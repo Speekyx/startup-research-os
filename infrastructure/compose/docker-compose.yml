@@ -1,0 +1,84 @@
+# Local development stack -- backing services only.
+#
+# ADR-007: local-first. This file is NOT a production rehearsal: no TLS, no
+# resource limits, no backups, no secrets management.
+#
+# Day-to-day workflow is these three containers plus the service you are editing
+# running natively with a debugger attached. Full-stack compose lives in
+# docker-compose.services.yml and is used for integration testing.
+#
+#   docker compose -f docker-compose.yml up -d
+#   docker compose -f docker-compose.yml ps
+#
+# Ports are bound to 127.0.0.1 only: nothing here is exposed beyond the host.
+
+name: sros-dev
+
+services:
+  postgres:
+    image: postgres:16.4-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-sros}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sros_dev_password}
+      POSTGRES_DB: ${POSTGRES_DB:-sros}
+      # Deterministic collation so index ordering matches across machines.
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-55432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-sros} -d ${POSTGRES_DB:-sros}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  redis:
+    image: redis:7.4-alpine
+    restart: unless-stopped
+    # AOF is ON deliberately (ADR-004). Redis is the Celery broker, so it holds
+    # in-flight job state, not just cache. With the default configuration a
+    # restart silently loses queued work -- which is exactly the lesson worth
+    # learning in development rather than discovering in production.
+    command:
+      - redis-server
+      - --appendonly
+      - "yes"
+      - --appendfsync
+      - everysec
+      - --save
+      - ""
+    ports:
+      - "127.0.0.1:${REDIS_PORT:-55379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+
+  qdrant:
+    image: qdrant/qdrant:v1.11.0
+    restart: unless-stopped
+    # Derived index (ADR-008). A total loss costs a re-index, never data, so
+    # this volume needs no backup strategy.
+    ports:
+      - "127.0.0.1:${QDRANT_HTTP_PORT:-55333}:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    healthcheck:
+      # The Qdrant image is distroless: no curl, no wget. Its own CLI answers.
+      test: ["CMD", "/qdrant/qdrant", "--version"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  postgres_data:
+  redis_data:
+  qdrant_data:

@@ -1,0 +1,69 @@
+# CODEOWNERS — Startup Research OS
+#
+# Syntax: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+# Later matches win. Ownership is about *required review*, not permission.
+#
+# ---------------------------------------------------------------------------
+# D-09 RESOLVED (Mission 0.1.1 §9)
+#
+# The GitHub repository owner is @Speekyx. The placeholder used during Mission
+# 0.1 has been replaced throughout.
+#
+# When a team exists, replace @Speekyx with a @org/team slug on the paths that
+# should require team review. Note that an unresolvable owner does not error in
+# GitHub — it silently assigns no reviewer, so branch protection would appear
+# configured while enforcing nothing. Verify any future change against the
+# repository's CODEOWNERS validation before relying on it.
+# ---------------------------------------------------------------------------
+
+# Default owner for everything not matched below.
+*                                   @Speekyx
+
+# ---------------------------------------------------------------------------
+# Authoritative specifications.
+# These are the contract of the whole system (PROJECT_MANIFEST.md §Authoritative
+# Documents). Changes here must never be merged as a side effect of a code PR.
+# ---------------------------------------------------------------------------
+/PROJECT_MANIFEST.md                @Speekyx
+/docs/CLAUDE.md                     @Speekyx
+/docs/domain/                       @Speekyx
+/docs/ai/                           @Speekyx
+/docs/data/                         @Speekyx
+
+# Architecture decision records are append-only history. Editing an accepted ADR
+# instead of superseding it destroys traceability.
+/docs/architecture/adr/             @Speekyx
+
+# ---------------------------------------------------------------------------
+# Cross-cutting contracts. A change here propagates to every service.
+# ---------------------------------------------------------------------------
+/packages/contracts/                @Speekyx
+/packages/typescript-config/        @Speekyx
+/turbo.json                         @Speekyx
+/pnpm-workspace.yaml                @Speekyx
+/package.json                       @Speekyx
+
+# ---------------------------------------------------------------------------
+# Security-sensitive surfaces.
+# ---------------------------------------------------------------------------
+/.github/                           @Speekyx
+/infrastructure/                    @Speekyx
+/.gitignore                         @Speekyx
+/CODEOWNERS                         @Speekyx
+
+# ---------------------------------------------------------------------------
+# Service ownership.
+# Single-maintainer today. Split by domain as the team grows — the point of
+# listing them separately now is that the split costs nothing later.
+# ---------------------------------------------------------------------------
+/services/gateway/                  @Speekyx
+/services/research-orchestrator/    @Speekyx
+/services/acquisition/              @Speekyx
+/services/nlp/                      @Speekyx
+/services/scoring/                  @Speekyx
+/services/market-intelligence/      @Speekyx
+/services/competition/              @Speekyx
+/services/execution/                @Speekyx
+/services/workers/                  @Speekyx
+
+/apps/web/                          @Speekyx

@@ -1,0 +1,125 @@
+# ---------------------------------------------------------------------------
+# Secrets — highest priority. `docs/CLAUDE.md` §Data collection and
+# `data-principles.md` §3 forbid committing credentials. These rules come first
+# so that no later negation can accidentally re-include them.
+# ---------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+credentials.json
+service-account*.json
+secrets/
+.secrets/
+*.secret
+
+# ---------------------------------------------------------------------------
+# Node / pnpm / Turborepo
+# ---------------------------------------------------------------------------
+node_modules/
+.pnpm-store/
+.pnpm-debug.log*
+npm-debug.log*
+yarn-error.log*
+.turbo/
+dist/
+build/
+out/
+*.tsbuildinfo
+.eslintcache
+
+# Next.js
+.next/
+.vercel/
+next-env.d.ts
+
+# ---------------------------------------------------------------------------
+# Python
+# ---------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+.eggs/
+*.egg-info/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.tox/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+
+# ---------------------------------------------------------------------------
+# Test & coverage output
+# ---------------------------------------------------------------------------
+coverage/
+test-results/
+playwright-report/
+blob-report/
+.playwright/
+
+# ---------------------------------------------------------------------------
+# Local infrastructure state — never commit database volumes or index data.
+# ---------------------------------------------------------------------------
+.docker-data/
+pgdata/
+qdrant_storage/
+redis-data/
+*.sqlite
+*.sqlite3
+*.db
+
+# ---------------------------------------------------------------------------
+# ML artifacts. Model weights and embeddings are large binaries produced by a
+# versioned pipeline; they belong in object storage, not in git.
+# ---------------------------------------------------------------------------
+models/
+*.onnx
+*.safetensors
+*.pt
+*.pth
+*.bin
+!**/fixtures/**/*.bin
+
+# ---------------------------------------------------------------------------
+# Collected data. Raw acquisition output must never be committed: it carries
+# provenance, licensing and privacy constraints (data-principles.md §8, §13).
+# ---------------------------------------------------------------------------
+data/raw/
+data/normalized/
+data/cache/
+*.ndjson
+*.jsonl
+!**/fixtures/**/*.jsonl
+
+# ---------------------------------------------------------------------------
+# Editors & OS
+# ---------------------------------------------------------------------------
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.shared.json
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---------------------------------------------------------------------------
+# Local agent / tooling scratch
+# ---------------------------------------------------------------------------
+.claude/local/
+*.local.md
+tmp/
+scratch/

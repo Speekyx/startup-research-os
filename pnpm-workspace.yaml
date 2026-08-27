@@ -1,0 +1,19 @@
+# pnpm workspace definition.
+#
+# Only JavaScript/TypeScript packages are listed here. Python services under
+# `services/` are managed by their own Python packaging (see
+# docs/architecture/quality-gates.md) and are intentionally NOT pnpm workspaces
+# — a Python service directory contains no package.json.
+#
+# ADR-004 removed BullMQ and with it the Node worker tier: every backend context
+# is Python. The `services/*` glob therefore matches only the thin package.json
+# script wrappers that let Turborepo invoke Python tasks. TypeScript exists in
+# `apps/web` and `packages/*` only.
+
+# `infrastructure/` is deliberately NOT a workspace: it holds Dockerfiles,
+# compose files and scripts, not publishable packages.
+
+packages:
+  - "apps/*"
+  - "services/*"
+  - "packages/*"

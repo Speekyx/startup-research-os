@@ -1,0 +1,382 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://startup-research-os.local/schema/domain.v1.schema.json",
+  "title": "Startup Research OS domain vocabulary",
+  "description": "GENERATED FILE. Source of truth: packages/contracts/schema/domain.v1.json. Regenerate with python packages/contracts/tools/generate.py.",
+  "x-contract-version": "1.0.0",
+  "x-ontology-version": "2",
+  "$defs": {
+    "ClaimType": {
+      "type": "string",
+      "enum": [
+        "OBSERVED",
+        "INFERRED",
+        "PREDICTED",
+        "RECOMMENDED",
+        "HYPOTHESIS"
+      ],
+      "description": "How an analytical statement is supported. Never conflated in any output."
+    },
+    "Confidence": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "How much the system trusts a value or interpretation. Presented as a percentage."
+    },
+    "DemandSignalFamily": {
+      "type": "string",
+      "enum": [
+        "PAIN",
+        "DESIRE",
+        "BEHAVIORAL",
+        "MARKET"
+      ],
+      "description": "Closed. Signal TYPES within a family are a registry, not an enum."
+    },
+    "EvidenceId": {
+      "type": "string",
+      "description": "An evidence record with mandatory provenance.",
+      "format": "uuid"
+    },
+    "EvidenceLevel": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 5,
+      "description": "0 Hypothesis, 1 Weak, 2 Repeated, 3 Multi-source, 4 Market evidence, 5 Direct validation. Never rescaled, never averaged into a score."
+    },
+    "Independence": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "Estimated independence from other evidence. The threshold gating evidence level 3 is A-04 and remains UNDEFINED."
+    },
+    "LlmTier": {
+      "type": "string",
+      "enum": [
+        "FAST_MODEL",
+        "BALANCED_MODEL",
+        "STRONG_MODEL",
+        "EMBEDDING_MODEL"
+      ],
+      "description": "Logical tier. Business services request a tier, never a provider or model name."
+    },
+    "MarketScope": {
+      "description": "Geographic scope. See opportunity-ontology-v2.md §4.",
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "GLOBAL"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "regions"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "REGION"
+            },
+            "regions": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "countries"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "COUNTRY"
+            },
+            "countries": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 1,
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Z]{2}$"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "countries"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "MULTI_COUNTRY"
+            },
+            "countries": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Z]{2}$"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "MarketScopeType": {
+      "type": "string",
+      "enum": [
+        "GLOBAL",
+        "REGION",
+        "COUNTRY",
+        "MULTI_COUNTRY"
+      ],
+      "description": "Geographic scope discriminator. Geographic axis only; segment scoping is A-12 and is NOT modelled."
+    },
+    "OpportunityId": {
+      "type": "string",
+      "description": "A domain hypothesis. Not owned by the session that found it. Ontology V2 §12.",
+      "format": "uuid"
+    },
+    "Probability": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "Likelihood of an event or outcome."
+    },
+    "RegistryEntry": {
+      "type": "object",
+      "required": [
+        "registry",
+        "id",
+        "name",
+        "version",
+        "status"
+      ],
+      "additionalProperties": false,
+      "description": "Ontology V2 §14.4. Deprecation, never deletion.",
+      "properties": {
+        "registry": {
+          "type": "string",
+          "enum": [
+            "market_type",
+            "product_type",
+            "user_motivation",
+            "user_behavior",
+            "value_proposition",
+            "demand_signal_type",
+            "retention_mechanism",
+            "monetization_model",
+            "distribution_channel",
+            "risk",
+            "region"
+          ]
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "status": {
+          "$ref": "#/$defs/RegistryStatus"
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "RegistryRef": {
+      "type": "object",
+      "required": [
+        "registry",
+        "id"
+      ],
+      "additionalProperties": false,
+      "description": "A reference into an extensible registry. Persists the stable id, never the display name.",
+      "properties": {
+        "registry": {
+          "type": "string",
+          "enum": [
+            "market_type",
+            "product_type",
+            "user_motivation",
+            "user_behavior",
+            "value_proposition",
+            "demand_signal_type",
+            "retention_mechanism",
+            "monetization_model",
+            "distribution_channel",
+            "risk",
+            "region"
+          ]
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$"
+        }
+      }
+    },
+    "RegistryStatus": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "DEPRECATED"
+      ],
+      "description": "Deprecation, never deletion. A deprecated entry stops being offered for new classification but keeps resolving for historical records."
+    },
+    "Reliability": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "Source reliability estimate."
+    },
+    "ResearchContext": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "market_scope"
+      ],
+      "description": "Value object, not an entity. Serialized as an immutable snapshot on a ResearchSession. Ontology V2 §11.3.",
+      "properties": {
+        "schema_version": {
+          "type": "string"
+        },
+        "market_scope": {
+          "$ref": "#/$defs/MarketScope"
+        },
+        "market_types": {
+          "description": "RegistryRef[market_type]"
+        },
+        "product_types": {
+          "description": "RegistryRef[product_type]"
+        },
+        "domains": {
+          "description": "string[]"
+        },
+        "audience": {
+          "description": "string?"
+        },
+        "languages": {
+          "description": "string[]"
+        },
+        "budget_constraints": {
+          "description": "BudgetConstraints?"
+        },
+        "technical_constraints": {
+          "description": "string[]"
+        },
+        "desired_mvp_complexity": {
+          "description": "string?"
+        },
+        "research_depth": {
+          "description": "string?"
+        },
+        "time_horizon_days": {
+          "description": "int?"
+        },
+        "excluded_markets": {
+          "description": "RegistryRef[market_type]"
+        },
+        "excluded_categories": {
+          "description": "string[]"
+        },
+        "filters": {
+          "description": "map<string,json>"
+        }
+      }
+    },
+    "ResearchProjectId": {
+      "type": "string",
+      "description": "Persistent workspace-scoped research objective. Ontology V2 §11.2.",
+      "format": "uuid"
+    },
+    "ResearchSessionId": {
+      "type": "string",
+      "description": "The only persisted execution entity. Ontology V2 §11.4. Replaces the retired 'run_id'.",
+      "format": "uuid"
+    },
+    "ResearchSessionStatus": {
+      "type": "string",
+      "enum": [
+        "PENDING",
+        "PLANNING",
+        "COLLECTING",
+        "ANALYZING",
+        "SCORING",
+        "COMPLETED",
+        "FAILED",
+        "CANCELLED"
+      ],
+      "description": "Session lifecycle. Budget exhaustion is COMPLETED with reduced Research Completeness, never a status. A session that finds nothing is COMPLETED, not FAILED."
+    },
+    "Score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "An assessed magnitude. NOT interchangeable with Confidence."
+    },
+    "ScoreFamily": {
+      "type": "string",
+      "enum": [
+        "OPPORTUNITY",
+        "EVIDENCE",
+        "EXECUTION",
+        "RESEARCH_COMPLETENESS",
+        "MODEL_CONFIDENCE"
+      ],
+      "description": "The five families. Never collapsed into a single number, not in an API, a sort key or a badge."
+    },
+    "SignalId": {
+      "type": "string",
+      "description": "An extracted demand signal.",
+      "format": "uuid"
+    },
+    "SourceId": {
+      "type": "string",
+      "description": "A registered external source. Global, not tenant-scoped. Registry contents are D-07, still open.",
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$"
+    },
+    "UserId": {
+      "type": "string",
+      "description": "A principal. Not a tenant. See ADR-005.",
+      "format": "uuid"
+    },
+    "WorkspaceId": {
+      "type": "string",
+      "description": "The tenant boundary. Required on every tenant-scoped contract.",
+      "format": "uuid"
+    }
+  }
+}

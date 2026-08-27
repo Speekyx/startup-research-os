@@ -1,0 +1,179 @@
+{
+  "$comment": "Shared conformance cases. BOTH the TypeScript and the Python test suites read this file and must agree on every case. This is what makes 'TS and Python contracts are synchronized' a tested property rather than a claim. Hand-edited.",
+  "conformance_version": "1.0.0",
+
+  "numeric": {
+    "Confidence": {
+      "valid": [0, 0.0, 0.5, 0.82, 1, 1.0],
+      "invalid": [-0.0001, 1.0001, 82, 100, -1, "0.5", null, "NaN", "Infinity"]
+    },
+    "Probability": {
+      "valid": [0, 0.25, 1],
+      "invalid": [-1, 1.5, 100, "0.25", null]
+    },
+    "Reliability": {
+      "valid": [0, 0.75, 1],
+      "invalid": [-0.1, 1.1, 75, null]
+    },
+    "Independence": {
+      "valid": [0, 0.91, 1],
+      "invalid": [-0.5, 2, 91, null]
+    },
+    "Score": {
+      "valid": [0, 1, 61, 82, 100],
+      "invalid": [-1, 101, 0.5, 82.37, "82", null, "NaN"]
+    },
+    "EvidenceLevel": {
+      "valid": [0, 1, 2, 3, 4, 5],
+      "invalid": [-1, 6, 2.5, "3", null]
+    }
+  },
+
+  "market_scope": {
+    "valid": [
+      {
+        "name": "global",
+        "input": { "type": "GLOBAL" },
+        "canonical": { "type": "GLOBAL" },
+        "key": "GLOBAL"
+      },
+      {
+        "name": "single country",
+        "input": { "type": "COUNTRY", "countries": ["FR"] },
+        "canonical": { "type": "COUNTRY", "countries": ["FR"] },
+        "key": "COUNTRY:FR"
+      },
+      {
+        "name": "single country lowercase is uppercased",
+        "input": { "type": "COUNTRY", "countries": ["fr"] },
+        "canonical": { "type": "COUNTRY", "countries": ["FR"] },
+        "key": "COUNTRY:FR"
+      },
+      {
+        "name": "multi country is sorted",
+        "input": { "type": "MULTI_COUNTRY", "countries": ["US", "FR", "DE"] },
+        "canonical": { "type": "MULTI_COUNTRY", "countries": ["DE", "FR", "US"] },
+        "key": "MULTI_COUNTRY:DE,FR,US"
+      },
+      {
+        "name": "multi country is deduplicated and case-normalized",
+        "input": { "type": "MULTI_COUNTRY", "countries": ["us", "US", "fr"] },
+        "canonical": { "type": "MULTI_COUNTRY", "countries": ["FR", "US"] },
+        "key": "MULTI_COUNTRY:FR,US"
+      },
+      {
+        "name": "region",
+        "input": { "type": "REGION", "regions": ["EUROPE"] },
+        "canonical": { "type": "REGION", "regions": ["europe"] },
+        "key": "REGION:europe"
+      },
+      {
+        "name": "regions sorted and deduplicated",
+        "input": { "type": "REGION", "regions": ["latam", "EUROPE", "europe"] },
+        "canonical": { "type": "REGION", "regions": ["europe", "latam"] },
+        "key": "REGION:europe,latam"
+      }
+    ],
+    "invalid": [
+      { "name": "unknown type", "input": { "type": "SEGMENT" }, "reason": "A-12 is not implemented; MarketScope is geographic only" },
+      { "name": "lowercase type", "input": { "type": "country", "countries": ["FR"] }, "reason": "closed enum values are UPPERCASE" },
+      { "name": "global with countries", "input": { "type": "GLOBAL", "countries": ["FR"] }, "reason": "GLOBAL carries no members" },
+      { "name": "global with regions", "input": { "type": "GLOBAL", "regions": ["europe"] }, "reason": "GLOBAL carries no members" },
+      { "name": "country with two codes", "input": { "type": "COUNTRY", "countries": ["FR", "DE"] }, "reason": "COUNTRY carries exactly one; two or more is MULTI_COUNTRY" },
+      { "name": "country with zero codes", "input": { "type": "COUNTRY", "countries": [] }, "reason": "empty lists are invalid; absence of scope is GLOBAL" },
+      { "name": "country with regions", "input": { "type": "COUNTRY", "countries": ["FR"], "regions": ["europe"] }, "reason": "country scopes carry no regions" },
+      { "name": "multi country with one code", "input": { "type": "MULTI_COUNTRY", "countries": ["FR"] }, "reason": "MULTI_COUNTRY carries two or more; one is COUNTRY" },
+      { "name": "multi country deduplicating to one", "input": { "type": "MULTI_COUNTRY", "countries": ["FR", "fr"] }, "reason": "after canonicalization only one distinct code remains" },
+      { "name": "region with empty list", "input": { "type": "REGION", "regions": [] }, "reason": "empty lists are invalid" },
+      { "name": "bad country code length", "input": { "type": "COUNTRY", "countries": ["FRA"] }, "reason": "ISO 3166-1 alpha-2 is two letters" },
+      { "name": "numeric country code", "input": { "type": "COUNTRY", "countries": ["12"] }, "reason": "alpha-2 is letters only" },
+      { "name": "missing type", "input": { "countries": ["FR"] }, "reason": "discriminator is required" }
+    ],
+    "equality": [
+      {
+        "name": "same scope written two ways is one scope",
+        "a": { "type": "MULTI_COUNTRY", "countries": ["us", "FR"] },
+        "b": { "type": "MULTI_COUNTRY", "countries": ["FR", "US"] },
+        "equal": true
+      },
+      {
+        "name": "single-country and multi-country are never equal",
+        "a": { "type": "COUNTRY", "countries": ["FR"] },
+        "b": { "type": "MULTI_COUNTRY", "countries": ["FR", "DE"] },
+        "equal": false
+      }
+    ]
+  },
+
+  "registry_ref": {
+    "valid": [
+      { "registry": "product_type", "id": "saas" },
+      { "registry": "user_motivation", "id": "money" },
+      { "registry": "value_proposition", "id": "money_making" },
+      { "registry": "region", "id": "europe" }
+    ],
+    "invalid": [
+      { "case": { "registry": "claim_type", "id": "observed" }, "reason": "ClaimType is a closed enum, not a registry" },
+      { "case": { "registry": "product_type", "id": "SaaS" }, "reason": "registry ids are lowercase stable slugs, not display names" },
+      { "case": { "registry": "product_type", "id": "" }, "reason": "empty id" },
+      { "case": { "registry": "not_a_registry", "id": "x" }, "reason": "unknown registry" }
+    ]
+  },
+
+  "claim_type": {
+    "valid": ["OBSERVED", "INFERRED", "PREDICTED", "RECOMMENDED", "HYPOTHESIS"],
+    "invalid": ["Observed", "observed", "UNKNOWN", "", null]
+  },
+
+  "research_session_status": {
+    "valid": [
+      "PENDING",
+      "PLANNING",
+      "COLLECTING",
+      "ANALYZING",
+      "SCORING",
+      "COMPLETED",
+      "FAILED",
+      "CANCELLED"
+    ],
+    "invalid": ["complete", "COMPLETE", "BUDGET_EXHAUSTED", "RUNNING", "PARTIAL", null]
+  },
+
+  "research_context": {
+    "valid": [
+      {
+        "name": "minimal",
+        "input": { "market_scope": { "type": "GLOBAL" } },
+        "canonical_json": "{\"audience\":null,\"desired_mvp_complexity\":null,\"domains\":[],\"excluded_categories\":[],\"excluded_markets\":[],\"filters\":{},\"languages\":[],\"market_scope\":{\"type\":\"GLOBAL\"},\"market_types\":[],\"product_types\":[],\"research_depth\":null,\"schema_version\":\"1.0.0\",\"technical_constraints\":[],\"time_horizon_days\":null}"
+      },
+      {
+        "name": "canonicalizes nested scope and languages",
+        "input": {
+          "market_scope": { "type": "MULTI_COUNTRY", "countries": ["us", "FR"] },
+          "languages": ["EN", "fr", "en"],
+          "domains": ["gaming"],
+          "product_types": [{ "registry": "product_type", "id": "game" }]
+        },
+        "canonical_json": "{\"audience\":null,\"desired_mvp_complexity\":null,\"domains\":[\"gaming\"],\"excluded_categories\":[],\"excluded_markets\":[],\"filters\":{},\"languages\":[\"en\",\"fr\"],\"market_scope\":{\"countries\":[\"FR\",\"US\"],\"type\":\"MULTI_COUNTRY\"},\"market_types\":[],\"product_types\":[{\"id\":\"game\",\"registry\":\"product_type\"}],\"research_depth\":null,\"schema_version\":\"1.0.0\",\"technical_constraints\":[],\"time_horizon_days\":null}"
+      }
+    ],
+    "invalid": [
+      { "name": "missing market scope", "input": {}, "reason": "market_scope is required" },
+      { "name": "invalid nested scope", "input": { "market_scope": { "type": "COUNTRY", "countries": [] } }, "reason": "nested MarketScope validation applies" },
+      { "name": "unknown field", "input": { "market_scope": { "type": "GLOBAL" }, "not_a_field": 1 }, "reason": "unknown fields are rejected so a typo is not silently dropped" },
+      { "name": "negative horizon", "input": { "market_scope": { "type": "GLOBAL" }, "time_horizon_days": -1 }, "reason": "time horizon must be positive" }
+    ]
+  },
+
+  "forbidden_fields": {
+    "$comment": "D-03 leakage guard. No contract, schema or migration may declare these until the evidence aggregation framework exists.",
+    "names": [
+      "decay_weight",
+      "aggregated_evidence_score",
+      "independence_threshold_result",
+      "contradiction_penalty",
+      "evidence_aggregate",
+      "decay_half_life"
+    ]
+  }
+}

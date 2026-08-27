@@ -1,0 +1,79 @@
+[project]
+name = "startup-research-os"
+version = "0.1.0"
+description = "Evidence-driven AI Opportunity Research Engine -- Python workspace root"
+requires-python = ">=3.12"
+dependencies = []
+
+[tool.uv.workspace]
+members = [
+    "packages/contracts/python",
+    "packages/llm-gateway/python",
+    "services/workers/python",
+    "services/gateway/python",
+]
+
+[tool.uv.sources]
+sros-contracts = { workspace = true }
+sros-llm-gateway = { workspace = true }
+sros-workers = { workspace = true }
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-asyncio>=0.24",
+    "httpx>=0.27",
+    "ruff>=0.6",
+    "mypy>=1.11",
+    "pip-audit>=2.7",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+bypass-selection = true
+
+# Python quality toolchain (Mission 0.2 §25).
+#
+# Deliberately small: ruff for lint AND format, mypy for types, stdlib unittest
+# for tests. Three tools, one config file. No tool is added here to imitate a
+# large organisation.
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["**/generated/**"]
+
+[tool.ruff.lint]
+# Two of these families are load-bearing rather than cosmetic:
+#   ASYNC - a blocking call inside an async handler is a failure whose symptom
+#           is far from its cause (ADR-003, Cons).
+#   DTZ   - naive datetimes are a correctness bug in the evidence model AND a
+#           retention bug: expires_at is computed from these timestamps.
+select = ["E", "W", "F", "I", "N", "UP", "B", "ASYNC", "S", "DTZ", "RET", "SIM", "PTH"]
+ignore = [
+    "E501",   # line length is handled by the formatter
+    "B008",   # FastAPI dependency injection idiom
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests assert on internals and use assert statements by design.
+"**/tests/**" = ["S101", "S105", "S106"]
+"infrastructure/scripts/*" = ["S603", "S607"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unreachable = true
+# Without strict mode the guarantee ADR-003 was made for stops at the boundary:
+# Pydantic validates the edges while the interior stays effectively untyped.
+exclude = ['(^|/)generated/', '^\.venv/']
+
+[[tool.mypy.overrides]]
+module = ["celery.*", "kombu.*", "psycopg.*", "psycopg_pool.*", "qdrant_client.*", "redis.*"]
+ignore_missing_imports = true

@@ -1,0 +1,36 @@
+# https://editorconfig.org
+# Single source of truth for whitespace across TypeScript, Python, SQL, YAML and Docker.
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+max_line_length = 100
+
+[*.{py,pyi}]
+indent_size = 4
+max_line_length = 100
+
+[*.{md,mdx}]
+# Trailing whitespace is significant in Markdown (hard line break).
+trim_trailing_whitespace = false
+max_line_length = off
+
+[*.{yml,yaml}]
+indent_size = 2
+
+[*.sql]
+indent_size = 2
+
+[{Makefile,*.mk}]
+indent_style = tab
+
+[*.{bat,cmd,ps1}]
+end_of_line = crlf
+
+[LICENSE]
+insert_final_newline = false

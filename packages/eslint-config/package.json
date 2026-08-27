@@ -1,0 +1,16 @@
+{
+  "name": "@sros/eslint-config",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Shared lint rules. Each rule blocks a specific specification violation.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js"
+  },
+  "peerDependencies": {
+    "eslint": ">=9",
+    "typescript-eslint": ">=8"
+  }
+}

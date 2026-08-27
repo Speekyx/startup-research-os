@@ -1,0 +1,58 @@
+/**
+ * Root ESLint flat config.
+ *
+ * The architectural rules live in `packages/eslint-config`; this file wires
+ * them to the workspace and scopes type-aware linting to the TypeScript
+ * sources.
+ *
+ * Type-checked rules apply to `**\/*.ts` ONLY. Pointing them at every file in
+ * the tree makes ESLint try to type-check vendored JavaScript inside the Python
+ * virtualenv, which fails loudly and for no useful reason.
+ */
+
+import js from "@eslint/js";
+import tseslint from "typescript-eslint";
+
+import { base, ignores } from "./packages/eslint-config/index.js";
+
+export default [
+  ...ignores,
+  {
+    ignores: [
+      ".venv/**",
+      "**/__pycache__/**",
+      "**/*.config.js",
+      "packages/eslint-config/index.js",
+      "eslint.config.js",
+    ],
+  },
+  js.configs.recommended,
+  ...tseslint.configs.recommendedTypeChecked.map((config) => ({
+    ...config,
+    files: ["**/*.ts"],
+  })),
+  {
+    files: ["**/*.ts"],
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
+  ...base.map((config) => ({ ...config, files: ["**/*.ts"] })),
+  {
+    // node:test's `describe` and `test` return promises by design and are not
+    // meant to be awaited. Fixture data loaded from JSON is `unknown` at the
+    // boundary and narrowed by assertion, which is what a conformance suite is
+    // for. Both rules stay ON for source.
+    files: ["**/test/**/*.ts"],
+    rules: {
+      "@typescript-eslint/no-floating-promises": "off",
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/no-unsafe-member-access": "off",
+      "@typescript-eslint/no-unsafe-argument": "off",
+      "@typescript-eslint/no-unsafe-call": "off",
+    },
+  },
+];

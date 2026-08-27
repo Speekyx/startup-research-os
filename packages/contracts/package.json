@@ -1,0 +1,22 @@
+{
+  "name": "@sros/contracts",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Canonical machine-readable domain contracts. Source of truth: schema/domain.v1.json",
+  "license": "UNLICENSED",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "generate": "python tools/generate.py",
+    "contracts:check": "python tools/generate.py --check",
+    "test": "node --test --experimental-strip-types test/conformance.test.ts",
+    "test:unit": "node --test --experimental-strip-types test/conformance.test.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@sros/typescript-config": "workspace:*"
+  }
+}

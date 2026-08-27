@@ -1,0 +1,5 @@
+# Worker runtime dependencies (ADR-004).
+# Installed in the worker container; not required to run the queue/routing tests,
+# which are deliberately Celery-free.
+celery[redis]==5.4.0
+redis==5.0.8
