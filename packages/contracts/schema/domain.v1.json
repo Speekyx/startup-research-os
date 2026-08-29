@@ -1,6 +1,6 @@
 {
   "$comment": "AUTHORITATIVE CONTRACT SOURCE OF TRUTH. Hand-edited. Everything under packages/contracts/generated/ is derived from this file by tools/generate.py. See ADR-009.",
-  "contract_version": "1.0.0",
+  "contract_version": "1.5.0",
   "ontology_version": "2",
   "scoring_framework_version": "1.1",
   "evidence_framework_version": "1",
@@ -30,6 +30,11 @@
       "name": "OpportunityId",
       "format": "uuid",
       "description": "A domain hypothesis. Not owned by the session that found it. Ontology V2 §12."
+    },
+    {
+      "name": "ClaimId",
+      "format": "uuid",
+      "description": "An assertion about an Opportunity that evidence can independently support or contradict. Ontology V2.1 §17. STABLE across statement revisions: the text may be rewritten, the identity may not. Distinct from ClaimType, which is an epistemic category and not an identity."
     },
     {
       "name": "EvidenceId",
@@ -261,6 +266,157 @@
       ]
     },
     {
+      "name": "ConditionVerification",
+      "spec": "source-registry-v1.md; Mission 1.3 §24",
+      "description": "HOW a review condition can be checked. Exists so APPROVED_WITH_CONDITIONS cannot silently mean 'a collector may run': each condition is satisfied individually, and one that no machine can verify must say so rather than pretending it can.",
+      "values": [
+        {
+          "value": "CONFIG_REFERENCE",
+          "description": "A named configuration key is present in the environment. The KEY name, never its value"
+        },
+        {
+          "value": "CAPABILITY",
+          "description": "A named product capability is implemented and enabled -- for example a surface that can display a required attribution notice"
+        },
+        {
+          "value": "RETENTION_LIMIT",
+          "description": "A retention limit at or below a stated number of days is configured for the source"
+        },
+        {
+          "value": "ACCESS_METHOD",
+          "description": "Collection uses only a named access method, and no other"
+        },
+        {
+          "value": "HUMAN_CONFIRMATION",
+          "description": "No machine can check it. A person must record the decision and the reference to it. Marking this satisfied is a human act, and the honest answer for anything a program cannot establish"
+        }
+      ]
+    },
+    {
+      "name": "ConditionVerificationResult",
+      "spec": "source-condition-gap-analysis-v1.md; Mission 1.4 §19",
+      "description": "The outcome of running a verifier against one review condition. Four values rather than a boolean, because 'we could not establish it' and 'it does not hold' call for different next steps and only one of them is a bug. UNKNOWN never becomes SATISFIED, and only SATISFIED clears the condition.",
+      "values": [
+        {
+          "value": "SATISFIED",
+          "description": "The verifier established the condition holds, and recorded what it looked at"
+        },
+        {
+          "value": "UNSATISFIED",
+          "description": "The verifier ran and the condition does not hold. A definite answer, not an absence of one"
+        },
+        {
+          "value": "UNKNOWN",
+          "description": "The verifier could not establish either answer -- no verifier is registered for the condition, or what it needs to inspect is unavailable. Blocks exactly like UNSATISFIED and must never be promoted"
+        },
+        {
+          "value": "NOT_APPLICABLE",
+          "description": "The condition does not apply in this context, for a reason the record states. Blocks: a condition that does not apply has still not been satisfied"
+        }
+      ]
+    },
+    {
+      "name": "AttributionElement",
+      "spec": "acquisition-authorization-v1.md; Mission 1.4 §6",
+      "description": "One required part of a source's attribution obligation. A closed enum because the renderer branches exhaustively: an element it does not recognise must be a contract change, never a silently dropped requirement.",
+      "values": [
+        {
+          "value": "SOURCE_CREDIT",
+          "description": "Credit to the source, in the wording the source's own terms require"
+        },
+        {
+          "value": "LICENCE_IDENTIFIER",
+          "description": "The licence the resource is distributed under, named so a reader can find it"
+        },
+        {
+          "value": "EXACT_NOTICE",
+          "description": "A sentence whose wording is prescribed by the terms and must appear verbatim. Never paraphrased, never composed"
+        },
+        {
+          "value": "MODIFICATION_STATEMENT",
+          "description": "A statement of what was changed, required where the licence requires changes to be indicated. Includes translation"
+        },
+        {
+          "value": "DATASET_DOI",
+          "description": "The persistent identifier of the specific dataset used. A per-resource value; it cannot be defaulted"
+        },
+        {
+          "value": "ACCESS_DATE",
+          "description": "The date the data was retrieved. A per-retrieval value; it cannot be defaulted"
+        },
+        {
+          "value": "DISCLAIMER",
+          "description": "A disclaimer the terms require alongside modified data, supplied as text rather than composed by this system when the exact wording is not in the recorded evidence"
+        }
+      ]
+    },
+    {
+      "name": "AcquisitionErrorCode",
+      "spec": "world-bank-collector-v1.md; Mission 1.5 §32",
+      "description": "Why an acquisition attempt did not produce records. A closed vocabulary so the orchestrator branches on a meaning rather than on a third party's exception class -- an upstream library changing its exception hierarchy must not change how this system retries. Each value also fixes whether it is worth retrying, which is the decision that costs money when it is wrong.",
+      "values": [
+        {
+          "value": "AUTHORIZATION_REJECTED",
+          "description": "No acquisition authorization could be built for the source. Never retried: the answer comes from the governance gate and will not change on its own"
+        },
+        {
+          "value": "RESOURCE_NOT_PERMITTED",
+          "description": "The source is authorised and this specific resource is not -- excluded dataset, licence outside the allowlist, third-party or unestablished origin. Never retried"
+        },
+        {
+          "value": "NETWORK_TIMEOUT",
+          "description": "The request did not complete within its connect or read budget. Retryable"
+        },
+        {
+          "value": "RATE_LIMITED",
+          "description": "The source signalled too many requests. Retryable, and more slowly than other failures"
+        },
+        {
+          "value": "TEMPORARY_UPSTREAM",
+          "description": "The source failed in a way it describes as its own and transient. Retryable"
+        },
+        {
+          "value": "UPSTREAM_CLIENT_ERROR",
+          "description": "The source rejected the request deterministically. Never retried: the same request produces the same rejection, and repeating it is how a rate limit becomes a ban"
+        },
+        {
+          "value": "INVALID_RESPONSE",
+          "description": "The response arrived and does not have the documented shape. Never retried: a source that changed its contract needs a person, not another attempt"
+        },
+        {
+          "value": "PARSING_FAILURE",
+          "description": "The response could not be read at all -- malformed encoding or unparseable body. Never retried"
+        },
+        {
+          "value": "PERSISTENCE_FAILURE",
+          "description": "Records were acquired and could not be stored. Retryable, because the source is not the problem"
+        },
+        {
+          "value": "CANCELLED",
+          "description": "The job was cancelled or ran out of its bounds before completing. Never retried automatically"
+        }
+      ]
+    },
+    {
+      "name": "ResourceContentOrigin",
+      "spec": "acquisition-authorization-v1.md; Mission 1.4 §12",
+      "description": "Whether the platform's own licence covers a particular resource. Aggregators republish material they do not own, so platform approval is not resource approval. UNKNOWN exists because it is the common case and must fail closed rather than be guessed either way.",
+      "values": [
+        {
+          "value": "PLATFORM_LICENSED",
+          "description": "The platform produces or licenses this resource, and the reviewed terms cover it"
+        },
+        {
+          "value": "THIRD_PARTY",
+          "description": "Owned by someone other than the platform. The platform's approval grants nothing over it, and separate permission from the owner is required"
+        },
+        {
+          "value": "UNKNOWN",
+          "description": "Not established. Denied wherever licensing scope matters: an unexamined resource is not a resource known to be covered"
+        }
+      ]
+    },
+    {
       "name": "SourceAccessMethod",
       "spec": "source-registry-v1.md §8",
       "description": "HOW access is technically performed. It says nothing about whether access is PERMITTED: permission is a separate dimension carried by the policy review. BROWSER_AUTOMATION being available never implies it is allowed.",
@@ -429,6 +585,197 @@
           "description": "Not assessed. Never treated as NONE_EXPECTED"
         }
       ]
+    },
+    {
+      "name": "EvidenceDirection",
+      "spec": "evidence-aggregation-framework-v1.md §5",
+      "description": "How one Evidence record bears on a Claim. Support and contradiction are aggregated SEPARATELY and never averaged together, so this drives exhaustive branching and is closed.",
+      "values": [
+        {
+          "value": "SUPPORTS",
+          "description": "The evidence bears in favour of the claim"
+        },
+        {
+          "value": "CONTRADICTS",
+          "description": "The evidence bears against the claim"
+        },
+        {
+          "value": "NEUTRAL",
+          "description": "Related to the claim but bearing neither way. Retained for provenance and coverage; contributes to neither support nor contradiction strength"
+        }
+      ]
+    },
+    {
+      "name": "EvidenceIndependenceState",
+      "spec": "evidence-aggregation-framework-v1.md §10, §13",
+      "description": "What is KNOWN about an evidence record provenance relationship to the rest of the set. UNKNOWN is a distinct third state and is never silently promoted to KNOWN_INDEPENDENT.",
+      "values": [
+        {
+          "value": "KNOWN_INDEPENDENT",
+          "description": "Provenance was established and does not derive from another record in the set"
+        },
+        {
+          "value": "KNOWN_DEPENDENT",
+          "description": "Provenance was established and shares an origin with other records; requires an independence group id"
+        },
+        {
+          "value": "UNKNOWN",
+          "description": "Provenance was not established. Conservative handling: all such records for one claim and one direction form at most ONE contribution group"
+        }
+      ]
+    },
+    {
+      "name": "EvidenceObservationCategory",
+      "spec": "evidence-aggregation-framework-v1.md §11",
+      "description": "WHAT KIND of thing was observed, independent of how strong it is. Gates EvidenceLevel 4 and 5, which quantity of evidence must never reach on its own. Closed because level eligibility branches exhaustively over it.",
+      "values": [
+        {
+          "value": "STATED_OPINION",
+          "description": "Someone expressed a view. A comment, a post, a reply"
+        },
+        {
+          "value": "REPORTED_BEHAVIOUR",
+          "description": "An account of behaviour, not the behaviour itself"
+        },
+        {
+          "value": "OBSERVED_BEHAVIOUR",
+          "description": "Aggregated behavioural measurement: search interest, download counts, review volume"
+        },
+        {
+          "value": "MARKET_ACTIVITY",
+          "description": "Economic activity: purchases, subscriptions, pricing, established competing products, adoption. Required for EvidenceLevel 4"
+        },
+        {
+          "value": "DIRECT_VALIDATION",
+          "description": "Validation of THIS opportunity: interviews, signups, prototype usage, preorders, payments. Required for EvidenceLevel 5"
+        },
+        {
+          "value": "UNCATEGORISED",
+          "description": "Not categorised. Cannot lift EvidenceLevel above 3, because an uncategorised record has not been shown to be market evidence"
+        }
+      ]
+    },
+    {
+      "name": "ClaimTemporality",
+      "spec": "evidence-aggregation-framework-v1.md §9",
+      "description": "Whether a claim decays. A property of the CLAIM, never of the source: the same platform can carry an evergreen fact and a trend that is stale in a week. Closed because freshness branches exhaustively over it.",
+      "values": [
+        {
+          "value": "EVERGREEN",
+          "description": "The claim does not decay with the passage of time. Freshness is 1.0 unless the underlying fact itself became obsolete, which is a new contradicting observation rather than decay"
+        },
+        {
+          "value": "TEMPORALLY_SENSITIVE",
+          "description": "The claim loses force as its observations age. Requires an authorised half-life in the aggregation profile; without one the evidence is NON-SCORABLE rather than assumed fresh"
+        }
+      ]
+    },
+    {
+      "name": "ClaimOrigin",
+      "spec": "claim-model-v1.md §6",
+      "description": "What PROCESS produced the claim, at the level of kind rather than instance. Deliberately carries no model, provider or prompt name: those change constantly and belong in provenance columns, where a new one does not require a contract change.",
+      "values": [
+        {
+          "value": "MANUAL",
+          "description": "Authored by a person"
+        },
+        {
+          "value": "DETERMINISTIC_EXTRACTION",
+          "description": "Produced by a rule, parser or query with no model involved"
+        },
+        {
+          "value": "LLM_EXTRACTION",
+          "description": "Extracted from source text by a language model. The model and prompt versions are recorded in provenance, never here"
+        },
+        {
+          "value": "INFERRED",
+          "description": "Derived analytically from other claims or signals rather than read from a source"
+        },
+        {
+          "value": "SYSTEM_GENERATED",
+          "description": "Created by the platform itself, for example a coverage placeholder"
+        },
+        {
+          "value": "IMPORTED",
+          "description": "Brought in from an external dataset or a prior system"
+        }
+      ]
+    },
+    {
+      "name": "ClaimLifecycle",
+      "spec": "claim-model-v1.md §8",
+      "description": "EDITORIAL state, never epistemic. There is deliberately no VALIDATED or REJECTED value: evidence can change, and a lifecycle state derived from EvidenceLevel would freeze a conclusion the evidence no longer supports (Mission 1.2 §38). What a claim is worth is read from its aggregation, never from this column.",
+      "values": [
+        {
+          "value": "ACTIVE",
+          "description": "In use. Accumulates evidence and may be aggregated"
+        },
+        {
+          "value": "WITHDRAWN",
+          "description": "Removed from use — malformed, duplicated, or out of scope. Its evidence and revision history are retained, because deleting the row would destroy the record of what was once believed"
+        }
+      ]
+    },
+    {
+      "name": "ObservationKind",
+      "spec": "opportunity-ontology-v2.md §12; claim-model-v1.md §7",
+      "description": "How one ResearchSession related to a persisted entity it encountered. Promoted to the canonical contract in Mission 1.2: it already governed opportunity observations as a SQL CHECK plus a Python frozenset, which is exactly the drift ADR-009 exists to prevent. Not a scoring judgement.",
+      "values": [
+        {
+          "value": "DISCOVERED",
+          "description": "The session introduced it"
+        },
+        {
+          "value": "CORROBORATED",
+          "description": "The session found further support for it"
+        },
+        {
+          "value": "CONTRADICTED",
+          "description": "The session found evidence against it"
+        }
+      ]
+    },
+    {
+      "name": "AggregationProfileStatus",
+      "spec": "evidence-aggregation-framework-v1.md §14",
+      "description": "Whether the PARAMETERS of a profile have been calibrated against data. Separate from whether the algorithm is defined: defining equations calibrates nothing. Production scoring requires CALIBRATED.",
+      "values": [
+        {
+          "value": "DRAFT",
+          "description": "Being written. Not runnable"
+        },
+        {
+          "value": "UNCALIBRATED",
+          "description": "Parameters are structural or provisional, never fitted to labelled data. Runnable only in an explicitly labelled experimental mode"
+        },
+        {
+          "value": "CALIBRATED",
+          "description": "Parameters were fitted and evaluated against a recorded calibration dataset"
+        },
+        {
+          "value": "RETIRED",
+          "description": "Superseded. Kept so historical results stay readable"
+        }
+      ]
+    },
+    {
+      "name": "EvidenceAggregationStatus",
+      "spec": "evidence-aggregation-framework-v1.md §16",
+      "description": "Whether the numbers in a result may be read as covering the evidence set. A result that silently dropped half its items would be indistinguishable from one that used all of them.",
+      "values": [
+        {
+          "value": "COMPLETE",
+          "description": "Every evidence record in the snapshot was scorable"
+        },
+        {
+          "value": "PARTIAL",
+          "description": "At least one record was scorable and at least one was not. missing_requirements names what was absent"
+        },
+        {
+          "value": "UNAVAILABLE",
+          "description": "No record was scorable. There is no Evidence Score, and an absent score is not a score of zero"
+        }
+      ]
     }
   ],
   "numeric_types": [
@@ -462,7 +809,8 @@
       "min": 0.0,
       "max": 1.0,
       "spec": "evidence-confidence-framework-v1.md §4",
-      "description": "Estimated independence from other evidence. The threshold gating evidence level 3 is A-04 and remains UNDEFINED."
+      "description": "SUPERSEDED by EvidenceIndependenceState in Mission 1.2. A scalar cannot express WHICH records share an origin, so it could not support the grouping the aggregation framework requires, and it invited q * independence -- discounting instead of grouping, which lets ten discounted duplicates still outweigh one original. Retained so historical references resolve; no column uses it.",
+      "superseded_by": "EvidenceIndependenceState"
     },
     {
       "name": "Score",
@@ -640,9 +988,9 @@
   "blocked": [
     {
       "id": "D-03",
-      "what": "Evidence aggregation formula, recency decay parameters, independence thresholds, contradiction penalties",
-      "consequence": "No aggregation field may be declared in contracts or schema. services/scoring cannot be implemented.",
-      "spec": "scoring-framework-v1.1.md §13"
+      "what": "Evidence aggregation formula, recency behaviour, independence handling, contradiction handling (RESOLVED AT FRAMEWORK LEVEL by Mission 1.1 -- evidence-aggregation-framework-v1.md)",
+      "consequence": "The V1 algorithm is defined and has a reference implementation. Its PARAMETERS are not calibrated, so no CALIBRATED profile exists and services/scoring remains unavailable for production research. The rejected designs stay forbidden: no flat contradiction penalty, no per-item decay weight, no per-source reliability constant.",
+      "spec": "evidence-aggregation-framework-v1.md; scoring-framework-v1.1.md §13"
     },
     {
       "id": "D-07",
@@ -655,6 +1003,12 @@
       "what": "Non-geographic (audience/segment) scoping",
       "consequence": "MarketScope stays geographic only. No SEGMENT variant.",
       "spec": "opportunity-ontology-v2.md §4.8"
+    },
+    {
+      "id": "A-13",
+      "what": "Claim as a persisted entity (RESOLVED by Mission 1.2 -- opportunity-ontology-v2.1.md, claim-model-v1.md)",
+      "consequence": "Resolved: research.claims exists with stable identity, append-only statement revisions, explicit temporality and provenance, and evidence now references a claim rather than an opportunity. Production scoring remains blocked for the separate reason that no CALIBRATED aggregation profile exists.",
+      "spec": "opportunity-ontology-v2.1.md §17; claim-model-v1.md"
     }
   ]
 }

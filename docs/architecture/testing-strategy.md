@@ -1,9 +1,9 @@
 # Testing Strategy
 
-Version: 1.3
-Status: Strategy fixed; infrastructure and orchestration tested. No business
-logic exists to test (Sprint 0 forbids it)
-Date: 2026-08-29 (amended in Mission 0.4)
+Version: 1.7
+Status: Strategy fixed; infrastructure, orchestration, evidence aggregation, the
+Claim model, the compliance layer and the first collector tested
+Date: 2026-08-30 (amended in Mission 1.5)
 
 `PROJECT_MANIFEST.md` §Testability: "Every important behavior must be testable."
 `docs/CLAUDE.md` §Definition of done: tests must cover important behavior and
@@ -115,6 +115,49 @@ Assert **invariants**, never values:
 **relative ordering** assertions (opportunity A ranks above B given this
 evidence). Ranking stability is a more meaningful guarantee than absolute value
 stability, and it survives model improvements.
+
+### Evidence aggregation (added in Mission 1.1)
+
+The first component in the system whose output has no correct answer *and* an
+executable specification, so it is where the invariant approach above gets its
+first real test. `packages/evidence-aggregation/python/tests` asserts twelve
+algebraic invariants and no expected value.
+
+Three lessons from writing them are worth keeping.
+
+**Deterministic sweeps beat a property-based dependency here.** The properties
+are algebraic and the interesting boundaries are known — 0, 1, near-zero,
+near-one, many groups, support-and-contradiction together. A generator library
+would have bought shrinking that a nine-point grid does not need.
+
+**Determinism has to be engineered, not asserted.** Floating-point addition is
+not associative, so "reordering the input changes nothing" is a property the
+implementation must be built to have (sorted summation, sorted group members,
+sorted result contributions). The reordering test caught a real defect: the
+masses were order-independent from the start, but the serialised *explanation*
+was not, so two runs over one snapshot produced different bytes.
+
+**Guards belong in the suite, not only in scripts.** "No per-source reliability
+weight" and "this package opens no network connection" are testable statements
+about source text, and a test that fails on the day somebody adds
+`reddit = 0.75` is worth more than a paragraph asking them not to.
+
+### Cross-tenant integrity (added in Mission 1.2)
+
+The Claim model added a fourth kind of tenancy test, distinct from the three the
+strategy already had.
+
+Existing tests prove a tenant cannot **read** another tenant's rows. These prove
+a tenant cannot **create a reference** to them: a claim pointing at another
+workspace's opportunity, evidence pointing at another workspace's claim, an
+independence group spanning two claims. The composite foreign keys make those
+structurally impossible, and the tests assert on the **constraint name** rather
+than on any exception — otherwise a row rejected for an unrelated reason would
+pass as proof.
+
+That distinction is not academic. Writing these tests caught an insert that
+failed on a missing `NOT NULL` column rather than on the constraint under test;
+a blind `pytest.raises(Exception)` would have reported it green.
 
 ### Classification and extraction
 
@@ -287,3 +330,99 @@ reasons unrelated to benchmarks.
 
 The failure mode this prevents is specific: a suite that quietly became enabled
 reports its problem as an invoice, weeks later, rather than as a red build.
+
+## 10. Environment-dependent expectations (added in Mission 1.4)
+
+Until Mission 1.4 the governance answer was the same everywhere: no source was
+collector-eligible, so a test could assert `eligible == 0` and be asserting a
+property. Condition verification made the answer depend on **what is deployed** —
+which capabilities exist, which credentials are configured, what somebody has
+recorded — and several tests that had looked like property assertions turned out
+to be statements about one database.
+
+They failed the moment `sros-source verify --apply` had been run, which is a bad
+way to find out.
+
+Three rules came out of fixing them, and they apply to anything whose answer can
+legitimately differ between environments.
+
+**Derive the expectation from the input, not from a remembered number.** The
+orchestrator integration test now asks which gate *should* answer given what the
+registry reported, instead of hard-coding `SOURCE-REGISTRY-GATE`:
+
+```python
+expected = "NO-COLLECTOR-IMPLEMENTED" if plan.eligible_source_ids else "SOURCE-REGISTRY-GATE"
+assert acquisition.blocked_reason.startswith(expected)
+```
+
+**Compare two implementations on the same inputs.** The Python gate and the SQL
+view are compared with the satisfaction the *database* holds
+(`conftest.recorded_satisfied_keys`). Evaluating Python without it would compare
+the same rule on different inputs and report a divergence that is really a
+missing argument.
+
+**Assert the behaviour, not the state it happened to produce.** "Every stored
+condition is unsatisfied" was really "nobody has verified this database yet".
+The test now forces every condition false, runs the loader, and asserts none was
+set — which is the property that was always meant: *a catalog load can never
+satisfy its own conditions.*
+
+Two things stay absolutely asserted, because no environment may change them:
+`collector_enabled` is false everywhere, and `acquisition.raw_records` is empty.
+
+## 11. Structural tests, and when they earn their keep (added in Mission 1.5)
+
+Most tests here assert behaviour. The collector conformance suite also asserts
+**shape**, and the distinction is worth stating because structural tests are easy
+to write badly.
+
+A behaviour test proves the collector went through the authorization gate on the
+call it made. A structural test proves there is no second door for it to start
+using next year:
+
+```python
+parameters = list(inspect.signature(WorldBankCollector.collect).parameters.values())
+assert parameters[1].name == "context"
+assert parameters[1].default is inspect.Parameter.empty
+```
+
+That is worth a test because the failure it catches is a *future* one -- somebody
+adding a convenience overload, or a default that quietly makes the context
+optional -- and no behaviour test would notice until something had already
+collected without authorization.
+
+Three rules keep them honest.
+
+**Assert the property, not the current text.** An early version scanned the
+collector's source for `build_authorization` and failed on the docstring that
+explains why the name is absent. Asserting the module NAMESPACE instead is both
+narrower and truer: the name has to be imported before it can be called.
+
+**Exempt by name, with the reason next to it.** The "no public signature accepts
+a URL" scan exempts `host_of`, which parses a URL and performs no request. An
+unexplained exemption list is where a real escape hatch eventually hides.
+
+**Zero, not "refused".** The most valuable assertion in that suite is
+`transport.calls == []`. A gate that refuses after the request went out has
+prevented nothing, and only a counting fake can tell the two apart.
+
+## 12. Tests that change the deployment (added in Mission 1.5)
+
+Two defects in this repository came from the same root, and both were found by
+the suite written after the one that caused them.
+
+A Mission 1.4 test called `sros-source enable world-bank` to assert a refusal.
+When Mission 1.5 gave World Bank a collector, the call stopped being refused and
+**enabled a real collector as a side effect**. A fixture then reset
+`collector_enabled = FALSE` for *every* source in teardown, silently reverting a
+deliberate operational decision.
+
+The rules that came out of it:
+
+- a test that needs the deployment in a particular state **puts it there and puts
+  it back**, restoring the previous value rather than forcing a default;
+- a test that asserts a refusal names a subject that will still be refused --
+  Eurostat is eligible with no collector, so it carries that property now;
+- a test that counts rows uses **its own workspace**. Workspace A holds real
+  collected data since Mission 1.5, and counting there measures the environment
+  rather than the behaviour under test.

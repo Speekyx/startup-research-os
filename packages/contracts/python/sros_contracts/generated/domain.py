@@ -8,7 +8,7 @@ Regenerate      : python packages/contracts/tools/generate.py
 Editing this file by hand will be overwritten and will fail the contract
 check in CI. Change the source of truth instead.
 
-contract_version: 1.0.0
+contract_version: 1.5.0
 ontology_version: 2
 """
 
@@ -17,7 +17,7 @@ from __future__ import annotations
 from enum import Enum
 from typing import Final
 
-CONTRACT_VERSION: Final[str] = "1.0.0"
+CONTRACT_VERSION: Final[str] = "1.5.0"
 ONTOLOGY_VERSION: Final[str] = "2"
 RESEARCH_CONTEXT_SCHEMA_VERSION: Final[str] = "1.0.0"
 
@@ -32,6 +32,7 @@ IDENTIFIER_FORMATS: Final[dict[str, str]] = {
     "ResearchProjectId": "uuid",
     "ResearchSessionId": "uuid",
     "OpportunityId": "uuid",
+    "ClaimId": "uuid",
     "EvidenceId": "uuid",
     "SignalId": "uuid",
     "SourceId": "slug",
@@ -146,6 +147,75 @@ class SourceApprovalState(str, Enum):
     SUSPENDED = "SUSPENDED"  # Operationally halted regardless of review state. An immediate stop that does not wait for a review cycle
 
 
+class ConditionVerification(str, Enum):
+    """HOW a review condition can be checked. Exists so APPROVED_WITH_CONDITIONS cannot silently mean 'a collector may run': each condition is satisfied individually, and one that no machine can verify must say so rather than pretending it can.
+
+    See source-registry-v1.md; Mission 1.3 §24.
+    """
+
+    CONFIG_REFERENCE = "CONFIG_REFERENCE"  # A named configuration key is present in the environment. The KEY name, never its value
+    CAPABILITY = "CAPABILITY"  # A named product capability is implemented and enabled -- for example a surface that can display a required attribution notice
+    RETENTION_LIMIT = "RETENTION_LIMIT"  # A retention limit at or below a stated number of days is configured for the source
+    ACCESS_METHOD = "ACCESS_METHOD"  # Collection uses only a named access method, and no other
+    HUMAN_CONFIRMATION = "HUMAN_CONFIRMATION"  # No machine can check it. A person must record the decision and the reference to it. Marking this satisfied is a human act, and the honest answer for anything a program cannot establish
+
+
+class ConditionVerificationResult(str, Enum):
+    """The outcome of running a verifier against one review condition. Four values rather than a boolean, because 'we could not establish it' and 'it does not hold' call for different next steps and only one of them is a bug. UNKNOWN never becomes SATISFIED, and only SATISFIED clears the condition.
+
+    See source-condition-gap-analysis-v1.md; Mission 1.4 §19.
+    """
+
+    SATISFIED = "SATISFIED"  # The verifier established the condition holds, and recorded what it looked at
+    UNSATISFIED = "UNSATISFIED"  # The verifier ran and the condition does not hold. A definite answer, not an absence of one
+    UNKNOWN = "UNKNOWN"  # The verifier could not establish either answer -- no verifier is registered for the condition, or what it needs to inspect is unavailable. Blocks exactly like UNSATISFIED and must never be promoted
+    NOT_APPLICABLE = "NOT_APPLICABLE"  # The condition does not apply in this context, for a reason the record states. Blocks: a condition that does not apply has still not been satisfied
+
+
+class AttributionElement(str, Enum):
+    """One required part of a source's attribution obligation. A closed enum because the renderer branches exhaustively: an element it does not recognise must be a contract change, never a silently dropped requirement.
+
+    See acquisition-authorization-v1.md; Mission 1.4 §6.
+    """
+
+    SOURCE_CREDIT = "SOURCE_CREDIT"  # Credit to the source, in the wording the source's own terms require
+    LICENCE_IDENTIFIER = "LICENCE_IDENTIFIER"  # The licence the resource is distributed under, named so a reader can find it
+    EXACT_NOTICE = "EXACT_NOTICE"  # A sentence whose wording is prescribed by the terms and must appear verbatim. Never paraphrased, never composed
+    MODIFICATION_STATEMENT = "MODIFICATION_STATEMENT"  # A statement of what was changed, required where the licence requires changes to be indicated. Includes translation
+    DATASET_DOI = "DATASET_DOI"  # The persistent identifier of the specific dataset used. A per-resource value; it cannot be defaulted
+    ACCESS_DATE = "ACCESS_DATE"  # The date the data was retrieved. A per-retrieval value; it cannot be defaulted
+    DISCLAIMER = "DISCLAIMER"  # A disclaimer the terms require alongside modified data, supplied as text rather than composed by this system when the exact wording is not in the recorded evidence
+
+
+class AcquisitionErrorCode(str, Enum):
+    """Why an acquisition attempt did not produce records. A closed vocabulary so the orchestrator branches on a meaning rather than on a third party's exception class -- an upstream library changing its exception hierarchy must not change how this system retries. Each value also fixes whether it is worth retrying, which is the decision that costs money when it is wrong.
+
+    See world-bank-collector-v1.md; Mission 1.5 §32.
+    """
+
+    AUTHORIZATION_REJECTED = "AUTHORIZATION_REJECTED"  # No acquisition authorization could be built for the source. Never retried: the answer comes from the governance gate and will not change on its own
+    RESOURCE_NOT_PERMITTED = "RESOURCE_NOT_PERMITTED"  # The source is authorised and this specific resource is not -- excluded dataset, licence outside the allowlist, third-party or unestablished origin. Never retried
+    NETWORK_TIMEOUT = "NETWORK_TIMEOUT"  # The request did not complete within its connect or read budget. Retryable
+    RATE_LIMITED = "RATE_LIMITED"  # The source signalled too many requests. Retryable, and more slowly than other failures
+    TEMPORARY_UPSTREAM = "TEMPORARY_UPSTREAM"  # The source failed in a way it describes as its own and transient. Retryable
+    UPSTREAM_CLIENT_ERROR = "UPSTREAM_CLIENT_ERROR"  # The source rejected the request deterministically. Never retried: the same request produces the same rejection, and repeating it is how a rate limit becomes a ban
+    INVALID_RESPONSE = "INVALID_RESPONSE"  # The response arrived and does not have the documented shape. Never retried: a source that changed its contract needs a person, not another attempt
+    PARSING_FAILURE = "PARSING_FAILURE"  # The response could not be read at all -- malformed encoding or unparseable body. Never retried
+    PERSISTENCE_FAILURE = "PERSISTENCE_FAILURE"  # Records were acquired and could not be stored. Retryable, because the source is not the problem
+    CANCELLED = "CANCELLED"  # The job was cancelled or ran out of its bounds before completing. Never retried automatically
+
+
+class ResourceContentOrigin(str, Enum):
+    """Whether the platform's own licence covers a particular resource. Aggregators republish material they do not own, so platform approval is not resource approval. UNKNOWN exists because it is the common case and must fail closed rather than be guessed either way.
+
+    See acquisition-authorization-v1.md; Mission 1.4 §12.
+    """
+
+    PLATFORM_LICENSED = "PLATFORM_LICENSED"  # The platform produces or licenses this resource, and the reviewed terms cover it
+    THIRD_PARTY = "THIRD_PARTY"  # Owned by someone other than the platform. The platform's approval grants nothing over it, and separate permission from the owner is required
+    UNKNOWN = "UNKNOWN"  # Not established. Denied wherever licensing scope matters: an unexamined resource is not a resource known to be covered
+
+
 class SourceAccessMethod(str, Enum):
     """HOW access is technically performed. It says nothing about whether access is PERMITTED: permission is a separate dimension carried by the policy review. BROWSER_AUTOMATION being available never implies it is allowed.
 
@@ -224,6 +294,110 @@ class PersonalDataRisk(str, Enum):
     IDENTIFIABLE = "IDENTIFIABLE"  # Real names, profiles or contact details may appear
     SENSITIVE_POSSIBLE = "SENSITIVE_POSSIBLE"  # Special-category information may appear in free text. Requires review before any collection
     UNKNOWN = "UNKNOWN"  # Not assessed. Never treated as NONE_EXPECTED
+
+
+class EvidenceDirection(str, Enum):
+    """How one Evidence record bears on a Claim. Support and contradiction are aggregated SEPARATELY and never averaged together, so this drives exhaustive branching and is closed.
+
+    See evidence-aggregation-framework-v1.md §5.
+    """
+
+    SUPPORTS = "SUPPORTS"  # The evidence bears in favour of the claim
+    CONTRADICTS = "CONTRADICTS"  # The evidence bears against the claim
+    NEUTRAL = "NEUTRAL"  # Related to the claim but bearing neither way. Retained for provenance and coverage; contributes to neither support nor contradiction strength
+
+
+class EvidenceIndependenceState(str, Enum):
+    """What is KNOWN about an evidence record provenance relationship to the rest of the set. UNKNOWN is a distinct third state and is never silently promoted to KNOWN_INDEPENDENT.
+
+    See evidence-aggregation-framework-v1.md §10, §13.
+    """
+
+    KNOWN_INDEPENDENT = "KNOWN_INDEPENDENT"  # Provenance was established and does not derive from another record in the set
+    KNOWN_DEPENDENT = "KNOWN_DEPENDENT"  # Provenance was established and shares an origin with other records; requires an independence group id
+    UNKNOWN = "UNKNOWN"  # Provenance was not established. Conservative handling: all such records for one claim and one direction form at most ONE contribution group
+
+
+class EvidenceObservationCategory(str, Enum):
+    """WHAT KIND of thing was observed, independent of how strong it is. Gates EvidenceLevel 4 and 5, which quantity of evidence must never reach on its own. Closed because level eligibility branches exhaustively over it.
+
+    See evidence-aggregation-framework-v1.md §11.
+    """
+
+    STATED_OPINION = "STATED_OPINION"  # Someone expressed a view. A comment, a post, a reply
+    REPORTED_BEHAVIOUR = "REPORTED_BEHAVIOUR"  # An account of behaviour, not the behaviour itself
+    OBSERVED_BEHAVIOUR = "OBSERVED_BEHAVIOUR"  # Aggregated behavioural measurement: search interest, download counts, review volume
+    MARKET_ACTIVITY = "MARKET_ACTIVITY"  # Economic activity: purchases, subscriptions, pricing, established competing products, adoption. Required for EvidenceLevel 4
+    DIRECT_VALIDATION = "DIRECT_VALIDATION"  # Validation of THIS opportunity: interviews, signups, prototype usage, preorders, payments. Required for EvidenceLevel 5
+    UNCATEGORISED = "UNCATEGORISED"  # Not categorised. Cannot lift EvidenceLevel above 3, because an uncategorised record has not been shown to be market evidence
+
+
+class ClaimTemporality(str, Enum):
+    """Whether a claim decays. A property of the CLAIM, never of the source: the same platform can carry an evergreen fact and a trend that is stale in a week. Closed because freshness branches exhaustively over it.
+
+    See evidence-aggregation-framework-v1.md §9.
+    """
+
+    EVERGREEN = "EVERGREEN"  # The claim does not decay with the passage of time. Freshness is 1.0 unless the underlying fact itself became obsolete, which is a new contradicting observation rather than decay
+    TEMPORALLY_SENSITIVE = "TEMPORALLY_SENSITIVE"  # The claim loses force as its observations age. Requires an authorised half-life in the aggregation profile; without one the evidence is NON-SCORABLE rather than assumed fresh
+
+
+class ClaimOrigin(str, Enum):
+    """What PROCESS produced the claim, at the level of kind rather than instance. Deliberately carries no model, provider or prompt name: those change constantly and belong in provenance columns, where a new one does not require a contract change.
+
+    See claim-model-v1.md §6.
+    """
+
+    MANUAL = "MANUAL"  # Authored by a person
+    DETERMINISTIC_EXTRACTION = "DETERMINISTIC_EXTRACTION"  # Produced by a rule, parser or query with no model involved
+    LLM_EXTRACTION = "LLM_EXTRACTION"  # Extracted from source text by a language model. The model and prompt versions are recorded in provenance, never here
+    INFERRED = "INFERRED"  # Derived analytically from other claims or signals rather than read from a source
+    SYSTEM_GENERATED = "SYSTEM_GENERATED"  # Created by the platform itself, for example a coverage placeholder
+    IMPORTED = "IMPORTED"  # Brought in from an external dataset or a prior system
+
+
+class ClaimLifecycle(str, Enum):
+    """EDITORIAL state, never epistemic. There is deliberately no VALIDATED or REJECTED value: evidence can change, and a lifecycle state derived from EvidenceLevel would freeze a conclusion the evidence no longer supports (Mission 1.2 §38). What a claim is worth is read from its aggregation, never from this column.
+
+    See claim-model-v1.md §8.
+    """
+
+    ACTIVE = "ACTIVE"  # In use. Accumulates evidence and may be aggregated
+    WITHDRAWN = "WITHDRAWN"  # Removed from use — malformed, duplicated, or out of scope. Its evidence and revision history are retained, because deleting the row would destroy the record of what was once believed
+
+
+class ObservationKind(str, Enum):
+    """How one ResearchSession related to a persisted entity it encountered. Promoted to the canonical contract in Mission 1.2: it already governed opportunity observations as a SQL CHECK plus a Python frozenset, which is exactly the drift ADR-009 exists to prevent. Not a scoring judgement.
+
+    See opportunity-ontology-v2.md §12; claim-model-v1.md §7.
+    """
+
+    DISCOVERED = "DISCOVERED"  # The session introduced it
+    CORROBORATED = "CORROBORATED"  # The session found further support for it
+    CONTRADICTED = "CONTRADICTED"  # The session found evidence against it
+
+
+class AggregationProfileStatus(str, Enum):
+    """Whether the PARAMETERS of a profile have been calibrated against data. Separate from whether the algorithm is defined: defining equations calibrates nothing. Production scoring requires CALIBRATED.
+
+    See evidence-aggregation-framework-v1.md §14.
+    """
+
+    DRAFT = "DRAFT"  # Being written. Not runnable
+    UNCALIBRATED = "UNCALIBRATED"  # Parameters are structural or provisional, never fitted to labelled data. Runnable only in an explicitly labelled experimental mode
+    CALIBRATED = "CALIBRATED"  # Parameters were fitted and evaluated against a recorded calibration dataset
+    RETIRED = "RETIRED"  # Superseded. Kept so historical results stay readable
+
+
+class EvidenceAggregationStatus(str, Enum):
+    """Whether the numbers in a result may be read as covering the evidence set. A result that silently dropped half its items would be indistinguishable from one that used all of them.
+
+    See evidence-aggregation-framework-v1.md §16.
+    """
+
+    COMPLETE = "COMPLETE"  # Every evidence record in the snapshot was scorable
+    PARTIAL = "PARTIAL"  # At least one record was scorable and at least one was not. missing_requirements names what was absent
+    UNAVAILABLE = "UNAVAILABLE"  # No record was scorable. There is no Evidence Score, and an absent score is not a score of zero
 
 
 # --- Numeric bounds --------------------------------------------------------

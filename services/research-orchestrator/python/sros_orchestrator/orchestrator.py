@@ -236,10 +236,18 @@ class ResearchOrchestrator:
         dispatcher: Dispatcher | None = None,
         planner: ResearchPlanner | None = None,
         sources: SourceAvailabilityProvider | None = None,
+        # The second acquisition gate (Mission 1.5). Supplied by the composition
+        # root, never imported: a service may not import another service's
+        # package (`service-boundaries.md`). Empty by default, so a caller that
+        # forgets to wire it gets a refusal rather than a permission.
+        implemented_collectors: frozenset[str] = frozenset(),
     ) -> None:
         self._db = db
         self._dispatcher = dispatcher or RecordingDispatcher()
-        self._planner = planner or ResearchPlanner(sources=sources or _registry_for(db))
+        self._planner = planner or ResearchPlanner(
+            sources=sources or _registry_for(db),
+            implemented_collectors=implemented_collectors,
+        )
         self.plans = ResearchPlanRepository(db)
         self.jobs = JobLedgerRepository(db)
         self.budgets = BudgetLedgerRepository(db)

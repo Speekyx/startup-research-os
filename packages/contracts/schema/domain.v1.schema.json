@@ -3,9 +3,81 @@
   "$id": "https://startup-research-os.local/schema/domain.v1.schema.json",
   "title": "Startup Research OS domain vocabulary",
   "description": "GENERATED FILE. Source of truth: packages/contracts/schema/domain.v1.json. Regenerate with python packages/contracts/tools/generate.py.",
-  "x-contract-version": "1.0.0",
+  "x-contract-version": "1.5.0",
   "x-ontology-version": "2",
   "$defs": {
+    "AcquisitionErrorCode": {
+      "type": "string",
+      "enum": [
+        "AUTHORIZATION_REJECTED",
+        "RESOURCE_NOT_PERMITTED",
+        "NETWORK_TIMEOUT",
+        "RATE_LIMITED",
+        "TEMPORARY_UPSTREAM",
+        "UPSTREAM_CLIENT_ERROR",
+        "INVALID_RESPONSE",
+        "PARSING_FAILURE",
+        "PERSISTENCE_FAILURE",
+        "CANCELLED"
+      ],
+      "description": "Why an acquisition attempt did not produce records. A closed vocabulary so the orchestrator branches on a meaning rather than on a third party's exception class -- an upstream library changing its exception hierarchy must not change how this system retries. Each value also fixes whether it is worth retrying, which is the decision that costs money when it is wrong."
+    },
+    "AggregationProfileStatus": {
+      "type": "string",
+      "enum": [
+        "DRAFT",
+        "UNCALIBRATED",
+        "CALIBRATED",
+        "RETIRED"
+      ],
+      "description": "Whether the PARAMETERS of a profile have been calibrated against data. Separate from whether the algorithm is defined: defining equations calibrates nothing. Production scoring requires CALIBRATED."
+    },
+    "AttributionElement": {
+      "type": "string",
+      "enum": [
+        "SOURCE_CREDIT",
+        "LICENCE_IDENTIFIER",
+        "EXACT_NOTICE",
+        "MODIFICATION_STATEMENT",
+        "DATASET_DOI",
+        "ACCESS_DATE",
+        "DISCLAIMER"
+      ],
+      "description": "One required part of a source's attribution obligation. A closed enum because the renderer branches exhaustively: an element it does not recognise must be a contract change, never a silently dropped requirement."
+    },
+    "ClaimId": {
+      "type": "string",
+      "description": "An assertion about an Opportunity that evidence can independently support or contradict. Ontology V2.1 §17. STABLE across statement revisions: the text may be rewritten, the identity may not. Distinct from ClaimType, which is an epistemic category and not an identity.",
+      "format": "uuid"
+    },
+    "ClaimLifecycle": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "WITHDRAWN"
+      ],
+      "description": "EDITORIAL state, never epistemic. There is deliberately no VALIDATED or REJECTED value: evidence can change, and a lifecycle state derived from EvidenceLevel would freeze a conclusion the evidence no longer supports (Mission 1.2 §38). What a claim is worth is read from its aggregation, never from this column."
+    },
+    "ClaimOrigin": {
+      "type": "string",
+      "enum": [
+        "MANUAL",
+        "DETERMINISTIC_EXTRACTION",
+        "LLM_EXTRACTION",
+        "INFERRED",
+        "SYSTEM_GENERATED",
+        "IMPORTED"
+      ],
+      "description": "What PROCESS produced the claim, at the level of kind rather than instance. Deliberately carries no model, provider or prompt name: those change constantly and belong in provenance columns, where a new one does not require a contract change."
+    },
+    "ClaimTemporality": {
+      "type": "string",
+      "enum": [
+        "EVERGREEN",
+        "TEMPORALLY_SENSITIVE"
+      ],
+      "description": "Whether a claim decays. A property of the CLAIM, never of the source: the same platform can carry an evergreen fact and a trend that is stale in a week. Closed because freshness branches exhaustively over it."
+    },
     "ClaimType": {
       "type": "string",
       "enum": [
@@ -16,6 +88,27 @@
         "HYPOTHESIS"
       ],
       "description": "How an analytical statement is supported. Never conflated in any output."
+    },
+    "ConditionVerification": {
+      "type": "string",
+      "enum": [
+        "CONFIG_REFERENCE",
+        "CAPABILITY",
+        "RETENTION_LIMIT",
+        "ACCESS_METHOD",
+        "HUMAN_CONFIRMATION"
+      ],
+      "description": "HOW a review condition can be checked. Exists so APPROVED_WITH_CONDITIONS cannot silently mean 'a collector may run': each condition is satisfied individually, and one that no machine can verify must say so rather than pretending it can."
+    },
+    "ConditionVerificationResult": {
+      "type": "string",
+      "enum": [
+        "SATISFIED",
+        "UNSATISFIED",
+        "UNKNOWN",
+        "NOT_APPLICABLE"
+      ],
+      "description": "The outcome of running a verifier against one review condition. Four values rather than a boolean, because 'we could not establish it' and 'it does not hold' call for different next steps and only one of them is a bug. UNKNOWN never becomes SATISFIED, and only SATISFIED clears the condition."
     },
     "Confidence": {
       "type": "number",
@@ -33,10 +126,37 @@
       ],
       "description": "Closed. Signal TYPES within a family are a registry, not an enum."
     },
+    "EvidenceAggregationStatus": {
+      "type": "string",
+      "enum": [
+        "COMPLETE",
+        "PARTIAL",
+        "UNAVAILABLE"
+      ],
+      "description": "Whether the numbers in a result may be read as covering the evidence set. A result that silently dropped half its items would be indistinguishable from one that used all of them."
+    },
+    "EvidenceDirection": {
+      "type": "string",
+      "enum": [
+        "SUPPORTS",
+        "CONTRADICTS",
+        "NEUTRAL"
+      ],
+      "description": "How one Evidence record bears on a Claim. Support and contradiction are aggregated SEPARATELY and never averaged together, so this drives exhaustive branching and is closed."
+    },
     "EvidenceId": {
       "type": "string",
       "description": "An evidence record with mandatory provenance.",
       "format": "uuid"
+    },
+    "EvidenceIndependenceState": {
+      "type": "string",
+      "enum": [
+        "KNOWN_INDEPENDENT",
+        "KNOWN_DEPENDENT",
+        "UNKNOWN"
+      ],
+      "description": "What is KNOWN about an evidence record provenance relationship to the rest of the set. UNKNOWN is a distinct third state and is never silently promoted to KNOWN_INDEPENDENT."
     },
     "EvidenceLevel": {
       "type": "integer",
@@ -44,11 +164,23 @@
       "maximum": 5,
       "description": "0 Hypothesis, 1 Weak, 2 Repeated, 3 Multi-source, 4 Market evidence, 5 Direct validation. Never rescaled, never averaged into a score."
     },
+    "EvidenceObservationCategory": {
+      "type": "string",
+      "enum": [
+        "STATED_OPINION",
+        "REPORTED_BEHAVIOUR",
+        "OBSERVED_BEHAVIOUR",
+        "MARKET_ACTIVITY",
+        "DIRECT_VALIDATION",
+        "UNCATEGORISED"
+      ],
+      "description": "WHAT KIND of thing was observed, independent of how strong it is. Gates EvidenceLevel 4 and 5, which quantity of evidence must never reach on its own. Closed because level eligibility branches exhaustively over it."
+    },
     "Independence": {
       "type": "number",
       "minimum": 0.0,
       "maximum": 1.0,
-      "description": "Estimated independence from other evidence. The threshold gating evidence level 3 is A-04 and remains UNDEFINED."
+      "description": "SUPERSEDED by EvidenceIndependenceState in Mission 1.2. A scalar cannot express WHICH records share an origin, so it could not support the grouping the aggregation framework requires, and it invited q * independence -- discounting instead of grouping, which lets ten discounted duplicates still outweigh one original. Retained so historical references resolve; no column uses it."
     },
     "LlmTier": {
       "type": "string",
@@ -149,6 +281,15 @@
         "MULTI_COUNTRY"
       ],
       "description": "Geographic scope discriminator. Geographic axis only; segment scoping is A-12 and is NOT modelled."
+    },
+    "ObservationKind": {
+      "type": "string",
+      "enum": [
+        "DISCOVERED",
+        "CORROBORATED",
+        "CONTRADICTED"
+      ],
+      "description": "How one ResearchSession related to a persisted entity it encountered. Promoted to the canonical contract in Mission 1.2: it already governed opportunity observations as a SQL CHECK plus a Python frozenset, which is exactly the drift ADR-009 exists to prevent. Not a scoring judgement."
     },
     "OpportunityId": {
       "type": "string",
@@ -378,6 +519,15 @@
         "CANCELLED"
       ],
       "description": "Session lifecycle. Budget exhaustion is COMPLETED with reduced Research Completeness, never a status. A session that finds nothing is COMPLETED, not FAILED."
+    },
+    "ResourceContentOrigin": {
+      "type": "string",
+      "enum": [
+        "PLATFORM_LICENSED",
+        "THIRD_PARTY",
+        "UNKNOWN"
+      ],
+      "description": "Whether the platform's own licence covers a particular resource. Aggregators republish material they do not own, so platform approval is not resource approval. UNKNOWN exists because it is the common case and must fail closed rather than be guessed either way."
     },
     "Score": {
       "type": "integer",

@@ -9,12 +9,12 @@
  * Editing this file by hand will be overwritten and will fail the contract
  * check in CI. Change the source of truth instead.
  *
- * contract_version: 1.0.0
+ * contract_version: 1.5.0
  * ontology_version: 2
  */
 
 
-export const CONTRACT_VERSION = "1.0.0" as const;
+export const CONTRACT_VERSION = "1.5.0" as const;
 export const ONTOLOGY_VERSION = "2" as const;
 export const RESEARCH_CONTEXT_SCHEMA_VERSION = "1.0.0" as const;
 
@@ -35,6 +35,8 @@ export type ResearchProjectId = Brand<string, "ResearchProjectId">;
 export type ResearchSessionId = Brand<string, "ResearchSessionId">;
 /** A domain hypothesis. Not owned by the session that found it. Ontology V2 §12. (format: uuid) */
 export type OpportunityId = Brand<string, "OpportunityId">;
+/** An assertion about an Opportunity that evidence can independently support or contradict. Ontology V2.1 §17. STABLE across statement revisions: the text may be rewritten, the identity may not. Distinct from ClaimType, which is an epistemic category and not an identity. (format: uuid) */
+export type ClaimId = Brand<string, "ClaimId">;
 /** An evidence record with mandatory provenance. (format: uuid) */
 export type EvidenceId = Brand<string, "EvidenceId">;
 /** An extracted demand signal. (format: uuid) */
@@ -48,6 +50,7 @@ export const IDENTIFIER_FORMATS = {
   ResearchProjectId: "uuid",
   ResearchSessionId: "uuid",
   OpportunityId: "uuid",
+  ClaimId: "uuid",
   EvidenceId: "uuid",
   SignalId: "uuid",
   SourceId: "slug",
@@ -185,6 +188,90 @@ export function isSourceApprovalState(v: unknown): v is SourceApprovalState {
 }
 
 /**
+ * HOW a review condition can be checked. Exists so APPROVED_WITH_CONDITIONS cannot silently mean 'a collector may run': each condition is satisfied individually, and one that no machine can verify must say so rather than pretending it can.
+ * @see source-registry-v1.md; Mission 1.3 §24
+ */
+export const CONDITION_VERIFICATION_VALUES = [
+  "CONFIG_REFERENCE",
+  "CAPABILITY",
+  "RETENTION_LIMIT",
+  "ACCESS_METHOD",
+  "HUMAN_CONFIRMATION",
+] as const;
+export type ConditionVerification = (typeof CONDITION_VERIFICATION_VALUES)[number];
+export function isConditionVerification(v: unknown): v is ConditionVerification {
+  return typeof v === "string" && (CONDITION_VERIFICATION_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * The outcome of running a verifier against one review condition. Four values rather than a boolean, because 'we could not establish it' and 'it does not hold' call for different next steps and only one of them is a bug. UNKNOWN never becomes SATISFIED, and only SATISFIED clears the condition.
+ * @see source-condition-gap-analysis-v1.md; Mission 1.4 §19
+ */
+export const CONDITION_VERIFICATION_RESULT_VALUES = [
+  "SATISFIED",
+  "UNSATISFIED",
+  "UNKNOWN",
+  "NOT_APPLICABLE",
+] as const;
+export type ConditionVerificationResult = (typeof CONDITION_VERIFICATION_RESULT_VALUES)[number];
+export function isConditionVerificationResult(v: unknown): v is ConditionVerificationResult {
+  return typeof v === "string" && (CONDITION_VERIFICATION_RESULT_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * One required part of a source's attribution obligation. A closed enum because the renderer branches exhaustively: an element it does not recognise must be a contract change, never a silently dropped requirement.
+ * @see acquisition-authorization-v1.md; Mission 1.4 §6
+ */
+export const ATTRIBUTION_ELEMENT_VALUES = [
+  "SOURCE_CREDIT",
+  "LICENCE_IDENTIFIER",
+  "EXACT_NOTICE",
+  "MODIFICATION_STATEMENT",
+  "DATASET_DOI",
+  "ACCESS_DATE",
+  "DISCLAIMER",
+] as const;
+export type AttributionElement = (typeof ATTRIBUTION_ELEMENT_VALUES)[number];
+export function isAttributionElement(v: unknown): v is AttributionElement {
+  return typeof v === "string" && (ATTRIBUTION_ELEMENT_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * Why an acquisition attempt did not produce records. A closed vocabulary so the orchestrator branches on a meaning rather than on a third party's exception class -- an upstream library changing its exception hierarchy must not change how this system retries. Each value also fixes whether it is worth retrying, which is the decision that costs money when it is wrong.
+ * @see world-bank-collector-v1.md; Mission 1.5 §32
+ */
+export const ACQUISITION_ERROR_CODE_VALUES = [
+  "AUTHORIZATION_REJECTED",
+  "RESOURCE_NOT_PERMITTED",
+  "NETWORK_TIMEOUT",
+  "RATE_LIMITED",
+  "TEMPORARY_UPSTREAM",
+  "UPSTREAM_CLIENT_ERROR",
+  "INVALID_RESPONSE",
+  "PARSING_FAILURE",
+  "PERSISTENCE_FAILURE",
+  "CANCELLED",
+] as const;
+export type AcquisitionErrorCode = (typeof ACQUISITION_ERROR_CODE_VALUES)[number];
+export function isAcquisitionErrorCode(v: unknown): v is AcquisitionErrorCode {
+  return typeof v === "string" && (ACQUISITION_ERROR_CODE_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * Whether the platform's own licence covers a particular resource. Aggregators republish material they do not own, so platform approval is not resource approval. UNKNOWN exists because it is the common case and must fail closed rather than be guessed either way.
+ * @see acquisition-authorization-v1.md; Mission 1.4 §12
+ */
+export const RESOURCE_CONTENT_ORIGIN_VALUES = [
+  "PLATFORM_LICENSED",
+  "THIRD_PARTY",
+  "UNKNOWN",
+] as const;
+export type ResourceContentOrigin = (typeof RESOURCE_CONTENT_ORIGIN_VALUES)[number];
+export function isResourceContentOrigin(v: unknown): v is ResourceContentOrigin {
+  return typeof v === "string" && (RESOURCE_CONTENT_ORIGIN_VALUES as readonly string[]).includes(v);
+}
+
+/**
  * HOW access is technically performed. It says nothing about whether access is PERMITTED: permission is a separate dimension carried by the policy review. BROWSER_AUTOMATION being available never implies it is allowed.
  * @see source-registry-v1.md §8
  */
@@ -280,6 +367,137 @@ export const PERSONAL_DATA_RISK_VALUES = [
 export type PersonalDataRisk = (typeof PERSONAL_DATA_RISK_VALUES)[number];
 export function isPersonalDataRisk(v: unknown): v is PersonalDataRisk {
   return typeof v === "string" && (PERSONAL_DATA_RISK_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * How one Evidence record bears on a Claim. Support and contradiction are aggregated SEPARATELY and never averaged together, so this drives exhaustive branching and is closed.
+ * @see evidence-aggregation-framework-v1.md §5
+ */
+export const EVIDENCE_DIRECTION_VALUES = [
+  "SUPPORTS",
+  "CONTRADICTS",
+  "NEUTRAL",
+] as const;
+export type EvidenceDirection = (typeof EVIDENCE_DIRECTION_VALUES)[number];
+export function isEvidenceDirection(v: unknown): v is EvidenceDirection {
+  return typeof v === "string" && (EVIDENCE_DIRECTION_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * What is KNOWN about an evidence record provenance relationship to the rest of the set. UNKNOWN is a distinct third state and is never silently promoted to KNOWN_INDEPENDENT.
+ * @see evidence-aggregation-framework-v1.md §10, §13
+ */
+export const EVIDENCE_INDEPENDENCE_STATE_VALUES = [
+  "KNOWN_INDEPENDENT",
+  "KNOWN_DEPENDENT",
+  "UNKNOWN",
+] as const;
+export type EvidenceIndependenceState = (typeof EVIDENCE_INDEPENDENCE_STATE_VALUES)[number];
+export function isEvidenceIndependenceState(v: unknown): v is EvidenceIndependenceState {
+  return typeof v === "string" && (EVIDENCE_INDEPENDENCE_STATE_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * WHAT KIND of thing was observed, independent of how strong it is. Gates EvidenceLevel 4 and 5, which quantity of evidence must never reach on its own. Closed because level eligibility branches exhaustively over it.
+ * @see evidence-aggregation-framework-v1.md §11
+ */
+export const EVIDENCE_OBSERVATION_CATEGORY_VALUES = [
+  "STATED_OPINION",
+  "REPORTED_BEHAVIOUR",
+  "OBSERVED_BEHAVIOUR",
+  "MARKET_ACTIVITY",
+  "DIRECT_VALIDATION",
+  "UNCATEGORISED",
+] as const;
+export type EvidenceObservationCategory = (typeof EVIDENCE_OBSERVATION_CATEGORY_VALUES)[number];
+export function isEvidenceObservationCategory(v: unknown): v is EvidenceObservationCategory {
+  return typeof v === "string" && (EVIDENCE_OBSERVATION_CATEGORY_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * Whether a claim decays. A property of the CLAIM, never of the source: the same platform can carry an evergreen fact and a trend that is stale in a week. Closed because freshness branches exhaustively over it.
+ * @see evidence-aggregation-framework-v1.md §9
+ */
+export const CLAIM_TEMPORALITY_VALUES = [
+  "EVERGREEN",
+  "TEMPORALLY_SENSITIVE",
+] as const;
+export type ClaimTemporality = (typeof CLAIM_TEMPORALITY_VALUES)[number];
+export function isClaimTemporality(v: unknown): v is ClaimTemporality {
+  return typeof v === "string" && (CLAIM_TEMPORALITY_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * What PROCESS produced the claim, at the level of kind rather than instance. Deliberately carries no model, provider or prompt name: those change constantly and belong in provenance columns, where a new one does not require a contract change.
+ * @see claim-model-v1.md §6
+ */
+export const CLAIM_ORIGIN_VALUES = [
+  "MANUAL",
+  "DETERMINISTIC_EXTRACTION",
+  "LLM_EXTRACTION",
+  "INFERRED",
+  "SYSTEM_GENERATED",
+  "IMPORTED",
+] as const;
+export type ClaimOrigin = (typeof CLAIM_ORIGIN_VALUES)[number];
+export function isClaimOrigin(v: unknown): v is ClaimOrigin {
+  return typeof v === "string" && (CLAIM_ORIGIN_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * EDITORIAL state, never epistemic. There is deliberately no VALIDATED or REJECTED value: evidence can change, and a lifecycle state derived from EvidenceLevel would freeze a conclusion the evidence no longer supports (Mission 1.2 §38). What a claim is worth is read from its aggregation, never from this column.
+ * @see claim-model-v1.md §8
+ */
+export const CLAIM_LIFECYCLE_VALUES = [
+  "ACTIVE",
+  "WITHDRAWN",
+] as const;
+export type ClaimLifecycle = (typeof CLAIM_LIFECYCLE_VALUES)[number];
+export function isClaimLifecycle(v: unknown): v is ClaimLifecycle {
+  return typeof v === "string" && (CLAIM_LIFECYCLE_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * How one ResearchSession related to a persisted entity it encountered. Promoted to the canonical contract in Mission 1.2: it already governed opportunity observations as a SQL CHECK plus a Python frozenset, which is exactly the drift ADR-009 exists to prevent. Not a scoring judgement.
+ * @see opportunity-ontology-v2.md §12; claim-model-v1.md §7
+ */
+export const OBSERVATION_KIND_VALUES = [
+  "DISCOVERED",
+  "CORROBORATED",
+  "CONTRADICTED",
+] as const;
+export type ObservationKind = (typeof OBSERVATION_KIND_VALUES)[number];
+export function isObservationKind(v: unknown): v is ObservationKind {
+  return typeof v === "string" && (OBSERVATION_KIND_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * Whether the PARAMETERS of a profile have been calibrated against data. Separate from whether the algorithm is defined: defining equations calibrates nothing. Production scoring requires CALIBRATED.
+ * @see evidence-aggregation-framework-v1.md §14
+ */
+export const AGGREGATION_PROFILE_STATUS_VALUES = [
+  "DRAFT",
+  "UNCALIBRATED",
+  "CALIBRATED",
+  "RETIRED",
+] as const;
+export type AggregationProfileStatus = (typeof AGGREGATION_PROFILE_STATUS_VALUES)[number];
+export function isAggregationProfileStatus(v: unknown): v is AggregationProfileStatus {
+  return typeof v === "string" && (AGGREGATION_PROFILE_STATUS_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * Whether the numbers in a result may be read as covering the evidence set. A result that silently dropped half its items would be indistinguishable from one that used all of them.
+ * @see evidence-aggregation-framework-v1.md §16
+ */
+export const EVIDENCE_AGGREGATION_STATUS_VALUES = [
+  "COMPLETE",
+  "PARTIAL",
+  "UNAVAILABLE",
+] as const;
+export type EvidenceAggregationStatus = (typeof EVIDENCE_AGGREGATION_STATUS_VALUES)[number];
+export function isEvidenceAggregationStatus(v: unknown): v is EvidenceAggregationStatus {
+  return typeof v === "string" && (EVIDENCE_AGGREGATION_STATUS_VALUES as readonly string[]).includes(v);
 }
 
 // --- Numeric bounds --------------------------------------------------------

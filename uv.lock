@@ -12,6 +12,7 @@ resolution-markers = [
 members = [
     "sros-acquisition",
     "sros-contracts",
+    "sros-evidence-aggregation",
     "sros-gateway",
     "sros-llm-gateway",
     "sros-orchestrator",
@@ -1578,16 +1579,31 @@ name = "sros-acquisition"
 version = "0.1.0"
 source = { editable = "services/acquisition/python" }
 dependencies = [
+    { name = "httpx" },
     { name = "sros-contracts" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "sros-contracts", editable = "packages/contracts/python" }]
+requires-dist = [
+    { name = "httpx", specifier = ">=0.27" },
+    { name = "sros-contracts", editable = "packages/contracts/python" },
+]
 
 [[package]]
 name = "sros-contracts"
 version = "0.1.0"
 source = { editable = "packages/contracts/python" }
+
+[[package]]
+name = "sros-evidence-aggregation"
+version = "0.1.0"
+source = { editable = "packages/evidence-aggregation/python" }
+dependencies = [
+    { name = "sros-contracts" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "sros-contracts", editable = "packages/contracts/python" }]
 
 [[package]]
 name = "sros-gateway"

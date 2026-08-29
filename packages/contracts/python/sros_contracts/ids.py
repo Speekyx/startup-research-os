@@ -22,6 +22,7 @@ __all__ = [
     "ResearchProjectId",
     "ResearchSessionId",
     "OpportunityId",
+    "ClaimId",
     "EvidenceId",
     "SignalId",
     "SourceId",
@@ -97,6 +98,19 @@ class ResearchSessionId(_UuidId):
 
 class OpportunityId(_UuidId):
     """A domain hypothesis. Not owned by the session that found it (V2 §12)."""
+
+
+class ClaimId(_UuidId):
+    """An assertion evidence can independently support or contradict.
+
+    **Stable across statement revisions.** The text of a claim may be rewritten;
+    its identity may not, or every evidence record attached to the old wording
+    would be orphaned and the claim would fragment into unrelated pieces.
+
+    **Not a ClaimType.** `ClaimType` is an epistemic category — OBSERVED,
+    INFERRED and so on — carried BY a claim. It has never been an identity, and
+    a system that used one as the other would have exactly five claims.
+    """
 
 
 class EvidenceId(_UuidId):

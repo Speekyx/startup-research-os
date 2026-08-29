@@ -366,12 +366,22 @@ class TestDatabaseRules:
 
     def test_the_python_gate_and_the_sql_view_agree(self, conn, catalog) -> None:
         """Two implementations of one rule is a real risk. The answer is to
-        compare them on every source rather than to trust that they match."""
+        compare them on every source rather than to trust that they match.
+
+        Since Mission 1.4 the Python side is given the satisfaction the database
+        holds. Condition satisfaction is environment state, so evaluating
+        without it would compare the same rule on different inputs and report a
+        divergence that is really a missing argument."""
+        from .conftest import recorded_satisfied_keys
+
         divergences = []
         for source in catalog:
             from_db = read_eligibility(conn, source.source_id)
             assert from_db is not None, source.source_id
-            if from_db.eligible != evaluate_eligibility(source).eligible:
+            from_python = evaluate_eligibility(
+                source, satisfied_conditions=recorded_satisfied_keys(conn, source.source_id)
+            )
+            if from_db.eligible != from_python.eligible:
                 divergences.append(source.source_id)
         assert divergences == []
 
@@ -391,16 +401,37 @@ class TestDatabaseRules:
         assert reviews_before == reviews_after
         conn.execute("ROLLBACK TO SAVEPOINT probe")
 
-    def test_no_source_in_the_database_has_a_collector_enabled(self, conn) -> None:
-        row = conn.execute(
-            "SELECT count(*) FROM registry.sources WHERE collector_enabled"
-        ).fetchone()
-        assert row[0] == 0
+    def test_only_a_source_with_a_collector_is_enabled(self, conn) -> None:
+        """Mission 1.0 asserted zero. That was true while no collector existed
+        and stopped being a property when one did; the rule that survives is
+        that the operational switch never gets ahead of an implementation."""
+        import sros_acquisition
 
-    def test_no_raw_record_was_collected(self, conn) -> None:
-        """§36. This mission acquires nothing. An empty `raw_records` is evidence
-        that the prohibition held, not an assumption that it did."""
-        assert conn.execute("SELECT count(*) FROM acquisition.raw_records").fetchone()[0] == 0
+        enabled = {
+            row[0]
+            for row in conn.execute(
+                "SELECT id FROM registry.sources WHERE collector_enabled"
+            ).fetchall()
+        }
+        assert enabled <= sros_acquisition.IMPLEMENTED_COLLECTORS
+
+    def test_nothing_is_collected_from_an_unimplemented_source(self, conn) -> None:
+        """Mission 1.0 asserted `raw_records == 0`, which was true while no
+        collector existed and stopped being a property when one did.
+
+        The rule that survives: a raw record exists only for a source this
+        codebase can actually collect from. Twelve of the thirteen have no
+        collector, and none of them has a record."""
+        import sros_acquisition
+
+        collected = {
+            row[0]
+            for row in conn.execute(
+                "SELECT DISTINCT source_id FROM acquisition.raw_records"
+            ).fetchall()
+        }
+        unexpected = collected - sros_acquisition.IMPLEMENTED_COLLECTORS
+        assert unexpected == set(), unexpected
 
 
 # ==================================================================== contracts

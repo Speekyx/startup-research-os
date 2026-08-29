@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.4
+Version: 1.8
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-08-29 (Sprint 1 / Mission 1.0)
+Last amended: 2026-08-30 (Sprint 1 / Mission 1.5)
 
 ---
 
@@ -13,6 +13,49 @@ Last amended: 2026-08-29 (Sprint 1 / Mission 1.0)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.8 — 2026-08-30 (Sprint 1 / Mission 1.5)
+
+Authorized by the Mission 1.5 brief §55 (documentation) and §51 (schema changes
+only where the existing model cannot represent the requirement).
+
+| Change | Section | Authority |
+|--------|---------|-----------|
+| `docs/data/world-bank-collector-v1.md` added to the authoritative chain | Authoritative Documents | Mission 1.5 §55. It is the reference architecture every later collector follows, and the record of what one source's data may be used for |
+| **The first collector exists, and one source is collected from** | Forbidden During Foundation | Mission 1.5 §3, §48. Sprint 0 forbade collectors during foundation; Sprint 0 is complete and the governance chain that had to precede one (D-07, the compliance layer, the authorization boundary) is in place. **World Bank only.** Eurostat is collector-eligible and deliberately has no collector |
+| **`acquisition.raw_records` is no longer empty** | Product Shape | Mission 1.5 §48, §49. One controlled acquisition of six World Bank observations. Every record carries complete provenance, a governance-derived expiry and its attribution obligation |
+
+## 1.7 — 2026-08-29 (Sprint 1 / Mission 1.4)
+
+Authorized by the Mission 1.4 brief §41 (documentation) and §40 (schema
+changes only where the existing model cannot express the requirement).
+
+| Change | Section | Authority |
+|--------|---------|-----------|
+| `docs/data/acquisition-authorization-v1.md` added to the authoritative chain | Authoritative Documents | Mission 1.4 §41. `source-registry-v1.md` §4 requires conditions to be checkable and specifies no mechanism for checking one; this document specifies it, and every future collector is gated by it |
+| **Collector eligibility is reachable, and two sources reach it** | Blocked work | Mission 1.4 §23, [ADR-016](docs/architecture/adr/ADR-016-compliance-capabilities-and-acquisition-authorization.md). `world-bank` and `eurostat` pass the gate in a verified environment; `fred` is design-eligible and blocked on a runtime credential. **No collector is implemented and none is enabled** — three separate facts, and the block on writing a collector moved from "no source has passed" to "this specific source has not" |
+
+## 1.6 — 2026-08-29 (Sprint 1 / Mission 1.2)
+
+Authorized by the Mission 1.2 brief §3 (create Ontology V2.1) and §49
+(documentation). A-13 was explicitly authorised for resolution.
+
+| Change | Section | Authority |
+|--------|---------|-----------|
+| `docs/domain/opportunity-ontology-v2.1.md` becomes the current ontology | Authoritative Documents | Mission 1.2 §3. V2 is retained as a historical record and is not deleted; V2.1 inherits §1–§16 unchanged and adds §17 (Claim) |
+| `docs/domain/claim-model-v1.md` added to the authoritative chain | Authoritative Documents | Mission 1.2 §49. The Claim is the unit `evidence-aggregation-framework-v1.md` operates on, so its model is authoritative by construction |
+| **A-13 resolved** | Blocked work | Mission 1.2 §44, [ADR-015](docs/architecture/adr/ADR-015-claim-persistence-and-versioning.md). Claim exists as a persisted entity with stable identity and append-only revisions; evidence references it. **Production scoring remains unavailable**: no `CALIBRATED` profile exists, which is a separate gate |
+
+## 1.5 — 2026-08-29 (Sprint 1 / Mission 1.1)
+
+Authorized by the Mission 1.1 brief §48 (documentation) and §40 (D-03 resolution
+criteria).
+
+| Change | Section | Authority |
+|--------|---------|-----------|
+| `docs/domain/evidence-aggregation-framework-v1.md` added to the authoritative chain | Authoritative Documents | Mission 1.1 §48. `scoring-framework-v1.1.md` §13 names this document as the precondition for `services/scoring`, so it is authoritative by construction |
+| **D-03 resolved at the FRAMEWORK level** | Blocked work | Mission 1.1 §40, [ADR-014](docs/architecture/adr/ADR-014-evidence-aggregation-reference-implementation.md). The algorithm is defined and has a reference implementation. **No parameter was calibrated**, no profile is `CALIBRATED`, and `services/scoring` stays unavailable for production research. Framework Defined and Profile Calibrated are separate gates |
+| **A-13 opened** | Blocked work | Aggregation is claim-centric and no Claim entity exists in the ontology or the schema. Recorded rather than resolved: it requires an ontology version and an ADR |
 
 ## 1.4 — 2026-08-29 (Sprint 1 / Mission 1.0)
 
@@ -172,7 +215,7 @@ These documents define the project.
 
 1. PROJECT_MANIFEST.md
 2. docs/CLAUDE.md
-3. docs/domain/opportunity-ontology-v2.md
+3. docs/domain/opportunity-ontology-v2.1.md
 4. docs/domain/scoring-framework-v1.1.md
 5. docs/domain/evidence-confidence-framework-v1.md
 6. docs/ai/llm-reasoning-rules.md
@@ -183,6 +226,10 @@ Additionally authoritative:
 - docs/data/data-retention-policy-v1.md
 - docs/ai/evaluation-framework-v1.md (added in 1.3)
 - docs/data/source-registry-v1.md (added in 1.4)
+- docs/domain/evidence-aggregation-framework-v1.md (added in 1.5)
+- docs/domain/claim-model-v1.md (added in 1.6)
+- docs/data/acquisition-authorization-v1.md (added in 1.7)
+- docs/data/world-bank-collector-v1.md (added in 1.8)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.
@@ -194,6 +241,9 @@ longer current and must not be used as the basis for implementation:
 
 - `docs/domain/opportunity-ontology-v1.md` — superseded by V1.1
 - `docs/domain/opportunity-ontology-v1.1.md` — superseded by V2
+- `docs/domain/opportunity-ontology-v2.md` — superseded by V2.1. V2.1 inherits
+  §1–§16 unchanged and refers to V2 for their text, so a reference to
+  `opportunity-ontology-v2.md §N` with `N <= 16` still resolves correctly
 - `docs/domain/scoring-framework-v1.md` — superseded by V1.1
 
 Historical reports and audits (`docs/architecture/mission-0.1-report.md`,
@@ -309,6 +359,24 @@ Do NOT implement:
 - user-facing workflows
 
 Foundation only.
+
+## Status of this list (amended in 1.8)
+
+Sprint 0 is complete, and two entries have been reached in Sprint 1. They are
+recorded here rather than struck out, because what unblocked them is specific
+and the rest of the list is still in force.
+
+**Collectors.** One exists, for one source, since Mission 1.5. It became
+permissible only after the chain that had to precede it: the Source Registry
+(D-07, Mission 1.0), the review round that produced an approving verdict on
+evidence (1.3), and the compliance capabilities and authorization boundary that
+make a collector unable to run without a governance decision behind it (1.4). A
+collector for a source that has not been through that chain is still forbidden,
+and the orchestrator refuses to plan one.
+
+**Everything else on the list is unchanged.** NLP pipelines are blocked by D-12,
+scoring algorithms by the absence of a `CALIBRATED` profile, and authentication
+by ADR-005 being unimplemented.
 
 ---
 

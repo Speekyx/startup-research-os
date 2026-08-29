@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.4
-Last amended: 2026-08-29 (Sprint 1 / Mission 1.0)
+Version: 1.9
+Last amended: 2026-08-30 (Sprint 1 / Mission 1.5)
 
 ## Boot Sequence
 
@@ -9,16 +9,20 @@ Before performing any task, execute this reading order.
 
 1. PROJECT_MANIFEST.md
 2. docs/CLAUDE.md
-3. docs/domain/opportunity-ontology-v2.md
+3. docs/domain/opportunity-ontology-v2.1.md
 4. docs/domain/scoring-framework-v1.1.md
 5. docs/domain/evidence-confidence-framework-v1.md
 6. docs/ai/llm-reasoning-rules.md
 7. docs/data/data-principles.md
 8. docs/data/data-retention-policy-v1.md
 9. docs/data/source-registry-v1.md
-10. docs/ai/evaluation-framework-v1.md
-11. Relevant ADRs
-12. Task-specific specifications
+10. docs/data/acquisition-authorization-v1.md
+11. docs/data/world-bank-collector-v1.md
+12. docs/domain/evidence-aggregation-framework-v1.md
+13. docs/domain/claim-model-v1.md
+14. docs/ai/evaluation-framework-v1.md
+15. Relevant ADRs
+16. Task-specific specifications
 
 These documents are the authoritative source of truth.
 
@@ -34,6 +38,11 @@ Ontology V2 keeps V1.1's numbering for §1–§10, so an existing reference to
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.9 | 2026-08-30 | First collector recorded: World Bank only, gated by an AcquisitionAuthorizationContext; raw_records is no longer empty; collector boundary invariant added |
+| 1.8 | 2026-08-29 | Compliance capabilities recorded: a condition is cleared by a verifier and by nothing else; two sources are collector-eligible; eligible / enabled / implemented separated (ADR-016) |
+| 1.7 | 2026-08-29 | Source review round recorded: three sources APPROVED_WITH_CONDITIONS, none collector-eligible; conditional-eligibility rule added |
+| 1.6 | 2026-08-29 | Boot sequence points to Ontology V2.1 and gains the Claim model; Claim invariant added; A-13 removed from blocked work (ADR-015) |
+| 1.5 | 2026-08-29 | Boot sequence gains the evidence aggregation framework; evidence-aggregation invariant added; D-03 blocked-work entry rewritten as framework-resolved / parameters-uncalibrated (ADR-014) |
 | 1.4 | 2026-08-29 | Boot sequence gains the source registry spec; source-governance invariant added; D-07 removed from blocked work (ADR-013) |
 | 1.3 | 2026-08-29 | Boot sequence gains the evaluation framework; tenancy invariant records that row-level security is now enforced (ADR-012) |
 | 1.2 | 2026-08-27 | Boot sequence points to ontology V2; research lifecycle and taxonomy-governance invariants added |
@@ -171,23 +180,136 @@ none of them is negotiable (`source-registry-v1.md` §1, ADR-013):
   post, a tutorial, a forum answer or model recall.
 - **No credential is stored in the registry.** Access profiles carry
   configuration key names only.
+- **`APPROVED_WITH_CONDITIONS` is not permission to run.** It says a collector
+  MAY be designed. Every condition is a checkable row, and the gate blocks until
+  all of them are satisfied — where satisfaction is environment state that a
+  catalog can never assert about itself.
+- **A condition is cleared by a verifier, and by nothing else** (Mission 1.4,
+  ADR-016, `acquisition-authorization-v1.md`). A verification records which
+  condition, which verifier, at which version, when, the result and why; a
+  database trigger refuses `satisfied = TRUE` with no `SATISFIED` record behind
+  it. There is no manual boolean, no catalog field and no migration that grants
+  it. Results are `SATISFIED | UNSATISFIED | UNKNOWN | NOT_APPLICABLE`, only the
+  first clears, and **`UNKNOWN` is never promoted**. No verifier can satisfy a
+  `HUMAN_CONFIRMATION` condition, and none in this repository writes one.
+- **Eligible, enabled and implemented are three facts.** After Mission 1.4
+  `world-bank` and `eurostat` are collector-eligible in any environment where
+  the capabilities are verified, and `fred` joins them wherever `FRED_API_KEY`
+  is configured — it is design-eligible and blocked everywhere else, including
+  CI. **None is enabled and none is implemented.** `sros-source enable` refuses a
+  source with no collector, and the orchestrator blocks acquisition under
+  `NO-COLLECTOR-IMPLEMENTED` rather than dispatching a job nothing can run.
+- **A source-level approval is not a resource-level one.** Each dataset or
+  series is authorised separately, and one whose licensing scope was never
+  established is refused. A collector receives an
+  `AcquisitionAuthorizationContext` or it receives nothing.
+
+### Collection — one collector, and what bounds it
+
+Since Mission 1.5 the World Bank Indicators collector exists
+(`world-bank-collector-v1.md`). It is the reference architecture, and five rules
+apply to it and to every collector that follows:
+
+- **No authorization, no collection.** `collect` takes an
+  `AcquisitionAuthorizationContext` as its first positional parameter, with no
+  default and no overload that omits it. A collector that could build its own
+  could approve itself.
+- **Every resource passes `authorize_resource` before a socket opens**, and a
+  refusal costs **zero** network calls.
+- **No public signature accepts a URL.** A request names indicators, countries
+  and years; the collector composes the path, and the host comes from the access
+  profile the review approved. There is no fallback domain and redirects are not
+  followed.
+- **Retention and attribution come from governance**, not from the collector.
+  `build_draft` has no parameter for either, so there is nothing to pass.
+- **Exactly one file may import a network client**
+  (`collection/transport.py`). The registry and compliance packages decide
+  whether collection may happen and stay network-free.
+
+Identity is three separate things and confusing any two is a defect:
+`observation_key` says WHICH observation, `content_hash` says WHAT the source
+said, and the record id follows from both. The retrieval time is in neither — it
+would make every re-retrieval look like an upstream revision.
 
 The registry is **global**: no `workspace_id`, no RLS policy, `SELECT` only for
 the runtime role. It is administered by `sros-source`, never over HTTP.
 
 This system is not a legal decision engine and its output is not legal advice.
 
+### Claim — the unit evidence accumulates against
+
+Since Mission 1.2 a **Claim** is a persisted entity (Ontology V2.1 §17,
+`claim-model-v1.md`, ADR-015). Five rules follow:
+
+```text
+Workspace -> Opportunity -> Claim -> Evidence -> Aggregation
+```
+
+- **A Claim is not a `ClaimType`.** `ClaimType` is an epistemic category a claim
+  carries; there are exactly five of them and none is an identity. A Claim is an
+  assertion with a `ClaimId`.
+- **A Claim is not an Opportunity.** One opportunity carries several assertions
+  that do not stand or fall together; aggregating at the opportunity level
+  averages away what the four masses preserve.
+- **Identity is stable; statements are revised append-only.** An aggregation that
+  evaluated revision 2 must still be able to read revision 2. The previous
+  revision is never modified.
+- **Temporality is declared on the Claim, never inferred from the source.** The
+  claim names a `claim_feature`; the half-life lives in the profile.
+- **`ClaimLifecycle` is editorial, never epistemic.** `ACTIVE` and `WITHDRAWN`
+  only. There is no `VALIDATED`: evidence changes, and a lifecycle derived from
+  it would freeze a conclusion the evidence no longer supports.
+
+A claim is not owned by the session that first met it (Ontology V2 §12, applied
+to Claim). Sessions produce observations; the same claim accumulates evidence
+across many of them.
+
+### Evidence aggregation — defined, and not calibrated
+
+Since Mission 1.1 the aggregation algorithm is defined
+(`evidence-aggregation-framework-v1.md`, ADR-014). Five rules follow, and none is
+negotiable:
+
+- **`q_i = min(components)`.** The weakest required dimension, never a weighted
+  average. A high value must not compensate for a critical weak one.
+- **Duplicates cannot multiply.** Records sharing an origin form one group and
+  the strongest member counts. Unknown provenance forms **one** group per claim
+  and direction — it is never promoted to independent.
+- **Support and contradiction are aggregated separately** and decomposed into
+  four masses that sum to 1. There is no flat contradiction penalty.
+- **No invented parameters.** No per-platform reliability coefficient, no
+  universal half-life. A temporally sensitive claim with no authorised half-life
+  reports `MISSING_TEMPORAL_PARAMETER` and produces no score.
+- **`EvidenceScore` is a score, not a probability.** `82` does not mean an 82%
+  chance the claim is true, and it is never published without
+  `support_strength`, `contradiction_strength`, `conflict_mass` and
+  `uncertainty_mass`.
+
+Source POLICY status (Mission 1.0) is not epistemic reliability. An `APPROVED`
+source does not produce better evidence.
+
 ### Blocked work
 
-**`services/scoring` must not be implemented** until
-`docs/domain/evidence-aggregation-framework-v1.md` exists and is authorized.
-Do not invent the Evidence Score formula, recency decay parameters, independence
-thresholds or contradiction penalties. See `scoring-framework-v1.1.md` §13.
+**`services/scoring` must not be implemented for production research.** D-03 is
+resolved at the *framework* level only: the equations exist, their parameters
+were never fitted, and no `CALIBRATED` profile exists. Framework Defined and
+Profile Calibrated are separate gates (ADR-014, framework §14). An
+`UNCALIBRATED` profile may be run only for synthetic or experimental work, and
+only when explicitly labelled as such.
+
+Do not invent a half-life, a damping constant, a per-source weight or a
+contradiction penalty to make the engine produce a number. Failing closed is the
+designed behaviour, not a gap to fill.
 
 **No collector may be implemented for a source that is not collector-eligible.**
-D-07 is resolved and the registry exists, but zero sources currently pass the
-gate. The block moved from *there is no registry* to *this specific source has
-not passed*, which is a per-source answer the orchestrator now reports by name.
+D-07 is resolved and the registry exists. Two sources pass the gate; one has a
+collector. The block is per source, and the orchestrator reports each by name
+under one of two gates — `SOURCE-REGISTRY-GATE` when nothing is eligible,
+`NO-COLLECTOR-IMPLEMENTED` when something is and nothing implements it.
+
+Mission 1.4's debt is paid: `test_collector_conformance.py` asserts structurally
+that the collector has no path to a URL outside `authorize_resource`, so the
+guarantee is observed rather than architectural.
 
 ## Core principles
 

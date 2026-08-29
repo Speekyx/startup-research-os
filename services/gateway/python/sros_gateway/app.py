@@ -168,11 +168,15 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     # ------------------------------------------------------------- routes
 
-    from .api import health, projects, sessions, sources
+    from .api import claims, health, projects, sessions, sources
 
     app.include_router(health.router)
     app.include_router(projects.router, prefix="/api/v1")
     app.include_router(sessions.router, prefix="/api/v1")
+    # Claims and their evidence. Writes exist and are DEVELOPMENT ONLY: there is
+    # no authentication, so the workspace header says which tenant you are
+    # working in, never that you are entitled to (Mission 1.2 §35).
+    app.include_router(claims.router, prefix="/api/v1")
     # Read-only. Source review is administered through the `sros-source` CLI,
     # never over HTTP: authentication does not exist, and an endpoint that could
     # approve a source would make the review process optional (Mission 1.0 §27).

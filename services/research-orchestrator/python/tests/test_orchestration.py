@@ -21,6 +21,7 @@ from sros_contracts.research_context import BudgetConstraints
 from sros_orchestrator import (
     ALLOWED_TRANSITIONS,
     BLOCKED_CAPABILITIES,
+    NO_COLLECTOR_IMPLEMENTED,
     BudgetAccount,
     BudgetGuard,
     BudgetRefusedError,
@@ -351,11 +352,73 @@ class TestPlanning(unittest.TestCase):
         """The unblocked branch must be reachable, or the gate would be a
         permanent refusal dressed as a check. Eligibility comes from a reviewed
         registry row in production; here it is a test double, never a real
-        platform approval."""
+        platform approval.
+
+        Since Mission 1.4 it also takes an implemented collector: both gates
+        have to be clear, and this is the only place in the suite where both
+        are."""
         report = StaticSourceAvailability(
             (SourceAvailability("fixture-source", "APPROVED", True),)
         ).source_availability()
-        self.assertIsNone(acquisition_block(report))
+        self.assertIsNone(acquisition_block(report, frozenset({"fixture-source"})))
+
+    def test_an_eligible_source_with_no_collector_still_blocks(self) -> None:
+        """Mission 1.4 §27. Passing the governance gate says a collector MAY be
+        built, never that one exists.
+
+        This became reachable in Mission 1.4 -- two sources cleared the registry
+        gate -- and without it the planner would have emitted `acquire.collect`
+        for a stage nothing implements. The block names the second gate, so the
+        two are not confused with each other."""
+        report = StaticSourceAvailability(
+            (SourceAvailability("fixture-source", "APPROVED", True),)
+        ).source_availability()
+        block = acquisition_block(report)
+        assert block is not None
+        self.assertEqual(block.decision_id, NO_COLLECTOR_IMPLEMENTED)
+        self.assertIn("fixture-source", block.reason)
+
+    def test_a_collector_for_a_different_source_does_not_lift_the_block(self) -> None:
+        """The two sets are intersected, not counted. A collector for a source
+        that is not eligible unblocks nothing."""
+        report = StaticSourceAvailability(
+            (SourceAvailability("fixture-source", "APPROVED", True),)
+        ).source_availability()
+        block = acquisition_block(report, frozenset({"some-other-source"}))
+        assert block is not None
+        self.assertEqual(block.decision_id, NO_COLLECTOR_IMPLEMENTED)
+
+    def test_the_planner_passes_its_implemented_set_to_the_gate(self) -> None:
+        """§46. The set reaches the gate from the CONSTRUCTOR, not from an
+        import: the orchestrator may not import the acquisition package
+        (`service-boundaries.md`), so the composition root wires it and a
+        planner that was not wired refuses."""
+        sources = StaticSourceAvailability(
+            (SourceAvailability("world-bank", "APPROVED_WITH_CONDITIONS", True),)
+        )
+        unwired = ResearchPlanner(sources=sources).plan(WORKSPACE, SESSION, CORRELATION, _context())
+        acquisition = next(b for b in unwired.blocked if b.capability is Capability.ACQUISITION)
+        assert acquisition.decision_id == NO_COLLECTOR_IMPLEMENTED
+
+        wired = ResearchPlanner(
+            sources=sources, implemented_collectors=frozenset({"world-bank"})
+        ).plan(WORKSPACE, SESSION, CORRELATION, _context())
+        assert Capability.ACQUISITION.value not in wired.blocked_capability_names
+        assert any(job.job_type == "acquire.collect" for job in wired.dispatchable_jobs)
+
+    def test_a_collector_for_one_source_does_not_unblock_another(self) -> None:
+        """§46, §57. Eurostat is collector-eligible and has no collector. World
+        Bank having one must not change that."""
+        report = StaticSourceAvailability(
+            (
+                SourceAvailability("eurostat", "APPROVED_WITH_CONDITIONS", True),
+                SourceAvailability("fred", "APPROVED_WITH_CONDITIONS", False, ("no key",)),
+            )
+        ).source_availability()
+        block = acquisition_block(report, frozenset({"world-bank"}))
+        assert block is not None
+        assert block.decision_id == NO_COLLECTOR_IMPLEMENTED
+        assert "eurostat" in block.reason
 
     def test_an_empty_registry_says_so_rather_than_blaming_review(self) -> None:
         """ "Nothing registered" and "nothing approved" have different remedies."""
@@ -363,10 +426,14 @@ class TestPlanning(unittest.TestCase):
         assert block is not None
         self.assertIn("empty", block.reason)
 
-    def test_scoring_is_blocked_by_d03_with_a_stated_reason(self) -> None:
+    def test_scoring_is_blocked_on_calibration_not_on_the_formula(self) -> None:
+        """Mission 1.2. The formula exists since Mission 1.1, so the old reason
+        went false. A false blocking reason invites someone to decide the block
+        no longer applies; what blocks scoring now is the second gate."""
         blocked = BLOCKED_CAPABILITIES[Capability.SCORING]
-        self.assertEqual(blocked.decision_id, "D-03")
-        self.assertIn("aggregation", blocked.reason)
+        self.assertEqual(blocked.decision_id, "PROFILE-NOT-CALIBRATED")
+        self.assertIn("CALIBRATED", blocked.reason)
+        self.assertNotIn("undefined", blocked.reason)
 
     def test_every_blocked_job_carries_the_deciding_reference(self) -> None:
         for job in self.plan.blocked_jobs:
@@ -374,7 +441,12 @@ class TestPlanning(unittest.TestCase):
             self.assertTrue(
                 any(
                     job.blocked_reason.startswith(d)
-                    for d in ("D-03", "D-12", "NO-COLLECTOR", "SOURCE-REGISTRY-GATE")
+                    for d in (
+                        "D-12",
+                        "NO-COLLECTOR",
+                        "SOURCE-REGISTRY-GATE",
+                        "PROFILE-NOT-CALIBRATED",
+                    )
                 ),
                 job.blocked_reason,
             )
@@ -415,7 +487,7 @@ class TestPlanning(unittest.TestCase):
     def test_the_incompleteness_reasons_name_the_open_decisions(self) -> None:
         reasons = " ".join(self.plan.incompleteness_reasons())
         self.assertIn("SOURCE-REGISTRY-GATE", reasons)
-        self.assertIn("D-03", reasons)
+        self.assertIn("PROFILE-NOT-CALIBRATED", reasons)
         self.assertIn("D-12", reasons)
 
     def test_a_plan_records_the_availability_it_was_built_from(self) -> None:
@@ -428,7 +500,12 @@ class TestPlanning(unittest.TestCase):
         )
         plan = planner.plan(WORKSPACE, SESSION, CORRELATION, _context())
         self.assertEqual(plan.eligible_source_ids, ("fixture-source",))
-        self.assertNotIn(Capability.ACQUISITION.value, plan.blocked_capability_names)
+        # The registry gate is CLEARED and acquisition is still blocked, by the
+        # other gate. Asserted by decision id rather than by absence: "blocked"
+        # is not one fact, and a reader has to be able to tell which of the two
+        # gates is holding.
+        acquisition = next(b for b in plan.blocked if b.capability is Capability.ACQUISITION)
+        self.assertEqual(acquisition.decision_id, NO_COLLECTOR_IMPLEMENTED)
 
     def test_blocked_source_reasons_are_reported_per_source(self) -> None:
         planner = ResearchPlanner(

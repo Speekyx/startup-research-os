@@ -20,6 +20,7 @@ from datetime import datetime
 from typing import Any
 
 from sros_contracts import (
+    ConditionVerification,
     PersonalDataRisk,
     PolicyAssessment,
     PolicyEvidenceType,
@@ -35,6 +36,7 @@ from .models import (
     PolicyEvidence,
     PolicyReview,
     RetentionOverride,
+    ReviewCondition,
     SourceRecord,
     SourceRegistryError,
 )
@@ -158,13 +160,38 @@ def _source_from_json(entry: object, use_case: str) -> SourceRecord:
         _profile_from_json(item, source_id) for item in entry.get("access_profiles") or ()
     )
 
-    review_raw = entry.get("review")
-    review: PolicyReview | None = None
-    if review_raw:
+    # Two accepted shapes. `reviews` is a HISTORY, oldest first, each with its
+    # own evidence -- the Mission 1.3 form. `review` plus a sibling `evidence`
+    # list is the Mission 1.0 form, read as a one-entry history so an older
+    # catalog still loads and still means the same thing.
+    history: list[PolicyReview] = []
+    reviews_raw = entry.get("reviews")
+    if reviews_raw:
+        if not isinstance(reviews_raw, list):
+            raise SourceRegistryError(f"{source_id}.reviews", "must be a list, oldest first")
+        for item in reviews_raw:
+            if not isinstance(item, dict):
+                raise SourceRegistryError(f"{source_id}.reviews", "each entry must be an object")
+            evidence = tuple(_evidence_from_json(e, source_id) for e in item.get("evidence") or ())
+            history.append(_review_from_json(item, evidence, use_case, source_id))
+    elif entry.get("review"):
         evidence = tuple(
             _evidence_from_json(item, source_id) for item in entry.get("evidence") or ()
         )
-        review = _review_from_json(review_raw, evidence, use_case, source_id)
+        history.append(_review_from_json(entry["review"], evidence, use_case, source_id))
+
+    if history:
+        versions = [r.review_version for r in history]
+        if len(set(versions)) != len(versions):
+            raise SourceRegistryError(
+                f"{source_id}.reviews",
+                f"duplicate review_version in {versions}. Two reviews sharing a version "
+                "cannot be told apart, and the later one would silently shadow the earlier",
+            )
+        history.sort(key=lambda r: r.review_version)
+    # The CURRENT review is the highest version. Earlier ones are superseded and
+    # kept, never mutated.
+    review: PolicyReview | None = history[-1] if history else None
 
     override_raw = entry.get("retention_override")
     override: RetentionOverride | None = None
@@ -192,6 +219,7 @@ def _source_from_json(entry: object, use_case: str) -> SourceRecord:
         capabilities=tuple(entry.get("capabilities") or ()),
         access_profiles=profiles,
         review=review,
+        review_history=tuple(history),
         retention_override=override,
         # Never read from the catalog. Enabling a collector is an operational
         # decision taken against a live registry through the CLI, where the
@@ -256,6 +284,18 @@ def _evidence_from_json(item: object, source_id: str) -> PolicyEvidence:
     )
 
 
+def _condition_from_json(item: object, source_id: str) -> ReviewCondition:
+    """One mechanically checkable condition (Mission 1.3 §24)."""
+    if not isinstance(item, dict):
+        raise SourceRegistryError(f"{source_id}.required_conditions", "each must be an object")
+    return ReviewCondition(
+        key=str(item.get("key") or ""),
+        description=str(item.get("description") or ""),
+        verification=ConditionVerification(item.get("verification") or "HUMAN_CONFIRMATION"),
+        verification_detail=item.get("verification_detail"),
+    )
+
+
 def _review_from_json(
     raw: object, evidence: tuple[PolicyEvidence, ...], use_case: str, source_id: str
 ) -> PolicyReview:
@@ -287,6 +327,9 @@ def _review_from_json(
         review_interval_days=int(raw.get("review_interval_days") or 180),
         assessments=assessments,
         conditions=tuple(raw.get("conditions") or ()),
+        required_conditions=tuple(
+            _condition_from_json(c, source_id) for c in raw.get("required_conditions") or ()
+        ),
         open_questions=tuple(raw.get("open_questions") or ()),
         review_notes=raw.get("review_notes"),
         personal_data_risk=PersonalDataRisk(raw.get("personal_data_risk") or "UNKNOWN"),

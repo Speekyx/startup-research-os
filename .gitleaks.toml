@@ -1,0 +1,57 @@
+# gitleaks configuration.
+#
+# One allowlist entry, deliberately narrow, and verified against the scanner
+# rather than assumed.
+#
+# WHAT THIS MUST NOT DO
+#
+# `docs/data/source-compliance-v1.json` is precisely the file a real credential
+# would be most tempting to put in: it is where FRED's configuration key NAME
+# lives, and Mission 1.4 built three guards to keep the VALUE out of it.
+# Suppressing the scanner across the whole file would quietly remove the fourth.
+#
+# WHY IT LOOKS LIKE THIS
+#
+# Three earlier versions of this file were wrong in ways that all LOOKED right,
+# and each was caught by running gitleaks 8.24.3 against probe cases rather than
+# by reading the config:
+#
+#   1. `[[rules]] id = "generic-api-key"` with an attached allowlist REPLACED
+#      the built-in rule. Carrying no `regex` of its own it matched nothing, and
+#      an injected AWS key in the same file went undetected;
+#   2. a top-level `[[allowlists]]` (plural) was not applied at all -- neither
+#      the path clause nor the regex clause had any effect;
+#   3. `paths = ['docs/data/...']` matched on Linux and not on Windows, because
+#      gitleaks reports paths with the host separator. It would have behaved one
+#      way in CI and another on a contributor's machine;
+#   4. `paths` AND `regexes` together, with `condition = "AND"`, allowlisted the
+#      WHOLE FILE. The singular `[allowlist]` table does not honour `condition`
+#      in 8.24.3 -- any clause matching is enough -- so the path clause alone
+#      suppressed an injected AWS key. Verified, not read.
+#
+# Hence: NO path clause. The allowlist is two exact secret VALUES and nothing
+# else. They are rule identifiers rather than credentials, so allowlisting them
+# repository-wide costs nothing, and every other finding in that file -- or any
+# file -- is still reported.
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = """
+`"key"` in source-compliance-v1.json is the stable identifier of an enumerated
+resource-exclusion rule, not a credential. The two values are the Eurostat
+trade-data carve-outs the copyright notice names: Liechtenstein and Switzerland
+as declaring countries from 1995, and Austria at CN 8-digit.
+
+Matched by exact VALUE, with no path clause, so a real key added to the same
+file later is still caught -- which is the property that matters.
+"""
+# Applied to the extracted SECRET (`li-ch-trade-1995`), not to the whole match
+# (`"key": "li-ch-trade-1995"`). Anchored, so a longer string that merely
+# contains one of these is not allowlisted by accident.
+regexes = [
+  '''^li-ch-trade-1995$''',
+  '''^at-trade-cn8$''',
+]
+regexTarget = "secret"

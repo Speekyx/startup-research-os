@@ -98,6 +98,15 @@ class TestSchemaRuntime:
             "registry.source_policy_evidence",
             "registry.source_retention_policies",
             "registry.source_capabilities",
+            # 0005_claim_evidence_alignment
+            "research.claims",
+            "research.claim_revisions",
+            "research.claim_session_observations",
+            "scoring.evidence_independence_groups",
+            # 0006_review_conditions
+            "registry.source_review_conditions",
+            # 0007_condition_verification
+            "registry.source_condition_verifications",
         }
 
     def test_the_source_eligibility_view_exists(self, database) -> None:
@@ -121,6 +130,10 @@ class TestSchemaRuntime:
             "0002_orchestration",
             "0003_row_level_security",
             "0004_source_registry",
+            "0005_claim_evidence_alignment",
+            "0006_review_conditions",
+            "0007_condition_verification",
+            "0008_raw_record_provenance",
         ]
         assert all(len(r[1]) == 64 for r in rows)  # sha256 hex
 
@@ -205,13 +218,18 @@ class TestSchemaRuntime:
             database.tenant_transaction(WORKSPACE_A) as conn,
         ):
             conn.execute(
+                # `direction` and `observation_category` became NOT NULL in
+                # migration 0005 and are supplied here so the insert fails on the
+                # constraint UNDER TEST. Without them it fails on a NOT NULL
+                # violation instead, and the test passes while proving nothing.
                 """INSERT INTO scoring.evidence
-                       (id, workspace_id, claim_type, evidence_level,
-                        collected_at, expires_at)
-                       VALUES (%s,%s,'OBSERVED',6, now(), now())""",
+                       (id, workspace_id, claim_type, evidence_level, direction,
+                        observation_category, collected_at, expires_at)
+                       VALUES (%s,%s,'OBSERVED',6,'SUPPORTS','UNCATEGORISED',
+                               now(), now())""",
                 (uuid.uuid4(), WORKSPACE_A),
             )
-        assert "check constraint" in str(exc.value).lower()
+        assert "evidence_level_range_check" in str(exc.value)
 
 
 # ======================================================= tenancy: PostgreSQL
@@ -518,14 +536,73 @@ class TestSourceRegistryApi:
         body = response.json()
         assert body["count"] > 0
 
-    def test_no_source_is_reported_as_collector_eligible(self, api_client) -> None:
-        body = api_client.get("/api/v1/sources").json()
-        assert body["collector_eligible_count"] == 0
-        assert all(not s["collector_eligible"] for s in body["sources"])
+    def test_the_api_reports_enablement_and_eligibility_separately(self, api_client) -> None:
+        """Mission 1.4 made eligibility reachable and Mission 1.5 made enablement
+        reachable, so this assertion has been narrowed twice.
 
-    def test_every_blocked_source_says_why(self, api_client) -> None:
+        `enabled == 0` was true of every mission until one collector existed. The
+        rule that survives is that the two are reported as different facts and
+        that the eligible count matches the view's own contract -- both hold
+        whether an operator has enabled something or not."""
+        body = api_client.get("/api/v1/sources").json()
+        for source in body["sources"]:
+            assert set(source) >= {"collector_eligible", "collector_enabled"}
+            # Enabled implies eligible. The database trigger refuses the
+            # reverse, and the API must not present a state the database would
+            # not accept.
+            if source["collector_enabled"]:
+                assert source["collector_eligible"], source["source_id"]
+        assert body["collector_eligible_count"] == sum(
+            1 for s in body["sources"] if not s["blocking_reasons"]
+        )
+
+    def test_a_source_is_eligible_exactly_when_it_has_no_blocking_reason(self, api_client) -> None:
+        """The view's contract, served unchanged: an empty reason array is the
+        pass, and a blocked source always says why."""
         for source in api_client.get("/api/v1/sources").json()["sources"]:
-            assert source["blocking_reasons"], source["source_id"]
+            assert source["collector_eligible"] == (not source["blocking_reasons"]), source[
+                "source_id"
+            ]
+
+    def test_the_eligibility_endpoint_explains_every_condition(self, api_client) -> None:
+        """Mission 1.4 §32. Read-only visibility into why a source can or cannot
+        be collected from, condition by condition."""
+        body = api_client.get("/api/v1/sources/fred/eligibility").json()
+        assert body["source_id"] == "fred"
+        assert body["approval_state"] == "APPROVED_WITH_CONDITIONS"
+        assert len(body["conditions"]) == 3
+        keys = {c["condition_key"] for c in body["conditions"]}
+        assert keys == {"fred-api-key", "fred-endorsement-notice", "copyrighted-series-excluded"}
+        assert body["collector_enabled"] is False
+        for condition in body["conditions"]:
+            assert condition["description"]
+            assert condition["verification"] in {
+                "CONFIG_REFERENCE",
+                "CAPABILITY",
+                "RETENTION_LIMIT",
+                "ACCESS_METHOD",
+                "HUMAN_CONFIRMATION",
+            }
+
+    def test_the_eligibility_endpoint_serves_key_names_never_credentials(self, api_client) -> None:
+        """§37. A CONFIG_REFERENCE condition's detail is the configuration KEY
+        NAME. The registry never held the value, so this cannot serve it."""
+        body = api_client.get("/api/v1/sources/fred/eligibility").json()
+        credential = next(c for c in body["conditions"] if c["condition_key"] == "fred-api-key")
+        assert credential["verification_detail"] == "FRED_API_KEY"
+        blob = json.dumps(body)
+        assert "sk-" not in blob
+        assert "secret" not in blob.lower()
+
+    def test_the_eligibility_endpoint_cannot_write(self, api_client) -> None:
+        """§32. No mutation path. Verification is administered through the CLI,
+        which runs as the migration role; the runtime role holds SELECT only."""
+        for method in ("post", "put", "patch", "delete"):
+            response = getattr(api_client, method)("/api/v1/sources/fred/eligibility")
+            assert response.status_code in (404, 405), method
+
+    def test_an_unknown_source_eligibility_is_a_404(self, api_client) -> None:
+        assert api_client.get("/api/v1/sources/not-a-source/eligibility").status_code == 404
 
     def test_a_source_detail_carries_its_evidence_urls(self, api_client) -> None:
         """The point of recording evidence is that it can be re-opened. An

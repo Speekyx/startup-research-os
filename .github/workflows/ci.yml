@@ -73,16 +73,56 @@ jobs:
       # environment must never be able to reduce it to nothing.
       - name: Catalog states, evidence and secrets
         run: python infrastructure/scripts/validate_source_registry.py
-      # §43: CI contacts no external platform. Fetching a source's terms here
-      # would itself be collection, and would make the build depend on a third
-      # party's uptime. Asserted rather than trusted.
-      - name: The acquisition package cannot reach a network
+      # Mission 1.4. Conditions became clearable, so the gate between an
+      # approving review and a collector now has a second half: every condition
+      # must resolve to a real verifier, every capability a condition names must
+      # pass its own conformance check, and an ineligible source must produce no
+      # acquisition authorization. Zero-dependency for the same reason as above.
+      - name: Compliance capabilities, verifiers and the acquisition boundary
+        run: python infrastructure/scripts/validate_compliance_capabilities.py
+      # Mission 1.0 forbade a network client anywhere in this package. Mission
+      # 1.5 built a collector, so the ban was NARROWED to one named file rather
+      # than deleted -- the same move Mission 1.2 made with the D-03 guard.
+      # Naming where the network IS says more than asserting it is absent.
+      #
+      # §52 still holds: CI itself contacts no external platform. Fetching a
+      # source's terms here would be collection, and would make the build depend
+      # on a third party's uptime.
+      - name: Only the transport module may reach a network
         run: |
-          if grep -rnE '^[[:space:]]*(import|from)[[:space:]]+(requests|httpx|urllib|aiohttp|http\.client|socket|playwright|selenium)\b' \
-               services/acquisition/python/sros_acquisition; then
-            echo "the source registry imports a network client; it governs collection, it does not collect" >&2
+          PATTERN='^[[:space:]]*(import|from)[[:space:]]+(requests|httpx|urllib|aiohttp|http[.]client|socket|playwright|selenium)'
+          OFFENDERS=$(grep -rlE "$PATTERN" services/acquisition/python/sros_acquisition | grep -v 'collection/transport[.]py$' || true)
+          if [ -n "$OFFENDERS" ]; then
+            echo "a network client is imported outside collection/transport.py:" >&2
+            echo "$OFFENDERS" >&2
             exit 1
           fi
+      # The registry and compliance packages DECIDE whether a source may be
+      # collected from. A collector inside either would put the decision and its
+      # execution in the same place.
+      - name: Collectors live only in the collection package
+        run: |
+          GOVERNANCE=services/acquisition/python/sros_acquisition
+          FOUND=$(find "$GOVERNANCE/registry" "$GOVERNANCE/compliance" -name '*collector*.py')
+          if [ -n "$FOUND" ]; then
+            echo "a collector module is inside a governance package: $FOUND" >&2
+            exit 1
+          fi
+
+  evidence-aggregation:
+    name: Evidence aggregation guard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # Zero-dependency, like the source-registry job and for the same reason:
+      # D-03 is resolved at the FRAMEWORK level only, and a broken dependency
+      # environment must not be able to reduce the gate between a defined
+      # framework and production scoring to nothing.
+      - name: Rejected designs, source weights, universal half-life
+        run: python infrastructure/scripts/validate_evidence_aggregation.py
 
   typescript:
     name: TypeScript (lint, typecheck, conformance)
@@ -146,6 +186,7 @@ jobs:
           uv run mypy packages/contracts/python/sros_contracts \
                       packages/llm-gateway/python/sros_llm_gateway \
                       services/workers/python/sros_workers \
+                      packages/evidence-aggregation/python/sros_evidence_aggregation \
                       services/acquisition/python/sros_acquisition \
                       services/research-orchestrator/python/sros_orchestrator \
                       services/gateway/python/sros_gateway
@@ -154,6 +195,16 @@ jobs:
       # the wrong one (ADR-009, applied to documentation).
       - name: Rendered source catalog is in sync
         run: uv run sros-source render --check
+      # The review-results document is the DIFF view -- what each verdict was and
+      # what moved it. Generated from the same catalog, checked for the same
+      # reason: two hand-maintained copies of one fact drift.
+      - name: Source review results are in sync
+        run: uv run python infrastructure/scripts/render_review_results.py --check
+      # The sensitivity analysis is generated from the reference implementation,
+      # so it cannot describe behaviour the code does not have. Same argument as
+      # the catalog above, applied to a document that reports findings.
+      - name: Sensitivity analysis matches the implementation
+        run: uv run python -m sros_evidence_aggregation.sensitivity --check
 
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
@@ -221,18 +272,47 @@ jobs:
       # assertion after it is the one that matters. Resolving D-07 approved no
       # source, and a build in which one had quietly become collectable should
       # be red (§31).
-      - name: Source registry loads and grants nothing
+      # `load` is idempotent and grants nothing; `verify --apply` is what can
+      # change eligibility, and it runs here rather than being assumed so the
+      # assertion below sees the state a real deployment would have.
+      #
+      # No credential is present in CI, so FRED's CONFIG_REFERENCE condition
+      # resolves NOT_CONFIGURED and FRED stays blocked. That is the §17
+      # distinction working: the compliance capability exists, the runtime
+      # credential does not, and CI proves the first without needing the second.
+      - name: Source registry loads, verifies, and grants nothing unverified
         run: |
           uv run sros-source load
+          uv run sros-source verify --apply
           uv run python infrastructure/scripts/assert_registry_grants_nothing.py
+      # §53. The collector's authorization path, against the real registry in
+      # the database. Reaches no network: `validate` answers whether a
+      # collection WOULD be permitted, which is a governance question.
+      - name: The collector authorization path holds
+        run: uv run sros-acquisition world-bank validate --indicator SP.POP.TOTL
 
-      - name: No provider credential is present
+      # Mission 1.4 §17 adds FRED_API_KEY to this list. CI must not have one:
+      # a source that became runnable because a build secret was added would be
+      # a source nobody decided to make runnable.
+      - name: No provider or source credential is present
         run: |
-          if [ -n "$ANTHROPIC_API_KEY" ] || [ -n "$GEMINI_API_KEY" ]; then
-            echo "a provider credential is exposed to CI; no job here needs one" >&2
+          if [ -n "$ANTHROPIC_API_KEY" ] || [ -n "$GEMINI_API_KEY" ] || [ -n "$FRED_API_KEY" ]; then
+            echo "a credential is exposed to CI; no job here needs one" >&2
             exit 1
           fi
           test "${SROS_ENABLE_PROVIDER_SMOKE_TESTS:-0}" = "0"
+          # §12, §52: the World Bank live suite is opt-in and CI never
+          # enables it. A suite that quietly became enabled would show up as
+          # traffic to a third party rather than as a red build.
+          test "${SROS_ENABLE_WORLD_BANK_SMOKE_TESTS:-0}" = "0"
+      # `.env.example` is committed, so a value in it is a published secret.
+      - name: The environment template carries no credential value
+        run: |
+          if grep -nE '^[A-Z_]*(API_KEY|SECRET|TOKEN|PASSWORD)=.+' infrastructure/compose/.env.example \
+             | grep -vE '=sros_dev_password$'; then
+            echo "infrastructure/compose/.env.example contains a value for a credential key" >&2
+            exit 1
+          fi
 
   compose:
     name: Docker Compose configuration

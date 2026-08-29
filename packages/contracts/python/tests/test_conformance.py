@@ -104,6 +104,53 @@ class ClosedEnumConformance(unittest.TestCase):
             with self.subTest(value=value), self.assertRaises(ValueError):
                 ClaimType(value)
 
+    def test_the_claim_model_enums_match_the_shared_cases(self) -> None:
+        """Mission 1.2. The same cases the TypeScript suite reads, so a value one
+        language accepts and the other rejects fails the build."""
+        from sros_contracts import (
+            ClaimLifecycle,
+            ClaimOrigin,
+            ClaimTemporality,
+            EvidenceDirection,
+            EvidenceIndependenceState,
+            EvidenceObservationCategory,
+            ObservationKind,
+        )
+
+        cases = CASES["claim_model"]
+        for key, enum in (
+            ("claim_temporality", ClaimTemporality),
+            ("claim_origin", ClaimOrigin),
+            ("claim_lifecycle", ClaimLifecycle),
+            ("evidence_direction", EvidenceDirection),
+            ("evidence_independence_state", EvidenceIndependenceState),
+            ("observation_category", EvidenceObservationCategory),
+            ("observation_kind", ObservationKind),
+        ):
+            for value in cases[key]["valid"]:
+                with self.subTest(enum=key, value=value):
+                    enum(value)
+            for value in cases[key]["invalid"]:
+                with self.subTest(enum=key, value=value), self.assertRaises(ValueError):
+                    enum(value)
+
+    def test_no_lifecycle_value_is_an_epistemic_verdict(self) -> None:
+        """The absence is the feature. A stored VALIDATED would freeze a
+        conclusion that later evidence could contradict (Mission 1.2 §38)."""
+        from sros_contracts import ClaimLifecycle
+
+        self.assertEqual({m.value for m in ClaimLifecycle}, {"ACTIVE", "WITHDRAWN"})
+
+    def test_claim_origin_carries_no_model_name(self) -> None:
+        """Models change constantly; a contract must not. They belong in the
+        provenance columns instead (Mission 1.2 §11)."""
+        from sros_contracts import ClaimOrigin
+
+        for member in ClaimOrigin:
+            self.assertNotIn("GPT", member.value)
+            self.assertNotIn("CLAUDE", member.value)
+            self.assertNotIn("-", member.value)
+
     def test_hypothesis_is_first_class(self) -> None:
         """Without it the anti-hallucination rule has nowhere to put a claim."""
         self.assertIs(ClaimType("HYPOTHESIS"), ClaimType.HYPOTHESIS)
@@ -182,6 +229,35 @@ class ResearchContextConformance(unittest.TestCase):
             {"market_scope": {"type": "MULTI_COUNTRY", "countries": ["FR", "US"]}}
         )
         self.assertEqual(a.snapshot_hash(), b.snapshot_hash())
+
+
+class ClaimIdentityConformance(unittest.TestCase):
+    """`ClaimId` is a distinct type, not an OpportunityId and not a ClaimType."""
+
+    def test_claim_id_accepts_and_rejects_the_shared_cases(self) -> None:
+        from sros_contracts import ClaimId
+
+        cases = CASES["claim_model"]["claim_id"]
+        for value in cases["valid"]:
+            with self.subTest(value=value):
+                ClaimId(value)
+        for value in cases["invalid"]:
+            with self.subTest(value=value), self.assertRaises(ContractError):
+                ClaimId(value)
+
+    def test_claim_id_is_generated_and_stable(self) -> None:
+        from sros_contracts import ClaimId
+
+        generated = ClaimId.generate()
+        self.assertEqual(ClaimId(str(generated)), generated)
+
+    def test_a_claim_type_is_not_a_claim_id(self) -> None:
+        """Mission 1.2 §6. A system that used one as the other would have
+        exactly five claims."""
+        from sros_contracts import ClaimId
+
+        with self.assertRaises(ContractError):
+            ClaimId("INFERRED")
 
 
 class BlockedWorkGuard(unittest.TestCase):

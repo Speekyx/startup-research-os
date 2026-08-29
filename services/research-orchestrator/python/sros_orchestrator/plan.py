@@ -11,8 +11,8 @@ into whatever the collectors happened to return
 (`services/research-orchestrator/README.md` §Why it exists).
 
 **Every domain stage is currently BLOCKED, and that is the honest output.**
-D-03 blocks scoring, §34 puts NLP out of scope, and no source has passed the
-governance gate. A planner that emitted runnable stages for those would be
+No CALIBRATED aggregation profile exists so scoring cannot run, and §34 puts NLP
+out of scope. A planner that emitted runnable stages for those would be
 describing a system that does not exist. The planner therefore returns a plan
 whose stages all carry an explicit unavailable reason, and the orchestrator
 refuses to dispatch them.
@@ -23,6 +23,14 @@ no longer *the registry is missing* but *these specific sources are not
 collectable, for these specific reasons*. That answer is read from the registry
 at plan time, per source, and never restated from memory here. A planner wired
 to no registry blocks acquisition, because silence is a refusal.
+
+**Since Mission 1.4 acquisition has two gates, not one.** Sources can now pass
+the governance gate, which made a second question visible that had never come
+up while none did: *may we* and *can we* are different, and a source being
+collectable says nothing about a collector existing. `acquisition_block`
+therefore blocks under `NO-COLLECTOR-IMPLEMENTED` when eligible sources exist
+and nothing is implemented for them, rather than emitting a job no worker could
+run.
 
 The dispatch, retry, resume and budget machinery is still real and still tested.
 It is exercised with job specs supplied directly by a caller, which is what a
@@ -52,6 +60,7 @@ __all__ = [
     "BLOCKED_CAPABILITIES",
     "STATIC_BLOCKED_CAPABILITIES",
     "acquisition_block",
+    "NO_COLLECTOR_IMPLEMENTED",
     "PlannedStage",
     "ResearchExecutionPlan",
     "ResearchPlanner",
@@ -61,7 +70,7 @@ __all__ = [
 # Bumped whenever the stage graph or the blocking set changes. Recorded on the
 # persisted plan so a session can be read years later against the planner that
 # produced it (llm-reasoning-rules.md §9 applied to orchestration).
-PLANNER_VERSION = "1.0.0"
+PLANNER_VERSION = "1.1.0"
 
 
 class Capability(StrEnum):
@@ -145,14 +154,21 @@ STATIC_BLOCKED_CAPABILITIES: dict[Capability, BlockedCapability] = {
         reason="discovery consumes NLP signals, which are not produced",
         governing_document="docs/domain/opportunity-ontology-v2.md §16",
     ),
+    # The reason CHANGED in Mission 1.2, because the old one became false.
+    #
+    # It used to read "the aggregation formula is undefined". Mission 1.1
+    # defined it, so that sentence stopped being true -- and a false blocking
+    # reason is worse than a vague one: it invites someone to conclude the block
+    # no longer applies. What actually blocks scoring now is the SECOND gate.
     Capability.SCORING: BlockedCapability(
         capability=Capability.SCORING,
-        decision_id="D-03",
+        decision_id="PROFILE-NOT-CALIBRATED",
         reason=(
-            "the evidence aggregation formula, recency behaviour and independence rules "
-            "are undefined; implementing scoring would mean choosing them"
+            "the aggregation algorithm is defined but no CALIBRATED "
+            "EvidenceAggregationProfile exists; its parameters were never fitted to "
+            "labelled data, so a score would carry numbers nobody measured"
         ),
-        governing_document="docs/domain/scoring-framework-v1.1.md §13",
+        governing_document="docs/domain/evidence-aggregation-framework-v1.md §14",
     ),
 }
 
@@ -166,14 +182,35 @@ BLOCKED_CAPABILITIES = STATIC_BLOCKED_CAPABILITIES
 SOURCE_REGISTRY_GATE = "SOURCE-REGISTRY-GATE"
 SOURCE_REGISTRY_DOCUMENT = "docs/data/source-registry-v1.md §Collector eligibility"
 
+# The second acquisition gate, separated in Mission 1.4. It is NOT a decision id
+# either: nobody unblocks it by deciding, only by implementing a collector.
+# Kept distinct from SOURCE_REGISTRY_GATE because the two are cleared by
+# different work, and collapsing them would let "no source is approved" and
+# "nothing exists to run" report as the same problem.
+NO_COLLECTOR_IMPLEMENTED = "NO-COLLECTOR-IMPLEMENTED"
 
-def acquisition_block(report: SourceAvailabilityReport) -> BlockedCapability | None:
-    """Derive the ACQUISITION block from what the registry said.
 
-    Returns `None` only when the registry was consulted **and** named at least
-    one eligible source. Every other outcome blocks, including the outcome where
-    the registry was never read: Mission 1.0 §31 forbids turning an unknown into
-    a permission, and an unwired planner is an unknown.
+def acquisition_block(
+    report: SourceAvailabilityReport,
+    implemented_collectors: frozenset[str] = frozenset(),
+) -> BlockedCapability | None:
+    """Derive the ACQUISITION block from the registry AND from what exists.
+
+    Returns `None` only when the registry was consulted, named at least one
+    eligible source, **and** a collector exists for one of those sources. Every
+    other outcome blocks.
+
+    The third condition was added in Mission 1.4 and is not a formality. Until
+    then no source had ever passed the gate, so "eligible" and "collectable"
+    could not come apart; two sources passing it revealed that this function
+    would have declared `acquire.collect` dispatchable with nothing behind it.
+    Eligible means *may we*, and a collector existing means *can we* -- two
+    different questions, and a planner that answers the first while being asked
+    the second emits a job no worker can run.
+
+    `implemented_collectors` defaults to empty, so a caller that does not pass it
+    gets a refusal. That is the same fail-closed default as `UnconsultedRegistry`
+    and for the same reason: a missing wire must never read as a permission.
     """
     if not report.consulted:
         return BlockedCapability(
@@ -186,7 +223,26 @@ def acquisition_block(report: SourceAvailabilityReport) -> BlockedCapability | N
             governing_document=SOURCE_REGISTRY_DOCUMENT,
         )
     if report.eligible:
-        return None
+        runnable = sorted({s.source_id for s in report.eligible} & implemented_collectors)
+        if runnable:
+            return None
+        return BlockedCapability(
+            capability=Capability.ACQUISITION,
+            decision_id=NO_COLLECTOR_IMPLEMENTED,
+            reason=(
+                f"{len(report.eligible)} source(s) passed the governance gate "
+                f"({', '.join(report.eligible_source_ids)}) and no collector is "
+                "implemented for any of them. Passing the gate says a collector MAY be "
+                "built, never that one exists"
+            ),
+            governing_document=SOURCE_REGISTRY_DOCUMENT,
+            # The refused sources are still listed. They do not stop being
+            # refused because two others passed, and a reader looking at a
+            # blocked acquisition stage needs the same per-source answer either
+            # way -- dropping it here would make the explanation get worse as
+            # the registry got better.
+            source_states=report.blocked,
+        )
 
     blocked = report.blocked
     if not blocked:
@@ -330,15 +386,23 @@ class ResearchPlanner:
     `sources` is the registry it asks about acquisition. The default refuses
     everything, so a planner constructed the pre-Mission-1.0 way keeps producing
     a blocked acquisition stage instead of silently permitting collection.
+
+    `implemented_collectors` is the second acquisition gate (Mission 1.5). It is
+    supplied by the composition root rather than imported, because a service may
+    not import another service's package (`service-boundaries.md`) -- and it
+    defaults to empty for the same reason `sources` defaults to a refusal: a
+    missing wire must read as "we cannot", never as "we may".
     """
 
     def __init__(
         self,
         stages: tuple[PlannedStage, ...] = DEFAULT_STAGES,
         sources: SourceAvailabilityProvider | None = None,
+        implemented_collectors: frozenset[str] = frozenset(),
     ) -> None:
         self._stages = stages
         self._sources: SourceAvailabilityProvider = sources or UnconsultedRegistry()
+        self._implemented_collectors = implemented_collectors
 
     def plan(
         self,
@@ -382,7 +446,7 @@ class ResearchPlanner:
         # inside one planning pass could disagree, and a plan that contradicts
         # itself is worse than one that is out of date.
         availability = self._sources.source_availability()
-        acquisition = acquisition_block(availability)
+        acquisition = acquisition_block(availability, self._implemented_collectors)
 
         jobs: list[JobSpec] = []
         blocked: list[BlockedCapability] = []

@@ -28,6 +28,7 @@ from .models import (
     PolicyEvidence,
     PolicyReview,
     RetentionOverride,
+    ReviewCondition,
     SourceRecord,
     SourceRegistryError,
 )
@@ -42,6 +43,7 @@ __all__ = [
     "SourceRecord",
     "AccessProfile",
     "PolicyReview",
+    "ReviewCondition",
     "PolicyEvidence",
     "RetentionOverride",
     "Coverage",

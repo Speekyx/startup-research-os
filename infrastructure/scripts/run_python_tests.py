@@ -25,6 +25,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 SUITES = [
     "packages/contracts/python",
     "packages/llm-gateway/python",
+    "packages/evidence-aggregation/python",
     "services/workers/python",
     "services/research-orchestrator/python",
 ]
@@ -37,6 +38,7 @@ SUITES = [
 SHARED_PATHS = [
     "packages/contracts/python",
     "packages/llm-gateway/python",
+    "packages/evidence-aggregation/python",
     "services/workers/python",
     "services/research-orchestrator/python",
 ]

@@ -85,15 +85,26 @@ def render_catalog_markdown(catalog: SourceCatalog) -> str:
         ids = by_state.get(state, [])
         add(f"| `{state}` | {len(ids)}{' — ' + ', '.join(ids) if ids else ''} |")
     add("")
-    add(f"**Collector-eligible: {len(eligible)} of {len(catalog)}.**")
-    if not eligible:
-        add("")
-        add(
-            "No source is collector-eligible. That is the expected result of a first "
-            "pass and not a failure: Mission 1.0 §31 asks for correctness over the "
-            "number of approvals, and a registry in which every platform came back "
-            "approved would mean the gate was not doing anything."
-        )
+    add(f"**Collector-eligible from the catalog alone: {len(eligible)} of {len(catalog)}.**")
+    add("")
+    add(
+        "This document is the **catalog view**: what the reviews say, with no condition "
+        "verified. It is generated from a JSON file and committed, so it cannot depend "
+        "on the machine it was rendered on -- and whether a condition holds depends on "
+        "what is deployed and configured. A catalog can never assert its own conditions "
+        "satisfied, so every source carrying one is shown blocked here."
+    )
+    add("")
+    add(
+        "For the environment view -- the same reviews with the verifiers actually run -- "
+        "use `sros-source eligibility` or `sros-source conditions <source>`. The two can "
+        "legitimately disagree, and only the second answers *may a collector run here*."
+    )
+    add("")
+    add(
+        "Either way, **no collector exists** and `collector_enabled` is false for every "
+        "source. Passing the gate says a collector MAY be built."
+    )
     add("")
 
     if catalog.known_limitations:
@@ -179,13 +190,53 @@ def render_catalog_markdown(catalog: SourceCatalog) -> str:
             add(f"  - Basis: {retention.basis}")
         add(
             f"- **State:** `{review.approval_state.value if review else 'NO REVIEW'}` — "
-            f"**collector eligible: {'yes' if result.eligible else 'no'}**"
+            f"**collector eligible from the catalog alone: "
+            f"{'yes' if result.eligible else 'no'}**"
         )
         if review:
             add(
                 f"- **Last reviewed:** {review.reviewed_at.date()} · next {review.next_review_at.date()}"
             )
         add("")
+
+        # The history, not only the current verdict. Mission 1.3 §27: what a
+        # reader needs in order to trust a verdict is what the previous one said
+        # and why it changed.
+        if len(source.review_history) > 1:
+            add("**Review history**")
+            add("")
+            add("| Version | Reviewed | By | State | Evidence |")
+            add("|---|---|---|---|---|")
+            for past in source.review_history:
+                marker = " ← current" if past is review else ""
+                add(
+                    f"| {past.review_version}{marker} | {past.reviewed_at.date()} | "
+                    f"`{past.reviewed_by}` | `{past.approval_state.value}` | "
+                    f"{len(past.evidence)} |"
+                )
+            add("")
+
+        if review and review.required_conditions:
+            add("**Required conditions** — all must be satisfied before a collector may run")
+            add("")
+            add("| Key | Verified by | Checks | Condition |")
+            add("|---|---|---|---|")
+            for condition in review.required_conditions:
+                detail = (
+                    f"`{condition.verification_detail}`" if condition.verification_detail else "—"
+                )
+                add(
+                    f"| `{condition.key}` | `{condition.verification.value}` | {detail} | "
+                    f"{condition.description} |"
+                )
+            add("")
+            add(
+                "None of these is satisfied *by the catalog*, and none can be: "
+                "satisfaction is environment state, recorded by a verifier that says "
+                "what it checked (`sros-source verify`). `APPROVED_WITH_CONDITIONS` "
+                "means a collector MAY be designed, never that one may run."
+            )
+            add("")
 
         add("**Access profiles** (how, not whether)")
         add("")

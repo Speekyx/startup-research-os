@@ -52,6 +52,15 @@ GLOBAL_TABLES = {
     "registry.source_policy_evidence",
     "registry.source_retention_policies",
     "registry.source_capabilities",
+    # Added in Mission 1.3. Conditions belong to a source review, and source
+    # reviews are global platform metadata: a condition assessed differently
+    # per workspace would make one review mean two things.
+    "registry.source_review_conditions",
+    # Added in Mission 1.4. A verification is a statement about a global
+    # condition, made by a program, about a deployment. Nothing about it is
+    # tenant-scoped, and a per-workspace verification would mean one review
+    # condition held in one workspace and not in another.
+    "registry.source_condition_verifications",
 }
 
 # Tables governed by data-retention-policy-v1.md.
@@ -204,6 +213,15 @@ def main() -> int:
         ("SourceAccessMethod", "registry.source_access_profiles", "access_method"),
         ("SourceAcquisitionCost", "registry.source_access_profiles", "acquisition_cost"),
         ("PolicyEvidenceType", "registry.source_policy_evidence", "document_type"),
+        # Mission 1.3 and 1.4. These two carry the gate between an approving
+        # review and a collector, so a value drifting from the contract here
+        # would let a condition be recorded as checked in a way nothing reads.
+        ("ConditionVerification", "registry.source_review_conditions", "verification"),
+        (
+            "ConditionVerificationResult",
+            "registry.source_condition_verifications",
+            "result",
+        ),
     ]
     for enum_name, table, column in enum_sites:
         expected = set(enums[enum_name])
