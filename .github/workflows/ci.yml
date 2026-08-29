@@ -60,6 +60,30 @@ jobs:
       - name: Migration plan is well formed
         run: python infrastructure/scripts/migrate.py --plan
 
+  source-registry:
+    name: Source registry governance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # Zero-dependency on purpose (ADR-009 rationale). This is the gate that
+      # says no source was silently approved, and a broken dependency
+      # environment must never be able to reduce it to nothing.
+      - name: Catalog states, evidence and secrets
+        run: python infrastructure/scripts/validate_source_registry.py
+      # §43: CI contacts no external platform. Fetching a source's terms here
+      # would itself be collection, and would make the build depend on a third
+      # party's uptime. Asserted rather than trusted.
+      - name: The acquisition package cannot reach a network
+        run: |
+          if grep -rnE '^[[:space:]]*(import|from)[[:space:]]+(requests|httpx|urllib|aiohttp|http\.client|socket|playwright|selenium)\b' \
+               services/acquisition/python/sros_acquisition; then
+            echo "the source registry imports a network client; it governs collection, it does not collect" >&2
+            exit 1
+          fi
+
   typescript:
     name: TypeScript (lint, typecheck, conformance)
     runs-on: ubuntu-latest
@@ -122,7 +146,14 @@ jobs:
           uv run mypy packages/contracts/python/sros_contracts \
                       packages/llm-gateway/python/sros_llm_gateway \
                       services/workers/python/sros_workers \
+                      services/acquisition/python/sros_acquisition \
+                      services/research-orchestrator/python/sros_orchestrator \
                       services/gateway/python/sros_gateway
+      # The markdown catalog is generated from the JSON one. Two hand-maintained
+      # copies of one fact drift, and the drift is discovered by whoever trusted
+      # the wrong one (ADR-009, applied to documentation).
+      - name: Rendered source catalog is in sync
+        run: uv run sros-source render --check
 
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
@@ -186,6 +217,15 @@ jobs:
       # §20: no provider key reaches CI, and the smoke tests stay off. Asserted
       # rather than trusted -- a suite that quietly became enabled would show up
       # as an invoice rather than as a red build.
+      # The registry applied to a real database. `load` is idempotent; the
+      # assertion after it is the one that matters. Resolving D-07 approved no
+      # source, and a build in which one had quietly become collectable should
+      # be red (§31).
+      - name: Source registry loads and grants nothing
+        run: |
+          uv run sros-source load
+          uv run python infrastructure/scripts/assert_registry_grants_nothing.py
+
       - name: No provider credential is present
         run: |
           if [ -n "$ANTHROPIC_API_KEY" ] || [ -n "$GEMINI_API_KEY" ]; then

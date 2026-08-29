@@ -9,6 +9,7 @@ scoring formula and no market or competitor logic.
     jobs.py          the generic job description and its ledger states
     dag.py           dependency ordering, without a workflow engine
     plan.py          the ResearchExecutionPlan and the blocked-capability register
+    sources.py       per-source acquisition availability, read from the registry
     budget.py        configured / reserved / actual accounting and the guard
     completeness.py  the Research Completeness record. No formula
     repositories.py  persistence, over a duck-typed tenant database
@@ -20,9 +21,14 @@ the dependency graph in `service-boundaries.md` §4 acyclic while both contexts
 share one deployable unit in Phase 1.
 
 **Nothing here can dispatch blocked work.** Every domain capability is currently
-blocked (D-07 acquisition, D-03 scoring, D-12 and §34 NLP), the planner marks
-those stages BLOCKED with a stated reason, and a BLOCKED job never becomes
-READY. The guard is mechanical rather than remembered.
+blocked (D-03 scoring, D-12 and §34 NLP, and no collector-eligible source), the
+planner marks those stages BLOCKED with a stated reason, and a BLOCKED job never
+becomes READY. The guard is mechanical rather than remembered.
+
+Since Mission 1.0 the acquisition reason is **derived from the Source Registry
+per source** rather than restated here: D-07 is resolved, so "the registry does
+not exist" would be a false reason. A planner with no registry wired blocks
+acquisition anyway, because an unconsulted registry is a refusal.
 """
 
 from .budget import (
@@ -66,11 +72,22 @@ from .lifecycle import (
 from .plan import (
     BLOCKED_CAPABILITIES,
     PLANNER_VERSION,
+    STATIC_BLOCKED_CAPABILITIES,
     BlockedCapability,
     Capability,
     PlannedStage,
     ResearchExecutionPlan,
     ResearchPlanner,
+    acquisition_block,
+)
+from .sources import (
+    RegistryDatabase,
+    RegistrySourceAvailability,
+    SourceAvailability,
+    SourceAvailabilityProvider,
+    SourceAvailabilityReport,
+    StaticSourceAvailability,
+    UnconsultedRegistry,
 )
 
 __all__ = [
@@ -104,10 +121,20 @@ __all__ = [
     "Capability",
     "BlockedCapability",
     "BLOCKED_CAPABILITIES",
+    "STATIC_BLOCKED_CAPABILITIES",
+    "acquisition_block",
     "PlannedStage",
     "ResearchExecutionPlan",
     "ResearchPlanner",
     "PLANNER_VERSION",
+    # sources
+    "SourceAvailability",
+    "SourceAvailabilityReport",
+    "SourceAvailabilityProvider",
+    "UnconsultedRegistry",
+    "StaticSourceAvailability",
+    "RegistryDatabase",
+    "RegistrySourceAvailability",
     # budget
     "COST_UNIT",
     "BudgetAccount",

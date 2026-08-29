@@ -166,6 +166,122 @@ export function isRegistryStatus(v: unknown): v is RegistryStatus {
   return typeof v === "string" && (REGISTRY_STATUS_VALUES as readonly string[]).includes(v);
 }
 
+/**
+ * Where a source stands in the governance gate. Closed: collector eligibility branches exhaustively on it, and an unhandled value would mean a source of unknown standing being treated as usable. Public visibility never produces APPROVED on its own.
+ * @see source-registry-v1.md §5
+ */
+export const SOURCE_APPROVAL_STATE_VALUES = [
+  "DRAFT",
+  "REQUIRES_REVIEW",
+  "APPROVED_WITH_CONDITIONS",
+  "APPROVED",
+  "RESTRICTED",
+  "PROHIBITED",
+  "SUSPENDED",
+] as const;
+export type SourceApprovalState = (typeof SOURCE_APPROVAL_STATE_VALUES)[number];
+export function isSourceApprovalState(v: unknown): v is SourceApprovalState {
+  return typeof v === "string" && (SOURCE_APPROVAL_STATE_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * HOW access is technically performed. It says nothing about whether access is PERMITTED: permission is a separate dimension carried by the policy review. BROWSER_AUTOMATION being available never implies it is allowed.
+ * @see source-registry-v1.md §8
+ */
+export const SOURCE_ACCESS_METHOD_VALUES = [
+  "OFFICIAL_API",
+  "PUBLIC_API",
+  "RSS_OR_FEED",
+  "DATASET_DOWNLOAD",
+  "PUBLIC_WEB",
+  "BROWSER_AUTOMATION",
+  "MANUAL_IMPORT",
+] as const;
+export type SourceAccessMethod = (typeof SOURCE_ACCESS_METHOD_VALUES)[number];
+export function isSourceAccessMethod(v: unknown): v is SourceAccessMethod {
+  return typeof v === "string" && (SOURCE_ACCESS_METHOD_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * The verdict for ONE activity. Activities are assessed separately because their conditions differ: a source may permit automated API access and forbid commercial use. A single boolean called `allowed` would erase exactly that difference.
+ * @see source-registry-v1.md §6
+ */
+export const POLICY_ASSESSMENT_VALUES = [
+  "PERMITTED",
+  "PERMITTED_WITH_CONDITIONS",
+  "NOT_PERMITTED",
+  "NOT_ADDRESSED",
+  "UNCLEAR",
+  "NOT_ASSESSED",
+] as const;
+export type PolicyAssessment = (typeof POLICY_ASSESSMENT_VALUES)[number];
+export function isPolicyAssessment(v: unknown): v is PolicyAssessment {
+  return typeof v === "string" && (POLICY_ASSESSMENT_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * What kind of document supports an assessment. Ordered by the evidence hierarchy: official operator documentation outranks anything else, and nothing below OFFICIAL_* may support an APPROVED state on its own.
+ * @see source-registry-v1.md §7
+ */
+export const POLICY_EVIDENCE_TYPE_VALUES = [
+  "OFFICIAL_API_DOCS",
+  "OFFICIAL_TERMS",
+  "OFFICIAL_LICENCE",
+  "OFFICIAL_PRIVACY",
+  "OFFICIAL_ACCESS_CONTROL",
+  "OPERATOR_CORRESPONDENCE",
+  "LEGAL_REVIEW",
+] as const;
+export type PolicyEvidenceType = (typeof POLICY_EVIDENCE_TYPE_VALUES)[number];
+export function isPolicyEvidenceType(v: unknown): v is PolicyEvidenceType {
+  return typeof v === "string" && (POLICY_EVIDENCE_TYPE_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * Whether the source itself still exists as a target. Separate from approval: a deprecated source may have been approved, and an active source may never have been reviewed.
+ * @see source-registry-v1.md §4
+ */
+export const SOURCE_LIFECYCLE_VALUES = [
+  "ACTIVE",
+  "DEPRECATED",
+] as const;
+export type SourceLifecycle = (typeof SOURCE_LIFECYCLE_VALUES)[number];
+export function isSourceLifecycle(v: unknown): v is SourceLifecycle {
+  return typeof v === "string" && (SOURCE_LIFECYCLE_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * The shape of what access costs, not an amount. Concrete prices are versioned configuration because operators change them; a price compiled in here would be wrong within months and would look authoritative.
+ * @see source-registry-v1.md §10
+ */
+export const SOURCE_ACQUISITION_COST_VALUES = [
+  "FREE",
+  "FREE_WITH_LIMITS",
+  "PAID",
+  "USAGE_BASED",
+  "UNKNOWN",
+] as const;
+export type SourceAcquisitionCost = (typeof SOURCE_ACQUISITION_COST_VALUES)[number];
+export function isSourceAcquisitionCost(v: unknown): v is SourceAcquisitionCost {
+  return typeof v === "string" && (SOURCE_ACQUISITION_COST_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * How likely the source is to carry personal data. A RISK CLASSIFICATION, not a legal ruling: it records what must be handled carefully and what still needs jurisdiction-specific review. GDPR analysis is separate and remains a human decision.
+ * @see source-registry-v1.md §9
+ */
+export const PERSONAL_DATA_RISK_VALUES = [
+  "NONE_EXPECTED",
+  "PSEUDONYMOUS",
+  "IDENTIFIABLE",
+  "SENSITIVE_POSSIBLE",
+  "UNKNOWN",
+] as const;
+export type PersonalDataRisk = (typeof PERSONAL_DATA_RISK_VALUES)[number];
+export function isPersonalDataRisk(v: unknown): v is PersonalDataRisk {
+  return typeof v === "string" && (PERSONAL_DATA_RISK_VALUES as readonly string[]).includes(v);
+}
+
 // --- Numeric bounds --------------------------------------------------------
 // A field named `confidence` is always [0,1]. A field named `*_score` is
 // always 0-100. scoring-framework-v1.1.md §4.1.
@@ -197,6 +313,7 @@ export const REGISTRY_NAMES = [
   "distribution_channel",
   "risk",
   "region",
+  "source_family",
 ] as const;
 export type RegistryName = (typeof REGISTRY_NAMES)[number];
 

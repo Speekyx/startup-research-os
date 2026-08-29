@@ -1,0 +1,1234 @@
+{
+  "catalog_version": "1.0.0",
+  "$comment": "MACHINE-READABLE SOURCE OF TRUTH for the initial source catalog (Mission 1.0, D-07). The human-readable table in source-catalog-v1.md is rendered from this file and checked in CI, so the two cannot drift. Edited by hand; loaded into PostgreSQL by `sros-source load`; validated with no dependencies by infrastructure/scripts/validate_source_registry.py.",
+  "assessed_use_case": "Automated collection of public content by Startup Research OS, a COMMERCIAL multi-tenant SaaS, for storage, derived analytics and LLM processing to produce opportunity intelligence. Every assessment below is scoped to that use. An assessment does not transfer to non-commercial or academic use, and a permission granted for a narrower purpose does not widen to this one.",
+  "reviewer": "mission-1.0",
+  "review_date": "2026-08-29",
+  "known_limitations": [
+    "Reddit and Stack Exchange documentation could not be retrieved from this environment: both hosts are unreachable through the available fetch path. Their assessments rest on no evidence and are REQUIRES_REVIEW with the exact documents named.",
+    "No assessment here is a legal opinion. Where a conclusion would require legal judgment, the recorded value is UNCLEAR or NOT_ADDRESSED and a human review is required.",
+    "No source data was collected. Only official documentation about the sources was read."
+  ],
+  "sources": [
+    {
+      "source_id": "reddit",
+      "canonical_name": "Reddit",
+      "source_family": "community",
+      "lifecycle": "ACTIVE",
+      "homepage_url": "https://www.reddit.com/",
+      "developer_portal_url": "https://www.reddit.com/dev/api/",
+      "documentation_url": "https://www.reddit.com/dev/api/",
+      "description": "Threaded discussion communities. A primary candidate for PAIN and DESIRE signals because complaints and feature requests are stated in the users' own words.",
+      "coverage": {
+        "scope": "PARTIAL",
+        "countries": [],
+        "regions": [],
+        "languages": [
+          "en"
+        ]
+      },
+      "quality_notes": {
+        "selection_bias": "Skews toward English-speaking, technical and hobbyist audiences. Not representative of any national market.",
+        "ranking_bias": "Vote-ordered listings surface agreement, not prevalence.",
+        "spam_exposure": "Moderate. Promotional posting and vote manipulation are known problems.",
+        "moderation_effects": "Per-subreddit moderation removes content asymmetrically, so absence is not evidence of absence.",
+        "historical_depth": "UNKNOWN pending documentation review."
+      },
+      "capabilities": [
+        "posts",
+        "comments",
+        "vote-counts",
+        "timestamps",
+        "subreddit-metadata"
+      ],
+      "access_profiles": [
+        {
+          "access_method": "OFFICIAL_API",
+          "label": "reddit-data-api",
+          "documentation_url": "https://www.reddit.com/dev/api/",
+          "requires_authentication": true,
+          "requires_api_key": false,
+          "requires_oauth": true,
+          "requires_account": true,
+          "requires_developer_app": true,
+          "requires_approval": true,
+          "approval_process_notes": "Registration of an application and acceptance of the developer terms is understood to be required. Not verified in this mission.",
+          "secret_references": [
+            "REDDIT_CLIENT_ID",
+            "REDDIT_CLIENT_SECRET"
+          ],
+          "rate_limit_known": false,
+          "acquisition_cost": "UNKNOWN",
+          "notes": "Reddit introduced paid API tiers in 2023. Neither the current tiers nor the current limits were verified here."
+        }
+      ],
+      "review": {
+        "approval_state": "REQUIRES_REVIEW",
+        "automated_access": "NOT_ASSESSED",
+        "api_use": "NOT_ASSESSED",
+        "browser_automation": "NOT_ASSESSED",
+        "commercial_use": "NOT_ASSESSED",
+        "storage": "NOT_ASSESSED",
+        "retention": "NOT_ASSESSED",
+        "redistribution": "NOT_ASSESSED",
+        "derived_analytics": "NOT_ASSESSED",
+        "model_processing": "NOT_ASSESSED",
+        "personal_data_handling": "NOT_ASSESSED",
+        "attribution_required": "NOT_ASSESSED",
+        "personal_data_risk": "PSEUDONYMOUS",
+        "contains_user_generated_content": true,
+        "contains_user_identifiers": true,
+        "contains_location": false,
+        "sensitive_data_possible": true,
+        "pseudonymization_expected": true,
+        "discard_identifiers_after_normalization": true,
+        "jurisdiction_review_required": true,
+        "review_interval_days": 180,
+        "conditions": [],
+        "open_questions": [
+          "Retrieve and assess the Reddit Data API Terms at https://www.redditinc.com/policies/data-api-terms",
+          "Retrieve and assess the Reddit Developer Terms at https://www.redditinc.com/policies/developer-terms",
+          "Determine the current API pricing tiers and whether a commercial tier is required for this use",
+          "Determine documented rate limits for the applicable tier",
+          "Determine whether content may be retained, and for how long",
+          "Determine whether use of content for model processing is addressed",
+          "Determine attribution requirements"
+        ],
+        "review_notes": "No evidence could be gathered: redditinc.com and reddit.com are unreachable from this environment. Reddit's 2023 API changes are widely understood to have introduced paid tiers and restrictions on automated use, which makes an unverified assumption particularly unsafe here. Nothing is assessed; every activity is NOT_ASSESSED rather than assumed."
+      },
+      "evidence": [],
+      "retention_override": null
+    },
+    {
+      "source_id": "hacker-news",
+      "canonical_name": "Hacker News",
+      "source_family": "community",
+      "lifecycle": "ACTIVE",
+      "homepage_url": "https://news.ycombinator.com/",
+      "developer_portal_url": "https://github.com/HackerNews/API",
+      "documentation_url": "https://github.com/HackerNews/API",
+      "description": "Technology and startup discussion. Useful for early product launches and developer-audience reaction.",
+      "coverage": {
+        "scope": "PARTIAL",
+        "countries": [],
+        "regions": [],
+        "languages": [
+          "en"
+        ]
+      },
+      "quality_notes": {
+        "selection_bias": "Strongly skewed toward English-speaking software professionals and founders. Useful for developer-tool signals; misleading for consumer markets.",
+        "ranking_bias": "Front-page ranking is time-decayed and vote-driven; visibility is not prevalence.",
+        "moderation_effects": "Moderator demotion of stories is not visible in the data.",
+        "sampling_limitation": "Small volume compared with mainstream platforms."
+      },
+      "capabilities": [
+        "posts",
+        "comments",
+        "vote-counts",
+        "timestamps"
+      ],
+      "access_profiles": [
+        {
+          "access_method": "PUBLIC_API",
+          "label": "firebase-api",
+          "endpoint_url": "https://hacker-news.firebaseio.com/v0/",
+          "documentation_url": "https://github.com/HackerNews/API",
+          "requires_authentication": false,
+          "requires_api_key": false,
+          "requires_oauth": false,
+          "requires_account": false,
+          "requires_developer_app": false,
+          "requires_approval": false,
+          "secret_references": [],
+          "rate_limit_known": false,
+          "acquisition_cost": "UNKNOWN",
+          "notes": "The official read-only API is documented in the HackerNews/API repository. Its terms and limits were not verified in this mission."
+        },
+        {
+          "access_method": "PUBLIC_WEB",
+          "label": "site-crawl",
+          "endpoint_url": "https://news.ycombinator.com/",
+          "documentation_url": "https://news.ycombinator.com/robots.txt",
+          "requires_authentication": false,
+          "requires_api_key": false,
+          "requires_oauth": false,
+          "requires_account": false,
+          "requires_developer_app": false,
+          "requires_approval": false,
+          "secret_references": [],
+          "rate_limit_known": true,
+          "rate_limit_requests": 1,
+          "rate_limit_period_seconds": 30,
+          "rate_limit_origin": "DOCUMENTED",
+          "rate_limit_verified_at": "2026-08-29T00:00:00Z",
+          "acquisition_cost": "FREE",
+          "notes": "robots.txt publishes Crawl-delay: 30 and disallows a set of action endpoints. The crawl delay is a documented access directive, not a permission to collect."
+        }
+      ],
+      "review": {
+        "approval_state": "REQUIRES_REVIEW",
+        "automated_access": "PERMITTED_WITH_CONDITIONS",
+        "api_use": "NOT_ASSESSED",
+        "browser_automation": "NOT_ADDRESSED",
+        "commercial_use": "NOT_ASSESSED",
+        "storage": "NOT_ASSESSED",
+        "retention": "NOT_ASSESSED",
+        "redistribution": "NOT_ASSESSED",
+        "derived_analytics": "NOT_ASSESSED",
+        "model_processing": "NOT_ASSESSED",
+        "personal_data_handling": "NOT_ASSESSED",
+        "attribution_required": "NOT_ASSESSED",
+        "personal_data_risk": "PSEUDONYMOUS",
+        "contains_user_generated_content": true,
+        "contains_user_identifiers": true,
+        "contains_location": false,
+        "sensitive_data_possible": false,
+        "pseudonymization_expected": true,
+        "discard_identifiers_after_normalization": true,
+        "jurisdiction_review_required": true,
+        "review_interval_days": 180,
+        "conditions": [
+          "Any crawl of news.ycombinator.com must honour Crawl-delay: 30 and must not touch the disallowed action endpoints"
+        ],
+        "open_questions": [
+          "Confirm the terms governing the official Firebase API at https://github.com/HackerNews/API",
+          "Determine whether Y Combinator publishes terms addressing commercial reuse of Hacker News content",
+          "Determine whether retention or redistribution is addressed anywhere",
+          "Determine whether use for model processing is addressed"
+        ],
+        "review_notes": "The only evidence gathered is robots.txt, which is an access directive rather than a licence. It establishes a crawl rate and a set of forbidden paths; it says nothing about commercial reuse, retention or model processing. Automated access is PERMITTED_WITH_CONDITIONS on that narrow basis alone. Everything that would be needed to approve collection remains unassessed."
+      },
+      "evidence": [
+        {
+          "document_type": "OFFICIAL_ACCESS_CONTROL",
+          "document_title": "Hacker News robots.txt",
+          "document_url": "https://news.ycombinator.com/robots.txt",
+          "section_reference": "User-agent: *",
+          "summarized_finding": "Publishes Crawl-delay: 30 for all user agents and disallows the action endpoints /collapse, /context, /fave, /flag, /hide, /login, /logout, /r, /reply, /submitlink, /vote and /x. No Allow directives are present.",
+          "retrieved_at": "2026-08-29T00:00:00Z"
+        }
+      ],
+      "retention_override": null
+    },
+    {
+      "source_id": "stack-exchange",
+      "canonical_name": "Stack Exchange",
+      "source_family": "forum",
+      "lifecycle": "ACTIVE",
+      "homepage_url": "https://stackexchange.com/",
+      "developer_portal_url": "https://api.stackexchange.com/",
+      "documentation_url": "https://api.stackexchange.com/docs",
+      "description": "Question-and-answer network including Stack Overflow. Questions are explicit statements of unsolved problems, which is a direct PAIN signal.",
+      "coverage": {
+        "scope": "PARTIAL",
+        "countries": [],
+        "regions": [],
+        "languages": [
+          "en"
+        ]
+      },
+      "quality_notes": {
+        "selection_bias": "Technical audiences. Question volume tracks technology popularity, not user population.",
+        "moderation_effects": "Duplicate closure and deletion remove signal asymmetrically.",
+        "historical_depth": "UNKNOWN pending documentation review."
+      },
+      "capabilities": [
+        "posts",
+        "comments",
+        "vote-counts",
+        "view-counts",
+        "tags",
+        "timestamps"
+      ],
+      "access_profiles": [
+        {
+          "access_method": "OFFICIAL_API",
+          "label": "stack-exchange-api",
+          "endpoint_url": "https://api.stackexchange.com/2.3/",
+          "documentation_url": "https://api.stackexchange.com/docs",
+          "requires_authentication": false,
+          "requires_api_key": true,
+          "requires_oauth": false,
+          "requires_account": false,
+          "requires_developer_app": true,
+          "requires_approval": false,
+          "approval_process_notes": "An application key is understood to raise the request quota. Not verified in this mission.",
+          "secret_references": [
+            "STACK_EXCHANGE_API_KEY"
+          ],
+          "rate_limit_known": false,
+          "acquisition_cost": "UNKNOWN"
+        }
+      ],
+      "review": {
+        "approval_state": "REQUIRES_REVIEW",
+        "automated_access": "NOT_ASSESSED",
+        "api_use": "NOT_ASSESSED",
+        "browser_automation": "NOT_ASSESSED",
+        "commercial_use": "NOT_ASSESSED",
+        "storage": "NOT_ASSESSED",
+        "retention": "NOT_ASSESSED",
+        "redistribution": "NOT_ASSESSED",
+        "derived_analytics": "NOT_ASSESSED",
+        "model_processing": "NOT_ASSESSED",
+        "personal_data_handling": "NOT_ASSESSED",
+        "attribution_required": "NOT_ASSESSED",
+        "personal_data_risk": "PSEUDONYMOUS",
+        "contains_user_generated_content": true,
+        "contains_user_identifiers": true,
+        "contains_location": false,
+        "sensitive_data_possible": false,
+        "pseudonymization_expected": true,
+        "discard_identifiers_after_normalization": true,
+        "jurisdiction_review_required": true,
+        "review_interval_days": 180,
+        "conditions": [],
+        "open_questions": [
+          "Retrieve and assess the API documentation and quota rules at https://api.stackexchange.com/docs",
+          "Retrieve and assess the content licence at https://stackoverflow.com/help/licensing, including which Creative Commons version applies to which date ranges and what attribution it requires",
+          "Determine whether the licence permits commercial redistribution of derived analytics and under what attribution",
+          "Determine whether use for model processing is addressed",
+          "Determine the documented request quota and its period"
+        ],
+        "review_notes": "No evidence could be gathered: api.stackexchange.com and stackoverflow.com are unreachable from this environment. Stack Exchange content is understood to carry a Creative Commons licence with attribution requirements, and attribution obligations attach to derived works in ways that must be read before any collection. Nothing is assessed."
+      },
+      "evidence": [],
+      "retention_override": null
+    },
+    {
+      "source_id": "product-hunt",
+      "canonical_name": "Product Hunt",
+      "source_family": "product_discovery",
+      "lifecycle": "ACTIVE",
+      "homepage_url": "https://www.producthunt.com/",
+      "developer_portal_url": "https://api.producthunt.com/v2/docs",
+      "documentation_url": "https://api.producthunt.com/v2/docs",
+      "description": "Daily product launches with community voting and comments. A direct view of what is being built and how it is received.",
+      "coverage": {
+        "scope": "PARTIAL",
+        "countries": [],
+        "regions": [],
+        "languages": [
+          "en"
+        ]
+      },
+      "quality_notes": {
+        "selection_bias": "Self-selected launches. Represents what founders chose to post, not what exists.",
+        "ranking_bias": "Vote-ordered and heavily influenced by launch-day promotion.",
+        "sampling_limitation": "One platform's launch calendar is not a market census."
+      },
+      "capabilities": [
+        "posts",
+        "comments",
+        "vote-counts",
+        "product-metadata",
+        "timestamps"
+      ],
+      "access_profiles": [
+        {
+          "access_method": "OFFICIAL_API",
+          "label": "graphql-v2",
+          "endpoint_url": "https://api.producthunt.com/v2/api/graphql",
+          "documentation_url": "https://api.producthunt.com/v2/docs",
+          "requires_authentication": true,
+          "requires_api_key": false,
+          "requires_oauth": true,
+          "requires_account": true,
+          "requires_developer_app": true,
+          "requires_approval": false,
+          "approval_process_notes": "Credentials are obtained from the API dashboard; either an OAuth access token or a developer token for scripts.",
+          "secret_references": [
+            "PRODUCT_HUNT_CLIENT_ID",
+            "PRODUCT_HUNT_CLIENT_SECRET"
+          ],
+          "rate_limit_known": false,
+          "rate_limit_origin": null,
+          "acquisition_cost": "UNKNOWN",
+          "notes": "The documentation reserves the right to rate-limit for unfair use but states no numbers, so no limit is recorded. A guessed limit would be worse than none: a collector would trust it."
+        }
+      ],
+      "review": {
+        "approval_state": "RESTRICTED",
+        "automated_access": "PERMITTED_WITH_CONDITIONS",
+        "api_use": "PERMITTED_WITH_CONDITIONS",
+        "browser_automation": "NOT_ADDRESSED",
+        "commercial_use": "NOT_PERMITTED",
+        "storage": "NOT_ADDRESSED",
+        "retention": "NOT_ADDRESSED",
+        "redistribution": "NOT_ADDRESSED",
+        "derived_analytics": "NOT_ADDRESSED",
+        "model_processing": "NOT_ADDRESSED",
+        "personal_data_handling": "NOT_ASSESSED",
+        "attribution_required": "NOT_ADDRESSED",
+        "personal_data_risk": "PSEUDONYMOUS",
+        "contains_user_generated_content": true,
+        "contains_user_identifiers": true,
+        "contains_location": false,
+        "sensitive_data_possible": false,
+        "pseudonymization_expected": true,
+        "discard_identifiers_after_normalization": true,
+        "jurisdiction_review_required": true,
+        "review_interval_days": 180,
+        "conditions": [
+          "API access is permitted only for non-commercial use under the published documentation",
+          "Commercial use requires prior written agreement obtained by contacting Product Hunt"
+        ],
+        "open_questions": [
+          "Whether Product Hunt will grant a commercial-use agreement for this use case, and on what terms",
+          "Whether storage, retention and redistribution are addressed in a separate terms document not reviewed here"
+        ],
+        "review_notes": "RESTRICTED, and the restriction is decisive rather than procedural. The API documentation states plainly that the API must not be used for commercial purposes and directs business users to contact Product Hunt. Startup Research OS is a commercial product, so the documented default excludes it. The path forward is operator correspondence, not a technical workaround; until such an agreement exists and is recorded as evidence, this source is not collectable."
+      },
+      "evidence": [
+        {
+          "document_type": "OFFICIAL_API_DOCS",
+          "document_title": "Product Hunt API v2 documentation",
+          "document_url": "https://api.producthunt.com/v2/docs",
+          "section_reference": "Introduction / usage",
+          "summarized_finding": "States that the API is accessible only with a provided access token obtained via OAuth or a developer token, that Product Hunt reserves the right to rate-limit applications it considers outside fair use without stating numeric limits, and that the API must not be used for commercial purposes, directing business users to contact hello@producthunt.com.",
+          "retrieved_at": "2026-08-29T00:00:00Z"
+        }
+      ],
+      "retention_override": null
+    },
+    {
+      "source_id": "github",
+      "canonical_name": "GitHub",
+      "source_family": "developer",
+      "lifecycle": "ACTIVE",
+      "homepage_url": "https://github.com/",
+      "developer_portal_url": "https://docs.github.com/rest",
+      "documentation_url": "https://docs.github.com/rest",
+      "description": "Code hosting with public repository metadata and issue trackers. Issues are explicit problem statements from a developer audience.",
+      "coverage": {
+        "scope": "PARTIAL",
+        "countries": [],
+        "regions": [],
+        "languages": [
+          "en"
+        ]
+      },
+      "quality_notes": {
+        "selection_bias": "Developer audiences only. Repository popularity reflects developer attention, not end-user demand.",
+        "sampling_limitation": "Public repositories only; private activity is invisible and is a large share of real usage.",
+        "api_truncation": "Search endpoints cap results, so a query is not a census.",
+        "historical_depth": "Full public history is available through the API subject to pagination limits."
+      },
+      "capabilities": [
+        "repository-metadata",
+        "issue-reports",
+        "timestamps",
+        "language",
+        "release-history"
+      ],
+      "access_profiles": [
+        {
+          "access_method": "OFFICIAL_API",
+          "label": "rest-api-unauthenticated",
+          "endpoint_url": "https://api.github.com/",
+          "documentation_url": "https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api",
+          "requires_authentication": false,
+          "requires_api_key": false,
+          "requires_oauth": false,
+          "requires_account": false,
+          "requires_developer_app": false,
+          "requires_approval": false,
+          "secret_references": [],
+          "rate_limit_known": true,
+          "rate_limit_requests": 60,
+          "rate_limit_period_seconds": 3600,
+          "rate_limit_origin": "DOCUMENTED",
+          "rate_limit_verified_at": "2026-08-29T00:00:00Z",
+          "acquisition_cost": "FREE_WITH_LIMITS",
+          "notes": "Unauthenticated access to public data. 60 requests per hour is too low for any real collection and is recorded for completeness."
+        },
+        {
+          "access_method": "OFFICIAL_API",
+          "label": "rest-api-authenticated",
+          "endpoint_url": "https://api.github.com/",
+          "documentation_url": "https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api",
+          "requires_authentication": true,
+          "requires_api_key": true,
+          "requires_oauth": false,
+          "requires_account": true,
+          "requires_developer_app": false,
+          "requires_approval": false,
+          "secret_references": [
+            "GITHUB_API_TOKEN"
+          ],
+          "rate_limit_known": true,
+          "rate_limit_requests": 5000,
+          "rate_limit_period_seconds": 3600,
+          "rate_limit_concurrency": 100,
+          "rate_limit_origin": "DOCUMENTED",
+          "rate_limit_verified_at": "2026-08-29T00:00:00Z",
+          "acquisition_cost": "FREE_WITH_LIMITS",
+          "notes": "Documented secondary limits also apply: no more than 100 concurrent requests, no more than 900 points per minute per endpoint, and no more than 90 seconds of CPU time per 60 seconds of real time."
+        }
+      ],
+      "review": {
+        "approval_state": "REQUIRES_REVIEW",
+        "automated_access": "PERMITTED_WITH_CONDITIONS",
+        "api_use": "PERMITTED_WITH_CONDITIONS",
+        "browser_automation": "UNCLEAR",
+        "commercial_use": "UNCLEAR",
+        "storage": "NOT_ASSESSED",
+        "retention": "NOT_ASSESSED",
+        "redistribution": "NOT_ASSESSED",
+        "derived_analytics": "UNCLEAR",
+        "model_processing": "NOT_ASSESSED",
+        "personal_data_handling": "PERMITTED_WITH_CONDITIONS",
+        "attribution_required": "NOT_ASSESSED",
+        "personal_data_risk": "IDENTIFIABLE",
+        "contains_user_generated_content": true,
+        "contains_user_identifiers": true,
+        "contains_location": true,
+        "sensitive_data_possible": false,
+        "pseudonymization_expected": false,
+        "discard_identifiers_after_normalization": true,
+        "jurisdiction_review_required": true,
+        "review_interval_days": 180,
+        "conditions": [
+          "Documented primary and secondary rate limits must be respected; the collector must consume the recorded values rather than its own",
+          "Information from GitHub must not be used for spam, unsolicited email, or the sale of personal information",
+          "Profile data must not be retained beyond what the research objective requires"
+        ],
+        "open_questions": [
+          "Read the API terms in the GitHub Terms of Service (Section H) and determine whether commercial use of API data for this purpose is permitted",
+          "The Acceptable Use Policies permit research use only where resulting publications are open access. Determine whether that clause governs commercial analytical use, or only the scraping route it appears within",
+          "Determine whether storage and retention of API responses are addressed anywhere",
+          "Determine whether use for model processing is addressed"
+        ],
+        "review_notes": "The technical picture is solid and documented; the permission picture is not. Two findings block approval. First, the Acceptable Use Policies separate scraping from API access and permit research use of scraped public information only where resulting publications are open access -- a condition a commercial product does not meet, and whose scope relative to API use is genuinely ambiguous. Second, the API terms live in the Terms of Service, which was not retrieved. GitHub profiles carry real names and locations, so the personal-data risk is IDENTIFIABLE rather than pseudonymous."
+      },
+      "evidence": [
+        {
+          "document_type": "OFFICIAL_API_DOCS",
+          "document_title": "Rate limits for the REST API",
+          "document_url": "https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api",
+          "section_reference": "Primary rate limits / Secondary rate limits",
+          "summarized_finding": "Unauthenticated requests are limited to 60 per hour; requests authenticated with a personal access token to 5,000 per hour. Secondary limits cap concurrent requests at 100, endpoint cost at 900 points per minute, CPU time at 90 seconds per 60 seconds of real time, and content-creating requests at 80 per minute and 500 per hour.",
+          "retrieved_at": "2026-08-29T00:00:00Z"
+        },
+        {
+          "document_type": "OFFICIAL_TERMS",
+          "document_title": "GitHub Acceptable Use Policies",
+          "document_url": "https://docs.github.com/en/site-policy/acceptable-use-policies/github-acceptable-use-policies",
+          "section_reference": "Information Usage Restrictions / Scraping and API Usage Restrictions",
+          "summarized_finding": "Defines scraping as automated extraction via the Service and states explicitly that scraping does not refer to collection through the API, which is governed by the Terms of Service instead. Permits researchers to use public non-personal information for research only if resulting publications are open access, and permits archival use. Prohibits using information from the Service for spam, unsolicited email, or selling personal information such as to recruiters or job boards. No effective date is stated on the page.",
+          "retrieved_at": "2026-08-29T00:00:00Z"
+        }
+      ],
+      "retention_override": null
+    },
+    {
+      "source_id": "apple-app-store",
+      "canonical_name": "Apple App Store",
+      "source_family": "app_store",
+      "lifecycle": "ACTIVE",
+      "homepage_url": "https://www.apple.com/app-store/",
+      "developer_portal_url": "https://developer.apple.com/",
+      "documentation_url": "https://developer.apple.com/app-store/review/guidelines/",
+      "description": "iOS application listings, ratings and customer reviews. Reviews are a dense source of complaints about existing products.",
+      "coverage": {
+        "scope": "GLOBAL",
+        "countries": [],
+        "regions": [],
+        "languages": []
+      },
+      "quality_notes": {
+        "selection_bias": "Reviews skew to extremes: users who were delighted or angry. The satisfied middle is silent.",
+        "moderation_effects": "Review moderation and developer responses alter the visible record.",
+        "sampling_limitation": "Storefronts are per country; a single-storefront read is not global."
+      },
+      "capabilities": [
+        "reviews",
+        "ratings",
+        "product-metadata",
+        "release-history",
+        "pricing"
+      ],
+      "access_profiles": [
+        {
+          "access_method": "RSS_OR_FEED",
+          "label": "itunes-rss",
+          "documentation_url": "https://developer.apple.com/app-store/review/guidelines/",
+          "requires_authentication": false,
+          "requires_api_key": false,
+          "requires_oauth": false,
+          "requires_account": false,
+          "requires_developer_app": false,
+          "requires_approval": false,
+          "secret_references": [],
+          "rate_limit_known": false,
+          "acquisition_cost": "UNKNOWN",
+          "notes": "App Store Review Guideline 4.5.1 refers to approved Apple RSS feeds such as the iTunes Store RSS feed as the permitted mechanism, in contrast with scraping. The current feed endpoints and their own terms were not verified."
+        }
+      ],
+      "review": {
+        "approval_state": "RESTRICTED",
+        "automated_access": "UNCLEAR",
+        "api_use": "NOT_ASSESSED",
+        "browser_automation": "NOT_PERMITTED",
+        "commercial_use": "NOT_ASSESSED",
+        "storage": "NOT_ASSESSED",
+        "retention": "NOT_ASSESSED",
+        "redistribution": "NOT_ASSESSED",
+        "derived_analytics": "UNCLEAR",
+        "model_processing": "NOT_ASSESSED",
+        "personal_data_handling": "NOT_ASSESSED",
+        "attribution_required": "NOT_ASSESSED",
+        "personal_data_risk": "PSEUDONYMOUS",
+        "contains_user_generated_content": true,
+        "contains_user_identifiers": true,
+        "contains_location": false,
+        "sensitive_data_possible": false,
+        "pseudonymization_expected": true,
+        "discard_identifiers_after_normalization": true,
+        "jurisdiction_review_required": true,
+        "review_interval_days": 180,
+        "conditions": [
+          "No scraping of Apple properties under any access method",
+          "Any use must go through an approved Apple feed, and that feed's own terms must be reviewed first"
+        ],
+        "open_questions": [
+          "Guideline 4.5.1 governs apps distributed on the App Store. Determine whether an equivalent restriction binds a third-party service that is not an App Store app -- the Apple Media Services Terms and the site terms of use need reading",
+          "Determine the current iTunes/App Store RSS feed endpoints and whether their terms permit this use",
+          "Determine whether App Store Connect API access is relevant, noting it is scoped to a developer's own apps"
+        ],
+        "review_notes": "RESTRICTED. Apple states directly that information must not be scraped from Apple sites including the App Store, and that rankings must not be created from such information -- the second half matters here, because ranking opportunities is what this system does. The clause sits in the App Store Review Guidelines, which govern apps rather than external services, so it is strong evidence of Apple's position rather than a term that plainly binds this system. That ambiguity is exactly why the state is RESTRICTED and not PROHIBITED: the correct next step is reading the terms that do bind a non-app consumer, not assuming either answer."
+      },
+      "evidence": [
+        {
+          "document_type": "OFFICIAL_TERMS",
+          "document_title": "App Store Review Guidelines",
+          "document_url": "https://developer.apple.com/app-store/review/guidelines/",
+          "section_reference": "4.5.1 Apple Sites and Services",
+          "summarized_finding": "States that apps may use approved Apple RSS feeds such as the iTunes Store RSS feed, but may not scrape any information from Apple sites including apple.com, the iTunes Store, the App Store, App Store Connect and the developer portal, and may not create rankings using that information. The guideline addresses apps distributed on the App Store rather than third-party services generally.",
+          "retrieved_at": "2026-08-29T00:00:00Z"
+        }
+      ],
+      "retention_override": null
+    },
+    {
+      "source_id": "google-play",
+      "canonical_name": "Google Play",
+      "source_family": "app_store",
+      "lifecycle": "ACTIVE",
+      "homepage_url": "https://play.google.com/",
+      "developer_portal_url": "https://developers.google.com/android-publisher",
+      "documentation_url": "https://developers.google.com/android-publisher",
+      "description": "Android application listings, ratings and reviews.",
+      "coverage": {
+        "scope": "GLOBAL",
+        "countries": [],
+        "regions": [],
+        "languages": []
+      },
+      "quality_notes": {
+        "selection_bias": "As with any store, reviews skew to extremes.",
+        "sampling_limitation": "The publisher API is scoped to a developer's own applications, which is not the population of interest here."
+      },
+      "capabilities": [
+        "reviews",
+        "ratings",
+        "product-metadata",
+        "pricing"
+      ],
+      "access_profiles": [
+        {
+          "access_method": "OFFICIAL_API",
+          "label": "android-publisher-api",
+          "documentation_url": "https://developers.google.com/android-publisher",
+          "requires_authentication": true,
+          "requires_api_key": false,
+          "requires_oauth": true,
+          "requires_account": true,
+          "requires_developer_app": true,
+          "requires_approval": false,
+          "approval_process_notes": "Understood to be scoped to applications the authenticated developer owns. Not verified.",
+          "secret_references": [
+            "GOOGLE_PLAY_SERVICE_ACCOUNT"
+          ],
+          "rate_limit_known": false,
+          "acquisition_cost": "UNKNOWN"
+        }
+      ],
+      "review": {
+        "approval_state": "REQUIRES_REVIEW",
+        "automated_access": "NOT_ASSESSED",
+        "api_use": "NOT_ASSESSED",
+        "browser_automation": "NOT_ASSESSED",
+        "commercial_use": "NOT_ASSESSED",
+        "storage": "NOT_ASSESSED",
+        "retention": "NOT_ASSESSED",
+        "redistribution": "NOT_ASSESSED",
+        "derived_analytics": "NOT_ASSESSED",
+        "model_processing": "NOT_ASSESSED",
+        "personal_data_handling": "NOT_ASSESSED",
+        "attribution_required": "NOT_ASSESSED",
+        "personal_data_risk": "PSEUDONYMOUS",
+        "contains_user_generated_content": true,
+        "contains_user_identifiers": true,
+        "contains_location": false,
+        "sensitive_data_possible": false,
+        "pseudonymization_expected": true,
+        "discard_identifiers_after_normalization": true,
+        "jurisdiction_review_required": true,
+        "review_interval_days": 180,
+        "conditions": [],
+        "open_questions": [
+          "Read the Google Play Developer API terms at https://developers.google.com/android-publisher/terms",
+          "Confirm whether the Play Developer API exposes reviews for applications the caller does not own -- if it does not, this source has no lawful automated access path for this use and the correct state is RESTRICTED",
+          "Read the Google Terms of Service provisions on automated access to Google properties",
+          "Determine whether any official mechanism exists for third-party access to Play listing and review data"
+        ],
+        "review_notes": "Not researched in this mission. The decisive question is not a policy nuance but a capability one: if the publisher API only exposes a developer's own applications, then no approved path exists for collecting competitor reviews, and no policy reading changes that. Recorded as REQUIRES_REVIEW with that question first."
+      },
+      "evidence": [],
+      "retention_override": null
+    },
+    {
+      "source_id": "youtube",
+      "canonical_name": "YouTube",
+      "source_family": "content_platform",
+      "lifecycle": "ACTIVE",
+      "homepage_url": "https://www.youtube.com/",
+      "developer_portal_url": "https://developers.google.com/youtube/v3",
+      "documentation_url": "https://developers.google.com/youtube/terms/developer-policies",
+      "description": "Video platform with comments and engagement metrics. Comments carry desire and complaint signals for consumer products.",
+      "coverage": {
+        "scope": "GLOBAL",
+        "countries": [],
+        "regions": [],
+        "languages": []
+      },
+      "quality_notes": {
+        "freshness": "Engagement accrues over a long tail; a snapshot understates a recent video.",
+        "spam_exposure": "High. Comment spam and bot engagement are widespread.",
+        "ranking_bias": "Recommendation-driven view counts reflect algorithmic promotion as much as interest.",
+        "api_truncation": "Quota-limited; a broad query cannot be exhaustive."
+      },
+      "capabilities": [
+        "comments",
+        "view-counts",
+        "vote-counts",
+        "product-metadata",
+        "timestamps",
+        "language"
+      ],
+      "access_profiles": [
+        {
+          "access_method": "OFFICIAL_API",
+          "label": "youtube-data-api-v3",
+          "endpoint_url": "https://www.googleapis.com/youtube/v3/",
+          "documentation_url": "https://developers.google.com/youtube/v3",
+          "requires_authentication": true,
+          "requires_api_key": true,
+          "requires_oauth": false,
+          "requires_account": true,
+          "requires_developer_app": true,
+          "requires_approval": false,
+          "approval_process_notes": "A Google Cloud project and an API key are required. A quota extension requires passing an API Compliance Audit.",
+          "secret_references": [
+            "YOUTUBE_API_KEY"
+          ],
+          "rate_limit_known": false,
+          "rate_limit_origin": null,
+          "acquisition_cost": "FREE_WITH_LIMITS",
+          "notes": "The developer policies confirm that quotas exist and that extensions require a compliance audit, but state no numbers. The numeric default quota was not verified, so no limit is recorded."
+        }
+      ],
+      "review": {
+        "approval_state": "REQUIRES_REVIEW",
+        "automated_access": "PERMITTED_WITH_CONDITIONS",
+        "api_use": "PERMITTED_WITH_CONDITIONS",
+        "browser_automation": "NOT_PERMITTED",
+        "commercial_use": "PERMITTED_WITH_CONDITIONS",
+        "storage": "PERMITTED_WITH_CONDITIONS",
+        "retention": "PERMITTED_WITH_CONDITIONS",
+        "redistribution": "NOT_PERMITTED",
+        "derived_analytics": "PERMITTED_WITH_CONDITIONS",
+        "model_processing": "NOT_ADDRESSED",
+        "personal_data_handling": "PERMITTED_WITH_CONDITIONS",
+        "attribution_required": "PERMITTED_WITH_CONDITIONS",
+        "personal_data_risk": "PSEUDONYMOUS",
+        "contains_user_generated_content": true,
+        "contains_user_identifiers": true,
+        "contains_location": false,
+        "sensitive_data_possible": true,
+        "pseudonymization_expected": true,
+        "discard_identifiers_after_normalization": true,
+        "jurisdiction_review_required": true,
+        "review_interval_days": 90,
+        "conditions": [
+          "Data obtained through the API must not be stored longer than 30 calendar days; it must be deleted or refreshed within that window",
+          "A user deletion request must be honoured as soon as possible and within 7 calendar days",
+          "No scraping of YouTube or Google properties, and no use of scraped YouTube data obtained elsewhere",
+          "YouTube must be shown as the source wherever its content is displayed, per the Branding Guidelines",
+          "Aggregation across channels is restricted to channels under the same content owner"
+        ],
+        "open_questions": [
+          "The policies do not address use of API data for machine learning or model processing. Since this system processes collected text with LLMs, that silence is material and needs a decision before any collection",
+          "Determine the numeric default quota for the Data API and record it as a documented rate limit",
+          "Confirm whether comment text counts as Authorized or Non-Authorized Data for the 30-day rule"
+        ],
+        "review_notes": "The best-documented candidate in this catalog, and still not approvable. The 30-day storage cap, the scraping prohibition, the branding requirement and the aggregation limits are all explicit and workable. What blocks approval is a single silence: the developer policies do not address processing API data with a language model, and this system's entire purpose is to do that. Silence is not permission (source-registry-v1.md §6), so the state is REQUIRES_REVIEW and the question is named. The review interval is shortened to 90 days because these policies were updated recently and change often."
+      },
+      "evidence": [
+        {
+          "document_type": "OFFICIAL_TERMS",
+          "document_title": "YouTube API Services - Developer Policies",
+          "document_url": "https://developers.google.com/youtube/terms/developer-policies",
+          "section_reference": "Storage and Caching / Commercial Use / Scraping / Attribution",
+          "summarized_finding": "Non-Authorized Data may be stored no longer than 30 calendar days and Authorized Data must be deleted or refreshed within 30 days, with user deletion requests honoured within 7 days. Clients must not scrape YouTube or Google applications, nor use scraped YouTube data obtained elsewhere. Commercial use is permitted in enumerated forms while selling API access or selling ads against API data without independent value requires prior written approval. Clients must display YouTube Brand Features as the source and must not obscure YouTube attribution. Quotas exist and extensions require an API Compliance Audit; no numeric limit is stated. Machine learning and model training are not addressed. Page states 'Last updated 2026-06-24 UTC'.",
+          "retrieved_at": "2026-08-29T00:00:00Z",
+          "effective_at": "2026-06-24T00:00:00Z"
+        }
+      ],
+      "retention_override": {
+        "raw_days": 30,
+        "normalized_days": 30,
+        "aggregate_permitted": true,
+        "basis": "YouTube API Services Developer Policies require API data to be deleted or refreshed within 30 calendar days. The project baseline allows 12 months for normalized observations (data-retention-policy-v1.md §2.2); the source rule is stricter and therefore wins (§1). Raw is already 30 days at baseline and is restated here so the whole constraint reads in one place.",
+        "reviewed_by": "mission-1.0"
+      }
+    },
+    {
+      "source_id": "tiktok",
+      "canonical_name": "TikTok",
+      "source_family": "social",
+      "lifecycle": "ACTIVE",
+      "homepage_url": "https://www.tiktok.com/",
+      "developer_portal_url": "https://developers.tiktok.com/",
+      "documentation_url": "https://developers.tiktok.com/products/research-api/",
+      "description": "Short-form video platform. Candidate for consumer trend and desire signals.",
+      "coverage": {
+        "scope": "PARTIAL",
+        "countries": [],
+        "regions": [],
+        "languages": []
+      },
+      "quality_notes": {
+        "sampling_limitation": "Research API access is restricted by region and by institution type, so any dataset is a biased subset.",
+        "ranking_bias": "Recommendation-driven distribution dominates visibility."
+      },
+      "capabilities": [
+        "posts",
+        "comments",
+        "vote-counts",
+        "view-counts",
+        "timestamps"
+      ],
+      "access_profiles": [
+        {
+          "access_method": "OFFICIAL_API",
+          "label": "research-api",
+          "endpoint_url": "https://open.tiktokapis.com/v2/research/",
+          "documentation_url": "https://developers.tiktok.com/products/research-api/",
+          "requires_authentication": true,
+          "requires_api_key": false,
+          "requires_oauth": true,
+          "requires_account": true,
+          "requires_developer_app": true,
+          "requires_approval": true,
+          "approval_process_notes": "An application form and a research proposal are required; approval typically takes up to four weeks. Applicants must be academic institutions in the US, EEA, UK or Switzerland, not-for-profit or independent research bodies in the EU, or academic and not-for-profit organisations in Brazil studying online youth safety.",
+          "secret_references": [
+            "TIKTOK_CLIENT_KEY",
+            "TIKTOK_CLIENT_SECRET"
+          ],
+          "rate_limit_known": false,
+          "acquisition_cost": "UNKNOWN",
+          "notes": "Authentication uses a client access token from /v2/oauth/token/ with the research.data.basic scope."
+        }
+      ],
+      "review": {
+        "approval_state": "PROHIBITED",
+        "automated_access": "NOT_PERMITTED",
+        "api_use": "NOT_PERMITTED",
+        "browser_automation": "NOT_PERMITTED",
+        "commercial_use": "NOT_PERMITTED",
+        "storage": "NOT_PERMITTED",
+        "retention": "NOT_PERMITTED",
+        "redistribution": "NOT_PERMITTED",
+        "derived_analytics": "NOT_PERMITTED",
+        "model_processing": "NOT_PERMITTED",
+        "personal_data_handling": "NOT_PERMITTED",
+        "attribution_required": "NOT_ASSESSED",
+        "personal_data_risk": "IDENTIFIABLE",
+        "contains_user_generated_content": true,
+        "contains_user_identifiers": true,
+        "contains_location": true,
+        "sensitive_data_possible": true,
+        "pseudonymization_expected": true,
+        "discard_identifiers_after_normalization": true,
+        "jurisdiction_review_required": true,
+        "review_interval_days": 365,
+        "conditions": [],
+        "open_questions": [
+          "Whether TikTok offers any commercial data product that would permit this use. If one exists it is a different source and needs its own registry entry and its own review"
+        ],
+        "review_notes": "PROHIBITED for this system's assessed use, and the finding is unambiguous rather than cautious. The Research API requires applicants to be independent from commercial interests and to conduct research on a not-for-profit or non-commercial basis, and eligibility is limited to academic institutions and non-profit research bodies in named regions. Startup Research OS is a commercial product and meets none of those criteria. There is no reading of these terms under which this system qualifies, and the correct response is to stop considering TikTok through this route rather than to look for a technical alternative -- scraping would breach the same terms more clearly, not less."
+      },
+      "evidence": [
+        {
+          "document_type": "OFFICIAL_API_DOCS",
+          "document_title": "TikTok Research API",
+          "document_url": "https://developers.tiktok.com/products/research-api/",
+          "section_reference": "Eligibility / application requirements",
+          "summarized_finding": "Access is limited to academic institutions in the US, EEA, UK or Switzerland, to not-for-profit or independent research institutions in the EU, and to academic or not-for-profit organisations in Brazil studying online youth safety. Applicants must submit a research proposal, must demonstrate a public-interest mission, and must be independent from commercial interests and able to conduct the research on a not-for-profit or non-commercial basis. Approval takes up to four weeks. Researchers must commit to data security and confidentiality requirements including protecting personal data.",
+          "retrieved_at": "2026-08-29T00:00:00Z"
+        }
+      ],
+      "retention_override": null
+    },
+    {
+      "source_id": "google-trends",
+      "canonical_name": "Google Trends",
+      "source_family": "search_trends",
+      "lifecycle": "ACTIVE",
+      "homepage_url": "https://trends.google.com/",
+      "developer_portal_url": "https://developers.google.com/search/blog",
+      "documentation_url": "https://trends.google.com/",
+      "description": "Relative search interest over time and geography. The most direct available proxy for demand attention.",
+      "coverage": {
+        "scope": "GLOBAL",
+        "countries": [],
+        "regions": [],
+        "languages": []
+      },
+      "quality_notes": {
+        "sampling_limitation": "Values are relative and normalised, not absolute volumes. Two queries are comparable only within one request.",
+        "freshness": "Series are sampled, and repeated identical queries can return slightly different values.",
+        "selection_bias": "Reflects search behaviour on one engine, which varies sharply by country."
+      },
+      "capabilities": [
+        "search-interest",
+        "timestamps",
+        "geographic-information"
+      ],
+      "access_profiles": [
+        {
+          "access_method": "OFFICIAL_API",
+          "label": "trends-api-alpha",
+          "documentation_url": "https://developers.google.com/search/blog",
+          "requires_authentication": true,
+          "requires_api_key": true,
+          "requires_oauth": false,
+          "requires_account": true,
+          "requires_developer_app": true,
+          "requires_approval": true,
+          "approval_process_notes": "The Google Trends API was announced in alpha in July 2025. Alpha access is understood to require an application; the current process was not verified.",
+          "secret_references": [
+            "GOOGLE_TRENDS_API_KEY"
+          ],
+          "rate_limit_known": false,
+          "acquisition_cost": "UNKNOWN"
+        }
+      ],
+      "review": {
+        "approval_state": "REQUIRES_REVIEW",
+        "automated_access": "NOT_ASSESSED",
+        "api_use": "NOT_ASSESSED",
+        "browser_automation": "NOT_PERMITTED",
+        "commercial_use": "NOT_ASSESSED",
+        "storage": "NOT_ASSESSED",
+        "retention": "NOT_ASSESSED",
+        "redistribution": "NOT_ASSESSED",
+        "derived_analytics": "NOT_ASSESSED",
+        "model_processing": "NOT_ASSESSED",
+        "personal_data_handling": "NOT_ASSESSED",
+        "attribution_required": "NOT_ASSESSED",
+        "personal_data_risk": "NONE_EXPECTED",
+        "contains_user_generated_content": false,
+        "contains_user_identifiers": false,
+        "contains_location": true,
+        "sensitive_data_possible": false,
+        "pseudonymization_expected": false,
+        "discard_identifiers_after_normalization": false,
+        "jurisdiction_review_required": true,
+        "review_interval_days": 90,
+        "conditions": [
+          "Unofficial Trends endpoints used by the web interface must not be called. They are not a published API, and using them is precisely the brittle bypass this registry exists to prevent"
+        ],
+        "open_questions": [
+          "Determine whether the Google Trends API has left alpha and what the current access and approval process is",
+          "Determine the terms governing the Trends API, including commercial use, storage and redistribution",
+          "Determine documented quotas"
+        ],
+        "review_notes": "An official API was announced in alpha in July 2025, which means access is limited and its terms were not retrievable here. The important entry is the condition: the widely used approach of calling the undocumented endpoints behind trends.google.com is not an option for this system. It is unpublished, unstable and outside any granted permission, and preferring a durable authorised path over a convenient bypass is a standing rule (Mission 1.0 §30). Data itself carries no personal information, which is why the personal-data risk is NONE_EXPECTED."
+      },
+      "evidence": [
+        {
+          "document_type": "OFFICIAL_API_DOCS",
+          "document_title": "Google Search Central Blog archive",
+          "document_url": "https://developers.google.com/search/blog",
+          "section_reference": "July 2025 post index",
+          "summarized_finding": "The blog archive lists a July 2025 announcement titled 'Introducing the Google Trends API (alpha)', indicating that an official Trends API exists but was in alpha with limited availability rather than generally available. The announcement's terms were not retrieved.",
+          "retrieved_at": "2026-08-29T00:00:00Z"
+        }
+      ],
+      "retention_override": null
+    },
+    {
+      "source_id": "world-bank",
+      "canonical_name": "World Bank Open Data",
+      "source_family": "economic_data",
+      "lifecycle": "ACTIVE",
+      "homepage_url": "https://data.worldbank.org/",
+      "developer_portal_url": "https://datahelpdesk.worldbank.org/knowledgebase/topics/125589",
+      "documentation_url": "https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-about-the-indicators-api-documentation",
+      "description": "Country-level development and economic indicators. Market-context data for MarketScope reasoning, with no personal data.",
+      "coverage": {
+        "scope": "GLOBAL",
+        "countries": [],
+        "regions": [],
+        "languages": []
+      },
+      "quality_notes": {
+        "freshness": "Indicators lag by one to several years depending on the series and the country.",
+        "sampling_limitation": "Country coverage is uneven; missing values are common and are not zeros.",
+        "historical_depth": "Long series, typically from 1960 onward for many indicators."
+      },
+      "capabilities": [
+        "product-metadata",
+        "timestamps",
+        "geographic-information"
+      ],
+      "access_profiles": [
+        {
+          "access_method": "PUBLIC_API",
+          "label": "indicators-api-v2",
+          "endpoint_url": "https://api.worldbank.org/v2/",
+          "documentation_url": "https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-about-the-indicators-api-documentation",
+          "requires_authentication": false,
+          "requires_api_key": false,
+          "requires_oauth": false,
+          "requires_account": false,
+          "requires_developer_app": false,
+          "requires_approval": false,
+          "secret_references": [],
+          "rate_limit_known": false,
+          "rate_limit_origin": null,
+          "acquisition_cost": "FREE",
+          "notes": "The documentation states no rate limits. Absence of a documented limit is not an absence of a limit, so none is recorded and a collector must still throttle itself conservatively."
+        }
+      ],
+      "review": {
+        "approval_state": "REQUIRES_REVIEW",
+        "automated_access": "PERMITTED",
+        "api_use": "PERMITTED",
+        "browser_automation": "NOT_ADDRESSED",
+        "commercial_use": "NOT_ASSESSED",
+        "storage": "NOT_ASSESSED",
+        "retention": "NOT_ASSESSED",
+        "redistribution": "NOT_ASSESSED",
+        "derived_analytics": "NOT_ASSESSED",
+        "model_processing": "NOT_ASSESSED",
+        "personal_data_handling": "NOT_ASSESSED",
+        "attribution_required": "NOT_ASSESSED",
+        "personal_data_risk": "NONE_EXPECTED",
+        "contains_user_generated_content": false,
+        "contains_user_identifiers": false,
+        "contains_location": true,
+        "sensitive_data_possible": false,
+        "pseudonymization_expected": false,
+        "discard_identifiers_after_normalization": false,
+        "jurisdiction_review_required": false,
+        "review_interval_days": 365,
+        "conditions": [],
+        "open_questions": [
+          "Read the World Bank Terms of Use at https://www.worldbank.org/en/about/legal/terms-of-use-for-datasets and the Open Data licence, and record which licence applies and what attribution it requires",
+          "Confirm whether commercial reuse and redistribution of derived analytics are permitted under that licence",
+          "Identify which indicators carry third-party rights that the World Bank licence does not cover"
+        ],
+        "review_notes": "The closest candidate to approvable, and still short of it. The API is documented, unauthenticated and explicitly needs no key, so automated access and API use are PERMITTED on documented evidence. What is missing is the licence: the documentation page points at terms of use without stating them, and this data is widely but not universally open -- some series carry third-party rights. Approval waits on reading the licence, which is a short task rather than a legal one. Personal-data risk is NONE_EXPECTED: these are country aggregates."
+      },
+      "evidence": [
+        {
+          "document_type": "OFFICIAL_API_DOCS",
+          "document_title": "About the Indicators API Documentation",
+          "document_url": "https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-about-the-indicators-api-documentation",
+          "section_reference": "API basic call structure",
+          "summarized_finding": "Documents the base URL https://api.worldbank.org/v2/ and states that API keys and other authentication methods are no longer necessary to access the API. No rate limits or usage restrictions are stated on the page. The page refers to the website terms of use without reproducing them, and states no licence or attribution requirement for the data itself.",
+          "retrieved_at": "2026-08-29T00:00:00Z"
+        }
+      ],
+      "retention_override": null
+    },
+    {
+      "source_id": "eurostat",
+      "canonical_name": "Eurostat",
+      "source_family": "economic_data",
+      "lifecycle": "ACTIVE",
+      "homepage_url": "https://ec.europa.eu/eurostat",
+      "developer_portal_url": "https://ec.europa.eu/eurostat/web/main/data/web-services",
+      "documentation_url": "https://ec.europa.eu/eurostat/web/main/data/web-services",
+      "description": "European statistical data. Market-context data for EU MarketScope values, with no personal data.",
+      "coverage": {
+        "scope": "PARTIAL",
+        "countries": [],
+        "regions": [
+          "europe"
+        ],
+        "languages": [
+          "en",
+          "de",
+          "fr"
+        ]
+      },
+      "quality_notes": {
+        "freshness": "Datasets are updated twice daily at 11:00 and 23:00 CET according to the web services page, though the underlying statistics lag by longer.",
+        "sampling_limitation": "European coverage only. Using it as a global proxy would be exactly the geographic averaging Ontology V2 §4.7 forbids."
+      },
+      "capabilities": [
+        "product-metadata",
+        "timestamps",
+        "geographic-information"
+      ],
+      "access_profiles": [
+        {
+          "access_method": "PUBLIC_API",
+          "label": "sdmx-web-services",
+          "documentation_url": "https://ec.europa.eu/eurostat/web/main/data/web-services",
+          "requires_authentication": false,
+          "requires_api_key": false,
+          "requires_oauth": false,
+          "requires_account": false,
+          "requires_developer_app": false,
+          "requires_approval": false,
+          "secret_references": [],
+          "rate_limit_known": false,
+          "acquisition_cost": "UNKNOWN",
+          "notes": "SDMX 2.1 web services are referenced with user guides, but the page lists no endpoint, no authentication statement and no limits."
+        }
+      ],
+      "review": {
+        "approval_state": "REQUIRES_REVIEW",
+        "automated_access": "NOT_ASSESSED",
+        "api_use": "NOT_ASSESSED",
+        "browser_automation": "NOT_ASSESSED",
+        "commercial_use": "NOT_ASSESSED",
+        "storage": "NOT_ASSESSED",
+        "retention": "NOT_ASSESSED",
+        "redistribution": "NOT_ASSESSED",
+        "derived_analytics": "NOT_ASSESSED",
+        "model_processing": "NOT_ASSESSED",
+        "personal_data_handling": "NOT_ASSESSED",
+        "attribution_required": "NOT_ASSESSED",
+        "personal_data_risk": "NONE_EXPECTED",
+        "contains_user_generated_content": false,
+        "contains_user_identifiers": false,
+        "contains_location": true,
+        "sensitive_data_possible": false,
+        "pseudonymization_expected": false,
+        "discard_identifiers_after_normalization": false,
+        "jurisdiction_review_required": false,
+        "review_interval_days": 365,
+        "conditions": [],
+        "open_questions": [
+          "Read the Eurostat copyright and free re-use notice, which the web services page references from the Help menu but does not link on the page reviewed",
+          "Record the SDMX endpoint base URL and the API user guide reference",
+          "Determine documented query-size and rate limits, which SDMX services commonly impose",
+          "Confirm attribution requirements under the applicable Commission reuse decision"
+        ],
+        "review_notes": "The web services page confirms that SDMX 2.1 services exist and that datasets refresh twice daily, and states nothing about authentication, limits or reuse. The reuse notice exists elsewhere on the site; an attempt to retrieve it at the expected copyright URL returned 404, so the correct current location has to be found rather than assumed. Nothing is assessed."
+      },
+      "evidence": [
+        {
+          "document_type": "OFFICIAL_API_DOCS",
+          "document_title": "Eurostat - Data web services",
+          "document_url": "https://ec.europa.eu/eurostat/web/main/data/web-services",
+          "section_reference": "Web services overview",
+          "summarized_finding": "States that SDMX 2.1 web services and Eurostat statistics web services are available with linked user guides, and that Eurostat datasets are updated twice a day at 11:00 and 23:00 CET. The page lists no endpoint base URL, states nothing about authentication or rate limits, and does not carry the reuse or copyright terms, which it references from a separate Help entry.",
+          "retrieved_at": "2026-08-29T00:00:00Z"
+        }
+      ],
+      "retention_override": null
+    },
+    {
+      "source_id": "fred",
+      "canonical_name": "FRED (Federal Reserve Economic Data)",
+      "source_family": "economic_data",
+      "lifecycle": "ACTIVE",
+      "homepage_url": "https://fred.stlouisfed.org/",
+      "developer_portal_url": "https://fred.stlouisfed.org/docs/api/fred/",
+      "documentation_url": "https://fred.stlouisfed.org/docs/api/fred/",
+      "description": "US and international economic time series held by the Federal Reserve Bank of St. Louis.",
+      "coverage": {
+        "scope": "PARTIAL",
+        "countries": [
+          "US"
+        ],
+        "regions": [],
+        "languages": [
+          "en"
+        ]
+      },
+      "quality_notes": {
+        "selection_bias": "US-centric, though international series are included.",
+        "historical_depth": "Long series with documented vintages and revisions.",
+        "sampling_limitation": "FRED redistributes third-party series whose own terms differ from FRED's."
+      },
+      "capabilities": [
+        "product-metadata",
+        "timestamps",
+        "geographic-information"
+      ],
+      "access_profiles": [
+        {
+          "access_method": "OFFICIAL_API",
+          "label": "fred-api",
+          "endpoint_url": "https://api.stlouisfed.org/fred/",
+          "documentation_url": "https://fred.stlouisfed.org/docs/api/fred/",
+          "requires_authentication": true,
+          "requires_api_key": true,
+          "requires_oauth": false,
+          "requires_account": true,
+          "requires_developer_app": false,
+          "requires_approval": false,
+          "approval_process_notes": "A free API key is understood to be obtainable after registering an account. Not verified in this mission.",
+          "secret_references": [
+            "FRED_API_KEY"
+          ],
+          "rate_limit_known": false,
+          "acquisition_cost": "UNKNOWN"
+        }
+      ],
+      "review": {
+        "approval_state": "REQUIRES_REVIEW",
+        "automated_access": "NOT_ASSESSED",
+        "api_use": "NOT_ASSESSED",
+        "browser_automation": "NOT_ASSESSED",
+        "commercial_use": "NOT_ASSESSED",
+        "storage": "NOT_ASSESSED",
+        "retention": "NOT_ASSESSED",
+        "redistribution": "NOT_ASSESSED",
+        "derived_analytics": "NOT_ASSESSED",
+        "model_processing": "NOT_ASSESSED",
+        "personal_data_handling": "NOT_ASSESSED",
+        "attribution_required": "NOT_ASSESSED",
+        "personal_data_risk": "NONE_EXPECTED",
+        "contains_user_generated_content": false,
+        "contains_user_identifiers": false,
+        "contains_location": true,
+        "sensitive_data_possible": false,
+        "pseudonymization_expected": false,
+        "discard_identifiers_after_normalization": false,
+        "jurisdiction_review_required": false,
+        "review_interval_days": 365,
+        "conditions": [],
+        "open_questions": [
+          "Retrieve and assess the FRED API Terms of Use at https://fred.stlouisfed.org/docs/api/terms_of_use.html, which returned HTTP 403 from this environment",
+          "Determine whether commercial use and redistribution of derived series are permitted",
+          "Determine which series are third-party and therefore carry separate terms that FRED's own terms do not cover",
+          "Determine attribution requirements and documented rate limits"
+        ],
+        "review_notes": "The terms page could not be retrieved: the host returned 403 to this environment. The specific risk worth naming is that FRED redistributes series owned by third parties under their own licences, so a single blanket conclusion about 'FRED data' would be wrong even if the FRED terms themselves were permissive. Nothing is assessed."
+      },
+      "evidence": [],
+      "retention_override": null
+    }
+  ]
+}

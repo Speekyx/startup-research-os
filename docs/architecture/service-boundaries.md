@@ -326,7 +326,6 @@ Updated in 1.1. Resolved items removed; what remains is genuinely open.
 | Open | Blocks |
 |------|--------|
 | **D-03** — evidence aggregation formula | **`scoring` implementation — hard blocker** (`scoring-framework-v1.1.md` §13) |
-| **D-07** — source registry + legal review records | `acquisition` |
 | **D-08** — score recomputation policy | `scoring`, caching, UI |
 | **D-11** — observability stack | `packages/observability` |
 | **D-12** — embedding re-embedding strategy | `nlp`, Qdrant |
@@ -337,6 +336,11 @@ Updated in 1.1. Resolved items removed; what remains is genuinely open.
 Resolved in Mission 0.1.1: C-01/D-02 (ADR-004), D-05 (ADR-005), C-02 and C-04
 (domain V1.1), D-04 (ADR-006), D-10 (ADR-007), D-06
 (`data-retention-policy-v1.md`), D-09 (CODEOWNERS).
+
+Resolved in Mission 1.0: **D-07** (`source-registry-v1.md`, ADR-013). The
+registry and its per-source review records exist. `acquisition` is still blocked,
+but per source and for a stated reason rather than globally: no candidate has
+passed the eligibility gate.
 
 Resolved in Mission 0.1.2: D-01, A-06, A-11, A-05, A-07, A-08 (Ontology V2). See
 `mission-0.1.2-decisions.md`.

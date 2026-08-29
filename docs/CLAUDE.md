@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.3
-Last amended: 2026-08-29 (Sprint 0 / Mission 0.4)
+Version: 1.4
+Last amended: 2026-08-29 (Sprint 1 / Mission 1.0)
 
 ## Boot Sequence
 
@@ -15,9 +15,10 @@ Before performing any task, execute this reading order.
 6. docs/ai/llm-reasoning-rules.md
 7. docs/data/data-principles.md
 8. docs/data/data-retention-policy-v1.md
-9. docs/ai/evaluation-framework-v1.md
-10. Relevant ADRs
-11. Task-specific specifications
+9. docs/data/source-registry-v1.md
+10. docs/ai/evaluation-framework-v1.md
+11. Relevant ADRs
+12. Task-specific specifications
 
 These documents are the authoritative source of truth.
 
@@ -33,6 +34,7 @@ Ontology V2 keeps V1.1's numbering for §1–§10, so an existing reference to
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.4 | 2026-08-29 | Boot sequence gains the source registry spec; source-governance invariant added; D-07 removed from blocked work (ADR-013) |
 | 1.3 | 2026-08-29 | Boot sequence gains the evaluation framework; tenancy invariant records that row-level security is now enforced (ADR-012) |
 | 1.2 | 2026-08-27 | Boot sequence points to ontology V2; research lifecycle and taxonomy-governance invariants added |
 | 1.1 | 2026-08-27 | Boot sequence points to domain V1.1; canonical domain invariants added (§Canonical invariants); tenancy rule added |
@@ -153,12 +155,39 @@ No business service imports a provider SDK. Services request a logical tier
 (`FAST_MODEL`, `BALANCED_MODEL`, `STRONG_MODEL`, `EMBEDDING_MODEL`), never a
 provider or a model name. See ADR-006.
 
+### Source governance — a gate, not a field
+
+A source becomes collectable only by passing the eligibility gate in
+`registry.source_eligibility`, never by any other route. Four rules follow, and
+none of them is negotiable (`source-registry-v1.md` §1, ADR-013):
+
+- **Public visibility is not permission.** Reachability is an access-profile
+  fact; permission is a review fact; the gate requires the review.
+- **Uncertainty is never permission.** Silent, unreachable or ambiguous terms
+  produce `NOT_ADDRESSED` / `UNCLEAR` and leave the source `REQUIRES_REVIEW`.
+  There is no path from *we could not check* to *we may proceed*.
+- **An approval requires retrieved, authoritative evidence** — the source's own
+  documents, operator correspondence or a recorded legal review. Never a blog
+  post, a tutorial, a forum answer or model recall.
+- **No credential is stored in the registry.** Access profiles carry
+  configuration key names only.
+
+The registry is **global**: no `workspace_id`, no RLS policy, `SELECT` only for
+the runtime role. It is administered by `sros-source`, never over HTTP.
+
+This system is not a legal decision engine and its output is not legal advice.
+
 ### Blocked work
 
 **`services/scoring` must not be implemented** until
 `docs/domain/evidence-aggregation-framework-v1.md` exists and is authorized.
 Do not invent the Evidence Score formula, recency decay parameters, independence
 thresholds or contradiction penalties. See `scoring-framework-v1.1.md` §13.
+
+**No collector may be implemented for a source that is not collector-eligible.**
+D-07 is resolved and the registry exists, but zero sources currently pass the
+gate. The block moved from *there is no registry* to *this specific source has
+not passed*, which is a per-source answer the orchestrator now reports by name.
 
 ## Core principles
 

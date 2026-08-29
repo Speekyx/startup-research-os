@@ -10,6 +10,7 @@ resolution-markers = [
 
 [manifest]
 members = [
+    "sros-acquisition",
     "sros-contracts",
     "sros-gateway",
     "sros-llm-gateway",
@@ -1573,6 +1574,17 @@ wheels = [
 ]
 
 [[package]]
+name = "sros-acquisition"
+version = "0.1.0"
+source = { editable = "services/acquisition/python" }
+dependencies = [
+    { name = "sros-contracts" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "sros-contracts", editable = "packages/contracts/python" }]
+
+[[package]]
 name = "sros-contracts"
 version = "0.1.0"
 source = { editable = "packages/contracts/python" }
@@ -1587,6 +1599,7 @@ dependencies = [
     { name = "pydantic" },
     { name = "qdrant-client" },
     { name = "redis" },
+    { name = "sros-acquisition" },
     { name = "sros-contracts" },
     { name = "sros-llm-gateway" },
     { name = "sros-orchestrator" },
@@ -1600,6 +1613,7 @@ requires-dist = [
     { name = "pydantic", specifier = ">=2.9,<3" },
     { name = "qdrant-client", specifier = ">=1.11,<1.12" },
     { name = "redis", specifier = ">=5.0,<6" },
+    { name = "sros-acquisition", editable = "services/acquisition/python" },
     { name = "sros-contracts", editable = "packages/contracts/python" },
     { name = "sros-llm-gateway", editable = "packages/llm-gateway/python" },
     { name = "sros-orchestrator", editable = "services/research-orchestrator/python" },

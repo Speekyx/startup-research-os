@@ -131,6 +131,101 @@ class RegistryStatus(str, Enum):
     DEPRECATED = "DEPRECATED"  # Historical only
 
 
+class SourceApprovalState(str, Enum):
+    """Where a source stands in the governance gate. Closed: collector eligibility branches exhaustively on it, and an unhandled value would mean a source of unknown standing being treated as usable. Public visibility never produces APPROVED on its own.
+
+    See source-registry-v1.md §5.
+    """
+
+    DRAFT = "DRAFT"  # A candidate has been recorded. No review has been attempted
+    REQUIRES_REVIEW = "REQUIRES_REVIEW"  # Review started and could not conclude. The correct result whenever terms are ambiguous, unreachable or silent. Never convert uncertainty into permission
+    APPROVED_WITH_CONDITIONS = "APPROVED_WITH_CONDITIONS"  # Permitted only while the recorded conditions hold. The conditions are part of the approval, not advice
+    APPROVED = "APPROVED"  # Permitted for the assessed activities, supported by evidence. Requires at least one evidence record
+    RESTRICTED = "RESTRICTED"  # Some assessed activity is not permitted. Not collector-eligible until the restriction is lifted or the activity is narrowed
+    PROHIBITED = "PROHIBITED"  # Documented terms forbid the intended use. A terminal judgment for the assessed scope, revisited only by a new review
+    SUSPENDED = "SUSPENDED"  # Operationally halted regardless of review state. An immediate stop that does not wait for a review cycle
+
+
+class SourceAccessMethod(str, Enum):
+    """HOW access is technically performed. It says nothing about whether access is PERMITTED: permission is a separate dimension carried by the policy review. BROWSER_AUTOMATION being available never implies it is allowed.
+
+    See source-registry-v1.md §8.
+    """
+
+    OFFICIAL_API = "OFFICIAL_API"  # A documented API the source operator offers for this purpose
+    PUBLIC_API = "PUBLIC_API"  # An unauthenticated endpoint reachable without registration
+    RSS_OR_FEED = "RSS_OR_FEED"  # A syndication feed published for consumption
+    DATASET_DOWNLOAD = "DATASET_DOWNLOAD"  # A published bulk dataset or export
+    PUBLIC_WEB = "PUBLIC_WEB"  # HTTP retrieval of pages intended for human readers. Visibility is not permission
+    BROWSER_AUTOMATION = "BROWSER_AUTOMATION"  # A driven browser. Never a way around an API restriction, a login, a rate limit or an anti-automation measure
+    MANUAL_IMPORT = "MANUAL_IMPORT"  # A human supplies the data. No automated access occurs
+
+
+class PolicyAssessment(str, Enum):
+    """The verdict for ONE activity. Activities are assessed separately because their conditions differ: a source may permit automated API access and forbid commercial use. A single boolean called `allowed` would erase exactly that difference.
+
+    See source-registry-v1.md §6.
+    """
+
+    PERMITTED = "PERMITTED"  # Documented terms permit it explicitly. Requires evidence
+    PERMITTED_WITH_CONDITIONS = "PERMITTED_WITH_CONDITIONS"  # Permitted while stated conditions hold. The conditions are recorded, not summarised away
+    NOT_PERMITTED = "NOT_PERMITTED"  # Documented terms forbid it explicitly
+    NOT_ADDRESSED = "NOT_ADDRESSED"  # The documents reviewed are silent. Silence is not permission and never becomes PERMITTED without a human decision
+    UNCLEAR = "UNCLEAR"  # The documents address it ambiguously. The correct result when a reading requires legal judgment this system must not make
+    NOT_ASSESSED = "NOT_ASSESSED"  # Nobody has looked yet
+
+
+class PolicyEvidenceType(str, Enum):
+    """What kind of document supports an assessment. Ordered by the evidence hierarchy: official operator documentation outranks anything else, and nothing below OFFICIAL_* may support an APPROVED state on its own.
+
+    See source-registry-v1.md §7.
+    """
+
+    OFFICIAL_API_DOCS = "OFFICIAL_API_DOCS"  # Developer or API reference published by the operator
+    OFFICIAL_TERMS = "OFFICIAL_TERMS"  # Terms of service, developer terms or API terms
+    OFFICIAL_LICENCE = "OFFICIAL_LICENCE"  # A data licence or copyright/reuse statement
+    OFFICIAL_PRIVACY = "OFFICIAL_PRIVACY"  # Privacy or data-use documentation
+    OFFICIAL_ACCESS_CONTROL = "OFFICIAL_ACCESS_CONTROL"  # robots.txt or a comparable published access directive
+    OPERATOR_CORRESPONDENCE = "OPERATOR_CORRESPONDENCE"  # Written confirmation from the operator, for example a granted commercial-use request
+    LEGAL_REVIEW = "LEGAL_REVIEW"  # A qualified human review recorded against this source. The only type that may carry a legal conclusion
+
+
+class SourceLifecycle(str, Enum):
+    """Whether the source itself still exists as a target. Separate from approval: a deprecated source may have been approved, and an active source may never have been reviewed.
+
+    See source-registry-v1.md §4.
+    """
+
+    ACTIVE = "ACTIVE"  # The source exists and is a candidate
+    DEPRECATED = "DEPRECATED"  # Retired. Kept, never deleted, so historical provenance still resolves
+
+
+class SourceAcquisitionCost(str, Enum):
+    """The shape of what access costs, not an amount. Concrete prices are versioned configuration because operators change them; a price compiled in here would be wrong within months and would look authoritative.
+
+    See source-registry-v1.md §10.
+    """
+
+    FREE = "FREE"  # No charge documented
+    FREE_WITH_LIMITS = "FREE_WITH_LIMITS"  # No charge within a documented quota
+    PAID = "PAID"  # A fixed or subscription charge
+    USAGE_BASED = "USAGE_BASED"  # Charged per request, row or unit
+    UNKNOWN = "UNKNOWN"  # Not documented, or not checked. Never assumed to be FREE
+
+
+class PersonalDataRisk(str, Enum):
+    """How likely the source is to carry personal data. A RISK CLASSIFICATION, not a legal ruling: it records what must be handled carefully and what still needs jurisdiction-specific review. GDPR analysis is separate and remains a human decision.
+
+    See source-registry-v1.md §9.
+    """
+
+    NONE_EXPECTED = "NONE_EXPECTED"  # Aggregate or institutional data with no individual attribution
+    PSEUDONYMOUS = "PSEUDONYMOUS"  # User-generated content under handles rather than real names
+    IDENTIFIABLE = "IDENTIFIABLE"  # Real names, profiles or contact details may appear
+    SENSITIVE_POSSIBLE = "SENSITIVE_POSSIBLE"  # Special-category information may appear in free text. Requires review before any collection
+    UNKNOWN = "UNKNOWN"  # Not assessed. Never treated as NONE_EXPECTED
+
+
 # --- Numeric bounds --------------------------------------------------------
 # A field named `confidence` is always [0,1]. A field named `*_score` is
 # always 0-100. scoring-framework-v1.1.md §4.1.
@@ -161,6 +256,7 @@ REGISTRY_NAMES: Final[tuple[str, ...]] = (
     "distribution_channel",
     "risk",
     "region",
+    "source_family",
 )
 
 

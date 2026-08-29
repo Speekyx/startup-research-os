@@ -1,8 +1,8 @@
 # Quality Gates
 
-Version: 1.3
+Version: 1.4
 Status: Active. Every gate in §1 runs in CI
-Date: 2026-08-29 (amended in Mission 0.4)
+Date: 2026-08-29 (amended in Mission 1.0)
 
 What must be true for a change to reach `main`. `docs/CLAUDE.md` §Definition of
 done is the requirement; this document is the mechanism.
@@ -54,7 +54,23 @@ Every gate above now runs. What changed since the table was written:
 | **Prompt-injection boundary** | `test_prompts.py`, adversarial payloads | No arrangement of attacker-controlled text escapes its region or reaches the system field (`llm-reasoning-rules.md` §7) |
 | **No provider credential in CI** | `ci.yml`, integration job | A smoke suite that quietly became enabled would show up as an invoice rather than as a red build (§20) |
 | **Retry policy by category** | `test_providers.py` | An authentication error or an invalid request is never retried: it costs the same twice and trips abuse detection (§22) |
-| **Blocked work cannot be dispatched** | `test_orchestrator_integration.py` | A `BLOCKED` job has no transition to `READY`, so D-07 and D-03 hold mechanically rather than by memory (§32, §33) |
+| **Blocked work cannot be dispatched** | `test_orchestrator_integration.py` | A `BLOCKED` job has no transition to `READY`, so the source gate and D-03 hold mechanically rather than by memory (§32, §33) |
+
+### Gates added in Mission 1.0
+
+Every one of these guards a rule that would otherwise depend on a reviewer
+remembering it under pressure to ship a collector.
+
+| Gate | Mechanism | Guards |
+|------|-----------|--------|
+| **No approval without authoritative evidence** | `registry.require_evidence_for_approval` (deferred constraint trigger) + `test_source_registry.py` | An approving review with no first-party document is refused at COMMIT, whoever writes it. A blog post cannot be recorded as the basis of an approval, because the evidence-type enum has no value for one |
+| **No collector on an ineligible source** | `registry.require_eligibility_for_collector` (BEFORE UPDATE trigger) | Even a direct `UPDATE` by the migration role cannot turn a collector on. The database, not the application, has the last word |
+| **The Python gate and the SQL view agree** | `test_source_registry.py` | The eligibility rules exist twice by necessity. Two implementations of one rule drift; this compares them on every source rather than trusting they match |
+| **No credential in the registry** | `sros_acquisition.registry.models` + `validate_source_registry.py` + `test_source_registry.py` | `secret_references` holds configuration key names. A value that looks like a credential is refused, so a secret cannot reach a file every reader of the repository can open |
+| **No source silently approved** | `validate_source_registry.py` (zero dependency) | Runs with no database and no packages installed. A broken environment cannot reduce this check to nothing (ADR-009 rationale) |
+| **The rendered catalog matches the JSON** | `sros-source render --check` | Two hand-maintained copies of one fact drift, and the drift is found by whoever trusted the wrong one |
+| **CI calls no external platform** | `ci.yml` | A registry job that fetched a platform's terms would be collection, and would make the build depend on a third party's uptime (§43) |
+| **Acquisition blocking is registry-derived** | `test_orchestrator_integration.py` | The orchestrator must read its refusal from `registry.source_eligibility`, not restate it in code. A hardcoded reason is a reason nobody notices going false |
 
 ---
 

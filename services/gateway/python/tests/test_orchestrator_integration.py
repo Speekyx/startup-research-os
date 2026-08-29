@@ -151,14 +151,52 @@ class TestBlockedWorkIsNeverDispatched:
         assert dispatcher.dispatched == []
         assert len(report.blocked) == len(Capability)
 
-    def test_the_acquisition_block_names_d07(self, database, orchestrator) -> None:
+    def test_the_acquisition_block_comes_from_the_real_registry(
+        self, database, orchestrator
+    ) -> None:
+        """Mission 1.0 §22, end to end. D-07 is resolved, so the reason must be
+        read from `registry.source_eligibility` rather than restated in code."""
         session = _new_session(database)
-        orchestrator.plan_session(WORKSPACE_A, session.id, CORRELATION)
+        plan = orchestrator.plan_session(WORKSPACE_A, session.id, CORRELATION)
         rows = orchestrator.jobs.list_for_session(WORKSPACE_A, session.id)
         acquisition = next(r for r in rows if r.job_type == "acquire.collect")
         assert acquisition.status is JobStatus.BLOCKED
         assert acquisition.blocked_reason is not None
-        assert acquisition.blocked_reason.startswith("D-07")
+        assert acquisition.blocked_reason.startswith("SOURCE-REGISTRY-GATE")
+        assert "D-07" not in acquisition.blocked_reason
+
+        # The registry WAS consulted: a fallback to "not consulted" would also
+        # block, and would look identical unless the test insists on the
+        # difference.
+        assert plan.source_availability is not None
+        assert plan.source_availability.consulted
+        assert plan.eligible_source_ids == ()
+
+    def test_the_acquisition_block_names_each_refused_source(self, database, orchestrator) -> None:
+        """A blocker a reader can act on: which source, and what stopped it."""
+        session = _new_session(database)
+        plan = orchestrator.plan_session(WORKSPACE_A, session.id, CORRELATION)
+        per_source = plan.blocked_source_reasons()
+        assert per_source, "the gate must name the sources it refused"
+        assert any(r.startswith("tiktok (PROHIBITED)") for r in per_source), per_source
+        assert any("REQUIRES_REVIEW" in r for r in per_source), per_source
+
+    def test_the_persisted_plan_keeps_the_per_source_reasons(self, database, orchestrator) -> None:
+        """A plan read back must still explain itself. Reasons that live only in
+        memory are reasons nobody can audit after the process exits."""
+        session = _new_session(database)
+        orchestrator.plan_session(WORKSPACE_A, session.id, CORRELATION)
+        with database.tenant_transaction(WORKSPACE_A) as conn:
+            row = conn.execute(
+                """SELECT blocked_reasons FROM research.research_plans
+                    WHERE research_session_id = %s""",
+                (session.id,),
+            ).fetchone()
+        assert row is not None
+        states = row[0]["ACQUISITION"]["source_states"]
+        assert {s["source_id"] for s in states} >= {"tiktok", "reddit"}
+        assert all(s["eligible"] is False for s in states)
+        assert all(s["blocking_reasons"] for s in states)
 
     def test_the_scoring_block_names_d03(self, database, orchestrator) -> None:
         session = _new_session(database)
@@ -618,7 +656,8 @@ class TestCompletenessRecording:
         assert record.basis is CompletenessBasis.UNKNOWN
         assert record.value is None
         assert set(record.blocked_capabilities) == {c.value for c in Capability}
-        assert any("D-07" in reason for reason in record.incompleteness_reasons)
+        assert any("SOURCE-REGISTRY-GATE" in reason for reason in record.incompleteness_reasons)
+        assert any("D-03" in reason for reason in record.incompleteness_reasons)
 
     def test_the_record_is_persisted_and_readable(self, database, orchestrator) -> None:
         session = _new_session(database)
