@@ -9,12 +9,12 @@
  * Editing this file by hand will be overwritten and will fail the contract
  * check in CI. Change the source of truth instead.
  *
- * contract_version: 1.1.0
+ * contract_version: 1.2.0
  * ontology_version: 2
  */
 
 
-export const CONTRACT_VERSION = "1.1.0" as const;
+export const CONTRACT_VERSION = "1.2.0" as const;
 export const ONTOLOGY_VERSION = "2" as const;
 export const RESEARCH_CONTEXT_SCHEMA_VERSION = "1.0.0" as const;
 
@@ -35,6 +35,8 @@ export type ResearchProjectId = Brand<string, "ResearchProjectId">;
 export type ResearchSessionId = Brand<string, "ResearchSessionId">;
 /** A domain hypothesis. Not owned by the session that found it. Ontology V2 §12. (format: uuid) */
 export type OpportunityId = Brand<string, "OpportunityId">;
+/** An assertion about an Opportunity that evidence can independently support or contradict. Ontology V2.1 §17. STABLE across statement revisions: the text may be rewritten, the identity may not. Distinct from ClaimType, which is an epistemic category and not an identity. (format: uuid) */
+export type ClaimId = Brand<string, "ClaimId">;
 /** An evidence record with mandatory provenance. (format: uuid) */
 export type EvidenceId = Brand<string, "EvidenceId">;
 /** An extracted demand signal. (format: uuid) */
@@ -48,6 +50,7 @@ export const IDENTIFIER_FORMATS = {
   ResearchProjectId: "uuid",
   ResearchSessionId: "uuid",
   OpportunityId: "uuid",
+  ClaimId: "uuid",
   EvidenceId: "uuid",
   SignalId: "uuid",
   SourceId: "slug",
@@ -338,6 +341,50 @@ export const CLAIM_TEMPORALITY_VALUES = [
 export type ClaimTemporality = (typeof CLAIM_TEMPORALITY_VALUES)[number];
 export function isClaimTemporality(v: unknown): v is ClaimTemporality {
   return typeof v === "string" && (CLAIM_TEMPORALITY_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * What PROCESS produced the claim, at the level of kind rather than instance. Deliberately carries no model, provider or prompt name: those change constantly and belong in provenance columns, where a new one does not require a contract change.
+ * @see claim-model-v1.md §6
+ */
+export const CLAIM_ORIGIN_VALUES = [
+  "MANUAL",
+  "DETERMINISTIC_EXTRACTION",
+  "LLM_EXTRACTION",
+  "INFERRED",
+  "SYSTEM_GENERATED",
+  "IMPORTED",
+] as const;
+export type ClaimOrigin = (typeof CLAIM_ORIGIN_VALUES)[number];
+export function isClaimOrigin(v: unknown): v is ClaimOrigin {
+  return typeof v === "string" && (CLAIM_ORIGIN_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * EDITORIAL state, never epistemic. There is deliberately no VALIDATED or REJECTED value: evidence can change, and a lifecycle state derived from EvidenceLevel would freeze a conclusion the evidence no longer supports (Mission 1.2 §38). What a claim is worth is read from its aggregation, never from this column.
+ * @see claim-model-v1.md §8
+ */
+export const CLAIM_LIFECYCLE_VALUES = [
+  "ACTIVE",
+  "WITHDRAWN",
+] as const;
+export type ClaimLifecycle = (typeof CLAIM_LIFECYCLE_VALUES)[number];
+export function isClaimLifecycle(v: unknown): v is ClaimLifecycle {
+  return typeof v === "string" && (CLAIM_LIFECYCLE_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * How one ResearchSession related to a persisted entity it encountered. Promoted to the canonical contract in Mission 1.2: it already governed opportunity observations as a SQL CHECK plus a Python frozenset, which is exactly the drift ADR-009 exists to prevent. Not a scoring judgement.
+ * @see opportunity-ontology-v2.md §12; claim-model-v1.md §7
+ */
+export const OBSERVATION_KIND_VALUES = [
+  "DISCOVERED",
+  "CORROBORATED",
+  "CONTRADICTED",
+] as const;
+export type ObservationKind = (typeof OBSERVATION_KIND_VALUES)[number];
+export function isObservationKind(v: unknown): v is ObservationKind {
+  return typeof v === "string" && (OBSERVATION_KIND_VALUES as readonly string[]).includes(v);
 }
 
 /**

@@ -19,6 +19,7 @@ remains unavailable for production research until a CALIBRATED profile exists
     profile.py       the versioned parameter set, and its calibration status
     result.py        the reproducible result and its explanation
     engine.py        aggregate()
+    adapters.py      persisted evidence rows -> aggregation inputs
     sensitivity.py   the synthetic harness
 
 **Three things this module deliberately does not have.**
@@ -43,6 +44,7 @@ runs in the zero-dependency CI job where a broken environment cannot silently
 reduce it to nothing (ADR-009).
 """
 
+from .adapters import evidence_item_from_row, evidence_items_from_rows
 from .engine import aggregate
 from .errors import (
     AggregationError,
@@ -92,6 +94,8 @@ __all__ = [
     "assess_evidence_level",
     "decompose",
     "evaluate_item",
+    "evidence_item_from_row",
+    "evidence_items_from_rows",
     "evidence_score",
     "freshness",
     "group_by_independence",

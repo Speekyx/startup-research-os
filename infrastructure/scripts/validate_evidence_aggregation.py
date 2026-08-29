@@ -10,9 +10,12 @@ This script draws the line that replaces it:
   1. Rejected designs stay forbidden EVERYWHERE. Each name encodes a design the
      framework considered and rejected with a stated reason, so its reappearance
      is a regression rather than an unblocked feature.
-  2. Authorised V1 vocabulary is allowed in the REFERENCE package and in the
-     canonical contracts, and forbidden in migrations. Defining the framework and
-     making production scoring available are separate gates.
+  2. Authorised V1 vocabulary splits in two, and only half stays out of
+     production. INPUT fields (`independence_state`, `observation_category`, …)
+     describe an evidence record and became legitimate schema columns in Mission
+     1.2. COMPUTED fields (the strengths, the masses, `evidence_score`) are
+     aggregation RESULTS: a column holding one would mean scoring had started
+     without a calibrated profile. No service may import the engine either.
   3. No universal half-life constant, anywhere. Framework §9 puts half-lives in
      versioned profiles keyed by claim feature; a module constant would be the
      universal value the framework refuses to invent, and it would WORK, which
@@ -68,7 +71,8 @@ def main() -> int:
 
     cases = json.loads(CASES.read_text(encoding="utf-8"))["forbidden_fields"]
     rejected = cases["names"]
-    authorised = cases["authorised_v1_vocabulary"]["names"]
+    computed = cases["authorised_v1_vocabulary"]["computed_outputs"]["names"]
+    evidence_inputs = cases["authorised_v1_vocabulary"]["evidence_inputs"]["names"]
     half_life_names = cases["universal_half_life"]["forbidden_constant_names"]
 
     # -- 1: the four documents exist ----------------------------------------
@@ -115,32 +119,60 @@ def main() -> int:
         print(f"ok    no rejected aggregation design present ({len(rejected)} names checked)")
     checks += 1
 
-    # -- 3: authorised vocabulary stays out of production surfaces ----------
+    # -- 3: COMPUTED aggregation values stay out of production surfaces -----
+    #
+    # Evidence INPUT fields are deliberately not checked here. Mission 1.2
+    # authorised them as schema columns (migration 0005): recording what was
+    # observed about a record is not aggregating it. What must not appear in a
+    # migration or a service is a stored or served RESULT.
     leaked: list[str] = []
     for path in sorted(MIGRATIONS.glob("*.sql")):
         text = path.read_text(encoding="utf-8")
-        for name in authorised:
+        for name in computed:
             if re.search(rf"\b{name}\b", text, re.IGNORECASE):
                 leaked.append(f"{path.relative_to(ROOT)}: {name}")
     for path in sorted((ROOT / "services").rglob("*.py")):
         if "__pycache__" in path.parts:
             continue
         text = path.read_text(encoding="utf-8", errors="ignore")
-        for name in authorised:
+        for name in computed:
             if re.search(rf"\b{name}\b", text):
                 leaked.append(f"{path.relative_to(ROOT)}: {name}")
     if leaked:
         errors.append(
-            f"authorised V1 aggregation vocabulary reached a production surface: {leaked}. "
-            "The framework being defined does not make production scoring available "
-            "(evidence-aggregation-framework-v1.md §14); it is allowed in "
-            f"{', '.join(AUTHORISED_ROOTS)} only"
+            f"a computed aggregation value reached a production surface: {leaked}. "
+            "Persisting or serving a result is scoring, and scoring requires a "
+            "CALIBRATED profile, which does not exist "
+            "(evidence-aggregation-framework-v1.md §14)"
         )
     else:
         print(
-            f"ok    V1 aggregation vocabulary confined to the reference package "
-            f"({len(authorised)} names checked)"
+            f"ok    computed aggregation values confined to the reference package "
+            f"({len(computed)} checked; {len(evidence_inputs)} input fields "
+            "authorised in the schema since Mission 1.2)"
         )
+    checks += 1
+
+    # -- 3b: no service imports the reference engine ------------------------
+    #
+    # The narrowing above is only safe while nothing under services/ can CALL
+    # the engine. Reading an evidence row is fine; importing the package is what
+    # turns a reference implementation into a runtime dependency (§39, ADR-014).
+    importers: list[str] = []
+    for path in sorted((ROOT / "services").rglob("*.py")):
+        if "__pycache__" in path.parts or "tests" in path.parts:
+            continue
+        text = path.read_text(encoding="utf-8", errors="ignore")
+        if re.search(r"^\s*(import|from)\s+sros_evidence_aggregation", text, re.MULTILINE):
+            importers.append(str(path.relative_to(ROOT)))
+    if importers:
+        errors.append(
+            f"a service imports the reference aggregation package: {importers}. It is an "
+            "implementation oracle and a test harness, not a runtime dependency "
+            "(ADR-014). Tests may import it; production modules may not"
+        )
+    else:
+        print("ok    no service imports the reference aggregation package")
     checks += 1
 
     # -- 4: no universal half-life constant ---------------------------------

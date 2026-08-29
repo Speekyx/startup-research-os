@@ -8,7 +8,7 @@ Regenerate      : python packages/contracts/tools/generate.py
 Editing this file by hand will be overwritten and will fail the contract
 check in CI. Change the source of truth instead.
 
-contract_version: 1.1.0
+contract_version: 1.2.0
 ontology_version: 2
 """
 
@@ -17,7 +17,7 @@ from __future__ import annotations
 from enum import Enum
 from typing import Final
 
-CONTRACT_VERSION: Final[str] = "1.1.0"
+CONTRACT_VERSION: Final[str] = "1.2.0"
 ONTOLOGY_VERSION: Final[str] = "2"
 RESEARCH_CONTEXT_SCHEMA_VERSION: Final[str] = "1.0.0"
 
@@ -32,6 +32,7 @@ IDENTIFIER_FORMATS: Final[dict[str, str]] = {
     "ResearchProjectId": "uuid",
     "ResearchSessionId": "uuid",
     "OpportunityId": "uuid",
+    "ClaimId": "uuid",
     "EvidenceId": "uuid",
     "SignalId": "uuid",
     "SourceId": "slug",
@@ -270,6 +271,41 @@ class ClaimTemporality(str, Enum):
 
     EVERGREEN = "EVERGREEN"  # The claim does not decay with the passage of time. Freshness is 1.0 unless the underlying fact itself became obsolete, which is a new contradicting observation rather than decay
     TEMPORALLY_SENSITIVE = "TEMPORALLY_SENSITIVE"  # The claim loses force as its observations age. Requires an authorised half-life in the aggregation profile; without one the evidence is NON-SCORABLE rather than assumed fresh
+
+
+class ClaimOrigin(str, Enum):
+    """What PROCESS produced the claim, at the level of kind rather than instance. Deliberately carries no model, provider or prompt name: those change constantly and belong in provenance columns, where a new one does not require a contract change.
+
+    See claim-model-v1.md §6.
+    """
+
+    MANUAL = "MANUAL"  # Authored by a person
+    DETERMINISTIC_EXTRACTION = "DETERMINISTIC_EXTRACTION"  # Produced by a rule, parser or query with no model involved
+    LLM_EXTRACTION = "LLM_EXTRACTION"  # Extracted from source text by a language model. The model and prompt versions are recorded in provenance, never here
+    INFERRED = "INFERRED"  # Derived analytically from other claims or signals rather than read from a source
+    SYSTEM_GENERATED = "SYSTEM_GENERATED"  # Created by the platform itself, for example a coverage placeholder
+    IMPORTED = "IMPORTED"  # Brought in from an external dataset or a prior system
+
+
+class ClaimLifecycle(str, Enum):
+    """EDITORIAL state, never epistemic. There is deliberately no VALIDATED or REJECTED value: evidence can change, and a lifecycle state derived from EvidenceLevel would freeze a conclusion the evidence no longer supports (Mission 1.2 §38). What a claim is worth is read from its aggregation, never from this column.
+
+    See claim-model-v1.md §8.
+    """
+
+    ACTIVE = "ACTIVE"  # In use. Accumulates evidence and may be aggregated
+    WITHDRAWN = "WITHDRAWN"  # Removed from use — malformed, duplicated, or out of scope. Its evidence and revision history are retained, because deleting the row would destroy the record of what was once believed
+
+
+class ObservationKind(str, Enum):
+    """How one ResearchSession related to a persisted entity it encountered. Promoted to the canonical contract in Mission 1.2: it already governed opportunity observations as a SQL CHECK plus a Python frozenset, which is exactly the drift ADR-009 exists to prevent. Not a scoring judgement.
+
+    See opportunity-ontology-v2.md §12; claim-model-v1.md §7.
+    """
+
+    DISCOVERED = "DISCOVERED"  # The session introduced it
+    CORROBORATED = "CORROBORATED"  # The session found further support for it
+    CONTRADICTED = "CONTRADICTED"  # The session found evidence against it
 
 
 class AggregationProfileStatus(str, Enum):

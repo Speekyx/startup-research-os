@@ -566,21 +566,31 @@
       "evidence_aggregate": "An unnamed catch-all. Every quantity V1 produces has a specific name and a stated meaning."
     },
     "authorised_v1_vocabulary": {
-      "$comment": "Defined by evidence-aggregation-framework-v1.md. Allowed in packages/evidence-aggregation (the reference implementation) and in the canonical contract enums. NOT permitted in a migration or in services/scoring: the framework being defined is a separate gate from production scoring being available (framework §14).",
-      "names": [
-        "support_strength",
-        "contradiction_strength",
-        "supported_mass",
-        "contradicted_mass",
-        "conflict_mass",
-        "uncertainty_mass",
-        "evidence_score",
-        "independence_group_id",
-        "independence_state",
-        "observation_category",
-        "aggregation_profile_id",
-        "algorithm_version"
-      ]
+      "$comment": "Split in Mission 1.2. The single list conflated two different things, and only one of them stayed forbidden. INPUT fields describe an evidence record and are now legitimate schema columns (migration 0005, resolving A-13 and I-1). COMPUTED fields are aggregation RESULTS, and persisting one would be scoring -- which is still gated on a CALIBRATED profile that does not exist. This narrows the guard precisely; it does not weaken it.",
+      "evidence_inputs": {
+        "$comment": "Authorised in migrations, repositories and the API since Mission 1.2. They record WHAT WAS OBSERVED about an evidence record. Recording them is not aggregating them.",
+        "names": [
+          "independence_state",
+          "independence_group_id",
+          "observation_category",
+          "extraction_confidence",
+          "directness"
+        ]
+      },
+      "computed_outputs": {
+        "$comment": "Aggregation results. Allowed in the reference package and the canonical contracts, forbidden in migrations and under services/. A column holding one of these would mean scoring had started without a calibrated profile (evidence-aggregation-framework-v1.md §14).",
+        "names": [
+          "support_strength",
+          "contradiction_strength",
+          "supported_mass",
+          "contradicted_mass",
+          "conflict_mass",
+          "uncertainty_mass",
+          "evidence_score",
+          "aggregation_profile_id",
+          "algorithm_version"
+        ]
+      }
     },
     "universal_half_life": {
       "$comment": "framework §9: a half-life belongs to a versioned profile keyed by claim feature, never to a module-level constant. A constant named like these would be the universal half-life the framework refuses to invent, and it would work -- which is what makes it dangerous.",
@@ -590,6 +600,127 @@
         "EVIDENCE_HALF_LIFE",
         "DECAY_HALF_LIFE",
         "UNIVERSAL_HALF_LIFE"
+      ]
+    }
+  },
+  "claim_model": {
+    "$comment": "Added in Mission 1.2 with the Claim entity. The shared cases both languages check, so a value accepted by Python and rejected by TypeScript fails the build rather than a request.",
+    "claim_id": {
+      "valid": [
+        "3f2504e0-4f89-41d3-9a0c-0305e82c3301",
+        "00000000-0000-4000-8000-000000000001"
+      ],
+      "invalid": [
+        "not-a-uuid",
+        "",
+        "OBSERVED",
+        null,
+        42
+      ]
+    },
+    "claim_temporality": {
+      "valid": [
+        "EVERGREEN",
+        "TEMPORALLY_SENSITIVE"
+      ],
+      "invalid": [
+        "evergreen",
+        "ATEMPORAL",
+        "STATIC",
+        "",
+        null
+      ]
+    },
+    "claim_origin": {
+      "valid": [
+        "MANUAL",
+        "DETERMINISTIC_EXTRACTION",
+        "LLM_EXTRACTION",
+        "INFERRED",
+        "SYSTEM_GENERATED",
+        "IMPORTED"
+      ],
+      "invalid": [
+        "manual",
+        "GPT4",
+        "claude-opus-5",
+        "AI",
+        "",
+        null
+      ]
+    },
+    "claim_lifecycle": {
+      "valid": [
+        "ACTIVE",
+        "WITHDRAWN"
+      ],
+      "invalid": [
+        "VALIDATED",
+        "REJECTED",
+        "CONFIRMED",
+        "DISPROVEN",
+        "active",
+        "",
+        null
+      ]
+    },
+    "evidence_direction": {
+      "valid": [
+        "SUPPORTS",
+        "CONTRADICTS",
+        "NEUTRAL"
+      ],
+      "invalid": [
+        "supports",
+        "SUPPORT",
+        "AGAINST",
+        "",
+        null
+      ]
+    },
+    "evidence_independence_state": {
+      "valid": [
+        "KNOWN_INDEPENDENT",
+        "KNOWN_DEPENDENT",
+        "UNKNOWN"
+      ],
+      "invalid": [
+        "INDEPENDENT",
+        "DEPENDENT",
+        "0.75",
+        "unknown",
+        "",
+        null
+      ]
+    },
+    "observation_category": {
+      "valid": [
+        "STATED_OPINION",
+        "REPORTED_BEHAVIOUR",
+        "OBSERVED_BEHAVIOUR",
+        "MARKET_ACTIVITY",
+        "DIRECT_VALIDATION",
+        "UNCATEGORISED"
+      ],
+      "invalid": [
+        "OBSERVED_BEHAVIOR",
+        "MARKET_BEHAVIOR",
+        "opinion",
+        "",
+        null
+      ]
+    },
+    "observation_kind": {
+      "valid": [
+        "DISCOVERED",
+        "CORROBORATED",
+        "CONTRADICTED"
+      ],
+      "invalid": [
+        "discovered",
+        "SEEN",
+        "",
+        null
       ]
     }
   }

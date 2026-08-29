@@ -11,8 +11,8 @@ into whatever the collectors happened to return
 (`services/research-orchestrator/README.md` §Why it exists).
 
 **Every domain stage is currently BLOCKED, and that is the honest output.**
-D-03 blocks scoring, §34 puts NLP out of scope, and no source has passed the
-governance gate. A planner that emitted runnable stages for those would be
+No CALIBRATED aggregation profile exists so scoring cannot run, §34 puts NLP out
+of scope, and no source has passed the governance gate. A planner that emitted runnable stages for those would be
 describing a system that does not exist. The planner therefore returns a plan
 whose stages all carry an explicit unavailable reason, and the orchestrator
 refuses to dispatch them.
@@ -145,14 +145,21 @@ STATIC_BLOCKED_CAPABILITIES: dict[Capability, BlockedCapability] = {
         reason="discovery consumes NLP signals, which are not produced",
         governing_document="docs/domain/opportunity-ontology-v2.md §16",
     ),
+    # The reason CHANGED in Mission 1.2, because the old one became false.
+    #
+    # It used to read "the aggregation formula is undefined". Mission 1.1
+    # defined it, so that sentence stopped being true -- and a false blocking
+    # reason is worse than a vague one: it invites someone to conclude the block
+    # no longer applies. What actually blocks scoring now is the SECOND gate.
     Capability.SCORING: BlockedCapability(
         capability=Capability.SCORING,
-        decision_id="D-03",
+        decision_id="PROFILE-NOT-CALIBRATED",
         reason=(
-            "the evidence aggregation formula, recency behaviour and independence rules "
-            "are undefined; implementing scoring would mean choosing them"
+            "the aggregation algorithm is defined but no CALIBRATED "
+            "EvidenceAggregationProfile exists; its parameters were never fitted to "
+            "labelled data, so a score would carry numbers nobody measured"
         ),
-        governing_document="docs/domain/scoring-framework-v1.1.md §13",
+        governing_document="docs/domain/evidence-aggregation-framework-v1.md §14",
     ),
 }
 

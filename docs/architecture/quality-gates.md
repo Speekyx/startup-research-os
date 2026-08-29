@@ -1,8 +1,8 @@
 # Quality Gates
 
-Version: 1.5
+Version: 1.6
 Status: Active. Every gate in §1 runs in CI
-Date: 2026-08-29 (amended in Mission 1.1)
+Date: 2026-08-29 (amended in Mission 1.2)
 
 What must be true for a change to reach `main`. `docs/CLAUDE.md` §Definition of
 done is the requirement; this document is the mechanism.
@@ -89,6 +89,19 @@ replaces it.
 | **The twelve mathematical invariants** | `test_evidence_aggregation.py` | Masses sum to 1; the score stays on 0–100; duplicates cannot inflate; unknown independence cannot stack; adding contradiction cannot raise the score; reordering changes nothing; evergreen evidence does not decay; missing inputs are never defaulted |
 | **Aggregation is order-independent end to end** | Same suite | Byte-identical canonical output under reordering. Floating-point addition is not associative, so this is engineered by sorting rather than assumed — and it caught a real defect in the explanation serialisation |
 | **The sensitivity report matches the code** | `sensitivity --check` | The report is generated from the implementation, so it cannot describe behaviour the code does not have |
+
+### Gates added in Mission 1.2
+
+| Gate | Mechanism | Guards |
+|------|-----------|--------|
+| **Cross-tenant references are impossible, not merely forbidden** | Composite foreign keys carrying `workspace_id` (migration 0005) + `test_claims.py` | A claim cannot reference an opportunity in another workspace, evidence cannot reference a claim in another workspace, and an independence group cannot span claims or workspaces. A third layer under the repository filter and the RLS policy, failing differently from both |
+| **The independence shape holds without the repository** | `evidence_independence_shape_check` | `KNOWN_DEPENDENT` must name a group, the other two must not. A future writer that bypasses the repository still cannot store an incoherent record |
+| **Unknown independence stays unknown in storage** | Same CHECK + `test_claims.py` | The engine builds its conservative runtime bucket without writing one. An unresolved question must not look resolved in the database |
+| **The claim revision pointer names a real revision** | Deferred composite foreign key | A pointer to a nonexistent revision would make the current statement unreadable |
+| **RLS on every new tenant table** | Migration 0005 + `test_rls.py` + `test_claims.py` | Four new tables, all ENABLE and FORCE, all policy-bearing. A claim visible across workspaces would leak what another tenant is researching, in their own words |
+| **No service imports the reference aggregation engine** | `validate_evidence_aggregation.py` | Tests may import it; production modules may not. This is what makes the vocabulary narrowing below safe (ADR-014) |
+| **Computed aggregation values stay out of production** | Same script | The guard was NARROWED, not weakened: evidence INPUT fields became legitimate schema columns in Mission 1.2, while the strengths, masses and score remain forbidden in migrations and under `services/` |
+| **No aggregation result is persisted** | `test_claims.py` | Storing a result would be scoring, and scoring requires a `CALIBRATED` profile that does not exist |
 
 ---
 

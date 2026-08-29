@@ -205,7 +205,7 @@ class TestBlockedWorkIsNeverDispatched:
         scoring = next(r for r in rows if r.job_type == "score.opportunity")
         assert scoring.status is JobStatus.BLOCKED
         assert scoring.blocked_reason is not None
-        assert scoring.blocked_reason.startswith("D-03")
+        assert scoring.blocked_reason.startswith("PROFILE-NOT-CALIBRATED")
 
     def test_the_database_refuses_a_blocked_job_with_no_reason(self, database) -> None:
         session = _new_session(database)
@@ -657,7 +657,7 @@ class TestCompletenessRecording:
         assert record.value is None
         assert set(record.blocked_capabilities) == {c.value for c in Capability}
         assert any("SOURCE-REGISTRY-GATE" in reason for reason in record.incompleteness_reasons)
-        assert any("D-03" in reason for reason in record.incompleteness_reasons)
+        assert any("PROFILE-NOT-CALIBRATED" in reason for reason in record.incompleteness_reasons)
 
     def test_the_record_is_persisted_and_readable(self, database, orchestrator) -> None:
         session = _new_session(database)

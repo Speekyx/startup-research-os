@@ -3,7 +3,7 @@
   "$id": "https://startup-research-os.local/schema/domain.v1.schema.json",
   "title": "Startup Research OS domain vocabulary",
   "description": "GENERATED FILE. Source of truth: packages/contracts/schema/domain.v1.json. Regenerate with python packages/contracts/tools/generate.py.",
-  "x-contract-version": "1.1.0",
+  "x-contract-version": "1.2.0",
   "x-ontology-version": "2",
   "$defs": {
     "AggregationProfileStatus": {
@@ -15,6 +15,31 @@
         "RETIRED"
       ],
       "description": "Whether the PARAMETERS of a profile have been calibrated against data. Separate from whether the algorithm is defined: defining equations calibrates nothing. Production scoring requires CALIBRATED."
+    },
+    "ClaimId": {
+      "type": "string",
+      "description": "An assertion about an Opportunity that evidence can independently support or contradict. Ontology V2.1 §17. STABLE across statement revisions: the text may be rewritten, the identity may not. Distinct from ClaimType, which is an epistemic category and not an identity.",
+      "format": "uuid"
+    },
+    "ClaimLifecycle": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "WITHDRAWN"
+      ],
+      "description": "EDITORIAL state, never epistemic. There is deliberately no VALIDATED or REJECTED value: evidence can change, and a lifecycle state derived from EvidenceLevel would freeze a conclusion the evidence no longer supports (Mission 1.2 §38). What a claim is worth is read from its aggregation, never from this column."
+    },
+    "ClaimOrigin": {
+      "type": "string",
+      "enum": [
+        "MANUAL",
+        "DETERMINISTIC_EXTRACTION",
+        "LLM_EXTRACTION",
+        "INFERRED",
+        "SYSTEM_GENERATED",
+        "IMPORTED"
+      ],
+      "description": "What PROCESS produced the claim, at the level of kind rather than instance. Deliberately carries no model, provider or prompt name: those change constantly and belong in provenance columns, where a new one does not require a contract change."
     },
     "ClaimTemporality": {
       "type": "string",
@@ -105,7 +130,7 @@
       "type": "number",
       "minimum": 0.0,
       "maximum": 1.0,
-      "description": "Estimated independence from other evidence. The threshold gating evidence level 3 is A-04 and remains UNDEFINED."
+      "description": "SUPERSEDED by EvidenceIndependenceState in Mission 1.2. A scalar cannot express WHICH records share an origin, so it could not support the grouping the aggregation framework requires, and it invited q * independence -- discounting instead of grouping, which lets ten discounted duplicates still outweigh one original. Retained so historical references resolve; no column uses it."
     },
     "LlmTier": {
       "type": "string",
@@ -206,6 +231,15 @@
         "MULTI_COUNTRY"
       ],
       "description": "Geographic scope discriminator. Geographic axis only; segment scoping is A-12 and is NOT modelled."
+    },
+    "ObservationKind": {
+      "type": "string",
+      "enum": [
+        "DISCOVERED",
+        "CORROBORATED",
+        "CONTRADICTED"
+      ],
+      "description": "How one ResearchSession related to a persisted entity it encountered. Promoted to the canonical contract in Mission 1.2: it already governed opportunity observations as a SQL CHECK plus a Python frozenset, which is exactly the drift ADR-009 exists to prevent. Not a scoring judgement."
     },
     "OpportunityId": {
       "type": "string",

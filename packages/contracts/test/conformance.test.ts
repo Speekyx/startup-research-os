@@ -30,9 +30,17 @@ import {
   researchContextCanonicalJson,
 } from "../src/researchContext.ts";
 import {
+  CLAIM_LIFECYCLE_VALUES,
   CLAIM_TYPE_VALUES,
   RESEARCH_SESSION_STATUS_VALUES,
+  isClaimLifecycle,
+  isClaimOrigin,
+  isClaimTemporality,
   isClaimType,
+  isEvidenceDirection,
+  isEvidenceIndependenceState,
+  isEvidenceObservationCategory,
+  isObservationKind,
   isResearchSessionStatus,
   type NumericTypeName,
 } from "../src/generated/domain.ts";
@@ -47,6 +55,23 @@ import {
 interface NumericCases {
   valid: unknown[];
   invalid: unknown[];
+}
+
+interface EnumCases {
+  valid: unknown[];
+  invalid: unknown[];
+}
+
+/** Added in Mission 1.2 with the Claim entity. */
+interface ClaimModelCases {
+  claim_id: EnumCases;
+  claim_temporality: EnumCases;
+  claim_origin: EnumCases;
+  claim_lifecycle: EnumCases;
+  evidence_direction: EnumCases;
+  evidence_independence_state: EnumCases;
+  observation_category: EnumCases;
+  observation_kind: EnumCases;
 }
 interface ScopeCase {
   name: string;
@@ -82,6 +107,7 @@ interface ConformanceCases {
     invalid: { case: unknown; reason: string }[];
   };
   claim_type: { valid: unknown[]; invalid: unknown[] };
+  claim_model: ClaimModelCases;
   research_session_status: { valid: unknown[]; invalid: unknown[] };
   research_context: { valid: ContextCase[]; invalid: InvalidCase[] };
   forbidden_fields: { names: string[] };
@@ -164,6 +190,34 @@ describe("closed enum conformance", () => {
     );
     for (const v of CASES.claim_type.valid) assert.equal(isClaimType(v), true, String(v));
     for (const v of CASES.claim_type.invalid) assert.equal(isClaimType(v), false, String(v));
+  });
+
+  test("the claim model enums match the shared cases", () => {
+    // The same fixture the Python suite reads. A value one language accepts and
+    // the other rejects fails the build rather than a request.
+    const guards: Array<[keyof ClaimModelCases, (v: unknown) => boolean]> = [
+      ["claim_temporality", isClaimTemporality],
+      ["claim_origin", isClaimOrigin],
+      ["claim_lifecycle", isClaimLifecycle],
+      ["evidence_direction", isEvidenceDirection],
+      ["evidence_independence_state", isEvidenceIndependenceState],
+      ["observation_category", isEvidenceObservationCategory],
+      ["observation_kind", isObservationKind],
+    ];
+    for (const [key, guard] of guards) {
+      const cases = CASES.claim_model[key];
+      for (const v of cases.valid) assert.equal(guard(v), true, `${key}: ${String(v)}`);
+      for (const v of cases.invalid) assert.equal(guard(v), false, `${key}: ${String(v)}`);
+    }
+  });
+
+  test("no claim lifecycle value is an epistemic verdict", () => {
+    // The absence is the feature. A stored VALIDATED would freeze a conclusion
+    // that later evidence could contradict (Mission 1.2 §38).
+    assert.deepEqual([...CLAIM_LIFECYCLE_VALUES], ["ACTIVE", "WITHDRAWN"]);
+    for (const forbidden of ["VALIDATED", "REJECTED", "CONFIRMED", "DISPROVEN"]) {
+      assert.equal(isClaimLifecycle(forbidden), false, forbidden);
+    }
   });
 
   test("HYPOTHESIS is first class", () => {

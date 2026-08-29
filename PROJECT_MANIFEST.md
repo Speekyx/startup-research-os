@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.5
+Version: 1.6
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-08-29 (Sprint 1 / Mission 1.1)
+Last amended: 2026-08-29 (Sprint 1 / Mission 1.2)
 
 ---
 
@@ -13,6 +13,17 @@ Last amended: 2026-08-29 (Sprint 1 / Mission 1.1)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.6 — 2026-08-29 (Sprint 1 / Mission 1.2)
+
+Authorized by the Mission 1.2 brief §3 (create Ontology V2.1) and §49
+(documentation). A-13 was explicitly authorised for resolution.
+
+| Change | Section | Authority |
+|--------|---------|-----------|
+| `docs/domain/opportunity-ontology-v2.1.md` becomes the current ontology | Authoritative Documents | Mission 1.2 §3. V2 is retained as a historical record and is not deleted; V2.1 inherits §1–§16 unchanged and adds §17 (Claim) |
+| `docs/domain/claim-model-v1.md` added to the authoritative chain | Authoritative Documents | Mission 1.2 §49. The Claim is the unit `evidence-aggregation-framework-v1.md` operates on, so its model is authoritative by construction |
+| **A-13 resolved** | Blocked work | Mission 1.2 §44, [ADR-015](docs/architecture/adr/ADR-015-claim-persistence-and-versioning.md). Claim exists as a persisted entity with stable identity and append-only revisions; evidence references it. **Production scoring remains unavailable**: no `CALIBRATED` profile exists, which is a separate gate |
 
 ## 1.5 — 2026-08-29 (Sprint 1 / Mission 1.1)
 
@@ -183,7 +194,7 @@ These documents define the project.
 
 1. PROJECT_MANIFEST.md
 2. docs/CLAUDE.md
-3. docs/domain/opportunity-ontology-v2.md
+3. docs/domain/opportunity-ontology-v2.1.md
 4. docs/domain/scoring-framework-v1.1.md
 5. docs/domain/evidence-confidence-framework-v1.md
 6. docs/ai/llm-reasoning-rules.md
@@ -195,6 +206,7 @@ Additionally authoritative:
 - docs/ai/evaluation-framework-v1.md (added in 1.3)
 - docs/data/source-registry-v1.md (added in 1.4)
 - docs/domain/evidence-aggregation-framework-v1.md (added in 1.5)
+- docs/domain/claim-model-v1.md (added in 1.6)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.
@@ -206,6 +218,9 @@ longer current and must not be used as the basis for implementation:
 
 - `docs/domain/opportunity-ontology-v1.md` — superseded by V1.1
 - `docs/domain/opportunity-ontology-v1.1.md` — superseded by V2
+- `docs/domain/opportunity-ontology-v2.md` — superseded by V2.1. V2.1 inherits
+  §1–§16 unchanged and refers to V2 for their text, so a reference to
+  `opportunity-ontology-v2.md §N` with `N <= 16` still resolves correctly
 - `docs/domain/scoring-framework-v1.md` — superseded by V1.1
 
 Historical reports and audits (`docs/architecture/mission-0.1-report.md`,

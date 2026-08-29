@@ -1,6 +1,6 @@
 {
   "$comment": "AUTHORITATIVE CONTRACT SOURCE OF TRUTH. Hand-edited. Everything under packages/contracts/generated/ is derived from this file by tools/generate.py. See ADR-009.",
-  "contract_version": "1.1.0",
+  "contract_version": "1.2.0",
   "ontology_version": "2",
   "scoring_framework_version": "1.1",
   "evidence_framework_version": "1",
@@ -30,6 +30,11 @@
       "name": "OpportunityId",
       "format": "uuid",
       "description": "A domain hypothesis. Not owned by the session that found it. Ontology V2 §12."
+    },
+    {
+      "name": "ClaimId",
+      "format": "uuid",
+      "description": "An assertion about an Opportunity that evidence can independently support or contradict. Ontology V2.1 §17. STABLE across statement revisions: the text may be rewritten, the identity may not. Distinct from ClaimType, which is an epistemic category and not an identity."
     },
     {
       "name": "EvidenceId",
@@ -515,6 +520,71 @@
       ]
     },
     {
+      "name": "ClaimOrigin",
+      "spec": "claim-model-v1.md §6",
+      "description": "What PROCESS produced the claim, at the level of kind rather than instance. Deliberately carries no model, provider or prompt name: those change constantly and belong in provenance columns, where a new one does not require a contract change.",
+      "values": [
+        {
+          "value": "MANUAL",
+          "description": "Authored by a person"
+        },
+        {
+          "value": "DETERMINISTIC_EXTRACTION",
+          "description": "Produced by a rule, parser or query with no model involved"
+        },
+        {
+          "value": "LLM_EXTRACTION",
+          "description": "Extracted from source text by a language model. The model and prompt versions are recorded in provenance, never here"
+        },
+        {
+          "value": "INFERRED",
+          "description": "Derived analytically from other claims or signals rather than read from a source"
+        },
+        {
+          "value": "SYSTEM_GENERATED",
+          "description": "Created by the platform itself, for example a coverage placeholder"
+        },
+        {
+          "value": "IMPORTED",
+          "description": "Brought in from an external dataset or a prior system"
+        }
+      ]
+    },
+    {
+      "name": "ClaimLifecycle",
+      "spec": "claim-model-v1.md §8",
+      "description": "EDITORIAL state, never epistemic. There is deliberately no VALIDATED or REJECTED value: evidence can change, and a lifecycle state derived from EvidenceLevel would freeze a conclusion the evidence no longer supports (Mission 1.2 §38). What a claim is worth is read from its aggregation, never from this column.",
+      "values": [
+        {
+          "value": "ACTIVE",
+          "description": "In use. Accumulates evidence and may be aggregated"
+        },
+        {
+          "value": "WITHDRAWN",
+          "description": "Removed from use — malformed, duplicated, or out of scope. Its evidence and revision history are retained, because deleting the row would destroy the record of what was once believed"
+        }
+      ]
+    },
+    {
+      "name": "ObservationKind",
+      "spec": "opportunity-ontology-v2.md §12; claim-model-v1.md §7",
+      "description": "How one ResearchSession related to a persisted entity it encountered. Promoted to the canonical contract in Mission 1.2: it already governed opportunity observations as a SQL CHECK plus a Python frozenset, which is exactly the drift ADR-009 exists to prevent. Not a scoring judgement.",
+      "values": [
+        {
+          "value": "DISCOVERED",
+          "description": "The session introduced it"
+        },
+        {
+          "value": "CORROBORATED",
+          "description": "The session found further support for it"
+        },
+        {
+          "value": "CONTRADICTED",
+          "description": "The session found evidence against it"
+        }
+      ]
+    },
+    {
       "name": "AggregationProfileStatus",
       "spec": "evidence-aggregation-framework-v1.md §14",
       "description": "Whether the PARAMETERS of a profile have been calibrated against data. Separate from whether the algorithm is defined: defining equations calibrates nothing. Production scoring requires CALIBRATED.",
@@ -588,7 +658,8 @@
       "min": 0.0,
       "max": 1.0,
       "spec": "evidence-confidence-framework-v1.md §4",
-      "description": "Estimated independence from other evidence. The threshold gating evidence level 3 is A-04 and remains UNDEFINED."
+      "description": "SUPERSEDED by EvidenceIndependenceState in Mission 1.2. A scalar cannot express WHICH records share an origin, so it could not support the grouping the aggregation framework requires, and it invited q * independence -- discounting instead of grouping, which lets ten discounted duplicates still outweigh one original. Retained so historical references resolve; no column uses it.",
+      "superseded_by": "EvidenceIndependenceState"
     },
     {
       "name": "Score",
@@ -781,6 +852,12 @@
       "what": "Non-geographic (audience/segment) scoping",
       "consequence": "MarketScope stays geographic only. No SEGMENT variant.",
       "spec": "opportunity-ontology-v2.md §4.8"
+    },
+    {
+      "id": "A-13",
+      "what": "Claim as a persisted entity (RESOLVED by Mission 1.2 -- opportunity-ontology-v2.1.md, claim-model-v1.md)",
+      "consequence": "Resolved: research.claims exists with stable identity, append-only statement revisions, explicit temporality and provenance, and evidence now references a claim rather than an opportunity. Production scoring remains blocked for the separate reason that no CALIBRATED aggregation profile exists.",
+      "spec": "opportunity-ontology-v2.1.md §17; claim-model-v1.md"
     }
   ]
 }

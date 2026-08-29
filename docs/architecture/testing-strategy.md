@@ -1,9 +1,9 @@
 # Testing Strategy
 
-Version: 1.4
-Status: Strategy fixed; infrastructure, orchestration and evidence aggregation
-tested. No production business logic exists to test
-Date: 2026-08-29 (amended in Mission 1.1)
+Version: 1.5
+Status: Strategy fixed; infrastructure, orchestration, evidence aggregation and
+the Claim model tested. No production business logic exists to test
+Date: 2026-08-29 (amended in Mission 1.2)
 
 `PROJECT_MANIFEST.md` §Testability: "Every important behavior must be testable."
 `docs/CLAUDE.md` §Definition of done: tests must cover important behavior and
@@ -141,6 +141,23 @@ was not, so two runs over one snapshot produced different bytes.
 weight" and "this package opens no network connection" are testable statements
 about source text, and a test that fails on the day somebody adds
 `reddit = 0.75` is worth more than a paragraph asking them not to.
+
+### Cross-tenant integrity (added in Mission 1.2)
+
+The Claim model added a fourth kind of tenancy test, distinct from the three the
+strategy already had.
+
+Existing tests prove a tenant cannot **read** another tenant's rows. These prove
+a tenant cannot **create a reference** to them: a claim pointing at another
+workspace's opportunity, evidence pointing at another workspace's claim, an
+independence group spanning two claims. The composite foreign keys make those
+structurally impossible, and the tests assert on the **constraint name** rather
+than on any exception — otherwise a row rejected for an unrelated reason would
+pass as proof.
+
+That distinction is not academic. Writing these tests caught an insert that
+failed on a missing `NOT NULL` column rather than on the constraint under test;
+a blind `pytest.raises(Exception)` would have reported it green.
 
 ### Classification and extraction
 

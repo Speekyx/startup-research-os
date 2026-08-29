@@ -363,10 +363,14 @@ class TestPlanning(unittest.TestCase):
         assert block is not None
         self.assertIn("empty", block.reason)
 
-    def test_scoring_is_blocked_by_d03_with_a_stated_reason(self) -> None:
+    def test_scoring_is_blocked_on_calibration_not_on_the_formula(self) -> None:
+        """Mission 1.2. The formula exists since Mission 1.1, so the old reason
+        went false. A false blocking reason invites someone to decide the block
+        no longer applies; what blocks scoring now is the second gate."""
         blocked = BLOCKED_CAPABILITIES[Capability.SCORING]
-        self.assertEqual(blocked.decision_id, "D-03")
-        self.assertIn("aggregation", blocked.reason)
+        self.assertEqual(blocked.decision_id, "PROFILE-NOT-CALIBRATED")
+        self.assertIn("CALIBRATED", blocked.reason)
+        self.assertNotIn("undefined", blocked.reason)
 
     def test_every_blocked_job_carries_the_deciding_reference(self) -> None:
         for job in self.plan.blocked_jobs:
@@ -374,7 +378,12 @@ class TestPlanning(unittest.TestCase):
             self.assertTrue(
                 any(
                     job.blocked_reason.startswith(d)
-                    for d in ("D-03", "D-12", "NO-COLLECTOR", "SOURCE-REGISTRY-GATE")
+                    for d in (
+                        "D-12",
+                        "NO-COLLECTOR",
+                        "SOURCE-REGISTRY-GATE",
+                        "PROFILE-NOT-CALIBRATED",
+                    )
                 ),
                 job.blocked_reason,
             )
@@ -415,7 +424,7 @@ class TestPlanning(unittest.TestCase):
     def test_the_incompleteness_reasons_name_the_open_decisions(self) -> None:
         reasons = " ".join(self.plan.incompleteness_reasons())
         self.assertIn("SOURCE-REGISTRY-GATE", reasons)
-        self.assertIn("D-03", reasons)
+        self.assertIn("PROFILE-NOT-CALIBRATED", reasons)
         self.assertIn("D-12", reasons)
 
     def test_a_plan_records_the_availability_it_was_built_from(self) -> None:

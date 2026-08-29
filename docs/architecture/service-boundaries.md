@@ -337,6 +337,14 @@ Resolved in Mission 0.1.1: C-01/D-02 (ADR-004), D-05 (ADR-005), C-02 and C-04
 (domain V1.1), D-04 (ADR-006), D-10 (ADR-007), D-06
 (`data-retention-policy-v1.md`), D-09 (CODEOWNERS).
 
+Resolved in Mission 1.2: **A-13** (`opportunity-ontology-v2.1.md` §17,
+`claim-model-v1.md`, ADR-015). The Claim is a persisted entity and evidence
+references it. Ownership follows §1: `research.claims` and its revisions belong
+to `research` because a Claim is a domain assertion, while
+`scoring.evidence_independence_groups` belongs to `scoring` because it is part
+of the evidence model. **Detecting** those provenance relationships is `nlp`'s
+work and D-12 is open, so every group is currently written by hand.
+
 Resolved in Mission 1.0: **D-07** (`source-registry-v1.md`, ADR-013). The
 registry and its per-source review records exist. `acquisition` is still blocked,
 but per source and for a stated reason rather than globally: no candidate has

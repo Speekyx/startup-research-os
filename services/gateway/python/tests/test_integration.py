@@ -98,6 +98,11 @@ class TestSchemaRuntime:
             "registry.source_policy_evidence",
             "registry.source_retention_policies",
             "registry.source_capabilities",
+            # 0005_claim_evidence_alignment
+            "research.claims",
+            "research.claim_revisions",
+            "research.claim_session_observations",
+            "scoring.evidence_independence_groups",
         }
 
     def test_the_source_eligibility_view_exists(self, database) -> None:
@@ -121,6 +126,7 @@ class TestSchemaRuntime:
             "0002_orchestration",
             "0003_row_level_security",
             "0004_source_registry",
+            "0005_claim_evidence_alignment",
         ]
         assert all(len(r[1]) == 64 for r in rows)  # sha256 hex
 
@@ -205,13 +211,18 @@ class TestSchemaRuntime:
             database.tenant_transaction(WORKSPACE_A) as conn,
         ):
             conn.execute(
+                # `direction` and `observation_category` became NOT NULL in
+                # migration 0005 and are supplied here so the insert fails on the
+                # constraint UNDER TEST. Without them it fails on a NOT NULL
+                # violation instead, and the test passes while proving nothing.
                 """INSERT INTO scoring.evidence
-                       (id, workspace_id, claim_type, evidence_level,
-                        collected_at, expires_at)
-                       VALUES (%s,%s,'OBSERVED',6, now(), now())""",
+                       (id, workspace_id, claim_type, evidence_level, direction,
+                        observation_category, collected_at, expires_at)
+                       VALUES (%s,%s,'OBSERVED',6,'SUPPORTS','UNCATEGORISED',
+                               now(), now())""",
                 (uuid.uuid4(), WORKSPACE_A),
             )
-        assert "check constraint" in str(exc.value).lower()
+        assert "evidence_level_range_check" in str(exc.value)
 
 
 # ======================================================= tenancy: PostgreSQL

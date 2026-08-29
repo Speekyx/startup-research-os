@@ -39,6 +39,13 @@ TENANT_TABLES = [
     "nlp.signals",
     "nlp.embedding_provenance",
     "scoring.evidence",
+    # Added in Mission 1.2. The aggregation unit and its provenance groups are
+    # tenant data like everything else above; a claim visible across workspaces
+    # would leak what another tenant is researching, in their own words.
+    "research.claims",
+    "research.claim_revisions",
+    "research.claim_session_observations",
+    "scoring.evidence_independence_groups",
 ]
 
 # Deliberately NOT policy-bearing. Listed here so that adding a policy to one of

@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.5
-Last amended: 2026-08-29 (Sprint 1 / Mission 1.1)
+Version: 1.6
+Last amended: 2026-08-29 (Sprint 1 / Mission 1.2)
 
 ## Boot Sequence
 
@@ -9,7 +9,7 @@ Before performing any task, execute this reading order.
 
 1. PROJECT_MANIFEST.md
 2. docs/CLAUDE.md
-3. docs/domain/opportunity-ontology-v2.md
+3. docs/domain/opportunity-ontology-v2.1.md
 4. docs/domain/scoring-framework-v1.1.md
 5. docs/domain/evidence-confidence-framework-v1.md
 6. docs/ai/llm-reasoning-rules.md
@@ -17,9 +17,10 @@ Before performing any task, execute this reading order.
 8. docs/data/data-retention-policy-v1.md
 9. docs/data/source-registry-v1.md
 10. docs/domain/evidence-aggregation-framework-v1.md
-11. docs/ai/evaluation-framework-v1.md
-12. Relevant ADRs
-13. Task-specific specifications
+11. docs/domain/claim-model-v1.md
+12. docs/ai/evaluation-framework-v1.md
+13. Relevant ADRs
+14. Task-specific specifications
 
 These documents are the authoritative source of truth.
 
@@ -35,6 +36,7 @@ Ontology V2 keeps V1.1's numbering for §1–§10, so an existing reference to
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.6 | 2026-08-29 | Boot sequence points to Ontology V2.1 and gains the Claim model; Claim invariant added; A-13 removed from blocked work (ADR-015) |
 | 1.5 | 2026-08-29 | Boot sequence gains the evidence aggregation framework; evidence-aggregation invariant added; D-03 blocked-work entry rewritten as framework-resolved / parameters-uncalibrated (ADR-014) |
 | 1.4 | 2026-08-29 | Boot sequence gains the source registry spec; source-governance invariant added; D-07 removed from blocked work (ADR-013) |
 | 1.3 | 2026-08-29 | Boot sequence gains the evaluation framework; tenancy invariant records that row-level security is now enforced (ADR-012) |
@@ -179,6 +181,34 @@ the runtime role. It is administered by `sros-source`, never over HTTP.
 
 This system is not a legal decision engine and its output is not legal advice.
 
+### Claim — the unit evidence accumulates against
+
+Since Mission 1.2 a **Claim** is a persisted entity (Ontology V2.1 §17,
+`claim-model-v1.md`, ADR-015). Five rules follow:
+
+```text
+Workspace -> Opportunity -> Claim -> Evidence -> Aggregation
+```
+
+- **A Claim is not a `ClaimType`.** `ClaimType` is an epistemic category a claim
+  carries; there are exactly five of them and none is an identity. A Claim is an
+  assertion with a `ClaimId`.
+- **A Claim is not an Opportunity.** One opportunity carries several assertions
+  that do not stand or fall together; aggregating at the opportunity level
+  averages away what the four masses preserve.
+- **Identity is stable; statements are revised append-only.** An aggregation that
+  evaluated revision 2 must still be able to read revision 2. The previous
+  revision is never modified.
+- **Temporality is declared on the Claim, never inferred from the source.** The
+  claim names a `claim_feature`; the half-life lives in the profile.
+- **`ClaimLifecycle` is editorial, never epistemic.** `ACTIVE` and `WITHDRAWN`
+  only. There is no `VALIDATED`: evidence changes, and a lifecycle derived from
+  it would freeze a conclusion the evidence no longer supports.
+
+A claim is not owned by the session that first met it (Ontology V2 §12, applied
+to Claim). Sessions produce observations; the same claim accumulates evidence
+across many of them.
+
 ### Evidence aggregation — defined, and not calibrated
 
 Since Mission 1.1 the aggregation algorithm is defined
@@ -215,11 +245,6 @@ only when explicitly labelled as such.
 Do not invent a half-life, a damping constant, a per-source weight or a
 contradiction penalty to make the engine produce a number. Failing closed is the
 designed behaviour, not a gap to fill.
-
-**No Claim entity exists (A-13).** Aggregation is claim-centric and the ontology
-defines a claims taxonomy, not a Claim entity. Adding one requires a new ontology
-version and an ADR — it is not an implementer's decision. See
-`evidence-schema-gap-analysis-v1.md` §4.
 
 **No collector may be implemented for a source that is not collector-eligible.**
 D-07 is resolved and the registry exists, but zero sources currently pass the
