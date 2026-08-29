@@ -1,0 +1,16 @@
+[project]
+name = "sros-evidence-aggregation"
+version = "0.1.0"
+description = "Reference implementation of Evidence Aggregation V1. NOT services/scoring."
+requires-python = ">=3.12"
+# Standard library plus the canonical contracts. No numpy, no scipy, no network
+# client: this package must run in the zero-dependency CI job, where a broken
+# environment cannot silently reduce the checks to nothing (ADR-009).
+dependencies = ["sros-contracts"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["sros_evidence_aggregation"]

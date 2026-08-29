@@ -84,6 +84,21 @@ jobs:
             exit 1
           fi
 
+  evidence-aggregation:
+    name: Evidence aggregation guard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # Zero-dependency, like the source-registry job and for the same reason:
+      # D-03 is resolved at the FRAMEWORK level only, and a broken dependency
+      # environment must not be able to reduce the gate between a defined
+      # framework and production scoring to nothing.
+      - name: Rejected designs, source weights, universal half-life
+        run: python infrastructure/scripts/validate_evidence_aggregation.py
+
   typescript:
     name: TypeScript (lint, typecheck, conformance)
     runs-on: ubuntu-latest
@@ -146,6 +161,7 @@ jobs:
           uv run mypy packages/contracts/python/sros_contracts \
                       packages/llm-gateway/python/sros_llm_gateway \
                       services/workers/python/sros_workers \
+                      packages/evidence-aggregation/python/sros_evidence_aggregation \
                       services/acquisition/python/sros_acquisition \
                       services/research-orchestrator/python/sros_orchestrator \
                       services/gateway/python/sros_gateway
@@ -154,6 +170,11 @@ jobs:
       # the wrong one (ADR-009, applied to documentation).
       - name: Rendered source catalog is in sync
         run: uv run sros-source render --check
+      # The sensitivity analysis is generated from the reference implementation,
+      # so it cannot describe behaviour the code does not have. Same argument as
+      # the catalog above, applied to a document that reports findings.
+      - name: Sensitivity analysis matches the implementation
+        run: uv run python -m sros_evidence_aggregation.sensitivity --check
 
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.

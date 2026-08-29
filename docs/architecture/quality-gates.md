@@ -1,8 +1,8 @@
 # Quality Gates
 
-Version: 1.4
+Version: 1.5
 Status: Active. Every gate in §1 runs in CI
-Date: 2026-08-29 (amended in Mission 1.0)
+Date: 2026-08-29 (amended in Mission 1.1)
 
 What must be true for a change to reach `main`. `docs/CLAUDE.md` §Definition of
 done is the requirement; this document is the mechanism.
@@ -71,6 +71,24 @@ remembering it under pressure to ship a collector.
 | **The rendered catalog matches the JSON** | `sros-source render --check` | Two hand-maintained copies of one fact drift, and the drift is found by whoever trusted the wrong one |
 | **CI calls no external platform** | `ci.yml` | A registry job that fetched a platform's terms would be collection, and would make the build depend on a third party's uptime (§43) |
 | **Acquisition blocking is registry-derived** | `test_orchestrator_integration.py` | The orchestrator must read its refusal from `registry.source_eligibility`, not restate it in code. A hardcoded reason is a reason nobody notices going false |
+
+### Gates added in Mission 1.1
+
+D-03 is resolved at the framework level, so the old blanket ban on aggregation
+vocabulary was replaced rather than deleted. These gates draw the line that
+replaces it.
+
+| Gate | Mechanism | Guards |
+|------|-----------|--------|
+| **Rejected designs stay rejected** | `validate_evidence_aggregation.py` | `contradiction_penalty`, `decay_weight`, `aggregated_evidence_score`, `independence_threshold_result`, `evidence_aggregate` are forbidden everywhere, permanently. Each names a design the framework considered and rejected, so its return is a regression rather than an unblocked feature |
+| **V1 vocabulary stays out of production surfaces** | Same script | The authorised names are allowed in the reference package and the contracts, never in a migration or under `services/`. Defining the framework and enabling production scoring are separate gates |
+| **No universal half-life** | Same script | A module-level half-life constant is refused anywhere. §9 puts half-lives in versioned profiles; a constant would be the invented universal value, and it would *work*, which is what makes it dangerous |
+| **No per-source reliability weight** | Same script + `test_evidence_aggregation.py` | No registered source id appears in the aggregation package. Two evidence sets differing only in `source_id` must produce identical numbers |
+| **The shipped profile stays UNCALIBRATED** | Same script | Promotion to `CALIBRATED` requires the calibration plan to have been executed and published. A profile cannot even be constructed as `CALIBRATED` without a `calibration_dataset_ref` |
+| **`services/scoring` has no implementation** | Same script | The directory is a boundary README. Code appearing in it means production scoring started without a calibrated profile |
+| **The twelve mathematical invariants** | `test_evidence_aggregation.py` | Masses sum to 1; the score stays on 0–100; duplicates cannot inflate; unknown independence cannot stack; adding contradiction cannot raise the score; reordering changes nothing; evergreen evidence does not decay; missing inputs are never defaulted |
+| **Aggregation is order-independent end to end** | Same suite | Byte-identical canonical output under reordering. Floating-point addition is not associative, so this is engineered by sorting rather than assumed — and it caught a real defect in the explanation serialisation |
+| **The sensitivity report matches the code** | `sensitivity --check` | The report is generated from the implementation, so it cannot describe behaviour the code does not have |
 
 ---
 

@@ -20,13 +20,15 @@ eventually be documented through ADRs."
 | [ADR-011](ADR-011-postgresql-access-psycopg.md) | psycopg 3 + explicit repositories | Accepted — Mission 0.3. **Supersedes ADR-008 §Database access strategy** |
 | [ADR-012](ADR-012-row-level-security.md) | Row-level security with transaction-local tenant context | Accepted — Mission 0.4. **Completes ADR-005 §Future row-level security** |
 | [ADR-013](ADR-013-source-registry-governance.md) | Source governance as a gate, not a field | Accepted — Mission 1.0. **Resolves D-07** |
-| ADR-014 | Production deployment target | Required — deferred by ADR-007 |
+| [ADR-014](ADR-014-evidence-aggregation-reference-implementation.md) | Evidence aggregation as a reference package, gated on calibration | Accepted — Mission 1.1. **Resolves D-03 at the framework level** |
+| ADR-015 | Production deployment target | Required — deferred by ADR-007 |
 
-> **Numbering note.** The production-deployment slot has now moved twice: it was
-> listed as ADR-012, then ADR-013, and each time the number went to the first ADR
+> **Numbering note.** The production-deployment slot has now moved three times:
+> ADR-012, then 013, then 014, and each time the number went to the first ADR
 > actually written. It is a placeholder with no file and no decision. A reserved
 > number is not an ADR; renumbering a row that records a TODO breaks no reference
-> and supersedes nothing.
+> and supersedes nothing. If this keeps happening, the answer is to stop
+> reserving the number rather than to keep moving it.
 
 ## Status values
 

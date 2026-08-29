@@ -9,6 +9,7 @@ dependencies = []
 members = [
     "packages/contracts/python",
     "packages/llm-gateway/python",
+    "packages/evidence-aggregation/python",
     "services/workers/python",
     "services/research-orchestrator/python",
     "services/acquisition/python",
@@ -18,6 +19,7 @@ members = [
 [tool.uv.sources]
 sros-contracts = { workspace = true }
 sros-llm-gateway = { workspace = true }
+sros-evidence-aggregation = { workspace = true }
 sros-workers = { workspace = true }
 sros-orchestrator = { workspace = true }
 sros-acquisition = { workspace = true }

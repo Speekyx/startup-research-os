@@ -9,12 +9,12 @@
  * Editing this file by hand will be overwritten and will fail the contract
  * check in CI. Change the source of truth instead.
  *
- * contract_version: 1.0.0
+ * contract_version: 1.1.0
  * ontology_version: 2
  */
 
 
-export const CONTRACT_VERSION = "1.0.0" as const;
+export const CONTRACT_VERSION = "1.1.0" as const;
 export const ONTOLOGY_VERSION = "2" as const;
 export const RESEARCH_CONTEXT_SCHEMA_VERSION = "1.0.0" as const;
 
@@ -280,6 +280,93 @@ export const PERSONAL_DATA_RISK_VALUES = [
 export type PersonalDataRisk = (typeof PERSONAL_DATA_RISK_VALUES)[number];
 export function isPersonalDataRisk(v: unknown): v is PersonalDataRisk {
   return typeof v === "string" && (PERSONAL_DATA_RISK_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * How one Evidence record bears on a Claim. Support and contradiction are aggregated SEPARATELY and never averaged together, so this drives exhaustive branching and is closed.
+ * @see evidence-aggregation-framework-v1.md §5
+ */
+export const EVIDENCE_DIRECTION_VALUES = [
+  "SUPPORTS",
+  "CONTRADICTS",
+  "NEUTRAL",
+] as const;
+export type EvidenceDirection = (typeof EVIDENCE_DIRECTION_VALUES)[number];
+export function isEvidenceDirection(v: unknown): v is EvidenceDirection {
+  return typeof v === "string" && (EVIDENCE_DIRECTION_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * What is KNOWN about an evidence record provenance relationship to the rest of the set. UNKNOWN is a distinct third state and is never silently promoted to KNOWN_INDEPENDENT.
+ * @see evidence-aggregation-framework-v1.md §10, §13
+ */
+export const EVIDENCE_INDEPENDENCE_STATE_VALUES = [
+  "KNOWN_INDEPENDENT",
+  "KNOWN_DEPENDENT",
+  "UNKNOWN",
+] as const;
+export type EvidenceIndependenceState = (typeof EVIDENCE_INDEPENDENCE_STATE_VALUES)[number];
+export function isEvidenceIndependenceState(v: unknown): v is EvidenceIndependenceState {
+  return typeof v === "string" && (EVIDENCE_INDEPENDENCE_STATE_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * WHAT KIND of thing was observed, independent of how strong it is. Gates EvidenceLevel 4 and 5, which quantity of evidence must never reach on its own. Closed because level eligibility branches exhaustively over it.
+ * @see evidence-aggregation-framework-v1.md §11
+ */
+export const EVIDENCE_OBSERVATION_CATEGORY_VALUES = [
+  "STATED_OPINION",
+  "REPORTED_BEHAVIOUR",
+  "OBSERVED_BEHAVIOUR",
+  "MARKET_ACTIVITY",
+  "DIRECT_VALIDATION",
+  "UNCATEGORISED",
+] as const;
+export type EvidenceObservationCategory = (typeof EVIDENCE_OBSERVATION_CATEGORY_VALUES)[number];
+export function isEvidenceObservationCategory(v: unknown): v is EvidenceObservationCategory {
+  return typeof v === "string" && (EVIDENCE_OBSERVATION_CATEGORY_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * Whether a claim decays. A property of the CLAIM, never of the source: the same platform can carry an evergreen fact and a trend that is stale in a week. Closed because freshness branches exhaustively over it.
+ * @see evidence-aggregation-framework-v1.md §9
+ */
+export const CLAIM_TEMPORALITY_VALUES = [
+  "EVERGREEN",
+  "TEMPORALLY_SENSITIVE",
+] as const;
+export type ClaimTemporality = (typeof CLAIM_TEMPORALITY_VALUES)[number];
+export function isClaimTemporality(v: unknown): v is ClaimTemporality {
+  return typeof v === "string" && (CLAIM_TEMPORALITY_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * Whether the PARAMETERS of a profile have been calibrated against data. Separate from whether the algorithm is defined: defining equations calibrates nothing. Production scoring requires CALIBRATED.
+ * @see evidence-aggregation-framework-v1.md §14
+ */
+export const AGGREGATION_PROFILE_STATUS_VALUES = [
+  "DRAFT",
+  "UNCALIBRATED",
+  "CALIBRATED",
+  "RETIRED",
+] as const;
+export type AggregationProfileStatus = (typeof AGGREGATION_PROFILE_STATUS_VALUES)[number];
+export function isAggregationProfileStatus(v: unknown): v is AggregationProfileStatus {
+  return typeof v === "string" && (AGGREGATION_PROFILE_STATUS_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * Whether the numbers in a result may be read as covering the evidence set. A result that silently dropped half its items would be indistinguishable from one that used all of them.
+ * @see evidence-aggregation-framework-v1.md §16
+ */
+export const EVIDENCE_AGGREGATION_STATUS_VALUES = [
+  "COMPLETE",
+  "PARTIAL",
+  "UNAVAILABLE",
+] as const;
+export type EvidenceAggregationStatus = (typeof EVIDENCE_AGGREGATION_STATUS_VALUES)[number];
+export function isEvidenceAggregationStatus(v: unknown): v is EvidenceAggregationStatus {
+  return typeof v === "string" && (EVIDENCE_AGGREGATION_STATUS_VALUES as readonly string[]).includes(v);
 }
 
 // --- Numeric bounds --------------------------------------------------------

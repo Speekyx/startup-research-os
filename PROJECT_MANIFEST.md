@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.4
+Version: 1.5
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-08-29 (Sprint 1 / Mission 1.0)
+Last amended: 2026-08-29 (Sprint 1 / Mission 1.1)
 
 ---
 
@@ -13,6 +13,17 @@ Last amended: 2026-08-29 (Sprint 1 / Mission 1.0)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.5 — 2026-08-29 (Sprint 1 / Mission 1.1)
+
+Authorized by the Mission 1.1 brief §48 (documentation) and §40 (D-03 resolution
+criteria).
+
+| Change | Section | Authority |
+|--------|---------|-----------|
+| `docs/domain/evidence-aggregation-framework-v1.md` added to the authoritative chain | Authoritative Documents | Mission 1.1 §48. `scoring-framework-v1.1.md` §13 names this document as the precondition for `services/scoring`, so it is authoritative by construction |
+| **D-03 resolved at the FRAMEWORK level** | Blocked work | Mission 1.1 §40, [ADR-014](docs/architecture/adr/ADR-014-evidence-aggregation-reference-implementation.md). The algorithm is defined and has a reference implementation. **No parameter was calibrated**, no profile is `CALIBRATED`, and `services/scoring` stays unavailable for production research. Framework Defined and Profile Calibrated are separate gates |
+| **A-13 opened** | Blocked work | Aggregation is claim-centric and no Claim entity exists in the ontology or the schema. Recorded rather than resolved: it requires an ontology version and an ADR |
 
 ## 1.4 — 2026-08-29 (Sprint 1 / Mission 1.0)
 
@@ -183,6 +194,7 @@ Additionally authoritative:
 - docs/data/data-retention-policy-v1.md
 - docs/ai/evaluation-framework-v1.md (added in 1.3)
 - docs/data/source-registry-v1.md (added in 1.4)
+- docs/domain/evidence-aggregation-framework-v1.md (added in 1.5)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

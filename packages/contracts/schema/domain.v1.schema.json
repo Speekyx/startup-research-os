@@ -3,9 +3,27 @@
   "$id": "https://startup-research-os.local/schema/domain.v1.schema.json",
   "title": "Startup Research OS domain vocabulary",
   "description": "GENERATED FILE. Source of truth: packages/contracts/schema/domain.v1.json. Regenerate with python packages/contracts/tools/generate.py.",
-  "x-contract-version": "1.0.0",
+  "x-contract-version": "1.1.0",
   "x-ontology-version": "2",
   "$defs": {
+    "AggregationProfileStatus": {
+      "type": "string",
+      "enum": [
+        "DRAFT",
+        "UNCALIBRATED",
+        "CALIBRATED",
+        "RETIRED"
+      ],
+      "description": "Whether the PARAMETERS of a profile have been calibrated against data. Separate from whether the algorithm is defined: defining equations calibrates nothing. Production scoring requires CALIBRATED."
+    },
+    "ClaimTemporality": {
+      "type": "string",
+      "enum": [
+        "EVERGREEN",
+        "TEMPORALLY_SENSITIVE"
+      ],
+      "description": "Whether a claim decays. A property of the CLAIM, never of the source: the same platform can carry an evergreen fact and a trend that is stale in a week. Closed because freshness branches exhaustively over it."
+    },
     "ClaimType": {
       "type": "string",
       "enum": [
@@ -33,16 +51,55 @@
       ],
       "description": "Closed. Signal TYPES within a family are a registry, not an enum."
     },
+    "EvidenceAggregationStatus": {
+      "type": "string",
+      "enum": [
+        "COMPLETE",
+        "PARTIAL",
+        "UNAVAILABLE"
+      ],
+      "description": "Whether the numbers in a result may be read as covering the evidence set. A result that silently dropped half its items would be indistinguishable from one that used all of them."
+    },
+    "EvidenceDirection": {
+      "type": "string",
+      "enum": [
+        "SUPPORTS",
+        "CONTRADICTS",
+        "NEUTRAL"
+      ],
+      "description": "How one Evidence record bears on a Claim. Support and contradiction are aggregated SEPARATELY and never averaged together, so this drives exhaustive branching and is closed."
+    },
     "EvidenceId": {
       "type": "string",
       "description": "An evidence record with mandatory provenance.",
       "format": "uuid"
+    },
+    "EvidenceIndependenceState": {
+      "type": "string",
+      "enum": [
+        "KNOWN_INDEPENDENT",
+        "KNOWN_DEPENDENT",
+        "UNKNOWN"
+      ],
+      "description": "What is KNOWN about an evidence record provenance relationship to the rest of the set. UNKNOWN is a distinct third state and is never silently promoted to KNOWN_INDEPENDENT."
     },
     "EvidenceLevel": {
       "type": "integer",
       "minimum": 0,
       "maximum": 5,
       "description": "0 Hypothesis, 1 Weak, 2 Repeated, 3 Multi-source, 4 Market evidence, 5 Direct validation. Never rescaled, never averaged into a score."
+    },
+    "EvidenceObservationCategory": {
+      "type": "string",
+      "enum": [
+        "STATED_OPINION",
+        "REPORTED_BEHAVIOUR",
+        "OBSERVED_BEHAVIOUR",
+        "MARKET_ACTIVITY",
+        "DIRECT_VALIDATION",
+        "UNCATEGORISED"
+      ],
+      "description": "WHAT KIND of thing was observed, independent of how strong it is. Gates EvidenceLevel 4 and 5, which quantity of evidence must never reach on its own. Closed because level eligibility branches exhaustively over it."
     },
     "Independence": {
       "type": "number",

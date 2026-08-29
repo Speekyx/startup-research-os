@@ -1,9 +1,9 @@
 # Testing Strategy
 
-Version: 1.3
-Status: Strategy fixed; infrastructure and orchestration tested. No business
-logic exists to test (Sprint 0 forbids it)
-Date: 2026-08-29 (amended in Mission 0.4)
+Version: 1.4
+Status: Strategy fixed; infrastructure, orchestration and evidence aggregation
+tested. No production business logic exists to test
+Date: 2026-08-29 (amended in Mission 1.1)
 
 `PROJECT_MANIFEST.md` §Testability: "Every important behavior must be testable."
 `docs/CLAUDE.md` §Definition of done: tests must cover important behavior and
@@ -115,6 +115,32 @@ Assert **invariants**, never values:
 **relative ordering** assertions (opportunity A ranks above B given this
 evidence). Ranking stability is a more meaningful guarantee than absolute value
 stability, and it survives model improvements.
+
+### Evidence aggregation (added in Mission 1.1)
+
+The first component in the system whose output has no correct answer *and* an
+executable specification, so it is where the invariant approach above gets its
+first real test. `packages/evidence-aggregation/python/tests` asserts twelve
+algebraic invariants and no expected value.
+
+Three lessons from writing them are worth keeping.
+
+**Deterministic sweeps beat a property-based dependency here.** The properties
+are algebraic and the interesting boundaries are known — 0, 1, near-zero,
+near-one, many groups, support-and-contradiction together. A generator library
+would have bought shrinking that a nine-point grid does not need.
+
+**Determinism has to be engineered, not asserted.** Floating-point addition is
+not associative, so "reordering the input changes nothing" is a property the
+implementation must be built to have (sorted summation, sorted group members,
+sorted result contributions). The reordering test caught a real defect: the
+masses were order-independent from the start, but the serialised *explanation*
+was not, so two runs over one snapshot produced different bytes.
+
+**Guards belong in the suite, not only in scripts.** "No per-source reliability
+weight" and "this package opens no network connection" are testable statements
+about source text, and a test that fails on the day somebody adds
+`reddit = 0.75` is worth more than a paragraph asking them not to.
 
 ### Classification and extraction
 

@@ -1,6 +1,6 @@
 {
   "$comment": "AUTHORITATIVE CONTRACT SOURCE OF TRUTH. Hand-edited. Everything under packages/contracts/generated/ is derived from this file by tools/generate.py. See ADR-009.",
-  "contract_version": "1.0.0",
+  "contract_version": "1.1.0",
   "ontology_version": "2",
   "scoring_framework_version": "1.1",
   "evidence_framework_version": "1",
@@ -429,6 +429,132 @@
           "description": "Not assessed. Never treated as NONE_EXPECTED"
         }
       ]
+    },
+    {
+      "name": "EvidenceDirection",
+      "spec": "evidence-aggregation-framework-v1.md §5",
+      "description": "How one Evidence record bears on a Claim. Support and contradiction are aggregated SEPARATELY and never averaged together, so this drives exhaustive branching and is closed.",
+      "values": [
+        {
+          "value": "SUPPORTS",
+          "description": "The evidence bears in favour of the claim"
+        },
+        {
+          "value": "CONTRADICTS",
+          "description": "The evidence bears against the claim"
+        },
+        {
+          "value": "NEUTRAL",
+          "description": "Related to the claim but bearing neither way. Retained for provenance and coverage; contributes to neither support nor contradiction strength"
+        }
+      ]
+    },
+    {
+      "name": "EvidenceIndependenceState",
+      "spec": "evidence-aggregation-framework-v1.md §10, §13",
+      "description": "What is KNOWN about an evidence record provenance relationship to the rest of the set. UNKNOWN is a distinct third state and is never silently promoted to KNOWN_INDEPENDENT.",
+      "values": [
+        {
+          "value": "KNOWN_INDEPENDENT",
+          "description": "Provenance was established and does not derive from another record in the set"
+        },
+        {
+          "value": "KNOWN_DEPENDENT",
+          "description": "Provenance was established and shares an origin with other records; requires an independence group id"
+        },
+        {
+          "value": "UNKNOWN",
+          "description": "Provenance was not established. Conservative handling: all such records for one claim and one direction form at most ONE contribution group"
+        }
+      ]
+    },
+    {
+      "name": "EvidenceObservationCategory",
+      "spec": "evidence-aggregation-framework-v1.md §11",
+      "description": "WHAT KIND of thing was observed, independent of how strong it is. Gates EvidenceLevel 4 and 5, which quantity of evidence must never reach on its own. Closed because level eligibility branches exhaustively over it.",
+      "values": [
+        {
+          "value": "STATED_OPINION",
+          "description": "Someone expressed a view. A comment, a post, a reply"
+        },
+        {
+          "value": "REPORTED_BEHAVIOUR",
+          "description": "An account of behaviour, not the behaviour itself"
+        },
+        {
+          "value": "OBSERVED_BEHAVIOUR",
+          "description": "Aggregated behavioural measurement: search interest, download counts, review volume"
+        },
+        {
+          "value": "MARKET_ACTIVITY",
+          "description": "Economic activity: purchases, subscriptions, pricing, established competing products, adoption. Required for EvidenceLevel 4"
+        },
+        {
+          "value": "DIRECT_VALIDATION",
+          "description": "Validation of THIS opportunity: interviews, signups, prototype usage, preorders, payments. Required for EvidenceLevel 5"
+        },
+        {
+          "value": "UNCATEGORISED",
+          "description": "Not categorised. Cannot lift EvidenceLevel above 3, because an uncategorised record has not been shown to be market evidence"
+        }
+      ]
+    },
+    {
+      "name": "ClaimTemporality",
+      "spec": "evidence-aggregation-framework-v1.md §9",
+      "description": "Whether a claim decays. A property of the CLAIM, never of the source: the same platform can carry an evergreen fact and a trend that is stale in a week. Closed because freshness branches exhaustively over it.",
+      "values": [
+        {
+          "value": "EVERGREEN",
+          "description": "The claim does not decay with the passage of time. Freshness is 1.0 unless the underlying fact itself became obsolete, which is a new contradicting observation rather than decay"
+        },
+        {
+          "value": "TEMPORALLY_SENSITIVE",
+          "description": "The claim loses force as its observations age. Requires an authorised half-life in the aggregation profile; without one the evidence is NON-SCORABLE rather than assumed fresh"
+        }
+      ]
+    },
+    {
+      "name": "AggregationProfileStatus",
+      "spec": "evidence-aggregation-framework-v1.md §14",
+      "description": "Whether the PARAMETERS of a profile have been calibrated against data. Separate from whether the algorithm is defined: defining equations calibrates nothing. Production scoring requires CALIBRATED.",
+      "values": [
+        {
+          "value": "DRAFT",
+          "description": "Being written. Not runnable"
+        },
+        {
+          "value": "UNCALIBRATED",
+          "description": "Parameters are structural or provisional, never fitted to labelled data. Runnable only in an explicitly labelled experimental mode"
+        },
+        {
+          "value": "CALIBRATED",
+          "description": "Parameters were fitted and evaluated against a recorded calibration dataset"
+        },
+        {
+          "value": "RETIRED",
+          "description": "Superseded. Kept so historical results stay readable"
+        }
+      ]
+    },
+    {
+      "name": "EvidenceAggregationStatus",
+      "spec": "evidence-aggregation-framework-v1.md §16",
+      "description": "Whether the numbers in a result may be read as covering the evidence set. A result that silently dropped half its items would be indistinguishable from one that used all of them.",
+      "values": [
+        {
+          "value": "COMPLETE",
+          "description": "Every evidence record in the snapshot was scorable"
+        },
+        {
+          "value": "PARTIAL",
+          "description": "At least one record was scorable and at least one was not. missing_requirements names what was absent"
+        },
+        {
+          "value": "UNAVAILABLE",
+          "description": "No record was scorable. There is no Evidence Score, and an absent score is not a score of zero"
+        }
+      ]
     }
   ],
   "numeric_types": [
@@ -640,9 +766,9 @@
   "blocked": [
     {
       "id": "D-03",
-      "what": "Evidence aggregation formula, recency decay parameters, independence thresholds, contradiction penalties",
-      "consequence": "No aggregation field may be declared in contracts or schema. services/scoring cannot be implemented.",
-      "spec": "scoring-framework-v1.1.md §13"
+      "what": "Evidence aggregation formula, recency behaviour, independence handling, contradiction handling (RESOLVED AT FRAMEWORK LEVEL by Mission 1.1 -- evidence-aggregation-framework-v1.md)",
+      "consequence": "The V1 algorithm is defined and has a reference implementation. Its PARAMETERS are not calibrated, so no CALIBRATED profile exists and services/scoring remains unavailable for production research. The rejected designs stay forbidden: no flat contradiction penalty, no per-item decay weight, no per-source reliability constant.",
+      "spec": "evidence-aggregation-framework-v1.md; scoring-framework-v1.1.md §13"
     },
     {
       "id": "D-07",

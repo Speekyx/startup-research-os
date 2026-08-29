@@ -8,6 +8,10 @@ system. Code conforms to them; they do not conform to code.
 | `opportunity-ontology-v2.md` | **Current** | Opportunity, dimensions, research lifecycle, market scope, taxonomy governance |
 | `scoring-framework-v1.1.md` | **Current** | The five score families, dimensions, profiles, normalization, numeric representation |
 | `evidence-confidence-framework-v1.md` | **Current** | Evidence levels, reliability, independence, recency, provenance, claim types |
+| `evidence-aggregation-framework-v1.md` | **Current** | How several Evidence records combine into support, contradiction and an Evidence Score. Resolves D-03 at the framework level |
+| `evidence-aggregation-calibration-plan-v1.md` | Plan | How the parameters will be fitted once labelled data exists. **Not executed** |
+| `evidence-aggregation-sensitivity-v1.md` | **Generated** | Synthetic behaviour analysis. Rendered from the reference implementation and checked in CI |
+| `evidence-schema-gap-analysis-v1.md` | Analysis | What `scoring.evidence` would need. **No migration was written** |
 | `opportunity-ontology-v1.1.md` | Superseded by V2 | Historical record |
 | `opportunity-ontology-v1.md` | Superseded by V1.1 | Historical record |
 | `scoring-framework-v1.md` | Superseded by V1.1 | Historical record |
@@ -41,6 +45,16 @@ New material is §11–§16.
 - **C-04** — numeric scales. Confidence on `[0,1]`, scores on `0–100`,
   `evidence_level` integer `0–5`. See `scoring-framework-v1.1.md` §4.1.
 
+### Resolved in Mission 1.1
+
+- **D-03 / A-02 / A-03 / A-04 — at the framework level only.**
+  `evidence-aggregation-framework-v1.md` defines the aggregation formula, the
+  recency **function**, provenance-based independence handling and continuous
+  contradiction. It fits **no parameter**: no half-life is assigned, no profile
+  is `CALIBRATED`, and **`services/scoring` remains unavailable for production
+  research**. Framework Defined and Profile Calibrated are separate gates
+  (ADR-014).
+
 ### Resolved in Mission 0.1.2 (Ontology V2)
 
 - **D-01 / A-06** — `ResearchContext` formally defined as an input value object
@@ -53,9 +67,10 @@ New material is §11–§16.
 
 ### Still open — recorded in `docs/architecture/specification-audit.md`
 
-- **D-03 / A-02 / A-03 / A-04** — the Evidence Score has no aggregation formula,
-  recency decay has no parameters, evidence-level independence has no threshold.
-  **`services/scoring` is blocked on this** (`scoring-framework-v1.1.md` §13).
+- **A-13** — *new in Mission 1.1.* Aggregation is defined around a **Claim**,
+  which Ontology V2 §7 defines as a taxonomy but never as an entity. There is no
+  `claim` table and no `claim_id`. Resolving it needs an ontology version and an
+  ADR. See `evidence-schema-gap-analysis-v1.md` §4.
 - **A-12** — *new in V2.* Non-geographic (audience/segment) scoping and how it
   composes with `MarketScope` (V2 §4.8).
 - **A-01** — whether a scoring profile weights all dimensions or a subset.

@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.4
-Last amended: 2026-08-29 (Sprint 1 / Mission 1.0)
+Version: 1.5
+Last amended: 2026-08-29 (Sprint 1 / Mission 1.1)
 
 ## Boot Sequence
 
@@ -16,9 +16,10 @@ Before performing any task, execute this reading order.
 7. docs/data/data-principles.md
 8. docs/data/data-retention-policy-v1.md
 9. docs/data/source-registry-v1.md
-10. docs/ai/evaluation-framework-v1.md
-11. Relevant ADRs
-12. Task-specific specifications
+10. docs/domain/evidence-aggregation-framework-v1.md
+11. docs/ai/evaluation-framework-v1.md
+12. Relevant ADRs
+13. Task-specific specifications
 
 These documents are the authoritative source of truth.
 
@@ -34,6 +35,7 @@ Ontology V2 keeps V1.1's numbering for §1–§10, so an existing reference to
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.5 | 2026-08-29 | Boot sequence gains the evidence aggregation framework; evidence-aggregation invariant added; D-03 blocked-work entry rewritten as framework-resolved / parameters-uncalibrated (ADR-014) |
 | 1.4 | 2026-08-29 | Boot sequence gains the source registry spec; source-governance invariant added; D-07 removed from blocked work (ADR-013) |
 | 1.3 | 2026-08-29 | Boot sequence gains the evaluation framework; tenancy invariant records that row-level security is now enforced (ADR-012) |
 | 1.2 | 2026-08-27 | Boot sequence points to ontology V2; research lifecycle and taxonomy-governance invariants added |
@@ -177,12 +179,47 @@ the runtime role. It is administered by `sros-source`, never over HTTP.
 
 This system is not a legal decision engine and its output is not legal advice.
 
+### Evidence aggregation — defined, and not calibrated
+
+Since Mission 1.1 the aggregation algorithm is defined
+(`evidence-aggregation-framework-v1.md`, ADR-014). Five rules follow, and none is
+negotiable:
+
+- **`q_i = min(components)`.** The weakest required dimension, never a weighted
+  average. A high value must not compensate for a critical weak one.
+- **Duplicates cannot multiply.** Records sharing an origin form one group and
+  the strongest member counts. Unknown provenance forms **one** group per claim
+  and direction — it is never promoted to independent.
+- **Support and contradiction are aggregated separately** and decomposed into
+  four masses that sum to 1. There is no flat contradiction penalty.
+- **No invented parameters.** No per-platform reliability coefficient, no
+  universal half-life. A temporally sensitive claim with no authorised half-life
+  reports `MISSING_TEMPORAL_PARAMETER` and produces no score.
+- **`EvidenceScore` is a score, not a probability.** `82` does not mean an 82%
+  chance the claim is true, and it is never published without
+  `support_strength`, `contradiction_strength`, `conflict_mass` and
+  `uncertainty_mass`.
+
+Source POLICY status (Mission 1.0) is not epistemic reliability. An `APPROVED`
+source does not produce better evidence.
+
 ### Blocked work
 
-**`services/scoring` must not be implemented** until
-`docs/domain/evidence-aggregation-framework-v1.md` exists and is authorized.
-Do not invent the Evidence Score formula, recency decay parameters, independence
-thresholds or contradiction penalties. See `scoring-framework-v1.1.md` §13.
+**`services/scoring` must not be implemented for production research.** D-03 is
+resolved at the *framework* level only: the equations exist, their parameters
+were never fitted, and no `CALIBRATED` profile exists. Framework Defined and
+Profile Calibrated are separate gates (ADR-014, framework §14). An
+`UNCALIBRATED` profile may be run only for synthetic or experimental work, and
+only when explicitly labelled as such.
+
+Do not invent a half-life, a damping constant, a per-source weight or a
+contradiction penalty to make the engine produce a number. Failing closed is the
+designed behaviour, not a gap to fill.
+
+**No Claim entity exists (A-13).** Aggregation is claim-centric and the ontology
+defines a claims taxonomy, not a Claim entity. Adding one requires a new ontology
+version and an ADR — it is not an implementer's decision. See
+`evidence-schema-gap-analysis-v1.md` §4.
 
 **No collector may be implemented for a source that is not collector-eligible.**
 D-07 is resolved and the registry exists, but zero sources currently pass the
