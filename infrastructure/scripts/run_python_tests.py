@@ -26,10 +26,20 @@ SUITES = [
     "packages/contracts/python",
     "packages/llm-gateway/python",
     "services/workers/python",
+    "services/research-orchestrator/python",
 ]
 
-# Every suite can import the shared contracts package.
-SHARED_PATHS = ["packages/contracts/python"]
+# Packages every suite may import without an install. The orchestrator is here
+# because its rules -- lifecycle, DAG, budget, completeness -- are pure Python
+# over the contracts and the worker routing table, and they are exactly the
+# rules that must stay checkable when a dependency environment is broken
+# (ADR-009).
+SHARED_PATHS = [
+    "packages/contracts/python",
+    "packages/llm-gateway/python",
+    "services/workers/python",
+    "services/research-orchestrator/python",
+]
 
 
 def main() -> int:

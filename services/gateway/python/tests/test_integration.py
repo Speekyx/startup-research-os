@@ -45,7 +45,11 @@ CONTEXT = {"market_scope": {"type": "COUNTRY", "countries": ["FR"]}}
 @needs_postgres
 class TestSchemaRuntime:
     def test_all_six_schemas_exist(self, database) -> None:
-        with database.connection() as conn:
+        # privileged_transaction, not connection(): these are administrative
+        # queries about the schema itself. Under the application role,
+        # information_schema is filtered to what that role holds privileges on,
+        # which would make the assertion measure grants rather than existence.
+        with database.privileged_transaction() as conn:
             rows = conn.execute(
                 """SELECT schema_name FROM information_schema.schemata
                    WHERE schema_name IN
@@ -53,23 +57,30 @@ class TestSchemaRuntime:
             ).fetchall()
         assert len(rows) == 6
 
-    def test_all_sixteen_tables_exist(self, database) -> None:
-        with database.connection() as conn:
+    def test_all_twenty_one_tables_exist(self, database) -> None:
+        with database.privileged_transaction() as conn:
             rows = conn.execute(
                 """SELECT table_schema||'.'||table_name FROM information_schema.tables
                    WHERE table_schema IN
                      ('core','registry','research','acquisition','nlp','scoring')"""
             ).fetchall()
-        assert len(rows) == 16, sorted(r[0] for r in rows)
+        # 16 from 0001_foundation + 5 orchestration tables from 0002.
+        assert len(rows) == 21, sorted(r[0] for r in rows)
 
-    def test_migration_ledger_records_the_applied_migration(self, database) -> None:
-        with database.connection() as conn:
-            rows = conn.execute("SELECT version, checksum FROM core.schema_migrations").fetchall()
-        assert [r[0] for r in rows] == ["0001_foundation"]
-        assert len(rows[0][1]) == 64  # sha256 hex
+    def test_migration_ledger_records_every_applied_migration(self, database) -> None:
+        with database.privileged_transaction() as conn:
+            rows = conn.execute(
+                "SELECT version, checksum FROM core.schema_migrations ORDER BY version"
+            ).fetchall()
+        assert [r[0] for r in rows] == [
+            "0001_foundation",
+            "0002_orchestration",
+            "0003_row_level_security",
+        ]
+        assert all(len(r[1]) == 64 for r in rows)  # sha256 hex
 
     def test_every_tenant_table_has_a_workspace_id_leading_index(self, database) -> None:
-        with database.connection() as conn:
+        with database.privileged_transaction() as conn:
             rows = conn.execute(
                 """SELECT tablename, indexdef FROM pg_indexes
                    WHERE schemaname IN ('research','acquisition','nlp','scoring')"""
@@ -81,7 +92,10 @@ class TestSchemaRuntime:
         assert missing == []
 
     def test_workspace_id_not_null_is_enforced(self, database) -> None:
-        with pytest.raises(Exception) as exc, database.transaction() as conn:
+        # Privileged: a NULL workspace_id can never satisfy an RLS WITH CHECK,
+        # so under a tenant transaction the policy would fire first and this
+        # test would stop measuring the column constraint it is named after.
+        with pytest.raises(Exception) as exc, database.privileged_transaction() as conn:
             conn.execute(
                 "INSERT INTO research.research_projects (id, workspace_id, name) "
                 "VALUES (%s, NULL, 'x')",
@@ -90,18 +104,29 @@ class TestSchemaRuntime:
         assert "null value" in str(exc.value).lower() or "not-null" in str(exc.value).lower()
 
     def test_foreign_key_rejects_an_unknown_workspace(self, database) -> None:
-        with pytest.raises(Exception) as exc, database.transaction() as conn:
+        # The tenant context is set to the SAME unknown workspace, so the RLS
+        # policy is satisfied and the foreign key is what rejects the row. This
+        # is the layering working as intended: a policy that passed did not
+        # make an invalid row valid.
+        unknown = uuid.uuid4()
+        with (
+            pytest.raises(Exception) as exc,
+            database.tenant_transaction(unknown) as conn,
+        ):
             conn.execute(
                 "INSERT INTO research.research_projects (id, workspace_id, name) "
                 "VALUES (%s, %s, 'x')",
-                (uuid.uuid4(), uuid.uuid4()),
+                (uuid.uuid4(), unknown),
             )
         assert "foreign key" in str(exc.value).lower()
 
     def test_closed_enum_check_rejects_an_invented_status(self, database) -> None:
         """Ontology V2 §15: no state is invented. BUDGET_EXHAUSTED is not one."""
         project = ResearchProjectRepository(database).create(WORKSPACE_A, "enum probe")
-        with pytest.raises(Exception) as exc, database.transaction() as conn:
+        with (
+            pytest.raises(Exception) as exc,
+            database.tenant_transaction(WORKSPACE_A) as conn,
+        ):
             conn.execute(
                 """INSERT INTO research.research_sessions
                        (id, workspace_id, project_id, research_context,
@@ -114,7 +139,10 @@ class TestSchemaRuntime:
 
     def test_numeric_range_check_rejects_an_out_of_range_score(self, database) -> None:
         project = ResearchProjectRepository(database).create(WORKSPACE_A, "range probe")
-        with pytest.raises(Exception) as exc, database.transaction() as conn:
+        with (
+            pytest.raises(Exception) as exc,
+            database.tenant_transaction(WORKSPACE_A) as conn,
+        ):
             conn.execute(
                 """INSERT INTO research.research_sessions
                        (id, workspace_id, project_id, research_context,
@@ -127,7 +155,10 @@ class TestSchemaRuntime:
         assert "check constraint" in str(exc.value).lower()
 
     def test_evidence_level_range_is_enforced(self, database) -> None:
-        with pytest.raises(Exception) as exc, database.transaction() as conn:
+        with (
+            pytest.raises(Exception) as exc,
+            database.tenant_transaction(WORKSPACE_A) as conn,
+        ):
             conn.execute(
                 """INSERT INTO scoring.evidence
                        (id, workspace_id, claim_type, evidence_level,

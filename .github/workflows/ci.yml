@@ -73,8 +73,13 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: Typecheck
+      - name: Typecheck contracts
         run: pnpm exec tsc --noEmit -p packages/contracts/tsconfig.json
+      # The web app has its own project: strict settings that the contracts
+      # project does not exercise (exactOptionalPropertyTypes,
+      # noUncheckedIndexedAccess) caught two real defects in the API client.
+      - name: Typecheck web
+        run: pnpm --filter @sros/web exec tsc --noEmit -p tsconfig.json
       - name: Lint
         run: pnpm exec eslint .
       # Runs on a bare Node runtime with native type stripping: no build step,
@@ -82,6 +87,15 @@ jobs:
       # TypeScript and Python contracts agree.
       - name: Contract conformance
         run: node --test --experimental-strip-types packages/contracts/test/conformance.test.ts
+      # Also install-free: the API client's cross-package imports are type-only
+      # and therefore erased, so it runs on a bare Node runtime.
+      - name: Web API client
+        run: node --test --experimental-strip-types apps/web/test/api-client.test.ts
+      # A type error must fail the build, not merely the typecheck: `next build`
+      # runs `tsc` over the route types it generates, which the project-level
+      # check above cannot see.
+      - name: Build web
+        run: pnpm --filter @sros/web build
 
   # ===========================================================================
   # Install-dependent gates, activated in Mission 0.3.
@@ -163,8 +177,22 @@ jobs:
       - name: Migrations are idempotent on a second run
         run: uv run python infrastructure/scripts/migrate.py --apply
 
-      - name: Integration and tenant-isolation suites
+      # Five packages, including the row-level-security suite. Every isolation
+      # assertion uses two workspaces: a tenancy suite with one workspace cannot
+      # detect a missing tenant filter (ADR-005).
+      - name: Integration, tenant-isolation and RLS suites
         run: uv run python infrastructure/scripts/run_pytest_suites.py
+
+      # §20: no provider key reaches CI, and the smoke tests stay off. Asserted
+      # rather than trusted -- a suite that quietly became enabled would show up
+      # as an invoice rather than as a red build.
+      - name: No provider credential is present
+        run: |
+          if [ -n "$ANTHROPIC_API_KEY" ] || [ -n "$GEMINI_API_KEY" ]; then
+            echo "a provider credential is exposed to CI; no job here needs one" >&2
+            exit 1
+          fi
+          test "${SROS_ENABLE_PROVIDER_SMOKE_TESTS:-0}" = "0"
 
   compose:
     name: Docker Compose configuration

@@ -1,7 +1,9 @@
 # `services/gateway`
 
-**Status:** implemented (Mission 0.3). The only public entry point.
-**Runtime:** Python / FastAPI. **Access:** psycopg 3 + explicit repositories (ADR-011).
+**Status:** implemented (Mission 0.3); **row-level security enforced in
+Mission 0.4** (ADR-012). The only public entry point.
+**Runtime:** Python / FastAPI. **Access:** psycopg 3 + explicit repositories
+(ADR-011), inside a tenant transaction that establishes the RLS context.
 
 ## Responsibility
 
@@ -52,9 +54,16 @@ a reason to refuse all traffic (ADR-008).
   "status": "ready",
   "dependencies": { "postgres": "ok", "redis": "ok" },
   "optional_dependencies": { "qdrant": "ok" },
+  "security": { "rls_policies": "active", "app_db_role": "sros_app" },
   "correlation_id": "…"
 }
 ```
+
+`security` is **reported, not assumed**. "Designed for RLS" and "RLS enabled"
+were indistinguishable from outside until Mission 0.4, and that difference is
+the entire value of the second isolation layer. It is informational and does not
+gate readiness: a database without policies still serves correct data through
+the repository filter.
 
 ### Business API (`/api/v1`)
 
@@ -107,7 +116,7 @@ One shape for every failure, always carrying the correlation id:
 | 409 | `invalid_transition` | A session lifecycle transition Ontology V2 §15 does not allow |
 | 422 | `contract_violation` | A domain contract rejected the input |
 
-## Repositories
+## Repositories and the two isolation layers
 
 `db/repositories.py`. Explicit repositories, hand-written SQL, no ORM (ADR-011).
 
@@ -116,6 +125,51 @@ and puts it in the `WHERE` clause. `_require_workspace()` fails closed on `None`
 and `""`. There is no ambient tenant and no default — a method that *could* be
 called without a workspace eventually will be, and in a multi-tenant system that
 is a data leak rather than a bug.
+
+**Added in Mission 0.4 (ADR-012):**
+
+```text
+Layer 1   the explicit WHERE workspace_id = %s above
+Layer 2   PostgreSQL row-level security, entered via
+          Database.tenant_transaction(workspace_id)
+```
+
+Layer 1 was **not** removed when layer 2 arrived, and removing it later would be
+a regression rather than a cleanup. The two fail differently on purpose: a
+forgotten `WHERE` is caught by the policy, and a connection that never
+established a tenant context returns *no* rows rather than *wrong* ones. A leak
+requires defeating both.
+
+### How the tenant context is established
+
+`tenant_transaction` opens a transaction and, inside it:
+
+```sql
+SET LOCAL ROLE sros_app;                            -- a role RLS can constrain
+SELECT set_config('app.workspace_id', $1, true);    -- transaction-local tenant
+```
+
+Both are transaction-local, which is what makes this safe with a pooled
+connection: a session-level `SET` would survive the connection's return to the
+pool and the next borrower would inherit the previous tenant's context — a
+cross-tenant read with no bug in any query.
+
+`SET LOCAL ROLE` matters because PostgreSQL RLS is bypassed by a superuser and,
+without `FORCE`, by the table owner. The local stack connects as the superuser,
+so without it the policies would be inert and the isolation tests would pass
+while proving nothing.
+
+Side effect worth having: `sros_app` holds DML privileges only, so a runtime
+connection cannot issue DDL. ADR-011 says migrations and runtime are strictly
+separate; now the database enforces it.
+
+### Connection kinds
+
+| Method | Role | Tenant | Use |
+|--------|------|--------|-----|
+| `tenant_transaction(ws)` | `sros_app` | set | Every tenant-scoped read and write |
+| `connection()` / `transaction()` | `sros_app` | **none** | Global reference data. Tenant tables are invisible |
+| `privileged_transaction()` | connecting role | none | Administrative and schema-introspection only. Named awkwardly on purpose — if it appears in a request path, that is the bug |
 
 ## Wrappers
 
@@ -140,12 +194,21 @@ connection pool at startup.
 uv run python infrastructure/scripts/run_pytest_suites.py
 ```
 
-46 integration tests: schema runtime, tenant isolation across PostgreSQL, Redis
-and Qdrant, the API surface, and the session lifecycle. They skip cleanly when
-the stack is not running rather than failing red.
+147 integration tests: schema runtime, tenant isolation across PostgreSQL, Redis
+and Qdrant, the API surface, the session lifecycle, row-level security
+(`test_rls.py`), orchestration against a real database
+(`test_orchestrator_integration.py`) and the HTTP security surface
+(`test_security.py`). They skip cleanly when the stack is not running rather
+than failing red.
 
 ## Not implemented
 
 Authentication, authorization, research execution, scoring (blocked on D-03),
 acquisition (blocked on D-07), and any endpoint that would mutate a context
 snapshot.
+
+**No orchestration endpoint either.** `sros_orchestrator` is callable in-process
+and has no HTTP surface: exposing "start research" while every capability is
+blocked would offer a button that cannot do anything, and `gateway` never calls
+`workers` (`service-boundaries.md` §4 invariant 5) — a user request must not be
+able to synchronously spend an unbounded amount of money.

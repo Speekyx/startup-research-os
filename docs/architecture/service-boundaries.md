@@ -1,9 +1,14 @@
 # Service Boundaries
 
-Version: 1.2
+Version: 1.3
 Status: Accepted
-Date: 2026-08-27 (amended in Mission 0.1.2)
+Date: 2026-08-29 (amended in Mission 0.4)
 
+> **Amended in 1.3.** Tenant scoping gains a second enforcement layer
+> (row-level security, ADR-012). `research-orchestrator` is now a real package
+> and owns `ResearchSession` transition policy; the gateway still persists those
+> rows and imports the transition table rather than holding a copy.
+>
 > **Amended in 1.2.** Research lifecycle terminology canonicalized: the persisted
 > execution entity is `ResearchSession`, grouped under a `ResearchProject`, with
 > an immutable `ResearchContext` snapshot. `research run` is retired
@@ -28,7 +33,7 @@ are normative; this document is the map.
 | Service | Responsibility (one sentence, no "and") | Runtime |
 |---------|------------------------------------------|---------|
 | `gateway` | Adapt the outside world to the internal contexts | Python / FastAPI |
-| `research-orchestrator` | Own the lifecycle of a `ResearchSession` | Python / FastAPI |
+| `research-orchestrator` | Own the lifecycle of a `ResearchSession` | Python (`sros_orchestrator`, no HTTP surface yet) |
 | `acquisition` | Lawfully collect raw external data with full provenance | Python (Playwright Python API) |
 | `nlp` | Turn normalized text into structured signals | Python |
 | `scoring` | Compute and explain the five score families | Python |
@@ -184,7 +189,7 @@ through its schema.
 | `market-intelligence` | `market_context`, `market_estimate`, `momentum` | Yes |
 | `competition` | `competitor`, `competition_gap`, `positioning` | Yes |
 | `execution` | `plan`, `risk_register`, `validation_plan` | Yes |
-| `research-orchestrator` | `research_project`, `research_session`, `research_plan`, `task_ledger`, `research_gap` | Yes |
+| `research-orchestrator` | `research_project`, `research_session`, `research_plan`, `research_jobs` + `research_job_dependencies` (the task ledger), `research_gap`, `session_budget_entries`, `research_completeness_records` | Yes |
 | `scoring` / discovery | opportunity ↔ session observation records (shape is Mission 0.2's choice — Ontology V2 §12) | Yes |
 | `gateway` | nothing persistent (cache only — keys workspace-prefixed) | n/a |
 | `workers` | `job`, `job_attempt`, `dead_letter` | Yes |
@@ -254,6 +259,24 @@ The two boundaries most easily forgotten are the ones that do not go through SQL
 **cache keys** and **vector search filters**. Both are enforced in their
 respective client wrappers rather than at call sites.
 
+**Added in 1.3 (ADR-012): the SQL boundary now has a second layer.** Every
+tenant-scoped table carries a row-level-security policy, entered through a
+transaction-local tenant context. The explicit repository filter is layer 1 and
+stays mandatory; the policy is layer 2. They fail differently on purpose — a
+forgotten `WHERE` is caught by the policy, and a missing tenant context returns
+no rows rather than wrong ones — so a leak requires defeating both. Deleting
+layer 1 because layer 2 exists is a regression, not a cleanup.
+
+Two consequences for anyone crossing this boundary:
+
+- Every tenant-scoped read runs inside a transaction, because the context is
+  transaction-local. That is the price of a context that cannot outlive its
+  work, and it is the property that stops a pooled connection carrying a tenant
+  between users.
+- A superuser bypasses the policy entirely. Administrative access, migrations
+  and any psql session see every workspace, which is exactly why layer 1
+  remains.
+
 ### LLM access
 
 **Added in 1.1 (ADR-006).** No context imports a provider SDK. Every LLM call
@@ -320,3 +343,24 @@ Resolved in Mission 0.1.2: D-01, A-06, A-11, A-05, A-07, A-08 (Ontology V2). See
 
 Remaining items are recorded rather than guessed, per `docs/CLAUDE.md`
 §Change control.
+
+---
+
+## 8. Import direction, and how it is kept acyclic (added in 1.3)
+
+Phase 1 deploys `gateway` and `research-orchestrator` in the same process (§2),
+which makes an accidental cycle cheap to write and invisible at runtime.
+
+The edge `gateway → orchestrator` is allowed by §4 and is used: the gateway
+imports `ALLOWED_TRANSITIONS` and `require_transition` from
+`sros_orchestrator.lifecycle`, so there is one transition table rather than a
+copy that drifts.
+
+**The reverse edge does not exist, and is prevented structurally rather than by
+review.** `sros_orchestrator` imports no database driver and no gateway module:
+its repositories take any object exposing `tenant_transaction(workspace_id)`.
+The concrete implementation is injected by whoever assembles the application.
+
+That is what lets both contexts share a process today and split without a
+rewrite tomorrow (§2 §What makes extraction cheap, rule 2: no context imports
+another context's internals).

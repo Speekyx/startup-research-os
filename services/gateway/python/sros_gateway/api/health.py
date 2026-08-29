@@ -51,6 +51,16 @@ def ready(request: Request, response: Response) -> dict[str, Any]:
     # Reported separately: informational, never gating.
     optional: dict[str, str] = {"qdrant": _qdrant_state(app_state.qdrant_url)}
 
+    # Security posture, reported rather than assumed. "Designed for RLS" and
+    # "RLS enabled" were indistinguishable from outside until Mission 0.4, and
+    # the difference is the entire value of the second isolation layer.
+    # It is informational: it does not gate readiness, because a database
+    # without policies still serves correct data through the repository filter.
+    security: dict[str, str] = {
+        "rls_policies": "active" if app_state.db.rls_active() else "absent",
+        "app_db_role": app_state.db.app_role or "none",
+    }
+
     required_ok = all(state == "ok" for state in dependencies.values())
     if not required_ok:
         response.status_code = 503
@@ -59,6 +69,7 @@ def ready(request: Request, response: Response) -> dict[str, Any]:
         "status": "ready" if required_ok else "not_ready",
         "dependencies": dependencies,
         "optional_dependencies": optional,
+        "security": security,
         "correlation_id": context.correlation_id,
     }
 

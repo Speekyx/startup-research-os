@@ -1,6 +1,8 @@
 # `infrastructure/db` — Schema and migrations
 
 **Governed by:** [ADR-008](../../docs/architecture/adr/ADR-008-storage-architecture.md)
+and, for row-level security,
+[ADR-012](../../docs/architecture/adr/ADR-012-row-level-security.md)
 
 ```
 db/
@@ -81,3 +83,60 @@ something a convenient index should settle.
 
 **No aggregation column.** D-03 is blocked; `scoring.evidence` stores raw
 metadata only, and how it combines is a future specification.
+
+---
+
+## Row-level security (migration 0003)
+
+Full rationale in ADR-012. What an operator needs to know:
+
+**Fifteen tenant-scoped tables carry `ENABLE` + `FORCE ROW LEVEL SECURITY`** and
+one policy each, `tenant_isolation`, with the same predicate in `USING` and
+`WITH CHECK`. Six tables in `core` and `registry` deliberately carry none: they
+are global reference data, and `core.workspace_memberships` in particular is the
+table that will *define* access once authentication exists.
+
+**The tenant context is transaction-local:**
+
+```sql
+SET LOCAL ROLE sros_app;
+SELECT set_config('app.workspace_id', '<uuid>', true);
+```
+
+Unset, empty and malformed all resolve to `NULL` through
+`core.current_workspace_id()`, and `workspace_id = NULL` is not `TRUE`, so every
+policy fails closed. There is no fallback workspace.
+
+### Two things that will surprise you
+
+**A superuser still sees everything.** `FORCE` binds the table owner, not a
+superuser. `psql -U sros` shows all workspaces, and that is not a bug — it is why
+the repository filter remains mandatory.
+
+**"No rows" now has two causes.** Either there are none, or no tenant context was
+set. Check with:
+
+```sql
+SELECT current_user, core.current_workspace_id();
+```
+
+### Applying migrations after 0003
+
+Nothing changes: `migrate.py` connects as the owning role and issues DDL only. It
+does not assume `sros_app`, which holds DML privileges exclusively — so a runtime
+connection cannot alter the schema even by accident.
+
+A future migration that must **modify tenant rows** needs a tenant context per
+workspace, or must run before the policies apply to it. Forward-only DDL is
+unaffected.
+
+### Verifying
+
+```bash
+docker exec sros-dev-postgres-1 psql -U sros -d sros -c   "SELECT relname, relrowsecurity, relforcerowsecurity FROM pg_class c
+   JOIN pg_namespace n ON n.oid = c.relnamespace
+   WHERE n.nspname = 'research' AND c.relkind = 'r' ORDER BY 1;"
+```
+
+The authoritative check is the test suite:
+`services/gateway/python/tests/test_rls.py`, 41 tests over two workspaces.

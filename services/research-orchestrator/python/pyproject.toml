@@ -1,0 +1,20 @@
+[project]
+name = "sros-orchestrator"
+version = "0.1.0"
+description = "ResearchSession lifecycle, planning, budget and job dispatch (Ontology V2 §11)."
+requires-python = ">=3.12"
+# No database driver. The repositories take a duck-typed connection provider
+# (`TenantDatabase`), so this package never imports the gateway and the
+# dependency direction stated in service-boundaries.md §4 stays acyclic.
+dependencies = [
+    "sros-contracts",
+    "sros-llm-gateway",
+    "sros-workers",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["sros_orchestrator"]

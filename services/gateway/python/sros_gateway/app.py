@@ -28,7 +28,7 @@ from sros_contracts import CONTRACT_VERSION, ONTOLOGY_VERSION, ContractError, Wo
 
 from .config import Settings, load_settings
 from .context import RequestContext, TenantContextMissingError
-from .db.pool import Database
+from .db.pool import Database, TenantScopeError
 from .db.repositories import InvalidTransitionError, NotFoundError
 
 CORRELATION_HEADER = "x-correlation-id"
@@ -55,6 +55,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             resolved.database_url,
             min_size=resolved.db_pool_min,
             max_size=resolved.db_pool_max,
+            app_role=resolved.app_db_role,
         )
         database.open()
         app.state.settings = resolved
@@ -148,6 +149,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def _tenant_missing(request: Request, exc: TenantContextMissingError) -> JSONResponse:
         # 400, not 401: authentication does not exist yet. What is missing is a
         # workspace, and saying so is more useful than a misleading 401.
+        return _error(request, 400, "workspace_required", str(exc))
+
+    @app.exception_handler(TenantScopeError)
+    async def _tenant_scope(request: Request, exc: TenantScopeError) -> JSONResponse:
+        # Same shape as a missing workspace: the caller's request could not be
+        # attributed to a tenant. 400 rather than 500 -- this is a bad request,
+        # not a broken server.
         return _error(request, 400, "workspace_required", str(exc))
 
     @app.exception_handler(NotFoundError)

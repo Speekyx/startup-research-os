@@ -1,8 +1,8 @@
 # Quality Gates
 
-Version: 1.2
-Status: Strategy fixed, tooling partially scaffolded
-Date: 2026-08-27 (amended in Mission 0.1.2)
+Version: 1.3
+Status: Active. Every gate in §1 runs in CI
+Date: 2026-08-29 (amended in Mission 0.4)
 
 What must be true for a change to reach `main`. `docs/CLAUDE.md` §Definition of
 done is the requirement; this document is the mechanism.
@@ -31,6 +31,30 @@ rule, a schema, or a test should be.
 
 "Pending" means the strategy below is decided and the tool is installed in
 Mission 0.2. Nothing in this table is undecided.
+
+### Status as of Mission 0.4
+
+Every gate above now runs. What changed since the table was written:
+
+| Gate | Now |
+|------|-----|
+| Lint | **Active.** ruff (11 rule families) and ESLint 9 with type-aware rules over `**/*.ts` **and `**/*.tsx`** — the React components are the newest code in the repository and would otherwise be the only code exempt from the architectural rules |
+| Types | **Active.** `mypy --strict` over 58 source files; `tsc` over two projects (contracts, web) plus `next build`, which typechecks generated route types the project-level check cannot see |
+| Unit / integration tests | **Active.** 225 zero-dependency tests, 370 pytest tests across five packages, 19 TypeScript conformance tests |
+| E2E | Still not implemented. There is no user workflow to walk through |
+
+### Gates added in Mission 0.4
+
+| Gate | Mechanism | Guards |
+|------|-----------|--------|
+| **Tenant isolation, two workspaces** | `services/gateway/python/tests/test_rls.py` | A query with no `WHERE workspace_id` returns only the current tenant's rows. This is the one gate that catches a *forgotten* filter rather than a wrong one (ADR-012) |
+| **Pooled-connection tenant leak** | Same suite, single-connection pool | A session-level `SET` would leak a tenant between borrowers with no bug in any query |
+| **No hard-coded provider tariff** | `test_pricing_and_telemetry.py` | A price constant in a module is a decision nobody recorded making (§15). Fails the build if one appears outside `pricing.py` |
+| **No content in telemetry** | Same suite | A secret placed in a request variable must not appear in the serialized log fields (`data-principles.md` §8) |
+| **Prompt-injection boundary** | `test_prompts.py`, adversarial payloads | No arrangement of attacker-controlled text escapes its region or reaches the system field (`llm-reasoning-rules.md` §7) |
+| **No provider credential in CI** | `ci.yml`, integration job | A smoke suite that quietly became enabled would show up as an invoice rather than as a red build (§20) |
+| **Retry policy by category** | `test_providers.py` | An authentication error or an invalid request is never retried: it costs the same twice and trips abuse detection (§22) |
+| **Blocked work cannot be dispatched** | `test_orchestrator_integration.py` | A `BLOCKED` job has no transition to `READY`, so D-07 and D-03 hold mechanically rather than by memory (§32, §33) |
 
 ---
 

@@ -10,6 +10,7 @@ members = [
     "packages/contracts/python",
     "packages/llm-gateway/python",
     "services/workers/python",
+    "services/research-orchestrator/python",
     "services/gateway/python",
 ]
 
@@ -17,6 +18,7 @@ members = [
 sros-contracts = { workspace = true }
 sros-llm-gateway = { workspace = true }
 sros-workers = { workspace = true }
+sros-orchestrator = { workspace = true }
 
 [dependency-groups]
 dev = [

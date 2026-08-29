@@ -8,6 +8,23 @@ required first argument and puts it in the WHERE clause. There is no default,
 no ambient context, and no session-scoped tenant. A method that could be called
 without a workspace will eventually be called without one, and in a
 multi-tenant system that is a data leak rather than a bug (ADR-005).
+
+**Two layers, not one (Mission 0.4, ADR-012).**
+
+    Layer 1   the explicit `WHERE workspace_id = %s` in every query below
+    Layer 2   PostgreSQL row-level security, entered via
+              `Database.tenant_transaction(workspace_id)`
+
+Layer 1 was NOT removed when layer 2 arrived, and removing it later would be a
+regression rather than a cleanup. The two fail differently on purpose: a
+forgotten `WHERE` is caught by the policy, and a connection that never
+established a tenant context is caught by the query returning the wrong rows
+loudly rather than silently returning none. A leak now requires defeating both.
+
+Practical consequence for anyone adding a method here: it must run inside
+`tenant_transaction`, **and** it must still filter explicitly. A query that
+relies on the policy alone reads as if it had forgotten something, and a
+reviewer cannot tell the difference between deliberate and forgotten.
 """
 
 from __future__ import annotations
@@ -24,6 +41,11 @@ from sros_contracts import (
     ResearchContext,
     ResearchSessionStatus,
     WorkspaceId,
+)
+from sros_orchestrator.lifecycle import (
+    ALLOWED_TRANSITIONS,
+    InvalidTransitionError,
+    require_transition,
 )
 
 __all__ = [
@@ -48,55 +70,13 @@ class NotFoundError(LookupError):
     """
 
 
-class InvalidTransitionError(ValueError):
-    """A ResearchSession status transition that Ontology V2 §15 does not allow."""
-
-
-# Ontology V2 §15. No state is invented here; this is the authorized lifecycle.
-ALLOWED_TRANSITIONS: dict[ResearchSessionStatus, frozenset[ResearchSessionStatus]] = {
-    ResearchSessionStatus.PENDING: frozenset(
-        {
-            ResearchSessionStatus.PLANNING,
-            ResearchSessionStatus.CANCELLED,
-            ResearchSessionStatus.FAILED,
-        }
-    ),
-    ResearchSessionStatus.PLANNING: frozenset(
-        {
-            ResearchSessionStatus.COLLECTING,
-            ResearchSessionStatus.CANCELLED,
-            ResearchSessionStatus.FAILED,
-        }
-    ),
-    ResearchSessionStatus.COLLECTING: frozenset(
-        {
-            ResearchSessionStatus.ANALYZING,
-            ResearchSessionStatus.CANCELLED,
-            ResearchSessionStatus.FAILED,
-        }
-    ),
-    ResearchSessionStatus.ANALYZING: frozenset(
-        {
-            ResearchSessionStatus.SCORING,
-            ResearchSessionStatus.CANCELLED,
-            ResearchSessionStatus.FAILED,
-        }
-    ),
-    # SCORING may reach COMPLETED even with partial coverage: budget exhaustion
-    # is COMPLETED with reduced Research Completeness, never FAILED
-    # (Ontology V2 §15, ADR-006).
-    ResearchSessionStatus.SCORING: frozenset(
-        {
-            ResearchSessionStatus.COMPLETED,
-            ResearchSessionStatus.CANCELLED,
-            ResearchSessionStatus.FAILED,
-        }
-    ),
-    # Terminal.
-    ResearchSessionStatus.COMPLETED: frozenset(),
-    ResearchSessionStatus.FAILED: frozenset(),
-    ResearchSessionStatus.CANCELLED: frozenset(),
-}
+# The lifecycle now lives in the orchestrator, which owns transition policy
+# (Mission 0.4 §9). Re-exported here so existing importers keep working and so
+# there is exactly one table, not a copy that drifts.
+#
+# `sros_gateway` -> `sros_orchestrator` is an allowed edge
+# (service-boundaries.md §4). The reverse is not, which is why the orchestrator
+# takes a duck-typed database rather than importing this package.
 
 # From the authoritative schema CHECK constraint. Not extended here.
 OBSERVATION_KINDS = frozenset({"DISCOVERED", "CORROBORATED", "CONTRADICTED"})
@@ -174,7 +154,7 @@ class ResearchProjectRepository:
         if not name.strip():
             raise ContractError("name", "a research project requires a name")
         new_id = project_id or uuid.uuid4()
-        with self._db.transaction() as conn:
+        with self._db.tenant_transaction(ws) as conn:
             row = conn.execute(
                 """INSERT INTO research.research_projects
                        (id, workspace_id, name, description)
@@ -188,7 +168,7 @@ class ResearchProjectRepository:
         self, workspace_id: WorkspaceId | uuid.UUID, limit: int = 50, offset: int = 0
     ) -> list[ResearchProjectRow]:
         ws = _require_workspace(workspace_id)
-        with self._db.connection() as conn:
+        with self._db.tenant_transaction(ws) as conn:
             rows = conn.execute(
                 """SELECT id, workspace_id, name, description, created_at, updated_at
                    FROM research.research_projects
@@ -203,7 +183,7 @@ class ResearchProjectRepository:
         self, workspace_id: WorkspaceId | uuid.UUID, project_id: uuid.UUID
     ) -> ResearchProjectRow:
         ws = _require_workspace(workspace_id)
-        with self._db.connection() as conn:
+        with self._db.tenant_transaction(ws) as conn:
             row = conn.execute(
                 """SELECT id, workspace_id, name, description, created_at, updated_at
                    FROM research.research_projects
@@ -240,7 +220,7 @@ class ResearchSessionRepository:
         ws = _require_workspace(workspace_id)
         new_id = session_id or uuid.uuid4()
 
-        with self._db.transaction() as conn:
+        with self._db.tenant_transaction(ws) as conn:
             project = conn.execute(
                 "SELECT 1 FROM research.research_projects WHERE workspace_id = %s AND id = %s",
                 (ws, project_id),
@@ -283,7 +263,7 @@ class ResearchSessionRepository:
         self, workspace_id: WorkspaceId | uuid.UUID, session_id: uuid.UUID
     ) -> ResearchSessionRow:
         ws = _require_workspace(workspace_id)
-        with self._db.connection() as conn:
+        with self._db.tenant_transaction(ws) as conn:
             row = conn.execute(
                 """SELECT id, workspace_id, project_id, status,
                           research_context, research_context_hash,
@@ -302,7 +282,7 @@ class ResearchSessionRepository:
         self, workspace_id: WorkspaceId | uuid.UUID, project_id: uuid.UUID
     ) -> list[ResearchSessionRow]:
         ws = _require_workspace(workspace_id)
-        with self._db.connection() as conn:
+        with self._db.tenant_transaction(ws) as conn:
             rows = conn.execute(
                 """SELECT id, workspace_id, project_id, status,
                           research_context, research_context_hash,
@@ -329,13 +309,9 @@ class ResearchSessionRepository:
         """
         ws = _require_workspace(workspace_id)
         current = self.get(ws, session_id)
-        allowed = ALLOWED_TRANSITIONS[current.status]
-        if target not in allowed:
-            raise InvalidTransitionError(
-                f"{current.status.value} -> {target.value} is not a permitted "
-                f"transition. Allowed from {current.status.value}: "
-                f"{sorted(s.value for s in allowed) or 'none (terminal)'}"
-            )
+        # The policy decision is the orchestrator's; this layer only persists
+        # the outcome (Mission 0.4 §9).
+        require_transition(current.status, target)
 
         # Static SQL with bound parameters. An earlier draft interpolated
         # fragments into the statement; even with trusted inputs that is a
@@ -347,7 +323,7 @@ class ResearchSessionRepository:
             ResearchSessionStatus.FAILED,
             ResearchSessionStatus.CANCELLED,
         )
-        with self._db.transaction() as conn:
+        with self._db.tenant_transaction(ws) as conn:
             row = conn.execute(
                 """UPDATE research.research_sessions
                    SET status = %(status)s,
@@ -400,7 +376,7 @@ class OpportunityRepository:
     ) -> uuid.UUID:
         ws = _require_workspace(workspace_id)
         new_id = opportunity_id or uuid.uuid4()
-        with self._db.transaction() as conn:
+        with self._db.tenant_transaction(ws) as conn:
             conn.execute(
                 """INSERT INTO research.opportunities
                        (id, workspace_id, title, summary, market_scope, market_scope_key)
@@ -420,7 +396,7 @@ class OpportunityRepository:
         self, workspace_id: WorkspaceId | uuid.UUID, opportunity_id: uuid.UUID
     ) -> dict[str, Any]:
         ws = _require_workspace(workspace_id)
-        with self._db.connection() as conn:
+        with self._db.tenant_transaction(ws) as conn:
             row = conn.execute(
                 """SELECT id, workspace_id, title, summary, market_scope, market_scope_key
                    FROM research.opportunities
@@ -459,7 +435,7 @@ class OpportunityRepository:
                 f"must be one of {sorted(OBSERVATION_KINDS)}, got {observation_kind!r}",
             )
         new_id = observation_id or uuid.uuid4()
-        with self._db.transaction() as conn:
+        with self._db.tenant_transaction(ws) as conn:
             conn.execute(
                 """INSERT INTO research.opportunity_session_observations
                        (id, workspace_id, opportunity_id, research_session_id,
@@ -473,7 +449,7 @@ class OpportunityRepository:
         self, workspace_id: WorkspaceId | uuid.UUID, opportunity_id: uuid.UUID
     ) -> list[dict[str, Any]]:
         ws = _require_workspace(workspace_id)
-        with self._db.connection() as conn:
+        with self._db.tenant_transaction(ws) as conn:
             rows = conn.execute(
                 """SELECT id, research_session_id, observation_kind, claim_type, observed_at
                    FROM research.opportunity_session_observations
