@@ -39,7 +39,19 @@ GLOBAL_TABLES = {
     "core.workspaces",
     "core.workspace_memberships",  # composite PK already leads with workspace_id
     "registry.registry_entries",
+    # The source registry is global on purpose (ADR-012 §4, Mission 1.0 §24).
+    # A source review that differed per workspace would make provenance
+    # incomparable across workspaces, and every tenant would have to
+    # re-establish that the same platform's terms say the same thing. Future
+    # per-workspace source CONFIGURATION -- credentials, quotas, an
+    # organisation's own account -- is a separate tenant-scoped table and is not
+    # part of source identity.
     "registry.sources",
+    "registry.source_access_profiles",
+    "registry.source_policy_reviews",
+    "registry.source_policy_evidence",
+    "registry.source_retention_policies",
+    "registry.source_capabilities",
 }
 
 # Tables governed by data-retention-policy-v1.md.
@@ -59,6 +71,11 @@ CREATE_INDEX = re.compile(
     r"(?:USING\s+\w+\s*)?\(\s*([a-z_]+)",
     re.IGNORECASE,
 )
+# A column or a CHECK introduced by a later ALTER belongs to the table it
+# alters. Without folding these in, a closed enum added by a forward migration
+# would go unverified against the contract -- which is the one drift this check
+# exists to catch.
+ALTER_TABLE = re.compile(r"ALTER TABLE\s+([a-z_]+\.[a-z_]+)(.*?);", re.DOTALL | re.IGNORECASE)
 
 
 class MigrationLayoutError(Exception):
@@ -100,6 +117,11 @@ def main() -> int:
     if not tables:
         print("FAIL  no CREATE TABLE statements parsed")
         return 1
+
+    for table, altered in ALTER_TABLE.findall(sql):
+        key = table.lower()
+        if key in tables:
+            tables[key] = tables[key] + "\n" + altered
 
     leading_index_cols: dict[str, set[str]] = {}
     for table, first_col in CREATE_INDEX.findall(sql):
@@ -173,6 +195,15 @@ def main() -> int:
         ("ClaimType", "scoring.evidence", "claim_type"),
         ("ResearchSessionStatus", "research.research_sessions", "status"),
         ("RegistryStatus", "registry.registry_entries", "status"),
+        # Source Registry (Mission 1.0). A value that drifted from the contract
+        # here would let a source of unknown standing read as reviewed.
+        ("SourceLifecycle", "registry.sources", "lifecycle"),
+        ("SourceApprovalState", "registry.source_policy_reviews", "approval_state"),
+        ("PersonalDataRisk", "registry.source_policy_reviews", "personal_data_risk"),
+        ("PolicyAssessment", "registry.source_policy_reviews", "automated_access"),
+        ("SourceAccessMethod", "registry.source_access_profiles", "access_method"),
+        ("SourceAcquisitionCost", "registry.source_access_profiles", "acquisition_cost"),
+        ("PolicyEvidenceType", "registry.source_policy_evidence", "document_type"),
     ]
     for enum_name, table, column in enum_sites:
         expected = set(enums[enum_name])
@@ -180,7 +211,12 @@ def main() -> int:
         if body is None:
             errors.append(f"{table}: expected table is missing from the schema")
             continue
-        checks = re.findall(rf"CHECK \(\s*{column} IN \(([^)]*)\)", body, re.IGNORECASE | re.DOTALL)
+        # `\s+` around IN rather than a single space: columns are aligned in the
+        # migrations, and a validator that fails on whitespace teaches people to
+        # format around the checker instead of reading it.
+        checks = re.findall(
+            rf"CHECK \(\s*{column}\s+IN\s*\(([^)]*)\)", body, re.IGNORECASE | re.DOTALL
+        )
         if not checks:
             errors.append(
                 f"{table}.{column}: no CHECK constraint found for closed enum {enum_name}"

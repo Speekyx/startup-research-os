@@ -11,10 +11,18 @@ into whatever the collectors happened to return
 (`services/research-orchestrator/README.md` §Why it exists).
 
 **Every domain stage is currently BLOCKED, and that is the honest output.**
-D-07 blocks acquisition, D-03 blocks scoring, and §34 puts NLP out of scope. A
-planner that emitted runnable stages for those would be describing a system that
-does not exist. The planner therefore returns a plan whose stages all carry an
-explicit unavailable reason, and the orchestrator refuses to dispatch them.
+D-03 blocks scoring, §34 puts NLP out of scope, and no source has passed the
+governance gate. A planner that emitted runnable stages for those would be
+describing a system that does not exist. The planner therefore returns a plan
+whose stages all carry an explicit unavailable reason, and the orchestrator
+refuses to dispatch them.
+
+**Acquisition is the exception to "statically blocked" (Mission 1.0 §22).** D-07
+is resolved: the Source Registry exists, so the reason acquisition cannot run is
+no longer *the registry is missing* but *these specific sources are not
+collectable, for these specific reasons*. That answer is read from the registry
+at plan time, per source, and never restated from memory here. A planner wired
+to no registry blocks acquisition, because silence is a refusal.
 
 The dispatch, retry, resume and budget machinery is still real and still tested.
 It is exercised with job specs supplied directly by a caller, which is what a
@@ -31,11 +39,19 @@ from sros_contracts import ResearchContext
 
 from .dag import topological_order
 from .jobs import JobSpec, JobStatus, build_idempotency_key, deterministic_job_id
+from .sources import (
+    SourceAvailability,
+    SourceAvailabilityProvider,
+    SourceAvailabilityReport,
+    UnconsultedRegistry,
+)
 
 __all__ = [
     "Capability",
     "BlockedCapability",
     "BLOCKED_CAPABILITIES",
+    "STATIC_BLOCKED_CAPABILITIES",
+    "acquisition_block",
     "PlannedStage",
     "ResearchExecutionPlan",
     "ResearchPlanner",
@@ -45,7 +61,7 @@ __all__ = [
 # Bumped whenever the stage graph or the blocking set changes. Recorded on the
 # persisted plan so a session can be read years later against the planner that
 # produced it (llm-reasoning-rules.md §9 applied to orchestration).
-PLANNER_VERSION = "0.4.0"
+PLANNER_VERSION = "1.0.0"
 
 
 class Capability(StrEnum):
@@ -70,37 +86,49 @@ class BlockedCapability:
     someone to decide the prose no longer applies. A blocked stage that names
     D-03 points at a register entry that says who may unblock it
     (`mission-0.1.1-decisions.md` §3).
+
+    Since Mission 1.0 it names either a decision-register entry (`D-03`, `D-12`)
+    or a **governance gate** (`SOURCE-REGISTRY-GATE`). The distinction matters:
+    a decision is unblocked by someone deciding, a gate is unblocked by a source
+    passing review. Neither is unblocked by editing this file.
+
+    `source_states` is populated only for a gate. It is what turns "acquisition
+    is unavailable" into "these thirteen sources are unavailable, each for a
+    stated reason", which is the difference between a blocker a reader can act
+    on and one they can only accept.
     """
 
     capability: Capability
     decision_id: str
     reason: str
     governing_document: str
+    source_states: tuple[SourceAvailability, ...] = ()
 
     def to_json(self) -> dict[str, object]:
-        return {
+        payload: dict[str, object] = {
             "capability": self.capability.value,
             "decision_id": self.decision_id,
             "reason": self.reason,
             "governing_document": self.governing_document,
         }
+        if self.source_states:
+            payload["source_states"] = [s.to_json() for s in self.source_states]
+        return payload
 
 
-BLOCKED_CAPABILITIES: dict[Capability, BlockedCapability] = {
-    Capability.ACQUISITION: BlockedCapability(
-        capability=Capability.ACQUISITION,
-        decision_id="D-07",
-        reason=(
-            "the source registry and its per-source legal review records do not exist, "
-            "so no source may lawfully be collected from"
-        ),
-        governing_document="docs/data/data-principles.md §13",
-    ),
+# Capabilities blocked by something that does not change between plans.
+# ACQUISITION is deliberately absent: its block is derived per source from the
+# registry by `acquisition_block`, because since Mission 1.0 the answer differs
+# per source and changes when a review lands.
+STATIC_BLOCKED_CAPABILITIES: dict[Capability, BlockedCapability] = {
     Capability.NORMALIZATION: BlockedCapability(
         capability=Capability.NORMALIZATION,
-        decision_id="D-07",
-        reason="there is nothing to normalize while acquisition is blocked",
-        governing_document="docs/data/data-principles.md §13",
+        decision_id="NO-COLLECTOR",
+        reason=(
+            "no collector is implemented, so acquisition produces no raw record to "
+            "normalize; this stays true independently of how many sources pass review"
+        ),
+        governing_document="docs/data/source-registry-v1.md §Collector eligibility",
     ),
     Capability.NLP_EXTRACTION: BlockedCapability(
         capability=Capability.NLP_EXTRACTION,
@@ -128,6 +156,57 @@ BLOCKED_CAPABILITIES: dict[Capability, BlockedCapability] = {
     ),
 }
 
+# Kept under the pre-Mission-1.0 name so existing readers and imports still
+# resolve. It is the static register: ACQUISITION is not in it.
+BLOCKED_CAPABILITIES = STATIC_BLOCKED_CAPABILITIES
+
+# The gate's identifier. Not a decision id: no one unblocks acquisition by
+# deciding. A source becomes collectable by passing the review recorded in the
+# registry, and by nothing else.
+SOURCE_REGISTRY_GATE = "SOURCE-REGISTRY-GATE"
+SOURCE_REGISTRY_DOCUMENT = "docs/data/source-registry-v1.md §Collector eligibility"
+
+
+def acquisition_block(report: SourceAvailabilityReport) -> BlockedCapability | None:
+    """Derive the ACQUISITION block from what the registry said.
+
+    Returns `None` only when the registry was consulted **and** named at least
+    one eligible source. Every other outcome blocks, including the outcome where
+    the registry was never read: Mission 1.0 §31 forbids turning an unknown into
+    a permission, and an unwired planner is an unknown.
+    """
+    if not report.consulted:
+        return BlockedCapability(
+            capability=Capability.ACQUISITION,
+            decision_id=SOURCE_REGISTRY_GATE,
+            reason=(
+                report.unavailable_reason
+                or "the source registry was not consulted, so no source may be collected"
+            ),
+            governing_document=SOURCE_REGISTRY_DOCUMENT,
+        )
+    if report.eligible:
+        return None
+
+    blocked = report.blocked
+    if not blocked:
+        # A registry that holds no source at all. Distinguished from one whose
+        # sources are all refused, because the remedy is different: register a
+        # candidate, rather than finish a review.
+        reason = "the source registry is empty, so there is no source to collect from"
+    else:
+        reason = (
+            f"no source has passed the governance gate "
+            f"({len(blocked)} registered, 0 collector-eligible)"
+        )
+    return BlockedCapability(
+        capability=Capability.ACQUISITION,
+        decision_id=SOURCE_REGISTRY_GATE,
+        reason=reason,
+        governing_document=SOURCE_REGISTRY_DOCUMENT,
+        source_states=blocked,
+    )
+
 
 @dataclass(frozen=True)
 class PlannedStage:
@@ -140,7 +219,8 @@ class PlannedStage:
 
     @property
     def blocked(self) -> BlockedCapability | None:
-        return BLOCKED_CAPABILITIES.get(self.capability)
+        """The static block, if any. ACQUISITION's is resolved by the planner."""
+        return STATIC_BLOCKED_CAPABILITIES.get(self.capability)
 
 
 # The pipeline shape from PROJECT_MANIFEST.md §Mission, expressed as stages.
@@ -170,6 +250,10 @@ class ResearchExecutionPlan:
     blocked: tuple[BlockedCapability, ...]
     planner_version: str = PLANNER_VERSION
     plan_id: uuid.UUID = field(default_factory=uuid.uuid4)
+    # What the registry said when this plan was built. Recorded rather than
+    # recomputed: a plan read back next year must show the sources that were
+    # available THEN, not the ones available at the moment someone reads it.
+    source_availability: SourceAvailabilityReport | None = None
 
     @property
     def estimated_cost_units(self) -> float:
@@ -203,11 +287,35 @@ class ResearchExecutionPlan:
         """Jobs in dependency order. Raises on a cycle."""
         return topological_order(list(self.jobs))
 
+    @property
+    def eligible_source_ids(self) -> tuple[str, ...]:
+        """Sources the registry cleared for collection when this plan was built.
+
+        Empty today, and empty is the correct answer rather than a placeholder:
+        no source in the catalog has passed the gate.
+        """
+        report = self.source_availability
+        return report.eligible_source_ids if report is not None else ()
+
     def incompleteness_reasons(self) -> tuple[str, ...]:
         """Human-readable reasons this plan cannot cover the search space."""
         return tuple(
             f"{b.capability.value} unavailable ({b.decision_id}): {b.reason}"
             for b in sorted(self.blocked, key=lambda b: b.capability.value)
+        )
+
+    def blocked_source_reasons(self) -> tuple[str, ...]:
+        """Per-source detail behind an acquisition block, one line each.
+
+        Separate from `incompleteness_reasons` because the audiences differ: the
+        session-level reason says the search space was not covered, and this
+        says which door was closed and by what.
+        """
+        return tuple(
+            f"{state.source_id} ({state.approval_state or 'NO REVIEW'}): "
+            + "; ".join(state.blocking_reasons)
+            for block in self.blocked
+            for state in block.source_states
         )
 
 
@@ -218,10 +326,19 @@ class ResearchPlanner:
     breadth-then-depth ordering are meaningless while every source is blocked.
     What it does today is enumerate the pipeline honestly and say, per stage,
     why it cannot run.
+
+    `sources` is the registry it asks about acquisition. The default refuses
+    everything, so a planner constructed the pre-Mission-1.0 way keeps producing
+    a blocked acquisition stage instead of silently permitting collection.
     """
 
-    def __init__(self, stages: tuple[PlannedStage, ...] = DEFAULT_STAGES) -> None:
+    def __init__(
+        self,
+        stages: tuple[PlannedStage, ...] = DEFAULT_STAGES,
+        sources: SourceAvailabilityProvider | None = None,
+    ) -> None:
         self._stages = stages
+        self._sources: SourceAvailabilityProvider = sources or UnconsultedRegistry()
 
     def plan(
         self,
@@ -261,11 +378,17 @@ class ResearchPlanner:
             for stage in self._stages
         }
 
+        # Asked once per plan, not once per stage: two reads of a live registry
+        # inside one planning pass could disagree, and a plan that contradicts
+        # itself is worse than one that is out of date.
+        availability = self._sources.source_availability()
+        acquisition = acquisition_block(availability)
+
         jobs: list[JobSpec] = []
         blocked: list[BlockedCapability] = []
 
         for stage in self._stages:
-            block = stage.blocked
+            block = acquisition if stage.capability is Capability.ACQUISITION else stage.blocked
             spec = JobSpec(
                 job_id=job_ids[stage.capability],
                 job_type=stage.job_type,
@@ -287,6 +410,7 @@ class ResearchPlanner:
             correlation_id=correlation_id,
             jobs=tuple(jobs),
             blocked=tuple(blocked),
+            source_availability=availability,
         )
         # Fail here rather than at dispatch: a cycle discovered at dispatch is a
         # plan that runs partially and then stalls with no error.

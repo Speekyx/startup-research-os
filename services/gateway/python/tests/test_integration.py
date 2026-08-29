@@ -8,6 +8,7 @@ because an isolation assertion needs something to be isolated from.
 
 from __future__ import annotations
 
+import json
 import uuid
 
 import pytest
@@ -57,15 +58,58 @@ class TestSchemaRuntime:
             ).fetchall()
         assert len(rows) == 6
 
-    def test_all_twenty_one_tables_exist(self, database) -> None:
+    def test_the_schema_holds_exactly_the_expected_tables(self, database) -> None:
+        """The set, not a count. A count that goes from 26 to 27 tells a reader
+        the number changed; the set tells them which table appeared."""
         with database.privileged_transaction() as conn:
             rows = conn.execute(
                 """SELECT table_schema||'.'||table_name FROM information_schema.tables
                    WHERE table_schema IN
-                     ('core','registry','research','acquisition','nlp','scoring')"""
+                     ('core','registry','research','acquisition','nlp','scoring')
+                     AND table_type = 'BASE TABLE'"""
             ).fetchall()
-        # 16 from 0001_foundation + 5 orchestration tables from 0002.
-        assert len(rows) == 21, sorted(r[0] for r in rows)
+        assert {r[0] for r in rows} == {
+            # 0001_foundation
+            "core.schema_migrations",
+            "core.users",
+            "core.workspace_memberships",
+            "core.workspaces",
+            "registry.registry_entries",
+            "research.research_projects",
+            "research.research_sessions",
+            "research.research_gaps",
+            "research.opportunities",
+            "research.opportunity_session_observations",
+            "acquisition.raw_records",
+            "acquisition.normalized_records",
+            "nlp.signals",
+            "nlp.embedding_provenance",
+            "scoring.evidence",
+            "registry.sources",
+            # 0002_orchestration
+            "research.research_plans",
+            "research.research_jobs",
+            "research.research_job_dependencies",
+            "research.session_budget_entries",
+            "research.research_completeness_records",
+            # 0004_source_registry
+            "registry.source_access_profiles",
+            "registry.source_policy_reviews",
+            "registry.source_policy_evidence",
+            "registry.source_retention_policies",
+            "registry.source_capabilities",
+        }
+
+    def test_the_source_eligibility_view_exists(self, database) -> None:
+        """A view, deliberately, not a column. Eligibility stored as a flag can
+        drift away from the reasons behind it; derived, it cannot."""
+        with database.privileged_transaction() as conn:
+            row = conn.execute(
+                """SELECT table_type FROM information_schema.tables
+                    WHERE table_schema = 'registry'
+                      AND table_name = 'source_eligibility'"""
+            ).fetchone()
+        assert row is not None and row[0] == "VIEW"
 
     def test_migration_ledger_records_every_applied_migration(self, database) -> None:
         with database.privileged_transaction() as conn:
@@ -76,6 +120,7 @@ class TestSchemaRuntime:
             "0001_foundation",
             "0002_orchestration",
             "0003_row_level_security",
+            "0004_source_registry",
         ]
         assert all(len(r[1]) == 64 for r in rows)  # sha256 hex
 
@@ -451,6 +496,74 @@ class TestApi:
             f"/api/v1/research-projects/{project_id}", headers=header(WORKSPACE_B)
         )
         assert response.status_code == 404
+
+
+# =============================================================== source registry
+
+
+@needs_postgres
+class TestSourceRegistryApi:
+    """Mission 1.0 §27. Read only, and global.
+
+    There is deliberately no write path: authentication does not exist, so an
+    endpoint able to approve a source or enable a collector would make the whole
+    review process optional for anyone who can reach the service.
+    """
+
+    def test_the_registry_is_readable_without_a_workspace(self, api_client) -> None:
+        """Source definitions are global platform metadata. Demanding a tenant
+        header would imply an isolation the registry does not have."""
+        response = api_client.get("/api/v1/sources")
+        assert response.status_code == 200
+        body = response.json()
+        assert body["count"] > 0
+
+    def test_no_source_is_reported_as_collector_eligible(self, api_client) -> None:
+        body = api_client.get("/api/v1/sources").json()
+        assert body["collector_eligible_count"] == 0
+        assert all(not s["collector_eligible"] for s in body["sources"])
+
+    def test_every_blocked_source_says_why(self, api_client) -> None:
+        for source in api_client.get("/api/v1/sources").json()["sources"]:
+            assert source["blocking_reasons"], source["source_id"]
+
+    def test_a_source_detail_carries_its_evidence_urls(self, api_client) -> None:
+        """The point of recording evidence is that it can be re-opened. An
+        approval whose basis cannot be re-read cannot be re-verified when the
+        platform changes its terms."""
+        body = api_client.get("/api/v1/sources/tiktok").json()
+        assert body["approval_state"] == "PROHIBITED"
+        assert body["evidence"]
+        assert all(e["document_url"].startswith("https://") for e in body["evidence"])
+
+    def test_the_api_serves_key_names_never_credentials(self, api_client) -> None:
+        body = api_client.get("/api/v1/sources/youtube").json()
+        references = [r for p in body["access_profiles"] for r in p["secret_references"]]
+        assert references == ["YOUTUBE_API_KEY"]
+        assert "value" not in json.dumps(body).lower().split("secret_references")[0][-40:]
+
+    def test_an_unknown_rate_limit_is_served_as_null_not_zero(self, api_client) -> None:
+        """A zero would be read as a real limit by whatever consumes this."""
+        for source in api_client.get("/api/v1/sources").json()["sources"]:
+            detail = api_client.get(f"/api/v1/sources/{source['source_id']}").json()
+            for profile in detail["access_profiles"]:
+                assert profile["rate_limit"] is None or profile["rate_limit"]["requests"]
+
+    def test_an_unknown_source_is_a_404(self, api_client) -> None:
+        response = api_client.get("/api/v1/sources/not-a-source")
+        assert response.status_code == 404
+
+    def test_there_is_no_write_path(self, api_client) -> None:
+        """The absence is the feature. Review is administered through
+        `sros-source`, which runs as the migration role."""
+        for method, path in (
+            ("post", "/api/v1/sources"),
+            ("patch", "/api/v1/sources/tiktok"),
+            ("put", "/api/v1/sources/tiktok"),
+            ("delete", "/api/v1/sources/tiktok"),
+        ):
+            response = api_client.request(method.upper(), path, json={})
+            assert response.status_code in (404, 405), (method, path)
 
 
 # ============================================================== tenancy: Redis

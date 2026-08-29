@@ -43,6 +43,7 @@ from .repositories import (
     ResearchPlanRepository,
     TenantDatabase,
 )
+from .sources import RegistrySourceAvailability, SourceAvailabilityProvider
 
 __all__ = [
     "Dispatcher",
@@ -211,6 +212,21 @@ class SessionStateRepository:
         return ResearchContext.from_json(row[0])
 
 
+def _registry_for(db: Any) -> SourceAvailabilityProvider | None:
+    """Use the real Source Registry when the given database can reach it.
+
+    The registry is global and carries no `workspace_id`, so it is read over a
+    plain connection rather than a tenant transaction (Mission 1.0 §25).
+    `TenantDatabase` does not promise one, hence the check: a database that
+    cannot open a non-tenant connection yields `None`, the planner falls back
+    to `UnconsultedRegistry`, and acquisition stays blocked. Failing that way
+    round is the point — an unwired registry must never read as permission.
+    """
+    if hasattr(db, "connection"):
+        return RegistrySourceAvailability(db)
+    return None
+
+
 class ResearchOrchestrator:
     """Coordinates one workspace's research sessions."""
 
@@ -219,10 +235,11 @@ class ResearchOrchestrator:
         db: TenantDatabase,
         dispatcher: Dispatcher | None = None,
         planner: ResearchPlanner | None = None,
+        sources: SourceAvailabilityProvider | None = None,
     ) -> None:
         self._db = db
         self._dispatcher = dispatcher or RecordingDispatcher()
-        self._planner = planner or ResearchPlanner()
+        self._planner = planner or ResearchPlanner(sources=sources or _registry_for(db))
         self.plans = ResearchPlanRepository(db)
         self.jobs = JobLedgerRepository(db)
         self.budgets = BudgetLedgerRepository(db)

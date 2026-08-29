@@ -5,6 +5,11 @@
 | Document | Defines |
 |----------|---------|
 | `data-principles.md` | Source strategy, acquisition, raw preservation, quality, deduplication, language and geography, privacy, temporal modeling, contradictions, lineage, cost control, legal review |
+| `data-retention-policy-v1.md` | Retention tiers, the stricter-constraint rule, per-source overrides, deletion semantics |
+| `source-registry-v1.md` | The source registry, per-activity policy assessment, evidence requirements and the collector eligibility gate (added in Mission 1.0) |
+| `source-review-guide.md` | How a human conducts a source review, step by step |
+| `source-catalog-v1.json` | The reviewed candidate catalog. **Source of truth**, edited by hand |
+| `source-catalog-v1.md` | The same catalog, rendered. **Generated** by `sros-source render`, checked in CI |
 
 ## The rules that are hardest to retrofit
 
@@ -50,10 +55,29 @@ in either direction, subject to the stricter-constraint rule.
 
 Deletion semantics are defined; deletion logic is **not implemented**.
 
+## Source governance — resolved
+
+**D-07 is resolved.** See `source-registry-v1.md` and
+[ADR-013](../architecture/adr/ADR-013-source-registry-governance.md). The
+registry exists, the `retention_override` mechanism the retention policy depends
+on now has a table behind it, and collector eligibility is a derived gate rather
+than a stored flag.
+
+Resolved does not mean open. **Thirteen candidate sources are registered and
+zero are collector-eligible**, which is the expected outcome of a first pass:
+§31 of the mission brief asks for correctness over the number of approvals, and
+a registry where every platform came back approved would mean the gate was doing
+nothing.
+
+Two rules are worth repeating here because they are the ones under pressure:
+
+- a source never becomes eligible because its data is publicly visible;
+- uncertainty resolves to `REQUIRES_REVIEW`, never to permission.
+
 ## Still open
 
-- **D-07** — the source registry does not exist. Blocks `acquisition`, and blocks
-  the `retention_override` mechanism that the retention policy depends on.
+- Evidence reliability weighting per source — blocked by **D-03**. The registry
+  deliberately assigns no per-platform reliability number.
 - Jurisdiction analysis (GDPR applicability) — **requires human/legal input**,
   deliberately not guessed.
 - Backup retention and how deletion interacts with backups — deferred to the

@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.3
+Version: 1.4
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-08-29 (Sprint 0 / Mission 0.4)
+Last amended: 2026-08-29 (Sprint 1 / Mission 1.0)
 
 ---
 
@@ -13,6 +13,16 @@ Last amended: 2026-08-29 (Sprint 0 / Mission 0.4)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.4 — 2026-08-29 (Sprint 1 / Mission 1.0)
+
+Authorized by the Mission 1.0 brief §40 (documentation) and §45 (decision
+resolution). Additive, plus one resolution.
+
+| Change | Section | Authority |
+|--------|---------|-----------|
+| `docs/data/source-registry-v1.md` added to the authoritative chain | Authoritative Documents | Mission 1.0 §40. `data-principles.md` §13 requires a pre-integration record for every source and specifies no structure for it; this document specifies it, and every future collector is gated by it |
+| **D-07 resolved** | Blocked work | Mission 1.0 §45. The source registry and its per-source review records now exist ([ADR-013](docs/architecture/adr/ADR-013-source-registry-governance.md)). Resolution of the blocker is not approval of any source: thirteen candidates are registered and zero are collector-eligible |
 
 ## 1.3 — 2026-08-29 (Sprint 0 / Mission 0.4)
 
@@ -172,6 +182,7 @@ Additionally authoritative:
 
 - docs/data/data-retention-policy-v1.md
 - docs/ai/evaluation-framework-v1.md (added in 1.3)
+- docs/data/source-registry-v1.md (added in 1.4)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

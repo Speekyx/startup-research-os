@@ -155,6 +155,42 @@
       "description": "A domain hypothesis. Not owned by the session that found it. Ontology V2 §12.",
       "format": "uuid"
     },
+    "PersonalDataRisk": {
+      "type": "string",
+      "enum": [
+        "NONE_EXPECTED",
+        "PSEUDONYMOUS",
+        "IDENTIFIABLE",
+        "SENSITIVE_POSSIBLE",
+        "UNKNOWN"
+      ],
+      "description": "How likely the source is to carry personal data. A RISK CLASSIFICATION, not a legal ruling: it records what must be handled carefully and what still needs jurisdiction-specific review. GDPR analysis is separate and remains a human decision."
+    },
+    "PolicyAssessment": {
+      "type": "string",
+      "enum": [
+        "PERMITTED",
+        "PERMITTED_WITH_CONDITIONS",
+        "NOT_PERMITTED",
+        "NOT_ADDRESSED",
+        "UNCLEAR",
+        "NOT_ASSESSED"
+      ],
+      "description": "The verdict for ONE activity. Activities are assessed separately because their conditions differ: a source may permit automated API access and forbid commercial use. A single boolean called `allowed` would erase exactly that difference."
+    },
+    "PolicyEvidenceType": {
+      "type": "string",
+      "enum": [
+        "OFFICIAL_API_DOCS",
+        "OFFICIAL_TERMS",
+        "OFFICIAL_LICENCE",
+        "OFFICIAL_PRIVACY",
+        "OFFICIAL_ACCESS_CONTROL",
+        "OPERATOR_CORRESPONDENCE",
+        "LEGAL_REVIEW"
+      ],
+      "description": "What kind of document supports an assessment. Ordered by the evidence hierarchy: official operator documentation outranks anything else, and nothing below OFFICIAL_* may support an APPROVED state on its own."
+    },
     "Probability": {
       "type": "number",
       "minimum": 0.0,
@@ -186,7 +222,8 @@
             "monetization_model",
             "distribution_channel",
             "risk",
-            "region"
+            "region",
+            "source_family"
           ]
         },
         "id": {
@@ -239,7 +276,8 @@
             "monetization_model",
             "distribution_channel",
             "risk",
-            "region"
+            "region",
+            "source_family"
           ]
         },
         "id": {
@@ -363,10 +401,55 @@
       "description": "An extracted demand signal.",
       "format": "uuid"
     },
+    "SourceAccessMethod": {
+      "type": "string",
+      "enum": [
+        "OFFICIAL_API",
+        "PUBLIC_API",
+        "RSS_OR_FEED",
+        "DATASET_DOWNLOAD",
+        "PUBLIC_WEB",
+        "BROWSER_AUTOMATION",
+        "MANUAL_IMPORT"
+      ],
+      "description": "HOW access is technically performed. It says nothing about whether access is PERMITTED: permission is a separate dimension carried by the policy review. BROWSER_AUTOMATION being available never implies it is allowed."
+    },
+    "SourceAcquisitionCost": {
+      "type": "string",
+      "enum": [
+        "FREE",
+        "FREE_WITH_LIMITS",
+        "PAID",
+        "USAGE_BASED",
+        "UNKNOWN"
+      ],
+      "description": "The shape of what access costs, not an amount. Concrete prices are versioned configuration because operators change them; a price compiled in here would be wrong within months and would look authoritative."
+    },
+    "SourceApprovalState": {
+      "type": "string",
+      "enum": [
+        "DRAFT",
+        "REQUIRES_REVIEW",
+        "APPROVED_WITH_CONDITIONS",
+        "APPROVED",
+        "RESTRICTED",
+        "PROHIBITED",
+        "SUSPENDED"
+      ],
+      "description": "Where a source stands in the governance gate. Closed: collector eligibility branches exhaustively on it, and an unhandled value would mean a source of unknown standing being treated as usable. Public visibility never produces APPROVED on its own."
+    },
     "SourceId": {
       "type": "string",
       "description": "A registered external source. Global, not tenant-scoped. Registry contents are D-07, still open.",
       "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$"
+    },
+    "SourceLifecycle": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "DEPRECATED"
+      ],
+      "description": "Whether the source itself still exists as a target. Separate from approval: a deprecated source may have been approved, and an active source may never have been reviewed."
     },
     "UserId": {
       "type": "string",

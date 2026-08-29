@@ -1,9 +1,31 @@
 # `services/acquisition`
 
-**Status:** boundary defined, not implemented.
+**Status:** the Source Registry is implemented. **Collection is not.**
 **Runtime:** Python (ADR-004). Playwright's Python API covers browser
 automation, so removing BullMQ removed the last reason for Node on the backend.
-**Blocked on:** D-07 — the source registry does not exist yet.
+**Governed by:** [`source-registry-v1.md`](../../docs/data/source-registry-v1.md),
+[ADR-013](../../docs/architecture/adr/ADR-013-source-registry-governance.md).
+
+D-07 is resolved: the registry, its per-source review records and the collector
+eligibility gate exist (Mission 1.0). **No collector may be written yet**, and
+not because a decision is pending — because no source has passed the gate. That
+answer is now per source, and `sros-source eligibility <id>` prints exactly what
+each one is missing.
+
+```text
+sros_acquisition/
+    registry/models.py         source, access profile, review, evidence, retention
+    registry/eligibility.py    the gate. Fails closed, reports every reason
+    registry/retention.py      baseline vs override. min(), never max()
+    registry/catalog.py        loads docs/data/source-catalog-v1.json
+    registry/repositories.py   applies the catalog to PostgreSQL, idempotently
+    rendering.py               generates the human-readable catalog
+    cli.py                     sros-source: list, show, validate, eligibility,
+                               stale, load, render, enable
+```
+
+**This package imports no network client, and CI asserts it.** It governs
+collection; it does not collect.
 
 ## Responsibility
 
@@ -19,8 +41,9 @@ interpretation out of this layer is what makes raw data reproducible later
 
 - Acquisition tasks from `workers` (Celery), dispatched by
   `research-orchestrator`. Every task payload carries `workspace_id`.
-- The source registry (D-07): per-source access method, credentials reference,
-  rate limits, usage restrictions, retention constraints.
+- The source registry: per-source access method, secret **reference** (a
+  configuration key name, never a value), rate limits, usage restrictions,
+  retention constraints. A collector reads it; it never writes to it.
 
 ## Outputs
 
@@ -48,13 +71,30 @@ search/trend signals · communities · product launches · app stores ·
 developer ecosystems · content platforms · public websites · structured
 datasets · first-party sources
 
-The concrete registry is Data Engineering phase work. No source is hardcoded here.
+No source is hardcoded here. The catalog is
+[`docs/data/source-catalog-v1.json`](../../docs/data/source-catalog-v1.json),
+rendered for reading as
+[`source-catalog-v1.md`](../../docs/data/source-catalog-v1.md).
 
-## Future API surface
+## API surface
+
+Implemented, read only:
+
+```
+GET  /api/v1/sources              registered sources, states and gate verdicts
+GET  /api/v1/sources/{id}         one source with evidence, review and retention
+```
+
+There is deliberately **no write endpoint**. Authentication does not exist
+(ADR-005), so an endpoint able to approve a source or enable a collector would
+make the review process optional for anyone who can reach the service. Review is
+administered by `sros-source`, running as the migration role; the runtime role
+holds `SELECT` only on `registry.*`.
+
+Future, once a source passes the gate:
 
 ```
 POST /internal/acquire            execute one acquisition task
-GET  /internal/sources            registered sources and their constraints
 GET  /internal/sources/{id}/quota remaining rate-limit budget
 GET  /internal/raw/{id}           retrieve a raw record by id
 ```
@@ -92,5 +132,5 @@ syndication and derivative detection require semantics and belong to `nlp`.
 | Source changed layout | Fail loudly with a parse-failure record. A silent empty result is worse than an error |
 | Partial page load | Record partial with a quality flag; never present partial as complete |
 | Content requires auth | Abort the task. Not an error to work around |
-| Robots/terms disallow | Source is removed from the registry, not worked around |
+| Robots/terms disallow | The review records `NOT_PERMITTED`, the gate refuses, and the source stays registered with its reason. Never worked around |
 | Duplicate of an existing record | Link to the existing record, keep the new provenance, do not overwrite |

@@ -33,7 +33,11 @@ from sros_orchestrator import (
     JobSpec,
     JobStatus,
     ResearchPlanner,
+    SourceAvailability,
+    StaticSourceAvailability,
+    UnconsultedRegistry,
     UnknownDependencyError,
+    acquisition_block,
     blocked_by_dependencies,
     can_transition,
     cancellation_target,
@@ -313,10 +317,51 @@ class TestPlanning(unittest.TestCase):
         self.assertEqual(set(self.plan.blocked_capability_names), {c.value for c in Capability})
         self.assertEqual(self.plan.dispatchable_jobs, ())
 
-    def test_acquisition_is_blocked_by_d07_with_a_stated_reason(self) -> None:
-        blocked = BLOCKED_CAPABILITIES[Capability.ACQUISITION]
-        self.assertEqual(blocked.decision_id, "D-07")
-        self.assertIn("source registry", blocked.reason)
+    def test_acquisition_is_not_in_the_static_register(self) -> None:
+        """Mission 1.0 §22. D-07 is resolved, so a hardcoded acquisition block
+        would be a stale reason nobody would notice going false. Its block is
+        derived from the registry per plan."""
+        self.assertNotIn(Capability.ACQUISITION, BLOCKED_CAPABILITIES)
+
+    def test_an_unconsulted_registry_blocks_acquisition(self) -> None:
+        """Fail closed. A planner wired to no registry must refuse, not permit:
+        Mission 1.0 §31 forbids converting an unknown into a permission."""
+        block = acquisition_block(UnconsultedRegistry().source_availability())
+        assert block is not None
+        self.assertEqual(block.decision_id, "SOURCE-REGISTRY-GATE")
+        self.assertIn("not consulted", block.reason)
+        self.assertEqual(block.source_states, ())
+
+    def test_a_registry_with_no_eligible_source_blocks_and_names_each_one(self) -> None:
+        report = StaticSourceAvailability(
+            (
+                SourceAvailability("reddit", "REQUIRES_REVIEW", False, ("no evidence",)),
+                SourceAvailability("tiktok", "PROHIBITED", False, ("policy review is PROHIBITED",)),
+            )
+        ).source_availability()
+        block = acquisition_block(report)
+        assert block is not None
+        self.assertIn("0 collector-eligible", block.reason)
+        self.assertEqual({s.source_id for s in block.source_states}, {"reddit", "tiktok"})
+        # The per-source reason survives into the persisted plan payload, which
+        # is the whole point: a stored plan must still explain itself later.
+        self.assertIn("source_states", block.to_json())
+
+    def test_one_eligible_source_lifts_the_acquisition_block(self) -> None:
+        """The unblocked branch must be reachable, or the gate would be a
+        permanent refusal dressed as a check. Eligibility comes from a reviewed
+        registry row in production; here it is a test double, never a real
+        platform approval."""
+        report = StaticSourceAvailability(
+            (SourceAvailability("fixture-source", "APPROVED", True),)
+        ).source_availability()
+        self.assertIsNone(acquisition_block(report))
+
+    def test_an_empty_registry_says_so_rather_than_blaming_review(self) -> None:
+        """ "Nothing registered" and "nothing approved" have different remedies."""
+        block = acquisition_block(StaticSourceAvailability(()).source_availability())
+        assert block is not None
+        self.assertIn("empty", block.reason)
 
     def test_scoring_is_blocked_by_d03_with_a_stated_reason(self) -> None:
         blocked = BLOCKED_CAPABILITIES[Capability.SCORING]
@@ -327,7 +372,10 @@ class TestPlanning(unittest.TestCase):
         for job in self.plan.blocked_jobs:
             self.assertIsNotNone(job.blocked_reason)
             self.assertTrue(
-                any(job.blocked_reason.startswith(d) for d in ("D-03", "D-07", "D-12")),
+                any(
+                    job.blocked_reason.startswith(d)
+                    for d in ("D-03", "D-12", "NO-COLLECTOR", "SOURCE-REGISTRY-GATE")
+                ),
                 job.blocked_reason,
             )
 
@@ -366,8 +414,38 @@ class TestPlanning(unittest.TestCase):
 
     def test_the_incompleteness_reasons_name_the_open_decisions(self) -> None:
         reasons = " ".join(self.plan.incompleteness_reasons())
-        self.assertIn("D-07", reasons)
+        self.assertIn("SOURCE-REGISTRY-GATE", reasons)
         self.assertIn("D-03", reasons)
+        self.assertIn("D-12", reasons)
+
+    def test_a_plan_records_the_availability_it_was_built_from(self) -> None:
+        """A plan read back later must show the sources available THEN, not the
+        ones available when someone happens to read it."""
+        planner = ResearchPlanner(
+            sources=StaticSourceAvailability(
+                (SourceAvailability("fixture-source", "APPROVED", True),)
+            )
+        )
+        plan = planner.plan(WORKSPACE, SESSION, CORRELATION, _context())
+        self.assertEqual(plan.eligible_source_ids, ("fixture-source",))
+        self.assertNotIn(Capability.ACQUISITION.value, plan.blocked_capability_names)
+
+    def test_blocked_source_reasons_are_reported_per_source(self) -> None:
+        planner = ResearchPlanner(
+            sources=StaticSourceAvailability(
+                (
+                    SourceAvailability(
+                        "tiktok", "PROHIBITED", False, ("policy review is PROHIBITED",)
+                    ),
+                )
+            )
+        )
+        plan = planner.plan(WORKSPACE, SESSION, CORRELATION, _context())
+        self.assertEqual(
+            plan.blocked_source_reasons(),
+            ("tiktok (PROHIBITED): policy review is PROHIBITED",),
+        )
+        self.assertEqual(plan.eligible_source_ids, ())
 
     def test_the_planner_records_the_scope_it_would_have_covered(self) -> None:
         scope = MarketScope.country("FR").key()
