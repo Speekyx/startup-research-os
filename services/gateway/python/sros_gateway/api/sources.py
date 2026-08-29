@@ -62,6 +62,95 @@ def list_sources(request: Request, family: str | None = None) -> dict[str, Any]:
     }
 
 
+@router.get("/{source_id}/eligibility")
+def get_source_eligibility(request: Request, source_id: str) -> dict[str, Any]:
+    """Why this source can or cannot be collected from, condition by condition.
+
+    Mission 1.4 §32. Read-only, like everything else here, and deliberately so:
+    an endpoint that could mark a condition satisfied would let anyone who can
+    reach the service clear the gate that the review process exists to hold.
+    Verification is administered through `sros-source verify`, which runs as the
+    migration role.
+
+    What is returned is the **recorded** state -- what a verifier wrote and when
+    -- not a fresh verification. Running verifiers on an HTTP request would make
+    the answer depend on the web process's environment rather than on the
+    deployment the registry describes.
+    """
+    with request.app.state.db.connection() as conn:
+        row = conn.execute(
+            """SELECT source_id, approval_state, review_stale, evidence_count,
+                      condition_count, unsatisfied_condition_count, blocking_reasons,
+                      collector_enabled, next_review_at
+                 FROM registry.source_eligibility WHERE source_id = %s""",
+            (source_id,),
+        ).fetchone()
+        if row is None:
+            raise NotFoundError(f"source {source_id} is not registered")
+
+        conditions = conn.execute(
+            """SELECT c.condition_key, c.description, c.verification, c.verification_detail,
+                      c.satisfied, c.satisfied_at, c.satisfied_by,
+                      v.verifier, v.verifier_version, v.result, v.reason, v.verified_at
+                 FROM registry.source_review_conditions c
+                 JOIN registry.source_policy_reviews r ON r.id = c.review_id
+                 -- LATERAL rather than a window function so a condition that has
+                 -- never been verified still appears. "Never checked" is a state
+                 -- a reader has to be able to see.
+                 LEFT JOIN LATERAL (
+                     SELECT verifier, verifier_version, result, reason, verified_at
+                       FROM registry.source_condition_verifications
+                      WHERE condition_id = c.id
+                      ORDER BY verified_at DESC, created_at DESC
+                      LIMIT 1
+                 ) v ON TRUE
+                WHERE c.source_id = %s AND r.superseded_at IS NULL
+                ORDER BY c.condition_key""",
+            (source_id,),
+        ).fetchall()
+
+    return {
+        "source_id": row[0],
+        "approval_state": row[1],
+        "review_stale": row[2],
+        "evidence_count": row[3],
+        "condition_count": row[4],
+        "unsatisfied_condition_count": row[5],
+        "blocking_reasons": row[6],
+        "collector_eligible": not row[6],
+        # Eligible is not enabled and neither is a collector existing. Returned
+        # explicitly so a caller cannot read the first as either of the others.
+        "collector_enabled": row[7],
+        "next_review_at": row[8],
+        "conditions": [
+            {
+                "condition_key": c[0],
+                "description": c[1],
+                "verification": c[2],
+                # A configuration KEY NAME where the verification is
+                # CONFIG_REFERENCE. No credential value is stored in the
+                # registry, so none can be served from it.
+                "verification_detail": c[3],
+                "satisfied": c[4],
+                "satisfied_at": c[5],
+                "satisfied_by": c[6],
+                "latest_verification": (
+                    {
+                        "verifier": c[7],
+                        "verifier_version": c[8],
+                        "result": c[9],
+                        "reason": c[10],
+                        "verified_at": c[11],
+                    }
+                    if c[7] is not None
+                    else None
+                ),
+            }
+            for c in conditions
+        ],
+    }
+
+
 @router.get("/{source_id}")
 def get_source(request: Request, source_id: str) -> dict[str, Any]:
     """One source in full: access profiles, current review, evidence, retention.

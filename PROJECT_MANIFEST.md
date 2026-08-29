@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.6
+Version: 1.7
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-08-29 (Sprint 1 / Mission 1.2)
+Last amended: 2026-08-29 (Sprint 1 / Mission 1.4)
 
 ---
 
@@ -13,6 +13,16 @@ Last amended: 2026-08-29 (Sprint 1 / Mission 1.2)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.7 — 2026-08-29 (Sprint 1 / Mission 1.4)
+
+Authorized by the Mission 1.4 brief §41 (documentation) and §40 (schema
+changes only where the existing model cannot express the requirement).
+
+| Change | Section | Authority |
+|--------|---------|-----------|
+| `docs/data/acquisition-authorization-v1.md` added to the authoritative chain | Authoritative Documents | Mission 1.4 §41. `source-registry-v1.md` §4 requires conditions to be checkable and specifies no mechanism for checking one; this document specifies it, and every future collector is gated by it |
+| **Collector eligibility is reachable, and two sources reach it** | Blocked work | Mission 1.4 §23, [ADR-016](docs/architecture/adr/ADR-016-compliance-capabilities-and-acquisition-authorization.md). `world-bank` and `eurostat` pass the gate in a verified environment; `fred` is design-eligible and blocked on a runtime credential. **No collector is implemented and none is enabled** — three separate facts, and the block on writing a collector moved from "no source has passed" to "this specific source has not" |
 
 ## 1.6 — 2026-08-29 (Sprint 1 / Mission 1.2)
 
@@ -207,6 +217,7 @@ Additionally authoritative:
 - docs/data/source-registry-v1.md (added in 1.4)
 - docs/domain/evidence-aggregation-framework-v1.md (added in 1.5)
 - docs/domain/claim-model-v1.md (added in 1.6)
+- docs/data/acquisition-authorization-v1.md (added in 1.7)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

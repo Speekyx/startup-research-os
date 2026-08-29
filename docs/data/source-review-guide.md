@@ -184,16 +184,72 @@ uv run sros-source render
 
 ---
 
-## Step 9 — Enabling a collector
+## Step 9 — If the review is APPROVED_WITH_CONDITIONS
+
+Added in Mission 1.4. Writing a condition down does not clear it, and you cannot
+clear it yourself.
+
+```bash
+uv run sros-source conditions <source-id>
+```
+
+Each condition shows its verification kind and what a verifier found **now**.
+`UNKNOWN` means nothing checked it — usually because the condition names a
+capability that does not exist yet, which is work for an engineer rather than
+for the reviewer.
+
+```bash
+uv run sros-source verify <source-id>          # dry run, writes nothing
+uv run sros-source verify <source-id> --apply  # records the results
+```
+
+A `CONFIG_REFERENCE` condition is answered from the process environment.
+`sros-source` folds the git-ignored `infrastructure/compose/.env` into its own
+process first, so putting a real value there is enough; an explicitly exported
+variable wins over the file. The command prints which file it read, never what
+was in it.
+
+Three rules govern what you may and may not do here.
+
+**You cannot mark a condition satisfied.** There is no command for it and the
+database refuses the `UPDATE`. A condition is cleared by a verifier that records
+what it checked; if you believe a condition holds and no verifier says so, the
+gap is a missing capability, not a missing permission.
+
+**Write a mechanical condition or write `HUMAN_CONFIRMATION`.** If what must be
+true is *"a lawyer confirmed X"* or *"the owner granted permission"*, say
+`HUMAN_CONFIRMATION` and name the decision that has to be recorded. Do not
+reword a legal obligation until it sounds checkable — that produces a verifier
+that checks something else.
+
+**Name what will be checked.** A `CAPABILITY` condition names a capability, a
+`CONFIG_REFERENCE` names a configuration key. `verification_detail` is not a
+description, and a condition whose detail names nothing real resolves `UNKNOWN`
+forever.
+
+Then say what the capability must *do*, in
+[`source-compliance-v1.json`](source-compliance-v1.json): exact notices verbatim,
+allowlists, exclusions, minimisation categories. If the terms prescribe wording
+and you do not have it, make the element **supplied** rather than composing a
+sentence — a validator checks that every exact notice appears in the evidence
+that prescribed it.
+
+---
+
+## Step 10 — Enabling a collector
 
 ```bash
 uv run sros-source enable <source-id>
 ```
 
-This will refuse unless the gate passes, and the database will refuse too even
-if the CLI is bypassed. That is intentional: enabling collection is the one
+This refuses unless the gate passes, **and** refuses when no collector is
+implemented for the source. The database refuses too, even if the CLI is
+bypassed. That is intentional: enabling collection is the one
 irreversible-feeling step, and it should require the review to be finished
 rather than the reviewer to remember.
+
+Eligible, enabled and implemented are three different facts. Today two sources
+are eligible, none is enabled, and none is implemented.
 
 ---
 

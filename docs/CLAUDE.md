@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.6
-Last amended: 2026-08-29 (Sprint 1 / Mission 1.2)
+Version: 1.8
+Last amended: 2026-08-29 (Sprint 1 / Mission 1.4)
 
 ## Boot Sequence
 
@@ -16,11 +16,12 @@ Before performing any task, execute this reading order.
 7. docs/data/data-principles.md
 8. docs/data/data-retention-policy-v1.md
 9. docs/data/source-registry-v1.md
-10. docs/domain/evidence-aggregation-framework-v1.md
-11. docs/domain/claim-model-v1.md
-12. docs/ai/evaluation-framework-v1.md
-13. Relevant ADRs
-14. Task-specific specifications
+10. docs/data/acquisition-authorization-v1.md
+11. docs/domain/evidence-aggregation-framework-v1.md
+12. docs/domain/claim-model-v1.md
+13. docs/ai/evaluation-framework-v1.md
+14. Relevant ADRs
+15. Task-specific specifications
 
 These documents are the authoritative source of truth.
 
@@ -36,6 +37,8 @@ Ontology V2 keeps V1.1's numbering for §1–§10, so an existing reference to
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.8 | 2026-08-29 | Compliance capabilities recorded: a condition is cleared by a verifier and by nothing else; two sources are collector-eligible; eligible / enabled / implemented separated (ADR-016) |
+| 1.7 | 2026-08-29 | Source review round recorded: three sources APPROVED_WITH_CONDITIONS, none collector-eligible; conditional-eligibility rule added |
 | 1.6 | 2026-08-29 | Boot sequence points to Ontology V2.1 and gains the Claim model; Claim invariant added; A-13 removed from blocked work (ADR-015) |
 | 1.5 | 2026-08-29 | Boot sequence gains the evidence aggregation framework; evidence-aggregation invariant added; D-03 blocked-work entry rewritten as framework-resolved / parameters-uncalibrated (ADR-014) |
 | 1.4 | 2026-08-29 | Boot sequence gains the source registry spec; source-governance invariant added; D-07 removed from blocked work (ADR-013) |
@@ -175,6 +178,29 @@ none of them is negotiable (`source-registry-v1.md` §1, ADR-013):
   post, a tutorial, a forum answer or model recall.
 - **No credential is stored in the registry.** Access profiles carry
   configuration key names only.
+- **`APPROVED_WITH_CONDITIONS` is not permission to run.** It says a collector
+  MAY be designed. Every condition is a checkable row, and the gate blocks until
+  all of them are satisfied — where satisfaction is environment state that a
+  catalog can never assert about itself.
+- **A condition is cleared by a verifier, and by nothing else** (Mission 1.4,
+  ADR-016, `acquisition-authorization-v1.md`). A verification records which
+  condition, which verifier, at which version, when, the result and why; a
+  database trigger refuses `satisfied = TRUE` with no `SATISFIED` record behind
+  it. There is no manual boolean, no catalog field and no migration that grants
+  it. Results are `SATISFIED | UNSATISFIED | UNKNOWN | NOT_APPLICABLE`, only the
+  first clears, and **`UNKNOWN` is never promoted**. No verifier can satisfy a
+  `HUMAN_CONFIRMATION` condition, and none in this repository writes one.
+- **Eligible, enabled and implemented are three facts.** After Mission 1.4
+  `world-bank` and `eurostat` are collector-eligible in any environment where
+  the capabilities are verified, and `fred` joins them wherever `FRED_API_KEY`
+  is configured — it is design-eligible and blocked everywhere else, including
+  CI. **None is enabled and none is implemented.** `sros-source enable` refuses a
+  source with no collector, and the orchestrator blocks acquisition under
+  `NO-COLLECTOR-IMPLEMENTED` rather than dispatching a job nothing can run.
+- **A source-level approval is not a resource-level one.** Each dataset or
+  series is authorised separately, and one whose licensing scope was never
+  established is refused. A collector receives an
+  `AcquisitionAuthorizationContext` or it receives nothing.
 
 The registry is **global**: no `workspace_id`, no RLS policy, `SELECT` only for
 the runtime role. It is administered by `sros-source`, never over HTTP.
@@ -247,9 +273,16 @@ contradiction penalty to make the engine produce a number. Failing closed is the
 designed behaviour, not a gap to fill.
 
 **No collector may be implemented for a source that is not collector-eligible.**
-D-07 is resolved and the registry exists, but zero sources currently pass the
-gate. The block moved from *there is no registry* to *this specific source has
-not passed*, which is a per-source answer the orchestrator now reports by name.
+D-07 is resolved and the registry exists. Since Mission 1.4 two sources DO pass
+the gate, so the block is no longer "none has passed" — it is per source, and
+the orchestrator reports each one by name.
+
+A collector for an eligible source must obtain its authorization from
+`build_authorization` and reach every resource through the context's resource
+gate. **Mission 1.5 owes a conformance test that it has no other path to a
+URL**: until that exists, the guarantee that the recorded conditions are honoured
+is architectural rather than observed
+(`acquisition-authorization-v1.md` §6, §10).
 
 ## Core principles
 

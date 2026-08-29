@@ -1,31 +1,75 @@
 # `services/acquisition`
 
-**Status:** the Source Registry is implemented. **Collection is not.**
+**Status:** the Source Registry and the compliance capability layer are
+implemented. **Collection is not.**
 **Runtime:** Python (ADR-004). Playwright's Python API covers browser
 automation, so removing BullMQ removed the last reason for Node on the backend.
 **Governed by:** [`source-registry-v1.md`](../../docs/data/source-registry-v1.md),
-[ADR-013](../../docs/architecture/adr/ADR-013-source-registry-governance.md).
+[`acquisition-authorization-v1.md`](../../docs/data/acquisition-authorization-v1.md),
+[ADR-013](../../docs/architecture/adr/ADR-013-source-registry-governance.md),
+[ADR-016](../../docs/architecture/adr/ADR-016-compliance-capabilities-and-acquisition-authorization.md).
 
 D-07 is resolved: the registry, its per-source review records and the collector
-eligibility gate exist (Mission 1.0). **No collector may be written yet**, and
-not because a decision is pending — because no source has passed the gate. That
-answer is now per source, and `sros-source eligibility <id>` prints exactly what
-each one is missing.
+eligibility gate exist (Mission 1.0). Mission 1.4 built the compliance
+capabilities that a conditional approval requires, so **two sources now pass the
+gate** — `world-bank` and `eurostat`. `sros-source eligibility <id>` prints
+exactly what each of the other eleven is missing.
+
+**No collector exists**, and that is now a separate fact from eligibility.
+Passing the gate says a collector MAY be built.
 
 ```text
 sros_acquisition/
-    registry/models.py         source, access profile, review, evidence, retention
-    registry/eligibility.py    the gate. Fails closed, reports every reason
-    registry/retention.py      baseline vs override. min(), never max()
-    registry/catalog.py        loads docs/data/source-catalog-v1.json
-    registry/repositories.py   applies the catalog to PostgreSQL, idempotently
-    rendering.py               generates the human-readable catalog
-    cli.py                     sros-source: list, show, validate, eligibility,
-                               stale, load, render, enable
+    registry/models.py           source, access profile, review, evidence, retention
+    registry/eligibility.py      the gate. Fails closed, reports every reason
+    registry/retention.py        baseline vs override. min(), never max()
+    registry/catalog.py          loads docs/data/source-catalog-v1.json
+    registry/repositories.py     applies the catalog to PostgreSQL, idempotently
+    compliance/config.py         obligations as governance data, not branches
+    compliance/attribution.py    what attribution follows the data, and survives
+    compliance/resources.py      which resources the approval actually covers
+    compliance/credentials.py    whether a key is configured, never what it is
+    compliance/capabilities.py   named capabilities and the checks that make them real
+    compliance/verification.py   running a verifier against a review condition
+    compliance/authorization.py  what a collector must hold before it may run
+    compliance/repositories.py   recording a verification, syncing the gate
+    rendering.py                 generates the human-readable catalog
+    cli.py                       sros-source: list, show, validate, eligibility,
+                                 conditions, verify, authorization, stale, load,
+                                 render, enable
 ```
 
 **This package imports no network client, and CI asserts it.** It governs
 collection; it does not collect.
+
+## Eligible, enabled, implemented
+
+Three facts. Collapsing any two of them is the mistake this section exists to
+prevent.
+
+| Fact | Now | Where it lives |
+|---|---|---|
+| collector-eligible | `world-bank`, `eurostat` | `registry.source_eligibility`, derived |
+| collector-enabled | none | `registry.sources.collector_enabled` |
+| collector implemented | none | `sros_acquisition.IMPLEMENTED_COLLECTORS`, empty |
+
+`sros-source enable` refuses a source with no implemented collector: a switch
+that gets ahead of the thing it switches reads, to anyone looking at the
+registry, as "this is running".
+
+## Clearing a condition
+
+A condition is cleared by a **verifier**, never by a boolean. `sros-source
+verify --apply` runs them and records what each one checked; a database trigger
+refuses `satisfied = TRUE` with no `SATISFIED` verification behind it. Results
+are `SATISFIED | UNSATISFIED | UNKNOWN | NOT_APPLICABLE` and only the first
+clears — `UNKNOWN` blocks exactly as a failure does.
+
+Re-verification takes a source **out** of eligibility as readily as into it,
+which is why CI re-verifies rather than trusting recorded state.
+
+Full specification:
+[`acquisition-authorization-v1.md`](../../docs/data/acquisition-authorization-v1.md).
 
 ## Responsibility
 
@@ -81,8 +125,9 @@ rendered for reading as
 Implemented, read only:
 
 ```
-GET  /api/v1/sources              registered sources, states and gate verdicts
-GET  /api/v1/sources/{id}         one source with evidence, review and retention
+GET  /api/v1/sources                    registered sources, states and gate verdicts
+GET  /api/v1/sources/{id}               one source with evidence, review and retention
+GET  /api/v1/sources/{id}/eligibility   every condition, its verification and the blockers
 ```
 
 There is deliberately **no write endpoint**. Authentication does not exist
@@ -91,7 +136,12 @@ make the review process optional for anyone who can reach the service. Review is
 administered by `sros-source`, running as the migration role; the runtime role
 holds `SELECT` only on `registry.*`.
 
-Future, once a source passes the gate:
+The eligibility endpoint serves the **recorded** state, not a fresh
+verification: running verifiers on an HTTP request would make the answer depend
+on the web process's environment rather than on the deployment the registry
+describes.
+
+Future, once a collector exists:
 
 ```
 POST /internal/acquire            execute one acquisition task
@@ -114,7 +164,12 @@ These are not guidelines. From `data-principles.md` §3 and §13, and
   a §13 legal review record **before** first collection.
 - Retention is bounded: raw content defaults to **30 days**, overridable per
   source via `retention_override` with a recorded `basis`
-  (`data-retention-policy-v1.md` §2.1, §3). The stricter constraint always wins.
+  (`data-retention-policy-v1.md` §2.1, §3). The stricter constraint always wins,
+  and a collector receives the resolved rule rather than choosing one.
+- A collector obtains an `AcquisitionAuthorizationContext` or it does not run,
+  and reaches every dataset through `context.authorize_resource(...)`. It does
+  not interpret a source's terms: doing so would be a second opinion about a
+  decision the review already made.
 - Avoid unnecessary personal data; aggregate or anonymize where possible
   (`data-principles.md` §8).
 

@@ -1,8 +1,8 @@
 # Quality Gates
 
-Version: 1.6
+Version: 1.8
 Status: Active. Every gate in §1 runs in CI
-Date: 2026-08-29 (amended in Mission 1.2)
+Date: 2026-08-29 (amended in Mission 1.4)
 
 What must be true for a change to reach `main`. `docs/CLAUDE.md` §Definition of
 done is the requirement; this document is the mechanism.
@@ -102,6 +102,44 @@ replaces it.
 | **No service imports the reference aggregation engine** | `validate_evidence_aggregation.py` | Tests may import it; production modules may not. This is what makes the vocabulary narrowing below safe (ADR-014) |
 | **Computed aggregation values stay out of production** | Same script | The guard was NARROWED, not weakened: evidence INPUT fields became legitimate schema columns in Mission 1.2, while the strengths, masses and score remain forbidden in migrations and under `services/` |
 | **No aggregation result is persisted** | `test_claims.py` | Storing a result would be scoring, and scoring requires a `CALIBRATED` profile that does not exist |
+
+### Gates added in Mission 1.3
+
+| Gate | Mechanism | Guards |
+|------|-----------|--------|
+| **An approving review is still blocked by unsatisfied conditions** | `evidence_independence`-style CHECK plus the eligibility view and `evaluate_eligibility` | `APPROVED_WITH_CONDITIONS` must never quietly mean "a collector may run". Three sources are approving and none is eligible |
+| **A catalog load cannot satisfy its own conditions** | `load_catalog_into` never writes `satisfied`; `test_source_review.py` forces every condition false, re-loads, and asserts none was set | A catalog that could declare its own conditions met would make the state meaningless |
+| **A satisfied condition must name who and when** | `source_review_conditions_satisfaction_provenance_check` | "Satisfied by nobody, at no time" is the shape an accidental UPDATE leaves behind |
+| **Review history is preserved, not overwritten** | Append-only review versions; `test_source_review.py` | The record that matters is "Mission 1.0 concluded X, Mission 1.3 found Y, because document Z became available" |
+| **A changed verdict cites evidence retrieved for it** | `test_source_review.py` | A status change with no document behind it is an opinion |
+| **Duplicate review versions are refused** | `load_catalog` | Two reviews sharing a version cannot be told apart, and the later would shadow the earlier |
+| **The review-results document matches the catalog** | `render_review_results.py --check` | Generated diff view; two hand-maintained copies of one fact drift |
+| **No collector exists** | `test_source_review.py` | No data-fetching client, no collector module. The day somebody adds one, this fails |
+
+### Gates added in Mission 1.4
+
+Conditions became clearable, which turned the last step between a review and a
+collector from "nothing can set this" into "something must". These gates decide
+what that something is allowed to be.
+
+| Gate | Mechanism | Guards |
+|------|-----------|--------|
+| **A condition cannot be satisfied without a verification** | `registry.require_verification_for_satisfied_condition` (BEFORE trigger, migration 0007) | The SQL bypass, closed. A boolean set by hand — by a migration, an `UPDATE`, a fixture or a developer in a hurry — leaves no record of what was checked. Clearing back to false stays unguarded: failing closed must never need permission |
+| **`UNKNOWN` is never promoted to `SATISFIED`** | `satisfied_condition_keys` + `test_compliance.py` | "The verifier failed" and "there is no verifier" are different problems. Both block, and collapsing them would hide the second behind the first permanently |
+| **No verifier can satisfy a human condition** | `verification._find` + `validate_compliance_capabilities.py` + `test_compliance.py` | Probed on every source: a `HUMAN_CONFIRMATION` condition must resolve `UNKNOWN` whatever the arguments. A program that could decide one would be the system granting itself permission |
+| **A capability is checked, not merely registered** | `capability_failures` conformance checks, asserted per source | Each check runs the real gate against the real configuration, asserts every denial the evidence names, **and asserts its own control case passes** — a filter that denies everything would otherwise satisfy every denial assertion |
+| **Every condition resolves to a real verifier** | `validate_compliance_capabilities.py` (zero dependency) | A condition naming a capability nobody built is `UNKNOWN`, and the validator fails rather than letting it sit unnoticed. Also fails on a registered capability no condition names (§5: no unused abstractions) |
+| **An exact required notice is traceable to its evidence** | Same script | The FRED sentence must appear in the review evidence that prescribed it. A notice nobody can trace to a document is our wording, not the source's |
+| **Attribution cannot be silently omitted** | `render_attribution` raises; `AttributedArtifact.derive` cannot drop an obligation; `test_compliance.py` | A notice missing half its obligation looks like attribution and is not, and the loss would happen at whichever transformation forgot to copy it |
+| **Unknown resource scope fails closed** | `authorize_resource`; six rule kinds, all denying | An unrecorded licence, an unstated geography, unread series notes and `UNKNOWN` content origin are all refused. An unexamined resource is not one known to be covered |
+| **A source-level approval cannot override a dataset exclusion** | Same, plus `test_compliance.py` | World Bank passes the gate; the Microdata Library still does not |
+| **No credential value reaches a log, a response or an exception** | `CredentialStatus` has no field for one; `source_condition_verifications_no_secret_value_check`; sentinel test | Structural rather than conventional: leaking it would require going and reading the environment, which is a visible change |
+| **No credential is present in CI, and none is in `.env.example`** | `ci.yml` | A source that became runnable because a build secret was added would be one nobody decided to make runnable |
+| **An ineligible source produces no authorization** | `build_authorization` raises; asserted for all 13 sources in two places | The §27 property. Not a flag the collector checks — the absence of the object it needs |
+| **Python and SQL agree with conditions verified on both sides** | `test_compliance.py`, `test_source_review.py`, `conftest.recorded_satisfied_keys` | The two implementations are compared on the *same inputs*. Satisfaction is environment state, so a Python gate evaluated without it would report a divergence that is really a missing argument |
+| **Eligible is not enabled, and neither is implemented** | `sros-source enable` refuses; `IMPLEMENTED_COLLECTORS` is empty; `assert_registry_grants_nothing.py` | Three facts. A switch ahead of the thing it switches reads as "this is running" |
+| **The planner does not dispatch a job nothing can run** | `acquisition_block(report, implemented_collectors)`, fail-closed default | Found by making sources eligible: the planner would have emitted `acquire.collect` with no collector behind it. The two acquisition gates are named separately because different work clears them |
+| **CI verifies rather than trusting recorded state** | `sros-source verify --apply` in the integration job | A capability removed after verification would leave a stale `satisfied` true. Re-verification takes a source out of eligibility as readily as into it |
 
 ---
 

@@ -9,12 +9,12 @@
  * Editing this file by hand will be overwritten and will fail the contract
  * check in CI. Change the source of truth instead.
  *
- * contract_version: 1.2.0
+ * contract_version: 1.4.0
  * ontology_version: 2
  */
 
 
-export const CONTRACT_VERSION = "1.2.0" as const;
+export const CONTRACT_VERSION = "1.4.0" as const;
 export const ONTOLOGY_VERSION = "2" as const;
 export const RESEARCH_CONTEXT_SCHEMA_VERSION = "1.0.0" as const;
 
@@ -185,6 +185,69 @@ export const SOURCE_APPROVAL_STATE_VALUES = [
 export type SourceApprovalState = (typeof SOURCE_APPROVAL_STATE_VALUES)[number];
 export function isSourceApprovalState(v: unknown): v is SourceApprovalState {
   return typeof v === "string" && (SOURCE_APPROVAL_STATE_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * HOW a review condition can be checked. Exists so APPROVED_WITH_CONDITIONS cannot silently mean 'a collector may run': each condition is satisfied individually, and one that no machine can verify must say so rather than pretending it can.
+ * @see source-registry-v1.md; Mission 1.3 §24
+ */
+export const CONDITION_VERIFICATION_VALUES = [
+  "CONFIG_REFERENCE",
+  "CAPABILITY",
+  "RETENTION_LIMIT",
+  "ACCESS_METHOD",
+  "HUMAN_CONFIRMATION",
+] as const;
+export type ConditionVerification = (typeof CONDITION_VERIFICATION_VALUES)[number];
+export function isConditionVerification(v: unknown): v is ConditionVerification {
+  return typeof v === "string" && (CONDITION_VERIFICATION_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * The outcome of running a verifier against one review condition. Four values rather than a boolean, because 'we could not establish it' and 'it does not hold' call for different next steps and only one of them is a bug. UNKNOWN never becomes SATISFIED, and only SATISFIED clears the condition.
+ * @see source-condition-gap-analysis-v1.md; Mission 1.4 §19
+ */
+export const CONDITION_VERIFICATION_RESULT_VALUES = [
+  "SATISFIED",
+  "UNSATISFIED",
+  "UNKNOWN",
+  "NOT_APPLICABLE",
+] as const;
+export type ConditionVerificationResult = (typeof CONDITION_VERIFICATION_RESULT_VALUES)[number];
+export function isConditionVerificationResult(v: unknown): v is ConditionVerificationResult {
+  return typeof v === "string" && (CONDITION_VERIFICATION_RESULT_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * One required part of a source's attribution obligation. A closed enum because the renderer branches exhaustively: an element it does not recognise must be a contract change, never a silently dropped requirement.
+ * @see acquisition-authorization-v1.md; Mission 1.4 §6
+ */
+export const ATTRIBUTION_ELEMENT_VALUES = [
+  "SOURCE_CREDIT",
+  "LICENCE_IDENTIFIER",
+  "EXACT_NOTICE",
+  "MODIFICATION_STATEMENT",
+  "DATASET_DOI",
+  "ACCESS_DATE",
+  "DISCLAIMER",
+] as const;
+export type AttributionElement = (typeof ATTRIBUTION_ELEMENT_VALUES)[number];
+export function isAttributionElement(v: unknown): v is AttributionElement {
+  return typeof v === "string" && (ATTRIBUTION_ELEMENT_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * Whether the platform's own licence covers a particular resource. Aggregators republish material they do not own, so platform approval is not resource approval. UNKNOWN exists because it is the common case and must fail closed rather than be guessed either way.
+ * @see acquisition-authorization-v1.md; Mission 1.4 §12
+ */
+export const RESOURCE_CONTENT_ORIGIN_VALUES = [
+  "PLATFORM_LICENSED",
+  "THIRD_PARTY",
+  "UNKNOWN",
+] as const;
+export type ResourceContentOrigin = (typeof RESOURCE_CONTENT_ORIGIN_VALUES)[number];
+export function isResourceContentOrigin(v: unknown): v is ResourceContentOrigin {
+  return typeof v === "string" && (RESOURCE_CONTENT_ORIGIN_VALUES as readonly string[]).includes(v);
 }
 
 /**

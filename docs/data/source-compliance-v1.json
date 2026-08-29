@@ -1,0 +1,202 @@
+{
+  "$comment": "COMPLIANCE CONFIGURATION. Hand-edited governance data, read by sros_acquisition.compliance. It carries the PARAMETERS of the obligations Mission 1.3 recorded -- exact notices, licence allowlists, enumerated exclusions -- so that satisfying a condition is a configuration fact rather than a branch in application code (Mission 1.4 §5, §7). It grants nothing: every entry here describes a restriction, and a source with no entry is denied by the resource gate rather than allowed.",
+  "compliance_version": "1.0",
+  "derived_from": {
+    "catalog": "source-catalog-v1.json",
+    "catalog_version": "1.1",
+    "review_round": "mission-1.3",
+    "note": "Every requirement below traces to a document Mission 1.3 retrieved. Nothing here re-reads a platform's terms; adding a requirement means re-opening the review, not editing this file."
+  },
+  "sources": [
+    {
+      "source_id": "world-bank",
+      "review_version": 2,
+      "evidence_url": "https://datacatalog.worldbank.org/public-licenses",
+      "evidence_section": "Creative Commons Attribution 4.0 (CC-BY 4.0); Microdata Research License; License Specified Externally; Custom License",
+      "attribution": {
+        "notes": "CC-BY 4.0 permits commercial use provided appropriate credit is given AND changes are indicated. The licence prescribes no exact sentence, so the credit string is configuration; the requirement that changes be indicated is not, which is why MODIFICATION_STATEMENT is supplied per artefact rather than defaulted. The licence identifier is per DATASET -- the same platform distributes CC-BY 4.0 and ODbL data -- so it cannot be a fixed string either.",
+        "requirements": [
+          {
+            "element": "SOURCE_CREDIT",
+            "text": "The World Bank",
+            "supplied": false,
+            "when_modified": false
+          },
+          {
+            "element": "LICENCE_IDENTIFIER",
+            "text": null,
+            "supplied": true,
+            "when_modified": false
+          },
+          {
+            "element": "MODIFICATION_STATEMENT",
+            "text": null,
+            "supplied": true,
+            "when_modified": true
+          }
+        ]
+      },
+      "resource_scope": {
+        "licence_allowlist": ["CC-BY-4.0", "ODbL-1.0"],
+        "licence_allowlist_note": "Canonical identifiers, matched exactly. A dataset whose licence is recorded in another spelling is denied rather than guessed at, because guessing is how 'License Specified Externally' would become 'probably CC-BY'.",
+        "excluded_dataset_families": ["microdata"],
+        "require_dataset_family": true,
+        "dataset_family_note": "The Microdata Library is excluded outright: its licence permits statistical and scientific research only and forbids redistribution without a prior written agreement. A resource whose family is unrecorded is denied -- an unclassified dataset is not a dataset known not to be microdata.",
+        "geography_allowlist": null,
+        "enumerated_exclusions": [],
+        "excluded_note_markers": [],
+        "require_notes": false,
+        "third_party_denied": true
+      },
+      "access_restriction": {
+        "name": "indicators-api-only",
+        "access_methods": ["PUBLIC_API"],
+        "profile_labels": ["indicators-api-v2"],
+        "note": "The registry must hold this profile and no other for the restriction to be verifiable. A second profile appearing on this source -- a bulk download, a browser path -- fails the check rather than being ignored."
+      },
+      "data_minimisation": {
+        "allowed": [
+          "indicator_identifier",
+          "dataset_identifier",
+          "observation_value",
+          "observation_period",
+          "unit_of_measure",
+          "geography",
+          "dataset_licence"
+        ],
+        "excluded": ["personal_data", "user_identifier", "microdata_record"],
+        "note": "Mission 1.3 §14. dataset_licence is in the allowed list because the licence allowlist cannot be evaluated without it."
+      }
+    },
+    {
+      "source_id": "eurostat",
+      "review_version": 2,
+      "evidence_url": "https://ec.europa.eu/eurostat/web/main/help/copyright-notice",
+      "evidence_section": "General principles; Exceptions; How to re-use Eurostat material for commercial purposes; How to cite Eurostat products",
+      "attribution": {
+        "notes": "Citation must give the dataset DOI and the access date; both are per-retrieval values and neither can be defaulted. Modifications must be stated with a non-responsibility disclaimer, and the exact disclaimer wording is NOT in the retrieved evidence -- so the disclaimer is required as SUPPLIED text rather than composed here. Inventing the sentence would be the opposite of preserving a required notice exactly.",
+        "requirements": [
+          {
+            "element": "SOURCE_CREDIT",
+            "text": "Eurostat",
+            "supplied": false,
+            "when_modified": false
+          },
+          {
+            "element": "DATASET_DOI",
+            "text": null,
+            "supplied": true,
+            "when_modified": false
+          },
+          {
+            "element": "ACCESS_DATE",
+            "text": null,
+            "supplied": true,
+            "when_modified": false
+          },
+          {
+            "element": "MODIFICATION_STATEMENT",
+            "text": null,
+            "supplied": true,
+            "when_modified": true
+          },
+          {
+            "element": "DISCLAIMER",
+            "text": null,
+            "supplied": true,
+            "when_modified": true
+          }
+        ]
+      },
+      "resource_scope": {
+        "licence_allowlist": null,
+        "excluded_dataset_families": [],
+        "require_dataset_family": false,
+        "geography_allowlist": [
+          "AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "ES", "FI",
+          "FR", "GR", "HR", "HU", "IE", "IT", "LT", "LU", "LV", "MT",
+          "NL", "PL", "PT", "RO", "SE", "SI", "SK",
+          "CH", "IS", "LI", "NO"
+        ],
+        "geography_allowlist_note": "EU-27 plus the four EFTA states, deliberately WITHOUT acceding and candidate countries. The copyright notice permits their data for commercial reuse; the set changes over time and the notice does not enumerate it, so the list here is stricter than the terms and never more permissive. Widening it requires re-reading the notice and recording the decision, not editing this array. EU-wide aggregate codes (EU27_2020, EA19) are likewise absent and therefore denied.",
+        "enumerated_exclusions": [
+          {
+            "key": "li-ch-trade-1995",
+            "declaring_countries": ["LI", "CH"],
+            "classifications": ["HS", "SITC", "BEC", "NSTR"],
+            "from_year": 1995,
+            "reason": "Trade data declared by Liechtenstein and Switzerland from 1995 onwards in the HS, SITC, BEC and NSTR classifications is named by the copyright notice as an exception to free re-use."
+          },
+          {
+            "key": "at-trade-cn8",
+            "declaring_countries": ["AT"],
+            "classifications": ["CN8"],
+            "from_year": null,
+            "reason": "Trade data declared by Austria at CN 8-digit level is named by the copyright notice as an exception to free re-use."
+          }
+        ],
+        "excluded_note_markers": [],
+        "require_notes": false,
+        "third_party_denied": true,
+        "third_party_note": "The notice excludes material identified as belonging to sources other than Eurostat, and publications whose copyright is partly or wholly third-party."
+      },
+      "access_restriction": null,
+      "data_minimisation": {
+        "allowed": [
+          "dataset_identifier",
+          "dataset_doi",
+          "observation_value",
+          "observation_period",
+          "unit_of_measure",
+          "geography",
+          "declaring_country",
+          "access_date"
+        ],
+        "excluded": ["personal_data", "user_identifier", "microdata_record"],
+        "note": "Mission 1.3 §14. dataset_doi and access_date are allowed because the attribution obligation cannot be met without them; declaring_country because the trade exclusions cannot be evaluated without it."
+      }
+    },
+    {
+      "source_id": "fred",
+      "review_version": 2,
+      "evidence_url": "https://fred.stlouisfed.org/docs/api/terms_of_use.html",
+      "evidence_section": "Property Rights; Prohibitions; Requirements",
+      "attribution": {
+        "notes": "The terms prescribe one sentence and require it to appear prominently on the application. It is stored here VERBATIM, including the registered trademark symbol, and rendered unmodified. A paraphrase is a different sentence and does not satisfy the requirement. No SOURCE_CREDIT element is declared: the terms require this notice, and adding a second obligation would be inventing one.",
+        "requirements": [
+          {
+            "element": "EXACT_NOTICE",
+            "text": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
+            "supplied": false,
+            "when_modified": false
+          }
+        ]
+      },
+      "resource_scope": {
+        "licence_allowlist": null,
+        "excluded_dataset_families": [],
+        "require_dataset_family": false,
+        "geography_allowlist": null,
+        "enumerated_exclusions": [],
+        "excluded_note_markers": ["copyright"],
+        "require_notes": true,
+        "note_marker_note": "Matched case-insensitively against the series notes. require_notes is true because a series whose notes were never read is not a series known to be uncopyrighted: the terms say copyrighted series are identifiable BY their notes, so an absent note is an unanswered question, not a clean answer.",
+        "third_party_denied": true,
+        "third_party_note": "The Bank's provision of the API does not override third-party owners' copyrights, and permission for those series must come from the owner. This system cannot record such a permission for itself; doing so is a human act with a document behind it."
+      },
+      "access_restriction": null,
+      "data_minimisation": {
+        "allowed": [
+          "series_identifier",
+          "series_notes",
+          "observation_value",
+          "observation_period",
+          "unit_of_measure",
+          "geography"
+        ],
+        "excluded": ["personal_data", "user_identifier", "microdata_record"],
+        "note": "Mission 1.3 §14. series_notes is in the allowed list for a specific reason: the copyrighted-series exclusion is evaluated from the notes, so a collector that minimised them away would lose the ability to honour the condition."
+      }
+    }
+  ]
+}

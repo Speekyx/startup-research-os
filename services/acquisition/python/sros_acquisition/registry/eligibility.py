@@ -12,6 +12,7 @@ collected from, and it is the reason the rest of the registry exists.
         AND retention is resolved
         AND the review is not stale
         AND the source is not suspended
+        AND every required review condition is satisfied
 
 **It fails closed, and it explains itself.** A refusal returns the reasons
 rather than a bare `False`, because a gate that will not say why gets worked
@@ -63,11 +64,22 @@ class EligibilityResult:
         }
 
 
-def evaluate_eligibility(source: SourceRecord, now: datetime | None = None) -> EligibilityResult:
+def evaluate_eligibility(
+    source: SourceRecord,
+    now: datetime | None = None,
+    satisfied_conditions: frozenset[str] = frozenset(),
+) -> EligibilityResult:
     """Evaluate every condition and report all failures, not the first.
 
     Reporting all of them matters: a reviewer who fixes one blocker and
     rediscovers the next on the following run learns to distrust the tool.
+
+    `satisfied_conditions` is deliberately a caller-supplied argument rather
+    than something read off the source. Whether a condition holds depends on
+    what is deployed and configured, and a catalog that could assert its own
+    conditions satisfied would make APPROVED_WITH_CONDITIONS meaningless
+    (Mission 1.3 §24). The default is the empty set: nothing is satisfied until
+    something says so.
     """
     moment = now or datetime.now(UTC)
     reasons: list[str] = []
@@ -88,6 +100,17 @@ def evaluate_eligibility(source: SourceRecord, now: datetime | None = None) -> E
             reasons.append("policy review has no evidence")
         elif not any(item.is_authoritative for item in review.evidence):
             reasons.append("policy review has no official or authoritative evidence")
+        # Mission 1.3 §24. An approving review whose conditions are not all
+        # satisfied still blocks. Satisfaction is ENVIRONMENT state, so the
+        # catalog cannot supply it — which is the point: APPROVED_WITH_CONDITIONS
+        # says a collector MAY be designed, not that one may run.
+        unsatisfied = tuple(
+            condition.key
+            for condition in review.required_conditions
+            if condition.key not in satisfied_conditions
+        )
+        if review.is_approving and unsatisfied:
+            reasons.append("review conditions not satisfied: " + ", ".join(sorted(unsatisfied)))
         if review.is_stale(moment):
             # §14: an approval that has gone stale fails closed. Platform terms
             # change, and an approval nobody has re-checked is a statement about
@@ -119,5 +142,9 @@ def evaluate_eligibility(source: SourceRecord, now: datetime | None = None) -> E
     )
 
 
-def is_collector_eligible(source: SourceRecord, now: datetime | None = None) -> bool:
-    return evaluate_eligibility(source, now).eligible
+def is_collector_eligible(
+    source: SourceRecord,
+    now: datetime | None = None,
+    satisfied_conditions: frozenset[str] = frozenset(),
+) -> bool:
+    return evaluate_eligibility(source, now, satisfied_conditions).eligible

@@ -155,14 +155,19 @@ class TestBlockedWorkIsNeverDispatched:
         self, database, orchestrator
     ) -> None:
         """Mission 1.0 §22, end to end. D-07 is resolved, so the reason must be
-        read from `registry.source_eligibility` rather than restated in code."""
+        read from `registry.source_eligibility` rather than restated in code.
+
+        Since Mission 1.4 acquisition has two gates and which one answers
+        depends on the database this runs against -- whether anyone has recorded
+        a condition verification. The expectation is therefore DERIVED from what
+        the registry said rather than hard-coded, so the test asserts the rule
+        instead of asserting one deployment's state."""
         session = _new_session(database)
         plan = orchestrator.plan_session(WORKSPACE_A, session.id, CORRELATION)
         rows = orchestrator.jobs.list_for_session(WORKSPACE_A, session.id)
         acquisition = next(r for r in rows if r.job_type == "acquire.collect")
         assert acquisition.status is JobStatus.BLOCKED
         assert acquisition.blocked_reason is not None
-        assert acquisition.blocked_reason.startswith("SOURCE-REGISTRY-GATE")
         assert "D-07" not in acquisition.blocked_reason
 
         # The registry WAS consulted: a fallback to "not consulted" would also
@@ -170,10 +175,18 @@ class TestBlockedWorkIsNeverDispatched:
         # difference.
         assert plan.source_availability is not None
         assert plan.source_availability.consulted
-        assert plan.eligible_source_ids == ()
+
+        expected = (
+            "NO-COLLECTOR-IMPLEMENTED" if plan.eligible_source_ids else "SOURCE-REGISTRY-GATE"
+        )
+        assert acquisition.blocked_reason.startswith(expected), acquisition.blocked_reason
 
     def test_the_acquisition_block_names_each_refused_source(self, database, orchestrator) -> None:
-        """A blocker a reader can act on: which source, and what stopped it."""
+        """A blocker a reader can act on: which source, and what stopped it.
+
+        The refused sources are still named when other sources have passed. A
+        block whose explanation got worse as the registry got better would be a
+        regression, so this holds under either acquisition gate."""
         session = _new_session(database)
         plan = orchestrator.plan_session(WORKSPACE_A, session.id, CORRELATION)
         per_source = plan.blocked_source_reasons()
@@ -656,7 +669,14 @@ class TestCompletenessRecording:
         assert record.basis is CompletenessBasis.UNKNOWN
         assert record.value is None
         assert set(record.blocked_capabilities) == {c.value for c in Capability}
-        assert any("SOURCE-REGISTRY-GATE" in reason for reason in record.incompleteness_reasons)
+        # Acquisition names one of its two gates. Which one depends on whether
+        # any condition verification has been recorded against this database, so
+        # asserting a specific id here would make the test a statement about a
+        # deployment rather than about the recorded reasons.
+        assert any(
+            "SOURCE-REGISTRY-GATE" in reason or "NO-COLLECTOR-IMPLEMENTED" in reason
+            for reason in record.incompleteness_reasons
+        )
         assert any("PROFILE-NOT-CALIBRATED" in reason for reason in record.incompleteness_reasons)
 
     def test_the_record_is_persisted_and_readable(self, database, orchestrator) -> None:

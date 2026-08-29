@@ -1,12 +1,15 @@
 # Source Registry V1
 
 **Status:** Authoritative. Created in Mission 1.0, resolving **D-07**.
-**Version:** 1.0
+**Version:** 1.1 (Mission 1.4 added §4 "How a condition gets cleared", "Two
+views of eligibility" and "Eligible, enabled, implemented"; §10 restated)
 **Date:** 2026-08-29
 **Governs:** `registry.sources` and the five tables around it, the collector
 eligibility gate, retention overrides, and every future collector.
 **Related:** `data-principles.md` §13, `data-retention-policy-v1.md`,
 [ADR-013](../architecture/adr/ADR-013-source-registry-governance.md),
+[ADR-016](../architecture/adr/ADR-016-compliance-capabilities-and-acquisition-authorization.md),
+[`acquisition-authorization-v1.md`](acquisition-authorization-v1.md),
 `opportunity-ontology-v2.md` §14.
 
 ---
@@ -80,10 +83,16 @@ These are invariants. Code that violates one is wrong even if it passes.
 
 ## 2. Enumerations
 
-All seven are **closed enums** (Ontology V2 §14): they require exhaustive
-branching, so adding a value is a contract change, not a data change. They are
-defined once in `packages/contracts/schema/domain.v1.json` and generated into
-TypeScript and Python.
+Every vocabulary below is a **closed enum** (Ontology V2 §14): they require
+exhaustive branching, so adding a value is a contract change, not a data change.
+They are defined once in `packages/contracts/schema/domain.v1.json` and
+generated into TypeScript and Python.
+
+Mission 1.3 added `ConditionVerification`; Mission 1.4 added
+`ConditionVerificationResult`, `AttributionElement` and `ResourceContentOrigin`.
+All four are specified in
+[`acquisition-authorization-v1.md`](acquisition-authorization-v1.md) rather than
+restated here.
 
 ### `SourceApprovalState`
 
@@ -129,11 +138,17 @@ the basis of an approval.
 ### `SourceLifecycle`, `SourceAcquisitionCost`, `PersonalDataRisk`
 
 `ACTIVE` / `DEPRECATED`; `FREE` / `FREE_WITH_LIMITS` / `PAID` /
-`PAID_ENTERPRISE` / `UNKNOWN`; `NONE_EXPECTED` / `LOW` / `MEDIUM` / `HIGH` /
-`UNKNOWN`.
+`USAGE_BASED` / `UNKNOWN`; `NONE_EXPECTED` / `PSEUDONYMOUS` / `IDENTIFIABLE` /
+`SENSITIVE_POSSIBLE` / `UNKNOWN`.
 
-`PersonalDataRisk` is a **handling classification, not a legal ruling**. It
+`PersonalDataRisk` is a **handling classification, not a legal ruling**, and its
+values say what KIND of data may be present rather than how bad it would be. It
 drives pseudonymisation and identifier-discard expectations, nothing else.
+
+*(Corrected in Mission 1.4: this section listed severity words —
+`LOW`/`MEDIUM`/`HIGH` — which were never the contract vocabulary. Mission 1.3
+found and fixed the same mistake in nine draft reviews; the specification kept
+it until now.)*
 
 ### `source_family` — a registry, not an enum
 
@@ -146,17 +161,25 @@ migration, per Ontology V2 §14.
 
 ## 3. Data model
 
-Six tables in the `registry` schema. All **global**: none carries a
+Eight tables in the `registry` schema. All **global**: none carries a
 `workspace_id`, none has a row-level-security policy.
 
 ```text
 registry.sources ──┬── source_access_profiles      how it could be reached
-                   ├── source_policy_reviews  ──── source_policy_evidence
+                   ├── source_policy_reviews  ──┬── source_policy_evidence
+                   │                            └── source_review_conditions
+                   │                                     │
+                   │                                     └── source_condition_
+                   │                                         verifications
                    ├── source_retention_policies   an override, if any
                    └── source_capabilities         what data it can supply
                    ▲
         registry.source_eligibility (VIEW)  the verdict, derived
 ```
+
+The last two were added by Missions 1.3 and 1.4. A condition is what an
+approving review depends on; a verification is the record of somebody having
+checked one, and is the only thing that can mark a condition satisfied.
 
 ### Why global rather than per workspace
 
@@ -229,6 +252,87 @@ change and an approval nobody has re-checked is a statement about the past
 presented as a statement about now. The interval is per source
 (`review_interval_days`, default 180): platforms differ in how often they revise
 terms, and no single universal interval is defensible.
+
+### Conditions must be checkable, not just written down
+
+Added in Mission 1.3. `APPROVED_WITH_CONDITIONS` must never silently mean "a
+collector may run", so each condition is a row rather than a sentence:
+
+```text
+key                  stable across review versions
+description          what must be true, for a human
+verification         CONFIG_REFERENCE | CAPABILITY | RETENTION_LIMIT
+                     | ACCESS_METHOD | HUMAN_CONFIRMATION
+verification_detail  the config key, capability or day count checked
+satisfied            ENVIRONMENT state. A catalog load can never set it
+```
+
+The gate blocks an approving review until **every** condition is satisfied, in
+both the Python implementation and the SQL view.
+
+`HUMAN_CONFIRMATION` is a real answer and the honest one for anything a program
+cannot establish. Encoding legal prose as executable logic — "attribution is
+adequate" as a boolean — would be worse than admitting a person has to decide.
+
+`satisfied` is deliberately not something the catalog can assert about itself. A
+catalog that could declare its own conditions met would make the state
+meaningless.
+
+### How a condition gets cleared
+
+Added in Mission 1.4, and specified in full by
+[`acquisition-authorization-v1.md`](acquisition-authorization-v1.md).
+
+**A verifier clears a condition, and nothing else does.** Each verification
+writes an append-only record — which condition, which verifier, at which
+version, when, the result, why, what was inspected — and `satisfied` is synced
+from it. A `BEFORE` trigger refuses to set the boolean true with no `SATISFIED`
+record behind it, whoever issues the `UPDATE`. There is no manual path, no
+catalog field and no migration that can grant it.
+
+Results are `SATISFIED | UNSATISFIED | UNKNOWN | NOT_APPLICABLE`. **Only
+`SATISFIED` clears.** `UNKNOWN` — the verifier could not run, or none is
+registered — blocks exactly as a failure does and is never promoted.
+
+No verifier can satisfy a `HUMAN_CONFIRMATION` condition. That branch returns
+`UNKNOWN` unconditionally, and no code in this repository writes a human
+confirmation.
+
+**Re-verification takes a source out of eligibility as readily as into it.** A
+capability removed after the fact produces `UNSATISFIED` on the next run and the
+boolean is cleared, which is why CI re-verifies rather than trusting what is
+recorded.
+
+### Two views of eligibility
+
+Since conditions became clearable there are two, and they can legitimately
+disagree:
+
+| View | Shows | Where |
+|---|---|---|
+| **Catalog** | The reviews, with no condition verified | `source-catalog-v1.md` — generated, committed, CI-checked |
+| **Environment** | The same reviews with the verifiers run here | `sros-source eligibility`, `conditions`, `GET /sources/{id}/eligibility` |
+
+A committed file cannot hold the environment view without drifting with the
+machine that generated it, and a catalog can never assert its own conditions
+satisfied. Each command and each document says which view it is showing.
+
+### Eligible, enabled, implemented
+
+Three facts, and collapsing any two of them is the mistake this section exists
+to prevent:
+
+| Fact | Means |
+|---|---|
+| **collector-eligible** | The governance gate passes. Derived, never stored |
+| **collector-enabled** | The operational switch is on. `registry.sources.collector_enabled` |
+| **collector implemented** | Code exists that can collect from it |
+
+After Mission 1.4, two sources are eligible, **none is enabled, and none is
+implemented**. `sros-source enable` refuses a source with no implemented
+collector — a switch ahead of the thing it switches reads as "this is running" —
+and the orchestrator blocks acquisition under `NO-COLLECTOR-IMPLEMENTED` rather
+than dispatching a job no worker can run.
 
 ---
 
@@ -335,14 +439,32 @@ permission.
 
 ## 10. Current state
 
-Thirteen candidate sources, **zero collector-eligible**. See
-[`source-catalog-v1.md`](source-catalog-v1.md) for the full assessment table and
-[`source-review-guide.md`](source-review-guide.md) for how to conduct a review.
+Thirteen candidate sources, and the count depends on where you ask:
 
-That zero is the expected first-pass outcome. Several sources could not be
-assessed because their terms were not retrievable at review time; per §1 rule 2
-those are `REQUIRES_REVIEW` with the exact outstanding documents named, rather
-than assumed.
+| Where | Eligible |
+|---|---|
+| From the catalog alone | **0** — a catalog can never assert its own conditions satisfied |
+| An environment with the capabilities verified and no credential (CI, a fresh clone) | **2** — `world-bank`, `eurostat` |
+| The same, plus `FRED_API_KEY` configured | **3** — `fred` joins them |
+
+That spread is the model working, not a discrepancy. `fred` differs from the
+other two by one condition whose answer is a property of the deployment rather
+than of the code: with no credential it is **design-eligible and not runnable**,
+and the canonical gate refuses it. Configuring the key satisfies that condition
+through the same verifier as every other, and nothing else changes.
+
+See [`source-catalog-v1.md`](source-catalog-v1.md) for the full assessment
+table, [`source-review-guide.md`](source-review-guide.md) for how to conduct a
+review, and
+[`acquisition-authorization-v1.md`](acquisition-authorization-v1.md) for how a
+condition is cleared.
+
+Several sources could not be assessed because their terms were not retrievable
+at review time; per §1 rule 2 those are `REQUIRES_REVIEW` with the exact
+outstanding documents named, rather than assumed.
+
+**No collector exists**, `collector_enabled` is false for all thirteen, and
+`acquisition.raw_records` is empty.
 
 ## 11. Still open
 

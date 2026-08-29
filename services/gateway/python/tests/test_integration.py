@@ -103,6 +103,10 @@ class TestSchemaRuntime:
             "research.claim_revisions",
             "research.claim_session_observations",
             "scoring.evidence_independence_groups",
+            # 0006_review_conditions
+            "registry.source_review_conditions",
+            # 0007_condition_verification
+            "registry.source_condition_verifications",
         }
 
     def test_the_source_eligibility_view_exists(self, database) -> None:
@@ -127,6 +131,8 @@ class TestSchemaRuntime:
             "0003_row_level_security",
             "0004_source_registry",
             "0005_claim_evidence_alignment",
+            "0006_review_conditions",
+            "0007_condition_verification",
         ]
         assert all(len(r[1]) == 64 for r in rows)  # sha256 hex
 
@@ -529,14 +535,65 @@ class TestSourceRegistryApi:
         body = response.json()
         assert body["count"] > 0
 
-    def test_no_source_is_reported_as_collector_eligible(self, api_client) -> None:
+    def test_no_collector_is_reported_as_enabled(self, api_client) -> None:
+        """Mission 1.4 made eligibility reachable, so the assertion moved to the
+        thing that is still absolutely true: eligible is not enabled, and no
+        collector exists to enable. The count is reported rather than asserted
+        to be zero -- a test that failed the day a review legitimately passed
+        would be asserting a moment rather than a property."""
         body = api_client.get("/api/v1/sources").json()
-        assert body["collector_eligible_count"] == 0
-        assert all(not s["collector_eligible"] for s in body["sources"])
+        assert all(not s["collector_enabled"] for s in body["sources"])
+        assert body["collector_eligible_count"] == sum(
+            1 for s in body["sources"] if not s["blocking_reasons"]
+        )
 
-    def test_every_blocked_source_says_why(self, api_client) -> None:
+    def test_a_source_is_eligible_exactly_when_it_has_no_blocking_reason(self, api_client) -> None:
+        """The view's contract, served unchanged: an empty reason array is the
+        pass, and a blocked source always says why."""
         for source in api_client.get("/api/v1/sources").json()["sources"]:
-            assert source["blocking_reasons"], source["source_id"]
+            assert source["collector_eligible"] == (not source["blocking_reasons"]), source[
+                "source_id"
+            ]
+
+    def test_the_eligibility_endpoint_explains_every_condition(self, api_client) -> None:
+        """Mission 1.4 §32. Read-only visibility into why a source can or cannot
+        be collected from, condition by condition."""
+        body = api_client.get("/api/v1/sources/fred/eligibility").json()
+        assert body["source_id"] == "fred"
+        assert body["approval_state"] == "APPROVED_WITH_CONDITIONS"
+        assert len(body["conditions"]) == 3
+        keys = {c["condition_key"] for c in body["conditions"]}
+        assert keys == {"fred-api-key", "fred-endorsement-notice", "copyrighted-series-excluded"}
+        assert body["collector_enabled"] is False
+        for condition in body["conditions"]:
+            assert condition["description"]
+            assert condition["verification"] in {
+                "CONFIG_REFERENCE",
+                "CAPABILITY",
+                "RETENTION_LIMIT",
+                "ACCESS_METHOD",
+                "HUMAN_CONFIRMATION",
+            }
+
+    def test_the_eligibility_endpoint_serves_key_names_never_credentials(self, api_client) -> None:
+        """§37. A CONFIG_REFERENCE condition's detail is the configuration KEY
+        NAME. The registry never held the value, so this cannot serve it."""
+        body = api_client.get("/api/v1/sources/fred/eligibility").json()
+        credential = next(c for c in body["conditions"] if c["condition_key"] == "fred-api-key")
+        assert credential["verification_detail"] == "FRED_API_KEY"
+        blob = json.dumps(body)
+        assert "sk-" not in blob
+        assert "secret" not in blob.lower()
+
+    def test_the_eligibility_endpoint_cannot_write(self, api_client) -> None:
+        """§32. No mutation path. Verification is administered through the CLI,
+        which runs as the migration role; the runtime role holds SELECT only."""
+        for method in ("post", "put", "patch", "delete"):
+            response = getattr(api_client, method)("/api/v1/sources/fred/eligibility")
+            assert response.status_code in (404, 405), method
+
+    def test_an_unknown_source_eligibility_is_a_404(self, api_client) -> None:
+        assert api_client.get("/api/v1/sources/not-a-source/eligibility").status_code == 404
 
     def test_a_source_detail_carries_its_evidence_urls(self, api_client) -> None:
         """The point of recording evidence is that it can be re-opened. An

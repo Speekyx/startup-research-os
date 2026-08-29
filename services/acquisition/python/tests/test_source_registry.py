@@ -366,12 +366,22 @@ class TestDatabaseRules:
 
     def test_the_python_gate_and_the_sql_view_agree(self, conn, catalog) -> None:
         """Two implementations of one rule is a real risk. The answer is to
-        compare them on every source rather than to trust that they match."""
+        compare them on every source rather than to trust that they match.
+
+        Since Mission 1.4 the Python side is given the satisfaction the database
+        holds. Condition satisfaction is environment state, so evaluating
+        without it would compare the same rule on different inputs and report a
+        divergence that is really a missing argument."""
+        from .conftest import recorded_satisfied_keys
+
         divergences = []
         for source in catalog:
             from_db = read_eligibility(conn, source.source_id)
             assert from_db is not None, source.source_id
-            if from_db.eligible != evaluate_eligibility(source).eligible:
+            from_python = evaluate_eligibility(
+                source, satisfied_conditions=recorded_satisfied_keys(conn, source.source_id)
+            )
+            if from_db.eligible != from_python.eligible:
                 divergences.append(source.source_id)
         assert divergences == []
 

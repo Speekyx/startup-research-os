@@ -78,6 +78,25 @@ def registry_loaded(catalog) -> None:
         connection.commit()
 
 
+def recorded_satisfied_keys(conn, source_id: str) -> frozenset[str]:
+    """The conditions the DATABASE currently considers satisfied.
+
+    Needed by every Python-versus-SQL comparison since Mission 1.4. Condition
+    satisfaction is environment state that lives in the database, so a Python
+    gate evaluated without it is not a second implementation of the same rule --
+    it is the same rule with different inputs, and comparing the two would
+    report a divergence that is really a missing argument.
+    """
+    rows = conn.execute(
+        """SELECT c.condition_key
+             FROM registry.source_review_conditions c
+             JOIN registry.source_policy_reviews r ON r.id = c.review_id
+            WHERE c.source_id = %s AND c.satisfied AND r.superseded_at IS NULL""",
+        (source_id,),
+    ).fetchall()
+    return frozenset(row[0] for row in rows)
+
+
 @pytest.fixture
 def conn() -> Iterator[object]:
     """A plain connection, rolled back at the end of every test.

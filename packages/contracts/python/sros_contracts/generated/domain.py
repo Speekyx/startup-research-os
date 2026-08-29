@@ -8,7 +8,7 @@ Regenerate      : python packages/contracts/tools/generate.py
 Editing this file by hand will be overwritten and will fail the contract
 check in CI. Change the source of truth instead.
 
-contract_version: 1.2.0
+contract_version: 1.4.0
 ontology_version: 2
 """
 
@@ -17,7 +17,7 @@ from __future__ import annotations
 from enum import Enum
 from typing import Final
 
-CONTRACT_VERSION: Final[str] = "1.2.0"
+CONTRACT_VERSION: Final[str] = "1.4.0"
 ONTOLOGY_VERSION: Final[str] = "2"
 RESEARCH_CONTEXT_SCHEMA_VERSION: Final[str] = "1.0.0"
 
@@ -145,6 +145,57 @@ class SourceApprovalState(str, Enum):
     RESTRICTED = "RESTRICTED"  # Some assessed activity is not permitted. Not collector-eligible until the restriction is lifted or the activity is narrowed
     PROHIBITED = "PROHIBITED"  # Documented terms forbid the intended use. A terminal judgment for the assessed scope, revisited only by a new review
     SUSPENDED = "SUSPENDED"  # Operationally halted regardless of review state. An immediate stop that does not wait for a review cycle
+
+
+class ConditionVerification(str, Enum):
+    """HOW a review condition can be checked. Exists so APPROVED_WITH_CONDITIONS cannot silently mean 'a collector may run': each condition is satisfied individually, and one that no machine can verify must say so rather than pretending it can.
+
+    See source-registry-v1.md; Mission 1.3 §24.
+    """
+
+    CONFIG_REFERENCE = "CONFIG_REFERENCE"  # A named configuration key is present in the environment. The KEY name, never its value
+    CAPABILITY = "CAPABILITY"  # A named product capability is implemented and enabled -- for example a surface that can display a required attribution notice
+    RETENTION_LIMIT = "RETENTION_LIMIT"  # A retention limit at or below a stated number of days is configured for the source
+    ACCESS_METHOD = "ACCESS_METHOD"  # Collection uses only a named access method, and no other
+    HUMAN_CONFIRMATION = "HUMAN_CONFIRMATION"  # No machine can check it. A person must record the decision and the reference to it. Marking this satisfied is a human act, and the honest answer for anything a program cannot establish
+
+
+class ConditionVerificationResult(str, Enum):
+    """The outcome of running a verifier against one review condition. Four values rather than a boolean, because 'we could not establish it' and 'it does not hold' call for different next steps and only one of them is a bug. UNKNOWN never becomes SATISFIED, and only SATISFIED clears the condition.
+
+    See source-condition-gap-analysis-v1.md; Mission 1.4 §19.
+    """
+
+    SATISFIED = "SATISFIED"  # The verifier established the condition holds, and recorded what it looked at
+    UNSATISFIED = "UNSATISFIED"  # The verifier ran and the condition does not hold. A definite answer, not an absence of one
+    UNKNOWN = "UNKNOWN"  # The verifier could not establish either answer -- no verifier is registered for the condition, or what it needs to inspect is unavailable. Blocks exactly like UNSATISFIED and must never be promoted
+    NOT_APPLICABLE = "NOT_APPLICABLE"  # The condition does not apply in this context, for a reason the record states. Blocks: a condition that does not apply has still not been satisfied
+
+
+class AttributionElement(str, Enum):
+    """One required part of a source's attribution obligation. A closed enum because the renderer branches exhaustively: an element it does not recognise must be a contract change, never a silently dropped requirement.
+
+    See acquisition-authorization-v1.md; Mission 1.4 §6.
+    """
+
+    SOURCE_CREDIT = "SOURCE_CREDIT"  # Credit to the source, in the wording the source's own terms require
+    LICENCE_IDENTIFIER = "LICENCE_IDENTIFIER"  # The licence the resource is distributed under, named so a reader can find it
+    EXACT_NOTICE = "EXACT_NOTICE"  # A sentence whose wording is prescribed by the terms and must appear verbatim. Never paraphrased, never composed
+    MODIFICATION_STATEMENT = "MODIFICATION_STATEMENT"  # A statement of what was changed, required where the licence requires changes to be indicated. Includes translation
+    DATASET_DOI = "DATASET_DOI"  # The persistent identifier of the specific dataset used. A per-resource value; it cannot be defaulted
+    ACCESS_DATE = "ACCESS_DATE"  # The date the data was retrieved. A per-retrieval value; it cannot be defaulted
+    DISCLAIMER = "DISCLAIMER"  # A disclaimer the terms require alongside modified data, supplied as text rather than composed by this system when the exact wording is not in the recorded evidence
+
+
+class ResourceContentOrigin(str, Enum):
+    """Whether the platform's own licence covers a particular resource. Aggregators republish material they do not own, so platform approval is not resource approval. UNKNOWN exists because it is the common case and must fail closed rather than be guessed either way.
+
+    See acquisition-authorization-v1.md; Mission 1.4 §12.
+    """
+
+    PLATFORM_LICENSED = "PLATFORM_LICENSED"  # The platform produces or licenses this resource, and the reviewed terms cover it
+    THIRD_PARTY = "THIRD_PARTY"  # Owned by someone other than the platform. The platform's approval grants nothing over it, and separate permission from the owner is required
+    UNKNOWN = "UNKNOWN"  # Not established. Denied wherever licensing scope matters: an unexamined resource is not a resource known to be covered
 
 
 class SourceAccessMethod(str, Enum):

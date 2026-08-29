@@ -21,6 +21,7 @@ from sros_contracts.research_context import BudgetConstraints
 from sros_orchestrator import (
     ALLOWED_TRANSITIONS,
     BLOCKED_CAPABILITIES,
+    NO_COLLECTOR_IMPLEMENTED,
     BudgetAccount,
     BudgetGuard,
     BudgetRefusedError,
@@ -351,11 +352,41 @@ class TestPlanning(unittest.TestCase):
         """The unblocked branch must be reachable, or the gate would be a
         permanent refusal dressed as a check. Eligibility comes from a reviewed
         registry row in production; here it is a test double, never a real
-        platform approval."""
+        platform approval.
+
+        Since Mission 1.4 it also takes an implemented collector: both gates
+        have to be clear, and this is the only place in the suite where both
+        are."""
         report = StaticSourceAvailability(
             (SourceAvailability("fixture-source", "APPROVED", True),)
         ).source_availability()
-        self.assertIsNone(acquisition_block(report))
+        self.assertIsNone(acquisition_block(report, frozenset({"fixture-source"})))
+
+    def test_an_eligible_source_with_no_collector_still_blocks(self) -> None:
+        """Mission 1.4 §27. Passing the governance gate says a collector MAY be
+        built, never that one exists.
+
+        This became reachable in Mission 1.4 -- two sources cleared the registry
+        gate -- and without it the planner would have emitted `acquire.collect`
+        for a stage nothing implements. The block names the second gate, so the
+        two are not confused with each other."""
+        report = StaticSourceAvailability(
+            (SourceAvailability("fixture-source", "APPROVED", True),)
+        ).source_availability()
+        block = acquisition_block(report)
+        assert block is not None
+        self.assertEqual(block.decision_id, NO_COLLECTOR_IMPLEMENTED)
+        self.assertIn("fixture-source", block.reason)
+
+    def test_a_collector_for_a_different_source_does_not_lift_the_block(self) -> None:
+        """The two sets are intersected, not counted. A collector for a source
+        that is not eligible unblocks nothing."""
+        report = StaticSourceAvailability(
+            (SourceAvailability("fixture-source", "APPROVED", True),)
+        ).source_availability()
+        block = acquisition_block(report, frozenset({"some-other-source"}))
+        assert block is not None
+        self.assertEqual(block.decision_id, NO_COLLECTOR_IMPLEMENTED)
 
     def test_an_empty_registry_says_so_rather_than_blaming_review(self) -> None:
         """ "Nothing registered" and "nothing approved" have different remedies."""
@@ -437,7 +468,12 @@ class TestPlanning(unittest.TestCase):
         )
         plan = planner.plan(WORKSPACE, SESSION, CORRELATION, _context())
         self.assertEqual(plan.eligible_source_ids, ("fixture-source",))
-        self.assertNotIn(Capability.ACQUISITION.value, plan.blocked_capability_names)
+        # The registry gate is CLEARED and acquisition is still blocked, by the
+        # other gate. Asserted by decision id rather than by absence: "blocked"
+        # is not one fact, and a reader has to be able to tell which of the two
+        # gates is holding.
+        acquisition = next(b for b in plan.blocked if b.capability is Capability.ACQUISITION)
+        self.assertEqual(acquisition.decision_id, NO_COLLECTOR_IMPLEMENTED)
 
     def test_blocked_source_reasons_are_reported_per_source(self) -> None:
         planner = ResearchPlanner(

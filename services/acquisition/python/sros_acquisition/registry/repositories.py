@@ -45,13 +45,15 @@ class LoadReport:
     evidence: int
     retention_overrides: int
     capabilities: int
+    conditions: int = 0
 
     def describe(self) -> str:
         return (
             f"{self.sources} sources, {self.access_profiles} access profiles, "
             f"{self.reviews} reviews, {self.evidence} evidence records, "
             f"{self.retention_overrides} retention overrides, "
-            f"{self.capabilities} capabilities"
+            f"{self.capabilities} capabilities, "
+            f"{self.conditions} review conditions"
         )
 
 
@@ -64,7 +66,16 @@ def load_catalog_into(conn: Any, catalog: SourceCatalog) -> LoadReport:
     which would be a registry nobody could trust.
     """
     counts = dict.fromkeys(
-        ("sources", "access_profiles", "reviews", "evidence", "retention", "capabilities"), 0
+        (
+            "sources",
+            "access_profiles",
+            "reviews",
+            "evidence",
+            "retention",
+            "capabilities",
+            "conditions",
+        ),
+        0,
     )
 
     for source in catalog.sources:
@@ -184,116 +195,174 @@ def load_catalog_into(conn: Any, catalog: SourceCatalog) -> LoadReport:
             )
             counts["capabilities"] += 1
 
-        review = source.review
-        if review is None:
-            continue
-
-        review_id = _row_id("review", source.source_id, str(review.review_version))
-        assessment_values = [review.assessment(activity).value for activity in ASSESSED_ACTIVITIES]
-        conn.execute(
-            f"""INSERT INTO registry.source_policy_reviews
-                    (id, source_id, review_version, approval_state,
-                     {", ".join(ASSESSED_ACTIVITIES)},
-                     assessed_use_case, conditions, open_questions, review_notes,
-                     personal_data_risk, contains_user_generated_content,
-                     contains_user_identifiers, contains_location, sensitive_data_possible,
-                     pseudonymization_expected, discard_identifiers_after_normalization,
-                     jurisdiction_review_required,
-                     reviewed_at, reviewed_by, review_interval_days)
-                VALUES (%s,%s,%s,%s,{",".join(["%s"] * len(ASSESSED_ACTIVITIES))},
-                        %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-                ON CONFLICT (source_id, review_version) DO UPDATE SET
-                    approval_state = EXCLUDED.approval_state,
-                    assessed_use_case = EXCLUDED.assessed_use_case,
-                    conditions = EXCLUDED.conditions,
-                    open_questions = EXCLUDED.open_questions,
-                    review_notes = EXCLUDED.review_notes,
-                    personal_data_risk = EXCLUDED.personal_data_risk,
-                    reviewed_at = EXCLUDED.reviewed_at,
-                    reviewed_by = EXCLUDED.reviewed_by,
-                    review_interval_days = EXCLUDED.review_interval_days,
-                    next_review_at = NULL""",  # noqa: S608 - activity list is a module constant
-            (
-                review_id,
-                source.source_id,
-                review.review_version,
-                review.approval_state.value,
-                *assessment_values,
-                review.assessed_use_case,
-                list(review.conditions),
-                list(review.open_questions),
-                review.review_notes,
-                review.personal_data_risk.value,
-                review.contains_user_generated_content,
-                review.contains_user_identifiers,
-                review.contains_location,
-                review.sensitive_data_possible,
-                review.pseudonymization_expected,
-                review.discard_identifiers_after_normalization,
-                review.jurisdiction_review_required,
-                review.reviewed_at,
-                review.reviewed_by,
-                review.review_interval_days,
-            ),
-        )
-        counts["reviews"] += 1
-
-        for item in review.evidence:
+        # Every review in the history, oldest first. Mission 1.3 §27: a new
+        # review is a new VERSION, and the old one is marked superseded rather
+        # than overwritten -- the record that matters is "Mission 1.0 concluded
+        # X, Mission 1.3 found Y, because document Z became available".
+        history = source.review_history or ((source.review,) if source.review else ())
+        current_version = source.review.review_version if source.review else None
+        for review in history:
+            is_current = review.review_version == current_version
+            review_id = _row_id("review", source.source_id, str(review.review_version))
+            assessment_values = [
+                review.assessment(activity).value for activity in ASSESSED_ACTIVITIES
+            ]
             conn.execute(
-                """INSERT INTO registry.source_policy_evidence
-                       (id, review_id, source_id, document_type, document_title, document_url,
-                        section_reference, summarized_finding, excerpt, review_notes,
-                        retrieved_at, effective_at, document_fingerprint)
-                   VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-                   ON CONFLICT (id) DO UPDATE SET
-                       summarized_finding = EXCLUDED.summarized_finding,
-                       section_reference = EXCLUDED.section_reference,
-                       retrieved_at = EXCLUDED.retrieved_at,
-                       effective_at = EXCLUDED.effective_at""",
+                f"""INSERT INTO registry.source_policy_reviews
+                        (id, source_id, review_version, approval_state,
+                         {", ".join(ASSESSED_ACTIVITIES)},
+                         assessed_use_case, conditions, open_questions, review_notes,
+                         personal_data_risk, contains_user_generated_content,
+                         contains_user_identifiers, contains_location, sensitive_data_possible,
+                         pseudonymization_expected, discard_identifiers_after_normalization,
+                         jurisdiction_review_required,
+                         reviewed_at, reviewed_by, review_interval_days)
+                    VALUES (%s,%s,%s,%s,{",".join(["%s"] * len(ASSESSED_ACTIVITIES))},
+                            %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                    ON CONFLICT (source_id, review_version) DO UPDATE SET
+                        approval_state = EXCLUDED.approval_state,
+                        assessed_use_case = EXCLUDED.assessed_use_case,
+                        conditions = EXCLUDED.conditions,
+                        open_questions = EXCLUDED.open_questions,
+                        review_notes = EXCLUDED.review_notes,
+                        personal_data_risk = EXCLUDED.personal_data_risk,
+                        reviewed_at = EXCLUDED.reviewed_at,
+                        reviewed_by = EXCLUDED.reviewed_by,
+                        review_interval_days = EXCLUDED.review_interval_days,
+                        next_review_at = NULL""",  # noqa: S608 - activity list is a module constant
                 (
-                    _row_id("evidence", source.source_id, item.document_url, item.document_title),
                     review_id,
                     source.source_id,
-                    item.document_type.value,
-                    item.document_title,
-                    item.document_url,
-                    item.section_reference,
-                    item.summarized_finding,
-                    item.excerpt,
-                    item.review_notes,
-                    item.retrieved_at,
-                    item.effective_at,
-                    item.document_fingerprint,
+                    review.review_version,
+                    review.approval_state.value,
+                    *assessment_values,
+                    review.assessed_use_case,
+                    list(review.conditions),
+                    list(review.open_questions),
+                    review.review_notes,
+                    review.personal_data_risk.value,
+                    review.contains_user_generated_content,
+                    review.contains_user_identifiers,
+                    review.contains_location,
+                    review.sensitive_data_possible,
+                    review.pseudonymization_expected,
+                    review.discard_identifiers_after_normalization,
+                    review.jurisdiction_review_required,
+                    review.reviewed_at,
+                    review.reviewed_by,
+                    review.review_interval_days,
                 ),
             )
-            counts["evidence"] += 1
+            counts["reviews"] += 1
 
-        override = source.retention_override
-        if override is not None:
+            for item in review.evidence:
+                conn.execute(
+                    """INSERT INTO registry.source_policy_evidence
+                           (id, review_id, source_id, document_type, document_title, document_url,
+                            section_reference, summarized_finding, excerpt, review_notes,
+                            retrieved_at, effective_at, document_fingerprint)
+                       VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                       ON CONFLICT (id) DO UPDATE SET
+                           summarized_finding = EXCLUDED.summarized_finding,
+                           section_reference = EXCLUDED.section_reference,
+                           retrieved_at = EXCLUDED.retrieved_at,
+                           effective_at = EXCLUDED.effective_at""",
+                    (
+                        # The REVIEW VERSION is part of the identity. The same
+                        # document cited by two reviews is two evidence records with
+                        # two retrieval dates, not one row that moves. Without the
+                        # version, a re-review citing the same URL silently
+                        # re-parented the old row and left the new review with no
+                        # evidence -- which the eligibility gate then blocked on,
+                        # correctly, for a reason that was not true.
+                        _row_id(
+                            "evidence",
+                            source.source_id,
+                            str(review.review_version),
+                            item.document_url,
+                            item.document_title,
+                        ),
+                        review_id,
+                        source.source_id,
+                        item.document_type.value,
+                        item.document_title,
+                        item.document_url,
+                        item.section_reference,
+                        item.summarized_finding,
+                        item.excerpt,
+                        item.review_notes,
+                        item.retrieved_at,
+                        item.effective_at,
+                        item.document_fingerprint,
+                    ),
+                )
+                counts["evidence"] += 1
+
+            # Retention belongs to the source, not to each historical review, so
+            # it is written once — from the current review — rather than once per
+            # version. Writing it in the loop would count it twice and attribute
+            # it to whichever review happened to run last.
+            override = source.retention_override
+            if override is not None and is_current:
+                conn.execute(
+                    """INSERT INTO registry.source_retention_policies
+                           (id, source_id, raw_days, normalized_days, aggregate_permitted,
+                            basis, review_id, reviewed_by)
+                       VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
+                       ON CONFLICT (source_id) DO UPDATE SET
+                           raw_days = EXCLUDED.raw_days,
+                           normalized_days = EXCLUDED.normalized_days,
+                           aggregate_permitted = EXCLUDED.aggregate_permitted,
+                           basis = EXCLUDED.basis,
+                           review_id = EXCLUDED.review_id,
+                           reviewed_by = EXCLUDED.reviewed_by""",
+                    (
+                        _row_id("retention", source.source_id),
+                        source.source_id,
+                        override.raw_days,
+                        override.normalized_days,
+                        override.aggregate_permitted,
+                        override.basis,
+                        review_id,
+                        override.reviewed_by,
+                    ),
+                )
+                counts["retention"] += 1
+
+            # Superseded rows stay readable and stop being the current review.
+            # The eligibility view picks the highest non-superseded version.
             conn.execute(
-                """INSERT INTO registry.source_retention_policies
-                       (id, source_id, raw_days, normalized_days, aggregate_permitted,
-                        basis, review_id, reviewed_by)
-                   VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
-                   ON CONFLICT (source_id) DO UPDATE SET
-                       raw_days = EXCLUDED.raw_days,
-                       normalized_days = EXCLUDED.normalized_days,
-                       aggregate_permitted = EXCLUDED.aggregate_permitted,
-                       basis = EXCLUDED.basis,
-                       review_id = EXCLUDED.review_id,
-                       reviewed_by = EXCLUDED.reviewed_by""",
-                (
-                    _row_id("retention", source.source_id),
-                    source.source_id,
-                    override.raw_days,
-                    override.normalized_days,
-                    override.aggregate_permitted,
-                    override.basis,
-                    review_id,
-                    override.reviewed_by,
-                ),
+                "UPDATE registry.source_policy_reviews SET superseded_at = %s WHERE id = %s",
+                (None if is_current else review.reviewed_at, review_id),
             )
-            counts["retention"] += 1
+
+            for condition in review.required_conditions:
+                # `satisfied` is never written here. The catalog DECLARES
+                # conditions; whether they hold is environment state, and a
+                # catalog that could assert its own conditions satisfied would
+                # make APPROVED_WITH_CONDITIONS meaningless (§24).
+                conn.execute(
+                    """INSERT INTO registry.source_review_conditions
+                           (id, review_id, source_id, condition_key, description,
+                            verification, verification_detail)
+                       VALUES (%s,%s,%s,%s,%s,%s,%s)
+                       ON CONFLICT (review_id, condition_key) DO UPDATE SET
+                           description = EXCLUDED.description,
+                           verification = EXCLUDED.verification,
+                           verification_detail = EXCLUDED.verification_detail""",
+                    (
+                        _row_id(
+                            "condition", source.source_id, str(review.review_version), condition.key
+                        ),
+                        review_id,
+                        source.source_id,
+                        condition.key,
+                        condition.description,
+                        condition.verification.value,
+                        condition.verification_detail,
+                    ),
+                )
+                counts["conditions"] += 1
 
     return LoadReport(
         sources=counts["sources"],
@@ -302,6 +371,7 @@ def load_catalog_into(conn: Any, catalog: SourceCatalog) -> LoadReport:
         evidence=counts["evidence"],
         retention_overrides=counts["retention"],
         capabilities=counts["capabilities"],
+        conditions=counts["conditions"],
     )
 
 

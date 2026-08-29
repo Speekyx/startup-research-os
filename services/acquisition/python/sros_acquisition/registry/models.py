@@ -30,6 +30,7 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 
 from sros_contracts import (
+    ConditionVerification,
     PersonalDataRisk,
     PolicyAssessment,
     PolicyEvidenceType,
@@ -45,6 +46,7 @@ __all__ = [
     "SourceRecord",
     "AccessProfile",
     "PolicyReview",
+    "ReviewCondition",
     "PolicyEvidence",
     "RetentionOverride",
     "CoverageScope",
@@ -223,6 +225,66 @@ class PolicyEvidence:
 
 
 @dataclass(frozen=True)
+class ReviewCondition:
+    """One condition an approving review depends on, stated so it can be checked.
+
+    Mission 1.3 §24. `APPROVED_WITH_CONDITIONS` must not silently mean "a
+    collector may run". The old model recorded conditions as prose in a
+    `TEXT[]`, which a reviewer could read and nothing could evaluate -- adequate
+    while every review was blocking anyway, useless the moment one approves.
+
+    So each condition names HOW it is verified. `HUMAN_CONFIRMATION` is a real
+    answer and the honest one for anything a program cannot establish: §24
+    forbids encoding legal prose as executable logic, and pretending a machine
+    can check "attribution is adequate" would be exactly that.
+
+    `satisfied` is ENVIRONMENT state, not catalog state. The catalog declares
+    what must hold; whether it holds depends on what is deployed. A catalog load
+    can never set it -- see `load_catalog_into`.
+    """
+
+    key: str
+    description: str
+    verification: ConditionVerification
+    verification_detail: str | None = None
+
+    def __post_init__(self) -> None:
+        if not self.key.strip():
+            raise SourceRegistryError("condition.key", "required and stable across reviews")
+        if not self.description.strip():
+            raise SourceRegistryError(
+                "condition.description",
+                "required: a condition nobody can read cannot be argued with",
+            )
+        if not isinstance(self.verification, ConditionVerification):
+            raise SourceRegistryError("condition.verification", "must be a ConditionVerification")
+        # A mechanical check needs something to look at. Only human confirmation
+        # can legitimately point at nothing.
+        if (
+            self.verification is not ConditionVerification.HUMAN_CONFIRMATION
+            and not (self.verification_detail or "").strip()
+        ):
+            raise SourceRegistryError(
+                "condition.verification_detail",
+                f"{self.verification.value} must name what is checked -- a config key, a "
+                "capability, a day count or an access method. If nothing can be checked, "
+                "the verification is HUMAN_CONFIRMATION",
+            )
+
+    @property
+    def mechanically_verifiable(self) -> bool:
+        return self.verification is not ConditionVerification.HUMAN_CONFIRMATION
+
+    def to_json(self) -> dict[str, object]:
+        return {
+            "key": self.key,
+            "description": self.description,
+            "verification": self.verification.value,
+            "verification_detail": self.verification_detail,
+        }
+
+
+@dataclass(frozen=True)
 class PolicyReview:
     """A dated, versioned assessment of one source for one stated use (§11).
 
@@ -242,6 +304,9 @@ class PolicyReview:
 
     assessments: dict[str, PolicyAssessment] = field(default_factory=dict)
     conditions: tuple[str, ...] = ()
+    # Structured, individually satisfiable. `conditions` above stays as the
+    # reviewer's own prose summary; this is what the gate evaluates.
+    required_conditions: tuple[ReviewCondition, ...] = ()
     open_questions: tuple[str, ...] = ()
     review_notes: str | None = None
 
@@ -303,6 +368,7 @@ class PolicyReview:
         if (
             self.approval_state is SourceApprovalState.APPROVED_WITH_CONDITIONS
             and not self.conditions
+            and not self.required_conditions
         ):
             raise SourceRegistryError(
                 "review.conditions",
@@ -515,6 +581,12 @@ class SourceRecord:
 
     access_profiles: tuple[AccessProfile, ...] = ()
     review: PolicyReview | None = None
+    # Every review this source has ever had, oldest first. Mission 1.3 §27:
+    # a new review creates a new VERSION rather than overwriting the old one,
+    # because the useful record is "Mission 1.0 concluded X, Mission 1.3 found
+    # Y, because document Z became available". Overwriting destroys exactly
+    # the part a reader needs in order to trust the current verdict.
+    review_history: tuple[PolicyReview, ...] = ()
     retention_override: RetentionOverride | None = None
 
     # §21. False for every new source, always.

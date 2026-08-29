@@ -73,6 +73,13 @@ jobs:
       # environment must never be able to reduce it to nothing.
       - name: Catalog states, evidence and secrets
         run: python infrastructure/scripts/validate_source_registry.py
+      # Mission 1.4. Conditions became clearable, so the gate between an
+      # approving review and a collector now has a second half: every condition
+      # must resolve to a real verifier, every capability a condition names must
+      # pass its own conformance check, and an ineligible source must produce no
+      # acquisition authorization. Zero-dependency for the same reason as above.
+      - name: Compliance capabilities, verifiers and the acquisition boundary
+        run: python infrastructure/scripts/validate_compliance_capabilities.py
       # §43: CI contacts no external platform. Fetching a source's terms here
       # would itself be collection, and would make the build depend on a third
       # party's uptime. Asserted rather than trusted.
@@ -81,6 +88,16 @@ jobs:
           if grep -rnE '^[[:space:]]*(import|from)[[:space:]]+(requests|httpx|urllib|aiohttp|http\.client|socket|playwright|selenium)\b' \
                services/acquisition/python/sros_acquisition; then
             echo "the source registry imports a network client; it governs collection, it does not collect" >&2
+            exit 1
+          fi
+      # A collector would be the thing every gate above exists to stand in front
+      # of. Its absence is asserted rather than assumed, in the job that would
+      # still run if the dependency environment were broken.
+      - name: No collector exists
+        run: |
+          if [ -d services/acquisition/python/sros_acquisition/collectors ] || \
+             find services/acquisition/python/sros_acquisition -name 'collector*.py' | grep -q .; then
+            echo "a collector module exists; no mission so far implements one" >&2
             exit 1
           fi
 
@@ -170,6 +187,11 @@ jobs:
       # the wrong one (ADR-009, applied to documentation).
       - name: Rendered source catalog is in sync
         run: uv run sros-source render --check
+      # The review-results document is the DIFF view -- what each verdict was and
+      # what moved it. Generated from the same catalog, checked for the same
+      # reason: two hand-maintained copies of one fact drift.
+      - name: Source review results are in sync
+        run: uv run python infrastructure/scripts/render_review_results.py --check
       # The sensitivity analysis is generated from the reference implementation,
       # so it cannot describe behaviour the code does not have. Same argument as
       # the catalog above, applied to a document that reports findings.
@@ -242,18 +264,38 @@ jobs:
       # assertion after it is the one that matters. Resolving D-07 approved no
       # source, and a build in which one had quietly become collectable should
       # be red (§31).
-      - name: Source registry loads and grants nothing
+      # `load` is idempotent and grants nothing; `verify --apply` is what can
+      # change eligibility, and it runs here rather than being assumed so the
+      # assertion below sees the state a real deployment would have.
+      #
+      # No credential is present in CI, so FRED's CONFIG_REFERENCE condition
+      # resolves NOT_CONFIGURED and FRED stays blocked. That is the §17
+      # distinction working: the compliance capability exists, the runtime
+      # credential does not, and CI proves the first without needing the second.
+      - name: Source registry loads, verifies, and grants nothing unverified
         run: |
           uv run sros-source load
+          uv run sros-source verify --apply
           uv run python infrastructure/scripts/assert_registry_grants_nothing.py
 
-      - name: No provider credential is present
+      # Mission 1.4 §17 adds FRED_API_KEY to this list. CI must not have one:
+      # a source that became runnable because a build secret was added would be
+      # a source nobody decided to make runnable.
+      - name: No provider or source credential is present
         run: |
-          if [ -n "$ANTHROPIC_API_KEY" ] || [ -n "$GEMINI_API_KEY" ]; then
-            echo "a provider credential is exposed to CI; no job here needs one" >&2
+          if [ -n "$ANTHROPIC_API_KEY" ] || [ -n "$GEMINI_API_KEY" ] || [ -n "$FRED_API_KEY" ]; then
+            echo "a credential is exposed to CI; no job here needs one" >&2
             exit 1
           fi
           test "${SROS_ENABLE_PROVIDER_SMOKE_TESTS:-0}" = "0"
+      # `.env.example` is committed, so a value in it is a published secret.
+      - name: The environment template carries no credential value
+        run: |
+          if grep -nE '^[A-Z_]*(API_KEY|SECRET|TOKEN|PASSWORD)=.+' infrastructure/compose/.env.example \
+             | grep -vE '=sros_dev_password$'; then
+            echo "infrastructure/compose/.env.example contains a value for a credential key" >&2
+            exit 1
+          fi
 
   compose:
     name: Docker Compose configuration

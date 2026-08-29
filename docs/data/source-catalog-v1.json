@@ -1,13 +1,15 @@
 {
-  "catalog_version": "1.0.0",
+  "catalog_version": "1.1",
   "$comment": "MACHINE-READABLE SOURCE OF TRUTH for the initial source catalog (Mission 1.0, D-07). The human-readable table in source-catalog-v1.md is rendered from this file and checked in CI, so the two cannot drift. Edited by hand; loaded into PostgreSQL by `sros-source load`; validated with no dependencies by infrastructure/scripts/validate_source_registry.py.",
   "assessed_use_case": "Automated collection of public content by Startup Research OS, a COMMERCIAL multi-tenant SaaS, for storage, derived analytics and LLM processing to produce opportunity intelligence. Every assessment below is scoped to that use. An assessment does not transfer to non-commercial or academic use, and a permission granted for a narrower purpose does not widen to this one.",
-  "reviewer": "mission-1.0",
+  "reviewer": "mission-1.3",
   "review_date": "2026-08-29",
   "known_limitations": [
-    "Reddit and Stack Exchange documentation could not be retrieved from this environment: both hosts are unreachable through the available fetch path. Their assessments rest on no evidence and are REQUIRES_REVIEW with the exact documents named.",
-    "No assessment here is a legal opinion. Where a conclusion would require legal judgment, the recorded value is UNCLEAR or NOT_ADDRESSED and a human review is required.",
-    "No source data was collected. Only official documentation about the sources was read."
+    "Reddit's governing policy documents (Data API Terms, Developer Terms, Responsible Builder Policy) could not be retrieved: redditinc.com is blocked by this environment's browsing policy. Reddit stays REQUIRES_REVIEW with those documents named.",
+    "Stack Exchange's Public Network Terms of Service and Consolidated Responsible AI policy could not be retrieved: stackoverflow.com served an anti-bot interstitial for those paths and this review did not attempt to bypass it (§8).",
+    "No assessment here is a legal opinion. Where a conclusion would require legal judgment, the recorded value is UNCLEAR or NOT_ADDRESSED and human review is required.",
+    "No source data was collected. Only official documentation ABOUT the sources was read.",
+    "Three sources are APPROVED_WITH_CONDITIONS. None is collector-eligible: every condition is unsatisfied because the capabilities they require do not exist yet."
   ],
   "sources": [
     {
@@ -62,42 +64,86 @@
           "notes": "Reddit introduced paid API tiers in 2023. Neither the current tiers nor the current limits were verified here."
         }
       ],
-      "review": {
-        "approval_state": "REQUIRES_REVIEW",
-        "automated_access": "NOT_ASSESSED",
-        "api_use": "NOT_ASSESSED",
-        "browser_automation": "NOT_ASSESSED",
-        "commercial_use": "NOT_ASSESSED",
-        "storage": "NOT_ASSESSED",
-        "retention": "NOT_ASSESSED",
-        "redistribution": "NOT_ASSESSED",
-        "derived_analytics": "NOT_ASSESSED",
-        "model_processing": "NOT_ASSESSED",
-        "personal_data_handling": "NOT_ASSESSED",
-        "attribution_required": "NOT_ASSESSED",
-        "personal_data_risk": "PSEUDONYMOUS",
-        "contains_user_generated_content": true,
-        "contains_user_identifiers": true,
-        "contains_location": false,
-        "sensitive_data_possible": true,
-        "pseudonymization_expected": true,
-        "discard_identifiers_after_normalization": true,
-        "jurisdiction_review_required": true,
-        "review_interval_days": 180,
-        "conditions": [],
-        "open_questions": [
-          "Retrieve and assess the Reddit Data API Terms at https://www.redditinc.com/policies/data-api-terms",
-          "Retrieve and assess the Reddit Developer Terms at https://www.redditinc.com/policies/developer-terms",
-          "Determine the current API pricing tiers and whether a commercial tier is required for this use",
-          "Determine documented rate limits for the applicable tier",
-          "Determine whether content may be retained, and for how long",
-          "Determine whether use of content for model processing is addressed",
-          "Determine attribution requirements"
-        ],
-        "review_notes": "No evidence could be gathered: redditinc.com and reddit.com are unreachable from this environment. Reddit's 2023 API changes are widely understood to have introduced paid tiers and restrictions on automated use, which makes an unverified assumption particularly unsafe here. Nothing is assessed; every activity is NOT_ASSESSED rather than assumed."
-      },
-      "evidence": [],
-      "retention_override": null
+      "retention_override": null,
+      "reviews": [
+        {
+          "approval_state": "REQUIRES_REVIEW",
+          "automated_access": "NOT_ASSESSED",
+          "api_use": "NOT_ASSESSED",
+          "browser_automation": "NOT_ASSESSED",
+          "commercial_use": "NOT_ASSESSED",
+          "storage": "NOT_ASSESSED",
+          "retention": "NOT_ASSESSED",
+          "redistribution": "NOT_ASSESSED",
+          "derived_analytics": "NOT_ASSESSED",
+          "model_processing": "NOT_ASSESSED",
+          "personal_data_handling": "NOT_ASSESSED",
+          "attribution_required": "NOT_ASSESSED",
+          "personal_data_risk": "PSEUDONYMOUS",
+          "contains_user_generated_content": true,
+          "contains_user_identifiers": true,
+          "contains_location": false,
+          "sensitive_data_possible": true,
+          "pseudonymization_expected": true,
+          "discard_identifiers_after_normalization": true,
+          "jurisdiction_review_required": true,
+          "review_interval_days": 180,
+          "conditions": [],
+          "open_questions": [
+            "Retrieve and assess the Reddit Data API Terms at https://www.redditinc.com/policies/data-api-terms",
+            "Retrieve and assess the Reddit Developer Terms at https://www.redditinc.com/policies/developer-terms",
+            "Determine the current API pricing tiers and whether a commercial tier is required for this use",
+            "Determine documented rate limits for the applicable tier",
+            "Determine whether content may be retained, and for how long",
+            "Determine whether use of content for model processing is addressed",
+            "Determine attribution requirements"
+          ],
+          "review_notes": "No evidence could be gathered: redditinc.com and reddit.com are unreachable from this environment. Reddit's 2023 API changes are widely understood to have introduced paid tiers and restrictions on automated use, which makes an unverified assumption particularly unsafe here. Nothing is assessed; every activity is NOT_ASSESSED rather than assumed.",
+          "review_version": 1,
+          "reviewed_by": "mission-1.0",
+          "reviewed_at": "2026-08-29T00:00:00+00:00",
+          "evidence": []
+        },
+        {
+          "review_version": 2,
+          "approval_state": "REQUIRES_REVIEW",
+          "reviewed_by": "mission-1.3",
+          "reviewed_at": "2026-08-29T00:00:00+00:00",
+          "review_interval_days": 180,
+          "automated_access": "PERMITTED_WITH_CONDITIONS",
+          "api_use": "PERMITTED_WITH_CONDITIONS",
+          "browser_automation": "NOT_ASSESSED",
+          "commercial_use": "UNCLEAR",
+          "storage": "NOT_ASSESSED",
+          "retention": "NOT_ASSESSED",
+          "redistribution": "NOT_ASSESSED",
+          "derived_analytics": "NOT_ASSESSED",
+          "model_processing": "NOT_ASSESSED",
+          "personal_data_handling": "NOT_ASSESSED",
+          "attribution_required": "NOT_ASSESSED",
+          "personal_data_risk": "PSEUDONYMOUS",
+          "contains_user_generated_content": true,
+          "contains_user_identifiers": true,
+          "jurisdiction_review_required": true,
+          "conditions": [],
+          "open_questions": [
+            "Retrieve the Reddit Data API Terms (https://redditinc.com/policies/data-api-terms), the Developer Terms and the Responsible Builder Policy from an environment that can reach redditinc.com.",
+            "Determine whether a commercial multi-tenant SaaS is eligible for free-tier access or requires a separate commercial agreement — the wiki's phrase 'those eligible for free access usage' implies a condition it does not state.",
+            "Determine the data retention and deletion obligations that apply when a Reddit user deletes content, and whether model processing of Reddit content is addressed."
+          ],
+          "review_notes": "Status unchanged at REQUIRES_REVIEW; the rate limit moves from UNKNOWN to documented, which is a real improvement. The three governing policy documents are named but were not retrieved: redditinc.com is blocked by this environment's browsing policy, so the Data API Terms, Developer Terms and Responsible Builder Policy could not be read. That is an environment limitation, not a statement about Reddit, and it is recorded as such. No fallback to scraping was considered: difficulty obtaining API terms is not a reason to bypass them.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "Reddit Data API Wiki",
+              "document_url": "https://support.reddithelp.com/hc/en-us/articles/16160319875092-Reddit-Data-API-Wiki",
+              "section_reference": "Rules; Rate limits",
+              "summarized_finding": "Use of the Data API is subject to the Responsible Builder Policy, the Developer Terms and the Data API Terms, and the wiki directs prospective users to contact Reddit to request access. Clients must authenticate with a registered OAuth token; traffic not using OAuth or login credentials is blocked. A descriptive User-Agent in a specified format is required. The documented free-tier limit is 100 queries per minute per OAuth client id, averaged over a ten-minute window — and the wording is 'those ELIGIBLE FOR free access usage', which implies an eligibility condition the wiki does not itself define.",
+              "retrieved_at": "2026-08-29T00:00:00+00:00"
+            }
+          ]
+        }
+      ]
     },
     {
       "source_id": "hacker-news",
@@ -166,50 +212,101 @@
           "notes": "robots.txt publishes Crawl-delay: 30 and disallows a set of action endpoints. The crawl delay is a documented access directive, not a permission to collect."
         }
       ],
-      "review": {
-        "approval_state": "REQUIRES_REVIEW",
-        "automated_access": "PERMITTED_WITH_CONDITIONS",
-        "api_use": "NOT_ASSESSED",
-        "browser_automation": "NOT_ADDRESSED",
-        "commercial_use": "NOT_ASSESSED",
-        "storage": "NOT_ASSESSED",
-        "retention": "NOT_ASSESSED",
-        "redistribution": "NOT_ASSESSED",
-        "derived_analytics": "NOT_ASSESSED",
-        "model_processing": "NOT_ASSESSED",
-        "personal_data_handling": "NOT_ASSESSED",
-        "attribution_required": "NOT_ASSESSED",
-        "personal_data_risk": "PSEUDONYMOUS",
-        "contains_user_generated_content": true,
-        "contains_user_identifiers": true,
-        "contains_location": false,
-        "sensitive_data_possible": false,
-        "pseudonymization_expected": true,
-        "discard_identifiers_after_normalization": true,
-        "jurisdiction_review_required": true,
-        "review_interval_days": 180,
-        "conditions": [
-          "Any crawl of news.ycombinator.com must honour Crawl-delay: 30 and must not touch the disallowed action endpoints"
-        ],
-        "open_questions": [
-          "Confirm the terms governing the official Firebase API at https://github.com/HackerNews/API",
-          "Determine whether Y Combinator publishes terms addressing commercial reuse of Hacker News content",
-          "Determine whether retention or redistribution is addressed anywhere",
-          "Determine whether use for model processing is addressed"
-        ],
-        "review_notes": "The only evidence gathered is robots.txt, which is an access directive rather than a licence. It establishes a crawl rate and a set of forbidden paths; it says nothing about commercial reuse, retention or model processing. Automated access is PERMITTED_WITH_CONDITIONS on that narrow basis alone. Everything that would be needed to approve collection remains unassessed."
-      },
-      "evidence": [
+      "retention_override": null,
+      "reviews": [
         {
-          "document_type": "OFFICIAL_ACCESS_CONTROL",
-          "document_title": "Hacker News robots.txt",
-          "document_url": "https://news.ycombinator.com/robots.txt",
-          "section_reference": "User-agent: *",
-          "summarized_finding": "Publishes Crawl-delay: 30 for all user agents and disallows the action endpoints /collapse, /context, /fave, /flag, /hide, /login, /logout, /r, /reply, /submitlink, /vote and /x. No Allow directives are present.",
-          "retrieved_at": "2026-08-29T00:00:00Z"
+          "approval_state": "REQUIRES_REVIEW",
+          "automated_access": "PERMITTED_WITH_CONDITIONS",
+          "api_use": "NOT_ASSESSED",
+          "browser_automation": "NOT_ADDRESSED",
+          "commercial_use": "NOT_ASSESSED",
+          "storage": "NOT_ASSESSED",
+          "retention": "NOT_ASSESSED",
+          "redistribution": "NOT_ASSESSED",
+          "derived_analytics": "NOT_ASSESSED",
+          "model_processing": "NOT_ASSESSED",
+          "personal_data_handling": "NOT_ASSESSED",
+          "attribution_required": "NOT_ASSESSED",
+          "personal_data_risk": "PSEUDONYMOUS",
+          "contains_user_generated_content": true,
+          "contains_user_identifiers": true,
+          "contains_location": false,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": true,
+          "discard_identifiers_after_normalization": true,
+          "jurisdiction_review_required": true,
+          "review_interval_days": 180,
+          "conditions": [
+            "Any crawl of news.ycombinator.com must honour Crawl-delay: 30 and must not touch the disallowed action endpoints"
+          ],
+          "open_questions": [
+            "Confirm the terms governing the official Firebase API at https://github.com/HackerNews/API",
+            "Determine whether Y Combinator publishes terms addressing commercial reuse of Hacker News content",
+            "Determine whether retention or redistribution is addressed anywhere",
+            "Determine whether use for model processing is addressed"
+          ],
+          "review_notes": "The only evidence gathered is robots.txt, which is an access directive rather than a licence. It establishes a crawl rate and a set of forbidden paths; it says nothing about commercial reuse, retention or model processing. Automated access is PERMITTED_WITH_CONDITIONS on that narrow basis alone. Everything that would be needed to approve collection remains unassessed.",
+          "review_version": 1,
+          "reviewed_by": "mission-1.0",
+          "reviewed_at": "2026-08-29T00:00:00+00:00",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_ACCESS_CONTROL",
+              "document_title": "Hacker News robots.txt",
+              "document_url": "https://news.ycombinator.com/robots.txt",
+              "section_reference": "User-agent: *",
+              "summarized_finding": "Publishes Crawl-delay: 30 for all user agents and disallows the action endpoints /collapse, /context, /fave, /flag, /hide, /login, /logout, /r, /reply, /submitlink, /vote and /x. No Allow directives are present.",
+              "retrieved_at": "2026-08-29T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "review_version": 2,
+          "approval_state": "REQUIRES_REVIEW",
+          "reviewed_by": "mission-1.3",
+          "reviewed_at": "2026-08-29T00:00:00+00:00",
+          "review_interval_days": 180,
+          "automated_access": "PERMITTED_WITH_CONDITIONS",
+          "api_use": "PERMITTED_WITH_CONDITIONS",
+          "browser_automation": "NOT_PERMITTED",
+          "commercial_use": "NOT_ADDRESSED",
+          "storage": "NOT_ADDRESSED",
+          "retention": "NOT_ADDRESSED",
+          "redistribution": "NOT_PERMITTED",
+          "derived_analytics": "NOT_ADDRESSED",
+          "model_processing": "NOT_ADDRESSED",
+          "personal_data_handling": "NOT_ADDRESSED",
+          "attribution_required": "NOT_ADDRESSED",
+          "personal_data_risk": "PSEUDONYMOUS",
+          "contains_user_generated_content": true,
+          "contains_user_identifiers": true,
+          "jurisdiction_review_required": true,
+          "conditions": [],
+          "open_questions": [
+            "Ask api@ycombinator.com — the contact the API documentation itself publishes — whether providing the official API authorises commercial storage and derived analytics of the returned Site Content, given the derivative-works clause in the Terms of Use.",
+            "Determine whether any retention or deletion obligation applies to API-obtained items when a user deletes their account, given that YC reserves the right to refuse to delete submissions and comments."
+          ],
+          "review_notes": "Status unchanged at REQUIRES_REVIEW, but the assessment underneath it changed materially. Browser automation and public-web collection move to NOT_PERMITTED: the Terms of Use prohibit scraping and data mining in plain words. The official Firebase API is a separate, expressly authorised mechanism and remains available. What is unresolved is narrow and specific: the ToS also prohibits creating derivative works based on Site Content 'except as expressly authorized', and nothing states whether publishing the API extends that authorisation to commercial storage and derived analytics. Silence is not permission, so the source stays blocked.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "Hacker News API — official documentation",
+              "document_url": "https://github.com/HackerNews/API",
+              "section_reference": "Overview; URI and Versioning",
+              "summarized_finding": "Y Combinator publishes an official read-only API in partnership with Firebase, explicitly to make public Hacker News data available in near real time. No authentication is required and the documentation states there is currently no rate limit. The documentation covers items, users and update feeds and is silent on commercial use, storage, retention and redistribution.",
+              "retrieved_at": "2026-08-29T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_TERMS",
+              "document_title": "Y Combinator Terms of Use",
+              "document_url": "https://www.ycombinator.com/legal/",
+              "section_reference": "Site Content, Software and Trademarks",
+              "summarized_finding": "The Terms of Use prohibit, except as expressly authorised by Y Combinator, modifying, copying, framing, SCRAPING, selling, distributing or creating derivative works based on the Site or Site Content, and state that 'in connection with your use of the Site you will not engage in or use any data mining, robots, scraping or similar data gathering or extraction methods'. Circumventing an IP block is separately prohibited.",
+              "retrieved_at": "2026-08-29T00:00:00+00:00"
+            }
+          ]
         }
-      ],
-      "retention_override": null
+      ]
     },
     {
       "source_id": "stack-exchange",
@@ -261,40 +358,84 @@
           "acquisition_cost": "UNKNOWN"
         }
       ],
-      "review": {
-        "approval_state": "REQUIRES_REVIEW",
-        "automated_access": "NOT_ASSESSED",
-        "api_use": "NOT_ASSESSED",
-        "browser_automation": "NOT_ASSESSED",
-        "commercial_use": "NOT_ASSESSED",
-        "storage": "NOT_ASSESSED",
-        "retention": "NOT_ASSESSED",
-        "redistribution": "NOT_ASSESSED",
-        "derived_analytics": "NOT_ASSESSED",
-        "model_processing": "NOT_ASSESSED",
-        "personal_data_handling": "NOT_ASSESSED",
-        "attribution_required": "NOT_ASSESSED",
-        "personal_data_risk": "PSEUDONYMOUS",
-        "contains_user_generated_content": true,
-        "contains_user_identifiers": true,
-        "contains_location": false,
-        "sensitive_data_possible": false,
-        "pseudonymization_expected": true,
-        "discard_identifiers_after_normalization": true,
-        "jurisdiction_review_required": true,
-        "review_interval_days": 180,
-        "conditions": [],
-        "open_questions": [
-          "Retrieve and assess the API documentation and quota rules at https://api.stackexchange.com/docs",
-          "Retrieve and assess the content licence at https://stackoverflow.com/help/licensing, including which Creative Commons version applies to which date ranges and what attribution it requires",
-          "Determine whether the licence permits commercial redistribution of derived analytics and under what attribution",
-          "Determine whether use for model processing is addressed",
-          "Determine the documented request quota and its period"
-        ],
-        "review_notes": "No evidence could be gathered: api.stackexchange.com and stackoverflow.com are unreachable from this environment. Stack Exchange content is understood to carry a Creative Commons licence with attribution requirements, and attribution obligations attach to derived works in ways that must be read before any collection. Nothing is assessed."
-      },
-      "evidence": [],
-      "retention_override": null
+      "retention_override": null,
+      "reviews": [
+        {
+          "approval_state": "REQUIRES_REVIEW",
+          "automated_access": "NOT_ASSESSED",
+          "api_use": "NOT_ASSESSED",
+          "browser_automation": "NOT_ASSESSED",
+          "commercial_use": "NOT_ASSESSED",
+          "storage": "NOT_ASSESSED",
+          "retention": "NOT_ASSESSED",
+          "redistribution": "NOT_ASSESSED",
+          "derived_analytics": "NOT_ASSESSED",
+          "model_processing": "NOT_ASSESSED",
+          "personal_data_handling": "NOT_ASSESSED",
+          "attribution_required": "NOT_ASSESSED",
+          "personal_data_risk": "PSEUDONYMOUS",
+          "contains_user_generated_content": true,
+          "contains_user_identifiers": true,
+          "contains_location": false,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": true,
+          "discard_identifiers_after_normalization": true,
+          "jurisdiction_review_required": true,
+          "review_interval_days": 180,
+          "conditions": [],
+          "open_questions": [
+            "Retrieve and assess the API documentation and quota rules at https://api.stackexchange.com/docs",
+            "Retrieve and assess the content licence at https://stackoverflow.com/help/licensing, including which Creative Commons version applies to which date ranges and what attribution it requires",
+            "Determine whether the licence permits commercial redistribution of derived analytics and under what attribution",
+            "Determine whether use for model processing is addressed",
+            "Determine the documented request quota and its period"
+          ],
+          "review_notes": "No evidence could be gathered: api.stackexchange.com and stackoverflow.com are unreachable from this environment. Stack Exchange content is understood to carry a Creative Commons licence with attribution requirements, and attribution obligations attach to derived works in ways that must be read before any collection. Nothing is assessed.",
+          "review_version": 1,
+          "reviewed_by": "mission-1.0",
+          "reviewed_at": "2026-08-29T00:00:00+00:00",
+          "evidence": []
+        },
+        {
+          "review_version": 2,
+          "approval_state": "REQUIRES_REVIEW",
+          "reviewed_by": "mission-1.3",
+          "reviewed_at": "2026-08-29T00:00:00+00:00",
+          "review_interval_days": 180,
+          "automated_access": "PERMITTED_WITH_CONDITIONS",
+          "api_use": "PERMITTED_WITH_CONDITIONS",
+          "browser_automation": "NOT_ASSESSED",
+          "commercial_use": "UNCLEAR",
+          "storage": "NOT_ADDRESSED",
+          "retention": "NOT_ADDRESSED",
+          "redistribution": "UNCLEAR",
+          "derived_analytics": "NOT_ADDRESSED",
+          "model_processing": "UNCLEAR",
+          "personal_data_handling": "NOT_ADDRESSED",
+          "attribution_required": "PERMITTED",
+          "personal_data_risk": "PSEUDONYMOUS",
+          "contains_user_generated_content": true,
+          "contains_user_identifiers": true,
+          "jurisdiction_review_required": true,
+          "conditions": [],
+          "open_questions": [
+            "Retrieve the Public Network Terms of Service (https://stackoverflow.com/legal/terms-of-service/public) and the Consolidated Responsible AI policy (https://stackoverflow.com/legal/consolidated-responsible-ai-policy) from an environment those paths serve, and assess commercial reuse, storage and model processing against them.",
+            "Determine the precise attribution obligations that CC BY-SA imposes on derived analytics, and whether share-alike reaches aggregated outputs.",
+            "Determine whether Stack Data Licensing is the required route for this use case, and if so what it covers."
+          ],
+          "review_notes": "Status unchanged at REQUIRES_REVIEW, with attribution now established as a hard requirement. The API Terms of Use were retrieved; the Public Network Terms of Service and the Consolidated Responsible AI policy were NOT — stackoverflow.com served an anti-bot interstitial for those paths, and this review did not attempt to bypass it. The existence of a paid Stack Data Licensing product alongside a free API is itself a signal that commercial and model-processing use may require a separate agreement, but a signal is not a term, and the review does not treat it as one.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_TERMS",
+              "document_title": "Stack Exchange, Inc. API Terms of Use",
+              "document_url": "https://stackoverflow.com/legal/api-terms-of-use",
+              "section_reference": "API Attribution; Stack Exchange Trademark and Brand Guidelines; Termination",
+              "summarized_finding": "Attribution is mandatory and specific: all applications must VISUALLY INDICATE that the Stack Exchange Network is the source of content provided through the API, and applications indexed by search engines must follow the attribution rules in the Terms of Service. Exceptions must be requested in advance. Logos may be used unmodified for identification only. The API Terms are silent on commercial use, storage, retention and model processing. The site footer states that user contributions are licensed under CC BY-SA, and the site navigation offers a separate commercial 'Stack Data Licensing' product and a Consolidated Responsible AI policy — both of which suggest that commercial and AI use are governed elsewhere than in these API terms.",
+              "retrieved_at": "2026-08-29T00:00:00+00:00"
+            }
+          ]
+        }
+      ]
     },
     {
       "source_id": "product-hunt",
@@ -348,49 +489,93 @@
           "notes": "The documentation reserves the right to rate-limit for unfair use but states no numbers, so no limit is recorded. A guessed limit would be worse than none: a collector would trust it."
         }
       ],
-      "review": {
-        "approval_state": "RESTRICTED",
-        "automated_access": "PERMITTED_WITH_CONDITIONS",
-        "api_use": "PERMITTED_WITH_CONDITIONS",
-        "browser_automation": "NOT_ADDRESSED",
-        "commercial_use": "NOT_PERMITTED",
-        "storage": "NOT_ADDRESSED",
-        "retention": "NOT_ADDRESSED",
-        "redistribution": "NOT_ADDRESSED",
-        "derived_analytics": "NOT_ADDRESSED",
-        "model_processing": "NOT_ADDRESSED",
-        "personal_data_handling": "NOT_ASSESSED",
-        "attribution_required": "NOT_ADDRESSED",
-        "personal_data_risk": "PSEUDONYMOUS",
-        "contains_user_generated_content": true,
-        "contains_user_identifiers": true,
-        "contains_location": false,
-        "sensitive_data_possible": false,
-        "pseudonymization_expected": true,
-        "discard_identifiers_after_normalization": true,
-        "jurisdiction_review_required": true,
-        "review_interval_days": 180,
-        "conditions": [
-          "API access is permitted only for non-commercial use under the published documentation",
-          "Commercial use requires prior written agreement obtained by contacting Product Hunt"
-        ],
-        "open_questions": [
-          "Whether Product Hunt will grant a commercial-use agreement for this use case, and on what terms",
-          "Whether storage, retention and redistribution are addressed in a separate terms document not reviewed here"
-        ],
-        "review_notes": "RESTRICTED, and the restriction is decisive rather than procedural. The API documentation states plainly that the API must not be used for commercial purposes and directs business users to contact Product Hunt. Startup Research OS is a commercial product, so the documented default excludes it. The path forward is operator correspondence, not a technical workaround; until such an agreement exists and is recorded as evidence, this source is not collectable."
-      },
-      "evidence": [
+      "retention_override": null,
+      "reviews": [
         {
-          "document_type": "OFFICIAL_API_DOCS",
-          "document_title": "Product Hunt API v2 documentation",
-          "document_url": "https://api.producthunt.com/v2/docs",
-          "section_reference": "Introduction / usage",
-          "summarized_finding": "States that the API is accessible only with a provided access token obtained via OAuth or a developer token, that Product Hunt reserves the right to rate-limit applications it considers outside fair use without stating numeric limits, and that the API must not be used for commercial purposes, directing business users to contact hello@producthunt.com.",
-          "retrieved_at": "2026-08-29T00:00:00Z"
+          "approval_state": "RESTRICTED",
+          "automated_access": "PERMITTED_WITH_CONDITIONS",
+          "api_use": "PERMITTED_WITH_CONDITIONS",
+          "browser_automation": "NOT_ADDRESSED",
+          "commercial_use": "NOT_PERMITTED",
+          "storage": "NOT_ADDRESSED",
+          "retention": "NOT_ADDRESSED",
+          "redistribution": "NOT_ADDRESSED",
+          "derived_analytics": "NOT_ADDRESSED",
+          "model_processing": "NOT_ADDRESSED",
+          "personal_data_handling": "NOT_ASSESSED",
+          "attribution_required": "NOT_ADDRESSED",
+          "personal_data_risk": "PSEUDONYMOUS",
+          "contains_user_generated_content": true,
+          "contains_user_identifiers": true,
+          "contains_location": false,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": true,
+          "discard_identifiers_after_normalization": true,
+          "jurisdiction_review_required": true,
+          "review_interval_days": 180,
+          "conditions": [
+            "API access is permitted only for non-commercial use under the published documentation",
+            "Commercial use requires prior written agreement obtained by contacting Product Hunt"
+          ],
+          "open_questions": [
+            "Whether Product Hunt will grant a commercial-use agreement for this use case, and on what terms",
+            "Whether storage, retention and redistribution are addressed in a separate terms document not reviewed here"
+          ],
+          "review_notes": "RESTRICTED, and the restriction is decisive rather than procedural. The API documentation states plainly that the API must not be used for commercial purposes and directs business users to contact Product Hunt. Startup Research OS is a commercial product, so the documented default excludes it. The path forward is operator correspondence, not a technical workaround; until such an agreement exists and is recorded as evidence, this source is not collectable.",
+          "review_version": 1,
+          "reviewed_by": "mission-1.0",
+          "reviewed_at": "2026-08-29T00:00:00+00:00",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "Product Hunt API v2 documentation",
+              "document_url": "https://api.producthunt.com/v2/docs",
+              "section_reference": "Introduction / usage",
+              "summarized_finding": "States that the API is accessible only with a provided access token obtained via OAuth or a developer token, that Product Hunt reserves the right to rate-limit applications it considers outside fair use without stating numeric limits, and that the API must not be used for commercial purposes, directing business users to contact hello@producthunt.com.",
+              "retrieved_at": "2026-08-29T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "review_version": 2,
+          "approval_state": "RESTRICTED",
+          "reviewed_by": "mission-1.3",
+          "reviewed_at": "2026-08-29T00:00:00+00:00",
+          "review_interval_days": 180,
+          "automated_access": "PERMITTED_WITH_CONDITIONS",
+          "api_use": "PERMITTED_WITH_CONDITIONS",
+          "browser_automation": "NOT_ASSESSED",
+          "commercial_use": "NOT_PERMITTED",
+          "storage": "NOT_ADDRESSED",
+          "retention": "NOT_ADDRESSED",
+          "redistribution": "NOT_ADDRESSED",
+          "derived_analytics": "NOT_ADDRESSED",
+          "model_processing": "NOT_ADDRESSED",
+          "personal_data_handling": "NOT_ADDRESSED",
+          "attribution_required": "NOT_ADDRESSED",
+          "personal_data_risk": "PSEUDONYMOUS",
+          "contains_user_generated_content": true,
+          "contains_user_identifiers": false,
+          "jurisdiction_review_required": true,
+          "conditions": [
+            "Commercial use requires prior written permission from Product Hunt."
+          ],
+          "open_questions": [
+            "If Product Hunt launch data becomes necessary, request commercial API permission from hello@producthunt.com and record the response as OPERATOR_CORRESPONDENCE evidence before any collection."
+          ],
+          "review_notes": "Status unchanged at RESTRICTED and now precisely evidenced. Mission 1.0 inferred the restriction; the documentation states it explicitly. Non-commercial use is permitted, our assessed use is commercial, and the platform names the route to change that. This is the textbook RESTRICTED case: a materially narrower use is permitted, not ours.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "Product Hunt API v2 documentation",
+              "document_url": "https://api.producthunt.com/v2/docs",
+              "section_reference": "Welcome to the Product Hunt API 2.0; Accessing Endpoints; May I use the API for my business?",
+              "summarized_finding": "The documentation states twice, in plain words, that 'the Product Hunt API must not be used for commercial purposes' and that 'if you would like to use it for your business, please contact us at hello@producthunt.com'. Access requires an OAuth access token; Product Hunt reserves the right to rate-limit any application it considers outside fair use, and faster access requires contacting them.",
+              "retrieved_at": "2026-08-29T00:00:00+00:00"
+            }
+          ]
         }
-      ],
-      "retention_override": null
+      ]
     },
     {
       "source_id": "github",
@@ -467,60 +652,102 @@
           "notes": "Documented secondary limits also apply: no more than 100 concurrent requests, no more than 900 points per minute per endpoint, and no more than 90 seconds of CPU time per 60 seconds of real time."
         }
       ],
-      "review": {
-        "approval_state": "REQUIRES_REVIEW",
-        "automated_access": "PERMITTED_WITH_CONDITIONS",
-        "api_use": "PERMITTED_WITH_CONDITIONS",
-        "browser_automation": "UNCLEAR",
-        "commercial_use": "UNCLEAR",
-        "storage": "NOT_ASSESSED",
-        "retention": "NOT_ASSESSED",
-        "redistribution": "NOT_ASSESSED",
-        "derived_analytics": "UNCLEAR",
-        "model_processing": "NOT_ASSESSED",
-        "personal_data_handling": "PERMITTED_WITH_CONDITIONS",
-        "attribution_required": "NOT_ASSESSED",
-        "personal_data_risk": "IDENTIFIABLE",
-        "contains_user_generated_content": true,
-        "contains_user_identifiers": true,
-        "contains_location": true,
-        "sensitive_data_possible": false,
-        "pseudonymization_expected": false,
-        "discard_identifiers_after_normalization": true,
-        "jurisdiction_review_required": true,
-        "review_interval_days": 180,
-        "conditions": [
-          "Documented primary and secondary rate limits must be respected; the collector must consume the recorded values rather than its own",
-          "Information from GitHub must not be used for spam, unsolicited email, or the sale of personal information",
-          "Profile data must not be retained beyond what the research objective requires"
-        ],
-        "open_questions": [
-          "Read the API terms in the GitHub Terms of Service (Section H) and determine whether commercial use of API data for this purpose is permitted",
-          "The Acceptable Use Policies permit research use only where resulting publications are open access. Determine whether that clause governs commercial analytical use, or only the scraping route it appears within",
-          "Determine whether storage and retention of API responses are addressed anywhere",
-          "Determine whether use for model processing is addressed"
-        ],
-        "review_notes": "The technical picture is solid and documented; the permission picture is not. Two findings block approval. First, the Acceptable Use Policies separate scraping from API access and permit research use of scraped public information only where resulting publications are open access -- a condition a commercial product does not meet, and whose scope relative to API use is genuinely ambiguous. Second, the API terms live in the Terms of Service, which was not retrieved. GitHub profiles carry real names and locations, so the personal-data risk is IDENTIFIABLE rather than pseudonymous."
-      },
-      "evidence": [
+      "retention_override": null,
+      "reviews": [
         {
-          "document_type": "OFFICIAL_API_DOCS",
-          "document_title": "Rate limits for the REST API",
-          "document_url": "https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api",
-          "section_reference": "Primary rate limits / Secondary rate limits",
-          "summarized_finding": "Unauthenticated requests are limited to 60 per hour; requests authenticated with a personal access token to 5,000 per hour. Secondary limits cap concurrent requests at 100, endpoint cost at 900 points per minute, CPU time at 90 seconds per 60 seconds of real time, and content-creating requests at 80 per minute and 500 per hour.",
-          "retrieved_at": "2026-08-29T00:00:00Z"
+          "approval_state": "REQUIRES_REVIEW",
+          "automated_access": "PERMITTED_WITH_CONDITIONS",
+          "api_use": "PERMITTED_WITH_CONDITIONS",
+          "browser_automation": "UNCLEAR",
+          "commercial_use": "UNCLEAR",
+          "storage": "NOT_ASSESSED",
+          "retention": "NOT_ASSESSED",
+          "redistribution": "NOT_ASSESSED",
+          "derived_analytics": "UNCLEAR",
+          "model_processing": "NOT_ASSESSED",
+          "personal_data_handling": "PERMITTED_WITH_CONDITIONS",
+          "attribution_required": "NOT_ASSESSED",
+          "personal_data_risk": "IDENTIFIABLE",
+          "contains_user_generated_content": true,
+          "contains_user_identifiers": true,
+          "contains_location": true,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": false,
+          "discard_identifiers_after_normalization": true,
+          "jurisdiction_review_required": true,
+          "review_interval_days": 180,
+          "conditions": [
+            "Documented primary and secondary rate limits must be respected; the collector must consume the recorded values rather than its own",
+            "Information from GitHub must not be used for spam, unsolicited email, or the sale of personal information",
+            "Profile data must not be retained beyond what the research objective requires"
+          ],
+          "open_questions": [
+            "Read the API terms in the GitHub Terms of Service (Section H) and determine whether commercial use of API data for this purpose is permitted",
+            "The Acceptable Use Policies permit research use only where resulting publications are open access. Determine whether that clause governs commercial analytical use, or only the scraping route it appears within",
+            "Determine whether storage and retention of API responses are addressed anywhere",
+            "Determine whether use for model processing is addressed"
+          ],
+          "review_notes": "The technical picture is solid and documented; the permission picture is not. Two findings block approval. First, the Acceptable Use Policies separate scraping from API access and permit research use of scraped public information only where resulting publications are open access -- a condition a commercial product does not meet, and whose scope relative to API use is genuinely ambiguous. Second, the API terms live in the Terms of Service, which was not retrieved. GitHub profiles carry real names and locations, so the personal-data risk is IDENTIFIABLE rather than pseudonymous.",
+          "review_version": 1,
+          "reviewed_by": "mission-1.0",
+          "reviewed_at": "2026-08-29T00:00:00+00:00",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "Rate limits for the REST API",
+              "document_url": "https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api",
+              "section_reference": "Primary rate limits / Secondary rate limits",
+              "summarized_finding": "Unauthenticated requests are limited to 60 per hour; requests authenticated with a personal access token to 5,000 per hour. Secondary limits cap concurrent requests at 100, endpoint cost at 900 points per minute, CPU time at 90 seconds per 60 seconds of real time, and content-creating requests at 80 per minute and 500 per hour.",
+              "retrieved_at": "2026-08-29T00:00:00Z"
+            },
+            {
+              "document_type": "OFFICIAL_TERMS",
+              "document_title": "GitHub Acceptable Use Policies",
+              "document_url": "https://docs.github.com/en/site-policy/acceptable-use-policies/github-acceptable-use-policies",
+              "section_reference": "Information Usage Restrictions / Scraping and API Usage Restrictions",
+              "summarized_finding": "Defines scraping as automated extraction via the Service and states explicitly that scraping does not refer to collection through the API, which is governed by the Terms of Service instead. Permits researchers to use public non-personal information for research only if resulting publications are open access, and permits archival use. Prohibits using information from the Service for spam, unsolicited email, or selling personal information such as to recruiters or job boards. No effective date is stated on the page.",
+              "retrieved_at": "2026-08-29T00:00:00Z"
+            }
+          ]
         },
         {
-          "document_type": "OFFICIAL_TERMS",
-          "document_title": "GitHub Acceptable Use Policies",
-          "document_url": "https://docs.github.com/en/site-policy/acceptable-use-policies/github-acceptable-use-policies",
-          "section_reference": "Information Usage Restrictions / Scraping and API Usage Restrictions",
-          "summarized_finding": "Defines scraping as automated extraction via the Service and states explicitly that scraping does not refer to collection through the API, which is governed by the Terms of Service instead. Permits researchers to use public non-personal information for research only if resulting publications are open access, and permits archival use. Prohibits using information from the Service for spam, unsolicited email, or selling personal information such as to recruiters or job boards. No effective date is stated on the page.",
-          "retrieved_at": "2026-08-29T00:00:00Z"
+          "review_version": 2,
+          "approval_state": "RESTRICTED",
+          "reviewed_by": "mission-1.3",
+          "reviewed_at": "2026-08-29T00:00:00+00:00",
+          "review_interval_days": 180,
+          "automated_access": "PERMITTED_WITH_CONDITIONS",
+          "api_use": "PERMITTED_WITH_CONDITIONS",
+          "browser_automation": "NOT_PERMITTED",
+          "commercial_use": "NOT_PERMITTED",
+          "storage": "PERMITTED_WITH_CONDITIONS",
+          "retention": "NOT_ADDRESSED",
+          "redistribution": "NOT_PERMITTED",
+          "derived_analytics": "NOT_PERMITTED",
+          "model_processing": "NOT_ADDRESSED",
+          "personal_data_handling": "PERMITTED_WITH_CONDITIONS",
+          "attribution_required": "NOT_ADDRESSED",
+          "personal_data_risk": "PSEUDONYMOUS",
+          "contains_user_generated_content": true,
+          "contains_user_identifiers": true,
+          "jurisdiction_review_required": true,
+          "conditions": [],
+          "open_questions": [
+            "If GitHub data becomes necessary, determine whether GitHub offers a commercial data licence or an enterprise arrangement covering this use — the Acceptable Use Policies do not mention one."
+          ],
+          "review_notes": "Status LOWERED from REQUIRES_REVIEW to RESTRICTED. The Acceptable Use Policies enumerate the permitted uses of information obtained from GitHub, and the enumeration is explicitly indifferent to how the information was obtained — so using the official API does not widen it. The open-access condition on the research permission is the decisive detail: Startup Research OS is a commercial multi-tenant SaaS producing proprietary insights, which is exactly the case that permission excludes. A narrower use is permitted; ours is not.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_TERMS",
+              "document_title": "GitHub Acceptable Use Policies",
+              "document_url": "https://docs.github.com/en/site-policy/acceptable-use-policies/github-acceptable-use-policies",
+              "section_reference": "7. Information Usage Restrictions; 8. Privacy",
+              "summarized_finding": "Section 7 is an ALLOWLIST and it applies 'regardless of whether the information was scraped, collected through our API, or obtained otherwise'. It permits two uses: researchers may use public non-personal information for research purposes ONLY IF any resulting publications are open access, and archivists may use public information for archival purposes. It separately states that scraping does not refer to collection through the API, and forbids using information from the Service for spamming purposes including selling personal information. Commercial market research producing proprietary insights appears in neither permitted use.",
+              "retrieved_at": "2026-08-29T00:00:00+00:00"
+            }
+          ]
         }
-      ],
-      "retention_override": null
+      ]
     },
     {
       "source_id": "apple-app-store",
@@ -566,50 +793,92 @@
           "notes": "App Store Review Guideline 4.5.1 refers to approved Apple RSS feeds such as the iTunes Store RSS feed as the permitted mechanism, in contrast with scraping. The current feed endpoints and their own terms were not verified."
         }
       ],
-      "review": {
-        "approval_state": "RESTRICTED",
-        "automated_access": "UNCLEAR",
-        "api_use": "NOT_ASSESSED",
-        "browser_automation": "NOT_PERMITTED",
-        "commercial_use": "NOT_ASSESSED",
-        "storage": "NOT_ASSESSED",
-        "retention": "NOT_ASSESSED",
-        "redistribution": "NOT_ASSESSED",
-        "derived_analytics": "UNCLEAR",
-        "model_processing": "NOT_ASSESSED",
-        "personal_data_handling": "NOT_ASSESSED",
-        "attribution_required": "NOT_ASSESSED",
-        "personal_data_risk": "PSEUDONYMOUS",
-        "contains_user_generated_content": true,
-        "contains_user_identifiers": true,
-        "contains_location": false,
-        "sensitive_data_possible": false,
-        "pseudonymization_expected": true,
-        "discard_identifiers_after_normalization": true,
-        "jurisdiction_review_required": true,
-        "review_interval_days": 180,
-        "conditions": [
-          "No scraping of Apple properties under any access method",
-          "Any use must go through an approved Apple feed, and that feed's own terms must be reviewed first"
-        ],
-        "open_questions": [
-          "Guideline 4.5.1 governs apps distributed on the App Store. Determine whether an equivalent restriction binds a third-party service that is not an App Store app -- the Apple Media Services Terms and the site terms of use need reading",
-          "Determine the current iTunes/App Store RSS feed endpoints and whether their terms permit this use",
-          "Determine whether App Store Connect API access is relevant, noting it is scoped to a developer's own apps"
-        ],
-        "review_notes": "RESTRICTED. Apple states directly that information must not be scraped from Apple sites including the App Store, and that rankings must not be created from such information -- the second half matters here, because ranking opportunities is what this system does. The clause sits in the App Store Review Guidelines, which govern apps rather than external services, so it is strong evidence of Apple's position rather than a term that plainly binds this system. That ambiguity is exactly why the state is RESTRICTED and not PROHIBITED: the correct next step is reading the terms that do bind a non-app consumer, not assuming either answer."
-      },
-      "evidence": [
+      "retention_override": null,
+      "reviews": [
         {
-          "document_type": "OFFICIAL_TERMS",
-          "document_title": "App Store Review Guidelines",
-          "document_url": "https://developer.apple.com/app-store/review/guidelines/",
-          "section_reference": "4.5.1 Apple Sites and Services",
-          "summarized_finding": "States that apps may use approved Apple RSS feeds such as the iTunes Store RSS feed, but may not scrape any information from Apple sites including apple.com, the iTunes Store, the App Store, App Store Connect and the developer portal, and may not create rankings using that information. The guideline addresses apps distributed on the App Store rather than third-party services generally.",
-          "retrieved_at": "2026-08-29T00:00:00Z"
+          "approval_state": "RESTRICTED",
+          "automated_access": "UNCLEAR",
+          "api_use": "NOT_ASSESSED",
+          "browser_automation": "NOT_PERMITTED",
+          "commercial_use": "NOT_ASSESSED",
+          "storage": "NOT_ASSESSED",
+          "retention": "NOT_ASSESSED",
+          "redistribution": "NOT_ASSESSED",
+          "derived_analytics": "UNCLEAR",
+          "model_processing": "NOT_ASSESSED",
+          "personal_data_handling": "NOT_ASSESSED",
+          "attribution_required": "NOT_ASSESSED",
+          "personal_data_risk": "PSEUDONYMOUS",
+          "contains_user_generated_content": true,
+          "contains_user_identifiers": true,
+          "contains_location": false,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": true,
+          "discard_identifiers_after_normalization": true,
+          "jurisdiction_review_required": true,
+          "review_interval_days": 180,
+          "conditions": [
+            "No scraping of Apple properties under any access method",
+            "Any use must go through an approved Apple feed, and that feed's own terms must be reviewed first"
+          ],
+          "open_questions": [
+            "Guideline 4.5.1 governs apps distributed on the App Store. Determine whether an equivalent restriction binds a third-party service that is not an App Store app -- the Apple Media Services Terms and the site terms of use need reading",
+            "Determine the current iTunes/App Store RSS feed endpoints and whether their terms permit this use",
+            "Determine whether App Store Connect API access is relevant, noting it is scoped to a developer's own apps"
+          ],
+          "review_notes": "RESTRICTED. Apple states directly that information must not be scraped from Apple sites including the App Store, and that rankings must not be created from such information -- the second half matters here, because ranking opportunities is what this system does. The clause sits in the App Store Review Guidelines, which govern apps rather than external services, so it is strong evidence of Apple's position rather than a term that plainly binds this system. That ambiguity is exactly why the state is RESTRICTED and not PROHIBITED: the correct next step is reading the terms that do bind a non-app consumer, not assuming either answer.",
+          "review_version": 1,
+          "reviewed_by": "mission-1.0",
+          "reviewed_at": "2026-08-29T00:00:00+00:00",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_TERMS",
+              "document_title": "App Store Review Guidelines",
+              "document_url": "https://developer.apple.com/app-store/review/guidelines/",
+              "section_reference": "4.5.1 Apple Sites and Services",
+              "summarized_finding": "States that apps may use approved Apple RSS feeds such as the iTunes Store RSS feed, but may not scrape any information from Apple sites including apple.com, the iTunes Store, the App Store, App Store Connect and the developer portal, and may not create rankings using that information. The guideline addresses apps distributed on the App Store rather than third-party services generally.",
+              "retrieved_at": "2026-08-29T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "review_version": 2,
+          "approval_state": "RESTRICTED",
+          "reviewed_by": "mission-1.3",
+          "reviewed_at": "2026-08-29T00:00:00+00:00",
+          "review_interval_days": 180,
+          "automated_access": "PERMITTED_WITH_CONDITIONS",
+          "api_use": "PERMITTED_WITH_CONDITIONS",
+          "browser_automation": "NOT_ASSESSED",
+          "commercial_use": "PERMITTED_WITH_CONDITIONS",
+          "storage": "NOT_ADDRESSED",
+          "retention": "NOT_ADDRESSED",
+          "redistribution": "NOT_PERMITTED",
+          "derived_analytics": "NOT_ADDRESSED",
+          "model_processing": "NOT_ADDRESSED",
+          "personal_data_handling": "NOT_ADDRESSED",
+          "attribution_required": "PERMITTED_WITH_CONDITIONS",
+          "personal_data_risk": "PSEUDONYMOUS",
+          "contains_user_generated_content": true,
+          "contains_user_identifiers": false,
+          "jurisdiction_review_required": true,
+          "conditions": [],
+          "open_questions": [
+            "Determine whether Apple offers any documented mechanism for third-party app metadata, ratings or reviews for market research, and under what terms; none was found in the affiliate search API documentation."
+          ],
+          "review_notes": "Status unchanged at RESTRICTED, with the reason now specific. The distinction Mission 1.3 §18 asks for holds: the documented public mechanism exists to promote store content and earn affiliate commission, and App Store Connect governs one's own apps. Neither is a licence for market-research collection and derived analytics over the catalogue. What is permitted is materially narrower than the assessed use case.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "iTunes Search API — Apple Services Performance Partners",
+              "document_url": "https://performance-partners.apple.com/search-api",
+              "section_reference": "Overview; Searching; Terms and conditions",
+              "summarized_finding": "The documented public search mechanism is published under the Apple Services Performance Partners (affiliate) programme. Its stated purpose is to search store content and DISPLAY THE RESULTS IN YOUR WEBSITE, and it states that developers may use promotional content from the API 'only to promote store content and not for entertainment purposes', with assets kept proximate to a store badge. The guidance is oriented to being 'commissioned for partner links'. No mechanism for bulk market research over third-party app metadata, ratings or reviews is documented here, and App Store Connect concerns a developer's own apps.",
+              "retrieved_at": "2026-08-29T00:00:00+00:00"
+            }
+          ]
         }
-      ],
-      "retention_override": null
+      ]
     },
     {
       "source_id": "google-play",
@@ -655,39 +924,81 @@
           "acquisition_cost": "UNKNOWN"
         }
       ],
-      "review": {
-        "approval_state": "REQUIRES_REVIEW",
-        "automated_access": "NOT_ASSESSED",
-        "api_use": "NOT_ASSESSED",
-        "browser_automation": "NOT_ASSESSED",
-        "commercial_use": "NOT_ASSESSED",
-        "storage": "NOT_ASSESSED",
-        "retention": "NOT_ASSESSED",
-        "redistribution": "NOT_ASSESSED",
-        "derived_analytics": "NOT_ASSESSED",
-        "model_processing": "NOT_ASSESSED",
-        "personal_data_handling": "NOT_ASSESSED",
-        "attribution_required": "NOT_ASSESSED",
-        "personal_data_risk": "PSEUDONYMOUS",
-        "contains_user_generated_content": true,
-        "contains_user_identifiers": true,
-        "contains_location": false,
-        "sensitive_data_possible": false,
-        "pseudonymization_expected": true,
-        "discard_identifiers_after_normalization": true,
-        "jurisdiction_review_required": true,
-        "review_interval_days": 180,
-        "conditions": [],
-        "open_questions": [
-          "Read the Google Play Developer API terms at https://developers.google.com/android-publisher/terms",
-          "Confirm whether the Play Developer API exposes reviews for applications the caller does not own -- if it does not, this source has no lawful automated access path for this use and the correct state is RESTRICTED",
-          "Read the Google Terms of Service provisions on automated access to Google properties",
-          "Determine whether any official mechanism exists for third-party access to Play listing and review data"
-        ],
-        "review_notes": "Not researched in this mission. The decisive question is not a policy nuance but a capability one: if the publisher API only exposes a developer's own applications, then no approved path exists for collecting competitor reviews, and no policy reading changes that. Recorded as REQUIRES_REVIEW with that question first."
-      },
-      "evidence": [],
-      "retention_override": null
+      "retention_override": null,
+      "reviews": [
+        {
+          "approval_state": "REQUIRES_REVIEW",
+          "automated_access": "NOT_ASSESSED",
+          "api_use": "NOT_ASSESSED",
+          "browser_automation": "NOT_ASSESSED",
+          "commercial_use": "NOT_ASSESSED",
+          "storage": "NOT_ASSESSED",
+          "retention": "NOT_ASSESSED",
+          "redistribution": "NOT_ASSESSED",
+          "derived_analytics": "NOT_ASSESSED",
+          "model_processing": "NOT_ASSESSED",
+          "personal_data_handling": "NOT_ASSESSED",
+          "attribution_required": "NOT_ASSESSED",
+          "personal_data_risk": "PSEUDONYMOUS",
+          "contains_user_generated_content": true,
+          "contains_user_identifiers": true,
+          "contains_location": false,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": true,
+          "discard_identifiers_after_normalization": true,
+          "jurisdiction_review_required": true,
+          "review_interval_days": 180,
+          "conditions": [],
+          "open_questions": [
+            "Read the Google Play Developer API terms at https://developers.google.com/android-publisher/terms",
+            "Confirm whether the Play Developer API exposes reviews for applications the caller does not own -- if it does not, this source has no lawful automated access path for this use and the correct state is RESTRICTED",
+            "Read the Google Terms of Service provisions on automated access to Google properties",
+            "Determine whether any official mechanism exists for third-party access to Play listing and review data"
+          ],
+          "review_notes": "Not researched in this mission. The decisive question is not a policy nuance but a capability one: if the publisher API only exposes a developer's own applications, then no approved path exists for collecting competitor reviews, and no policy reading changes that. Recorded as REQUIRES_REVIEW with that question first.",
+          "review_version": 1,
+          "reviewed_by": "mission-1.0",
+          "reviewed_at": "2026-08-29T00:00:00+00:00",
+          "evidence": []
+        },
+        {
+          "review_version": 2,
+          "approval_state": "RESTRICTED",
+          "reviewed_by": "mission-1.3",
+          "reviewed_at": "2026-08-29T00:00:00+00:00",
+          "review_interval_days": 180,
+          "automated_access": "PERMITTED_WITH_CONDITIONS",
+          "api_use": "PERMITTED_WITH_CONDITIONS",
+          "browser_automation": "NOT_ASSESSED",
+          "commercial_use": "NOT_ADDRESSED",
+          "storage": "NOT_ADDRESSED",
+          "retention": "NOT_ADDRESSED",
+          "redistribution": "NOT_ADDRESSED",
+          "derived_analytics": "NOT_ADDRESSED",
+          "model_processing": "NOT_ADDRESSED",
+          "personal_data_handling": "NOT_ADDRESSED",
+          "attribution_required": "NOT_ADDRESSED",
+          "personal_data_risk": "PSEUDONYMOUS",
+          "contains_user_generated_content": true,
+          "contains_user_identifiers": false,
+          "jurisdiction_review_required": true,
+          "conditions": [],
+          "open_questions": [
+            "Determine whether Google offers any authorised mechanism — a data licence or otherwise — for third-party Play listing, rating or review data for market research. None is documented in the Play Developer API."
+          ],
+          "review_notes": "Status changed from REQUIRES_REVIEW to RESTRICTED. The distinction Mission 1.3 §19 asks for is confirmed by the documentation: the Play Developer API is an app-management API for a developer's own apps, not a market-data API. A materially narrower use is authorised and ours is not. The only remaining route would be collecting the public store pages, which this review does not pursue and does not document.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "Google Play Developer API",
+              "document_url": "https://developers.google.com/android-publisher",
+              "section_reference": "Google Play Developer APIs; Subscriptions and In-App Purchases; Publishing API",
+              "summarized_finding": "Every documented capability concerns the caller's OWN applications: catalog and in-app product management, purchase and subscription status, uploading new versions, assigning releases to tracks, and creating or modifying one's own Play Store listings. No documented mechanism returns third-party application metadata, ratings or reviews for market research.",
+              "retrieved_at": "2026-08-29T00:00:00+00:00"
+            }
+          ]
+        }
+      ]
     },
     {
       "source_id": "youtube",
@@ -740,60 +1051,102 @@
           "notes": "The developer policies confirm that quotas exist and that extensions require a compliance audit, but state no numbers. The numeric default quota was not verified, so no limit is recorded."
         }
       ],
-      "review": {
-        "approval_state": "REQUIRES_REVIEW",
-        "automated_access": "PERMITTED_WITH_CONDITIONS",
-        "api_use": "PERMITTED_WITH_CONDITIONS",
-        "browser_automation": "NOT_PERMITTED",
-        "commercial_use": "PERMITTED_WITH_CONDITIONS",
-        "storage": "PERMITTED_WITH_CONDITIONS",
-        "retention": "PERMITTED_WITH_CONDITIONS",
-        "redistribution": "NOT_PERMITTED",
-        "derived_analytics": "PERMITTED_WITH_CONDITIONS",
-        "model_processing": "NOT_ADDRESSED",
-        "personal_data_handling": "PERMITTED_WITH_CONDITIONS",
-        "attribution_required": "PERMITTED_WITH_CONDITIONS",
-        "personal_data_risk": "PSEUDONYMOUS",
-        "contains_user_generated_content": true,
-        "contains_user_identifiers": true,
-        "contains_location": false,
-        "sensitive_data_possible": true,
-        "pseudonymization_expected": true,
-        "discard_identifiers_after_normalization": true,
-        "jurisdiction_review_required": true,
-        "review_interval_days": 90,
-        "conditions": [
-          "Data obtained through the API must not be stored longer than 30 calendar days; it must be deleted or refreshed within that window",
-          "A user deletion request must be honoured as soon as possible and within 7 calendar days",
-          "No scraping of YouTube or Google properties, and no use of scraped YouTube data obtained elsewhere",
-          "YouTube must be shown as the source wherever its content is displayed, per the Branding Guidelines",
-          "Aggregation across channels is restricted to channels under the same content owner"
-        ],
-        "open_questions": [
-          "The policies do not address use of API data for machine learning or model processing. Since this system processes collected text with LLMs, that silence is material and needs a decision before any collection",
-          "Determine the numeric default quota for the Data API and record it as a documented rate limit",
-          "Confirm whether comment text counts as Authorized or Non-Authorized Data for the 30-day rule"
-        ],
-        "review_notes": "The best-documented candidate in this catalog, and still not approvable. The 30-day storage cap, the scraping prohibition, the branding requirement and the aggregation limits are all explicit and workable. What blocks approval is a single silence: the developer policies do not address processing API data with a language model, and this system's entire purpose is to do that. Silence is not permission (source-registry-v1.md §6), so the state is REQUIRES_REVIEW and the question is named. The review interval is shortened to 90 days because these policies were updated recently and change often."
-      },
-      "evidence": [
-        {
-          "document_type": "OFFICIAL_TERMS",
-          "document_title": "YouTube API Services - Developer Policies",
-          "document_url": "https://developers.google.com/youtube/terms/developer-policies",
-          "section_reference": "Storage and Caching / Commercial Use / Scraping / Attribution",
-          "summarized_finding": "Non-Authorized Data may be stored no longer than 30 calendar days and Authorized Data must be deleted or refreshed within 30 days, with user deletion requests honoured within 7 days. Clients must not scrape YouTube or Google applications, nor use scraped YouTube data obtained elsewhere. Commercial use is permitted in enumerated forms while selling API access or selling ads against API data without independent value requires prior written approval. Clients must display YouTube Brand Features as the source and must not obscure YouTube attribution. Quotas exist and extensions require an API Compliance Audit; no numeric limit is stated. Machine learning and model training are not addressed. Page states 'Last updated 2026-06-24 UTC'.",
-          "retrieved_at": "2026-08-29T00:00:00Z",
-          "effective_at": "2026-06-24T00:00:00Z"
-        }
-      ],
       "retention_override": {
         "raw_days": 30,
         "normalized_days": 30,
         "aggregate_permitted": true,
         "basis": "YouTube API Services Developer Policies require API data to be deleted or refreshed within 30 calendar days. The project baseline allows 12 months for normalized observations (data-retention-policy-v1.md §2.2); the source rule is stricter and therefore wins (§1). Raw is already 30 days at baseline and is restated here so the whole constraint reads in one place.",
         "reviewed_by": "mission-1.0"
-      }
+      },
+      "reviews": [
+        {
+          "approval_state": "REQUIRES_REVIEW",
+          "automated_access": "PERMITTED_WITH_CONDITIONS",
+          "api_use": "PERMITTED_WITH_CONDITIONS",
+          "browser_automation": "NOT_PERMITTED",
+          "commercial_use": "PERMITTED_WITH_CONDITIONS",
+          "storage": "PERMITTED_WITH_CONDITIONS",
+          "retention": "PERMITTED_WITH_CONDITIONS",
+          "redistribution": "NOT_PERMITTED",
+          "derived_analytics": "PERMITTED_WITH_CONDITIONS",
+          "model_processing": "NOT_ADDRESSED",
+          "personal_data_handling": "PERMITTED_WITH_CONDITIONS",
+          "attribution_required": "PERMITTED_WITH_CONDITIONS",
+          "personal_data_risk": "PSEUDONYMOUS",
+          "contains_user_generated_content": true,
+          "contains_user_identifiers": true,
+          "contains_location": false,
+          "sensitive_data_possible": true,
+          "pseudonymization_expected": true,
+          "discard_identifiers_after_normalization": true,
+          "jurisdiction_review_required": true,
+          "review_interval_days": 90,
+          "conditions": [
+            "Data obtained through the API must not be stored longer than 30 calendar days; it must be deleted or refreshed within that window",
+            "A user deletion request must be honoured as soon as possible and within 7 calendar days",
+            "No scraping of YouTube or Google properties, and no use of scraped YouTube data obtained elsewhere",
+            "YouTube must be shown as the source wherever its content is displayed, per the Branding Guidelines",
+            "Aggregation across channels is restricted to channels under the same content owner"
+          ],
+          "open_questions": [
+            "The policies do not address use of API data for machine learning or model processing. Since this system processes collected text with LLMs, that silence is material and needs a decision before any collection",
+            "Determine the numeric default quota for the Data API and record it as a documented rate limit",
+            "Confirm whether comment text counts as Authorized or Non-Authorized Data for the 30-day rule"
+          ],
+          "review_notes": "The best-documented candidate in this catalog, and still not approvable. The 30-day storage cap, the scraping prohibition, the branding requirement and the aggregation limits are all explicit and workable. What blocks approval is a single silence: the developer policies do not address processing API data with a language model, and this system's entire purpose is to do that. Silence is not permission (source-registry-v1.md §6), so the state is REQUIRES_REVIEW and the question is named. The review interval is shortened to 90 days because these policies were updated recently and change often.",
+          "review_version": 1,
+          "reviewed_by": "mission-1.0",
+          "reviewed_at": "2026-08-29T00:00:00+00:00",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_TERMS",
+              "document_title": "YouTube API Services - Developer Policies",
+              "document_url": "https://developers.google.com/youtube/terms/developer-policies",
+              "section_reference": "Storage and Caching / Commercial Use / Scraping / Attribution",
+              "summarized_finding": "Non-Authorized Data may be stored no longer than 30 calendar days and Authorized Data must be deleted or refreshed within 30 days, with user deletion requests honoured within 7 days. Clients must not scrape YouTube or Google applications, nor use scraped YouTube data obtained elsewhere. Commercial use is permitted in enumerated forms while selling API access or selling ads against API data without independent value requires prior written approval. Clients must display YouTube Brand Features as the source and must not obscure YouTube attribution. Quotas exist and extensions require an API Compliance Audit; no numeric limit is stated. Machine learning and model training are not addressed. Page states 'Last updated 2026-06-24 UTC'.",
+              "retrieved_at": "2026-08-29T00:00:00Z",
+              "effective_at": "2026-06-24T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "review_version": 2,
+          "approval_state": "PROHIBITED",
+          "reviewed_by": "mission-1.3",
+          "reviewed_at": "2026-08-29T00:00:00+00:00",
+          "review_interval_days": 180,
+          "automated_access": "PERMITTED_WITH_CONDITIONS",
+          "api_use": "PERMITTED_WITH_CONDITIONS",
+          "browser_automation": "NOT_PERMITTED",
+          "commercial_use": "NOT_ADDRESSED",
+          "storage": "PERMITTED_WITH_CONDITIONS",
+          "retention": "PERMITTED_WITH_CONDITIONS",
+          "redistribution": "NOT_PERMITTED",
+          "derived_analytics": "NOT_PERMITTED",
+          "model_processing": "NOT_ADDRESSED",
+          "personal_data_handling": "PERMITTED_WITH_CONDITIONS",
+          "attribution_required": "NOT_ADDRESSED",
+          "personal_data_risk": "PSEUDONYMOUS",
+          "contains_user_generated_content": true,
+          "contains_user_identifiers": true,
+          "jurisdiction_review_required": true,
+          "conditions": [],
+          "open_questions": [
+            "None material to the verdict. Should YouTube data ever be needed, the route is a content licensing agreement with YouTube, not a change to this assessment."
+          ],
+          "review_notes": "Status LOWERED from REQUIRES_REVIEW to PROHIBITED. This is the largest change in the mission and it goes the opposite way from an approval. Startup Research OS aggregates API data across channels it does not own, to produce market insight for readers who are not those channels' content owners. The Data Aggregation policy addresses that arrangement directly and forbids it. The 30-day retention override is retained rather than removed: current evidence supports it, and a PROHIBITED source keeping an accurate retention record costs nothing while removing it would lose a verified fact.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_TERMS",
+              "document_title": "YouTube API Services — Developer Policies",
+              "document_url": "https://developers.google.com/youtube/terms/developer-policies",
+              "section_reference": "III.E.4 Storage and Refresh of API Data; Data Aggregation",
+              "summarized_finding": "Two findings. First, the 30-day rule Mission 1.0 recorded is CONFIRMED and sharpened: an API Client must not store statistics retrieved as Non-Authorized Data for more than 30 days, and Authorized Data other than the enumerated exceptions may be stored for no longer than 30 calendar days, after which it must be deleted or refreshed. Second, and decisive for this use case, the Data Aggregation section states 'Do not aggregate API Data' except for channels under the same content owner pursuant to a YouTube content licensing agreement, with such aggregates viewable only by that content owner, and separately 'Do not aggregate API Data or otherwise use API Data or YouTube API Services to gain insights into YouTube's usage, revenue, or any other aspects of YouTube's business.'",
+              "retrieved_at": "2026-08-29T00:00:00+00:00"
+            }
+          ]
+        }
+      ]
     },
     {
       "source_id": "tiktok",
@@ -843,45 +1196,85 @@
           "notes": "Authentication uses a client access token from /v2/oauth/token/ with the research.data.basic scope."
         }
       ],
-      "review": {
-        "approval_state": "PROHIBITED",
-        "automated_access": "NOT_PERMITTED",
-        "api_use": "NOT_PERMITTED",
-        "browser_automation": "NOT_PERMITTED",
-        "commercial_use": "NOT_PERMITTED",
-        "storage": "NOT_PERMITTED",
-        "retention": "NOT_PERMITTED",
-        "redistribution": "NOT_PERMITTED",
-        "derived_analytics": "NOT_PERMITTED",
-        "model_processing": "NOT_PERMITTED",
-        "personal_data_handling": "NOT_PERMITTED",
-        "attribution_required": "NOT_ASSESSED",
-        "personal_data_risk": "IDENTIFIABLE",
-        "contains_user_generated_content": true,
-        "contains_user_identifiers": true,
-        "contains_location": true,
-        "sensitive_data_possible": true,
-        "pseudonymization_expected": true,
-        "discard_identifiers_after_normalization": true,
-        "jurisdiction_review_required": true,
-        "review_interval_days": 365,
-        "conditions": [],
-        "open_questions": [
-          "Whether TikTok offers any commercial data product that would permit this use. If one exists it is a different source and needs its own registry entry and its own review"
-        ],
-        "review_notes": "PROHIBITED for this system's assessed use, and the finding is unambiguous rather than cautious. The Research API requires applicants to be independent from commercial interests and to conduct research on a not-for-profit or non-commercial basis, and eligibility is limited to academic institutions and non-profit research bodies in named regions. Startup Research OS is a commercial product and meets none of those criteria. There is no reading of these terms under which this system qualifies, and the correct response is to stop considering TikTok through this route rather than to look for a technical alternative -- scraping would breach the same terms more clearly, not less."
-      },
-      "evidence": [
+      "retention_override": null,
+      "reviews": [
         {
-          "document_type": "OFFICIAL_API_DOCS",
-          "document_title": "TikTok Research API",
-          "document_url": "https://developers.tiktok.com/products/research-api/",
-          "section_reference": "Eligibility / application requirements",
-          "summarized_finding": "Access is limited to academic institutions in the US, EEA, UK or Switzerland, to not-for-profit or independent research institutions in the EU, and to academic or not-for-profit organisations in Brazil studying online youth safety. Applicants must submit a research proposal, must demonstrate a public-interest mission, and must be independent from commercial interests and able to conduct the research on a not-for-profit or non-commercial basis. Approval takes up to four weeks. Researchers must commit to data security and confidentiality requirements including protecting personal data.",
-          "retrieved_at": "2026-08-29T00:00:00Z"
+          "approval_state": "PROHIBITED",
+          "automated_access": "NOT_PERMITTED",
+          "api_use": "NOT_PERMITTED",
+          "browser_automation": "NOT_PERMITTED",
+          "commercial_use": "NOT_PERMITTED",
+          "storage": "NOT_PERMITTED",
+          "retention": "NOT_PERMITTED",
+          "redistribution": "NOT_PERMITTED",
+          "derived_analytics": "NOT_PERMITTED",
+          "model_processing": "NOT_PERMITTED",
+          "personal_data_handling": "NOT_PERMITTED",
+          "attribution_required": "NOT_ASSESSED",
+          "personal_data_risk": "IDENTIFIABLE",
+          "contains_user_generated_content": true,
+          "contains_user_identifiers": true,
+          "contains_location": true,
+          "sensitive_data_possible": true,
+          "pseudonymization_expected": true,
+          "discard_identifiers_after_normalization": true,
+          "jurisdiction_review_required": true,
+          "review_interval_days": 365,
+          "conditions": [],
+          "open_questions": [
+            "Whether TikTok offers any commercial data product that would permit this use. If one exists it is a different source and needs its own registry entry and its own review"
+          ],
+          "review_notes": "PROHIBITED for this system's assessed use, and the finding is unambiguous rather than cautious. The Research API requires applicants to be independent from commercial interests and to conduct research on a not-for-profit or non-commercial basis, and eligibility is limited to academic institutions and non-profit research bodies in named regions. Startup Research OS is a commercial product and meets none of those criteria. There is no reading of these terms under which this system qualifies, and the correct response is to stop considering TikTok through this route rather than to look for a technical alternative -- scraping would breach the same terms more clearly, not less.",
+          "review_version": 1,
+          "reviewed_by": "mission-1.0",
+          "reviewed_at": "2026-08-29T00:00:00+00:00",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "TikTok Research API",
+              "document_url": "https://developers.tiktok.com/products/research-api/",
+              "section_reference": "Eligibility / application requirements",
+              "summarized_finding": "Access is limited to academic institutions in the US, EEA, UK or Switzerland, to not-for-profit or independent research institutions in the EU, and to academic or not-for-profit organisations in Brazil studying online youth safety. Applicants must submit a research proposal, must demonstrate a public-interest mission, and must be independent from commercial interests and able to conduct the research on a not-for-profit or non-commercial basis. Approval takes up to four weeks. Researchers must commit to data security and confidentiality requirements including protecting personal data.",
+              "retrieved_at": "2026-08-29T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "review_version": 2,
+          "approval_state": "PROHIBITED",
+          "reviewed_by": "mission-1.3",
+          "reviewed_at": "2026-08-29T00:00:00+00:00",
+          "review_interval_days": 180,
+          "automated_access": "NOT_PERMITTED",
+          "api_use": "NOT_PERMITTED",
+          "browser_automation": "NOT_PERMITTED",
+          "commercial_use": "NOT_PERMITTED",
+          "storage": "NOT_PERMITTED",
+          "retention": "NOT_ASSESSED",
+          "redistribution": "NOT_PERMITTED",
+          "derived_analytics": "NOT_PERMITTED",
+          "model_processing": "NOT_ASSESSED",
+          "personal_data_handling": "NOT_PERMITTED",
+          "attribution_required": "NOT_ASSESSED",
+          "personal_data_risk": "IDENTIFIABLE",
+          "contains_user_generated_content": true,
+          "contains_user_identifiers": true,
+          "jurisdiction_review_required": true,
+          "conditions": [],
+          "open_questions": [],
+          "review_notes": "Status unchanged at PROHIBITED and now directly evidenced rather than inferred. This is the case Mission 1.3 §22 describes exactly: an official research API exists, and it is restricted to qualified non-commercial researchers at eligible institutions in eligible regions. Startup Research OS is a commercial multi-tenant SaaS and fails the eligibility criteria on their own terms. An official API existing is not an official API being available to us.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "TikTok Research Tools — eligibility and application",
+              "document_url": "https://developers.tiktok.com/products/research-api/",
+              "section_reference": "Who can apply?",
+              "summarized_finding": "The Research Tools are the documented mechanism for accessing public TikTok data, and their eligibility criteria exclude this use case on two independent grounds. Applicants must be affiliated with an academic institution in the US, EEA, UK or Switzerland, a not-for-profit or independent research institution in the EU, or an academic/not-for-profit body in Brazil studying online youth safety. Applicants must also 'be independent from commercial interests and be able to conduct research on a not-for-profit or non-commercial basis pursuant to a public-interest mission'. Approval additionally requires a defined research proposal, disclosed funding and evidence of ethical review.",
+              "retrieved_at": "2026-08-29T00:00:00+00:00"
+            }
+          ]
         }
-      ],
-      "retention_override": null
+      ]
     },
     {
       "source_id": "google-trends",
@@ -927,49 +1320,94 @@
           "acquisition_cost": "UNKNOWN"
         }
       ],
-      "review": {
-        "approval_state": "REQUIRES_REVIEW",
-        "automated_access": "NOT_ASSESSED",
-        "api_use": "NOT_ASSESSED",
-        "browser_automation": "NOT_PERMITTED",
-        "commercial_use": "NOT_ASSESSED",
-        "storage": "NOT_ASSESSED",
-        "retention": "NOT_ASSESSED",
-        "redistribution": "NOT_ASSESSED",
-        "derived_analytics": "NOT_ASSESSED",
-        "model_processing": "NOT_ASSESSED",
-        "personal_data_handling": "NOT_ASSESSED",
-        "attribution_required": "NOT_ASSESSED",
-        "personal_data_risk": "NONE_EXPECTED",
-        "contains_user_generated_content": false,
-        "contains_user_identifiers": false,
-        "contains_location": true,
-        "sensitive_data_possible": false,
-        "pseudonymization_expected": false,
-        "discard_identifiers_after_normalization": false,
-        "jurisdiction_review_required": true,
-        "review_interval_days": 90,
-        "conditions": [
-          "Unofficial Trends endpoints used by the web interface must not be called. They are not a published API, and using them is precisely the brittle bypass this registry exists to prevent"
-        ],
-        "open_questions": [
-          "Determine whether the Google Trends API has left alpha and what the current access and approval process is",
-          "Determine the terms governing the Trends API, including commercial use, storage and redistribution",
-          "Determine documented quotas"
-        ],
-        "review_notes": "An official API was announced in alpha in July 2025, which means access is limited and its terms were not retrievable here. The important entry is the condition: the widely used approach of calling the undocumented endpoints behind trends.google.com is not an option for this system. It is unpublished, unstable and outside any granted permission, and preferring a durable authorised path over a convenient bypass is a standing rule (Mission 1.0 §30). Data itself carries no personal information, which is why the personal-data risk is NONE_EXPECTED."
-      },
-      "evidence": [
+      "retention_override": null,
+      "reviews": [
         {
-          "document_type": "OFFICIAL_API_DOCS",
-          "document_title": "Google Search Central Blog archive",
-          "document_url": "https://developers.google.com/search/blog",
-          "section_reference": "July 2025 post index",
-          "summarized_finding": "The blog archive lists a July 2025 announcement titled 'Introducing the Google Trends API (alpha)', indicating that an official Trends API exists but was in alpha with limited availability rather than generally available. The announcement's terms were not retrieved.",
-          "retrieved_at": "2026-08-29T00:00:00Z"
+          "approval_state": "REQUIRES_REVIEW",
+          "automated_access": "NOT_ASSESSED",
+          "api_use": "NOT_ASSESSED",
+          "browser_automation": "NOT_PERMITTED",
+          "commercial_use": "NOT_ASSESSED",
+          "storage": "NOT_ASSESSED",
+          "retention": "NOT_ASSESSED",
+          "redistribution": "NOT_ASSESSED",
+          "derived_analytics": "NOT_ASSESSED",
+          "model_processing": "NOT_ASSESSED",
+          "personal_data_handling": "NOT_ASSESSED",
+          "attribution_required": "NOT_ASSESSED",
+          "personal_data_risk": "NONE_EXPECTED",
+          "contains_user_generated_content": false,
+          "contains_user_identifiers": false,
+          "contains_location": true,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": false,
+          "discard_identifiers_after_normalization": false,
+          "jurisdiction_review_required": true,
+          "review_interval_days": 90,
+          "conditions": [
+            "Unofficial Trends endpoints used by the web interface must not be called. They are not a published API, and using them is precisely the brittle bypass this registry exists to prevent"
+          ],
+          "open_questions": [
+            "Determine whether the Google Trends API has left alpha and what the current access and approval process is",
+            "Determine the terms governing the Trends API, including commercial use, storage and redistribution",
+            "Determine documented quotas"
+          ],
+          "review_notes": "An official API was announced in alpha in July 2025, which means access is limited and its terms were not retrievable here. The important entry is the condition: the widely used approach of calling the undocumented endpoints behind trends.google.com is not an option for this system. It is unpublished, unstable and outside any granted permission, and preferring a durable authorised path over a convenient bypass is a standing rule (Mission 1.0 §30). Data itself carries no personal information, which is why the personal-data risk is NONE_EXPECTED.",
+          "review_version": 1,
+          "reviewed_by": "mission-1.0",
+          "reviewed_at": "2026-08-29T00:00:00+00:00",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "Google Search Central Blog archive",
+              "document_url": "https://developers.google.com/search/blog",
+              "section_reference": "July 2025 post index",
+              "summarized_finding": "The blog archive lists a July 2025 announcement titled 'Introducing the Google Trends API (alpha)', indicating that an official Trends API exists but was in alpha with limited availability rather than generally available. The announcement's terms were not retrieved.",
+              "retrieved_at": "2026-08-29T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "review_version": 2,
+          "approval_state": "REQUIRES_REVIEW",
+          "reviewed_by": "mission-1.3",
+          "reviewed_at": "2026-08-29T00:00:00+00:00",
+          "review_interval_days": 180,
+          "automated_access": "NOT_ASSESSED",
+          "api_use": "NOT_ASSESSED",
+          "browser_automation": "NOT_PERMITTED",
+          "commercial_use": "NOT_ASSESSED",
+          "storage": "NOT_ASSESSED",
+          "retention": "NOT_ASSESSED",
+          "redistribution": "NOT_ASSESSED",
+          "derived_analytics": "NOT_ASSESSED",
+          "model_processing": "NOT_ASSESSED",
+          "personal_data_handling": "NOT_ADDRESSED",
+          "attribution_required": "NOT_ASSESSED",
+          "personal_data_risk": "NONE_EXPECTED",
+          "contains_user_generated_content": false,
+          "contains_user_identifiers": false,
+          "jurisdiction_review_required": true,
+          "conditions": [
+            "The undocumented endpoints behind the Trends web interface must not be called, and no unofficial client library may be used."
+          ],
+          "open_questions": [
+            "Apply to the Google Trends API alpha programme and obtain its terms of use; only then can commercial use, storage, retention and redistribution be assessed."
+          ],
+          "review_notes": "Status unchanged at REQUIRES_REVIEW, and the reason has changed for the better: Mission 1.0 recorded that no official API existed, and one now does. It is not generally available and its terms are not published, so nothing about the assessed use case can yet be established. The Mission 1.0 condition holds unchanged and is reaffirmed here: the undocumented endpoints behind trends.google.com are not an option, and an unofficial library that happens to work is not an authorisation.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "Introducing the Google Trends API (alpha)",
+              "document_url": "https://developers.google.com/search/blog/2025/07/trends-api",
+              "section_reference": "Announcement; Data available",
+              "summarized_finding": "An official Google Trends API now exists, announced 24 July 2025, and it is in ALPHA: 'the API will be available only to a very limited number of testers', with access by application to the alpha programme. It offers consistently scaled search interest data over 1800 days with daily, weekly, monthly and yearly aggregation and region/sub-region restriction. The announcement lists business use among the expected use cases but is a blog post, not a terms document, and no terms of use for the API were published with it.",
+              "retrieved_at": "2026-08-29T00:00:00+00:00",
+              "effective_at": "2025-07-24T00:00:00+00:00"
+            }
+          ]
         }
-      ],
-      "retention_override": null
+      ]
     },
     {
       "source_id": "world-bank",
@@ -1015,47 +1453,114 @@
           "notes": "The documentation states no rate limits. Absence of a documented limit is not an absence of a limit, so none is recorded and a collector must still throttle itself conservatively."
         }
       ],
-      "review": {
-        "approval_state": "REQUIRES_REVIEW",
-        "automated_access": "PERMITTED",
-        "api_use": "PERMITTED",
-        "browser_automation": "NOT_ADDRESSED",
-        "commercial_use": "NOT_ASSESSED",
-        "storage": "NOT_ASSESSED",
-        "retention": "NOT_ASSESSED",
-        "redistribution": "NOT_ASSESSED",
-        "derived_analytics": "NOT_ASSESSED",
-        "model_processing": "NOT_ASSESSED",
-        "personal_data_handling": "NOT_ASSESSED",
-        "attribution_required": "NOT_ASSESSED",
-        "personal_data_risk": "NONE_EXPECTED",
-        "contains_user_generated_content": false,
-        "contains_user_identifiers": false,
-        "contains_location": true,
-        "sensitive_data_possible": false,
-        "pseudonymization_expected": false,
-        "discard_identifiers_after_normalization": false,
-        "jurisdiction_review_required": false,
-        "review_interval_days": 365,
-        "conditions": [],
-        "open_questions": [
-          "Read the World Bank Terms of Use at https://www.worldbank.org/en/about/legal/terms-of-use-for-datasets and the Open Data licence, and record which licence applies and what attribution it requires",
-          "Confirm whether commercial reuse and redistribution of derived analytics are permitted under that licence",
-          "Identify which indicators carry third-party rights that the World Bank licence does not cover"
-        ],
-        "review_notes": "The closest candidate to approvable, and still short of it. The API is documented, unauthenticated and explicitly needs no key, so automated access and API use are PERMITTED on documented evidence. What is missing is the licence: the documentation page points at terms of use without stating them, and this data is widely but not universally open -- some series carry third-party rights. Approval waits on reading the licence, which is a short task rather than a legal one. Personal-data risk is NONE_EXPECTED: these are country aggregates."
-      },
-      "evidence": [
+      "retention_override": null,
+      "reviews": [
         {
-          "document_type": "OFFICIAL_API_DOCS",
-          "document_title": "About the Indicators API Documentation",
-          "document_url": "https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-about-the-indicators-api-documentation",
-          "section_reference": "API basic call structure",
-          "summarized_finding": "Documents the base URL https://api.worldbank.org/v2/ and states that API keys and other authentication methods are no longer necessary to access the API. No rate limits or usage restrictions are stated on the page. The page refers to the website terms of use without reproducing them, and states no licence or attribution requirement for the data itself.",
-          "retrieved_at": "2026-08-29T00:00:00Z"
+          "approval_state": "REQUIRES_REVIEW",
+          "automated_access": "PERMITTED",
+          "api_use": "PERMITTED",
+          "browser_automation": "NOT_ADDRESSED",
+          "commercial_use": "NOT_ASSESSED",
+          "storage": "NOT_ASSESSED",
+          "retention": "NOT_ASSESSED",
+          "redistribution": "NOT_ASSESSED",
+          "derived_analytics": "NOT_ASSESSED",
+          "model_processing": "NOT_ASSESSED",
+          "personal_data_handling": "NOT_ASSESSED",
+          "attribution_required": "NOT_ASSESSED",
+          "personal_data_risk": "NONE_EXPECTED",
+          "contains_user_generated_content": false,
+          "contains_user_identifiers": false,
+          "contains_location": true,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": false,
+          "discard_identifiers_after_normalization": false,
+          "jurisdiction_review_required": false,
+          "review_interval_days": 365,
+          "conditions": [],
+          "open_questions": [
+            "Read the World Bank Terms of Use at https://www.worldbank.org/en/about/legal/terms-of-use-for-datasets and the Open Data licence, and record which licence applies and what attribution it requires",
+            "Confirm whether commercial reuse and redistribution of derived analytics are permitted under that licence",
+            "Identify which indicators carry third-party rights that the World Bank licence does not cover"
+          ],
+          "review_notes": "The closest candidate to approvable, and still short of it. The API is documented, unauthenticated and explicitly needs no key, so automated access and API use are PERMITTED on documented evidence. What is missing is the licence: the documentation page points at terms of use without stating them, and this data is widely but not universally open -- some series carry third-party rights. Approval waits on reading the licence, which is a short task rather than a legal one. Personal-data risk is NONE_EXPECTED: these are country aggregates.",
+          "review_version": 1,
+          "reviewed_by": "mission-1.0",
+          "reviewed_at": "2026-08-29T00:00:00+00:00",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "About the Indicators API Documentation",
+              "document_url": "https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-about-the-indicators-api-documentation",
+              "section_reference": "API basic call structure",
+              "summarized_finding": "Documents the base URL https://api.worldbank.org/v2/ and states that API keys and other authentication methods are no longer necessary to access the API. No rate limits or usage restrictions are stated on the page. The page refers to the website terms of use without reproducing them, and states no licence or attribution requirement for the data itself.",
+              "retrieved_at": "2026-08-29T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "review_version": 2,
+          "approval_state": "APPROVED_WITH_CONDITIONS",
+          "reviewed_by": "mission-1.3",
+          "reviewed_at": "2026-08-29T00:00:00+00:00",
+          "review_interval_days": 180,
+          "automated_access": "PERMITTED",
+          "api_use": "PERMITTED",
+          "browser_automation": "NOT_ADDRESSED",
+          "commercial_use": "PERMITTED",
+          "storage": "PERMITTED",
+          "retention": "PERMITTED",
+          "redistribution": "PERMITTED_WITH_CONDITIONS",
+          "derived_analytics": "PERMITTED",
+          "model_processing": "PERMITTED",
+          "personal_data_handling": "NOT_ADDRESSED",
+          "attribution_required": "PERMITTED",
+          "personal_data_risk": "NONE_EXPECTED",
+          "contains_user_generated_content": false,
+          "contains_user_identifiers": false,
+          "jurisdiction_review_required": true,
+          "conditions": [
+            "Collect only datasets labelled CC-BY 4.0 or ODbL.",
+            "Never collect from the Microdata Library: its licence permits statistical and scientific research only and forbids redistribution without written agreement.",
+            "Attribute the World Bank and indicate any modifications, including translations.",
+            "If any ODbL dataset is used, honour its share-alike obligation on redistribution."
+          ],
+          "required_conditions": [
+            {
+              "key": "attribution-surface",
+              "description": "A product surface exists that displays the required World Bank attribution and a statement of any modifications, on every view derived from this source.",
+              "verification": "CAPABILITY",
+              "verification_detail": "source-attribution-display"
+            },
+            {
+              "key": "dataset-licence-allowlist",
+              "description": "The collector requests only datasets whose recorded licence is CC-BY 4.0 or ODbL, and skips every other licence.",
+              "verification": "CAPABILITY",
+              "verification_detail": "dataset-licence-filter"
+            },
+            {
+              "key": "microdata-excluded",
+              "description": "The Microdata Library is excluded from every request path.",
+              "verification": "ACCESS_METHOD",
+              "verification_detail": "indicators-api-only"
+            }
+          ],
+          "open_questions": [
+            "Confirm per dataset, at collection time, which licence applies — the licence is a dataset property and the catalog records it per dataset, not per platform."
+          ],
+          "review_notes": "Status raised from REQUIRES_REVIEW to APPROVED_WITH_CONDITIONS. Mission 1.0 could not establish the licence; the Data Catalog licensing page was retrieved this mission and is explicit that CC-BY 4.0 permits commercial use with attribution. The conditions exist because the SAME platform also distributes Microdata under a research-only licence and third-party data under external terms, so an approval that covered 'World Bank' as a whole would be wrong. It covers CC-BY 4.0 indicator data and nothing else.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_LICENCE",
+              "document_title": "World Bank Data Catalog — Data Access and Licensing",
+              "document_url": "https://datacatalog.worldbank.org/public-licenses",
+              "section_reference": "Creative Commons Attribution 4.0 (CC-BY 4.0); Microdata Research License; License Specified Externally; Custom License",
+              "summarized_finding": "CC-BY 4.0 is the DEFAULT licence for datasets the World Bank itself produces and distributes as open data, and it permits copying, modification and distribution in any format FOR ANY PURPOSE, INCLUDING COMMERCIAL USE, provided appropriate credit is given and changes are indicated. Additional mandatory terms impose mediation and UNCITRAL arbitration for disputes. Crucially the page states that many datasets carry OTHER licences: ODbL adds a share-alike obligation on redistribution; the Microdata Research License permits statistical and scientific research only and forbids redistribution without prior written agreement; and 'License Specified Externally' and 'Custom License' datasets carry third-party terms. Licensing is therefore per dataset, not per platform.",
+              "retrieved_at": "2026-08-29T00:00:00+00:00"
+            }
+          ]
         }
-      ],
-      "retention_override": null
+      ]
     },
     {
       "source_id": "eurostat",
@@ -1104,48 +1609,114 @@
           "notes": "SDMX 2.1 web services are referenced with user guides, but the page lists no endpoint, no authentication statement and no limits."
         }
       ],
-      "review": {
-        "approval_state": "REQUIRES_REVIEW",
-        "automated_access": "NOT_ASSESSED",
-        "api_use": "NOT_ASSESSED",
-        "browser_automation": "NOT_ASSESSED",
-        "commercial_use": "NOT_ASSESSED",
-        "storage": "NOT_ASSESSED",
-        "retention": "NOT_ASSESSED",
-        "redistribution": "NOT_ASSESSED",
-        "derived_analytics": "NOT_ASSESSED",
-        "model_processing": "NOT_ASSESSED",
-        "personal_data_handling": "NOT_ASSESSED",
-        "attribution_required": "NOT_ASSESSED",
-        "personal_data_risk": "NONE_EXPECTED",
-        "contains_user_generated_content": false,
-        "contains_user_identifiers": false,
-        "contains_location": true,
-        "sensitive_data_possible": false,
-        "pseudonymization_expected": false,
-        "discard_identifiers_after_normalization": false,
-        "jurisdiction_review_required": false,
-        "review_interval_days": 365,
-        "conditions": [],
-        "open_questions": [
-          "Read the Eurostat copyright and free re-use notice, which the web services page references from the Help menu but does not link on the page reviewed",
-          "Record the SDMX endpoint base URL and the API user guide reference",
-          "Determine documented query-size and rate limits, which SDMX services commonly impose",
-          "Confirm attribution requirements under the applicable Commission reuse decision"
-        ],
-        "review_notes": "The web services page confirms that SDMX 2.1 services exist and that datasets refresh twice daily, and states nothing about authentication, limits or reuse. The reuse notice exists elsewhere on the site; an attempt to retrieve it at the expected copyright URL returned 404, so the correct current location has to be found rather than assumed. Nothing is assessed."
-      },
-      "evidence": [
+      "retention_override": null,
+      "reviews": [
         {
-          "document_type": "OFFICIAL_API_DOCS",
-          "document_title": "Eurostat - Data web services",
-          "document_url": "https://ec.europa.eu/eurostat/web/main/data/web-services",
-          "section_reference": "Web services overview",
-          "summarized_finding": "States that SDMX 2.1 web services and Eurostat statistics web services are available with linked user guides, and that Eurostat datasets are updated twice a day at 11:00 and 23:00 CET. The page lists no endpoint base URL, states nothing about authentication or rate limits, and does not carry the reuse or copyright terms, which it references from a separate Help entry.",
-          "retrieved_at": "2026-08-29T00:00:00Z"
+          "approval_state": "REQUIRES_REVIEW",
+          "automated_access": "NOT_ASSESSED",
+          "api_use": "NOT_ASSESSED",
+          "browser_automation": "NOT_ASSESSED",
+          "commercial_use": "NOT_ASSESSED",
+          "storage": "NOT_ASSESSED",
+          "retention": "NOT_ASSESSED",
+          "redistribution": "NOT_ASSESSED",
+          "derived_analytics": "NOT_ASSESSED",
+          "model_processing": "NOT_ASSESSED",
+          "personal_data_handling": "NOT_ASSESSED",
+          "attribution_required": "NOT_ASSESSED",
+          "personal_data_risk": "NONE_EXPECTED",
+          "contains_user_generated_content": false,
+          "contains_user_identifiers": false,
+          "contains_location": true,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": false,
+          "discard_identifiers_after_normalization": false,
+          "jurisdiction_review_required": false,
+          "review_interval_days": 365,
+          "conditions": [],
+          "open_questions": [
+            "Read the Eurostat copyright and free re-use notice, which the web services page references from the Help menu but does not link on the page reviewed",
+            "Record the SDMX endpoint base URL and the API user guide reference",
+            "Determine documented query-size and rate limits, which SDMX services commonly impose",
+            "Confirm attribution requirements under the applicable Commission reuse decision"
+          ],
+          "review_notes": "The web services page confirms that SDMX 2.1 services exist and that datasets refresh twice daily, and states nothing about authentication, limits or reuse. The reuse notice exists elsewhere on the site; an attempt to retrieve it at the expected copyright URL returned 404, so the correct current location has to be found rather than assumed. Nothing is assessed.",
+          "review_version": 1,
+          "reviewed_by": "mission-1.0",
+          "reviewed_at": "2026-08-29T00:00:00+00:00",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "Eurostat - Data web services",
+              "document_url": "https://ec.europa.eu/eurostat/web/main/data/web-services",
+              "section_reference": "Web services overview",
+              "summarized_finding": "States that SDMX 2.1 web services and Eurostat statistics web services are available with linked user guides, and that Eurostat datasets are updated twice a day at 11:00 and 23:00 CET. The page lists no endpoint base URL, states nothing about authentication or rate limits, and does not carry the reuse or copyright terms, which it references from a separate Help entry.",
+              "retrieved_at": "2026-08-29T00:00:00Z"
+            }
+          ]
+        },
+        {
+          "review_version": 2,
+          "approval_state": "APPROVED_WITH_CONDITIONS",
+          "reviewed_by": "mission-1.3",
+          "reviewed_at": "2026-08-29T00:00:00+00:00",
+          "review_interval_days": 180,
+          "automated_access": "PERMITTED",
+          "api_use": "PERMITTED",
+          "browser_automation": "NOT_ADDRESSED",
+          "commercial_use": "PERMITTED_WITH_CONDITIONS",
+          "storage": "PERMITTED",
+          "retention": "PERMITTED",
+          "redistribution": "PERMITTED_WITH_CONDITIONS",
+          "derived_analytics": "PERMITTED",
+          "model_processing": "PERMITTED",
+          "personal_data_handling": "NOT_ADDRESSED",
+          "attribution_required": "PERMITTED",
+          "personal_data_risk": "NONE_EXPECTED",
+          "contains_user_generated_content": false,
+          "contains_user_identifiers": false,
+          "jurisdiction_review_required": true,
+          "conditions": [
+            "Exclude data for countries outside the EU, EFTA and official acceding/candidate countries from any commercial use.",
+            "Exclude the named trade-data exceptions (Liechtenstein and Switzerland as declaring countries from 1995 for HS/SITC/BEC/NSTR; Austria at CN 8-digit).",
+            "Cite the dataset DOI and the access date; state any modification with the Eurostat non-responsibility disclaimer."
+          ],
+          "required_conditions": [
+            {
+              "key": "attribution-surface",
+              "description": "A product surface displays the Eurostat citation — dataset DOI and access date — on every view derived from this source.",
+              "verification": "CAPABILITY",
+              "verification_detail": "source-attribution-display"
+            },
+            {
+              "key": "geographic-exclusion",
+              "description": "The collector excludes data for countries outside the EU, EFTA and official acceding/candidate countries.",
+              "verification": "CAPABILITY",
+              "verification_detail": "eurostat-geographic-filter"
+            },
+            {
+              "key": "trade-data-exclusion",
+              "description": "The collector excludes the named Liechtenstein, Switzerland and Austria trade-data exceptions.",
+              "verification": "CAPABILITY",
+              "verification_detail": "eurostat-trade-exclusion"
+            }
+          ],
+          "open_questions": [
+            "Record the SDMX endpoint base URL and its documented query-size and rate limits, which the copyright notice does not cover."
+          ],
+          "review_notes": "Status raised from REQUIRES_REVIEW to APPROVED_WITH_CONDITIONS. Mission 1.0 could not retrieve the copyright notice; it was retrieved this mission. The geographic exclusion is the condition that matters: our assessed use is commercial, and data for non-EU/EFTA/candidate countries may NOT be reused commercially. That is a mechanical filter, not a caveat to remember.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_LICENCE",
+              "document_title": "Eurostat — Copyright notice and free re-use of data",
+              "document_url": "https://ec.europa.eu/eurostat/web/main/help/copyright-notice",
+              "section_reference": "General principles; Exceptions; How to re-use Eurostat material for commercial purposes; How to cite Eurostat products",
+              "summarized_finding": "Reuse of statistical data, metadata and publications for COMMERCIAL or non-commercial purposes is authorised provided the source is acknowledged, under the Commission reuse Decision of 12 December 2011. There is no special procedure and no written licence required. The exceptions are enumerated and material: data identified as belonging to sources other than Eurostat; publications whose copyright is partly or wholly third-party; DATA FOR COUNTRIES OTHER THAN EU, EFTA and official acceding/candidate countries (the page names the USA, Japan and China) which must be removed before commercial reuse; and specific trade data declared by Liechtenstein, Switzerland and Austria. Citation must give the dataset DOI and the access date, and modifications must be stated with a disclaimer.",
+              "retrieved_at": "2026-08-29T00:00:00+00:00"
+            }
+          ]
         }
-      ],
-      "retention_override": null
+      ]
     },
     {
       "source_id": "fred",
@@ -1196,39 +1767,105 @@
           "acquisition_cost": "UNKNOWN"
         }
       ],
-      "review": {
-        "approval_state": "REQUIRES_REVIEW",
-        "automated_access": "NOT_ASSESSED",
-        "api_use": "NOT_ASSESSED",
-        "browser_automation": "NOT_ASSESSED",
-        "commercial_use": "NOT_ASSESSED",
-        "storage": "NOT_ASSESSED",
-        "retention": "NOT_ASSESSED",
-        "redistribution": "NOT_ASSESSED",
-        "derived_analytics": "NOT_ASSESSED",
-        "model_processing": "NOT_ASSESSED",
-        "personal_data_handling": "NOT_ASSESSED",
-        "attribution_required": "NOT_ASSESSED",
-        "personal_data_risk": "NONE_EXPECTED",
-        "contains_user_generated_content": false,
-        "contains_user_identifiers": false,
-        "contains_location": true,
-        "sensitive_data_possible": false,
-        "pseudonymization_expected": false,
-        "discard_identifiers_after_normalization": false,
-        "jurisdiction_review_required": false,
-        "review_interval_days": 365,
-        "conditions": [],
-        "open_questions": [
-          "Retrieve and assess the FRED API Terms of Use at https://fred.stlouisfed.org/docs/api/terms_of_use.html, which returned HTTP 403 from this environment",
-          "Determine whether commercial use and redistribution of derived series are permitted",
-          "Determine which series are third-party and therefore carry separate terms that FRED's own terms do not cover",
-          "Determine attribution requirements and documented rate limits"
-        ],
-        "review_notes": "The terms page could not be retrieved: the host returned 403 to this environment. The specific risk worth naming is that FRED redistributes series owned by third parties under their own licences, so a single blanket conclusion about 'FRED data' would be wrong even if the FRED terms themselves were permissive. Nothing is assessed."
-      },
-      "evidence": [],
-      "retention_override": null
+      "retention_override": null,
+      "reviews": [
+        {
+          "approval_state": "REQUIRES_REVIEW",
+          "automated_access": "NOT_ASSESSED",
+          "api_use": "NOT_ASSESSED",
+          "browser_automation": "NOT_ASSESSED",
+          "commercial_use": "NOT_ASSESSED",
+          "storage": "NOT_ASSESSED",
+          "retention": "NOT_ASSESSED",
+          "redistribution": "NOT_ASSESSED",
+          "derived_analytics": "NOT_ASSESSED",
+          "model_processing": "NOT_ASSESSED",
+          "personal_data_handling": "NOT_ASSESSED",
+          "attribution_required": "NOT_ASSESSED",
+          "personal_data_risk": "NONE_EXPECTED",
+          "contains_user_generated_content": false,
+          "contains_user_identifiers": false,
+          "contains_location": true,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": false,
+          "discard_identifiers_after_normalization": false,
+          "jurisdiction_review_required": false,
+          "review_interval_days": 365,
+          "conditions": [],
+          "open_questions": [
+            "Retrieve and assess the FRED API Terms of Use at https://fred.stlouisfed.org/docs/api/terms_of_use.html, which returned HTTP 403 from this environment",
+            "Determine whether commercial use and redistribution of derived series are permitted",
+            "Determine which series are third-party and therefore carry separate terms that FRED's own terms do not cover",
+            "Determine attribution requirements and documented rate limits"
+          ],
+          "review_notes": "The terms page could not be retrieved: the host returned 403 to this environment. The specific risk worth naming is that FRED redistributes series owned by third parties under their own licences, so a single blanket conclusion about 'FRED data' would be wrong even if the FRED terms themselves were permissive. Nothing is assessed.",
+          "review_version": 1,
+          "reviewed_by": "mission-1.0",
+          "reviewed_at": "2026-08-29T00:00:00+00:00",
+          "evidence": []
+        },
+        {
+          "review_version": 2,
+          "approval_state": "APPROVED_WITH_CONDITIONS",
+          "reviewed_by": "mission-1.3",
+          "reviewed_at": "2026-08-29T00:00:00+00:00",
+          "review_interval_days": 180,
+          "automated_access": "PERMITTED",
+          "api_use": "PERMITTED",
+          "browser_automation": "NOT_ADDRESSED",
+          "commercial_use": "PERMITTED_WITH_CONDITIONS",
+          "storage": "PERMITTED",
+          "retention": "PERMITTED",
+          "redistribution": "PERMITTED_WITH_CONDITIONS",
+          "derived_analytics": "PERMITTED",
+          "model_processing": "PERMITTED",
+          "personal_data_handling": "NOT_ADDRESSED",
+          "attribution_required": "PERMITTED",
+          "personal_data_risk": "NONE_EXPECTED",
+          "contains_user_generated_content": false,
+          "contains_user_identifiers": false,
+          "jurisdiction_review_required": true,
+          "conditions": [
+            "Display verbatim: 'This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.'",
+            "Exclude every series whose notes contain 'Copyright', unless permission has been obtained from that series' owner and recorded.",
+            "Do not use FRED, ALFRED or Federal Reserve Bank in a hostname, do not use their marks, and do not imply endorsement."
+          ],
+          "required_conditions": [
+            {
+              "key": "fred-api-key",
+              "description": "A FRED API key is configured in the environment.",
+              "verification": "CONFIG_REFERENCE",
+              "verification_detail": "FRED_API_KEY"
+            },
+            {
+              "key": "fred-endorsement-notice",
+              "description": "The product prominently displays the exact notice the terms require.",
+              "verification": "CAPABILITY",
+              "verification_detail": "source-attribution-display"
+            },
+            {
+              "key": "copyrighted-series-excluded",
+              "description": "The collector excludes every series whose notes contain 'Copyright', or records per-owner permission for it.",
+              "verification": "CAPABILITY",
+              "verification_detail": "fred-copyright-series-filter"
+            }
+          ],
+          "open_questions": [
+            "Determine whether any series the research use case needs is copyrighted; if so, the owner must be contacted individually — the Bank cannot grant that permission."
+          ],
+          "review_notes": "Status raised from REQUIRES_REVIEW to APPROVED_WITH_CONDITIONS. The terms are clear and the conditions are unusually concrete — one of them is an exact sentence that must appear in the product. The third-party-series carve-out is the substantive limit: FRED redistributes series it does not own, and API access grants no rights over those. It is mechanically detectable, which is why it is a condition rather than an open question.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_TERMS",
+              "document_title": "FRED® API Terms of Use",
+              "document_url": "https://fred.stlouisfed.org/docs/api/terms_of_use.html",
+              "section_reference": "Property Rights; Prohibitions; Requirements",
+              "summarized_finding": "Access to the FRED API is licensed, and the terms were retrieved in full this mission (Mission 1.0 received HTTP 403). Property Rights is the decisive section: data series available through the API MAY BE OWNED BY THIRD PARTIES, the Bank's provision of the API does not override those owners' copyrights, and 'before using data series owned by third parties for anything other than your own personal use, you must contact the data owner to obtain permission'. Copyrighted series are identifiable: they contain the word 'Copyright' in their notes and can be found via the fred/series/search request. Requirements include a MANDATORY notice — 'This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis' — placed prominently on the application. Prohibitions include using FRED marks in a hostname, implying endorsement, removing proprietary notices, and replicating the essential user experience of the FRED website. Rate and bandwidth limits may be imposed at the Bank's discretion.",
+              "retrieved_at": "2026-08-29T00:00:00+00:00"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

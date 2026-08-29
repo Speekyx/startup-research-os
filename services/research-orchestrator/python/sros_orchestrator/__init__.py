@@ -71,6 +71,7 @@ from .lifecycle import (
 )
 from .plan import (
     BLOCKED_CAPABILITIES,
+    NO_COLLECTOR_IMPLEMENTED,
     PLANNER_VERSION,
     STATIC_BLOCKED_CAPABILITIES,
     BlockedCapability,
@@ -127,6 +128,7 @@ __all__ = [
     "ResearchExecutionPlan",
     "ResearchPlanner",
     "PLANNER_VERSION",
+    "NO_COLLECTOR_IMPLEMENTED",
     # sources
     "SourceAvailability",
     "SourceAvailabilityReport",

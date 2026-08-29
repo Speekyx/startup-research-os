@@ -7,9 +7,14 @@
 | `data-principles.md` | Source strategy, acquisition, raw preservation, quality, deduplication, language and geography, privacy, temporal modeling, contradictions, lineage, cost control, legal review |
 | `data-retention-policy-v1.md` | Retention tiers, the stricter-constraint rule, per-source overrides, deletion semantics |
 | `source-registry-v1.md` | The source registry, per-activity policy assessment, evidence requirements and the collector eligibility gate (added in Mission 1.0) |
+| `acquisition-authorization-v1.md` | How a review condition is cleared, and what a collector must hold before it may run (added in Mission 1.4) |
 | `source-review-guide.md` | How a human conducts a source review, step by step |
 | `source-catalog-v1.json` | The reviewed candidate catalog. **Source of truth**, edited by hand |
 | `source-catalog-v1.md` | The same catalog, rendered. **Generated** by `sros-source render`, checked in CI |
+| `source-review-results-v1.md` | Mission 1.3 review results as a diff: previous verdict, new verdict, and the document that moved it. **Generated**, checked in CI |
+| `source-human-review-queue-v1.md` | Twelve unresolved items, each with the exact document, the exact question and the exact next action |
+| `source-condition-gap-analysis-v1.md` | The nine Mission 1.3 conditions inventoried and classified, and the obligations deliberately left out of code |
+| `source-compliance-v1.json` | Attribution texts, licence and geography allowlists, enumerated exclusions and minimisation profiles. **Source of truth**, edited by hand |
 
 ## The rules that are hardest to retrofit
 
@@ -63,16 +68,32 @@ registry exists, the `retention_override` mechanism the retention policy depends
 on now has a table behind it, and collector eligibility is a derived gate rather
 than a stored flag.
 
-Resolved does not mean open. **Thirteen candidate sources are registered and
-zero are collector-eligible**, which is the expected outcome of a first pass:
-§31 of the mission brief asks for correctness over the number of approvals, and
-a registry where every platform came back approved would mean the gate was doing
-nothing.
+Resolved does not mean open. The Mission 1.3 review round left **thirteen
+sources registered and zero collector-eligible**: three reached
+`APPROVED_WITH_CONDITIONS` — World Bank, Eurostat and FRED — and every condition
+they carried was unsatisfied. Three verdicts moved *down* on current evidence
+(YouTube to `PROHIBITED`, GitHub and Google Play to `RESTRICTED`), which is the
+clearest sign the review was not optimising for approvals.
 
-Two rules are worth repeating here because they are the ones under pressure:
+Mission 1.4 built the compliance capabilities those conditions require and
+cleared eight of the nine. **World Bank and Eurostat are now collector-eligible**
+in an environment where the capabilities are present and verified; **FRED is
+design-eligible and not runnable**, because its API key is not configured.
+
+Three things did not change, and they are the ones under pressure:
 
 - a source never becomes eligible because its data is publicly visible;
-- uncertainty resolves to `REQUIRES_REVIEW`, never to permission.
+- uncertainty resolves to `REQUIRES_REVIEW`, never to permission;
+- **a condition is cleared by a verifier and by nothing else.** Not a manual
+  boolean, not a catalog field, not a migration — the database refuses the
+  boolean with no verification record behind it
+  ([`acquisition-authorization-v1.md`](acquisition-authorization-v1.md),
+  [ADR-016](../architecture/adr/ADR-016-compliance-capabilities-and-acquisition-authorization.md)).
+
+`APPROVED_WITH_CONDITIONS` says a collector **may be designed**. Eligible says
+one **may be built**. Neither says one exists: `collector_enabled` is false for
+all thirteen sources, no collector is implemented, and
+`acquisition.raw_records` is empty.
 
 ## Still open
 

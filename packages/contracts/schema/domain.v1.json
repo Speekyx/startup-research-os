@@ -1,6 +1,6 @@
 {
   "$comment": "AUTHORITATIVE CONTRACT SOURCE OF TRUTH. Hand-edited. Everything under packages/contracts/generated/ is derived from this file by tools/generate.py. See ADR-009.",
-  "contract_version": "1.2.0",
+  "contract_version": "1.4.0",
   "ontology_version": "2",
   "scoring_framework_version": "1.1",
   "evidence_framework_version": "1",
@@ -262,6 +262,110 @@
         {
           "value": "SUSPENDED",
           "description": "Operationally halted regardless of review state. An immediate stop that does not wait for a review cycle"
+        }
+      ]
+    },
+    {
+      "name": "ConditionVerification",
+      "spec": "source-registry-v1.md; Mission 1.3 §24",
+      "description": "HOW a review condition can be checked. Exists so APPROVED_WITH_CONDITIONS cannot silently mean 'a collector may run': each condition is satisfied individually, and one that no machine can verify must say so rather than pretending it can.",
+      "values": [
+        {
+          "value": "CONFIG_REFERENCE",
+          "description": "A named configuration key is present in the environment. The KEY name, never its value"
+        },
+        {
+          "value": "CAPABILITY",
+          "description": "A named product capability is implemented and enabled -- for example a surface that can display a required attribution notice"
+        },
+        {
+          "value": "RETENTION_LIMIT",
+          "description": "A retention limit at or below a stated number of days is configured for the source"
+        },
+        {
+          "value": "ACCESS_METHOD",
+          "description": "Collection uses only a named access method, and no other"
+        },
+        {
+          "value": "HUMAN_CONFIRMATION",
+          "description": "No machine can check it. A person must record the decision and the reference to it. Marking this satisfied is a human act, and the honest answer for anything a program cannot establish"
+        }
+      ]
+    },
+    {
+      "name": "ConditionVerificationResult",
+      "spec": "source-condition-gap-analysis-v1.md; Mission 1.4 §19",
+      "description": "The outcome of running a verifier against one review condition. Four values rather than a boolean, because 'we could not establish it' and 'it does not hold' call for different next steps and only one of them is a bug. UNKNOWN never becomes SATISFIED, and only SATISFIED clears the condition.",
+      "values": [
+        {
+          "value": "SATISFIED",
+          "description": "The verifier established the condition holds, and recorded what it looked at"
+        },
+        {
+          "value": "UNSATISFIED",
+          "description": "The verifier ran and the condition does not hold. A definite answer, not an absence of one"
+        },
+        {
+          "value": "UNKNOWN",
+          "description": "The verifier could not establish either answer -- no verifier is registered for the condition, or what it needs to inspect is unavailable. Blocks exactly like UNSATISFIED and must never be promoted"
+        },
+        {
+          "value": "NOT_APPLICABLE",
+          "description": "The condition does not apply in this context, for a reason the record states. Blocks: a condition that does not apply has still not been satisfied"
+        }
+      ]
+    },
+    {
+      "name": "AttributionElement",
+      "spec": "acquisition-authorization-v1.md; Mission 1.4 §6",
+      "description": "One required part of a source's attribution obligation. A closed enum because the renderer branches exhaustively: an element it does not recognise must be a contract change, never a silently dropped requirement.",
+      "values": [
+        {
+          "value": "SOURCE_CREDIT",
+          "description": "Credit to the source, in the wording the source's own terms require"
+        },
+        {
+          "value": "LICENCE_IDENTIFIER",
+          "description": "The licence the resource is distributed under, named so a reader can find it"
+        },
+        {
+          "value": "EXACT_NOTICE",
+          "description": "A sentence whose wording is prescribed by the terms and must appear verbatim. Never paraphrased, never composed"
+        },
+        {
+          "value": "MODIFICATION_STATEMENT",
+          "description": "A statement of what was changed, required where the licence requires changes to be indicated. Includes translation"
+        },
+        {
+          "value": "DATASET_DOI",
+          "description": "The persistent identifier of the specific dataset used. A per-resource value; it cannot be defaulted"
+        },
+        {
+          "value": "ACCESS_DATE",
+          "description": "The date the data was retrieved. A per-retrieval value; it cannot be defaulted"
+        },
+        {
+          "value": "DISCLAIMER",
+          "description": "A disclaimer the terms require alongside modified data, supplied as text rather than composed by this system when the exact wording is not in the recorded evidence"
+        }
+      ]
+    },
+    {
+      "name": "ResourceContentOrigin",
+      "spec": "acquisition-authorization-v1.md; Mission 1.4 §12",
+      "description": "Whether the platform's own licence covers a particular resource. Aggregators republish material they do not own, so platform approval is not resource approval. UNKNOWN exists because it is the common case and must fail closed rather than be guessed either way.",
+      "values": [
+        {
+          "value": "PLATFORM_LICENSED",
+          "description": "The platform produces or licenses this resource, and the reviewed terms cover it"
+        },
+        {
+          "value": "THIRD_PARTY",
+          "description": "Owned by someone other than the platform. The platform's approval grants nothing over it, and separate permission from the owner is required"
+        },
+        {
+          "value": "UNKNOWN",
+          "description": "Not established. Denied wherever licensing scope matters: an unexamined resource is not a resource known to be covered"
         }
       ]
     },

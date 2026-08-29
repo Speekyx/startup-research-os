@@ -22,6 +22,7 @@ eventually be documented through ADRs."
 | [ADR-013](ADR-013-source-registry-governance.md) | Source governance as a gate, not a field | Accepted — Mission 1.0. **Resolves D-07** |
 | [ADR-014](ADR-014-evidence-aggregation-reference-implementation.md) | Evidence aggregation as a reference package, gated on calibration | Accepted — Mission 1.1. **Resolves D-03 at the framework level** |
 | [ADR-015](ADR-015-claim-persistence-and-versioning.md) | Claim persistence: stable identity, append-only revisions | Accepted — Mission 1.2. **Resolves A-13** |
+| [ADR-016](ADR-016-compliance-capabilities-and-acquisition-authorization.md) | Compliance capabilities and acquisition authorization: a condition is cleared by a verifier, and a collector receives an authorization or nothing | Accepted — Mission 1.4. Extends ADR-013 |
 
 > **Numbering note.** The production-deployment ADR has **no reserved number any
 > more.** It moved from 012 to 013 to 014 to 015, once per mission, because each

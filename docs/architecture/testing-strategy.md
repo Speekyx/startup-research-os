@@ -1,9 +1,10 @@
 # Testing Strategy
 
-Version: 1.5
-Status: Strategy fixed; infrastructure, orchestration, evidence aggregation and
-the Claim model tested. No production business logic exists to test
-Date: 2026-08-29 (amended in Mission 1.2)
+Version: 1.6
+Status: Strategy fixed; infrastructure, orchestration, evidence aggregation, the
+Claim model and the compliance layer tested. No production business logic exists
+to test
+Date: 2026-08-29 (amended in Mission 1.4)
 
 `PROJECT_MANIFEST.md` §Testability: "Every important behavior must be testable."
 `docs/CLAUDE.md` §Definition of done: tests must cover important behavior and
@@ -330,3 +331,42 @@ reasons unrelated to benchmarks.
 
 The failure mode this prevents is specific: a suite that quietly became enabled
 reports its problem as an invoice, weeks later, rather than as a red build.
+
+## 10. Environment-dependent expectations (added in Mission 1.4)
+
+Until Mission 1.4 the governance answer was the same everywhere: no source was
+collector-eligible, so a test could assert `eligible == 0` and be asserting a
+property. Condition verification made the answer depend on **what is deployed** —
+which capabilities exist, which credentials are configured, what somebody has
+recorded — and several tests that had looked like property assertions turned out
+to be statements about one database.
+
+They failed the moment `sros-source verify --apply` had been run, which is a bad
+way to find out.
+
+Three rules came out of fixing them, and they apply to anything whose answer can
+legitimately differ between environments.
+
+**Derive the expectation from the input, not from a remembered number.** The
+orchestrator integration test now asks which gate *should* answer given what the
+registry reported, instead of hard-coding `SOURCE-REGISTRY-GATE`:
+
+```python
+expected = "NO-COLLECTOR-IMPLEMENTED" if plan.eligible_source_ids else "SOURCE-REGISTRY-GATE"
+assert acquisition.blocked_reason.startswith(expected)
+```
+
+**Compare two implementations on the same inputs.** The Python gate and the SQL
+view are compared with the satisfaction the *database* holds
+(`conftest.recorded_satisfied_keys`). Evaluating Python without it would compare
+the same rule on different inputs and report a divergence that is really a
+missing argument.
+
+**Assert the behaviour, not the state it happened to produce.** "Every stored
+condition is unsatisfied" was really "nobody has verified this database yet".
+The test now forces every condition false, runs the loader, and asserts none was
+set — which is the property that was always meant: *a catalog load can never
+satisfy its own conditions.*
+
+Two things stay absolutely asserted, because no environment may change them:
+`collector_enabled` is false everywhere, and `acquisition.raw_records` is empty.
