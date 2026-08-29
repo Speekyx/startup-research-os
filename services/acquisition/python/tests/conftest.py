@@ -55,6 +55,29 @@ def catalog():
     return load_catalog(REPO_ROOT / "docs/data/source-catalog-v1.json")
 
 
+@pytest.fixture(scope="session", autouse=True)
+def registry_loaded(catalog) -> None:
+    """Apply the catalog before any database test reads it.
+
+    The suite must not depend on someone having run `sros-source load` first.
+    That dependency is invisible while it holds -- a developer's database
+    usually has the catalog in it from an earlier run -- and it fails only in a
+    clean environment, which is to say in CI and on a new machine.
+
+    Idempotent by construction: every row id is a uuid5 of its natural key, so
+    loading twice converges on the rows that exist. Loading here grants nothing;
+    `load_catalog_into` writes `collector_enabled = FALSE` unconditionally.
+    """
+    if not _postgres_available():
+        return
+    import psycopg
+    from sros_acquisition.registry.repositories import load_catalog_into
+
+    with psycopg.connect(DATABASE_URL) as connection:
+        load_catalog_into(connection, catalog)
+        connection.commit()
+
+
 @pytest.fixture
 def conn() -> Iterator[object]:
     """A plain connection, rolled back at the end of every test.
