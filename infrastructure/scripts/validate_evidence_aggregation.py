@@ -132,7 +132,19 @@ def main() -> int:
             if re.search(rf"\b{name}\b", text, re.IGNORECASE):
                 leaked.append(f"{path.relative_to(ROOT)}: {name}")
     for path in sorted((ROOT / "services").rglob("*.py")):
-        if "__pycache__" in path.parts:
+        # Tests are excluded, exactly as check 3b below already excludes them,
+        # and the inconsistency between the two was a real defect. This check
+        # flagged `test_claims.py` for the three lines that assert those very
+        # names are ABSENT from an API response:
+        #
+        #     for forbidden in ("evidence_score", "support_strength", ...):
+        #         assert forbidden not in serialised
+        #
+        # A test naming the vocabulary in order to forbid it is this guard's
+        # ally, not its target. Mission 1.2 narrowed 3b and left this one, so
+        # the gate had been failing ever since -- reported as passing because
+        # the FAIL line prints before the `ok` lines and a `| tail -1` hid it.
+        if "__pycache__" in path.parts or "tests" in path.parts:
             continue
         text = path.read_text(encoding="utf-8", errors="ignore")
         for name in computed:

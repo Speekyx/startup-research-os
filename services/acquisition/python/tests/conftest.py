@@ -57,24 +57,38 @@ def catalog():
 
 @pytest.fixture(scope="session", autouse=True)
 def registry_loaded(catalog) -> None:
-    """Apply the catalog before any database test reads it.
+    """Apply the catalog AND verify its conditions before any database test reads it.
 
     The suite must not depend on someone having run `sros-source load` first.
     That dependency is invisible while it holds -- a developer's database
     usually has the catalog in it from an earlier run -- and it fails only in a
     clean environment, which is to say in CI and on a new machine.
 
-    Idempotent by construction: every row id is a uuid5 of its natural key, so
-    loading twice converges on the rows that exist. Loading here grants nothing;
-    `load_catalog_into` writes `collector_enabled = FALSE` unconditionally.
+    **Verification is here for exactly the same reason, and it was added after
+    the CI run that proved the point.** CI executes the suites before
+    `sros-source verify --apply`, so on a fresh database no condition was
+    satisfied, World Bank was not eligible, and
+    `registry.require_eligibility_for_collector` correctly refused to let the
+    enablement fixture turn its collector on. The database was right; the suite
+    was assuming state somebody else had produced.
+
+    Both steps grant nothing on their own. `load_catalog_into` writes
+    `collector_enabled = FALSE` unconditionally, and a verification only records
+    what a verifier found -- with no credential configured, FRED's condition
+    stays unsatisfied here exactly as it does in production.
     """
     if not _postgres_available():
         return
     import psycopg
+    from sros_acquisition.compliance import load_compliance, verify_source
+    from sros_acquisition.compliance.repositories import record_verifications
     from sros_acquisition.registry.repositories import load_catalog_into
 
+    compliance = load_compliance(REPO_ROOT / "docs/data/source-compliance-v1.json")
     with psycopg.connect(DATABASE_URL) as connection:
         load_catalog_into(connection, catalog)
+        records = [r for source in catalog for r in verify_source(source, compliance)]
+        record_verifications(connection, records)
         connection.commit()
 
 
