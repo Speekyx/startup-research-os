@@ -8,7 +8,7 @@ Regenerate      : python packages/contracts/tools/generate.py
 Editing this file by hand will be overwritten and will fail the contract
 check in CI. Change the source of truth instead.
 
-contract_version: 1.4.0
+contract_version: 1.5.0
 ontology_version: 2
 """
 
@@ -17,7 +17,7 @@ from __future__ import annotations
 from enum import Enum
 from typing import Final
 
-CONTRACT_VERSION: Final[str] = "1.4.0"
+CONTRACT_VERSION: Final[str] = "1.5.0"
 ONTOLOGY_VERSION: Final[str] = "2"
 RESEARCH_CONTEXT_SCHEMA_VERSION: Final[str] = "1.0.0"
 
@@ -185,6 +185,24 @@ class AttributionElement(str, Enum):
     DATASET_DOI = "DATASET_DOI"  # The persistent identifier of the specific dataset used. A per-resource value; it cannot be defaulted
     ACCESS_DATE = "ACCESS_DATE"  # The date the data was retrieved. A per-retrieval value; it cannot be defaulted
     DISCLAIMER = "DISCLAIMER"  # A disclaimer the terms require alongside modified data, supplied as text rather than composed by this system when the exact wording is not in the recorded evidence
+
+
+class AcquisitionErrorCode(str, Enum):
+    """Why an acquisition attempt did not produce records. A closed vocabulary so the orchestrator branches on a meaning rather than on a third party's exception class -- an upstream library changing its exception hierarchy must not change how this system retries. Each value also fixes whether it is worth retrying, which is the decision that costs money when it is wrong.
+
+    See world-bank-collector-v1.md; Mission 1.5 §32.
+    """
+
+    AUTHORIZATION_REJECTED = "AUTHORIZATION_REJECTED"  # No acquisition authorization could be built for the source. Never retried: the answer comes from the governance gate and will not change on its own
+    RESOURCE_NOT_PERMITTED = "RESOURCE_NOT_PERMITTED"  # The source is authorised and this specific resource is not -- excluded dataset, licence outside the allowlist, third-party or unestablished origin. Never retried
+    NETWORK_TIMEOUT = "NETWORK_TIMEOUT"  # The request did not complete within its connect or read budget. Retryable
+    RATE_LIMITED = "RATE_LIMITED"  # The source signalled too many requests. Retryable, and more slowly than other failures
+    TEMPORARY_UPSTREAM = "TEMPORARY_UPSTREAM"  # The source failed in a way it describes as its own and transient. Retryable
+    UPSTREAM_CLIENT_ERROR = "UPSTREAM_CLIENT_ERROR"  # The source rejected the request deterministically. Never retried: the same request produces the same rejection, and repeating it is how a rate limit becomes a ban
+    INVALID_RESPONSE = "INVALID_RESPONSE"  # The response arrived and does not have the documented shape. Never retried: a source that changed its contract needs a person, not another attempt
+    PARSING_FAILURE = "PARSING_FAILURE"  # The response could not be read at all -- malformed encoding or unparseable body. Never retried
+    PERSISTENCE_FAILURE = "PERSISTENCE_FAILURE"  # Records were acquired and could not be stored. Retryable, because the source is not the problem
+    CANCELLED = "CANCELLED"  # The job was cancelled or ran out of its bounds before completing. Never retried automatically
 
 
 class ResourceContentOrigin(str, Enum):

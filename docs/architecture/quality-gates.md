@@ -1,8 +1,8 @@
 # Quality Gates
 
-Version: 1.8
+Version: 1.9
 Status: Active. Every gate in §1 runs in CI
-Date: 2026-08-29 (amended in Mission 1.4)
+Date: 2026-08-30 (amended in Mission 1.5)
 
 What must be true for a change to reach `main`. `docs/CLAUDE.md` §Definition of
 done is the requirement; this document is the mechanism.
@@ -140,6 +140,38 @@ what that something is allowed to be.
 | **Eligible is not enabled, and neither is implemented** | `sros-source enable` refuses; `IMPLEMENTED_COLLECTORS` is empty; `assert_registry_grants_nothing.py` | Three facts. A switch ahead of the thing it switches reads as "this is running" |
 | **The planner does not dispatch a job nothing can run** | `acquisition_block(report, implemented_collectors)`, fail-closed default | Found by making sources eligible: the planner would have emitted `acquire.collect` with no collector behind it. The two acquisition gates are named separately because different work clears them |
 | **CI verifies rather than trusting recorded state** | `sros-source verify --apply` in the integration job | A capability removed after verification would leave a stale `satisfied` true. Re-verification takes a source out of eligibility as readily as into it |
+
+### Gates added in Mission 1.5
+
+The first collector exists, so three Mission 1.0-1.4 guards were **narrowed**
+rather than deleted -- the same discipline applied to the D-03 guard in 1.2 and
+the enablement guard in 1.4. A guard that becomes false stops protecting
+anything; a guard that names its boundary keeps working after the boundary
+moves.
+
+| Gate | Mechanism | Guards |
+|------|-----------|--------|
+| **A collector cannot run without an authorization** | `collect`'s signature; `test_collector_conformance.py` | Structural, not behavioural: the context is the first positional parameter with no default, so nobody can add an overload that omits it. Mission 1.4's recorded debt, paid |
+| **The collector cannot build its own authorization** | Module-namespace assertion | `build_authorization`, `load_catalog` and `load_compliance` are not importable names in the collector module. A collector that could authorise itself could approve itself |
+| **A refused resource costs zero network calls** | `RecordingTransport` call count | Not "is refused" -- **zero calls**. A gate that refuses after the request went out has prevented nothing |
+| **No public signature accepts a URL** | Parameter-name scan over `collection.__all__` | The shape an escape hatch takes when someone adds one "just for testing". `host_of` is exempted by name, with the reason recorded |
+| **A path cannot be a URL, and cannot traverse** | `HttpRequest.__post_init__` | The transport takes a path. Handing it an absolute URL is a construction error |
+| **An indicator cannot reshape the request** | `WorldBankRequest.__post_init__` | It becomes a path segment; a slash or a query character would change what is fetched |
+| **An unauthorized host is refused at the transport** | `HttpxTransport._compose` | Checked at the last place before a socket as well as at the collector: a guard that exists only further up is one a future caller routes around |
+| **Redirects are not followed** | `follow_redirects=False`, and a 3xx is an error | A redirect is the documented way out of a host allowlist |
+| **Only one file may reach a network** | `ci.yml`, `test_collector_conformance.py` | Mission 1.0's blanket ban, narrowed to `collection/transport.py`. Naming where the network IS says more than asserting it is absent |
+| **Collectors live only in the collection package** | `ci.yml`, both suites | The registry and compliance packages decide whether collection may happen. A collector inside either would put the decision and its execution in one place |
+| **The switch never gets ahead of an implementation** | `sros-source enable`; `IMPLEMENTED_COLLECTORS` | Eurostat is eligible and has no collector, and cannot be enabled. Found the hard way: a Mission 1.4 test enabled a real collector as a side effect the moment World Bank gained one |
+| **Nothing is collected from a source with no collector** | Both suites, asserted as a set relation | Replaces `raw_records == 0`, which was true of every mission until one collected and then stopped being a property |
+| **Retention cannot be chosen by a collector** | `build_draft` has no expiry parameter | Enforced by construction: there is nothing to pass |
+| **Attribution cannot be composed by a collector** | Same -- no attribution parameter | It is rendered from the obligation the review recorded, and rendering fails closed |
+| **The fingerprint ignores retrieval time** | `test_world_bank_collector.py` | Hashing it would make every retrieval a revision, which is how an idempotent collector grows a table forever |
+| **Pagination cannot loop** | Bounded `range`; page-advance check | A source repeating page 1 is reported as a fault rather than absorbed until a limit hides it |
+| **A deterministic 4xx is never retried** | `_status_failure` + `RETRYABLE_CODES` | One call, not three. Repeating a rejection is how a rate limit becomes a ban |
+| **No response body reaches a job result** | `AcquisitionFailure`; sentinel test | §33. A driver has no obligation to keep secrets out of its own messages |
+| **Duplicate delivery writes no second row** | Shared-connection job test | At-least-once delivery honoured without claiming exactly-once |
+| **Raw records are tenant-isolated** | Two workspaces, RLS, `test_world_bank_collector.py` | A worker cannot write into another workspace, and a query with no tenant filter still returns only its own |
+| **The live suite is opt-in and absent from CI** | `SROS_ENABLE_WORLD_BANK_SMOKE_TESTS`, `ci.yml` | A suite that quietly became enabled would show up as traffic to somebody else's servers rather than as a red build |
 
 ---
 

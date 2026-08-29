@@ -35,6 +35,7 @@ from ..registry.models import SourceRegistryError
 __all__ = [
     "DEFAULT_COMPLIANCE_PATH",
     "AccessRestriction",
+    "AuthorizedDataset",
     "AttributionObligation",
     "AttributionRequirement",
     "ComplianceConfig",
@@ -259,6 +260,40 @@ class DataMinimisationProfile:
 
 
 @dataclass(frozen=True)
+class AuthorizedDataset:
+    """One resource a collector may request, and the facts that authorise it.
+
+    Mission 1.5 §7. A collector builds its `ResourceDescriptor` **from** an entry
+    here, never from what a caller claims. Letting the requester supply the
+    licence would make "this dataset is CC-BY 4.0" an assertion the requester
+    makes about itself, which is the failure mode the whole review model exists
+    to prevent.
+
+    A resource with no entry therefore has no licence, no dataset family and no
+    content origin — and the resource gate denies exactly that.
+    """
+
+    resource_id: str
+    dataset_family: str
+    licence: str
+    content_origin: str
+    basis: str
+    indicator: str | None = None
+    name: str | None = None
+
+    def __post_init__(self) -> None:
+        for field_name in ("resource_id", "dataset_family", "licence", "content_origin"):
+            if not str(getattr(self, field_name)).strip():
+                raise SourceRegistryError(f"dataset.{field_name}", "required")
+        if not self.basis.strip():
+            raise SourceRegistryError(
+                f"dataset.{self.resource_id}",
+                "required: an authorised dataset with no stated basis cannot be re-checked "
+                "against the document that authorised it",
+            )
+
+
+@dataclass(frozen=True)
 class SourceCompliance:
     """Everything the compliance layer knows about one source."""
 
@@ -270,6 +305,15 @@ class SourceCompliance:
     data_minimisation: DataMinimisationProfile
     evidence_section: str | None = None
     access_restriction: AccessRestriction | None = None
+    datasets: tuple[AuthorizedDataset, ...] = ()
+
+    def dataset(self, resource_id: str) -> AuthorizedDataset | None:
+        """`None` for an unauthorised resource. The caller must refuse, not
+        default: there is no permissive fallback to fall into."""
+        return next((d for d in self.datasets if d.resource_id == resource_id), None)
+
+    def dataset_for_indicator(self, indicator: str) -> AuthorizedDataset | None:
+        return next((d for d in self.datasets if d.indicator == indicator), None)
 
     def __post_init__(self) -> None:
         if self.review_version < 1:
@@ -393,6 +437,14 @@ def _source_from_json(entry: object) -> SourceCompliance:
         notes=minimisation_raw.get("note"),
     )
 
+    datasets = tuple(_dataset_from_json(item, source_id) for item in entry.get("datasets") or ())
+    ids = [d.resource_id for d in datasets]
+    if len(set(ids)) != len(ids):
+        raise SourceRegistryError(
+            f"{source_id}.datasets",
+            "a resource_id appears twice; which entry authorises it would be undefined",
+        )
+
     return SourceCompliance(
         source_id=source_id,
         review_version=int(entry.get("review_version") or 0),
@@ -402,6 +454,21 @@ def _source_from_json(entry: object) -> SourceCompliance:
         resource_scope=scope,
         data_minimisation=minimisation,
         access_restriction=restriction,
+        datasets=datasets,
+    )
+
+
+def _dataset_from_json(item: object, source_id: str) -> AuthorizedDataset:
+    if not isinstance(item, dict):
+        raise SourceRegistryError(f"{source_id}.datasets", "each entry must be an object")
+    return AuthorizedDataset(
+        resource_id=str(item.get("resource_id") or ""),
+        dataset_family=str(item.get("dataset_family") or ""),
+        licence=str(item.get("licence") or ""),
+        content_origin=str(item.get("content_origin") or ""),
+        basis=str(item.get("basis") or ""),
+        indicator=item.get("indicator"),
+        name=item.get("name"),
     )
 
 

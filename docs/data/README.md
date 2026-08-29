@@ -8,13 +8,15 @@
 | `data-retention-policy-v1.md` | Retention tiers, the stricter-constraint rule, per-source overrides, deletion semantics |
 | `source-registry-v1.md` | The source registry, per-activity policy assessment, evidence requirements and the collector eligibility gate (added in Mission 1.0) |
 | `acquisition-authorization-v1.md` | How a review condition is cleared, and what a collector must hold before it may run (added in Mission 1.4) |
+| `world-bank-collector-v1.md` | The first real collector: scope, request model, transport, identity, provenance (added in Mission 1.5) |
 | `source-review-guide.md` | How a human conducts a source review, step by step |
 | `source-catalog-v1.json` | The reviewed candidate catalog. **Source of truth**, edited by hand |
 | `source-catalog-v1.md` | The same catalog, rendered. **Generated** by `sros-source render`, checked in CI |
 | `source-review-results-v1.md` | Mission 1.3 review results as a diff: previous verdict, new verdict, and the document that moved it. **Generated**, checked in CI |
 | `source-human-review-queue-v1.md` | Twelve unresolved items, each with the exact document, the exact question and the exact next action |
 | `source-condition-gap-analysis-v1.md` | The nine Mission 1.3 conditions inventoried and classified, and the obligations deliberately left out of code |
-| `source-compliance-v1.json` | Attribution texts, licence and geography allowlists, enumerated exclusions and minimisation profiles. **Source of truth**, edited by hand |
+| `source-compliance-v1.json` | Attribution texts, licence and geography allowlists, enumerated exclusions, authorized datasets and minimisation profiles. **Source of truth**, edited by hand |
+| `raw-record-gap-analysis-v1.md` | What `acquisition.raw_records` could not represent before the first collector, and what migration 0008 added |
 
 ## The rules that are hardest to retrofit
 
@@ -91,9 +93,25 @@ Three things did not change, and they are the ones under pressure:
   [ADR-016](../architecture/adr/ADR-016-compliance-capabilities-and-acquisition-authorization.md)).
 
 `APPROVED_WITH_CONDITIONS` says a collector **may be designed**. Eligible says
-one **may be built**. Neither says one exists: `collector_enabled` is false for
-all thirteen sources, no collector is implemented, and
-`acquisition.raw_records` is empty.
+one **may be built**. Neither says one exists.
+
+## Collection — the first one
+
+Mission 1.5 implemented the World Bank Indicators collector and performed one
+controlled real acquisition. It is the only collector, and the three facts stay
+separate:
+
+| Fact | World Bank | Eurostat | FRED |
+|---|---|---|---|
+| collector-eligible | yes | yes | only where `FRED_API_KEY` is configured |
+| collector implemented | **yes** | no | no |
+| collector enabled | yes, deliberately | no | no |
+
+Eurostat is eligible and has no collector, which is the pairing that keeps the
+distinction honest: eligibility says a collector may be built, never that one
+exists. `acquisition.raw_records` holds World Bank observations and nothing else.
+
+See [`world-bank-collector-v1.md`](world-bank-collector-v1.md).
 
 ## Still open
 

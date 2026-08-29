@@ -133,6 +133,7 @@ class TestSchemaRuntime:
             "0005_claim_evidence_alignment",
             "0006_review_conditions",
             "0007_condition_verification",
+            "0008_raw_record_provenance",
         ]
         assert all(len(r[1]) == 64 for r in rows)  # sha256 hex
 
@@ -535,14 +536,22 @@ class TestSourceRegistryApi:
         body = response.json()
         assert body["count"] > 0
 
-    def test_no_collector_is_reported_as_enabled(self, api_client) -> None:
-        """Mission 1.4 made eligibility reachable, so the assertion moved to the
-        thing that is still absolutely true: eligible is not enabled, and no
-        collector exists to enable. The count is reported rather than asserted
-        to be zero -- a test that failed the day a review legitimately passed
-        would be asserting a moment rather than a property."""
+    def test_the_api_reports_enablement_and_eligibility_separately(self, api_client) -> None:
+        """Mission 1.4 made eligibility reachable and Mission 1.5 made enablement
+        reachable, so this assertion has been narrowed twice.
+
+        `enabled == 0` was true of every mission until one collector existed. The
+        rule that survives is that the two are reported as different facts and
+        that the eligible count matches the view's own contract -- both hold
+        whether an operator has enabled something or not."""
         body = api_client.get("/api/v1/sources").json()
-        assert all(not s["collector_enabled"] for s in body["sources"])
+        for source in body["sources"]:
+            assert set(source) >= {"collector_eligible", "collector_enabled"}
+            # Enabled implies eligible. The database trigger refuses the
+            # reverse, and the API must not present a state the database would
+            # not accept.
+            if source["collector_enabled"]:
+                assert source["collector_eligible"], source["source_id"]
         assert body["collector_eligible_count"] == sum(
             1 for s in body["sources"] if not s["blocking_reasons"]
         )

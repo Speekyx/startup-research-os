@@ -37,17 +37,20 @@ __all__ = [
     "resolve_retention",
 ]
 
-# Sources this codebase can actually collect from. Empty, and that is the whole
-# statement: Mission 1.4 made two sources collector-ELIGIBLE, which says a
-# collector may be built and not that one was.
+# Sources this codebase can actually collect from.
 #
-# It exists as a named, empty set rather than as an unwritten fact because two
-# things now have to consult it. `sros-source enable` refuses to switch on a
-# collector that does not exist -- a switch that gets ahead of the thing it
-# switches reads as "this is running" -- and the orchestrator answers the same
-# question with its own fail-closed default, since a service may not import
-# another service's package (`service-boundaries.md`).
+# One entry since Mission 1.5, and it was added only after the collector's
+# conformance suite passed (§26). Adding a name here is the LAST step of
+# implementing a collector, never a way to prepare for one: everything that
+# consults this set treats membership as "code exists that can collect from
+# this", and a name added early would make that false.
 #
-# Adding an entry here is part of implementing a collector, never a way to
-# prepare for one.
-IMPLEMENTED_COLLECTORS: frozenset[str] = frozenset()
+# Two things consult it. `sros-source enable` refuses to switch on a collector
+# that does not exist -- a switch that gets ahead of the thing it switches reads
+# as "this is running" -- and the orchestrator answers the same question with
+# its own fail-closed default, since a service may not import another service's
+# package (`service-boundaries.md`).
+#
+# Eurostat is collector-eligible and is NOT here. Eligibility says a collector
+# may be built; this says one was.
+IMPLEMENTED_COLLECTORS: frozenset[str] = frozenset({"world-bank"})

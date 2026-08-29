@@ -386,15 +386,23 @@ class ResearchPlanner:
     `sources` is the registry it asks about acquisition. The default refuses
     everything, so a planner constructed the pre-Mission-1.0 way keeps producing
     a blocked acquisition stage instead of silently permitting collection.
+
+    `implemented_collectors` is the second acquisition gate (Mission 1.5). It is
+    supplied by the composition root rather than imported, because a service may
+    not import another service's package (`service-boundaries.md`) -- and it
+    defaults to empty for the same reason `sources` defaults to a refusal: a
+    missing wire must read as "we cannot", never as "we may".
     """
 
     def __init__(
         self,
         stages: tuple[PlannedStage, ...] = DEFAULT_STAGES,
         sources: SourceAvailabilityProvider | None = None,
+        implemented_collectors: frozenset[str] = frozenset(),
     ) -> None:
         self._stages = stages
         self._sources: SourceAvailabilityProvider = sources or UnconsultedRegistry()
+        self._implemented_collectors = implemented_collectors
 
     def plan(
         self,
@@ -438,7 +446,7 @@ class ResearchPlanner:
         # inside one planning pass could disagree, and a plan that contradicts
         # itself is worse than one that is out of date.
         availability = self._sources.source_availability()
-        acquisition = acquisition_block(availability)
+        acquisition = acquisition_block(availability, self._implemented_collectors)
 
         jobs: list[JobSpec] = []
         blocked: list[BlockedCapability] = []

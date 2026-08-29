@@ -20,7 +20,8 @@ Checked:
   8. Every resource scope denies unknown content origin and excludes something.
   9. A HUMAN_CONFIRMATION condition cannot be satisfied by any verifier.
  10. An ineligible source produces no acquisition authorization.
- 11. No collector exists, and nothing in the package can fetch.
+ 11. The network boundary is one file, and no governance package holds a
+     collector (narrowed in Mission 1.5, when the first collector arrived).
 
 Usage: python infrastructure/scripts/validate_compliance_capabilities.py
 """
@@ -299,19 +300,43 @@ def main(argv: list[str]) -> int:
         f"({len(authorized)} of {len(catalog)} authorizable with no credentials configured)"
     )
 
-    # -- 11: still no collector, still no network -----------------------------
+    # -- 11: the collection boundary holds ------------------------------------
+    #
+    # Mission 1.4 asserted here that no collector and no network client existed
+    # anywhere in this package. Mission 1.5 built one, so the check was NARROWED
+    # rather than deleted -- the same move Mission 1.2 made with the D-03 guard.
+    # Naming the one file that may reach a network, and the packages that may
+    # not hold a collector, says more than asserting both are absent.
     package = ROOT / "services" / "acquisition" / "python" / "sros_acquisition"
+    network_boundary = package / "collection" / "transport.py"
     forbidden = re.compile(
         r"^\s*(?:import|from)\s+(?:requests|httpx|urllib|aiohttp|http\.client|socket|"
-        r"playwright|selenium)\b",
+        r"playwright|selenium)",
         re.MULTILINE,
     )
     for file in sorted(package.rglob("*.py")):
+        if file == network_boundary:
+            continue
         if forbidden.search(file.read_text(encoding="utf-8")):
-            errors.append(f"{file.name} imports a network client; this package collects nothing")
-    if (package / "collectors").exists() or list(package.glob("**/collector*.py")):
-        errors.append("a collector module exists; Mission 1.4 implements none")
-    print("ok    no collector module and no network client in the acquisition package")
+            errors.append(
+                f"{file.relative_to(package)} imports a network client. The boundary is "
+                "collection/transport.py and nothing else"
+            )
+    if not network_boundary.exists():
+        errors.append(
+            "collection/transport.py is missing, so the network boundary this check "
+            "pins does not exist"
+        )
+    # The registry DECIDES whether a source may be collected from; the compliance
+    # layer says what a collector must obey. A collector in either would put the
+    # decision and its execution in the same place.
+    for governance in ("registry", "compliance"):
+        for file in sorted((package / governance).rglob("*collector*.py")):
+            errors.append(f"{file.relative_to(package)} is a collector inside a governance package")
+    print(
+        "ok    the network boundary is collection/transport.py, and no governance "
+        "package holds a collector"
+    )
 
     if errors:
         print(f"\nCOMPLIANCE VALIDATION FAILED ({len(errors)} problem(s)):", file=sys.stderr)

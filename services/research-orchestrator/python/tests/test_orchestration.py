@@ -388,6 +388,38 @@ class TestPlanning(unittest.TestCase):
         assert block is not None
         self.assertEqual(block.decision_id, NO_COLLECTOR_IMPLEMENTED)
 
+    def test_the_planner_passes_its_implemented_set_to_the_gate(self) -> None:
+        """§46. The set reaches the gate from the CONSTRUCTOR, not from an
+        import: the orchestrator may not import the acquisition package
+        (`service-boundaries.md`), so the composition root wires it and a
+        planner that was not wired refuses."""
+        sources = StaticSourceAvailability(
+            (SourceAvailability("world-bank", "APPROVED_WITH_CONDITIONS", True),)
+        )
+        unwired = ResearchPlanner(sources=sources).plan(WORKSPACE, SESSION, CORRELATION, _context())
+        acquisition = next(b for b in unwired.blocked if b.capability is Capability.ACQUISITION)
+        assert acquisition.decision_id == NO_COLLECTOR_IMPLEMENTED
+
+        wired = ResearchPlanner(
+            sources=sources, implemented_collectors=frozenset({"world-bank"})
+        ).plan(WORKSPACE, SESSION, CORRELATION, _context())
+        assert Capability.ACQUISITION.value not in wired.blocked_capability_names
+        assert any(job.job_type == "acquire.collect" for job in wired.dispatchable_jobs)
+
+    def test_a_collector_for_one_source_does_not_unblock_another(self) -> None:
+        """§46, §57. Eurostat is collector-eligible and has no collector. World
+        Bank having one must not change that."""
+        report = StaticSourceAvailability(
+            (
+                SourceAvailability("eurostat", "APPROVED_WITH_CONDITIONS", True),
+                SourceAvailability("fred", "APPROVED_WITH_CONDITIONS", False, ("no key",)),
+            )
+        ).source_availability()
+        block = acquisition_block(report, frozenset({"world-bank"}))
+        assert block is not None
+        assert block.decision_id == NO_COLLECTOR_IMPLEMENTED
+        assert "eurostat" in block.reason
+
     def test_an_empty_registry_says_so_rather_than_blaming_review(self) -> None:
         """ "Nothing registered" and "nothing approved" have different remedies."""
         block = acquisition_block(StaticSourceAvailability(()).source_availability())

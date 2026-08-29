@@ -1,11 +1,12 @@
 # `services/acquisition`
 
-**Status:** the Source Registry and the compliance capability layer are
-implemented. **Collection is not.**
+**Status:** the Source Registry, the compliance capability layer and the **first
+collector** are implemented. One source can be collected from: World Bank.
 **Runtime:** Python (ADR-004). Playwright's Python API covers browser
 automation, so removing BullMQ removed the last reason for Node on the backend.
 **Governed by:** [`source-registry-v1.md`](../../docs/data/source-registry-v1.md),
 [`acquisition-authorization-v1.md`](../../docs/data/acquisition-authorization-v1.md),
+[`world-bank-collector-v1.md`](../../docs/data/world-bank-collector-v1.md),
 [ADR-013](../../docs/architecture/adr/ADR-013-source-registry-governance.md),
 [ADR-016](../../docs/architecture/adr/ADR-016-compliance-capabilities-and-acquisition-authorization.md).
 
@@ -15,8 +16,13 @@ capabilities that a conditional approval requires, so **two sources now pass the
 gate** — `world-bank` and `eurostat`. `sros-source eligibility <id>` prints
 exactly what each of the other eleven is missing.
 
-**No collector exists**, and that is now a separate fact from eligibility.
-Passing the gate says a collector MAY be built.
+Mission 1.5 built the **World Bank Indicators collector**, the reference every
+later one follows. It cannot run without an `AcquisitionAuthorizationContext`,
+every resource passes `authorize_resource` before a socket opens, and no public
+signature in the package accepts a URL.
+
+Eurostat is collector-eligible and has no collector. That pairing is what keeps
+the distinction honest.
 
 ```text
 sros_acquisition/
@@ -33,14 +39,22 @@ sros_acquisition/
     compliance/verification.py   running a verifier against a review condition
     compliance/authorization.py  what a collector must hold before it may run
     compliance/repositories.py   recording a verification, syncing the gate
+    collection/transport.py      the HTTP boundary. The ONLY file that may reach a network
+    collection/pacing.py         our own request pacing. Not anyone's rate limit
+    collection/records.py        what an observation is, and what identifies it
+    collection/world_bank.py     the collector
+    collection/repositories.py   persistence: idempotent, revision-aware, tenant-scoped
+    collection/job.py            one acquisition job, testable without a broker
     rendering.py                 generates the human-readable catalog
-    cli.py                       sros-source: list, show, validate, eligibility,
-                                 conditions, verify, authorization, stale, load,
-                                 render, enable
+    cli.py                       sros-source: governance
+    acquisition_cli.py           sros-acquisition: validate, smoke, collect
 ```
 
-**This package imports no network client, and CI asserts it.** It governs
-collection; it does not collect.
+**Exactly one file may import a network client, and CI asserts it.** Mission
+1.0's blanket ban was narrowed rather than deleted when the first collector
+arrived: `collection/transport.py` is the boundary, and the registry and
+compliance packages remain network-free because they *decide* whether collection
+may happen.
 
 ## Eligible, enabled, implemented
 
@@ -50,8 +64,8 @@ prevent.
 | Fact | Now | Where it lives |
 |---|---|---|
 | collector-eligible | `world-bank`, `eurostat` | `registry.source_eligibility`, derived |
-| collector-enabled | none | `registry.sources.collector_enabled` |
-| collector implemented | none | `sros_acquisition.IMPLEMENTED_COLLECTORS`, empty |
+| collector implemented | `world-bank` | `sros_acquisition.IMPLEMENTED_COLLECTORS` |
+| collector-enabled | `world-bank`, set deliberately | `registry.sources.collector_enabled` |
 
 `sros-source enable` refuses a source with no implemented collector: a switch
 that gets ahead of the thing it switches reads, to anyone looking at the

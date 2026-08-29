@@ -1,15 +1,20 @@
 [project]
 name = "sros-acquisition"
 version = "0.1.0"
-description = "Source registry and governance. Collection itself is not implemented."
+description = "Source registry, compliance governance, and the World Bank collector."
 requires-python = ">=3.12"
-# No database driver and no HTTP client. The registry is governance metadata:
-# it is loaded, validated and queried, and nothing here reaches a network.
-# A collector will add its own dependencies when D-07's per-source gate opens.
-dependencies = ["sros-contracts"]
+# httpx arrives in Mission 1.5 with the first collector, and is imported INSIDE
+# the one function that needs it (`collection/transport.py`), never at module
+# scope. ADR-009's rule still holds everywhere else: the registry model, the
+# compliance layer and every zero-dependency validator must keep running with
+# nothing installed, and they would not if importing this package pulled a
+# client. No database driver, for the same reason -- the CLI imports psycopg
+# lazily too.
+dependencies = ["sros-contracts", "httpx>=0.27"]
 
 [project.scripts]
 sros-source = "sros_acquisition.cli:main"
+sros-acquisition = "sros_acquisition.acquisition_cli:main"
 
 [build-system]
 requires = ["hatchling"]

@@ -1,6 +1,6 @@
 {
   "$comment": "AUTHORITATIVE CONTRACT SOURCE OF TRUTH. Hand-edited. Everything under packages/contracts/generated/ is derived from this file by tools/generate.py. See ADR-009.",
-  "contract_version": "1.4.0",
+  "contract_version": "1.5.0",
   "ontology_version": "2",
   "scoring_framework_version": "1.1",
   "evidence_framework_version": "1",
@@ -347,6 +347,53 @@
         {
           "value": "DISCLAIMER",
           "description": "A disclaimer the terms require alongside modified data, supplied as text rather than composed by this system when the exact wording is not in the recorded evidence"
+        }
+      ]
+    },
+    {
+      "name": "AcquisitionErrorCode",
+      "spec": "world-bank-collector-v1.md; Mission 1.5 §32",
+      "description": "Why an acquisition attempt did not produce records. A closed vocabulary so the orchestrator branches on a meaning rather than on a third party's exception class -- an upstream library changing its exception hierarchy must not change how this system retries. Each value also fixes whether it is worth retrying, which is the decision that costs money when it is wrong.",
+      "values": [
+        {
+          "value": "AUTHORIZATION_REJECTED",
+          "description": "No acquisition authorization could be built for the source. Never retried: the answer comes from the governance gate and will not change on its own"
+        },
+        {
+          "value": "RESOURCE_NOT_PERMITTED",
+          "description": "The source is authorised and this specific resource is not -- excluded dataset, licence outside the allowlist, third-party or unestablished origin. Never retried"
+        },
+        {
+          "value": "NETWORK_TIMEOUT",
+          "description": "The request did not complete within its connect or read budget. Retryable"
+        },
+        {
+          "value": "RATE_LIMITED",
+          "description": "The source signalled too many requests. Retryable, and more slowly than other failures"
+        },
+        {
+          "value": "TEMPORARY_UPSTREAM",
+          "description": "The source failed in a way it describes as its own and transient. Retryable"
+        },
+        {
+          "value": "UPSTREAM_CLIENT_ERROR",
+          "description": "The source rejected the request deterministically. Never retried: the same request produces the same rejection, and repeating it is how a rate limit becomes a ban"
+        },
+        {
+          "value": "INVALID_RESPONSE",
+          "description": "The response arrived and does not have the documented shape. Never retried: a source that changed its contract needs a person, not another attempt"
+        },
+        {
+          "value": "PARSING_FAILURE",
+          "description": "The response could not be read at all -- malformed encoding or unparseable body. Never retried"
+        },
+        {
+          "value": "PERSISTENCE_FAILURE",
+          "description": "Records were acquired and could not be stored. Retryable, because the source is not the problem"
+        },
+        {
+          "value": "CANCELLED",
+          "description": "The job was cancelled or ran out of its bounds before completing. Never retried automatically"
         }
       ]
     },

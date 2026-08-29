@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.7
+Version: 1.8
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-08-29 (Sprint 1 / Mission 1.4)
+Last amended: 2026-08-30 (Sprint 1 / Mission 1.5)
 
 ---
 
@@ -13,6 +13,17 @@ Last amended: 2026-08-29 (Sprint 1 / Mission 1.4)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.8 — 2026-08-30 (Sprint 1 / Mission 1.5)
+
+Authorized by the Mission 1.5 brief §55 (documentation) and §51 (schema changes
+only where the existing model cannot represent the requirement).
+
+| Change | Section | Authority |
+|--------|---------|-----------|
+| `docs/data/world-bank-collector-v1.md` added to the authoritative chain | Authoritative Documents | Mission 1.5 §55. It is the reference architecture every later collector follows, and the record of what one source's data may be used for |
+| **The first collector exists, and one source is collected from** | Forbidden During Foundation | Mission 1.5 §3, §48. Sprint 0 forbade collectors during foundation; Sprint 0 is complete and the governance chain that had to precede one (D-07, the compliance layer, the authorization boundary) is in place. **World Bank only.** Eurostat is collector-eligible and deliberately has no collector |
+| **`acquisition.raw_records` is no longer empty** | Product Shape | Mission 1.5 §48, §49. One controlled acquisition of six World Bank observations. Every record carries complete provenance, a governance-derived expiry and its attribution obligation |
 
 ## 1.7 — 2026-08-29 (Sprint 1 / Mission 1.4)
 
@@ -218,6 +229,7 @@ Additionally authoritative:
 - docs/domain/evidence-aggregation-framework-v1.md (added in 1.5)
 - docs/domain/claim-model-v1.md (added in 1.6)
 - docs/data/acquisition-authorization-v1.md (added in 1.7)
+- docs/data/world-bank-collector-v1.md (added in 1.8)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.
@@ -347,6 +359,24 @@ Do NOT implement:
 - user-facing workflows
 
 Foundation only.
+
+## Status of this list (amended in 1.8)
+
+Sprint 0 is complete, and two entries have been reached in Sprint 1. They are
+recorded here rather than struck out, because what unblocked them is specific
+and the rest of the list is still in force.
+
+**Collectors.** One exists, for one source, since Mission 1.5. It became
+permissible only after the chain that had to precede it: the Source Registry
+(D-07, Mission 1.0), the review round that produced an approving verdict on
+evidence (1.3), and the compliance capabilities and authorization boundary that
+make a collector unable to run without a governance decision behind it (1.4). A
+collector for a source that has not been through that chain is still forbidden,
+and the orchestrator refuses to plan one.
+
+**Everything else on the list is unchanged.** NLP pipelines are blocked by D-12,
+scoring algorithms by the absence of a `CALIBRATED` profile, and authentication
+by ADR-005 being unimplemented.
 
 ---
 

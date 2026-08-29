@@ -1,10 +1,9 @@
 # Testing Strategy
 
-Version: 1.6
+Version: 1.7
 Status: Strategy fixed; infrastructure, orchestration, evidence aggregation, the
-Claim model and the compliance layer tested. No production business logic exists
-to test
-Date: 2026-08-29 (amended in Mission 1.4)
+Claim model, the compliance layer and the first collector tested
+Date: 2026-08-30 (amended in Mission 1.5)
 
 `PROJECT_MANIFEST.md` §Testability: "Every important behavior must be testable."
 `docs/CLAUDE.md` §Definition of done: tests must cover important behavior and
@@ -370,3 +369,60 @@ satisfy its own conditions.*
 
 Two things stay absolutely asserted, because no environment may change them:
 `collector_enabled` is false everywhere, and `acquisition.raw_records` is empty.
+
+## 11. Structural tests, and when they earn their keep (added in Mission 1.5)
+
+Most tests here assert behaviour. The collector conformance suite also asserts
+**shape**, and the distinction is worth stating because structural tests are easy
+to write badly.
+
+A behaviour test proves the collector went through the authorization gate on the
+call it made. A structural test proves there is no second door for it to start
+using next year:
+
+```python
+parameters = list(inspect.signature(WorldBankCollector.collect).parameters.values())
+assert parameters[1].name == "context"
+assert parameters[1].default is inspect.Parameter.empty
+```
+
+That is worth a test because the failure it catches is a *future* one -- somebody
+adding a convenience overload, or a default that quietly makes the context
+optional -- and no behaviour test would notice until something had already
+collected without authorization.
+
+Three rules keep them honest.
+
+**Assert the property, not the current text.** An early version scanned the
+collector's source for `build_authorization` and failed on the docstring that
+explains why the name is absent. Asserting the module NAMESPACE instead is both
+narrower and truer: the name has to be imported before it can be called.
+
+**Exempt by name, with the reason next to it.** The "no public signature accepts
+a URL" scan exempts `host_of`, which parses a URL and performs no request. An
+unexplained exemption list is where a real escape hatch eventually hides.
+
+**Zero, not "refused".** The most valuable assertion in that suite is
+`transport.calls == []`. A gate that refuses after the request went out has
+prevented nothing, and only a counting fake can tell the two apart.
+
+## 12. Tests that change the deployment (added in Mission 1.5)
+
+Two defects in this repository came from the same root, and both were found by
+the suite written after the one that caused them.
+
+A Mission 1.4 test called `sros-source enable world-bank` to assert a refusal.
+When Mission 1.5 gave World Bank a collector, the call stopped being refused and
+**enabled a real collector as a side effect**. A fixture then reset
+`collector_enabled = FALSE` for *every* source in teardown, silently reverting a
+deliberate operational decision.
+
+The rules that came out of it:
+
+- a test that needs the deployment in a particular state **puts it there and puts
+  it back**, restoring the previous value rather than forcing a default;
+- a test that asserts a refusal names a subject that will still be refused --
+  Eurostat is eligible with no collector, so it carries that property now;
+- a test that counts rows uses **its own workspace**. Workspace A holds real
+  collected data since Mission 1.5, and counting there measures the environment
+  rather than the behaviour under test.

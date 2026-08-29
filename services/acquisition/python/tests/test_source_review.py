@@ -360,15 +360,43 @@ class TestLoadedRegistry:
             )
         conn.execute("ROLLBACK TO SAVEPOINT probe")
 
-    def test_no_collector_is_enabled_and_nothing_was_collected(self, conn) -> None:
-        """§30, §34. The mission reviewed; it did not collect."""
-        assert (
-            conn.execute(
-                "SELECT count(*) FROM registry.sources WHERE collector_enabled"
-            ).fetchone()[0]
-            == 0
-        )
-        assert conn.execute("SELECT count(*) FROM acquisition.raw_records").fetchone()[0] == 0
+    def test_nothing_is_collected_from_a_source_that_has_no_collector(self, conn) -> None:
+        """The RULE, since Mission 1.5 made collection real.
+
+        This assertion used to read `enabled == 0 and raw_records == 0`, which
+        was true of every mission up to 1.4 and stopped being a property the
+        moment one collector existed. Asserting it still would have been
+        asserting a moment.
+
+        What must hold forever is the ordering: nothing is enabled that has no
+        collector, and nothing is collected from a source that is not enabled.
+        Both hold whether the deployment has collected anything or not.
+        """
+        import sros_acquisition
+
+        implemented = sros_acquisition.IMPLEMENTED_COLLECTORS
+
+        enabled = {
+            row[0]
+            for row in conn.execute(
+                "SELECT id FROM registry.sources WHERE collector_enabled"
+            ).fetchall()
+        }
+        assert enabled <= implemented, f"enabled with no collector: {enabled - implemented}"
+
+        collected = {
+            row[0]
+            for row in conn.execute(
+                "SELECT DISTINCT source_id FROM acquisition.raw_records"
+            ).fetchall()
+        }
+        assert collected <= implemented, f"collected with no collector: {collected - implemented}"
+
+        # Deliberately NOT `collected <= enabled`. Disabling a collector does
+        # not retroactively make what it already collected illegitimate, and an
+        # assertion that said so would forbid ever turning one off.
+
+        # §36: normalization is Mission 1.6's. Nothing produces one yet.
         assert (
             conn.execute("SELECT count(*) FROM acquisition.normalized_records").fetchone()[0] == 0
         )
@@ -397,15 +425,29 @@ class TestLoadedRegistry:
             assert unsatisfied == actual_unsatisfied, source_id
 
 
-class TestNoCollectorExists:
-    def test_the_acquisition_package_still_fetches_nothing(self) -> None:
-        """§35. There is no data-fetching client because there is no collector.
-        Asserted rather than assumed: the day somebody adds one, this fails."""
-        import pathlib
+class TestCollectionStaysInsideItsBoundary:
+    """Mission 1.3 asserted that no collector and no network client existed.
+
+    Mission 1.5 built one, so those assertions were NARROWED rather than
+    deleted -- the same move Mission 1.2 made with the D-03 aggregation guard
+    and Mission 1.4 with the enablement guard. Naming the one file that may
+    reach a network, and the one package that may hold a collector, is a
+    stronger statement than forbidding both everywhere: it says where the
+    boundary is, not merely that nothing has crossed it yet.
+
+    The full structural suite lives in `test_collector_conformance.py`; these
+    are the two properties Mission 1.3 was protecting, restated.
+    """
+
+    def test_governance_modules_still_fetch_nothing(self) -> None:
+        """The registry decides whether a source may be collected from. A
+        network client there would put the decision and its execution in one
+        place."""
+        import pathlib as _pathlib
 
         import sros_acquisition
 
-        root = pathlib.Path(sros_acquisition.__file__).parent
+        root = _pathlib.Path(sros_acquisition.__file__).parent
         forbidden = (
             "import requests",
             "import httpx",
@@ -415,16 +457,15 @@ class TestNoCollectorExists:
             "playwright",
             "selenium",
         )
-        for path in sorted(root.rglob("*.py")):
-            text = path.read_text(encoding="utf-8")
-            for token in forbidden:
-                assert token not in text, f"{path.name} imports {token!r}"
+        for package in ("registry", "compliance"):
+            for path in sorted((root / package).rglob("*.py")):
+                text = path.read_text(encoding="utf-8")
+                for token in forbidden:
+                    assert token not in text, f"{package}/{path.name} imports {token!r}"
 
-    def test_no_collector_module_exists(self) -> None:
-        import pathlib
-
+    def test_exactly_one_collector_exists_and_it_is_world_bank(self) -> None:
+        """Eurostat is collector-eligible and has no collector. Eligibility says
+        one may be built; this says which one was."""
         import sros_acquisition
 
-        root = pathlib.Path(sros_acquisition.__file__).parent
-        assert not (root / "collectors").exists()
-        assert not list(root.glob("**/collector*.py"))
+        assert frozenset({"world-bank"}) == sros_acquisition.IMPLEMENTED_COLLECTORS

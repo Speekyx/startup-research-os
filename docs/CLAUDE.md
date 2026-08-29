@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.8
-Last amended: 2026-08-29 (Sprint 1 / Mission 1.4)
+Version: 1.9
+Last amended: 2026-08-30 (Sprint 1 / Mission 1.5)
 
 ## Boot Sequence
 
@@ -17,11 +17,12 @@ Before performing any task, execute this reading order.
 8. docs/data/data-retention-policy-v1.md
 9. docs/data/source-registry-v1.md
 10. docs/data/acquisition-authorization-v1.md
-11. docs/domain/evidence-aggregation-framework-v1.md
-12. docs/domain/claim-model-v1.md
-13. docs/ai/evaluation-framework-v1.md
-14. Relevant ADRs
-15. Task-specific specifications
+11. docs/data/world-bank-collector-v1.md
+12. docs/domain/evidence-aggregation-framework-v1.md
+13. docs/domain/claim-model-v1.md
+14. docs/ai/evaluation-framework-v1.md
+15. Relevant ADRs
+16. Task-specific specifications
 
 These documents are the authoritative source of truth.
 
@@ -37,6 +38,7 @@ Ontology V2 keeps V1.1's numbering for §1–§10, so an existing reference to
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.9 | 2026-08-30 | First collector recorded: World Bank only, gated by an AcquisitionAuthorizationContext; raw_records is no longer empty; collector boundary invariant added |
 | 1.8 | 2026-08-29 | Compliance capabilities recorded: a condition is cleared by a verifier and by nothing else; two sources are collector-eligible; eligible / enabled / implemented separated (ADR-016) |
 | 1.7 | 2026-08-29 | Source review round recorded: three sources APPROVED_WITH_CONDITIONS, none collector-eligible; conditional-eligibility rule added |
 | 1.6 | 2026-08-29 | Boot sequence points to Ontology V2.1 and gains the Claim model; Claim invariant added; A-13 removed from blocked work (ADR-015) |
@@ -202,6 +204,33 @@ none of them is negotiable (`source-registry-v1.md` §1, ADR-013):
   established is refused. A collector receives an
   `AcquisitionAuthorizationContext` or it receives nothing.
 
+### Collection — one collector, and what bounds it
+
+Since Mission 1.5 the World Bank Indicators collector exists
+(`world-bank-collector-v1.md`). It is the reference architecture, and five rules
+apply to it and to every collector that follows:
+
+- **No authorization, no collection.** `collect` takes an
+  `AcquisitionAuthorizationContext` as its first positional parameter, with no
+  default and no overload that omits it. A collector that could build its own
+  could approve itself.
+- **Every resource passes `authorize_resource` before a socket opens**, and a
+  refusal costs **zero** network calls.
+- **No public signature accepts a URL.** A request names indicators, countries
+  and years; the collector composes the path, and the host comes from the access
+  profile the review approved. There is no fallback domain and redirects are not
+  followed.
+- **Retention and attribution come from governance**, not from the collector.
+  `build_draft` has no parameter for either, so there is nothing to pass.
+- **Exactly one file may import a network client**
+  (`collection/transport.py`). The registry and compliance packages decide
+  whether collection may happen and stay network-free.
+
+Identity is three separate things and confusing any two is a defect:
+`observation_key` says WHICH observation, `content_hash` says WHAT the source
+said, and the record id follows from both. The retrieval time is in neither — it
+would make every re-retrieval look like an upstream revision.
+
 The registry is **global**: no `workspace_id`, no RLS policy, `SELECT` only for
 the runtime role. It is administered by `sros-source`, never over HTTP.
 
@@ -273,16 +302,14 @@ contradiction penalty to make the engine produce a number. Failing closed is the
 designed behaviour, not a gap to fill.
 
 **No collector may be implemented for a source that is not collector-eligible.**
-D-07 is resolved and the registry exists. Since Mission 1.4 two sources DO pass
-the gate, so the block is no longer "none has passed" — it is per source, and
-the orchestrator reports each one by name.
+D-07 is resolved and the registry exists. Two sources pass the gate; one has a
+collector. The block is per source, and the orchestrator reports each by name
+under one of two gates — `SOURCE-REGISTRY-GATE` when nothing is eligible,
+`NO-COLLECTOR-IMPLEMENTED` when something is and nothing implements it.
 
-A collector for an eligible source must obtain its authorization from
-`build_authorization` and reach every resource through the context's resource
-gate. **Mission 1.5 owes a conformance test that it has no other path to a
-URL**: until that exists, the guarantee that the recorded conditions are honoured
-is architectural rather than observed
-(`acquisition-authorization-v1.md` §6, §10).
+Mission 1.4's debt is paid: `test_collector_conformance.py` asserts structurally
+that the collector has no path to a URL outside `authorize_resource`, so the
+guarantee is observed rather than architectural.
 
 ## Core principles
 

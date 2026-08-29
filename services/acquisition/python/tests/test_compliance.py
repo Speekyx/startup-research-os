@@ -981,41 +981,97 @@ class TestRecordedVerification:
         assert divergences == []
         conn.execute("ROLLBACK TO SAVEPOINT probe")
 
-    def test_nothing_is_enabled_and_nothing_was_collected(self, conn) -> None:
-        """§38. Eligible is not enabled, and neither is a collector existing."""
-        assert (
-            conn.execute(
-                "SELECT count(*) FROM registry.sources WHERE collector_enabled"
-            ).fetchone()[0]
-            == 0
-        )
-        assert conn.execute("SELECT count(*) FROM acquisition.raw_records").fetchone()[0] == 0
+    def test_nothing_is_collected_from_a_source_that_has_no_collector(self, conn) -> None:
+        """The RULE, since Mission 1.5 made collection real.
+
+        This assertion used to read `enabled == 0 and raw_records == 0`, which
+        was true of every mission up to 1.4 and stopped being a property the
+        moment one collector existed. Asserting it still would have been
+        asserting a moment.
+
+        What must hold forever is the ordering: nothing is enabled that has no
+        collector, and nothing is collected from a source that is not enabled.
+        Both hold whether the deployment has collected anything or not.
+        """
+        import sros_acquisition
+
+        implemented = sros_acquisition.IMPLEMENTED_COLLECTORS
+
+        enabled = {
+            row[0]
+            for row in conn.execute(
+                "SELECT id FROM registry.sources WHERE collector_enabled"
+            ).fetchall()
+        }
+        assert enabled <= implemented, f"enabled with no collector: {enabled - implemented}"
+
+        collected = {
+            row[0]
+            for row in conn.execute(
+                "SELECT DISTINCT source_id FROM acquisition.raw_records"
+            ).fetchall()
+        }
+        assert collected <= implemented, f"collected with no collector: {collected - implemented}"
+
+        # Deliberately NOT `collected <= enabled`. Disabling a collector does
+        # not retroactively make what it already collected illegitimate, and an
+        # assertion that said so would forbid ever turning one off.
+
+        # §36: normalization is Mission 1.6's. Nothing produces one yet.
         assert (
             conn.execute("SELECT count(*) FROM acquisition.normalized_records").fetchone()[0] == 0
         )
 
-    def test_no_collector_module_exists(self) -> None:
-        """§38, §45. The day somebody adds one, this fails."""
+    def test_collectors_live_only_in_the_collection_package(self) -> None:
+        """Mission 1.4 asserted that NO collector existed. Mission 1.5 built
+        one, so the assertion was narrowed to *where* a collector may live
+        rather than deleted -- the same move Mission 1.2 made with the D-03
+        guard. The registry and compliance packages govern collection, and a
+        collector inside either would put the decision and its execution in the
+        same place."""
         import pathlib
 
         import sros_acquisition
 
         root = pathlib.Path(sros_acquisition.__file__).parent
-        assert not (root / "collectors").exists()
-        assert not list(root.glob("**/collector*.py"))
-        assert frozenset() == sros_acquisition.IMPLEMENTED_COLLECTORS
+        for package in ("registry", "compliance"):
+            assert list((root / package).rglob("*collector*.py")) == []
+        assert frozenset({"world-bank"}) == sros_acquisition.IMPLEMENTED_COLLECTORS
 
-    def test_an_eligible_source_cannot_be_enabled_with_no_collector(self, capsys) -> None:
-        """§25. `collector_enabled` stays false for every source, including the
-        two that now pass the gate.
+    def test_an_eligible_source_with_no_collector_cannot_be_enabled(self, capsys) -> None:
+        """§25, restated on the source that still proves it.
 
-        The switch must not get ahead of the thing it switches: a source flagged
-        enabled with nothing behind it reads, to anyone looking at the registry,
-        as one that is running."""
+        This test used to name `world-bank`, and when Mission 1.5 gave it a
+        collector the test stopped asserting a refusal and **enabled a real
+        collector as a side effect** -- which is the confusion §27 exists to
+        prevent, found by the suite that came after it.
+
+        Eurostat is the case that carries the property now: it passes the
+        governance gate and has no collector, so the switch still cannot get
+        ahead of the thing it switches."""
         from sros_acquisition.cli import main
 
-        assert main(["enable", "world-bank"]) == 1
+        assert main(["enable", "eurostat"]) == 1
         assert "no collector is implemented" in capsys.readouterr().err
+
+    def test_only_a_source_with_a_collector_is_ever_enabled(self, conn) -> None:
+        """The invariant a previous version of this suite broke.
+
+        A Mission 1.4 test called `sros-source enable world-bank` to assert a
+        refusal; when Mission 1.5 gave World Bank a collector the call stopped
+        being refused and enabled it for real. What is asserted now is the rule
+        rather than a count, so it holds whether an operator has deliberately
+        enabled something or not."""
+        import sros_acquisition
+
+        enabled = {
+            row[0]
+            for row in conn.execute(
+                "SELECT id FROM registry.sources WHERE collector_enabled ORDER BY id"
+            ).fetchall()
+        }
+        extra = enabled - sros_acquisition.IMPLEMENTED_COLLECTORS
+        assert extra == set(), f"enabled with no collector behind it: {extra}"
 
 
 def _unverified_condition(conn) -> object:

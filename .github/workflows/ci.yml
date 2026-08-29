@@ -80,24 +80,32 @@ jobs:
       # acquisition authorization. Zero-dependency for the same reason as above.
       - name: Compliance capabilities, verifiers and the acquisition boundary
         run: python infrastructure/scripts/validate_compliance_capabilities.py
-      # §43: CI contacts no external platform. Fetching a source's terms here
-      # would itself be collection, and would make the build depend on a third
-      # party's uptime. Asserted rather than trusted.
-      - name: The acquisition package cannot reach a network
+      # Mission 1.0 forbade a network client anywhere in this package. Mission
+      # 1.5 built a collector, so the ban was NARROWED to one named file rather
+      # than deleted -- the same move Mission 1.2 made with the D-03 guard.
+      # Naming where the network IS says more than asserting it is absent.
+      #
+      # §52 still holds: CI itself contacts no external platform. Fetching a
+      # source's terms here would be collection, and would make the build depend
+      # on a third party's uptime.
+      - name: Only the transport module may reach a network
         run: |
-          if grep -rnE '^[[:space:]]*(import|from)[[:space:]]+(requests|httpx|urllib|aiohttp|http\.client|socket|playwright|selenium)\b' \
-               services/acquisition/python/sros_acquisition; then
-            echo "the source registry imports a network client; it governs collection, it does not collect" >&2
+          PATTERN='^[[:space:]]*(import|from)[[:space:]]+(requests|httpx|urllib|aiohttp|http[.]client|socket|playwright|selenium)'
+          OFFENDERS=$(grep -rlE "$PATTERN" services/acquisition/python/sros_acquisition | grep -v 'collection/transport[.]py$' || true)
+          if [ -n "$OFFENDERS" ]; then
+            echo "a network client is imported outside collection/transport.py:" >&2
+            echo "$OFFENDERS" >&2
             exit 1
           fi
-      # A collector would be the thing every gate above exists to stand in front
-      # of. Its absence is asserted rather than assumed, in the job that would
-      # still run if the dependency environment were broken.
-      - name: No collector exists
+      # The registry and compliance packages DECIDE whether a source may be
+      # collected from. A collector inside either would put the decision and its
+      # execution in the same place.
+      - name: Collectors live only in the collection package
         run: |
-          if [ -d services/acquisition/python/sros_acquisition/collectors ] || \
-             find services/acquisition/python/sros_acquisition -name 'collector*.py' | grep -q .; then
-            echo "a collector module exists; no mission so far implements one" >&2
+          GOVERNANCE=services/acquisition/python/sros_acquisition
+          FOUND=$(find "$GOVERNANCE/registry" "$GOVERNANCE/compliance" -name '*collector*.py')
+          if [ -n "$FOUND" ]; then
+            echo "a collector module is inside a governance package: $FOUND" >&2
             exit 1
           fi
 
@@ -277,6 +285,11 @@ jobs:
           uv run sros-source load
           uv run sros-source verify --apply
           uv run python infrastructure/scripts/assert_registry_grants_nothing.py
+      # §53. The collector's authorization path, against the real registry in
+      # the database. Reaches no network: `validate` answers whether a
+      # collection WOULD be permitted, which is a governance question.
+      - name: The collector authorization path holds
+        run: uv run sros-acquisition world-bank validate --indicator SP.POP.TOTL
 
       # Mission 1.4 §17 adds FRED_API_KEY to this list. CI must not have one:
       # a source that became runnable because a build secret was added would be
@@ -288,6 +301,10 @@ jobs:
             exit 1
           fi
           test "${SROS_ENABLE_PROVIDER_SMOKE_TESTS:-0}" = "0"
+          # §12, §52: the World Bank live suite is opt-in and CI never
+          # enables it. A suite that quietly became enabled would show up as
+          # traffic to a third party rather than as a red build.
+          test "${SROS_ENABLE_WORLD_BANK_SMOKE_TESTS:-0}" = "0"
       # `.env.example` is committed, so a value in it is a published secret.
       - name: The environment template carries no credential value
         run: |

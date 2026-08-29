@@ -9,12 +9,12 @@
  * Editing this file by hand will be overwritten and will fail the contract
  * check in CI. Change the source of truth instead.
  *
- * contract_version: 1.4.0
+ * contract_version: 1.5.0
  * ontology_version: 2
  */
 
 
-export const CONTRACT_VERSION = "1.4.0" as const;
+export const CONTRACT_VERSION = "1.5.0" as const;
 export const ONTOLOGY_VERSION = "2" as const;
 export const RESEARCH_CONTEXT_SCHEMA_VERSION = "1.0.0" as const;
 
@@ -234,6 +234,27 @@ export const ATTRIBUTION_ELEMENT_VALUES = [
 export type AttributionElement = (typeof ATTRIBUTION_ELEMENT_VALUES)[number];
 export function isAttributionElement(v: unknown): v is AttributionElement {
   return typeof v === "string" && (ATTRIBUTION_ELEMENT_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * Why an acquisition attempt did not produce records. A closed vocabulary so the orchestrator branches on a meaning rather than on a third party's exception class -- an upstream library changing its exception hierarchy must not change how this system retries. Each value also fixes whether it is worth retrying, which is the decision that costs money when it is wrong.
+ * @see world-bank-collector-v1.md; Mission 1.5 §32
+ */
+export const ACQUISITION_ERROR_CODE_VALUES = [
+  "AUTHORIZATION_REJECTED",
+  "RESOURCE_NOT_PERMITTED",
+  "NETWORK_TIMEOUT",
+  "RATE_LIMITED",
+  "TEMPORARY_UPSTREAM",
+  "UPSTREAM_CLIENT_ERROR",
+  "INVALID_RESPONSE",
+  "PARSING_FAILURE",
+  "PERSISTENCE_FAILURE",
+  "CANCELLED",
+] as const;
+export type AcquisitionErrorCode = (typeof ACQUISITION_ERROR_CODE_VALUES)[number];
+export function isAcquisitionErrorCode(v: unknown): v is AcquisitionErrorCode {
+  return typeof v === "string" && (ACQUISITION_ERROR_CODE_VALUES as readonly string[]).includes(v);
 }
 
 /**

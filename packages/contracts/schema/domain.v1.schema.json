@@ -3,9 +3,25 @@
   "$id": "https://startup-research-os.local/schema/domain.v1.schema.json",
   "title": "Startup Research OS domain vocabulary",
   "description": "GENERATED FILE. Source of truth: packages/contracts/schema/domain.v1.json. Regenerate with python packages/contracts/tools/generate.py.",
-  "x-contract-version": "1.4.0",
+  "x-contract-version": "1.5.0",
   "x-ontology-version": "2",
   "$defs": {
+    "AcquisitionErrorCode": {
+      "type": "string",
+      "enum": [
+        "AUTHORIZATION_REJECTED",
+        "RESOURCE_NOT_PERMITTED",
+        "NETWORK_TIMEOUT",
+        "RATE_LIMITED",
+        "TEMPORARY_UPSTREAM",
+        "UPSTREAM_CLIENT_ERROR",
+        "INVALID_RESPONSE",
+        "PARSING_FAILURE",
+        "PERSISTENCE_FAILURE",
+        "CANCELLED"
+      ],
+      "description": "Why an acquisition attempt did not produce records. A closed vocabulary so the orchestrator branches on a meaning rather than on a third party's exception class -- an upstream library changing its exception hierarchy must not change how this system retries. Each value also fixes whether it is worth retrying, which is the decision that costs money when it is wrong."
+    },
     "AggregationProfileStatus": {
       "type": "string",
       "enum": [
