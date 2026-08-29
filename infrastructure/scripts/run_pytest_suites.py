@@ -25,6 +25,7 @@ SUITES = [
     "packages/contracts/python",
     "packages/llm-gateway/python",
     "services/workers/python",
+    "services/research-orchestrator/python",
     "services/gateway/python",
 ]
 

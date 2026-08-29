@@ -18,7 +18,13 @@ eventually be documented through ADRs."
 | [ADR-009](ADR-009-contract-first-code-generation.md) | Contract-first domain vocabulary with stdlib code generation | Accepted — Mission 0.2 |
 | [ADR-010](ADR-010-python-dependency-management.md) | uv workspace for Python dependencies | Accepted — Mission 0.3 |
 | [ADR-011](ADR-011-postgresql-access-psycopg.md) | psycopg 3 + explicit repositories | Accepted — Mission 0.3. **Supersedes ADR-008 §Database access strategy** |
-| ADR-012 | Production deployment target | Required — deferred by ADR-007 |
+| [ADR-012](ADR-012-row-level-security.md) | Row-level security with transaction-local tenant context | Accepted — Mission 0.4. **Completes ADR-005 §Future row-level security** |
+| ADR-013 | Production deployment target | Required — deferred by ADR-007 |
+
+> **Numbering note.** The production-deployment slot was previously listed as
+> ADR-012. It was a placeholder with no file and no decision, so the number went
+> to the first ADR actually written. A reserved number is not an ADR; renumbering
+> a row that recorded a TODO breaks no reference and supersedes nothing.
 
 ## Status values
 

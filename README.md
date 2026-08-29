@@ -15,15 +15,31 @@ hypothesis.
 
 ## Status
 
-**Sprint 0 — Mission 0.3 complete: runtime verified, API foundation, tenant-safe data access.**
+**Sprint 0 — Mission 0.4 complete: row-level security, orchestration, LLM
+provider adapters, evaluation framework, web API foundation.**
 
 No business research logic exists: no collectors, no NLP, no scoring, no
 dashboards, no authentication, no monetization. That is deliberate
 (`PROJECT_MANIFEST.md` §Forbidden During Foundation).
 
-The Mission 0.2 foundation is now **verified against real services**: Docker
-Compose boots, migrations apply to an empty PostgreSQL, a real Celery worker
-connects to Redis, and the FastAPI gateway serves traffic.
+Mission 0.4 added the layers that have to exist *before* research logic can:
+
+- **Two isolation layers.** The repository tenant filter, plus PostgreSQL
+  row-level security on all 15 tenant-scoped tables with a transaction-local
+  tenant context (ADR-012). A query that forgets its `WHERE workspace_id`
+  returns only the current tenant's rows.
+- **The research orchestrator as a real package** — session lifecycle, planning,
+  a job ledger, dependency ordering, budget accounting, cancellation and
+  resumability. It dispatches nothing, because every domain capability is
+  blocked, and it says which decision blocks each one.
+- **Anthropic and Gemini behind the gateway**, with a normalized error taxonomy,
+  a retry policy that refuses to retry deterministic failures, versioned pricing
+  configuration and cost telemetry. **No vendor SDK is a dependency, and no test
+  needs an API key.**
+- **An evaluation framework** with versioned datasets, per-task metrics and
+  regression comparison in which cost can never offset quality.
+- **A typed web API client** with correlation on every request and one place
+  that builds headers.
 
 What runs today:
 
@@ -59,13 +75,17 @@ uv run uvicorn "sros_gateway.app:create_app" --factory --port 8412
 uv run python infrastructure/scripts/run_pytest_suites.py
 ```
 
+```bash
+pnpm --filter @sros/web build
+```
+
 What exists: the specification audit, the monorepo skeleton, the service
-boundaries, the diagrams, seven ADRs, the repository standards, the quality gate
-strategy, **Opportunity Ontology V2**, Scoring Framework V1.1, and the data
-retention policy.
+boundaries, the diagrams, **twelve ADRs**, the repository standards, the quality
+gates, **Opportunity Ontology V2**, Scoring Framework V1.1, the data retention
+policy and the **evaluation framework**.
 
 Start with
-[`docs/architecture/mission-0.3-report.md`](docs/architecture/mission-0.3-report.md)
+[`docs/architecture/mission-0.4-report.md`](docs/architecture/mission-0.4-report.md)
 and the decision registers
 [`mission-0.1.2-decisions.md`](docs/architecture/mission-0.1.2-decisions.md) /
 [`mission-0.1.1-decisions.md`](docs/architecture/mission-0.1.1-decisions.md).
@@ -88,6 +108,7 @@ the project. Read them in order:
 
 Also authoritative:
 [`docs/data/data-retention-policy-v1.md`](docs/data/data-retention-policy-v1.md)
+and [`docs/ai/evaluation-framework-v1.md`](docs/ai/evaluation-framework-v1.md)
 and the accepted ADRs.
 
 Superseded, retained as historical records only: `opportunity-ontology-v1.md`,

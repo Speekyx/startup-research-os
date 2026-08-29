@@ -6,7 +6,7 @@
   "license": "UNLICENSED",
   "packageManager": "pnpm@9.12.3",
   "engines": {
-    "node": ">=22.11.0",
+    "node": ">=22.13.0",
     "pnpm": ">=9.0.0"
   },
   "scripts": {
@@ -24,6 +24,7 @@
     "db:validate": "python infrastructure/scripts/validate_schema.py",
     "py:test": "python -m unittest discover -s packages/contracts/python -p \"test_*.py\"",
     "test:ts": "node --test --experimental-strip-types packages/contracts/test/conformance.test.ts",
+    "test:web": "node --test --experimental-strip-types apps/web/test/api-client.test.ts",
     "test:py": "python infrastructure/scripts/run_pytest_suites.py",
     "test:py:nodeps": "python infrastructure/scripts/run_python_tests.py"
   },

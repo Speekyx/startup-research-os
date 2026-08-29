@@ -1,8 +1,9 @@
 # Testing Strategy
 
-Version: 1.2
-Status: Strategy fixed, no tests implemented (Sprint 0 forbids business logic)
-Date: 2026-08-27 (amended in Mission 0.1.2)
+Version: 1.3
+Status: Strategy fixed; infrastructure and orchestration tested. No business
+logic exists to test (Sprint 0 forbids it)
+Date: 2026-08-29 (amended in Mission 0.4)
 
 `PROJECT_MANIFEST.md` §Testability: "Every important behavior must be testable."
 `docs/CLAUDE.md` §Definition of done: tests must cover important behavior and
@@ -199,7 +200,7 @@ Every one of these represents a real failure mode:
 | Context | Must be tested |
 |---------|---------------|
 | `gateway` | Contract validation, error normalization, correlation propagation, rate limiting |
-| `research-orchestrator` | Plan generation, budget enforcement, resumability, gap recording, cancellation, **`ResearchContext` snapshot immutability**, status transitions |
+| `research-orchestrator` | Plan generation, budget enforcement, resumability, gap recording, cancellation, **`ResearchContext` snapshot immutability**, status transitions. **All covered in Mission 0.4**, plus dependency ordering, cycle detection, duplicate delivery and blocked-capability refusal |
 | `acquisition` | Provenance completeness, rate-limit compliance, parse failure handling, exact dedup |
 | `nlp` | Extraction precision/recall, independence estimation, injection resistance, cost-ladder respect |
 | `scoring` | Every invariant in §3, weight validation, insufficiency handling |
@@ -207,7 +208,8 @@ Every one of these represents a real failure mode:
 | `competition` | No fabricated competitor attributes, absence ≠ empty market, staleness flagging |
 | `execution` | All output typed `RECOMMENDED`/`PREDICTED`, staleness detection, refusal on low evidence |
 | `workers` | Idempotency **under duplicate delivery**, retry/backoff, dead-lettering, timeout enforcement, backpressure, `workspace_id` required in every task payload |
-| LLM Gateway | Tier routing, fallback recording, budget refusal, timeout, schema-failure handling, no provider SDK reaching a caller (ADR-006) |
+| LLM Gateway | Tier routing, fallback recording, budget refusal, timeout, schema-failure handling, no provider SDK reaching a caller (ADR-006). **Added in Mission 0.4:** request translation per provider, response normalization, the error-category mapping (both providers must agree that a 429 means the same thing), retry policy by category, telemetry carrying ids and never content, prompt-injection boundary, evaluation and regression comparison |
+| `apps/web` | Typed responses matching what the gateway actually returns, correlation on every request, one place that builds headers (§31). Proved by `smoke.ts` against a live gateway, because `tsc` only checks what the client *claims* the server returns |
 
 ---
 
@@ -246,3 +248,42 @@ is the test list.
 | Test with a single workspace | Cannot detect a missing tenant filter (ADR-005) |
 | Hard-code a registry value as an enum in a test | Freezes a taxonomy that is meant to be extensible (Ontology V2 §14) |
 | Assume a job runs exactly once | Delivery is at-least-once; a test that never duplicates a job does not test idempotency (ADR-004) |
+
+---
+
+## 8. Two-layer isolation testing (added in Mission 0.4)
+
+ADR-012 added row-level security beside the repository filter. Testing two
+layers that produce the same observable result needs one rule, because the
+obvious mistake is to test them together and conclude that both work.
+
+**Test each layer where the other cannot help.**
+
+| Layer | Tested by | Why the other layer cannot mask it |
+|-------|-----------|-----------------------------------|
+| Repository filter | `repo.get(WORKSPACE_A, b_row)` raises `NotFoundError` | Runs under a correct tenant context, so RLS is satisfied and only the filter can reject |
+| RLS policy | `SELECT * FROM …` with **no** `WHERE` clause | The filter is what is missing; if the result is still one tenant's, the database did it |
+
+Two further rules follow:
+
+1. **A schema-constraint probe must not be masked by a policy.** A `NOT NULL`
+   test that inserts `workspace_id = NULL` can never satisfy an RLS `WITH
+   CHECK`, so the policy fires first and the test stops measuring what it is
+   named after. Those probes use `privileged_transaction()`, and the reason is
+   written next to each one.
+2. **A source-reading test is legitimate here.** `test_the_repository_still_filters_explicitly`
+   asserts on the repository source, because with RLS enabled the *behaviour* of
+   a query with and without its tenant filter is identical — which is exactly
+   how a deleted filter would go unnoticed until someone ran a report with a
+   privileged role.
+
+## 9. Opt-in tests that cost money (added in Mission 0.4)
+
+Real-provider smoke tests are skipped unless **both** an explicit flag and a
+credential are present, and the guard itself is tested. The flag is separate
+from the key because a developer with a key exported for other work has not
+consented to spending money on every test run, and CI acquires secrets for
+reasons unrelated to benchmarks.
+
+The failure mode this prevents is specific: a suite that quietly became enabled
+reports its problem as an invoice, weeks later, rather than as a red build.

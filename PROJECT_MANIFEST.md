@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.2
+Version: 1.3
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-08-27 (Sprint 0 / Mission 0.1.2)
+Last amended: 2026-08-29 (Sprint 0 / Mission 0.4)
 
 ---
 
@@ -13,6 +13,15 @@ Last amended: 2026-08-27 (Sprint 0 / Mission 0.1.2)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.3 — 2026-08-29 (Sprint 0 / Mission 0.4)
+
+Authorized by the Mission 0.4 brief §24 (create the evaluation framework) and
+§39 (documentation). Additive only: no existing statement is changed.
+
+| Change | Section | Authority |
+|--------|---------|-----------|
+| `docs/ai/evaluation-framework-v1.md` added to the authoritative chain | Authoritative Documents | Mission 0.4 §24. `llm-reasoning-rules.md` §10 requires evaluation datasets and defines none; this document specifies them, so leaving it outside the chain would put an authoritative-by-nature document where the boot sequence never looks |
 
 ## 1.2 — 2026-08-27 (Sprint 0 / Mission 0.1.2)
 
@@ -162,6 +171,7 @@ These documents define the project.
 Additionally authoritative:
 
 - docs/data/data-retention-policy-v1.md
+- docs/ai/evaluation-framework-v1.md (added in 1.3)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

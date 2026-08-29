@@ -35,6 +35,12 @@ class Settings:
     db_pool_min: int = 1
     db_pool_max: int = 10
 
+    # ADR-012: the role assumed per transaction so PostgreSQL row-level
+    # security actually applies. Empty disables it, which is legitimate only
+    # against a database that predates migration 0003 -- never a way to opt out
+    # of RLS in a deployed environment.
+    app_db_role: str | None = "sros_app"
+
     @property
     def is_development(self) -> bool:
         return self.environment == "development"
@@ -56,6 +62,18 @@ def load_settings(env: dict[str, str] | None = None) -> Settings:
     environment = source.get("ENVIRONMENT", "development")
     dev_workspace = source.get("DEV_WORKSPACE_ID") or None
 
+    # APP_DB_ROLE may be blanked deliberately, so the default only applies when
+    # the variable is absent entirely.
+    raw_role = source.get("APP_DB_ROLE")
+    app_db_role = ("sros_app" if raw_role is None else raw_role) or None
+
+    if environment != "development" and app_db_role is None:
+        raise ConfigurationError(
+            "APP_DB_ROLE is empty outside development. Row-level security is "
+            "bypassed without an application role, and a deployed environment "
+            "must not run with only the repository filter (ADR-012)."
+        )
+
     if environment != "development" and dev_workspace:
         raise ConfigurationError(
             "DEV_WORKSPACE_ID is set outside development. The development "
@@ -73,4 +91,5 @@ def load_settings(env: dict[str, str] | None = None) -> Settings:
         dev_workspace_id=dev_workspace,
         db_pool_min=int(source.get("DB_POOL_MIN", "1")),
         db_pool_max=int(source.get("DB_POOL_MAX", "10")),
+        app_db_role=app_db_role,
     )

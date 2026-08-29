@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.2
-Last amended: 2026-08-27 (Sprint 0 / Mission 0.1.2)
+Version: 1.3
+Last amended: 2026-08-29 (Sprint 0 / Mission 0.4)
 
 ## Boot Sequence
 
@@ -15,8 +15,9 @@ Before performing any task, execute this reading order.
 6. docs/ai/llm-reasoning-rules.md
 7. docs/data/data-principles.md
 8. docs/data/data-retention-policy-v1.md
-9. Relevant ADRs
-10. Task-specific specifications
+9. docs/ai/evaluation-framework-v1.md
+10. Relevant ADRs
+11. Task-specific specifications
 
 These documents are the authoritative source of truth.
 
@@ -32,6 +33,7 @@ Ontology V2 keeps V1.1's numbering for §1–§10, so an existing reference to
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.3 | 2026-08-29 | Boot sequence gains the evaluation framework; tenancy invariant records that row-level security is now enforced (ADR-012) |
 | 1.2 | 2026-08-27 | Boot sequence points to ontology V2; research lifecycle and taxonomy-governance invariants added |
 | 1.1 | 2026-08-27 | Boot sequence points to domain V1.1; canonical domain invariants added (§Canonical invariants); tenancy rule added |
 | 1.0 | — | Initial operating contract (was unversioned; versioning added in 1.1 per `specification-audit.md` §4 recommendation 8) |
@@ -131,6 +133,13 @@ task payload, every cache key, every vector-store filter and every log line.
 `workspace_id` is never inferred, never defaulted in service code, never
 reconstructed from another field. A missing `workspace_id` is an error in every
 environment. See ADR-005.
+
+**Two layers, since Mission 0.4 (ADR-012).** The explicit repository filter is
+layer 1 and remains mandatory. PostgreSQL row-level security is layer 2, entered
+through a transaction-local tenant context. Neither replaces the other: a
+forgotten `WHERE` is caught by the policy, and a missing tenant context returns
+no rows rather than wrong ones. Removing the explicit filter because RLS exists
+is a regression, not a cleanup.
 
 ### Jobs — Celery over Redis
 
@@ -241,6 +250,7 @@ Foundational specifications use explicit versions in the filename, for example:
 - `scoring-framework-v1.1.md` (current) — supersedes `scoring-framework-v1.md`
 - `evidence-confidence-framework-v1.md` (current)
 - `data-retention-policy-v1.md` (current)
+- `evaluation-framework-v1.md` (current)
 
 Material changes should create a new version and, when architectural, an ADR.
 

@@ -16,12 +16,14 @@ from sros_llm_gateway import (
     BudgetExhaustedError,
     BudgetLedger,
     BudgetLimits,
+    ErrorCategory,
     GatewayConfig,
     LlmGateway,
     LlmRequest,
     NoProviderAvailableError,
     SchemaValidationError,
     TierBinding,
+    category_of,
     load_config_from_env,
 )
 from sros_llm_gateway.providers import EchoProvider, FailingProvider
@@ -144,13 +146,25 @@ class Completion(unittest.TestCase):
         self.assertEqual(response.usage.retries, 1)
 
     def test_exhausted_retries_fail_rather_than_fabricate(self) -> None:
+        """Changed in Mission 0.4: the ORIGINAL failure propagates.
+
+        Until §21 there was no error taxonomy, so exhausted retries were
+        reported as `NoProviderAvailableError`. That is now misleading: the
+        provider WAS available and the request timed out, and the two are
+        different operational problems with different responses. The failure
+        keeps its category so a caller can tell them apart.
+
+        What has not changed is the part that matters: it still fails, and it
+        still never fabricates an answer.
+        """
         gateway = LlmGateway(config=make_config())
         gateway.config.bindings[LlmTier.FAST_MODEL] = TierBinding(
             LlmTier.FAST_MODEL, "fake-failing", "m"
         )
         gateway.register(FailingProvider(failures_before_success=99))
-        with self.assertRaises(NoProviderAvailableError):
+        with self.assertRaises(TimeoutError) as ctx:
             gateway.complete(make_request(max_retries=1))
+        self.assertIs(category_of(ctx.exception), ErrorCategory.TIMEOUT)
 
 
 class StructuredOutput(unittest.TestCase):

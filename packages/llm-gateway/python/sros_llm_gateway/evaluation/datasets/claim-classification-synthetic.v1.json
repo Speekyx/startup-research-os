@@ -1,0 +1,67 @@
+{
+  "dataset_id": "claim-classification-synthetic",
+  "version": "1.0.0",
+  "task": "CLAIM_CLASSIFICATION",
+  "synthetic": true,
+  "description": "SYNTHETIC FIXTURE. Eight invented statements labelled with the five canonical claim types (opportunity-ontology-v2.md §7). It exists to prove the evaluation runner, the metrics and the regression comparison work end to end. It measures NOTHING about model quality: the examples were written to be unambiguous, which is the opposite of what a real evaluation set needs. A production claim-classification set requires labelled statements drawn from collected sources, which D-07 blocks.",
+  "output_schema": {
+    "type": "object",
+    "required": ["claim_type"],
+    "properties": {
+      "claim_type": {
+        "type": "string",
+        "enum": ["OBSERVED", "INFERRED", "PREDICTED", "RECOMMENDED", "HYPOTHESIS"]
+      }
+    }
+  },
+  "items": [
+    {
+      "item_id": "obs-1",
+      "input": { "statement": "Three hundred and twelve reviews in the dataset mention the export button failing." },
+      "expected": "OBSERVED",
+      "tags": ["clear"]
+    },
+    {
+      "item_id": "obs-2",
+      "input": { "statement": "The pricing page lists a monthly plan at a fixed amount." },
+      "expected": "OBSERVED",
+      "tags": ["clear"]
+    },
+    {
+      "item_id": "inf-1",
+      "input": { "statement": "Because complaints cluster around exports and imports, the file pipeline is the weak point." },
+      "expected": "INFERRED",
+      "tags": ["clear"]
+    },
+    {
+      "item_id": "inf-2",
+      "input": { "statement": "The reviews and the forum threads describe the same workflow, so they are about one feature." },
+      "expected": "INFERRED",
+      "tags": ["clear"]
+    },
+    {
+      "item_id": "pred-1",
+      "input": { "statement": "Demand for this category will keep growing through the next two quarters." },
+      "expected": "PREDICTED",
+      "tags": ["clear"]
+    },
+    {
+      "item_id": "rec-1",
+      "input": { "statement": "Ship the bulk export first and defer the integrations." },
+      "expected": "RECOMMENDED",
+      "tags": ["clear"]
+    },
+    {
+      "item_id": "hyp-1",
+      "input": { "statement": "Teams might abandon the tool during onboarding, though nothing collected shows it." },
+      "expected": "HYPOTHESIS",
+      "tags": ["clear", "rare-class"]
+    },
+    {
+      "item_id": "hyp-2",
+      "input": { "statement": "There may be a second audience here; no evidence has been gathered either way." },
+      "expected": "HYPOTHESIS",
+      "tags": ["clear", "rare-class"]
+    }
+  ]
+}

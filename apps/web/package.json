@@ -1,0 +1,28 @@
+{
+  "name": "@sros/web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Research console. Mission 0.4 delivers the API foundation only — no dashboard.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "scripts": {
+    "dev": "next dev --port 3412",
+    "build": "next build",
+    "start": "next start --port 3412",
+    "test": "node --test --experimental-strip-types test/api-client.test.ts",
+    "test:unit": "node --test --experimental-strip-types test/api-client.test.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@sros/contracts": "workspace:*",
+    "next": "15.5.7",
+    "react": "19.2.0",
+    "react-dom": "19.2.0"
+  },
+  "devDependencies": {
+    "@sros/typescript-config": "workspace:*",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0"
+  }
+}
