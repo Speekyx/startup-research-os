@@ -94,6 +94,7 @@ FORBIDDEN_TABLES = (
     # deriving, and the boundary this file guards is that normalization renames
     # and reshapes without deciding.
     "nlp.signal_inputs",
+    "nlp.signal_derivation_runs",
     "nlp.embedding_provenance",
     "research.claims",
     "scoring.evidence",

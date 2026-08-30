@@ -8,7 +8,7 @@ Regenerate      : python packages/contracts/tools/generate.py
 Editing this file by hand will be overwritten and will fail the contract
 check in CI. Change the source of truth instead.
 
-contract_version: 1.6.0
+contract_version: 1.7.0
 ontology_version: 2
 """
 
@@ -17,7 +17,7 @@ from __future__ import annotations
 from enum import Enum
 from typing import Final
 
-CONTRACT_VERSION: Final[str] = "1.6.0"
+CONTRACT_VERSION: Final[str] = "1.7.0"
 ONTOLOGY_VERSION: Final[str] = "2"
 RESEARCH_CONTEXT_SCHEMA_VERSION: Final[str] = "1.0.0"
 
@@ -549,6 +549,7 @@ class SignalMagnitudeKind(str, Enum):
     """
 
     ABSOLUTE_CHANGE = "ABSOLUTE_CHANGE"  # A difference expressed in the inputs' own quantity. The unit is INHERITED where the inputs published one and NOT_ESTABLISHED where they did not
+    ABSOLUTE_DIFFERENCE = "ABSOLUTE_DIFFERENCE"  # A difference between two quantities measured at the SAME position -- two lexical terms in one source period, two geographies in one year. Distinct from ABSOLUTE_CHANGE because that one asserts something changed, which is a statement about time: a consumer branching on this value must be able to tell a contrast from a movement. The unit follows the inputs, as for ABSOLUTE_CHANGE
     RATIO = "RATIO"  # One quantity relative to another. Always DIMENSIONLESS
     OBSERVATION_COUNT = "OBSERVATION_COUNT"  # How many observations satisfied the derivation's condition. Always DIMENSIONLESS, and a diagnostic count rather than a sample size
 
@@ -622,6 +623,7 @@ class SignalRefusalReason(str, Enum):
     REQUIRED_FACT_WITHHELD = "REQUIRED_FACT_WITHHELD"  # A canonical fact the derivation requires is absent, per the record's own quality reasons or its record kind
     AMBIGUOUS_OBSERVATION_LINEAGE = "AMBIGUOUS_OBSERVATION_LINEAGE"  # Two contributing rows carry the same observation_key under different lineages. Refused rather than resolved: choosing between them is D-08, which is open, and counting both would manufacture a contrast out of one observation
     INCOMPATIBLE_INPUT_KINDS = "INCOMPATIBLE_INPUT_KINDS"  # The inputs disagree on record kind or period resolution. Never silently coarsened to the coarser of the two
+    INCOMPATIBLE_SERIES = "INCOMPATIBLE_SERIES"  # The inputs are the same record kind at the same resolution and are not observations of the same thing -- a different metric, geography, unit, dataset, source period label, source language label or gram size. INCOMPATIBLE_INPUT_KINDS cannot express this: two World Bank observations of different countries disagree on neither kind nor resolution. The detail names the field that disagreed
     INSUFFICIENT_INPUT_OBSERVATIONS = "INSUFFICIENT_INPUT_OBSERVATIONS"  # Fewer than two distinct source observations remain. One observation is not a Signal
     UNSUPPORTED_SIGNAL_TYPE = "UNSUPPORTED_SIGNAL_TYPE"  # The signal type is not registered, or its declared family does not match the inputs
     PARAMETERS_INCOMPLETE = "PARAMETERS_INCOMPLETE"  # A parameter affecting the output was not stated. A hidden default makes the extractor version meaningless

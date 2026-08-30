@@ -9,12 +9,12 @@
  * Editing this file by hand will be overwritten and will fail the contract
  * check in CI. Change the source of truth instead.
  *
- * contract_version: 1.6.0
+ * contract_version: 1.7.0
  * ontology_version: 2
  */
 
 
-export const CONTRACT_VERSION = "1.6.0" as const;
+export const CONTRACT_VERSION = "1.7.0" as const;
 export const ONTOLOGY_VERSION = "2" as const;
 export const RESEARCH_CONTEXT_SCHEMA_VERSION = "1.0.0" as const;
 
@@ -684,6 +684,7 @@ export function isSignalDirection(v: unknown): v is SignalDirection {
  */
 export const SIGNAL_MAGNITUDE_KIND_VALUES = [
   "ABSOLUTE_CHANGE",
+  "ABSOLUTE_DIFFERENCE",
   "RATIO",
   "OBSERVATION_COUNT",
 ] as const;
@@ -775,6 +776,7 @@ export const SIGNAL_REFUSAL_REASON_VALUES = [
   "REQUIRED_FACT_WITHHELD",
   "AMBIGUOUS_OBSERVATION_LINEAGE",
   "INCOMPATIBLE_INPUT_KINDS",
+  "INCOMPATIBLE_SERIES",
   "INSUFFICIENT_INPUT_OBSERVATIONS",
   "UNSUPPORTED_SIGNAL_TYPE",
   "PARAMETERS_INCOMPLETE",

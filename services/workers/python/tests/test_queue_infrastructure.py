@@ -106,8 +106,13 @@ class DeliverySemantics(unittest.TestCase):
 
     def test_routes_cover_every_declared_prefix(self) -> None:
         routes = build_celery_config()["task_routes"]
-        self.assertEqual(len(routes), 12)
+        # 13 since Mission 1.11.1 added `signal.`. It routes to ACQUISITION, not
+        # to `nlp`: deterministic arithmetic over records the deployment already
+        # holds is bounded and CPU-cheap, and the `nlp` queue is sized for
+        # LLM-backed work it would then compete with.
+        self.assertEqual(len(routes), 13)
         self.assertEqual(routes["nlp.embed*"], {"queue": "embedding"})
+        self.assertEqual(routes["signal.*"], {"queue": "acquisition"})
 
 
 class Correlation(unittest.TestCase):

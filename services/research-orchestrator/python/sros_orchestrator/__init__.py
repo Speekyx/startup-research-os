@@ -82,6 +82,7 @@ from .plan import (
     ResearchPlanner,
     acquisition_block,
     normalization_block,
+    signal_derivation_block,
 )
 from .sources import (
     RegistryDatabase,
@@ -127,6 +128,7 @@ __all__ = [
     "STATIC_BLOCKED_CAPABILITIES",
     "acquisition_block",
     "normalization_block",
+    "signal_derivation_block",
     "PlannedStage",
     "ResearchExecutionPlan",
     "ResearchPlanner",

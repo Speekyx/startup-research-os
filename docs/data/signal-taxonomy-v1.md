@@ -1,7 +1,7 @@
 # Signal Taxonomy V1
 
-**Status:** Authoritative for the Signal layer. Vocabulary only — **no extractor
-exists and no Signal has been derived.**
+**Status:** Authoritative for the Signal layer. **Both types are implemented as
+of Mission 1.11.1**, and five real Signals exist.
 **Date:** 2026-08-30 (Sprint 1 / Mission 1.11)
 **Related:** [`signal-contract-v1.md`](signal-contract-v1.md),
 [`signal-model-gap-analysis-v1.md`](signal-model-gap-analysis-v1.md),
@@ -133,16 +133,22 @@ kept:
 
 | | |
 |---|---|
-| the two type entries | **registered** by migration 0012 |
-| the families | **declared** in the contract, generated to both surfaces |
+| the two type entries | registered by migration 0012 |
+| the families | declared in the contract, generated to both surfaces |
 | the model | `sros_signal_model`, with tests over synthetic objects |
-| an extractor | **none** |
-| `SIGNAL_EXTRACTORS` | **empty** |
-| `nlp.signals` | **0 rows** |
+| an extractor | **`numeric-period-change@1.0.0`, `lexical-frequency-contrast@1.0.0`** |
+| `IMPLEMENTED_EXTRACTORS` | **both** |
+| `nlp.signals` | **5 real rows** |
 
-A registry row lets the model describe a shape and lets the database refuse a
-type nobody registered. The claim that code exists is `SIGNAL_EXTRACTORS`, and
-it is empty.
+Mission 1.11 registered the **vocabulary** and no extractor; Mission 1.11.1
+added the extractors. The two remained separate claims throughout, which is what
+made it possible to design the taxonomy in one mission and implement against it
+in the next without either pretending to be the other.
+
+`SIGNAL_EXTRACTORS` in `sros_signal_model` stays **empty** and always will: that
+package says what a Signal IS, and `validate_signals.py` fails the build if an
+extractor appears in it. `IMPLEMENTED_EXTRACTORS` in `sros_nlp` is the claim
+that code exists.
 
 ---
 
@@ -154,7 +160,7 @@ not.
 | Candidate | Verdict |
 |---|---|
 | `LEXICAL_FREQUENCY_OBSERVED` | **Rejected.** It is the normalized record with a new table name. Contract §3's contrast rule exists to forbid exactly this |
-| `LEXICAL_FREQUENCY_CHANGE` | **Deferred, not rejected.** A sound derivation that needs two buckets in a known order. Blocked while H-32 is open — see [`signal-temporal-semantics-v1.md`](signal-temporal-semantics-v1.md) §4 |
+| `LEXICAL_FREQUENCY_CHANGE` | **Deferred, not rejected, and still deferred after Mission 1.11.1.** A sound derivation that needs two buckets in a known order. Blocked while H-32 is open — see [`signal-temporal-semantics-v1.md`](signal-temporal-semantics-v1.md) §4 |
 | `LEXICAL_ATTENTION_GROWTH` | **Rejected.** "Attention" is an interpretation of a count, "growth" is an interpretation of a difference, and one name asserts both |
 | `LEXICAL_ATTENTION_DECLINE` | **Rejected**, same reason. Direction is a field, not a type: two types differing only in sign would make a decline unfindable when looking for the term |
 | `NUMERIC_LEVEL` | **Rejected.** A level is one observation |

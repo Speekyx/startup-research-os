@@ -68,6 +68,8 @@ __all__ = [
     "STATIC_BLOCKED_CAPABILITIES",
     "acquisition_block",
     "normalization_block",
+    "signal_derivation_block",
+    "NO_EXTRACTOR_IMPLEMENTED",
     "NO_COLLECTOR_IMPLEMENTED",
     "NO_NORMALIZER_IMPLEMENTED",
     "PlannedStage",
@@ -79,7 +81,7 @@ __all__ = [
 # Bumped whenever the stage graph or the blocking set changes. Recorded on the
 # persisted plan so a session can be read years later against the planner that
 # produced it (llm-reasoning-rules.md §9 applied to orchestration).
-PLANNER_VERSION = "1.2.0"
+PLANNER_VERSION = "1.3.0"
 
 
 class Capability(StrEnum):
@@ -91,6 +93,13 @@ class Capability(StrEnum):
 
     ACQUISITION = "ACQUISITION"
     NORMALIZATION = "NORMALIZATION"
+    # Separated from NLP_EXTRACTION in Mission 1.11.1, and the separation was
+    # required rather than tidy. NLP_EXTRACTION is blocked by D-12, whose stated
+    # reason is embedding model versioning -- true of classification, embedding
+    # and clustering, and FALSE of deterministic arithmetic over canonical
+    # decimals. A blocking reason that has become false is worse than a vague
+    # one: it invites someone to conclude the block no longer applies.
+    SIGNAL_DERIVATION = "SIGNAL_DERIVATION"
     NLP_EXTRACTION = "NLP_EXTRACTION"
     OPPORTUNITY_DISCOVERY = "OPPORTUNITY_DISCOVERY"
     SCORING = "SCORING"
@@ -153,8 +162,10 @@ STATIC_BLOCKED_CAPABILITIES: dict[Capability, BlockedCapability] = {
         capability=Capability.NLP_EXTRACTION,
         decision_id="D-12",
         reason=(
-            "embedding model versioning and the re-embedding strategy are undecided, "
-            "and NLP execution is outside this mission's scope"
+            "embedding model versioning and the re-embedding strategy are undecided, so "
+            "classification, embedding and clustering cannot run. This is NOT the "
+            "deterministic signal derivation separated into SIGNAL_DERIVATION in "
+            "Mission 1.11.1, which needs no model and no vector"
         ),
         governing_document="docs/domain/opportunity-ontology-v2.md §16",
     ),
@@ -346,6 +357,61 @@ def normalization_block(
     )
 
 
+# The signal gate, separated in Mission 1.11.1. Not a decision id, for the same
+# reason NO-NORMALIZER-IMPLEMENTED is not one: nobody unblocks it by deciding,
+# only by writing an extractor.
+NO_EXTRACTOR_IMPLEMENTED = "NO-EXTRACTOR-IMPLEMENTED"
+SIGNAL_DOCUMENT = "docs/data/signal-contract-v1.md §3"
+
+
+def signal_derivation_block(
+    report: SourceAvailabilityReport,
+    implemented_collectors: frozenset[str] = frozenset(),
+    implemented_normalizers: frozenset[str] = frozenset(),
+    implemented_extractors: frozenset[str] = frozenset(),
+) -> BlockedCapability | None:
+    """Derive the SIGNAL_DERIVATION block from the registry AND from what exists.
+
+    Four conditions rather than three: a source must be eligible, have a
+    collector, have a normalizer, **and** some extractor must exist to read the
+    canonical records. A planner that dispatched `signal.derive` with no
+    extractor registered would emit a job guaranteed to refuse the job payload
+    it was handed.
+
+    `implemented_extractors` names EXTRACTORS rather than sources, because an
+    extractor reads a record KIND and not a platform -- `numeric-period-change`
+    works on any source that produces `numeric_observation`. It defaults to
+    empty, so a missing wire reads as a refusal and never as a permission.
+    """
+    normalization = normalization_block(report, implemented_collectors, implemented_normalizers)
+    if normalization is not None:
+        # Nothing to derive from, and saying so in normalization's words rather
+        # than inventing a second explanation for one cause.
+        return BlockedCapability(
+            capability=Capability.SIGNAL_DERIVATION,
+            decision_id=normalization.decision_id,
+            reason=(
+                f"normalization is blocked, so no canonical observation is produced to "
+                f"derive from: {normalization.reason}"
+            ),
+            governing_document=normalization.governing_document,
+        )
+
+    if implemented_extractors:
+        return None
+
+    return BlockedCapability(
+        capability=Capability.SIGNAL_DERIVATION,
+        decision_id=NO_EXTRACTOR_IMPLEMENTED,
+        reason=(
+            "canonical observations exist and no signal extractor is implemented. A "
+            "normalizer says what an observation structurally represents; an extractor "
+            "states a relation between two of them, and one never implies the other"
+        ),
+        governing_document=SIGNAL_DOCUMENT,
+    )
+
+
 @dataclass(frozen=True)
 class PlannedStage:
     """One capability's place in the plan."""
@@ -372,7 +438,11 @@ class PlannedStage:
 DEFAULT_STAGES: tuple[PlannedStage, ...] = (
     PlannedStage(Capability.ACQUISITION, "acquire.collect"),
     PlannedStage(Capability.NORMALIZATION, "normalize.records", (Capability.ACQUISITION,)),
-    PlannedStage(Capability.NLP_EXTRACTION, "nlp.extract.signals", (Capability.NORMALIZATION,)),
+    # acquisition -> normalization -> signals (§44). The extractor consumes
+    # NormalizedRecords only; it has no dependency on acquisition beyond the one
+    # it inherits through normalization.
+    PlannedStage(Capability.SIGNAL_DERIVATION, "signal.derive", (Capability.NORMALIZATION,)),
+    PlannedStage(Capability.NLP_EXTRACTION, "nlp.extract.signals", (Capability.SIGNAL_DERIVATION,)),
     PlannedStage(
         Capability.OPPORTUNITY_DISCOVERY,
         "nlp.cluster.opportunities",
@@ -488,11 +558,13 @@ class ResearchPlanner:
         sources: SourceAvailabilityProvider | None = None,
         implemented_collectors: frozenset[str] = frozenset(),
         implemented_normalizers: frozenset[str] = frozenset(),
+        implemented_extractors: frozenset[str] = frozenset(),
     ) -> None:
         self._stages = stages
         self._sources: SourceAvailabilityProvider = sources or UnconsultedRegistry()
         self._implemented_collectors = implemented_collectors
         self._implemented_normalizers = implemented_normalizers
+        self._implemented_extractors = implemented_extractors
 
     def plan(
         self,
@@ -546,6 +618,12 @@ class ResearchPlanner:
                 availability,
                 self._implemented_collectors,
                 self._implemented_normalizers,
+            ),
+            Capability.SIGNAL_DERIVATION: signal_derivation_block(
+                availability,
+                self._implemented_collectors,
+                self._implemented_normalizers,
+                self._implemented_extractors,
             ),
         }
 

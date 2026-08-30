@@ -548,17 +548,25 @@ class TestPlanning(unittest.TestCase):
             implemented_normalizers=frozenset({"world-bank"}),
         ).plan(WORKSPACE, SESSION, CORRELATION, _context())
         blocked = set(wired.blocked_capability_names)
+        # Added in Mission 1.11.1. Normalization opening does not open signal
+        # derivation: an extractor is separate work, and this planner has none
+        # wired.
+        assert Capability.SIGNAL_DERIVATION.value in blocked
         assert Capability.NLP_EXTRACTION.value in blocked
         assert Capability.OPPORTUNITY_DISCOVERY.value in blocked
         assert Capability.SCORING.value in blocked
 
-    def test_the_planner_version_records_that_the_blocking_set_changed(self) -> None:
+    def test_the_planner_version_records_that_the_graph_changed(self) -> None:
         """A plan read back years later must be interpretable against the
-        planner that produced it. The stage graph did not change; the blocking
-        SET did, and that is what the version tracks."""
+        planner that produced it.
+
+        1.2.0 tracked a change to the blocking SET with the graph unchanged.
+        1.3.0 is the first time the GRAPH changed: Mission 1.11.1 inserted
+        SIGNAL_DERIVATION between normalization and NLP extraction, so a plan
+        produced before it has one fewer job and a different dependency edge."""
         from sros_orchestrator.plan import PLANNER_VERSION
 
-        assert PLANNER_VERSION == "1.2.0"
+        assert PLANNER_VERSION == "1.3.0"
 
     def test_scoring_is_blocked_on_calibration_not_on_the_formula(self) -> None:
         """Mission 1.2. The formula exists since Mission 1.1, so the old reason
@@ -579,6 +587,7 @@ class TestPlanning(unittest.TestCase):
                         "D-12",
                         "NO-COLLECTOR",
                         "SOURCE-REGISTRY-GATE",
+                        "NO-EXTRACTOR",
                         "PROFILE-NOT-CALIBRATED",
                     )
                 ),
@@ -597,6 +606,7 @@ class TestPlanning(unittest.TestCase):
             [
                 Capability.ACQUISITION.value,
                 Capability.NORMALIZATION.value,
+                Capability.SIGNAL_DERIVATION.value,
                 Capability.NLP_EXTRACTION.value,
                 Capability.OPPORTUNITY_DISCOVERY.value,
                 Capability.SCORING.value,

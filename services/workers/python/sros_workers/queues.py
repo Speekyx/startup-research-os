@@ -129,6 +129,11 @@ RETRY_POLICIES: dict[Queue, RetryPolicy] = {
 TASK_ROUTES: dict[str, Queue] = {
     "acquire.": Queue.ACQUISITION,
     "normalize.": Queue.ACQUISITION,
+    # Mission 1.11.1. Deterministic arithmetic over records the deployment
+    # already holds -- bounded and CPU-cheap, exactly like normalization. The
+    # `nlp` queue is sized for LLM-backed work, and routing a subtraction
+    # there would let it compete for slots meant for something else.
+    "signal.": Queue.ACQUISITION,
     "nlp.extract": Queue.NLP,
     "nlp.classify": Queue.NLP,
     "nlp.embed": Queue.EMBEDDING,

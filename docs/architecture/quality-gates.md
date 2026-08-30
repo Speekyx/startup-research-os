@@ -301,6 +301,21 @@ database itself -- and where a rule could live in either, it lives in both.
 | **A registered signal type resolves on an empty database** | The two entries are written by migration 0012, not by a seed | `demand_signal_type` had no migration-written entry, so `nlp.signals` accepted an insert on a seeded machine and rejected it everywhere else |
 | **Thirteen constraints verified by the constraint that refused** | A rollback-only probe asserting `exc.diag.constraint_name` | Its first version asserted "some error was raised" and every case passed while the real cause was a column the fixture forgot |
 
+### The first signal extractors (Mission 1.11.1)
+
+One new CI step, in the existing normalization-boundary job.
+
+| Gate | Mechanism | Guards |
+|------|-----------|--------|
+| **Derivation reaches no network, model or embedder** | `validate_signals.py`, walking every **import** in `sros_nlp` and `sros_signal_model` | The same inputs, parameters and version must produce the same signal, which a model call cannot promise. AST, not grep: a docstring naming a module must not fail the check |
+| **`packages/signal-model` contains no extractor** | AST: no class ending `Extractor` | The model says what a Signal IS. An extractor there would make the contract depend on an implementation of itself |
+| **No later-stage table is written** | `evidence`, `claims`, `opportunities`, `embedding_provenance` | A Signal is not Evidence, not a Claim and not a Score; each needs something this layer does not have |
+| **No extractor names a conclusion** | AST over `extractor_id` constants against a word list | `contrast` and `change` are operations; `trend`, `growth`, `demand` and `attention` are readings, and an id carrying one puts the interpretation in the name |
+| **Every declared signal type is migration-registered** | AST over `signal_type_id` against the migrations' INSERTs | The foreign key would resolve only on a seeded database, which is the Mission 1.11 GAP-13 failure one layer up |
+| **A refused group carries its reasons** | `CHECK (groups_refused = 0 OR jsonb_array_length(refusals) > 0)` | A count with no reasons behind it is the "something did not happen" the run log replaces |
+| **A run's arithmetic adds up** | `CHECK (records_contributed + records_excluded <= records_considered)` | It caught a real defect: contributors were summed per draft, and one record legitimately contributes to several signals |
+| **`signal.` does not route to the `nlp` queue** | `TASK_ROUTES`, asserted by name | The `nlp` queue is sized for LLM-backed work; deterministic subtraction would compete for slots meant for something else |
+
 ---
 
 ## 2. Turborepo task graph

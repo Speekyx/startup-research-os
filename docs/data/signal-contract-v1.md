@@ -1,7 +1,9 @@
 # Signal Contract V1
 
-**Status:** Authoritative. **Model and contract only — no extractor exists,
-`SIGNAL_EXTRACTORS` is empty and `nlp.signals` holds 0 rows.**
+**Status:** Authoritative, and **implemented**. Mission 1.11.1 added the first
+two extractors and **five real Signals**: four `numeric_period_change` and one
+`lexical_frequency_contrast`. Two contract values were added while implementing
+— see §21.
 **Date:** 2026-08-30 (Sprint 1 / Mission 1.11)
 **Code:** `sros_signal_model` (`packages/signal-model/python`)
 **Schema:** `sros.signal/1`
@@ -156,7 +158,8 @@ magnitude_unit_state  INHERITED | DIMENSIONLESS | NOT_ESTABLISHED
 
 | Kind | Meaning | Unit |
 |---|---|---|
-| `ABSOLUTE_CHANGE` | A difference in the inputs' own quantity | `INHERITED` where the inputs published one, `NOT_ESTABLISHED` where they did not |
+| `ABSOLUTE_CHANGE` | A difference in the inputs' own quantity **over time** | `INHERITED` where the inputs published one, `NOT_ESTABLISHED` where they did not |
+| `ABSOLUTE_DIFFERENCE` | A difference between two quantities measured at the **same position** — two terms in one bucket | as `ABSOLUTE_CHANGE` |
 | `RATIO` | One quantity relative to another | **must** be `DIMENSIONLESS` |
 | `OBSERVATION_COUNT` | How many observations satisfied the derivation's condition | **must** be `DIMENSIONLESS` |
 
@@ -375,6 +378,8 @@ INPUT_RECORD_INVALID              an input is INVALID
 REQUIRED_FACT_WITHHELD            a required canonical fact is absent
 AMBIGUOUS_OBSERVATION_LINEAGE     two contributing rows are one observation (D-08)
 INCOMPATIBLE_INPUT_KINDS          inputs disagree on record kind or resolution
+INCOMPATIBLE_SERIES               same kind, different thing: metric, geography,
+                                  unit, dataset, bucket, language label, gram size
 INSUFFICIENT_INPUT_OBSERVATIONS   fewer than two distinct observations remain
 UNSUPPORTED_SIGNAL_TYPE           no registered type
 PARAMETERS_INCOMPLETE             a parameter affecting output was not stated
@@ -596,3 +601,39 @@ sits at, is a design error.
 - Map a source language label to a canonical tag.
 - Resolve a contradiction, estimate independence, or produce a score.
 - Store a row that means no signal exists.
+
+---
+
+## 21. What implementing it changed (Mission 1.11.1)
+
+Two values, both because the contract could not say something true. Contract
+`1.6.0` → `1.7.0`; nothing else in this document was revised.
+
+### `SignalMagnitudeKind.ABSOLUTE_DIFFERENCE`
+
+`ABSOLUTE_CHANGE` asserts that something **changed**, which is a statement about
+time. A same-bucket contrast between two lexical terms is a difference between
+two quantities measured at the same position: nothing changed, and using the
+temporal value would have asserted a temporality H-32 says is not established.
+
+A consumer branching on magnitude kind has to be able to tell a contrast from a
+movement, which is the test §5 already applies to a ratio and a difference.
+
+### `SignalRefusalReason.INCOMPATIBLE_SERIES`
+
+`INCOMPATIBLE_INPUT_KINDS` means *the inputs disagree on record kind or period
+resolution*. Two World Bank observations of **different countries** disagree on
+neither — same kind, same `YEAR` resolution — and are still not observations of
+the same measured series. The same holds for two GDELT terms from different
+buckets, different language labels or different gram sizes.
+
+One value covers every case and the `detail` names the field that disagreed.
+Mission 1.11.1 §34 offered four separate codes for it; four codes for one
+question would make a consumer branch on which field happened to differ.
+
+### What did NOT change
+
+Nothing about identity, lineage, scope, confidence, quality interaction or the
+two-observation rule needed revision. The extractors were written against §1–§20
+as shipped, and the required-fact machinery worked unchanged on the first real
+`PARTIAL` inputs.

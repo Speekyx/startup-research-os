@@ -3,7 +3,7 @@
   "$id": "https://startup-research-os.local/schema/domain.v1.schema.json",
   "title": "Startup Research OS domain vocabulary",
   "description": "GENERATED FILE. Source of truth: packages/contracts/schema/domain.v1.json. Regenerate with python packages/contracts/tools/generate.py.",
-  "x-contract-version": "1.6.0",
+  "x-contract-version": "1.7.0",
   "x-ontology-version": "2",
   "$defs": {
     "AcquisitionErrorCode": {
@@ -687,6 +687,7 @@
       "type": "string",
       "enum": [
         "ABSOLUTE_CHANGE",
+        "ABSOLUTE_DIFFERENCE",
         "RATIO",
         "OBSERVATION_COUNT"
       ],
@@ -716,6 +717,7 @@
         "REQUIRED_FACT_WITHHELD",
         "AMBIGUOUS_OBSERVATION_LINEAGE",
         "INCOMPATIBLE_INPUT_KINDS",
+        "INCOMPATIBLE_SERIES",
         "INSUFFICIENT_INPUT_OBSERVATIONS",
         "UNSUPPORTED_SIGNAL_TYPE",
         "PARAMETERS_INCOMPLETE"

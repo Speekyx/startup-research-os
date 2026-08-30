@@ -14,6 +14,7 @@ members = [
     "services/workers/python",
     "services/research-orchestrator/python",
     "services/acquisition/python",
+    "services/nlp/python",
     "services/gateway/python",
 ]
 
@@ -25,6 +26,7 @@ sros-signal-model = { workspace = true }
 sros-workers = { workspace = true }
 sros-orchestrator = { workspace = true }
 sros-acquisition = { workspace = true }
+sros-nlp = { workspace = true }
 
 [dependency-groups]
 dev = [
