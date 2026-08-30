@@ -27,6 +27,14 @@ It surfaced instead in a later mission's suite, as an assertion that counted
 rows and found 39 it had not written -- where it looked like that assertion's
 fault and was very nearly weakened to make it pass. The check lives here so the
 next one fails where it was caused.
+
+**Mission 1.7 §31 added the other half.** A `workspace_id` is what the query
+above looks for, so `registry.*` -- global platform metadata, no `workspace_id`
+anywhere in it -- was outside the check by construction, and
+`test-data-isolation-audit-v1.md` §6 named that gap rather than closing it.
+Three acquisition modules mutate the registry, one of them by turning a
+collector on. `testing/registry_state.py` covers them, by content rather than by
+count: flipping a boolean inside a row does not move a row count.
 """
 
 from __future__ import annotations
@@ -37,6 +45,11 @@ import subprocess
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+
+# One definition of what global state is, shared with whatever else needs to
+# assert over it, rather than a second copy that drifts from this one.
+sys.path.insert(0, str(ROOT / "infrastructure"))
+from testing import registry_state  # noqa: E402
 
 SUITES = [
     "packages/contracts/python",
@@ -203,6 +216,11 @@ def main() -> int:
     tables = _tenant_tables(conn) if conn is not None else []
     before = _snapshot(conn, tables) if conn is not None else {}
 
+    # The complement: everything in the owned schemas that carries no
+    # `workspace_id`, which is the registry and nothing the tenant check sees.
+    global_tables = registry_state.global_tables(conn) if conn is not None else []
+    global_before = registry_state.snapshot(conn, global_tables) if conn is not None else {}
+
     failures: list[str] = []
     for suite in SUITES:
         print(f"=== {suite} " + "=" * max(0, 60 - len(suite)))
@@ -222,6 +240,12 @@ def main() -> int:
     clean = True
     if conn is not None:
         clean = _report(conn, tables, before, _snapshot(conn, tables))
+        differences = registry_state.compare(
+            global_before, registry_state.snapshot(conn, global_tables)
+        )
+        global_clean, text = registry_state.format_report(global_tables, differences)
+        print(text, file=sys.stdout if global_clean else sys.stderr)
+        clean = clean and global_clean
         conn.close()
 
     if failures:

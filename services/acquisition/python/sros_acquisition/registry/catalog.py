@@ -32,11 +32,13 @@ from sros_contracts import (
 
 from .models import (
     AccessProfile,
+    BehaviorCoverage,
     Coverage,
     PolicyEvidence,
     PolicyReview,
     RetentionOverride,
     ReviewCondition,
+    SignalCoverage,
     SourceRecord,
     SourceRegistryError,
 )
@@ -217,6 +219,8 @@ def _source_from_json(entry: object, use_case: str) -> SourceRecord:
         coverage=coverage,
         quality_notes=dict(entry.get("quality_notes") or {}),
         capabilities=tuple(entry.get("capabilities") or ()),
+        signal_coverage=_signal_coverage_from_json(entry, source_id),
+        behavior_coverage=_behavior_coverage_from_json(entry, source_id),
         access_profiles=profiles,
         review=review,
         review_history=tuple(history),
@@ -228,6 +232,63 @@ def _source_from_json(entry: object, use_case: str) -> SourceRecord:
         suspended=bool(entry.get("suspended", False)),
         suspended_reason=entry.get("suspended_reason"),
     )
+
+
+def _signal_coverage_from_json(
+    entry: dict[str, object], source_id: str
+) -> tuple[SignalCoverage, ...]:
+    """Mission 1.7 §4. Absent is legal and means nobody has profiled the source.
+
+    An empty profile is NOT the same statement as "this source exposes
+    nothing", and the loader keeps them distinguishable by never inventing a
+    default.
+    """
+    items = entry.get("signal_coverage")
+    if items is None:
+        return ()
+    if not isinstance(items, list):
+        raise SourceRegistryError(f"{source_id}.signal_coverage", "must be a list")
+    out = []
+    for item in items:
+        if not isinstance(item, dict):
+            raise SourceRegistryError(
+                f"{source_id}.signal_coverage",
+                "each entry must be an object with signal_family and basis",
+            )
+        out.append(
+            SignalCoverage(
+                signal_family=str(item.get("signal_family") or ""),
+                basis=str(item.get("basis") or ""),
+                notes=item.get("notes"),
+            )
+        )
+    return tuple(out)
+
+
+def _behavior_coverage_from_json(
+    entry: dict[str, object], source_id: str
+) -> tuple[BehaviorCoverage, ...]:
+    """Mission 1.7 §5, against Ontology V2 §3.4's canonical `user_behavior`."""
+    items = entry.get("behavior_coverage")
+    if items is None:
+        return ()
+    if not isinstance(items, list):
+        raise SourceRegistryError(f"{source_id}.behavior_coverage", "must be a list")
+    out = []
+    for item in items:
+        if not isinstance(item, dict):
+            raise SourceRegistryError(
+                f"{source_id}.behavior_coverage",
+                "each entry must be an object with behavior and basis",
+            )
+        out.append(
+            BehaviorCoverage(
+                behavior=str(item.get("behavior") or ""),
+                basis=str(item.get("basis") or ""),
+                notes=item.get("notes"),
+            )
+        )
+    return tuple(out)
 
 
 def _profile_from_json(item: object, source_id: str) -> AccessProfile:

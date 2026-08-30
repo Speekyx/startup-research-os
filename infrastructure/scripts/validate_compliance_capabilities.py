@@ -209,7 +209,26 @@ def main(argv: list[str]) -> int:
     print(f"ok    every capability a condition names is implemented ({len(CAPABILITIES)} total)")
 
     # -- 3: every condition resolves to a verifier, or is an explicit gap -------
+    #
+    # UNKNOWN has two causes and only one of them is a defect. Until Mission 1.7
+    # no approving review carried a HUMAN_CONFIRMATION condition, so the two
+    # were indistinguishable here and the check treated both as errors:
+    #
+    #   * a condition naming a CAPABILITY or ACCESS_METHOD that does not exist
+    #     is a defect. It names something unreal and will resolve UNKNOWN for
+    #     ever, which is a condition nobody is checking dressed as one somebody
+    #     is;
+    #   * a HUMAN_CONFIRMATION condition resolves UNKNOWN **by design**
+    #     (`acquisition-authorization-v1.md`, §21): no verifier can establish it
+    #     and none in this repository writes one. It still blocks eligibility,
+    #     which is the point -- it is the honest answer for an obligation a
+    #     program cannot check, and `source-review-guide.md` §9 requires it
+    #     rather than a machine-checkable reword of a legal judgment.
+    #
+    # Rejecting the second would force every such obligation into prose, which
+    # is exactly what Mission 1.7 §28 forbids.
     unresolved: list[str] = []
+    human: list[str] = []
     for source in catalog:
         review = source.review
         if review is None or review.approval_state not in APPROVING_STATES:
@@ -218,14 +237,20 @@ def main(argv: list[str]) -> int:
         if len(records) != len(review.required_conditions):
             errors.append(f"{source.source_id}: not every condition produced a verification")
         for record in records:
-            if record.result is ConditionVerificationResult.UNKNOWN:
+            if record.result is not ConditionVerificationResult.UNKNOWN:
+                continue
+            if record.verification is ConditionVerification.HUMAN_CONFIRMATION:
+                human.append(f"{source.source_id}/{record.condition_key}")
+            else:
                 unresolved.append(f"{source.source_id}/{record.condition_key}: {record.reason}")
     if unresolved:
         errors.append(
-            "condition(s) with no verifier and no recorded justification:\n      "
-            + "\n      ".join(unresolved)
+            "condition(s) whose verifier does not exist:\n      " + "\n      ".join(unresolved)
         )
-    print("ok    every condition on an approving review resolves to a verifier")
+    print(
+        "ok    every condition on an approving review resolves to a verifier "
+        f"({len(human)} awaiting a human decision, which block)"
+    )
 
     # -- 7: exact notices are traceable to the evidence that established them --
     for entry in config:

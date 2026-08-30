@@ -1,10 +1,11 @@
 # Source human-review queue V1
 
 **Status:** Open items. Each entry is a concrete question, not a request to think about it.
-**Version:** 1.0
-**Date:** 2026-08-29 (Mission 1.3)
+**Version:** 1.1 (Mission 1.7 added H-13 to H-24; H-1 to H-12 are unchanged)
+**Date:** 2026-08-30
 **Governed by:** [`source-registry-v1.md`](source-registry-v1.md)
-**Results:** [`source-review-results-v1.md`](source-review-results-v1.md)
+**Results:** [`source-review-results-v1.md`](source-review-results-v1.md) ·
+[`source-expansion-consumer-social-v1.md`](source-expansion-consumer-social-v1.md)
 
 ---
 
@@ -32,6 +33,18 @@ entered: §37 asks for the required next action to be *recorded*, not taken.
 | [H-10](#h-10) | World Bank | condition | Per-dataset licence determination |
 | [H-11](#h-11) | FRED | condition | Third-party series permission |
 | [H-12](#h-12) | All | cross-cutting | Jurisdiction / GDPR — still deferred |
+| [H-13](#h-13) | Mastodon / Lemmy | modelling | Can the registry express a federated source? |
+| [H-14](#h-14) | X (Twitter) | REQUIRES_REVIEW | Agreement returned HTTP 402 |
+| [H-15](#h-15) | Discord | REQUIRES_REVIEW | Developer Terms returned HTTP 403 |
+| [H-16](#h-16) | Twitch | REQUIRES_REVIEW | Developer Services Agreement text unreadable |
+| [H-17](#h-17) | Pinterest | REQUIRES_REVIEW | Developer terms did not return their text |
+| [H-18](#h-18) | Bluesky | REQUIRES_REVIEW | Is there a developer terms document at all? |
+| [H-19](#h-19) | Hugging Face | REQUIRES_REVIEW | Does anything govern Hub METADATA? |
+| [H-20](#h-20) | Steam | RESTRICTED | Is analytical use inside the grant? |
+| [H-21](#h-21) | Meta / Instagram | RESTRICTED | Does any endpoint expose public content? |
+| [H-22](#h-22) | 5 newly approved | conditions | Compliance capabilities do not exist |
+| [H-23](#h-23) | OpenAlex | condition | Metered API — spend ceiling undecided |
+| [H-24](#h-24) | Wikimedia | condition | Do view COUNTS carry CC BY-SA? |
 
 ---
 
@@ -313,3 +326,331 @@ and not a workaround: they are the sources where the question does not arise.
 **Vendor contact needed?** No.
 **Legal counsel appropriate?** **Yes**, and this is the item that most clearly
 needs it.
+
+
+---
+
+# Mission 1.7 additions
+
+Twelve items. Four are retrieval failures, four are questions a source's own
+documents do not answer, one is a modelling decision, and three are conditions
+that cannot currently be cleared.
+
+Nobody was contacted and no agreement was entered (§44). Each entry records the
+action that would be required.
+
+---
+
+## H-13 — Can the registry express a federated source? {#h-13}
+
+**Issue.** Mastodon and Lemmy are software, not services. Thousands of instances
+are run by different operators under different policies; the Mastodon API
+documentation confirms the API is per-instance and that no single terms document
+governs the network.
+
+**Why it is unresolved.** The registry models a source as **one operator with one
+policy**, and a federated network is not that. Registering `mastodon` would
+create an identity whose review can never conclude, and whose `REQUIRES_REVIEW`
+state would read as "somebody should finish this" when the honest statement is
+"this cannot be expressed at this level". §16 forbids flattening heterogeneous
+instance policies into "Mastodon is allowed", so neither source was registered.
+
+**Needed.** A decision between three options, none free:
+
+1. **Register instances, not networks.** `mastodon-social` is one operator with
+   one ToS and is perfectly governable. Review cost is per instance, and each
+   instance is one community rather than a network.
+2. **Add an instance layer to the model** — a source carrying per-instance
+   policy records, with eligibility resolved per instance. Correct, and a schema
+   change Mission 1.7 had no mandate to design.
+3. **Leave federated sources out**, forfeiting the only social protocols whose
+   data is structurally open.
+
+**Vendor contact needed?** No.
+**Legal counsel appropriate?** Not for the modelling decision. Probably yes for
+whichever instances are eventually reviewed.
+**Developer action needed?** Yes, for option 2.
+
+---
+
+## H-14 — The X Developer Agreement returned HTTP 402 {#h-14}
+
+**Issue.** No evidence was gathered for X. Every activity is `NOT_ASSESSED`.
+
+**Document.** `https://developer.x.com/en/developer-terms/agreement-and-policy`.
+
+**Why it is unresolved.** The URL returned **HTTP 402 Payment Required** to this
+environment on 2026-08-30. That is an environment limitation and not a statement
+by X; it is recorded as such rather than as a refusal. The widely-held
+understanding that X restricts commercial reuse is not evidence and was not
+recorded as any.
+
+**Needed.** Retrieve the agreement from an ordinary browser session and assess
+commercial use, storage, retention, redistribution and model processing against
+the recorded use case. Then determine which access tier applies to a commercial
+multi-tenant SaaS, and what it costs.
+
+**Vendor contact needed?** Probably, for tier and pricing.
+**Legal counsel appropriate?** Only once the document has been read.
+
+---
+
+## H-15 — The Discord Developer Terms returned HTTP 403 {#h-15}
+
+**Issue.** No evidence was gathered for Discord.
+
+**Document.**
+`https://support-dev.discord.com/hc/articles/8562894815383-Discord-Developer-Terms-of-Service`.
+
+**Why it is unresolved.** HTTP 403 Forbidden on 2026-08-30.
+
+**Needed.** Retrieve and assess. But answer the cheaper question first: most
+Discord content sits in private servers, so even permissive terms would expose a
+small and self-selected sample, and the Message Content privileged intent is
+granted by Discord rather than self-selected. **If that intent would not be
+granted for an analytics use case, the policy reading is moot.**
+
+**Vendor contact needed?** Yes, for the privileged intent.
+**Legal counsel appropriate?** Not yet.
+
+---
+
+## H-16 — The Twitch Developer Services Agreement could not be read {#h-16}
+
+**Issue.** The Twitch API documentation was retrieved and establishes the access
+model — OAuth 2.0, registered application. The document that would establish
+PERMISSION was not.
+
+**Document.** `https://legal.twitch.com/legal/developer-agreement/`. Two attempts
+on 2026-08-30 returned the page navigation without the agreement text.
+
+**Why it is unresolved.** A reviewer who read only the API documentation would
+find a well-documented, openly described API and could easily mistake that for a
+permission. Every policy activity stays `NOT_ASSESSED`.
+
+**Needed.** Retrieve the agreement and assess storage, caching limits, commercial
+use by a third-party analytics product, aggregation, derived analytics and
+machine-learning processing — the last three separately, per §10. Also obtain
+the documented rate limits, which the API documentation references without
+stating.
+
+**Vendor contact needed?** Not for retrieval.
+**Legal counsel appropriate?** Once read.
+
+**Why it matters.** Twitch is the strongest available creator-economy and
+live-gaming source, and `creator` currently has no approving source at all.
+
+---
+
+## H-17 — The Pinterest developer terms did not return their text {#h-17}
+
+**Issue.** No evidence was gathered for Pinterest.
+
+**Document.** `https://developers.pinterest.com/terms/`.
+
+**Why it is unresolved.** The developer site was reached on 2026-08-30; the terms
+document itself returned navigation rather than content.
+
+**Needed.** Retrieve and assess. Establish separately whether the API exposes
+aggregate interest or trend data usable without access to individual accounts.
+
+**Vendor contact needed?** Likely, for app review.
+**Legal counsel appropriate?** Once read.
+
+**Why it matters.** Pinterest is the strongest candidate in the catalog for
+`desire` signals specifically: saving something is an expression of want with no
+complaint and no purchase attached, which is exactly the signal shape the
+portfolio is missing.
+
+---
+
+## H-18 — Does Bluesky publish developer terms at all? {#h-18}
+
+**Issue.** Bluesky's Terms of Service were retrieved and read. They contain **no
+provision** about automated access, crawling, the API, or machine-learning use of
+content. Meanwhile the AT Protocol documentation states of the public firehose
+that no API key is required.
+
+**Documents.** `https://bsky.social/about/support/tos` (read, effective
+2025-08-14) and `https://atproto.com/` (read).
+
+**Why it is unresolved.** Silence is not permission
+(`source-registry-v1.md` §1 rule 2). The user Terms govern the relationship with
+account holders and say nothing to a third party reading public records. This is
+the most technically open social platform available and it is blocked entirely
+on the absence of a document.
+
+**Needed.** Determine whether a developer or API terms document exists separate
+from the user ToS. If it does, assess it. If it does not, that is itself the
+answer, and the question becomes whether operator correspondence can establish
+the position — `OPERATOR_CORRESPONDENCE` is an acceptable evidence type.
+
+Separately: the Terms acknowledge that deletion may not propagate across the
+network. A downstream holder of a deleted post is exactly the case that sentence
+describes, and it creates an obligation the Terms do not specify.
+
+**Vendor contact needed?** **Yes** — this is the single highest-value question in
+the queue, and one answer would settle it.
+**Legal counsel appropriate?** Only if a document turns up and is ambiguous.
+
+---
+
+## H-19 — Does anything govern Hugging Face Hub METADATA? {#h-19}
+
+**Issue.** The Terms of Service address neither automated collection nor
+commercial reuse of Hub metadata. They DO contain a broad licence grant — public
+repositories grant every user rights to use, reproduce and make derivative works
+— but that grant runs between **users** and covers repository **content**. What
+this system would collect is platform metadata: download counts, likes, trending
+placement. No clause mentions it.
+
+**Document.** `https://huggingface.co/terms-of-service`, effective 2022-09-15.
+
+**Why it is unresolved.** Reading the content grant as covering metadata would be
+inferring permission from an adjacent one, which §12 forbids by name.
+
+**Needed.** Determine whether any Hugging Face document addresses automated
+collection and commercial reuse of Hub metadata. Determine separately whether the
+2022 Terms have been superseded — every other source reviewed in this round
+carries a materially more recent document, and a four-year-old ToS on a platform
+that changed this much is itself a question.
+
+**Vendor contact needed?** Possibly.
+**Legal counsel appropriate?** For the content-versus-metadata boundary, yes.
+
+---
+
+## H-20 — Is analytical use inside Steam's grant? {#h-20}
+
+**Issue.** Steam's API Terms grant permission to implement the Web API in an
+Application and **distribute Steam Data to end users for their personal use via
+that Application**. Accumulating Steam Data into an analytical corpus and selling
+derived intelligence is not that. The terms separately prohibit presenting Steam
+Data so that it appears to be available from a third party.
+
+**Document.** `https://steamcommunity.com/dev/apiterms`, retrieved 2026-08-30.
+
+**Why it is unresolved.** The verdict is `RESTRICTED` — the documents were read,
+they permit some assessed activities, and ours is outside the grant they make.
+Whether Valve would characterise analytical accumulation as inside or outside it
+is a judgment the terms do not settle.
+
+**Needed.** Three answers: whether accumulation for analysis falls inside the
+licence; whether derived market intelligence sold to customers is "presenting
+Steam Data so that it appears to be available from a third party"; and whether
+Valve offers a commercial or data-partner arrangement covering analytical use.
+No such route was found in the terms.
+
+**Vendor contact needed?** **Yes**, for the third.
+**Legal counsel appropriate?** **Yes**, for the first two.
+
+**Why it matters.** `competition` and `collection` rest entirely on Steam and are
+currently uncovered. It is the single richest gaming source available and there
+is no substitute in the catalog.
+
+---
+
+## H-21 — Does any Meta endpoint expose public content? {#h-21}
+
+**Issue.** Meta's Platform Terms authorise use only as the developer
+documentation permits, and prohibit selling or licensing Platform Data, which
+reaches the output of a commercial intelligence product directly.
+
+**Document.** `https://developers.facebook.com/terms/`, effective 2026-02-03.
+
+**Why it is unresolved.** There is a prior question that is **cheaper and may
+settle the source outright**: Meta's APIs serve accounts a developer owns or
+manages, not the public graph. If no endpoint exposes public content from
+accounts we do not control, the policy analysis is moot for market research.
+
+**Needed.** Establish the capability question first. Only if it passes: determine
+whether market-intelligence output derived from Platform Data constitutes
+granting a licence to Platform Data, and what "authorized applicable purposes
+stated in Meta's developer documentation" includes.
+
+**Vendor contact needed?** Only after the capability question.
+**Legal counsel appropriate?** Only after the capability question.
+
+---
+
+## H-22 — Five approved sources have no capability to clear their conditions {#h-22}
+
+**Issue.** `gdelt`, `wikimedia-pageviews`, `openalex`, `npm-registry` and `pypi`
+are `APPROVED_WITH_CONDITIONS`, and **none is collector-eligible**. Their eleven
+conditions name verifications that no capability implements.
+
+**Why it is unresolved.** A condition is cleared by a verifier and by nothing else
+(ADR-016). The compliance capabilities that would check an attribution surface or
+an access restriction are parameterised for a *collector*, and Mission 1.7 §29
+forbids writing one. Eight of the eleven conditions are therefore
+`HUMAN_CONFIRMATION`, which no verifier can ever satisfy by design.
+
+This is exactly the state Mission 1.3 left `world-bank`, `eurostat` and `fred`
+in. Mission 1.4 resolved it by building capabilities and writing
+`source-compliance-v1.json` entries.
+
+**Needed.** For the two highest-value sources — `gdelt` and
+`wikimedia-pageviews` — a `source-compliance-v1.json` entry describing their
+attribution obligations, so the existing `source-attribution-display` capability
+can verify them. That capability already describes itself as shared and
+parameterised. **This is configuration rather than code, and it would move two
+sources from approving to eligible without a line of collector.**
+
+**Vendor contact needed?** No.
+**Legal counsel appropriate?** No.
+**Developer action needed?** **Yes**, and it is the cheapest large improvement
+available.
+
+---
+
+## H-23 — OpenAlex is metered and no spend ceiling exists {#h-23}
+
+**Issue.** OpenAlex data is CC0, which removes every licensing question at once.
+Access is not free above an allowance: the documentation states a free API key
+raises the daily budget tenfold, and that heavier use is pay-as-you-go returning
+a `cost_usd` per call.
+
+**Document.** `https://help.openalex.org/api/`, retrieved 2026-08-30.
+
+**Why it is unresolved.** The help page describes the tiers without stating the
+numbers. The exact free allowance, the allowance with a key, and the per-call
+price above it were not established, and an unofficial figure must not be
+recorded (§18, §19).
+
+**Needed.** Obtain the official figures from `help.openalex.org/access/pricing/`.
+Then set a spending ceiling and record who set it and where it is enforced.
+Separately, configure `OPENALEX_CONTACT_EMAIL` — the one condition in this whole
+expansion that a verifier can currently clear.
+
+**Vendor contact needed?** No.
+**Legal counsel appropriate?** No.
+
+---
+
+## H-24 — Do Wikimedia pageview COUNTS carry CC BY-SA? {#h-24}
+
+**Issue.** The Wikimedia Foundation's terms state the content licences do allow
+commercial use, and the Analytics API documentation labels its content
+CC BY-SA 4.0 without distinguishing article text from aggregate view counts.
+
+**Documents.** `https://foundation.wikimedia.org/wiki/Policy:Terms_of_Use`
+(effective 2023-06-07) and `https://doc.wikimedia.org/analytics-api/`, both
+retrieved 2026-08-30.
+
+**Why it is unresolved.** A chart of view counts is plausibly not a derivative of
+the licensed text, and plausibly is not a finding. The answer decides whether
+attribution is required on every surface derived from this source or only on
+those displaying article content. The review records attribution as required, as
+the stricter reading.
+
+**Needed.** A determination of whether the licence attaches to aggregate counts.
+Separately: whether Wikimedia Enterprise is **required** rather than merely
+offered at a commercial reuser's volume — the APIs overview presents it as the
+route for high-volume commercial reuse without stating a threshold at which it
+becomes mandatory.
+
+**Vendor contact needed?** For the Enterprise threshold, probably.
+**Legal counsel appropriate?** **Yes**, for the licence scope question.
+
+**Why it matters.** `wikimedia-pageviews` is the highest-priority collector in
+the portfolio and the portfolio's only real answer to desire-driven discovery.

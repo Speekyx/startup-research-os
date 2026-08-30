@@ -133,6 +133,12 @@ class TestSchemaRuntime:
             "registry.source_review_conditions",
             # 0007_condition_verification
             "registry.source_condition_verifications",
+            # 0010_source_signal_coverage. GLOBAL reference data like the rest
+            # of `registry`: no workspace_id, no RLS policy, SELECT-only at
+            # runtime. Listed here by hand on purpose -- a new table SHOULD
+            # fail this test until somebody states whether it is tenant data.
+            "registry.source_signal_coverage",
+            "registry.source_behavior_coverage",
         }
 
     def test_the_source_eligibility_view_exists(self, database) -> None:
@@ -667,11 +673,23 @@ class TestSourceRegistryApi:
         assert "value" not in json.dumps(body).lower().split("secret_references")[0][-40:]
 
     def test_an_unknown_rate_limit_is_served_as_null_not_zero(self, api_client) -> None:
-        """A zero would be read as a real limit by whatever consumes this."""
+        """A zero would be read as a real limit by whatever consumes this.
+
+        `requests` may legitimately be absent while the limit is known: Steam
+        documents a daily quota and no per-period rate. What must never appear
+        is a ZERO, in any dimension -- that is the value a consumer would read
+        as "no requests allowed" or, worse, divide by.
+        """
         for source in api_client.get("/api/v1/sources").json()["sources"]:
             detail = api_client.get(f"/api/v1/sources/{source['source_id']}").json()
             for profile in detail["access_profiles"]:
-                assert profile["rate_limit"] is None or profile["rate_limit"]["requests"]
+                limit = profile["rate_limit"]
+                if limit is None:
+                    continue
+                numbers = {k: v for k, v in limit.items() if isinstance(v, int | float)}
+                assert numbers, source["source_id"]
+                for name, value in numbers.items():
+                    assert value > 0, f"{source['source_id']}.{name}"
 
     def test_an_unknown_source_is_a_404(self, api_client) -> None:
         response = api_client.get("/api/v1/sources/not-a-source")

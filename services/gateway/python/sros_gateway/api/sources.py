@@ -181,7 +181,8 @@ def get_source(request: Request, source_id: str) -> dict[str, Any]:
                       requires_authentication, requires_api_key, requires_oauth,
                       requires_account, requires_developer_app, requires_approval,
                       secret_references, rate_limit_known, rate_limit_requests,
-                      rate_limit_period_seconds, rate_limit_origin, acquisition_cost, notes
+                      rate_limit_period_seconds, rate_limit_origin, acquisition_cost, notes,
+                      rate_limit_daily_quota
                  FROM registry.source_access_profiles
                 WHERE source_id = %s ORDER BY access_method, label""",
             (source_id,),
@@ -243,6 +244,12 @@ def get_source(request: Request, source_id: str) -> dict[str, Any]:
                 {
                     "requests": p[12],
                     "period_seconds": p[13],
+                    # A source may document a daily quota and no per-period
+                    # rate -- Steam is the first, at 100,000 calls per day.
+                    # Omitting it served `rate_limit_known` with every number
+                    # null, which reads as "no limit is documented" and is the
+                    # opposite of what the registry recorded.
+                    "daily_quota": p[17],
                     "origin": p[14],
                 }
                 if p[11]

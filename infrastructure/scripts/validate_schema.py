@@ -61,6 +61,12 @@ GLOBAL_TABLES = {
     # tenant-scoped, and a per-workspace verification would mean one review
     # condition held in one workspace and not in another.
     "registry.source_condition_verifications",
+    # Added in Mission 1.7 (ADR-017). Coverage describes a PLATFORM, not a
+    # tenant. A source that exposed entertainment signals in one workspace and
+    # not in another would make provenance incomparable across workspaces --
+    # the same argument that makes every table above global.
+    "registry.source_signal_coverage",
+    "registry.source_behavior_coverage",
 }
 
 # Tables governed by data-retention-policy-v1.md.

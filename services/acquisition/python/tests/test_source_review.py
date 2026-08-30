@@ -34,6 +34,25 @@ from .conftest import needs_postgres
 
 APPROVED_IN_1_3 = {"world-bank", "eurostat", "fred"}
 
+# The thirteen candidates Mission 1.0 registered. Later rounds add sources whose
+# first review is their own, so "the first review is Mission 1.0's" is a claim
+# about these thirteen and not about the catalog.
+REGISTERED_IN_1_0 = {
+    "reddit",
+    "hacker-news",
+    "stack-exchange",
+    "product-hunt",
+    "github",
+    "apple-app-store",
+    "google-play",
+    "youtube",
+    "tiktok",
+    "google-trends",
+    "world-bank",
+    "eurostat",
+    "fred",
+}
+
 
 # ============================================================ review versioning
 
@@ -44,7 +63,11 @@ class TestReviewVersioning:
         because overwriting the first would destroy the part a reader needs in
         order to trust the second."""
         for source in catalog:
-            assert len(source.review_history) >= 2, source.source_id
+            # >= 1, not >= 2. A candidate registered in this round has exactly
+            # one review and that is correct; requiring two asserted the shape
+            # of the Mission 1.3 catalog rather than the property. What must
+            # hold is that versions are ordered, distinct, and never rewritten.
+            assert source.review_history, source.source_id
             versions = [r.review_version for r in source.review_history]
             assert versions == sorted(versions), source.source_id
             assert len(set(versions)) == len(versions), source.source_id
@@ -57,15 +80,25 @@ class TestReviewVersioning:
             )
 
     def test_the_mission_1_0_review_is_recoverable_unchanged(self, catalog) -> None:
-        """§46. The earlier verdict survives verbatim, including the states this
-        mission moved away from."""
+        """§46. The earlier verdict survives verbatim, including the states a
+        later mission moved away from.
+
+        Asserted for the sources Mission 1.0 actually registered. Requiring
+        `reviewed_by == "mission-1.0"` of EVERY source was true of a catalog
+        that had only ever had one round; it became false the moment a new
+        candidate was registered by a later one, and it was never the property
+        being tested.
+        """
         by_id = {s.source_id: s for s in catalog}
         first = {s: by_id[s].review_history[0] for s in by_id}
         assert first["youtube"].approval_state is SourceApprovalState.REQUIRES_REVIEW
         assert first["github"].approval_state is SourceApprovalState.REQUIRES_REVIEW
         assert first["tiktok"].approval_state is SourceApprovalState.PROHIBITED
-        for review in first.values():
-            assert review.reviewed_by == "mission-1.0"
+        for source_id in REGISTERED_IN_1_0:
+            assert first[source_id].reviewed_by == "mission-1.0", source_id
+        # And every source's first review is version 1, whoever wrote it.
+        for source_id, review in first.items():
+            assert review.review_version == 1, source_id
 
     def test_a_duplicate_review_version_is_refused(self) -> None:
         """Two reviews sharing a version cannot be told apart, and the later one
@@ -116,10 +149,16 @@ class TestReviewVersioning:
 
 
 class TestConditionalEligibility:
-    def test_the_three_approving_reviews_declare_conditions(self, catalog) -> None:
+    def test_every_approving_review_declares_conditions(self, catalog) -> None:
+        """An approving review with no condition is an APPROVED in all but name.
+
+        The membership check that used to sit here pinned the approving set to
+        the three sources of Mission 1.3. That made the test fail when a review
+        legitimately approved a fourth, which is a tripwire for catalog growth
+        rather than an assertion about conditions.
+        """
         for source in catalog:
             if source.review.approval_state in APPROVING_STATES:
-                assert source.source_id in APPROVED_IN_1_3
                 assert source.review.required_conditions, source.source_id
 
     def test_an_approving_review_is_still_blocked_by_its_conditions(self, catalog) -> None:
@@ -285,8 +324,13 @@ class TestLoadedRegistry:
         superseded = conn.execute(
             "SELECT count(*) FROM registry.source_policy_reviews WHERE superseded_at IS NOT NULL"
         ).fetchone()[0]
+        total_reviews = sum(len(s.review_history) for s in catalog)
+        # One current review per source; every other review in the history is
+        # superseded and still present. Derived from the catalog rather than
+        # asserted as a number, so the next registered source does not break it.
         assert current == len(list(catalog))
-        assert superseded == len(list(catalog))
+        assert superseded == total_reviews - len(list(catalog))
+        assert current + superseded == total_reviews
 
     def test_a_catalog_load_can_never_satisfy_a_condition(self, conn, catalog) -> None:
         """§24, §30. A catalog load declares conditions; it can never assert
@@ -416,7 +460,7 @@ class TestLoadedRegistry:
         )
         assert normalized <= collected, f"normalized but never collected: {normalized - collected}"
 
-    def test_the_sql_view_reports_condition_counts(self, conn) -> None:
+    def test_the_sql_view_reports_condition_counts(self, conn, catalog) -> None:
         """The view's counts must match the condition table exactly.
 
         Compared against the table rather than asserted as a fixed number:
@@ -434,7 +478,13 @@ class TestLoadedRegistry:
                  FROM registry.source_eligibility e
                 WHERE e.condition_count > 0 ORDER BY e.source_id"""
         ).fetchall()
-        assert {r[0] for r in rows} == APPROVED_IN_1_3
+        # Compared against the CATALOG rather than a frozen set of source ids:
+        # which sources carry conditions is a fact the catalog owns, and pinning
+        # it here made this test fail whenever a later review approved a source
+        # -- a growth tripwire wearing the clothes of a count assertion.
+        expected = {s.source_id for s in catalog if s.review and s.review.required_conditions}
+        assert expected, "no source carries a condition; this test would prove nothing"
+        assert {r[0] for r in rows} == expected
         for source_id, total, unsatisfied, actual_total, actual_unsatisfied in rows:
             assert total == actual_total, source_id
             assert unsatisfied == actual_unsatisfied, source_id

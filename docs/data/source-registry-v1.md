@@ -1,11 +1,13 @@
 # Source Registry V1
 
 **Status:** Authoritative. Created in Mission 1.0, resolving **D-07**.
-**Version:** 1.1 (Mission 1.4 added §4 "How a condition gets cleared", "Two
-views of eligibility" and "Eligible, enabled, implemented"; §10 restated)
-**Date:** 2026-08-29
-**Governs:** `registry.sources` and the five tables around it, the collector
-eligibility gate, retention overrides, and every future collector.
+**Version:** 1.2 (Mission 1.7 added the two coverage tables to §3, the new
+families to §2, and restated §10. Mission 1.4 added §4 "How a condition gets
+cleared", "Two views of eligibility" and "Eligible, enabled, implemented")
+**Date:** 2026-08-30
+**Governs:** `registry.sources` and the tables around it, the collector
+eligibility gate, retention overrides, source coverage, and every future
+collector.
 **Related:** `data-principles.md` §13, `data-retention-policy-v1.md`,
 [ADR-013](../architecture/adr/ADR-013-source-registry-governance.md),
 [ADR-016](../architecture/adr/ADR-016-compliance-capabilities-and-acquisition-authorization.md),
@@ -153,9 +155,14 @@ it until now.)*
 ### `source_family` — a registry, not an enum
 
 Families (`community`, `forum`, `app_store`, `content_platform`,
-`product_discovery`, `search_trends`, `economic_data`, `developer`, `social`, …)
-are rows in `registry.registry_entries`. Adding one must never require a
-migration, per Ontology V2 §14.
+`product_discovery`, `search_trends`, `economic_data`, `developer`, `social`,
+`gaming`, `creator`, `knowledge`, `news`, `public_dataset`) are rows in
+`registry.registry_entries`. Adding one must never require a migration, per
+Ontology V2 §14 — the last three arrived in Mission 1.7 as an `INSERT`.
+
+**A family is a discovery attribute and never an eligibility one.** The gate
+does not read this column, and a `gaming` source is neither more nor less
+collectable for being one.
 
 ---
 
@@ -172,12 +179,21 @@ registry.sources ──┬── source_access_profiles      how it could be rea
                    │                                     └── source_condition_
                    │                                         verifications
                    ├── source_retention_policies   an override, if any
-                   └── source_capabilities         what data it can supply
+                   ├── source_capabilities         what data it can supply
+                   ├── source_signal_coverage      what could be LEARNED from it
+                   └── source_behavior_coverage    which behaviours it records
                    ▲
         registry.source_eligibility (VIEW)  the verdict, derived
 ```
 
-The last two were added by Missions 1.3 and 1.4. A condition is what an
+The condition tables were added by Missions 1.3 and 1.4; the two coverage tables
+by Mission 1.7 ([ADR-017](../architecture/adr/ADR-017-source-signal-coverage.md)).
+
+**Coverage is potential, never permission.** A source may cover `entertainment`
+and be `PROHIBITED`. The eligibility view does not read either coverage table,
+and it must never start: a field describing what a source could tell us, sitting
+next to a field describing whether we may ask, is exactly the single "is this
+source OK" column §0 exists to prevent. A condition is what an
 approving review depends on; a verification is the record of somebody having
 checked one, and is the only thing that can mark a condition satisfied.
 
@@ -439,7 +455,8 @@ permission.
 
 ## 10. Current state
 
-Thirteen candidate sources, and the count depends on where you ask:
+**Twenty-seven candidate sources** after Mission 1.7, across fourteen families.
+The eligible count still depends on where you ask:
 
 | Where | Eligible |
 |---|---|
@@ -453,18 +470,61 @@ than of the code: with no credential it is **design-eligible and not runnable**,
 and the canonical gate refuses it. Configuring the key satisfies that condition
 through the same verifier as every other, and nothing else changes.
 
+### Verdicts
+
+| State | Count |
+|---|---|
+| `APPROVED` | 0 |
+| `APPROVED_WITH_CONDITIONS` | 8 |
+| `RESTRICTED` | 6 |
+| `REQUIRES_REVIEW` | 10 |
+| `PROHIBITED` | 3 |
+
+**Eight sources are in an approving state and three are eligible.** The five
+Mission 1.7 approved — `gdelt`, `wikimedia-pageviews`, `openalex`,
+`npm-registry`, `pypi` — carry eleven conditions that no verifier can clear,
+because the capabilities that would check them are parameterised for a collector
+and none of the five has one. This is the state Mission 1.3 left the economic
+three in, and Mission 1.4 is the shape of the work that resolves it.
+
+### The bias the expansion made measurable
+
+Every consumer-facing family is registered and **none is approving**:
+
+| | Registered | Approving |
+|---|---|---|
+| `economic_data` | 3 | 3 |
+| `knowledge`, `news`, `developer` | 9 | 5 |
+| `social`, `community`, `gaming`, `creator`, `app_store` | 11 | **0** |
+
+That is a fact about platform terms rather than about the review, and it is the
+reason [`source-signal-coverage-v1.md`](source-signal-coverage-v1.md) exists:
+seven of sixteen signal families have no usable source at all, `problem` and
+`desire` among them.
+
+### What is still true
+
 See [`source-catalog-v1.md`](source-catalog-v1.md) for the full assessment
 table, [`source-review-guide.md`](source-review-guide.md) for how to conduct a
-review, and
+review,
 [`acquisition-authorization-v1.md`](acquisition-authorization-v1.md) for how a
-condition is cleared.
+condition is cleared, and
+[`source-portfolio-v1.md`](source-portfolio-v1.md) for what to build next.
 
 Several sources could not be assessed because their terms were not retrievable
 at review time; per §1 rule 2 those are `REQUIRES_REVIEW` with the exact
-outstanding documents named, rather than assumed.
+outstanding documents named, rather than assumed. Mission 1.7 added four more of
+those and confirmed that Mission 1.3's two are still unreachable.
 
-**No collector exists**, `collector_enabled` is false for all thirteen, and
-`acquisition.raw_records` is empty.
+**One collector exists** (`world-bank`, Mission 1.5) and `collector_enabled` is
+true for it alone. `acquisition.raw_records` holds six records and
+`normalized_records` six, unchanged by Mission 1.7.
+
+**Federated networks cannot currently be expressed.** Mastodon and Lemmy are one
+protocol with thousands of independently-governed instances, and this model is
+one source with one policy. They are deliberately unregistered rather than
+flattened into a verdict that would be false for most instances; the modelling
+decision is **H-13** in the human review queue.
 
 ## 11. Still open
 

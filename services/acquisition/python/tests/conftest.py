@@ -86,9 +86,24 @@ def registry_loaded(catalog) -> None:
     if not _postgres_available():
         return
     import psycopg
+    from sros_acquisition.cli import _load_local_env
     from sros_acquisition.compliance import load_compliance, verify_source
     from sros_acquisition.compliance.repositories import record_verifications
     from sros_acquisition.registry.repositories import load_catalog_into
+
+    # The SAME environment the CLI verifies against.
+    #
+    # `sros-source verify --apply` folds the git-ignored `infrastructure/compose/.env`
+    # into its process; this fixture did not, so on a developer machine with
+    # `FRED_API_KEY` configured the two disagreed: the CLI recorded FRED's
+    # credential condition SATISFIED and the next `pytest` run recorded it
+    # UNSATISFIED, silently taking FRED out of eligibility. Nothing surfaced it
+    # until Mission 1.7 extended the post-suite leak check to `registry.*`.
+    #
+    # Folding it here makes a verification mean the same thing whoever runs it.
+    # Absent in CI, where only `.env.example` exists, so this changes nothing
+    # there -- and an explicitly exported variable still wins over the file.
+    _load_local_env(REPO_ROOT)
 
     compliance = load_compliance(REPO_ROOT / "docs/data/source-compliance-v1.json")
     with psycopg.connect(DATABASE_URL) as connection:

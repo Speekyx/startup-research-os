@@ -217,6 +217,11 @@ jobs:
       # reason: two hand-maintained copies of one fact drift.
       - name: Source review results are in sync
         run: uv run python infrastructure/scripts/render_review_results.py --check
+      # The coverage matrix answers "do we have twenty economic sources and no
+      # entertainment sources". Generated from the same catalog for the same
+      # reason: an answer nobody regenerates is an answer about last month.
+      - name: Source signal coverage is in sync
+        run: uv run python infrastructure/scripts/render_signal_coverage.py --check
       # The sensitivity analysis is generated from the reference implementation,
       # so it cannot describe behaviour the code does not have. Same argument as
       # the catalog above, applied to a document that reports findings.
