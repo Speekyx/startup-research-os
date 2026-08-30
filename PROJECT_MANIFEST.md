@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.17
+Version: 1.18
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-08-30 (Sprint 1 / Mission 1.11.1)
+Last amended: 2026-08-30 (Sprint 1 / Mission 1.12)
 
 ---
 
@@ -13,6 +13,20 @@ Last amended: 2026-08-30 (Sprint 1 / Mission 1.11.1)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.18 — 2026-08-30 (Sprint 1 / Mission 1.12)
+
+Authorized by the Mission 1.12 brief §2 (four questions kept apart), §3
+(first-party sources only), §10 (populate the certification if H-32 closes), §21
+(documentation) and §24 (stop after the report).
+
+| Change | Section | Authority |
+|--------|---------|-----------|
+| **H-32 is CLOSED: the WEB-NGRAM stream is ordered** | Blocked work | Mission 1.12 §5, §6, [ADR-022](docs/architecture/adr/ADR-022-web-ngram-source-relative-order.md). Three first-party artifacts: GDELT's own BigQuery analysis over `gdelt-bq.gdeltv2.web_1grams` reads `SUBSTR(DATE,0,8)` as a calendar day and `ORDER BY DATE ASC` to chart a nine-month series; `MASTERFILELIST.TXT` is published in ascending label order at **15-minute** resolution across 7.6 years; `LASTUPDATE.TXT` names the maximal label as the newest publication. Mission 1.11 refused the same conclusion on an *inference about the mechanism* and was right to — what changed is the evidence, not the standard |
+| **H-29 is still OPEN, and now for a sharper reason** | Blocked work | Mission 1.12 §8. GDELT **does** document UTC — for **Web News NGrams 3.0** (`gdeltv3/webngrams/`, table `webngrams`), whose `date` means "the JSON timestamp when the article was seen". Ours (`gdeltv3/web/ngrams/`, table `web_1grams`) is the **15-minute bucket the counts aggregate**: different path, table, format, cadence and meaning. A timing observation against the CDN's `last-modified` header was available and **refused** — it measures a storage object against this machine's clock, from one sample |
+| **A certification is scoped to a publication STREAM, never a label shape** | Engineering Principles | Mission 1.12 §10, §11. `ORDER_ESTABLISHED_WITHOUT_TIMEZONE` holds one `TemporalOrderCertification` naming its source, its **resources exactly**, its label scheme, its review version, its basis and its scope; the constructor refuses one with no basis or no resources. `ObservationInput` gained `resource_id` because `source_id` alone could not express the scope — and the same directory publishes an unreviewed `chargram` file that a prefix match on `web-ngrams/` would have covered silently |
+| **H-31 answered, and refined into the two questions it was** | Blocked work | Mission 1.12 §9. **Semantic coverage** is 2019-01-01, documented since the announcement; **current directory extent** begins at `20190101000000`, read bounded from `MASTERFILELIST.TXT`. The second is an observation and not a retention guarantee: GDELT commits to none, so no backfill window may still be assumed |
+| **Nothing was derived, and nothing moved** | Forbidden During Foundation | Mission 1.12 §15, §16, §17, §24. No extractor was written, no production Signal created, and all five stored signal identities were **recomputed** from their stored lineage and reproduce byte-for-byte. The two GDELT normalized records keep `timezone_state = NOT_ESTABLISHED` and `observed_at = NULL`; the one real lexical signal stays `SAME_PERIOD_LABEL` / `NOT_APPLICABLE`. **Temporally permitted is not extractor specified** |
 
 ## 1.17 — 2026-08-30 (Sprint 1 / Mission 1.11.1)
 
@@ -515,10 +529,16 @@ tokenize nothing, embed nothing, classify nothing and cluster nothing. They
 subtract exact decimals and compare exact labels. `validate_signals.py` asserts
 each of those mechanically by walking every import.
 
-**A temporal GDELT extractor stays forbidden** while H-32 is open — frequency
-change, growth, decline, moving averages and rolling windows all — and
-cross-source temporal alignment stays forbidden while H-29 is. Classification,
-embedding and clustering stay blocked by D-12.
+**A temporal GDELT extractor became temporally permitted in 1.12 and is still
+not written.** H-32 closed, so frequency change, growth, decline, moving
+averages and rolling windows over WEB-NGRAM buckets are no longer blocked by an
+unestablished ordering — but none of them has an extractor, a window size, a gap
+policy or a rule for a missing bucket. **Temporally permitted is not extractor
+specified.**
+
+**Cross-source temporal alignment stays forbidden** while H-29 is open, along
+with `observed_at`, `TIMESTAMPTZ` conversion and any wall-clock "as of" claim.
+Classification, embedding and clustering stay blocked by D-12.
 
 **Everything else on the list is unchanged.** NLP pipelines are blocked by D-12,
 scoring algorithms by the absence of a `CALIBRATED` profile, and authentication

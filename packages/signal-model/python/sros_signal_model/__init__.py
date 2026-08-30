@@ -21,6 +21,8 @@ from .facts import (
     NUMERIC_OBSERVATION,
     ORDER_ESTABLISHED_WITHOUT_TIMEZONE,
     FactRule,
+    TemporalOrderCertification,
+    order_certification,
     withheld_facts,
 )
 from .model import (
@@ -78,11 +80,13 @@ __all__ = [
     "SignalScope",
     "SignalTypeSpec",
     "SignalWindow",
+    "TemporalOrderCertification",
     "assess_inputs",
     "build_signal",
     "canonical_decimal_text",
     "canonical_fingerprint",
     "canonical_json",
+    "order_certification",
     "record_kind_for",
     "withheld_facts",
 ]

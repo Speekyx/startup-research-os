@@ -108,6 +108,13 @@ rather than a gap.
 
 ## Decision 3 — order and instant are different facts, and neither is granted to GDELT
 
+> **Amended by [ADR-022](ADR-022-web-ngram-source-relative-order.md) (Mission
+> 1.12).** H-32 was closed on first-party GDELT evidence and
+> `SOURCE_RELATIVE_ORDER` is now granted to the WEB-NGRAM 1gram/2gram stream.
+> **H-29 is unchanged and `COMPARABLE_INSTANT` is still withheld.** The text
+> below stands as written: it was right on the evidence it had, and what the
+> next paragraph asked for is exactly what was retrieved.
+
 `SignalTemporalBasis` has four values — `NONE`, `SAME_PERIOD_LABEL`,
 `ORDERED_PERIODS`, `COMPARABLE_INSTANTS` — and the required facts behind the
 last two are separate: `SOURCE_RELATIVE_ORDER` and `COMPARABLE_INSTANT`.

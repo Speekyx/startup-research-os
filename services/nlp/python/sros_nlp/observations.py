@@ -138,6 +138,18 @@ class NormalizedObservation:
         return self.text("observation", "unit_state") or "UNKNOWN"
 
     @property
+    def resource_id(self) -> str | None:
+        """WHICH published resource this observation came from.
+
+        Read from `series.resource_id`, the canonical field the normalizers
+        already write. It is what scopes a temporal order certification to one
+        publication stream (Mission 1.12): `source_id` alone would let a future
+        GDELT dataset inherit the WEB-NGRAM ordering finding, which
+        `signal-temporal-semantics-v1.md` forbids by name.
+        """
+        return self.text("series", "resource_id")
+
+    @property
     def term_text(self) -> str | None:
         """The source term, verbatim. Never trimmed, never case-folded."""
         return self.text("term", "text")
@@ -167,4 +179,5 @@ class NormalizedObservation:
             period_label=self.period_label,
             quality=self.quality,
             quality_reasons=self.quality_reasons,
+            resource_id=self.resource_id,
         )

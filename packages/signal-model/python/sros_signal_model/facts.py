@@ -33,6 +33,8 @@ __all__ = [
     "NUMERIC_OBSERVATION",
     "ORDER_ESTABLISHED_WITHOUT_TIMEZONE",
     "FactRule",
+    "TemporalOrderCertification",
+    "order_certification",
     "withheld_facts",
 ]
 
@@ -104,19 +106,112 @@ FACT_RULES: Mapping[Fact, FactRule] = MappingProxyType(
     }
 )
 
-# Sources whose stream order is established WITHOUT a timezone being established.
+
+@dataclass(frozen=True)
+class TemporalOrderCertification:
+    """A reviewed finding that one publication stream's labels are ordered.
+
+    Mission 1.12, ADR-022. It certifies **B without C**: two labels from this
+    stream can be placed in chronological order, and neither can be placed on a
+    timeline shared with anything else.
+
+    Every field is part of the scope rather than decoration:
+
+        source_id      whose stream
+        resource_ids   WHICH resources, named exactly. Never a prefix: the
+                       WEB-NGRAM directory also publishes a `chargram` file that
+                       no review has assessed, and a prefix match on
+                       `web-ngrams/` would have silently covered it
+        label_scheme   the shape being certified, so a source publishing two
+                       label schemes cannot have one inherit the other's finding
+        review_version which review established it
+        basis          the retrieved evidence. Mandatory, for the reason a
+                       geography map entry records one: a certification nobody
+                       can re-check is a guess with a citation field
+        scope          what it does NOT grant, in words, next to what it does
+    """
+
+    source_id: str
+    resource_ids: frozenset[str]
+    label_scheme: str
+    review_version: int
+    basis: str
+    scope: str
+
+    def __post_init__(self) -> None:
+        if not self.resource_ids:
+            raise ValueError(
+                "a certification names the resources it covers. An entry covering "
+                "nothing grants nothing, and one covering everything is not a finding"
+            )
+        if not self.basis.strip():
+            raise ValueError(
+                "a temporal order certification records the evidence that established "
+                "it. Ordering asserted with no basis is the inference this mechanism "
+                "exists to replace"
+            )
+
+    def covers(self, source_id: str, resource_id: str | None) -> bool:
+        """Whether this certification applies to one observation.
+
+        A record with no resource id is NOT covered. Ordering is a property of a
+        publication stream, and an observation that cannot say which stream it
+        came from cannot claim one stream's finding.
+        """
+        return source_id == self.source_id and resource_id in self.resource_ids
+
+
+# Streams whose order is established WITHOUT a timezone being established.
 #
-# EMPTY, and empty is the finding. `signal-temporal-semantics-v1.md` §3.3 sets
-# out the argument for granting it to GDELT -- a fixed-width stamp orders
-# lexicographically inside any fixed offset, and the stamp is the published
-# filename, which cannot repeat inside a directory -- and why that argument is an
-# inference about the publisher's mechanism rather than a retrieved statement
-# about the data. Recorded as H-32.
+# Mission 1.11 left this EMPTY and was right to: the argument available then --
+# a fixed-width stamp sorts lexicographically and the stamp is a filename that
+# cannot repeat inside a directory -- was an inference about the publisher's
+# mechanism rather than a retrieved statement about the data.
 #
-# An entry is a REVIEWED FINDING and carries its basis, exactly as an entry in
-# the geography map does. Adding one on the strength of it being obvious is the
-# move `geography-mapping-v1.json` exists to prevent.
-ORDER_ESTABLISHED_WITHOUT_TIMEZONE: Mapping[str, str] = MappingProxyType({})
+# Mission 1.12 retrieved the statements. GDELT's own BigQuery analysis over
+# `gdelt-bq.gdeltv2.web_1grams` uses DATE as a chronological axis; its own
+# MASTERFILELIST is sequenced by the label at 15-minute resolution across 7.6
+# years; and its own LASTUPDATE names the maximal label as the newest
+# publication. `gdelt-web-ngram-temporal-evidence-v1.md` §2 sets it out.
+#
+# An entry remains a REVIEWED FINDING carrying its basis, exactly as an entry in
+# the geography map does. Adding one on the strength of it being obvious is
+# still the move `geography-mapping-v1.json` exists to prevent.
+ORDER_ESTABLISHED_WITHOUT_TIMEZONE: tuple[TemporalOrderCertification, ...] = (
+    TemporalOrderCertification(
+        source_id="gdelt",
+        resource_ids=frozenset({"web-ngrams/1gram", "web-ngrams/2gram"}),
+        label_scheme="gdelt-web-ngram-bucket",
+        review_version=3,
+        basis=(
+            "GDELT's own published BigQuery analysis over gdelt-bq.gdeltv2.web_1grams "
+            "reads SUBSTR(DATE,0,8) as a calendar day and ORDER BY DATE ASC to chart a "
+            "nine-month series; MASTERFILELIST.TXT is published in ascending label "
+            "order at 15-minute resolution from 20190101000000 to the current bucket; "
+            "LASTUPDATE.TXT names the maximal label as the newest publication. "
+            "Retrieved 2026-08-30, gdelt-web-ngram-temporal-evidence-v1.md"
+        ),
+        scope=(
+            "Grants SOURCE_RELATIVE_ORDER within this stream only. Grants NO timezone, "
+            "NO COMPARABLE_INSTANT, NO observed_at and NO comparison with any other "
+            "source. H-29 remains open"
+        ),
+    ),
+)
+
+
+def order_certification(
+    source_id: str, resource_id: str | None
+) -> TemporalOrderCertification | None:
+    """The certification covering this observation, or `None`.
+
+    Fails closed: an unreviewed source, an unreviewed resource, or an
+    observation that cannot say which resource it came from gets nothing.
+    """
+    for certification in ORDER_ESTABLISHED_WITHOUT_TIMEZONE:
+        if certification.covers(source_id, resource_id):
+            return certification
+    return None
 
 
 def withheld_facts(
@@ -125,14 +220,19 @@ def withheld_facts(
     record_kind_id: str,
     quality_reasons: frozenset[Reason],
     source_id: str,
+    resource_id: str | None = None,
 ) -> frozenset[Fact]:
     """The required facts this record cannot supply.
 
     Two independent ways to withhold a fact, and they answer different
     questions: the record KIND says whether the field exists at all, and the
     quality REASONS say whether the value in it was established.
+
+    `resource_id` defaults to `None` and that default is a REFUSAL, not a
+    convenience: a caller that does not say which resource an observation came
+    from gets no ordering certification.
     """
-    order_certified = source_id in ORDER_ESTABLISHED_WITHOUT_TIMEZONE
+    order_certified = order_certification(source_id, resource_id) is not None
     withheld: set[Fact] = set()
     for fact in required:
         rule = FACT_RULES[fact]

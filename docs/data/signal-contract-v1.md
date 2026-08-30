@@ -340,11 +340,20 @@ which `NormalizationQualityReason` values withhold it.
 | `CANONICAL_LANGUAGE` | `lexical_frequency_observation` | `LANGUAGE_NOT_MAPPED` |
 | `CLASSIFIED_GEOGRAPHY` | `numeric_observation` | `GEOGRAPHY_NOT_CLASSIFIED`, `GEOGRAPHY_MISSING` |
 
-† **unless the source appears in the reviewed order certification.** That map is
-`ORDER_ESTABLISHED_WITHOUT_TIMEZONE` and it is **empty**. An entry is a reviewed
-finding and requires a stated basis, exactly as a geography map entry does; it
-is the mechanism by which H-32 would be closed for GDELT without H-29 being
-answered. See [`signal-temporal-semantics-v1.md`](signal-temporal-semantics-v1.md) §3.4.
+† **unless the observation's STREAM appears in the reviewed order
+certification.** `ORDER_ESTABLISHED_WITHOUT_TIMEZONE` holds one entry as of
+Mission 1.12: `gdelt` for `web-ngrams/1gram` and `web-ngrams/2gram`, on
+first-party evidence ([ADR-022](../architecture/adr/ADR-022-web-ngram-source-relative-order.md)).
+It grants `SOURCE_RELATIVE_ORDER` and **nothing else** -- no timezone, no
+`COMPARABLE_INSTANT`, no `observed_at`.
+
+A certification names its `source_id`, its `resource_ids` **exactly** (never a
+prefix), its label scheme, its review version, its basis and its scope, and the
+constructor refuses one with no basis or no resources. It is scoped to a
+publication STREAM rather than a source, which is why `ObservationInput` carries
+`resource_id`: `source_id` alone would let a different GDELT dataset inherit the
+finding. An observation that cannot name its resource is not covered.
+See [`signal-temporal-semantics-v1.md`](signal-temporal-semantics-v1.md) §3.4.
 
 A fact whose `withheld_by` set is empty is not decorative: it is checked against
 the **record kind**, so a derivation requiring `LEXICAL_TERM` over a numeric

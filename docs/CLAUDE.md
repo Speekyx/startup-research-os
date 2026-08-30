@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.18
-Last amended: 2026-08-30 (Sprint 1 / Mission 1.11.1)
+Version: 1.19
+Last amended: 2026-08-30 (Sprint 1 / Mission 1.12)
 
 ## Boot Sequence
 
@@ -42,6 +42,7 @@ Ontology V2 keeps V1.1's numbering for §1–§10, so an existing reference to
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.19 | 2026-08-30 | **H-32 closed** on first-party GDELT evidence: the WEB-NGRAM stream is ordered. **H-29 stays open** — GDELT documents UTC for a *different* dataset whose date means something else. H-31 answered and refined. No extractor, no new signal (ADR-022) |
 | 1.18 | 2026-08-30 | First two deterministic extractors, and **five real Signals**. `PARTIAL` proved usable in production: both GDELT inputs contributed because neither missing fact was one the derivation needed. A refused derivation gets a run record, never a Signal (ADR-021) |
 | 1.17 | 2026-08-30 | Signal defined as a DERIVATION over two or more observations, never a labelled one. `nlp.signals` reshaped; the family stops classifying demand; order and instant separated, and H-32 opened. Model and contract only -- no extractor, 0 signals |
 | 1.16 | 2026-08-30 | Second normalizer recorded: GDELT WEB-NGRAM, deterministic and offline, with two real canonical records. Every one is PARTIAL because H-29 and H-30 stay open and are stated per record |
@@ -509,6 +510,14 @@ observations, `lexical-frequency-contrast@1.0.0` one from the two GDELT ones.
   `PERIOD_TIMEZONE_NOT_ESTABLISHED` and `LANGUAGE_NOT_MAPPED`, neither is a fact
   the contrast requires, and both contributed with no withheld facts. No quality
   string is branched on anywhere in either extractor.
+- **Order and instant stay separate, and one closed without the other**
+  (Mission 1.12, ADR-022). `ORDER_ESTABLISHED_WITHOUT_TIMEZONE` holds one
+  `TemporalOrderCertification`: `gdelt`, resources `web-ngrams/1gram` and
+  `web-ngrams/2gram`, with its basis and its scope recorded. It is scoped to a
+  publication **stream**, which is why `ObservationInput` carries `resource_id`
+  — `source_id` alone would let another GDELT dataset inherit the finding, and
+  the same directory publishes an unreviewed `chargram` file a prefix match
+  would have covered. An observation that cannot name its resource is refused.
 - **A refused derivation gets a run record, never a Signal** (ADR-021).
   `nlp.signal_derivation_runs` holds one row per **execution**, written in the
   same transaction as the signals: N considered, M derived, K refused and why. A
@@ -592,12 +601,19 @@ normalization job may be dispatched for a source with no normalizer. The
 orchestrator reports the second under `NO-NORMALIZER-IMPLEMENTED`, distinct from
 the two acquisition gates because different work clears each.
 
-**No GDELT temporal signal may be derived while H-32 is open.** Frequency
-change, growth, decline, moving averages and rolling windows over WEB-NGRAM
-buckets are all blocked, and so is any direction on a GDELT signal. The lexical
-extractor's grouping key carries the exact bucket label, so two buckets never
-meet; an extractor that worked around that would be granting itself a fact no
-source established. Cross-source temporal alignment stays blocked by H-29.
+**Sequential WEB-NGRAM derivation is temporally permitted since Mission 1.12
+and no extractor implements it.** H-32 closed on GDELT's own evidence, so
+`SOURCE_RELATIVE_ORDER` is granted to `gdelt` for `web-ngrams/1gram` and
+`web-ngrams/2gram` — named exactly, never by prefix, never by label shape.
+**Temporally permitted is not extractor specified**: a window size, a gap policy
+and what a missing bucket means are all still undecided, and until they are, no
+frequency-change extractor may be written.
+
+**Cross-source temporal alignment stays blocked by H-29**, along with any
+`observed_at`, any `TIMESTAMPTZ` conversion and any "as of" wall-clock claim.
+GDELT documents UTC for **Web News NGrams 3.0**, a different dataset whose `date`
+is when an article was seen rather than a 15-minute aggregation bucket; that
+sentence establishes nothing about ours.
 
 **No collector may be implemented for a source that is not collector-eligible.**
 D-07 is resolved and the registry exists. Two sources pass the gate; one has a

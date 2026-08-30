@@ -1,8 +1,8 @@
 # Signal Temporal Semantics V1
 
-**Status:** Authoritative for the Signal layer. Defines what a derivation may
-assert about time, and what it may not while **H-29** and the new **H-32** are
-open.
+**Status:** Authoritative for the Signal layer. **H-32 was CLOSED in Mission
+1.12** on first-party GDELT evidence; **H-29 remains open.** §3.3 and §4 are
+amended below and the reasoning that led to opening H-32 is kept as written.
 **Date:** 2026-08-30 (Sprint 1 / Mission 1.11)
 **Related:** [`signal-contract-v1.md`](signal-contract-v1.md),
 [`gdelt-web-ngram-normalizer-v1.md`](gdelt-web-ngram-normalizer-v1.md),
@@ -112,8 +112,31 @@ same class of reasoning `geography-mapping-v1.json` exists to replace: a code's
 shape and a label's plausibility are not a basis, and the first case that
 differs is silently wrong.
 
-**Decision.** `SOURCE_RELATIVE_ORDER` is **defined** in the model and **not
-granted** to GDELT. Recorded as **H-32**.
+**Decision, as taken in Mission 1.11.** `SOURCE_RELATIVE_ORDER` is **defined**
+in the model and **not granted** to GDELT. Recorded as **H-32**.
+
+> ### Amended: H-32 CLOSED (Mission 1.12)
+>
+> The reasoning above is left exactly as written, because it was right on the
+> evidence it had. What changed is the evidence, not the standard.
+>
+> Mission 1.12 retrieved three first-party artifacts
+> ([`gdelt-web-ngram-temporal-evidence-v1.md`](gdelt-web-ngram-temporal-evidence-v1.md)
+> §2, [ADR-022](../architecture/adr/ADR-022-web-ngram-source-relative-order.md)):
+>
+> - GDELT's own published BigQuery analysis over `gdelt-bq.gdeltv2.web_1grams`
+>   reads `SUBSTR(DATE,0,8)` as a calendar day and `ORDER BY DATE ASC` to chart a
+>   nine-month series -- **the publisher ordering this column, on this table**;
+> - `MASTERFILELIST.TXT` is published in ascending label order at **15-minute
+>   resolution**, from `20190101000000` to the current bucket;
+> - `LASTUPDATE.TXT` names the **maximal** label as the newest publication.
+>
+> The mechanism is no longer inferred. `SOURCE_RELATIVE_ORDER` is granted to
+> `gdelt` for `web-ngrams/1gram` and `web-ngrams/2gram` only, by a named entry in
+> `ORDER_ESTABLISHED_WITHOUT_TIMEZONE` carrying its basis and its scope.
+>
+> **`COMPARABLE_INSTANT` is not granted, and H-29 is not closed.** §3.2 stands
+> unchanged.
 
 ### 3.4 Why H-32 is separate from H-29, and why that matters
 
@@ -141,15 +164,20 @@ why the model carries two required facts instead of one timezone flag.
 | Read one record's frequency | — | Not a Signal at all (contract §3) |
 | Contrast two terms' frequencies within one bucket, one language label | `SAME_PERIOD_LABEL` | ✅ |
 | Count the distinct buckets a term appears in | `NONE` — a set cardinality, no order | ✅ |
-| Compare the same term across two buckets | `ORDERED_PERIODS` | ⛔ **H-32** |
-| Frequency change, growth rate, moving average, momentum, trend | `ORDERED_PERIODS` | ⛔ **H-32** |
-| Rolling or baseline window over buckets | `ORDERED_PERIODS` | ⛔ **H-32** |
+| Compare the same term across two buckets | `ORDERED_PERIODS` | ✅ **since Mission 1.12** |
+| Frequency change, growth rate, moving average, momentum, trend | `ORDERED_PERIODS` | ✅ **temporally permitted**; no extractor specified |
+| Rolling or baseline window over buckets | `ORDERED_PERIODS` | ✅ **temporally permitted**; no extractor specified |
 | Align a GDELT bucket with a World Bank year, or with any other source | `COMPARABLE_INSTANTS` | ⛔ **H-29** |
 | Compare against a differently zoned source | `COMPARABLE_INSTANTS` | ⛔ **H-29** |
 | Anything reported "as of" a wall-clock time | `COMPARABLE_INSTANTS` | ⛔ **H-29** |
 
-**Closing H-32 alone unblocks six of these. Closing H-29 alone unblocks all
-nine**, since a stated zone establishes order too.
+**H-32 closed and it unblocked exactly those six** (Mission 1.12). The three
+still marked ⛔ need H-29, and a stated zone would establish order too -- which
+is now moot for this stream, since order is established without one.
+
+**Temporally permitted is not extractor specified.** Ordering existing does not
+decide a window size, a gap policy or what a missing bucket means. Those are an
+extractor's parameters and none of them is settled here.
 
 ### 4.2 World Bank Indicators
 

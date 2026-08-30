@@ -1107,3 +1107,48 @@ Not because the code is expected to be wrong, but because:
 
 The same argument the tenancy composite keys make: a guarantee enforced where
 the data lands does not depend on every future caller remembering it.
+
+---
+
+## 26. Rewrite a superseded assertion; never weaken it (restated in Mission 1.12)
+
+Mission 1.10.1 set the convention and Mission 1.12 is the first time an
+assertion was superseded because the WORLD changed rather than because the code
+did. Two tests said, correctly, that GDELT had no established ordering:
+
+```python
+def test_h32_blocks_source_relative_order_for_gdelt(self):
+    ...  assertEqual(withheld, {SOURCE_RELATIVE_ORDER})
+
+def test_no_source_is_order_certified(self):
+    ...  assertEqual(dict(ORDER_ESTABLISHED_WITHOUT_TIMEZONE), {})
+```
+
+H-32 closed on first-party evidence, and both became false.
+
+### What not to do
+
+Delete them, or loosen them to `assertIn`/`assertTrue` so they keep passing.
+Either leaves the suite quieter than it was: the first loses the record that the
+question existed, and the second turns a fact into a shape check.
+
+### What was done
+
+Each was **rewritten in place**, keeping the test's position in the file, with a
+docstring naming the old truth and what moved it:
+
+```python
+def test_h32_grants_source_relative_order_to_the_reviewed_stream(self):
+    """Until Mission 1.12 this asserted the opposite, and correctly. …"""
+```
+
+and the constraints the old assertion was really protecting were promoted into
+tests of their own — that a certification states its basis, names its resources
+rather than matching a prefix, grants ordering only, and is refused when it
+covers everything or cites nothing.
+
+**The suite got larger, not smaller.** One assertion that said "nothing is
+certified" became six that say what a certification may and may not be. That is
+the test for whether a superseded assertion was handled properly: the
+replacement should be harder to satisfy than the original, not easier.
+

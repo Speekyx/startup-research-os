@@ -35,6 +35,7 @@
 | `signal-contract-v1.md` | What a Signal IS: a relation between two or more observations, and everything it may not assert |
 | `signal-taxonomy-v1.md` | Why the Signal family is not the demand family, and the two types real data justifies |
 | `signal-temporal-semantics-v1.md` | ORDER and GLOBAL INSTANT kept apart; which derivations H-29 and H-32 block |
+| `gdelt-web-ngram-temporal-evidence-v1.md` | The first-party evidence that closed H-32, left H-29 open and refined H-31 |
 | `signal-derivation-runtime-v1.md` | How extraction runs, groups and persists, and where a REFUSED derivation goes |
 | `numeric-period-change-extractor-v1.md` | The first extractor: adjacent-period change in one measured series |
 | `lexical-frequency-contrast-extractor-v1.md` | The second: two terms, one bucket, one language label, and no ordering |

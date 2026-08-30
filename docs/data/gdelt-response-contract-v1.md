@@ -268,7 +268,7 @@ The `2gram` file is identical in shape, with a two-word `NGRAM`:
 
 | Column | Meaning |
 |---|---|
-| `DATE` | the 15-minute bucket, `YYYYMMDDHHMMSS`, UTC |
+| `DATE` | the 15-minute bucket, `YYYYMMDDHHMMSS`. **No timezone** — see §10.1, and `gdelt-web-ngram-temporal-evidence-v1.md` §3 |
 | `LANG` | language name, uppercased. **Not geography** |
 | `NGRAM` | one word (`1gram`) or a two-word phrase (`2gram`) |
 | `COUNT` | times mentioned in articles of that language in that bucket |
@@ -369,9 +369,29 @@ established** and is now an open question on review 3. The collector must
 preserve the source label verbatim, which makes answering it later a
 re-derivation rather than a re-collection.
 
+> **Mission 1.12 re-checked and confirms this.** The words UTC, GMT, timezone
+> and "time zone" appear nowhere on the announcement, and the data page states
+> none for any dataset. GDELT **does** document UTC for **Web News NGrams 3.0**
+> (`gdeltv3/webngrams/`), whose `date` means "the JSON timestamp when the article
+> was seen" rather than a 15-minute aggregation bucket. Different path, table,
+> format, cadence and meaning: **H-29 stays open**
+> ([`gdelt-web-ngram-temporal-evidence-v1.md`](gdelt-web-ngram-temporal-evidence-v1.md) §3).
+>
+> The §9.5 table above has been corrected; it still said UTC.
+
 **No directory retention.** Coverage runs from 2019 to present; how far back the
 publication directory itself reaches is unstated, so no historical backfill
 window may be assumed.
+
+> **Mission 1.12 answered the extent and not the retention.** A bounded read of
+> `MASTERFILELIST.TXT` shows the current index beginning at `20190101000000` --
+> the directory reaches back to the dataset's first bucket **today**. GDELT
+> publishes no retention commitment, so that is an observation and not a
+> guarantee, and no backfill window may still be assumed (H-31, refined).
+>
+> The same index lists a **third** file per bucket, `chargram`, which the
+> announcement does not document and no review has assessed. It is not
+> authorised and not covered by the ordering certification.
 
 ### 10.2 A correction to §9.2
 

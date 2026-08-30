@@ -316,6 +316,22 @@ One new CI step, in the existing normalization-boundary job.
 | **A run's arithmetic adds up** | `CHECK (records_contributed + records_excluded <= records_considered)` | It caught a real defect: contributors were summed per draft, and one record legitimately contributes to several signals |
 | **`signal.` does not route to the `nlp` queue** | `TASK_ROUTES`, asserted by name | The `nlp` queue is sized for LLM-backed work; deterministic subtraction would compete for slots meant for something else |
 
+### Temporal order certification (Mission 1.12)
+
+No new CI job. The gates are in the constructor and in the certification's own
+shape, because this is the kind of finding that decays quietly.
+
+| Gate | Mechanism | Guards |
+|------|-----------|--------|
+| **A certification states its basis** | `TemporalOrderCertification.__post_init__` refuses a blank `basis` | A certification nobody can re-check is a guess with a citation field |
+| **A certification covers something** | Refuses an empty `resource_ids` | An entry covering nothing grants nothing; one covering everything is not a finding |
+| **Resources are NAMED, never prefixed** | `covers()` tests set membership | The WEB-NGRAM directory publishes an unreviewed `chargram` file per bucket, and a prefix match on `web-ngrams/` would have covered it silently |
+| **An observation that cannot name its stream is refused** | `resource_id` defaults to `None` and `covers(None)` is false | Ordering is a property of a publication stream. A default that granted it would be a permission by omission |
+| **Ordering never leaks into an instant** | The certification overrides `PERIOD_TIMEZONE_NOT_ESTABLISHED` for `SOURCE_RELATIVE_ORDER` only | H-29. The same record, the same reasons, and the two facts get opposite answers |
+| **No certification can name a timezone** | Asserted over the serialised certification: `utc`, `gmt`, `+00:00`, `offset` appear nowhere, and no `timezone` attribute exists | Closing H-32 must not become closing H-29 |
+| **A period that could not be represented has no order either** | The override matches `PERIOD_TIMEZONE_NOT_ESTABLISHED` **exactly**, not as a subset | `PERIOD_NOT_SUPPORTED` still withholds ordering |
+| **Existing signal identities are unmoved** | Recomputed from stored lineage; `resource_id` is lineage and enters no fingerprint | Adding a field to `ObservationInput` must not silently reissue every signal ever derived |
+
 ---
 
 ## 2. Turborepo task graph
