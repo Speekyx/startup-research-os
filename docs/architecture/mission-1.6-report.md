@@ -551,16 +551,49 @@ all still `VALID`, values exact, attribution present, retention correct, content
 hashes unchanged. A session deletion is not supposed to destroy the data
 collected under it.
 
-Two things follow:
+Two things followed:
 
-- **The lineage claim above should be read as "at verification time".** The
-  session link is restorable only by re-collecting under a new session, which
-  would be another live request to fix damage that recurs on every suite run
-  until `test_rls.py` is scoped to a throwaway workspace. Left as found.
+- **The lineage claim above should be read as "at verification time".**
 - **This is the same class of defect spun off in §20**, one level more serious.
   That entry was about a suite leaving rows behind; this is a suite *destroying*
-  rows in the shared seeded workspace. A sibling branch is already working in
-  `test_rls.py`, and it has been told.
+  rows in the shared seeded workspace.
+
+### Second amendment: the link was repaired, at a price
+
+The paragraph above ended "left as found". That is no longer true, and what
+replaced it is worth recording precisely, because the repair was not free and
+one of its consequences was invisible until someone looked for it.
+
+`test_rls.py` was fixed on a sibling branch and merged. The session link was
+then repaired the only honest way available: **the six raw records were deleted
+and collected again** under a new session. An `UPDATE` was considered and
+rejected — the original session id was unrecoverable (`research_sessions` is
+`ON DELETE CASCADE` from its project, the provenance JSONB carries no session
+reference, and `correlation_id` is a job label), so writing one in would have
+fabricated a provenance link.
+
+What that cost, stated plainly:
+
+| | |
+|---|---|
+| original `collected_at` | lost — the records now read 01:21:20, not the first acquisition |
+| original record ids | lost — new `uuid5` inputs, so new ids |
+| six normalized records | **destroyed by cascade** |
+| one further live World Bank request | spent |
+
+The cascade is the part nobody predicted. `normalized_records.raw_record_id` is
+`ON DELETE CASCADE`, so deleting the raw records took every normalized record
+with them. The database sat at 6 raw / 0 normalized — this report describing six
+canonical observations, and none of them present.
+
+**Normalization was re-run and the outcome is whole**: 6 input, 6 normalized, 6
+valid, 6 new, 0 failures. Both layers now carry a genuine session link, from a
+real collection under a real session rather than from an `UPDATE`.
+
+The general lesson, which is the one worth carrying past this incident:
+**delete-and-recollect at the raw layer is a two-part operation.** The cascade
+means the second part is not optional, and doing only the first leaves the
+database contradicting whatever the normalized layer had recorded.
 
 ---
 
@@ -612,7 +645,41 @@ the database is an assertion about everything that ever touched it.**
 `test_rls.py::test_a_delete_cannot_reach_another_workspace` issues an unscoped
 `DELETE FROM research.research_projects` inside workspace A. The test is right
 about RLS; its problem is the workspace it does it in. It destroyed this
-mission's research session. See the amendment to §19.
+mission's research session. See the amendments to §19.
+
+**A guard that enumerates what must survive only covers the tables you already
+thought of.** Found while clearing accumulated test litter from the development
+database after this mission merged, and it applies squarely to the verification
+this report describes.
+
+A `DELETE` of 156 test opportunities was wrapped in a transaction whose guard
+asserted `opportunities = 0`, `raw = 6`, `normalized = 6`, `project = 1` — it
+would refuse to commit if it had reached real data. It committed. But
+`research.claims.opportunity_id` is `ON DELETE CASCADE`, so the delete also took
+39 claims, and onward through `claim_revisions`, `claim_session_observations`,
+`scoring.evidence` and `evidence_independence_groups`. Five tables the guard did
+not name, so five tables it silently approved. The reported count — 156 — was
+what `DELETE` returned, which is the directly-matched rows and not the closure.
+
+**The verification in §19 of this report has the identical shape and would have
+had the identical hole.** It is a hand-written list of invariants over the tables
+its author thought of, and a cascade into a table outside that list would pass
+through it unremarked.
+
+The correction is mechanical rather than a matter of care: **query `pg_constraint`
+outward from the delete target before opening the transaction, and let the guard
+assert over the closure it returns** rather than over a list someone typed. The
+FK graph is already in the database; a guard that asks it cannot be surprised by
+it.
+
+Nothing of value was lost — the deleted claims carried synthetic statements
+("A meaningful segment expresses willingness to pay"), every evidence row had a
+`NULL` `source_id`, and all 39 were created inside one 2.5-second window, which
+is a single suite run. Four independent signals that it was `test_claims.py`
+litter. But that is a reconstruction from observations taken before the deletion,
+not a backup: the JSON backups captured projects, sessions, opportunities and the
+acquisition rows, and did **not** capture the cascaded claims or evidence,
+because nobody knew they were in scope.
 
 **The Mission 1.2 claim suites write into the seeded development workspace** and
 do not clean up, which is the §12 workspace rule not yet applied to them. Spun
@@ -676,7 +743,7 @@ Three things a next mission should know:
 | Is World Bank normalization implemented? | **Yes.** `world-bank-indicators-numeric@1.0.0`, and it is the only one |
 | Does normalization perform any network request? | **No.** Not one, and no code path could. Enforced by an AST-parsing CI gate probed against fourteen violations |
 | Are the six real World Bank RawRecords normalized? | **Yes** — after being re-collected, because they did not exist (§0) |
-| How many real NormalizedRecords exist? | **6**, all World Bank, all `VALID`. Their session link was later nulled by `test_rls.py` (§19 amendment); the records themselves are intact |
+| How many real NormalizedRecords exist? | **6**, all World Bank, all `VALID`. Their history since is in the §19 amendments: the session link was nulled by `test_rls.py`, then repaired by delete-and-recollect, which cascaded the normalized records away and required re-normalizing. Current state is 6 raw / 6 normalized, both layers linked |
 | Is null ever converted to zero? | **No.** `value_state` is mandatory and the constructor refuses a number beside `NOT_REPORTED` |
 | Are yearly periods represented without pretending January 1 is exact event time? | **Yes.** A half-open interval with `type: YEAR` and the source's own label beside the start bound |
 | Are aggregate geographies distinguishable from countries? | **Yes.** `COUNTRY / AGGREGATE / UNKNOWN`, from a reviewed map. An unclassified code is never promoted, and an aggregate can never carry a country code |
