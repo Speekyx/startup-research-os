@@ -1,7 +1,8 @@
 # GDELT DOC API Response Contract V1
 
-**Status:** **Incomplete.** Two of the three contracts this document exists to
-record are not established, and the missing pair is **H-27**.
+**Status:** **Partially established.** The two DOC API timeline contracts remain
+unobserved (**H-27**, now reproduced in two independent environments). A third
+contract — the WEB-NGRAM dataset — **was** observed and is recorded in §9.
 **Date:** 2026-08-30
 **Produced by:** Mission 1.9.1 §3, §4, §8, §9.
 **Capture tool:** `infrastructure/scripts/capture_gdelt_fixtures.py`
@@ -19,6 +20,7 @@ record are not established, and the missing pair is **H-27**.
 | Mode semantics, parameters, time-step rules | **documented** by GDELT, Mission 1.9.1 §3 |
 | `TimelineTone` envelope | **NOT established** — H-27 |
 | `TimelineVolRaw` envelope | **NOT established** — H-27 |
+| **WEB-NGRAM `1gram`/`2gram`** | **observed** — §9.5, one capped file inspection |
 
 **No envelope in this document was reconstructed from prose.** Where a shape was
 not observed it is recorded as not observed, and no fixture was written.
@@ -172,3 +174,156 @@ fixtures.**
 That includes fixtures reconstructed from this document. Everything above §3 is
 GDELT's prose about its own behaviour, which establishes *semantics* and is not
 a substitute for a response.
+
+---
+
+## 9. Legacy DOC API availability, and the Web NGrams alternative
+
+Added after the DOC API capture failed in a **second independent environment**.
+
+### 9.1 The failure is not local to one machine
+
+| Environment | TimelineTone | TimelineVolRaw |
+|---|---|---|
+| CI / agent environment | `ConnectTimeout` | `ConnectTimeout` |
+| operator's Windows development machine | `ConnectTimeout` | `ConnectTimeout` |
+
+Two independent networks, same result, against a control (`api.worldbank.org`)
+that returns HTTP 200 from the same client. **No workaround was attempted** —
+no proxy, no mirror, no identity rotation, no rate-limit evasion (§5).
+
+### 9.2 GDELT's own documentation explains it
+
+First-party, retrieved 2026-08-30:
+
+> the transition of our search and API infrastructure to Spanner is still
+> underway, our existing legacy search infrastructure is struggling to handle the
+> ever-growing volume
+
+and, in the same post:
+
+> Researchers should try to switch their searches to use these ngram files
+> instead of the search APIs for the time being
+
+**The API we were trying to reach is one GDELT is actively asking people to stop
+using.** That reframes H-27: it is not a transient outage to wait out, and
+continuing to retry the DOC API would be pushing against infrastructure its
+operator says is under strain.
+
+### 9.3 The bulk host is reachable — the API host is not
+
+Measured from the same client, seconds apart:
+
+| Host | Result |
+|---|---|
+| `api.gdeltproject.org` — DOC API | **`ConnectTimeout`** |
+| `data.gdeltproject.org` — bulk datasets | **HTTP 301**, reachable |
+| `storage.googleapis.com` — GDELT bucket | HTTP 403 on the bare bucket, reachable |
+| `api.worldbank.org` — control | HTTP 200 |
+
+These are different network paths. Nothing about the DOC API's unreachability
+says anything about the dataset host.
+
+### 9.4 Three ngram datasets, and only one is usable
+
+GDELT publishes several, and they differ in exactly the way that matters here.
+
+| Dataset | Fields | Publisher content? |
+|---|---|---|
+| **Web News NGrams 3.0** (`gdeltv3/webngrams/`) | `date, ngram, lang, type, pos, pre, post, url` | **YES** — `pre`/`post` are contextual snippets "typically up to 7 words", plus the article `url` |
+| **quadgram TOC** (`gdeltv5/weblegacy/ngrams/`) | `ID, date, img, lang, title, url` | **YES** — `title` is the headline, plus `img` and `url` |
+| **WEB-NGRAM 1gram/2gram** (`gdeltv3/web/ngrams/`) | `DATE, LANG, NGRAM, COUNT` | **NO** |
+
+The first two carry exactly what disqualified `ArtList`: headline text, image
+references, article URLs, and in NGrams 3.0 a running snippet of the article
+itself. Both are **out**, for the same reason and without further analysis.
+
+### 9.5 WEB-NGRAM 1gram/2gram — contract observed
+
+One file inspection, streamed with a hard byte cap, decompressed in memory,
+**nothing persisted**.
+
+```text
+GET https://data.gdeltproject.org/gdeltv3/web/ngrams/20260830091500.1gram.txt.gz
+HTTP 200 · content-type text/plain · gzip · strict UTF-8 decode OK
+```
+
+Tab-delimited, **four columns, no header row**:
+
+```text
+DATE             LANG        NGRAM      COUNT
+20260830091500   ALBANIAN    dhe        676
+20260830091500   ALBANIAN    e          1142
+```
+
+The `2gram` file is identical in shape, with a two-word `NGRAM`:
+
+```text
+20260830091500   ALBANIAN    do të      104
+```
+
+| Column | Meaning |
+|---|---|
+| `DATE` | the 15-minute bucket, `YYYYMMDDHHMMSS`, UTC |
+| `LANG` | language name, uppercased. **Not geography** |
+| `NGRAM` | one word (`1gram`) or a two-word phrase (`2gram`) |
+| `COUNT` | times mentioned in articles of that language in that bucket |
+
+Published every 15 minutes, ~7–10 minutes after each quarter. GDELT documents
+coverage as "42 billion words of news coverage in 142 languages spanning
+January 1, 2019 to present".
+
+### 9.6 Why this is a better fit than any DOC API mode
+
+**No publisher content, structurally.** Not "we filter it out" — the file does
+not contain a title, a URL, an image or a sentence. There is nothing to
+minimise away, which is a stronger position than any filter.
+
+**The count is real and is not request-bounded.** This is the objection that
+killed the `ArtList` count and that `MAXRECORDS` only partially answered for
+timelines: here we issue no query at all. We download a published aggregate
+GDELT computed over everything it monitored. The number cannot be an artefact of
+our request because our request does not influence it.
+
+**The identity is source-native.** `(DATE, LANG, NGRAM)` is a natural key the
+source itself defines. That **resolves the §21 weakness outright** — the DOC API
+path had `(our query, mode, bucket)` and the query was ours, so two phrasings of
+one research question forked the identity. Here there is no query.
+
+**It is reachable**, which the DOC API is not from two environments.
+
+### 9.7 What it still needs — none of it code
+
+Three gaps, and none is a blocker in the H-27 sense.
+
+**A different access path.** This is `data.gdeltproject.org` over
+`DATASET_DOWNLOAD`, which is the **`gdelt-bulk-files`** profile — not
+`gdelt-doc-api`. Mission 1.9 §54 put bulk files out of scope, and the profile
+deliberately records no `endpoint_url` so it authorises no host. **The
+`gdelt-doc-api` profile does not authorise this dataset and must not be
+stretched to.**
+
+**A minimisation category.** The committed profile allows `event_identifier`,
+`theme_identifier`, `entity_mention`, `tone_score`, `observation_period`,
+`geography`, `content_origin`. A term and its frequency are none of those, and
+`LANG` is not `geography` — the project is explicit that language is not
+geography. Authorising this needs a reviewed addition naming a term-frequency
+category, which is governance work of the kind Mission 1.8 did.
+
+**A review version.** The Mission 1.7 review recorded GDELT's capabilities as
+news events, themes, entity mentions, tone, timestamps and geography. Ngram
+frequency is none of them. The *rights* grant carries over unchanged — the terms
+cover "all datasets **released by** the GDELT Project" and this is one — but the
+**capability and access facts are new**, and §27 calls that substantive review
+work.
+
+### 9.8 Volume, which minimisation has to answer
+
+96 buckets a day, two files each, global across 142 languages. The `1gram` slice
+read here was over a megabyte gzipped before the cap and the `2gram` over four.
+
+A collector that ingested all of it would be the "bulk-data vacuum" the brief
+warns against. The obvious shape is a reviewed restriction — specific languages,
+and terms drawn from a research context — decided at review time rather than by
+the collector. **That decision belongs in the minimisation profile**, which is
+the third gap above and not a separate problem.
