@@ -4,6 +4,9 @@
 **Branch:** `sprint-1/mission-1.9.1`
 **Status:** **Partially complete.** H-28 is fully resolved. H-27 is not, and
 §36 says stop rather than fabricate — so no fixture was written.
+**Continued 2026-08-30** after the DOC API capture failed from the operator's
+machine too: see *Legacy DOC API availability and Web NGrams alternative* at the
+end. The recommended acquisition path has changed, on first-party evidence.
 
 **Deliverables:**
 [`acquisition-rights-basis-gap-analysis-v1.md`](../data/acquisition-rights-basis-gap-analysis-v1.md) ·
@@ -348,3 +351,161 @@ runtimes) · `validate_schema` · `validate_source_registry` ·
 `validate_normalization` · all generated documents in sync · six raw and six
 normalized World Bank records unchanged · **zero GDELT records, zero signals,
 zero embeddings, zero claims**.
+
+
+---
+
+# Legacy DOC API availability and Web NGrams alternative
+
+Added after the fixture capture failed from the operator's own machine as well.
+Everything above this line stands unchanged; nothing in it was rewritten.
+
+## A. H-27 reproduced in a second independent environment
+
+| Environment | TimelineTone | TimelineVolRaw |
+|---|---|---|
+| agent environment | `ConnectTimeout` | `ConnectTimeout` |
+| operator's Windows development machine | `ConnectTimeout` | `ConnectTimeout` |
+
+Same failure, two unrelated networks, against a control that returns HTTP 200
+from the same client. **No workaround was attempted** — no proxy, no mirror, no
+identity rotation, no rate-limit evasion, and no further retrying of the DOC API.
+
+**H-27 stays open.** No TimelineTone or TimelineVolRaw fixture was fabricated.
+
+## B. GDELT's own documentation explains the failure
+
+First-party, retrieved 2026-08-30:
+
+> the transition of our search and API infrastructure to Spanner is still
+> underway, our existing legacy search infrastructure is struggling to handle the
+> ever-growing volume
+
+> Researchers should try to switch their searches to use these ngram files
+> instead of the search APIs for the time being
+
+**The API we were trying to reach is one its operator is actively asking people
+to stop using.** That reframes H-27 from a transient outage into a documented
+migration, and it means continuing to retry would be pushing against
+infrastructure GDELT says is under strain.
+
+## C. The bulk host is reachable; the API host is not
+
+| Host | Result |
+|---|---|
+| `api.gdeltproject.org` — DOC API | **`ConnectTimeout`** |
+| `data.gdeltproject.org` — bulk datasets | **HTTP 301, reachable** |
+| `storage.googleapis.com` — GDELT bucket | HTTP 403 on the bare bucket, reachable |
+| `api.worldbank.org` — control | HTTP 200 |
+
+Measured from the same client, seconds apart. Different network paths: the DOC
+API's unreachability says nothing about the dataset host.
+
+## D. Three ngram datasets, two of them disqualified immediately
+
+| Dataset | Fields | Publisher content? |
+|---|---|---|
+| Web News NGrams 3.0 | `date, ngram, lang, type, pos, pre, post, url` | **YES** — `pre`/`post` are snippets "typically up to 7 words", plus the article `url` |
+| quadgram TOC (`gdeltv5/weblegacy`) | `ID, date, img, lang, title, url` | **YES** — headline, image, URL |
+| **WEB-NGRAM `1gram`/`2gram`** | `DATE, LANG, NGRAM, COUNT` | **NO** |
+
+The first two carry precisely what disqualified `ArtList`. Being newer or more
+prominently announced does not change that, and neither was analysed further.
+
+## E. The WEB-NGRAM contract — observed, not inferred
+
+One file inspection, streamed with a hard byte cap, decompressed in memory,
+**nothing persisted**:
+
+```text
+GET https://data.gdeltproject.org/gdeltv3/web/ngrams/20260830091500.1gram.txt.gz
+HTTP 200 · text/plain · gzip · strict UTF-8 decode OK · 4 columns, no header
+```
+
+```text
+DATE             LANG        NGRAM      COUNT
+20260830091500   ALBANIAN    dhe        676
+20260830091500   ALBANIAN    do të      104     (2gram file)
+```
+
+| Column | Meaning |
+|---|---|
+| `DATE` | 15-minute bucket, `YYYYMMDDHHMMSS`, UTC |
+| `LANG` | language name. **Not geography** |
+| `NGRAM` | one word, or a two-word phrase |
+| `COUNT` | mentions in articles of that language in that bucket |
+
+Every 15 minutes; GDELT documents 142 languages from 2019 to present.
+
+## F. Why it fits better than any DOC API mode
+
+**No publisher content, structurally.** Not filtered out — absent. There is no
+title, URL, image or sentence in the file. That is a stronger position than any
+filter, because there is nothing to fail to remove.
+
+**The count cannot be request-bounded.** No query is issued at all: the file is a
+published aggregate GDELT computed over everything it monitored. This is the
+objection that killed the `ArtList` count, answered completely rather than
+partially.
+
+**Identity becomes source-native.** `(DATE, LANG, NGRAM)` is a key the source
+defines. That **resolves the §21 weakness outright** — on the DOC API path the
+key contained *our* query, so two phrasings of one research question forked the
+identity. Here there is no query.
+
+**It is reachable.**
+
+## G. What it still needs — and none of it is collector code
+
+**A different access route.** `data.gdeltproject.org` over `DATASET_DOWNLOAD` is
+the **`gdelt-bulk-files`** profile, not `gdelt-doc-api`. That profile records no
+`endpoint_url` and authorises no host. **The API profile does not cover this and
+must not be stretched**: a different host over a different method is a different
+route, and widening one to reach the other is what §10 refuses.
+
+**A reviewed minimisation category.** The committed profile has no category for a
+term or a frequency, and `LANG` is not `geography`.
+
+**A new review version.** The Mission 1.7 review recorded GDELT's capabilities as
+news events, themes, entity mentions, tone, timestamps and geography — a term
+frequency is none of them. The **rights grant carries over unchanged**, because
+the terms cover "all datasets released by the GDELT Project" and these are; but
+capability and access are new facts, and §27 calls recording them substantive
+review work.
+
+**A volume decision.** 96 buckets a day across 142 languages, two files each.
+Ingesting all of it is the bulk-data vacuum the brief warns against; the bound
+belongs in the minimisation profile, decided at review time rather than by the
+collector.
+
+## H. Recommendation
+
+**Stop pursuing the DOC API for the first collector.** Its operator is asking
+people not to use it, and it is unreachable from two environments.
+
+**Make WEB-NGRAM `1gram`/`2gram` the first GDELT acquisition path**, via a
+governance round: re-review, minimisation category, endpoint on the bulk profile,
+dataset entry. Then a collector — and a smaller one than the DOC API would have
+needed, since a gzipped four-column file has no pagination, no query construction
+and no envelope ambiguity.
+
+---
+
+## Answers to the continuation's explicit questions
+
+| Question | Answer |
+|---|---|
+| Is H-27 still open? | **Yes.** No TimelineTone or TimelineVolRaw fixture exists and none was fabricated |
+| Has the DOC API failure reproduced in two independent environments? | **Yes** — agent environment and the operator's Windows machine, both `ConnectTimeout`, against a control returning 200 |
+| Does current first-party GDELT documentation acknowledge legacy search/API degradation? | **Yes**, in GDELT's own words: legacy search infrastructure "struggling to handle the ever-growing volume" during a Spanner migration, with researchers asked to use ngram files instead of the search APIs |
+| Is Web NGrams an officially documented alternative? | **Yes**, announced and documented first-party — but it is **three** datasets, and only `WEB-NGRAM 1gram/2gram` is usable here |
+| Is it governed by the current GDELT direct grant, or does it need a new review? | **The rights grant covers it** — the terms grant use of "all datasets released by the GDELT Project", so `DIRECT_GRANT` carries over and H-28 needs nothing new. **A new review version is still required**, because the capability (term frequencies) and the access route (`gdelt-bulk-files`) are not what the Mission 1.7 review recorded. A rights grant is not an access authorisation |
+| Can Web NGrams become an authorized concrete GDELT resource? | **Yes**, after §G's four governance steps. Its contract is observed, so nothing about it is guesswork |
+| Would it be more suitable than TimelineTone for the first collector? | **Yes, materially** — no publisher content by construction, a count that cannot be request-bounded, source-native identity, a reachable host, and a simpler file format |
+| Is a collector safe to implement after this review? | **Not yet.** The review, the minimisation category, the endpoint and the dataset entry come first. After those, yes — and the collector is smaller than the DOC API one would have been |
+| Does H-28 remain closed? | **Yes.** The rights-basis model handles this path unchanged: `DIRECT_GRANT`, no licence value |
+| Is at least one concrete GDELT resource authorized? | **No.** None is committed, on either path |
+| Does GDELT remain collector-eligible? | **Yes**, unchanged |
+| Does GDELT remain unimplemented and disabled? | **Yes.** `IMPLEMENTED_COLLECTORS == {"world-bank"}`, `collector_enabled` false |
+| Was any GDELT research record persisted? | **No.** Zero. The one file inspection was streamed, capped, read in memory and discarded |
+| Is Mission 1.9.2 safe to begin? | **Not as a collector.** The next mission is a GDELT re-review against the ngram datasets — governance, not code |

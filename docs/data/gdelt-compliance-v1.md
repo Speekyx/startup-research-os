@@ -157,6 +157,29 @@ Pacing a future collector is therefore an engineering decision that must not be
 laundered through this file. It is recorded as an open question on the review
 instead.
 
+## 4.1 A second access route exists and is NOT authorised by this entry
+
+Added after Mission 1.9.1's continuation found the DOC API unreachable from two
+independent environments and GDELT asking researchers to use its ngram files
+instead.
+
+The WEB-NGRAM datasets live on **`data.gdeltproject.org`** and are fetched as
+files, which is the **`gdelt-bulk-files`** profile — `DATASET_DOWNLOAD`, not
+`PUBLIC_API`. That profile deliberately records no `endpoint_url`, so it
+authorises no host, and nothing in this configuration reaches it.
+
+**The `gdelt-doc-api` profile does not cover it.** A different host over a
+different access method is a different route, and stretching an API profile to
+cover a file download would be exactly the widening §10 refuses. The rights
+basis carries over unchanged — GDELT's grant covers everything it releases — but
+a rights grant is not an access authorisation, and the two have been kept apart
+since Mission 1.0.
+
+What that route would need is in
+[`gdelt-resource-model-v1.md`](gdelt-resource-model-v1.md) §8.4: a new review
+version, a reviewed minimisation category for term frequencies, and an endpoint
+on the bulk profile. None of it is done here.
+
 ## 5. Authentication (§12)
 
 None. No key, no OAuth, no account, no developer application, and therefore **no

@@ -1,8 +1,10 @@
 # GDELT Resource Model V1
 
-**Status:** Specified and **not committed.** Every decision below is made; the
-one input still missing is the response contract (**H-27**), and committing a
-dataset entry without it would guess what a GDELT resource is.
+**Status:** Specified and **not committed.** §1–§7 describe the DOC API path,
+still blocked on **H-27**. §8, added after the DOC API failed in a second
+environment, describes a **different and better-fitting path** — the WEB-NGRAM
+dataset — whose contract *is* observed and which is now the recommended
+direction.
 **Date:** 2026-08-30
 **Produced by:** Mission 1.9.1 §17–§22.
 **Related:** [`gdelt-response-contract-v1.md`](gdelt-response-contract-v1.md),
@@ -167,3 +169,82 @@ against overengineering one that does not exist.
 5. Then Mission 1.9.2 builds the collector.
 
 Steps 1 to 4 are governance and capture. Only step 5 is engineering.
+
+---
+
+## 8. The WEB-NGRAM path, added after H-27 reproduced
+
+The DOC API failed from a second independent environment, and GDELT's own
+documentation says why: its legacy search infrastructure is under strain during a
+Spanner migration, and it asks researchers to **use ngram files instead of the
+search APIs**.
+
+The contract is recorded in
+[`gdelt-response-contract-v1.md`](gdelt-response-contract-v1.md) §9. What matters
+for the resource model:
+
+### 8.1 It answers three problems §1–§7 could only mitigate
+
+| Problem on the DOC API path | On the WEB-NGRAM path |
+|---|---|
+| publisher content had to be filtered out | **the file contains none** — four columns, no title, URL, image or sentence |
+| the count risked being request-bounded | **no query is issued**; the file is a published aggregate GDELT computed |
+| identity depended on *our* query (§5) | **`(DATE, LANG, NGRAM)` is source-native** — the §5 weakness disappears |
+| host unreachable from two environments | `data.gdeltproject.org` returns 301 from here |
+
+### 8.2 The dataset entry it would need
+
+```json
+{
+  "resource_id": "web-ngrams/1gram",
+  "dataset_family": "WEB_NGRAM_UNIGRAM",
+  "content_origin": "PLATFORM_LICENSED",
+  "rights_basis": "DIRECT_GRANT",
+  "basis": "GDELT's terms grant unlimited and unrestricted use for any academic, commercial or governmental use of any kind without fee, naming no licence. The WEB-NGRAM files are datasets released by the GDELT Project and are therefore inside that grant."
+}
+```
+
+`DIRECT_GRANT` and **no licence key** — the rights basis is unchanged from §3,
+because the grant is over everything GDELT releases and this is one of those
+things. **H-28 stays closed and this path needs nothing new from it.**
+
+### 8.3 What it cannot inherit
+
+**Not the `gdelt-doc-api` access profile.** This is `data.gdeltproject.org` over
+`DATASET_DOWNLOAD` — the `gdelt-bulk-files` profile, which deliberately records
+no `endpoint_url` and therefore authorises no host. Stretching the API profile to
+cover a different host over a different method would be precisely the
+"source-level approval widened into a resource grant" §10 forbids.
+
+**Not the current capability list.** The Mission 1.7 review recorded news
+events, themes, entity mentions, tone, timestamps and geography. A term
+frequency is none of them.
+
+**Not the current minimisation profile.** No category covers a term or a count,
+and `LANG` is not `geography`.
+
+### 8.4 Therefore: a review version, not a config edit
+
+The honest sequence, and none of it is collector code:
+
+1. **Re-review GDELT** against the ngram datasets — a new review version
+   recording the capability (term frequencies), the access route
+   (`gdelt-bulk-files`, with its endpoint) and the verdict. The rights grant is
+   unchanged and re-cited rather than re-argued.
+2. **Add a reviewed minimisation category** for a term and its frequency, and
+   decide the language/term restriction there — 96 buckets a day across 142
+   languages is a bulk-data vacuum unless the profile bounds it.
+3. **Record `endpoint_url`** on `gdelt-bulk-files`.
+4. **Commit the §8.2 dataset entry.**
+5. Then a collector.
+
+Steps 1–4 are governance. Only step 5 is engineering, and it is smaller than the
+DOC API collector would have been: a gzipped tab-delimited file with four columns
+and no pagination.
+
+### 8.5 What is explicitly NOT recommended
+
+**Web News NGrams 3.0** and the **quadgram TOC** files. Both carry publisher
+content — 3.0 has `pre`/`post` snippets of up to seven words plus the article
+`url`; the TOC has `title` and `img`. They are out for the same reason `ArtList`
+is, and being newer or more prominent does not change that.
