@@ -128,10 +128,12 @@ A GDELT WEB-NGRAM row has no geography and its term is not a metric, so
 have let a World Bank record exist with no geography**, which is the existing
 model getting worse for a new source's sake.
 
-The kind was added and **no adapter was**. A registry row is a *vocabulary*
-entry: it lets the model describe a shape, and it lets the database refuse a row
-naming a kind nobody registered. The claim that code exists is
-`NORMALIZER_REGISTRY`, and for GDELT it is still empty.
+Mission 1.10 added the kind and **no adapter**; Mission 1.10.1 added the
+adapter. A registry row is a *vocabulary* entry — it lets the model describe a
+shape and lets the database refuse a row naming a kind nobody registered — while
+the claim that code exists is `NORMALIZER_REGISTRY`. Keeping the two separate is
+what made it possible to design the model in one mission and implement against
+it in the next.
 
 Adding a kind is: insert the registry row, declare its canonical payload model
 in `RECORD_KINDS`, and write the adapter that produces it.
@@ -651,10 +653,8 @@ is.
 
 - **Re-normalization selection (D-08).** Coexistence works; choosing does not
   exist. §49 is explicit that Mission 1.6 must not invent it.
-- **Two record kinds, and one adapter.** `numeric_observation` has one;
-  `lexical_frequency_observation` has none, because Mission 1.10 defined the
-  model and stopped there. Document and discussion kinds arrive with the adapters
-  that produce them.
+- **Two record kinds and two adapters**, as of Mission 1.10.1. Document and
+  discussion kinds arrive with the adapters that produce them.
 - **H-29 — the GDELT bucket timezone is unestablished**, so those periods will be
   `NOT_ESTABLISHED` and their `observed_at` `NULL`. Answering it is a normalizer
   version bump over records already held, not a re-collection.

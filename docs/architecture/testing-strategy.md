@@ -942,3 +942,64 @@ A literal rather than a round-trip, because a round-trip through the same code
 that changed would agree with itself. This is the assertion that made the
 conditional key a deliberate design decision rather than an oversight discovered
 later by a hash mismatch.
+
+---
+
+## 23. Grepping prose is not a structural test (added in Mission 1.10.1)
+
+Mission 1.9.3 recorded a version of this as §20, and Mission 1.10.1 walked into
+it twice in one afternoon. It is worth stating as its own rule.
+
+The GDELT normalizer must never convert a timezone and must embed no language
+table. Both are structural properties, and the obvious way to assert one is:
+
+```python
+source = pathlib.Path(adapter.__file__).read_text()
+assert "astimezone" not in source  # fails
+assert "ISO 639" not in source  # fails
+```
+
+Both failed, and **both failed on the docstring that explains the rule**. The
+module says *"nothing here calls `astimezone`"* and *"a distinction ISO 639 draws
+that CLD2 does not"* — the sentences a reader most needs are the ones the grep
+trips over.
+
+### The failure mode is worse than a red test
+
+The natural next move is to weaken the assertion — strip the docstring, exclude
+comments, drop the term from the list. Each of those makes the check a little
+less true while keeping it green, and after two or three rounds nobody trusts it
+enough to add a term to.
+
+### Assert over the AST
+
+```python
+tree = ast.parse(source)
+called = {n.attr for n in ast.walk(tree) if isinstance(n, ast.Attribute)}
+assert "astimezone" not in called
+
+constants = {
+    n.value for n in ast.walk(tree) if isinstance(n, ast.Constant) and isinstance(n.value, str)
+}
+assert "en" not in constants
+```
+
+This is stricter, not looser: it catches `getattr(dt, "astimezone")` written to
+dodge a grep, and it cannot be defeated by prose. The three shapes worth reaching
+for are **imports** (does this module depend on a network client or a model),
+**attribute names** (does it call this), and **string constants** (does it embed
+this datum).
+
+### When a substring scan is still right
+
+Over the **serialised payload**, not the source:
+
+```python
+serialised = canonical_json(draft.payload).lower()
+for classification in ("theme", "topic", "entity"):
+    assert classification not in serialised
+```
+
+There is no prose in a payload, and a field-by-field check would pass while a
+*new* field carried the thing forbidden. The rule is about what is being scanned:
+**source text has explanations in it; data does not.**

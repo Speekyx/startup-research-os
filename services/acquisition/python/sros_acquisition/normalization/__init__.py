@@ -33,6 +33,12 @@ from .errors import (
     NormalizationFailure,
     is_retryable,
 )
+from .gdelt_web_ngram import (
+    GDELT_WEB_NGRAM_NORMALIZER_ID,
+    GDELT_WEB_NGRAM_NORMALIZER_VERSION,
+    GRAM_SIZES,
+    GdeltWebNgramLexicalNormalizer,
+)
 from .geography import (
     DEFAULT_GEOGRAPHY_MAP_PATH,
     GeographyEntry,
@@ -110,11 +116,34 @@ WORLD_BANK_NORMALIZER_SPEC = NormalizerSpec(
     build=lambda context: WorldBankNumericNormalizer(context.geography, context.retention),
 )
 
-if WORLD_BANK_NORMALIZER_SPEC.key not in NORMALIZER_REGISTRY:
-    register_normalizer(WORLD_BANK_NORMALIZER_SPEC)
+# Mission 1.10.1. The second adapter, registered the same way and for the same
+# reason: the set of adapters is one readable list rather than something
+# assembled by whichever modules a caller happened to import.
+#
+# It takes NO geography map. A WEB-NGRAM row has no geography, and constructing
+# it with a classification table it never consults would suggest it might.
+GDELT_WEB_NGRAM_NORMALIZER_SPEC = NormalizerSpec(
+    normalizer_id=GDELT_WEB_NGRAM_NORMALIZER_ID,
+    normalizer_version=GDELT_WEB_NGRAM_NORMALIZER_VERSION,
+    source_id="gdelt",
+    collector_id="gdelt-web-ngram",
+    supported_collector_versions=frozenset({"1.0.0"}),
+    schema_id=NORMALIZATION_SCHEMA_ID,
+    schema_version=NORMALIZATION_SCHEMA_VERSION,
+    build=lambda context: GdeltWebNgramLexicalNormalizer(context.retention),
+)
+
+for _spec in (WORLD_BANK_NORMALIZER_SPEC, GDELT_WEB_NGRAM_NORMALIZER_SPEC):
+    if _spec.key not in NORMALIZER_REGISTRY:
+        register_normalizer(_spec)
 
 __all__ = [
     "DEFAULT_GEOGRAPHY_MAP_PATH",
+    "GDELT_WEB_NGRAM_NORMALIZER_ID",
+    "GDELT_WEB_NGRAM_NORMALIZER_SPEC",
+    "GDELT_WEB_NGRAM_NORMALIZER_VERSION",
+    "GRAM_SIZES",
+    "GdeltWebNgramLexicalNormalizer",
     "MAX_NORMALIZATION_BATCH",
     "NORMALIZATION_SCHEMA_ID",
     "NORMALIZATION_SCHEMA_VERSION",

@@ -1,8 +1,9 @@
 # GDELT WEB-NGRAM Normalization Contract V1
 
-**Status:** **Specified, not implemented.** The canonical model can represent a
-WEB-NGRAM observation; no normalizer exists and no GDELT record has been
-normalized.
+**Status:** **Implemented in Mission 1.10.1**, exactly as specified below.
+`gdelt-web-ngram-lexical@1.0.0` produces this shape and two real records carry
+it. See [`gdelt-web-ngram-normalizer-v1.md`](gdelt-web-ngram-normalizer-v1.md)
+for the adapter and what implementing it found.
 **Date:** 2026-08-30 (Mission 1.10)
 **Related:** [`gdelt-normalized-record-gap-analysis-v1.md`](gdelt-normalized-record-gap-analysis-v1.md)
 (the working that produced this),
@@ -180,7 +181,7 @@ observations, not a collision — no extra field required.
 ## 5. The normalizer, when it is written
 
 ```text
-normalizer_id       gdelt-web-ngram-lexical
+normalizer_id       gdelt-web-ngram-lexical          <- implemented
 normalizer_version  1.0.0
 source_id           gdelt
 collector_id        gdelt-web-ngram
@@ -236,15 +237,15 @@ it.
 
 | | |
 |---|---|
-| the record kind | **declared** in `RECORD_KINDS` and **registered** by migration 0011 |
+| the record kind | declared in `RECORD_KINDS` and registered by migration 0011 |
 | the payload class | `LexicalFrequencyObservation` |
 | `CanonicalLanguage`, `timezone_state` | in the model, with tests |
-| the adapter | **none** |
-| `NORMALIZER_REGISTRY` for gdelt | **empty** |
-| `IMPLEMENTED_NORMALIZERS` | `{world-bank}` |
-| GDELT normalized records | **0** |
+| the adapter | **`gdelt-web-ngram-lexical@1.0.0`** (Mission 1.10.1) |
+| `NORMALIZER_REGISTRY` for gdelt | **`(gdelt, gdelt-web-ngram)`** |
+| `IMPLEMENTED_NORMALIZERS` | `{world-bank, gdelt}` |
+| GDELT normalized records | **2**, both `PARTIAL` |
 
-The registry row is a **vocabulary** entry — it lets the model describe the
-shape, and the database refuse a row naming a kind nobody registered. It is not a
-claim that code exists; that claim is `NORMALIZER_REGISTRY`, and it is still
-empty.
+Mission 1.10 registered the **vocabulary** and no adapter; Mission 1.10.1 added
+the adapter. The two remained separate claims throughout, which is the
+distinction that made it possible to design the model in one mission and
+implement against it in the next without either pretending to be the other.

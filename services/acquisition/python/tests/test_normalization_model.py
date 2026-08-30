@@ -635,10 +635,17 @@ class TestSelection:
         with pytest.raises(NormalizationFailedError):
             select_normalizer(raw_view(), {})
 
-    def test_the_registry_holds_one_adapter(self) -> None:
+    def test_the_registry_holds_one_adapter_per_collector(self) -> None:
+        """Two now. The key is `(source_id, collector_id)` rather than the source
+        alone — a second collector for one source parses a different shape, and
+        handing it to the wrong adapter would produce plausible nonsense rather
+        than an error."""
         from sros_acquisition.normalization import NORMALIZER_REGISTRY
 
-        assert list(NORMALIZER_REGISTRY) == [("world-bank", "world-bank-indicators")]
+        assert sorted(NORMALIZER_REGISTRY) == [
+            ("gdelt", "gdelt-web-ngram"),
+            ("world-bank", "world-bank-indicators"),
+        ]
 
     def test_the_context_carries_governance_not_choices(self) -> None:
         parameters = set(NormalizationContext.__dataclass_fields__)
