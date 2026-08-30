@@ -359,7 +359,10 @@ def main() -> int:
     # different tables, so a name-only match would compare unrelated value sets.
     enum_sites = [
         ("ClaimType", "research.opportunity_session_observations", "claim_type"),
-        ("ClaimType", "scoring.evidence", "claim_type"),
+        # scoring.evidence.claim_type was DROPPED in Mission 1.13: it predates
+        # claim_id, duplicated the claim's own type, and the aggregation
+        # framework reads neither. The site on
+        # research.opportunity_session_observations stays.
         ("ResearchSessionStatus", "research.research_sessions", "status"),
         ("RegistryStatus", "registry.registry_entries", "status"),
         # Source Registry (Mission 1.0). A value that drifted from the contract

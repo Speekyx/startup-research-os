@@ -54,7 +54,7 @@ have one.
 |-------|---------------|
 | `claim_id` | Stable identity, survives statement revision (§4) |
 | `workspace_id` | Tenant boundary. `NOT NULL`, always (ADR-005) |
-| `opportunity_id` | What the claim is about. Exactly one (§3) |
+| `opportunity_id` | What the claim is about, if anything yet. **At most one, possibly none** since Mission 1.13 (§3) |
 | `claim_type` | Epistemic category. Not identity |
 | `lifecycle` | Editorial state. Never epistemic (§8) |
 | `temporality` | Whether the claim decays. Required by aggregation (§5) |
@@ -69,17 +69,28 @@ the current text and the history cannot disagree.
 
 ---
 
-## 3. One Opportunity, many Claims
+## 3. At most one Opportunity, many Claims
 
-A claim belongs to **exactly one** opportunity. An opportunity may have zero or
-many claims.
+A claim belongs to **at most one** opportunity, and may belong to none. An
+opportunity may have zero or many claims.
 
-Cross-opportunity claim sharing is deliberately not modelled in V1. If
+> **Amended in Mission 1.13** (ADR-024, Ontology V2.2 §17.3). This section
+> originally said *exactly one*, and `claims.opportunity_id` was `NOT NULL`. The
+> pipeline runs Signal → Claim → Opportunity: a claim about a source fact exists
+> before anybody has conceived of the product it might justify, so the original
+> rule made the intended pipeline unrepresentable. Migration 0016 drops the
+> constraint. Everything else in this document is unchanged.
+
+Cross-opportunity claim sharing is still deliberately not modelled. If
 deduplication later shows the same assertion recurring across opportunities,
 that raises its own questions — whose evidence set, whose workspace, what
 happens when one opportunity is deleted — and answering them before the simple
 model has been used would be guessing. The first model has to be one people can
 reason about.
+
+An **unattached** claim is a different situation from a shared one, and is now
+the normal state of a freshly interpreted claim rather than an anomaly.
+`idx_claims_unattached` exists to find them (migration 0016).
 
 ---
 

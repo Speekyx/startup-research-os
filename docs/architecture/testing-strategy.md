@@ -1195,3 +1195,92 @@ Both incidents argue for the same practice from §25 — put arithmetic
 relationships in a CHECK — and this one adds the caveat that makes it safe: the
 CHECK is a hypothesis, and a failure is evidence about the hypothesis as much as
 about the write.
+## 28. A CHECK that evaluates to NULL is not a CHECK (Mission 1.13)
+
+§25 and §27 both argue for putting invariants in database constraints. Mission
+1.13 found the way that advice fails: a constraint can be syntactically fine,
+semantically intended, applied to the database, and enforce **nothing**.
+
+Migration 0016 added this to `research.claims`, meaning "all three of the
+interpreter fields, or none of them":
+
+```sql
+CHECK (
+    (interpreter_id IS NULL AND interpreter_version IS NULL
+                            AND interpretation_kind IS NULL)
+ OR (length(btrim(interpreter_id)) > 0
+     AND length(btrim(interpreter_version)) > 0
+     AND interpretation_kind IS NOT NULL)
+)
+```
+
+With `interpreter_id = 'x'` and `interpreter_version = NULL`:
+
+| Term | Value |
+|------|-------|
+| first branch | `false` — `interpreter_id` is not null |
+| `length(btrim(NULL)) > 0` | **NULL** |
+| second branch | `NULL` — `NULL AND anything` is `NULL` |
+| whole expression | `false OR NULL` → **NULL** |
+
+**A CHECK rejects a row only when its expression is FALSE.** NULL is accepted.
+So half an interpreter identity — a version nobody could resolve — was written
+without complaint, by a constraint whose name says it prevents exactly that.
+
+### How it was found
+
+Not by review. By a probe written to *disbelieve* the constraint: nine cases,
+each stating the constraint name it expected, run inside a transaction that
+rolls back. The half-identity case expected
+`claims_interpreter_complete_check` and got `ACCEPTED`.
+
+This is the §24 practice paying off a second time. A probe asserting only "the
+insert failed" would have passed here too — because the insert did not fail, and
+a test that tolerates either outcome tolerates this one.
+
+### What to do about it
+
+- **Any CHECK touching a nullable column needs a NULL row in its probe.** Not
+  the all-null row, which usually works: the *partially* null row, which is
+  where three-valued logic bites.
+- **Prefer functions that cannot return NULL for the arity part.**
+  `num_nonnulls(a, b, c) IN (0, 3)` returns an integer whatever the inputs are.
+  Migration 0017 is that fix, forward-only — 0016 stays as written, because a
+  migration is never edited after it has been applied.
+- **Guard each nullable test so NULL short-circuits to TRUE**, explicitly:
+  `(x IS NULL OR length(btrim(x)) > 0)`. The intent is then readable rather than
+  reconstructible from the three-valued truth table.
+
+The general form: **a guard that cannot fail is worse than no guard**, because
+the absent guard is visible in review and the silent one is not.
+
+## 29. Test a guard against the example that motivated it (Mission 1.13)
+
+The interpretation contract forbids an `OBSERVED` claim from asserting a market
+reading of a measurement. The guard is a vocabulary check, and the mission brief
+supplied its own example of the failure: *"The German SaaS market is growing"*
+derived from population arithmetic.
+
+The vocabulary list contained `market for`. The example says `market is`. The
+guard passed the sentence it exists to catch, and every other test in the suite
+was green.
+
+The test suite caught it because one test used the brief's sentence **verbatim**
+rather than a sentence invented to exercise the list. Had the test been written
+from the implementation — picking a phrase known to be in the list — the suite
+would have reported a working guard.
+
+### What that argues for
+
+- **Write at least one case from the specification's own wording**, before or
+  without looking at the implementation. A test derived from the code tests that
+  the code does what it does.
+- **A guard that misses its motivating example is worse than no guard**, for the
+  §28 reason: it advertises a protection nobody re-checks.
+- **When the guard is wrong, widen the guard.** The reflex is to adjust the test
+  sentence until it matches the list. That is fixing the thermometer.
+- **State the cost of widening in the code.** The bare word `market` now refuses
+  a faithful restatement of a metric whose published title contains it
+  (`CM.MKT.LCAP.CD`, "market capitalization of listed companies"), so a test
+  records that case and the comment says what to do instead — restate by metric
+  id. An unstated cost is rediscovered as a bug.

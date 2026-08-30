@@ -24,6 +24,7 @@ aggregating it are different acts, and only the first belongs here.
 from __future__ import annotations
 
 import uuid
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Any
@@ -152,6 +153,116 @@ def _row(record: tuple[Any, ...]) -> ClaimRow:
     return ClaimRow(*record)
 
 
+_EVIDENCE_INSERT = """
+INSERT INTO scoring.evidence
+       (id, workspace_id, claim_id, research_session_id,
+        direction, evidence_level, relevance, directness, reliability,
+        extraction_confidence, confidence, observation_category,
+        independence_state, independence_group_id, source_id,
+        source_reference, extraction_method, model_version, prompt_version,
+        observed_at, collected_at, expires_at)
+VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+"""
+
+
+def _write_evidence(
+    conn: Any,
+    ws: uuid.UUID,
+    claim_id: uuid.UUID,
+    direction: EvidenceDirection | str,
+    *,
+    evidence_level: int,
+    collected_at: datetime,
+    expires_at: datetime,
+    observation_category: EvidenceObservationCategory | str = (
+        EvidenceObservationCategory.UNCATEGORISED
+    ),
+    independence_state: EvidenceIndependenceState | str = EvidenceIndependenceState.UNKNOWN,
+    independence_group_id: uuid.UUID | None = None,
+    relevance: float | None = None,
+    directness: float | None = None,
+    reliability: float | None = None,
+    extraction_confidence: float | None = None,
+    confidence: float | None = None,
+    observed_at: datetime | None = None,
+    source_id: str | None = None,
+    source_reference: str | None = None,
+    extraction_method: str | None = None,
+    model_version: str | None = None,
+    prompt_version: str | None = None,
+    research_session_id: uuid.UUID | None = None,
+    evidence_id: uuid.UUID | None = None,
+) -> uuid.UUID:
+    """Validate and insert one evidence row on an OPEN connection.
+
+    Factored out of `EvidenceRepository.create` in Mission 1.13 so that
+    `ClaimRepository.create` can write a claim and its evidence in one
+    transaction. The evidence requirement for a generated claim is a
+    `DEFERRABLE INITIALLY DEFERRED` trigger that fires at COMMIT, so evidence
+    arriving in a later transaction is too late by construction
+    (`claim-evidence-interpretation-contract-v1.md` §9).
+    """
+    state = _enum_value("independence_state", independence_state, EvidenceIndependenceState)
+
+    # Checked here as well as by the CHECK constraint, because a constraint
+    # violation names the constraint and this names the mistake.
+    if state == EvidenceIndependenceState.KNOWN_DEPENDENT.value:
+        if independence_group_id is None:
+            raise ContractError(
+                "independence_group_id",
+                "KNOWN_DEPENDENT asserts a dependency on nothing without a group. "
+                "Name the group, or record the state as UNKNOWN",
+            )
+    elif independence_group_id is not None:
+        raise ContractError(
+            "independence_group_id",
+            f"{state} must not name a group: it would claim independence, or an "
+            "unresolved question, and membership at the same time",
+        )
+
+    for name, value in (
+        ("relevance", relevance),
+        ("directness", directness),
+        ("reliability", reliability),
+        ("extraction_confidence", extraction_confidence),
+        ("confidence", confidence),
+    ):
+        if value is not None and not (0.0 <= float(value) <= 1.0):
+            raise ContractError(name, f"must be on the unit interval [0,1], got {value!r}")
+    if not (0 <= int(evidence_level) <= 5):
+        raise ContractError("evidence_level", "must be an integer 0-5")
+
+    new_id = evidence_id or uuid.uuid4()
+    conn.execute(
+        _EVIDENCE_INSERT,
+        (
+            new_id,
+            ws,
+            claim_id,
+            research_session_id,
+            _enum_value("direction", direction, EvidenceDirection),
+            int(evidence_level),
+            relevance,
+            directness,
+            reliability,
+            extraction_confidence,
+            confidence,
+            _enum_value("observation_category", observation_category, EvidenceObservationCategory),
+            state,
+            independence_group_id,
+            source_id,
+            source_reference,
+            extraction_method,
+            model_version,
+            prompt_version,
+            observed_at,
+            collected_at,
+            expires_at,
+        ),
+    )
+    return new_id
+
+
 class ClaimRepository:
     """Claims, their statement revisions, and which sessions met them.
 
@@ -169,12 +280,13 @@ class ClaimRepository:
     def create(
         self,
         workspace_id: WorkspaceId | uuid.UUID,
-        opportunity_id: uuid.UUID,
+        opportunity_id: uuid.UUID | None,
         statement: str,
         claim_type: ClaimType | str,
         temporality: ClaimTemporality | str,
         origin: ClaimOrigin | str,
         *,
+        evidence: Sequence[Mapping[str, Any]] = (),
         claim_feature: str | None = None,
         origin_session_id: uuid.UUID | None = None,
         origin_detail: str | None = None,
@@ -192,6 +304,17 @@ class ClaimRepository:
 
         The claim and revision reference each other, so the pointer constraint
         is DEFERRABLE and checked at COMMIT — both halves land or neither does.
+
+        `opportunity_id` may be **None** since Mission 1.13 (ADR-024): the
+        pipeline runs Signal → Claim → Opportunity, so a claim about a source
+        fact exists before anybody has conceived of the product it might justify.
+
+        `evidence` is a sequence of keyword mappings for `_write_evidence`,
+        written in **this** transaction. A generated claim that is not a
+        HYPOTHESIS needs at least one, and the requirement is a deferred trigger
+        firing at COMMIT — so evidence attached afterwards, in a second
+        transaction, is too late by construction
+        (`claim-evidence-interpretation-contract-v1.md` §9).
         """
         ws = _require_workspace(workspace_id)
         text = statement.strip()
@@ -228,6 +351,8 @@ class ClaimRepository:
                    VALUES (%s,%s,%s, 1, %s, 'initial statement', FALSE, %s, %s)""",
                 (uuid.uuid4(), ws, new_id, text, created_by, origin_session_id),
             )
+            for item in evidence:
+                _write_evidence(conn, ws, new_id, **dict(item))
         return new_id
 
     def revise(
@@ -539,7 +664,6 @@ class EvidenceRepository:
         direction: EvidenceDirection | str,
         *,
         evidence_level: int,
-        claim_type: ClaimType | str,
         collected_at: datetime,
         expires_at: datetime,
         observation_category: EvidenceObservationCategory | str = (
@@ -572,80 +696,44 @@ class EvidenceRepository:
         given a default. Aggregation reports such a record non-scorable and
         names the field. An unknown number stays unknown
         (evidence-aggregation-framework-v1.md §6).
+
+        **`claim_type` was removed in Mission 1.13** (migration 0016, GAP-7). It
+        duplicated `research.claims.claim_type`, and two answers to one question
+        eventually disagree. Read it from the claim.
+
+        This writes into its OWN transaction, so it cannot satisfy the evidence
+        requirement for a claim being created — that trigger fires at the claim's
+        commit, before this method could run. Pass `evidence=` to
+        `ClaimRepository.create` for a generated claim
+        (`claim-evidence-interpretation-contract-v1.md` §9).
         """
         ws = _require_workspace(workspace_id)
-        state = _enum_value("independence_state", independence_state, EvidenceIndependenceState)
-
-        # Checked here as well as by the CHECK constraint, because a constraint
-        # violation names the constraint and this names the mistake.
-        if state == EvidenceIndependenceState.KNOWN_DEPENDENT.value:
-            if independence_group_id is None:
-                raise ContractError(
-                    "independence_group_id",
-                    "KNOWN_DEPENDENT asserts a dependency on nothing without a group. "
-                    "Name the group, or record the state as UNKNOWN",
-                )
-        elif independence_group_id is not None:
-            raise ContractError(
-                "independence_group_id",
-                f"{state} must not name a group: it would claim independence, or an "
-                "unresolved question, and membership at the same time",
-            )
-
-        for name, value in (
-            ("relevance", relevance),
-            ("directness", directness),
-            ("reliability", reliability),
-            ("extraction_confidence", extraction_confidence),
-            ("confidence", confidence),
-        ):
-            if value is not None and not (0.0 <= float(value) <= 1.0):
-                raise ContractError(name, f"must be on the unit interval [0,1], got {value!r}")
-        if not (0 <= int(evidence_level) <= 5):
-            raise ContractError("evidence_level", "must be an integer 0-5")
-
-        new_id = evidence_id or uuid.uuid4()
         with self._db.tenant_transaction(ws) as conn:
-            conn.execute(
-                """INSERT INTO scoring.evidence
-                       (id, workspace_id, claim_id, research_session_id, claim_type,
-                        direction, evidence_level, relevance, directness, reliability,
-                        extraction_confidence, confidence, observation_category,
-                        independence_state, independence_group_id, source_id,
-                        source_reference, extraction_method, model_version, prompt_version,
-                        observed_at, collected_at, expires_at)
-                   VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
-                (
-                    new_id,
-                    ws,
-                    claim_id,
-                    research_session_id,
-                    _enum_value("claim_type", claim_type, ClaimType),
-                    _enum_value("direction", direction, EvidenceDirection),
-                    int(evidence_level),
-                    relevance,
-                    directness,
-                    reliability,
-                    extraction_confidence,
-                    confidence,
-                    _enum_value(
-                        "observation_category",
-                        observation_category,
-                        EvidenceObservationCategory,
-                    ),
-                    state,
-                    independence_group_id,
-                    source_id,
-                    source_reference,
-                    extraction_method,
-                    model_version,
-                    prompt_version,
-                    observed_at,
-                    collected_at,
-                    expires_at,
-                ),
+            return _write_evidence(
+                conn,
+                ws,
+                claim_id,
+                direction,
+                evidence_level=evidence_level,
+                collected_at=collected_at,
+                expires_at=expires_at,
+                observation_category=observation_category,
+                independence_state=independence_state,
+                independence_group_id=independence_group_id,
+                relevance=relevance,
+                directness=directness,
+                reliability=reliability,
+                extraction_confidence=extraction_confidence,
+                confidence=confidence,
+                observed_at=observed_at,
+                source_id=source_id,
+                source_reference=source_reference,
+                extraction_method=extraction_method,
+                model_version=model_version,
+                prompt_version=prompt_version,
+                research_session_id=research_session_id,
+                evidence_id=evidence_id,
             )
-        return new_id
 
     def list_for_claim(
         self, workspace_id: WorkspaceId | uuid.UUID, claim_id: uuid.UUID
@@ -663,7 +751,7 @@ class EvidenceRepository:
                 """SELECT id, claim_id, direction, relevance, directness, reliability,
                           extraction_confidence, confidence, observation_category,
                           independence_state, independence_group_id, evidence_level,
-                          claim_type, source_id, source_reference, extraction_method,
+                          source_id, source_reference, extraction_method,
                           model_version, prompt_version, observed_at, collected_at,
                           expires_at, research_session_id
                      FROM scoring.evidence
@@ -685,16 +773,15 @@ class EvidenceRepository:
                 "independence_state": r[9],
                 "independence_group_id": str(r[10]) if r[10] else None,
                 "evidence_level": r[11],
-                "claim_type": r[12],
-                "source_id": r[13],
-                "source_reference": r[14],
-                "extraction_method": r[15],
-                "model_version": r[16],
-                "prompt_version": r[17],
-                "observed_at": r[18],
-                "collected_at": r[19],
-                "expires_at": r[20],
-                "research_session_id": str(r[21]) if r[21] else None,
+                "source_id": r[12],
+                "source_reference": r[13],
+                "extraction_method": r[14],
+                "model_version": r[15],
+                "prompt_version": r[16],
+                "observed_at": r[17],
+                "collected_at": r[18],
+                "expires_at": r[19],
+                "research_session_id": str(r[20]) if r[20] else None,
             }
             for r in records
         ]

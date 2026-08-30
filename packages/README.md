@@ -22,9 +22,16 @@ duplicating it would cause drift, not because it seemed reusable.
 | `contracts/` | **implemented** | Domain vocabulary, single source of truth (ADR-009) |
 | `llm-gateway/` | **implemented (skeleton)** | Provider-agnostic LLM access (ADR-006) |
 | `eslint-config/` | **implemented** | Shared lint rules |
+| `evidence-aggregation/` | **implemented** | The aggregation reference implementation (ADR-014) |
+| `signal-model/` | **implemented** | What a Signal is, and what it may not assert (ADR-020) |
+| `claim-model/` | **implemented** | The interpretation boundary: how a Signal may become a Claim, and may not (ADR-024) |
 | `typescript-config/` | scaffolded | Shared `tsconfig` bases |
 | `ui/` | planned | shadcn/ui-based component library |
 | `observability/` | planned | Logging, tracing and correlation conventions |
+
+> Three rows were missing from this table until Mission 1.13 —
+> `evidence-aggregation` (1.1), `signal-model` (1.11) and, on the same pass,
+> `claim-model`. An index that omits what exists is a worse guide than no index.
 
 ## Why `contracts` matters more than the rest
 

@@ -1,6 +1,6 @@
 {
   "$comment": "AUTHORITATIVE CONTRACT SOURCE OF TRUTH. Hand-edited. Everything under packages/contracts/generated/ is derived from this file by tools/generate.py. See ADR-009.",
-  "contract_version": "1.8.0",
+  "contract_version": "1.9.0",
   "ontology_version": "2",
   "scoring_framework_version": "1.1",
   "evidence_framework_version": "1",
@@ -1219,6 +1219,56 @@
         {
           "value": "PARAMETERS_INCOMPLETE",
           "description": "A parameter affecting the output was not stated. A hidden default makes the extractor version meaningless"
+        }
+      ]
+    },
+    {
+      "name": "ClaimInterpretationKind",
+      "spec": "claim-evidence-interpretation-contract-v1.md §6; Mission 1.13 §20",
+      "description": "How a Claim's proposition was produced from Signals. Closed and mandatory wherever an interpreter was involved, so that 'an LLM is a reasoning mechanism and not a market-data source' is a constraint rather than a sentence: DETERMINISTIC requires model and prompt versions to be ABSENT, and MODEL_DERIVED requires a model version. It is the claim-layer counterpart of SignalDerivationKind, and the same defect it fixes -- a table whose only producer identity is a model version reads as a table of model outputs.",
+      "values": [
+        {
+          "value": "DETERMINISTIC",
+          "description": "A template or rule applied to structured Signal facts. Reproducible from the Signals and the interpreter version alone, with no model and no prompt"
+        },
+        {
+          "value": "MODEL_DERIVED",
+          "description": "A model proposed the proposition. Obliged to carry provider and model version, to cite the Signal ids it read, to be schema-validated, and to treat source content as untrusted data (llm-reasoning-rules.md §7, §9). The model is never itself the evidence"
+        }
+      ]
+    },
+    {
+      "name": "ClaimEvidenceRefusalReason",
+      "spec": "claim-evidence-interpretation-contract-v1.md §11; Mission 1.13 §22",
+      "description": "Why an interpretation produced no Claim. A RETURNED VALUE, never a row: a claim stored to record that no claim could be made is exactly the unsupported assertion this layer exists to prevent, and a claim table row saying 'nothing' is worse than no row.",
+      "values": [
+        {
+          "value": "NO_SUPPORTING_SIGNAL",
+          "description": "The proposition cites no Signal. An automatically generated claim that cites nothing is an assertion a machine invented"
+        },
+        {
+          "value": "UNSUPPORTED_INTERPRETATION",
+          "description": "The proposition asserts more than its cited Signals establish -- a market, demand, user or monetisation reading of an arithmetic relation. Downgrade to HYPOTHESIS or refuse; never store it as OBSERVED or INFERRED"
+        },
+        {
+          "value": "SIGNAL_NOT_CITED",
+          "description": "An evidence draft names no Signal, so the claim could not be traced to what it was derived from"
+        },
+        {
+          "value": "INCOMPATIBLE_TEMPORAL_SEMANTICS",
+          "description": "The proposition asserts temporal coincidence or an 'as of' instant that its Signals cannot support -- H-29. A GDELT bucket is ordered within its stream and is on no shared timeline"
+        },
+        {
+          "value": "INCOMPATIBLE_LANGUAGE_SEMANTICS",
+          "description": "The proposition merges source language labels that no reviewed mapping relates -- H-30. CLD2 ENGLISH is not BCP-47 en"
+        },
+        {
+          "value": "PROPOSITION_NOT_IDENTIFIABLE",
+          "description": "No canonical proposition key could be built, so two derivations of the same proposition could not be recognised as one claim"
+        },
+        {
+          "value": "INTERPRETER_PROVENANCE_INCOMPLETE",
+          "description": "The interpreter did not name itself, its version, or the model a MODEL_DERIVED interpretation used"
         }
       ]
     }

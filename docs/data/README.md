@@ -40,6 +40,10 @@
 | `numeric-period-change-extractor-v1.md` | The first extractor: adjacent-period change in one measured series |
 | `lexical-frequency-contrast-extractor-v1.md` | The second: two terms, one bucket, one language label, and no ordering |
 | `lexical-frequency-change-extractor-v1.md` | The third: one term, two adjacent buckets, and a gap that is never bridged |
+| `claim-evidence-interpretation-gap-analysis-v1.md` | The Mission 1.13 audit: ten gaps between the claim schema and the pipeline that feeds it, written before the migration |
+| `claim-evidence-interpretation-contract-v1.md` | Where arithmetic becomes an assertion: what a Claim is, what Evidence is, and what a machine may not store |
+| `claim-epistemic-semantics-v1.md` | What each of the five claim types asserts, and the four ways of choosing the wrong one |
+| `signal-to-evidence-semantics-v1.md` | How a Signal becomes Evidence FOR a particular Claim, and why news frequency is not weak demand evidence |
 | `acquisition-rights-basis-gap-analysis-v1.md` | Why a resource records what KIND of thing authorises it, not only which licence (H-28, ADR-018) |
 | `wikimedia-pageviews-compliance-v1.md` | What Wikimedia Pageviews would need, and the one question blocking it |
 | `source-condition-gap-analysis-v1.md` | The nine Mission 1.3 conditions inventoried and classified, and the obligations deliberately left out of code |

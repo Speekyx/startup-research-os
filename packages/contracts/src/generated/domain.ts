@@ -9,12 +9,12 @@
  * Editing this file by hand will be overwritten and will fail the contract
  * check in CI. Change the source of truth instead.
  *
- * contract_version: 1.8.0
+ * contract_version: 1.9.0
  * ontology_version: 2
  */
 
 
-export const CONTRACT_VERSION = "1.8.0" as const;
+export const CONTRACT_VERSION = "1.9.0" as const;
 export const ONTOLOGY_VERSION = "2" as const;
 export const RESEARCH_CONTEXT_SCHEMA_VERSION = "1.0.0" as const;
 
@@ -785,6 +785,37 @@ export const SIGNAL_REFUSAL_REASON_VALUES = [
 export type SignalRefusalReason = (typeof SIGNAL_REFUSAL_REASON_VALUES)[number];
 export function isSignalRefusalReason(v: unknown): v is SignalRefusalReason {
   return typeof v === "string" && (SIGNAL_REFUSAL_REASON_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * How a Claim's proposition was produced from Signals. Closed and mandatory wherever an interpreter was involved, so that 'an LLM is a reasoning mechanism and not a market-data source' is a constraint rather than a sentence: DETERMINISTIC requires model and prompt versions to be ABSENT, and MODEL_DERIVED requires a model version. It is the claim-layer counterpart of SignalDerivationKind, and the same defect it fixes -- a table whose only producer identity is a model version reads as a table of model outputs.
+ * @see claim-evidence-interpretation-contract-v1.md §6; Mission 1.13 §20
+ */
+export const CLAIM_INTERPRETATION_KIND_VALUES = [
+  "DETERMINISTIC",
+  "MODEL_DERIVED",
+] as const;
+export type ClaimInterpretationKind = (typeof CLAIM_INTERPRETATION_KIND_VALUES)[number];
+export function isClaimInterpretationKind(v: unknown): v is ClaimInterpretationKind {
+  return typeof v === "string" && (CLAIM_INTERPRETATION_KIND_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * Why an interpretation produced no Claim. A RETURNED VALUE, never a row: a claim stored to record that no claim could be made is exactly the unsupported assertion this layer exists to prevent, and a claim table row saying 'nothing' is worse than no row.
+ * @see claim-evidence-interpretation-contract-v1.md §11; Mission 1.13 §22
+ */
+export const CLAIM_EVIDENCE_REFUSAL_REASON_VALUES = [
+  "NO_SUPPORTING_SIGNAL",
+  "UNSUPPORTED_INTERPRETATION",
+  "SIGNAL_NOT_CITED",
+  "INCOMPATIBLE_TEMPORAL_SEMANTICS",
+  "INCOMPATIBLE_LANGUAGE_SEMANTICS",
+  "PROPOSITION_NOT_IDENTIFIABLE",
+  "INTERPRETER_PROVENANCE_INCOMPLETE",
+] as const;
+export type ClaimEvidenceRefusalReason = (typeof CLAIM_EVIDENCE_REFUSAL_REASON_VALUES)[number];
+export function isClaimEvidenceRefusalReason(v: unknown): v is ClaimEvidenceRefusalReason {
+  return typeof v === "string" && (CLAIM_EVIDENCE_REFUSAL_REASON_VALUES as readonly string[]).includes(v);
 }
 
 // --- Numeric bounds --------------------------------------------------------
