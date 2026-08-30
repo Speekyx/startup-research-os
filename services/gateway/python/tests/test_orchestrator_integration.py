@@ -10,6 +10,10 @@ this package — the dependency runs one way only (`service-boundaries.md` §4).
 
 Every test runs through `tenant_transaction`, so every assertion below is also
 an assertion that the RLS policies do not get in the way of legitimate work.
+
+The two workspaces are this module's own, created before each test and dropped
+after it by `own_workspaces` below. Nearly every test here starts by creating a
+project and a session, and the seeded workspaces kept every one of them.
 """
 
 from __future__ import annotations
@@ -24,9 +28,19 @@ from sros_orchestrator import BudgetEntryKind, Capability, CompletenessBasis, Jo
 from sros_orchestrator.orchestrator import RecordingDispatcher, ResearchOrchestrator
 from sros_orchestrator.repositories import OrchestratorNotFoundError
 
-from .conftest import WORKSPACE_A, WORKSPACE_B, needs_postgres
+from .conftest import WORKSPACE_ORCH_P, WORKSPACE_ORCH_Q, needs_postgres
 
 CORRELATION = "corr-orchestration"
+
+
+@pytest.fixture(autouse=True)
+def own_workspaces(orchestration_workspaces) -> None:
+    """Every test in this module runs in workspaces of its own.
+
+    Autouse, and it hands nothing back: `_new_session` already defaults to
+    WORKSPACE_ORCH_P, so what a test needs is not a value but a guarantee --
+    that the workspaces exist when it starts and are gone when it ends.
+    """
 
 
 def _context(**overrides: object) -> ResearchContext:
@@ -35,7 +49,7 @@ def _context(**overrides: object) -> ResearchContext:
     return ResearchContext.from_json(payload)
 
 
-def _new_session(database, workspace=WORKSPACE_A, context: ResearchContext | None = None):
+def _new_session(database, workspace=WORKSPACE_ORCH_P, context: ResearchContext | None = None):
     project = ResearchProjectRepository(database).create(workspace, f"orch-{uuid.uuid4().hex[:8]}")
     return ResearchSessionRepository(database).create(
         workspace_id=workspace,
@@ -88,48 +102,48 @@ def _save_jobs(orchestrator: ResearchOrchestrator, session_row, jobs: list[JobSp
 class TestPlanPersistence:
     def test_a_plan_and_its_jobs_are_persisted_together(self, database, orchestrator) -> None:
         session = _new_session(database)
-        plan = orchestrator.plan_session(WORKSPACE_A, session.id, CORRELATION)
+        plan = orchestrator.plan_session(WORKSPACE_ORCH_P, session.id, CORRELATION)
 
-        row = orchestrator.plans.active_for_session(WORKSPACE_A, session.id)
+        row = orchestrator.plans.active_for_session(WORKSPACE_ORCH_P, session.id)
         assert row.plan_version == 1
         assert row.planner_version == plan.planner_version
         assert set(row.blocked_capabilities) == {c.value for c in Capability}
 
-        ledger = orchestrator.jobs.list_for_session(WORKSPACE_A, session.id)
+        ledger = orchestrator.jobs.list_for_session(WORKSPACE_ORCH_P, session.id)
         assert len(ledger) == len(plan.jobs)
 
     def test_planning_moves_the_session_out_of_pending(self, database, orchestrator) -> None:
         session = _new_session(database)
         assert session.status is Status.PENDING
-        orchestrator.plan_session(WORKSPACE_A, session.id, CORRELATION)
-        assert orchestrator.sessions.status(WORKSPACE_A, session.id) is Status.PLANNING
+        orchestrator.plan_session(WORKSPACE_ORCH_P, session.id, CORRELATION)
+        assert orchestrator.sessions.status(WORKSPACE_ORCH_P, session.id) is Status.PLANNING
 
     def test_replanning_converges_on_the_existing_ledger(self, database, orchestrator) -> None:
         """§13. A replan after a crash must not insert a parallel copy of the
         plan and orphan the one already in flight."""
         session = _new_session(database)
-        orchestrator.plan_session(WORKSPACE_A, session.id, CORRELATION)
-        first = {j.id for j in orchestrator.jobs.list_for_session(WORKSPACE_A, session.id)}
+        orchestrator.plan_session(WORKSPACE_ORCH_P, session.id, CORRELATION)
+        first = {j.id for j in orchestrator.jobs.list_for_session(WORKSPACE_ORCH_P, session.id)}
 
-        orchestrator.plan_session(WORKSPACE_A, session.id, "a-different-correlation")
-        second = orchestrator.jobs.list_for_session(WORKSPACE_A, session.id)
+        orchestrator.plan_session(WORKSPACE_ORCH_P, session.id, "a-different-correlation")
+        second = orchestrator.jobs.list_for_session(WORKSPACE_ORCH_P, session.id)
 
         assert {j.id for j in second} == first
         assert len(second) == len(first)
-        assert orchestrator.plans.active_for_session(WORKSPACE_A, session.id).plan_version == 1
+        assert orchestrator.plans.active_for_session(WORKSPACE_ORCH_P, session.id).plan_version == 1
 
     def test_the_dependency_edges_are_persisted(self, database, orchestrator) -> None:
         session = _new_session(database)
-        plan = orchestrator.plan_session(WORKSPACE_A, session.id, CORRELATION)
-        edges = orchestrator.jobs.dependencies_for_session(WORKSPACE_A, session.id)
+        plan = orchestrator.plan_session(WORKSPACE_ORCH_P, session.id, CORRELATION)
+        edges = orchestrator.jobs.dependencies_for_session(WORKSPACE_ORCH_P, session.id)
         expected = {job.job_id: job.dependencies for job in plan.jobs if job.dependencies}
         assert edges == {k: tuple(sorted(v, key=str)) for k, v in expected.items()}
 
     def test_a_plan_belongs_to_one_workspace_only(self, database, orchestrator) -> None:
         session = _new_session(database)
-        orchestrator.plan_session(WORKSPACE_A, session.id, CORRELATION)
+        orchestrator.plan_session(WORKSPACE_ORCH_P, session.id, CORRELATION)
         with pytest.raises(OrchestratorNotFoundError):
-            orchestrator.plans.active_for_session(WORKSPACE_B, session.id)
+            orchestrator.plans.active_for_session(WORKSPACE_ORCH_Q, session.id)
 
 
 # ============================================== blocked work is never dispatched
@@ -143,9 +157,9 @@ class TestBlockedWorkIsNeverDispatched:
         dispatcher = RecordingDispatcher()
         orchestrator = ResearchOrchestrator(database, dispatcher=dispatcher)
         session = _new_session(database)
-        orchestrator.plan_session(WORKSPACE_A, session.id, CORRELATION)
+        orchestrator.plan_session(WORKSPACE_ORCH_P, session.id, CORRELATION)
 
-        report = orchestrator.advance(WORKSPACE_A, session.id)
+        report = orchestrator.advance(WORKSPACE_ORCH_P, session.id)
 
         assert report.dispatched == ()
         assert dispatcher.dispatched == []
@@ -163,8 +177,8 @@ class TestBlockedWorkIsNeverDispatched:
         the registry said rather than hard-coded, so the test asserts the rule
         instead of asserting one deployment's state."""
         session = _new_session(database)
-        plan = orchestrator.plan_session(WORKSPACE_A, session.id, CORRELATION)
-        rows = orchestrator.jobs.list_for_session(WORKSPACE_A, session.id)
+        plan = orchestrator.plan_session(WORKSPACE_ORCH_P, session.id, CORRELATION)
+        rows = orchestrator.jobs.list_for_session(WORKSPACE_ORCH_P, session.id)
         acquisition = next(r for r in rows if r.job_type == "acquire.collect")
         assert acquisition.status is JobStatus.BLOCKED
         assert acquisition.blocked_reason is not None
@@ -188,7 +202,7 @@ class TestBlockedWorkIsNeverDispatched:
         block whose explanation got worse as the registry got better would be a
         regression, so this holds under either acquisition gate."""
         session = _new_session(database)
-        plan = orchestrator.plan_session(WORKSPACE_A, session.id, CORRELATION)
+        plan = orchestrator.plan_session(WORKSPACE_ORCH_P, session.id, CORRELATION)
         per_source = plan.blocked_source_reasons()
         assert per_source, "the gate must name the sources it refused"
         assert any(r.startswith("tiktok (PROHIBITED)") for r in per_source), per_source
@@ -198,8 +212,8 @@ class TestBlockedWorkIsNeverDispatched:
         """A plan read back must still explain itself. Reasons that live only in
         memory are reasons nobody can audit after the process exits."""
         session = _new_session(database)
-        orchestrator.plan_session(WORKSPACE_A, session.id, CORRELATION)
-        with database.tenant_transaction(WORKSPACE_A) as conn:
+        orchestrator.plan_session(WORKSPACE_ORCH_P, session.id, CORRELATION)
+        with database.tenant_transaction(WORKSPACE_ORCH_P) as conn:
             row = conn.execute(
                 """SELECT blocked_reasons FROM research.research_plans
                     WHERE research_session_id = %s""",
@@ -213,8 +227,8 @@ class TestBlockedWorkIsNeverDispatched:
 
     def test_the_scoring_block_names_d03(self, database, orchestrator) -> None:
         session = _new_session(database)
-        orchestrator.plan_session(WORKSPACE_A, session.id, CORRELATION)
-        rows = orchestrator.jobs.list_for_session(WORKSPACE_A, session.id)
+        orchestrator.plan_session(WORKSPACE_ORCH_P, session.id, CORRELATION)
+        rows = orchestrator.jobs.list_for_session(WORKSPACE_ORCH_P, session.id)
         scoring = next(r for r in rows if r.job_type == "score.opportunity")
         assert scoring.status is JobStatus.BLOCKED
         assert scoring.blocked_reason is not None
@@ -222,13 +236,13 @@ class TestBlockedWorkIsNeverDispatched:
 
     def test_the_database_refuses_a_blocked_job_with_no_reason(self, database) -> None:
         session = _new_session(database)
-        with pytest.raises(Exception) as exc, database.tenant_transaction(WORKSPACE_A) as conn:
+        with pytest.raises(Exception) as exc, database.tenant_transaction(WORKSPACE_ORCH_P) as conn:
             conn.execute(
                 """INSERT INTO research.research_jobs
                        (id, workspace_id, research_session_id, job_type, queue,
                         correlation_id, idempotency_key, status)
                    VALUES (%s,%s,%s,'maintenance.probe','maintenance','c',%s,'BLOCKED')""",
-                (uuid.uuid4(), WORKSPACE_A, session.id, uuid.uuid4().hex),
+                (uuid.uuid4(), WORKSPACE_ORCH_P, session.id, uuid.uuid4().hex),
             )
         assert "check constraint" in str(exc.value).lower()
 
@@ -247,7 +261,7 @@ class TestDispatchOrdering:
         second = _probe_job(session, payload={"step": 2}, dependencies=(first.job_id,))
         _save_jobs(orchestrator, session, [first, second])
 
-        report = orchestrator.advance(WORKSPACE_A, session.id)
+        report = orchestrator.advance(WORKSPACE_ORCH_P, session.id)
         assert report.dispatched == (first.job_id,)
 
     def test_a_dependent_becomes_dispatchable_once_its_dependency_succeeds(
@@ -258,11 +272,11 @@ class TestDispatchOrdering:
         second = _probe_job(session, payload={"step": 2}, dependencies=(first.job_id,))
         _save_jobs(orchestrator, session, [first, second])
 
-        orchestrator.advance(WORKSPACE_A, session.id)
-        orchestrator.report_started(WORKSPACE_A, first.job_id)
-        orchestrator.report_success(WORKSPACE_A, first.job_id, actual_cost_units=1.0)
+        orchestrator.advance(WORKSPACE_ORCH_P, session.id)
+        orchestrator.report_started(WORKSPACE_ORCH_P, first.job_id)
+        orchestrator.report_success(WORKSPACE_ORCH_P, first.job_id, actual_cost_units=1.0)
 
-        report = orchestrator.advance(WORKSPACE_A, session.id)
+        report = orchestrator.advance(WORKSPACE_ORCH_P, session.id)
         assert report.dispatched == (second.job_id,)
 
     def test_a_dependent_of_failed_work_is_reported_unreachable(
@@ -273,12 +287,12 @@ class TestDispatchOrdering:
         second = _probe_job(session, payload={"step": 2}, dependencies=(first.job_id,))
         _save_jobs(orchestrator, session, [first, second])
 
-        orchestrator.advance(WORKSPACE_A, session.id)
+        orchestrator.advance(WORKSPACE_ORCH_P, session.id)
         orchestrator.report_failure(
-            WORKSPACE_A, first.job_id, "deterministic parse error", retryable=False
+            WORKSPACE_ORCH_P, first.job_id, "deterministic parse error", retryable=False
         )
 
-        report = orchestrator.advance(WORKSPACE_A, session.id)
+        report = orchestrator.advance(WORKSPACE_ORCH_P, session.id)
         assert report.dispatched == ()
         assert second.job_id in report.unreachable
 
@@ -288,11 +302,11 @@ class TestDispatchOrdering:
         session = _new_session(database)
         _save_jobs(orchestrator, session, [_probe_job(session)])
 
-        orchestrator.advance(WORKSPACE_A, session.id)
+        orchestrator.advance(WORKSPACE_ORCH_P, session.id)
 
         _job_id, headers = dispatcher.dispatched[0]
         assert headers == {
-            "workspace_id": str(WORKSPACE_A),
+            "workspace_id": str(WORKSPACE_ORCH_P),
             "research_session_id": str(session.id),
             "correlation_id": CORRELATION,
         }
@@ -311,21 +325,21 @@ class TestDuplicateDelivery:
         _save_jobs(orchestrator, session, [job])
         _save_jobs(orchestrator, session, [job])
 
-        rows = orchestrator.jobs.list_for_session(WORKSPACE_A, session.id)
+        rows = orchestrator.jobs.list_for_session(WORKSPACE_ORCH_P, session.id)
         assert len(rows) == 1
 
     def test_the_same_key_in_another_workspace_is_a_different_row(self, database) -> None:
         """Tenant separation of the key: two workspaces doing identical work
         must not collide on each other's constraint."""
         orchestrator = ResearchOrchestrator(database)
-        session_a = _new_session(database, WORKSPACE_A)
-        session_b = _new_session(database, WORKSPACE_B)
+        session_a = _new_session(database, WORKSPACE_ORCH_P)
+        session_b = _new_session(database, WORKSPACE_ORCH_Q)
 
         _save_jobs(orchestrator, session_a, [_probe_job(session_a)])
         _save_jobs(orchestrator, session_b, [_probe_job(session_b)])
 
-        assert len(orchestrator.jobs.list_for_session(WORKSPACE_A, session_a.id)) == 1
-        assert len(orchestrator.jobs.list_for_session(WORKSPACE_B, session_b.id)) == 1
+        assert len(orchestrator.jobs.list_for_session(WORKSPACE_ORCH_P, session_a.id)) == 1
+        assert len(orchestrator.jobs.list_for_session(WORKSPACE_ORCH_Q, session_b.id)) == 1
 
     def test_a_direct_duplicate_insert_is_refused_by_the_constraint(
         self, database, orchestrator
@@ -334,13 +348,13 @@ class TestDuplicateDelivery:
         job = _probe_job(session)
         _save_jobs(orchestrator, session, [job])
 
-        with pytest.raises(Exception) as exc, database.tenant_transaction(WORKSPACE_A) as conn:
+        with pytest.raises(Exception) as exc, database.tenant_transaction(WORKSPACE_ORCH_P) as conn:
             conn.execute(
                 """INSERT INTO research.research_jobs
                        (id, workspace_id, research_session_id, job_type, queue,
                         correlation_id, idempotency_key, status)
                    VALUES (%s,%s,%s,'maintenance.probe','maintenance','c',%s,'PENDING')""",
-                (uuid.uuid4(), WORKSPACE_A, session.id, job.idempotency_key()),
+                (uuid.uuid4(), WORKSPACE_ORCH_P, session.id, job.idempotency_key()),
             )
         assert "unique" in str(exc.value).lower() or "duplicate" in str(exc.value).lower()
 
@@ -354,10 +368,10 @@ class TestFailureHandling:
         session = _new_session(database)
         job = _probe_job(session, max_attempts=3)
         _save_jobs(orchestrator, session, [job])
-        orchestrator.advance(WORKSPACE_A, session.id)
+        orchestrator.advance(WORKSPACE_ORCH_P, session.id)
 
         row = orchestrator.report_failure(
-            WORKSPACE_A, job.job_id, "connection reset", retryable=True
+            WORKSPACE_ORCH_P, job.job_id, "connection reset", retryable=True
         )
         assert row.status is JobStatus.READY
         assert row.last_error == "connection reset"
@@ -367,10 +381,10 @@ class TestFailureHandling:
         session = _new_session(database)
         job = _probe_job(session, max_attempts=3)
         _save_jobs(orchestrator, session, [job])
-        orchestrator.advance(WORKSPACE_A, session.id)
+        orchestrator.advance(WORKSPACE_ORCH_P, session.id)
 
         row = orchestrator.report_failure(
-            WORKSPACE_A, job.job_id, "invalid request", retryable=False
+            WORKSPACE_ORCH_P, job.job_id, "invalid request", retryable=False
         )
         assert row.status is JobStatus.FAILED
 
@@ -380,9 +394,9 @@ class TestFailureHandling:
         session = _new_session(database)
         job = _probe_job(session, max_attempts=1)
         _save_jobs(orchestrator, session, [job])
-        orchestrator.advance(WORKSPACE_A, session.id)
+        orchestrator.advance(WORKSPACE_ORCH_P, session.id)
 
-        row = orchestrator.report_failure(WORKSPACE_A, job.job_id, "timeout", retryable=True)
+        row = orchestrator.report_failure(WORKSPACE_ORCH_P, job.job_id, "timeout", retryable=True)
         assert row.status is JobStatus.FAILED
 
     def test_a_failed_job_does_not_fail_the_session(self, database, orchestrator) -> None:
@@ -391,10 +405,10 @@ class TestFailureHandling:
         session = _new_session(database)
         job = _probe_job(session)
         _save_jobs(orchestrator, session, [job])
-        orchestrator.advance(WORKSPACE_A, session.id)
-        orchestrator.report_failure(WORKSPACE_A, job.job_id, "boom", retryable=False)
+        orchestrator.advance(WORKSPACE_ORCH_P, session.id)
+        orchestrator.report_failure(WORKSPACE_ORCH_P, job.job_id, "boom", retryable=False)
 
-        assert orchestrator.sessions.status(WORKSPACE_A, session.id) is Status.PENDING
+        assert orchestrator.sessions.status(WORKSPACE_ORCH_P, session.id) is Status.PENDING
 
 
 # ================================================================ resumability
@@ -409,13 +423,13 @@ class TestResumability:
         first = ResearchOrchestrator(database, dispatcher=RecordingDispatcher())
         job = _probe_job(session, max_attempts=3)
         _save_jobs(first, session, [job])
-        first.advance(WORKSPACE_A, session.id)
+        first.advance(WORKSPACE_ORCH_P, session.id)
 
         # The process dies here. Nothing was flushed, nothing was checkpointed.
         del first
 
         second = ResearchOrchestrator(database, dispatcher=RecordingDispatcher())
-        rows = second.jobs.list_for_session(WORKSPACE_A, session.id)
+        rows = second.jobs.list_for_session(WORKSPACE_ORCH_P, session.id)
         assert [r.status for r in rows] == [JobStatus.DISPATCHED]
 
     def test_resume_reclaims_work_no_worker_reported_on(self, database) -> None:
@@ -424,13 +438,13 @@ class TestResumability:
         orchestrator = ResearchOrchestrator(database, dispatcher=dispatcher)
         job = _probe_job(session, max_attempts=3)
         _save_jobs(orchestrator, session, [job])
-        orchestrator.advance(WORKSPACE_A, session.id)
+        orchestrator.advance(WORKSPACE_ORCH_P, session.id)
 
         resumed = ResearchOrchestrator(database, dispatcher=dispatcher)
-        report = resumed.resume(WORKSPACE_A, session.id)
+        report = resumed.resume(WORKSPACE_ORCH_P, session.id)
 
         assert job.job_id in report.dispatched
-        row = resumed.jobs.get(WORKSPACE_A, job.job_id)
+        row = resumed.jobs.get(WORKSPACE_ORCH_P, job.job_id)
         assert row.attempts == 2
 
     def test_resume_does_not_reclaim_work_that_is_out_of_attempts(self, database) -> None:
@@ -439,9 +453,9 @@ class TestResumability:
         orchestrator = ResearchOrchestrator(database)
         job = _probe_job(session, max_attempts=1)
         _save_jobs(orchestrator, session, [job])
-        orchestrator.advance(WORKSPACE_A, session.id)
+        orchestrator.advance(WORKSPACE_ORCH_P, session.id)
 
-        report = ResearchOrchestrator(database).resume(WORKSPACE_A, session.id)
+        report = ResearchOrchestrator(database).resume(WORKSPACE_ORCH_P, session.id)
         assert report.dispatched == ()
 
     def test_redis_is_not_the_source_of_progress_truth(self, database, orchestrator) -> None:
@@ -450,13 +464,13 @@ class TestResumability:
         session = _new_session(database)
         job = _probe_job(session)
         _save_jobs(orchestrator, session, [job])
-        orchestrator.advance(WORKSPACE_A, session.id)
+        orchestrator.advance(WORKSPACE_ORCH_P, session.id)
 
-        with database.tenant_transaction(WORKSPACE_A) as conn:
+        with database.tenant_transaction(WORKSPACE_ORCH_P) as conn:
             row = conn.execute(
                 """SELECT status, attempts, dispatched_at, correlation_id, idempotency_key
                    FROM research.research_jobs WHERE workspace_id = %s AND id = %s""",
-                (WORKSPACE_A, job.job_id),
+                (WORKSPACE_ORCH_P, job.job_id),
             ).fetchone()
         assert row is not None
         assert row[0] == "DISPATCHED"
@@ -480,7 +494,7 @@ class TestBudgetEnforcement:
         job = _probe_job(session, estimated_cost_units=50.0)
         _save_jobs(orchestrator, session, [job])
 
-        report = orchestrator.advance(WORKSPACE_A, session.id)
+        report = orchestrator.advance(WORKSPACE_ORCH_P, session.id)
 
         assert report.dispatched == ()
         assert dispatcher.dispatched == []
@@ -493,17 +507,17 @@ class TestBudgetEnforcement:
             database, context=_context(budget_constraints={"max_cost_units": 1.0})
         )
         _save_jobs(orchestrator, session, [_probe_job(session, estimated_cost_units=99.0)])
-        orchestrator.advance(WORKSPACE_A, session.id)
-        assert orchestrator.sessions.status(WORKSPACE_A, session.id) is Status.PENDING
+        orchestrator.advance(WORKSPACE_ORCH_P, session.id)
+        assert orchestrator.sessions.status(WORKSPACE_ORCH_P, session.id) is Status.PENDING
 
     def test_a_reservation_is_recorded_before_dispatch(self, database, orchestrator) -> None:
         session = _new_session(
             database, context=_context(budget_constraints={"max_cost_units": 100.0})
         )
         _save_jobs(orchestrator, session, [_probe_job(session, estimated_cost_units=10.0)])
-        orchestrator.advance(WORKSPACE_A, session.id)
+        orchestrator.advance(WORKSPACE_ORCH_P, session.id)
 
-        entries = orchestrator.budgets.entries_for_session(WORKSPACE_A, session.id)
+        entries = orchestrator.budgets.entries_for_session(WORKSPACE_ORCH_P, session.id)
         assert [e["entry_kind"] for e in entries] == [BudgetEntryKind.RESERVATION.value]
         assert entries[0]["cost_units"] == 10.0
         assert entries[0]["currency"] == "COST_UNIT"
@@ -520,7 +534,7 @@ class TestBudgetEnforcement:
         second = _probe_job(session, payload={"n": 2}, estimated_cost_units=10.0)
         _save_jobs(orchestrator, session, [first, second])
 
-        report = orchestrator.advance(WORKSPACE_A, session.id)
+        report = orchestrator.advance(WORKSPACE_ORCH_P, session.id)
 
         # WHICH of the two goes first is ledger ordering and is not the point.
         # What the guard must guarantee is that the second one does not also
@@ -539,13 +553,13 @@ class TestBudgetEnforcement:
         )
         job = _probe_job(session, estimated_cost_units=10.0)
         _save_jobs(orchestrator, session, [job])
-        orchestrator.advance(WORKSPACE_A, session.id)
-        orchestrator.report_started(WORKSPACE_A, job.job_id)
+        orchestrator.advance(WORKSPACE_ORCH_P, session.id)
+        orchestrator.report_started(WORKSPACE_ORCH_P, job.job_id)
         orchestrator.report_success(
-            WORKSPACE_A, job.job_id, actual_cost_units=7.5, provider="fake", tier="FAST_MODEL"
+            WORKSPACE_ORCH_P, job.job_id, actual_cost_units=7.5, provider="fake", tier="FAST_MODEL"
         )
 
-        account = orchestrator.budgets.account_for_session(WORKSPACE_A, session.id)
+        account = orchestrator.budgets.account_for_session(WORKSPACE_ORCH_P, session.id)
         assert account.reserved_cost_units == 0.0
         assert account.actual_cost_units == 7.5
         assert account.remaining_cost_units == 92.5
@@ -558,10 +572,10 @@ class TestBudgetEnforcement:
         )
         job = _probe_job(session, estimated_cost_units=10.0)
         _save_jobs(orchestrator, session, [job])
-        orchestrator.advance(WORKSPACE_A, session.id)
-        orchestrator.report_failure(WORKSPACE_A, job.job_id, "boom", retryable=False)
+        orchestrator.advance(WORKSPACE_ORCH_P, session.id)
+        orchestrator.report_failure(WORKSPACE_ORCH_P, job.job_id, "boom", retryable=False)
 
-        account = orchestrator.budgets.account_for_session(WORKSPACE_A, session.id)
+        account = orchestrator.budgets.account_for_session(WORKSPACE_ORCH_P, session.id)
         assert account.committed_cost_units == 0.0
 
     def test_the_spend_record_carries_its_reproducibility_metadata(
@@ -572,9 +586,9 @@ class TestBudgetEnforcement:
         )
         job = _probe_job(session, estimated_cost_units=1.0)
         _save_jobs(orchestrator, session, [job])
-        orchestrator.advance(WORKSPACE_A, session.id)
+        orchestrator.advance(WORKSPACE_ORCH_P, session.id)
         orchestrator.report_success(
-            WORKSPACE_A,
+            WORKSPACE_ORCH_P,
             job.job_id,
             actual_cost_units=2.0,
             provider="anthropic",
@@ -585,7 +599,7 @@ class TestBudgetEnforcement:
 
         actuals = [
             e
-            for e in orchestrator.budgets.entries_for_session(WORKSPACE_A, session.id)
+            for e in orchestrator.budgets.entries_for_session(WORKSPACE_ORCH_P, session.id)
             if e["entry_kind"] == BudgetEntryKind.ACTUAL.value
         ]
         assert actuals[0]["provider"] == "anthropic"
@@ -595,12 +609,12 @@ class TestBudgetEnforcement:
 
     def test_the_database_refuses_an_unknown_tier(self, database, orchestrator) -> None:
         session = _new_session(database)
-        with pytest.raises(Exception) as exc, database.tenant_transaction(WORKSPACE_A) as conn:
+        with pytest.raises(Exception) as exc, database.tenant_transaction(WORKSPACE_ORCH_P) as conn:
             conn.execute(
                 """INSERT INTO research.session_budget_entries
                        (id, workspace_id, research_session_id, entry_kind, cost_units, tier)
                    VALUES (%s,%s,%s,'ACTUAL',1.0,'GENIUS_MODEL')""",
-                (uuid.uuid4(), WORKSPACE_A, session.id),
+                (uuid.uuid4(), WORKSPACE_ORCH_P, session.id),
             )
         assert "check constraint" in str(exc.value).lower()
 
@@ -616,8 +630,8 @@ class TestCancellation:
         session = _new_session(database)
         _save_jobs(orchestrator, session, [_probe_job(session)])
 
-        orchestrator.cancel(WORKSPACE_A, session.id)
-        report = orchestrator.advance(WORKSPACE_A, session.id)
+        orchestrator.cancel(WORKSPACE_ORCH_P, session.id)
+        report = orchestrator.advance(WORKSPACE_ORCH_P, session.id)
 
         assert report.dispatched == ()
         assert dispatcher.dispatched == []
@@ -626,8 +640,8 @@ class TestCancellation:
         self, database, orchestrator
     ) -> None:
         session = _new_session(database)
-        orchestrator.cancel(WORKSPACE_A, session.id)
-        assert orchestrator.sessions.status(WORKSPACE_A, session.id) is Status.CANCELLED
+        orchestrator.cancel(WORKSPACE_ORCH_P, session.id)
+        assert orchestrator.sessions.status(WORKSPACE_ORCH_P, session.id) is Status.CANCELLED
 
     def test_in_flight_work_is_reported_rather_than_claimed_stopped(
         self, database, orchestrator
@@ -638,18 +652,18 @@ class TestCancellation:
         session = _new_session(database)
         job = _probe_job(session)
         _save_jobs(orchestrator, session, [job])
-        orchestrator.advance(WORKSPACE_A, session.id)
+        orchestrator.advance(WORKSPACE_ORCH_P, session.id)
 
-        report = orchestrator.cancel(WORKSPACE_A, session.id)
+        report = orchestrator.cancel(WORKSPACE_ORCH_P, session.id)
 
         assert job.job_id in report.unreachable
-        assert orchestrator.jobs.get(WORKSPACE_A, job.job_id).status is JobStatus.DISPATCHED
+        assert orchestrator.jobs.get(WORKSPACE_ORCH_P, job.job_id).status is JobStatus.DISPATCHED
 
     def test_cancelling_a_terminal_session_is_a_no_op(self, database, orchestrator) -> None:
         session = _new_session(database)
-        orchestrator.cancel(WORKSPACE_A, session.id)
-        orchestrator.cancel(WORKSPACE_A, session.id)
-        assert orchestrator.sessions.status(WORKSPACE_A, session.id) is Status.CANCELLED
+        orchestrator.cancel(WORKSPACE_ORCH_P, session.id)
+        orchestrator.cancel(WORKSPACE_ORCH_P, session.id)
+        assert orchestrator.sessions.status(WORKSPACE_ORCH_P, session.id) is Status.CANCELLED
 
 
 # ================================================================ completeness
@@ -661,10 +675,10 @@ class TestCompletenessRecording:
         self, database, orchestrator
     ) -> None:
         session = _new_session(database)
-        plan = orchestrator.plan_session(WORKSPACE_A, session.id, CORRELATION)
-        orchestrator.advance(WORKSPACE_A, session.id)
+        plan = orchestrator.plan_session(WORKSPACE_ORCH_P, session.id, CORRELATION)
+        orchestrator.advance(WORKSPACE_ORCH_P, session.id)
 
-        record = orchestrator.finalize(WORKSPACE_A, session.id, plan)
+        record = orchestrator.finalize(WORKSPACE_ORCH_P, session.id, plan)
 
         assert record.basis is CompletenessBasis.UNKNOWN
         assert record.value is None
@@ -681,11 +695,11 @@ class TestCompletenessRecording:
 
     def test_the_record_is_persisted_and_readable(self, database, orchestrator) -> None:
         session = _new_session(database)
-        plan = orchestrator.plan_session(WORKSPACE_A, session.id, CORRELATION)
-        orchestrator.advance(WORKSPACE_A, session.id)
-        orchestrator.finalize(WORKSPACE_A, session.id, plan)
+        plan = orchestrator.plan_session(WORKSPACE_ORCH_P, session.id, CORRELATION)
+        orchestrator.advance(WORKSPACE_ORCH_P, session.id)
+        orchestrator.finalize(WORKSPACE_ORCH_P, session.id, plan)
 
-        stored = orchestrator.completeness.latest_for_session(WORKSPACE_A, session.id)
+        stored = orchestrator.completeness.latest_for_session(WORKSPACE_ORCH_P, session.id)
         assert stored is not None
         assert stored.basis is CompletenessBasis.UNKNOWN
         assert stored.incompleteness_reasons
@@ -694,12 +708,12 @@ class TestCompletenessRecording:
         self, database, orchestrator
     ) -> None:
         session = _new_session(database)
-        with pytest.raises(Exception) as exc, database.tenant_transaction(WORKSPACE_A) as conn:
+        with pytest.raises(Exception) as exc, database.tenant_transaction(WORKSPACE_ORCH_P) as conn:
             conn.execute(
                 """INSERT INTO research.research_completeness_records
                        (id, workspace_id, research_session_id, basis)
                    VALUES (%s,%s,%s,'MEASURED')""",
-                (uuid.uuid4(), WORKSPACE_A, session.id),
+                (uuid.uuid4(), WORKSPACE_ORCH_P, session.id),
             )
         assert "check constraint" in str(exc.value).lower()
 
@@ -707,12 +721,12 @@ class TestCompletenessRecording:
         self, database, orchestrator
     ) -> None:
         session = _new_session(database)
-        with pytest.raises(Exception) as exc, database.tenant_transaction(WORKSPACE_A) as conn:
+        with pytest.raises(Exception) as exc, database.tenant_transaction(WORKSPACE_ORCH_P) as conn:
             conn.execute(
                 """INSERT INTO research.research_completeness_records
                        (id, workspace_id, research_session_id, basis, measured_score)
                    VALUES (%s,%s,%s,'MEASURED',101)""",
-                (uuid.uuid4(), WORKSPACE_A, session.id),
+                (uuid.uuid4(), WORKSPACE_ORCH_P, session.id),
             )
         assert "check constraint" in str(exc.value).lower()
 
@@ -724,22 +738,22 @@ class TestCompletenessRecording:
 class TestOrchestrationIsTenantScoped:
     def test_one_workspace_cannot_read_another_workspaces_ledger(self, database) -> None:
         orchestrator = ResearchOrchestrator(database)
-        session = _new_session(database, WORKSPACE_A)
+        session = _new_session(database, WORKSPACE_ORCH_P)
         _save_jobs(orchestrator, session, [_probe_job(session)])
 
-        assert orchestrator.jobs.list_for_session(WORKSPACE_B, session.id) == []
+        assert orchestrator.jobs.list_for_session(WORKSPACE_ORCH_Q, session.id) == []
 
     def test_a_job_cannot_be_transitioned_from_another_workspace(self, database) -> None:
         orchestrator = ResearchOrchestrator(database)
-        session = _new_session(database, WORKSPACE_A)
+        session = _new_session(database, WORKSPACE_ORCH_P)
         job = _probe_job(session)
         _save_jobs(orchestrator, session, [job])
 
         with pytest.raises(OrchestratorNotFoundError):
-            orchestrator.jobs.transition(WORKSPACE_B, job.job_id, JobStatus.READY)
+            orchestrator.jobs.transition(WORKSPACE_ORCH_Q, job.job_id, JobStatus.READY)
 
     def test_a_missing_workspace_is_refused(self, database) -> None:
         orchestrator = ResearchOrchestrator(database)
-        session = _new_session(database, WORKSPACE_A)
+        session = _new_session(database, WORKSPACE_ORCH_P)
         with pytest.raises(ValueError):
             orchestrator.jobs.list_for_session("", session.id)

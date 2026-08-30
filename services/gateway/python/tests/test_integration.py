@@ -4,6 +4,11 @@ Categories from Mission 0.3 §36: runtime, tenancy, API, lifecycle.
 
 The tenancy tests are the ones that matter most. They all use TWO workspaces,
 because an isolation assertion needs something to be isolated from.
+
+Both are this module's own, created before each test and dropped after it by
+`own_workspaces` below. The seeded pair is shared with every other suite, and
+this module writes on nearly every test -- projects, sessions, opportunities
+and observations -- so writing there left all of it behind, run after run.
 """
 
 from __future__ import annotations
@@ -29,8 +34,8 @@ from sros_gateway.vectors.qdrant_client import (
 )
 
 from tests.conftest import (
-    WORKSPACE_A,
-    WORKSPACE_B,
+    WORKSPACE_INTEGRATION_P,
+    WORKSPACE_INTEGRATION_Q,
     header,
     needs_postgres,
     needs_qdrant,
@@ -38,6 +43,27 @@ from tests.conftest import (
 )
 
 CONTEXT = {"market_scope": {"type": "COUNTRY", "countries": ["FR"]}}
+
+
+# ================================================================= workspaces
+
+
+@pytest.fixture(autouse=True)
+def own_workspaces(integration_workspaces) -> None:
+    """Every test in this module runs in workspaces of its own.
+
+    Autouse, and it hands nothing back: the tests name WORKSPACE_INTEGRATION_P
+    and WORKSPACE_INTEGRATION_Q directly, so what they need is not a value but
+    a guarantee -- that the two exist when a test starts and are gone when it
+    ends. Requesting it by name in sixty signatures would state the same thing
+    sixty times and leave the sixty-first writing into a seeded workspace.
+
+    Autouse over the WHOLE module, including the Redis and Qdrant classes,
+    which use a workspace id as an opaque tenant key and store no row against
+    it. Two rules are easier to keep than one rule and an exemption, and the
+    fixture is a no-op when PostgreSQL is unreachable, so those classes still
+    run on a machine with no database.
+    """
 
 
 # ============================================================ runtime: schema
@@ -180,10 +206,10 @@ class TestSchemaRuntime:
 
     def test_closed_enum_check_rejects_an_invented_status(self, database) -> None:
         """Ontology V2 §15: no state is invented. BUDGET_EXHAUSTED is not one."""
-        project = ResearchProjectRepository(database).create(WORKSPACE_A, "enum probe")
+        project = ResearchProjectRepository(database).create(WORKSPACE_INTEGRATION_P, "enum probe")
         with (
             pytest.raises(Exception) as exc,
-            database.tenant_transaction(WORKSPACE_A) as conn,
+            database.tenant_transaction(WORKSPACE_INTEGRATION_P) as conn,
         ):
             conn.execute(
                 """INSERT INTO research.research_sessions
@@ -191,15 +217,15 @@ class TestSchemaRuntime:
                         research_context_hash, research_context_schema_version,
                         status, contract_version, ontology_version)
                        VALUES (%s,%s,%s,'{}','h','1.0.0','BUDGET_EXHAUSTED','1','2')""",
-                (uuid.uuid4(), WORKSPACE_A, project.id),
+                (uuid.uuid4(), WORKSPACE_INTEGRATION_P, project.id),
             )
         assert "check constraint" in str(exc.value).lower()
 
     def test_numeric_range_check_rejects_an_out_of_range_score(self, database) -> None:
-        project = ResearchProjectRepository(database).create(WORKSPACE_A, "range probe")
+        project = ResearchProjectRepository(database).create(WORKSPACE_INTEGRATION_P, "range probe")
         with (
             pytest.raises(Exception) as exc,
-            database.tenant_transaction(WORKSPACE_A) as conn,
+            database.tenant_transaction(WORKSPACE_INTEGRATION_P) as conn,
         ):
             conn.execute(
                 """INSERT INTO research.research_sessions
@@ -208,14 +234,14 @@ class TestSchemaRuntime:
                         status, contract_version, ontology_version,
                         research_completeness_score)
                        VALUES (%s,%s,%s,'{}','h','1.0.0','PENDING','1','2',101)""",
-                (uuid.uuid4(), WORKSPACE_A, project.id),
+                (uuid.uuid4(), WORKSPACE_INTEGRATION_P, project.id),
             )
         assert "check constraint" in str(exc.value).lower()
 
     def test_evidence_level_range_is_enforced(self, database) -> None:
         with (
             pytest.raises(Exception) as exc,
-            database.tenant_transaction(WORKSPACE_A) as conn,
+            database.tenant_transaction(WORKSPACE_INTEGRATION_P) as conn,
         ):
             conn.execute(
                 # `direction` and `observation_category` became NOT NULL in
@@ -227,7 +253,7 @@ class TestSchemaRuntime:
                         observation_category, collected_at, expires_at)
                        VALUES (%s,%s,'OBSERVED',6,'SUPPORTS','UNCATEGORISED',
                                now(), now())""",
-                (uuid.uuid4(), WORKSPACE_A),
+                (uuid.uuid4(), WORKSPACE_INTEGRATION_P),
             )
         assert "evidence_level_range_check" in str(exc.value)
 
@@ -246,55 +272,59 @@ class TestDatabaseTenantIsolation:
 
     def test_workspace_a_cannot_read_workspace_b_projects(self, database) -> None:
         repo = ResearchProjectRepository(database)
-        b_project = repo.create(WORKSPACE_B, "workspace B private project")
+        b_project = repo.create(WORKSPACE_INTEGRATION_Q, "workspace Q private project")
 
         with pytest.raises(NotFoundError):
-            repo.get(WORKSPACE_A, b_project.id)
+            repo.get(WORKSPACE_INTEGRATION_P, b_project.id)
 
-        a_ids = {p.id for p in repo.list(WORKSPACE_A, limit=200)}
+        a_ids = {p.id for p in repo.list(WORKSPACE_INTEGRATION_P, limit=200)}
         assert b_project.id not in a_ids
 
     def test_workspace_a_cannot_read_workspace_b_sessions(self, database) -> None:
         projects = ResearchProjectRepository(database)
         sessions = ResearchSessionRepository(database)
-        b_project = projects.create(WORKSPACE_B, "B sessions")
+        b_project = projects.create(WORKSPACE_INTEGRATION_Q, "Q sessions")
         b_session = sessions.create(
-            WORKSPACE_B, b_project.id, ResearchContext.from_json(CONTEXT), "1.0.0", "2"
+            WORKSPACE_INTEGRATION_Q, b_project.id, ResearchContext.from_json(CONTEXT), "1.0.0", "2"
         )
 
         with pytest.raises(NotFoundError):
-            sessions.get(WORKSPACE_A, b_session.id)
-        assert sessions.list_for_project(WORKSPACE_A, b_project.id) == []
+            sessions.get(WORKSPACE_INTEGRATION_P, b_session.id)
+        assert sessions.list_for_project(WORKSPACE_INTEGRATION_P, b_project.id) == []
 
     def test_workspace_a_cannot_read_workspace_b_observations(self, database) -> None:
         projects = ResearchProjectRepository(database)
         sessions = ResearchSessionRepository(database)
         opportunities = OpportunityRepository(database)
 
-        b_project = projects.create(WORKSPACE_B, "B observations")
+        b_project = projects.create(WORKSPACE_INTEGRATION_Q, "Q observations")
         b_session = sessions.create(
-            WORKSPACE_B, b_project.id, ResearchContext.from_json(CONTEXT), "1.0.0", "2"
+            WORKSPACE_INTEGRATION_Q, b_project.id, ResearchContext.from_json(CONTEXT), "1.0.0", "2"
         )
         b_opportunity = opportunities.create(
-            WORKSPACE_B, "B opportunity", MarketScope.country("FR")
+            WORKSPACE_INTEGRATION_Q, "Q opportunity", MarketScope.country("FR")
         )
         opportunities.record_observation(
-            WORKSPACE_B, b_opportunity, b_session.id, "DISCOVERED", "HYPOTHESIS"
+            WORKSPACE_INTEGRATION_Q, b_opportunity, b_session.id, "DISCOVERED", "HYPOTHESIS"
         )
 
-        assert len(opportunities.list_observations(WORKSPACE_B, b_opportunity)) == 1
-        # From A: the opportunity is invisible, and so are its observations.
+        assert len(opportunities.list_observations(WORKSPACE_INTEGRATION_Q, b_opportunity)) == 1
+        # From P: the opportunity is invisible, and so are its observations.
         with pytest.raises(NotFoundError):
-            opportunities.get(WORKSPACE_A, b_opportunity)
-        assert opportunities.list_observations(WORKSPACE_A, b_opportunity) == []
+            opportunities.get(WORKSPACE_INTEGRATION_P, b_opportunity)
+        assert opportunities.list_observations(WORKSPACE_INTEGRATION_P, b_opportunity) == []
 
     def test_session_cannot_be_created_against_another_workspaces_project(self, database) -> None:
         projects = ResearchProjectRepository(database)
         sessions = ResearchSessionRepository(database)
-        b_project = projects.create(WORKSPACE_B, "B project for cross check")
+        b_project = projects.create(WORKSPACE_INTEGRATION_Q, "Q project for cross check")
         with pytest.raises(NotFoundError):
             sessions.create(
-                WORKSPACE_A, b_project.id, ResearchContext.from_json(CONTEXT), "1.0.0", "2"
+                WORKSPACE_INTEGRATION_P,
+                b_project.id,
+                ResearchContext.from_json(CONTEXT),
+                "1.0.0",
+                "2",
             )
 
 
@@ -306,23 +336,23 @@ class TestResearchSessionLifecycle:
     def test_canonical_initial_status_is_pending(self, database) -> None:
         projects = ResearchProjectRepository(database)
         sessions = ResearchSessionRepository(database)
-        project = projects.create(WORKSPACE_A, "lifecycle")
+        project = projects.create(WORKSPACE_INTEGRATION_P, "lifecycle")
         session = sessions.create(
-            WORKSPACE_A, project.id, ResearchContext.from_json(CONTEXT), "1.0.0", "2"
+            WORKSPACE_INTEGRATION_P, project.id, ResearchContext.from_json(CONTEXT), "1.0.0", "2"
         )
         assert session.status is ResearchSessionStatus.PENDING
 
     def test_context_is_canonicalized_before_persistence(self, database) -> None:
         projects = ResearchProjectRepository(database)
         sessions = ResearchSessionRepository(database)
-        project = projects.create(WORKSPACE_A, "canonicalization")
+        project = projects.create(WORKSPACE_INTEGRATION_P, "canonicalization")
         context = ResearchContext.from_json(
             {
                 "market_scope": {"type": "MULTI_COUNTRY", "countries": ["us", "FR", "us"]},
                 "languages": ["EN", "fr", "en"],
             }
         )
-        session = sessions.create(WORKSPACE_A, project.id, context, "1.0.0", "2")
+        session = sessions.create(WORKSPACE_INTEGRATION_P, project.id, context, "1.0.0", "2")
         stored = session.research_context
         assert stored["market_scope"]["countries"] == ["FR", "US"]
         assert stored["languages"] == ["en", "fr"]
@@ -335,51 +365,55 @@ class TestResearchSessionLifecycle:
 
         projects = ResearchProjectRepository(database)
         sessions = ResearchSessionRepository(database)
-        project = projects.create(WORKSPACE_A, "immutability")
+        project = projects.create(WORKSPACE_INTEGRATION_P, "immutability")
         original = ResearchContext.from_json(CONTEXT)
-        session = sessions.create(WORKSPACE_A, project.id, original, "1.0.0", "2")
+        session = sessions.create(WORKSPACE_INTEGRATION_P, project.id, original, "1.0.0", "2")
 
         # Editing the in-memory context produces a NEW object and leaves the
         # persisted snapshot untouched.
         changed = original.with_changes(audience="indie devs")
         assert changed.snapshot_hash() != original.snapshot_hash()
 
-        reread = sessions.get(WORKSPACE_A, session.id)
+        reread = sessions.get(WORKSPACE_INTEGRATION_P, session.id)
         assert reread.research_context_hash == original.snapshot_hash()
         assert reread.research_context["audience"] is None
 
     def test_valid_transition_is_accepted(self, database) -> None:
         projects = ResearchProjectRepository(database)
         sessions = ResearchSessionRepository(database)
-        project = projects.create(WORKSPACE_A, "transitions")
+        project = projects.create(WORKSPACE_INTEGRATION_P, "transitions")
         session = sessions.create(
-            WORKSPACE_A, project.id, ResearchContext.from_json(CONTEXT), "1.0.0", "2"
+            WORKSPACE_INTEGRATION_P, project.id, ResearchContext.from_json(CONTEXT), "1.0.0", "2"
         )
-        moved = sessions.transition(WORKSPACE_A, session.id, ResearchSessionStatus.PLANNING)
+        moved = sessions.transition(
+            WORKSPACE_INTEGRATION_P, session.id, ResearchSessionStatus.PLANNING
+        )
         assert moved.status is ResearchSessionStatus.PLANNING
         assert moved.started_at is not None
 
     def test_invalid_transition_is_rejected(self, database) -> None:
         projects = ResearchProjectRepository(database)
         sessions = ResearchSessionRepository(database)
-        project = projects.create(WORKSPACE_A, "invalid transitions")
+        project = projects.create(WORKSPACE_INTEGRATION_P, "invalid transitions")
         session = sessions.create(
-            WORKSPACE_A, project.id, ResearchContext.from_json(CONTEXT), "1.0.0", "2"
+            WORKSPACE_INTEGRATION_P, project.id, ResearchContext.from_json(CONTEXT), "1.0.0", "2"
         )
         # PENDING -> COMPLETED skips the whole lifecycle.
         with pytest.raises(InvalidTransitionError):
-            sessions.transition(WORKSPACE_A, session.id, ResearchSessionStatus.COMPLETED)
+            sessions.transition(
+                WORKSPACE_INTEGRATION_P, session.id, ResearchSessionStatus.COMPLETED
+            )
 
     def test_terminal_states_are_terminal(self, database) -> None:
         projects = ResearchProjectRepository(database)
         sessions = ResearchSessionRepository(database)
-        project = projects.create(WORKSPACE_A, "terminal")
+        project = projects.create(WORKSPACE_INTEGRATION_P, "terminal")
         session = sessions.create(
-            WORKSPACE_A, project.id, ResearchContext.from_json(CONTEXT), "1.0.0", "2"
+            WORKSPACE_INTEGRATION_P, project.id, ResearchContext.from_json(CONTEXT), "1.0.0", "2"
         )
-        sessions.transition(WORKSPACE_A, session.id, ResearchSessionStatus.CANCELLED)
+        sessions.transition(WORKSPACE_INTEGRATION_P, session.id, ResearchSessionStatus.CANCELLED)
         with pytest.raises(InvalidTransitionError):
-            sessions.transition(WORKSPACE_A, session.id, ResearchSessionStatus.PLANNING)
+            sessions.transition(WORKSPACE_INTEGRATION_P, session.id, ResearchSessionStatus.PLANNING)
 
     def test_scoring_may_reach_completed_budget_exhaustion_is_not_failure(self) -> None:
         """ADR-006 / Ontology V2 §15, asserted on the transition table itself."""
@@ -420,13 +454,13 @@ class TestApi:
         created = api_client.post(
             "/api/v1/research-projects",
             json={"name": "API project", "description": "d"},
-            headers=header(WORKSPACE_A),
+            headers=header(WORKSPACE_INTEGRATION_P),
         )
         assert created.status_code == 201
         project_id = created.json()["id"]
 
         fetched = api_client.get(
-            f"/api/v1/research-projects/{project_id}", headers=header(WORKSPACE_A)
+            f"/api/v1/research-projects/{project_id}", headers=header(WORKSPACE_INTEGRATION_P)
         )
         assert fetched.status_code == 200
         assert fetched.json()["name"] == "API project"
@@ -435,13 +469,13 @@ class TestApi:
         project_id = api_client.post(
             "/api/v1/research-projects",
             json={"name": "API session project"},
-            headers=header(WORKSPACE_A),
+            headers=header(WORKSPACE_INTEGRATION_P),
         ).json()["id"]
 
         created = api_client.post(
             f"/api/v1/research-projects/{project_id}/sessions",
             json={"research_context": {"market_scope": {"type": "COUNTRY", "countries": ["fr"]}}},
-            headers=header(WORKSPACE_A),
+            headers=header(WORKSPACE_INTEGRATION_P),
         )
         assert created.status_code == 201
         body = created.json()
@@ -455,7 +489,7 @@ class TestApi:
         project_id = api_client.post(
             "/api/v1/research-projects",
             json={"name": "invalid context"},
-            headers=header(WORKSPACE_A),
+            headers=header(WORKSPACE_INTEGRATION_P),
         ).json()["id"]
 
         # COUNTRY with two codes is MULTI_COUNTRY (Ontology V2 §4.4).
@@ -464,7 +498,7 @@ class TestApi:
             json={
                 "research_context": {"market_scope": {"type": "COUNTRY", "countries": ["FR", "DE"]}}
             },
-            headers=header(WORKSPACE_A),
+            headers=header(WORKSPACE_INTEGRATION_P),
         )
         assert response.status_code == 422
         assert response.json()["error"] == "contract_violation"
@@ -473,12 +507,12 @@ class TestApi:
         project_id = api_client.post(
             "/api/v1/research-projects",
             json={"name": "a12"},
-            headers=header(WORKSPACE_A),
+            headers=header(WORKSPACE_INTEGRATION_P),
         ).json()["id"]
         response = api_client.post(
             f"/api/v1/research-projects/{project_id}/sessions",
             json={"research_context": {"market_scope": {"type": "SEGMENT"}}},
-            headers=header(WORKSPACE_A),
+            headers=header(WORKSPACE_INTEGRATION_P),
         )
         assert response.status_code == 422
         assert "A-12" in response.json()["detail"]
@@ -488,18 +522,18 @@ class TestApi:
         project_id = api_client.post(
             "/api/v1/research-projects",
             json={"name": "no patch"},
-            headers=header(WORKSPACE_A),
+            headers=header(WORKSPACE_INTEGRATION_P),
         ).json()["id"]
         session_id = api_client.post(
             f"/api/v1/research-projects/{project_id}/sessions",
             json={"research_context": CONTEXT},
-            headers=header(WORKSPACE_A),
+            headers=header(WORKSPACE_INTEGRATION_P),
         ).json()["id"]
 
         response = api_client.patch(
             f"/api/v1/research-sessions/{session_id}",
             json={"research_context": {"market_scope": {"type": "GLOBAL"}}},
-            headers=header(WORKSPACE_A),
+            headers=header(WORKSPACE_INTEGRATION_P),
         )
         assert response.status_code in (404, 405)
 
@@ -507,11 +541,11 @@ class TestApi:
         project_id = api_client.post(
             "/api/v1/research-projects",
             json={"name": "A only"},
-            headers=header(WORKSPACE_A),
+            headers=header(WORKSPACE_INTEGRATION_P),
         ).json()["id"]
 
         response = api_client.get(
-            f"/api/v1/research-projects/{project_id}", headers=header(WORKSPACE_B)
+            f"/api/v1/research-projects/{project_id}", headers=header(WORKSPACE_INTEGRATION_Q)
         )
         assert response.status_code == 404
 
@@ -649,10 +683,10 @@ class TestSourceRegistryApi:
 @needs_redis
 class TestRedisTenantIsolation:
     def test_same_logical_key_differs_physically_per_workspace(self) -> None:
-        a = cache_key(str(WORKSPACE_A), "market", "FR")
-        b = cache_key(str(WORKSPACE_B), "market", "FR")
+        a = cache_key(str(WORKSPACE_INTEGRATION_P), "market", "FR")
+        b = cache_key(str(WORKSPACE_INTEGRATION_Q), "market", "FR")
         assert a != b
-        assert str(WORKSPACE_A) in a and str(WORKSPACE_B) in b
+        assert str(WORKSPACE_INTEGRATION_P) in a and str(WORKSPACE_INTEGRATION_Q) in b
 
     def test_cache_key_requires_a_workspace(self) -> None:
         with pytest.raises(ContractError):
@@ -663,8 +697,8 @@ class TestRedisTenantIsolation:
             TenantCache(redis_client, "")
 
     def test_workspace_a_cannot_read_workspace_b_entry(self, redis_client) -> None:
-        a = TenantCache(redis_client, WORKSPACE_A)
-        b = TenantCache(redis_client, WORKSPACE_B)
+        a = TenantCache(redis_client, WORKSPACE_INTEGRATION_P)
+        b = TenantCache(redis_client, WORKSPACE_INTEGRATION_Q)
         try:
             b.set("probe", "shared-logical-key", value="workspace-b-secret", ttl_seconds=60)
             assert b.get("probe", "shared-logical-key") == b"workspace-b-secret"
@@ -674,7 +708,7 @@ class TestRedisTenantIsolation:
             b.delete("probe", "shared-logical-key")
 
     def test_global_cache_is_a_separate_namespace(self, redis_client) -> None:
-        tenant = TenantCache(redis_client, WORKSPACE_A)
+        tenant = TenantCache(redis_client, WORKSPACE_INTEGRATION_P)
         glob = GlobalCache(redis_client)
         assert not glob.key("registry", "product_type").startswith(
             tenant.key("registry", "product_type")
@@ -709,43 +743,43 @@ class TestQdrantTenantIsolation:
             TenantVectorStore(qdrant, "")
 
     def test_filter_always_contains_the_workspace_condition(self, qdrant) -> None:
-        store = TenantVectorStore(qdrant, WORKSPACE_A)
+        store = TenantVectorStore(qdrant, WORKSPACE_INTEGRATION_P)
         built = store.build_filter()
         assert built["must"][0]["key"] == "workspace_id"
-        assert built["must"][0]["match"]["value"] == str(WORKSPACE_A)
+        assert built["must"][0]["match"]["value"] == str(WORKSPACE_INTEGRATION_P)
 
     def test_session_scope_is_additive_not_a_replacement(self, qdrant) -> None:
-        store = TenantVectorStore(qdrant, WORKSPACE_A)
+        store = TenantVectorStore(qdrant, WORKSPACE_INTEGRATION_P)
         built = store.build_filter(research_session_id="sess-1")
         keys = [c["key"] for c in built["must"]]
         assert keys == ["workspace_id", "research_session_id"]
 
     def test_cross_tenant_write_is_refused(self, qdrant) -> None:
-        store = TenantVectorStore(qdrant, WORKSPACE_A)
+        store = TenantVectorStore(qdrant, WORKSPACE_INTEGRATION_P)
         with pytest.raises(ContractError):
             store.upsert(
                 self.COLLECTION,
                 str(uuid.uuid4()),
                 [0.1, 0.2, 0.3, 0.4],
-                VectorPayload(workspace_id=str(WORKSPACE_B)),
+                VectorPayload(workspace_id=str(WORKSPACE_INTEGRATION_Q)),
             )
 
     def test_workspace_a_search_cannot_return_workspace_b_vectors(self, qdrant) -> None:
-        a = TenantVectorStore(qdrant, WORKSPACE_A)
-        b = TenantVectorStore(qdrant, WORKSPACE_B)
+        a = TenantVectorStore(qdrant, WORKSPACE_INTEGRATION_P)
+        b = TenantVectorStore(qdrant, WORKSPACE_INTEGRATION_Q)
 
         a_id, b_id = str(uuid.uuid4()), str(uuid.uuid4())
         a.upsert(
             self.COLLECTION,
             a_id,
             [1.0, 0.0, 0.0, 0.0],
-            VectorPayload(workspace_id=str(WORKSPACE_A)),
+            VectorPayload(workspace_id=str(WORKSPACE_INTEGRATION_P)),
         )
         b.upsert(
             self.COLLECTION,
             b_id,
             [1.0, 0.0, 0.0, 0.0],
-            VectorPayload(workspace_id=str(WORKSPACE_B)),
+            VectorPayload(workspace_id=str(WORKSPACE_INTEGRATION_Q)),
         )
 
         # Identical vectors: only the tenant filter separates them.
@@ -758,19 +792,19 @@ class TestQdrantTenantIsolation:
         assert b.count(self.COLLECTION) == 1
 
     def test_delete_workspace_removes_only_that_tenant(self, qdrant) -> None:
-        a = TenantVectorStore(qdrant, WORKSPACE_A)
-        b = TenantVectorStore(qdrant, WORKSPACE_B)
+        a = TenantVectorStore(qdrant, WORKSPACE_INTEGRATION_P)
+        b = TenantVectorStore(qdrant, WORKSPACE_INTEGRATION_Q)
         a.upsert(
             self.COLLECTION,
             str(uuid.uuid4()),
             [0.0, 1.0, 0.0, 0.0],
-            VectorPayload(workspace_id=str(WORKSPACE_A)),
+            VectorPayload(workspace_id=str(WORKSPACE_INTEGRATION_P)),
         )
         b.upsert(
             self.COLLECTION,
             str(uuid.uuid4()),
             [0.0, 1.0, 0.0, 0.0],
-            VectorPayload(workspace_id=str(WORKSPACE_B)),
+            VectorPayload(workspace_id=str(WORKSPACE_INTEGRATION_Q)),
         )
 
         a.delete_workspace(self.COLLECTION)
@@ -789,25 +823,25 @@ class TestOpportunityBoundary:
         sessions = ResearchSessionRepository(database)
         opportunities = OpportunityRepository(database)
 
-        project = projects.create(WORKSPACE_A, "rediscovery")
+        project = projects.create(WORKSPACE_INTEGRATION_P, "rediscovery")
         first = sessions.create(
-            WORKSPACE_A, project.id, ResearchContext.from_json(CONTEXT), "1.0.0", "2"
+            WORKSPACE_INTEGRATION_P, project.id, ResearchContext.from_json(CONTEXT), "1.0.0", "2"
         )
         second = sessions.create(
-            WORKSPACE_A, project.id, ResearchContext.from_json(CONTEXT), "1.0.0", "2"
+            WORKSPACE_INTEGRATION_P, project.id, ResearchContext.from_json(CONTEXT), "1.0.0", "2"
         )
 
         opportunity = opportunities.create(
-            WORKSPACE_A, "rediscovered opportunity", MarketScope.country("FR")
+            WORKSPACE_INTEGRATION_P, "rediscovered opportunity", MarketScope.country("FR")
         )
         opportunities.record_observation(
-            WORKSPACE_A, opportunity, first.id, "DISCOVERED", "HYPOTHESIS"
+            WORKSPACE_INTEGRATION_P, opportunity, first.id, "DISCOVERED", "HYPOTHESIS"
         )
         opportunities.record_observation(
-            WORKSPACE_A, opportunity, second.id, "CORROBORATED", "INFERRED"
+            WORKSPACE_INTEGRATION_P, opportunity, second.id, "CORROBORATED", "INFERRED"
         )
 
-        observations = opportunities.list_observations(WORKSPACE_A, opportunity)
+        observations = opportunities.list_observations(WORKSPACE_INTEGRATION_P, opportunity)
         assert len(observations) == 2
         assert {o["observation_kind"] for o in observations} == {"DISCOVERED", "CORROBORATED"}
 
@@ -815,14 +849,14 @@ class TestOpportunityBoundary:
         projects = ResearchProjectRepository(database)
         sessions = ResearchSessionRepository(database)
         opportunities = OpportunityRepository(database)
-        project = projects.create(WORKSPACE_A, "kinds")
+        project = projects.create(WORKSPACE_INTEGRATION_P, "kinds")
         session = sessions.create(
-            WORKSPACE_A, project.id, ResearchContext.from_json(CONTEXT), "1.0.0", "2"
+            WORKSPACE_INTEGRATION_P, project.id, ResearchContext.from_json(CONTEXT), "1.0.0", "2"
         )
-        opportunity = opportunities.create(WORKSPACE_A, "kinds", MarketScope.global_())
+        opportunity = opportunities.create(WORKSPACE_INTEGRATION_P, "kinds", MarketScope.global_())
         with pytest.raises(ContractError):
             opportunities.record_observation(
-                WORKSPACE_A, opportunity, session.id, "SCORED", "OBSERVED"
+                WORKSPACE_INTEGRATION_P, opportunity, session.id, "SCORED", "OBSERVED"
             )
 
     def test_no_identity_resolution_helper_exists(self) -> None:
