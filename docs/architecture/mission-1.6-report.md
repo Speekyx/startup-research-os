@@ -532,6 +532,36 @@ forced re-normalization records_input 6, unchanged 6, new 0, conflicted 0
 
 Still six rows. At-least-once delivery honoured; exactly-once not claimed.
 
+### Amendment: one link did not survive the afternoon
+
+Every line above was true when it ran. One has since stopped being true, and
+recording that is worth more than leaving a table that reads cleaner than the
+database.
+
+A later full suite run executed `test_rls.py::test_a_delete_cannot_reach_another_workspace`,
+which runs `DELETE FROM research.research_projects` **with no WHERE clause**
+inside workspace A's tenant transaction. RLS scoped it to workspace A, which is
+exactly the property that test exists to prove — and workspace A is the seeded
+development workspace holding these six records' research session. The session
+was deleted and `research_session_id` went `NULL` on all twelve rows.
+
+**Everything else survived**, which is the `ON DELETE SET NULL` design working as
+intended rather than a second defect: six raw records, six normalized records,
+all still `VALID`, values exact, attribution present, retention correct, content
+hashes unchanged. A session deletion is not supposed to destroy the data
+collected under it.
+
+Two things follow:
+
+- **The lineage claim above should be read as "at verification time".** The
+  session link is restorable only by re-collecting under a new session, which
+  would be another live request to fix damage that recurs on every suite run
+  until `test_rls.py` is scoped to a throwaway workspace. Left as found.
+- **This is the same class of defect spun off in §20**, one level more serious.
+  That entry was about a suite leaving rows behind; this is a suite *destroying*
+  rows in the shared seeded workspace. A sibling branch is already working in
+  `test_rls.py`, and it has been told.
+
 ---
 
 ## 20. Issues found
@@ -559,10 +589,30 @@ false in Mission 1.5, and **survived the Mission 1.5 amendment of the same
 document**. Guards were narrowed rather than deleted, and each narrowed guard was
 probed to confirm it still fails.
 
-**My own verification script asserted the wrong thing.** It read §44 literally as
-`research.claims == 0` and failed on 45 rows created by the Mission 1.2 suite
-minutes earlier. The system was right. Rewritten as a delta — none created since
-collection, none naming a source, none in the normalization session.
+**My own verification script asserted the wrong thing, twice.** Attempt 1 read
+§44 literally as `research.claims == 0` and failed on 45 rows the Mission 1.2
+suite had created minutes earlier. Attempt 2 — *none created since the raw
+records were collected* — looked like a proper delta and was **also wrong**: it
+failed the moment a concurrent suite run created claims *after* normalization,
+because it conflated "normalization created nothing" with "nothing else ran
+afterwards".
+
+Attempt 3 is the only form that isolates one stage: **bracket it**. Snapshot the
+five downstream tables, force a normalization pass over every record, snapshot
+again, and require both that nothing moved *and* that the pass actually
+normalized something — a run that read zero records would otherwise pass
+vacuously, which it did on the first try and correctly refused to.
+
+The committed test, `test_no_claim_evidence_or_signal_is_created`, already had
+the bracketed form. Only the throwaway verification script had the fragile one.
+The generalisation is worth stating once more: **any assertion about what is in
+the database is an assertion about everything that ever touched it.**
+
+**A test deletes real data in the shared seeded workspace.**
+`test_rls.py::test_a_delete_cannot_reach_another_workspace` issues an unscoped
+`DELETE FROM research.research_projects` inside workspace A. The test is right
+about RLS; its problem is the workspace it does it in. It destroyed this
+mission's research session. See the amendment to §19.
 
 **The Mission 1.2 claim suites write into the seeded development workspace** and
 do not clean up, which is the §12 workspace rule not yet applied to them. Spun
@@ -626,7 +676,7 @@ Three things a next mission should know:
 | Is World Bank normalization implemented? | **Yes.** `world-bank-indicators-numeric@1.0.0`, and it is the only one |
 | Does normalization perform any network request? | **No.** Not one, and no code path could. Enforced by an AST-parsing CI gate probed against fourteen violations |
 | Are the six real World Bank RawRecords normalized? | **Yes** — after being re-collected, because they did not exist (§0) |
-| How many real NormalizedRecords exist? | **6**, all World Bank, all `VALID` |
+| How many real NormalizedRecords exist? | **6**, all World Bank, all `VALID`. Their session link was later nulled by `test_rls.py` (§19 amendment); the records themselves are intact |
 | Is null ever converted to zero? | **No.** `value_state` is mandatory and the constructor refuses a number beside `NOT_REPORTED` |
 | Are yearly periods represented without pretending January 1 is exact event time? | **Yes.** A half-open interval with `type: YEAR` and the source's own label beside the start bound |
 | Are aggregate geographies distinguishable from countries? | **Yes.** `COUNTRY / AGGREGATE / UNKNOWN`, from a reviewed map. An unclassified code is never promoted, and an aggregate can never carry a country code |
