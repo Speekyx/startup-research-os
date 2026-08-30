@@ -4,7 +4,8 @@
     transport.py     the HTTP boundary. The ONLY file here that may reach a network
     pacing.py        our own request pacing. Not a claim about anyone's rate limit
     records.py       what an observation is, and what identifies it
-    world_bank.py    the World Bank Indicators collector
+    world_bank.py       the World Bank Indicators collector
+    gdelt_web_ngram.py  the GDELT WEB-NGRAM collector (Mission 1.9.3)
     repositories.py  persistence: idempotent, revision-aware, tenant-scoped
 
 **A collector cannot run without an authorization.** `WorldBankCollector.collect`
@@ -16,21 +17,42 @@ before a socket opens, and a refusal costs zero network calls.
 countries and years; the collector composes the path, and the transport refuses
 any host outside the allowlist the access profile authorised.
 
-One collector exists. `sros_acquisition.IMPLEMENTED_COLLECTORS` says which, and
-eligibility, enablement and implementation remain three separate facts.
+**Two collectors exist**, and what they share is deliberate rather than
+generic. Both are gated the same way, both build records through
+`build_raw_record`, and both classify HTTP statuses through `code_for_status`.
+They differ where the sources differ: one reads a paginated JSON API through
+`Transport.get`, the other streams a gzipped bulk file through
+`StreamingTransport.download`. There is no "bulk source engine" between them,
+because two sources are not yet a pattern.
+
+`sros_acquisition.IMPLEMENTED_COLLECTORS` says which sources have one, and
+eligible, resource-ready, implemented and enabled remain four separate facts.
 """
 
 from .errors import (
     RETRYABLE_CODES,
     AcquisitionFailedError,
     AcquisitionFailure,
+    code_for_status,
     is_retryable,
 )
-from .pacing import WORLD_BANK_PACING, PacingPolicy, RequestPacer
+from .gdelt_web_ngram import (
+    GRAM_KINDS,
+    GdeltWebNgramCollector,
+    NgramBounds,
+    NgramFileReport,
+    NgramObservation,
+    WebNgramRequest,
+    WebNgramResult,
+    validate_bucket_label,
+)
+from .pacing import WEB_NGRAM_PACING, WORLD_BANK_PACING, PacingPolicy, RequestPacer
 from .records import (
     CollectedObservation,
     RawRecordDraft,
+    SourceObservation,
     build_draft,
+    build_raw_record,
     canonical_fingerprint,
     canonical_number,
     observation_key,
@@ -44,9 +66,11 @@ from .repositories import (
     read_observation_history,
 )
 from .transport import (
+    DownloadLimits,
     HttpRequest,
     HttpResponse,
     HttpxTransport,
+    StreamingTransport,
     Transport,
     TransportConfig,
     host_of,
@@ -61,30 +85,43 @@ from .world_bank import (
 )
 
 __all__ = [
-    "COLLECTOR_ID",
-    "COLLECTOR_VERSION",
-    "RETRYABLE_CODES",
-    "WORLD_BANK_PACING",
     "AcquisitionFailedError",
     "AcquisitionFailure",
+    "COLLECTOR_ID",
+    "COLLECTOR_VERSION",
     "CollectedObservation",
     "CollectionBounds",
     "CollectorResult",
+    "DownloadLimits",
+    "GRAM_KINDS",
+    "GdeltWebNgramCollector",
     "HttpRequest",
     "HttpResponse",
     "HttpxTransport",
+    "NgramBounds",
+    "NgramFileReport",
+    "NgramObservation",
     "PacingPolicy",
     "PersistenceOutcome",
     "PersistenceReport",
+    "RETRYABLE_CODES",
     "RawRecordDraft",
     "RequestPacer",
+    "SourceObservation",
+    "StreamingTransport",
     "Transport",
     "TransportConfig",
+    "WEB_NGRAM_PACING",
+    "WORLD_BANK_PACING",
+    "WebNgramRequest",
+    "WebNgramResult",
     "WorldBankCollector",
     "WorldBankRequest",
     "build_draft",
+    "build_raw_record",
     "canonical_fingerprint",
     "canonical_number",
+    "code_for_status",
     "collector_enabled",
     "count_records",
     "host_of",
@@ -92,4 +129,5 @@ __all__ = [
     "observation_key",
     "persist_drafts",
     "read_observation_history",
+    "validate_bucket_label",
 ]

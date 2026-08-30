@@ -760,3 +760,103 @@ because a third rule now runs. It is now
 which is the property, and it was renamed to match. §13 of this document is the
 same lesson and this is its fourth recurrence.
 
+---
+
+## 20. A live smoke test earns its keep when it finds what fixtures cannot (added in Mission 1.9.3)
+
+Mission 1.9.3 wrote 105 tests for the GDELT WEB-NGRAM collector against fixture
+files, and every one of them passed. The first contact with a real file failed.
+
+```text
+INVALID_RESPONSE: a row's NGRAM contains the observation-key separator '|'
+```
+
+`observation_key` joins its parts with `|` and **refused** any part containing
+one. That rule was written in Mission 1.5, when every part was a source id, a
+resource id, an ISO country code or a year — none of which can contain a pipe.
+News text can, so GDELT publishes terms that do, and the parser was discarding an
+entire 223,342-row file of legitimate observations because of our own key format.
+
+**No fixture caught it, and no fixture was going to.** The fixtures were written
+by someone who did not expect a pipe in a word — which is the same someone who
+wrote the rule. A synthetic corpus reproduces its author's model of the source,
+and that is exactly the blind spot a live test exists to cover.
+
+### What this does NOT mean
+
+It does not mean fixtures are weak. The 105 fixture tests cover truncated gzip,
+amplification, extra fields, invalid UTF-8, negative counts and cancellation —
+none of which a live test can produce on demand, and several of which would be
+irresponsible to provoke against a third party. The two are complementary and
+neither substitutes.
+
+What it means is narrower and worth stating: **a fixture proves the parser
+handles what its author imagined. Only real data proves what the source
+actually sends.**
+
+### The shape of the fix matters as much as the fix
+
+The first instinct was to skip rows containing the separator. That would have
+been the system silently dropping real observations to protect an internal
+format — the failure this repository keeps naming from other directions.
+
+The second was to move the separator. There is nowhere to move it to: **any
+printable character can appear in a term.**
+
+The third was to hash the parts, which removes the readability the key exists
+for.
+
+The answer was to escape, which keeps the guarantee (distinct part sequences
+produce distinct keys) without deciding what a source is allowed to say. Every
+part written before the change contains neither `|` nor `\`, so no committed key
+moved — and a test asserts that, because "this refactor changed no existing
+identity" is a claim worth checking rather than believing.
+
+### Keep the live suite opt-in and cheap
+
+One bucket, one resource, one narrow filter, nothing persisted, and no crawl for
+a file that happens to exist. A smoke test that hunted for a working bucket would
+be testing the hunt, and a smoke test that ran by default would be traffic to
+somebody else's servers that nobody consented to.
+
+---
+
+## 21. The zero-dependency suite is a different environment, not a faster one (added in Mission 1.9.3)
+
+A worker test asserted that `WebNgramJobPayload` has no field an authorization
+could travel in. It imported the class to do so, passed locally, and failed in
+CI:
+
+```text
+ModuleNotFoundError: No module named 'sros_acquisition'
+```
+
+`run_python_tests.py` runs the zero-dependency suites **with nothing installed**,
+which is the whole reason ADR-009 exists: the contract, schema and governance
+checks must keep working when a dependency environment is broken. A developer's
+venv has every workspace package on the path, so the same script passes there for
+a reason that has nothing to do with the code.
+
+**Running the script is not the same as reproducing the condition.** The way to
+check is to run it with an interpreter that does *not* have the workspace
+installed:
+
+```bash
+python infrastructure/scripts/run_python_tests.py
+```
+
+— the system Python, not `.venv/Scripts/python`.
+
+### The boundary rule said the same thing first
+
+`service-boundaries.md` already forbids a service importing another service's
+package. `sros_workers` reaches `sros_acquisition` at runtime, lazily, inside the
+task body; its *tests* must not, and CI enforcing the dependency-free environment
+enforced the boundary as a side effect.
+
+The assertion did not disappear — it moved to the acquisition suite, where the
+class lives and where importing it is not a boundary crossing. What stayed on the
+worker side is the half that is genuinely about the worker: a smuggled
+`authorization` key survives the payload merge and reaches a job that never looks
+at it.
+

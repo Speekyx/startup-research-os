@@ -37,11 +37,23 @@ from ..compliance.authorization import (
 from ..compliance.config import ComplianceConfig, load_compliance
 from ..registry.catalog import SourceCatalog, load_catalog
 from .errors import AcquisitionFailedError, AcquisitionFailure
+from .gdelt_web_ngram import (
+    GRAM_KINDS,
+    GdeltWebNgramCollector,
+    NgramBounds,
+    WebNgramRequest,
+)
 from .repositories import PersistenceReport, collector_enabled, persist_drafts
 from .transport import HttpxTransport, Transport
 from .world_bank import CollectionBounds, WorldBankCollector, WorldBankRequest
 
-__all__ = ["AcquisitionJobResult", "WorldBankJobPayload", "run_world_bank_job"]
+__all__ = [
+    "AcquisitionJobResult",
+    "WebNgramJobPayload",
+    "WorldBankJobPayload",
+    "run_gdelt_web_ngram_job",
+    "run_world_bank_job",
+]
 
 _REQUIRED_HEADERS = ("workspace_id", "research_session_id", "correlation_id")
 
@@ -125,6 +137,16 @@ class AcquisitionJobResult:
     refused_resources: tuple[str, ...] = ()
     failures: tuple[AcquisitionFailure, ...] = field(default=())
     idempotency_key: str = ""
+    # Mission 1.9.3 §33. A paginated API reports pages; a bulk-file collector
+    # reports files and rows. Both live here rather than in two result types,
+    # because a caller counting records should not have to know which shape of
+    # source produced them -- and each collector leaves the other half at zero
+    # rather than filling it with a number that means nothing.
+    files_requested: int = 0
+    files_processed: int = 0
+    files_failed: int = 0
+    rows_scanned: int = 0
+    rows_matched: int = 0
 
     @property
     def succeeded(self) -> bool:
@@ -137,6 +159,11 @@ class AcquisitionJobResult:
             "persisted": self.persisted.to_json(),
             "requests_made": self.requests_made,
             "pages_read": self.pages_read,
+            "files_requested": self.files_requested,
+            "files_processed": self.files_processed,
+            "files_failed": self.files_failed,
+            "rows_scanned": self.rows_scanned,
+            "rows_matched": self.rows_matched,
             "refused_resources": list(self.refused_resources),
             # Already sanitised: a failure carries a message this codebase wrote
             # and safe diagnostic context, never a body or a stack trace (§33).
@@ -268,6 +295,217 @@ def run_world_bank_job(
         failures=tuple(result.failures),
         idempotency_key=job.idempotency_key,
     )
+
+
+@dataclass(frozen=True)
+class WebNgramJobPayload:
+    """What a GDELT WEB-NGRAM task must carry. Every header is required.
+
+    Mission 1.9.3 §41. **No authorization travels in a payload.** A serialized
+    permission outlives the state it was derived from, and a source suspended
+    between planning and execution would still be collected; the job rebuilds
+    the authorization itself, every time.
+
+    The request fields are the collector's own -- gram kinds and exact source
+    bucket labels. There is no host, no path and no filename here either, so a
+    payload cannot carry an escape the collector's signature refuses.
+    """
+
+    workspace_id: str
+    research_session_id: str
+    correlation_id: str
+    buckets: tuple[str, ...]
+    grams: tuple[str, ...] = ("1gram",)
+    languages: tuple[str, ...] = ()
+    ngrams: tuple[str, ...] = ()
+    ngram_prefix: str | None = None
+    max_records: int = 5_000
+    source_id: str = "gdelt"
+
+    @classmethod
+    def from_payload(cls, payload: object) -> WebNgramJobPayload:
+        if not isinstance(payload, dict):
+            raise ValueError("an acquisition task payload must be a mapping")
+        missing = [name for name in _REQUIRED_HEADERS if not payload.get(name)]
+        if missing:
+            raise ValueError(
+                f"acquisition payload is missing required headers: {missing}. A worker "
+                "never resolves the workspace itself and never falls back to a default "
+                "(ADR-005)"
+            )
+        buckets = tuple(str(b) for b in payload.get("buckets") or ())
+        if not buckets:
+            raise ValueError(
+                "a WEB-NGRAM payload must name at least one source bucket label. There is "
+                "no discovery crawl: a job collects the buckets it was told to (§37)"
+            )
+        grams = tuple(str(g) for g in payload.get("grams") or ("1gram",))
+        unknown = [g for g in grams if g not in GRAM_KINDS]
+        if unknown:
+            raise ValueError(f"{unknown} is not a reviewed gram kind; known: {sorted(GRAM_KINDS)}")
+        prefix = payload.get("ngram_prefix")
+        return cls(
+            workspace_id=str(payload["workspace_id"]),
+            research_session_id=str(payload["research_session_id"]),
+            correlation_id=str(payload["correlation_id"]),
+            buckets=buckets,
+            grams=grams,
+            languages=tuple(str(x) for x in payload.get("languages") or ()),
+            ngrams=tuple(str(x) for x in payload.get("ngrams") or ()),
+            ngram_prefix=str(prefix) if prefix else None,
+            max_records=int(payload.get("max_records") or 5_000),
+            source_id=str(payload.get("source_id") or "gdelt"),
+        )
+
+    @property
+    def idempotency_key(self) -> str:
+        """Stable over what the job WOULD collect, not over when it was sent.
+
+        The local filters are part of it: two jobs over the same files with
+        different filters persist different observations, so they are different
+        logical jobs even though they download the same bytes.
+        """
+        return "|".join(
+            (
+                self.workspace_id,
+                self.source_id,
+                ",".join(sorted(self.grams)),
+                ",".join(sorted(self.buckets)),
+                ",".join(sorted(self.languages)),
+                ",".join(sorted(self.ngrams)),
+                self.ngram_prefix or "",
+            )
+        )
+
+    def to_request(self) -> WebNgramRequest:
+        return WebNgramRequest(
+            buckets=self.buckets,
+            grams=self.grams,
+            languages=self.languages,
+            ngrams=self.ngrams,
+            ngram_prefix=self.ngram_prefix,
+        )
+
+
+def run_gdelt_web_ngram_job(
+    payload: object,
+    connection_factory: Callable[[str], Any],
+    *,
+    catalog: SourceCatalog | None = None,
+    compliance: ComplianceConfig | None = None,
+    transport: Any | None = None,
+    collector: GdeltWebNgramCollector | None = None,
+    bounds: NgramBounds | None = None,
+    cancelled: Callable[[], bool] | None = None,
+    now: Callable[[], datetime] | None = None,
+) -> AcquisitionJobResult:
+    """Collect WEB-NGRAM rows, then persist, in the caller's tenant transaction.
+
+    The same shape as `run_world_bank_job` and for the same reasons: the
+    governance gate runs at execution time, the operational switch is a separate
+    question asked before anything is fetched, and persistence happens in one
+    transaction the caller owns.
+
+    **Persistence is all-or-nothing across the job; acquisition is per file**
+    (§32, §33). A file that violates the documented contract contributes no
+    drafts and is reported as failed, while the files that completed still
+    persist. Claiming atomicity across eight independent downloads would be
+    claiming something the architecture does not provide.
+    """
+    job = WebNgramJobPayload.from_payload(payload)
+    sources = catalog or load_catalog()
+    rules = compliance or load_compliance()
+    source = sources.get(job.source_id)
+
+    def refuse(code: AcquisitionErrorCode, detail: str) -> AcquisitionJobResult:
+        return AcquisitionJobResult(
+            source_id=job.source_id,
+            collector="",
+            persisted=PersistenceReport(),
+            requests_made=0,
+            pages_read=0,
+            failures=(
+                AcquisitionFailure(
+                    code=code,
+                    detail=detail,
+                    source_id=job.source_id,
+                    correlation_id=job.correlation_id,
+                ),
+            ),
+            idempotency_key=job.idempotency_key,
+        )
+
+    try:
+        context = build_authorization(source, rules)
+    except AcquisitionNotAuthorizedError as exc:
+        return refuse(AcquisitionErrorCode.AUTHORIZATION_REJECTED, "; ".join(exc.reasons))
+
+    with connection_factory(job.workspace_id) as conn:
+        if not collector_enabled(conn, job.source_id):
+            return refuse(
+                AcquisitionErrorCode.AUTHORIZATION_REJECTED,
+                (
+                    f"{job.source_id} passes the governance gate and its collector is not "
+                    "enabled. Enablement is a separate, deliberate decision "
+                    "(`sros-source enable`), and a job must not take it on an operator's "
+                    "behalf"
+                ),
+            )
+
+    worker = collector or GdeltWebNgramCollector(transport or HttpxTransport(), now=now)
+    limits = bounds or NgramBounds(max_records=job.max_records)
+    result = worker.collect(
+        context,
+        job.to_request(),
+        workspace_id=job.workspace_id,
+        correlation_id=job.correlation_id,
+        research_session_id=job.research_session_id,
+        bounds=limits,
+        cancelled=cancelled,
+    )
+
+    def outcome(
+        persisted: PersistenceReport, extra: tuple[AcquisitionFailure, ...] = ()
+    ) -> AcquisitionJobResult:
+        return AcquisitionJobResult(
+            source_id=job.source_id,
+            collector=f"{worker.collector_id}@{worker.collector_version}",
+            persisted=persisted,
+            requests_made=result.requests_made,
+            pages_read=0,
+            refused_resources=tuple(result.refused_resources),
+            failures=(*result.failures, *extra),
+            idempotency_key=job.idempotency_key,
+            files_requested=result.files_requested,
+            files_processed=result.files_processed,
+            files_failed=result.files_failed,
+            rows_scanned=result.rows_scanned,
+            rows_matched=result.rows_matched,
+        )
+
+    persisted = PersistenceReport()
+    if result.drafts:
+        try:
+            with connection_factory(job.workspace_id) as conn:
+                persisted = persist_drafts(conn, result.drafts)
+        except AcquisitionFailedError:
+            raise
+        except Exception as exc:  # noqa: BLE001 - normalised, see errors.py
+            return outcome(
+                PersistenceReport(),
+                (
+                    AcquisitionFailure(
+                        code=AcquisitionErrorCode.PERSISTENCE_FAILURE,
+                        detail=(
+                            f"records were acquired and could not be stored "
+                            f"({type(exc).__name__}); nothing was committed"
+                        ),
+                        source_id=job.source_id,
+                        correlation_id=job.correlation_id,
+                    ),
+                ),
+            )
+    return outcome(persisted)
 
 
 def utc_now() -> datetime:

@@ -450,12 +450,15 @@ class TestEligibilityAgreesEverywhere:
             "collector_enabled is set on a source with no implemented collector: "
             f"{sorted(enabled - set(IMPLEMENTED_COLLECTORS))}"
         )
-        assert "gdelt" not in enabled, (
-            "GDELT became eligible in this mission and must not have become enabled: "
-            "no collector exists for it"
-        )
 
-    def test_no_collector_was_implemented(self) -> None:
+    def test_the_implemented_collectors_are_the_two_that_were_authorised(self) -> None:
+        """Mission 1.8 asserted that GDELT was eligible with NO collector, which
+        was the whole point of that mission: eligibility is not implementation.
+
+        Mission 1.9.2 authorised its resources and Mission 1.9.3 wrote the
+        collector, in that order. The assertion moved rather than being deleted,
+        because the sequence it records is the thing worth keeping.
+        """
         from sros_acquisition import IMPLEMENTED_COLLECTORS
 
-        assert set(IMPLEMENTED_COLLECTORS) == {"world-bank"}
+        assert set(IMPLEMENTED_COLLECTORS) == {"world-bank", "gdelt"}

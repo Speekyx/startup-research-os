@@ -88,23 +88,37 @@ class TestTheRegistrationCanAuthoriseAHost:
 
 
 class TestNoCollectorWasImplemented:
-    def test_gdelt_is_eligible_and_has_no_collector(self, catalog, gdelt) -> None:
-        """§52.1 is NOT met and the report says so. Asserted here so the claim
-        cannot quietly become false in either direction."""
+    def test_gdelt_is_eligible_and_now_has_a_collector(self, catalog, gdelt) -> None:
+        """Mission 1.9's §52.1 was NOT met and its report said so.
+
+        Mission 1.9.3 met it. What did not change is the order the three facts
+        had to arrive in: the approval came first, then a concrete authorised
+        resource, then code. This still asserts the approval, because a
+        collector on a source whose review lapsed would be the failure the whole
+        gate exists to prevent.
+        """
         from sros_acquisition import IMPLEMENTED_COLLECTORS
 
         assert gdelt.review.approval_state is SourceApprovalState.APPROVED_WITH_CONDITIONS
-        assert "gdelt" not in IMPLEMENTED_COLLECTORS
-        assert set(IMPLEMENTED_COLLECTORS) == {"world-bank"}
+        assert "gdelt" in IMPLEMENTED_COLLECTORS
+        assert set(IMPLEMENTED_COLLECTORS) == {"world-bank", "gdelt"}
 
     def test_gdelt_is_not_enabled(self, gdelt) -> None:
         assert gdelt.collector_enabled is False
 
-    def test_no_gdelt_module_exists_in_the_collection_package(self) -> None:
-        """A half-written collector left on a branch is worse than none: it
-        reads as available to the next person who greps for it."""
+    def test_the_collector_that_exists_is_the_web_ngram_one(self) -> None:
+        """Mission 1.9 asserted that NO gdelt module existed, because a
+        half-written collector reads as available to whoever greps for it.
+
+        Mission 1.9.3 wrote one — for the WEB-NGRAM route. The DOC API collector
+        is still not written and H-27 is still why, so the assertion is now that
+        the module which exists is the reviewed one and no generic `gdelt.py`
+        sits beside it claiming to serve the whole source.
+        """
         collection = REPO_ROOT / "services/acquisition/python/sros_acquisition/collection"
+        assert (collection / "gdelt_web_ngram.py").exists()
         assert not (collection / "gdelt.py").exists()
+        assert not (collection / "gdelt_doc_api.py").exists()
 
 
 class TestTheResourceModelStillFailsClosed:

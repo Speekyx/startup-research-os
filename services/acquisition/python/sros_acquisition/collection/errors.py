@@ -29,6 +29,7 @@ __all__ = [
     "RETRYABLE_CODES",
     "AcquisitionFailure",
     "AcquisitionFailedError",
+    "code_for_status",
     "is_retryable",
 ]
 
@@ -48,6 +49,32 @@ RETRYABLE_CODES: frozenset[AcquisitionErrorCode] = frozenset(
 
 def is_retryable(code: AcquisitionErrorCode) -> bool:
     return code in RETRYABLE_CODES
+
+
+def code_for_status(status: int) -> tuple[AcquisitionErrorCode, str] | None:
+    """Map an HTTP status to a normalised code and a message we wrote.
+
+    `None` for a success. Extracted in Mission 1.9.3 because a second collector
+    needed exactly this mapping and two copies of a retry classification is how
+    one of them quietly starts retrying a 404.
+
+    **The body never enters the detail** (§33). A status number is a safe
+    diagnostic; a response body is a third party's text, which may contain
+    anything.
+    """
+    if 200 <= status < 300:
+        return None
+    if status == 429:
+        return AcquisitionErrorCode.RATE_LIMITED, "the source signalled too many requests"
+    if status >= 500:
+        return (
+            AcquisitionErrorCode.TEMPORARY_UPSTREAM,
+            "the source reported a server-side failure",
+        )
+    return (
+        AcquisitionErrorCode.UPSTREAM_CLIENT_ERROR,
+        "the source rejected the request deterministically",
+    )
 
 
 @dataclass(frozen=True)

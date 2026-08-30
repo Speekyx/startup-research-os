@@ -431,10 +431,15 @@ class TestNetworkBoundary:
             found = list((root / package).rglob("*collector*.py"))
             assert found == [], found
 
-    def test_exactly_one_collector_is_registered(self) -> None:
-        """§26, §57. World Bank and nothing else. Eurostat did not gain a
-        collector because World Bank has one."""
-        assert frozenset({"world-bank"}) == sros_acquisition.IMPLEMENTED_COLLECTORS
+    def test_only_the_collectors_that_were_authorised_are_registered(self) -> None:
+        """§26, §57, extended in Mission 1.9.3.
+
+        Two now, and the point is unchanged: Eurostat did not gain a collector
+        because the other two have one. Still an EQUALITY rather than a
+        containment — a third name appearing without a conformance suite behind
+        it is what this exists to catch.
+        """
+        assert frozenset({"world-bank", "gdelt"}) == sros_acquisition.IMPLEMENTED_COLLECTORS
 
 
 def _public_methods(cls: type) -> list[object]:

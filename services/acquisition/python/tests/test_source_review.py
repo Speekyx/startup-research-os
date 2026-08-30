@@ -530,7 +530,12 @@ class TestCollectionStaysInsideItsBoundary:
 
     def test_exactly_one_collector_exists_and_it_is_world_bank(self) -> None:
         """Eurostat is collector-eligible and has no collector. Eligibility says
-        one may be built; this says which one was."""
+        one may be built; this says which ones were.
+
+        Mission 1.9.3 added `gdelt`, after Mission 1.9.2 authorised the resources
+        it collects. Eurostat is still eligible with neither a resource nor a
+        collector, which is the pairing that keeps the facts apart.
+        """
         import sros_acquisition
 
-        assert frozenset({"world-bank"}) == sros_acquisition.IMPLEMENTED_COLLECTORS
+        assert frozenset({"world-bank", "gdelt"}) == sros_acquisition.IMPLEMENTED_COLLECTORS

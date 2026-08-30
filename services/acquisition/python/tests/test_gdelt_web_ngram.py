@@ -479,9 +479,12 @@ class TestTheFourFactsStayApart:
         readiness = evaluate_readiness(gdelt, compliance)
         assert readiness.eligible is True
         assert readiness.resource_ready is True
-        assert readiness.implemented is False
+        # Mission 1.9.3 implemented the collector, which is the step this
+        # mission's own report named as next. `enabled` stays false: it is a
+        # per-deployment switch, and the catalog record never turns one on.
+        assert readiness.implemented is True
         assert readiness.enabled is False
-        assert readiness.next_step == "implement a collector"
+        assert readiness.next_step == "enable the collector in this deployment"
         assert set(readiness.authorized_resources) == {UNIGRAM, BIGRAM}
         assert readiness.resource_gaps == ()
 
@@ -518,30 +521,45 @@ class TestTheFourFactsStayApart:
 
 
 class TestNoCollectorAndNoData:
-    def test_gdelt_is_still_unimplemented(self, gdelt) -> None:
+    def test_gdelt_became_implemented_in_the_mission_after_this_one(self, gdelt) -> None:
+        """Mission 1.9.2 authorised the resources and wrote no code; Mission
+        1.9.3 wrote the collector. The order is the point, and it is why this
+        assertion moved rather than being deleted."""
         from sros_acquisition import IMPLEMENTED_COLLECTORS
 
-        assert "gdelt" not in IMPLEMENTED_COLLECTORS
-        assert set(IMPLEMENTED_COLLECTORS) == {"world-bank"}
+        assert set(IMPLEMENTED_COLLECTORS) == {"world-bank", "gdelt"}
 
     def test_gdelt_is_still_disabled(self, gdelt) -> None:
         assert gdelt.collector_enabled is False
 
-    def test_no_gdelt_module_exists_in_the_collection_package(self) -> None:
-        """A half-written collector left on a branch is worse than none: it
-        reads as available to the next person who greps for it."""
+    def test_only_the_reviewed_route_has_a_collector(self) -> None:
+        """The WEB-NGRAM collector exists as of Mission 1.9.3. Nothing serves the
+        DOC API, because H-27 is open and no timeline envelope has ever been
+        observed — writing a parser against invented field names is what Mission
+        1.9 refused to do, and that refusal still stands."""
         collection = REPO_ROOT / "services/acquisition/python/sros_acquisition/collection"
+        assert (collection / "gdelt_web_ngram.py").exists()
         assert not (collection / "gdelt.py").exists()
-        assert not (collection / "gdelt_web_ngram.py").exists()
+        assert not (collection / "gdelt_doc_api.py").exists()
 
-    def test_no_ngram_parser_was_written_anywhere(self) -> None:
-        """§26 and §27. The contract is recorded in a document; nothing in the
-        code reads a WEB-NGRAM file, because reading one is the collector."""
+    def test_the_ngram_parser_lives_only_in_the_collection_package(self) -> None:
+        """Mission 1.9.2 asserted that NOTHING read a WEB-NGRAM file, because
+        reading one is the collector and no collector was authorised to exist.
+
+        Mission 1.9.3 wrote the parser. The assertion becomes a boundary one:
+        decompression and row parsing live in `collection/`, and neither the
+        registry nor the compliance package — which DECIDE whether collection
+        may happen — has learned to read a file.
+        """
         package = REPO_ROOT / "services/acquisition/python/sros_acquisition"
-        offenders = [
-            path
+        readers = {
+            path.relative_to(package).as_posix()
             for path in package.rglob("*.py")
-            if "gzip" in path.read_text(encoding="utf-8")
-            or ".1gram" in path.read_text(encoding="utf-8")
-        ]
-        assert offenders == []
+            if "zlib" in path.read_text(encoding="utf-8")
+        }
+        assert readers == {"collection/gdelt_web_ngram.py"}
+        for governance in ("registry", "compliance"):
+            for path in (package / governance).rglob("*.py"):
+                text = path.read_text(encoding="utf-8")
+                assert "zlib" not in text
+                assert "gzip" not in text

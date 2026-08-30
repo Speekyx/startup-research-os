@@ -12,7 +12,8 @@ across workspaces.
 
     registry/       may this source be collected from, and why not
     compliance/     what a collector would have to obey, and whether it can
-    collection/     the World Bank collector, and the HTTP boundary
+    collection/     the World Bank and GDELT WEB-NGRAM collectors, and the
+                    HTTP boundary
     normalization/  RawRecord to canonical observation
 
 Neither governance package opens a network connection, and CI asserts it --
@@ -45,11 +46,11 @@ __all__ = [
 
 # Sources this codebase can actually collect from.
 #
-# One entry since Mission 1.5, and it was added only after the collector's
-# conformance suite passed (§26). Adding a name here is the LAST step of
-# implementing a collector, never a way to prepare for one: everything that
-# consults this set treats membership as "code exists that can collect from
-# this", and a name added early would make that false.
+# Two entries. Each was added only after its own conformance suite passed --
+# Mission 1.5 §26 for World Bank, Mission 1.9.3 §40 for GDELT. Adding a name
+# here is the LAST step of implementing a collector, never a way to prepare for
+# one: everything that consults this set treats membership as "code exists that
+# can collect from this", and a name added early would make that false.
 #
 # Two things consult it. `sros-source enable` refuses to switch on a collector
 # that does not exist -- a switch that gets ahead of the thing it switches reads
@@ -57,9 +58,12 @@ __all__ = [
 # its own fail-closed default, since a service may not import another service's
 # package (`service-boundaries.md`).
 #
-# Eurostat is collector-eligible and is NOT here. Eligibility says a collector
-# may be built; this says one was.
-IMPLEMENTED_COLLECTORS: frozenset[str] = frozenset({"world-bank"})
+# Eurostat is collector-eligible and is NOT here, and since Mission 1.9.2 there
+# is a sharper way to say why: it has no authorised RESOURCE either, so even a
+# collector would have nothing it could ask for. Eligibility says a collector
+# may be built; resource-readiness says there is something to build against;
+# this says one was built.
+IMPLEMENTED_COLLECTORS: frozenset[str] = frozenset({"world-bank", "gdelt"})
 
 
 # Sources this codebase can actually NORMALIZE.

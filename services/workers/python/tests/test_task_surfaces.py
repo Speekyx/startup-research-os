@@ -18,7 +18,9 @@ from typing import Any
 
 from sros_workers import Queue, route_task
 from sros_workers.acquisition_tasks import (
+    GDELT_WEB_NGRAM_COLLECT,
     WORLD_BANK_COLLECT,
+    acquisition_payload,
     register_acquisition_tasks,
     world_bank_payload,
 )
@@ -79,8 +81,15 @@ class TestRouting(unittest.TestCase):
         """
         self.assertIs(route_task(NORMALIZE_RAW_RECORDS), Queue.ACQUISITION)
 
-    def test_the_two_task_names_are_distinct(self) -> None:
-        self.assertNotEqual(WORLD_BANK_COLLECT, NORMALIZE_RAW_RECORDS)
+    def test_the_ngram_collector_task_routes_to_the_acquisition_queue(self) -> None:
+        """Mission 1.9.3 §41. The existing queue, not a new one: a bulk file is
+        bigger work than an API page and it is still acquisition, and a pool of
+        its own would be a split made in advance of any measurement."""
+        self.assertIs(route_task(GDELT_WEB_NGRAM_COLLECT), Queue.ACQUISITION)
+
+    def test_every_task_name_is_distinct(self) -> None:
+        names = {WORLD_BANK_COLLECT, GDELT_WEB_NGRAM_COLLECT, NORMALIZE_RAW_RECORDS}
+        self.assertEqual(len(names), 3)
 
 
 class TestContext(unittest.TestCase):
@@ -123,8 +132,33 @@ class TestFailClosed(unittest.TestCase):
     def test_acquisition_refuses_without_a_connection_factory(self) -> None:
         app = _StubApp()
         register_acquisition_tasks(app)
-        with self.assertRaises(RuntimeError):
-            app.call(WORLD_BANK_COLLECT, HEADERS, {})
+        for name in (WORLD_BANK_COLLECT, GDELT_WEB_NGRAM_COLLECT):
+            with self.assertRaises(RuntimeError):
+                app.call(name, HEADERS, {})
+
+    def test_the_ngram_task_merge_behaves_identically(self) -> None:
+        merged = acquisition_payload(HEADERS, {"workspace_id": "an-imposter"})
+        self.assertEqual(merged["workspace_id"], WORKSPACE)
+
+    def test_a_smuggled_authorization_key_survives_the_merge_and_means_nothing(self) -> None:
+        """§41, from the WORKER's side only.
+
+        The merge is deliberately dumb: it keeps whatever the payload carried and
+        lets the tenancy headers win. So a key called `authorization` passes
+        through here untouched — and reaches a job that rebuilds the
+        authorization from the registry and never looks at it.
+
+        **The payload class itself is asserted in the acquisition suite**, not
+        here. This module runs in the ZERO-DEPENDENCY suite with no workspace
+        packages installed, so importing `sros_acquisition` fails in CI while
+        passing on any developer machine that has it — which is how this test
+        was written and how CI caught it. `service-boundaries.md` says the same
+        thing for a different reason: a service does not import another
+        service's package.
+        """
+        merged = acquisition_payload(HEADERS, {"authorization": {"allowed": True}})
+        self.assertEqual(merged["authorization"], {"allowed": True})
+        self.assertEqual(merged["workspace_id"], WORKSPACE)
 
     def test_registration_is_explicit(self) -> None:
         """A process that should not normalize simply does not register it."""
