@@ -3,6 +3,10 @@
 Mission 1.2 §47. Two workspaces throughout, because a tenancy assertion with one
 workspace has nothing to be isolated from (ADR-005).
 
+Those two are P and Q, and they exist only while a test is running: the
+`own_workspaces` fixture below creates them before each test and drops them
+after. Nothing here writes into the seeded development workspaces.
+
 The tests worth reading first are `TestCrossTenantIntegrity` and
 `TestHistoricalReproducibility`. The first proves that a cross-workspace
 reference is not merely forbidden but structurally impossible — the composite
@@ -43,7 +47,7 @@ from sros_gateway.db.repositories import (
     ResearchSessionRepository,
 )
 
-from .conftest import DATABASE_URL, WORKSPACE_A, WORKSPACE_B, header, needs_postgres
+from .conftest import DATABASE_URL, WORKSPACE_P, WORKSPACE_Q, header, needs_postgres
 
 NOW = datetime.now(UTC)
 EXPIRES = NOW + timedelta(days=30)
@@ -55,16 +59,39 @@ CAT = EvidenceObservationCategory
 CONTEXT = {"market_scope": {"type": "COUNTRY", "countries": ["FR"]}}
 
 
+# ==================================================================== workspaces
+
+
+@pytest.fixture(autouse=True)
+def own_workspaces(probe_workspaces) -> None:
+    """Every test in this module runs in workspaces of its own.
+
+    Autouse, and it hands nothing back, because no test here needs to be handed
+    a workspace: the helpers below already carry P and Q as defaults, so what a
+    test needs is not a value but a guarantee -- that the two exist when it
+    starts and are gone when it finishes. Requesting `probe_workspaces` by name
+    in fifty signatures would state the same thing fifty times and leave the
+    fifty-first test silently writing into a seeded workspace.
+
+    Without it these tests committed into the seeded development workspace and
+    left everything there. A full run of the suites accumulated 39 claims and 36
+    evidence records that no test had asked for, which Mission 1.6 then hit from
+    the other side: a normalization test asserting that no Claims existed found
+    39 and had to be weakened to a delta to pass. The rows were never a
+    normalization concern; they were this suite's litter.
+    """
+
+
 # ===================================================================== helpers
 
 
-def make_opportunity(database, workspace=WORKSPACE_A, title="Test opportunity") -> uuid.UUID:
+def make_opportunity(database, workspace=WORKSPACE_P, title="Test opportunity") -> uuid.UUID:
     """Explicit creation. Mission 1.2 §36: tests insert opportunities directly
     rather than exercising identity resolution, which remains open."""
     return OpportunityRepository(database).create(workspace, title, MarketScope.country("FR"))
 
 
-def make_session(database, workspace=WORKSPACE_A) -> uuid.UUID:
+def make_session(database, workspace=WORKSPACE_P) -> uuid.UUID:
     from sros_contracts import CONTRACT_VERSION, ONTOLOGY_VERSION, ResearchContext
 
     project = ResearchProjectRepository(database).create(workspace, "claim tests")
@@ -84,7 +111,7 @@ def make_session(database, workspace=WORKSPACE_A) -> uuid.UUID:
 def make_claim(
     database,
     opportunity_id: uuid.UUID,
-    workspace=WORKSPACE_A,
+    workspace=WORKSPACE_P,
     statement: str = "A meaningful segment expresses willingness to pay.",
     temporality=ClaimTemporality.EVERGREEN,
     **kwargs,
@@ -100,7 +127,7 @@ def make_claim(
     )
 
 
-def add_evidence(database, claim_id, workspace=WORKSPACE_A, **kwargs) -> uuid.UUID:
+def add_evidence(database, claim_id, workspace=WORKSPACE_P, **kwargs) -> uuid.UUID:
     defaults = {
         "evidence_level": 1,
         "claim_type": ClaimType.OBSERVED,
@@ -122,18 +149,18 @@ def add_evidence(database, claim_id, workspace=WORKSPACE_A, **kwargs) -> uuid.UU
 
 @needs_postgres
 class TestClaimPersistence:
-    def test_a_claim_is_created_with_its_first_revision(self, database) -> None:
+    def test_p_claim_is_created_with_its_first_revision(self, database) -> None:
         opportunity = make_opportunity(database)
         claim_id = make_claim(database, opportunity)
-        claim = ClaimRepository(database).get(WORKSPACE_A, claim_id)
+        claim = ClaimRepository(database).get(WORKSPACE_P, claim_id)
         assert claim.current_revision == 1
         assert claim.statement.startswith("A meaningful segment")
         assert claim.lifecycle == ClaimLifecycle.ACTIVE.value
 
-    def test_a_claim_belongs_to_one_opportunity(self, database) -> None:
+    def test_p_claim_belongs_to_one_opportunity(self, database) -> None:
         opportunity = make_opportunity(database)
         claim_id = make_claim(database, opportunity)
-        assert ClaimRepository(database).get(WORKSPACE_A, claim_id).opportunity_id == opportunity
+        assert ClaimRepository(database).get(WORKSPACE_P, claim_id).opportunity_id == opportunity
 
     def test_one_opportunity_carries_many_independently_evaluated_claims(self, database) -> None:
         """The point of the model. Aggregating at the opportunity level would
@@ -147,14 +174,14 @@ class TestClaimPersistence:
         add_evidence(database, supported, direction=D.SUPPORTS)
         add_evidence(database, contradicted, direction=D.CONTRADICTS)
 
-        claims = ClaimRepository(database).list_for_opportunity(WORKSPACE_A, opportunity)
+        claims = ClaimRepository(database).list_for_opportunity(WORKSPACE_P, opportunity)
         assert {c.id for c in claims} == {supported, contradicted}
 
         repository = EvidenceRepository(database)
-        assert [e["direction"] for e in repository.list_for_claim(WORKSPACE_A, supported)] == [
+        assert [e["direction"] for e in repository.list_for_claim(WORKSPACE_P, supported)] == [
             "SUPPORTS"
         ]
-        assert [e["direction"] for e in repository.list_for_claim(WORKSPACE_A, contradicted)] == [
+        assert [e["direction"] for e in repository.list_for_claim(WORKSPACE_P, contradicted)] == [
             "CONTRADICTS"
         ]
 
@@ -166,8 +193,8 @@ class TestClaimPersistence:
         second = make_claim(database, opportunity, statement="Statement two.")
         assert first != second
         repository = ClaimRepository(database)
-        assert repository.get(WORKSPACE_A, first).claim_type == ClaimType.INFERRED.value
-        assert repository.get(WORKSPACE_A, second).claim_type == ClaimType.INFERRED.value
+        assert repository.get(WORKSPACE_P, first).claim_type == ClaimType.INFERRED.value
+        assert repository.get(WORKSPACE_P, second).claim_type == ClaimType.INFERRED.value
 
     def test_temporality_is_explicit_and_has_no_default(self, database) -> None:
         """§12. Never inferred from the source: one platform carries an
@@ -187,17 +214,17 @@ class TestClaimPersistence:
             claim_feature="trend-momentum",
         )
         repository = ClaimRepository(database)
-        assert repository.get(WORKSPACE_A, evergreen).temporality == "EVERGREEN"
-        assert repository.get(WORKSPACE_A, sensitive).temporality == "TEMPORALLY_SENSITIVE"
+        assert repository.get(WORKSPACE_P, evergreen).temporality == "EVERGREEN"
+        assert repository.get(WORKSPACE_P, sensitive).temporality == "TEMPORALLY_SENSITIVE"
         # The claim NAMES the feature; the half-life lives in the profile, and
         # no profile has one (framework §9).
-        assert repository.get(WORKSPACE_A, sensitive).claim_feature == "trend-momentum"
+        assert repository.get(WORKSPACE_P, sensitive).claim_feature == "trend-momentum"
 
     def test_provenance_answers_where_the_assertion_came_from(self, database) -> None:
         opportunity = make_opportunity(database)
         session = make_session(database)
         claim_id = ClaimRepository(database).create(
-            WORKSPACE_A,
+            WORKSPACE_P,
             opportunity,
             "Extracted assertion.",
             ClaimType.OBSERVED,
@@ -209,7 +236,7 @@ class TestClaimPersistence:
             prompt_version="claim-extraction@1",
             created_by="test",
         )
-        claim = ClaimRepository(database).get(WORKSPACE_A, claim_id)
+        claim = ClaimRepository(database).get(WORKSPACE_P, claim_id)
         assert claim.origin == "LLM_EXTRACTION"
         assert claim.origin_session_id == session
         # The model name is provenance, never the origin enum: a new model must
@@ -217,7 +244,7 @@ class TestClaimPersistence:
         assert claim.model_version == "test-model-v3"
         assert "LLM_EXTRACTION" not in (claim.model_version or "")
 
-    def test_a_claim_accumulates_evidence_across_sessions(self, database) -> None:
+    def test_p_claim_accumulates_evidence_across_sessions(self, database) -> None:
         """§10. A claim is not owned by the session that first met it.
         Duplicating it because a second session found it would split its
         evidence in two."""
@@ -228,19 +255,19 @@ class TestClaimPersistence:
 
         repository = ClaimRepository(database)
         repository.record_observation(
-            WORKSPACE_A, claim_id, first_session, ObservationKind.DISCOVERED
+            WORKSPACE_P, claim_id, first_session, ObservationKind.DISCOVERED
         )
         repository.record_observation(
-            WORKSPACE_A, claim_id, second_session, ObservationKind.CORROBORATED
+            WORKSPACE_P, claim_id, second_session, ObservationKind.CORROBORATED
         )
         add_evidence(database, claim_id)
         add_evidence(database, claim_id, research_session_id=second_session)
 
-        observations = repository.observations(WORKSPACE_A, claim_id)
+        observations = repository.observations(WORKSPACE_P, claim_id)
         assert {o["observation_kind"] for o in observations} == {"DISCOVERED", "CORROBORATED"}
         # One claim, two sessions, one evidence set.
-        assert len(EvidenceRepository(database).list_for_claim(WORKSPACE_A, claim_id)) == 2
-        assert len(repository.list_for_opportunity(WORKSPACE_A, opportunity)) == 1
+        assert len(EvidenceRepository(database).list_for_claim(WORKSPACE_P, claim_id)) == 2
+        assert len(repository.list_for_opportunity(WORKSPACE_P, opportunity)) == 1
 
     def test_deleting_a_session_leaves_the_claim_standing(self, database) -> None:
         """A claim is not owned by the session that discovered it, so deleting
@@ -258,17 +285,17 @@ class TestClaimPersistence:
         claim_id = make_claim(database, opportunity, origin_session_id=session)
         add_evidence(database, claim_id)
 
-        with database.tenant_transaction(WORKSPACE_A) as conn:
+        with database.tenant_transaction(WORKSPACE_P) as conn:
             conn.execute(
                 "DELETE FROM research.research_sessions WHERE workspace_id = %s AND id = %s",
-                (WORKSPACE_A, session),
+                (WORKSPACE_P, session),
             )
 
-        claim = ClaimRepository(database).get(WORKSPACE_A, claim_id)
+        claim = ClaimRepository(database).get(WORKSPACE_P, claim_id)
         assert claim.origin_session_id is None
-        assert claim.workspace_id == WORKSPACE_A
+        assert claim.workspace_id == WORKSPACE_P
         # The evidence went nowhere either.
-        assert len(EvidenceRepository(database).list_for_claim(WORKSPACE_A, claim_id)) == 1
+        assert len(EvidenceRepository(database).list_for_claim(WORKSPACE_P, claim_id)) == 1
 
     def test_a_group_with_members_cannot_simply_be_deleted(self, database) -> None:
         """RESTRICT, and the refusal is the designed behaviour.
@@ -284,7 +311,7 @@ class TestClaimPersistence:
         claim_id = make_claim(database, opportunity)
         repository = EvidenceRepository(database)
         group = repository.create_independence_group(
-            WORKSPACE_A, claim_id, basis="shared origin", detection_method="manual"
+            WORKSPACE_P, claim_id, basis="shared origin", detection_method="manual"
         )
         evidence_id = add_evidence(
             database,
@@ -295,28 +322,28 @@ class TestClaimPersistence:
 
         with (
             pytest.raises(Exception, match="evidence_independence_group_same_claim_fkey"),
-            database.tenant_transaction(WORKSPACE_A) as conn,
+            database.tenant_transaction(WORKSPACE_P) as conn,
         ):
             conn.execute(
                 """DELETE FROM scoring.evidence_independence_groups
                     WHERE workspace_id = %s AND id = %s""",
-                (WORKSPACE_A, group),
+                (WORKSPACE_P, group),
             )
 
         # Correct the members first, and the group can then go.
-        with database.tenant_transaction(WORKSPACE_A) as conn:
+        with database.tenant_transaction(WORKSPACE_P) as conn:
             conn.execute(
                 """UPDATE scoring.evidence
                       SET independence_state = 'UNKNOWN', independence_group_id = NULL
                     WHERE workspace_id = %s AND id = %s""",
-                (WORKSPACE_A, evidence_id),
+                (WORKSPACE_P, evidence_id),
             )
             conn.execute(
                 """DELETE FROM scoring.evidence_independence_groups
                     WHERE workspace_id = %s AND id = %s""",
-                (WORKSPACE_A, group),
+                (WORKSPACE_P, group),
             )
-        records = repository.list_for_claim(WORKSPACE_A, claim_id)
+        records = repository.list_for_claim(WORKSPACE_P, claim_id)
         assert len(records) == 1
         assert records[0]["independence_state"] == "UNKNOWN"
 
@@ -327,23 +354,23 @@ class TestClaimPersistence:
         claim_id = make_claim(database, opportunity)
         add_evidence(database, claim_id)
         repository = ClaimRepository(database)
-        repository.withdraw(WORKSPACE_A, claim_id, "duplicated another claim")
+        repository.withdraw(WORKSPACE_P, claim_id, "duplicated another claim")
 
-        assert repository.get(WORKSPACE_A, claim_id).lifecycle == "WITHDRAWN"
-        assert repository.list_for_opportunity(WORKSPACE_A, opportunity) == []
+        assert repository.get(WORKSPACE_P, claim_id).lifecycle == "WITHDRAWN"
+        assert repository.list_for_opportunity(WORKSPACE_P, opportunity) == []
         assert (
-            len(repository.list_for_opportunity(WORKSPACE_A, opportunity, include_withdrawn=True))
+            len(repository.list_for_opportunity(WORKSPACE_P, opportunity, include_withdrawn=True))
             == 1
         )
         # The evidence survives. Deleting it would destroy the record of what
         # was once believed.
-        assert EvidenceRepository(database).list_for_claim(WORKSPACE_A, claim_id)
+        assert EvidenceRepository(database).list_for_claim(WORKSPACE_P, claim_id)
 
     def test_withdrawal_requires_a_reason(self, database) -> None:
         opportunity = make_opportunity(database)
         claim_id = make_claim(database, opportunity)
         with pytest.raises(ContractError):
-            ClaimRepository(database).withdraw(WORKSPACE_A, claim_id, "   ")
+            ClaimRepository(database).withdraw(WORKSPACE_P, claim_id, "   ")
 
     def test_no_lifecycle_value_asserts_the_claim_is_true(self) -> None:
         """The absence IS the feature. A VALIDATED state would be an epistemic
@@ -371,9 +398,9 @@ class TestHistoricalReproducibility:
         repository = ClaimRepository(database)
         claim_id = make_claim(database, opportunity, statement="Users want faster exports.")
 
-        original = repository.get(WORKSPACE_A, claim_id).statement
+        original = repository.get(WORKSPACE_P, claim_id).statement
         revision = repository.revise(
-            WORKSPACE_A,
+            WORKSPACE_P,
             claim_id,
             "Enterprise users want faster exports.",
             revision_reason="narrowed the population",
@@ -381,9 +408,9 @@ class TestHistoricalReproducibility:
         )
 
         assert revision == 2
-        assert repository.get(WORKSPACE_A, claim_id).statement.startswith("Enterprise")
+        assert repository.get(WORKSPACE_P, claim_id).statement.startswith("Enterprise")
         # The evaluated text, still readable.
-        assert repository.statement_at(WORKSPACE_A, claim_id, 1) == original
+        assert repository.statement_at(WORKSPACE_P, claim_id, 1) == original
 
     def test_identity_survives_a_rewrite(self, database) -> None:
         """§5. Under supersession the id would change and every attached
@@ -392,14 +419,14 @@ class TestHistoricalReproducibility:
         claim_id = make_claim(database, opportunity)
         add_evidence(database, claim_id)
         ClaimRepository(database).revise(
-            WORKSPACE_A,
+            WORKSPACE_P,
             claim_id,
             "A rewritten statement.",
             revision_reason="clarity",
             material_change=False,
         )
-        assert ClaimRepository(database).get(WORKSPACE_A, claim_id).id == claim_id
-        assert len(EvidenceRepository(database).list_for_claim(WORKSPACE_A, claim_id)) == 1
+        assert ClaimRepository(database).get(WORKSPACE_P, claim_id).id == claim_id
+        assert len(EvidenceRepository(database).list_for_claim(WORKSPACE_P, claim_id)) == 1
 
     def test_the_history_records_whether_the_meaning_changed(self, database) -> None:
         """`material_change` is author-declared and nothing acts on it in V1.
@@ -409,20 +436,20 @@ class TestHistoricalReproducibility:
         repository = ClaimRepository(database)
         claim_id = make_claim(database, opportunity)
         repository.revise(
-            WORKSPACE_A,
+            WORKSPACE_P,
             claim_id,
             "Fixed a typo in the statement.",
             revision_reason="typo",
             material_change=False,
         )
         repository.revise(
-            WORKSPACE_A,
+            WORKSPACE_P,
             claim_id,
             "A materially different assertion entirely.",
             revision_reason="scope change",
             material_change=True,
         )
-        history = repository.revisions(WORKSPACE_A, claim_id)
+        history = repository.revisions(WORKSPACE_P, claim_id)
         assert [h["revision"] for h in history] == [1, 2, 3]
         assert [h["material_change"] for h in history] == [False, False, True]
         assert all(h["revision_reason"] for h in history)
@@ -433,7 +460,7 @@ class TestHistoricalReproducibility:
         claim_id = make_claim(database, opportunity, statement="Unchanged.")
         with pytest.raises(ClaimStatementUnchangedError):
             repository.revise(
-                WORKSPACE_A, claim_id, "Unchanged.", revision_reason="none", material_change=False
+                WORKSPACE_P, claim_id, "Unchanged.", revision_reason="none", material_change=False
             )
 
     def test_a_revision_requires_a_stated_reason(self, database) -> None:
@@ -441,7 +468,7 @@ class TestHistoricalReproducibility:
         claim_id = make_claim(database, opportunity)
         with pytest.raises(ContractError):
             ClaimRepository(database).revise(
-                WORKSPACE_A,
+                WORKSPACE_P,
                 claim_id,
                 "Something else.",
                 revision_reason="  ",
@@ -468,12 +495,12 @@ class TestHistoricalReproducibility:
 
 @needs_postgres
 class TestEvidencePersistence:
-    def test_evidence_references_a_claim_not_an_opportunity(self, database) -> None:
+    def test_evidence_references_p_claim_not_an_opportunity(self, database) -> None:
         """Mission 1.1 I-2, resolved. The aggregation unit is the claim."""
         opportunity = make_opportunity(database)
         claim_id = make_claim(database, opportunity)
         evidence_id = add_evidence(database, claim_id)
-        records = EvidenceRepository(database).list_for_claim(WORKSPACE_A, claim_id)
+        records = EvidenceRepository(database).list_for_claim(WORKSPACE_P, claim_id)
         assert [r["evidence_id"] for r in records] == [str(evidence_id)]
         assert records[0]["claim_id"] == str(claim_id)
 
@@ -484,7 +511,7 @@ class TestEvidencePersistence:
             add_evidence(database, claim_id, direction=direction)
         directions = {
             r["direction"]
-            for r in EvidenceRepository(database).list_for_claim(WORKSPACE_A, claim_id)
+            for r in EvidenceRepository(database).list_for_claim(WORKSPACE_P, claim_id)
         }
         assert directions == {"SUPPORTS", "CONTRADICTS", "NEUTRAL"}
 
@@ -493,7 +520,7 @@ class TestEvidencePersistence:
         claim_id = make_claim(database, opportunity)
         repository = EvidenceRepository(database)
         group = repository.create_independence_group(
-            WORKSPACE_A,
+            WORKSPACE_P,
             claim_id,
             basis="all three repeat one product announcement",
             detection_method="manual fixture",
@@ -506,9 +533,9 @@ class TestEvidencePersistence:
                 independence_state=IND.KNOWN_DEPENDENT,
                 independence_group_id=group,
             )
-        records = repository.list_for_claim(WORKSPACE_A, claim_id)
+        records = repository.list_for_claim(WORKSPACE_P, claim_id)
         assert {r["independence_group_id"] for r in records} == {str(group)}
-        assert repository.independence_groups(WORKSPACE_A, claim_id)[0]["basis"].startswith("all")
+        assert repository.independence_groups(WORKSPACE_P, claim_id)[0]["basis"].startswith("all")
 
     def test_known_independent_carries_no_group(self, database) -> None:
         """§17. A nullable group id alone is NOT the independence model: it
@@ -516,7 +543,7 @@ class TestEvidencePersistence:
         opportunity = make_opportunity(database)
         claim_id = make_claim(database, opportunity)
         add_evidence(database, claim_id, independence_state=IND.KNOWN_INDEPENDENT)
-        record = EvidenceRepository(database).list_for_claim(WORKSPACE_A, claim_id)[0]
+        record = EvidenceRepository(database).list_for_claim(WORKSPACE_P, claim_id)[0]
         assert record["independence_state"] == "KNOWN_INDEPENDENT"
         assert record["independence_group_id"] is None
 
@@ -526,7 +553,7 @@ class TestEvidencePersistence:
         opportunity = make_opportunity(database)
         claim_id = make_claim(database, opportunity)
         add_evidence(database, claim_id)  # default state
-        record = EvidenceRepository(database).list_for_claim(WORKSPACE_A, claim_id)[0]
+        record = EvidenceRepository(database).list_for_claim(WORKSPACE_P, claim_id)[0]
         assert record["independence_state"] == "UNKNOWN"
         assert record["independence_group_id"] is None
 
@@ -534,7 +561,7 @@ class TestEvidencePersistence:
         opportunity = make_opportunity(database)
         claim_id = make_claim(database, opportunity)
         group = EvidenceRepository(database).create_independence_group(
-            WORKSPACE_A, claim_id, basis="shared origin", detection_method="manual"
+            WORKSPACE_P, claim_id, basis="shared origin", detection_method="manual"
         )
         with pytest.raises(ContractError):
             add_evidence(database, claim_id, independence_state=IND.KNOWN_DEPENDENT)
@@ -567,7 +594,7 @@ class TestEvidencePersistence:
                             collected_at, expires_at)
                        VALUES (%s,%s,%s,'OBSERVED','SUPPORTS',1,'UNCATEGORISED',
                                'KNOWN_DEPENDENT',now(),now())""",
-                    (uuid.uuid4(), WORKSPACE_A, claim_id),
+                    (uuid.uuid4(), WORKSPACE_P, claim_id),
                 )
             assert "independence" in str(exc.value).lower()
             conn.rollback()
@@ -578,7 +605,7 @@ class TestEvidencePersistence:
         opportunity = make_opportunity(database)
         claim_id = make_claim(database, opportunity)
         add_evidence(database, claim_id, extraction_confidence=None, reliability=None)
-        record = EvidenceRepository(database).list_for_claim(WORKSPACE_A, claim_id)[0]
+        record = EvidenceRepository(database).list_for_claim(WORKSPACE_P, claim_id)[0]
         assert record["extraction_confidence"] is None
         assert record["reliability"] is None
 
@@ -596,7 +623,7 @@ class TestEvidencePersistence:
         claim_id = make_claim(database, opportunity)
         with pytest.raises(ContractError):
             EvidenceRepository(database).create_independence_group(
-                WORKSPACE_A, claim_id, basis="  ", detection_method="manual"
+                WORKSPACE_P, claim_id, basis="  ", detection_method="manual"
             )
 
     def test_the_scalar_independence_column_is_gone(self, database) -> None:
@@ -620,31 +647,31 @@ class TestEvidencePersistence:
 
 @needs_postgres
 class TestCrossTenantIntegrity:
-    def test_workspace_a_cannot_read_workspace_b_claims(self, database) -> None:
-        opportunity = make_opportunity(database, WORKSPACE_B, "B opportunity")
-        claim_id = make_claim(database, opportunity, workspace=WORKSPACE_B)
+    def test_workspace_p_cannot_read_workspace_q_claims(self, database) -> None:
+        opportunity = make_opportunity(database, WORKSPACE_Q, "Q opportunity")
+        claim_id = make_claim(database, opportunity, workspace=WORKSPACE_Q)
         with pytest.raises(NotFoundError):
-            ClaimRepository(database).get(WORKSPACE_A, claim_id)
+            ClaimRepository(database).get(WORKSPACE_P, claim_id)
 
-    def test_workspace_a_cannot_read_workspace_b_evidence(self, database) -> None:
-        opportunity = make_opportunity(database, WORKSPACE_B, "B opportunity")
-        claim_id = make_claim(database, opportunity, workspace=WORKSPACE_B)
-        add_evidence(database, claim_id, workspace=WORKSPACE_B)
-        assert EvidenceRepository(database).list_for_claim(WORKSPACE_A, claim_id) == []
+    def test_workspace_p_cannot_read_workspace_q_evidence(self, database) -> None:
+        opportunity = make_opportunity(database, WORKSPACE_Q, "Q opportunity")
+        claim_id = make_claim(database, opportunity, workspace=WORKSPACE_Q)
+        add_evidence(database, claim_id, workspace=WORKSPACE_Q)
+        assert EvidenceRepository(database).list_for_claim(WORKSPACE_P, claim_id) == []
 
-    def test_a_claim_cannot_reference_an_opportunity_in_another_workspace(self, database) -> None:
+    def test_p_claim_cannot_reference_an_opportunity_in_another_workspace(self, database) -> None:
         """The composite foreign key carries workspace_id, so this is a
         structural impossibility rather than a rule somebody must remember."""
-        opportunity = make_opportunity(database, WORKSPACE_B, "B opportunity")
+        opportunity = make_opportunity(database, WORKSPACE_Q, "Q opportunity")
         with pytest.raises(Exception) as exc:
-            make_claim(database, opportunity, workspace=WORKSPACE_A)
+            make_claim(database, opportunity, workspace=WORKSPACE_P)
         assert "foreign key" in str(exc.value).lower() or "policy" in str(exc.value).lower()
 
-    def test_evidence_cannot_reference_a_claim_in_another_workspace(self, database) -> None:
-        opportunity = make_opportunity(database, WORKSPACE_B, "B opportunity")
-        claim_id = make_claim(database, opportunity, workspace=WORKSPACE_B)
+    def test_evidence_cannot_reference_p_claim_in_another_workspace(self, database) -> None:
+        opportunity = make_opportunity(database, WORKSPACE_Q, "Q opportunity")
+        claim_id = make_claim(database, opportunity, workspace=WORKSPACE_Q)
         with pytest.raises(Exception, match="evidence_claim_same_workspace_fkey"):
-            add_evidence(database, claim_id, workspace=WORKSPACE_A)
+            add_evidence(database, claim_id, workspace=WORKSPACE_P)
 
     def test_an_independence_group_cannot_span_claims(self, database) -> None:
         """The evidence foreign key carries workspace AND claim, so a record
@@ -653,7 +680,7 @@ class TestCrossTenantIntegrity:
         first = make_claim(database, opportunity, statement="First claim.")
         second = make_claim(database, opportunity, statement="Second claim.")
         group = EvidenceRepository(database).create_independence_group(
-            WORKSPACE_A, first, basis="shared origin", detection_method="manual"
+            WORKSPACE_P, first, basis="shared origin", detection_method="manual"
         )
         with pytest.raises(Exception) as exc:
             add_evidence(
@@ -665,11 +692,11 @@ class TestCrossTenantIntegrity:
         assert "foreign key" in str(exc.value).lower()
 
     def test_an_independence_group_cannot_span_workspaces(self, database) -> None:
-        opportunity = make_opportunity(database, WORKSPACE_B, "B opportunity")
-        claim_id = make_claim(database, opportunity, workspace=WORKSPACE_B)
+        opportunity = make_opportunity(database, WORKSPACE_Q, "Q opportunity")
+        claim_id = make_claim(database, opportunity, workspace=WORKSPACE_Q)
         with pytest.raises(Exception, match="independence_groups_claim_same_workspace_fkey"):
             EvidenceRepository(database).create_independence_group(
-                WORKSPACE_A, claim_id, basis="shared origin", detection_method="manual"
+                WORKSPACE_P, claim_id, basis="shared origin", detection_method="manual"
             )
 
     def test_a_workspace_is_required_on_every_call(self, database) -> None:
@@ -708,31 +735,31 @@ class TestClaimRowLevelSecurity:
         """The test that justifies RLS: every other layer depends on someone
         remembering something. This one asks for everything and gets one
         tenant's rows."""
-        a_opportunity = make_opportunity(database)
-        b_opportunity = make_opportunity(database, WORKSPACE_B, "B opportunity")
-        a_claim = make_claim(database, a_opportunity, statement="A claim.")
-        make_claim(database, b_opportunity, workspace=WORKSPACE_B, statement="B claim.")
+        p_opportunity = make_opportunity(database)
+        q_opportunity = make_opportunity(database, WORKSPACE_Q, "Q opportunity")
+        p_claim = make_claim(database, p_opportunity, statement="A claim.")
+        make_claim(database, q_opportunity, workspace=WORKSPACE_Q, statement="B claim.")
 
-        with database.tenant_transaction(WORKSPACE_A) as conn:
+        with database.tenant_transaction(WORKSPACE_P) as conn:
             visible = {r[0] for r in conn.execute("SELECT id FROM research.claims").fetchall()}
-        assert a_claim in visible
-        with database.tenant_transaction(WORKSPACE_B) as conn:
-            b_visible = {r[0] for r in conn.execute("SELECT id FROM research.claims").fetchall()}
-        assert a_claim not in b_visible
+        assert p_claim in visible
+        with database.tenant_transaction(WORKSPACE_Q) as conn:
+            q_visible = {r[0] for r in conn.execute("SELECT id FROM research.claims").fetchall()}
+        assert p_claim not in q_visible
 
     def test_a_tenant_cannot_insert_a_row_tagged_for_another(self, database) -> None:
         """WITH CHECK, not just USING. Without it a workspace could write a row
         visible to nobody who wrote it and to exactly the wrong tenant."""
-        opportunity = make_opportunity(database, WORKSPACE_B, "B opportunity")
+        opportunity = make_opportunity(database, WORKSPACE_Q, "Q opportunity")
         with (
             pytest.raises(Exception, match="row-level security"),
-            database.tenant_transaction(WORKSPACE_A) as conn,
+            database.tenant_transaction(WORKSPACE_P) as conn,
         ):
             conn.execute(
                 """INSERT INTO research.claims
                        (id, workspace_id, opportunity_id, claim_type, temporality, origin)
                    VALUES (%s,%s,%s,'INFERRED','EVERGREEN','MANUAL')""",
-                (uuid.uuid4(), WORKSPACE_B, opportunity),
+                (uuid.uuid4(), WORKSPACE_Q, opportunity),
             )
 
 
@@ -760,7 +787,7 @@ class TestAggregationCompatibility:
         repository = EvidenceRepository(database)
 
         group = repository.create_independence_group(
-            WORKSPACE_A,
+            WORKSPACE_P,
             claim_id,
             basis="three records repeating one announcement",
             detection_method="manual fixture",
@@ -792,8 +819,8 @@ class TestAggregationCompatibility:
             extraction_confidence=0.5,
         )
 
-        claim = ClaimRepository(database).get(WORKSPACE_A, claim_id)
-        rows = repository.list_for_claim(WORKSPACE_A, claim_id)
+        claim = ClaimRepository(database).get(WORKSPACE_P, claim_id)
+        rows = repository.list_for_claim(WORKSPACE_P, claim_id)
         result = aggregate(
             f"{claim.id}@r{claim.current_revision}",
             evidence_items_from_rows(rows),
@@ -827,7 +854,7 @@ class TestAggregationCompatibility:
         for _ in range(10):
             add_evidence(database, claim_id)
 
-        rows = EvidenceRepository(database).list_for_claim(WORKSPACE_A, claim_id)
+        rows = EvidenceRepository(database).list_for_claim(WORKSPACE_P, claim_id)
         assert all(r["independence_state"] == "UNKNOWN" for r in rows)
         assert all(r["independence_group_id"] is None for r in rows)
 
@@ -856,7 +883,7 @@ class TestAggregationCompatibility:
         claim_id = make_claim(database, opportunity)
         add_evidence(database, claim_id, independence_state=IND.KNOWN_INDEPENDENT)
 
-        rows = EvidenceRepository(database).list_for_claim(WORKSPACE_A, claim_id)
+        rows = EvidenceRepository(database).list_for_claim(WORKSPACE_P, claim_id)
         before = aggregate(
             f"{claim_id}@r1",
             evidence_items_from_rows(rows),
@@ -867,13 +894,13 @@ class TestAggregationCompatibility:
         )
 
         claims.revise(
-            WORKSPACE_A,
+            WORKSPACE_P,
             claim_id,
             "A revised statement.",
             revision_reason="clarity",
             material_change=False,
         )
-        rows_after = EvidenceRepository(database).list_for_claim(WORKSPACE_A, claim_id)
+        rows_after = EvidenceRepository(database).list_for_claim(WORKSPACE_P, claim_id)
         after = aggregate(
             f"{claim_id}@r1",
             evidence_items_from_rows(rows_after),
@@ -885,7 +912,7 @@ class TestAggregationCompatibility:
         assert before.canonical_json() == after.canonical_json()
         assert before.evidence_snapshot_digest == after.evidence_snapshot_digest
         # And revision 1 still reads as it did.
-        assert claims.statement_at(WORKSPACE_A, claim_id, 1).startswith("A meaningful segment")
+        assert claims.statement_at(WORKSPACE_P, claim_id, 1).startswith("A meaningful segment")
 
     def test_no_aggregation_result_is_persisted(self, database) -> None:
         """§39, §26. The model is prepared; the table is not created. Storing a
@@ -910,7 +937,7 @@ class TestClaimApi:
         opportunity = make_opportunity(database)
         created = api_client.post(
             "/api/v1/claims",
-            headers=header(WORKSPACE_A),
+            headers=header(WORKSPACE_P),
             json={
                 "opportunity_id": str(opportunity),
                 "statement": "Users show strong interest in this category.",
@@ -924,7 +951,7 @@ class TestClaimApi:
 
         revised = api_client.post(
             f"/api/v1/claims/{claim_id}/revisions",
-            headers=header(WORKSPACE_A),
+            headers=header(WORKSPACE_P),
             json={
                 "statement": "Enterprise users show strong interest in this category.",
                 "revision_reason": "narrowed the population",
@@ -934,12 +961,12 @@ class TestClaimApi:
         assert revised.status_code == 201
         assert revised.json()["revision"] == 2
 
-        detail = api_client.get(f"/api/v1/claims/{claim_id}", headers=header(WORKSPACE_A)).json()
+        detail = api_client.get(f"/api/v1/claims/{claim_id}", headers=header(WORKSPACE_P)).json()
         assert [r["revision"] for r in detail["revisions"]] == [1, 2]
         assert detail["statement"].startswith("Enterprise")
 
         listing = api_client.get(
-            f"/api/v1/opportunities/{opportunity}/claims", headers=header(WORKSPACE_A)
+            f"/api/v1/opportunities/{opportunity}/claims", headers=header(WORKSPACE_P)
         ).json()
         assert listing["count"] == 1
 
@@ -950,7 +977,7 @@ class TestClaimApi:
         add_evidence(database, claim_id, direction=D.CONTRADICTS)
 
         body = api_client.get(
-            f"/api/v1/claims/{claim_id}/evidence", headers=header(WORKSPACE_A)
+            f"/api/v1/claims/{claim_id}/evidence", headers=header(WORKSPACE_P)
         ).json()
         assert body["counts"]["supports"] == 1
         assert body["counts"]["contradicts"] == 1
@@ -966,7 +993,7 @@ class TestClaimApi:
         assert api_client.get(f"/api/v1/claims/{claim_id}").status_code == 400
 
     def test_a_cross_workspace_read_is_a_404(self, api_client, database) -> None:
-        opportunity = make_opportunity(database, WORKSPACE_B, "B opportunity")
-        claim_id = make_claim(database, opportunity, workspace=WORKSPACE_B)
-        response = api_client.get(f"/api/v1/claims/{claim_id}", headers=header(WORKSPACE_A))
+        opportunity = make_opportunity(database, WORKSPACE_Q, "Q opportunity")
+        claim_id = make_claim(database, opportunity, workspace=WORKSPACE_Q)
+        response = api_client.get(f"/api/v1/claims/{claim_id}", headers=header(WORKSPACE_P))
         assert response.status_code == 404
