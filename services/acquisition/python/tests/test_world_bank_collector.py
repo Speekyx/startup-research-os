@@ -15,10 +15,13 @@ import json
 import uuid
 from dataclasses import dataclass, field, replace
 from datetime import UTC, datetime, timedelta
+from decimal import Decimal
 
 import psycopg
 import pytest
 from sros_acquisition.collection import (
+    COLLECTOR_ID,
+    COLLECTOR_VERSION,
     CollectionBounds,
     HttpRequest,
     HttpResponse,
@@ -27,6 +30,7 @@ from sros_acquisition.collection import (
     WorldBankCollector,
     WorldBankRequest,
     canonical_fingerprint,
+    canonical_number,
     count_records,
     observation_key,
     persist_drafts,
@@ -477,7 +481,10 @@ class TestPersistence:
         assert row[2] == "world-bank-indicators"
         assert row[4] == 2
         assert row[6]["licence"] == "CC-BY-4.0"
-        assert row[7]["value"] == 67571107
+        # The canonical decimal STRING the 1.1.0 collector writes, derived
+        # from the value the fixture sent rather than written out again --
+        # two literals for one fact drift.
+        assert row[7]["value"] == canonical_number(Decimal(_row()["value"]))
         assert row[8] == datetime(2020, 1, 1, tzinfo=UTC)
         assert row[9] == row[10] + timedelta(days=30)
         assert row[12] is None
@@ -548,8 +555,8 @@ class TestPersistence:
         assert report.revised == 1
         assert len(history) == 2
         assert [h["current"] for h in history] == [True, False]
-        assert history[0]["payload"]["value"] == 68000000
-        assert history[1]["payload"]["value"] == 67571107
+        assert history[0]["payload"]["value"] == canonical_number(Decimal(68000000))
+        assert history[1]["payload"]["value"] == canonical_number(Decimal(67571107))
 
     def test_a_rollback_leaves_no_partial_acquisition(
         self, tenant_conn, context, probe_workspace
@@ -767,7 +774,10 @@ class TestJobExecution:
         )
         assert result.succeeded, result.to_json()
         assert result.persisted.new == 1
-        assert result.collector == "world-bank-indicators@1.0.0"
+        # Pinned to the constants, not to a literal: a version bump is a
+        # deliberate act (Mission 1.6.1 §5) and should not also require
+        # editing an assertion that was only ever restating them.
+        assert result.collector == f"{COLLECTOR_ID}@{COLLECTOR_VERSION}"
 
     def test_duplicate_delivery_writes_no_second_row(
         self, catalog, compliance, probe_workspace, enabled_world_bank, dev_session

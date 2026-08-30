@@ -1,10 +1,10 @@
 # Testing Strategy
 
-Version: 1.8
+Version: 1.9
 Status: Strategy fixed; infrastructure, orchestration, evidence aggregation, the
 Claim model, the compliance layer, the first collector and the first normalizer
 tested
-Date: 2026-08-30 (amended in Mission 1.6)
+Date: 2026-08-30 (amended in Mission 1.6.1)
 
 `PROJECT_MANIFEST.md` §Testability: "Every important behavior must be testable."
 `docs/CLAUDE.md` §Definition of done: tests must cover important behavior and
@@ -502,3 +502,92 @@ verification script writes a population figure down. They compare the normalized
 value to the raw payload it came from, which is what "the transformation
 preserved it" actually means — and which is why the first version of the revision
 test failed for the right reason when a fixture's ordering changed.
+
+## 15. Test data isolation — a standing rule (added in Mission 1.6.1)
+
+Three incidents in one afternoon, all the same shape, none careless. The rule
+that came out of them is short and is not negotiable:
+
+> **A test must not mutate persistent seeded development data.**
+>
+> Seeded data may be read where that is justified. A test that needs to create,
+> update or delete builds its own tenant graph — workspace, project, session —
+> and removes exactly what it made.
+
+`infrastructure/db/seed/0001_dev_workspace.sql` creates two workspaces. They are
+shared by every suite and they hold real collected records. A test that writes
+into one decides what other suites can observe; a test that deletes from one
+destroys data somebody acquired.
+
+### Reading is fine. Using the id is not writing.
+
+A unit test that puts a seeded workspace's uuid into a task payload and asserts
+the payload is refused never opens a connection. That is read-only in effect,
+and seven modules do it. It is a latent hazard rather than a defect, and the
+fixture guard is what keeps it latent.
+
+### The guard, and why the leak check does not replace it
+
+Two mechanisms, answering different questions:
+
+| | Asks | Blind to |
+|---|---|---|
+| `run_pytest_suites.py` leak check | did the run **change** the database? | a fixture deleting from a seeded workspace that is empty *today* |
+| `workspace_guard.disposable()` | may this fixture **point here at all**? | a write reaching the database through no fixture |
+
+The second exists because of the third incident: an acquisition fixture deleted
+acquisition rows from seeded workspace B in teardown for two missions, passing
+every time, purely because B happened to be empty.
+
+Call `disposable()` in the fixture that **creates or destroys**, not at each use
+site. A guard you must remember everywhere is one you will forget somewhere.
+
+### Fixtures restore only what they created
+
+Never `UPDATE` every row, `DELETE` every row, or reset a flag everywhere unless
+the test created all of it. Mission 1.5 found a teardown that set
+`collector_enabled = FALSE` for every source and silently reverted an operator's
+deliberate enablement; the fix was to read the previous value and put **that**
+back. Prefer transaction rollback where the behaviour under test allows it —
+`tenant_conn` does — and note that rollback cannot express "the second delivery
+finds the work already done", which needs a committing fixture.
+
+## 16. Cleanup assertions must consider the FK closure (added in Mission 1.6.1)
+
+> **A guard that enumerates what must survive only covers the tables somebody
+> already thought of.**
+
+A cleanup ran inside a transaction asserting `opportunities = 0`, `raw = 6`,
+`normalized = 6`, `project = 1`, and committed. It had also deleted 39 claims,
+their revisions, their session observations, 36 evidence rows and their
+independence groups — five tables the guard did not name, so five it silently
+approved. The count it reported was what `DELETE` returned: rows matched
+directly, not the closure.
+
+No amount of care fixes that. The failure is in the *shape* of the check.
+
+**Before a broad destructive action, derive the closure from the catalog:**
+
+```bash
+python infrastructure/scripts/fk_closure.py research.opportunities
+```
+
+It walks `pg_constraint` and reports every table a delete may reach, separating
+rows **deleted** (`CASCADE`) from rows **detached** (`SET NULL`). The second
+matters as much as the first: a row that survives with a nulled foreign key is
+still a row the delete changed, and that is precisely how twelve records lost
+their session link while every row count stayed the same.
+
+Numbers worth knowing, all from this repository:
+
+| Delete from | Reaches |
+|---|---|
+| `research.opportunities` | 6 tables |
+| `acquisition.raw_records` | 5 tables — including `normalized_records` |
+| `research.research_projects` | **17 tables** |
+
+The last is the unscoped `DELETE` in `test_rls.py`. Nobody had looked at its
+closure until after it had destroyed a session.
+
+Assert over what the tool returns, not over a list typed by hand. The graph is
+already in the database; a guard that asks it cannot be surprised by it.

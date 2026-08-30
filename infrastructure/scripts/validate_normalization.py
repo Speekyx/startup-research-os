@@ -22,6 +22,8 @@ because crossing them looks like ordinary work:
      aggregate carries a country code.
  10. A registered normalizer exists for every source in IMPLEMENTED_NORMALIZERS
      and for no other.
+ 11. No `float(` in the World Bank numeric acquisition path (Mission 1.6.1 §21).
+ 12. No test fixture points a destructive helper at a seeded workspace (§21).
 
 Stdlib only. Usage: python infrastructure/scripts/validate_normalization.py
 """
@@ -285,6 +287,83 @@ def check_registered_normalizers(errors: list[str]) -> list[str]:
     return [source for source, _ in specs]
 
 
+# ------------------------------------------------------------ Mission 1.6.1
+
+# The acquisition modules a source number passes through. A `float(` here is the
+# defect `raw-numeric-precision-gap-analysis-v1.md` measured: it collapses `1`
+# and `1.0` into one record, rounds integers past 2^53, and truncates beyond 17
+# significant digits -- silently, and in a way that makes a real upstream
+# revision persist as UNCHANGED.
+NUMERIC_PATH = (
+    "services/acquisition/python/sros_acquisition/collection/records.py",
+    "services/acquisition/python/sros_acquisition/collection/world_bank.py",
+)
+
+
+def check_no_float_in_numeric_path(errors: list[str]) -> int:
+    """§21. AST, not grep: `float(` appears in prose and in type annotations.
+
+    What is forbidden is a CALL to `float` on the value path. `float | None` in
+    an annotation is a different token and a grep would flag it; a comment
+    explaining why float is avoided would flag too, which is how a check gets
+    disabled by whoever documents the rule it enforces.
+    """
+    checked = 0
+    for rel in NUMERIC_PATH:
+        path = ROOT / rel
+        if not path.exists():
+            errors.append(f"{rel}: missing from the numeric path")
+            continue
+        checked += 1
+        tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+        for node in ast.walk(tree):
+            if (
+                isinstance(node, ast.Call)
+                and isinstance(node.func, ast.Name)
+                and node.func.id == "float"
+            ):
+                errors.append(
+                    f"{rel}:{node.lineno}: calls float() on the acquisition numeric "
+                    "path. Source values are parsed with parse_float=Decimal and stay "
+                    "Decimal until canonical_number serialises them "
+                    "(raw-numeric-precision-gap-analysis-v1.md)"
+                )
+    return checked
+
+
+# Fixtures that create or destroy a workspace must go through the shared guard,
+# which refuses the seeded ids. Checked structurally rather than by trusting the
+# convention: a helper nobody calls protects nothing.
+DESTRUCTIVE_FIXTURES = (
+    "services/acquisition/python/tests/conftest.py",
+    "services/gateway/python/tests/conftest.py",
+)
+
+
+def check_workspace_guard_is_wired(errors: list[str]) -> int:
+    checked = 0
+    for rel in DESTRUCTIVE_FIXTURES:
+        path = ROOT / rel
+        if not path.exists():
+            errors.append(f"{rel}: missing")
+            continue
+        checked += 1
+        source = path.read_text(encoding="utf-8")
+        if "workspace_guard" not in source:
+            errors.append(
+                f"{rel}: does not import the shared workspace guard. A conftest that "
+                "creates or drops workspaces must refuse the seeded ones "
+                "(docs/testing/test-data-isolation-audit-v1.md §5)"
+            )
+            continue
+        if "disposable(" not in source:
+            errors.append(
+                f"{rel}: imports the guard and never calls disposable(). An unused "
+                "guard is a comment"
+            )
+    return checked
+
+
 def main() -> int:
     errors: list[str] = []
 
@@ -309,6 +388,12 @@ def main() -> int:
     sources = check_registered_normalizers(errors)
     print(f"ok    registered normalizers: {', '.join(sources) or 'none'}")
 
+    numeric = check_no_float_in_numeric_path(errors)
+    print(f"ok    no float() on the acquisition numeric path ({numeric} module(s))")
+
+    fixtures = check_workspace_guard_is_wired(errors)
+    print(f"ok    destructive fixtures go through the workspace guard ({fixtures})")
+
     print()
     if errors:
         print(f"NORMALIZATION VALIDATION FAILED ({len(errors)} problem(s)):", file=sys.stderr)
@@ -316,7 +401,7 @@ def main() -> int:
             print(f"  - {err}", file=sys.stderr)
         return 1
 
-    print("normalization validation passed: 7 boundary groups")
+    print("normalization validation passed: 9 boundary groups")
     return 0
 
 

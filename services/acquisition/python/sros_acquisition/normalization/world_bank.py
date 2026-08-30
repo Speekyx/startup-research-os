@@ -89,7 +89,18 @@ class WorldBankNumericNormalizer:
     # §20 and §54. Declared rather than assumed: a collector version this
     # adapter has never seen may have changed the payload shape, and a parse
     # that half-works on an unknown shape is worse than one that stops.
-    supported_collector_versions: frozenset[str] = frozenset({"1.0.0"})
+    #
+    # BOTH versions are supported, deliberately. 1.0.0 wrote the value as a JSON
+    # number (a float, which is the defect Mission 1.6.1 fixed); 1.1.0 writes a
+    # canonical decimal string. `decimal_from` reads either exactly, because the
+    # repository parses the payload text with `parse_float=Decimal` -- so a
+    # 1.0.0 record arrives as a Decimal too, exact with respect to what was
+    # stored even though what was stored had already lost information.
+    #
+    # Dropping 1.0.0 would strand every record collected before the bump. They
+    # are still true statements about what the source said when they were
+    # written, and §8 forbids rewriting them.
+    supported_collector_versions: frozenset[str] = frozenset({"1.0.0", "1.1.0"})
 
     def __init__(self, geography: GeographyMap, retention: EffectiveRetention) -> None:
         self.geography = geography
