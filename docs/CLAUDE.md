@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.14
-Last amended: 2026-08-30 (Sprint 1 / Mission 1.9.3)
+Version: 1.15
+Last amended: 2026-08-30 (Sprint 1 / Mission 1.10)
 
 ## Boot Sequence
 
@@ -40,6 +40,7 @@ Ontology V2 keeps V1.1's numbering for §1–§10, so an existing reference to
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.15 | 2026-08-30 | Second canonical record kind recorded: a lexical frequency observation with no geography. A period may declare its timezone unestablished and a language may stay unmapped, both visibly (ADR-019). No GDELT normalizer |
 | 1.14 | 2026-08-30 | Second collector recorded: GDELT WEB-NGRAM, streamed and bounded, with real RawRecords. Bulk-file collection rules added; GDELT is collected and still not normalized |
 | 1.13 | 2026-08-30 | Resource-ready separated from eligible: a source can pass the gate while every resource it could ask for fails closed. GDELT review 3 authorises two WEB-NGRAM resources; how much a job may take became a governance question alongside what it may reach |
 | 1.12 | 2026-08-30 | Silence-is-not-permission made mechanical: an approving review must grant every materially required activity. Three Mission 1.7 approvals withdrawn on audit; GDELT became the fourth collector-eligible source and the first non-economic one |
@@ -341,6 +342,19 @@ Six rules, and none is negotiable:
 - **A year is an interval, not January 1.** The canonical period carries its
   type, its label and a half-open `[start, end)`, so nothing downstream can read
   the start bound as an exact event time.
+- **An unestablished timezone is stated, never chosen** (Mission 1.10, ADR-019).
+  A source may publish a period label and no offset. `timezone_state` says which
+  situation a period is in: `ESTABLISHED` keeps timezone-aware bounds and an
+  event time, `NOT_ESTABLISHED` carries **naive** wall-clock bounds and
+  `observed_at` is `NULL`. Storing an aware UTC datetime beside a note saying it
+  is not really UTC would be a lie next to a disclaimer, because code reads the
+  datetime.
+- **A language is stated, never resembled, and never a place** (Mission 1.10).
+  `CanonicalLanguage` keeps the source label, the vocabulary it came from, the
+  mapping status and — only where a reviewed mapping establishes one — a
+  canonical tag. `unmapped()` is the counterpart of
+  `CanonicalGeography.unclassified()`. `ENGLISH` looks like `en`, and the first
+  name that does not resemble its tag would be silently wrong.
 - **Numbers are exact decimals, never floats.** Parsed from JSON text with
   `parse_float=Decimal`, stored as decimal strings, and free of artifacts from
   an intermediate representation.
@@ -353,6 +367,18 @@ Identity is again three separate things: `observation_key` says WHICH
 observation (inherited verbatim), `raw_record_id` says WHAT the source said, and
 the row id says WHICH transformation of it. The normalization timestamp is in
 none of them.
+
+**Record kinds are a registry and a kind exists because DATA exists** (Mission
+1.10). Two now: `numeric_observation`, and `lexical_frequency_observation` — one
+occurrence count for one lexical term, one language, one period, and **no
+geography key at all**. Widening the first to fit the second would have let a
+World Bank record exist without a geography, which is the existing model getting
+worse for a new source's sake.
+
+That is a different rule from the one governing adapters. A vocabulary row lets
+the model describe a shape and lets the database refuse an unregistered one; the
+claim that **code** exists is `NORMALIZER_REGISTRY` and `IMPLEMENTED_NORMALIZERS`,
+and GDELT is in neither.
 
 **A revision is not an overwrite and an upgrade is not a replacement.** A revised
 RawRecord produces a new normalized row with the previous one superseded; a newer

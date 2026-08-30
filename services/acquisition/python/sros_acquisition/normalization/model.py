@@ -31,12 +31,15 @@ import uuid
 from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 from decimal import Decimal, InvalidOperation
+from typing import Protocol
 
 from sros_contracts import (
     NormalizationQualityReason,
     NormalizedGeographyKind,
+    NormalizedLanguageMapping,
     NormalizedPeriodType,
     NormalizedRecordQuality,
+    NormalizedTimezoneState,
     NormalizedUnitState,
     NormalizedValueState,
 )
@@ -51,8 +54,11 @@ __all__ = [
     "RECORD_KINDS",
     "RECORD_KIND_REGISTRY",
     "CanonicalGeography",
+    "CanonicalLanguage",
+    "CanonicalObservation",
     "CanonicalPeriod",
     "CanonicalValue",
+    "LexicalFrequencyObservation",
     "NormalizedRecordDraft",
     "NumericObservation",
     "QualityAssessment",
@@ -158,6 +164,27 @@ class CanonicalPeriod:
 
     An `INSTANT` is the only type for which a single moment IS the observation,
     and it is reached only when a source states one.
+
+    **`timezone_state` was added in Mission 1.10**, because a source can publish
+    a period label and no offset. GDELT's WEB-NGRAM `DATE` is a 15-minute bucket
+    stamp and nothing in its documentation states a zone (H-29), so every route
+    into a period would have had to choose one -- in the field a consumer trusts
+    most.
+
+    The two states carry different kinds of bound, and that is the whole
+    mechanism rather than a convention:
+
+        ESTABLISHED      bounds are timezone-AWARE. The rule since Mission 1.6,
+                         unchanged, still enforced, and true of every record
+                         written to date
+        NOT_ESTABLISHED  bounds are timezone-NAIVE -- wall-clock readings, which
+                         is exactly what Python's naive datetime means and what
+                         iCalendar calls floating time. Code that treats one as
+                         UTC has made an error a type checker can see
+
+    Making the bounds nullable instead would have weakened every period for one
+    source's sake, and storing an aware UTC datetime beside a flag saying it is
+    not really UTC would be a lie next to a disclaimer.
     """
 
     type: NormalizedPeriodType
@@ -165,12 +192,25 @@ class CanonicalPeriod:
     start: datetime
     end: datetime
     end_inclusive: bool = False
+    timezone_state: NormalizedTimezoneState = NormalizedTimezoneState.ESTABLISHED
 
     def __post_init__(self) -> None:
+        established = self.timezone_state is NormalizedTimezoneState.ESTABLISHED
         for name in ("start", "end"):
             moment: datetime = getattr(self, name)
-            if moment.tzinfo is None:
-                raise ValueError(f"period {name} must be timezone-aware")
+            if established and moment.tzinfo is None:
+                raise ValueError(
+                    f"period {name} must be timezone-aware when the timezone is "
+                    "ESTABLISHED. A naive bound under that state would be a wall-clock "
+                    "reading presented as a moment"
+                )
+            if not established and moment.tzinfo is not None:
+                raise ValueError(
+                    f"period {name} must be timezone-NAIVE when the timezone is not "
+                    "established. An aware bound here carries an offset the source "
+                    "never published, which is the invention this state exists to "
+                    "prevent"
+                )
         if self.end < self.start:
             raise ValueError("a period cannot end before it starts")
         if self.type is not NormalizedPeriodType.INSTANT and self.end == self.start:
@@ -179,14 +219,43 @@ class CanonicalPeriod:
                 "interval pretending to be a moment"
             )
 
+    @property
+    def event_time(self) -> datetime | None:
+        """The start, when it is a moment; `None` when the zone is unestablished.
+
+        What `observed_at` is set from. A naive start cannot go into a
+        `TIMESTAMPTZ` and an aware one would be the invented offset, so the
+        honest answer is the absent one -- the same answer Mission 1.9.3 reached
+        one layer down, for the same reason.
+        """
+        if self.timezone_state is not NormalizedTimezoneState.ESTABLISHED:
+            return None
+        return self.start
+
     def to_json(self) -> dict[str, object]:
-        return {
+        """The canonical form. `timezone_state` appears only when it is not
+        ESTABLISHED, and that asymmetry is deliberate.
+
+        The payload is inside the content fingerprint, so an unconditional key
+        would change the hash of every record ever written -- for a fact those
+        records already state. An ISO-8601 string **discloses its own offset or
+        its absence**: `2018-01-01T00:00:00+00:00` and `20260830T091500` are
+        self-describing to any reader.
+
+        The explicit key is emitted where the answer is the surprising one,
+        which is the direction "a missing mapping must remain visible" points.
+        A consumer reading it should default it to ESTABLISHED.
+        """
+        payload: dict[str, object] = {
             "type": self.type.value,
             "label": self.label,
             "start": self.start.isoformat(),
             "end": self.end.isoformat(),
             "end_inclusive": self.end_inclusive,
         }
+        if self.timezone_state is not NormalizedTimezoneState.ESTABLISHED:
+            payload["timezone_state"] = self.timezone_state.value
+        return payload
 
 
 def year_period(label: str) -> CanonicalPeriod:
@@ -207,6 +276,88 @@ def year_period(label: str) -> CanonicalPeriod:
         end=datetime(year + 1, 1, 1, tzinfo=UTC),
         end_inclusive=False,
     )
+
+
+# ------------------------------------------------------------------- language
+
+
+@dataclass(frozen=True)
+class CanonicalLanguage:
+    """Which language the observation is in, with the source form always preserved.
+
+    Mission 1.10 §5, and deliberately shaped after `CanonicalGeography`: the
+    source label and the canonical tag are different facts, overwriting the first
+    with the second would make the mapping unauditable, and an unmapped label
+    would have nowhere to live.
+
+    **A language is never a geography.** Spanish is not Spain and Arabic is not
+    one country; a row stating a language says nothing about where anything
+    happened. The registry model already keeps countries and languages apart
+    (`registry/models.py`) and this is the same separation at the canonical
+    layer.
+
+    `source_scheme` has no geography counterpart and earns its place: `ENGLISH`
+    means something only once a reader knows it came from CLD2 rather than from
+    ISO 639's English names, which overlap and are not identical.
+    """
+
+    source_label: str
+    source_scheme: str
+    mapping_state: NormalizedLanguageMapping
+    canonical_tag: str | None = None
+    canonical_scheme: str | None = None
+
+    def __post_init__(self) -> None:
+        if not self.source_label.strip():
+            raise ValueError("a canonical language must preserve the source label")
+        if not self.source_scheme.strip():
+            raise ValueError(
+                "a source label needs the vocabulary it came from, or a reader cannot "
+                "tell a CLD2 name from an ISO 639 English name"
+            )
+        established = self.mapping_state is NormalizedLanguageMapping.ESTABLISHED
+        if established and not self.canonical_tag:
+            raise ValueError(
+                "an ESTABLISHED mapping must carry the tag it established. A state "
+                "claiming a mapping with nothing mapped is the absence wearing the "
+                "clothes of a fact"
+            )
+        if not established and self.canonical_tag:
+            raise ValueError(
+                "a tag without an ESTABLISHED mapping is a guess. The label is kept "
+                "verbatim and the absence stays visible"
+            )
+        if bool(self.canonical_tag) != bool(self.canonical_scheme):
+            raise ValueError("canonical_tag and canonical_scheme must agree")
+
+    @classmethod
+    def unmapped(cls, source_label: str, source_scheme: str) -> CanonicalLanguage:
+        """What an unmapped label becomes. Never a tag.
+
+        The counterpart of `CanonicalGeography.unclassified`, and reached for the
+        same reason: resemblance is not a mapping. `ENGLISH` looks like `en` and
+        `KOREAN` looks like `ko`, and the first label that does not -- a CLD2
+        name with an underscore, or a distinction ISO 639 draws that CLD2 does
+        not -- would be silently wrong with nothing to catch it.
+        """
+        return cls(
+            source_label=source_label,
+            source_scheme=source_scheme,
+            mapping_state=NormalizedLanguageMapping.NOT_ESTABLISHED,
+        )
+
+    @property
+    def mapped(self) -> bool:
+        return self.mapping_state is NormalizedLanguageMapping.ESTABLISHED
+
+    def to_json(self) -> dict[str, object]:
+        return {
+            "source_label": self.source_label,
+            "source_scheme": self.source_scheme,
+            "mapping_state": self.mapping_state.value,
+            "canonical_tag": self.canonical_tag,
+            "canonical_scheme": self.canonical_scheme,
+        }
 
 
 # ------------------------------------------------------------------ geography
@@ -360,7 +511,40 @@ RECORD_KINDS: dict[str, RecordKind] = {
         description=(
             "One measured or reported numeric value for one metric, one geography and one period."
         ),
-    )
+    ),
+    # Mission 1.10. The second kind, and the first real use of the registry the
+    # first one described. A GDELT WEB-NGRAM row has no geography and its term
+    # is not a metric, so `numeric_observation` cannot hold it -- and widening
+    # that kind to fit would let a World Bank record exist with no geography,
+    # which is the existing model getting worse for a new source's sake.
+    #
+    # `language.canonical_tag` is OPTIONAL because no CLD2-to-tag mapping is
+    # established (H-30) and a required field nothing can satisfy would render
+    # every record INVALID for a condition that is universal and known. The
+    # absence stays visible through `language.mapping_state` and a
+    # LANGUAGE_NOT_MAPPED quality reason -- which is a PARTIAL, not a silence.
+    "lexical_frequency_observation": RecordKind(
+        kind_id="lexical_frequency_observation",
+        required=(
+            "term.text",
+            "term.gram_size",
+            "language.source_label",
+            "period",
+            "observation.value_state",
+        ),
+        optional=(
+            "language.canonical_tag",
+            "observation.value",
+            "observation.unit",
+            "series.resource_id",
+            "series.source_last_updated",
+        ),
+        description=(
+            "One occurrence count the source measured for one lexical term, in one "
+            "language, over one period. Source data: the term carries no classification "
+            "and the count is not a signal, a score or a rank."
+        ),
+    ),
 }
 
 
@@ -447,6 +631,96 @@ class NumericObservation:
                 "source_last_updated": self.source_last_updated,
             },
         }
+
+
+@dataclass(frozen=True)
+class LexicalFrequencyObservation:
+    """The canonical payload for `record_kind = lexical_frequency_observation`.
+
+    Mission 1.10 §6. **Source data, never a derived signal.** The count is what
+    the source measured over a stated window; nothing here ranks it, scores it,
+    compares it or calls it a trend.
+
+    Four properties are load-bearing and each answers a way this could have gone
+    wrong:
+
+    **The term is not a metric.** A metric is a definition -- population, GDP --
+    reused across geographies and periods. `climate` is an observed lexical item
+    and the thing measured is how often it appeared, so it lives in `term`
+    rather than being pushed into `metric.id`.
+
+    **There is no geography, and the key is ABSENT rather than null.** A WEB-NGRAM
+    row states a language, and a language is not a place. A `null` geography
+    would invite a reader to think one was looked for and not found.
+
+    **`gram_size` comes from the resource, never from the term.** Counting spaces
+    would make a two-word entry in a unigram file look like a bigram instead of
+    surfacing it as the contract violation it would be.
+
+    **The count carries no unit.** GDELT publishes four columns and none is a
+    unit, so `unit_state` is NOT_PUBLISHED -- and this record kind already says
+    the number is an occurrence count over a window, which is what a unit string
+    would have said less reliably.
+    """
+
+    term_text: str
+    term_gram_size: int
+    term_scheme: str
+    language: CanonicalLanguage
+    value: CanonicalValue
+    period: CanonicalPeriod
+    dataset: str | None = None
+    resource_id: str | None = None
+    source_last_updated: str | None = None
+
+    record_kind: str = "lexical_frequency_observation"
+
+    def __post_init__(self) -> None:
+        if not self.term_text:
+            raise ValueError("a lexical observation must carry the term the source published")
+        if self.term_gram_size < 1:
+            raise ValueError(
+                "gram size is how many words the term has and comes from the authorized "
+                "resource, not from counting spaces"
+            )
+
+    def to_payload(self) -> dict[str, object]:
+        return {
+            "record_kind": self.record_kind,
+            "term": {
+                "text": self.term_text,
+                "gram_size": self.term_gram_size,
+                "scheme": self.term_scheme,
+            },
+            "language": self.language.to_json(),
+            "observation": self.value.to_json(),
+            "period": self.period.to_json(),
+            "series": {
+                "dataset": self.dataset,
+                "resource_id": self.resource_id,
+                "source_last_updated": self.source_last_updated,
+            },
+        }
+
+
+class CanonicalObservation(Protocol):
+    """What every canonical payload must be able to do.
+
+    Mission 1.10. Introduced because a SECOND kind exists, not in anticipation of
+    one: `build_normalized` was typed to `NumericObservation` and needed to
+    accept a shape with no geography and no metric. What the two genuinely share
+    is a kind id, a period and the ability to render themselves -- and nothing
+    else, which is why this protocol has three members rather than a union of
+    two field sets.
+    """
+
+    @property
+    def record_kind(self) -> str: ...
+
+    @property
+    def period(self) -> CanonicalPeriod: ...
+
+    def to_payload(self) -> dict[str, object]: ...
 
 
 # ----------------------------------------------------------------- raw input
@@ -566,7 +840,7 @@ DETERMINISTIC_ADAPTER = "DETERMINISTIC_ADAPTER"
 
 def build_normalized(
     raw: RawRecordView,
-    observation: NumericObservation,
+    observation: CanonicalObservation,
     assessment: QualityAssessment,
     retention: EffectiveRetention,
     *,
@@ -685,7 +959,13 @@ def build_normalized(
         # Event time from the canonical period, not from the raw column: the
         # period is what the source stated, and `type` sits beside it on the row
         # so nothing reads January 1 as an exact moment (§16).
-        observed_at=observation.period.start,
+        #
+        # `event_time` rather than `.start` since Mission 1.10: a period whose
+        # timezone is not established has no moment to offer, and `observed_at`
+        # is left NULL rather than filled with an offset the source never
+        # published. World Bank periods are ESTABLISHED, so this is the same
+        # value for every record written to date.
+        observed_at=observation.period.event_time,
         collected_at=raw.collected_at,
         normalized_at=normalized_at,
         expires_at=normalized_at + timedelta(days=retention.normalized_days),

@@ -303,7 +303,9 @@
         "GEOGRAPHY_NOT_CLASSIFIED",
         "GEOGRAPHY_MISSING",
         "METRIC_MISSING",
-        "PERIOD_NOT_SUPPORTED"
+        "PERIOD_NOT_SUPPORTED",
+        "PERIOD_TIMEZONE_NOT_ESTABLISHED",
+        "LANGUAGE_NOT_MAPPED"
       ],
       "description": "Why a normalized record is not VALID. A closed vocabulary rather than free text, for the same reason AcquisitionErrorCode is one: a consumer branches on the MEANING -- a record with no reported value is skipped, a record whose geography is unclassified is still usable -- and a message it had to pattern-match would make that branch break on a reworded string."
     },
@@ -315,6 +317,14 @@
         "UNKNOWN"
       ],
       "description": "What kind of entity a source geography code names. Closed because the branch is exhaustive and consequential: a COUNTRY can join to a MarketScope country list and an AGGREGATE must never be counted as one. UNKNOWN exists because it is the safe failure -- an unclassified code keeps its source form and is never promoted to a country."
+    },
+    "NormalizedLanguageMapping": {
+      "type": "string",
+      "enum": [
+        "ESTABLISHED",
+        "NOT_ESTABLISHED"
+      ],
+      "description": "Whether a source language label has been mapped to a canonical language tag. Closed for the reason NormalizedGeographyKind is: the safe failure has to be nameable. A source publishing a human-readable language name is not publishing a language tag, and a name sitting in a field whose contract means a tag is a guess wearing the clothes of a fact. The source label is preserved either way."
     },
     "NormalizedPeriodType": {
       "type": "string",
@@ -336,6 +346,14 @@
         "INVALID"
       ],
       "description": "The STRUCTURAL completeness of a normalized record, and nothing else. Not a confidence and not a reliability: those are epistemic judgments on [0,1] that belong to the evidence model, and a value of that kind here would invite a downstream stage to multiply a parsing outcome by an evidence weight. Closed because every consumer must decide what to do with each state, and an unhandled fourth value would be a bug rather than a gap."
+    },
+    "NormalizedTimezoneState": {
+      "type": "string",
+      "enum": [
+        "ESTABLISHED",
+        "NOT_ESTABLISHED"
+      ],
+      "description": "Whether the timezone of a canonical period's bounds is established. Closed because the branch is exhaustive and consequential: an ESTABLISHED period carries timezone-aware bounds and an event time, and a NOT_ESTABLISHED one carries wall-clock bounds and no event time at all. The distinction cannot be collapsed -- a source that publishes a bucket label and no offset is not the same as one that publishes UTC, and storing an aware datetime beside a note saying it is not really UTC would be a lie next to a disclaimer."
     },
     "NormalizedUnitState": {
       "type": "string",

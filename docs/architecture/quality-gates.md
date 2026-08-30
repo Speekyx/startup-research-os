@@ -248,6 +248,22 @@ first collector never had to cross.
 | **No language code is guessed** | `content_language` stays `NULL` | H-30 is open, and that column is read as a code |
 | **CI reaches no GDELT host** | The live suite is opt-in behind `SROS_ENABLE_GDELT_WEB_NGRAM_SMOKE_TESTS` | A developer with a network has not consented to third-party traffic on every run |
 
+### The canonical model gained a second shape (Mission 1.10)
+
+No new CI job. These are rules inside the normalization guard and the model
+itself, and each closes a way the model could have been made to lie.
+
+| Gate | Mechanism | Guards |
+|------|-----------|--------|
+| **A period cannot claim a zone it does not have** | `CanonicalPeriod.__post_init__`, both directions | `NOT_ESTABLISHED` refuses aware bounds and `ESTABLISHED` refuses naive ones. An aware bound under an unestablished zone carries an offset the source never published |
+| **`observed_at` is empty when there is no event time** | `period.event_time`, `None` under `NOT_ESTABLISHED` | A `TIMESTAMPTZ` filled from a wall-clock reading would be an assumption in the column a consumer trusts most |
+| **An existing payload cannot change shape** | `timezone_state` serialised only when not `ESTABLISHED` | The payload is inside the content fingerprint; an unconditional key would have reported a revision on every record ever written |
+| **A language tag cannot appear without a mapping** | `CanonicalLanguage.__post_init__`, both directions | Resemblance is not a mapping. `ENGLISH` looks like `en`, and the first CLD2 name that does not would be silently wrong |
+| **A language cannot be assigned where a geography is expected** | The two value objects share one field name | Asserted structurally rather than by convention |
+| **A record kind cannot be declared without being registered** | `validate_normalization.py`, now reading **every** migration | A single filename was right while one kind existed and would have silently stopped covering the second |
+| **The term's gram size is never inferred from its text** | Asserted over the payload class's source | A two-word entry in a unigram file is a contract violation, and counting spaces would hide it |
+| **A vocabulary entry is not an adapter** | `NORMALIZER_REGISTRY` and `IMPLEMENTED_NORMALIZERS` asserted empty of GDELT | The registry row lets the model describe a shape; it does not claim code exists |
+
 ---
 
 ## 2. Turborepo task graph
