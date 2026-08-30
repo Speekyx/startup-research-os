@@ -357,6 +357,22 @@ class TestJobPayload:
         for forbidden in ("url", "path", "host", "filename", "base_url", "endpoint"):
             assert forbidden not in fields
 
+    def test_a_payload_cannot_carry_an_authorization(self) -> None:
+        """§41. A serialized permission outlives the state it came from, so the
+        payload has no field for one and the class does not mention the type.
+
+        Asserted HERE rather than in the worker suite, which runs
+        zero-dependency: importing this class from `sros_workers` passes on a
+        machine with the workspace installed and fails in CI, and the boundary
+        rule says the same thing anyway.
+        """
+        import inspect
+
+        fields = set(WebNgramJobPayload.__dataclass_fields__)
+        for forbidden in ("context", "authorization", "datasets", "resource_scope"):
+            assert forbidden not in fields
+        assert "AcquisitionAuthorizationContext" not in inspect.getsource(WebNgramJobPayload)
+
     def test_the_idempotency_key_is_stable_and_covers_the_filters(self) -> None:
         """Two deliveries of one logical job share it; two jobs over the same
         files with different filters do not, because they persist different

@@ -819,3 +819,44 @@ a file that happens to exist. A smoke test that hunted for a working bucket woul
 be testing the hunt, and a smoke test that ran by default would be traffic to
 somebody else's servers that nobody consented to.
 
+---
+
+## 21. The zero-dependency suite is a different environment, not a faster one (added in Mission 1.9.3)
+
+A worker test asserted that `WebNgramJobPayload` has no field an authorization
+could travel in. It imported the class to do so, passed locally, and failed in
+CI:
+
+```text
+ModuleNotFoundError: No module named 'sros_acquisition'
+```
+
+`run_python_tests.py` runs the zero-dependency suites **with nothing installed**,
+which is the whole reason ADR-009 exists: the contract, schema and governance
+checks must keep working when a dependency environment is broken. A developer's
+venv has every workspace package on the path, so the same script passes there for
+a reason that has nothing to do with the code.
+
+**Running the script is not the same as reproducing the condition.** The way to
+check is to run it with an interpreter that does *not* have the workspace
+installed:
+
+```bash
+python infrastructure/scripts/run_python_tests.py
+```
+
+— the system Python, not `.venv/Scripts/python`.
+
+### The boundary rule said the same thing first
+
+`service-boundaries.md` already forbids a service importing another service's
+package. `sros_workers` reaches `sros_acquisition` at runtime, lazily, inside the
+task body; its *tests* must not, and CI enforcing the dependency-free environment
+enforced the boundary as a side effect.
+
+The assertion did not disappear — it moved to the acquisition suite, where the
+class lives and where importing it is not a boundary crossing. What stayed on the
+worker side is the half that is genuinely about the worker: a smuggled
+`authorization` key survives the payload merge and reaches a job that never looks
+at it.
+

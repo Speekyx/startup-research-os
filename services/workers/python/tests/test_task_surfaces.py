@@ -140,19 +140,25 @@ class TestFailClosed(unittest.TestCase):
         merged = acquisition_payload(HEADERS, {"workspace_id": "an-imposter"})
         self.assertEqual(merged["workspace_id"], WORKSPACE)
 
-    def test_no_authorization_can_travel_in_a_payload(self) -> None:
-        """§41. The merge keeps a payload's own fields, and an authorization is
-        not one of them: the job rebuilds it from the registry every time, so a
-        key smuggled in here reaches nothing that reads it."""
-        import inspect
+    def test_a_smuggled_authorization_key_survives_the_merge_and_means_nothing(self) -> None:
+        """§41, from the WORKER's side only.
 
-        from sros_acquisition.collection.job import WebNgramJobPayload
+        The merge is deliberately dumb: it keeps whatever the payload carried and
+        lets the tenancy headers win. So a key called `authorization` passes
+        through here untouched — and reaches a job that rebuilds the
+        authorization from the registry and never looks at it.
 
-        fields = set(WebNgramJobPayload.__dataclass_fields__)
-        for forbidden in ("context", "authorization", "datasets", "resource_scope"):
-            self.assertNotIn(forbidden, fields)
-        source = inspect.getsource(WebNgramJobPayload)
-        self.assertNotIn("AcquisitionAuthorizationContext", source)
+        **The payload class itself is asserted in the acquisition suite**, not
+        here. This module runs in the ZERO-DEPENDENCY suite with no workspace
+        packages installed, so importing `sros_acquisition` fails in CI while
+        passing on any developer machine that has it — which is how this test
+        was written and how CI caught it. `service-boundaries.md` says the same
+        thing for a different reason: a service does not import another
+        service's package.
+        """
+        merged = acquisition_payload(HEADERS, {"authorization": {"allowed": True}})
+        self.assertEqual(merged["authorization"], {"allowed": True})
+        self.assertEqual(merged["workspace_id"], WORKSPACE)
 
     def test_registration_is_explicit(self) -> None:
         """A process that should not normalize simply does not register it."""
