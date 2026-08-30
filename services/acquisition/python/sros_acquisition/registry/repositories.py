@@ -46,6 +46,8 @@ class LoadReport:
     retention_overrides: int
     capabilities: int
     conditions: int = 0
+    signal_coverage: int = 0
+    behavior_coverage: int = 0
 
     def describe(self) -> str:
         return (
@@ -53,7 +55,9 @@ class LoadReport:
             f"{self.reviews} reviews, {self.evidence} evidence records, "
             f"{self.retention_overrides} retention overrides, "
             f"{self.capabilities} capabilities, "
-            f"{self.conditions} review conditions"
+            f"{self.conditions} review conditions, "
+            f"{self.signal_coverage} signal coverage, "
+            f"{self.behavior_coverage} behaviour coverage"
         )
 
 
@@ -74,6 +78,8 @@ def load_catalog_into(conn: Any, catalog: SourceCatalog) -> LoadReport:
             "retention",
             "capabilities",
             "conditions",
+            "signal_coverage",
+            "behavior_coverage",
         ),
         0,
     )
@@ -194,6 +200,51 @@ def load_catalog_into(conn: Any, catalog: SourceCatalog) -> LoadReport:
                 (_row_id("capability", source.source_id, capability), source.source_id, capability),
             )
             counts["capabilities"] += 1
+
+        # Mission 1.7 §4/§5, ADR-017. What could be LEARNED from the source, as
+        # opposed to what data it returns. Deliberately written next to the
+        # capabilities so the distinction is visible to whoever edits either:
+        # a capability is a field in a response, this is an analytical claim
+        # about that field, and neither implies the other.
+        #
+        # Nothing here is consulted by the eligibility gate. A PROHIBITED
+        # source keeps its coverage rows, because "what this could tell us"
+        # stays true whether or not we may ask.
+        for signal in source.signal_coverage:
+            conn.execute(
+                """INSERT INTO registry.source_signal_coverage
+                       (id, source_id, signal_family, basis, notes)
+                   VALUES (%s,%s,%s,%s,%s)
+                   ON CONFLICT (source_id, signal_family) DO UPDATE SET
+                       basis = EXCLUDED.basis,
+                       notes = EXCLUDED.notes""",
+                (
+                    _row_id("signal-coverage", source.source_id, signal.signal_family),
+                    source.source_id,
+                    signal.signal_family,
+                    signal.basis,
+                    signal.notes,
+                ),
+            )
+            counts["signal_coverage"] += 1
+
+        for behavior in source.behavior_coverage:
+            conn.execute(
+                """INSERT INTO registry.source_behavior_coverage
+                       (id, source_id, behavior, basis, notes)
+                   VALUES (%s,%s,%s,%s,%s)
+                   ON CONFLICT (source_id, behavior) DO UPDATE SET
+                       basis = EXCLUDED.basis,
+                       notes = EXCLUDED.notes""",
+                (
+                    _row_id("behavior-coverage", source.source_id, behavior.behavior),
+                    source.source_id,
+                    behavior.behavior,
+                    behavior.basis,
+                    behavior.notes,
+                ),
+            )
+            counts["behavior_coverage"] += 1
 
         # Every review in the history, oldest first. Mission 1.3 §27: a new
         # review is a new VERSION, and the old one is marked superseded rather
@@ -372,6 +423,8 @@ def load_catalog_into(conn: Any, catalog: SourceCatalog) -> LoadReport:
         retention_overrides=counts["retention"],
         capabilities=counts["capabilities"],
         conditions=counts["conditions"],
+        signal_coverage=counts["signal_coverage"],
+        behavior_coverage=counts["behavior_coverage"],
     )
 
 

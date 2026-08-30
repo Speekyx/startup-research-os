@@ -1,10 +1,10 @@
 # Testing Strategy
 
-Version: 1.9
+Version: 1.10
 Status: Strategy fixed; infrastructure, orchestration, evidence aggregation, the
 Claim model, the compliance layer, the first collector and the first normalizer
 tested
-Date: 2026-08-30 (amended in Mission 1.6.1)
+Date: 2026-08-30 (amended in Mission 1.7)
 
 `PROJECT_MANIFEST.md` §Testability: "Every important behavior must be testable."
 `docs/CLAUDE.md` §Definition of done: tests must cover important behavior and
@@ -591,3 +591,65 @@ closure until after it had destroyed a session.
 
 Assert over what the tool returns, not over a list typed by hand. The graph is
 already in the database; a guard that asks it cannot be surprised by it.
+
+---
+
+## 17. Global state is watched too, and by content (added in Mission 1.7)
+
+`test-data-isolation-audit-v1.md` §6 named a gap rather than closing it: the
+post-suite leak check finds tenant tables by looking for a `workspace_id`
+column, so `registry.*` — global platform metadata, no `workspace_id` anywhere
+in it — was outside the check **by construction**. Three acquisition modules
+mutate the registry.
+
+`infrastructure/testing/registry_state.py` closes it, and two of its design
+choices are the parts worth remembering.
+
+### Count the content, not the rows
+
+The failure this had to catch is count-stable:
+
+```sql
+UPDATE registry.sources SET collector_enabled = TRUE WHERE id = 'world-bank'
+```
+
+A row count does not move when a boolean flips inside a row, so the tenant
+check's mechanism could not find this however carefully it was applied. Each row
+is reduced to `to_jsonb(row)` minus its bookkeeping columns and hashed; a table
+is the set of those hashes.
+
+### Too strict is a failure mode, not the safe side
+
+The instinct is that a stricter check is a safer check. It is not, and this one
+proved it on its first real run: eight conditions came back "changed" after a
+completely clean suite, because `satisfied_at` and `satisfaction_reference` are a
+**projection of the append-only verification log** and move every time it grows.
+`satisfied` — the governance fact — was identical in all eight.
+
+A check that fails on every run is a check somebody deletes, which lands you back
+at the permissive failure with extra steps. So the derived columns are excluded
+and `satisfied` is not, and a test asserts that boundary from both sides.
+
+Same reasoning gives `registry.source_condition_verifications` an explicit
+exemption: it is append-only by design, so it may **grow**, may not shrink, and
+may not have a row rewritten. One subset test covers all three.
+
+### The two checks partition the tables between them
+
+Neither keeps a list. The tenant check takes every table WITH a `workspace_id`;
+this one takes every table WITHOUT. A table added by a future migration is
+therefore watched by exactly one of them from the moment it exists, and a test
+asserts that no table appears in both.
+
+### What it found immediately
+
+Not a test bug. `sros-source verify --apply` folds the git-ignored
+`infrastructure/compose/.env` into its process and the pytest fixture did not, so
+on a machine with `FRED_API_KEY` configured the two disagreed: the CLI recorded
+FRED's credential condition `SATISFIED`, and the next `pytest` run recorded it
+`UNSATISFIED` and quietly took FRED out of eligibility. Both were behaving
+correctly; they were answering the same question in different environments.
+
+The fix was to fold the same file in the fixture, so a verification means the
+same thing whoever runs it. **The check earned its place before it had a green
+run.**

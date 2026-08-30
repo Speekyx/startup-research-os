@@ -556,6 +556,121 @@ class RetentionOverride:
             )
 
 
+# The vocabularies migration 0010 seeds, mirrored here so the model and the
+# validators keep working with no database (ADR-009). Duplicated deliberately
+# and compared by a test rather than trusted: `source-registry-v1.md` §4 takes
+# the same approach to eligibility, which "exists twice, and the two are
+# compared".
+#
+# `signal_family` (Mission 1.7 §4) says what a source COULD expose. It is not
+# permission, it is not evidence weight, and it never enters EvidenceScore.
+SIGNAL_FAMILIES: frozenset[str] = frozenset(
+    {
+        "problem",
+        "desire",
+        "entertainment",
+        "creativity",
+        "curiosity",
+        "competition",
+        "social",
+        "discovery",
+        "learning",
+        "collection",
+        "personalization",
+        "status",
+        "community",
+        "trend",
+        "commercial",
+        "developer_activity",
+    }
+)
+
+# Ontology V2 §3.4, unchanged. NOT a Mission 1.7 vocabulary: behaviour coverage
+# reuses the canonical registry rather than defining a second one (§5).
+USER_BEHAVIORS: frozenset[str] = frozenset(
+    {
+        "create",
+        "discover",
+        "consume",
+        "play",
+        "learn",
+        "compare",
+        "predict",
+        "collect",
+        "share",
+        "compete",
+        "customize",
+        "track",
+        "discuss",
+        "buy",
+        "sell",
+        "collaborate",
+        "automate",
+    }
+)
+
+
+@dataclass(frozen=True)
+class SignalCoverage:
+    """One kind of opportunity signal a source could expose (Mission 1.7 §4).
+
+    **Potential, never permission.** A source may cover `entertainment` and be
+    `PROHIBITED`; the two facts live in different tables so that no view can
+    collapse them into one verdict.
+
+    `basis` is mandatory for the reason a retention override's is
+    (`source-registry-v1.md` §6): a coverage claim with no stated justification
+    cannot be re-checked when the source changes, and is indistinguishable from
+    somebody having wanted the category filled in.
+
+    There is deliberately no weight, score or confidence field. One would be a
+    per-source reliability coefficient under another name, which is D-03 (§35).
+    """
+
+    signal_family: str
+    basis: str
+    notes: str | None = None
+
+    def __post_init__(self) -> None:
+        if self.signal_family not in SIGNAL_FAMILIES:
+            raise SourceRegistryError(
+                "signal_coverage.signal_family",
+                f"{self.signal_family!r} is not a signal family. "
+                f"Known: {', '.join(sorted(SIGNAL_FAMILIES))}",
+            )
+        if not self.basis.strip():
+            raise SourceRegistryError(
+                "signal_coverage.basis",
+                "required: which documented capability this rests on. A coverage claim "
+                "with no basis cannot be re-checked when the source changes",
+            )
+
+
+@dataclass(frozen=True)
+class BehaviorCoverage:
+    """A canonical user behaviour a source records evidence of (Mission 1.7 §5).
+
+    References Ontology V2 §3.4's `user_behavior` registry. No second behaviour
+    vocabulary exists and none should: the canonical list is already exactly
+    what §5 asks for.
+    """
+
+    behavior: str
+    basis: str
+    notes: str | None = None
+
+    def __post_init__(self) -> None:
+        if self.behavior not in USER_BEHAVIORS:
+            raise SourceRegistryError(
+                "behavior_coverage.behavior",
+                f"{self.behavior!r} is not a canonical user behaviour "
+                f"(opportunity-ontology-v2.md §3.4). "
+                f"Known: {', '.join(sorted(USER_BEHAVIORS))}",
+            )
+        if not self.basis.strip():
+            raise SourceRegistryError("behavior_coverage.basis", "required")
+
+
 @dataclass(frozen=True)
 class SourceRecord:
     """One candidate or registered source.
@@ -578,6 +693,13 @@ class SourceRecord:
     coverage: Coverage = field(default_factory=Coverage)
     quality_notes: dict[str, str] = field(default_factory=dict)
     capabilities: tuple[str, ...] = ()
+
+    # What could be LEARNED from this source, as opposed to what data it
+    # returns (`capabilities`). Mission 1.7 §4/§5, ADR-017. Empty is a legal
+    # and meaningful state: it says nobody has profiled the source yet, which
+    # is different from saying it exposes nothing.
+    signal_coverage: tuple[SignalCoverage, ...] = ()
+    behavior_coverage: tuple[BehaviorCoverage, ...] = ()
 
     access_profiles: tuple[AccessProfile, ...] = ()
     review: PolicyReview | None = None

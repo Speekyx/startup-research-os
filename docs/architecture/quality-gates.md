@@ -114,6 +114,8 @@ replaces it.
 | **A changed verdict cites evidence retrieved for it** | `test_source_review.py` | A status change with no document behind it is an opinion |
 | **Duplicate review versions are refused** | `load_catalog` | Two reviews sharing a version cannot be told apart, and the later would shadow the earlier |
 | **The review-results document matches the catalog** | `render_review_results.py --check` | Generated diff view; two hand-maintained copies of one fact drift |
+| **The coverage matrix matches the catalog** | `render_signal_coverage.py --check` | Answers "twenty economic sources and no entertainment sources?" from the registry. An answer nobody regenerates is an answer about last month |
+| **A suite cannot silently change the registry** | `testing/registry_state.py`, run by `run_pytest_suites.py` | `registry.*` carries no `workspace_id`, so the tenant leak check cannot see it *by construction*. Compared by CONTENT: flipping `collector_enabled` inside a row moves no row count |
 | **No collector exists** | `test_source_review.py` | No data-fetching client, no collector module. The day somebody adds one, this fails |
 
 ### Gates added in Mission 1.4

@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.10
-Last amended: 2026-08-30 (Sprint 1 / Mission 1.6)
+Version: 1.11
+Last amended: 2026-08-30 (Sprint 1 / Mission 1.7)
 
 ## Boot Sequence
 
@@ -40,6 +40,7 @@ Ontology V2 keeps V1.1's numbering for §1–§10, so an existing reference to
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.11 | 2026-08-30 | Source universe expanded to 27 across 14 families; signal coverage added as a non-scoring source attribute (ADR-017); coverage-is-not-permission invariant added; global registry state watched by the post-suite check |
 | 1.10 | 2026-08-30 | First normalizer recorded: the RawRecord to NormalizedRecord boundary, World Bank only; normalized_records is no longer empty; normalization invariant added; normalizable separated from eligible, enabled and implemented |
 | 1.9 | 2026-08-30 | First collector recorded: World Bank only, gated by an AcquisitionAuthorizationContext; raw_records is no longer empty; collector boundary invariant added |
 | 1.8 | 2026-08-29 | Compliance capabilities recorded: a condition is cleared by a verifier and by nothing else; two sources are collector-eligible; eligible / enabled / implemented separated (ADR-016) |
@@ -206,6 +207,19 @@ none of them is negotiable (`source-registry-v1.md` §1, ADR-013):
   series is authorised separately, and one whose licensing scope was never
   established is refused. A collector receives an
   `AcquisitionAuthorizationContext` or it receives nothing.
+- **Coverage is potential, never permission** (Mission 1.7, ADR-017).
+  `registry.source_signal_coverage` and `source_behavior_coverage` say what a
+  source COULD expose. A source may cover `entertainment` and be `PROHIBITED`;
+  the eligibility view reads neither table and must never start. They carry no
+  weight, no score and no confidence — one would be a per-source reliability
+  coefficient, which is D-03, which is blocked. Behaviour coverage reuses
+  Ontology V2 §3.4's `user_behavior` rather than defining a second vocabulary.
+- **Silence is the commonest blocker, and it is doing its job.** After Mission
+  1.7 twenty-seven sources are registered, eight are approving and three are
+  eligible. Bluesky publishes an open firehose needing no API key, and Hugging
+  Face publishes open endpoints with documented numeric rate limits; both are
+  `REQUIRES_REVIEW`, because their terms address none of the assessed
+  activities. Reachability was never the question.
 
 ### Collection — one collector, and what bounds it
 

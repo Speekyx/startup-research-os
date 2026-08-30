@@ -60,8 +60,13 @@ class TestSourceIdentity:
             assert not source.source_id.startswith("-")
 
     def test_every_source_belongs_to_a_registered_family(self, catalog) -> None:
-        migration = (REPO_ROOT / "infrastructure/db/migrations/0004_source_registry.sql").read_text(
-            encoding="utf-8"
+        # EVERY migration, not just 0004. Families are seeded wherever they are
+        # introduced -- 0010 added `gaming`, `creator` and `knowledge` -- and
+        # reading one file would fail for a family that is correctly registered
+        # somewhere else.
+        migration = "\n".join(
+            path.read_text(encoding="utf-8")
+            for path in sorted((REPO_ROOT / "infrastructure/db/migrations").glob("*.sql"))
         )
         for source in catalog:
             # The family registry is seeded by the migration; an unseeded family
@@ -238,11 +243,21 @@ class TestAccessMetadata:
         trust. UNKNOWN is a real answer and must stay expressible."""
         for source in catalog:
             for profile in source.access_profiles:
+                # A documented limit may be expressed in any dimension the
+                # source publishes. Steam documents a DAILY QUOTA and no
+                # per-period rate; requiring `rate_limit_requests` specifically
+                # would reject a limit that is both real and recorded.
+                dimensions = (
+                    profile.rate_limit_requests,
+                    profile.rate_limit_daily_quota,
+                    profile.rate_limit_concurrency,
+                    profile.rate_limit_burst,
+                )
                 if profile.rate_limit_known:
                     assert profile.rate_limit_origin in ("DOCUMENTED", "OBSERVED")
-                    assert profile.rate_limit_requests is not None
+                    assert any(d is not None for d in dimensions), source.source_id
                 else:
-                    assert profile.rate_limit_requests is None
+                    assert all(d is None for d in dimensions), source.source_id
 
     def test_no_access_profile_describes_circumvention(self, catalog) -> None:
         """§21. Login walls, CAPTCHAs and anti-automation measures are limits,

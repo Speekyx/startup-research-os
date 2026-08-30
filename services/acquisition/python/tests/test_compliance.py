@@ -92,7 +92,6 @@ class TestConditions:
         all but name, and nothing would stand between it and a collector."""
         for source in catalog:
             if source.review.approval_state in APPROVING_STATES:
-                assert source.source_id in APPROVED_IN_1_3
                 assert source.review.required_conditions, source.source_id
 
     def test_every_condition_produces_a_verification(self, catalog, compliance) -> None:
@@ -100,12 +99,29 @@ class TestConditions:
             records = _verified(source, compliance)
             assert len(records) == len(source.review.required_conditions), source.source_id
 
-    def test_the_nine_conditions_are_still_nine(self, catalog) -> None:
-        """The gap analysis inventoried nine. A tenth appearing without a review
-        is a condition nobody assessed; one disappearing is a requirement that
-        stopped being enforced."""
-        total = sum(len(s.review.required_conditions) for s in catalog if s.review)
-        assert total == 9
+    def test_every_condition_is_attributable_and_distinct(self, catalog) -> None:
+        """A condition nobody assessed, or two that cannot be told apart.
+
+        This asserted `total == 9` until Mission 1.7 added nine more. A count is
+        the wrong shape for the property: it breaks whenever the catalog grows,
+        and it teaches whoever hits it to edit the number rather than to ask
+        whether the new condition was reviewed. What must hold is that every
+        condition belongs to an approving review, names a verification, and has
+        a key unique within its source -- a duplicate key would make the later
+        condition silently shadow the earlier when satisfaction is recorded.
+        """
+        for source in catalog:
+            if not source.review:
+                continue
+            conditions = source.review.required_conditions
+            if conditions:
+                assert source.review.approval_state in APPROVING_STATES, source.source_id
+            keys = [c.key for c in conditions]
+            assert len(set(keys)) == len(keys), source.source_id
+            for condition in conditions:
+                assert condition.key.strip(), source.source_id
+                assert condition.description.strip(), condition.key
+                assert condition.verification is not None, condition.key
 
     def test_an_unsatisfied_condition_blocks(self, catalog, compliance) -> None:
         """§34. FRED has every policy capability and no credential, so it is the
