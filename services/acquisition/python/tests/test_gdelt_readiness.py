@@ -1,0 +1,133 @@
+"""What GDELT's registration must hold before a collector can exist.
+
+Mission 1.9. The collector was NOT built — the audit in
+`gdelt-raw-record-gap-analysis-v1.md` found that the authorised data categories
+and the reviewed access profile do not intersect, and a parser composed from
+invented field names would be validated by fake responses composed from the same
+invention.
+
+What this module does cover is the governance the collector will need, including
+one defect the audit found by trying to use the registration rather than by
+reading it: neither access profile recorded an `endpoint_url`, so the host
+allowlist any GDELT collector derives from the registry was **empty**.
+
+These assertions would all have passed vacuously before that fix, which is why
+they are written against the derived value rather than against the JSON field.
+"""
+
+from __future__ import annotations
+
+import pytest
+from sros_acquisition.collection.transport import host_of
+from sros_acquisition.compliance import build_authorization, load_compliance
+from sros_contracts import SourceApprovalState
+
+from .conftest import REPO_ROOT
+
+DOC_API = "gdelt-doc-api"
+BULK = "gdelt-bulk-files"
+
+
+@pytest.fixture(scope="session")
+def compliance():
+    return load_compliance(REPO_ROOT / "docs/data/source-compliance-v1.json")
+
+
+@pytest.fixture(scope="session")
+def gdelt(catalog):
+    return catalog.get("gdelt")
+
+
+class TestTheRegistrationCanAuthoriseAHost:
+    def test_the_reviewed_api_profile_records_where_it_lives(self, gdelt) -> None:
+        """The defect Mission 1.9 found.
+
+        The collector derives its allowlist from the registry so that revoking a
+        profile revokes the host (Mission 1.5 §10). A profile with no endpoint
+        therefore authorises nothing -- fail-closed, and not what Mission 1.7
+        intended when it registered the source.
+        """
+        profile = next(p for p in gdelt.access_profiles if p.label == DOC_API)
+        assert profile.endpoint_url, "the reviewed API profile records no endpoint"
+        assert profile.endpoint_url.startswith("https://")
+        assert host_of(profile.endpoint_url) == "api.gdeltproject.org"
+
+    def test_the_derived_allowlist_is_not_empty(self, gdelt, compliance) -> None:
+        """Asserted on the DERIVED value, not on the JSON field.
+
+        This is what the transport is handed, and it is what was broken.
+        """
+        context = build_authorization(gdelt, compliance)
+        hosts = frozenset(h for a in context.access if (h := host_of(a.endpoint_url or "")))
+        assert hosts == {"api.gdeltproject.org"}
+
+    def test_the_unimplemented_bulk_profile_authorises_no_host(self, gdelt) -> None:
+        """§54 forbids implementing the bulk route in Mission 1.9.
+
+        Recording an endpoint for it would widen the allowlist to a host no
+        collector may reach. Left absent deliberately, and asserted so that
+        adding one is a decision somebody takes rather than a line somebody
+        copies.
+        """
+        profile = next(p for p in gdelt.access_profiles if p.label == BULK)
+        assert profile.endpoint_url is None
+        assert host_of(profile.endpoint_url or "") == ""
+
+
+class TestNoCollectorWasImplemented:
+    def test_gdelt_is_eligible_and_has_no_collector(self, catalog, gdelt) -> None:
+        """§52.1 is NOT met and the report says so. Asserted here so the claim
+        cannot quietly become false in either direction."""
+        from sros_acquisition import IMPLEMENTED_COLLECTORS
+
+        assert gdelt.review.approval_state is SourceApprovalState.APPROVED_WITH_CONDITIONS
+        assert "gdelt" not in IMPLEMENTED_COLLECTORS
+        assert set(IMPLEMENTED_COLLECTORS) == {"world-bank"}
+
+    def test_gdelt_is_not_enabled(self, gdelt) -> None:
+        assert gdelt.collector_enabled is False
+
+    def test_no_gdelt_module_exists_in_the_collection_package(self) -> None:
+        """A half-written collector left on a branch is worse than none: it
+        reads as available to the next person who greps for it."""
+        collection = REPO_ROOT / "services/acquisition/python/sros_acquisition/collection"
+        assert not (collection / "gdelt.py").exists()
+
+
+class TestTheResourceModelStillFailsClosed:
+    def test_no_dataset_is_authorised_so_no_draft_could_be_built(self, gdelt, compliance) -> None:
+        """§9.2 of the audit. Deliberately NOT fixed.
+
+        Populating `datasets` requires deciding what a GDELT resource is, which
+        depends on which API mode the collector uses -- the question the audit
+        could not answer. Guessing it now would fix the symptom and lock in the
+        wrong answer.
+        """
+        context = build_authorization(gdelt, compliance)
+        assert context.datasets == ()
+        assert context.authorized_dataset("anything") is None
+
+    def test_the_minimisation_profile_excludes_publisher_content(self, compliance) -> None:
+        """The rule that stopped the collector being written against ArtList.
+
+        The observed `ArtList` envelope returns `title` and `socialimage`, which
+        are the publisher's text and image, and `url`/`domain`, which the
+        profile does not list. What remains is a period and a geography: two
+        dimensions and no measurement.
+        """
+        entry = compliance.get("gdelt")
+        assert "publisher_content" in entry.data_minimisation.excluded
+        assert "article_full_text" in entry.data_minimisation.excluded
+        # The categories ArtList would need in order to be collectable, and does
+        # not return.
+        for measure in ("tone_score", "theme_identifier", "entity_mention"):
+            assert measure in entry.data_minimisation.allowed
+
+    def test_the_rate_limit_is_still_recorded_as_unknown(self, gdelt) -> None:
+        """§13. GDELT returned HTTP 429 to a Mission 1.9 probe, which proves a
+        limit exists and does not reveal what it is. A number here would be read
+        by a collector as the provider's quota."""
+        for profile in gdelt.access_profiles:
+            assert profile.rate_limit_known is False
+            assert profile.rate_limit_requests is None
+            assert profile.rate_limit_daily_quota is None
