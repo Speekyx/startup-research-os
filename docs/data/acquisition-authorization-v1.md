@@ -145,21 +145,48 @@ required notice exactly.
 
 ## 4. Resource scope
 
-Six rule kinds, each demanded by an actual condition. Not a rule language: a
+Seven rule kinds, each demanded by an actual condition. Not a rule language: a
 general expression grammar would be a place to encode a legal sentence as a
 boolean, which §1.2 forbids.
 
 | Rule | Denies |
 |---|---|
+| **Rights basis** | A resource with **none established**. Unconditional — see §4.1 |
 | Content origin | `THIRD_PARTY`, and `UNKNOWN` where licensing scope matters |
-| Licence allowlist | A licence outside the list, and a resource with none recorded |
-| Dataset family | An excluded family, and an unrecorded family where the exclusion requires one |
+| Licence allowlist | A licence outside the list, a basis that is not `NAMED_LICENCE`, and a resource with no licence recorded |
+| Dataset family | An excluded family, an unrecorded family where the scope requires one, and — since Mission 1.9.2 — a family **outside the reviewed set** |
 | Geography allowlist | A geography outside the set, and a resource naming none |
 | Enumerated exclusion | A named carve-out, including one whose other dimension is unrecorded |
 | Note marker | A third-party ownership marker, and notes that were never read |
 
 **Every rule denies; none permits.** A resource is allowed only when no rule
 objected, and a descriptor that omits what a rule needs is denied by that rule.
+
+### 4.1 Two rules Mission 1.9.2 added, and the holes they closed
+
+Both were reachable only by a hand-made descriptor — a collector builds one
+*from* an authorised entry, which always carries these fields. That is the same
+standing the transport's host check has, and the argument for writing them is the
+one the transport already makes: *a guard that only exists further up is a guard
+a future caller can route around.*
+
+**An unestablished rights basis is now a refusal in its own right.** It had been
+checked only inside the licence-allowlist rule, so a descriptor with **no basis
+at all** passed for every source whose scope enumerates no licences — Eurostat,
+FRED, and pointedly GDELT, the one source whose resources are authorised by a
+direct grant rather than by a licence. "Nothing established" read as approval on
+exactly the source where the basis is the whole story. The rule is unconditional
+because every other rule answers a question a particular review may or may not
+have asked, and *what authorises this at all* is not one of those.
+
+**A positive family allowlist.** `require_dataset_family` refused a resource that
+could not say what it is; it did not refuse one that says something nobody
+reviewed, because a family no reviewer had rejected was indistinguishable from
+one a reviewer had approved. `allowed_dataset_families` answers *did a reviewer
+look at that kind of thing*, and `excluded_dataset_families` continues to answer
+*was it looked at and rejected* — both are kept, because an empty exclusion list
+would say nobody had looked. `None` on the other three sources, which is
+unchanged behaviour.
 
 ### `ResourceContentOrigin`
 
@@ -288,11 +315,60 @@ What a collector receives, and the only thing that lets it do anything.
 | `retention` | the resolved rule, stricter constraint already applied |
 | `attribution` | what attribution follows this data |
 | `data_minimisation` | what may be requested, and what must not |
+| `acquisition_bounds` | how much of the source one job may take |
 | `verifications` | the condition snapshot the authorization rests on |
 | `issued_at` | when |
 
 `authorize_resource(descriptor)` is the only sanctioned way to reach a specific
 dataset. Holding the context permits nothing on its own.
+
+### 7.1 Acquisition bounds — *how much*, kept apart from *what*
+
+Mission 1.9.2. Every rule in §4 answers **what** may be reached. A published
+bulk dataset raises a second question — **how much of it** — and GDELT's
+WEB-NGRAM files are the first case where nothing in the terms answers it: two
+files every fifteen minutes since 2019, and a grant that limits none of it.
+
+`context.authorize_job_size(file_count)` returns the reasons a job exceeds the
+reviewed ceiling, or nothing. Three properties, and each is the point:
+
+- **the ceiling belongs to the review.** A collector that chose its own bound
+  would be setting its own permissions;
+- **a bound with no stated basis is refused at load time**, because a number that
+  nobody can re-check survives every later review by looking deliberate;
+- **`None` means no ceiling was reviewed, not that any size is fine.** Every
+  source that predates this mission is in that state, and spelling it
+  `unlimited` would turn an unasked question into an answer.
+
+The unit is whatever the review found meaningful. For GDELT it is the **file**,
+because that is what the source publishes and what a request costs — and because
+the observed contract removed the obvious alternative: each file spans every
+language, so a job cannot ask for fewer languages and language is not a dimension
+of the request at all.
+
+### 7.2 Acquisition readiness — four facts, derived
+
+`evaluate_readiness(source, config)` reports, and refuses nothing:
+
+```text
+eligible         may we collect from this source at all
+resource_ready   is there a concrete resource the review actually authorises
+implemented      does a collector exist
+enabled          is collection switched on here
+```
+
+`resource_ready` is the one that did not exist. Between Missions 1.7 and 1.9.1,
+GDELT was eligible with an empty `datasets` tuple: the gate said yes, the
+resource layer refused everything, and "eligible" was the most specific word
+available — which read as further along than it was. Eurostat is in that state
+today, and the diagnostic now says so.
+
+**Nothing is stored.** A persisted `resource_ready` would be a copy of a
+derivation, which is the argument `source-registry-v1.md` §3 already makes for
+eligibility being a view. `enabled` reflects the record it is handed: the catalog
+file is the governance record and `sros-source enable` writes the deployment
+switch to `registry.sources`, so the two can differ and the CLI says which it
+read.
 
 ### The boundary
 
@@ -354,22 +430,32 @@ than by sharing a constant.
 
 | | |
 |---|---|
-| Conditions | 9, across 3 approving sources |
+A snapshot, refreshed at Mission 1.9.2. Anything counted here is derived, so
+`sros-source readiness` is the current answer and this is the shape of it.
+
+| | |
+|---|---|
+| Conditions | 12, across 5 approving sources |
 | Verifiers | 3 kinds registered, 1 deliberately absent, 1 deliberately inert |
 | Capabilities | 5, each asserted by its own conformance check |
-| Collector-eligible | **world-bank, eurostat** — with no credential configured |
+| Collector-eligible | **world-bank, eurostat, gdelt** — with no credential configured |
 | Design-eligible, not runnable | **fred** — `FRED_API_KEY` not configured |
-| Collectors enabled | 0 |
-| Collectors implemented | 0 |
-| Raw records | 0 |
+| **Resource-ready** | **world-bank, gdelt.** Eurostat is eligible and has no authorised resource |
+| Collectors implemented | 1 — `world-bank` |
+| Collectors enabled | per deployment; the catalog record enables none |
+| Raw records | 6, all World Bank |
 
 ---
 
 ## 10. Still open
 
-- **The collector conformance test** (§6). Until Mission 1.5 asserts that a
-  collector reaches resources only through `authorize_resource`, the guarantee
-  that the rules are honoured is architectural rather than observed.
+- **Eurostat has no authorised resource.** It has been collector-eligible since
+  Mission 1.4 and `context.datasets` is empty, so every Eurostat resource fails
+  closed. That is the gate working, and it is also the reason "eligible" was
+  never the last word.
+- **No acquisition bound exists for any source but GDELT** (§7.1). The question
+  has not been asked for the other three, which is different from having been
+  answered permissively.
 - **Eurostat's disclaimer wording** — not in the retrieved evidence, so it is
   required as supplied text rather than composed. Resolving it means re-reading
   the copyright notice, not editing configuration.

@@ -1,8 +1,12 @@
 # GDELT DOC API Response Contract V1
 
 **Status:** **Partially established.** The two DOC API timeline contracts remain
-unobserved (**H-27**, now reproduced in two independent environments). A third
-contract — the WEB-NGRAM dataset — **was** observed and is recorded in §9.
+unobserved (**H-27**, now reproduced in two independent environments) and that
+route is **deferred** as of GDELT review 3. A third contract — the WEB-NGRAM
+dataset — **was** observed, is recorded in §9, and was **confirmed against
+GDELT's own documentation** in Mission 1.9.2; §10 records the confirmation, two
+things the documentation does not say, and one claim in §9 that had to be
+corrected.
 **Date:** 2026-08-30
 **Produced by:** Mission 1.9.1 §3, §4, §8, §9.
 **Capture tool:** `infrastructure/scripts/capture_gdelt_fixtures.py`
@@ -327,3 +331,74 @@ warns against. The obvious shape is a reviewed restriction — specific language
 and terms drawn from a research context — decided at review time rather than by
 the collector. **That decision belongs in the minimisation profile**, which is
 the third gap above and not a separate problem.
+
+---
+
+## 10. The observed contract, checked against the operator's documentation
+
+Mission 1.9.2 §4. §9.5 was read off a file. This section is the same contract
+read off GDELT's own announcement, retrieved 2026-08-30 from
+`https://blog.gdeltproject.org/announcing-the-web-news-ngram-datasets-web-ngram/`
+(published 2019-09-30, linked from the GDELT data page as this dataset's
+documentation).
+
+**They agree, field for field.**
+
+| Column | GDELT's own words |
+|---|---|
+| `DATE` | "The date in YYYYMMDDHHMMSS format. This is included in the file to make it easier to load the ngrams as-is into a database for analysis." |
+| `LANG` | "The human-readable language name as output by CLD2. Most language names are in all uppercase, though a few like Korean appear in titlecase and some may have underscores." |
+| `NGRAM` | "The word or phrase." |
+| `COUNT` | "The number of times the word/phrase was mentioned in articles of that language published in that given 15 minute interval." |
+
+> Each row represents a unique language/word/phrase and is tab delimited with the
+> following columns (there is no header row)
+
+Cadence, verbatim: two files every 15 minutes, "typically around 7-10 minutes
+after the hour, 22-25 minutes after the hour, 37-40 minutes after the hour and
+52-55 minutes after the hour". Coverage at release: "42 billion words of news
+coverage in 142 languages spanning January 1, 2019 to present". The current data
+index says **152 languages**; both figures are recorded with their dates rather
+than one being chosen.
+
+### 10.1 Two things the documentation does NOT say
+
+**No timezone.** `DATE` is `YYYYMMDDHHMMSS` and neither the announcement nor the
+data page states UTC anywhere. §9.5 above recorded it as UTC; **that was not
+established** and is now an open question on review 3. The collector must
+preserve the source label verbatim, which makes answering it later a
+re-derivation rather than a re-collection.
+
+**No directory retention.** Coverage runs from 2019 to present; how far back the
+publication directory itself reaches is unstated, so no historical backfill
+window may be assumed.
+
+### 10.2 A correction to §9.2
+
+§9.2 quotes GDELT asking researchers to "switch their searches to use these ngram
+files instead of the search APIs", and Mission 1.9.1 read that as first-party
+support for the WEB-NGRAM path.
+
+**It is not.** The sentence appears in the post announcing the **quadgram**
+dataset — per-minute files on `storage.googleapis.com` under
+`gdeltv5/weblegacy/ngrams/`, whose `ngrams` file keys quadgram counts to a
+per-document `DOCID` and whose companion `toc.json.gz` carries `title`, `img` and
+`url`. "These ngram files" means those, and GDELT review 3 **rejects** that
+dataset for exactly the content §9.4 already identified.
+
+What stands unchanged is the other half of §9.2 — GDELT describing its own legacy
+search infrastructure as struggling during a Spanner migration. That is a
+statement about infrastructure, it is why the DOC API route is **deferred**, and
+it needed no support from the recommendation.
+
+The case for WEB-NGRAM rests on §9.5, §9.6 and §10 above: its own documentation
+and its own observed structure.
+
+### 10.3 One more fact, and it decides the acquisition bound
+
+**Each file spans every language.** `LANG` is a data column, not a partition —
+which the observed file's shape already implied and the documentation confirms.
+
+A job therefore cannot request fewer languages than a file contains, so language
+is not a dimension of the request at all, and the volume bound is counted in
+files. See [`gdelt-web-ngram-resource-v1.md`](gdelt-web-ngram-resource-v1.md) §3.

@@ -72,22 +72,40 @@ def _baseline(compliance: SourceCompliance) -> ResourceDescriptor:
     gate that denies everything, which is a refusal, not a filter.
     """
     scope = compliance.resource_scope
+    # The basis the scope can actually admit, and NEVER absent.
+    #
+    # Mission 1.9.1 §15 made a licence allowlist require NAMED_LICENCE
+    # specifically. Mission 1.9.2 then made an UNESTABLISHED basis a refusal in
+    # its own right, at which point leaving this `None` -- which is what it did
+    # for every source without a licence allowlist -- turned the control case
+    # into a denial and took three capabilities down with it. Where the source
+    # enumerates its own resources the probe borrows their basis, so the control
+    # resembles a real resource rather than a hypothetical one.
+    bases = {dataset.rights_basis for dataset in compliance.datasets}
+    rights_basis = (
+        RightsBasis.NAMED_LICENCE
+        if scope.licence_allowlist or len(bases) != 1
+        else next(iter(bases))
+    )
+    # A family the review positively assessed, where the review named any.
+    # `_PROBE_FAMILY` was enough while the only family rules were "state one"
+    # and "not these"; an allowlist refuses a sentinel nobody reviewed, which is
+    # the whole point of it.
+    families = scope.allowed_dataset_families
     return ResourceDescriptor(
         source_id=compliance.source_id,
         resource_id=f"{compliance.source_id}:probe",
         licence=(sorted(scope.licence_allowlist)[0] if scope.licence_allowlist else None),
-        # The basis the scope requires, not a fixed one. A scope enumerating
-        # licences can only be satisfied by a NAMED_LICENCE resource
-        # (Mission 1.9.1 §15), so the control case has to carry that basis or it
-        # would fail for a reason the probe is not testing. Where the scope has
-        # no licence rule the basis is left unestablished, exactly as a
-        # descriptor built by a caller rather than from a dataset would be.
-        rights_basis=(RightsBasis.NAMED_LICENCE if scope.licence_allowlist else None),
+        rights_basis=rights_basis,
         content_origin=ResourceContentOrigin.PLATFORM_LICENSED,
         dataset_family=(
-            _PROBE_FAMILY
-            if (scope.require_dataset_family or scope.excluded_dataset_families)
-            else None
+            sorted(families)[0]
+            if families
+            else (
+                _PROBE_FAMILY
+                if (scope.require_dataset_family or scope.excluded_dataset_families)
+                else None
+            )
         ),
         geographies=((sorted(scope.geography_allowlist)[0],) if scope.geography_allowlist else ()),
         notes=("compliance probe series" if scope.excluded_note_markers else None),

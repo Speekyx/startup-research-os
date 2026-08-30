@@ -157,28 +157,46 @@ Pacing a future collector is therefore an engineering decision that must not be
 laundered through this file. It is recorded as an open question on the review
 instead.
 
-## 4.1 A second access route exists and is NOT authorised by this entry
+## 4.1 The second access route, reviewed and now authorised
 
-Added after Mission 1.9.1's continuation found the DOC API unreachable from two
-independent environments and GDELT asking researchers to use its ngram files
-instead.
+Mission 1.9.1 found the DOC API unreachable from two independent environments and
+recorded that a second route existed which **this configuration did not
+authorise**. GDELT review 3 (Mission 1.9.2) reviewed it, and the configuration
+now targets review 3.
 
-The WEB-NGRAM datasets live on **`data.gdeltproject.org`** and are fetched as
-files, which is the **`gdelt-bulk-files`** profile — `DATASET_DOWNLOAD`, not
-`PUBLIC_API`. That profile deliberately records no `endpoint_url`, so it
-authorises no host, and nothing in this configuration reaches it.
+| | |
+|---|---|
+| profile | **`gdelt-web-ngram-files`**, `DATASET_DOWNLOAD` |
+| endpoint | `https://data.gdeltproject.org/gdeltv3/web/ngrams/` |
+| replaces | the `gdelt-bulk-files` placeholder, which named the bulk route in general and carried no endpoint |
+| authorised resources | `web-ngrams/1gram`, `web-ngrams/2gram` — the first GDELT resources to exist |
+| rights basis | `DIRECT_GRANT`, unchanged, no licence |
 
-**The `gdelt-doc-api` profile does not cover it.** A different host over a
-different access method is a different route, and stretching an API profile to
-cover a file download would be exactly the widening §10 refuses. The rights
-basis carries over unchanged — GDELT's grant covers everything it releases — but
-a rights grant is not an access authorisation, and the two have been kept apart
-since Mission 1.0.
+**The `gdelt-doc-api` profile still does not cover it, and was not stretched to.**
+A different host over a different access method is a different route; the two
+profiles carry their own endpoints and the ngram route borrows nothing from the
+API one. That route remains reviewed and approved and is **deferred**: H-27 is
+open, no timeline envelope has ever been observed, and no resource on it is
+authorised.
 
-What that route would need is in
-[`gdelt-resource-model-v1.md`](gdelt-resource-model-v1.md) §8.4: a new review
-version, a reviewed minimisation category for term frequencies, and an endpoint
-on the bulk profile. None of it is done here.
+The reasoning is in
+[`gdelt-web-ngram-review-v1.md`](gdelt-web-ngram-review-v1.md); what was
+committed is in
+[`gdelt-web-ngram-resource-v1.md`](gdelt-web-ngram-resource-v1.md).
+
+### 4.2 Two rules this entry gained
+
+**A positive family allowlist.** `require_dataset_family` already refused a
+resource that could not say what it is. It did not refuse one that says something
+nobody reviewed — any string passed, because a family no reviewer had rejected
+was indistinguishable from one a reviewer had approved. `allowed_dataset_families`
+answers the other question, and GDELT is the source that needed it: the review
+assessed two of the many products the project publishes.
+
+**A reviewed acquisition ceiling.** `max_files_per_job` is 8. GDELT emits 96
+buckets a day and two files each since 2019, and nothing in the terms limits how
+much of that is taken — so the limit is the review's, recorded where it can be
+checked rather than left to a collector to choose.
 
 ## 5. Authentication (§12)
 
@@ -187,6 +205,23 @@ None. No key, no OAuth, no account, no developer application, and therefore **no
 credential is required. `runtime_credential_references` on the authorization
 context is empty, which is the correct and checkable representation of "nothing
 is needed".
+
+## 5.1 Minimisation gained three categories in review 3
+
+`content_language`, `lexical_ngram` and `source_measured_frequency`, for `LANG`,
+`NGRAM` and `COUNT`. `DATE` needed nothing new — `observation_period` already
+means the interval an observation belongs to.
+
+Each was reached by first showing that every existing candidate asserts something
+the source did not do: `geography` would put a place where a language is,
+`theme_identifier` a classification no classifier made, `entity_mention` a
+resolution no resolver ran, and `observation_value` a measurement whose owner is
+unstated. The working is in
+[`gdelt-web-ngram-minimisation-gap-analysis-v1.md`](gdelt-web-ngram-minimisation-gap-analysis-v1.md).
+
+The seven DOC API categories are **kept**, because that route is deferred rather
+than withdrawn and deleting them would make a later un-deferral look like a new
+approval.
 
 ## 6. Retention and minimisation (§14, §15)
 

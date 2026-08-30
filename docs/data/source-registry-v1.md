@@ -529,14 +529,26 @@ table, [`source-review-guide.md`](source-review-guide.md) for how to conduct a
 review,
 [`acquisition-authorization-v1.md`](acquisition-authorization-v1.md) for how a
 condition is cleared,
-[`gdelt-compliance-v1.md`](gdelt-compliance-v1.md) for the one source configured
-this round, and
+[`gdelt-compliance-v1.md`](gdelt-compliance-v1.md) and
+[`gdelt-web-ngram-review-v1.md`](gdelt-web-ngram-review-v1.md) for the source
+re-reviewed most recently, and
 [`source-portfolio-v1.md`](source-portfolio-v1.md) for what to build next.
 
 **One collector exists** (`world-bank`, Mission 1.5) and `collector_enabled` is
-true for it alone. GDELT is eligible and has no collector, which is exactly the
-state Eurostat has been in since Mission 1.4. `acquisition.raw_records` holds
-six records and `normalized_records` six, unchanged.
+true for it alone. `acquisition.raw_records` holds six records and
+`normalized_records` six, unchanged.
+
+**GDELT is eligible, has no collector, and — since Mission 1.9.2 — has two
+authorised resources.** Eurostat is eligible, has no collector, and has none.
+Those are different states, and until review 3 nothing in this system could say
+so: eligibility is a gate on the *source*, and a source can clear it while every
+*resource* it could ask for fails closed. `sros-source readiness` reports the two
+facts separately, deriving both rather than storing either.
+
+Review 3 also settled a question Mission 1.9 had left open: the DOC API route is
+**deferred**, not withdrawn. It stays reviewed, approved and endpointed with no
+authorised resource on it, because **H-27** is still open and deleting the
+profile would make a later un-deferral look like a new approval.
 
 **Federated networks cannot currently be expressed** (**H-13**).
 

@@ -39,6 +39,7 @@ from ..registry.eligibility import evaluate_eligibility
 from ..registry.models import AccessProfile, SourceRecord
 from ..registry.retention import EffectiveRetention, resolve_retention
 from .config import (
+    AcquisitionBounds,
     AttributionObligation,
     AuthorizedDataset,
     ComplianceConfig,
@@ -154,6 +155,9 @@ class AcquisitionAuthorizationContext:
     datasets: tuple[AuthorizedDataset, ...]
     verifications: tuple[ConditionVerificationRecord, ...]
     issued_at: datetime
+    # `None` when no review has set a ceiling for this source. Not "unbounded":
+    # unasked (Mission 1.9.2 §15).
+    acquisition_bounds: AcquisitionBounds | None = None
 
     def authorized_dataset(self, resource_id: str) -> AuthorizedDataset | None:
         """The entry that authorises one resource, or `None`.
@@ -173,6 +177,20 @@ class AcquisitionAuthorizationContext:
         resource is asked for separately and refused by default.
         """
         return authorize_resource(self.resource_scope, descriptor)
+
+    def authorize_job_size(self, file_count: int | None) -> tuple[str, ...]:
+        """Why a job of this size exceeds what the review approved, or nothing.
+
+        Mission 1.9.2 §15. Separate from `authorize_resource` because the two
+        answer different questions -- *may we reach this* and *may we take this
+        much* -- and a source can fail the second while passing the first.
+
+        A source with no reviewed bound returns nothing, which says the question
+        has not been asked rather than that any size is approved.
+        """
+        if self.acquisition_bounds is None:
+            return ()
+        return self.acquisition_bounds.refusals(file_count)
 
     @property
     def design_eligible(self) -> bool:
@@ -234,11 +252,15 @@ class AcquisitionAuthorizationContext:
                 {
                     "resource_id": d.resource_id,
                     "dataset_family": d.dataset_family,
+                    "rights_basis": d.rights_basis.value,
                     "licence": d.licence,
                     "content_origin": d.content_origin,
                 }
                 for d in self.datasets
             ],
+            "acquisition_bounds": (
+                self.acquisition_bounds.to_json() if self.acquisition_bounds else None
+            ),
             "verifications": [v.to_json() for v in self.verifications],
             "design_eligible": self.design_eligible,
             "issued_at": self.issued_at.isoformat(),
@@ -309,6 +331,7 @@ def build_authorization(
         attribution=compliance.attribution,
         data_minimisation=compliance.data_minimisation,
         datasets=compliance.datasets,
+        acquisition_bounds=compliance.acquisition_bounds,
         verifications=tuple(records),
         issued_at=moment,
     )

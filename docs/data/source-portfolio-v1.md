@@ -163,7 +163,15 @@ uncovered family.
 
 | Source | Why | What it needs first |
 |---|---|---|
-| `gdelt` | **Collector-eligible as of Mission 1.8.** The most permissive terms in the catalog by a distance, free, no key, bulk files available, and the only approving source touching `social` and `community` | Nothing governance-side. It is a pure implementation task |
+| `gdelt` | **Collector-eligible since Mission 1.8, and RESOURCE-READY since Mission 1.9.2.** The most permissive terms in the catalog by a distance, free, no key, and the only approving source touching `social` and `community`. Two authorised resources now exist — `web-ngrams/1gram` and `web-ngrams/2gram` — on a reviewed `DATASET_DOWNLOAD` route | Nothing governance-side. It is a pure implementation task, and a smaller one than it was: a gzipped four-column file with no pagination, no query construction and no envelope ambiguity |
+
+**"Nothing governance-side" was optimistic when Mission 1.8 wrote it**, and the
+correction is worth keeping. Mission 1.9 found that GDELT's reviewed API route
+and its authorised data categories did not intersect, and Mission 1.9.1 found the
+route unreachable from two independent environments. What made the sentence true
+was a **second governance round** — a new review version, a reviewed access
+route, three minimisation categories, two dataset entries and an acquisition
+ceiling. Eligibility was never the last gate; it was the third of four.
 
 One entry, where Mission 1.7 had two. `wikimedia-pageviews` was the other and is
 now `REQUIRES_REVIEW`; it returns to this tier the moment **H-24** is answered,
@@ -290,6 +298,18 @@ is eligible, and answering one legal question now outranks everything else.
 Note what is absent: "approach Steam", "buy an X tier". Both are legitimate
 vendor conversations with cost and lead time, and neither is the cheapest next
 move.
+
+## 5.1 What Mission 1.9.2 changed about this document
+
+The HIGH row above now says something it could not before: **GDELT has a
+concrete authorised resource.** That is a fourth fact, distinct from eligible,
+implemented and enabled, and this document had no way to express it — which is
+why the row read "a pure implementation task" for two missions while the resource
+layer refused every request GDELT could have made.
+
+`sros-source readiness` reports all four now. The portfolio's tiers are still
+qualitative judgements about value; the readiness columns are derived facts about
+state, and keeping them apart is the point.
 
 ## 6. What Mission 1.8 changed about this document
 

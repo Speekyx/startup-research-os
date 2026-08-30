@@ -127,6 +127,27 @@ def authorize_resource(
                 "an unestablished origin is denied rather than assumed"
             )
 
+    # -- rights basis (Mission 1.9.2) ---------------------------------------
+    #
+    # Unconditional, unlike every rule below it. Those answer questions a
+    # particular review may or may not have asked -- which licences, which
+    # geographies, which families. This one answers "what authorises this at
+    # all", and no review can leave that optional.
+    #
+    # It had been checked only inside the licence-allowlist rule, so a
+    # descriptor with NO established basis passed for every source whose scope
+    # enumerates no licences -- which is Eurostat, FRED and, pointedly, GDELT,
+    # the one source whose resources are authorised by a direct grant rather
+    # than by a licence. "Nothing established" read as approval on exactly the
+    # source where the basis is the whole story.
+    evaluated.append("rights-basis")
+    if descriptor.rights_basis is None:
+        reasons.append(
+            "resource has no established rights basis; a resource that cannot say what "
+            "authorises it -- a named licence, or the source's own grant -- is not one "
+            "known to be authorised by anything"
+        )
+
     # -- licence allowlist ---------------------------------------------------
     #
     # Mission 1.9.1 §15. A scope that enumerates acceptable LICENCES is asking a
@@ -162,10 +183,14 @@ def authorize_resource(
             )
 
     # -- dataset family exclusion -------------------------------------------
-    if scope.excluded_dataset_families or scope.require_dataset_family:
+    if (
+        scope.excluded_dataset_families
+        or scope.require_dataset_family
+        or scope.allowed_dataset_families is not None
+    ):
         evaluated.append("dataset-family")
         if descriptor.dataset_family is None:
-            if scope.require_dataset_family:
+            if scope.require_dataset_family or scope.allowed_dataset_families is not None:
                 reasons.append(
                     "resource dataset family is unrecorded; an unclassified dataset is "
                     f"not one known to fall outside {sorted(scope.excluded_dataset_families)}"
@@ -173,6 +198,20 @@ def authorize_resource(
         elif descriptor.dataset_family in scope.excluded_dataset_families:
             reasons.append(
                 f"dataset family {descriptor.dataset_family!r} is excluded by the review"
+            )
+        elif (
+            scope.allowed_dataset_families is not None
+            and descriptor.dataset_family not in scope.allowed_dataset_families
+        ):
+            # Mission 1.9.2 §22. The exclusion list above answers "was this
+            # rejected"; this answers "was it ever looked at". Without it a
+            # descriptor could name any family it liked and pass, because a
+            # string nobody had rejected was indistinguishable from one
+            # somebody had approved.
+            reasons.append(
+                f"dataset family {descriptor.dataset_family!r} is not one this review "
+                f"assessed {sorted(scope.allowed_dataset_families)}. An unreviewed family "
+                "is not an approved one, whether or not anybody thought to exclude it"
             )
 
     # -- geography allowlist -------------------------------------------------

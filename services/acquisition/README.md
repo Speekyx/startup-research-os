@@ -56,16 +56,29 @@ arrived: `collection/transport.py` is the boundary, and the registry and
 compliance packages remain network-free because they *decide* whether collection
 may happen.
 
-## Eligible, enabled, implemented
+## Eligible, resource-ready, implemented, enabled
 
-Three facts. Collapsing any two of them is the mistake this section exists to
-prevent.
+Four facts. Collapsing any two of them is the mistake this section exists to
+prevent, and the fourth was added in Mission 1.9.2 after two missions in which
+the other three could not express what was actually blocking GDELT.
 
 | Fact | Now | Where it lives |
 |---|---|---|
-| collector-eligible | `world-bank`, `eurostat` | `registry.source_eligibility`, derived |
+| collector-eligible | `world-bank`, `eurostat`, `gdelt` | `registry.source_eligibility`, derived |
+| **resource-ready** | `world-bank`, `gdelt` | derived by `evaluate_readiness`; **nothing stores it** |
 | collector implemented | `world-bank` | `sros_acquisition.IMPLEMENTED_COLLECTORS` |
-| collector-enabled | `world-bank`, set deliberately | `registry.sources.collector_enabled` |
+| collector-enabled | per deployment | `registry.sources.collector_enabled` |
+
+```bash
+uv run sros-source readiness
+```
+
+**Eurostat is the case that makes `resource_ready` worth having.** It has been
+collector-eligible since Mission 1.4 and has no authorised resource, so
+`authorized_dataset(...)` returns `None` for everything it could ask for. GDELT
+was in the same state until review 3 authorised two WEB-NGRAM datasets. Before
+this, "eligible" was the most specific answer available and it read as further
+along than it was.
 
 `sros-source enable` refuses a source with no implemented collector: a switch
 that gets ahead of the thing it switches reads, to anyone looking at the

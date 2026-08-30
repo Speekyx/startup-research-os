@@ -1,8 +1,8 @@
 # Source Catalog V1
 
 **Status:** Authoritative record of the initial candidate catalog.
-**Catalog version:** 1.3
-**Reviewed:** 2026-08-30 by `mission-1.8`
+**Catalog version:** 1.4
+**Reviewed:** 2026-08-30 by `mission-1.9.2`
 **Governed by:** [`source-registry-v1.md`](source-registry-v1.md)
 
 > **GENERATED FILE.** Rendered from `source-catalog-v1.json` by
@@ -52,6 +52,8 @@ Either way, **no collector exists** and `collector_enabled` is false for every s
 - Mission 1.8 audited every approving review against the assessed use and downgraded three that rested on silence rather than on a grant: `pypi` (four of six required activities unaddressed), `npm-registry` (three, after two assessments were corrected to what their evidence actually says) and `wikimedia-pageviews` (two, after a documentation-site footer was corrected to not be a data licence). Every Mission 1.7 review version is preserved.
 - Five sources are in an approving state and four are collector-eligible in a verified environment. GDELT joined the economic three by having its attribution, resource-scope and access obligations expressed as machine-verified conditions; no gate was relaxed to admit it.
 - The gdelt-doc-api access profile had no endpoint_url until Mission 1.9, so the host allowlist any GDELT collector derives from the registry was empty and no request could have been made. Found by trying to use the registration rather than by reading it.
+- GDELT does not state a timezone for the WEB-NGRAM DATE column anywhere on the dataset announcement or the data index, and no first-party statement was found. Mission 1.9.1 recorded it as UTC; review 3 does not assert it and carries it as an open question (H-29). The value is preserved as the source label so that answering it later costs no re-collection.
+- No mapping from the CLD2 language names GDELT emits (ALBANIAN, some titlecase, some with underscores) to language tags was found, so no language code is derived from LANG (H-30). Separately, how far back the WEB-NGRAM publication directory stays retrievable is undocumented, so no historical backfill window is assumed (H-31).
 
 ---
 
@@ -425,7 +427,8 @@ Global news monitoring: events, themes, tone and entity mentions extracted from 
 | Version | Reviewed | By | State | Evidence |
 |---|---|---|---|---|
 | 1 | 2026-08-30 | `mission-1.7` | `APPROVED_WITH_CONDITIONS` | 1 |
-| 2 ← current | 2026-08-30 | `mission-1.8` | `APPROVED_WITH_CONDITIONS` | 1 |
+| 2 | 2026-08-30 | `mission-1.8` | `APPROVED_WITH_CONDITIONS` | 1 |
+| 3 ← current | 2026-08-30 | `mission-1.9.2` | `APPROVED_WITH_CONDITIONS` | 4 |
 
 **Required conditions** — all must be satisfied before a collector may run
 
@@ -440,7 +443,7 @@ None of these is satisfied *by the catalog*, and none can be: satisfaction is en
 | Method | Label | Requires | Secret references | Rate limit | Cost |
 |---|---|---|---|---|---|
 | `PUBLIC_API` | gdelt-doc-api | nothing | — | **UNKNOWN** | `FREE` |
-| `DATASET_DOWNLOAD` | gdelt-bulk-files | nothing | — | **UNKNOWN** | `FREE` |
+| `DATASET_DOWNLOAD` | gdelt-web-ngram-files | nothing | — | **UNKNOWN** | `FREE` |
 
 **Assessment**
 
@@ -464,17 +467,26 @@ None of these is satisfied *by the catalog*, and none can be: satisfaction is en
 
 **Reviewer notes**
 
-Verdict UNCHANGED and re-verified against the same evidence. GDELT is the only source added in Mission 1.7 whose approval survives the materiality audit this mission ran across the whole catalog: all six activities the assessed use requires are positively permitted, on a sentence that grants rather than merely fails to prohibit -- 'unlimited and unrestricted use for any academic, commercial or governmental use of any kind without fee'. What changed is how its single obligation is checked. Version 1 expressed the citation requirement as HUMAN_CONFIRMATION, which no verifier can ever clear, because no compliance configuration existed for this source. That configuration now exists, so the condition becomes a CAPABILITY verified by source-attribution-display -- the same generic verifier the economic three use, parameterised rather than duplicated. The obligation is identical; only its enforceability changed.
+Verdict, rights basis and obligation all UNCHANGED. What is new is a capability and an access route, and recording those is substantive review work rather than a configuration edit -- reviews 1 and 2 assessed news events, themes, entity mentions, tone, timestamps and geography reached over the DOC API, and a term frequency reached as a published file is none of those things. ASSESSED HERE: the WEB-NGRAM 1gram and 2gram datasets, DATASET_DOWNLOAD access to data.gdeltproject.org/gdeltv3/web/ngrams/, and the four published columns DATE, LANG, NGRAM and COUNT. The rights basis is re-cited rather than re-argued: the terms grant 'unlimited and unrestricted use ... of any kind without fee' over ALL DATASETS RELEASED BY the GDELT Project, and these are datasets it releases, so the same DIRECT_GRANT covers them and no licence identifier exists to name. CONTENT ORIGIN. The file is GDELT's own count over its own index and contains no publisher title, URL, image or sentence -- PLATFORM_LICENSED. The news material it counts belongs to publishers who granted nothing and stays THIRD_PARTY and refused. An aggregate ABOUT third-party material is not third-party material, and the distinction is the same one review 2 relied on. 1GRAM AND 2GRAM ARE BOTH APPROVED, as separate resources rather than as one family. The governance model is identical for both -- same grant, same origin, same four columns, same absence of any link to an article -- and the length difference has nothing to hang a distinction on: neither file carries a position, a document id or a URL, so no fragment can be attached to the article it came from. That is precisely what disqualifies the other two ngram products, and it is why a two-word phrase here is further from an excerpt than a seven-word snippet there. Separate entries so that withdrawing 2gram later is a deletion rather than a re-derivation. POSITIVELY REJECTED, having been read: Web News NGrams 3.0 (gdeltv3/webngrams/) carries pre/post contextual snippets and the article url; the quadgram TOC (gdeltv5/weblegacy/) carries title, img and url and keys its counts to a per-document DOCID. Both are publisher content by the same rule that rejected the DOC API's ArtList mode in Mission 1.9, and being newer or more prominently announced does not change it. A CORRECTION TO THE RECORD. GDELT does ask researchers to 'switch their searches to use these ngram files instead of the search APIs for the time being', and Mission 1.9.1 read that as support for the WEB-NGRAM path. It is not: the sentence appears in the post announcing the QUADGRAM dataset and refers to that dataset, which this review rejects. The half that does carry over is the reason -- GDELT describes its legacy search infrastructure as struggling during a migration to Spanner -- and that is why the DOC API is deferred. This review's case for WEB-NGRAM rests on the dataset's own documentation and its observed structure, not on a recommendation that was about something else. PERSONAL DATA. Structurally there is none: four columns, no name field, no author, no identifier, no profile. A lexical term can nonetheless BE a person's name, carrying one number and no link to any article. That is recorded rather than resolved -- whether it is personal data in the regulatory sense is jurisdiction, which is H-12 and deferred project-wide. The classification stays PSEUDONYMOUS; reading one dataset's structure as a statement about the source would be the wrong move in the permissive direction. VOLUME. 96 buckets a day and two files each, each file spanning every language GDELT monitors. The review approves a bounded subset rather than the dataset, and the bound is recorded in the compliance configuration where it is checkable.
 
 **Open questions**
 
-- Determine whether GDELT publishes rate limits for the DOC API anywhere on its own site; none were found and none is invented, so both profiles record the limit as unknown.
-- Determine whether the extracted entity mentions constitute personal data under the project's own framing; the terms do not address personal data at all, and the source is classified PSEUDONYMOUS on the shape of the data rather than on a statement by the project.
+- Determine whether GDELT publishes rate limits anywhere on its own site, for either route; none were found and none is invented, so both profiles record the limit as unknown.
+- Determine whether the extracted entity mentions on the DOC API route constitute personal data under the project's own framing; the terms do not address personal data at all, and the source is classified PSEUDONYMOUS on the shape of the data rather than on a statement by the project.
+- Determine the timezone of the WEB-NGRAM DATE column. Neither the dataset announcement nor the data page states one, so this review does not assert UTC; the collector must preserve the source label verbatim so that answering this later costs no re-collection.
+- Determine whether GDELT publishes a mapping from the CLD2 language names it emits (ALBANIAN, and a few in titlecase or with underscores) to language tags. None was found, so the source label is preserved and no code is guessed.
+- Determine how long WEB-NGRAM files stay retrievable at the publication path. The announcement states coverage from 2019-01-01 to present and says nothing about how far back the directory itself reaches, so no historical backfill window is assumed.
 
-**Official evidence (1)**
+**Official evidence (4)**
 
 - [The GDELT Project - About / Terms of Use](https://www.gdeltproject.org/about.html) — `OFFICIAL_TERMS`, retrieved 2026-08-30, section: Terms of Use
   - The page states that all datasets released by the GDELT Project are available for unlimited and unrestricted use for any academic, commercial or governmental use of any kind without fee, and that the datasets may be redistributed, rehosted, republished and mirrored in any form. The single stated obligation is that any use or redistribution include a citation to the GDELT Project and a link to https://www.gdeltproject.org/. The grant is general and does not single out AI or machine-learning processing either to permit or to forbid it; model_processing is recorded as PERMITTED on the strength of 'any kind', and the absence of an AI-specific clause is noted rather than read as a restriction.
+- [The GDELT Project - Announcing The Web News Ngram Datasets (WEB-NGRAM)](https://blog.gdeltproject.org/announcing-the-web-news-ngram-datasets-web-ngram/) — `OFFICIAL_API_DOCS`, retrieved 2026-08-30, section: Dataset description and file format
+  - The operator's own announcement of the dataset, published 2019-09-30 and linked from the GDELT data page as its documentation. It states the publication path 'http://data.gdeltproject.org/gdeltv3/web/ngrams/YYYYMMDDHHMMSS.1gram/2gram.txt.gz'; that every 15 minutes two gzipped UTF-8 files are produced, one for unigrams and one for bigrams, typically 7-10, 22-25, 37-40 and 52-55 minutes after the hour; that each row represents a unique language/word/phrase, is tab delimited and has no header row; and that the four columns are DATE ('The date in YYYYMMDDHHMMSS format'), LANG ('The human-readable language name as output by CLD2'), NGRAM ('The word or phrase') and COUNT ('The number of times the word/phrase was mentioned in articles of that language published in that given 15 minute interval'). Coverage at release is stated as 42 billion words in 142 languages from 2019-01-01 to present. No timezone is stated for DATE, and none is inferred here. Each file spans every language rather than being partitioned by one, which is why a job cannot request fewer languages than a file contains.
+- [The GDELT Project - Data](https://www.gdeltproject.org/data.html) — `OFFICIAL_API_DOCS`, retrieved 2026-08-30, section: GDELT WEB-NGRAM
+  - The operator's dataset index lists WEB-NGRAM as a current product -- 'Global online news ngrams in 152 languages' -- and links to the announcement above as its documentation. The language count is higher than the 142 the 2019 announcement states, so the dataset has grown; both figures are recorded with their dates rather than one being chosen. The page states no timezone for GDELT timestamps anywhere, which is why review 3 leaves the DATE timezone as an open question instead of asserting UTC.
+- [The GDELT Project - Using The New Web NGrams Dataset To Find Relevant Coverage](https://blog.gdeltproject.org/using-the-new-web-ngrams-dataset-to-find-relevant-coverage/) — `OFFICIAL_API_DOCS`, retrieved 2026-08-30, section: Legacy search infrastructure and the quadgram dataset
+  - Published 2026-06-30. The operator states that 'While the transition of our search and API infrastructure to Spanner is still underway, our existing legacy search infrastructure is struggling to handle the ever-growing volume of searches', and asks that 'Researchers should try to switch their searches to use these ngram files instead of the search APIs for the time being until we have completed our migration to Spanner'. Read carefully, that recommendation names the QUADGRAM dataset the same post announces -- per-minute files at storage.googleapis.com/data.gdeltproject.org/gdeltv5/weblegacy/ngrams/, whose ngrams file keys quadgram counts to a per-document DOCID and whose companion toc.json.gz carries title, img and url. This review rejects that dataset and does NOT claim GDELT recommended WEB-NGRAM. What the document does establish first-party is the state of the legacy search infrastructure, which is the reason the DOC API route is deferred rather than retried.
 
 **Blocked by**
 

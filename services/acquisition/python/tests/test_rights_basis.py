@@ -245,16 +245,30 @@ class TestExistingSourcesAreUnaffected:
 
 
 class TestGdeltStillHasNoAuthorisedResource:
-    """H-28 is closed; H-27 is not, and the resource model waits on it.
+    """H-28 is closed, and Mission 1.9.2 filled the entry the model was holding.
 
-    Populating `datasets` means deciding what one GDELT resource IS, which
-    depends on which API mode the collector uses -- the question the response
-    contract would answer.
+    When this class was written, populating `datasets` meant deciding what one
+    GDELT resource IS, and that depended on which DOC API mode the collector
+    would use -- the question H-27 still cannot answer. Review 3 answered it
+    from the other direction: the WEB-NGRAM files are a different route whose
+    contract WAS observed, so the resources are the two ngram datasets and not a
+    timeline mode. The class name is kept so the history stays readable.
     """
 
-    def test_gdelt_has_no_dataset_entry_yet(self, catalog, compliance) -> None:
+    def test_gdelt_resources_are_the_reviewed_ngram_datasets_and_no_api_mode(
+        self, catalog, compliance
+    ) -> None:
+        """The entry is no longer empty, and it is still not a DOC API mode.
+
+        H-27 remains open, so nothing on that route is authorised. What changed
+        is that GDELT stopped being blocked ON H-27 for its first resource.
+        """
         context = build_authorization(catalog.get("gdelt"), compliance)
-        assert context.datasets == ()
+        assert {d.resource_id for d in context.datasets} == {
+            "web-ngrams/1gram",
+            "web-ngrams/2gram",
+        }
+        assert not any("doc-api" in d.resource_id for d in context.datasets)
 
     def test_gdelt_carries_no_licence_anywhere(self, compliance) -> None:
         """The finding H-28 started from: GDELT names no instrument, and nothing
