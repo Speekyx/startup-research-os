@@ -1,7 +1,9 @@
 # Source portfolio V1
 
-**Status:** Recommendation. Produced by Mission 1.7 §38–§40.
-**Date:** 2026-08-30
+**Status:** Recommendation. Produced by Mission 1.7 §38–§40, revised by
+Mission 1.8 after three of the five newly approving sources were downgraded on
+audit.
+**Date:** 2026-08-30 (revised)
 **Governed by:** [`source-registry-v1.md`](source-registry-v1.md)
 **Measured from:** [`source-signal-coverage-v1.md`](source-signal-coverage-v1.md)
 (generated) and [`source-review-results-v1.md`](source-review-results-v1.md)
@@ -23,44 +25,43 @@ objects and the tiers below never leave this document.
 
 ## 1. The state it starts from
 
-Twenty-seven registered sources. Eight in an approving state. **Three
+Twenty-seven registered sources. **Five in an approving state. Four
 collector-eligible, one collector implemented, one collector enabled.**
 
-The bias is not in the catalog. It is in what may be used:
+Mission 1.8 audited every approving review against the assessed use and
+downgraded three that rested on silence rather than on a grant — `pypi`,
+`npm-registry` and `wikimedia-pageviews`. The register is more honest and the
+portfolio is narrower, and both halves of that are reported here.
+
+The bias is not in the catalog. It is in what may be used, and it got worse:
 
 | | Registered | Approving |
 |---|---|---|
-| economic data | 3 of 27 (11%) | **3 of 8 (37%)** |
-| social / community / gaming / creator / app store | 11 of 27 (41%) | **0 of 8 (0%)** |
-| knowledge / news / developer | 9 of 27 | 5 of 8 |
+| economic data | 3 of 27 (11%) | **3 of 5 (60%)** |
+| social / community / gaming / creator / app store | 11 of 27 (41%) | **0 of 5 (0%)** |
+| developer | 4 of 27 | **0 of 5** |
+| knowledge / news | 3 of 27 | 2 of 5 |
 
-**Every consumer-facing family is registered and none is approving.** That
-single row is the finding of Mission 1.7, and it is a finding about platform
-terms rather than about the review: `social`, `community`, `gaming`, `creator`
-and `app_store` contain eleven sources, and each one is `PROHIBITED`,
-`RESTRICTED`, or blocked because a document was silent or unreachable.
+**Every consumer-facing family is registered and none is approving**, and the
+developer family joined them when npm and PyPI were downgraded. The approving
+set is now three statistics agencies, one scholarly catalog and one news
+monitor.
 
-### 1.1 Seven of sixteen signal families have no usable source
+### 1.1 Eight of sixteen signal families have no usable source
 
-`desire`, `creativity`, `competition`, `collection`, `personalization`,
-`status`, `problem`.
+`desire`, `entertainment`, `creativity`, `competition`, `collection`,
+`personalization`, `status`, `problem`.
 
-Two of those deserve comment.
+`entertainment` joined that list in Mission 1.8: Wikimedia Pageviews was its
+only approving source, and the downgrade took it. **The portfolio's answer to
+desire-driven discovery got weaker, not stronger, and the reason is that the
+answer had been resting on a misreading.**
 
-**`problem` is uncovered.** The system Mission 1.7 was told not to become — a
-business pain detector — is not currently something it *could* become. Every
-source that exposes stated problems (`reddit`, `stack-exchange`, `hacker-news`,
-the app stores, `github`, `steam`, `bluesky`) is blocked or pending. This is
-worth stating plainly because the mission's framing assumes pain coverage is the
-default that needs balancing, and in this portfolio it is not the default and
-does not exist.
-
-**`personalization` and `status` have no registered source at all**, blocked or
-otherwise. Every other uncovered family is blocked on a verdict; these two are
-blocked on the catalog containing nothing that exposes them. That is a discovery
-gap rather than a governance one, and it is the only one of its kind.
-
----
+Two observations still stand from Mission 1.7. `problem` is uncovered, so the
+business pain detector this project was told not to become is not currently
+something it *could* become. And `personalization` and `status` have no
+registered source at all — a discovery gap rather than a governance one, and
+still the only one of its kind.
 
 ## 2. Portfolio by need
 
@@ -162,26 +163,24 @@ uncovered family.
 
 | Source | Why | What it needs first |
 |---|---|---|
-| `wikimedia-pageviews` | The only approving source that measures *attention* directly. Covers `curiosity`, `trend`, `discovery`, `entertainment` and `learning` from one stable, well-documented API with published limits and no key. It is also the single best answer to §24 | The User-Agent and attribution conditions verified |
-| `gdelt` | The most permissive terms in the catalog, by a distance, and the only approving source touching `social` and `community`. Free, no key, bulk files available | Its attribution condition verified |
+| `gdelt` | **Collector-eligible as of Mission 1.8.** The most permissive terms in the catalog by a distance, free, no key, bulk files available, and the only approving source touching `social` and `community` | Nothing governance-side. It is a pure implementation task |
 
-Both are HIGH for the same structural reason: they are approving, they are
-cheap, and they cover families nothing else covers. Neither needs a credential,
-a vendor conversation or a paid tier.
+One entry, where Mission 1.7 had two. `wikimedia-pageviews` was the other and is
+now `REQUIRES_REVIEW`; it returns to this tier the moment **H-24** is answered,
+and its compliance work is already specified in
+[`wikimedia-pageviews-compliance-v1.md`](wikimedia-pageviews-compliance-v1.md).
 
 ### MEDIUM
 
 | Source | Why | What it needs first |
 |---|---|---|
-| `openalex` | CC0 removes every licensing question at once. Overlaps `wikimedia-pageviews` on `learning` and `discovery`, which is why it is not HIGH, and it leads consumer behaviour by years | `OPENALEX_CONTACT_EMAIL` configured; a spend ceiling decided, since the API is now metered |
-| `eurostat` | Already eligible and already unblocked. Zero governance work remains | Nothing. It is a pure implementation task |
-| `npm-registry` | The only source in the catalog with an explicit replication grant. Narrow — one language ecosystem — which is what keeps it out of HIGH | Its API-only and volume conditions verified |
+| `eurostat` | Already eligible and already unblocked since Mission 1.4. Zero governance work remains | Nothing. A pure implementation task |
+| `openalex` | CC0 removes every licensing question at once, and it leads consumer behaviour by years | `OPENALEX_CONTACT_EMAIL` configured; a spend ceiling decided, since the API is metered |
 
 ### LOW
 
 | Source | Why |
 |---|---|
-| `pypi` | Approving on the weaker footing described in the expansion record: commercial use is `NOT_ADDRESSED` rather than permitted, and no numeric rate limit is published to build against |
 | `fred` | Eligible only where `FRED_API_KEY` is configured, and overlaps `world-bank` heavily. A third macroeconomic source is the least valuable addition available |
 
 ### BLOCKED — do not implement
@@ -189,9 +188,10 @@ a vendor conversation or a paid tier.
 `reddit`, `stack-exchange`, `hacker-news`, `google-trends`, `bluesky`,
 `huggingface`, `twitch`, `discord`, `x-twitter`, `pinterest`, `product-hunt`,
 `github`, `apple-app-store`, `google-play`, `steam`, `meta-instagram`,
-`youtube`, `tiktok`, `spotify`.
+`youtube`, `tiktok`, `spotify`, **`npm-registry`**, **`pypi`**,
+**`wikimedia-pageviews`**.
 
-Nineteen of twenty-seven. The orchestrator will refuse to plan acquisition for
+Twenty-two of twenty-seven, three of them added by Mission 1.8's audit. The orchestrator will refuse to plan acquisition for
 any of them and `sros-source enable` will refuse to switch one on, so this row
 is a summary of a mechanism rather than a request for restraint.
 
@@ -269,22 +269,36 @@ lives**, and none of them is usable.
 
 ## 5. What would change the picture most
 
-In order of effect per unit of work, and none of it is a collector:
+In order of effect per unit of work. The list changed materially in Mission 1.8:
+the compliance-configuration item at the top is **done** for GDELT and is why it
+is eligible, and answering one legal question now outranks everything else.
 
-1. **Compliance configuration for `gdelt` and `wikimedia-pageviews`** — converts
-   the two HIGH sources from approving to eligible. Config, not code.
-2. **Retrieve the four unreachable documents** (`x-twitter`, `discord`,
-   `twitch`, `pinterest`) from an ordinary browser session. Four verdicts are
-   currently `NOT_ASSESSED` for environmental reasons, and `twitch` plus
-   `pinterest` are the entry points to gaming-creator and desire respectively.
-3. **Ask Bluesky one question** — whether a developer terms document exists
-   separate from the user ToS. A single answer would settle the most open social
-   platform available.
-4. **Decide MODEL-01** — whether the registry can express federated sources. It
-   is the difference between having zero and several open social protocols.
-5. **Establish whether Meta exposes public content at all** — a capability
-   question that would close a source without legal reading.
+1. **Answer H-24** — are aggregate Wikimedia pageview counts Licensed Material
+   under CC BY-SA 4.0? It is the only thing standing between the portfolio and
+   its single best `curiosity`, `entertainment` and `trend` source, and the
+   compliance work behind it is already specified.
+2. **Find a grant for the developer ecosystem.** npm and PyPI were the whole of
+   `developer_activity` coverage and both are now pending. npm's replication
+   grant is real and narrow; what is missing is any statement about commercial
+   reuse, derived analytics or model processing.
+3. **Retrieve the four unreachable documents** (`x-twitter`, `discord`,
+   `twitch`, `pinterest`) from an ordinary browser session.
+4. **Ask Bluesky one question** — whether a developer terms document exists
+   separate from the user ToS.
+5. **Decide MODEL-01** — whether the registry can express federated sources.
 
-Note what is absent: "approach Steam", "buy an X tier". Both are legitimate and
-both are vendor conversations with cost and lead time, and neither is the
-cheapest next move.
+Note what is absent: "approach Steam", "buy an X tier". Both are legitimate
+vendor conversations with cost and lead time, and neither is the cheapest next
+move.
+
+## 6. What Mission 1.8 changed about this document
+
+Mission 1.7 recommended `wikimedia-pageviews` and `gdelt` as the two HIGH
+priorities and said the cheapest large win was compliance configuration for
+both. Half of that was right: GDELT's configuration took an afternoon and made
+it eligible. The other half was resting on a misreading of Wikimedia's evidence,
+and the audit that found it also removed `entertainment` from the covered list.
+
+**A recommendation that survives contact with an audit is worth more than one
+that does not have to.** This one did not, entirely, and the revision is the
+record of that.

@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.11
-Last amended: 2026-08-30 (Sprint 1 / Mission 1.7)
+Version: 1.12
+Last amended: 2026-08-30 (Sprint 1 / Mission 1.8)
 
 ## Boot Sequence
 
@@ -40,6 +40,7 @@ Ontology V2 keeps V1.1's numbering for §1–§10, so an existing reference to
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.12 | 2026-08-30 | Silence-is-not-permission made mechanical: an approving review must grant every materially required activity. Three Mission 1.7 approvals withdrawn on audit; GDELT became the fourth collector-eligible source and the first non-economic one |
 | 1.11 | 2026-08-30 | Source universe expanded to 27 across 14 families; signal coverage added as a non-scoring source attribute (ADR-017); coverage-is-not-permission invariant added; global registry state watched by the post-suite check |
 | 1.10 | 2026-08-30 | First normalizer recorded: the RawRecord to NormalizedRecord boundary, World Bank only; normalized_records is no longer empty; normalization invariant added; normalizable separated from eligible, enabled and implemented |
 | 1.9 | 2026-08-30 | First collector recorded: World Bank only, gated by an AcquisitionAuthorizationContext; raw_records is no longer empty; collector boundary invariant added |
@@ -215,11 +216,24 @@ none of them is negotiable (`source-registry-v1.md` §1, ADR-013):
   coefficient, which is D-03, which is blocked. Behaviour coverage reuses
   Ontology V2 §3.4's `user_behavior` rather than defining a second vocabulary.
 - **Silence is the commonest blocker, and it is doing its job.** After Mission
-  1.7 twenty-seven sources are registered, eight are approving and three are
-  eligible. Bluesky publishes an open firehose needing no API key, and Hugging
-  Face publishes open endpoints with documented numeric rate limits; both are
-  `REQUIRES_REVIEW`, because their terms address none of the assessed
+  1.8 twenty-seven sources are registered, **five** are approving and **four**
+  are eligible. Bluesky publishes an open firehose needing no API key, and
+  Hugging Face publishes open endpoints with documented numeric rate limits;
+  both are `REQUIRES_REVIEW`, because their terms address none of the assessed
   activities. Reachability was never the question.
+- **An approving state requires a GRANT, not the absence of a prohibition**
+  (Mission 1.8, `source-registry-v1.md` §1 rule 8). The assessed use names six
+  load-bearing activities — `automated_access`, `api_use`, `commercial_use`,
+  `storage`, `derived_analytics`, `model_processing` — and each must be
+  positively permitted on authoritative evidence. `NOT_ADDRESSED` on any of them
+  blocks, whatever the other five say.
+
+  This was prose from Mission 1.0 that nothing read, until Mission 1.7 approved
+  a source with four of the six unaddressed and wrote the reason down in the
+  review's own notes. `validate_source_registry` enforces it now. **Do not
+  narrow the assessed use case to rescue a source**: the use case describes the
+  product, and a permission obtained by describing a smaller product is a
+  permission for a product we are not building.
 
 ### Collection — one collector, and what bounds it
 

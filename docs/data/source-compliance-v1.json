@@ -9,96 +9,6 @@
   },
   "sources": [
     {
-      "source_id": "world-bank",
-      "review_version": 2,
-      "evidence_url": "https://datacatalog.worldbank.org/public-licenses",
-      "evidence_section": "Creative Commons Attribution 4.0 (CC-BY 4.0); Microdata Research License; License Specified Externally; Custom License",
-      "attribution": {
-        "notes": "CC-BY 4.0 permits commercial use provided appropriate credit is given AND changes are indicated. The licence prescribes no exact sentence, so the credit string is configuration; the requirement that changes be indicated is not, which is why MODIFICATION_STATEMENT is supplied per artefact rather than defaulted. The licence identifier is per DATASET -- the same platform distributes CC-BY 4.0 and ODbL data -- so it cannot be a fixed string either.",
-        "requirements": [
-          {
-            "element": "SOURCE_CREDIT",
-            "text": "The World Bank",
-            "supplied": false,
-            "when_modified": false
-          },
-          {
-            "element": "LICENCE_IDENTIFIER",
-            "text": null,
-            "supplied": true,
-            "when_modified": false
-          },
-          {
-            "element": "MODIFICATION_STATEMENT",
-            "text": null,
-            "supplied": true,
-            "when_modified": true
-          }
-        ]
-      },
-      "resource_scope": {
-        "licence_allowlist": ["CC-BY-4.0", "ODbL-1.0"],
-        "licence_allowlist_note": "Canonical identifiers, matched exactly. A dataset whose licence is recorded in another spelling is denied rather than guessed at, because guessing is how 'License Specified Externally' would become 'probably CC-BY'.",
-        "excluded_dataset_families": ["microdata"],
-        "require_dataset_family": true,
-        "dataset_family_note": "The Microdata Library is excluded outright: its licence permits statistical and scientific research only and forbids redistribution without a prior written agreement. A resource whose family is unrecorded is denied -- an unclassified dataset is not a dataset known not to be microdata.",
-        "geography_allowlist": null,
-        "enumerated_exclusions": [],
-        "excluded_note_markers": [],
-        "require_notes": false,
-        "third_party_denied": true
-      },
-      "access_restriction": {
-        "name": "indicators-api-only",
-        "access_methods": ["PUBLIC_API"],
-        "profile_labels": ["indicators-api-v2"],
-        "note": "The registry must hold this profile and no other for the restriction to be verifiable. A second profile appearing on this source -- a bulk download, a browser path -- fails the check rather than being ignored."
-      },
-      "datasets_note": "The authorised resource set (Mission 1.5 §7). A collector builds its resource descriptor FROM an entry here, never from what a caller claims -- otherwise 'this dataset is CC-BY 4.0' would be an assertion the requester makes about itself, which is the failure mode the whole review model exists to prevent. A resource with no entry has no licence, no dataset family and no content origin, so the resource gate denies it.\n\nDELIBERATELY SMALL, and the reason is recorded rather than assumed. The licence on each entry rests on the Data Catalog statement that CC-BY 4.0 is the DEFAULT licence for datasets the World Bank itself produces and distributes as open data -- not on a per-series licence page, because none was retrieved. Mission 1.3 left exactly this as an open question: 'Confirm per dataset, at collection time, which licence applies.' Until a reviewer closes it, widening this list means re-opening the review, not appending a line.",
-      "datasets": [
-        {
-          "resource_id": "indicator/NY.GDP.MKTP.CD",
-          "indicator": "NY.GDP.MKTP.CD",
-          "name": "GDP (current US$)",
-          "dataset_family": "indicators",
-          "licence": "CC-BY-4.0",
-          "content_origin": "PLATFORM_LICENSED",
-          "basis": "A World Development Indicators series compiled by the World Bank from national accounts data. Covered by the Data Catalog default licence for World Bank-produced open data."
-        },
-        {
-          "resource_id": "indicator/SP.POP.TOTL",
-          "indicator": "SP.POP.TOTL",
-          "name": "Population, total",
-          "dataset_family": "indicators",
-          "licence": "CC-BY-4.0",
-          "content_origin": "PLATFORM_LICENSED",
-          "basis": "A World Development Indicators series compiled by the World Bank. Covered by the Data Catalog default licence for World Bank-produced open data."
-        },
-        {
-          "resource_id": "indicator/IT.NET.USER.ZS",
-          "indicator": "IT.NET.USER.ZS",
-          "name": "Individuals using the Internet (% of population)",
-          "dataset_family": "indicators",
-          "licence": "CC-BY-4.0",
-          "content_origin": "PLATFORM_LICENSED",
-          "basis": "A World Development Indicators series compiled by the World Bank. Covered by the Data Catalog default licence for World Bank-produced open data."
-        }
-      ],
-      "data_minimisation": {
-        "allowed": [
-          "indicator_identifier",
-          "dataset_identifier",
-          "observation_value",
-          "observation_period",
-          "unit_of_measure",
-          "geography",
-          "dataset_licence"
-        ],
-        "excluded": ["personal_data", "user_identifier", "microdata_record"],
-        "note": "Mission 1.3 §14. dataset_licence is in the allowed list because the licence allowlist cannot be evaluated without it."
-      }
-    },
-    {
       "source_id": "eurostat",
       "review_version": 2,
       "evidence_url": "https://ec.europa.eu/eurostat/web/main/help/copyright-notice",
@@ -143,24 +53,63 @@
         "excluded_dataset_families": [],
         "require_dataset_family": false,
         "geography_allowlist": [
-          "AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "ES", "FI",
-          "FR", "GR", "HR", "HU", "IE", "IT", "LT", "LU", "LV", "MT",
-          "NL", "PL", "PT", "RO", "SE", "SI", "SK",
-          "CH", "IS", "LI", "NO"
+          "AT",
+          "BE",
+          "BG",
+          "CY",
+          "CZ",
+          "DE",
+          "DK",
+          "EE",
+          "ES",
+          "FI",
+          "FR",
+          "GR",
+          "HR",
+          "HU",
+          "IE",
+          "IT",
+          "LT",
+          "LU",
+          "LV",
+          "MT",
+          "NL",
+          "PL",
+          "PT",
+          "RO",
+          "SE",
+          "SI",
+          "SK",
+          "CH",
+          "IS",
+          "LI",
+          "NO"
         ],
         "geography_allowlist_note": "EU-27 plus the four EFTA states, deliberately WITHOUT acceding and candidate countries. The copyright notice permits their data for commercial reuse; the set changes over time and the notice does not enumerate it, so the list here is stricter than the terms and never more permissive. Widening it requires re-reading the notice and recording the decision, not editing this array. EU-wide aggregate codes (EU27_2020, EA19) are likewise absent and therefore denied.",
         "enumerated_exclusions": [
           {
             "key": "li-ch-trade-1995",
-            "declaring_countries": ["LI", "CH"],
-            "classifications": ["HS", "SITC", "BEC", "NSTR"],
+            "declaring_countries": [
+              "LI",
+              "CH"
+            ],
+            "classifications": [
+              "HS",
+              "SITC",
+              "BEC",
+              "NSTR"
+            ],
             "from_year": 1995,
             "reason": "Trade data declared by Liechtenstein and Switzerland from 1995 onwards in the HS, SITC, BEC and NSTR classifications is named by the copyright notice as an exception to free re-use."
           },
           {
             "key": "at-trade-cn8",
-            "declaring_countries": ["AT"],
-            "classifications": ["CN8"],
+            "declaring_countries": [
+              "AT"
+            ],
+            "classifications": [
+              "CN8"
+            ],
             "from_year": null,
             "reason": "Trade data declared by Austria at CN 8-digit level is named by the copyright notice as an exception to free re-use."
           }
@@ -182,7 +131,11 @@
           "declaring_country",
           "access_date"
         ],
-        "excluded": ["personal_data", "user_identifier", "microdata_record"],
+        "excluded": [
+          "personal_data",
+          "user_identifier",
+          "microdata_record"
+        ],
         "note": "Mission 1.3 §14. dataset_doi and access_date are allowed because the attribution obligation cannot be met without them; declaring_country because the trade exclusions cannot be evaluated without it."
       }
     },
@@ -208,7 +161,9 @@
         "require_dataset_family": false,
         "geography_allowlist": null,
         "enumerated_exclusions": [],
-        "excluded_note_markers": ["copyright"],
+        "excluded_note_markers": [
+          "copyright"
+        ],
         "require_notes": true,
         "note_marker_note": "Matched case-insensitively against the series notes. require_notes is true because a series whose notes were never read is not a series known to be uncopyrighted: the terms say copyrighted series are identifiable BY their notes, so an absent note is an unanswered question, not a clean answer.",
         "third_party_denied": true,
@@ -224,8 +179,170 @@
           "unit_of_measure",
           "geography"
         ],
-        "excluded": ["personal_data", "user_identifier", "microdata_record"],
+        "excluded": [
+          "personal_data",
+          "user_identifier",
+          "microdata_record"
+        ],
         "note": "Mission 1.3 §14. series_notes is in the allowed list for a specific reason: the copyrighted-series exclusion is evaluated from the notes, so a collector that minimised them away would lose the ability to honour the condition."
+      }
+    },
+    {
+      "source_id": "gdelt",
+      "review_version": 2,
+      "evidence_url": "https://www.gdeltproject.org/about.html",
+      "evidence_section": "Terms of Use",
+      "attribution": {
+        "notes": "The terms prescribe both halves of the obligation in one sentence: a citation to the GDELT Project AND a link to the project site, required on use and separately on redistribution. Both are fixed strings the terms state, so neither is supplied per artefact -- unlike Eurostat's DOI and access date, which are per-retrieval values. There is no modification statement and no disclaimer because the terms require neither, and inventing one would be worse than omitting it (§8). There is no licence identifier because GDELT names no licence: it grants unlimited use directly rather than through a named instrument, which is unusual and is why LICENCE_IDENTIFIER is absent rather than blank.",
+        "requirements": [
+          {
+            "element": "SOURCE_CREDIT",
+            "text": "The GDELT Project",
+            "supplied": false,
+            "when_modified": false
+          },
+          {
+            "element": "EXACT_NOTICE",
+            "text": "Any use or redistribution of the data must include a citation to the GDELT Project and a link to this website (https://www.gdeltproject.org/).",
+            "supplied": false,
+            "when_modified": false
+          }
+        ]
+      },
+      "resource_scope": {
+        "third_party_denied": true,
+        "licence_allowlist": null,
+        "licence_allowlist_note": "No allowlist. GDELT names no licence per dataset -- the grant is a single blanket sentence covering everything it releases -- so there is no licence identifier to match against, and inventing an allowlist would deny everything for a reason the terms do not give.",
+        "excluded_dataset_families": [],
+        "require_dataset_family": true,
+        "dataset_family_note": "Every resource must declare its dataset family and an unclassified one is denied. Not a licence distinction -- GDELT's grant covers everything it releases equally -- but a REVIEW distinction: the Mission 1.7 review assessed the DOC API and the bulk files for news events, themes, entity mentions, tone, timestamps and geography, and GDELT publishes products beyond that set which no review has looked at. A resource that cannot say what it is has not been assessed.",
+        "geography_allowlist": null,
+        "enumerated_exclusions": [],
+        "excluded_note_markers": [],
+        "require_notes": false,
+        "third_party_note": "The only scope rule the evidence supports. GDELT's grant is over what it releases; the news material it describes belongs to publishers who granted nothing, so a resource must state that its content originates with the platform before it is allowed."
+      },
+      "datasets_note": "No enumerated dataset allowlist. World Bank needs one because its platform distributes datasets under several different licences and the licence is a per-dataset property; GDELT's terms make one statement about everything it releases, so the authorised set is defined by content origin rather than by enumeration. The first collector still receives a resource descriptor per request and each is authorised separately -- source-level approval is not resource-level approval, whatever the scope rules happen to be.",
+      "data_minimisation": {
+        "allowed": [
+          "event_identifier",
+          "theme_identifier",
+          "entity_mention",
+          "tone_score",
+          "observation_period",
+          "geography",
+          "content_origin"
+        ],
+        "excluded": [
+          "article_full_text",
+          "publisher_content",
+          "personal_data",
+          "user_identifier"
+        ],
+        "note": "content_origin is in the allowed list for the reason FRED's series_notes is in its own: the third-party exclusion cannot be evaluated without it, so a collector that minimised it away would lose the ability to honour the rule that makes the source usable. article_full_text and publisher_content are excluded because GDELT's grant covers what GDELT releases -- its extraction of the news -- and not the news itself, which belongs to publishers who granted nothing. Entity mentions are allowed and are the reason this source is classified PSEUDONYMOUS rather than NONE_EXPECTED; whether they constitute personal data is an open question on the review."
+      }
+    },
+    {
+      "source_id": "world-bank",
+      "review_version": 2,
+      "evidence_url": "https://datacatalog.worldbank.org/public-licenses",
+      "evidence_section": "Creative Commons Attribution 4.0 (CC-BY 4.0); Microdata Research License; License Specified Externally; Custom License",
+      "attribution": {
+        "notes": "CC-BY 4.0 permits commercial use provided appropriate credit is given AND changes are indicated. The licence prescribes no exact sentence, so the credit string is configuration; the requirement that changes be indicated is not, which is why MODIFICATION_STATEMENT is supplied per artefact rather than defaulted. The licence identifier is per DATASET -- the same platform distributes CC-BY 4.0 and ODbL data -- so it cannot be a fixed string either.",
+        "requirements": [
+          {
+            "element": "SOURCE_CREDIT",
+            "text": "The World Bank",
+            "supplied": false,
+            "when_modified": false
+          },
+          {
+            "element": "LICENCE_IDENTIFIER",
+            "text": null,
+            "supplied": true,
+            "when_modified": false
+          },
+          {
+            "element": "MODIFICATION_STATEMENT",
+            "text": null,
+            "supplied": true,
+            "when_modified": true
+          }
+        ]
+      },
+      "resource_scope": {
+        "licence_allowlist": [
+          "CC-BY-4.0",
+          "ODbL-1.0"
+        ],
+        "licence_allowlist_note": "Canonical identifiers, matched exactly. A dataset whose licence is recorded in another spelling is denied rather than guessed at, because guessing is how 'License Specified Externally' would become 'probably CC-BY'.",
+        "excluded_dataset_families": [
+          "microdata"
+        ],
+        "require_dataset_family": true,
+        "dataset_family_note": "The Microdata Library is excluded outright: its licence permits statistical and scientific research only and forbids redistribution without a prior written agreement. A resource whose family is unrecorded is denied -- an unclassified dataset is not a dataset known not to be microdata.",
+        "geography_allowlist": null,
+        "enumerated_exclusions": [],
+        "excluded_note_markers": [],
+        "require_notes": false,
+        "third_party_denied": true
+      },
+      "access_restriction": {
+        "name": "indicators-api-only",
+        "access_methods": [
+          "PUBLIC_API"
+        ],
+        "profile_labels": [
+          "indicators-api-v2"
+        ],
+        "note": "The registry must hold this profile and no other for the restriction to be verifiable. A second profile appearing on this source -- a bulk download, a browser path -- fails the check rather than being ignored."
+      },
+      "datasets_note": "The authorised resource set (Mission 1.5 §7). A collector builds its resource descriptor FROM an entry here, never from what a caller claims -- otherwise 'this dataset is CC-BY 4.0' would be an assertion the requester makes about itself, which is the failure mode the whole review model exists to prevent. A resource with no entry has no licence, no dataset family and no content origin, so the resource gate denies it.\n\nDELIBERATELY SMALL, and the reason is recorded rather than assumed. The licence on each entry rests on the Data Catalog statement that CC-BY 4.0 is the DEFAULT licence for datasets the World Bank itself produces and distributes as open data -- not on a per-series licence page, because none was retrieved. Mission 1.3 left exactly this as an open question: 'Confirm per dataset, at collection time, which licence applies.' Until a reviewer closes it, widening this list means re-opening the review, not appending a line.",
+      "datasets": [
+        {
+          "resource_id": "indicator/NY.GDP.MKTP.CD",
+          "indicator": "NY.GDP.MKTP.CD",
+          "name": "GDP (current US$)",
+          "dataset_family": "indicators",
+          "licence": "CC-BY-4.0",
+          "content_origin": "PLATFORM_LICENSED",
+          "basis": "A World Development Indicators series compiled by the World Bank from national accounts data. Covered by the Data Catalog default licence for World Bank-produced open data."
+        },
+        {
+          "resource_id": "indicator/SP.POP.TOTL",
+          "indicator": "SP.POP.TOTL",
+          "name": "Population, total",
+          "dataset_family": "indicators",
+          "licence": "CC-BY-4.0",
+          "content_origin": "PLATFORM_LICENSED",
+          "basis": "A World Development Indicators series compiled by the World Bank. Covered by the Data Catalog default licence for World Bank-produced open data."
+        },
+        {
+          "resource_id": "indicator/IT.NET.USER.ZS",
+          "indicator": "IT.NET.USER.ZS",
+          "name": "Individuals using the Internet (% of population)",
+          "dataset_family": "indicators",
+          "licence": "CC-BY-4.0",
+          "content_origin": "PLATFORM_LICENSED",
+          "basis": "A World Development Indicators series compiled by the World Bank. Covered by the Data Catalog default licence for World Bank-produced open data."
+        }
+      ],
+      "data_minimisation": {
+        "allowed": [
+          "indicator_identifier",
+          "dataset_identifier",
+          "observation_value",
+          "observation_period",
+          "unit_of_measure",
+          "geography",
+          "dataset_licence"
+        ],
+        "excluded": [
+          "personal_data",
+          "user_identifier",
+          "microdata_record"
+        ],
+        "note": "Mission 1.3 §14. dataset_licence is in the allowed list because the licence allowlist cannot be evaluated without it."
       }
     }
   ]

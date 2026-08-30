@@ -61,10 +61,16 @@ from .conftest import REPO_ROOT, needs_postgres
 
 APPROVED_IN_1_3 = {"world-bank", "eurostat", "fred"}
 
-# What Mission 1.4 expects to become eligible once the capabilities exist, and
-# what stays blocked. Written down rather than derived, so an accidental change
-# in either direction is a failure rather than a new baseline.
-EXPECTED_ELIGIBLE = {"world-bank", "eurostat"}
+# What is expected to become eligible once the capabilities exist, and what
+# stays blocked. Written down rather than derived, so an accidental change in
+# either direction is a failure rather than a new baseline.
+#
+# `gdelt` was added in Mission 1.8 and is the acknowledgement this tripwire
+# exists to force: the first non-economic source to reach the gate, admitted by
+# giving its one reviewed obligation -- cite the project and link to it -- a
+# verifier, rather than by relaxing anything. It is eligible with NO credential,
+# which is why it belongs in the first set and not the second.
+EXPECTED_ELIGIBLE = {"world-bank", "eurostat", "gdelt"}
 EXPECTED_BLOCKED_ON_CREDENTIAL = {"fred"}
 
 # Never a real credential, and asserted to appear in no output anywhere.

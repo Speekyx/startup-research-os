@@ -1,9 +1,10 @@
 # Source Registry V1
 
 **Status:** Authoritative. Created in Mission 1.0, resolving **D-07**.
-**Version:** 1.2 (Mission 1.7 added the two coverage tables to §3, the new
-families to §2, and restated §10. Mission 1.4 added §4 "How a condition gets
-cleared", "Two views of eligibility" and "Eligible, enabled, implemented")
+**Version:** 1.3 (Mission 1.8 restated §10 and added §1 rule 8, the
+materiality rule. Mission 1.7 added the two coverage tables to §3, the new
+families to §2. Mission 1.4 added §4 "How a condition gets cleared", "Two views
+of eligibility" and "Eligible, enabled, implemented")
 **Date:** 2026-08-30
 **Governs:** `registry.sources` and the tables around it, the collector
 eligibility gate, retention overrides, source coverage, and every future
@@ -80,6 +81,23 @@ These are invariants. Code that violates one is wrong even if it passes.
 7. **No invented numbers.** No arbitrary per-platform reliability weights, no
    "legal confidence = 83%". Reliability is a scoring concern and is blocked by
    D-03; inventing a value here would decide D-03 by the back door.
+8. **An approving state requires a grant for every activity the assessed use
+   needs.** Added in Mission 1.8, because rule 2 was prose that nothing read.
+   The assessed use names six load-bearing activities — `automated_access`,
+   `api_use`, `commercial_use`, `storage`, `derived_analytics`,
+   `model_processing` — and each must be `PERMITTED` or
+   `PERMITTED_WITH_CONDITIONS` on authoritative evidence. `NOT_ADDRESSED` on any
+   of them blocks the approval, whatever the other five say.
+
+   Mission 1.7 approved `pypi` with four of the six unaddressed, on a review
+   whose own notes described the basis as "the absence of a prohibition covering
+   us plus the presence of a documented API". Three sources were downgraded on
+   audit and `validate_source_registry` now enforces the rule mechanically. The
+   remaining five activities are deliberately outside it: `retention` is a limit
+   rather than a permission, `attribution_required` is an obligation,
+   `browser_automation` is unused, `redistribution` applies only to republished
+   content, and `personal_data_handling` is governed by risk classification and
+   by H-12.
 
 ---
 
@@ -455,52 +473,54 @@ permission.
 
 ## 10. Current state
 
-**Twenty-seven candidate sources** after Mission 1.7, across fourteen families.
-The eligible count still depends on where you ask:
+**Twenty-seven candidate sources** across fourteen families. The eligible count
+still depends on where you ask:
 
 | Where | Eligible |
 |---|---|
 | From the catalog alone | **0** — a catalog can never assert its own conditions satisfied |
-| An environment with the capabilities verified and no credential (CI, a fresh clone) | **2** — `world-bank`, `eurostat` |
-| The same, plus `FRED_API_KEY` configured | **3** — `fred` joins them |
+| An environment with the capabilities verified and no credential (CI, a fresh clone) | **3** — `world-bank`, `eurostat`, `gdelt` |
+| The same, plus `FRED_API_KEY` configured | **4** — `fred` joins them |
 
-That spread is the model working, not a discrepancy. `fred` differs from the
-other two by one condition whose answer is a property of the deployment rather
-than of the code: with no credential it is **design-eligible and not runnable**,
-and the canonical gate refuses it. Configuring the key satisfies that condition
-through the same verifier as every other, and nothing else changes.
+`fred` differs from the others by one condition whose answer is a property of the
+deployment rather than of the code: with no credential it is **design-eligible
+and not runnable**, and the canonical gate refuses it.
 
 ### Verdicts
 
 | State | Count |
 |---|---|
 | `APPROVED` | 0 |
-| `APPROVED_WITH_CONDITIONS` | 8 |
+| `APPROVED_WITH_CONDITIONS` | 5 |
 | `RESTRICTED` | 6 |
-| `REQUIRES_REVIEW` | 10 |
+| `REQUIRES_REVIEW` | 13 |
 | `PROHIBITED` | 3 |
 
-**Eight sources are in an approving state and three are eligible.** The five
-Mission 1.7 approved — `gdelt`, `wikimedia-pageviews`, `openalex`,
-`npm-registry`, `pypi` — carry eleven conditions that no verifier can clear,
-because the capabilities that would check them are parameterised for a collector
-and none of the five has one. This is the state Mission 1.3 left the economic
-three in, and Mission 1.4 is the shape of the work that resolves it.
+**Mission 1.8 downgraded three of the eight sources Mission 1.7 had approving**,
+on audit rather than on any change by the platforms: `pypi`, `npm-registry` and
+`wikimedia-pageviews` each rested on silence rather than on a grant (§1 rule 8).
+Every superseded review is preserved.
 
-### The bias the expansion made measurable
+`gdelt` moved the other way and is the fourth eligible source. Nothing was
+relaxed to admit it: its one reviewed obligation — cite the project and link to
+it — was re-expressed from `HUMAN_CONFIRMATION`, which no verifier can clear, to
+a `CAPABILITY` checked by the same generic attribution verifier the economic
+three use.
 
-Every consumer-facing family is registered and **none is approving**:
+### The bias, and what correcting the register did to it
 
 | | Registered | Approving |
 |---|---|---|
 | `economic_data` | 3 | 3 |
-| `knowledge`, `news`, `developer` | 9 | 5 |
+| `knowledge`, `news` | 3 | 2 |
+| `developer` | 4 | 0 |
 | `social`, `community`, `gaming`, `creator`, `app_store` | 11 | **0** |
 
-That is a fact about platform terms rather than about the review, and it is the
-reason [`source-signal-coverage-v1.md`](source-signal-coverage-v1.md) exists:
-seven of sixteen signal families have no usable source at all, `problem` and
-`desire` among them.
+The economic share of approving sources rose from 37% to **60%**, and eight of
+sixteen signal families now have no usable source. That is the audit making the
+register more honest and the portfolio narrower at the same time; it is reported
+rather than smoothed over, because a coverage number that improves when the
+governance behind it gets stricter is measuring the wrong thing.
 
 ### What is still true
 
@@ -508,23 +528,17 @@ See [`source-catalog-v1.md`](source-catalog-v1.md) for the full assessment
 table, [`source-review-guide.md`](source-review-guide.md) for how to conduct a
 review,
 [`acquisition-authorization-v1.md`](acquisition-authorization-v1.md) for how a
-condition is cleared, and
+condition is cleared,
+[`gdelt-compliance-v1.md`](gdelt-compliance-v1.md) for the one source configured
+this round, and
 [`source-portfolio-v1.md`](source-portfolio-v1.md) for what to build next.
 
-Several sources could not be assessed because their terms were not retrievable
-at review time; per §1 rule 2 those are `REQUIRES_REVIEW` with the exact
-outstanding documents named, rather than assumed. Mission 1.7 added four more of
-those and confirmed that Mission 1.3's two are still unreachable.
-
 **One collector exists** (`world-bank`, Mission 1.5) and `collector_enabled` is
-true for it alone. `acquisition.raw_records` holds six records and
-`normalized_records` six, unchanged by Mission 1.7.
+true for it alone. GDELT is eligible and has no collector, which is exactly the
+state Eurostat has been in since Mission 1.4. `acquisition.raw_records` holds
+six records and `normalized_records` six, unchanged.
 
-**Federated networks cannot currently be expressed.** Mastodon and Lemmy are one
-protocol with thousands of independently-governed instances, and this model is
-one source with one policy. They are deliberately unregistered rather than
-flattened into a verdict that would be false for most instances; the modelling
-decision is **H-13** in the human review queue.
+**Federated networks cannot currently be expressed** (**H-13**).
 
 ## 11. Still open
 

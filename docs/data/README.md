@@ -17,7 +17,10 @@
 | `source-coverage-gap-analysis-v1.md` | Why coverage needed its own tables rather than `source_capabilities` (written before migration 0010) |
 | `source-expansion-consumer-social-v1.md` | The Mission 1.7 review round: fourteen new candidates, what each document said, and what could not be retrieved |
 | `source-portfolio-v1.md` | Which sources future missions should build collectors for, grouped by need. Qualitative tiers, never scores |
-| `source-human-review-queue-v1.md` | Twenty-four unresolved items, each with the exact document, the exact question and the exact next action |
+| `source-human-review-queue-v1.md` | Unresolved items, each with the exact document, the exact question and the exact next action |
+| `new-source-compliance-gap-analysis-v1.md` | The Mission 1.8 audit: why three Mission 1.7 approvals rested on silence, and what GDELT needed instead |
+| `gdelt-compliance-v1.md` | GDELT's compliance configuration and why each rule is the only one its evidence supports |
+| `wikimedia-pageviews-compliance-v1.md` | What Wikimedia Pageviews would need, and the one question blocking it |
 | `source-condition-gap-analysis-v1.md` | The nine Mission 1.3 conditions inventoried and classified, and the obligations deliberately left out of code |
 | `source-compliance-v1.json` | Attribution texts, licence and geography allowlists, enumerated exclusions, authorized datasets and minimisation profiles. **Source of truth**, edited by hand |
 | `raw-record-gap-analysis-v1.md` | What `acquisition.raw_records` could not represent before the first collector, and what migration 0008 added |

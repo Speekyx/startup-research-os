@@ -1,10 +1,10 @@
 # Testing Strategy
 
-Version: 1.10
+Version: 1.11
 Status: Strategy fixed; infrastructure, orchestration, evidence aggregation, the
 Claim model, the compliance layer, the first collector and the first normalizer
 tested
-Date: 2026-08-30 (amended in Mission 1.7)
+Date: 2026-08-30 (amended in Mission 1.8)
 
 `PROJECT_MANIFEST.md` §Testability: "Every important behavior must be testable."
 `docs/CLAUDE.md` §Definition of done: tests must cover important behavior and
@@ -653,3 +653,48 @@ correctly; they were answering the same question in different environments.
 The fix was to fold the same file in the fixture, so a verification means the
 same thing whoever runs it. **The check earned its place before it had a green
 run.**
+
+---
+
+## 18. A prose rule that nothing reads is not a rule (added in Mission 1.8)
+
+`source-registry-v1.md` §1 rule 2 has said *"uncertainty is never permission"*
+since Mission 1.0. It is stated in the specification, restated in the review
+guide, and quoted in three mission reports.
+
+Mission 1.7 approved a source with four of the six activities the assessed use
+requires recorded `NOT_ADDRESSED`, on a review whose own notes described the
+basis as *"the absence of a prohibition covering us plus the presence of a
+documented API"*. The reviewer wrote the diagnosis and recorded the approving
+state in the same document.
+
+**The rule was never enforced by anything.** No validator read it, no test
+asserted it, and the catalog was free to contradict it in a field nobody
+compared against the prose.
+
+### What the test has to assert
+
+Not "pypi is not approving". That passes the day somebody approves a different
+source the same way, which is exactly how the first one happened.
+
+The property is over the whole catalog: *every* approving review grants *every*
+materially required activity. It is written as a loop over sources with the
+required set named once, so a new source is covered from the moment it is added.
+
+### The list exists twice and is compared
+
+The validator runs with nothing installed (ADR-009) and cannot import the test
+module; the test cannot import the validator either, because the validator is a
+script. So both name the six activities, and a third test reads the validator's
+source and asserts the two lists are equal.
+
+Two copies of one fact drift. Two copies plus a comparison do not — and this is
+the same argument `source-registry-v1.md` §4 makes for keeping the Python and
+SQL eligibility implementations separate and testing that they agree.
+
+### Write the check so it fails first
+
+This one was written against the catalog **before** the downgrades landed, and
+it named all three offending sources and the exact activities each was missing.
+A governance check that has only ever passed proves nothing about what it would
+catch, and the cheapest moment to find out is before the data is corrected.

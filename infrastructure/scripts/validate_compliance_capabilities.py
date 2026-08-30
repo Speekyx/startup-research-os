@@ -159,6 +159,15 @@ def main(argv: list[str]) -> int:
             scope.excluded_dataset_families or None,
             scope.enumerated_exclusions or None,
             scope.excluded_note_markers or None,
+            # `require_dataset_family` denies any resource whose family is
+            # unrecorded, which is a resource-level restriction by any reading.
+            # It was missing from this tuple because World Bank -- the only
+            # source that had ever set it -- also carries an exclusion list, so
+            # the omission never showed. GDELT sets it alone: its grant covers
+            # everything it releases equally, so there is no licence or family
+            # to exclude, and what the review DID limit is which of GDELT's
+            # products were looked at.
+            scope.require_dataset_family or None,
         )
         if not any(restrictions):
             errors.append(

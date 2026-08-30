@@ -22,6 +22,8 @@ Checked:
   9. Every non-approving source states what is missing.
  10. Coverage claims do not infer geography from language.
  11. No evidence-aggregation vocabulary leaked in (D-03 stays blocked).
+ 12. An approving review positively PERMITS every activity the assessed use
+     materially requires. Silence is not permission (§1 rule 2).
 
 Usage: python infrastructure/scripts/validate_source_registry.py [catalog.json]
 """
@@ -52,8 +54,19 @@ from sros_acquisition.registry.retention import (  # noqa: E402
     BASELINE_NORMALIZED_DAYS,
     BASELINE_RAW_DAYS,
 )
+from sros_contracts import PolicyAssessment  # noqa: E402
 
 DEFAULT_CATALOG = ROOT / "docs" / "data" / "source-catalog-v1.json"
+
+REQUIRED_ACTIVITIES = (
+    "automated_access",
+    "api_use",
+    "commercial_use",
+    "storage",
+    "derived_analytics",
+    "model_processing",
+)
+GRANTING = {PolicyAssessment.PERMITTED, PolicyAssessment.PERMITTED_WITH_CONDITIONS}
 
 # A credential that reached the catalog would be published to everyone who reads
 # the governance record -- the exact opposite of what a registry is for. These
@@ -126,6 +139,56 @@ def main(argv: list[str]) -> int:
     print(f"ok    catalog parses and every record validates ({len(catalog)} sources)")
 
     eligible: list[str] = []
+
+    # -- 12: silence is not permission, made mechanical ------------------------
+    #
+    # The assessed use case is automated collection by a COMMERCIAL multi-tenant
+    # SaaS for STORAGE, DERIVED ANALYTICS and LLM PROCESSING. Those five words
+    # name activities, and an approving review has to have found a grant for
+    # each of them -- not merely to have failed to find a prohibition.
+    #
+    # Mission 1.7 approved `pypi` with all four of the load-bearing activities
+    # recorded NOT_ADDRESSED, on a review whose own notes said the state "rests
+    # on the absence of a prohibition covering us plus the presence of a
+    # documented API". That is the exact move `source-registry-v1.md` §1 rule 2
+    # and Mission 1.7 §12 forbid, and the prose rule did not stop it because
+    # nothing read the prose. This does.
+    #
+    # NOT in the required set, and each for its own reason:
+    #   browser_automation      no source uses a browser profile
+    #   retention               a LIMIT, not a permission. Silence means the
+    #                           project baseline applies, which is the baseline
+    #                           working rather than a gap
+    #   redistribution          required only where source content is
+    #                           republished; aggregated insight is analytics
+    #   personal_data_handling  governed by personal_data_risk and by H-12
+    #   attribution_required    an OBLIGATION. Silence there means no duty was
+    #                           found, which cannot block an approval
+
+    materiality_errors: list[str] = []
+    for source in catalog:
+        review = source.review
+        if review is None or review.approval_state not in APPROVING_STATES:
+            continue
+        ungranted = [
+            activity
+            for activity in REQUIRED_ACTIVITIES
+            if review.assessment(activity) not in GRANTING
+        ]
+        if ungranted:
+            materiality_errors.append(
+                f"{source.source_id}: {review.approval_state.value} while the assessed use "
+                f"requires {', '.join(ungranted)}, which no evidence grants "
+                f"({', '.join(review.assessment(a).value for a in ungranted)}). "
+                "Absence of a prohibition is not a permission (source-registry-v1.md §1 "
+                "rule 2)"
+            )
+    errors.extend(materiality_errors)
+    if not materiality_errors:
+        print(
+            "ok    approving reviews grant every materially required activity "
+            f"({len(REQUIRED_ACTIVITIES)} checked)"
+        )
 
     for source in catalog:
         sid = source.source_id
