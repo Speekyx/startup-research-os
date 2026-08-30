@@ -19,6 +19,9 @@ Checked:
      it, and an extractor id carrying one would put the interpretation in the
      name (§3).
   5. The registered extractor ids match `signal_type` entries a migration wrote.
+  6. No EXTRACTOR converts a timezone or reads a clock. Mission 1.12.1 gave one
+     of them datetime arithmetic over unzoned source labels, and the one place
+     a UTC offset could enter the layer H-29 keeps clean is there.
 
 Stdlib only. Usage: python infrastructure/scripts/validate_signals.py
 """
@@ -32,6 +35,7 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 NLP = ROOT / "services/nlp/python/sros_nlp"
+EXTRACTORS = NLP / "extractors"
 MODEL = ROOT / "packages/signal-model/python/sros_signal_model"
 MIGRATIONS = ROOT / "infrastructure/db/migrations"
 
@@ -84,6 +88,18 @@ FORBIDDEN_TABLES = (
 
 # Names that assert what a reader is supposed to CONCLUDE rather than what the
 # extractor computes. `contrast` and `change` are operations; these are verdicts.
+# Assigning a timezone, by any of the names Python offers. Scoped to the
+# EXTRACTORS: `job.py` legitimately calls `datetime.now(UTC)` for a derivation
+# timestamp, which is our clock and not a source label's frame.
+#
+# H-29 is open. A GDELT bucket label is a wall-clock reading in a frame nobody
+# has established, and Mission 1.12.1's adjacency check does arithmetic on one --
+# in LABEL space, deliberately. A single `.astimezone()` or `tzinfo=` here would
+# turn that into an instant, silently, in the field a consumer trusts most.
+TIMEZONE_CALLS = frozenset(
+    {"astimezone", "utcnow", "utcfromtimestamp", "now", "today", "localtime", "fromtimestamp"}
+)
+
 CONCLUSION_WORDS = (
     "trend",
     "growth",
@@ -238,6 +254,31 @@ def main() -> int:
         )
     else:
         print(f"ok    every declared signal type is registered by a migration ({sorted(declared)})")
+    checks += 1
+
+    # -- 6: no extractor converts a timezone or reads a clock ---------------
+    tz_offenders: list[str] = []
+    for path, tree in trees.items():
+        if EXTRACTORS not in path.parents:
+            continue
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Attribute) and node.attr in TIMEZONE_CALLS:
+                tz_offenders.append(f"{path.relative_to(ROOT)}: .{node.attr}")
+            if isinstance(node, ast.Call):
+                for keyword in node.keywords:
+                    if keyword.arg == "tzinfo":
+                        tz_offenders.append(f"{path.relative_to(ROOT)}: tzinfo=")
+    if tz_offenders:
+        errors.append(
+            f"an extractor converts a timezone or reads a clock: {sorted(set(tz_offenders))}. "
+            "H-29 is open: a GDELT bucket label is a wall-clock reading in a frame nobody "
+            "has established, and an offset entering here would be invented"
+        )
+    else:
+        print(
+            f"ok    no extractor converts a timezone or reads a clock "
+            f"({len(TIMEZONE_CALLS)} names, tzinfo= keyword)"
+        )
     checks += 1
 
     print()

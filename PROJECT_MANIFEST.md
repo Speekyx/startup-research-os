@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.18
+Version: 1.19
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-08-30 (Sprint 1 / Mission 1.12)
+Last amended: 2026-08-30 (Sprint 1 / Mission 1.12.1)
 
 ---
 
@@ -13,6 +13,21 @@ Last amended: 2026-08-30 (Sprint 1 / Mission 1.12)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.19 — 2026-08-30 (Sprint 1 / Mission 1.12.1)
+
+Authorized by the Mission 1.12.1 brief §3 (register one type), §10 (decide gap
+semantics), §34-§35 (optional bounded controlled acquisition), §47
+(documentation) and §49 (stop after the report).
+
+| Change | Section | Authority |
+|--------|---------|-----------|
+| **The first source-relative temporal extractor exists, and it produced real signals** | Product Shape | Mission 1.12.1 §2, §34. `lexical-frequency-change@1.0.0` is the third extractor and the first whose window basis is `ORDERED_PERIODS`. One bounded controlled acquisition — 2 files against a reviewed ceiling of 8, 370,468 rows scanned, 4 matched — produced **two real signals** (`climate` 48→59, `weather` 33→42) **and two real gap refusals** in the same run |
+| **A gap is never bridged** | Engineering Principles | Mission 1.12.1 §10, [ADR-023](docs/architecture/adr/ADR-023-source-bucket-adjacency.md). A pair derives only when its labels are **exactly one published bucket apart**; anything else is `NON_CONTIGUOUS_SOURCE_BUCKETS`, a value no existing reason could express. The step is computed in **label space** — components advanced and formatted back into a label — so nothing becomes an instant, and the arithmetic is licensed by the Mission 1.12 certification rather than by the format |
+| **An absent term is absent, never a zero** | Engineering Principles | Mission 1.12.1 §11, ADR-023. A term with no observation in a bucket did not occur zero times there; GDELT publishing `0` is a measurement and silence is not. Zero-filling is the most natural thing to do to sparse lexical data and is wrong in a way nothing downstream can detect — a signal saying a term fell by 55 would be indistinguishable from a real collapse in coverage |
+| **Order is asked for, never inferred** | Engineering Principles | Mission 1.12.1 §7. The extractor calls the Mission 1.12 certification for its source AND its resource AND checks the label scheme before comparing anything. `web-ngrams/chargram` sits in the same directory with the same label shape and is refused. A new AST gate fails the build if any extractor calls `astimezone`, `now`, `utcnow`, `localtime` or passes `tzinfo=` |
+| **H-29 is untouched, and the model enforces it** | Blocked work | Mission 1.12.1 §8. `ORDERED_PERIODS` carries **no window bounds**, `observed_at` stays `NULL` — a database CHECK refuses otherwise — and no cross-source comparison is possible. H-29 and H-30 both remain open |
+| **A CHECK caught the model rather than the code** | Engineering Principles | Mission 1.12.1. Migration 0013's `groups_derived + groups_refused <= groups_considered` encoded an assumption the third extractor falsified: a group pairing within itself derives one pair and refuses another. The counters were right and the constraint was wrong, and migration 0015 replaces it forward. Second time this table's arithmetic has caught a real modelling error |
 
 ## 1.18 — 2026-08-30 (Sprint 1 / Mission 1.12)
 
@@ -529,12 +544,11 @@ tokenize nothing, embed nothing, classify nothing and cluster nothing. They
 subtract exact decimals and compare exact labels. `validate_signals.py` asserts
 each of those mechanically by walking every import.
 
-**A temporal GDELT extractor became temporally permitted in 1.12 and is still
-not written.** H-32 closed, so frequency change, growth, decline, moving
-averages and rolling windows over WEB-NGRAM buckets are no longer blocked by an
-unestablished ordering — but none of them has an extractor, a window size, a gap
-policy or a rule for a missing bucket. **Temporally permitted is not extractor
-specified.**
+**Pairwise GDELT frequency change was implemented in 1.12.1**, with a gap policy
+and a rule for a missing bucket (ADR-023). **Rolling windows, moving averages
+and momentum are still not written**: each needs its own decision about what a
+gap means for that operation, and temporally permitted is still not extractor
+specified.
 
 **Cross-source temporal alignment stays forbidden** while H-29 is open, along
 with `observed_at`, `TIMESTAMPTZ` conversion and any wall-clock "as of" claim.

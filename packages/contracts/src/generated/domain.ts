@@ -9,12 +9,12 @@
  * Editing this file by hand will be overwritten and will fail the contract
  * check in CI. Change the source of truth instead.
  *
- * contract_version: 1.7.0
+ * contract_version: 1.8.0
  * ontology_version: 2
  */
 
 
-export const CONTRACT_VERSION = "1.7.0" as const;
+export const CONTRACT_VERSION = "1.8.0" as const;
 export const ONTOLOGY_VERSION = "2" as const;
 export const RESEARCH_CONTEXT_SCHEMA_VERSION = "1.0.0" as const;
 
@@ -777,6 +777,7 @@ export const SIGNAL_REFUSAL_REASON_VALUES = [
   "AMBIGUOUS_OBSERVATION_LINEAGE",
   "INCOMPATIBLE_INPUT_KINDS",
   "INCOMPATIBLE_SERIES",
+  "NON_CONTIGUOUS_SOURCE_BUCKETS",
   "INSUFFICIENT_INPUT_OBSERVATIONS",
   "UNSUPPORTED_SIGNAL_TYPE",
   "PARAMETERS_INCOMPLETE",
