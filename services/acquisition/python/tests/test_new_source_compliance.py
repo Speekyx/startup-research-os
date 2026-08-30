@@ -27,6 +27,7 @@ from sros_contracts import (
     ConditionVerificationResult,
     PolicyAssessment,
     ResourceContentOrigin,
+    RightsBasis,
     SourceApprovalState,
 )
 
@@ -194,11 +195,18 @@ class TestGdeltIsConfiguredFromItsEvidenceAndNothingElse:
         assert ConditionVerification.CONFIG_REFERENCE not in kinds
 
     def test_only_the_reviewed_access_methods_appear(self, catalog) -> None:
-        """§9. Two documented routes, and nothing that would need circumvention."""
+        """§9. Two documented routes, and nothing that would need circumvention.
+
+        The bulk profile was renamed in Mission 1.9.2. It had been a placeholder
+        naming the bulk route in general and carrying no endpoint, so it
+        authorised no host; review 3 assessed ONE dataset family on ONE path and
+        the profile now records that path, which a label reading "bulk files"
+        would have misdescribed.
+        """
         methods = {(p.access_method.value, p.label) for p in catalog.get("gdelt").access_profiles}
         assert methods == {
             ("PUBLIC_API", "gdelt-doc-api"),
-            ("DATASET_DOWNLOAD", "gdelt-bulk-files"),
+            ("DATASET_DOWNLOAD", "gdelt-web-ngram-files"),
         }
         for profile in catalog.get("gdelt").access_profiles:
             assert profile.access_method.value not in ("BROWSER_AUTOMATION", "PUBLIC_WEB")
@@ -234,13 +242,21 @@ class TestGdeltResourceScopeFailsClosed:
         ],
     )
     def test_content_origin_decides(self, context, origin, allowed) -> None:
-        """With everything else established, origin is what decides."""
+        """With everything else established, origin is what decides.
+
+        "Everything else" grew in Mission 1.9.2: a resource must now carry an
+        established rights basis, and its family must be one review 3 actually
+        assessed. Both are supplied here so that origin is still the variable
+        under test -- `events` was a family nobody had reviewed, and left in
+        place it would have made every case refuse for the wrong reason.
+        """
         result = context.authorize_resource(
             ResourceDescriptor(
                 source_id="gdelt",
-                resource_id="events",
+                resource_id="web-ngrams/1gram",
+                rights_basis=RightsBasis.DIRECT_GRANT,
                 content_origin=origin,
-                dataset_family="events",
+                dataset_family="web-ngrams-1gram",
             )
         )
         assert result.allowed is allowed
@@ -268,20 +284,27 @@ class TestGdeltResourceScopeFailsClosed:
         assert not result.allowed
         assert any("dataset family" in reason for reason in result.denial_reasons)
 
-    def test_both_rules_are_evaluated_not_short_circuited(self, context) -> None:
+    def test_every_rule_reports_rather_than_short_circuiting(self, context) -> None:
         """A caller who fixes one refusal and meets the next learns to distrust
-        the gate, so every rule reports."""
+        the gate, so every rule reports.
+
+        Asserted as a property rather than as the number 2. Mission 1.9.2 added
+        a third rule to this scope, and a test that counted refusals would have
+        failed for saying "two" while the behaviour it names -- report all of
+        them, not the first -- was working exactly as before.
+        """
         result = context.authorize_resource(
             ResourceDescriptor(
                 source_id="gdelt",
                 resource_id="unknown",
+                rights_basis=None,
                 content_origin=ResourceContentOrigin.UNKNOWN,
                 dataset_family=None,
             )
         )
         assert not result.allowed
-        assert len(result.denial_reasons) == 2
-        assert set(result.rules_evaluated) == {"content-origin", "dataset-family"}
+        assert len(result.denial_reasons) == len(result.rules_evaluated)
+        assert {"content-origin", "dataset-family", "rights-basis"} <= set(result.rules_evaluated)
 
     def test_another_sources_resource_is_refused(self, context) -> None:
         result = context.authorize_resource(
@@ -307,7 +330,7 @@ class TestTheAuthorizationContextIsComplete:
         assert payload["review_version"] == catalog.get("gdelt").review.review_version
         assert {a["label"] for a in payload["access"]} == {
             "gdelt-doc-api",
-            "gdelt-bulk-files",
+            "gdelt-web-ngram-files",
         }
         # Retention comes from governance, never from the collector.
         assert payload["retention"]["raw_days"] == 30

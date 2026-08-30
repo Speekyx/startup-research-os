@@ -481,6 +481,10 @@ class TestResourceScope:
             ResourceDescriptor(
                 source_id="eurostat",
                 resource_id="dataset",
+                # Established, because Mission 1.9.2 made an UNSET basis a refusal
+                # in its own right. The rule under test here is a different one,
+                # and a control that failed on the basis would prove nothing.
+                rights_basis=RightsBasis.NAMED_LICENCE,
                 content_origin=ResourceContentOrigin.PLATFORM_LICENSED,
                 geographies=("DE", "FR"),
             )
@@ -490,6 +494,10 @@ class TestResourceScope:
         context = _context(catalog, compliance, "eurostat")
         excluded = ResourceDescriptor(
             source_id="eurostat",
+            # Established for the reason above: the rules under test are the
+            # exclusion ones, and both cases below include a control that must
+            # pass.
+            rights_basis=RightsBasis.NAMED_LICENCE,
             resource_id="trade",
             content_origin=ResourceContentOrigin.PLATFORM_LICENSED,
             geographies=("CH",),
@@ -527,6 +535,10 @@ class TestResourceScope:
         context = _context(catalog, compliance, "fred", environ={"FRED_API_KEY": SENTINEL})
         marked = ResourceDescriptor(
             source_id="fred",
+            # Established for the reason above: the rules under test are the
+            # exclusion ones, and both cases below include a control that must
+            # pass.
+            rights_basis=RightsBasis.NAMED_LICENCE,
             resource_id="SERIESX",
             content_origin=ResourceContentOrigin.PLATFORM_LICENSED,
             notes="Copyright, 2026, Some Data Provider LLC.",

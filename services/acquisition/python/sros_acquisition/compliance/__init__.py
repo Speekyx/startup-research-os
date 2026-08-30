@@ -9,6 +9,7 @@ The layer between an approving review and a collector that may not exist yet.
     capabilities.py   named capabilities, and the checks that make them real
     verification.py   running a verifier against a Mission 1.3 condition
     authorization.py  what a collector must hold before it may run
+    readiness.py      the four separate facts, derived and never stored
     repositories.py   persisting a verification, and syncing the gate's boolean
 
 **Nothing here grants anything.** Every rule is a restriction, every default is
@@ -39,6 +40,7 @@ from .capabilities import CAPABILITIES, ComplianceCapability, capability, capabi
 from .config import (
     DEFAULT_COMPLIANCE_PATH,
     AccessRestriction,
+    AcquisitionBounds,
     AttributionObligation,
     AttributionRequirement,
     AuthorizedDataset,
@@ -51,6 +53,7 @@ from .config import (
     load_compliance,
 )
 from .credentials import CONFIGURED, NOT_CONFIGURED, CredentialStatus, credential_status
+from .readiness import AcquisitionReadiness, evaluate_readiness
 from .resources import ResourceAuthorization, ResourceDescriptor, authorize_resource
 from .verification import (
     RUNTIME_VERIFICATIONS,
@@ -71,7 +74,9 @@ __all__ = [
     "VERIFIER_VERSION",
     "AccessRestriction",
     "AcquisitionAuthorizationContext",
+    "AcquisitionBounds",
     "AcquisitionNotAuthorizedError",
+    "AcquisitionReadiness",
     "AttributedArtifact",
     "AttributionFacts",
     "AttributionIncompleteError",
@@ -97,6 +102,7 @@ __all__ = [
     "capability_failures",
     "credential_status",
     "design_eligible",
+    "evaluate_readiness",
     "find_compliance_config",
     "load_compliance",
     "render_attribution",

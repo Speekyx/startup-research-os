@@ -25,7 +25,10 @@ from sros_contracts import SourceApprovalState
 from .conftest import REPO_ROOT
 
 DOC_API = "gdelt-doc-api"
-BULK = "gdelt-bulk-files"
+# `gdelt-bulk-files` no longer exists. Mission 1.9.2 replaced the placeholder
+# with the reviewed route it stood in for -- see the note on
+# `test_the_bulk_placeholder_became_a_reviewed_route` below.
+BULK = "gdelt-web-ngram-files"
 
 
 @pytest.fixture(scope="session")
@@ -56,22 +59,32 @@ class TestTheRegistrationCanAuthoriseAHost:
         """Asserted on the DERIVED value, not on the JSON field.
 
         This is what the transport is handed, and it is what was broken.
+
+        Mission 1.9.2 added the second host by reviewing the route that reaches
+        it. The assertion is still an EQUALITY rather than a containment: a
+        third host appearing is exactly what it exists to catch, and §5 names
+        `storage.googleapis.com` -- which hosts the quadgram files this review
+        rejected -- as the one most likely to turn up.
         """
         context = build_authorization(gdelt, compliance)
         hosts = frozenset(h for a in context.access if (h := host_of(a.endpoint_url or "")))
-        assert hosts == {"api.gdeltproject.org"}
+        assert hosts == {"api.gdeltproject.org", "data.gdeltproject.org"}
 
-    def test_the_unimplemented_bulk_profile_authorises_no_host(self, gdelt) -> None:
-        """§54 forbids implementing the bulk route in Mission 1.9.
+    def test_the_bulk_placeholder_became_a_reviewed_route(self, gdelt) -> None:
+        """The decision this assertion was waiting for, taken in Mission 1.9.2.
 
-        Recording an endpoint for it would widen the allowlist to a host no
-        collector may reach. Left absent deliberately, and asserted so that
-        adding one is a decision somebody takes rather than a line somebody
-        copies.
+        Mission 1.9 left the bulk profile without an endpoint and asserted the
+        absence, so that "adding one is a decision somebody takes rather than a
+        line somebody copies". Review 3 is that decision, and what it authorises
+        is narrower than what the placeholder was named after: not the bulk
+        route, but the one dataset directory the review assessed.
         """
         profile = next(p for p in gdelt.access_profiles if p.label == BULK)
-        assert profile.endpoint_url is None
-        assert host_of(profile.endpoint_url or "") == ""
+        assert profile.endpoint_url == "https://data.gdeltproject.org/gdeltv3/web/ngrams/"
+        assert host_of(profile.endpoint_url) == "data.gdeltproject.org"
+        # The placeholder is gone rather than sitting alongside, so nothing is
+        # left for a later mission to quietly fill in.
+        assert not any(p.label == "gdelt-bulk-files" for p in gdelt.access_profiles)
 
 
 class TestNoCollectorWasImplemented:
@@ -95,17 +108,20 @@ class TestNoCollectorWasImplemented:
 
 
 class TestTheResourceModelStillFailsClosed:
-    def test_no_dataset_is_authorised_so_no_draft_could_be_built(self, gdelt, compliance) -> None:
-        """§9.2 of the audit. Deliberately NOT fixed.
+    def test_no_doc_api_resource_is_authorised(self, gdelt, compliance) -> None:
+        """§9.2 of the audit, answered from the other direction.
 
-        Populating `datasets` requires deciding what a GDELT resource is, which
-        depends on which API mode the collector uses -- the question the audit
-        could not answer. Guessing it now would fix the symptom and lock in the
-        wrong answer.
+        The audit could not say what a GDELT resource IS, because the answer
+        depended on which DOC API mode a collector would use and H-27 had never
+        let anyone see one. Mission 1.9.2 did not guess: it reviewed a different
+        route whose contract was observed. So `datasets` is no longer empty, and
+        the thing the audit refused to guess at is still not in it.
         """
         context = build_authorization(gdelt, compliance)
-        assert context.datasets == ()
+        assert context.datasets
         assert context.authorized_dataset("anything") is None
+        for mode in ("doc-api/timeline-tone", "doc-api/timeline-vol-raw", "doc-api/artlist"):
+            assert context.authorized_dataset(mode) is None
 
     def test_the_minimisation_profile_excludes_publisher_content(self, compliance) -> None:
         """The rule that stopped the collector being written against ArtList.

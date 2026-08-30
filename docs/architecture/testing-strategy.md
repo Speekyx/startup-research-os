@@ -698,3 +698,65 @@ This one was written against the catalog **before** the downgrades landed, and
 it named all three offending sources and the exact activities each was missing.
 A governance check that has only ever passed proves nothing about what it would
 catch, and the cheapest moment to find out is before the data is corrected.
+
+---
+
+## 19. When a governance change moves a test's subject (added in Mission 1.9.2)
+
+Mission 1.9.2 re-reviewed GDELT and turned eight passing tests red. None of them
+was wrong when it was written, and none of them was a test somebody had loosened
+— each was a **correct statement about a state the review deliberately left**.
+
+```text
+test_the_unimplemented_bulk_profile_authorises_no_host   the profile now has one
+test_no_dataset_is_authorised_so_no_draft_could_be_built two now are
+test_gdelt_has_no_dataset_entry_yet                      it has two
+```
+
+The temptation in this situation is to delete the assertion, because the thing it
+asserted is no longer true. That loses the reason it existed.
+
+### Rewrite in place, and say what moved
+
+Every one of the eight was rewritten to assert the **new** truth and to carry a
+docstring naming the old one and the decision that changed it. Mission 1.9's
+comment said the bulk profile had no endpoint "so that adding one is a decision
+somebody takes rather than a line somebody copies"; the replacement says review 3
+*is* that decision and what it authorises is narrower than the placeholder's
+name. A reader who lands on the test can tell a governance change from a
+loosened check without leaving the file.
+
+Four were also **renamed**, because a name that describes the old state is worse
+than no name: `test_no_dataset_is_authorised_so_no_draft_could_be_built` became
+`test_no_doc_api_resource_is_authorised`, which is what it now proves and is
+still a real constraint — H-27 is open and nothing on that route is authorised.
+
+### The three that were assertions about a mechanism, not a state
+
+A different category, and they needed a different fix. `_baseline` in
+`capabilities.py` builds a control descriptor that every rule in a scope should
+allow; it left `rights_basis` unset for any source without a licence allowlist.
+When the unestablished basis became a refusal, three capability conformance
+checks failed — **correctly**, and for a reason unrelated to what they test.
+
+The fix is to supply what the new rule needs so that the rule under test is still
+the variable. The same applies to fixture descriptors: three cases in
+`test_compliance.py` are about geography, trade exclusions and note markers, and
+all three had a positive control that started failing on the basis instead. Each
+now carries one, with a comment saying why it is there.
+
+**The signal is which direction the failure runs.** A control case that starts
+failing means a new rule reached further than intended, or that the control was
+incomplete. A denial case that starts *passing* is the one to be frightened of,
+and none did.
+
+### Count nothing you do not mean to count
+
+`test_both_rules_are_evaluated_not_short_circuited` asserted
+`len(result.denial_reasons) == 2`. The behaviour it names — report every refusal
+rather than the first — was working exactly as before; the number was stale
+because a third rule now runs. It is now
+`len(denial_reasons) == len(rules_evaluated)` with a `<=` on the rule names,
+which is the property, and it was renamed to match. §13 of this document is the
+same lesson and this is its fourth recurrence.
+

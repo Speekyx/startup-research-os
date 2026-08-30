@@ -35,6 +35,7 @@ from ..registry.models import SourceRegistryError
 __all__ = [
     "DEFAULT_COMPLIANCE_PATH",
     "AccessRestriction",
+    "AcquisitionBounds",
     "AuthorizedDataset",
     "AttributionObligation",
     "AttributionRequirement",
@@ -186,6 +187,14 @@ class ResourceScope:
 
     source_id: str
     licence_allowlist: frozenset[str] | None = None
+    # The families a review positively assessed. `None` means the review imposed
+    # no family restriction; a set means everything outside it is refused.
+    #
+    # Mission 1.9.2 §22. `require_dataset_family` already refused a resource that
+    # could not say what it is, and did NOT refuse one that says something nobody
+    # reviewed -- any string passed. The two rules answer different questions:
+    # "did you classify this?" and "did a reviewer look at that kind of thing?".
+    allowed_dataset_families: frozenset[str] | None = None
     excluded_dataset_families: frozenset[str] = frozenset()
     require_dataset_family: bool = False
     geography_allowlist: frozenset[str] | None = None
@@ -206,6 +215,20 @@ class ResourceScope:
                 f"{self.source_id}.geography_allowlist",
                 "an empty allowlist denies everything. Use null for 'no restriction'",
             )
+        if self.allowed_dataset_families is not None:
+            if not self.allowed_dataset_families:
+                raise SourceRegistryError(
+                    f"{self.source_id}.allowed_dataset_families",
+                    "an empty allowlist denies everything, which is a refusal dressed as a "
+                    "filter. Use null to mean 'the review imposed no family restriction'",
+                )
+            overlap = self.allowed_dataset_families & self.excluded_dataset_families
+            if overlap:
+                raise SourceRegistryError(
+                    f"{self.source_id}.allowed_dataset_families",
+                    f"{sorted(overlap)} is both reviewed and excluded. Which rule applies "
+                    "would depend on which the reader checked first",
+                )
         if self.require_notes and not self.excluded_note_markers:
             raise SourceRegistryError(
                 f"{self.source_id}.require_notes",
@@ -236,6 +259,79 @@ class AccessRestriction:
                 f"access_restriction.{self.name}",
                 "must name at least one permitted access profile, or it restricts nothing",
             )
+
+
+@dataclass(frozen=True)
+class AcquisitionBounds:
+    """How much of a source one job may take, decided by the review.
+
+    Mission 1.9.2 §15. Every other rule in this module answers *what* may be
+    reached; this one answers *how much*, and it exists because GDELT's
+    WEB-NGRAM files are a published bulk dataset emitted every fifteen minutes
+    since 2019. Nothing in the terms limits how much of it is taken, so a
+    limit that exists only as good intentions is no limit -- and "prose nobody
+    reads" is the exact failure Mission 1.8 found in *silence is not
+    permission*, which had been written down since Mission 1.0.
+
+    **The ceiling belongs to the review, not to the collector.** A collector
+    that chose its own bound would be setting its own permissions, which is the
+    move the whole authorization layer exists to prevent.
+
+    `None` means **no ceiling was reviewed**, which is not the same as "any size
+    is fine": it means nobody has asked the question for this source, and every
+    source that predates this mission is in that state deliberately.
+    """
+
+    source_id: str
+    max_files_per_job: int | None = None
+    basis: str = ""
+
+    def __post_init__(self) -> None:
+        if self.max_files_per_job is not None:
+            if self.max_files_per_job < 1:
+                raise SourceRegistryError(
+                    f"{self.source_id}.acquisition_bounds.max_files_per_job",
+                    "must be at least 1. A ceiling of zero is a refusal written as a "
+                    "budget, and it would read as 'bounded' in every report",
+                )
+            if not self.basis.strip():
+                raise SourceRegistryError(
+                    f"{self.source_id}.acquisition_bounds",
+                    "required: a bound with no stated basis cannot be re-checked, and the "
+                    "number would survive every later review by looking deliberate",
+                )
+
+    @property
+    def bounded(self) -> bool:
+        return self.max_files_per_job is not None
+
+    def refusals(self, file_count: int | None) -> tuple[str, ...]:
+        """Why this request exceeds the reviewed ceiling, or nothing.
+
+        Fails closed on an unstated count, the same asymmetry `ResourceDescriptor`
+        is built on: a job that does not say how much it intends to take has not
+        been shown to fall inside the bound.
+        """
+        if self.max_files_per_job is None:
+            return ()
+        if file_count is None:
+            return (
+                "the job does not state how many files it would fetch; the review set a "
+                f"ceiling of {self.max_files_per_job}, and an unstated size is not a size "
+                "known to fall under it",
+            )
+        if file_count < 1:
+            return (f"a job that fetches {file_count} files is not a job; state a real size",)
+        if file_count > self.max_files_per_job:
+            return (
+                f"{file_count} files exceeds the reviewed ceiling of "
+                f"{self.max_files_per_job} for {self.source_id}. Raising it is a review "
+                "decision, not a configuration one",
+            )
+        return ()
+
+    def to_json(self) -> dict[str, object]:
+        return {"max_files_per_job": self.max_files_per_job, "basis": self.basis or None}
 
 
 @dataclass(frozen=True)
@@ -331,6 +427,7 @@ class SourceCompliance:
     evidence_section: str | None = None
     access_restriction: AccessRestriction | None = None
     datasets: tuple[AuthorizedDataset, ...] = ()
+    acquisition_bounds: AcquisitionBounds | None = None
 
     def dataset(self, resource_id: str) -> AuthorizedDataset | None:
         """`None` for an unauthorised resource. The caller must refuse, not
@@ -428,9 +525,11 @@ def _source_from_json(entry: object) -> SourceCompliance:
     scope_raw = entry.get("resource_scope") or {}
     licences = scope_raw.get("licence_allowlist")
     geographies = scope_raw.get("geography_allowlist")
+    families = scope_raw.get("allowed_dataset_families")
     scope = ResourceScope(
         source_id=source_id,
         licence_allowlist=frozenset(licences) if licences is not None else None,
+        allowed_dataset_families=frozenset(families) if families is not None else None,
         excluded_dataset_families=frozenset(scope_raw.get("excluded_dataset_families") or ()),
         require_dataset_family=bool(scope_raw.get("require_dataset_family", False)),
         geography_allowlist=frozenset(geographies) if geographies is not None else None,
@@ -470,6 +569,21 @@ def _source_from_json(entry: object) -> SourceCompliance:
             "a resource_id appears twice; which entry authorises it would be undefined",
         )
 
+    bounds_raw = entry.get("acquisition_bounds")
+    bounds = (
+        AcquisitionBounds(
+            source_id=source_id,
+            max_files_per_job=(
+                int(bounds_raw["max_files_per_job"])
+                if bounds_raw.get("max_files_per_job") is not None
+                else None
+            ),
+            basis=str(bounds_raw.get("basis") or ""),
+        )
+        if isinstance(bounds_raw, dict)
+        else None
+    )
+
     return SourceCompliance(
         source_id=source_id,
         review_version=int(entry.get("review_version") or 0),
@@ -480,6 +594,7 @@ def _source_from_json(entry: object) -> SourceCompliance:
         data_minimisation=minimisation,
         access_restriction=restriction,
         datasets=datasets,
+        acquisition_bounds=bounds,
     )
 
 

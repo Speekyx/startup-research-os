@@ -48,8 +48,11 @@ entered: §37 asks for the required next action to be *recorded*, not taken.
 | [H-24](#h-24) | Wikimedia | **REQUIRES_REVIEW** | Do view COUNTS carry CC BY-SA? — **now the blocker** |
 | [H-25](#h-25) | PyPI | REQUIRES_REVIEW | Is there any grant at all? |
 | [H-26](#h-26) | npm | REQUIRES_REVIEW | Commercial reuse and analytics by a third party |
-| [H-27](#h-27) | GDELT | **collector blocked** | Timeline JSON envelope is unobservable from here |
-| [H-28](#h-28) | GDELT | **collector blocked** | What is a GDELT resource, and what licence identifies it? |
+| [H-27](#h-27) | GDELT | **DOC API deferred** | Timeline JSON envelope is unobservable from here — [no longer the first-collector blocker](#h-27-update) |
+| [H-28](#h-28) | GDELT | — | [**RESOLVED**](#h-28-update) — the model in Mission 1.9.1, the entries in Mission 1.9.2 |
+| [H-29](#h-29) | GDELT | refinement | Is the WEB-NGRAM `DATE` column UTC? Nothing first-party says |
+| [H-30](#h-30) | GDELT | refinement | Is there a CLD2-name-to-language-tag mapping? |
+| [H-31](#h-31) | GDELT | refinement | How far back does the WEB-NGRAM directory reach? |
 
 ---
 
@@ -842,3 +845,120 @@ field.
 **Vendor contact needed?** No.
 **Legal counsel appropriate?** No.
 **Developer action needed?** Yes, after H-27.
+
+---
+
+# Mission 1.9.2 changes and additions
+
+GDELT was re-reviewed against its WEB-NGRAM datasets. **No item was removed
+because it became inconvenient**; one was genuinely resolved, one was
+reclassified without being closed, and three new ones are refinements that block
+nothing.
+
+---
+
+## H-27 — reclassified: still open, no longer the first-collector blocker {#h-27-update}
+
+**Unchanged:** no `TimelineTone` or `TimelineVolRaw` envelope has ever been
+observed, none was fabricated, and the entry above stands in full. Two saved
+responses would still close it.
+
+**What changed** is that nothing now waits on it. GDELT review 3 authorised two
+resources on a **different route** — the WEB-NGRAM files, whose contract was
+observed and then confirmed against GDELT's own documentation — so the source has
+a usable acquisition path that does not touch the DOC API.
+
+The DOC API route is **deferred**: reviewed, approved, its access profile kept
+with its endpoint, and **no resource on it authorised**. The profile and the
+capture script are deliberately not deleted — the Spanner migration will finish,
+and deleting them would make a later un-deferral look like a new approval.
+
+**Developer action needed?** Still yes, still two saved responses — but it is no
+longer urgent and no longer blocks a collector.
+
+---
+
+## H-28 — resolved {#h-28-update}
+
+Both halves, in two missions.
+
+**"What licence identifies a GDELT resource?"** — Mission 1.9.1. The answer was
+that the question does not apply: GDELT grants use directly and names no
+instrument. `RightsBasis = NAMED_LICENCE | DIRECT_GRANT` ([ADR-018]) made that
+statable, and the model refuses a licence identifier under a direct grant, so
+none of `OTHER`, `NONE`, `N/A` or an invented name can be written.
+
+**"What IS a GDELT resource?"** — Mission 1.9.2. `web-ngrams/1gram` and
+`web-ngrams/2gram`, each `DIRECT_GRANT`, `PLATFORM_LICENSED`, with a `basis`
+quoting the grant sentence. `context.datasets` is no longer empty, and the
+resource that is still not in it is any DOC API mode — which is H-27, and is
+correctly a different item.
+
+**Nothing further is needed.**
+
+[ADR-018]: ../architecture/adr/ADR-018-acquisition-rights-basis.md
+
+---
+
+## H-29 — Is the WEB-NGRAM `DATE` column UTC? {#h-29}
+
+**Issue.** `DATE` is `YYYYMMDDHHMMSS` and marks a 15-minute bucket. **No
+first-party document read in this review states a timezone** — not the dataset
+announcement, not the data index. Mission 1.9.1 recorded it as UTC; that was not
+established, and review 3 does not assert it.
+
+**Why it is unresolved.** GDELT does not say. Inferring it from the delivery time
+of one file would be a measurement of this machine's clock and this network's
+latency, not of the source.
+
+**Why it blocks nothing.** The collector must preserve the source label verbatim,
+so answering this later is a re-derivation over records already held rather than
+a re-collection. Until it is answered, no canonical period may claim a zone.
+
+**Needed.** A first-party statement, or an operator answer.
+
+**Vendor contact needed?** Possibly — this is a one-line question to GDELT.
+**Legal counsel appropriate?** No.
+**Developer action needed?** No, so long as the raw label is preserved.
+
+---
+
+## H-30 — Does GDELT publish a CLD2-name-to-language-tag mapping? {#h-30}
+
+**Issue.** `LANG` is "the human-readable language name as output by CLD2" —
+`ALBANIAN`, mostly uppercase, some titlecase, some with underscores. The
+project's canonical language representation is a BCP-47 tag. No mapping between
+the two was found.
+
+**Why it is unresolved.** Composing one would be guessing, and the failure mode is
+silent: a wrong tag looks exactly like a right one downstream. `LANG` must never
+become `geography` either — that is settled and is not this question.
+
+**Why it blocks nothing.** The source label is preserved honestly, the same way
+`CanonicalGeography.unclassified` preserves a code nobody can map.
+
+**Needed.** A published mapping from CLD2 language names to language tags, from
+GDELT or from the CLD2 project.
+
+**Vendor contact needed?** No. **Legal counsel appropriate?** No.
+**Developer action needed?** Only when a normalizer is written.
+
+---
+
+## H-31 — How far back does the WEB-NGRAM publication directory reach? {#h-31}
+
+**Issue.** GDELT documents coverage "spanning January 1, 2019 to present". It does
+**not** say how long a given 15-minute file stays retrievable at
+`data.gdeltproject.org/gdeltv3/web/ngrams/`.
+
+**Why it is unresolved.** Nothing first-party addresses it, and probing the
+directory to find out would be collection rather than documentation inspection.
+
+**Why it blocks nothing.** No historical backfill window is assumed. A collector
+bounded to eight files per job is asking for a recent window in any case.
+
+**Needed.** A first-party statement, or a deliberate bounded probe under a future
+mission's authority.
+
+**Vendor contact needed?** No. **Legal counsel appropriate?** No.
+**Developer action needed?** Only if historical backfill is ever wanted.

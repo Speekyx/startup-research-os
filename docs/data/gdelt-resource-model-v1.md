@@ -1,10 +1,11 @@
 # GDELT Resource Model V1
 
-**Status:** Specified and **not committed.** §1–§7 describe the DOC API path,
-still blocked on **H-27**. §8, added after the DOC API failed in a second
-environment, describes a **different and better-fitting path** — the WEB-NGRAM
-dataset — whose contract *is* observed and which is now the recommended
-direction.
+**Status:** §1–§7 describe the DOC API path, **still specified and still not
+committed**: H-27 is open and that route is now **deferred**. §8 describes the
+WEB-NGRAM path, whose contract *is* observed — and as of Mission 1.9.2 it is
+**committed**. The governance round §8.4 set out has been carried out; see
+[`gdelt-web-ngram-resource-v1.md`](gdelt-web-ngram-resource-v1.md) for what was
+actually authorised.
 **Date:** 2026-08-30
 **Produced by:** Mission 1.9.1 §17–§22.
 **Related:** [`gdelt-response-contract-v1.md`](gdelt-response-contract-v1.md),
@@ -224,6 +225,19 @@ frequency is none of them.
 and `LANG` is not `geography`.
 
 ### 8.4 Therefore: a review version, not a config edit
+
+**All four steps were carried out in Mission 1.9.2**, and step 5 was not. What
+follows is the plan as written; what was actually committed —
+including one thing the plan got wrong — is in
+[`gdelt-web-ngram-resource-v1.md`](gdelt-web-ngram-resource-v1.md).
+
+The plan's `resource_id`/`dataset_family` in §8.2 above were `web-ngrams/1gram`
+and `WEB_NGRAM_UNIGRAM`; the committed family follows the lowercase convention
+World Bank's `indicators` established, and there are **two** entries rather than
+one because §20 of the mission required 1gram and 2gram to be assessed
+separately. The plan also assumed a language restriction would be the volume
+control; the observed contract says otherwise, because each file spans every
+language.
 
 The honest sequence, and none of it is collector code:
 

@@ -119,12 +119,22 @@ if lowered:
 # carried forward. Stating "every source was re-reviewed" when twelve were not
 # is the drift a generated document exists to prevent.
 this_round = [s.source_id for s in catalog if s.review and s.review.reviewed_by == catalog.reviewer]
-first_time = [s.source_id for s in catalog if s.review and len(s.review_history) <= 1]
+# "of those" means OF THIS ROUND, so the intersection is what the sentence
+# claims. Counting first reviews across the whole catalog produced arithmetic
+# nobody could believe -- Mission 1.8 rendered "4 of 27 ... 10 of those are first
+# reviews", and Mission 1.9.2, which re-reviewed a single source, rendered
+# "1 of 27 ... 10 of those". A generated document exists to stop drift, and it
+# cannot do that while stating something impossible.
+first_time = [
+    s.source_id for s in catalog if s.source_id in this_round and len(s.review_history) <= 1
+]
 carried = [s.source_id for s in catalog if s.source_id not in this_round]
-add(
-    f"**{len(this_round)} of {total_} sources carry a review from `{catalog.reviewer}`**; "
-    f"{len(first_time)} of those are first reviews of a new candidate."
-)
+sentence = f"**{len(this_round)} of {total_} sources carry a review from `{catalog.reviewer}`**"
+if first_time:
+    sentence += f"; {len(first_time)} of those are first reviews of a new candidate."
+else:
+    sentence += ", and none of them is a new candidate: every one was already registered."
+add(sentence)
 if carried:
     add("")
     add(

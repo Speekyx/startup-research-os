@@ -211,6 +211,22 @@ run against clean code is a validator whose patterns have never been exercised.
 | **A cross-tenant reference cannot be written** | Composite FK on `(workspace_id, raw_record_id)` | Layer three. RLS and the repository filter can be forgotten; a structural impossibility cannot |
 | **The planner does not dispatch normalization for a source with no normalizer** | `normalization_block(report, collectors, normalizers)`, fail-closed default | The gap Mission 1.5 opened: the old reason said "no collector is implemented", which stopped being true while the capability stayed unavailable |
 
+### Acquisition authorization (Mission 1.9.2)
+
+No new CI job. These are rules inside gates that already run — the source-registry
+job and the acquisition suite — and they are listed because each closed a hole
+that a passing suite had been reporting as fine.
+
+| Gate | Mechanism | Guards |
+|------|-----------|--------|
+| **An unestablished rights basis is refused** | `authorize_resource`, unconditional rule | It had been checked only inside the licence-allowlist rule, so a descriptor with **no basis at all** passed for every source enumerating no licences — including GDELT, the one source authorised by a direct grant rather than a licence |
+| **An unreviewed dataset family is refused** | `allowed_dataset_families` on the scope | `require_dataset_family` refused a resource that could not say what it is, and admitted one that said something nobody had reviewed. A family no reviewer had rejected was indistinguishable from one a reviewer had approved |
+| **A job that exceeds the reviewed ceiling is refused** | `AcquisitionBounds.refusals`, via `context.authorize_job_size` | GDELT publishes two files every fifteen minutes since 2019 and its terms limit none of it. The ceiling is the review's; a collector choosing its own would be setting its own permissions |
+| **A ceiling with no basis is refused at load time** | `AcquisitionBounds.__post_init__` | A number nobody can re-check survives every later review by looking deliberate |
+| **A job that does not state its size is refused** | Same | The asymmetry `ResourceDescriptor` is built on: not saying how much you intend to take is not a size known to fall under a bound |
+| **The reviewed path is the endpoint, not the site root** | `endpoint_url` on the access profile, plus `HttpRequest`'s refusal of `..` and of absolute URLs | Fail-closed **by construction** rather than by a new rule: a base of `.../gdeltv3/web/ngrams/` cannot reach `.../gdeltv3/webngrams/`, the sibling dataset this review rejected |
+| **Four facts stay four** | `evaluate_readiness`, derived and never stored | Eligible, resource-ready, implemented, enabled. GDELT spent two missions eligible with every resource failing closed, and "eligible" was the most specific word available |
+
 ---
 
 ## 2. Turborepo task graph

@@ -21,8 +21,11 @@
 | `new-source-compliance-gap-analysis-v1.md` | The Mission 1.8 audit: why three Mission 1.7 approvals rested on silence, and what GDELT needed instead |
 | `gdelt-compliance-v1.md` | GDELT's compliance configuration and why each rule is the only one its evidence supports |
 | `gdelt-raw-record-gap-analysis-v1.md` | The Mission 1.9 audit: why the reviewed DOC API cannot serve the authorised data categories, and what would unblock it |
-| `gdelt-response-contract-v1.md` | What is established about the DOC API's responses, and which two contracts are still missing (H-27) |
-| `gdelt-resource-model-v1.md` | The GDELT resource entry, decided and awaiting the response contract before it is committed |
+| `gdelt-response-contract-v1.md` | What is established about the DOC API's responses, which two contracts are still missing (H-27), and the WEB-NGRAM contract that was observed and then confirmed against GDELT's own documentation |
+| `gdelt-resource-model-v1.md` | The DOC API resource entry, decided and still uncommitted; and the WEB-NGRAM path that superseded it |
+| `gdelt-web-ngram-review-v1.md` | The reasoning behind GDELT review 3: what was assessed, the first-party evidence, and the DOC API deferral |
+| `gdelt-web-ngram-minimisation-gap-analysis-v1.md` | The four observed columns against the committed categories, and why three of them needed a new one |
+| `gdelt-web-ngram-resource-v1.md` | The two authorised WEB-NGRAM resources, the access route, and the reviewed acquisition ceiling |
 | `acquisition-rights-basis-gap-analysis-v1.md` | Why a resource records what KIND of thing authorises it, not only which licence (H-28, ADR-018) |
 | `wikimedia-pageviews-compliance-v1.md` | What Wikimedia Pageviews would need, and the one question blocking it |
 | `source-condition-gap-analysis-v1.md` | The nine Mission 1.3 conditions inventoried and classified, and the obligations deliberately left out of code |

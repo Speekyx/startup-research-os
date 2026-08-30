@@ -48,6 +48,7 @@ from .compliance import (
     ConditionVerificationRecord,
     build_authorization,
     design_eligible,
+    evaluate_readiness,
     find_compliance_config,
     load_compliance,
     satisfied_condition_keys,
@@ -298,7 +299,16 @@ def cmd_show(args: argparse.Namespace) -> int:
     print(f"\n  COLLECTOR ELIGIBLE: {'yes' if result.eligible else 'NO'}")
     for reason in result.blocking_reasons:
         print(f"    - {reason}")
-    print("  COLLECTOR ENABLED:  no. No collector exists for any source")
+    readiness = evaluate_readiness(source, _compliance(args))
+    print(f"  RESOURCE READY:     {'yes' if readiness.resource_ready else 'NO'}")
+    for gap in readiness.resource_gaps:
+        print(f"    - {gap}")
+    print(f"  COLLECTOR EXISTS:   {'yes' if readiness.implemented else 'no'}")
+    print(
+        f"  COLLECTOR ENABLED:  {'yes' if readiness.enabled else 'no'}"
+        "   (per deployment; this is the catalog record, not the database switch)"
+    )
+    print(f"  NEXT STEP:          {readiness.next_step}")
     return 0
 
 
@@ -483,6 +493,9 @@ def cmd_authorization(args: argparse.Namespace) -> int:
     print(
         f"    geographies     {sorted(scope.geography_allowlist) if scope.geography_allowlist else 'no restriction'}"
     )
+    print(
+        f"    reviewed family {sorted(scope.allowed_dataset_families) if scope.allowed_dataset_families else 'no restriction'}"
+    )
     print(f"    excluded family {sorted(scope.excluded_dataset_families) or '-'}")
     print(f"    exclusions      {[e.key for e in scope.enumerated_exclusions] or '-'}")
     print(f"    note markers    {list(scope.excluded_note_markers) or '-'}")
@@ -500,7 +513,69 @@ def cmd_authorization(args: argparse.Namespace) -> int:
     )
     print(f"  MINIMISATION  allowed {list(context.data_minimisation.allowed)}")
     print(f"                excluded {list(context.data_minimisation.excluded)}")
-    print("\n  No collector exists. This context describes what one would be permitted to do.")
+
+    bounds = context.acquisition_bounds
+    if bounds is not None and bounds.bounded:
+        print(f"  JOB CEILING   {bounds.max_files_per_job} file(s) per job")
+        print(f"                basis: {bounds.basis[:150]}")
+    else:
+        print("  JOB CEILING   none reviewed -- which is an unasked question, not a licence")
+
+    print("\n  AUTHORIZED RESOURCES (source approval is not resource approval)")
+    for dataset in context.datasets:
+        rights = (
+            f"{dataset.rights_basis.value}: {dataset.licence}"
+            if dataset.licence
+            else f"{dataset.rights_basis.value} (no licence instrument is named)"
+        )
+        print(f"    {dataset.resource_id:<24} {dataset.dataset_family}")
+        print(f"      {dataset.content_origin}  {rights}")
+    if not context.datasets:
+        print("    none. Every resource fails closed")
+
+    readiness = evaluate_readiness(source, _compliance(args))
+    print(f"\n  NEXT STEP: {readiness.next_step}")
+    return 0
+
+
+def cmd_readiness(args: argparse.Namespace) -> int:
+    """The four separate facts, for one source or all of them.
+
+    Mission 1.9.2 §23. `eligibility` answers whether the gate passes and stops
+    there, which was the most specific answer available while GDELT was eligible
+    with no authorised resource at all -- a state that reads as further along
+    than it is.
+    """
+    catalog = _catalog(args)
+    config = _compliance(args)
+    sources = [catalog.get(args.source_id)] if args.source_id else list(catalog)
+    rows = [evaluate_readiness(source, config) for source in sources]
+
+    if args.json:
+        print(json.dumps([r.to_json() for r in rows], indent=2))
+        return 0
+
+    def mark(value: bool) -> str:
+        return "yes" if value else "no "
+
+    print(f"{'source':<22} {'elig':<5} {'rsrc':<5} {'impl':<5} {'enab':<5} next step")
+    for row in rows:
+        print(
+            f"{row.source_id:<22} {mark(row.eligible):<5} {mark(row.resource_ready):<5} "
+            f"{mark(row.implemented):<5} {mark(row.enabled):<5} {row.next_step}"
+        )
+    print(
+        "\n  elig  the eligibility gate passes        rsrc  a concrete resource is authorised"
+        "\n  impl  a collector exists in this code    enab  switched on IN THIS CATALOG RECORD"
+        "\n\n  Enablement is a per-deployment fact `sros-source enable` writes to the database."
+        "\n  This column reads the catalog, so a source can be off here and on in a deployment."
+    )
+    if args.source_id:
+        for row in rows:
+            for reason in row.blocking_reasons:
+                print(f"\n  blocked: {reason}")
+            for gap in row.resource_gaps:
+                print(f"\n  gap: {gap}")
     return 0
 
 
@@ -682,6 +757,14 @@ def build_parser() -> argparse.ArgumentParser:
     authorization.add_argument("source_id")
     authorization.add_argument("--json", action="store_true")
     authorization.set_defaults(func=cmd_authorization)
+
+    readiness = sub.add_parser(
+        "readiness",
+        help="eligible / resource-ready / implemented / enabled, kept apart",
+    )
+    readiness.add_argument("source_id", nargs="?")
+    readiness.add_argument("--json", action="store_true")
+    readiness.set_defaults(func=cmd_readiness)
 
     stale = sub.add_parser("stale", help="reviews that are due or never concluded")
     stale.set_defaults(func=cmd_stale)

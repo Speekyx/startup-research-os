@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.12
-Last amended: 2026-08-30 (Sprint 1 / Mission 1.8)
+Version: 1.13
+Last amended: 2026-08-30 (Sprint 1 / Mission 1.9.2)
 
 ## Boot Sequence
 
@@ -40,6 +40,7 @@ Ontology V2 keeps V1.1's numbering for §1–§10, so an existing reference to
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.13 | 2026-08-30 | Resource-ready separated from eligible: a source can pass the gate while every resource it could ask for fails closed. GDELT review 3 authorises two WEB-NGRAM resources; how much a job may take became a governance question alongside what it may reach |
 | 1.12 | 2026-08-30 | Silence-is-not-permission made mechanical: an approving review must grant every materially required activity. Three Mission 1.7 approvals withdrawn on audit; GDELT became the fourth collector-eligible source and the first non-economic one |
 | 1.11 | 2026-08-30 | Source universe expanded to 27 across 14 families; signal coverage added as a non-scoring source attribute (ADR-017); coverage-is-not-permission invariant added; global registry state watched by the post-suite check |
 | 1.10 | 2026-08-30 | First normalizer recorded: the RawRecord to NormalizedRecord boundary, World Bank only; normalized_records is no longer empty; normalization invariant added; normalizable separated from eligible, enabled and implemented |
@@ -197,17 +198,38 @@ none of them is negotiable (`source-registry-v1.md` §1, ADR-013):
   it. Results are `SATISFIED | UNSATISFIED | UNKNOWN | NOT_APPLICABLE`, only the
   first clears, and **`UNKNOWN` is never promoted**. No verifier can satisfy a
   `HUMAN_CONFIRMATION` condition, and none in this repository writes one.
-- **Eligible, enabled and implemented are three facts.** After Mission 1.4
-  `world-bank` and `eurostat` are collector-eligible in any environment where
-  the capabilities are verified, and `fred` joins them wherever `FRED_API_KEY`
-  is configured — it is design-eligible and blocked everywhere else, including
-  CI. **None is enabled and none is implemented.** `sros-source enable` refuses a
-  source with no collector, and the orchestrator blocks acquisition under
-  `NO-COLLECTOR-IMPLEMENTED` rather than dispatching a job nothing can run.
+- **Eligible, RESOURCE-READY, implemented and enabled are four facts.** After
+  Mission 1.8 `world-bank`, `eurostat` and `gdelt` are collector-eligible in any
+  environment where the capabilities are verified, and `fred` joins them wherever
+  `FRED_API_KEY` is configured — it is design-eligible and blocked everywhere
+  else, including CI. `sros-source enable` refuses a source with no collector,
+  and the orchestrator blocks acquisition under `NO-COLLECTOR-IMPLEMENTED`
+  rather than dispatching a job nothing can run.
+
+  **`resource_ready` was separated in Mission 1.9.2**, because a source can pass
+  the gate while every resource it could ask for is refused — GDELT was in that
+  state for two missions and "eligible" was the most specific word available for
+  it. Eurostat is in it today. `sros-source readiness` derives all four and
+  stores none: a persisted copy of a derivation is what §3 of
+  `source-registry-v1.md` refuses for eligibility.
 - **A source-level approval is not a resource-level one.** Each dataset or
   series is authorised separately, and one whose licensing scope was never
   established is refused. A collector receives an
   `AcquisitionAuthorizationContext` or it receives nothing.
+
+  **An unestablished rights basis is refused unconditionally** (Mission 1.9.2):
+  every other rule answers a question a particular review may or may not have
+  asked, and *what authorises this at all* is not one of those. Where a review
+  named the families it assessed, a family outside that list is refused too —
+  **"nobody rejected this" is not "a reviewer approved it"**, and
+  `require_dataset_family` only ever asked whether a resource could say what it
+  is.
+- **How much is a governance question too** (Mission 1.9.2). A reviewed
+  `max_files_per_job` bounds what one job may take from a published bulk
+  dataset, refused at load time without a stated basis, and a job that does not
+  state its size is refused. **Absent means no ceiling was reviewed, not that
+  any size is fine.** A collector choosing its own bound would be setting its
+  own permissions.
 - **Coverage is potential, never permission** (Mission 1.7, ADR-017).
   `registry.source_signal_coverage` and `source_behavior_coverage` say what a
   source COULD expose. A source may cover `entertainment` and be `PROHIBITED`;

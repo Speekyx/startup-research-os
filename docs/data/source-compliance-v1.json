@@ -1,11 +1,11 @@
 {
-  "$comment": "COMPLIANCE CONFIGURATION. Hand-edited governance data, read by sros_acquisition.compliance. It carries the PARAMETERS of the obligations Mission 1.3 recorded -- exact notices, licence allowlists, enumerated exclusions -- so that satisfying a condition is a configuration fact rather than a branch in application code (Mission 1.4 §5, §7). It grants nothing: every entry here describes a restriction, and a source with no entry is denied by the resource gate rather than allowed. Mission 1.9.1: every authorised dataset now states its RIGHTS BASIS -- whether a NAMED_LICENCE or a DIRECT_GRANT authorises it. Stated per entry rather than defaulted, because a default would silently classify the first entry that omitted it, and the wrong classification is invisible. A DIRECT_GRANT never satisfies a licence allowlist.",
-  "compliance_version": "1.0",
+  "$comment": "COMPLIANCE CONFIGURATION. Hand-edited governance data, read by sros_acquisition.compliance. It carries the PARAMETERS of the obligations Mission 1.3 recorded -- exact notices, licence allowlists, enumerated exclusions -- so that satisfying a condition is a configuration fact rather than a branch in application code (Mission 1.4 §5, §7). It grants nothing: every entry here describes a restriction, and a source with no entry is denied by the resource gate rather than allowed. Mission 1.9.1: every authorised dataset now states its RIGHTS BASIS -- whether a NAMED_LICENCE or a DIRECT_GRANT authorises it. Stated per entry rather than defaulted, because a default would silently classify the first entry that omitted it, and the wrong classification is invisible. A DIRECT_GRANT never satisfies a licence allowlist. Mission 1.9.2: a resource scope may also carry a POSITIVE list of reviewed dataset families, and a source may carry acquisition bounds -- a reviewed ceiling on how much of a published bulk dataset one job may take. Both are restrictions like everything else here, and both default to absent, which for a bound means no ceiling was reviewed rather than that any size is fine.",
+  "compliance_version": "1.1",
   "derived_from": {
     "catalog": "source-catalog-v1.json",
-    "catalog_version": "1.1",
-    "review_round": "mission-1.3",
-    "note": "Every requirement below traces to a document Mission 1.3 retrieved. Nothing here re-reads a platform's terms; adding a requirement means re-opening the review, not editing this file."
+    "catalog_version": "1.4",
+    "review_round": "mission-1.9.2",
+    "note": "Every requirement below traces to a document the review that introduced it retrieved. Nothing here re-reads a platform's terms; adding a requirement means re-opening the review, not editing this file. The GDELT entry targets review 3 (mission-1.9.2); the other three still target the mission-1.3 round that established them."
   },
   "sources": [
     {
@@ -189,7 +189,7 @@
     },
     {
       "source_id": "gdelt",
-      "review_version": 2,
+      "review_version": 3,
       "evidence_url": "https://www.gdeltproject.org/about.html",
       "evidence_section": "Terms of Use",
       "attribution": {
@@ -213,16 +213,27 @@
         "third_party_denied": true,
         "licence_allowlist": null,
         "licence_allowlist_note": "No allowlist. GDELT names no licence per dataset -- the grant is a single blanket sentence covering everything it releases -- so there is no licence identifier to match against, and inventing an allowlist would deny everything for a reason the terms do not give.",
-        "excluded_dataset_families": [],
+        "excluded_dataset_families": [
+          "web-news-ngrams-3.0",
+          "weblegacy-quadgram",
+          "weblegacy-quadgram-toc",
+          "doc-api-artlist"
+        ],
         "require_dataset_family": true,
-        "dataset_family_note": "Every resource must declare its dataset family and an unclassified one is denied. Not a licence distinction -- GDELT's grant covers everything it releases equally -- but a REVIEW distinction: the Mission 1.7 review assessed the DOC API and the bulk files for news events, themes, entity mentions, tone, timestamps and geography, and GDELT publishes products beyond that set which no review has looked at. A resource that cannot say what it is has not been assessed.",
+        "dataset_family_note": "Every resource must declare its dataset family, an unclassified one is denied, and as of review 3 a family outside allowed_dataset_families is denied too. Not a licence distinction -- GDELT's grant covers everything it releases equally -- but a REVIEW distinction: reviews 1 and 2 assessed the DOC API for news events, themes, entity mentions, tone, timestamps and geography, review 3 assessed the WEB-NGRAM 1gram and 2gram files, and GDELT publishes products beyond both sets that no review has looked at. A resource that cannot say what it is has not been assessed; a resource that says something unreviewed has not been assessed either.",
         "geography_allowlist": null,
         "enumerated_exclusions": [],
         "excluded_note_markers": [],
         "require_notes": false,
-        "third_party_note": "The only scope rule the evidence supports. GDELT's grant is over what it releases; the news material it describes belongs to publishers who granted nothing, so a resource must state that its content originates with the platform before it is allowed."
+        "third_party_note": "The only scope rule the evidence supports. GDELT's grant is over what it releases; the news material it describes belongs to publishers who granted nothing, so a resource must state that its content originates with the platform before it is allowed.",
+        "allowed_dataset_families": [
+          "web-ngrams-1gram",
+          "web-ngrams-2gram"
+        ],
+        "allowed_dataset_families_note": "The families review 3 actually assessed. require_dataset_family already denied a resource that could not say what it is; it did NOT deny one that says something nobody reviewed, because a stated family passed the check whatever the string was. GDELT publishes many bulk products, so 'the reviewer looked at this kind of thing' has to be a positive list rather than the absence of an objection -- the same asymmetry the licence allowlist has. Null on the other three sources, which is unchanged behaviour.",
+        "excluded_dataset_families_note": "Redundant against the allowlist above and written anyway, because these four were READ and REJECTED rather than merely left out. Web News NGrams 3.0 carries pre/post contextual snippets of up to about seven words plus the article url; the quadgram pair carries title, img and url and keys its counts to a per-document DOCID; ArtList returns the publisher's title and social image. An empty exclusion list would say nobody had looked."
       },
-      "datasets_note": "No enumerated dataset allowlist. World Bank needs one because its platform distributes datasets under several different licences and the licence is a per-dataset property; GDELT's terms make one statement about everything it releases, so the authorised set is defined by content origin rather than by enumeration. The first collector still receives a resource descriptor per request and each is authorised separately -- source-level approval is not resource-level approval, whatever the scope rules happen to be.",
+      "datasets_note": "Enumerated as of review 3, where before there was no entry and every GDELT resource therefore failed closed. The enumeration is not a licence distinction -- GDELT's terms make one statement about everything it releases -- but a review distinction: these are the two resources a reviewer has actually looked at. A collector builds its descriptor FROM one of these entries and never from what a caller claims, so an unreviewed resource has no family, no origin and no basis to build from, and the family allowlist refuses a hand-made descriptor that claims one anyway. The DOC API modes remain unenumerated and therefore unauthorised: H-27 is still open and no timeline envelope has ever been observed.",
       "data_minimisation": {
         "allowed": [
           "event_identifier",
@@ -231,7 +242,10 @@
           "tone_score",
           "observation_period",
           "geography",
-          "content_origin"
+          "content_origin",
+          "content_language",
+          "lexical_ngram",
+          "source_measured_frequency"
         ],
         "excluded": [
           "article_full_text",
@@ -239,8 +253,31 @@
           "personal_data",
           "user_identifier"
         ],
-        "note": "content_origin is in the allowed list for the reason FRED's series_notes is in its own: the third-party exclusion cannot be evaluated without it, so a collector that minimised it away would lose the ability to honour the rule that makes the source usable. article_full_text and publisher_content are excluded because GDELT's grant covers what GDELT releases -- its extraction of the news -- and not the news itself, which belongs to publishers who granted nothing. Entity mentions are allowed and are the reason this source is classified PSEUDONYMOUS rather than NONE_EXPECTED; whether they constitute personal data is an open question on the review."
-      }
+        "note": "content_origin is in the allowed list for the reason FRED's series_notes is in its own: the third-party exclusion cannot be evaluated without it, so a collector that minimised it away would lose the ability to honour the rule that makes the source usable. article_full_text and publisher_content are excluded because GDELT's grant covers what GDELT releases -- its extraction of the news -- and not the news itself, which belongs to publishers who granted nothing. Entity mentions are allowed and are the reason this source is classified PSEUDONYMOUS rather than NONE_EXPECTED; whether they constitute personal data is an open question on the review. Mission 1.9.2 added the last three for the WEB-NGRAM route. content_language, because LANG is a language and language is NOT geography -- writing it into geography would put a fabricated place in every record, and the category is named after content_language, the canonical field on RawRecord and NormalizedRecord that already exists to hold it. lexical_ngram, because a word that occurred is not a theme (nothing classified it) and not an entity (no resolver ran); the smallest truthful thing to say is that the source observed the term. source_measured_frequency, because COUNT is an occurrence count GDELT computed over its own corpus and the name has to keep saying whose measurement it is -- it is not the number of rows our job downloaded, not the size of a result set, not a popularity score, and not a signal. DATE needed nothing new: observation_period already means the interval an observation belongs to, which is what a 15-minute bucket is. The seven DOC API categories are kept because that route is deferred, not withdrawn."
+      },
+      "acquisition_bounds": {
+        "max_files_per_job": 8,
+        "basis": "A reviewed ceiling on how much of a published bulk dataset one job may take. GDELT emits 96 buckets a day and two files per bucket, from 2019-01-01 to present; ingesting that is the bulk-data vacuum this system is not, and the ceiling belongs to the review rather than to a collector that would then be setting its own limits. Eight is two hours of one ngram kind, or one hour of both -- enough for a bounded look at a moving window, far short of a corpus. The unit is the FILE because that is the unit GDELT publishes and the unit a request costs; it bounds bytes, request count and load at once.",
+        "considered_and_not_written": "A time-window bound was considered and rejected: it constrains nothing max_files_per_job does not, and the job it would restrict most -- a few files sampled across two years -- is the CHEAPER one for the source. A language allowlist was considered and rejected for a stronger reason: each file spans every language GDELT monitors, so language is not a dimension of the request at all. Which languages are retained is a research decision and a normalizer's concern, and encoding it here would present a product choice as a term of the grant, which restricts no language."
+      },
+      "datasets": [
+        {
+          "resource_id": "web-ngrams/1gram",
+          "name": "GDELT WEB-NGRAM unigrams",
+          "dataset_family": "web-ngrams-1gram",
+          "rights_basis": "DIRECT_GRANT",
+          "content_origin": "PLATFORM_LICENSED",
+          "basis": "GDELT's terms grant 'unlimited and unrestricted use for any academic, commercial, or governmental use of any kind without fee' over ALL DATASETS RELEASED BY the GDELT Project, naming no licence instrument. The WEB-NGRAM files are datasets it releases, so the grant reaches them directly and there is nothing to record in a licence field. Review 3 (mission-1.9.2) assessed this dataset specifically: four columns, no publisher title, url, image or sentence, and a count GDELT computed over its own index rather than over anything we asked for. One word per row, with the number of times it was mentioned in articles of that language in that 15-minute interval."
+        },
+        {
+          "resource_id": "web-ngrams/2gram",
+          "name": "GDELT WEB-NGRAM bigrams",
+          "dataset_family": "web-ngrams-2gram",
+          "rights_basis": "DIRECT_GRANT",
+          "content_origin": "PLATFORM_LICENSED",
+          "basis": "GDELT's terms grant 'unlimited and unrestricted use for any academic, commercial, or governmental use of any kind without fee' over ALL DATASETS RELEASED BY the GDELT Project, naming no licence instrument. The WEB-NGRAM files are datasets it releases, so the grant reaches them directly and there is nothing to record in a licence field. Review 3 (mission-1.9.2) assessed this dataset specifically: four columns, no publisher title, url, image or sentence, and a count GDELT computed over its own index rather than over anything we asked for. Two adjacent words per row, with the same count. Approved alongside the unigrams because nothing in the governance model separates them: the file carries no position, no document id and no url, so a two-word phrase cannot be attached to the article it came from. That absence is exactly what disqualifies Web News NGrams 3.0, whose pre/post snippets DO come with the url that anchors them."
+        }
+      ]
     },
     {
       "source_id": "world-bank",
