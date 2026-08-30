@@ -16,6 +16,7 @@ from __future__ import annotations
 import json
 import uuid
 
+import psycopg
 import pytest
 from sros_contracts import ContractError, MarketScope, ResearchContext, ResearchSessionStatus
 from sros_gateway.cache.redis_client import GlobalCache, TenantCache, cache_key
@@ -266,23 +267,47 @@ class TestSchemaRuntime:
         assert "check constraint" in str(exc.value).lower()
 
     def test_evidence_level_range_is_enforced(self, database) -> None:
+        claim_id = uuid.uuid4()
+        with database.tenant_transaction(WORKSPACE_INTEGRATION_P) as conn:
+            # A MANUAL HYPOTHESIS, so the row can stand alone: the evidence
+            # requirement added in migration 0016 exempts both, and this test is
+            # about `evidence_level`, not about that trigger.
+            conn.execute(
+                """INSERT INTO research.claims
+                       (id, workspace_id, claim_type, temporality, origin)
+                   VALUES (%s,%s,'HYPOTHESIS','EVERGREEN','MANUAL')""",
+                (claim_id, WORKSPACE_INTEGRATION_P),
+            )
+            conn.execute(
+                """INSERT INTO research.claim_revisions
+                       (id, workspace_id, claim_id, revision, statement)
+                   VALUES (%s,%s,%s,1,'a claim to hang evidence on')""",
+                (uuid.uuid4(), WORKSPACE_INTEGRATION_P, claim_id),
+            )
         with (
-            pytest.raises(Exception) as exc,
+            pytest.raises(psycopg.errors.CheckViolation) as exc,
             database.tenant_transaction(WORKSPACE_INTEGRATION_P) as conn,
         ):
             conn.execute(
                 # `direction` and `observation_category` became NOT NULL in
-                # migration 0005 and are supplied here so the insert fails on the
-                # constraint UNDER TEST. Without them it fails on a NOT NULL
-                # violation instead, and the test passes while proving nothing.
+                # migration 0005, and `claim_id` in 0016; all three are supplied
+                # here so the insert fails on the constraint UNDER TEST. Without
+                # them it fails on a NOT NULL violation instead, and the test
+                # passes while proving nothing. `claim_type` was DROPPED from
+                # this table in 0016 -- naming it made the insert fail on an
+                # UndefinedColumn error, which the old substring assertion would
+                # have caught but a `str(exc.value)` match on a different
+                # constraint would not (`testing-strategy.md` §24).
                 """INSERT INTO scoring.evidence
-                       (id, workspace_id, claim_type, evidence_level, direction,
+                       (id, workspace_id, claim_id, evidence_level, direction,
                         observation_category, collected_at, expires_at)
-                       VALUES (%s,%s,'OBSERVED',6,'SUPPORTS','UNCATEGORISED',
+                       VALUES (%s,%s,%s,6,'SUPPORTS','UNCATEGORISED',
                                now(), now())""",
-                (uuid.uuid4(), WORKSPACE_INTEGRATION_P),
+                (uuid.uuid4(), WORKSPACE_INTEGRATION_P, claim_id),
             )
-        assert "evidence_level_range_check" in str(exc.value)
+        assert exc.value.diag.constraint_name == "evidence_level_range_check"
+        with database.tenant_transaction(WORKSPACE_INTEGRATION_P) as conn:
+            conn.execute("DELETE FROM research.claims WHERE id = %s", (claim_id,))
 
 
 # ======================================================= tenancy: PostgreSQL

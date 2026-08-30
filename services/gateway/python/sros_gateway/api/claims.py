@@ -45,9 +45,13 @@ class CreateClaimBody(BaseModel):
     platform carries an evergreen fact and a trend stale in a week — a guess
     would be wrong for one of them with no way to tell which
     (evidence-aggregation-framework-v1.md §9).
+
+    `opportunity_id` is optional since Mission 1.13 (ADR-024). The pipeline runs
+    Signal → Claim → Opportunity, so a claim exists before the product it might
+    justify has been conceived.
     """
 
-    opportunity_id: uuid.UUID
+    opportunity_id: uuid.UUID | None = None
     statement: str = Field(min_length=1)
     claim_type: str
     temporality: str

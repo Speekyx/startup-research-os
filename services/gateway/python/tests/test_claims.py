@@ -130,7 +130,6 @@ def make_claim(
 def add_evidence(database, claim_id, workspace=WORKSPACE_P, **kwargs) -> uuid.UUID:
     defaults = {
         "evidence_level": 1,
-        "claim_type": ClaimType.OBSERVED,
         "collected_at": NOW,
         "expires_at": EXPIRES,
         "relevance": 0.6,
@@ -230,6 +229,18 @@ class TestClaimPersistence:
             ClaimType.OBSERVED,
             ClaimTemporality.EVERGREEN,
             ClaimOrigin.LLM_EXTRACTION,
+            # A generated OBSERVED claim may not be stored unsupported, and the
+            # requirement is a DEFERRABLE trigger firing at COMMIT -- so the
+            # evidence has to land in THIS transaction, not a later one
+            # (Mission 1.13 §22, ADR-024).
+            evidence=[
+                {
+                    "direction": D.SUPPORTS,
+                    "evidence_level": 1,
+                    "collected_at": NOW,
+                    "expires_at": EXPIRES,
+                }
+            ],
             origin_session_id=session,
             origin_detail="extracted from a review corpus",
             model_version="test-model-v3",
@@ -586,17 +597,22 @@ class TestEvidencePersistence:
         opportunity = make_opportunity(database)
         claim_id = make_claim(database, opportunity)
         with psycopg.connect(DATABASE_URL) as conn:
-            with pytest.raises(Exception) as exc:
+            with pytest.raises(psycopg.errors.CheckViolation) as exc:
                 conn.execute(
                     """INSERT INTO scoring.evidence
-                           (id, workspace_id, claim_id, claim_type, direction,
+                           (id, workspace_id, claim_id, direction,
                             evidence_level, observation_category, independence_state,
                             collected_at, expires_at)
-                       VALUES (%s,%s,%s,'OBSERVED','SUPPORTS',1,'UNCATEGORISED',
+                       VALUES (%s,%s,%s,'SUPPORTS',1,'UNCATEGORISED',
                                'KNOWN_DEPENDENT',now(),now())""",
                     (uuid.uuid4(), WORKSPACE_P, claim_id),
                 )
-            assert "independence" in str(exc.value).lower()
+            # The constraint by NAME, not a substring of the message. This
+            # assertion read `"independence" in str(exc.value).lower()` until
+            # Mission 1.13 dropped `claim_type` from the table -- at which point
+            # it kept passing on an UndefinedColumn error that never reached the
+            # CHECK (`testing-strategy.md` §24).
+            assert exc.value.diag.constraint_name == "evidence_independence_shape_check"
             conn.rollback()
 
     def test_a_missing_factor_is_stored_as_missing(self, database) -> None:

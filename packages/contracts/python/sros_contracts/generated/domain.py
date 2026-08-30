@@ -8,7 +8,7 @@ Regenerate      : python packages/contracts/tools/generate.py
 Editing this file by hand will be overwritten and will fail the contract
 check in CI. Change the source of truth instead.
 
-contract_version: 1.8.0
+contract_version: 1.9.0
 ontology_version: 2
 """
 
@@ -17,7 +17,7 @@ from __future__ import annotations
 from enum import Enum
 from typing import Final
 
-CONTRACT_VERSION: Final[str] = "1.8.0"
+CONTRACT_VERSION: Final[str] = "1.9.0"
 ONTOLOGY_VERSION: Final[str] = "2"
 RESEARCH_CONTEXT_SCHEMA_VERSION: Final[str] = "1.0.0"
 
@@ -628,6 +628,31 @@ class SignalRefusalReason(str, Enum):
     INSUFFICIENT_INPUT_OBSERVATIONS = "INSUFFICIENT_INPUT_OBSERVATIONS"  # Fewer than two distinct source observations remain. One observation is not a Signal
     UNSUPPORTED_SIGNAL_TYPE = "UNSUPPORTED_SIGNAL_TYPE"  # The signal type is not registered, or its declared family does not match the inputs
     PARAMETERS_INCOMPLETE = "PARAMETERS_INCOMPLETE"  # A parameter affecting the output was not stated. A hidden default makes the extractor version meaningless
+
+
+class ClaimInterpretationKind(str, Enum):
+    """How a Claim's proposition was produced from Signals. Closed and mandatory wherever an interpreter was involved, so that 'an LLM is a reasoning mechanism and not a market-data source' is a constraint rather than a sentence: DETERMINISTIC requires model and prompt versions to be ABSENT, and MODEL_DERIVED requires a model version. It is the claim-layer counterpart of SignalDerivationKind, and the same defect it fixes -- a table whose only producer identity is a model version reads as a table of model outputs.
+
+    See claim-evidence-interpretation-contract-v1.md §6; Mission 1.13 §20.
+    """
+
+    DETERMINISTIC = "DETERMINISTIC"  # A template or rule applied to structured Signal facts. Reproducible from the Signals and the interpreter version alone, with no model and no prompt
+    MODEL_DERIVED = "MODEL_DERIVED"  # A model proposed the proposition. Obliged to carry provider and model version, to cite the Signal ids it read, to be schema-validated, and to treat source content as untrusted data (llm-reasoning-rules.md §7, §9). The model is never itself the evidence
+
+
+class ClaimEvidenceRefusalReason(str, Enum):
+    """Why an interpretation produced no Claim. A RETURNED VALUE, never a row: a claim stored to record that no claim could be made is exactly the unsupported assertion this layer exists to prevent, and a claim table row saying 'nothing' is worse than no row.
+
+    See claim-evidence-interpretation-contract-v1.md §11; Mission 1.13 §22.
+    """
+
+    NO_SUPPORTING_SIGNAL = "NO_SUPPORTING_SIGNAL"  # The proposition cites no Signal. An automatically generated claim that cites nothing is an assertion a machine invented
+    UNSUPPORTED_INTERPRETATION = "UNSUPPORTED_INTERPRETATION"  # The proposition asserts more than its cited Signals establish -- a market, demand, user or monetisation reading of an arithmetic relation. Downgrade to HYPOTHESIS or refuse; never store it as OBSERVED or INFERRED
+    SIGNAL_NOT_CITED = "SIGNAL_NOT_CITED"  # An evidence draft names no Signal, so the claim could not be traced to what it was derived from
+    INCOMPATIBLE_TEMPORAL_SEMANTICS = "INCOMPATIBLE_TEMPORAL_SEMANTICS"  # The proposition asserts temporal coincidence or an 'as of' instant that its Signals cannot support -- H-29. A GDELT bucket is ordered within its stream and is on no shared timeline
+    INCOMPATIBLE_LANGUAGE_SEMANTICS = "INCOMPATIBLE_LANGUAGE_SEMANTICS"  # The proposition merges source language labels that no reviewed mapping relates -- H-30. CLD2 ENGLISH is not BCP-47 en
+    PROPOSITION_NOT_IDENTIFIABLE = "PROPOSITION_NOT_IDENTIFIABLE"  # No canonical proposition key could be built, so two derivations of the same proposition could not be recognised as one claim
+    INTERPRETER_PROVENANCE_INCOMPLETE = "INTERPRETER_PROVENANCE_INCOMPLETE"  # The interpreter did not name itself, its version, or the model a MODEL_DERIVED interpretation used
 
 
 # --- Numeric bounds --------------------------------------------------------

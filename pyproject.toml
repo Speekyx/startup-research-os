@@ -11,6 +11,7 @@ members = [
     "packages/llm-gateway/python",
     "packages/evidence-aggregation/python",
     "packages/signal-model/python",
+    "packages/claim-model/python",
     "services/workers/python",
     "services/research-orchestrator/python",
     "services/acquisition/python",
@@ -23,6 +24,7 @@ sros-contracts = { workspace = true }
 sros-llm-gateway = { workspace = true }
 sros-evidence-aggregation = { workspace = true }
 sros-signal-model = { workspace = true }
+sros-claim-model = { workspace = true }
 sros-workers = { workspace = true }
 sros-orchestrator = { workspace = true }
 sros-acquisition = { workspace = true }

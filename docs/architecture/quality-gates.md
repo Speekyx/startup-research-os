@@ -344,6 +344,24 @@ shape, because this is the kind of finding that decays quietly.
 | **A dropped constraint is stripped, not its DROP statement** | `validate_schema.py` skips `CONSTRAINT` mentions preceded by `DROP` | With one drop it did not matter. A second migration dropping the same constraint left a superseded value set in the body, which then failed against the contract as drift that did not exist |
 | **Group counters may overlap** | Migration 0015 replaced 0013's `derived + refused <= considered` | An extractor pairing within a group derives one pair and refuses another. The counters were right; the constraint encoded an assumption |
 
+### The interpretation boundary (Mission 1.13)
+
+| Gate | Mechanism | Guards |
+|------|-----------|--------|
+| **A generated Claim cannot be stored unsupported** | `research.require_evidence_for_generated_claim`, a `DEFERRABLE INITIALLY DEFERRED` constraint trigger (migration 0016), plus `NO_SUPPORTING_SIGNAL` in `build_claim` | The failure the whole layer exists to prevent. Deferred because a claim and its evidence are written in one transaction and neither exists first |
+| **`HYPOTHESIS` is exempt by definition, not by exception** | The same trigger, and `requires_evidence` | Requiring evidence for a hypothesis makes the category unusable, which pushes unsupported ideas into `INFERRED` — the exact failure the rule prevents |
+| **An interpreter identity is complete or absent** | `num_nonnulls(...) IN (0, 3)` (migration 0017, replacing 0016's spelling) | The obvious spelling evaluates to NULL on a half-filled row, and **a CHECK accepts NULL**. See `testing-strategy.md` §28 |
+| **`DETERMINISTIC` implies no model in the path** | `claims_interpretation_provenance_check`, and `ClaimInterpretation.__post_init__` | "Deterministic" is a promise the claim can be regenerated and compared. A model silently voids it |
+| **A model is never the evidence** | The evidence requirement applies identically to `MODEL_DERIVED` claims | An LLM proposing a reading is provenance. An LLM as the support is a citation of itself |
+| **No chain-of-thought is stored** | No field exists on the draft, the claim or the revision; a test asserts the absence | A private reasoning transcript is not evidence and is not a record anybody can check |
+| **Identity survives rewording and never uses an embedding** | `proposition_key` = sha256 over canonical facts (migration 0016 unique per workspace) | D-12 is open. An identity that moved when the model moved would split and merge claims silently |
+| **An `OBSERVED` claim may not assert a market reading** | `UNSUPPORTED_INTERPRETATION` in `build_claim`, over a deliberately blunt vocabulary list | The failure that would otherwise ship: arithmetic rewritten as a market fact, weighted by aggregation as a source observation |
+| **Evidence names its Claim** | `scoring.evidence.claim_id NOT NULL` (migration 0016) | Evidence for nothing can never be read |
+| **One answer per question** | `scoring.evidence.claim_type` dropped (migration 0016); `validate_schema.py` enum-site list updated | Two copies of a claim's type eventually disagree |
+| **No generated `NEUTRAL` evidence** | `build_claim`, not a CHECK | A Signal bearing on nothing produces no row. The enum value stays for the human null result a person can own |
+| **An absent factor stays absent** | `EvidenceDraft.to_json` omits it; out-of-range is rejected, never clamped | `0.5` and `0.0` are both measurements. `q_i = min(components)` makes the second catastrophic |
+| **H-29 / H-30 fail closed at the claim boundary** | `INCOMPATIBLE_TEMPORAL_SEMANTICS`, `INCOMPATIBLE_LANGUAGE_SEMANTICS` | Refusal reasons rather than prose warnings, so a future interpreter cannot proceed by not reading the document |
+
 ---
 
 ## 2. Turborepo task graph

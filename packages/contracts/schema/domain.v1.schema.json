@@ -3,7 +3,7 @@
   "$id": "https://startup-research-os.local/schema/domain.v1.schema.json",
   "title": "Startup Research OS domain vocabulary",
   "description": "GENERATED FILE. Source of truth: packages/contracts/schema/domain.v1.json. Regenerate with python packages/contracts/tools/generate.py.",
-  "x-contract-version": "1.8.0",
+  "x-contract-version": "1.9.0",
   "x-ontology-version": "2",
   "$defs": {
     "AcquisitionErrorCode": {
@@ -45,10 +45,31 @@
       ],
       "description": "One required part of a source's attribution obligation. A closed enum because the renderer branches exhaustively: an element it does not recognise must be a contract change, never a silently dropped requirement."
     },
+    "ClaimEvidenceRefusalReason": {
+      "type": "string",
+      "enum": [
+        "NO_SUPPORTING_SIGNAL",
+        "UNSUPPORTED_INTERPRETATION",
+        "SIGNAL_NOT_CITED",
+        "INCOMPATIBLE_TEMPORAL_SEMANTICS",
+        "INCOMPATIBLE_LANGUAGE_SEMANTICS",
+        "PROPOSITION_NOT_IDENTIFIABLE",
+        "INTERPRETER_PROVENANCE_INCOMPLETE"
+      ],
+      "description": "Why an interpretation produced no Claim. A RETURNED VALUE, never a row: a claim stored to record that no claim could be made is exactly the unsupported assertion this layer exists to prevent, and a claim table row saying 'nothing' is worse than no row."
+    },
     "ClaimId": {
       "type": "string",
       "description": "An assertion about an Opportunity that evidence can independently support or contradict. Ontology V2.1 §17. STABLE across statement revisions: the text may be rewritten, the identity may not. Distinct from ClaimType, which is an epistemic category and not an identity.",
       "format": "uuid"
+    },
+    "ClaimInterpretationKind": {
+      "type": "string",
+      "enum": [
+        "DETERMINISTIC",
+        "MODEL_DERIVED"
+      ],
+      "description": "How a Claim's proposition was produced from Signals. Closed and mandatory wherever an interpreter was involved, so that 'an LLM is a reasoning mechanism and not a market-data source' is a constraint rather than a sentence: DETERMINISTIC requires model and prompt versions to be ABSENT, and MODEL_DERIVED requires a model version. It is the claim-layer counterpart of SignalDerivationKind, and the same defect it fixes -- a table whose only producer identity is a model version reads as a table of model outputs."
     },
     "ClaimLifecycle": {
       "type": "string",

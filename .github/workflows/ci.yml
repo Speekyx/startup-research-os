@@ -207,6 +207,7 @@ jobs:
                       services/workers/python/sros_workers \
                       packages/evidence-aggregation/python/sros_evidence_aggregation \
                       packages/signal-model/python/sros_signal_model \
+                      packages/claim-model/python/sros_claim_model \
                       services/acquisition/python/sros_acquisition \
                       services/nlp/python/sros_nlp \
                       services/research-orchestrator/python/sros_orchestrator \

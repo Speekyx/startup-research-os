@@ -5,7 +5,8 @@ system. Code conforms to them; they do not conform to code.
 
 | Document | Status | Defines |
 |----------|--------|---------|
-| `opportunity-ontology-v2.1.md` | **Current** | V2 plus the Claim entity (§17). Resolves A-13 |
+| `opportunity-ontology-v2.2.md` | **Current** | V2.1 with one sentence amended: a Claim belongs to at most one Opportunity, and may belong to none (§17.3) |
+| `opportunity-ontology-v2.1.md` | Superseded by V2.2 | Historical record. Everything but §17.3 is unchanged and V2.2 refers to it |
 | `claim-model-v1.md` | **Current** | The Claim: identity, statement revision, temporality, origin, lifecycle, evidence relationship |
 | `opportunity-ontology-v2.md` | Superseded by V2.1 | Historical record. §1–§16 are unchanged and V2.1 refers to it for them |
 | `scoring-framework-v1.1.md` | **Current** | The five score families, dimensions, profiles, normalization, numeric representation |

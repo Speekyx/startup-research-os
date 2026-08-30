@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.19
+Version: 1.20
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-08-30 (Sprint 1 / Mission 1.12.1)
+Last amended: 2026-08-31 (Sprint 1 / Mission 1.13)
 
 ---
 
@@ -13,6 +13,23 @@ Last amended: 2026-08-30 (Sprint 1 / Mission 1.12.1)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.20 — 2026-08-31 (Sprint 1 / Mission 1.13)
+
+Authorized by the Mission 1.13 brief §4 (decide whether a new entity is needed),
+§41 (gap analysis before migration), §42 and §55 (documentation), §53 (synthetic
+tests), §56 (report) and §57 (stop after the report).
+
+| Change | Section | Authority |
+|--------|---------|-----------|
+| **A Claim may precede its Opportunity** | Product Shape | Mission 1.13 §17, [ADR-024](docs/architecture/adr/ADR-024-claim-precedes-opportunity.md), Ontology V2.2 §17.3. The schema said `claims.opportunity_id NOT NULL` while the pipeline runs Signal → Claim → Opportunity, which made the intended pipeline **unrepresentable**: a Claim about a source fact exists before anybody has conceived of the product it might justify. Migration 0016 drops the constraint; a Claim now belongs to **at most one** Opportunity, and may belong to none |
+| **A machine may not store an assertion nothing supports** | Engineering Principles | Mission 1.13 §22, ADR-024. Enforced twice — a `DEFERRABLE INITIALLY DEFERRED` constraint trigger (migration 0016) and `NO_SUPPORTING_SIGNAL` in `build_claim`. Three exemptions, each reasoned: `HYPOTHESIS` **by definition** (requiring evidence would make the category unusable, pushing unsupported ideas into `INFERRED` — the exact failure), `MANUAL` because a person asserting and then looking is the ordinary research motion, `WITHDRAWN` because a withdrawn claim's evidence may be gone |
+| **The interpretation step got no new entity** | Product Shape | Mission 1.13 §4. A `ClaimCandidate` table would be a second place an assertion can live, and an assertion outside `research.claims` escapes every rule in the contract — including the evidence requirement. The step produces an unpersisted `ClaimDraft`, written as claim + revision + evidence in one transaction or not at all |
+| **A model is a reasoning mechanism, never the evidence** | Engineering Principles | Mission 1.13 §20. A `MODEL_DERIVED` claim citing no Signal is refused exactly as a deterministic one is; the model's contribution is provenance, never a row in `scoring.evidence`. `DETERMINISTIC` **forbids** a model version, because that word promises the claim can be regenerated. No chain-of-thought is stored and there is nowhere to put one |
+| **Identity is the proposition, and never a vector** | Engineering Principles | Mission 1.13 §17, §39. `proposition_key` is sha256 over the canonical facts asserted, unique per workspace: two interpreters wording one fact differently produced **one** claim. Not the prose, not the research session, and **not an embedding** — D-12 stays open, and two claims whose prose differs by "DE"/"FR" are different claims no distance threshold reliably separates |
+| **GDELT lexical frequency alone never satisfies a demand claim** | Engineering Principles | Mission 1.13 §46. Not weakly, not with low relevance, not with a caveat. News coverage is journalists publishing; demand is people wanting and paying — a low relevance score models it as *a little bit of the right thing*, and it is none of the right thing. `UNSUPPORTED_INTERPRETATION` refuses market vocabulary in an `OBSERVED` claim |
+| **A CHECK that evaluates to NULL is not a CHECK** | Engineering Principles | Mission 1.13. Migration 0016's `claims_interpreter_complete_check` spelled "all three or none" as `(all NULL) OR (all non-blank)`, which returns **NULL** on a half-filled row — and a CHECK accepts NULL. Half an interpreter identity was written without complaint. Found by a probe written to disbelieve it, fixed forward by migration 0017 with `num_nonnulls(...) IN (0, 3)` |
+| **Nothing was interpreted, and nothing moved** | Forbidden During Foundation | Mission 1.13 §51. **Claims 0, Evidence 0, Opportunities 0.** RawRecords 12, NormalizedRecords 12, Signals 7, all byte-for-byte unchanged. No embeddings, no scoring, no LLM call, and `packages/claim-model` reaches no network, no model, no embedder and no database |
 
 ## 1.19 — 2026-08-30 (Sprint 1 / Mission 1.12.1)
 
@@ -371,7 +388,7 @@ These documents define the project.
 
 1. PROJECT_MANIFEST.md
 2. docs/CLAUDE.md
-3. docs/domain/opportunity-ontology-v2.1.md
+3. docs/domain/opportunity-ontology-v2.2.md
 4. docs/domain/scoring-framework-v1.1.md
 5. docs/domain/evidence-confidence-framework-v1.md
 6. docs/ai/llm-reasoning-rules.md
@@ -402,6 +419,10 @@ longer current and must not be used as the basis for implementation:
 - `docs/domain/opportunity-ontology-v2.md` — superseded by V2.1. V2.1 inherits
   §1–§16 unchanged and refers to V2 for their text, so a reference to
   `opportunity-ontology-v2.md §N` with `N <= 16` still resolves correctly
+- `docs/domain/opportunity-ontology-v2.1.md` — superseded by V2.2. V2.2 inherits
+  V2.1 in full and amends **one sentence** (§17.3: a Claim belongs to at most one
+  Opportunity, and may belong to none), so every other reference to
+  `opportunity-ontology-v2.1.md §N` resolves unchanged in V2.2
 - `docs/domain/scoring-framework-v1.md` — superseded by V1.1
 
 Historical reports and audits (`docs/architecture/mission-0.1-report.md`,
@@ -553,6 +574,19 @@ specified.
 **Cross-source temporal alignment stays forbidden** while H-29 is open, along
 with `observed_at`, `TIMESTAMPTZ` conversion and any wall-clock "as of" claim.
 Classification, embedding and clustering stay blocked by D-12.
+
+**Claim and Evidence generation is defined and not implemented**, since Mission
+1.13. The interpretation boundary is written down
+(`claim-evidence-interpretation-contract-v1.md`, ADR-024) and nothing crosses it:
+Claims 0, Evidence 0. `packages/claim-model` validates drafts in memory and
+reaches no network, no model, no embedder and no database. The next mission
+implements an interpreter **against** this contract — it does not revisit the
+contract to make an interpreter easier to write.
+
+**Opportunity formation stays forbidden.** Making `opportunity_id` nullable
+removed a precondition; it granted no permission. An Opportunity groups Claims
+that describe one addressable thing, and deciding which Claims those are is a
+mission of its own.
 
 **Everything else on the list is unchanged.** NLP pipelines are blocked by D-12,
 scoring algorithms by the absence of a `CALIBRATED` profile, and authentication

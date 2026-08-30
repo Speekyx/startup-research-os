@@ -31,6 +31,7 @@ SUITES = [
     # kind of rule that must stay checkable when a dependency environment is
     # broken (ADR-009).
     "packages/signal-model/python",
+    "packages/claim-model/python",
     "services/workers/python",
     "services/research-orchestrator/python",
 ]
