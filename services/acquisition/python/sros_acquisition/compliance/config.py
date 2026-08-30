@@ -28,7 +28,7 @@ import pathlib
 from dataclasses import dataclass, field
 from typing import Any
 
-from sros_contracts import AttributionElement
+from sros_contracts import AttributionElement, RightsBasis
 
 from ..registry.models import SourceRegistryError
 
@@ -275,16 +275,41 @@ class AuthorizedDataset:
 
     resource_id: str
     dataset_family: str
-    licence: str
     content_origin: str
     basis: str
+    # What KIND of thing authorises this resource (Mission 1.9.1, ADR-018).
+    # Required and never defaulted: inferring NAMED_LICENCE from the presence of
+    # a licence string would work for every entry that exists today and would
+    # silently classify the first one that forgot the field.
+    rights_basis: RightsBasis = RightsBasis.NAMED_LICENCE
+    # Conditional on the basis, in BOTH directions -- see __post_init__. `None`
+    # under a direct grant rather than a placeholder: a source that names no
+    # licence has nothing to put here, and an invented identifier would reach
+    # every record's provenance indistinguishable from a real one.
+    licence: str | None = None
     indicator: str | None = None
     name: str | None = None
 
     def __post_init__(self) -> None:
-        for field_name in ("resource_id", "dataset_family", "licence", "content_origin"):
+        for field_name in ("resource_id", "dataset_family", "content_origin"):
             if not str(getattr(self, field_name)).strip():
                 raise SourceRegistryError(f"dataset.{field_name}", "required")
+        if self.rights_basis is RightsBasis.NAMED_LICENCE:
+            if not (self.licence or "").strip():
+                raise SourceRegistryError(
+                    f"dataset.{self.resource_id}.licence",
+                    "required under NAMED_LICENCE: the basis says a published instrument "
+                    "authorises this resource, so it has an identifier",
+                )
+        elif (self.licence or "").strip():
+            # The fabrication arriving through the other door.
+            raise SourceRegistryError(
+                f"dataset.{self.resource_id}.licence",
+                f"must be absent under {self.rights_basis.value}: the basis says the "
+                "source's own terms grant this directly and name no instrument, so a "
+                "licence identifier here would be this repository's invention presented "
+                "as the source's",
+            )
         if not self.basis.strip():
             raise SourceRegistryError(
                 f"dataset.{self.resource_id}",
@@ -458,13 +483,38 @@ def _source_from_json(entry: object) -> SourceCompliance:
     )
 
 
+def _rights_basis(item: dict[str, object], source_id: str) -> RightsBasis:
+    """Read the basis. Absent is an error, never a default.
+
+    Mission 1.9.1 §28 requires a missing rights basis to fail. Defaulting it to
+    NAMED_LICENCE would be correct for every entry that exists today and would
+    silently mis-classify the first one that omitted it -- which is the opposite
+    of failing.
+    """
+    raw = item.get("rights_basis")
+    if raw is None:
+        raise SourceRegistryError(
+            f"{source_id}.datasets.rights_basis",
+            "required: state whether a NAMED_LICENCE or a DIRECT_GRANT authorises this "
+            "resource. There is no default, because the wrong one is invisible",
+        )
+    try:
+        return RightsBasis(str(raw))
+    except ValueError:
+        raise SourceRegistryError(
+            f"{source_id}.datasets.rights_basis",
+            f"{raw!r} is not a rights basis. Known: {', '.join(b.value for b in RightsBasis)}",
+        ) from None
+
+
 def _dataset_from_json(item: object, source_id: str) -> AuthorizedDataset:
     if not isinstance(item, dict):
         raise SourceRegistryError(f"{source_id}.datasets", "each entry must be an object")
     return AuthorizedDataset(
         resource_id=str(item.get("resource_id") or ""),
         dataset_family=str(item.get("dataset_family") or ""),
-        licence=str(item.get("licence") or ""),
+        rights_basis=_rights_basis(item, source_id),
+        licence=(str(item["licence"]).strip() or None) if item.get("licence") else None,
         content_origin=str(item.get("content_origin") or ""),
         basis=str(item.get("basis") or ""),
         indicator=item.get("indicator"),

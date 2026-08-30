@@ -604,6 +604,14 @@
       ],
       "description": "Whether the platform's own licence covers a particular resource. Aggregators republish material they do not own, so platform approval is not resource approval. UNKNOWN exists because it is the common case and must fail closed rather than be guessed either way."
     },
+    "RightsBasis": {
+      "type": "string",
+      "enum": [
+        "NAMED_LICENCE",
+        "DIRECT_GRANT"
+      ],
+      "description": "What kind of thing authorises one resource. Closed because authorization branches exhaustively on it and an unhandled value would mean a resource of unknown standing being treated as authorised. Two values, deliberately: there is no UNKNOWN member, because an unestablished basis is the ABSENCE of one -- expressed as null and refused -- and a third value that looked like an answer would be the exact fabrication this enum exists to prevent. A DIRECT_GRANT never satisfies a rule that requires a NAMED_LICENCE."
+    },
     "Score": {
       "type": "integer",
       "minimum": 0,

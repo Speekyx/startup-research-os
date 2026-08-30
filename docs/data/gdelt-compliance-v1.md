@@ -91,6 +91,21 @@ so a notice composed here rather than quoted would fail.
 
 ---
 
+## 2.1 The licence field, and why there is none (Mission 1.9.1)
+
+The absence of a `LICENCE_IDENTIFIER` above was a finding before it was a
+design: GDELT names no licence. Until Mission 1.9.1 that also made a GDELT
+dataset entry **unwritable**, because `AuthorizedDataset` required a non-empty
+`licence` and every candidate value was a fabrication of a different shape.
+
+A resource now records its **rights basis** — `NAMED_LICENCE` or `DIRECT_GRANT`
+— and GDELT's is `DIRECT_GRANT`, with the licence field required to be *absent*
+rather than filled. See [ADR-018](../architecture/adr/ADR-018-acquisition-rights-basis.md).
+
+A direct grant does **not** satisfy a licence allowlist. GDELT has none, so this
+does not affect it; World Bank does, and its enforcement got stricter rather than
+looser.
+
 ## 3. Resource scope (§10)
 
 One rule, and it is the only one the evidence supports:

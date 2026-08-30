@@ -357,6 +357,7 @@ class WorldBankCollector:
             source_id=self.source_id,
             resource_id=resource_id,
             licence=dataset.licence,
+            rights_basis=dataset.rights_basis,
             content_origin=ResourceContentOrigin(dataset.content_origin),
             dataset_family=dataset.dataset_family,
             geographies=tuple(c for c in request.countries if c != "all"),

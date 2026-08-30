@@ -27,7 +27,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from sros_contracts import ResourceContentOrigin
+from sros_contracts import ResourceContentOrigin, RightsBasis
 
 from .config import EnumeratedExclusion, ResourceScope
 
@@ -48,6 +48,10 @@ class ResourceDescriptor:
     resource_id: str
 
     licence: str | None = None
+    # What kind of thing authorises this resource. `None` is "not established",
+    # which every rule that cares about rights treats as a refusal -- the same
+    # asymmetry the rest of this descriptor is built on.
+    rights_basis: RightsBasis | None = None
     content_origin: ResourceContentOrigin = ResourceContentOrigin.UNKNOWN
     dataset_family: str | None = None
     dataset_doi: str | None = None
@@ -124,9 +128,29 @@ def authorize_resource(
             )
 
     # -- licence allowlist ---------------------------------------------------
+    #
+    # Mission 1.9.1 §15. A scope that enumerates acceptable LICENCES is asking a
+    # question only a NAMED_LICENCE resource can answer. A direct terms grant is
+    # a real and often broader authorisation, and it is not a licence -- so it
+    # fails this rule rather than passing it by having nothing to compare.
+    #
+    # Reported as a basis mismatch rather than as a missing licence, because the
+    # two call for different fixes and a reader chasing the wrong one loses an
+    # afternoon.
     if scope.licence_allowlist is not None:
         evaluated.append("licence-allowlist")
-        if descriptor.licence is None:
+        if descriptor.rights_basis is None:
+            reasons.append(
+                "resource has no established rights basis; this scope enumerates "
+                "acceptable licences, and an unestablished basis is not a basis"
+            )
+        elif descriptor.rights_basis is not RightsBasis.NAMED_LICENCE:
+            reasons.append(
+                f"resource is authorised by {descriptor.rights_basis.value} and this "
+                f"scope requires a named licence from {sorted(scope.licence_allowlist)}. "
+                "A direct grant does not satisfy a licence allowlist"
+            )
+        elif descriptor.licence is None:
             reasons.append(
                 "resource has no recorded licence; the licence is a dataset property "
                 f"and must be one of {sorted(scope.licence_allowlist)}"

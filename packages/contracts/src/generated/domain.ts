@@ -272,6 +272,19 @@ export function isResourceContentOrigin(v: unknown): v is ResourceContentOrigin 
 }
 
 /**
+ * What kind of thing authorises one resource. Closed because authorization branches exhaustively on it and an unhandled value would mean a resource of unknown standing being treated as authorised. Two values, deliberately: there is no UNKNOWN member, because an unestablished basis is the ABSENCE of one -- expressed as null and refused -- and a third value that looked like an answer would be the exact fabrication this enum exists to prevent. A DIRECT_GRANT never satisfies a rule that requires a NAMED_LICENCE.
+ * @see acquisition-rights-basis-gap-analysis-v1.md; Mission 1.9.1 §14
+ */
+export const RIGHTS_BASIS_VALUES = [
+  "NAMED_LICENCE",
+  "DIRECT_GRANT",
+] as const;
+export type RightsBasis = (typeof RIGHTS_BASIS_VALUES)[number];
+export function isRightsBasis(v: unknown): v is RightsBasis {
+  return typeof v === "string" && (RIGHTS_BASIS_VALUES as readonly string[]).includes(v);
+}
+
+/**
  * HOW access is technically performed. It says nothing about whether access is PERMITTED: permission is a separate dimension carried by the policy review. BROWSER_AUTOMATION being available never implies it is allowed.
  * @see source-registry-v1.md §8
  */
