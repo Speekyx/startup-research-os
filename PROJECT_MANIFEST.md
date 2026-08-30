@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.15
+Version: 1.16
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-08-30 (Sprint 1 / Mission 1.10.1)
+Last amended: 2026-08-30 (Sprint 1 / Mission 1.11)
 
 ---
 
@@ -13,6 +13,21 @@ Last amended: 2026-08-30 (Sprint 1 / Mission 1.10.1)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.16 — 2026-08-30 (Sprint 1 / Mission 1.11)
+
+Authorized by the Mission 1.11 brief §32 (gap analysis before any persistence
+change), §34 (model and schema changes only), §49 (documentation) and §51 (stop
+before extractors).
+
+| Change | Section | Authority |
+|--------|---------|-----------|
+| **A Signal is a DERIVATION, and one observation is not one** | Engineering Principles | Mission 1.11 §37, [ADR-020](docs/architecture/adr/ADR-020-signal-derivation-model.md). At least **two distinct source observations** must contribute, and distinctness is over `observation_key` rather than over the row id — counting rows would let a normalizer version bump manufacture a contrast out of one observation. Two rows sharing a key are refused as `AMBIGUOUS_OBSERVATION_LINEAGE`: **D-08 is failed closed on, not solved** |
+| **The Signal family stops classifying demand** | Engineering Principles | Mission 1.11 §5, §6, GAP-2. `nlp.signals.signal_family` had CHECKed `PAIN / DESIRE / BEHAVIORAL / MARKET` since Mission 0.1, which asserted that every signal is evidence of demand. Neither derivation the two real sources support is: a GDELT term count may equally be a news event, a crisis, a celebrity or the weather. Renamed `quantity_family`, `LEXICAL_FREQUENCY | MEASURED_SERIES`. **Ontology V2 §3.6 is unchanged**; three things called "signal family" now have three names |
+| **Order and global instant were separated, and neither is granted to GDELT** | Blocked work | Mission 1.11 §12, §13. `SOURCE_RELATIVE_ORDER` and `COMPARABLE_INSTANT` are different required facts needing different evidence. H-29 blocks the second; the new **H-32** blocks the first — the argument for granting it is an inference about GDELT's publication mechanism, not a retrieved statement, and H-32 is strictly weaker and separately answerable. Label EQUALITY needs no timezone, so a within-bucket contrast is derivable and a frequency change is not |
+| **The database refuses what the documents forbid** | Engineering Principles | Mission 1.11 §34, §40. `observed_at` is `NULL` unless the basis is `COMPARABLE_INSTANTS`; a direction other than `NOT_APPLICABLE` requires an ordered basis; a `DETERMINISTIC` signal may carry no model version; a magnitude is `NUMERIC` and unbounded rather than a float on `[0,1]`. Thirteen constraints verified by the constraint that refused, in rolled-back transactions |
+| **Two pre-existing defects closed, both named first** | Engineering Principles | Mission 1.11 §31, GAP-12 and GAP-13. `scoring.evidence.signal_id` was a single-column FK that migration 0005 left behind, so evidence in one workspace could name a signal in another. And the `demand_signal_type` entries `nlp.signals` pointed at were written only by a development seed, which made the table writable on a developer's machine and unwritable on the empty database CI starts from |
+| **A registered signal type is vocabulary, and no extractor exists** | Forbidden During Foundation | Mission 1.11 §41. Two `signal_type` entries, each justified by records this repository holds. `SIGNAL_EXTRACTORS` is **empty**, `nlp.signals` and `nlp.signal_inputs` hold **0 rows**, and the eight real Raw and eight real Normalized records are byte-for-byte unchanged. No embedding, no cluster, no claim, no opportunity, no score |
 
 ## 1.15 — 2026-08-30 (Sprint 1 / Mission 1.10.1)
 
@@ -478,6 +493,14 @@ forbidden entry is *NLP pipelines*, and normalization is the stage before one.
 It maps a source observation to a canonical structure and stops. It performs no
 tokenization, no embedding, no classification and no clustering, and CI asserts
 each of those mechanically rather than by review.
+
+**The Signal model**, added in 1.11, is a **contract and a schema**, not a
+pipeline. It defines what a derived signal is, what identity and lineage it
+carries, and which canonical facts a derivation may require. `SIGNAL_EXTRACTORS`
+is empty, `nlp.signals` and `nlp.signal_inputs` hold 0 rows, and nothing
+tokenizes, embeds, classifies or clusters. A signal EXTRACTOR is still forbidden
+until Mission 1.11.1, and a temporal GDELT extractor stays forbidden beyond it
+while H-29 and H-32 are open.
 
 **Everything else on the list is unchanged.** NLP pipelines are blocked by D-12,
 scoring algorithms by the absence of a `CALIBRATED` profile, and authentication

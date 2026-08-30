@@ -90,6 +90,10 @@ ML_MODULES = {
 # Tables this layer must never write (§43, §44, §45).
 FORBIDDEN_TABLES = (
     "nlp.signals",
+    # Added in Mission 1.11. A normalizer writing a signal's lineage would be
+    # deriving, and the boundary this file guards is that normalization renames
+    # and reshapes without deciding.
+    "nlp.signal_inputs",
     "nlp.embedding_provenance",
     "research.claims",
     "scoring.evidence",

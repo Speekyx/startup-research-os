@@ -53,6 +53,10 @@ TENANT_TABLES = [
     "research.claim_revisions",
     "research.claim_session_observations",
     "scoring.evidence_independence_groups",
+    # Added in Mission 1.11. A signal's lineage names which observations a
+    # workspace derived from, which is as much a statement about what a tenant
+    # is researching as the signal itself.
+    "nlp.signal_inputs",
 ]
 
 # Deliberately NOT policy-bearing. Listed here so that adding a policy to one of

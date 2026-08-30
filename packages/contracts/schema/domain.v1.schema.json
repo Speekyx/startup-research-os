@@ -3,7 +3,7 @@
   "$id": "https://startup-research-os.local/schema/domain.v1.schema.json",
   "title": "Startup Research OS domain vocabulary",
   "description": "GENERATED FILE. Source of truth: packages/contracts/schema/domain.v1.json. Regenerate with python packages/contracts/tools/generate.py.",
-  "x-contract-version": "1.5.0",
+  "x-contract-version": "1.6.0",
   "x-ontology-version": "2",
   "$defs": {
     "AcquisitionErrorCode": {
@@ -456,7 +456,9 @@
             "risk",
             "region",
             "source_family",
-            "normalization_record_kind"
+            "normalization_record_kind",
+            "signal_family",
+            "signal_type"
           ]
         },
         "id": {
@@ -511,7 +513,9 @@
             "risk",
             "region",
             "source_family",
-            "normalization_record_kind"
+            "normalization_record_kind",
+            "signal_family",
+            "signal_type"
           ]
         },
         "id": {
@@ -647,10 +651,100 @@
       ],
       "description": "The five families. Never collapsed into a single number, not in an API, a sort key or a badge."
     },
+    "SignalDerivationKind": {
+      "type": "string",
+      "enum": [
+        "DETERMINISTIC",
+        "MODEL_DERIVED"
+      ],
+      "description": "How a Signal was produced. Closed and mandatory so that a Signal not being inherently LLM-generated is a constraint rather than a sentence: DETERMINISTIC requires model and prompt versions to be ABSENT, and MODEL_DERIVED requires a model version."
+    },
+    "SignalDirection": {
+      "type": "string",
+      "enum": [
+        "INCREASING",
+        "DECREASING",
+        "UNCHANGED",
+        "INDETERMINATE",
+        "NOT_APPLICABLE"
+      ],
+      "description": "Which way the derived quantity moved. About CHANGE ONLY: POSITIVE and NEGATIVE are deliberately absent because they are sentiment, and a complaint-frequency signal can be INCREASING while the sentiment of the underlying text is negative -- one enum holding both would make that sentence unrepresentable. Any value other than NOT_APPLICABLE requires a temporal basis of ORDERED_PERIODS or COMPARABLE_INSTANTS, because increasing is a statement about before and after."
+    },
     "SignalId": {
       "type": "string",
       "description": "An extracted demand signal.",
       "format": "uuid"
+    },
+    "SignalInputRole": {
+      "type": "string",
+      "enum": [
+        "CONTRIBUTED",
+        "EXCLUDED"
+      ],
+      "description": "Whether an input actually entered the derivation. Excluded inputs are recorded rather than dropped: we looked at ten and used six must be visible, and a signal that quietly used six of ten is indistinguishable from one that was offered six."
+    },
+    "SignalMagnitudeKind": {
+      "type": "string",
+      "enum": [
+        "ABSOLUTE_CHANGE",
+        "RATIO",
+        "OBSERVATION_COUNT"
+      ],
+      "description": "How to read a Signal's magnitude. Closed because a ratio of 2 and a difference of 2 are not the same fact, and a consumer that could not tell them apart would compare them. There is no LEVEL value: a level is one observation, and one observation is not a Signal."
+    },
+    "SignalMagnitudeUnitState": {
+      "type": "string",
+      "enum": [
+        "INHERITED",
+        "DIMENSIONLESS",
+        "NOT_ESTABLISHED"
+      ],
+      "description": "Whether a Signal's magnitude carries a unit, and why not when it does not. The counterpart of NormalizedUnitState one layer up, and it exists for the same reason: GDELT publishes four columns and none is a unit, so a change over GDELT counts has no unit to inherit. Naming one here would assert the source did something it did not."
+    },
+    "SignalQuantityFamily": {
+      "type": "string",
+      "enum": [
+        "LEXICAL_FREQUENCY",
+        "MEASURED_SERIES"
+      ],
+      "description": "What kind of quantity a derived Signal is about. Closed because consumers branch exhaustively on it and the families have different scope shapes -- a lexical signal carries a term and NO geography key, a series signal carries a metric and a geography -- so an unhandled third value is a bug rather than a gap. It is deliberately NOT DemandSignalFamily: PAIN/DESIRE/BEHAVIORAL/MARKET classify demand, and a count of how often a token occurred in news text is not evidence of demand. It is also not the registry called signal_family, which says what a SOURCE could expose (ADR-017). Three relations, three subjects, three names."
+    },
+    "SignalRefusalReason": {
+      "type": "string",
+      "enum": [
+        "INPUT_RECORD_INVALID",
+        "REQUIRED_FACT_WITHHELD",
+        "AMBIGUOUS_OBSERVATION_LINEAGE",
+        "INCOMPATIBLE_INPUT_KINDS",
+        "INSUFFICIENT_INPUT_OBSERVATIONS",
+        "UNSUPPORTED_SIGNAL_TYPE",
+        "PARAMETERS_INCOMPLETE"
+      ],
+      "description": "Why an input was excluded, or why a whole derivation produced no Signal. One vocabulary for both, because a refused derivation is usually an exclusion having happened often enough. A refusal is a RETURNED VALUE, never a row: a record in a table of signals says a signal exists, and one meaning no signal exists is a misleading signal."
+    },
+    "SignalRequiredFact": {
+      "type": "string",
+      "enum": [
+        "EXACT_NUMERIC_VALUE",
+        "LEXICAL_TERM",
+        "SOURCE_PERIOD_LABEL",
+        "SOURCE_RELATIVE_ORDER",
+        "COMPARABLE_INSTANT",
+        "SOURCE_LANGUAGE_LABEL",
+        "CANONICAL_LANGUAGE",
+        "CLASSIFIED_GEOGRAPHY"
+      ],
+      "description": "A canonical fact a derivation declares it needs. Closed because each value maps to a specific set of NormalizationQualityReason values that withhold it and to the record kinds that can supply it, so the check is mechanical rather than a judgement. The point is that PARTIAL must not automatically mean unusable: what matters is whether the SPECIFIC missing fact matters to the SPECIFIC derivation."
+    },
+    "SignalTemporalBasis": {
+      "type": "string",
+      "enum": [
+        "NONE",
+        "SAME_PERIOD_LABEL",
+        "ORDERED_PERIODS",
+        "COMPARABLE_INSTANTS"
+      ],
+      "description": "What temporal relation a derivation actually used. Closed and consequential: ORDER and GLOBAL INSTANT are different questions needing different evidence, and collapsing them is how a timezone gets invented. Only COMPARABLE_INSTANTS may carry window bounds or leave observed_at non-null; every other basis carries neither."
     },
     "SourceAccessMethod": {
       "type": "string",

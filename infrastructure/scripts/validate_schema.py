@@ -69,12 +69,19 @@ GLOBAL_TABLES = {
     "registry.source_behavior_coverage",
 }
 
-# Tables governed by data-retention-policy-v1.md.
+# Tables governed by data-retention-policy-v1.md, each with the column its
+# retention clock STARTS from.
+#
+# Not always `collected_at`. A Signal is not collected: its inputs were, at
+# various times, from possibly several sources, so a single collection time on
+# the derived row has no referent (Mission 1.11, GAP-15). Assuming one column
+# name for every table would have this check verifying a column that no longer
+# exists, which passes and measures nothing.
 RETENTION_TABLES = {
-    "acquisition.raw_records",
-    "acquisition.normalized_records",
-    "nlp.signals",
-    "scoring.evidence",
+    "acquisition.raw_records": "collected_at",
+    "acquisition.normalized_records": "collected_at",
+    "nlp.signals": "derived_at",
+    "scoring.evidence": "collected_at",
 }
 
 CREATE_TABLE = re.compile(
@@ -91,6 +98,45 @@ CREATE_INDEX = re.compile(
 # would go unverified against the contract -- which is the one drift this check
 # exists to catch.
 ALTER_TABLE = re.compile(r"ALTER TABLE\s+([a-z_]+\.[a-z_]+)(.*?);", re.DOTALL | re.IGNORECASE)
+
+# A column renamed by a later migration keeps its ORIGINAL name in the CREATE
+# TABLE text this script reads, so every check below would go on asserting about
+# a name the database no longer has -- and pass, while measuring nothing. Applied
+# to the folded body so `derived_at TIMESTAMPTZ NOT NULL` is found where
+# migration 0001 wrote `collected_at` and migration 0012 renamed it.
+RENAME_COLUMN = re.compile(r"RENAME\s+COLUMN\s+([a-z_]+)\s+TO\s+([a-z_]+)", re.IGNORECASE)
+
+# A constraint dropped by a later migration is still in the CREATE TABLE text.
+# Left in, it is compared against the contract alongside the constraint that
+# REPLACED it -- so a value set that was deliberately changed reads as drift.
+# Both live cases pair a drop with a rename (`sources.status` -> `lifecycle` in
+# 0004, `signals.signal_family` -> `quantity_family` in 0012), which is exactly
+# when the old definition is most misleading.
+DROP_CONSTRAINT = re.compile(r"DROP\s+CONSTRAINT\s+([a-z_]+)", re.IGNORECASE)
+
+
+def strip_constraint(body: str, name: str) -> str:
+    """The table body without the named constraint's definition.
+
+    Scans forward from the definition tracking parenthesis depth, so a comma
+    inside `CHECK (x IN ('a', 'b'))` does not end it early.
+    """
+    match = re.search(rf"CONSTRAINT\s+{re.escape(name)}\b", body, re.IGNORECASE)
+    if match is None:
+        return body
+    start, depth, index = match.start(), 0, match.end()
+    while index < len(body):
+        char = body[index]
+        if char == "(":
+            depth += 1
+        elif char == ")":
+            depth -= 1
+        elif char == "," and depth == 0:
+            index += 1
+            break
+        index += 1
+    return body[:start] + body[index:]
+
 
 # Every `INSERT INTO registry.registry_entries (cols) VALUES (...), (...);`
 # with its column list, so values can be read BY COLUMN NAME rather than by
@@ -212,10 +258,23 @@ def main() -> int:
         print("FAIL  no CREATE TABLE statements parsed")
         return 1
 
+    renames: dict[str, list[tuple[str, str]]] = {}
+    dropped: dict[str, list[str]] = {}
     for table, altered in ALTER_TABLE.findall(sql):
         key = table.lower()
         if key in tables:
             tables[key] = tables[key] + "\n" + altered
+            renames.setdefault(key, []).extend(RENAME_COLUMN.findall(altered))
+            dropped.setdefault(key, []).extend(DROP_CONSTRAINT.findall(altered))
+
+    # Drops first: a dropped constraint must not be renamed into looking current.
+    for key, names in dropped.items():
+        for name in names:
+            tables[key] = strip_constraint(tables[key], name)
+    # In migration order, so a column renamed twice ends on its current name.
+    for key, pairs in renames.items():
+        for old, new in pairs:
+            tables[key] = re.sub(rf"\b{re.escape(old)}\b", new, tables[key])
 
     leading_index_cols: dict[str, set[str]] = {}
     for table, first_col in CREATE_INDEX.findall(sql):
@@ -264,12 +323,12 @@ def main() -> int:
     checks_run += 1
 
     # -- 6: retention fields ------------------------------------------------
-    for table in sorted(RETENTION_TABLES):
+    for table, start_column in sorted(RETENTION_TABLES.items()):
         body = tables.get(table)
         if body is None:
             errors.append(f"{table}: retention-governed table is missing from the schema")
             continue
-        for column in ("collected_at", "expires_at"):
+        for column in (start_column, "expires_at"):
             if not re.search(rf"{column}\s+TIMESTAMPTZ\s+NOT NULL", body, re.IGNORECASE):
                 errors.append(
                     f"{table}: retention-governed table must declare "
@@ -316,6 +375,21 @@ def main() -> int:
             "acquisition.normalized_records",
             "quality",
         ),
+        # Mission 1.11. Every one of these decides how a derived signal is READ:
+        # a family says what kind of quantity it is about, a direction asserts
+        # change, a magnitude kind says whether 2 means a difference or a ratio,
+        # and a temporal basis decides whether the row may carry an event time at
+        # all. A value drifting from the contract here would let a signal be read
+        # as something it is not.
+        ("SignalQuantityFamily", "nlp.signals", "quantity_family"),
+        ("SignalDirection", "nlp.signals", "direction"),
+        ("SignalMagnitudeKind", "nlp.signals", "magnitude_kind"),
+        ("SignalMagnitudeUnitState", "nlp.signals", "magnitude_unit_state"),
+        ("SignalTemporalBasis", "nlp.signals", "temporal_basis"),
+        ("SignalDerivationKind", "nlp.signals", "derivation_kind"),
+        ("SignalInputRole", "nlp.signal_inputs", "role"),
+        ("SignalRefusalReason", "nlp.signal_inputs", "refusal_reason"),
+        ("NormalizedRecordQuality", "nlp.signal_inputs", "input_quality"),
     ]
     for enum_name, table, column in enum_sites:
         expected = set(enums[enum_name])

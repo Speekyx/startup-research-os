@@ -280,6 +280,27 @@ No new CI job. Rules inside the normalization guard and the adapter itself.
 | **An existing payload still hashes to its historical value** | A **literal** sha256, not a round-trip | The assertion that catches `timezone_state` leaking into an `ESTABLISHED` payload and reporting a revision on every record ever written |
 | **`only_unnormalized` stays meaningful with two adapters** | One lineage per registered adapter, matched on the collector | Dropping the filter is correct per record and silently wrong in bulk: a workspace larger than the batch bound would re-read its first page forever |
 
+### The Signal model (Mission 1.11)
+
+No new CI job. Rules in the schema validator, in the constructor, and in the
+database itself -- and where a rule could live in either, it lives in both.
+
+| Gate | Mechanism | Guards |
+|------|-----------|--------|
+| **A dropped constraint is not compared against the contract** | `validate_schema.py` strips `DROP CONSTRAINT` definitions before checking | Two live cases pair a drop with a rename, so a value set that was deliberately changed read as drift and the check reported a failure that was not one |
+| **A renamed column is checked under its current name** | `validate_schema.py` applies `RENAME COLUMN` to the folded table body | Without it, the retention check asserted `collected_at TIMESTAMPTZ NOT NULL` on a table whose column is `derived_at` -- and passed, while measuring nothing |
+| **Nine closed-enum sites across two signal tables** | `validate_schema.py` compares each `CHECK` against `domain.v1.json` | Each of these decides how a derived signal is READ: a family, a direction, a magnitude kind, a temporal basis |
+| **No GDELT signal can carry an event time** | `CHECK (observed_at IS NULL OR temporal_basis = 'COMPARABLE_INSTANTS')` | H-29. The normalizer refuses to invent a zone; without this the layer above could invent one back |
+| **No signal can claim a direction without an order** | `CHECK (direction = 'NOT_APPLICABLE' OR temporal_basis IN (...))` | H-32. "Increasing" is a statement about before and after |
+| **The basis cannot disagree with its own window** | `CHECK (temporal_basis = temporal_window ->> 'basis')` | Two answers to one question is how the wrong one wins |
+| **A deterministic signal carries no model provenance** | `CHECK` pairing `derivation_kind` with `model_version` | Mission 1.11 §23 as a constraint rather than a sentence |
+| **A magnitude is exact and unbounded** | `NUMERIC`, replacing `DOUBLE PRECISION CHECK (BETWEEN 0 AND 1)` | The old column could not hold a change from 55 to 81, and a float gives back at the first subtraction what the normalization layer exists to guarantee |
+| **A ratio or a count names no unit** | `CHECK` on `magnitude_kind` against `magnitude_unit_state` | GDELT publishes four columns and none is a unit |
+| **A signal cannot reference another workspace's records** | Composite FKs on `signal_inputs` and on `evidence.signal_id` | The second was a pre-existing gap: migration 0005 made `claim_id` composite and left `signal_id` behind |
+| **One derivation is one row** | `UNIQUE (workspace_id, derivation_fingerprint)` plus a UUIDv5 id over the same material | Two rows for one derivation are indistinguishable from two independent findings, which is the one shape evidence aggregation must never be handed |
+| **A registered signal type resolves on an empty database** | The two entries are written by migration 0012, not by a seed | `demand_signal_type` had no migration-written entry, so `nlp.signals` accepted an insert on a seeded machine and rejected it everywhere else |
+| **Thirteen constraints verified by the constraint that refused** | A rollback-only probe asserting `exc.diag.constraint_name` | Its first version asserted "some error was raised" and every case passed while the real cause was a column the fixture forgot |
+
 ---
 
 ## 2. Turborepo task graph

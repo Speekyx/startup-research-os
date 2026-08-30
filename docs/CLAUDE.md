@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.16
-Last amended: 2026-08-30 (Sprint 1 / Mission 1.10.1)
+Version: 1.17
+Last amended: 2026-08-30 (Sprint 1 / Mission 1.11)
 
 ## Boot Sequence
 
@@ -23,8 +23,9 @@ Before performing any task, execute this reading order.
 14. docs/domain/evidence-aggregation-framework-v1.md
 15. docs/domain/claim-model-v1.md
 16. docs/ai/evaluation-framework-v1.md
-17. Relevant ADRs
-18. Task-specific specifications
+17. docs/data/signal-contract-v1.md
+18. Relevant ADRs
+19. Task-specific specifications
 
 These documents are the authoritative source of truth.
 
@@ -40,6 +41,7 @@ Ontology V2 keeps V1.1's numbering for §1–§10, so an existing reference to
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.17 | 2026-08-30 | Signal defined as a DERIVATION over two or more observations, never a labelled one. `nlp.signals` reshaped; the family stops classifying demand; order and instant separated, and H-32 opened. Model and contract only -- no extractor, 0 signals |
 | 1.16 | 2026-08-30 | Second normalizer recorded: GDELT WEB-NGRAM, deterministic and offline, with two real canonical records. Every one is PARTIAL because H-29 and H-30 stay open and are stated per record |
 | 1.15 | 2026-08-30 | Second canonical record kind recorded: a lexical frequency observation with no geography. A period may declare its timezone unestablished and a language may stay unmapped, both visibly (ADR-019). No GDELT normalizer |
 | 1.14 | 2026-08-30 | Second collector recorded: GDELT WEB-NGRAM, streamed and bounded, with real RawRecords. Bulk-file collection rules added; GDELT is collected and still not normalized |
@@ -414,6 +416,72 @@ through `collection/transport.py`. `validate_normalization.py` asserts it by
 parsing every import, and was probed against fourteen deliberate violations
 before being believed.
 
+### Signal — a derivation, never a labelled observation
+
+Since Mission 1.11 the Signal contract exists (`signal-contract-v1.md`,
+`signal-taxonomy-v1.md`, `signal-temporal-semantics-v1.md`, ADR-020). **The model
+exists and no extractor does**: `SIGNAL_EXTRACTORS` is empty and `nlp.signals`
+holds 0 rows.
+
+```text
+RawRecord -> NormalizedRecord -> SIGNAL -> Claim / Evidence -> Opportunity -> Score
+```
+
+Eight rules, and none is negotiable:
+
+- **One observation is not a Signal.** A derivation whose assertion is
+  recoverable from a single input's payload is that observation renamed. At
+  least **two distinct source observations** must contribute, and distinctness is
+  over `observation_key` — never over `normalized_record_id`, because one
+  observation can have several normalized rows and counting rows would let a
+  normalizer upgrade manufacture a contrast out of one observation. Two rows
+  sharing a key are refused as `AMBIGUOUS_OBSERVATION_LINEAGE`. **D-08 is failed
+  closed on, not solved.**
+- **The Signal family is not the demand family.** `quantity_family` is
+  `LEXICAL_FREQUENCY | MEASURED_SERIES` and says what kind of QUANTITY the signal
+  is about. `PAIN / DESIRE / BEHAVIORAL / MARKET` classify demand, and neither
+  derivation the two real sources support is evidence of demand — a GDELT term
+  count may equally be a news event, a crisis, a celebrity or the weather.
+  **Ontology V2 §3.6 is unchanged**; what stops being true is the claim that
+  every row of that table carries a demand family. Three things were called
+  "signal family" and now have three names (`signal-taxonomy-v1.md` §1).
+- **Order and global instant are different facts.** `SOURCE_RELATIVE_ORDER` says
+  which of two observations came first within one source stream;
+  `COMPARABLE_INSTANT` places them on a shared timeline. **Neither is granted to
+  GDELT**: H-29 blocks the second and the new **H-32** blocks the first. Label
+  EQUALITY needs no timezone and is available, so a contrast between two terms
+  inside one bucket is derivable today and a frequency change is not. A direction
+  other than `NOT_APPLICABLE` requires an ordered basis, so no GDELT signal can
+  carry one — enforced by the database.
+- **`PARTIAL` does not mean unusable and `INVALID` is never derivable from.** A
+  derivation declares the `SignalRequiredFact` values it needs and the model
+  computes what each input withholds from that record's own quality reasons.
+  Every GDELT record is `PARTIAL` and a within-bucket contrast needs neither
+  thing it is missing.
+- **A blocked derivation produces no Signal.** There is no lifecycle enum, no
+  `BLOCKED` and no `INSUFFICIENT_DATA`: a row in a table of signals says a signal
+  exists. A refusal is a returned value object with a closed reason code.
+- **Magnitude is exact, typed and not a strength.** A `Decimal`, never a float,
+  never bounded to `[0,1]`, and **no 0–100 cross-signal scale** — a GDELT term
+  frequency and a World Bank population figure are not comparable measurements.
+  The unit is inherited from the inputs or does not exist.
+- **`derivation_confidence` is about the derivation.** A deterministic
+  extractor's is `1.0`, and that is a statement about arithmetic, not about the
+  market. It is not an `EvidenceScore`, not an evidence strength, and it is
+  multiplied by nothing.
+- **A Signal is not Evidence and resolves no contradiction.** Evidence is
+  claim-scoped and adds direction, relevance, directness, reliability and an
+  independence state; a Signal has no claim to be relative to. Lineage preserves
+  the source and raw-record facts so aggregation can judge independence later,
+  and **judges nothing here**.
+
+Identity is deterministic over workspace, type, extractor and version, schema
+version, the ordered contributing inputs, the parameter fingerprint and the
+window — and excludes the OUTPUTS, so a changed magnitude under an unchanged
+identity is reportable rather than absorbed into a new row. The research session
+is **lineage, never identity**: two sessions deriving the same thing converge on
+one signal, because two rows would read as two independent findings.
+
 ### Claim — the unit evidence accumulates against
 
 Since Mission 1.2 a **Claim** is a persisted entity (Ontology V2.1 §17,
@@ -483,6 +551,11 @@ designed behaviour, not a gap to fill.
 normalization job may be dispatched for a source with no normalizer. The
 orchestrator reports the second under `NO-NORMALIZER-IMPLEMENTED`, distinct from
 the two acquisition gates because different work clears each.
+
+**No signal extractor may be implemented before Mission 1.11.1**, and none
+may derive a temporal GDELT signal while H-29 and H-32 are open. The model
+refuses it; an extractor that worked around the refusal would be granting itself
+a fact no source established.
 
 **No collector may be implemented for a source that is not collector-eligible.**
 D-07 is resolved and the registry exists. Two sources pass the gate; one has a

@@ -8,7 +8,7 @@ Regenerate      : python packages/contracts/tools/generate.py
 Editing this file by hand will be overwritten and will fail the contract
 check in CI. Change the source of truth instead.
 
-contract_version: 1.5.0
+contract_version: 1.6.0
 ontology_version: 2
 """
 
@@ -17,7 +17,7 @@ from __future__ import annotations
 from enum import Enum
 from typing import Final
 
-CONTRACT_VERSION: Final[str] = "1.5.0"
+CONTRACT_VERSION: Final[str] = "1.6.0"
 ONTOLOGY_VERSION: Final[str] = "2"
 RESEARCH_CONTEXT_SCHEMA_VERSION: Final[str] = "1.0.0"
 
@@ -519,6 +519,114 @@ class NormalizedLanguageMapping(str, Enum):
     NOT_ESTABLISHED = "NOT_ESTABLISHED"  # No reviewed mapping exists for this source label. The label is kept verbatim, no tag is assigned, and the absence stays visible rather than being resolved by resemblance
 
 
+class SignalQuantityFamily(str, Enum):
+    """What kind of quantity a derived Signal is about. Closed because consumers branch exhaustively on it and the families have different scope shapes -- a lexical signal carries a term and NO geography key, a series signal carries a metric and a geography -- so an unhandled third value is a bug rather than a gap. It is deliberately NOT DemandSignalFamily: PAIN/DESIRE/BEHAVIORAL/MARKET classify demand, and a count of how often a token occurred in news text is not evidence of demand. It is also not the registry called signal_family, which says what a SOURCE could expose (ADR-017). Three relations, three subjects, three names.
+
+    See signal-taxonomy-v1.md; Mission 1.11 §5.
+    """
+
+    LEXICAL_FREQUENCY = "LEXICAL_FREQUENCY"  # How often language tokens occur in text a source processed. Carries a term and a source language label, and no geography key at all
+    MEASURED_SERIES = "MEASURED_SERIES"  # A numeric quantity a source measures or reports over a period. Carries a metric and a geography
+
+
+class SignalDirection(str, Enum):
+    """Which way the derived quantity moved. About CHANGE ONLY: POSITIVE and NEGATIVE are deliberately absent because they are sentiment, and a complaint-frequency signal can be INCREASING while the sentiment of the underlying text is negative -- one enum holding both would make that sentence unrepresentable. Any value other than NOT_APPLICABLE requires a temporal basis of ORDERED_PERIODS or COMPARABLE_INSTANTS, because increasing is a statement about before and after.
+
+    See signal-contract-v1.md; Mission 1.11 §33.
+    """
+
+    INCREASING = "INCREASING"  # The quantity is larger at the later position
+    DECREASING = "DECREASING"  # The quantity is smaller at the later position
+    UNCHANGED = "UNCHANGED"  # Equal at both positions. Not STABLE: stability is a claim about variance over a window, which two points cannot support
+    INDETERMINATE = "INDETERMINATE"  # The comparison ran and did not resolve to a direction -- a non-monotonic sequence, or a tie the derivation declines to break
+    NOT_APPLICABLE = "NOT_APPLICABLE"  # The derivation states no ordered relation, so direction is not a question it answers. The only value permitted under a NONE or SAME_PERIOD_LABEL basis
+
+
+class SignalMagnitudeKind(str, Enum):
+    """How to read a Signal's magnitude. Closed because a ratio of 2 and a difference of 2 are not the same fact, and a consumer that could not tell them apart would compare them. There is no LEVEL value: a level is one observation, and one observation is not a Signal.
+
+    See signal-contract-v1.md; Mission 1.11 §33.
+    """
+
+    ABSOLUTE_CHANGE = "ABSOLUTE_CHANGE"  # A difference expressed in the inputs' own quantity. The unit is INHERITED where the inputs published one and NOT_ESTABLISHED where they did not
+    RATIO = "RATIO"  # One quantity relative to another. Always DIMENSIONLESS
+    OBSERVATION_COUNT = "OBSERVATION_COUNT"  # How many observations satisfied the derivation's condition. Always DIMENSIONLESS, and a diagnostic count rather than a sample size
+
+
+class SignalMagnitudeUnitState(str, Enum):
+    """Whether a Signal's magnitude carries a unit, and why not when it does not. The counterpart of NormalizedUnitState one layer up, and it exists for the same reason: GDELT publishes four columns and none is a unit, so a change over GDELT counts has no unit to inherit. Naming one here would assert the source did something it did not.
+
+    See signal-contract-v1.md; Mission 1.11 §33.
+    """
+
+    INHERITED = "INHERITED"  # The contributing observations published a unit and the magnitude carries it verbatim. The only state that carries a unit string
+    DIMENSIONLESS = "DIMENSIONLESS"  # The magnitude has no unit by construction -- a ratio, or a count of observations. Required for RATIO and OBSERVATION_COUNT
+    NOT_ESTABLISHED = "NOT_ESTABLISHED"  # The magnitude is in the inputs' quantity and the inputs published no unit. Carried up rather than resolved
+
+
+class SignalTemporalBasis(str, Enum):
+    """What temporal relation a derivation actually used. Closed and consequential: ORDER and GLOBAL INSTANT are different questions needing different evidence, and collapsing them is how a timezone gets invented. Only COMPARABLE_INSTANTS may carry window bounds or leave observed_at non-null; every other basis carries neither.
+
+    See signal-temporal-semantics-v1.md; Mission 1.11 §12, §13.
+    """
+
+    NONE = "NONE"  # The derivation relates its inputs without any temporal relation between them
+    SAME_PERIOD_LABEL = "SAME_PERIOD_LABEL"  # Every input carries the identical source period label. String equality over a value the source published, needing no timezone -- the basis available to GDELT while H-29 is open
+    ORDERED_PERIODS = "ORDERED_PERIODS"  # The inputs are placed in sequence within one source stream, without being placed on any shared timeline. Requires SOURCE_RELATIVE_ORDER
+    COMPARABLE_INSTANTS = "COMPARABLE_INSTANTS"  # The inputs are placed on a shared timeline. Requires COMPARABLE_INSTANT, and is the only basis that carries timezone-aware window bounds
+
+
+class SignalRequiredFact(str, Enum):
+    """A canonical fact a derivation declares it needs. Closed because each value maps to a specific set of NormalizationQualityReason values that withhold it and to the record kinds that can supply it, so the check is mechanical rather than a judgement. The point is that PARTIAL must not automatically mean unusable: what matters is whether the SPECIFIC missing fact matters to the SPECIFIC derivation.
+
+    See signal-contract-v1.md §10; Mission 1.11 §11.
+    """
+
+    EXACT_NUMERIC_VALUE = "EXACT_NUMERIC_VALUE"  # A reported figure readable as an exact decimal. Withheld by VALUE_NOT_REPORTED and MALFORMED_NUMERIC_VALUE
+    LEXICAL_TERM = "LEXICAL_TERM"  # The source term, verbatim. Supplied only by lexical_frequency_observation
+    SOURCE_PERIOD_LABEL = "SOURCE_PERIOD_LABEL"  # The source's own period label, for equality and membership. Needs no timezone; withheld only by PERIOD_NOT_SUPPORTED
+    SOURCE_RELATIVE_ORDER = "SOURCE_RELATIVE_ORDER"  # The ability to say which of two observations came first within one source stream, without placing either on a shared timeline. Withheld by PERIOD_TIMEZONE_NOT_ESTABLISHED unless the source appears in the reviewed order certification, which is empty (H-32)
+    COMPARABLE_INSTANT = "COMPARABLE_INSTANT"  # A moment on a timeline shared with other sources. Withheld by PERIOD_TIMEZONE_NOT_ESTABLISHED (H-29)
+    SOURCE_LANGUAGE_LABEL = "SOURCE_LANGUAGE_LABEL"  # The source language label and its scheme, for equality within one source. Sufficient for within-source work while H-30 is open
+    CANONICAL_LANGUAGE = "CANONICAL_LANGUAGE"  # A canonical language tag. Withheld by LANGUAGE_NOT_MAPPED, and required for any cross-source language aggregation (H-30)
+    CLASSIFIED_GEOGRAPHY = "CLASSIFIED_GEOGRAPHY"  # A geography established as a country or an aggregate. Withheld by GEOGRAPHY_NOT_CLASSIFIED and GEOGRAPHY_MISSING
+
+
+class SignalDerivationKind(str, Enum):
+    """How a Signal was produced. Closed and mandatory so that a Signal not being inherently LLM-generated is a constraint rather than a sentence: DETERMINISTIC requires model and prompt versions to be ABSENT, and MODEL_DERIVED requires a model version.
+
+    See signal-contract-v1.md §8; Mission 1.11 §23.
+    """
+
+    DETERMINISTIC = "DETERMINISTIC"  # Arithmetic and comparison over canonical values. Reproducible from the inputs and the parameters alone, with no model and no prompt
+    MODEL_DERIVED = "MODEL_DERIVED"  # A model participated. Obliged to carry provider and model version, an extraction confidence, schema validation and untrusted-content handling (llm-reasoning-rules.md §7, §9)
+
+
+class SignalInputRole(str, Enum):
+    """Whether an input actually entered the derivation. Excluded inputs are recorded rather than dropped: we looked at ten and used six must be visible, and a signal that quietly used six of ten is indistinguishable from one that was offered six.
+
+    See signal-contract-v1.md §9; Mission 1.11 §19.
+    """
+
+    CONTRIBUTED = "CONTRIBUTED"  # The input supplied every fact the derivation required and entered the result
+    EXCLUDED = "EXCLUDED"  # The input was considered and set aside. Carries the reason and the facts it could not supply
+
+
+class SignalRefusalReason(str, Enum):
+    """Why an input was excluded, or why a whole derivation produced no Signal. One vocabulary for both, because a refused derivation is usually an exclusion having happened often enough. A refusal is a RETURNED VALUE, never a row: a record in a table of signals says a signal exists, and one meaning no signal exists is a misleading signal.
+
+    See signal-contract-v1.md §11; Mission 1.11 §27.
+    """
+
+    INPUT_RECORD_INVALID = "INPUT_RECORD_INVALID"  # The normalized record is INVALID. A record that could not be represented must not be read as an observation
+    REQUIRED_FACT_WITHHELD = "REQUIRED_FACT_WITHHELD"  # A canonical fact the derivation requires is absent, per the record's own quality reasons or its record kind
+    AMBIGUOUS_OBSERVATION_LINEAGE = "AMBIGUOUS_OBSERVATION_LINEAGE"  # Two contributing rows carry the same observation_key under different lineages. Refused rather than resolved: choosing between them is D-08, which is open, and counting both would manufacture a contrast out of one observation
+    INCOMPATIBLE_INPUT_KINDS = "INCOMPATIBLE_INPUT_KINDS"  # The inputs disagree on record kind or period resolution. Never silently coarsened to the coarser of the two
+    INSUFFICIENT_INPUT_OBSERVATIONS = "INSUFFICIENT_INPUT_OBSERVATIONS"  # Fewer than two distinct source observations remain. One observation is not a Signal
+    UNSUPPORTED_SIGNAL_TYPE = "UNSUPPORTED_SIGNAL_TYPE"  # The signal type is not registered, or its declared family does not match the inputs
+    PARAMETERS_INCOMPLETE = "PARAMETERS_INCOMPLETE"  # A parameter affecting the output was not stated. A hidden default makes the extractor version meaningless
+
+
 # --- Numeric bounds --------------------------------------------------------
 # A field named `confidence` is always [0,1]. A field named `*_score` is
 # always 0-100. scoring-framework-v1.1.md §4.1.
@@ -551,6 +659,8 @@ REGISTRY_NAMES: Final[tuple[str, ...]] = (
     "region",
     "source_family",
     "normalization_record_kind",
+    "signal_family",
+    "signal_type",
 )
 
 

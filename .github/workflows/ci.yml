@@ -204,6 +204,7 @@ jobs:
                       packages/llm-gateway/python/sros_llm_gateway \
                       services/workers/python/sros_workers \
                       packages/evidence-aggregation/python/sros_evidence_aggregation \
+                      packages/signal-model/python/sros_signal_model \
                       services/acquisition/python/sros_acquisition \
                       services/research-orchestrator/python/sros_orchestrator \
                       services/gateway/python/sros_gateway

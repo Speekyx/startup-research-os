@@ -1003,3 +1003,57 @@ for classification in ("theme", "topic", "entity"):
 There is no prose in a payload, and a field-by-field check would pass while a
 *new* field carried the thing forbidden. The rule is about what is being scanned:
 **source text has explanations in it; data does not.**
+
+---
+
+## 24. A refusal test must assert WHY it was refused (added in Mission 1.11)
+
+Migration 0012 added twelve CHECK constraints to `nlp.signals`, and the way to
+believe a constraint is to watch it refuse something. The probe was a dozen
+INSERTs inside rolled-back transactions, each expecting a failure:
+
+```python
+try:
+    conn.execute(insert_sql(row), params)
+    inserted = True
+except Exception:
+    inserted = False
+assert inserted is expected
+```
+
+Ten of the twelve cases reported `ok` on the first run. All ten were wrong. The
+fixture omitted `correlation_id`, which is `NOT NULL`, so **every** insert failed
+before reaching any CHECK -- and a test that only asks "did it fail" cannot tell
+a constraint working from a fixture that never got there.
+
+### What exposed it
+
+The two cases that expected an insert to **succeed**. A suite made only of
+refusals has no way to notice that everything refuses.
+
+### The rule
+
+```python
+except psycopg.Error as exc:
+    actual = exc.diag.constraint_name
+assert actual == "signals_observed_at_requires_comparable_instants_check"
+```
+
+- **Name the expected constraint**, not the exception class. `IntegrityError`
+  covers a null violation, a foreign key, a unique conflict and every CHECK in
+  the table.
+- **Include at least one positive case** in any refusal-shaped suite. It is the
+  only case that fails when the fixture is broken rather than the rule.
+- The same applies above the database: `test_signal_model.py` asserts
+  `caught.exception.refusal.reason`, never that "a `SignalRefusedError` was
+  raised" -- seven refusal reasons share one exception type, and six of them
+  passing for the wrong reason would look identical to six passing.
+
+### Where a `ValueError` belongs instead
+
+The Signal model splits two things a single exception type would blur: a
+`SignalRefusedError` means **the data** does not support a derivation, which is an
+ordinary outcome; a `ValueError` means **the caller** is wrong -- a confidence
+out of range, a direction with no order behind it, a lexical scope carrying a
+geography. Tests assert the split, because a caller error that arrives as a
+refusal would be logged as "no signal today" and never fixed.

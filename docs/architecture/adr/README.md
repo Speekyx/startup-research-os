@@ -23,6 +23,10 @@ eventually be documented through ADRs."
 | [ADR-014](ADR-014-evidence-aggregation-reference-implementation.md) | Evidence aggregation as a reference package, gated on calibration | Accepted — Mission 1.1. **Resolves D-03 at the framework level** |
 | [ADR-015](ADR-015-claim-persistence-and-versioning.md) | Claim persistence: stable identity, append-only revisions | Accepted — Mission 1.2. **Resolves A-13** |
 | [ADR-016](ADR-016-compliance-capabilities-and-acquisition-authorization.md) | Compliance capabilities and acquisition authorization: a condition is cleared by a verifier, and a collector receives an authorization or nothing | Accepted — Mission 1.4. Extends ADR-013 |
+| [ADR-017](ADR-017-source-signal-coverage.md) | Source signal coverage as a mapped projection of the canonical ontology | Accepted — Mission 1.7. Coverage is potential, never permission |
+| [ADR-018](ADR-018-acquisition-rights-basis.md) | Record what KIND of thing authorises a resource, not only which licence | Accepted — Mission 1.9.1. **Resolves H-28** |
+| [ADR-019](ADR-019-lexical-frequency-observation.md) | A second record kind, and two canonical absences | Accepted — Mission 1.10. Extends ADR-009 |
+| [ADR-020](ADR-020-signal-derivation-model.md) | A Signal is a derivation, not a labelled observation | Accepted — Mission 1.11. Extends ADR-008, ADR-012, ADR-019 |
 
 > **Numbering note.** The production-deployment ADR has **no reserved number any
 > more.** It moved from 012 to 013 to 014 to 015, once per mission, because each
