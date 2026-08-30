@@ -39,7 +39,12 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 PACKAGE = ROOT / "services/acquisition/python/sros_acquisition/normalization"
 CONTRACT = ROOT / "packages/contracts/schema/domain.v1.json"
-MIGRATION = ROOT / "infrastructure/db/migrations/0009_normalized_record_canonical.sql"
+# Every migration that inserts a record-kind row. A single filename was right
+# while one kind existed and would have silently stopped checking the moment a
+# second arrived in a second file -- the check would still pass, over a smaller
+# set than it claimed to cover (Mission 1.10).
+MIGRATIONS = ROOT / "infrastructure/db/migrations"
+MIGRATION = MIGRATIONS / "0009_normalized_record_canonical.sql"
 GEOGRAPHY = ROOT / "docs/data/geography-mapping-v1.json"
 CONFORMANCE = ROOT / "packages/contracts/conformance/cases.json"
 
@@ -239,12 +244,12 @@ def check_record_kinds(errors: list[str]) -> None:
         errors.append("RECORD_KINDS is empty; a normalizer with no kind writes an unreadable row")
         return
 
-    sql = MIGRATION.read_text(encoding="utf-8")
-    seeded = set(re.findall(r"'normalization_record_kind', '([a-z0-9_]+)'", sql))
+    sql = "\n".join(path.read_text(encoding="utf-8") for path in sorted(MIGRATIONS.glob("*.sql")))
+    seeded = set(re.findall(r"'normalization_record_kind',\s*'([a-z0-9_]+)'", sql))
     if declared != seeded:
         errors.append(
-            f"record kinds declared in code {sorted(declared)} do not match those seeded "
-            f"by migration 0009 {sorted(seeded)}"
+            f"record kinds declared in code {sorted(declared)} do not match those "
+            f"inserted by the migrations {sorted(seeded)}"
         )
 
 

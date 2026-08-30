@@ -538,6 +538,8 @@ export const NORMALIZATION_QUALITY_REASON_VALUES = [
   "GEOGRAPHY_MISSING",
   "METRIC_MISSING",
   "PERIOD_NOT_SUPPORTED",
+  "PERIOD_TIMEZONE_NOT_ESTABLISHED",
+  "LANGUAGE_NOT_MAPPED",
 ] as const;
 export type NormalizationQualityReason = (typeof NORMALIZATION_QUALITY_REASON_VALUES)[number];
 export function isNormalizationQualityReason(v: unknown): v is NormalizationQualityReason {
@@ -619,6 +621,32 @@ export const NORMALIZED_UNIT_STATE_VALUES = [
 export type NormalizedUnitState = (typeof NORMALIZED_UNIT_STATE_VALUES)[number];
 export function isNormalizedUnitState(v: unknown): v is NormalizedUnitState {
   return typeof v === "string" && (NORMALIZED_UNIT_STATE_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * Whether the timezone of a canonical period's bounds is established. Closed because the branch is exhaustive and consequential: an ESTABLISHED period carries timezone-aware bounds and an event time, and a NOT_ESTABLISHED one carries wall-clock bounds and no event time at all. The distinction cannot be collapsed -- a source that publishes a bucket label and no offset is not the same as one that publishes UTC, and storing an aware datetime beside a note saying it is not really UTC would be a lie next to a disclaimer.
+ * @see normalized-record-v1.md §7.1; Mission 1.10 §4
+ */
+export const NORMALIZED_TIMEZONE_STATE_VALUES = [
+  "ESTABLISHED",
+  "NOT_ESTABLISHED",
+] as const;
+export type NormalizedTimezoneState = (typeof NORMALIZED_TIMEZONE_STATE_VALUES)[number];
+export function isNormalizedTimezoneState(v: unknown): v is NormalizedTimezoneState {
+  return typeof v === "string" && (NORMALIZED_TIMEZONE_STATE_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * Whether a source language label has been mapped to a canonical language tag. Closed for the reason NormalizedGeographyKind is: the safe failure has to be nameable. A source publishing a human-readable language name is not publishing a language tag, and a name sitting in a field whose contract means a tag is a guess wearing the clothes of a fact. The source label is preserved either way.
+ * @see normalized-record-v1.md §7.3; Mission 1.10 §5
+ */
+export const NORMALIZED_LANGUAGE_MAPPING_VALUES = [
+  "ESTABLISHED",
+  "NOT_ESTABLISHED",
+] as const;
+export type NormalizedLanguageMapping = (typeof NORMALIZED_LANGUAGE_MAPPING_VALUES)[number];
+export function isNormalizedLanguageMapping(v: unknown): v is NormalizedLanguageMapping {
+  return typeof v === "string" && (NORMALIZED_LANGUAGE_MAPPING_VALUES as readonly string[]).includes(v);
 }
 
 // --- Numeric bounds --------------------------------------------------------

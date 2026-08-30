@@ -289,8 +289,16 @@ class TestGeographySemantics:
 class TestRecordKinds:
     """§11. One kind, because one adapter exists."""
 
-    def test_exactly_one_kind_is_declared(self) -> None:
-        assert set(RECORD_KINDS) == {"numeric_observation"}
+    def test_only_the_kinds_with_a_proven_shape_are_declared(self) -> None:
+        """Mission 1.10 added the second, and the rule did not change.
+
+        `numeric_observation` was alone because one adapter existed.
+        `lexical_frequency_observation` was added because a real GDELT
+        observation proved the first kind cannot hold it -- no geography, and a
+        term that is not a metric. Still an EQUALITY: a third kind appearing
+        without a source that needs it is what this catches.
+        """
+        assert set(RECORD_KINDS) == {"numeric_observation", "lexical_frequency_observation"}
 
     def test_no_hypothetical_kind_is_declared(self) -> None:
         # §11 names ten shapes future sources MIGHT have. A registered kind with
@@ -320,15 +328,20 @@ class TestRecordKinds:
 
         assert RECORD_KIND_REGISTRY in REGISTRY_NAMES
 
-    def test_the_seeded_registry_entry_matches_the_declared_kind(self) -> None:
-        # The migration seeds the row and this module declares the shape. Two
-        # hand-maintained copies of one fact drift, and the drift is discovered
-        # by whoever trusted the wrong one.
-        migration = (
-            REPO_ROOT / "infrastructure/db/migrations/0009_normalized_record_canonical.sql"
-        ).read_text(encoding="utf-8")
+    def test_every_declared_kind_is_inserted_by_a_migration(self) -> None:
+        """A migration inserts the row and this module declares the shape. Two
+        hand-maintained copies of one fact drift, and the drift is discovered by
+        whoever trusted the wrong one.
+
+        Reading EVERY migration rather than 0009 by name: a single filename was
+        right while one kind existed and would have silently stopped covering
+        the second the moment it arrived in a second file — still passing, over
+        a smaller set than it claimed.
+        """
+        migrations = (REPO_ROOT / "infrastructure/db/migrations").glob("*.sql")
+        sql = "\n".join(path.read_text(encoding="utf-8") for path in migrations)
         for kind_id in RECORD_KINDS:
-            assert f"'{kind_id}'" in migration
+            assert f"'{kind_id}'" in sql, kind_id
 
 
 # ------------------------------------------------------------------ versioning

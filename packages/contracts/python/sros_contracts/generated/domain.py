@@ -433,6 +433,8 @@ class NormalizationQualityReason(str, Enum):
     GEOGRAPHY_MISSING = "GEOGRAPHY_MISSING"  # The raw record carries no geography at all, so the observation cannot be placed. Renders the record INVALID
     METRIC_MISSING = "METRIC_MISSING"  # The raw record names no metric, so there is nothing the value is a measurement OF. Renders the record INVALID
     PERIOD_NOT_SUPPORTED = "PERIOD_NOT_SUPPORTED"  # The period is in a form this adapter does not represent. Renders the record INVALID rather than approximated: inventing an exact date the source did not give is how January 1 becomes an event time
+    PERIOD_TIMEZONE_NOT_ESTABLISHED = "PERIOD_TIMEZONE_NOT_ESTABLISHED"  # The source published a period label with no timezone, and none has been established from its documentation. The bounds are recorded as wall-clock readings and `observed_at` is left null: a UTC offset the source never published would land in the field a consumer trusts most
+    LANGUAGE_NOT_MAPPED = "LANGUAGE_NOT_MAPPED"  # The source language label has no established mapping to a canonical language tag. The label is preserved verbatim and no tag is assigned -- deriving one from a name is the same class of inference the geography map exists to replace
 
 
 class NormalizationErrorCode(str, Enum):
@@ -495,6 +497,26 @@ class NormalizedUnitState(str, Enum):
     PUBLISHED = "PUBLISHED"  # The source published a unit, and it is recorded verbatim
     NOT_PUBLISHED = "NOT_PUBLISHED"  # The authorized access path does not carry a unit for this observation. Inferring one from the metric identifier would be a guess dressed as a fact, and the first metric whose naming convention differed would make it silently wrong
     UNKNOWN = "UNKNOWN"  # Not established. Reserved for an adapter whose source MAY publish a unit and did not for this observation
+
+
+class NormalizedTimezoneState(str, Enum):
+    """Whether the timezone of a canonical period's bounds is established. Closed because the branch is exhaustive and consequential: an ESTABLISHED period carries timezone-aware bounds and an event time, and a NOT_ESTABLISHED one carries wall-clock bounds and no event time at all. The distinction cannot be collapsed -- a source that publishes a bucket label and no offset is not the same as one that publishes UTC, and storing an aware datetime beside a note saying it is not really UTC would be a lie next to a disclaimer.
+
+    See normalized-record-v1.md §7.1; Mission 1.10 §4.
+    """
+
+    ESTABLISHED = "ESTABLISHED"  # The source states the timezone, or authoritative documentation does. The period's bounds are timezone-aware and `observed_at` carries the start
+    NOT_ESTABLISHED = "NOT_ESTABLISHED"  # The source publishes a period label and no offset, and none has been established. The bounds are naive wall-clock readings -- floating time -- and `observed_at` is null rather than an invented moment. Answering it later is a re-derivation over records already held, not a re-collection
+
+
+class NormalizedLanguageMapping(str, Enum):
+    """Whether a source language label has been mapped to a canonical language tag. Closed for the reason NormalizedGeographyKind is: the safe failure has to be nameable. A source publishing a human-readable language name is not publishing a language tag, and a name sitting in a field whose contract means a tag is a guess wearing the clothes of a fact. The source label is preserved either way.
+
+    See normalized-record-v1.md §7.3; Mission 1.10 §5.
+    """
+
+    ESTABLISHED = "ESTABLISHED"  # A reviewed mapping assigns a canonical language tag to this source label. Only this state carries a tag
+    NOT_ESTABLISHED = "NOT_ESTABLISHED"  # No reviewed mapping exists for this source label. The label is kept verbatim, no tag is assigned, and the absence stays visible rather than being resolved by resemblance
 
 
 # --- Numeric bounds --------------------------------------------------------

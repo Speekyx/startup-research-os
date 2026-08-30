@@ -860,3 +860,85 @@ worker side is the half that is genuinely about the worker: a smuggled
 `authorization` key survives the payload merge and reaches a job that never looks
 at it.
 
+---
+
+## 22. Testing a model change against real data you must not use (added in Mission 1.10)
+
+Mission 1.10 changed the canonical model so a GDELT WEB-NGRAM observation could
+be represented, and was forbidden from normalizing the two real records that
+motivated it. That is an awkward shape to test and the resolution is worth
+recording.
+
+### Use the real records as a specimen, not as a fixture
+
+The two RawRecords are copied into the test module as a literal:
+
+```python
+REAL_RECORDS = (
+    {
+        "gram_kind": "1gram",
+        "date": "20260830091500",
+        "lang": "ENGLISH",
+        "ngram": "climate",
+        "count": "55",
+    },
+    ...,
+)
+```
+
+Copied rather than queried, for a reason that outlasts this mission: **a model
+test that needed PostgreSQL would be skipped exactly where the model is least
+exercised** — on a contributor's machine with no Docker, and in any environment
+where the database is the thing that broke.
+
+They are real values, not invented ones, and that matters here: the point of the
+exercise is that the model can hold *what the source actually published*, and a
+handwritten specimen would have been shaped by the same expectations that shaped
+the model.
+
+### Assert the refusals, not only the representations
+
+A model that can express a truthful record is half the guarantee. The other half
+is that it **cannot** express an untruthful one, and that half is where the
+assertions earn their keep:
+
+```text
+an aware bound under NOT_ESTABLISHED   -> refused
+a naive bound under ESTABLISHED        -> refused   (the old rule, unchanged)
+a canonical tag with no mapping        -> refused
+a mapping state with no tag            -> refused
+```
+
+Each pairs a positive case with its negative. A constructor that only ever
+refused would pass every negative test while being unusable, which is the failure
+`_control_passes` exists to catch one layer down.
+
+### Assert the absences by serialising
+
+Three of this mission's guarantees are about things that must **not** appear —
+no geography, no classification, no invented timezone. Those are cheapest and
+most reliable to assert over the serialised payload rather than field by field:
+
+```python
+serialised = canonical_json(observation(row).to_payload()).lower()
+for classification in ("theme", "entity", "topic", "keyword", "intent"):
+    assert classification not in serialised
+```
+
+A field-by-field check passes while a *new* field carries the thing forbidden.
+The serialisation check does not.
+
+### The change that must not change anything
+
+The one assertion this mission most needed was that an existing payload
+serialises **byte-identically**:
+
+```python
+assert year_period("2018").to_json() == {...literal...}
+assert "timezone_state" not in payload
+```
+
+A literal rather than a round-trip, because a round-trip through the same code
+that changed would agree with itself. This is the assertion that made the
+conditional key a deliberate design decision rather than an oversight discovered
+later by a hash mismatch.

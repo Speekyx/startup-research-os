@@ -115,23 +115,51 @@ describes. They are different questions and they get different columns.
 (`registry.registry_entries`, registry `normalization_record_kind`), following
 Ontology V2 §14.3 and the pattern `nlp.signals.signal_type_id` already uses.
 
-**One entry exists**, because one adapter exists:
+**Two entries exist.**
 
 | id | Meaning |
 |---|---|
 | `numeric_observation` | One measured or reported numeric value for one metric, one geography and one period |
+| `lexical_frequency_observation` | One occurrence count the source measured for one lexical term, in one language, over one period. **No geography** |
 
-Adding a kind is: register the entry, register its canonical payload model in
-`RECORD_KINDS`, and write the adapter that produces it. **No migration.** That is
-the extension mechanism §11 asks for, and it is the reason this is a registry
-rather than a `CHECK` list that would need a migration per adapter.
+The second arrived in Mission 1.10 and is the first real use of this registry.
+A GDELT WEB-NGRAM row has no geography and its term is not a metric, so
+`numeric_observation` could not hold it — and **widening that kind to fit would
+have let a World Bank record exist with no geography**, which is the existing
+model getting worse for a new source's sake.
+
+The kind was added and **no adapter was**. A registry row is a *vocabulary*
+entry: it lets the model describe a shape, and it lets the database refuse a row
+naming a kind nobody registered. The claim that code exists is
+`NORMALIZER_REGISTRY`, and for GDELT it is still empty.
+
+Adding a kind is: insert the registry row, declare its canonical payload model
+in `RECORD_KINDS`, and write the adapter that produces it.
+
+**The row does need a migration**, and the original text here said it did not.
+Two rules make it necessary and both are worth keeping:
+`normalized_records.record_kind_id` has a foreign key to
+`registry.registry_entries`, so a kind the registry does not know cannot be
+persisted; and `validate_normalization.py` asserts that the kinds declared in
+`RECORD_KINDS` are exactly those a migration inserts, so the two copies cannot
+drift. What the registry buys is that **no table is altered** — migration 0011 is
+one `INSERT`.
 
 **No hypothetical kinds are declared.** §11 names ten shapes future sources might
 have — documents, discussion posts, reviews, repositories, events. None is
-created here. A registry entry with no adapter behind it is a promise the code
-does not keep, and this project has a standing rule about that:
-`IMPLEMENTED_COLLECTORS` gains a name as the *last* step of building a collector,
-never as preparation for one.
+created, and none will be until a source produces one.
+
+Mission 1.10 sharpened what that rule is about. Its original form said a registry
+entry with no adapter behind it is a promise the code does not keep — by analogy
+with `IMPLEMENTED_COLLECTORS`, which gains a name as the *last* step of building a
+collector. **The analogy holds for adapters and not for vocabulary.**
+
+    a kind exists because DATA exists       -- two real GDELT records
+    an adapter exists because CODE exists   -- NORMALIZER_REGISTRY says which
+
+`lexical_frequency_observation` is not hypothetical: a real source publishes that
+shape and two real RawRecords hold it. What would be a promise the code does not
+keep is registering an *adapter*, and Mission 1.10 registered none.
 
 Each kind declares which canonical fields are **required** and which are
 **optional**. That declaration is what the quality state (§8) is computed
@@ -140,7 +168,7 @@ record.
 
 ---
 
-## 5. The NumericObservation canonical shape
+## 5. The canonical shapes
 
 The payload for `record_kind = numeric_observation`.
 
@@ -189,6 +217,48 @@ nothing is fetched** (§17, §18, §41).
 `metric.name` is `null` for the World Bank adapter because the Indicators API
 response carries no indicator label — an absence, faithfully recorded, not a gap
 to fill from recall.
+
+### 5.1 The LexicalFrequencyObservation canonical shape
+
+The payload for `record_kind = lexical_frequency_observation`, added in Mission
+1.10. Full derivation in
+[`gdelt-normalization-contract-v1.md`](gdelt-normalization-contract-v1.md).
+
+```json
+{
+  "record_kind": "lexical_frequency_observation",
+  "term": {"text": "climate", "gram_size": 1, "scheme": "gdelt-web-ngram"},
+  "language": {
+    "source_label": "ENGLISH",
+    "source_scheme": "cld2-language-name",
+    "mapping_state": "NOT_ESTABLISHED",
+    "canonical_tag": null,
+    "canonical_scheme": null
+  },
+  "observation": {"value": "55", "value_state": "REPORTED",
+                  "unit": null, "unit_state": "NOT_PUBLISHED", "decimals": null},
+  "period": {"type": "INTERVAL", "label": "20260830091500",
+             "start": "2026-08-30T09:15:00", "end": "2026-08-30T09:30:00",
+             "end_inclusive": false, "timezone_state": "NOT_ESTABLISHED"},
+  "series": {"dataset": "web-ngrams", "resource_id": "web-ngrams/1gram",
+             "source_last_updated": null}
+}
+```
+
+Four things about it are decisions rather than mechanics:
+
+- **There is no `geography` key.** Absent, not null — a null would invite a
+  reader to think one was looked for and not found. A row stating a language says
+  nothing about where anything happened.
+- **The term is not a metric.** A metric is a *definition* reused across
+  geographies and periods; a term is an observed item, and the thing measured is
+  how often it appeared.
+- **`gram_size` comes from the resource id**, never from counting spaces in the
+  term: a two-word entry in a unigram file is a contract violation, and counting
+  would hide it.
+- **The count carries no unit.** `NOT_PUBLISHED`, because the source publishes
+  four columns and none is a unit — and the record kind already says the number
+  is an occurrence count over a window.
 
 ---
 
@@ -270,6 +340,35 @@ beside it precisely so nothing can read January 1 as an exact event time**
 (§16) — the interval says the observation covers a year, and the label preserves
 what the source actually wrote.
 
+#### The timezone can be unestablished (Mission 1.10)
+
+A source can publish a period label and no offset. GDELT's WEB-NGRAM `DATE` is a
+15-minute bucket stamp and nothing in its documentation states a zone (**H-29**),
+so every route into a period would have had to choose one.
+
+`timezone_state` says which situation a period is in, and the two carry different
+kinds of bound:
+
+| State | Bounds | `observed_at` |
+|---|---|---|
+| `ESTABLISHED` | timezone-**aware** — the rule since Mission 1.6, unchanged and still enforced | the period start |
+| `NOT_ESTABLISHED` | timezone-**naive** — a wall-clock reading, which is what Python's naive `datetime` means and what iCalendar calls floating time | **`NULL`** |
+
+A naive datetime cannot enter a `TIMESTAMPTZ`, and an aware one would carry an
+offset the source never published. Leaving `observed_at` empty is how the field
+is not abused.
+
+**`timezone_state` is serialised only when it is not `ESTABLISHED`.** The payload
+is inside the content fingerprint, so an unconditional key would have changed the
+hash of every record ever written — for a fact those records already state, since
+an ISO-8601 string discloses its own offset or its absence. **A consumer reading
+the key should default it to `ESTABLISHED`.**
+
+Nothing here weakens period semantics: aware bounds are still required wherever a
+zone is established, which is every record written to date. See
+[ADR-019](../architecture/adr/ADR-019-lexical-frequency-observation.md) for the
+alternatives and why each was rejected.
+
 ### 7.2 Geography
 
 Four fields, and the split is the point (§15):
@@ -297,11 +396,40 @@ Three rules, none negotiable:
   country would be inference, and §41 forbids reaching for a model to do it. The
   map is the only authority.
 
-### 7.3 The three timestamps
+### 7.3 Language
+
+Five fields, and the split is the same one geography makes (Mission 1.10 §5):
+
+| Field | Meaning |
+|---|---|
+| `source_label` | Verbatim from the source. Always present, never rewritten |
+| `source_scheme` | Which vocabulary the label is from — `cld2-language-name`, not the same as ISO 639's English names |
+| `mapping_state` | `ESTABLISHED` or `NOT_ESTABLISHED` |
+| `canonical_tag` | A language tag, **only** where a reviewed mapping establishes it |
+| `canonical_scheme` | `BCP-47`, where a tag exists |
+
+Three rules, none negotiable:
+
+- **A language is never a geography.** Spanish is not Spain and Arabic is not one
+  country. The registry model already keeps countries and languages apart, and
+  this is the same separation at the canonical layer.
+- **Resemblance is not a mapping.** `ENGLISH` looks like `en`; the first CLD2
+  name that does not resemble its tag would be silently wrong with nothing to
+  catch it. `CanonicalLanguage.unmapped()` is the counterpart of
+  `CanonicalGeography.unclassified`, reached for the same reason.
+- **The absence stays visible.** `mapping_state` is what makes an unmapped label
+  readable rather than inferable, and the constructor refuses a tag without a
+  mapping and a mapping without a tag.
+
+**`content_language` on the row stays `NULL`** where no tag is established. That
+column's contract means a code, and a name in it would be a guess wearing the
+clothes of a fact.
+
+### 7.4 The three timestamps
 
 | Column | Fact |
 |---|---|
-| `observed_at` | when the source observation happened — the period start |
+| `observed_at` | when the source observation happened — the period start, or **`NULL`** when the period's timezone is unestablished (§7.1) |
 | `collected_at` | when it was collected — inherited verbatim from the RawRecord |
 | `normalized_at` | when this representation was produced |
 
@@ -523,14 +651,22 @@ is.
 
 - **Re-normalization selection (D-08).** Coexistence works; choosing does not
   exist. §49 is explicit that Mission 1.6 must not invent it.
-- **One record kind.** `numeric_observation` only, because one adapter exists.
-  Text, document and discussion kinds arrive with the adapters that produce them.
+- **Two record kinds, and one adapter.** `numeric_observation` has one;
+  `lexical_frequency_observation` has none, because Mission 1.10 defined the
+  model and stopped there. Document and discussion kinds arrive with the adapters
+  that produce them.
+- **H-29 — the GDELT bucket timezone is unestablished**, so those periods will be
+  `NOT_ESTABLISHED` and their `observed_at` `NULL`. Answering it is a normalizer
+  version bump over records already held, not a re-collection.
+- **H-30 — no CLD2-to-language-tag mapping is established**, so those records
+  will carry a source label and no canonical tag. Same shape of fix.
 - **The geography map holds two entries.** Widening it requires evidence per
   entry, the same discipline as the authorized dataset list.
 - **Retention lifecycle jobs are still unimplemented** (`data-retention-policy-v1.md`
   §6). `expires_at` is written correctly and nothing yet acts on it.
 - **Object storage (D-10).** Canonical payloads are inline because they are a few
   hundred bytes.
-- **No language detection.** `content_language` is `NULL` for numeric
-  observations, which is correct rather than deferred. A text adapter will need
-  a decision, and it is not made here.
+- **No language detection, and none is planned.** `content_language` is `NULL`
+  for numeric observations, which is correct rather than deferred. Mission 1.10
+  added `CanonicalLanguage` for a source that **states** its language; detecting
+  one from text is a different act and remains undecided.
