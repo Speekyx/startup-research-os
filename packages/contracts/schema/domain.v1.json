@@ -1,6 +1,6 @@
 {
   "$comment": "AUTHORITATIVE CONTRACT SOURCE OF TRUTH. Hand-edited. Everything under packages/contracts/generated/ is derived from this file by tools/generate.py. See ADR-009.",
-  "contract_version": "1.5.0",
+  "contract_version": "1.6.0",
   "ontology_version": "2",
   "scoring_framework_version": "1.1",
   "evidence_framework_version": "1",
@@ -1002,6 +1002,213 @@
           "description": "No reviewed mapping exists for this source label. The label is kept verbatim, no tag is assigned, and the absence stays visible rather than being resolved by resemblance"
         }
       ]
+    },
+    {
+      "name": "SignalQuantityFamily",
+      "spec": "signal-taxonomy-v1.md; Mission 1.11 §5",
+      "description": "What kind of quantity a derived Signal is about. Closed because consumers branch exhaustively on it and the families have different scope shapes -- a lexical signal carries a term and NO geography key, a series signal carries a metric and a geography -- so an unhandled third value is a bug rather than a gap. It is deliberately NOT DemandSignalFamily: PAIN/DESIRE/BEHAVIORAL/MARKET classify demand, and a count of how often a token occurred in news text is not evidence of demand. It is also not the registry called signal_family, which says what a SOURCE could expose (ADR-017). Three relations, three subjects, three names.",
+      "values": [
+        {
+          "value": "LEXICAL_FREQUENCY",
+          "description": "How often language tokens occur in text a source processed. Carries a term and a source language label, and no geography key at all"
+        },
+        {
+          "value": "MEASURED_SERIES",
+          "description": "A numeric quantity a source measures or reports over a period. Carries a metric and a geography"
+        }
+      ]
+    },
+    {
+      "name": "SignalDirection",
+      "spec": "signal-contract-v1.md; Mission 1.11 §33",
+      "description": "Which way the derived quantity moved. About CHANGE ONLY: POSITIVE and NEGATIVE are deliberately absent because they are sentiment, and a complaint-frequency signal can be INCREASING while the sentiment of the underlying text is negative -- one enum holding both would make that sentence unrepresentable. Any value other than NOT_APPLICABLE requires a temporal basis of ORDERED_PERIODS or COMPARABLE_INSTANTS, because increasing is a statement about before and after.",
+      "values": [
+        {
+          "value": "INCREASING",
+          "description": "The quantity is larger at the later position"
+        },
+        {
+          "value": "DECREASING",
+          "description": "The quantity is smaller at the later position"
+        },
+        {
+          "value": "UNCHANGED",
+          "description": "Equal at both positions. Not STABLE: stability is a claim about variance over a window, which two points cannot support"
+        },
+        {
+          "value": "INDETERMINATE",
+          "description": "The comparison ran and did not resolve to a direction -- a non-monotonic sequence, or a tie the derivation declines to break"
+        },
+        {
+          "value": "NOT_APPLICABLE",
+          "description": "The derivation states no ordered relation, so direction is not a question it answers. The only value permitted under a NONE or SAME_PERIOD_LABEL basis"
+        }
+      ]
+    },
+    {
+      "name": "SignalMagnitudeKind",
+      "spec": "signal-contract-v1.md; Mission 1.11 §33",
+      "description": "How to read a Signal's magnitude. Closed because a ratio of 2 and a difference of 2 are not the same fact, and a consumer that could not tell them apart would compare them. There is no LEVEL value: a level is one observation, and one observation is not a Signal.",
+      "values": [
+        {
+          "value": "ABSOLUTE_CHANGE",
+          "description": "A difference expressed in the inputs' own quantity. The unit is INHERITED where the inputs published one and NOT_ESTABLISHED where they did not"
+        },
+        {
+          "value": "RATIO",
+          "description": "One quantity relative to another. Always DIMENSIONLESS"
+        },
+        {
+          "value": "OBSERVATION_COUNT",
+          "description": "How many observations satisfied the derivation's condition. Always DIMENSIONLESS, and a diagnostic count rather than a sample size"
+        }
+      ]
+    },
+    {
+      "name": "SignalMagnitudeUnitState",
+      "spec": "signal-contract-v1.md; Mission 1.11 §33",
+      "description": "Whether a Signal's magnitude carries a unit, and why not when it does not. The counterpart of NormalizedUnitState one layer up, and it exists for the same reason: GDELT publishes four columns and none is a unit, so a change over GDELT counts has no unit to inherit. Naming one here would assert the source did something it did not.",
+      "values": [
+        {
+          "value": "INHERITED",
+          "description": "The contributing observations published a unit and the magnitude carries it verbatim. The only state that carries a unit string"
+        },
+        {
+          "value": "DIMENSIONLESS",
+          "description": "The magnitude has no unit by construction -- a ratio, or a count of observations. Required for RATIO and OBSERVATION_COUNT"
+        },
+        {
+          "value": "NOT_ESTABLISHED",
+          "description": "The magnitude is in the inputs' quantity and the inputs published no unit. Carried up rather than resolved"
+        }
+      ]
+    },
+    {
+      "name": "SignalTemporalBasis",
+      "spec": "signal-temporal-semantics-v1.md; Mission 1.11 §12, §13",
+      "description": "What temporal relation a derivation actually used. Closed and consequential: ORDER and GLOBAL INSTANT are different questions needing different evidence, and collapsing them is how a timezone gets invented. Only COMPARABLE_INSTANTS may carry window bounds or leave observed_at non-null; every other basis carries neither.",
+      "values": [
+        {
+          "value": "NONE",
+          "description": "The derivation relates its inputs without any temporal relation between them"
+        },
+        {
+          "value": "SAME_PERIOD_LABEL",
+          "description": "Every input carries the identical source period label. String equality over a value the source published, needing no timezone -- the basis available to GDELT while H-29 is open"
+        },
+        {
+          "value": "ORDERED_PERIODS",
+          "description": "The inputs are placed in sequence within one source stream, without being placed on any shared timeline. Requires SOURCE_RELATIVE_ORDER"
+        },
+        {
+          "value": "COMPARABLE_INSTANTS",
+          "description": "The inputs are placed on a shared timeline. Requires COMPARABLE_INSTANT, and is the only basis that carries timezone-aware window bounds"
+        }
+      ]
+    },
+    {
+      "name": "SignalRequiredFact",
+      "spec": "signal-contract-v1.md §10; Mission 1.11 §11",
+      "description": "A canonical fact a derivation declares it needs. Closed because each value maps to a specific set of NormalizationQualityReason values that withhold it and to the record kinds that can supply it, so the check is mechanical rather than a judgement. The point is that PARTIAL must not automatically mean unusable: what matters is whether the SPECIFIC missing fact matters to the SPECIFIC derivation.",
+      "values": [
+        {
+          "value": "EXACT_NUMERIC_VALUE",
+          "description": "A reported figure readable as an exact decimal. Withheld by VALUE_NOT_REPORTED and MALFORMED_NUMERIC_VALUE"
+        },
+        {
+          "value": "LEXICAL_TERM",
+          "description": "The source term, verbatim. Supplied only by lexical_frequency_observation"
+        },
+        {
+          "value": "SOURCE_PERIOD_LABEL",
+          "description": "The source's own period label, for equality and membership. Needs no timezone; withheld only by PERIOD_NOT_SUPPORTED"
+        },
+        {
+          "value": "SOURCE_RELATIVE_ORDER",
+          "description": "The ability to say which of two observations came first within one source stream, without placing either on a shared timeline. Withheld by PERIOD_TIMEZONE_NOT_ESTABLISHED unless the source appears in the reviewed order certification, which is empty (H-32)"
+        },
+        {
+          "value": "COMPARABLE_INSTANT",
+          "description": "A moment on a timeline shared with other sources. Withheld by PERIOD_TIMEZONE_NOT_ESTABLISHED (H-29)"
+        },
+        {
+          "value": "SOURCE_LANGUAGE_LABEL",
+          "description": "The source language label and its scheme, for equality within one source. Sufficient for within-source work while H-30 is open"
+        },
+        {
+          "value": "CANONICAL_LANGUAGE",
+          "description": "A canonical language tag. Withheld by LANGUAGE_NOT_MAPPED, and required for any cross-source language aggregation (H-30)"
+        },
+        {
+          "value": "CLASSIFIED_GEOGRAPHY",
+          "description": "A geography established as a country or an aggregate. Withheld by GEOGRAPHY_NOT_CLASSIFIED and GEOGRAPHY_MISSING"
+        }
+      ]
+    },
+    {
+      "name": "SignalDerivationKind",
+      "spec": "signal-contract-v1.md §8; Mission 1.11 §23",
+      "description": "How a Signal was produced. Closed and mandatory so that a Signal not being inherently LLM-generated is a constraint rather than a sentence: DETERMINISTIC requires model and prompt versions to be ABSENT, and MODEL_DERIVED requires a model version.",
+      "values": [
+        {
+          "value": "DETERMINISTIC",
+          "description": "Arithmetic and comparison over canonical values. Reproducible from the inputs and the parameters alone, with no model and no prompt"
+        },
+        {
+          "value": "MODEL_DERIVED",
+          "description": "A model participated. Obliged to carry provider and model version, an extraction confidence, schema validation and untrusted-content handling (llm-reasoning-rules.md §7, §9)"
+        }
+      ]
+    },
+    {
+      "name": "SignalInputRole",
+      "spec": "signal-contract-v1.md §9; Mission 1.11 §19",
+      "description": "Whether an input actually entered the derivation. Excluded inputs are recorded rather than dropped: we looked at ten and used six must be visible, and a signal that quietly used six of ten is indistinguishable from one that was offered six.",
+      "values": [
+        {
+          "value": "CONTRIBUTED",
+          "description": "The input supplied every fact the derivation required and entered the result"
+        },
+        {
+          "value": "EXCLUDED",
+          "description": "The input was considered and set aside. Carries the reason and the facts it could not supply"
+        }
+      ]
+    },
+    {
+      "name": "SignalRefusalReason",
+      "spec": "signal-contract-v1.md §11; Mission 1.11 §27",
+      "description": "Why an input was excluded, or why a whole derivation produced no Signal. One vocabulary for both, because a refused derivation is usually an exclusion having happened often enough. A refusal is a RETURNED VALUE, never a row: a record in a table of signals says a signal exists, and one meaning no signal exists is a misleading signal.",
+      "values": [
+        {
+          "value": "INPUT_RECORD_INVALID",
+          "description": "The normalized record is INVALID. A record that could not be represented must not be read as an observation"
+        },
+        {
+          "value": "REQUIRED_FACT_WITHHELD",
+          "description": "A canonical fact the derivation requires is absent, per the record's own quality reasons or its record kind"
+        },
+        {
+          "value": "AMBIGUOUS_OBSERVATION_LINEAGE",
+          "description": "Two contributing rows carry the same observation_key under different lineages. Refused rather than resolved: choosing between them is D-08, which is open, and counting both would manufacture a contrast out of one observation"
+        },
+        {
+          "value": "INCOMPATIBLE_INPUT_KINDS",
+          "description": "The inputs disagree on record kind or period resolution. Never silently coarsened to the coarser of the two"
+        },
+        {
+          "value": "INSUFFICIENT_INPUT_OBSERVATIONS",
+          "description": "Fewer than two distinct source observations remain. One observation is not a Signal"
+        },
+        {
+          "value": "UNSUPPORTED_SIGNAL_TYPE",
+          "description": "The signal type is not registered, or its declared family does not match the inputs"
+        },
+        {
+          "value": "PARAMETERS_INCOMPLETE",
+          "description": "A parameter affecting the output was not stated. A hidden default makes the extractor version meaningless"
+        }
+      ]
     }
   ],
   "numeric_types": [
@@ -1109,6 +1316,14 @@
     {
       "name": "normalization_record_kind",
       "spec": "normalized-record-v1.md §4"
+    },
+    {
+      "name": "signal_family",
+      "spec": "source-signal-coverage-v1.md §2; ADR-017"
+    },
+    {
+      "name": "signal_type",
+      "spec": "signal-taxonomy-v1.md §4"
     }
   ],
   "market_scope": {

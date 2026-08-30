@@ -16,6 +16,7 @@ members = [
     "sros-gateway",
     "sros-llm-gateway",
     "sros-orchestrator",
+    "sros-signal-model",
     "sros-workers",
     "startup-research-os",
 ]
@@ -1663,6 +1664,17 @@ requires-dist = [
     { name = "sros-llm-gateway", editable = "packages/llm-gateway/python" },
     { name = "sros-workers", editable = "services/workers/python" },
 ]
+
+[[package]]
+name = "sros-signal-model"
+version = "0.1.0"
+source = { editable = "packages/signal-model/python" }
+dependencies = [
+    { name = "sros-contracts" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "sros-contracts", editable = "packages/contracts/python" }]
 
 [[package]]
 name = "sros-workers"

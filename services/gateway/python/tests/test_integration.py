@@ -139,6 +139,11 @@ class TestSchemaRuntime:
             # fail this test until somebody states whether it is tenant data.
             "registry.source_signal_coverage",
             "registry.source_behavior_coverage",
+            # 0012_signal_derivation_model. TENANT data, and listed as such in
+            # `test_rls.py`: a signal's lineage names which observations a
+            # workspace derived from, which is as much a statement about what a
+            # tenant is researching as the signal itself.
+            "nlp.signal_inputs",
         }
 
     def test_the_source_eligibility_view_exists(self, database) -> None:

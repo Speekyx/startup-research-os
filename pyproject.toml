@@ -10,6 +10,7 @@ members = [
     "packages/contracts/python",
     "packages/llm-gateway/python",
     "packages/evidence-aggregation/python",
+    "packages/signal-model/python",
     "services/workers/python",
     "services/research-orchestrator/python",
     "services/acquisition/python",
@@ -20,6 +21,7 @@ members = [
 sros-contracts = { workspace = true }
 sros-llm-gateway = { workspace = true }
 sros-evidence-aggregation = { workspace = true }
+sros-signal-model = { workspace = true }
 sros-workers = { workspace = true }
 sros-orchestrator = { workspace = true }
 sros-acquisition = { workspace = true }

@@ -1,0 +1,153 @@
+"""Which canonical facts a derivation may require, and what withholds each one.
+
+`signal-contract-v1.md` §10, Mission 1.11 §10 and §11.
+
+The rule this module exists to enforce is that **`PARTIAL` does not mean
+unusable**. A normalized record's quality state says whether the source
+observation could be structurally represented; it does not say whether the thing
+that is missing matters to the derivation in front of it. Every GDELT record is
+`PARTIAL`, and a contrast between two terms in one bucket needs neither of the
+two facts it is missing.
+
+So a derivation declares what it requires and this module computes what each
+input withholds -- from that record's own quality reasons and its record kind.
+Neither side guesses.
+"""
+
+from __future__ import annotations
+
+from collections.abc import Mapping
+from dataclasses import dataclass
+from types import MappingProxyType
+
+from sros_contracts import (
+    NormalizationQualityReason as Reason,
+)
+from sros_contracts import (
+    SignalRequiredFact as Fact,
+)
+
+__all__ = [
+    "FACT_RULES",
+    "LEXICAL_FREQUENCY_OBSERVATION",
+    "NUMERIC_OBSERVATION",
+    "ORDER_ESTABLISHED_WITHOUT_TIMEZONE",
+    "FactRule",
+    "withheld_facts",
+]
+
+# The two canonical record kinds that exist (`normalized-record-v1.md` §4).
+# Named rather than imported: `sros_acquisition` is a service package and this
+# is a shared model, so the dependency would run the wrong way.
+NUMERIC_OBSERVATION = "numeric_observation"
+LEXICAL_FREQUENCY_OBSERVATION = "lexical_frequency_observation"
+
+
+@dataclass(frozen=True)
+class FactRule:
+    """Which record kinds can supply a fact, and which reasons withhold it.
+
+    `withheld_by` may be empty and the rule is still load-bearing: `LEXICAL_TERM`
+    is withheld by no quality reason and is supplied by exactly one record kind,
+    so a derivation asking for it over a numeric observation is refused rather
+    than reading a field that is not there.
+    """
+
+    supplied_by: frozenset[str]
+    withheld_by: frozenset[Reason]
+
+
+_BOTH_KINDS = frozenset({NUMERIC_OBSERVATION, LEXICAL_FREQUENCY_OBSERVATION})
+
+FACT_RULES: Mapping[Fact, FactRule] = MappingProxyType(
+    {
+        Fact.EXACT_NUMERIC_VALUE: FactRule(
+            supplied_by=_BOTH_KINDS,
+            withheld_by=frozenset({Reason.VALUE_NOT_REPORTED, Reason.MALFORMED_NUMERIC_VALUE}),
+        ),
+        Fact.LEXICAL_TERM: FactRule(
+            supplied_by=frozenset({LEXICAL_FREQUENCY_OBSERVATION}),
+            withheld_by=frozenset(),
+        ),
+        # Needs no timezone. String equality over a value the source published.
+        Fact.SOURCE_PERIOD_LABEL: FactRule(
+            supplied_by=_BOTH_KINDS,
+            withheld_by=frozenset({Reason.PERIOD_NOT_SUPPORTED}),
+        ),
+        # ORDER and GLOBAL INSTANT are different questions. This one is withheld
+        # by an unestablished timezone ONLY because no source is certified below;
+        # a certification would grant it without anyone asserting a zone (H-32).
+        Fact.SOURCE_RELATIVE_ORDER: FactRule(
+            supplied_by=_BOTH_KINDS,
+            withheld_by=frozenset(
+                {Reason.PERIOD_NOT_SUPPORTED, Reason.PERIOD_TIMEZONE_NOT_ESTABLISHED}
+            ),
+        ),
+        Fact.COMPARABLE_INSTANT: FactRule(
+            supplied_by=_BOTH_KINDS,
+            withheld_by=frozenset(
+                {Reason.PERIOD_NOT_SUPPORTED, Reason.PERIOD_TIMEZONE_NOT_ESTABLISHED}
+            ),
+        ),
+        Fact.SOURCE_LANGUAGE_LABEL: FactRule(
+            supplied_by=frozenset({LEXICAL_FREQUENCY_OBSERVATION}),
+            withheld_by=frozenset(),
+        ),
+        Fact.CANONICAL_LANGUAGE: FactRule(
+            supplied_by=frozenset({LEXICAL_FREQUENCY_OBSERVATION}),
+            withheld_by=frozenset({Reason.LANGUAGE_NOT_MAPPED}),
+        ),
+        Fact.CLASSIFIED_GEOGRAPHY: FactRule(
+            supplied_by=frozenset({NUMERIC_OBSERVATION}),
+            withheld_by=frozenset({Reason.GEOGRAPHY_NOT_CLASSIFIED, Reason.GEOGRAPHY_MISSING}),
+        ),
+    }
+)
+
+# Sources whose stream order is established WITHOUT a timezone being established.
+#
+# EMPTY, and empty is the finding. `signal-temporal-semantics-v1.md` §3.3 sets
+# out the argument for granting it to GDELT -- a fixed-width stamp orders
+# lexicographically inside any fixed offset, and the stamp is the published
+# filename, which cannot repeat inside a directory -- and why that argument is an
+# inference about the publisher's mechanism rather than a retrieved statement
+# about the data. Recorded as H-32.
+#
+# An entry is a REVIEWED FINDING and carries its basis, exactly as an entry in
+# the geography map does. Adding one on the strength of it being obvious is the
+# move `geography-mapping-v1.json` exists to prevent.
+ORDER_ESTABLISHED_WITHOUT_TIMEZONE: Mapping[str, str] = MappingProxyType({})
+
+
+def withheld_facts(
+    required: frozenset[Fact],
+    *,
+    record_kind_id: str,
+    quality_reasons: frozenset[Reason],
+    source_id: str,
+) -> frozenset[Fact]:
+    """The required facts this record cannot supply.
+
+    Two independent ways to withhold a fact, and they answer different
+    questions: the record KIND says whether the field exists at all, and the
+    quality REASONS say whether the value in it was established.
+    """
+    order_certified = source_id in ORDER_ESTABLISHED_WITHOUT_TIMEZONE
+    withheld: set[Fact] = set()
+    for fact in required:
+        rule = FACT_RULES[fact]
+        if record_kind_id not in rule.supplied_by:
+            withheld.add(fact)
+            continue
+        blocking = rule.withheld_by
+        if (
+            fact is Fact.SOURCE_RELATIVE_ORDER
+            and order_certified
+            and blocking & quality_reasons == {Reason.PERIOD_TIMEZONE_NOT_ESTABLISHED}
+        ):
+            # The zone is unestablished and the ORDER is separately certified for
+            # this source, which is the whole point of keeping the two apart.
+            continue
+        if blocking & quality_reasons:
+            withheld.add(fact)
+    return frozenset(withheld)

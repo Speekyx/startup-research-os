@@ -31,6 +31,10 @@
 | `gdelt-normalized-record-gap-analysis-v1.md` | The four fields against the canonical model, and which three of them it could not hold |
 | `gdelt-normalization-contract-v1.md` | The canonical shape a GDELT normalizer must produce, decided in Mission 1.10 and implemented in 1.10.1 |
 | `gdelt-web-ngram-normalizer-v1.md` | The second adapter: offline, deterministic, and what it refuses to invent |
+| `signal-model-gap-analysis-v1.md` | What `nlp.signals` could not represent, sixteen gaps, written before the migration |
+| `signal-contract-v1.md` | What a Signal IS: a relation between two or more observations, and everything it may not assert |
+| `signal-taxonomy-v1.md` | Why the Signal family is not the demand family, and the two types real data justifies |
+| `signal-temporal-semantics-v1.md` | ORDER and GLOBAL INSTANT kept apart; which derivations H-29 and H-32 block |
 | `acquisition-rights-basis-gap-analysis-v1.md` | Why a resource records what KIND of thing authorises it, not only which licence (H-28, ADR-018) |
 | `wikimedia-pageviews-compliance-v1.md` | What Wikimedia Pageviews would need, and the one question blocking it |
 | `source-condition-gap-analysis-v1.md` | The nine Mission 1.3 conditions inventoried and classified, and the obligations deliberately left out of code |

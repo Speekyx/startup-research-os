@@ -26,6 +26,11 @@ SUITES = [
     "packages/contracts/python",
     "packages/llm-gateway/python",
     "packages/evidence-aggregation/python",
+    # Mission 1.11. The Signal model is pure Python over the contracts, and its
+    # tests are synthetic objects with no database and no network -- exactly the
+    # kind of rule that must stay checkable when a dependency environment is
+    # broken (ADR-009).
+    "packages/signal-model/python",
     "services/workers/python",
     "services/research-orchestrator/python",
 ]

@@ -9,12 +9,12 @@
  * Editing this file by hand will be overwritten and will fail the contract
  * check in CI. Change the source of truth instead.
  *
- * contract_version: 1.5.0
+ * contract_version: 1.6.0
  * ontology_version: 2
  */
 
 
-export const CONTRACT_VERSION = "1.5.0" as const;
+export const CONTRACT_VERSION = "1.6.0" as const;
 export const ONTOLOGY_VERSION = "2" as const;
 export const RESEARCH_CONTEXT_SCHEMA_VERSION = "1.0.0" as const;
 
@@ -649,6 +649,141 @@ export function isNormalizedLanguageMapping(v: unknown): v is NormalizedLanguage
   return typeof v === "string" && (NORMALIZED_LANGUAGE_MAPPING_VALUES as readonly string[]).includes(v);
 }
 
+/**
+ * What kind of quantity a derived Signal is about. Closed because consumers branch exhaustively on it and the families have different scope shapes -- a lexical signal carries a term and NO geography key, a series signal carries a metric and a geography -- so an unhandled third value is a bug rather than a gap. It is deliberately NOT DemandSignalFamily: PAIN/DESIRE/BEHAVIORAL/MARKET classify demand, and a count of how often a token occurred in news text is not evidence of demand. It is also not the registry called signal_family, which says what a SOURCE could expose (ADR-017). Three relations, three subjects, three names.
+ * @see signal-taxonomy-v1.md; Mission 1.11 §5
+ */
+export const SIGNAL_QUANTITY_FAMILY_VALUES = [
+  "LEXICAL_FREQUENCY",
+  "MEASURED_SERIES",
+] as const;
+export type SignalQuantityFamily = (typeof SIGNAL_QUANTITY_FAMILY_VALUES)[number];
+export function isSignalQuantityFamily(v: unknown): v is SignalQuantityFamily {
+  return typeof v === "string" && (SIGNAL_QUANTITY_FAMILY_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * Which way the derived quantity moved. About CHANGE ONLY: POSITIVE and NEGATIVE are deliberately absent because they are sentiment, and a complaint-frequency signal can be INCREASING while the sentiment of the underlying text is negative -- one enum holding both would make that sentence unrepresentable. Any value other than NOT_APPLICABLE requires a temporal basis of ORDERED_PERIODS or COMPARABLE_INSTANTS, because increasing is a statement about before and after.
+ * @see signal-contract-v1.md; Mission 1.11 §33
+ */
+export const SIGNAL_DIRECTION_VALUES = [
+  "INCREASING",
+  "DECREASING",
+  "UNCHANGED",
+  "INDETERMINATE",
+  "NOT_APPLICABLE",
+] as const;
+export type SignalDirection = (typeof SIGNAL_DIRECTION_VALUES)[number];
+export function isSignalDirection(v: unknown): v is SignalDirection {
+  return typeof v === "string" && (SIGNAL_DIRECTION_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * How to read a Signal's magnitude. Closed because a ratio of 2 and a difference of 2 are not the same fact, and a consumer that could not tell them apart would compare them. There is no LEVEL value: a level is one observation, and one observation is not a Signal.
+ * @see signal-contract-v1.md; Mission 1.11 §33
+ */
+export const SIGNAL_MAGNITUDE_KIND_VALUES = [
+  "ABSOLUTE_CHANGE",
+  "RATIO",
+  "OBSERVATION_COUNT",
+] as const;
+export type SignalMagnitudeKind = (typeof SIGNAL_MAGNITUDE_KIND_VALUES)[number];
+export function isSignalMagnitudeKind(v: unknown): v is SignalMagnitudeKind {
+  return typeof v === "string" && (SIGNAL_MAGNITUDE_KIND_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * Whether a Signal's magnitude carries a unit, and why not when it does not. The counterpart of NormalizedUnitState one layer up, and it exists for the same reason: GDELT publishes four columns and none is a unit, so a change over GDELT counts has no unit to inherit. Naming one here would assert the source did something it did not.
+ * @see signal-contract-v1.md; Mission 1.11 §33
+ */
+export const SIGNAL_MAGNITUDE_UNIT_STATE_VALUES = [
+  "INHERITED",
+  "DIMENSIONLESS",
+  "NOT_ESTABLISHED",
+] as const;
+export type SignalMagnitudeUnitState = (typeof SIGNAL_MAGNITUDE_UNIT_STATE_VALUES)[number];
+export function isSignalMagnitudeUnitState(v: unknown): v is SignalMagnitudeUnitState {
+  return typeof v === "string" && (SIGNAL_MAGNITUDE_UNIT_STATE_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * What temporal relation a derivation actually used. Closed and consequential: ORDER and GLOBAL INSTANT are different questions needing different evidence, and collapsing them is how a timezone gets invented. Only COMPARABLE_INSTANTS may carry window bounds or leave observed_at non-null; every other basis carries neither.
+ * @see signal-temporal-semantics-v1.md; Mission 1.11 §12, §13
+ */
+export const SIGNAL_TEMPORAL_BASIS_VALUES = [
+  "NONE",
+  "SAME_PERIOD_LABEL",
+  "ORDERED_PERIODS",
+  "COMPARABLE_INSTANTS",
+] as const;
+export type SignalTemporalBasis = (typeof SIGNAL_TEMPORAL_BASIS_VALUES)[number];
+export function isSignalTemporalBasis(v: unknown): v is SignalTemporalBasis {
+  return typeof v === "string" && (SIGNAL_TEMPORAL_BASIS_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * A canonical fact a derivation declares it needs. Closed because each value maps to a specific set of NormalizationQualityReason values that withhold it and to the record kinds that can supply it, so the check is mechanical rather than a judgement. The point is that PARTIAL must not automatically mean unusable: what matters is whether the SPECIFIC missing fact matters to the SPECIFIC derivation.
+ * @see signal-contract-v1.md §10; Mission 1.11 §11
+ */
+export const SIGNAL_REQUIRED_FACT_VALUES = [
+  "EXACT_NUMERIC_VALUE",
+  "LEXICAL_TERM",
+  "SOURCE_PERIOD_LABEL",
+  "SOURCE_RELATIVE_ORDER",
+  "COMPARABLE_INSTANT",
+  "SOURCE_LANGUAGE_LABEL",
+  "CANONICAL_LANGUAGE",
+  "CLASSIFIED_GEOGRAPHY",
+] as const;
+export type SignalRequiredFact = (typeof SIGNAL_REQUIRED_FACT_VALUES)[number];
+export function isSignalRequiredFact(v: unknown): v is SignalRequiredFact {
+  return typeof v === "string" && (SIGNAL_REQUIRED_FACT_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * How a Signal was produced. Closed and mandatory so that a Signal not being inherently LLM-generated is a constraint rather than a sentence: DETERMINISTIC requires model and prompt versions to be ABSENT, and MODEL_DERIVED requires a model version.
+ * @see signal-contract-v1.md §8; Mission 1.11 §23
+ */
+export const SIGNAL_DERIVATION_KIND_VALUES = [
+  "DETERMINISTIC",
+  "MODEL_DERIVED",
+] as const;
+export type SignalDerivationKind = (typeof SIGNAL_DERIVATION_KIND_VALUES)[number];
+export function isSignalDerivationKind(v: unknown): v is SignalDerivationKind {
+  return typeof v === "string" && (SIGNAL_DERIVATION_KIND_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * Whether an input actually entered the derivation. Excluded inputs are recorded rather than dropped: we looked at ten and used six must be visible, and a signal that quietly used six of ten is indistinguishable from one that was offered six.
+ * @see signal-contract-v1.md §9; Mission 1.11 §19
+ */
+export const SIGNAL_INPUT_ROLE_VALUES = [
+  "CONTRIBUTED",
+  "EXCLUDED",
+] as const;
+export type SignalInputRole = (typeof SIGNAL_INPUT_ROLE_VALUES)[number];
+export function isSignalInputRole(v: unknown): v is SignalInputRole {
+  return typeof v === "string" && (SIGNAL_INPUT_ROLE_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * Why an input was excluded, or why a whole derivation produced no Signal. One vocabulary for both, because a refused derivation is usually an exclusion having happened often enough. A refusal is a RETURNED VALUE, never a row: a record in a table of signals says a signal exists, and one meaning no signal exists is a misleading signal.
+ * @see signal-contract-v1.md §11; Mission 1.11 §27
+ */
+export const SIGNAL_REFUSAL_REASON_VALUES = [
+  "INPUT_RECORD_INVALID",
+  "REQUIRED_FACT_WITHHELD",
+  "AMBIGUOUS_OBSERVATION_LINEAGE",
+  "INCOMPATIBLE_INPUT_KINDS",
+  "INSUFFICIENT_INPUT_OBSERVATIONS",
+  "UNSUPPORTED_SIGNAL_TYPE",
+  "PARAMETERS_INCOMPLETE",
+] as const;
+export type SignalRefusalReason = (typeof SIGNAL_REFUSAL_REASON_VALUES)[number];
+export function isSignalRefusalReason(v: unknown): v is SignalRefusalReason {
+  return typeof v === "string" && (SIGNAL_REFUSAL_REASON_VALUES as readonly string[]).includes(v);
+}
+
 // --- Numeric bounds --------------------------------------------------------
 // A field named `confidence` is always [0,1]. A field named `*_score` is
 // always 0-100. scoring-framework-v1.1.md §4.1.
@@ -682,6 +817,8 @@ export const REGISTRY_NAMES = [
   "region",
   "source_family",
   "normalization_record_kind",
+  "signal_family",
+  "signal_type",
 ] as const;
 export type RegistryName = (typeof REGISTRY_NAMES)[number];
 

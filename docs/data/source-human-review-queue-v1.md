@@ -53,6 +53,7 @@ entered: §37 asks for the required next action to be *recorded*, not taken.
 | [H-29](#h-29) | GDELT | refinement | Is the WEB-NGRAM `DATE` column UTC? Nothing first-party says |
 | [H-30](#h-30) | GDELT | refinement | Is there a CLD2-name-to-language-tag mapping? |
 | [H-31](#h-31) | GDELT | refinement | How far back does the WEB-NGRAM directory reach? |
+| [H-32](#h-32) | GDELT | refinement | Are the WEB-NGRAM `DATE` stamps monotonic within the stream? |
 
 ---
 
@@ -962,3 +963,42 @@ mission's authority.
 
 **Vendor contact needed?** No. **Legal counsel appropriate?** No.
 **Developer action needed?** Only if historical backfill is ever wanted.
+
+---
+
+## H-32 — Are the WEB-NGRAM `DATE` stamps monotonic within one stream? {#h-32}
+
+**Issue.** Mission 1.11 needed to know whether two observations from the same
+GDELT access path can be placed in ORDER without anyone asserting what timezone
+their labels are in. That is a different question from [H-29](#h-29), and a
+strictly weaker one.
+
+**Why it looked answerable from here.** `YYYYMMDDHHMMSS` is fixed-width, so
+lexicographic order equals chronological order within any single fixed offset.
+The label is also the published filename, and two files in one directory cannot
+share a name -- so a repeated label would be a collision a system publishing
+every fifteen minutes for years would not survive unnoticed.
+
+**Why it is unresolved.** That is an inference about the publisher's mechanism,
+not a retrieved statement about the data. If the stamps were local time in a zone
+observing daylight saving, one hour per year would repeat and order would invert
+inside it; the filename argument says GDELT would have noticed *something*, not
+that this system may assume what they did about it. It is the class of reasoning
+`geography-mapping-v1.json` exists to replace.
+
+**What it blocks.** Every within-stream sequential derivation: frequency change,
+growth, decline, moving averages, rolling and baseline windows. A signal may not
+carry a direction without it. What stays available is label EQUALITY -- a
+contrast between terms inside one bucket -- and set cardinality over buckets.
+
+**Why it is worth asking separately.** A first-party page stating the zone
+answers H-29 and this together. A page stating only that the stamps are monotonic
+and non-repeating answers this one alone, and unblocks six blocked operations
+without anyone asserting UTC.
+
+**Needed.** A first-party statement, or an operator answer. One line.
+
+**Vendor contact needed?** Possibly -- the same message that would ask H-29.
+**Legal counsel appropriate?** No.
+**Developer action needed?** No. The exact label is preserved, so answering this
+later is a re-derivation over records already held.
