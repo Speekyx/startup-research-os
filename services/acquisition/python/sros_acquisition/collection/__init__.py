@@ -32,6 +32,7 @@ from .records import (
     RawRecordDraft,
     build_draft,
     canonical_fingerprint,
+    canonical_number,
     observation_key,
 )
 from .repositories import (
@@ -83,6 +84,7 @@ __all__ = [
     "WorldBankRequest",
     "build_draft",
     "canonical_fingerprint",
+    "canonical_number",
     "collector_enabled",
     "count_records",
     "host_of",

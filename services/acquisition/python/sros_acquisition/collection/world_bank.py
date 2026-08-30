@@ -31,6 +31,7 @@ import json
 from collections.abc import Callable, Iterator
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
+from decimal import Decimal, InvalidOperation
 
 from sros_contracts import AcquisitionErrorCode, ResourceContentOrigin
 
@@ -54,7 +55,20 @@ __all__ = [
 # not when a message is reworded. Recorded on every row, so a future change
 # cannot make old records unauditable.
 COLLECTOR_ID = "world-bank-indicators"
-COLLECTOR_VERSION = "1.0.0"
+# 1.1.0 -- Mission 1.6.1 §5. Numeric values are parsed as `Decimal` and stored
+# as canonical decimal strings instead of passing through `float`.
+#
+# A BUMP RATHER THAN A FIX, and the distinction is the point. The change alters
+# the canonical payload, which alters `content_hash`, which alters the record
+# id. A collector that silently produced different hashes for identical source
+# data would make every existing record look revised on its next collection --
+# the same guarantee §7 protects by keeping the retrieval time out of the
+# fingerprint, broken from the other direction.
+#
+# So 1.0.0 records stay 1.0.0 records, readable and attributable, and every row
+# says which version wrote it (Mission 1.5 §50 put `collector_version` there for
+# exactly this).
+COLLECTOR_VERSION = "1.1.0"
 
 _SOURCE_ID = "world-bank"
 # The World Bank Indicators API is a 2-element array: metadata, then rows.
@@ -68,11 +82,17 @@ def _as_int(value: object) -> int | None:
     Returning `None` rather than a default is the point: a default of 1 would
     silently truncate a paginated result, and a default of "keep going" would
     loop. Both are worse than reporting that the metadata is unusable.
+
+    `Decimal` is accepted because the body is parsed with `parse_float=Decimal`,
+    so a source writing `"pages": 3.0` now delivers one here. Only an integral
+    Decimal qualifies: a page count of 3.5 is unusable metadata, not a 3.
     """
     if isinstance(value, bool):
         return None
     if isinstance(value, int):
         return value
+    if isinstance(value, Decimal):
+        return int(value) if value == value.to_integral_value() else None
     if isinstance(value, str) and value.strip().isdigit():
         return int(value)
     return None
@@ -611,7 +631,20 @@ class WorldBankCollector:
         retried, because another attempt produces the same shape.
         """
         try:
-            payload = json.loads(response.text)
+            # §4. `parse_float=Decimal`, and deliberately NOT `parse_int`.
+            #
+            # A decimal beyond 17 significant digits is truncated by the default
+            # float parse, so that one is required. Integers need nothing:
+            # Python's int is arbitrary-precision, so `9007199254740993` already
+            # arrives exact and the corruption came from `float()` downstream,
+            # not from the parse.
+            #
+            # Setting `parse_int` as well looked harmless and broke pagination --
+            # `pages` and `page` became Decimals, `_as_int` rejected them as
+            # non-integers, and the collector stopped after page one reporting
+            # unusable metadata. Caught by the existing pagination tests, which
+            # is what they are for.
+            payload = json.loads(response.text, parse_float=Decimal)
         except ValueError:
             raise AcquisitionFailedError(
                 AcquisitionFailure(
@@ -713,16 +746,31 @@ class WorldBankCollector:
             return None
 
         raw_value = row.get("value")
-        value: float | None
+        value: Decimal | None
         if raw_value is None:
             value = None
-        elif isinstance(raw_value, int | float):
-            value = float(raw_value)
-        else:
+        elif isinstance(raw_value, Decimal):
+            # The ordinary path: `_parse` already produced a Decimal, and it is
+            # passed through untouched. Converting it to anything else here
+            # would undo the parse.
+            value = raw_value
+        elif isinstance(raw_value, bool):
+            # Before the int check: bool is a subclass of int, and `True` is not
+            # a measurement.
+            return None
+        elif isinstance(raw_value, int):
+            value = Decimal(raw_value)
+        elif isinstance(raw_value, str):
+            # A source that quotes its numbers. Read exactly, never via float.
             try:
-                value = float(str(raw_value))
-            except ValueError:
+                value = Decimal(raw_value.strip())
+            except InvalidOperation:
                 return None
+        else:
+            # A float can only arrive from a caller that parsed the body itself.
+            # Refused rather than converted: by the time it is a float the
+            # damage is already done, and accepting it would launder it.
+            return None
 
         decimals = row.get("decimal")
         return CollectedObservation(
@@ -735,8 +783,11 @@ class WorldBankCollector:
             value=value,
             unit=str(row.get("unit") or "") or None,
             obs_status=str(row.get("obs_status") or "") or None,
+            # A COUNT of digits, not a measurement, so it stays an int. It
+            # arrives as a Decimal now that `parse_int` is set, hence the widened
+            # isinstance -- `str(Decimal("0")).isdigit()` is still True.
             decimals=int(decimals)
-            if isinstance(decimals, int | str) and str(decimals).isdigit()
+            if isinstance(decimals, int | str | Decimal) and str(decimals).isdigit()
             else None,
             source_last_updated=str(meta.get("lastupdated") or "") or None,
         )

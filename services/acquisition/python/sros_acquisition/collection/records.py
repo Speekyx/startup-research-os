@@ -38,6 +38,7 @@ import json
 import uuid
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
+from decimal import Decimal
 
 from ..compliance.attribution import AttributionFacts, render_attribution
 from ..compliance.authorization import AcquisitionAuthorizationContext
@@ -49,6 +50,7 @@ __all__ = [
     "build_draft",
     "canonical_fingerprint",
     "canonical_json",
+    "canonical_number",
     "observation_key",
 ]
 
@@ -68,6 +70,32 @@ def canonical_json(payload: object) -> str:
 
 def canonical_fingerprint(payload: object) -> str:
     return hashlib.sha256(canonical_json(payload).encode("utf-8")).hexdigest()
+
+
+def canonical_number(value: Decimal) -> str:
+    """The source's number, as a string, exactly as it was sent.
+
+    Mission 1.6.1 §6. Four properties, and each one is load-bearing --
+    `raw-numeric-precision-gap-analysis-v1.md` measured what breaks without it:
+
+    **Plain, never scientific.** `json.dumps` writes `1.2345678901234568e+17`
+    for a large float and PostgreSQL `JSONB` rewrites that as
+    `123456789012345680`. The fingerprint is computed in Python over the first
+    and anything re-reading the stored payload sees the second, so the two
+    disagree about a record nobody changed.
+
+    **Exact.** The digits the source sent, neither rounded nor padded.
+
+    **Type-preserving.** `1` and `1.0` serialise differently, because the source
+    distinguished them. A JSON *number* cannot carry that -- JSON has one numeric
+    type -- which is why the value is a string here and at the normalized layer
+    (`normalized-record-v1.md` §6.1) for the same reason.
+
+    **Deterministic.** Same input, same bytes, every platform and every run.
+    `format(d, "f")` is fixed-point by definition; nothing about it depends on a
+    float repr or a locale.
+    """
+    return format(value, "f")
 
 
 def observation_key(source_id: str, resource_id: str, geography: str, period: str) -> str:
@@ -102,7 +130,10 @@ class CollectedObservation:
     geography: str
     geography_name: str | None
     period: str
-    value: float | None
+    # A `Decimal`, never a `float` (Mission 1.6.1 §4). The collector parses the
+    # response body with `parse_float=Decimal` and `parse_int=Decimal`, so a
+    # source value never passes through IEEE-754 on its way here.
+    value: Decimal | None
     unit: str | None
     obs_status: str | None
     decimals: int | None
@@ -130,7 +161,11 @@ class CollectedObservation:
             "geography": self.geography,
             "geography_name": self.geography_name,
             "period": self.period,
-            "value": self.value,
+            # A canonical decimal STRING, so the value that reaches the
+            # fingerprint is the one the source sent. `None` stays JSON null:
+            # a value the source did not report is not the string "None", and
+            # it is certainly not zero.
+            "value": None if self.value is None else canonical_number(self.value),
             "unit": self.unit,
             "obs_status": self.obs_status,
             "decimals": self.decimals,

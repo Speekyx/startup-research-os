@@ -15,9 +15,15 @@ from __future__ import annotations
 
 import os
 import pathlib
+import sys
 from collections.abc import Iterator
 
 import pytest
+
+# Mission 1.6.1 §17. One definition, imported by both suites that own
+# destructive fixtures, rather than a copy in each that can drift.
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[4] / "infrastructure"))
+from testing.workspace_guard import disposable  # noqa: E402
 
 DATABASE_URL = os.environ.get(
     "DATABASE_URL", "postgresql://sros:sros_dev_password@127.0.0.1:55432/sros"
@@ -121,11 +127,17 @@ def recorded_satisfied_keys(conn, source_id: str) -> frozenset[str]:
 WORKSPACE_A = "00000000-0000-4000-8000-000000000001"
 WORKSPACE_B = "00000000-0000-4000-8000-000000000003"
 WORKSPACE_P = "00000000-0000-4000-8000-000000000004"
+# The second disposable workspace, added in Mission 1.6.1 §10. It replaces the
+# seeded WORKSPACE_B on the other side of every isolation assertion: an
+# assertion needs a workspace to be isolated FROM, and nothing about it requires
+# that workspace to be one somebody else's data lives in.
+WORKSPACE_Q = "00000000-0000-4000-8000-00000000000e"
 
 
 def _make_workspace(workspace_id: str, slug: str) -> None:
     import psycopg
 
+    disposable(workspace_id, what="_make_workspace")
     with psycopg.connect(DATABASE_URL) as connection:
         connection.execute(
             "INSERT INTO core.workspaces (id, name, slug) VALUES (%s,%s,%s) "
@@ -136,11 +148,16 @@ def _make_workspace(workspace_id: str, slug: str) -> None:
 
 
 def _drop_workspace(workspace_id: str) -> None:
-    """Only ever called for a workspace this suite created. Seeded workspaces
-    are cleaned of their rows, never removed."""
+    """Remove a workspace this suite created, and its rows.
+
+    The `disposable` guard replaced a hand-written `== WORKSPACE_P` assertion
+    here. That assertion was correct and would have gone stale the moment a
+    second disposable workspace existed -- which is what §10 then added.
+    `disposable` states the rule instead of one instance of it.
+    """
     import psycopg
 
-    assert workspace_id == WORKSPACE_P, "seeded workspaces must not be dropped"
+    disposable(workspace_id, what="_drop_workspace")
     with psycopg.connect(DATABASE_URL) as connection:
         connection.execute(
             "DELETE FROM acquisition.normalized_records WHERE workspace_id = %s",
@@ -161,7 +178,7 @@ def probe_workspace() -> Iterator[str]:
     also holds real collected data measures the environment rather than the
     behaviour under test.
     """
-    _make_workspace(WORKSPACE_P, "acquisition-probe")
+    _make_workspace(disposable(WORKSPACE_P, what="probe_workspace"), "acquisition-probe")
     yield WORKSPACE_P
     _drop_workspace(WORKSPACE_P)
 
@@ -243,26 +260,22 @@ def committing_tenant_conn(probe_workspace: str):
 
 @pytest.fixture
 def second_workspace() -> Iterator[str]:
-    """The other side of an isolation assertion.
+    """The other side of an isolation assertion, and disposable (§10).
 
-    Workspace B is **seeded** (`0001_dev_workspace`), so this fixture removes
-    only the rows it caused and never the workspace itself. An earlier version
-    deleted it in teardown and broke the gateway suite, which had every right to
-    assume seeded reference data is still there -- a fixture that removes what it
-    did not create is a fixture that decides what other suites can test.
+    This used to yield the SEEDED workspace B and delete acquisition rows from
+    it in teardown. It was harmless only because B happened to be empty: the
+    day anything real was collected there, a passing test would have destroyed
+    it. Mission 1.6.1 §9 classified it as the suite's one remaining
+    shared-seed-mutating fixture.
+
+    Nothing about the assertion needed a seeded workspace. "A workspace cannot
+    read another workspace's rows" needs *another workspace*, and one this
+    fixture creates and drops answers it exactly as well while being safe to
+    empty.
     """
-    yield WORKSPACE_B
-    import psycopg
-
-    with psycopg.connect(DATABASE_URL) as connection:
-        connection.execute(
-            "DELETE FROM acquisition.normalized_records WHERE workspace_id = %s",
-            (WORKSPACE_B,),
-        )
-        connection.execute(
-            "DELETE FROM acquisition.raw_records WHERE workspace_id = %s", (WORKSPACE_B,)
-        )
-        connection.commit()
+    _make_workspace(disposable(WORKSPACE_Q, what="second_workspace"), "acquisition-second")
+    yield WORKSPACE_Q
+    _drop_workspace(WORKSPACE_Q)
 
 
 @pytest.fixture

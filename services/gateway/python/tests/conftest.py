@@ -21,10 +21,18 @@ from __future__ import annotations
 
 import contextlib
 import os
+import pathlib
+import sys
 import uuid
 from collections.abc import Iterator
 
 import pytest
+
+# Mission 1.6.1 §17. One definition, shared with the acquisition suite rather
+# than copied into each -- two copies of a safety rule drift, and the copy that
+# drifts is the one nobody is looking at.
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[4] / "infrastructure"))
+from testing.workspace_guard import SEEDED_WORKSPACES, disposable  # noqa: E402
 
 # A and B are seeded by `0001_dev_workspace` and shared with every other suite.
 # Read from them freely; write into them only when the rows are rolled back.
@@ -58,7 +66,12 @@ WORKSPACE_SECURITY_P = uuid.UUID("00000000-0000-4000-8000-00000000000d")
 # Named, rather than written out at the one place it is checked, because the
 # check is the thing standing between a teardown and the seeded data every
 # other suite reads.
-SEEDED_WORKSPACES = frozenset({WORKSPACE_A, WORKSPACE_B})
+# Kept as an assertion rather than a second definition: if the shared guard and
+# this suite ever disagreed about which workspaces are seeded, the guard would be
+# protecting a different set from the one the suite believes in.
+assert frozenset({WORKSPACE_A, WORKSPACE_B}) == SEEDED_WORKSPACES, (
+    "the shared workspace guard and this suite disagree about the seeded set"
+)
 
 DATABASE_URL = os.environ.get(
     "DATABASE_URL", "postgresql://sros:sros_dev_password@127.0.0.1:55432/sros"
@@ -293,6 +306,8 @@ def _probe_workspaces(label: str, *workspaces: uuid.UUID) -> Iterator[None]:
 
 
 def _make_workspaces(label: str, workspaces: tuple[uuid.UUID, ...]) -> None:
+    for workspace in workspaces:
+        disposable(workspace, what=f"the {label} fixture")
     import psycopg
 
     with psycopg.connect(DATABASE_URL) as connection:
@@ -306,10 +321,11 @@ def _make_workspaces(label: str, workspaces: tuple[uuid.UUID, ...]) -> None:
 
 
 def _drop_workspaces(workspaces: tuple[uuid.UUID, ...]) -> None:
+    for workspace in workspaces:
+        disposable(workspace, what="_drop_workspaces")
     """Only ever called for the workspaces a probe fixture created."""
     import psycopg
 
-    assert SEEDED_WORKSPACES.isdisjoint(workspaces), "seeded workspaces must not be dropped"
     ids = list(workspaces)
     with psycopg.connect(DATABASE_URL) as connection:
         # `scoring.evidence` is deleted by name, before the cascade runs.
