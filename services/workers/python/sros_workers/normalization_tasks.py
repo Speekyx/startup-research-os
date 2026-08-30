@@ -85,9 +85,19 @@ def register_normalization_tasks(
                 "normalizer must not construct its own database access"
             )
 
-        from sros_acquisition.normalization.job import run_normalization_job
+        # Imported ONLY when no runner was injected. `runner or <import>`
+        # looks equivalent and is not: it resolves the import first, so an
+        # injected runner avoided the call while still requiring the package.
+        # services/acquisition/python is deliberately absent from the
+        # zero-dependency test path (ADR-009), which is where that showed up --
+        # dependency injection that still hard-imports its dependency is not
+        # injection, it is a call site with an unused parameter.
+        execute = runner
+        if execute is None:
+            from sros_acquisition.normalization.job import run_normalization_job
 
-        execute = runner or run_normalization_job
+            execute = run_normalization_job
+
         result = execute(merged, connection_factory)
         return {
             **result.to_json(),
