@@ -46,6 +46,7 @@ from .model import RawRecordView
 
 __all__ = [
     "NormalizationOutcome",
+    "NormalizerLineage",
     "PersistenceReport",
     "count_normalized",
     "persist_normalized",
@@ -59,6 +60,21 @@ class NormalizationOutcome(StrEnum):
     REVISED = "REVISED"
     UNCHANGED = "UNCHANGED"
     CONFLICT = "CONFLICT"
+
+
+@dataclass(frozen=True)
+class NormalizerLineage:
+    """Which adapter would have normalized a record, and under what version.
+
+    Mission 1.10.1. Named rather than passed as four loose arguments, because
+    the four only mean anything together -- and because a second adapter made a
+    LIST of them the thing a caller supplies.
+    """
+
+    collector_id: str
+    normalizer_id: str
+    normalizer_version: str
+    schema_version: int
 
 
 @dataclass(frozen=True)
@@ -136,19 +152,26 @@ def read_raw_records(
     record_ids: Sequence[str] | None = None,
     research_session_id: str | None = None,
     source_id: str | None = None,
-    only_unnormalized: bool = False,
-    normalizer_id: str | None = None,
-    normalizer_version: str | None = None,
-    schema_version: int | None = None,
+    lineages: Sequence[NormalizerLineage] = (),
     limit: int = 500,
 ) -> list[RawRecordView]:
     """The raw records a normalization pass will read.
 
-    `only_unnormalized` is scoped to ONE lineage on purpose. "Already
-    normalized" is not a property of a raw record -- it is a property of a raw
-    record *under a given normalizer and schema version*. A global flag would
-    make a re-normalization under a new version find nothing to do, which is the
-    opposite of what §24 asks for.
+    `lineages` scopes "already normalized" to the adapters that would handle
+    these records. **"Already normalized" is not a property of a raw record** --
+    it is a property of a raw record *under a given normalizer and schema
+    version*, so a global flag would make a re-normalization under a new version
+    find nothing to do, which is the opposite of what §24 asks for.
+
+    ONE lineage per registered adapter, matched on the collector that wrote the
+    record. Mission 1.10.1 widened this from a single lineage: with two adapters
+    registered the caller had been dropping the filter altogether, which is
+    correct per record and silently wrong in bulk -- a workspace holding more
+    raw records than `limit` would re-read the same first page every pass and
+    never reach the rest.
+
+    An empty `lineages` means no filter, which is what a caller asking for
+    specific record ids wants.
 
     `limit` is our own bound (§34) and is always applied. "The caller will pass
     one" is not a bound; the default is.
@@ -165,17 +188,38 @@ def read_raw_records(
     if source_id:
         clauses.append("r.source_id = %s")
         params.append(source_id)
-    if only_unnormalized:
-        clauses.append(
-            """NOT EXISTS (
-                   SELECT 1 FROM acquisition.normalized_records n
-                    WHERE n.workspace_id = r.workspace_id
-                      AND n.raw_record_id = r.id
-                      AND n.normalizer_id = %s
-                      AND n.normalizer_version = %s
-                      AND n.normalization_schema_version = %s)"""
+    if lineages:
+        # One branch per adapter, each matched on the collector that wrote the
+        # record. A record whose collector no adapter serves matches no branch
+        # and is therefore NOT excluded -- it is read, and `select_normalizer`
+        # reports it as unsupported, which is where that belongs.
+        branches = " OR ".join(
+            """(r.collector_id = %s
+                   AND n.normalizer_id = %s
+                   AND n.normalizer_version = %s
+                   AND n.normalization_schema_version = %s)"""
+            for _ in lineages
         )
-        params.extend([normalizer_id, normalizer_version, schema_version])
+        # The interpolated part is `branches`, built above from a literal
+        # TEMPLATE repeated once per registered adapter. Every value goes
+        # through `params` as a bound parameter -- there is no path by which a
+        # collector id or a version reaches the string.
+        clauses.append(
+            "NOT EXISTS ("  # noqa: S608 - `branches` is a literal template, see above
+            "   SELECT 1 FROM acquisition.normalized_records n"
+            "    WHERE n.workspace_id = r.workspace_id"
+            "      AND n.raw_record_id = r.id"
+            f"      AND ({branches}))"
+        )
+        for lineage in lineages:
+            params.extend(
+                [
+                    lineage.collector_id,
+                    lineage.normalizer_id,
+                    lineage.normalizer_version,
+                    lineage.schema_version,
+                ]
+            )
 
     params.append(limit)
     # The interpolated parts are the column list and the clause TEMPLATES, both

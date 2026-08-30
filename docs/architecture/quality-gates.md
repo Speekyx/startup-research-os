@@ -264,6 +264,22 @@ itself, and each closes a way the model could have been made to lie.
 | **The term's gram size is never inferred from its text** | Asserted over the payload class's source | A two-word entry in a unigram file is a contract violation, and counting spaces would hide it |
 | **A vocabulary entry is not an adapter** | `NORMALIZER_REGISTRY` and `IMPLEMENTED_NORMALIZERS` asserted empty of GDELT | The registry row lets the model describe a shape; it does not claim code exists |
 
+### The second normalizer (Mission 1.10.1)
+
+No new CI job. Rules inside the normalization guard and the adapter itself.
+
+| Gate | Mechanism | Guards |
+|------|-----------|--------|
+| **The adapter reaches no network, model or lookup** | AST walk over its imports | A substring scan fails on the docstring explaining the rule, and teaches the next person to weaken the assertion |
+| **No timezone is ever converted** | AST: no `astimezone` / `utcnow` / `now` / `localtime` call, no `tzinfo=` keyword | H-29. The one place a UTC offset could enter the field a consumer trusts most |
+| **No language table is embedded** | AST over string constants: `en`, `fr`, `es`, `ko`, `de`, `ja`, `BCP-47` appear nowhere | H-30. A mapping cannot be applied that does not exist |
+| **Source text is preserved verbatim** | `_source_text` (unstripped) is separate from `_text` (trimmed) | A term published with an edge space would otherwise be stored as a different term — invisibly, in the payload, the fingerprint and the identity |
+| **`gram_size` is never inferred from the term** | Asserted over the mapping code: no `.split(`, no `.count(` | Counting spaces would silently correct a contract violation instead of leaving it visible |
+| **A self-contradictory payload is refused** | `gram_kind` checked against `resource_id` | Choosing a winner between two source facts is the silent correction |
+| **Quality reasons come out in a stated order** | Built in sequence, never sorted afterwards; asserted over three runs | A consumer branching on the first reason must get the same one every time |
+| **An existing payload still hashes to its historical value** | A **literal** sha256, not a round-trip | The assertion that catches `timezone_state` leaking into an `ESTABLISHED` payload and reporting a revision on every record ever written |
+| **`only_unnormalized` stays meaningful with two adapters** | One lineage per registered adapter, matched on the collector | Dropping the filter is correct per record and silently wrong in bulk: a workspace larger than the batch bound would re-read its first page forever |
+
 ---
 
 ## 2. Turborepo task graph

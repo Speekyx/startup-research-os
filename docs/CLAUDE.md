@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.15
-Last amended: 2026-08-30 (Sprint 1 / Mission 1.10)
+Version: 1.16
+Last amended: 2026-08-30 (Sprint 1 / Mission 1.10.1)
 
 ## Boot Sequence
 
@@ -40,6 +40,7 @@ Ontology V2 keeps V1.1's numbering for §1–§10, so an existing reference to
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.16 | 2026-08-30 | Second normalizer recorded: GDELT WEB-NGRAM, deterministic and offline, with two real canonical records. Every one is PARTIAL because H-29 and H-30 stay open and are stated per record |
 | 1.15 | 2026-08-30 | Second canonical record kind recorded: a lexical frequency observation with no geography. A period may declare its timezone unestablished and a language may stay unmapped, both visibly (ADR-019). No GDELT normalizer |
 | 1.14 | 2026-08-30 | Second collector recorded: GDELT WEB-NGRAM, streamed and bounded, with real RawRecords. Bulk-file collection rules added; GDELT is collected and still not normalized |
 | 1.13 | 2026-08-30 | Resource-ready separated from eligible: a source can pass the gate while every resource it could ask for fails closed. GDELT review 3 authorises two WEB-NGRAM resources; how much a job may take became a governance question alongside what it may reach |
@@ -393,6 +394,20 @@ was separated in Mission 1.6 because the planner's normalization block read "no
 collector is implemented" — which Mission 1.5 made false while leaving
 normalization exactly as unavailable. `normalization_block` now derives it from
 what exists, and a future Eurostat collector with no normalizer stays blocked.
+
+**Two adapters exist** (Mission 1.10.1): `world-bank-indicators-numeric` and
+`gdelt-web-ngram-lexical`. Both are offline and deterministic, and both are
+asserted so over the **AST** rather than over the file's text — a substring scan
+fails on the docstring that explains the rule, and weakening it until it passes
+is how a structural check stops checking (`testing-strategy.md` §23).
+
+**A known absence is stated, never filled in.** Every GDELT normalized record is
+`PARTIAL`, carrying `PERIOD_TIMEZONE_NOT_ESTABLISHED` and `LANGUAGE_NOT_MAPPED`,
+because H-29 and H-30 are open. `VALID` would say nothing is missing when two
+canonical facts are, and `INVALID` would make a record unreadable for a condition
+that is universal and expected. The exact source label survives either way, so
+answering an open question later is a normalizer version bump over records
+already held — not a re-collection.
 
 Normalization reaches **no network, no model and no embedding library**, not even
 through `collection/transport.py`. `validate_normalization.py` asserts it by

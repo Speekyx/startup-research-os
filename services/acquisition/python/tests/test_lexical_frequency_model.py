@@ -443,23 +443,37 @@ class TestTheQualityVocabularyCanNameBothAbsences:
 # =========================================== nothing was implemented or written
 
 
-class TestNoNormalizerExists:
-    def test_no_gdelt_normalizer_is_registered(self) -> None:
-        """§22. The registry says *code exists that can normalize this*, and
-        none does. The record-kind registry row is a VOCABULARY entry, which is
-        a different claim."""
+class TestTheAdapterAndTheVocabularyStaySeparateClaims:
+    def test_the_gdelt_normalizer_is_registered_for_its_collector_only(self) -> None:
+        """Mission 1.10 §22 asserted that NONE was registered, because the
+        registry says *code exists that can normalize this* and none did.
+
+        Mission 1.10.1 wrote it. The key is still `(source_id, collector_id)`
+        rather than the source alone: a second collector for one source parses a
+        different shape, and handing it to this adapter would produce plausible
+        nonsense rather than an error.
+        """
         from sros_acquisition.normalization import NORMALIZER_REGISTRY
 
-        assert not any(key[0] == "gdelt" for key in NORMALIZER_REGISTRY)
+        assert ("gdelt", "gdelt-web-ngram") in NORMALIZER_REGISTRY
+        assert not any(
+            key[0] == "gdelt" and key[1] != "gdelt-web-ngram" for key in NORMALIZER_REGISTRY
+        )
 
-    def test_gdelt_is_not_normalizable(self) -> None:
+    def test_gdelt_became_normalizable_in_the_mission_after_this_one(self) -> None:
+        """Mission 1.10 defined the model and stopped; 1.10.1 wrote the adapter.
+        The order is the point, which is why this moved rather than being
+        deleted."""
         from sros_acquisition import IMPLEMENTED_NORMALIZERS
 
-        assert frozenset({"world-bank"}) == IMPLEMENTED_NORMALIZERS
+        assert frozenset({"world-bank", "gdelt"}) == IMPLEMENTED_NORMALIZERS
 
-    def test_no_gdelt_normalizer_module_exists(self) -> None:
+    def test_the_adapter_module_is_the_web_ngram_one(self) -> None:
+        """Mission 1.10 asserted that no module existed at all. One does now, and
+        it is named for the route it serves rather than for the source."""
         package = REPO_ROOT / "services/acquisition/python/sros_acquisition/normalization"
-        for name in ("gdelt.py", "gdelt_web_ngram.py", "lexical_frequency.py"):
+        assert (package / "gdelt_web_ngram.py").exists()
+        for name in ("gdelt.py", "gdelt_doc_api.py"):
             assert not (package / name).exists()
 
     def test_the_model_change_reached_no_model_or_network(self) -> None:

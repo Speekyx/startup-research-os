@@ -625,13 +625,18 @@ class TestTheCollectorIsRegistered:
         collection = REPO_ROOT / "services/acquisition/python/sros_acquisition/collection"
         assert (collection / "gdelt_web_ngram.py").exists()
 
-    def test_gdelt_is_still_not_normalizable(self) -> None:
-        """§56. A collector says what was fetched; a normalizer says what it
-        structurally represents, and one never implies the other."""
+    def test_gdelt_became_normalizable_two_missions_later(self) -> None:
+        """Mission 1.9.3 §56 asserted the opposite, and the gap it recorded was
+        the point: a collector says what was fetched, a normalizer says what it
+        structurally represents, and one never implies the other.
+
+        GDELT was collected in 1.9.3, the canonical model that could hold it was
+        designed in 1.10, and the adapter arrived in 1.10.1 — three separate
+        facts satisfied in three separate missions.
+        """
         from sros_acquisition import IMPLEMENTED_NORMALIZERS
 
-        assert "gdelt" not in IMPLEMENTED_NORMALIZERS
-        assert frozenset({"world-bank"}) == IMPLEMENTED_NORMALIZERS
+        assert frozenset({"world-bank", "gdelt"}) == IMPLEMENTED_NORMALIZERS
 
     def test_the_planner_now_sees_a_runnable_source(self, catalog) -> None:
         """§42. Derived from what exists, so nothing in the planner changed."""
@@ -660,7 +665,11 @@ class TestTheCollectorIsRegistered:
         assert readiness.resource_ready is True
         assert readiness.implemented is True
 
-    def test_no_gdelt_normalizer_was_written(self) -> None:
+    def test_the_normalizer_that_exists_serves_only_the_reviewed_route(self) -> None:
+        """Mission 1.9.3 asserted that NO gdelt normalizer existed. One does now,
+        for the WEB-NGRAM route. Nothing serves the DOC API, because H-27 is open
+        and no timeline envelope has ever been observed."""
         normalization = REPO_ROOT / "services/acquisition/python/sros_acquisition/normalization"
+        assert (normalization / "gdelt_web_ngram.py").exists()
         assert not (normalization / "gdelt.py").exists()
-        assert not (normalization / "gdelt_web_ngram.py").exists()
+        assert not (normalization / "gdelt_doc_api.py").exists()

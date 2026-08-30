@@ -54,6 +54,7 @@ from .normalizers import (
     select_normalizer,
 )
 from .repositories import (
+    NormalizerLineage,
     PersistenceReport,
     persist_normalized,
     read_raw_records,
@@ -277,29 +278,39 @@ def _select_records(
     """The raw records this pass will read, bounded.
 
     `only_unnormalized` needs a lineage to be meaningful, and the lineage is a
-    property of the normalizer -- so when exactly one is registered the filter
-    is scoped to it, and otherwise the pass reads everything in scope and lets
-    per-record idempotency classify it. Guessing a lineage from a registry with
-    two entries would silently normalize under one adapter's version while
-    skipping records another had already done.
+    property of the normalizer that would handle each record -- which
+    `select_normalizer` resolves from `(source_id, collector_id)`. So the filter
+    carries ONE lineage per registered adapter, matched on the collector that
+    wrote the record.
+
+    Until Mission 1.10.1 it was applied only when exactly one adapter existed and
+    dropped otherwise. That was correct per record -- idempotent persistence
+    classifies a re-read as UNCHANGED -- and silently wrong in bulk: a workspace
+    holding more raw records than `max_records` would re-read the same first page
+    every pass and never reach the rest. Registering the second adapter is what
+    activated it.
     """
-    lineage: dict[str, Any] = {}
-    if job.only_unnormalized and len(table) == 1:
-        spec = next(iter(table.values()))
-        lineage = {
-            "only_unnormalized": True,
-            "normalizer_id": spec.normalizer_id,
-            "normalizer_version": spec.normalizer_version,
-            "schema_version": spec.schema_version,
-        }
+    lineages = (
+        [
+            NormalizerLineage(
+                collector_id=spec.collector_id,
+                normalizer_id=spec.normalizer_id,
+                normalizer_version=spec.normalizer_version,
+                schema_version=spec.schema_version,
+            )
+            for spec in sorted(table.values(), key=lambda s: s.key)
+        ]
+        if job.only_unnormalized
+        else []
+    )
     return read_raw_records(
         conn,
         job.workspace_id,
         record_ids=job.raw_record_ids or None,
         research_session_id=None if job.raw_record_ids else job.research_session_id,
         source_id=job.source_id,
+        lineages=lineages,
         limit=job.max_records,
-        **lineage,
     )
 
 
