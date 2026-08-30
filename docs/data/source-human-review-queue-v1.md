@@ -1,8 +1,8 @@
 # Source human-review queue V1
 
 **Status:** Open items. Each entry is a concrete question, not a request to think about it.
-**Version:** 1.2 (Mission 1.8 added H-25 and H-26, resolved half of H-22 and
-promoted H-24 to a blocker; Mission 1.7 added H-13 to H-24)
+**Version:** 1.3 (Mission 1.9 added H-27 and H-28; Mission 1.8 added H-25 and
+H-26, resolved half of H-22 and promoted H-24 to a blocker)
 **Date:** 2026-08-30
 **Governed by:** [`source-registry-v1.md`](source-registry-v1.md)
 **Results:** [`source-review-results-v1.md`](source-review-results-v1.md) ·
@@ -48,6 +48,8 @@ entered: §37 asks for the required next action to be *recorded*, not taken.
 | [H-24](#h-24) | Wikimedia | **REQUIRES_REVIEW** | Do view COUNTS carry CC BY-SA? — **now the blocker** |
 | [H-25](#h-25) | PyPI | REQUIRES_REVIEW | Is there any grant at all? |
 | [H-26](#h-26) | npm | REQUIRES_REVIEW | Commercial reuse and analytics by a third party |
+| [H-27](#h-27) | GDELT | **collector blocked** | Timeline JSON envelope is unobservable from here |
+| [H-28](#h-28) | GDELT | **collector blocked** | What is a GDELT resource, and what licence identifies it? |
 
 ---
 
@@ -765,3 +767,78 @@ nothing.
 **Vendor contact needed?** The terms direct high-volume users to a sales team,
 which is a route to the question.
 **Legal counsel appropriate?** Not before the documents are found.
+
+
+---
+
+# Mission 1.9 additions
+
+Two items, and between them they are why the GDELT collector was not written.
+Neither is a policy question: GDELT's approval stands and is unchanged.
+
+---
+
+## H-27 — The GDELT timeline JSON envelope could not be observed {#h-27}
+
+**Issue.** The DOC API mode that fits the authorised data categories is
+`TimelineTone` — it returns tone over time, which maps onto `tone_score` plus
+`observation_period` and contains no publisher content at all. Its JSON field
+names are unknown.
+
+**Why it is unresolved.** Two independent routes, both closed:
+
+- **GDELT does not publish the schema.** Its own announcement documents the
+  parameters and the modes' semantics — `TimelineVol` reports volume as a
+  percentage of monitored coverage, `TimelineVolRaw` returns raw counts plus a
+  `norm` field — and states that JSON output exists without listing the fields.
+- **This environment cannot reach `api.gdeltproject.org`.** Fourteen attempts
+  returned `ConnectTimeout`, `ECONNRESET`, `HTTP 429` and finally
+  `ECONNREFUSED`, while `api.worldbank.org` returned HTTP 200 from the same
+  client moments apart. One `ArtList` response was obtained through a proxied
+  route before that route also began refusing.
+
+A parser was not written against invented field names. It would have been
+validated by fake responses composed from the same invention — a test passing by
+checking a guess against itself.
+
+**Needed.** One `TimelineTone` response and one `TimelineVolRaw` response,
+captured as JSON from any environment that can reach the API, and committed as
+test fixtures. That is the entire blocker.
+
+```text
+https://api.gdeltproject.org/api/v2/doc/doc?query=climate&mode=TimelineTone&format=json&timespan=1d
+```
+
+**Vendor contact needed?** No.
+**Legal counsel appropriate?** No.
+**Developer action needed?** **Yes**, and it is small: two saved responses.
+
+---
+
+## H-28 — What is a GDELT resource, and what licence identifies it? {#h-28}
+
+**Issue.** `context.datasets` is empty for GDELT, so `authorized_dataset(...)`
+returns `None` for everything and no RawRecord draft can be built. The resource
+model is failing closed exactly as designed — a resource nobody reviewed has no
+licence, no family and no content origin.
+
+**Why it is unresolved.** Populating it means deciding what one GDELT resource
+*is*, and the answer depends on which API mode the collector uses, which is
+**H-27**. Guessing now would fix the symptom and lock in the wrong answer.
+
+A second question sits inside it: `AuthorizedDataset.licence` is required and
+non-empty, and **GDELT names no licence**. It grants unlimited use directly
+rather than through a named instrument, which is the finding
+`gdelt-compliance-v1.md` §2 records as the reason there is no
+`LICENCE_IDENTIFIER` in its attribution. The honest value is an identifier for
+the grant instrument rather than a licence name, and since `licence_allowlist`
+is `null` nothing matches against it — so the choice is about being readable
+later, not about enforcement.
+
+**Needed.** After H-27: one authorised dataset entry per collected mode, with a
+`basis` quoting the grant sentence, and a deliberate decision on the licence
+field.
+
+**Vendor contact needed?** No.
+**Legal counsel appropriate?** No.
+**Developer action needed?** Yes, after H-27.

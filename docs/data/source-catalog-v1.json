@@ -15,7 +15,8 @@
     "No source data was collected. Only official documentation ABOUT the sources was read, and no candidate platform was queried for content.",
     "Signal and behaviour coverage are recorded for every source except the three PROHIBITED ones (§23) and the four whose documentation could not be retrieved, which have no basis to cite.",
     "Mission 1.8 audited every approving review against the assessed use and downgraded three that rested on silence rather than on a grant: `pypi` (four of six required activities unaddressed), `npm-registry` (three, after two assessments were corrected to what their evidence actually says) and `wikimedia-pageviews` (two, after a documentation-site footer was corrected to not be a data licence). Every Mission 1.7 review version is preserved.",
-    "Five sources are in an approving state and four are collector-eligible in a verified environment. GDELT joined the economic three by having its attribution, resource-scope and access obligations expressed as machine-verified conditions; no gate was relaxed to admit it."
+    "Five sources are in an approving state and four are collector-eligible in a verified environment. GDELT joined the economic three by having its attribution, resource-scope and access obligations expressed as machine-verified conditions; no gate was relaxed to admit it.",
+    "The gdelt-doc-api access profile had no endpoint_url until Mission 1.9, so the host allowlist any GDELT collector derives from the registry was empty and no request could have been made. Found by trying to use the registration rather than by reading it."
   ],
   "sources": [
     {
@@ -812,7 +813,7 @@
         {
           "access_method": "PUBLIC_API",
           "label": "gdelt-doc-api",
-          "endpoint_url": null,
+          "endpoint_url": "https://api.gdeltproject.org/api/v2/doc/",
           "documentation_url": "https://www.gdeltproject.org/data.html",
           "requires_authentication": false,
           "requires_api_key": false,
@@ -828,7 +829,7 @@
           "rate_limit_daily_quota": null,
           "rate_limit_origin": null,
           "acquisition_cost": "FREE",
-          "notes": "No key documented. Rate limits are not published, so they are recorded as unknown rather than guessed."
+          "notes": "The DOC 2.0 API endpoint, recorded so the collector's host allowlist can be derived from the registry rather than hard-coded (Mission 1.5 §10). Registered in Mission 1.7 and configured in Mission 1.8 without one, because no collector had yet tried to use it -- with no endpoint the derived allowlist is EMPTY and the transport refuses, which is fail-closed but not what anyone intended. No key is documented. Rate limits are not published, so they are recorded as unknown rather than guessed; GDELT does nonetheless return HTTP 429, which is why local pacing is required and why no number is recorded here as a provider quota."
         },
         {
           "access_method": "DATASET_DOWNLOAD",
@@ -849,7 +850,7 @@
           "rate_limit_daily_quota": null,
           "rate_limit_origin": null,
           "acquisition_cost": "FREE",
-          "notes": "Published bulk files. The terms cover redistribution of the datasets explicitly."
+          "notes": "Published bulk files. The terms cover redistribution of the datasets explicitly. DELIBERATELY carries no endpoint_url: the collector derives its host allowlist from the profiles, so recording one here would authorise a host for a route no collector implements. It is recorded when this profile is actually built against, and not before."
         }
       ],
       "retention_override": null,
