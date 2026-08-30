@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.17
-Last amended: 2026-08-30 (Sprint 1 / Mission 1.11)
+Version: 1.18
+Last amended: 2026-08-30 (Sprint 1 / Mission 1.11.1)
 
 ## Boot Sequence
 
@@ -24,8 +24,9 @@ Before performing any task, execute this reading order.
 15. docs/domain/claim-model-v1.md
 16. docs/ai/evaluation-framework-v1.md
 17. docs/data/signal-contract-v1.md
-18. Relevant ADRs
-19. Task-specific specifications
+18. docs/data/signal-derivation-runtime-v1.md
+19. Relevant ADRs
+20. Task-specific specifications
 
 These documents are the authoritative source of truth.
 
@@ -41,6 +42,7 @@ Ontology V2 keeps V1.1's numbering for §1–§10, so an existing reference to
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.18 | 2026-08-30 | First two deterministic extractors, and **five real Signals**. `PARTIAL` proved usable in production: both GDELT inputs contributed because neither missing fact was one the derivation needed. A refused derivation gets a run record, never a Signal (ADR-021) |
 | 1.17 | 2026-08-30 | Signal defined as a DERIVATION over two or more observations, never a labelled one. `nlp.signals` reshaped; the family stops classifying demand; order and instant separated, and H-32 opened. Model and contract only -- no extractor, 0 signals |
 | 1.16 | 2026-08-30 | Second normalizer recorded: GDELT WEB-NGRAM, deterministic and offline, with two real canonical records. Every one is PARTIAL because H-29 and H-30 stay open and are stated per record |
 | 1.15 | 2026-08-30 | Second canonical record kind recorded: a lexical frequency observation with no geography. A period may declare its timezone unestablished and a language may stay unmapped, both visibly (ADR-019). No GDELT normalizer |
@@ -482,6 +484,44 @@ identity is reportable rather than absorbed into a new row. The research session
 is **lineage, never identity**: two sessions deriving the same thing converge on
 one signal, because two rows would read as two independent findings.
 
+### Signal derivation — two extractors, and what bounds them
+
+Since Mission 1.11.1 two deterministic extractors exist
+(`signal-derivation-runtime-v1.md`, ADR-021) and **five real Signals** do:
+`numeric-period-change@1.0.0` produced four from the six World Bank
+observations, `lexical-frequency-contrast@1.0.0` one from the two GDELT ones.
+
+- **The extractor computes; the model checks.** `ObservationInput` carries no
+  payload, so the model cannot interpret; the extractor reads the payload to
+  subtract. Neither does the other's job, and `packages/signal-model` still
+  contains no extractor — asserted over the AST.
+- **Grouping is what keeps it tractable.** Records are bucketed by a canonical
+  key and only records sharing one can meet. A caller handing an explicit
+  incompatible pair is refused with `INCOMPATIBLE_SERIES`, naming the field that
+  disagreed.
+- **`terms` is a required parameter for the lexical contrast.** One WEB-NGRAM
+  file holds 223,342 rows and an unselected all-pairs sweep is ~2.5 x 10^10
+  pairs; every bounded default would be a threshold nobody reviewed.
+- **Ordering never comes from the database.** Numeric by canonical period start,
+  lexical by term text verbatim. Input order enters the derivation identity, so
+  an order chosen by the query optimiser would choose the identity.
+- **`PARTIAL` is usable, and now proven so.** Both GDELT records carry
+  `PERIOD_TIMEZONE_NOT_ESTABLISHED` and `LANGUAGE_NOT_MAPPED`, neither is a fact
+  the contrast requires, and both contributed with no withheld facts. No quality
+  string is branched on anywhere in either extractor.
+- **A refused derivation gets a run record, never a Signal** (ADR-021).
+  `nlp.signal_derivation_runs` holds one row per **execution**, written in the
+  same transaction as the signals: N considered, M derived, K refused and why. A
+  redelivery writes a second run row and zero new signals, which is the honest
+  record — the signals are what is idempotent.
+- **`signal.derive` routes to the acquisition queue**, like `normalize.`:
+  bounded, CPU-cheap work over records already held. The `nlp` queue is sized
+  for LLM-backed work.
+- **`SIGNAL_DERIVATION` is its own capability**, between normalization and NLP
+  extraction, with a derived block. `NLP_EXTRACTION` stays blocked by D-12 —
+  whose reason is embedding versioning, true of classification and clustering
+  and **false** of deterministic arithmetic.
+
 ### Claim — the unit evidence accumulates against
 
 Since Mission 1.2 a **Claim** is a persisted entity (Ontology V2.1 §17,
@@ -552,10 +592,12 @@ normalization job may be dispatched for a source with no normalizer. The
 orchestrator reports the second under `NO-NORMALIZER-IMPLEMENTED`, distinct from
 the two acquisition gates because different work clears each.
 
-**No signal extractor may be implemented before Mission 1.11.1**, and none
-may derive a temporal GDELT signal while H-29 and H-32 are open. The model
-refuses it; an extractor that worked around the refusal would be granting itself
-a fact no source established.
+**No GDELT temporal signal may be derived while H-32 is open.** Frequency
+change, growth, decline, moving averages and rolling windows over WEB-NGRAM
+buckets are all blocked, and so is any direction on a GDELT signal. The lexical
+extractor's grouping key carries the exact bucket label, so two buckets never
+meet; an extractor that worked around that would be granting itself a fact no
+source established. Cross-source temporal alignment stays blocked by H-29.
 
 **No collector may be implemented for a source that is not collector-eligible.**
 D-07 is resolved and the registry exists. Two sources pass the gate; one has a

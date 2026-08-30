@@ -1,6 +1,19 @@
 # `services/nlp`
 
-**Status:** boundary defined, not implemented.
+**Status:** **partially implemented.** Two deterministic signal extractors exist
+(Mission 1.11.1) and five real Signals do. Everything else on this page --
+embeddings, clustering, LLM classification, independence estimation -- is still
+a boundary and is blocked by D-12.
+
+```text
+sros_nlp/extractors/   numeric-period-change@1.0.0
+                       lexical-frequency-contrast@1.0.0
+```
+
+Neither reaches a network, a model or an embedder, and
+`infrastructure/scripts/validate_signals.py` asserts it by walking every import.
+See `docs/data/signal-derivation-runtime-v1.md`.
+
 **Runtime:** Python. BGE-M3 and HDBSCAN being Python-only is what drove ADR-004
 to remove BullMQ and put the whole backend on Celery.
 

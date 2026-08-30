@@ -1,6 +1,6 @@
 {
   "$comment": "AUTHORITATIVE CONTRACT SOURCE OF TRUTH. Hand-edited. Everything under packages/contracts/generated/ is derived from this file by tools/generate.py. See ADR-009.",
-  "contract_version": "1.6.0",
+  "contract_version": "1.7.0",
   "ontology_version": "2",
   "scoring_framework_version": "1.1",
   "evidence_framework_version": "1",
@@ -1055,6 +1055,10 @@
           "description": "A difference expressed in the inputs' own quantity. The unit is INHERITED where the inputs published one and NOT_ESTABLISHED where they did not"
         },
         {
+          "value": "ABSOLUTE_DIFFERENCE",
+          "description": "A difference between two quantities measured at the SAME position -- two lexical terms in one source period, two geographies in one year. Distinct from ABSOLUTE_CHANGE because that one asserts something changed, which is a statement about time: a consumer branching on this value must be able to tell a contrast from a movement. The unit follows the inputs, as for ABSOLUTE_CHANGE"
+        },
+        {
           "value": "RATIO",
           "description": "One quantity relative to another. Always DIMENSIONLESS"
         },
@@ -1195,6 +1199,10 @@
         {
           "value": "INCOMPATIBLE_INPUT_KINDS",
           "description": "The inputs disagree on record kind or period resolution. Never silently coarsened to the coarser of the two"
+        },
+        {
+          "value": "INCOMPATIBLE_SERIES",
+          "description": "The inputs are the same record kind at the same resolution and are not observations of the same thing -- a different metric, geography, unit, dataset, source period label, source language label or gram size. INCOMPATIBLE_INPUT_KINDS cannot express this: two World Bank observations of different countries disagree on neither kind nor resolution. The detail names the field that disagreed"
         },
         {
           "value": "INSUFFICIENT_INPUT_OBSERVATIONS",

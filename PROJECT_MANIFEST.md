@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.16
+Version: 1.17
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-08-30 (Sprint 1 / Mission 1.11)
+Last amended: 2026-08-30 (Sprint 1 / Mission 1.11.1)
 
 ---
 
@@ -13,6 +13,21 @@ Last amended: 2026-08-30 (Sprint 1 / Mission 1.11)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.17 — 2026-08-30 (Sprint 1 / Mission 1.11.1)
+
+Authorized by the Mission 1.11.1 brief §4 (resolve refusal observability before
+implementing), §37 and §38 (real extraction over existing records), §51
+(documentation) and §54 (stop after the report).
+
+| Change | Section | Authority |
+|--------|---------|-----------|
+| **The pipeline reaches Signals, and five real ones exist** | Product Shape | Mission 1.11.1 §37, §38. `numeric-period-change@1.0.0` derived four from the six World Bank observations (two series, adjacent periods); `lexical-frequency-contrast@1.0.0` derived one from the two GDELT observations. Both deterministic, both offline, `derivation_confidence` 1.0. Eight raw and eight normalized records byte-for-byte unchanged |
+| **PARTIAL was proven usable in production** | Engineering Principles | Mission 1.11.1 §22. Both GDELT inputs carry `PERIOD_TIMEZONE_NOT_ESTABLISHED` and `LANGUAGE_NOT_MAPPED`, neither is a fact a within-bucket contrast requires, and both contributed with **no withheld facts**. No quality string is branched on anywhere in either extractor: the model evaluates required facts against each record's own reasons |
+| **A refused derivation gets a run record, never a Signal** | Engineering Principles | Mission 1.11.1 §4, [ADR-021](docs/architecture/adr/ADR-021-signal-derivation-run-log.md). `nlp.signal_derivation_runs` holds one row per **execution**, written in the same transaction as the signals it emitted: N considered, M derived, K refused and why. `research.research_jobs` was the closest existing home and has no result column and a different transaction. A redelivery writes a second run row and zero new signals, because the signals are what is idempotent |
+| **H-32 is respected by construction, not by a check** | Blocked work | Mission 1.11.1 §16. The lexical extractor's grouping key carries the **exact bucket label**, so two buckets never share a group and no ordering between them is required, asserted or possible. No frequency change, growth, decline or rolling window exists, and no GDELT signal can carry a direction — enforced by a database CHECK as well as by the model |
+| **Signal derivation became its own pipeline capability** | Product Shape | Mission 1.11.1 §43, §44. `SIGNAL_DERIVATION` sits between normalization and NLP extraction with a **derived** block, and `signal.derive` routes to the acquisition queue like `normalize.`. `NLP_EXTRACTION` stays blocked by D-12, whose stated reason — embedding model versioning — is true of classification and clustering and **false** of deterministic arithmetic. Planner version 1.3.0, the first change to the stage GRAPH |
+| **The extractor computes and the model checks** | Engineering Principles | Mission 1.11.1 §5. `packages/signal-model` contains no extractor and `validate_signals.py` fails the build if one appears, walking the AST. Neither package may import a network client, a model or an embedder. D-03 and D-12 untouched: zero embeddings, claims, evidence, opportunities and scores |
 
 ## 1.16 — 2026-08-30 (Sprint 1 / Mission 1.11)
 
@@ -494,13 +509,16 @@ It maps a source observation to a canonical structure and stops. It performs no
 tokenization, no embedding, no classification and no clustering, and CI asserts
 each of those mechanically rather than by review.
 
-**The Signal model**, added in 1.11, is a **contract and a schema**, not a
-pipeline. It defines what a derived signal is, what identity and lineage it
-carries, and which canonical facts a derivation may require. `SIGNAL_EXTRACTORS`
-is empty, `nlp.signals` and `nlp.signal_inputs` hold 0 rows, and nothing
-tokenizes, embeds, classifies or clusters. A signal EXTRACTOR is still forbidden
-until Mission 1.11.1, and a temporal GDELT extractor stays forbidden beyond it
-while H-29 and H-32 are open.
+**Deterministic signal derivation**, added in 1.11.1, is not on this list and
+never was: the forbidden entry is *NLP pipelines*, and these two extractors
+tokenize nothing, embed nothing, classify nothing and cluster nothing. They
+subtract exact decimals and compare exact labels. `validate_signals.py` asserts
+each of those mechanically by walking every import.
+
+**A temporal GDELT extractor stays forbidden** while H-32 is open — frequency
+change, growth, decline, moving averages and rolling windows all — and
+cross-source temporal alignment stays forbidden while H-29 is. Classification,
+embedding and clustering stay blocked by D-12.
 
 **Everything else on the list is unchanged.** NLP pipelines are blocked by D-12,
 scoring algorithms by the absence of a `CALIBRATED` profile, and authentication

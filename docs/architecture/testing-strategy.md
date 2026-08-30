@@ -1057,3 +1057,53 @@ ordinary outcome; a `ValueError` means **the caller** is wrong -- a confidence
 out of range, a direction with no order behind it, a lexical scope carrying a
 geography. Tests assert the split, because a caller error that arrives as a
 refusal would be logged as "no signal today" and never fixed.
+
+---
+
+## 25. A database CHECK is a test you cannot forget to write (added in Mission 1.11.1)
+
+Migration 0013 gave the derivation run log two arithmetic constraints, written
+as belt-and-braces:
+
+```sql
+CHECK (groups_derived + groups_refused <= groups_considered)
+CHECK (records_contributed + records_excluded <= records_considered)
+```
+
+The second one failed on the third integration test, and the defect was real.
+The job counted contributors by summing over drafts:
+
+```python
+for draft in outcome.drafts:
+    contributed += len(draft.contributed)
+```
+
+Over 2018/2019/2020 that produces two signals and counts **four** contributors
+from **three** records, because 2019 belongs to both pairs. The run would have
+reported more contributing records than it read.
+
+### Why no unit test would have caught it
+
+Every extractor test asserted the *signals*, which were correct. The counters
+are diagnostics — nobody branches on them — so nothing asserted their
+relationship to each other, and the wrong number would have sat in the run log
+being quietly believed by whoever read it during an incident.
+
+The constraint asserted the relationship because the relationship is what makes
+the numbers mean anything. `records_contributed` now counts **distinct** records,
+and a record excluded from one signal while contributing to another counts as a
+contributor.
+
+### The rule
+
+**When two stored numbers have an arithmetic relationship, put it in a CHECK.**
+Not because the code is expected to be wrong, but because:
+
+- it is checked on every row forever, including rows written by code that does
+  not exist yet;
+- it fails at the write, naming the constraint, rather than surfacing as a
+  number somebody mistrusts a year later;
+- it costs one line, and the alternative is a test per producer.
+
+The same argument the tenancy composite keys make: a guarantee enforced where
+the data lands does not depend on every future caller remembering it.

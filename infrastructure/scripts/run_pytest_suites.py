@@ -56,6 +56,7 @@ SUITES = [
     "packages/llm-gateway/python",
     "services/workers/python",
     "services/acquisition/python",
+    "services/nlp/python",
     "services/research-orchestrator/python",
     "services/gateway/python",
 ]

@@ -125,6 +125,8 @@ jobs:
       # match the contract source of truth.
       - name: Normalization reaches no network, no model and no later stage
         run: python infrastructure/scripts/validate_normalization.py
+      - name: Signal derivation reaches no network, no model and no later stage
+        run: python infrastructure/scripts/validate_signals.py
 
   evidence-aggregation:
     name: Evidence aggregation guard
@@ -206,6 +208,7 @@ jobs:
                       packages/evidence-aggregation/python/sros_evidence_aggregation \
                       packages/signal-model/python/sros_signal_model \
                       services/acquisition/python/sros_acquisition \
+                      services/nlp/python/sros_nlp \
                       services/research-orchestrator/python/sros_orchestrator \
                       services/gateway/python/sros_gateway
       # The markdown catalog is generated from the JSON one. Two hand-maintained

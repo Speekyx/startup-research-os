@@ -15,6 +15,7 @@ members = [
     "sros-evidence-aggregation",
     "sros-gateway",
     "sros-llm-gateway",
+    "sros-nlp",
     "sros-orchestrator",
     "sros-signal-model",
     "sros-workers",
@@ -1647,6 +1648,21 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [{ name = "sros-contracts", editable = "packages/contracts/python" }]
+
+[[package]]
+name = "sros-nlp"
+version = "0.1.0"
+source = { editable = "services/nlp/python" }
+dependencies = [
+    { name = "sros-contracts" },
+    { name = "sros-signal-model" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "sros-contracts", editable = "packages/contracts/python" },
+    { name = "sros-signal-model", editable = "packages/signal-model/python" },
+]
 
 [[package]]
 name = "sros-orchestrator"

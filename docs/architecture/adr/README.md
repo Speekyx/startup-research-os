@@ -27,6 +27,7 @@ eventually be documented through ADRs."
 | [ADR-018](ADR-018-acquisition-rights-basis.md) | Record what KIND of thing authorises a resource, not only which licence | Accepted — Mission 1.9.1. **Resolves H-28** |
 | [ADR-019](ADR-019-lexical-frequency-observation.md) | A second record kind, and two canonical absences | Accepted — Mission 1.10. Extends ADR-009 |
 | [ADR-020](ADR-020-signal-derivation-model.md) | A Signal is a derivation, not a labelled observation | Accepted — Mission 1.11. Extends ADR-008, ADR-012, ADR-019 |
+| [ADR-021](ADR-021-signal-derivation-run-log.md) | A refused derivation gets a run record, never a Signal | Accepted — Mission 1.11.1. Extends ADR-020 |
 
 > **Numbering note.** The production-deployment ADR has **no reserved number any
 > more.** It moved from 012 to 013 to 014 to 015, once per mission, because each

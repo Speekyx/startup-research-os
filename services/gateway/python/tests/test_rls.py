@@ -57,6 +57,10 @@ TENANT_TABLES = [
     # workspace derived from, which is as much a statement about what a tenant
     # is researching as the signal itself.
     "nlp.signal_inputs",
+    # Added in Mission 1.11.1. A derivation run names which observations a
+    # workspace considered, which says as much about what a tenant is
+    # researching as the signals it produced.
+    "nlp.signal_derivation_runs",
 ]
 
 # Deliberately NOT policy-bearing. Listed here so that adding a policy to one of

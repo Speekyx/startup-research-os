@@ -144,6 +144,9 @@ class TestSchemaRuntime:
             # workspace derived from, which is as much a statement about what a
             # tenant is researching as the signal itself.
             "nlp.signal_inputs",
+            # 0013_signal_derivation_runs. Tenant data: where a REFUSED
+            # derivation goes, so no row in nlp.signals ever means "no signal".
+            "nlp.signal_derivation_runs",
         }
 
     def test_the_source_eligibility_view_exists(self, database) -> None:
