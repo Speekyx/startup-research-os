@@ -11,8 +11,9 @@ observation without re-parsing the blob.
 Three identities are kept apart, and confusing any two of them is the bug this
 module exists to prevent:
 
-    observation_key   WHICH observation. Source, resource, geography, period.
-                      Never the value, never the retrieval time
+    observation_key   WHICH observation. Source, resource, and whatever else
+                      the source identifies one by. Never the value, never the
+                      retrieval time
     content_hash      WHAT the source said. The canonical payload, which
                       includes the identifying facts AND the value
     record id         which row. Derived from the two above
@@ -39,6 +40,7 @@ import uuid
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from decimal import Decimal
+from typing import Protocol
 
 from ..compliance.attribution import AttributionFacts, render_attribution
 from ..compliance.authorization import AcquisitionAuthorizationContext
@@ -47,7 +49,9 @@ __all__ = [
     "COLLECTOR_NAMESPACE",
     "CollectedObservation",
     "RawRecordDraft",
+    "SourceObservation",
     "build_draft",
+    "build_raw_record",
     "canonical_fingerprint",
     "canonical_json",
     "canonical_number",
@@ -57,6 +61,11 @@ __all__ = [
 # Deterministic record ids, so a re-run converges on the row that exists rather
 # than inserting a parallel copy. Same argument as the registry's row ids.
 COLLECTOR_NAMESPACE = uuid.UUID("6f2a1c94-8d3b-5e07-9a41-2b7c6d5e8f30")
+
+#: The one access profile the World Bank review approved. Stated here because
+#: `build_draft` is this source's builder; a second profile appearing would make
+#: this wrong loudly rather than silently.
+WORLD_BANK_ACCESS_PROFILE = "indicators-api-v2"
 
 
 def canonical_json(payload: object) -> str:
@@ -98,21 +107,62 @@ def canonical_number(value: Decimal) -> str:
     return format(value, "f")
 
 
-def observation_key(source_id: str, resource_id: str, geography: str, period: str) -> str:
-    """The stable identity of an observation.
+_KEY_SEPARATOR = "|"
+_KEY_ESCAPE = "\\"
+
+
+def _escape_key_part(part: str) -> str:
+    r"""Make one part unambiguous inside a `|`-joined key.
+
+    The escape character is escaped first, or `a\` followed by `b` and `a`
+    followed by `\b` would produce the same key.
+    """
+    return part.replace(_KEY_ESCAPE, _KEY_ESCAPE * 2).replace(
+        _KEY_SEPARATOR, _KEY_ESCAPE + _KEY_SEPARATOR
+    )
+
+
+def observation_key(*parts: str) -> str:
+    r"""The stable identity of an observation.
 
     Composed rather than hashed: an operator debugging a revision should be able
     to read the key and know which series it is, and a hash would make them look
-    it up. The parts are joined with a separator none of them may contain.
+    it up.
+
+    **Variadic since Mission 1.9.3, and the arity is the source's business.** A
+    World Bank observation is identified by four facts and a GDELT WEB-NGRAM row
+    by five -- source, resource, bucket, language, ngram -- so a fixed signature
+    would have forced the second to pack two facts into one field.
+
+    **The separator is ESCAPED rather than forbidden, and the live smoke test is
+    why.** Until Mission 1.9.3 a part containing `|` was rejected outright, which
+    was safe while every part was an identifier, an ISO code or a year. The first
+    real WEB-NGRAM file refused to parse: news text contains pipes, so GDELT
+    publishes terms containing them, and a rule written for identifiers was
+    discarding a whole file of legitimate observations.
+
+    Forbidding was the wrong shape of answer. **Any printable character can
+    appear in a term**, so there is no separator to move to; skipping such rows
+    would drop real data because of our own key format; and hashing would take
+    away the readability the key exists for. Escaping keeps the guarantee --
+    distinct part sequences produce distinct keys -- without deciding what a
+    source is allowed to say.
+
+    Parts containing neither `|` nor `\` are unaffected, which is every part of
+    every record written before this change.
     """
-    parts = (source_id, resource_id, geography, period)
+    if len(parts) < 2:
+        raise ValueError(
+            "an observation key needs at least a source and a resource; fewer parts "
+            "would collide across resources of one source"
+        )
     for part in parts:
-        if not part or "|" in part:
+        if not part:
             raise ValueError(
-                f"observation key part {part!r} is empty or contains the separator; the "
-                "key would be ambiguous and two observations could collide"
+                "an observation key part is empty; the key would be ambiguous and two "
+                "observations could collide"
             )
-    return "|".join(parts)
+    return _KEY_SEPARATOR.join(_escape_key_part(part) for part in parts)
 
 
 @dataclass(frozen=True)
@@ -197,6 +247,42 @@ class CollectedObservation:
         return None
 
 
+class SourceObservation(Protocol):
+    """What every collector's observation must be able to say about itself.
+
+    Mission 1.9.3 §39. Abstracted because TWO collectors now need it and their
+    shapes genuinely differ -- a World Bank observation has an indicator, a
+    geography and a unit; a WEB-NGRAM row has a language, a term and a count,
+    and no geography at all. What they share is exactly this: an identity, a
+    canonical payload, a fingerprint over it, and an event time or the honest
+    absence of one.
+
+    Everything source-specific -- which provenance facts to record, what a
+    human-readable reference looks like -- is supplied by the caller of
+    `build_raw_record` rather than guessed here. A protocol that tried to cover
+    both field sets would be a union of two vocabularies, which is how a
+    "generic bulk source engine" starts.
+    """
+
+    @property
+    def source_id(self) -> str: ...
+
+    @property
+    def resource_id(self) -> str: ...
+
+    @property
+    def key(self) -> str: ...
+
+    @property
+    def payload(self) -> dict[str, object]: ...
+
+    @property
+    def content_hash(self) -> str: ...
+
+    @property
+    def observed_at(self) -> datetime | None: ...
+
+
 @dataclass(frozen=True)
 class RawRecordDraft:
     """A row ready to be written, with everything §19 requires already resolved.
@@ -240,8 +326,8 @@ class RawRecordDraft:
         }
 
 
-def build_draft(
-    observation: CollectedObservation,
+def build_raw_record(
+    observation: SourceObservation,
     context: AcquisitionAuthorizationContext,
     *,
     workspace_id: str,
@@ -250,26 +336,50 @@ def build_draft(
     collector_id: str,
     collector_version: str,
     collected_at: datetime,
-    page: int,
-    request_path: str,
+    access_label: str,
+    source_reference: str,
+    source_provenance: dict[str, object],
+    content_language: str | None = None,
 ) -> RawRecordDraft:
     """Assemble one row. Retention and attribution come from the CONTEXT.
 
-    §20 and §21 are enforced here by construction rather than by review: there is
-    no parameter for an expiry and no parameter for an attribution string, so a
-    collector has nothing to pass even if it wanted to. `expires_at` is the
-    resolved raw-retention window, and the attribution notice is rendered from
-    the obligation the review recorded.
+    Mission 1.5 §20 and §21, extracted in Mission 1.9.3 so a second collector
+    inherits them rather than reimplementing them. **The properties that matter
+    are the ones a collector has no parameter for**: there is no argument for an
+    expiry and none for an attribution string, so a collector has nothing to
+    pass even if it wanted to.
 
-    Rendering the attribution also *fails closed* (§20): a resource whose
+    `source_provenance` is the collector's own vocabulary -- an indicator and a
+    geography for one source, a bucket label and a language label for another.
+    It is merged UNDER the governance facts below, so a collector cannot
+    overwrite the review version, the rights basis or the condition snapshot by
+    choosing a key name.
+
+    Rendering the attribution also *fails closed* (§20, §28): a resource whose
     licence the obligation requires, and which the dataset entry does not carry,
     raises rather than producing a record with no credit attached.
+
+    `access_label` names the route the collector ACTUALLY used, and it is
+    required rather than derived. This function used to read `context.access[0]`,
+    which was correct while exactly one source had exactly one profile and became
+    a lie the moment GDELT carried two: its first profile is the DEFERRED DOC
+    API, so every WEB-NGRAM record would have claimed `PUBLIC_API` on
+    `api.gdeltproject.org` for a file downloaded over `DATASET_DOWNLOAD` from
+    somewhere else. A collector knows which route it took; nothing else does.
     """
     dataset = context.authorized_dataset(observation.resource_id)
     if dataset is None:  # pragma: no cover - the collector authorises first
         raise ValueError(
             f"{observation.resource_id} is not an authorized dataset; a draft must not be "
             "built for a resource the gate did not clear"
+        )
+
+    access = next((a for a in context.access if a.label == access_label), None)
+    if access is None:
+        raise ValueError(
+            f"{access_label!r} is not an authorized access profile for "
+            f"{observation.source_id}; a record must not name a route the review did not "
+            "approve, and it must not name a different one from the one it came over"
         )
 
     notice = render_attribution(
@@ -284,28 +394,30 @@ def build_draft(
     )
 
     provenance: dict[str, object] = {
-        # §19, in the order an analyst reads them.
+        **source_provenance,
+        # §19 and Mission 1.9.3 §27, in the order an analyst reads them. Merged
+        # last, so a collector's own keys cannot shadow a governance fact.
         "source_id": observation.source_id,
-        "access_profile": context.access[0].label if context.access else None,
-        "access_method": context.access[0].access_method if context.access else None,
+        "access_profile": access.label,
+        "access_method": access.access_method,
+        "endpoint": access.endpoint_url,
         "review_version": context.review_version,
         "approval_state": context.approval_state.value,
         "resource_id": observation.resource_id,
         "dataset_family": dataset.dataset_family,
-        "indicator": observation.indicator,
-        "geography": observation.geography,
-        "geography_name": observation.geography_name,
-        "period": observation.period,
         "licence": dataset.licence,
+        # Mission 1.9.3 §27. GDELT's resources are authorised by a DIRECT_GRANT
+        # and carry no licence, so a record recording only `licence: null` would
+        # be indistinguishable from one whose licence nobody established.
+        "rights_basis": dataset.rights_basis.value,
         "content_origin": dataset.content_origin,
         "licence_basis": dataset.basis,
         "attribution": notice.to_json(),
-        "source_last_updated": observation.source_last_updated,
-        "request_path": request_path,
-        "page": page,
-        # The condition snapshot the authorization rested on. Not the whole
-        # verification records: their reasons are long, and what a record needs
-        # is which conditions were satisfied when it was collected.
+        "retention_days": context.retention.raw_days,
+        "retention_basis": context.retention.raw_source,
+        "acquisition_bounds": (
+            context.acquisition_bounds.to_json() if context.acquisition_bounds else None
+        ),
         "condition_snapshot": {
             record.condition_key: record.result.value for record in context.verifications
         },
@@ -323,10 +435,8 @@ def build_draft(
         # A human-readable reference, NOT the provenance. §19 forbids making an
         # analyst infer provenance from a string like this one, which is why
         # everything above exists.
-        source_reference=(
-            f"{observation.resource_id}/{observation.geography}/{observation.period}"
-        ),
-        acquisition_method=context.access[0].access_method if context.access else "UNKNOWN",
+        source_reference=source_reference,
+        acquisition_method=access.access_method,
         payload=observation.payload,
         provenance=provenance,
         review_version=context.review_version,
@@ -336,7 +446,62 @@ def build_draft(
         collected_at=collected_at,
         observed_at=observation.observed_at,
         expires_at=expires_at,
+        content_language=content_language,
         attribution_text=notice.text,
+    )
+
+
+def build_draft(
+    observation: CollectedObservation,
+    context: AcquisitionAuthorizationContext,
+    *,
+    workspace_id: str,
+    research_session_id: str | None,
+    correlation_id: str,
+    collector_id: str,
+    collector_version: str,
+    collected_at: datetime,
+    page: int,
+    request_path: str,
+) -> RawRecordDraft:
+    """The World Bank record, assembled through the shared core.
+
+    Mission 1.9.3 §39. What is specific to this source is the provenance
+    vocabulary below -- an indicator, a geography, a page -- and nothing else.
+    The governance half (retention, attribution, identity, the condition
+    snapshot) moved to `build_raw_record`, so the second collector inherits it
+    rather than reimplementing it and neither can drift from the other.
+
+    **The payload, the key and the fingerprint are untouched by that move.**
+    They are computed by the observation, which did not change, so every record
+    written before the refactor still hashes to the same value.
+    """
+    return build_raw_record(
+        observation,
+        context,
+        workspace_id=workspace_id,
+        research_session_id=research_session_id,
+        correlation_id=correlation_id,
+        collector_id=collector_id,
+        collector_version=collector_version,
+        collected_at=collected_at,
+        # Named rather than positional, and named rather than taken from
+        # `access[0]`. World Bank has exactly one profile so its behaviour is
+        # unchanged; what changed is that the fact is now stated instead of
+        # inferred from an ordering nothing guarantees.
+        access_label=WORLD_BANK_ACCESS_PROFILE,
+        source_reference=(
+            f"{observation.resource_id}/{observation.geography}/{observation.period}"
+        ),
+        source_provenance={
+            "indicator": observation.indicator,
+            "geography": observation.geography,
+            "geography_name": observation.geography_name,
+            "period": observation.period,
+            "source_last_updated": observation.source_last_updated,
+            "request_path": request_path,
+            "page": page,
+        },
     )
 
 

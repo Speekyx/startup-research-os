@@ -760,3 +760,62 @@ because a third rule now runs. It is now
 which is the property, and it was renamed to match. §13 of this document is the
 same lesson and this is its fourth recurrence.
 
+---
+
+## 20. A live smoke test earns its keep when it finds what fixtures cannot (added in Mission 1.9.3)
+
+Mission 1.9.3 wrote 105 tests for the GDELT WEB-NGRAM collector against fixture
+files, and every one of them passed. The first contact with a real file failed.
+
+```text
+INVALID_RESPONSE: a row's NGRAM contains the observation-key separator '|'
+```
+
+`observation_key` joins its parts with `|` and **refused** any part containing
+one. That rule was written in Mission 1.5, when every part was a source id, a
+resource id, an ISO country code or a year — none of which can contain a pipe.
+News text can, so GDELT publishes terms that do, and the parser was discarding an
+entire 223,342-row file of legitimate observations because of our own key format.
+
+**No fixture caught it, and no fixture was going to.** The fixtures were written
+by someone who did not expect a pipe in a word — which is the same someone who
+wrote the rule. A synthetic corpus reproduces its author's model of the source,
+and that is exactly the blind spot a live test exists to cover.
+
+### What this does NOT mean
+
+It does not mean fixtures are weak. The 105 fixture tests cover truncated gzip,
+amplification, extra fields, invalid UTF-8, negative counts and cancellation —
+none of which a live test can produce on demand, and several of which would be
+irresponsible to provoke against a third party. The two are complementary and
+neither substitutes.
+
+What it means is narrower and worth stating: **a fixture proves the parser
+handles what its author imagined. Only real data proves what the source
+actually sends.**
+
+### The shape of the fix matters as much as the fix
+
+The first instinct was to skip rows containing the separator. That would have
+been the system silently dropping real observations to protect an internal
+format — the failure this repository keeps naming from other directions.
+
+The second was to move the separator. There is nowhere to move it to: **any
+printable character can appear in a term.**
+
+The third was to hash the parts, which removes the readability the key exists
+for.
+
+The answer was to escape, which keeps the guarantee (distinct part sequences
+produce distinct keys) without deciding what a source is allowed to say. Every
+part written before the change contains neither `|` nor `\`, so no committed key
+moved — and a test asserts that, because "this refactor changed no existing
+identity" is a claim worth checking rather than believing.
+
+### Keep the live suite opt-in and cheap
+
+One bucket, one resource, one narrow filter, nothing persisted, and no crawl for
+a file that happens to exist. A smoke test that hunted for a working bucket would
+be testing the hunt, and a smoke test that ran by default would be traffic to
+somebody else's servers that nobody consented to.
+

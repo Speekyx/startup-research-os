@@ -363,9 +363,35 @@ class TestRecordSemantics:
     def test_the_fingerprint_is_stable_across_key_order(self) -> None:
         assert canonical_fingerprint({"a": 1, "b": 2}) == canonical_fingerprint({"b": 2, "a": 1})
 
-    def test_the_observation_key_refuses_an_ambiguous_part(self) -> None:
-        with pytest.raises(ValueError, match="separator"):
-            observation_key("world-bank", "indicator/X|Y", "FRA", "2020")
+    def test_the_observation_key_escapes_rather_than_refusing_a_separator(self) -> None:
+        """This asserted a REFUSAL until Mission 1.9.3.
+
+        Forbidding `|` in a part was safe while every part was an identifier, a
+        country code or a year. The first real GDELT WEB-NGRAM file broke it:
+        news text contains pipes, so the source publishes terms containing them,
+        and a whole file of legitimate observations was being discarded by our
+        own key format. What has to hold is that distinct part sequences produce
+        distinct keys — which escaping gives without deciding what a source may
+        say.
+        """
+        ambiguous = observation_key("world-bank", "indicator/X|Y", "FRA", "2020")
+        assert ambiguous == r"world-bank|indicator/X\|Y|FRA|2020"
+        assert observation_key("s", "a|b", "c") != observation_key("s", "a", "b|c")
+
+    def test_an_empty_key_part_is_still_refused(self) -> None:
+        """Escaping made the separator representable. It did not make an unnamed
+        part meaningful."""
+        with pytest.raises(ValueError, match="empty"):
+            observation_key("world-bank", "", "FRA", "2020")
+
+    def test_the_existing_world_bank_keys_are_unchanged_by_escaping(self) -> None:
+        """The six committed records must still hash and key identically: no
+        World Bank key part contains `|` or a backslash, so escaping is a no-op
+        on every one of them."""
+        assert (
+            observation_key("world-bank", "indicator/SP.POP.TOTL", "FRA", "2020")
+            == "world-bank|indicator/SP.POP.TOTL|FRA|2020"
+        )
 
     def test_event_time_is_the_period_not_the_retrieval(self, context) -> None:
         """`data-principles.md` §9. Trend analysis on ingestion timestamps

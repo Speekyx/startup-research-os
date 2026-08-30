@@ -26,6 +26,8 @@
 | `gdelt-web-ngram-review-v1.md` | The reasoning behind GDELT review 3: what was assessed, the first-party evidence, and the DOC API deferral |
 | `gdelt-web-ngram-minimisation-gap-analysis-v1.md` | The four observed columns against the committed categories, and why three of them needed a new one |
 | `gdelt-web-ngram-resource-v1.md` | The two authorised WEB-NGRAM resources, the access route, and the reviewed acquisition ceiling |
+| `gdelt-web-ngram-collector-v1.md` | The second collector: streaming, bounded, strict-parsing, and what it refuses |
+| `gdelt-web-ngram-raw-record-v1.md` | What one WEB-NGRAM observation is, why `observed_at` and `content_language` are empty, and why the key separator is escaped |
 | `acquisition-rights-basis-gap-analysis-v1.md` | Why a resource records what KIND of thing authorises it, not only which licence (H-28, ADR-018) |
 | `wikimedia-pageviews-compliance-v1.md` | What Wikimedia Pageviews would need, and the one question blocking it |
 | `source-condition-gap-analysis-v1.md` | The nine Mission 1.3 conditions inventoried and classified, and the obligations deliberately left out of code |

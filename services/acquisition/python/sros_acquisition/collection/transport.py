@@ -24,19 +24,21 @@ module scope.
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Iterator, Mapping
 from dataclasses import dataclass, field
 from typing import Any, Protocol
 from urllib.parse import urlparse
 
 from sros_contracts import AcquisitionErrorCode
 
-from .errors import AcquisitionFailedError, AcquisitionFailure
+from .errors import AcquisitionFailedError, AcquisitionFailure, code_for_status
 
 __all__ = [
+    "DownloadLimits",
     "HttpRequest",
     "HttpResponse",
     "HttpxTransport",
+    "StreamingTransport",
     "Transport",
     "TransportConfig",
     "host_of",
@@ -112,6 +114,31 @@ class HttpResponse:
     url_path: str
 
 
+@dataclass(frozen=True)
+class DownloadLimits:
+    """How much this client is willing to pull down. **Ours, not the source's.**
+
+    Mission 1.9.3 §12. Every number here is an INTERNAL_SAFETY_POLICY chosen for
+    memory and worker safety, and none of it is a quota anybody published. A
+    reader six months from now must not be able to mistake one for the other,
+    which is why it says so here rather than only in a document.
+
+    `max_bytes` bounds the COMPRESSED stream. Decompression amplification is a
+    different ceiling and belongs to whatever decompresses -- the transport does
+    not know that a body is gzip and must not start guessing.
+    """
+
+    max_bytes: int = 32 * 1024 * 1024
+    chunk_bytes: int = 64 * 1024
+    accept: str = "*/*"
+
+    def __post_init__(self) -> None:
+        if self.max_bytes < 1:
+            raise ValueError("max_bytes must be positive; a ceiling of zero downloads nothing")
+        if self.chunk_bytes < 1:
+            raise ValueError("chunk_bytes must be positive")
+
+
 class Transport(Protocol):
     """Injectable so the test suite never needs the public internet (§11, §42).
 
@@ -123,6 +150,29 @@ class Transport(Protocol):
     def get(
         self, base_url: str, request: HttpRequest, allowed_hosts: frozenset[str]
     ) -> HttpResponse: ...
+
+
+class StreamingTransport(Protocol):
+    """A transport that can hand back a body in bounded pieces.
+
+    Mission 1.9.3 §13. A SEPARATE protocol rather than a method on `Transport`,
+    because the two answer different questions and merging them would force
+    every existing fake to grow a method it does not use. `HttpxTransport`
+    implements both; a test double implements whichever it needs.
+
+    **The iterator is lazy and must stay lazy.** A `download` that read the body
+    and then yielded it in slices would satisfy the type and defeat the purpose:
+    the ceiling has to be enforced while the bytes arrive, or the process has
+    already held them.
+    """
+
+    def download(
+        self,
+        base_url: str,
+        request: HttpRequest,
+        allowed_hosts: frozenset[str],
+        limits: DownloadLimits,
+    ) -> Iterator[bytes]: ...
 
 
 class HttpxTransport:
@@ -166,21 +216,7 @@ class HttpxTransport:
             client.close()
 
         # A redirect never becomes a second request. Reported as what it is.
-        if 300 <= response.status_code < 400:
-            location = response.headers.get("location", "")
-            raise AcquisitionFailedError(
-                AcquisitionFailure(
-                    code=AcquisitionErrorCode.INVALID_RESPONSE,
-                    detail=(
-                        f"the source redirected to host "
-                        f"{host_of(location) or 'an unparseable location'!r}, which this "
-                        "collector does not follow: a redirect is the documented way out "
-                        "of a host allowlist"
-                    ),
-                    source_id="",
-                    context={"status": response.status_code, "path": request.path},
-                )
-            )
+        self._refuse_redirect(response, request)
 
         text = response.text
         if len(text.encode("utf-8")) > self.config.max_response_bytes:
@@ -201,6 +237,103 @@ class HttpxTransport:
             elapsed_seconds=response.elapsed.total_seconds() if response.elapsed else 0.0,
             url_path=request.path,
         )
+
+    def download(
+        self,
+        base_url: str,
+        request: HttpRequest,
+        allowed_hosts: frozenset[str],
+        limits: DownloadLimits,
+    ) -> Iterator[bytes]:
+        """Stream a body in bounded chunks, through the same boundary as `get`.
+
+        Mission 1.9.3 §13. `get` buffers a complete body and decodes it as text,
+        which is right for a JSON API and wrong twice over for a gzipped bulk
+        file: the decode would corrupt the bytes, and a file of unknown size
+        would be held whole before anyone could object to its size.
+
+        **Every rule `get` enforces is enforced here, in the same order** --
+        host allowlist, https, no redirect followed -- because a second entry
+        point that checked less would be the escape hatch the first one closes.
+        The only addition is the byte ceiling, checked as the chunks arrive.
+
+        The generator owns the response: closing it early (a cancellation, a
+        parser that has seen enough) closes the connection through the
+        `finally`, rather than leaving a socket for the pool to reap.
+        """
+        url = self._compose(base_url, request, allowed_hosts)
+        client = self._client(accept=limits.accept)
+        try:
+            with client.stream("GET", url, params=dict(request.query)) as response:
+                self._refuse_redirect(response, request)
+                mapped = code_for_status(response.status_code)
+                if mapped is not None:
+                    code, detail = mapped
+                    raise AcquisitionFailedError(
+                        AcquisitionFailure(
+                            code=code,
+                            detail=f"{detail} (HTTP {response.status_code})",
+                            source_id="",
+                            context={"status": response.status_code, "path": request.path},
+                        )
+                    )
+                received = 0
+                for chunk in response.iter_bytes(limits.chunk_bytes):
+                    received += len(chunk)
+                    if received > limits.max_bytes:
+                        raise AcquisitionFailedError(
+                            AcquisitionFailure(
+                                code=AcquisitionErrorCode.INVALID_RESPONSE,
+                                detail=(
+                                    f"the download exceeded {limits.max_bytes} bytes. This "
+                                    "is our own operational ceiling, not a limit the "
+                                    "source published"
+                                ),
+                                source_id="",
+                                context={"path": request.path, "bytes_read": received},
+                            )
+                        )
+                    yield chunk
+        except AcquisitionFailedError:
+            raise
+        except Exception as exc:  # noqa: BLE001 - normalised, see the module docstring
+            raise AcquisitionFailedError(
+                AcquisitionFailure(
+                    code=self._code_for(exc),
+                    detail=(
+                        f"the download did not complete ({type(exc).__name__}); "
+                        f"connect {self.config.connect_timeout_seconds}s, "
+                        f"read {self.config.read_timeout_seconds}s"
+                    ),
+                    source_id="",
+                    context={"path": request.path},
+                )
+            ) from None
+        finally:
+            client.close()
+
+    def _refuse_redirect(self, response: Any, request: HttpRequest) -> None:
+        """A redirect is a response to reason about, never a hop to take.
+
+        Shared by `get` and `download` so the two cannot drift: §10 requires the
+        escape to be impossible, and an escape that only one entry point closes
+        is open.
+        """
+        if 300 <= response.status_code < 400:
+            location = response.headers.get("location", "")
+            raise AcquisitionFailedError(
+                AcquisitionFailure(
+                    code=AcquisitionErrorCode.INVALID_RESPONSE,
+                    detail=(
+                        f"the source redirected to host "
+                        f"{host_of(location) or 'an unparseable location'!r}, which this "
+                        "collector does not follow: a redirect is the documented way out "
+                        "of a host allowlist"
+                    ),
+                    source_id="",
+                    context={"status": response.status_code, "path": request.path},
+                )
+            )
 
     def _compose(self, base_url: str, request: HttpRequest, allowed_hosts: frozenset[str]) -> str:
         """Assemble the URL and refuse a host the registry did not authorise.
@@ -244,8 +377,15 @@ class HttpxTransport:
             )
         return base + request.path.lstrip("/")
 
-    def _client(self) -> Any:
-        """Imported here, not at module scope (ADR-009). See the module docstring."""
+    def _client(self, accept: str = "application/json") -> Any:
+        """Imported here, not at module scope (ADR-009). See the module docstring.
+
+        `accept` is a parameter as of Mission 1.9.3: the header was fixed at
+        `application/json`, which is a request for a representation GDELT does
+        not publish for its bulk files. It says what this client is prepared to
+        read; it authorises nothing, and §16 is explicit that a MIME type is
+        advisory and never a permission.
+        """
         try:
             import httpx
         except ImportError as exc:  # pragma: no cover - depends on the environment
@@ -267,7 +407,7 @@ class HttpxTransport:
             ),
             # Never followed. See the class docstring.
             follow_redirects=False,
-            headers={"User-Agent": self.config.user_agent, "Accept": "application/json"},
+            headers={"User-Agent": self.config.user_agent, "Accept": accept},
         )
 
     @staticmethod

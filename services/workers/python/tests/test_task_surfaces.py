@@ -18,7 +18,9 @@ from typing import Any
 
 from sros_workers import Queue, route_task
 from sros_workers.acquisition_tasks import (
+    GDELT_WEB_NGRAM_COLLECT,
     WORLD_BANK_COLLECT,
+    acquisition_payload,
     register_acquisition_tasks,
     world_bank_payload,
 )
@@ -79,8 +81,15 @@ class TestRouting(unittest.TestCase):
         """
         self.assertIs(route_task(NORMALIZE_RAW_RECORDS), Queue.ACQUISITION)
 
-    def test_the_two_task_names_are_distinct(self) -> None:
-        self.assertNotEqual(WORLD_BANK_COLLECT, NORMALIZE_RAW_RECORDS)
+    def test_the_ngram_collector_task_routes_to_the_acquisition_queue(self) -> None:
+        """Mission 1.9.3 §41. The existing queue, not a new one: a bulk file is
+        bigger work than an API page and it is still acquisition, and a pool of
+        its own would be a split made in advance of any measurement."""
+        self.assertIs(route_task(GDELT_WEB_NGRAM_COLLECT), Queue.ACQUISITION)
+
+    def test_every_task_name_is_distinct(self) -> None:
+        names = {WORLD_BANK_COLLECT, GDELT_WEB_NGRAM_COLLECT, NORMALIZE_RAW_RECORDS}
+        self.assertEqual(len(names), 3)
 
 
 class TestContext(unittest.TestCase):
@@ -123,8 +132,27 @@ class TestFailClosed(unittest.TestCase):
     def test_acquisition_refuses_without_a_connection_factory(self) -> None:
         app = _StubApp()
         register_acquisition_tasks(app)
-        with self.assertRaises(RuntimeError):
-            app.call(WORLD_BANK_COLLECT, HEADERS, {})
+        for name in (WORLD_BANK_COLLECT, GDELT_WEB_NGRAM_COLLECT):
+            with self.assertRaises(RuntimeError):
+                app.call(name, HEADERS, {})
+
+    def test_the_ngram_task_merge_behaves_identically(self) -> None:
+        merged = acquisition_payload(HEADERS, {"workspace_id": "an-imposter"})
+        self.assertEqual(merged["workspace_id"], WORKSPACE)
+
+    def test_no_authorization_can_travel_in_a_payload(self) -> None:
+        """§41. The merge keeps a payload's own fields, and an authorization is
+        not one of them: the job rebuilds it from the registry every time, so a
+        key smuggled in here reaches nothing that reads it."""
+        import inspect
+
+        from sros_acquisition.collection.job import WebNgramJobPayload
+
+        fields = set(WebNgramJobPayload.__dataclass_fields__)
+        for forbidden in ("context", "authorization", "datasets", "resource_scope"):
+            self.assertNotIn(forbidden, fields)
+        source = inspect.getsource(WebNgramJobPayload)
+        self.assertNotIn("AcquisitionAuthorizationContext", source)
 
     def test_registration_is_explicit(self) -> None:
         """A process that should not normalize simply does not register it."""

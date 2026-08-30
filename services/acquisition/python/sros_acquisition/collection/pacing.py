@@ -27,7 +27,7 @@ import time
 from collections.abc import Callable
 from dataclasses import dataclass, field
 
-__all__ = ["PacingPolicy", "RequestPacer"]
+__all__ = ["WEB_NGRAM_PACING", "WORLD_BANK_PACING", "PacingPolicy", "RequestPacer"]
 
 
 @dataclass(frozen=True)
@@ -42,6 +42,11 @@ class PacingPolicy:
     min_interval_seconds: float
     max_requests_per_job: int
     basis: str
+    # Mission 1.9.3 §35. Named so that a value reaching a record's provenance
+    # says whose policy it is. There is exactly one legitimate value today, and
+    # a second would mean a source had published a limit -- which would be a
+    # review fact, not a constant.
+    origin: str = "INTERNAL_SAFETY_POLICY"
 
     def __post_init__(self) -> None:
         if self.min_interval_seconds < 0:
@@ -66,6 +71,29 @@ WORLD_BANK_PACING = PacingPolicy(
         "recorded that absence as UNKNOWN rather than as permission. A source that "
         "has not said what it tolerates is a reason to go slower, so this paces at "
         "four requests per second and caps a single job at 50 requests."
+    ),
+)
+
+
+# GDELT publishes no rate limit for either route, and Mission 1.9 recorded the
+# DOC API returning HTTP 429 -- which proves a limit exists on THAT route and
+# reveals neither its value nor whether it applies to this one. §35 is explicit
+# that the two are different routes, so nothing about the 429 is carried across.
+#
+# This is ours, and it is slower than the World Bank policy on purpose: a bulk
+# file is a much larger request than an API page, and the eight-file ceiling
+# means a job needs very few of them.
+WEB_NGRAM_PACING = PacingPolicy(
+    min_interval_seconds=2.0,
+    max_requests_per_job=24,
+    basis=(
+        "Chosen locally. GDELT documents no rate limit for the bulk-file route, and the "
+        "HTTP 429 Mission 1.9 saw came from api.gdeltproject.org -- a different route, "
+        "whose limit says nothing about this one. A source that has not said what it "
+        "tolerates is a reason to go slower, so this waits two seconds between file "
+        "downloads. The 24-request ceiling is the reviewed eight files times three "
+        "attempts each: enough that a retry is possible, few enough that a loop cannot "
+        "hide inside it."
     ),
 )
 

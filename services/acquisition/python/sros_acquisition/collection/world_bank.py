@@ -37,7 +37,7 @@ from sros_contracts import AcquisitionErrorCode, ResourceContentOrigin
 
 from ..compliance.authorization import AcquisitionAuthorizationContext
 from ..compliance.resources import ResourceDescriptor
-from .errors import AcquisitionFailedError, AcquisitionFailure
+from .errors import AcquisitionFailedError, AcquisitionFailure, code_for_status
 from .pacing import WORLD_BANK_PACING, RequestPacer
 from .records import CollectedObservation, RawRecordDraft, build_draft
 from .transport import HttpRequest, HttpResponse, Transport, host_of
@@ -600,17 +600,10 @@ class WorldBankCollector:
     ) -> AcquisitionFailure | None:
         """Map an HTTP status to a normalised code. The body never enters it (§33)."""
         status = response.status_code
-        if 200 <= status < 300:
+        mapped = code_for_status(status)
+        if mapped is None:
             return None
-        if status == 429:
-            code = AcquisitionErrorCode.RATE_LIMITED
-            detail = "the source signalled too many requests"
-        elif status >= 500:
-            code = AcquisitionErrorCode.TEMPORARY_UPSTREAM
-            detail = "the source reported a server-side failure"
-        else:
-            code = AcquisitionErrorCode.UPSTREAM_CLIENT_ERROR
-            detail = "the source rejected the request deterministically"
+        code, detail = mapped
         return AcquisitionFailure(
             code=code,
             detail=f"{detail} (HTTP {status})",

@@ -66,12 +66,18 @@ the other three could not express what was actually blocking GDELT.
 |---|---|---|
 | collector-eligible | `world-bank`, `eurostat`, `gdelt` | `registry.source_eligibility`, derived |
 | **resource-ready** | `world-bank`, `gdelt` | derived by `evaluate_readiness`; **nothing stores it** |
-| collector implemented | `world-bank` | `sros_acquisition.IMPLEMENTED_COLLECTORS` |
+| collector implemented | `world-bank`, `gdelt` | `sros_acquisition.IMPLEMENTED_COLLECTORS` |
+| normalizable | `world-bank` | `sros_acquisition.IMPLEMENTED_NORMALIZERS`, derived from the adapters |
 | collector-enabled | per deployment | `registry.sources.collector_enabled` |
 
 ```bash
 uv run sros-source readiness
 ```
+
+**GDELT is the case that makes `normalizable` worth having**, as of Mission
+1.9.3: it has a collector and real records, and no normalizer. A collector says
+what was fetched; a normalizer says what it structurally represents, and one
+never implies the other.
 
 **Eurostat is the case that makes `resource_ready` worth having.** It has been
 collector-eligible since Mission 1.4 and has no authorised resource, so

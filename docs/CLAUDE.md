@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.13
-Last amended: 2026-08-30 (Sprint 1 / Mission 1.9.2)
+Version: 1.14
+Last amended: 2026-08-30 (Sprint 1 / Mission 1.9.3)
 
 ## Boot Sequence
 
@@ -40,6 +40,7 @@ Ontology V2 keeps V1.1's numbering for §1–§10, so an existing reference to
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.14 | 2026-08-30 | Second collector recorded: GDELT WEB-NGRAM, streamed and bounded, with real RawRecords. Bulk-file collection rules added; GDELT is collected and still not normalized |
 | 1.13 | 2026-08-30 | Resource-ready separated from eligible: a source can pass the gate while every resource it could ask for fails closed. GDELT review 3 authorises two WEB-NGRAM resources; how much a job may take became a governance question alongside what it may reach |
 | 1.12 | 2026-08-30 | Silence-is-not-permission made mechanical: an approving review must grant every materially required activity. Three Mission 1.7 approvals withdrawn on audit; GDELT became the fourth collector-eligible source and the first non-economic one |
 | 1.11 | 2026-08-30 | Source universe expanded to 27 across 14 families; signal coverage added as a non-scoring source attribute (ADR-017); coverage-is-not-permission invariant added; global registry state watched by the post-suite check |
@@ -257,11 +258,13 @@ none of them is negotiable (`source-registry-v1.md` §1, ADR-013):
   product, and a permission obtained by describing a smaller product is a
   permission for a product we are not building.
 
-### Collection — one collector, and what bounds it
+### Collection — two collectors, and what bounds them
 
 Since Mission 1.5 the World Bank Indicators collector exists
-(`world-bank-collector-v1.md`). It is the reference architecture, and five rules
-apply to it and to every collector that follows:
+(`world-bank-collector-v1.md`) and is the reference architecture. Since Mission
+1.9.3 the GDELT WEB-NGRAM collector exists too
+(`gdelt-web-ngram-collector-v1.md`), reading a published gzipped file rather than
+a paginated API. Five rules apply to both and to every collector that follows:
 
 - **No authorization, no collection.** `collect` takes an
   `AcquisitionAuthorizationContext` as its first positional parameter, with no
@@ -282,7 +285,27 @@ apply to it and to every collector that follows:
 Identity is three separate things and confusing any two is a defect:
 `observation_key` says WHICH observation, `content_hash` says WHAT the source
 said, and the record id follows from both. The retrieval time is in neither — it
-would make every re-retrieval look like an upstream revision.
+would make every re-retrieval look like an upstream revision. The key's parts are
+**escaped**, not restricted: a source publishes what it publishes, and a key
+format that refused real values would drop them (Mission 1.9.3).
+
+Four more rules apply where a collector reads a **bulk file** (Mission 1.9.3):
+
+- **The reviewed ceiling is the review's.** `context.authorize_job_size` decides
+  how much one job may take; a collector that defined its own bound would be
+  setting its own permissions, and a request one file over is refused whole
+  rather than split into two permitted jobs.
+- **Operational bounds are ours and say so.** Compressed bytes, decompressed
+  bytes, line length, rows scanned and records kept are `INTERNAL_SAFETY_POLICY`,
+  labelled as such in provenance. **Absent means unasked, never unlimited**, and
+  none of them is a quota anybody published.
+- **Our ceilings truncate; the source's contract discards.** Hitting a record cap
+  keeps what was accepted and says which bound stopped it. A malformed row
+  discards its whole file, because the contract is documented and a deviation
+  means a person is needed rather than a filter.
+- **The route is resolved by name.** A source with two access profiles has a
+  first one, and taking it silently authorises whichever the JSON happened to
+  list first — which for GDELT is the deferred DOC API.
 
 The registry is **global**: no `workspace_id`, no RLS policy, `SELECT` only for
 the runtime role. It is administered by `sros-source`, never over HTTP.

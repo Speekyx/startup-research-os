@@ -227,6 +227,27 @@ that a passing suite had been reporting as fine.
 | **The reviewed path is the endpoint, not the site root** | `endpoint_url` on the access profile, plus `HttpRequest`'s refusal of `..` and of absolute URLs | Fail-closed **by construction** rather than by a new rule: a base of `.../gdeltv3/web/ngrams/` cannot reach `.../gdeltv3/webngrams/`, the sibling dataset this review rejected |
 | **Four facts stay four** | `evaluate_readiness`, derived and never stored | Eligible, resource-ready, implemented, enabled. GDELT spent two missions eligible with every resource failing closed, and "eligible" was the most specific word available |
 
+### The second collector (Mission 1.9.3)
+
+No new CI job, and no new queue. What the second collector added are rules inside
+the acquisition suite, and they are listed because each one guards a boundary the
+first collector never had to cross.
+
+| Gate | Mechanism | Guards |
+|------|-----------|--------|
+| **The reviewed ceiling cannot be redefined in code** | `authorize_job_size` on the context; the string `max_files_per_job` is absent from the collector, asserted | A collector that set its own volume bound would be setting its own permissions |
+| **A nine-file job is refused whole** | The check runs once for the request, not per file | Splitting it into two permitted jobs would grant a ceiling the review did not |
+| **The route is resolved by LABEL** | `_route` selects `gdelt-web-ngram-files`; `build_raw_record` requires the access label | `access[0]` is GDELT's **deferred** DOC API. Taking it would have authorised the wrong host and recorded `PUBLIC_API` on every file download |
+| **Decompression is bounded three ways** | `NgramBounds` — compressed, decompressed, line length | The decompressed ceiling is the one the compressed ceiling cannot give: kilobytes on the wire becoming megabytes |
+| **Gzip framing is required** | `zlib.decompressobj(31)` | An HTML error page returned with HTTP 200 fails immediately instead of parsing into plausible rubbish |
+| **A truncated stream is not a short file** | `decompressor.eof` checked at the end | Rows already read from an incomplete download are not a complete file |
+| **A malformed row discards its file** | Strict four-field parse, fatal | No column shifting: a five-field row is a contract change, and both a change and a wrong file need a person |
+| **Our ceilings truncate; the source's contract discards** | `truncated_by_bound` on the file report | The two failures mean opposite things and must not report the same way |
+| **Retry cannot duplicate** | `_read_file` returns a list, not a generator | A mid-stream failure would otherwise have already released rows that the retry re-reads |
+| **No timezone is invented** | `validate_bucket_label` returns a string; `observed_at` is `None` | H-29 is open, and an assumption stored in a `TIMESTAMPTZ` is the one a reader trusts most |
+| **No language code is guessed** | `content_language` stays `NULL` | H-30 is open, and that column is read as a code |
+| **CI reaches no GDELT host** | The live suite is opt-in behind `SROS_ENABLE_GDELT_WEB_NGRAM_SMOKE_TESTS` | A developer with a network has not consented to third-party traffic on every run |
+
 ---
 
 ## 2. Turborepo task graph
