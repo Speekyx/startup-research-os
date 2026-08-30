@@ -72,8 +72,21 @@ COMMENT ON COLUMN registry.registry_entries.maps_to_registry IS
 -- Not new vocabulary: these are the ontology's own initial entries, sixteen of
 -- which were never loaded. §14.3 authorises adding registry entries without an
 -- ontology change, and these were already canonical.
+--
+-- ALL SEVENTEEN ARE LISTED, INCLUDING THE ONE THAT ALREADY EXISTS.
+--
+-- `create` is written by `infrastructure/db/seed/0002_registry_seed.sql`, and a
+-- seed is DEVELOPMENT-ONLY and runs AFTER every migration. A migration that
+-- assumed a seed had run would be correct on a developer's machine, where the
+-- rows are already there from an earlier run, and would fail on the empty
+-- database that CI and any real deployment start from. §5's foreign key made
+-- that dependency load-bearing rather than cosmetic.
+--
+-- `ON CONFLICT DO NOTHING` makes listing it harmless where it exists and
+-- necessary where it does not.
 -- -----------------------------------------------------------------------------
 INSERT INTO registry.registry_entries (registry, id, name, description) VALUES
+    ('user_behavior', 'create',      'Create',      'The user makes something'),
     ('user_behavior', 'discover',    'Discover',    'Finding something previously unknown to the user'),
     ('user_behavior', 'consume',     'Consume',     'Reading, watching or listening without producing'),
     ('user_behavior', 'play',        'Play',        'Playing a game or engaging in play for its own sake'),
@@ -95,9 +108,16 @@ ON CONFLICT (registry, id) DO NOTHING;
 -- -----------------------------------------------------------------------------
 -- 3. The canonical user_motivation entries (Ontology V2 §3.3)
 --
--- Fourteen of seventeen were never loaded. Same authority as §2 above.
+-- Fourteen of seventeen were never loaded. Same authority as §2 above, and the
+-- same reason for listing all seventeen: `problem`, `money` and `creativity`
+-- come from the development seed, and §5 below carries a FOREIGN KEY to
+-- `problem`. A migration whose foreign key resolves only because a seed ran is
+-- a migration that fails on the first empty database it meets.
 -- -----------------------------------------------------------------------------
 INSERT INTO registry.registry_entries (registry, id, name, description) VALUES
+    ('user_motivation', 'problem',         'Problem',         'Solving a painful problem'),
+    ('user_motivation', 'money',           'Money',           'Why the user acts: desire for financial gain (Ontology V2 §13)'),
+    ('user_motivation', 'creativity',      'Creativity',      'Desire to create'),
     ('user_motivation', 'utility',         'Utility',         'The user wants a task done'),
     ('user_motivation', 'entertainment',   'Entertainment',   'The user wants to be entertained'),
     ('user_motivation', 'curiosity',       'Curiosity',       'The user wants to know'),

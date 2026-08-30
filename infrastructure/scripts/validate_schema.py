@@ -92,6 +92,85 @@ CREATE_INDEX = re.compile(
 # exists to catch.
 ALTER_TABLE = re.compile(r"ALTER TABLE\s+([a-z_]+\.[a-z_]+)(.*?);", re.DOTALL | re.IGNORECASE)
 
+# Every `INSERT INTO registry.registry_entries (cols) VALUES (...), (...);`
+# with its column list, so values can be read BY COLUMN NAME rather than by
+# position. A looser regex over the whole file matches quoted pairs inside CHECK
+# constraints and enum lists and reports them as registry entries, which is how
+# the first version of this check failed on its own baseline.
+REGISTRY_ENTRY_INSERT = re.compile(
+    r"INSERT\s+INTO\s+registry\.registry_entries\s*\(([^)]*)\)\s*VALUES(.*?);",
+    re.DOTALL | re.IGNORECASE,
+)
+
+
+def _tuples(body: str) -> list[list[str]]:
+    """Split a VALUES body into rows of raw column values.
+
+    Hand-rolled because the alternative is a SQL parser for four INSERTs.
+    Tracks quote state so a comma or parenthesis inside a description -- and
+    there are several -- does not split a row.
+    """
+    rows: list[list[str]] = []
+    current: list[str] = []
+    field: list[str] = []
+    depth, in_quote = 0, False
+    for index, char in enumerate(body):
+        if in_quote:
+            field.append(char)
+            # '' is an escaped quote inside a SQL string, not the end of one.
+            if char == "'" and body[index + 1 : index + 2] != "'":
+                in_quote = False
+            continue
+        if char == "'":
+            in_quote = True
+            field.append(char)
+        elif char == "(":
+            depth += 1
+            if depth == 1:
+                current, field = [], []
+            else:
+                field.append(char)
+        elif char == ")" and depth == 1:
+            depth = 0
+            current.append("".join(field).strip())
+            rows.append(current)
+            current, field = [], []
+        elif char == "," and depth == 1:
+            current.append("".join(field).strip())
+            field = []
+        elif depth == 1:
+            field.append(char)
+    return rows
+
+
+def registry_entries_in(sql: str) -> tuple[set[tuple[str, str]], set[tuple[str, str]]]:
+    """`(entries inserted, maps_to targets referenced)` across every migration.
+
+    Read BY COLUMN NAME, so a future INSERT that lists its columns in another
+    order is still understood.
+    """
+    inserted: set[tuple[str, str]] = set()
+    targets: set[tuple[str, str]] = set()
+    for columns, body in REGISTRY_ENTRY_INSERT.findall(sql):
+        names = [c.strip().lower() for c in columns.split(",")]
+        try:
+            key = (names.index("registry"), names.index("id"))
+        except ValueError:
+            continue
+        maps = (
+            (names.index("maps_to_registry"), names.index("maps_to_id"))
+            if "maps_to_registry" in names and "maps_to_id" in names
+            else None
+        )
+        for row in _tuples(body):
+            if len(row) != len(names):
+                continue
+            unquote = lambda v: v.strip().strip("'").lower()  # noqa: E731
+            inserted.add((unquote(row[key[0]]), unquote(row[key[1]])))
+            if maps and row[maps[0]].strip().upper() != "NULL":
+                targets.add((unquote(row[maps[0]]), unquote(row[maps[1]])))
+    return inserted, targets
+
 
 class MigrationLayoutError(Exception):
     pass
@@ -282,6 +361,36 @@ def main() -> int:
                     "BETWEEN 0 AND 100 CHECK (scoring-framework-v1.1.md §4.1)"
                 )
     print("ok    numeric naming rule (confidence [0,1] vs *_score 0-100)")
+    checks_run += 1
+
+    # -- migrations must not depend on seed data ------------------------------
+    #
+    # Seeds are development-only and run AFTER every migration
+    # (`infrastructure/db/seed/`). A migration whose foreign key resolves only
+    # because a seed had run is correct on a developer's machine -- where the
+    # rows are already there from an earlier run -- and fails on the empty
+    # database CI and every real deployment start from.
+    #
+    # Mission 1.7 shipped exactly that: migration 0010 pointed `signal_family`
+    # entries at `user_motivation:problem`, which only
+    # `seed/0002_registry_seed.sql` wrote. It applied cleanly on a machine that
+    # had been seeded months earlier and failed on the first empty database it
+    # met. This check runs with no database, so it fails where it is caused.
+    inserted, targets = registry_entries_in(sql)
+    if not inserted:
+        errors.append("no registry_entries INSERT parsed: this check measured nothing")
+    unmet = sorted(t for t in targets if t not in inserted)
+    for registry, entry_id in unmet:
+        errors.append(
+            f"a migration maps a registry entry to {registry}:{entry_id}, which no migration "
+            "inserts. If a seed provides it, the foreign key resolves only on an "
+            "already-seeded database and fails on the empty one CI starts from"
+        )
+    if not unmet and inserted:
+        print(
+            "ok    migrations do not depend on seed data "
+            f"({len(inserted)} entries inserted, {len(targets)} mapped)"
+        )
     checks_run += 1
 
     print()

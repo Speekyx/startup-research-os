@@ -461,6 +461,30 @@ The gateway's expected-table list was updated by hand, which is correct: it is
 hand-written on purpose so a new table fails until somebody states whether it is
 tenant data. These two are global.
 
+### A migration depended on development seed data
+
+Caught by CI, not by me, and the reason is worth recording. Migration 0010
+pointed `signal_family` entries at `user_motivation:problem` — an entry written
+by `infrastructure/db/seed/0002_registry_seed.sql`, which is **development-only
+and runs after every migration**. The foreign key resolved on a machine seeded
+months earlier and failed on the first empty database it met.
+
+Every local check passed because every local check ran against an
+incrementally-migrated database. The fix is that migration 0010 now inserts all
+seventeen motivations and all seventeen behaviours itself, with
+`ON CONFLICT DO NOTHING`, so it depends on nothing a seed provides. Verified by
+applying all ten migrations to a genuinely empty database — twice, once with
+`--seed` and once without — in a scratch database, so the six records were never
+at risk.
+
+`validate_schema.py` now asserts it mechanically, with no database: every
+`maps_to` target must be inserted by some **migration**, not merely by a seed.
+Its first version was wrong in both directions — it printed `ok` before knowing
+its own result, and its regex matched quoted pairs inside CHECK constraints, so
+it failed on its own baseline. It now parses the INSERT column lists and reads
+values by name. **Probed against the exact defect that shipped**, which it
+catches and names.
+
 ### A validator was conflating two different UNKNOWNs
 
 `validate_compliance_capabilities` required every condition on an approving
@@ -568,7 +592,7 @@ approving to eligible, and is configuration rather than code.
 
 ## Validation
 
-Database rebuild plan · 10 migrations applied · RLS green · **846 pytest across
+**All 10 migrations applied to an empty database, with and without `--seed`** · RLS green · **846 pytest across
 6 packages** · 337 zero-dependency · ruff check + format · mypy strict (113
 files) · contract generation `--check` · `validate_schema` ·
 `validate_source_registry` (27 sources, 29 evidence records, **0 warnings**) ·
