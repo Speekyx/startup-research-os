@@ -1,7 +1,8 @@
 # Source human-review queue V1
 
 **Status:** Open items. Each entry is a concrete question, not a request to think about it.
-**Version:** 1.1 (Mission 1.7 added H-13 to H-24; H-1 to H-12 are unchanged)
+**Version:** 1.2 (Mission 1.8 added H-25 and H-26, resolved half of H-22 and
+promoted H-24 to a blocker; Mission 1.7 added H-13 to H-24)
 **Date:** 2026-08-30
 **Governed by:** [`source-registry-v1.md`](source-registry-v1.md)
 **Results:** [`source-review-results-v1.md`](source-review-results-v1.md) ·
@@ -44,7 +45,9 @@ entered: §37 asks for the required next action to be *recorded*, not taken.
 | [H-21](#h-21) | Meta / Instagram | RESTRICTED | Does any endpoint expose public content? |
 | [H-22](#h-22) | 5 newly approved | conditions | Compliance capabilities do not exist |
 | [H-23](#h-23) | OpenAlex | condition | Metered API — spend ceiling undecided |
-| [H-24](#h-24) | Wikimedia | condition | Do view COUNTS carry CC BY-SA? |
+| [H-24](#h-24) | Wikimedia | **REQUIRES_REVIEW** | Do view COUNTS carry CC BY-SA? — **now the blocker** |
+| [H-25](#h-25) | PyPI | REQUIRES_REVIEW | Is there any grant at all? |
+| [H-26](#h-26) | npm | REQUIRES_REVIEW | Commercial reuse and analytics by a third party |
 
 ---
 
@@ -654,3 +657,111 @@ becomes mandatory.
 
 **Why it matters.** `wikimedia-pageviews` is the highest-priority collector in
 the portfolio and the portfolio's only real answer to desire-driven discovery.
+
+
+---
+
+# Mission 1.8 additions and changes
+
+Two new items, one half-resolved, and one promoted from a refinement to a
+blocker.
+
+## H-22 — half resolved {#h-22-update}
+
+**GDELT is done.** Its attribution obligation is now a `CAPABILITY` verified by
+`source-attribution-display`, and it is collector-eligible. See
+[`gdelt-compliance-v1.md`](gdelt-compliance-v1.md).
+
+**The other four are not, and three of them no longer can be**: `pypi`,
+`npm-registry` and `wikimedia-pageviews` were downgraded on audit, so their
+conditions are moot until their reviews are approving again. `openalex` remains
+approving with two conditions, one of which a verifier can already clear.
+
+## H-24 — promoted from refinement to blocker {#h-24-update}
+
+Mission 1.7 recorded this as a question about whether attribution is required on
+a chart of view counts. **It is now the single thing blocking the source.**
+
+Mission 1.8 retrieved CC BY-SA 4.0 and confirmed Section 2 grants reproduction
+and the production of Adapted Material, commercially and without a
+text-and-data-mining restriction — for **Licensed Material**. It also found that
+the evidence Mission 1.7 read as a data licence is the documentation site's
+footer (`Content: CC BY-SA 4.0 · Code: MIT-0`), not a statement about the data
+the API returns.
+
+So the question is no longer "is attribution required here" but "is there a
+grant here at all", and both answers to it are determinations about what
+copyright subsists in.
+
+**Needed.** A legal reading of whether aggregate pageview counts are Licensed
+Material under CC BY-SA 4.0. If they are, Section 2 supplies the `storage` and
+`model_processing` grants the Wikimedia terms do not state, and the source
+becomes approvable immediately — the compliance work is specified in
+[`wikimedia-pageviews-compliance-v1.md`](wikimedia-pageviews-compliance-v1.md)
+§3. If they are not, a separate basis is needed for holding and processing them.
+
+**Legal counsel appropriate?** **Yes.** This is the highest-value legal question
+in the queue: one answer restores the portfolio's best `curiosity`,
+`entertainment` and `trend` source.
+
+---
+
+## H-25 — Does anything in PyPI's documents grant anything? {#h-25}
+
+**Issue.** PyPI was downgraded from `APPROVED_WITH_CONDITIONS` to
+`REQUIRES_REVIEW`. Four of the six activities the assessed use materially
+requires — `commercial_use`, `storage`, `derived_analytics`, `model_processing`
+— are `NOT_ADDRESSED`, and the single cited document contains prohibitions and
+no grant of any kind.
+
+**Document.** `https://policies.python.org/pypi.org/Terms-of-Use/`, effective
+2025-02-25, read 2026-08-30.
+
+**Why it is unresolved.** Nothing about PyPI's terms changed; the reading of
+them did. The Mission 1.7 review approved the source on "the absence of a
+prohibition covering us plus the presence of a documented API" — its own words —
+which is the inference `source-registry-v1.md` §1 rule 2 forbids.
+
+**Needed.** Determine whether any PyPI or PSF document positively permits
+commercial reuse of package metadata by a third-party product, addresses storage
+of replicated metadata, or addresses derived analytics and model processing.
+Check separately whether the published bulk dataset carries more explicit terms
+than the API — a dataset distribution often does.
+
+**Vendor contact needed?** Possibly, and the PSF is approachable.
+**Legal counsel appropriate?** Only once it is established whether any document
+speaks to this at all.
+
+---
+
+## H-26 — Does npm permit commercial reuse and analytics by a third party? {#h-26}
+
+**Issue.** npm was downgraded for the same class of defect, milder in form. Two
+Mission 1.7 assessments overstated their evidence:
+
+- *"Commercial packages are welcomed expressly"* is about what may be
+  **published to** npm, not about commercial reuse of registry data;
+- the right to *"copy, publish and analyze content and share its analyses"* is
+  granted **to npm**, which the Mission 1.7 evidence note said in so many words
+  before the assessment recorded it as a permission of ours.
+
+**Document.** `https://docs.npmjs.com/policies/open-source-terms`, effective
+2022-03-10.
+
+**Why it is unresolved.** What the terms genuinely grant is narrow and real —
+*"You may replicate data from the Public Registry using the Public APIs"*, which
+is storage plus API access. Commercial reuse, derived analytics and model
+processing are all unaddressed.
+
+**Needed.** Determine whether any npm or GitHub document permits commercial
+reuse of public registry metadata by a third party, derived analytics over it by
+anyone other than npm, or model processing of it. Also determine retention
+obligations when a package is unpublished upstream.
+
+**Why it matters.** npm and PyPI were the whole of the portfolio's
+`developer_activity` coverage. Both are now pending, so that family rests on
+nothing.
+
+**Vendor contact needed?** The terms direct high-volume users to a sales team,
+which is a route to the question.
+**Legal counsel appropriate?** Not before the documents are found.

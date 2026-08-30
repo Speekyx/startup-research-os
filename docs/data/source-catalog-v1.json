@@ -1,8 +1,8 @@
 {
-  "catalog_version": "1.2",
+  "catalog_version": "1.3",
   "$comment": "MACHINE-READABLE SOURCE OF TRUTH for the initial source catalog (Mission 1.0, D-07). The human-readable table in source-catalog-v1.md is rendered from this file and checked in CI, so the two cannot drift. Edited by hand; loaded into PostgreSQL by `sros-source load`; validated with no dependencies by infrastructure/scripts/validate_source_registry.py.",
   "assessed_use_case": "Automated collection of public content by Startup Research OS, a COMMERCIAL multi-tenant SaaS, for storage, derived analytics and LLM processing to produce opportunity intelligence. Every assessment below is scoped to that use. An assessment does not transfer to non-commercial or academic use, and a permission granted for a narrower purpose does not widen to this one.",
-  "reviewer": "mission-1.7",
+  "reviewer": "mission-1.8",
   "review_date": "2026-08-30",
   "known_limitations": [
     "Reddit's governing policy documents (Data API Terms, Developer Terms, Responsible Builder Policy) still could not be retrieved: redditinc.com remains blocked by this environment's browsing policy. Retried 2026-08-30; the Mission 1.3 verdict and its open questions stand unchanged.",
@@ -13,8 +13,9 @@
     "The Pinterest Developer and API terms did not return their text on 2026-08-30.",
     "No assessment here is a legal opinion. Where a conclusion would require legal judgment, the recorded value is UNCLEAR or NOT_ADDRESSED and human review is required.",
     "No source data was collected. Only official documentation ABOUT the sources was read, and no candidate platform was queried for content.",
-    "Twelve sources are in an approving state and NONE is collector-eligible. The nine conditions carried by the economic three are satisfied by capabilities Mission 1.4 built; the eleven carried by the five sources approved in Mission 1.7 name verifications that no capability implements, because no collector exists for any of them.",
-    "Signal and behaviour coverage are recorded for every source except the three PROHIBITED ones (§23) and the four whose documentation could not be retrieved, which have no basis to cite."
+    "Signal and behaviour coverage are recorded for every source except the three PROHIBITED ones (§23) and the four whose documentation could not be retrieved, which have no basis to cite.",
+    "Mission 1.8 audited every approving review against the assessed use and downgraded three that rested on silence rather than on a grant: `pypi` (four of six required activities unaddressed), `npm-registry` (three, after two assessments were corrected to what their evidence actually says) and `wikimedia-pageviews` (two, after a documentation-site footer was corrected to not be a data licence). Every Mission 1.7 review version is preserved.",
+    "Five sources are in an approving state and four are collector-eligible in a verified environment. GDELT joined the economic three by having its attribution, resource-scope and access obligations expressed as machine-verified conditions; no gate was relaxed to admit it."
   ],
   "sources": [
     {
@@ -902,6 +903,59 @@
               "section_reference": "Terms of Use",
               "summarized_finding": "The page states that all datasets released by the GDELT Project are available for unlimited and unrestricted use for any academic, commercial or governmental use of any kind without fee, and that the datasets may be redistributed, rehosted, republished and mirrored in any form. The single stated obligation is that any use or redistribution include a citation to the GDELT Project and a link to https://www.gdeltproject.org/. The grant is general and does not single out AI or machine-learning processing either to permit or to forbid it; model_processing is recorded as PERMITTED on the strength of 'any kind', and the absence of an AI-specific clause is noted rather than read as a restriction.",
               "retrieved_at": "2026-08-30T00:00:00+00:00"
+            }
+          ]
+        },
+        {
+          "review_version": 2,
+          "approval_state": "APPROVED_WITH_CONDITIONS",
+          "reviewed_by": "mission-1.8",
+          "reviewed_at": "2026-08-30T00:00:00+00:00",
+          "review_interval_days": 180,
+          "automated_access": "PERMITTED",
+          "api_use": "PERMITTED",
+          "browser_automation": "NOT_ADDRESSED",
+          "commercial_use": "PERMITTED",
+          "storage": "PERMITTED",
+          "retention": "NOT_ADDRESSED",
+          "redistribution": "PERMITTED_WITH_CONDITIONS",
+          "derived_analytics": "PERMITTED",
+          "model_processing": "PERMITTED",
+          "personal_data_handling": "NOT_ADDRESSED",
+          "attribution_required": "PERMITTED_WITH_CONDITIONS",
+          "personal_data_risk": "PSEUDONYMOUS",
+          "contains_user_generated_content": false,
+          "contains_user_identifiers": true,
+          "contains_location": false,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": false,
+          "discard_identifiers_after_normalization": false,
+          "jurisdiction_review_required": true,
+          "conditions": [
+            "Cite the GDELT Project and link to https://www.gdeltproject.org/ on any surface derived from this source, and on any redistribution."
+          ],
+          "required_conditions": [
+            {
+              "key": "gdelt-attribution",
+              "description": "Every product surface derived from GDELT carries a citation to the GDELT Project and a link to https://www.gdeltproject.org/, as its terms require on use and on redistribution.",
+              "verification": "CAPABILITY",
+              "verification_detail": "source-attribution-display"
+            }
+          ],
+          "open_questions": [
+            "Determine whether GDELT publishes rate limits for the DOC API anywhere on its own site; none were found and none is invented, so both profiles record the limit as unknown.",
+            "Determine whether the extracted entity mentions constitute personal data under the project's own framing; the terms do not address personal data at all, and the source is classified PSEUDONYMOUS on the shape of the data rather than on a statement by the project."
+          ],
+          "review_notes": "Verdict UNCHANGED and re-verified against the same evidence. GDELT is the only source added in Mission 1.7 whose approval survives the materiality audit this mission ran across the whole catalog: all six activities the assessed use requires are positively permitted, on a sentence that grants rather than merely fails to prohibit -- 'unlimited and unrestricted use for any academic, commercial or governmental use of any kind without fee'. What changed is how its single obligation is checked. Version 1 expressed the citation requirement as HUMAN_CONFIRMATION, which no verifier can ever clear, because no compliance configuration existed for this source. That configuration now exists, so the condition becomes a CAPABILITY verified by source-attribution-display -- the same generic verifier the economic three use, parameterised rather than duplicated. The obligation is identical; only its enforceability changed.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_TERMS",
+              "document_title": "The GDELT Project - About / Terms of Use",
+              "document_url": "https://www.gdeltproject.org/about.html",
+              "section_reference": "Terms of Use",
+              "summarized_finding": "The page states that all datasets released by the GDELT Project are available for unlimited and unrestricted use for any academic, commercial or governmental use of any kind without fee, and that the datasets may be redistributed, rehosted, republished and mirrored in any form. The single stated obligation is that any use or redistribution include a citation to the GDELT Project and a link to https://www.gdeltproject.org/. The grant is general and does not single out AI or machine-learning processing either to permit or to forbid it; model_processing is recorded as PERMITTED on the strength of 'any kind', and the absence of an AI-specific clause is noted rather than read as a restriction.",
+              "retrieved_at": "2026-08-30T00:00:00+00:00",
+              "excerpt": "Any use or redistribution of the data must include a citation to the GDELT Project and a link to this website (https://www.gdeltproject.org/)."
             }
           ]
         }
@@ -2068,6 +2122,52 @@
               "retrieved_at": "2026-08-30T00:00:00+00:00"
             }
           ]
+        },
+        {
+          "review_version": 2,
+          "approval_state": "REQUIRES_REVIEW",
+          "reviewed_by": "mission-1.8",
+          "reviewed_at": "2026-08-30T00:00:00+00:00",
+          "review_interval_days": 180,
+          "automated_access": "PERMITTED_WITH_CONDITIONS",
+          "api_use": "PERMITTED",
+          "browser_automation": "NOT_PERMITTED",
+          "commercial_use": "NOT_ADDRESSED",
+          "storage": "PERMITTED",
+          "retention": "NOT_ADDRESSED",
+          "redistribution": "NOT_ADDRESSED",
+          "derived_analytics": "NOT_ADDRESSED",
+          "model_processing": "NOT_ADDRESSED",
+          "personal_data_handling": "NOT_ADDRESSED",
+          "attribution_required": "NOT_ADDRESSED",
+          "personal_data_risk": "PSEUDONYMOUS",
+          "contains_user_generated_content": true,
+          "contains_user_identifiers": true,
+          "contains_location": false,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": false,
+          "discard_identifiers_after_normalization": false,
+          "jurisdiction_review_required": true,
+          "conditions": [],
+          "required_conditions": [],
+          "open_questions": [
+            "Determine whether any npm or GitHub document positively permits commercial reuse of public registry metadata by a third-party product.",
+            "Determine whether derived analytics over registry metadata by a party other than npm is addressed anywhere.",
+            "Determine whether model processing of registry metadata is addressed.",
+            "Determine whether the terms address retention of replicated registry data, and whether a package unpublished upstream must be removed downstream.",
+            "Retained from version 1 as obligations that would apply IF a grant is found: use the public registry API only, never the website; and stay far below the five million requests a month the terms name as unreasonable."
+          ],
+          "review_notes": "DOWNGRADED on audit. Two assessments in version 1 overstated the evidence they cited. 'Commercial packages are welcomed expressly' is about what may be PUBLISHED TO npm, not about commercial reuse of registry data by a third party; and the right to 'copy, publish and analyze content and share its analyses' is granted to npm, which version 1's own evidence note said in so many words before the assessment recorded it as a permission of ours. What the terms genuinely grant is narrow and real and is unchanged here: 'You may replicate data from the Public Registry using the Public APIs' -- replication, which is storage, plus API access. With commercial_use, derived_analytics and model_processing all unaddressed, three of the six materially required activities have no grant. Corrected rather than defended: npm's replication grant remains the clearest sentence any source in this catalog offers, and it does not reach as far as version 1 read it.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_TERMS",
+              "document_title": "npm Open Source Terms",
+              "document_url": "https://docs.npmjs.com/policies/open-source-terms",
+              "section_reference": "Acceptable Use; Public Registry; Content",
+              "summarized_finding": "Effective 10 March 2022. The terms prohibit automating access to, use of or monitoring of the Website with a web crawler, browser plug-in or other program that is not a web browser, and then grant an explicit exception: data from the Public Registry may be replicated using the Public APIs per the agreement. Commercial packages are welcomed expressly, the text naming everything from hobby projects to competitive products and enterprise tooling. On volume the terms say the infrastructure must not be strained with an unreasonable number of requests and state that under no circumstances are five million requests in a single month-long period by any single individual, organisation or group of affiliated companies remotely reasonable, directing higher-volume users to the sales team. npm also reserves for itself the right to copy, publish and analyse content and share its analyses, which is a statement about npm's rights and not a grant of ours.",
+              "retrieved_at": "2026-08-30T00:00:00+00:00"
+            }
+          ]
         }
       ]
     },
@@ -2642,6 +2742,52 @@
             "Determine whether the bulk dataset published elsewhere carries different terms from the API."
           ],
           "review_notes": "Approving, but on a narrower basis than npm: PyPI's terms prohibit specific misuses rather than granting a specific use, so the approving state rests on the absence of a prohibition covering us plus the presence of a documented API, and commercial reuse itself is NOT_ADDRESSED. That is a materially weaker footing than npm's explicit replication grant, and the two should not be read as equivalent because both came out APPROVED_WITH_CONDITIONS.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_TERMS",
+              "document_title": "PyPI Terms of Service",
+              "document_url": "https://policies.python.org/pypi.org/Terms-of-Use/",
+              "section_reference": "API; Acceptable Use",
+              "summarized_finding": "Effective 25 February 2025, superseding the earlier Terms of Use. The terms state that abuse or excessively frequent requests to PyPI via the API may result in temporary or permanent suspension of an account's API access, that API tokens may not be shared in order to exceed PyPI's rate limitations, and that the API may not be used to download data or content for spamming purposes, including selling PyPI users' personal information to recruiters, headhunters and job boards. All API activity is stated to remain subject to the Terms of Service and the Privacy Policy. Automated access is therefore not prohibited as such; what is prohibited is named narrowly, and the personal-information clause bears directly on maintainer contact details.",
+              "retrieved_at": "2026-08-30T00:00:00+00:00"
+            }
+          ]
+        },
+        {
+          "review_version": 2,
+          "approval_state": "REQUIRES_REVIEW",
+          "reviewed_by": "mission-1.8",
+          "reviewed_at": "2026-08-30T00:00:00+00:00",
+          "review_interval_days": 180,
+          "automated_access": "PERMITTED_WITH_CONDITIONS",
+          "api_use": "PERMITTED_WITH_CONDITIONS",
+          "browser_automation": "NOT_ADDRESSED",
+          "commercial_use": "NOT_ADDRESSED",
+          "storage": "NOT_ADDRESSED",
+          "retention": "NOT_ADDRESSED",
+          "redistribution": "NOT_ADDRESSED",
+          "derived_analytics": "NOT_ADDRESSED",
+          "model_processing": "NOT_ADDRESSED",
+          "personal_data_handling": "PERMITTED_WITH_CONDITIONS",
+          "attribution_required": "NOT_ADDRESSED",
+          "personal_data_risk": "PSEUDONYMOUS",
+          "contains_user_generated_content": true,
+          "contains_user_identifiers": true,
+          "contains_location": false,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": false,
+          "discard_identifiers_after_normalization": false,
+          "jurisdiction_review_required": true,
+          "conditions": [],
+          "required_conditions": [],
+          "open_questions": [
+            "Determine whether any PyPI or PSF document positively permits commercial reuse of package metadata by a third-party product. The Terms of Service read on 2026-08-30 prohibit specific misuses and grant nothing.",
+            "Determine whether storage of replicated package metadata is addressed anywhere in PyPI's own documents.",
+            "Determine whether derived analytics over package metadata, and model processing of it, are addressed. Both are unaddressed in the Terms of Service and both are required by the assessed use.",
+            "Determine whether the published bulk dataset carries different and possibly more explicit terms than the API.",
+            "Retained from review version 1 as obligations that would apply IF a grant is found: pace requests so they cannot be characterised as excessively frequent, and never extract maintainer contact details for any purpose resembling recruitment, which the terms name specifically."
+          ],
+          "review_notes": "DOWNGRADED from APPROVED_WITH_CONDITIONS, on audit rather than on new evidence. The Mission 1.7 review recorded four of the six activities the assessed use materially requires -- commercial_use, storage, derived_analytics and model_processing -- as NOT_ADDRESSED, and approved the source anyway. Its own notes described the basis as 'the absence of a prohibition covering us plus the presence of a documented API', which is the move source-registry-v1.md §1 rule 2 and Mission 1.7 §12 forbid by name. The single cited document contains prohibitions and no grant of any kind: PyPI is the only source in the catalog that reached an approving state with NOT ONE required activity positively permitted. Nothing about PyPI's terms changed; the reading of them did. Version 1 is preserved as the record of what was concluded and on what basis, because the useful history is that the reasoning was written down correctly and acted on incorrectly.",
           "evidence": [
             {
               "document_type": "OFFICIAL_TERMS",
@@ -3633,6 +3779,76 @@
               "document_url": "https://foundation.wikimedia.org/wiki/Policy:Wikimedia_Foundation_User-Agent_Policy",
               "section_reference": "Format",
               "summarized_finding": "Automated clients must send an informative User-Agent identifying the client, its version and contact information, in the form 'CoolBot/0.0 (https://example.org/coolbot/; coolbot@example.org) generic-library/0.0'. The policy states that scripts should use an informative User-Agent string with contact information or they may be blocked without notice, and directs clients not to copy a browser user agent and not to use a generic one such as curl or python-requests.",
+              "retrieved_at": "2026-08-30T00:00:00+00:00"
+            }
+          ]
+        },
+        {
+          "review_version": 2,
+          "approval_state": "REQUIRES_REVIEW",
+          "reviewed_by": "mission-1.8",
+          "reviewed_at": "2026-08-30T00:00:00+00:00",
+          "review_interval_days": 180,
+          "automated_access": "PERMITTED_WITH_CONDITIONS",
+          "api_use": "PERMITTED_WITH_CONDITIONS",
+          "browser_automation": "NOT_ADDRESSED",
+          "commercial_use": "PERMITTED",
+          "storage": "NOT_ADDRESSED",
+          "retention": "NOT_ADDRESSED",
+          "redistribution": "PERMITTED_WITH_CONDITIONS",
+          "derived_analytics": "PERMITTED",
+          "model_processing": "NOT_ADDRESSED",
+          "personal_data_handling": "NOT_ADDRESSED",
+          "attribution_required": "PERMITTED_WITH_CONDITIONS",
+          "personal_data_risk": "NONE_EXPECTED",
+          "contains_user_generated_content": false,
+          "contains_user_identifiers": false,
+          "contains_location": false,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": false,
+          "discard_identifiers_after_normalization": false,
+          "jurisdiction_review_required": true,
+          "conditions": [],
+          "required_conditions": [],
+          "open_questions": [
+            "H-24, now the blocking question rather than a refinement: determine whether aggregate pageview counts are Licensed Material under CC BY-SA 4.0. If they are, Section 2 grants storage and the production of Adapted Material and this source is approvable. If they are not, a separate basis is needed for holding and processing them.",
+            "Determine whether the Wikimedia Foundation addresses storage or retention of pageview data by a reuser anywhere in its own documents. Neither the Terms of Use nor the API access policy does.",
+            "Determine whether model processing of Wikimedia data is addressed by any Foundation document.",
+            "Determine whether Wikimedia Enterprise is REQUIRED rather than merely offered for a commercial reuser at this volume; the APIs overview presents it as the route for high-volume commercial reuse without stating a threshold.",
+            "Retained from version 1 as obligations that would apply IF a grant is found: send a descriptive User-Agent in the format the User-Agent Policy prescribes, stay within the documented 200 requests per minute and honour HTTP 429, and carry CC BY-SA attribution wherever article content is surfaced."
+          ],
+          "review_notes": "DOWNGRADED, and the reason is a misreading corrected rather than a policy that changed. Version 1 cited the Analytics API documentation as labelling its content CC BY-SA 4.0; that page carries 'Content: CC BY-SA 4.0 · Code: MIT-0', which is the standard footer describing THE DOCUMENTATION SITE and not a statement about the data the API returns. With that removed, storage and model_processing have no grant behind them and both are required by the assessed use. CC BY-SA 4.0 was retrieved during this mission to test whether the licence supplies them. Section 2 does grant reproduction and the production of Adapted Material, commercially and with no text-and-data-mining restriction -- FOR LICENSED MATERIAL. Whether aggregate pageview COUNTS are Licensed Material is exactly the open question version 1 recorded as H-24, and either answer to it is a determination about what copyright subsists in, which source-registry-v1.md §0 states this system does not make. Resolving H-24 in our own favour to reach eligibility is the one thing Mission 1.8 §18 forbids, so the source fails closed and the licence is recorded so the next reviewer has both halves of the question in front of them. What is NOT in doubt is commercial reuse, which the Foundation's terms permit in their own words, and the documented rate limits, which stand.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_TERMS",
+              "document_title": "Wikimedia Foundation Terms of Use",
+              "document_url": "https://foundation.wikimedia.org/wiki/Policy:Terms_of_Use",
+              "section_reference": "Reuse; Licensing of Content; Refraining from Certain Activities",
+              "summarized_finding": "Effective 7 June 2023. The Foundation states that the licences applied to project content do allow commercial uses of contributions provided the use complies with the terms of the respective licence, and that text is licensed CC BY-SA 4.0 and GFDL. Attribution may be satisfied by a hyperlink or URL to the article contributed to. The terms prohibit automated uses that are abusive or disruptive, that violate applicable acceptable-usage policies, or that have not been approved by the community, and state that by using the APIs the user agrees to abide by the User-Agent Policy, the Robot Policy and API:Etiquette. Commercial reuse is therefore permitted; the constraint is on HOW automated access is conducted, not on whether the result may be sold.",
+              "retrieved_at": "2026-08-30T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "Wikimedia APIs - Rate limits",
+              "document_url": "https://www.mediawiki.org/wiki/Wikimedia_APIs/Rate_limits",
+              "section_reference": "Rates by client type",
+              "summarized_finding": "Limits are enforced per minute across the Action API and the REST APIs: 10 requests per minute for a client identified only by IP address, 200 for an unauthenticated client sending a User-Agent, 200 for a new authenticated account, 2000 for an established editor, and exemption for bot-flagged and approved clients. Exceeding a limit returns HTTP 429 with a Retry-After header; where no such header is present the documentation directs clients to wait at least five seconds or apply exponential back-off. The page states these limits are new in 2026 and subject to change.",
+              "retrieved_at": "2026-08-30T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_ACCESS_CONTROL",
+              "document_title": "Wikimedia Foundation User-Agent Policy",
+              "document_url": "https://foundation.wikimedia.org/wiki/Policy:Wikimedia_Foundation_User-Agent_Policy",
+              "section_reference": "Format",
+              "summarized_finding": "Automated clients must send an informative User-Agent identifying the client, its version and contact information, in the form 'CoolBot/0.0 (https://example.org/coolbot/; coolbot@example.org) generic-library/0.0'. The policy states that scripts should use an informative User-Agent string with contact information or they may be blocked without notice, and directs clients not to copy a browser user agent and not to use a generic one such as curl or python-requests.",
+              "retrieved_at": "2026-08-30T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_LICENCE",
+              "document_title": "Creative Commons Attribution-ShareAlike 4.0 International — Legal Code",
+              "document_url": "https://creativecommons.org/licenses/by-sa/4.0/legalcode",
+              "section_reference": "Section 1 (Adapted Material); Section 2 (Scope — Licence grant)",
+              "summarized_finding": "Section 2 grants the licensee the right to 'reproduce and Share the Licensed Material, in whole or in part' and to 'produce, reproduce, and Share Adapted Material', with no exclusion of commercial purposes and no restriction on text and data mining or automated processing. Adapted Material is defined in Section 1 as material derived from or based upon the Licensed Material in a manner requiring permission under the Copyright and Similar Rights held by the Licensor. Retrieved to test whether the licence supplies the storage and model-processing grants the Wikimedia terms do not state. It supplies them FOR LICENSED MATERIAL, and whether aggregate pageview counts are Licensed Material is the unresolved question.",
               "retrieved_at": "2026-08-30T00:00:00+00:00"
             }
           ]
