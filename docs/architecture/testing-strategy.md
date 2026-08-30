@@ -1152,3 +1152,46 @@ certified" became six that say what a certification may and may not be. That is
 the test for whether a superseded assertion was handled properly: the
 replacement should be harder to satisfy than the original, not easier.
 
+---
+
+## 27. The second time a CHECK caught the model, not the code (Mission 1.12.1)
+
+`testing-strategy.md` §25 recorded the run log's arithmetic constraints catching
+a double-counted contributor. Mission 1.12.1 hit the other one, and the lesson
+is different enough to be worth its own entry.
+
+```sql
+CHECK (groups_derived + groups_refused <= groups_considered)   -- migration 0013
+```
+
+It looks like arithmetic and it is a **claim about the domain**: that a candidate
+group either derives or refuses. That was true of the first two extractors,
+because each group produced one outcome. The third pairs *within* a group, and
+the first real derivation produced one signal and one refusal from one group.
+
+### The difference from §25
+
+In §25 the code was wrong and the constraint was right. Here **the code was right
+and the constraint was wrong** — the counters already meant "groups that produced
+at least one", which is the honest definition, and the constraint had encoded an
+assumption nobody had noticed making.
+
+### What that changes about writing them
+
+A constraint over two counters is a model of how the counters relate, and a model
+can be falsified by a feature. So:
+
+- **Write the invariant you can defend, not the tightest one that passes today.**
+  `derived <= considered AND refused <= considered` was always true;
+  `derived + refused <= considered` was true by coincidence of having two
+  extractors that behaved the same way.
+- **When one fails, ask which side is wrong.** The reflex is to fix the code. In
+  §25 that was right; here it would have made the counters lie to keep a
+  constraint that was itself the error.
+- **Fix it forward.** Migration 0015 replaces 0013's constraint and 0013 is not
+  edited, so the record of what was believed and when survives.
+
+Both incidents argue for the same practice from §25 — put arithmetic
+relationships in a CHECK — and this one adds the caveat that makes it safe: the
+CHECK is a hypothesis, and a failure is evidence about the hypothesis as much as
+about the write.

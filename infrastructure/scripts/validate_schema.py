@@ -116,12 +116,26 @@ DROP_CONSTRAINT = re.compile(r"DROP\s+CONSTRAINT\s+([a-z_]+)", re.IGNORECASE)
 
 
 def strip_constraint(body: str, name: str) -> str:
-    """The table body without the named constraint's definition.
+    """The table body without the named constraint's earliest DEFINITION.
 
     Scans forward from the definition tracking parenthesis depth, so a comma
     inside `CHECK (x IN ('a', 'b'))` does not end it early.
+
+    A `DROP CONSTRAINT <name>` statement mentions the name too, and skipping
+    those is load-bearing rather than tidy. With one drop it did not matter;
+    Mission 1.12.1 added a second migration that drops and re-adds the same
+    constraint, and stripping a DROP's text instead of the older definition left
+    a SUPERSEDED value set in the body -- which then failed against the contract
+    as drift that did not exist.
     """
-    match = re.search(rf"CONSTRAINT\s+{re.escape(name)}\b", body, re.IGNORECASE)
+    match = next(
+        (
+            m
+            for m in re.finditer(rf"CONSTRAINT\s+{re.escape(name)}\b", body, re.IGNORECASE)
+            if not re.search(r"DROP\s+$", body[max(0, m.start() - 8) : m.start()], re.IGNORECASE)
+        ),
+        None,
+    )
     if match is None:
         return body
     start, depth, index = match.start(), 0, match.end()

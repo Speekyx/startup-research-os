@@ -118,6 +118,11 @@ sharing a key can meet.
 |---|---|
 | `numeric-period-change` | source · record kind · metric scheme + id · geography kind + canonical code + source code · unit state + unit · series dataset + resource · period type |
 | `lexical-frequency-contrast` | source · record kind · series resource · **exact period label** · language scheme + label · gram size |
+| `lexical-frequency-change` | source · record kind · series resource · language scheme + label · gram size · **term** |
+
+The two lexical keys are mirror images and the difference is exactly one field:
+the contrast groups by the **bucket** and varies the term; the change groups by
+the **term** and varies the bucket.
 
 Both keys are built from canonical payload fields only, sorted, and serialised
 canonically, so a key is stable across runs and across machines.
@@ -139,6 +144,7 @@ one maps onto an existing value except one, which was added:
 | `INSUFFICIENT_DISTINCT_OBSERVATIONS` | `INSUFFICIENT_INPUT_OBSERVATIONS` |
 | `INCOMPATIBLE_SERIES`, `SOURCE_LANGUAGE_MISMATCH`, `GRAM_SIZE_MISMATCH`, `INCOMPATIBLE_PERIOD` | **`INCOMPATIBLE_SERIES`** — added, see below |
 | `TEMPORAL_ORDER_NOT_ESTABLISHED`, `CANONICAL_LANGUAGE_REQUIRED`, `MISSING_REQUIRED_FACT` | `REQUIRED_FACT_WITHHELD`, naming the withheld fact |
+| `NON_CONTIGUOUS_SOURCE_BUCKETS` | **added in Mission 1.12.1** — no existing value could say it (ADR-023) |
 | `INVALID_INPUT` | `INPUT_RECORD_INVALID` |
 | `UNSUPPORTED_RECORD_KIND` | `INCOMPATIBLE_INPUT_KINDS` |
 
@@ -240,6 +246,7 @@ Ours, and labelled as such — no external platform published any of them.
 | Normalized records read per job | 500 | A transaction of a few hundred kilobytes. A workspace with more takes more jobs |
 | Groups derived per job | 200 | A group produces at most a handful of signals; the cap keeps one transaction bounded |
 | Terms per lexical contrast | exactly 2 | §9 below |
+| Terms per lexical change selection | 25 | Same argument as §9. A selection larger than a person writes by hand is a sweep with a list in front of it |
 
 A job that hits a bound **says which one stopped it**, and keeps what it derived.
 Truncation is reported, never silent.
@@ -271,3 +278,36 @@ Embed, cluster, classify, call a model, contact a network, read a raw record,
 write Evidence, write a Claim, produce an Opportunity, or compute a score.
 `validate_signals.py` asserts the first six by parsing every import in the
 package.
+
+---
+
+## 11. A group may derive AND refuse (Mission 1.12.1)
+
+`groups_derived` counts candidate groups that produced at least one signal;
+`groups_refused` counts those that produced at least one refusal. **The two sets
+overlap**, and migration 0013's
+
+```sql
+CHECK (groups_derived + groups_refused <= groups_considered)
+```
+
+asserted that they do not. It read as arithmetic and was really a claim: that a
+group either derives or refuses. True of both Mission 1.11.1 extractors, because
+each group yielded one outcome — and false the moment an extractor pairs
+*within* a group.
+
+The first real `lexical-frequency-change` derivation hit it: one term, three
+buckets, one adjacent pair emitting a signal and one gap refused. One group, one
+signal, one refusal, and `1 + 1 > 1`.
+
+Migration 0015 replaced it with the invariant that was always true:
+
+```sql
+CHECK (groups_derived <= groups_considered AND groups_refused <= groups_considered)
+```
+
+`records_contributed + records_excluded <= records_considered` is unchanged —
+those two sets are genuinely disjoint, and Mission 1.11.1 made them so after the
+same constraint caught a double count. **That is twice this table's arithmetic
+has caught a real modelling error**, and both times the counters were the thing
+that was wrong about the world rather than about the code.

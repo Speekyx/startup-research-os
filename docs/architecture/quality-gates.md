@@ -332,6 +332,18 @@ shape, because this is the kind of finding that decays quietly.
 | **A period that could not be represented has no order either** | The override matches `PERIOD_TIMEZONE_NOT_ESTABLISHED` **exactly**, not as a subset | `PERIOD_NOT_SUPPORTED` still withholds ordering |
 | **Existing signal identities are unmoved** | Recomputed from stored lineage; `resource_id` is lineage and enters no fingerprint | Adding a field to `ObservationInput` must not silently reissue every signal ever derived |
 
+### The first temporal extractor (Mission 1.12.1)
+
+| Gate | Mechanism | Guards |
+|------|-----------|--------|
+| **No extractor converts a timezone or reads a clock** | `validate_signals.py`, AST over attribute names and `tzinfo=` keywords, scoped to `sros_nlp/extractors` | H-29. This mission gave an extractor datetime arithmetic over unzoned source labels, and one `.astimezone()` would turn a label into an instant silently. Probed against two deliberate violations |
+| **Order is asked for, never inferred** | The extractor calls `order_certification(source, resource)` and checks the `label_scheme` before comparing anything | A label that sorts is not a finding. A certification for another scheme would make the 15-minute step wrong silently |
+| **A gap is never bridged** | `NON_CONTIGUOUS_SOURCE_BUCKETS`, in the contract and in the `signal_inputs` CHECK | A change computed across a bucket nobody read is indistinguishable from one that happened |
+| **An absent term is not a zero** | Two actual observations required; no synthesis anywhere | Zero-filling is the most natural thing to do to sparse lexical data and is wrong in a way nothing downstream can detect |
+| **An empty selection is a refusal** | `terms` required; empty raises `PARAMETERS_INCOMPLETE` | "Empty means everything" over a bucket of ~223,000 terms |
+| **A dropped constraint is stripped, not its DROP statement** | `validate_schema.py` skips `CONSTRAINT` mentions preceded by `DROP` | With one drop it did not matter. A second migration dropping the same constraint left a superseded value set in the body, which then failed against the contract as drift that did not exist |
+| **Group counters may overlap** | Migration 0015 replaced 0013's `derived + refused <= considered` | An extractor pairing within a group derives one pair and refuses another. The counters were right; the constraint encoded an assumption |
+
 ---
 
 ## 2. Turborepo task graph

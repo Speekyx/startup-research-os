@@ -119,6 +119,7 @@ appear, and adding one must never require a migration.
 | id | Family | Derivation | Justified by |
 |---|---|---|---|
 | `lexical_frequency_contrast` | `LEXICAL_FREQUENCY` | The relation between the frequencies of two or more lexical terms observed under one identical source period label and one identical source language label | The two real GDELT records: bucket `20260830091500`, `ENGLISH`, `climate` and `weather` |
+| `lexical_frequency_change` | `LEXICAL_FREQUENCY` | The change in one term's frequency between two **adjacent** source buckets of one stream. Added in Mission 1.12.1, once H-32 closed | Four real GDELT records across buckets `20260830184500` and `20260830190000` |
 | `numeric_period_change` | `MEASURED_SERIES` | The change in one metric, for one geography, between two periods on a common timeline | The six real World Bank records: `SP.POP.TOTL`, `DEU` and `FRA`, 2018 to 2020 |
 
 **Two, because two data shapes exist.** Mission 1.11 §35 asks for a small
@@ -136,9 +137,9 @@ kept:
 | the two type entries | registered by migration 0012 |
 | the families | declared in the contract, generated to both surfaces |
 | the model | `sros_signal_model`, with tests over synthetic objects |
-| an extractor | **`numeric-period-change@1.0.0`, `lexical-frequency-contrast@1.0.0`** |
-| `IMPLEMENTED_EXTRACTORS` | **both** |
-| `nlp.signals` | **5 real rows** |
+| an extractor | **three**: `numeric-period-change@1.0.0`, `lexical-frequency-contrast@1.0.0`, `lexical-frequency-change@1.0.0` |
+| `IMPLEMENTED_EXTRACTORS` | **all three** |
+| `nlp.signals` | **7 real rows** |
 
 Mission 1.11 registered the **vocabulary** and no extractor; Mission 1.11.1
 added the extractors. The two remained separate claims throughout, which is what
@@ -160,7 +161,7 @@ not.
 | Candidate | Verdict |
 |---|---|
 | `LEXICAL_FREQUENCY_OBSERVED` | **Rejected.** It is the normalized record with a new table name. Contract §3's contrast rule exists to forbid exactly this |
-| `LEXICAL_FREQUENCY_CHANGE` | **Deferred, not rejected, and still deferred after Mission 1.11.1.** A sound derivation that needs two buckets in a known order. Blocked while H-32 is open — see [`signal-temporal-semantics-v1.md`](signal-temporal-semantics-v1.md) §4 |
+| `LEXICAL_FREQUENCY_CHANGE` | **Implemented in Mission 1.12.1** as `lexical_frequency_change`, once Mission 1.12 closed H-32 on GDELT's own evidence. It was deferred rather than rejected for three missions, which is what the distinction was for |
 | `LEXICAL_ATTENTION_GROWTH` | **Rejected.** "Attention" is an interpretation of a count, "growth" is an interpretation of a difference, and one name asserts both |
 | `LEXICAL_ATTENTION_DECLINE` | **Rejected**, same reason. Direction is a field, not a type: two types differing only in sign would make a decline unfindable when looking for the term |
 | `NUMERIC_LEVEL` | **Rejected.** A level is one observation |

@@ -389,6 +389,8 @@ AMBIGUOUS_OBSERVATION_LINEAGE     two contributing rows are one observation (D-0
 INCOMPATIBLE_INPUT_KINDS          inputs disagree on record kind or resolution
 INCOMPATIBLE_SERIES               same kind, different thing: metric, geography,
                                   unit, dataset, bucket, language label, gram size
+NON_CONTIGUOUS_SOURCE_BUCKETS     the same series, and the labels are not one
+                                  published step apart (ADR-023)
 INSUFFICIENT_INPUT_OBSERVATIONS   fewer than two distinct observations remain
 UNSUPPORTED_SIGNAL_TYPE           no registered type
 PARAMETERS_INCOMPLETE             a parameter affecting output was not stated
@@ -639,6 +641,17 @@ buckets, different language labels or different gram sizes.
 One value covers every case and the `detail` names the field that disagreed.
 Mission 1.11.1 §34 offered four separate codes for it; four codes for one
 question would make a consumer branch on which field happened to differ.
+
+### `SignalRefusalReason.NON_CONTIGUOUS_SOURCE_BUCKETS` (Mission 1.12.1)
+
+Contract `1.7.0` → `1.8.0`. Two observations that **are** the same series, whose
+source period labels are not one documented step apart.
+
+`INCOMPATIBLE_SERIES` says the observations are of different things and they are
+not; `INSUFFICIENT_INPUT_OBSERVATIONS` says there are too few and there are
+exactly two. What was missing was a way to say *these two belong together and
+the interval between them is not the one the source publishes* — which is the
+difference between a change and an invented one (ADR-023).
 
 ### What did NOT change
 

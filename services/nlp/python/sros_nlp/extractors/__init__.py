@@ -11,6 +11,11 @@ fills them in.
 No `trend`, `growth`, `momentum`, `demand`, `pain`, `desire`, `attention`,
 `sentiment` or `topic` extractor exists. Each of those names a conclusion rather
 than an operation, and none is derivable from the data this system holds.
+
+`lexical-frequency-change` (Mission 1.12.1) is the third, and the first whose
+window basis is `ORDERED_PERIODS`. It exists only because Mission 1.12 closed
+H-32 on GDELT's own evidence, and it asks the certification rather than
+inferring order from a label's shape.
 """
 
 from __future__ import annotations
@@ -26,6 +31,7 @@ from .base import (
     SignalExtractor,
     group_key_of,
 )
+from .lexical_frequency_change import LexicalFrequencyChangeExtractor
 from .lexical_frequency_contrast import LexicalFrequencyContrastExtractor
 from .numeric_period_change import NumericPeriodChangeExtractor
 
@@ -36,6 +42,7 @@ __all__ = [
     "DerivationRequest",
     "GroupOutcome",
     "GroupRefusal",
+    "LexicalFrequencyChangeExtractor",
     "LexicalFrequencyContrastExtractor",
     "NumericPeriodChangeExtractor",
     "SignalExtractor",
@@ -45,11 +52,13 @@ __all__ = [
 
 _NUMERIC = NumericPeriodChangeExtractor()
 _LEXICAL = LexicalFrequencyContrastExtractor()
+_LEXICAL_CHANGE = LexicalFrequencyChangeExtractor()
 
 EXTRACTOR_REGISTRY: Mapping[str, SignalExtractor] = MappingProxyType(
     {
         _NUMERIC.extractor_id: _NUMERIC,
         _LEXICAL.extractor_id: _LEXICAL,
+        _LEXICAL_CHANGE.extractor_id: _LEXICAL_CHANGE,
     }
 )
 

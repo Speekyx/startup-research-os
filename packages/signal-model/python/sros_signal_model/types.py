@@ -55,6 +55,18 @@ SIGNAL_TYPES: Mapping[str, SignalTypeSpec] = MappingProxyType(
                 "nothing about attention, interest or demand."
             ),
         ),
+        "lexical_frequency_change": SignalTypeSpec(
+            id="lexical_frequency_change",
+            family=SignalQuantityFamily.LEXICAL_FREQUENCY,
+            summary=(
+                "The change in one lexical term's source-measured frequency between two "
+                "ADJACENT source buckets of one publication stream, under one source "
+                "language label and one gram size. Requires a reviewed temporal order "
+                "certification; the buckets are ordered relative to each other and are "
+                "NOT placed on any shared timeline. Says the measured frequency "
+                "differed, and nothing about attention, interest, demand or trend."
+            ),
+        ),
         "numeric_period_change": SignalTypeSpec(
             id="numeric_period_change",
             family=SignalQuantityFamily.MEASURED_SERIES,

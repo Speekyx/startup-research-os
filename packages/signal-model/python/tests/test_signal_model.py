@@ -864,8 +864,26 @@ class TestDerivationIdentityAndParameters(unittest.TestCase):
             lexical_signal(signal_type_id="lexical_attention_growth")
         self.assertIs(caught.exception.refusal.reason, SignalRefusalReason.UNSUPPORTED_SIGNAL_TYPE)
 
-    def test_the_registered_types_are_the_two_justified_by_real_shapes(self):
-        self.assertEqual(set(SIGNAL_TYPES), {"lexical_frequency_contrast", "numeric_period_change"})
+    def test_every_registered_type_is_justified_by_a_real_data_shape(self):
+        """Until Mission 1.12.1 this asserted TWO types, and correctly.
+
+        `lexical_frequency_change` joined them once H-32 closed: it is the first
+        type whose window basis is ORDERED_PERIODS, and it could not have
+        existed while ordering was unestablished. The rule the old assertion
+        protected is unchanged -- every type is justified by a data shape this
+        repository holds, and each declares the family whose record kind it
+        reads."""
+        self.assertEqual(
+            set(SIGNAL_TYPES),
+            {
+                "lexical_frequency_contrast",
+                "lexical_frequency_change",
+                "numeric_period_change",
+            },
+        )
+        for spec in SIGNAL_TYPES.values():
+            self.assertTrue(spec.summary.strip())
+            self.assertIn(spec.family, set(SignalQuantityFamily))
 
     def test_no_extractor_exists(self):
         """Mission 1.11 §41. A registered type is vocabulary; this is the claim

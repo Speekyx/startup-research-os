@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.19
-Last amended: 2026-08-30 (Sprint 1 / Mission 1.12)
+Version: 1.20
+Last amended: 2026-08-30 (Sprint 1 / Mission 1.12.1)
 
 ## Boot Sequence
 
@@ -42,6 +42,7 @@ Ontology V2 keeps V1.1's numbering for §1–§10, so an existing reference to
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.20 | 2026-08-30 | First **source-relative temporal** extractor: `lexical-frequency-change@1.0.0`, two real signals and two real gap refusals. A gap is never bridged and an absent term is not a zero (ADR-023). H-29 untouched: `ORDERED_PERIODS`, no bounds, no `observed_at` |
 | 1.19 | 2026-08-30 | **H-32 closed** on first-party GDELT evidence: the WEB-NGRAM stream is ordered. **H-29 stays open** — GDELT documents UTC for a *different* dataset whose date means something else. H-31 answered and refined. No extractor, no new signal (ADR-022) |
 | 1.18 | 2026-08-30 | First two deterministic extractors, and **five real Signals**. `PARTIAL` proved usable in production: both GDELT inputs contributed because neither missing fact was one the derivation needed. A refused derivation gets a run record, never a Signal (ADR-021) |
 | 1.17 | 2026-08-30 | Signal defined as a DERIVATION over two or more observations, never a labelled one. `nlp.signals` reshaped; the family stops classifying demand; order and instant separated, and H-32 opened. Model and contract only -- no extractor, 0 signals |
@@ -518,6 +519,12 @@ observations, `lexical-frequency-contrast@1.0.0` one from the two GDELT ones.
   — `source_id` alone would let another GDELT dataset inherit the finding, and
   the same directory publishes an unreviewed `chargram` file a prefix match
   would have covered. An observation that cannot name its resource is refused.
+- **An extractor never reads a clock or converts a timezone** (Mission 1.12.1).
+  `astimezone`, `now`, `utcnow`, `localtime` and `tzinfo=` are absent from every
+  module under `sros_nlp/extractors`, asserted over the AST. The adjacency step
+  is computed in **label space** — the earlier label's own components advanced by
+  one published bucket and formatted back into a label — so nothing becomes an
+  instant. That arithmetic is licensed by the certification, not by the format.
 - **A refused derivation gets a run record, never a Signal** (ADR-021).
   `nlp.signal_derivation_runs` holds one row per **execution**, written in the
   same transaction as the signals: N considered, M derived, K refused and why. A
@@ -601,13 +608,22 @@ normalization job may be dispatched for a source with no normalizer. The
 orchestrator reports the second under `NO-NORMALIZER-IMPLEMENTED`, distinct from
 the two acquisition gates because different work clears each.
 
-**Sequential WEB-NGRAM derivation is temporally permitted since Mission 1.12
-and no extractor implements it.** H-32 closed on GDELT's own evidence, so
-`SOURCE_RELATIVE_ORDER` is granted to `gdelt` for `web-ngrams/1gram` and
-`web-ngrams/2gram` — named exactly, never by prefix, never by label shape.
-**Temporally permitted is not extractor specified**: a window size, a gap policy
-and what a missing bucket means are all still undecided, and until they are, no
-frequency-change extractor may be written.
+**Sequential WEB-NGRAM derivation is implemented since Mission 1.12.1**, by
+`lexical-frequency-change@1.0.0` and by nothing else. It asks the Mission 1.12
+certification for its stream and its label scheme before comparing anything;
+order is never inferred from a label that happens to sort.
+
+**Two rules bound it, and both are ADR-023.** A pair derives only when its labels
+are **exactly one published bucket apart** — anything else is
+`NON_CONTIGUOUS_SOURCE_BUCKETS`, because a change computed across a bucket
+nobody read is indistinguishable from one that happened. And **a term absent
+from a bucket is absent, never a frequency of zero**: zero-filling is the most
+natural thing to do to sparse lexical data and is wrong in a way nothing
+downstream can detect.
+
+**Rolling windows, moving averages and momentum are still not implemented.**
+Temporally permitted is not extractor specified, and each needs its own decision
+about what a gap means for *that* operation.
 
 **Cross-source temporal alignment stays blocked by H-29**, along with any
 `observed_at`, any `TIMESTAMPTZ` conversion and any "as of" wall-clock claim.

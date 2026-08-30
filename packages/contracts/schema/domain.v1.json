@@ -1,6 +1,6 @@
 {
   "$comment": "AUTHORITATIVE CONTRACT SOURCE OF TRUTH. Hand-edited. Everything under packages/contracts/generated/ is derived from this file by tools/generate.py. See ADR-009.",
-  "contract_version": "1.7.0",
+  "contract_version": "1.8.0",
   "ontology_version": "2",
   "scoring_framework_version": "1.1",
   "evidence_framework_version": "1",
@@ -1203,6 +1203,10 @@
         {
           "value": "INCOMPATIBLE_SERIES",
           "description": "The inputs are the same record kind at the same resolution and are not observations of the same thing -- a different metric, geography, unit, dataset, source period label, source language label or gram size. INCOMPATIBLE_INPUT_KINDS cannot express this: two World Bank observations of different countries disagree on neither kind nor resolution. The detail names the field that disagreed"
+        },
+        {
+          "value": "NON_CONTIGUOUS_SOURCE_BUCKETS",
+          "description": "The inputs ARE the same series and their source period labels are not one documented step apart. Distinct from INCOMPATIBLE_SERIES, which says the observations are of different things, and from INSUFFICIENT_INPUT_OBSERVATIONS, which says there are too few: here there are two compatible observations and the interval between them is not the one the source publishes. Treating them as adjacent would invent continuity across a bucket nobody read, and a change computed across an invented gap is indistinguishable from one that happened"
         },
         {
           "value": "INSUFFICIENT_INPUT_OBSERVATIONS",

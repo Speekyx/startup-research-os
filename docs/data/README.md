@@ -39,6 +39,7 @@
 | `signal-derivation-runtime-v1.md` | How extraction runs, groups and persists, and where a REFUSED derivation goes |
 | `numeric-period-change-extractor-v1.md` | The first extractor: adjacent-period change in one measured series |
 | `lexical-frequency-contrast-extractor-v1.md` | The second: two terms, one bucket, one language label, and no ordering |
+| `lexical-frequency-change-extractor-v1.md` | The third: one term, two adjacent buckets, and a gap that is never bridged |
 | `acquisition-rights-basis-gap-analysis-v1.md` | Why a resource records what KIND of thing authorises it, not only which licence (H-28, ADR-018) |
 | `wikimedia-pageviews-compliance-v1.md` | What Wikimedia Pageviews would need, and the one question blocking it |
 | `source-condition-gap-analysis-v1.md` | The nine Mission 1.3 conditions inventoried and classified, and the obligations deliberately left out of code |
