@@ -1,7 +1,7 @@
 [project]
 name = "sros-acquisition"
 version = "0.1.0"
-description = "Source registry, compliance governance, and the World Bank collector."
+description = "Source registry, compliance governance, the World Bank collector and its normalizer."
 requires-python = ">=3.12"
 # httpx arrives in Mission 1.5 with the first collector, and is imported INSIDE
 # the one function that needs it (`collection/transport.py`), never at module
@@ -15,6 +15,7 @@ dependencies = ["sros-contracts", "httpx>=0.27"]
 [project.scripts]
 sros-source = "sros_acquisition.cli:main"
 sros-acquisition = "sros_acquisition.acquisition_cli:main"
+sros-normalize = "sros_acquisition.normalization_cli:main"
 
 [build-system]
 requires = ["hatchling"]

@@ -282,6 +282,79 @@
       ],
       "description": "Geographic scope discriminator. Geographic axis only; segment scoping is A-12 and is NOT modelled."
     },
+    "NormalizationErrorCode": {
+      "type": "string",
+      "enum": [
+        "UNSUPPORTED_SOURCE",
+        "UNSUPPORTED_COLLECTOR_VERSION",
+        "INVALID_RAW_RECORD",
+        "UNSUPPORTED_RECORD_TYPE",
+        "NON_DETERMINISTIC_OUTPUT",
+        "PERSISTENCE_FAILURE",
+        "CANCELLED"
+      ],
+      "description": "Why a normalization attempt produced no record at all. Distinct from NormalizationQualityReason, which explains a record that EXISTS and is degraded. Closed so orchestration branches on a meaning rather than on a Python exception class, the same argument AcquisitionErrorCode makes."
+    },
+    "NormalizationQualityReason": {
+      "type": "string",
+      "enum": [
+        "VALUE_NOT_REPORTED",
+        "MALFORMED_NUMERIC_VALUE",
+        "GEOGRAPHY_NOT_CLASSIFIED",
+        "GEOGRAPHY_MISSING",
+        "METRIC_MISSING",
+        "PERIOD_NOT_SUPPORTED"
+      ],
+      "description": "Why a normalized record is not VALID. A closed vocabulary rather than free text, for the same reason AcquisitionErrorCode is one: a consumer branches on the MEANING -- a record with no reported value is skipped, a record whose geography is unclassified is still usable -- and a message it had to pattern-match would make that branch break on a reworded string."
+    },
+    "NormalizedGeographyKind": {
+      "type": "string",
+      "enum": [
+        "COUNTRY",
+        "AGGREGATE",
+        "UNKNOWN"
+      ],
+      "description": "What kind of entity a source geography code names. Closed because the branch is exhaustive and consequential: a COUNTRY can join to a MarketScope country list and an AGGREGATE must never be counted as one. UNKNOWN exists because it is the safe failure -- an unclassified code keeps its source form and is never promoted to a country."
+    },
+    "NormalizedPeriodType": {
+      "type": "string",
+      "enum": [
+        "YEAR",
+        "QUARTER",
+        "MONTH",
+        "DAY",
+        "INSTANT",
+        "INTERVAL"
+      ],
+      "description": "The temporal shape of a canonical observation. Closed because downstream time handling must branch exhaustively -- a YEAR is not an INSTANT, and code that treated the start of a yearly period as an exact event time would produce trend artifacts indistinguishable from real market movements (data-principles.md §9). An adapter supports only the forms its real records use and reports the rest rather than approximating them."
+    },
+    "NormalizedRecordQuality": {
+      "type": "string",
+      "enum": [
+        "VALID",
+        "PARTIAL",
+        "INVALID"
+      ],
+      "description": "The STRUCTURAL completeness of a normalized record, and nothing else. Not a confidence and not a reliability: those are epistemic judgments on [0,1] that belong to the evidence model, and a value of that kind here would invite a downstream stage to multiply a parsing outcome by an evidence weight. Closed because every consumer must decide what to do with each state, and an unhandled fourth value would be a bug rather than a gap."
+    },
+    "NormalizedUnitState": {
+      "type": "string",
+      "enum": [
+        "PUBLISHED",
+        "NOT_PUBLISHED",
+        "UNKNOWN"
+      ],
+      "description": "Whether a canonical numeric observation carries a unit, and why not when it does not. Closed so that 'the source does not publish units on this endpoint' stays distinguishable from 'we have not established the unit' -- the first is a settled fact about the access path and the second is work someone could do. Neither is ever resolved by reading the metric name."
+    },
+    "NormalizedValueState": {
+      "type": "string",
+      "enum": [
+        "REPORTED",
+        "NOT_REPORTED",
+        "UNREADABLE"
+      ],
+      "description": "Whether a canonical numeric observation carries a measurement. Closed and mandatory because the alternative is representing 'the source published no figure' as the number zero -- and zero is a real measurement, so the two would become permanently indistinguishable with no way for any downstream stage to recover the difference."
+    },
     "ObservationKind": {
       "type": "string",
       "enum": [
@@ -364,7 +437,8 @@
             "distribution_channel",
             "risk",
             "region",
-            "source_family"
+            "source_family",
+            "normalization_record_kind"
           ]
         },
         "id": {
@@ -418,7 +492,8 @@
             "distribution_channel",
             "risk",
             "region",
-            "source_family"
+            "source_family",
+            "normalization_record_kind"
           ]
         },
         "id": {

@@ -32,6 +32,13 @@ therefore blocks under `NO-COLLECTOR-IMPLEMENTED` when eligible sources exist
 and nothing is implemented for them, rather than emitting a job no worker could
 run.
 
+**Since Mission 1.6 normalization is derived too, and for a sharper reason.**
+Its block was static and read "no collector is implemented" -- which Mission
+1.5 made false while leaving normalization exactly as unavailable. Availability
+now depends on a source being eligible, a collector existing for it AND a
+normalizer existing for what that collector writes: four facts, not three, and
+a Eurostat collector arriving with no normalizer must still block.
+
 The dispatch, retry, resume and budget machinery is still real and still tested.
 It is exercised with job specs supplied directly by a caller, which is what a
 future capability will do once it is unblocked.
@@ -60,7 +67,9 @@ __all__ = [
     "BLOCKED_CAPABILITIES",
     "STATIC_BLOCKED_CAPABILITIES",
     "acquisition_block",
+    "normalization_block",
     "NO_COLLECTOR_IMPLEMENTED",
+    "NO_NORMALIZER_IMPLEMENTED",
     "PlannedStage",
     "ResearchExecutionPlan",
     "ResearchPlanner",
@@ -70,7 +79,7 @@ __all__ = [
 # Bumped whenever the stage graph or the blocking set changes. Recorded on the
 # persisted plan so a session can be read years later against the planner that
 # produced it (llm-reasoning-rules.md §9 applied to orchestration).
-PLANNER_VERSION = "1.1.0"
+PLANNER_VERSION = "1.2.0"
 
 
 class Capability(StrEnum):
@@ -126,19 +135,20 @@ class BlockedCapability:
 
 
 # Capabilities blocked by something that does not change between plans.
+#
 # ACQUISITION is deliberately absent: its block is derived per source from the
 # registry by `acquisition_block`, because since Mission 1.0 the answer differs
 # per source and changes when a review lands.
+#
+# NORMALIZATION left this register in Mission 1.6, and the reason it had to is
+# worth recording. Its entry read "no collector is implemented, so acquisition
+# produces no raw record to normalize" -- and Mission 1.5 implemented one, so
+# the sentence became FALSE while the capability stayed just as unavailable. A
+# false blocking reason is worse than a vague one: it invites someone to
+# conclude the block no longer applies. The same correction Mission 1.2 made to
+# the SCORING reason, for the same reason, and it is now derived by
+# `normalization_block` from what actually exists.
 STATIC_BLOCKED_CAPABILITIES: dict[Capability, BlockedCapability] = {
-    Capability.NORMALIZATION: BlockedCapability(
-        capability=Capability.NORMALIZATION,
-        decision_id="NO-COLLECTOR",
-        reason=(
-            "no collector is implemented, so acquisition produces no raw record to "
-            "normalize; this stays true independently of how many sources pass review"
-        ),
-        governing_document="docs/data/source-registry-v1.md §Collector eligibility",
-    ),
     Capability.NLP_EXTRACTION: BlockedCapability(
         capability=Capability.NLP_EXTRACTION,
         decision_id="D-12",
@@ -264,6 +274,78 @@ def acquisition_block(
     )
 
 
+# The normalization gate, separated in Mission 1.6. Not a decision id: nobody
+# unblocks it by deciding, only by writing a normalizer. Kept distinct from
+# NO_COLLECTOR_IMPLEMENTED because the two are cleared by different work --
+# collecting from a source and understanding what was collected are separate
+# problems, and a source can have one without the other.
+NO_NORMALIZER_IMPLEMENTED = "NO-NORMALIZER-IMPLEMENTED"
+NORMALIZATION_DOCUMENT = "docs/data/normalized-record-v1.md §4"
+
+
+def normalization_block(
+    report: SourceAvailabilityReport,
+    implemented_collectors: frozenset[str] = frozenset(),
+    implemented_normalizers: frozenset[str] = frozenset(),
+) -> BlockedCapability | None:
+    """Derive the NORMALIZATION block from the registry AND from what exists.
+
+    Returns `None` only when some source is eligible, has a collector, **and**
+    has a normalizer. Every other outcome blocks, and each blocks with the
+    reason that is actually true rather than the one that used to be.
+
+    Three conditions rather than two, because §36 is explicit that normalization
+    must not become generically available: a future Eurostat collector with no
+    normalizer would produce raw records nothing could read, and a planner that
+    dispatched `normalize.raw_records` for it would emit a job guaranteed to
+    refuse every record it was handed.
+
+    `implemented_normalizers` defaults to empty, so a caller that does not pass
+    it gets a refusal. The same fail-closed default as `implemented_collectors`
+    and `UnconsultedRegistry`, and for the same reason: a missing wire must
+    never read as a permission.
+    """
+    acquisition = acquisition_block(report, implemented_collectors)
+    if acquisition is not None:
+        # Nothing to normalize, and saying so in acquisition's words rather than
+        # inventing a second explanation for one cause. A reader who fixes the
+        # acquisition gate should not then discover a differently-worded version
+        # of the problem they just solved.
+        return BlockedCapability(
+            capability=Capability.NORMALIZATION,
+            decision_id=acquisition.decision_id,
+            reason=(
+                f"acquisition is blocked, so no raw record is produced to normalize: "
+                f"{acquisition.reason}"
+            ),
+            governing_document=acquisition.governing_document,
+            # The per-source detail is deliberately NOT copied. It is already on
+            # the acquisition block, it is the same list for the same cause, and
+            # `blocked_source_reasons()` walks every block -- so copying it here
+            # printed each refused source twice, which a test caught. A derived
+            # block quotes the reason it borrowed; it does not duplicate the
+            # evidence behind it.
+        )
+
+    collectable = {s.source_id for s in report.eligible} & implemented_collectors
+    runnable = sorted(collectable & implemented_normalizers)
+    if runnable:
+        return None
+
+    return BlockedCapability(
+        capability=Capability.NORMALIZATION,
+        decision_id=NO_NORMALIZER_IMPLEMENTED,
+        reason=(
+            f"{len(collectable)} source(s) can be collected from "
+            f"({', '.join(sorted(collectable))}) and no normalizer is implemented for "
+            "any of them. A collector says what was fetched; a normalizer says what it "
+            "structurally represents, and one never implies the other"
+        ),
+        governing_document=NORMALIZATION_DOCUMENT,
+        source_states=report.blocked,
+    )
+
+
 @dataclass(frozen=True)
 class PlannedStage:
     """One capability's place in the plan."""
@@ -275,7 +357,12 @@ class PlannedStage:
 
     @property
     def blocked(self) -> BlockedCapability | None:
-        """The static block, if any. ACQUISITION's is resolved by the planner."""
+        """The static block, if any.
+
+        ACQUISITION and NORMALIZATION are resolved by the planner instead, from
+        the registry and from what is implemented. Both change between plans,
+        which is exactly what a static register cannot express.
+        """
         return STATIC_BLOCKED_CAPABILITIES.get(self.capability)
 
 
@@ -387,10 +474,11 @@ class ResearchPlanner:
     everything, so a planner constructed the pre-Mission-1.0 way keeps producing
     a blocked acquisition stage instead of silently permitting collection.
 
-    `implemented_collectors` is the second acquisition gate (Mission 1.5). It is
+    `implemented_collectors` is the second acquisition gate (Mission 1.5) and
+    `implemented_normalizers` the normalization one (Mission 1.6). Both are
     supplied by the composition root rather than imported, because a service may
-    not import another service's package (`service-boundaries.md`) -- and it
-    defaults to empty for the same reason `sources` defaults to a refusal: a
+    not import another service's package (`service-boundaries.md`) -- and both
+    default to empty for the same reason `sources` defaults to a refusal: a
     missing wire must read as "we cannot", never as "we may".
     """
 
@@ -399,10 +487,12 @@ class ResearchPlanner:
         stages: tuple[PlannedStage, ...] = DEFAULT_STAGES,
         sources: SourceAvailabilityProvider | None = None,
         implemented_collectors: frozenset[str] = frozenset(),
+        implemented_normalizers: frozenset[str] = frozenset(),
     ) -> None:
         self._stages = stages
         self._sources: SourceAvailabilityProvider = sources or UnconsultedRegistry()
         self._implemented_collectors = implemented_collectors
+        self._implemented_normalizers = implemented_normalizers
 
     def plan(
         self,
@@ -446,13 +536,24 @@ class ResearchPlanner:
         # inside one planning pass could disagree, and a plan that contradicts
         # itself is worse than one that is out of date.
         availability = self._sources.source_availability()
-        acquisition = acquisition_block(availability, self._implemented_collectors)
+        # Both derived gates are computed from ONE availability read. Two reads
+        # inside a planning pass could disagree, and a plan whose acquisition
+        # stage contradicted its normalization stage would be worse than one
+        # that is merely out of date.
+        derived: dict[Capability, BlockedCapability | None] = {
+            Capability.ACQUISITION: acquisition_block(availability, self._implemented_collectors),
+            Capability.NORMALIZATION: normalization_block(
+                availability,
+                self._implemented_collectors,
+                self._implemented_normalizers,
+            ),
+        }
 
         jobs: list[JobSpec] = []
         blocked: list[BlockedCapability] = []
 
         for stage in self._stages:
-            block = acquisition if stage.capability is Capability.ACQUISITION else stage.blocked
+            block = derived.get(stage.capability, stage.blocked)
             spec = JobSpec(
                 job_id=job_ids[stage.capability],
                 job_type=stage.job_type,

@@ -193,6 +193,28 @@ Acquisition performs **exact** deduplication only (content hash), and never
 destroys provenance when it does (`data-principles.md` §6). Near-duplicate,
 syndication and derivative detection require semantics and belong to `nlp`.
 
+## Normalization boundary (Mission 1.6)
+
+`normalization/` maps a RawRecord to a canonical observation. It is inside this
+context because it reads what the collector wrote and nothing else, and the two
+share the retention and attribution governance that follows the data.
+
+What it is **not** allowed to do, enforced by
+`infrastructure/scripts/validate_normalization.py` rather than by review:
+
+| Forbidden | Why |
+|---|---|
+| import a network client | Everything it needs is already persisted |
+| import `collection/transport.py` | Reaching the network through the door left open for a collector is still reaching the network |
+| import an LLM gateway or provider SDK | Normalization is deterministic and reproducible; a model deciding a geography would make it neither |
+| import an embedding, clustering or vector library | D-12 is open |
+| name `nlp.signals`, `research.claims` or `scoring.evidence` in a query | Signal, claim and evidence creation are later stages |
+| carry a confidence, reliability or score field | Quality here is structural; an epistemic number would be read as one |
+
+The boundary in one line: **collection gets source-native data, normalization
+maps it to canonical structure, and interpretation happens nowhere in this
+service.**
+
 ## Failure modes to design for
 
 | Failure | Required behavior |

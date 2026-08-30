@@ -222,6 +222,15 @@ def main() -> int:
             "registry.source_condition_verifications",
             "result",
         ),
+        # Mission 1.6. The quality state is what a downstream stage filters on
+        # before reading a normalized record as an observation, so a value
+        # drifting from the contract here would let a record that could not be
+        # represented read as one that could.
+        (
+            "NormalizedRecordQuality",
+            "acquisition.normalized_records",
+            "quality",
+        ),
     ]
     for enum_name, table, column in enum_sites:
         expected = set(enums[enum_name])

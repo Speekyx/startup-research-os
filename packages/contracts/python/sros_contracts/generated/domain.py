@@ -400,6 +400,93 @@ class EvidenceAggregationStatus(str, Enum):
     UNAVAILABLE = "UNAVAILABLE"  # No record was scorable. There is no Evidence Score, and an absent score is not a score of zero
 
 
+class NormalizedRecordQuality(str, Enum):
+    """The STRUCTURAL completeness of a normalized record, and nothing else. Not a confidence and not a reliability: those are epistemic judgments on [0,1] that belong to the evidence model, and a value of that kind here would invite a downstream stage to multiply a parsing outcome by an evidence weight. Closed because every consumer must decide what to do with each state, and an unhandled fourth value would be a bug rather than a gap.
+
+    See normalized-record-v1.md §8; Mission 1.6 §25.
+    """
+
+    VALID = "VALID"  # Every field the record kind declares required is present and well formed
+    PARTIAL = "PARTIAL"  # Required fields are present, and something the source supplied could not be fully represented or something a consumer would expect is absent. The record remains usable; the reasons say what is missing
+    INVALID = "INVALID"  # A required canonical field is missing or cannot be safely represented. The record is still stored, because a raw record that cannot be normalized is a fact someone has to be able to find -- but it must not be read as an observation
+
+
+class NormalizationQualityReason(str, Enum):
+    """Why a normalized record is not VALID. A closed vocabulary rather than free text, for the same reason AcquisitionErrorCode is one: a consumer branches on the MEANING -- a record with no reported value is skipped, a record whose geography is unclassified is still usable -- and a message it had to pattern-match would make that branch break on a reworded string.
+
+    See normalized-record-v1.md §8; Mission 1.6 §26.
+    """
+
+    VALUE_NOT_REPORTED = "VALUE_NOT_REPORTED"  # The source published no figure for this metric, geography and period. A real statement by the source, not a failure, and NEVER represented as zero: zero is a measurement and absence is not
+    MALFORMED_NUMERIC_VALUE = "MALFORMED_NUMERIC_VALUE"  # The source published something in the value position that could not be read as an exact decimal. Distinct from VALUE_NOT_REPORTED on purpose: one is the source saying nothing, the other is this system failing to read what it said
+    GEOGRAPHY_NOT_CLASSIFIED = "GEOGRAPHY_NOT_CLASSIFIED"  # The source geography code has no entry in the reviewed geography map, so it is neither established as a country nor as an aggregate. The source code is preserved verbatim and no canonical code is assigned -- an unclassified code is never promoted to a country
+    GEOGRAPHY_MISSING = "GEOGRAPHY_MISSING"  # The raw record carries no geography at all, so the observation cannot be placed. Renders the record INVALID
+    METRIC_MISSING = "METRIC_MISSING"  # The raw record names no metric, so there is nothing the value is a measurement OF. Renders the record INVALID
+    PERIOD_NOT_SUPPORTED = "PERIOD_NOT_SUPPORTED"  # The period is in a form this adapter does not represent. Renders the record INVALID rather than approximated: inventing an exact date the source did not give is how January 1 becomes an event time
+
+
+class NormalizationErrorCode(str, Enum):
+    """Why a normalization attempt produced no record at all. Distinct from NormalizationQualityReason, which explains a record that EXISTS and is degraded. Closed so orchestration branches on a meaning rather than on a Python exception class, the same argument AcquisitionErrorCode makes.
+
+    See normalized-record-v1.md §13; Mission 1.6 §28.
+    """
+
+    UNSUPPORTED_SOURCE = "UNSUPPORTED_SOURCE"  # No normalizer is registered for this source. Fails closed: an unknown source is never handed to whichever normalizer happens to exist
+    UNSUPPORTED_COLLECTOR_VERSION = "UNSUPPORTED_COLLECTOR_VERSION"  # A normalizer exists for the source and does not declare support for the collector version that wrote the record. Refused rather than attempted, because a parse that half-works on an unknown shape is worse than one that stops
+    INVALID_RAW_RECORD = "INVALID_RAW_RECORD"  # The raw record is missing something a record of its kind must have -- no payload, no provenance, no attribution obligation. Never repaired: the raw layer records what the source returned, and correcting it would destroy the evidence that it was wrong
+    UNSUPPORTED_RECORD_TYPE = "UNSUPPORTED_RECORD_TYPE"  # The raw record's shape maps to no registered canonical record kind
+    NON_DETERMINISTIC_OUTPUT = "NON_DETERMINISTIC_OUTPUT"  # A stored normalized record already exists for this exact identity -- same raw record, same schema version, same normalizer id and version -- and re-running produced DIFFERENT canonical content. Either the normalizer is not deterministic, or a reviewed input it reads changed without the version being bumped. Reported rather than written: overwriting would destroy the stored representation, and bumping the normalizer version is the mechanism by which output is allowed to change
+    PERSISTENCE_FAILURE = "PERSISTENCE_FAILURE"  # A normalized record was produced and could not be stored. Nothing was committed
+    CANCELLED = "CANCELLED"  # The job was cancelled or reached its batch bound before completing
+
+
+class NormalizedPeriodType(str, Enum):
+    """The temporal shape of a canonical observation. Closed because downstream time handling must branch exhaustively -- a YEAR is not an INSTANT, and code that treated the start of a yearly period as an exact event time would produce trend artifacts indistinguishable from real market movements (data-principles.md §9). An adapter supports only the forms its real records use and reports the rest rather than approximating them.
+
+    See normalized-record-v1.md §7.1; Mission 1.6 §16.
+    """
+
+    YEAR = "YEAR"  # A calendar year. The start bound is January 1 and is NOT an event time
+    QUARTER = "QUARTER"  # A calendar quarter
+    MONTH = "MONTH"  # A calendar month
+    DAY = "DAY"  # A calendar day
+    INSTANT = "INSTANT"  # A point in time the source stated to timestamp resolution. The only value for which a single moment is the observation
+    INTERVAL = "INTERVAL"  # An arbitrary interval the source stated explicitly, where no calendar unit describes it
+
+
+class NormalizedGeographyKind(str, Enum):
+    """What kind of entity a source geography code names. Closed because the branch is exhaustive and consequential: a COUNTRY can join to a MarketScope country list and an AGGREGATE must never be counted as one. UNKNOWN exists because it is the safe failure -- an unclassified code keeps its source form and is never promoted to a country.
+
+    See normalized-record-v1.md §7.2; Mission 1.6 §15.
+    """
+
+    COUNTRY = "COUNTRY"  # A single country, established by an entry in the reviewed geography map. Only this kind carries a canonical ISO 3166-1 alpha-2 code
+    AGGREGATE = "AGGREGATE"  # A group of countries or an income or regional grouping -- 'World', 'High income'. Preserved as an aggregate, never mapped to a country
+    UNKNOWN = "UNKNOWN"  # Not established. The source code is preserved verbatim, no canonical code is assigned, and the record is PARTIAL. Guessing from the label would be inference, and inference is what the map exists to replace
+
+
+class NormalizedValueState(str, Enum):
+    """Whether a canonical numeric observation carries a measurement. Closed and mandatory because the alternative is representing 'the source published no figure' as the number zero -- and zero is a real measurement, so the two would become permanently indistinguishable with no way for any downstream stage to recover the difference.
+
+    See normalized-record-v1.md §6.2; Mission 1.6 §14.
+    """
+
+    REPORTED = "REPORTED"  # The source published a figure, and the value holds it exactly
+    NOT_REPORTED = "NOT_REPORTED"  # The source published no figure for this metric, geography and period. The value is null. The ordinary case for a sparse series, not a failure
+    UNREADABLE = "UNREADABLE"  # The source published something that could not be read as an exact decimal. The value is null and the quality reasons record it
+
+
+class NormalizedUnitState(str, Enum):
+    """Whether a canonical numeric observation carries a unit, and why not when it does not. Closed so that 'the source does not publish units on this endpoint' stays distinguishable from 'we have not established the unit' -- the first is a settled fact about the access path and the second is work someone could do. Neither is ever resolved by reading the metric name.
+
+    See normalized-record-v1.md §6.3; Mission 1.6 §17.
+    """
+
+    PUBLISHED = "PUBLISHED"  # The source published a unit, and it is recorded verbatim
+    NOT_PUBLISHED = "NOT_PUBLISHED"  # The authorized access path does not carry a unit for this observation. Inferring one from the metric identifier would be a guess dressed as a fact, and the first metric whose naming convention differed would make it silently wrong
+    UNKNOWN = "UNKNOWN"  # Not established. Reserved for an adapter whose source MAY publish a unit and did not for this observation
+
+
 # --- Numeric bounds --------------------------------------------------------
 # A field named `confidence` is always [0,1]. A field named `*_score` is
 # always 0-100. scoring-framework-v1.1.md §4.1.
@@ -431,6 +518,7 @@ REGISTRY_NAMES: Final[tuple[str, ...]] = (
     "risk",
     "region",
     "source_family",
+    "normalization_record_kind",
 )
 
 

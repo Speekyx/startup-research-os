@@ -42,7 +42,10 @@ for package in (
     if str(package) not in sys.path:
         sys.path.insert(0, str(package))
 
-from sros_acquisition import IMPLEMENTED_COLLECTORS  # noqa: E402
+from sros_acquisition import (  # noqa: E402
+    IMPLEMENTED_COLLECTORS,
+    IMPLEMENTED_NORMALIZERS,
+)
 
 
 def main() -> int:
@@ -75,6 +78,22 @@ def main() -> int:
         normalized = conn.execute("SELECT count(*) FROM acquisition.normalized_records").fetchone()[
             0
         ]
+        normalized_sources = {
+            row[0]
+            for row in conn.execute(
+                "SELECT DISTINCT source_id FROM acquisition.normalized_records"
+            ).fetchall()
+        }
+        # A normalized record whose raw record is gone, or belongs to another
+        # workspace. The composite foreign key added in migration 0009 makes the
+        # second impossible, so a row here means the constraint is gone.
+        orphaned = conn.execute(
+            """SELECT count(*) FROM acquisition.normalized_records n
+                WHERE NOT EXISTS (
+                    SELECT 1 FROM acquisition.raw_records r
+                     WHERE r.id = n.raw_record_id
+                       AND r.workspace_id = n.workspace_id)"""
+        ).fetchone()[0]
 
         # A satisfied condition with nothing behind it. Migration 0007 installs
         # a trigger that refuses exactly this, so a row here means the trigger
@@ -133,10 +152,34 @@ def main() -> int:
             f"raw records exist for source(s) this codebase cannot collect from: "
             f"{sorted(collected - IMPLEMENTED_COLLECTORS)}"
         )
-    if normalized:
+    # NARROWED in Mission 1.6, not deleted -- the same move Mission 1.2 made
+    # with the D-03 guard and Mission 1.5 made with the network-client ban.
+    #
+    # This read `if normalized: fail`, which was a true property of every
+    # mission until one normalized something and then stopped being a property
+    # at all. Deleting it would have removed the check entirely; what survives
+    # is the rule that was always underneath it:
+    #
+    #     a normalized record exists only for a source a normalizer serves,
+    #     and only for a raw record of its own workspace.
+    if normalized_sources - IMPLEMENTED_NORMALIZERS:
         failures.append(
-            f"{normalized} normalized record(s) exist; normalization is Mission 1.6's and "
-            "nothing should produce one yet"
+            f"normalized record(s) exist for source(s) this codebase cannot normalize: "
+            f"{sorted(normalized_sources - IMPLEMENTED_NORMALIZERS)}. A normalizer says "
+            "what a collector's output structurally represents; without one there is "
+            "nothing that could have produced these"
+        )
+    if normalized_sources - collected:
+        failures.append(
+            f"normalized record(s) exist for source(s) with no raw record: "
+            f"{sorted(normalized_sources - collected)}. Every canonical observation "
+            "derives from one that was collected"
+        )
+    if orphaned:
+        failures.append(
+            f"{orphaned} normalized record(s) reference a raw record that is absent or "
+            "belongs to another workspace. Migration 0009's composite foreign key makes "
+            "the second impossible, so its absence means the constraint is gone"
         )
 
     if failures:
@@ -152,7 +195,12 @@ def main() -> int:
     print(
         f"collection: {sorted(IMPLEMENTED_COLLECTORS) or 'no'} collector(s) implemented, "
         f"{sorted(enabled) or 'none'} enabled, {records} raw record(s) from "
-        f"{sorted(collected) or 'no source'}, {normalized} normalized"
+        f"{sorted(collected) or 'no source'}"
+    )
+    print(
+        f"normalization: {sorted(IMPLEMENTED_NORMALIZERS) or 'no'} normalizer(s) "
+        f"implemented, {normalized} normalized record(s) from "
+        f"{sorted(normalized_sources) or 'no source'}, 0 orphaned"
     )
     return 0
 

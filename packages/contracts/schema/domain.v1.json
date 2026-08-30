@@ -776,6 +776,179 @@
           "description": "No record was scorable. There is no Evidence Score, and an absent score is not a score of zero"
         }
       ]
+    },
+    {
+      "name": "NormalizedRecordQuality",
+      "spec": "normalized-record-v1.md §8; Mission 1.6 §25",
+      "description": "The STRUCTURAL completeness of a normalized record, and nothing else. Not a confidence and not a reliability: those are epistemic judgments on [0,1] that belong to the evidence model, and a value of that kind here would invite a downstream stage to multiply a parsing outcome by an evidence weight. Closed because every consumer must decide what to do with each state, and an unhandled fourth value would be a bug rather than a gap.",
+      "values": [
+        {
+          "value": "VALID",
+          "description": "Every field the record kind declares required is present and well formed"
+        },
+        {
+          "value": "PARTIAL",
+          "description": "Required fields are present, and something the source supplied could not be fully represented or something a consumer would expect is absent. The record remains usable; the reasons say what is missing"
+        },
+        {
+          "value": "INVALID",
+          "description": "A required canonical field is missing or cannot be safely represented. The record is still stored, because a raw record that cannot be normalized is a fact someone has to be able to find -- but it must not be read as an observation"
+        }
+      ]
+    },
+    {
+      "name": "NormalizationQualityReason",
+      "spec": "normalized-record-v1.md §8; Mission 1.6 §26",
+      "description": "Why a normalized record is not VALID. A closed vocabulary rather than free text, for the same reason AcquisitionErrorCode is one: a consumer branches on the MEANING -- a record with no reported value is skipped, a record whose geography is unclassified is still usable -- and a message it had to pattern-match would make that branch break on a reworded string.",
+      "values": [
+        {
+          "value": "VALUE_NOT_REPORTED",
+          "description": "The source published no figure for this metric, geography and period. A real statement by the source, not a failure, and NEVER represented as zero: zero is a measurement and absence is not"
+        },
+        {
+          "value": "MALFORMED_NUMERIC_VALUE",
+          "description": "The source published something in the value position that could not be read as an exact decimal. Distinct from VALUE_NOT_REPORTED on purpose: one is the source saying nothing, the other is this system failing to read what it said"
+        },
+        {
+          "value": "GEOGRAPHY_NOT_CLASSIFIED",
+          "description": "The source geography code has no entry in the reviewed geography map, so it is neither established as a country nor as an aggregate. The source code is preserved verbatim and no canonical code is assigned -- an unclassified code is never promoted to a country"
+        },
+        {
+          "value": "GEOGRAPHY_MISSING",
+          "description": "The raw record carries no geography at all, so the observation cannot be placed. Renders the record INVALID"
+        },
+        {
+          "value": "METRIC_MISSING",
+          "description": "The raw record names no metric, so there is nothing the value is a measurement OF. Renders the record INVALID"
+        },
+        {
+          "value": "PERIOD_NOT_SUPPORTED",
+          "description": "The period is in a form this adapter does not represent. Renders the record INVALID rather than approximated: inventing an exact date the source did not give is how January 1 becomes an event time"
+        }
+      ]
+    },
+    {
+      "name": "NormalizationErrorCode",
+      "spec": "normalized-record-v1.md §13; Mission 1.6 §28",
+      "description": "Why a normalization attempt produced no record at all. Distinct from NormalizationQualityReason, which explains a record that EXISTS and is degraded. Closed so orchestration branches on a meaning rather than on a Python exception class, the same argument AcquisitionErrorCode makes.",
+      "values": [
+        {
+          "value": "UNSUPPORTED_SOURCE",
+          "description": "No normalizer is registered for this source. Fails closed: an unknown source is never handed to whichever normalizer happens to exist"
+        },
+        {
+          "value": "UNSUPPORTED_COLLECTOR_VERSION",
+          "description": "A normalizer exists for the source and does not declare support for the collector version that wrote the record. Refused rather than attempted, because a parse that half-works on an unknown shape is worse than one that stops"
+        },
+        {
+          "value": "INVALID_RAW_RECORD",
+          "description": "The raw record is missing something a record of its kind must have -- no payload, no provenance, no attribution obligation. Never repaired: the raw layer records what the source returned, and correcting it would destroy the evidence that it was wrong"
+        },
+        {
+          "value": "UNSUPPORTED_RECORD_TYPE",
+          "description": "The raw record's shape maps to no registered canonical record kind"
+        },
+        {
+          "value": "NON_DETERMINISTIC_OUTPUT",
+          "description": "A stored normalized record already exists for this exact identity -- same raw record, same schema version, same normalizer id and version -- and re-running produced DIFFERENT canonical content. Either the normalizer is not deterministic, or a reviewed input it reads changed without the version being bumped. Reported rather than written: overwriting would destroy the stored representation, and bumping the normalizer version is the mechanism by which output is allowed to change"
+        },
+        {
+          "value": "PERSISTENCE_FAILURE",
+          "description": "A normalized record was produced and could not be stored. Nothing was committed"
+        },
+        {
+          "value": "CANCELLED",
+          "description": "The job was cancelled or reached its batch bound before completing"
+        }
+      ]
+    },
+    {
+      "name": "NormalizedPeriodType",
+      "spec": "normalized-record-v1.md §7.1; Mission 1.6 §16",
+      "description": "The temporal shape of a canonical observation. Closed because downstream time handling must branch exhaustively -- a YEAR is not an INSTANT, and code that treated the start of a yearly period as an exact event time would produce trend artifacts indistinguishable from real market movements (data-principles.md §9). An adapter supports only the forms its real records use and reports the rest rather than approximating them.",
+      "values": [
+        {
+          "value": "YEAR",
+          "description": "A calendar year. The start bound is January 1 and is NOT an event time"
+        },
+        {
+          "value": "QUARTER",
+          "description": "A calendar quarter"
+        },
+        {
+          "value": "MONTH",
+          "description": "A calendar month"
+        },
+        {
+          "value": "DAY",
+          "description": "A calendar day"
+        },
+        {
+          "value": "INSTANT",
+          "description": "A point in time the source stated to timestamp resolution. The only value for which a single moment is the observation"
+        },
+        {
+          "value": "INTERVAL",
+          "description": "An arbitrary interval the source stated explicitly, where no calendar unit describes it"
+        }
+      ]
+    },
+    {
+      "name": "NormalizedGeographyKind",
+      "spec": "normalized-record-v1.md §7.2; Mission 1.6 §15",
+      "description": "What kind of entity a source geography code names. Closed because the branch is exhaustive and consequential: a COUNTRY can join to a MarketScope country list and an AGGREGATE must never be counted as one. UNKNOWN exists because it is the safe failure -- an unclassified code keeps its source form and is never promoted to a country.",
+      "values": [
+        {
+          "value": "COUNTRY",
+          "description": "A single country, established by an entry in the reviewed geography map. Only this kind carries a canonical ISO 3166-1 alpha-2 code"
+        },
+        {
+          "value": "AGGREGATE",
+          "description": "A group of countries or an income or regional grouping -- 'World', 'High income'. Preserved as an aggregate, never mapped to a country"
+        },
+        {
+          "value": "UNKNOWN",
+          "description": "Not established. The source code is preserved verbatim, no canonical code is assigned, and the record is PARTIAL. Guessing from the label would be inference, and inference is what the map exists to replace"
+        }
+      ]
+    },
+    {
+      "name": "NormalizedValueState",
+      "spec": "normalized-record-v1.md §6.2; Mission 1.6 §14",
+      "description": "Whether a canonical numeric observation carries a measurement. Closed and mandatory because the alternative is representing 'the source published no figure' as the number zero -- and zero is a real measurement, so the two would become permanently indistinguishable with no way for any downstream stage to recover the difference.",
+      "values": [
+        {
+          "value": "REPORTED",
+          "description": "The source published a figure, and the value holds it exactly"
+        },
+        {
+          "value": "NOT_REPORTED",
+          "description": "The source published no figure for this metric, geography and period. The value is null. The ordinary case for a sparse series, not a failure"
+        },
+        {
+          "value": "UNREADABLE",
+          "description": "The source published something that could not be read as an exact decimal. The value is null and the quality reasons record it"
+        }
+      ]
+    },
+    {
+      "name": "NormalizedUnitState",
+      "spec": "normalized-record-v1.md §6.3; Mission 1.6 §17",
+      "description": "Whether a canonical numeric observation carries a unit, and why not when it does not. Closed so that 'the source does not publish units on this endpoint' stays distinguishable from 'we have not established the unit' -- the first is a settled fact about the access path and the second is work someone could do. Neither is ever resolved by reading the metric name.",
+      "values": [
+        {
+          "value": "PUBLISHED",
+          "description": "The source published a unit, and it is recorded verbatim"
+        },
+        {
+          "value": "NOT_PUBLISHED",
+          "description": "The authorized access path does not carry a unit for this observation. Inferring one from the metric identifier would be a guess dressed as a fact, and the first metric whose naming convention differed would make it silently wrong"
+        },
+        {
+          "value": "UNKNOWN",
+          "description": "Not established. Reserved for an adapter whose source MAY publish a unit and did not for this observation"
+        }
+      ]
     }
   ],
   "numeric_types": [
@@ -879,6 +1052,10 @@
     {
       "name": "source_family",
       "spec": "source-registry-v1.md §4"
+    },
+    {
+      "name": "normalization_record_kind",
+      "spec": "normalized-record-v1.md §4"
     }
   ],
   "market_scope": {

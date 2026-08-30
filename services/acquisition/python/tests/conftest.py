@@ -143,6 +143,10 @@ def _drop_workspace(workspace_id: str) -> None:
     assert workspace_id == WORKSPACE_P, "seeded workspaces must not be dropped"
     with psycopg.connect(DATABASE_URL) as connection:
         connection.execute(
+            "DELETE FROM acquisition.normalized_records WHERE workspace_id = %s",
+            (workspace_id,),
+        )
+        connection.execute(
             "DELETE FROM acquisition.raw_records WHERE workspace_id = %s", (workspace_id,)
         )
         connection.execute("DELETE FROM core.workspaces WHERE id = %s", (workspace_id,))
@@ -201,6 +205,43 @@ def tenant_conn():
 
 
 @pytest.fixture
+def committing_tenant_conn(probe_workspace: str):
+    """A tenant connection factory that COMMITS, cleaned up with the workspace.
+
+    `tenant_conn` rolls back, which is right for a persistence assertion and
+    wrong for an idempotency one: "the second delivery finds the work already
+    done" cannot be observed if the first delivery was undone. So this commits,
+    and the probe workspace's teardown removes everything it wrote.
+
+    Both isolation layers are still entered. A committing factory that skipped
+    `SET LOCAL ROLE` would run as the migration role, which BYPASSES row-level
+    security -- and every tenancy assertion made through it would be vacuous.
+    """
+    import contextlib
+    import os
+
+    import psycopg
+
+    role = os.environ.get("APP_DB_ROLE", "sros_app")
+
+    @contextlib.contextmanager
+    def factory(workspace_id: str):
+        connection = psycopg.connect(DATABASE_URL)
+        try:
+            with connection.transaction():
+                connection.execute(f"SET LOCAL ROLE {role}")
+                connection.execute(
+                    "SELECT set_config('app.workspace_id', %s, true)", (workspace_id,)
+                )
+                yield connection
+            connection.commit()
+        finally:
+            connection.close()
+
+    return factory
+
+
+@pytest.fixture
 def second_workspace() -> Iterator[str]:
     """The other side of an isolation assertion.
 
@@ -214,6 +255,10 @@ def second_workspace() -> Iterator[str]:
     import psycopg
 
     with psycopg.connect(DATABASE_URL) as connection:
+        connection.execute(
+            "DELETE FROM acquisition.normalized_records WHERE workspace_id = %s",
+            (WORKSPACE_B,),
+        )
         connection.execute(
             "DELETE FROM acquisition.raw_records WHERE workspace_id = %s", (WORKSPACE_B,)
         )
@@ -343,3 +388,86 @@ def conn() -> Iterator[object]:
     finally:
         connection.rollback()
         connection.close()
+
+
+@pytest.fixture
+def seeded_raw(probe_workspace: str, dev_session: str, catalog):
+    """Real raw records in the probe workspace, written the way production writes them.
+
+    Produced by the REAL collector against a fake transport, then persisted
+    through the REAL repository. A fixture that inserted hand-written rows would
+    be testing the normalizer against a shape nothing produces -- and the first
+    thing to change in the collector would leave it green and wrong.
+
+    Six observations, matching the Mission 1.5 acquisition: one indicator, two
+    countries, three years. Removed with the workspace.
+    """
+    import json
+
+    import psycopg
+    from sros_acquisition.collection import (
+        RequestPacer,
+        WorldBankCollector,
+        WorldBankRequest,
+        persist_drafts,
+    )
+    from sros_acquisition.collection.pacing import WORLD_BANK_PACING
+    from sros_acquisition.collection.transport import HttpRequest, HttpResponse
+    from sros_acquisition.compliance import build_authorization, load_compliance
+    from sros_acquisition.normalization import read_raw_records
+
+    indicator = "SP.POP.TOTL"
+    rows = [
+        {
+            "indicator": {"id": indicator, "value": "Population, total"},
+            "country": {"id": iso2, "value": name},
+            "countryiso3code": iso3,
+            "date": str(year),
+            "value": value,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 0,
+        }
+        for iso2, iso3, name, values in (
+            ("FR", "FRA", "France", {2018: 66977107, 2019: 67157400, 2020: 67571107}),
+            ("DE", "DEU", "Germany", {2018: 82905782, 2019: 83092962, 2020: 83160871}),
+        )
+        for year, value in values.items()
+    ]
+    body = json.dumps(
+        [{"page": 1, "pages": 1, "per_page": 50, "total": 6, "lastupdated": "2025-07-01"}, rows]
+    )
+
+    class _Fixed:
+        def get(self, base_url, request: HttpRequest, allowed_hosts) -> HttpResponse:
+            return HttpResponse(200, body, 0.01, request.path)
+
+    compliance = load_compliance(REPO_ROOT / "docs/data/source-compliance-v1.json")
+    context = build_authorization(catalog.get("world-bank"), compliance, environ={})
+    collector = WorldBankCollector(
+        _Fixed(),  # type: ignore[arg-type]
+        pacer=RequestPacer(WORLD_BANK_PACING, sleep=lambda _: None),
+    )
+    result = collector.collect(
+        context,
+        WorldBankRequest(indicators=(indicator,), countries=("FR", "DE")),
+        workspace_id=probe_workspace,
+        correlation_id="seeded-raw",
+        research_session_id=dev_session,
+    )
+    assert result.succeeded, result.failures
+    assert len(result.drafts) == 6
+
+    with psycopg.connect(DATABASE_URL) as connection:
+        with connection.transaction():
+            connection.execute("SET LOCAL ROLE sros_app")
+            connection.execute(
+                "SELECT set_config('app.workspace_id', %s, true)", (probe_workspace,)
+            )
+            persist_drafts(connection, result.drafts)
+        connection.commit()
+
+    with psycopg.connect(DATABASE_URL) as connection, connection.transaction():
+        connection.execute("SET LOCAL ROLE sros_app")
+        connection.execute("SELECT set_config('app.workspace_id', %s, true)", (probe_workspace,))
+        yield read_raw_records(connection, probe_workspace)

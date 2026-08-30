@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.8
+Version: 1.9
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-08-30 (Sprint 1 / Mission 1.5)
+Last amended: 2026-08-30 (Sprint 1 / Mission 1.6)
 
 ---
 
@@ -13,6 +13,18 @@ Last amended: 2026-08-30 (Sprint 1 / Mission 1.5)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.9 — 2026-08-30 (Sprint 1 / Mission 1.6)
+
+Authorized by the Mission 1.6 brief §61 (documentation) and §57 (schema changes
+only where the existing semantics are genuinely incompatible).
+
+| Change | Section | Authority |
+|--------|---------|-----------|
+| `docs/data/normalized-record-v1.md` added to the authoritative chain | Authoritative Documents | Mission 1.6 §5, §61. It defines the canonical observation every later stage reads, so every signal, claim and score eventually rests on it |
+| `docs/data/world-bank-normalizer-v1.md` added to the authoritative chain | Authoritative Documents | Mission 1.6 §61. The reference adapter, and the record of what may and may not be inferred while producing a canonical observation |
+| **The Raw to Normalized boundary exists, and one source crosses it** | Product Shape | Mission 1.6 §37, §38. `acquisition.normalized_records` holds six canonical numeric observations derived from the six real World Bank raw records. Every one carries complete lineage, its attribution obligation, a governance-resolved expiry and a structural quality state |
+| **Normalizable is a fourth fact, separate from eligible, enabled and implemented** | Forbidden During Foundation | Mission 1.6 §36. A collector says what was fetched; a normalizer says what it structurally represents, and one never implies the other. Eurostat is collector-eligible with neither |
 
 ## 1.8 — 2026-08-30 (Sprint 1 / Mission 1.5)
 
@@ -230,6 +242,8 @@ Additionally authoritative:
 - docs/domain/claim-model-v1.md (added in 1.6)
 - docs/data/acquisition-authorization-v1.md (added in 1.7)
 - docs/data/world-bank-collector-v1.md (added in 1.8)
+- docs/data/normalized-record-v1.md (added in 1.9)
+- docs/data/world-bank-normalizer-v1.md (added in 1.9)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.
@@ -360,7 +374,7 @@ Do NOT implement:
 
 Foundation only.
 
-## Status of this list (amended in 1.8)
+## Status of this list (amended in 1.9)
 
 Sprint 0 is complete, and two entries have been reached in Sprint 1. They are
 recorded here rather than struck out, because what unblocked them is specific
@@ -373,6 +387,12 @@ evidence (1.3), and the compliance capabilities and authorization boundary that
 make a collector unable to run without a governance decision behind it (1.4). A
 collector for a source that has not been through that chain is still forbidden,
 and the orchestrator refuses to plan one.
+
+**Normalization**, added in 1.9, is not on this list and never was: the
+forbidden entry is *NLP pipelines*, and normalization is the stage before one.
+It maps a source observation to a canonical structure and stops. It performs no
+tokenization, no embedding, no classification and no clustering, and CI asserts
+each of those mechanically rather than by review.
 
 **Everything else on the list is unchanged.** NLP pipelines are blocked by D-12,
 scoring algorithms by the absence of a `CALIBRATED` profile, and authentication

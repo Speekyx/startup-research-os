@@ -109,6 +109,23 @@ jobs:
             exit 1
           fi
 
+  normalization:
+    name: Normalization boundary guard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # Mission 1.6. Zero-dependency, like the source-registry job and for the
+      # same reason: these are the rules a reviewer is least likely to catch,
+      # because crossing them looks like ordinary work. No network client, not
+      # even the sanctioned transport; no LLM; no embedding library; no signal,
+      # claim or evidence table; and the canonical vocabulary in the code must
+      # match the contract source of truth.
+      - name: Normalization reaches no network, no model and no later stage
+        run: python infrastructure/scripts/validate_normalization.py
+
   evidence-aggregation:
     name: Evidence aggregation guard
     runs-on: ubuntu-latest
@@ -290,6 +307,11 @@ jobs:
       # collection WOULD be permitted, which is a governance question.
       - name: The collector authorization path holds
         run: uv run sros-acquisition world-bank validate --indicator SP.POP.TOTL
+      # Mission 1.6 §58. Which sources can be normalized, and by what. Reaches
+      # no network AND no database: normalizer selection is a property of the
+      # code and the reviewed configuration, not of the deployment.
+      - name: The normalizer selection path holds
+        run: uv run sros-normalize validate
 
       # Mission 1.4 §17 adds FRED_API_KEY to this list. CI must not have one:
       # a source that became runnable because a build secret was added would be

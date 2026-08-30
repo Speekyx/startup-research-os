@@ -28,6 +28,14 @@ export default [
       // Linting a generated file means fixing it again after every build.
       "apps/web/next-env.d.ts",
       "apps/web/.next/**",
+      // Git worktrees the agent tooling checks out for background tasks. They
+      // are a full second copy of the repository at some other commit, so
+      // linting them reports every finding twice and, when the other commit is
+      // older, reports findings nobody can act on from here. Excluded from git
+      // via `.git/info/exclude`, so CI never sees them and only a local run
+      // could -- a linter that fails locally for a reason CI does not have is
+      // a linter people learn to ignore.
+      ".claude/worktrees/**",
     ],
   },
   js.configs.recommended,

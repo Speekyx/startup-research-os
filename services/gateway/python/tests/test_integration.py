@@ -121,20 +121,33 @@ class TestSchemaRuntime:
         assert row is not None and row[0] == "VIEW"
 
     def test_migration_ledger_records_every_applied_migration(self, database) -> None:
+        """The ledger matches the migrations on disk, in order.
+
+        Derived rather than listed. An earlier version of this test hard-coded
+        the eight migration names that existed when it was written, so every
+        mission that added one broke it -- and a test that has to be edited to
+        stay green teaches people to edit it rather than read it. That is the
+        same defect Mission 1.4 found in six condition tests: it asserted a
+        moment instead of a property.
+
+        The property is that nothing was applied out of order and nothing on
+        disk was skipped, which is what this now checks.
+        """
+        import pathlib
+
+        migrations = sorted(
+            path.stem
+            for path in (
+                pathlib.Path(__file__).resolve().parents[4] / "infrastructure" / "db" / "migrations"
+            ).glob("*.sql")
+        )
+        assert migrations, "no migration files found; the check would pass vacuously"
+
         with database.privileged_transaction() as conn:
             rows = conn.execute(
                 "SELECT version, checksum FROM core.schema_migrations ORDER BY version"
             ).fetchall()
-        assert [r[0] for r in rows] == [
-            "0001_foundation",
-            "0002_orchestration",
-            "0003_row_level_security",
-            "0004_source_registry",
-            "0005_claim_evidence_alignment",
-            "0006_review_conditions",
-            "0007_condition_verification",
-            "0008_raw_record_provenance",
-        ]
+        assert [r[0] for r in rows] == migrations
         assert all(len(r[1]) == 64 for r in rows)  # sha256 hex
 
     def test_every_tenant_table_has_a_workspace_id_leading_index(self, database) -> None:

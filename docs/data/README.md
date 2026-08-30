@@ -113,6 +113,45 @@ exists. `acquisition.raw_records` holds World Bank observations and nothing else
 
 See [`world-bank-collector-v1.md`](world-bank-collector-v1.md).
 
+## Normalization — the first adapter
+
+Mission 1.6 built the RawRecord to NormalizedRecord boundary and normalized
+those six observations. **Normalizable is a fourth fact**, and the mission that
+added it is the one that proved the separation was not academic: until then the
+planner blocked normalization under "no collector is implemented", a reason
+Mission 1.5 made false while normalization stayed just as impossible.
+
+| Fact | World Bank | Eurostat | FRED |
+|---|---|---|---|
+| collector-eligible | yes | yes | only where `FRED_API_KEY` is configured |
+| collector implemented | yes | no | no |
+| collector enabled | yes, deliberately | no | no |
+| **normalizer implemented** | **yes** | no | no |
+
+Normalization answers *what does this source observation structurally
+represent*, and stops. It does not answer whether anything is a market
+opportunity: signal extraction interprets meaning, claim extraction makes
+assertions, and scoring evaluates them — three later stages, none of them
+implemented.
+
+Three rules carry over from collection, and one is new:
+
+- **It reaches nothing.** No network, no model, no NLP. CI parses every import
+  in the package rather than trusting a comment, and the guard was checked
+  against fourteen deliberate violations before being believed.
+- **Unknown stays unknown.** A unit the endpoint does not publish, a geography
+  code no reviewer classified, a value the source never reported — each gets a
+  state a consumer can branch on rather than a plausible value nobody can check.
+- **Missing is never zero.** Zero is a measurement; absence is not; a layer that
+  mapped both to `0` would make them permanently indistinguishable.
+- **Versions coexist.** A revised RawRecord produces a revised NormalizedRecord
+  with the earlier one intact, and a newer normalizer version produces an
+  additional row rather than replacing one. Which version downstream should read
+  is **D-08**, open and deliberately unresolved.
+
+See [`normalized-record-v1.md`](normalized-record-v1.md) and
+[`world-bank-normalizer-v1.md`](world-bank-normalizer-v1.md).
+
 ## Still open
 
 - Evidence reliability weighting per source — blocked by **D-03**. The registry
@@ -121,3 +160,10 @@ See [`world-bank-collector-v1.md`](world-bank-collector-v1.md).
   deliberately not guessed.
 - Backup retention and how deletion interacts with backups — deferred to the
   production ADR (ADR-007).
+- Which normalized representation downstream should read when several
+  normalizer or schema versions exist — **D-08**. Coexistence works; selection
+  does not exist and was deliberately not invented.
+- The raw layer converts numeric values with `float(...)`, which is exact for
+  the integers the authorized series carry and would not be for a rate.
+  Normalization cannot recover what that lost; fixing it belongs to a collector
+  version bump (`world-bank-normalizer-v1.md` §4).
