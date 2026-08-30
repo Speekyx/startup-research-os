@@ -54,6 +54,7 @@ from sros_contracts import (
     ConditionVerification,
     ConditionVerificationResult,
     ResourceContentOrigin,
+    RightsBasis,
     SourceApprovalState,
 )
 
@@ -365,6 +366,10 @@ class TestResourceScope:
             source_id="world-bank",
             resource_id="NY.GDP.MKTP.CD",
             licence="CC-BY-4.0",
+            # Added in Mission 1.9.1. A scope that enumerates licences can only
+            # be satisfied by a NAMED_LICENCE resource, and this descriptor
+            # always meant that -- it just had no way to say so.
+            rights_basis=RightsBasis.NAMED_LICENCE,
             content_origin=ResourceContentOrigin.PLATFORM_LICENSED,
             dataset_family="indicators",
         )
@@ -378,6 +383,7 @@ class TestResourceScope:
             source_id="world-bank",
             resource_id="LSMS-2019",
             licence="CC-BY-4.0",
+            rights_basis=RightsBasis.NAMED_LICENCE,
             content_origin=ResourceContentOrigin.PLATFORM_LICENSED,
             dataset_family="microdata",
         )
@@ -393,6 +399,11 @@ class TestResourceScope:
             ResourceDescriptor(
                 source_id="world-bank",
                 resource_id="unknown",
+                # The basis is stated so this exercises the LICENCE rule.
+                # Without it the descriptor now fails on the rights basis first
+                # (Mission 1.9.1 §15) and the test would pass while proving
+                # something else.
+                rights_basis=RightsBasis.NAMED_LICENCE,
                 content_origin=ResourceContentOrigin.PLATFORM_LICENSED,
                 dataset_family="indicators",
             )
@@ -429,6 +440,7 @@ class TestResourceScope:
                 source_id="world-bank",
                 resource_id="unclassified",
                 licence="CC-BY-4.0",
+                rights_basis=RightsBasis.NAMED_LICENCE,
                 dataset_family="indicators",
             )
         )
@@ -445,6 +457,7 @@ class TestResourceScope:
                 source_id="world-bank",
                 resource_id="LSMS",
                 licence="CC-BY-4.0",
+                rights_basis=RightsBasis.NAMED_LICENCE,
                 content_origin=ResourceContentOrigin.PLATFORM_LICENSED,
                 dataset_family="microdata",
             )

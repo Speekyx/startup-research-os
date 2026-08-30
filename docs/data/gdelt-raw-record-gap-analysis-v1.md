@@ -3,6 +3,11 @@
 **Status:** Analysis record. Produced by Mission 1.9 §17, **before** any
 persistence contract was designed — which is why the collector in that mission
 was not written.
+**Superseded in part by Mission 1.9.1:** §9.2's rights-model blocker (H-28) is
+**closed** — see [ADR-018](../architecture/adr/ADR-018-acquisition-rights-basis.md)
+and [`acquisition-rights-basis-gap-analysis-v1.md`](acquisition-rights-basis-gap-analysis-v1.md).
+§10's step 1 (H-27) is still open and now has a tool:
+`infrastructure/scripts/capture_gdelt_fixtures.py`. Everything else below stands.
 **Date:** 2026-08-30
 **Reads:** the GDELT DOC 2.0 API as its own documentation describes it and as one
 observed response shows it; the committed `gdelt` entries in

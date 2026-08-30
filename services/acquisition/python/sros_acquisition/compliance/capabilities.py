@@ -34,7 +34,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, replace
 from datetime import date
 
-from sros_contracts import AttributionElement, ResourceContentOrigin
+from sros_contracts import AttributionElement, ResourceContentOrigin, RightsBasis
 
 from .attribution import AttributionFacts, AttributionIncompleteError, render_attribution
 from .config import SourceCompliance
@@ -76,6 +76,13 @@ def _baseline(compliance: SourceCompliance) -> ResourceDescriptor:
         source_id=compliance.source_id,
         resource_id=f"{compliance.source_id}:probe",
         licence=(sorted(scope.licence_allowlist)[0] if scope.licence_allowlist else None),
+        # The basis the scope requires, not a fixed one. A scope enumerating
+        # licences can only be satisfied by a NAMED_LICENCE resource
+        # (Mission 1.9.1 §15), so the control case has to carry that basis or it
+        # would fail for a reason the probe is not testing. Where the scope has
+        # no licence rule the basis is left unestablished, exactly as a
+        # descriptor built by a caller rather than from a dataset would be.
+        rights_basis=(RightsBasis.NAMED_LICENCE if scope.licence_allowlist else None),
         content_origin=ResourceContentOrigin.PLATFORM_LICENSED,
         dataset_family=(
             _PROBE_FAMILY

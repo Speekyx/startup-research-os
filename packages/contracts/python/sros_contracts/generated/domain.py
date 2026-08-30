@@ -216,6 +216,16 @@ class ResourceContentOrigin(str, Enum):
     UNKNOWN = "UNKNOWN"  # Not established. Denied wherever licensing scope matters: an unexamined resource is not a resource known to be covered
 
 
+class RightsBasis(str, Enum):
+    """What kind of thing authorises one resource. Closed because authorization branches exhaustively on it and an unhandled value would mean a resource of unknown standing being treated as authorised. Two values, deliberately: there is no UNKNOWN member, because an unestablished basis is the ABSENCE of one -- expressed as null and refused -- and a third value that looked like an answer would be the exact fabrication this enum exists to prevent. A DIRECT_GRANT never satisfies a rule that requires a NAMED_LICENCE.
+
+    See acquisition-rights-basis-gap-analysis-v1.md; Mission 1.9.1 §14.
+    """
+
+    NAMED_LICENCE = "NAMED_LICENCE"  # A published instrument authorises the resource and has an identifier that can be matched against an allowlist -- CC-BY-4.0, ODbL-1.0. The licence field is required and must name it
+    DIRECT_GRANT = "DIRECT_GRANT"  # The source's own terms grant the use directly, naming no instrument. GDELT grants 'unlimited and unrestricted use ... of any kind without fee' and publishes no licence, so there is nothing to name; the licence field must be ABSENT rather than filled with an invented identifier, and the prose basis carries which grant it was
+
+
 class SourceAccessMethod(str, Enum):
     """HOW access is technically performed. It says nothing about whether access is PERMITTED: permission is a separate dimension carried by the policy review. BROWSER_AUTOMATION being available never implies it is allowed.
 

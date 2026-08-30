@@ -1,5 +1,5 @@
 {
-  "$comment": "COMPLIANCE CONFIGURATION. Hand-edited governance data, read by sros_acquisition.compliance. It carries the PARAMETERS of the obligations Mission 1.3 recorded -- exact notices, licence allowlists, enumerated exclusions -- so that satisfying a condition is a configuration fact rather than a branch in application code (Mission 1.4 §5, §7). It grants nothing: every entry here describes a restriction, and a source with no entry is denied by the resource gate rather than allowed.",
+  "$comment": "COMPLIANCE CONFIGURATION. Hand-edited governance data, read by sros_acquisition.compliance. It carries the PARAMETERS of the obligations Mission 1.3 recorded -- exact notices, licence allowlists, enumerated exclusions -- so that satisfying a condition is a configuration fact rather than a branch in application code (Mission 1.4 §5, §7). It grants nothing: every entry here describes a restriction, and a source with no entry is denied by the resource gate rather than allowed. Mission 1.9.1: every authorised dataset now states its RIGHTS BASIS -- whether a NAMED_LICENCE or a DIRECT_GRANT authorises it. Stated per entry rather than defaulted, because a default would silently classify the first entry that omitted it, and the wrong classification is invisible. A DIRECT_GRANT never satisfies a licence allowlist.",
   "compliance_version": "1.0",
   "derived_from": {
     "catalog": "source-catalog-v1.json",
@@ -306,7 +306,8 @@
           "dataset_family": "indicators",
           "licence": "CC-BY-4.0",
           "content_origin": "PLATFORM_LICENSED",
-          "basis": "A World Development Indicators series compiled by the World Bank from national accounts data. Covered by the Data Catalog default licence for World Bank-produced open data."
+          "basis": "A World Development Indicators series compiled by the World Bank from national accounts data. Covered by the Data Catalog default licence for World Bank-produced open data.",
+          "rights_basis": "NAMED_LICENCE"
         },
         {
           "resource_id": "indicator/SP.POP.TOTL",
@@ -315,7 +316,8 @@
           "dataset_family": "indicators",
           "licence": "CC-BY-4.0",
           "content_origin": "PLATFORM_LICENSED",
-          "basis": "A World Development Indicators series compiled by the World Bank. Covered by the Data Catalog default licence for World Bank-produced open data."
+          "basis": "A World Development Indicators series compiled by the World Bank. Covered by the Data Catalog default licence for World Bank-produced open data.",
+          "rights_basis": "NAMED_LICENCE"
         },
         {
           "resource_id": "indicator/IT.NET.USER.ZS",
@@ -324,7 +326,8 @@
           "dataset_family": "indicators",
           "licence": "CC-BY-4.0",
           "content_origin": "PLATFORM_LICENSED",
-          "basis": "A World Development Indicators series compiled by the World Bank. Covered by the Data Catalog default licence for World Bank-produced open data."
+          "basis": "A World Development Indicators series compiled by the World Bank. Covered by the Data Catalog default licence for World Bank-produced open data.",
+          "rights_basis": "NAMED_LICENCE"
         }
       ],
       "data_minimisation": {
