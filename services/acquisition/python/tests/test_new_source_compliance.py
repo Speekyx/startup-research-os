@@ -402,14 +402,32 @@ class TestEligibilityAgreesEverywhere:
             assert source_id not in eligible, source_id
 
     def test_eligibility_did_not_enable_anything(self, conn) -> None:
-        """§19. Eligible, enabled and implemented stay three separate facts."""
-        enabled = [
+        """§19. Eligible, enabled and implemented stay three separate facts.
+
+        Asserted as a RELATION, not as a list. Which sources are enabled is an
+        environment fact: `world-bank` is switched on wherever Mission 1.5's
+        enablement was run, and NOTHING is switched on in CI, where the catalog
+        load writes `collector_enabled = FALSE` and `sros-source enable` never
+        runs. This assertion was first written as `== ["world-bank"]`, which
+        passed on a developer machine and failed on the fresh one CI starts
+        from -- testing-strategy.md §10's whole subject, walked into again.
+
+        What must hold in every environment is that the switch never gets ahead
+        of an implementation.
+        """
+        from sros_acquisition import IMPLEMENTED_COLLECTORS
+
+        enabled = {
             r[0]
             for r in conn.execute(
-                "SELECT id FROM registry.sources WHERE collector_enabled ORDER BY id"
+                "SELECT id FROM registry.sources WHERE collector_enabled"
             ).fetchall()
-        ]
-        assert enabled == ["world-bank"], (
+        }
+        assert enabled <= set(IMPLEMENTED_COLLECTORS), (
+            "collector_enabled is set on a source with no implemented collector: "
+            f"{sorted(enabled - set(IMPLEMENTED_COLLECTORS))}"
+        )
+        assert "gdelt" not in enabled, (
             "GDELT became eligible in this mission and must not have become enabled: "
             "no collector exists for it"
         )
