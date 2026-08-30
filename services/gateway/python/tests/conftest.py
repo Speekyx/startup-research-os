@@ -8,6 +8,11 @@ red suite that teaches them to ignore failures.
 **Two workspaces are always present.** A tenancy system tested with one tenant
 is not meaningfully tested: every isolation assertion here needs a second
 workspace to have something to be isolated *from*.
+
+**A and B are SEEDED, and a suite that writes into them leaves its rows behind.**
+`probe_workspaces` exists for the suites that write: a throwaway pair, created
+and dropped per test. See its docstring for why counting rows in a seeded
+workspace is a measurement of the environment rather than of the code.
 """
 
 from __future__ import annotations
@@ -18,8 +23,16 @@ from collections.abc import Iterator
 
 import pytest
 
+# A and B are seeded by `0001_dev_workspace` and shared with every other suite.
+# Read from them freely; write into them only when the rows are rolled back.
 WORKSPACE_A = uuid.UUID("00000000-0000-4000-8000-000000000001")
 WORKSPACE_B = uuid.UUID("00000000-0000-4000-8000-000000000003")
+
+# P and Q belong to `probe_workspaces`: created per test, dropped per test, and
+# never seeded. 0004 is the acquisition suite's probe workspace -- distinct ids
+# per suite, so no suite can be looking at another one's leftovers.
+WORKSPACE_P = uuid.UUID("00000000-0000-4000-8000-000000000005")
+WORKSPACE_Q = uuid.UUID("00000000-0000-4000-8000-000000000006")
 
 DATABASE_URL = os.environ.get(
     "DATABASE_URL", "postgresql://sros:sros_dev_password@127.0.0.1:55432/sros"
@@ -147,3 +160,87 @@ def api_client() -> Iterator[object]:
 
 def header(workspace: uuid.UUID) -> dict[str, str]:
     return {"x-workspace-id": str(workspace)}
+
+
+@pytest.fixture
+def probe_workspaces() -> Iterator[tuple[uuid.UUID, uuid.UUID]]:
+    """A throwaway pair of workspaces, created for one test and dropped after it.
+
+    Mission 1.5 established this for the acquisition suite and Mission 1.6 found
+    the cost of not having it here: a normalization test asserted
+    `count(*) == 0` on `research.claims` and failed on 39 rows the claim suite
+    had committed into the seeded development workspace across earlier runs.
+    Counting rows in a workspace that also holds seeded and collected data
+    measures the environment, not the behaviour under test -- and the assertion
+    that catches the leak is the one that gets rewritten, because the leak looks
+    like the assertion's fault.
+
+    Both workspaces are removed in teardown, which is only safe because this
+    fixture CREATED them. The seeded workspaces are never dropped: an earlier
+    version of the acquisition fixture deleted WORKSPACE_B and broke this suite
+    on a foreign key, and a fixture that removes what it did not create is a
+    fixture that decides what other suites can test.
+
+    Two, not one, because this suite's isolation assertions need a second
+    workspace to be isolated *from* -- the same reason the seeded pair exists.
+
+    Dropped before it is created, as well as after. Teardown is in a `finally`
+    and so survives a failing test, but it does not survive the run being
+    killed -- and the workspaces left behind by an interrupted run would be
+    silently reused by the next one, which is the defect this fixture exists to
+    remove, merely made rarer.
+    """
+    _drop_workspaces()
+    _make_workspaces()
+    try:
+        yield WORKSPACE_P, WORKSPACE_Q
+    finally:
+        _drop_workspaces()
+
+
+def _make_workspaces() -> None:
+    import psycopg
+
+    with psycopg.connect(DATABASE_URL) as connection:
+        connection.execute(
+            "INSERT INTO core.workspaces (id, name, slug) VALUES (%s,%s,%s), (%s,%s,%s) "
+            "ON CONFLICT (id) DO NOTHING",
+            (
+                WORKSPACE_P,
+                "gateway probe",
+                "gateway-probe",
+                WORKSPACE_Q,
+                "gateway probe (isolation)",
+                "gateway-probe-other",
+            ),
+        )
+        connection.commit()
+
+
+def _drop_workspaces() -> None:
+    """Only ever called for the workspaces this fixture created."""
+    import psycopg
+
+    assert {WORKSPACE_P, WORKSPACE_Q}.isdisjoint({WORKSPACE_A, WORKSPACE_B}), (
+        "seeded workspaces must not be dropped"
+    )
+    with psycopg.connect(DATABASE_URL) as connection:
+        # `scoring.evidence` is deleted by name, before the cascade runs.
+        # Its `independence_group_id` foreign key is ON DELETE RESTRICT, so a
+        # dependent evidence record can refuse the deletion of the group it
+        # belongs to. Both tables cascade from `core.workspaces`, and which of
+        # the two cascades first is a property of PostgreSQL's trigger order
+        # rather than anything this schema states -- so the teardown does not
+        # depend on it.
+        connection.execute(
+            "DELETE FROM scoring.evidence WHERE workspace_id = ANY(%s)",
+            ([WORKSPACE_P, WORKSPACE_Q],),
+        )
+        # Everything else goes with the workspace: every tenant table declares
+        # `workspace_id ... REFERENCES core.workspaces (id) ON DELETE CASCADE`,
+        # so claims, revisions, observations, independence groups, opportunities,
+        # sessions and projects are all removed by these two rows.
+        connection.execute(
+            "DELETE FROM core.workspaces WHERE id = ANY(%s)", ([WORKSPACE_P, WORKSPACE_Q],)
+        )
+        connection.commit()
