@@ -396,10 +396,25 @@ class TestLoadedRegistry:
         # not retroactively make what it already collected illegitimate, and an
         # assertion that said so would forbid ever turning one off.
 
-        # §36: normalization is Mission 1.6's. Nothing produces one yet.
-        assert (
-            conn.execute("SELECT count(*) FROM acquisition.normalized_records").fetchone()[0] == 0
+        # NARROWED in Mission 1.6, not deleted. This read
+        # `normalized_records == 0`, which was true of every mission until one
+        # normalized something -- the same stale absolute the two lines above
+        # replaced one mission earlier, in the same test.
+        #
+        # The rule that survives is the ordering, one link further along:
+        # nothing is normalized that no normalizer serves, and nothing is
+        # normalized that was not collected first.
+        normalizable = sros_acquisition.IMPLEMENTED_NORMALIZERS
+        normalized = {
+            row[0]
+            for row in conn.execute(
+                "SELECT DISTINCT source_id FROM acquisition.normalized_records"
+            ).fetchall()
+        }
+        assert normalized <= normalizable, (
+            f"normalized with no normalizer: {normalized - normalizable}"
         )
+        assert normalized <= collected, f"normalized but never collected: {normalized - collected}"
 
     def test_the_sql_view_reports_condition_counts(self, conn) -> None:
         """The view's counts must match the condition table exactly.

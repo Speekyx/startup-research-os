@@ -1,9 +1,10 @@
 # Testing Strategy
 
-Version: 1.7
+Version: 1.8
 Status: Strategy fixed; infrastructure, orchestration, evidence aggregation, the
-Claim model, the compliance layer and the first collector tested
-Date: 2026-08-30 (amended in Mission 1.5)
+Claim model, the compliance layer, the first collector and the first normalizer
+tested
+Date: 2026-08-30 (amended in Mission 1.6)
 
 `PROJECT_MANIFEST.md` §Testability: "Every important behavior must be testable."
 `docs/CLAUDE.md` §Definition of done: tests must cover important behavior and
@@ -367,8 +368,18 @@ The test now forces every condition false, runs the loader, and asserts none was
 set — which is the property that was always meant: *a catalog load can never
 satisfy its own conditions.*
 
-Two things stay absolutely asserted, because no environment may change them:
-`collector_enabled` is false everywhere, and `acquisition.raw_records` is empty.
+**Two absolutes were retired in Mission 1.5, and the sentence claiming them
+outlived them.** It read: *"`collector_enabled` is false everywhere, and
+`acquisition.raw_records` is empty."* Both stopped being true the moment a
+collector was implemented and enabled, and a stale absolute in a testing strategy
+is worse than a missing one — it tells the next reader to write an assertion that
+will fail for a reason unrelated to their change.
+
+What replaced them are **set relations**, which stay true as the system grows:
+
+- no source outside `IMPLEMENTED_COLLECTORS` is enabled;
+- no raw record exists for a source with no collector;
+- no normalized record exists for a source with no normalizer.
 
 ## 11. Structural tests, and when they earn their keep (added in Mission 1.5)
 
@@ -426,3 +437,68 @@ The rules that came out of it:
 - a test that counts rows uses **its own workspace**. Workspace A holds real
   collected data since Mission 1.5, and counting there measures the environment
   rather than the behaviour under test.
+
+## 13. Absolute counts, and why they keep going stale (added in Mission 1.6)
+
+The same defect appeared a third time, in a place nobody was watching.
+
+Mission 1.6's verification script asserted `research.claims == 0` and
+`scoring.evidence == 0`, reading §44's "no Claims created" literally. It failed
+against a freshly rebuilt database: 45 claims and 37 evidence rows were there,
+created by the Mission 1.2 suite minutes earlier, all synthetic and none from
+any source.
+
+The assertion was wrong, not the system. **What §44 asks is whether
+NORMALIZATION created any**, and that is a delta, not a count. The check became:
+none created since the raw records were collected, none naming a source, none
+belonging to the normalization session.
+
+The general rule, now stated three times in this document under three different
+disguises:
+
+> An absolute count is a statement about a database. A relation between two
+> observations is a statement about behaviour. Assert the second.
+
+**Where an absolute IS still right**, and it is worth knowing the difference:
+`nlp.signals` and `nlp.embedding_provenance` are asserted at zero, because
+nothing in this system has ever produced one. The moment something does, that
+assertion becomes a delta too — and it should be changed then rather than
+weakened in advance.
+
+A side finding, spun off rather than fixed here: the Mission 1.2 claim suites
+write into the **seeded** development workspace and do not clean up, which is
+the workspace rule in §12 not yet applied to them.
+
+## 14. Testing a transformation that must not invent anything (added in Mission 1.6)
+
+Normalization's failure mode is not "it crashed" — it is "it produced something
+plausible". A parser that turns a missing value into `0`, an unclassified code
+into a country, or an unknown unit into a guessed one produces records that look
+perfect and are wrong, and no amount of behaviour testing on the happy path
+finds it.
+
+Three kinds of test carry that, and each catches something the others cannot:
+
+**Constructor tests, for the invariants a value must never violate.**
+`CanonicalValue(value=Decimal("0"), state=NOT_REPORTED)` raises. That constructor
+is the single place the "missing became zero" bug would have to pass through, so
+guarding it there is stronger than any number of assertions about outputs.
+
+**Signature tests, for guarantees that are structural.** §46 does not ask that a
+normalizer *happens* to preserve attribution; it asks that there be no API
+through which one could drop it. A behavioural test would pass equally well
+against a builder with an unused `attribution=None` parameter, so the signature
+is asserted instead — the same move the collector conformance suite makes.
+
+**Probing the validator, before believing it.** `validate_normalization.py`
+enforces nine boundaries. It was run against **fourteen deliberate violations** —
+each import form, each forbidden library, each forbidden table — and every one
+had to fail the build before the validator was trusted. A guard that has only
+ever run against clean code is a guard whose patterns have never been exercised,
+which the gitleaks configuration in Mission 1.5 demonstrated four times over.
+
+One more, from §39: **expectations are derived from the input.** No test and no
+verification script writes a population figure down. They compare the normalized
+value to the raw payload it came from, which is what "the transformation
+preserved it" actually means — and which is why the first version of the revision
+test failed for the right reason when a fixture's ordering changed.

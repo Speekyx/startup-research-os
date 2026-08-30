@@ -173,6 +173,37 @@ moves.
 | **Raw records are tenant-isolated** | Two workspaces, RLS, `test_world_bank_collector.py` | A worker cannot write into another workspace, and a query with no tenant filter still returns only its own |
 | **The live suite is opt-in and absent from CI** | `SROS_ENABLE_WORLD_BANK_SMOKE_TESTS`, `ci.yml` | A suite that quietly became enabled would show up as traffic to somebody else's servers rather than as a red build |
 
+### Normalization (Mission 1.6)
+
+The first stage that reads what a collector wrote. Its guards protect a
+different property from collection's: not *may we fetch this*, but *did the
+transformation invent anything*.
+
+`validate_normalization.py` is zero-dependency and was **probed against fourteen
+deliberate violations before being believed** — the same discipline the gitleaks
+configuration needed, and for the same reason: a validator that has only ever
+run against clean code is a validator whose patterns have never been exercised.
+
+| Gate | Mechanism | Guards |
+|------|-----------|--------|
+| **Normalization reaches no network** | `validate_normalization.py` parses every import in the package | Not a grep for `httpx`: an AST walk, so `from urllib.request import urlopen` and `import socket` are caught too |
+| **Not even the sanctioned transport** | Same, on relative imports | The blanket ban would be satisfied by importing `collection/transport.py`, the one file allowed to hold a client. Reaching the network through the door left open for a collector is still reaching the network |
+| **No LLM and no embedding library** | Same | Normalization is deterministic and reproducible. A model deciding a geography would make it neither, and D-12 is still open |
+| **No signal, claim or evidence table** | Same, on SQL string literals | A mention in prose is how the rule gets explained; a mention inside a query is the thing forbidden |
+| **The vocabulary matches the contract** | Same, against `domain.v1.json` and migration 0009 | Seven closed enums and one registry. A vocabulary living only in Python drifts from the schema `CHECK` and the TypeScript side at once |
+| **Record kinds in code match the ones seeded** | Same | Two hand-maintained copies of one fact drift, and the drift is found by whoever trusted the wrong one |
+| **Every geography entry records its basis** | Same, over `geography-mapping-v1.json` | A classification that cannot be re-verified is indistinguishable from a guess |
+| **No aggregate carries a country code** | Same, plus `CanonicalGeography.__post_init__` | The "World is a country" error, refused at the data and at the constructor |
+| **Attribution cannot be dropped** | `build_normalized` has no attribution parameter; signature test | Structural. A behavioural test would pass equally well against a builder with an `attribution=None` nobody had used yet |
+| **Retention cannot be chosen** | Same — no expiry parameter | The window is the resolved normalized tier, anchored on normalization, and the raw expiry is deliberately not copied |
+| **Missing is never zero** | `CanonicalValue.__post_init__` | Constructing a `NOT_REPORTED` value carrying a number raises. That constructor is where the bug would have to pass |
+| **Floats are refused as input** | `decimal_from` | A value that has been through IEEE-754 may already differ from the source's; re-reading it would bake that in |
+| **Re-running writes nothing** | Identity unique constraint; job test; the real six records | Idempotency without claiming exactly-once delivery, which Celery does not provide |
+| **Output cannot change without a version bump** | `NON_DETERMINISTIC_OUTPUT` on an identity collision with different content | Overwriting would destroy the stored representation; the version *is* the identity that would distinguish them |
+| **A revision does not overwrite its predecessor** | `superseded_at`, scoped to one lineage | Crossing lineages would make writing schema 2 retire schema 1 — the selection policy D-08 forbids inventing |
+| **A cross-tenant reference cannot be written** | Composite FK on `(workspace_id, raw_record_id)` | Layer three. RLS and the repository filter can be forgotten; a structural impossibility cannot |
+| **The planner does not dispatch normalization for a source with no normalizer** | `normalization_block(report, collectors, normalizers)`, fail-closed default | The gap Mission 1.5 opened: the old reason said "no collector is implemented", which stopped being true while the capability stayed unavailable |
+
 ---
 
 ## 2. Turborepo task graph

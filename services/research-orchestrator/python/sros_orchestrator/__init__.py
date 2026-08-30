@@ -72,6 +72,7 @@ from .lifecycle import (
 from .plan import (
     BLOCKED_CAPABILITIES,
     NO_COLLECTOR_IMPLEMENTED,
+    NO_NORMALIZER_IMPLEMENTED,
     PLANNER_VERSION,
     STATIC_BLOCKED_CAPABILITIES,
     BlockedCapability,
@@ -80,6 +81,7 @@ from .plan import (
     ResearchExecutionPlan,
     ResearchPlanner,
     acquisition_block,
+    normalization_block,
 )
 from .sources import (
     RegistryDatabase,
@@ -124,11 +126,13 @@ __all__ = [
     "BLOCKED_CAPABILITIES",
     "STATIC_BLOCKED_CAPABILITIES",
     "acquisition_block",
+    "normalization_block",
     "PlannedStage",
     "ResearchExecutionPlan",
     "ResearchPlanner",
     "PLANNER_VERSION",
     "NO_COLLECTOR_IMPLEMENTED",
+    "NO_NORMALIZER_IMPLEMENTED",
     # sources
     "SourceAvailability",
     "SourceAvailabilityReport",

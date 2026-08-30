@@ -116,7 +116,7 @@ other. They are two views of the same system, at different altitudes.
 |-------------------------------|------------------------------------------|----------------|
 | Raw Signals | — (external) | — |
 | Data Collection | `raw` | `acquisition` |
-| Normalization | `normalized`, `deduplicated` (exact) | `acquisition` |
+| Normalization | `normalized`, `deduplicated` (exact) | `acquisition` — implemented in Mission 1.6, World Bank only |
 | NLP | `deduplicated` (near/semantic), `enriched` | `nlp` |
 | Signal Extraction | `signal` | `nlp` |
 | Opportunity Discovery | `feature` (clustering into seeds) | `nlp` |

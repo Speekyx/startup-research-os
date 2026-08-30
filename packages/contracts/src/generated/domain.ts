@@ -500,6 +500,114 @@ export function isEvidenceAggregationStatus(v: unknown): v is EvidenceAggregatio
   return typeof v === "string" && (EVIDENCE_AGGREGATION_STATUS_VALUES as readonly string[]).includes(v);
 }
 
+/**
+ * The STRUCTURAL completeness of a normalized record, and nothing else. Not a confidence and not a reliability: those are epistemic judgments on [0,1] that belong to the evidence model, and a value of that kind here would invite a downstream stage to multiply a parsing outcome by an evidence weight. Closed because every consumer must decide what to do with each state, and an unhandled fourth value would be a bug rather than a gap.
+ * @see normalized-record-v1.md §8; Mission 1.6 §25
+ */
+export const NORMALIZED_RECORD_QUALITY_VALUES = [
+  "VALID",
+  "PARTIAL",
+  "INVALID",
+] as const;
+export type NormalizedRecordQuality = (typeof NORMALIZED_RECORD_QUALITY_VALUES)[number];
+export function isNormalizedRecordQuality(v: unknown): v is NormalizedRecordQuality {
+  return typeof v === "string" && (NORMALIZED_RECORD_QUALITY_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * Why a normalized record is not VALID. A closed vocabulary rather than free text, for the same reason AcquisitionErrorCode is one: a consumer branches on the MEANING -- a record with no reported value is skipped, a record whose geography is unclassified is still usable -- and a message it had to pattern-match would make that branch break on a reworded string.
+ * @see normalized-record-v1.md §8; Mission 1.6 §26
+ */
+export const NORMALIZATION_QUALITY_REASON_VALUES = [
+  "VALUE_NOT_REPORTED",
+  "MALFORMED_NUMERIC_VALUE",
+  "GEOGRAPHY_NOT_CLASSIFIED",
+  "GEOGRAPHY_MISSING",
+  "METRIC_MISSING",
+  "PERIOD_NOT_SUPPORTED",
+] as const;
+export type NormalizationQualityReason = (typeof NORMALIZATION_QUALITY_REASON_VALUES)[number];
+export function isNormalizationQualityReason(v: unknown): v is NormalizationQualityReason {
+  return typeof v === "string" && (NORMALIZATION_QUALITY_REASON_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * Why a normalization attempt produced no record at all. Distinct from NormalizationQualityReason, which explains a record that EXISTS and is degraded. Closed so orchestration branches on a meaning rather than on a Python exception class, the same argument AcquisitionErrorCode makes.
+ * @see normalized-record-v1.md §13; Mission 1.6 §28
+ */
+export const NORMALIZATION_ERROR_CODE_VALUES = [
+  "UNSUPPORTED_SOURCE",
+  "UNSUPPORTED_COLLECTOR_VERSION",
+  "INVALID_RAW_RECORD",
+  "UNSUPPORTED_RECORD_TYPE",
+  "NON_DETERMINISTIC_OUTPUT",
+  "PERSISTENCE_FAILURE",
+  "CANCELLED",
+] as const;
+export type NormalizationErrorCode = (typeof NORMALIZATION_ERROR_CODE_VALUES)[number];
+export function isNormalizationErrorCode(v: unknown): v is NormalizationErrorCode {
+  return typeof v === "string" && (NORMALIZATION_ERROR_CODE_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * The temporal shape of a canonical observation. Closed because downstream time handling must branch exhaustively -- a YEAR is not an INSTANT, and code that treated the start of a yearly period as an exact event time would produce trend artifacts indistinguishable from real market movements (data-principles.md §9). An adapter supports only the forms its real records use and reports the rest rather than approximating them.
+ * @see normalized-record-v1.md §7.1; Mission 1.6 §16
+ */
+export const NORMALIZED_PERIOD_TYPE_VALUES = [
+  "YEAR",
+  "QUARTER",
+  "MONTH",
+  "DAY",
+  "INSTANT",
+  "INTERVAL",
+] as const;
+export type NormalizedPeriodType = (typeof NORMALIZED_PERIOD_TYPE_VALUES)[number];
+export function isNormalizedPeriodType(v: unknown): v is NormalizedPeriodType {
+  return typeof v === "string" && (NORMALIZED_PERIOD_TYPE_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * What kind of entity a source geography code names. Closed because the branch is exhaustive and consequential: a COUNTRY can join to a MarketScope country list and an AGGREGATE must never be counted as one. UNKNOWN exists because it is the safe failure -- an unclassified code keeps its source form and is never promoted to a country.
+ * @see normalized-record-v1.md §7.2; Mission 1.6 §15
+ */
+export const NORMALIZED_GEOGRAPHY_KIND_VALUES = [
+  "COUNTRY",
+  "AGGREGATE",
+  "UNKNOWN",
+] as const;
+export type NormalizedGeographyKind = (typeof NORMALIZED_GEOGRAPHY_KIND_VALUES)[number];
+export function isNormalizedGeographyKind(v: unknown): v is NormalizedGeographyKind {
+  return typeof v === "string" && (NORMALIZED_GEOGRAPHY_KIND_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * Whether a canonical numeric observation carries a measurement. Closed and mandatory because the alternative is representing 'the source published no figure' as the number zero -- and zero is a real measurement, so the two would become permanently indistinguishable with no way for any downstream stage to recover the difference.
+ * @see normalized-record-v1.md §6.2; Mission 1.6 §14
+ */
+export const NORMALIZED_VALUE_STATE_VALUES = [
+  "REPORTED",
+  "NOT_REPORTED",
+  "UNREADABLE",
+] as const;
+export type NormalizedValueState = (typeof NORMALIZED_VALUE_STATE_VALUES)[number];
+export function isNormalizedValueState(v: unknown): v is NormalizedValueState {
+  return typeof v === "string" && (NORMALIZED_VALUE_STATE_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * Whether a canonical numeric observation carries a unit, and why not when it does not. Closed so that 'the source does not publish units on this endpoint' stays distinguishable from 'we have not established the unit' -- the first is a settled fact about the access path and the second is work someone could do. Neither is ever resolved by reading the metric name.
+ * @see normalized-record-v1.md §6.3; Mission 1.6 §17
+ */
+export const NORMALIZED_UNIT_STATE_VALUES = [
+  "PUBLISHED",
+  "NOT_PUBLISHED",
+  "UNKNOWN",
+] as const;
+export type NormalizedUnitState = (typeof NORMALIZED_UNIT_STATE_VALUES)[number];
+export function isNormalizedUnitState(v: unknown): v is NormalizedUnitState {
+  return typeof v === "string" && (NORMALIZED_UNIT_STATE_VALUES as readonly string[]).includes(v);
+}
+
 // --- Numeric bounds --------------------------------------------------------
 // A field named `confidence` is always [0,1]. A field named `*_score` is
 // always 0-100. scoring-framework-v1.1.md §4.1.
@@ -532,6 +640,7 @@ export const REGISTRY_NAMES = [
   "risk",
   "region",
   "source_family",
+  "normalization_record_kind",
 ] as const;
 export type RegistryName = (typeof REGISTRY_NAMES)[number];
 

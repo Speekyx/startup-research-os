@@ -39,13 +39,26 @@ useDefault = true
 
 [allowlist]
 description = """
-`"key"` in source-compliance-v1.json is the stable identifier of an enumerated
-resource-exclusion rule, not a credential. The two values are the Eurostat
-trade-data carve-outs the copyright notice names: Liechtenstein and Switzerland
-as declaring countries from 1995, and Austria at CN 8-digit.
+Three registry identifiers that are not credentials, matched by exact value.
 
-Matched by exact VALUE, with no path clause, so a real key added to the same
-file later is still caught -- which is the property that matters.
+`"key"` in source-compliance-v1.json is the stable identifier of an enumerated
+resource-exclusion rule. Two values: the Eurostat trade-data carve-outs the
+copyright notice names -- Liechtenstein and Switzerland as declaring countries
+from 1995, and Austria at CN 8-digit.
+
+`indicators-api-v2` (added in Mission 1.6) is the World Bank ACCESS PROFILE
+LABEL. It is already published in source-catalog-v1.json, source-compliance-v1.json,
+the rendered catalog and world-bank-collector-v1.md, and it is printed by
+`sros-acquisition world-bank validate`. It tripped `generic-api-key` because it
+sits next to a key containing "access" and has entropy above the threshold --
+`"access_profile": "indicators-api-v2"`.
+
+It is not a credential and structurally cannot become one: a credential in this
+system is a CONFIGURATION KEY NAME in `secret_references`, and
+validate_source_registry.py refuses a value there.
+
+Matched by exact VALUE, with no path clause, so a real key added to any of these
+files later is still caught -- which is the property that matters.
 """
 # Applied to the extracted SECRET (`li-ch-trade-1995`), not to the whole match
 # (`"key": "li-ch-trade-1995"`). Anchored, so a longer string that merely
@@ -53,5 +66,6 @@ file later is still caught -- which is the property that matters.
 regexes = [
   '''^li-ch-trade-1995$''',
   '''^at-trade-cn8$''',
+  '''^indicators-api-v2$''',
 ]
 regexTarget = "secret"

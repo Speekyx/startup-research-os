@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.9
-Last amended: 2026-08-30 (Sprint 1 / Mission 1.5)
+Version: 1.10
+Last amended: 2026-08-30 (Sprint 1 / Mission 1.6)
 
 ## Boot Sequence
 
@@ -18,11 +18,13 @@ Before performing any task, execute this reading order.
 9. docs/data/source-registry-v1.md
 10. docs/data/acquisition-authorization-v1.md
 11. docs/data/world-bank-collector-v1.md
-12. docs/domain/evidence-aggregation-framework-v1.md
-13. docs/domain/claim-model-v1.md
-14. docs/ai/evaluation-framework-v1.md
-15. Relevant ADRs
-16. Task-specific specifications
+12. docs/data/normalized-record-v1.md
+13. docs/data/world-bank-normalizer-v1.md
+14. docs/domain/evidence-aggregation-framework-v1.md
+15. docs/domain/claim-model-v1.md
+16. docs/ai/evaluation-framework-v1.md
+17. Relevant ADRs
+18. Task-specific specifications
 
 These documents are the authoritative source of truth.
 
@@ -38,6 +40,7 @@ Ontology V2 keeps V1.1's numbering for §1–§10, so an existing reference to
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.10 | 2026-08-30 | First normalizer recorded: the RawRecord to NormalizedRecord boundary, World Bank only; normalized_records is no longer empty; normalization invariant added; normalizable separated from eligible, enabled and implemented |
 | 1.9 | 2026-08-30 | First collector recorded: World Bank only, gated by an AcquisitionAuthorizationContext; raw_records is no longer empty; collector boundary invariant added |
 | 1.8 | 2026-08-29 | Compliance capabilities recorded: a condition is cleared by a verifier and by nothing else; two sources are collector-eligible; eligible / enabled / implemented separated (ADR-016) |
 | 1.7 | 2026-08-29 | Source review round recorded: three sources APPROVED_WITH_CONDITIONS, none collector-eligible; conditional-eligibility rule added |
@@ -236,6 +239,67 @@ the runtime role. It is administered by `sros-source`, never over HTTP.
 
 This system is not a legal decision engine and its output is not legal advice.
 
+### Normalization — what a canonical observation is, and is not
+
+Since Mission 1.6 the RawRecord to NormalizedRecord boundary exists
+(`normalized-record-v1.md`, `world-bank-normalizer-v1.md`). One adapter, for
+World Bank, and six real canonical observations.
+
+**This layer renames and reshapes. It does not decide.** Normalization answers
+*what does this source observation structurally represent*, and stops. A field
+that encoded "this indicates growing demand" would put an interpretation
+somewhere that looks like a fact, and every stage downstream would inherit it as
+one. Signal extraction interprets, claim extraction asserts, scoring evaluates —
+three later stages, none implemented.
+
+Six rules, and none is negotiable:
+
+- **Unknown stays unknown.** A unit the source does not publish is
+  `NOT_PUBLISHED`, never inferred from a metric name. A geography code no
+  reviewer classified is `UNKNOWN`, never promoted to a country. Each is a state
+  a consumer branches on, which beats a plausible value nobody can check.
+- **Missing is never zero.** Zero is a measurement and absence is not. A layer
+  that mapped both to `0` would make them permanently indistinguishable, and the
+  constructor refuses a number beside a `NOT_REPORTED` state.
+- **An aggregate is never a country.** `World` and `High income` are real
+  entities, preserved as aggregates with their source code. Classification comes
+  from a reviewed map where every entry records its basis, and from nothing else
+  — not from a code's shape and not from its label.
+- **A year is an interval, not January 1.** The canonical period carries its
+  type, its label and a half-open `[start, end)`, so nothing downstream can read
+  the start bound as an exact event time.
+- **Numbers are exact decimals, never floats.** Parsed from JSON text with
+  `parse_float=Decimal`, stored as decimal strings, and free of artifacts from
+  an intermediate representation.
+- **Quality is structural, never epistemic.** `VALID | PARTIAL | INVALID` says
+  whether the record could be represented. It is not a confidence, not a
+  reliability and not a weight; those belong to the evidence model and mean
+  something else entirely.
+
+Identity is again three separate things: `observation_key` says WHICH
+observation (inherited verbatim), `raw_record_id` says WHAT the source said, and
+the row id says WHICH transformation of it. The normalization timestamp is in
+none of them.
+
+**A revision is not an overwrite and an upgrade is not a replacement.** A revised
+RawRecord produces a new normalized row with the previous one superseded; a newer
+normalizer or schema version produces an additional row with the old one intact.
+Which one downstream should read is **D-08**, open, and Mission 1.6 deliberately
+did not invent it. Output may only change with a version bump: the same identity
+producing different content is reported as `NON_DETERMINISTIC_OUTPUT`, never
+written over.
+
+**Eligible, enabled, implemented and normalizable are FOUR facts.** The fourth
+was separated in Mission 1.6 because the planner's normalization block read "no
+collector is implemented" — which Mission 1.5 made false while leaving
+normalization exactly as unavailable. `normalization_block` now derives it from
+what exists, and a future Eurostat collector with no normalizer stays blocked.
+
+Normalization reaches **no network, no model and no embedding library**, not even
+through `collection/transport.py`. `validate_normalization.py` asserts it by
+parsing every import, and was probed against fourteen deliberate violations
+before being believed.
+
 ### Claim — the unit evidence accumulates against
 
 Since Mission 1.2 a **Claim** is a persisted entity (Ontology V2.1 §17,
@@ -300,6 +364,11 @@ only when explicitly labelled as such.
 Do not invent a half-life, a damping constant, a per-source weight or a
 contradiction penalty to make the engine produce a number. Failing closed is the
 designed behaviour, not a gap to fill.
+
+**No normalizer may be implemented for a source with no collector**, and no
+normalization job may be dispatched for a source with no normalizer. The
+orchestrator reports the second under `NO-NORMALIZER-IMPLEMENTED`, distinct from
+the two acquisition gates because different work clears each.
 
 **No collector may be implemented for a source that is not collector-eligible.**
 D-07 is resolved and the registry exists. Two sources pass the gate; one has a

@@ -1,0 +1,29 @@
+{
+  "$comment": "Reviewed geography classification for normalization. Mission 1.6 §15.",
+  "version": 1,
+  "notes": "Normalization must distinguish a country from an aggregate, and must never turn 'World' or 'High income' into a country. It cannot do that by looking at a code: the World Bank uses three-letter codes for both, so 'FRA' and 'WLD' are indistinguishable by shape. Classifying from the accompanying NAME would be inference, and Mission 1.6 §41 forbids reaching for a model to do it.\n\nSo classification is data, reviewed per entry, exactly like the authorized dataset list in source-compliance-v1.json. A code with no entry here is UNKNOWN: it keeps its source code, gets no canonical country code, and the record is marked PARTIAL with GEOGRAPHY_NOT_CLASSIFIED. Unknown is the safe failure, and it is never promoted to COUNTRY.\n\nDELIBERATELY SMALL, and the reason is recorded rather than assumed. Two entries, for the two countries the authorized collection actually covers. Widening this file means establishing each entry's basis, not appending a line -- the same discipline the dataset allowlist is under, and for the same reason: a bulk import of 250 codes would be 250 assertions nobody checked.\n\nNo AGGREGATE entry is seeded. The AGGREGATE kind exists, is reachable, and is exercised by the test suite against a fixture map -- but classifying a real World Bank aggregate requires evidence this mission did not retrieve, and writing one down from recall is exactly what data-principles.md and llm-reasoning-rules.md forbid. Until a reviewer establishes them, aggregates land in UNKNOWN, which preserves the property Mission 1.6 §15 actually protects: an aggregate is never mistaken for a country.",
+  "canonical_scheme": "ISO-3166-1-ALPHA-2",
+  "schemes": [
+    {
+      "source_id": "world-bank",
+      "code_scheme": "world-bank-country-code",
+      "scheme_note": "The Indicators API returns ISO 3166-1 alpha-3 for countries and World Bank aggregate codes for aggregates, in the same field. The collector stores whichever it received, verbatim, as the observation's geography.",
+      "entries": [
+        {
+          "source_code": "FRA",
+          "kind": "COUNTRY",
+          "canonical_code": "FR",
+          "name": "France",
+          "basis": "ISO 3166-1 assigns alpha-3 FRA and alpha-2 FR to France. A published standard, not a source assertion, and not derived from the label the API returned alongside the code."
+        },
+        {
+          "source_code": "DEU",
+          "kind": "COUNTRY",
+          "canonical_code": "DE",
+          "name": "Germany",
+          "basis": "ISO 3166-1 assigns alpha-3 DEU and alpha-2 DE to Germany. Same standard, same reasoning as FRA."
+        }
+      ]
+    }
+  ]
+}

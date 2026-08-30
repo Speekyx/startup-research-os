@@ -76,9 +76,15 @@ def register_acquisition_tasks(
                 "must not construct its own database access"
             )
 
-        from sros_acquisition.collection.job import run_world_bank_job
+        # See the same construct in `normalization_tasks`: imported only when
+        # no runner was injected. This one had the same latent defect and never
+        # failed, because nothing exercised the path with a runner supplied.
+        execute = runner
+        if execute is None:
+            from sros_acquisition.collection.job import run_world_bank_job
 
-        execute = runner or run_world_bank_job
+            execute = run_world_bank_job
+
         result = execute(merged, connection_factory)
         return {
             **result.to_json(),

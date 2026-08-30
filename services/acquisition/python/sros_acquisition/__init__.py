@@ -10,10 +10,15 @@ records to this context, and marks them GLOBAL rather than tenant-scoped: a
 source review that differed per workspace would make provenance incomparable
 across workspaces.
 
-    registry/    may this source be collected from, and why not
-    compliance/  what a collector would have to obey, and whether it can
+    registry/       may this source be collected from, and why not
+    compliance/     what a collector would have to obey, and whether it can
+    collection/     the World Bank collector, and the HTTP boundary
+    normalization/  RawRecord to canonical observation
 
-Neither package opens a network connection, and CI asserts it.
+Neither governance package opens a network connection, and CI asserts it --
+along with the narrower Mission 1.5 rule that exactly one file in
+`collection/` may, and the Mission 1.6 rule that no file in `normalization/`
+may reach a network, a model or an embedding library at all.
 """
 
 from .registry import (
@@ -28,6 +33,7 @@ from .registry import (
 
 __all__ = [
     "IMPLEMENTED_COLLECTORS",
+    "IMPLEMENTED_NORMALIZERS",
     "EligibilityResult",
     "SourceCatalog",
     "SourceRecord",
@@ -54,3 +60,31 @@ __all__ = [
 # Eurostat is collector-eligible and is NOT here. Eligibility says a collector
 # may be built; this says one was.
 IMPLEMENTED_COLLECTORS: frozenset[str] = frozenset({"world-bank"})
+
+
+# Sources this codebase can actually NORMALIZE.
+#
+# A FOURTH separate fact, and the mission that added it is the one that proved
+# the separation was not academic. Before Mission 1.6 the planner blocked
+# normalization under "no collector is implemented" -- a reason that stopped
+# being true the moment Mission 1.5 built one, while normalization remained just
+# as impossible. A false blocking reason is worse than a vague one: it invites
+# someone to conclude the block no longer applies.
+#
+#     eligible      may we collect from this source
+#     enabled       is collection switched on in this deployment
+#     implemented   does a collector exist
+#     normalizable  does a NORMALIZER exist for what that collector writes
+#
+# Eurostat is collector-eligible, has no collector and is not here. World Bank
+# has both. Derived from the registered adapters rather than written twice, so
+# the set cannot drift from the table that actually dispatches -- and the
+# orchestrator gets it from the composition root, because a service may not
+# import another service's package (`service-boundaries.md`).
+def _normalizable_sources() -> frozenset[str]:
+    from .normalization import supported_sources
+
+    return supported_sources()
+
+
+IMPLEMENTED_NORMALIZERS: frozenset[str] = _normalizable_sources()

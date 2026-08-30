@@ -22,6 +22,7 @@ from sros_orchestrator import (
     ALLOWED_TRANSITIONS,
     BLOCKED_CAPABILITIES,
     NO_COLLECTOR_IMPLEMENTED,
+    NO_NORMALIZER_IMPLEMENTED,
     BudgetAccount,
     BudgetGuard,
     BudgetRefusedError,
@@ -45,6 +46,7 @@ from sros_orchestrator import (
     dependency_closure,
     deterministic_job_id,
     is_terminal,
+    normalization_block,
     ready_job_ids,
     require_job_transition,
     require_transition,
@@ -425,6 +427,138 @@ class TestPlanning(unittest.TestCase):
         block = acquisition_block(StaticSourceAvailability(()).source_availability())
         assert block is not None
         self.assertIn("empty", block.reason)
+
+    # ---------------------------------------------------------- normalization
+
+    def test_normalization_is_available_only_with_a_collector_and_a_normalizer(
+        self,
+    ) -> None:
+        """Mission 1.6 §36. Three conditions, and all three are load-bearing."""
+        report = StaticSourceAvailability(
+            (SourceAvailability("world-bank", "APPROVED_WITH_CONDITIONS", True),)
+        ).source_availability()
+        collectors = frozenset({"world-bank"})
+        normalizers = frozenset({"world-bank"})
+        self.assertIsNone(normalization_block(report, collectors, normalizers))
+
+    def test_a_collector_with_no_normalizer_still_blocks_normalization(self) -> None:
+        """The gap Mission 1.5 created and Mission 1.6 closes.
+
+        Until now normalization was blocked by "no collector is implemented".
+        Mission 1.5 implemented one, so the sentence became false while the
+        capability stayed just as unavailable -- and a false blocking reason
+        invites someone to conclude the block no longer applies."""
+        report = StaticSourceAvailability(
+            (SourceAvailability("world-bank", "APPROVED_WITH_CONDITIONS", True),)
+        ).source_availability()
+        block = normalization_block(report, frozenset({"world-bank"}), frozenset())
+        assert block is not None
+        self.assertEqual(block.decision_id, NO_NORMALIZER_IMPLEMENTED)
+        self.assertIn("world-bank", block.reason)
+
+    def test_normalization_borrows_acquisitions_reason_when_acquisition_blocks(
+        self,
+    ) -> None:
+        """One cause, one explanation. A reader who fixes the acquisition gate
+        should not then meet a reworded version of the problem they solved."""
+        report = StaticSourceAvailability(
+            (SourceAvailability("tiktok", "PROHIBITED", False, ("review is PROHIBITED",)),)
+        ).source_availability()
+        acquisition = acquisition_block(report, frozenset({"world-bank"}))
+        block = normalization_block(report, frozenset({"world-bank"}), frozenset({"world-bank"}))
+        assert block is not None and acquisition is not None
+        self.assertIn("no raw record is produced", block.reason)
+        # Acquisition's reason, quoted verbatim rather than paraphrased.
+        self.assertIn(acquisition.reason, block.reason)
+        self.assertEqual(block.decision_id, acquisition.decision_id)
+        # And the per-source detail is NOT duplicated: it is on the acquisition
+        # block, and `blocked_source_reasons()` walks every block.
+        self.assertEqual(block.source_states, ())
+
+    def test_a_normalizer_for_a_source_with_no_collector_unblocks_nothing(self) -> None:
+        """The sets are intersected. A normalizer for something nothing collects
+        is a normalizer with no input."""
+        report = StaticSourceAvailability(
+            (SourceAvailability("world-bank", "APPROVED_WITH_CONDITIONS", True),)
+        ).source_availability()
+        block = normalization_block(report, frozenset({"world-bank"}), frozenset({"eurostat"}))
+        assert block is not None
+        self.assertEqual(block.decision_id, NO_NORMALIZER_IMPLEMENTED)
+
+    def test_a_future_eurostat_collector_with_no_normalizer_stays_blocked(self) -> None:
+        """§36, stated as the rule: availability is never generic."""
+        report = StaticSourceAvailability(
+            (
+                SourceAvailability("eurostat", "APPROVED_WITH_CONDITIONS", True),
+                SourceAvailability("fred", "APPROVED_WITH_CONDITIONS", False, ("no key",)),
+            )
+        ).source_availability()
+        block = normalization_block(report, frozenset({"eurostat"}), frozenset({"world-bank"}))
+        assert block is not None
+        self.assertEqual(block.decision_id, NO_NORMALIZER_IMPLEMENTED)
+        self.assertIn("eurostat", block.reason)
+
+    def test_normalization_defaults_to_refusing_when_nothing_is_wired(self) -> None:
+        """Fail closed, like every other gate. A missing wire is not a permission."""
+        report = StaticSourceAvailability(
+            (SourceAvailability("world-bank", "APPROVED_WITH_CONDITIONS", True),)
+        ).source_availability()
+        assert normalization_block(report) is not None
+
+    def test_the_planner_passes_its_normalizer_set_to_the_gate(self) -> None:
+        """The composition root wires it; the orchestrator may not import the
+        acquisition package (`service-boundaries.md`)."""
+        sources = StaticSourceAvailability(
+            (SourceAvailability("world-bank", "APPROVED_WITH_CONDITIONS", True),)
+        )
+        unwired = ResearchPlanner(
+            sources=sources, implemented_collectors=frozenset({"world-bank"})
+        ).plan(WORKSPACE, SESSION, CORRELATION, _context())
+        normalization = next(b for b in unwired.blocked if b.capability is Capability.NORMALIZATION)
+        assert normalization.decision_id == NO_NORMALIZER_IMPLEMENTED
+
+        wired = ResearchPlanner(
+            sources=sources,
+            implemented_collectors=frozenset({"world-bank"}),
+            implemented_normalizers=frozenset({"world-bank"}),
+        ).plan(WORKSPACE, SESSION, CORRELATION, _context())
+        assert Capability.NORMALIZATION.value not in wired.blocked_capability_names
+        assert any(job.job_type == "normalize.records" for job in wired.dispatchable_jobs)
+
+    def test_normalization_is_not_dispatchable_before_acquisition(self) -> None:
+        """The DAG still orders them. Normalization becoming runnable does not
+        make it runnable FIRST."""
+        wired = ResearchPlanner(
+            sources=StaticSourceAvailability(
+                (SourceAvailability("world-bank", "APPROVED_WITH_CONDITIONS", True),)
+            ),
+            implemented_collectors=frozenset({"world-bank"}),
+            implemented_normalizers=frozenset({"world-bank"}),
+        ).plan(WORKSPACE, SESSION, CORRELATION, _context())
+        ordered = [job.job_type for job in wired.ordered_jobs()]
+        assert ordered.index("acquire.collect") < ordered.index("normalize.records")
+
+    def test_the_later_stages_stay_blocked_when_normalization_opens(self) -> None:
+        """§43, §44, §45. Nothing downstream of normalization moves."""
+        wired = ResearchPlanner(
+            sources=StaticSourceAvailability(
+                (SourceAvailability("world-bank", "APPROVED_WITH_CONDITIONS", True),)
+            ),
+            implemented_collectors=frozenset({"world-bank"}),
+            implemented_normalizers=frozenset({"world-bank"}),
+        ).plan(WORKSPACE, SESSION, CORRELATION, _context())
+        blocked = set(wired.blocked_capability_names)
+        assert Capability.NLP_EXTRACTION.value in blocked
+        assert Capability.OPPORTUNITY_DISCOVERY.value in blocked
+        assert Capability.SCORING.value in blocked
+
+    def test_the_planner_version_records_that_the_blocking_set_changed(self) -> None:
+        """A plan read back years later must be interpretable against the
+        planner that produced it. The stage graph did not change; the blocking
+        SET did, and that is what the version tracks."""
+        from sros_orchestrator.plan import PLANNER_VERSION
+
+        assert PLANNER_VERSION == "1.2.0"
 
     def test_scoring_is_blocked_on_calibration_not_on_the_formula(self) -> None:
         """Mission 1.2. The formula exists since Mission 1.1, so the old reason
