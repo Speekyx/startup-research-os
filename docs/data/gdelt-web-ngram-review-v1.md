@@ -280,7 +280,9 @@ analysis. What follows is what a future collector must *keep* about each.
 - the bucket's **resolution is 15 minutes** and the label marks its start;
 - it is **not** the publication time of any article, and not the time we fetched
   anything;
-- **the timezone is not documented.** Neither the announcement nor the data page
+- **the timezone is not documented** (re-checked in Mission 1.12; H-29 still
+  open, and the ORDERING of these labels is now established without it --
+  `gdelt-web-ngram-temporal-evidence-v1.md`). Neither the announcement nor the data page
   states one. Mission 1.9.1 recorded it as UTC and this review does not confirm
   that — it is an open question on review 3.
 

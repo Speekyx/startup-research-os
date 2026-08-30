@@ -208,6 +208,13 @@ class ObservationInput:
     period_label: str
     quality: NormalizedRecordQuality
     quality_reasons: frozenset[NormalizationQualityReason] = frozenset()
+    # WHICH published resource this came from. Added in Mission 1.12 so a
+    # temporal order certification can be scoped to one publication stream:
+    # ordering is a property of a stream, and `source_id` alone would let a
+    # future GDELT dataset inherit the WEB-NGRAM finding. Optional, and the
+    # default is a REFUSAL -- an observation that cannot say which resource it
+    # came from claims no stream's certification.
+    resource_id: str | None = None
 
     def __post_init__(self) -> None:
         for name in (
@@ -245,6 +252,7 @@ class AssessedInput:
             "source_id": self.observation.source_id,
             "observation_key": self.observation.observation_key,
             "record_kind_id": self.observation.record_kind_id,
+            "resource_id": self.observation.resource_id,
             "period_label": self.observation.period_label,
             "period_type": self.observation.period_type.value,
             "quality": self.observation.quality.value,
@@ -575,6 +583,7 @@ def assess_inputs(
             record_kind_id=observation.record_kind_id,
             quality_reasons=observation.quality_reasons,
             source_id=observation.source_id,
+            resource_id=observation.resource_id,
         )
         if withheld:
             assessed.append(

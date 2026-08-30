@@ -43,6 +43,7 @@ from sros_contracts import (
 from sros_signal_model import (
     MINIMUM_DISTINCT_OBSERVATIONS,
     ORDER_ESTABLISHED_WITHOUT_TIMEZONE,
+    ORDERED_BASES,
     SIGNAL_EXTRACTORS,
     SIGNAL_TYPES,
     ObservationInput,
@@ -51,9 +52,12 @@ from sros_signal_model import (
     SignalRefusedError,
     SignalScope,
     SignalWindow,
+    TemporalOrderCertification,
     assess_inputs,
     build_signal,
+    canonical_fingerprint,
     canonical_json,
+    order_certification,
     withheld_facts,
 )
 
@@ -71,11 +75,18 @@ EXPIRES_AT = DERIVED_AT + timedelta(days=365)
 # from a source.
 
 
-def gdelt_observation(term: str, *, record_id: str, bucket: str = "20260830091500"):
+def gdelt_observation(
+    term: str,
+    *,
+    record_id: str,
+    bucket: str = "20260830091500",
+    resource_id: str | None = "web-ngrams/1gram",
+):
     return ObservationInput(
         normalized_record_id=record_id,
         raw_record_id=f"raw-{record_id}",
         source_id="gdelt",
+        resource_id=resource_id,
         observation_key=f"gdelt|web-ngrams/1gram|{bucket}|ENGLISH|{term}",
         record_kind_id="lexical_frequency_observation",
         period_type=NormalizedPeriodType.INTERVAL,
@@ -396,10 +407,15 @@ class TestTemporalSemantics(unittest.TestCase):
             frozenset({SignalRequiredFact.COMPARABLE_INSTANT}),
         )
 
-    def test_h32_blocks_source_relative_order_for_gdelt(self):
-        """Separately answerable, and separately blocked. If this ever passes
-        without an entry in the order certification, ordering was granted by
-        accident."""
+    def test_h32_grants_source_relative_order_to_the_reviewed_stream(self):
+        """Until Mission 1.12 this asserted the opposite, and correctly.
+
+        H-32 was closed on GDELT's own evidence -- its BigQuery analysis orders
+        this table by DATE, its MASTERFILELIST is sequenced by the label at
+        15-minute resolution, and its LASTUPDATE names the maximal label as the
+        newest publication. The record still says
+        PERIOD_TIMEZONE_NOT_ESTABLISHED and the certification overrides that
+        reason and NO other."""
         observation = gdelt_observation("climate", record_id="n-1")
         self.assertEqual(
             withheld_facts(
@@ -407,6 +423,93 @@ class TestTemporalSemantics(unittest.TestCase):
                 record_kind_id=observation.record_kind_id,
                 quality_reasons=observation.quality_reasons,
                 source_id=observation.source_id,
+                resource_id=observation.resource_id,
+            ),
+            frozenset(),
+        )
+
+    def test_order_does_not_leak_into_a_comparable_instant(self):
+        """The whole point of keeping B and C apart. The same record, the same
+        quality reasons, and the two facts get opposite answers."""
+        observation = gdelt_observation("climate", record_id="n-1")
+        self.assertEqual(
+            withheld_facts(
+                frozenset(
+                    {
+                        SignalRequiredFact.SOURCE_RELATIVE_ORDER,
+                        SignalRequiredFact.COMPARABLE_INSTANT,
+                    }
+                ),
+                record_kind_id=observation.record_kind_id,
+                quality_reasons=observation.quality_reasons,
+                source_id=observation.source_id,
+                resource_id=observation.resource_id,
+            ),
+            frozenset({SignalRequiredFact.COMPARABLE_INSTANT}),
+        )
+
+    def test_an_unreviewed_resource_inherits_nothing(self):
+        """`chargram` is published in the same directory, by the same source,
+        with the same label scheme, and no review has assessed it. A prefix
+        match on `web-ngrams/` would have covered it silently."""
+        observation = gdelt_observation(
+            "climate", record_id="n-1", resource_id="web-ngrams/chargram"
+        )
+        self.assertEqual(
+            withheld_facts(
+                frozenset({SignalRequiredFact.SOURCE_RELATIVE_ORDER}),
+                record_kind_id=observation.record_kind_id,
+                quality_reasons=observation.quality_reasons,
+                source_id=observation.source_id,
+                resource_id=observation.resource_id,
+            ),
+            frozenset({SignalRequiredFact.SOURCE_RELATIVE_ORDER}),
+        )
+
+    def test_an_observation_that_cannot_name_its_resource_inherits_nothing(self):
+        """The default is a refusal, not a convenience."""
+        observation = gdelt_observation("climate", record_id="n-1", resource_id=None)
+        self.assertEqual(
+            withheld_facts(
+                frozenset({SignalRequiredFact.SOURCE_RELATIVE_ORDER}),
+                record_kind_id=observation.record_kind_id,
+                quality_reasons=observation.quality_reasons,
+                source_id=observation.source_id,
+                resource_id=observation.resource_id,
+            ),
+            frozenset({SignalRequiredFact.SOURCE_RELATIVE_ORDER}),
+        )
+
+    def test_an_unreviewed_source_inherits_nothing(self):
+        """Ordering is certified per stream, never per label shape. A source
+        publishing identical-looking YYYYMMDDHHMMSS labels gets nothing."""
+        self.assertIsNone(order_certification("some-other-source", "web-ngrams/1gram"))
+        self.assertIsNone(order_certification("gdelt", "webngrams"))
+
+    def test_a_period_that_could_not_be_represented_still_has_no_order(self):
+        """The certification overrides an unestablished TIMEZONE and nothing
+        else. A period the adapter could not represent has no order either."""
+        broken = ObservationInput(
+            normalized_record_id="n-9",
+            raw_record_id="raw-n-9",
+            source_id="gdelt",
+            resource_id="web-ngrams/1gram",
+            observation_key="gdelt|web-ngrams/1gram|nonsense|ENGLISH|climate",
+            record_kind_id="lexical_frequency_observation",
+            period_type=NormalizedPeriodType.INTERVAL,
+            period_label="nonsense",
+            quality=NormalizedRecordQuality.INVALID,
+            quality_reasons=frozenset(
+                {Reason.PERIOD_NOT_SUPPORTED, Reason.PERIOD_TIMEZONE_NOT_ESTABLISHED}
+            ),
+        )
+        self.assertEqual(
+            withheld_facts(
+                frozenset({SignalRequiredFact.SOURCE_RELATIVE_ORDER}),
+                record_kind_id=broken.record_kind_id,
+                quality_reasons=broken.quality_reasons,
+                source_id=broken.source_id,
+                resource_id=broken.resource_id,
             ),
             frozenset({SignalRequiredFact.SOURCE_RELATIVE_ORDER}),
         )
@@ -423,11 +526,96 @@ class TestTemporalSemantics(unittest.TestCase):
             frozenset(),
         )
 
-    def test_no_source_is_order_certified(self):
-        """H-32 is open. An entry here is a REVIEWED FINDING with a stated basis,
-        and adding one because the ordering seems obvious is the move the
-        geography map exists to prevent."""
-        self.assertEqual(dict(ORDER_ESTABLISHED_WITHOUT_TIMEZONE), {})
+    def test_exactly_one_stream_is_order_certified(self):
+        """Until Mission 1.12 this asserted the map was EMPTY.
+
+        It holds one entry now, and the constraints on it are what the old
+        assertion was protecting: every entry states its basis, names its
+        resources rather than matching a prefix, and grants ordering only."""
+        self.assertEqual(len(ORDER_ESTABLISHED_WITHOUT_TIMEZONE), 1)
+        (certification,) = ORDER_ESTABLISHED_WITHOUT_TIMEZONE
+        self.assertEqual(certification.source_id, "gdelt")
+        self.assertEqual(
+            certification.resource_ids,
+            frozenset({"web-ngrams/1gram", "web-ngrams/2gram"}),
+        )
+        self.assertEqual(certification.label_scheme, "gdelt-web-ngram-bucket")
+        self.assertEqual(certification.review_version, 3)
+
+    def test_every_certification_states_its_basis(self):
+        """A certification nobody can re-check is a guess with a citation field."""
+        for certification in ORDER_ESTABLISHED_WITHOUT_TIMEZONE:
+            self.assertTrue(certification.basis.strip())
+            self.assertTrue(certification.scope.strip())
+
+    def test_a_certification_may_not_cover_everything(self):
+        with self.assertRaises(ValueError):
+            TemporalOrderCertification(
+                source_id="gdelt",
+                resource_ids=frozenset(),
+                label_scheme="x",
+                review_version=3,
+                basis="b",
+                scope="s",
+            )
+
+    def test_a_certification_may_not_omit_its_basis(self):
+        with self.assertRaises(ValueError):
+            TemporalOrderCertification(
+                source_id="gdelt",
+                resource_ids=frozenset({"web-ngrams/1gram"}),
+                label_scheme="x",
+                review_version=3,
+                basis="   ",
+                scope="s",
+            )
+
+    def test_no_certification_grants_a_timezone(self):
+        """H-29 is untouched. Nothing in the certification vocabulary can say
+        UTC, an offset, or an instant."""
+        for certification in ORDER_ESTABLISHED_WITHOUT_TIMEZONE:
+            serialised = canonical_json(
+                {
+                    "source": certification.source_id,
+                    "scheme": certification.label_scheme,
+                    "scope": certification.scope,
+                }
+            ).lower()
+            for invented in ("utc", "gmt", "+00:00", "offset"):
+                self.assertNotIn(invented, serialised)
+            self.assertFalse(hasattr(certification, "timezone"))
+            self.assertFalse(hasattr(certification, "utc_offset"))
+
+    def test_ordered_periods_carries_no_bounds_and_no_event_time(self):
+        """§14. Closing H-32 gave GDELT an ORDER, not an INSTANT. An
+        ORDERED_PERIODS window has no start, no end and no observed_at, so
+        nothing can convert one to a TIMESTAMPTZ."""
+        window = SignalWindow(
+            basis=SignalTemporalBasis.ORDERED_PERIODS,
+            period_labels=("20260830091500", "20260830093000"),
+            resolution=NormalizedPeriodType.INTERVAL,
+            observation_count=2,
+        )
+        self.assertIsNone(window.event_time)
+        self.assertNotIn("start", window.to_json())
+        self.assertNotIn("end", window.to_json())
+        with self.assertRaises(ValueError):
+            SignalWindow(
+                basis=SignalTemporalBasis.ORDERED_PERIODS,
+                period_labels=("20260830091500", "20260830093000"),
+                resolution=NormalizedPeriodType.INTERVAL,
+                observation_count=2,
+                start=datetime(2026, 8, 30, 9, 15, tzinfo=UTC),
+                end=datetime(2026, 8, 30, 9, 45, tzinfo=UTC),
+            )
+
+    def test_an_ordered_basis_permits_a_direction_without_a_timeline(self):
+        """The point of closing H-32: `INCREASING` becomes sayable about two
+        buckets in one stream, and still says nothing about when either was."""
+        self.assertIn(SignalTemporalBasis.ORDERED_PERIODS, ORDERED_BASES)
+        self.assertIn(SignalTemporalBasis.COMPARABLE_INSTANTS, ORDERED_BASES)
+        self.assertNotIn(SignalTemporalBasis.SAME_PERIOD_LABEL, ORDERED_BASES)
+        self.assertNotIn(SignalTemporalBasis.NONE, ORDERED_BASES)
 
     def test_only_a_shared_timeline_carries_bounds(self):
         with self.assertRaises(ValueError):
@@ -772,6 +960,40 @@ class TestIdentity(unittest.TestCase):
         )
         self.assertNotEqual(
             lexical_signal().derivation_fingerprint, reversed_inputs.derivation_fingerprint
+        )
+
+    def test_closing_h32_did_not_move_an_existing_signal(self):
+        """§16. A same-bucket contrast is unchanged: the certification grants a
+        fact this derivation never required, and `resource_id` is lineage rather
+        than identity."""
+        draft = lexical_signal()
+        self.assertEqual(
+            draft.derivation_fingerprint,
+            canonical_fingerprint(
+                {
+                    "extractor": {"id": "gdelt-lexical-contrast", "version": "1.0.0"},
+                    "inputs": [
+                        {
+                            "normalized_record_id": "n-1",
+                            "observation_key": draft.inputs[0].observation.observation_key,
+                        },
+                        {
+                            "normalized_record_id": "n-2",
+                            "observation_key": draft.inputs[1].observation.observation_key,
+                        },
+                    ],
+                    "parameter_fingerprint": draft.parameter_fingerprint,
+                    "quantity_family": "LEXICAL_FREQUENCY",
+                    "schema": {"id": "sros.signal", "version": 1},
+                    "signal_type": {"id": "lexical_frequency_contrast", "registry": "signal_type"},
+                    "window": {
+                        "basis": "SAME_PERIOD_LABEL",
+                        "period_labels": ["20260830091500", "20260830091500"],
+                        "resolution": "INTERVAL",
+                    },
+                    "workspace_id": WORKSPACE,
+                }
+            ),
         )
 
     def test_serialisation_is_stable_across_runs(self):

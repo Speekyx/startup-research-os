@@ -50,10 +50,10 @@ entered: §37 asks for the required next action to be *recorded*, not taken.
 | [H-26](#h-26) | npm | REQUIRES_REVIEW | Commercial reuse and analytics by a third party |
 | [H-27](#h-27) | GDELT | **DOC API deferred** | Timeline JSON envelope is unobservable from here — [no longer the first-collector blocker](#h-27-update) |
 | [H-28](#h-28) | GDELT | — | [**RESOLVED**](#h-28-update) — the model in Mission 1.9.1, the entries in Mission 1.9.2 |
-| [H-29](#h-29) | GDELT | refinement | Is the WEB-NGRAM `DATE` column UTC? Nothing first-party says |
+| [H-29](#h-29) | GDELT | refinement | Is the WEB-NGRAM `DATE` column UTC? **Re-checked in Mission 1.12 and still open** — [why](#h-29-update) |
 | [H-30](#h-30) | GDELT | refinement | Is there a CLD2-name-to-language-tag mapping? |
-| [H-31](#h-31) | GDELT | refinement | How far back does the WEB-NGRAM directory reach? |
-| [H-32](#h-32) | GDELT | refinement | Are the WEB-NGRAM `DATE` stamps monotonic within the stream? |
+| [H-31](#h-31) | GDELT | — | [**RESOLVED & REFINED**](#h-31-update) — coverage vs current extent, both answered |
+| [H-32](#h-32) | GDELT | — | [**RESOLVED**](#h-32-update) — GDELT orders this stream itself |
 
 ---
 
@@ -1002,3 +1002,86 @@ without anyone asserting UTC.
 **Legal counsel appropriate?** No.
 **Developer action needed?** No. The exact label is preserved, so answering this
 later is a re-derivation over records already held.
+
+---
+
+## H-29 — update after Mission 1.12 {#h-29-update}
+
+**Re-checked against first-party material on 2026-08-30 and still OPEN.**
+
+The words UTC, GMT, timezone and "time zone" appear **nowhere** on the WEB-NGRAM
+announcement, and `gdeltproject.org/data.html` states none for any dataset.
+
+**GDELT does document UTC — for a different dataset**, and the difference is the
+whole point:
+
+| | WEB-NGRAM (ours) | Web News NGrams 3.0 |
+|---|---|---|
+| path | `gdeltv3/web/ngrams/` | `gdeltv3/webngrams/` |
+| BigQuery | `web_1grams` / `web_2grams` | `webngrams` |
+| cadence | every 15 minutes | every minute |
+| what `date` MEANS | the **15-minute bucket** the counts aggregate | "the JSON timestamp **when the article was seen**" |
+| timezone | unstated | **UTC, stated** |
+
+A timezone documented for an article-observation instant says nothing about an
+aggregation window in another dataset, and the 3.0 announcement never mentions
+`gdeltv3/web/ngrams`. A third family, `gdeltv5/weblegacy/ngrams/`, states none
+either.
+
+**A timing observation was available and was refused.** `LASTUPDATE` named
+bucket `20260830184500` while the response carried `last-modified: 18:50:30
+GMT`. That compares a Google Cloud Storage object's write time against this
+machine's clock, from one sample, and even a clean result would not distinguish
+UTC from a fixed-offset zone that equals it today.
+
+**Needed, unchanged.** A first-party statement, or an operator answer.
+
+---
+
+## H-31 — update after Mission 1.12 {#h-31-update}
+
+**RESOLVED, and refined into the two questions it was.**
+
+| | Question | Answer |
+|---|---|---|
+| **H-31a** | Dataset **semantic coverage** | **2019-01-01.** The announcement: "January 1, 2019 through present" |
+| **H-31b** | Current **download directory extent** | **`20190101000000`.** A bounded read of `MASTERFILELIST.TXT` shows the current index beginning at the dataset's first bucket |
+
+**H-31b is an observation, not a guarantee.** GDELT publishes no retention
+commitment for this directory, so no backfill plan may assume a file will still
+be fetchable later. The acquisition bounds are unchanged.
+
+The same index also lists a **third** file per bucket, `chargram`, which the
+announcement does not document and no review has assessed. Recorded so its
+existence is a known fact; it is not authorised.
+
+---
+
+## H-32 — update after Mission 1.12 {#h-32-update}
+
+**RESOLVED. Ordering is established; the timezone is not.**
+
+Three first-party artifacts, retrieved 2026-08-30:
+
+1. **GDELT orders this column itself.** Its published BigQuery analysis over
+   `gdelt-bq.gdeltv2.web_1grams` reads `SUBSTR(CAST(DATE AS STRING), 0, 8)` as a
+   calendar day and `ORDER BY DATE ASC` to chart a nine-month series.
+2. **GDELT sequences its own directory by the label.** `MASTERFILELIST.TXT` is
+   published in ascending label order at **15-minute resolution**, across 7.6
+   years.
+3. **GDELT calls the maximal label the newest.** `LASTUPDATE.TXT` names exactly
+   the last entry of `MASTERFILELIST`.
+
+The daylight-saving objection is answered by the artifacts rather than argued
+away: a repeating wall-clock label would need a duplicate filename in one flat
+directory, and would break the "newest = largest" invariant `LASTUPDATE` is
+built on.
+
+**Scope.** `gdelt`, resources `web-ngrams/1gram` and `web-ngrams/2gram` **named
+exactly**, label scheme `gdelt-web-ngram-bucket`, review 3. It grants
+`SOURCE_RELATIVE_ORDER` and nothing else. It is not a rule about
+`YYYYMMDDHHMMSS` strings and no other GDELT dataset inherits it.
+
+Full record: [`gdelt-web-ngram-temporal-evidence-v1.md`](gdelt-web-ngram-temporal-evidence-v1.md),
+[ADR-022](../architecture/adr/ADR-022-web-ngram-source-relative-order.md).
+

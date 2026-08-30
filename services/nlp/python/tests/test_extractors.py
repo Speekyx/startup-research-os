@@ -24,6 +24,7 @@ from sros_contracts import (
     SignalMagnitudeKind,
     SignalMagnitudeUnitState,
     SignalRefusalReason,
+    SignalRequiredFact,
     SignalTemporalBasis,
 )
 from sros_nlp import (
@@ -34,7 +35,7 @@ from sros_nlp import (
     NumericPeriodChangeExtractor,
     select_extractor,
 )
-from sros_signal_model import SignalRefusedError
+from sros_signal_model import SignalRefusedError, withheld_facts
 
 WORKSPACE = "11111111-1111-4111-8111-111111111111"
 DERIVED_AT = datetime(2026, 8, 30, 12, tzinfo=UTC)
@@ -825,6 +826,83 @@ class TestLexicalQualityAndAbsences(unittest.TestCase):
         ).lower()
         for interpretation in ("attention", "demand", "trend", "topic", "sentiment", "growth"):
             self.assertNotIn(interpretation, serialised)
+
+
+class TestTemporalOrderCertification(unittest.TestCase):
+    """Mission 1.12 §19. H-32 closed; nothing about the extractors changed."""
+
+    def test_a_real_shaped_gdelt_observation_names_its_resource(self):
+        """The certification is scoped to a publication STREAM, so an
+        observation that could not say which resource it came from would claim
+        nothing."""
+        observation = lexical_observation("climate", "55", record_id="x")
+        self.assertEqual(observation.resource_id, "web-ngrams/1gram")
+        self.assertEqual(observation.to_input().resource_id, "web-ngrams/1gram")
+
+    def test_the_certified_stream_now_supplies_source_relative_order(self):
+        observation = lexical_observation("climate", "55", record_id="x")
+        self.assertEqual(
+            withheld_facts(
+                frozenset({SignalRequiredFact.SOURCE_RELATIVE_ORDER}),
+                record_kind_id=observation.record_kind_id,
+                quality_reasons=observation.quality_reasons,
+                source_id=observation.source_id,
+                resource_id=observation.resource_id,
+            ),
+            frozenset(),
+        )
+
+    def test_a_comparable_instant_is_still_withheld(self):
+        """H-29 is open and closing H-32 did not touch it."""
+        observation = lexical_observation("climate", "55", record_id="x")
+        self.assertEqual(
+            withheld_facts(
+                frozenset({SignalRequiredFact.COMPARABLE_INSTANT}),
+                record_kind_id=observation.record_kind_id,
+                quality_reasons=observation.quality_reasons,
+                source_id=observation.source_id,
+                resource_id=observation.resource_id,
+            ),
+            frozenset({SignalRequiredFact.COMPARABLE_INSTANT}),
+        )
+
+    def test_the_lexical_extractor_still_requires_no_ordering(self):
+        """§17. No extractor was written this mission. The contrast requires the
+        LABEL, not the order, so nothing it derives changed."""
+        derivation = LEXICAL.resolve({"terms": ["climate", "weather"]})
+        self.assertNotIn(SignalRequiredFact.SOURCE_RELATIVE_ORDER, derivation.required_facts)
+        self.assertNotIn(SignalRequiredFact.COMPARABLE_INSTANT, derivation.required_facts)
+
+    def test_two_buckets_are_still_refused(self):
+        """§16, §17. Ordering being ESTABLISHED does not make the same-bucket
+        extractor a sequential one. Its grouping key still carries the exact
+        label, so two buckets never meet."""
+        outcome = derive(
+            LEXICAL,
+            [
+                lexical_observation("climate", "10", record_id="x", bucket="20260830091500"),
+                lexical_observation("climate", "40", record_id="y", bucket="20260830093000"),
+            ],
+            {"terms": ["climate", "weather"]},
+        )
+        self.assertEqual(outcome.drafts, ())
+        self.assertIs(outcome.refusals[0].reason, SignalRefusalReason.INCOMPATIBLE_SERIES)
+
+    def test_the_existing_signal_is_unmoved(self):
+        """§16. The one real GDELT signal must not be reinterpreted: same
+        magnitude, same basis, same direction, same fingerprint inputs."""
+        draft = derive(
+            LEXICAL,
+            [
+                lexical_observation("climate", "55", record_id="x"),
+                lexical_observation("weather", "36", record_id="y"),
+            ],
+            {"terms": ["climate", "weather"]},
+        ).drafts[0]
+        self.assertEqual(draft.magnitude.value, Decimal("19"))
+        self.assertIs(draft.window.basis, SignalTemporalBasis.SAME_PERIOD_LABEL)
+        self.assertIs(draft.direction, SignalDirection.NOT_APPLICABLE)
+        self.assertIsNone(draft.observed_at)
 
 
 class TestRegistry(unittest.TestCase):
