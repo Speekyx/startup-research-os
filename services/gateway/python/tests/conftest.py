@@ -10,13 +10,16 @@ is not meaningfully tested: every isolation assertion here needs a second
 workspace to have something to be isolated *from*.
 
 **A and B are SEEDED, and a suite that writes into them leaves its rows behind.**
-`probe_workspaces` exists for the suites that write: a throwaway pair, created
-and dropped per test. See its docstring for why counting rows in a seeded
-workspace is a measurement of the environment rather than of the code.
+Every module that writes has a probe pair of its own -- `probe_workspaces` for
+`test_claims.py`, `rls_workspaces` for `test_rls.py`, and so on -- created and
+dropped per test. See `probe_workspaces` for why counting rows in a seeded
+workspace is a measurement of the environment rather than of the code, and the
+allocation table below for why the pairs are not shared.
 """
 
 from __future__ import annotations
 
+import contextlib
 import os
 import uuid
 from collections.abc import Iterator
@@ -28,11 +31,34 @@ import pytest
 WORKSPACE_A = uuid.UUID("00000000-0000-4000-8000-000000000001")
 WORKSPACE_B = uuid.UUID("00000000-0000-4000-8000-000000000003")
 
-# P and Q belong to `probe_workspaces`: created per test, dropped per test, and
-# never seeded. 0004 is the acquisition suite's probe workspace -- distinct ids
-# per suite, so no suite can be looking at another one's leftovers.
+# The probe workspaces: created per test, dropped per test, never seeded.
+#
+# One pair PER MODULE rather than one for the suite, so that the drop each
+# fixture performs before it creates -- the step that lets an interrupted run
+# self-heal -- can only ever reach rows its own tests wrote. Two overlapping
+# runs are the case that makes the difference: on a shared id, one run's setup
+# deletes the other run's live rows.
+#
+#   ...0004        the acquisition suite (services/acquisition/python/tests)
+#   ...0005/0006   test_claims.py
+#   ...0007/0008   test_rls.py
+#   ...0009/000a   test_integration.py
+#   ...000b/000c   test_orchestrator_integration.py
+#   ...000d        test_security.py
 WORKSPACE_P = uuid.UUID("00000000-0000-4000-8000-000000000005")
 WORKSPACE_Q = uuid.UUID("00000000-0000-4000-8000-000000000006")
+WORKSPACE_RLS_P = uuid.UUID("00000000-0000-4000-8000-000000000007")
+WORKSPACE_RLS_Q = uuid.UUID("00000000-0000-4000-8000-000000000008")
+WORKSPACE_INTEGRATION_P = uuid.UUID("00000000-0000-4000-8000-000000000009")
+WORKSPACE_INTEGRATION_Q = uuid.UUID("00000000-0000-4000-8000-00000000000a")
+WORKSPACE_ORCH_P = uuid.UUID("00000000-0000-4000-8000-00000000000b")
+WORKSPACE_ORCH_Q = uuid.UUID("00000000-0000-4000-8000-00000000000c")
+WORKSPACE_SECURITY_P = uuid.UUID("00000000-0000-4000-8000-00000000000d")
+
+# Named, rather than written out at the one place it is checked, because the
+# check is the thing standing between a teardown and the seeded data every
+# other suite reads.
+SEEDED_WORKSPACES = frozenset({WORKSPACE_A, WORKSPACE_B})
 
 DATABASE_URL = os.environ.get(
     "DATABASE_URL", "postgresql://sros:sros_dev_password@127.0.0.1:55432/sros"
@@ -72,8 +98,12 @@ def _qdrant_available() -> bool:
         return False
 
 
+# Probed once, at import: the probe fixtures below consult it on every test,
+# and a connection attempt per test would pay for the same answer each time.
+_POSTGRES_AVAILABLE = _postgres_available()
+
 needs_postgres = pytest.mark.skipif(
-    not _postgres_available(), reason="PostgreSQL not reachable; start infrastructure/compose"
+    not _POSTGRES_AVAILABLE, reason="PostgreSQL not reachable; start infrastructure/compose"
 )
 needs_redis = pytest.mark.skipif(
     not _redis_available(), reason="Redis not reachable; start infrastructure/compose"
@@ -184,46 +214,103 @@ def probe_workspaces() -> Iterator[tuple[uuid.UUID, uuid.UUID]]:
     Two, not one, because this suite's isolation assertions need a second
     workspace to be isolated *from* -- the same reason the seeded pair exists.
 
-    Dropped before it is created, as well as after. Teardown is in a `finally`
-    and so survives a failing test, but it does not survive the run being
-    killed -- and the workspaces left behind by an interrupted run would be
-    silently reused by the next one, which is the defect this fixture exists to
-    remove, merely made rarer.
+    This one belongs to `test_claims.py`. The four below are the same fixture
+    on ids of their own, for the four other modules that write.
     """
-    _drop_workspaces()
-    _make_workspaces()
-    try:
+    with _probe_workspaces("claims", WORKSPACE_P, WORKSPACE_Q):
         yield WORKSPACE_P, WORKSPACE_Q
+
+
+@pytest.fixture
+def rls_workspaces() -> Iterator[tuple[uuid.UUID, uuid.UUID]]:
+    """`probe_workspaces` for `test_rls.py`.
+
+    Before this existed the suite left an `rls-a-*` project in the seeded
+    development workspace and an `rls-b-*` project in the seeded second one on
+    every run -- and did worse than litter.
+    `test_a_delete_cannot_reach_another_workspace` issues a DELETE with no
+    WHERE, which is the point of the test: the policy, not the query, is what
+    must confine it. Confined to the seeded development workspace, it emptied
+    `research.research_projects` there on every run, and
+    `research_sessions.project_id` cascades, so every session in that workspace
+    went with the projects.
+    """
+    with _probe_workspaces("rls", WORKSPACE_RLS_P, WORKSPACE_RLS_Q):
+        yield WORKSPACE_RLS_P, WORKSPACE_RLS_Q
+
+
+@pytest.fixture
+def integration_workspaces() -> Iterator[tuple[uuid.UUID, uuid.UUID]]:
+    """`probe_workspaces` for `test_integration.py`."""
+    with _probe_workspaces("integration", WORKSPACE_INTEGRATION_P, WORKSPACE_INTEGRATION_Q):
+        yield WORKSPACE_INTEGRATION_P, WORKSPACE_INTEGRATION_Q
+
+
+@pytest.fixture
+def orchestration_workspaces() -> Iterator[tuple[uuid.UUID, uuid.UUID]]:
+    """`probe_workspaces` for `test_orchestrator_integration.py`."""
+    with _probe_workspaces("orchestration", WORKSPACE_ORCH_P, WORKSPACE_ORCH_Q):
+        yield WORKSPACE_ORCH_P, WORKSPACE_ORCH_Q
+
+
+@pytest.fixture
+def security_workspace() -> Iterator[uuid.UUID]:
+    """`probe_workspaces` for `test_security.py`, which needs only one.
+
+    Nothing in that module asserts isolation; it asserts that errors, logs and
+    readiness payloads carry no tenant content. One workspace is what it uses,
+    so one is what it gets -- a second would be a workspace no test writes to,
+    which is a fixture pretending to a coverage it does not have.
+    """
+    with _probe_workspaces("security", WORKSPACE_SECURITY_P):
+        yield WORKSPACE_SECURITY_P
+
+
+@contextlib.contextmanager
+def _probe_workspaces(label: str, *workspaces: uuid.UUID) -> Iterator[None]:
+    """Hold the given workspaces open for one test, then remove them.
+
+    Dropped before they are created, as well as after. Teardown is in a
+    `finally` and so survives a failing test, but it does not survive the run
+    being killed -- and the workspaces left behind by an interrupted run would
+    be silently reused by the next one, which is the defect these fixtures
+    exist to remove, merely made rarer.
+
+    A no-op without PostgreSQL, so that a module can bind one of these autouse
+    and still let its Redis-only and Qdrant-only tests run on a machine with no
+    database. Those tests use a workspace id as an opaque tenant key and never
+    store a row against it.
+    """
+    if not _POSTGRES_AVAILABLE:
+        yield
+        return
+    _drop_workspaces(workspaces)
+    _make_workspaces(label, workspaces)
+    try:
+        yield
     finally:
-        _drop_workspaces()
+        _drop_workspaces(workspaces)
 
 
-def _make_workspaces() -> None:
+def _make_workspaces(label: str, workspaces: tuple[uuid.UUID, ...]) -> None:
     import psycopg
 
     with psycopg.connect(DATABASE_URL) as connection:
-        connection.execute(
-            "INSERT INTO core.workspaces (id, name, slug) VALUES (%s,%s,%s), (%s,%s,%s) "
-            "ON CONFLICT (id) DO NOTHING",
-            (
-                WORKSPACE_P,
-                "gateway probe",
-                "gateway-probe",
-                WORKSPACE_Q,
-                "gateway probe (isolation)",
-                "gateway-probe-other",
-            ),
-        )
+        for index, workspace in enumerate(workspaces):
+            connection.execute(
+                "INSERT INTO core.workspaces (id, name, slug) VALUES (%s,%s,%s) "
+                "ON CONFLICT (id) DO NOTHING",
+                (workspace, f"{label} probe {index}", f"{label}-probe-{index}"),
+            )
         connection.commit()
 
 
-def _drop_workspaces() -> None:
-    """Only ever called for the workspaces this fixture created."""
+def _drop_workspaces(workspaces: tuple[uuid.UUID, ...]) -> None:
+    """Only ever called for the workspaces a probe fixture created."""
     import psycopg
 
-    assert {WORKSPACE_P, WORKSPACE_Q}.isdisjoint({WORKSPACE_A, WORKSPACE_B}), (
-        "seeded workspaces must not be dropped"
-    )
+    assert SEEDED_WORKSPACES.isdisjoint(workspaces), "seeded workspaces must not be dropped"
+    ids = list(workspaces)
     with psycopg.connect(DATABASE_URL) as connection:
         # `scoring.evidence` is deleted by name, before the cascade runs.
         # Its `independence_group_id` foreign key is ON DELETE RESTRICT, so a
@@ -232,15 +319,10 @@ def _drop_workspaces() -> None:
         # the two cascades first is a property of PostgreSQL's trigger order
         # rather than anything this schema states -- so the teardown does not
         # depend on it.
-        connection.execute(
-            "DELETE FROM scoring.evidence WHERE workspace_id = ANY(%s)",
-            ([WORKSPACE_P, WORKSPACE_Q],),
-        )
+        connection.execute("DELETE FROM scoring.evidence WHERE workspace_id = ANY(%s)", (ids,))
         # Everything else goes with the workspace: every tenant table declares
         # `workspace_id ... REFERENCES core.workspaces (id) ON DELETE CASCADE`,
         # so claims, revisions, observations, independence groups, opportunities,
-        # sessions and projects are all removed by these two rows.
-        connection.execute(
-            "DELETE FROM core.workspaces WHERE id = ANY(%s)", ([WORKSPACE_P, WORKSPACE_Q],)
-        )
+        # sessions, plans, jobs and projects are all removed by these rows.
+        connection.execute("DELETE FROM core.workspaces WHERE id = ANY(%s)", (ids,))
         connection.commit()

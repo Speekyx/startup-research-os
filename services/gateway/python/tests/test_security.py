@@ -6,6 +6,11 @@ external error sanitization, and no secret exposure in `/ready` or in logs.
 Tenant leakage and pooled-connection leakage are in `test_rls.py`; the prompt
 injection boundary and the provider SDK restriction are in the llm-gateway
 suite, next to the code they constrain.
+
+The workspace is this module's own, created before each test and dropped after
+it by `own_workspace` below. Two of these tests create a project through the
+API -- one of them named after a secret, on purpose -- and the seeded
+development workspace kept both on every run.
 """
 
 from __future__ import annotations
@@ -18,7 +23,14 @@ import uuid
 import pytest
 from sros_gateway.config import ConfigurationError, Settings, load_settings
 
-from .conftest import DATABASE_URL, QDRANT_URL, REDIS_URL, WORKSPACE_A, header, needs_postgres
+from .conftest import (
+    DATABASE_URL,
+    QDRANT_URL,
+    REDIS_URL,
+    WORKSPACE_SECURITY_P,
+    header,
+    needs_postgres,
+)
 
 # The credential fragments that appear in the local stack's configuration. If
 # any of these reaches a response body or a log line, something is echoing
@@ -26,10 +38,24 @@ from .conftest import DATABASE_URL, QDRANT_URL, REDIS_URL, WORKSPACE_A, header, 
 SECRET_FRAGMENTS = ("sros_dev_password", "@127.0.0.1:55432", "postgresql://")
 
 
+@pytest.fixture(autouse=True)
+def own_workspace(security_workspace) -> None:
+    """Every test in this module runs in a workspace of its own.
+
+    Autouse, and it hands nothing back: the tests name WORKSPACE_SECURITY_P
+    directly, so what they need is not a value but a guarantee -- that it
+    exists when a test starts and is gone when it ends.
+
+    Autouse over the whole module, including the classes that need no stack at
+    all, because the fixture is a no-op when PostgreSQL is unreachable and one
+    rule is easier to keep than a rule with an exemption.
+    """
+
+
 @needs_postgres
 class TestReadinessLeaksNothing:
     def test_ready_reports_state_without_echoing_connection_strings(self, api_client) -> None:
-        body = api_client.get("/ready", headers=header(WORKSPACE_A)).text
+        body = api_client.get("/ready", headers=header(WORKSPACE_SECURITY_P)).text
         for fragment in SECRET_FRAGMENTS:
             assert fragment not in body, f"/ready echoed {fragment!r}"
 
@@ -37,7 +63,7 @@ class TestReadinessLeaksNothing:
         """ "Designed for RLS" and "RLS enabled" were indistinguishable from
         outside until Mission 0.4, and the difference is the whole value of the
         second isolation layer."""
-        payload = api_client.get("/ready", headers=header(WORKSPACE_A)).json()
+        payload = api_client.get("/ready", headers=header(WORKSPACE_SECURITY_P)).json()
         assert payload["security"]["rls_policies"] == "active"
         assert payload["security"]["app_db_role"] == "sros_app"
 
@@ -68,7 +94,7 @@ class TestReadinessLeaksNothing:
             environment="development",
         )
         with TestClient(create_app(settings)) as client:
-            response = client.get("/ready", headers=header(WORKSPACE_A))
+            response = client.get("/ready", headers=header(WORKSPACE_SECURITY_P))
 
         assert response.status_code == 503
         assert "hunter2" not in response.text
@@ -91,7 +117,7 @@ class TestErrorSanitization:
 
     def test_a_not_found_response_carries_no_sql_or_schema_detail(self, api_client) -> None:
         response = api_client.get(
-            f"/api/v1/research-projects/{uuid.uuid4()}", headers=header(WORKSPACE_A)
+            f"/api/v1/research-projects/{uuid.uuid4()}", headers=header(WORKSPACE_SECURITY_P)
         )
         assert response.status_code == 404
         body = response.json()
@@ -105,7 +131,8 @@ class TestErrorSanitization:
             (api_client.get("/api/v1/research-projects"), 400),
             (
                 api_client.get(
-                    f"/api/v1/research-sessions/{uuid.uuid4()}", headers=header(WORKSPACE_A)
+                    f"/api/v1/research-sessions/{uuid.uuid4()}",
+                    headers=header(WORKSPACE_SECURITY_P),
                 ),
                 404,
             ),
@@ -117,12 +144,12 @@ class TestErrorSanitization:
     def test_a_contract_violation_names_the_field_not_the_internals(self, api_client) -> None:
         project = api_client.post(
             "/api/v1/research-projects",
-            headers=header(WORKSPACE_A),
+            headers=header(WORKSPACE_SECURITY_P),
             json={"name": "sanitization probe"},
         ).json()
         response = api_client.post(
             f"/api/v1/research-projects/{project['id']}/sessions",
-            headers=header(WORKSPACE_A),
+            headers=header(WORKSPACE_SECURITY_P),
             json={
                 "research_context": {"market_scope": {"type": "COUNTRY", "countries": ["FR", "DE"]}}
             },
@@ -144,7 +171,7 @@ class TestLogsCarryIdsNotContent:
         with caplog.at_level(logging.DEBUG, logger="sros.gateway"):
             api_client.post(
                 "/api/v1/research-projects",
-                headers=header(WORKSPACE_A),
+                headers=header(WORKSPACE_SECURITY_P),
                 json={"name": secret},
             )
         assert secret not in caplog.text
