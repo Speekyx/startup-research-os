@@ -12,6 +12,7 @@ import sys
 
 sys.path.insert(0, "services/acquisition/python")
 from sros_acquisition.registry import evaluate_eligibility, load_catalog, resolve_retention
+from sros_acquisition.registry.models import LEGACY_USE_PROFILE
 
 catalog = load_catalog("docs/data/source-catalog-v1.json")
 L: list[str] = []
@@ -65,7 +66,7 @@ for state in (
     ids = by_state.get(state, [])
     add(f"| `{state}` | {len(ids)} | {', '.join(f'`{i}`' for i in ids) if ids else '—'} |")
 add("")
-eligible = [s.source_id for s in catalog if evaluate_eligibility(s).eligible]
+eligible = [s.source_id for s in catalog if evaluate_eligibility(s, LEGACY_USE_PROFILE).eligible]
 add(f"**Collector-eligible: {len(eligible)} of {len(list(catalog))}.**")
 add("")
 approving = len(by_state.get("APPROVED", [])) + len(by_state.get("APPROVED_WITH_CONDITIONS", []))
@@ -151,7 +152,7 @@ add("")
 
 for s in catalog:
     prev, cur = s.review_history[0], s.review
-    result = evaluate_eligibility(s)
+    result = evaluate_eligibility(s, LEGACY_USE_PROFILE)
     retention = resolve_retention(s.retention_override)
     add(f"### {s.canonical_name} — `{s.source_id}`")
     add("")

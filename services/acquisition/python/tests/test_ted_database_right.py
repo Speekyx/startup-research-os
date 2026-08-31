@@ -25,7 +25,13 @@ import pytest
 from sros_acquisition.registry import APPROVING_STATES
 from sros_contracts import PolicyAssessment, SourceApprovalState
 
-from .conftest import NEVER_EVIDENCE, REPO_ROOT, TED_FIRST_PARTY_PREFIXES, needs_postgres
+from .conftest import (
+    LEGACY_PROFILE,
+    NEVER_EVIDENCE,
+    REPO_ROOT,
+    TED_FIRST_PARTY_PREFIXES,
+    needs_postgres,
+)
 
 LOAD_BEARING = (
     "automated_access",
@@ -62,7 +68,13 @@ def joined(review_obj, field: str) -> str:
 
 class TestEarlierReviewsImmutable:
     def test_four_versions_exist_with_no_gaps(self, catalog) -> None:
-        versions = sorted(r.review_version for r in source_of(catalog, "ted-eu").review_history)
+        # Version lines are per PROFILE since Mission 1.15.5. The legacy line
+        # is the one this file's findings live on.
+        versions = sorted(
+            r.review_version
+            for r in source_of(catalog, "ted-eu").review_history
+            if r.assessed_use_profile == LEGACY_PROFILE
+        )
         assert versions == list(range(1, len(versions) + 1))
         assert 4 in versions
 

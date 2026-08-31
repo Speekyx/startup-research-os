@@ -20,13 +20,20 @@ your app. All true, all recorded, and none of it a licence over a collection.
 from __future__ import annotations
 
 import ast
+import inspect
 import pathlib
 
 import pytest
 from sros_acquisition.registry import APPROVING_STATES
 from sros_contracts import PolicyAssessment, PolicyEvidenceType, SourceApprovalState
 
-from .conftest import NEVER_EVIDENCE, REPO_ROOT, TED_FIRST_PARTY_PREFIXES, needs_postgres
+from .conftest import (
+    LEGACY_PROFILE,
+    NEVER_EVIDENCE,
+    REPO_ROOT,
+    TED_FIRST_PARTY_PREFIXES,
+    needs_postgres,
+)
 
 DOCS = REPO_ROOT / "docs" / "data"
 LOCAL_REVIEW = DOCS / "ted-eu-local-private-research-review-v1.md"
@@ -214,36 +221,44 @@ class TestAuthorizationFailsClosed:
 
         config = load_compliance(REPO_ROOT / "docs" / "data" / "source-compliance-v1.json")
         with pytest.raises(AcquisitionNotAuthorizedError) as caught:
-            build_authorization(source_of(catalog, "ted-eu"), config)
+            build_authorization(source_of(catalog, "ted-eu"), LEGACY_PROFILE, config)
         reasons = " ".join(caught.value.reasons).lower()
         assert "requires_review" in reasons
 
-    def test_the_gate_has_no_use_profile_parameter(self) -> None:
-        """§26, asserted structurally rather than believed. The gap is that
-        eligibility cannot be asked about a use profile at all -- so a narrow
-        local authorization has nowhere to live."""
+    def test_the_gate_now_requires_a_use_profile(self) -> None:
+        """The inverse of what this test asserted on the day it was written.
+
+        Mission 1.15.4 asserted that `evaluate_eligibility` had NO profile
+        parameter, and said in its own docstring that a failure here would mean
+        the proposed extension was being built and should happen in a mission
+        that says so. Mission 1.15.5 says so. The assertion is inverted rather
+        than deleted, because the property worth protecting did not disappear --
+        it flipped."""
         from sros_acquisition.registry.eligibility import evaluate_eligibility
 
-        parameters = set(inspect_signature_names(evaluate_eligibility))
-        assert not any("profile" in name for name in parameters), parameters
+        parameters = list(inspect_signature_names(evaluate_eligibility))
+        assert "use_profile_id" in parameters, parameters
+        # Second positional and no default: a caller cannot omit it.
+        assert parameters[1] == "use_profile_id"
+        signature = inspect.signature(evaluate_eligibility)
+        assert signature.parameters["use_profile_id"].default is inspect.Parameter.empty
 
-    def test_no_use_profile_concept_exists_anywhere_in_the_packages(self) -> None:
-        """If this test ever fails, the extension proposed in the gap document is
-        being built -- which is fine, and it should happen in a mission that says
-        so rather than as a side effect of a TED change."""
-        roots = (
-            REPO_ROOT / "services" / "acquisition" / "python" / "sros_acquisition",
-            REPO_ROOT / "packages" / "contracts" / "python" / "sros_contracts",
-        )
-        needles = ("use_profile", "deployment_profile", "LOCAL_PRIVATE", "MULTI_TENANT")
-        offenders = [
-            f"{path.relative_to(REPO_ROOT).as_posix()}: {needle}"
-            for root in roots
-            for path in root.rglob("*.py")
-            for needle in needles
-            if needle in path.read_text(encoding="utf-8")
-        ]
-        assert offenders == [], offenders
+    def test_the_use_profile_concept_now_exists(self, catalog) -> None:
+        """Also inverted. Mission 1.15.4 asserted the concept was absent
+        everywhere; Mission 1.15.5 built it, and the registry now names the two
+        profiles a reviewer may answer about."""
+        registered = {p.use_profile_id for p in catalog.use_profiles}
+        assert "commercial-multi-tenant-research-v1" in registered
+        assert "local-private-research-v1" in registered
+
+    def test_an_unregistered_profile_is_never_authorised(self, catalog) -> None:
+        """§6, §15. Unknown profile = refused, and never resolved against
+        another one."""
+        from sros_acquisition.registry.eligibility import evaluate_eligibility
+
+        result = evaluate_eligibility(source_of(catalog, "ted-eu"), "invented-profile-v1")
+        assert not result.eligible
+        assert any("no policy review exists" in r for r in result.blocking_reasons)
 
     def test_the_gap_document_records_the_refusal_and_a_proposed_extension(self) -> None:
         text = flat(GAP)
@@ -324,7 +339,11 @@ class TestUnchangedBoundaries:
 
 class TestReviewVersioning:
     def test_five_versions_exist_with_no_gaps(self, catalog) -> None:
-        versions = sorted(r.review_version for r in source_of(catalog, "ted-eu").review_history)
+        versions = sorted(
+            r.review_version
+            for r in source_of(catalog, "ted-eu").review_history
+            if r.assessed_use_profile == LEGACY_PROFILE
+        )
         assert versions == list(range(1, len(versions) + 1))
         assert 5 in versions
 

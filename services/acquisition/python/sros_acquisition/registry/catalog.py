@@ -31,7 +31,9 @@ from sros_contracts import (
 )
 
 from .models import (
+    LEGACY_USE_PROFILE,
     AccessProfile,
+    AssessedUseProfile,
     BehaviorCoverage,
     Coverage,
     PolicyEvidence,
@@ -70,6 +72,25 @@ class SourceCatalog:
     review_date: str
     sources: tuple[SourceRecord, ...]
     known_limitations: tuple[str, ...] = ()
+    # The registered use profiles (Mission 1.15.5). A review may only name one
+    # of these, and an id that is not here is refused at load rather than at the
+    # gate -- an unregistered profile is a typo or an invention, and both should
+    # fail before anything asks it a question.
+    use_profiles: tuple[AssessedUseProfile, ...] = ()
+
+    def use_profile(self, use_profile_id: str) -> AssessedUseProfile:
+        for profile in self.use_profiles:
+            if profile.use_profile_id == use_profile_id:
+                return profile
+        raise SourceRegistryError(
+            "use_profile_id",
+            f"no use profile {use_profile_id!r} is registered. Known: "
+            f"{', '.join(p.use_profile_id for p in self.use_profiles)}. An unknown "
+            "profile is never authorised (Mission 1.15.5 §6)",
+        )
+
+    def has_use_profile(self, use_profile_id: str) -> bool:
+        return any(p.use_profile_id == use_profile_id for p in self.use_profiles)
 
     def get(self, source_id: str) -> SourceRecord:
         for source in self.sources:
@@ -105,6 +126,19 @@ def load_catalog(path: pathlib.Path | str | None = None) -> SourceCatalog:
             "relied on for a different use",
         )
 
+    raw_profiles = payload.get("use_profiles")
+    if not isinstance(raw_profiles, list) or not raw_profiles:
+        raise SourceRegistryError(
+            "catalog.use_profiles",
+            "at least one use profile is required: every review is an answer to a "
+            "question about a use, and the question must be registered before the "
+            "answer can be checked (Mission 1.15.5 §4)",
+        )
+    use_profiles = tuple(_use_profile_from_json(item) for item in raw_profiles)
+    profile_ids = {p.use_profile_id for p in use_profiles}
+    if len(profile_ids) != len(use_profiles):
+        raise SourceRegistryError("catalog.use_profiles", "duplicate use_profile_id")
+
     raw_sources = payload.get("sources")
     if not isinstance(raw_sources, list) or not raw_sources:
         raise SourceRegistryError("catalog.sources", "at least one source is required")
@@ -113,6 +147,13 @@ def load_catalog(path: pathlib.Path | str | None = None) -> SourceCatalog:
     seen: set[str] = set()
     for entry in raw_sources:
         record = _source_from_json(entry, use_case)
+        for past in record.review_history:
+            if past.assessed_use_profile not in profile_ids:
+                raise SourceRegistryError(
+                    f"{record.source_id}.reviews[{past.review_version}].assessed_use_profile",
+                    f"{past.assessed_use_profile!r} is not a registered use profile. "
+                    f"Known: {', '.join(sorted(profile_ids))}",
+                )
         if record.source_id in seen:
             raise SourceRegistryError(
                 "catalog.sources",
@@ -129,6 +170,33 @@ def load_catalog(path: pathlib.Path | str | None = None) -> SourceCatalog:
         review_date=str(payload.get("review_date") or ""),
         sources=tuple(sources),
         known_limitations=tuple(payload.get("known_limitations") or ()),
+        use_profiles=use_profiles,
+    )
+
+
+def _use_profile_from_json(raw: object) -> AssessedUseProfile:
+    if not isinstance(raw, dict):
+        raise SourceRegistryError("catalog.use_profiles", "each entry must be an object")
+    return AssessedUseProfile(
+        use_profile_id=str(raw.get("use_profile_id") or ""),
+        name=str(raw.get("name") or ""),
+        description=str(raw.get("description") or ""),
+        semantic_version=int(raw.get("semantic_version") or 1),
+        status=str(raw.get("status") or "ACTIVE"),
+        deployment=str(raw.get("deployment") or "LOCAL"),
+        operator_scope=str(raw.get("operator_scope") or "SINGLE_OPERATOR"),
+        public_access=bool(raw.get("public_access", False)),
+        external_customers=bool(raw.get("external_customers", False)),
+        raw_redistribution=bool(raw.get("raw_redistribution", False)),
+        raw_resale=bool(raw.get("raw_resale", False)),
+        customer_facing_source_access=bool(raw.get("customer_facing_source_access", False)),
+        derived_internal_analysis=bool(raw.get("derived_internal_analysis", True)),
+        commercial_purpose=bool(raw.get("commercial_purpose", True)),
+        model_inference=bool(raw.get("model_inference", True)),
+        model_training=bool(raw.get("model_training", False)),
+        embeddings=bool(raw.get("embeddings", False)),
+        personal_data_posture=str(raw.get("personal_data_posture") or "MINIMISED"),
+        notes=raw.get("notes"),
     )
 
 
@@ -183,17 +251,26 @@ def _source_from_json(entry: object, use_case: str) -> SourceRecord:
         history.append(_review_from_json(entry["review"], evidence, use_case, source_id))
 
     if history:
-        versions = [r.review_version for r in history]
-        if len(set(versions)) != len(versions):
+        # Each PROFILE keeps its own append-only version line (Mission 1.15.5).
+        # Version 1 under a second profile is a first review of a new question,
+        # not a duplicate of the first review of the old one.
+        keys = [(r.assessed_use_profile, r.review_version) for r in history]
+        if len(set(keys)) != len(keys):
             raise SourceRegistryError(
                 f"{source_id}.reviews",
-                f"duplicate review_version in {versions}. Two reviews sharing a version "
-                "cannot be told apart, and the later one would silently shadow the earlier",
+                f"duplicate (use profile, review_version) in {keys}. Two reviews sharing "
+                "both cannot be told apart, and the later one would silently shadow the "
+                "earlier",
             )
-        history.sort(key=lambda r: r.review_version)
-    # The CURRENT review is the highest version. Earlier ones are superseded and
-    # kept, never mutated.
-    review: PolicyReview | None = history[-1] if history else None
+        history.sort(key=lambda r: (r.assessed_use_profile, r.review_version))
+    # `review` is the current review UNDER THE LEGACY PROFILE, and nothing else
+    # (Mission 1.15.5). Every document, validator and rendered catalog written
+    # before profiles existed was written about that profile, so keeping this
+    # field scoped to it leaves every existing statement true. The gate does not
+    # read it -- `SourceRecord.review_for` is the authorization accessor, and a
+    # structural test keeps it that way.
+    legacy = [r for r in history if r.assessed_use_profile == LEGACY_USE_PROFILE]
+    review: PolicyReview | None = legacy[-1] if legacy else None
 
     override_raw = entry.get("retention_override")
     override: RetentionOverride | None = None
@@ -376,6 +453,7 @@ def _review_from_json(
         approval_state=SourceApprovalState(raw.get("approval_state") or "DRAFT"),
         # The catalog states its scope once, at the top, and every review
         # inherits it. A per-source restatement would drift.
+        assessed_use_profile=str(raw.get("assessed_use_profile") or ""),
         assessed_use_case=str(raw.get("assessed_use_case") or use_case),
         reviewed_by=str(raw.get("reviewed_by") or "mission-1.0"),
         reviewed_at=(

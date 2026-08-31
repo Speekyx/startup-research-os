@@ -45,6 +45,7 @@ from .compliance import (
     find_compliance_config,
     load_compliance,
 )
+from .compliance.use_profile import declared_use_profile
 from .registry import SourceRegistryError, find_catalog, load_catalog
 
 __all__ = ["main"]
@@ -56,7 +57,10 @@ _SOURCE_ID = "world-bank"
 def _context(args: argparse.Namespace) -> Any:
     catalog = load_catalog(args.catalog or find_catalog())
     compliance = load_compliance(args.compliance or find_compliance_config())
-    return build_authorization(catalog.get(_SOURCE_ID), compliance)
+    # The runtime declares its profile. There is no default and no flag that
+    # could supply one, because an operator who can pass --use-profile to a
+    # COLLECTION command can pick the permission they want.
+    return build_authorization(catalog.get(_SOURCE_ID), declared_use_profile(), compliance)
 
 
 @contextmanager

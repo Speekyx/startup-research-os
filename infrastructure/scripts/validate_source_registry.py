@@ -50,6 +50,7 @@ from sros_acquisition.registry import (  # noqa: E402
     load_catalog,
     resolve_retention,
 )
+from sros_acquisition.registry.models import LEGACY_USE_PROFILE  # noqa: E402
 from sros_acquisition.registry.retention import (  # noqa: E402
     BASELINE_NORMALIZED_DAYS,
     BASELINE_RAW_DAYS,
@@ -267,7 +268,7 @@ def main(argv: list[str]) -> int:
             )
 
         # -- the gate ----------------------------------------------------------
-        result = evaluate_eligibility(source, now)
+        result = evaluate_eligibility(source, LEGACY_USE_PROFILE, now)
         if result.eligible:
             eligible.append(sid)
         if source.collector_enabled and not result.eligible:

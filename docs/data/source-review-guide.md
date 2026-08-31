@@ -58,6 +58,34 @@ describe a scraper.
 
 ---
 
+## Step 2.5 — Declare the assessed use profile, before anything else
+
+**A review with no subject may not exist** (Mission 1.15.5, ADR-027). Before
+assessing a single activity, state which use profile you are reviewing for:
+
+| Profile | Assess against this when… |
+|---|---|
+| `commercial-multi-tenant-research-v1` | the question is what a public, customer-facing, multi-tenant Startup Research OS may do. The **widest** profile: nothing that fails here can be rescued by a narrower one |
+| `local-private-research-v1` | the question is what the current local, single-operator deployment may do, with no redistribution and no customer-facing access |
+
+Three rules follow, and none is negotiable:
+
+- **The profile is not a way to rescue a blocked source.** It exists to persist
+  the question a review answered. If you find yourself reaching for a narrower
+  profile because a source failed under a wider one, ask whether the narrower
+  use is what the system actually does — and if it is not, the source is blocked.
+- **Local is not non-commercial.** `commercial_purpose` is true on both
+  registered profiles. The research this system produces is used to launch
+  commercial products, so a commercial-use right still has to be positively
+  granted by the source's own evidence.
+- **An approval never transfers.** A verdict under one profile says nothing
+  about another, and the gate refuses a profile with no review rather than
+  consulting one that has one.
+
+Record the profile on the review. A source may hold different current verdicts
+under different profiles, and that is not a contradiction — they are answers to
+two questions.
+
 ## Step 3 — Read the source's own documents
 
 Acceptable evidence, and nothing else:

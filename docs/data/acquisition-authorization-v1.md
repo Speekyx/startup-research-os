@@ -466,3 +466,36 @@ A snapshot, refreshed at Mission 1.9.2. Anything counted here is derived, so
 - **Per-workspace source configuration** — an organisation's own credentials and
   quotas would be a tenant-scoped table. Source identity stays global; nothing
   here anticipates one.
+
+---
+
+## Use-profile scoping (Mission 1.15.5, ADR-027)
+
+`build_authorization` takes the **assessed use profile** as its second
+positional argument, with no default, and the context carries it:
+
+```python
+context = build_authorization(source, use_profile_id, config)
+context.use_profile_id  # what this authorization was granted FOR
+```
+
+**The runtime declares the profile; it never infers it.**
+`declared_use_profile()` reads `SROS_USE_PROFILE` and refuses when it is unset
+or malformed. A collection job takes the profile as a parameter and falls back
+to the declaration — never to a default, because the convenient default is the
+narrow local profile, which is exactly the one an operator running a public
+service would most want assumed for them.
+
+**Everything fails closed and nothing falls back.** A missing profile raises; an
+unknown profile is refused; a profile with no review for this source is refused;
+and none of them is resolved against another profile or against the source's
+legacy verdict.
+
+**Compliance configuration is keyed by `(source, profile)`.** A resource scope,
+an attribution obligation and a minimisation profile are answers to *what may we
+do with this, for what*, and one profile must not borrow another's.
+
+A collector holding a context can be asked **what it is authorised to be doing**,
+not only which source it may reach — and a job that recorded the context can be
+asked, years later, under which profile its data was collected.
+

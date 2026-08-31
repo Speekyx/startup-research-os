@@ -22,7 +22,7 @@ from sros_acquisition.collection.transport import host_of
 from sros_acquisition.compliance import build_authorization, load_compliance
 from sros_contracts import SourceApprovalState
 
-from .conftest import REPO_ROOT
+from .conftest import LEGACY_PROFILE, REPO_ROOT
 
 DOC_API = "gdelt-doc-api"
 # `gdelt-bulk-files` no longer exists. Mission 1.9.2 replaced the placeholder
@@ -66,7 +66,7 @@ class TestTheRegistrationCanAuthoriseAHost:
         `storage.googleapis.com` -- which hosts the quadgram files this review
         rejected -- as the one most likely to turn up.
         """
-        context = build_authorization(gdelt, compliance)
+        context = build_authorization(gdelt, LEGACY_PROFILE, compliance)
         hosts = frozenset(h for a in context.access if (h := host_of(a.endpoint_url or "")))
         assert hosts == {"api.gdeltproject.org", "data.gdeltproject.org"}
 
@@ -131,7 +131,7 @@ class TestTheResourceModelStillFailsClosed:
         route whose contract was observed. So `datasets` is no longer empty, and
         the thing the audit refused to guess at is still not in it.
         """
-        context = build_authorization(gdelt, compliance)
+        context = build_authorization(gdelt, LEGACY_PROFILE, compliance)
         assert context.datasets
         assert context.authorized_dataset("anything") is None
         for mode in ("doc-api/timeline-tone", "doc-api/timeline-vol-raw", "doc-api/artlist"):

@@ -2,6 +2,50 @@
   "catalog_version": "1.4",
   "$comment": "MACHINE-READABLE SOURCE OF TRUTH for the initial source catalog (Mission 1.0, D-07). The human-readable table in source-catalog-v1.md is rendered from this file and checked in CI, so the two cannot drift. Edited by hand; loaded into PostgreSQL by `sros-source load`; validated with no dependencies by infrastructure/scripts/validate_source_registry.py.",
   "assessed_use_case": "Automated collection of public content by Startup Research OS, a COMMERCIAL multi-tenant SaaS, for storage, derived analytics and LLM processing to produce opportunity intelligence. Every assessment below is scoped to that use. An assessment does not transfer to non-commercial or academic use, and a permission granted for a narrower purpose does not widen to this one.",
+  "use_profiles": [
+    {
+      "use_profile_id": "commercial-multi-tenant-research-v1",
+      "name": "Commercial multi-tenant research",
+      "semantic_version": 1,
+      "status": "ACTIVE",
+      "description": "Startup Research OS operated as a COMMERCIAL, MULTI-TENANT, customer-facing service: automated collection of public content for storage, derived analytics and LLM processing to produce opportunity intelligence offered to external customers. This is the profile every review from Mission 1.0 to Mission 1.15.4 actually assessed -- the catalog's own assessed_use_case prose has said so since Mission 1.0 -- and it is also the profile a future public commercial deployment would have to satisfy. It is the WIDEST profile: nothing that fails here can be rescued by a narrower one, and nothing approved here needs a narrower one.",
+      "deployment": "PUBLIC_MULTI_TENANT",
+      "operator_scope": "MULTI_OPERATOR",
+      "public_access": true,
+      "external_customers": true,
+      "raw_redistribution": true,
+      "raw_resale": true,
+      "customer_facing_source_access": true,
+      "derived_internal_analysis": true,
+      "commercial_purpose": true,
+      "model_inference": true,
+      "model_training": false,
+      "embeddings": false,
+      "personal_data_posture": "MINIMISED",
+      "notes": "Recorded by Mission 1.15.5 as a MIGRATION INTERPRETATION of the historical review scope, not as a new policy conclusion. No verdict, assessment, condition, open question or evidence row was changed by attaching it."
+    },
+    {
+      "use_profile_id": "local-private-research-v1",
+      "name": "Local private research",
+      "semantic_version": 1,
+      "status": "ACTIVE",
+      "description": "Startup Research OS running LOCALLY for a single operator: not publicly accessible, no external customers, no redistribution or resale of source data, no customer-facing access to a source, minimised storage, official access routes only. Derived internal analysis and machine inference are in scope. LOCAL IS NOT NON-COMMERCIAL: the research produced is used to discover, evaluate and launch commercial products, so commercial-use rights must still be positively granted by the source's own evidence (docs/CLAUDE.md, Deployment model).",
+      "deployment": "LOCAL",
+      "operator_scope": "SINGLE_OPERATOR",
+      "public_access": false,
+      "external_customers": false,
+      "raw_redistribution": false,
+      "raw_resale": false,
+      "customer_facing_source_access": false,
+      "derived_internal_analysis": true,
+      "commercial_purpose": true,
+      "model_inference": true,
+      "model_training": false,
+      "embeddings": false,
+      "personal_data_posture": "MINIMISED",
+      "notes": "A profile narrows WHAT IS DONE WITH A SOURCE. It never widens what a source permits, and an approval here never transfers to commercial-multi-tenant-research-v1."
+    }
+  ],
   "reviewer": "mission-1.9.2",
   "review_date": "2026-08-30",
   "known_limitations": [
@@ -100,6 +144,7 @@
           ],
           "review_notes": "RESTRICTED. Apple states directly that information must not be scraped from Apple sites including the App Store, and that rankings must not be created from such information -- the second half matters here, because ranking opportunities is what this system does. The clause sits in the App Store Review Guidelines, which govern apps rather than external services, so it is strong evidence of Apple's position rather than a term that plainly binds this system. That ambiguity is exactly why the state is RESTRICTED and not PROHIBITED: the correct next step is reading the terms that do bind a non-app consumer, not assuming either answer.",
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "reviewed_by": "mission-1.0",
           "reviewed_at": "2026-08-29T00:00:00+00:00",
           "evidence": [
@@ -115,6 +160,7 @@
         },
         {
           "review_version": 2,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "RESTRICTED",
           "reviewed_by": "mission-1.3",
           "reviewed_at": "2026-08-29T00:00:00+00:00",
@@ -283,6 +329,7 @@
       "reviews": [
         {
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "REQUIRES_REVIEW",
           "reviewed_by": "mission-1.7",
           "reviewed_at": "2026-08-30T00:00:00+00:00",
@@ -336,6 +383,7 @@
         },
         {
           "review_version": 2,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "REQUIRES_REVIEW",
           "reviewed_by": "mission-1.15",
           "reviewed_at": "2026-08-31T00:00:00+00:00",
@@ -447,6 +495,7 @@
       "reviews": [
         {
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "REQUIRES_REVIEW",
           "reviewed_by": "mission-1.7",
           "reviewed_at": "2026-08-30T00:00:00+00:00",
@@ -563,6 +612,7 @@
           ],
           "review_notes": "The web services page confirms that SDMX 2.1 services exist and that datasets refresh twice daily, and states nothing about authentication, limits or reuse. The reuse notice exists elsewhere on the site; an attempt to retrieve it at the expected copyright URL returned 404, so the correct current location has to be found rather than assumed. Nothing is assessed.",
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "reviewed_by": "mission-1.0",
           "reviewed_at": "2026-08-29T00:00:00+00:00",
           "evidence": [
@@ -578,6 +628,7 @@
         },
         {
           "review_version": 2,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "APPROVED_WITH_CONDITIONS",
           "reviewed_by": "mission-1.3",
           "reviewed_at": "2026-08-29T00:00:00+00:00",
@@ -732,12 +783,14 @@
           ],
           "review_notes": "The terms page could not be retrieved: the host returned 403 to this environment. The specific risk worth naming is that FRED redistributes series owned by third parties under their own licences, so a single blanket conclusion about 'FRED data' would be wrong even if the FRED terms themselves were permissive. Nothing is assessed.",
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "reviewed_by": "mission-1.0",
           "reviewed_at": "2026-08-29T00:00:00+00:00",
           "evidence": []
         },
         {
           "review_version": 2,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "APPROVED_WITH_CONDITIONS",
           "reviewed_by": "mission-1.3",
           "reviewed_at": "2026-08-29T00:00:00+00:00",
@@ -920,6 +973,7 @@
       "reviews": [
         {
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "APPROVED_WITH_CONDITIONS",
           "reviewed_by": "mission-1.7",
           "reviewed_at": "2026-08-30T00:00:00+00:00",
@@ -972,6 +1026,7 @@
         },
         {
           "review_version": 2,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "APPROVED_WITH_CONDITIONS",
           "reviewed_by": "mission-1.8",
           "reviewed_at": "2026-08-30T00:00:00+00:00",
@@ -1025,6 +1080,7 @@
         },
         {
           "review_version": 3,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "APPROVED_WITH_CONDITIONS",
           "reviewed_by": "mission-1.9.2",
           "reviewed_at": "2026-08-30T00:00:00+00:00",
@@ -1219,6 +1275,7 @@
           ],
           "review_notes": "The technical picture is solid and documented; the permission picture is not. Two findings block approval. First, the Acceptable Use Policies separate scraping from API access and permit research use of scraped public information only where resulting publications are open access -- a condition a commercial product does not meet, and whose scope relative to API use is genuinely ambiguous. Second, the API terms live in the Terms of Service, which was not retrieved. GitHub profiles carry real names and locations, so the personal-data risk is IDENTIFIABLE rather than pseudonymous.",
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "reviewed_by": "mission-1.0",
           "reviewed_at": "2026-08-29T00:00:00+00:00",
           "evidence": [
@@ -1242,6 +1299,7 @@
         },
         {
           "review_version": 2,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "RESTRICTED",
           "reviewed_by": "mission-1.3",
           "reviewed_at": "2026-08-29T00:00:00+00:00",
@@ -1392,12 +1450,14 @@
           ],
           "review_notes": "Not researched in this mission. The decisive question is not a policy nuance but a capability one: if the publisher API only exposes a developer's own applications, then no approved path exists for collecting competitor reviews, and no policy reading changes that. Recorded as REQUIRES_REVIEW with that question first.",
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "reviewed_by": "mission-1.0",
           "reviewed_at": "2026-08-29T00:00:00+00:00",
           "evidence": []
         },
         {
           "review_version": 2,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "RESTRICTED",
           "reviewed_by": "mission-1.3",
           "reviewed_at": "2026-08-29T00:00:00+00:00",
@@ -1553,6 +1613,7 @@
           ],
           "review_notes": "An official API was announced in alpha in July 2025, which means access is limited and its terms were not retrievable here. The important entry is the condition: the widely used approach of calling the undocumented endpoints behind trends.google.com is not an option for this system. It is unpublished, unstable and outside any granted permission, and preferring a durable authorised path over a convenient bypass is a standing rule (Mission 1.0 §30). Data itself carries no personal information, which is why the personal-data risk is NONE_EXPECTED.",
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "reviewed_by": "mission-1.0",
           "reviewed_at": "2026-08-29T00:00:00+00:00",
           "evidence": [
@@ -1568,6 +1629,7 @@
         },
         {
           "review_version": 2,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "REQUIRES_REVIEW",
           "reviewed_by": "mission-1.3",
           "reviewed_at": "2026-08-29T00:00:00+00:00",
@@ -1608,6 +1670,7 @@
         },
         {
           "review_version": 3,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "REQUIRES_REVIEW",
           "reviewed_by": "mission-1.7",
           "reviewed_at": "2026-08-30T00:00:00+00:00",
@@ -1782,6 +1845,7 @@
           ],
           "review_notes": "The only evidence gathered is robots.txt, which is an access directive rather than a licence. It establishes a crawl rate and a set of forbidden paths; it says nothing about commercial reuse, retention or model processing. Automated access is PERMITTED_WITH_CONDITIONS on that narrow basis alone. Everything that would be needed to approve collection remains unassessed.",
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "reviewed_by": "mission-1.0",
           "reviewed_at": "2026-08-29T00:00:00+00:00",
           "evidence": [
@@ -1797,6 +1861,7 @@
         },
         {
           "review_version": 2,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "REQUIRES_REVIEW",
           "reviewed_by": "mission-1.3",
           "reviewed_at": "2026-08-29T00:00:00+00:00",
@@ -1843,6 +1908,7 @@
         },
         {
           "review_version": 3,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "RESTRICTED",
           "reviewed_by": "mission-1.15",
           "reviewed_at": "2026-08-31T00:00:00+00:00",
@@ -2018,6 +2084,7 @@
       "reviews": [
         {
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "REQUIRES_REVIEW",
           "reviewed_by": "mission-1.7",
           "reviewed_at": "2026-08-30T00:00:00+00:00",
@@ -2122,6 +2189,7 @@
       "reviews": [
         {
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "RESTRICTED",
           "reviewed_by": "mission-1.7",
           "reviewed_at": "2026-08-30T00:00:00+00:00",
@@ -2260,6 +2328,7 @@
       "reviews": [
         {
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "APPROVED_WITH_CONDITIONS",
           "reviewed_by": "mission-1.7",
           "reviewed_at": "2026-08-30T00:00:00+00:00",
@@ -2320,6 +2389,7 @@
         },
         {
           "review_version": 2,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "REQUIRES_REVIEW",
           "reviewed_by": "mission-1.8",
           "reviewed_at": "2026-08-30T00:00:00+00:00",
@@ -2481,6 +2551,7 @@
       "reviews": [
         {
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "APPROVED_WITH_CONDITIONS",
           "reviewed_by": "mission-1.7",
           "reviewed_at": "2026-08-30T00:00:00+00:00",
@@ -2592,6 +2663,7 @@
       "reviews": [
         {
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "REQUIRES_REVIEW",
           "reviewed_by": "mission-1.7",
           "reviewed_at": "2026-08-30T00:00:00+00:00",
@@ -2628,6 +2700,7 @@
         },
         {
           "review_version": 2,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "RESTRICTED",
           "reviewed_by": "mission-1.15",
           "reviewed_at": "2026-08-31T00:00:00+00:00",
@@ -2763,6 +2836,7 @@
           ],
           "review_notes": "RESTRICTED, and the restriction is decisive rather than procedural. The API documentation states plainly that the API must not be used for commercial purposes and directs business users to contact Product Hunt. Startup Research OS is a commercial product, so the documented default excludes it. The path forward is operator correspondence, not a technical workaround; until such an agreement exists and is recorded as evidence, this source is not collectable.",
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "reviewed_by": "mission-1.0",
           "reviewed_at": "2026-08-29T00:00:00+00:00",
           "evidence": [
@@ -2778,6 +2852,7 @@
         },
         {
           "review_version": 2,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "RESTRICTED",
           "reviewed_by": "mission-1.3",
           "reviewed_at": "2026-08-29T00:00:00+00:00",
@@ -2939,6 +3014,7 @@
       "reviews": [
         {
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "APPROVED_WITH_CONDITIONS",
           "reviewed_by": "mission-1.7",
           "reviewed_at": "2026-08-30T00:00:00+00:00",
@@ -2999,6 +3075,7 @@
         },
         {
           "review_version": 2,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "REQUIRES_REVIEW",
           "reviewed_by": "mission-1.8",
           "reviewed_at": "2026-08-30T00:00:00+00:00",
@@ -3133,12 +3210,14 @@
           ],
           "review_notes": "No evidence could be gathered: redditinc.com and reddit.com are unreachable from this environment. Reddit's 2023 API changes are widely understood to have introduced paid tiers and restrictions on automated use, which makes an unverified assumption particularly unsafe here. Nothing is assessed; every activity is NOT_ASSESSED rather than assumed.",
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "reviewed_by": "mission-1.0",
           "reviewed_at": "2026-08-29T00:00:00+00:00",
           "evidence": []
         },
         {
           "review_version": 2,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "REQUIRES_REVIEW",
           "reviewed_by": "mission-1.3",
           "reviewed_at": "2026-08-29T00:00:00+00:00",
@@ -3273,6 +3352,7 @@
       "reviews": [
         {
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "PROHIBITED",
           "reviewed_by": "mission-1.7",
           "reviewed_at": "2026-08-30T00:00:00+00:00",
@@ -3397,12 +3477,14 @@
           ],
           "review_notes": "No evidence could be gathered: api.stackexchange.com and stackoverflow.com are unreachable from this environment. Stack Exchange content is understood to carry a Creative Commons licence with attribution requirements, and attribution obligations attach to derived works in ways that must be read before any collection. Nothing is assessed.",
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "reviewed_by": "mission-1.0",
           "reviewed_at": "2026-08-29T00:00:00+00:00",
           "evidence": []
         },
         {
           "review_version": 2,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "REQUIRES_REVIEW",
           "reviewed_by": "mission-1.3",
           "reviewed_at": "2026-08-29T00:00:00+00:00",
@@ -3588,6 +3670,7 @@
       "reviews": [
         {
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "RESTRICTED",
           "reviewed_by": "mission-1.7",
           "reviewed_at": "2026-08-30T00:00:00+00:00",
@@ -3739,6 +3822,7 @@
       "reviews": [
         {
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "REQUIRES_REVIEW",
           "reviewed_by": "mission-1.15",
           "reviewed_at": "2026-08-31T00:00:00+00:00",
@@ -3793,6 +3877,7 @@
         },
         {
           "review_version": 2,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "REQUIRES_REVIEW",
           "reviewed_by": "mission-1.15.1",
           "reviewed_at": "2026-08-31T00:00:00+00:00",
@@ -3866,6 +3951,7 @@
         },
         {
           "review_version": 3,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "REQUIRES_REVIEW",
           "reviewed_by": "mission-1.15.2",
           "reviewed_at": "2026-08-31T00:00:00+00:00",
@@ -3934,6 +4020,7 @@
         },
         {
           "review_version": 4,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "REQUIRES_REVIEW",
           "reviewed_by": "mission-1.15.3",
           "reviewed_at": "2026-08-31T00:00:00+00:00",
@@ -4036,6 +4123,7 @@
         },
         {
           "review_version": 5,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "REQUIRES_REVIEW",
           "reviewed_by": "mission-1.15.4",
           "reviewed_at": "2026-08-31T00:00:00+00:00",
@@ -4110,6 +4198,113 @@
               "document_url": "https://docs.ted.europa.eu/ODS/latest/reuse/search-api.html",
               "section_reference": "Search modes; Limits; Request body of the notice search endpoint",
               "summarized_finding": "FIELD SELECTION IS SUPPORTED, WHICH MAKES MINIMISATION AT ACQUISITION POSSIBLE. The documented request body carries 'fields: Fields to return for each notice' alongside query, page, limit, scope, paginationMode and iterationNextToken. Mission 1.15.4 section 14 requires that a collector not collect first and minimise later where the official query supports field selection, and this route does. Two modes are documented: pagination 'Allows the retrieval of up to 15000 notice documents for a given query' with 250 notices and 10,000 fields per page; and iteration/scroll, which 'Allows the retrieval of all notice documents for a given query, without limitations' -- 250 per page, 10,000 fields per page, and 'There is no limit on the number of retrievable notice documents.' No request-rate or concurrency limit is stated anywhere. The response carries the total match count and, per result, the requested fields plus URLs for the formats and languages the notice is available in.",
+              "retrieved_at": "2026-08-31T00:00:00+00:00"
+            }
+          ]
+        },
+        {
+          "review_version": 1,
+          "assessed_use_profile": "local-private-research-v1",
+          "approval_state": "APPROVED_WITH_CONDITIONS",
+          "reviewed_by": "mission-1.15.5",
+          "reviewed_at": "2026-08-31T00:00:00+00:00",
+          "review_interval_days": 365,
+          "automated_access": "PERMITTED",
+          "api_use": "PERMITTED",
+          "commercial_use": "PERMITTED",
+          "storage": "PERMITTED",
+          "retention": "PERMITTED",
+          "redistribution": "NOT_PERMITTED",
+          "derived_analytics": "PERMITTED",
+          "model_processing": "PERMITTED",
+          "personal_data_handling": "PERMITTED_WITH_CONDITIONS",
+          "attribution_required": "PERMITTED_WITH_CONDITIONS",
+          "personal_data_risk": "IDENTIFIABLE",
+          "contains_user_generated_content": false,
+          "contains_user_identifiers": true,
+          "contains_location": true,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": false,
+          "discard_identifiers_after_normalization": true,
+          "jurisdiction_review_required": false,
+          "conditions": [
+            "Attribution is required for reused editorial material under CC BY 4.0, and changes must be indicated. The Publications Office logo may not be used without prior consent.",
+            "Notices publish contact details of contracting authorities and successful tenderers -- names, addresses, email addresses, telephone and fax numbers. A minimisation profile must discard the entire contact block: the engine needs the award value, the buyer and supplier organisation names, the CPV classification and the dates, and needs no natural person's contact details for any assessed purpose.",
+            "Only electronically signed notices published in the Supplement to the Official Journal are authentic; online documents are not necessarily exact reproductions. Any claim derived from TED must be attributed to TED's published notice rather than asserted as the authentic award.",
+            "The legal notice states that additional rights may need clearing where content depicts identifiable private individuals or includes third-party works, and that content not owned by the EU may require permission from the rightholder. The reuse grant is therefore not a blanket grant over everything inside a notice, and a minimisation profile is a compliance requirement rather than a preference.",
+            "Industrial property -- patents, trademarks, registered designs, logos and names, including the TED and SIMAP logos -- is excluded from the Commission's reuse policy and is not licensed. Supplier and buyer NAMES appear in award notices as facts about a procurement; using them as trademarks is a different act and is outside the grant.",
+            "Article 6(2)(b): the reuser is obliged NOT TO DISTORT the original meaning or message of the documents. This is the condition with the most direct bearing on the claim layer: an OBSERVED restatement of a TED award notice must say what the notice says, and a derived signal must not be presented in a way that changes what the procurement record means. It is a legal obligation as well as an epistemic one.",
+            "Article 2(4): nothing in the Decision authorises reuse of documents in a manner calculated to deceive or to defraud. The only prohibition in the Decision that concerns the MANNER of use rather than the class of document.",
+            "Article 6(2)(c): the Commission accepts no liability for any consequence stemming from the reuse. Read with TED's authenticity condition, any claim derived from a notice is a claim about what TED published and never a warranted statement about the underlying contract.",
+            "The machine-processing permission established by this review is SCOPED to inference, extraction, classification and structured analysis over reused notices -- the engine's assessed need. MODEL TRAINING was not assessed and is not authorised here: the Decision does not distinguish methods, but training raises the Article 2(2)(b) third-party-rights question in a materially different form and the engine does not need it. Embeddings are likewise unassessed for implementation and blocked independently by D-12.",
+            "The licence that governs a TED resource must be resolved from THAT resource's own first-party record, and never carried across from another. The data.europa.eu catalogue declares dct:license = COM_REUSE (the European Commission reuse notice, which resolves by skos:exactMatch to Commission Decision 2011/833/EU) on EVERY distribution of the ted-1 dataset, including the bulk XML download; the search API's own OpenAPI 'Terms of Usage' section resolves to the same TED legal notice. Twelve distributions of the SEPARATE ted-csv dataset, published by DG GROW rather than by the Publications Office, declare CC BY 4.0 instead -- a licence whose Section 4 expressly grants extraction and re-utilisation of a substantial portion of a database's contents. Those twelve files licence themselves and nothing else. They do not licence the XML corpus, the bulk packages or the search API, and the same catalogue applies the two licences to OVERLAPPING coverage -- ted-contract-award-notices-2017-2021.zip is CC BY 4.0 while ted-contract-award-notices-2018-2023.zip is COM_REUSE -- so the favourable one may not be selected by choosing a filename.",
+            "The documented PURPOSE of an official route is not a grant of a database right. The Publications Office states that the Search API 'allows access to published procurement notices for analysis and reuse', that it is 'primarily targeted at data reusers', and names commercial organisations integrating TED data into platforms among its users; the TED Open Data Service says the data is published 'for analysis and re-use' and offers a 'Connect your app' button to keep an application updated with live results. That is first-party evidence of INTENDED USE and it is recorded as such. It is not a statement about the sui generis database right, which H-36A and H-36B still leave open, and no route may be authorised on it alone. Any future authorisation must rest on the route's intended-use evidence AND on a resolution of the database-right question appropriate to the volume being taken.",
+            "OFFICIAL QUERY ROUTES ONLY. Authorised access is the TED Search API (https://api.ted.europa.eu/v3/notices/search) and the TED Open Data Service SPARQL endpoint (https://data.ted.europa.eu/). The daily and monthly bulk XML packages at https://ted.europa.eu/packages/ are NOT authorised under this or any profile, and neither is the ted-csv historical subset. Mission 1.15.3 established the highest database-right exposure on the bulk route and nothing since has spoken to it.",
+            "NO CORPUS MIRROR, AND MINIMISATION AT ACQUISITION. Queries are bounded and purpose-scoped; the Search API's `fields` parameter is used to request only the authorised fields, so minimisation happens AT acquisition rather than after it. Retrieving the corpus a query at a time would be the bulk route by another name, and Directive 96/9/EC Article 7(5) reaches repeated and systematic extraction of insubstantial parts regardless of how each request is sized.",
+            "NO REDISTRIBUTION, NO RESALE, NO CUSTOMER-FACING ACCESS. Derived aggregate findings may be published with attribution; the notices themselves and any substantial part of the collection may not. This is the condition that makes the Article 7(2)(b) re-utilisation limb -- 'making available to the public' -- structurally not engaged under this profile, and it is also the condition whose breach would move the use to commercial-multi-tenant-research-v1, which is REQUIRES_REVIEW.",
+            "RESIDUAL DATABASE-RIGHT RISK, ACCEPTED BY A NAMED OPERATOR AND NOT RESOLVED. H-36A and H-36B remain open under this profile exactly as they are under the legacy one: nothing establishes whether a sui generis right subsists in the TED corpus, who would hold it, or whether it is licensed. This review does not resolve that law. It records a judgement that BOUNDED queries through the operator's own documented reuse interfaces, without redistribution, under a single-operator local deployment, sit within the intended use the Publications Office publishes -- and that the residual exposure is the operator's to accept. The judgement is a HUMAN_CONFIRMATION condition precisely so that no verifier and no code can supply it, and so that an unconfirmed TED stays ineligible rather than quietly usable."
+          ],
+          "required_conditions": [
+            {
+              "key": "ted-attribution",
+              "description": "Every product surface derived from TED carries the attribution the TED legal notice requires, and no TED or SIMAP logo is used.",
+              "verification": "CAPABILITY",
+              "verification_detail": "source-attribution-display"
+            },
+            {
+              "key": "ted-official-route-only",
+              "description": "Collection uses the Search API or the Open Data Service SPARQL endpoint and never the bulk packages. A person confirms the deployed collector's route, because a catalog cannot assert what code does.",
+              "verification": "HUMAN_CONFIRMATION"
+            },
+            {
+              "key": "ted-personal-data-minimisation",
+              "description": "The deployed minimisation profile requests only the authorised fields and discards the entire natural-person contact block.",
+              "verification": "HUMAN_CONFIRMATION"
+            },
+            {
+              "key": "ted-database-right-residual-exposure-accepted",
+              "description": "A named operator has read ted-eu-local-official-route-readiness-v1.md and accepted the residual, unresolved database-right exposure for bounded queries under this profile. No verifier can satisfy this, by design.",
+              "verification": "HUMAN_CONFIRMATION"
+            }
+          ],
+          "open_questions": [
+            "H-36A: whether a sui generis database right SUBSISTS in the TED notice corpus is NOT ESTABLISHED, in either direction, and this review does not change that. Directive 96/9/EC Article 7(1) gives the right to a MAKER showing substantial investment; no first-party document names one, and the data.europa.eu record for ted-1 carries a publisher and no dct:creator. Narrowing the use profile changes the EXPOSURE and not the law.",
+            "H-36B: whether the right holder grants or waives extraction remains NOT ADDRESSED for broad corpus extraction. What this review relies on instead is the Publications Office's own published statements of INTENDED USE for its two query routes, plus the structural fact that the Article 7(2)(b) re-utilisation limb -- making available to the public -- is not engaged by a use that redistributes nothing. Neither is a licence, and the review says so rather than implying otherwise.",
+            "Request-rate limits are still unpublished for both official routes and for the SPARQL endpoint. Documented VOLUME limits exist for the Search API (15,000 retrievable notices per query in pagination mode; unlimited in scroll mode), and no fair-use statement was found for the SPARQL endpoint at all. A collector must throttle conservatively on its own rather than be handed a number nobody published.",
+            "Open Data Service coverage is recent and partial -- eForms from 1 March 2023, Standard Forms only a documented proof-of-concept slice of six form types. A coverage bound rather than a rights bound, and it limits what transaction research the route can support."
+          ],
+          "review_notes": "THE FIRST REVIEW UNDER A SECOND USE PROFILE, and the whole point of Mission 1.15.5's architecture. TED is REQUIRES_REVIEW under commercial-multi-tenant-research-v1 and APPROVED_WITH_CONDITIONS here, at the same time, without contradiction -- because they are answers to two different questions.\n\nWHAT IS THE SAME. The six load-bearing activities are PERMITTED on identical evidence: Commission Decision 2011/833/EU defines reuse by purpose rather than by method, and grants commercial reuse without charge or application (H-34, closed by Mission 1.15.2 and not reopened). COMMERCIAL_USE is PERMITTED here even though the deployment is local, because a local deployment does not make the use non-commercial and the grant never depended on it being one.\n\nWHAT IS DIFFERENT, AND IT IS NOT THE LAW. Two things change with the profile, and neither of them is H-36. First, the Article 7(2)(b) re-utilisation limb -- 'making available to the public all or a substantial part' -- is not engaged by a use that redistributes nothing, and that is a structural consequence of the profile rather than an interpretation. Second, the taking itself is bounded: official query routes only, purpose-scoped queries, field selection at acquisition, no corpus mirror, no bulk packages. The extraction limb of Article 7(1) turns on substantiality, and a bounded query is a materially smaller taking than a 427 MB monthly package.\n\nWHAT THIS REVIEW DOES NOT DO. It does not resolve H-36A or H-36B, and both are carried into the open questions unchanged. It does not claim the database right does not subsist, that the Publications Office has licensed it, or that intended-use documentation is a rights grant. What it records is a JUDGEMENT: that bounded queries through the operator's own documented reuse interfaces, without redistribution, under a single-operator local deployment, sit within the use the Publications Office publishes those interfaces for -- and that the residual exposure is the operator's to accept rather than the reviewer's to assume away.\n\nWHY THE VERDICT IS NOT BLOCKED BY THE OPEN QUESTION. The registry already approves sources that carry open questions and fails closed at the point where the question bites: gdelt is APPROVED_WITH_CONDITIONS with H-29, H-30 and H-31 open, and H-29 blocks `observed_at` rather than the source. The same shape applies here. H-36 bites on substantial and repeated extraction, and the conditions fail closed exactly there -- bulk blocked, corpus mirror blocked, redistribution blocked.\n\nAND IT IS STILL NOT COLLECTOR-ELIGIBLE. Three of the four required conditions are HUMAN_CONFIRMATION, which no verifier in this repository can satisfy and none ever will. An unconfirmed TED is ineligible rather than quietly usable, and the residual database-right acceptance is deliberately one of them: a judgement that could be satisfied by code would be a judgement nobody made.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "TED Developer Docs -- Search API (intended purpose and audiences)",
+              "document_url": "https://docs.ted.europa.eu/api/latest/search.html",
+              "section_reference": "Search API; Available Operations; Who Uses This API",
+              "summarized_finding": "APPLICABILITY TO THIS PROFILE: this is the route the profile authorises, and the operator states what it is for. 'The Search API allows access to published procurement notices for analysis and reuse'; it is 'primarily targeted at data reusers' and 'openly accessible to any system or user'; and its named audiences include 'Commercial Organisations: Integrating TED data into platforms to provide added-value services' and 'Researchers: Analysing public procurement trends and patterns'. Analysis, reuse, application integration, commercial use and automated access are each named. The request body carries a `fields` parameter, which is what makes minimisation at acquisition possible rather than aspirational. NOT a database-right grant: nothing here mentions the sui generis right, and the review's open questions say so.",
+              "retrieved_at": "2026-08-31T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "TED Open Data Service (data.ted.europa.eu) -- home and help text",
+              "document_url": "https://data.ted.europa.eu/",
+              "section_reference": "Home; Help; footer",
+              "summarized_finding": "APPLICABILITY TO THIS PROFILE: the second authorised route. 'We organise this information as a knowledge graph and publish it for analysis and re-use. We invite you to explore, understand and use this information in your research and applications.' The Connect your app button exists to 'run your query and retrieve live results directly into Excel, Power BI, or any application that can get data from the web', which is a first-party statement contemplating repeated automated access. The footer's Legal Notice links to the SAME TED legal notice that governs the bulk route, so this route adds no new licence and inherits the Decision. The service's own invitation to 'extract custom datasets across many notices' uses the Directive's verb and is recorded here as intended use, not as a rights grant.",
+              "retrieved_at": "2026-08-31T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_LICENCE",
+              "document_title": "Commission Decision 2011/833/EU on the reuse of Commission documents",
+              "document_url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=cb76d4a0-c886-40bd-99d7-8db018a723d0&format=pdf&language=en&productionSystem=cellar",
+              "section_reference": "Articles 1-13; read in full by Mission 1.15.2",
+              "summarized_finding": "APPLICABILITY TO THIS PROFILE: unchanged and load-bearing. Article 3(2) defines reuse as 'the use of documents ... for commercial or non-commercial purposes other than the initial purpose for which the documents were produced' -- framed by PURPOSE, enumerating no acts -- and Article 4 makes all in-scope documents available on that footing, commercially, without charge and without individual application. That is what grants the six load-bearing activities under this profile as much as under the legacy one, which is why COMMERCIAL_USE is PERMITTED here even though the deployment is local: a local deployment does not make the use non-commercial, and the grant does not depend on it being one. The text contains no database-right provision, which is why H-36 is still open below.",
+              "retrieved_at": "2026-08-31T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_TERMS",
+              "document_title": "TED and SIMAP legal notice (copyright notice)",
+              "document_url": "https://ted.europa.eu/en/legal-notice",
+              "section_reference": "Copyright notice",
+              "summarized_finding": "APPLICABILITY TO THIS PROFILE: the instrument both authorised routes point at, and the source of three carried-forward conditions. 'Unless otherwise noted, the procurement notices published in the Supplement to the Official Journal of the European Union can be freely reused, for commercial or non-commercial purposes.' CC BY 4.0 covers 'the editorial content of the SIMAP websites' and CC0 1.0 'the SIMAP's system metadata' -- neither the notices nor the dataset. Additional rights may need clearing where content depicts identifiable private individuals; industrial property including the logos is excluded. Copyright contact: op-copyright@publications.europa.eu.",
               "retrieved_at": "2026-08-31T00:00:00+00:00"
             }
           ]
@@ -4194,6 +4389,7 @@
           ],
           "review_notes": "PROHIBITED for this system's assessed use, and the finding is unambiguous rather than cautious. The Research API requires applicants to be independent from commercial interests and to conduct research on a not-for-profit or non-commercial basis, and eligibility is limited to academic institutions and non-profit research bodies in named regions. Startup Research OS is a commercial product and meets none of those criteria. There is no reading of these terms under which this system qualifies, and the correct response is to stop considering TikTok through this route rather than to look for a technical alternative -- scraping would breach the same terms more clearly, not less.",
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "reviewed_by": "mission-1.0",
           "reviewed_at": "2026-08-29T00:00:00+00:00",
           "evidence": [
@@ -4209,6 +4405,7 @@
         },
         {
           "review_version": 2,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "PROHIBITED",
           "reviewed_by": "mission-1.3",
           "reviewed_at": "2026-08-29T00:00:00+00:00",
@@ -4299,6 +4496,7 @@
       "reviews": [
         {
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "REQUIRES_REVIEW",
           "reviewed_by": "mission-1.7",
           "reviewed_at": "2026-08-30T00:00:00+00:00",
@@ -4419,6 +4617,7 @@
       "reviews": [
         {
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "REQUIRES_REVIEW",
           "reviewed_by": "mission-1.15",
           "reviewed_at": "2026-08-31T00:00:00+00:00",
@@ -4561,6 +4760,7 @@
       "reviews": [
         {
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "APPROVED_WITH_CONDITIONS",
           "reviewed_by": "mission-1.7",
           "reviewed_at": "2026-08-30T00:00:00+00:00",
@@ -4638,6 +4838,7 @@
         },
         {
           "review_version": 2,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "REQUIRES_REVIEW",
           "reviewed_by": "mission-1.8",
           "reviewed_at": "2026-08-30T00:00:00+00:00",
@@ -4784,6 +4985,7 @@
           ],
           "review_notes": "The closest candidate to approvable, and still short of it. The API is documented, unauthenticated and explicitly needs no key, so automated access and API use are PERMITTED on documented evidence. What is missing is the licence: the documentation page points at terms of use without stating them, and this data is widely but not universally open -- some series carry third-party rights. Approval waits on reading the licence, which is a short task rather than a legal one. Personal-data risk is NONE_EXPECTED: these are country aggregates.",
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "reviewed_by": "mission-1.0",
           "reviewed_at": "2026-08-29T00:00:00+00:00",
           "evidence": [
@@ -4799,6 +5001,7 @@
         },
         {
           "review_version": 2,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "APPROVED_WITH_CONDITIONS",
           "reviewed_by": "mission-1.3",
           "reviewed_at": "2026-08-29T00:00:00+00:00",
@@ -4924,6 +5127,7 @@
       "reviews": [
         {
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "REQUIRES_REVIEW",
           "reviewed_by": "mission-1.7",
           "reviewed_at": "2026-08-30T00:00:00+00:00",
@@ -5056,6 +5260,7 @@
           ],
           "review_notes": "The best-documented candidate in this catalog, and still not approvable. The 30-day storage cap, the scraping prohibition, the branding requirement and the aggregation limits are all explicit and workable. What blocks approval is a single silence: the developer policies do not address processing API data with a language model, and this system's entire purpose is to do that. Silence is not permission (source-registry-v1.md §6), so the state is REQUIRES_REVIEW and the question is named. The review interval is shortened to 90 days because these policies were updated recently and change often.",
           "review_version": 1,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "reviewed_by": "mission-1.0",
           "reviewed_at": "2026-08-29T00:00:00+00:00",
           "evidence": [
@@ -5072,6 +5277,7 @@
         },
         {
           "review_version": 2,
+          "assessed_use_profile": "commercial-multi-tenant-research-v1",
           "approval_state": "PROHIBITED",
           "reviewed_by": "mission-1.3",
           "reviewed_at": "2026-08-29T00:00:00+00:00",

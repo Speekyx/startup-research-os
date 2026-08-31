@@ -81,9 +81,20 @@ class TestReviewHistory:
             assert len(versions) >= 2, source_id
 
     def test_versions_are_contiguous_from_one(self, catalog) -> None:
+        # Per PROFILE since Mission 1.15.5: each profile keeps its own
+        # append-only line, and version 1 under a second profile is a first
+        # review of a new question rather than a duplicate.
         for source in catalog.sources:
-            versions = sorted(r.review_version for r in source.review_history)
-            assert versions == list(range(1, len(versions) + 1)), source.source_id
+            for profile in source.use_profiles:
+                versions = sorted(
+                    r.review_version
+                    for r in source.review_history
+                    if r.assessed_use_profile == profile
+                )
+                assert versions == list(range(1, len(versions) + 1)), (
+                    source.source_id,
+                    profile,
+                )
 
     def test_the_earlier_pinterest_review_still_says_it_was_unassessed(self, catalog) -> None:
         """v1 recorded NOT_ASSESSED because the document could not be retrieved.

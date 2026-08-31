@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.29
-Last amended: 2026-08-31 (deployment model)
+Version: 1.30
+Last amended: 2026-08-31 (Sprint 1 / Mission 1.15.5)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.30 | 2026-08-31 | **Source permission is use-profile-specific** (ADR-027). Every review already answered a question about a use -- the catalog said so in prose since Mission 1.0 -- but the answer had no IDENTITY, so it could not be required, compared or matched, and the gate never saw it. Now a review records its `assessed_use_profile`, currentness is per (source, profile), and `evaluate_eligibility` requires the profile with no default. **`ted-eu` is `REQUIRES_REVIEW` under the commercial profile and `APPROVED_WITH_CONDITIONS` under the local one, at the same time.** Approval never transfers; the runtime declares its profile and never infers it |
 | 1.29 | 2026-08-31 | **The deployment model is recorded: LOCAL-FIRST / SINGLE-OPERATOR.** The application runs locally for its operator and is not offered as a public multi-tenant SaaS -- but the research it produces is used to launch **commercial** products, so **local deployment never implies `NON_COMMERCIAL_USE`** and commercial-use rights are still reviewed. Workspace and RLS stay. No billing, customer accounts, team collaboration or cloud scaling unless explicitly required |
 | 1.28 | 2026-08-31 | **The routes are documented; the gate has no vocabulary for them.** TED's own docs say the Search API is *"for analysis and reuse"* and *"primarily targeted at data reusers"*, naming commercial organisations and researchers as users; the Open Data Service publishes data *"for analysis and re-use"* with a **Connect your app** button. That is intended-use evidence and **not** a database-right grant, and a condition now says so. The real blocker moved: **every approval in this registry is an answer to a use case the model never records**, so a source cannot be blocked broadly and authorised narrowly. `ted-eu` stays `REQUIRES_REVIEW` at v5 |
 | 1.27 | 2026-08-31 | **The dataset licence found, and H-36 still open.** The Publications Office's own DCAT record attaches `dct:license = COM_REUSE` to **every** `ted-1` distribution including the bulk XML download, and `COM_REUSE` carries `skos:exactMatch` to Decision 2011/833/EU -- so the licence on the bulk route IS the instrument already known to be silent. The search API's own Terms of Usage resolve to the same TED legal notice. H-36 splits into **H-36A** (does the right subsist? not established -- nothing names a maker) and **H-36B** (is it granted? not addressed). The blocker is now a drafted, unsent message to a named address |
@@ -144,6 +145,42 @@ is **local, not non-commercial**, and must not be renamed or read as
 non-commercial when `assessed_use_profile` is built. Nothing in the TED reviews
 rests on non-commercial status: `commercial_use` is `PERMITTED` there on its own
 evidence, from v1.
+
+### Source permission — scoped to the use it was granted for
+
+Added in 1.30 (Mission 1.15.5, ADR-027). Placed here because it is the mechanism
+the deployment model above needs in order to mean anything.
+
+**A verdict has a subject.** Every policy review records the
+`assessed_use_profile` it answered about. Two are registered:
+`commercial-multi-tenant-research-v1` (what every review before Mission 1.15.5
+assessed, and what a future public deployment must satisfy) and
+`local-private-research-v1` (the current runtime).
+
+- **Currentness is per `(source, profile)`.** Each profile keeps its own
+  append-only version line, and a source may hold different current verdicts
+  under different profiles without contradiction. `ted-eu` does.
+- **The gate requires the profile, with no default.**
+  `evaluate_eligibility(source, use_profile_id, …)`,
+  `build_authorization(source, use_profile_id, …)` and
+  `verify_source(source, use_profile_id, …)` all take it second and positional.
+- **Never transfer approval between profiles.** A missing profile raises, an
+  unknown one is refused, and a profile with no review is refused. **Nothing
+  falls back** -- not to another profile, and not to the source's legacy verdict.
+- **Runtime authorization must declare the active profile.** `SROS_USE_PROFILE`,
+  read at the entry point. Never inferred from an environment name, the host, a
+  container, a user count or the absence of billing: a profile is a governance
+  fact and those are infrastructural ones, and the same binary in the same
+  container can be operated under either.
+- **`SourceRecord.review` is the LEGACY-profile review and is not an
+  authorization input.** It survives so that every document written before
+  ADR-027 stays true; an AST test asserts the three gate modules never read it.
+- **A profile never widens what a source permits.** It narrows what we claim to
+  do. `commercial_purpose` is true on BOTH profiles, because local is not
+  non-commercial and a commercial-use right still has to be granted by the
+  source's own evidence.
+- **Never report a naked verdict.** A source's standing is a table keyed by
+  profile. Generated catalog documents present the legacy profile and say so.
 
 ### Claim taxonomy — exactly five values, UPPERCASE
 

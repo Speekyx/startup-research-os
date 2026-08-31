@@ -29,7 +29,7 @@ from sros_acquisition.collection.pacing import WEB_NGRAM_PACING, RequestPacer
 from sros_acquisition.compliance import build_authorization
 from sros_contracts import AcquisitionErrorCode
 
-from .conftest import DATABASE_URL, REPO_ROOT, needs_postgres
+from .conftest import DATABASE_URL, LEGACY_PROFILE, REPO_ROOT, needs_postgres
 from .web_ngram_fixtures import (
     BUCKET,
     NOT_GZIP,
@@ -52,7 +52,7 @@ def compliance():
 
 @pytest.fixture(scope="session")
 def context(catalog, compliance):
-    return build_authorization(catalog.get("gdelt"), compliance)
+    return build_authorization(catalog.get("gdelt"), LEGACY_PROFILE, compliance)
 
 
 def collect_into(workspace, context, transport=None, **request_kwargs):
@@ -408,6 +408,7 @@ class TestJobExecution:
             catalog=catalog,
             compliance=compliance,
             transport=transport_with_defaults(),
+            use_profile=LEGACY_PROFILE,
         )
         assert not result.succeeded
         assert result.failures[0].code is AcquisitionErrorCode.AUTHORIZATION_REJECTED
@@ -437,6 +438,7 @@ class TestJobExecution:
             collector=GdeltWebNgramCollector(
                 transport, pacer=RequestPacer(WEB_NGRAM_PACING, sleep=lambda _: None)
             ),
+            use_profile=LEGACY_PROFILE,
         )
         assert result.succeeded, result.failures
         assert result.persisted.new == 3
@@ -475,6 +477,7 @@ class TestJobExecution:
                     transport_with_defaults(),
                     pacer=RequestPacer(WEB_NGRAM_PACING, sleep=lambda _: None),
                 ),
+                use_profile=LEGACY_PROFILE,
             )
 
         first, second = run(), run()
@@ -513,6 +516,7 @@ class TestJobExecution:
             collector=GdeltWebNgramCollector(
                 transport, pacer=RequestPacer(WEB_NGRAM_PACING, sleep=lambda _: None)
             ),
+            use_profile=LEGACY_PROFILE,
         )
         assert result.files_processed == 1
         assert result.files_failed == 1
@@ -543,6 +547,7 @@ class TestJobExecution:
                 transport_with_defaults(),
                 pacer=RequestPacer(WEB_NGRAM_PACING, sleep=lambda _: None),
             ),
+            use_profile=LEGACY_PROFILE,
         )
         with psycopg.connect(DATABASE_URL) as conn, conn.transaction(force_rollback=True):
             conn.execute("SET LOCAL ROLE sros_app")
@@ -574,6 +579,7 @@ class TestJobExecution:
             catalog=catalog,
             compliance=compliance,
             transport=transport_with_defaults(),
+            use_profile=LEGACY_PROFILE,
         )
         # Refused on the operational switch, which is the next gate — proof that
         # the smuggled keys did not shortcut anything.
@@ -604,6 +610,7 @@ class TestJobExecution:
             collector=GdeltWebNgramCollector(
                 transport, pacer=RequestPacer(WEB_NGRAM_PACING, sleep=lambda _: None)
             ),
+            use_profile=LEGACY_PROFILE,
         )
         assert transport.requests == []
         assert result.persisted.total == 0
@@ -652,7 +659,7 @@ class TestTheCollectorIsRegistered:
         """§42's before/after, as one object."""
         from sros_acquisition.compliance import evaluate_readiness
 
-        readiness = evaluate_readiness(catalog.get("gdelt"), compliance)
+        readiness = evaluate_readiness(catalog.get("gdelt"), LEGACY_PROFILE, compliance)
         assert readiness.eligible is True
         assert readiness.resource_ready is True
         assert readiness.implemented is True
@@ -660,7 +667,7 @@ class TestTheCollectorIsRegistered:
     def test_world_bank_is_unaffected(self, catalog, compliance) -> None:
         from sros_acquisition.compliance import evaluate_readiness
 
-        readiness = evaluate_readiness(catalog.get("world-bank"), compliance)
+        readiness = evaluate_readiness(catalog.get("world-bank"), LEGACY_PROFILE, compliance)
         assert readiness.eligible is True
         assert readiness.resource_ready is True
         assert readiness.implemented is True

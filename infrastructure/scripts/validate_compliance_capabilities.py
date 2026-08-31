@@ -59,6 +59,7 @@ from sros_acquisition.registry import (  # noqa: E402
     evaluate_eligibility,
     load_catalog,
 )
+from sros_acquisition.registry.models import LEGACY_USE_PROFILE  # noqa: E402
 from sros_contracts import (  # noqa: E402
     AttributionElement,
     ConditionVerification,
@@ -242,7 +243,7 @@ def main(argv: list[str]) -> int:
         review = source.review
         if review is None or review.approval_state not in APPROVING_STATES:
             continue
-        records = verify_source(source, config, environ={}, now=now)
+        records = verify_source(source, LEGACY_USE_PROFILE, config, environ={}, now=now)
         if len(records) != len(review.required_conditions):
             errors.append(f"{source.source_id}: not every condition produced a verification")
         for record in records:
@@ -299,7 +300,9 @@ def main(argv: list[str]) -> int:
     for source in catalog:
         if source.review is None:
             continue
-        outcome = verify_condition(source, probe, config.get(source.source_id), {}, now)
+        outcome = verify_condition(
+            source, LEGACY_USE_PROFILE, probe, config.get(source.source_id), {}, now
+        )
         if outcome.result is not ConditionVerificationResult.UNKNOWN:
             errors.append(
                 f"{source.source_id}: a HUMAN_CONFIRMATION condition resolved to "
@@ -311,10 +314,12 @@ def main(argv: list[str]) -> int:
     # -- 10: an ineligible source produces no authorization --------------------
     authorized: list[str] = []
     for source in catalog:
-        records = verify_source(source, config, environ={}, now=now)
-        eligible = evaluate_eligibility(source, now, satisfied_condition_keys(list(records)))
+        records = verify_source(source, LEGACY_USE_PROFILE, config, environ={}, now=now)
+        eligible = evaluate_eligibility(
+            source, LEGACY_USE_PROFILE, now, satisfied_condition_keys(list(records))
+        )
         try:
-            build_authorization(source, config, records, environ={}, now=now)
+            build_authorization(source, LEGACY_USE_PROFILE, config, records, environ={}, now=now)
         except AcquisitionNotAuthorizedError:
             if eligible.eligible:
                 errors.append(

@@ -64,6 +64,7 @@ from .registry import (
     resolve_retention,
 )
 from .registry.eligibility import EligibilityResult
+from .registry.models import LEGACY_USE_PROFILE
 
 __all__ = ["main"]
 
@@ -77,7 +78,10 @@ def _compliance(args: argparse.Namespace) -> ComplianceConfig:
 
 
 def _live_eligibility(
-    source: SourceRecord, config: ComplianceConfig, now: datetime | None = None
+    source: SourceRecord,
+    profile: str,
+    config: ComplianceConfig,
+    now: datetime | None = None,
 ) -> tuple[EligibilityResult, tuple[ConditionVerificationRecord, ...]]:
     """The gate, with this environment's verifiers actually run.
 
@@ -85,8 +89,8 @@ def _live_eligibility(
     command that prints "blocked" without being able to say which condition
     failed is the sort of output people work around instead of using.
     """
-    records = verify_source(source, config)
-    result = evaluate_eligibility(source, now, satisfied_condition_keys(list(records)))
+    records = verify_source(source, profile, config)
+    result = evaluate_eligibility(source, profile, now, satisfied_condition_keys(list(records)))
     return result, records
 
 
@@ -162,7 +166,8 @@ def cmd_list(args: argparse.Namespace) -> int:
     catalog = _catalog(args)
     config = _compliance(args)
     now = datetime.now(UTC)
-    verdicts = {s.source_id: _live_eligibility(s, config, now) for s in catalog}
+    profile = _cli_profile(args)
+    verdicts = {s.source_id: _live_eligibility(s, profile, config, now) for s in catalog}
 
     if args.json:
         print(
@@ -205,7 +210,7 @@ def cmd_show(args: argparse.Namespace) -> int:
     catalog = _catalog(args)
     source = catalog.get(args.source_id)
     review = source.review
-    result, records = _live_eligibility(source, _compliance(args))
+    result, records = _live_eligibility(source, _cli_profile(args), _compliance(args))
     retention = resolve_retention(source.retention_override)
 
     print(f"{source.canonical_name}  ({source.source_id})")
@@ -299,7 +304,7 @@ def cmd_show(args: argparse.Namespace) -> int:
     print(f"\n  COLLECTOR ELIGIBLE: {'yes' if result.eligible else 'NO'}")
     for reason in result.blocking_reasons:
         print(f"    - {reason}")
-    readiness = evaluate_readiness(source, _compliance(args))
+    readiness = evaluate_readiness(source, _cli_profile(args), _compliance(args))
     print(f"  RESOURCE READY:     {'yes' if readiness.resource_ready else 'NO'}")
     for gap in readiness.resource_gaps:
         print(f"    - {gap}")
@@ -317,7 +322,7 @@ def cmd_eligibility(args: argparse.Namespace) -> int:
     config = _compliance(args)
     sources = [catalog.get(args.source_id)] if args.source_id else list(catalog)
     for source in sources:
-        result, records = _live_eligibility(source, config)
+        result, records = _live_eligibility(source, _cli_profile(args), config)
         if args.json:
             print(
                 json.dumps(
@@ -383,7 +388,7 @@ def cmd_conditions(args: argparse.Namespace) -> int:
                 print(f"    {latest['reason']}")
         return 0
 
-    records = verify_source(source, _compliance(args))
+    records = verify_source(source, _cli_profile(args), _compliance(args))
     if args.json:
         print(json.dumps([r.to_json() for r in records], indent=2))
         return 0
@@ -411,7 +416,7 @@ def cmd_verify(args: argparse.Namespace) -> int:
 
     records: list[ConditionVerificationRecord] = []
     for source in sources:
-        records.extend(verify_source(source, config))
+        records.extend(verify_source(source, _cli_profile(args), config))
 
     if not records:
         print("no source in scope declares a review condition; nothing to verify")
@@ -458,7 +463,7 @@ def cmd_authorization(args: argparse.Namespace) -> int:
     catalog = _catalog(args)
     source = catalog.get(args.source_id)
     try:
-        context = build_authorization(source, _compliance(args))
+        context = build_authorization(source, _cli_profile(args), _compliance(args))
     except AcquisitionNotAuthorizedError as exc:
         print(f"REFUSED: no acquisition authorization for {source.source_id}", file=sys.stderr)
         for reason in exc.reasons:
@@ -533,7 +538,7 @@ def cmd_authorization(args: argparse.Namespace) -> int:
     if not context.datasets:
         print("    none. Every resource fails closed")
 
-    readiness = evaluate_readiness(source, _compliance(args))
+    readiness = evaluate_readiness(source, _cli_profile(args), _compliance(args))
     print(f"\n  NEXT STEP: {readiness.next_step}")
     return 0
 
@@ -549,7 +554,7 @@ def cmd_readiness(args: argparse.Namespace) -> int:
     catalog = _catalog(args)
     config = _compliance(args)
     sources = [catalog.get(args.source_id)] if args.source_id else list(catalog)
-    rows = [evaluate_readiness(source, config) for source in sources]
+    rows = [evaluate_readiness(source, _cli_profile(args), config) for source in sources]
 
     if args.json:
         print(json.dumps([r.to_json() for r in rows], indent=2))
@@ -681,7 +686,7 @@ def cmd_enable(args: argparse.Namespace) -> int:
     """
     catalog = _catalog(args)
     source = catalog.get(args.source_id)
-    result, _ = _live_eligibility(source, _compliance(args))
+    result, _ = _live_eligibility(source, _cli_profile(args), _compliance(args))
     if not result.eligible:
         print(f"REFUSED: {source.source_id} is not collector-eligible", file=sys.stderr)
         for reason in result.blocking_reasons:
@@ -710,10 +715,29 @@ def cmd_enable(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cli_profile(args: argparse.Namespace) -> str:
+    """The profile a reporting command is about.
+
+    Reporting only. `sros-acquisition` and the collection job take theirs from
+    `declared_use_profile`, which has no default at all.
+    """
+    return str(getattr(args, "use_profile", None) or LEGACY_USE_PROFILE)
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="sros-source", description=__doc__)
     parser.add_argument("--catalog", help="path to source-catalog-v1.json")
     parser.add_argument("--compliance", help="path to source-compliance-v1.json")
+    # Mission 1.15.5. Defaults to the LEGACY profile because that is the subject
+    # of every report this CLI has ever produced, and changing what an existing
+    # command means is a worse failure than making the operator type a flag.
+    # The RUNTIME does not default -- `declared_use_profile` refuses -- and the
+    # difference is deliberate: a report is not an authorization.
+    parser.add_argument(
+        "--use-profile",
+        default=LEGACY_USE_PROFILE,
+        help=f"assessed use profile to report on (default: {LEGACY_USE_PROFILE})",
+    )
     sub = parser.add_subparsers(dest="command", required=True)
 
     listing = sub.add_parser("list", help="every source with its state and gate result")

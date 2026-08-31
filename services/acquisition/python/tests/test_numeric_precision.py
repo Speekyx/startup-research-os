@@ -32,7 +32,7 @@ from sros_acquisition.compliance import build_authorization, load_compliance
 from sros_acquisition.normalization import decimal_from
 from sros_acquisition.normalization.repositories import _view
 
-from .conftest import REPO_ROOT, WORKSPACE_P
+from .conftest import LEGACY_PROFILE, REPO_ROOT, WORKSPACE_P
 
 INDICATOR = "SP.POP.TOTL"
 
@@ -40,7 +40,7 @@ INDICATOR = "SP.POP.TOTL"
 @pytest.fixture(scope="module")
 def context(catalog):
     compliance = load_compliance(REPO_ROOT / "docs/data/source-compliance-v1.json")
-    return build_authorization(catalog.get("world-bank"), compliance, environ={})
+    return build_authorization(catalog.get("world-bank"), LEGACY_PROFILE, compliance, environ={})
 
 
 class _Fixed:

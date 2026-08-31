@@ -37,7 +37,7 @@ from sros_acquisition.collection import (
 from sros_acquisition.collection.pacing import WEB_NGRAM_PACING
 from sros_acquisition.compliance import build_authorization, load_compliance
 
-from .conftest import REPO_ROOT, WORKSPACE_A
+from .conftest import LEGACY_PROFILE, REPO_ROOT, WORKSPACE_A
 
 SMOKE_FLAG = "SROS_ENABLE_GDELT_WEB_NGRAM_SMOKE_TESTS"
 #: The bucket to fetch, as an explicit source label. Overridable because a file
@@ -55,7 +55,7 @@ live_only = pytest.mark.skipif(
 @pytest.fixture(scope="module")
 def context(catalog):
     compliance = load_compliance(REPO_ROOT / "docs/data/source-compliance-v1.json")
-    return build_authorization(catalog.get("gdelt"), compliance, environ={})
+    return build_authorization(catalog.get("gdelt"), LEGACY_PROFILE, compliance, environ={})
 
 
 @live_only

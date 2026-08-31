@@ -58,7 +58,7 @@ from sros_contracts import (
     SourceApprovalState,
 )
 
-from .conftest import REPO_ROOT, needs_postgres
+from .conftest import LEGACY_PROFILE, REPO_ROOT, needs_postgres
 
 APPROVED_IN_1_3 = {"world-bank", "eurostat", "fred"}
 
@@ -87,7 +87,9 @@ def compliance():
 
 
 def _verified(source, compliance, environ=None):
-    return verify_source(source, compliance, environ=environ if environ is not None else {})
+    return verify_source(
+        source, LEGACY_PROFILE, compliance, environ=environ if environ is not None else {}
+    )
 
 
 # ================================================================== conditions
@@ -135,7 +137,9 @@ class TestConditions:
         source that proves one unsatisfied condition is enough."""
         fred = catalog.get("fred")
         records = _verified(fred, compliance)
-        result = evaluate_eligibility(fred, satisfied_conditions=satisfied_condition_keys(records))
+        result = evaluate_eligibility(
+            fred, LEGACY_PROFILE, satisfied_conditions=satisfied_condition_keys(records)
+        )
         assert not result.eligible
         assert result.blocking_reasons == ("review conditions not satisfied: fred-api-key",)
 
@@ -150,7 +154,9 @@ class TestConditions:
             verification=ConditionVerification.RETENTION_LIMIT,
             verification_detail="30",
         )
-        record = verify_condition(source, condition, compliance.get("world-bank"), {})
+        record = verify_condition(
+            source, LEGACY_PROFILE, condition, compliance.get("world-bank"), {}
+        )
         assert record.result is ConditionVerificationResult.UNKNOWN
         assert not record.satisfied
         assert "no verifier is registered" in record.reason
@@ -164,7 +170,9 @@ class TestConditions:
             verification=ConditionVerification.HUMAN_CONFIRMATION,
         )
         for source in catalog:
-            record = verify_condition(source, condition, compliance.get(source.source_id), {})
+            record = verify_condition(
+                source, LEGACY_PROFILE, condition, compliance.get(source.source_id), {}
+            )
             assert record.result is ConditionVerificationResult.UNKNOWN, source.source_id
 
     def test_satisfying_one_condition_does_not_ignore_the_others(self, catalog, compliance) -> None:
@@ -173,7 +181,7 @@ class TestConditions:
         keys = [c.key for c in fred.review.required_conditions]
         for held_back in keys:
             partial = frozenset(k for k in keys if k != held_back)
-            result = evaluate_eligibility(fred, satisfied_conditions=partial)
+            result = evaluate_eligibility(fred, LEGACY_PROFILE, satisfied_conditions=partial)
             assert not result.eligible
             assert held_back in result.blocking_reasons[0]
 
@@ -187,7 +195,9 @@ class TestConditions:
             source = catalog.get(source_id)
             keys = frozenset(c.key for c in source.review.required_conditions)
             future = datetime.now(UTC) + timedelta(days=3650)
-            result = evaluate_eligibility(source, now=future, satisfied_conditions=keys)
+            result = evaluate_eligibility(
+                source, LEGACY_PROFILE, now=future, satisfied_conditions=keys
+            )
             assert not result.eligible, source_id
             assert any("stale" in r for r in result.blocking_reasons)
 
@@ -204,9 +214,11 @@ class TestConditions:
                 "attribution-surface",
                 "fred-api-key",
             }
-            result = evaluate_eligibility(source, satisfied_conditions=everything)
+            result = evaluate_eligibility(source, LEGACY_PROFILE, satisfied_conditions=everything)
             assert not result.eligible, source.source_id
-            assert any(r.startswith("policy review is") for r in result.blocking_reasons)
+            assert any(
+                r.startswith("policy review for use profile") for r in result.blocking_reasons
+            )
 
     def test_a_stale_compliance_config_yields_unknown(self, catalog, compliance) -> None:
         """A re-review can change what a condition means, so configuration
@@ -215,7 +227,7 @@ class TestConditions:
         source = catalog.get("world-bank")
         stale = replace(compliance.get("world-bank"), review_version=99)
         for condition in source.review.required_conditions:
-            record = verify_condition(source, condition, stale, {})
+            record = verify_condition(source, LEGACY_PROFILE, condition, stale, {})
             if condition.verification is ConditionVerification.CONFIG_REFERENCE:
                 continue
             assert record.result is ConditionVerificationResult.UNKNOWN
@@ -229,7 +241,9 @@ class TestConditions:
             verification=ConditionVerification.CAPABILITY,
             verification_detail="capability-that-does-not-exist",
         )
-        record = verify_condition(source, condition, compliance.get("world-bank"), {})
+        record = verify_condition(
+            source, LEGACY_PROFILE, condition, compliance.get("world-bank"), {}
+        )
         assert record.result is ConditionVerificationResult.UNKNOWN
         assert "no capability named" in record.reason
 
@@ -580,7 +594,7 @@ class TestSecrets:
         records = _verified(fred, compliance, environ={})
         assert design_eligible(list(records))
         assert not evaluate_eligibility(
-            fred, satisfied_conditions=satisfied_condition_keys(records)
+            fred, LEGACY_PROFILE, satisfied_conditions=satisfied_condition_keys(records)
         ).eligible
 
     def test_a_present_credential_clears_the_last_condition(self, catalog, compliance) -> None:
@@ -589,7 +603,7 @@ class TestSecrets:
         fred = catalog.get("fred")
         records = _verified(fred, compliance, environ={"FRED_API_KEY": SENTINEL})
         assert evaluate_eligibility(
-            fred, satisfied_conditions=satisfied_condition_keys(records)
+            fred, LEGACY_PROFILE, satisfied_conditions=satisfied_condition_keys(records)
         ).eligible
 
     def test_an_empty_variable_counts_as_not_configured(self, catalog, compliance) -> None:
@@ -605,12 +619,12 @@ class TestSecrets:
         fred = catalog.get("fred")
         environ = {"FRED_API_KEY": SENTINEL}
         records = _verified(fred, compliance, environ=environ)
-        context = build_authorization(fred, compliance, records, environ=environ)
+        context = build_authorization(fred, LEGACY_PROFILE, compliance, records, environ=environ)
         blob = json.dumps(
             {
                 "verifications": [r.to_json() for r in records],
                 "eligibility": evaluate_eligibility(
-                    fred, satisfied_conditions=satisfied_condition_keys(records)
+                    fred, LEGACY_PROFILE, satisfied_conditions=satisfied_condition_keys(records)
                 ).to_json(),
                 "authorization": context.to_json(),
                 "status": credential_status("FRED_API_KEY", environ).to_json(),
@@ -622,7 +636,9 @@ class TestSecrets:
     def test_no_secret_value_appears_in_an_exception(self, catalog, compliance) -> None:
         fred = catalog.get("fred")
         try:
-            build_authorization(fred, compliance, environ={"FRED_API_KEY": SENTINEL, "X": "y"})
+            build_authorization(
+                fred, LEGACY_PROFILE, compliance, environ={"FRED_API_KEY": SENTINEL, "X": "y"}
+            )
         except AcquisitionNotAuthorizedError as exc:  # pragma: no cover - not expected
             assert SENTINEL not in str(exc)
         with pytest.raises(SourceRegistryError) as caught:
@@ -736,7 +752,7 @@ class TestGates:
         for source in catalog:
             records = _verified(source, compliance)
             if evaluate_eligibility(
-                source, satisfied_conditions=satisfied_condition_keys(records)
+                source, LEGACY_PROFILE, satisfied_conditions=satisfied_condition_keys(records)
             ).eligible:
                 eligible.add(source.source_id)
         assert eligible == EXPECTED_ELIGIBLE
@@ -748,7 +764,7 @@ class TestGates:
             source = catalog.get(source_id)
             records = _verified(source, compliance)
             result = evaluate_eligibility(
-                source, satisfied_conditions=satisfied_condition_keys(records)
+                source, LEGACY_PROFILE, satisfied_conditions=satisfied_condition_keys(records)
             )
             assert len(result.blocking_reasons) == 1
             assert design_eligible(list(records))
@@ -762,10 +778,10 @@ class TestGates:
         for source in catalog:
             records = _verified(source, compliance)
             eligible = evaluate_eligibility(
-                source, satisfied_conditions=satisfied_condition_keys(records)
+                source, LEGACY_PROFILE, satisfied_conditions=satisfied_condition_keys(records)
             ).eligible
             try:
-                build_authorization(source, compliance, records, environ={})
+                build_authorization(source, LEGACY_PROFILE, compliance, records, environ={})
             except AcquisitionNotAuthorizedError as exc:
                 refused += 1
                 assert not eligible, source.source_id
@@ -780,7 +796,7 @@ class TestGates:
         """The verifications parameter is a cache for callers that just ran
         them, never a way in: omitting it must not weaken anything."""
         with pytest.raises(AcquisitionNotAuthorizedError):
-            build_authorization(catalog.get("fred"), compliance, environ={})
+            build_authorization(catalog.get("fred"), LEGACY_PROFILE, compliance, environ={})
 
     def test_removing_the_compliance_config_removes_the_authorizations(
         self, catalog, compliance
@@ -795,7 +811,7 @@ class TestGates:
         empty = ComplianceConfig(compliance_version="test", sources=())
         for source_id in EXPECTED_ELIGIBLE:
             with pytest.raises(AcquisitionNotAuthorizedError, match="conditions not satisfied"):
-                build_authorization(catalog.get(source_id), empty, environ={})
+                build_authorization(catalog.get(source_id), LEGACY_PROFILE, empty, environ={})
 
     def test_an_unconditional_approval_with_no_compliance_entry_is_still_refused(self) -> None:
         """An empty scope is not an open one.
@@ -823,6 +839,7 @@ class TestGates:
                 AccessProfile(access_method=SourceAccessMethod.PUBLIC_API, label="probe"),
             ),
             review=PolicyReview(
+                assessed_use_profile=LEGACY_PROFILE,
                 approval_state=SourceApprovalState.APPROVED,
                 assessed_use_case="a probe, approved with no condition attached",
                 reviewed_by="test",
@@ -838,10 +855,13 @@ class TestGates:
                 ),
             ),
         )
-        assert evaluate_eligibility(source).eligible
+        assert evaluate_eligibility(source, LEGACY_PROFILE).eligible
         with pytest.raises(AcquisitionNotAuthorizedError, match="no compliance configuration"):
             build_authorization(
-                source, ComplianceConfig(compliance_version="test", sources=()), environ={}
+                source,
+                LEGACY_PROFILE,
+                ComplianceConfig(compliance_version="test", sources=()),
+                environ={},
             )
 
     def test_the_context_carries_everything_a_collector_must_not_decide(
@@ -967,9 +987,9 @@ class TestRecordedVerification:
         source = catalog.get("eurostat")
         conn.execute("SAVEPOINT probe")
         first = datetime(2026, 8, 29, 10, 0, tzinfo=UTC)
-        record_verifications(conn, verify_source(source, compliance, {}, first))
+        record_verifications(conn, verify_source(source, LEGACY_PROFILE, compliance, {}, first))
         record_verifications(
-            conn, verify_source(source, compliance, {}, first + timedelta(hours=1))
+            conn, verify_source(source, LEGACY_PROFILE, compliance, {}, first + timedelta(hours=1))
         )
         # Matched on the two exact moments, not a range: the database also holds
         # whatever an operator recorded earlier, and a range would count that.
@@ -1015,9 +1035,9 @@ class TestRecordedVerification:
         for source in catalog:
             records = _verified(source, compliance)
             from_python = evaluate_eligibility(
-                source, satisfied_conditions=satisfied_condition_keys(records)
+                source, LEGACY_PROFILE, satisfied_conditions=satisfied_condition_keys(records)
             )
-            from_db = read_eligibility(conn, source.source_id)
+            from_db = read_eligibility(conn, source.source_id, LEGACY_PROFILE)
             assert from_db is not None
             if from_db.eligible != from_python.eligible or set(from_db.blocking_reasons) != set(
                 from_python.blocking_reasons
@@ -1165,5 +1185,9 @@ def _context(catalog, compliance, source_id, environ=None):
     source = catalog.get(source_id)
     environ = environ if environ is not None else {}
     return build_authorization(
-        source, compliance, verify_source(source, compliance, environ), environ=environ
+        source,
+        LEGACY_PROFILE,
+        compliance,
+        verify_source(source, LEGACY_PROFILE, compliance, environ),
+        environ=environ,
     )

@@ -48,6 +48,10 @@ GLOBAL_TABLES = {
     # part of source identity.
     "registry.sources",
     "registry.source_access_profiles",
+    # Mission 1.15.5. A use profile says what the SYSTEM does with a source,
+    # which is a statement about the platform and not about any tenant. Global
+    # for the same reason every registry table above is.
+    "registry.use_profiles",
     "registry.source_policy_reviews",
     "registry.source_policy_evidence",
     "registry.source_retention_policies",

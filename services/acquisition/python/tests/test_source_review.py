@@ -30,7 +30,7 @@ from sros_acquisition.registry import (
 from sros_acquisition.registry.repositories import read_eligibility
 from sros_contracts import ConditionVerification, SourceApprovalState
 
-from .conftest import needs_postgres
+from .conftest import LEGACY_PROFILE, needs_postgres
 
 APPROVED_IN_1_3 = {"world-bank", "eurostat", "fred"}
 
@@ -68,16 +68,29 @@ class TestReviewVersioning:
             # of the Mission 1.3 catalog rather than the property. What must
             # hold is that versions are ordered, distinct, and never rewritten.
             assert source.review_history, source.source_id
-            versions = [r.review_version for r in source.review_history]
-            assert versions == sorted(versions), source.source_id
-            assert len(set(versions)) == len(versions), source.source_id
+            # Ordered and distinct WITHIN a profile: version 1 under a second
+            # profile is a first review of a new question (Mission 1.15.5).
+            for profile in source.use_profiles:
+                versions = [
+                    r.review_version
+                    for r in source.review_history
+                    if r.assessed_use_profile == profile
+                ]
+                assert versions == sorted(versions), (source.source_id, profile)
+                assert len(set(versions)) == len(versions), (source.source_id, profile)
 
-    def test_the_current_review_is_the_highest_version(self, catalog) -> None:
+    def test_the_current_review_is_the_highest_version_of_its_profile(self, catalog) -> None:
+        """Per PROFILE since Mission 1.15.5. `source.review` is the current
+        LEGACY review specifically, and each profile's line has its own head."""
         for source in catalog:
-            assert source.review is source.review_history[-1], source.source_id
-            assert source.review.review_version == max(
-                r.review_version for r in source.review_history
-            )
+            for profile, current in source.reviews_by_profile().items():
+                assert current.review_version == max(
+                    r.review_version
+                    for r in source.review_history
+                    if r.assessed_use_profile == profile
+                ), (source.source_id, profile)
+            if source.review is not None:
+                assert source.review.assessed_use_profile == LEGACY_PROFILE
 
     def test_the_mission_1_0_review_is_recoverable_unchanged(self, catalog) -> None:
         """§46. The earlier verdict survives verbatim, including the states a
@@ -120,7 +133,7 @@ class TestReviewVersioning:
         with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False, encoding="utf-8") as f:
             json.dump(raw, f)
             path = pathlib.Path(f.name)
-        with pytest.raises(SourceRegistryError, match="duplicate review_version"):
+        with pytest.raises(SourceRegistryError, match=r"duplicate \(use profile, review_version\)"):
             load_catalog(path)
         path.unlink()
 
@@ -170,7 +183,7 @@ class TestConditionalEligibility:
         for source in catalog:
             if source.source_id not in APPROVED_IN_1_3:
                 continue
-            result = evaluate_eligibility(source)
+            result = evaluate_eligibility(source, LEGACY_PROFILE)
             assert not result.eligible, source.source_id
             assert len(result.blocking_reasons) == 1, result.blocking_reasons
             assert result.blocking_reasons[0].startswith("review conditions not satisfied")
@@ -183,7 +196,7 @@ class TestConditionalEligibility:
             if source.source_id not in APPROVED_IN_1_3:
                 continue
             keys = frozenset(c.key for c in source.review.required_conditions)
-            assert evaluate_eligibility(source, satisfied_conditions=keys).eligible
+            assert evaluate_eligibility(source, LEGACY_PROFILE, satisfied_conditions=keys).eligible
 
     def test_satisfying_only_some_conditions_does_not_clear_it(self, catalog) -> None:
         for source in catalog:
@@ -191,7 +204,7 @@ class TestConditionalEligibility:
                 continue
             keys = [c.key for c in source.review.required_conditions]
             partial = frozenset(keys[:-1])
-            result = evaluate_eligibility(source, satisfied_conditions=partial)
+            result = evaluate_eligibility(source, LEGACY_PROFILE, satisfied_conditions=partial)
             assert not result.eligible
             assert keys[-1] in result.blocking_reasons[0]
 
@@ -202,8 +215,10 @@ class TestConditionalEligibility:
         for source in catalog:
             if source.review.approval_state in APPROVING_STATES:
                 continue
-            reasons = evaluate_eligibility(source).blocking_reasons
-            assert any(r.startswith("policy review is") for r in reasons), source.source_id
+            reasons = evaluate_eligibility(source, LEGACY_PROFILE).blocking_reasons
+            assert any(r.startswith("policy review for use profile") for r in reasons), (
+                source.source_id
+            )
 
     def test_a_mechanical_condition_must_name_what_it_checks(self) -> None:
         with pytest.raises(SourceRegistryError, match="must name what is checked"):
@@ -223,7 +238,9 @@ class TestConditionalEligibility:
         That was Mission 1.3's whole outcome; since Mission 1.4 it is one of two
         views, and the environment view lives in
         `test_compliance.py::TestGates`."""
-        assert [s.source_id for s in catalog if evaluate_eligibility(s).eligible] == []
+        assert [
+            s.source_id for s in catalog if evaluate_eligibility(s, LEGACY_PROFILE).eligible
+        ] == []
 
 
 # ================================================================ carried rules
@@ -268,7 +285,7 @@ class TestPreviouslyEstablishedRules:
         source = next(s for s in catalog if s.source_id == "fred")
         keys = frozenset(c.key for c in source.review.required_conditions)
         future = datetime.now(UTC) + timedelta(days=3650)
-        result = evaluate_eligibility(source, now=future, satisfied_conditions=keys)
+        result = evaluate_eligibility(source, LEGACY_PROFILE, now=future, satisfied_conditions=keys)
         assert not result.eligible
         assert any("stale" in r for r in result.blocking_reasons)
 
@@ -304,11 +321,13 @@ class TestLoadedRegistry:
 
         divergences = []
         for source in catalog:
-            from_db = read_eligibility(conn, source.source_id)
+            from_db = read_eligibility(conn, source.source_id, LEGACY_PROFILE)
             # The satisfaction the DATABASE holds, so the two implementations
             # are compared on the same inputs (Mission 1.4).
             from_python = evaluate_eligibility(
-                source, satisfied_conditions=recorded_satisfied_keys(conn, source.source_id)
+                source,
+                LEGACY_PROFILE,
+                satisfied_conditions=recorded_satisfied_keys(conn, source.source_id),
             )
             assert from_db is not None, source.source_id
             if from_db.eligible != from_python.eligible or set(from_db.blocking_reasons) != set(
@@ -328,8 +347,10 @@ class TestLoadedRegistry:
         # One current review per source; every other review in the history is
         # superseded and still present. Derived from the catalog rather than
         # asserted as a number, so the next registered source does not break it.
-        assert current == len(list(catalog))
-        assert superseded == total_reviews - len(list(catalog))
+        # One current review per (source, PROFILE) since Mission 1.15.5, so a
+        # source reviewed under two profiles contributes two.
+        assert current == sum(len(s.use_profiles) for s in catalog)
+        assert superseded == total_reviews - sum(len(s.use_profiles) for s in catalog)
         assert current + superseded == total_reviews
 
     def test_a_catalog_load_can_never_satisfy_a_condition(self, conn, catalog) -> None:
@@ -484,7 +505,9 @@ class TestLoadedRegistry:
         # -- a growth tripwire wearing the clothes of a count assertion.
         expected = {s.source_id for s in catalog if s.review and s.review.required_conditions}
         assert expected, "no source carries a condition; this test would prove nothing"
-        assert {r[0] for r in rows} == expected
+        # ted-eu joined this set when it gained required conditions under
+        # local-private-research-v1 (Mission 1.15.5).
+        assert {r[0] for r in rows} == expected | {"ted-eu"}
         for source_id, total, unsatisfied, actual_total, actual_unsatisfied in rows:
             assert total == actual_total, source_id
             assert unsatisfied == actual_unsatisfied, source_id

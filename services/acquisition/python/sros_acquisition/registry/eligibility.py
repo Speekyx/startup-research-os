@@ -34,7 +34,7 @@ from datetime import UTC, datetime
 
 from sros_contracts import SourceApprovalState, SourceLifecycle
 
-from .models import SourceRecord
+from .models import SourceRecord, SourceRegistryError
 
 __all__ = ["EligibilityResult", "evaluate_eligibility", "is_collector_eligible"]
 
@@ -44,6 +44,9 @@ class EligibilityResult:
     """Whether a source may be collected from, and why not if it may not."""
 
     source_id: str
+    # The profile this answer is about. An eligibility result with no subject
+    # would be exactly the naked verdict Mission 1.15.5 exists to remove.
+    use_profile_id: str
     eligible: bool
     blocking_reasons: tuple[str, ...]
     approval_state: SourceApprovalState | None
@@ -56,6 +59,7 @@ class EligibilityResult:
     def to_json(self) -> dict[str, object]:
         return {
             "source_id": self.source_id,
+            "use_profile_id": self.use_profile_id,
             "eligible": self.eligible,
             "blocking_reasons": list(self.blocking_reasons),
             "approval_state": self.approval_state.value if self.approval_state else None,
@@ -66,6 +70,7 @@ class EligibilityResult:
 
 def evaluate_eligibility(
     source: SourceRecord,
+    use_profile_id: str,
     now: datetime | None = None,
     satisfied_conditions: frozenset[str] = frozenset(),
 ) -> EligibilityResult:
@@ -73,6 +78,14 @@ def evaluate_eligibility(
 
     Reporting all of them matters: a reviewer who fixes one blocker and
     rediscovers the next on the following run learns to distrust the tool.
+
+    `use_profile_id` is REQUIRED and has no default (Mission 1.15.5 §14, §15).
+    Every review answers a question about a use, so a gate that did not know
+    which use was being asked about would be answering a different question from
+    the one the reviewer answered. There is no fallback: an unreviewed profile is
+    refused, and it is never resolved against another profile or against the
+    source's legacy verdict, because that is precisely how a local permission
+    would silently become a commercial one.
 
     `satisfied_conditions` is deliberately a caller-supplied argument rather
     than something read off the source. Whether a condition holds depends on
@@ -83,7 +96,15 @@ def evaluate_eligibility(
     """
     moment = now or datetime.now(UTC)
     reasons: list[str] = []
-    review = source.review
+    if not (use_profile_id or "").strip():
+        # Not a defensive nicety: an empty profile reaching here would mean a
+        # caller that never decided what it was doing with the source.
+        raise SourceRegistryError(
+            "use_profile_id",
+            "required: authorization must declare the assessed use profile it is "
+            "operating under, and it is never inferred (Mission 1.15.5 §12)",
+        )
+    review = source.review_for(use_profile_id)
 
     if source.lifecycle is not SourceLifecycle.ACTIVE:
         reasons.append(f"source lifecycle is {source.lifecycle.value}")
@@ -92,10 +113,12 @@ def evaluate_eligibility(
         reasons.append(f"source is suspended: {source.suspended_reason or 'no reason recorded'}")
 
     if review is None:
-        reasons.append("no policy review exists")
+        reasons.append(f"no policy review exists for use profile {use_profile_id!r}")
     else:
         if not review.is_approving:
-            reasons.append(f"policy review is {review.approval_state.value}")
+            reasons.append(
+                f"policy review for use profile {use_profile_id!r} is {review.approval_state.value}"
+            )
         if not review.evidence:
             reasons.append("policy review has no evidence")
         elif not any(item.is_authoritative for item in review.evidence):
@@ -134,6 +157,7 @@ def evaluate_eligibility(
 
     return EligibilityResult(
         source_id=source.source_id,
+        use_profile_id=use_profile_id,
         eligible=not reasons,
         blocking_reasons=tuple(reasons),
         approval_state=review.approval_state if review else None,
@@ -144,7 +168,8 @@ def evaluate_eligibility(
 
 def is_collector_eligible(
     source: SourceRecord,
+    use_profile_id: str,
     now: datetime | None = None,
     satisfied_conditions: frozenset[str] = frozenset(),
 ) -> bool:
-    return evaluate_eligibility(source, now, satisfied_conditions).eligible
+    return evaluate_eligibility(source, use_profile_id, now, satisfied_conditions).eligible

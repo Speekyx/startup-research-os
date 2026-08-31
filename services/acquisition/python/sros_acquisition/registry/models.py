@@ -43,6 +43,7 @@ from sros_contracts.errors import ContractError
 
 __all__ = [
     "SourceRegistryError",
+    "AssessedUseProfile",
     "SourceRecord",
     "AccessProfile",
     "PolicyReview",
@@ -55,6 +56,8 @@ __all__ = [
     "AUTHORITATIVE_EVIDENCE_TYPES",
     "ASSESSED_ACTIVITIES",
     "SOURCE_ID_PATTERN",
+    "USE_PROFILE_ID_PATTERN",
+    "LEGACY_USE_PROFILE",
 ]
 
 
@@ -63,6 +66,82 @@ class SourceRegistryError(ContractError):
 
     def __init__(self, field_name: str, reason: str) -> None:
         super().__init__(field_name, reason)
+
+
+# A use-profile id is a slug with an explicit semantic version, because §7 of
+# Mission 1.15.5 requires identity to be independent of display wording and to
+# change when the semantics do. `local-private-research-v2` would be a different
+# profile, not an edit of this one, and no review would silently follow it.
+USE_PROFILE_ID_PATTERN = r"^[a-z][a-z0-9-]*-v[0-9]+$"
+
+# The profile every review from Mission 1.0 to Mission 1.15.4 actually assessed.
+# Attaching it is a migration interpretation of the historical scope, not a new
+# policy conclusion -- the catalog's own `assessed_use_case` prose has said
+# "a COMMERCIAL multi-tenant SaaS" since Mission 1.0.
+LEGACY_USE_PROFILE = "commercial-multi-tenant-research-v1"
+
+
+@dataclass(frozen=True)
+class AssessedUseProfile:
+    """WHAT THE SYSTEM DOES WITH A SOURCE -- the subject of a policy review.
+
+    Mission 1.15.5. Every review has always answered a question about a use
+    case; the catalog stated it in prose at the top and every review inherited
+    it. What was missing is that the prose had no IDENTITY, so it could not be
+    compared, required or matched, and the gate never saw it.
+
+    **A profile is not a deployment environment.** `development` and
+    `production` say where code runs; a profile says what is being done with
+    somebody else's data. The same binary in the same container can be operated
+    under either profile, and the difference is a governance fact, not an
+    infrastructural one -- which is why §12 forbids inferring it from localhost,
+    Docker, an environment name, a user count or the absence of billing.
+
+    **A profile never widens what a source permits.** It narrows what we claim
+    to do. `commercial_purpose` is TRUE on both registered profiles for exactly
+    that reason: running locally does not make the use non-commercial, and a
+    commercial-use right still has to be granted by the source's own evidence.
+    """
+
+    use_profile_id: str
+    name: str
+    description: str
+    semantic_version: int = 1
+    status: str = "ACTIVE"
+
+    deployment: str = "LOCAL"
+    operator_scope: str = "SINGLE_OPERATOR"
+    public_access: bool = False
+    external_customers: bool = False
+    raw_redistribution: bool = False
+    raw_resale: bool = False
+    customer_facing_source_access: bool = False
+    derived_internal_analysis: bool = True
+    commercial_purpose: bool = True
+    model_inference: bool = True
+    model_training: bool = False
+    embeddings: bool = False
+    personal_data_posture: str = "MINIMISED"
+    notes: str | None = None
+
+    def __post_init__(self) -> None:
+        import re
+
+        if not re.match(USE_PROFILE_ID_PATTERN, self.use_profile_id):
+            raise SourceRegistryError(
+                "use_profile_id",
+                f"must match {USE_PROFILE_ID_PATTERN}: a slug carrying its semantic "
+                "version, so a changed meaning is a changed identity",
+            )
+        if not self.name.strip() or not self.description.strip():
+            raise SourceRegistryError(
+                "use_profile",
+                "a profile with no description is a subject nobody can check a review against",
+            )
+
+    @property
+    def is_active(self) -> bool:
+        return self.status == "ACTIVE"
 
 
 # The only states that let a source be collected from. Everything else --
@@ -295,6 +374,10 @@ class PolicyReview:
     """
 
     approval_state: SourceApprovalState
+    # WHICH use profile this review answered. Required: a verdict with no
+    # subject cannot be relied on for anything, and Mission 1.15.5 made the
+    # subject checkable rather than only stated.
+    assessed_use_profile: str
     assessed_use_case: str
     reviewed_by: str
     reviewed_at: datetime
@@ -322,6 +405,15 @@ class PolicyReview:
     def __post_init__(self) -> None:
         if not isinstance(self.approval_state, SourceApprovalState):
             raise SourceRegistryError("review.approval_state", "must be a SourceApprovalState")
+        import re as _re
+
+        if not _re.match(USE_PROFILE_ID_PATTERN, self.assessed_use_profile or ""):
+            raise SourceRegistryError(
+                "review.assessed_use_profile",
+                "required, and must be a registered use-profile id: a review is an "
+                "answer to a question about a use, and a verdict whose subject is "
+                "unstated cannot be transferred, compared or refused correctly",
+            )
         if not self.assessed_use_case.strip():
             raise SourceRegistryError(
                 "review.assessed_use_case",
@@ -702,6 +794,17 @@ class SourceRecord:
     behavior_coverage: tuple[BehaviorCoverage, ...] = ()
 
     access_profiles: tuple[AccessProfile, ...] = ()
+    # The current review UNDER THE LEGACY PROFILE, and nothing else.
+    #
+    # Mission 1.15.5 kept this field rather than removing it, because it is what
+    # every existing document, validator and rendered catalog was written about:
+    # `commercial-multi-tenant-research-v1` is the profile the whole history
+    # assessed, so every statement already made about a source stays true.
+    #
+    # **It is not an authorization input.** The gate uses `review_for`, and a
+    # structural test asserts that `eligibility.py`, `authorization.py` and
+    # `verification.py` never read this attribute -- because reading it would be
+    # exactly the silent fallback to a global verdict that §15 forbids.
     review: PolicyReview | None = None
     # Every review this source has ever had, oldest first. Mission 1.3 §27:
     # a new review creates a new VERSION rather than overwriting the old one,
@@ -745,6 +848,50 @@ class SourceRecord:
                 "collector_enabled",
                 "cannot be enabled on a source with no policy review",
             )
+
+    @property
+    def _reviews(self) -> tuple[PolicyReview, ...]:
+        """Every review, however the record was constructed.
+
+        A record built by hand may set `review` and leave `review_history`
+        empty; the catalog loader always fills both. Normalising here rather
+        than at each call site is what `repositories.py` already does, and it
+        keeps profile matching honest either way -- a single review still only
+        answers for its OWN profile.
+        """
+        return self.review_history or ((self.review,) if self.review else ())
+
+    @property
+    def use_profiles(self) -> tuple[str, ...]:
+        """Every profile this source has ever been reviewed under, in order."""
+        seen: list[str] = []
+        for past in self._reviews:
+            if past.assessed_use_profile not in seen:
+                seen.append(past.assessed_use_profile)
+        return tuple(seen)
+
+    def review_for(self, use_profile_id: str) -> PolicyReview | None:
+        """The CURRENT review for one use profile, or None.
+
+        **This is the accessor the gate uses, and the only one it may use.**
+        `review` below answers a different question and is not an authorization
+        input.
+
+        None means "nobody has reviewed this source for this use", which is a
+        refusal and never a reason to look at another profile (§15, §16).
+        """
+        candidates = [past for past in self._reviews if past.assessed_use_profile == use_profile_id]
+        if not candidates:
+            return None
+        return max(candidates, key=lambda past: past.review_version)
+
+    def reviews_by_profile(self) -> dict[str, PolicyReview]:
+        """Current review per profile. For presentation and reporting (§31)."""
+        return {
+            profile: current
+            for profile in self.use_profiles
+            if (current := self.review_for(profile)) is not None
+        }
 
     @property
     def has_credentialed_profile_without_reference(self) -> bool:

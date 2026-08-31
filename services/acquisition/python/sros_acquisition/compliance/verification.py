@@ -110,40 +110,55 @@ class _Finding:
 
 def verify_source(
     source: SourceRecord,
+    use_profile_id: str,
     config: ComplianceConfig,
     environ: Mapping[str, str] | None = None,
     now: datetime | None = None,
 ) -> tuple[ConditionVerificationRecord, ...]:
-    """Verify every condition on a source's current review.
+    """Verify every condition on a source's current review FOR ONE USE PROFILE.
 
-    A source with no review, or one whose review declares no condition, produces
-    no records. That is not a pass: the eligibility gate blocks such a source
-    for its own reasons, and an empty result must never be read as "nothing
-    objected, therefore authorised".
+    A source with no review for that profile, or one whose review declares no
+    condition, produces no records. That is not a pass: the eligibility gate
+    blocks such a source for its own reasons, and an empty result must never be
+    read as "nothing objected, therefore authorised".
+
+    `use_profile_id` is required for the same reason the gate requires it
+    (Mission 1.15.5 §18): conditions belong to the review that imposed them, and
+    two profiles may impose different ones on the same source.
     """
-    review = source.review
+    review = source.review_for(use_profile_id)
     if review is None:
         return ()
     moment = now or datetime.now(UTC)
-    compliance = config.get(source.source_id)
+    compliance = config.get(source.source_id, use_profile_id)
     return tuple(
-        verify_condition(source, condition, compliance, environ, moment)
+        verify_condition(source, use_profile_id, condition, compliance, environ, moment)
         for condition in review.required_conditions
     )
 
 
 def verify_condition(
     source: SourceRecord,
+    use_profile_id: str,
     condition: ReviewCondition,
     compliance: SourceCompliance | None,
     environ: Mapping[str, str] | None = None,
     now: datetime | None = None,
 ) -> ConditionVerificationRecord:
-    """Run the verifier the condition names, and stamp the result."""
-    finding = _find(source, condition, compliance, environ)
+    """Run the verifier the condition names, and stamp the result.
+
+    `use_profile_id` decides WHICH review's version is stamped and compared.
+    Reading `source.review` here would have compared the compliance
+    configuration against the legacy review's version whatever profile was
+    being verified -- which is exactly the defect Mission 1.15.5 exists to
+    remove, and it produced a spurious UNKNOWN the first time TED was verified
+    under a second profile.
+    """
+    review = source.review_for(use_profile_id)
+    finding = _find(source, use_profile_id, condition, compliance, environ)
     return ConditionVerificationRecord(
         source_id=source.source_id,
-        review_version=source.review.review_version if source.review else 0,
+        review_version=review.review_version if review else 0,
         condition_key=condition.key,
         verification=condition.verification,
         verifier=finding.verifier,
@@ -157,6 +172,7 @@ def verify_condition(
 
 def _find(
     source: SourceRecord,
+    use_profile_id: str,
     condition: ReviewCondition,
     compliance: SourceCompliance | None,
     environ: Mapping[str, str] | None,
@@ -190,7 +206,8 @@ def _find(
 
     # Everything below inspects the compliance configuration, so its absence or
     # staleness is UNKNOWN rather than a failure: nothing was checked.
-    review_version = source.review.review_version if source.review else 0
+    profile_review = source.review_for(use_profile_id)
+    review_version = profile_review.review_version if profile_review else 0
     if compliance is None:
         return _Finding(
             "compliance-config",

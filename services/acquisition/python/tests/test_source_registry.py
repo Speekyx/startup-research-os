@@ -37,7 +37,7 @@ from sros_acquisition.registry import (
 from sros_acquisition.registry.repositories import load_catalog_into, read_eligibility
 from sros_contracts import SourceAccessMethod
 
-from .conftest import REPO_ROOT, needs_postgres
+from .conftest import LEGACY_PROFILE, REPO_ROOT, needs_postgres
 
 CATALOG_PATH = REPO_ROOT / "docs/data/source-catalog-v1.json"
 
@@ -142,12 +142,14 @@ class TestEligibility:
         """§31 states the standard: correctness over the number of approvals. A
         registry where every platform came back approved would mean the gate did
         nothing. Zero is the honest first-pass result, not a failure."""
-        eligible = [s.source_id for s in catalog if evaluate_eligibility(s).eligible]
+        eligible = [
+            s.source_id for s in catalog if evaluate_eligibility(s, LEGACY_PROFILE).eligible
+        ]
         assert eligible == []
 
     def test_the_gate_reports_every_reason_not_the_first(self, catalog) -> None:
         for source in catalog:
-            result = evaluate_eligibility(source)
+            result = evaluate_eligibility(source, LEGACY_PROFILE)
             if not result.eligible:
                 assert result.blocking_reasons, source.source_id
 
@@ -157,7 +159,7 @@ class TestEligibility:
         for source in catalog:
             methods = {p.access_method.value for p in source.access_profiles}
             if methods and methods <= {"PUBLIC_WEB", "RSS_OR_FEED"}:
-                assert not evaluate_eligibility(source).eligible, source.source_id
+                assert not evaluate_eligibility(source, LEGACY_PROFILE).eligible, source.source_id
 
     def test_the_catalog_format_carries_no_collector_switch(self, catalog) -> None:
         """A JSON file is not a review. Loading a catalog must never be the act
@@ -336,9 +338,10 @@ class TestDatabaseRules:
         with pytest.raises(Exception) as exc:
             conn.execute(
                 """INSERT INTO registry.source_policy_reviews
-                       (id, source_id, review_version, approval_state,
+                       (id, source_id, review_version, assessed_use_profile, approval_state,
                         assessed_use_case, reviewed_by)
-                   VALUES (%s, 'reddit', 99, 'APPROVED', 'test fixture', 'test')""",
+                   VALUES (%s, 'reddit', 99, 'commercial-multi-tenant-research-v1',
+                           'APPROVED', 'test fixture', 'test')""",
                 (uuid.uuid4(),),
             )
             conn.execute("SET CONSTRAINTS ALL IMMEDIATE")
@@ -354,9 +357,10 @@ class TestDatabaseRules:
         review_id = uuid.uuid4()
         conn.execute(
             """INSERT INTO registry.source_policy_reviews
-                   (id, source_id, review_version, approval_state,
+                   (id, source_id, review_version, assessed_use_profile, approval_state,
                     assessed_use_case, reviewed_by)
-               VALUES (%s, 'reddit', 98, 'APPROVED', 'test fixture', 'test')""",
+               VALUES (%s, 'reddit', 98, 'commercial-multi-tenant-research-v1',
+                       'APPROVED', 'test fixture', 'test')""",
             (review_id,),
         )
         conn.execute(
@@ -391,10 +395,12 @@ class TestDatabaseRules:
 
         divergences = []
         for source in catalog:
-            from_db = read_eligibility(conn, source.source_id)
+            from_db = read_eligibility(conn, source.source_id, LEGACY_PROFILE)
             assert from_db is not None, source.source_id
             from_python = evaluate_eligibility(
-                source, satisfied_conditions=recorded_satisfied_keys(conn, source.source_id)
+                source,
+                LEGACY_PROFILE,
+                satisfied_conditions=recorded_satisfied_keys(conn, source.source_id),
             )
             if from_db.eligible != from_python.eligible:
                 divergences.append(source.source_id)

@@ -35,6 +35,7 @@ from ..compliance.authorization import (
     build_authorization,
 )
 from ..compliance.config import ComplianceConfig, load_compliance
+from ..compliance.use_profile import UseProfileNotDeclaredError, declared_use_profile
 from ..registry.catalog import SourceCatalog, load_catalog
 from .errors import AcquisitionFailedError, AcquisitionFailure
 from .gdelt_web_ngram import (
@@ -179,6 +180,11 @@ def run_world_bank_job(
     *,
     catalog: SourceCatalog | None = None,
     compliance: ComplianceConfig | None = None,
+    # The assessed use profile this job runs under. `None` means "ask the
+    # runtime declaration", which is what a worker does; a caller that already
+    # knows passes it, which is what a test and the CLI do. There is no
+    # DEFAULT PROFILE -- `declared_use_profile()` refuses when nothing is set.
+    use_profile: str | None = None,
     transport: Transport | None = None,
     collector: WorldBankCollector | None = None,
     cancelled: Callable[[], bool] | None = None,
@@ -218,7 +224,12 @@ def run_world_bank_job(
     # authorise a collection now: a source suspended in between must not be
     # collected because the planner had already decided it could be.
     try:
-        context = build_authorization(source, rules)
+        context = build_authorization(source, use_profile or declared_use_profile(), rules)
+    except UseProfileNotDeclaredError as exc:
+        # The runtime did not say what it is doing with this source. Refused in
+        # the same voice as any other authorization failure, because it is one:
+        # a permission decision cannot be made without the question.
+        return refuse(AcquisitionErrorCode.AUTHORIZATION_REJECTED, str(exc))
     except AcquisitionNotAuthorizedError as exc:
         return refuse(AcquisitionErrorCode.AUTHORIZATION_REJECTED, "; ".join(exc.reasons))
 
@@ -393,6 +404,11 @@ def run_gdelt_web_ngram_job(
     *,
     catalog: SourceCatalog | None = None,
     compliance: ComplianceConfig | None = None,
+    # The assessed use profile this job runs under. `None` means "ask the
+    # runtime declaration", which is what a worker does; a caller that already
+    # knows passes it, which is what a test and the CLI do. There is no
+    # DEFAULT PROFILE -- `declared_use_profile()` refuses when nothing is set.
+    use_profile: str | None = None,
     transport: Any | None = None,
     collector: GdeltWebNgramCollector | None = None,
     bounds: NgramBounds | None = None,
@@ -436,7 +452,12 @@ def run_gdelt_web_ngram_job(
         )
 
     try:
-        context = build_authorization(source, rules)
+        context = build_authorization(source, use_profile or declared_use_profile(), rules)
+    except UseProfileNotDeclaredError as exc:
+        # The runtime did not say what it is doing with this source. Refused in
+        # the same voice as any other authorization failure, because it is one:
+        # a permission decision cannot be made without the question.
+        return refuse(AcquisitionErrorCode.AUTHORIZATION_REJECTED, str(exc))
     except AcquisitionNotAuthorizedError as exc:
         return refuse(AcquisitionErrorCode.AUTHORIZATION_REJECTED, "; ".join(exc.reasons))
 

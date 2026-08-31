@@ -15,6 +15,7 @@ from __future__ import annotations
 from datetime import UTC, datetime
 
 from .registry import SourceCatalog, evaluate_eligibility, resolve_retention
+from .registry.models import LEGACY_USE_PROFILE
 
 __all__ = ["render_catalog_markdown"]
 
@@ -34,7 +35,9 @@ def _cell(value: str) -> str:
 
 def render_catalog_markdown(catalog: SourceCatalog) -> str:
     now = datetime.now(UTC)
-    results = {s.source_id: evaluate_eligibility(s, now) for s in catalog}
+    # Presentation of the LEGACY profile, which is what every rendered
+    # document has always been about (Mission 1.15.5 §31).
+    results = {s.source_id: evaluate_eligibility(s, LEGACY_USE_PROFILE, now) for s in catalog}
     eligible = [s for s in catalog if results[s.source_id].eligible]
 
     by_state: dict[str, list[str]] = {}

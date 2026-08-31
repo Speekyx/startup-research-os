@@ -101,7 +101,7 @@ Status unchanged at RESTRICTED, with the reason now specific. The distinction Mi
 
 **Blocked by**
 
-- policy review is RESTRICTED
+- policy review for use profile 'commercial-multi-tenant-research-v1' is RESTRICTED
 
 ---
 
@@ -143,7 +143,7 @@ The verdict does not change and the question does. v1 asked whether a developer 
 
 **Blocked by**
 
-- policy review is REQUIRES_REVIEW
+- policy review for use profile 'commercial-multi-tenant-research-v1' is REQUIRES_REVIEW
 
 ---
 
@@ -176,7 +176,7 @@ No evidence. Beyond the retrieval failure there is a prior question that may mak
 
 **Blocked by**
 
-- policy review is REQUIRES_REVIEW
+- policy review for use profile 'commercial-multi-tenant-research-v1' is REQUIRES_REVIEW
 - policy review has no evidence
 
 ---
@@ -364,7 +364,7 @@ Status LOWERED from REQUIRES_REVIEW to RESTRICTED. The Acceptable Use Policies e
 
 **Blocked by**
 
-- policy review is RESTRICTED
+- policy review for use profile 'commercial-multi-tenant-research-v1' is RESTRICTED
 
 ---
 
@@ -398,7 +398,7 @@ Status changed from REQUIRES_REVIEW to RESTRICTED. The distinction Mission 1.3 Â
 
 **Blocked by**
 
-- policy review is RESTRICTED
+- policy review for use profile 'commercial-multi-tenant-research-v1' is RESTRICTED
 
 ---
 
@@ -434,7 +434,7 @@ Re-reviewed against a current first-party document and the verdict holds at REQU
 
 **Blocked by**
 
-- policy review is REQUIRES_REVIEW
+- policy review for use profile 'commercial-multi-tenant-research-v1' is REQUIRES_REVIEW
 
 ---
 
@@ -471,7 +471,7 @@ The clearest demonstration in the catalog of the rule that technical accessibili
 
 **Blocked by**
 
-- policy review is RESTRICTED
+- policy review for use profile 'commercial-multi-tenant-research-v1' is RESTRICTED
 
 ---
 
@@ -510,7 +510,7 @@ Technically the most accessible source in this expansion after Bluesky -- docume
 
 **Blocked by**
 
-- policy review is REQUIRES_REVIEW
+- policy review for use profile 'commercial-multi-tenant-research-v1' is REQUIRES_REVIEW
 
 ---
 
@@ -546,7 +546,7 @@ RESTRICTED, and the reasoning has two independent legs. On policy: use is author
 
 **Blocked by**
 
-- policy review is RESTRICTED
+- policy review for use profile 'commercial-multi-tenant-research-v1' is RESTRICTED
 
 ---
 
@@ -584,7 +584,7 @@ DOWNGRADED on audit. Two assessments in version 1 overstated the evidence they c
 
 **Blocked by**
 
-- policy review is REQUIRES_REVIEW
+- policy review for use profile 'commercial-multi-tenant-research-v1' is REQUIRES_REVIEW
 
 ---
 
@@ -668,7 +668,7 @@ The verdict changed on retrieved first-party evidence, and it changed in the dir
 
 **Blocked by**
 
-- policy review is RESTRICTED
+- policy review for use profile 'commercial-multi-tenant-research-v1' is RESTRICTED
 
 ---
 
@@ -706,7 +706,7 @@ Status unchanged at RESTRICTED and now precisely evidenced. Mission 1.0 inferred
 
 **Blocked by**
 
-- policy review is RESTRICTED
+- policy review for use profile 'commercial-multi-tenant-research-v1' is RESTRICTED
 
 ---
 
@@ -744,7 +744,7 @@ DOWNGRADED from APPROVED_WITH_CONDITIONS, on audit rather than on new evidence. 
 
 **Blocked by**
 
-- policy review is REQUIRES_REVIEW
+- policy review for use profile 'commercial-multi-tenant-research-v1' is REQUIRES_REVIEW
 
 ---
 
@@ -780,7 +780,7 @@ Status unchanged at REQUIRES_REVIEW; the rate limit moves from UNKNOWN to docume
 
 **Blocked by**
 
-- policy review is REQUIRES_REVIEW
+- policy review for use profile 'commercial-multi-tenant-research-v1' is REQUIRES_REVIEW
 
 ---
 
@@ -810,7 +810,7 @@ Assessed and closed. Four of the activities this system requires -- storage, agg
 
 **Blocked by**
 
-- policy review is PROHIBITED
+- policy review for use profile 'commercial-multi-tenant-research-v1' is PROHIBITED
 
 ---
 
@@ -846,7 +846,7 @@ Status unchanged at REQUIRES_REVIEW, with attribution now established as a hard 
 
 **Blocked by**
 
-- policy review is REQUIRES_REVIEW
+- policy review for use profile 'commercial-multi-tenant-research-v1' is REQUIRES_REVIEW
 
 ---
 
@@ -882,7 +882,7 @@ RESTRICTED rather than REQUIRES_REVIEW, and the distinction is deliberate: the t
 
 **Blocked by**
 
-- policy review is RESTRICTED
+- policy review for use profile 'commercial-multi-tenant-research-v1' is RESTRICTED
 
 ---
 
@@ -952,7 +952,7 @@ VERDICT UNCHANGED. REQUIRES_REVIEW. Every assessment is byte-identical to v4, H-
 
 **Blocked by**
 
-- policy review is REQUIRES_REVIEW
+- policy review for use profile 'commercial-multi-tenant-research-v1' is REQUIRES_REVIEW
 
 ---
 
@@ -982,7 +982,7 @@ Status unchanged at PROHIBITED and now directly evidenced rather than inferred. 
 
 **Blocked by**
 
-- policy review is PROHIBITED
+- policy review for use profile 'commercial-multi-tenant-research-v1' is PROHIBITED
 
 ---
 
@@ -1020,7 +1020,7 @@ The API documentation was retrieved and establishes the access model; the docume
 
 **Blocked by**
 
-- policy review is REQUIRES_REVIEW
+- policy review for use profile 'commercial-multi-tenant-research-v1' is REQUIRES_REVIEW
 
 ---
 
@@ -1059,7 +1059,7 @@ Registered because it is the second lawful-looking route to WILLINGNESS_TO_PAY a
 
 **Blocked by**
 
-- policy review is REQUIRES_REVIEW
+- policy review for use profile 'commercial-multi-tenant-research-v1' is REQUIRES_REVIEW
 
 ---
 
@@ -1106,7 +1106,7 @@ DOWNGRADED, and the reason is a misreading corrected rather than a policy that c
 
 **Blocked by**
 
-- policy review is REQUIRES_REVIEW
+- policy review for use profile 'commercial-multi-tenant-research-v1' is REQUIRES_REVIEW
 
 ---
 
@@ -1189,7 +1189,7 @@ No evidence was gathered and every activity is NOT_ASSESSED. The governing docum
 
 **Blocked by**
 
-- policy review is REQUIRES_REVIEW
+- policy review for use profile 'commercial-multi-tenant-research-v1' is REQUIRES_REVIEW
 - policy review has no evidence
 
 ---
@@ -1224,7 +1224,7 @@ Status LOWERED from REQUIRES_REVIEW to PROHIBITED. This is the largest change in
 
 **Blocked by**
 
-- policy review is PROHIBITED
+- policy review for use profile 'commercial-multi-tenant-research-v1' is PROHIBITED
 
 ---
 

@@ -41,6 +41,12 @@ REPO_ROOT = pathlib.Path(__file__).resolve().parents[4]
 # Every entry is a domain the Publications Office or the Commission operates.
 # Adding to it is a claim about who published a document, so it is the kind of
 # edit that should be visible in a diff.
+# Mission 1.15.5. Every review written before that mission assessed the
+# commercial multi-tenant use, so a test that does not care about profiles
+# should name this one rather than invent a narrower subject for itself.
+LEGACY_PROFILE = "commercial-multi-tenant-research-v1"
+LOCAL_PROFILE = "local-private-research-v1"
+
 TED_FIRST_PARTY_PREFIXES = (
     "https://ted.europa.eu",
     "https://docs.ted.europa.eu",
@@ -135,7 +141,9 @@ def registry_loaded(catalog) -> None:
     compliance = load_compliance(REPO_ROOT / "docs/data/source-compliance-v1.json")
     with psycopg.connect(DATABASE_URL) as connection:
         load_catalog_into(connection, catalog)
-        records = [r for source in catalog for r in verify_source(source, compliance)]
+        records = [
+            r for source in catalog for r in verify_source(source, LEGACY_PROFILE, compliance)
+        ]
         record_verifications(connection, records)
         connection.commit()
 
@@ -498,7 +506,7 @@ def seeded_raw(probe_workspace: str, dev_session: str, catalog):
             return HttpResponse(200, body, 0.01, request.path)
 
     compliance = load_compliance(REPO_ROOT / "docs/data/source-compliance-v1.json")
-    context = build_authorization(catalog.get("world-bank"), compliance, environ={})
+    context = build_authorization(catalog.get("world-bank"), LEGACY_PROFILE, compliance, environ={})
     collector = WorldBankCollector(
         _Fixed(),  # type: ignore[arg-type]
         pacer=RequestPacer(WORLD_BANK_PACING, sleep=lambda _: None),
