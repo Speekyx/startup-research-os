@@ -1,6 +1,18 @@
 # TED-EU Reuse and Machine-Learning Processing Review V1
 
-**Authoritative.** Mission 1.15.1. The narrow review of H-34.
+**Authoritative for what it records.** Mission 1.15.1. The narrow review of H-34.
+
+> **Superseded on its central question by Mission 1.15.2.** The Decision was
+> retrieved and read, and **H-34 closed PERMITTED** — see
+> [`ted-eu-governing-decision-review-v1.md`](ted-eu-governing-decision-review-v1.md).
+> H-36 remains open and is analysed in
+> [`ted-eu-database-right-review-v1.md`](ted-eu-database-right-review-v1.md).
+>
+> This document is retained because its reasoning stands: with the instrument
+> unread, treating the grant as covering machine processing would have been
+> assuming a definition. That was the right call on the evidence then available,
+> and the definition turned out to be broad. Being right for the right reason and
+> being lucky are different things, and the record should show which happened.
 
 **Outcome C — H-34 remains OPEN.** TED-EU stays `REQUIRES_REVIEW` at review v2.
 No activity assessment changed. What changed is that the governing instrument is

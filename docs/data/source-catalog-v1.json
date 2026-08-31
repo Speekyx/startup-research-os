@@ -3863,6 +3863,74 @@
               "retrieved_at": "2026-08-31T00:00:00+00:00"
             }
           ]
+        },
+        {
+          "review_version": 3,
+          "approval_state": "REQUIRES_REVIEW",
+          "reviewed_by": "mission-1.15.2",
+          "reviewed_at": "2026-08-31T00:00:00+00:00",
+          "review_interval_days": 365,
+          "automated_access": "PERMITTED",
+          "api_use": "PERMITTED",
+          "commercial_use": "PERMITTED",
+          "storage": "PERMITTED",
+          "retention": "PERMITTED",
+          "redistribution": "PERMITTED",
+          "derived_analytics": "PERMITTED",
+          "model_processing": "PERMITTED",
+          "personal_data_handling": "PERMITTED_WITH_CONDITIONS",
+          "attribution_required": "PERMITTED_WITH_CONDITIONS",
+          "personal_data_risk": "IDENTIFIABLE",
+          "contains_user_generated_content": false,
+          "contains_user_identifiers": true,
+          "contains_location": true,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": false,
+          "discard_identifiers_after_normalization": true,
+          "jurisdiction_review_required": false,
+          "conditions": [
+            "Attribution is required for reused editorial material under CC BY 4.0, and changes must be indicated. The Publications Office logo may not be used without prior consent.",
+            "Notices publish contact details of contracting authorities and successful tenderers -- names, addresses, email addresses, telephone and fax numbers. A minimisation profile must discard the entire contact block: the engine needs the award value, the buyer and supplier organisation names, the CPV classification and the dates, and needs no natural person's contact details for any assessed purpose.",
+            "Only electronically signed notices published in the Supplement to the Official Journal are authentic; online documents are not necessarily exact reproductions. Any claim derived from TED must be attributed to TED's published notice rather than asserted as the authentic award.",
+            "The legal notice states that additional rights may need clearing where content depicts identifiable private individuals or includes third-party works, and that content not owned by the EU may require permission from the rightholder. The reuse grant is therefore not a blanket grant over everything inside a notice, and a minimisation profile is a compliance requirement rather than a preference.",
+            "Industrial property -- patents, trademarks, registered designs, logos and names, including the TED and SIMAP logos -- is excluded from the Commission's reuse policy and is not licensed. Supplier and buyer NAMES appear in award notices as facts about a procurement; using them as trademarks is a different act and is outside the grant.",
+            "Article 6(2)(b): the reuser is obliged NOT TO DISTORT the original meaning or message of the documents. This is the condition with the most direct bearing on the claim layer: an OBSERVED restatement of a TED award notice must say what the notice says, and a derived signal must not be presented in a way that changes what the procurement record means. It is a legal obligation as well as an epistemic one.",
+            "Article 2(4): nothing in the Decision authorises reuse of documents in a manner calculated to deceive or to defraud. The only prohibition in the Decision that concerns the MANNER of use rather than the class of document.",
+            "Article 6(2)(c): the Commission accepts no liability for any consequence stemming from the reuse. Read with TED's authenticity condition, any claim derived from a notice is a claim about what TED published and never a warranted statement about the underlying contract.",
+            "The machine-processing permission established by this review is SCOPED to inference, extraction, classification and structured analysis over reused notices -- the engine's assessed need. MODEL TRAINING was not assessed and is not authorised here: the Decision does not distinguish methods, but training raises the Article 2(2)(b) third-party-rights question in a materially different form and the engine does not need it. Embeddings are likewise unassessed for implementation and blocked independently by D-12."
+          ],
+          "required_conditions": [],
+          "open_questions": [
+            "H-36: determine whether the reuse framework reaches the SUI GENERIS DATABASE RIGHT. Commission Decision 2011/833/EU was read in full on 2026-08-31 and contains no occurrence of 'sui generis', 'extraction', 're-utilisation' or a reference to Directive 96/9/EC; its two occurrences of 'database' are an exclusion for unpublished research and an example inside the definition of structured data. Article 1 and Article 2(1) frame the Decision around DOCUMENTS held or published by the Commission or the Publications Office, and say nothing about rights in the collection those documents sit in. The documented access route is bulk daily and monthly XML packages, which is extraction and re-utilisation of substantial portions. This is now the ONLY question standing between TED and an approving verdict.",
+            "Determine documented rate limits for the TED search API. The data-reuse page documents the API and states no limit; absence of a stated limit is not a stated absence of limits."
+          ],
+          "review_notes": "The Decision was retrieved and read in full, and it answers H-34 favourably while leaving H-36 exactly where it was.\n\nRETRIEVAL. Five EUR-Lex representations failed again. The authentic text came from the Publications Office's own Cellar repository through the opportal-service download handler, addressed by the Cellar identifier cb76d4a0-c886-40bd-99d7-8db018a723d0 that the Publications Office publication record itself publishes -- a first-party representation reached by content negotiation, not a mirror. Four pages, 16,748 characters, Articles 1 to 13.\n\nH-34, CLOSED PERMITTED. Article 3(2): reuse 'means the use of documents by persons or legal entities of documents, for commercial or non-commercial purposes other than the initial purpose for which the documents were produced'. The definition is framed by PURPOSE and is silent about METHOD -- it does not enumerate copying, adaptation or analysis, it covers use for any purpose other than the original one. Article 4 makes all in-scope documents available for reuse on that footing without charge and without individual application. Article 6(1) says without restrictions unless a licence or disclaimer sets conditions, and Article 6(2) says conditions 'shall not unnecessarily restrict possibilities for reuse', listing three: acknowledge the source, do not distort the meaning, and the Commission is not liable. NONE of them concerns how a document may be processed. The Article 2(2) exclusions are classes of DOCUMENT -- software and industrial property, third-party IP, access-restricted documents, confidential statistical data, ongoing research -- not methods of use, and the single manner-of-use prohibition in the whole Decision is Article 2(4)'s reuse 'calculated to deceive or to defraud'. Recitals (2) to (4) point the same way, describing possibilities to aggregate and combine content and reuse in value-added information products and services.\n\nSo this is not silence about machine learning. It is a grant whose operative term is defined broadly enough that the method of use does not enter, which is the condition Mission 1.15.2 §12 sets for closing without the literal words.\n\nH-36, NOT CLOSED. The Decision contains nothing about the sui generis database right: zero occurrences of 'sui generis', 'extraction', 're-utilisation' or Directive 96/9/EC across the full text. It governs the reuse of DOCUMENTS held or published by the Commission and the Publications Office; the TED database as a collection, and whether extracting substantial portions of it through the bulk packages engages a right independent of copyright, is a question the instrument does not reach. A grant over documents does not carry a right in the database by implication, and reading it as doing so would be inferring permission from silence -- which is what the registry refuses.\n\nVERDICT. §24's rule: H-34 permitted with H-36 unresolved gives REQUIRES_REVIEW. All six load-bearing activities are now positively granted and the source is still blocked, which is the correct and slightly uncomfortable outcome: the remaining question is not an activity in the matrix. It is whether a different body of rights sits over the same data.\n\nThe favourable half of this review must not be read as progress toward collection. Nothing here authorises a collector, and H-36 bears specifically on the bulk route a collector would use.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_LICENCE",
+              "document_title": "Commission Decision 2011/833/EU of 12 December 2011 on the reuse of Commission documents",
+              "document_url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=cb76d4a0-c886-40bd-99d7-8db018a723d0&format=pdf&language=en&productionSystem=cellar",
+              "section_reference": "Articles 1-13; recitals 1-9",
+              "summarized_finding": "RETRIEVED AND READ IN FULL -- four pages, Articles 1 to 13, from the Publications Office Cellar repository. Article 1 states the Decision determines the conditions for reuse of documents held by the Commission or on its behalf by the Publications Office. Article 2(1) applies it to public documents produced by or for the Commission and published through publications, websites or dissemination tools. Article 2(2) excludes software and documents covered by industrial property rights such as patents, trademarks, registered designs, logos and names; documents the Commission cannot allow reuse of in view of third-party intellectual property; documents excluded from access under Regulation 1049/2001; confidential data under Regulation 223/2009; and unpublished ongoing research. Article 2(4) states nothing authorises reuse in a manner calculated to deceive or defraud. Article 3(2) defines reuse as the use of documents by persons or legal entities for commercial or non-commercial purposes other than the initial purpose for which the documents were produced, excluding only inter-public-body exchange in pursuit of public tasks. Article 4 makes all documents available for reuse for commercial or non-commercial purposes under Article 6, without charge and without individual application. Article 6(1) requires availability without restrictions or under an open licence or disclaimer; Article 6(2) says conditions shall not unnecessarily restrict possibilities for reuse and may include acknowledging the source, not distorting the original meaning or message, and the non-liability of the Commission. Article 9 makes reuse free of charge in principle. Article 11 requires non-discrimination between comparable categories of reuse and grants no exclusive rights. THE TEXT CONTAINS NO OCCURRENCE of 'sui generis', 'extraction', 're-utilisation', 'text and data mining', 'machine learning' or Directive 96/9/EC; its two occurrences of 'database' are the Article 2(2)(e) research exclusion and an example inside the Article 3(6) definition of structured data.",
+              "retrieved_at": "2026-08-31T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_LICENCE",
+              "document_title": "Publications Office publication record for Decision 2011/833/EU",
+              "document_url": "https://op.europa.eu/en/publication-detail/-/publication/cb76d4a0-c886-40bd-99d7-8db018a723d0/language-en",
+              "section_reference": "Bibliographic record",
+              "summarized_finding": "The Publications Office's own record for the Decision. Confirms CELEX 32011D0833, ELI dec/2011/833/oj, Official Journal reference JOL_2011_330_R_0039_01, publication date 12 December 2011 and corporate author European Commission, and publishes the Cellar identifier cb76d4a0-c886-40bd-99d7-8db018a723d0 through which the operative text was then retrieved. The record itself carries metadata only and no operative text.",
+              "retrieved_at": "2026-08-31T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_LICENCE",
+              "document_title": "Commission Decision 2011/833/EU -- EUR-Lex representations",
+              "document_url": "https://eur-lex.europa.eu/eli/dec/2011/833/oj",
+              "section_reference": "Retrieval failure",
+              "summarized_finding": "EUR-Lex again returned empty bodies on 2026-08-31, this time including the Official Journal L 330 full-issue HTML representation that Mission 1.15.1 had not tried. The publications.europa.eu CELEX resource redirects to an RDF metadata object rather than the operative text. Recorded so the successful route is legible as the Publications Office Cellar rather than EUR-Lex, and so a future reviewer does not repeat the five failures.",
+              "retrieved_at": "2026-08-31T00:00:00+00:00"
+            }
+          ]
         }
       ]
     },

@@ -432,6 +432,21 @@ shape, because this is the kind of finding that decays quietly.
 | **No TED data reached the database** | Live assertions that no RawRecord or NormalizedRecord carries `source_id = 'ted-eu'` | §28. Retrieving legal documents is review work; procurement notices are research data |
 | **Zero TED rows, zero assessments, zero opportunities** | Live assertions that hold in EVERY environment, because they follow from there being no TED collector | §27, §30. The counts 12 / 12 / 7 / 7 / 7 are deliberately NOT asserted: they are facts about one database, not invariants, and pinning them failed on the first CI run. "Unchanged" is a property of a run, already asserted by the post-suite digest watcher (`testing-strategy.md` §36) |
 
+### The governing Decision (Mission 1.15.2)
+
+| Gate | Mechanism | Guards |
+|------|-----------|--------|
+| **Six granted activities and a blocked source, at once** | A test asserts all six `PERMITTED` *and* `REQUIRES_REVIEW` together | The state most likely to be "tidied up" by someone who sees six greens and assumes the verdict lagged. The blocker is not an activity in the matrix -- it is a different body of rights over the same data |
+| **A favourable H-34 cannot override an unresolved H-36** | The two are tracked independently and both asserted | §23. The mission's most likely failure was closing the easy question and declaring the source usable |
+| **A permission finding rests on the operative text** | The evidence entry must carry the Cellar URL, `Articles 1-13`, "read in full" and the verbatim definition fragment | A summary of a legal instrument must never stand in for it, and a PERMITTED finding is exactly where that shortcut is tempting |
+| **ML inference does not authorise model training** | A condition scopes the permission; a test asserts training is named as not authorised | §13. The Decision does not distinguish methods, so a single `PERMITTED` field would otherwise read as authorising everything |
+| **Embeddings are not inherited from inference** | A condition names them and D-12; asserted | §14 |
+| **Database rights are not inferred from a copyright permission** | H-36 stays in the open questions, and the question records that the Decision was read and searched | An established absence is a different fact from an unknown, and a future reviewer must not re-retrieve what has been read |
+| **The EUR-Lex failures stay recorded beside the Cellar success** | Asserted | Otherwise the next reviewer repeats five failed retrievals before finding the route that works |
+| **Every evidence URL is first-party** | Asserted against a prefix list; mirrors, archives, caches and GitHub explicitly excluded | §3 |
+| **A finding is asserted against its version** | Mission 1.15 and 1.15.1 assertions pinned to v1 and v2; durable properties left on the current review | Seven tests failed when v3 landed. Pinning keeps the append-only history checked instead of relaxing the old assertions away (`testing-strategy.md` §37) |
+
+
 ---
 
 ## 2. Turborepo task graph

@@ -1563,3 +1563,51 @@ system or facts about the environment.** Facts about the environment belong in
 the report, where they are findings. Facts about the system belong in tests. A
 count of collected rows is almost always the first kind, and the giveaway is
 that it would change if somebody ran a collector — which is not a regression.
+
+## 37. A review test must name the version it is testing (Mission 1.15.2)
+
+Mission 1.15.2 appended TED review v3 and **seven tests failed** — five from
+Mission 1.15.1's suite and two from Mission 1.15's. Every one of them was
+correct when written and every one of them was wrong by then.
+
+The cause is one habit:
+
+```python
+review(catalog, "ted-eu")  # "the current review" -- moves under you
+review(catalog, "ted-eu", 2)  # the review that mission established
+```
+
+Mission 1.15.1's suite asserted that `model_processing` was `NOT_ADDRESSED` and
+that five granted activities did not make six. Both were true of v2 and both
+became false when v3 read the governing Decision and granted the sixth.
+
+### Why the fix is pinning, not deleting
+
+The failing assertions record what a specific review *found*, and an append-only
+history is worth nothing if nothing checks that superseded versions still say
+what they said. Deleting them would remove the only mechanical guard against v2
+being quietly edited later; pinning them to v2 keeps the guard and lets the
+current state move.
+
+So the rule has two halves:
+
+- **A finding is asserted against its version.** *"v2 recorded
+  `NOT_ADDRESSED`"* stays true forever and is worth protecting.
+- **A durable property is asserted against the current review.** *"a blocked
+  source names what is missing"* must hold at every version, and pinning it to
+  one would stop it protecting anything.
+
+Each of the seven was re-read and sorted into one of the two. Two acquired a
+companion test on the current review, because the property was durable and the
+original assertion had merely happened to be specific.
+
+### The failure this prevents
+
+Without the split, the pressure at every re-review is to relax the old
+assertion until it passes — and the easiest relaxation is to stop asserting the
+old finding at all. That is how an append-only history becomes an append-only
+history that nobody checks.
+
+The tell is a test whose name describes a *state* rather than a *version*:
+`test_five_activities_granted_still_does_not_make_six` is a claim about a moment.
+Renaming it `..._at_v2` was most of the fix.

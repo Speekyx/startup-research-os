@@ -1,4 +1,13 @@
-"""TED-EU after Mission 1.15.1, as properties of the recorded review.
+"""TED-EU as Mission 1.15.1 left it, pinned to review v2.
+
+Mission 1.15.2 read the governing Decision and appended v3, which closed H-34.
+These assertions therefore name **v2 explicitly** wherever they record what
+1.15.1 established. They failed first when v3 landed -- correctly, because they
+were written against "the current review" and the current review had moved.
+
+Pinning is the right fix rather than deleting them: what v2 found remains true of
+v2, and an append-only history is worth nothing if nothing checks that the
+superseded versions still say what they said.
 
 Mission 1.15.1 §33. **No third-party network call.** Retrieving the documents was
 the review; these tests read what the reviewer recorded — the rule
@@ -62,9 +71,10 @@ class TestPriorReviewImmutable:
         assert v1.reviewed_by == "mission-1.15"
         assert assessment(v1, "model_processing") is PolicyAssessment.NOT_ADDRESSED
 
-    def test_both_versions_exist_and_are_contiguous(self, catalog) -> None:
+    def test_the_first_two_versions_still_exist_and_are_contiguous(self, catalog) -> None:
         versions = sorted(r.review_version for r in source_of(catalog, "ted-eu").review_history)
-        assert versions == [1, 2]
+        assert versions[:2] == [1, 2]
+        assert versions == list(range(1, len(versions) + 1))
 
     def test_version_two_carries_every_v1_activity_forward_unchanged(self, catalog) -> None:
         """A re-review that could not close its question must not quietly move
@@ -83,10 +93,11 @@ class TestVerdictUnchanged:
     def test_ted_is_not_approving(self, catalog) -> None:
         assert review(catalog, "ted-eu").approval_state not in APPROVING_STATES
 
-    def test_five_activities_granted_still_does_not_make_six(self, catalog) -> None:
-        """Rule 8: one NOT_ADDRESSED load-bearing activity blocks whatever the
-        others say. The single most likely place for this to be softened."""
-        current = review(catalog, "ted-eu")
+    def test_five_activities_granted_did_not_make_six_at_v2(self, catalog) -> None:
+        """Rule 8 as it applied at v2: one NOT_ADDRESSED load-bearing activity
+        blocked whatever the others said. Mission 1.15.2 later granted the
+        sixth, and v2 must still record the state that made it right."""
+        current = review(catalog, "ted-eu", 2)
         granted = {n for n in LOAD_BEARING if assessment(current, n) is PolicyAssessment.PERMITTED}
         unaddressed = {
             n for n in LOAD_BEARING if assessment(current, n) is PolicyAssessment.NOT_ADDRESSED
@@ -95,12 +106,13 @@ class TestVerdictUnchanged:
         assert unaddressed == {"model_processing"}
         assert current.approval_state is SourceApprovalState.REQUIRES_REVIEW
 
-    def test_model_processing_was_not_inferred_from_the_broad_grant(self, catalog) -> None:
-        """The grant says notices "can be freely reused". Reading that as
-        covering ML inference would be assuming a definition from a document
-        nobody has read."""
+    def test_model_processing_was_not_inferred_from_the_broad_grant_at_v2(self, catalog) -> None:
+        """The grant says notices "can be freely reused". With the instrument
+        unread, treating that as covering ML inference would have meant assuming
+        a definition. Mission 1.15.2 read the definition and it turned out to be
+        broad -- which vindicates the reasoning rather than retiring it."""
         assert (
-            assessment(review(catalog, "ted-eu"), "model_processing")
+            assessment(review(catalog, "ted-eu", 2), "model_processing")
             is PolicyAssessment.NOT_ADDRESSED
         )
 
@@ -129,7 +141,7 @@ class TestEvidence:
         what stops the next reader assuming it was read."""
         entry = next(
             e
-            for e in review(catalog, "ted-eu").evidence
+            for e in review(catalog, "ted-eu", 2).evidence
             if e.document_url == GOVERNING_INSTRUMENT_URL
         )
         assert "empty body" in entry.summarized_finding.lower()
@@ -178,11 +190,10 @@ class TestActivitiesStayDistinct:
     def test_training_and_embeddings_were_not_folded_into_inference(self, catalog) -> None:
         """§3, §14, §15. Nothing in the review claims a training or embedding
         permission, and neither may inherit an inference decision."""
-        notes = (review(catalog, "ted-eu").review_notes or "").lower()
+        notes = (review(catalog, "ted-eu", 2).review_notes or "").lower()
         assert "not_addressed" in notes or "could not be retrieved" in notes
-        # No assessment anywhere claims a positive ML permission.
         assert (
-            assessment(review(catalog, "ted-eu"), "model_processing")
+            assessment(review(catalog, "ted-eu", 2), "model_processing")
             is not PolicyAssessment.PERMITTED
         )
 

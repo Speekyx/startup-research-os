@@ -332,6 +332,27 @@ context and empty on individual behaviour. Mission 1.15 examined nine sources an
 did not change that. What it changed is how much of the emptiness is *known* to
 be closed rather than merely unexplored.
 
+## 5.3 What Mission 1.15.2 changed about this document
+
+The `ted-eu` item added in §5.2 has moved, and not in the direction the effort
+suggested.
+
+**H-34 closed PERMITTED.** Commission Decision 2011/833/EU was read in full from
+the Publications Office Cellar. Reuse is defined by *purpose* and not by
+*method*, so machine processing of reused notices falls inside the grant. All six
+load-bearing activities are now positively granted.
+
+**`ted-eu` is still `REQUIRES_REVIEW`**, blocked by one question the Decision
+does not touch: whether the reuse framework reaches the sui generis database
+right, given that the documented route is bulk extraction of substantial parts
+(H-36).
+
+**What that costs this document's ranking.** The cheapest-next-move logic in §5
+assumed TED's blocker was a document to fetch. It is now a legal question the
+documents do not answer, and legal questions are slower and less certain than
+retrievals. `ted-eu` remains the portfolio's only route to transaction-class
+evidence and its expected time-to-usable got worse, not better.
+
 ## 5.1 What Mission 1.9.2 changed about this document
 
 The HIGH row above now says something it could not before: **GDELT has a
