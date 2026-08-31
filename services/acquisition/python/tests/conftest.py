@@ -46,6 +46,9 @@ TED_FIRST_PARTY_PREFIXES = (
     "https://docs.ted.europa.eu",
     "https://developer.ted.europa.eu",
     "https://api.ted.europa.eu",
+    # The TED Open Data Service, added by Mission 1.15.4. Its own footer reads
+    # "This website is managed by: Publications Office of the European Union".
+    "https://data.ted.europa.eu",
     "https://eur-lex.europa.eu",
     "https://op.europa.eu",
     "https://publications.europa.eu",

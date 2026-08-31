@@ -122,7 +122,9 @@ class TestTheDatasetLicenceWasFound:
     def test_the_catalogue_record_for_the_bulk_route_is_recorded_as_evidence(self, catalog) -> None:
         """§5's question -- is a licence attached to the assembled dataset --
         was answered, and the answer is in the evidence rather than in prose."""
-        entry = next(e for e in review(catalog, "ted-eu").evidence if "ted-1.rdf" in e.document_url)
+        entry = next(
+            e for e in review(catalog, "ted-eu", 4).evidence if "ted-1.rdf" in e.document_url
+        )
         finding = e_lower(entry)
         assert "com_reuse" in finding
         assert "bulk" in finding
@@ -131,7 +133,9 @@ class TestTheDatasetLicenceWasFound:
     def test_com_reuse_is_recorded_as_resolving_to_the_decision(self, catalog) -> None:
         """The whole finding. Without skos:exactMatch this is just another
         opaque licence code, and with it the licence IS the Decision."""
-        entry = next(e for e in review(catalog, "ted-eu").evidence if "COM_REUSE" in e.document_url)
+        entry = next(
+            e for e in review(catalog, "ted-eu", 4).evidence if "COM_REUSE" in e.document_url
+        )
         finding = e_lower(entry)
         assert "exactmatch" in finding
         assert "2011/833" in finding
@@ -140,7 +144,9 @@ class TestTheDatasetLicenceWasFound:
         """The most tempting over-read available in this mission: COM_REUSE
         declares euvoc:appliesTo licence-domain/DATA, and DATA is a subject
         class, not a class of right."""
-        entry = next(e for e in review(catalog, "ted-eu").evidence if "COM_REUSE" in e.document_url)
+        entry = next(
+            e for e in review(catalog, "ted-eu", 4).evidence if "COM_REUSE" in e.document_url
+        )
         finding = e_lower(entry)
         assert "appliesto" in finding
         assert "not a database-right grant" in finding
@@ -207,7 +213,7 @@ class TestCCBYWasNotOverread:
         """Recording the favourable fact is what makes the refusal to rely on it
         honest rather than convenient."""
         entry = next(
-            e for e in review(catalog, "ted-eu").evidence if "ted-csv.rdf" in e.document_url
+            e for e in review(catalog, "ted-eu", 4).evidence if "ted-csv.rdf" in e.document_url
         )
         finding = e_lower(entry)
         assert "cc_by_4_0" in finding or "cc by 4.0" in finding
@@ -216,7 +222,7 @@ class TestCCBYWasNotOverread:
 
     def test_the_inconsistency_that_blocks_reliance_is_recorded(self, catalog) -> None:
         entry = next(
-            e for e in review(catalog, "ted-eu").evidence if "ted-csv.rdf" in e.document_url
+            e for e in review(catalog, "ted-eu", 4).evidence if "ted-csv.rdf" in e.document_url
         )
         finding = e_lower(entry)
         assert "inconsistent" in finding
@@ -225,7 +231,7 @@ class TestCCBYWasNotOverread:
     def test_a_condition_forbids_carrying_a_licence_across_resources(self, catalog) -> None:
         """§7. The CSV subset's licence licences the CSV subset. A future
         collector must not read it onto the XML corpus."""
-        text = joined(review(catalog, "ted-eu"), "conditions")
+        text = joined(review(catalog, "ted-eu", 4), "conditions")
         assert "ted-csv" in text
         assert "ted-1" in text
         assert "do not licence" in text or "does not licence" in text
@@ -243,7 +249,7 @@ class TestCC0StaysScoped:
         notice verbatim and must not have moved it."""
         entry = next(
             e
-            for e in review(catalog, "ted-eu").evidence
+            for e in review(catalog, "ted-eu", 4).evidence
             if e.document_url == "https://ted.europa.eu/en/legal-notice"
         )
         finding = entry.summarized_finding.lower()
@@ -277,7 +283,9 @@ class TestAccessIsNotPermission:
         """§4. Headers are metadata; the archives are research data. The
         evidence must show the line was found rather than crossed."""
         entry = next(
-            e for e in review(catalog, "ted-eu").evidence if "xml-bulk-download" in e.document_url
+            e
+            for e in review(catalog, "ted-eu", 4).evidence
+            if "xml-bulk-download" in e.document_url
         )
         finding = e_lower(entry)
         assert "head" in finding
@@ -288,7 +296,7 @@ class TestAccessIsNotPermission:
         """§14. The API's existence is not permission, and its own terms point
         at the document that does not mention the right."""
         entry = next(
-            e for e in review(catalog, "ted-eu").evidence if e.document_url.endswith("/docs/v3")
+            e for e in review(catalog, "ted-eu", 4).evidence if e.document_url.endswith("/docs/v3")
         )
         finding = e_lower(entry)
         assert "terms of usage" in finding
@@ -299,7 +307,7 @@ class TestAccessIsNotPermission:
         own specification documents a mode with no notice limit, and the
         correction must be visible rather than silently absorbed."""
         entry = next(
-            e for e in review(catalog, "ted-eu").evidence if e.document_url.endswith("/docs/v3")
+            e for e in review(catalog, "ted-eu", 4).evidence if e.document_url.endswith("/docs/v3")
         )
         assert "no limit on the number of retrievable notices" in entry.summarized_finding.lower()
 
@@ -351,7 +359,7 @@ class TestNoInventedLegalChain:
         chain, and the absence of one is a finding worth writing down."""
         entry = next(
             e
-            for e in review(catalog, "ted-eu").evidence
+            for e in review(catalog, "ted-eu", 4).evidence
             if "publications-office-of-the-european-union-copyright" in e.document_url
         )
         finding = entry.summarized_finding.lower()

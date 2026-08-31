@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.26
+Version: 1.27
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-08-31 (Sprint 1 / Mission 1.15.3)
+Last amended: 2026-08-31 (Sprint 1 / Mission 1.15.4)
 
 ---
 
@@ -13,6 +13,26 @@ Last amended: 2026-08-31 (Sprint 1 / Mission 1.15.3)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.27 — 2026-08-31 (Sprint 1 / Mission 1.15.4)
+
+Authorized by the Mission 1.15.4 brief §1-§2 (the changed real-world use case),
+§4-§6 (first-party route research), §25-§26 (source review architecture and the
+critical question), §32 (fake response guard), §35 (documentation) and §39 (stop
+after the report).
+
+| Change | Section | Authority |
+|--------|---------|-----------|
+| **A user summary was excluded before any policy reasoning** | Engineering Principles | Mission 1.15.4 §32. A file describing a written Publications Office reply exists outside the repository and is a transcription that says so in its own second paragraph. Classified USER_SUPPLIED / NON_AUTHORITATIVE: not cited, not copied in, not entered as evidence, **not deleted**. A test asserts that **no source in the catalog** carries an `OPERATOR_CORRESPONDENCE` evidence row at any version -- a tripwire rather than a validator, because a test that tried to VALIDATE an operator response would be a specification for forging one (`testing-strategy.md` §40) |
+| **Local private use creates no permission** | Engineering Principles | Mission 1.15.4 §1, §27. The use case got smaller and the source stayed blocked. The review names and refuses each forbidden conclusion verbatim -- "TED has no database rights", "local projects do not need permission", "because the API is public, all reuse is allowed", "because TED wants reuse, H-36 is irrelevant" -- because every one of them is reachable from the evidence gathered and every one is wrong |
+| **The official routes' intended purpose is documented, first-party** | Product Shape | Mission 1.15.4 §5, §6. The Search API "allows access to published procurement notices for analysis and reuse", is "primarily targeted at data reusers", requires no authentication, and names "Commercial Organisations: Integrating TED data into platforms to provide added-value services" and "Researchers: Analysing public procurement trends and patterns" among its users. The TED Open Data Service publishes data "for analysis and re-use", invites use "in your research and applications", and offers a **Connect your app** button to "retrieve live results directly into Excel, Power BI, or any application that can get data from the web". Analysis, reuse, application integration, commercial use, repeated access and automated access are each named by the operator about its own route |
+| **Documented purpose is NOT a database-right grant** | Blocked work | Mission 1.15.4 §13, §9. Condition 11 records the distinction. Nothing on either route mentions the sui generis right, and an operator describing what its service is for is not a right holder licensing a right in a collection. The Search API is nowhere framed as a way around H-36: the argument rests on documented purpose, never on the route transferring smaller chunks. The Open Data Service's own invitation to "extract custom datasets across many notices" uses the Directive's verb, is recorded, and closes nothing |
+| **Minimisation is possible AT acquisition, and coverage is bounded** | Engineering Principles | Mission 1.15.4 §14. The Search API request body carries a `fields` parameter, so "collect first, minimise later" is not available as an excuse on this route. Coverage is recent and partial: eForms from 1 March 2023 to current day minus one; Standard Forms only 28 August 2023 to 26 January 2024, a documented "proof of concept" slice of form types F3, F6, F21, F22, F23, F25. Recorded so a collector does not discover it from an empty result set |
+| **THE BLOCKER MOVED, and it is ours: every approval answers a use case the model never records** | Blocked work | Mission 1.15.4 §25, §26. `build_authorization('ted-eu')` returns exactly one reason, "policy review is REQUIRES_REVIEW", and no route, resource or profile argument exists that could change it; searching the contracts and acquisition packages for `use_profile`, `deployment_profile`, `LOCAL_PRIVATE` or `MULTI_TENANT` returns **zero matches**. The finding is not about TED. Twenty-nine sources carry approval states that answer an unrecorded question, which cost nothing while one product was being assessed. TED is the first source whose product has two shapes at once, and the model has one slot |
+| **The three ways to hack it are each worse than the gap** | Engineering Principles | Mission 1.15.4 §26. Flipping the verdict makes the eligibility view, the validators, the portfolio and the coverage tables all report TED approving for the commercial multi-tenant use case that is still unresolved -- the silent migration §8 exists to prevent, with conditions as prose next to a boolean that says otherwise. Two current reviews means two answers to one question. A use-profile condition still needs the flip to get past the gate, and inherits its failure whole |
+| **The minimal extension is proposed, not built** | Blocked work | Mission 1.15.4 §26, §35. Record `assessed_use_profile` on a review (every existing one is COMMERCIAL_MULTI_TENANT, which is what they DID assess -- labelling, not a new claim); allow one current review per profile; thread the profile through `evaluate_eligibility` and `build_authorization`; have the runtime DECLARE its profile from configuration rather than infer it, so a profile the review does not name is refused. It touches the most safety-critical function in the repository and needs an ADR and a mission of its own |
+| **Review v5 records the routes and moves nothing else** | Engineering Principles | Mission 1.15.4 §10, §12. Every activity assessment is byte-identical between v4 and v5; the verdict stays REQUIRES_REVIEW; all ten v4 conditions are carried forward verbatim and an eleventh is added. H-34 stays CLOSED PERMITTED and was not reopened. Bulk XML stays blocked -- public downloadability alone is insufficient and nothing found here speaks to repeated substantial extraction. `ted-csv` stays a separate review |
+| **Nothing was collected, built, claimed or scored** | Forbidden During Foundation | Mission 1.15.4 §26-§31, §39. No collector, no API client, no SPARQL client -- asserted against the file tree and against `SPARQLWrapper` anywhere in the repository. No compliance configuration for a blocked source. RawRecords 12, NormalizedRecords 12, Signals 7, Claims 7, ClaimRevisions 7, Evidence 7 unchanged. Reliability assessments 0, Opportunities 0, embeddings 0, scores 0, TED rows 0. Verdict distribution unchanged: 5 / 13 / 8 / 3 |
 
 ## 1.26 — 2026-08-31 (Sprint 1 / Mission 1.15.3)
 

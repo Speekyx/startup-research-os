@@ -226,3 +226,33 @@ drew got *narrower* rather than wider — the API's documented scroll mode has n
 limit on retrievable notices — so there is still no basis for preferring one, and
 none was expressed.
 
+---
+
+## 5. Update after Mission 1.15.4 — a second blocker, and it is ours
+
+`ted-eu` stays P0. The cheapest-next-step table gains a row, and the ordering
+changes.
+
+Mission 1.15.4 re-reviewed TED against the system's **actual** use — local,
+private, one developer — and found strong first-party evidence that TED's two
+official query routes are documented for exactly that: the Search API *"for
+analysis and reuse"*, *"primarily targeted at data reusers"*, naming commercial
+organisations and researchers as users; the Open Data Service publishing data
+*"for analysis and re-use"* with a **Connect your app** button.
+
+**And it still could not be authorised**, for a reason that has nothing to do
+with TED: the registry has no use-profile dimension, so a source cannot be blocked
+broadly and authorised narrowly. `build_authorization('ted-eu')` returns one
+reason — *"policy review is REQUIRES_REVIEW"* — and no argument exists that could
+change it.
+
+| # | Action | Cost | Note |
+|---|--------|------|------|
+| **1** | **Send the prepared clarification** to `op-copyright@publications.europa.eu` | one email, already written | Unchanged, and still the only thing that could close H-36 outright |
+| **2** | **Route-scoped source authorization** — the governance extension | an ADR and a mission | **New.** It would still be needed even if the Publications Office replied favourably *scoped to narrow local research*, because there would be nowhere to record a narrow approval. It benefits every source, not just TED |
+| **3** | Legal review, using `ted-eu-h36-legal-review-packet-v1.md` | a lawyer's time | Only if the reply does not settle it |
+| **4** | Review `usaspending` (H-35) | a source review | **In parallel.** Waiting on a reply is not work |
+
+**Items 1, 2 and 4 do not compete for the same effort**, and item 2 is the one
+that is useful regardless of what TED's answer turns out to be.
+
