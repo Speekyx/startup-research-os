@@ -82,7 +82,9 @@ def enabled_gdelt():
             "SELECT collector_enabled FROM registry.sources WHERE id = 'gdelt'"
         ).fetchone()[0]
         connection.execute(
-            "UPDATE registry.sources SET collector_enabled = TRUE WHERE id = 'gdelt'"
+            "UPDATE registry.sources SET collector_enabled = TRUE, "
+            "collector_use_profile = 'commercial-multi-tenant-research-v1' "
+            "WHERE id = 'gdelt'"
         )
         connection.commit()
     yield "gdelt"

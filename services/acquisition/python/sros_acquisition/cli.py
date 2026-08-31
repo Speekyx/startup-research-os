@@ -706,12 +706,19 @@ def cmd_enable(args: argparse.Namespace) -> int:
         )
         return 1
 
+    profile = _cli_profile(args)
     with _connect() as conn, conn.transaction():
+        # The switch names the use it was flipped for (Mission 1.15.5): a
+        # collector enabled with no stated scope is one enabled for the widest,
+        # and the database refuses it. The trigger then re-checks eligibility
+        # under THAT profile, so `--use-profile` cannot widen a permission --
+        # it can only pick which narrow one is being turned on.
         conn.execute(
-            "UPDATE registry.sources SET collector_enabled = TRUE WHERE id = %s",
-            (source.source_id,),
+            "UPDATE registry.sources SET collector_enabled = TRUE, "
+            "collector_use_profile = %s WHERE id = %s",
+            (profile, source.source_id),
         )
-    print(f"collector enabled for {source.source_id}")
+    print(f"collector enabled for {source.source_id} under use profile {profile}")
     return 0
 
 

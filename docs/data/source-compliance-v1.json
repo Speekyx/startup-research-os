@@ -286,7 +286,7 @@
       "evidence_url": "https://ted.europa.eu/en/legal-notice",
       "evidence_section": "Copyright notice",
       "attribution": {
-        "notes": "The legal notice grants reuse of the procurement notices and separately licenses the SIMAP websites' EDITORIAL content under CC BY 4.0. The notices are not the editorial content, so the licence identifier here is the Decision rather than CC BY 4.0 -- citing CC BY over a notice would attribute it to a licence that does not cover it. The logo requirement is an EXCLUSION rather than an attribution element: the notice says the logos may not be used without prior consent, which is a thing not to do, and the resource scope carries it.",
+        "notes": "The legal notice grants reuse of the procurement notices and separately licenses the SIMAP websites' EDITORIAL content under CC BY 4.0. The notices are not the editorial content, so the licence identifier here is the Decision rather than CC BY 4.0 -- citing CC BY over a notice would attribute it to a licence that does not cover it. The logo requirement is an EXCLUSION rather than an attribution element: the notice says the logos may not be used without prior consent, which is a thing not to do, and the resource scope carries it. THERE IS NO EXACT_NOTICE REQUIREMENT, and the omission is deliberate. The TED legal notice requires attribution and forbids using the logos; it prescribes no sentence to reproduce. A notice written by us and presented as required would be our wording wearing the source's authority -- the same reason GDELT carries no LICENCE_IDENTIFIER. The authenticity and non-liability obligations are carried as review CONDITIONS, where they are read by a person, rather than as a quoted string nothing prescribed.",
         "requirements": [
           {
             "element": "SOURCE_CREDIT",
@@ -297,12 +297,6 @@
           {
             "element": "LICENCE_IDENTIFIER",
             "text": "Commission Decision 2011/833/EU on the reuse of Commission documents",
-            "supplied": false,
-            "when_modified": false
-          },
-          {
-            "element": "EXACT_NOTICE",
-            "text": "Derived from TED notices. Only electronically signed notices published in the Supplement to the Official Journal of the European Union are authentic; the Commission accepts no liability for consequences of reuse.",
             "supplied": false,
             "when_modified": false
           }

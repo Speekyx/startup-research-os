@@ -116,33 +116,41 @@ def main(argv: list[str]) -> int:
     )
 
     catalog_ids = {s.source_id for s in catalog}
-    approving = {
-        s.source_id
-        for s in catalog
-        if s.review is not None and s.review.approval_state in APPROVING_STATES
-    }
 
-    # -- 5: no entry for a source that has not been approved -------------------
+    # Mission 1.15.5. A compliance entry configures a source FOR A USE, so both
+    # checks below ask about the review under the entry's own profile. Asking
+    # `source.review` would compare against the legacy profile whatever the
+    # entry said, which is the source-only reasoning this mission removed --
+    # and it reported TED's local entry as preparation for an approval that
+    # already exists under the profile it names.
+    def profile_review(entry):
+        source = next((s for s in catalog if s.source_id == entry.source_id), None)
+        return source.review_for(entry.use_profile_id) if source else None
+
+    # -- 5: no entry for a source/profile pair that has not been approved ------
     for entry in config:
         if entry.source_id not in catalog_ids:
             errors.append(f"{entry.source_id}: a compliance entry for a source not in the catalog")
-        elif entry.source_id not in approving:
+            continue
+        review = profile_review(entry)
+        if review is None or review.approval_state not in APPROVING_STATES:
             errors.append(
                 f"{entry.source_id}: a compliance entry for a source with no approving "
-                "review. Compliance parameters for a source nobody approved read as "
-                "preparation for approving it"
+                f"review under use profile {entry.use_profile_id!r}. Compliance "
+                "parameters for a use nobody approved read as preparation for "
+                "approving it"
             )
 
-    # -- 4: entries target the current review ---------------------------------
+    # -- 4: entries target the current review OF THEIR PROFILE ----------------
     for entry in config:
-        source = next((s for s in catalog if s.source_id == entry.source_id), None)
-        if source is None or source.review is None:
+        review = profile_review(entry)
+        if review is None:
             continue
-        if entry.review_version != source.review.review_version:
+        if entry.review_version != review.review_version:
             errors.append(
                 f"{entry.source_id}: the compliance entry targets review version "
-                f"{entry.review_version} and the current review is version "
-                f"{source.review.review_version}"
+                f"{entry.review_version} and the current review under use profile "
+                f"{entry.use_profile_id!r} is version {review.review_version}"
             )
 
     # -- 8: every scope fails closed on unknown origin, and excludes something --
@@ -264,8 +272,8 @@ def main(argv: list[str]) -> int:
 
     # -- 7: exact notices are traceable to the evidence that established them --
     for entry in config:
-        source = next((s for s in catalog if s.source_id == entry.source_id), None)
-        if source is None or source.review is None:
+        review = profile_review(entry)
+        if review is None:
             continue
         requirement = entry.attribution.requirement(AttributionElement.EXACT_NOTICE)
         if requirement is None:
@@ -275,8 +283,7 @@ def main(argv: list[str]) -> int:
         # else about the wording is normalised, on purpose.
         notice = (requirement.text or "").strip().rstrip(".")
         corpus = " ".join(
-            (item.summarized_finding or "") + " " + (item.excerpt or "")
-            for item in source.review.evidence
+            (item.summarized_finding or "") + " " + (item.excerpt or "") for item in review.evidence
         )
         if notice and notice not in corpus:
             errors.append(
@@ -383,10 +390,18 @@ def main(argv: list[str]) -> int:
             print(f"  - {error}", file=sys.stderr)
         return 1
 
-    conditions = sum(len(s.review.required_conditions) for s in catalog if s.review is not None)
+    # Counted per (source, profile) since Mission 1.15.5: a source approved
+    # under two profiles carries two sets of conditions, and one number for
+    # the source would hide which use they belong to.
+    pairs = [
+        (source, review) for source in catalog for review in source.reviews_by_profile().values()
+    ]
+    conditions = sum(len(review.required_conditions) for _, review in pairs)
+    approving_pairs = [pair for pair in pairs if pair[1].approval_state in APPROVING_STATES]
     print(
-        f"\ncompliance validation passed: {conditions} condition(s) across "
-        f"{len(approving)} approving source(s), {len(CAPABILITIES)} capabilities, "
+        "\ncompliance validation passed: "
+        f"{conditions} condition(s) across {len(approving_pairs)} approving "
+        f"(source, use profile) pair(s), {len(CAPABILITIES)} capabilities, "
         f"{len(authorized)} authorizable"
     )
     return 0

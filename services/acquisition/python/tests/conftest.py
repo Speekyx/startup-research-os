@@ -397,7 +397,9 @@ def enabled_world_bank() -> Iterator[str]:
             "SELECT collector_enabled FROM registry.sources WHERE id = 'world-bank'"
         ).fetchone()[0]
         connection.execute(
-            "UPDATE registry.sources SET collector_enabled = TRUE WHERE id = 'world-bank'"
+            "UPDATE registry.sources SET collector_enabled = TRUE, "
+            "collector_use_profile = 'commercial-multi-tenant-research-v1' "
+            "WHERE id = 'world-bank'"
         )
         connection.commit()
     yield "world-bank"
