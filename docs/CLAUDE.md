@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.25
-Last amended: 2026-08-31 (Sprint 1 / Mission 1.15.1)
+Version: 1.26
+Last amended: 2026-08-31 (Sprint 1 / Mission 1.15.2)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.26 | 2026-08-31 | **H-34 CLOSED PERMITTED; H-36 did not close.** Commission Decision 2011/833/EU was retrieved from the Publications Office Cellar and read in full: reuse is defined by PURPOSE, not by METHOD, so machine processing falls inside the grant. The same text contains **zero** occurrences of *sui generis*, *extraction*, *re-utilisation* or Directive 96/9/EC. All six load-bearing activities are now granted and `ted-eu` is **still REQUIRES_REVIEW** -- the blocker is no longer an activity in the matrix |
 | 1.25 | 2026-08-31 | **H-34 stays OPEN, and the question got precise.** TED's governing instrument is now NAMED and proven -- Commission Decision 2011/833/EU, cited by TED's own legal notice -- and its text returned an empty body at five first-party EUR-Lex addresses. The grant says notices may be *reused*, and 'reuse' is defined in the document nobody could read. A second question surfaced: does the grant reach the sui generis DATABASE right, given that the access route is bulk extraction (H-36) |
 | 1.24 | 2026-08-31 | **Demand-side expansion: nine sources examined, zero approvals, and that is the result.** Pinterest and Hacker News moved to RESTRICTED on retrieved terms; Bluesky's developer guidelines are now known to exist and could not be fetched. Two procurement sources registered -- the first lawful route to WILLINGNESS_TO_PAY as a TRANSACTION rather than a listed price. `ted-eu` has five of six activities granted and is blocked by one |
 | 1.23 | 2026-08-31 | **Reviewed reliability governed, and none reviewed.** A reliability applies to a MEASUREMENT x PURPOSE scope, rests on retrieved first-party documents, is attributed to a person and is superseded rather than updated (ADR-026). Zero assessments exist, so all seven Evidence rows stay NON_SCORABLE and aggregation stays UNAVAILABLE -- **outcome B, and it is the design working**. D-03 loses one blocker and keeps four |
@@ -884,56 +885,73 @@ relevance — and it has not yet.** Even a perfect reliability review of all sev
 existing Evidence rows would establish nothing about pain, desire, willingness to
 pay, competition, distribution or retention.
 
-### TED-EU — the closest blocked source, and why it stays blocked
+### TED-EU — every activity granted, and still blocked
 
-Mission 1.15.1 was a narrow mission to close H-34 in either direction
-(`ted-eu-reuse-ml-review-v1.md`). It could not, and the reason is not the one
-anybody expected.
+Mission 1.15.2 retrieved and read the governing instrument
+(`ted-eu-governing-decision-review-v1.md`,
+`ted-eu-database-right-review-v1.md`). Review v3.
 
-- **The governing instrument is established and the link is PROVEN.** TED's own
-  legal notice states that the Commission's reuse policy *"is implemented by the
-  Commission Decision of 12 December 2011 on the reuse of Commission
-  documents"* and links its ELI address. Mission 1.15's open question guessed at
-  "the Publications Office's reuse decision, or another first-party instrument";
-  the instrument now has a name, a date, a publisher and a canonical URL.
-- **That document could not be read.** Five first-party EUR-Lex addresses — the
-  ELI URL, the ELI English URL, the CELEX text URL, the CELEX HTML URL and the
-  Official Journal PDF — each returned an empty body. The Publications Office's
-  own copyright notice does not restate it and is silent on text and data
-  mining, machine learning and automated processing; the TED Developer Docs link
-  back to the same legal notice.
-- **This is worse than silence, not better.** The grant reads *"can be freely
-  reused, for commercial or non-commercial purposes"*. The operative word is
-  **reused**, and its scope is defined in the instrument that would not render.
-  Reading the grant as covering machine-learning inference would mean assuming a
-  definition from an **unread document** — a weaker basis than inferring from
-  observed silence, because silence is at least established.
-- **A search summary was refused.** A search restricted to EU domains returned a
-  summary describing the Decision's articles. It was not treated as evidence and
-  no part of the review rests on it. A summary of a legal instrument is precisely
-  what must not stand in for the instrument.
-- **A second question surfaced that nobody had asked (H-36).** TED is a database
-  and the documented route is bulk XML — extraction and re-utilisation of
-  substantial portions. The sui generis database right is independent of
-  copyright, and nothing retrieved addresses it. It bears on `automated_access`
-  and `redistribution` rather than `model_processing`, so **it could block TED
-  even if H-34 closes favourably**. Recorded as a new open question rather than
-  used to downgrade Mission 1.15's findings: a question nobody has answered is
-  not evidence that an earlier review was wrong.
-- **Two conditions were added and none weakened.** The legal notice states that
-  additional rights may need clearing where content depicts identifiable private
-  individuals, and that industrial property including logos and names is excluded
-  from the reuse policy. The reuse grant is therefore **not a blanket grant over
-  everything inside a notice**, which makes minimisation a compliance requirement
-  rather than a preference. Mission 1.15's minimisation and authenticity
-  conditions are intact and asserted by test.
-- **Every activity assessment is byte-identical between v1 and v2.** A re-review
-  that could not close its question must not quietly move findings it did not
-  re-establish.
+**The retrieval.** EUR-Lex failed again — six representations across two
+missions, including the Official Journal full-issue HTML. The text came from the
+**Publications Office's own Cellar repository**, addressed by the Cellar
+identifier the Publications Office publication record itself publishes. Four
+pages, Articles 1–13, 16,748 characters. A first-party representation reached by
+following the publisher's own identifiers; not a mirror.
 
-**The project wants this source badly** — it would be the first transaction-class
-evidence the portfolio has ever had — **and that had zero effect on the review.**
-The next action is one retrieval from an environment that renders EUR-Lex.
+**H-34 — CLOSED PERMITTED.** Article 3(2): reuse *"means the use of documents by
+persons or legal entities of documents, for commercial or non-commercial
+purposes other than the initial purpose for which the documents were
+produced"*. The definition is framed by **purpose** and enumerates no acts —
+method does not enter. Article 4 makes all in-scope documents available on that
+footing; Article 6(2) says conditions *"shall not unnecessarily restrict
+possibilities for reuse"* and lists three, none about method; the Article 2(2)
+exclusions are classes of **document**; and the only manner-of-use prohibition in
+the whole instrument is Article 2(4)'s reuse *"calculated to deceive or to
+defraud"*.
+
+**This is not silence about machine learning.** It is a grant whose operative
+term is defined broadly enough that method does not enter — a different thing,
+and the thing that permits closing without the literal words.
+
+**Scope of what closed.** Inference, extraction, classification, structured
+analysis. **Model training was not assessed and is not authorised** — the
+Decision does not distinguish methods, but training raises Article 2(2)(b)'s
+third-party-rights exclusion in a materially different form and the engine does
+not need it. Embeddings are unassessed for implementation and blocked
+independently by D-12. Both recorded as a **condition** on v3, because a single
+`PERMITTED` field cannot carry a boundary.
+
+**Three new conditions from the Decision.** Article 6(2)(b) obliges the reuser
+**not to distort the original meaning or message** — the condition with the most
+direct bearing on the claim layer, making an epistemic requirement a legal one
+too. Article 2(4) forbids deceptive or fraudulent reuse. Article 6(2)(c) records
+the Commission's non-liability.
+
+**H-36 — NOT CLOSED, and the unknown became an established absence.** The full
+text contains **zero** occurrences of *sui generis*, *extraction*,
+*re-utilisation* or Directive 96/9/EC; its two occurrences of *database* are an
+exclusion for unpublished research and an example inside the definition of
+structured data. The Decision is framed throughout around **documents**
+(Articles 1, 2(1), 3(1)); the collection they sit in is never mentioned. Article
+2(2)(a) excludes industrial property by name and the database right is not in
+that list — the instrument neither grants over it nor excludes it, it **does not
+reach it**.
+
+One fact cuts the other way and is recorded: SIMAP *system metadata* is CC0 1.0,
+and CC0 waives sui generis rights where the dedicator holds them. That shows the
+Publications Office addresses this right when it means to — and it applies to
+metadata, not to the notice corpus a collector would extract.
+
+**The verdict.** Permitted plus unresolved gives `REQUIRES_REVIEW`. **All six
+load-bearing activities are granted and the source is still blocked**, which is
+uncomfortable and correct: the remaining question is not an activity in the
+matrix, it is whether a different body of rights sits over the same data.
+
+**The blocker changed kind.** It was *"retrieve a document"*. It is now *"decide
+a legal question the documents do not answer"* — the first item in the queue a
+further document search cannot settle, because the documents have been read.
+Bulk XML and the search API are analysed separately and both are unresolved,
+with different exposure; **no collector route was forced**.
 
 ### Blocked work
 

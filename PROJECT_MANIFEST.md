@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.24
+Version: 1.25
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-08-31 (Sprint 1 / Mission 1.15.1)
+Last amended: 2026-08-31 (Sprint 1 / Mission 1.15.2)
 
 ---
 
@@ -13,6 +13,25 @@ Last amended: 2026-08-31 (Sprint 1 / Mission 1.15.1)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.25 — 2026-08-31 (Sprint 1 / Mission 1.15.2)
+
+Authorized by the Mission 1.15.2 brief §2 (resolve H-34 and H-36), §3 (retrieval
+is the mission), §7 (resolve the definition of reuse), §15 (database rights are
+mandatory), §24 (verdict rules), §44 (documentation) and §46 (stop after the
+report).
+
+| Change | Section | Authority |
+|--------|---------|-----------|
+| **The governing Decision was retrieved and read in full** | Product Shape | Mission 1.15.2 §3, §5. EUR-Lex failed again -- six representations across two missions. The text came from the **Publications Office's own Cellar repository**, addressed by the Cellar identifier the Publications Office publication record itself publishes: four pages, Articles 1-13, 16,748 characters. A first-party representation reached by following the publisher's own identifiers, not a mirror |
+| **H-34 CLOSED PERMITTED: reuse is defined by PURPOSE, not by METHOD** | Product Shape | Mission 1.15.2 §7, §12. Article 3(2): reuse "means the use of documents by persons or legal entities of documents, for commercial or non-commercial purposes other than the initial purpose for which the documents were produced". The definition enumerates no acts. Article 4 makes all in-scope documents available on that footing; Article 6(2)'s permitted conditions -- attribution, non-distortion, non-liability -- contain nothing about method; the Article 2(2) exclusions are classes of DOCUMENT; and the only manner-of-use prohibition in the instrument is Article 2(4)'s reuse "calculated to deceive or to defraud". **This is not silence about machine learning** -- it is a grant whose operative term is broad enough that method does not enter |
+| **The permission is scoped, and training is not authorised** | Forbidden During Foundation | Mission 1.15.2 §13, §14. Inference, extraction, classification and structured analysis are within the grant. Model training was NOT assessed: the Decision does not distinguish methods, but training raises Article 2(2)(b)'s third-party-rights exclusion in a materially different form and the engine does not need it. Embeddings stay unassessed for implementation and blocked by D-12. Both recorded as a CONDITION, because a single PERMITTED field cannot carry a boundary |
+| **Article 6(2)(b) makes non-distortion a legal obligation** | Engineering Principles | Mission 1.15.2. The reuser is obliged "not to distort the original meaning or message of the documents" -- the condition with the most direct bearing on the claim layer. An OBSERVED restatement of an award notice must say what the notice says, which the interpretation contract already required epistemically and the Decision now requires legally |
+| **H-36 did NOT close, and the unknown became an established absence** | Blocked work | Mission 1.15.2 §15, §23. The full text contains **zero** occurrences of "sui generis", "extraction", "re-utilisation" or Directive 96/9/EC; its two occurrences of "database" are an exclusion for unpublished research and an example inside the definition of structured data. The Decision is framed throughout around DOCUMENTS (Articles 1, 2(1), 3(1)); the collection they sit in is never mentioned. Article 2(2)(a) excludes industrial property by name and the database right is not in that list -- the instrument neither grants over it nor excludes it, it **does not reach it** |
+| **Six granted activities and a blocked source, at once** | Blocked work | Mission 1.15.2 §24. Permitted plus unresolved gives REQUIRES_REVIEW. All six load-bearing activities are now positively granted and `ted-eu` is still blocked, which is uncomfortable and correct: **the remaining question is not an activity in the matrix**, it is whether a different body of rights sits over the same data. A favourable H-34 was not allowed to override an unresolved H-36 |
+| **The blocker changed kind, and got more expensive** | Blocked work | Mission 1.15.2 §42. It was "retrieve a document". It is now "decide a legal question the documents do not answer" -- the first item in the human-review queue a further document search cannot settle, because the documents have been read. Bulk XML and the search API are analysed separately and both are unresolved with different exposure; **no collector route was forced** |
+| **A review test must name the version it is testing** | Engineering Principles | Mission 1.15.2. Seven tests from Missions 1.15 and 1.15.1 failed when v3 landed, every one correct when written. A FINDING is asserted against its version and a DURABLE PROPERTY against the current review; pinning keeps the append-only history checked instead of relaxing the old assertions away (`testing-strategy.md` §37) |
+| **Nothing was collected, built, claimed or scored** | Forbidden During Foundation | Mission 1.15.2 §34-§38, §46. No collector, no TED RawRecord or NormalizedRecord -- asserted live. RawRecords 12, NormalizedRecords 12, Signals 7, Claims 7, ClaimRevisions 7, Evidence 7 unchanged. Reliability assessments 0, Opportunities 0, embeddings 0, scores 0. Verdict distribution unchanged: 5 / 13 / 8 / 3. USAspending was not re-reviewed (§43) |
 
 ## 1.24 — 2026-08-31 (Sprint 1 / Mission 1.15.1)
 

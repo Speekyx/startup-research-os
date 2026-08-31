@@ -1288,3 +1288,103 @@ suspicion is what the append-only rule exists to prevent.
 **Legal counsel appropriate?** Yes, if the instrument is silent on database
 rights — the question then becomes whether a documents reuse policy carries the
 database right by implication.
+
+---
+
+## H-34 — CLOSED after Mission 1.15.2 {#h-34-closed}
+
+**Closed PERMITTED**, on the operative text of Commission Decision 2011/833/EU,
+retrieved and read in full on 2026-08-31.
+
+**How it was retrieved.** EUR-Lex failed again — five representations in Mission
+1.15.1, plus the Official Journal L 330 full-issue HTML this round.
+`publications.europa.eu/resource/celex/32011D0833` redirects to an RDF metadata
+object. The text came from the **Publications Office's own Cellar repository**,
+addressed by the Cellar identifier `cb76d4a0-c886-40bd-99d7-8db018a723d0` that
+the Publications Office publication record itself publishes. Four pages,
+Articles 1–13.
+
+**What closed it.** Article 3(2):
+
+> *"'reuse' means the use of documents by persons or legal entities of
+> documents, for commercial or non-commercial purposes other than the initial
+> purpose for which the documents were produced."*
+
+The definition is framed by **purpose** and enumerates no acts. Article 4 makes
+all in-scope documents available for reuse on that footing; Article 6(2) says
+conditions *"shall not unnecessarily restrict possibilities for reuse"* and
+lists three, none of them about method; the Article 2(2) exclusions are classes
+of document rather than methods of use; and the only manner-of-use prohibition
+in the instrument is Article 2(4)'s reuse *"calculated to deceive or to
+defraud"*.
+
+This is not silence about machine learning. It is a grant whose operative term is
+defined broadly enough that method does not enter.
+
+**Scope of what closed.** Inference, extraction, classification and structured
+analysis. **Model training was not assessed and is not authorised**; embeddings
+are unassessed for implementation and blocked independently by D-12. Recorded as
+a condition on review v3 rather than left to prose.
+
+**Status:** closed. See `ted-eu-governing-decision-review-v1.md`.
+
+---
+
+## H-36 — update after Mission 1.15.2 {#h-36-update}
+
+**Still open, and the unknown became an established absence.**
+
+Mission 1.15.1 recorded H-36 as *"the instrument might address database rights
+and we cannot read the instrument"*. The instrument has now been read in full and
+**does not address them**:
+
+| Term | Occurrences in Decision 2011/833/EU |
+|------|------------------------------------:|
+| `sui generis` | **0** |
+| `extraction` | **0** |
+| `re-utilisation` / `reutilisation` | **0** |
+| `Directive 96/9` | **0** |
+| `database` | 2 — an exclusion for unpublished research, and an example inside the definition of *structured data* |
+
+The Decision is framed throughout around **documents** (Articles 1, 2(1), 3(1)).
+The collection those documents sit in is never mentioned. Article 2(2)(a)
+excludes industrial property *"such as patents, trademarks, registered designs,
+logos and names"*; the database right is not in that list and not elsewhere. The
+instrument neither grants over it nor excludes it — **it does not reach it**.
+
+**One fact cuts the other way and is recorded honestly.** SIMAP *system metadata*
+is dedicated to the public domain under CC0 1.0, and CC0 waives sui generis
+database rights where the dedicator holds them. That shows the Publications
+Office addresses this class of right when it means to — and it applies to
+metadata, not to the notice corpus a collector would extract. Reading it across
+would extend a stated grant past its stated subject.
+
+**Why silence is not permission here.** The maker of the assembled collection is
+not established — notices are filed by contracting authorities across the Union.
+The Decision enumerates rights it *cannot* grant over, so its silence is not
+naturally read as a grant. And the engine's documented route is bulk daily and
+monthly packages, which is the paradigm case of repeated and systematic
+extraction of substantial parts rather than a marginal one.
+
+**This is now the only question standing between TED and an approving verdict.**
+All six load-bearing activities are positively granted at review v3 and the
+source remains `REQUIRES_REVIEW`.
+
+**Needed**, cheapest first:
+
+1. A first-party statement from the Publications Office on whether it asserts or
+   waives database rights in TED, or whether the reuse policy is intended to
+   cover extraction of the corpus.
+2. A licence attached to the bulk packages themselves, if one exists — the
+   data-reuse page carries none.
+3. Legal review of whether a documents reuse policy carries the database right by
+   implication, and whether the right subsists in TED at all given who assembles
+   it.
+
+**Vendor contact needed?** **Yes** — the Publications Office publishes a contact
+route. Not contacted.
+**Legal counsel appropriate?** **Yes.** This is no longer a retrieval problem.
+It is the first question in the queue that a further document search cannot
+answer, because the documents have been read.
+
+**Status:** open. See `ted-eu-database-right-review-v1.md`.

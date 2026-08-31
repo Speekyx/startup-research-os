@@ -127,7 +127,7 @@ evidence a payment before this round.
 
 | Source | Verdict | Evidence class | Blocker |
 |--------|---------|----------------|---------|
-| `ted-eu` | REQUIRES_REVIEW *(v2)* | **TRANSACTION** | `model_processing` not addressed (H-34), and database rights unasked until Mission 1.15.1 (H-36) |
+| `ted-eu` | REQUIRES_REVIEW *(v3)* | **TRANSACTION** | H-34 **closed PERMITTED**; blocked solely by the sui generis database right (H-36), which the governing Decision does not address at all |
 | `usaspending` | REQUIRES_REVIEW *(new)* | **TRANSACTION** | No licence or terms document retrievable |
 
 ```text

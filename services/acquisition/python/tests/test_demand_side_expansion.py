@@ -180,10 +180,15 @@ class TestAccessIsNotPermission:
 
 
 class TestSilenceStillBlocks:
-    def test_ted_grants_five_activities_and_is_blocked_by_the_sixth(self, catalog) -> None:
-        """The whole shape of the finding, as a test. A single NOT_ADDRESSED
-        activity blocks whatever the other five say (Mission 1.8, rule 8)."""
-        current = review(catalog, "ted-eu")
+    def test_ted_granted_five_activities_and_was_blocked_by_the_sixth_at_v1(self, catalog) -> None:
+        """The whole shape of Mission 1.15's finding, pinned to the version that
+        made it. A single NOT_ADDRESSED activity blocked whatever the other five
+        said (Mission 1.8, rule 8).
+
+        Mission 1.15.2 read the governing Decision and granted the sixth, so
+        this tracks v1 rather than the current review -- what v1 found remains
+        true of v1, and that is what an append-only history is for."""
+        current = review(catalog, "ted-eu", 1)
         granted = [
             name for name in LOAD_BEARING if assessment(current, name) is PolicyAssessment.PERMITTED
         ]
@@ -196,11 +201,19 @@ class TestSilenceStillBlocks:
         assert unaddressed == ["model_processing"]
         assert current.approval_state is SourceApprovalState.REQUIRES_REVIEW
 
-    def test_ted_names_the_single_missing_grant_in_its_open_questions(self, catalog) -> None:
+    def test_ted_named_the_single_missing_grant_at_v1(self, catalog) -> None:
         """A blocked source must say what is missing, specifically enough that
-        somebody could go and get it."""
-        questions = " ".join(review(catalog, "ted-eu").open_questions).lower()
+        somebody could go and get it. Somebody did: Mission 1.15.2 retrieved the
+        Decision and closed that question, so this pins v1."""
+        questions = " ".join(review(catalog, "ted-eu", 1).open_questions).lower()
         assert "machine-learning" in questions or "machine learning" in questions
+
+    def test_ted_is_still_blocked_and_still_says_why(self, catalog) -> None:
+        """The durable property, at whatever the current version is: a blocked
+        source names what is missing. Today that is the database right."""
+        current = review(catalog, "ted-eu")
+        assert current.approval_state not in APPROVING_STATES
+        assert current.open_questions
 
     def test_bluesky_remains_silent_on_every_load_bearing_activity(self, catalog) -> None:
         current = review(catalog, "bluesky")

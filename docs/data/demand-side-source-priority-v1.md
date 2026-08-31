@@ -133,15 +133,41 @@ than `model_processing`, so **it could block `ted-eu` even if H-34 closes
 favourably**. That is new risk, honestly recorded, and it does not change the
 ranking: both questions are likely answered by the same retrieval.
 
+## 2.2 What Mission 1.15.2 changed
+
+**H-34 closed PERMITTED.** Commission Decision 2011/833/EU was retrieved from the
+Publications Office Cellar and read in full. Article 3(2) defines reuse by
+*purpose* — *"the use of documents … for commercial or non-commercial purposes
+other than the initial purpose"* — and enumerates no acts, so the method of use
+does not enter. All six load-bearing activities are now positively granted.
+
+**And `ted-eu` is still blocked**, because H-36 did not close. The Decision
+contains no occurrence of *sui generis*, *extraction*, *re-utilisation* or
+Directive 96/9/EC. It governs **documents**; the collection they sit in is never
+mentioned.
+
+**The blocker changed kind.** It was *"retrieve a document"*. It is now *"decide
+a legal question the documents do not answer"* — which is more expensive, and
+which is why `ted-eu` staying P0 is now a weaker claim than it was.
+
+**A collector route was not forced.** Bulk XML and the search API are analysed
+separately (§29) and both are unresolved, with different exposure: bulk is the
+paradigm case of extracting substantial parts, the search API less obviously so.
+Choosing bulk now because it is convenient would be choosing the more exposed
+route before knowing whether the exposure is real.
+
 ## 3. The recommendation
 
-**Mission 1.15.1 did exactly this and the document would not render. The
-recommendation stands, unchanged, for whoever can reach EUR-Lex.**
+**Superseded by Mission 1.15.2.** The Decision was retrieved and read. H-34
+closed PERMITTED; H-36 did not close, and the Decision does not address database
+rights at all.
 
-The question is now exact: retrieve **Commission Decision 2011/833/EU**, and
-establish the scope of "reuse" as it defines the term — plus anything it says
-about databases, extraction, text and data mining or automated processing (H-34
-and H-36 together).
+**The next action is no longer a retrieval.** It is a first-party clarification
+from the Publications Office on whether it asserts or waives database rights in
+TED, and failing that a legal review of whether a documents reuse policy carries
+the database right by implication. That is the first item in this document's
+history that a further document search cannot answer, because the documents have
+been read.
 
 Three outcomes, all useful:
 
