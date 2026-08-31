@@ -283,10 +283,10 @@ def _supported_signal_types() -> tuple[str, ...]:
             and isinstance(node.value, ast.Tuple)
         ):
             return tuple(
-                    e.value
-                    for e in node.value.elts
-                    if isinstance(e, ast.Constant) and isinstance(e.value, str)
-                )
+                e.value
+                for e in node.value.elts
+                if isinstance(e, ast.Constant) and isinstance(e.value, str)
+            )
     return ()
 
 
