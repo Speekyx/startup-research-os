@@ -858,20 +858,19 @@ class TestTheRegistryHoldsExactlyOneAcceptance:
                 )
             conn.rollback()
 
-    def test_reverification_would_clear_the_acceptance(self) -> None:
-        """**The finding of this mission, asserted rather than described.**
+    def test_reverification_preserves_the_acceptance(self) -> None:
+        """**Inverted by Mission 1.15.6.2, exactly as this test predicted.**
 
-        `verify_source` yields UNKNOWN for a human condition and
-        `record_verifications` writes `satisfied = FALSE` for any non-SATISFIED
-        result -- correct for a capability that stopped holding, destructive for
-        a decision a person made once. So `sros-source verify --apply` would
-        silently revoke this acceptance.
+        It asserted the opposite -- that `verify --apply` CLEARED a recorded
+        acceptance -- and said in its own docstring that a future mission
+        deciding how re-verification should treat human conditions would make it
+        fail, and should invert it rather than delete it
+        (`testing-strategy.md` §43). Mission 1.15.6.2 decided: a machine pass
+        that cannot answer a human condition writes nothing for it, so an
+        acceptance survives re-verification and only a person can withdraw one.
 
-        Asserted inside a ROLLED-BACK transaction, and asserted as the CURRENT
-        behaviour rather than the desired one. When a future mission decides how
-        re-verification should treat human conditions, this test is where the
-        decision becomes visible: it fails, and is inverted rather than deleted
-        (`testing-strategy.md` §43).
+        Still asserted inside a ROLLED-BACK transaction: the property is about
+        what the write path does, not about leaving the database changed.
         """
         import psycopg
         from sros_acquisition.compliance.repositories import record_verifications
@@ -897,14 +896,50 @@ class TestTheRegistryHoldsExactlyOneAcceptance:
                     record_verifications(
                         conn, verify_source(source, LOCAL_PROFILE, config, environ={})
                     )
-                    assert satisfied(conn) is False, (
-                        "re-verification no longer clears a recorded human confirmation. "
-                        "If that is deliberate, invert this test and record the decision"
+                    assert satisfied(conn) is True, (
+                        "re-verification cleared a recorded human confirmation. A machine "
+                        "pass must not revoke a decision nobody withdrew (Mission 1.15.6.2)"
                     )
                     raise _RollbackError
             except _RollbackError:
                 pass
-            assert satisfied(conn) is True, "the rollback did not restore the acceptance"
+            assert satisfied(conn) is True, "the acceptance did not survive"
+
+    def test_reverification_writes_no_row_for_the_human_condition(self) -> None:
+        """§30. Idempotent, and silent about what it cannot answer.
+
+        Preserving the boolean is half of it. The other half is that no row is
+        written either: an append-only log that gained an UNKNOWN entry every
+        time somebody ran the verifiers would bury the one decision that matters
+        under a history of machines shrugging.
+        """
+        import psycopg
+        from sros_acquisition.compliance.repositories import record_verifications
+        from sros_acquisition.registry import load_catalog
+
+        catalog_ = load_catalog(REPO_ROOT / "docs" / "data" / "source-catalog-v1.json")
+        source = next(entry for entry in catalog_ if entry.source_id == "ted-eu")
+        config = load_compliance(DOCS / "source-compliance-v1.json")
+
+        def rows(conn) -> int:
+            return conn.execute(
+                "SELECT count(*) FROM registry.source_condition_verifications "
+                "WHERE condition_key = %s",
+                (RESIDUAL,),
+            ).fetchone()[0]
+
+        with psycopg.connect(DATABASE_URL) as conn:
+            before = rows(conn)
+            try:
+                with conn.transaction():
+                    report = record_verifications(
+                        conn, verify_source(source, LOCAL_PROFILE, config, environ={})
+                    )
+                    assert rows(conn) == before, "a machine pass appended to the human log"
+                    assert RESIDUAL in report.left_to_a_human
+                    raise _RollbackError
+            except _RollbackError:
+                pass
 
     def test_each_review_version_owns_its_condition_rows(self) -> None:
         """§17, and the answer is fail-closed with no change needed.

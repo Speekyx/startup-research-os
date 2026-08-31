@@ -31,7 +31,7 @@ it should be asking permission.
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from datetime import UTC, datetime
 
@@ -41,6 +41,7 @@ from ..registry.models import SourceRecord
 from .authorization import AcquisitionNotAuthorizedError, build_authorization
 from .config import ComplianceConfig
 from .resources import ResourceDescriptor, authorize_resource
+from .verification import ConditionVerificationRecord
 
 __all__ = ["AcquisitionReadiness", "evaluate_readiness"]
 
@@ -104,6 +105,7 @@ def evaluate_readiness(
     config: ComplianceConfig,
     environ: Mapping[str, str] | None = None,
     now: datetime | None = None,
+    decisions: Sequence[ConditionVerificationRecord] = (),
 ) -> AcquisitionReadiness:
     """Report; never refuse. Building the context is how one refuses."""
     # Deferred so that importing the compliance package does not import the
@@ -116,7 +118,9 @@ def evaluate_readiness(
     enabled = bool(source.collector_enabled)
 
     try:
-        context = build_authorization(source, use_profile_id, config, environ=environ, now=moment)
+        context = build_authorization(
+            source, use_profile_id, config, environ=environ, now=moment, decisions=decisions
+        )
     except AcquisitionNotAuthorizedError as exc:
         return AcquisitionReadiness(
             source_id=source.source_id,

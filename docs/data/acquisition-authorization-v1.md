@@ -311,10 +311,54 @@ only run with an authorization context, and the resource rules travel inside it.
 resource through the context's resource gate and has no other path to a URL.**
 Until then the guarantee is architectural, not observed.
 
+### Effective state: live where live means something, persisted where it does not
+
+Added in Mission 1.15.6.2, and specified in full in
+[`effective-condition-verification-v1.md`](effective-condition-verification-v1.md).
+
+`verify_source` answers every condition the same way — by running a verifier now
+— which is right for a capability and impossible for a judgement. An operator's
+acceptance of a legal risk is not observable at any moment, so the verifier
+answers `UNKNOWN` and always will.
+
+`resolve_effective_verifications(source, profile, config, decisions, …)` resolves
+each condition from the source that can answer it:
+
+```text
+HUMAN_CONFIRMATION  ->  a usable persisted decision, else UNKNOWN (which blocks)
+everything else     ->  the verifier, run now
+```
+
+**A supplied decision can only ever satisfy a `HUMAN_CONFIRMATION`.** Every
+record is filtered by kind, authorship, source, review version, result and
+whether the review requires the condition — so a caller handing in a forged
+capability result changes nothing, and the parameter cannot become a way past
+the gate.
+
+**No machine state is ever read from persistence.** A capability recorded
+satisfied months ago says what was true then; re-running it is the point of a
+mechanical check.
+
+`build_authorization(source, profile, config, decisions=…)` takes the persisted
+half from `read_human_decisions`. It is injected rather than fetched because the
+compliance layer must keep running with nothing installed (ADR-009). **Empty is
+the safe default and stays fail-closed.**
+
 ### Persistence
 
 `registry.source_condition_verifications` is an append-only log; the history of
 a condition is part of what makes its current state trustworthy.
+
+**A machine pass writes nothing for a human condition** (Mission 1.15.6.2).
+`record_verifications` skips any record carrying the `human-confirmation`
+placeholder: no row, and above all no cleared boolean. Before this,
+`verify --apply` turned a recorded operator acceptance into `satisfied = FALSE`
+because every non-`SATISFIED` result cleared the flag — the operator had
+withdrawn nothing, and a routine command revoked their decision.
+
+**Absence of a human answer is not a negative human answer.** A person recording
+a withdrawal writes a row under their own identifier; that record is
+human-authored, passes straight through, and clears the flag as it should.
 `registry.source_review_conditions.satisfied` remains the gate's input, synced
 from the latest verification, and a `BEFORE` trigger refuses to set it true with
 no `SATISFIED` record behind it.
@@ -329,6 +373,15 @@ boolean is cleared.
 |---|---|---|
 | Catalog | The reviews, with no condition verified | `source-catalog-v1.md`, generated and committed |
 | Environment | The same reviews with the verifiers run here | `sros-source eligibility`, `conditions`, the API |
+
+**And a third, since Mission 1.15.6.2: the SQL view is the LAST RECORDED state,
+not the live one.** `registry.source_eligibility` reads
+`source_review_conditions.satisfied`, which is current for a human decision — only
+a person changes one — and as old as the last `verify --apply` for a machine
+condition. It is the right input for the database trigger that must refuse an
+`UPDATE` without running Python, and **it does not on its own prove that
+acquisition is authorised now**. Where the two disagree the Python gate is the
+stricter and more current answer.
 
 A committed file cannot hold the environment view without drifting with the
 machine that produced it, and a catalog can never assert its own conditions
