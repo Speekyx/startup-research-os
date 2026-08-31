@@ -111,14 +111,37 @@ reviewed this round and are neither closer nor further than before. The app
 stores, `product-hunt`, `steam`, `github`, `meta-instagram` remain `RESTRICTED`
 and were not re-opened.
 
+## 2.1 What Mission 1.15.1 changed
+
+The P0 recommendation below was executed as Mission 1.15.1 and **did not close**.
+`ted-eu` stays P0, and the reasoning under "Blocker type" got sharper rather than
+weaker.
+
+**The governing instrument is now named and proven**: Commission Decision
+2011/833/EU, cited by TED's own legal notice. That was the guess in the row
+below; it is now a fact.
+
+**Its text could not be retrieved.** Five first-party EUR-Lex addresses returned
+empty bodies. So the blocker moved from *"a document to fetch, if we can work out
+which one"* to *"this exact document, from an environment that renders EUR-Lex"*
+— which is the same class of blocker, smaller.
+
+**A second question surfaced (H-36).** Whether the reuse grant reaches the sui
+generis database right, given that the access route is bulk extraction of
+substantial portions. It bears on `automated_access` and `redistribution` rather
+than `model_processing`, so **it could block `ted-eu` even if H-34 closes
+favourably**. That is new risk, honestly recorded, and it does not change the
+ranking: both questions are likely answered by the same retrieval.
+
 ## 3. The recommendation
 
-**Mission 1.15.1 should retrieve the one document standing between `ted-eu` and
-an approving verdict — not build a collector.**
+**Mission 1.15.1 did exactly this and the document would not render. The
+recommendation stands, unchanged, for whoever can reach EUR-Lex.**
 
-The question is narrow and answerable: does the Publications Office's reuse
-decision, or another first-party instrument, address machine-learning processing
-of reused notices?
+The question is now exact: retrieve **Commission Decision 2011/833/EU**, and
+establish the scope of "reuse" as it defines the term — plus anything it says
+about databases, extraction, text and data mining or automated processing (H-34
+and H-36 together).
 
 Three outcomes, all useful:
 

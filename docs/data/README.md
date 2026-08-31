@@ -52,6 +52,7 @@
 | `demand-side-source-expansion-v1.md` | The Mission 1.15 round: nine sources examined, two verdicts changed on retrieved evidence, and every retrieval that failed |
 | `demand-side-source-coverage-v1.md` | The eight business evidence families against the registry. Seven have no approving source; two have no candidate at all |
 | `demand-side-source-priority-v1.md` | Which source to pursue next, in ordinal buckets with stated reasoning. Never a numeric source score |
+| `ted-eu-reuse-ml-review-v1.md` | The Mission 1.15.1 review of H-34: the governing instrument named and proven, its text unretrievable, and why that is worse than silence |
 | `acquisition-rights-basis-gap-analysis-v1.md` | Why a resource records what KIND of thing authorises it, not only which licence (H-28, ADR-018) |
 | `wikimedia-pageviews-compliance-v1.md` | What Wikimedia Pageviews would need, and the one question blocking it |
 | `source-condition-gap-analysis-v1.md` | The nine Mission 1.3 conditions inventoried and classified, and the obligations deliberately left out of code |

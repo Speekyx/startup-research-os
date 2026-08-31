@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.23
+Version: 1.24
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-08-31 (Sprint 1 / Mission 1.15)
+Last amended: 2026-08-31 (Sprint 1 / Mission 1.15.1)
 
 ---
 
@@ -13,6 +13,23 @@ Last amended: 2026-08-31 (Sprint 1 / Mission 1.15)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.24 — 2026-08-31 (Sprint 1 / Mission 1.15.1)
+
+Authorized by the Mission 1.15.1 brief §2 (resolve H-34 only), §5 (establish the
+governing instrument), §16 (three valid outcomes), §35 (documentation) and §37
+(stop after the report).
+
+| Change | Section | Authority |
+|--------|---------|-----------|
+| **The governing instrument is named and the link is PROVEN** | Product Shape | Mission 1.15.1 §5. TED's own legal notice states that the Commission's reuse policy "is implemented by the Commission Decision of 12 December 2011 on the reuse of Commission documents" and links its ELI address. Mission 1.15's open question guessed at "the Publications Office's reuse decision, or another first-party instrument"; the instrument now has a name, a date, a publisher and a canonical URL. §5 required proving the link rather than assuming a generic EU open-data statement applies, and it is proven |
+| **H-34 stays OPEN because the instrument could not be read** | Blocked work | Mission 1.15.1 §16, Outcome C. Five first-party EUR-Lex addresses -- the ELI URL, the ELI English URL, the CELEX text URL, the CELEX HTML URL and the Official Journal PDF -- each returned an empty body. The Publications Office copyright notice does not restate it and is silent on text and data mining, machine learning and automated processing; the TED Developer Docs link back to the same legal notice |
+| **An unread document is a weaker basis than observed silence** | Engineering Principles | Mission 1.15.1 §3, §7. The grant reads "can be freely reused, for commercial or non-commercial purposes". The operative word is REUSED, and its scope is defined in the instrument that would not render. Reading it as covering machine-learning inference would mean assuming a definition from a document nobody has opened -- which is worse than inferring from silence, because silence is at least established |
+| **A search-engine summary of the Decision was refused as evidence** | Engineering Principles | Mission 1.15.1 §4. A search restricted to EU domains returned a summary describing the Decision's articles, and it was the one thing in the mission that would have closed the question. No part of the review rests on it, and a test asserts every evidence URL is a first-party EU host |
+| **A new question surfaced: does the grant reach the sui generis DATABASE right?** | Blocked work | Mission 1.15.1 §9, H-36. TED is a database and the documented route is bulk XML -- extraction and re-utilisation of substantial portions. The database right is independent of copyright and nothing retrieved addresses it. It bears on `automated_access` and `redistribution` rather than `model_processing`, so it could block TED **even if H-34 closes favourably**. Recorded as a new open question rather than used to downgrade Mission 1.15's findings: a question nobody has answered is not evidence that an earlier review was wrong |
+| **Two conditions added, none weakened** | Engineering Principles | Mission 1.15.1 §11, §12, §13. The legal notice states that additional rights may need clearing where content depicts identifiable private individuals, and that industrial property including logos and names is excluded from the reuse policy. **The reuse grant is not a blanket grant over everything inside a notice**, which makes minimisation a compliance requirement rather than a preference. Mission 1.15's minimisation and authenticity conditions are intact and asserted by test |
+| **Every activity assessment is byte-identical between v1 and v2** | Engineering Principles | Mission 1.15.1 §19. A re-review that could not close its question must not quietly move findings it did not re-establish. `v1.assessments == v2.assessments` is one assertion and it catches the whole class |
+| **Nothing was collected, built, claimed or scored** | Forbidden During Foundation | Mission 1.15.1 §27-§32, §37. No collector, no TED RawRecord or NormalizedRecord -- asserted live against the database. RawRecords 12, NormalizedRecords 12, Signals 7, Claims 7, ClaimRevisions 7, Evidence 7 unchanged. Reliability assessments 0, Opportunities 0, embeddings 0, scores 0. Verdict distribution unchanged: 5 / 13 / 8 / 3 |
 
 ## 1.23 — 2026-08-31 (Sprint 1 / Mission 1.15)
 

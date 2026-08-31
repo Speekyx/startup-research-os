@@ -3790,6 +3790,79 @@
               "retrieved_at": "2026-08-31T00:00:00+00:00"
             }
           ]
+        },
+        {
+          "review_version": 2,
+          "approval_state": "REQUIRES_REVIEW",
+          "reviewed_by": "mission-1.15.1",
+          "reviewed_at": "2026-08-31T00:00:00+00:00",
+          "review_interval_days": 365,
+          "automated_access": "PERMITTED",
+          "api_use": "PERMITTED",
+          "commercial_use": "PERMITTED",
+          "storage": "PERMITTED",
+          "retention": "PERMITTED",
+          "redistribution": "PERMITTED",
+          "derived_analytics": "PERMITTED",
+          "model_processing": "NOT_ADDRESSED",
+          "personal_data_handling": "PERMITTED_WITH_CONDITIONS",
+          "attribution_required": "PERMITTED_WITH_CONDITIONS",
+          "personal_data_risk": "IDENTIFIABLE",
+          "contains_user_generated_content": false,
+          "contains_user_identifiers": true,
+          "contains_location": true,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": false,
+          "discard_identifiers_after_normalization": true,
+          "jurisdiction_review_required": false,
+          "conditions": [
+            "Attribution is required for reused editorial material under CC BY 4.0, and changes must be indicated. The Publications Office logo may not be used without prior consent.",
+            "Notices publish contact details of contracting authorities and successful tenderers -- names, addresses, email addresses, telephone and fax numbers. A minimisation profile must discard the entire contact block: the engine needs the award value, the buyer and supplier organisation names, the CPV classification and the dates, and needs no natural person's contact details for any assessed purpose.",
+            "Only electronically signed notices published in the Supplement to the Official Journal are authentic; online documents are not necessarily exact reproductions. Any claim derived from TED must be attributed to TED's published notice rather than asserted as the authentic award.",
+            "The legal notice states that additional rights may need clearing where content depicts identifiable private individuals or includes third-party works, and that content not owned by the EU may require permission from the rightholder. The reuse grant is therefore not a blanket grant over everything inside a notice, and a minimisation profile is a compliance requirement rather than a preference.",
+            "Industrial property -- patents, trademarks, registered designs, logos and names, including the TED and SIMAP logos -- is excluded from the Commission's reuse policy and is not licensed. Supplier and buyer NAMES appear in award notices as facts about a procurement; using them as trademarks is a different act and is outside the grant."
+          ],
+          "required_conditions": [],
+          "open_questions": [
+            "H-34: retrieve Commission Decision 2011/833/EU of 12 December 2011 on the reuse of Commission documents -- the instrument TED's own legal notice names as implementing the Commission's reuse policy -- and establish the SCOPE of 'reuse' as that Decision defines it. Specifically: does the definition reach computational analysis, transformation and machine-learning inference over reused documents? The Decision was attempted at five first-party EUR-Lex addresses on 2026-08-31 and every one returned an empty body. The grant TED states -- notices 'can be freely reused, for commercial or non-commercial purposes' -- uses a term whose legal scope is defined in a document that could not be read, so the breadth of the grant is unknown rather than broad.",
+            "H-36: determine whether the reuse framework reaches the SUI GENERIS DATABASE RIGHT, not only copyright. TED is a database and the documented access route is bulk daily and monthly XML packages, which is extraction and re-utilisation of substantial portions. A copyright reuse grant does not automatically carry the database right, and neither the TED legal notice nor any document retrieved this round mentions databases, extraction or re-utilisation. v1 did not ask this.",
+            "Determine documented rate limits for the TED search API. The data-reuse page documents the API and states no limit; absence of a stated limit is not a stated absence of limits."
+          ],
+          "review_notes": "H-34 stays OPEN, and the mission that could not close it is worth more than one that closed it on the answer everybody wanted. Two things changed.\n\nFirst, the governing instrument is established and the link is PROVEN rather than assumed. TED's own legal notice states that the Commission's reuse policy 'is implemented by the Commission Decision of 12 December 2011 on the reuse of Commission documents' and links its ELI address. v1's open question guessed at 'the Publications Office's reuse decision, or another first-party instrument'; the instrument now has a name, a date, a publisher and a canonical URL.\n\nSecond, that document could not be retrieved. Five first-party EUR-Lex addresses -- the ELI URL, the ELI language URL, the CELEX text URL, the CELEX HTML URL and the Official Journal PDF -- each returned an empty body on 2026-08-31. The Publications Office's own copyright notice and the TED Developer Docs were retrieved instead and neither restates the Decision: the Developer Docs link back to the same legal notice, and the Publications Office notice covers its website's publications under CC BY 4.0 and is silent on text and data mining, machine learning and automated processing.\n\nSo the finding is precise: the grant TED states is real and its SCOPE is unread. 'Freely reused' is the operative term and 'reuse' is a defined term in the instrument that was not retrievable. Reading it as covering machine-learning inference would be inferring permission from a document nobody has read, which is worse than inferring it from silence -- at least silence is observed.\n\nA third finding surfaced that v1 did not ask about: database rights. TED is a database and the reuse route is bulk extraction of substantial portions. A copyright reuse grant does not automatically carry the sui generis right, and nothing retrieved addresses it. Recorded as H-36 rather than used to downgrade v1's activity findings, because it is a question nobody has answered rather than evidence that v1 was wrong.\n\nNo activity assessment moved. The project wants this source badly -- it would be the first transaction-class evidence the portfolio has ever had -- and that had no bearing on the review.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_LICENCE",
+              "document_title": "TED and SIMAP legal notice (reuse section, re-read)",
+              "document_url": "https://ted.europa.eu/en/legal-notice",
+              "section_reference": "Copyright notice; reuse policy",
+              "summarized_finding": "States that the European Commission's reuse policy is implemented by the Commission Decision of 12 December 2011 on the reuse of Commission documents, linking https://eur-lex.europa.eu/eli/dec/2011/833/oj -- which establishes the governing instrument for TED notice reuse and proves it applies to TED rather than being a generic EU open-data statement. Repeats that unless otherwise noted the procurement notices published in the Supplement to the Official Journal can be freely reused for commercial or non-commercial purposes; that SIMAP editorial content is CC BY 4.0 with credit and indication of changes; and that SIMAP system metadata is CC0 1.0. Adds two obligations v1 did not record: additional rights may need clearing where content depicts identifiable private individuals or includes third-party works, and industrial property including logos, trademarks and names is excluded from the reuse policy and not licensed. Addresses text and data mining, machine learning, training and inference nowhere.",
+              "retrieved_at": "2026-08-31T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_LICENCE",
+              "document_title": "Commission Decision 2011/833/EU of 12 December 2011 on the reuse of Commission documents",
+              "document_url": "https://eur-lex.europa.eu/eli/dec/2011/833/oj",
+              "section_reference": "Retrieval failure",
+              "summarized_finding": "The instrument TED's legal notice names as implementing the reuse policy. Attempted on 2026-08-31 at five first-party EUR-Lex addresses -- the ELI URL, the ELI English URL, the CELEX text URL, the CELEX HTML URL and the Official Journal L 330 PDF -- and every one returned an empty body. No mirror, cached copy, third-party transcription or search-engine summary was used in its place, and one search result summarising the Decision's articles was explicitly NOT treated as evidence. The definition of 'reuse' the TED grant depends on therefore remains unread, and with it the scope of the grant.",
+              "retrieved_at": "2026-08-31T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_LICENCE",
+              "document_title": "Publications Office of the European Union copyright notice",
+              "document_url": "https://op.europa.eu/en/web/about-us/legal-notices/publications-office-of-the-european-union-copyright",
+              "section_reference": "Copyright and reuse",
+              "summarized_finding": "The notice of the body that operates TED. Governs publications on the Publications Office website under Creative Commons Attribution 4.0, requiring acknowledgement of the source and indication of changes, and notes that additional rights may need clearing where content depicts identifiable private individuals. It does not restate Decision 2011/833/EU and is SILENT on commercial reuse, databases and database rights, text and data mining, machine learning, artificial intelligence and automated processing.",
+              "retrieved_at": "2026-08-31T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "TED Developer Docs",
+              "document_url": "https://docs.ted.europa.eu/home/index.html",
+              "section_reference": "Home; legal links",
+              "summarized_finding": "Carries no licence statement, no terms of use, no rate limits and no registration requirement of its own, and is silent on commercial use, storage, derived analytics, text and data mining and machine learning. Its legal link points back to https://ted.europa.eu/en/legal-notice, which confirms the legal notice is the single governing statement on the TED side rather than one of several.",
+              "retrieved_at": "2026-08-31T00:00:00+00:00"
+            }
+          ]
         }
       ]
     },

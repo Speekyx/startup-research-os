@@ -419,6 +419,19 @@ shape, because this is the kind of finding that decays quietly.
 | **No collector was built** | Tests assert neither new source is in `IMPLEMENTED_COLLECTORS` or `IMPLEMENTED_NORMALIZERS` | §31. A collector for a `REQUIRES_REVIEW` source is code the gate would refuse to run |
 | **CI never contacts a platform** | The whole suite reads the recorded catalog | The review environment could not reach two hosts; a suite that fetched terms would fail on the network rather than on the record (`testing-strategy.md` §34) |
 
+### The TED reuse review (Mission 1.15.1)
+
+| Gate | Mechanism | Guards |
+|------|-----------|--------|
+| **A retrieval failure is stored as evidence, not as prose** | `section_reference = "Retrieval failure"` and "empty body" in the finding, both asserted | A citation normally claims somebody read the document. Here it must claim the opposite, and only a structured field does that reliably (`testing-strategy.md` §35) |
+| **No search-engine summary becomes evidence** | A test asserts every evidence URL is a first-party EU host | A search returned a summary of the Decision's articles — the one thing in the mission that would have closed the question if treated as evidence |
+| **A re-review does not move findings it did not re-establish** | `v1.assessments == v2.assessments`, asserted | A mission that set out to close a question and could not is where a finding drifts to look like progress |
+| **Five of six granted still does not make six** | Rule 8, asserted against the exact granted/unaddressed sets | TED would be the first transaction-class source and the project wants it. That must have zero effect, and a test is what makes "zero" checkable |
+| **ML inference, embeddings and training stay distinct** | `model_processing` is a single named assessment and is never `PERMITTED`; no embedding or training permission is claimed | §3. Collapsing them would let a future embedding use inherit an inference decision the legal text may distinguish |
+| **Minimisation and authenticity survive a mission about reuse rights** | Every v1 condition asserted present in v2; personal-data risk and identifier-discard flags pinned | §12, §13. A mission about ML processing is exactly where an unrelated condition gets weakened incidentally |
+| **No TED data reached the database** | Live assertions that no RawRecord or NormalizedRecord carries `source_id = 'ted-eu'` | §28. Retrieving legal documents is review work; procurement notices are research data |
+| **Zero TED rows, zero assessments, zero opportunities** | Live assertions that hold in EVERY environment, because they follow from there being no TED collector | §27, §30. The counts 12 / 12 / 7 / 7 / 7 are deliberately NOT asserted: they are facts about one database, not invariants, and pinning them failed on the first CI run. "Unchanged" is a property of a run, already asserted by the post-suite digest watcher (`testing-strategy.md` §36) |
+
 ---
 
 ## 2. Turborepo task graph
