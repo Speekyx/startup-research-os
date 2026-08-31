@@ -7,6 +7,26 @@ sui generis database right.
 and does not address database rights at all. This is now the **only** question
 standing between TED and an approving verdict.
 
+> **EXTENDED AND PARTLY CORRECTED BY MISSION 1.15.3.** Read
+> `ted-eu-database-right-clarification-v1.md` alongside this document. It stands
+> as the record of what the Decision says; two things in it have moved.
+>
+> **What was added.** §3's table below says the TED datasets are silent on
+> database rights. That was true of the pages examined and incomplete: the
+> Publications Office's own DCAT record for `ted-1` declares
+> `dct:license = COM_REUSE` on every distribution **including the bulk XML
+> download**, and `COM_REUSE` carries `skos:exactMatch` to Decision
+> 2011/833/EU. A dataset-level licence exists. It resolves to the instrument
+> analysed here, so the conclusion is unchanged and the reasoning is stronger.
+>
+> **What was corrected.** §5 below reasons that the search API is "less
+> obviously a substantial part … and correspondingly less exposed". The API's
+> own specification documents a scroll mode with **no limit on the number of
+> retrievable notices**, and Directive 96/9/EC Article 7(5) reaches repeated and
+> systematic extraction of insubstantial parts regardless. Both routes remain
+> unresolved and neither is preferred; the gap between them is smaller than
+> recorded here.
+
 ---
 
 ## 0. Why this is a separate question
@@ -123,7 +143,7 @@ Analysed separately, because they may not share an answer:
 | Route | Position |
 |-------|----------|
 | **Bulk XML packages** | The documented reuse route, published for download without sign-in. Also the clearest case of extracting substantial portions. **Unresolved, and it is the route a collector would want.** |
-| **Read-only search API** | Returns individual notices matching a query. Less obviously a substantial part of the collection, and correspondingly less exposed — but no first-party document addresses it either, so it is unresolved on the same evidence |
+| **Read-only search API** | Returns individual notices matching a query. Judged here as less obviously a substantial part, and correspondingly less exposed — **Mission 1.15.3 weakened that judgement**: the API's own OpenAPI document describes a scroll mode with no limit on the number of retrievable notices, and its Terms of Usage resolve to the same TED legal notice. Unresolved on the same evidence |
 
 **Neither is authorised. Neither is prohibited.** The mission's §29 explicitly
 permits a split outcome, and the honest state today is that both are unresolved

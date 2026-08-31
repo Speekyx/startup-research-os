@@ -1611,3 +1611,75 @@ history that nobody checks.
 The tell is a test whose name describes a *state* rather than a *version*:
 `test_five_activities_granted_still_does_not_make_six` is a claim about a moment.
 Renaming it `..._at_v2` was most of the fix.
+
+---
+
+## 38. A structural guard must not match its own source (Mission 1.15.3)
+
+`test_ted_database_right.py` needed one assertion: **no test in this file
+reaches the network**, because the retrieval *was* the review and a suite that
+re-fetched `data.europa.eu` would go red on the Publications Office's uptime
+rather than on the catalog.
+
+The first spelling was a substring scan:
+
+```python
+for forbidden in ("requests.", "httpx.", "urllib.request", "urlopen", "socket."):
+    assert forbidden not in source, forbidden
+```
+
+**It failed on its own list.** The file contains the string `"requests."`
+because the check contains the string `"requests."`.
+
+This is §23's lesson arriving a third time — after the normalization guard and
+after Mission 1.13's interpretive-vocabulary guard, which refused the example
+`§3` used to explain itself. The pattern is stable enough to state as a rule:
+
+> **A guard expressed over a file's TEXT eventually matches the text that
+> explains the guard.** Express it over the AST instead.
+
+The fix walks `ast.Import` and `ast.ImportFrom` and checks module names. That
+version cannot match its own literals, and it is also *stricter*: it catches
+`import httpx as h`, which the substring scan for `"httpx."` would have missed.
+
+### Why the tempting fix is the wrong one
+
+The obvious repair is to obfuscate the list — split the strings, or add an
+exclusion for the line the check lives on. Both make the guard weaker in the
+same way: they teach the next person that the way past a structural check is to
+edit the check. **The check was right and the mechanism was wrong.**
+
+### The tell
+
+A guard is text-based and needs replacing when you cannot write a comment
+explaining it inside the file it guards.
+
+---
+
+## 39. Assert against normalised text, not against line breaks (Mission 1.15.3)
+
+The same suite asserts that the prepared clarification request contains no legal
+conclusion:
+
+```python
+assert "contains no legal conclusion" in PACKET.read_text().lower()
+```
+
+It failed, and the document said exactly that. Markdown wraps at 80 columns, so
+the phrase was split across a newline between `no` and `legal`.
+
+A raw-text assertion over prose finds a sentence only when the author happened
+to fit it between two newlines. That makes it a **reformatting detector**: it
+goes red when somebody rewraps a paragraph and green when they do not, and
+neither outcome says anything about the content it claims to check.
+
+The suite routes every document assertion through one helper:
+
+```python
+def flat(path):
+    return " ".join(path.read_text(encoding="utf-8").split()).lower()
+```
+
+**Cheap, and it removes a whole class of false failure** that would otherwise
+train contributors to treat a red documentation test as noise.
+

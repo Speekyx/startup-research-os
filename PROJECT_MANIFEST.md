@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.25
+Version: 1.26
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-08-31 (Sprint 1 / Mission 1.15.2)
+Last amended: 2026-08-31 (Sprint 1 / Mission 1.15.3)
 
 ---
 
@@ -13,6 +13,26 @@ Last amended: 2026-08-31 (Sprint 1 / Mission 1.15.2)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.26 — 2026-08-31 (Sprint 1 / Mission 1.15.3)
+
+Authorized by the Mission 1.15.3 brief §2 (resolve or externalise H-36), §3
+(exhaust first-party evidence), §5-§8 (dataset licence and rights metadata),
+§10 (H-36A / H-36B), §18-§22 (clarification and legal packet), §38
+(documentation) and §40 (stop after the report).
+
+| Change | Section | Authority |
+|--------|---------|-----------|
+| **The dataset-level licence exists, and it is the Decision** | Product Shape | Mission 1.15.3 §5, §8. The Publications Office's own DCAT-AP record for `ted-1` on data.europa.eu declares `dct:license = COM_REUSE` on **every** distribution, including *"Last daily editions of procurement notices in bulk download"*. The `COM_REUSE` authority concept carries `skos:exactMatch` to `http://data.europa.eu/eli/dec/2011/833/oj`. So the machine-readable licence on the bulk route resolves, **by the publisher's own assertion**, to the instrument Mission 1.15.2 read in full and found silent. The dataset node itself carries no licence, no `dct:rights` and **no `dct:creator`** |
+| **Both access routes are governed by the same silence** | Product Shape | Mission 1.15.3 §13, §14. The TED Search API's OpenAPI document contains a "Terms of Usage" section whose entire content is a link to the TED legal notice. Bulk XML and the API are therefore governed by the same instrument, and the enclosing chain -- TED notice, Publications Office notice, europa.eu notice, the 20,015-character data.europa.eu notice, the bulk page, the package HTTP headers, the API specification -- contains **zero** occurrences of *sui generis*, *database right*, *extraction*, *re-utilisation* or Directive 96/9/EC |
+| **`appliesTo licence-domain/DATA` is not a database-right grant** | Engineering Principles | Mission 1.15.3 §8. The tempting over-read, refused on the vocabulary's own text: `DATA` is defined in the same authority table as a *"set of values of qualitative or quantitative variables"* -- a subject class, not a class of right. The whole `licence-domain` scheme is `CODE`, `DATA`, `METADATA`, `W_LIT_ART` and a placeholder, so **there is no `DATABASE` domain** and the absence is not a deliberate choice either. `CC_BY_4_0` carries the identical two values |
+| **H-36 split into H-36A and H-36B** | Blocked work | Mission 1.15.3 §10. **H-36A -- does the right subsist? NOT ESTABLISHED either way**: Directive 96/9/EC Article 7(1) gives it to a MAKER showing SUBSTANTIAL INVESTMENT, and nothing retrieved names one; the catalogue names a *publisher*, notices are filed by contracting authorities across the Union, and Article 11 makes subsistence turn on facts about that maker. **H-36B -- is it granted? NOT ADDRESSED for both routes**: Article 7(3) confirms the right can be granted by contractual licence, and `COM_REUSE` does not |
+| **CC BY 4.0 was found on TED-derived data, recorded in full, and not relied on** | Engineering Principles | Mission 1.15.3 §7, §15. The same portal declares CC BY 4.0 -- whose Section 4 expressly grants the right *"to extract, reuse, reproduce, and Share all or a substantial portion of the contents of the database"* -- on **12 of 48** distributions of the separate `ted-csv` dataset published by DG GROW, including award notices for 2020-2022. Not relied on for two reasons that both matter: it is a different dataset under a different publisher, and the assignment **overlaps** its own COM_REUSE files (`ted-contract-award-notices-2017-2021.zip` is CC BY 4.0, `ted-contract-award-notices-2018-2023.zip` is COM_REUSE). Selecting the favourable licence would be **selecting a licence by selecting a filename**. Condition 10 forbids carrying a licence across resources |
+| **Mission 1.15.2's bulk-versus-API reasoning corrected** | Engineering Principles | Mission 1.15.3 §14. That review judged the search API "less obviously a substantial part … and correspondingly less exposed". The API's own specification documents a **scroll mode with no limit on the number of retrievable notices**, and Article 7(5) reaches repeated and systematic extraction of insubstantial parts regardless. Both routes stay unresolved, the gap is smaller than recorded, and **no route was preferred** |
+| **No PSI or open-data chain exists** | Engineering Principles | Mission 1.15.3 §12. Directive (EU) 2019/1024 appears nowhere in any TED or Publications Office material. The single occurrence of Directive 2003/98/EC is inside the data.europa.eu **privacy** statement, cited as a legal basis for processing personal data in operating the portal -- not as a reuse-rights chain for TED content. Recorded as separate legal context, never as controlling evidence |
+| **The blocker became a drafted, unsent message** | Blocked work | Mission 1.15.3 §17-§21, Outcome C. `ted-eu-database-right-clarification-request-v1.md` addresses `op-copyright@publications.europa.eu`, the route TED's own legal notice publishes for SIMAP copyright issues, with `GROW-D2@ec.europa.eu` for the CSV question. **Nothing was sent, and nothing claims to have been**: there is no `sent_at` anywhere and a test asserts it. `ted-eu-h36-legal-review-packet-v1.md` holds the established facts and five questions with **no legal conclusion**, and records the unfavourable outcome in advance so it reads as a question rather than as advocacy |
+| **A structural guard must not match its own source** | Engineering Principles | Mission 1.15.3. The no-network assertion was first written as a substring scan and **failed on its own list of forbidden substrings** -- the third time this pattern has appeared, after the normalization guard and Mission 1.13's vocabulary guard. Rewritten over the AST, which cannot match its own literals and also catches `import httpx as h`. Separately, a documentation assertion failed because Markdown wraps at 80 columns and split the phrase it looked for; all document assertions now go through one whitespace-normalising helper (`testing-strategy.md` §38, §39) |
+| **Nothing was collected, built, claimed or scored** | Forbidden During Foundation | Mission 1.15.3 §27-§32, §40. No collector, no normalizer, no TED module anywhere in the acquisition package -- asserted against the file tree as well as the registry. HEAD requests read package headers (16.7 MB daily, 427 MB monthly) and **no package body was downloaded**; whether a licence travels inside the archives is recorded as unestablished rather than worked around. RawRecords 12, NormalizedRecords 12, Signals 7, Claims 7, ClaimRevisions 7, Evidence 7 unchanged. Reliability assessments 0, Opportunities 0, embeddings 0, scores 0. Verdict distribution unchanged: 5 / 13 / 8 / 3. USAspending was not re-reviewed |
 
 ## 1.25 — 2026-08-31 (Sprint 1 / Mission 1.15.2)
 

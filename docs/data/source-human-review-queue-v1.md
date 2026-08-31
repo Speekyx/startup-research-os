@@ -1387,4 +1387,74 @@ route. Not contacted.
 It is the first question in the queue that a further document search cannot
 answer, because the documents have been read.
 
-**Status:** open. See `ted-eu-database-right-review-v1.md`.
+**Status:** open. See `ted-eu-database-right-review-v1.md`, and the
+Mission 1.15.3 update below.
+
+---
+
+## H-36 — update after Mission 1.15.3: split into H-36A and H-36B {#h-36-split}
+
+**Still open, and now answerable by a named person rather than by more reading.**
+
+Mission 1.15.3 asked the one question Mission 1.15.2 had not: is there a licence
+attached to the assembled **dataset**, as opposed to the individual documents?
+**There is**, and it changes the shape of the question without changing the
+answer.
+
+### What was found
+
+| | |
+|---|---|
+| `ted-1` DCAT record, publisher **Publications Office** | `dct:license = COM_REUSE` on **every** distribution, including the bulk XML download. No dataset-level licence, no `dct:rights`, **no `dct:creator`** |
+| `COM_REUSE` authority concept | `skos:exactMatch` → `http://data.europa.eu/eli/dec/2011/833/oj` — **the licence IS the Decision** |
+| TED Search API OpenAPI document | "Terms of Usage" section = one link, to the TED legal notice |
+| Bulk page, package HTTP headers, PO notice, europa.eu notice, data.europa.eu notice | **zero** occurrences of `sui generis`, `database right`, `extraction`, `re-utilisation` or 96/9 |
+
+So the silence is not an artefact of reading the wrong document. **The whole
+chain has now been read and it closes without ever mentioning the right.**
+
+### The two halves, tracked separately from here
+
+**H-36A — does the right subsist?** **NOT ESTABLISHED, either way.** Directive
+96/9/EC Article 7(1) gives the right to a **maker** showing **substantial
+investment**; nothing retrieved names a maker or asserts an investment. The
+catalogue names a *publisher* and carries **no creator at all**, and notices are
+filed by contracting authorities across the Union. Article 11 then makes
+subsistence turn on facts about that maker. **A legal question about facts nobody
+has published, not a retrieval gap.**
+
+**H-36B — does the right holder grant or waive?** **NOT ADDRESSED for either
+route.** Article 7(3) confirms the right *can* be granted by contractual licence.
+`COM_REUSE` does not, and it governs both routes.
+
+### The fact that makes it answerable
+
+The same portal declares **CC BY 4.0** — whose Section 4 expressly grants the
+right *"to extract, reuse, reproduce, and Share all or a substantial portion of
+the contents of the database"* — on **12 of 48** distributions of the separate
+`ted-csv` dataset published by **DG GROW**. The other 36 are `COM_REUSE`, and the
+two **overlap**: `ted-contract-award-notices-2017-2021.zip` is CC BY 4.0 while
+`ted-contract-award-notices-2018-2023.zip` is `COM_REUSE`.
+
+**Not relied on** — a different dataset, a different publisher, and an assignment
+inconsistent enough that choosing the favourable licence would mean choosing a
+licence by choosing a filename. **But it is a question one person can answer in a
+sentence:** is the difference deliberate?
+
+### Needed
+
+1. **Send the prepared clarification** to `op-copyright@publications.europa.eu`,
+   the address the TED legal notice publishes for SIMAP copyright issues.
+   `GROW-D2@ec.europa.eu` is the route for the CSV-subset question. The message
+   is written: `ted-eu-database-right-clarification-request-v1.md`. **Nothing has
+   been sent.**
+2. **Legal review** if the answer does not settle it:
+   `ted-eu-h36-legal-review-packet-v1.md` holds the facts and the questions with
+   no conclusion attached.
+
+**Vendor contact needed?** **Yes, and the message is drafted and unsent.**
+**Legal counsel appropriate?** **Yes**, and the packet exists to make it cheap.
+
+**Status:** open, `EXTERNAL_CLARIFICATION_REQUIRED`. TED stays
+`REQUIRES_REVIEW` at review **v4**. See
+`ted-eu-database-right-clarification-v1.md`.

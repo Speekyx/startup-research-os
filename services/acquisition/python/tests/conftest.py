@@ -31,6 +31,30 @@ DATABASE_URL = os.environ.get(
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parents[4]
 
+# Mission 1.15.3 §33. Three TED suites assert that no evidence came from a
+# mirror, an archive or a search result, and the list of hosts that count as
+# first-party grew when Mission 1.15.3 found the licence in the Publications
+# Office's own open-data catalogue. Defined once, for the same reason the
+# workspace guard is: three copies of a security-shaped list drift, and the one
+# that drifts is the one nobody re-reads.
+#
+# Every entry is a domain the Publications Office or the Commission operates.
+# Adding to it is a claim about who published a document, so it is the kind of
+# edit that should be visible in a diff.
+TED_FIRST_PARTY_PREFIXES = (
+    "https://ted.europa.eu",
+    "https://docs.ted.europa.eu",
+    "https://developer.ted.europa.eu",
+    "https://api.ted.europa.eu",
+    "https://eur-lex.europa.eu",
+    "https://op.europa.eu",
+    "https://publications.europa.eu",
+    "https://data.europa.eu",
+)
+
+# Hosts that are never evidence, whatever they happen to be serving (§3).
+NEVER_EVIDENCE = ("google", "bing", "duckduckgo", "archive.org", "webcache", "github")
+
 
 def _postgres_available() -> bool:
     try:

@@ -55,6 +55,9 @@
 | `ted-eu-reuse-ml-review-v1.md` | The Mission 1.15.1 review of H-34: the governing instrument named and proven, its text unretrievable, and why that is worse than silence |
 | `ted-eu-governing-decision-review-v1.md` | Commission Decision 2011/833/EU read in full. H-34 closes PERMITTED: reuse is defined by purpose, not by method |
 | `ted-eu-database-right-review-v1.md` | H-36 does not close. The Decision governs documents and never reaches the collection they sit in |
+| `ted-eu-database-right-clarification-v1.md` | The dataset-level licence, found and identified: `COM_REUSE` on every `ted-1` distribution including bulk XML, resolving by `skos:exactMatch` to the same Decision. H-36 splits into H-36A and H-36B and stays open |
+| `ted-eu-database-right-clarification-request-v1.md` | The message to the Publications Office. **Prepared, not sent** — sending is an operator action |
+| `ted-eu-h36-legal-review-packet-v1.md` | Established facts and five questions for a lawyer, with no legal conclusion attached |
 | `acquisition-rights-basis-gap-analysis-v1.md` | Why a resource records what KIND of thing authorises it, not only which licence (H-28, ADR-018) |
 | `wikimedia-pageviews-compliance-v1.md` | What Wikimedia Pageviews would need, and the one question blocking it |
 | `source-condition-gap-analysis-v1.md` | The nine Mission 1.3 conditions inventoried and classified, and the obligations deliberately left out of code |

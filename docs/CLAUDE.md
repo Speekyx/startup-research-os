@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.26
-Last amended: 2026-08-31 (Sprint 1 / Mission 1.15.2)
+Version: 1.27
+Last amended: 2026-08-31 (Sprint 1 / Mission 1.15.3)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.27 | 2026-08-31 | **The dataset licence found, and H-36 still open.** The Publications Office's own DCAT record attaches `dct:license = COM_REUSE` to **every** `ted-1` distribution including the bulk XML download, and `COM_REUSE` carries `skos:exactMatch` to Decision 2011/833/EU -- so the licence on the bulk route IS the instrument already known to be silent. The search API's own Terms of Usage resolve to the same TED legal notice. H-36 splits into **H-36A** (does the right subsist? not established -- nothing names a maker) and **H-36B** (is it granted? not addressed). The blocker is now a drafted, unsent message to a named address |
 | 1.26 | 2026-08-31 | **H-34 CLOSED PERMITTED; H-36 did not close.** Commission Decision 2011/833/EU was retrieved from the Publications Office Cellar and read in full: reuse is defined by PURPOSE, not by METHOD, so machine processing falls inside the grant. The same text contains **zero** occurrences of *sui generis*, *extraction*, *re-utilisation* or Directive 96/9/EC. All six load-bearing activities are now granted and `ted-eu` is **still REQUIRES_REVIEW** -- the blocker is no longer an activity in the matrix |
 | 1.25 | 2026-08-31 | **H-34 stays OPEN, and the question got precise.** TED's governing instrument is now NAMED and proven -- Commission Decision 2011/833/EU, cited by TED's own legal notice -- and its text returned an empty body at five first-party EUR-Lex addresses. The grant says notices may be *reused*, and 'reuse' is defined in the document nobody could read. A second question surfaced: does the grant reach the sui generis DATABASE right, given that the access route is bulk extraction (H-36) |
 | 1.24 | 2026-08-31 | **Demand-side expansion: nine sources examined, zero approvals, and that is the result.** Pinterest and Hacker News moved to RESTRICTED on retrieved terms; Bluesky's developer guidelines are now known to exist and could not be fetched. Two procurement sources registered -- the first lawful route to WILLINGNESS_TO_PAY as a TRANSACTION rather than a listed price. `ted-eu` has five of six activities granted and is blocked by one |
@@ -884,6 +885,86 @@ family.**
 relevance — and it has not yet.** Even a perfect reliability review of all seven
 existing Evidence rows would establish nothing about pain, desire, willingness to
 pay, competition, distribution or retention.
+
+### TED-EU — the licence found, and the question externalised
+
+Mission 1.15.3 exhausted the first-party dataset-level material
+(`ted-eu-database-right-clarification-v1.md`,
+`ted-eu-database-right-clarification-request-v1.md`,
+`ted-eu-h36-legal-review-packet-v1.md`). Review v4. Verdict unchanged.
+
+**The question Mission 1.15.2 did not ask.** Is a licence attached to the
+assembled DATASET, as opposed to the individual documents? **Yes.** The
+Publications Office publishes TED in its own open-data catalogue, and the DCAT-AP
+record for `ted-1` declares `dct:license = COM_REUSE` on **every** distribution
+-- including *"Last daily editions of procurement notices in bulk download"*. The
+dataset node itself carries no licence, no `dct:rights` and **no `dct:creator`**;
+`dct:publisher` is the Publications Office.
+
+**And the licence IS the Decision.** The `COM_REUSE` authority concept carries
+`skos:exactMatch` to `http://data.europa.eu/eli/dec/2011/833/oj`. The
+machine-readable licence on the bulk route resolves, by the publisher's own
+assertion, to the instrument Mission 1.15.2 read in full and found silent on
+database rights. The TED Search API's OpenAPI document has a "Terms of Usage"
+section whose entire content is a link to the same TED legal notice. **Both
+routes are governed by the same silence, and the silence is now known to be
+complete**: the TED notice, the Publications Office notice, the europa.eu notice,
+the 20,015-character data.europa.eu notice, the bulk page, the package HTTP
+headers and the API specification contain **zero** occurrences of *sui generis*,
+*database right*, *extraction*, *re-utilisation* or Directive 96/9/EC.
+
+**`appliesTo licence-domain/DATA` is not a database-right grant.** The tempting
+over-read. `DATA` is defined in the same authority table as a *"set of values of
+qualitative or quantitative variables"* -- a subject class, not a class of right
+-- and the whole `licence-domain` scheme is `CODE`, `DATA`, `METADATA`,
+`W_LIT_ART` and a placeholder. **There is no `DATABASE` domain**, so the absence
+is not a deliberate choice either. `CC_BY_4_0` carries the same two values.
+
+**H-36 split, because the halves have different addressees.**
+
+- **H-36A -- does the right subsist?** **NOT ESTABLISHED, either way.** Directive
+  96/9/EC Article 7(1) gives the right to a **maker** showing **substantial
+  investment**; nothing retrieved names one. The catalogue names a *publisher*
+  and no creator, notices are filed by contracting authorities across the Union,
+  and Article 11 makes subsistence turn on facts about that maker. A legal
+  question about facts nobody has published.
+- **H-36B -- is it granted or waived?** **NOT ADDRESSED for both routes.**
+  Article 7(3) confirms the right *can* be granted by contractual licence.
+  `COM_REUSE` does not.
+
+**The sharpest fact, recorded and not relied on.** The same portal declares
+**CC BY 4.0** -- whose Section 4 expressly grants the right *"to extract, reuse,
+reproduce, and Share all or a substantial portion of the contents of the
+database"* -- on **12 of 48** distributions of the separate `ted-csv` dataset,
+published by **DG GROW**, including contract award notices for 2020, 2021 and
+2022. The other 36 are `COM_REUSE`, and the two **overlap**:
+`ted-contract-award-notices-2017-2021.zip` is CC BY 4.0 while
+`ted-contract-award-notices-2018-2023.zip` is `COM_REUSE`. Nothing on `ted-1`
+carries CC BY 4.0. **Selecting the favourable licence would be selecting a
+licence by selecting a filename**, so it is asked about rather than used --
+condition 10 forbids carrying a licence across resources.
+
+**A correction to Mission 1.15.2.** That review reasoned the search API was a
+smaller taking than bulk. The API's own specification documents a **scroll mode
+with no limit on the number of retrievable notices**, and Article 7(5) reaches
+repeated and systematic extraction of insubstantial parts regardless. Both routes
+stay unresolved and **no route is preferred**.
+
+**No PSI chain exists** (§12). Directive (EU) 2019/1024 appears nowhere; the one
+occurrence of Directive 2003/98/EC is inside the data.europa.eu **privacy**
+statement as a personal-data processing basis. Recorded as separate legal
+context, never as controlling evidence.
+
+**The blocker is now a message.** `ted-eu-database-right-clarification-request-v1.md`
+is written and **unsent** -- addressed to `op-copyright@publications.europa.eu`,
+the route TED's own legal notice publishes for SIMAP copyright issues, with
+`GROW-D2@ec.europa.eu` for the CSV question. The repository may PREPARE a message
+and may never imply it was delivered: there is no `sent_at` anywhere, and a test
+asserts it. Legal review is step two, and
+`ted-eu-h36-legal-review-packet-v1.md` exists so it starts from established facts.
+
+**Verdict `REQUIRES_REVIEW` at v4.** H-34 untouched, six activities still
+`PERMITTED`, all nine v3 conditions carried forward verbatim plus a tenth.
 
 ### TED-EU — every activity granted, and still blocked
 

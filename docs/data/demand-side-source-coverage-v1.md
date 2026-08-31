@@ -127,7 +127,7 @@ evidence a payment before this round.
 
 | Source | Verdict | Evidence class | Blocker |
 |--------|---------|----------------|---------|
-| `ted-eu` | REQUIRES_REVIEW *(v3)* | **TRANSACTION** | H-34 **closed PERMITTED**; blocked solely by the sui generis database right (H-36), which the governing Decision does not address at all |
+| `ted-eu` | REQUIRES_REVIEW *(v4)* | **TRANSACTION** | H-34 **closed PERMITTED**; blocked solely by the sui generis database right. Mission 1.15.3 found the dataset-level licence — `COM_REUSE` on every distribution including bulk XML — and it resolves by `skos:exactMatch` to the same Decision, which does not address database rights. Split into **H-36A** (does the right subsist? not established) and **H-36B** (is it granted? not addressed). A clarification request is written and unsent |
 | `usaspending` | REQUIRES_REVIEW *(new)* | **TRANSACTION** | No licence or terms document retrievable |
 
 ```text
