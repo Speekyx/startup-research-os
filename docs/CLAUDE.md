@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.27
-Last amended: 2026-08-31 (Sprint 1 / Mission 1.15.3)
+Version: 1.28
+Last amended: 2026-08-31 (Sprint 1 / Mission 1.15.4)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.28 | 2026-08-31 | **The routes are documented; the gate has no vocabulary for them.** TED's own docs say the Search API is *"for analysis and reuse"* and *"primarily targeted at data reusers"*, naming commercial organisations and researchers as users; the Open Data Service publishes data *"for analysis and re-use"* with a **Connect your app** button. That is intended-use evidence and **not** a database-right grant, and a condition now says so. The real blocker moved: **every approval in this registry is an answer to a use case the model never records**, so a source cannot be blocked broadly and authorised narrowly. `ted-eu` stays `REQUIRES_REVIEW` at v5 |
 | 1.27 | 2026-08-31 | **The dataset licence found, and H-36 still open.** The Publications Office's own DCAT record attaches `dct:license = COM_REUSE` to **every** `ted-1` distribution including the bulk XML download, and `COM_REUSE` carries `skos:exactMatch` to Decision 2011/833/EU -- so the licence on the bulk route IS the instrument already known to be silent. The search API's own Terms of Usage resolve to the same TED legal notice. H-36 splits into **H-36A** (does the right subsist? not established -- nothing names a maker) and **H-36B** (is it granted? not addressed). The blocker is now a drafted, unsent message to a named address |
 | 1.26 | 2026-08-31 | **H-34 CLOSED PERMITTED; H-36 did not close.** Commission Decision 2011/833/EU was retrieved from the Publications Office Cellar and read in full: reuse is defined by PURPOSE, not by METHOD, so machine processing falls inside the grant. The same text contains **zero** occurrences of *sui generis*, *extraction*, *re-utilisation* or Directive 96/9/EC. All six load-bearing activities are now granted and `ted-eu` is **still REQUIRES_REVIEW** -- the blocker is no longer an activity in the matrix |
 | 1.25 | 2026-08-31 | **H-34 stays OPEN, and the question got precise.** TED's governing instrument is now NAMED and proven -- Commission Decision 2011/833/EU, cited by TED's own legal notice -- and its text returned an empty body at five first-party EUR-Lex addresses. The grant says notices may be *reused*, and 'reuse' is defined in the document nobody could read. A second question surfaced: does the grant reach the sui generis DATABASE right, given that the access route is bulk extraction (H-36) |
@@ -885,6 +886,85 @@ family.**
 relevance — and it has not yet.** Even a perfect reliability review of all seven
 existing Evidence rows would establish nothing about pain, desire, willingness to
 pay, competition, distribution or retention.
+
+### TED-EU — official routes documented, and a gap in our own model
+
+Mission 1.15.4 re-reviewed TED against the system's **actual** use -- local,
+private, one developer, no redistribution, no resale, no training
+(`ted-eu-local-private-research-review-v1.md`,
+`route-scoped-source-authorization-gap-v1.md`). Review v5. **Verdict unchanged.**
+
+**A user summary was excluded before anything else** (§32). A file describing a
+written Publications Office reply exists outside the repository and is a
+transcription that says so itself. Classified `USER_SUPPLIED / NON_AUTHORITATIVE`,
+not cited, not entered as evidence, not deleted. **No source in the catalog
+carries an `OPERATOR_CORRESPONDENCE` row**, asserted as a tripwire so the first
+one is a visible diff. H-36 is exactly where Mission 1.15.3 left it.
+
+**Local use creates no permission.** *"It is local, therefore anything is
+allowed"* is not an argument and nothing rests on it. What the narrower use
+changes is which question is worth asking: not *may we mirror the corpus
+commercially*, but *do the official query routes document a purpose that covers
+narrow local research*.
+
+**They do, in the operator's own words.** The Search API *"allows access to
+published procurement notices for analysis and reuse"*, is *"primarily targeted at
+data reusers"*, requires no authentication, and names *"Commercial Organisations:
+Integrating TED data into platforms to provide added-value services"* and
+*"Researchers: Analysing public procurement trends and patterns"*. The TED Open
+Data Service publishes the data *"for analysis and re-use"*, invites use *"in your
+research and applications"*, and offers a **Connect your app** button to
+*"retrieve live results directly into Excel, Power BI, or any application that can
+get data from the web"*. Analysis, reuse, integration, commercial use, repeated
+access and automated access are each named by the operator about its own route.
+
+**And that is intended-use evidence, not a rights grant.** Nothing on either route
+mentions the sui generis database right. **Condition 11** records the distinction
+so a later reader cannot collapse them, and the Search API is nowhere framed as a
+way around H-36 -- the argument rests on documented purpose, never on the route
+transferring smaller chunks. The Open Data Service's own invitation to *"extract
+custom datasets across many notices"* uses the Directive's verb and is recorded
+as striking and load-bearing for nothing.
+
+**Two practical findings.** The Search API request body carries a **`fields`**
+parameter, so minimisation happens AT acquisition rather than after it. And
+coverage is recent and partial: eForms from **1 March 2023**, Standard Forms only
+28 August 2023 to 26 January 2024 as a *"proof of concept"* slice of six form
+types -- a bound on what research the route could support, recorded so a collector
+does not discover it from an empty result set.
+
+**THE REAL BLOCKER MOVED, and it is ours.** The system's use is local and a narrow
+official-route profile would be defensible; the registry cannot express it.
+`build_authorization('ted-eu')` returns exactly one reason -- *"policy review is
+REQUIRES_REVIEW"* -- and there is no route, resource or profile argument that
+could change it. Searching the contracts and acquisition packages for
+`use_profile`, `deployment_profile`, `LOCAL_PRIVATE` or `MULTI_TENANT` returns
+**zero matches**.
+
+The finding underneath is not about TED: **every review in this registry already
+assessed a use case, and the model never recorded which one.** Twenty-eight
+sources cost nothing for it because one product was being assessed. TED is the
+first source whose product has two shapes at once, and the model has one slot.
+
+**Three ways to hack it, all worse than the gap.** Flipping the verdict makes
+every consumer report TED approving for the commercial use case that is still
+unresolved -- the silent migration §8 exists to prevent. Two current reviews means
+two answers to one question. A use-profile condition still needs the flip to get
+past the gate.
+
+**The minimal extension is proposed and not built**: record
+`assessed_use_profile` on a review (every existing one is
+`COMMERCIAL_MULTI_TENANT`, which is what they DID assess), allow one current
+review per profile, thread the profile through `evaluate_eligibility` and
+`build_authorization`, and have the runtime **declare** its profile from
+configuration rather than infer it. A profile the review does not name is
+refused. It needs an ADR and a mission of its own -- doing it as a side effect of
+a TED mission would be the change-control violation §Change control describes.
+
+**Unchanged:** H-34 `CLOSED PERMITTED` and not reopened; every activity assessment
+byte-identical between v4 and v5; all ten v4 conditions carried forward verbatim;
+personal-data minimisation intact; model training **not authorised**; embeddings
+blocked by D-12; bulk XML **still blocked**; `ted-csv` still a separate review.
 
 ### TED-EU — the licence found, and the question externalised
 

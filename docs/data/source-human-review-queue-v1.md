@@ -1458,3 +1458,39 @@ sentence:** is the difference deliberate?
 **Status:** open, `EXTERNAL_CLARIFICATION_REQUIRED`. TED stays
 `REQUIRES_REVIEW` at review **v4**. See
 `ted-eu-database-right-clarification-v1.md`.
+
+---
+
+## H-36 — update after Mission 1.15.4: unchanged, and one thing was excluded {#h-36-1154}
+
+**No first-party response has been received. H-36A and H-36B are exactly as
+Mission 1.15.3 left them.**
+
+**What was excluded (§32).** A file describing a Publications Office reply exists
+outside the repository at `Downloads/ted-eu-publications-office-response.txt`. It
+is a user-written transcription and says so itself: *"This file is NOT a verbatim
+copy of the original email"*, and *"The response therefore confirms, according to
+the user who received it, that repeated reuse is authorised."*
+
+Classified **`USER_SUPPLIED / NON_AUTHORITATIVE`**. Not cited, not copied into the
+repository, not entered as evidence, and **not deleted** — it is the user's file.
+A test now asserts that **no** source in the catalog carries an
+`OPERATOR_CORRESPONDENCE` evidence row, so the first one to appear has to be a
+deliberate act with a real document behind it.
+
+The project's own rule already covered this: *"Do not guess, and do not
+substitute a second-hand description of it"* (`source-review-guide.md`).
+
+**What is still needed** is unchanged: a written first-party answer from
+`op-copyright@publications.europa.eu`, and failing that a legal review using
+`ted-eu-h36-legal-review-packet-v1.md`. The message is drafted and unsent.
+
+**A second, separable blocker appeared.** Even a favourable answer scoped to
+narrow local research could not be represented today: the registry has no
+use-profile dimension, so a source cannot be blocked broadly and authorised
+narrowly. That is an architecture question rather than a source question, and it
+has its own document — `route-scoped-source-authorization-gap-v1.md`. It needs an
+ADR and a mission, not a patch.
+
+**Status:** open, `EXTERNAL_CLARIFICATION_REQUIRED`. TED stays `REQUIRES_REVIEW`
+at review **v5**.

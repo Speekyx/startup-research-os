@@ -406,3 +406,40 @@ collector-ineligible. The next action is to send
 `ted-eu-database-right-clarification-request-v1.md`, which is prepared and
 **unsent**.
 
+### 5.5 Update after Mission 1.15.4 — the routes are documented, the gate is not
+
+`ted-eu` did not move, and what it is waiting for became clearer.
+
+**What TED's own documentation says its official routes are for.** The Search API
+*"allows access to published procurement notices for analysis and reuse"*, is
+*"primarily targeted at data reusers"*, needs no authentication, and names
+*"Commercial Organisations: Integrating TED data into platforms to provide
+added-value services"* and *"Researchers: Analysing public procurement trends and
+patterns"* among its users. The TED Open Data Service publishes the data *"for
+analysis and re-use"*, invites use *"in your research and applications"*, and
+offers a **Connect your app** button to *"retrieve live results directly into
+Excel, Power BI, or any application that can get data from the web"*.
+
+**That is intended-use evidence, and it is not a database-right grant.** Nothing
+on either route mentions the sui generis right. H-36A and H-36B are unchanged,
+and condition 11 records the distinction so a later reader cannot collapse them.
+
+**What blocks TED is now our own model, not the evidence.** The system's real use
+is local and private, and a narrow official-route profile would be defensible.
+The registry cannot express it: `approval_state` is a property of the source, and
+**every approval in the registry is an answer to a use case the model never
+records**. Attempting `build_authorization('ted-eu')` returns exactly one reason,
+*"policy review is REQUIRES_REVIEW"*, and no route, resource or profile argument
+exists that could change it. See `route-scoped-source-authorization-gap-v1.md`.
+
+**Portfolio position, unchanged.** `ted-eu` remains registered, non-approving,
+collector-ineligible, and the only transaction-class candidate for European
+willingness-to-pay evidence. `usaspending` (H-35) remains the only other one and
+remains unreviewed.
+
+**What TED would cover if authorised:** public procurement transactions, award
+activity, buyer and supplier activity, contract-value evidence. **What it would
+not:** consumer purchase behaviour, SaaS subscription churn, general pricing
+willingness, retention, pain, desire. None of that changed, and none of it is
+made truer by the routes being well documented.
+

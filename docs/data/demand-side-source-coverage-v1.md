@@ -127,7 +127,7 @@ evidence a payment before this round.
 
 | Source | Verdict | Evidence class | Blocker |
 |--------|---------|----------------|---------|
-| `ted-eu` | REQUIRES_REVIEW *(v4)* | **TRANSACTION** | H-34 **closed PERMITTED**; blocked solely by the sui generis database right. Mission 1.15.3 found the dataset-level licence — `COM_REUSE` on every distribution including bulk XML — and it resolves by `skos:exactMatch` to the same Decision, which does not address database rights. Split into **H-36A** (does the right subsist? not established) and **H-36B** (is it granted? not addressed). A clarification request is written and unsent |
+| `ted-eu` | REQUIRES_REVIEW *(v5)* | **TRANSACTION** | H-34 **closed PERMITTED**; blocked solely by the sui generis database right. Mission 1.15.3 found the dataset-level licence — `COM_REUSE` on every distribution including bulk XML — and it resolves by `skos:exactMatch` to the same Decision, which does not address database rights. Split into **H-36A** (does the right subsist? not established) and **H-36B** (is it granted? not addressed). A clarification request is written and unsent |
 | `usaspending` | REQUIRES_REVIEW *(new)* | **TRANSACTION** | No licence or terms document retrievable |
 
 ```text
@@ -236,3 +236,29 @@ Mission 1.15 changed two things, and neither is an approval:
 A correct review concluding that candidates remain blocked is worth more than a
 false approval (§39). This document exists so that the cost of that correctness
 stays visible rather than being absorbed into a count of registered sources.
+
+---
+
+## Update after Mission 1.15.4 — transaction class, registered and still not eligible
+
+`ted-eu` is the portfolio's only WILLINGNESS_TO_PAY candidate of **transaction**
+class, and its state is now precise in all three dimensions §29 asks for:
+
+| | |
+|---|---|
+| **Registered** | **yes** — `ted-eu`, review v5 |
+| **Approving** | **no** — `REQUIRES_REVIEW`, unchanged since v1 |
+| **Eligible** | **no** — the gate refuses with one reason, *"policy review is REQUIRES_REVIEW"* |
+
+**This is still not a direct willingness-to-pay source, and the distinction is the
+one Mission 1.15 drew.** What TED could support, if ever authorised, is
+`TRANSACTION_CLASS_PUBLIC_PROCUREMENT_EVIDENCE`: what a named public buyer
+awarded to a named supplier, at a reported value, for a classified category, on a
+date. Whether that bears on anybody's willingness to pay is an interpretation
+question for a later stage, and no Claim was created here.
+
+Mission 1.15.4 found strong first-party evidence that TED's two **official query
+routes** are documented for analysis, reuse and application integration — and
+that changes nothing about the coverage row, because the blocker was never the
+route.
+

@@ -1682,6 +1682,71 @@ def flat(path):
 
 **Cheap, and it removes a whole class of false failure** that would otherwise
 train contributors to treat a red documentation test as noise.
+
+---
+
+## 40. A summary must not be able to become evidence (Mission 1.15.4)
+
+Mission 1.15.4 arrived with a file describing a written reply from the
+Publications Office that would have closed H-36. The file was a user
+transcription and said so in its own second paragraph.
+
+Excluding it was easy. **Making the exclusion durable was the test problem**,
+because nothing in the suite could tell the difference between a real operator
+response and a paraphrase of one — both would arrive as an
+`OPERATOR_CORRESPONDENCE` evidence row with a title and a finding.
+
+The guard chosen is blunt and it is right:
+
+```python
+def test_no_source_at_all_carries_operator_correspondence_yet(catalog):
+    for source in catalog.sources:
+        for past in source.review_history:
+            for item in past.evidence:
+                assert item.document_type is not PolicyEvidenceType.OPERATOR_CORRESPONDENCE
+```
+
+**Zero, across the whole catalog, at every version.** Not "TED has none", and not
+a heuristic about what a real response looks like.
+
+### Why the blunt version is the good one
+
+A test that tried to *validate* an operator response — checking for a sender, a
+date, a quoted excerpt — would be a spec for forging one. This test makes no such
+claim. It says the registry contains none today, so **the first one is a diff**:
+somebody adds it deliberately, a reviewer sees this test go red, and the red is
+the conversation.
+
+It is a **tripwire, not a validator**, and tripwires are the right shape when the
+thing you are guarding against is a person in a hurry rather than a bug.
+
+### The tell
+
+Reach for this shape when a category of evidence is powerful, rare, and
+impossible to verify mechanically. Deleting the assertion has to be the cheapest
+way past it, and it has to be visible when someone does.
+
+---
+
+## 41. A finding pins to its version — the third time (Mission 1.15.4)
+
+Ten assertions in `test_ted_database_right.py` failed when review v5 landed.
+Every one had been written against `review(catalog, "ted-eu")` and every one was
+recording something Mission **1.15.3** established.
+
+This is §37 exactly, and it has now happened at v3, at v4 and at v5. The fix was
+the same each time — pin the finding, leave durable properties on the current
+review — and the repetition is itself the finding:
+
+> **A review-backed test defaults to the wrong thing.** `review(catalog, id)`
+> reads naturally and is almost always the mistake, because most assertions in a
+> review suite are about what a particular review FOUND.
+
+The habit worth forming is to write the version first and drop it only when the
+property is genuinely durable — the opposite of what the API's convenience
+suggests. Mission 1.15.4's own suite was written that way and needed no repinning
+for the version it introduced.
+
 ---
 
 ## 42. A fixed timestamp compared against a real clock is a snapshot

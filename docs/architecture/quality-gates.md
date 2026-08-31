@@ -463,6 +463,22 @@ shape, because this is the kind of finding that decays quietly.
 | **The packet offers no legal conclusion, and records the unfavourable outcome** | Both asserted | §22. A packet that only describes the outcome we want is advocacy, not a question |
 | **No TED module exists in the acquisition package** | The file tree is walked for any module whose stem contains `ted` | §28. "No collector" checked against the tree, not only against a registry a new module could forget to join |
 
+### The local private research route (Mission 1.15.4)
+
+| Gate | Mechanism | Guards |
+|------|-----------|--------|
+| **No summary can become operator evidence** | Asserted that NO source in the catalog carries an `OPERATOR_CORRESPONDENCE` evidence row, at any review version | §32. A user transcription describing a Publications Office reply exists outside the repository. A tripwire, not a validator: the first real response is a visible diff (`testing-strategy.md` §40) |
+| **Local use creates no permission** | The verdict is asserted unchanged after a review that narrowed the use case; the review names the four forbidden conclusions verbatim and refuses each | §1, §27. "It is local, therefore anything is allowed" is the failure this whole mission is exposed to |
+| **Documented purpose is not a rights grant** | Condition 11 says so; a test asserts the condition contains "not a grant of a database right" and "no route may be authorised on it alone" | §13. Four pieces of enthusiastic operator documentation are exactly what a reader in a hurry would mistake for a licence |
+| **The operator's own word "extract" closed nothing** | The Open Data Service invites users to "extract custom datasets across many notices"; the evidence records it AND records that it does not close H-36 | The Directive's verb, used by the operator, in an invitation. Recording it and refusing it is what makes the refusal honest |
+| **The gate refuses, and the reason is the gap** | `build_authorization('ted-eu')` is called in a test and must raise with "REQUIRES_REVIEW"; a second test asserts `evaluate_eligibility` has no use-profile parameter | §26, §29. The architectural gap demonstrated rather than asserted |
+| **No use-profile concept exists yet** | The contracts and acquisition packages are walked for `use_profile`, `deployment_profile`, `LOCAL_PRIVATE`, `MULTI_TENANT` | If this goes red the proposed extension is being built, which should happen in a mission that says so rather than as a side effect |
+| **A local profile cannot migrate to a commercial one** | The review states the boundary; the gap document states that an unnamed profile is refused; both asserted | §8. The most likely way this review causes harm later |
+| **No compliance configuration for a blocked source** | Asserted that `source-compliance-v1.json` has no `ted-eu` entry | Preparation dressed as permission. The profile is defined in the gap document and authorised nowhere |
+| **No SPARQL client anywhere** | The tree is walked for `SPARQLWrapper` and for modules whose stem contains `sparql` | §28. The new route is a query endpoint, so "no collector" needs a second shape of check |
+| **The coverage window is recorded, not discovered at runtime** | The evidence must carry "1 march 2023" and "proof of concept" | The Open Data Service holds eForms from March 2023 and a six-form-type slice of Standard Forms. A collector must not learn that from an empty result set |
+| **Assessments byte-identical across a route review** | `v4.assessments == v5.assessments` | A review that established no new right must not move a finding it did not re-establish |
+
 
 ---
 

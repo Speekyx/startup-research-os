@@ -58,6 +58,8 @@
 | `ted-eu-database-right-clarification-v1.md` | The dataset-level licence, found and identified: `COM_REUSE` on every `ted-1` distribution including bulk XML, resolving by `skos:exactMatch` to the same Decision. H-36 splits into H-36A and H-36B and stays open |
 | `ted-eu-database-right-clarification-request-v1.md` | The message to the Publications Office. **Prepared, not sent** — sending is an operator action |
 | `ted-eu-h36-legal-review-packet-v1.md` | Established facts and five questions for a lawyer, with no legal conclusion attached |
+| `ted-eu-local-private-research-review-v1.md` | The two OFFICIAL query routes reviewed against the system's actual local, private use. Their documented purpose covers analysis, reuse and application integration; that is intended-use evidence and not a database-right grant |
+| `route-scoped-source-authorization-gap-v1.md` | Why a source cannot be blocked broadly and authorised narrowly in the current model, and the minimal extension that would let it |
 | `acquisition-rights-basis-gap-analysis-v1.md` | Why a resource records what KIND of thing authorises it, not only which licence (H-28, ADR-018) |
 | `wikimedia-pageviews-compliance-v1.md` | What Wikimedia Pageviews would need, and the one question blocking it |
 | `source-condition-gap-analysis-v1.md` | The nine Mission 1.3 conditions inventoried and classified, and the obligations deliberately left out of code |
