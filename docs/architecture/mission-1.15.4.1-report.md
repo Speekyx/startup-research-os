@@ -127,8 +127,8 @@ own cause in the failure output:
 
 ```python
 record = raw_view(collected_at=NORMALIZED_AT + timedelta(seconds=1))
-assert record.collected_at > NORMALIZED_AT          # true on purpose
-assert _persist_at(record) >= record.collected_at   # the repair
+assert record.collected_at > NORMALIZED_AT  # true on purpose
+assert _persist_at(record) >= record.collected_at  # the repair
 ```
 
 ## Were similar fixture risks found?
