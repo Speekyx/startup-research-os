@@ -4,10 +4,16 @@
 What is authorised under `local-private-research-v1`, and what still stands
 between that and a collector.
 
-**State: `APPROVING_BUT_NOT_ELIGIBLE`.** The review is
-`APPROVED_WITH_CONDITIONS`; `AcquisitionAuthorizationContext` **cannot be
-built**; **one** condition is outstanding, and it is the residual database-right
-exposure.
+**State: `AUTHORIZATION_READY`** (Mission 1.15.6.1). The review is
+`APPROVED_WITH_CONDITIONS`, **all four conditions are satisfied**, and
+`AcquisitionAuthorizationContext` **builds**. The operator recorded the residual
+database-right acceptance on 2026-08-31; the record and its two qualifiers are in
+[`ted-eu-operator-risk-acceptance-v1.md`](ted-eu-operator-risk-acceptance-v1.md).
+
+**`AUTHORIZATION_READY` is not a legal clearance and not `resource_ready`.**
+H-36A remains `NOT ESTABLISHED` and H-36B remains `NOT ADDRESSED`; and TED
+authorises **zero concrete datasets**, so a collector holding the context would
+still be refused every resource it asked for.
 
 **Amended by Mission 1.15.6.** Two of the three conditions this document
 reported as outstanding described objective properties of the *configuration*
@@ -182,19 +188,28 @@ and says the residual exposure is the operator's to accept.
 
 ## What stands between this and a collector
 
-`build_authorization('ted-eu', 'local-private-research-v1')` **refuses**:
+`build_authorization('ted-eu', 'local-private-research-v1')` **succeeds**, given
+the complete verification set — the three live capability results plus the
+recorded operator decision:
 
 ```text
-review conditions not satisfied:
-  ted-database-right-residual-exposure-accepted
+  use profile   local-private-research-v1
+  review        v2  APPROVED_WITH_CONDITIONS
+  routes        ted-open-data-sparql, ted-search-api
+  ted-bulk-xml  ABSENT
+  preferred     ted-search-api
 ```
 
-| Condition | Verification | State |
-|---|---|---|
-| `ted-attribution` | CAPABILITY `source-attribution-display` | **SATISFIED** |
-| `ted-official-route-only` | CAPABILITY `source-route-binding` | **SATISFIED** |
-| `ted-personal-data-minimisation` | CAPABILITY `source-field-minimisation` | **SATISFIED** |
-| `ted-database-right-residual-exposure-accepted` | HUMAN_CONFIRMATION | **outstanding** |
+What still stands between this and a **collector** is no longer a permission. It
+is a concrete resource: TED authorises zero datasets, so `resource_ready` is
+**no**.
+
+| Condition | Verification | State | Established by |
+|---|---|---|---|
+| `ted-attribution` | CAPABILITY `source-attribution-display` | **SATISFIED** | the live verifiers |
+| `ted-official-route-only` | CAPABILITY `source-route-binding` | **SATISFIED** | the live verifiers |
+| `ted-personal-data-minimisation` | CAPABILITY `source-field-minimisation` | **SATISFIED** | the live verifiers |
+| `ted-database-right-residual-exposure-accepted` | HUMAN_CONFIRMATION | **SATISFIED** | a recorded operator decision, 2026-08-31 |
 
 **No verifier in this repository can satisfy a `HUMAN_CONFIRMATION` condition,
 and none ever will.** That is the design, and it is deliberate for this one: a
@@ -214,6 +229,24 @@ left exactly where it was, because it is a judgement rather than a property.
 [`ted-eu-authorization-bootstrap-v1.md`](ted-eu-authorization-bootstrap-v1.md)
 §6.2. Nothing has been recorded, and the existence of that text is not an
 acceptance.
+
+**The acceptance was recorded on 2026-08-31**, at the second attempt. A first,
+shorter statement was **refused** because three of §6.2's seven items were
+absent, including the clause that gives the acceptance a boundary; that refusal
+and its reasoning are preserved in
+[`ted-eu-operator-acceptance-pending-v1.md`](ted-eu-operator-acceptance-pending-v1.md).
+The operator then supplied the complete acknowledgement, and one
+`HUMAN_CONFIRMATION` row was written against `ted-eu` ·
+`local-private-research-v1` · review v2 · actor `local-operator`. See
+[`ted-eu-operator-risk-acceptance-v1.md`](ted-eu-operator-risk-acceptance-v1.md).
+
+**Do not run `verify --apply` for this source under this profile.** It would
+silently clear the acceptance: `verify_source` yields `UNKNOWN` for a human
+condition and `record_verifications` writes `satisfied = FALSE` for any
+non-`SATISFIED` result. Confirmed empirically and recorded in
+`ted-eu-operator-risk-acceptance-v1.md` §8, which is also where the wider gap
+lives — no shipped command produces a complete verification set for a source that
+has a human condition.
 
 ## Next mission
 
