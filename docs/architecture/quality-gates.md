@@ -430,7 +430,7 @@ shape, because this is the kind of finding that decays quietly.
 | **ML inference, embeddings and training stay distinct** | `model_processing` is a single named assessment and is never `PERMITTED`; no embedding or training permission is claimed | §3. Collapsing them would let a future embedding use inherit an inference decision the legal text may distinguish |
 | **Minimisation and authenticity survive a mission about reuse rights** | Every v1 condition asserted present in v2; personal-data risk and identifier-discard flags pinned | §12, §13. A mission about ML processing is exactly where an unrelated condition gets weakened incidentally |
 | **No TED data reached the database** | Live assertions that no RawRecord or NormalizedRecord carries `source_id = 'ted-eu'` | §28. Retrieving legal documents is review work; procurement notices are research data |
-| **Production counts are pinned** | 12 / 12 / 7 / 7 / 7, plus 0 opportunities, 0 embeddings, 0 reliability assessments | §27, §30. A policy mission may change registry metadata and nothing else |
+| **Zero TED rows, zero assessments, zero opportunities** | Live assertions that hold in EVERY environment, because they follow from there being no TED collector | §27, §30. The counts 12 / 12 / 7 / 7 / 7 are deliberately NOT asserted: they are facts about one database, not invariants, and pinning them failed on the first CI run. "Unchanged" is a property of a run, already asserted by the post-suite digest watcher (`testing-strategy.md` §36) |
 
 ---
 

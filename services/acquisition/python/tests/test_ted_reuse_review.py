@@ -298,20 +298,28 @@ class TestNothingWasCollected:
             == 0
         )
 
-    def test_the_production_row_counts_are_unchanged(self) -> None:
-        """§27. A policy mission may change registry and review metadata and
-        nothing else."""
-        for query, expected in (
-            ("SELECT count(*) FROM acquisition.raw_records", 12),
-            ("SELECT count(*) FROM acquisition.normalized_records", 12),
-            ("SELECT count(*) FROM nlp.signals", 7),
-            ("SELECT count(*) FROM research.claims", 7),
-            ("SELECT count(*) FROM research.claim_revisions", 7),
-            ("SELECT count(*) FROM scoring.evidence", 7),
-            ("SELECT count(*) FROM research.opportunities", 0),
-            ("SELECT count(*) FROM nlp.embedding_provenance", 0),
-            # §30. Reliability review is a different process and this mission
-            # is not it.
-            ("SELECT count(*) FROM epistemic.reliability_assessments", 0),
+    def test_no_reliability_assessment_was_created(self) -> None:
+        """§30. Source review asks whether we MAY use TED; reliability review
+        asks how dependable its measurements are. Different processes, and this
+        mission is not the second one."""
+        assert self._count("SELECT count(*) FROM epistemic.reliability_assessments") == 0
+
+    def test_no_opportunity_or_embedding_was_created(self) -> None:
+        for query in (
+            "SELECT count(*) FROM research.opportunities",
+            "SELECT count(*) FROM nlp.embedding_provenance",
         ):
-            assert self._count(query) == expected, query
+            assert self._count(query) == 0, query
+
+    # §27 asks that the production rows be unchanged, and this file deliberately
+    # does NOT assert 12 / 12 / 7 / 7 / 7 to check it. Those are facts about one
+    # developer's database, not invariants of the system: a fresh CI database
+    # holds none of them, and a test that pinned them would fail everywhere the
+    # data has not been loaded -- which it did, on the first CI run.
+    #
+    # "Unchanged" is a property of a RUN rather than of a row count, and the
+    # pytest post-suite watcher already asserts it properly by comparing content
+    # digests before and after across every tenant and global table. The
+    # assertions above are the ones that hold in EVERY environment, because they
+    # follow from there being no TED collector rather than from what somebody
+    # happens to have collected (`testing-strategy.md` §36).

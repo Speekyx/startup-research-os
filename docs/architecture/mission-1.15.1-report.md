@@ -366,7 +366,7 @@ the rule were relaxed.
 
 ## 2. What the tests protect
 
-31 tests, none of which contacts a network. The ones worth naming:
+32 tests, none of which contacts a network. The ones worth naming:
 
 - **the retrieval failure is stored as structured evidence** —
   `section_reference = "Retrieval failure"`, "empty body" in the finding. A
@@ -382,6 +382,15 @@ the rule were relaxed.
 
 Recorded as `testing-strategy.md` §35.
 
+**One test was wrong and CI caught it.** The suite first asserted the production
+counts — 12 / 12 / 7 / 7 / 7 — as a way of checking §27. Those are facts about
+one developer's database, not invariants: a fresh CI database holds none of them,
+and the run failed on `assert 0 == 12`. It was replaced by the assertions that
+hold in every environment, because they follow from there being no TED collector
+rather than from what somebody happens to have collected. "Unchanged" is a
+property of a run and the post-suite digest watcher already asserts it properly.
+Recorded as `testing-strategy.md` §36.
+
 ## 3. Gates
 
 | Gate | Result |
@@ -392,7 +401,7 @@ Recorded as `testing-strategy.md` §35.
 | `validate_schema` · `validate_claims` · `validate_signals` · `validate_normalization` | pass |
 | `validate_compliance_capabilities` · `validate_evidence_aggregation` | pass |
 | Generated catalog documents `--check` | current |
-| New tests | 31 |
+| New tests | 32 |
 | `ruff` / `mypy` | pass |
 
 ## 4. The thing worth remembering

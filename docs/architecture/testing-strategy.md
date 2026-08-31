@@ -1516,3 +1516,50 @@ The corollary is a rule about direction: a mission whose stated goal is to *clos
 a question needs its strongest tests on the path where the question stays open.
 The failure mode is not writing a false finding — it is letting an unresolved
 question quietly acquire the appearance of resolution.
+
+## 36. A local snapshot is not an invariant (Mission 1.15.1)
+
+§32 recorded that a number in a test fixture becomes indistinguishable from a
+reviewed finding. This is the same failure with the direction reversed: **a
+number that IS a finding, written into a test as though it were a rule.**
+
+Mission 1.15.1's brief asked that the production rows be unchanged — 12
+RawRecords, 12 NormalizedRecords, 7 Signals, 7 Claims, 7 Evidence. The obvious
+way to check that is to assert those counts, so that is what the suite did.
+
+It passed locally and failed on the first CI run, on `assert 0 == 12`.
+
+### Why it was wrong even where it passed
+
+Those counts describe **one developer's database**. A fresh CI database holds
+none of them; a second developer's holds whatever they collected. Encoding them
+as assertions makes the suite pass or fail on *how much data the runner happens
+to have*, which is not a property of the code under test.
+
+Worse, it would have been read later as an invariant. A test asserting
+`raw_records == 12` looks like the system guarantees twelve.
+
+### What replaced it
+
+Only the assertions that hold in **every** environment, because they follow from
+the code rather than from history:
+
+```text
+zero raw records with source_id = 'ted-eu'     -- no TED collector exists
+zero normalized records for TED                -- same
+zero reliability assessments                   -- this mission is not that process
+zero opportunities, zero embeddings
+```
+
+"Unchanged" is a property of a **run**, not of a row count, and the pytest
+post-suite watcher already asserts it properly: it digests every tenant and
+global table before and after and reports any difference. The suite did not need
+a second, worse implementation of a check that already existed.
+
+### The general form
+
+**When a brief states expected numbers, ask whether they are facts about the
+system or facts about the environment.** Facts about the environment belong in
+the report, where they are findings. Facts about the system belong in tests. A
+count of collected rows is almost always the first kind, and the giveaway is
+that it would change if somebody ran a collector — which is not a regression.
