@@ -1,11 +1,11 @@
 {
   "$comment": "COMPLIANCE CONFIGURATION. Hand-edited governance data, read by sros_acquisition.compliance. It carries the PARAMETERS of the obligations Mission 1.3 recorded -- exact notices, licence allowlists, enumerated exclusions -- so that satisfying a condition is a configuration fact rather than a branch in application code (Mission 1.4 §5, §7). It grants nothing: every entry here describes a restriction, and a source with no entry is denied by the resource gate rather than allowed. Mission 1.9.1: every authorised dataset now states its RIGHTS BASIS -- whether a NAMED_LICENCE or a DIRECT_GRANT authorises it. Stated per entry rather than defaulted, because a default would silently classify the first entry that omitted it, and the wrong classification is invisible. A DIRECT_GRANT never satisfies a licence allowlist. Mission 1.9.2: a resource scope may also carry a POSITIVE list of reviewed dataset families, and a source may carry acquisition bounds -- a reviewed ceiling on how much of a published bulk dataset one job may take. Both are restrictions like everything else here, and both default to absent, which for a bound means no ceiling was reviewed rather than that any size is fine.",
-  "compliance_version": "1.1",
+  "compliance_version": "1.2",
   "derived_from": {
     "catalog": "source-catalog-v1.json",
-    "catalog_version": "1.4",
-    "review_round": "mission-1.9.2",
-    "note": "Every requirement below traces to a document the review that introduced it retrieved. Nothing here re-reads a platform's terms; adding a requirement means re-opening the review, not editing this file. The GDELT entry targets review 3 (mission-1.9.2); the other three still target the mission-1.3 round that established them."
+    "catalog_version": "1.5",
+    "review_round": "mission-1.15.6",
+    "note": "Every requirement below traces to a document the review that introduced it retrieved. Nothing here re-reads a platform's terms; adding a requirement means re-opening the review, not editing this file. Entries are keyed by (source, use profile) since Mission 1.15.5. The ted-eu entry targets the local-private-research-v1 review v2 (mission-1.15.6), which reclassified two conditions from HUMAN_CONFIRMATION to CAPABILITY and changed no policy conclusion; the GDELT entry targets review 3 (mission-1.9.2); the other three still target the mission-1.3 round that established them."
   },
   "sources": [
     {
@@ -282,7 +282,7 @@
     {
       "source_id": "ted-eu",
       "use_profile_id": "local-private-research-v1",
-      "review_version": 1,
+      "review_version": 2,
       "evidence_url": "https://ted.europa.eu/en/legal-notice",
       "evidence_section": "Copyright notice",
       "attribution": {
@@ -317,6 +317,17 @@
         ],
         "require_dataset_family": true,
         "dataset_family_note": "Every resource must declare its family and an unclassified one is denied. The three excluded families are named rather than merely absent, because they are the routes a future collector would most plausibly reach for: the bulk packages carry the highest database-right exposure (Mission 1.15.3) and ted-csv is a separate DG GROW dataset whose licence must be resolved from its own record."
+      },
+      "route_authorization": {
+        "allowed_labels": [
+          "ted-search-api",
+          "ted-open-data-sparql"
+        ],
+        "blocked_labels": [
+          "ted-bulk-xml"
+        ],
+        "preferred_label": "ted-search-api",
+        "basis": "Local review v1 condition OFFICIAL QUERY ROUTES ONLY, carried unchanged into v2: authorised access is the TED Search API (https://api.ted.europa.eu/v3/notices/search) and the TED Open Data Service SPARQL endpoint (https://data.ted.europa.eu/); the daily and monthly bulk XML packages at https://ted.europa.eu/packages/ are NOT authorised under this or any profile. ted-bulk-xml is BLOCKED BY NAME rather than merely absent, because Mission 1.15.3 established the highest database-right exposure on that route and it is the route a collector would most plausibly reach for. The preference for the Search API is an IMPLEMENTATION choice among authorised routes and widens nothing: it publishes explicit intended-use documentation, supports field selection through `fields` so minimisation happens at acquisition, and has a simpler response contract than SPARQL for a first collector. The Open Data Service remains authorised and may be implemented later."
       },
       "data_minimisation": {
         "allowed": [

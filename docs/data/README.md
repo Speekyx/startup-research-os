@@ -62,7 +62,8 @@
 | `route-scoped-source-authorization-gap-v1.md` | Mission 1.15.4's gap analysis. **The extension it proposed was built in Mission 1.15.5** (ADR-027); kept as the record of why |
 | `use-profile-aware-source-policy-v1.md` | How source permission is scoped to the use it was granted for: the two registered profiles, fail-closed behaviour, and why the runtime declares its profile rather than inferring it |
 | `use-profile-migration-v1.md` | What 55 historical reviews were interpreted as having assessed, and everything the migration did not change |
-| `ted-eu-local-official-route-readiness-v1.md` | TED under `local-private-research-v1`: authorised routes and fields, and the three human confirmations still outstanding |
+| `ted-eu-local-official-route-readiness-v1.md` | TED under `local-private-research-v1`: authorised routes and fields, and the one human confirmation still outstanding. **Amended by Mission 1.15.6** |
+| `ted-eu-authorization-bootstrap-v1.md` | How the pre-collector deadlock broke: two conditions were properties of CONFIGURATION rather than of code and are now verified against it; the third is a judgement and stays human. Carries the exact operator statement a later, explicit action must record — **nothing has been recorded** |
 | `acquisition-rights-basis-gap-analysis-v1.md` | Why a resource records what KIND of thing authorises it, not only which licence (H-28, ADR-018) |
 | `wikimedia-pageviews-compliance-v1.md` | What Wikimedia Pageviews would need, and the one question blocking it |
 | `source-condition-gap-analysis-v1.md` | The nine Mission 1.3 conditions inventoried and classified, and the obligations deliberately left out of code |

@@ -292,6 +292,127 @@ def _check_note_marker_exclusion(compliance: SourceCompliance) -> tuple[str, ...
     return tuple(failures)
 
 
+# ------------------------------------------- route binding and field minimisation
+
+
+_UNREVIEWED_ROUTE = "compliance-probe-route"
+_UNREVIEWED_FIELD = "compliance_probe_field"
+
+
+def _check_route_binding(compliance: SourceCompliance) -> tuple[str, ...]:
+    """The route gate authorises what the review named, and refuses everything else.
+
+    Mission 1.15.6 §7, §14. What this establishes is stated precisely, because
+    the distinction is the whole point of §15: it does **not** say that a future
+    collector follows the rules. It says the configuration supplied to
+    authorization names one reviewed route, that the gate accepts exactly the
+    reviewed routes, and that it refuses the blocked ones, the unreviewed ones
+    and the unstated one.
+
+    The structural half of the guarantee is elsewhere and is the load-bearing
+    one: `build_authorization` puts only authorised routes in the context, so a
+    blocked route has no endpoint a collector could reach.
+    """
+    routes = compliance.route_authorization
+    if routes is None:
+        return (
+            "no route authorization is configured, so no access route is restricted and "
+            "acquisition could bind to any route the registry records",
+        )
+
+    failures: list[str] = []
+
+    # The control case. A gate that refused every route would pass every
+    # refusal assertion below and authorise nothing, which is a refusal
+    # dressed as a restriction.
+    for label in sorted(routes.allowed_labels):
+        refusals = routes.refusals(label)
+        if refusals:
+            failures.append(
+                f"authorised route {label!r} is refused by the gate that is supposed to "
+                f"permit it: {'; '.join(refusals)}"
+            )
+
+    for label in sorted(routes.blocked_labels):
+        if not routes.refusals(label):
+            failures.append(f"blocked route {label!r} is allowed; it must be refused by name")
+
+    if not routes.refusals(_UNREVIEWED_ROUTE):
+        failures.append(
+            "a route nobody reviewed is allowed; an unreviewed route must fail closed "
+            "rather than pass by not having been excluded"
+        )
+
+    for unstated in (None, "", "   "):
+        if not routes.refusals(unstated):
+            failures.append(
+                "acquisition that names no route is allowed; an unstated route is not a "
+                "route known to be authorised"
+            )
+            break
+
+    return tuple(failures)
+
+
+def _check_field_minimisation(compliance: SourceCompliance) -> tuple[str, ...]:
+    """The field gate permits the authorised selection and refuses everything else.
+
+    Mission 1.15.6 §8, §9. The excluded categories are the natural-person contact
+    block, and the assertion that matters is that requesting one of them is
+    refused BEFORE a request is composed -- not filtered out of a response that
+    already contained it.
+    """
+    minimisation = compliance.data_minimisation
+    if not minimisation.allowed:
+        return (
+            "the minimisation profile authorises no field, so there is no selection a "
+            "collector could be permitted to request",
+        )
+    if not minimisation.excluded:
+        return (
+            "the minimisation profile excludes no field, so it names what may be asked "
+            "for without refusing anything by name",
+        )
+
+    failures: list[str] = []
+
+    refusals = minimisation.refusals(minimisation.allowed)
+    if refusals:
+        failures.append(
+            "the authorised field selection is refused by the gate that is supposed to "
+            f"permit it: {'; '.join(refusals)}"
+        )
+
+    for field_name in minimisation.excluded:
+        if not minimisation.refusals((field_name,)):
+            failures.append(
+                f"excluded field {field_name!r} may be requested; it must be refused by name"
+            )
+        # And it must still be refused when hidden among authorised fields,
+        # which is the shape a real over-broad request has.
+        if not minimisation.refusals((*minimisation.allowed, field_name)):
+            failures.append(
+                f"excluded field {field_name!r} is allowed when requested alongside the "
+                "authorised set; one prohibited field must refuse the whole request"
+            )
+
+    if not minimisation.refusals((_UNREVIEWED_FIELD,)):
+        failures.append(
+            "a field nobody reviewed may be requested; an unreviewed field must fail "
+            "closed rather than pass by not having been excluded"
+        )
+
+    for unstated in (None, ()):
+        if not minimisation.refusals(unstated):
+            failures.append(
+                "a request that states no field selection is allowed; where the source "
+                "supports field selection, an unstated selection is not a minimised one"
+            )
+            break
+
+    return tuple(failures)
+
+
 # ------------------------------------------------------------------- registry
 
 CAPABILITIES: dict[str, ComplianceCapability] = {
@@ -331,6 +452,27 @@ CAPABILITIES: dict[str, ComplianceCapability] = {
                 "unrecorded."
             ),
             check=_check_enumerated_exclusions,
+        ),
+        ComplianceCapability(
+            name="source-route-binding",
+            description=(
+                "Authorises acquisition against the access routes the review named, and "
+                "refuses a route the review blocked, a route nobody reviewed and "
+                "acquisition that names no route at all. Generic mechanism; the "
+                "authorization context carries only the authorised routes, so a blocked "
+                "one has no endpoint to reach."
+            ),
+            check=_check_route_binding,
+        ),
+        ComplianceCapability(
+            name="source-field-minimisation",
+            description=(
+                "Authorises a field selection against the minimisation profile before a "
+                "request is composed, and refuses an excluded field, an unreviewed field "
+                "and a request that states no selection. Minimisation at acquisition, "
+                "never a filter applied to what came back."
+            ),
+            check=_check_field_minimisation,
         ),
         ComplianceCapability(
             name="fred-copyright-series-filter",
