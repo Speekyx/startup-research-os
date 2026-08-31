@@ -46,6 +46,9 @@
 | `signal-to-evidence-semantics-v1.md` | How a Signal becomes Evidence FOR a particular Claim, and why news frequency is not weak demand evidence |
 | `deterministic-observed-claim-interpreter-v1.md` | The first interpreter: three templates, a source named in every sentence, and nothing else asserted |
 | `claim-interpretation-runtime-v1.md` | How interpretation runs and persists, where a REFUSED interpretation goes, and what the run remembers considering |
+| `evidence-reliability-gap-analysis-v1.md` | The Mission 1.14 audit: twelve gaps between per-row reliability semantics and anything a reviewer could actually write |
+| `evidence-reliability-contract-v1.md` | What reliability means, who may establish one, and why a scope nobody assessed produces no number |
+| `evidence-reliability-review-guide-v1.md` | How a human writes a reliability assessment, and when to write none |
 | `acquisition-rights-basis-gap-analysis-v1.md` | Why a resource records what KIND of thing authorises it, not only which licence (H-28, ADR-018) |
 | `wikimedia-pageviews-compliance-v1.md` | What Wikimedia Pageviews would need, and the one question blocking it |
 | `source-condition-gap-analysis-v1.md` | The nine Mission 1.3 conditions inventoried and classified, and the obligations deliberately left out of code |

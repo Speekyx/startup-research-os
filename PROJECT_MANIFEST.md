@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.21
+Version: 1.22
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-08-31 (Sprint 1 / Mission 1.13.1)
+Last amended: 2026-08-31 (Sprint 1 / Mission 1.14)
 
 ---
 
@@ -13,6 +13,25 @@ Last amended: 2026-08-31 (Sprint 1 / Mission 1.13.1)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.22 — 2026-08-31 (Sprint 1 / Mission 1.14)
+
+Authorized by the Mission 1.14 brief §2 (define what reliability means), §5-§6
+(find the smallest valid reusable scope), §31-§32 (gap analysis then contract),
+§48 (documentation) and §50 (stop after the report).
+
+| Change | Section | Authority |
+|--------|---------|-----------|
+| **Reliability is assessed per MEASUREMENT x PURPOSE, never per source** | Engineering Principles | Mission 1.14 §3, §5, [ADR-026](docs/architecture/adr/ADR-026-reliability-assessment-scope-and-binding.md). A five-part scope — source, resource, record kind, claim type, proposition kind — matched in full or not at all. `world-bank` alone matches nothing, so the framework's own example resolves with no special case: a population record used for a demand proposition has a different proposition kind and matches nothing. **The purpose-relativity is structural, not documented** |
+| **The purpose vocabulary already existed** | Product Shape | Mission 1.14 §5. `proposition_kind` is the `proposition_facts` discriminator Mission 1.13.1 added so two proposition shapes could not collide in a hash. It names what a claim asserts IN KIND, which is exactly what "purpose" means in "reliability is purpose-relative". **Seven Evidence rows collapse to three scopes**, and stay three however many observations arrive — the ratio that justifies the design |
+| **Compliance is not reliability, enforced rather than stated** | Engineering Principles | Mission 1.14 §4. An APPROVED source does not produce better evidence and a RESTRICTED one does not produce worse. A separate `epistemic` schema with no policy column, and an AST test over string literals that excludes docstrings so the paragraph explaining the rule cannot fail it |
+| **A value rests on retrieved first-party documents, and states what bounds it** | Engineering Principles | Mission 1.14 §7, §24. "The publisher is reputable" is a sentence, not a basis: `REVIEWER_DOCUMENTED_JUDGEMENT` is permitted alongside documents and refused alone, by a deferred trigger. `stated_limitation` is required — a reliability with no stated failure mode is a number nobody can argue with. Full documents are never stored, the same 1000-character discipline `registry.source_policy_evidence` uses |
+| **There is no MODEL_GUESSED origin, and closure is the point** | Forbidden During Foundation | Mission 1.14 §8, §43. Three origins: HUMAN_REVIEW, DOCUMENTED_METHOD, CALIBRATED_EMPIRICALLY. A model may help a reviewer read documentation and may not be the epistemic source, and a vocabulary with nowhere to record a guess is what makes that enforceable rather than merely stated |
+| **Unknown is the absence of a row, never a value** | Engineering Principles | Mission 1.14 §10. `0.5 because unknown`, `0.8 because reputable`, `1.0 because official` and `0.0 because we do not know` are all measurements, and `q_i = min(components)` must never see one nobody made. **The system stays capable of producing no score**, which is what makes a score mean something when one appears |
+| **Zero, one and many are all defined, and many is refused** | Engineering Principles | Mission 1.14 §18. Never the closest — "closest" needs a distance nobody defined. Never the maximum — optimism with a mechanism. Never the mean — averaging two competing reviewed judgements produces a third nobody made. A partial unique index makes the many-case unreachable and the resolver refuses anyway, because a guard that trusts another guard is one schema change away from trusting nothing |
+| **Resolved late, bound explicitly** | Product Shape | Mission 1.14 §19, §20, ADR-026 Decision 2. Copying the value forward loses where it came from; binding to "latest" rewrites yesterday's score silently. A result records which assessment id and version produced each number, so re-running against current assessments is identifiable AS a recomputation. Does not resolve D-08; refuses to make it harder |
+| **Outcome B: no assessment was written, and all seven rows stay NON_SCORABLE** | Blocked work | Mission 1.14 §23, §43. §8 says a model may not be the epistemic source of an assessment and §43 says reliability cannot come from "Claude thinks World Bank is reliable" — so writing one here would have meant fabricating a reviewer, which is worse than producing no score. The report names the three scopes a reviewer would need and what documents each requires. **Aggregation returns UNAVAILABLE, uncertainty mass 1.0, and that is success** |
+| **D-03 lost one blocker and kept four** | Blocked work | Mission 1.14 §21. Resolved: the definition of reliability and who may set one. Still open: no reviewed value for any scope in use, no CALIBRATED profile, no authorised half-life, and level thresholds that are structural minimums rather than fitted values. Reliability governance is not calibration and does not become it by being careful |
 
 ## 1.21 — 2026-08-31 (Sprint 1 / Mission 1.13.1)
 
@@ -619,6 +638,19 @@ willingness to pay, no pricing power, no competition gap, no distribution
 feasibility, no retention, no revenue potential. They are factual, source-level
 claims about two publications, and every Evidence row behind them is
 `NON_SCORABLE` today.
+
+**Reliability is governed since 1.14 and no value has been reviewed.** The
+contract, the scope, the basis requirement, the versioning and the fail-closed
+resolver exist; `epistemic.reliability_assessments` holds zero rows. Writing one
+would have meant a model standing in for a reviewer, which the mission forbids
+and which is worse than producing no score. A reviewer needs three assessments —
+one per scope in use — and `evidence-reliability-review-guide-v1.md` §9 says what
+documents each would require.
+
+**Reliability does not solve missing evidence families.** Even a reviewed value
+for all seven rows decides whether the evidence the system HAS can be scored. It
+says nothing about whether that evidence bears on anything anybody wants to
+know.
 
 **Everything else on the list is unchanged.** NLP pipelines are blocked by D-12,
 scoring algorithms by the absence of a `CALIBRATED` profile, and authentication

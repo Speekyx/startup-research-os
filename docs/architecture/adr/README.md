@@ -32,6 +32,7 @@ eventually be documented through ADRs."
 | [ADR-023](ADR-023-source-bucket-adjacency.md) | A gap is never bridged, and an absent term is not a zero | Accepted — Mission 1.12.1. Extends ADR-022 |
 | [ADR-024](ADR-024-claim-precedes-opportunity.md) | A Claim may precede its Opportunity, and a machine may not store an unsupported one | Accepted — Mission 1.13. Amends Ontology V2.1 §17.3 |
 | [ADR-025](ADR-025-claim-interpretation-run-and-considered-inputs.md) | What an interpretation considered is part of the record | Accepted — Mission 1.13.1. **Resolves GAP-5**, extends ADR-021 and ADR-024 |
+| [ADR-026](ADR-026-reliability-assessment-scope-and-binding.md) | Reliability is assessed per measurement-and-purpose, and bound explicitly | Accepted — Mission 1.14. Extends ADR-014 and ADR-025 |
 
 > **Numbering note.** The production-deployment ADR has **no reserved number any
 > more.** It moved from 012 to 013 to 014 to 015, once per mission, because each

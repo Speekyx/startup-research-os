@@ -8,7 +8,7 @@ Regenerate      : python packages/contracts/tools/generate.py
 Editing this file by hand will be overwritten and will fail the contract
 check in CI. Change the source of truth instead.
 
-contract_version: 1.10.0
+contract_version: 1.11.0
 ontology_version: 2
 """
 
@@ -17,7 +17,7 @@ from __future__ import annotations
 from enum import Enum
 from typing import Final
 
-CONTRACT_VERSION: Final[str] = "1.10.0"
+CONTRACT_VERSION: Final[str] = "1.11.0"
 ONTOLOGY_VERSION: Final[str] = "2"
 RESEARCH_CONTEXT_SCHEMA_VERSION: Final[str] = "1.0.0"
 
@@ -667,6 +667,46 @@ class ClaimInterpretationInputRole(str, Enum):
     CITED = "CITED"  # A Claim was emitted from this Signal and an Evidence row cites it. The run row names the claim
     EXCLUDED = "EXCLUDED"  # The interpreter did NOT attempt this Signal -- no template for its type, or its lineage could not be read. Considered and passed over, with the reason recorded
     REFUSED = "REFUSED"  # The interpreter attempted this Signal and the model refused the resulting draft. Attempted-and-rejected is a different fact from never-attempted, and collapsing them loses which of the two happened
+
+
+class ReliabilityAssessmentOrigin(str, Enum):
+    """What established a reliability value. Closed, and closed is the point: there is deliberately no MODEL_GUESSED member. A model may help a reviewer read documentation; it may not be the epistemic source of the judgement, and a vocabulary with nowhere to record a guess is what makes that enforceable rather than merely stated (llm-reasoning-rules.md §7).
+
+    See evidence-reliability-contract-v1.md §5; Mission 1.14 §8.
+    """
+
+    HUMAN_REVIEW = "HUMAN_REVIEW"  # A named reviewer's judgement, resting on retrieved first-party documents recorded as basis rows. The reviewer is accountable and identified
+    DOCUMENTED_METHOD = "DOCUMENTED_METHOD"  # The value follows from a published methodology statement that specifies it -- a documented sampling error, a stated completeness bound. The document supplies the number; the reviewer only locates it
+    CALIBRATED_EMPIRICALLY = "CALIBRATED_EMPIRICALLY"  # Fitted against labelled outcome data. Requires a calibration dataset reference. NOT what a human review produces, however careful -- see evidence-aggregation-framework-v1.md §14
+
+
+class ReliabilityBasisType(str, Enum):
+    """What KIND of document or fact a reliability judgement rests on. Every assessment carries at least one basis row naming a retrieved document; 'the publisher is reputable' is not a member and cannot be recorded, because reputation is not a property of a measurement.
+
+    See evidence-reliability-contract-v1.md §6; Mission 1.14 §7.
+    """
+
+    SOURCE_DOCUMENTATION = "SOURCE_DOCUMENTATION"  # The publisher's own description of what the resource contains and how to read it
+    DATASET_METHODOLOGY = "DATASET_METHODOLOGY"  # How the dataset is assembled, revised and versioned -- including revision policy, which is what makes a snapshot claim age
+    MEASUREMENT_METHODOLOGY = "MEASUREMENT_METHODOLOGY"  # How the quantity itself is measured, sampled or estimated
+    KNOWN_LIMITATION = "KNOWN_LIMITATION"  # A limitation the publisher states, or one established by first-party evidence. A limitation nobody documented is a suspicion
+    INDEPENDENT_VALIDATION = "INDEPENDENT_VALIDATION"  # A comparison against a separate measurement of the same quantity, by someone other than the publisher
+    OFFICIAL_STATISTICAL_METHOD = "OFFICIAL_STATISTICAL_METHOD"  # A published statistical standard the resource states it follows
+    CORPUS_CONSTRUCTION_METHOD = "CORPUS_CONSTRUCTION_METHOD"  # For text-derived measurements: how the corpus was selected, crawled, filtered and de-duplicated. What a frequency is a frequency OVER
+    REVIEWER_DOCUMENTED_JUDGEMENT = "REVIEWER_DOCUMENTED_JUDGEMENT"  # The reviewer's own reasoning ABOUT the documents above. Permitted only alongside at least one document-backed basis; never on its own, or it is an opinion with a citation field
+
+
+class ReliabilityResolutionOutcome(str, Enum):
+    """What happened when an Evidence row asked for a reliability value. Recorded on every row an aggregation considered, so a score's coefficients can be reconstructed and a non-scorable row can say precisely why (Mission 1.14 §20).
+
+    See evidence-reliability-contract-v1.md §8; Mission 1.14 §18, ADR-026.
+    """
+
+    DIRECTLY_SUPPLIED = "DIRECTLY_SUPPLIED"  # The Evidence row carried its own reliability. A statement about THAT record is more specific than a class-level assessment, so no assessment is consulted and the two can never disagree
+    RESOLVED = "RESOLVED"  # Exactly one current assessment matched the row's full scope. Its id, version, origin and reviewed_at are recorded with the value
+    NO_APPLICABLE_ASSESSMENT = "NO_APPLICABLE_ASSESSMENT"  # No current assessment covers this measurement-and-purpose. Reliability stays NULL and the row is NON_SCORABLE. This is the ordinary state, not an error
+    AMBIGUOUS_ASSESSMENTS = "AMBIGUOUS_ASSESSMENTS"  # More than one current assessment matched. REFUSED: never the closest, never the maximum, never the mean -- averaging two competing reviewed judgements produces a third nobody made
+    SUPERSEDED_ONLY = "SUPERSEDED_ONLY"  # Assessments exist for this scope and every one is superseded. Distinct from NO_APPLICABLE_ASSESSMENT: somebody reviewed this and withdrew it, which is a different fact from nobody having looked
 
 
 # --- Numeric bounds --------------------------------------------------------

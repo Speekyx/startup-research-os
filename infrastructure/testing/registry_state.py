@@ -75,7 +75,20 @@ __all__ = [
 # The schemas the application owns. Same list as the tenant check, so a global
 # table added to any of them is watched from the moment it exists rather than
 # from the moment somebody remembers this file.
-GLOBAL_SCHEMAS = ("core", "registry", "research", "acquisition", "nlp", "scoring")
+GLOBAL_SCHEMAS = (
+    "core",
+    "registry",
+    "research",
+    "acquisition",
+    "nlp",
+    "scoring",
+    # Added in Mission 1.14. `epistemic` holds reviewed reliability
+    # assessments, which are global and administered through a review path --
+    # never by a service and never by a suite. An assessment appearing during a
+    # test run is exactly the failure `testing-strategy.md` §32 describes: a
+    # fixture becoming a fact.
+    "epistemic",
+)
 
 # Tables whose rows accumulate as a matter of design. NAMED rather than derived:
 # append-only-ness is a property of what writes the table, and a rule inferred

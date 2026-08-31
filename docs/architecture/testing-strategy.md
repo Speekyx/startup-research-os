@@ -1363,3 +1363,65 @@ the loop never terminated. It produced no output and looked like a slow test.
 
 An ascent that can fail needs a stop condition, and "resolve the repo root" is
 better answered by asserting the working directory is one.
+
+## 32. A test that asserts a value can become the review it was testing (Mission 1.14)
+
+Mission 1.14 built the machinery for reviewed reliability and deliberately
+established **no assessment**: a reviewer is a person, and the mission forbids a
+model being the epistemic source of one.
+
+The suites still need assessments to exercise. Every one of them carries a
+number, and every number is a fiction — `0.5`, `0.6`, `0.7` — chosen because the
+resolver needs something to return.
+
+The hazard is specific and slow: a number in a test fixture looks exactly like a
+number somebody reviewed. Six months later, `reliability=0.6` beside
+`source_id="world-bank"` in a test file is indistinguishable from a finding,
+and the natural next step is to lift it into a seed.
+
+### What the suites do about it
+
+- **The fixture says so, at the point of the number.** `"A FIXTURE VALUE. Not a
+  judgement about World Bank."` — on the line, not in the module docstring
+  somebody skims past.
+- **The live probes use a resource that does not exist.** `indicator/PROBE.ONLY`
+  and `probe_only_proposition` cannot collide with a real scope, so a probe row
+  that escaped its rollback still could not be resolved against real evidence.
+  A probe using the real scope would be one committed transaction away from
+  being a review.
+- **A test asserts the production count is zero.** `test_no_assessment_exists_in_production`
+  fails the moment an assessment appears without a mission behind it. It is the
+  cheapest possible guard against a fixture becoming a fact.
+
+### The general form
+
+**When a test must supply a value that the system treats as authoritative, the
+test has to say it is not.** The same applies to a calibration constant, a
+half-life, a threshold — anything a reviewer would otherwise have to establish.
+The failure is not that the test is wrong; it is that the test is *right* and
+gets read as evidence.
+
+## 33. Narrowing a guard's subject needs an exhaustiveness check (restated, Mission 1.14)
+
+§19 covers what to do when a governance change moves a test's subject, and
+Mission 1.13.1 applied it to `validate_signals.py`, which was scanning a package
+that had grown a second layer: the subject was named rather than the rule
+relaxed, with an exhaustiveness check so the narrowing could not grow by adding
+files. Mission 1.14 hit the mirror image and did **not** need to narrow
+anything, which is worth recording as the case that went right.
+
+`validate_evidence_aggregation.py` asserts that **no registered source id appears
+anywhere in `packages/evidence-aggregation/`** — the guard that keeps source
+identity out of the mathematics. A reliability resolver necessarily matches on
+source and resource.
+
+The tempting move was to relax the guard for one new file. Instead the resolver
+went into its own package, `packages/evidence-reliability`, on the same side of
+the seam as the existing row adapter. The aggregation guard is untouched, and
+the resolver got its **own** no-source-id test — asserting that no *literal*
+source id appears in it either, since it matches data against data.
+
+The rule this suggests: **when a guard blocks correct new code, first ask
+whether the code is on the right side of the boundary the guard defends.**
+Narrowing the guard is the second option, not the first, and it costs an
+exhaustiveness check to stay honest. Moving the code costs neither.

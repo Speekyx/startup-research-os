@@ -25,6 +25,7 @@ duplicating it would cause drift, not because it seemed reusable.
 | `evidence-aggregation/` | **implemented** | The aggregation reference implementation (ADR-014) |
 | `signal-model/` | **implemented** | What a Signal is, and what it may not assert (ADR-020) |
 | `claim-model/` | **implemented** | The interpretation boundary: how a Signal may become a Claim, and may not (ADR-024) |
+| `evidence-reliability/` | **implemented** | Reviewed reliability: the measurement-and-purpose scope and the fail-closed resolver. Names no source (ADR-026) |
 | `typescript-config/` | scaffolded | Shared `tsconfig` bases |
 | `ui/` | planned | shadcn/ui-based component library |
 | `observability/` | planned | Logging, tracing and correlation conventions |

@@ -71,9 +71,33 @@ Level 5 is the strongest form of validation but may not be available during earl
 
 ## 3. Source reliability
 
+> **Amended in Mission 1.14.** The list below is retained as a historical record
+> of how this framework first described reliability. **It is not usable as
+> stored values, and nothing may read it as a table.**
+>
+> Read literally it is a source-type coefficient table — *first-party structured
+> data: high* — and a coefficient is exactly what
+> [`evidence-aggregation-framework-v1.md`](evidence-aggregation-framework-v1.md)
+> §3 and [`../data/evidence-reliability-contract-v1.md`](../data/evidence-reliability-contract-v1.md)
+> forbid. A platform is not a reliability: the same platform carries a
+> maintainer's release note and an anonymous rumour, and one number cannot be
+> right for both.
+>
+> **What supersedes it.** Reliability is a reviewed judgement about a
+> **measurement** (source, resource, record kind) for a **purpose** (claim type,
+> proposition kind), resting on retrieved first-party documentation, versioned
+> and superseded rather than updated. A scope nobody has assessed produces no
+> number and the record stays `NON_SCORABLE`. See
+> [`../data/evidence-reliability-contract-v1.md`](../data/evidence-reliability-contract-v1.md)
+> and [ADR-026](../architecture/adr/ADR-026-reliability-assessment-scope-and-binding.md).
+>
+> The one sentence below that survives unchanged is the first:
+> **reliability is context-dependent.** Mission 1.14 makes "context" a thing the
+> system can name rather than a caveat.
+
 Source reliability is context-dependent.
 
-Initial heuristic examples:
+Initial heuristic examples (**historical, not usable as values**):
 
 - Direct observed transaction: very high
 - First-party structured data: high
@@ -83,7 +107,9 @@ Initial heuristic examples:
 - Social comments: lower and highly context-dependent
 - LLM-generated reasoning: not market evidence
 
-These are starting priors, not immutable constants.
+These were starting priors and were never immutable constants. Since Mission
+1.14 they are not priors either: an unreviewed scope has no value at all, and a
+prior would be a placeholder wearing a rationale.
 
 ## 4. Evidence independence
 
@@ -208,3 +234,10 @@ Contradictory evidence should be preserved, not discarded simply because it hurt
 ## 12. Versioning
 
 Every important evidence-derived result should be traceable to the evidence snapshot and framework version used to calculate it.
+
+**Since Mission 1.14 this extends to reliability.** A result records, per
+contributing record, which reliability assessment produced its value — id,
+version, origin, reviewer and review time — so a score's coefficients can be
+reconstructed rather than trusted. Assessments are superseded and never updated,
+so a result that used version N stays explicable after version N+1 lands
+([ADR-026](../architecture/adr/ADR-026-reliability-assessment-scope-and-binding.md)).

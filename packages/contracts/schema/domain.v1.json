@@ -1,6 +1,6 @@
 {
   "$comment": "AUTHORITATIVE CONTRACT SOURCE OF TRUTH. Hand-edited. Everything under packages/contracts/generated/ is derived from this file by tools/generate.py. See ADR-009.",
-  "contract_version": "1.10.0",
+  "contract_version": "1.11.0",
   "ontology_version": "2",
   "scoring_framework_version": "1.1",
   "evidence_framework_version": "1",
@@ -1300,6 +1300,91 @@
         {
           "value": "REFUSED",
           "description": "The interpreter attempted this Signal and the model refused the resulting draft. Attempted-and-rejected is a different fact from never-attempted, and collapsing them loses which of the two happened"
+        }
+      ]
+    },
+    {
+      "name": "ReliabilityAssessmentOrigin",
+      "spec": "evidence-reliability-contract-v1.md §5; Mission 1.14 §8",
+      "description": "What established a reliability value. Closed, and closed is the point: there is deliberately no MODEL_GUESSED member. A model may help a reviewer read documentation; it may not be the epistemic source of the judgement, and a vocabulary with nowhere to record a guess is what makes that enforceable rather than merely stated (llm-reasoning-rules.md §7).",
+      "values": [
+        {
+          "value": "HUMAN_REVIEW",
+          "description": "A named reviewer's judgement, resting on retrieved first-party documents recorded as basis rows. The reviewer is accountable and identified"
+        },
+        {
+          "value": "DOCUMENTED_METHOD",
+          "description": "The value follows from a published methodology statement that specifies it -- a documented sampling error, a stated completeness bound. The document supplies the number; the reviewer only locates it"
+        },
+        {
+          "value": "CALIBRATED_EMPIRICALLY",
+          "description": "Fitted against labelled outcome data. Requires a calibration dataset reference. NOT what a human review produces, however careful -- see evidence-aggregation-framework-v1.md §14"
+        }
+      ]
+    },
+    {
+      "name": "ReliabilityBasisType",
+      "spec": "evidence-reliability-contract-v1.md §6; Mission 1.14 §7",
+      "description": "What KIND of document or fact a reliability judgement rests on. Every assessment carries at least one basis row naming a retrieved document; 'the publisher is reputable' is not a member and cannot be recorded, because reputation is not a property of a measurement.",
+      "values": [
+        {
+          "value": "SOURCE_DOCUMENTATION",
+          "description": "The publisher's own description of what the resource contains and how to read it"
+        },
+        {
+          "value": "DATASET_METHODOLOGY",
+          "description": "How the dataset is assembled, revised and versioned -- including revision policy, which is what makes a snapshot claim age"
+        },
+        {
+          "value": "MEASUREMENT_METHODOLOGY",
+          "description": "How the quantity itself is measured, sampled or estimated"
+        },
+        {
+          "value": "KNOWN_LIMITATION",
+          "description": "A limitation the publisher states, or one established by first-party evidence. A limitation nobody documented is a suspicion"
+        },
+        {
+          "value": "INDEPENDENT_VALIDATION",
+          "description": "A comparison against a separate measurement of the same quantity, by someone other than the publisher"
+        },
+        {
+          "value": "OFFICIAL_STATISTICAL_METHOD",
+          "description": "A published statistical standard the resource states it follows"
+        },
+        {
+          "value": "CORPUS_CONSTRUCTION_METHOD",
+          "description": "For text-derived measurements: how the corpus was selected, crawled, filtered and de-duplicated. What a frequency is a frequency OVER"
+        },
+        {
+          "value": "REVIEWER_DOCUMENTED_JUDGEMENT",
+          "description": "The reviewer's own reasoning ABOUT the documents above. Permitted only alongside at least one document-backed basis; never on its own, or it is an opinion with a citation field"
+        }
+      ]
+    },
+    {
+      "name": "ReliabilityResolutionOutcome",
+      "spec": "evidence-reliability-contract-v1.md §8; Mission 1.14 §18, ADR-026",
+      "description": "What happened when an Evidence row asked for a reliability value. Recorded on every row an aggregation considered, so a score's coefficients can be reconstructed and a non-scorable row can say precisely why (Mission 1.14 §20).",
+      "values": [
+        {
+          "value": "DIRECTLY_SUPPLIED",
+          "description": "The Evidence row carried its own reliability. A statement about THAT record is more specific than a class-level assessment, so no assessment is consulted and the two can never disagree"
+        },
+        {
+          "value": "RESOLVED",
+          "description": "Exactly one current assessment matched the row's full scope. Its id, version, origin and reviewed_at are recorded with the value"
+        },
+        {
+          "value": "NO_APPLICABLE_ASSESSMENT",
+          "description": "No current assessment covers this measurement-and-purpose. Reliability stays NULL and the row is NON_SCORABLE. This is the ordinary state, not an error"
+        },
+        {
+          "value": "AMBIGUOUS_ASSESSMENTS",
+          "description": "More than one current assessment matched. REFUSED: never the closest, never the maximum, never the mean -- averaging two competing reviewed judgements produces a third nobody made"
+        },
+        {
+          "value": "SUPERSEDED_ONLY",
+          "description": "Assessments exist for this scope and every one is superseded. Distinct from NO_APPLICABLE_ASSESSMENT: somebody reviewed this and withdrew it, which is a different fact from nobody having looked"
         }
       ]
     }

@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.22
-Last amended: 2026-08-31 (Sprint 1 / Mission 1.13.1)
+Version: 1.23
+Last amended: 2026-08-31 (Sprint 1 / Mission 1.14)
 
 ## Boot Sequence
 
@@ -27,8 +27,9 @@ Before performing any task, execute this reading order.
 18. docs/data/signal-derivation-runtime-v1.md
 19. docs/data/claim-evidence-interpretation-contract-v1.md
 20. docs/data/claim-interpretation-runtime-v1.md
-21. Relevant ADRs
-22. Task-specific specifications
+21. docs/data/evidence-reliability-contract-v1.md
+22. Relevant ADRs
+23. Task-specific specifications
 
 These documents are the authoritative source of truth.
 
@@ -48,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.23 | 2026-08-31 | **Reviewed reliability governed, and none reviewed.** A reliability applies to a MEASUREMENT x PURPOSE scope, rests on retrieved first-party documents, is attributed to a person and is superseded rather than updated (ADR-026). Zero assessments exist, so all seven Evidence rows stay NON_SCORABLE and aggregation stays UNAVAILABLE -- **outcome B, and it is the design working**. D-03 loses one blocker and keeps four |
 | 1.22 | 2026-08-31 | The **first complete Signal -> Claim -> Evidence pipeline**: `observed-signal-restatement@1.0.0` produced **7 real OBSERVED Claims, 7 revisions and 7 Evidence rows** from the seven real Signals. Deterministic, source-attributed, no LLM. GAP-5 resolved; a refused interpretation gets a run record, never a Claim (ADR-025). Reliability stays NULL and every record is NON_SCORABLE, honestly |
 | 1.21 | 2026-08-31 | The **interpretation boundary** defined before anything crosses it: a Claim may precede its Opportunity, and a machine may not store an assertion nothing supports (ADR-024, Ontology V2.2). Contract and model only -- **0 Claims, 0 Evidence** |
 | 1.20 | 2026-08-30 | First **source-relative temporal** extractor: `lexical-frequency-change@1.0.0`, two real signals and two real gap refusals. A gap is never bridged and an absent term is not a zero (ADR-023). H-29 untouched: `ORDERED_PERIODS`, no bounds, no `observed_at` |
@@ -750,11 +752,93 @@ negotiable:
 Source POLICY status (Mission 1.0) is not epistemic reliability. An `APPROVED`
 source does not produce better evidence.
 
+### Evidence reliability — reviewed, never inferred
+
+Since Mission 1.14 reliability has a governance contract
+(`evidence-reliability-contract-v1.md`, `evidence-reliability-review-guide-v1.md`,
+ADR-026). **The machinery exists and no assessment does**: zero rows in
+`epistemic.reliability_assessments`, so all seven Evidence rows remain
+`NON_SCORABLE` with `MISSING_RELIABILITY`.
+
+- **Reliability answers one question**: how dependable is this kind of
+  measurement, for this kind of proposition. Not how permitted the source is,
+  not how well-known, not how carefully we read it, not how much it bears on the
+  claim.
+- **The scope is measurement × purpose**, matched in full or not at all:
+  `source_id`, `resource_id`, `record_kind_id` name the measurement;
+  `claim_type` and `proposition_kind` name the purpose. `world-bank` alone
+  matches nothing, so the framework's own example resolves with no special case
+  — a population record used for a demand proposition has a different kind and
+  matches nothing at all. `proposition_kind` is the `proposition_facts`
+  discriminator Mission 1.13.1 already writes.
+- **Seven Evidence rows collapse to three scopes**, and stay three however many
+  observations arrive. That ratio is the design's whole justification: a scope
+  narrow enough to stay purpose-relative and broad enough for a person to
+  review.
+- **Compliance is not reliability, in both directions.** An `APPROVED` source
+  does not produce better evidence and a `RESTRICTED` one does not produce
+  worse. Enforced by a separate schema with no policy column, and by an AST test
+  that excludes docstrings so the paragraph explaining the rule cannot fail it.
+- **A value rests on retrieved first-party documents.** `"The publisher is
+  reputable"` is a sentence, not a basis; `REVIEWER_DOCUMENTED_JUDGEMENT` is
+  permitted alongside documents and refused alone, by a deferred trigger. Full
+  documents are never stored — a reference, a section, a short finding, an
+  excerpt capped at 1000 characters, the same discipline
+  `registry.source_policy_evidence` uses.
+- **A value states what bounds it.** `stated_limitation` is required: a
+  reliability with no stated failure mode is a number nobody can argue with.
+- **There is no `MODEL_GUESSED` origin, and closure is the point.** A model may
+  help a reviewer read documentation and may not be the epistemic source. The
+  three origins are `HUMAN_REVIEW`, `DOCUMENTED_METHOD`, `CALIBRATED_EMPIRICALLY`.
+- **Human review is not calibration.** A `HUMAN_REVIEW` assessment may not name
+  a calibration dataset and a `CALIBRATED_EMPIRICALLY` one must — refused both
+  ways. `REFERENCE_PROFILE_V1` stays `UNCALIBRATED` however many assessments
+  exist.
+- **Unknown is the absence of a row, not a value.** `0.5 because unknown`,
+  `0.8 because reputable`, `1.0 because official`, `0.9 because government` and
+  `0.0 because we do not know` are all measurements, and `q_i = min(components)`
+  must never see one nobody made. **The system stays capable of producing no
+  score**, which is what makes a score mean something when one appears.
+- **Zero, one, many are all defined.** Zero → `NO_APPLICABLE_ASSESSMENT`; all
+  superseded → `SUPERSEDED_ONLY`, deliberately distinct because *reviewed and
+  withdrawn* is a different fact from *nobody looked*; one → `RESOLVED`; more
+  than one → **refused**. Never the closest, never the maximum, never the mean.
+- **Resolved late, bound explicitly** (ADR-026 Decision 2). The result records
+  which assessment id and version produced each number, so a score's
+  coefficients can be reconstructed. A value already on the Evidence row wins
+  and consults nothing — one answer per question, by construction.
+- **No factor implies another.** `resolve_reliability` takes scope, candidates
+  and supplied, and nothing else. Relevance, directness, extraction confidence
+  and claim interpretation confidence are all `1.0` on the real rows and none of
+  them is an argument.
+- **Assessments are GLOBAL.** A statement about a published dataset's
+  measurement contract is not a statement about a tenant, and per-workspace
+  review would give one question several answers. No `workspace_id`, no RLS
+  policy, `SELECT` only for the runtime role — **no tenant data, so no leakage
+  path**, which is stronger than a correct policy.
+- **The resolver lives outside `packages/evidence-aggregation`**, whose guard
+  forbids naming a source at all. The guard was left untouched rather than
+  narrowed, and the resolver carries its own no-source-id test.
+
+**Reliability does not solve missing evidence families.** Even a reviewed value
+for all seven rows would establish nothing about pain, desire, willingness to
+pay, pricing power, competition, distribution, retention or revenue potential.
+It decides whether the evidence the system HAS can be scored, not whether it is
+evidence of the thing anybody wants to know.
+
 ### Blocked work
 
 **`services/scoring` must not be implemented for production research.** D-03 is
 resolved at the *framework* level only: the equations exist, their parameters
-were never fitted, and no `CALIBRATED` profile exists. Framework Defined and
+were never fitted, and no `CALIBRATED` profile exists.
+
+**Mission 1.14 closed one of D-03's blockers and left four standing.** What is
+resolved is the *definition* of reliability and who may establish one. What
+remains open: no reviewed value exists for any scope in use, no `CALIBRATED`
+profile exists, no authorised half-life exists for temporally sensitive claims,
+and the level thresholds are structural minimums rather than fitted values.
+Reliability governance is not calibration and does not become it by being
+careful. Framework Defined and
 Profile Calibrated are separate gates (ADR-014, framework §14). An
 `UNCALIBRATED` profile may be run only for synthetic or experimental work, and
 only when explicitly labelled as such.
