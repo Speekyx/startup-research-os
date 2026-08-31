@@ -2079,3 +2079,52 @@ assert offenders == []
 
 **Exempting one named function is what makes the fence survivable.** A fence
 with no legitimate way through gets deleted the first time somebody needs one.
+
+---
+
+## 49. Deployment state is not repository state, and a test must not confuse them (Mission 1.15.6.1)
+
+A `HUMAN_CONFIRMATION` is satisfied by a row in the operator's database. The
+catalog travels through git; **that row does not**. `source-registry-v1.md` §3
+and Mission 1.3 §24 already say why — satisfaction depends on what is deployed,
+and a catalog that could assert its own conditions satisfied would make
+`APPROVED_WITH_CONDITIONS` meaningless.
+
+The first version of `test_ted_operator_acceptance.py` asserted the recorded
+acceptance **unconditionally**. It passed on the operator's machine and went red
+in CI, which starts from an empty database and has no operator — where TED is
+correctly ineligible.
+
+**This is the same mistake as quoting one database's research counts as a
+property of the repository**, which Mission 1.15.6 had flagged two missions
+earlier. It is easy to make twice because local state is the state you can see.
+
+The shape that works:
+
+- gate the deployment-dependent assertions on whether the row is present;
+- and assert, **unconditionally**, the invariant that holds either way —
+  *if* an acceptance exists it came from a person and carries the right scope,
+  and *if* it does not, the gate refuses for exactly that condition.
+
+The second half is what stops the gate from becoming a test that skips itself
+into vacuity.
+
+### Ask at test time, not at import time
+
+The first attempt used a module-level `pytest.mark.skipif(not _recorded(), …)`.
+It skipped **everything**, on the machine where the row exists.
+
+A `skipif` argument is evaluated while the module is being imported: before the
+session has started, before fixtures, and — because the helper caught `Exception`
+and returned `False` — any hiccup was indistinguishable from a real absence. The
+file then skipped silently **while looking like it had run**, which is worse than
+failing.
+
+A fixture calling `pytest.skip()` asks at test time, and narrowing the `except`
+to the one error that genuinely means *absent* (`UndefinedTable`) makes a failure
+to ask visible instead of silently negative.
+
+**A guard that cannot tell "no" from "I could not check" is the same defect as
+`UNKNOWN` being promoted to `UNSATISFIED`** — the distinction this repository
+enforces everywhere else, arriving through the test harness.
+

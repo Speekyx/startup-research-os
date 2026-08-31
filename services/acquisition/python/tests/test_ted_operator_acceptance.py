@@ -42,11 +42,76 @@ from sros_contracts import (
     SourceApprovalState,
 )
 
-from .conftest import DATABASE_URL, LEGACY_PROFILE, LOCAL_PROFILE, REPO_ROOT, needs_postgres
+from .conftest import (
+    DATABASE_URL,
+    LEGACY_PROFILE,
+    LOCAL_PROFILE,
+    REPO_ROOT,
+    _postgres_available,
+    needs_postgres,
+)
 
 
 class _RollbackError(Exception):
     """Unwinds a transaction that must not commit. Named so the `except` reads."""
+
+
+def _acceptance_recorded() -> bool:
+    """Whether THIS deployment holds the operator's acceptance.
+
+    **A human confirmation is deployment state, not repository state**, and the
+    distinction is the reason this function exists rather than a constant.
+    `source-registry-v1.md` §3 and Mission 1.3 §24 already say it: satisfaction
+    depends on what is deployed, and a catalog that could assert its own
+    conditions satisfied would make `APPROVED_WITH_CONDITIONS` meaningless.
+
+    So the row travels with the database, not with git. On the operator's
+    machine it exists; in CI, which starts from an empty database and has no
+    operator, it does not — and TED is correctly ineligible there.
+
+    This was learned the hard way: the first version of this file asserted the
+    acceptance unconditionally and went red in CI, which is the same mistake as
+    quoting one database's research counts as a property of the repository.
+    """
+    if not _postgres_available():
+        return False
+    import psycopg
+
+    try:
+        with psycopg.connect(DATABASE_URL, connect_timeout=5) as conn:
+            row = conn.execute(
+                """SELECT count(*)
+                     FROM registry.source_condition_verifications v
+                     JOIN registry.source_review_conditions c ON c.id = v.condition_id
+                     JOIN registry.source_policy_reviews r ON r.id = c.review_id
+                    WHERE v.condition_key = %s
+                      AND v.result = 'SATISFIED'
+                      AND r.assessed_use_profile = %s
+                      AND r.review_version = 2""",
+                (RESIDUAL, LOCAL_PROFILE),
+            ).fetchone()
+        return bool(row and row[0])
+    except psycopg.errors.UndefinedTable:
+        # The registry is not loaded here. Absent, not broken.
+        return False
+
+
+@pytest.fixture
+def needs_recorded_acceptance() -> None:
+    """Skip unless THIS deployment holds the acceptance.
+
+    A fixture rather than a module-level `skipif`, because the latter is
+    evaluated at IMPORT time: the database is asked before the session has
+    started, any hiccup is indistinguishable from a real absence, and the whole
+    file then skips silently while looking like it ran. Asked at test time, the
+    answer is the one that matters and a failure to ask is visible.
+    """
+    if not _acceptance_recorded():
+        pytest.skip(
+            "no operator acceptance is recorded in this deployment. That is the correct "
+            "state for CI and for a fresh clone: a HUMAN_CONFIRMATION is environment "
+            "state and does not travel through git"
+        )
 
 
 RESIDUAL = "ted-database-right-residual-exposure-accepted"
@@ -271,6 +336,7 @@ class TestTheRecordedAcknowledgementIsFaithful:
 
 
 @needs_postgres
+@pytest.mark.usefixtures("needs_recorded_acceptance")
 class TestTheAuthorizationBuilds:
     """§7, §8, §9, §11, §19.
 
@@ -400,6 +466,67 @@ class TestTheAuthorizationBuilds:
             build_authorization(ted, LEGACY_PROFILE, compliance, complete, environ={})
         reasons = " ".join(caught.value.reasons).lower()
         assert "requires_review" in reasons
+
+
+@needs_postgres
+class TestTheAcceptanceIsDeploymentStateEitherWay:
+    """The invariant that is true on **both** machines, and the reason the
+    classes above are gated.
+
+    Whether an acceptance exists depends on the deployment. What must never
+    depend on the deployment is that an acceptance, IF present, came from a
+    person and carries the right scope — and that TED is refused for exactly
+    that condition when it is absent.
+    """
+
+    @staticmethod
+    def _rows():
+        import psycopg
+
+        with psycopg.connect(DATABASE_URL) as conn:
+            return conn.execute(
+                """SELECT v.verifier, v.result, r.assessed_use_profile, r.review_version
+                     FROM registry.source_condition_verifications v
+                     JOIN registry.source_review_conditions c ON c.id = v.condition_id
+                     JOIN registry.source_policy_reviews r ON r.id = c.review_id
+                    WHERE v.condition_key = %s AND v.result = 'SATISFIED'""",
+                (RESIDUAL,),
+            ).fetchall()
+
+    def test_any_acceptance_present_came_from_a_person(self) -> None:
+        """Vacuously true where none is recorded, load-bearing where one is."""
+        for verifier, _, _, _ in self._rows():
+            assert verifier != "human-confirmation", (
+                "the human-confirmation verifier produced SATISFIED; it returns UNKNOWN "
+                "unconditionally and must never write one"
+            )
+            for machine in (
+                "capability:",
+                "access-restriction:",
+                "credential-availability",
+                "compliance-config",
+                "unregistered",
+            ):
+                assert not verifier.startswith(machine), verifier
+
+    def test_any_acceptance_present_is_scoped_to_the_local_review_v2(self) -> None:
+        for _, _, profile, version in self._rows():
+            assert profile == LOCAL_PROFILE
+            assert version == 2
+
+    def test_there_is_never_more_than_one(self) -> None:
+        """§19. One decision, not a history of changes of mind."""
+        assert len(self._rows()) <= 1
+
+    def test_without_it_ted_is_refused_for_exactly_that_condition(self, ted, compliance) -> None:
+        """The other side of the same invariant. Where no acceptance is recorded
+        — CI, a fresh clone — TED must be refused, and refused by name rather
+        than for some incidental reason."""
+        if self._rows():
+            pytest.skip("an acceptance is recorded in this deployment")
+        with pytest.raises(AcquisitionNotAuthorizedError) as caught:
+            build_authorization(ted, LOCAL_PROFILE, compliance, environ={})
+        assert caught.value.reasons == (f"review conditions not satisfied: {RESIDUAL}",)
 
 
 # =================================================== H-36 is unchanged
@@ -622,6 +749,7 @@ class TestNothingWasBuilt:
 
 
 @needs_postgres
+@pytest.mark.usefixtures("needs_recorded_acceptance")
 class TestTheRegistryHoldsExactlyOneAcceptance:
     @staticmethod
     def _count(query: str, *params: object) -> int:

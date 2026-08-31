@@ -470,9 +470,10 @@ counts, not the historical 12 / 12 / 7 / 7 / 7 from another instance.
 | All seven validators | **pass** |
 | Contract generation `--check` · generated documents `--check` | current |
 | `ruff format` / `ruff check` / `mypy` | **pass** |
-| Tests in `test_ted_operator_acceptance.py` | **50** |
+| Tests in `test_ted_operator_acceptance.py` | **54** |
 | First-run assertions | **inverted, none deleted** |
 | Mission 1.15.6 assertion inverted | 1 — *no residual acceptance was written* now asserts that any acceptance came from a **person**, not a verifier |
+| CI caught | the first version of the new tests asserted the recorded acceptance **unconditionally** and went red on a database that correctly has none — recorded as `testing-strategy.md` §49 |
 
 ## C9. Final state
 
