@@ -24,7 +24,7 @@ from typing import Any
 
 from .catalog import SourceCatalog
 from .eligibility import EligibilityResult
-from .models import ASSESSED_ACTIVITIES, SourceRecord
+from .models import ASSESSED_ACTIVITIES, LEGACY_USE_PROFILE, SourceRecord
 
 __all__ = ["LoadReport", "load_catalog_into", "read_eligibility", "read_sources"]
 
@@ -251,16 +251,40 @@ def load_catalog_into(conn: Any, catalog: SourceCatalog) -> LoadReport:
         # than overwritten -- the record that matters is "Mission 1.0 concluded
         # X, Mission 1.3 found Y, because document Z became available".
         history = source.review_history or ((source.review,) if source.review else ())
-        current_version = source.review.review_version if source.review else None
+        # Currentness is per (source, profile) since Mission 1.15.5, so the row
+        # id and the "is this the current one" test both carry the profile.
+        current_by_profile = {
+            profile: current.review_version
+            for profile, current in source.reviews_by_profile().items()
+        }
         for review in history:
-            is_current = review.review_version == current_version
-            review_id = _row_id("review", source.source_id, str(review.review_version))
+            is_current = review.review_version == current_by_profile.get(
+                review.assessed_use_profile
+            )
+            # The legacy profile keeps the HISTORICAL id derivation. Review ids
+            # are deterministic surrogates, and rows hanging off them --
+            # conditions, and the condition VERIFICATIONS that record who
+            # checked what and when -- are real history. Re-deriving every id
+            # would orphan them, and deleting them to make the load tidy would
+            # destroy the record the registry exists to keep. Only profiles that
+            # did not exist before Mission 1.15.5 need the profile in the key,
+            # and only to stop their version 1 colliding with the legacy one.
+            review_id = (
+                _row_id("review", source.source_id, str(review.review_version))
+                if review.assessed_use_profile == LEGACY_USE_PROFILE
+                else _row_id(
+                    "review",
+                    source.source_id,
+                    review.assessed_use_profile,
+                    str(review.review_version),
+                )
+            )
             assessment_values = [
                 review.assessment(activity).value for activity in ASSESSED_ACTIVITIES
             ]
             conn.execute(
                 f"""INSERT INTO registry.source_policy_reviews
-                        (id, source_id, review_version, approval_state,
+                        (id, source_id, review_version, assessed_use_profile, approval_state,
                          {", ".join(ASSESSED_ACTIVITIES)},
                          assessed_use_case, conditions, open_questions, review_notes,
                          personal_data_risk, contains_user_generated_content,
@@ -268,9 +292,9 @@ def load_catalog_into(conn: Any, catalog: SourceCatalog) -> LoadReport:
                          pseudonymization_expected, discard_identifiers_after_normalization,
                          jurisdiction_review_required,
                          reviewed_at, reviewed_by, review_interval_days)
-                    VALUES (%s,%s,%s,%s,{",".join(["%s"] * len(ASSESSED_ACTIVITIES))},
+                    VALUES (%s,%s,%s,%s,%s,{",".join(["%s"] * len(ASSESSED_ACTIVITIES))},
                             %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-                    ON CONFLICT (source_id, review_version) DO UPDATE SET
+                    ON CONFLICT (source_id, assessed_use_profile, review_version) DO UPDATE SET
                         approval_state = EXCLUDED.approval_state,
                         assessed_use_case = EXCLUDED.assessed_use_case,
                         conditions = EXCLUDED.conditions,
@@ -285,6 +309,7 @@ def load_catalog_into(conn: Any, catalog: SourceCatalog) -> LoadReport:
                     review_id,
                     source.source_id,
                     review.review_version,
+                    review.assessed_use_profile,
                     review.approval_state.value,
                     *assessment_values,
                     review.assessed_use_case,
@@ -436,7 +461,9 @@ def read_sources(conn: Any) -> list[dict[str, Any]]:
                   s.coverage_scope, s.coverage_countries, s.coverage_languages,
                   e.approval_state, e.review_stale, e.evidence_count, e.blocking_reasons
              FROM registry.sources s
-             JOIN registry.source_eligibility e ON e.source_id = s.id
+             JOIN registry.source_eligibility e
+               ON e.source_id = s.id
+              AND e.use_profile_id = 'commercial-multi-tenant-research-v1'
             ORDER BY s.id"""
     ).fetchall()
     return [
@@ -461,7 +488,7 @@ def read_sources(conn: Any) -> list[dict[str, Any]]:
     ]
 
 
-def read_eligibility(conn: Any, source_id: str) -> EligibilityResult | None:
+def read_eligibility(conn: Any, source_id: str, use_profile_id: str) -> EligibilityResult | None:
     """Ask the DATABASE for the verdict, not the model.
 
     Used by the tests that assert the SQL view and the Python gate agree. Two
@@ -472,13 +499,17 @@ def read_eligibility(conn: Any, source_id: str) -> EligibilityResult | None:
 
     row = conn.execute(
         """SELECT approval_state, review_stale, evidence_count, blocking_reasons
-             FROM registry.source_eligibility WHERE source_id = %s""",
-        (source_id,),
+             FROM registry.source_eligibility
+            WHERE source_id = %s AND use_profile_id = %s""",
+        (source_id, use_profile_id),
     ).fetchone()
     if row is None:
+        # No review under this profile. An absent row is a refusal, and the
+        # caller must not resolve it against another profile (§15).
         return None
     return EligibilityResult(
         source_id=source_id,
+        use_profile_id=use_profile_id,
         eligible=not row[3],
         blocking_reasons=tuple(row[3]),
         approval_state=SourceApprovalState(row[0]) if row[0] else None,

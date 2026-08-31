@@ -141,6 +141,11 @@ class AcquisitionAuthorizationContext:
     """Everything a collector is allowed to know and required to obey."""
 
     source_id: str
+    # WHICH USE this authorization was granted for (Mission 1.15.5 §13). A
+    # collector holding a context can be asked what it is authorised to be
+    # doing, and a job that recorded it can be asked years later under which
+    # profile its data was collected.
+    use_profile_id: str
     canonical_name: str
     approval_state: SourceApprovalState
     review_version: int
@@ -204,6 +209,7 @@ class AcquisitionAuthorizationContext:
     def to_json(self) -> dict[str, object]:
         return {
             "source_id": self.source_id,
+            "use_profile_id": self.use_profile_id,
             "canonical_name": self.canonical_name,
             "approval_state": self.approval_state.value,
             "review_version": self.review_version,
@@ -269,6 +275,7 @@ class AcquisitionAuthorizationContext:
 
 def build_authorization(
     source: SourceRecord,
+    use_profile_id: str,
     config: ComplianceConfig,
     verifications: tuple[ConditionVerificationRecord, ...] | None = None,
     environ: Mapping[str, str] | None = None,
@@ -280,19 +287,30 @@ def build_authorization(
     an authorization by passing a hand-made list of satisfied conditions: the
     parameter exists for the CLI and the API, which have just run them and
     should not run them twice, not as a way in.
+
+    `use_profile_id` is required and never defaulted (Mission 1.15.5 §12, §15).
+    An authorization that did not name the use it was granted for could be held
+    by a collector running under any use at all, which is the failure the whole
+    profile mechanism exists to prevent.
     """
     moment = now or datetime.now(UTC)
-    records = verifications if verifications is not None else verify_source(source, config, environ)
+    records = (
+        verifications
+        if verifications is not None
+        else verify_source(source, use_profile_id, config, environ)
+    )
 
-    result = evaluate_eligibility(source, moment, satisfied_condition_keys(records))
+    result = evaluate_eligibility(source, use_profile_id, moment, satisfied_condition_keys(records))
     if not result.eligible:
         raise AcquisitionNotAuthorizedError(source.source_id, result.blocking_reasons)
 
-    review = source.review
+    review = source.review_for(use_profile_id)
     if review is None:  # pragma: no cover - the gate above already refuses this
-        raise AcquisitionNotAuthorizedError(source.source_id, ("no policy review exists",))
+        raise AcquisitionNotAuthorizedError(
+            source.source_id, (f"no policy review exists for use profile {use_profile_id!r}",)
+        )
 
-    compliance = config.get(source.source_id)
+    compliance = config.get(source.source_id, use_profile_id)
     if compliance is None:
         # A source can pass the gate with no compliance entry only if its review
         # declares no condition. It still gets no authorization: the context has
@@ -318,6 +336,7 @@ def build_authorization(
 
     return AcquisitionAuthorizationContext(
         source_id=source.source_id,
+        use_profile_id=use_profile_id,
         canonical_name=source.canonical_name,
         approval_state=review.approval_state,
         review_version=review.review_version,

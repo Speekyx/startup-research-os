@@ -443,3 +443,34 @@ not:** consumer purchase behaviour, SaaS subscription churn, general pricing
 willingness, retention, pain, desire. None of that changed, and none of it is
 made truer by the routes being well documented.
 
+### 5.6 Update after Mission 1.15.5 — TED holds two verdicts
+
+The gap §5.5 described was closed by ADR-027. A source's standing is now a table
+rather than a value:
+
+| `ted-eu` under | Verdict | Eligible |
+|---|---|---|
+| `commercial-multi-tenant-research-v1` (v5) | `REQUIRES_REVIEW` | no |
+| `local-private-research-v1` (v1) | **`APPROVED_WITH_CONDITIONS`** | no |
+
+**Both are true at once**, and neither is a rollup. The commercial profile is
+still blocked by the unresolved database-right question over corpus-scale
+extraction. The local profile is approving because the same Decision grants the
+six load-bearing activities, the two official query routes carry the operator's
+own published intended-use documentation, and the profile's no-redistribution
+rule means the Article 7(2)(b) re-utilisation limb is not engaged at all.
+
+**H-36A and H-36B are open under both.** A profile changes the exposure and the
+acts performed; it does not change the law, and the local review says so in its
+own open questions rather than implying otherwise.
+
+**TED is still not collector-eligible.** Three `HUMAN_CONFIRMATION` conditions
+are outstanding, one of them being a named operator's acceptance of the residual
+database-right exposure. No verifier can satisfy them, by design. See
+`ted-eu-local-official-route-readiness-v1.md`.
+
+**Portfolio position.** `ted-eu` remains the only transaction-class candidate
+for European willingness-to-pay evidence, and it is now *closer* in a way that
+is measurable: what stands between it and a collector is three recorded human
+decisions rather than an unanswered question about the model.
+

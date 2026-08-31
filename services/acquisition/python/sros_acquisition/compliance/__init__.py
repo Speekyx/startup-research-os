@@ -55,6 +55,11 @@ from .config import (
 from .credentials import CONFIGURED, NOT_CONFIGURED, CredentialStatus, credential_status
 from .readiness import AcquisitionReadiness, evaluate_readiness
 from .resources import ResourceAuthorization, ResourceDescriptor, authorize_resource
+from .use_profile import (
+    USE_PROFILE_ENV_VAR,
+    UseProfileNotDeclaredError,
+    declared_use_profile,
+)
 from .verification import (
     RUNTIME_VERIFICATIONS,
     VERIFIER_VERSION,
@@ -66,6 +71,7 @@ from .verification import (
 )
 
 __all__ = [
+    "USE_PROFILE_ENV_VAR",
     "CAPABILITIES",
     "CONFIGURED",
     "DEFAULT_COMPLIANCE_PATH",
@@ -94,6 +100,8 @@ __all__ = [
     "RateLimit",
     "ResourceAuthorization",
     "ResourceDescriptor",
+    "UseProfileNotDeclaredError",
+    "declared_use_profile",
     "ResourceScope",
     "SourceCompliance",
     "authorize_resource",

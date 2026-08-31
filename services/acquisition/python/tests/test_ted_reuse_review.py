@@ -26,7 +26,7 @@ import pytest
 from sros_acquisition.registry import APPROVING_STATES
 from sros_contracts import PolicyAssessment, SourceApprovalState
 
-from .conftest import NEVER_EVIDENCE, TED_FIRST_PARTY_PREFIXES, needs_postgres
+from .conftest import LEGACY_PROFILE, NEVER_EVIDENCE, TED_FIRST_PARTY_PREFIXES, needs_postgres
 
 # The instrument TED's own legal notice names. Establishing it was this
 # mission's one real advance; reading it was not possible.
@@ -72,7 +72,11 @@ class TestPriorReviewImmutable:
         assert assessment(v1, "model_processing") is PolicyAssessment.NOT_ADDRESSED
 
     def test_the_first_two_versions_still_exist_and_are_contiguous(self, catalog) -> None:
-        versions = sorted(r.review_version for r in source_of(catalog, "ted-eu").review_history)
+        versions = sorted(
+            r.review_version
+            for r in source_of(catalog, "ted-eu").review_history
+            if r.assessed_use_profile == LEGACY_PROFILE
+        )
         assert versions[:2] == [1, 2]
         assert versions == list(range(1, len(versions) + 1))
 

@@ -280,6 +280,76 @@
       ]
     },
     {
+      "source_id": "ted-eu",
+      "use_profile_id": "local-private-research-v1",
+      "review_version": 1,
+      "evidence_url": "https://ted.europa.eu/en/legal-notice",
+      "evidence_section": "Copyright notice",
+      "attribution": {
+        "notes": "The legal notice grants reuse of the procurement notices and separately licenses the SIMAP websites' EDITORIAL content under CC BY 4.0. The notices are not the editorial content, so the licence identifier here is the Decision rather than CC BY 4.0 -- citing CC BY over a notice would attribute it to a licence that does not cover it. The logo requirement is an EXCLUSION rather than an attribution element: the notice says the logos may not be used without prior consent, which is a thing not to do, and the resource scope carries it. THERE IS NO EXACT_NOTICE REQUIREMENT, and the omission is deliberate. The TED legal notice requires attribution and forbids using the logos; it prescribes no sentence to reproduce. A notice written by us and presented as required would be our wording wearing the source's authority -- the same reason GDELT carries no LICENCE_IDENTIFIER. The authenticity and non-liability obligations are carried as review CONDITIONS, where they are read by a person, rather than as a quoted string nothing prescribed.",
+        "requirements": [
+          {
+            "element": "SOURCE_CREDIT",
+            "text": "Tenders Electronic Daily (TED), Publications Office of the European Union",
+            "supplied": false,
+            "when_modified": false
+          },
+          {
+            "element": "LICENCE_IDENTIFIER",
+            "text": "Commission Decision 2011/833/EU on the reuse of Commission documents",
+            "supplied": false,
+            "when_modified": false
+          }
+        ]
+      },
+      "resource_scope": {
+        "third_party_denied": true,
+        "licence_allowlist": null,
+        "licence_allowlist_note": "No allowlist. The reuse grant is a single instrument covering the notices, and there is no per-resource licence identifier on the query routes to match against.",
+        "allowed_dataset_families": [
+          "ted-search-api-notices",
+          "ted-open-data-sparql"
+        ],
+        "excluded_dataset_families": [
+          "ted-bulk-xml-daily",
+          "ted-bulk-xml-monthly",
+          "ted-csv-historical"
+        ],
+        "require_dataset_family": true,
+        "dataset_family_note": "Every resource must declare its family and an unclassified one is denied. The three excluded families are named rather than merely absent, because they are the routes a future collector would most plausibly reach for: the bulk packages carry the highest database-right exposure (Mission 1.15.3) and ted-csv is a separate DG GROW dataset whose licence must be resolved from its own record."
+      },
+      "data_minimisation": {
+        "allowed": [
+          "notice_id",
+          "publication_date",
+          "award_date",
+          "contract_date",
+          "buyer_organisation_name",
+          "supplier_organisation_name",
+          "cpv_code",
+          "procurement_classification",
+          "monetary_amount",
+          "monetary_amount_type",
+          "currency",
+          "country_code",
+          "region_code",
+          "award_status"
+        ],
+        "excluded": [
+          "contact_point",
+          "contact_name",
+          "contact_email",
+          "contact_telephone",
+          "contact_fax",
+          "postal_address",
+          "natural_person_name",
+          "personal_identifier"
+        ],
+        "notes": "Requested through the Search API's `fields` parameter, so minimisation happens AT acquisition rather than after it. MONETARY_AMOUNT_TYPE is in the allowed list deliberately: an amount without its semantic is the flattening into price_paid that Mission 1.15.3 forbids, and a collector that cannot say which kind of amount it retrieved has not retrieved a usable one."
+      },
+      "datasets": []
+    },
+    {
       "source_id": "world-bank",
       "review_version": 2,
       "evidence_url": "https://datacatalog.worldbank.org/public-licenses",

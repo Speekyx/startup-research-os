@@ -31,7 +31,7 @@ from sros_contracts import (
     SourceApprovalState,
 )
 
-from .conftest import REPO_ROOT, needs_postgres, recorded_satisfied_keys
+from .conftest import LEGACY_PROFILE, REPO_ROOT, needs_postgres, recorded_satisfied_keys
 
 # The activities the assessed use case names in so many words: automated
 # collection by a COMMERCIAL multi-tenant SaaS for STORAGE, DERIVED ANALYTICS
@@ -213,7 +213,7 @@ class TestGdeltIsConfiguredFromItsEvidenceAndNothingElse:
 
     def test_the_condition_is_satisfied_by_a_real_verifier(self, catalog, compliance) -> None:
         """§17. No boolean was flipped; a verifier ran and recorded what it found."""
-        records = verify_source(catalog.get("gdelt"), compliance, environ={})
+        records = verify_source(catalog.get("gdelt"), LEGACY_PROFILE, compliance, environ={})
         (record,) = records
         assert record.condition_key == "gdelt-attribution"
         assert record.result is ConditionVerificationResult.SATISFIED
@@ -231,7 +231,7 @@ class TestGdeltResourceScopeFailsClosed:
 
     @pytest.fixture()
     def context(self, catalog, compliance):
-        return build_authorization(catalog.get("gdelt"), compliance)
+        return build_authorization(catalog.get("gdelt"), LEGACY_PROFILE, compliance)
 
     @pytest.mark.parametrize(
         ("origin", "allowed"),
@@ -323,7 +323,7 @@ class TestTheAuthorizationContextIsComplete:
     def test_gdelt_context_carries_everything_a_collector_would_need(
         self, catalog, compliance
     ) -> None:
-        context = build_authorization(catalog.get("gdelt"), compliance)
+        context = build_authorization(catalog.get("gdelt"), LEGACY_PROFILE, compliance)
         payload = context.to_json()
 
         assert payload["source_id"] == "gdelt"
@@ -350,7 +350,7 @@ class TestTheAuthorizationContextIsComplete:
 
         for source_id in ("wikimedia-pageviews", "pypi", "npm-registry"):
             with pytest.raises(AcquisitionNotAuthorizedError):
-                build_authorization(catalog.get(source_id), compliance)
+                build_authorization(catalog.get(source_id), LEGACY_PROFILE, compliance)
 
 
 class TestWikimediaIsBlockedForTheRecordedReason:
@@ -362,7 +362,7 @@ class TestWikimediaIsBlockedForTheRecordedReason:
 
     def test_it_is_blocked_on_its_review_state_not_on_a_condition(self, catalog) -> None:
         source = catalog.get("wikimedia-pageviews")
-        result = evaluate_eligibility(source)
+        result = evaluate_eligibility(source, LEGACY_PROFILE)
         assert not result.eligible
         assert any("REQUIRES_REVIEW" in reason for reason in result.blocking_reasons)
 
@@ -403,8 +403,10 @@ class TestEligibilityAgreesEverywhere:
         divergences = []
         for source in catalog:
             satisfied = recorded_satisfied_keys(conn, source.source_id)
-            from_python = evaluate_eligibility(source, satisfied_conditions=satisfied)
-            from_db = read_eligibility(conn, source.source_id)
+            from_python = evaluate_eligibility(
+                source, LEGACY_PROFILE, satisfied_conditions=satisfied
+            )
+            from_db = read_eligibility(conn, source.source_id, LEGACY_PROFILE)
             assert from_db is not None, source.source_id
             if from_db.eligible != from_python.eligible or set(from_db.blocking_reasons) != set(
                 from_python.blocking_reasons
@@ -417,7 +419,7 @@ class TestEligibilityAgreesEverywhere:
             s.source_id
             for s in catalog
             if evaluate_eligibility(
-                s, satisfied_conditions=recorded_satisfied_keys(conn, s.source_id)
+                s, LEGACY_PROFILE, satisfied_conditions=recorded_satisfied_keys(conn, s.source_id)
             ).eligible
         }
         assert "gdelt" in eligible

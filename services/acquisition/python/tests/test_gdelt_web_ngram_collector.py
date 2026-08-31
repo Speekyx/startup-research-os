@@ -33,7 +33,7 @@ from sros_acquisition.collection.pacing import WEB_NGRAM_PACING, RequestPacer
 from sros_acquisition.compliance import build_authorization
 from sros_contracts import AcquisitionErrorCode, RightsBasis
 
-from .conftest import REPO_ROOT
+from .conftest import LEGACY_PROFILE, REPO_ROOT
 from .web_ngram_fixtures import (
     BUCKET,
     EMPTY_GZIP,
@@ -67,7 +67,7 @@ def compliance():
 
 @pytest.fixture(scope="session")
 def context(catalog, compliance):
-    return build_authorization(catalog.get("gdelt"), compliance)
+    return build_authorization(catalog.get("gdelt"), LEGACY_PROFILE, compliance)
 
 
 def make_collector(transport, **kwargs):
@@ -203,7 +203,7 @@ class TestNothingReachesTheNetworkWithoutAuthorization:
 
     def test_another_sources_authorization_is_refused(self, catalog, compliance) -> None:
         transport = transport_with_defaults()
-        world_bank = build_authorization(catalog.get("world-bank"), compliance)
+        world_bank = build_authorization(catalog.get("world-bank"), LEGACY_PROFILE, compliance)
         with pytest.raises(AcquisitionFailedError):
             collect(make_collector(transport), world_bank, WebNgramRequest(buckets=(BUCKET,)))
         assert transport.requests == []
@@ -254,7 +254,7 @@ class TestNothingReachesTheNetworkWithoutAuthorization:
         """A GDELT authorization whose dataset entries have been emptied."""
         from dataclasses import replace
 
-        context = build_authorization(catalog.get("gdelt"), compliance)
+        context = build_authorization(catalog.get("gdelt"), LEGACY_PROFILE, compliance)
         stripped = replace(context, datasets=())
         transport = transport_with_defaults()
         result = collect(make_collector(transport), stripped, WebNgramRequest(buckets=(BUCKET,)))
@@ -269,7 +269,7 @@ class TestNothingReachesTheNetworkWithoutAuthorization:
         refuse is to change governance — which is the point."""
         from dataclasses import replace
 
-        context = build_authorization(catalog.get("gdelt"), compliance)
+        context = build_authorization(catalog.get("gdelt"), LEGACY_PROFILE, compliance)
         narrowed = replace(
             context,
             resource_scope=replace(
@@ -286,7 +286,7 @@ class TestNothingReachesTheNetworkWithoutAuthorization:
         """A refusal is per resource, and the reviewed one still runs."""
         from dataclasses import replace
 
-        context = build_authorization(catalog.get("gdelt"), compliance)
+        context = build_authorization(catalog.get("gdelt"), LEGACY_PROFILE, compliance)
         only_bigram = replace(
             context, datasets=tuple(d for d in context.datasets if d.resource_id == BIGRAM)
         )

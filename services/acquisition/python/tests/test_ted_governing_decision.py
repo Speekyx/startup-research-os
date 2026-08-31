@@ -15,7 +15,7 @@ import pytest
 from sros_acquisition.registry import APPROVING_STATES
 from sros_contracts import PolicyAssessment, SourceApprovalState
 
-from .conftest import NEVER_EVIDENCE, TED_FIRST_PARTY_PREFIXES, needs_postgres
+from .conftest import LEGACY_PROFILE, NEVER_EVIDENCE, TED_FIRST_PARTY_PREFIXES, needs_postgres
 
 LOAD_BEARING = (
     "automated_access",
@@ -60,7 +60,11 @@ class TestEarlierReviewsImmutable:
         1.15.3 appended v4. What matters permanently is that the history starts
         at 1, has no gaps, and still contains the three versions this file and
         its two predecessors were written against."""
-        versions = sorted(r.review_version for r in source_of(catalog, "ted-eu").review_history)
+        versions = sorted(
+            r.review_version
+            for r in source_of(catalog, "ted-eu").review_history
+            if r.assessed_use_profile == LEGACY_PROFILE
+        )
         assert versions == list(range(1, len(versions) + 1))
         assert {1, 2, 3} <= set(versions)
 

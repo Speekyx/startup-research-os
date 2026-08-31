@@ -1870,3 +1870,88 @@ Everything else pairs fixed with fixed (`normalization_fixtures.py`'s
 deliberately in Mission 1.6 so the normalizer meets the shape production
 produces — and it was the only place a real clock met a literal.
 
+---
+
+## 43. Invert a guard rather than delete it (Mission 1.15.5)
+
+Mission 1.15.4 wrote two tests asserting that a thing did **not** exist:
+
+```python
+def test_the_gate_has_no_use_profile_parameter(): ...
+def test_no_use_profile_concept_exists_anywhere_in_the_packages(): ...
+```
+
+Their docstrings said, in advance, what a failure would mean: *"If this test ever
+fails, the extension proposed in the gap document is being built — which is fine,
+and it should happen in a mission that says so."*
+
+Mission 1.15.5 said so, and both went red. **They were inverted, not deleted:**
+
+```python
+def test_the_gate_now_requires_a_use_profile(): ...
+def test_the_use_profile_concept_now_exists(): ...
+```
+
+### Why inverting is the right move
+
+The property worth protecting did not disappear — **it flipped**. Before, the
+risk was building a governance concept as a side effect of a source review;
+after, the risk is losing it. Deleting the tests would have left the second risk
+unguarded and erased the record that the first one was ever taken seriously.
+
+An absence-assertion is a **dated claim about the codebase**, and the honest way
+to retire one is to replace it with the claim that superseded it, in the same
+place, so a reader sees the transition rather than a gap.
+
+### The tell
+
+Write the docstring of an absence-assertion as if somebody will one day make it
+fail. If you cannot say what their failure means and what they should do, the
+test is a lock rather than a guard, and it will be deleted rather than inverted.
+
+---
+
+## 44. A required argument is a better guard than an assertion (Mission 1.15.5)
+
+The gate had to stop answering questions about a source without knowing what the
+source was being used for. Two mechanisms were available:
+
+```python
+# assert
+def evaluate_eligibility(source, use_profile_id=None, ...):
+    if use_profile_id is None:
+        raise ...
+
+# require
+def evaluate_eligibility(source, use_profile_id, ...):
+```
+
+**The second was chosen, and the difference is not style.** A defaulted argument
+with a runtime check is discovered by whoever runs the code; a required
+positional argument is discovered by **mypy, across 40 modules, before anything
+runs** — and it made the migration mechanical: every one of 68 call sites had to
+be visited, and none could be missed by being on a branch nobody exercised.
+
+It also removes the shape that would have been most dangerous:
+`use_profile_id=None` meaning "whatever the source's current review is" is
+exactly one careless edit away from a silent fallback to a global verdict.
+
+The tests then assert the *signature* rather than the behaviour:
+
+```python
+parameters = inspect.signature(evaluate_eligibility).parameters
+assert list(parameters)[1] == "use_profile_id"
+assert parameters["use_profile_id"].default is inspect.Parameter.empty
+```
+
+**A test on the signature survives a rewrite of the body.** A test that only
+checked "raises when None" would pass against a function that had quietly
+acquired a default of `LEGACY_USE_PROFILE`.
+
+### The related guard
+
+`SourceRecord.review` survives as the legacy-profile accessor, so an AST test
+asserts that the three gate modules never read it. That fence exists because
+`.review` reads more naturally than `.review_for(profile)` — which is precisely
+how the mistake would be made, by someone writing what sounds right.
+

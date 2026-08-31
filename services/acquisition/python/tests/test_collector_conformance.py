@@ -46,7 +46,7 @@ from sros_acquisition.compliance import (
 )
 from sros_contracts import AcquisitionErrorCode
 
-from .conftest import REPO_ROOT
+from .conftest import LEGACY_PROFILE, REPO_ROOT
 
 WORKSPACE = "00000000-0000-4000-8000-000000000001"
 AUTHORIZED_INDICATOR = "SP.POP.TOTL"
@@ -117,7 +117,7 @@ def world_bank(catalog):
 
 @pytest.fixture
 def context(world_bank, compliance):
-    return build_authorization(world_bank, compliance, environ={})
+    return build_authorization(world_bank, LEGACY_PROFILE, compliance, environ={})
 
 
 def _collector(transport: object) -> WorldBankCollector:
@@ -163,12 +163,14 @@ class TestAuthorizationIsRequired:
         transport = RecordingTransport()
         for source_id in ("youtube", "reddit", "github"):
             with pytest.raises(AcquisitionNotAuthorizedError):
-                build_authorization(catalog.get(source_id), compliance, environ={})
+                build_authorization(catalog.get(source_id), LEGACY_PROFILE, compliance, environ={})
         assert transport.calls == []
 
     def test_another_sources_authorization_is_refused(self, catalog, compliance, context) -> None:
         """One source's approval never authorises another's collection."""
-        eurostat = build_authorization(catalog.get("eurostat"), compliance, environ={})
+        eurostat = build_authorization(
+            catalog.get("eurostat"), LEGACY_PROFILE, compliance, environ={}
+        )
         transport = RecordingTransport()
         with pytest.raises(AcquisitionFailedError) as caught:
             _collector(transport).collect(
@@ -234,7 +236,7 @@ class TestEveryResourceIsAuthorized:
         """§41. The Microdata Library permits statistical and scientific research
         only. It is refused by the resource gate whatever a caller asks for,
         because no microdata resource is an authorized dataset."""
-        context = build_authorization(world_bank, compliance, environ={})
+        context = build_authorization(world_bank, LEGACY_PROFILE, compliance, environ={})
         assert all(d.dataset_family != "microdata" for d in context.datasets)
         transport = RecordingTransport()
         result = _collector(transport).collect(

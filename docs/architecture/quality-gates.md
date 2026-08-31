@@ -479,6 +479,22 @@ shape, because this is the kind of finding that decays quietly.
 | **The coverage window is recorded, not discovered at runtime** | The evidence must carry "1 march 2023" and "proof of concept" | The Open Data Service holds eForms from March 2023 and a six-form-type slice of Standard Forms. A collector must not learn that from an empty result set |
 | **Assessments byte-identical across a route review** | `v4.assessments == v5.assessments` | A review that established no new right must not move a finding it did not re-establish |
 
+### Use-profile-scoped policy (Mission 1.15.5, ADR-027)
+
+| Gate | Mechanism | Guards |
+|------|-----------|--------|
+| **A review cannot exist without a subject** | `PolicyReview` refuses an empty `assessed_use_profile`; the catalog loader refuses an unregistered id | A verdict whose subject is unstated cannot be transferred, compared or refused correctly. Refused at LOAD, because an unregistered id is a typo or an invention and both should fail before anything asks a question |
+| **One source, two current verdicts, no contradiction** | TED asserted `REQUIRES_REVIEW` under the commercial profile and `APPROVED_WITH_CONDITIONS` under the local one, together | §46's success criterion. Before this the registry could only reach that state by making one of the two answers untrue |
+| **The gate cannot be asked without a profile** | Signature tests: `use_profile_id` is the second positional with no default on `evaluate_eligibility`, `build_authorization` and `verify_source` | A signature test survives a rewrite of the body; a "raises when None" test would pass against a function that quietly acquired a default (`testing-strategy.md` §44) |
+| **No gate module reads the legacy-scoped `.review`** | AST walk over `eligibility.py`, `authorization.py`, `verification.py` | The single easiest mistake here, because `.review` reads more naturally than `.review_for(profile)`. Reading it would be the silent fallback to a global verdict |
+| **Permission never transfers between profiles** | Cross-profile refusals asserted for TED, for an unknown profile, and for an approving source under an unreviewed profile | §16. Deploying publicly must request a profile nothing approved, not inherit one granted for a laptop |
+| **Compliance configuration does not leak across profiles** | `compliance.get("ted-eu", LOCAL)` is present, `(…, LEGACY)` is None | A resource scope and a minimisation profile are answers to *for what*, and one profile must not borrow another's |
+| **The runtime declares, never infers** | `declared_use_profile` refuses when unset or malformed; an AST test asserts the module reads exactly one env key, by its constant, and contains no environment-shaped tell | §12. A profile derived from a host or an environment name is an infrastructural guess standing in for a governance decision |
+| **Local is not non-commercial** | `commercial_purpose` asserted true on every registered profile, and TED's local review asserted `commercial_use = PERMITTED` | The rule most easily taken backwards. Taking it backwards produces the narrowed assessed use case §Source governance forbids |
+| **Historical verdicts unchanged by the migration** | The legacy distribution asserted at 5 / 13 / 8 / 3 | §29. Attaching profile identity to history is an interpretation of scope, never a new conclusion |
+| **Approving is still not eligible** | The refusal is asserted to name all three outstanding `HUMAN_CONFIRMATION` conditions | A residual-risk acceptance that code could satisfy would be a judgement nobody made |
+| **The SQL view and the Python gate still agree** | Existing cross-check, now per profile | It caught a real regression: the first rebuild of the view dropped migration 0006's condition columns and the `review conditions not satisfied` blocking reason |
+
 
 ---
 

@@ -26,7 +26,7 @@ from sros_acquisition.compliance.resources import ResourceDescriptor, authorize_
 from sros_acquisition.registry.models import SourceRegistryError
 from sros_contracts import ResourceContentOrigin, RightsBasis
 
-from .conftest import REPO_ROOT
+from .conftest import LEGACY_PROFILE, REPO_ROOT
 
 NGRAM_PROFILE = "gdelt-web-ngram-files"
 DOC_API_PROFILE = "gdelt-doc-api"
@@ -47,7 +47,7 @@ def gdelt(catalog):
 
 @pytest.fixture(scope="session")
 def context(gdelt, compliance):
-    return build_authorization(gdelt, compliance)
+    return build_authorization(gdelt, LEGACY_PROFILE, compliance)
 
 
 def descriptor(context, resource_id: str, **overrides) -> ResourceDescriptor:
@@ -476,7 +476,7 @@ class TestTheFourFactsStayApart:
     ) -> None:
         """§23's expected state, asserted as one object so the four cannot drift
         into each other."""
-        readiness = evaluate_readiness(gdelt, compliance)
+        readiness = evaluate_readiness(gdelt, LEGACY_PROFILE, compliance)
         assert readiness.eligible is True
         assert readiness.resource_ready is True
         # Mission 1.9.3 implemented the collector, which is the step this
@@ -497,7 +497,7 @@ class TestTheFourFactsStayApart:
         way to say it, so "eligible" was the most specific available answer and
         it read as further along than it was.
         """
-        readiness = evaluate_readiness(catalog.get("eurostat"), compliance)
+        readiness = evaluate_readiness(catalog.get("eurostat"), LEGACY_PROFILE, compliance)
         assert readiness.eligible is True
         assert readiness.resource_ready is False
         assert readiness.next_step == "authorise a concrete resource"
@@ -506,7 +506,7 @@ class TestTheFourFactsStayApart:
     def test_readiness_never_refuses_and_is_not_a_gate(self, catalog, compliance) -> None:
         """It reports on every source in the catalog, including the blocked
         ones. `build_authorization` is what refuses."""
-        rows = [evaluate_readiness(s, compliance) for s in catalog]
+        rows = [evaluate_readiness(s, LEGACY_PROFILE, compliance) for s in catalog]
         assert len(rows) == len(list(catalog))
         blocked = [r for r in rows if not r.eligible]
         assert blocked and all(r.blocking_reasons for r in blocked)

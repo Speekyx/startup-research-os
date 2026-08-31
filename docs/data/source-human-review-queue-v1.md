@@ -1494,3 +1494,40 @@ ADR and a mission, not a patch.
 
 **Status:** open, `EXTERNAL_CLARIFICATION_REQUIRED`. TED stays `REQUIRES_REVIEW`
 at review **v5**.
+
+---
+
+## TED-EU — three confirmations, and they are the whole remaining blocker {#ted-confirmations}
+
+**New in Mission 1.15.5.** TED is `APPROVED_WITH_CONDITIONS` under
+`local-private-research-v1` and **not eligible**, because three conditions can
+only be satisfied by a person:
+
+| Condition | What a person must record |
+|---|---|
+| `ted-official-route-only` | that the deployed collector uses the Search API or the Open Data Service and never the bulk packages |
+| `ted-personal-data-minimisation` | that the deployed minimisation profile requests only the authorised fields and discards the whole contact block |
+| **`ted-database-right-residual-exposure-accepted`** | that a named operator has read `ted-eu-local-official-route-readiness-v1.md` and **accepts the residual, unresolved database-right exposure** for bounded queries under this profile |
+
+The third is the one that matters. **H-36A and H-36B are still open** — nothing
+establishes whether a sui generis right subsists in the TED corpus, who holds it,
+or whether it is licensed. The local review does not resolve that. It records a
+judgement that bounded queries through the operator's own documented reuse
+interfaces, without redistribution, sit within the use those interfaces are
+published for — and that the residual exposure is the operator's to accept.
+
+**It is a `HUMAN_CONFIRMATION` condition precisely so that no verifier can supply
+it.** A residual-risk acceptance that code could satisfy would be a judgement
+nobody made.
+
+The first two are also outstanding for a plain reason: **there is no collector
+yet**, so there is nothing whose route or field selection could be confirmed.
+
+**Vendor contact needed?** Still yes, and unchanged: the clarification request to
+`op-copyright@publications.europa.eu` is written and unsent. A favourable answer
+would close H-36 and remove the third condition's reason for existing.
+
+**Status:** three operator decisions outstanding. TED stays ineligible until they
+are recorded, and stays `REQUIRES_REVIEW` under the commercial profile
+regardless.
+

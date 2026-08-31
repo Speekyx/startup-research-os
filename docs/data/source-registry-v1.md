@@ -62,15 +62,25 @@ These are invariants. Code that violates one is wrong even if it passes.
    unreachable, or ambiguous, the result is `NOT_ADDRESSED` / `UNCLEAR` and the
    source stays `REQUIRES_REVIEW`. There is no path from *we could not check* to
    *we may proceed*.
-3. **An approval requires retrieved, authoritative evidence.** Not a blog post,
+3. **A verdict has a subject, and the gate requires it** (Mission 1.15.5,
+   ADR-027). Every review records the `assessed_use_profile` it answered about,
+   currentness is per `(source, profile)`, and `evaluate_eligibility` takes the
+   profile as a required argument with no default. A source may hold
+   `REQUIRES_REVIEW` under one profile and `APPROVED_WITH_CONDITIONS` under
+   another without contradiction. **Permission never transfers between
+   profiles**, an unknown or unreviewed profile is refused, and neither falls
+   back to another profile or to the source's historical verdict. The runtime
+   DECLARES its profile through configuration and never infers it from the
+   environment name, the host, the container or the user count.
+4. **An approval requires retrieved, authoritative evidence.** Not a blog post,
    not a tutorial, not a forum answer, not a Stack Overflow reply, and not model
    recall. Authoritative means the source's own published documents, an operator
    response, or a recorded legal review.
-4. **No credential is ever stored here.** Access profiles carry configuration
+5. **No credential is ever stored here.** Access profiles carry configuration
    **key names** (`REDDIT_CLIENT_ID`). A value that looks like a credential is
    refused by the model, so a secret cannot be written into a file that every
    reader of the repository can open.
-5. **No circumvention.** Login requirements, API restrictions, rate limits,
+6. **No circumvention.** Login requirements, API restrictions, rate limits,
    robots directives, anti-automation measures, CAPTCHAs and technical
    protections are limits, not obstacles. The registry never describes getting
    around one, and inconvenience of an official API is not a reason to create a

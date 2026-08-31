@@ -59,7 +59,10 @@
 | `ted-eu-database-right-clarification-request-v1.md` | The message to the Publications Office. **Prepared, not sent** — sending is an operator action |
 | `ted-eu-h36-legal-review-packet-v1.md` | Established facts and five questions for a lawyer, with no legal conclusion attached |
 | `ted-eu-local-private-research-review-v1.md` | The two OFFICIAL query routes reviewed against the system's actual local, private use. Their documented purpose covers analysis, reuse and application integration; that is intended-use evidence and not a database-right grant |
-| `route-scoped-source-authorization-gap-v1.md` | Why a source cannot be blocked broadly and authorised narrowly in the current model, and the minimal extension that would let it |
+| `route-scoped-source-authorization-gap-v1.md` | Mission 1.15.4's gap analysis. **The extension it proposed was built in Mission 1.15.5** (ADR-027); kept as the record of why |
+| `use-profile-aware-source-policy-v1.md` | How source permission is scoped to the use it was granted for: the two registered profiles, fail-closed behaviour, and why the runtime declares its profile rather than inferring it |
+| `use-profile-migration-v1.md` | What 55 historical reviews were interpreted as having assessed, and everything the migration did not change |
+| `ted-eu-local-official-route-readiness-v1.md` | TED under `local-private-research-v1`: authorised routes and fields, and the three human confirmations still outstanding |
 | `acquisition-rights-basis-gap-analysis-v1.md` | Why a resource records what KIND of thing authorises it, not only which licence (H-28, ADR-018) |
 | `wikimedia-pageviews-compliance-v1.md` | What Wikimedia Pageviews would need, and the one question blocking it |
 | `source-condition-gap-analysis-v1.md` | The nine Mission 1.3 conditions inventoried and classified, and the obligations deliberately left out of code |

@@ -42,7 +42,7 @@ from sros_acquisition.collection.pacing import WORLD_BANK_PACING
 from sros_acquisition.compliance import build_authorization, load_compliance
 from sros_contracts import AcquisitionErrorCode
 
-from .conftest import REPO_ROOT, WORKSPACE_A, WORKSPACE_P, needs_postgres
+from .conftest import LEGACY_PROFILE, REPO_ROOT, WORKSPACE_A, WORKSPACE_P, needs_postgres
 
 INDICATOR = "SP.POP.TOTL"
 NOW = datetime(2026, 8, 30, 12, 0, tzinfo=UTC)
@@ -55,7 +55,7 @@ def compliance():
 
 @pytest.fixture
 def context(catalog, compliance):
-    return build_authorization(catalog.get("world-bank"), compliance, environ={})
+    return build_authorization(catalog.get("world-bank"), LEGACY_PROFILE, compliance, environ={})
 
 
 # ------------------------------------------------------------------ fake transports
@@ -753,6 +753,7 @@ class TestJobPayload:
             connection_factory=_never_called,
             catalog=catalog,
             compliance=compliance,
+            use_profile=LEGACY_PROFILE,
         )
         assert not result.succeeded
         assert result.failures[0].code is AcquisitionErrorCode.AUTHORIZATION_REJECTED
@@ -781,6 +782,7 @@ class TestJobExecution:
             catalog=catalog,
             compliance=compliance,
             transport=transport,
+            use_profile=LEGACY_PROFILE,
         )
         assert transport.calls == []
         assert result.failures[0].code is AcquisitionErrorCode.AUTHORIZATION_REJECTED
@@ -797,6 +799,7 @@ class TestJobExecution:
             catalog=catalog,
             compliance=compliance,
             collector=_collector(transport),
+            use_profile=LEGACY_PROFILE,
         )
         assert result.succeeded, result.to_json()
         assert result.persisted.new == 1
@@ -825,6 +828,7 @@ class TestJobExecution:
                         catalog=catalog,
                         compliance=compliance,
                         collector=_collector(ScriptedTransport([_envelope([_row()])])),
+                        use_profile=LEGACY_PROFILE,
                     )
                 )
             stored = connection.execute(
@@ -850,6 +854,7 @@ class TestJobExecution:
                 catalog=catalog,
                 compliance=compliance,
                 collector=_collector(ScriptedTransport([_envelope([_row()])])),
+                use_profile=LEGACY_PROFILE,
             )
             assert result.succeeded, result.to_json()
             assert result.persisted.new == 1
@@ -906,6 +911,7 @@ class TestJobExecution:
             catalog=catalog,
             compliance=compliance,
             collector=_collector(ScriptedTransport([_envelope([_row()])])),
+            use_profile=LEGACY_PROFILE,
         )
         blob = json.dumps(result.to_json())
         assert result.failures[-1].code is AcquisitionErrorCode.PERSISTENCE_FAILURE

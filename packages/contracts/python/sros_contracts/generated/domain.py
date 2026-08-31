@@ -740,6 +740,7 @@ REGISTRY_NAMES: Final[tuple[str, ...]] = (
     "risk",
     "region",
     "source_family",
+    "assessed_use_profile",
     "normalization_record_kind",
     "signal_family",
     "signal_type",

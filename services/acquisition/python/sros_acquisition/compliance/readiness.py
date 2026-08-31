@@ -100,6 +100,7 @@ class AcquisitionReadiness:
 
 def evaluate_readiness(
     source: SourceRecord,
+    use_profile_id: str,
     config: ComplianceConfig,
     environ: Mapping[str, str] | None = None,
     now: datetime | None = None,
@@ -115,7 +116,7 @@ def evaluate_readiness(
     enabled = bool(source.collector_enabled)
 
     try:
-        context = build_authorization(source, config, environ=environ, now=moment)
+        context = build_authorization(source, use_profile_id, config, environ=environ, now=moment)
     except AcquisitionNotAuthorizedError as exc:
         return AcquisitionReadiness(
             source_id=source.source_id,

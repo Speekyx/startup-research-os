@@ -132,6 +132,7 @@ class TestSchemaRuntime:
             "scoring.evidence_independence_groups",
             # 0006_review_conditions
             "registry.source_review_conditions",
+            "registry.use_profiles",
             # 0007_condition_verification
             "registry.source_condition_verifications",
             # 0010_source_signal_coverage. GLOBAL reference data like the rest

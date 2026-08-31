@@ -30,7 +30,7 @@ from typing import Any
 
 from sros_contracts import AttributionElement, RightsBasis
 
-from ..registry.models import SourceRegistryError
+from ..registry.models import LEGACY_USE_PROFILE, SourceRegistryError
 
 __all__ = [
     "DEFAULT_COMPLIANCE_PATH",
@@ -416,7 +416,14 @@ class AuthorizedDataset:
 
 @dataclass(frozen=True)
 class SourceCompliance:
-    """Everything the compliance layer knows about one source."""
+    """Everything the compliance layer knows about one source, FOR ONE USE.
+
+    Keyed by (source, use profile) since Mission 1.15.5. A configuration that
+    named only the source would be the same defect the reviews had: a resource
+    scope, an attribution obligation and a minimisation profile are answers to
+    "what may we do with this, for what", and two profiles can legitimately have
+    different answers.
+    """
 
     source_id: str
     review_version: int
@@ -424,6 +431,9 @@ class SourceCompliance:
     attribution: AttributionObligation
     resource_scope: ResourceScope
     data_minimisation: DataMinimisationProfile
+    # Defaults to the legacy profile so every existing entry keeps configuring
+    # what it has always configured, and a new profile has to say so.
+    use_profile_id: str = LEGACY_USE_PROFILE
     evidence_section: str | None = None
     access_restriction: AccessRestriction | None = None
     datasets: tuple[AuthorizedDataset, ...] = ()
@@ -456,11 +466,21 @@ class ComplianceConfig:
     review_round: str | None = None
     path: pathlib.Path | None = field(default=None, compare=False)
 
-    def get(self, source_id: str) -> SourceCompliance | None:
-        """`None` rather than a default. A source with no compliance entry has
-        no basis for a request, and the caller must decide -- there is no
-        permissive fallback to fall into."""
-        return next((s for s in self.sources if s.source_id == source_id), None)
+    def get(
+        self, source_id: str, use_profile_id: str = LEGACY_USE_PROFILE
+    ) -> SourceCompliance | None:
+        """`None` rather than a default. A source with no compliance entry for
+        THAT USE has no basis for a request, and the caller must decide -- there
+        is no permissive fallback to fall into, and in particular no falling
+        back to another profile's configuration."""
+        return next(
+            (
+                s
+                for s in self.sources
+                if s.source_id == source_id and s.use_profile_id == use_profile_id
+            ),
+            None,
+        )
 
     def __iter__(self) -> Any:
         return iter(self.sources)
@@ -586,6 +606,7 @@ def _source_from_json(entry: object) -> SourceCompliance:
 
     return SourceCompliance(
         source_id=source_id,
+        use_profile_id=str(entry.get("use_profile_id") or LEGACY_USE_PROFILE),
         review_version=int(entry.get("review_version") or 0),
         evidence_url=str(entry.get("evidence_url") or ""),
         evidence_section=entry.get("evidence_section"),

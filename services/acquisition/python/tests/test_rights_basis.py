@@ -28,7 +28,7 @@ from sros_acquisition.compliance.resources import ResourceDescriptor, authorize_
 from sros_acquisition.registry.models import SourceRegistryError
 from sros_contracts import ResourceContentOrigin, RightsBasis
 
-from .conftest import REPO_ROOT
+from .conftest import LEGACY_PROFILE, REPO_ROOT
 
 FABRICATIONS = ["OTHER", "GDELT Terms Licence", "GDELT licence", "NONE", "N/A", "unknown"]
 
@@ -135,7 +135,9 @@ class TestADirectGrantIsNotAWayPastALicenceAllowlist:
 
     @pytest.fixture()
     def world_bank_scope(self, catalog, compliance):
-        return build_authorization(catalog.get("world-bank"), compliance).resource_scope
+        return build_authorization(
+            catalog.get("world-bank"), LEGACY_PROFILE, compliance
+        ).resource_scope
 
     def _descriptor(self, scope, **overrides) -> ResourceDescriptor:
         base = {
@@ -221,7 +223,7 @@ class TestExistingSourcesAreUnaffected:
         authorizable = []
         for source_id in ("world-bank", "eurostat", "gdelt"):
             try:
-                build_authorization(catalog.get(source_id), compliance, environ={})
+                build_authorization(catalog.get(source_id), LEGACY_PROFILE, compliance, environ={})
                 authorizable.append(source_id)
             except AcquisitionNotAuthorizedError:
                 pass
@@ -263,7 +265,7 @@ class TestGdeltStillHasNoAuthorisedResource:
         H-27 remains open, so nothing on that route is authorised. What changed
         is that GDELT stopped being blocked ON H-27 for its first resource.
         """
-        context = build_authorization(catalog.get("gdelt"), compliance)
+        context = build_authorization(catalog.get("gdelt"), LEGACY_PROFILE, compliance)
         assert {d.resource_id for d in context.datasets} == {
             "web-ngrams/1gram",
             "web-ngrams/2gram",

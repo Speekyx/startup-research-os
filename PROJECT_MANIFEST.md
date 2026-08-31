@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.28
+Version: 1.29
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-08-31 (deployment model)
+Last amended: 2026-08-31 (Sprint 1 / Mission 1.15.5)
 
 ---
 
@@ -13,6 +13,30 @@ Last amended: 2026-08-31 (deployment model)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.29 — 2026-08-31 (Sprint 1 / Mission 1.15.5)
+
+Authorized by the Mission 1.15.5 brief §4 (the required concept), §8-§10
+(persistence, legacy profile, currentness), §12-§16 (runtime declaration,
+context, gate, fail-closed, isolation), §20-§24 (TED as validation case),
+§27-§29 (contracts, migration), §38 (ADR), §49 (documentation) and §51 (stop
+after the report).
+
+| Change | Section | Authority |
+|--------|---------|-----------|
+| **A verdict has a subject: `AssessedUseProfile`** | Canonical invariants | ADR-027. Every review already answered a question about a USE -- `assessed_use_case` is a required field and the catalog has said "a COMMERCIAL multi-tenant SaaS" since Mission 1.0 -- but the answer had no IDENTITY, so it could not be required, compared or matched and the gate never saw it. This corrects Mission 1.15.4's framing, which said the model never recorded the use case: it recorded it, and could not USE it |
+| **Two registered profiles, and no more** | Canonical invariants | §5, §6. `commercial-multi-tenant-research-v1` is what every review from Mission 1.0 to 1.15.4 actually assessed and what a future public deployment must satisfy; `local-private-research-v1` is the current runtime. `PUBLIC_COMMERCIAL_SERVICE` was NOT created as a third: it is the first one under the name the historical prose already used, and two near-identical profiles would be the proliferation §5 warns against. A registry rather than a closed enum, because nothing branches exhaustively on it |
+| **`commercial_purpose` is TRUE on both profiles** | Canonical invariants | The rule most easily taken backwards. Local deployment does not make the use non-commercial, so a commercial-use right still has to be positively granted by the source's own evidence. Asserted on every registered profile by test |
+| **Currentness is per (source, profile)** | Engineering Principles | §10. Each profile keeps its own append-only version line; version 1 under a second profile is a FIRST review of a new question, not a duplicate. The database constraint moved from UNIQUE (source_id, review_version) to (source_id, assessed_use_profile, review_version), and the eligibility view emits one row per pair |
+| **The gate requires the profile, with no default** | Engineering Principles | §14, §15. `evaluate_eligibility`, `build_authorization` and `verify_source` all take it second and positional. A required argument is a better guard than an assertion: mypy found all 68 call sites before anything ran, and `use_profile_id=None` meaning "the current review" would have been one careless edit from a silent fallback (`testing-strategy.md` §44) |
+| **Nothing falls back, anywhere** | Blocked work | §15, §16. A missing profile raises, an unknown one is refused, a profile with no review is refused -- and none is resolved against another profile or against the source's legacy verdict. Compliance configuration is keyed by (source, profile) too, so one profile cannot borrow another's resource scope or minimisation profile |
+| **The runtime declares its profile and never infers it** | Canonical invariants | §12, §34, §35. `SROS_USE_PROFILE`, read at the entry point and passed down. Never from an environment name, the host, a container, a user count or the absence of billing: a profile is a governance fact and those are infrastructural ones, and the same binary in the same container can be operated under either. There is NO default, because the convenient default is the narrow local profile -- exactly the one an operator running a public service would most want assumed for them |
+| **`SourceRecord.review` survives as the LEGACY accessor, fenced** | Engineering Principles | It keeps every document, validator and rendered catalog written before ADR-027 true. It is not an authorization input, and an AST test asserts the three gate modules never read it -- because `.review` reads more naturally than `.review_for(profile)`, which is precisely how the mistake would be made |
+| **55 historical reviews migrated with nothing rewritten** | Engineering Principles | §8, §9, §29. All attached to the legacy profile, recorded as a MIGRATION INTERPRETATION of their scope rather than a new policy conclusion -- and not a guess: the catalog's own prose has said it since Mission 1.0. The verdict distribution is asserted unchanged at 5 / 13 / 8 / 3. Review row ids keep the historical derivation for the legacy profile, because rows hang off them -- conditions, and the condition VERIFICATIONS that record who checked what and when |
+| **TED holds two current verdicts at once** | Product Shape | §20, §46, §47. `REQUIRES_REVIEW` under the commercial profile and `APPROVED_WITH_CONDITIONS` under the local one, both true. The local review rests on the same Decision granting the six load-bearing activities, the operator's own published intended-use documentation for its two query routes, and the structural fact that the Article 7(2)(b) re-utilisation limb is not engaged by a use that redistributes nothing |
+| **H-36 was NOT resolved, and the review says so** | Blocked work | §21, §23. H-36A stays NOT ESTABLISHED and H-36B stays NOT ADDRESSED under BOTH profiles. A profile changes the exposure and the acts performed; it does not change the law. Bulk XML and the ted-csv subset are excluded by name under every profile, so profile support did not become a loophole (§24) |
+| **Approving is still not eligible, and it names why** | Blocked work | §48. `build_authorization` for TED under the local profile refuses with three outstanding HUMAN_CONFIRMATION conditions, one of them a named operator's acceptance of the residual database-right exposure. No verifier can satisfy them, by design: a residual-risk acceptance that code could satisfy would be a judgement nobody made. The machine-checkable condition, attribution, is SATISFIED |
+| **Nothing was collected, built or scored** | Forbidden During Foundation | §41-§43, §51. No collector, no API client, no SPARQL client, no TED module anywhere -- asserted against the file tree. RawRecords 12, NormalizedRecords 12, Signals 7, Claims 7, ClaimRevisions 7, Evidence 7 unchanged. Reliability 0, Opportunities 0, embeddings 0, scores 0, TED rows 0 |
 
 ## 1.28 — 2026-08-31 (deployment model)
 
