@@ -385,6 +385,26 @@ shape, because this is the kind of finding that decays quietly.
 | **A second execution creates no duplicate** | Proposition-key lookup before every write; proven on the real seven | §28. Two run rows and zero new claims -- idempotent persistence without a claim of exactly-once delivery |
 | **A run in one workspace cannot name another's Signal** | Composite FKs plus RLS on both new tables | §35. The read returns nothing AND the run row is refused; both layers asserted |
 
+### Reviewed reliability (Mission 1.14)
+
+| Gate | Mechanism | Guards |
+|------|-----------|--------|
+| **Reliability is never a source coefficient** | A five-part scope — source, resource, record kind, claim type, proposition kind — matched in full or not at all | The core rule. `world-bank` alone matches nothing, so a value reviewed for one purpose has no path to another |
+| **Policy approval cannot become reliability** | A separate schema, no policy column, and an AST test over string literals excluding docstrings | An APPROVED source does not produce better evidence and a RESTRICTED one does not produce worse. The prose explaining the rule must not fail the check |
+| **There is no MODEL_GUESSED origin** | A closed contract enum plus `reliability_assessments_origin_check` | A model may help a reviewer read documentation and may not be the epistemic source. A vocabulary with nowhere to record a guess is what makes that enforceable |
+| **A value rests on a retrieved document** | `epistemic.require_documented_basis`, a `DEFERRABLE INITIALLY DEFERRED` trigger | "The publisher is reputable" is a sentence, not a basis. Reviewer reasoning is permitted alongside documents and refused alone |
+| **A value states what bounds it** | `reliability_assessments_rationale_check` | A reliability with no stated failure mode is a number nobody can argue with |
+| **Human review is not calibration** | `reliability_assessments_calibration_ref_check`, both directions | However careful a review was, it fitted nothing to outcome data. `REFERENCE_PROFILE_V1` stays UNCALIBRATED |
+| **Unknown produces no number** | No way to express "unknown" as a value; unknown is the absence of a row | 0.5, 0.8, 1.0 and 0.0 are all measurements. `q_i = min(components)` must never see one that nobody made |
+| **At most one current assessment per scope** | `idx_reliability_assessments_current`, a partial unique index | Makes the ambiguous case unreachable through the ordinary path |
+| **Ambiguity is refused, never resolved** | `resolve_reliability` refuses independently of the index | Never the closest, never the max, never the mean. A guard that trusts another guard is one schema change away from trusting nothing |
+| **Superseded, never updated** | `superseded_at` + `superseded_reason`, `num_nonnulls(...) IN (0, 2)` | An aggregation that used version N must still read version N. Half a supersession is a withdrawal nobody can explain (migration 0017's spelling) |
+| **A score's coefficients are reconstructible** | `ReliabilityBinding`: assessment id, key, version, origin, reviewer, review time | Late resolution with a recorded binding, rather than a bare number copied onto a row |
+| **No factor implies another** | `resolve_reliability` takes only scope, candidates and supplied — asserted by a signature test | Relevance, directness, extraction confidence and claim confidence are all 1.0 on the real rows and none of them is an argument |
+| **The aggregation package still names no source** | The resolver lives in `packages/evidence-reliability`, not in `evidence-aggregation` | The guard that keeps source identity out of the mathematics was left untouched rather than narrowed (`testing-strategy.md` §33) |
+| **Assessments are global, with no tenant path** | No `workspace_id`, no RLS policy, `SELECT` only for the runtime role | No tenant data means no leakage path, which is stronger than a correct policy. Asserted by test |
+| **A test fixture cannot become a review** | Probes use a resource that does not exist; a test asserts production holds zero assessments | A number in a fixture is indistinguishable from a finding six months later (`testing-strategy.md` §32) |
+
 ---
 
 ## 2. Turborepo task graph

@@ -9,12 +9,12 @@
  * Editing this file by hand will be overwritten and will fail the contract
  * check in CI. Change the source of truth instead.
  *
- * contract_version: 1.10.0
+ * contract_version: 1.11.0
  * ontology_version: 2
  */
 
 
-export const CONTRACT_VERSION = "1.10.0" as const;
+export const CONTRACT_VERSION = "1.11.0" as const;
 export const ONTOLOGY_VERSION = "2" as const;
 export const RESEARCH_CONTEXT_SCHEMA_VERSION = "1.0.0" as const;
 
@@ -833,6 +833,55 @@ export const CLAIM_INTERPRETATION_INPUT_ROLE_VALUES = [
 export type ClaimInterpretationInputRole = (typeof CLAIM_INTERPRETATION_INPUT_ROLE_VALUES)[number];
 export function isClaimInterpretationInputRole(v: unknown): v is ClaimInterpretationInputRole {
   return typeof v === "string" && (CLAIM_INTERPRETATION_INPUT_ROLE_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * What established a reliability value. Closed, and closed is the point: there is deliberately no MODEL_GUESSED member. A model may help a reviewer read documentation; it may not be the epistemic source of the judgement, and a vocabulary with nowhere to record a guess is what makes that enforceable rather than merely stated (llm-reasoning-rules.md §7).
+ * @see evidence-reliability-contract-v1.md §5; Mission 1.14 §8
+ */
+export const RELIABILITY_ASSESSMENT_ORIGIN_VALUES = [
+  "HUMAN_REVIEW",
+  "DOCUMENTED_METHOD",
+  "CALIBRATED_EMPIRICALLY",
+] as const;
+export type ReliabilityAssessmentOrigin = (typeof RELIABILITY_ASSESSMENT_ORIGIN_VALUES)[number];
+export function isReliabilityAssessmentOrigin(v: unknown): v is ReliabilityAssessmentOrigin {
+  return typeof v === "string" && (RELIABILITY_ASSESSMENT_ORIGIN_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * What KIND of document or fact a reliability judgement rests on. Every assessment carries at least one basis row naming a retrieved document; 'the publisher is reputable' is not a member and cannot be recorded, because reputation is not a property of a measurement.
+ * @see evidence-reliability-contract-v1.md §6; Mission 1.14 §7
+ */
+export const RELIABILITY_BASIS_TYPE_VALUES = [
+  "SOURCE_DOCUMENTATION",
+  "DATASET_METHODOLOGY",
+  "MEASUREMENT_METHODOLOGY",
+  "KNOWN_LIMITATION",
+  "INDEPENDENT_VALIDATION",
+  "OFFICIAL_STATISTICAL_METHOD",
+  "CORPUS_CONSTRUCTION_METHOD",
+  "REVIEWER_DOCUMENTED_JUDGEMENT",
+] as const;
+export type ReliabilityBasisType = (typeof RELIABILITY_BASIS_TYPE_VALUES)[number];
+export function isReliabilityBasisType(v: unknown): v is ReliabilityBasisType {
+  return typeof v === "string" && (RELIABILITY_BASIS_TYPE_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * What happened when an Evidence row asked for a reliability value. Recorded on every row an aggregation considered, so a score's coefficients can be reconstructed and a non-scorable row can say precisely why (Mission 1.14 §20).
+ * @see evidence-reliability-contract-v1.md §8; Mission 1.14 §18, ADR-026
+ */
+export const RELIABILITY_RESOLUTION_OUTCOME_VALUES = [
+  "DIRECTLY_SUPPLIED",
+  "RESOLVED",
+  "NO_APPLICABLE_ASSESSMENT",
+  "AMBIGUOUS_ASSESSMENTS",
+  "SUPERSEDED_ONLY",
+] as const;
+export type ReliabilityResolutionOutcome = (typeof RELIABILITY_RESOLUTION_OUTCOME_VALUES)[number];
+export function isReliabilityResolutionOutcome(v: unknown): v is ReliabilityResolutionOutcome {
+  return typeof v === "string" && (RELIABILITY_RESOLUTION_OUTCOME_VALUES as readonly string[]).includes(v);
 }
 
 // --- Numeric bounds --------------------------------------------------------

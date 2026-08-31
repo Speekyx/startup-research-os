@@ -10,7 +10,7 @@ system. Code conforms to them; they do not conform to code.
 | `claim-model-v1.md` | **Current** | The Claim: identity, statement revision, temporality, origin, lifecycle, evidence relationship |
 | `opportunity-ontology-v2.md` | Superseded by V2.1 | Historical record. §1–§16 are unchanged and V2.1 refers to it for them |
 | `scoring-framework-v1.1.md` | **Current** | The five score families, dimensions, profiles, normalization, numeric representation |
-| `evidence-confidence-framework-v1.md` | **Current** | Evidence levels, reliability, independence, recency, provenance, claim types |
+| `evidence-confidence-framework-v1.md` | **Current** | Evidence levels, reliability, independence, recency, provenance, claim types. **§3's heuristic list was marked historical in Mission 1.14** -- read literally it is a source-type coefficient table |
 | `evidence-aggregation-framework-v1.md` | **Current** | How several Evidence records combine into support, contradiction and an Evidence Score. Resolves D-03 at the framework level |
 | `evidence-aggregation-calibration-plan-v1.md` | Plan | How the parameters will be fitted once labelled data exists. **Not executed** |
 | `evidence-aggregation-sensitivity-v1.md` | **Generated** | Synthetic behaviour analysis. Rendered from the reference implementation and checked in CI |

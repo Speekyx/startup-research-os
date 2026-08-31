@@ -14,6 +14,7 @@ members = [
     "sros-claim-model",
     "sros-contracts",
     "sros-evidence-aggregation",
+    "sros-evidence-reliability",
     "sros-gateway",
     "sros-llm-gateway",
     "sros-nlp",
@@ -1612,6 +1613,17 @@ source = { editable = "packages/contracts/python" }
 name = "sros-evidence-aggregation"
 version = "0.1.0"
 source = { editable = "packages/evidence-aggregation/python" }
+dependencies = [
+    { name = "sros-contracts" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "sros-contracts", editable = "packages/contracts/python" }]
+
+[[package]]
+name = "sros-evidence-reliability"
+version = "0.1.0"
+source = { editable = "packages/evidence-reliability/python" }
 dependencies = [
     { name = "sros-contracts" },
 ]

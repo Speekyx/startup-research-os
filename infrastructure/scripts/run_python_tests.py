@@ -32,6 +32,7 @@ SUITES = [
     # broken (ADR-009).
     "packages/signal-model/python",
     "packages/claim-model/python",
+    "packages/evidence-reliability/python",
     "services/workers/python",
     "services/research-orchestrator/python",
 ]

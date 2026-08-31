@@ -116,6 +116,26 @@ would be a category error in both directions:
 differing only in `source_id` must produce identical numbers, and a test asserts
 that too.
 
+### Where a reviewed reliability comes from (added in Mission 1.14)
+
+This framework says what reliability *means* and consumes the number. It does
+not say who may set one. Since Mission 1.14 that is governed by
+[`../data/evidence-reliability-contract-v1.md`](../data/evidence-reliability-contract-v1.md):
+
+- a reviewed assessment applies to a **measurement × purpose** scope — source,
+  resource, record kind, claim type, proposition kind — and matches only when
+  **all five** agree, so `world-bank` alone matches nothing;
+- it rests on retrieved first-party documentation, is attributed to a named
+  reviewer, and is superseded rather than updated;
+- **zero matches leaves the value `NULL`** and the record NON_SCORABLE (§6);
+  more than one match is **refused**, never averaged;
+- the resolver lives in `packages/evidence-reliability`, deliberately outside
+  this package — it matches on source, and the guard above must stay intact.
+
+Nothing in §4, §5 or §6 changes. What changed is that "a reviewer forming that
+judgement" is now a reviewed artifact with a basis, a version and a binding
+recorded on the result, rather than a sentence in this document.
+
 ---
 
 ## 4. Evidence item inputs
@@ -548,6 +568,12 @@ The two gates are independent:
 Framework Defined     <- Mission 1.1 does this
 Profile Calibrated    <- requires labelled data. NOT DONE
 ```
+
+**Reliability review is a third thing, and it is neither gate.** Mission 1.14
+defines how a reliability value may be established and reviewed. That is not
+calibration: a `HUMAN_REVIEW` or `DOCUMENTED_METHOD` assessment fits nothing to
+any outcome, and the database refuses one that names a calibration dataset.
+`REFERENCE_PROFILE_V1` stays `UNCALIBRATED` however many assessments exist.
 
 Until a `CALIBRATED` profile exists, `services/scoring` remains **unavailable
 for production research**. Synthetic and experimental evaluation may use an

@@ -67,6 +67,16 @@ GLOBAL_TABLES = {
     # the same argument that makes every table above global.
     "registry.source_signal_coverage",
     "registry.source_behavior_coverage",
+    # Added in Mission 1.14 (ADR-026 Decision 3). An assessment is a statement
+    # about a PUBLISHED DATASET's measurement contract, evidenced by the
+    # publisher's own documentation -- not a statement about a tenant. Making it
+    # tenant-scoped would mean every workspace re-reviewing the same
+    # methodology, producing several answers to one question with nothing to say
+    # which is right. Deliberately a separate SCHEMA from `registry`: legal
+    # permission and measurement quality are different concerns, and no formula
+    # converts one into the other.
+    "epistemic.reliability_assessments",
+    "epistemic.reliability_assessment_basis",
 }
 
 # Tables governed by data-retention-policy-v1.md, each with the column its
@@ -407,6 +417,17 @@ def main() -> int:
         ("SignalInputRole", "nlp.signal_inputs", "role"),
         ("SignalRefusalReason", "nlp.signal_inputs", "refusal_reason"),
         ("NormalizedRecordQuality", "nlp.signal_inputs", "input_quality"),
+        # Mission 1.14. The origin vocabulary is the one that matters most: it is
+        # closed precisely so there is nowhere to record a model's guess, and a
+        # value drifting from the contract here would reopen the hole the closure
+        # exists to shut (evidence-reliability-contract-v1.md §5).
+        ("ReliabilityAssessmentOrigin", "epistemic.reliability_assessments", "origin"),
+        ("ClaimType", "epistemic.reliability_assessments", "claim_type"),
+        (
+            "ReliabilityBasisType",
+            "epistemic.reliability_assessment_basis",
+            "basis_type",
+        ),
     ]
     for enum_name, table, column in enum_sites:
         expected = set(enums[enum_name])

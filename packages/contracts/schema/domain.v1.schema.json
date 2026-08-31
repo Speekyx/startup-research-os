@@ -3,7 +3,7 @@
   "$id": "https://startup-research-os.local/schema/domain.v1.schema.json",
   "title": "Startup Research OS domain vocabulary",
   "description": "GENERATED FILE. Source of truth: packages/contracts/schema/domain.v1.json. Regenerate with python packages/contracts/tools/generate.py.",
-  "x-contract-version": "1.10.0",
+  "x-contract-version": "1.11.0",
   "x-ontology-version": "2",
   "$defs": {
     "AcquisitionErrorCode": {
@@ -570,6 +570,40 @@
       "minimum": 0.0,
       "maximum": 1.0,
       "description": "Source reliability estimate."
+    },
+    "ReliabilityAssessmentOrigin": {
+      "type": "string",
+      "enum": [
+        "HUMAN_REVIEW",
+        "DOCUMENTED_METHOD",
+        "CALIBRATED_EMPIRICALLY"
+      ],
+      "description": "What established a reliability value. Closed, and closed is the point: there is deliberately no MODEL_GUESSED member. A model may help a reviewer read documentation; it may not be the epistemic source of the judgement, and a vocabulary with nowhere to record a guess is what makes that enforceable rather than merely stated (llm-reasoning-rules.md §7)."
+    },
+    "ReliabilityBasisType": {
+      "type": "string",
+      "enum": [
+        "SOURCE_DOCUMENTATION",
+        "DATASET_METHODOLOGY",
+        "MEASUREMENT_METHODOLOGY",
+        "KNOWN_LIMITATION",
+        "INDEPENDENT_VALIDATION",
+        "OFFICIAL_STATISTICAL_METHOD",
+        "CORPUS_CONSTRUCTION_METHOD",
+        "REVIEWER_DOCUMENTED_JUDGEMENT"
+      ],
+      "description": "What KIND of document or fact a reliability judgement rests on. Every assessment carries at least one basis row naming a retrieved document; 'the publisher is reputable' is not a member and cannot be recorded, because reputation is not a property of a measurement."
+    },
+    "ReliabilityResolutionOutcome": {
+      "type": "string",
+      "enum": [
+        "DIRECTLY_SUPPLIED",
+        "RESOLVED",
+        "NO_APPLICABLE_ASSESSMENT",
+        "AMBIGUOUS_ASSESSMENTS",
+        "SUPERSEDED_ONLY"
+      ],
+      "description": "What happened when an Evidence row asked for a reliability value. Recorded on every row an aggregation considered, so a score's coefficients can be reconstructed and a non-scorable row can say precisely why (Mission 1.14 §20)."
     },
     "ResearchContext": {
       "type": "object",
