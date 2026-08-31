@@ -12,7 +12,7 @@ from __future__ import annotations
 import contextlib
 import json
 import uuid
-from datetime import timedelta
+from datetime import UTC, datetime, timedelta
 from decimal import Decimal
 
 import psycopg
@@ -315,13 +315,29 @@ class TestJobPayload:
 # ----------------------------------------------------------------- persistence
 
 
+def _persist_at(*records) -> datetime:
+    """A normalization time that is never before collection.
+
+    `seeded_raw` runs the REAL collector, so its records carry a real-clock
+    `collected_at`, while `NORMALIZED_AT` is a fixed instant. The database's
+    `CHECK (normalized_at >= collected_at)` is right and the constant was a
+    snapshot: it held until the wall clock passed 2026-08-31 09:00 UTC and then
+    failed for good (`testing-strategy.md` §42).
+
+    The offline tests keep the constant. They pair it with the fixed
+    `COLLECTED_AT` and are deterministic, which is worth more there than
+    clock-independence is here.
+    """
+    return max([NORMALIZED_AT, datetime.now(UTC), *(r.collected_at for r in records)])
+
+
 @needs_postgres
 class TestPersistence:
     """§55. Against a real database, with real row-level security."""
 
     def test_a_draft_persists_with_complete_lineage(self, tenant_conn, seeded_raw) -> None:
         draft = make_normalizer().normalize(
-            seeded_raw[0], correlation_id="c", normalized_at=NORMALIZED_AT
+            seeded_raw[0], correlation_id="c", normalized_at=_persist_at(seeded_raw[0])
         )
         with tenant_conn(WORKSPACE_P) as conn:
             report = persist_normalized(conn, [draft])
@@ -357,17 +373,15 @@ class TestPersistence:
     def test_running_twice_writes_nothing_the_second_time(self, tenant_conn, seeded_raw) -> None:
         """§23 and §35. The property that makes duplicate delivery safe."""
         normalizer = make_normalizer()
-        drafts = [
-            normalizer.normalize(r, correlation_id="c", normalized_at=NORMALIZED_AT)
-            for r in seeded_raw
-        ]
+        at = _persist_at(*seeded_raw)
+        drafts = [normalizer.normalize(r, correlation_id="c", normalized_at=at) for r in seeded_raw]
         with tenant_conn(WORKSPACE_P) as conn:
             first = persist_normalized(conn, drafts)
             # A LATER clock on the second pass, because a redelivery does not
             # happen at the same instant -- and the time must not matter.
             again = [
                 normalizer.normalize(
-                    r, correlation_id="redelivery", normalized_at=NORMALIZED_AT + timedelta(hours=3)
+                    r, correlation_id="redelivery", normalized_at=at + timedelta(hours=3)
                 )
                 for r in seeded_raw
             ]
@@ -392,12 +406,16 @@ class TestPersistence:
         original = seeded_raw[0]
         original_value = canonical_decimal_text(Decimal(str(original.payload["value"])))
         normalizer = make_normalizer()
-        first = normalizer.normalize(original, correlation_id="c", normalized_at=NORMALIZED_AT)
+        first = normalizer.normalize(
+            original, correlation_id="c", normalized_at=_persist_at(original)
+        )
 
         revised_value = Decimal(str(original.payload["value"])) + Decimal("1000")
         revised_raw = _revise(original, revised_value)
+        # The revision was collected a day later, so its normalization must be
+        # later still -- `_revise` moves `collected_at` forward by design.
         second = normalizer.normalize(
-            revised_raw, correlation_id="c", normalized_at=NORMALIZED_AT + timedelta(days=1)
+            revised_raw, correlation_id="c", normalized_at=_persist_at(revised_raw)
         )
 
         with tenant_conn(WORKSPACE_P) as conn:
@@ -421,12 +439,11 @@ class TestPersistence:
     def test_two_normalizer_versions_coexist(self, tenant_conn, seeded_raw) -> None:
         """§49. Representation A survives when B is written."""
         record = seeded_raw[0]
-        first = make_normalizer().normalize(record, correlation_id="c", normalized_at=NORMALIZED_AT)
+        at = _persist_at(record)
+        first = make_normalizer().normalize(record, correlation_id="c", normalized_at=at)
         newer = make_normalizer()
         newer.normalizer_version = "1.1.0"  # type: ignore[misc]
-        second = newer.normalize(
-            record, correlation_id="c", normalized_at=NORMALIZED_AT + timedelta(hours=1)
-        )
+        second = newer.normalize(record, correlation_id="c", normalized_at=at + timedelta(hours=1))
 
         with tenant_conn(WORKSPACE_P) as conn:
             persist_normalized(conn, [first])
@@ -448,9 +465,8 @@ class TestPersistence:
     ) -> None:
         """The mechanism that makes a version bump necessary rather than polite."""
         record = seeded_raw[0]
-        stored = make_normalizer().normalize(
-            record, correlation_id="c", normalized_at=NORMALIZED_AT
-        )
+        at = _persist_at(record)
+        stored = make_normalizer().normalize(record, correlation_id="c", normalized_at=at)
         # A normalizer whose CONFIGURATION changed without its version changing:
         # the same identity, different canonical content.
         from sros_acquisition.normalization import GeographyMap
@@ -458,7 +474,7 @@ class TestPersistence:
         blind = make_normalizer(
             geography=GeographyMap(canonical_scheme="ISO-3166-1-ALPHA-2", entries={})
         )
-        divergent = blind.normalize(record, correlation_id="c", normalized_at=NORMALIZED_AT)
+        divergent = blind.normalize(record, correlation_id="c", normalized_at=at)
         assert divergent.record_id == stored.record_id
         assert divergent.content_hash != stored.content_hash
 
@@ -480,9 +496,9 @@ class TestPersistence:
         """§29. Either the batch and its lineage, or nothing."""
         from .conftest import DATABASE_URL
 
+        at = _persist_at(*seeded_raw)
         drafts = [
-            make_normalizer().normalize(r, correlation_id="c", normalized_at=NORMALIZED_AT)
-            for r in seeded_raw
+            make_normalizer().normalize(r, correlation_id="c", normalized_at=at) for r in seeded_raw
         ]
         connection = psycopg.connect(DATABASE_URL)
         try:
@@ -507,7 +523,7 @@ class TestPersistence:
     ) -> None:
         """§30. Two workspaces, because one cannot detect a missing filter."""
         draft = make_normalizer().normalize(
-            seeded_raw[0], correlation_id="c", normalized_at=NORMALIZED_AT
+            seeded_raw[0], correlation_id="c", normalized_at=_persist_at(seeded_raw[0])
         )
         with tenant_conn(WORKSPACE_P) as conn:
             persist_normalized(conn, [draft])
@@ -527,7 +543,7 @@ class TestPersistence:
     ) -> None:
         """§31. Layer three: the composite FK makes it impossible, not merely wrong."""
         draft = make_normalizer().normalize(
-            seeded_raw[0], correlation_id="c", normalized_at=NORMALIZED_AT
+            seeded_raw[0], correlation_id="c", normalized_at=_persist_at(seeded_raw[0])
         )
         # The same raw record, claimed by the other workspace.
         alien = _with_workspace(draft, second_workspace)

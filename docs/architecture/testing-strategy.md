@@ -1682,4 +1682,69 @@ def flat(path):
 
 **Cheap, and it removes a whole class of false failure** that would otherwise
 train contributors to treat a red documentation test as noise.
+---
+
+## 42. A fixed timestamp compared against a real clock is a snapshot
+
+Seven database tests in `test_world_bank_normalizer.py::TestPersistence` began
+failing at **09:00 UTC on 2026-08-31** and would have failed for ever after:
+
+```text
+psycopg.errors.CheckViolation: new row for relation "normalized_records"
+violates check constraint "normalized_records_normalized_after_collection_check"
+```
+
+The constraint is `CHECK (normalized_at >= collected_at)` and it is correct. What
+was wrong is the pair either side of it:
+
+| | |
+|---|---|
+| `NORMALIZED_AT` | a fixed `2026-08-31 09:00 UTC` in `normalization_fixtures.py` |
+| `seeded_raw` | runs the **real** collector, which stamps `collected_at` from the real clock |
+
+For eight months the constant was in the future and everything passed. The wall
+clock reached it, and from that instant every `seeded_raw` record was collected
+*after* the moment the tests claimed to normalise it.
+
+### Why it hid for so long, and why CI did not catch it
+
+CI seeds a **fresh** database on every run, so it exercises the same code — but
+the failure is not about database state, it is about the clock, and CI's clock
+crossed the threshold in the same hour a local run did. It went red on the next
+run. **A test whose failure date is in the future is invisible to every run
+before that date**, which is what makes this class worth naming rather than just
+fixing.
+
+### The fix
+
+Inside `TestPersistence`, derive the time instead of pinning it:
+
+```python
+def _persist_at(*records) -> datetime:
+    return max([NORMALIZED_AT, datetime.now(UTC), *(r.collected_at for r in records)])
+```
+
+Computed **once per test** and reused, so nothing drifts between two calls in one
+test — `_revise` moves `collected_at` a day forward on purpose, and that record
+has to be passed in rather than assumed.
+
+**The offline tests keep the constant**, and should: they pair `NORMALIZED_AT`
+with the fixed `COLLECTED_AT`, and determinism is worth more there than
+clock-independence. The rule is not "never use a fixed timestamp".
+
+### The rule
+
+> **A fixed timestamp compared against a real clock is a snapshot, not an
+> invariant.**
+
+This is §36's lesson — *a local snapshot is not a test invariant* — in the time
+dimension. There it was row counts from one database; here it is an instant from
+one afternoon. Both read as facts about the world and are facts about the moment
+the test was written.
+
+### The tell
+
+A constant that must be *later than* something the test does not control. If a
+fixture calls real code that reads a clock, no literal on the other side of the
+comparison is safe.
 
