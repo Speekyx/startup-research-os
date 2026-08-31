@@ -1425,3 +1425,50 @@ The rule this suggests: **when a guard blocks correct new code, first ask
 whether the code is on the right side of the boundary the guard defends.**
 Narrowing the guard is the second option, not the first, and it costs an
 exhaustiveness check to stay honest. Moving the code costs neither.
+
+## 34. A review is tested against its record, never against the source (Mission 1.15)
+
+Mission 1.15 reviewed nine sources by retrieving their governing documents.
+Two of those retrievals failed because the host would not serve to the review
+environment at all — Reddit and Stack Exchange, both high-value, both left
+exactly where they were.
+
+That failure mode is the argument for a rule the registry suites have followed
+since Mission 1.0 and which had not been written down: **a source-review test
+asserts properties of the recorded review, and never contacts the platform.**
+
+If `test_demand_side_expansion.py` fetched Y Combinator's terms to check that
+Hacker News is `RESTRICTED`, the suite would fail whenever YC was slow, whenever
+CI ran from a blocked network, and whenever the document moved — none of which is
+a defect in the catalog. Worse, it would *pass* while the recorded review said
+something else entirely, because it would be testing the world rather than the
+record.
+
+**Retrieving the document is the review. The test checks that the review says
+what the reviewer found.**
+
+### What that makes testable
+
+Properties the record must have, none of which needs a network:
+
+- a verdict that changed carries evidence with a URL, a finding and a retrieval
+  time;
+- a `RESTRICTED` verdict names at least one activity as `NOT_PERMITTED` — it
+  rests on a finding rather than an absence;
+- an unreachable source gained **no** review version, because a failed retrieval
+  is not evidence;
+- superseded versions still say what they said: Pinterest v1's `NOT_ASSESSED` and
+  v2's `NOT_PERMITTED` are different claims and both survive;
+- a blocked source records coverage and is still not counted as usable.
+
+### The assertion that had to get stricter
+
+One test checked that Pinterest's evidence mentioned storage, by looking for
+`"store"` in the finding. The finding says *"storing"*, so it failed — and the
+tempting fix was to match the stem `"stor"`.
+
+That would have made the test pass on any prose that *mentioned* storage,
+including a finding that said storage was permitted. It now matches the verbatim
+clause the verdict turns on: *"call the API on each access"*. A test over
+evidence text should match what the document actually said, not the topic it was
+about.

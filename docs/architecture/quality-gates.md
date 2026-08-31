@@ -405,6 +405,20 @@ shape, because this is the kind of finding that decays quietly.
 | **Assessments are global, with no tenant path** | No `workspace_id`, no RLS policy, `SELECT` only for the runtime role | No tenant data means no leakage path, which is stronger than a correct policy. Asserted by test |
 | **A test fixture cannot become a review** | Probes use a resource that does not exist; a test asserts production holds zero assessments | A number in a fixture is indistinguishable from a finding six months later (`testing-strategy.md` §32) |
 
+### The demand-side source round (Mission 1.15)
+
+| Gate | Mechanism | Guards |
+|------|-----------|--------|
+| **A verdict change carries retrieved evidence** | `validate_source_registry.py` plus a test per re-reviewed source: URL, finding and retrieval time all required | A verdict that moved on a recollection rather than a document would be indistinguishable from one that moved on evidence |
+| **A RESTRICTED verdict names what prohibits it** | A test asserts at least one load-bearing activity is `NOT_PERMITTED` | RESTRICTED must rest on a finding, never on an absence -- which is what `REQUIRES_REVIEW` is for |
+| **A failed retrieval changes nothing** | Reddit and Stack Exchange gained no review version, asserted by test | A source nobody could reach is not a source anybody assessed. Recording a version would make an unresolved question look answered |
+| **Silence still blocks, with five of six granted** | `ted-eu` records `model_processing` as `NOT_ADDRESSED`; rule 8 blocks the approval | The strongest test the rule has had: a source with an explicit commercial-reuse grant, blocked on one unaddressed activity. Narrowing the assessed use to rescue it is what Mission 1.8 forbids |
+| **Technical access is still not permission** | Tests pair a keyless public API with a non-approving verdict, for `hacker-news`, `bluesky` and `ted-eu` | Hacker News publishes an API stating there is no rate limit, and its governing terms prohibit data mining and commercial derivative work. Both facts are true at once |
+| **Restricted and prohibited verdicts were not softened** | A test pins the six RESTRICTED and three PROHIBITED sources, and the approving set of five | An expansion round is where a verdict gets quietly relaxed to raise the count of usable sources |
+| **Coverage is still not permission** | Both new sources record signal coverage and neither is approving, asserted by test | ADR-017, on the two sources most likely to tempt an exception -- they cover the family with no candidate at all |
+| **No collector was built** | Tests assert neither new source is in `IMPLEMENTED_COLLECTORS` or `IMPLEMENTED_NORMALIZERS` | §31. A collector for a `REQUIRES_REVIEW` source is code the gate would refuse to run |
+| **CI never contacts a platform** | The whole suite reads the recorded catalog | The review environment could not reach two hosts; a suite that fetched terms would fail on the network rather than on the record (`testing-strategy.md` §34) |
+
 ---
 
 ## 2. Turborepo task graph

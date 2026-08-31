@@ -333,6 +333,66 @@
               "retrieved_at": "2026-08-30T00:00:00+00:00"
             }
           ]
+        },
+        {
+          "review_version": 2,
+          "approval_state": "REQUIRES_REVIEW",
+          "reviewed_by": "mission-1.15",
+          "reviewed_at": "2026-08-31T00:00:00+00:00",
+          "review_interval_days": 180,
+          "automated_access": "NOT_ADDRESSED",
+          "api_use": "NOT_ADDRESSED",
+          "browser_automation": "NOT_ADDRESSED",
+          "commercial_use": "NOT_ADDRESSED",
+          "storage": "NOT_ADDRESSED",
+          "retention": "UNCLEAR",
+          "redistribution": "NOT_ADDRESSED",
+          "derived_analytics": "NOT_ADDRESSED",
+          "model_processing": "NOT_ADDRESSED",
+          "personal_data_handling": "UNCLEAR",
+          "attribution_required": "NOT_ADDRESSED",
+          "personal_data_risk": "IDENTIFIABLE",
+          "contains_user_generated_content": true,
+          "contains_user_identifiers": true,
+          "contains_location": false,
+          "sensitive_data_possible": true,
+          "pseudonymization_expected": true,
+          "discard_identifiers_after_normalization": true,
+          "jurisdiction_review_required": true,
+          "conditions": [],
+          "required_conditions": [],
+          "open_questions": [
+            "Retrieve the Bluesky Developer Guidelines. The document is named by Bluesky's own documentation domain at https://docs.bsky.app/docs/support/developer-guidelines, which redirects permanently to https://bsky.network/docs/support/developer-guidelines and returned an empty body on 2026-08-31. This is the single question standing between Bluesky and an assessable verdict.",
+            "Determine whether Bluesky publishes documented rate limits for the public AppView and the firehose. None were found in the documents read here or in v1.",
+            "Determine what obligations follow from the Terms' acknowledgement that deletion may not propagate across the network. A downstream holder of a deleted post is exactly the case that sentence describes, and it creates an obligation the Terms do not specify."
+          ],
+          "review_notes": "The verdict does not change and the question does. v1 asked whether a developer terms document exists separate from the user Terms of Service; it does -- Bluesky's own documentation domain names 'Bluesky Developer Guidelines' -- and it could not be retrieved: the canonical URL redirects permanently to bsky.network and that host returned an empty body. No mirror, cache or third-party copy was consulted, because a retrieval failure leaves a question unresolved rather than licensing a substitute. The Terms of Service were re-retrieved at their current version, updated effective 15 September 2025 after v1 was written, and remain silent on all ten activities that matter to a third party reading public records. Bluesky is therefore still the catalog's sharpest illustration of technical openness without a governing grant -- but the open question is now one retrievable document rather than four unknowns.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_TERMS",
+              "document_title": "Bluesky Terms of Service (current version)",
+              "document_url": "https://bsky.social/about/support/tos",
+              "section_reference": "Whole document",
+              "summarized_finding": "Re-retrieved on 2026-08-31 following the terms update announced for 15 September 2025. The document remains silent, for a third party reading public records, on automated access and crawling, API use, commercial use, storage or caching, derived analytics, machine-learning inference, embeddings, model training, redistribution and rate limits. It addresses deletion only, stating that because of the AT Protocol's decentralised nature Bluesky cannot control or force other services and developer applications.",
+              "retrieved_at": "2026-08-31T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_TERMS",
+              "document_title": "Bluesky Developer Guidelines",
+              "document_url": "https://bsky.network/docs/support/developer-guidelines",
+              "section_reference": "Retrieval failure",
+              "summarized_finding": "Named by Bluesky's documentation domain as the guidelines developers who federate apps or services on the AT Protocol must follow to communicate with Bluesky services. The canonical URL docs.bsky.app/docs/support/developer-guidelines returned HTTP 301 to bsky.network/docs/support/developer-guidelines, and that URL returned an empty body on 2026-08-31. The documentation root at bsky.network links to no terms, guidelines or legal document. The document's existence is established; its content is not.",
+              "retrieved_at": "2026-08-31T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_TERMS",
+              "document_title": "Bluesky: Updated Terms and Policies",
+              "document_url": "https://bsky.social/about/blog/08-14-2025-updated-terms-and-policies",
+              "section_reference": "Effective dates",
+              "summarized_finding": "Announces updated Terms of Service, Privacy Policy and Copyright Policy effective 15 September 2025 and updated Community Guidelines effective 15 October 2025. The announcement addresses regulatory compliance and names no developer, API, commercial-use or machine-learning provision, and links to no developer terms document.",
+              "retrieved_at": "2026-08-31T00:00:00+00:00"
+            }
+          ]
         }
       ]
     },
@@ -1780,6 +1840,55 @@
               "retrieved_at": "2026-08-29T00:00:00+00:00"
             }
           ]
+        },
+        {
+          "review_version": 3,
+          "approval_state": "RESTRICTED",
+          "reviewed_by": "mission-1.15",
+          "reviewed_at": "2026-08-31T00:00:00+00:00",
+          "review_interval_days": 365,
+          "automated_access": "NOT_PERMITTED",
+          "api_use": "UNCLEAR",
+          "commercial_use": "NOT_PERMITTED",
+          "storage": "NOT_PERMITTED",
+          "retention": "NOT_ADDRESSED",
+          "redistribution": "NOT_PERMITTED",
+          "derived_analytics": "NOT_PERMITTED",
+          "model_processing": "NOT_ADDRESSED",
+          "personal_data_handling": "NOT_ADDRESSED",
+          "attribution_required": "NOT_ADDRESSED",
+          "personal_data_risk": "PSEUDONYMOUS",
+          "contains_user_generated_content": true,
+          "contains_user_identifiers": true,
+          "contains_location": false,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": true,
+          "discard_identifiers_after_normalization": true,
+          "jurisdiction_review_required": false,
+          "conditions": [],
+          "required_conditions": [],
+          "open_questions": [
+            "Whether Y Combinator would grant written permission for automated collection of Hacker News content for a commercial research product. The Terms prohibit the activity and describe no permission route, so this is operator correspondence rather than a document to retrieve."
+          ],
+          "review_notes": "The clearest demonstration in the catalog of the rule that technical accessibility is not permission. The Hacker News API is published on GitHub, documented, needs no key, and states 'There is currently no rate limit' -- an invitation by every engineering measure. The governing Y Combinator Terms of Use, which bring news.ycombinator.com in scope explicitly, prohibit 'any data mining, robots, scraping or similar data gathering or extraction methods' and prohibit reproducing, creating derivative works from or exploiting any portion of the Site for any commercial purposes. Both halves of this engine's use are named. v2 recorded REQUIRES_REVIEW because the governing terms had not been retrieved; they have been now, and they answer the question against us. The MIT licence on the API's GitHub repository covers that repository's documentation, not the content Hacker News serves.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_TERMS",
+              "document_title": "Y Combinator Terms of Use",
+              "document_url": "https://www.ycombinator.com/legal/",
+              "section_reference": "Terms of Use; prohibited conduct",
+              "summarized_finding": "States that use of certain components of the Site is subject to additional terms including the Hacker News Guidelines at news.ycombinator.com/newsguidelines.html, which places Hacker News within this document's scope. Prohibits engaging in or using any data mining, robots, scraping or similar data gathering or extraction methods. Separately prohibits displaying, distributing, licensing, reproducing, duplicating, copying, creating derivative works from, modifying, selling, reselling, exploiting or transferring any portion of the Site for any commercial purposes, excepting a user's own content.",
+              "retrieved_at": "2026-08-31T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "Hacker News API",
+              "document_url": "https://github.com/HackerNews/API",
+              "section_reference": "Overview; rate limits",
+              "summarized_finding": "Documents a public Firebase-backed API requiring no key and states 'There is currently no rate limit'. Carries no terms of use and addresses none of commercial use, storage, automated collection, derived analytics or machine learning. The repository's MIT licence applies to the repository, which contains documentation rather than Hacker News content.",
+              "retrieved_at": "2026-08-31T00:00:00+00:00"
+            }
+          ]
         }
       ],
       "signal_coverage": [
@@ -2516,6 +2625,55 @@
           ],
           "review_notes": "Pinterest is the strongest candidate in the catalog for DESIRE signals specifically -- saving something is an expression of want with no complaint and no purchase attached, which is exactly the signal shape §24 asks whether the portfolio can detect. That is a reason to finish the review with some priority, and it is not a reason to assume the answer. No evidence was gathered and every activity is NOT_ASSESSED.",
           "evidence": []
+        },
+        {
+          "review_version": 2,
+          "approval_state": "RESTRICTED",
+          "reviewed_by": "mission-1.15",
+          "reviewed_at": "2026-08-31T00:00:00+00:00",
+          "review_interval_days": 365,
+          "automated_access": "NOT_PERMITTED",
+          "api_use": "PERMITTED_WITH_CONDITIONS",
+          "commercial_use": "NOT_PERMITTED",
+          "storage": "NOT_PERMITTED",
+          "retention": "NOT_PERMITTED",
+          "redistribution": "NOT_PERMITTED",
+          "derived_analytics": "NOT_PERMITTED",
+          "model_processing": "NOT_PERMITTED",
+          "personal_data_handling": "UNCLEAR",
+          "attribution_required": "NOT_ADDRESSED",
+          "personal_data_risk": "IDENTIFIABLE",
+          "contains_user_generated_content": true,
+          "contains_user_identifiers": true,
+          "contains_location": false,
+          "sensitive_data_possible": true,
+          "pseudonymization_expected": true,
+          "discard_identifiers_after_normalization": true,
+          "jurisdiction_review_required": true,
+          "conditions": [],
+          "required_conditions": [],
+          "open_questions": [
+            "Whether Pinterest grants explicit written authorization for platform insights, benchmarking or competitor research features, and on what commercial terms. The guidelines name that authorization as the only route; obtaining one is an external action, not a review finding."
+          ],
+          "review_notes": "The verdict changed on retrieved first-party evidence, and it changed in the direction nobody hoped for. Mission 1.7 called Pinterest the catalog's strongest DESIRE candidate -- saving something is an expression of want with no complaint and no purchase attached -- and Mission 1.15 retrieved the developer guidelines that v1 could not reach. They close it. Four clauses each independently incompatible with this engine: no storage of API information at all ('call the API each time'), automated extraction prohibited, ML training prohibited, and API information usable only to serve and evaluate ads ON Pinterest. The fifth names the product directly -- platform insights, benchmarking and competitor research require explicit written authorization. RESTRICTED rather than PROHIBITED because a written authorization is a route Pinterest itself describes; it is an external commercial action and not something a reviewer can resolve. A definite no is worth more than a hopeful maybe: this closes the portfolio's best DESIRE hypothesis on evidence instead of leaving it open on silence.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_TERMS",
+              "document_title": "Pinterest Developer Guidelines",
+              "document_url": "https://policy.pinterest.com/en/developer-guidelines",
+              "section_reference": "Storage; Prohibited uses",
+              "summarized_finding": "Prohibits storing information accessed through Pinterest Materials including the API, directing developers to call the API on each access instead, with an exception only for campaign analytics about an account the developer holds or has been granted access to. Lists among prohibited uses: automated scraping or data extraction except as expressly permitted; using Pinterest Materials to train, fine-tune or otherwise develop AI or machine-learning models except as expressly permitted; and attempting or claiming to provide platform insights, benchmarking or competitor research features without explicit written authorization. States that API information may not be used except to serve and evaluate the performance of ads on Pinterest, and that information from the API may not be shared or sold to a third party.",
+              "retrieved_at": "2026-08-31T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_TERMS",
+              "document_title": "Pinterest Developer and API Terms of Service (landing page)",
+              "document_url": "https://developers.pinterest.com/terms/",
+              "section_reference": "Retrieval failure",
+              "summarized_finding": "Reached on 2026-08-31 and returned navigation and footer links only, with no policy text -- the same failure Mission 1.7 recorded. The substantive guidelines were obtained instead from policy.pinterest.com, a first-party Pinterest policy host reached directly. No mirror, cache or third-party copy was used.",
+              "retrieved_at": "2026-08-31T00:00:00+00:00"
+            }
+          ]
         }
       ]
     },
@@ -3475,6 +3633,167 @@
       ]
     },
     {
+      "source_id": "ted-eu",
+      "canonical_name": "Tenders Electronic Daily (EU public procurement)",
+      "source_family": "public_procurement",
+      "lifecycle": "ACTIVE",
+      "homepage_url": "https://ted.europa.eu/en/",
+      "developer_portal_url": "https://ted.europa.eu/en/simap/developers-corner-for-reusers",
+      "documentation_url": "https://ted.europa.eu/en/legal-notice",
+      "description": "The EU's official public procurement journal. Contract award notices record what a public body actually bought, from which supplier, at what value -- a TRANSACTION rather than a listed price, which is the evidence class the portfolio has never had. REQUIRES_REVIEW: five of six load-bearing activities are granted explicitly and machine-learning processing is not addressed.",
+      "coverage": {
+        "scope": "PARTIAL",
+        "countries": [],
+        "regions": [
+          "EU"
+        ],
+        "languages": []
+      },
+      "quality_notes": {
+        "selection_bias": "Only procurement above EU publication thresholds appears, so small purchases are absent entirely. Public-sector buying only: it says nothing about what consumers or private companies pay.",
+        "moderation_effects": "None. Notices are filed by contracting authorities under a legal obligation rather than moderated.",
+        "historical_depth": "Daily and monthly packages are published as bulk XML; notices are retained ten years on the TED website and then archived."
+      },
+      "capabilities": [
+        "contract_award_notices",
+        "contract_notices",
+        "award_values",
+        "supplier_names",
+        "buyer_names",
+        "cpv_classification",
+        "award_dates"
+      ],
+      "signal_coverage": [
+        {
+          "signal_family": "commercial",
+          "basis": "A contract award notice records a completed purchase with its value. This is the first candidate in the catalog able to evidence that somebody paid, rather than that a price was listed."
+        },
+        {
+          "signal_family": "competition",
+          "basis": "Award notices name the winning supplier and, where published, the number of tenders received -- who competes for a category of work and how many did."
+        },
+        {
+          "signal_family": "problem",
+          "basis": "The subject of a contract states what a public body needed badly enough to buy. A weak PAIN signal about organisations, never about individuals."
+        },
+        {
+          "signal_family": "trend",
+          "basis": "Award volume and value by CPV classification are observable over time from dated notices."
+        }
+      ],
+      "behavior_coverage": [
+        {
+          "behavior": "buy",
+          "basis": "The notice records a completed procurement. The only source in the catalog whose primary record is a purchase."
+        },
+        {
+          "behavior": "compare",
+          "basis": "Where the number of tenders received is published, the notice records that alternatives were evaluated against each other."
+        }
+      ],
+      "access_profiles": [
+        {
+          "access_method": "DATASET_DOWNLOAD",
+          "label": "ted-bulk-xml",
+          "endpoint_url": "https://ted.europa.eu/en/help/data-reuse",
+          "documentation_url": "https://ted.europa.eu/en/help/data-reuse",
+          "requires_authentication": false,
+          "requires_api_key": false,
+          "requires_oauth": false,
+          "requires_account": false,
+          "requires_developer_app": false,
+          "requires_approval": false,
+          "approval_process_notes": null,
+          "secret_references": [],
+          "rate_limit_known": false,
+          "rate_limit_requests": null,
+          "rate_limit_period_seconds": null,
+          "rate_limit_daily_quota": null,
+          "rate_limit_origin": null,
+          "acquisition_cost": "FREE",
+          "notes": "Daily and monthly bulk XML packages, documented as downloadable without signing in. The intended reuse route rather than a technical loophole."
+        },
+        {
+          "access_method": "OFFICIAL_API",
+          "label": "ted-search-api",
+          "endpoint_url": "https://api.ted.europa.eu/",
+          "documentation_url": "https://ted.europa.eu/api/documentation/index.html",
+          "requires_authentication": false,
+          "requires_api_key": false,
+          "requires_oauth": false,
+          "requires_account": false,
+          "requires_developer_app": false,
+          "requires_approval": false,
+          "approval_process_notes": null,
+          "secret_references": [],
+          "rate_limit_known": false,
+          "rate_limit_requests": null,
+          "rate_limit_period_seconds": null,
+          "rate_limit_daily_quota": null,
+          "rate_limit_origin": null,
+          "acquisition_cost": "FREE",
+          "notes": "A documented read-only search API. Rate limits were not established by the documents retrieved here and must not be assumed absent."
+        }
+      ],
+      "retention_override": null,
+      "reviews": [
+        {
+          "review_version": 1,
+          "approval_state": "REQUIRES_REVIEW",
+          "reviewed_by": "mission-1.15",
+          "reviewed_at": "2026-08-31T00:00:00+00:00",
+          "review_interval_days": 365,
+          "automated_access": "PERMITTED",
+          "api_use": "PERMITTED",
+          "commercial_use": "PERMITTED",
+          "storage": "PERMITTED",
+          "retention": "PERMITTED",
+          "redistribution": "PERMITTED",
+          "derived_analytics": "PERMITTED",
+          "model_processing": "NOT_ADDRESSED",
+          "personal_data_handling": "PERMITTED_WITH_CONDITIONS",
+          "attribution_required": "PERMITTED_WITH_CONDITIONS",
+          "personal_data_risk": "IDENTIFIABLE",
+          "contains_user_generated_content": false,
+          "contains_user_identifiers": true,
+          "contains_location": true,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": false,
+          "discard_identifiers_after_normalization": true,
+          "jurisdiction_review_required": false,
+          "conditions": [
+            "Attribution is required for reused editorial material under CC BY 4.0, and changes must be indicated. The Publications Office logo may not be used without prior consent.",
+            "Notices publish contact details of contracting authorities and successful tenderers -- names, addresses, email addresses, telephone and fax numbers. A minimisation profile must discard the entire contact block: the engine needs the award value, the buyer and supplier organisation names, the CPV classification and the dates, and needs no natural person's contact details for any assessed purpose.",
+            "Only electronically signed notices published in the Supplement to the Official Journal are authentic; online documents are not necessarily exact reproductions. Any claim derived from TED must be attributed to TED's published notice rather than asserted as the authentic award."
+          ],
+          "required_conditions": [],
+          "open_questions": [
+            "Determine whether the Publications Office's reuse decision, or another first-party instrument, addresses machine-learning processing -- inference, summarisation, classification, embedding or training -- of reused notices. The TED legal notice grants free reuse for commercial or non-commercial purposes and does not name any of them. This is the ONLY activity of the six load-bearing ones not positively granted, and it is the whole distance between this source and an approving verdict.",
+            "Determine documented rate limits for the TED search API. The data-reuse page documents the API and states no limit; absence of a stated limit is not a stated absence of limits."
+          ],
+          "review_notes": "The most valuable candidate this mission found, and it is not approved. Contract award notices are the only lawful route the portfolio has ever had to WILLINGNESS_TO_PAY as a TRANSACTION rather than a LISTED_PRICE: the notice records that a buyer paid a supplier a stated amount for stated work. Five of the six load-bearing activities are granted in one retrieved sentence -- 'the procurement notices published in the Supplement to the Official Journal of the European Union can be freely reused, for commercial or non-commercial purposes' -- which is a GRANT and not an absence of prohibition, the distinction Mission 1.8 made the gate turn on. model_processing is not addressed, and under rule 8 that blocks whatever the other five say. Recording it as anything else would be the narrowing of the assessed use case Mission 1.8 forbids: this engine's product includes LLM processing, and describing a smaller product to rescue a source is a permission for a product we are not building. What TED cannot evidence is as important as what it can -- this is PUBLIC-SECTOR buying above EU publication thresholds. It says nothing about consumers, nothing about SaaS pricing, and nothing about individual behaviour.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_LICENCE",
+              "document_title": "TED and SIMAP legal notice",
+              "document_url": "https://ted.europa.eu/en/legal-notice",
+              "section_reference": "Reuse policy; personal data; disclaimer",
+              "summarized_finding": "States that unless otherwise noted the procurement notices published in the Supplement to the Official Journal of the European Union can be freely reused for commercial or non-commercial purposes. Editorial content is licensed CC BY 4.0 requiring appropriate credit and indication of changes; metadata is dedicated to the public domain under CC0 1.0. The Publications Office logo may not be used without prior consent. Records that notices publish contact details of contracting authorities and successful tenderers including names, addresses, emails, telephone and fax numbers, retained ten years on the TED website and then archived. Disclaims that online documents are not necessarily exact reproductions of officially adopted texts and that only electronically signed notices published in the Supplement are authentic. Addresses machine learning, text mining, training and inference nowhere.",
+              "retrieved_at": "2026-08-31T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "TED help: data reuse and additional features",
+              "document_url": "https://ted.europa.eu/en/help/data-reuse",
+              "section_reference": "Bulk download; API",
+              "summarized_finding": "Documents the reuse routes: bulk XML download in daily and monthly packages through the portal or by direct URL, RSS feeds by business sector, and a read-only search API. States that there is no need to sign in to download the daily or monthly packages. Carries no licence text and no rate limits; the governing terms are in the legal notice.",
+              "retrieved_at": "2026-08-31T00:00:00+00:00"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "source_id": "tiktok",
       "canonical_name": "TikTok",
       "source_family": "social",
@@ -3698,6 +4017,131 @@
               "section_reference": "Authentication; Concepts",
               "summarized_finding": "The documentation states that the Twitch API uses OAuth 2.0 for authentication and that extension endpoints require JSON Web Tokens. It refers readers to a concepts page for how Twitch handles rate limits without stating any numeric limit on the page retrieved. It establishes that a registered application and OAuth credentials are required; it establishes nothing about permitted use, which is governed by the Developer Services Agreement.",
               "retrieved_at": "2026-08-30T00:00:00+00:00"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "usaspending",
+      "canonical_name": "USAspending.gov (US federal award data)",
+      "source_family": "public_procurement",
+      "lifecycle": "ACTIVE",
+      "homepage_url": "https://www.usaspending.gov/",
+      "developer_portal_url": "https://api.usaspending.gov/",
+      "documentation_url": "https://api.usaspending.gov/docs/",
+      "description": "US federal contract and grant awards: who received public money, from which agency, for how much. The same TRANSACTION evidence class as TED. REQUIRES_REVIEW: no licence or terms document could be retrieved.",
+      "coverage": {
+        "scope": "PARTIAL",
+        "countries": [
+          "US"
+        ],
+        "regions": [],
+        "languages": [
+          "en"
+        ]
+      },
+      "quality_notes": {
+        "selection_bias": "US federal awards only. Says nothing about consumer purchasing, state or local procurement, or private-sector buying.",
+        "moderation_effects": "None. Reported by agencies under the DATA Act.",
+        "historical_depth": "Not established by the documents retrieved here. The API root describes award-level and account-level spending without stating coverage dates."
+      },
+      "capabilities": [
+        "federal_awards",
+        "award_amounts",
+        "recipient_names",
+        "agency_breakdowns",
+        "geographic_breakdowns"
+      ],
+      "signal_coverage": [
+        {
+          "signal_family": "commercial",
+          "basis": "An award record states that a federal agency committed a stated amount to a named recipient. A completed transaction, not a listed price."
+        },
+        {
+          "signal_family": "competition",
+          "basis": "Recipient names by agency and category record who wins federal work."
+        }
+      ],
+      "behavior_coverage": [
+        {
+          "behavior": "buy",
+          "basis": "The award record is a purchase or grant commitment by a public buyer."
+        }
+      ],
+      "access_profiles": [
+        {
+          "access_method": "OFFICIAL_API",
+          "label": "usaspending-api",
+          "endpoint_url": "https://api.usaspending.gov/",
+          "documentation_url": "https://api.usaspending.gov/docs/",
+          "requires_authentication": false,
+          "requires_api_key": false,
+          "requires_oauth": false,
+          "requires_account": false,
+          "requires_developer_app": false,
+          "requires_approval": false,
+          "approval_process_notes": null,
+          "secret_references": [],
+          "rate_limit_known": false,
+          "rate_limit_requests": null,
+          "rate_limit_period_seconds": null,
+          "rate_limit_daily_quota": null,
+          "rate_limit_origin": null,
+          "acquisition_cost": "UNKNOWN",
+          "notes": "A documented public API. Whether we may use it is unestablished: no terms or licence document was retrievable."
+        }
+      ],
+      "retention_override": null,
+      "reviews": [
+        {
+          "review_version": 1,
+          "approval_state": "REQUIRES_REVIEW",
+          "reviewed_by": "mission-1.15",
+          "reviewed_at": "2026-08-31T00:00:00+00:00",
+          "review_interval_days": 365,
+          "automated_access": "NOT_ADDRESSED",
+          "api_use": "NOT_ADDRESSED",
+          "commercial_use": "NOT_ADDRESSED",
+          "storage": "NOT_ADDRESSED",
+          "retention": "NOT_ADDRESSED",
+          "redistribution": "NOT_ADDRESSED",
+          "derived_analytics": "NOT_ADDRESSED",
+          "model_processing": "NOT_ADDRESSED",
+          "personal_data_handling": "NOT_ADDRESSED",
+          "attribution_required": "NOT_ADDRESSED",
+          "personal_data_risk": "UNKNOWN",
+          "contains_user_generated_content": false,
+          "contains_user_identifiers": true,
+          "contains_location": true,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": false,
+          "discard_identifiers_after_normalization": true,
+          "jurisdiction_review_required": true,
+          "conditions": [],
+          "required_conditions": [],
+          "open_questions": [
+            "Retrieve a licence or terms-of-use document for USAspending data. The API root at api.usaspending.gov states that the data is open source and provided to the public as part of the DATA Act but carries no licence text; usaspending.gov/about returned no content on 2026-08-31; and the operating agency's GitHub README states the same DATA Act sentence with no licence, terms, attribution requirement or rate limit.",
+            "Determine whether US federal works' copyright status is asserted anywhere first-party for this dataset. A general legal principle is not a source document, and no verdict may rest on one.",
+            "Determine documented rate limits for the public API."
+          ],
+          "review_notes": "Registered because it is the second lawful-looking route to WILLINGNESS_TO_PAY as a transaction, and REQUIRES_REVIEW because looking lawful is not being permitted. Three first-party locations were tried and none carried a licence: the API root, the about page (which returned no content) and the operating agency's own repository README. The DATA Act sentence establishes that the data must be publicly ACCESSIBLE, which is a statement about publication and not a grant of reuse rights to a commercial product. This is a weaker position than TED, where a reuse grant was retrieved verbatim, and the difference is exactly the one the registry exists to keep visible.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "USAspending API root",
+              "document_url": "https://api.usaspending.gov/",
+              "section_reference": "Overview",
+              "summarized_finding": "Describes comprehensive US government spending data covering awards -- who received federal contracts or grants, with geographic and agency breakdowns -- and account-level data. States that the data is open source and provided to the public as part of the DATA Act which requires it to be publicly accessible. Carries no licence, terms of use, registration requirement, rate limit, or statement about commercial use, storage, redistribution, analytics or machine learning.",
+              "retrieved_at": "2026-08-31T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "usaspending-api repository README",
+              "document_url": "https://github.com/fedspendingtransparency/usaspending-api/blob/master/README.md",
+              "section_reference": "Retrieval outcome",
+              "summarized_finding": "The operating agency's own repository documentation repeats that the data is open source and provided to the public as part of the DATA Act, and states no software licence, copyright notice, terms of use, rate limit or attribution requirement. https://www.usaspending.gov/about returned no page content on 2026-08-31 and is recorded as a retrieval failure.",
+              "retrieved_at": "2026-08-31T00:00:00+00:00"
             }
           ]
         }

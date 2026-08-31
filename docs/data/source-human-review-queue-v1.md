@@ -1085,3 +1085,128 @@ exactly**, label scheme `gdelt-web-ngram-bucket`, review 3. It grants
 Full record: [`gdelt-web-ngram-temporal-evidence-v1.md`](gdelt-web-ngram-temporal-evidence-v1.md),
 [ADR-022](../architecture/adr/ADR-022-web-ngram-source-relative-order.md).
 
+
+---
+
+## H-5 — update after Mission 1.15 {#h-5-update}
+
+**Resolved, against us.** The Y Combinator Terms of Use were retrieved on
+2026-08-31 and the ambiguity H-5 recorded is not there. Two clauses settle it
+without needing the API question answered:
+
+> *"you will not engage in or use any data mining, robots, scraping or similar
+> data gathering or extraction methods"*
+
+> *"you agree not to display, distribute, license, perform, publish, reproduce,
+> duplicate, copy, create derivative works from, modify, sell, resell, exploit,
+> transfer or upload for any commercial purposes, any portion of the Site"*
+
+The Terms also state that use of certain Site components is subject to the Hacker
+News Guidelines, which places `news.ycombinator.com` in scope explicitly.
+
+H-5 asked whether publishing an API constitutes authorisation for commercial
+derived analytics. The first clause makes it moot: the **collection method** is
+prohibited regardless of what the API's publication implies about the output.
+
+`hacker-news` moved to **RESTRICTED** at review v3. The vendor contact remains
+available — `api@ycombinator.com` — but it is now a request for a written
+exception rather than a clarifying question, which is a different kind of ask.
+
+**Status:** closed. Superseded by the v3 review.
+
+---
+
+## H-33 — Bluesky publishes developer guidelines that cannot be retrieved {#h-33}
+
+**Issue.** Bluesky's documentation domain names a *Bluesky Developer Guidelines*
+document — the guidelines developers who federate apps or services on the AT
+Protocol must follow to communicate with Bluesky services. Its canonical URL,
+`https://docs.bsky.app/docs/support/developer-guidelines`, returns HTTP 301 to
+`https://bsky.network/docs/support/developer-guidelines`, and that URL returned
+an empty body on 2026-08-31. The documentation root at `bsky.network` links to no
+terms, guidelines or legal document at all.
+
+**Why it matters.** Bluesky's user Terms of Service are silent on all ten
+activities that matter to a third party reading public records — re-confirmed at
+the current version, updated effective 15 September 2025. If the developer
+guidelines address commercial use, storage, automated access and machine
+learning, Bluesky becomes assessable; if they do not, it is silent everywhere and
+the question closes. Either answer moves the catalog's most-cited open question.
+
+**Why it is unresolved.** A retrieval failure. No mirror, cached copy or
+third-party transcription was consulted, because a failed retrieval leaves a
+question open rather than licensing a substitute.
+
+**Needed.** The document text, from `bsky.network` or `docs.bsky.app`, retrieved
+in an ordinary browser session.
+
+**Vendor contact needed?** Only if the document stays unreachable.
+**Legal counsel appropriate?** Not yet — this is a retrieval problem, not an
+interpretation one.
+
+---
+
+## H-34 — Does the EU's reuse framework address machine-learning processing of TED notices? {#h-34}
+
+**Issue.** The TED legal notice grants, verbatim:
+
+> *"Unless otherwise noted, the procurement notices published in the Supplement
+> to the Official Journal of the European Union can be freely reused, for
+> commercial or non-commercial purposes."*
+
+That grants five of the six load-bearing activities directly:
+`automated_access`, `api_use`, `commercial_use`, `storage`, `derived_analytics`.
+It names machine learning, text mining, training and inference **nowhere**.
+
+**Why it matters.** This is the single activity standing between `ted-eu` and an
+approving verdict, and `ted-eu` would be the portfolio's **first
+WILLINGNESS_TO_PAY source** — a family with no registered candidate at all before
+Mission 1.15. A contract award notice records what a buyer paid a named supplier,
+which is a transaction rather than a listed price.
+
+**Why it is unresolved.** Silence is not permission (`source-registry-v1.md` §1
+rule 2), and rule 8 blocks an approving state when any materially required
+activity is `NOT_ADDRESSED`. The assessed use case includes LLM processing and
+must not be narrowed to rescue a source.
+
+**Needed.** A first-party instrument addressing further processing of reused
+Official Journal material — the Publications Office's reuse decision or an
+equivalent. A general legal principle about EU open data is not a source
+document and cannot settle this.
+
+**Vendor contact needed?** Possibly — the Publications Office publishes a contact
+route. Not contacted.
+**Legal counsel appropriate?** **Yes**, if the instrument is silent too. The
+question then becomes whether a broad reuse grant covers ML processing by
+default, which is a legal reading rather than a document retrieval.
+
+---
+
+## H-35 — USAspending publishes no licence or terms document {#h-35}
+
+**Issue.** Three first-party locations were tried on 2026-08-31 and none carried
+a licence, terms of use, attribution requirement or rate limit:
+
+- `https://api.usaspending.gov/` — states the data *"is open source and provided
+  to the public as part of the DATA Act"* and nothing further;
+- `https://www.usaspending.gov/about` — returned no page content;
+- the operating agency's own repository README — repeats the DATA Act sentence.
+
+**Why it matters.** USAspending is the second lawful-looking route to
+`WILLINGNESS_TO_PAY` as a transaction, and corroboration from a second
+independent procurement system is a materially different evidential position from
+one source alone.
+
+**Why it is unresolved.** The DATA Act sentence establishes that the data must be
+publicly **accessible**. That is a statement about publication, not a grant of
+reuse rights to a commercial product — the same distinction that keeps Bluesky's
+public firehose from being permission.
+
+**Needed.** A licence or terms-of-use document, or a first-party statement of the
+data's copyright status. A reviewer might reasonably expect US federal works to
+be uncopyrighted; that is a general legal principle and no verdict may rest on
+one.
+
+**Vendor contact needed?** Possibly.
+**Legal counsel appropriate?** Yes, if no document exists — the question becomes
+whether the absence of copyright is itself the grant.
