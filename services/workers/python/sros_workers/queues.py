@@ -134,6 +134,10 @@ TASK_ROUTES: dict[str, Queue] = {
     # `nlp` queue is sized for LLM-backed work, and routing a subtraction
     # there would let it compete for slots meant for something else.
     "signal.": Queue.ACQUISITION,
+    # Mission 1.13.1. Rendering a format string over a Signal already read,
+    # for the same reason: bounded and CPU-cheap. No model is involved and
+    # none may be, so the `nlp` queue would be the wrong home twice over.
+    "claim.": Queue.ACQUISITION,
     "nlp.extract": Queue.NLP,
     "nlp.classify": Queue.NLP,
     "nlp.embed": Queue.EMBEDDING,

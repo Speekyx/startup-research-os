@@ -83,6 +83,17 @@ def _drop_workspace(workspace_id: str) -> None:
     disposable(workspace_id, what="_drop_workspace")
     with psycopg.connect(DATABASE_URL) as connection:
         for statement in (
+            # Mission 1.13.1's tables come first: `claim_interpretation_inputs`
+            # references BOTH nlp.signals and research.claims, and evidence
+            # references a claim and a signal. Deleting a signal before them
+            # would hit the composite foreign keys that exist to stop exactly
+            # that -- the FK closure, read before deleting rather than after
+            # (`testing-strategy.md` §16).
+            "DELETE FROM research.claim_interpretation_inputs WHERE workspace_id = %s",
+            "DELETE FROM research.claim_interpretation_runs WHERE workspace_id = %s",
+            "DELETE FROM scoring.evidence WHERE workspace_id = %s",
+            "DELETE FROM research.claim_revisions WHERE workspace_id = %s",
+            "DELETE FROM research.claims WHERE workspace_id = %s",
             "DELETE FROM nlp.signal_inputs WHERE workspace_id = %s",
             "DELETE FROM nlp.signal_derivation_runs WHERE workspace_id = %s",
             "DELETE FROM nlp.signals WHERE workspace_id = %s",

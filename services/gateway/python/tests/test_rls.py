@@ -61,6 +61,13 @@ TENANT_TABLES = [
     # workspace considered, which says as much about what a tenant is
     # researching as the signals it produced.
     "nlp.signal_derivation_runs",
+    # Added in Mission 1.13.1, for the same reason one layer up. An
+    # interpretation run names which Signals a workspace considered and which
+    # propositions it drew from them; the considered set names the Signals it
+    # looked at and passed over, which is a statement about what a tenant is
+    # researching that the claims themselves do not make.
+    "research.claim_interpretation_runs",
+    "research.claim_interpretation_inputs",
 ]
 
 # Deliberately NOT policy-bearing. Listed here so that adding a policy to one of

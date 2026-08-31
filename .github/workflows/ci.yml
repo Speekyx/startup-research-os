@@ -127,6 +127,8 @@ jobs:
         run: python infrastructure/scripts/validate_normalization.py
       - name: Signal derivation reaches no network, no model and no later stage
         run: python infrastructure/scripts/validate_signals.py
+      - name: Claim interpretation reaches no network, no model and no later stage
+        run: python infrastructure/scripts/validate_claims.py
 
   evidence-aggregation:
     name: Evidence aggregation guard

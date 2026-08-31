@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.20
+Version: 1.21
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-08-31 (Sprint 1 / Mission 1.13)
+Last amended: 2026-08-31 (Sprint 1 / Mission 1.13.1)
 
 ---
 
@@ -13,6 +13,26 @@ Last amended: 2026-08-31 (Sprint 1 / Mission 1.13)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.21 — 2026-08-31 (Sprint 1 / Mission 1.13.1)
+
+Authorized by the Mission 1.13.1 brief §2 (implement the pipeline), §3 (one
+interpreter family), §21-§22 (run log and GAP-5), §31 (interpret the seven real
+Signals), §44 (orchestration), §47 (documentation) and §50 (stop after the
+report).
+
+| Change | Section | Authority |
+|--------|---------|-----------|
+| **The first complete Signal → Claim → Evidence pipeline exists, and it produced real Claims** | Product Shape | Mission 1.13.1 §2, §31. `observed-signal-restatement@1.0.0` interpreted all **seven** real Signals into **7 OBSERVED Claims, 7 revisions and 7 Evidence rows** — 4 World Bank, 2 GDELT frequency-change, 1 GDELT contrast. Every statement names its source and says "reported that"; none asserts demand, interest, attention or a market |
+| **The interpreter is structurally OBSERVED, not defaulted** | Engineering Principles | Mission 1.13.1 §5. `_CLAIM_TYPE` is a module constant, `interpret()` takes no claim-type parameter, and `validate_claims.py` fails the build on any `ClaimType.X` attribute access in the package where X is not OBSERVED — over the **AST**. A Signal type with no template is `UNSUPPORTED_SIGNAL_TYPE`; there is no generic prose path, because a sentence nobody specified is a proposition nobody reviewed |
+| **Attribution is what makes it OBSERVED** | Engineering Principles | Mission 1.13.1 §9. "Germany's population increased" is not OBSERVED from a World Bank record; "World Bank Open Data reported that…" is, and they have different falsifiers. The geography is the SOURCE's own name, never our canonical code. Three attribution facts come from the contributing normalized records because the Signal's scope does not carry them, and disagreement between them is refused rather than resolved |
+| **H-29 and H-30 are enforced in the wording, and in the AST** | Blocked work | Mission 1.13.1 §25, §26. GDELT claims say "source bucket" and "the preceding source bucket", never a clock or a date; `observed_at` is written NULL. They say "under source language label ENGLISH", never "in English", and `canonical_tag` is never read. Both asserted by `validate_claims.py` over call arguments and timezone-call names, and probed against deliberate violations. **H-29 and H-30 remain open** |
+| **A guard whose subject is arbitrary text needs an exemption** | Engineering Principles | Mission 1.13.1 §10. The vocabulary guard became TOKEN matching over the interpreter's own prose, with **quoted source data exempt**: a GDELT term is arbitrary text, and `market`, `demand` and `pain` are ordinary English words a news corpus contains. Refusing `the term "demand" appeared 12 more times` would refuse the most faithful restatement available — the exact thing the guard protects. The template is the primary protection; no template contains the word |
+| **Identity excludes the magnitude, so a revised source figure appends a revision** | Product Shape | Mission 1.13.1 §11, §12, §29. The proposition key is over the facts, so 187,180 becoming 187,200 is the SAME proposition worded differently and revision 2 is appended. Revision 1 is never modified. For a contrast, where `direction` is NOT_APPLICABLE, the relation comes from the SIGN of the magnitude and IS part of identity while the value is not. `proposition_facts` stores the preimage: a hash nobody can verify is an identity nobody can dispute (ADR-025) |
+| **A refused interpretation gets a run record, never a Claim; GAP-5 is resolved** | Product Shape | Mission 1.13.1 §21, §22, [ADR-025](docs/architecture/adr/ADR-025-claim-interpretation-run-and-considered-inputs.md). `research.claim_interpretation_runs` holds one row per EXECUTION, written in the claims' transaction. `research.claim_interpretation_inputs` records every Signal a run CONSIDERED with its role — CITED, EXCLUDED, REFUSED — and why: "three of forty considered were supporting" is a different fact from "three supporting Signals exist". EXCLUDED (never attempted) and REFUSED (attempted and rejected) stay apart |
+| **Reliability was not invented, and the consequence was reported** | Blocked work | Mission 1.13.1 §17, §30. Reliability is purpose-relative and D-03 is blocked, so it is written NULL. Every one of the seven Evidence rows is therefore `NON_SCORABLE` with `MISSING_RELIABILITY`, aggregation returns `UNAVAILABLE` and no score was persisted. That is the honest answer; filling it in to make a number appear is the failure the framework's §6 exists to prevent |
+| **A validator was probed before being believed** | Engineering Principles | Mission 1.13.1. `validate_claims.py` printed eleven `ok` lines on its first run, which is what a validator that checks nothing also prints. A probe applied **11 deliberate violations** — one per rule — to the real files and all eleven were caught. The probe found its own infinite loop first: it walked up from `__file__` looking for `.git` from outside the repository |
+| **Existing data is untouched and the additions are additive** | Forbidden During Foundation | Mission 1.13.1 §38, §41, §43. RawRecords 12, NormalizedRecords 12, Signals 7 and signal_inputs 14, all **byte-for-byte unchanged** under a content digest taken before and after. Opportunities 0, embeddings 0, scores 0. No LLM, no network, no embedder — asserted over every import in the layer |
 
 ## 1.20 — 2026-08-31 (Sprint 1 / Mission 1.13)
 
@@ -575,18 +595,30 @@ specified.
 with `observed_at`, `TIMESTAMPTZ` conversion and any wall-clock "as of" claim.
 Classification, embedding and clustering stay blocked by D-12.
 
-**Claim and Evidence generation is defined and not implemented**, since Mission
-1.13. The interpretation boundary is written down
-(`claim-evidence-interpretation-contract-v1.md`, ADR-024) and nothing crosses it:
-Claims 0, Evidence 0. `packages/claim-model` validates drafts in memory and
-reaches no network, no model, no embedder and no database. The next mission
-implements an interpreter **against** this contract — it does not revisit the
-contract to make an interpreter easier to write.
+**Deterministic OBSERVED claim interpretation was implemented in 1.13.1**, by
+`observed-signal-restatement@1.0.0` and by nothing else, against the Mission
+1.13 contract rather than by revising it. Seven real Claims exist.
+
+**`INFERRED`, `PREDICTED` and `RECOMMENDED` generation is still forbidden**, and
+is not partially written: there is no module, no branch and no parameter that
+would select one. An inference needs a stated reasoning step, and adding one is
+a version bump with a document behind it. `validate_claims.py` fails the build
+on any non-`OBSERVED` claim type constructed in the interpretation package, over
+the AST.
+
+**`MODEL_DERIVED` remains unused**, and the layer imports no model, network
+client or embedder — asserted over every import.
 
 **Opportunity formation stays forbidden.** Making `opportunity_id` nullable
-removed a precondition; it granted no permission. An Opportunity groups Claims
-that describe one addressable thing, and deciding which Claims those are is a
-mission of its own.
+removed a precondition; it granted no permission, and Mission 1.13.1 created no
+Opportunity. An Opportunity groups Claims that describe one addressable thing,
+and deciding which Claims those are is a mission of its own.
+
+**The seven Claims establish nothing about a market.** No pain, no desire, no
+willingness to pay, no pricing power, no competition gap, no distribution
+feasibility, no retention, no revenue potential. They are factual, source-level
+claims about two publications, and every Evidence row behind them is
+`NON_SCORABLE` today.
 
 **Everything else on the list is unchanged.** NLP pipelines are blocked by D-12,
 scoring algorithms by the absence of a `CALIBRATED` profile, and authentication

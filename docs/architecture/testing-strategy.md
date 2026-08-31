@@ -1284,3 +1284,82 @@ would have reported a working guard.
   (`CM.MKT.LCAP.CD`, "market capitalization of listed companies"), so a test
   records that case and the comment says what to do instead — restate by metric
   id. An unstated cost is rediscovered as a bug.
+
+## 30. A guard whose subject is arbitrary text needs an exemption (Mission 1.13.1)
+
+§29 recorded a vocabulary guard that missed its own motivating example, and
+widening it. Mission 1.13.1 built the interpreter that guard protects, and hit
+the failure on the other side.
+
+The guard forbids market vocabulary in an `OBSERVED` claim. One of the three
+templates restates a **GDELT lexical term**, and a GDELT term is arbitrary text
+from a news corpus. `market`, `demand`, `pain`, `opportunity` and `interest` are
+all ordinary English words that appear in news. So:
+
+> `The GDELT Project reported that the term "demand" appeared 12 more times…`
+
+is the most faithful restatement available, and the guard refused it.
+
+### The shape of the mistake
+
+The guard was checking **the whole statement** when what it is about is **the
+interpreter's own prose**. A quoted source value is data being reported; the
+sentence around it is the claim being made. Conflating them meant the guard
+policed the source's vocabulary instead of ours — and a source does not get a
+say in what our claims may assert, in either direction.
+
+### What that argues for
+
+- **A guard over generated text needs to know which spans it generated.** Here
+  every template puts source-supplied values in double quotes and its own prose
+  outside them, and the guard strips quoted spans before tokenising. The
+  convention is enforced by review of three template functions, which is small
+  enough to hold.
+- **Tokens, not substrings.** The same pass replaced `term in text.lower()` with
+  whole-token matching. `supermarket` and `marketing` are not `market`; the
+  metric id `SP.POP.TOTL` is three tokens, none of them vocabulary. A guard with
+  false positives gets loosened until it stops guarding, which is §29's failure
+  arriving by a slower route.
+- **Test the exemption with words that are actually forbidden.** Three tests
+  build Signals whose term is literally `demand`, `market` and `pain` and assert
+  a claim is produced. Testing the exemption with a harmless word would prove
+  nothing.
+
+The general form: **a guard needs to distinguish what the system asserts from
+what the system quotes**, and the distinction has to be structural, because the
+source will eventually publish every word on the list.
+
+## 31. Probe the validator, not only the code it validates (Mission 1.13.1)
+
+`validate_claims.py` fails the build when the interpretation layer imports a
+model, constructs a non-`OBSERVED` claim type, reads a canonical language tag,
+converts a timezone, writes a later-stage table or names an unregistered signal
+type. It printed eleven `ok` lines on the first run.
+
+Eleven `ok` lines is what a validator that checks nothing also prints.
+
+So a probe applies **eleven deliberate violations** — one per rule — to the real
+files, runs the validator, and restores them. All eleven were caught. Without
+it, the AST-walking checks would have been believed on the strength of passing,
+which is the §28 failure applied to a script instead of a constraint.
+
+Two details worth keeping:
+
+- **Mutate the real file, not a copy.** A probe against a fixture proves the
+  checker works on fixtures. The restore goes in a `finally`, and the run is
+  verified clean before and after.
+- **Assert the probe's own edit applied.** A `str.replace` that matches nothing
+  returns the original string, the validator passes, and the case reports `ok`
+  for having changed nothing. Each case compares mutated against original first
+  and fails loudly when they are equal — the same "measuring nothing" failure
+  §24 found in a constraint probe, in a different costume.
+
+### The probe found its own bug first
+
+The probe located the repository root by walking up from `__file__` looking for
+`.git`. It lives in a scratch directory outside the repository, so it walked to
+the filesystem root and spun there — `Path("C:/").parent` is `Path("C:/")`, so
+the loop never terminated. It produced no output and looked like a slow test.
+
+An ascent that can fail needs a stop condition, and "resolve the repo root" is
+better answered by asserting the working directory is one.

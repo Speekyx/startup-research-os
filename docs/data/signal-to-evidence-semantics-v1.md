@@ -155,6 +155,12 @@ people did — a search volume series, a marketplace listing count, a survey.
 Nothing in the system produces one, and the correct behaviour meanwhile is
 refusal with `UNSUPPORTED_INTERPRETATION`.
 
+**Since Mission 1.13.1 this is what the only interpreter does.** The two real
+`lexical_frequency_change` Signals produced claims saying a term appeared more
+often in one source bucket than in the preceding one, attributed to GDELT, and
+nothing further. The protection is the template, not the guard: no template
+contains the word `demand`.
+
 ## 9. What the certifications forbid at this layer
 
 The refusal reasons are raised when constructing the Claim, but the constraint is
@@ -173,15 +179,20 @@ Both fail closed. Neither is closed by this mission.
 
 ## 10. What is deliberately not recorded
 
-**Which Signals were considered and rejected** (GAP-5). An interpreter that
-examined forty Signals and cited three has made a selection, and the selection is
-information — an aggregator cannot distinguish "three supporting Signals exist"
-from "three of forty were supporting".
+~~**Which Signals were considered and rejected** (GAP-5).~~ **Recorded since
+Mission 1.13.1.** An interpreter that examined forty Signals and cited three has
+made a selection, and the selection is information — an aggregator cannot
+distinguish "three supporting Signals exist" from "three of forty were
+supporting".
 
-It is not implemented because there is no interpreter yet, so the table would
-have no writer, and a schema designed against an imagined writer is a schema
-fitted to a guess. Named here so the next mission designs it rather than
-rediscovering it.
+`research.claim_interpretation_inputs` holds one row per considered Signal with
+its role (`CITED` / `EXCLUDED` / `REFUSED`) and a reason code, hanging off the
+RUN rather than the Claim because a Signal considered and not cited has no Claim
+to hang off (migration 0018, ADR-025).
+
+**Whether an aggregator should read it is still open.** This layer makes the
+fact available; how a selection ratio would enter a score is D-03's question,
+and D-03 is blocked.
 
 ## 11. Where this is enforced
 
@@ -196,3 +207,5 @@ rediscovering it.
 | `KNOWN_INDEPENDENT` names none | `EvidenceDraft` |
 | No score on an Evidence row | the absence of a column, asserted by test |
 | `claim_type` no longer duplicated | migration 0016 dropped it; `validate_schema.py` updated |
+| Considered-but-not-cited Signals are recorded | migration 0018, `persist_considered` |
+| A generated row's factors are the interpreter's decisions, each with a reason | `deterministic-observed-claim-interpreter-v1.md` §7 |

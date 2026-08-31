@@ -68,8 +68,10 @@ __all__ = [
     "STATIC_BLOCKED_CAPABILITIES",
     "acquisition_block",
     "normalization_block",
+    "claim_interpretation_block",
     "signal_derivation_block",
     "NO_EXTRACTOR_IMPLEMENTED",
+    "NO_INTERPRETER_IMPLEMENTED",
     "NO_COLLECTOR_IMPLEMENTED",
     "NO_NORMALIZER_IMPLEMENTED",
     "PlannedStage",
@@ -81,7 +83,7 @@ __all__ = [
 # Bumped whenever the stage graph or the blocking set changes. Recorded on the
 # persisted plan so a session can be read years later against the planner that
 # produced it (llm-reasoning-rules.md §9 applied to orchestration).
-PLANNER_VERSION = "1.3.0"
+PLANNER_VERSION = "1.4.0"
 
 
 class Capability(StrEnum):
@@ -100,6 +102,12 @@ class Capability(StrEnum):
     # decimals. A blocking reason that has become false is worse than a vague
     # one: it invites someone to conclude the block no longer applies.
     SIGNAL_DERIVATION = "SIGNAL_DERIVATION"
+    # Added in Mission 1.13.1. Separate from SIGNAL_DERIVATION because a
+    # Signal states a relation between its inputs and a Claim asserts a
+    # proposition about the world, and separate from NLP_EXTRACTION for the
+    # reason SIGNAL_DERIVATION was: D-12 is about embedding versioning, which
+    # a format string over structured facts does not use.
+    CLAIM_INTERPRETATION = "CLAIM_INTERPRETATION"
     NLP_EXTRACTION = "NLP_EXTRACTION"
     OPPORTUNITY_DISCOVERY = "OPPORTUNITY_DISCOVERY"
     SCORING = "SCORING"
@@ -412,6 +420,66 @@ def signal_derivation_block(
     )
 
 
+# The interpretation gate, added in Mission 1.13.1. Not a decision id, for the
+# same reason NO-EXTRACTOR-IMPLEMENTED is not one: nobody unblocks it by
+# deciding, only by writing an interpreter.
+NO_INTERPRETER_IMPLEMENTED = "NO-INTERPRETER-IMPLEMENTED"
+CLAIM_DOCUMENT = "docs/data/claim-evidence-interpretation-contract-v1.md §3"
+
+
+def claim_interpretation_block(
+    report: SourceAvailabilityReport,
+    implemented_collectors: frozenset[str] = frozenset(),
+    implemented_normalizers: frozenset[str] = frozenset(),
+    implemented_extractors: frozenset[str] = frozenset(),
+    implemented_interpreters: frozenset[str] = frozenset(),
+) -> BlockedCapability | None:
+    """Derive the CLAIM_INTERPRETATION block from the registry AND what exists.
+
+    Five conditions now: a source must be eligible, have a collector, have a
+    normalizer, some extractor must exist, **and** some interpreter must exist
+    to read the Signals. A planner that dispatched `claim.interpret` with no
+    interpreter registered would emit a job guaranteed to refuse its own
+    payload.
+
+    `implemented_interpreters` names INTERPRETERS rather than sources or signal
+    types, because an interpreter reads a signal TYPE and not a platform --
+    `observed-signal-restatement` restates any of the three it has templates
+    for, from whichever source produced them. It defaults to empty, so a missing
+    wire reads as a refusal and never as a permission.
+    """
+    derivation = signal_derivation_block(
+        report, implemented_collectors, implemented_normalizers, implemented_extractors
+    )
+    if derivation is not None:
+        # Nothing to interpret, and saying so in derivation's words rather than
+        # inventing a second explanation for one cause.
+        return BlockedCapability(
+            capability=Capability.CLAIM_INTERPRETATION,
+            decision_id=derivation.decision_id,
+            reason=(
+                f"signal derivation is blocked, so no Signal is produced to interpret: "
+                f"{derivation.reason}"
+            ),
+            governing_document=derivation.governing_document,
+        )
+
+    if implemented_interpreters:
+        return None
+
+    return BlockedCapability(
+        capability=Capability.CLAIM_INTERPRETATION,
+        decision_id=NO_INTERPRETER_IMPLEMENTED,
+        reason=(
+            "Signals exist and no claim interpreter is implemented. An extractor states "
+            "a relation between two observations; an interpreter asserts a proposition "
+            "about the world that observations outside the derivation could contradict, "
+            "and one never implies the other"
+        ),
+        governing_document=CLAIM_DOCUMENT,
+    )
+
+
 @dataclass(frozen=True)
 class PlannedStage:
     """One capability's place in the plan."""
@@ -442,6 +510,12 @@ DEFAULT_STAGES: tuple[PlannedStage, ...] = (
     # NormalizedRecords only; it has no dependency on acquisition beyond the one
     # it inherits through normalization.
     PlannedStage(Capability.SIGNAL_DERIVATION, "signal.derive", (Capability.NORMALIZATION,)),
+    # acquisition -> normalization -> signals -> claims (§44). The
+    # interpreter consumes SIGNALS. It reads normalized records for
+    # attribution and never RawRecords, so it depends on derivation alone.
+    PlannedStage(
+        Capability.CLAIM_INTERPRETATION, "claim.interpret", (Capability.SIGNAL_DERIVATION,)
+    ),
     PlannedStage(Capability.NLP_EXTRACTION, "nlp.extract.signals", (Capability.SIGNAL_DERIVATION,)),
     PlannedStage(
         Capability.OPPORTUNITY_DISCOVERY,
@@ -559,12 +633,14 @@ class ResearchPlanner:
         implemented_collectors: frozenset[str] = frozenset(),
         implemented_normalizers: frozenset[str] = frozenset(),
         implemented_extractors: frozenset[str] = frozenset(),
+        implemented_interpreters: frozenset[str] = frozenset(),
     ) -> None:
         self._stages = stages
         self._sources: SourceAvailabilityProvider = sources or UnconsultedRegistry()
         self._implemented_collectors = implemented_collectors
         self._implemented_normalizers = implemented_normalizers
         self._implemented_extractors = implemented_extractors
+        self._implemented_interpreters = implemented_interpreters
 
     def plan(
         self,
@@ -624,6 +700,13 @@ class ResearchPlanner:
                 self._implemented_collectors,
                 self._implemented_normalizers,
                 self._implemented_extractors,
+            ),
+            Capability.CLAIM_INTERPRETATION: claim_interpretation_block(
+                availability,
+                self._implemented_collectors,
+                self._implemented_normalizers,
+                self._implemented_extractors,
+                self._implemented_interpreters,
             ),
         }
 

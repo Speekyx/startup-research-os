@@ -3,7 +3,7 @@
   "$id": "https://startup-research-os.local/schema/domain.v1.schema.json",
   "title": "Startup Research OS domain vocabulary",
   "description": "GENERATED FILE. Source of truth: packages/contracts/schema/domain.v1.json. Regenerate with python packages/contracts/tools/generate.py.",
-  "x-contract-version": "1.9.0",
+  "x-contract-version": "1.10.0",
   "x-ontology-version": "2",
   "$defs": {
     "AcquisitionErrorCode": {
@@ -54,7 +54,10 @@
         "INCOMPATIBLE_TEMPORAL_SEMANTICS",
         "INCOMPATIBLE_LANGUAGE_SEMANTICS",
         "PROPOSITION_NOT_IDENTIFIABLE",
-        "INTERPRETER_PROVENANCE_INCOMPLETE"
+        "INTERPRETER_PROVENANCE_INCOMPLETE",
+        "UNSUPPORTED_SIGNAL_TYPE",
+        "SIGNAL_LINEAGE_UNAVAILABLE",
+        "AMBIGUOUS_SIGNAL_LINEAGE"
       ],
       "description": "Why an interpretation produced no Claim. A RETURNED VALUE, never a row: a claim stored to record that no claim could be made is exactly the unsupported assertion this layer exists to prevent, and a claim table row saying 'nothing' is worse than no row."
     },
@@ -62,6 +65,15 @@
       "type": "string",
       "description": "An assertion about an Opportunity that evidence can independently support or contradict. Ontology V2.1 §17. STABLE across statement revisions: the text may be rewritten, the identity may not. Distinct from ClaimType, which is an epistemic category and not an identity.",
       "format": "uuid"
+    },
+    "ClaimInterpretationInputRole": {
+      "type": "string",
+      "enum": [
+        "CITED",
+        "EXCLUDED",
+        "REFUSED"
+      ],
+      "description": "What one interpretation run did with one Signal it CONSIDERED. GAP-5: 'three supporting Signals exist' and 'three of forty considered were supporting' are different facts, and an aggregator that cannot tell them apart reads a selection as a census."
     },
     "ClaimInterpretationKind": {
       "type": "string",
