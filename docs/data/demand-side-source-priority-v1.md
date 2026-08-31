@@ -185,3 +185,44 @@ that cannot run — which is the gate working exactly as designed.
 **A collector for anything else would be worse.** No other source is closer, and
 the five approving sources already have collectors or do not need one for this
 gap.
+
+---
+
+## 4. Update after Mission 1.15.3 — the clarification is written, and unsent
+
+**`ted-eu` stays P0, and the next action is now a message rather than a
+retrieval.**
+
+Mission 1.15.3 exhausted the first-party dataset-level material. What it found:
+the Publications Office's own catalogue **does** attach a licence to the bulk
+route — `dct:license = COM_REUSE` on every `ted-1` distribution — and
+`COM_REUSE` carries `skos:exactMatch` to Commission Decision 2011/833/EU. The
+search API's own "Terms of Usage" resolve to the same TED legal notice. **Both
+routes are governed by the instrument already known to be silent on database
+rights.**
+
+H-36 split into two questions that need different answers:
+
+| | State |
+|---|---|
+| **H-36A** — does a sui generis right subsist, and who holds it? | **NOT ESTABLISHED** either way. No first-party document names a maker or asserts a substantial investment; the catalogue names a *publisher* and carries **no creator** |
+| **H-36B** — does the right holder grant or waive extraction? | **NOT ADDRESSED** for both routes |
+
+**The cheapest next step, ranked** (§37):
+
+| # | Action | Cost | Why it is first |
+|---|--------|------|-----------------|
+| **1** | **Send the prepared clarification** to `op-copyright@publications.europa.eu` | One email. The message is written and the questions are specific | It is the only step that could close H-36 outright, and the address is published by the operator in its own legal notice |
+| 2 | Legal review, using `ted-eu-h36-legal-review-packet-v1.md` | A lawyer's time | Needed only if the answer does not settle it. The packet exists so the reviewer starts from established facts rather than from scratch |
+| 3 | Move temporarily to `usaspending` (H-35) | A source review | **In parallel, not instead.** Waiting on a reply is not work, and the WTP gap is the portfolio's largest |
+
+**TED is not abandoned because human review is needed.** It remains the only
+route to transaction-class willingness-to-pay evidence in the European market,
+and steps 1 and 3 do not compete for the same effort.
+
+**What did NOT happen.** No collector was written, no procurement notice was
+fetched, no route was chosen. The bulk-versus-API distinction Mission 1.15.2
+drew got *narrower* rather than wider — the API's documented scroll mode has no
+limit on retrievable notices — so there is still no basis for preferring one, and
+none was expressed.
+

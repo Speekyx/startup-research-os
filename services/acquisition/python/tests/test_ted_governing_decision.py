@@ -15,7 +15,7 @@ import pytest
 from sros_acquisition.registry import APPROVING_STATES
 from sros_contracts import PolicyAssessment, SourceApprovalState
 
-from .conftest import needs_postgres
+from .conftest import NEVER_EVIDENCE, TED_FIRST_PARTY_PREFIXES, needs_postgres
 
 LOAD_BEARING = (
     "automated_access",
@@ -30,13 +30,9 @@ LOAD_BEARING = (
 CELLAR_HOST = "https://op.europa.eu/o/opportal-service/download-handler"
 EURLEX_ELI = "https://eur-lex.europa.eu/eli/dec/2011/833/oj"
 
-FIRST_PARTY_PREFIXES = (
-    "https://ted.europa.eu",
-    "https://docs.ted.europa.eu",
-    "https://eur-lex.europa.eu",
-    "https://op.europa.eu",
-    "https://publications.europa.eu",
-)
+# Mission 1.15.3 moved this list to conftest, because a third suite needed it and
+# three copies of a list like this one drift.
+FIRST_PARTY_PREFIXES = TED_FIRST_PARTY_PREFIXES
 
 
 def source_of(catalog, source_id: str):
@@ -58,9 +54,15 @@ def assessment(review_obj, activity: str):
 
 
 class TestEarlierReviewsImmutable:
-    def test_three_versions_exist_and_are_contiguous(self, catalog) -> None:
+    def test_the_versions_are_contiguous_from_one(self, catalog) -> None:
+        """Durable, and deliberately not `== [1, 2, 3]`: that spelling was a
+        finding about the history's LENGTH, and it failed the moment Mission
+        1.15.3 appended v4. What matters permanently is that the history starts
+        at 1, has no gaps, and still contains the three versions this file and
+        its two predecessors were written against."""
         versions = sorted(r.review_version for r in source_of(catalog, "ted-eu").review_history)
-        assert versions == [1, 2, 3]
+        assert versions == list(range(1, len(versions) + 1))
+        assert {1, 2, 3} <= set(versions)
 
     @pytest.mark.parametrize("version", [1, 2])
     def test_the_earlier_versions_still_say_model_processing_was_unaddressed(
@@ -97,7 +99,7 @@ class TestH34Closed:
         """A permission finding must rest on the operative text, not on a
         summary of it."""
         entry = next(
-            e for e in review(catalog, "ted-eu").evidence if "2011/833" in e.document_title
+            e for e in review(catalog, "ted-eu", 3).evidence if "2011/833" in e.document_title
         )
         assert entry.document_url.startswith(CELLAR_HOST)
         assert "Articles 1-13" in (entry.section_reference or "")
@@ -163,13 +165,18 @@ class TestEvidenceDiscipline:
         blogs are not evidence, however convenient."""
         for item in review(catalog, "ted-eu").evidence:
             url = item.document_url.lower()
-            for forbidden in ("google", "bing", "archive.org", "webcache", "github"):
+            for forbidden in NEVER_EVIDENCE:
                 assert forbidden not in url, item.document_url
 
     def test_the_eurlex_failures_are_still_recorded(self, catalog) -> None:
         """The successful route was the Cellar, not EUR-Lex. Recording the
-        failures stops a future reviewer repeating five of them."""
-        entry = next(e for e in review(catalog, "ted-eu").evidence if e.document_url == EURLEX_ELI)
+        failures stops a future reviewer repeating five of them.
+
+        Pinned to v3: this is a finding about the review that made the
+        retrieval, and a later review does not have to restate it."""
+        entry = next(
+            e for e in review(catalog, "ted-eu", 3).evidence if e.document_url == EURLEX_ELI
+        )
         assert (entry.section_reference or "").lower() == "retrieval failure"
 
     def test_every_evidence_item_carries_a_retrieval_time(self, catalog) -> None:

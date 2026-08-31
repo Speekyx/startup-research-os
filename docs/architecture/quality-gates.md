@@ -446,6 +446,23 @@ shape, because this is the kind of finding that decays quietly.
 | **Every evidence URL is first-party** | Asserted against a prefix list; mirrors, archives, caches and GitHub explicitly excluded | §3 |
 | **A finding is asserted against its version** | Mission 1.15 and 1.15.1 assertions pinned to v1 and v2; durable properties left on the current review | Seven tests failed when v3 landed. Pinning keeps the append-only history checked instead of relaxing the old assertions away (`testing-strategy.md` §37) |
 
+### The database right (Mission 1.15.3)
+
+| Gate | Mechanism | Guards |
+|------|-----------|--------|
+| **A dataset-level licence did not become a database-right grant** | A test asserts that H-36A and H-36B are both open on the review that RECORDS finding `dct:license = COM_REUSE` on the bulk distribution | The mission's central risk. Finding a licence attached to the assembled dataset looks like the answer, and it resolves to the same instrument that says nothing about the right |
+| **`appliesTo licence-domain/DATA` is not a grant over a database** | The evidence must record that DATA is a subject class, and that the vocabulary has no DATABASE domain | The single most plausible over-read available in the metadata, and the one a reader in a hurry would make |
+| **CC BY 4.0 on `ted-csv` does not licence `ted-1`** | A condition names both datasets and says so; tests assert the condition and assert the overlapping-coverage inconsistency is recorded | CC BY 4.0 §4 *does* grant extraction of a substantial portion. Carrying it across from a DG GROW CSV subset to the XML corpus would be choosing a licence by choosing a filename |
+| **The favourable fact is recorded in full before being refused** | Tests assert the CC BY finding, its §4 wording, AND the inconsistency in the same evidence entry | A refusal that omits the fact it refuses reads as if the fact was never found |
+| **CC0 stays scoped to SIMAP system metadata** | Asserted against the re-read legal notice; the undefined scope became a question in the request rather than a finding | §6. Reading "system metadata" onto the notice corpus would waive the right over exactly the fields the engine wants, which is why it is the reading to distrust |
+| **H-36A and H-36B are tracked separately** | Two open questions, each asserted for its own vocabulary — *maker* and *substantial investment* for subsistence, *not addressed* for grant | §10. Subsistence and grant have different answers and different addressees; collapsing them loses which one is open |
+| **Package sizes recorded without downloading a package** | The evidence must say HEAD and "no package body was downloaded"; the byte count is asserted | §4. The line between metadata and research data had to be visibly found rather than quietly crossed |
+| **A correction to an earlier mission is visible** | The API scroll-mode limit is asserted present in the evidence, and the superseded reasoning is banner-marked in the 1.15.2 document | Mission 1.15.2 reasoned the API was less exposed than bulk. Silently absorbing the correction would leave a wrong sentence authoritative |
+| **General legislation is not source policy evidence** | A test asserts Directive 96/9/EC appears in NO registry evidence row | It belongs in the legal packet. Putting it in the registry would be turning general legal knowledge into project evidence |
+| **Nothing claims to have been sent** | Tests assert the request says "prepared, not sent", carries an operator-send status, and that no `sent_at` exists anywhere in the catalog | §21. A repository that can draft a message must never imply it delivered one |
+| **The packet offers no legal conclusion, and records the unfavourable outcome** | Both asserted | §22. A packet that only describes the outcome we want is advocacy, not a question |
+| **No TED module exists in the acquisition package** | The file tree is walked for any module whose stem contains `ted` | §28. "No collector" checked against the tree, not only against a registry a new module could forget to join |
+
 
 ---
 

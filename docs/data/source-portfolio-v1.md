@@ -376,3 +376,33 @@ and the audit that found it also removed `entertainment` from the covered list.
 **A recommendation that survives contact with an audit is worth more than one
 that does not have to.** This one did not, entirely, and the revision is the
 record of that.
+
+### 5.4 Update after Mission 1.15.3 — the blocker is now a message
+
+`ted-eu` moved from *"a legal question the documents do not answer"* to *"a legal
+question with a named addressee and a drafted message"*.
+
+The first-party dataset material is exhausted. The Publications Office's own DCAT
+record attaches `dct:license = COM_REUSE` to **every** `ted-1` distribution
+including the bulk XML download, and that licence carries `skos:exactMatch` to
+Commission Decision 2011/833/EU — the instrument already read in full and already
+known to contain no database-right provision. The search API's OpenAPI "Terms of
+Usage" section resolves to the same TED legal notice. Neither route has a
+database-right grant, and **neither route has a different answer**.
+
+H-36 is now tracked as **H-36A** (subsistence: not established, because nothing
+names a maker or a substantial investment — the catalogue names a *publisher* and
+carries no creator) and **H-36B** (grant: not addressed).
+
+One fact sharpens it without resolving it: the same portal declares **CC BY 4.0**
+— whose Section 4 expressly grants extraction and re-utilisation of a substantial
+portion — on 12 of 48 distributions of the separate `ted-csv` dataset published by
+DG GROW, inconsistently and over coverage that overlaps the `COM_REUSE` files.
+Not relied on, and asked about instead.
+
+`ted-eu` remains `REQUIRES_REVIEW` at review v4, remains the portfolio's only
+route to transaction-class willingness-to-pay evidence, and remains
+collector-ineligible. The next action is to send
+`ted-eu-database-right-clarification-request-v1.md`, which is prepared and
+**unsent**.
+

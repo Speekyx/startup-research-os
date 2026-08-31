@@ -26,7 +26,7 @@ import pytest
 from sros_acquisition.registry import APPROVING_STATES
 from sros_contracts import PolicyAssessment, SourceApprovalState
 
-from .conftest import needs_postgres
+from .conftest import NEVER_EVIDENCE, TED_FIRST_PARTY_PREFIXES, needs_postgres
 
 # The instrument TED's own legal notice names. Establishing it was this
 # mission's one real advance; reading it was not possible.
@@ -122,9 +122,11 @@ class TestVerdictUnchanged:
 
 class TestEvidence:
     def test_the_new_review_carries_retrieved_evidence(self, catalog) -> None:
-        current = review(catalog, "ted-eu")
-        assert len(current.evidence) >= 3
-        for item in current.evidence:
+        """Pinned to v2, the review this file is about. Mission 1.15.3's v4
+        carries its own evidence and its own test."""
+        v2 = review(catalog, "ted-eu", 2)
+        assert len(v2.evidence) >= 3
+        for item in v2.evidence:
             assert item.document_url.startswith("https://")
             assert item.summarized_finding.strip()
             assert item.retrieved_at is not None
@@ -133,7 +135,7 @@ class TestEvidence:
         """The one thing this mission established. v1 guessed at "the
         Publications Office's reuse decision, or another first-party
         instrument"; v2 names it."""
-        urls = {e.document_url for e in review(catalog, "ted-eu").evidence}
+        urls = {e.document_url for e in review(catalog, "ted-eu", 2).evidence}
         assert GOVERNING_INSTRUMENT_URL in urls
 
     def test_the_retrieval_failure_is_recorded_as_evidence(self, catalog) -> None:
@@ -148,18 +150,16 @@ class TestEvidence:
         assert (entry.section_reference or "").lower() == "retrieval failure"
 
     def test_no_search_engine_summary_was_used_as_evidence(self, catalog) -> None:
-        """§4. A summary of a legal instrument must not stand in for it."""
-        for item in review(catalog, "ted-eu").evidence:
-            assert "google" not in item.document_url
-            assert "bing" not in item.document_url
-            assert item.document_url.startswith(
-                (
-                    "https://ted.europa.eu",
-                    "https://eur-lex.europa.eu",
-                    "https://op.europa.eu",
-                    "https://docs.ted.europa.eu",
-                )
-            ), item.document_url
+        """§4. A summary of a legal instrument must not stand in for it.
+
+        Asserted over EVERY version rather than the current one: this is a
+        property of the whole history, and stating it that way is both stronger
+        and immune to the version drift that broke the assertions above."""
+        for past in source_of(catalog, "ted-eu").review_history:
+            for item in past.evidence:
+                for forbidden in NEVER_EVIDENCE:
+                    assert forbidden not in item.document_url.lower(), item.document_url
+                assert item.document_url.startswith(TED_FIRST_PARTY_PREFIXES), item.document_url
 
 
 # ================================= technical access is still not permission
