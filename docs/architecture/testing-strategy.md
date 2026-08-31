@@ -1472,3 +1472,47 @@ including a finding that said storage was permitted. It now matches the verbatim
 clause the verdict turns on: *"call the API on each access"*. A test over
 evidence text should match what the document actually said, not the topic it was
 about.
+
+## 35. An unread document must stay visibly unread (Mission 1.15.1)
+
+§34 established that a source-review test asserts properties of the recorded
+review rather than contacting the platform. Mission 1.15.1 found the case that
+makes the rule sharper: **the document the whole review turned on could not be
+read at all.**
+
+TED's legal notice names its governing instrument — Commission Decision
+2011/833/EU — and links its canonical EUR-Lex address. Five first-party URL forms
+for that Decision each returned an empty body. So the review recorded a grant
+whose *scope* is defined in a document nobody has opened.
+
+That is a specific hazard. Six months on, a reader sees a review citing a named
+legal instrument with a canonical URL and reasonably assumes somebody read it.
+
+### What the suite does about it
+
+- **The failure is stored as evidence**, with `section_reference` set to
+  `"Retrieval failure"` and the finding stating "empty body". A test asserts both.
+  The document appears in the evidence list *because* it could not be read, which
+  is the opposite of the usual reason and needs to be unmistakable.
+- **A test asserts no evidence URL is a search engine.** A search restricted to
+  EU domains returned a summary describing the Decision's articles, and it was
+  the one thing in the mission that would have closed the question if treated as
+  evidence. The assertion is over the recorded URLs, so the temptation cannot be
+  yielded to silently later either.
+- **A test asserts the activity assessments are byte-identical between versions.**
+  A re-review that could not close its question must not quietly move findings it
+  did not re-establish. `v1.assessments == v2.assessments` is one line and it
+  catches the whole class.
+
+### The general form
+
+**When a review depends on a document that could not be retrieved, the record has
+to say so at the point where the document is cited** — not only in prose that a
+later reader may skim. A citation is normally a claim that somebody read the
+thing; here it must carry the opposite claim, and only a structured field can do
+that reliably.
+
+The corollary is a rule about direction: a mission whose stated goal is to *close*
+a question needs its strongest tests on the path where the question stays open.
+The failure mode is not writing a false finding — it is letting an unresolved
+question quietly acquire the appearance of resolution.

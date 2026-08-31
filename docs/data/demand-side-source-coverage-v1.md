@@ -127,7 +127,7 @@ evidence a payment before this round.
 
 | Source | Verdict | Evidence class | Blocker |
 |--------|---------|----------------|---------|
-| `ted-eu` | REQUIRES_REVIEW *(new)* | **TRANSACTION** | `model_processing` not addressed — the only ungranted activity of six |
+| `ted-eu` | REQUIRES_REVIEW *(v2)* | **TRANSACTION** | `model_processing` not addressed (H-34), and database rights unasked until Mission 1.15.1 (H-36) |
 | `usaspending` | REQUIRES_REVIEW *(new)* | **TRANSACTION** | No licence or terms document retrievable |
 
 ```text

@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.24
-Last amended: 2026-08-31 (Sprint 1 / Mission 1.15)
+Version: 1.25
+Last amended: 2026-08-31 (Sprint 1 / Mission 1.15.1)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.25 | 2026-08-31 | **H-34 stays OPEN, and the question got precise.** TED's governing instrument is now NAMED and proven -- Commission Decision 2011/833/EU, cited by TED's own legal notice -- and its text returned an empty body at five first-party EUR-Lex addresses. The grant says notices may be *reused*, and 'reuse' is defined in the document nobody could read. A second question surfaced: does the grant reach the sui generis DATABASE right, given that the access route is bulk extraction (H-36) |
 | 1.24 | 2026-08-31 | **Demand-side expansion: nine sources examined, zero approvals, and that is the result.** Pinterest and Hacker News moved to RESTRICTED on retrieved terms; Bluesky's developer guidelines are now known to exist and could not be fetched. Two procurement sources registered -- the first lawful route to WILLINGNESS_TO_PAY as a TRANSACTION rather than a listed price. `ted-eu` has five of six activities granted and is blocked by one |
 | 1.23 | 2026-08-31 | **Reviewed reliability governed, and none reviewed.** A reliability applies to a MEASUREMENT x PURPOSE scope, rests on retrieved first-party documents, is attributed to a person and is superseded rather than updated (ADR-026). Zero assessments exist, so all seven Evidence rows stay NON_SCORABLE and aggregation stays UNAVAILABLE -- **outcome B, and it is the design working**. D-03 loses one blocker and keeps four |
 | 1.22 | 2026-08-31 | The **first complete Signal -> Claim -> Evidence pipeline**: `observed-signal-restatement@1.0.0` produced **7 real OBSERVED Claims, 7 revisions and 7 Evidence rows** from the seven real Signals. Deterministic, source-attributed, no LLM. GAP-5 resolved; a refused interpretation gets a run record, never a Claim (ADR-025). Reliability stays NULL and every record is NON_SCORABLE, honestly |
@@ -882,6 +883,57 @@ family.**
 relevance — and it has not yet.** Even a perfect reliability review of all seven
 existing Evidence rows would establish nothing about pain, desire, willingness to
 pay, competition, distribution or retention.
+
+### TED-EU — the closest blocked source, and why it stays blocked
+
+Mission 1.15.1 was a narrow mission to close H-34 in either direction
+(`ted-eu-reuse-ml-review-v1.md`). It could not, and the reason is not the one
+anybody expected.
+
+- **The governing instrument is established and the link is PROVEN.** TED's own
+  legal notice states that the Commission's reuse policy *"is implemented by the
+  Commission Decision of 12 December 2011 on the reuse of Commission
+  documents"* and links its ELI address. Mission 1.15's open question guessed at
+  "the Publications Office's reuse decision, or another first-party instrument";
+  the instrument now has a name, a date, a publisher and a canonical URL.
+- **That document could not be read.** Five first-party EUR-Lex addresses — the
+  ELI URL, the ELI English URL, the CELEX text URL, the CELEX HTML URL and the
+  Official Journal PDF — each returned an empty body. The Publications Office's
+  own copyright notice does not restate it and is silent on text and data
+  mining, machine learning and automated processing; the TED Developer Docs link
+  back to the same legal notice.
+- **This is worse than silence, not better.** The grant reads *"can be freely
+  reused, for commercial or non-commercial purposes"*. The operative word is
+  **reused**, and its scope is defined in the instrument that would not render.
+  Reading the grant as covering machine-learning inference would mean assuming a
+  definition from an **unread document** — a weaker basis than inferring from
+  observed silence, because silence is at least established.
+- **A search summary was refused.** A search restricted to EU domains returned a
+  summary describing the Decision's articles. It was not treated as evidence and
+  no part of the review rests on it. A summary of a legal instrument is precisely
+  what must not stand in for the instrument.
+- **A second question surfaced that nobody had asked (H-36).** TED is a database
+  and the documented route is bulk XML — extraction and re-utilisation of
+  substantial portions. The sui generis database right is independent of
+  copyright, and nothing retrieved addresses it. It bears on `automated_access`
+  and `redistribution` rather than `model_processing`, so **it could block TED
+  even if H-34 closes favourably**. Recorded as a new open question rather than
+  used to downgrade Mission 1.15's findings: a question nobody has answered is
+  not evidence that an earlier review was wrong.
+- **Two conditions were added and none weakened.** The legal notice states that
+  additional rights may need clearing where content depicts identifiable private
+  individuals, and that industrial property including logos and names is excluded
+  from the reuse policy. The reuse grant is therefore **not a blanket grant over
+  everything inside a notice**, which makes minimisation a compliance requirement
+  rather than a preference. Mission 1.15's minimisation and authenticity
+  conditions are intact and asserted by test.
+- **Every activity assessment is byte-identical between v1 and v2.** A re-review
+  that could not close its question must not quietly move findings it did not
+  re-establish.
+
+**The project wants this source badly** — it would be the first transaction-class
+evidence the portfolio has ever had — **and that had zero effect on the review.**
+The next action is one retrieval from an environment that renders EUR-Lex.
 
 ### Blocked work
 

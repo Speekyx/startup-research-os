@@ -1210,3 +1210,81 @@ one.
 **Vendor contact needed?** Possibly.
 **Legal counsel appropriate?** Yes, if no document exists — the question becomes
 whether the absence of copyright is itself the grant.
+
+---
+
+## H-34 — update after Mission 1.15.1 {#h-34-update}
+
+**Still open, and now precise.** Mission 1.15.1 was a narrow mission to close
+H-34 in either direction. It could not, and the reason changed the question.
+
+**What is now established.** TED's own legal notice names the governing
+instrument:
+
+> *"The European Commission's reuse policy is implemented by the Commission
+> Decision of 12 December 2011 on the reuse of Commission documents."*
+
+That is **Commission Decision 2011/833/EU**, published in Official Journal L 330,
+linked by TED at `https://eur-lex.europa.eu/eli/dec/2011/833/oj`. The link is
+proven from first-party material rather than assumed, which is what H-34's
+original wording — *"the Publications Office's reuse decision, or another
+first-party instrument"* — could not say.
+
+**What blocks it.** The Decision could not be retrieved. Five first-party EUR-Lex
+addresses were attempted on 2026-08-31 — the ELI URL, the ELI English URL, the
+CELEX text URL, the CELEX HTML URL and the Official Journal PDF — and every one
+returned an empty body. The Publications Office's own copyright notice does not
+restate it and is silent on text and data mining, machine learning and automated
+processing. The TED Developer Docs link back to the same legal notice.
+
+**Why this is worse than silence, not better.** The grant reads *"can be freely
+reused, for commercial or non-commercial purposes"*. The operative word is
+**reused**, and its scope is defined in the instrument that could not be read.
+Treating the grant as covering machine-learning inference would mean assuming a
+definition from an unread document — which is a weaker basis than inferring from
+observed silence, because silence is at least established.
+
+**Needed.** Commission Decision 2011/833/EU, retrieved from EUR-Lex in an
+environment that renders it. Specifically the scope article and the definition of
+"reuse", plus anything on databases, extraction, text and data mining or
+automated processing.
+
+**Vendor contact needed?** No. This is a public legal instrument at a canonical
+address.
+**Legal counsel appropriate?** Only if the Decision's definition is itself
+ambiguous once read.
+
+**Status:** open, refined. TED-EU review v2 records it.
+
+---
+
+## H-36 — Does the TED reuse grant reach the sui generis database right? {#h-36}
+
+**Issue.** TED is a database, and the documented reuse route is bulk daily and
+monthly XML packages — extraction and re-utilisation of substantial portions of
+it. The sui generis database right is independent of copyright, and a reuse grant
+framed around *documents* does not automatically carry it.
+
+**Why it matters.** It bears on `automated_access` (bulk) and `redistribution`
+more than on `model_processing`, so **it could block TED even if H-34 closes
+favourably**. Mission 1.15's review recorded seven activities as `PERMITTED` on
+one sentence and did not ask this question.
+
+**Why it is unresolved.** Nothing retrieved addresses it. The TED legal notice
+does not mention databases, extraction or re-utilisation. The Publications Office
+copyright notice does not either. Commission Decision 2011/833/EU could not be
+read (H-34).
+
+**Needed.** Whether Decision 2011/833/EU, or another instrument it references,
+addresses database rights, extraction or re-utilisation of substantial portions.
+Likely answered by the same retrieval that answers H-34.
+
+**Note on process.** This was recorded as a new open question rather than used to
+downgrade Mission 1.15's activity findings. It is a question nobody has answered,
+not evidence that the earlier review was wrong, and rewriting a prior review on a
+suspicion is what the append-only rule exists to prevent.
+
+**Vendor contact needed?** No.
+**Legal counsel appropriate?** Yes, if the instrument is silent on database
+rights — the question then becomes whether a documents reuse policy carries the
+database right by implication.
