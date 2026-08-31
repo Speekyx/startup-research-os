@@ -261,6 +261,40 @@ because one is a bug and the other is missing work.
 would be an unused abstraction, and `UNKNOWN` is the honest answer for a check
 that does not exist.
 
+### Choosing between a mechanical kind and `HUMAN_CONFIRMATION`
+
+Added in Mission 1.15.6, from the TED bootstrap. The general rule, and the
+boundary that keeps it from becoming an excuse:
+
+**An objective property of what a collector is CONFIGURED to do should be
+verified against that configuration, not confirmed by a person.** A
+`HUMAN_CONFIRMATION` condition describing a mechanical property costs more than
+it looks: nothing checks it, nothing sees it regress, and a person becomes the
+load-bearing element for something a gate is better at.
+
+TED carried two of them — *collection uses the official routes and never the
+bulk packages*, and *the deployed profile requests only the authorised fields*.
+Both read as claims about code nobody had written, which produced a bootstrap:
+the collector could not be authorised until a person confirmed its behaviour,
+and the behaviour could not be confirmed until the collector existed. Neither
+was ever about code. Both are properties of the **configuration handed to
+authorization**, and both are checkable before anything opens a socket.
+
+**The boundary.** A judgement, a risk acceptance, a legal conclusion or a
+promise about the future stays `HUMAN_CONFIRMATION`. `source-review-guide.md` §9
+is unchanged and load-bearing: *do not reword a legal obligation until it sounds
+checkable — that produces a verifier that checks something else.* TED's third
+condition, the residual database-right exposure, was left exactly where it was.
+
+Ask which of the two a condition is:
+
+| The condition asserts | Kind |
+|---|---|
+| a named gate exists and refuses what it must, against this source's configuration | `CAPABILITY` |
+| the registry records exactly the approved access profiles for the SOURCE | `ACCESS_METHOD` |
+| a configuration key is present | `CONFIG_REFERENCE` |
+| a person accepted a risk, formed a legal view, or promised future conduct | `HUMAN_CONFIRMATION` |
+
 ### What a `CAPABILITY` verification does and does not establish
 
 Stated here because it is the load-bearing limitation of the whole layer.
@@ -310,11 +344,11 @@ What a collector receives, and the only thing that lets it do anything.
 |---|---|
 | `source_id`, `canonical_name` | which source |
 | `approval_state`, `review_version`, `reviewed_at`, `next_review_at` | under which review |
-| `access` | the approved paths, with credential key names and rate-limit metadata |
+| `access` | the approved paths, with credential key names and rate-limit metadata. **Only the routes the review authorised**, where it restricted them (§7.1) |
 | `resource_scope` | which resources are in scope, and which are excluded |
 | `retention` | the resolved rule, stricter constraint already applied |
 | `attribution` | what attribution follows this data |
-| `data_minimisation` | what may be requested, and what must not |
+| `data_minimisation` | what may be requested, and what must not — asked through `authorize_fields` before a request is composed (§7.2) |
 | `acquisition_bounds` | how much of the source one job may take |
 | `verifications` | the condition snapshot the authorization rests on |
 | `issued_at` | when |
@@ -322,7 +356,79 @@ What a collector receives, and the only thing that lets it do anything.
 `authorize_resource(descriptor)` is the only sanctioned way to reach a specific
 dataset. Holding the context permits nothing on its own.
 
-### 7.1 Acquisition bounds — *how much*, kept apart from *what*
+### 7.1 Authorized routes — *how*, kept apart from *what* and *how much*
+
+Mission 1.15.6, ADR-028. `access` used to carry **every** access profile the
+registry recorded, because an access profile is a fact about the source and the
+context had nothing to filter it with. A collector then chose among them by
+label.
+
+That was survivable while no approving source had a route its review refused.
+TED is the first that does: the bulk XML packages are published, documented and
+downloadable without signing in — so `ted-bulk-xml` is in the registry, because
+it is true — and the local review refuses them by name, because Mission 1.15.3
+established the highest database-right exposure on that route.
+
+**`AccessRestriction` could not carry this, and the reason generalises.** It
+verifies that the registry holds exactly the approved access profiles: a
+statement about **the source**. Making it pass for TED would have meant deleting
+a real route from the registry, which is falsifying a fact about a source in
+order to obtain a permission. What the review actually requires is a statement
+about **us** — that acquisition binds to one named authorised route.
+
+So a `(source, profile)` compliance entry may carry a `route_authorization`:
+
+```json
+"route_authorization": {
+  "allowed_labels": ["ted-search-api", "ted-open-data-sparql"],
+  "blocked_labels": ["ted-bulk-xml"],
+  "preferred_label": "ted-search-api",
+  "basis": "..."
+}
+```
+
+Refused at load time: an empty allowlist (a refusal dressed as a filter), an
+empty blocklist (a preference dressed as a restriction), a label in both lists,
+a preference naming an unauthorised route, and a bound with no stated basis.
+
+**Where one exists, `context.access` carries the authorised routes and nothing
+else.** That is the enforcement, and it is the same shape as the rest of this
+layer: not a flag the collector is asked to check, but the absence of the thing
+it would need. A blocked label has no endpoint to read, so there is no host to
+allowlist and nothing for the transport to be pointed at.
+`context.authorize_route(label)` exists so a refusal reads as *refused by name*
+rather than as *not found*.
+
+An authorised label the registry does not record is **refused**, not skipped: a
+route with no access profile has no endpoint and nothing to check a host
+against.
+
+`None` means **no route restriction was reviewed** for that `(source, profile)`,
+not that any route is fine. Every entry predating Mission 1.15.6 is in that
+state, and `source-route-binding` reports *unimplemented* rather than
+*satisfied* when it is absent — so a condition can only ever rest on a
+restriction that exists.
+
+### 7.2 Data minimisation — what may be REQUESTED
+
+Mission 1.15.6 §8, §9. `DataMinimisationProfile` has held the allowed and
+excluded categories since Mission 1.4, and until this mission **nothing
+consulted them**: `permits(category)` answered a question about one category
+and had no caller in the gate.
+
+`context.authorize_fields(requested)` answers the question a request actually
+asks. It refuses an excluded field **by name**, a field no review authorised, a
+request stating no selection, and a profile that authorises nothing.
+
+**Where the source supports field selection, this is the primary control and not
+a filter.** The TED Search API's request body carries a `fields` parameter, so a
+request that took everything and discarded the contact block afterwards would
+have retrieved the contact block — and the obligation is about what is
+retrieved. There is deliberately no method that removes fields from a collected
+record. Post-collection filtering may exist later as a defensive second layer;
+it may never be the primary minimisation control.
+
+### 7.3 Acquisition bounds — *how much*, kept apart from *what*
 
 Mission 1.9.2. Every rule in §4 answers **what** may be reached. A published
 bulk dataset raises a second question — **how much of it** — and GDELT's
@@ -346,7 +452,7 @@ the observed contract removed the obvious alternative: each file spans every
 language, so a job cannot ask for fewer languages and language is not a dimension
 of the request at all.
 
-### 7.2 Acquisition readiness — four facts, derived
+### 7.4 Acquisition readiness — four facts, derived
 
 `evaluate_readiness(source, config)` reports, and refuses nothing:
 
@@ -430,20 +536,25 @@ than by sharing a constant.
 
 | | |
 |---|---|
-A snapshot, refreshed at Mission 1.9.2. Anything counted here is derived, so
+A snapshot, refreshed at Mission 1.15.6. Anything counted here is derived, so
 `sros-source readiness` is the current answer and this is the shape of it.
+
+Counted per **(source, use profile)** since Mission 1.15.5: a source approved
+under two profiles carries two sets of conditions, and one number for the source
+would hide which use they belong to.
 
 | | |
 |---|---|
-| Conditions | 12, across 5 approving sources |
+| Conditions | 16, across 6 approving (source, profile) pairs |
 | Verifiers | 3 kinds registered, 1 deliberately absent, 1 deliberately inert |
-| Capabilities | 5, each asserted by its own conformance check |
-| Collector-eligible | **world-bank, eurostat, gdelt** — with no credential configured |
+| Capabilities | 7, each asserted by its own conformance check |
+| Collector-eligible | **world-bank, eurostat, gdelt** under the legacy profile, with no credential configured |
 | Design-eligible, not runnable | **fred** — `FRED_API_KEY` not configured |
+| **Approving, not eligible** | **ted-eu** under `local-private-research-v1` — one human confirmation outstanding |
 | **Resource-ready** | **world-bank, gdelt.** Eurostat is eligible and has no authorised resource |
-| Collectors implemented | 1 — `world-bank` |
+| Route-restricted | **ted-eu** only (§7.1) |
+| Collectors implemented | 2 — `world-bank`, `gdelt` |
 | Collectors enabled | per deployment; the catalog record enables none |
-| Raw records | 6, all World Bank |
 
 ---
 
@@ -453,9 +564,20 @@ A snapshot, refreshed at Mission 1.9.2. Anything counted here is derived, so
   Mission 1.4 and `context.datasets` is empty, so every Eurostat resource fails
   closed. That is the gate working, and it is also the reason "eligible" was
   never the last word.
-- **No acquisition bound exists for any source but GDELT** (§7.1). The question
+- **No acquisition bound exists for any source but GDELT** (§7.3). The question
   has not been asked for the other three, which is different from having been
   answered permissively.
+- **No route restriction exists for any source but TED** (§7.1). Same shape, same
+  reading: absent means unasked. **GDELT is the one that matters** — it carries a
+  second, deferred access profile for the DOC API that no review has assessed, so
+  its context hands a collector both. Adding a route authorization for it is a
+  review act rather than a configuration edit, and it belongs to a mission that
+  says so.
+- **TED holds one outstanding human confirmation**, the residual database-right
+  exposure. Nothing in this repository can satisfy it, which is the design. The
+  exact statement an operator would have to record is in
+  [`ted-eu-authorization-bootstrap-v1.md`](ted-eu-authorization-bootstrap-v1.md)
+  §6.2, and writing that text down is not recording it.
 - **Eurostat's disclaimer wording** — not in the retrieved evidence, so it is
   required as supplied text rather than composed. Resolving it means re-reading
   the copyright notice, not editing configuration.

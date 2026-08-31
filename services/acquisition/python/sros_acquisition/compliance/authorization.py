@@ -28,7 +28,7 @@ performs nothing, and the package it lives in is asserted network-free in CI.
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from datetime import UTC, datetime
 
@@ -45,6 +45,7 @@ from .config import (
     ComplianceConfig,
     DataMinimisationProfile,
     ResourceScope,
+    RouteAuthorization,
 )
 from .resources import ResourceAuthorization, ResourceDescriptor, authorize_resource
 from .verification import (
@@ -160,6 +161,11 @@ class AcquisitionAuthorizationContext:
     datasets: tuple[AuthorizedDataset, ...]
     verifications: tuple[ConditionVerificationRecord, ...]
     issued_at: datetime
+    # The reviewed route restriction, carried so a refusal can NAME the blocked
+    # route rather than reporting an absence (Mission 1.15.6 §13). `None` where
+    # no review has restricted routes for this (source, profile), in which case
+    # `access` holds every registered profile exactly as it did before.
+    route_authorization: RouteAuthorization | None = None
     # `None` when no review has set a ceiling for this source. Not "unbounded":
     # unasked (Mission 1.9.2 §15).
     acquisition_bounds: AcquisitionBounds | None = None
@@ -182,6 +188,38 @@ class AcquisitionAuthorizationContext:
         resource is asked for separately and refused by default.
         """
         return authorize_resource(self.resource_scope, descriptor)
+
+    def authorize_route(self, label: str | None) -> tuple[str, ...]:
+        """Why binding acquisition to this access route is refused, or nothing.
+
+        Mission 1.15.6 §22. The load-bearing guarantee is not this method: it is
+        that `access` below holds ONLY authorised routes, so a collector that
+        selects a route by label the way `GdeltWebNgramCollector._route` does
+        finds nothing for a blocked one and cannot reach a host. This method
+        exists so that the refusal is *named* -- "refused by name" reads
+        differently from "not found", and the second is what an engineer
+        debugs for an hour.
+
+        A source with no reviewed route restriction returns nothing, which says
+        the question has not been asked rather than that any route is approved.
+        """
+        if self.route_authorization is None:
+            return ()
+        return self.route_authorization.refusals(label)
+
+    def authorize_fields(self, requested: Sequence[str] | None) -> tuple[str, ...]:
+        """Why this field selection is not the minimised one, or nothing.
+
+        Mission 1.15.6 §8. Asked BEFORE a request is composed, because the
+        source supports field selection and an obligation about what is
+        retrieved cannot be met by discarding afterwards (§9).
+        """
+        return self.data_minimisation.refusals(requested)
+
+    @property
+    def authorized_route_labels(self) -> tuple[str, ...]:
+        """The routes a collector may bind to, in registry order."""
+        return tuple(access.label for access in self.access)
 
     def authorize_job_size(self, file_count: int | None) -> tuple[str, ...]:
         """Why a job of this size exceeds what the review approved, or nothing.
@@ -267,6 +305,10 @@ class AcquisitionAuthorizationContext:
             "acquisition_bounds": (
                 self.acquisition_bounds.to_json() if self.acquisition_bounds else None
             ),
+            "route_authorization": (
+                self.route_authorization.to_json() if self.route_authorization else None
+            ),
+            "authorized_route_labels": list(self.authorized_route_labels),
             "verifications": [v.to_json() for v in self.verifications],
             "design_eligible": self.design_eligible,
             "issued_at": self.issued_at.isoformat(),
@@ -334,6 +376,8 @@ def build_authorization(
             ),
         )
 
+    access = _reviewed_access(source, compliance.route_authorization)
+
     return AcquisitionAuthorizationContext(
         source_id=source.source_id,
         use_profile_id=use_profile_id,
@@ -342,7 +386,7 @@ def build_authorization(
         review_version=review.review_version,
         reviewed_at=review.reviewed_at,
         next_review_at=review.next_review_at,
-        access=tuple(_authorized_access(p) for p in source.access_profiles),
+        access=access,
         resource_scope=compliance.resource_scope,
         # Governance input, never a collector's choice (§30). Resolution takes
         # the stricter of the baseline and any override, in that direction only.
@@ -351,9 +395,53 @@ def build_authorization(
         data_minimisation=compliance.data_minimisation,
         datasets=compliance.datasets,
         acquisition_bounds=compliance.acquisition_bounds,
+        route_authorization=compliance.route_authorization,
         verifications=tuple(records),
         issued_at=moment,
     )
+
+
+def _reviewed_access(
+    source: SourceRecord, routes: RouteAuthorization | None
+) -> tuple[AuthorizedAccess, ...]:
+    """The routes the context hands a collector: the reviewed ones, and no others.
+
+    Mission 1.15.6 §22, ADR-028. Before this mission the context carried EVERY
+    registered access profile, because an access profile is a fact about the
+    source and the context had nothing to filter it with. That was survivable
+    while no approving source had a route its review refused; TED is the first
+    that does, and its refused route is a full bulk download of the corpus whose
+    database-right exposure is the open question.
+
+    A collector selects its route by label -- `GdeltWebNgramCollector._route`
+    is the existing pattern, and its own docstring records that taking
+    `context.access[0]` would silently authorise a second host. Filtering here
+    is what makes that pattern safe rather than careful: a blocked label is not
+    in the tuple, so there is no endpoint to read, no host to allowlist, and the
+    transport has nothing to be pointed at.
+
+    Sources with no reviewed route restriction are unchanged. `None` means the
+    question was never asked for that (source, profile), and answering it here
+    by inventing an allowlist would be this module setting permissions.
+    """
+    if routes is None:
+        return tuple(_authorized_access(profile) for profile in source.access_profiles)
+    registered = {profile.label: profile for profile in source.access_profiles}
+    missing = sorted(routes.allowed_labels - registered.keys())
+    if missing:
+        # §13. A route the review authorised and the registry does not record is
+        # not a route: there is no endpoint, no rate-limit metadata and nothing
+        # to bind to. Refused rather than skipped, because skipping it would
+        # quietly narrow the authorisation to whatever happened to exist.
+        raise AcquisitionNotAuthorizedError(
+            source.source_id,
+            (
+                f"the review authorises access route(s) {missing} that the registry does "
+                "not record for this source. An authorised route with no access profile "
+                "has no endpoint to reach and nothing to check a host against",
+            ),
+        )
+    return tuple(_authorized_access(registered[label]) for label in sorted(routes.allowed_labels))
 
 
 def _authorized_access(profile: AccessProfile) -> AuthorizedAccess:

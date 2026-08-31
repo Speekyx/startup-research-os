@@ -1,12 +1,21 @@
 # TED-EU Local Official Route Readiness V1
 
-**Authoritative.** Mission 1.15.5 §20–§24, §48. What is authorised under
-`local-private-research-v1`, and what still stands between that and a collector.
+**Authoritative.** Mission 1.15.5 §20–§24, §48, **amended by Mission 1.15.6**.
+What is authorised under `local-private-research-v1`, and what still stands
+between that and a collector.
 
 **State: `APPROVING_BUT_NOT_ELIGIBLE`.** The review is
-`APPROVED_WITH_CONDITIONS`; `AcquisitionAuthorizationContext` **cannot be built**;
-three human confirmations are outstanding, and one of them is the residual
-database-right exposure.
+`APPROVED_WITH_CONDITIONS`; `AcquisitionAuthorizationContext` **cannot be
+built**; **one** condition is outstanding, and it is the residual database-right
+exposure.
+
+**Amended by Mission 1.15.6.** Two of the three conditions this document
+reported as outstanding described objective properties of the *configuration*
+rather than of code, and are now verified against it: `ted-official-route-only`
+by the `source-route-binding` capability, `ted-personal-data-minimisation` by
+`source-field-minimisation`. Local review **v2** carries the reclassification and
+changed no policy conclusion. See
+[`ted-eu-authorization-bootstrap-v1.md`](ted-eu-authorization-bootstrap-v1.md).
 
 **No collector exists and none may be written from this document alone.**
 
@@ -19,7 +28,7 @@ database-right exposure.
 | Profile | Review | Verdict | Eligible |
 |---|---|---|---|
 | `commercial-multi-tenant-research-v1` | v5 | `REQUIRES_REVIEW` | no |
-| **`local-private-research-v1`** | **v1** | **`APPROVED_WITH_CONDITIONS`** | **no** |
+| **`local-private-research-v1`** | **v2** | **`APPROVED_WITH_CONDITIONS`** | **no** |
 
 ## Rights basis
 
@@ -45,12 +54,26 @@ resource is denied.
 
 ## Access route
 
-| Route | Status |
-|---|---|
-| **TED Search API** — `https://api.ted.europa.eu/v3/notices/search` | **authorised** |
-| **TED Open Data Service (SPARQL)** — `https://data.ted.europa.eu/` | **authorised** |
-| Bulk XML packages — `https://ted.europa.eu/packages/` | **BLOCKED**, under every profile |
-| `ted-csv` historical subset (DG GROW) | **BLOCKED**, separate dataset, separate licence record |
+| Route | Access profile | Status |
+|---|---|---|
+| **TED Search API** — `https://api.ted.europa.eu/v3/notices/search` | `ted-search-api` | **authorised**, and the **preferred first implementation route** |
+| **TED Open Data Service (SPARQL)** — `https://data.ted.europa.eu/` | `ted-open-data-sparql` | **authorised** |
+| Bulk XML packages — `https://ted.europa.eu/packages/` | `ted-bulk-xml` | **BLOCKED BY NAME**, under every profile |
+| `ted-csv` historical subset (DG GROW) | *(no route)* | **BLOCKED** at the resource gate, separate dataset, separate licence record |
+
+**Enforced, not promised** (Mission 1.15.6). The authorised labels are a
+`route_authorization` in `source-compliance-v1.json`, and
+`build_authorization` puts **only those routes** into `context.access` — so
+`ted-bulk-xml` has no endpoint a collector could reach, no host to allowlist and
+nothing for the transport to be pointed at. `ted-open-data-sparql` was
+registered as an access profile in the same mission, because the review
+authorised a route the registry did not record.
+
+The Search API is **preferred** for the first collector: it publishes explicit
+intended-use documentation, supports field selection through `fields` so
+minimisation happens at acquisition, and has a simpler response contract than
+SPARQL. That is an implementation choice among authorised routes and widens
+nothing.
 
 ## Activity status
 
@@ -82,6 +105,13 @@ the notice to a licence that does not cover it.
 
 **Requested through the Search API's `fields` parameter, so minimisation happens
 at acquisition** — not after it.
+
+**Enforced, not promised** (Mission 1.15.6). `context.authorize_fields(...)`
+refuses an excluded field by name, a field no review authorised, and a request
+that states no field selection at all — before a request is composed. There is
+deliberately no method that strips fields out of a collected record: a request
+that took the contact block and discarded it afterwards would have retrieved the
+contact block.
 
 | Keep | Discard |
 |---|---|
@@ -157,33 +187,49 @@ and says the residual exposure is the operator's to accept.
 ```text
 review conditions not satisfied:
   ted-database-right-residual-exposure-accepted
-  ted-official-route-only
-  ted-personal-data-minimisation
 ```
 
 | Condition | Verification | State |
 |---|---|---|
 | `ted-attribution` | CAPABILITY `source-attribution-display` | **SATISFIED** |
-| `ted-official-route-only` | HUMAN_CONFIRMATION | outstanding |
-| `ted-personal-data-minimisation` | HUMAN_CONFIRMATION | outstanding |
-| `ted-database-right-residual-exposure-accepted` | HUMAN_CONFIRMATION | outstanding |
+| `ted-official-route-only` | CAPABILITY `source-route-binding` | **SATISFIED** |
+| `ted-personal-data-minimisation` | CAPABILITY `source-field-minimisation` | **SATISFIED** |
+| `ted-database-right-residual-exposure-accepted` | HUMAN_CONFIRMATION | **outstanding** |
 
 **No verifier in this repository can satisfy a `HUMAN_CONFIRMATION` condition,
-and none ever will.** That is the design, and it is deliberate for the third one:
-a residual-risk acceptance that code could satisfy would be a judgement nobody
+and none ever will.** That is the design, and it is deliberate for this one: a
+residual-risk acceptance that code could satisfy would be a judgement nobody
 made. An unconfirmed TED is ineligible rather than quietly usable.
 
-The first two are outstanding for a plain reason as well — **there is no
-collector yet**, so there is nothing whose route or field selection a person
-could confirm.
+**What Mission 1.15.6 changed, and what it did not.** This document previously
+recorded the first two as outstanding for a plain reason — *there is no collector
+yet, so there is nothing whose route or field selection a person could confirm*.
+That was a bootstrap, and it broke in the wrong direction: it invited writing the
+collector first and confirming it afterwards. Both conditions turned out to
+describe the **configuration handed to authorization** rather than code, and both
+are now checked against it, with no network call and no collector. The third was
+left exactly where it was, because it is a judgement rather than a property.
+
+**The exact operator statement** that a later, explicit action must record is in
+[`ted-eu-authorization-bootstrap-v1.md`](ted-eu-authorization-bootstrap-v1.md)
+§6.2. Nothing has been recorded, and the existence of that text is not an
+acceptance.
 
 ## Next mission
 
-**TED Official API Collector V1 — Local Private Research Profile**, if and when
-the operator records the three confirmations.
+**TED Official Search API Collector V1 — Local Private Research Profile**, if and
+when the operator records the one remaining confirmation.
 
-It must: use only the two authorised routes; issue bounded, purpose-scoped
-queries; request only the authorised fields through `fields`; discard every
-natural-person field; respect unknown rate limits by throttling conservatively;
-preserve provenance including the use profile; **never become a TED mirror**; and
-remain refused under `commercial-multi-tenant-research-v1`.
+It must: obtain its route from `context.access` and bind to `ted-search-api`;
+request only the fields `context.authorize_fields` permits; issue bounded,
+purpose-scoped queries; discard every natural-person field; respect unknown rate
+limits by throttling conservatively rather than against an invented number;
+preserve provenance including the use profile; distinguish every monetary
+semantic rather than flattening into `price_paid`; **never become a TED mirror**;
+and remain refused under `commercial-multi-tenant-research-v1`.
+
+**It must also be built so that it cannot execute without an authorized
+configuration**, the way `test_collector_conformance.py` already asserts for
+resource access. The route and field gates establish that the configuration is
+correct; only the collector's own structure can establish that it went through
+them.

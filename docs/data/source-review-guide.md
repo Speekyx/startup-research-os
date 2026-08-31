@@ -250,6 +250,27 @@ true is *"a lawyer confirmed X"* or *"the owner granted permission"*, say
 reword a legal obligation until it sounds checkable — that produces a verifier
 that checks something else.
 
+**But first ask whether it is a property of CONFIGURATION** (Mission 1.15.6). A
+condition phrased as a claim about a collector — *collection uses the official
+route*, *the deployed profile requests only these fields* — usually is not one.
+The route acquisition binds to and the fields it asks for are properties of the
+configuration authorization is handed, and that configuration exists before any
+collector does. Writing those as `HUMAN_CONFIRMATION` creates a **bootstrap**:
+nothing can be authorised until a person confirms behaviour, and nobody can
+confirm behaviour until the thing exists. TED sat in exactly that loop for a
+mission.
+
+The test is short:
+
+| The condition is about | Write |
+|---|---|
+| a value, list or binding a reviewer can put in `source-compliance-v1.json` | a mechanical kind, and register the capability that checks it |
+| a judgement, a risk accepted, a legal view, a promise about future conduct | `HUMAN_CONFIRMATION` |
+
+The second column is not a lesser answer. TED's residual database-right
+acceptance stays there, and a residual-risk acceptance that code could satisfy
+would be a judgement nobody made.
+
 **Name what will be checked.** A `CAPABILITY` condition names a capability, a
 `CONFIG_REFERENCE` names a configuration key. `verification_detail` is not a
 description, and a condition whose detail names nothing real resolves `UNKNOWN`
@@ -276,8 +297,15 @@ bypassed. That is intentional: enabling collection is the one
 irreversible-feeling step, and it should require the review to be finished
 rather than the reviewer to remember.
 
-Eligible, enabled and implemented are three different facts. Today two sources
-are eligible, none is enabled, and none is implemented.
+Eligible, enabled and implemented are three different facts, and
+`resource_ready` is a fourth (Mission 1.9.2). `sros-source readiness` derives all
+four and stores none.
+
+**And a review answers about one use profile.** `conditions`, `verify` and
+`eligibility` take `--use-profile`; a source may hold different verdicts and
+different condition sets under different profiles, and `ted-eu` does. A verdict
+reported without its profile is a naked verdict (`use-profile-aware-source-policy-v1.md`
+§8).
 
 ---
 

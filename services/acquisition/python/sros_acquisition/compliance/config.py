@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import json
 import pathlib
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -43,6 +44,7 @@ __all__ = [
     "DataMinimisationProfile",
     "EnumeratedExclusion",
     "ResourceScope",
+    "RouteAuthorization",
     "SourceCompliance",
     "find_compliance_config",
     "load_compliance",
@@ -262,6 +264,116 @@ class AccessRestriction:
 
 
 @dataclass(frozen=True)
+class RouteAuthorization:
+    """Which of a source's registered access routes this review authorised.
+
+    Mission 1.15.6 §7, §12, ADR-028. `AccessRestriction` above answers a
+    different question and could not be made to answer this one.
+
+    **`AccessRestriction` is about the SOURCE; this is about US.** It verifies
+    that the registry records exactly the approved access profiles and no
+    others -- a statement about how the source can be reached. TED can be
+    reached by bulk XML: the packages are published, documented and downloadable
+    without signing in, and `ted-bulk-xml` is in the registry because that is
+    true. Deleting it to make an access restriction pass would be falsifying a
+    fact about a source in order to obtain a permission, which is the worst
+    thing this layer could learn to do.
+
+    What the TED review actually requires is that **our acquisition binds to one
+    named route**, and the route we bind to is a property of the configuration
+    we supply -- checkable before anything opens a socket, and exactly the sort
+    of objective collector property §21 says should not be left to a human
+    confirmation nobody can make until the collector exists.
+
+    Every field is a restriction. `allowed_labels` names access-profile labels
+    the review assessed; `blocked_labels` names the ones it refused BY NAME, so
+    that a refusal reads as a decision rather than as an omission.
+
+    `preferred_label` is an **implementation preference and never a permission**
+    (§11). It says which authorised route a first collector should reach for; it
+    widens nothing, and a route absent from `allowed_labels` cannot be preferred.
+    """
+
+    source_id: str
+    allowed_labels: frozenset[str] = frozenset()
+    blocked_labels: frozenset[str] = frozenset()
+    preferred_label: str | None = None
+    basis: str = ""
+
+    def __post_init__(self) -> None:
+        if not self.allowed_labels:
+            raise SourceRegistryError(
+                f"{self.source_id}.route_authorization.allowed_labels",
+                "must name at least one authorised access route. An empty allowlist "
+                "refuses everything, which is a source-level refusal wearing a route "
+                "restriction's name -- omit the key instead",
+            )
+        overlap = self.allowed_labels & self.blocked_labels
+        if overlap:
+            raise SourceRegistryError(
+                f"{self.source_id}.route_authorization",
+                f"{sorted(overlap)} is both authorised and blocked. Which rule applies "
+                "would depend on which the reader checked first",
+            )
+        if not self.blocked_labels:
+            raise SourceRegistryError(
+                f"{self.source_id}.route_authorization.blocked_labels",
+                "must name the routes the review refused. A route authorisation that "
+                "names a permitted path without refusing an excluded one records a "
+                "preference, not a restriction",
+            )
+        if self.preferred_label is not None and self.preferred_label not in self.allowed_labels:
+            raise SourceRegistryError(
+                f"{self.source_id}.route_authorization.preferred_label",
+                f"{self.preferred_label!r} is not an authorised route. A preference is an "
+                "implementation choice among what the review permitted, and it never "
+                "widens what the review permitted",
+            )
+        if not self.basis.strip():
+            raise SourceRegistryError(
+                f"{self.source_id}.route_authorization",
+                "required: a route authorisation with no stated basis cannot be re-checked "
+                "against the review that granted it",
+            )
+
+    def refusals(self, label: str | None) -> tuple[str, ...]:
+        """Why binding to this route is refused, or nothing.
+
+        Fails closed on an unnamed route: acquisition that does not say how it
+        would reach the source has not been shown to use an authorised path,
+        and "it will use the right one" is the promise §15 replaces.
+        """
+        if label is None or not label.strip():
+            return (
+                "the acquisition configuration names no access route. A route the "
+                f"configuration does not state is not one known to be inside "
+                f"{sorted(self.allowed_labels)}",
+            )
+        name = label.strip()
+        if name in self.blocked_labels:
+            return (
+                f"access route {name!r} is refused BY NAME under this review "
+                f"{sorted(self.blocked_labels)}. It is not an unreviewed route; it is a "
+                "reviewed and rejected one",
+            )
+        if name not in self.allowed_labels:
+            return (
+                f"access route {name!r} is not one this review authorised "
+                f"{sorted(self.allowed_labels)}. An unreviewed route is not an approved "
+                "one, whether or not anybody thought to exclude it",
+            )
+        return ()
+
+    def to_json(self) -> dict[str, object]:
+        return {
+            "allowed_labels": sorted(self.allowed_labels),
+            "blocked_labels": sorted(self.blocked_labels),
+            "preferred_label": self.preferred_label,
+            "basis": self.basis or None,
+        }
+
+
+@dataclass(frozen=True)
 class AcquisitionBounds:
     """How much of a source one job may take, decided by the review.
 
@@ -354,6 +466,60 @@ class DataMinimisationProfile:
     def permits(self, category: str) -> bool:
         return category in self.allowed and category not in self.excluded
 
+    def refusals(self, requested: Sequence[str] | None) -> tuple[str, ...]:
+        """Why this field selection is not the minimised one, or nothing.
+
+        Mission 1.15.6 §8, §9. `permits` answered a question about ONE category
+        and nothing called it; this answers the question a request actually
+        asks -- *may I ask for these* -- and it is the primary minimisation
+        control rather than a filter applied to what came back.
+
+        **Collect-then-filter is not available here** (§9). Where the source
+        supports field selection, a request that took everything and discarded
+        the contact block afterwards would have retrieved the contact block,
+        and the obligation is about what is retrieved.
+
+        Fails closed on an unstated selection, the same asymmetry
+        `ResourceDescriptor` and `AcquisitionBounds` are built on: a request
+        that does not say which fields it wants has not been shown to want only
+        authorised ones.
+        """
+        if requested is None:
+            return (
+                "the request does not state which fields it would ask for. Minimisation "
+                "happens AT acquisition, so an unstated selection is not a selection known "
+                "to be minimised",
+            )
+        fields = tuple(requested)
+        if not fields:
+            return ("the request names no field at all, which is not a request",)
+        if not self.allowed:
+            return (
+                "this minimisation profile authorises no field, so nothing may be "
+                "requested. An empty allowlist is a refusal, not an absence of rules",
+            )
+
+        reasons: list[str] = []
+        # Reported separately from the allowlist miss below, and first, because
+        # the two call for different fixes: one is a field nobody reviewed, the
+        # other is a field a reviewer refused BY NAME, and a reader chasing the
+        # wrong one loses an afternoon.
+        prohibited = sorted({f for f in fields if f in self.excluded})
+        if prohibited:
+            reasons.append(
+                f"{prohibited} is excluded by name in this minimisation profile. These are "
+                "the fields the review requires to be discarded, and requesting one is the "
+                "act the obligation forbids"
+            )
+        unreviewed = sorted({f for f in fields if f not in self.allowed and f not in self.excluded})
+        if unreviewed:
+            reasons.append(
+                f"{unreviewed} is not a field this review authorised "
+                f"{sorted(self.allowed)}. An unreviewed field is not an approved one, "
+                "whether or not anybody thought to exclude it"
+            )
+        return tuple(reasons)
+
 
 @dataclass(frozen=True)
 class AuthorizedDataset:
@@ -436,6 +602,12 @@ class SourceCompliance:
     use_profile_id: str = LEGACY_USE_PROFILE
     evidence_section: str | None = None
     access_restriction: AccessRestriction | None = None
+    # Which registered access route acquisition may bind to (Mission 1.15.6).
+    # `None` means NO ROUTE RESTRICTION WAS REVIEWED for this (source, profile) —
+    # not that every route is fine. Every entry predating this mission is in that
+    # state, and the capability that checks it fails rather than passes when it
+    # is absent, so a condition can only rest on a restriction that exists.
+    route_authorization: RouteAuthorization | None = None
     datasets: tuple[AuthorizedDataset, ...] = ()
     acquisition_bounds: AcquisitionBounds | None = None
 
@@ -503,14 +675,24 @@ def load_compliance(path: pathlib.Path | str | None = None) -> ComplianceConfig:
         raise SourceRegistryError("compliance.sources", "must be a list")
 
     sources: list[SourceCompliance] = []
-    seen: set[str] = set()
+    # Keyed by (source, profile) since Mission 1.15.6. `SourceCompliance` has
+    # been keyed that way since 1.15.5 and `get` has looked it up that way since
+    # 1.15.5, but this guard still deduplicated on the source alone -- so the
+    # second profile's entry for a source, which is the whole point of the key,
+    # was refused as a duplicate before anything could read it. TED is the first
+    # source that would ever have two.
+    seen: set[tuple[str, str]] = set()
     for entry in raw_sources:
         record = _source_from_json(entry)
-        if record.source_id in seen:
+        key = (record.source_id, record.use_profile_id)
+        if key in seen:
             raise SourceRegistryError(
-                "compliance.sources", f"duplicate entry for {record.source_id!r}"
+                "compliance.sources",
+                f"duplicate entry for {record.source_id!r} under use profile "
+                f"{record.use_profile_id!r}; which entry configures that use would be "
+                "undefined",
             )
-        seen.add(record.source_id)
+        seen.add(key)
         sources.append(record)
 
     derived = payload.get("derived_from") or {}
@@ -574,6 +756,19 @@ def _source_from_json(entry: object) -> SourceCompliance:
         else None
     )
 
+    routes_raw = entry.get("route_authorization")
+    routes = (
+        RouteAuthorization(
+            source_id=source_id,
+            allowed_labels=frozenset(routes_raw.get("allowed_labels") or ()),
+            blocked_labels=frozenset(routes_raw.get("blocked_labels") or ()),
+            preferred_label=routes_raw.get("preferred_label"),
+            basis=str(routes_raw.get("basis") or ""),
+        )
+        if isinstance(routes_raw, dict)
+        else None
+    )
+
     minimisation_raw = entry.get("data_minimisation") or {}
     minimisation = DataMinimisationProfile(
         allowed=tuple(minimisation_raw.get("allowed") or ()),
@@ -614,6 +809,7 @@ def _source_from_json(entry: object) -> SourceCompliance:
         resource_scope=scope,
         data_minimisation=minimisation,
         access_restriction=restriction,
+        route_authorization=routes,
         datasets=datasets,
         acquisition_bounds=bounds,
     )

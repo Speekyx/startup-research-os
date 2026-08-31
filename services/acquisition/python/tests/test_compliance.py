@@ -904,16 +904,30 @@ class TestGates:
         """§20. Registering a capability is not enough: its check runs the real
         gate against the real configuration."""
         checked = set()
+        # Every (source, PROFILE) pair since Mission 1.15.6, not `source.review`.
+        # This walked the legacy profile alone, which was correct while every
+        # review answered one profile -- and it went red the moment two
+        # capabilities were named ONLY by TED's local review: they were reported
+        # as registered-but-unused, because this loop could not see the review
+        # that requires them. Rewritten rather than relaxed
+        # (`testing-strategy.md` §26): the property is "every registered
+        # capability is required by some review and passes its check", and it
+        # was the subject that was too narrow, never the property.
         for source in catalog:
-            entry = compliance.get(source.source_id)
-            if entry is None:
-                continue
-            for condition in source.review.required_conditions:
-                if condition.verification is not ConditionVerification.CAPABILITY:
+            for profile, review in source.reviews_by_profile().items():
+                entry = compliance.get(source.source_id, profile)
+                if entry is None:
                     continue
-                name = condition.verification_detail
-                checked.add(name)
-                assert capability_failures(name, entry) == (), (source.source_id, name)
+                for condition in review.required_conditions:
+                    if condition.verification is not ConditionVerification.CAPABILITY:
+                        continue
+                    name = condition.verification_detail
+                    checked.add(name)
+                    assert capability_failures(name, entry) == (), (
+                        source.source_id,
+                        profile,
+                        name,
+                    )
         assert checked == set(CAPABILITIES)
 
 

@@ -1955,3 +1955,81 @@ asserts that the three gate modules never read it. That fence exists because
 `.review` reads more naturally than `.review_for(profile)` — which is precisely
 how the mistake would be made, by someone writing what sounds right.
 
+
+---
+
+## 45. A gate test needs its control case, or it passes against a refusal (Mission 1.15.6)
+
+Two new capabilities check gates that permit some things and refuse others:
+`source-route-binding` and `source-field-minimisation`. The obvious tests are
+the refusals — bulk XML is rejected, the contact block is rejected, an
+unreviewed field is rejected — and every one of them passes against a gate that
+**refuses everything**.
+
+A filter that allows nothing is a refusal, not a filter. So each check asserts
+its control first:
+
+```python
+for label in sorted(routes.allowed_labels):
+    if routes.refusals(label):
+        failures.append("authorised route ... is refused by the gate that is supposed to permit it")
+```
+
+This is not new — `_control_passes` has done it for the resource-gate
+capabilities since Mission 1.4 — and it is restated because the mistake is
+easiest to make on a **fresh** gate, where the refusal cases are the interesting
+ones and the permit case looks too obvious to assert.
+
+### The same rule, one level up
+
+`_check_route_binding` reports **unimplemented** when no route authorization is
+configured, rather than passing. A capability that returned no failures for a
+source with nothing configured would satisfy its condition by having no rules —
+the shape §31 already warns about for validators, arriving through the
+capability door.
+
+---
+
+## 46. Test the reclassification from both sides of the version line (Mission 1.15.6)
+
+Two conditions moved from `HUMAN_CONFIRMATION` to `CAPABILITY`, by appending
+local review **v2** rather than editing v1. Three assertions, and the middle one
+is the one a reviewer would forget:
+
+```python
+assert v1.assessments == v2.assessments  # the conclusion did not move
+assert kinds_in_v1[ROUTE_ONLY] is HUMAN_CONFIRMATION  # v1 still says what it said
+assert changed == {ROUTE_ONLY, MINIMISATION}  # and NOTHING ELSE changed
+```
+
+The first protects the policy conclusion. The second protects the append-only
+guarantee **from the other side**: a test that only checked v2 would pass
+against a migration that had quietly rewritten v1 to match.
+
+The third is the one that earns its place. Asserting that two conditions changed
+says nothing about the other two, and a diff of a JSON review is exactly the
+place where an unintended edit survives review by being surrounded by intended
+ones. Computing the changed set and comparing it to an expected set catches the
+edit nobody meant to make.
+
+---
+
+## 47. Assert that a new mechanism cannot reach the thing it must not (Mission 1.15.6)
+
+Mission 1.15.6 built a way for configuration to satisfy conditions. The risk it
+introduced is not that the mechanism fails; it is that the mechanism **reaches
+one condition too many** — specifically TED's residual database-right
+acceptance, which must stay unsatisfiable.
+
+So the suite asserts the absence directly rather than trusting the dispatch:
+
+- the condition still declares `HUMAN_CONFIRMATION`;
+- verifying it with the full compliance configuration in hand returns `UNKNOWN`
+  from the `human-confirmation` verifier;
+- rewriting it as a `CAPABILITY` naming either new capability does not make it
+  answer *this* question — it answers a different one;
+- the database still refuses a hand-set `satisfied` boolean.
+
+**A guard is worth most when it is tested against the thing that would most
+plausibly defeat it**, which here is the mission's own new code rather than a
+hypothetical attacker.

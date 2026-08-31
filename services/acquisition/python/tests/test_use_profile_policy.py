@@ -150,8 +150,14 @@ class TestOneSourceTwoAnswers:
         )
         assert legacy == [1, 2, 3, 4, 5]
         # Version 1 under a second profile is a FIRST review of a new question,
-        # not a duplicate of the legacy v1.
-        assert local == [1]
+        # not a duplicate of the legacy v1. Mission 1.15.6 appended v2, which is
+        # what an append-only line is FOR: it reclassified two conditions from
+        # HUMAN_CONFIRMATION to CAPABILITY and changed no policy conclusion,
+        # rather than editing v1 in place.
+        assert local == [1, 2]
+        # And the two lines still advance independently: appending to one must
+        # never renumber or disturb the other.
+        assert legacy[-1] == 5
 
     def test_exactly_one_current_review_per_source_and_profile(self, catalog) -> None:
         for source in catalog.sources:
@@ -324,9 +330,23 @@ class TestRuntimeDeclaration:
 
 class TestTedUnderTheLocalProfile:
     def test_the_local_review_is_approving_with_conditions(self, catalog) -> None:
-        local = source_of(catalog, "ted-eu").review_for(LOCAL_PROFILE)
+        ted = source_of(catalog, "ted-eu")
+        local = ted.review_for(LOCAL_PROFILE)
         assert local.approval_state is SourceApprovalState.APPROVED_WITH_CONDITIONS
-        assert local.reviewed_by == "mission-1.15.5"
+        # The CURRENT local review is v2 (Mission 1.15.6), which reclassified two
+        # conditions and reached the same conclusion. Asserted alongside v1's
+        # own reviewer rather than instead of it: the append-only guarantee is
+        # only worth testing from both sides, and a test that followed the
+        # current version alone would pass against a v1 rewritten in place.
+        assert local.review_version == 2
+        assert local.reviewed_by == "mission-1.15.6"
+        v1 = next(
+            r
+            for r in ted.review_history
+            if r.assessed_use_profile == LOCAL_PROFILE and r.review_version == 1
+        )
+        assert v1.reviewed_by == "mission-1.15.5"
+        assert v1.approval_state is local.approval_state
 
     def test_h36_is_still_open_under_the_local_profile(self, catalog) -> None:
         """§21. Narrowing the use profile changes the EXPOSURE, not the law. A
@@ -408,25 +428,46 @@ class TestTedUnderTheLocalProfile:
 
 
 class TestApprovingButNotEligible:
-    def test_the_context_cannot_be_built_and_names_the_human_decisions(
+    def test_the_context_cannot_be_built_and_names_the_human_decision(
         self, catalog, compliance
     ) -> None:
         """§48. The exact remaining blocker, asserted rather than described.
 
-        Three of the four required conditions are HUMAN_CONFIRMATION, which no
-        verifier in this repository can satisfy and none ever will. That is the
-        design: the residual database-right acceptance is a judgement, and a
-        judgement code could satisfy would be a judgement nobody made."""
+        **Narrowed by Mission 1.15.6, and narrowed is the right word.** This
+        asserted three outstanding HUMAN_CONFIRMATION conditions. Two of them
+        described objective properties of the CONFIGURATION -- which route
+        acquisition binds to, which fields it requests -- and are now verified
+        against it, so exactly one remains.
+
+        Rewritten rather than weakened (`testing-strategy.md` §26). The property
+        worth protecting was never "three conditions block"; it is that **the
+        refusal names every outstanding condition and nothing satisfies a
+        judgement**. The tuple is asserted in full rather than by substring, so
+        a condition silently dropping out of the queue fails here.
+        """
         with pytest.raises(AcquisitionNotAuthorizedError) as caught:
             build_authorization(source_of(catalog, "ted-eu"), LOCAL_PROFILE, compliance, environ={})
-        reasons = " ".join(caught.value.reasons)
-        assert "review conditions not satisfied" in reasons
-        for key in (
-            "ted-official-route-only",
-            "ted-personal-data-minimisation",
-            "ted-database-right-residual-exposure-accepted",
-        ):
-            assert key in reasons, key
+        assert caught.value.reasons == (
+            "review conditions not satisfied: ted-database-right-residual-exposure-accepted",
+        )
+
+    def test_the_two_reclassified_conditions_are_verified_not_confirmed(
+        self, catalog, compliance
+    ) -> None:
+        """The other half of the assertion above, kept separate because it is a
+        different claim: they left the queue by being CHECKED, not by being
+        excused. Mission 1.15.6, ADR-028."""
+        records = {
+            r.condition_key: r
+            for r in verify_source(source_of(catalog, "ted-eu"), LOCAL_PROFILE, compliance, {})
+        }
+        for key in ("ted-official-route-only", "ted-personal-data-minimisation"):
+            assert records[key].verification.value == "CAPABILITY", key
+            assert records[key].result.value == "SATISFIED", key
+        assert (
+            records["ted-database-right-residual-exposure-accepted"].verification.value
+            == "HUMAN_CONFIRMATION"
+        )
 
     def test_the_machine_checkable_condition_is_satisfied(self, catalog, compliance) -> None:
         """Attribution is verified by capability and passes, so the blocker is

@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.30
-Last amended: 2026-08-31 (Sprint 1 / Mission 1.15.5)
+Version: 1.31
+Last amended: 2026-08-31 (Sprint 1 / Mission 1.15.6)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.31 | 2026-08-31 | **The authorization carries only reviewed routes, and an objective property of configuration is verified rather than human-confirmed** (ADR-028). `context.access` used to hold every registered access profile, so TED's context would have handed a collector the bulk route its review refuses by name -- with the transport's host allowlist derived from it. A `(source, profile)` may now declare a `route_authorization`, and the context carries those routes and no others. Two TED conditions that described objective properties of a collector that does not exist -- its route, its field selection -- moved from `HUMAN_CONFIRMATION` to `CAPABILITY` on **appended local review v2**, changing no policy conclusion. **The residual database-right acceptance stays human, is unrecorded, and still blocks** |
 | 1.30 | 2026-08-31 | **Source permission is use-profile-specific** (ADR-027). Every review already answered a question about a use -- the catalog said so in prose since Mission 1.0 -- but the answer had no IDENTITY, so it could not be required, compared or matched, and the gate never saw it. Now a review records its `assessed_use_profile`, currentness is per (source, profile), and `evaluate_eligibility` requires the profile with no default. **`ted-eu` is `REQUIRES_REVIEW` under the commercial profile and `APPROVED_WITH_CONDITIONS` under the local one, at the same time.** Approval never transfers; the runtime declares its profile and never infers it |
 | 1.29 | 2026-08-31 | **The deployment model is recorded: LOCAL-FIRST / SINGLE-OPERATOR.** The application runs locally for its operator and is not offered as a public multi-tenant SaaS -- but the research it produces is used to launch **commercial** products, so **local deployment never implies `NON_COMMERCIAL_USE`** and commercial-use rights are still reviewed. Workspace and RLS stay. No billing, customer accounts, team collaboration or cloud scaling unless explicitly required |
 | 1.28 | 2026-08-31 | **The routes are documented; the gate has no vocabulary for them.** TED's own docs say the Search API is *"for analysis and reuse"* and *"primarily targeted at data reusers"*, naming commercial organisations and researchers as users; the Open Data Service publishes data *"for analysis and re-use"* with a **Connect your app** button. That is intended-use evidence and **not** a database-right grant, and a condition now says so. The real blocker moved: **every approval in this registry is an answer to a use case the model never records**, so a source cannot be blocked broadly and authorised narrowly. `ted-eu` stays `REQUIRES_REVIEW` at v5 |
@@ -181,6 +182,62 @@ assessed, and what a future public deployment must satisfy) and
   source's own evidence.
 - **Never report a naked verdict.** A source's standing is a table keyed by
   profile. Generated catalog documents present the legacy profile and say so.
+
+### Route binding — the authorization carries only what the review authorised
+
+Added in 1.31 (Mission 1.15.6, ADR-028). Placed here because it is what stops
+the profile above from being a label on an authorization that still hands a
+collector everything.
+
+**An access profile is a fact about the source; a route authorization is a fact
+about us.** `AccessRestriction` verifies that the registry records exactly the
+approved access profiles -- which TED cannot satisfy, because TED really is
+reachable by bulk XML and deleting that row would be falsifying a fact about a
+source in order to obtain a permission.
+
+- **`context.access` carries the reviewed routes and no others**, where a
+  `(source, profile)` declares a `route_authorization`. A blocked label has no
+  endpoint to read, so there is no host to allowlist and nothing for the
+  transport to be pointed at. That is the enforcement; `authorize_route` only
+  makes the refusal say *refused by name* instead of *not found*.
+- **An authorised route the registry does not record is refused**, not skipped.
+- **`None` means unasked, not unrestricted.** Every entry before 1.15.6 is in
+  that state -- and `source-route-binding` reports *unimplemented* rather than
+  *satisfied* when it is absent, so a condition never rests on a restriction
+  that does not exist. **GDELT is the named gap**: it carries a second, deferred
+  DOC API profile that no review assessed, and its context still hands a
+  collector both. Restricting it is a review act.
+- **Field minimisation is asked before a request is composed.**
+  `context.authorize_fields` refuses an excluded field by name, an unreviewed
+  field and an unstated selection. Where a source supports field selection --
+  TED's `fields` parameter does -- **collect-then-filter is not available as an
+  excuse**, because a request that discarded the contact block afterwards
+  retrieved the contact block. No method removes fields from a collected record.
+
+### A condition is verified where it can be, and confirmed where it cannot
+
+Added in 1.31. **An objective property of what a collector is CONFIGURED to do
+belongs to a mechanical verification kind, not to a person.**
+
+Writing one as `HUMAN_CONFIRMATION` creates a **bootstrap**: nothing can be
+authorised until somebody confirms behaviour, and nobody can confirm behaviour
+until the thing exists. TED sat in that loop for a mission with two such
+conditions, and the loop's natural break is the wrong one -- write the collector
+first, confirm it after.
+
+**The boundary is unchanged and load-bearing.** A judgement, a risk acceptance,
+a legal conclusion or a promise about future conduct stays `HUMAN_CONFIRMATION`,
+and `source-review-guide.md` §9 still applies: *do not reword a legal obligation
+until it sounds checkable -- that produces a verifier that checks something
+else.* The new rule is upstream of it: **ask first whether the condition was
+ever about a legal obligation at all.**
+
+**What a configuration-verified condition establishes** is stated precisely,
+because the distinction is the whole point: not *the collector follows the
+rules*, which nothing here can establish, but *the configuration supplied to
+authorization satisfies the policy constraints, and the authorization hands a
+collector nothing else*. The remaining obligation is on the collector mission --
+it must be built so it cannot execute without an authorized configuration.
 
 ### Claim taxonomy — exactly five values, UPPERCASE
 
@@ -1195,6 +1252,39 @@ further document search cannot settle, because the documents have been read.
 Bulk XML and the search API are analysed separately and both are unresolved,
 with different exposure; **no collector route was forced**.
 
+### TED-EU — one human decision left, and it is the right one
+
+Mission 1.15.6 (`ted-eu-authorization-bootstrap-v1.md`, ADR-028). Local review
+**v2**, appended.
+
+Three of TED's four conditions under `local-private-research-v1` now verify
+`SATISFIED` against configuration: `ted-attribution`,
+`ted-official-route-only` (`source-route-binding`) and
+`ted-personal-data-minimisation` (`source-field-minimisation`). The routes are
+`ted-search-api` and `ted-open-data-sparql`, the Search API is the **preferred
+first implementation route**, and `ted-bulk-xml` is refused by name and absent
+from the context. `ted-open-data-sparql` was registered as an access profile in
+the same mission, because the review authorised a route the registry had never
+recorded.
+
+**`ted-database-right-residual-exposure-accepted` is OUTSTANDING and stays
+`HUMAN_CONFIRMATION`.** Nothing in this repository can satisfy it: the human
+branch is reached before any configuration is consulted, and the database
+refuses a hand-set boolean with no verification behind it.
+
+**No acceptance has been recorded.** The exact statement an operator would have
+to record is written down in the bootstrap document §6.2, and **writing it down
+is not recording it**. The existence of that mission is not acceptance, and
+neither is the fact that the deployment is local.
+
+**Nothing else moved.** H-36A NOT ESTABLISHED and H-36B NOT ADDRESSED under both
+profiles. Commercial profile still `REQUIRES_REVIEW`. Model training not
+authorised, embeddings blocked by D-12, redistribution not permitted, bulk XML
+and `ted-csv` blocked at the route gate and again at the resource gate. Local
+review v1 was not rewritten: v2 carries every assessment, condition, open
+question and evidence row unchanged and differs in exactly two condition
+classifications.
+
 ### Blocked work
 
 **`services/scoring` must not be implemented for production research.** D-03 is
@@ -1266,6 +1356,13 @@ rather than a precondition — and Mission 1.13.1 created none. Nothing unblocks
 competition gap, distribution feasibility, retention or revenue potential.** They
 are factual, source-level claims about two publications. The first Claims
 existing does not make Opportunity discovery ready.
+
+**`ted-eu` is APPROVING AND NOT ELIGIBLE, on one condition.**
+`build_authorization('ted-eu', 'local-private-research-v1')` refuses with
+`review conditions not satisfied: ted-database-right-residual-exposure-accepted`
+and with nothing else. No collector may be written against a refusal: the next
+mission is the TED Official Search API Collector **if and when** the operator
+records the acceptance, and not before.
 
 **No collector may be implemented for a source that is not collector-eligible.**
 D-07 is resolved and the registry exists. Two sources pass the gate; one has a

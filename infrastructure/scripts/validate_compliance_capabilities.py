@@ -59,7 +59,6 @@ from sros_acquisition.registry import (  # noqa: E402
     evaluate_eligibility,
     load_catalog,
 )
-from sros_acquisition.registry.models import LEGACY_USE_PROFILE  # noqa: E402
 from sros_contracts import (  # noqa: E402
     AttributionElement,
     ConditionVerification,
@@ -126,6 +125,18 @@ def main(argv: list[str]) -> int:
     def profile_review(entry):
         source = next((s for s in catalog if s.source_id == entry.source_id), None)
         return source.review_for(entry.use_profile_id) if source else None
+
+    # Mission 1.15.6. Checks 3, 6, 9 and 10 below walked `source.review` -- the
+    # LEGACY profile's review and nothing else -- which was correct while every
+    # review answered one profile. TED's local review is the first that does
+    # not, so a condition, a capability or an authorization existing only under
+    # a second profile was checked by nothing here. Walking the pairs is what
+    # `reviews_by_profile` was built for.
+    pairs = [
+        (source, profile, review)
+        for source in catalog
+        for profile, review in source.reviews_by_profile().items()
+    ]
 
     # -- 5: no entry for a source/profile pair that has not been approved ------
     for entry in config:
@@ -197,10 +208,9 @@ def main(argv: list[str]) -> int:
     # configuration that legitimately does not exist -- FRED has no geography
     # allowlist because its terms impose none.
     unused = set(CAPABILITIES)
-    for source in catalog:
-        review = source.review
-        entry = config.get(source.source_id)
-        if review is None or entry is None:
+    for source, profile, review in pairs:
+        entry = config.get(source.source_id, profile)
+        if entry is None:
             continue
         for condition in review.required_conditions:
             if condition.verification is not ConditionVerification.CAPABILITY:
@@ -247,20 +257,23 @@ def main(argv: list[str]) -> int:
     # is exactly what Mission 1.7 §28 forbids.
     unresolved: list[str] = []
     human: list[str] = []
-    for source in catalog:
-        review = source.review
-        if review is None or review.approval_state not in APPROVING_STATES:
+    for source, profile, review in pairs:
+        if review.approval_state not in APPROVING_STATES:
             continue
-        records = verify_source(source, LEGACY_USE_PROFILE, config, environ={}, now=now)
+        records = verify_source(source, profile, config, environ={}, now=now)
         if len(records) != len(review.required_conditions):
-            errors.append(f"{source.source_id}: not every condition produced a verification")
+            errors.append(
+                f"{source.source_id}/{profile}: not every condition produced a verification"
+            )
         for record in records:
             if record.result is not ConditionVerificationResult.UNKNOWN:
                 continue
             if record.verification is ConditionVerification.HUMAN_CONFIRMATION:
-                human.append(f"{source.source_id}/{record.condition_key}")
+                human.append(f"{source.source_id}/{profile}/{record.condition_key}")
             else:
-                unresolved.append(f"{source.source_id}/{record.condition_key}: {record.reason}")
+                unresolved.append(
+                    f"{source.source_id}/{profile}/{record.condition_key}: {record.reason}"
+                )
     if unresolved:
         errors.append(
             "condition(s) whose verifier does not exist:\n      " + "\n      ".join(unresolved)
@@ -304,46 +317,59 @@ def main(argv: list[str]) -> int:
         description="A probe asserting that no verifier can satisfy a human condition.",
         verification=ConditionVerification.HUMAN_CONFIRMATION,
     )
-    for source in catalog:
-        if source.review is None:
-            continue
+    for source, profile, _ in pairs:
         outcome = verify_condition(
-            source, LEGACY_USE_PROFILE, probe, config.get(source.source_id), {}, now
+            source, profile, probe, config.get(source.source_id, profile), {}, now
         )
         if outcome.result is not ConditionVerificationResult.UNKNOWN:
             errors.append(
-                f"{source.source_id}: a HUMAN_CONFIRMATION condition resolved to "
-                f"{outcome.result.value}. Only a person may record one, and no verifier "
-                "may reach any other answer (§21)"
+                f"{source.source_id}/{profile}: a HUMAN_CONFIRMATION condition resolved "
+                f"to {outcome.result.value}. Only a person may record one, and no "
+                "verifier may reach any other answer (§21)"
             )
     print("ok    a human-confirmation condition cannot be satisfied by any verifier")
 
     # -- 10: an ineligible source produces no authorization --------------------
     authorized: list[str] = []
-    for source in catalog:
-        records = verify_source(source, LEGACY_USE_PROFILE, config, environ={}, now=now)
+    for source, profile, _ in pairs:
+        records = verify_source(source, profile, config, environ={}, now=now)
         eligible = evaluate_eligibility(
-            source, LEGACY_USE_PROFILE, now, satisfied_condition_keys(list(records))
+            source, profile, now, satisfied_condition_keys(list(records))
         )
         try:
-            build_authorization(source, LEGACY_USE_PROFILE, config, records, environ={}, now=now)
+            context = build_authorization(source, profile, config, records, environ={}, now=now)
         except AcquisitionNotAuthorizedError:
             if eligible.eligible:
                 errors.append(
-                    f"{source.source_id}: passes the gate and yet no authorization can be "
-                    "built. The two must agree, or the gate is reporting something the "
-                    "boundary does not honour"
+                    f"{source.source_id}/{profile}: passes the gate and yet no "
+                    "authorization can be built. The two must agree, or the gate is "
+                    "reporting something the boundary does not honour"
                 )
             continue
-        authorized.append(source.source_id)
+        authorized.append(f"{source.source_id}/{profile}")
         if not eligible.eligible:
             errors.append(
-                f"{source.source_id}: an acquisition authorization was built for a source "
-                "the gate refuses. This is the one thing §27 exists to prevent"
+                f"{source.source_id}/{profile}: an acquisition authorization was built "
+                "for a source the gate refuses. This is the one thing §27 exists to "
+                "prevent"
             )
+        # Mission 1.15.6 §22. Where a route restriction was reviewed, the context
+        # must carry the reviewed routes and nothing else. A blocked route
+        # reaching a collector would make the restriction advisory.
+        entry = config.get(source.source_id, profile)
+        routes = entry.route_authorization if entry else None
+        if routes is not None:
+            carried = set(context.authorized_route_labels)
+            if carried != set(routes.allowed_labels):
+                errors.append(
+                    f"{source.source_id}/{profile}: the authorization carries routes "
+                    f"{sorted(carried)} and the review authorised "
+                    f"{sorted(routes.allowed_labels)}"
+                )
     print(
         f"ok    authorization follows the gate exactly "
-        f"({len(authorized)} of {len(catalog)} authorizable with no credentials configured)"
+        f"({len(authorized)} of {len(pairs)} (source, use profile) pair(s) authorizable "
+        "with no credentials configured)"
     )
 
     # -- 11: the collection boundary holds ------------------------------------

@@ -1,7 +1,7 @@
 # Source Catalog V1
 
 **Status:** Authoritative record of the initial candidate catalog.
-**Catalog version:** 1.4
+**Catalog version:** 1.5
 **Reviewed:** 2026-08-30 by `mission-1.9.2`
 **Governed by:** [`source-registry-v1.md`](source-registry-v1.md)
 
@@ -1405,6 +1405,7 @@ The EU's official public procurement journal. Contract award notices record what
 | 4 | 2026-08-31 | `mission-1.15.3` | `REQUIRES_REVIEW` | 7 |
 | 5 ← current | 2026-08-31 | `mission-1.15.4` | `REQUIRES_REVIEW` | 4 |
 | 1 | 2026-08-31 | `mission-1.15.5` | `APPROVED_WITH_CONDITIONS` | 4 |
+| 2 | 2026-08-31 | `mission-1.15.6` | `APPROVED_WITH_CONDITIONS` | 4 |
 
 **Access profiles** (how, not whether)
 
@@ -1412,6 +1413,7 @@ The EU's official public procurement journal. Contract award notices record what
 |---|---|---|---|---|---|
 | `DATASET_DOWNLOAD` | ted-bulk-xml | nothing | — | **UNKNOWN** | `FREE` |
 | `OFFICIAL_API` | ted-search-api | nothing | — | **UNKNOWN** | `FREE` |
+| `OFFICIAL_API` | ted-open-data-sparql | nothing | — | **UNKNOWN** | `FREE` |
 
 **Assessment**
 
