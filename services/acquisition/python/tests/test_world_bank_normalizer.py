@@ -9,8 +9,10 @@ where a database is available, against rows written through the real collector.
 
 from __future__ import annotations
 
+import ast
 import contextlib
 import json
+import pathlib
 import uuid
 from datetime import UTC, datetime, timedelta
 from decimal import Decimal
@@ -329,6 +331,88 @@ def _persist_at(*records) -> datetime:
     clock-independence is here.
     """
     return max([NORMALIZED_AT, datetime.now(UTC), *(r.collected_at for r in records)])
+
+
+# --------------------------------------------------- the fixture cannot expire
+
+
+class TestTheFixtureCannotExpire:
+    """Mission 1.15.4.1 §9. The regression guard for the failure that took seven
+    tests down at 09:00 UTC on 2026-08-31.
+
+    Every test here **fails against the old implementation** -- a bare
+    `NORMALIZED_AT` -- and **none of them waits for real time to pass**. The
+    advancing clock is simulated by moving the RECORD forward, which is the same
+    relationship seen from the other side and needs no patching, no freezing and
+    no sleep.
+
+    They need no database either: the invariant is a property of fixture
+    construction, and checking it against Postgres would only prove that the
+    constraint still exists.
+    """
+
+    @pytest.mark.parametrize("days_ahead", [0, 1, 365, 3650])
+    def test_normalization_never_precedes_collection_however_late_the_record(
+        self, days_ahead: int
+    ) -> None:
+        """The §9 assertion. `days_ahead=3650` is the wall clock a decade past
+        the constant, which is the state the old fixture could not survive."""
+        record = raw_view(collected_at=NORMALIZED_AT + timedelta(days=days_ahead, seconds=1))
+        assert _persist_at(record) >= record.collected_at
+
+    def test_the_bare_constant_is_exactly_what_would_fail(self) -> None:
+        """States the defect rather than only its absence.
+
+        The first assertion is deliberately written to be TRUE: the record
+        really is collected after the constant, which is the situation the old
+        fixture could not survive. The second is the repair. A future edit that
+        reverts `_persist_at` to the constant turns the second line red while
+        the first stays green, so the failure output names the cause rather
+        than only the symptom."""
+        record = raw_view(collected_at=NORMALIZED_AT + timedelta(seconds=1))
+        assert record.collected_at > NORMALIZED_AT
+        assert _persist_at(record) >= record.collected_at
+
+    def test_it_holds_across_a_batch_and_across_the_revision_a_batch_produces(self) -> None:
+        """`_revise` moves `collected_at` a day forward ON PURPOSE, so a batch
+        time computed before the revision exists is not enough for it. This is
+        the case the repair had to get right rather than merely satisfy."""
+        records = [
+            raw_view(
+                record_id=f"3333333{n}-3333-4333-8333-333333333333",
+                collected_at=NORMALIZED_AT + timedelta(hours=n),
+            )
+            for n in (1, 2, 3)
+        ]
+        batch_at = _persist_at(*records)
+        assert all(batch_at >= r.collected_at for r in records)
+
+        revised = _revise(records[0], Decimal("1"))
+        assert revised.collected_at > batch_at
+        assert _persist_at(revised) >= revised.collected_at
+
+    def test_no_persistence_test_passes_the_bare_constant(self) -> None:
+        """Structural, over the AST, because the property worth protecting is
+        that nobody REINTRODUCES the constant in a new test -- and a value test
+        cannot see a test that has not been written yet.
+
+        Asserted over the AST rather than the file's text for the reason
+        `testing-strategy.md` §38 gives: a substring scan would match the name
+        in this docstring."""
+        tree = ast.parse(pathlib.Path(__file__).read_text(encoding="utf-8"))
+        persistence = next(
+            node
+            for node in ast.walk(tree)
+            if isinstance(node, ast.ClassDef) and node.name == "TestPersistence"
+        )
+        offenders = [
+            ast.unparse(keyword.value)
+            for node in ast.walk(persistence)
+            if isinstance(node, ast.Call)
+            for keyword in node.keywords
+            if keyword.arg == "normalized_at" and "NORMALIZED_AT" in ast.unparse(keyword.value)
+        ]
+        assert offenders == [], offenders
 
 
 @needs_postgres

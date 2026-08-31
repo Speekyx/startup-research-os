@@ -1799,8 +1799,12 @@ clock-independence. The rule is not "never use a fixed timestamp".
 
 ### The rule
 
-> **A fixed timestamp compared against a real clock is a snapshot, not an
-> invariant.**
+> **A test timestamp may be absolute only when absolute time is the subject of
+> the test. Where temporal ORDERING is the invariant, fixture timestamps must be
+> derived from one another or from a deterministic test clock.**
+
+Or, shorter: **a fixed timestamp compared against a real clock is a snapshot, not
+an invariant.**
 
 This is §36's lesson — *a local snapshot is not a test invariant* — in the time
 dimension. There it was row counts from one database; here it is an instant from
@@ -1812,4 +1816,57 @@ the test was written.
 A constant that must be *later than* something the test does not control. If a
 fixture calls real code that reads a clock, no literal on the other side of the
 comparison is safe.
+
+### The guard, and how it was believed (Mission 1.15.4.1)
+
+Four tests in `TestTheFixtureCannotExpire`. None waits for real time: the
+advancing clock is simulated by moving the RECORD forward, which is the same
+relationship seen from the other side and needs no patching, no freezing and no
+sleep. None needs a database either — the invariant is a property of fixture
+construction, and asserting it against Postgres would only prove the constraint
+still exists.
+
+**Probed both ways.** With `_persist_at` reverted to the bare constant, six of
+the seven cases go red. The seventh — the AST check that no call inside
+`TestPersistence` passes `NORMALIZED_AT` as `normalized_at` — stays green, and
+correctly: the old defect was the *value* the helper returned, not a constant at
+a call site. It guards a different regression, which is the one a value test
+cannot see: **a new test written later that reintroduces the constant.**
+
+One of them states the defect rather than only its absence:
+
+```python
+record = raw_view(collected_at=NORMALIZED_AT + timedelta(seconds=1))
+assert NORMALIZED_AT < record.collected_at  # the old behaviour, true on purpose
+assert _persist_at(record) >= record.collected_at  # the repair
+```
+
+A revert turns the second line red while the first stays green, so the failure
+output names the cause instead of only the symptom.
+
+### The bounded scan, and its result
+
+Mission 1.15.4.1 §10 asked for a search for equivalent time bombs, scoped to test
+fixtures rather than turned into a repository-wide clock project. Done
+mechanically: the schema carries **nine** ordering CHECKs between two timestamps,
+across `raw_records`, `normalized_records`, `signals`, `signal_derivation_runs`
+and `claim_interpretation_runs`. The dangerous shape is a fixed constant on one
+side and a runtime clock on the other, so the search was for test modules holding
+**both**.
+
+**Two modules hold both, and neither is defective:**
+
+| Module | Why it is safe |
+|---|---|
+| `test_compliance.py` | Its fixed `datetime(2026, 8, 29, 10, 0)` is a verification time compared only with `first + timedelta(hours=1)`. Both sides derive from the same constant; the `datetime.now(UTC)` uses sit in unrelated assertions |
+| `test_signal_persistence.py` | One `now = datetime.now(UTC)` supplies `last_seen_at`, `collected_at` and `expires_at = now + 30 days` together, so every ordering holds by construction. Its fixed `datetime(2018, 1, 1)` is an `observed_at` in a constraint-violation case — observation semantics, not ordering against a clock |
+
+Everything else pairs fixed with fixed (`normalization_fixtures.py`'s
+`COLLECTED_AT`/`NORMALIZED_AT` for the offline tests,
+`test_gdelt_web_ngram_normalizer.py`'s pair) or runtime with runtime.
+
+**Exactly one instance of the defect existed**, and the reason is worth keeping:
+`seeded_raw` is the only fixture that runs a **real collector** — chosen
+deliberately in Mission 1.6 so the normalizer meets the shape production
+produces — and it was the only place a real clock met a literal.
 
