@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Bring this machine's environment up to the working tree, after a pull.
 
-`git pull` moves four things not at all: the virtualenv, the applied migrations,
-the contents of `registry.*`, and `infrastructure/compose/.env`. Each has its own
-command, and the failure mode they share is silence -- the code runs, and it runs
-against last week's environment. README §After every pull is the prose version of
-this file; this is the version that cannot be half-followed.
+`git pull` moves five things not at all: the virtualenv, `node_modules`, the
+applied migrations, the contents of `registry.*`, and
+`infrastructure/compose/.env`. Each has its own command, and the failure mode
+they share is silence -- the code runs, and it runs against last week's
+environment. README §After every pull is the prose version of this file; this is
+the version that cannot be half-followed.
 
     python infrastructure/scripts/sync.py
     python infrastructure/scripts/sync.py --check     # report, change nothing
@@ -96,6 +97,27 @@ def step_uv(check: bool) -> None:
         print("  would run: uv sync --all-packages --frozen")
         return
     _run([uv, "sync", "--all-packages", "--frozen"])
+
+
+def step_pnpm(check: bool) -> None:
+    """Install the Node workspace exactly as `pnpm-lock.yaml` pins it.
+
+    `node_modules` is the fifth thing a pull does not move, and the one most
+    easily forgotten because the Python side goes green without it. What it
+    looks like when skipped is not a missing-install message: it is
+    `Cannot find module 'next'` and a hundred JSX errors out of `tsc`, which
+    reads like the TypeScript configuration is broken.
+    """
+    pnpm = shutil.which("pnpm") or shutil.which("pnpm.cmd")
+    if pnpm is None:
+        raise StepError(
+            "pnpm is not on PATH",
+            "corepack enable && corepack prepare pnpm@9.12.3 --activate",
+        )
+    if check:
+        print("  would run: pnpm install --frozen-lockfile")
+        return
+    _run([pnpm, "install", "--frozen-lockfile"])
 
 
 def step_services(check: bool) -> None:
@@ -235,14 +257,36 @@ def step_database(env: dict[str, str], check: bool) -> None:
 
 
 def step_verify(env: dict[str, str]) -> None:
-    """Run every pytest suite, including both leak checks."""
+    """Run both halves of the repository, not just the larger one.
+
+    The pytest suites carry the two leak checks and most of the behaviour. The
+    Node gates are here because a machine where `pnpm install` was skipped fails
+    ONLY on that side, so a verification that stopped at Python would report a
+    clean machine that cannot typecheck the web app.
+    """
     uv = shutil.which("uv")
     if uv is None:  # pragma: no cover - step_uv refused first
         raise StepError("uv is not on PATH", "winget install --id astral-sh.uv")
+    merged = {**env, **os.environ}
     _run(
         [uv, "run", "python", "infrastructure/scripts/run_pytest_suites.py"],
-        env={**env, **os.environ},
+        env=merged,
     )
+
+    pnpm = shutil.which("pnpm") or shutil.which("pnpm.cmd")
+    if pnpm is None:  # pragma: no cover - step_pnpm refused first
+        raise StepError("pnpm is not on PATH", "corepack enable")
+    _run([pnpm, "exec", "tsc", "--noEmit", "-p", "packages/contracts/tsconfig.json"], env=merged)
+    _run(
+        [pnpm, "--filter", "@sros/web", "exec", "tsc", "--noEmit", "-p", "tsconfig.json"],
+        env=merged,
+    )
+    _run([pnpm, "exec", "eslint", "."], env=merged)
+    for test in (
+        "packages/contracts/test/conformance.test.ts",
+        "apps/web/test/api-client.test.ts",
+    ):
+        _run(["node", "--test", "--experimental-strip-types", test], env=merged)
 
 
 # ----------------------------------------------------------------- the driver
@@ -267,16 +311,19 @@ def main(argv: list[str] | None = None) -> int:
     # so an unflushed heading arrives AFTER the stderr failure it introduces --
     # which reads as the step having failed before it started.
     try:
-        print("[1/4] dependencies", flush=True)
+        print("[1/5] python dependencies", flush=True)
         step_uv(args.check)
 
-        print("[2/4] backing services", flush=True)
+        print("[2/5] node dependencies", flush=True)
+        step_pnpm(args.check)
+
+        print("[3/5] backing services", flush=True)
         step_services(args.check)
 
-        print("[3/4] environment file", flush=True)
+        print("[4/5] environment file", flush=True)
         env = step_env(args.check)
 
-        print("[4/4] database and registry", flush=True)
+        print("[5/5] database and registry", flush=True)
         step_database(env, args.check)
 
         if args.verify and not args.check:

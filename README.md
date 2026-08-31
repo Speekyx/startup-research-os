@@ -95,18 +95,19 @@ Earlier mission reports remain as historical records.
 
 ## After every pull
 
-**`git pull` alone is never enough.** Four things this project needs do not
-travel through git, and all four are silent when they are stale: the code runs,
+**`git pull` alone is never enough.** Five things this project needs do not
+travel through git, and all five are silent when they are stale: the code runs,
 and it runs against the wrong environment.
 
 | Not in git | Where it actually lives | Symptom when stale |
 |------------|-------------------------|--------------------|
 | Python dependencies | `.venv/`, not versioned | `ModuleNotFoundError` on a package that exists in the tree |
+| Node dependencies | `node_modules/`, not versioned | `Cannot find module 'next'`, and `tsc` reporting a hundred JSX errors |
 | Applied migrations | the local PostgreSQL | a migration file that exists but was applied nowhere |
 | `registry.*` contents | loaded from the catalog JSON, not by git | the previous catalog: missing use profiles, missing reviews |
 | `infrastructure/compose/.env` | git-ignored (`.gitignore:6`) | a key with no default refuses the command outright |
 
-One script does all four, stopping at the first thing it cannot fix and naming
+One script does all five, stopping at the first thing it cannot fix and naming
 the fix:
 
 ```bash
@@ -123,7 +124,9 @@ step by step, for when one of them fails.
 
 ---
 
-**1. Take the code and the dependencies.**
+**1. Take the code and both sets of dependencies.** The Node half is the one
+that gets skipped, because the Python side goes green without it and the failure
+then looks like a broken TypeScript configuration rather than a missing install.
 
 ```bash
 git checkout main && git pull
@@ -131,6 +134,10 @@ git checkout main && git pull
 
 ```bash
 uv sync --all-packages --frozen
+```
+
+```bash
+pnpm install --frozen-lockfile
 ```
 
 **2. Start the backing services.**
@@ -188,7 +195,9 @@ uv run python infrastructure/scripts/run_pytest_suites.py
 
 It ends with `all pytest suites passed across 7 packages`, plus the two leak
 checks that assert the run left the tenant tables and the `registry.*` tables as
-it found them.
+it found them. That covers the Python half; `sync.py --verify` follows it with
+`tsc`, `eslint` and the two Node test files, which are what a skipped
+`pnpm install` breaks.
 
 ### Research data does not travel either
 

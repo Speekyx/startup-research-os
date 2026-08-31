@@ -17,10 +17,11 @@ python infrastructure/scripts/sync.py
 ```
 
 `sync.py` is the executable form of README §After every pull. It installs the
-locked dependencies, starts the backing services, reconciles
-`infrastructure/compose/.env` against the committed template, applies migrations
-and reloads the source catalog into `registry.*` — the four things `git pull`
-does not move. It stops at the first step that fails and names the fix.
+locked dependencies for both halves of the monorepo, starts the backing
+services, reconciles `infrastructure/compose/.env` against the committed
+template, applies migrations and reloads the source catalog into `registry.*` —
+the five things `git pull` does not move. It stops at the first step that fails
+and names the fix.
 
 It is stdlib-only and is deliberately NOT run through `uv`, because installing
 the dependencies is one of its own steps. `--check` reports without changing
