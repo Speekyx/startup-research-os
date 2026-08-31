@@ -93,6 +93,117 @@ Earlier mission reports remain as historical records.
 
 ---
 
+## After every pull
+
+**`git pull` alone is never enough.** Four things this project needs do not
+travel through git, and all four are silent when they are stale: the code runs,
+and it runs against the wrong environment.
+
+| Not in git | Where it actually lives | Symptom when stale |
+|------------|-------------------------|--------------------|
+| Python dependencies | `.venv/`, not versioned | `ModuleNotFoundError` on a package that exists in the tree |
+| Applied migrations | the local PostgreSQL | a migration file that exists but was applied nowhere |
+| `registry.*` contents | loaded from the catalog JSON, not by git | the previous catalog: missing use profiles, missing reviews |
+| `infrastructure/compose/.env` | git-ignored (`.gitignore:6`) | a key with no default refuses the command outright |
+
+One script does all four, stopping at the first thing it cannot fix and naming
+the fix:
+
+```bash
+git checkout main && git pull
+```
+
+```bash
+python infrastructure/scripts/sync.py --verify
+```
+
+It never runs git, so pull first. Drop `--verify` to skip the suites, or pass
+`--check` to see what it would change. The rest of this section is what it does,
+step by step, for when one of them fails.
+
+---
+
+**1. Take the code and the dependencies.**
+
+```bash
+git checkout main && git pull
+```
+
+```bash
+uv sync --all-packages --frozen
+```
+
+**2. Start the backing services.**
+
+```bash
+docker compose -f infrastructure/compose/docker-compose.yml up -d
+```
+
+**3. Reconcile `.env` against the template, before running anything that reads
+it.** `.env.example` is committed and gains keys as missions add them; your
+`.env` is not and does not. This prints every key the template has and yours
+lacks:
+
+```bash
+comm -23 <(grep -oE '^[A-Z_0-9]+=' infrastructure/compose/.env.example | sort -u) <(grep -oE '^[A-Z_0-9]+=' infrastructure/compose/.env | sort -u)
+```
+
+Add each one with the template's value. `SROS_USE_PROFILE` is the one that stops
+the day: it has **deliberately no default**, so every acquisition command
+refuses to run until the deployment declares which use profile it operates
+under. On a developer machine that is:
+
+```bash
+echo "SROS_USE_PROFILE=local-private-research-v1" >> infrastructure/compose/.env
+```
+
+**4. Fold `.env` into the shell.** `migrate.py` and `run_pytest_suites.py` read
+`os.environ`; they do not read the file for you, and without this step the next
+command exits with `DATABASE_URL is not set` while the value sits in the file:
+
+```bash
+set -a && source infrastructure/compose/.env && set +a
+```
+
+The CLI is the exception. `sros-source` folds the file in itself and names it on
+stderr. The acquisition suite does the same, deliberately, so a verification
+means the same thing whether the CLI or `pytest` recorded it
+(`services/acquisition/python/tests/conftest.py`).
+
+**5. Bring the database and the registry up to the tree.**
+
+```bash
+uv run python infrastructure/scripts/migrate.py --apply
+```
+
+```bash
+uv run sros-source load
+```
+
+**6. Verify, in one command.**
+
+```bash
+uv run python infrastructure/scripts/run_pytest_suites.py
+```
+
+It ends with `all pytest suites passed across 7 packages`, plus the two leak
+checks that assert the run left the tenant tables and the `registry.*` tables as
+it found them.
+
+### Research data does not travel either
+
+The catalog is governance data, and `sros-source load` reproduces it exactly on
+any machine. Collected research is not: raw records, normalized records,
+signals, claims and evidence live in whichever local PostgreSQL produced them.
+A second machine has whatever its own database holds, usually nothing.
+
+That is harmless for governance work, which only touches the registry. It
+matters the day a report states counts: **those numbers describe one database,
+not the repository.** Reproducing them elsewhere means re-running collection,
+normalization, derivation and interpretation there.
+
+---
+
 ## Read this before contributing
 
 `PROJECT_MANIFEST.md` §Authoritative Documents lists seven documents that define
