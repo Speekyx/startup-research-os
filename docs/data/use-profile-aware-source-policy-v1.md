@@ -115,6 +115,17 @@ Reporting commands (`sros-source`) default to the legacy profile and take
 existing command means is a worse failure than making the operator type a flag.
 Collection commands have no such flag.
 
+**And a report reads the review for the profile it was given.** That took a
+follow-up to Mission 1.15.6 to be true: `list`, `show`, `conditions` and `stale`
+read `source.review` — the legacy profile's review — while the gate result
+printed beside it was computed for the requested one. Invisible while every
+source had a single review, and wrong the moment one did not: `conditions` under
+the local profile answered *"the current review declares no condition"* for a
+TED review carrying four, because the legacy review declares none.
+
+Every reporting command now **names the profile it answered about**. A verdict
+whose subject is only visible when it fails is a naked verdict on success (§8).
+
 ## 6. What `SourceRecord.review` means now
 
 **The current review under the legacy profile, and nothing else.**

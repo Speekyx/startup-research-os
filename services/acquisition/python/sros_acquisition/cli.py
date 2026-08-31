@@ -64,7 +64,7 @@ from .registry import (
     resolve_retention,
 )
 from .registry.eligibility import EligibilityResult
-from .registry.models import LEGACY_USE_PROFILE
+from .registry.models import LEGACY_USE_PROFILE, PolicyReview
 
 __all__ = ["main"]
 
@@ -186,18 +186,31 @@ def cmd_list(args: argparse.Namespace) -> int:
         )
         return 0
 
+    print(_profile_banner(profile))
     print(f"{'SOURCE':<18} {'FAMILY':<18} {'STATE':<26} {'EVID':>4}  ELIGIBLE")
     print("-" * 82)
     for source in catalog:
         result, _ = verdicts[source.source_id]
-        state = source.review.approval_state.value if source.review else "NO REVIEW"
+        # The state and the gate result must answer about the SAME profile.
+        # This read `source.review` while ELIGIBLE beside it was per-profile,
+        # so under a second profile the two columns described different
+        # questions on one row.
+        review = _profile_review(source, profile)
+        state = review.approval_state.value if review else "NO REVIEW"
         mark = "yes" if result.eligible else "no"
         print(
             f"{source.source_id:<18} {source.source_family:<18} {state:<26} "
             f"{result.evidence_count:>4}  {mark}"
         )
     eligible = sum(1 for result, _ in verdicts.values() if result.eligible)
-    print(f"\n{len(catalog)} sources, {eligible} collector-eligible")
+    unreviewed = sum(1 for source in catalog if _profile_review(source, profile) is None)
+    print(f"\n{len(catalog)} sources, {eligible} collector-eligible under {profile}")
+    if unreviewed:
+        print(
+            f"{unreviewed} of them have NO review under this profile, which is a refusal "
+            "rather than a gap in this report: absence is never resolved against another "
+            "profile."
+        )
     print(
         "This is the LIVE view: conditions verified against this environment. "
         "Nothing is recorded until `sros-source verify --apply`, and eligible is "
@@ -209,11 +222,13 @@ def cmd_list(args: argparse.Namespace) -> int:
 def cmd_show(args: argparse.Namespace) -> int:
     catalog = _catalog(args)
     source = catalog.get(args.source_id)
-    review = source.review
-    result, records = _live_eligibility(source, _cli_profile(args), _compliance(args))
+    profile = _cli_profile(args)
+    review = _profile_review(source, profile)
+    result, records = _live_eligibility(source, profile, _compliance(args))
     retention = resolve_retention(source.retention_override)
 
     print(f"{source.canonical_name}  ({source.source_id})")
+    print(f"  {_profile_banner(profile)}")
     print(f"  family        {source.source_family}")
     print(f"  lifecycle     {source.lifecycle.value}")
     print(f"  description   {source.description}")
@@ -224,36 +239,75 @@ def cmd_show(args: argparse.Namespace) -> int:
     )
 
     print("\n  ACCESS PROFILES (how, not whether)")
-    for profile in source.access_profiles:
+    # `access` rather than `profile`: an ACCESS profile and a USE profile are
+    # different things, and this loop shadowed the use profile the rest of the
+    # command reports on. mypy caught it the moment the outer name existed.
+    for access in source.access_profiles:
         needs = [
             name
             for name, flag in (
-                ("auth", profile.requires_authentication),
-                ("api-key", profile.requires_api_key),
-                ("oauth", profile.requires_oauth),
-                ("account", profile.requires_account),
-                ("dev-app", profile.requires_developer_app),
-                ("approval", profile.requires_approval),
+                ("auth", access.requires_authentication),
+                ("api-key", access.requires_api_key),
+                ("oauth", access.requires_oauth),
+                ("account", access.requires_account),
+                ("dev-app", access.requires_developer_app),
+                ("approval", access.requires_approval),
             )
             if flag
         ]
         limit = (
-            f"{profile.rate_limit_requests}/{profile.rate_limit_period_seconds}s "
-            f"({profile.rate_limit_origin})"
-            if profile.rate_limit_known
+            f"{access.rate_limit_requests}/{access.rate_limit_period_seconds}s "
+            f"({access.rate_limit_origin})"
+            if access.rate_limit_known
             else "UNKNOWN"
         )
-        print(f"    {profile.access_method.value:<20} {profile.label}")
+        print(f"    {access.access_method.value:<20} {access.label}")
         print(f"      requires    {', '.join(needs) or 'nothing'}")
-        print(f"      secrets     {list(profile.secret_references) or '-'}  (key names only)")
+        print(f"      secrets     {list(access.secret_references) or '-'}  (key names only)")
         print(f"      rate limit  {limit}")
-        print(f"      cost        {profile.acquisition_cost.value}")
+        print(f"      cost        {access.acquisition_cost.value}")
+
+    # Every profile this source has ever been reviewed under, before the detail
+    # of one of them. A standing is a table, and a reader who saw only the
+    # requested profile could not tell whether the others exist.
+    standing = source.reviews_by_profile()
+    if len(standing) > 1:
+        print("\n  STANDING (one row per assessed use)")
+        for other, current in standing.items():
+            mark = " <- shown below" if other == profile else ""
+            print(
+                f"    {other:<38} v{current.review_version}  {current.approval_state.value}{mark}"
+            )
 
     if review is None:
-        print("\n  NO POLICY REVIEW")
+        print(f"\n  NO POLICY REVIEW UNDER {profile}")
+        print(
+            "    Absence is a refusal, never a reason to consult another profile. "
+            "Use --use-profile to report on one this source was reviewed under."
+        )
     else:
         print(f"\n  POLICY REVIEW v{review.review_version}  {review.approval_state.value}")
-        print(f"    scope       {review.assessed_use_case[:100]}...")
+        # The SCOPE of a review is its profile, not the prose (ADR-027). Every
+        # review inherits the catalog's `assessed_use_case` sentence, which says
+        # "a COMMERCIAL multi-tenant SaaS" and has said so since Mission 1.0 -- so
+        # printing it under a LOCAL review claimed the opposite of what that review
+        # assessed. The prose is kept, labelled as what it is.
+        registered = next(
+            (
+                entry
+                for entry in catalog.use_profiles
+                if entry.use_profile_id == review.assessed_use_profile
+            ),
+            None,
+        )
+        print(f"    scope       {review.assessed_use_profile}")
+        if registered is not None:
+            print(f"                {registered.description[:150]}...")
+        print(f'    inherited   "{review.assessed_use_case[:90]}..."')
+        print(
+            "                the catalog-level sentence every review carries. The "
+            "profile above is the identity"
+        )
         print(f"    reviewed    {review.reviewed_at.date()} by {review.reviewed_by}")
         print(
             f"    next review {review.next_review_at.date()}"
@@ -320,9 +374,15 @@ def cmd_show(args: argparse.Namespace) -> int:
 def cmd_eligibility(args: argparse.Namespace) -> int:
     catalog = _catalog(args)
     config = _compliance(args)
+    profile = _cli_profile(args)
     sources = [catalog.get(args.source_id)] if args.source_id else list(catalog)
+    if not args.json:
+        # Stated once, deliberately, rather than left to be inferred from a
+        # blocking reason that happens to quote the profile. A verdict whose
+        # subject is only visible when it fails is a naked verdict on success.
+        print(_profile_banner(profile))
     for source in sources:
-        result, records = _live_eligibility(source, _cli_profile(args), config)
+        result, records = _live_eligibility(source, profile, config)
         if args.json:
             print(
                 json.dumps(
@@ -359,9 +419,23 @@ def cmd_conditions(args: argparse.Namespace) -> int:
     """
     catalog = _catalog(args)
     source = catalog.get(args.source_id)
-    review = source.review
-    if review is None or not review.required_conditions:
-        print(f"{source.source_id}: the current review declares no condition")
+    profile = _cli_profile(args)
+    # Mission 1.15.6 follow-up. This read `source.review` -- the LEGACY profile
+    # -- while verifying against the profile the operator asked for, so under a
+    # second profile it returned "declares no condition" and stopped before
+    # verifying anything. TED's legacy review declares none and its local review
+    # declares four, which made the command silently useless for the one source
+    # whose conditions anybody needed to read.
+    review = _profile_review(source, profile)
+    if review is None:
+        print(f"{source.source_id}: no policy review exists under {profile}")
+        print(
+            "  Absence is a refusal, never a reason to consult another profile. "
+            "Use --use-profile to name one this source was reviewed under."
+        )
+        return 0
+    if not review.required_conditions:
+        print(f"{source.source_id}: the current review under {profile} declares no condition")
         return 0
 
     if args.recorded:
@@ -372,7 +446,10 @@ def cmd_conditions(args: argparse.Namespace) -> int:
         if args.json:
             print(json.dumps(states, indent=2, default=str))
             return 0
-        print(f"{source.source_id}: {len(states)} condition(s), as recorded in the registry")
+        print(
+            f"{source.source_id}: {len(states)} condition(s), as recorded in the registry. "
+            "Recorded state spans every profile; the live view above is per profile"
+        )
         for state in states:
             latest = state["latest_verification"]
             mark = "satisfied" if state["satisfied"] else "NOT SATISFIED"
@@ -388,11 +465,11 @@ def cmd_conditions(args: argparse.Namespace) -> int:
                 print(f"    {latest['reason']}")
         return 0
 
-    records = verify_source(source, _cli_profile(args), _compliance(args))
+    records = verify_source(source, profile, _compliance(args))
     if args.json:
         print(json.dumps([r.to_json() for r in records], indent=2))
         return 0
-    print(f"{source.source_id}: {len(records)} condition(s), verified live")
+    print(f"{source.source_id}: {len(records)} condition(s) under {profile}, verified live")
     by_key = {c.key: c for c in review.required_conditions}
     for record in records:
         condition = by_key[record.condition_key]
@@ -563,6 +640,7 @@ def cmd_readiness(args: argparse.Namespace) -> int:
     def mark(value: bool) -> str:
         return "yes" if value else "no "
 
+    print(_profile_banner(_cli_profile(args)))
     print(f"{'source':<22} {'elig':<5} {'rsrc':<5} {'impl':<5} {'enab':<5} next step")
     for row in rows:
         print(
@@ -593,25 +671,42 @@ def cmd_stale(args: argparse.Namespace) -> int:
     """
     catalog = _catalog(args)
     now = datetime.now(UTC)
-    stale = [s for s in catalog if s.review and s.review.is_stale(now)]
+    profile = _cli_profile(args)
+    reviews = {
+        source.source_id: review
+        for source in catalog
+        if (review := _profile_review(source, profile)) is not None
+    }
+    stale = [s for s in catalog if (r := reviews.get(s.source_id)) and r.is_stale(now)]
     pending = [
         s
         for s in catalog
-        if s.review and s.review.approval_state is SourceApprovalState.REQUIRES_REVIEW
+        if (r := reviews.get(s.source_id))
+        and r.approval_state is SourceApprovalState.REQUIRES_REVIEW
     ]
 
-    print(f"STALE REVIEWS ({len(stale)})")
+    print(_profile_banner(profile))
+    print(f"\nSTALE REVIEWS ({len(stale)})")
     for source in stale:
-        assert source.review is not None  # noqa: S101 - guarded by the comprehension
-        print(f"  {source.source_id:<18} due {source.review.next_review_at.date()}")
+        print(f"  {source.source_id:<18} due {reviews[source.source_id].next_review_at.date()}")
     if not stale:
         print("  none")
 
     print(f"\nAWAITING REVIEW ({len(pending)})")
     for source in pending:
-        assert source.review is not None  # noqa: S101 - guarded by the comprehension
-        questions = len(source.review.open_questions)
+        questions = len(reviews[source.source_id].open_questions)
         print(f"  {source.source_id:<18} {questions} open question(s)")
+    if not pending:
+        print("  none")
+
+    # Reported as its own number rather than folded into AWAITING REVIEW: a
+    # source nobody has assessed for this use is not a review that has stalled,
+    # and merging the two would put twenty-eight sources into a queue under any
+    # profile but the legacy one.
+    unreviewed = len(catalog) - len(reviews)
+    if unreviewed:
+        print(f"\nNO REVIEW UNDER THIS PROFILE ({unreviewed})")
+        print("  Not a stalled review. Nobody has assessed these sources for this use.")
     return 0
 
 
@@ -729,6 +824,32 @@ def _cli_profile(args: argparse.Namespace) -> str:
     `declared_use_profile`, which has no default at all.
     """
     return str(getattr(args, "use_profile", None) or LEGACY_USE_PROFILE)
+
+
+def _profile_review(source: SourceRecord, profile: str) -> PolicyReview | None:
+    """The review a report is about, for the profile the operator asked for.
+
+    **Never `source.review`.** That accessor answers a different question -- the
+    LEGACY profile's current review -- and reading it here is how a report ends
+    up printing one profile's verdict beside another profile's gate result, on
+    the same row, with nothing saying so.
+
+    `None` means nobody has reviewed this source for that use, which every
+    caller must render as an absence rather than resolving against another
+    profile (`use-profile-aware-source-policy-v1.md` §4).
+    """
+    return source.review_for(profile)
+
+
+def _profile_banner(profile: str) -> str:
+    """One line naming the subject of what follows.
+
+    `docs/CLAUDE.md` §Source permission: never report a naked verdict. A source's
+    standing is a table keyed by profile, and a report that does not say which
+    key it used invites the reader to supply the wrong one.
+    """
+    suffix = "  (default; --use-profile to change)" if profile == LEGACY_USE_PROFILE else ""
+    return f"use profile: {profile}{suffix}"
 
 
 def build_parser() -> argparse.ArgumentParser:
