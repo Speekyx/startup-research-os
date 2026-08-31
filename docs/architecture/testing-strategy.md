@@ -2033,3 +2033,49 @@ So the suite asserts the absence directly rather than trusting the dispatch:
 **A guard is worth most when it is tested against the thing that would most
 plausibly defeat it**, which here is the mission's own new code rather than a
 hypothetical attacker.
+
+---
+
+## 48. A fence protects the modules it names, and nothing else (Mission 1.15.6 follow-up)
+
+Mission 1.15.5 put an AST fence on `SourceRecord.review`, the legacy-profile
+accessor, asserting that `eligibility.py`, `authorization.py` and
+`verification.py` never read it. The reasoning was exact and is still right:
+`.review` reads more naturally than `.review_for(profile)`, which is precisely
+how the mistake would be made.
+
+**It was made four times, in the module the fence did not name.** `cli.py` read
+`source.review` in `list`, `show`, `conditions` and `stale`, while passing the
+requested profile to the gate whose result it printed alongside. The worst of
+the four returned *"the current review declares no condition"* for a review
+carrying four.
+
+Two things generalise.
+
+**A guard's scope is a claim, and it should be as wide as the risk.** The fence
+covered the modules that *decide*, because a wrong decision is worse than a
+wrong report. That reasoning is sound and the conclusion was too narrow: an
+operator who reads "declares no condition" stops looking, and the decision that
+follows is theirs rather than the gate's.
+
+**The default hid it.** Under the legacy profile — the default, and what 28 of
+29 sources have — the old output was correct. The command was right everywhere
+except the one source anybody needed it for, which is the shape a defect keeps
+for longest.
+
+The fence now covers `cli.py` too, exempting the single sanctioned reader by
+name:
+
+```python
+offenders = [
+    f"{fn.name}:{node.lineno}"
+    for fn in functions(tree)
+    if fn.name != "_profile_review"
+    for node in ast.walk(fn)
+    if isinstance(node, ast.Attribute) and node.attr == "review"
+]
+assert offenders == []
+```
+
+**Exempting one named function is what makes the fence survivable.** A fence
+with no legitimate way through gets deleted the first time somebody needs one.

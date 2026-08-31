@@ -221,6 +221,19 @@ clear it yourself.
 uv run sros-source conditions <source-id>
 ```
 
+**A review belongs to one use profile, and so does this command.** It defaults
+to the legacy profile and takes `--use-profile`; a source reviewed under a
+second profile carries a different condition set there, and the output names
+which one it read.
+
+```bash
+uv run sros-source --use-profile local-private-research-v1 conditions ted-eu
+```
+
+A source with no review under the profile you named reports an **absence**, not
+an empty condition list. Absence is a refusal and is never resolved against
+another profile.
+
 Each condition shows its verification kind and what a verifier found **now**.
 `UNKNOWN` means nothing checked it — usually because the condition names a
 capability that does not exist yet, which is work for an engineer rather than
