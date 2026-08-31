@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.28
-Last amended: 2026-08-31 (Sprint 1 / Mission 1.15.4)
+Version: 1.29
+Last amended: 2026-08-31 (deployment model)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.29 | 2026-08-31 | **The deployment model is recorded: LOCAL-FIRST / SINGLE-OPERATOR.** The application runs locally for its operator and is not offered as a public multi-tenant SaaS -- but the research it produces is used to launch **commercial** products, so **local deployment never implies `NON_COMMERCIAL_USE`** and commercial-use rights are still reviewed. Workspace and RLS stay. No billing, customer accounts, team collaboration or cloud scaling unless explicitly required |
 | 1.28 | 2026-08-31 | **The routes are documented; the gate has no vocabulary for them.** TED's own docs say the Search API is *"for analysis and reuse"* and *"primarily targeted at data reusers"*, naming commercial organisations and researchers as users; the Open Data Service publishes data *"for analysis and re-use"* with a **Connect your app** button. That is intended-use evidence and **not** a database-right grant, and a condition now says so. The real blocker moved: **every approval in this registry is an answer to a use case the model never records**, so a source cannot be blocked broadly and authorised narrowly. `ted-eu` stays `REQUIRES_REVIEW` at v5 |
 | 1.27 | 2026-08-31 | **The dataset licence found, and H-36 still open.** The Publications Office's own DCAT record attaches `dct:license = COM_REUSE` to **every** `ted-1` distribution including the bulk XML download, and `COM_REUSE` carries `skos:exactMatch` to Decision 2011/833/EU -- so the licence on the bulk route IS the instrument already known to be silent. The search API's own Terms of Usage resolve to the same TED legal notice. H-36 splits into **H-36A** (does the right subsist? not established -- nothing names a maker) and **H-36B** (is it granted? not addressed). The blocker is now a drafted, unsent message to a named address |
 | 1.26 | 2026-08-31 | **H-34 CLOSED PERMITTED; H-36 did not close.** Commission Decision 2011/833/EU was retrieved from the Publications Office Cellar and read in full: reuse is defined by PURPOSE, not by METHOD, so machine processing falls inside the grant. The same text contains **zero** occurrences of *sui generis*, *extraction*, *re-utilisation* or Directive 96/9/EC. All six load-bearing activities are now granted and `ted-eu` is **still REQUIRES_REVIEW** -- the blocker is no longer an activity in the matrix |
@@ -103,6 +104,46 @@ These documents are authoritative unless a newer, explicitly versioned specifica
 
 Added in 1.1. These are settled. Do not re-derive them, do not redefine them
 locally, and do not resolve an apparent conflict with them by guessing.
+
+### Deployment model — local-first, single-operator
+
+Added in 1.29. **Placed first because it frames the invariants that follow**: it
+decides what every source review's assessed use case is about, and it is the
+reason the tenancy rule below survives having one operator.
+
+Startup Research OS is intended to **run locally for its developer/operator**. It
+is **not** intended to be offered as a public multi-tenant SaaS.
+
+**The research it produces is used to discover, evaluate and launch commercial
+SaaS and web products.** So the deployment is local and the purpose is
+commercial, and those are two independent facts.
+
+- **Local deployment does NOT imply `NON_COMMERCIAL_USE`.** This is the rule most
+  easily taken backwards, and taking it backwards would produce exactly the
+  narrowed assessed use case §Source governance forbids: a permission obtained by
+  describing a smaller product is a permission for a product we are not building.
+  **Commercial-use rights are still reviewed wherever they apply.**
+- **Public redistribution and customer-facing data rights are out of scope**
+  unless the deployment model changes. A source review that grants them is not
+  wrong; a review that *depends* on them is out of scope.
+- **Do not build billing, customer accounts, team collaboration or cloud
+  scaling** unless a mission explicitly requires it.
+- **Preserve the workspace and row-level-security architecture.** Being a single
+  operator today is not a concrete reason to remove a tenant boundary, and
+  re-adding one later is far more expensive than keeping it.
+- **Optimise application UX and deployment for one local operator.**
+
+**If the deployment ever becomes public, customer-facing, sold,
+subscription-based or multi-tenant, the commercial profile must be reviewed again
+from the top.** It is unreviewed today, and it must not be reached by drift.
+
+**The open governance consequence.** Every approval in the source registry is an
+answer to a use case the model does not record (Mission 1.15.4). The
+`LOCAL_PRIVATE_RESEARCH` profile in `route-scoped-source-authorization-gap-v1.md`
+is **local, not non-commercial**, and must not be renamed or read as
+non-commercial when `assessed_use_profile` is built. Nothing in the TED reviews
+rests on non-commercial status: `commercial_use` is `PERMITTED` there on its own
+evidence, from v1.
 
 ### Claim taxonomy — exactly five values, UPPERCASE
 
@@ -181,6 +222,9 @@ through a transaction-local tenant context. Neither replaces the other: a
 forgotten `WHERE` is caught by the policy, and a missing tenant context returns
 no rows rather than wrong ones. Removing the explicit filter because RLS exists
 is a regression, not a cleanup.
+
+**Single-operator deployment is not a reason to drop either layer** (§Deployment
+model). The tenant boundary costs little to keep and a great deal to re-add.
 
 ### Jobs — Celery over Redis
 

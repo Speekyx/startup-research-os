@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.27
+Version: 1.28
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-08-31 (Sprint 1 / Mission 1.15.4)
+Last amended: 2026-08-31 (deployment model)
 
 ---
 
@@ -13,6 +13,22 @@ Last amended: 2026-08-31 (Sprint 1 / Mission 1.15.4)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.28 — 2026-08-31 (deployment model)
+
+Authorized by the operator directly, as standing guidance for all future
+missions rather than by a mission brief.
+
+| Change | Section | Authority |
+|--------|---------|-----------|
+| **The deployment model is recorded: LOCAL-FIRST / SINGLE-OPERATOR** | Canonical invariants | Operator directive, 2026-08-31. The application runs locally for its developer/operator and is not intended to be offered as a public multi-tenant SaaS. Placed FIRST among the canonical invariants because it frames the ones that depend on it: it decides what every source review's assessed use case is about, and it is why the tenancy rule survives having one operator |
+| **Local deployment does NOT imply NON_COMMERCIAL_USE** | Canonical invariants | The load-bearing half, and the one most easily taken backwards. The research this system produces is used to discover, evaluate and launch **commercial** SaaS and web products, so the deployment is local and the purpose is commercial -- two independent facts. Taking it backwards would produce exactly the narrowed assessed use case §Source governance forbids. **Commercial-use rights are still reviewed wherever they apply** |
+| **Public redistribution and customer-facing rights are out of scope** | Canonical invariants | Unless the deployment model changes. A source review that grants them is not wrong; a review that DEPENDS on them is out of scope. If the deployment ever becomes public, customer-facing, sold, subscription-based or multi-tenant, the commercial profile must be reviewed again from the top -- it is unreviewed today and must not be reached by drift |
+| **Workspace and row-level security are preserved** | Canonical invariants | Being a single operator today is not a concrete reason to remove a tenant boundary, and re-adding one later is far more expensive than keeping it. A pointer was added to §Tenancy, where the question is most likely to be raised |
+| **No billing, customer accounts, team collaboration or cloud scaling** | Forbidden During Foundation | Unless a mission explicitly requires it. Application UX and deployment are optimised for one local operator |
+| **The LOCAL_PRIVATE_RESEARCH profile is local, not non-commercial** | Blocked work | Mission 1.15.4 defined it in `route-scoped-source-authorization-gap-v1.md` and could not authorise it, because every approval in the registry answers a use case the model does not record. It must not be renamed or read as a non-commercial profile when `assessed_use_profile` is built. Nothing in the TED reviews rests on non-commercial status: `commercial_use` is PERMITTED there on its own evidence, from v1 |
+
+No code, no schema, no registry state. Documentation only.
 
 ## 1.27 — 2026-08-31 (Sprint 1 / Mission 1.15.4)
 
