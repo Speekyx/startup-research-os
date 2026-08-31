@@ -319,6 +319,12 @@ jobs:
       # the database. Reaches no network: `validate` answers whether a
       # collection WOULD be permitted, which is a governance question.
       - name: The collector authorization path holds
+        # Mission 1.15.5. The runtime DECLARES the use profile it operates
+        # under; it is never inferred, and there is no default. CI declares the
+        # legacy profile because that is the one world-bank's approving review
+        # assessed -- and the step failing without it is the mechanism working.
+        env:
+          SROS_USE_PROFILE: commercial-multi-tenant-research-v1
         run: uv run sros-acquisition world-bank validate --indicator SP.POP.TOTL
       # Mission 1.6 §58. Which sources can be normalized, and by what. Reaches
       # no network AND no database: normalizer selection is a property of the
