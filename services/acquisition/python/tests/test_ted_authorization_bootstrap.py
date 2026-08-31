@@ -762,16 +762,46 @@ class TestNothingReachedTheDatabase:
             == 0
         )
 
-    def test_no_residual_acceptance_was_written(self) -> None:
-        """§6. The one row this mission must not have created."""
-        assert (
-            self._count(
-                "SELECT count(*) FROM registry.source_condition_verifications "
+    def test_any_residual_acceptance_came_from_a_person_and_not_a_verifier(self) -> None:
+        """Inverted by Mission 1.15.6.1, not deleted (`testing-strategy.md` §43).
+
+        This asserted that NO acceptance existed, which was the correct
+        assertion for Mission 1.15.6: it must not have created one, and it did
+        not. An operator later did, so the count is no longer the property worth
+        protecting.
+
+        **What survives is the property that mattered all along**: if an
+        acceptance exists, no verifier produced it. The row must be a
+        `human-confirmation` written by a named actor, and it must not carry the
+        identity of any registered verifier -- `capability:*`,
+        `access-restriction:*`, `credential-availability` or `compliance-config`.
+        A future code path that auto-accepted would fail here even though the
+        count is no longer zero.
+        """
+        import psycopg
+
+        from .conftest import DATABASE_URL
+
+        with psycopg.connect(DATABASE_URL) as conn:
+            rows = conn.execute(
+                "SELECT verifier, result FROM registry.source_condition_verifications "
                 "WHERE condition_key = %s AND result = 'SATISFIED'",
-                RESIDUAL,
+                (RESIDUAL,),
+            ).fetchall()
+
+        for verifier, _ in rows:
+            assert verifier != "human-confirmation", (
+                "the human-confirmation verifier produced a SATISFIED result; it returns "
+                "UNKNOWN unconditionally and must never write one"
             )
-            == 0
-        )
+            for machine in (
+                "capability:",
+                "access-restriction:",
+                "credential-availability",
+                "compliance-config",
+                "unregistered",
+            ):
+                assert not verifier.startswith(machine), verifier
 
     def test_the_database_refuses_a_hand_set_satisfied_boolean(self) -> None:
         """§5, and the guarantee that outlives this mission's code. Even with SQL
