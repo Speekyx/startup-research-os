@@ -8,7 +8,7 @@ Regenerate      : python packages/contracts/tools/generate.py
 Editing this file by hand will be overwritten and will fail the contract
 check in CI. Change the source of truth instead.
 
-contract_version: 1.9.0
+contract_version: 1.10.0
 ontology_version: 2
 """
 
@@ -17,7 +17,7 @@ from __future__ import annotations
 from enum import Enum
 from typing import Final
 
-CONTRACT_VERSION: Final[str] = "1.9.0"
+CONTRACT_VERSION: Final[str] = "1.10.0"
 ONTOLOGY_VERSION: Final[str] = "2"
 RESEARCH_CONTEXT_SCHEMA_VERSION: Final[str] = "1.0.0"
 
@@ -653,6 +653,20 @@ class ClaimEvidenceRefusalReason(str, Enum):
     INCOMPATIBLE_LANGUAGE_SEMANTICS = "INCOMPATIBLE_LANGUAGE_SEMANTICS"  # The proposition merges source language labels that no reviewed mapping relates -- H-30. CLD2 ENGLISH is not BCP-47 en
     PROPOSITION_NOT_IDENTIFIABLE = "PROPOSITION_NOT_IDENTIFIABLE"  # No canonical proposition key could be built, so two derivations of the same proposition could not be recognised as one claim
     INTERPRETER_PROVENANCE_INCOMPLETE = "INTERPRETER_PROVENANCE_INCOMPLETE"  # The interpreter did not name itself, its version, or the model a MODEL_DERIVED interpretation used
+    UNSUPPORTED_SIGNAL_TYPE = "UNSUPPORTED_SIGNAL_TYPE"  # No template exists for this Signal type. An interpreter that fell back to generic prose would be writing a proposition nobody specified, which is the one thing a DETERMINISTIC interpreter must not do
+    SIGNAL_LINEAGE_UNAVAILABLE = "SIGNAL_LINEAGE_UNAVAILABLE"  # The Signal's contributing normalized records could not be read, so the attribution an OBSERVED claim requires -- which source, which resource, which geography name -- cannot be stated. Attribution is not optional and is never reconstructed from a key
+    AMBIGUOUS_SIGNAL_LINEAGE = "AMBIGUOUS_SIGNAL_LINEAGE"  # The Signal's contributing records disagree on a fact the proposition names -- two resources, two language labels, two geographies. The claim would have to pick one, and picking one silently is how an attribution becomes wrong
+
+
+class ClaimInterpretationInputRole(str, Enum):
+    """What one interpretation run did with one Signal it CONSIDERED. GAP-5: 'three supporting Signals exist' and 'three of forty considered were supporting' are different facts, and an aggregator that cannot tell them apart reads a selection as a census.
+
+    See claim-interpretation-runtime-v1.md §4; Mission 1.13.1 §22.
+    """
+
+    CITED = "CITED"  # A Claim was emitted from this Signal and an Evidence row cites it. The run row names the claim
+    EXCLUDED = "EXCLUDED"  # The interpreter did NOT attempt this Signal -- no template for its type, or its lineage could not be read. Considered and passed over, with the reason recorded
+    REFUSED = "REFUSED"  # The interpreter attempted this Signal and the model refused the resulting draft. Attempted-and-rejected is a different fact from never-attempted, and collapsing them loses which of the two happened
 
 
 # --- Numeric bounds --------------------------------------------------------

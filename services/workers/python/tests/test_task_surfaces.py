@@ -223,3 +223,101 @@ class TestDelivery(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+# ==================================================== Mission 1.13.1: claim.interpret
+
+
+class TestClaimTaskSurface(unittest.TestCase):
+    """The fourth surface. Same three properties, asserted rather than assumed.
+
+    Every one of these was already true of `signal.derive`; a new surface that
+    merely looked similar would be the place a tenant header quietly stopped
+    being required.
+    """
+
+    def test_it_routes_to_the_acquisition_queue(self) -> None:
+        """Not `nlp`. Rendering a format string over a Signal already read is
+        bounded and CPU-cheap, and no model is involved or permitted."""
+        from sros_workers.claim_tasks import INTERPRET_CLAIMS
+
+        self.assertIs(route_task(INTERPRET_CLAIMS), Queue.ACQUISITION)
+
+    def test_the_headers_win_over_the_payload(self) -> None:
+        from sros_workers.claim_tasks import claim_payload
+
+        merged = claim_payload(HEADERS, {"workspace_id": "an-imposter"})
+        self.assertEqual(merged["workspace_id"], WORKSPACE)
+
+    def test_a_payload_with_no_workspace_is_refused(self) -> None:
+        from sros_workers.claim_tasks import claim_payload
+
+        with self.assertRaises(MissingContextError):
+            claim_payload({"research_session_id": SESSION, "correlation_id": "c"}, {})
+
+    def test_it_refuses_without_a_connection_factory(self) -> None:
+        from sros_workers.claim_tasks import INTERPRET_CLAIMS, register_claim_tasks
+
+        app = _StubApp()
+        register_claim_tasks(app)
+        with self.assertRaises(RuntimeError) as caught:
+            app.call(INTERPRET_CLAIMS, HEADERS, {"interpreter_id": "x"})
+        self.assertIn("must not construct its own database access", str(caught.exception))
+
+    def test_registration_is_explicit(self) -> None:
+        """A process that should not interpret claims simply does not call it."""
+        from sros_workers.claim_tasks import INTERPRET_CLAIMS, register_claim_tasks
+
+        app = _StubApp()
+        self.assertNotIn(INTERPRET_CLAIMS, app.registered)
+        register_claim_tasks(app)
+        self.assertIn(INTERPRET_CLAIMS, app.registered)
+
+    def test_the_task_name_is_distinct_from_every_other(self) -> None:
+        from sros_workers.claim_tasks import INTERPRET_CLAIMS
+        from sros_workers.signal_tasks import DERIVE_SIGNALS
+
+        names = {
+            WORLD_BANK_COLLECT,
+            GDELT_WEB_NGRAM_COLLECT,
+            NORMALIZE_RAW_RECORDS,
+            DERIVE_SIGNALS,
+            INTERPRET_CLAIMS,
+        }
+        self.assertEqual(len(names), 5)
+
+    def test_the_injected_runner_receives_the_merged_payload(self) -> None:
+        """The correlation headers reach the job, and the job is not imported
+        when a runner is injected -- services/nlp is deliberately absent from
+        the zero-dependency test path (ADR-009)."""
+        from sros_workers.claim_tasks import INTERPRET_CLAIMS, register_claim_tasks
+
+        seen: dict[str, Any] = {}
+
+        def runner(payload: Any, _factory: Any) -> Any:
+            seen.update(payload)
+            return type("R", (), {"to_json": lambda self: {"ok": True}})()
+
+        app = _StubApp()
+        register_claim_tasks(app, runner=runner, connection_factory=lambda _ws: None)
+        result = app.call(
+            INTERPRET_CLAIMS, HEADERS, {"interpreter_id": "observed-signal-restatement"}
+        )
+        self.assertEqual(seen["workspace_id"], WORKSPACE)
+        self.assertEqual(seen["correlation_id"], "corr-1")
+        self.assertEqual(seen["interpreter_id"], "observed-signal-restatement")
+        self.assertTrue(result["ok"])
+        self.assertEqual(result["task_id"], "task-abc")
+
+    def test_the_idempotency_key_is_stable_across_deliveries(self) -> None:
+        from sros_workers.claim_tasks import INTERPRET_CLAIMS, register_claim_tasks
+
+        def runner(_payload: Any, _factory: Any) -> Any:
+            return type("R", (), {"to_json": lambda self: {}})()
+
+        app = _StubApp()
+        register_claim_tasks(app, runner=runner, connection_factory=lambda _ws: None)
+        payload = {"interpreter_id": "observed-signal-restatement"}
+        first = app.call(INTERPRET_CLAIMS, HEADERS, payload)
+        second = app.call(INTERPRET_CLAIMS, HEADERS, payload)
+        self.assertEqual(first["task_idempotency_key"], second["task_idempotency_key"])

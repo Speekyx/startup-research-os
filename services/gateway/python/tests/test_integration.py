@@ -148,6 +148,11 @@ class TestSchemaRuntime:
             # 0013_signal_derivation_runs. Tenant data: where a REFUSED
             # derivation goes, so no row in nlp.signals ever means "no signal".
             "nlp.signal_derivation_runs",
+            # 0018_claim_interpretation_runs. The same two facts one layer up:
+            # where a REFUSED interpretation goes, and which Signals a run
+            # CONSIDERED and did not cite (GAP-5, ADR-025).
+            "research.claim_interpretation_runs",
+            "research.claim_interpretation_inputs",
         }
 
     def test_the_source_eligibility_view_exists(self, database) -> None:

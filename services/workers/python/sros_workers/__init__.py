@@ -1,8 +1,8 @@
 """Celery infrastructure for Startup Research OS.
 
-INFRASTRUCTURE, plus the thin task surfaces of the three stages that exist. No
-job BODY lives here: `acquisition_tasks`, `normalization_tasks` and
-`signal_tasks` each merge
+INFRASTRUCTURE, plus the thin task surfaces of the four stages that exist. No
+job BODY lives here: `acquisition_tasks`, `normalization_tasks`, `signal_tasks`
+and `claim_tasks` each merge
 the correlation headers, refuse a payload with no tenant, and call a function
 in the context that owns the work. Everything decidable is decided there, so
 it can be tested without a broker -- a job whose logic sits inside a task
@@ -14,6 +14,7 @@ decorator is a job that only a running worker can exercise.
   acquisition_tasks.py  acquire.collect.world_bank             (Mission 1.5)
   normalization_tasks.py normalize.raw_records                 (Mission 1.6)
   signal_tasks.py       signal.derive                         (Mission 1.11.1)
+  claim_tasks.py        claim.interpret                       (Mission 1.13.1)
 
 Keeping the first two Celery-free is what lets the routing and retry rules be
 tested without a broker.

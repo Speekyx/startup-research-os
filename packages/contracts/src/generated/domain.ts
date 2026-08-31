@@ -9,12 +9,12 @@
  * Editing this file by hand will be overwritten and will fail the contract
  * check in CI. Change the source of truth instead.
  *
- * contract_version: 1.9.0
+ * contract_version: 1.10.0
  * ontology_version: 2
  */
 
 
-export const CONTRACT_VERSION = "1.9.0" as const;
+export const CONTRACT_VERSION = "1.10.0" as const;
 export const ONTOLOGY_VERSION = "2" as const;
 export const RESEARCH_CONTEXT_SCHEMA_VERSION = "1.0.0" as const;
 
@@ -812,10 +812,27 @@ export const CLAIM_EVIDENCE_REFUSAL_REASON_VALUES = [
   "INCOMPATIBLE_LANGUAGE_SEMANTICS",
   "PROPOSITION_NOT_IDENTIFIABLE",
   "INTERPRETER_PROVENANCE_INCOMPLETE",
+  "UNSUPPORTED_SIGNAL_TYPE",
+  "SIGNAL_LINEAGE_UNAVAILABLE",
+  "AMBIGUOUS_SIGNAL_LINEAGE",
 ] as const;
 export type ClaimEvidenceRefusalReason = (typeof CLAIM_EVIDENCE_REFUSAL_REASON_VALUES)[number];
 export function isClaimEvidenceRefusalReason(v: unknown): v is ClaimEvidenceRefusalReason {
   return typeof v === "string" && (CLAIM_EVIDENCE_REFUSAL_REASON_VALUES as readonly string[]).includes(v);
+}
+
+/**
+ * What one interpretation run did with one Signal it CONSIDERED. GAP-5: 'three supporting Signals exist' and 'three of forty considered were supporting' are different facts, and an aggregator that cannot tell them apart reads a selection as a census.
+ * @see claim-interpretation-runtime-v1.md §4; Mission 1.13.1 §22
+ */
+export const CLAIM_INTERPRETATION_INPUT_ROLE_VALUES = [
+  "CITED",
+  "EXCLUDED",
+  "REFUSED",
+] as const;
+export type ClaimInterpretationInputRole = (typeof CLAIM_INTERPRETATION_INPUT_ROLE_VALUES)[number];
+export function isClaimInterpretationInputRole(v: unknown): v is ClaimInterpretationInputRole {
+  return typeof v === "string" && (CLAIM_INTERPRETATION_INPUT_ROLE_VALUES as readonly string[]).includes(v);
 }
 
 // --- Numeric bounds --------------------------------------------------------

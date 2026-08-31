@@ -362,6 +362,29 @@ shape, because this is the kind of finding that decays quietly.
 | **An absent factor stays absent** | `EvidenceDraft.to_json` omits it; out-of-range is rejected, never clamped | `0.5` and `0.0` are both measurements. `q_i = min(components)` makes the second catastrophic |
 | **H-29 / H-30 fail closed at the claim boundary** | `INCOMPATIBLE_TEMPORAL_SEMANTICS`, `INCOMPATIBLE_LANGUAGE_SEMANTICS` | Refusal reasons rather than prose warnings, so a future interpreter cannot proceed by not reading the document |
 
+### The first claim interpreter (Mission 1.13.1)
+
+| Gate | Mechanism | Guards |
+|------|-----------|--------|
+| **No interpreter constructs a non-OBSERVED claim** | `validate_claims.py`, AST over `ClaimType.X` attribute access in `sros_nlp/interpreters` | §5: structurally incapable, not defaulted. A docstring naming INFERRED must not fail it, and a rename must not slip past it. Probed against a deliberate violation |
+| **The layer reaches no model, network or embedder** | `validate_claims.py`, walking every import in the interpreters, the job, the repositories and `packages/claim-model` | §39. `MODEL_DERIVED` is unused and an LLM cannot enter the path by accident |
+| **`packages/claim-model` holds no template and no SQL** | `validate_claims.py` | The model checks and the interpreter computes. A template in the model would put the proposition where nothing validates it |
+| **No template reads a canonical language tag** | `validate_claims.py`, over CALL ARGUMENTS and SUBSCRIPTS | §26, H-30. `ENGLISH` from CLD2 is not BCP-47 `en`, and reading `canonical_tag` would assert a mapping nobody reviewed |
+| **No template converts a timezone or reads a clock** | `validate_claims.py`, `.astimezone`/`.now`/`tzinfo=` and four more | §25, H-29. The templates name unzoned bucket labels; one conversion would make one an instant, silently |
+| **A template accepts only bases it can phrase** | `_ACCEPTED_BASES`, `INCOMPATIBLE_TEMPORAL_SEMANTICS` | Failing closed. A basis this template does not know is refused rather than described with wording chosen for a different one |
+| **The interpretation layer writes no later-stage table** | `validate_claims.py`, over five table names | §41, §43. A Claim precedes an Opportunity; grouping them is a separate decision |
+| **Every supported signal type is registered by a migration** | `validate_claims.py` reads `SUPPORTED_SIGNAL_TYPES` from the AST | An interpreter naming a type nothing registered would emit claims about a vocabulary the registry does not hold |
+| **The validator itself was probed** | 11 deliberate violations applied to the real files, one per rule | Eleven `ok` lines is what a validator that checks nothing also prints (`testing-strategy.md` §31) |
+| **Quoted source data is exempt from the vocabulary guard** | `_QUOTED` stripped before tokenising; three tests use terms `demand`, `market`, `pain` | A GDELT term is arbitrary text. Refusing the most faithful restatement available is the failure the guard exists to prevent (`testing-strategy.md` §30) |
+| **Tokens, not substrings** | `_TOKEN` over unquoted prose | `supermarket` is not `market`. A guard with false positives gets loosened until it stops guarding |
+| **Claim, revision and evidence land together** | One transaction, plus migration 0016's deferred trigger firing at COMMIT | §20. Evidence in a second transaction is too late by construction, and the trigger says so rather than the reviewer |
+| **A key is stored with its preimage** | `claims_proposition_facts_paired_check`, `num_nonnulls(...) IN (0, 2)` | A hash nobody can verify is an identity nobody can dispute (ADR-025) |
+| **A considered Signal names its role and its reason** | `claim_interpretation_inputs_role_coherent_check`, every branch NULL-safe | GAP-5. A Signal passed over without a reason is the gap the table closes, reopened |
+| **Outcome counters are bounded individually, never summed** | `claim_interpretation_runs_outcome_bounds_check` | The tighter sum is a model of how the counters relate. Migration 0015 had to undo exactly that shape one layer down (`testing-strategy.md` §27) |
+| **Reliability is never invented** | Written `NULL`; every record is NON_SCORABLE with MISSING_RELIABILITY | §17, D-03. The seven real claims aggregate to no score, and that is the honest answer rather than a gap to fill |
+| **A second execution creates no duplicate** | Proposition-key lookup before every write; proven on the real seven | §28. Two run rows and zero new claims -- idempotent persistence without a claim of exactly-once delivery |
+| **A run in one workspace cannot name another's Signal** | Composite FKs plus RLS on both new tables | §35. The read returns nothing AND the run row is refused; both layers asserted |
+
 ---
 
 ## 2. Turborepo task graph

@@ -13,7 +13,14 @@ Checked:
      (`testing-strategy.md` §23).
   2. `packages/signal-model` contains no extractor. It says what a Signal IS;
      deriving one is a different package, and the dependency runs one way.
-  3. Neither package writes a table belonging to a LATER stage.
+  3. Every module under `sros_nlp` is classified as signal-layer or
+     claim-layer. The package held one layer when this file was written and
+     holds two since Mission 1.13.1, so the SUBJECT of check 3b had to be
+     named -- and an unclassified module would be scanned by neither
+     validator (`testing-strategy.md` §19).
+  3b. The SIGNAL layer writes no table belonging to a LATER stage. The claim
+     interpreter writes Claims and Evidence because that is what it is for,
+     and `validate_claims.py` holds it to its own boundary.
   4. No extractor names a conclusion. `trend`, `growth`, `momentum`, `demand`,
      `attention` and `sentiment` are readings of a number, not operations over
      it, and an extractor id carrying one would put the interpretation in the
@@ -77,6 +84,30 @@ ML_MODULES = {
 # Tables a signal extractor must never write. It derives a Signal and stops:
 # Evidence needs a Claim to bear on, an embedding needs D-12 answered, and a
 # score needs a CALIBRATED profile that does not exist.
+# `sros_nlp` held ONE layer when this file was written and holds TWO since
+# Mission 1.13.1. The later-stage-table rule below is about the SIGNAL layer:
+# an extractor must never write a Claim. The claim interpreter must, because
+# writing one is what it is for.
+#
+# So the layers are named rather than the rule relaxed -- and the naming is
+# EXHAUSTIVE. A new module under `sros_nlp` that belongs to neither list fails
+# check 3a, so it has to be classified rather than silently escape the scan.
+# An exclusion that grows by adding a file is not an exclusion.
+SIGNAL_MODULES = frozenset(
+    {
+        "__init__.py",
+        "observations.py",
+        "repositories.py",
+        "job.py",
+    }
+)
+CLAIM_MODULES = frozenset(
+    {
+        "claim_job.py",
+        "claim_repositories.py",
+    }
+)
+
 FORBIDDEN_TABLES = (
     "nlp.embedding_provenance",
     "research.claims",
@@ -134,6 +165,23 @@ def imported_roots(tree: ast.AST) -> set[str]:
     return roots
 
 
+def is_signal_layer(path: pathlib.Path) -> bool:
+    """Whether this module belongs to the SIGNAL layer of `sros_nlp`.
+
+    Everything under `extractors/` is, plus the four top-level modules named
+    above. `packages/signal-model` is too. The claim interpreter is not, and
+    `validate_claims.py` holds it to its own boundary.
+    """
+    if MODEL in path.parents or path.parent == MODEL:
+        return True
+    if EXTRACTORS in path.parents or path.parent == EXTRACTORS:
+        return True
+    if path.parent == NLP:
+        return path.name in SIGNAL_MODULES
+    # A subpackage of sros_nlp that is not `extractors` -- `interpreters` today.
+    return False
+
+
 def main() -> int:
     errors: list[str] = []
     checks = 0
@@ -185,9 +233,34 @@ def main() -> int:
         print("ok    packages/signal-model contains no extractor")
     checks += 1
 
-    # -- 3: no later-stage table is written --------------------------------
+    # -- 3: every module under sros_nlp is CLASSIFIED ----------------------
+    #
+    # Before check 3b narrows to the signal layer, this makes the narrowing
+    # honest: a module belonging to neither list is an unclassified module, and
+    # an unclassified module would be scanned by nothing.
+    unclassified = [
+        path.relative_to(ROOT).as_posix()
+        for path in trees
+        if path.parent == NLP and path.name not in SIGNAL_MODULES | CLAIM_MODULES
+    ]
+    if unclassified:
+        errors.append(
+            f"{unclassified} belongs to neither SIGNAL_MODULES nor CLAIM_MODULES. "
+            "`sros_nlp` holds two layers and each has its own boundary rules; a module "
+            "in neither list is checked by neither validator"
+        )
+    else:
+        print(
+            f"ok    every sros_nlp module is classified "
+            f"({len(SIGNAL_MODULES)} signal, {len(CLAIM_MODULES)} claim)"
+        )
+    checks += 1
+
+    # -- 3b: no later-stage table is written by the SIGNAL layer -----------
     leaked: list[str] = []
     for path in trees:
+        if not is_signal_layer(path):
+            continue
         text = path.read_text(encoding="utf-8")
         for table in FORBIDDEN_TABLES:
             if re.search(rf"\b{re.escape(table)}\b", text):
@@ -199,7 +272,7 @@ def main() -> int:
             "not have"
         )
     else:
-        print(f"ok    no later-stage table written ({len(FORBIDDEN_TABLES)} checked)")
+        print(f"ok    no later-stage table written by the signal layer ({len(FORBIDDEN_TABLES)})")
     checks += 1
 
     # -- 4: no extractor names a conclusion --------------------------------

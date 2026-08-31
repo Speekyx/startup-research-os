@@ -9,15 +9,24 @@ Companion documents:
 | `claim-evidence-interpretation-gap-analysis-v1.md` | What the schema could not represent, written before the migration |
 | `claim-epistemic-semantics-v1.md` | What each of the five claim types asserts, and how to tell them apart |
 | `signal-to-evidence-semantics-v1.md` | How one Signal becomes Evidence *for a particular Claim*, and what it may not become |
+| `deterministic-observed-claim-interpreter-v1.md` | The first interpreter to cross this boundary (Mission 1.13.1) |
+| `claim-interpretation-runtime-v1.md` | How it runs, persists and refuses |
 | `ADR-024-claim-precedes-opportunity.md` | Why a Claim no longer requires an Opportunity |
+| `ADR-025-claim-interpretation-run-and-considered-inputs.md` | Why what a run considered is part of the record |
 | `../domain/opportunity-ontology-v2.2.md` | The amended ontology sentence |
 
-**Status of the system when this was written:** RawRecords 12, NormalizedRecords
-12, Signals 7 (4 `numeric_period_change`, 2 `lexical_frequency_change`, 1
-`lexical_frequency_contrast`). Claims 0, Evidence 0, Opportunities 0. This
-mission created no production Claim and no production Evidence, and the contract
-was written without one to look at deliberately: a contract fitted to the first
-row it happens to see is a description, not a rule.
+**Status of the system when this was written (Mission 1.13):** RawRecords 12,
+NormalizedRecords 12, Signals 7 (4 `numeric_period_change`, 2
+`lexical_frequency_change`, 1 `lexical_frequency_contrast`). Claims 0, Evidence
+0, Opportunities 0. That mission created no production Claim and no production
+Evidence, and the contract was written without one to look at deliberately: a
+contract fitted to the first row it happens to see is a description, not a rule.
+
+**Since Mission 1.13.1** there are 7 OBSERVED Claims, 7 revisions and 7 Evidence
+rows, produced by `observed-signal-restatement@1.0.0` from those same seven
+Signals. Nothing in this contract was weakened to let them exist; the two
+changes the implementation forced were both additions (migration 0018) and both
+are recorded in ADR-025.
 
 ---
 
@@ -97,9 +106,11 @@ or it is not written at all. A refusal produces a `ClaimRefusal` carrying a
 log alongside the refused Signal derivations — the same place, for the same
 reason (`signal-derivation-runtime-v1.md`, ADR-021).
 
-The run-log side of this is deliberately **not implemented in this mission**: no
-interpreter runs yet, so a run log for it would be a table with no writer. It is
-named here so the next mission does not invent a candidate table by accident.
+The run-log side of this was deliberately **not implemented in Mission 1.13**:
+no interpreter ran yet, so a run log for it would have been a table with no
+writer. **Mission 1.13.1 built it** —
+`research.claim_interpretation_runs`, migration 0018, ADR-025 — because an
+interpreter now writes one. No candidate table was invented.
 
 ## 5. Claim
 
@@ -357,9 +368,11 @@ outcome, not an exception message.
 
 ## 15. What this contract does not decide
 
-- **Which Signals were considered and rejected** (GAP-5). Recording the
-  considered-but-excluded set needs a writer, and there is no interpreter yet.
-  Deferred, named, not designed around.
+- ~~**Which Signals were considered and rejected** (GAP-5).~~ **Resolved in
+  Mission 1.13.1** by `research.claim_interpretation_inputs` (migration 0018,
+  ADR-025): one row per considered Signal, with its role — `CITED`, `EXCLUDED`
+  or `REFUSED` — and why. It hangs off the RUN rather than the Claim, because a
+  Signal considered and not cited has no Claim to hang off.
 - **Claim similarity and merging.** D-12 is open and stays open; nothing here
   depends on it.
 - **Aggregation.** The Evidence factors are written; how they combine is
@@ -371,6 +384,12 @@ outcome, not an exception message.
 | Rule | Enforced in |
 |------|-------------|
 | Claim may exist without an Opportunity | migration 0016 |
+| A proposition key is stored with its preimage | migration 0018, ADR-025 |
+| A refused interpretation gets a run record, never a Claim | migration 0018, `claim_job.py` |
+| What a run considered and did not cite is recorded | migration 0018 |
+| No interpreter constructs a non-OBSERVED claim type | `validate_claims.py`, over the AST |
+| No template reads a canonical language tag or converts a timezone | `validate_claims.py` |
+| The interpretation layer reaches no model, network or embedder | `validate_claims.py` |
 | All-or-nothing interpreter identity | migration 0017 |
 | Deterministic implies no model | migration 0016, `ClaimInterpretation.__post_init__` |
 | Generated claim needs evidence | migration 0016 trigger, `build_claim` |

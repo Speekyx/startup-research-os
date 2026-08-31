@@ -44,6 +44,8 @@ from sros_contracts import (
 
 __all__ = [
     "AUTOMATED_ORIGINS",
+    "INTERPRETIVE_PHRASES",
+    "INTERPRETIVE_TOKENS",
     "INTERPRETIVE_VOCABULARY",
     "ClaimDraft",
     "ClaimInterpretation",
@@ -69,41 +71,81 @@ AUTOMATED_ORIGINS: frozenset[ClaimOrigin] = frozenset(
     }
 )
 
-# Words that assert a MARKET or USER reading of a measurement. An OBSERVED claim
-# restates what a source reported; the moment it says one of these it has
+# Vocabulary that asserts a MARKET or USER reading of a measurement. An OBSERVED
+# claim restates what a source reported; the moment it says one of these it has
 # asserted something the source did not, and it is INFERRED at best.
+#
+# **Matched as TOKENS, not substrings** (Mission 1.13.1 §10). Mission 1.13 used
+# `term in statement.lower()`, which refuses `supermarket` and `marketing` for
+# containing `market`, and refuses the metric id `CM.MKT.LCAP.CD` for nothing at
+# all. A guard with false positives gets loosened until it stops guarding.
 #
 # `growth` is deliberately ABSENT. "population growth" is the name of a
 # demographic quantity a source publishes, and banning it would refuse a
 # faithful restatement -- the guard has to catch interpretation, not vocabulary
-# that happens to sound commercial.
-INTERPRETIVE_VOCABULARY: tuple[str, ...] = (
-    "demand",
-    "interest in",
-    "popularity",
-    "attention",
-    "momentum",
-    "opportunity",
-    "willingness to pay",
-    # The bare word, not `market for`. Mission 1.13 §3's own example is "the
-    # German SaaS market is growing", which `market for` does not match -- a
-    # guard that misses the sentence defining the boundary is worse than no
-    # guard, because it advertises a protection it does not give.
-    #
-    # The cost is stated rather than avoided: a source metric whose PUBLISHED
-    # NAME contains the word (World Bank's `CM.MKT.LCAP.CD`, "market
-    # capitalization of listed companies") cannot be restated by title in an
-    # OBSERVED claim. It must be restated by metric id -- which is the more
-    # faithful wording anyway, since the id is what the fact set carries.
-    "market",
-    "customers want",
-    "users want",
-    "trending",
-    "product-market fit",
-    "revenue potential",
+# that happens to sound commercial. `growth opportunity` is a phrase below.
+INTERPRETIVE_TOKENS: frozenset[str] = frozenset(
+    {
+        "attention",
+        "demand",
+        "demands",
+        "desire",
+        "desires",
+        # A source metric whose published NAME contains one of these (World
+        # Bank's `FR.INR.RINR`, "Real interest rate") is restated by metric id,
+        # which is the more faithful wording anyway -- the id is what the
+        # proposition's fact set carries. The cost is stated, not avoided.
+        "interest",
+        "interests",
+        "market",
+        "markets",
+        "momentum",
+        "monetisation",
+        "monetization",
+        "mrr",
+        "arr",
+        "opportunity",
+        "opportunities",
+        "pain",
+        "pains",
+        "popular",
+        "popularity",
+        "revenue",
+        "revenues",
+        "traction",
+        "trending",
+    }
 )
 
-_WORD = re.compile(r"[a-z][a-z'-]*")
+# Multi-word vocabulary, matched over the token sequence so spacing and
+# punctuation between the words do not decide the outcome.
+INTERPRETIVE_PHRASES: tuple[tuple[str, ...], ...] = (
+    ("willingness", "to", "pay"),
+    ("customers", "want"),
+    ("users", "want"),
+    ("product", "market", "fit"),
+    ("growth", "opportunity"),
+)
+
+# Retained as the union, for callers and documents that name one list.
+INTERPRETIVE_VOCABULARY: tuple[str, ...] = tuple(
+    sorted(INTERPRETIVE_TOKENS | {" ".join(p) for p in INTERPRETIVE_PHRASES})
+)
+
+# Tokens are maximal runs of letters and digits. Everything else -- spaces,
+# hyphens, full stops inside a metric id, punctuation -- separates. So
+# `SP.POP.TOTL` is three tokens none of which is vocabulary, and `supermarket`
+# is one token that is not `market`.
+_TOKEN = re.compile(r"[a-z0-9]+")
+
+# Text inside double quotes is SOURCE DATA being reported, not a claim being
+# made. A GDELT term is literally arbitrary text: `market`, `demand` and `pain`
+# are all real English words a news corpus contains, and a guard that refused
+# `GDELT reported that the term "demand" appeared 12 more times` would refuse
+# the most faithful restatement available -- the exact thing it exists to
+# protect. Every template puts source-supplied values in double quotes and its
+# own prose outside them.
+_QUOTED = re.compile(r'"[^"]*"')
 
 
 def canonical_json(payload: object) -> str:
@@ -466,11 +508,24 @@ def build_claim(
 def _interpretive_terms(statement: str) -> set[str]:
     """Market or user vocabulary an OBSERVED claim may not use.
 
-    A blunt instrument, and deliberately so. It cannot tell a faithful
-    restatement from a subtle over-reach, and it does not try: it catches the
-    obvious failure -- an arithmetic relation rewritten as a market fact -- which
-    is the one that would otherwise ship. The subtle cases are what review is
-    for, and what `INFERRED` exists for.
+    Blunt, and deliberately so. It cannot tell a faithful restatement from a
+    subtle over-reach, and it does not try: it catches the obvious failure -- an
+    arithmetic relation rewritten as a market fact -- which is the one that would
+    otherwise ship. The subtle cases are what review is for, and what `INFERRED`
+    exists for.
+
+    Two things make it blunt rather than wrong (Mission 1.13.1 §10):
+
+    **Tokens, not substrings.** `supermarket` and `marketing` are not `market`.
+
+    **Quoted spans are data.** What a source published is quoted and exempt;
+    what the interpreter wrote about it is not.
     """
-    lowered = statement.lower()
-    return {term for term in INTERPRETIVE_VOCABULARY if term in lowered}
+    prose = _QUOTED.sub(" ", statement.lower())
+    tokens = _TOKEN.findall(prose)
+    found = {token for token in tokens if token in INTERPRETIVE_TOKENS}
+    for phrase in INTERPRETIVE_PHRASES:
+        width = len(phrase)
+        if any(tuple(tokens[i : i + width]) == phrase for i in range(len(tokens) - width + 1)):
+            found.add(" ".join(phrase))
+    return found

@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.21
-Last amended: 2026-08-31 (Sprint 1 / Mission 1.13)
+Version: 1.22
+Last amended: 2026-08-31 (Sprint 1 / Mission 1.13.1)
 
 ## Boot Sequence
 
@@ -26,8 +26,9 @@ Before performing any task, execute this reading order.
 17. docs/data/signal-contract-v1.md
 18. docs/data/signal-derivation-runtime-v1.md
 19. docs/data/claim-evidence-interpretation-contract-v1.md
-20. Relevant ADRs
-21. Task-specific specifications
+20. docs/data/claim-interpretation-runtime-v1.md
+21. Relevant ADRs
+22. Task-specific specifications
 
 These documents are the authoritative source of truth.
 
@@ -47,6 +48,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.22 | 2026-08-31 | The **first complete Signal -> Claim -> Evidence pipeline**: `observed-signal-restatement@1.0.0` produced **7 real OBSERVED Claims, 7 revisions and 7 Evidence rows** from the seven real Signals. Deterministic, source-attributed, no LLM. GAP-5 resolved; a refused interpretation gets a run record, never a Claim (ADR-025). Reliability stays NULL and every record is NON_SCORABLE, honestly |
 | 1.21 | 2026-08-31 | The **interpretation boundary** defined before anything crosses it: a Claim may precede its Opportunity, and a machine may not store an assertion nothing supports (ADR-024, Ontology V2.2). Contract and model only -- **0 Claims, 0 Evidence** |
 | 1.20 | 2026-08-30 | First **source-relative temporal** extractor: `lexical-frequency-change@1.0.0`, two real signals and two real gap refusals. A gap is never bridged and an absent term is not a zero (ADR-023). H-29 untouched: `ORDERED_PERIODS`, no bounds, no `observed_at` |
 | 1.19 | 2026-08-30 | **H-32 closed** on first-party GDELT evidence: the WEB-NGRAM stream is ordered. **H-29 stays open** — GDELT documents UTC for a *different* dataset whose date means something else. H-31 answered and refined. No extractor, no new signal (ADR-022) |
@@ -585,8 +587,11 @@ across many of them.
 
 Since Mission 1.13 the interpretation boundary is defined
 (`claim-evidence-interpretation-contract-v1.md`, `claim-epistemic-semantics-v1.md`,
-`signal-to-evidence-semantics-v1.md`, ADR-024). **The contract exists and no
-interpreter does**: Claims 0, Evidence 0, and no production row was created.
+`signal-to-evidence-semantics-v1.md`, ADR-024). Since Mission 1.13.1 **one
+interpreter crosses it**: `observed-signal-restatement@1.0.0`
+(`deterministic-observed-claim-interpreter-v1.md`,
+`claim-interpretation-runtime-v1.md`, ADR-025), which produced **7 real OBSERVED
+Claims, 7 revisions and 7 Evidence rows** from the seven real Signals.
 
 Each layer is defined by the one verb it may perform: a RawRecord **preserves**, a
 NormalizedRecord **reshapes**, a Signal **relates**, a Claim **asserts**, Evidence
@@ -652,9 +657,74 @@ prevents.
   and cannot become a named language (`INCOMPATIBLE_LANGUAGE_SEMANTICS`). A
   `HYPOTHESIS` is exempt from the evidence requirement, never from these.
 
-**Which Signals were considered and rejected is not recorded** (GAP-5). It is
-information an aggregator needs — three of forty supporting is not three
-supporting — and it has no writer yet. Named so the next mission designs it.
+### Claim interpretation — one interpreter, and what bounds it
+
+Since Mission 1.13.1 `observed-signal-restatement@1.0.0` exists and is the only
+thing that crosses the interpretation boundary. Three templates, one per
+implemented Signal type, and **no fallback**.
+
+- **Structurally OBSERVED, not defaulted.** `_CLAIM_TYPE` is a module constant,
+  `interpret()` takes no claim-type parameter, and `validate_claims.py` fails the
+  build on any `ClaimType.X` attribute access in the package where X is not
+  `OBSERVED` — over the AST. There is no low-confidence-inferred escape hatch.
+- **A Signal type with no template is `UNSUPPORTED_SIGNAL_TYPE`.** Generic prose
+  over an unknown Signal would be a proposition nobody specified and nobody
+  reviewed.
+- **Attribution is the claim.** Every statement names the source and says
+  "reported that". `Germany's population increased` is not OBSERVED from a World
+  Bank record; `World Bank Open Data reported that "SP.POP.TOTL" for "Germany"
+  increased…` is. The geography is the SOURCE's own name, never our canonical
+  code — the code is what a reviewed mapping decided.
+- **Three attribution facts come from the contributing normalized records** —
+  resource, geography name, term and language schemes — because the Signal's
+  scope does not carry them. Disagreement is `AMBIGUOUS_SIGNAL_LINEAGE` and
+  absence is `SIGNAL_LINEAGE_UNAVAILABLE`; the interpreter refuses rather than
+  picks. It never reads a RawRecord.
+- **H-29 in the wording.** "source bucket" and "the preceding source bucket",
+  never a clock, a date or an alignment. `observed_at` is written NULL. Each
+  template accepts only the temporal bases it can phrase and refuses the rest.
+- **H-30 in the wording.** "under source language label ENGLISH", never "in
+  English". `canonical_tag` is never read, asserted over call arguments and
+  subscripts.
+- **The vocabulary guard exempts QUOTED source data** (Mission 1.13.1 §10). A
+  GDELT term is arbitrary text: `market`, `demand` and `pain` are ordinary
+  English words a news corpus contains, and refusing them would refuse the most
+  faithful restatement available. Matching is over TOKENS of the interpreter's
+  own prose — `supermarket` is not `market`. **The template is the primary
+  protection**; no template contains the word `demand`.
+- **Identity is the proposition and excludes the magnitude.** A source revising
+  187,180 to 187,200 restated the SAME proposition, so a re-interpretation
+  appends revision 2 rather than creating a second claim. Revision 1 is never
+  modified. For a contrast, where `direction` is NOT_APPLICABLE, the relation
+  comes from the SIGN of the magnitude and is part of identity while the value
+  is not. `proposition_facts` stores the preimage, so the key can be verified
+  rather than trusted (ADR-025).
+- **Every evidence factor is a decision with a reason, and the absent one is the
+  important one.** `SUPPORTS`; relevance and directness 1.0 because the claim
+  restates that Signal and nothing else; extraction confidence 1.0 because a
+  format string either read the facts or raised; `UNCATEGORISED` for both sources
+  because a population count is not market activity and a news frequency is
+  nobody's behaviour; independence `UNKNOWN`; evidence level 1. **Reliability is
+  NULL** — purpose-relative, D-03 blocked — so every record is `NON_SCORABLE`
+  with `MISSING_RELIABILITY` and the seven real claims aggregate to no score.
+  That is the honest answer, not a gap to fill.
+- **Claim, revision and evidence are written in ONE transaction.** The evidence
+  requirement is a deferred trigger firing at COMMIT; evidence in a second
+  transaction is too late by construction.
+- **A refused interpretation gets a run record, never a Claim** (ADR-025).
+  `research.claim_interpretation_runs` holds one row per EXECUTION. A redelivery
+  writes a second run row and zero new claims, which is the honest record — the
+  CLAIMS are what is idempotent, and this is not exactly-once.
+- **GAP-5 is resolved.** `research.claim_interpretation_inputs` records every
+  Signal a run CONSIDERED with its role — `CITED`, `EXCLUDED`, `REFUSED` — and
+  why. `EXCLUDED` was never attempted; `REFUSED` was attempted and rejected, and
+  collapsing them loses which happened. It hangs off the RUN, because a Signal
+  considered and not cited has no Claim to hang off.
+- **`claim.interpret` routes to the acquisition queue**, like `signal.` and
+  `normalize.`. No parallel AI worker subsystem was created.
+- **`CLAIM_INTERPRETATION` is its own capability**, after `SIGNAL_DERIVATION`,
+  with a derived block. `PLANNER_VERSION` is `1.4.0`.
+
 
 ### Evidence aggregation — defined, and not calibrated
 
@@ -721,17 +791,28 @@ GDELT documents UTC for **Web News NGrams 3.0**, a different dataset whose `date
 is when an article was seen rather than a 15-minute aggregation bucket; that
 sentence establishes nothing about ours.
 
-**No production Claim and no production Evidence may be generated yet.** Mission
-1.13 defined the boundary and built no interpreter: `research.claims`,
-`research.claim_revisions` and `scoring.evidence` all hold 0 rows, and
-`packages/claim-model` reaches no network, no model, no embedder and no database.
-The next mission implements an interpreter against this contract — it does not
-revisit the contract to make an interpreter easier.
+**Only DETERMINISTIC OBSERVED interpretation is implemented**, by
+`observed-signal-restatement@1.0.0` and by nothing else. **`INFERRED`,
+`PREDICTED` and `RECOMMENDED` generation is not written and is not partially
+written**: there is no module for it, no branch to reach and no parameter that
+would select one. An inference needs a stated reasoning step, and adding one is
+a version bump with a document behind it — not a flag.
 
-**Opportunities and scoring stay blocked.** A Claim may now exist without an
-Opportunity, which is what makes Opportunity formation a separate decision rather
-than a precondition. Nothing in Mission 1.13 unblocks `services/scoring`: D-03 is
-resolved at the framework level only and no `CALIBRATED` profile exists.
+`MODEL_DERIVED` remains unused. `validate_claims.py` fails the build on a model,
+network or embedder import anywhere in the interpretation layer, and on a write
+to any later-stage table.
+
+**Opportunities and scoring stay blocked.** A Claim may exist without an
+Opportunity, which is what makes Opportunity formation a separate decision
+rather than a precondition — and Mission 1.13.1 created none. Nothing unblocks
+`services/scoring`: D-03 is resolved at the framework level only, no
+`CALIBRATED` profile exists, and every one of the seven real Evidence rows is
+`NON_SCORABLE` for want of a reviewed reliability.
+
+**The seven Claims establish no pain, desire, willingness to pay, pricing power,
+competition gap, distribution feasibility, retention or revenue potential.** They
+are factual, source-level claims about two publications. The first Claims
+existing does not make Opportunity discovery ready.
 
 **No collector may be implemented for a source that is not collector-eligible.**
 D-07 is resolved and the registry exists. Two sources pass the gate; one has a

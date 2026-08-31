@@ -552,9 +552,62 @@ class TestPlanning(unittest.TestCase):
         # derivation: an extractor is separate work, and this planner has none
         # wired.
         assert Capability.SIGNAL_DERIVATION.value in blocked
+        assert Capability.CLAIM_INTERPRETATION.value in blocked
         assert Capability.NLP_EXTRACTION.value in blocked
         assert Capability.OPPORTUNITY_DISCOVERY.value in blocked
         assert Capability.SCORING.value in blocked
+
+    def test_signal_derivation_opening_does_not_open_claim_interpretation(self) -> None:
+        """Mission 1.13.1 §44. An extractor states a relation between two
+        observations; an interpreter asserts a proposition about the world.
+        Wiring the first does not imply the second."""
+        wired = ResearchPlanner(
+            sources=StaticSourceAvailability(
+                (SourceAvailability("world-bank", "APPROVED_WITH_CONDITIONS", True),)
+            ),
+            implemented_collectors=frozenset({"world-bank"}),
+            implemented_normalizers=frozenset({"world-bank"}),
+            implemented_extractors=frozenset({"numeric-period-change"}),
+        ).plan(WORKSPACE, SESSION, CORRELATION, _context())
+        blocked = {b.capability.value: b for b in wired.blocked}
+        assert Capability.SIGNAL_DERIVATION.value not in blocked
+        assert blocked[Capability.CLAIM_INTERPRETATION.value].decision_id == (
+            "NO-INTERPRETER-IMPLEMENTED"
+        )
+
+    def test_claim_interpretation_opens_when_an_interpreter_is_wired(self) -> None:
+        wired = ResearchPlanner(
+            sources=StaticSourceAvailability(
+                (SourceAvailability("world-bank", "APPROVED_WITH_CONDITIONS", True),)
+            ),
+            implemented_collectors=frozenset({"world-bank"}),
+            implemented_normalizers=frozenset({"world-bank"}),
+            implemented_extractors=frozenset({"numeric-period-change"}),
+            implemented_interpreters=frozenset({"observed-signal-restatement"}),
+        ).plan(WORKSPACE, SESSION, CORRELATION, _context())
+        blocked = set(wired.blocked_capability_names)
+        assert Capability.CLAIM_INTERPRETATION.value not in blocked
+        # And nothing downstream moves. A Claim precedes an Opportunity
+        # (ADR-024); grouping claims into one is a later decision.
+        assert Capability.OPPORTUNITY_DISCOVERY.value in blocked
+        assert Capability.SCORING.value in blocked
+
+    def test_a_missing_interpreter_wire_reads_as_a_refusal(self) -> None:
+        """Defaults to empty, so a composition root that forgets the wire gets
+        a blocked stage rather than a permission."""
+        from sros_orchestrator.plan import claim_interpretation_block
+
+        report = StaticSourceAvailability(
+            (SourceAvailability("world-bank", "APPROVED_WITH_CONDITIONS", True),)
+        ).source_availability()
+        block = claim_interpretation_block(
+            report,
+            frozenset({"world-bank"}),
+            frozenset({"world-bank"}),
+            frozenset({"numeric-period-change"}),
+        )
+        assert block is not None
+        assert block.decision_id == "NO-INTERPRETER-IMPLEMENTED"
 
     def test_the_planner_version_records_that_the_graph_changed(self) -> None:
         """A plan read back years later must be interpretable against the
@@ -563,10 +616,12 @@ class TestPlanning(unittest.TestCase):
         1.2.0 tracked a change to the blocking SET with the graph unchanged.
         1.3.0 is the first time the GRAPH changed: Mission 1.11.1 inserted
         SIGNAL_DERIVATION between normalization and NLP extraction, so a plan
-        produced before it has one fewer job and a different dependency edge."""
+        produced before it has one fewer job and a different dependency edge.
+        1.4.0 is the second: Mission 1.13.1 inserted CLAIM_INTERPRETATION after
+        SIGNAL_DERIVATION."""
         from sros_orchestrator.plan import PLANNER_VERSION
 
-        assert PLANNER_VERSION == "1.3.0"
+        assert PLANNER_VERSION == "1.4.0"
 
     def test_scoring_is_blocked_on_calibration_not_on_the_formula(self) -> None:
         """Mission 1.2. The formula exists since Mission 1.1, so the old reason
@@ -607,6 +662,10 @@ class TestPlanning(unittest.TestCase):
                 Capability.ACQUISITION.value,
                 Capability.NORMALIZATION.value,
                 Capability.SIGNAL_DERIVATION.value,
+                # Added in Mission 1.13.1: acquisition -> normalization ->
+                # signals -> claims. It sits before NLP_EXTRACTION because both
+                # depend on SIGNAL_DERIVATION and the stage order is declared.
+                Capability.CLAIM_INTERPRETATION.value,
                 Capability.NLP_EXTRACTION.value,
                 Capability.OPPORTUNITY_DISCOVERY.value,
                 Capability.SCORING.value,
