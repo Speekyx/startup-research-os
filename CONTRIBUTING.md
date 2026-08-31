@@ -55,12 +55,30 @@ is rejected regardless of how good the code is.
 | Node.js | 20.11.0 (see `.nvmrc`) | `package.json#engines`, `engine-strict` |
 | pnpm | >= 9 | `package.json#packageManager` (Corepack) |
 | Python | 3.12+ | per-service packaging |
+| uv | >= 0.12 | `uv.lock`, the workspace layout (ADR-010) |
 | Docker | recent | `infrastructure/docker` |
 
 ```bash
 corepack enable && corepack prepare pnpm@9.12.3 --activate
 pnpm install --frozen-lockfile
 ```
+
+**uv is not optional and nothing in the repository installs it.** Every command
+that touches the database or runs a pytest suite goes through `uv run`, so a
+machine without it cannot run the Python side at all. Install it once per
+machine:
+
+```bash
+winget install --id astral-sh.uv
+```
+
+On Windows, winget puts uv on the user PATH but shells opened before the install
+keep their old copy of it. Open a new terminal rather than debugging why `uv` is
+still not found.
+
+Then, on a machine that already has a clone, follow README §After every pull
+before assuming anything is broken: dependencies, migrations, the `registry.*`
+tables and `.env` all need a step of their own.
 
 ---
 
