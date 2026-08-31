@@ -257,6 +257,14 @@ database refuses the `UPDATE`. A condition is cleared by a verifier that records
 what it checked; if you believe a condition holds and no verifier says so, the
 gap is a missing capability, not a missing permission.
 
+**A `HUMAN_CONFIRMATION` is the exception, and it is cleared by a person rather
+than by a verifier** — someone writing a row under their own identifier in
+`registry.source_condition_verifications`. Since Mission 1.15.6.2,
+`verify --apply` leaves those conditions untouched and says so: a machine pass
+does not answer them and no longer revokes them either. **A recorded decision is
+changed by another explicit decision, never by re-running the verifiers.** See
+[`effective-condition-verification-v1.md`](effective-condition-verification-v1.md).
+
 **Write a mechanical condition or write `HUMAN_CONFIRMATION`.** If what must be
 true is *"a lawyer confirmed X"* or *"the owner granted permission"*, say
 `HUMAN_CONFIRMATION` and name the decision that has to be recorded. Do not

@@ -28,7 +28,7 @@ exists is that the boolean could not carry any of it.
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from datetime import UTC, datetime
 
@@ -40,14 +40,24 @@ from .config import ComplianceConfig, SourceCompliance
 from .credentials import credential_status
 
 __all__ = [
+    "AWAITING_HUMAN_VERIFIER",
     "RUNTIME_VERIFICATIONS",
     "VERIFIER_VERSION",
     "ConditionVerificationRecord",
     "design_eligible",
+    "resolve_effective_verifications",
     "satisfied_condition_keys",
     "verify_condition",
     "verify_source",
 ]
+
+# The verifier name the dispatcher writes for a HUMAN_CONFIRMATION condition it
+# cannot decide. It is a PLACEHOLDER, not an actor: a real human decision is
+# recorded by a person writing a row with their OWN identifier here (migration
+# 0007). Telling the two apart is what Mission 1.15.6.2 needed and did not have
+# -- "a machine pass could not decide" and "a person decided no" had the same
+# shape, so re-verification silently revoked decisions nobody withdrew.
+AWAITING_HUMAN_VERIFIER = "human-confirmation"
 
 # Bumped when a verifier's meaning changes, not when a message is reworded. A
 # satisfaction recorded by an older version stays readable as a fact about that
@@ -82,6 +92,39 @@ class ConditionVerificationRecord:
     @property
     def runtime_dependent(self) -> bool:
         return self.verification in RUNTIME_VERIFICATIONS
+
+    @property
+    def is_human_decision(self) -> bool:
+        """A `HUMAN_CONFIRMATION` record a PERSON actually authored.
+
+        Mission 1.15.6.2. The distinction the whole mission rests on: a human
+        condition produces two very different records that were previously
+        indistinguishable to everything downstream.
+
+        * a person recording a decision, under their own identifier;
+        * the dispatcher reporting that no verifier can decide.
+
+        Only the first is a decision. Only the first may satisfy a condition,
+        and only the first may revoke one.
+        """
+        return (
+            self.verification is ConditionVerification.HUMAN_CONFIRMATION
+            and self.verifier != AWAITING_HUMAN_VERIFIER
+        )
+
+    @property
+    def awaits_human_decision(self) -> bool:
+        """The placeholder: a machine pass saying it cannot decide this.
+
+        **Not an answer, and in particular not a negative one.** Persisting it
+        as a negative is exactly the defect Mission 1.15.6.1 found: running the
+        verifiers turned a recorded acceptance into `satisfied = FALSE` while
+        the operator had withdrawn nothing.
+        """
+        return (
+            self.verification is ConditionVerification.HUMAN_CONFIRMATION
+            and self.verifier == AWAITING_HUMAN_VERIFIER
+        )
 
     def to_json(self) -> dict[str, object]:
         return {
@@ -183,7 +226,7 @@ def _find(
         # any argument: a program that could decide this would be the system
         # granting itself permission.
         return _Finding(
-            "human-confirmation",
+            AWAITING_HUMAN_VERIFIER,
             ConditionVerificationResult.UNKNOWN,
             "this condition requires a person to record a decision and a reference to it. "
             "No verifier can establish it, and none in this repository writes one",
@@ -349,6 +392,107 @@ def _verify_access_method(
         "including resources whose family is unrecorded",
         name,
     )
+
+
+def resolve_effective_verifications(
+    source: SourceRecord,
+    use_profile_id: str,
+    config: ComplianceConfig,
+    decisions: Sequence[ConditionVerificationRecord] = (),
+    environ: Mapping[str, str] | None = None,
+    now: datetime | None = None,
+) -> tuple[ConditionVerificationRecord, ...]:
+    """The EFFECTIVE verification state: live where live is meaningful, persisted
+    where only a person can answer.
+
+    Mission 1.15.6.2. `verify_source` answers every condition the same way --
+    by running a verifier now -- and that is right for a capability and wrong
+    for a judgement. A capability either holds at this moment or it does not; an
+    operator's acceptance of a legal risk is not observable at any moment, so
+    asking a verifier produces `UNKNOWN` forever.
+
+    So each condition is resolved from the source that can actually answer it:
+
+    ============================  =========================================
+    `HUMAN_CONFIRMATION`          a persisted decision, or `UNKNOWN`
+    everything else               evaluated LIVE, every time
+    ============================  =========================================
+
+    **Machine conditions are never read from persistence.** A capability
+    recorded as satisfied months ago says what was true then. Re-running it is
+    cheap, it is the whole point of a mechanical check, and a stale copy that
+    authorised acquisition would be the persisted-everything failure this
+    separation exists to avoid.
+
+    **`decisions` can only ever SATISFY a human condition.** Every supplied
+    record is filtered: it must be `HUMAN_CONFIRMATION`, must be human-authored
+    rather than the placeholder, must name this source, this review version and
+    a condition this review requires. Anything else is ignored rather than
+    trusted -- so a caller handing in a forged `CAPABILITY` result changes
+    nothing, and the parameter cannot become a way past the gate.
+
+    **Nothing here is TED-specific.** A source with no human condition resolves
+    exactly as it did before this mission, decisions supplied or not.
+    """
+    review = source.review_for(use_profile_id)
+    if review is None:
+        return ()
+    moment = now or datetime.now(UTC)
+    compliance = config.get(source.source_id, use_profile_id)
+
+    recorded = _human_decisions_by_key(source, review.review_version, decisions)
+
+    resolved: list[ConditionVerificationRecord] = []
+    for condition in review.required_conditions:
+        decision = recorded.get(condition.key)
+        if decision is not None:
+            resolved.append(decision)
+            continue
+        resolved.append(
+            verify_condition(source, use_profile_id, condition, compliance, environ, moment)
+        )
+    return tuple(resolved)
+
+
+def _human_decisions_by_key(
+    source: SourceRecord,
+    review_version: int,
+    decisions: Sequence[ConditionVerificationRecord],
+) -> dict[str, ConditionVerificationRecord]:
+    """The persisted decisions that may be used, keyed by condition.
+
+    Every rejection below is a fail-closed one, and each answers a different
+    way the wrong record could arrive:
+
+    * not a human decision -- the placeholder, or a machine record dressed as
+      one. A caller must not be able to satisfy anything by supplying it;
+    * a different source -- a decision about one source can never speak for
+      another;
+    * a different review version -- Mission 1.15.6.1 established that each
+      review version owns its own condition rows, and that a materially changed
+      review needs a new decision. This is that rule, upstream of the database;
+    * not `SATISFIED` -- a recorded WITHDRAWAL is a decision too, and it must
+      leave the condition unsatisfied rather than satisfied. Dropping it here
+      sends the condition to the live verifier, which answers `UNKNOWN`, which
+      blocks.
+
+    Where a person recorded the same decision twice, the most recent wins:
+    history is append-only, and the current answer is the latest one.
+    """
+    usable: dict[str, ConditionVerificationRecord] = {}
+    for record in decisions:
+        if not record.is_human_decision:
+            continue
+        if record.source_id != source.source_id:
+            continue
+        if record.review_version != review_version:
+            continue
+        if not record.satisfied:
+            continue
+        current = usable.get(record.condition_key)
+        if current is None or record.verified_at > current.verified_at:
+            usable[record.condition_key] = record
+    return usable
 
 
 def satisfied_condition_keys(

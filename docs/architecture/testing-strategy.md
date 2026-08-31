@@ -2128,3 +2128,73 @@ to ask visible instead of silently negative.
 `UNKNOWN` being promoted to `UNSATISFIED`** — the distinction this repository
 enforces everywhere else, arriving through the test harness.
 
+
+---
+
+## 50. Assert both directions of a rule that trades one risk for another (Mission 1.15.6.2)
+
+The effective-verification rule has two halves, and each exists to stop the
+other from going too far:
+
+- a machine verifier must **never revoke** a human decision;
+- a human decision must **never make a machine condition sticky**.
+
+A suite that tested only the first would pass against an implementation that
+persisted everything and stopped checking — which is the failure the separation
+exists to prevent, reached by satisfying its headline requirement.
+
+So each capability is broken in turn, with the operator's acceptance supplied
+intact, and the authorization must still refuse **naming the capability**:
+
+```python
+@pytest.mark.parametrize(("field", "condition"), [...])
+def test_a_broken_capability_blocks_even_with_the_acceptance_recorded(...):
+    assert resolved[RESIDUAL].result is SATISFIED          # the human half held
+    assert resolved[condition].result is not SATISFIED     # the machine half did too
+```
+
+**A rule stated as a trade-off needs a test per side.** The one you remember to
+write is the side that motivated the change.
+
+### The probe that proves a filter is a filter
+
+`decisions` is an argument a caller supplies, so the assertion that matters is
+not that a legitimate decision works — it is that an illegitimate one does
+nothing. A forged `CAPABILITY` record supplied alongside a passing capability
+proves nothing, because the capability passes anyway. It is proved against a
+configuration where the capability **fails**: if supplied records could satisfy
+machine conditions, that test would go green.
+
+**Test an allowlist against the case it must refuse, in a world where refusing
+is the only thing that could produce the answer.**
+
+---
+
+## 51. `except Exception` does not catch `SystemExit` (Mission 1.15.6.2)
+
+A CLI helper read operator decisions from the database and degraded to "none"
+when it could not, so the commands documented to run without a database would
+keep working. The guard was `except Exception`.
+
+`_connect()` raises **`SystemExit`** for an unset `DATABASE_URL` or a missing
+driver, and `SystemExit` inherits from `BaseException`, not `Exception`. The
+guard did not catch the case it was written for.
+
+The second half was subtler: `psycopg.connect` raises for an unreachable host
+**inside `_connect()`**, before the `with` body the `try` was wrapped around. Two
+different failures, both landing outside the handler, and both discovered only
+by pointing `DATABASE_URL` at a closed port and at nothing.
+
+```python
+try:
+    with _connect() as conn:
+        return read_human_decisions(...)
+except SystemExit as exc:  # unset URL, missing driver
+    ...
+except Exception as exc:  # unreachable host, driver error
+    ...
+```
+
+**And it says which happened.** Returning "no decisions" silently would be
+§49's defect again — a guard that cannot tell *no* from *I could not check*. The
+refusal is identical either way; the reader's understanding of it is not.

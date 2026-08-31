@@ -8,6 +8,7 @@
 | `data-retention-policy-v1.md` | Retention tiers, the stricter-constraint rule, per-source overrides, deletion semantics |
 | `source-registry-v1.md` | The source registry, per-activity policy assessment, evidence requirements and the collector eligibility gate (added in Mission 1.0) |
 | `acquisition-authorization-v1.md` | How a review condition is cleared, and what a collector must hold before it may run (added in Mission 1.4) |
+| `effective-condition-verification-v1.md` | How a persisted human decision and a live machine verification combine into the state the gate reads. A machine that cannot answer never counts as a no; a human decision never makes a machine condition sticky (added in Mission 1.15.6.2) |
 | `world-bank-collector-v1.md` | The first real collector: scope, request model, transport, identity, provenance (added in Mission 1.5) |
 | `source-review-guide.md` | How a human conducts a source review, step by step |
 | `source-catalog-v1.json` | The reviewed candidate catalog. **Source of truth**, edited by hand |

@@ -240,13 +240,12 @@ The operator then supplied the complete acknowledgement, and one
 `local-private-research-v1` · review v2 · actor `local-operator`. See
 [`ted-eu-operator-risk-acceptance-v1.md`](ted-eu-operator-risk-acceptance-v1.md).
 
-**Do not run `verify --apply` for this source under this profile.** It would
-silently clear the acceptance: `verify_source` yields `UNKNOWN` for a human
-condition and `record_verifications` writes `satisfied = FALSE` for any
-non-`SATISFIED` result. Confirmed empirically and recorded in
-`ted-eu-operator-risk-acceptance-v1.md` §8, which is also where the wider gap
-lives — no shipped command produces a complete verification set for a source that
-has a human condition.
+**The `verify --apply` warning is lifted** (Mission 1.15.6.2). A machine pass
+now leaves a human condition untouched — no row, no cleared boolean — and says so
+in its output. Running the verifiers no longer revokes a decision nobody
+withdrew, and `sros-source authorization ted-eu` builds the context through the
+normal path without any caller merging verification sources by hand. See
+[`effective-condition-verification-v1.md`](effective-condition-verification-v1.md).
 
 ## Next mission
 

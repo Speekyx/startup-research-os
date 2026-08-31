@@ -39,7 +39,7 @@ import sys
 from datetime import UTC, datetime
 from typing import Any
 
-from sros_contracts import SourceApprovalState
+from sros_contracts import ConditionVerification, SourceApprovalState
 
 from . import IMPLEMENTED_COLLECTORS
 from .compliance import (
@@ -51,6 +51,7 @@ from .compliance import (
     evaluate_readiness,
     find_compliance_config,
     load_compliance,
+    resolve_effective_verifications,
     satisfied_condition_keys,
     verify_source,
 )
@@ -77,19 +78,76 @@ def _compliance(args: argparse.Namespace) -> ComplianceConfig:
     return load_compliance(getattr(args, "compliance", None) or find_compliance_config())
 
 
+def _recorded_decisions(
+    source: SourceRecord, profile: str
+) -> tuple[ConditionVerificationRecord, ...]:
+    """The operator decisions this deployment holds, or nothing.
+
+    Mission 1.15.6.2. A `HUMAN_CONFIRMATION` is satisfied by a row in the
+    database, so a report that never looked there would tell an operator their
+    own recorded decision does not exist.
+
+    **Absent database is not a failure here.** `list`, `show`, `eligibility` and
+    `validate` are documented to run with no database at all, and they still
+    must. No decisions then, every human condition resolves `UNKNOWN`, and the
+    gate refuses -- which is the honest answer for an environment that cannot
+    see whether anyone decided anything.
+
+    **But it SAYS it could not look.** A report that silently returned "nobody
+    accepted" when it had simply failed to ask would be the defect
+    `testing-strategy.md` §49 names: a guard that cannot tell *no* from *I could
+    not check*. The refusal is the same either way; the reader's understanding
+    of it is not.
+    """
+    review = source.review_for(profile)
+    if review is None or not any(
+        condition.verification is ConditionVerification.HUMAN_CONFIRMATION
+        for condition in review.required_conditions
+    ):
+        # No human condition: nothing to read, and no reason to require a
+        # database for a source that never had one.
+        return ()
+
+    from .compliance.repositories import read_human_decisions
+
+    try:
+        with _connect() as conn:
+            return read_human_decisions(conn, source.source_id, profile, review.review_version)
+    except SystemExit as exc:
+        # `_connect` raises SystemExit -- a BaseException -- for an unset
+        # DATABASE_URL or a missing driver, so it must be caught BY NAME. A bare
+        # `except Exception` does not catch it, and the commands documented to
+        # run without a database would die instead of degrading.
+        print(f"note: operator decisions were not read ({exc})", file=sys.stderr)
+        return ()
+    except Exception as exc:  # noqa: BLE001 - any driver error means "could not ask"
+        # Raised by `psycopg.connect` itself for an unreachable host, which is
+        # OUTSIDE the `with` body -- discovered by pointing DATABASE_URL at a
+        # closed port and watching a traceback where a note belonged.
+        print(f"note: operator decisions could not be read ({exc})", file=sys.stderr)
+        return ()
+
+
 def _live_eligibility(
     source: SourceRecord,
     profile: str,
     config: ComplianceConfig,
     now: datetime | None = None,
 ) -> tuple[EligibilityResult, tuple[ConditionVerificationRecord, ...]]:
-    """The gate, with this environment's verifiers actually run.
+    """The gate, on the EFFECTIVE verification state.
+
+    Machine conditions are evaluated now; human ones come from what a person
+    recorded (Mission 1.15.6.2). Running the verifiers over both would report
+    `UNKNOWN` for every human decision ever made, which is what this command did
+    before and why it disagreed with the database.
 
     The records come back with the verdict rather than being discarded: a
     command that prints "blocked" without being able to say which condition
     failed is the sort of output people work around instead of using.
     """
-    records = verify_source(source, profile, config)
+    records = resolve_effective_verifications(
+        source, profile, config, _recorded_decisions(source, profile)
+    )
     result = evaluate_eligibility(source, profile, now, satisfied_condition_keys(list(records)))
     return result, records
 
@@ -465,11 +523,16 @@ def cmd_conditions(args: argparse.Namespace) -> int:
                 print(f"    {latest['reason']}")
         return 0
 
-    records = verify_source(source, profile, _compliance(args))
+    records = resolve_effective_verifications(
+        source, profile, _compliance(args), _recorded_decisions(source, profile)
+    )
     if args.json:
         print(json.dumps([r.to_json() for r in records], indent=2))
         return 0
-    print(f"{source.source_id}: {len(records)} condition(s) under {profile}, verified live")
+    print(
+        f"{source.source_id}: {len(records)} condition(s) under {profile}. Machine conditions "
+        "verified live; human ones as recorded"
+    )
     by_key = {c.key: c for c in review.required_conditions}
     for record in records:
         condition = by_key[record.condition_key]
@@ -519,6 +582,15 @@ def cmd_verify(args: argparse.Namespace) -> int:
     with _connect() as conn, conn.transaction():
         report = record_verifications(conn, records)
     print(f"recorded: {report.describe()}")
+    if report.left_to_a_human:
+        # Mission 1.15.6.2. Said out loud, because silence here used to mean
+        # "revoked" and an operator had no way to tell.
+        print(
+            "  untouched, and deliberately: "
+            + ", ".join(sorted(report.left_to_a_human))
+            + ". A machine pass does not answer a human condition, and no longer "
+            "clears one either"
+        )
     if report.missing_conditions:
         print(
             "  the following conditions are not in the registry -- run `sros-source load` "
@@ -540,7 +612,13 @@ def cmd_authorization(args: argparse.Namespace) -> int:
     catalog = _catalog(args)
     source = catalog.get(args.source_id)
     try:
-        context = build_authorization(source, _cli_profile(args), _compliance(args))
+        profile = _cli_profile(args)
+        context = build_authorization(
+            source,
+            profile,
+            _compliance(args),
+            decisions=_recorded_decisions(source, profile),
+        )
     except AcquisitionNotAuthorizedError as exc:
         print(f"REFUSED: no acquisition authorization for {source.source_id}", file=sys.stderr)
         for reason in exc.reasons:

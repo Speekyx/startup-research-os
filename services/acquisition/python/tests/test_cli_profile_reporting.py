@@ -90,11 +90,18 @@ class TestListReportsOneProfilePerRow:
     def test_the_state_and_the_gate_answer_the_same_question(self, capsys) -> None:
         """The STATE column read the legacy review while ELIGIBLE beside it was
         per-profile, so under a second profile one row carried two answers to
-        two different questions with nothing saying so."""
+        two different questions with nothing saying so.
+
+        **The ELIGIBLE value is deployment state and is deliberately not
+        asserted** (`testing-strategy.md` §49). TED is eligible where an
+        operator recorded their acceptance and not where they did not, and this
+        test is about which REVIEW the state column reports -- a repository
+        fact, true on every machine.
+        """
         out = run(capsys, "--use-profile", LOCAL_PROFILE, "list")
         ted = next(line for line in out.splitlines() if line.startswith("ted-eu"))
         assert "APPROVED_WITH_CONDITIONS" in ted
-        assert ted.rstrip().endswith("no")
+        assert ted.rstrip().rsplit(maxsplit=1)[-1] in {"yes", "no"}
 
     def test_the_legacy_view_still_shows_the_legacy_verdict(self, capsys) -> None:
         out = run(capsys, "list")

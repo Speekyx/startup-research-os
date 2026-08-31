@@ -28,7 +28,7 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import Any
 
-from sros_contracts import AcquisitionErrorCode
+from sros_contracts import AcquisitionErrorCode, ConditionVerification
 
 from ..compliance.authorization import (
     AcquisitionNotAuthorizedError,
@@ -36,7 +36,9 @@ from ..compliance.authorization import (
 )
 from ..compliance.config import ComplianceConfig, load_compliance
 from ..compliance.use_profile import UseProfileNotDeclaredError, declared_use_profile
+from ..compliance.verification import ConditionVerificationRecord
 from ..registry.catalog import SourceCatalog, load_catalog
+from ..registry.models import SourceRecord
 from .errors import AcquisitionFailedError, AcquisitionFailure
 from .gdelt_web_ngram import (
     GRAM_KINDS,
@@ -174,6 +176,35 @@ class AcquisitionJobResult:
         }
 
 
+def _recorded_decisions(
+    source: SourceRecord, use_profile_id: str, connection_factory: Any, workspace_id: str
+) -> tuple[ConditionVerificationRecord, ...]:
+    """The operator decisions the registry holds for this (source, profile, review).
+
+    Mission 1.15.6.2. A `HUMAN_CONFIRMATION` is satisfied by a persisted row, so
+    a job that never read one would refuse every source whose review carries a
+    human condition -- including one an operator had already accepted.
+
+    **Read in its own short connection**, before the authorization, for the same
+    reason `collector_enabled` is: a transaction must not be held open across a
+    network call.
+
+    A source with no human condition reads nothing. A read that fails supplies
+    nothing, and the gate then refuses -- fail-closed, because "the database was
+    unreachable" is not "the operator decided".
+    """
+    review = source.review_for(use_profile_id)
+    if review is None or not any(
+        condition.verification is ConditionVerification.HUMAN_CONFIRMATION
+        for condition in review.required_conditions
+    ):
+        return ()
+    from ..compliance.repositories import read_human_decisions
+
+    with connection_factory(workspace_id) as conn:
+        return read_human_decisions(conn, source.source_id, use_profile_id, review.review_version)
+
+
 def run_world_bank_job(
     payload: object,
     connection_factory: Callable[[str], Any],
@@ -224,7 +255,13 @@ def run_world_bank_job(
     # authorise a collection now: a source suspended in between must not be
     # collected because the planner had already decided it could be.
     try:
-        context = build_authorization(source, use_profile or declared_use_profile(), rules)
+        profile = use_profile or declared_use_profile()
+        context = build_authorization(
+            source,
+            profile,
+            rules,
+            decisions=_recorded_decisions(source, profile, connection_factory, job.workspace_id),
+        )
     except UseProfileNotDeclaredError as exc:
         # The runtime did not say what it is doing with this source. Refused in
         # the same voice as any other authorization failure, because it is one:
@@ -452,7 +489,13 @@ def run_gdelt_web_ngram_job(
         )
 
     try:
-        context = build_authorization(source, use_profile or declared_use_profile(), rules)
+        profile = use_profile or declared_use_profile()
+        context = build_authorization(
+            source,
+            profile,
+            rules,
+            decisions=_recorded_decisions(source, profile, connection_factory, job.workspace_id),
+        )
     except UseProfileNotDeclaredError as exc:
         # The runtime did not say what it is doing with this source. Refused in
         # the same voice as any other authorization failure, because it is one:

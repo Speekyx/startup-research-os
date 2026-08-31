@@ -66,6 +66,7 @@ from .verification import (
     VERIFIER_VERSION,
     ConditionVerificationRecord,
     design_eligible,
+    resolve_effective_verifications,
     satisfied_condition_keys,
     verify_condition,
     verify_source,
@@ -118,5 +119,6 @@ __all__ = [
     "render_attribution",
     "satisfied_condition_keys",
     "verify_condition",
+    "resolve_effective_verifications",
     "verify_source",
 ]

@@ -51,8 +51,8 @@ from .resources import ResourceAuthorization, ResourceDescriptor, authorize_reso
 from .verification import (
     ConditionVerificationRecord,
     design_eligible,
+    resolve_effective_verifications,
     satisfied_condition_keys,
-    verify_source,
 )
 
 __all__ = [
@@ -322,6 +322,7 @@ def build_authorization(
     verifications: tuple[ConditionVerificationRecord, ...] | None = None,
     environ: Mapping[str, str] | None = None,
     now: datetime | None = None,
+    decisions: Sequence[ConditionVerificationRecord] = (),
 ) -> AcquisitionAuthorizationContext:
     """Build the context, or refuse and say why.
 
@@ -334,12 +335,26 @@ def build_authorization(
     An authorization that did not name the use it was granted for could be held
     by a collector running under any use at all, which is the failure the whole
     profile mechanism exists to prevent.
+
+    `decisions` carries the operator decisions a database holds for this
+    (source, profile, review), from `read_human_decisions` (Mission 1.15.6.2).
+    It is the persisted half of the effective verification state and **can only
+    ever satisfy a `HUMAN_CONFIRMATION` condition**: `resolve_effective_verifications`
+    filters every record by kind, authorship, source, review version and
+    condition, so a caller supplying a forged capability result changes nothing.
+
+    **Empty is the safe default and stays fail-closed.** A caller with no
+    database supplies nothing, every human condition resolves `UNKNOWN`, and the
+    gate refuses -- which is what every caller did before this parameter
+    existed.
     """
     moment = now or datetime.now(UTC)
     records = (
         verifications
         if verifications is not None
-        else verify_source(source, use_profile_id, config, environ)
+        else resolve_effective_verifications(
+            source, use_profile_id, config, decisions, environ, moment
+        )
     )
 
     result = evaluate_eligibility(source, use_profile_id, moment, satisfied_condition_keys(records))
