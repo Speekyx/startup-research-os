@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.23
-Last amended: 2026-08-31 (Sprint 1 / Mission 1.14)
+Version: 1.24
+Last amended: 2026-08-31 (Sprint 1 / Mission 1.15)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.24 | 2026-08-31 | **Demand-side expansion: nine sources examined, zero approvals, and that is the result.** Pinterest and Hacker News moved to RESTRICTED on retrieved terms; Bluesky's developer guidelines are now known to exist and could not be fetched. Two procurement sources registered -- the first lawful route to WILLINGNESS_TO_PAY as a TRANSACTION rather than a listed price. `ted-eu` has five of six activities granted and is blocked by one |
 | 1.23 | 2026-08-31 | **Reviewed reliability governed, and none reviewed.** A reliability applies to a MEASUREMENT x PURPOSE scope, rests on retrieved first-party documents, is attributed to a person and is superseded rather than updated (ADR-026). Zero assessments exist, so all seven Evidence rows stay NON_SCORABLE and aggregation stays UNAVAILABLE -- **outcome B, and it is the design working**. D-03 loses one blocker and keeps four |
 | 1.22 | 2026-08-31 | The **first complete Signal -> Claim -> Evidence pipeline**: `observed-signal-restatement@1.0.0` produced **7 real OBSERVED Claims, 7 revisions and 7 Evidence rows** from the seven real Signals. Deterministic, source-attributed, no LLM. GAP-5 resolved; a refused interpretation gets a run record, never a Claim (ADR-025). Reliability stays NULL and every record is NON_SCORABLE, honestly |
 | 1.21 | 2026-08-31 | The **interpretation boundary** defined before anything crosses it: a Claim may precede its Opportunity, and a machine may not store an assertion nothing supports (ADR-024, Ontology V2.2). Contract and model only -- **0 Claims, 0 Evidence** |
@@ -825,6 +826,62 @@ for all seven rows would establish nothing about pain, desire, willingness to
 pay, pricing power, competition, distribution, retention or revenue potential.
 It decides whether the evidence the system HAS can be scored, not whether it is
 evidence of the thing anybody wants to know.
+
+### Demand-side sources — nine examined, none usable
+
+Since Mission 1.15 the portfolio has been reviewed against the eight business
+evidence families the product needs (`demand-side-source-expansion-v1.md`,
+`demand-side-source-coverage-v1.md`, `demand-side-source-priority-v1.md`).
+**29 sources registered, 5 approving, 0 collector-eligible for any demand-side
+family.**
+
+- **Six of eight families have no approving source**, and two — Pricing and
+  Retention — have no registered candidate at all. The two families that DO have
+  an approving source have a weak one: `openalex` for distribution is
+  scholarly-record discovery rather than a marketing channel, and `gdelt` for
+  user behaviour is news-corpus activity. **No approving source observes an
+  individual doing anything.** Retention's obstacle is
+  structural rather than legal: it needs the same subject observed twice, and
+  everything in the portfolio is an aggregate or a one-shot public record. **No
+  proxy is proposed**, because a proxy nobody can validate is worse than an
+  acknowledged gap.
+- **WILLINGNESS_TO_PAY gained its first candidates.** `ted-eu` and `usaspending`
+  record contract awards: what a buyer paid a named supplier. `LISTED_PRICE` and
+  `TRANSACTION` are different evidence classes and a pricing page is only ever
+  the first — the distinction the portfolio had no source able to make.
+- **`ted-eu` is the closest any blocked source has come.** One retrieved sentence
+  grants five of six load-bearing activities: *"the procurement notices ... can
+  be freely reused, for commercial or non-commercial purposes"* — a GRANT, not
+  an absence of prohibition. `model_processing` is `NOT_ADDRESSED` and rule 8
+  blocks whatever the other five say. Recording it otherwise would be the
+  narrowing of the assessed use case Mission 1.8 forbids: this product includes
+  LLM processing, and a permission obtained by describing a smaller product is a
+  permission for a product we are not building.
+- **Two hopeful maybes became definite noes.** Pinterest — the catalog's best
+  DESIRE hypothesis since Mission 1.7 — prohibits storing API information at all
+  (*"call the API each time"*), prohibits automated extraction and ML training,
+  and requires explicit written authorization for competitor-research features,
+  which names this product. Hacker News publishes an API stating *"There is
+  currently no rate limit"* while Y Combinator's Terms prohibit *"data mining,
+  robots, scraping"* and commercial derivative works over Site content. Both are
+  RESTRICTED on retrieved evidence.
+- **Bluesky's question got smaller.** Its developer guidelines exist — named by
+  Bluesky's own documentation domain — and returned an empty body. The user
+  Terms, re-retrieved at the version effective 15 September 2025, remain silent
+  on all ten activities. H-33.
+- **A failed retrieval changes nothing.** Reddit and Stack Exchange were
+  unreachable from the review environment and gained **no review version** in
+  either direction. No mirror, cached copy, alternative page or community summary
+  was used to infer terms, and no bot protection was bypassed. An unresolved
+  question stays visibly unresolved.
+- **Coverage is still potential, never permission.** Both new sources record
+  signal coverage and neither is approving. Both facts hold at once, and the
+  registry exists to keep them apart.
+
+**Reliability solved scorability; source expansion is what would solve
+relevance — and it has not yet.** Even a perfect reliability review of all seven
+existing Evidence rows would establish nothing about pain, desire, willingness to
+pay, competition, distribution or retention.
 
 ### Blocked work
 

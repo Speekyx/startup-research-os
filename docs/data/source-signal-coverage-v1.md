@@ -49,7 +49,9 @@ is backed by a recorded `basis` naming the capability it rests on; the bases are
 | `apple-app-store` | app_store | BLOCKED | • | • |  |  |  |  |  |  |  |  |  |  | • | • |  | • |
 | `github` | developer | BLOCKED |  |  | • |  |  |  |  |  |  |  |  |  | • |  | • | • |
 | `google-play` | app_store | BLOCKED | • | • |  |  |  |  |  |  |  |  |  |  | • | • |  | • |
+| `hacker-news` | community | BLOCKED |  |  |  |  |  |  |  |  |  | • | • |  |  | • | • | • |
 | `meta-instagram` | social | BLOCKED |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| `pinterest` | product_discovery | BLOCKED |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 | `product-hunt` | product_discovery | BLOCKED | • |  |  |  |  |  |  |  |  |  | • |  | • | • |  |  |
 | `spotify` | content_platform | BLOCKED |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 | `steam` | gaming | BLOCKED | • | • |  |  | • | • |  |  |  | • |  |  | • | • |  | • |
@@ -58,14 +60,14 @@ is backed by a recorded `basis` naming the capability it rests on; the bases are
 | `bluesky` | social | PENDING |  |  |  |  |  |  |  |  | • | • | • |  | • |  |  | • |
 | `discord` | community | PENDING |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 | `google-trends` | search_trends | PENDING |  |  |  | • |  |  |  |  |  |  | • |  | • | • |  |  |
-| `hacker-news` | community | PENDING |  |  |  |  |  |  |  |  |  | • | • |  |  | • | • | • |
 | `huggingface` | developer | PENDING |  |  | • |  |  |  |  |  |  |  | • |  | • |  | • |  |
 | `npm-registry` | developer | PENDING |  |  |  |  |  |  |  |  |  |  | • |  | • | • | • |  |
-| `pinterest` | product_discovery | PENDING |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 | `pypi` | developer | PENDING |  |  |  |  |  |  |  |  |  |  | • | • | • |  | • |  |
 | `reddit` | community | PENDING | • |  |  | • |  |  |  |  | • | • | • |  |  |  |  | • |
 | `stack-exchange` | forum | PENDING |  |  |  |  |  |  |  |  |  |  |  | • |  |  | • | • |
+| `ted-eu` | public_procurement | PENDING |  |  |  |  | • |  |  |  |  |  |  |  | • | • |  | • |
 | `twitch` | creator | PENDING |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| `usaspending` | public_procurement | PENDING |  |  |  |  | • |  |  |  |  |  |  |  |  | • |  |  |
 | `wikimedia-pageviews` | knowledge | PENDING |  | • |  | • |  |  |  |  |  |  | • | • | • |  |  |  |
 | `x-twitter` | social | PENDING |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 
@@ -82,16 +84,18 @@ Which canonical user behaviours (Ontology V2 §3.4) a source records evidence of
 | `apple-app-store` | BLOCKED |  |  |  |  |  |  |  | • |  | • |  | • |  | • |  |  |  |
 | `github` | BLOCKED | • |  |  |  |  |  | • |  |  |  |  |  |  |  |  | • | • |
 | `google-play` | BLOCKED |  |  |  |  |  |  |  | • |  | • |  | • |  | • |  |  |  |
+| `hacker-news` | BLOCKED |  |  |  |  |  | • | • | • |  |  |  |  |  |  |  |  |  |
 | `product-hunt` | BLOCKED |  |  |  |  |  | • |  | • |  | • |  |  |  |  |  |  |  |
 | `steam` | BLOCKED |  | • | • | • |  |  | • |  |  | • |  |  |  | • |  |  |  |
 | `bluesky` | PENDING |  |  |  |  |  | • | • | • |  |  |  |  |  |  |  |  |  |
 | `google-trends` | PENDING |  |  |  |  |  |  |  | • |  | • |  |  |  |  |  |  |  |
-| `hacker-news` | PENDING |  |  |  |  |  | • | • | • |  |  |  |  |  |  |  |  |  |
 | `huggingface` | PENDING | • |  |  |  |  |  |  | • |  |  |  |  |  |  |  | • |  |
 | `npm-registry` | PENDING | • |  |  |  |  |  |  | • |  |  |  |  |  |  |  | • | • |
 | `pypi` | PENDING | • |  |  |  |  |  |  |  |  |  |  |  |  |  |  | • | • |
 | `reddit` | PENDING |  |  |  |  |  | • | • | • |  | • |  |  |  |  |  |  |  |
 | `stack-exchange` | PENDING |  |  |  |  |  |  | • |  | • | • |  |  |  |  |  |  |  |
+| `ted-eu` | PENDING |  |  |  |  |  |  |  |  |  | • |  |  |  | • |  |  |  |
+| `usaspending` | PENDING |  |  |  |  |  |  |  |  |  |  |  |  |  | • |  |  |  |
 | `wikimedia-pageviews` | PENDING |  |  |  |  |  |  |  | • | • |  |  | • |  |  |  |  |  |
 
 Column keys, in order: `crea`=create, `play`=play, `comp`=compete, `coll`=collect, `cust`=customize, `shar`=share, `disc`=discuss, `disc`=discover, `lear`=learn, `comp`=compare, `pred`=predict, `cons`=consume, `trac`=track, `buy`=buy, `sell`=sell, `coll`=collaborate, `auto`=automate.
@@ -116,18 +120,18 @@ columns are what a change of verdict would buy.
 | `entertainment` | 0 | 1 | 3 | **UNCOVERED** |
 | `creativity` | 0 | 1 | 1 | **UNCOVERED** |
 | `curiosity` | 2 | 3 | 0 | **covered** |
-| `competition` | 0 | 0 | 1 | **UNCOVERED** |
+| `competition` | 0 | 2 | 1 | **UNCOVERED** |
 | `collection` | 0 | 0 | 1 | **UNCOVERED** |
 | `personalization` | 0 | 0 | 0 | **UNCOVERED** |
 | `status` | 0 | 0 | 0 | **UNCOVERED** |
 | `social` | 1 | 2 | 0 | partial |
-| `community` | 1 | 3 | 1 | partial |
-| `discovery` | 1 | 8 | 1 | partial |
+| `community` | 1 | 2 | 2 | partial |
+| `discovery` | 1 | 7 | 2 | partial |
 | `learning` | 1 | 3 | 0 | partial |
-| `trend` | 5 | 6 | 5 | **covered** |
-| `commercial` | 4 | 3 | 4 | **covered** |
-| `developer_activity` | 1 | 5 | 1 | partial |
-| `problem` | 0 | 4 | 4 | **UNCOVERED** |
+| `trend` | 5 | 7 | 5 | **covered** |
+| `commercial` | 4 | 4 | 5 | **covered** |
+| `developer_activity` | 1 | 4 | 2 | partial |
+| `problem` | 0 | 4 | 5 | **UNCOVERED** |
 
 **8 of 16 families have no usable source at all**: `desire`, `entertainment`, `creativity`, `competition`, `collection`, `personalization`, `status`, `problem`.
 
@@ -140,11 +144,11 @@ columns are what a change of verdict would buy.
 | `desire` | `reddit`, `apple-app-store`, `google-play`, `product-hunt`, `steam` | verdicts, not capability |
 | `entertainment` | `wikimedia-pageviews`, `apple-app-store`, `google-play`, `steam` | verdicts, not capability |
 | `creativity` | `huggingface`, `github` | verdicts, not capability |
-| `competition` | `steam` | verdicts, not capability |
+| `competition` | `ted-eu`, `usaspending`, `steam` | verdicts, not capability |
 | `collection` | `steam` | verdicts, not capability |
 | `personalization` | **nothing in the catalog** | no registered source exposes it |
 | `status` | **nothing in the catalog** | no registered source exposes it |
-| `problem` | `bluesky`, `hacker-news`, `reddit`, `stack-exchange`, `apple-app-store`, `github`, `google-play`, `steam` | verdicts, not capability |
+| `problem` | `bluesky`, `reddit`, `stack-exchange`, `ted-eu`, `apple-app-store`, `github`, `google-play`, `hacker-news`, `steam` | verdicts, not capability |
 
 ## 5. Portfolio balance
 
@@ -161,13 +165,14 @@ consumer or social. Category counts, not quality claims.
 | `content_platform` | 2 | 0 | `spotify`, `youtube` |
 | `knowledge` | 2 | 1 | `openalex`, `wikimedia-pageviews` |
 | `product_discovery` | 2 | 0 | `pinterest`, `product-hunt` |
+| `public_procurement` | 2 | 0 | `ted-eu`, `usaspending` |
 | `creator` | 1 | 0 | `twitch` |
 | `forum` | 1 | 0 | `stack-exchange` |
 | `gaming` | 1 | 0 | `steam` |
 | `news` | 1 | 1 | `gdelt` |
 | `search_trends` | 1 | 0 | `google-trends` |
 
-**Registered: 3 of 27 sources are economic data (11%), across 13 families.**
+**Registered: 3 of 29 sources are economic data (10%), across 14 families.**
 **In an approving state: 3 of 5 (60%).**
 
 The registered figure is the healthier of the two and it is the less meaningful

@@ -24,13 +24,13 @@ An assessment does not transfer. A source that permits academic research has not
 |----------------|---------|
 | `APPROVED` | 0 |
 | `APPROVED_WITH_CONDITIONS` | 5 — eurostat, fred, gdelt, openalex, world-bank |
-| `REQUIRES_REVIEW` | 13 — bluesky, discord, google-trends, hacker-news, huggingface, npm-registry, pinterest, pypi, reddit, stack-exchange, twitch, wikimedia-pageviews, x-twitter |
-| `RESTRICTED` | 6 — apple-app-store, github, google-play, meta-instagram, product-hunt, steam |
+| `REQUIRES_REVIEW` | 13 — bluesky, discord, google-trends, huggingface, npm-registry, pypi, reddit, stack-exchange, ted-eu, twitch, usaspending, wikimedia-pageviews, x-twitter |
+| `RESTRICTED` | 8 — apple-app-store, github, google-play, hacker-news, meta-instagram, pinterest, product-hunt, steam |
 | `PROHIBITED` | 3 — spotify, tiktok, youtube |
 | `SUSPENDED` | 0 |
 | `DRAFT` | 0 |
 
-**Collector-eligible from the catalog alone: 0 of 27.**
+**Collector-eligible from the catalog alone: 0 of 29.**
 
 This document is the **catalog view**: what the reviews say, with no condition verified. It is generated from a JSON file and committed, so it cannot depend on the machine it was rendered on -- and whether a condition holds depends on what is deployed and configured. A catalog can never assert its own conditions satisfied, so every source carrying one is shown blocked here.
 
@@ -72,20 +72,22 @@ Activities are assessed separately, because their conditions differ. A source ma
 | `github` | developer | official api | yes | yes | **not permitted** | conditional | conditional | not addressed | **not permitted** | documented | PSEUDONYMOUS | `RESTRICTED` | **no** |
 | `google-play` | app_store | official api | yes | yes | not addressed | conditional | not addressed | not addressed | not addressed | UNKNOWN | PSEUDONYMOUS | `RESTRICTED` | **no** |
 | `google-trends` | search_trends | official api | yes | yes | not assessed | not addressed | not assessed | not assessed | not assessed | UNKNOWN | NONE_EXPECTED | `REQUIRES_REVIEW` | **no** |
-| `hacker-news` | community | public api, public web | yes | no | not addressed | conditional | not addressed | not addressed | **not permitted** | documented | PSEUDONYMOUS | `REQUIRES_REVIEW` | **no** |
+| `hacker-news` | community | public api, public web | yes | no | **not permitted** | **not permitted** | **not permitted** | not addressed | **not permitted** | documented | PSEUDONYMOUS | `RESTRICTED` | **no** |
 | `huggingface` | developer | public api | yes | no | not addressed | not addressed | not addressed | not addressed | not addressed | documented | PSEUDONYMOUS | `REQUIRES_REVIEW` | **no** |
 | `meta-instagram` | social | official api | yes | yes | conditional | conditional | conditional | conditional | **not permitted** | UNKNOWN | IDENTIFIABLE | `RESTRICTED` | **no** |
 | `npm-registry` | developer | public api | yes | no | not addressed | conditional | permitted | not addressed | not addressed | UNKNOWN | PSEUDONYMOUS | `REQUIRES_REVIEW` | **no** |
 | `openalex` | knowledge | dataset download, public api | yes | no | permitted | permitted | permitted | permitted | permitted | UNKNOWN | IDENTIFIABLE | `APPROVED_WITH_CONDITIONS` | **no** |
-| `pinterest` | product_discovery | official api | yes | yes | not assessed | not assessed | not assessed | not assessed | not assessed | UNKNOWN | IDENTIFIABLE | `REQUIRES_REVIEW` | **no** |
+| `pinterest` | product_discovery | official api | yes | yes | **not permitted** | **not permitted** | **not permitted** | **not permitted** | **not permitted** | UNKNOWN | IDENTIFIABLE | `RESTRICTED` | **no** |
 | `product-hunt` | product_discovery | official api | yes | yes | **not permitted** | conditional | not addressed | not addressed | not addressed | UNKNOWN | PSEUDONYMOUS | `RESTRICTED` | **no** |
 | `pypi` | developer | public api | yes | no | not addressed | conditional | not addressed | not addressed | not addressed | UNKNOWN | PSEUDONYMOUS | `REQUIRES_REVIEW` | **no** |
 | `reddit` | community | official api | yes | yes | unclear | conditional | not assessed | not assessed | not assessed | UNKNOWN | PSEUDONYMOUS | `REQUIRES_REVIEW` | **no** |
 | `spotify` | content_platform | official api | yes | yes | **not permitted** | **not permitted** | **not permitted** | **not permitted** | **not permitted** | UNKNOWN | UNKNOWN | `PROHIBITED` | **no** |
 | `stack-exchange` | forum | official api | yes | no | unclear | conditional | not addressed | not addressed | unclear | UNKNOWN | PSEUDONYMOUS | `REQUIRES_REVIEW` | **no** |
 | `steam` | gaming | official api | yes | yes | not addressed | conditional | conditional | not addressed | **not permitted** | documented | PSEUDONYMOUS | `RESTRICTED` | **no** |
+| `ted-eu` | public_procurement | dataset download, official api | yes | no | permitted | permitted | permitted | permitted | permitted | UNKNOWN | IDENTIFIABLE | `REQUIRES_REVIEW` | **no** |
 | `tiktok` | social | official api | yes | yes | **not permitted** | **not permitted** | **not permitted** | not assessed | **not permitted** | UNKNOWN | IDENTIFIABLE | `PROHIBITED` | **no** |
 | `twitch` | creator | official api | yes | yes | not assessed | not assessed | not assessed | not assessed | not assessed | UNKNOWN | PSEUDONYMOUS | `REQUIRES_REVIEW` | **no** |
+| `usaspending` | public_procurement | official api | yes | no | not addressed | not addressed | not addressed | not addressed | not addressed | UNKNOWN | UNKNOWN | `REQUIRES_REVIEW` | **no** |
 | `wikimedia-pageviews` | knowledge | public api | yes | no | permitted | conditional | not addressed | not addressed | conditional | documented | NONE_EXPECTED | `REQUIRES_REVIEW` | **no** |
 | `world-bank` | economic_data | public api | yes | no | permitted | permitted | permitted | permitted | conditional | UNKNOWN | NONE_EXPECTED | `APPROVED_WITH_CONDITIONS` | **no** |
 | `x-twitter` | social | official api | yes | yes | not assessed | not assessed | not assessed | not assessed | not assessed | UNKNOWN | IDENTIFIABLE | `REQUIRES_REVIEW` | **no** |
@@ -161,7 +163,14 @@ Social platform on the open AT Protocol, with a public firehose that needs no ke
 - **Coverage:** GLOBAL
 - **Retention if collected:** raw 30d (baseline), normalized 365d (baseline)
 - **State:** `REQUIRES_REVIEW` — **collector eligible from the catalog alone: no**
-- **Last reviewed:** 2026-08-30 · next 2027-02-26
+- **Last reviewed:** 2026-08-31 · next 2027-02-27
+
+**Review history**
+
+| Version | Reviewed | By | State | Evidence |
+|---|---|---|---|---|
+| 1 | 2026-08-30 | `mission-1.7` | `REQUIRES_REVIEW` | 2 |
+| 2 ← current | 2026-08-31 | `mission-1.15` | `REQUIRES_REVIEW` | 3 |
 
 **Access profiles** (how, not whether)
 
@@ -187,21 +196,22 @@ Social platform on the open AT Protocol, with a public firehose that needs no ke
 
 **Reviewer notes**
 
-The most instructive result in this expansion. Technically this is the most open social platform available -- an event stream of all public activity, reachable with no key, on a protocol designed for independent consumers. And it is REQUIRES_REVIEW, because the Terms of Service are SILENT on every activity that matters and silence is not permission (source-registry-v1.md §1 rule 2). The distance between 'we can reach this trivially' and 'we may use it' is the entire point of the registry, and no source in the catalog illustrates it better. Coverage IS recorded, because the capabilities are documented and the portfolio analysis has to be able to show what a blocked source would have contributed; coverage is potential and has never been permission.
+The verdict does not change and the question does. v1 asked whether a developer terms document exists separate from the user Terms of Service; it does -- Bluesky's own documentation domain names 'Bluesky Developer Guidelines' -- and it could not be retrieved: the canonical URL redirects permanently to bsky.network and that host returned an empty body. No mirror, cache or third-party copy was consulted, because a retrieval failure leaves a question unresolved rather than licensing a substitute. The Terms of Service were re-retrieved at their current version, updated effective 15 September 2025 after v1 was written, and remain silent on all ten activities that matter to a third party reading public records. Bluesky is therefore still the catalog's sharpest illustration of technical openness without a governing grant -- but the open question is now one retrievable document rather than four unknowns.
 
 **Open questions**
 
-- Determine whether Bluesky publishes a developer or API terms document separate from the user Terms of Service. The user Terms address the relationship with account holders and say nothing to a third party reading public records.
-- Determine whether Bluesky publishes documented rate limits for the public AppView and the firehose. None were found in the documents read here.
+- Retrieve the Bluesky Developer Guidelines. The document is named by Bluesky's own documentation domain at https://docs.bsky.app/docs/support/developer-guidelines, which redirects permanently to https://bsky.network/docs/support/developer-guidelines and returned an empty body on 2026-08-31. This is the single question standing between Bluesky and an assessable verdict.
+- Determine whether Bluesky publishes documented rate limits for the public AppView and the firehose. None were found in the documents read here or in v1.
 - Determine what obligations follow from the Terms' acknowledgement that deletion may not propagate across the network. A downstream holder of a deleted post is exactly the case that sentence describes, and it creates an obligation the Terms do not specify.
-- Determine whether the assessed commercial use is addressed anywhere in Bluesky's own documents.
 
-**Official evidence (2)**
+**Official evidence (3)**
 
-- [Bluesky Terms of Service](https://bsky.social/about/support/tos) — `OFFICIAL_TERMS`, retrieved 2026-08-30, section: Your Content; Deletion
-  - Effective 14 August 2025. The Terms contain no provision addressing automated access, crawling, scraping, bots or use of the API, and none addressing use of user content for machine-learning or AI model training. On content they state that Bluesky will not sell user content without permission first, and grant Bluesky rights to use content to promote and market its services and to develop, operate and enhance them -- rights held by Bluesky, not granted to third parties. On deletion they state that reasonable efforts will be made to remove content if an account is deleted, and note that because of the AT Protocol's decentralised nature complete deletion across the network may not always be possible.
-- [AT Protocol](https://atproto.com/) — `OFFICIAL_API_DOCS`, retrieved 2026-08-30, section: Overview; Firehose
-  - The protocol site describes an open data network in which posts, likes, follows and profiles are public JSON records, and documents a public event stream for all public activity at wss://jetstream1.us-east.bsky.network/subscribe, stating explicitly that no API key is required. It describes self-hosting and independent operators. It addresses no terms of use, no rate limits and no governance of access, because it documents a protocol rather than a service.
+- [Bluesky Terms of Service (current version)](https://bsky.social/about/support/tos) — `OFFICIAL_TERMS`, retrieved 2026-08-31, section: Whole document
+  - Re-retrieved on 2026-08-31 following the terms update announced for 15 September 2025. The document remains silent, for a third party reading public records, on automated access and crawling, API use, commercial use, storage or caching, derived analytics, machine-learning inference, embeddings, model training, redistribution and rate limits. It addresses deletion only, stating that because of the AT Protocol's decentralised nature Bluesky cannot control or force other services and developer applications.
+- [Bluesky Developer Guidelines](https://bsky.network/docs/support/developer-guidelines) — `OFFICIAL_TERMS`, retrieved 2026-08-31, section: Retrieval failure
+  - Named by Bluesky's documentation domain as the guidelines developers who federate apps or services on the AT Protocol must follow to communicate with Bluesky services. The canonical URL docs.bsky.app/docs/support/developer-guidelines returned HTTP 301 to bsky.network/docs/support/developer-guidelines, and that URL returned an empty body on 2026-08-31. The documentation root at bsky.network links to no terms, guidelines or legal document. The document's existence is established; its content is not.
+- [Bluesky: Updated Terms and Policies](https://bsky.social/about/blog/08-14-2025-updated-terms-and-policies) — `OFFICIAL_TERMS`, retrieved 2026-08-31, section: Effective dates
+  - Announces updated Terms of Service, Privacy Policy and Copyright Policy effective 15 September 2025 and updated Community Guidelines effective 15 October 2025. The announcement addresses regulatory compliance and names no developer, API, commercial-use or machine-learning provision, and links to no developer terms document.
 
 **Blocked by**
 
@@ -679,15 +689,16 @@ Technology and startup discussion. Useful for early product launches and develop
 - **Family:** community
 - **Coverage:** PARTIAL, languages ['en']
 - **Retention if collected:** raw 30d (baseline), normalized 365d (baseline)
-- **State:** `REQUIRES_REVIEW` — **collector eligible from the catalog alone: no**
-- **Last reviewed:** 2026-08-29 · next 2027-02-25
+- **State:** `RESTRICTED` — **collector eligible from the catalog alone: no**
+- **Last reviewed:** 2026-08-31 · next 2027-08-31
 
 **Review history**
 
 | Version | Reviewed | By | State | Evidence |
 |---|---|---|---|---|
 | 1 | 2026-08-29 | `mission-1.0` | `REQUIRES_REVIEW` | 1 |
-| 2 ← current | 2026-08-29 | `mission-1.3` | `REQUIRES_REVIEW` | 2 |
+| 2 | 2026-08-29 | `mission-1.3` | `REQUIRES_REVIEW` | 2 |
+| 3 ← current | 2026-08-31 | `mission-1.15` | `RESTRICTED` | 2 |
 
 **Access profiles** (how, not whether)
 
@@ -700,37 +711,36 @@ Technology and startup discussion. Useful for early product launches and develop
 
 | Activity | Verdict |
 |---|---|
-| automated access | conditional |
-| api use | conditional |
-| browser automation | **not permitted** |
-| commercial use | not addressed |
-| storage | not addressed |
+| automated access | **not permitted** |
+| api use | unclear |
+| browser automation | not assessed |
+| commercial use | **not permitted** |
+| storage | **not permitted** |
 | retention | not addressed |
 | redistribution | **not permitted** |
-| derived analytics | not addressed |
+| derived analytics | **not permitted** |
 | model processing | not addressed |
 | personal data handling | not addressed |
 | attribution required | not addressed |
 
 **Reviewer notes**
 
-Status unchanged at REQUIRES_REVIEW, but the assessment underneath it changed materially. Browser automation and public-web collection move to NOT_PERMITTED: the Terms of Use prohibit scraping and data mining in plain words. The official Firebase API is a separate, expressly authorised mechanism and remains available. What is unresolved is narrow and specific: the ToS also prohibits creating derivative works based on Site Content 'except as expressly authorized', and nothing states whether publishing the API extends that authorisation to commercial storage and derived analytics. Silence is not permission, so the source stays blocked.
+The clearest demonstration in the catalog of the rule that technical accessibility is not permission. The Hacker News API is published on GitHub, documented, needs no key, and states 'There is currently no rate limit' -- an invitation by every engineering measure. The governing Y Combinator Terms of Use, which bring news.ycombinator.com in scope explicitly, prohibit 'any data mining, robots, scraping or similar data gathering or extraction methods' and prohibit reproducing, creating derivative works from or exploiting any portion of the Site for any commercial purposes. Both halves of this engine's use are named. v2 recorded REQUIRES_REVIEW because the governing terms had not been retrieved; they have been now, and they answer the question against us. The MIT licence on the API's GitHub repository covers that repository's documentation, not the content Hacker News serves.
 
 **Open questions**
 
-- Ask api@ycombinator.com — the contact the API documentation itself publishes — whether providing the official API authorises commercial storage and derived analytics of the returned Site Content, given the derivative-works clause in the Terms of Use.
-- Determine whether any retention or deletion obligation applies to API-obtained items when a user deletes their account, given that YC reserves the right to refuse to delete submissions and comments.
+- Whether Y Combinator would grant written permission for automated collection of Hacker News content for a commercial research product. The Terms prohibit the activity and describe no permission route, so this is operator correspondence rather than a document to retrieve.
 
 **Official evidence (2)**
 
-- [Hacker News API — official documentation](https://github.com/HackerNews/API) — `OFFICIAL_API_DOCS`, retrieved 2026-08-29, section: Overview; URI and Versioning
-  - Y Combinator publishes an official read-only API in partnership with Firebase, explicitly to make public Hacker News data available in near real time. No authentication is required and the documentation states there is currently no rate limit. The documentation covers items, users and update feeds and is silent on commercial use, storage, retention and redistribution.
-- [Y Combinator Terms of Use](https://www.ycombinator.com/legal/) — `OFFICIAL_TERMS`, retrieved 2026-08-29, section: Site Content, Software and Trademarks
-  - The Terms of Use prohibit, except as expressly authorised by Y Combinator, modifying, copying, framing, SCRAPING, selling, distributing or creating derivative works based on the Site or Site Content, and state that 'in connection with your use of the Site you will not engage in or use any data mining, robots, scraping or similar data gathering or extraction methods'. Circumventing an IP block is separately prohibited.
+- [Y Combinator Terms of Use](https://www.ycombinator.com/legal/) — `OFFICIAL_TERMS`, retrieved 2026-08-31, section: Terms of Use; prohibited conduct
+  - States that use of certain components of the Site is subject to additional terms including the Hacker News Guidelines at news.ycombinator.com/newsguidelines.html, which places Hacker News within this document's scope. Prohibits engaging in or using any data mining, robots, scraping or similar data gathering or extraction methods. Separately prohibits displaying, distributing, licensing, reproducing, duplicating, copying, creating derivative works from, modifying, selling, reselling, exploiting or transferring any portion of the Site for any commercial purposes, excepting a user's own content.
+- [Hacker News API](https://github.com/HackerNews/API) — `OFFICIAL_API_DOCS`, retrieved 2026-08-31, section: Overview; rate limits
+  - Documents a public Firebase-backed API requiring no key and states 'There is currently no rate limit'. Carries no terms of use and addresses none of commercial use, storage, automated collection, derived analytics or machine learning. The repository's MIT licence applies to the repository, which contains documentation rather than Hacker News content.
 
 **Blocked by**
 
-- policy review is REQUIRES_REVIEW
+- policy review is RESTRICTED
 
 ---
 
@@ -978,8 +988,15 @@ Visual discovery and saving platform. REQUIRES_REVIEW: the Developer Terms could
 - **Family:** product_discovery
 - **Coverage:** GLOBAL
 - **Retention if collected:** raw 30d (baseline), normalized 365d (baseline)
-- **State:** `REQUIRES_REVIEW` — **collector eligible from the catalog alone: no**
-- **Last reviewed:** 2026-08-30 · next 2027-02-26
+- **State:** `RESTRICTED` — **collector eligible from the catalog alone: no**
+- **Last reviewed:** 2026-08-31 · next 2027-08-31
+
+**Review history**
+
+| Version | Reviewed | By | State | Evidence |
+|---|---|---|---|---|
+| 1 | 2026-08-30 | `mission-1.7` | `REQUIRES_REVIEW` | 0 |
+| 2 ← current | 2026-08-31 | `mission-1.15` | `RESTRICTED` | 2 |
 
 **Access profiles** (how, not whether)
 
@@ -991,38 +1008,36 @@ Visual discovery and saving platform. REQUIRES_REVIEW: the Developer Terms could
 
 | Activity | Verdict |
 |---|---|
-| automated access | not assessed |
-| api use | not assessed |
+| automated access | **not permitted** |
+| api use | conditional |
 | browser automation | not assessed |
-| commercial use | not assessed |
-| storage | not assessed |
-| retention | not assessed |
-| redistribution | not assessed |
-| derived analytics | not assessed |
-| model processing | not assessed |
-| personal data handling | not assessed |
-| attribution required | not assessed |
+| commercial use | **not permitted** |
+| storage | **not permitted** |
+| retention | **not permitted** |
+| redistribution | **not permitted** |
+| derived analytics | **not permitted** |
+| model processing | **not permitted** |
+| personal data handling | unclear |
+| attribution required | not addressed |
 
 **Reviewer notes**
 
-Pinterest is the strongest candidate in the catalog for DESIRE signals specifically -- saving something is an expression of want with no complaint and no purchase attached, which is exactly the signal shape §24 asks whether the portfolio can detect. That is a reason to finish the review with some priority, and it is not a reason to assume the answer. No evidence was gathered and every activity is NOT_ASSESSED.
+The verdict changed on retrieved first-party evidence, and it changed in the direction nobody hoped for. Mission 1.7 called Pinterest the catalog's strongest DESIRE candidate -- saving something is an expression of want with no complaint and no purchase attached -- and Mission 1.15 retrieved the developer guidelines that v1 could not reach. They close it. Four clauses each independently incompatible with this engine: no storage of API information at all ('call the API each time'), automated extraction prohibited, ML training prohibited, and API information usable only to serve and evaluate ads ON Pinterest. The fifth names the product directly -- platform insights, benchmarking and competitor research require explicit written authorization. RESTRICTED rather than PROHIBITED because a written authorization is a route Pinterest itself describes; it is an external commercial action and not something a reviewer can resolve. A definite no is worth more than a hopeful maybe: this closes the portfolio's best DESIRE hypothesis on evidence instead of leaving it open on silence.
 
 **Open questions**
 
-- Retrieve the Pinterest Developer and API terms from https://developers.pinterest.com/terms/. The developer site was reached on 2026-08-30 but the terms document itself did not return its text.
-- Determine whether the API exposes aggregate interest or trend data usable without access to individual user accounts.
-- Determine whether commercial use by a third-party analytics product is permitted, and what the app review process requires.
-- Determine what the terms say about storage, retention and machine-learning processing, treating them separately.
+- Whether Pinterest grants explicit written authorization for platform insights, benchmarking or competitor research features, and on what commercial terms. The guidelines name that authorization as the only route; obtaining one is an external action, not a review finding.
 
-**Official evidence (0)**
+**Official evidence (2)**
 
-None. This assessment rests on no retrieved document, which is why it
-cannot approve anything.
+- [Pinterest Developer Guidelines](https://policy.pinterest.com/en/developer-guidelines) — `OFFICIAL_TERMS`, retrieved 2026-08-31, section: Storage; Prohibited uses
+  - Prohibits storing information accessed through Pinterest Materials including the API, directing developers to call the API on each access instead, with an exception only for campaign analytics about an account the developer holds or has been granted access to. Lists among prohibited uses: automated scraping or data extraction except as expressly permitted; using Pinterest Materials to train, fine-tune or otherwise develop AI or machine-learning models except as expressly permitted; and attempting or claiming to provide platform insights, benchmarking or competitor research features without explicit written authorization. States that API information may not be used except to serve and evaluate the performance of ads on Pinterest, and that information from the API may not be shared or sold to a third party.
+- [Pinterest Developer and API Terms of Service (landing page)](https://developers.pinterest.com/terms/) — `OFFICIAL_TERMS`, retrieved 2026-08-31, section: Retrieval failure
+  - Reached on 2026-08-31 and returned navigation and footer links only, with no policy text -- the same failure Mission 1.7 recorded. The substantive guidelines were obtained instead from policy.pinterest.com, a first-party Pinterest policy host reached directly. No mirror, cache or third-party copy was used.
 
 **Blocked by**
 
-- policy review is REQUIRES_REVIEW
-- policy review has no evidence
+- policy review is RESTRICTED
 
 ---
 
@@ -1370,6 +1385,67 @@ RESTRICTED rather than REQUIRES_REVIEW, and the distinction is deliberate: the t
 
 ---
 
+### Tenders Electronic Daily (EU public procurement) — `ted-eu`
+
+The EU's official public procurement journal. Contract award notices record what a public body actually bought, from which supplier, at what value -- a TRANSACTION rather than a listed price, which is the evidence class the portfolio has never had. REQUIRES_REVIEW: five of six load-bearing activities are granted explicitly and machine-learning processing is not addressed.
+
+- **Family:** public_procurement
+- **Coverage:** PARTIAL
+- **Retention if collected:** raw 30d (baseline), normalized 365d (baseline)
+- **State:** `REQUIRES_REVIEW` — **collector eligible from the catalog alone: no**
+- **Last reviewed:** 2026-08-31 · next 2027-08-31
+
+**Access profiles** (how, not whether)
+
+| Method | Label | Requires | Secret references | Rate limit | Cost |
+|---|---|---|---|---|---|
+| `DATASET_DOWNLOAD` | ted-bulk-xml | nothing | — | **UNKNOWN** | `FREE` |
+| `OFFICIAL_API` | ted-search-api | nothing | — | **UNKNOWN** | `FREE` |
+
+**Assessment**
+
+| Activity | Verdict |
+|---|---|
+| automated access | permitted |
+| api use | permitted |
+| browser automation | not assessed |
+| commercial use | permitted |
+| storage | permitted |
+| retention | permitted |
+| redistribution | permitted |
+| derived analytics | permitted |
+| model processing | not addressed |
+| personal data handling | conditional |
+| attribution required | conditional |
+
+**Conditions**
+
+- Attribution is required for reused editorial material under CC BY 4.0, and changes must be indicated. The Publications Office logo may not be used without prior consent.
+- Notices publish contact details of contracting authorities and successful tenderers -- names, addresses, email addresses, telephone and fax numbers. A minimisation profile must discard the entire contact block: the engine needs the award value, the buyer and supplier organisation names, the CPV classification and the dates, and needs no natural person's contact details for any assessed purpose.
+- Only electronically signed notices published in the Supplement to the Official Journal are authentic; online documents are not necessarily exact reproductions. Any claim derived from TED must be attributed to TED's published notice rather than asserted as the authentic award.
+
+**Reviewer notes**
+
+The most valuable candidate this mission found, and it is not approved. Contract award notices are the only lawful route the portfolio has ever had to WILLINGNESS_TO_PAY as a TRANSACTION rather than a LISTED_PRICE: the notice records that a buyer paid a supplier a stated amount for stated work. Five of the six load-bearing activities are granted in one retrieved sentence -- 'the procurement notices published in the Supplement to the Official Journal of the European Union can be freely reused, for commercial or non-commercial purposes' -- which is a GRANT and not an absence of prohibition, the distinction Mission 1.8 made the gate turn on. model_processing is not addressed, and under rule 8 that blocks whatever the other five say. Recording it as anything else would be the narrowing of the assessed use case Mission 1.8 forbids: this engine's product includes LLM processing, and describing a smaller product to rescue a source is a permission for a product we are not building. What TED cannot evidence is as important as what it can -- this is PUBLIC-SECTOR buying above EU publication thresholds. It says nothing about consumers, nothing about SaaS pricing, and nothing about individual behaviour.
+
+**Open questions**
+
+- Determine whether the Publications Office's reuse decision, or another first-party instrument, addresses machine-learning processing -- inference, summarisation, classification, embedding or training -- of reused notices. The TED legal notice grants free reuse for commercial or non-commercial purposes and does not name any of them. This is the ONLY activity of the six load-bearing ones not positively granted, and it is the whole distance between this source and an approving verdict.
+- Determine documented rate limits for the TED search API. The data-reuse page documents the API and states no limit; absence of a stated limit is not a stated absence of limits.
+
+**Official evidence (2)**
+
+- [TED and SIMAP legal notice](https://ted.europa.eu/en/legal-notice) — `OFFICIAL_LICENCE`, retrieved 2026-08-31, section: Reuse policy; personal data; disclaimer
+  - States that unless otherwise noted the procurement notices published in the Supplement to the Official Journal of the European Union can be freely reused for commercial or non-commercial purposes. Editorial content is licensed CC BY 4.0 requiring appropriate credit and indication of changes; metadata is dedicated to the public domain under CC0 1.0. The Publications Office logo may not be used without prior consent. Records that notices publish contact details of contracting authorities and successful tenderers including names, addresses, emails, telephone and fax numbers, retained ten years on the TED website and then archived. Disclaims that online documents are not necessarily exact reproductions of officially adopted texts and that only electronically signed notices published in the Supplement are authentic. Addresses machine learning, text mining, training and inference nowhere.
+- [TED help: data reuse and additional features](https://ted.europa.eu/en/help/data-reuse) — `OFFICIAL_API_DOCS`, retrieved 2026-08-31, section: Bulk download; API
+  - Documents the reuse routes: bulk XML download in daily and monthly packages through the portal or by direct URL, RSS feeds by business sector, and a read-only search API. States that there is no need to sign in to download the daily or monthly packages. Carries no licence text and no rate limits; the governing terms are in the legal notice.
+
+**Blocked by**
+
+- policy review is REQUIRES_REVIEW
+
+---
+
 ### TikTok — `tiktok`
 
 Short-form video platform. Candidate for consumer trend and desire signals.
@@ -1472,6 +1548,61 @@ The API documentation was retrieved and establishes the access model; the docume
 
 - [Twitch API - Reference](https://dev.twitch.tv/docs/api/) — `OFFICIAL_API_DOCS`, retrieved 2026-08-30, section: Authentication; Concepts
   - The documentation states that the Twitch API uses OAuth 2.0 for authentication and that extension endpoints require JSON Web Tokens. It refers readers to a concepts page for how Twitch handles rate limits without stating any numeric limit on the page retrieved. It establishes that a registered application and OAuth credentials are required; it establishes nothing about permitted use, which is governed by the Developer Services Agreement.
+
+**Blocked by**
+
+- policy review is REQUIRES_REVIEW
+
+---
+
+### USAspending.gov (US federal award data) — `usaspending`
+
+US federal contract and grant awards: who received public money, from which agency, for how much. The same TRANSACTION evidence class as TED. REQUIRES_REVIEW: no licence or terms document could be retrieved.
+
+- **Family:** public_procurement
+- **Coverage:** PARTIAL, countries ['US'], languages ['en']
+- **Retention if collected:** raw 30d (baseline), normalized 365d (baseline)
+- **State:** `REQUIRES_REVIEW` — **collector eligible from the catalog alone: no**
+- **Last reviewed:** 2026-08-31 · next 2027-08-31
+
+**Access profiles** (how, not whether)
+
+| Method | Label | Requires | Secret references | Rate limit | Cost |
+|---|---|---|---|---|---|
+| `OFFICIAL_API` | usaspending-api | nothing | — | **UNKNOWN** | `UNKNOWN` |
+
+**Assessment**
+
+| Activity | Verdict |
+|---|---|
+| automated access | not addressed |
+| api use | not addressed |
+| browser automation | not assessed |
+| commercial use | not addressed |
+| storage | not addressed |
+| retention | not addressed |
+| redistribution | not addressed |
+| derived analytics | not addressed |
+| model processing | not addressed |
+| personal data handling | not addressed |
+| attribution required | not addressed |
+
+**Reviewer notes**
+
+Registered because it is the second lawful-looking route to WILLINGNESS_TO_PAY as a transaction, and REQUIRES_REVIEW because looking lawful is not being permitted. Three first-party locations were tried and none carried a licence: the API root, the about page (which returned no content) and the operating agency's own repository README. The DATA Act sentence establishes that the data must be publicly ACCESSIBLE, which is a statement about publication and not a grant of reuse rights to a commercial product. This is a weaker position than TED, where a reuse grant was retrieved verbatim, and the difference is exactly the one the registry exists to keep visible.
+
+**Open questions**
+
+- Retrieve a licence or terms-of-use document for USAspending data. The API root at api.usaspending.gov states that the data is open source and provided to the public as part of the DATA Act but carries no licence text; usaspending.gov/about returned no content on 2026-08-31; and the operating agency's GitHub README states the same DATA Act sentence with no licence, terms, attribution requirement or rate limit.
+- Determine whether US federal works' copyright status is asserted anywhere first-party for this dataset. A general legal principle is not a source document, and no verdict may rest on one.
+- Determine documented rate limits for the public API.
+
+**Official evidence (2)**
+
+- [USAspending API root](https://api.usaspending.gov/) — `OFFICIAL_API_DOCS`, retrieved 2026-08-31, section: Overview
+  - Describes comprehensive US government spending data covering awards -- who received federal contracts or grants, with geographic and agency breakdowns -- and account-level data. States that the data is open source and provided to the public as part of the DATA Act which requires it to be publicly accessible. Carries no licence, terms of use, registration requirement, rate limit, or statement about commercial use, storage, redistribution, analytics or machine learning.
+- [usaspending-api repository README](https://github.com/fedspendingtransparency/usaspending-api/blob/master/README.md) — `OFFICIAL_API_DOCS`, retrieved 2026-08-31, section: Retrieval outcome
+  - The operating agency's own repository documentation repeats that the data is open source and provided to the public as part of the DATA Act, and states no software licence, copyright notice, terms of use, rate limit or attribution requirement. https://www.usaspending.gov/about returned no page content on 2026-08-31 and is recorded as a retrieval failure.
 
 **Blocked by**
 

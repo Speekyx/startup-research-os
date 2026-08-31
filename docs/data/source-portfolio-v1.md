@@ -299,6 +299,39 @@ Note what is absent: "approach Steam", "buy an X tier". Both are legitimate
 vendor conversations with cost and lead time, and neither is the cheapest next
 move.
 
+## 5.2 What Mission 1.15 changed about this document
+
+The list in §5 was written before the demand-side round. Three of its items have
+moved and one has been superseded.
+
+**Item 4 is answered.** Bluesky *does* publish a developer terms document
+separate from the user ToS — its own documentation domain names "Bluesky
+Developer Guidelines". It could not be retrieved (301 to `bsky.network`, empty
+body). The question is no longer *does one exist* but *what does it say*, which
+is a narrower and more actionable thing to ask.
+
+**Item 3 lost `pinterest`.** The document was retrieved from
+`policy.pinterest.com` and it closes the source: no storage of API information at
+all, automated extraction prohibited, and platform-insights or competitor-research
+features requiring explicit written authorization. Pinterest was this document's
+best DESIRE hypothesis; it is now RESTRICTED on evidence.
+
+**A new item outranks all five.** `ted-eu` — EU public procurement — has five of
+the six load-bearing activities granted in a single retrieved sentence and one
+activity, `model_processing`, unaddressed. It would be the portfolio's first
+WILLINGNESS_TO_PAY source, and WTP is a family that had *no registered candidate
+at all* until this round. Retrieving one more first-party instrument is the
+cheapest remaining move by a wide margin.
+
+See `demand-side-source-priority-v1.md` for the full ranking and
+`demand-side-source-coverage-v1.md` for what each family actually has.
+
+**The shape of the finding is unchanged, and worth restating.** This document has
+said since Mission 1.7 that the portfolio is strong on published aggregate
+context and empty on individual behaviour. Mission 1.15 examined nine sources and
+did not change that. What it changed is how much of the emptiness is *known* to
+be closed rather than merely unexplored.
+
 ## 5.1 What Mission 1.9.2 changed about this document
 
 The HIGH row above now says something it could not before: **GDELT has a

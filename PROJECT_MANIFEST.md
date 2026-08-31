@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.22
+Version: 1.23
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-08-31 (Sprint 1 / Mission 1.14)
+Last amended: 2026-08-31 (Sprint 1 / Mission 1.15)
 
 ---
 
@@ -13,6 +13,24 @@ Last amended: 2026-08-31 (Sprint 1 / Mission 1.14)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.23 — 2026-08-31 (Sprint 1 / Mission 1.15)
+
+Authorized by the Mission 1.15 brief §2 (find lawful demand-side sources), §4-§6
+(priority candidates), §12 (the WTP gap), §21-§23 (coverage and priority), §42
+(documentation) and §44 (stop after the report).
+
+| Change | Section | Authority |
+|--------|---------|-----------|
+| **WILLINGNESS_TO_PAY gained its first lawful candidates, and neither is approved** | Product Shape | Mission 1.15 §12. `ted-eu` and `usaspending` record contract awards -- what a buyer paid a named supplier -- which is a TRANSACTION and not a LISTED_PRICE. WTP had **no registered candidate at all** before this round. Both are REQUIRES_REVIEW: a first candidate is not a first source |
+| **`ted-eu` is the closest any blocked source has come, and one silence holds it** | Blocked work | Mission 1.15. One retrieved sentence grants five of the six load-bearing activities -- "the procurement notices ... can be freely reused, for commercial or non-commercial purposes" -- which is a GRANT rather than an absence of prohibition. `model_processing` is NOT_ADDRESSED and rule 8 blocks whatever the other five say. Recording it otherwise would be the narrowing of the assessed use Mission 1.8 forbids: this product includes LLM processing, and a permission for a smaller product is a permission for a product we are not building |
+| **Two hopeful maybes became definite noes on retrieved evidence** | Engineering Principles | Mission 1.15 §5, §6, §7. Pinterest -- the catalog's best DESIRE hypothesis since Mission 1.7 -- prohibits storing API information at all ("call the API each time"), prohibits automated extraction and ML training, and requires explicit written authorization for competitor-research features, which names this product. Hacker News publishes an API stating "There is currently no rate limit" while Y Combinator's Terms prohibit "data mining, robots, scraping" and commercial derivative works. Both RESTRICTED |
+| **Technical accessibility is still not permission, demonstrated three times** | Engineering Principles | Mission 1.15 §18. A keyless public API paired with a non-approving verdict for `hacker-news`, `bluesky` and `ted-eu`, each for a different reason: prohibited, silent, and granted-but-for-one-activity. Asserted by test rather than left to prose |
+| **A failed retrieval changes nothing** | Engineering Principles | Mission 1.15 §18. Reddit and Stack Exchange were unreachable and gained **no review version in either direction**. No mirror, cached copy, alternative page or community summary was used to infer terms; no bot protection was encountered and no bypass attempted. A search result carrying substantive-looking Pinterest quotes was NOT treated as evidence until the document itself was fetched from a first-party host |
+| **Bluesky's open question narrowed from four unknowns to one document** | Blocked work | Mission 1.15 §5. Its developer guidelines exist -- named by Bluesky's own documentation domain -- and returned an empty body. The user Terms, re-retrieved at the version effective 15 September 2025, remain silent on all ten activities. Review v2 records the same verdict and a materially better question (H-33) |
+| **A source family for sources whose primary record is a purchase** | Product Shape | Mission 1.15, migration 0020. `public_procurement` rather than `economic_data`: World Bank and Eurostat publish statistics ABOUT economies, TED publishes individual transactions within one. Filing them together would have made the coverage report say the portfolio has had commercial evidence since Mission 1.5, which it has not |
+| **No approving source observes an individual doing anything** | Blocked work | Mission 1.15 §21, `demand-side-source-coverage-v1.md`. Six of eight business families have no approving source and two -- Pricing and Retention -- have no registered candidate at all. The two families that do have one have a weak one: `openalex` for distribution is scholarly-record discovery, `gdelt` for user behaviour is news-corpus activity. Retention's obstacle is structural rather than legal: it needs the same subject observed twice, and everything in the portfolio is an aggregate or a one-shot public record. **No proxy is proposed**, because a proxy nobody can validate is worse than an acknowledged gap |
+| **Nothing was collected and nothing became eligible** | Forbidden During Foundation | Mission 1.15 §31, §32. No collector, no RawRecords, no NormalizedRecords, no Signals. RawRecords 12, NormalizedRecords 12, Signals 7, Claims 7, Evidence 7 unchanged. Reliability assessments 0, Opportunities 0, embeddings 0, scores 0. A correct review concluding that candidates remain blocked is worth more than a false approval |
 
 ## 1.22 — 2026-08-31 (Sprint 1 / Mission 1.14)
 
