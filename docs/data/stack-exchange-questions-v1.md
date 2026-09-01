@@ -5,10 +5,11 @@ community-content source, and the first where the positive rights come from a
 **content licence** rather than from a platform's terms.
 
 **Verdict: `APPROVED_WITH_CONDITIONS` under `local-private-research-v1`.**
-ELIGIBLE, resource-ready, and **no collector exists yet** — implementation is the
-remaining work.
+ELIGIBLE and resource-ready. **`stack-exchange-questions@1.0.0` exists and has
+run**: one bounded acquisition, 15 RawRecords, idempotency verified (§12).
 
-**No research data was collected.** Counts unchanged.
+**Mission 1.18 is still in progress.** No record kind, no normalizer, no Signal,
+no Claim, no Evidence — the 15 records are raw and unnormalized.
 
 ---
 
