@@ -212,7 +212,7 @@ No one-off script bypassed any of it.
 | pytest suites | 7 packages; acquisition 1 385 + 11 skipped |
 | seven validators | all OK, including the new TED block |
 | contract generation `--check` | current |
-| catalog render `--check` | matches |
+| all five generator `--check` steps | current (see §9.1) |
 | `ruff check` / `format --check` | clean, 446 files |
 | `mypy` | no issues |
 | env-template secret check · `assert_registry_grants_nothing` | OK |
@@ -222,6 +222,27 @@ No one-off script bypassed any of it.
 "no TED normalizer" claims, then the database-count ones — and §56 of
 `testing-strategy.md` records what replaced the counts: an assertion about the
 stage nobody has built, which does not expire when the pipeline advances.
+
+## 9.1 A mistake CI caught, and where the fact belongs instead
+
+`docs/data/source-signal-coverage-v1.md` was amended by hand to say that TED is
+normalized and still produces no Signal. **It is a GENERATED file**, rendered
+from the catalog by `render_signal_coverage.py`, and `--check` failed on CI while
+every local gate passed — because the five generator checks are separate CI steps
+and only one of them had been run locally.
+
+The edit was reverted rather than regenerated around. Two hand-maintained copies
+of one fact drift, and the drift is discovered by whoever trusted the wrong one
+(ADR-009, applied to documentation).
+
+**The fact still needed a home**, and it has two that are not generated:
+`ted-eu-normalization-v1.md` §18 and §11 of this report. Coverage says what a
+source COULD expose; it is derived from the catalog and says nothing about what
+has been built, which is exactly why it could not carry this.
+
+All five generator checks now run together locally:
+`generate.py`, `sros-source render`, `render_review_results.py`,
+`render_signal_coverage.py` and `sros_evidence_aggregation.sensitivity`.
 
 ## 10. Final state
 
