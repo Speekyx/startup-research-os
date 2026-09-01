@@ -324,6 +324,28 @@ matters the day a report states counts: **those numbers describe one database,
 not the repository.** Reproducing them elsewhere means re-running collection,
 normalization, derivation and interpretation there.
 
+### The one thing that travels by neither, and what to do about it
+
+A **human decision** is regenerable by nothing. `registry.source_condition_verifications`
+holds the operator's acceptance of the residual TED database-right exposure, and
+on a second machine that row does not exist, so `ted-eu` is not eligible there.
+
+There is deliberately **no `decide` verb** (Mission 1.15.6): a decision that is
+routine to record is not a decision. What there is, for this one already-made and
+already documented acceptance, is a replay with no parameters (ADR-030):
+
+```bash
+python infrastructure/scripts/record_ted_operator_acceptance.py
+```
+
+It prints the acknowledgement in full and writes nothing. Re-run it with
+`--apply` and it asks you to type a confirmation before recording one row. It
+refuses if the condition is missing, if this deployment carries a different
+review version, if the condition is not `HUMAN_CONFIRMATION`, or if the row is
+already there.
+
+**This is once per machine, not once per pull.** `sync.py` covers every pull.
+
 ---
 
 ## Read this before contributing
