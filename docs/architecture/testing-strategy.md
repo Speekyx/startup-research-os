@@ -2316,3 +2316,68 @@ Mission 1.15.6.3 broke here, because they pinned the sentence
 protecting was that it does **not** say "pass the eligibility gate". The
 sentence moves every time the mission does; the property does not. The constant
 is now named `REAL_STEP` with a comment saying it will move again.
+
+---
+
+## 55. Model the path the value actually travels, not the value (Mission 1.15.8)
+
+The TED fixtures hold what the API sends: a JSON body with `1875000.50` as a
+number. The normalizer receives something else — the collector stores that body,
+PostgreSQL keeps it as `jsonb`, and `read_raw_records` reads `payload::text` back
+with `parse_float=Decimal`.
+
+The first version of the suite handed the adapter the fixture dict directly. Every
+monetary case failed, and the failure was **correct**: `decimal_from` refuses a
+Python float, because a binary approximation must never reach a figure saying what
+a public contract was worth.
+
+Two ways to make it pass, and only one of them is a test:
+
+- change the fixtures to `Decimal`. The suite goes green and stops exercising the
+  refusal — and the fixtures stop being a JSON body, which is what the *collector*
+  tests need them to be;
+- **run the fixture through the real path**: `json.loads(json.dumps(payload),
+  parse_float=Decimal)`. Now the adapter sees exactly what production hands it,
+  and the refusal stays reachable and gets its own test.
+
+The second also bought a case the first could never have: a decimal with more
+significant digits than a float64 holds, asserted to arrive unrounded. That
+assertion is only meaningful because the value went through the same three steps
+the real one does.
+
+**The general rule: when a value crosses layers before reaching the code under
+test, the fixture is the value at the FIRST layer and the test performs the
+crossing.** A fixture shaped like the last layer tests the code against an input
+nothing produces, and the mismatch it hides is exactly the kind that survives
+into production — because every test agreed with it.
+
+---
+
+## 56. A guard on a database count has a shelf life; the one under it may not
+(Mission 1.15.8)
+
+Six missions wrote `raw_records WHERE source_id = 'ted-eu' == 0`, and each was
+true when written. Mission 1.15.7 made the raw count non-zero and 1.15.8 made the
+normalized count non-zero, so across two missions the same assertion had to be
+inverted twice in six files.
+
+That churn is a symptom. **The counts were never the property** — they were a
+proxy for *nothing has been built past the point this mission reached*, and a
+proxy that expires every time the pipeline advances.
+
+What replaced them survives instead of expiring:
+
+```sql
+SELECT count(*) FROM nlp.signal_inputs si
+  JOIN acquisition.normalized_records n ON n.id = si.normalized_record_id
+ WHERE n.source_id = 'ted-eu'
+```
+
+Zero, and it stays zero on every machine until a mission deliberately writes a
+TED Signal extractor — which is a REPOSITORY fact, not a deployment one, and is
+the actual stop condition every one of those guards was reaching for.
+
+**When inverting a count guard, ask what it was a proxy for and assert that
+instead.** A count of the stage you just built is deployment state (§49) and will
+be wrong on the next machine; a count of the stage nobody has built is a claim
+about the code, and it is the one worth keeping.

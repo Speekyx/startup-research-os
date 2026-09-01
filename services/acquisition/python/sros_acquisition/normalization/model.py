@@ -53,11 +53,18 @@ __all__ = [
     "NORMALIZED_NAMESPACE",
     "RECORD_KINDS",
     "RECORD_KIND_REGISTRY",
+    "CanonicalClassification",
     "CanonicalGeography",
     "CanonicalLanguage",
     "CanonicalObservation",
     "CanonicalPeriod",
     "CanonicalValue",
+    "CanonicalMonetaryAmount",
+    "CanonicalMultilingualText",
+    "MONETARY_AMOUNT_TYPES",
+    "NOTICE_CLASSES",
+    "NOTICE_TYPE_CLASSES",
+    "ProcurementNoticeObservation",
     "LexicalFrequencyObservation",
     "NormalizedRecordDraft",
     "NumericObservation",
@@ -545,6 +552,50 @@ RECORD_KINDS: dict[str, RecordKind] = {
             "and the count is not a signal, a score or a rank."
         ),
     ),
+    # Mission 1.15.8. The third kind. A procurement notice is neither a measured
+    # metric nor a counted term: it is a DOCUMENT a public body published, whose
+    # interesting content is a set of typed monetary facts, organisations in
+    # roles, classifications and dates. Neither existing kind can hold that, and
+    # widening one to fit would give a World Bank record an award status.
+    #
+    # `notice.source_type` is REQUIRED rather than optional, because the whole
+    # point of the two families this resource contains is that a call for
+    # competition and a report of an outcome are different things -- a notice
+    # that cannot say which it is stays usable and is honestly PARTIAL.
+    #
+    # `period` is required and is the publication DAY. `observation.value` has no
+    # counterpart here on purpose: a notice has no single measurement, and the
+    # amounts it carries are a LIST of typed entries, each of which has to say
+    # what it means (§19). A required scalar value would have forced exactly the
+    # flattening this kind exists to avoid.
+    "procurement_notice": RecordKind(
+        kind_id="procurement_notice",
+        required=("notice.publication_number", "notice.source_type", "period"),
+        optional=(
+            "notice.identifier",
+            "notice.version",
+            "notice.form_type",
+            "classification.codes",
+            "classification.contract_nature",
+            "organisations.buyer",
+            "organisations.tenderer",
+            "award.selection_status",
+            "dates.award_decision",
+            "dates.contract_conclusion",
+            "place.buyer_countries",
+            "place.performance_countries",
+            "place.performance_subdivisions",
+            "amounts",
+            "series.resource_id",
+            "source_reference",
+        ),
+        description=(
+            "One procurement notice a contracting authority published, as the source "
+            "published it. Source data: the amounts are typed and unconverted, the "
+            "organisations are multilingual and role-scoped, and nothing here is a "
+            "transaction, a price or a market signal."
+        ),
+    ),
 }
 
 
@@ -701,6 +752,328 @@ class LexicalFrequencyObservation:
                 "source_last_updated": self.source_last_updated,
             },
         }
+
+
+# ----------------------------------------------- procurement (Mission 1.15.8)
+
+
+# The monetary semantics TED publishes, as a CLOSED vocabulary. Each entry maps
+# to exactly one source field and says what that field means; there is no
+# generic member, and adding one would be the flattening the whole design
+# refuses.
+#
+# **Not a domain enum, deliberately.** These are SOURCE semantics established
+# for one source's field set. A cross-source `AmountType` would have to claim
+# that a TED framework maximum and some future source's "budget ceiling" are the
+# same concept, and nothing has established that. A vocabulary that grows a
+# member per source is a vocabulary; one that grows a member per MEANING is an
+# ontology, and that is a decision with an ADR behind it.
+MONETARY_AMOUNT_TYPES: dict[str, str] = {
+    "TOTAL_VALUE": (
+        "The total value the notice states for the procurement it reports. TED field `total-value`."
+    ),
+    "TENDER_VALUE": (
+        "The value of a tender. TED field `tender-value`; published per lot, so "
+        "a notice with several lots carries several."
+    ),
+    "ESTIMATED_VALUE": (
+        "An estimated value, published before an outcome is known. TED field "
+        "`estimated-value-lot`. NOT an amount anybody paid."
+    ),
+    "FRAMEWORK_MAXIMUM": (
+        "The maximum value a framework agreement may reach. TED field "
+        "`framework-maximum-value-lot`. A ceiling, not a transaction."
+    ),
+}
+
+# Whether a monetary entry describes the notice as a whole or one of its lots.
+MONETARY_SCOPES = ("NOTICE", "LOT")
+
+# Whether amount i and currency i can be said to describe the same thing.
+#
+# ESTABLISHED   exactly one amount and one currency, so there is nothing to
+#               align and the pairing is a fact rather than a reading
+# NOT_ESTABLISHED
+#               several amounts and/or several currencies. The Search API's
+#               schema declares both as arrays and states NOTHING about
+#               positional correspondence, so pairing by index would be a
+#               reading of the source rather than the source's own statement.
+#               Both sequences are preserved whole and unpaired
+MONETARY_PAIRING_STATES = ("ESTABLISHED", "NOT_ESTABLISHED")
+
+
+@dataclass(frozen=True)
+class CanonicalMonetaryAmount:
+    """One monetary fact, with the semantic that makes it usable.
+
+    Mission 1.15.8 §15/§19. **An amount without its type is not stored.** The
+    review's own note says a collector that cannot say which kind of amount it
+    retrieved has not retrieved a usable one, and the same is true one layer up:
+    a canonical amount whose meaning is unknown is exactly the `price_paid`
+    flattening this model exists to prevent, wearing a different name.
+
+    **Amount and currency are sequences, not scalars.** TED publishes both as
+    arrays and says nothing about their correspondence, so a single-valued
+    representation would have to pick or pair. `pairing` records whether the two
+    can be read together, and it is `ESTABLISHED` only in the one shape where
+    there is nothing to decide.
+    """
+
+    amount_type: str
+    source_field: str
+    scope: str
+    amounts: tuple[Decimal, ...]
+    currencies: tuple[str, ...]
+    currency_source_field: str | None
+    pairing: str
+
+    def __post_init__(self) -> None:
+        if self.amount_type not in MONETARY_AMOUNT_TYPES:
+            raise ValueError(
+                f"{self.amount_type!r} is not an established monetary semantic. An "
+                "amount whose meaning is not in the vocabulary must not be stored: "
+                "that is how a framework ceiling becomes a price somebody paid"
+            )
+        if self.scope not in MONETARY_SCOPES:
+            raise ValueError(f"{self.scope!r} is not a monetary scope")
+        if self.pairing not in MONETARY_PAIRING_STATES:
+            raise ValueError(f"{self.pairing!r} is not a pairing state")
+        if not self.amounts:
+            raise ValueError(
+                "a monetary entry with no amount is an absence, and an absence is "
+                "represented by the entry not existing"
+            )
+        if self.pairing == "ESTABLISHED" and not (
+            len(self.amounts) == 1 and len(self.currencies) == 1
+        ):
+            raise ValueError(
+                "pairing is ESTABLISHED only where there is one amount and one "
+                "currency. With several of either, positional correspondence is a "
+                "reading the source has not published"
+            )
+
+    def to_json(self) -> dict[str, object]:
+        return {
+            "amount_type": self.amount_type,
+            "source_field": self.source_field,
+            "scope": self.scope,
+            # Exact decimal STRINGS, never JSON floats -- the rule `CanonicalValue`
+            # already states, for the same three reasons.
+            "amounts": [canonical_decimal_text(a) for a in self.amounts],
+            "currencies": list(self.currencies),
+            "currency_source_field": self.currency_source_field,
+            "pairing": self.pairing,
+        }
+
+
+@dataclass(frozen=True)
+class CanonicalMultilingualText:
+    """A value the source published in several languages, kept in all of them.
+
+    Mission 1.15.8 §10. The Search API returns an object keyed by language and
+    its request carries no language selector, so there is no source-supported
+    preference to apply. Choosing English, or the first key, would be this
+    layer inventing an editorial rule and discarding what it did not choose.
+
+    **There is no `display` field**, and its absence is the design. A canonical
+    display value would be read as *the* name by everything downstream, and the
+    rule that produced it would live here rather than where a reader could see
+    it. A consumer that needs one language asks for it by tag.
+
+    Ordering is by language tag, so serialisation is deterministic and the
+    content fingerprint does not depend on dictionary order.
+    """
+
+    values: tuple[tuple[str, tuple[str, ...]], ...]
+    scheme: str = "ted-language-code"
+
+    @classmethod
+    def from_source(
+        cls, raw: object, scheme: str = "ted-language-code"
+    ) -> CanonicalMultilingualText | None:
+        """Build from what TED returned, or `None` when it returned nothing.
+
+        Accepts the object-keyed-by-language shape the API documents. A shape
+        this does not recognise returns `None` and the caller records drift --
+        silently stringifying an unexpected structure is what §30 forbids.
+        """
+        if not isinstance(raw, dict) or not raw:
+            return None
+        values: list[tuple[str, tuple[str, ...]]] = []
+        for tag in sorted(raw):
+            entry = raw[tag]
+            if isinstance(entry, str):
+                items: tuple[str, ...] = (entry,)
+            elif isinstance(entry, list) and all(isinstance(i, str) for i in entry):
+                items = tuple(entry)
+            else:
+                return None
+            values.append((str(tag), items))
+        return cls(values=tuple(values), scheme=scheme)
+
+    @property
+    def language_tags(self) -> tuple[str, ...]:
+        return tuple(tag for tag, _ in self.values)
+
+    def to_json(self) -> dict[str, object]:
+        return {
+            "scheme": self.scheme,
+            "by_language": {tag: list(items) for tag, items in self.values},
+            "language_tags": list(self.language_tags),
+        }
+
+
+@dataclass(frozen=True)
+class CanonicalClassification:
+    """One classification code, as the source published it.
+
+    Mission 1.15.8 §13. A code and the scheme it belongs to, and nothing else.
+    No label is invented, no sector is inferred, and no CPV is rolled up: a
+    taxonomy mapping is a reviewed act and belongs to the mission that does it.
+    """
+
+    code: str
+    scheme: str
+    label: str | None = None
+
+    def to_json(self) -> dict[str, object]:
+        return {"code": self.code, "scheme": self.scheme, "label": self.label}
+
+
+@dataclass(frozen=True)
+class ProcurementNoticeObservation:
+    """The canonical payload for `record_kind = procurement_notice`.
+
+    Mission 1.15.8. **One notice, one record.** The lots inside it are structured
+    data on this record and never records of their own: TED publishes one notice
+    under one publication number, and a per-lot record would invent an identity
+    the source does not have and make one publication look like several.
+
+    **This is what TED published, not what happened.** A normalized notice
+    supports the claim *TED reported that ...* and no stronger one; nothing here
+    is independently verified, and the authenticity boundary the review draws is
+    preserved by saying so rather than by omitting to say it.
+
+    Four properties are load-bearing:
+
+    **The period is the publication DAY and carries no moment.** See
+    `publication` below and `ted-eu-normalization-v1.md` §5.
+
+    **The notice type is preserved and also classified.** `source_type` is what
+    TED wrote; `notice_class` is the normalized reading of it. Both, because a
+    normalized class alone would lose which source vocabulary produced it, and a
+    source type alone would make every consumer re-learn TED's spelling.
+
+    **Money is a list of typed entries, never a number.** See
+    `CanonicalMonetaryAmount`.
+
+    **Organisations are multilingual and role-scoped.** A buyer and a tenderer
+    are different roles, and a tenderer is never read as an awarded supplier
+    here: only `award.selection_status` speaks to an outcome.
+    """
+
+    publication_number: str
+    notice_class: str
+    source_type: str
+    source_type_scheme: str
+    period: CanonicalPeriod
+    publication_source_value: str
+    publication_precision: str
+    publication_utc_offset: str | None
+    publication_offset_semantics: str
+    notice_identifier: str | None = None
+    notice_version: int | None = None
+    form_type: str | None = None
+    contract_nature: tuple[str, ...] = ()
+    classifications: tuple[CanonicalClassification, ...] = ()
+    buyer_organisations: CanonicalMultilingualText | None = None
+    tenderer_organisations: CanonicalMultilingualText | None = None
+    award_selection_status: tuple[str, ...] = ()
+    award_decision_dates: tuple[str, ...] = ()
+    contract_conclusion_dates: tuple[str, ...] = ()
+    buyer_countries: tuple[str, ...] = ()
+    performance_countries: tuple[str, ...] = ()
+    performance_subdivisions: tuple[str, ...] = ()
+    amounts: tuple[CanonicalMonetaryAmount, ...] = ()
+    resource_id: str | None = None
+    source_reference: dict[str, str] = field(default_factory=dict)
+
+    record_kind: str = "procurement_notice"
+
+    def __post_init__(self) -> None:
+        if not self.publication_number:
+            raise ValueError(
+                "a procurement notice must carry the publication number the source "
+                "published; identity is never reconstructed from position"
+            )
+        if self.notice_class not in NOTICE_CLASSES:
+            raise ValueError(f"{self.notice_class!r} is not an established notice class")
+
+    def to_payload(self) -> dict[str, object]:
+        return {
+            "record_kind": self.record_kind,
+            "notice": {
+                "publication_number": self.publication_number,
+                "identifier": self.notice_identifier,
+                "version": self.notice_version,
+                # BOTH, always. §7.
+                "class": self.notice_class,
+                "source_type": self.source_type,
+                "source_type_scheme": self.source_type_scheme,
+                "form_type": self.form_type,
+            },
+            "period": self.period.to_json(),
+            # The source value verbatim, beside the period derived from it, so a
+            # later mission can close the open question without re-collecting.
+            "publication": {
+                "source_value": self.publication_source_value,
+                "precision": self.publication_precision,
+                "utc_offset": self.publication_utc_offset,
+                "offset_semantics": self.publication_offset_semantics,
+            },
+            # THREE date concepts, never merged. §9.
+            "dates": {
+                "award_decision": list(self.award_decision_dates),
+                "contract_conclusion": list(self.contract_conclusion_dates),
+            },
+            "classification": {
+                "codes": [c.to_json() for c in self.classifications],
+                "contract_nature": list(self.contract_nature),
+            },
+            "organisations": {
+                "buyer": self.buyer_organisations.to_json() if self.buyer_organisations else None,
+                "tenderer": (
+                    self.tenderer_organisations.to_json() if self.tenderer_organisations else None
+                ),
+            },
+            "award": {"selection_status": list(self.award_selection_status)},
+            "place": {
+                "buyer_countries": list(self.buyer_countries),
+                "performance_countries": list(self.performance_countries),
+                "performance_subdivisions": list(self.performance_subdivisions),
+                "scheme": "ted-source-code",
+            },
+            "amounts": [a.to_json() for a in self.amounts],
+            "series": {"resource_id": self.resource_id},
+            "source_reference": dict(sorted(self.source_reference.items())),
+        }
+
+
+# What a notice IS, normalized. Closed, and both members correspond to a notice
+# type this resource contains -- there is no OTHER member, because a notice
+# outside the resource is refused rather than classified.
+NOTICE_CLASSES: dict[str, str] = {
+    "CONTRACT_NOTICE": "A call for competition. No award outcome exists yet.",
+    "CONTRACT_AWARD_NOTICE": "A notice reporting the result of a procurement.",
+}
+
+# TED's own vocabulary, mapped to the classes above. The mapping is the whole of
+# the interpretation this normalizer performs on the notice type, and it is a
+# table rather than a rule so a reader can check it.
+NOTICE_TYPE_CLASSES: dict[str, str] = {
+    "cn-standard": "CONTRACT_NOTICE",
+    "can-standard": "CONTRACT_AWARD_NOTICE",
+}
 
 
 class CanonicalObservation(Protocol):

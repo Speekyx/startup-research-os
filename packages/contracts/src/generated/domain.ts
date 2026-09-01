@@ -540,6 +540,9 @@ export const NORMALIZATION_QUALITY_REASON_VALUES = [
   "PERIOD_NOT_SUPPORTED",
   "PERIOD_TIMEZONE_NOT_ESTABLISHED",
   "LANGUAGE_NOT_MAPPED",
+  "MONETARY_PAIRING_NOT_ESTABLISHED",
+  "MONETARY_CURRENCY_ABSENT",
+  "PERSONAL_DATA_FIELD_NOT_PROMOTED",
 ] as const;
 export type NormalizationQualityReason = (typeof NORMALIZATION_QUALITY_REASON_VALUES)[number];
 export function isNormalizationQualityReason(v: unknown): v is NormalizationQualityReason {

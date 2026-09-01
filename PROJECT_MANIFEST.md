@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.31
+Version: 1.32
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-01 (Sprint 1 / Mission 1.15.7)
+Last amended: 2026-09-01 (Sprint 1 / Mission 1.15.8)
 
 ---
 
@@ -13,6 +13,41 @@ Last amended: 2026-09-01 (Sprint 1 / Mission 1.15.7)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.32 — 2026-09-01 (Sprint 1 / Mission 1.15.8)
+
+Authorized by the Mission 1.15.8 brief §3-§45.
+
+**The third record kind, and the first canonical procurement notices.**
+`procurement_notice` (migration 0022) joins `numeric_observation` and
+`lexical_frequency_observation` for the reason the second one was added: a notice
+is a DOCUMENT carrying typed monetary facts, organisations in roles and several
+distinct dates, and widening either existing kind to hold it would give a World
+Bank figure an award status. It carries no `observation.value`, deliberately —
+a notice has no single measurement.
+
+**`ted-search-api-notice@1.0.0`**, the third normalizer. **One notice, one
+record; lots are structured data inside it.** Four monetary semantics under their
+own names with no `price_paid` and no currency conversion; amounts paired with a
+currency only where there is one of each, because the source declares arrays and
+states nothing about positional correspondence (**H-38**); every language kept
+with no canonical display value; CPV codes as identifiers with no invented
+sector; the `links` block left in the raw record.
+
+**A published DATE does not become a moment.** `publication-date` is
+`2023-03-01+01:00` — a day, an offset, and no time. The period is that day with
+NAIVE bounds and **`observed_at` is NULL**. `ESTABLISHED` was considered and
+refused: its definition requires the source or authoritative documentation to
+state the timezone, and an offset inside one value is data rather than a
+statement about what it means. Recorded as **H-37**, with the source value
+preserved so closing it is a re-derivation rather than a re-collection.
+
+**Three real notices normalized** through the production job path; a second run
+persisted nothing. `73415.22` survives the whole path exactly. Raw 15 (3 TED),
+normalized 15 (3 TED), and **every downstream count unchanged**: 7 Signals, 7
+Claims, 7 Evidence, 0 Opportunities, 0 embeddings, 0 scores, all pre-existing and
+none of them TED's. **No TED Signal, Claim or Evidence exists.** H-36A and H-36B
+untouched
 
 ## 1.31 — 2026-09-01 (Sprint 1 / Mission 1.15.7)
 

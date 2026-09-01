@@ -466,7 +466,7 @@ class TestTheAdapterAndTheVocabularyStaySeparateClaims:
         deleted."""
         from sros_acquisition import IMPLEMENTED_NORMALIZERS
 
-        assert frozenset({"world-bank", "gdelt"}) == IMPLEMENTED_NORMALIZERS
+        assert frozenset({"world-bank", "gdelt", "ted-eu"}) == IMPLEMENTED_NORMALIZERS
 
     def test_the_adapter_module_is_the_web_ngram_one(self) -> None:
         """Mission 1.10 asserted that no module existed at all. One does now, and

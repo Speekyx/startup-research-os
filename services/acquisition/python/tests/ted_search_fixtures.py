@@ -26,6 +26,7 @@ from typing import Any
 __all__ = [
     "AWARD_NOTICE",
     "CONTRACT_NOTICE",
+    "LINKS",
     "MALFORMED_NOT_JSON",
     "MULTI_LOT_NOTICE",
     "NOTICE_WITHOUT_IDENTITY",
@@ -156,3 +157,21 @@ def response_missing_notices() -> str:
 
 def response_notices_not_a_list() -> str:
     return json.dumps({"notices": {"publication-number": "00123456-2023"}})
+
+
+# The `links` object TED attaches to every notice regardless of the field
+# selection (Mission 1.15.7 §6). Trimmed to three languages rather than the 24
+# a real response carries: the shape is what matters, and a fixture that
+# reproduced the size would only make every test file slower to read.
+LINKS: dict[str, Any] = {
+    "pdf": {
+        "ENG": "https://ted.europa.eu/en/notice/00123456-2023/pdf",
+        "FRA": "https://ted.europa.eu/fr/notice/00123456-2023/pdf",
+        "DEU": "https://ted.europa.eu/de/notice/00123456-2023/pdf",
+    },
+    "html": {
+        "ENG": "https://ted.europa.eu/en/notice/00123456-2023",
+        "FRA": "https://ted.europa.eu/fr/notice/00123456-2023",
+    },
+    "xml": {"ENG": "https://ted.europa.eu/en/notice/00123456-2023/xml"},
+}

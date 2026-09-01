@@ -307,6 +307,10 @@ def check_registered_normalizers(errors: list[str]) -> list[str]:
 NUMERIC_PATH = (
     "services/acquisition/python/sros_acquisition/collection/records.py",
     "services/acquisition/python/sros_acquisition/collection/world_bank.py",
+    # Mission 1.15.8. The TED adapter reads monetary amounts, which is the one
+    # place in this repository where a binary approximation would land in a
+    # figure describing what a public contract was worth.
+    "services/acquisition/python/sros_acquisition/normalization/ted_search_api.py",
 )
 
 
@@ -374,6 +378,74 @@ def check_workspace_guard_is_wired(errors: list[str]) -> int:
     return checked
 
 
+# ------------------------------------------------------------ Mission 1.15.8
+
+# The TED adapter's load-bearing invariants, checked from the SOURCE so this
+# script keeps running with nothing installed. Each corresponds to a way the
+# procurement mapping could be quietly loosened.
+TED_NORMALIZER = "services/acquisition/python/sros_acquisition/normalization/ted_search_api.py"
+
+# The four monetary semantics, and the source field each is bound to. A fifth
+# entry, a renamed one, or a generic member is a semantic change and must arrive
+# with a normalizer version bump rather than as an edit.
+TED_MONETARY_BINDINGS = (
+    ('"total-value"', '"TOTAL_VALUE"'),
+    ('"tender-value"', '"TENDER_VALUE"'),
+    ('"estimated-value-lot"', '"ESTIMATED_VALUE"'),
+    ('"framework-maximum-value-lot"', '"FRAMEWORK_MAXIMUM"'),
+)
+
+# Names that would mean the four semantics had been collapsed into one.
+TED_FORBIDDEN_NAMES = ("price_paid", "contract_value", "generic_amount", "amount_eur")
+
+
+def check_ted_normalizer(errors: list[str]) -> int:
+    """§44. The procurement mapping's invariants, as source properties."""
+    path = ROOT / TED_NORMALIZER
+    if not path.exists():
+        errors.append(f"{TED_NORMALIZER}: missing")
+        return 0
+    text = path.read_text(encoding="utf-8")
+    tree = ast.parse(text)
+
+    for source_field, semantic in TED_MONETARY_BINDINGS:
+        if source_field not in text or semantic not in text:
+            errors.append(
+                f"{TED_NORMALIZER}: the binding {source_field} -> {semantic} is gone. "
+                "A monetary semantic that stops being distinguished is the flattening "
+                "the whole mapping exists to prevent"
+            )
+
+    # A FLATTENED amount, as an identifier or a stored value -- not as prose, so
+    # the paragraph explaining the rule cannot trip the rule.
+    names = {n.id for n in ast.walk(tree) if isinstance(n, ast.Name)}
+    values = {
+        n.value.strip()
+        for n in ast.walk(tree)
+        if isinstance(n, ast.Constant) and isinstance(n.value, str)
+    }
+    for forbidden in TED_FORBIDDEN_NAMES:
+        if forbidden in names or forbidden in values:
+            errors.append(f"{TED_NORMALIZER}: {forbidden!r} appears as a name or a value")
+
+    # No currency arithmetic. A conversion needs a rate, and a rate needs a
+    # source nobody has reviewed.
+    for token in ("exchange_rate", "to_eur", "convert_currency", "fx_rate"):
+        if token in names:
+            errors.append(f"{TED_NORMALIZER}: {token!r} suggests a currency conversion")
+
+    # `observed_at` is never set here. The publication date is a DAY with no
+    # time, and H-37 is open; a promotion is a version bump with evidence
+    # behind it, not an assignment.
+    for node in ast.walk(tree):
+        if isinstance(node, ast.keyword) and node.arg == "observed_at":
+            errors.append(
+                f"{TED_NORMALIZER}: observed_at is assigned. A published DATE has no "
+                "moment, and H-37 is open"
+            )
+    return 1
+
+
 def main() -> int:
     errors: list[str] = []
 
@@ -397,6 +469,12 @@ def main() -> int:
 
     sources = check_registered_normalizers(errors)
     print(f"ok    registered normalizers: {', '.join(sources) or 'none'}")
+
+    if check_ted_normalizer(errors):
+        print(
+            "ok    TED procurement mapping: four monetary semantics bound, no flattened "
+            "amount, no currency conversion, no observed_at"
+        )
 
     numeric = check_no_float_in_numeric_path(errors)
     print(f"ok    no float() on the acquisition numeric path ({numeric} module(s))")

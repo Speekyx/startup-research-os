@@ -295,10 +295,20 @@ class TestRecordKinds:
         `numeric_observation` was alone because one adapter existed.
         `lexical_frequency_observation` was added because a real GDELT
         observation proved the first kind cannot hold it -- no geography, and a
-        term that is not a metric. Still an EQUALITY: a third kind appearing
+        term that is not a metric. Still an EQUALITY: a fourth kind appearing
         without a source that needs it is what this catches.
+
+        Mission 1.15.8 added the third for the same reason as the second. A TED
+        procurement notice is a DOCUMENT carrying typed monetary facts,
+        organisations in roles and several distinct dates; widening
+        `numeric_observation` to hold it would have given a World Bank
+        population figure an award status.
         """
-        assert set(RECORD_KINDS) == {"numeric_observation", "lexical_frequency_observation"}
+        assert set(RECORD_KINDS) == {
+            "numeric_observation",
+            "lexical_frequency_observation",
+            "procurement_notice",
+        }
 
     def test_no_hypothetical_kind_is_declared(self) -> None:
         # §11 names ten shapes future sources MIGHT have. A registered kind with
@@ -644,6 +654,7 @@ class TestSelection:
 
         assert sorted(NORMALIZER_REGISTRY) == [
             ("gdelt", "gdelt-web-ngram"),
+            ("ted-eu", "ted-search-api"),
             ("world-bank", "world-bank-indicators"),
         ]
 

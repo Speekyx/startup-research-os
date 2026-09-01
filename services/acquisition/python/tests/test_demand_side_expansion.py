@@ -347,10 +347,14 @@ class TestNoCollectorWasBuilt:
         assert "ted-eu" in IMPLEMENTED_COLLECTORS
 
     def test_the_new_sources_have_no_implemented_normalizer(self, catalog) -> None:
+        """`usaspending` still has none. `ted-eu` gained one in Mission 1.15.8,
+        seven missions after being registered here -- which is the fact this
+        loop is really about: registering a source gives it nothing."""
         from sros_acquisition import IMPLEMENTED_NORMALIZERS
 
-        for source_id in NEW_IN_1_15:
+        for source_id in NEW_IN_1_15 - {"ted-eu"}:
             assert source_id not in IMPLEMENTED_NORMALIZERS, source_id
+        assert "ted-eu" in IMPLEMENTED_NORMALIZERS
 
     def test_no_source_reviewed_this_round_became_collector_eligible(self, catalog) -> None:
         """§39's success criterion is honest review, not an approval. Nothing
