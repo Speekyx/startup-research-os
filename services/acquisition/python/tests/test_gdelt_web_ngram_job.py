@@ -647,10 +647,17 @@ class TestTheCollectorIsRegistered:
 
         TED took the same route over four: collected in 1.15.7, and normalizable
         in 1.15.8 once a canonical kind existed that could hold a notice.
+        Stack Exchange took the same route inside ONE mission -- collected and
+        normalizable in 1.18 -- which does not weaken the rule: the two facts
+        were still established separately, and the collector shipped and ran
+        before a record kind existed.
         """
         from sros_acquisition import IMPLEMENTED_NORMALIZERS
 
-        assert frozenset({"world-bank", "gdelt", "ted-eu"}) == IMPLEMENTED_NORMALIZERS
+        assert (
+            frozenset({"world-bank", "gdelt", "ted-eu", "stack-exchange"})
+            == IMPLEMENTED_NORMALIZERS
+        )
 
     def test_the_planner_now_sees_a_runnable_source(self, catalog) -> None:
         """§42. Derived from what exists, so nothing in the planner changed."""

@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.40
+Version: 1.41
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-01 (Sprint 1 / Mission 1.18)
+Last amended: 2026-09-02 (Sprint 1 / Mission 1.18)
 
 ---
 
@@ -14,7 +14,64 @@ This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
 
-## 1.40 — 2026-09-01 (Sprint 1 / Mission 1.18)
+## 1.41 — 2026-09-02 (Sprint 1 / Mission 1.18, completed)
+
+Authorized by the Mission 1.18 brief. **Supersedes 1.40, which reported the same
+mission when only its governance half was done.** Stack Exchange now has a
+collector, a record kind, a normalizer and real normalized data.
+
+**OUTCOME S0: zero Signals, zero Claims, zero Evidence, and that is the result.**
+Not blocked, not deferred, not insufficient data -- a derivation was considered
+against 15 real questions and correctly produced nothing.
+
+**A tag is a SUBJECT, not a PROBLEM, and the sample proves it rather than the
+argument.** 15 questions, 35 distinct tags, **three** tags appearing more than
+once, **no two questions sharing a complete tag set**, and no repeated quoted
+identifier in any title. `python` is on all 15 because it is what the query asked
+for. `google-cloud-platform` groups duplicate Eventarc processing, a `setup.py`
+type error and Google Docs text extraction. `deep-learning` groups the same
+`setup.py` error and a backpropagation question. **One question is in both
+cohorts**, which one repeated problem cannot be. Getting past that would take
+semantic inference over question text -- an INFERRED step this mission does not
+authorise. **The cohort was not weakened and no second query was run to find a
+friendlier sample.**
+
+**A fourth record kind, and the first named for a SHAPE.** `community_question`
+(migration 0024, one registry row, no schema change). Not
+`stack_exchange_question`: a question on a public Q&A site is a shape other
+sources share, and naming the kind after the first source to reach it would make
+the vocabulary a list of vendors. The SITE is a field; the source is provenance.
+Widening any of the three existing kinds would have made it worse for a new
+source's sake.
+
+**`stack-exchange-question@1.0.0`, and every record is VALID -- which no adapter
+here had achieved.** GDELT is `PARTIAL` for H-29 and H-30, TED for H-37; nothing
+is open here. **The first adapter whose period is `ESTABLISHED` on the source's
+own evidence**: a Unix epoch second is an unambiguous instant, so `observed_at` is
+a real moment for the first time in this repository. The payload states its own
+limits -- the tags carry the site's scheme, `accepted_answer_semantics` says the
+asker accepted an answer and not that the problem is resolved, `engagement`
+counters are *"not importance, not demand, not market size"*, and `author` is
+`null` because it was never acquired. A record carrying `owner`, `last_editor` or
+`comments` is REFUSED at normalization rather than stripped, and a record with no
+canonical URL is refused because CC BY-SA needs the link.
+
+**Two defects the tests found in paths the real data never took**: the normalizer's
+failure constructor read `record.raw_record_id`, which `RawRecordView` does not
+have, so every refusal would have raised `AttributeError` instead of a
+`NormalizationFailure`; and a missing body reached a `QualityReason` member that
+does not exist. The second was fixed by NOT adding the member -- the kind does not
+require a body, no existing code would truthfully name the absence, and a wrong
+code where a consumer branches is worse than `question.body: null`.
+
+**Counts: 38 RawRecords, 38 NormalizedRecords, 8/8/8/8 Signals, Claims, Revisions
+and Evidence unchanged, 1 assessment, 0 opportunities.** Six existing equality
+assertions were repointed because the repository genuinely grew from three record
+kinds and three normalizers to four of each; none was weakened to a containment.
+TED, World Bank and GDELT untouched; the historical 23 RawRecords not backfilled;
+the Gateway profile bug not fixed; no 403 retried
+
+## 1.40 — 2026-09-01 (Sprint 1 / Mission 1.18, governance only)
 
 Authorized by the Mission 1.18 brief §1-§50.
 

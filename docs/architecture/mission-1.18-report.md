@@ -2,19 +2,21 @@
 
 **Sprint 1. Authorized by the Mission 1.18 brief §1-§50.**
 
-> ## MISSION 1.18 IS IN PROGRESS
+> ## OUTCOME S0 — ZERO SIGNALS, AND THAT IS THE RESULT
 >
-> **Completed:** the review, the ADR-031 attribution correction, the collector,
-> one real bounded acquisition, 15 RawRecords and verified idempotency.
+> Stack Exchange is approved, collected and normalized: 15 RawRecords, 15
+> NormalizedRecords, a fourth record kind and a fourth normalizer. **The 15 real
+> questions were then read, and they carry no repeated problem a deterministic
+> rule could see.** So the mission produced **0 Signals, 0 Claims, 0 Evidence** —
+> not blocked, not deferred, not insufficient data, but a derivation considered
+> against real data that correctly produced nothing.
 >
-> **Not started:** the `community_question` record kind, normalization,
-> inspection of the real questions, the Signal feasibility decision, and any
-> Claim or Evidence. **This report does not claim completion**; §10 records
-> exactly what remains.
+> §7 records the tag structure that decided it, so the decision can be checked
+> rather than taken.
 
 **The review approves: `APPROVED_WITH_CONDITIONS` under
-`local-private-research-v1`, ELIGIBLE, resource-ready — and the collector now
-exists and has run.**
+`local-private-research-v1`, ELIGIBLE, resource-ready. The collector and the
+normalizer both exist and have both run.**
 
 Full review: [`stack-exchange-questions-v1.md`](../data/stack-exchange-questions-v1.md).
 
@@ -288,96 +290,242 @@ guard was right and the set was wrong.
 
 ---
 
-## 7. Signals, Claims, Evidence
+## 7. The record kind, the normalizer, and the Signal decision
 
-**None, and none was designed — deliberately.** The Signal semantics depend on
-inspecting real questions, and that inspection has not been done. Designing a
-cohort rule against imagined data is exactly what the brief warns against.
+### Which record kind, and why a fourth one?
+
+**`community_question`** — migration 0024, one registry row, **no schema change**.
+`acquisition.normalized_records` already carries `payload JSONB` and a
+`record_kind_id` with a foreign key into `registry.registry_entries`, so the
+storage existed and what was missing was permission to use it.
+
+None of the three existing kinds could hold a question without getting worse for
+the sake of a new source. A question carries no measured value, so
+`numeric_observation` would have to make `observation.value_state` meaningless for
+it; it counts no term, so `lexical_frequency_observation` would have to lose its
+term and its language; it is nobody's procurement, so `procurement_notice` would
+have to make monetary amounts optional and give a question a buyer.
+
+**It is named for a SHAPE, not for a vendor.** `stack_exchange_question` would
+have made the record-kind vocabulary a list of sources. A question asked on a
+public Q&A site is a shape other sources share; the SITE is a field and the source
+is provenance. This is the first kind in the repository for which that distinction
+had to be made deliberately, and it is the one design decision here that a later
+source will either thank or curse.
+
+### What does one normalized record assert?
+
+*Stack Exchange published this public question on Stack Overflow with these source
+fields.* That is the whole assertion. `stack-exchange-question@1.0.0`, run over all
+15 records, idempotent — and after a later code fix, a forced re-normalization
+returned `unchanged: 15, conflicted: 0`, which proves the output byte-identical
+rather than asserting it.
+
+Four things the payload refuses to say, each written into the record rather than
+left to a reader's discipline:
+
+| In the record | Says, in the record itself |
+|---|---|
+| `tags.scheme: stack-exchange-tags:stackoverflow` | the site's vocabulary, never mapped to a taxonomy of ours |
+| `answers.accepted_answer_semantics` | *"the asker marked an answer accepted; not a statement that the problem is objectively resolved"* |
+| `engagement.semantics` | *"source counters, carried unpromoted: not importance, not demand, not market size"* |
+| `author: null` | not omitted for tidiness — never acquired |
+
+**Every record is `VALID`, and no adapter here had produced that before.** Every
+GDELT record is `PARTIAL` because H-29 and H-30 are open; every TED record is
+`PARTIAL` because H-37 is. Nothing is open here — and this is **the first adapter
+whose period is `ESTABLISHED` on the source's own evidence**. A Unix epoch second
+is an unambiguous instant, unlike TED's offset-without-a-time or GDELT's unzoned
+bucket, so `observed_at` is a real moment for the first time in this repository.
+
+A raw record carrying `owner`, `last_editor` or `comments` is **refused at
+normalization** rather than stripped: the collector refuses such a *response* and
+this refuses such a *record*, because they are different moments and a record
+already in the database can only be caught here. A record with no canonical URL is
+refused too — CC BY-SA requires the link, so a record that cannot be attributed is
+never normalized into one that cannot be displayed.
+
+### What do the real questions actually look like?
+
+Read from the database, not from the design:
+
+| Fact | Value |
+|---|---|
+| Questions | 15 |
+| Distinct tags | 35 |
+| Tags on 2 or more questions | **3** |
+| Questions sharing a complete tag set | **0** |
+| Repeated quoted identifier in a title | **0** |
+| Title word on 3 or more questions | `python` — the query term, and nothing else |
+| Accepted answer | 3 of 15 |
+| Score | between -2 and 1 |
+
+The three repeated tags are the entire cohort space, and each one fails:
+
+- **`python` — all 15.** It is the term the query asked for. A cohort built on it
+  is a property of the retrieval, not a finding about the world: it says *these
+  are the questions we asked for.*
+- **`google-cloud-platform` — 3.** Eventarc firing duplicate Cloud Run processes
+  (`78098392`), a `setup.py` `install_requires` type error (`78098469`), and
+  extracting text from a Google Doc (`78098567`).
+- **`deep-learning` — 2.** The same `setup.py` packaging error (`78098469`) and
+  whether padded rows affect backpropagation (`78098740`).
+
+**`78098469` sits in both cohorts**, which is the sharpest available evidence that
+these groupings are about subject and not about problem: one question cannot be
+two repeated problems.
+
+### Is a Signal derivable? No — Outcome S0
+
+**A tag identifies a SUBJECT. It does not identify a PROBLEM.** Every
+deterministic rule available over this sample — shared tag, shared tag pair,
+shared title token — groups questions that share a technology and nothing else.
+Getting past that would take semantic inference over question text, which is an
+INFERRED step this mission does not authorise and which no Signal may rest on.
+
+So the derivation was considered and produced nothing:
 
 | | |
 |---|---|
-| Signals | 0 |
-| OBSERVED Claims | 0 |
-| Evidence rows | 0 |
-| Observation category, independence, reliability, scorability | not reached |
+| Signals | **0** |
+| OBSERVED Claims | **0** |
+| Evidence rows | **0** |
+| ReliabilityAssessment | **0** — none was created, and none applies |
+
+**Three things that were not done, and each was available.** The cohort was not
+weakened until something appeared — a support threshold lowered until it produces
+output is a threshold that measures the analyst. A second, friendlier query was
+not run. And no `INFERRED` path was opened to rescue the result.
+
+**What would change the answer is a different acquisition shape, not a different
+rule**: many questions about ONE narrow tool, where a repeated concrete failure
+could actually recur. That is a mission with its own bounded acquisition and its
+own review of what the query selects for — not a parameter on this one.
+
+The tag structure above is pinned in `TestWhyNoSignalIsDefensible`, by question
+id. A mission that declines to produce data owes the tests that fix why, or it is
+indistinguishable from one that forgot.
 
 ---
 
-## 8. Boundaries
+## 8. Two defects the tests found after the data was already correct
+
+Both were in code paths the 15 real records never took, which is exactly why they
+survived a successful production run.
+
+- **`record.raw_record_id` does not exist** — `RawRecordView` calls it
+  `record_id`. Every refusal path in the normalizer would have raised
+  `AttributeError` instead of the `NormalizationFailure` it was written to raise.
+  All 15 records were well-formed, so nothing ever reached it.
+- **`QualityReason.OPTIONAL_FIELD_MISSING` does not exist.** A missing question
+  body would have crashed. The fix is not to add the member: the record kind does
+  not require a body, and `NormalizationQualityReason` has no member that would
+  truthfully name the absence. Reaching for the nearest one would put a wrong code
+  where a consumer branches, and adding a member to a generated closed enum is a
+  contract change with an ADR behind it that no record in the real sample calls
+  for. A missing body now leaves the record `VALID` with `question.body: null`,
+  where the absence is visible in the data itself.
+
+The adapter consequently has **no `PARTIAL` branch at all**, and that is stated in
+the code rather than left as an accident: a record either carries the four facts
+the kind requires, or it is refused above.
+
+---
+
+## 9. Boundaries
 
 | | |
 |---|---|
 | INFERRED Claims | **0** |
 | Opportunities | **0** |
 | Embeddings | **0** |
-| Product / market / WTP scores | **0** |
-| TED, World Bank, GDELT semantics or data | **unchanged**, and none was collected |
-| Gateway backlog | not fixed; its duplicate-row tripwire grew to seven sources, as predicted |
+| Product / market / WTP / pricing / MRR scores | **0** |
+| ReliabilityAssessments created | **0** |
+| Other Stack Exchange sites, Data Dump, users, Teams, chat, jobs, companies | **not touched, and refused by name** |
+| The two HTTP 403s | **not retried**, no header varied, no alternative route sought |
+| TED, World Bank, GDELT semantics or data | **unchanged**; nothing recollected, nothing rewritten |
+| The historical 23 RawRecords | **not backfilled** with `use_profile` |
+| Gateway profile bug | **not fixed**; its duplicate-row tripwire grew to seven sources, as predicted |
 
 ### Counts before and after
 
 | | Before | After |
 |---|---|---|
 | RawRecords | 23 | **38** (+15 Stack Overflow) |
-| NormalizedRecords | 23 | 23 — **not normalized yet** |
-| Signals / Claims / ClaimRevisions / Evidence | 8 / 8 / 8 / 8 | 8 / 8 / 8 / 8 |
+| NormalizedRecords | 23 | **38** (+15, all `VALID`) |
+| Record kinds | 3 | **4** |
+| Normalizers | 3 | **4** |
+| Signals / Claims / ClaimRevisions / Evidence | 8 / 8 / 8 / 8 | **8 / 8 / 8 / 8** |
 | ReliabilityAssessments | 1 | 1 |
 | Opportunities / Embeddings / Scores | 0 | 0 |
 
-The 15-record gap between raw and normalized is the honest state of a mission in
-progress, not a defect: nothing has been normalized because the record kind has
-not been decided.
-
-Catalog counts changed: 63 reviews, 99 evidence records, 43 conditions, one new
-access profile, one new compliance entry.
+Normalized coverage by source and kind, read back:
+`world-bank / numeric_observation / VALID / 6`,
+`gdelt / lexical_frequency_observation / PARTIAL / 6`,
+`ted-eu / procurement_notice / PARTIAL / 11`,
+`stack-exchange / community_question / VALID / 15`.
 
 ### Did all gates pass?
 
-**Yes** — zero-dependency suites, all pytest suites, seven validators, contract
-generation `--check`, all four generated-document checks, ruff, mypy,
-environment-template secret check, `assert_registry_grants_nothing`.
+**Yes.** Zero-dependency suites (555 tests across 8 packages), all pytest suites
+(7 packages, including 1,464 acquisition tests), the seven validators plus
+`check_env_template` and `assert_registry_grants_nothing`, contract generation
+`--check`, all four generated-document checks, ruff check, ruff format --check,
+and mypy over all 146 source files.
 
-Three existing tests needed repointing because the registry genuinely changed. One
-of them, the eligibility-view condition count, had been maintained by appending
-`| {"ted-eu"}` by hand — it is now **derived across every profile**, because the
-hand-added set was about to become the growth tripwire its own comment warned
-against.
+**Six existing tests were repointed because the repository genuinely changed**, and
+none was weakened. Three in the earlier pass, for registry counts the new source
+moved. Three more here: `IMPLEMENTED_NORMALIZERS` and `NORMALIZER_REGISTRY` grew
+from three entries to four, and `RECORD_KINDS` from three to four. Each remains an
+**equality** rather than a containment, because a fifth kind appearing without a
+source that needs it is exactly what those assertions exist to catch.
 
----
-
-## 9. Why this pass stopped where it did
-
-The remaining work is a **new record kind**, a normalizer, the empirical
-inspection of real questions, a Signal semantic designed against them, a
-deterministic extractor with hard negatives, and a claim and evidence path. TED
-needed Missions 1.15.8 through 1.15.11 for the equivalent, and each found
-something that changed the design.
-
-The collector half is finished and tested; the rest benefits from being done with
-the same care rather than compressed to finish a report.
+`assert_registry_grants_nothing` had already caught a real omission in the earlier
+pass: raw records existed for a source `IMPLEMENTED_COLLECTORS` said this codebase
+could not collect from. The guard was right and the declaration was missing.
 
 ---
 
-## 10. Exactly what remains for Mission 1.18
+## 10. What Mission 1.18 establishes, and what it does not
 
-1. **`community_question` record-kind decision.** A question is a community
-   solution-seeking document and fits none of `numeric_observation`,
-   `lexical_frequency_observation` or `procurement_notice`. A vocabulary
-   extension is likely and follows the canonical migration rules.
-2. **Normalization** of the 15 real records, preserving question identity, tags,
-   the source timestamp with its real semantics, answer metadata, the canonical
-   link and the licence — and treating an accepted answer as *the asker accepted
-   an answer*, never as *solved*.
-3. **Inspection of the real normalized questions.** What tag combinations look
-   like, how specific titles are, whether a deterministic cohort is constructible
-   without semantic inference, and what the false positives are.
-4. **The Signal feasibility decision**, which is genuinely open. A tag identifies
-   a subject, not a problem: `python` is not a cohort. **Zero Signals is a
-   legitimate answer** and must not be worked around.
-5. **Signal implementation only if defensible**, minimum support >= 2, hard
-   negatives.
-6. **OBSERVED Claim and Evidence only if a real Signal exists.**
-7. **Final update of this report.**
+**Establishes.** That Stack Exchange questions can be lawfully acquired under the
+local profile on a content licence rather than a platform's terms; that a
+community question has a canonical shape this system can hold without damaging the
+three kinds that came before it; that a public Q&A tag is a subject and not a
+problem, on real data rather than on argument; and that the pipeline can be run
+end to end and correctly stop before asserting anything.
 
-Nothing above is blocked. The data is in the database and the governance is
-settled.
+**Does not establish.** Any pain, desire, willingness to pay, pricing power,
+competition gap, distribution feasibility, retention or revenue potential. 15
+questions asked on one day about one tag are 15 people asking 15 things once. The
+`problem` family gained a source that is **collected and normalized** and still
+gained **no evidence**, and the honest reading is that the portfolio's
+demand-side gap is unchanged.
+
+---
+
+## 11. The next portfolio gap
+
+**No source is selected here**, because selecting one is a review act with its own
+mission and its own retrieved evidence.
+
+The gap this mission measured is not the one it set out to close. Mission 1.16
+found six of eight business evidence families with no approving source; Stack
+Exchange was chosen for `problem`, and it now demonstrates the sharper version of
+that finding: **`problem` now has an approving, collected, normalized source and
+still no evidence**, because what a public Q&A site publishes is *somebody asked
+how to do something*, one time each.
+
+So the gap with the most leverage is no longer *find a source for `problem`*. It
+is: **no source in the portfolio observes the same subject twice.** Retention needs
+it by definition; a repeated problem needs it; distinguishing a one-off question
+from a recurring failure needs it. Everything registered is an aggregate
+(World Bank), a one-shot public record (TED), a corpus count (GDELT) or a
+single utterance (Stack Exchange). No proxy is proposed, because a proxy nobody can
+validate is worse than an acknowledged gap.
+
+Two shapes could close it and both are review questions, not engineering ones: a
+source that publishes the same entity's state on a schedule, or an acquisition
+design over an existing approving source that deliberately observes one narrow
+subject repeatedly. Whichever is chosen, `WILLINGNESS_TO_PAY` and `PRICING` remain
+where Mission 1.16 left them — the second with no registered candidate at all.

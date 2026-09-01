@@ -95,6 +95,11 @@ from .repositories import (
     read_normalized_history,
     read_raw_records,
 )
+from .stack_exchange_questions import (
+    SE_NORMALIZER_ID,
+    SE_NORMALIZER_VERSION,
+    StackExchangeQuestionNormalizer,
+)
 from .ted_search_api import (
     TED_NORMALIZER_ID,
     TED_NORMALIZER_VERSION,
@@ -162,10 +167,26 @@ TED_SEARCH_API_NORMALIZER_SPEC = NormalizerSpec(
     build=lambda context: TedSearchApiNoticeNormalizer(context.retention),
 )
 
+# Mission 1.18. Fourth adapter, first community-content source, and the first
+# whose period is ESTABLISHED on the source's own evidence -- a Unix epoch second
+# is an unambiguous instant, unlike TED's offset-without-a-time or GDELT's
+# unzoned bucket.
+STACK_EXCHANGE_QUESTION_NORMALIZER_SPEC = NormalizerSpec(
+    normalizer_id=SE_NORMALIZER_ID,
+    normalizer_version=SE_NORMALIZER_VERSION,
+    source_id="stack-exchange",
+    collector_id="stack-exchange-questions",
+    supported_collector_versions=frozenset({"1.0.0"}),
+    schema_id="normalization.v1",
+    schema_version=1,
+    build=StackExchangeQuestionNormalizer,
+)
+
 for _spec in (
     WORLD_BANK_NORMALIZER_SPEC,
     GDELT_WEB_NGRAM_NORMALIZER_SPEC,
     TED_SEARCH_API_NORMALIZER_SPEC,
+    STACK_EXCHANGE_QUESTION_NORMALIZER_SPEC,
 ):
     if _spec.key not in NORMALIZER_REGISTRY:
         register_normalizer(_spec)

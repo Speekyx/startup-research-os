@@ -5,11 +5,15 @@ community-content source, and the first where the positive rights come from a
 **content licence** rather than from a platform's terms.
 
 **Verdict: `APPROVED_WITH_CONDITIONS` under `local-private-research-v1`.**
-ELIGIBLE and resource-ready. **`stack-exchange-questions@1.0.0` exists and has
-run**: one bounded acquisition, 15 RawRecords, idempotency verified (§12).
+ELIGIBLE and resource-ready. Collected and normalized:
+`stack-exchange-questions@1.0.0` and `stack-exchange-question@1.0.0` both exist
+and have run, over the `community_question` record kind — **15 RawRecords, 15
+NormalizedRecords, all `VALID`** (§12, §13).
 
-**Mission 1.18 is still in progress.** No record kind, no normalizer, no Signal,
-no Claim, no Evidence — the 15 records are raw and unnormalized.
+**Zero Signals, zero Claims, zero Evidence, and that is the finding** (§14). The
+15 real questions were read; they share no repeated problem a deterministic rule
+could see. **Outcome S0** is recorded with the tag structure that produced it, so
+a later reader can check the decision rather than take it.
 
 ---
 
@@ -211,7 +215,7 @@ in what the attribution *contract* can express, not in what the data supports.
 
 All three verify **satisfied**. Stack Exchange is ELIGIBLE.
 
-## 12. The collector, and what still does not exist
+## 12. The collector, and the acquisition
 
 **`stack-exchange-questions@1.0.0` exists and has run.** One real bounded
 acquisition: `stackoverflow`, tagged `python`, 2024-03-04 to 2024-03-05,
@@ -227,11 +231,110 @@ Field minimisation is performed by the API's own `/filters/create` filter
 from `included_fields`. No owner field was received. New records carry
 `use_profile` in provenance (Mission 1.17's gap, closed prospectively).
 
-**Still does not exist: a record kind, a normalizer, a Signal, a Claim, an
-Evidence row.** The 15 records are raw and unnormalized, which is the honest state
-of a mission in progress.
+**Collected in this mission and normalized in the same one**, which does not
+weaken the rule that collection and normalization are separate facts: the
+collector shipped, ran and was tested before a record kind existed to hold what it
+returned.
 
-## 13. Known limitations
+## 13. The record kind and the normalizer
+
+**`community_question`, and the name is the decision.** Migration 0024 inserts one
+registry row and changes no schema, because `normalized_records` already carries
+`payload JSONB` and a `record_kind_id` with a foreign key into the registry. It is
+the **fourth** kind and the first named for a SHAPE rather than for the first
+source to reach it: a question asked on a public Q&A site is a shape other sources
+share, and `stack_exchange_question` would have made the vocabulary a list of
+vendors. The SITE is a field; the source is provenance.
+
+The three existing kinds could not hold it without getting worse. A question
+carries no measured value, so `numeric_observation` would have to make
+`observation.value_state` meaningless for it; it counts no term, so
+`lexical_frequency_observation` would have to lose its term and its language; and
+it is nobody's procurement, so `procurement_notice` would have to make monetary
+amounts optional and give a question a buyer.
+
+**`stack-exchange-question@1.0.0`**, run over all 15 records. Idempotent:
+re-running produced `new: 0`, and a forced re-normalization after a later code fix
+produced `unchanged: 15, conflicted: 0` — so the output is proven byte-identical
+rather than asserted to be.
+
+**Every record is `VALID`, and that is new.** Every GDELT record is `PARTIAL`
+because H-29 and H-30 are open; every TED record is `PARTIAL` because H-37 is.
+Nothing is open here. **This is the first adapter whose period is `ESTABLISHED` on
+the source's own evidence**: `creation_date` is a Unix epoch second, an
+unambiguous instant, unlike TED's offset-without-a-time or GDELT's unzoned bucket.
+So `observed_at` is a real moment for the first time in this repository.
+
+What one normalized record asserts, in full: *Stack Exchange published this public
+question on Stack Overflow with these source fields.* Four things it does not
+assert, each written into the payload rather than left to a reader:
+
+- **the tags are the SITE's vocabulary** and are never mapped to a taxonomy of
+  ours, carried under `scheme: stack-exchange-tags:stackoverflow`;
+- **an accepted answer means the ASKER accepted one**, carried beside
+  `accepted_answer_semantics`, which says in the record itself that it is *"not a
+  statement that the problem is objectively resolved"*;
+- **score and view count are source counters**, carried under
+  `engagement.semantics`: *"not importance, not demand, not market size"*;
+- **`author: null`** — not omitted for tidiness, never acquired.
+
+A raw record carrying `owner`, `last_editor` or `comments` is **refused at
+normalization**, not quietly stripped. The collector refuses such a response and
+this refuses such a record, because they are different moments and a record
+already in the database can only be caught here. A record with no canonical URL is
+refused too: CC BY-SA needs the link, so a record that cannot be attributed is
+never normalized into one that cannot be displayed.
+
+## 14. Zero Signals, and why that is the answer
+
+**The 15 real questions were read before anything was designed.** The Signal
+semantics were never going to be decidable against imagined data, and the decision
+below rests on what the sample actually contains.
+
+| Fact | Value |
+|---|---|
+| Questions | 15 |
+| Distinct tags | 35 |
+| Tags appearing on 2 or more questions | **3** |
+| Questions sharing a complete tag set | **0** |
+| Repeated quoted identifier in a title | **0** |
+| Title word on 3 or more questions | `python` — the query term, and nothing else |
+
+The three repeated tags are the whole cohort space, and each one fails:
+
+- **`python` — all 15.** It is the term the query asked for, so it is a property
+  of the retrieval and not a finding about the world. A cohort built on it says
+  *these are the questions we asked for.*
+- **`google-cloud-platform` — 3.** Eventarc firing duplicate Cloud Run processes
+  (`78098392`), a `setup.py` `install_requires` type error (`78098469`), and
+  extracting text from a Google Doc (`78098567`). Three unrelated problems that
+  share a platform.
+- **`deep-learning` — 2.** The same `setup.py` packaging error (`78098469`) and
+  whether padded rows affect backpropagation (`78098740`). Two unrelated problems
+  that share a field.
+
+**`78098469` is in both cohorts**, which is the clearest evidence available that
+these groupings are about subject rather than about problem: one question cannot
+be two repeated problems.
+
+**A tag identifies a SUBJECT. It does not identify a PROBLEM.** Any deterministic
+rule over this sample — shared tag, shared tag pair, shared title token — groups
+questions that share a technology and nothing else. Reading further would take
+semantic inference over question text, which is an INFERRED step this mission does
+not authorise and which no Signal may rest on.
+
+**So: 0 Signals, 0 Claims, 0 Evidence.** Not blocked, not deferred, not
+insufficient data — a derivation was considered against real data and correctly
+produced nothing. **The cohort was not weakened to get output**, and a second query
+was not run to look for a friendlier sample: a support threshold lowered until
+something appears is a threshold that measures the analyst.
+
+**What would change the answer** is a different acquisition shape, not a different
+rule: many questions about ONE narrow tool, where a repeated concrete failure could
+recur. That is a mission with its own bounded acquisition and its own review of
+what the query selects for, not a parameter on this one.
+
+## 15. Known limitations
 
 1. ShareAlike classification is avoided by the profile, not resolved (§4).
 2. Model training is not assessed and not authorised (§6).
@@ -242,3 +345,10 @@ of a mission in progress.
 6. Only `stackoverflow` is authorised; no other network site is.
 7. No job-size ceiling has been reviewed, which is an unasked question rather
    than a licence.
+8. The empirical finding in §14 is about **this sample**: 15 questions, one day,
+   one tag. It is evidence that a tag is not a problem; it is not a proof that no
+   Stack Overflow cohort could ever carry a Signal.
+9. A missing question body leaves the record `VALID` with `question.body: null`.
+   `NormalizationQualityReason` has no member that would truthfully name that
+   absence, and adding one to a generated closed enum is a contract change with an
+   ADR behind it that no record in the real sample calls for.

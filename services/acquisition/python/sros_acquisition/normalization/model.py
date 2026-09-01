@@ -503,6 +503,32 @@ class RecordKind:
 # standing rule about that: IMPLEMENTED_COLLECTORS gains a name as the LAST step
 # of building a collector, never as preparation for one.
 RECORD_KINDS: dict[str, RecordKind] = {
+    # Mission 1.18, migration 0024. GENERIC, not `stack_exchange_question`: a
+    # public Q&A question is a shape other sources share, and naming the kind
+    # after the first source to reach it would make the vocabulary a list of
+    # vendors. The SITE is a field; the source is provenance.
+    "community_question": RecordKind(
+        kind_id="community_question",
+        required=("question.id", "question.site", "question.title", "period"),
+        optional=(
+            "question.body",
+            "question.url",
+            "question.content_licence",
+            "tags.values",
+            "answers.count",
+            "answers.has_accepted_answer",
+            "answers.accepted_answer_id",
+            "engagement.score",
+            "engagement.view_count",
+        ),
+        description=(
+            "One public question a person asked on a community Q&A site, as the site "
+            "published it. The tags are the SITE's vocabulary and are never translated; "
+            "an accepted answer means only that the asker marked one accepted; the author "
+            "is deliberately absent. It supports the claim that the site PUBLISHED a "
+            "request for help, never that a market, a demand or an opportunity exists."
+        ),
+    ),
     "numeric_observation": RecordKind(
         kind_id="numeric_observation",
         required=("metric.id", "period", "geography.source_code", "observation.value_state"),
