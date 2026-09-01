@@ -28,10 +28,15 @@ and that this machine is the same local, private, single-operator deployment the
 acceptance was written about. It prints the full text and requires an explicit
 typed confirmation before writing, because reading it is the act.
 
-Usage:
+Usage, on a deployment that has already run `sync.py`:
 
     python infrastructure/scripts/record_ted_operator_acceptance.py            # dry run
     python infrastructure/scripts/record_ted_operator_acceptance.py --apply
+
+**It clears ONE of TED's four conditions.** The other three are capability
+verifications that `sros-source verify --apply` records; `sros-source load`
+writes the catalog and never a verification, so a fresh deployment has none of
+the four until a verifier and a person have each done their half.
 
 Related: `docs/data/ted-eu-operator-risk-acceptance-v1.md` (the decision),
 `docs/data/ted-eu-authorization-bootstrap-v1.md` §6.2 (the statement),
@@ -204,8 +209,15 @@ def main() -> int:
         conn.commit()
         print(f"recorded. one row, id {row_id}")
         print()
-        print("Next: `sros-source --use-profile local-private-research-v1 conditions ted-eu`")
-        print("should now show four conditions of four satisfied.")
+        print("This clears ONE of TED's four conditions. The other three are capability")
+        print("verifications and come from a verifier, not from this script:")
+        print()
+        print("    sros-source verify --apply")
+        print("    sros-source --use-profile local-private-research-v1 conditions ted-eu")
+        print()
+        print("The second should then show four of four satisfied. `sros-source load`")
+        print("writes the catalog and never a verification, so a fresh deployment has")
+        print("none of the four until a verifier and a person have each done their half.")
         return 0
 
 
