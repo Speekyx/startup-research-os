@@ -179,3 +179,25 @@ The registered figure is the healthier of the two and it is the less meaningful
 one. What the system may actually collect from is the second, and there the
 economic share is far higher than the catalog as a whole suggests — which is the
 bias §40 asks to be reported rather than the one it hopes for.
+
+---
+
+## Amendment — TED is normalized, and produces no Signal (Mission 1.15.8)
+
+`ted-eu` now has real RawRecords and real NormalizedRecords: three notices,
+record kind `procurement_notice`.
+
+**No TED Signal exists, and coverage has not changed.** Coverage says what a
+source COULD expose; a normalized record says what one notice structurally
+represents. Neither is a Signal, and no extractor consumes a procurement notice.
+
+Two things must be true before one can, and neither is:
+
+- a **derivation** over two or more observations that a procurement notice can
+  actually support — a normalized notice is one document, and a Signal is never
+  a single observation renamed;
+- the temporal semantics **H-37** leaves open. A TED period carries naive bounds
+  and no `observed_at`, so nothing can order two notices on a shared timeline.
+
+`WILLINGNESS_TO_PAY` as a TRANSACTION remains a coverage claim, not an
+implemented capability.

@@ -670,3 +670,33 @@ is.
   for numeric observations, which is correct rather than deferred. Mission 1.10
   added `CanonicalLanguage` for a source that **states** its language; detecting
   one from text is a different act and remains undecided.
+
+---
+
+## Amendment — the third record kind (Mission 1.15.8)
+
+`procurement_notice` joins `numeric_observation` and
+`lexical_frequency_observation`, seeded by migration 0022 and declared in
+`RECORD_KINDS`.
+
+**Why a third kind rather than a wider existing one.** A procurement notice is
+neither a measured metric nor a counted term. It is a DOCUMENT a public body
+published, whose content is a set of TYPED monetary facts, organisations in
+roles, classification codes and several distinct dates. Widening
+`numeric_observation` to hold it would give a World Bank population figure an
+award status and a currency; widening `lexical_frequency_observation` would give
+a GDELT term a buyer. §5.1's rule — the existing kinds must not get worse for a
+new source's sake — decided it, exactly as it did in Mission 1.10.
+
+**It has no `observation.value`, and that is the point.** A notice has no single
+measurement; the amounts it carries are a LIST of typed entries, each of which
+must say what it means. A required scalar value would have forced the flattening
+the kind exists to avoid.
+
+Three new `NormalizationQualityReason` members accompany it —
+`MONETARY_PAIRING_NOT_ESTABLISHED`, `MONETARY_CURRENCY_ABSENT` and
+`PERSONAL_DATA_FIELD_NOT_PROMOTED` — because each is a MEANING a consumer
+branches on rather than a message somebody may reword.
+
+The full mapping, and the two open questions it records, are in
+[`ted-eu-normalization-v1.md`](ted-eu-normalization-v1.md).

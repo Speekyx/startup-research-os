@@ -338,7 +338,10 @@
         "METRIC_MISSING",
         "PERIOD_NOT_SUPPORTED",
         "PERIOD_TIMEZONE_NOT_ESTABLISHED",
-        "LANGUAGE_NOT_MAPPED"
+        "LANGUAGE_NOT_MAPPED",
+        "MONETARY_PAIRING_NOT_ESTABLISHED",
+        "MONETARY_CURRENCY_ABSENT",
+        "PERSONAL_DATA_FIELD_NOT_PROMOTED"
       ],
       "description": "Why a normalized record is not VALID. A closed vocabulary rather than free text, for the same reason AcquisitionErrorCode is one: a consumer branches on the MEANING -- a record with no reported value is skipped, a record whose geography is unclassified is still usable -- and a message it had to pattern-match would make that branch break on a reworded string."
     },

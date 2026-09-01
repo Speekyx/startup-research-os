@@ -245,7 +245,12 @@ class TestNothingWasBuilt:
         from sros_acquisition import IMPLEMENTED_COLLECTORS, IMPLEMENTED_NORMALIZERS
 
         assert "ted-eu" in IMPLEMENTED_COLLECTORS
-        assert "ted-eu" not in IMPLEMENTED_NORMALIZERS
+        # Inverted again in Mission 1.15.8, which wrote the normalizer. The half
+        # that still holds is one layer further down and is 1.15.8's own stop
+        # condition: no TED notice becomes a Signal, a Claim or Evidence, and
+        # `test_no_ted_notice_became_a_canonical_record` in the reuse-review file
+        # is now the assertion that says so.
+        assert "ted-eu" in IMPLEMENTED_NORMALIZERS
 
     def test_ted_is_not_collector_eligible(self, catalog) -> None:
         assert review(catalog, "ted-eu").approval_state not in APPROVING_STATES
@@ -288,9 +293,21 @@ class TestNothingReachedTheDatabase:
         # a test from encoding. What stays REPOSITORY-true is the line below:
         # there is no TED normalizer, so no TED notice can become a canonical
         # record on any machine.
+        # NORMALIZED records joined RAW as DEPLOYMENT state in Mission 1.15.8,
+        # which normalized the three notices 1.15.7 collected. Neither count is
+        # asserted here any more: both are legitimately non-zero on a machine
+        # that has run the pipeline and zero on one that has not, and encoding
+        # either is the confusion §49 forbids.
+        #
+        # What stays REPOSITORY-true, and what this asserts, is that nothing
+        # downstream of normalization exists for TED on any machine -- no Signal
+        # extractor consumes a procurement notice, so no Claim and no Evidence
+        # can follow. That is Mission 1.15.8's own stop condition.
         assert (
             self._count(
-                "SELECT count(*) FROM acquisition.normalized_records WHERE source_id = 'ted-eu'"
+                "SELECT count(*) FROM nlp.signal_inputs si "
+                "JOIN acquisition.normalized_records n ON n.id = si.normalized_record_id "
+                "WHERE n.source_id = 'ted-eu'"
             )
             == 0
         )

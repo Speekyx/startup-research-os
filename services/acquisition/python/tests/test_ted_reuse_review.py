@@ -262,10 +262,11 @@ class TestNothingWasBuilt:
 
         assert "ted-eu" in IMPLEMENTED_COLLECTORS
 
-    def test_no_ted_normalizer_exists(self, catalog) -> None:
+    def test_the_normalizer_arrived_in_mission_1_15_8(self, catalog) -> None:
+        """Inverted, and the line below it is where the property moved to."""
         from sros_acquisition import IMPLEMENTED_NORMALIZERS
 
-        assert "ted-eu" not in IMPLEMENTED_NORMALIZERS
+        assert "ted-eu" in IMPLEMENTED_NORMALIZERS
 
     def test_ted_is_not_collector_eligible(self, catalog) -> None:
         """An authorization context cannot be built for a source that does not
@@ -310,20 +311,35 @@ class TestNothingWasCollected:
         the confusion §49 forbids. What remains repository-true is that no TED
         notice can become a canonical record, because no TED normalizer exists.
         """
-        assert (
-            self._count(
-                "SELECT count(*) FROM acquisition.normalized_records WHERE source_id = 'ted-eu'"
-            )
-            == 0
-        )
-        from sros_acquisition import IMPLEMENTED_NORMALIZERS
-
-        assert "ted-eu" not in IMPLEMENTED_NORMALIZERS
+        # Normalized records are DEPLOYMENT state too, as of Mission 1.15.8.
+        # What is repository-true, and what this now asserts, is that NOTHING
+        # downstream of normalization exists for TED: no Signal, no Claim, no
+        # Evidence. That is 1.15.8's own stop condition, and it is the last
+        # thing this guard has left to protect.
+        for table in (
+            "SELECT count(*) FROM nlp.signal_inputs si "
+            "JOIN acquisition.normalized_records n ON n.id = si.normalized_record_id "
+            "JOIN acquisition.raw_records r ON r.id = n.raw_record_id "
+            "WHERE r.source_id = 'ted-eu'",
+        ):
+            assert self._count(table) == 0, table
 
     def test_no_normalized_record_has_source_id_ted_eu(self) -> None:
+        # NORMALIZED records joined RAW as DEPLOYMENT state in Mission 1.15.8,
+        # which normalized the three notices 1.15.7 collected. Neither count is
+        # asserted here any more: both are legitimately non-zero on a machine
+        # that has run the pipeline and zero on one that has not, and encoding
+        # either is the confusion §49 forbids.
+        #
+        # What stays REPOSITORY-true, and what this asserts, is that nothing
+        # downstream of normalization exists for TED on any machine -- no Signal
+        # extractor consumes a procurement notice, so no Claim and no Evidence
+        # can follow. That is Mission 1.15.8's own stop condition.
         assert (
             self._count(
-                "SELECT count(*) FROM acquisition.normalized_records WHERE source_id = 'ted-eu'"
+                "SELECT count(*) FROM nlp.signal_inputs si "
+                "JOIN acquisition.normalized_records n ON n.id = si.normalized_record_id "
+                "WHERE n.source_id = 'ted-eu'"
             )
             == 0
         )

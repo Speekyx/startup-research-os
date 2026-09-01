@@ -95,6 +95,11 @@ from .repositories import (
     read_normalized_history,
     read_raw_records,
 )
+from .ted_search_api import (
+    TED_NORMALIZER_ID,
+    TED_NORMALIZER_VERSION,
+    TedSearchApiNoticeNormalizer,
+)
 from .world_bank import (
     WORLD_BANK_NORMALIZER_ID,
     WORLD_BANK_NORMALIZER_VERSION,
@@ -133,7 +138,28 @@ GDELT_WEB_NGRAM_NORMALIZER_SPEC = NormalizerSpec(
     build=lambda context: GdeltWebNgramLexicalNormalizer(context.retention),
 )
 
-for _spec in (WORLD_BANK_NORMALIZER_SPEC, GDELT_WEB_NGRAM_NORMALIZER_SPEC):
+# Mission 1.15.8. The THIRD adapter. `supported_collector_versions` carries the
+# 1.x line the resource's collector has published: 1.0.0 wrote the three records
+# that exist. A version outside it is refused rather than attempted, because a
+# collector version this adapter has never seen may have changed the payload
+# shape, and a parse that half-works on an unknown one is worse than one that
+# stops.
+TED_SEARCH_API_NORMALIZER_SPEC = NormalizerSpec(
+    normalizer_id=TED_NORMALIZER_ID,
+    normalizer_version=TED_NORMALIZER_VERSION,
+    source_id="ted-eu",
+    collector_id="ted-search-api",
+    supported_collector_versions=frozenset({"1.0.0"}),
+    schema_id=NORMALIZATION_SCHEMA_ID,
+    schema_version=NORMALIZATION_SCHEMA_VERSION,
+    build=lambda context: TedSearchApiNoticeNormalizer(context.retention),
+)
+
+for _spec in (
+    WORLD_BANK_NORMALIZER_SPEC,
+    GDELT_WEB_NGRAM_NORMALIZER_SPEC,
+    TED_SEARCH_API_NORMALIZER_SPEC,
+):
     if _spec.key not in NORMALIZER_REGISTRY:
         register_normalizer(_spec)
 
@@ -152,6 +178,8 @@ __all__ = [
     "RECORD_KIND_REGISTRY",
     "RETRYABLE_NORMALIZATION_CODES",
     "WORLD_BANK_NORMALIZER_ID",
+    "TED_SEARCH_API_NORMALIZER_SPEC",
+    "TedSearchApiNoticeNormalizer",
     "WORLD_BANK_NORMALIZER_SPEC",
     "WORLD_BANK_NORMALIZER_VERSION",
     "CanonicalGeography",

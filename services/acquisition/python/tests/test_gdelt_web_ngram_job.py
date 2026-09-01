@@ -642,10 +642,13 @@ class TestTheCollectorIsRegistered:
         GDELT was collected in 1.9.3, the canonical model that could hold it was
         designed in 1.10, and the adapter arrived in 1.10.1 — three separate
         facts satisfied in three separate missions.
+
+        TED took the same route over four: collected in 1.15.7, and normalizable
+        in 1.15.8 once a canonical kind existed that could hold a notice.
         """
         from sros_acquisition import IMPLEMENTED_NORMALIZERS
 
-        assert frozenset({"world-bank", "gdelt"}) == IMPLEMENTED_NORMALIZERS
+        assert frozenset({"world-bank", "gdelt", "ted-eu"}) == IMPLEMENTED_NORMALIZERS
 
     def test_the_planner_now_sees_a_runnable_source(self, catalog) -> None:
         """§42. Derived from what exists, so nothing in the planner changed."""

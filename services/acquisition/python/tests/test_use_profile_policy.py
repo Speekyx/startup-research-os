@@ -505,13 +505,21 @@ class TestNothingWasBuilt:
         from sros_acquisition import IMPLEMENTED_COLLECTORS, IMPLEMENTED_NORMALIZERS
 
         assert "ted-eu" in IMPLEMENTED_COLLECTORS
-        assert "ted-eu" not in IMPLEMENTED_NORMALIZERS
+        # Inverted again in Mission 1.15.8, which wrote the normalizer. The half
+        # that still holds is one layer further down and is 1.15.8's own stop
+        # condition: no TED notice becomes a Signal, a Claim or Evidence, and
+        # `test_no_ted_notice_became_a_canonical_record` in the reuse-review file
+        # is now the assertion that says so.
+        assert "ted-eu" in IMPLEMENTED_NORMALIZERS
         modules = sorted(
-            p.name
+            p.relative_to(ACQUISITION).as_posix()
             for p in ACQUISITION.rglob("*.py")
             if "ted" in p.stem.lower() or "sparql" in p.stem.lower()
         )
-        assert modules == ["ted_search_api.py"], modules
+        assert modules == [
+            "collection/ted_search_api.py",
+            "normalization/ted_search_api.py",
+        ], modules
 
     def test_the_legacy_verdict_distribution_is_unchanged(self, catalog) -> None:
         """§29, §44. Attaching profile identity to history changed no verdict."""
