@@ -344,7 +344,20 @@ refuses if the condition is missing, if this deployment carries a different
 review version, if the condition is not `HUMAN_CONFIRMATION`, or if the row is
 already there.
 
-**This is once per machine, not once per pull.** `sync.py` covers every pull.
+That clears **one** of TED's four conditions. The other three are capability
+verifications, and `sros-source load` writes the catalog but never a
+verification, so a fresh deployment has none of the four until both halves have
+run:
+
+```bash
+uv run sros-source verify --apply
+```
+
+```bash
+uv run sros-source --use-profile local-private-research-v1 conditions ted-eu
+```
+
+**Both are once per machine, not once per pull.** `sync.py` covers every pull.
 
 ---
 
