@@ -115,7 +115,8 @@ published business rules.
 | Basis | 4 rows, **4 document-backed** |
 | Calibration dataset | none, and the contract refuses one for this origin |
 
-**Rationale**, as submitted:
+**Rationale**, as recorded. The wording was AI-assisted and the reviewer read,
+adopted and submitted it; the number it explains was theirs alone (§4.2):
 
 > *"I assign a reliability of 0.5 because the structured meaning and publication
 > process of BT-161 are documented, but the underlying economic amount is
@@ -125,7 +126,7 @@ published business rules.
 > uncertainty around how completely and accurately the resulting contrast reflects
 > the underlying procurement activity."*
 
-**Stated limitation**, as submitted, in full:
+**Stated limitation**, as recorded, in full. Same authorship as the rationale:
 
 > *"This reliability assessment applies only to TED's structured publication of
 > BT-161 values for the reviewed OBSERVED proposition. BT-161 includes options and
@@ -153,6 +154,31 @@ there.
 
 Recorded here because a later reader sees the figure before the rationale, and
 the question should not have to be asked twice.
+
+### 4.2 Who wrote what
+
+The distinction matters enough to state plainly rather than leave to the word
+"submitted".
+
+| | |
+|---|---|
+| The value `0.5` | **the reviewer's alone.** No model selected, derived, defaulted or recommended it |
+| The decision to record it | **the reviewer's**, given explicitly |
+| The wording of the rationale and stated limitation | **AI-assisted**, then reviewed and adopted by the reviewer |
+| The four basis rows | retrieved documents, established in Mission 1.15.12 and checked by the reviewer |
+
+`evidence-reliability-review-guide-v1.md` §5 draws the line in the same place:
+*"A model may help you read documentation. It may summarise a methodology page,
+point you at a section, or draft a paraphrase you then check against the source.
+It may not be the epistemic source of the judgement."*
+
+Help with expression is on one side of that line and choosing the number is on
+the other. `HUMAN_REVIEW` remains the correct origin, and `reviewed_by` names the
+person who made the judgement and is accountable for the text they adopted.
+
+**Nothing persisted was changed by this clarification** — not the value, the
+reviewer, the scope, the basis, the confirmation or the version. It corrects the
+documentation only.
 
 ## 5. Persistence semantics
 

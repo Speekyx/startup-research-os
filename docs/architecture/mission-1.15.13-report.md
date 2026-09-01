@@ -30,7 +30,7 @@ stated limitation explicitly.
 
 ### What value, and what limitation?
 
-**0.5.** The stated limitation, in the reviewer's own words, scopes the
+**0.5.** The stated limitation scopes the
 assessment to TED's structured publication of BT-161, names the four material
 findings (options and renewals, no independent verification, lawful withholding,
 sensitivity of a max-minus-min to a missing extreme) and closes with an explicit
@@ -51,10 +51,28 @@ refused, which is recorded rather than assumed.
 
 ### Was an LLM used as reviewer?
 
-**No.** The value, the rationale and the limitation were all written by the
-operator. What the mission contributed was the factual packet — four retrieved
-first-party documents and their findings, established in Mission 1.15.12 — which
-is the reading a model may do.
+**No — and the boundary is worth stating exactly, because it is not "no model
+was involved".**
+
+| | |
+|---|---|
+| The numeric judgement, `0.5` | **the human's alone.** No model selected, derived, defaulted or recommended it, and the tool has no mechanism that could |
+| The decision to record it | **the human's**, given explicitly and confirmed |
+| The **wording** of the rationale and the stated limitation | **AI-assisted**, then reviewed and adopted by the human |
+
+The review guide already licenses exactly this and draws the line in the same
+place: *"A model may help you read documentation. It may summarise a methodology
+page, point you at a section, or draft a paraphrase you then check against the
+source. It may not be the epistemic source of the judgement."*
+
+Drafting prose that a reviewer then reads, edits and adopts is help with
+expression. Choosing the number would have been the epistemic act, and it is the
+one thing no origin in the contract would let a model perform. `HUMAN_REVIEW` is
+therefore the correct origin, and `reviewed_by` correctly names the person who
+made the judgement and is accountable for the text they adopted.
+
+Recorded here because "written by the operator" was the original wording and it
+overstated the case in the one document a later reader would use to check it.
 
 **One thing was raised rather than recorded silently.** The contract uses
 `0.5 because unknown` as its own example of a non-judgement: *"A measurement
