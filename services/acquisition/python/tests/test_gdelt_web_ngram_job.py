@@ -628,7 +628,9 @@ class TestTheCollectorIsRegistered:
         implementing a collector, never a way to prepare for one."""
         from sros_acquisition import IMPLEMENTED_COLLECTORS
 
-        assert frozenset({"world-bank", "gdelt", "ted-eu"}) == IMPLEMENTED_COLLECTORS
+        assert (
+            frozenset({"world-bank", "gdelt", "ted-eu", "stack-exchange"}) == IMPLEMENTED_COLLECTORS
+        )
 
     def test_the_module_lives_in_the_collection_package(self) -> None:
         collection = REPO_ROOT / "services/acquisition/python/sros_acquisition/collection"

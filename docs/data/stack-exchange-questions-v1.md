@@ -210,15 +210,25 @@ in what the attribution *contract* can express, not in what the data supports.
 
 All three verify **satisfied**. Stack Exchange is ELIGIBLE.
 
-## 12. What does not exist yet
+## 12. The collector, and what still does not exist
 
-**No collector, no RawRecord, no record kind, no normalizer, no Signal, no Claim,
-no Evidence.** `readiness` reports `elig yes / rsrc yes / impl no / enab no`, next
-step *implement a collector*.
+**`stack-exchange-questions@1.0.0` exists and has run.** One real bounded
+acquisition: `stackoverflow`, tagged `python`, 2024-03-04 to 2024-03-05,
+`page_size` 10, `max_pages` 2, `max_records` 15. Two HTTP requests, 16 items
+returned, **15 RawRecords**, quota 294/300, no `backoff`. Re-run identically:
+`new: 0, unchanged: 15`.
 
-The official API **is reachable** from this environment (`/2.3/info` returned HTTP
-200), so acquisition is not blocked by the environment — only by the collector not
-being written.
+`has_more` came back **true** and collection stopped anyway, at `max_pages` —
+which is what makes the no-exhaustion rule a property rather than a promise.
+
+Field minimisation is performed by the API's own `/filters/create` filter
+`!SyjNl4V)kvv2kw3Qt6`, verified by reading it back: `question.owner` is absent
+from `included_fields`. No owner field was received. New records carry
+`use_profile` in provenance (Mission 1.17's gap, closed prospectively).
+
+**Still does not exist: a record kind, a normalizer, a Signal, a Claim, an
+Evidence row.** The 15 records are raw and unnormalized, which is the honest state
+of a mission in progress.
 
 ## 13. Known limitations
 

@@ -63,7 +63,14 @@ __all__ = [
 # collector would have nothing it could ask for. Eligibility says a collector
 # may be built; resource-readiness says there is something to build against;
 # this says one was built.
-IMPLEMENTED_COLLECTORS: frozenset[str] = frozenset({"world-bank", "gdelt", "ted-eu"})
+IMPLEMENTED_COLLECTORS: frozenset[str] = frozenset(
+    # `stack-exchange` joined in Mission 1.18. The guard that caught its
+    # absence is the one worth naming: `assert_registry_grants_nothing`
+    # refused a database holding raw records for a source this codebase
+    # "cannot collect from", which was true of the SET and false of the
+    # repository -- the collector existed and had not been declared here.
+    {"world-bank", "gdelt", "ted-eu", "stack-exchange"}
+)
 
 
 # Sources this codebase can actually NORMALIZE.

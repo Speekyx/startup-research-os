@@ -464,4 +464,4 @@ class TestEligibilityAgreesEverywhere:
         """
         from sros_acquisition import IMPLEMENTED_COLLECTORS
 
-        assert set(IMPLEMENTED_COLLECTORS) == {"world-bank", "gdelt", "ted-eu"}
+        assert set(IMPLEMENTED_COLLECTORS) == {"world-bank", "gdelt", "ted-eu", "stack-exchange"}

@@ -340,6 +340,7 @@ def build_raw_record(
     source_reference: str,
     source_provenance: dict[str, object],
     content_language: str | None = None,
+    source_item_link: str | None = None,
 ) -> RawRecordDraft:
     """Assemble one row. Retention and attribution come from the CONTEXT.
 
@@ -382,9 +383,19 @@ def build_raw_record(
             "approve, and it must not name a different one from the one it came over"
         )
 
+    # ADR-031. `source_item_link` is the per-item URL where the licence requires
+    # the material itself to be locatable -- CC BY and CC BY-SA both do. Passed
+    # by the collector because only the collector knows the canonical link for
+    # the thing it just fetched, and left None for a source whose obligation
+    # does not include one. A source that DOES declare SOURCE_ITEM_LINK and
+    # whose collector passes nothing fails here rather than rendering a partial
+    # attribution, which is the behaviour the licence requires.
     notice = render_attribution(
         context.attribution,
-        AttributionFacts(licence_identifier=dataset.licence),
+        AttributionFacts(
+            licence_identifier=dataset.licence,
+            source_item_link=source_item_link,
+        ),
     )
 
     expires_at = collected_at + _retention_window(context)
@@ -423,6 +434,14 @@ def build_raw_record(
         },
         "authorization_issued_at": context.issued_at.isoformat(),
         "data_minimisation_allowed": list(context.data_minimisation.allowed),
+        # Mission 1.17 found this absent from every RawRecord: provenance
+        # recorded the review version and the rights basis but never the PROFILE
+        # the job declared, so a record could not say which of two possible
+        # answers about its source it was collected under. Added prospectively
+        # in Mission 1.18. Historical records are NOT backfilled -- they were
+        # written under a model that had no such concept, and inventing the
+        # field for them would assert something nobody recorded.
+        "use_profile": context.use_profile_id,
     }
 
     return RawRecordDraft(

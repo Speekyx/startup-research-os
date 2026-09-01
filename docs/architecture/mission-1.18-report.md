@@ -2,14 +2,19 @@
 
 **Sprint 1. Authorized by the Mission 1.18 brief §1-§50.**
 
-**The review approves. `APPROVED_WITH_CONDITIONS` under
-`local-private-research-v1`, ELIGIBLE, resource-ready — and no collector was
-built.**
+> ## MISSION 1.18 IS IN PROGRESS
+>
+> **Completed:** the review, the ADR-031 attribution correction, the collector,
+> one real bounded acquisition, 15 RawRecords and verified idempotency.
+>
+> **Not started:** the `community_question` record kind, normalization,
+> inspection of the real questions, the Signal feasibility decision, and any
+> Claim or Evidence. **This report does not claim completion**; §10 records
+> exactly what remains.
 
-That is an outcome §37 did not list, and it is stated plainly rather than dressed
-as one of the four: the governance half of the mission is complete and the
-implementation half is not started. **No research data was collected; counts are
-unchanged.**
+**The review approves: `APPROVED_WITH_CONDITIONS` under
+`local-private-research-v1`, ELIGIBLE, resource-ready — and the collector now
+exists and has run.**
 
 Full review: [`stack-exchange-questions-v1.md`](../data/stack-exchange-questions-v1.md).
 
@@ -134,8 +139,8 @@ reason. It is argued in the compliance entry rather than set.
 | Refused by name | the **Data Dump** (route authorisation *and* excluded family), plus users, Teams, chat, jobs, companies |
 | Personal data acquired | **none.** `owner` and every field under it, `last_editor` and `comments` are excluded at acquisition |
 | Attribution | two obligations from two documents — see below |
-| Bounds | not yet defined; there is no collector |
-| Quota/backoff | rate limit recorded `UNKNOWN`; the context says *"throttle conservatively; no limit is invented"* |
+| Bounds | required and defaulted nowhere; the real values used are in §6 |
+| Quota/backoff | the registry records the rate limit `UNKNOWN`, but the API returns `quota_remaining`, `quota_max` and `backoff` and those ARE honoured — §5 |
 
 **The Data Dump route was registered in this mission so that it could be
 refused.** It genuinely exists, and deleting it to keep the registry tidy would
@@ -163,33 +168,131 @@ element would render is held.
 
 ---
 
-## 4. Real data
+## 4. The attribution gap was real, and it was the worse shape
 
-### Was the official API reachable?
+**Outcome B.** `AttributionElement` could not express the per-item link CC BY-SA
+requires, and `stack-exchange-attribution` reported **SATISFIED anyway** —
+because `source-attribution-display` verifies that the *declared* elements render
+and has no knowledge of what a licence requires. A correct mechanism check across
+an incomplete list, which is worse than a failing one.
 
-**Yes** — `api.stackexchange.com/2.3/info?site=stackoverflow` returned HTTP 200
-from this environment. Earlier missions' failures were the WebFetch tool, not the
-network.
+**ADR-031** adds `SOURCE_ITEM_LINK`: generic, not source-specific, not
+licence-specific, supplied per item because a fixed link would attribute every
+item to one place.
 
-**So acquisition is not blocked by the environment.** It is blocked by there being
-no collector.
+**Two existing designs caught my own mistakes while I made them.** The
+conformance probe builds "every element supplied" and mine was not in it, so it
+failed for a source whose configuration was correct. And `_without` removes one
+element by explicit branch rather than a name table *"because a table hides a
+missing entry as a silent no-op"* — its docstring made that claim in Mission 1.4,
+and this is the first time it was tested. It held.
 
-| | |
-|---|---|
-| Requests for research data | **0** |
-| RawRecords / NormalizedRecords | **0 / 0** |
-| Record kind | none created |
-| Revisions / idempotency | not reached |
+**World Bank and Eurostat carry the same obligation and are NOT declared.** Their
+collectors supply no per-item link, so declaring it would fail closed on sources
+this mission was told not to modify. Recorded as a finding with a named
+follow-up.
+
+**The source is still ELIGIBLE**, now over an obligation that is complete rather
+than under-declared.
 
 ---
 
-## 5. Signals, Claims, Evidence
+## 5. The collector
 
-**None, and none was designed.** The Signal semantics work (§26–§32 of the brief)
-depends on seeing real question data — what tags look like, whether a
-deterministic problem-pattern cohort is achievable at all without semantic
-inference — and inventing it against imagined data would be the opposite of what
-those sections ask for.
+**`stack-exchange-questions@1.0.0`**, official API only, one site, no fallback.
+
+| | |
+|---|---|
+| Route | `stack-exchange-api`, by label; the Data Dump is blocked and absent from the context |
+| Site | `stackoverflow`, a **constant and not a parameter** — a `site` argument would make the authorised scope a runtime choice |
+| Bounds | `from_date`, `to_date`, `page_size`, `max_pages`, `max_records` all **required**; `StackExchangeBounds()` is a `TypeError` |
+| Two ceilings | `page_size <= 100` is the **source's**; `max_pages <= 20` is **ours**, enforced separately |
+| Identity | the source's own `question_id`, scoped by site — never a title, a hash or a page position |
+| Quota | `quota_remaining` / `quota_max` read from the envelope and recorded |
+| Backoff | **obeyed**, not merely logged — it is the one rate instruction this source publishes |
+| Failure | a non-200, an error envelope or a non-JSON body is a refused acquisition. **No HTML fallback exists** |
+
+### The filter is the API's own, and the first one was an HTTP 400
+
+Field minimisation happens **at acquisition**, through Stack Exchange's
+`/filters/create` method. The first attempt used an invented filter id and the
+API returned 400 — a better outcome than a plausible-looking string that silently
+selected the wrong fields.
+
+The real filter was derived once from `base=default`, `include=question.body;
+question.link; question.content_license; question.accepted_answer_id`,
+`exclude=question.owner; question.last_editor; question.comments;
+question.answers; question.closed_by`, and **verified by reading it back**:
+`question.owner` is absent from `included_fields`.
+
+**An owner arriving anyway is a failure, not a cleanup.** A collector that
+quietly dropped it would report success over data it should never have received.
+
+### `use_profile` provenance was a small generic change, and was made
+
+Mission 1.17 found it absent from every RawRecord. `build_raw_record` already has
+the context, so the profile is now recorded on **new** records. **Historical
+records are not backfilled** — they were written under a model with no such
+concept, and inventing the field for them would assert something nobody recorded.
+
+---
+
+## 6. The real bounded acquisition
+
+Deliberately small, and deliberately **not** tuned to produce a Signal.
+
+```text
+site         stackoverflow          endpoint   https://api.stackexchange.com/2.3/
+tagged       python                 filter     !SyjNl4V)kvv2kw3Qt6
+window       2024-03-04 to 2024-03-05          order asc, sort creation
+page_size    10    max_pages 2      max_records 15
+```
+
+| | |
+|---|---|
+| HTTP requests | **2** |
+| Items returned | 16 |
+| RawRecords persisted | **15 new** (`max_records` stopped it mid-page) |
+| `quota_remaining` / `quota_max` | **294 / 300** |
+| `backoff` | none returned |
+| `has_more` | **`true`** — and collection stopped anyway, at `max_pages` |
+| Owner fields received | **none** |
+
+**Idempotency verified**: the identical acquisition re-run gave
+`new: 0, unchanged: 15, revised: 0`.
+
+A persisted record, read back:
+
+```text
+key         stack-exchange|stackoverflow|78098368
+reference   https://stackoverflow.com/questions/78098368/python-multithreading-i-o-operation
+use_profile local-private-research-v1
+licence     CC-BY-SA-4.0
+attribution Stack Exchange Network CC BY-SA 4.0 https://stackoverflow.com/questions/78098368/...
+payload     answer_count, body, content_license, creation_date, is_answered,
+            last_activity_date, link, question_id, score, tags, title, view_count
+owner       absent
+```
+
+**The `has_more: true` line is worth reading twice.** The source said there was
+more and the collector stopped, because `max_pages` is a ceiling rather than a
+suggestion. That is the no-crawl-until-exhaustion property, demonstrated on real
+data rather than asserted.
+
+### A guard caught a real omission
+
+`assert_registry_grants_nothing` refused a database holding raw records for a
+source this codebase *"cannot collect from"* — true of `IMPLEMENTED_COLLECTORS`
+and false of the repository. The collector existed and had not been declared. The
+guard was right and the set was wrong.
+
+---
+
+## 7. Signals, Claims, Evidence
+
+**None, and none was designed — deliberately.** The Signal semantics depend on
+inspecting real questions, and that inspection has not been done. Designing a
+cohort rule against imagined data is exactly what the brief warns against.
 
 | | |
 |---|---|
@@ -200,7 +303,7 @@ those sections ask for.
 
 ---
 
-## 6. Boundaries
+## 8. Boundaries
 
 | | |
 |---|---|
@@ -215,10 +318,15 @@ those sections ask for.
 
 | | Before | After |
 |---|---|---|
-| RawRecords / NormalizedRecords | 23 / 23 | 23 / 23 |
+| RawRecords | 23 | **38** (+15 Stack Overflow) |
+| NormalizedRecords | 23 | 23 — **not normalized yet** |
 | Signals / Claims / ClaimRevisions / Evidence | 8 / 8 / 8 / 8 | 8 / 8 / 8 / 8 |
 | ReliabilityAssessments | 1 | 1 |
 | Opportunities / Embeddings / Scores | 0 | 0 |
+
+The 15-record gap between raw and normalized is the honest state of a mission in
+progress, not a defect: nothing has been normalized because the record kind has
+not been decided.
 
 Catalog counts changed: 63 reviews, 99 evidence records, 43 conditions, one new
 access profile, one new compliance entry.
@@ -237,39 +345,39 @@ against.
 
 ---
 
-## 7. Why this mission stopped where it did
+## 9. Why this pass stopped where it did
 
-The brief's §11 says not to split automatically, and it is right that the
-foundations exist. But the remaining work is a collector, a **new record kind** for
-a community-content document, a normalizer, a Signal semantic that has to be
-designed against real data, a deterministic extractor with hard negatives, a claim
-template and an evidence path. TED needed Missions 1.15.7 through 1.15.11 for the
-equivalent, and each of those found something that changed the design.
+The remaining work is a **new record kind**, a normalizer, the empirical
+inspection of real questions, a Signal semantic designed against them, a
+deterministic extractor with hard negatives, and a claim and evidence path. TED
+needed Missions 1.15.8 through 1.15.11 for the equivalent, and each found
+something that changed the design.
 
-**Producing that quickly would have meant producing it without the care every
-comparable mission had.** The review is the part that gates everything and is
-finished; the implementation is the part that benefits from being done properly.
-
-Stated as its own outcome rather than claimed as one of §37's four, because the
-honest shape of this result is *governance complete, implementation not started*.
+The collector half is finished and tested; the rest benefits from being done with
+the same care rather than compressed to finish a report.
 
 ---
 
-## 8. Next
+## 10. Exactly what remains for Mission 1.18
 
-**Mission 1.18.1 — Stack Exchange questions collector and normalizer.** Everything
-it needs is in place: eligible, resource-ready, route-bound, field-minimised,
-attribution configured, API reachable. It should stop after real bounded
-acquisition and normalization, and leave the Signal design to a mission that can
-look at real questions first.
+1. **`community_question` record-kind decision.** A question is a community
+   solution-seeking document and fits none of `numeric_observation`,
+   `lexical_frequency_observation` or `procurement_notice`. A vocabulary
+   extension is likely and follows the canonical migration rules.
+2. **Normalization** of the 15 real records, preserving question identity, tags,
+   the source timestamp with its real semantics, answer metadata, the canonical
+   link and the licence — and treating an accepted answer as *the asker accepted
+   an answer*, never as *solved*.
+3. **Inspection of the real normalized questions.** What tag combinations look
+   like, how specific titles are, whether a deterministic cohort is constructible
+   without semantic inference, and what the false positives are.
+4. **The Signal feasibility decision**, which is genuinely open. A tag identifies
+   a subject, not a problem: `python` is not a cohort. **Zero Signals is a
+   legitimate answer** and must not be worked around.
+5. **Signal implementation only if defensible**, minimum support >= 2, hard
+   negatives.
+6. **OBSERVED Claim and Evidence only if a real Signal exists.**
+7. **Final update of this report.**
 
-**Then the Signal question, which is the genuinely hard one** and which
-§27 of this brief framed correctly: a tag identifies a subject, not a problem.
-`python` is not a cohort. Whether a deterministic repeated-problem cohort exists
-without semantic inference is an open question that real data will answer, and
-**zero Signals is a legitimate answer** to it.
-
-**And do not deepen Stack Exchange past that.** §49 is right: after it produces
-evidence, the next question is which source adds the next genuinely different
-dimension. `desire` still has no approving source, and `problem` will then have
-exactly one substantive one.
+Nothing above is blocked. The data is in the database and the governance is
+settled.
