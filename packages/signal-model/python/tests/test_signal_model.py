@@ -869,16 +869,24 @@ class TestDerivationIdentityAndParameters(unittest.TestCase):
 
         `lexical_frequency_change` joined them once H-32 closed: it is the first
         type whose window basis is ORDERED_PERIODS, and it could not have
-        existed while ordering was unestablished. The rule the old assertion
-        protected is unchanged -- every type is justified by a data shape this
-        repository holds, and each declares the family whose record kind it
-        reads."""
+        existed while ordering was unestablished.
+
+        `procurement_value_contrast` joined in Mission 1.15.9, and it is the
+        mirror image: the first type whose basis is NONE, and it exists BECAUSE
+        H-37 is open -- a derivation over TED notices that needed an order could
+        not have been written at all. Its data shape is the `procurement_notice`
+        record kind Mission 1.15.8 added.
+
+        The rule the original assertion protected is unchanged: every type is
+        justified by a data shape this repository holds, and each declares the
+        family whose record kind it reads."""
         self.assertEqual(
             set(SIGNAL_TYPES),
             {
                 "lexical_frequency_contrast",
                 "lexical_frequency_change",
                 "numeric_period_change",
+                "procurement_value_contrast",
             },
         )
         for spec in SIGNAL_TYPES.values():
