@@ -17,6 +17,9 @@ The suite is organised around what must stay impossible:
 
 from __future__ import annotations
 
+import ast
+import inspect
+import pathlib
 import unittest
 from datetime import UTC, datetime
 
@@ -31,6 +34,7 @@ from sros_evidence_reliability import (
     ReliabilityBasis,
     ReliabilityScope,
     assessment_key,
+    model,
     resolve_reliability,
     scope_from_claim,
 )
@@ -586,6 +590,371 @@ class TestNoPropagation(unittest.TestCase):
         interpretation confidence 1.0. Neither produces a value here."""
         result = resolve_reliability(scope=WB_SCOPE, candidates=[])
         self.assertIsNone(result.reliability)
+
+
+# ===================================================== Mission 1.15.12: the TED scope
+#
+# The real TED Evidence row has NO assessment and this mission created none
+# (Outcome B: no origin in the contract lets a documentary review become a
+# number without a named human reviewer). Every assessment below is SYNTHETIC
+# and exists to prove the machinery would behave correctly if a reviewer ever
+# wrote one.
+#
+# The SCOPE, by contrast, is real: it is what the live TED Evidence row
+# resolves to, and it is the fourth distinct scope across the eight rows.
+
+TED_SCOPE = ReliabilityScope(
+    source_id="ted-eu",
+    resource_id="notices/eforms-contract-and-award",
+    record_kind_id="procurement_notice",
+    claim_type=ClaimType.OBSERVED,
+    proposition_kind="source_reported_procurement_value_contrast",
+)
+
+
+def ted_assessment(**overrides) -> ReliabilityAssessment:
+    """SYNTHETIC. No such assessment exists in any database."""
+    kwargs = {
+        "id": "synthetic-ted-1",
+        "scope": TED_SCOPE,
+        "version": 1,
+        # A FIXTURE VALUE, and deliberately not a plausible-looking one. It is
+        # not a judgement about TED, and no test below asserts anything about
+        # its magnitude.
+        "reliability": 0.42,
+        "origin": ReliabilityAssessmentOrigin.HUMAN_REVIEW,
+        "rationale": "A synthetic rationale for a synthetic assessment.",
+        "stated_limitation": "Invented for a test; bounded by being invented.",
+        "reviewed_by": "test-fixture",
+        "reviewed_at": REVIEWED_AT,
+        "basis": (basis(),),
+    }
+    kwargs.update(overrides)
+    return ReliabilityAssessment(**kwargs)
+
+
+class TestTheTedScopeIsTheFourth(unittest.TestCase):
+    """The real inventory: 8 Evidence rows fall into 4 scopes, TED being one.
+
+    Mission 1.14 recorded "7 rows collapse to 3 scopes" and that ratio was its
+    design justification. Mission 1.15.12 re-measured it rather than assuming
+    it, because TED introduced a new proposition kind.
+    """
+
+    def test_ted_does_not_collide_with_any_existing_scope(self):
+        others = [WB_SCOPE, GDELT_SCOPE]
+        for other in others:
+            self.assertNotEqual(TED_SCOPE.key, other.key)
+
+    def test_the_scope_is_what_the_real_evidence_row_resolves_to(self):
+        """Built by the production helper from the claim's own facts.
+
+        If `scope_from_claim` ever stopped producing this, the live row would
+        silently fall under a different scope and could pick up an assessment
+        reviewed for something else.
+        """
+        scope = scope_from_claim(
+            source_id="ted-eu",
+            resource_id="notices/eforms-contract-and-award",
+            record_kind_id="procurement_notice",
+            claim_type=ClaimType.OBSERVED,
+            proposition_facts={
+                "proposition": "source_reported_procurement_value_contrast",
+                "currency": "EUR",
+                "notice_ids": ["125972-2023", "126676-2023", "127668-2023"],
+            },
+        )
+        self.assertIsNotNone(scope)
+        assert scope is not None
+        self.assertEqual(scope.key, TED_SCOPE.key)
+
+    def test_the_cohort_details_do_not_enter_the_scope(self):
+        """Two TED contrasts over different notices share one scope.
+
+        Reliability is about a measurement and a purpose, not about a
+        particular cohort. A scope that moved with the notice ids would need a
+        fresh review per Signal, which is the per-record judgement the contract
+        says is unreachable.
+        """
+        other_cohort = scope_from_claim(
+            source_id="ted-eu",
+            resource_id="notices/eforms-contract-and-award",
+            record_kind_id="procurement_notice",
+            claim_type=ClaimType.OBSERVED,
+            proposition_facts={
+                "proposition": "source_reported_procurement_value_contrast",
+                "currency": "PLN",
+                "notice_ids": ["999999-2023", "888888-2023"],
+            },
+        )
+        assert other_cohort is not None
+        self.assertEqual(other_cohort.key, TED_SCOPE.key)
+
+
+class TestTedScopeMatchingDoesTheWork(unittest.TestCase):
+    """§17: no TED special case in the matcher. Five parts, all or nothing."""
+
+    def _resolve(self, scope):
+        return resolve_reliability(scope=scope, candidates=[ted_assessment()])
+
+    def test_the_ted_assessment_applies_to_the_ted_scope(self):
+        result = self._resolve(TED_SCOPE)
+        self.assertIs(result.outcome, ReliabilityResolutionOutcome.RESOLVED)
+        self.assertEqual(result.reliability, 0.42)
+        assert result.binding is not None
+        self.assertEqual(result.binding.assessment_id, "synthetic-ted-1")
+
+    def test_the_same_source_with_another_resource_does_not_match(self):
+        """A second TED resource is a different measurement.
+
+        `ted-csv` and the bulk packages are blocked today, so this is a guard
+        against a future resource inheriting a review it never had.
+        """
+        result = self._resolve(
+            ReliabilityScope(
+                source_id="ted-eu",
+                resource_id="notices/some-other-resource",
+                record_kind_id="procurement_notice",
+                claim_type=ClaimType.OBSERVED,
+                proposition_kind="source_reported_procurement_value_contrast",
+            )
+        )
+        self.assertIs(result.outcome, ReliabilityResolutionOutcome.NO_APPLICABLE_ASSESSMENT)
+
+    def test_the_same_resource_with_another_record_kind_does_not_match(self):
+        result = self._resolve(
+            ReliabilityScope(
+                source_id="ted-eu",
+                resource_id="notices/eforms-contract-and-award",
+                record_kind_id="numeric_observation",
+                claim_type=ClaimType.OBSERVED,
+                proposition_kind="source_reported_procurement_value_contrast",
+            )
+        )
+        self.assertIs(result.outcome, ReliabilityResolutionOutcome.NO_APPLICABLE_ASSESSMENT)
+
+    def test_an_inferred_claim_does_not_inherit_the_observed_review(self):
+        """The purpose half of the scope, doing its job.
+
+        How dependable a published award value is for "TED reported X" is a
+        different question from how dependable it is for an inference drawn
+        from X, and no INFERRED interpreter exists to ask it.
+        """
+        result = self._resolve(
+            ReliabilityScope(
+                source_id="ted-eu",
+                resource_id="notices/eforms-contract-and-award",
+                record_kind_id="procurement_notice",
+                claim_type=ClaimType.INFERRED,
+                proposition_kind="source_reported_procurement_value_contrast",
+            )
+        )
+        self.assertIs(result.outcome, ReliabilityResolutionOutcome.NO_APPLICABLE_ASSESSMENT)
+
+    def test_another_proposition_kind_over_the_same_records_does_not_match(self):
+        """A future template over procurement notices asks a new question.
+
+        A claim about a single award amount is not a claim about a spread, and
+        the review that covered the second says nothing about the first.
+        """
+        result = self._resolve(
+            ReliabilityScope(
+                source_id="ted-eu",
+                resource_id="notices/eforms-contract-and-award",
+                record_kind_id="procurement_notice",
+                claim_type=ClaimType.OBSERVED,
+                proposition_kind="source_reported_procurement_award_amount",
+            )
+        )
+        self.assertIs(result.outcome, ReliabilityResolutionOutcome.NO_APPLICABLE_ASSESSMENT)
+
+    def test_world_bank_and_gdelt_are_untouched_by_a_ted_assessment(self):
+        for scope in (WB_SCOPE, GDELT_SCOPE):
+            result = self._resolve(scope)
+            self.assertIs(result.outcome, ReliabilityResolutionOutcome.NO_APPLICABLE_ASSESSMENT)
+            self.assertIsNone(result.reliability)
+
+    def test_a_ted_scope_finds_nothing_among_the_other_assessments(self):
+        """And the reverse: a World Bank review does not reach TED."""
+        result = resolve_reliability(scope=TED_SCOPE, candidates=[assessment()])
+        self.assertIs(result.outcome, ReliabilityResolutionOutcome.NO_APPLICABLE_ASSESSMENT)
+
+
+class TestNothingLeaksIntoReliability(unittest.TestCase):
+    """§11 and §33: reliability is not any of the numbers that sit beside it.
+
+    The real TED row carries `relevance`, `directness`, `extraction_confidence`
+    all 1.0, its Signal carries `derivation_confidence` 1.0 and its Claim
+    carries `interpretation_confidence` 1.0. Five ones, and none of them is a
+    reliability. The structural guarantee is that `resolve_reliability` cannot
+    see any of them.
+    """
+
+    def test_the_resolver_takes_only_scope_candidates_and_supplied(self):
+        parameters = set(inspect.signature(resolve_reliability).parameters)
+        self.assertEqual(parameters, {"scope", "candidates", "supplied"})
+
+    def test_no_confidence_or_support_field_names_appear_in_the_package(self):
+        """Asserted over the AST, and over identifiers rather than text.
+
+        A substring scan would fail on the docstrings that explain the rule,
+        which is how a structural check stops checking
+        (`testing-strategy.md` §23).
+        """
+        forbidden = {
+            "derivation_confidence",
+            "interpretation_confidence",
+            "extraction_confidence",
+            "relevance",
+            "directness",
+            "evidence_level",
+            "support_count",
+            "approval_state",
+        }
+        root = pathlib.Path(model.__file__).parent
+        seen: set[str] = set()
+        for path in root.rglob("*.py"):
+            tree = ast.parse(path.read_text(encoding="utf-8"))
+            for node in ast.walk(tree):
+                if isinstance(node, ast.Name):
+                    seen.add(node.id)
+                elif isinstance(node, ast.Attribute):
+                    seen.add(node.attr)
+                elif isinstance(node, ast.arg):
+                    seen.add(node.arg)
+        self.assertEqual(seen & forbidden, set())
+
+    def test_a_supplied_value_is_used_verbatim_and_consults_nothing(self):
+        """The one path that sets reliability without an assessment.
+
+        It reads a value the Evidence row already carried; it derives nothing
+        from a neighbouring confidence.
+        """
+        result = resolve_reliability(scope=TED_SCOPE, candidates=[ted_assessment()], supplied=0.11)
+        self.assertIs(result.outcome, ReliabilityResolutionOutcome.DIRECTLY_SUPPLIED)
+        self.assertEqual(result.reliability, 0.11)
+        self.assertIsNone(result.binding)
+
+
+class TestOrthogonality(unittest.TestCase):
+    """§18, §19, §20: what resolving a reliability may NOT change."""
+
+    def test_resolution_returns_a_value_and_touches_no_evidence_field(self):
+        """The resolver produces a resolution, never a mutated row.
+
+        Category, independence and level cannot move because the function has
+        no evidence row to move them on, and this asserts the shape rather
+        than trusting the implementation to keep its hands off.
+        """
+        result = resolve_reliability(scope=TED_SCOPE, candidates=[ted_assessment()])
+        fields = set(result.to_json())
+        for forbidden in ("observation_category", "independence_state", "evidence_level"):
+            self.assertNotIn(forbidden, fields)
+
+    def test_an_assessment_carries_no_category_and_no_independence(self):
+        """Nothing on an assessment could promote a row even if applied.
+
+        This is what keeps §18 true by construction: a reviewer writing a
+        reliability has no field in which to also declare the observation a
+        market activity.
+        """
+        assessment_fields = set(ted_assessment().binding().to_json())
+        for forbidden in ("observation_category", "independence_state", "evidence_level"):
+            self.assertNotIn(forbidden, assessment_fields)
+
+
+class TestSupersessionAndIdempotency(unittest.TestCase):
+    """§36: repeated application is stable; a new version supersedes cleanly."""
+
+    def test_resolving_twice_returns_the_same_binding(self):
+        first = resolve_reliability(scope=TED_SCOPE, candidates=[ted_assessment()])
+        second = resolve_reliability(scope=TED_SCOPE, candidates=[ted_assessment()])
+        self.assertEqual(first.to_json(), second.to_json())
+
+    def test_a_superseded_version_is_preserved_and_the_current_one_wins(self):
+        old = ted_assessment(
+            id="synthetic-ted-1",
+            version=1,
+            reliability=0.42,
+            superseded_at=REVIEWED_AT,
+            superseded_reason="replaced by v2 after re-reading the specification",
+        )
+        new = ted_assessment(id="synthetic-ted-2", version=2, reliability=0.37)
+        result = resolve_reliability(scope=TED_SCOPE, candidates=[old, new])
+        self.assertIs(result.outcome, ReliabilityResolutionOutcome.RESOLVED)
+        assert result.binding is not None
+        self.assertEqual(result.binding.version, 2)
+        # The old one still exists and still says what it said.
+        self.assertFalse(old.is_current)
+        self.assertEqual(old.reliability, 0.42)
+
+    def test_every_version_superseded_is_not_the_same_as_nobody_looked(self):
+        withdrawn = ted_assessment(
+            superseded_at=REVIEWED_AT,
+            superseded_reason="withdrawn pending a re-read of the eForms specification",
+        )
+        result = resolve_reliability(scope=TED_SCOPE, candidates=[withdrawn])
+        self.assertIs(result.outcome, ReliabilityResolutionOutcome.SUPERSEDED_ONLY)
+        self.assertIsNone(result.reliability)
+
+    def test_two_current_assessments_are_refused_rather_than_averaged(self):
+        result = resolve_reliability(
+            scope=TED_SCOPE,
+            candidates=[ted_assessment(id="a"), ted_assessment(id="b", reliability=0.9)],
+        )
+        self.assertIs(result.outcome, ReliabilityResolutionOutcome.AMBIGUOUS_ASSESSMENTS)
+        self.assertIsNone(result.reliability)
+
+
+class TestOutcomeBFailsClosed(unittest.TestCase):
+    """§37, and the state the real database is actually in.
+
+    Mission 1.15.12 created no assessment. This is what the live TED Evidence
+    row does, expressed over the same code path the production resolver uses.
+    """
+
+    def test_no_assessment_leaves_reliability_null(self):
+        result = resolve_reliability(scope=TED_SCOPE, candidates=[])
+        self.assertIs(result.outcome, ReliabilityResolutionOutcome.NO_APPLICABLE_ASSESSMENT)
+        self.assertIsNone(result.reliability)
+        self.assertIsNone(result.binding)
+
+    def test_a_claim_with_no_proposition_kind_states_no_scope(self):
+        """And therefore can never pick up an assessment by accident."""
+        self.assertIsNone(
+            scope_from_claim(
+                source_id="ted-eu",
+                resource_id="notices/eforms-contract-and-award",
+                record_kind_id="procurement_notice",
+                claim_type=ClaimType.OBSERVED,
+                proposition_facts={"currency": "EUR"},
+            )
+        )
+
+    def test_an_assessment_without_a_document_backed_basis_is_refused(self):
+        """The rule that makes Outcome B unavoidable rather than cautious.
+
+        A reviewer's reasoning alone cannot carry an assessment. Whatever a
+        future TED reliability rests on, it rests on retrieved documents.
+        """
+        with self.assertRaises(ValueError):
+            ted_assessment(
+                basis=(
+                    ReliabilityBasis(
+                        basis_type=ReliabilityBasisType.REVIEWER_DOCUMENTED_JUDGEMENT,
+                        document_title="Reasoning about the eForms specification",
+                        summarized_finding="The reviewer's own argument, with no document.",
+                    ),
+                )
+            )
+
+    def test_a_documented_method_assessment_may_not_name_a_calibration_dataset(self):
+        """Human review is not calibration, and neither is document reading."""
+        with self.assertRaises(ValueError):
+            ted_assessment(
+                origin=ReliabilityAssessmentOrigin.DOCUMENTED_METHOD,
+                calibration_dataset_ref="some-outcome-set",
+            )
 
 
 if __name__ == "__main__":

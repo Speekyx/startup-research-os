@@ -198,7 +198,7 @@ name, no external call.
 
 | `amount_type` | Source field | Scope | What it is |
 |---|---|---|---|
-| `TOTAL_VALUE` | `total-value` | NOTICE | the total the notice states |
+| `TOTAL_VALUE` | `total-value` | NOTICE | eForms **BT-161**: *"the value of all contracts awarded in this notice, **including options and renewals**"*. Not what was paid, and not necessarily what will be (Mission 1.15.12) |
 | `TENDER_VALUE` | `tender-value` | LOT | the value of a tender |
 | `ESTIMATED_VALUE` | `estimated-value-lot` | LOT | an estimate, **not** what anybody paid |
 | `FRAMEWORK_MAXIMUM` | `framework-maximum-value-lot` | LOT | a ceiling, **not** a transaction |
