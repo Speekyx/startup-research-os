@@ -53,6 +53,7 @@
 | `demand-side-source-expansion-v1.md` | The Mission 1.15 round: nine sources examined, two verdicts changed on retrieved evidence, and every retrieval that failed |
 | `demand-side-source-coverage-v1.md` | The eight business evidence families against the registry. Seven have no approving source; two have no candidate at all |
 | `demand-side-source-priority-v1.md` | Which source to pursue next, in ordinal buckets with stated reasoning. Never a numeric source score |
+| `demand-evidence-portfolio-blocker-v1.md` | **Why Mission 1.16 added no source, measured from the registry.** Ten sources cover `problem` or `desire` and none approves: six are RESTRICTED on retrieved terms, and the three worth advancing need documents this environment cannot reach. **And the larger finding:** the runtime declares `local-private-research-v1`, exactly one review exists under it, and World Bank and GDELT -- 15 of 23 RawRecords -- are BLOCKED today |
 | `ted-eu-reuse-ml-review-v1.md` | The Mission 1.15.1 review of H-34: the governing instrument named and proven, its text unretrievable, and why that is worse than silence |
 | `ted-eu-governing-decision-review-v1.md` | Commission Decision 2011/833/EU read in full. H-34 closes PERMITTED: reuse is defined by purpose, not by method |
 | `ted-eu-database-right-review-v1.md` | H-36 does not close. The Decision governs documents and never reaches the collection they sit in |
