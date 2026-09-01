@@ -796,11 +796,16 @@ class TestNothingReachedTheDatabase:
         # downstream of normalization exists for TED on any machine -- no Signal
         # extractor consumes a procurement notice, so no Claim and no Evidence
         # can follow. That is Mission 1.15.8's own stop condition.
+        # A TED SIGNAL exists as of Mission 1.15.10, so this moved one stage
+        # further down -- to the last one it has. Nothing INTERPRETS a TED
+        # signal: no Claim cites one and no Evidence references one, which is
+        # 1.15.10's own stop condition. When that changes, delete this rather
+        # than move it again.
         assert (
             self._count(
-                "SELECT count(*) FROM nlp.signal_inputs si "
-                "JOIN acquisition.normalized_records n ON n.id = si.normalized_record_id "
-                "WHERE n.source_id = 'ted-eu'"
+                "SELECT count(*) FROM research.claim_interpretation_inputs cii "
+                "JOIN nlp.signals s ON s.id = cii.signal_id "
+                "WHERE s.quantity_family = 'TRANSACTION_VALUE'"
             )
             == 0
         )

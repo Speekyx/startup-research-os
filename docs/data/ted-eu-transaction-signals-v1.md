@@ -1,14 +1,20 @@
 # TED-EU Transaction Signals V1
 
-**Authoritative.** Mission 1.15.9, ADR-029. The first derivation over
-procurement notices, what it asserts, and the four things it refuses to assert.
+**Authoritative.** Mission 1.15.9 and Mission 1.15.10, ADR-029. The first
+derivation over procurement notices, what it asserts, and the four things it
+refuses to assert.
 
-**State: the extractor exists and produced ZERO real Signals.** Three normalized
-TED notices were inspected, two carried an eligible amount, two cohorts formed,
-and neither reached the minimum support. That is the correct answer for the
-observations held, not a failure, and §11 gives the exact reason.
+**State: ONE real Signal exists**, derived in Mission 1.15.10 from three award
+notices acquired for comparability. Mission 1.15.9 produced zero from the
+notices it had, and that stands as a correct answer rather than a failure; §11
+records both runs, and §11.2 records what the real data corrected in the
+extractor.
 
-**H-37 OPEN. H-38 OPEN. H-36A NOT ESTABLISHED. H-36B NOT ADDRESSED.**
+**H-37 OPEN. H-38 OPEN. H-36A NOT ESTABLISHED. H-36B NOT ADDRESSED.** The
+blocking rule that Mission 1.15.9 placed on the next TED acquisition — repair
+the collector's Decimal invariant with a version bump — was **satisfied by
+Mission 1.15.10 Phase A** before any acquisition ran. See
+`ted-eu-search-api-collector-v1.md` §5.1.
 
 ---
 
@@ -32,7 +38,7 @@ So the floor is **two distinct observations**, and the extractor returns
 
 | | |
 |---|---|
-| Extractor | **`procurement-value-contrast@1.0.0`** |
+| Extractor | **`procurement-value-contrast@1.0.1`** |
 | Signal type | `procurement_value_contrast` |
 | Quantity family | **`TRANSACTION_VALUE`** (ADR-029) |
 | Record kind read | `procurement_notice` |
@@ -204,7 +210,9 @@ readable:
 - **no temporal basis.** `NONE` says the members are related by comparability
   and by nothing else.
 
-## 11. The real execution
+## 11. The real executions
+
+### 11.1 Mission 1.15.9 — zero, and why that was right
 
 Run through `run_signal_derivation_job` over the three normalized TED records,
 once per monetary semantic.
@@ -234,25 +242,55 @@ group  cpv_division=90  CONTRACT_AWARD_NOTICE   1 member   INSUFFICIENT_INPUT_OB
 **Eight derivation runs are recorded and zero signals were written.** A refused
 derivation gets a run record, never a row in a table of signals (ADR-021).
 
-## 12. What would produce one
+### 11.2 Mission 1.15.10 — one Signal, and what the data corrected
 
-Two or more award notices, in the **same CPV division**, with a total value in
-the **same currency**, paired. Nothing about the extractor needs to change; the
-observations do.
+The acquisition was designed for comparability first: one CPV division, one
+three-day window, award notices, chosen before execution. Four more notices
+arrived, three of them award notices with a EUR total value in division 90.
 
-That is a bounded acquisition designed for comparability rather than a larger
-one — and it is blocked behind the collector repair recorded in §13.
+| | |
+|---|---|
+| Members | `125972-2023`, `126676-2023`, `127668-2023` |
+| Amounts | 73 415.22, 440 000, 759 960.24 EUR |
+| Magnitude | **686 545.02** |
+| Magnitude kind | `ABSOLUTE_DIFFERENCE`, max minus min |
+| Unit | `EUR`, `INHERITED` |
+| Direction | `NOT_APPLICABLE` |
+| Temporal basis | `NON_TEMPORAL` |
+| Extractor | `procurement-value-contrast@1.0.1` |
 
-## 13. Blocking rule for the next TED acquisition
+Re-derived identically: **0 new, 1 unchanged**.
 
-> **Before the next TED acquisition mission**, the collector's Decimal invariant
-> must be repaired with an appropriate version bump and compatibility treatment.
-> `ted-search-api@1.0.0` parses its response with plain `json.loads` rather than
-> `json.loads(..., parse_float=Decimal)`, which contradicts the manifest's own
-> rule. The three records already held are exact at the raw-to-normalized
-> boundary and remain valid inputs; the rule is about what is collected **next**.
+**What the real data corrected.** The scope carried only the **first** member's
+CPV codes. With one member per cohort in 1.15.9 that was invisible; with three
+members carrying four different codes it was plainly wrong, because the scope is
+what tells a reader which market the contrast is about. The scope is now the
+**union** of every member's codes, and the extractor is `1.0.1` because the same
+inputs now produce a different scope. The `1.0.0` row was deleted and the signal
+re-derived rather than left standing beside its successor.
 
-## 14. Open questions
+**Two notices in the window were correctly excluded**, and they are worth naming
+because they show the cohort rule doing real work rather than nominal work:
+`127009-2023` spans divisions 77 and 90 and is denominated in PLN, and
+`127459-2023` spans 45 and 90. A cohort mixing currencies would compare numbers
+that are not comparable, and that is exactly what §7 exists to prevent.
+
+## 12. What this one Signal supports, and what it does not
+
+It supports: *within division 90 award notices published in this window, the
+largest EUR total value exceeded the smallest by 686 545.02 EUR.*
+
+It does **not** support any of the following, and §3 is the section to re-read
+before anyone tries:
+
+- that the market is growing, shrinking or moving — three notices in one window
+  are `NON_TEMPORAL`, and H-37 blocks any temporal reading regardless;
+- that buyers are willing to pay 686 545.02 for anything — the magnitude is a
+  spread between two contracts, not a price;
+- that 90 is a representative sample of anything — the cohort is every
+  qualifying notice **in this bounded query**, not in the market.
+
+## 13. Open questions
 
 | | |
 |---|---|
@@ -264,10 +302,11 @@ one — and it is blocked behind the collector repair recorded in §13.
 Neither H-37 nor H-38 is closed by an extractor being able to avoid it. Closing
 either needs first-party evidence.
 
-## 15. What does not exist
+## 14. What does not exist
 
-No Claim, no ClaimRevision, no Evidence, no ReliabilityAssessment, no
-Opportunity, no embedding, no score — for TED or for anything else. A Signal
-describing a repeated transaction-value pattern would still not say that a market
-exists or that anyone will buy anything, and those are later questions with their
-own missions.
+Nothing interprets this Signal. No Claim cites it, no ClaimRevision, no
+Evidence, no ReliabilityAssessment, no Opportunity, no embedding, no score —
+and no Opportunity or ReliabilityAssessment exists for any source at all. A
+Signal describing a transaction-value contrast still does not say that a market
+exists or that anyone will buy anything, and those are later questions with
+their own missions.

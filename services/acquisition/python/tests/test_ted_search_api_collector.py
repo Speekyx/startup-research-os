@@ -23,6 +23,7 @@ import json
 import pathlib
 from dataclasses import replace
 from datetime import UTC, date, datetime
+from decimal import Decimal
 
 import pytest
 from sros_acquisition.collection import (
@@ -578,9 +579,13 @@ class TestResponseHandling:
         survive into the payload exactly as TED published them."""
         result = collect(context, FakeTransport(fx.response(fx.AWARD_NOTICE)))
         payload = result.drafts[0].payload
-        assert payload["total-value"] == 1875000.50
+        # An exact decimal STRING as of collector 1.1.0, never a JSON float.
+        # `1875000.5` rather than `1875000.50` because the FIXTURE is a Python
+        # float and `json.dumps` drops the trailing zero before the collector
+        # ever sees the text -- the collector preserves whatever digits arrive.
+        assert payload["total-value"] == "1875000.5"
         assert payload["total-value-cur"] == ["EUR"]
-        assert payload["tender-value"] == [1875000.50]
+        assert payload["tender-value"] == ["1875000.5"]
         assert "price_paid" not in json.dumps(payload)
 
     def test_an_absent_monetary_block_stays_absent(self, context) -> None:
@@ -617,9 +622,26 @@ class TestResponseHandling:
         collect(context, transport)
         assert "language" not in transport.calls[0][1].body
 
-    def test_the_payload_is_the_source_structure_unaltered(self, context) -> None:
+    def test_the_payload_is_the_source_structure_with_exact_numbers(self, context) -> None:
+        """Mission 1.15.10 changed exactly one thing about this payload, and the
+        distinction is worth stating rather than relaxing the assertion.
+
+        **The STRUCTURE is untouched**: same keys, same nesting, same array
+        lengths, same order. What changed is the REPRESENTATION of a non-integer
+        number -- an exact decimal string instead of a JSON float -- which is the
+        defect repair, and it is why the collector version was bumped rather
+        than edited.
+        """
         result = collect(context, FakeTransport(fx.response(fx.AWARD_NOTICE)))
-        assert result.drafts[0].payload == fx.AWARD_NOTICE
+        payload = result.drafts[0].payload
+        assert payload.keys() == fx.AWARD_NOTICE.keys()
+        for key, expected in fx.AWARD_NOTICE.items():
+            if isinstance(expected, float):
+                assert payload[key] == format(Decimal(str(expected)), "f")
+            elif isinstance(expected, list) and any(isinstance(i, float) for i in expected):
+                assert len(payload[key]) == len(expected)
+            else:
+                assert payload[key] == expected
 
 
 # ================================================================ raw identity
@@ -951,3 +973,170 @@ class TestTheJobPayload:
         payload = {**self.BASE, "notice_types": ["cn-standard", "pin-only"]}
         with pytest.raises(ValueError, match="outside this resource"):
             TedSearchJobPayload.from_payload(payload).request()
+
+
+# ============================================ the Decimal repair (Mission 1.15.10)
+
+
+class TestExactNumericParsing:
+    """Collector 1.1.0. The defect Mission 1.15.8 recorded, and its repair.
+
+    **The values here are chosen to EXPOSE the difference**, which `73415.22`
+    does not: it survives a float round trip intact, which is exactly why the
+    defect went unnoticed for two missions.
+    """
+
+    # More significant digits than an IEEE-754 double can hold. A float would
+    # return 12345678901234567.0 and the trailing `89` would be gone.
+    LONG = "12345678901234567.89"
+    # The canonical float-representation trap. As a double this is
+    # 0.1000000000000000055511151231257827, and `0.1 + 0.2 != 0.3`.
+    THIRD = "0.30000000000000004"
+
+    def notice_with(self, value: str) -> str:
+        """A response whose amount is written as a JSON NUMBER, as TED sends it."""
+        body = json.dumps(
+            {
+                "notices": [{**fx.AWARD_NOTICE, "total-value": 0}],
+                "totalNoticeCount": 1,
+                "timedOut": False,
+            }
+        )
+        # Substituted into the TEXT so the number reaches `json.loads` as a JSON
+        # numeric literal. Building it in Python would put a float in before the
+        # parser ever saw it, which is the very step under test.
+        return body.replace('"total-value": 0', f'"total-value": {value}')
+
+    def test_a_long_decimal_survives_collection_exactly(self, context) -> None:
+        result = collect(context, FakeTransport(self.notice_with(self.LONG)))
+        assert result.drafts[0].payload["total-value"] == self.LONG
+
+    def test_the_float_trap_survives_collection_exactly(self, context) -> None:
+        result = collect(context, FakeTransport(self.notice_with(self.THIRD)))
+        assert result.drafts[0].payload["total-value"] == self.THIRD
+
+    def test_the_old_behaviour_would_have_lost_it(self) -> None:
+        """States the defect rather than only its absence.
+
+        A plain `json.loads` is what collector 1.0.0 did, and the assertion is
+        written to be TRUE: the value really does change. A future edit that
+        reverts `parse_float=Decimal` turns the tests above red while this one
+        stays green, which is how a reader learns what broke.
+        """
+        lost = json.loads(f'{{"v": {self.LONG}}}')["v"]
+        assert isinstance(lost, float)
+        assert format(Decimal(str(lost)), "f") != self.LONG
+
+        kept = json.loads(f'{{"v": {self.LONG}}}', parse_float=Decimal)["v"]
+        assert isinstance(kept, Decimal)
+        assert format(kept, "f") == self.LONG
+
+    def test_no_float_reaches_the_record(self, context) -> None:
+        """§36. Not one value anywhere in the payload is a binary float."""
+
+        def floats(value: object) -> list[float]:
+            if isinstance(value, bool):
+                return []
+            if isinstance(value, float):
+                return [value]
+            if isinstance(value, dict):
+                return [f for v in value.values() for f in floats(v)]
+            if isinstance(value, list):
+                return [f for v in value for f in floats(v)]
+            return []
+
+        result = collect(context, FakeTransport(self.notice_with(self.LONG)))
+        assert floats(result.drafts[0].payload) == []
+
+    def test_an_integer_stays_an_integer(self, context) -> None:
+        """`parse_int` is deliberately NOT set. An integer is already exact, and
+        converting it would erase the source's own distinction between `1` and
+        `1.0` -- which a JSON number cannot carry and a string can."""
+        result = collect(context, FakeTransport(self.notice_with("25000")))
+        assert result.drafts[0].payload["total-value"] == 25000
+
+    def test_new_records_record_the_new_collector_version(self, context) -> None:
+        result = collect(context, FakeTransport(fx.response(fx.CONTRACT_NOTICE)))
+        assert result.drafts[0].collector_version == "1.1.0"
+        assert TED_COLLECTOR_VERSION == "1.1.0"
+
+    def test_the_serialised_payload_round_trips_through_json(self, context) -> None:
+        """The half that `canonical_number` exists for. `json.dumps` writes a
+        large float in scientific notation and PostgreSQL JSONB rewrites that as
+        an integer, so a fingerprint computed here would disagree with anything
+        re-reading the stored payload."""
+        result = collect(context, FakeTransport(self.notice_with(self.LONG)))
+        payload = result.drafts[0].payload
+        assert json.loads(json.dumps(payload))["total-value"] == self.LONG
+
+
+# ================================== the payload's narrowing reaches the query
+
+
+class TestNarrowingReachesTheQuery:
+    """Mission 1.15.10. Every narrowing a payload states must appear in the
+    expert query the source receives.
+
+    **This class exists because one did not.** `cpv_division` was added to the
+    dataclass, passed into `TedSearchRequest` and folded into the idempotency
+    key -- three of the four places -- and never READ from the payload dict. It
+    silently defaulted to `None`, and an acquisition ran broader than the one
+    that had been declared before execution.
+
+    A field asserted only at the dataclass boundary would not have caught it.
+    These assert the composed QUERY, which is the only artefact the source
+    actually sees.
+    """
+
+    BASE = {
+        "workspace_id": WORKSPACE,
+        "research_session_id": "22222222-2222-2222-2222-222222222222",
+        "correlation_id": "mission-1.15.10",
+        "date_start": "2023-03-01",
+        "date_end": "2023-03-01",
+        "max_pages": 1,
+        "max_records": 5,
+        "page_size": 5,
+    }
+
+    def query_for(self, **extra) -> str:
+        return TedSearchJobPayload.from_payload({**self.BASE, **extra}).request().expert_query
+
+    def test_the_cpv_division_reaches_the_query(self) -> None:
+        assert "(classification-cpv=90*)" in self.query_for(cpv_division="90")
+
+    def test_no_cpv_clause_when_none_is_stated(self) -> None:
+        assert "classification-cpv" not in self.query_for()
+
+    def test_the_notice_types_reach_the_query(self) -> None:
+        assert "notice-type IN (can-standard)" in self.query_for(notice_types=["can-standard"])
+
+    def test_both_narrowings_reach_the_query_together(self) -> None:
+        query = self.query_for(notice_types=["can-standard"], cpv_division="90")
+        assert "notice-type IN (can-standard)" in query
+        assert "(classification-cpv=90*)" in query
+
+    def test_the_cpv_division_reaches_the_idempotency_key(self) -> None:
+        with_division = TedSearchJobPayload.from_payload({**self.BASE, "cpv_division": "90"})
+        without = TedSearchJobPayload.from_payload(dict(self.BASE))
+        assert with_division.idempotency_key != without.idempotency_key
+        assert "90" in with_division.idempotency_key
+
+    @pytest.mark.parametrize("bad", ["9", "900", "9a", ""])
+    def test_a_value_that_is_not_a_division_is_refused(self, bad: str) -> None:
+        """Two digits, because that is the granularity the Signal cohort key
+        uses. A longer prefix would filter below it and a shorter one is not a
+        division."""
+        payload = {**self.BASE, "cpv_division": bad}
+        if bad == "":
+            assert "classification-cpv" not in self.query_for(cpv_division=bad)
+            return
+        with pytest.raises(ValueError, match="CPV division"):
+            TedSearchJobPayload.from_payload(payload).request()
+
+    def test_the_narrowing_never_widens_the_resource(self) -> None:
+        """A CPV filter cannot reach a notice family the resource excludes."""
+        with pytest.raises(ValueError, match="outside this resource"):
+            TedSearchJobPayload.from_payload(
+                {**self.BASE, "notice_types": ["pin-only"], "cpv_division": "90"}
+            ).request()

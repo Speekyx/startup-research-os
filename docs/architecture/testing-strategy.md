@@ -2421,3 +2421,44 @@ a result is worth little if the surrounding process punishes not having one.
 The tests carry both halves: fixtures that DO qualify prove the extractor derives
 correctly, and `test_different_cpv_divisions_do_not_share_a_cohort` pins the
 decision that made the real answer zero.
+
+---
+
+## 58. Assert the artefact the outside world sees (Mission 1.15.10)
+
+`cpv_division` was a declared narrowing. It reached the request dataclass, the
+composed expert query and the idempotency key, and every test passed. It was
+never read out of the job payload, so the acquisition that actually ran asked
+TED for the whole window.
+
+The tests were not thin. They were pointed at the wrong object: they asserted
+the **field**, which is internal, rather than the **query string**, which is the
+only thing the source ever receives. A field that is set correctly and never
+used is indistinguishable, from inside, from one that works.
+
+```text
+weak    assert request.cpv_division == "90"
+strong  assert "(classification-cpv=90*)" in composed_query
+```
+
+The strong form fails on every way the narrowing can be lost: not read from the
+payload, dropped in composition, rendered with the wrong operator, overwritten
+by a default. The weak form fails on exactly one of them, and it is the one
+least likely to happen.
+
+**The rule: when a value's purpose is to change what leaves the process, assert
+what leaves the process.** For an HTTP client that is the URL and the body; for
+a writer it is the bytes; for a query builder it is the query text. Intermediate
+state is worth asserting only when it is itself the deliverable.
+
+### The same mission, from the other direction
+
+The cohort scope carried only the first member's CPV codes. The fixtures had
+never had a qualifying cohort with more than one member — the extractor's first
+real run produced none at all — so "first member" and "all members" were the
+same value everywhere the suite looked, and no assertion could tell them apart.
+
+Real data with three members and four distinct codes separated them immediately.
+**A test cannot distinguish two rules that coincide on every input it holds**,
+and the fix is a fixture where they differ, which
+`test_the_scope_carries_every_members_codes` now is.

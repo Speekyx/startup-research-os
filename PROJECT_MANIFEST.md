@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.33
+Version: 1.34
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-01 (Sprint 1 / Mission 1.15.9)
+Last amended: 2026-09-01 (Sprint 1 / Mission 1.15.10)
 
 ---
 
@@ -13,6 +13,45 @@ Last amended: 2026-09-01 (Sprint 1 / Mission 1.15.9)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.34 — 2026-09-01 (Sprint 1 / Mission 1.15.10)
+
+Authorized by the Mission 1.15.10 brief §1-§43.
+
+**The Decimal invariant repaired, and the first real TED Signal.** Phase A bumped
+the collector to **`ted-search-api@1.1.0`**: `json.loads(..., parse_float=Decimal)`
+plus `canonical_number` on the way out, so a fractional tender value reaches jsonb
+as an exact fixed-point **string** instead of a binary float. `parse_int` stays
+unset, because a JSON integer was never at risk and wrapping it would change a
+value that had no problem. The normalizer is **not** bumped and now declares
+`supported_collector_versions = {"1.0.0", "1.1.0"}`: its own output is unchanged,
+so bumping it would announce a difference that does not exist.
+
+**A bounded acquisition designed for comparability, not for volume.** One CPV
+division, one three-day window, award notices, all declared before execution. The
+first execution was **broader than declared**: `cpv_division` reached the
+dataclass, the query and the idempotency key but `from_payload` never read it. A
+narrowing that exists only in the caller's intent is not a narrowing, and the
+test that now guards it asserts **the composed query string**, which is the only
+artefact the source ever sees.
+
+**One `TRANSACTION_VALUE` Signal.** Three award notices in CPV division 90, EUR
+total values 73 415.22, 440 000 and 759 960.24, magnitude **686 545.02**
+`ABSOLUTE_DIFFERENCE`, `NON_TEMPORAL`, direction `NOT_APPLICABLE`. Two notices in
+the same window were excluded for being denominated in PLN or spanning a second
+division, which is the comparability rule doing real work.
+
+**Real data corrected the extractor.** The cohort scope carried only the first
+member's CPV codes — invisible when every cohort had one member, plainly wrong
+with three members and four codes, because the scope is what tells a reader which
+market the contrast describes. Now the union of all members' codes;
+**`procurement-value-contrast@1.0.1`**, the `1.0.0` row deleted after checking
+the FK closure and the Signal re-derived rather than left beside its successor.
+
+**H-36A, H-36B, H-37 and H-38 all untouched.** Counts: 23 raw (11 TED), 23
+normalized (11 TED), **8 signals (1 TED)**, 7 claims, 7 evidence, 0
+opportunities, 0 reliability assessments, 0 embeddings. Nothing interprets the
+TED Signal: no Claim cites it and no Evidence references it
 
 ## 1.33 — 2026-09-01 (Sprint 1 / Mission 1.15.9)
 
@@ -36,7 +75,9 @@ described.** That a named buyer paid a named supplier a stated amount is
 established; that a market exists or that a comparable buyer would pay a
 comparable amount for a different product is not.
 
-**The real run produced ZERO Signals, and that is the correct answer.** Three
+**The real run produced ZERO Signals, and that was the correct answer for the
+observations held.** (Superseded by 1.34, which acquired observations that do
+form a cohort; the reasoning below is unchanged and is why.) Three
 normalized notices inspected, two carrying an eligible paired amount, **two
 cohorts formed, neither meeting the minimum support of two** -- the two EUR award
 totals are in CPV divisions 90 and 66, cleaning and insurance, which are two

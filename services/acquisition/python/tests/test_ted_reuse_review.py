@@ -316,11 +316,22 @@ class TestNothingWasCollected:
         # downstream of normalization exists for TED: no Signal, no Claim, no
         # Evidence. That is 1.15.8's own stop condition, and it is the last
         # thing this guard has left to protect.
+        # A TED SIGNAL now exists too, as of Mission 1.15.10 -- so this guard
+        # has moved one stage further down for the third time, and this is the
+        # last move it has: what remains true is that nothing INTERPRETS a TED
+        # signal. No Claim cites one, and no Evidence references one, which is
+        # 1.15.10's own stop condition.
+        #
+        # When that stops being true, this assertion has nowhere left to go and
+        # should be deleted rather than moved again -- there is no stage below
+        # Evidence that TED has not reached.
         for table in (
-            "SELECT count(*) FROM nlp.signal_inputs si "
-            "JOIN acquisition.normalized_records n ON n.id = si.normalized_record_id "
-            "JOIN acquisition.raw_records r ON r.id = n.raw_record_id "
-            "WHERE r.source_id = 'ted-eu'",
+            "SELECT count(*) FROM research.claim_interpretation_inputs cii "
+            "JOIN nlp.signals s ON s.id = cii.signal_id "
+            "WHERE s.quantity_family = 'TRANSACTION_VALUE'",
+            "SELECT count(*) FROM scoring.evidence e "
+            "JOIN nlp.signals s ON s.id = e.signal_id "
+            "WHERE s.quantity_family = 'TRANSACTION_VALUE'",
         ):
             assert self._count(table) == 0, table
 
@@ -337,9 +348,9 @@ class TestNothingWasCollected:
         # can follow. That is Mission 1.15.8's own stop condition.
         assert (
             self._count(
-                "SELECT count(*) FROM nlp.signal_inputs si "
-                "JOIN acquisition.normalized_records n ON n.id = si.normalized_record_id "
-                "WHERE n.source_id = 'ted-eu'"
+                "SELECT count(*) FROM research.claim_interpretation_inputs cii "
+                "JOIN nlp.signals s ON s.id = cii.signal_id "
+                "WHERE s.quantity_family = 'TRANSACTION_VALUE'"
             )
             == 0
         )

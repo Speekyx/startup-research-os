@@ -613,6 +613,7 @@ class TedSearchJobPayload:
     page_size: int
     notice_types: tuple[str, ...] = TED_NOTICE_TYPES
     conceptual_fields: tuple[str, ...] = DEFAULT_CONCEPTUAL_FIELDS
+    cpv_division: str | None = None
     source_id: str = "ted-eu"
 
     @classmethod
@@ -649,6 +650,7 @@ class TedSearchJobPayload:
             page_size=int(payload["page_size"]),
             notice_types=tuple(payload.get("notice_types") or TED_NOTICE_TYPES),
             conceptual_fields=tuple(payload.get("conceptual_fields") or DEFAULT_CONCEPTUAL_FIELDS),
+            cpv_division=(str(payload["cpv_division"]) if payload.get("cpv_division") else None),
             source_id=str(payload.get("source_id") or "ted-eu"),
         )
 
@@ -663,6 +665,7 @@ class TedSearchJobPayload:
             ),
             conceptual_fields=self.conceptual_fields,
             notice_types=self.notice_types,
+            cpv_division=self.cpv_division,
         )
 
     @property
@@ -675,6 +678,7 @@ class TedSearchJobPayload:
                 self.date_start,
                 self.date_end,
                 ",".join(sorted(self.notice_types)),
+                self.cpv_division or "*",
             )
         )
 
