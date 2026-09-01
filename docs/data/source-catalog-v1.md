@@ -290,6 +290,7 @@ European statistical data. Market-context data for EU MarketScope values, with n
 |---|---|---|---|---|
 | 1 | 2026-08-29 | `mission-1.0` | `REQUIRES_REVIEW` | 1 |
 | 2 ← current | 2026-08-29 | `mission-1.3` | `APPROVED_WITH_CONDITIONS` | 1 |
+| 1 | 2026-09-01 | `mission-1.17` | `APPROVED_WITH_CONDITIONS` | 1 |
 
 **Required conditions** — all must be satisfied before a collector may run
 
@@ -364,6 +365,7 @@ US and international economic time series held by the Federal Reserve Bank of St
 |---|---|---|---|---|
 | 1 | 2026-08-29 | `mission-1.0` | `REQUIRES_REVIEW` | 0 |
 | 2 ← current | 2026-08-29 | `mission-1.3` | `APPROVED_WITH_CONDITIONS` | 1 |
+| 1 | 2026-09-01 | `mission-1.17` | `APPROVED_WITH_CONDITIONS` | 1 |
 
 **Required conditions** — all must be satisfied before a collector may run
 
@@ -439,6 +441,7 @@ Global news monitoring: events, themes, tone and entity mentions extracted from 
 | 1 | 2026-08-30 | `mission-1.7` | `APPROVED_WITH_CONDITIONS` | 1 |
 | 2 | 2026-08-30 | `mission-1.8` | `APPROVED_WITH_CONDITIONS` | 1 |
 | 3 ← current | 2026-08-30 | `mission-1.9.2` | `APPROVED_WITH_CONDITIONS` | 4 |
+| 1 | 2026-09-01 | `mission-1.17` | `APPROVED_WITH_CONDITIONS` | 4 |
 
 **Required conditions** — all must be satisfied before a collector may run
 
@@ -923,6 +926,13 @@ Open catalog of scholarly works, authors, institutions and concepts, published C
 - **Retention if collected:** raw 30d (baseline), normalized 365d (baseline)
 - **State:** `APPROVED_WITH_CONDITIONS` — **collector eligible from the catalog alone: no**
 - **Last reviewed:** 2026-08-30 · next 2027-02-26
+
+**Review history**
+
+| Version | Reviewed | By | State | Evidence |
+|---|---|---|---|---|
+| 1 ← current | 2026-08-30 | `mission-1.7` | `APPROVED_WITH_CONDITIONS` | 1 |
+| 1 | 2026-09-01 | `mission-1.17` | `APPROVED_WITH_CONDITIONS` | 1 |
 
 **Required conditions** — all must be satisfied before a collector may run
 
@@ -1731,6 +1741,7 @@ Country-level development and economic indicators. Market-context data for Marke
 |---|---|---|---|---|
 | 1 | 2026-08-29 | `mission-1.0` | `REQUIRES_REVIEW` | 1 |
 | 2 ← current | 2026-08-29 | `mission-1.3` | `APPROVED_WITH_CONDITIONS` | 1 |
+| 1 | 2026-09-01 | `mission-1.17` | `APPROVED_WITH_CONDITIONS` | 1 |
 
 **Required conditions** — all must be satisfied before a collector may run
 

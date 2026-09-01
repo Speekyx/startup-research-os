@@ -487,17 +487,25 @@ class TestLoadedRegistry:
         Compared against the table rather than asserted as a fixed number:
         satisfaction is environment state now, and a test that hard-coded
         "all unsatisfied" would pass only on a database nobody had verified."""
+        # SCOPED BY PROFILE on both sides since Mission 1.17. The view has one
+        # row per (source, profile) and always did; the subqueries counted every
+        # current review of the source, which was the same number for as long as
+        # only one profile had reviews. Adding local-profile reviews made
+        # eurostat report 3 in the view and 6 in the subquery -- a real
+        # disagreement between the test and the view, caused by the test.
         rows = conn.execute(
             """SELECT e.source_id, e.condition_count, e.unsatisfied_condition_count,
                       (SELECT count(*) FROM registry.source_review_conditions c
                         JOIN registry.source_policy_reviews r ON r.id = c.review_id
-                       WHERE c.source_id = e.source_id AND r.superseded_at IS NULL),
+                       WHERE c.source_id = e.source_id AND r.superseded_at IS NULL
+                         AND r.assessed_use_profile = e.use_profile_id),
                       (SELECT count(*) FROM registry.source_review_conditions c
                         JOIN registry.source_policy_reviews r ON r.id = c.review_id
                        WHERE c.source_id = e.source_id AND r.superseded_at IS NULL
+                         AND r.assessed_use_profile = e.use_profile_id
                          AND NOT c.satisfied)
                  FROM registry.source_eligibility e
-                WHERE e.condition_count > 0 ORDER BY e.source_id"""
+                WHERE e.condition_count > 0 ORDER BY e.source_id, e.use_profile_id"""
         ).fetchall()
         # Compared against the CATALOG rather than a frozen set of source ids:
         # which sources carry conditions is a fact the catalog owns, and pinning

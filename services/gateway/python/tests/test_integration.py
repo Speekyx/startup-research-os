@@ -665,12 +665,31 @@ class TestSourceRegistryApi:
         #
         # Asserted as the DEFECT rather than removed, so it fails the day it is
         # fixed and this comment gets deleted with it.
+        #
+        # MISSION 1.17 MADE IT SIX TIMES BIGGER, and that is worth recording
+        # rather than quietly re-pinning. The endpoint duplicates a source once
+        # per profile that has reviewed it, so while `ted-eu` was the only
+        # source with two profile rows the blast radius was one. Aligning
+        # world-bank, gdelt, eurostat, fred and openalex to the local profile
+        # gave five more sources a second row each.
+        #
+        # Nothing about the defect changed; what changed is how much of the
+        # response it corrupts, and it will grow again with every profile
+        # alignment. The fix is still a design decision about which profile the
+        # HTTP layer answers for, and still belongs to a mission that says so.
         duplicated = [
             s["source_id"]
             for s in body["sources"]
             if [o for o in body["sources"] if o["source_id"] == s["source_id"]][1:]
         ]
-        assert set(duplicated) == {"ted-eu"}, duplicated
+        assert set(duplicated) == {
+            "ted-eu",
+            "world-bank",
+            "gdelt",
+            "eurostat",
+            "fred",
+            "openalex",
+        }, duplicated
         for source in body["sources"]:
             if source["collector_enabled"] and source["source_id"] not in duplicated:
                 assert source["collector_eligible"], source["source_id"]
@@ -692,7 +711,24 @@ class TestSourceRegistryApi:
         body = api_client.get("/api/v1/sources/fred/eligibility").json()
         assert body["source_id"] == "fred"
         assert body["approval_state"] == "APPROVED_WITH_CONDITIONS"
-        assert len(body["conditions"]) == 3
+        # SIX, NOT THREE, AND IT IS THE SAME DEFECT AS ABOVE IN A SECOND
+        # ENDPOINT. `fred` carries three conditions under each of two profiles,
+        # and this endpoint -- like `/api/v1/sources` -- reports a verdict
+        # without its subject, so it returns the union.
+        #
+        # Mission 1.17 is what made it visible: before it, `fred` had reviews
+        # under one profile only. That the profile-blindness reaches more than
+        # one endpoint is new information and belongs here rather than in a
+        # commit message, because whoever fixes `/sources` will otherwise fix
+        # half of it and this test will still pass.
+        #
+        # Asserted as the DEFECT, so it fails the day it is fixed.
+        assert len(body["conditions"]) == 6
+        assert {c["condition_key"] for c in body["conditions"]} == {
+            "copyrighted-series-excluded",
+            "fred-api-key",
+            "fred-endorsement-notice",
+        }, "the union is over PROFILES, not over distinct conditions"
         keys = {c["condition_key"] for c in body["conditions"]}
         assert keys == {"fred-api-key", "fred-endorsement-notice", "copyrighted-series-excluded"}
         assert body["collector_enabled"] is False

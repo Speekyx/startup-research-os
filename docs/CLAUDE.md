@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.39
-Last amended: 2026-09-01 (Sprint 1 / Mission 1.16)
+Version: 1.40
+Last amended: 2026-09-01 (Sprint 1 / Mission 1.17)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.40 | 2026-09-01 | **The registry and the runtime agree, and nothing was inherited to get there.** Five sources gained a `local-private-research-v1` review, each version 1 of its own line, evidence reused and decisions re-made. **ADR-027 unchanged, no fallback**: `ted-eu` is still approving locally and REFUSED commercially. Four ELIGIBLE; OpenAlex approves and stays blocked on two unsatisfied conditions, and is the one place the local profile is **stricter** (scholarly authorship, MINIMISED posture). **The named GDELT gap is closed for this profile**: `gdelt-doc-api` and `gdelt-bulk-files` are now blocked BY NAME, because a narrowing that exists only in the review text is not a narrowing. Loader bug fixed: condition and evidence row ids omitted the profile, so two reviews of one source sharing a condition key collided |
 | 1.39 | 2026-09-01 | **No source added, and the blocker is the product.** Ten sources cover `problem` or `desire` and none approves. Stack Exchange won the selection and could not proceed: its two outstanding documents sit behind an anti-bot interstitial this environment cannot reach at all, and **no bypass was attempted**. **The larger finding: the runtime declares `local-private-research-v1` and exactly ONE review exists under it.** `world-bank`, `gdelt`, `eurostat`, `fred` and `openalex` are all REFUSED at the gate today -- the deployment holds 15 of 23 RawRecords it could not re-collect, gathered before ADR-027 existed and carrying no `use_profile` in their provenance. The gate is right; the review nobody wrote is what is missing. Next: local-profile reviews FIRST, then Stack Exchange |
 | 1.38 | 2026-09-01 | **The first ReliabilityAssessment, and the first evidence score.** A generic operator tool with **no default for any judgement field** -- value, reviewer, rationale and limitation are all refused blank, and the packet is FACTS while the file is JUDGEMENT. Recorded: `HUMAN_REVIEW` **0.5** by a named person over the TED procurement scope, on 4 document-backed basis rows. **The Evidence is now SCORABLE and `q_i = min(components)` names RELIABILITY as the limiting component** -- score 50.0, support 0.5, uncertainty 0.5. **Level stayed 1**: the category gate and unknown independence both hold, so reliability alone cannot reach Level 4. Nothing persisted downstream, profile still `UNCALIBRATED`, D-03 untouched. `scoring.evidence.reliability` stays NULL -- resolved late from the assessment with the binding recorded (ADR-026) |
 | 1.37 | 2026-09-01 | **The first reliability review against real Evidence, and the first to stop at the end of the framework. Outcome B: NO assessment created.** eForms **BT-161** read from the Publications Office's own SDK 1.15.1: *"the value of all contracts awarded in this notice, INCLUDING OPTIONS AND RENEWALS"* -- not what was paid, not necessarily what will be. It can also be **lawfully withheld** (BT-195 to BT-198), so a cohort covers the PUBLISHED subset and a max-minus-min is an extreme over non-random missingness. TED validates conformance, never truth: 60 rules name BT-161 and all are presence/absence. **No origin can supply the number** -- `DOCUMENTED_METHOD` needs the document to state it, `CALIBRATED_EMPIRICALLY` needs outcome data, `HUMAN_REVIEW` needs a named person and a model may not stand in. Inventory re-measured: **8 Evidence rows, 4 scopes**, TED the fourth. Category, independence and level untouched. **0 assessments, everything still NON_SCORABLE** |
@@ -212,9 +213,12 @@ source in order to obtain a permission.
 - **`None` means unasked, not unrestricted.** Every entry before 1.15.6 is in
   that state -- and `source-route-binding` reports *unimplemented* rather than
   *satisfied* when it is absent, so a condition never rests on a restriction
-  that does not exist. **GDELT is the named gap**: it carries a second, deferred
-  DOC API profile that no review assessed, and its context still hands a
-  collector both. Restricting it is a review act.
+  that does not exist. **GDELT was the named gap and is now half-closed.**
+  Mission 1.17's local-profile review declares a `route_authorization` blocking
+  `gdelt-doc-api` and `gdelt-bulk-files` by name, so the LOCAL context carries
+  only `gdelt-web-ngram-files`. **The commercial context still hands a collector
+  all three**, and closing it there is a commercial-profile review act that has
+  not happened.
 - **Field minimisation is asked before a request is composed.**
   `context.authorize_fields` refuses an excluded field by name, an unreviewed
   field and an unstated selection. Where a source supports field selection --

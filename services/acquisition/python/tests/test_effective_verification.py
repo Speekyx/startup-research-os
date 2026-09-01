@@ -373,9 +373,15 @@ class TestOtherSourcesBehaveExactlyAsBefore:
             for condition in review.required_conditions
             if condition.verification is ConditionVerification.HUMAN_CONFIRMATION
         }
+        # Mission 1.17 added a local-profile review to openalex carrying the same
+        # `openalex-spend-bounded` condition, so the count went from two to three.
+        # The mechanism is unchanged and this is the evidence for it: a human
+        # condition follows the (source, profile) pair it was written for, and
+        # openalex now carries one under each of two profiles independently.
         assert carriers == {
             ("ted-eu", LOCAL_PROFILE),
             ("openalex", LEGACY_PROFILE),
+            ("openalex", LOCAL_PROFILE),
         }, carriers
 
     def test_openalex_is_unaffected_by_teds_decision(self, catalog, compliance) -> None:

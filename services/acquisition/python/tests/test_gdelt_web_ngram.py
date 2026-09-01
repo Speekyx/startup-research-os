@@ -429,8 +429,19 @@ class TestAttributionAndRetentionAreGovernanceDerived:
 
 class TestTheReviewHistoryAndTheGate:
     def test_review_three_is_current_and_the_earlier_two_are_intact(self, gdelt) -> None:
-        """§3. A new version, not a rewrite."""
-        versions = [r.review_version for r in gdelt.review_history]
+        """§3. A new version, not a rewrite.
+
+        Scoped to the COMMERCIAL profile since Mission 1.17, which added a
+        local-profile review at version 1. Version lines are per (source,
+        profile), so an unscoped history now interleaves two of them -- and
+        asserting the merged list would have made this test about how many
+        profiles exist rather than about GDELT's review history.
+        """
+        versions = [
+            r.review_version
+            for r in gdelt.review_history
+            if r.assessed_use_profile == LEGACY_PROFILE
+        ]
         assert versions == [1, 2, 3]
         assert gdelt.review.review_version == 3
         assert gdelt.review.reviewed_by == "mission-1.9.2"

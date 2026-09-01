@@ -37,6 +37,30 @@ def _row_id(*parts: str) -> uuid.UUID:
     return uuid.uuid5(_NAMESPACE, "|".join(parts))
 
 
+def _review_scoped_id(
+    kind: str, source_id: str, profile: str, version: int, *parts: str
+) -> uuid.UUID:
+    """A derived id for a row that hangs off ONE review.
+
+    The review id itself has carried the profile since Mission 1.15.5; the rows
+    beneath it did not, and until Mission 1.17 nothing had two reviews of one
+    source sharing a condition key to notice. `world-bank` commercial v1 and
+    `world-bank` local v1 both declare `attribution-surface`, which produced one
+    id for two rows and a primary-key violation on load. The ON CONFLICT clause
+    named the right natural key; the id is checked before it.
+
+    Two reviews of one source legitimately carry the same condition key -- that
+    is what it means for two profiles to impose the same obligation -- so the
+    scoping belongs here rather than in whichever catalog entry hit it.
+
+    The LEGACY profile keeps its original key shape, for the reason the review id
+    does: re-deriving ids for rows that already exist would orphan them.
+    """
+    if profile == LEGACY_USE_PROFILE:
+        return _row_id(kind, source_id, str(version), *parts)
+    return _row_id(kind, source_id, profile, str(version), *parts)
+
+
 @dataclass(frozen=True)
 class LoadReport:
     sources: int
@@ -279,6 +303,7 @@ def load_catalog_into(conn: Any, catalog: SourceCatalog) -> LoadReport:
                     str(review.review_version),
                 )
             )
+
             assessment_values = [
                 review.assessment(activity).value for activity in ASSESSED_ACTIVITIES
             ]
@@ -351,10 +376,11 @@ def load_catalog_into(conn: Any, catalog: SourceCatalog) -> LoadReport:
                         # re-parented the old row and left the new review with no
                         # evidence -- which the eligibility gate then blocked on,
                         # correctly, for a reason that was not true.
-                        _row_id(
+                        _review_scoped_id(
                             "evidence",
                             source.source_id,
-                            str(review.review_version),
+                            review.assessed_use_profile,
+                            review.review_version,
                             item.document_url,
                             item.document_title,
                         ),
@@ -427,8 +453,12 @@ def load_catalog_into(conn: Any, catalog: SourceCatalog) -> LoadReport:
                            verification = EXCLUDED.verification,
                            verification_detail = EXCLUDED.verification_detail""",
                     (
-                        _row_id(
-                            "condition", source.source_id, str(review.review_version), condition.key
+                        _review_scoped_id(
+                            "condition",
+                            source.source_id,
+                            review.assessed_use_profile,
+                            review.review_version,
+                            condition.key,
                         ),
                         review_id,
                         source.source_id,

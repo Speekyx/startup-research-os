@@ -21,6 +21,15 @@ local review declares four. A silent false negative, in the command
 conditions anybody needed to read.
 """
 
+# Mission 1.17 reviewed world-bank, gdelt, eurostat, fred and openalex under
+# `local-private-research-v1`, so world-bank stopped being an example of a source
+# unreviewed under that profile. These tests now use `reddit`, which genuinely
+# has no local review and is one of 23 that do not.
+#
+# The assertions themselves are UNCHANGED. What moved is the fixture, because
+# what they check -- that an unreviewed profile reports an ABSENCE rather than
+# an emptiness or a fallback -- is exactly as important as it was.
+
 from __future__ import annotations
 
 import pytest
@@ -64,7 +73,7 @@ class TestConditionsReadsTheRequestedProfile:
     def test_the_legacy_profile_still_reports_no_condition_for_ted(self, capsys) -> None:
         """The other half, and the reason the defect survived: under the DEFAULT
         profile the old output was correct. TED's legacy review really does
-        declare none, so the command was right for 28 sources and silently wrong
+        declare none, so the command was right for most sources and silently wrong
         for the 29th."""
         out = run(capsys, "conditions", "ted-eu")
         assert "declares no condition" in out
@@ -73,7 +82,7 @@ class TestConditionsReadsTheRequestedProfile:
     def test_an_unreviewed_profile_reports_an_absence_not_an_emptiness(self, capsys) -> None:
         """A source with no review under a profile must not read as a source
         whose review imposed nothing. Absence is a refusal (§4)."""
-        out = run(capsys, "--use-profile", LOCAL_PROFILE, "conditions", "world-bank")
+        out = run(capsys, "--use-profile", LOCAL_PROFILE, "conditions", "reddit")
         assert "no policy review exists under" in out
         assert "never a reason to consult another profile" in out
 
@@ -110,8 +119,8 @@ class TestListReportsOneProfilePerRow:
 
     def test_a_source_unreviewed_under_the_profile_says_so(self, capsys) -> None:
         out = run(capsys, "--use-profile", LOCAL_PROFILE, "list")
-        world_bank = next(line for line in out.splitlines() if line.startswith("world-bank"))
-        assert "NO REVIEW" in world_bank
+        unreviewed = next(line for line in out.splitlines() if line.startswith("reddit"))
+        assert "NO REVIEW" in unreviewed
         assert "have NO review under this profile" in out
 
     def test_it_names_the_profile(self, capsys) -> None:
@@ -151,7 +160,7 @@ class TestShowReportsTheRequestedProfile:
         assert "the profile above is the identity" in out.lower()
 
     def test_an_unreviewed_profile_refuses_rather_than_falling_back(self, capsys) -> None:
-        out = run(capsys, "--use-profile", LOCAL_PROFILE, "show", "world-bank")
+        out = run(capsys, "--use-profile", LOCAL_PROFILE, "show", "reddit")
         assert "NO POLICY REVIEW UNDER" in out
         assert "PER-ACTIVITY ASSESSMENT" not in out.upper()
 
@@ -167,10 +176,10 @@ class TestStaleScansTheRequestedProfile:
 
     def test_unreviewed_is_counted_apart_from_awaiting_review(self, capsys) -> None:
         """A source nobody assessed for this use is not a review that stalled.
-        Merging the two would put 28 sources into a queue under any profile but
+        Merging the two would put every unreviewed source into a queue under any profile but
         the legacy one, which is noise dressed as work."""
         out = run(capsys, "--use-profile", LOCAL_PROFILE, "stale")
-        assert "NO REVIEW UNDER THIS PROFILE (28)" in out
+        assert "NO REVIEW UNDER THIS PROFILE (23)" in out
         assert "Not a stalled review" in out
 
     def test_the_legacy_view_still_finds_the_sources_awaiting_review(self, capsys) -> None:
