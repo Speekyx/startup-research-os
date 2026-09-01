@@ -99,6 +99,40 @@ applies the same filters again in SQL.
 human condition resolves `UNKNOWN`, and the gate refuses — which is what every
 caller did before this parameter existed.
 
+### 3.3 Safe for a gate is not safe for a report (amended in Mission 1.15.6.3)
+
+The sentence above is true of the **gate** and was read as though it were true
+of everything. It is not, and the difference is what a refusal means in each
+place.
+
+**A gate that refuses without asking is conservative.** Nothing is collected
+that should not have been; the worst outcome is work not done.
+
+**A report that refuses without asking is wrong.** It tells an operator that the
+decision they recorded does not exist, names the one condition they answered as
+the reason the source is blocked, and does it in the command
+`source-review-guide.md` §9 tells them to run. Nobody is protected by that, and
+the reader stops looking.
+
+So the rule for every caller that evaluates readiness, eligibility or
+authorization for a human to read:
+
+> **Pass the decisions, or state why there are none.** `decisions=()` is a claim
+> about a deployment — *this one holds no operator decision* — and a caller that
+> has not read them is not entitled to make it.
+
+`evaluate_readiness(source, profile, config)` type-checks, runs, and asserts an
+absence it never checked. Three CLI call sites did exactly that, so `readiness`
+and the footers of `show` and `authorization` disagreed with the gate printed
+beside them. The commands now read once per source through
+`_recorded_decisions` — the one sanctioned reader, which wraps
+`read_human_decisions` and degrades with a note rather than a traceback — and
+pass that set to every consultation they make about that source.
+
+**A source with no `HUMAN_CONFIRMATION` condition never opens a connection**,
+which is what keeps the reports documented to run without a database running
+without one.
+
 ## 4. `verify --apply` no longer revokes
 
 `record_verifications` **skips** any record that is the human placeholder. No

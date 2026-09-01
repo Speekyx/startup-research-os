@@ -808,15 +808,26 @@ class TestTheRegistryHoldsExactlyOneAcceptance:
 
     def test_the_acknowledgement_is_stored_verbatim_in_the_row(self) -> None:
         """§5. The operator's words are the evidence, so the row carries them
-        rather than a summary of them."""
+        rather than a summary of them.
+
+        **Compared with runs of whitespace collapsed** (Mission 1.15.6.3). The
+        words are the evidence; where the operator's editor wrapped them is not.
+        A second deployment recorded the same acknowledgement, character for
+        character, wrapped at different columns, and two of the three phrases
+        below straddled a newline there -- so this asserted a property of a text
+        editor and failed on a row that was correct. Collapsing whitespace keeps
+        the whole phrase, in order, and drops only the thing that carries no
+        meaning.
+        """
         import psycopg
 
         with psycopg.connect(DATABASE_URL) as conn:
-            reason = conn.execute(
+            stored = conn.execute(
                 "SELECT reason FROM registry.source_condition_verifications "
                 "WHERE condition_key = %s",
                 (RESIDUAL,),
             ).fetchone()[0]
+        reason = re.sub(r"\s+", " ", stored)
         assert "J’ai lu intégralement" in reason
         assert "review version 2, et pour rien d’autre" in reason
         assert "aucun avocat n’a validé" in reason
