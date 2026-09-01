@@ -1,6 +1,7 @@
 # Deterministic OBSERVED Claim Interpreter V1
 
-**Authoritative.** Mission 1.13.1. `observed-signal-restatement@1.0.0`.
+**Authoritative.** Mission 1.13.1, fourth template added in Mission 1.15.11.
+`observed-signal-restatement@1.1.0`.
 
 Implementation: `services/nlp/python/sros_nlp/interpreters/`.
 Runtime: `claim-interpretation-runtime-v1.md`.
@@ -14,13 +15,14 @@ named.
 
 ## 1. What it is
 
-One interpreter, three templates, no fallback.
+One interpreter, four templates, no fallback.
 
 | Signal type | Proposition shape |
 |-------------|-------------------|
 | `numeric_period_change` | *{Source} reported that "{metric}" for "{geography}" increased/decreased/was unchanged between "{period A}" and "{period B}" by {magnitude}.* |
 | `lexical_frequency_change` | *{Source} reported that, in its "{stream}" stream under source language label "{label}", the term "{term}" appeared {n} more/fewer times in source bucket "{later}" than in the preceding source bucket "{earlier}".* |
 | `lexical_frequency_contrast` | *{Source} reported that, in its "{stream}" stream under source language label "{label}", within source bucket "{label}", the term "{A}" appeared {n} more/fewer times than the term "{B}".* |
+| `procurement_value_contrast` | *{Source} reported that, in its "{resource}" resource, within a bounded set of {n} "{notice class}" notices classified under "{scheme}" division "{division}", the largest "{amount type}" amount at "{scope}" scope stated in "{currency}" exceeded the smallest by {magnitude}.* |
 
 `interpretation_kind` is `DETERMINISTIC`. `model_version` and `prompt_version`
 are `NULL`, and the database refuses a `DETERMINISTIC` interpretation that
@@ -112,6 +114,7 @@ rest with `INCOMPATIBLE_TEMPORAL_SEMANTICS`:
 | `numeric_period_change` | `COMPARABLE_INSTANTS`, `ORDERED_PERIODS` |
 | `lexical_frequency_change` | `ORDERED_PERIODS` |
 | `lexical_frequency_contrast` | `SAME_PERIOD_LABEL` |
+| `procurement_value_contrast` | `NONE` |
 
 A lexical change Signal arriving on `COMPARABLE_INSTANTS` would mean H-29 had
 closed, and the sentence to write for it is a decision rather than a default.
@@ -222,6 +225,33 @@ items, zero scorable, status `UNAVAILABLE`, no score, nothing persisted.
 That is the honest answer. Filling reliability in to make a number appear is the
 failure `../domain/evidence-aggregation-framework-v1.md` §6 exists to prevent.
 
+## 7.2 The fourth template, and why 1.1.0
+
+Mission 1.15.11 added `procurement_value_contrast` and bumped the interpreter to
+**1.1.0**. Full semantics in `ted-eu-observed-claims-evidence-v1.md`; three
+things belong here because they are about the interpreter rather than about TED.
+
+**Why a template and not a second interpreter.** The proposition is a Signal
+restated with its source named, which is what this interpreter is. A template is
+specific to a **Signal type**, never to a publisher, and a TED-specific
+interpreter would have made the boundary source-shaped for no reason the
+semantics required.
+
+**Why a version bump for a purely additive change.** The three existing
+templates render byte-identical statements, fact sets and evidence, and the
+seven stored Claims keep `1.0.0` and gained no revision. What changed is the set
+of propositions this interpreter can make, and that is version-worthy even when
+nothing existing moves. `TestTheExistingThreeTemplatesDidNotMove` pins the two
+statements and one proposition key, so "additive" is checked rather than
+promised.
+
+**Where its identity rule DIFFERS from the other three.** Everywhere else the
+magnitude is wording and the periods are fixed by the query. Here the **cohort
+membership is the subject**, so the contributing notice identifiers enter
+`proposition_facts`: a revised amount appends a revision, and a fourth
+qualifying notice is a different proposition. The member *values* stay out,
+reachable through Evidence -> Signal -> `signal_inputs` -> `normalized_records`.
+
 ## 8. Determinism
 
 Same Signal + same interpreter version → same proposition key, same statement,
@@ -251,9 +281,9 @@ copies or defaults one from the other.
 - **No Opportunity, no embedding, no score.** Enforced by `validate_claims.py`,
   which fails the build on a write to any later-stage table.
 
-## 10. The seven real Claims
+## 10. The eight real Claims
 
-Produced from the seven real Signals, one each, with the existing 12 RawRecords,
+Seven were produced from the seven real Signals, one each, with the existing 12 RawRecords,
 12 NormalizedRecords, 7 Signals and 14 signal-input rows **byte-for-byte
 unchanged** (a content digest before and after).
 
@@ -277,6 +307,16 @@ The GDELT Project reported that, in its "web-ngrams/1gram" stream under source
 The GDELT Project reported that, in its "web-ngrams/1gram" stream under source
     language label "ENGLISH", within source bucket "20260830091500", the term
     "climate" appeared 19 more times than the term "weather".
+```
+
+An eighth was added in Mission 1.15.11, from the one real TED Signal:
+
+```
+Tenders Electronic Daily (EU public procurement) reported that, in its
+    "notices/eforms-contract-and-award" resource, within a bounded set of 3
+    "CONTRACT_AWARD_NOTICE" notices classified under "CPV" division "90", the
+    largest "TOTAL_VALUE" amount at "NOTICE" scope stated in "EUR" exceeded the
+    smallest by 686545.02.
 ```
 
 **These establish no pain, no desire, no willingness to pay, no pricing power,

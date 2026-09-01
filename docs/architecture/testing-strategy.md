@@ -2462,3 +2462,33 @@ Real data with three members and four distinct codes separated them immediately.
 **A test cannot distinguish two rules that coincide on every input it holds**,
 and the fix is a fixture where they differ, which
 `test_the_scope_carries_every_members_codes` now is.
+
+---
+
+## 59. A guard that has run out of stages is deleted, not moved (Mission 1.15.11)
+
+`TestNothingWasCollected` asserted that TED had not reached a stage of the
+pipeline. It was inverted in 1.15.7 when RawRecords appeared, in 1.15.8 when
+NormalizedRecords appeared, and in 1.15.10 when a Signal appeared — each time by
+moving the assertion one stage further down.
+
+Mission 1.15.11 created a TED Claim and a TED Evidence row, and the two methods
+that had been moved three times had nothing left to assert. They were **deleted**
+rather than pointed at Opportunities.
+
+The reason is not tidiness. A guard that keeps retreating stops being a guard and
+becomes a record of how far the work got — it passes at every step, it fails
+only when a mission does its job, and each move costs a real edit for no protection
+gained. By the third move the assertion was three joins long and the thing it
+protected was already covered by the mission's own tests.
+
+**What was kept is the part that never moved.** The same class already asserted
+that no ReliabilityAssessment, no Opportunity and no embedding exists, and those
+are still absences rather than counts — the next things a mission could create by
+accident. The class name stayed historical on purpose: renaming it would erase
+the record of a guard that was useful three times and then retired.
+
+**The rule: a boundary assertion is worth keeping while the thing it names is
+absent for a REASON.** When the absence becomes "we have not got there yet",
+it is a progress marker wearing a test's clothes, and the honest move is to
+delete it and let the tests of the stage that did arrive carry the weight.

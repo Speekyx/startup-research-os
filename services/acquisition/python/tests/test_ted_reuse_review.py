@@ -290,8 +290,16 @@ class TestNothingWasBuilt:
 @needs_postgres
 class TestNothingWasCollected:
     """§28. Retrieving legal documents is review work; procurement notices are
-    research data and none was fetched. The assertion is cheap and it is the one
-    a future mission is most likely to violate by accident."""
+    research data and none was fetched BY A REVIEW.
+
+    **The name is now historical and is kept deliberately.** TED has since been
+    collected, normalized, derived from, interpreted and evidenced across
+    Missions 1.15.7 to 1.15.11, and this class watched each of those boundaries
+    fall in turn. Renaming it would erase the record of a guard that was
+    inverted three times and then, correctly, retired.
+
+    What it still asserts is what has stayed absent: no reliability assessment,
+    no Opportunity, no embedding."""
 
     @staticmethod
     def _count(query: str) -> int:
@@ -302,58 +310,6 @@ class TestNothingWasCollected:
         with psycopg.connect(DATABASE_URL) as conn:
             row = conn.execute(query).fetchone()
         return int(row[0]) if row else -1
-
-    def test_no_ted_notice_became_a_canonical_record(self) -> None:
-        """Inverted in Mission 1.15.7, which collected three notices.
-
-        The raw count is DEPLOYMENT state: non-zero on a machine that has run
-        the collector, zero on one that has not, and asserting either would be
-        the confusion §49 forbids. What remains repository-true is that no TED
-        notice can become a canonical record, because no TED normalizer exists.
-        """
-        # Normalized records are DEPLOYMENT state too, as of Mission 1.15.8.
-        # What is repository-true, and what this now asserts, is that NOTHING
-        # downstream of normalization exists for TED: no Signal, no Claim, no
-        # Evidence. That is 1.15.8's own stop condition, and it is the last
-        # thing this guard has left to protect.
-        # A TED SIGNAL now exists too, as of Mission 1.15.10 -- so this guard
-        # has moved one stage further down for the third time, and this is the
-        # last move it has: what remains true is that nothing INTERPRETS a TED
-        # signal. No Claim cites one, and no Evidence references one, which is
-        # 1.15.10's own stop condition.
-        #
-        # When that stops being true, this assertion has nowhere left to go and
-        # should be deleted rather than moved again -- there is no stage below
-        # Evidence that TED has not reached.
-        for table in (
-            "SELECT count(*) FROM research.claim_interpretation_inputs cii "
-            "JOIN nlp.signals s ON s.id = cii.signal_id "
-            "WHERE s.quantity_family = 'TRANSACTION_VALUE'",
-            "SELECT count(*) FROM scoring.evidence e "
-            "JOIN nlp.signals s ON s.id = e.signal_id "
-            "WHERE s.quantity_family = 'TRANSACTION_VALUE'",
-        ):
-            assert self._count(table) == 0, table
-
-    def test_no_normalized_record_has_source_id_ted_eu(self) -> None:
-        # NORMALIZED records joined RAW as DEPLOYMENT state in Mission 1.15.8,
-        # which normalized the three notices 1.15.7 collected. Neither count is
-        # asserted here any more: both are legitimately non-zero on a machine
-        # that has run the pipeline and zero on one that has not, and encoding
-        # either is the confusion §49 forbids.
-        #
-        # What stays REPOSITORY-true, and what this asserts, is that nothing
-        # downstream of normalization exists for TED on any machine -- no Signal
-        # extractor consumes a procurement notice, so no Claim and no Evidence
-        # can follow. That is Mission 1.15.8's own stop condition.
-        assert (
-            self._count(
-                "SELECT count(*) FROM research.claim_interpretation_inputs cii "
-                "JOIN nlp.signals s ON s.id = cii.signal_id "
-                "WHERE s.quantity_family = 'TRANSACTION_VALUE'"
-            )
-            == 0
-        )
 
     def test_no_reliability_assessment_was_created(self) -> None:
         """§30. Source review asks whether we MAY use TED; reliability review

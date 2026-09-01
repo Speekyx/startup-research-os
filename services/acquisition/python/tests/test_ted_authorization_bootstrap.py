@@ -796,19 +796,19 @@ class TestNothingReachedTheDatabase:
         # downstream of normalization exists for TED on any machine -- no Signal
         # extractor consumes a procurement notice, so no Claim and no Evidence
         # can follow. That is Mission 1.15.8's own stop condition.
-        # A TED SIGNAL exists as of Mission 1.15.10, so this moved one stage
-        # further down -- to the last one it has. Nothing INTERPRETS a TED
-        # signal: no Claim cites one and no Evidence references one, which is
-        # 1.15.10's own stop condition. When that changes, delete this rather
-        # than move it again.
-        assert (
-            self._count(
-                "SELECT count(*) FROM research.claim_interpretation_inputs cii "
-                "JOIN nlp.signals s ON s.id = cii.signal_id "
-                "WHERE s.quantity_family = 'TRANSACTION_VALUE'"
-            )
-            == 0
-        )
+        # **Mission 1.15.11 DELETED the downstream assertion rather than moving
+        # it a fourth time**, as 1.15.10 said to. A TED Claim and a TED Evidence
+        # row now exist, so the guard ran out of stages the way it was always
+        # going to: TED reached every one of them.
+        #
+        # What is left is the fact this test was originally about, and it is
+        # still repository-true: no TED notice was fetched by a REVIEW. The
+        # counts downstream of it are deployment state and belong to no
+        # assertion here.
+        #
+        # The current stop condition is asserted where it is still an absence
+        # rather than a count -- see the reliability and opportunity tests in
+        # this class, which are the boundary Mission 1.15.11 stopped at.
 
     def test_any_residual_acceptance_came_from_a_person_and_not_a_verifier(self) -> None:
         """Inverted by Mission 1.15.6.1, not deleted (`testing-strategy.md` §43).

@@ -1,6 +1,7 @@
-"""`observed-signal-restatement@1.0.0` -- a Signal, said back with its source named.
+"""`observed-signal-restatement@1.1.0` -- a Signal, said back with its source named.
 
-`deterministic-observed-claim-interpreter-v1.md`. Mission 1.13.1.
+`deterministic-observed-claim-interpreter-v1.md`. Mission 1.13.1, fourth
+template added in Mission 1.15.11.
 
 **What every claim here asserts, in full:** that a named source reported a named
 quantity, over named source periods, with this exact magnitude and this
@@ -12,10 +13,19 @@ right. `OBSERVED` is about the publication: it is false if the source did not
 say that, and it stays true if the source was wrong
 (`claim-epistemic-semantics-v1.md` §3).
 
-Three templates, one per implemented Signal type, and **no fallback**. A Signal
+Four templates, one per implemented Signal type, and **no fallback**. A Signal
 type with no template is `UNSUPPORTED_SIGNAL_TYPE`. Generic prose over an
 unknown Signal is the one thing a deterministic interpreter must not do: it
 would emit a proposition nobody specified and nobody reviewed.
+
+**Why 1.1.0 and not a second interpreter.** The fourth template restates a
+Signal with its source named, which is precisely what this interpreter is; a
+separate one would have been source-specific, and a template is specific to a
+SIGNAL TYPE rather than to a publisher. The bump is minor because the addition
+is purely additive: the three existing templates render byte-identical
+statements, fact sets and evidence, and the seven claims already stored are
+untouched. What changed is the set of propositions this interpreter can make,
+and that is a version-worthy fact even when nothing existing moves.
 
 **Structurally OBSERVED.** `_CLAIM_TYPE` is a module constant read by every
 template, and no code path in this package passes any other value to
@@ -69,12 +79,13 @@ __all__ = [
 ]
 
 INTERPRETER_ID = "observed-signal-restatement"
-INTERPRETER_VERSION = "1.0.0"
+INTERPRETER_VERSION = "1.1.0"
 
 SUPPORTED_SIGNAL_TYPES: tuple[str, ...] = (
     "numeric_period_change",
     "lexical_frequency_change",
     "lexical_frequency_contrast",
+    "procurement_value_contrast",
 )
 
 # Read by every template and passed by no caller. The claim type this
@@ -114,7 +125,23 @@ OBSERVED_EVIDENCE_LEVEL = 1
 #
 # Inventing a category for publication activity here would be a taxonomy change
 # made in passing.
+#
+# Mission 1.15.11 kept it UNCATEGORISED for TED too, and this is the mission's
+# closest call. A CONTRACT AWARD NOTICE records a purchase that actually
+# happened, which is the enum's own first example of MARKET_ACTIVITY -- and
+# MARKET_ACTIVITY is the only gate to EvidenceLevel 4.
+#
+# What this Evidence carries is not a purchase. It is a MAXIMUM MINUS MINIMUM
+# over a set of published notices, and a spread is a property of records rather
+# than economic activity. The individual notices underneath might well support
+# MARKET_ACTIVITY for a claim about a purchase; no such claim exists, and
+# creating one is a proposition nobody has specified. Recorded as an open
+# question rather than settled in passing.
 _OBSERVATION_CATEGORY = EvidenceObservationCategory.UNCATEGORISED
+
+# A CPV division is the first two characters of a CPV code. Named rather than
+# inlined so the reason a `[:2]` appears below is legible.
+_DIVISION_LENGTH = 2
 
 _DETERMINISTIC = ClaimInterpretation(
     interpreter_id=INTERPRETER_ID,
@@ -134,6 +161,12 @@ _ACCEPTED_BASES: Mapping[str, frozenset[str]] = {
     "numeric_period_change": frozenset({"COMPARABLE_INSTANTS", "ORDERED_PERIODS"}),
     "lexical_frequency_change": frozenset({"ORDERED_PERIODS"}),
     "lexical_frequency_contrast": frozenset({"SAME_PERIOD_LABEL"}),
+    # NONE and nothing else. The procurement contrast is non-temporal by
+    # construction (ADR-029): its members are ordered by amount, no date is
+    # read, and H-37 leaves the meaning of a TED publication date's offset
+    # unestablished. A Signal of this type arriving on any other basis would
+    # mean H-37 had closed, and the sentence to write then is a decision.
+    "procurement_value_contrast": frozenset({"NONE"}),
 }
 
 
@@ -240,6 +273,8 @@ class ObservedSignalRestatementInterpreter:
             return self._numeric_period_change(signal, request)
         if signal.signal_type_id == "lexical_frequency_change":
             return self._lexical_frequency_change(signal, request)
+        if signal.signal_type_id == "procurement_value_contrast":
+            return self._procurement_value_contrast(signal, request)
         return self._lexical_frequency_contrast(signal, request)
 
     # ------------------------------------------------------ numeric templates
@@ -409,6 +444,97 @@ class ObservedSignalRestatementInterpreter:
             )
         return self._build(signal, request, source_id, statement, facts)
 
+    # ------------------------------------------------- procurement templates
+
+    def _procurement_value_contrast(
+        self, signal: SignalView, request: InterpretationRequest
+    ) -> ClaimDraft:
+        """A spread over a BOUNDED cohort, said back, and bounded in the wording.
+
+        **The whole difficulty of this template is what it must not say.** The
+        Signal relates three published amounts; the sentence a reader wants is
+        "division 90 contracts vary by 686545.02 EUR", and that sentence is
+        about a population nobody sampled. So the statement names the number of
+        notices, calls them a bounded set, and keeps every cohort dimension in
+        it: a proposition that cannot say WHICH notices is not checkable, and
+        one that omits its bound reads as a fact about a market.
+
+        It is a MAXIMUM MINUS MINIMUM over the qualifying amounts, and the
+        wording says exactly that -- "the largest ... exceeded the smallest by".
+        Never an average, never a median, never a price, never a contract value,
+        because none of those is what was computed.
+
+        **Nothing temporal.** No date, no window, no ordering, no "recently".
+        `period_labels` is never read here, and the acquisition window that
+        bounded RETRIEVAL is not a property of the proposition. H-37 is open and
+        this template does not depend on it.
+        """
+        source_id = signal.single_source()
+        source_name = _source_name(signal, source_id)
+        resource_id = lineage_fact(signal, "series", "resource_id", label="the resource id")
+        notice_class = _one_scope_value(signal, "notice_classes", label="the notice class")
+        amount_type = _one_scope_value(signal, "amount_types", label="the amount type")
+        amount_scope = _one_scope_value(signal, "amount_scopes", label="the amount scope")
+        currency = _one_scope_value(signal, "currencies", label="the currency")
+        scheme = signal.scope_text("classification_scheme")
+        if not scheme:
+            raise _refuse(
+                ClaimEvidenceRefusalReason.SIGNAL_LINEAGE_UNAVAILABLE,
+                "this Signal names no classification scheme, so the codes below it cannot "
+                "be stated as anything in particular. A bare number is not a subject",
+            )
+        codes = tuple(sorted(signal.scope_list("classification_codes")))
+        division = _classification_division(codes, scheme)
+        notice_ids = _notice_ids(signal)
+
+        # NOT_APPLICABLE by construction, like the lexical contrast: nothing
+        # changed, so there is no direction to state. The one semantic fact the
+        # magnitude carries is whether the cohort's amounts differ AT ALL, and
+        # that enters the identity while the value does not (§6.1). A revised
+        # amount that keeps the amounts unequal restates the same proposition; a
+        # revision that makes them all equal is a different one.
+        relation = "DIFFERS" if signal.magnitude > 0 else "EQUAL"
+
+        facts = {
+            "proposition": "source_reported_procurement_value_contrast",
+            "source_id": source_id,
+            "resource_id": resource_id,
+            "notice_class": notice_class,
+            "amount_type": amount_type,
+            "amount_scope": amount_scope,
+            "currency": currency,
+            "classification_scheme": scheme,
+            "classification_division": division,
+            "classification_codes": list(codes),
+            # The COHORT is the proposition's subject, so its membership is its
+            # identity. A fourth qualifying notice does not revise this claim,
+            # it makes a different one -- unlike a revised AMOUNT, which is
+            # wording. The values themselves are deliberately absent: they are
+            # reachable through Evidence -> Signal -> signal_inputs ->
+            # normalized_records, and copying them here would be a second place
+            # for one fact to live.
+            "notice_ids": list(notice_ids),
+            "relation": relation,
+        }
+
+        preamble = (
+            f'{source_name} reported that, in its "{resource_id}" resource, within a bounded '
+            f'set of {len(notice_ids)} "{notice_class}" notices classified under "{scheme}" '
+            f'division "{division}"'
+        )
+        if relation == "EQUAL":
+            statement = (
+                f'{preamble}, the largest "{amount_type}" amount at "{amount_scope}" scope '
+                f'stated in "{currency}" was equal to the smallest.'
+            )
+        else:
+            statement = (
+                f'{preamble}, the largest "{amount_type}" amount at "{amount_scope}" scope '
+                f'stated in "{currency}" exceeded the smallest by '
+                f"{_plain(abs(signal.magnitude))}."
+            )
+        return self._build(signal, request, source_id, statement, facts)
+
     # ----------------------------------------------------------------- build
 
     def _build(
@@ -472,6 +598,98 @@ def _lexical_lineage(signal: SignalView) -> tuple[str, str, str, str, str]:
         lineage_fact(signal, "term", "scheme", label="the term scheme"),
         lineage_fact(signal, "term", "gram_size", label="the gram size"),
     )
+
+
+def _one_scope_value(signal: SignalView, name: str, *, label: str) -> str:
+    """One cohort dimension, which the scope must name exactly once.
+
+    Each of these is part of the key the extractor grouped by, so a cohort
+    carrying two of anything did not come from that grouping. Refusing beats
+    picking the first: a statement naming one currency over a cohort holding two
+    would compare amounts that are not comparable, which is the failure the
+    cohort key exists to prevent one layer down.
+    """
+    values = signal.scope_list(name)
+    if len(values) != 1:
+        raise _refuse(
+            ClaimEvidenceRefusalReason.AMBIGUOUS_SIGNAL_LINEAGE,
+            f"this Signal's scope names {list(values)} for {label}; a restatement of a "
+            "cohort says exactly one, because the cohort was grouped by it",
+        )
+    return values[0]
+
+
+def _classification_division(codes: tuple[str, ...], scheme: str) -> str:
+    """The division every code in the cohort agrees on.
+
+    The division is the dimension the extractor grouped by and the scope does
+    not carry it -- it carries the union of the members' full codes. It is
+    recovered here as the leading two characters, which is what a CPV division
+    IS, and only where every code agrees.
+
+    Agreement is guaranteed by the grouping and checked anyway. This is the
+    same class of defect Mission 1.15.10 found one layer down, where a scope
+    built from the FIRST member looked correct for as long as every cohort had
+    one member.
+    """
+    if not codes:
+        raise _refuse(
+            ClaimEvidenceRefusalReason.SIGNAL_LINEAGE_UNAVAILABLE,
+            f"this Signal's scope carries no {scheme} code, so the cohort has no stated "
+            "subject and a restatement would be about nothing in particular",
+        )
+    short = [code for code in codes if len(code) < _DIVISION_LENGTH]
+    if short:
+        raise _refuse(
+            ClaimEvidenceRefusalReason.SIGNAL_LINEAGE_UNAVAILABLE,
+            f"{scheme} code(s) {short} are shorter than a division, so no division can be "
+            "read off them. A truncated code is not a broader category",
+        )
+    divisions = {code[:_DIVISION_LENGTH] for code in codes}
+    if len(divisions) != 1:
+        raise _refuse(
+            ClaimEvidenceRefusalReason.AMBIGUOUS_SIGNAL_LINEAGE,
+            f"this Signal's {scheme} codes {list(codes)} span divisions {sorted(divisions)}. "
+            "A cohort spanning two divisions has no single subject, and naming one of them "
+            "would say the contrast is about a category half of it is not in",
+        )
+    return divisions.pop()
+
+
+def _notice_ids(signal: SignalView) -> tuple[str, ...]:
+    """Every contributing notice, named, sorted, and never reduced to one.
+
+    `lineage_fact` is the wrong tool here: it exists for facts every record must
+    AGREE on, and these are the facts that must all be KEPT. A support of three
+    whose proposition names one notice would be a claim about a different, much
+    smaller thing -- and would read as if two observations had been found and
+    then lost.
+    """
+    contributing = signal.contributing
+    if not contributing:
+        raise _refuse(
+            ClaimEvidenceRefusalReason.SIGNAL_LINEAGE_UNAVAILABLE,
+            "this Signal has no readable contributing records, so the cohort cannot be "
+            "named. A bounded claim whose bound cannot be stated is not bounded",
+        )
+    ids = []
+    for record in contributing:
+        value = record.text("notice", "publication_number")
+        if value is None:
+            raise _refuse(
+                ClaimEvidenceRefusalReason.SIGNAL_LINEAGE_UNAVAILABLE,
+                "a contributing record does not publish its notice identifier "
+                "(notice.publication_number), and it is not reconstructed from a key or a "
+                "URL. A cohort member nobody can look up is not a citation",
+            )
+        ids.append(value)
+    if len(set(ids)) != len(ids):
+        raise _refuse(
+            ClaimEvidenceRefusalReason.AMBIGUOUS_SIGNAL_LINEAGE,
+            f"the contributing records name notice {sorted(ids)} more than once. Counting "
+            "one notice twice would double the apparent support for one observation",
+        )
+    return tuple(sorted(ids))
 
 
 def _two_labels(signal: SignalView) -> tuple[str, str]:

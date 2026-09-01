@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.35
-Last amended: 2026-09-01 (Sprint 1 / Mission 1.15.10)
+Version: 1.36
+Last amended: 2026-09-01 (Sprint 1 / Mission 1.15.11)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.36 | 2026-09-01 | **The TED Signal interpreted, and the sentence is the enforcement.** A fourth template on the existing interpreter -- **`observed-signal-restatement@1.1.0`**, not a TED-specific one, because a template is specific to a SIGNAL TYPE and never to a publisher. **1 OBSERVED Claim, 1 revision, 1 Evidence row**, through the production path, idempotent. The claim is bounded in its own wording -- *"within a bounded set of 3"* is what stops it becoming a statement about every division-90 contract -- source-attributed, and carries no date, no trend and no market vocabulary. **The cohort MEMBERSHIP is the identity and the amount is wording**: a revised amount appends a revision, a fourth notice is a different proposition, and the member values stay in provenance. `observation_category` stayed `UNCATEGORISED` because a spread is not a purchase, and `MARKET_ACTIVITY` is the only gate to Level 4. Support 3 is still ONE source; reliability NULL, `NON_SCORABLE`. **No Opportunity, no score, no LLM.** H-36A/B, H-37, H-38 untouched |
 | 1.35 | 2026-09-01 | **Exact decimals, and the first real TED Signal.** `ted-search-api@1.1.0` parses with `parse_float=Decimal` and renders through `canonical_number`, so a fractional tender value reaches jsonb as an exact STRING; `parse_int` stays unset because a JSON integer was never at risk. **The normalizer is NOT bumped** -- its output is unchanged, and what changed is the inputs it accepts, declared in `supported_collector_versions`. One bounded acquisition on 2023-03-01 in CPV division 90 produced **1 TRANSACTION_VALUE Signal**: support 3, 686545.02 EUR, `ABSOLUTE_DIFFERENCE`, `NON_TEMPORAL`. Two defects real data exposed: `cpv_division` never reached the composed query, and the cohort scope carried only the FIRST member's codes -- `procurement-value-contrast@1.0.1`. **No Claim, no Evidence.** H-36A/B, H-37, H-38 untouched |
 | 1.34 | 2026-09-01 | **A third Signal quantity family, and a derivation that correctly produced nothing.** `TRANSACTION_VALUE` (ADR-029): the `procurement_notice` kind mapped to neither existing family, and `MEASURED_SERIES` could not be widened without making `metric` optional for every series signal ever written. `procurement-value-contrast@1.0.0` is NON-TEMPORAL by construction -- basis `NONE`, no date read, members ordered by amount -- keeps four monetary semantics apart, converts no currency, and is **not** willingness-to-pay. **0 real Signals**: the two EUR award totals are CPV 90 and CPV 66, which are two markets. **H-37 and H-38 stay OPEN** |
 | 1.33 | 2026-09-01 | **The third record kind, and the first canonical procurement notices.** `procurement_notice` holds what neither existing kind could without getting worse, and carries no `observation.value` because a notice has no single measurement. `ted-search-api-notice@1.0.0`: one notice one record with lots structured inside it, four monetary semantics kept apart, no `price_paid`, no currency converted, every language kept with no canonical display value. **A published DATE does not become a moment** -- `observed_at` NULL, naive bounds, **H-37** open with the source value preserved. Three real notices normalized, idempotent, all `PARTIAL`. **No TED Signal, Claim or Evidence** |
@@ -1371,9 +1372,11 @@ in Mission 1.15.6.1; Mission 1.15.7 authorised one concrete resource and wrote
 `ted-search-api-notice@1.0.0`; Mission 1.15.9 added `TRANSACTION_VALUE` and
 correctly derived nothing; Mission 1.15.10 repaired the Decimal invariant as
 `ted-search-api@1.1.0` and derived **one** Signal from an acquisition designed
-for comparability. **11 RawRecords, 11 NormalizedRecords all `PARTIAL`, 1
-Signal.** Nothing downstream of it: no Claim cites the TED Signal and no
-Evidence references it. `ted-bulk-xml`, the historical CSV and
+for comparability. Mission 1.15.11 interpreted that Signal into one `OBSERVED` Claim and one
+Evidence row through `observed-signal-restatement@1.1.0`. **11 RawRecords, 11
+NormalizedRecords all `PARTIAL`, 1 Signal, 1 Claim, 1 Evidence.** Nothing
+downstream of THAT: no ReliabilityAssessment applies to it, so it is
+`NON_SCORABLE`, and no Opportunity consumes it. `ted-bulk-xml`, the historical CSV and
 `commercial-multi-tenant-research-v1` are refused exactly as before, and H-36A,
 H-36B, H-37 and H-38 are untouched.
 
