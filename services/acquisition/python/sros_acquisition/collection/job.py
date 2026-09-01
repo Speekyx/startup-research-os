@@ -25,7 +25,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 from typing import Any
 
 from sros_contracts import AcquisitionErrorCode, ConditionVerification
@@ -47,14 +47,25 @@ from .gdelt_web_ngram import (
     WebNgramRequest,
 )
 from .repositories import PersistenceReport, collector_enabled, persist_drafts
-from .transport import HttpxTransport, Transport
+from .ted_search_api import (
+    DEFAULT_CONCEPTUAL_FIELDS,
+    TED_COLLECTOR_ID,
+    TED_COLLECTOR_VERSION,
+    TedSearchApiCollector,
+    TedSearchBounds,
+    TedSearchRequest,
+)
+from .ted_search_api import NOTICE_TYPES as TED_NOTICE_TYPES
+from .transport import HttpxTransport, JsonPostTransport, Transport
 from .world_bank import CollectionBounds, WorldBankCollector, WorldBankRequest
 
 __all__ = [
     "AcquisitionJobResult",
+    "TedSearchJobPayload",
     "WebNgramJobPayload",
     "WorldBankJobPayload",
     "run_gdelt_web_ngram_job",
+    "run_ted_search_job",
     "run_world_bank_job",
 ]
 
@@ -574,3 +585,217 @@ def run_gdelt_web_ngram_job(
 
 def utc_now() -> datetime:
     return datetime.now(UTC)
+
+
+@dataclass(frozen=True)
+class TedSearchJobPayload:
+    """What a TED acquisition task must carry. **No bound is defaulted.**
+
+    Mission 1.15.7 §16. `WorldBankJobPayload` defaults `max_pages` and
+    `max_records`, which is defensible for a source that publishes its own page
+    size and a documented rate limit. TED publishes neither: its rate limit is
+    UNKNOWN, and a default ceiling here would be a number nobody reviewed
+    applied to the one source whose acquisition rests on an operator personally
+    accepting an unresolved legal exposure -- an acceptance that is itself
+    conditioned on the queries being bounded.
+
+    So every bound is required, and a payload that omits one is refused rather
+    than completed.
+    """
+
+    workspace_id: str
+    research_session_id: str
+    correlation_id: str
+    date_start: str
+    date_end: str
+    max_pages: int
+    max_records: int
+    page_size: int
+    notice_types: tuple[str, ...] = TED_NOTICE_TYPES
+    conceptual_fields: tuple[str, ...] = DEFAULT_CONCEPTUAL_FIELDS
+    source_id: str = "ted-eu"
+
+    @classmethod
+    def from_payload(cls, payload: object) -> TedSearchJobPayload:
+        if not isinstance(payload, dict):
+            raise ValueError("an acquisition task payload must be a mapping")
+        missing = [name for name in _REQUIRED_HEADERS if not payload.get(name)]
+        if missing:
+            raise ValueError(
+                f"acquisition payload is missing required headers: {missing}. A worker "
+                "never resolves the workspace itself and never falls back to a default "
+                "(ADR-005)"
+            )
+        unbounded = [
+            name
+            for name in ("date_start", "date_end", "max_pages", "max_records", "page_size")
+            if payload.get(name) in (None, "")
+        ]
+        if unbounded:
+            raise ValueError(
+                f"TED acquisition payload states no {unbounded}. Every bound is required: "
+                "TED publishes no rate limit, and the operator acceptance this source "
+                "rests on is conditioned on bounded, purpose-scoped queries. There is no "
+                "default that could be supplied here without inventing one"
+            )
+        return cls(
+            workspace_id=str(payload["workspace_id"]),
+            research_session_id=str(payload["research_session_id"]),
+            correlation_id=str(payload["correlation_id"]),
+            date_start=str(payload["date_start"]),
+            date_end=str(payload["date_end"]),
+            max_pages=int(payload["max_pages"]),
+            max_records=int(payload["max_records"]),
+            page_size=int(payload["page_size"]),
+            notice_types=tuple(payload.get("notice_types") or TED_NOTICE_TYPES),
+            conceptual_fields=tuple(payload.get("conceptual_fields") or DEFAULT_CONCEPTUAL_FIELDS),
+            source_id=str(payload.get("source_id") or "ted-eu"),
+        )
+
+    def request(self) -> TedSearchRequest:
+        return TedSearchRequest(
+            bounds=TedSearchBounds(
+                date_start=date.fromisoformat(self.date_start),
+                date_end=date.fromisoformat(self.date_end),
+                max_pages=self.max_pages,
+                max_records=self.max_records,
+                page_size=self.page_size,
+            ),
+            conceptual_fields=self.conceptual_fields,
+            notice_types=self.notice_types,
+        )
+
+    @property
+    def idempotency_key(self) -> str:
+        """Stable over what the job WOULD collect. The retrieval time is absent."""
+        return "|".join(
+            (
+                self.workspace_id,
+                self.source_id,
+                self.date_start,
+                self.date_end,
+                ",".join(sorted(self.notice_types)),
+            )
+        )
+
+
+def run_ted_search_job(
+    payload: object,
+    connection_factory: Callable[[str], Any],
+    *,
+    catalog: SourceCatalog | None = None,
+    compliance: ComplianceConfig | None = None,
+    use_profile: str | None = None,
+    transport: JsonPostTransport | None = None,
+    collector: TedSearchApiCollector | None = None,
+    now: Callable[[], datetime] | None = None,
+) -> AcquisitionJobResult:
+    """Collect from the TED Search API and persist, in the caller's transaction.
+
+    The same sequence `run_world_bank_job` runs, and for the same reasons. The
+    two differences are the ones TED's governance forced: the payload carries no
+    default bound, and the authorization is built with the persisted operator
+    decision -- which is not a TED special case but the path Mission 1.15.6.2
+    gave every source carrying a `HUMAN_CONFIRMATION` condition. TED is the only
+    source that has one.
+    """
+    job = TedSearchJobPayload.from_payload(payload)
+    sources = catalog or load_catalog()
+    rules = compliance or load_compliance()
+    source = sources.get(job.source_id)
+
+    def refuse(code: AcquisitionErrorCode, detail: str) -> AcquisitionJobResult:
+        return AcquisitionJobResult(
+            source_id=job.source_id,
+            collector="",
+            persisted=PersistenceReport(),
+            requests_made=0,
+            pages_read=0,
+            failures=(
+                AcquisitionFailure(
+                    code=code,
+                    detail=detail,
+                    source_id=job.source_id,
+                    correlation_id=job.correlation_id,
+                ),
+            ),
+            idempotency_key=job.idempotency_key,
+        )
+
+    # The gate, at execution time, with the persisted human decision read the
+    # one sanctioned way. A context assembled by hand here would be the manual
+    # bypass §19 forbids.
+    try:
+        profile = use_profile or declared_use_profile()
+        context = build_authorization(
+            source,
+            profile,
+            rules,
+            decisions=_recorded_decisions(source, profile, connection_factory, job.workspace_id),
+        )
+    except UseProfileNotDeclaredError as exc:
+        return refuse(AcquisitionErrorCode.AUTHORIZATION_REJECTED, str(exc))
+    except AcquisitionNotAuthorizedError as exc:
+        return refuse(AcquisitionErrorCode.AUTHORIZATION_REJECTED, "; ".join(exc.reasons))
+
+    with connection_factory(job.workspace_id) as conn:
+        if not collector_enabled(conn, job.source_id):
+            return refuse(
+                AcquisitionErrorCode.AUTHORIZATION_REJECTED,
+                (
+                    f"{job.source_id} passes the governance gate and its collector is not "
+                    "enabled. Enablement is a separate, deliberate decision "
+                    "(`sros-source enable`), and a job must not take it on an operator's "
+                    "behalf"
+                ),
+            )
+
+    worker = collector or TedSearchApiCollector(transport or HttpxTransport())
+    result = worker.collect(
+        context,
+        job.request(),
+        workspace_id=job.workspace_id,
+        research_session_id=job.research_session_id,
+        correlation_id=job.correlation_id,
+        now=(now or utc_now)(),
+    )
+
+    failures = (result.failure,) if result.failure else ()
+    persisted = PersistenceReport()
+    if result.drafts:
+        try:
+            with connection_factory(job.workspace_id) as conn:
+                persisted = persist_drafts(conn, result.drafts)
+        except AcquisitionFailedError:
+            raise
+        except Exception as exc:  # noqa: BLE001 - normalised, see errors.py
+            return AcquisitionJobResult(
+                source_id=job.source_id,
+                collector=f"{TED_COLLECTOR_ID}@{TED_COLLECTOR_VERSION}",
+                persisted=PersistenceReport(),
+                requests_made=result.pages_fetched,
+                pages_read=result.pages_fetched,
+                failures=(
+                    *failures,
+                    AcquisitionFailure(
+                        code=AcquisitionErrorCode.PERSISTENCE_FAILURE,
+                        detail=(
+                            f"records were acquired and could not be stored "
+                            f"({type(exc).__name__}); nothing was committed"
+                        ),
+                        source_id=job.source_id,
+                        correlation_id=job.correlation_id,
+                    ),
+                ),
+                idempotency_key=job.idempotency_key,
+            )
+
+    return AcquisitionJobResult(
+        source_id=job.source_id,
+        collector=f"{TED_COLLECTOR_ID}@{TED_COLLECTOR_VERSION}",
+        persisted=persisted,
+        requests_made=result.pages_fetched,
+        pages_read=result.pages_fetched,
+        failures=failures,
+        idempotency_key=job.idempotency_key,
+    )

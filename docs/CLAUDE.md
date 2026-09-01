@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.31
-Last amended: 2026-08-31 (Sprint 1 / Mission 1.15.6)
+Version: 1.32
+Last amended: 2026-09-01 (Sprint 1 / Mission 1.15.7)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.32 | 2026-09-01 | **The first TED acquisition, and the first concrete TED resource.** A source-level approval is not a resource-level one: TED authorised `"datasets": []` and every resource failed closed, which is why `AUTHORIZATION_READY` sat beside `resource_ready` NO for six missions. **One** resource authorised -- eForms contract and award notices from 2023-03-01 through the Search API -- then `ted-search-api@1.0.0`, the third collector: four gates before a socket, one route with **no fallback**, bounds with **no defaults**, **no exhaustion mode**, four monetary semantics kept apart, no currency converted. **3 real RawRecords**, idempotent on re-run. **H-36A NOT ESTABLISHED, H-36B NOT ADDRESSED, no normalizer, no Signal, no Claim** |
 | 1.31 | 2026-08-31 | **The authorization carries only reviewed routes, and an objective property of configuration is verified rather than human-confirmed** (ADR-028). `context.access` used to hold every registered access profile, so TED's context would have handed a collector the bulk route its review refuses by name -- with the transport's host allowlist derived from it. A `(source, profile)` may now declare a `route_authorization`, and the context carries those routes and no others. Two TED conditions that described objective properties of a collector that does not exist -- its route, its field selection -- moved from `HUMAN_CONFIRMATION` to `CAPABILITY` on **appended local review v2**, changing no policy conclusion. **The residual database-right acceptance stays human, is unrecorded, and still blocks** |
 | 1.30 | 2026-08-31 | **Source permission is use-profile-specific** (ADR-027). Every review already answered a question about a use -- the catalog said so in prose since Mission 1.0 -- but the answer had no IDENTITY, so it could not be required, compared or matched, and the gate never saw it. Now a review records its `assessed_use_profile`, currentness is per (source, profile), and `evaluate_eligibility` requires the profile with no default. **`ted-eu` is `REQUIRES_REVIEW` under the commercial profile and `APPROVED_WITH_CONDITIONS` under the local one, at the same time.** Approval never transfers; the runtime declares its profile and never infers it |
 | 1.29 | 2026-08-31 | **The deployment model is recorded: LOCAL-FIRST / SINGLE-OPERATOR.** The application runs locally for its operator and is not offered as a public multi-tenant SaaS -- but the research it produces is used to launch **commercial** products, so **local deployment never implies `NON_COMMERCIAL_USE`** and commercial-use rights are still reviewed. Workspace and RLS stay. No billing, customer accounts, team collaboration or cloud scaling unless explicitly required |
@@ -419,13 +420,16 @@ none of them is negotiable (`source-registry-v1.md` §1, ADR-013):
   product, and a permission obtained by describing a smaller product is a
   permission for a product we are not building.
 
-### Collection — two collectors, and what bounds them
+### Collection — three collectors, and what bounds them
 
 Since Mission 1.5 the World Bank Indicators collector exists
 (`world-bank-collector-v1.md`) and is the reference architecture. Since Mission
 1.9.3 the GDELT WEB-NGRAM collector exists too
 (`gdelt-web-ngram-collector-v1.md`), reading a published gzipped file rather than
-a paginated API. Five rules apply to both and to every collector that follows:
+a paginated API. Since Mission 1.15.7 the TED Search API collector exists
+(`ted-eu-search-api-collector-v1.md`), posting a composed JSON body to a
+documented search endpoint. Five rules apply to all three and to every collector
+that follows:
 
 - **No authorization, no collection.** `collect` takes an
   `AcquisitionAuthorizationContext` as its first positional parameter, with no
@@ -1357,12 +1361,23 @@ competition gap, distribution feasibility, retention or revenue potential.** The
 are factual, source-level claims about two publications. The first Claims
 existing does not make Opportunity discovery ready.
 
-**`ted-eu` is APPROVING AND NOT ELIGIBLE, on one condition.**
-`build_authorization('ted-eu', 'local-private-research-v1')` refuses with
-`review conditions not satisfied: ted-database-right-residual-exposure-accepted`
-and with nothing else. No collector may be written against a refusal: the next
-mission is the TED Official Search API Collector **if and when** the operator
-records the acceptance, and not before.
+**`ted-eu` is eligible, resource-ready and collected, under ONE profile and
+through ONE route.** The operator recorded the acceptance in Mission 1.15.6.1,
+Mission 1.15.7 authorised one concrete resource and wrote
+`ted-search-api@1.0.0`, and three real RawRecords exist. **Nothing downstream
+does**: there is no TED normalizer, and the mapping from a notice to a canonical
+record is Mission 1.15.8. `ted-bulk-xml`, the historical CSV and
+`commercial-multi-tenant-research-v1` are refused exactly as before, and H-36A
+and H-36B are untouched.
+
+**Four rules bound that collector, and each is enforced rather than promised**
+(`ted-eu-search-api-collector-v1.md`): every bound is required with no default,
+because TED's rate limit is UNKNOWN and the acceptance is conditioned on bounded
+queries; there is **no exhaustion mode**, because the API's `ITERATION` scroll
+would retrieve the corpus; there is **no fallback** to `ted-open-data-sparql`,
+which is authorised and unimplemented, because a fallback turns a reviewed route
+into a runtime choice; and the four monetary semantics stay under their own
+names, with no `price_paid` and no currency conversion.
 
 **No collector may be implemented for a source that is not collector-eligible.**
 D-07 is resolved and the registry exists. Two sources pass the gate; one has a

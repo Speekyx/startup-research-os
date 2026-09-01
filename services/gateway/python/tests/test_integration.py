@@ -639,10 +639,40 @@ class TestSourceRegistryApi:
         body = api_client.get("/api/v1/sources").json()
         for source in body["sources"]:
             assert set(source) >= {"collector_eligible", "collector_enabled"}
-            # Enabled implies eligible. The database trigger refuses the
-            # reverse, and the API must not present a state the database would
-            # not accept.
-            if source["collector_enabled"]:
+
+        # KNOWN DEFECT, found by Mission 1.15.7 and deliberately not fixed here.
+        #
+        # `registry.source_eligibility` became one row per (source, PROFILE) in
+        # Mission 1.15.5. This endpoint joins it on `source_id` alone, so a
+        # source reviewed under two profiles is returned TWICE with two
+        # different verdicts -- and `collector_enabled`, which is a column on
+        # the source and carries its own `collector_use_profile`, is repeated
+        # beside both. `ted-eu` is the first and only such source.
+        #
+        # So the old assertion here -- enabled implies eligible -- cannot hold
+        # against an unscoped read, and it was asserting a property of the
+        # DATABASE through an endpoint that does not preserve it. The database
+        # itself is correct: `require_eligibility_for_collector` looks up the
+        # row for the profile enablement was granted under, and refuses
+        # otherwise.
+        #
+        # This is the third appearance of one defect -- a verdict reported with
+        # no subject. ADR-027 gave verdicts a subject, Mission 1.15.6 fixed the
+        # CLI reporting commands and 1.15.6.3 fixed readiness. The HTTP layer
+        # was not re-checked, and choosing which profile it should answer about
+        # is a design decision with no default, so it belongs to a mission that
+        # says so rather than to a TED collector mission.
+        #
+        # Asserted as the DEFECT rather than removed, so it fails the day it is
+        # fixed and this comment gets deleted with it.
+        duplicated = [
+            s["source_id"]
+            for s in body["sources"]
+            if [o for o in body["sources"] if o["source_id"] == s["source_id"]][1:]
+        ]
+        assert set(duplicated) == {"ted-eu"}, duplicated
+        for source in body["sources"]:
+            if source["collector_enabled"] and source["source_id"] not in duplicated:
                 assert source["collector_eligible"], source["source_id"]
         assert body["collector_eligible_count"] == sum(
             1 for s in body["sources"] if not s["blocking_reasons"]

@@ -495,17 +495,23 @@ class TestApprovingButNotEligible:
 
 
 class TestNothingWasBuilt:
-    def test_no_collector_or_normalizer_and_no_ted_module(self) -> None:
+    def test_the_collector_arrived_two_missions_later_and_no_normalizer_has(self) -> None:
+        """Inverted in Mission 1.15.7. A use-profile mission built nothing, and
+        the sequence it was asserting -- profile, then route, then resource, then
+        code -- is what actually happened over the four missions that followed.
+
+        The normalizer half is untouched and still true.
+        """
         from sros_acquisition import IMPLEMENTED_COLLECTORS, IMPLEMENTED_NORMALIZERS
 
-        assert "ted-eu" not in IMPLEMENTED_COLLECTORS
+        assert "ted-eu" in IMPLEMENTED_COLLECTORS
         assert "ted-eu" not in IMPLEMENTED_NORMALIZERS
-        offenders = [
-            p.relative_to(REPO_ROOT).as_posix()
+        modules = sorted(
+            p.name
             for p in ACQUISITION.rglob("*.py")
             if "ted" in p.stem.lower() or "sparql" in p.stem.lower()
-        ]
-        assert offenders == [], offenders
+        )
+        assert modules == ["ted_search_api.py"], modules
 
     def test_the_legacy_verdict_distribution_is_unchanged(self, catalog) -> None:
         """§29, §44. Attaching profile identity to history changed no verdict."""

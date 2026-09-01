@@ -235,9 +235,16 @@ class TestConditionsPreserved:
 
 class TestNothingWasBuilt:
     def test_no_ted_collector_or_normalizer_exists(self, catalog) -> None:
+        """Inverted in Mission 1.15.7, which authorised a concrete resource and
+        wrote the Search API collector -- in that order.
+
+        **The half that still holds is the half kept.** There is no TED
+        normalizer, no Signal, no Claim and no Evidence, and 1.15.7's stop
+        condition is exactly that line. Deleting this test would have lost it.
+        """
         from sros_acquisition import IMPLEMENTED_COLLECTORS, IMPLEMENTED_NORMALIZERS
 
-        assert "ted-eu" not in IMPLEMENTED_COLLECTORS
+        assert "ted-eu" in IMPLEMENTED_COLLECTORS
         assert "ted-eu" not in IMPLEMENTED_NORMALIZERS
 
     def test_ted_is_not_collector_eligible(self, catalog) -> None:
@@ -274,10 +281,13 @@ class TestNothingReachedTheDatabase:
         # Written out rather than interpolated: the table names are literals
         # either way, and a loop over them reads as query construction to the
         # linter, which is a rule worth not teaching people to silence.
-        assert (
-            self._count("SELECT count(*) FROM acquisition.raw_records WHERE source_id = 'ted-eu'")
-            == 0
-        )
+        # RAW records are DEPLOYMENT state and are no longer asserted here.
+        # Mission 1.15.7 authorised a resource and collected three notices, so
+        # this count is legitimately non-zero on a machine that has run it and
+        # zero on one that has not -- which is exactly the confusion §49 forbids
+        # a test from encoding. What stays REPOSITORY-true is the line below:
+        # there is no TED normalizer, so no TED notice can become a canonical
+        # record on any machine.
         assert (
             self._count(
                 "SELECT count(*) FROM acquisition.normalized_records WHERE source_id = 'ted-eu'"

@@ -436,12 +436,19 @@ class TestNetworkBoundary:
     def test_only_the_collectors_that_were_authorised_are_registered(self) -> None:
         """§26, §57, extended in Mission 1.9.3.
 
-        Two now, and the point is unchanged: Eurostat did not gain a collector
-        because the other two have one. Still an EQUALITY rather than a
-        containment — a third name appearing without a conformance suite behind
+        Three now, and the point is unchanged: Eurostat did not gain a collector
+        because the others have one. Still an EQUALITY rather than a
+        containment — a fourth name appearing without a conformance suite behind
         it is what this exists to catch.
+
+        Mission 1.15.7 added `ted-eu`, after Mission 1.15.6.1 recorded the
+        operator decision and Phase A of 1.15.7 authorised a concrete resource --
+        the same order GDELT went in, and the order this equality exists to keep
+        legible: resource first, collector second.
         """
-        assert frozenset({"world-bank", "gdelt"}) == sros_acquisition.IMPLEMENTED_COLLECTORS
+        assert (
+            frozenset({"world-bank", "gdelt", "ted-eu"}) == sros_acquisition.IMPLEMENTED_COLLECTORS
+        )
 
 
 def _public_methods(cls: type) -> list[object]:

@@ -2279,3 +2279,40 @@ trailing whitespace and the width of somebody's terminal all belong to the
 transport. This is §42's lesson in another medium — a test that pins an
 incidental of the environment it was written in reports a failure about the
 environment and looks like a failure about the subject.
+
+---
+
+## 54. A guard that says "nothing was built" is inverted, never deleted (Mission 1.15.7)
+
+Twenty-five tests failed the moment the TED collector existed, across ten files
+and six missions. Every one of them asserted a state that was true when it was
+written and that this mission was authorised to change: `"ted-eu" not in
+IMPLEMENTED_COLLECTORS`, an empty `context.datasets`, no module in the package
+with `ted` in its name.
+
+**None was deleted.** §43 already says to invert a guard rather than delete it;
+what this mission adds is *what to keep when you invert one*, because these
+guards were rarely asserting only one thing:
+
+- `test_no_ted_collector_or_normalizer_exists` asserted two facts. One moved and
+  one did not — **there is still no TED normalizer**, and that is this mission's
+  own stop condition. Deleting the test would have lost the half worth keeping.
+- `test_no_ted_module_exists` became an EQUALITY on the module list rather than
+  an absence: `["ted_search_api.py"]`, so the second TED module — the SPARQL
+  client for the other authorised route — is still caught.
+- `test_the_context_still_authorises_no_concrete_resource` predicted in its own
+  docstring that the collector mission's first act would be a governance one. It
+  was. The assertion that survived is the sharper half: a resource nobody
+  reviewed is still refused.
+
+**The rule.** When a mission falsifies a guard, read what the guard was
+protecting before rewriting it. If it protected two properties and one still
+holds, the inverted test keeps that one; if it protected an absence, an equality
+usually protects more than a re-pointed absence would.
+
+**And a guard on your own recent mission is not exempt.** Three assertions from
+Mission 1.15.6.3 broke here, because they pinned the sentence
+`next_step` returns — "authorise a concrete resource" — when what they were
+protecting was that it does **not** say "pass the eligibility gate". The
+sentence moves every time the mission does; the property does not. The constant
+is now named `REAL_STEP` with a comment saying it will move again.

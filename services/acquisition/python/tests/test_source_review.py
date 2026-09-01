@@ -556,9 +556,12 @@ class TestCollectionStaysInsideItsBoundary:
         one may be built; this says which ones were.
 
         Mission 1.9.3 added `gdelt`, after Mission 1.9.2 authorised the resources
-        it collects. Eurostat is still eligible with neither a resource nor a
-        collector, which is the pairing that keeps the facts apart.
+        it collects. Mission 1.15.7 added `ted-eu` the same way round. Eurostat is
+        still eligible with neither a resource nor a collector, which is the
+        pairing that keeps the facts apart.
         """
         import sros_acquisition
 
-        assert frozenset({"world-bank", "gdelt"}) == sros_acquisition.IMPLEMENTED_COLLECTORS
+        assert (
+            frozenset({"world-bank", "gdelt", "ted-eu"}) == sros_acquisition.IMPLEMENTED_COLLECTORS
+        )

@@ -332,10 +332,19 @@ class TestCoverageIsNotPermission:
 
 class TestNoCollectorWasBuilt:
     def test_the_new_sources_have_no_implemented_collector(self, catalog) -> None:
+        """`usaspending` still has none, and that is what this now asserts.
+
+        `ted-eu` gained one in Mission 1.15.7 and is excluded by name rather
+        than by weakening the loop: the property worth keeping is that
+        registering a source does not give it a collector, and it is still true
+        of every source this round registered but one -- which took six further
+        missions of governance to get there.
+        """
         from sros_acquisition import IMPLEMENTED_COLLECTORS
 
-        for source_id in NEW_IN_1_15:
+        for source_id in NEW_IN_1_15 - {"ted-eu"}:
             assert source_id not in IMPLEMENTED_COLLECTORS, source_id
+        assert "ted-eu" in IMPLEMENTED_COLLECTORS
 
     def test_the_new_sources_have_no_implemented_normalizer(self, catalog) -> None:
         from sros_acquisition import IMPLEMENTED_NORMALIZERS

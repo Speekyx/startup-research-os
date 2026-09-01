@@ -38,6 +38,8 @@ __all__ = [
     "HttpRequest",
     "HttpResponse",
     "HttpxTransport",
+    "JsonPostTransport",
+    "JsonRequest",
     "StreamingTransport",
     "Transport",
     "TransportConfig",
@@ -105,6 +107,40 @@ class HttpRequest:
 
 
 @dataclass(frozen=True)
+class JsonRequest:
+    """A request whose parameters travel in a JSON body (Mission 1.15.7).
+
+    The TED Search API is `POST /v3/notices/search` with a JSON body, which its
+    own OpenAPI document defines and its own documentation calls the public
+    search endpoint. A query string cannot carry it.
+
+    **`path` keeps every guard `HttpRequest.path` has**, for the same reason: a
+    body is not a way to smuggle a host. The body is a mapping the collector
+    composed, never a caller-supplied string, so there is nothing here that
+    could carry a second endpoint either.
+    """
+
+    path: str
+    body: Mapping[str, object] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        if self.path.startswith(("http://", "https://", "//")):
+            raise ValueError(
+                "path is a path, not a URL. A collector composes requests from an "
+                "authorized base; accepting an absolute URL here would be the escape "
+                "hatch §4 forbids"
+            )
+        if ".." in self.path:
+            raise ValueError("path must not traverse; '..' cannot appear")
+        if not self.body:
+            raise ValueError(
+                "a JSON request with no body is not a request. The search endpoint "
+                "requires a query and a field selection, and an empty body would ask "
+                "the source to decide what to return"
+            )
+
+
+@dataclass(frozen=True)
 class HttpResponse:
     """What came back. The body is text; parsing belongs to the collector."""
 
@@ -149,6 +185,24 @@ class Transport(Protocol):
 
     def get(
         self, base_url: str, request: HttpRequest, allowed_hosts: frozenset[str]
+    ) -> HttpResponse: ...
+
+
+class JsonPostTransport(Protocol):
+    """A transport that can send a composed JSON body (Mission 1.15.7).
+
+    A SEPARATE protocol rather than a method on `Transport`, for the reason
+    `StreamingTransport` records below: merging them would force every existing
+    fake to grow a method it does not use, and the two answer different
+    questions. `HttpxTransport` implements all three; a test double implements
+    whichever it needs.
+
+    `allowed_hosts` is per call here too. The allowlist comes from the
+    authorization context and never from configuration.
+    """
+
+    def post_json(
+        self, base_url: str, request: JsonRequest, allowed_hosts: frozenset[str]
     ) -> HttpResponse: ...
 
 
@@ -216,6 +270,59 @@ class HttpxTransport:
             client.close()
 
         # A redirect never becomes a second request. Reported as what it is.
+        self._refuse_redirect(response, request)
+
+        text = response.text
+        if len(text.encode("utf-8")) > self.config.max_response_bytes:
+            raise AcquisitionFailedError(
+                AcquisitionFailure(
+                    code=AcquisitionErrorCode.INVALID_RESPONSE,
+                    detail=(
+                        f"the response exceeded {self.config.max_response_bytes} bytes; "
+                        "an unbounded body is a memory bound nobody set"
+                    ),
+                    source_id="",
+                    context={"path": request.path},
+                )
+            )
+        return HttpResponse(
+            status_code=response.status_code,
+            text=text,
+            elapsed_seconds=response.elapsed.total_seconds() if response.elapsed else 0.0,
+            url_path=request.path,
+        )
+
+    def post_json(
+        self, base_url: str, request: JsonRequest, allowed_hosts: frozenset[str]
+    ) -> HttpResponse:
+        """One POST with a composed JSON body. Mission 1.15.7.
+
+        Every guard `get` applies applies here, through the same three helpers
+        rather than through a second copy: the host allowlist and the https
+        requirement in `_compose`, the redirect refusal in `_refuse_redirect`,
+        the response ceiling below. A second entry point enforcing a subset
+        would be the open door `_refuse_redirect`'s own docstring warns about.
+        """
+        url = self._compose(base_url, request, allowed_hosts)
+        client = self._client()
+        try:
+            response = client.post(url, json=dict(request.body))
+        except Exception as exc:  # noqa: BLE001 - normalised deliberately, as in `get`
+            raise AcquisitionFailedError(
+                AcquisitionFailure(
+                    code=self._code_for(exc),
+                    detail=(
+                        f"the request did not complete ({type(exc).__name__}); "
+                        f"connect {self.config.connect_timeout_seconds}s, "
+                        f"read {self.config.read_timeout_seconds}s"
+                    ),
+                    source_id="",
+                    context={"path": request.path},
+                )
+            ) from None
+        finally:
+            client.close()
+
         self._refuse_redirect(response, request)
 
         text = response.text
@@ -312,7 +419,7 @@ class HttpxTransport:
         finally:
             client.close()
 
-    def _refuse_redirect(self, response: Any, request: HttpRequest) -> None:
+    def _refuse_redirect(self, response: Any, request: HttpRequest | JsonRequest) -> None:
         """A redirect is a response to reason about, never a hop to take.
 
         Shared by `get` and `download` so the two cannot drift: §10 requires the
@@ -335,7 +442,9 @@ class HttpxTransport:
                 )
             )
 
-    def _compose(self, base_url: str, request: HttpRequest, allowed_hosts: frozenset[str]) -> str:
+    def _compose(
+        self, base_url: str, request: HttpRequest | JsonRequest, allowed_hosts: frozenset[str]
+    ) -> str:
         """Assemble the URL and refuse a host the registry did not authorise.
 
         Checked here as well as at the collector, on purpose. This is the last

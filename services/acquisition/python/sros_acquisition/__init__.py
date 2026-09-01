@@ -63,7 +63,7 @@ __all__ = [
 # collector would have nothing it could ask for. Eligibility says a collector
 # may be built; resource-readiness says there is something to build against;
 # this says one was built.
-IMPLEMENTED_COLLECTORS: frozenset[str] = frozenset({"world-bank", "gdelt"})
+IMPLEMENTED_COLLECTORS: frozenset[str] = frozenset({"world-bank", "gdelt", "ted-eu"})
 
 
 # Sources this codebase can actually NORMALIZE.
