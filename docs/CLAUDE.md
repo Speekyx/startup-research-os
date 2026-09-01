@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.33
-Last amended: 2026-09-01 (Sprint 1 / Mission 1.15.8)
+Version: 1.34
+Last amended: 2026-09-01 (Sprint 1 / Mission 1.15.9)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.34 | 2026-09-01 | **A third Signal quantity family, and a derivation that correctly produced nothing.** `TRANSACTION_VALUE` (ADR-029): the `procurement_notice` kind mapped to neither existing family, and `MEASURED_SERIES` could not be widened without making `metric` optional for every series signal ever written. `procurement-value-contrast@1.0.0` is NON-TEMPORAL by construction -- basis `NONE`, no date read, members ordered by amount -- keeps four monetary semantics apart, converts no currency, and is **not** willingness-to-pay. **0 real Signals**: the two EUR award totals are CPV 90 and CPV 66, which are two markets. **H-37 and H-38 stay OPEN** |
 | 1.33 | 2026-09-01 | **The third record kind, and the first canonical procurement notices.** `procurement_notice` holds what neither existing kind could without getting worse, and carries no `observation.value` because a notice has no single measurement. `ted-search-api-notice@1.0.0`: one notice one record with lots structured inside it, four monetary semantics kept apart, no `price_paid`, no currency converted, every language kept with no canonical display value. **A published DATE does not become a moment** -- `observed_at` NULL, naive bounds, **H-37** open with the source value preserved. Three real notices normalized, idempotent, all `PARTIAL`. **No TED Signal, Claim or Evidence** |
 | 1.32 | 2026-09-01 | **The first TED acquisition, and the first concrete TED resource.** A source-level approval is not a resource-level one: TED authorised `"datasets": []` and every resource failed closed, which is why `AUTHORIZATION_READY` sat beside `resource_ready` NO for six missions. **One** resource authorised -- eForms contract and award notices from 2023-03-01 through the Search API -- then `ted-search-api@1.0.0`, the third collector: four gates before a socket, one route with **no fallback**, bounds with **no defaults**, **no exhaustion mode**, four monetary semantics kept apart, no currency converted. **3 real RawRecords**, idempotent on re-run. **H-36A NOT ESTABLISHED, H-36B NOT ADDRESSED, no normalizer, no Signal, no Claim** |
 | 1.31 | 2026-08-31 | **The authorization carries only reviewed routes, and an objective property of configuration is verified rather than human-confirmed** (ADR-028). `context.access` used to hold every registered access profile, so TED's context would have handed a collector the bulk route its review refuses by name -- with the transport's host allowlist derived from it. A `(source, profile)` may now declare a `route_authorization`, and the context carries those routes and no others. Two TED conditions that described objective properties of a collector that does not exist -- its route, its field selection -- moved from `HUMAN_CONFIRMATION` to `CAPABILITY` on **appended local review v2**, changing no policy conclusion. **The residual database-right acceptance stays human, is unrecorded, and still blocks** |

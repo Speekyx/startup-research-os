@@ -95,6 +95,13 @@ reading a lexical signal's geography would be reading a key that is not there.
 An unhandled third value would be a bug rather than a gap, which is Ontology V2
 §14.2's test for a closed enum. Adding a third is a contract change with an ADR.
 
+**A third was added in Mission 1.15.9, and this is the ADR it required:
+ADR-029.** `TRANSACTION_VALUE` -- the value at which a transaction between named
+parties was recorded. It exists because Mission 1.15.8 added the
+`procurement_notice` record kind and neither existing family could read it, and
+it carries no metric, which is precisely why `MEASURED_SERIES` could not be
+widened to hold it. It is still not a demand family.
+
 **Mechanical, not interpretive.** Each value says what kind of quantity the
 derivation is about, and nothing about what it means for a market. That is the
 whole point: `ATTENTION` was considered and rejected as the family for GDELT,

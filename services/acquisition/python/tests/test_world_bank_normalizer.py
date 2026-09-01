@@ -387,7 +387,7 @@ class TestTheFixtureCannotExpire:
         batch_at = _persist_at(*records)
         assert all(batch_at >= r.collected_at for r in records)
 
-        revised = _revise(records[0], Decimal("1"))
+        revised = _revise(records[0], Decimal("1"), after=batch_at)
         assert revised.collected_at > batch_at
         assert _persist_at(revised) >= revised.collected_at
 
@@ -807,16 +807,30 @@ def _science_counts(conn) -> dict[str, int]:
 # -------------------------------------------------------------------- helpers
 
 
-def _revise(record, value):
+def _revise(record, value, *, after: datetime | None = None):
+    """A later collection of the same observation.
+
+    `after` is the instant the revision must follow, and it exists because of
+    the failure `TestTheFixtureCannotExpire` was written to prevent, reappearing
+    inside that class's own setup (Mission 1.15.9).
+
+    A day past the RECORD's fixed `collected_at` is a day past a constant, and
+    `_persist_at` includes `datetime.now(UTC)` -- so once the wall clock passed
+    the constant plus a day, the "later" collection was in the past and the
+    test's premise stopped holding. Advancing from `max(record, after)` makes
+    "later" relative to whatever the batch actually used, which is the same
+    repair `_persist_at` itself applies one level up.
+    """
     from dataclasses import replace
 
     payload = {**record.payload, "value": value}
+    reference = max(record.collected_at, after) if after else record.collected_at
     return replace(
         record,
         record_id=str(uuid.uuid4()),
         payload=payload,
         content_hash="1" * 64,
-        collected_at=record.collected_at + timedelta(days=1),
+        collected_at=reference + timedelta(days=1),
     )
 
 

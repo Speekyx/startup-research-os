@@ -407,10 +407,35 @@ class SignalScope:
     source_language_scheme: str | None = None
     canonical_language_tags: tuple[str, ...] = ()
     geography_codes: tuple[str, ...] = ()
+    # Mission 1.15.9, ADR-029. The dimensions a TRANSACTION_VALUE derivation is
+    # about. Absent from every other family's scope, which is the same rule the
+    # lexical kind follows for geography: a dimension no input carries has no
+    # key, never a null.
+    amount_types: tuple[str, ...] = ()
+    amount_scopes: tuple[str, ...] = ()
+    currencies: tuple[str, ...] = ()
+    notice_classes: tuple[str, ...] = ()
+    classification_codes: tuple[str, ...] = ()
+    classification_scheme: str | None = None
 
     def __post_init__(self) -> None:
         if not self.source_ids:
             raise ValueError("a signal scope must name at least one source")
+        # ADR-029. An amount whose kind is unrecorded is the flattening the
+        # normalization layer spent a design refusing; a currency with no amount
+        # type beside it is a number nobody can read.
+        if self.currencies and not self.amount_types:
+            raise ValueError(
+                "a currency means nothing without the amount semantic it belongs to. A "
+                "total value and a framework maximum in EUR are different facts, and a "
+                "scope carrying only the currency would make them look like one"
+            )
+        if self.classification_codes and not self.classification_scheme:
+            raise ValueError(
+                "a classification code means nothing without the vocabulary it came "
+                "from. 90911200 is a CPV code, and a reader cannot know that from the "
+                "digits alone"
+            )
         if self.source_language_labels and not self.source_language_scheme:
             raise ValueError(
                 "a source language label means nothing without the vocabulary it came "
@@ -426,11 +451,18 @@ class SignalScope:
             ("source_language_labels", self.source_language_labels),
             ("canonical_language_tags", self.canonical_language_tags),
             ("geography_codes", self.geography_codes),
+            ("amount_types", self.amount_types),
+            ("amount_scopes", self.amount_scopes),
+            ("currencies", self.currencies),
+            ("notice_classes", self.notice_classes),
+            ("classification_codes", self.classification_codes),
         ):
             if values:
                 payload[key] = list(values)
         if self.source_language_scheme:
             payload["source_language_scheme"] = self.source_language_scheme
+        if self.classification_scheme:
+            payload["classification_scheme"] = self.classification_scheme
         return payload
 
 
@@ -808,6 +840,31 @@ def build_signal(
             )
         if not scope.terms:
             raise ValueError("a LEXICAL_FREQUENCY signal states the terms it is about")
+    elif spec.family is SignalQuantityFamily.TRANSACTION_VALUE:
+        # Mission 1.15.9, ADR-029. The dimensions a transaction signal cannot be
+        # read without, and each mirrors a rule one layer down.
+        #
+        # `metric_ids` is deliberately NOT required and NOT permitted: a
+        # procurement value is the amount ONE transaction settled at, with no
+        # metric it is an instance of. That absence is why MEASURED_SERIES could
+        # not be widened to hold this family.
+        if scope.metric_ids or scope.terms:
+            raise ValueError(
+                "a TRANSACTION_VALUE signal carries no metric and no term. It is the "
+                "value one transaction settled at, not an instance of a series and not "
+                "a count of tokens"
+            )
+        if not scope.amount_types:
+            raise ValueError(
+                "a TRANSACTION_VALUE signal states the monetary semantic it aggregated. "
+                "An amount whose kind is unrecorded is the flattening the normalization "
+                "layer refuses, one layer up"
+            )
+        if not scope.currencies:
+            raise ValueError(
+                "a TRANSACTION_VALUE signal states its currency. A number of money with "
+                "no currency is not readable, and no rate exists to supply one"
+            )
     elif not scope.metric_ids:
         raise ValueError("a MEASURED_SERIES signal states the metric it is about")
 

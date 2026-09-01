@@ -659,6 +659,7 @@ export function isNormalizedLanguageMapping(v: unknown): v is NormalizedLanguage
 export const SIGNAL_QUANTITY_FAMILY_VALUES = [
   "LEXICAL_FREQUENCY",
   "MEASURED_SERIES",
+  "TRANSACTION_VALUE",
 ] as const;
 export type SignalQuantityFamily = (typeof SIGNAL_QUANTITY_FAMILY_VALUES)[number];
 export function isSignalQuantityFamily(v: unknown): v is SignalQuantityFamily {
@@ -738,6 +739,7 @@ export const SIGNAL_REQUIRED_FACT_VALUES = [
   "SOURCE_LANGUAGE_LABEL",
   "CANONICAL_LANGUAGE",
   "CLASSIFIED_GEOGRAPHY",
+  "PAIRED_MONETARY_AMOUNT",
 ] as const;
 export type SignalRequiredFact = (typeof SIGNAL_REQUIRED_FACT_VALUES)[number];
 export function isSignalRequiredFact(v: unknown): v is SignalRequiredFact {

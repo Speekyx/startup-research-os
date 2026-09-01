@@ -869,16 +869,24 @@ class TestDerivationIdentityAndParameters(unittest.TestCase):
 
         `lexical_frequency_change` joined them once H-32 closed: it is the first
         type whose window basis is ORDERED_PERIODS, and it could not have
-        existed while ordering was unestablished. The rule the old assertion
-        protected is unchanged -- every type is justified by a data shape this
-        repository holds, and each declares the family whose record kind it
-        reads."""
+        existed while ordering was unestablished.
+
+        `procurement_value_contrast` joined in Mission 1.15.9, and it is the
+        mirror image: the first type whose basis is NONE, and it exists BECAUSE
+        H-37 is open -- a derivation over TED notices that needed an order could
+        not have been written at all. Its data shape is the `procurement_notice`
+        record kind Mission 1.15.8 added.
+
+        The rule the original assertion protected is unchanged: every type is
+        justified by a data shape this repository holds, and each declares the
+        family whose record kind it reads."""
         self.assertEqual(
             set(SIGNAL_TYPES),
             {
                 "lexical_frequency_contrast",
                 "lexical_frequency_change",
                 "numeric_period_change",
+                "procurement_value_contrast",
             },
         )
         for spec in SIGNAL_TYPES.values():
@@ -1125,9 +1133,22 @@ class TestTaxonomyBoundaries(unittest.TestCase):
     """§4, §5, §6. The Signal family is not the demand family."""
 
     def test_the_quantity_family_is_not_a_demand_family(self):
+        """Three now, and the property is unchanged and is the whole point.
+
+        `TRANSACTION_VALUE` was added in Mission 1.15.9 under ADR-029, because
+        the `procurement_notice` record kind mapped to neither existing family
+        and `MEASURED_SERIES` could not be widened without making `metric`
+        optional for every World Bank signal ever written.
+
+        **It is still not a demand family.** A public body paying for cleaning
+        services is a transaction that happened; whether it evidences demand
+        anybody could sell into is an inference this axis does not make, and
+        Ontology V2 §3.6 is not amended.
+        """
         values = {member.value for member in SignalQuantityFamily}
-        self.assertEqual(values, {"LEXICAL_FREQUENCY", "MEASURED_SERIES"})
+        self.assertEqual(values, {"LEXICAL_FREQUENCY", "MEASURED_SERIES", "TRANSACTION_VALUE"})
         self.assertFalse(values & {"PAIN", "DESIRE", "BEHAVIORAL", "MARKET"})
+        self.assertNotIn("WILLINGNESS_TO_PAY", values)
 
     def test_a_signal_carries_no_demand_family_and_no_motivation(self):
         draft = lexical_signal()

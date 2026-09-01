@@ -2381,3 +2381,43 @@ the actual stop condition every one of those guards was reaching for.
 instead.** A count of the stage you just built is deployment state (§49) and will
 be wrong on the next machine; a count of the stage nobody has built is a claim
 about the code, and it is the one worth keeping.
+
+---
+
+## 57. Choose the cohort key before you know what it produces (Mission 1.15.9)
+
+The TED transaction extractor groups observations before it derives anything, and
+the grouping key decides what the Signal is **about**. Two keys were available
+over the same three records:
+
+```text
+(amount_type, scope, currency, notice_class)                 -> 1 cohort of 2  -> 1 Signal
+(amount_type, scope, currency, notice_class, cpv_division)   -> 2 cohorts of 1 -> 0 Signals
+```
+
+The first produces a result. The second is true.
+
+The two award notices carrying a EUR total value are CPV division `90` (cleaning
+services) and `66` (insurance services). Under the first key their values become
+one distribution, and the Signal describes *"EUR totals in this slice of TED"* --
+a statement about a query rather than about anything in the world.
+
+**The trap is that the key was chosen while the outcome was already visible.**
+Three records were in front of us; running both groupings took a minute; and one
+of them made the mission look productive. That is the moment a semantic decision
+turns into a results decision, and nothing downstream can detect it afterwards --
+a cohort key leaves no trace of the alternatives it was picked over.
+
+**So the rule is procedural rather than technical: define comparability from the
+source's semantics, in writing, before running it over real data.** The mission
+brief asked for exactly that ordering (*define the Signal semantics; document
+before implementation*), and the reason is this failure mode rather than tidiness.
+
+**And a mission that produces nothing must stay comfortable.** The brief said so
+outright -- *the mission succeeds even if the correct result is 0 real Signals* --
+which is what makes the honest key available at all. A guard against manufacturing
+a result is worth little if the surrounding process punishes not having one.
+
+The tests carry both halves: fixtures that DO qualify prove the extractor derives
+correctly, and `test_different_cpv_divisions_do_not_share_a_cohort` pins the
+decision that made the real answer zero.
