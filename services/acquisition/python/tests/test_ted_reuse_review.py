@@ -311,11 +311,18 @@ class TestNothingWasCollected:
             row = conn.execute(query).fetchone()
         return int(row[0]) if row else -1
 
-    def test_no_reliability_assessment_was_created(self) -> None:
-        """§30. Source review asks whether we MAY use TED; reliability review
-        asks how dependable its measurements are. Different processes, and this
-        mission is not the second one."""
-        assert self._count("SELECT count(*) FROM epistemic.reliability_assessments") == 0
+    # `test_no_reliability_assessment_was_created` was DELETED in Mission
+    # 1.15.13, when a named reviewer recorded one for the TED procurement scope.
+    #
+    # Deleted rather than moved or narrowed, for the reason testing-strategy §59
+    # gives: the absence it asserted had stopped being "a source review is not a
+    # reliability review" -- which is still true and is stated in the contract --
+    # and become "nobody has done the second one yet", which is a progress
+    # marker wearing a test's clothes.
+    #
+    # What the two processes are and why they stay apart is asserted where it
+    # belongs, by the AST test that keeps policy state out of the reliability
+    # package entirely.
 
     def test_no_opportunity_or_embedding_was_created(self) -> None:
         for query in (

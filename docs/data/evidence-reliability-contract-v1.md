@@ -16,6 +16,14 @@ exist. **That is still true after this mission**, and §11 says why.
 **Amended by Mission 1.15.12**, the first review carried out against real
 Evidence rather than against the framework. It is now **8 Claims and 8 Evidence
 rows over 4 scopes**, still zero assessments, still every row `NON_SCORABLE`.
+
+**Amended again by Mission 1.15.13: the first assessment exists.** One
+`HUMAN_REVIEW` row, reviewed by a named person, over the TED procurement scope.
+That row resolves and the TED Evidence is **scorable**, with reliability as the
+limiting component of `q_i = min(components)`; the other seven scopes have no
+assessment and stay `NON_SCORABLE`. **The profile is still `UNCALIBRATED`** and
+D-03's remaining blockers are untouched. See
+`ted-eu-evidence-reliability-operator-review-v1.md`.
 The mission reviewed the TED procurement scope against first-party eForms
 specifications and stopped at the number: no origin lets a document review or a
 model supply one, and the reviewer has to be a person. See

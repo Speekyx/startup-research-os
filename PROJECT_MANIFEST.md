@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.36
+Version: 1.37
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-01 (Sprint 1 / Mission 1.15.12)
+Last amended: 2026-09-01 (Sprint 1 / Mission 1.15.13)
 
 ---
 
@@ -13,6 +13,49 @@ Last amended: 2026-09-01 (Sprint 1 / Mission 1.15.12)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.37 — 2026-09-01 (Sprint 1 / Mission 1.15.13)
+
+Authorized by the Mission 1.15.13 brief §1-§30.
+
+**The first ReliabilityAssessment in the system, and the first evidence score.**
+Mission 1.15.12 stopped at an act the contract reserves to an accountable
+person; this mission built the write path for it and then stopped again, at the
+person.
+
+**The tool has no defaults, and that is its whole design.** `reliability`,
+`reviewed_by`, `rationale` and `stated_limitation` are refused when blank, with
+no suggestion, fallback or derivation anywhere in the file. **The packet is
+facts and the file is judgement:** `--packet` prints the four retrieved
+documents Mission 1.15.12 established and emits a template whose basis rows are
+filled and whose judgement fields are empty. A test asserts no packet contains a
+`reliability` key at all.
+
+**Recorded: `HUMAN_REVIEW`, 0.5, by `thibchm`**, over the TED procurement scope,
+resting on 4 document-backed basis rows. The reviewer was shown that the
+contract uses `0.5 because unknown` as its own example of a non-judgement, and
+kept the value: the submitted rationale is a two-sided argument rather than a
+shrug, and the stated limitation bounds it.
+
+**The Evidence is now SCORABLE, and `q_i = min(components)` did exactly what it
+is for.** Relevance, directness, extraction confidence and freshness are 1.0;
+reliability is 0.5; the engine names **reliability** as the limiting component.
+`evidence_score` 50.0, support 0.5, uncertainty 0.5. **The level stayed 1**,
+blocked by the category gate Mission 1.15.11 deliberately left at
+`UNCATEGORISED` and by unknown independence — reliability alone cannot reach
+Level 4.
+
+**Nothing was persisted downstream and nothing is calibrated.** The score
+required `allow_uncalibrated` explicitly, carries its own warning, and no score
+row was written. `reference-v1` stays `UNCALIBRATED` and D-03's remaining
+blockers are untouched: a human review is not a calibration however careful.
+
+**A refusal real use found.** The reviewer first submitted `<MON IDENTITÉ
+RÉELLE>` as an identity. A blank was refused and a placeholder was recorded, so
+the field that says who is accountable was worse protected against a template
+shape than against nothing. Now refused. Counts: research data unchanged at
+23/23/8/8/8/8, **ReliabilityAssessments 0 → 1**, opportunities 0, embeddings 0,
+scores 0. No LLM as reviewer. H-36A, H-36B, H-37, H-38 untouched
 
 ## 1.36 — 2026-09-01 (Sprint 1 / Mission 1.15.12)
 

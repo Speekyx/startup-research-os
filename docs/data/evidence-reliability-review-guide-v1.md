@@ -109,6 +109,33 @@ be `HUMAN_REVIEW`.
 outcome data and can name the dataset. The database refuses it otherwise, and
 however careful your review was, it was not a calibration.
 
+## 4.1 Writing it down (Mission 1.15.13)
+
+There is a tool now, and it is deliberately unhelpful about the parts that are
+yours:
+
+```bash
+python infrastructure/scripts/record_reliability_assessment.py --packet <scope-name>
+```
+
+prints what the repository has already established about a scope -- the
+retrieved documents and their findings -- and emits a template whose basis rows
+are filled in and whose **value, reviewer, rationale and limitation are empty**.
+Fill those in, then:
+
+```bash
+python infrastructure/scripts/record_reliability_assessment.py --review-file <path>
+python infrastructure/scripts/record_reliability_assessment.py --review-file <path> --apply
+```
+
+The first prints what would be recorded and writes nothing. The second asks you
+to type a confirmation.
+
+**It will not help you with the number.** There is no default, no suggestion and
+no derivation from anything the system already knows, and a test asserts the
+template ships every judgement field blank. The packet is facts; the file is
+yours.
+
 ## 5. Attribute it
 
 `reviewed_by` names a person. Not a team, not a script, not a model.

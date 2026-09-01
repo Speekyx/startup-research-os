@@ -355,12 +355,48 @@ class TestScopeAndTenancy:
             assert ("reliability_assessments", forbidden) not in grants
             assert ("reliability_assessment_basis", forbidden) not in grants
 
-    def test_no_assessment_exists_in_production(self, database) -> None:
-        """Mission 1.14 produced the machinery and no review. Seven Evidence
-        rows stay NON_SCORABLE, which is the design working rather than a
-        shortfall in it (§23, outcome B)."""
+    def test_every_production_assessment_names_a_reviewer_and_rests_on_a_document(
+        self, database
+    ) -> None:
+        """Mission 1.14 produced the machinery and no review; Mission 1.15.13
+        produced the first review.
+
+        This used to assert the table was EMPTY, which stopped being a statement
+        about the design the moment a named person legitimately wrote one -- it
+        would then have asserted that nobody had got round to it yet
+        (testing-strategy §59). What replaces it is the invariant that survives
+        however many assessments accumulate: **whatever is in this table was
+        decided by somebody, bounded by them, and rests on a retrieved
+        document.**
+
+        Deliberately NOT asserted here: how many rows there are, or what any
+        value is. Those are deployment state, and a test that pinned them would
+        fail on the machine that did the review and pass on the one that did
+        not.
+        """
         with database.privileged_transaction() as conn:
-            count = conn.execute(
-                "SELECT count(*) FROM epistemic.reliability_assessments"
-            ).fetchone()
-        assert count is not None and count[0] == 0
+            rows = conn.execute(
+                """SELECT a.id, a.origin, a.reviewed_by, a.stated_limitation,
+                          a.calibration_dataset_ref,
+                          (SELECT count(*) FROM epistemic.reliability_assessment_basis b
+                            WHERE b.assessment_id = a.id
+                              AND b.basis_type <> 'REVIEWER_DOCUMENTED_JUDGEMENT') AS documented
+                     FROM epistemic.reliability_assessments a"""
+            ).fetchall()
+
+        for row in rows:
+            assessment_id, origin, reviewed_by, limitation, calibration, documented = row
+            # There is no MODEL_GUESSED member and there must never be a row
+            # that would have wanted one.
+            assert origin in ("HUMAN_REVIEW", "DOCUMENTED_METHOD", "CALIBRATED_EMPIRICALLY"), (
+                assessment_id,
+                origin,
+            )
+            assert (reviewed_by or "").strip(), assessment_id
+            # A value with no stated failure mode is a number nobody can argue
+            # with, which is the shape a wrong one keeps for longest.
+            assert (limitation or "").strip(), assessment_id
+            assert documented >= 1, assessment_id
+            # Human review is not calibration, however careful it was.
+            if origin != "CALIBRATED_EMPIRICALLY":
+                assert calibration is None, assessment_id
