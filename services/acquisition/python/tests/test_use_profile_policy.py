@@ -221,13 +221,45 @@ class TestCrossProfileIsolation:
         assert compliance.get("ted-eu", LOCAL_PROFILE) is not None
         assert compliance.get("ted-eu", LEGACY_PROFILE) is None
 
-    def test_an_approving_source_under_one_profile_is_unknown_under_another(self, catalog) -> None:
-        """world-bank is approving under the legacy profile and has never been
-        reviewed under the local one. Absence is a refusal."""
-        world_bank = source_of(catalog, "world-bank")
-        assert world_bank.review_for(LEGACY_PROFILE).is_approving
-        assert world_bank.review_for(LOCAL_PROFILE) is None
-        assert not evaluate_eligibility(world_bank, LOCAL_PROFILE).eligible
+    def test_a_source_reviewed_under_one_profile_is_unknown_under_another(self, catalog) -> None:
+        """Absence is a refusal, and the example had to move.
+
+        This used to use `world-bank`, which was approving under the legacy
+        profile and unreviewed under the local one. Mission 1.17 reviewed it
+        under the local profile, so it stopped being an example of absence --
+        and after that mission NO source is approving under the legacy profile
+        and unreviewed under the local one, because those were exactly the five
+        it reviewed.
+
+        `reddit` still carries the shape that matters: a review under one
+        profile, nothing under the other, and a refusal that comes from the
+        nothing rather than from the review.
+        """
+        reddit = source_of(catalog, "reddit")
+        assert reddit.review_for(LEGACY_PROFILE) is not None
+        assert reddit.review_for(LOCAL_PROFILE) is None
+        assert not evaluate_eligibility(reddit, LOCAL_PROFILE).eligible
+
+    def test_the_five_aligned_sources_did_not_inherit_anything(self, catalog) -> None:
+        """Mission 1.17's own guard: each of the five has TWO reviews, and the
+        local one is a separate row with its own version line.
+
+        If a future change ever satisfied the local profile by reading the
+        commercial verdict, this is where it would show -- the local review
+        would stop being version 1 of its own line, or stop existing while
+        eligibility still passed.
+        """
+        for source_id in ("world-bank", "gdelt", "eurostat", "fred", "openalex"):
+            source = source_of(catalog, source_id)
+            legacy = source.review_for(LEGACY_PROFILE)
+            local = source.review_for(LOCAL_PROFILE)
+            assert legacy is not None, source_id
+            assert local is not None, source_id
+            assert local is not legacy, source_id
+            # Separate version lines: the local review is the first of its own.
+            assert local.review_version == 1, source_id
+            assert local.assessed_use_profile == LOCAL_PROFILE, source_id
+            assert local.reviewed_by == "mission-1.17", source_id
 
 
 # ============================= the gate cannot be asked without a subject

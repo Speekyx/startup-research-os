@@ -140,6 +140,139 @@
       }
     },
     {
+      "source_id": "eurostat",
+      "review_version": 1,
+      "evidence_url": "https://ec.europa.eu/eurostat/web/main/help/copyright-notice",
+      "evidence_section": "General principles; Exceptions; How to re-use Eurostat material for commercial purposes; How to cite Eurostat products",
+      "attribution": {
+        "notes": "Citation must give the dataset DOI and the access date; both are per-retrieval values and neither can be defaulted. Modifications must be stated with a non-responsibility disclaimer, and the exact disclaimer wording is NOT in the retrieved evidence -- so the disclaimer is required as SUPPLIED text rather than composed here. Inventing the sentence would be the opposite of preserving a required notice exactly.",
+        "requirements": [
+          {
+            "element": "SOURCE_CREDIT",
+            "text": "Eurostat",
+            "supplied": false,
+            "when_modified": false
+          },
+          {
+            "element": "DATASET_DOI",
+            "text": null,
+            "supplied": true,
+            "when_modified": false
+          },
+          {
+            "element": "ACCESS_DATE",
+            "text": null,
+            "supplied": true,
+            "when_modified": false
+          },
+          {
+            "element": "MODIFICATION_STATEMENT",
+            "text": null,
+            "supplied": true,
+            "when_modified": true
+          },
+          {
+            "element": "DISCLAIMER",
+            "text": null,
+            "supplied": true,
+            "when_modified": true
+          }
+        ]
+      },
+      "resource_scope": {
+        "licence_allowlist": null,
+        "excluded_dataset_families": [],
+        "require_dataset_family": false,
+        "geography_allowlist": [
+          "AT",
+          "BE",
+          "BG",
+          "CY",
+          "CZ",
+          "DE",
+          "DK",
+          "EE",
+          "ES",
+          "FI",
+          "FR",
+          "GR",
+          "HR",
+          "HU",
+          "IE",
+          "IT",
+          "LT",
+          "LU",
+          "LV",
+          "MT",
+          "NL",
+          "PL",
+          "PT",
+          "RO",
+          "SE",
+          "SI",
+          "SK",
+          "CH",
+          "IS",
+          "LI",
+          "NO"
+        ],
+        "geography_allowlist_note": "EU-27 plus the four EFTA states, deliberately WITHOUT acceding and candidate countries. The copyright notice permits their data for commercial reuse; the set changes over time and the notice does not enumerate it, so the list here is stricter than the terms and never more permissive. Widening it requires re-reading the notice and recording the decision, not editing this array. EU-wide aggregate codes (EU27_2020, EA19) are likewise absent and therefore denied.",
+        "enumerated_exclusions": [
+          {
+            "key": "li-ch-trade-1995",
+            "declaring_countries": [
+              "LI",
+              "CH"
+            ],
+            "classifications": [
+              "HS",
+              "SITC",
+              "BEC",
+              "NSTR"
+            ],
+            "from_year": 1995,
+            "reason": "Trade data declared by Liechtenstein and Switzerland from 1995 onwards in the HS, SITC, BEC and NSTR classifications is named by the copyright notice as an exception to free re-use."
+          },
+          {
+            "key": "at-trade-cn8",
+            "declaring_countries": [
+              "AT"
+            ],
+            "classifications": [
+              "CN8"
+            ],
+            "from_year": null,
+            "reason": "Trade data declared by Austria at CN 8-digit level is named by the copyright notice as an exception to free re-use."
+          }
+        ],
+        "excluded_note_markers": [],
+        "require_notes": false,
+        "third_party_denied": true,
+        "third_party_note": "The notice excludes material identified as belonging to sources other than Eurostat, and publications whose copyright is partly or wholly third-party."
+      },
+      "access_restriction": null,
+      "data_minimisation": {
+        "allowed": [
+          "dataset_identifier",
+          "dataset_doi",
+          "observation_value",
+          "observation_period",
+          "unit_of_measure",
+          "geography",
+          "declaring_country",
+          "access_date"
+        ],
+        "excluded": [
+          "personal_data",
+          "user_identifier",
+          "microdata_record"
+        ],
+        "note": "Mission 1.3 §14. dataset_doi and access_date are allowed because the attribution obligation cannot be met without them; declaring_country because the trade exclusions cannot be evaluated without it."
+      },
+      "use_profile_id": "local-private-research-v1",
+      "$comment": "Mission 1.17. THE SAME CONFIGURATION, FOR A DIFFERENT PROFILE, and the duplication is deliberate rather than lazy: the obligations these settings satisfy are the SOURCE's, and a source does not require less attribution or permit a wider licence set because the deployment stopped being multi-tenant. What the local profile narrows is what is DONE with the data, and that is carried by the profile definition, not by this file. Copying configuration is not copying a decision -- the decision is the review, and ADR-027 forbids sharing that."
+    },
+    {
       "source_id": "fred",
       "review_version": 2,
       "evidence_url": "https://fred.stlouisfed.org/docs/api/terms_of_use.html",
@@ -186,6 +319,56 @@
         ],
         "note": "Mission 1.3 §14. series_notes is in the allowed list for a specific reason: the copyrighted-series exclusion is evaluated from the notes, so a collector that minimised them away would lose the ability to honour the condition."
       }
+    },
+    {
+      "source_id": "fred",
+      "review_version": 1,
+      "evidence_url": "https://fred.stlouisfed.org/docs/api/terms_of_use.html",
+      "evidence_section": "Property Rights; Prohibitions; Requirements",
+      "attribution": {
+        "notes": "The terms prescribe one sentence and require it to appear prominently on the application. It is stored here VERBATIM, including the registered trademark symbol, and rendered unmodified. A paraphrase is a different sentence and does not satisfy the requirement. No SOURCE_CREDIT element is declared: the terms require this notice, and adding a second obligation would be inventing one.",
+        "requirements": [
+          {
+            "element": "EXACT_NOTICE",
+            "text": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
+            "supplied": false,
+            "when_modified": false
+          }
+        ]
+      },
+      "resource_scope": {
+        "licence_allowlist": null,
+        "excluded_dataset_families": [],
+        "require_dataset_family": false,
+        "geography_allowlist": null,
+        "enumerated_exclusions": [],
+        "excluded_note_markers": [
+          "copyright"
+        ],
+        "require_notes": true,
+        "note_marker_note": "Matched case-insensitively against the series notes. require_notes is true because a series whose notes were never read is not a series known to be uncopyrighted: the terms say copyrighted series are identifiable BY their notes, so an absent note is an unanswered question, not a clean answer.",
+        "third_party_denied": true,
+        "third_party_note": "The Bank's provision of the API does not override third-party owners' copyrights, and permission for those series must come from the owner. This system cannot record such a permission for itself; doing so is a human act with a document behind it."
+      },
+      "access_restriction": null,
+      "data_minimisation": {
+        "allowed": [
+          "series_identifier",
+          "series_notes",
+          "observation_value",
+          "observation_period",
+          "unit_of_measure",
+          "geography"
+        ],
+        "excluded": [
+          "personal_data",
+          "user_identifier",
+          "microdata_record"
+        ],
+        "note": "Mission 1.3 §14. series_notes is in the allowed list for a specific reason: the copyrighted-series exclusion is evaluated from the notes, so a collector that minimised them away would lose the ability to honour the condition."
+      },
+      "use_profile_id": "local-private-research-v1",
+      "$comment": "Mission 1.17. THE SAME CONFIGURATION, FOR A DIFFERENT PROFILE, and the duplication is deliberate rather than lazy: the obligations these settings satisfy are the SOURCE's, and a source does not require less attribution or permit a wider licence set because the deployment stopped being multi-tenant. What the local profile narrows is what is DONE with the data, and that is carried by the profile definition, not by this file. Copying configuration is not copying a decision -- the decision is the review, and ADR-027 forbids sharing that."
     },
     {
       "source_id": "gdelt",
@@ -278,6 +461,111 @@
           "basis": "GDELT's terms grant 'unlimited and unrestricted use for any academic, commercial, or governmental use of any kind without fee' over ALL DATASETS RELEASED BY the GDELT Project, naming no licence instrument. The WEB-NGRAM files are datasets it releases, so the grant reaches them directly and there is nothing to record in a licence field. Review 3 (mission-1.9.2) assessed this dataset specifically: four columns, no publisher title, url, image or sentence, and a count GDELT computed over its own index rather than over anything we asked for. Two adjacent words per row, with the same count. Approved alongside the unigrams because nothing in the governance model separates them: the file carries no position, no document id and no url, so a two-word phrase cannot be attached to the article it came from. That absence is exactly what disqualifies Web News NGrams 3.0, whose pre/post snippets DO come with the url that anchors them."
         }
       ]
+    },
+    {
+      "source_id": "gdelt",
+      "review_version": 1,
+      "evidence_url": "https://www.gdeltproject.org/about.html",
+      "evidence_section": "Terms of Use",
+      "attribution": {
+        "notes": "The terms prescribe both halves of the obligation in one sentence: a citation to the GDELT Project AND a link to the project site, required on use and separately on redistribution. Both are fixed strings the terms state, so neither is supplied per artefact -- unlike Eurostat's DOI and access date, which are per-retrieval values. There is no modification statement and no disclaimer because the terms require neither, and inventing one would be worse than omitting it (§8). There is no licence identifier because GDELT names no licence: it grants unlimited use directly rather than through a named instrument, which is unusual and is why LICENCE_IDENTIFIER is absent rather than blank.",
+        "requirements": [
+          {
+            "element": "SOURCE_CREDIT",
+            "text": "The GDELT Project",
+            "supplied": false,
+            "when_modified": false
+          },
+          {
+            "element": "EXACT_NOTICE",
+            "text": "Any use or redistribution of the data must include a citation to the GDELT Project and a link to this website (https://www.gdeltproject.org/).",
+            "supplied": false,
+            "when_modified": false
+          }
+        ]
+      },
+      "resource_scope": {
+        "third_party_denied": true,
+        "licence_allowlist": null,
+        "licence_allowlist_note": "No allowlist. GDELT names no licence per dataset -- the grant is a single blanket sentence covering everything it releases -- so there is no licence identifier to match against, and inventing an allowlist would deny everything for a reason the terms do not give.",
+        "excluded_dataset_families": [
+          "web-news-ngrams-3.0",
+          "weblegacy-quadgram",
+          "weblegacy-quadgram-toc",
+          "doc-api-artlist"
+        ],
+        "require_dataset_family": true,
+        "dataset_family_note": "Every resource must declare its dataset family, an unclassified one is denied, and as of review 3 a family outside allowed_dataset_families is denied too. Not a licence distinction -- GDELT's grant covers everything it releases equally -- but a REVIEW distinction: reviews 1 and 2 assessed the DOC API for news events, themes, entity mentions, tone, timestamps and geography, review 3 assessed the WEB-NGRAM 1gram and 2gram files, and GDELT publishes products beyond both sets that no review has looked at. A resource that cannot say what it is has not been assessed; a resource that says something unreviewed has not been assessed either.",
+        "geography_allowlist": null,
+        "enumerated_exclusions": [],
+        "excluded_note_markers": [],
+        "require_notes": false,
+        "third_party_note": "The only scope rule the evidence supports. GDELT's grant is over what it releases; the news material it describes belongs to publishers who granted nothing, so a resource must state that its content originates with the platform before it is allowed.",
+        "allowed_dataset_families": [
+          "web-ngrams-1gram",
+          "web-ngrams-2gram"
+        ],
+        "allowed_dataset_families_note": "The families review 3 actually assessed. require_dataset_family already denied a resource that could not say what it is; it did NOT deny one that says something nobody reviewed, because a stated family passed the check whatever the string was. GDELT publishes many bulk products, so 'the reviewer looked at this kind of thing' has to be a positive list rather than the absence of an objection -- the same asymmetry the licence allowlist has. Null on the other three sources, which is unchanged behaviour.",
+        "excluded_dataset_families_note": "Redundant against the allowlist above and written anyway, because these four were READ and REJECTED rather than merely left out. Web News NGrams 3.0 carries pre/post contextual snippets of up to about seven words plus the article url; the quadgram pair carries title, img and url and keys its counts to a per-document DOCID; ArtList returns the publisher's title and social image. An empty exclusion list would say nobody had looked."
+      },
+      "datasets_note": "Enumerated as of review 3, where before there was no entry and every GDELT resource therefore failed closed. The enumeration is not a licence distinction -- GDELT's terms make one statement about everything it releases -- but a review distinction: these are the two resources a reviewer has actually looked at. A collector builds its descriptor FROM one of these entries and never from what a caller claims, so an unreviewed resource has no family, no origin and no basis to build from, and the family allowlist refuses a hand-made descriptor that claims one anyway. The DOC API modes remain unenumerated and therefore unauthorised: H-27 is still open and no timeline envelope has ever been observed.",
+      "data_minimisation": {
+        "allowed": [
+          "event_identifier",
+          "theme_identifier",
+          "entity_mention",
+          "tone_score",
+          "observation_period",
+          "geography",
+          "content_origin",
+          "content_language",
+          "lexical_ngram",
+          "source_measured_frequency"
+        ],
+        "excluded": [
+          "article_full_text",
+          "publisher_content",
+          "personal_data",
+          "user_identifier"
+        ],
+        "note": "content_origin is in the allowed list for the reason FRED's series_notes is in its own: the third-party exclusion cannot be evaluated without it, so a collector that minimised it away would lose the ability to honour the rule that makes the source usable. article_full_text and publisher_content are excluded because GDELT's grant covers what GDELT releases -- its extraction of the news -- and not the news itself, which belongs to publishers who granted nothing. Entity mentions are allowed and are the reason this source is classified PSEUDONYMOUS rather than NONE_EXPECTED; whether they constitute personal data is an open question on the review. Mission 1.9.2 added the last three for the WEB-NGRAM route. content_language, because LANG is a language and language is NOT geography -- writing it into geography would put a fabricated place in every record, and the category is named after content_language, the canonical field on RawRecord and NormalizedRecord that already exists to hold it. lexical_ngram, because a word that occurred is not a theme (nothing classified it) and not an entity (no resolver ran); the smallest truthful thing to say is that the source observed the term. source_measured_frequency, because COUNT is an occurrence count GDELT computed over its own corpus and the name has to keep saying whose measurement it is -- it is not the number of rows our job downloaded, not the size of a result set, not a popularity score, and not a signal. DATE needed nothing new: observation_period already means the interval an observation belongs to, which is what a 15-minute bucket is. The seven DOC API categories are kept because that route is deferred, not withdrawn."
+      },
+      "acquisition_bounds": {
+        "max_files_per_job": 8,
+        "basis": "A reviewed ceiling on how much of a published bulk dataset one job may take. GDELT emits 96 buckets a day and two files per bucket, from 2019-01-01 to present; ingesting that is the bulk-data vacuum this system is not, and the ceiling belongs to the review rather than to a collector that would then be setting its own limits. Eight is two hours of one ngram kind, or one hour of both -- enough for a bounded look at a moving window, far short of a corpus. The unit is the FILE because that is the unit GDELT publishes and the unit a request costs; it bounds bytes, request count and load at once.",
+        "considered_and_not_written": "A time-window bound was considered and rejected: it constrains nothing max_files_per_job does not, and the job it would restrict most -- a few files sampled across two years -- is the CHEAPER one for the source. A language allowlist was considered and rejected for a stronger reason: each file spans every language GDELT monitors, so language is not a dimension of the request at all. Which languages are retained is a research decision and a normalizer's concern, and encoding it here would present a product choice as a term of the grant, which restricts no language."
+      },
+      "datasets": [
+        {
+          "resource_id": "web-ngrams/1gram",
+          "name": "GDELT WEB-NGRAM unigrams",
+          "dataset_family": "web-ngrams-1gram",
+          "rights_basis": "DIRECT_GRANT",
+          "content_origin": "PLATFORM_LICENSED",
+          "basis": "GDELT's terms grant 'unlimited and unrestricted use for any academic, commercial, or governmental use of any kind without fee' over ALL DATASETS RELEASED BY the GDELT Project, naming no licence instrument. The WEB-NGRAM files are datasets it releases, so the grant reaches them directly and there is nothing to record in a licence field. Review 3 (mission-1.9.2) assessed this dataset specifically: four columns, no publisher title, url, image or sentence, and a count GDELT computed over its own index rather than over anything we asked for. One word per row, with the number of times it was mentioned in articles of that language in that 15-minute interval."
+        },
+        {
+          "resource_id": "web-ngrams/2gram",
+          "name": "GDELT WEB-NGRAM bigrams",
+          "dataset_family": "web-ngrams-2gram",
+          "rights_basis": "DIRECT_GRANT",
+          "content_origin": "PLATFORM_LICENSED",
+          "basis": "GDELT's terms grant 'unlimited and unrestricted use for any academic, commercial, or governmental use of any kind without fee' over ALL DATASETS RELEASED BY the GDELT Project, naming no licence instrument. The WEB-NGRAM files are datasets it releases, so the grant reaches them directly and there is nothing to record in a licence field. Review 3 (mission-1.9.2) assessed this dataset specifically: four columns, no publisher title, url, image or sentence, and a count GDELT computed over its own index rather than over anything we asked for. Two adjacent words per row, with the same count. Approved alongside the unigrams because nothing in the governance model separates them: the file carries no position, no document id and no url, so a two-word phrase cannot be attached to the article it came from. That absence is exactly what disqualifies Web News NGrams 3.0, whose pre/post snippets DO come with the url that anchors them."
+        }
+      ],
+      "use_profile_id": "local-private-research-v1",
+      "$comment": "Mission 1.17. THE SAME CONFIGURATION, FOR A DIFFERENT PROFILE, and the duplication is deliberate rather than lazy: the obligations these settings satisfy are the SOURCE's, and a source does not require less attribution or permit a wider licence set because the deployment stopped being multi-tenant. What the local profile narrows is what is DONE with the data, and that is carried by the profile definition, not by this file. Copying configuration is not copying a decision -- the decision is the review, and ADR-027 forbids sharing that.",
+      "route_authorization": {
+        "allowed_labels": [
+          "gdelt-web-ngram-files"
+        ],
+        "blocked_labels": [
+          "gdelt-doc-api",
+          "gdelt-bulk-files"
+        ],
+        "preferred_label": "gdelt-web-ngram-files",
+        "basis": "Mission 1.17 local review, and it makes an existing statement enforceable rather than adding a new restriction. Every GDELT review since Mission 1.9.3 has been scoped to the WEB-NGRAM stream -- Mission 1.12's temporal certification is scoped to `web-ngrams/1gram` and `web-ngrams/2gram` by resource id precisely so a sibling directory cannot inherit it -- while the authorization context went on handing a collector all three routes. `docs/CLAUDE.md` names this: 'GDELT is the named gap: it carries a second, deferred DOC API profile that no review assessed, and its context still hands a collector both. Restricting it is a review act.' This review is that act, for this profile.\n\ngdelt-doc-api and gdelt-bulk-files are BLOCKED BY NAME rather than merely absent, for the reason ADR-028 gives: a blocked label has no endpoint to read, so there is no host to allowlist and nothing for the transport to be pointed at. The DOC API returns article-level records with URLs and titles -- a different corpus with a different personal-data profile from an aggregated n-gram count -- and no review has ever assessed it.\n\nSCOPED TO THIS PROFILE. The commercial-profile context is untouched and still carries all three, which is not an endorsement of that state: it is the same gap, and closing it there is a commercial-profile review act that this mission is not."
+      }
     },
     {
       "source_id": "ted-eu",
@@ -475,6 +763,114 @@
         ],
         "note": "Mission 1.3 §14. dataset_licence is in the allowed list because the licence allowlist cannot be evaluated without it."
       }
+    },
+    {
+      "source_id": "world-bank",
+      "review_version": 1,
+      "evidence_url": "https://datacatalog.worldbank.org/public-licenses",
+      "evidence_section": "Creative Commons Attribution 4.0 (CC-BY 4.0); Microdata Research License; License Specified Externally; Custom License",
+      "attribution": {
+        "notes": "CC-BY 4.0 permits commercial use provided appropriate credit is given AND changes are indicated. The licence prescribes no exact sentence, so the credit string is configuration; the requirement that changes be indicated is not, which is why MODIFICATION_STATEMENT is supplied per artefact rather than defaulted. The licence identifier is per DATASET -- the same platform distributes CC-BY 4.0 and ODbL data -- so it cannot be a fixed string either.",
+        "requirements": [
+          {
+            "element": "SOURCE_CREDIT",
+            "text": "The World Bank",
+            "supplied": false,
+            "when_modified": false
+          },
+          {
+            "element": "LICENCE_IDENTIFIER",
+            "text": null,
+            "supplied": true,
+            "when_modified": false
+          },
+          {
+            "element": "MODIFICATION_STATEMENT",
+            "text": null,
+            "supplied": true,
+            "when_modified": true
+          }
+        ]
+      },
+      "resource_scope": {
+        "licence_allowlist": [
+          "CC-BY-4.0",
+          "ODbL-1.0"
+        ],
+        "licence_allowlist_note": "Canonical identifiers, matched exactly. A dataset whose licence is recorded in another spelling is denied rather than guessed at, because guessing is how 'License Specified Externally' would become 'probably CC-BY'.",
+        "excluded_dataset_families": [
+          "microdata"
+        ],
+        "require_dataset_family": true,
+        "dataset_family_note": "The Microdata Library is excluded outright: its licence permits statistical and scientific research only and forbids redistribution without a prior written agreement. A resource whose family is unrecorded is denied -- an unclassified dataset is not a dataset known not to be microdata.",
+        "geography_allowlist": null,
+        "enumerated_exclusions": [],
+        "excluded_note_markers": [],
+        "require_notes": false,
+        "third_party_denied": true
+      },
+      "access_restriction": {
+        "name": "indicators-api-only",
+        "access_methods": [
+          "PUBLIC_API"
+        ],
+        "profile_labels": [
+          "indicators-api-v2"
+        ],
+        "note": "The registry must hold this profile and no other for the restriction to be verifiable. A second profile appearing on this source -- a bulk download, a browser path -- fails the check rather than being ignored."
+      },
+      "datasets_note": "The authorised resource set (Mission 1.5 §7). A collector builds its resource descriptor FROM an entry here, never from what a caller claims -- otherwise 'this dataset is CC-BY 4.0' would be an assertion the requester makes about itself, which is the failure mode the whole review model exists to prevent. A resource with no entry has no licence, no dataset family and no content origin, so the resource gate denies it.\n\nDELIBERATELY SMALL, and the reason is recorded rather than assumed. The licence on each entry rests on the Data Catalog statement that CC-BY 4.0 is the DEFAULT licence for datasets the World Bank itself produces and distributes as open data -- not on a per-series licence page, because none was retrieved. Mission 1.3 left exactly this as an open question: 'Confirm per dataset, at collection time, which licence applies.' Until a reviewer closes it, widening this list means re-opening the review, not appending a line.",
+      "datasets": [
+        {
+          "resource_id": "indicator/NY.GDP.MKTP.CD",
+          "indicator": "NY.GDP.MKTP.CD",
+          "name": "GDP (current US$)",
+          "dataset_family": "indicators",
+          "licence": "CC-BY-4.0",
+          "content_origin": "PLATFORM_LICENSED",
+          "basis": "A World Development Indicators series compiled by the World Bank from national accounts data. Covered by the Data Catalog default licence for World Bank-produced open data.",
+          "rights_basis": "NAMED_LICENCE"
+        },
+        {
+          "resource_id": "indicator/SP.POP.TOTL",
+          "indicator": "SP.POP.TOTL",
+          "name": "Population, total",
+          "dataset_family": "indicators",
+          "licence": "CC-BY-4.0",
+          "content_origin": "PLATFORM_LICENSED",
+          "basis": "A World Development Indicators series compiled by the World Bank. Covered by the Data Catalog default licence for World Bank-produced open data.",
+          "rights_basis": "NAMED_LICENCE"
+        },
+        {
+          "resource_id": "indicator/IT.NET.USER.ZS",
+          "indicator": "IT.NET.USER.ZS",
+          "name": "Individuals using the Internet (% of population)",
+          "dataset_family": "indicators",
+          "licence": "CC-BY-4.0",
+          "content_origin": "PLATFORM_LICENSED",
+          "basis": "A World Development Indicators series compiled by the World Bank. Covered by the Data Catalog default licence for World Bank-produced open data.",
+          "rights_basis": "NAMED_LICENCE"
+        }
+      ],
+      "data_minimisation": {
+        "allowed": [
+          "indicator_identifier",
+          "dataset_identifier",
+          "observation_value",
+          "observation_period",
+          "unit_of_measure",
+          "geography",
+          "dataset_licence"
+        ],
+        "excluded": [
+          "personal_data",
+          "user_identifier",
+          "microdata_record"
+        ],
+        "note": "Mission 1.3 §14. dataset_licence is in the allowed list because the licence allowlist cannot be evaluated without it."
+      },
+      "use_profile_id": "local-private-research-v1",
+      "$comment": "Mission 1.17. THE SAME CONFIGURATION, FOR A DIFFERENT PROFILE, and the duplication is deliberate rather than lazy: the obligations these settings satisfy are the SOURCE's, and a source does not require less attribution or permit a wider licence set because the deployment stopped being multi-tenant. What the local profile narrows is what is DONE with the data, and that is carried by the profile definition, not by this file. Copying configuration is not copying a decision -- the decision is the review, and ADR-027 forbids sharing that."
     }
   ]
 }

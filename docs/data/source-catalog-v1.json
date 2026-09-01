@@ -687,6 +687,73 @@
               "retrieved_at": "2026-08-29T00:00:00+00:00"
             }
           ]
+        },
+        {
+          "review_version": 1,
+          "assessed_use_profile": "local-private-research-v1",
+          "approval_state": "APPROVED_WITH_CONDITIONS",
+          "reviewed_by": "mission-1.17",
+          "reviewed_at": "2026-09-01T00:00:00+00:00",
+          "review_interval_days": 365,
+          "automated_access": "PERMITTED",
+          "api_use": "PERMITTED",
+          "browser_automation": "NOT_ADDRESSED",
+          "commercial_use": "PERMITTED_WITH_CONDITIONS",
+          "storage": "PERMITTED",
+          "retention": "PERMITTED",
+          "redistribution": "PERMITTED_WITH_CONDITIONS",
+          "derived_analytics": "PERMITTED",
+          "model_processing": "PERMITTED",
+          "personal_data_handling": "NOT_ADDRESSED",
+          "attribution_required": "PERMITTED",
+          "personal_data_risk": "NONE_EXPECTED",
+          "contains_user_generated_content": false,
+          "contains_user_identifiers": false,
+          "contains_location": null,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": false,
+          "discard_identifiers_after_normalization": false,
+          "jurisdiction_review_required": false,
+          "conditions": [
+            "A product surface displays the Eurostat citation — dataset DOI and access date — on every view derived from this source.",
+            "The collector excludes data for countries outside the EU, EFTA and official acceding/candidate countries.",
+            "The collector excludes the named Liechtenstein, Switzerland and Austria trade-data exceptions."
+          ],
+          "required_conditions": [
+            {
+              "key": "attribution-surface",
+              "description": "A product surface displays the Eurostat citation — dataset DOI and access date — on every view derived from this source.",
+              "verification": "CAPABILITY",
+              "verification_detail": "source-attribution-display"
+            },
+            {
+              "key": "geographic-exclusion",
+              "description": "The collector excludes data for countries outside the EU, EFTA and official acceding/candidate countries.",
+              "verification": "CAPABILITY",
+              "verification_detail": "eurostat-geographic-filter"
+            },
+            {
+              "key": "trade-data-exclusion",
+              "description": "The collector excludes the named Liechtenstein, Switzerland and Austria trade-data exceptions.",
+              "verification": "CAPABILITY",
+              "verification_detail": "eurostat-trade-exclusion"
+            }
+          ],
+          "open_questions": [
+            "No Eurostat resource has been operationally selected. Source-level approval authorises no dataset; each is reviewed when it is chosen.",
+            "The exact commodity classifications excluded for Swiss and Austrian trade data are named by Eurostat per-dataset. The exclusion condition fails closed rather than enumerating them here."
+          ],
+          "review_notes": "RE-READ 2026-09-01 and unchanged: 'Reuse of statistical data, metadata, publications, and other dissemination tools published on this website for commercial or non-commercial purposes is authorised', under Commission Decision 2011/833/EU -- the same instrument that governs TED, arriving here through a different publisher.\n\nCOMMERCIAL_USE IS PERMITTED_WITH_CONDITIONS RATHER THAN PERMITTED, and the conditions are the publisher's rather than ours: data on non-EU/EFTA countries, trade data from Switzerland and Austria under specific commodity classifications, and third-party copyrighted material are excluded from free re-use. Those exclusions are properties of particular datasets and survive any narrowing of what we do with them.\n\nTHE MODIFICATION-DISCLOSURE OBLIGATION IS LOAD-BEARING FOR THIS SYSTEM SPECIFICALLY. Eurostat requires that changes be disclosed clearly and that a disclaimer state Eurostat bears no responsibility for alterations. Every layer above normalization in this system is an alteration, so the obligation reaches derived analytics rather than stopping at republication, and `attribution-surface` is the condition that carries it.\n\nNO RESOURCE IS AUTHORISED BY THIS REVIEW, and none is invented. Eurostat has no implemented collector and no operationally selected dataset, so this approves CAPABILITIES only. `resource_ready` stays NO and a future resource is reviewed then, not now -- source-level approval is never a wildcard.\n\nWHAT THIS REVIEW IS, IN ONE SENTENCE: an answer about eurostat for local-private-research-v1, reached from eurostat's own documents, NOT the commercial verdict re-badged. ADR-027 forbids transferring the decision and permits reusing the evidence, and that is exactly the split used here -- the documents below are the same documents; the questions asked of them are different.\n\nWHAT THE PROFILE DOES NOT DO, AND WHY NO CONDITION ENCODES IT: no redistribution, no resale, no customer-facing access to the source, no model training, no embeddings. Those are properties of the PROFILE, enforced by its own definition and by D-12 for embeddings. Writing them as source conditions would imply the source imposed them, which for several of these sources would be false.\n\nHISTORICAL DATA IS NOT RETROSPECTIVELY AUTHORISED BY THIS REVIEW. RawRecords collected before ADR-027 existed carry no `use_profile` in their provenance and are left exactly as they are. They were authorised under the governance model in force when they were collected. This review is prospective only.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_LICENCE",
+              "document_title": "Eurostat — Copyright notice and free re-use of data",
+              "document_url": "https://ec.europa.eu/eurostat/web/main/help/copyright-notice",
+              "section_reference": "General principles; Exceptions; How to re-use Eurostat material for commercial purposes; How to cite Eurostat products",
+              "summarized_finding": "APPLICABILITY TO THIS PROFILE: RE-RETRIEVED 2026-09-01 and unchanged. Reuse of statistical data, metadata and publications for COMMERCIAL or non-commercial purposes is authorised provided the source is acknowledged, under the Commission reuse Decision of 12 December 2011. There is no special procedure and no written licence required. The exceptions are enumerated and material: data identified as belonging to sources other than Eurostat; publications whose copyright is partly or wholly third-party; DATA FOR COUNTRIES OTHER THAN EU, EFTA and official acceding/candidate countries (the page names the USA, Japan and China) which must be removed before commercial reuse; and specific trade data declared by Liechtenstein, Switzerland and Austria. Citation must give the dataset DOI and the access date, and modifications must be stated with a disclaimer.",
+              "retrieved_at": "2026-08-29T00:00:00+00:00"
+            }
+          ]
         }
       ],
       "signal_coverage": [
@@ -846,6 +913,73 @@
               "document_url": "https://fred.stlouisfed.org/docs/api/terms_of_use.html",
               "section_reference": "Property Rights; Prohibitions; Requirements",
               "summarized_finding": "Access to the FRED API is licensed, and the terms were retrieved in full this mission (Mission 1.0 received HTTP 403). Property Rights is the decisive section: data series available through the API MAY BE OWNED BY THIRD PARTIES, the Bank's provision of the API does not override those owners' copyrights, and 'before using data series owned by third parties for anything other than your own personal use, you must contact the data owner to obtain permission'. Copyrighted series are identifiable: they contain the word 'Copyright' in their notes and can be found via the fred/series/search request. Requirements include a MANDATORY notice — 'This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis' — placed prominently on the application. Prohibitions include using FRED marks in a hostname, implying endorsement, removing proprietary notices, and replicating the essential user experience of the FRED website. Rate and bandwidth limits may be imposed at the Bank's discretion.",
+              "retrieved_at": "2026-08-29T00:00:00+00:00"
+            }
+          ]
+        },
+        {
+          "review_version": 1,
+          "assessed_use_profile": "local-private-research-v1",
+          "approval_state": "APPROVED_WITH_CONDITIONS",
+          "reviewed_by": "mission-1.17",
+          "reviewed_at": "2026-09-01T00:00:00+00:00",
+          "review_interval_days": 365,
+          "automated_access": "PERMITTED",
+          "api_use": "PERMITTED",
+          "browser_automation": "NOT_ADDRESSED",
+          "commercial_use": "PERMITTED_WITH_CONDITIONS",
+          "storage": "PERMITTED",
+          "retention": "PERMITTED",
+          "redistribution": "PERMITTED_WITH_CONDITIONS",
+          "derived_analytics": "PERMITTED",
+          "model_processing": "PERMITTED",
+          "personal_data_handling": "NOT_ADDRESSED",
+          "attribution_required": "PERMITTED",
+          "personal_data_risk": "NONE_EXPECTED",
+          "contains_user_generated_content": false,
+          "contains_user_identifiers": false,
+          "contains_location": null,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": false,
+          "discard_identifiers_after_normalization": false,
+          "jurisdiction_review_required": false,
+          "conditions": [
+            "A FRED API key is configured in the environment.",
+            "The product prominently displays the exact notice the terms require.",
+            "The collector excludes every series whose notes contain 'Copyright', or records per-owner permission for it."
+          ],
+          "required_conditions": [
+            {
+              "key": "fred-api-key",
+              "description": "A FRED API key is configured in the environment.",
+              "verification": "CONFIG_REFERENCE",
+              "verification_detail": "FRED_API_KEY"
+            },
+            {
+              "key": "fred-endorsement-notice",
+              "description": "The product prominently displays the exact notice the terms require.",
+              "verification": "CAPABILITY",
+              "verification_detail": "source-attribution-display"
+            },
+            {
+              "key": "copyrighted-series-excluded",
+              "description": "The collector excludes every series whose notes contain 'Copyright', or records per-owner permission for it.",
+              "verification": "CAPABILITY",
+              "verification_detail": "fred-copyright-series-filter"
+            }
+          ],
+          "open_questions": [
+            "Re-retrieval of the FRED API Terms of Use returned HTTP 403 from this environment on 2026-09-01. Confirm the recorded evidence against the live document from an environment that serves it, at the next review.",
+            "No FRED series has been operationally selected. Source-level approval authorises none."
+          ],
+          "review_notes": "EVIDENCE FRESHNESS FIRST, because it is the only unusual thing about this review. Re-retrieval of the FRED API Terms of Use was attempted on 2026-09-01 and the host returned HTTP 403 to this environment. The recorded evidence dates from 2026-08-29 -- three days old, inside the framework's own 365-day interval -- so it is relied on as current. That is the rule the review contract states, and the failed attempt is recorded rather than quietly omitted.\n\nTHE THREE CONDITIONS ARE THE REVIEW. An API key is required by the terms, not chosen by us; the endorsement notice is a specific disclaimer the Federal Reserve Bank of St. Louis requires so that derived work is not read as its endorsement; and some FRED series are third-party copyrighted and are excluded rather than filtered after the fact.\n\nCOMMERCIAL_USE IS PERMITTED_WITH_CONDITIONS for the same reason as Eurostat: the permission is real and the copyrighted-series carve-out is a property of particular series. A local deployment does not make a copyrighted series reusable.\n\nNO RESOURCE IS AUTHORISED and no collector exists. This approves capabilities; `resource_ready` stays NO.\n\nWHAT THIS REVIEW IS, IN ONE SENTENCE: an answer about fred for local-private-research-v1, reached from fred's own documents, NOT the commercial verdict re-badged. ADR-027 forbids transferring the decision and permits reusing the evidence, and that is exactly the split used here -- the documents below are the same documents; the questions asked of them are different.\n\nWHAT THE PROFILE DOES NOT DO, AND WHY NO CONDITION ENCODES IT: no redistribution, no resale, no customer-facing access to the source, no model training, no embeddings. Those are properties of the PROFILE, enforced by its own definition and by D-12 for embeddings. Writing them as source conditions would imply the source imposed them, which for several of these sources would be false.\n\nHISTORICAL DATA IS NOT RETROSPECTIVELY AUTHORISED BY THIS REVIEW. RawRecords collected before ADR-027 existed carry no `use_profile` in their provenance and are left exactly as they are. They were authorised under the governance model in force when they were collected. This review is prospective only.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_TERMS",
+              "document_title": "FRED® API Terms of Use",
+              "document_url": "https://fred.stlouisfed.org/docs/api/terms_of_use.html",
+              "section_reference": "Property Rights; Prohibitions; Requirements",
+              "summarized_finding": "APPLICABILITY TO THIS PROFILE: RE-RETRIEVAL ATTEMPTED 2026-09-01 and refused: the host returned HTTP 403 to this environment. The recorded evidence is from 2026-08-29, three days old and well inside the review framework's own 365-day interval, so it is relied on as current rather than re-researched. The failure is recorded rather than hidden. Access to the FRED API is licensed, and the terms were retrieved in full this mission (Mission 1.0 received HTTP 403). Property Rights is the decisive section: data series available through the API MAY BE OWNED BY THIRD PARTIES, the Bank's provision of the API does not override those owners' copyrights, and 'before using data series owned by third parties for anything other than your own personal use, you must contact the data owner to obtain permission'. Copyrighted series are identifiable: they contain the word 'Copyright' in their notes and can be found via the fred/series/search request. Requirements include a MANDATORY notice — 'This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis' — placed prominently on the application. Prohibitions include using FRED marks in a hostname, implying endorsement, removing proprietary notices, and replicating the essential user experience of the FRED website. Rate and bandwidth limits may be imposed at the Bank's discretion.",
               "retrieved_at": "2026-08-29T00:00:00+00:00"
             }
           ]
@@ -1156,6 +1290,87 @@
               "document_url": "https://blog.gdeltproject.org/using-the-new-web-ngrams-dataset-to-find-relevant-coverage/",
               "section_reference": "Legacy search infrastructure and the quadgram dataset",
               "summarized_finding": "Published 2026-06-30. The operator states that 'While the transition of our search and API infrastructure to Spanner is still underway, our existing legacy search infrastructure is struggling to handle the ever-growing volume of searches', and asks that 'Researchers should try to switch their searches to use these ngram files instead of the search APIs for the time being until we have completed our migration to Spanner'. Read carefully, that recommendation names the QUADGRAM dataset the same post announces -- per-minute files at storage.googleapis.com/data.gdeltproject.org/gdeltv5/weblegacy/ngrams/, whose ngrams file keys quadgram counts to a per-document DOCID and whose companion toc.json.gz carries title, img and url. This review rejects that dataset and does NOT claim GDELT recommended WEB-NGRAM. What the document does establish first-party is the state of the legacy search infrastructure, which is the reason the DOC API route is deferred rather than retried.",
+              "retrieved_at": "2026-08-30T00:00:00+00:00",
+              "excerpt": "our existing legacy search infrastructure is struggling to handle the ever-growing volume of searches"
+            }
+          ]
+        },
+        {
+          "review_version": 1,
+          "assessed_use_profile": "local-private-research-v1",
+          "approval_state": "APPROVED_WITH_CONDITIONS",
+          "reviewed_by": "mission-1.17",
+          "reviewed_at": "2026-09-01T00:00:00+00:00",
+          "review_interval_days": 365,
+          "automated_access": "PERMITTED",
+          "api_use": "PERMITTED",
+          "browser_automation": "NOT_ADDRESSED",
+          "commercial_use": "PERMITTED",
+          "storage": "PERMITTED",
+          "retention": "NOT_ADDRESSED",
+          "redistribution": "PERMITTED_WITH_CONDITIONS",
+          "derived_analytics": "PERMITTED",
+          "model_processing": "PERMITTED",
+          "personal_data_handling": "NOT_ADDRESSED",
+          "attribution_required": "PERMITTED_WITH_CONDITIONS",
+          "personal_data_risk": "PSEUDONYMOUS",
+          "contains_user_generated_content": false,
+          "contains_user_identifiers": true,
+          "contains_location": false,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": false,
+          "discard_identifiers_after_normalization": true,
+          "jurisdiction_review_required": false,
+          "conditions": [
+            "Every product surface derived from GDELT carries a citation to the GDELT Project and a link to https://www.gdeltproject.org/, as its terms require on use and on redistribution."
+          ],
+          "required_conditions": [
+            {
+              "key": "gdelt-attribution",
+              "description": "Every product surface derived from GDELT carries a citation to the GDELT Project and a link to https://www.gdeltproject.org/, as its terms require on use and on redistribution.",
+              "verification": "CAPABILITY",
+              "verification_detail": "source-attribution-display"
+            }
+          ],
+          "open_questions": [
+            "H-29: the WEB-NGRAM bucket timezone is unestablished. It blocks `observed_at` and cross-source temporal alignment, not acquisition, and this review does not close it.",
+            "H-30: the CLD2 language label mapping is unestablished. It blocks a canonical language tag, not acquisition, and this review does not close it.",
+            "The second GDELT access profile (DOC API) has never been reviewed. It is not authorised by this review and must not be reached by route resolution."
+          ],
+          "review_notes": "THE MOST PERMISSIVE GRANT IN THE PORTFOLIO, re-read from GDELT's own about page on 2026-09-01 and unchanged: 'All datasets released by the GDELT Project are available for unlimited and unrestricted use for any academic, commercial, or governmental use of any kind without fee.' Redistribution is granted explicitly -- 'You may redistribute, rehost, republish, and mirror any of the GDELT datasets in any form' -- subject to citation and a link.\n\nEVERY LOCAL ACTIVITY SITS INSIDE THAT, and none of them needed an argument. Commercial use is named in the grant, so the profile's commercial purpose is not a difficulty here.\n\nSCOPED TO WEB-NGRAM, AND DELIBERATELY. This review is about the resource the system actually collects, `web-ngrams/1gram`. GDELT publishes many datasets with different construction and different provenance, and the Mission 1.9.2 rule stands: a certification or a review scoped to a publication stream does not generalise to a sibling directory. The unreviewed DOC API access profile stays unreviewed.\n\nRETENTION IS NOT_ADDRESSED, unchanged. GDELT states no retention obligation, so the platform baseline applies and there is nothing source-specific to record. NOT_ADDRESSED here means the source is silent, never that any retention is fine.\n\nH-29 AND H-30 ARE CARRIED FORWARD AND ARE NOT POLICY QUESTIONS. They bite on `observed_at` and on language mapping inside normalization, which is why GDELT can be approving while every GDELT normalized record is PARTIAL. This review does not touch either.\n\nWHAT THIS REVIEW IS, IN ONE SENTENCE: an answer about gdelt for local-private-research-v1, reached from gdelt's own documents, NOT the commercial verdict re-badged. ADR-027 forbids transferring the decision and permits reusing the evidence, and that is exactly the split used here -- the documents below are the same documents; the questions asked of them are different.\n\nWHAT THE PROFILE DOES NOT DO, AND WHY NO CONDITION ENCODES IT: no redistribution, no resale, no customer-facing access to the source, no model training, no embeddings. Those are properties of the PROFILE, enforced by its own definition and by D-12 for embeddings. Writing them as source conditions would imply the source imposed them, which for several of these sources would be false.\n\nHISTORICAL DATA IS NOT RETROSPECTIVELY AUTHORISED BY THIS REVIEW. RawRecords collected before ADR-027 existed carry no `use_profile` in their provenance and are left exactly as they are. They were authorised under the governance model in force when they were collected. This review is prospective only.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_TERMS",
+              "document_title": "The GDELT Project - About / Terms of Use",
+              "document_url": "https://www.gdeltproject.org/about.html",
+              "section_reference": "Terms of Use",
+              "summarized_finding": "APPLICABILITY TO THIS PROFILE: RE-RETRIEVED 2026-09-01 and unchanged. The page states that all datasets released by the GDELT Project are available for unlimited and unrestricted use for any academic, commercial or governmental use of any kind without fee, and that the datasets may be redistributed, rehosted, republished and mirrored in any form. The single stated obligation is that any use or redistribution include a citation to the GDELT Project and a link to https://www.gdeltproject.org/. The grant is general and does not single out AI or machine-learning processing either to permit or to forbid it; model_processing is recorded as PERMITTED on the strength of 'any kind', and the absence of an AI-specific clause is noted rather than read as a restriction.",
+              "retrieved_at": "2026-08-30T00:00:00+00:00",
+              "excerpt": "Any use or redistribution of the data must include a citation to the GDELT Project and a link to this website (https://www.gdeltproject.org/)."
+            },
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "The GDELT Project - Announcing The Web News Ngram Datasets (WEB-NGRAM)",
+              "document_url": "https://blog.gdeltproject.org/announcing-the-web-news-ngram-datasets-web-ngram/",
+              "section_reference": "Dataset description and file format",
+              "summarized_finding": "APPLICABILITY TO THIS PROFILE: RE-RETRIEVED 2026-09-01 and unchanged. The operator's own announcement of the dataset, published 2019-09-30 and linked from the GDELT data page as its documentation. It states the publication path 'http://data.gdeltproject.org/gdeltv3/web/ngrams/YYYYMMDDHHMMSS.1gram/2gram.txt.gz'; that every 15 minutes two gzipped UTF-8 files are produced, one for unigrams and one for bigrams, typically 7-10, 22-25, 37-40 and 52-55 minutes after the hour; that each row represents a unique language/word/phrase, is tab delimited and has no header row; and that the four columns are DATE ('The date in YYYYMMDDHHMMSS format'), LANG ('The human-readable language name as output by CLD2'), NGRAM ('The word or phrase') and COUNT ('The number of times the word/phrase was mentioned in articles of that language published in that given 15 minute interval'). Coverage at release is stated as 42 billion words in 142 languages from 2019-01-01 to present. No timezone is stated for DATE, and none is inferred here. Each file spans every language rather than being partitioned by one, which is why a job cannot request fewer languages than a file contains.",
+              "retrieved_at": "2026-08-30T00:00:00+00:00",
+              "excerpt": "Each row represents a unique language/word/phrase and is tab delimited with the following columns (there is no header row)"
+            },
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "The GDELT Project - Data",
+              "document_url": "https://www.gdeltproject.org/data.html",
+              "section_reference": "GDELT WEB-NGRAM",
+              "summarized_finding": "APPLICABILITY TO THIS PROFILE: RE-RETRIEVED 2026-09-01 and unchanged. The operator's dataset index lists WEB-NGRAM as a current product -- 'Global online news ngrams in 152 languages' -- and links to the announcement above as its documentation. The language count is higher than the 142 the 2019 announcement states, so the dataset has grown; both figures are recorded with their dates rather than one being chosen. The page states no timezone for GDELT timestamps anywhere, which is why review 3 leaves the DATE timezone as an open question instead of asserting UTC.",
+              "retrieved_at": "2026-08-30T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "The GDELT Project - Using The New Web NGrams Dataset To Find Relevant Coverage",
+              "document_url": "https://blog.gdeltproject.org/using-the-new-web-ngrams-dataset-to-find-relevant-coverage/",
+              "section_reference": "Legacy search infrastructure and the quadgram dataset",
+              "summarized_finding": "APPLICABILITY TO THIS PROFILE: RE-RETRIEVED 2026-09-01 and unchanged. Published 2026-06-30. The operator states that 'While the transition of our search and API infrastructure to Spanner is still underway, our existing legacy search infrastructure is struggling to handle the ever-growing volume of searches', and asks that 'Researchers should try to switch their searches to use these ngram files instead of the search APIs for the time being until we have completed our migration to Spanner'. Read carefully, that recommendation names the QUADGRAM dataset the same post announces -- per-minute files at storage.googleapis.com/data.gdeltproject.org/gdeltv5/weblegacy/ngrams/, whose ngrams file keys quadgram counts to a per-document DOCID and whose companion toc.json.gz carries title, img and url. This review rejects that dataset and does NOT claim GDELT recommended WEB-NGRAM. What the document does establish first-party is the state of the legacy search infrastructure, which is the reason the DOC API route is deferred rather than retried.",
               "retrieved_at": "2026-08-30T00:00:00+00:00",
               "excerpt": "our existing legacy search infrastructure is struggling to handle the ever-growing volume of searches"
             }
@@ -2605,6 +2820,67 @@
               "document_url": "https://help.openalex.org/api/",
               "section_reference": "Overview; Authentication; Pricing",
               "summarized_finding": "The documentation states that all OpenAlex data is CC0, that basic use is free and requires no account, that a free API key raises the daily budget tenfold, and that heavier usage is pay-as-you-go with a cost_usd figure returned per call. CC0 places the data in the public domain, which permits commercial use, storage, redistribution and model processing without an attribution obligation; the conditions that remain are operational rather than licensing, being the daily budget and the cost of exceeding it.",
+              "retrieved_at": "2026-08-30T00:00:00+00:00"
+            }
+          ]
+        },
+        {
+          "review_version": 1,
+          "assessed_use_profile": "local-private-research-v1",
+          "approval_state": "APPROVED_WITH_CONDITIONS",
+          "reviewed_by": "mission-1.17",
+          "reviewed_at": "2026-09-01T00:00:00+00:00",
+          "review_interval_days": 365,
+          "automated_access": "PERMITTED",
+          "api_use": "PERMITTED_WITH_CONDITIONS",
+          "browser_automation": "NOT_ADDRESSED",
+          "commercial_use": "PERMITTED",
+          "storage": "PERMITTED",
+          "retention": "PERMITTED",
+          "redistribution": "PERMITTED",
+          "derived_analytics": "PERMITTED",
+          "model_processing": "PERMITTED",
+          "personal_data_handling": "PERMITTED_WITH_CONDITIONS",
+          "attribution_required": "NOT_ADDRESSED",
+          "personal_data_risk": "IDENTIFIABLE",
+          "contains_user_generated_content": false,
+          "contains_user_identifiers": true,
+          "contains_location": false,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": false,
+          "discard_identifiers_after_normalization": true,
+          "jurisdiction_review_required": false,
+          "conditions": [
+            "A contact address is configured for OpenAlex requests, so traffic is attributable to us as the documentation asks.",
+            "A person has confirmed a spending ceiling for the metered API, since usage above the free allowance is billed per call."
+          ],
+          "required_conditions": [
+            {
+              "key": "openalex-contact-configured",
+              "description": "A contact address is configured for OpenAlex requests, so traffic is attributable to us as the documentation asks.",
+              "verification": "CONFIG_REFERENCE",
+              "verification_detail": "OPENALEX_CONTACT_EMAIL"
+            },
+            {
+              "key": "openalex-spend-bounded",
+              "description": "A person has confirmed a spending ceiling for the metered API, since usage above the free allowance is billed per call.",
+              "verification": "HUMAN_CONFIRMATION",
+              "verification_detail": "Record who set the ceiling, what it is, and where it is enforced."
+            }
+          ],
+          "open_questions": [
+            "Re-retrieval of the OpenAlex API documentation returned HTTP 403 or a redirect to an index from this environment on 2026-09-01. Confirm the licence statement and the polite-pool requirement against the live documents at the next review.",
+            "No OpenAlex resource has been operationally selected. Whether abstracts or full-text-adjacent fields are in scope is a separate question from works metadata, and neither is authorised here.",
+            "The two conditions are unsatisfied on this deployment, so OpenAlex is approving and not eligible."
+          ],
+          "review_notes": "EVIDENCE FRESHNESS, as for FRED. Re-retrieval was attempted on 2026-09-01 and refused: openalex.org returned HTTP 403 and the documentation host redirected to a help index. The recorded evidence dates from 2026-08-30 and is inside the interval, so it is relied on as current and the failure is recorded.\n\nTHE PERSONAL-DATA POSTURE IS WHAT THIS PROFILE CHANGES, and it is the one place among these five where the local profile is materially stricter rather than merely narrower. OpenAlex carries scholarly AUTHORSHIP: named people, affiliations, identifiers. The profile's posture is MINIMISED, so `personal_data_handling` moves from NOT_ADDRESSED to PERMITTED_WITH_CONDITIONS and `personal_data_risk` stays IDENTIFIABLE. Any future OpenAlex collector acquires the minimum its evidence semantics need, and author identity is not assumed to be part of that.\n\nAPI_USE IS PERMITTED_WITH_CONDITIONS because OpenAlex asks for a contact address to reach its polite pool. That is a courtesy the operator owes rather than a restriction on the data, and it is a condition rather than a limit on the verdict.\n\nAND IT IS STILL NOT ELIGIBLE, WHICH IS THE HONEST OUTCOME. Both conditions are UNSATISFIED on this deployment: no contact address is configured and no spend ceiling has been confirmed by a person. An approving review that leaves a source blocked at the condition gate is the registry working as designed -- approving and eligible are different facts, and this review moves only the first.\n\nNO RESOURCE IS AUTHORISED and no collector exists.\n\nWHAT THIS REVIEW IS, IN ONE SENTENCE: an answer about openalex for local-private-research-v1, reached from openalex's own documents, NOT the commercial verdict re-badged. ADR-027 forbids transferring the decision and permits reusing the evidence, and that is exactly the split used here -- the documents below are the same documents; the questions asked of them are different.\n\nWHAT THE PROFILE DOES NOT DO, AND WHY NO CONDITION ENCODES IT: no redistribution, no resale, no customer-facing access to the source, no model training, no embeddings. Those are properties of the PROFILE, enforced by its own definition and by D-12 for embeddings. Writing them as source conditions would imply the source imposed them, which for several of these sources would be false.\n\nHISTORICAL DATA IS NOT RETROSPECTIVELY AUTHORISED BY THIS REVIEW. RawRecords collected before ADR-027 existed carry no `use_profile` in their provenance and are left exactly as they are. They were authorised under the governance model in force when they were collected. This review is prospective only.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "OpenAlex Help Center - API reference",
+              "document_url": "https://help.openalex.org/api/",
+              "section_reference": "Overview; Authentication; Pricing",
+              "summarized_finding": "APPLICABILITY TO THIS PROFILE: RE-RETRIEVAL ATTEMPTED 2026-09-01 and refused: both openalex.org and the documentation host returned HTTP 403 or redirected to a help index. The recorded evidence is from 2026-08-30, two days old and inside the 365-day interval. Same treatment as FRED, for the same reason. The documentation states that all OpenAlex data is CC0, that basic use is free and requires no account, that a free API key raises the daily budget tenfold, and that heavier usage is pay-as-you-go with a cost_usd figure returned per call. CC0 places the data in the public domain, which permits commercial use, storage, redistribution and model processing without an attribution obligation; the conditions that remain are operational rather than licensing, being the daily budget and the cost of exceeding it.",
               "retrieved_at": "2026-08-30T00:00:00+00:00"
             }
           ]
@@ -5188,6 +5464,72 @@
               "document_url": "https://datacatalog.worldbank.org/public-licenses",
               "section_reference": "Creative Commons Attribution 4.0 (CC-BY 4.0); Microdata Research License; License Specified Externally; Custom License",
               "summarized_finding": "CC-BY 4.0 is the DEFAULT licence for datasets the World Bank itself produces and distributes as open data, and it permits copying, modification and distribution in any format FOR ANY PURPOSE, INCLUDING COMMERCIAL USE, provided appropriate credit is given and changes are indicated. Additional mandatory terms impose mediation and UNCITRAL arbitration for disputes. Crucially the page states that many datasets carry OTHER licences: ODbL adds a share-alike obligation on redistribution; the Microdata Research License permits statistical and scientific research only and forbids redistribution without prior written agreement; and 'License Specified Externally' and 'Custom License' datasets carry third-party terms. Licensing is therefore per dataset, not per platform.",
+              "retrieved_at": "2026-08-29T00:00:00+00:00"
+            }
+          ]
+        },
+        {
+          "review_version": 1,
+          "assessed_use_profile": "local-private-research-v1",
+          "approval_state": "APPROVED_WITH_CONDITIONS",
+          "reviewed_by": "mission-1.17",
+          "reviewed_at": "2026-09-01T00:00:00+00:00",
+          "review_interval_days": 365,
+          "automated_access": "PERMITTED",
+          "api_use": "PERMITTED",
+          "browser_automation": "NOT_ADDRESSED",
+          "commercial_use": "PERMITTED",
+          "storage": "PERMITTED",
+          "retention": "PERMITTED",
+          "redistribution": "PERMITTED_WITH_CONDITIONS",
+          "derived_analytics": "PERMITTED",
+          "model_processing": "PERMITTED",
+          "personal_data_handling": "NOT_ADDRESSED",
+          "attribution_required": "PERMITTED",
+          "personal_data_risk": "NONE_EXPECTED",
+          "contains_user_generated_content": false,
+          "contains_user_identifiers": false,
+          "contains_location": null,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": false,
+          "discard_identifiers_after_normalization": false,
+          "jurisdiction_review_required": false,
+          "conditions": [
+            "A product surface exists that displays the required World Bank attribution and a statement of any modifications, on every view derived from this source.",
+            "The collector requests only datasets whose recorded licence is CC-BY 4.0 or ODbL, and skips every other licence.",
+            "The Microdata Library is excluded from every request path."
+          ],
+          "required_conditions": [
+            {
+              "key": "attribution-surface",
+              "description": "A product surface exists that displays the required World Bank attribution and a statement of any modifications, on every view derived from this source.",
+              "verification": "CAPABILITY",
+              "verification_detail": "source-attribution-display"
+            },
+            {
+              "key": "dataset-licence-allowlist",
+              "description": "The collector requests only datasets whose recorded licence is CC-BY 4.0 or ODbL, and skips every other licence.",
+              "verification": "CAPABILITY",
+              "verification_detail": "dataset-licence-filter"
+            },
+            {
+              "key": "microdata-excluded",
+              "description": "The Microdata Library is excluded from every request path.",
+              "verification": "ACCESS_METHOD",
+              "verification_detail": "indicators-api-only"
+            }
+          ],
+          "open_questions": [
+            "The Data Catalog labels externally-licensed and custom-licensed datasets individually. The allowlist condition fails closed on anything not known to be CC BY 4.0, and that remains the mechanism rather than a resolved question."
+          ],
+          "review_notes": "CC BY 4.0, re-read from the World Bank's own licensing page on 2026-09-01: data may be copied, modified and distributed 'in any format for any purpose, including commercial use', with attribution and an indication of changes.\n\nWHAT THE LOCAL PROFILE ACTUALLY DOES is a strict subset of that grant: acquire through the Indicators API, store locally, derive analysis, apply model inference, and redistribute nothing. Each was assessed against the licence separately rather than inherited from the commercial verdict -- and the assessment is short precisely because a licence permitting redistribution for any purpose cannot be read to forbid local storage without it.\n\nCOMMERCIAL_USE IS PERMITTED AND THE DEPLOYMENT BEING LOCAL DOES NOT CHANGE THAT. The profile's own definition says local is not non-commercial, and CC BY 4.0 grants commercial use outright, so nothing here depends on the distinction.\n\nREDISTRIBUTION IS RECORDED AS PERMITTED_WITH_CONDITIONS BECAUSE THE LICENCE GRANTS IT, not because the profile does it. The profile does not redistribute; that is our restriction, not the World Bank's, and recording it as NOT_PERMITTED would misattribute our choice to their licence.\n\nTHE THREE CONDITIONS CARRY FORWARD UNCHANGED because the exclusions they encode are properties of the catalogue rather than of the use: microdata sits under a separate research licence, and externally- and custom-licensed datasets are not CC BY 4.0. A local deployment does not make a non-CC-BY dataset CC BY.\n\nWHAT THIS REVIEW IS, IN ONE SENTENCE: an answer about world-bank for local-private-research-v1, reached from world-bank's own documents, NOT the commercial verdict re-badged. ADR-027 forbids transferring the decision and permits reusing the evidence, and that is exactly the split used here -- the documents below are the same documents; the questions asked of them are different.\n\nWHAT THE PROFILE DOES NOT DO, AND WHY NO CONDITION ENCODES IT: no redistribution, no resale, no customer-facing access to the source, no model training, no embeddings. Those are properties of the PROFILE, enforced by its own definition and by D-12 for embeddings. Writing them as source conditions would imply the source imposed them, which for several of these sources would be false.\n\nHISTORICAL DATA IS NOT RETROSPECTIVELY AUTHORISED BY THIS REVIEW. RawRecords collected before ADR-027 existed carry no `use_profile` in their provenance and are left exactly as they are. They were authorised under the governance model in force when they were collected. This review is prospective only.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_LICENCE",
+              "document_title": "World Bank Data Catalog — Data Access and Licensing",
+              "document_url": "https://datacatalog.worldbank.org/public-licenses",
+              "section_reference": "Creative Commons Attribution 4.0 (CC-BY 4.0); Microdata Research License; License Specified Externally; Custom License",
+              "summarized_finding": "APPLICABILITY TO THIS PROFILE: RE-RETRIEVED 2026-09-01 and unchanged. CC-BY 4.0 is the DEFAULT licence for datasets the World Bank itself produces and distributes as open data, and it permits copying, modification and distribution in any format FOR ANY PURPOSE, INCLUDING COMMERCIAL USE, provided appropriate credit is given and changes are indicated. Additional mandatory terms impose mediation and UNCITRAL arbitration for disputes. Crucially the page states that many datasets carry OTHER licences: ODbL adds a share-alike obligation on redistribution; the Microdata Research License permits statistical and scientific research only and forbids redistribution without prior written agreement; and 'License Specified Externally' and 'Custom License' datasets carry third-party terms. Licensing is therefore per dataset, not per platform.",
               "retrieved_at": "2026-08-29T00:00:00+00:00"
             }
           ]

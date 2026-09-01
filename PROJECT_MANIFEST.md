@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.38
+Version: 1.39
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-01 (Sprint 1 / Mission 1.16)
+Last amended: 2026-09-01 (Sprint 1 / Mission 1.17)
 
 ---
 
@@ -13,6 +13,47 @@ Last amended: 2026-09-01 (Sprint 1 / Mission 1.16)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.39 — 2026-09-01 (Sprint 1 / Mission 1.17)
+
+Authorized by the Mission 1.17 brief §1-§31.
+
+**The registry and the runtime now agree, and no approval was inherited to get
+there.** Five sources -- `world-bank`, `gdelt`, `eurostat`, `fred`, `openalex` --
+gained a `local-private-research-v1` review, each version 1 of its own profile
+line. **ADR-027 is unchanged and no fallback was added**, which the result proves
+in both directions: `ted-eu` is still approving locally and REFUSED commercially,
+and the five were refused locally until the work was done.
+
+**Evidence reused, decisions not.** Three licence documents were re-retrieved on
+2026-09-01 and confirmed unchanged (World Bank CC BY 4.0, Eurostat under Decision
+2011/833/EU, GDELT's unlimited-use grant). FRED and OpenAlex refused this
+environment with HTTP 403; their evidence is days old and inside the 365-day
+interval, and both failures are recorded in the reviews rather than omitted.
+
+**Four ELIGIBLE, one still BLOCKED.** OpenAlex approves and stays blocked on two
+unsatisfied conditions, which is approving and eligible being different facts
+rather than a failure. **OpenAlex is also the one place the local profile is
+STRICTER**: it carries scholarly authorship, so `personal_data_handling` moves to
+`PERMITTED_WITH_CONDITIONS` under a MINIMISED posture. Four of five were narrower
+everywhere and one was not, which is why a per-profile review is not a formality.
+
+**A gap the contract itself had named is closed for this profile.** GDELT's
+context was handing collectors all three routes including the unreviewed DOC API;
+`docs/CLAUDE.md` said *"restricting it is a review act"*. The local entry now
+blocks `gdelt-doc-api` and `gdelt-bulk-files` **by name** (ADR-028). A narrowing
+that exists only in the review text is not a narrowing.
+
+**Two defects exposed.** `sros-source load` derived condition and evidence row ids
+without the profile, so two reviews of one source sharing a condition key
+collided on the primary key -- fixed generically rather than by renaming
+conditions, because two profiles legitimately impose the same obligation. And the
+Gateway's profile-blindness got **six times bigger** and was found in a **second
+endpoint**; both are asserted as defects so they fail when fixed.
+
+**Correction to 1.16:** all 23 RawRecords lack `use_profile` in provenance, TED's
+eleven included -- no collector writes it. Research counts unchanged at
+23/23/8/8/8/8, 1 assessment, 0 opportunities. No research API was called
 
 ## 1.38 — 2026-09-01 (Sprint 1 / Mission 1.16)
 
