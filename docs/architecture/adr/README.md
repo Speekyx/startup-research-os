@@ -35,6 +35,8 @@ eventually be documented through ADRs."
 | [ADR-026](ADR-026-reliability-assessment-scope-and-binding.md) | Reliability is assessed per measurement-and-purpose, and bound explicitly | Accepted — Mission 1.14. Extends ADR-014 and ADR-025 |
 | [ADR-027](ADR-027-use-profile-scoped-source-policy.md) | A verdict has a subject: source permission is scoped to the use it was granted for | Accepted — Mission 1.15.5. Amends ADR-013 and ADR-016 |
 | [ADR-028](ADR-028-reviewed-route-binding-and-configuration-verified-conditions.md) | The authorization carries only reviewed routes, and an objective property of configuration is verified rather than human-confirmed | Accepted — Mission 1.15.6. Amends ADR-016 and ADR-027 |
+| [ADR-029](ADR-029-transaction-value-signal-family.md) | A third Signal quantity family, `TRANSACTION_VALUE`, because a procurement notice mapped to neither existing one and `MEASURED_SERIES` could not be widened without making `metric` optional for every series signal ever written | Accepted — Mission 1.15.9. Amends the Signal taxonomy and contract |
+| [ADR-030](ADR-030-replaying-a-recorded-human-decision-onto-a-second-deployment.md) | A single-purpose replay script may exist for ONE already-made, already documented human decision; a general `decide` verb still may not | Accepted — operational. Narrows Mission 1.15.6's refusal without reopening it |
 
 > **Numbering note.** The production-deployment ADR has **no reserved number any
 > more.** It moved from 012 to 013 to 014 to 015, once per mission, because each
