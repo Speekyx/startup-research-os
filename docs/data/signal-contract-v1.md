@@ -134,8 +134,8 @@ Full reasoning in [`signal-taxonomy-v1.md`](signal-taxonomy-v1.md).
 
 | | |
 |---|---|
-| `quantity_family` | **Closed enum** `SignalQuantityFamily`: `LEXICAL_FREQUENCY`, `MEASURED_SERIES`. What kind of quantity the signal is about |
-| `signal_type` | **Registry** reference (`signal_type`). Two entries: `lexical_frequency_contrast`, `numeric_period_change` |
+| `quantity_family` | **Closed enum** `SignalQuantityFamily`: `LEXICAL_FREQUENCY`, `MEASURED_SERIES`, `TRANSACTION_VALUE`. What kind of quantity the signal is about |
+| `signal_type` | **Registry** reference (`signal_type`). Four entries: `lexical_frequency_contrast`, `numeric_period_change`, `lexical_frequency_change`, `procurement_value_contrast` |
 
 **The demand families are not this axis.** `PAIN / DESIRE / BEHAVIORAL /
 MARKET` classify demand; neither V1 derivation is evidence of demand. Ontology
@@ -143,7 +143,17 @@ V2 §3.6 is unchanged.
 
 The family must match the record kind of every contributing input —
 `LEXICAL_FREQUENCY` from `lexical_frequency_observation`, `MEASURED_SERIES` from
-`numeric_observation` — and a mismatch is `INCOMPATIBLE_INPUT_KINDS`.
+`numeric_observation`, `TRANSACTION_VALUE` from `procurement_notice` — and a
+mismatch is `INCOMPATIBLE_INPUT_KINDS`.
+
+**`TRANSACTION_VALUE` was added in Mission 1.15.9 under ADR-029**, because the
+third record kind mapped to neither existing family and the Signal layer was
+therefore structurally unable to say anything about procurement. It carries an
+amount semantic, a currency and a procurement classification, and **no metric**:
+widening `MEASURED_SERIES` would have made `metric` optional for every series
+signal ever written. It is **not** willingness-to-pay, and
+[`ted-eu-transaction-signals-v1.md`](ted-eu-transaction-signals-v1.md) §3 is
+where that boundary is drawn.
 
 ---
 

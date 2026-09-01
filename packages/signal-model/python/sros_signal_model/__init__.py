@@ -20,6 +20,7 @@ from .facts import (
     LEXICAL_FREQUENCY_OBSERVATION,
     NUMERIC_OBSERVATION,
     ORDER_ESTABLISHED_WITHOUT_TIMEZONE,
+    PROCUREMENT_NOTICE,
     FactRule,
     TemporalOrderCertification,
     order_certification,
@@ -58,6 +59,7 @@ from .types import (
 __all__ = [
     "FACT_RULES",
     "LEXICAL_FREQUENCY_OBSERVATION",
+    "PROCUREMENT_NOTICE",
     "MINIMUM_DISTINCT_OBSERVATIONS",
     "NUMERIC_OBSERVATION",
     "ORDERED_BASES",

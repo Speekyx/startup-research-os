@@ -43,6 +43,8 @@ __all__ = [
 # is a shared model, so the dependency would run the wrong way.
 NUMERIC_OBSERVATION = "numeric_observation"
 LEXICAL_FREQUENCY_OBSERVATION = "lexical_frequency_observation"
+# The third, added in Mission 1.15.8 and reachable by a derivation since 1.15.9.
+PROCUREMENT_NOTICE = "procurement_notice"
 
 
 @dataclass(frozen=True)
@@ -102,6 +104,27 @@ FACT_RULES: Mapping[Fact, FactRule] = MappingProxyType(
         Fact.CLASSIFIED_GEOGRAPHY: FactRule(
             supplied_by=frozenset({NUMERIC_OBSERVATION}),
             withheld_by=frozenset({Reason.GEOGRAPHY_NOT_CLASSIFIED, Reason.GEOGRAPHY_MISSING}),
+        ),
+        # Mission 1.15.9. An amount that says what KIND of amount it is and
+        # carries exactly one currency.
+        #
+        # **The two reasons that withhold it are the two Mission 1.15.8 added**,
+        # and the mapping is the whole point of this table being mechanical: a
+        # source that publishes amounts and currencies as arrays, and says
+        # nothing about their positional correspondence, has not supplied a
+        # paired amount (H-38).
+        #
+        # **`PERIOD_TIMEZONE_NOT_ESTABLISHED` is deliberately ABSENT.** Every TED
+        # record carries it and is therefore PARTIAL, and a monetary fact does
+        # not stop being one because the publication date's offset means
+        # something nobody established. This is the second production case of
+        # the rule §10 of the contract exists for: what matters is whether the
+        # SPECIFIC missing fact matters to the SPECIFIC derivation.
+        Fact.PAIRED_MONETARY_AMOUNT: FactRule(
+            supplied_by=frozenset({PROCUREMENT_NOTICE}),
+            withheld_by=frozenset(
+                {Reason.MONETARY_PAIRING_NOT_ESTABLISHED, Reason.MONETARY_CURRENCY_ABSENT}
+            ),
         ),
     }
 )

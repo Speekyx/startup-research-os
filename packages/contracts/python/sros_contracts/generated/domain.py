@@ -530,6 +530,7 @@ class SignalQuantityFamily(str, Enum):
 
     LEXICAL_FREQUENCY = "LEXICAL_FREQUENCY"  # How often language tokens occur in text a source processed. Carries a term and a source language label, and no geography key at all
     MEASURED_SERIES = "MEASURED_SERIES"  # A numeric quantity a source measures or reports over a period. Carries a metric and a geography
+    TRANSACTION_VALUE = "TRANSACTION_VALUE"  # The monetary value at which a transaction between named parties was recorded, as the source published it. Carries an amount semantic, a currency and a procurement classification, and NO metric -- there is no series it is an instance of, which is why MEASURED_SERIES could not be widened to hold it (ADR-029). The currency is the unit and is INHERITED, and a derivation whose inputs disagree on currency is refused rather than converted. It is NOT willingness-to-pay: that a buyer paid this is established, that a market exists or that a comparable buyer would pay a comparable amount for a different product is not
 
 
 class SignalDirection(str, Enum):
@@ -594,6 +595,7 @@ class SignalRequiredFact(str, Enum):
     SOURCE_LANGUAGE_LABEL = "SOURCE_LANGUAGE_LABEL"  # The source language label and its scheme, for equality within one source. Sufficient for within-source work while H-30 is open
     CANONICAL_LANGUAGE = "CANONICAL_LANGUAGE"  # A canonical language tag. Withheld by LANGUAGE_NOT_MAPPED, and required for any cross-source language aggregation (H-30)
     CLASSIFIED_GEOGRAPHY = "CLASSIFIED_GEOGRAPHY"  # A geography established as a country or an aggregate. Withheld by GEOGRAPHY_NOT_CLASSIFIED and GEOGRAPHY_MISSING
+    PAIRED_MONETARY_AMOUNT = "PAIRED_MONETARY_AMOUNT"  # An amount whose semantic type is established and which is unambiguously paired with exactly one currency. Supplied only by procurement_notice. Withheld by MONETARY_PAIRING_NOT_ESTABLISHED and MONETARY_CURRENCY_ABSENT -- the two reasons Mission 1.15.8 added for a source that publishes amounts and currencies as arrays and states nothing about their positional correspondence (H-38). Deliberately NOT withheld by PERIOD_TIMEZONE_NOT_ESTABLISHED: a monetary fact does not stop being a monetary fact because the publication date's offset means something nobody has established
 
 
 class SignalDerivationKind(str, Enum):

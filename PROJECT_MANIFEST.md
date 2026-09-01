@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.32
+Version: 1.33
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-01 (Sprint 1 / Mission 1.15.8)
+Last amended: 2026-09-01 (Sprint 1 / Mission 1.15.9)
 
 ---
 
@@ -13,6 +13,38 @@ Last amended: 2026-09-01 (Sprint 1 / Mission 1.15.8)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.33 — 2026-09-01 (Sprint 1 / Mission 1.15.9)
+
+Authorized by the Mission 1.15.9 brief §1-§39 and by ADR-029.
+
+**A third Signal quantity family, and a derivation that correctly produced
+nothing.** Mission 1.15.8 added the `procurement_notice` record kind and the
+Signal contract binds the family to the record kind of every input, so nothing
+mapped and the Signal layer was structurally unable to say anything about
+procurement. `TRANSACTION_VALUE` (ADR-029, migration 0023) closes that:
+it carries an amount semantic, a currency and a procurement classification and
+**no metric**, which is exactly why `MEASURED_SERIES` could not be widened.
+
+**`procurement-value-contrast@1.0.0`**, the fourth extractor. A **non-temporal**
+cohort spread: basis `NONE`, direction `NOT_APPLICABLE`, no bound, no date read.
+Members are ordered by amount, never by time. Four monetary semantics never mix,
+two currencies never mix, nothing is converted, and no `price_paid` exists.
+
+**It is not willingness-to-pay, and the distinction is enforced rather than
+described.** That a named buyer paid a named supplier a stated amount is
+established; that a market exists or that a comparable buyer would pay a
+comparable amount for a different product is not.
+
+**The real run produced ZERO Signals, and that is the correct answer.** Three
+normalized notices inspected, two carrying an eligible paired amount, **two
+cohorts formed, neither meeting the minimum support of two** -- the two EUR award
+totals are in CPV divisions 90 and 66, cleaning and insurance, which are two
+markets. Eight derivation runs recorded, no row written.
+
+**H-37 and H-38 both remain OPEN.** The derivation avoids depending on either and
+neither is closed by that. Counts unchanged: 15 raw, 15 normalized, 7 signals, 7
+claims, 7 evidence, and no TED signal, claim or evidence exists
 
 ## 1.32 — 2026-09-01 (Sprint 1 / Mission 1.15.8)
 

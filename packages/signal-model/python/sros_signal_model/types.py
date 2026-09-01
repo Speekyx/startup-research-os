@@ -18,7 +18,7 @@ from types import MappingProxyType
 
 from sros_contracts import SignalQuantityFamily
 
-from .facts import LEXICAL_FREQUENCY_OBSERVATION, NUMERIC_OBSERVATION
+from .facts import LEXICAL_FREQUENCY_OBSERVATION, NUMERIC_OBSERVATION, PROCUREMENT_NOTICE
 
 __all__ = [
     "SIGNAL_EXTRACTORS",
@@ -67,6 +67,19 @@ SIGNAL_TYPES: Mapping[str, SignalTypeSpec] = MappingProxyType(
                 "differed, and nothing about attention, interest, demand or trend."
             ),
         ),
+        "procurement_value_contrast": SignalTypeSpec(
+            id="procurement_value_contrast",
+            family=SignalQuantityFamily.TRANSACTION_VALUE,
+            summary=(
+                "The spread of the values at which several comparable procurement "
+                "transactions settled, within one source. Every member shares an amount "
+                "semantic, a scope, a currency, a notice class and a procurement "
+                "classification. NON-TEMPORAL: nothing here is ordered, compared across "
+                "periods or read as a trend. Says what several buyers paid; says nothing "
+                "about demand, about what a product could charge, or about willingness to "
+                "pay."
+            ),
+        ),
         "numeric_period_change": SignalTypeSpec(
             id="numeric_period_change",
             family=SignalQuantityFamily.MEASURED_SERIES,
@@ -86,6 +99,9 @@ _FAMILY_RECORD_KIND: Mapping[SignalQuantityFamily, str] = MappingProxyType(
     {
         SignalQuantityFamily.LEXICAL_FREQUENCY: LEXICAL_FREQUENCY_OBSERVATION,
         SignalQuantityFamily.MEASURED_SERIES: NUMERIC_OBSERVATION,
+        # Mission 1.15.9, ADR-029. A transaction value reads a procurement
+        # notice, which carries an amount semantic and a currency and no metric.
+        SignalQuantityFamily.TRANSACTION_VALUE: PROCUREMENT_NOTICE,
     }
 )
 

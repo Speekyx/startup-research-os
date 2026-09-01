@@ -34,6 +34,7 @@ from .base import (
 from .lexical_frequency_change import LexicalFrequencyChangeExtractor
 from .lexical_frequency_contrast import LexicalFrequencyContrastExtractor
 from .numeric_period_change import NumericPeriodChangeExtractor
+from .procurement_value_contrast import ProcurementValueContrastExtractor
 
 __all__ = [
     "EXTRACTOR_REGISTRY",
@@ -45,6 +46,7 @@ __all__ = [
     "LexicalFrequencyChangeExtractor",
     "LexicalFrequencyContrastExtractor",
     "NumericPeriodChangeExtractor",
+    "ProcurementValueContrastExtractor",
     "SignalExtractor",
     "group_key_of",
     "select_extractor",
@@ -53,12 +55,16 @@ __all__ = [
 _NUMERIC = NumericPeriodChangeExtractor()
 _LEXICAL = LexicalFrequencyContrastExtractor()
 _LEXICAL_CHANGE = LexicalFrequencyChangeExtractor()
+# Mission 1.15.9, ADR-029. The first derivation over a `procurement_notice`, and
+# the first in the TRANSACTION_VALUE family.
+_PROCUREMENT = ProcurementValueContrastExtractor()
 
 EXTRACTOR_REGISTRY: Mapping[str, SignalExtractor] = MappingProxyType(
     {
         _NUMERIC.extractor_id: _NUMERIC,
         _LEXICAL.extractor_id: _LEXICAL,
         _LEXICAL_CHANGE.extractor_id: _LEXICAL_CHANGE,
+        _PROCUREMENT.extractor_id: _PROCUREMENT,
     }
 )
 

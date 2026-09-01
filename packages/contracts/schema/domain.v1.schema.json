@@ -778,7 +778,8 @@
       "type": "string",
       "enum": [
         "LEXICAL_FREQUENCY",
-        "MEASURED_SERIES"
+        "MEASURED_SERIES",
+        "TRANSACTION_VALUE"
       ],
       "description": "What kind of quantity a derived Signal is about. Closed because consumers branch exhaustively on it and the families have different scope shapes -- a lexical signal carries a term and NO geography key, a series signal carries a metric and a geography -- so an unhandled third value is a bug rather than a gap. It is deliberately NOT DemandSignalFamily: PAIN/DESIRE/BEHAVIORAL/MARKET classify demand, and a count of how often a token occurred in news text is not evidence of demand. It is also not the registry called signal_family, which says what a SOURCE could expose (ADR-017). Three relations, three subjects, three names."
     },
@@ -807,7 +808,8 @@
         "COMPARABLE_INSTANT",
         "SOURCE_LANGUAGE_LABEL",
         "CANONICAL_LANGUAGE",
-        "CLASSIFIED_GEOGRAPHY"
+        "CLASSIFIED_GEOGRAPHY",
+        "PAIRED_MONETARY_AMOUNT"
       ],
       "description": "A canonical fact a derivation declares it needs. Closed because each value maps to a specific set of NormalizationQualityReason values that withhold it and to the record kinds that can supply it, so the check is mechanical rather than a judgement. The point is that PARTIAL must not automatically mean unusable: what matters is whether the SPECIFIC missing fact matters to the SPECIFIC derivation."
     },

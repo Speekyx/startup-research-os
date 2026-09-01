@@ -126,7 +126,15 @@ RENAME_COLUMN = re.compile(r"RENAME\s+COLUMN\s+([a-z_]+)\s+TO\s+([a-z_]+)", re.I
 # Both live cases pair a drop with a rename (`sources.status` -> `lifecycle` in
 # 0004, `signals.signal_family` -> `quantity_family` in 0012), which is exactly
 # when the old definition is most misleading.
-DROP_CONSTRAINT = re.compile(r"DROP\s+CONSTRAINT\s+([a-z_]+)", re.IGNORECASE)
+# `IF EXISTS` is optional and standard, and the pattern must skip it rather than
+# capture `if` as the constraint's name. Mission 1.15.9 wrote
+# `DROP CONSTRAINT IF EXISTS signals_quantity_family_check` and this regex read
+# the constraint as `if` -- so the DROP was not recognised, the SUPERSEDED
+# definition stayed in the body, and a deliberately widened value set was
+# reported as drift against the contract. A silent misparse rather than an
+# error, which is the shape worth fixing at the pattern rather than at the
+# migration.
+DROP_CONSTRAINT = re.compile(r"DROP\s+CONSTRAINT\s+(?:IF\s+EXISTS\s+)?([a-z_]+)", re.IGNORECASE)
 
 
 def strip_constraint(body: str, name: str) -> str:
