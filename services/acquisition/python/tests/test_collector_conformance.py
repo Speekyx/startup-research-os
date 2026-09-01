@@ -447,7 +447,8 @@ class TestNetworkBoundary:
         legible: resource first, collector second.
         """
         assert (
-            frozenset({"world-bank", "gdelt", "ted-eu"}) == sros_acquisition.IMPLEMENTED_COLLECTORS
+            frozenset({"world-bank", "gdelt", "ted-eu", "stack-exchange"})
+            == sros_acquisition.IMPLEMENTED_COLLECTORS
         )
 
 

@@ -463,10 +463,15 @@ class TestTheAdapterAndTheVocabularyStaySeparateClaims:
     def test_gdelt_became_normalizable_in_the_mission_after_this_one(self) -> None:
         """Mission 1.10 defined the model and stopped; 1.10.1 wrote the adapter.
         The order is the point, which is why this moved rather than being
-        deleted."""
+        deleted.
+        Four sources now. Stack Exchange joined in 1.18.
+        """
         from sros_acquisition import IMPLEMENTED_NORMALIZERS
 
-        assert frozenset({"world-bank", "gdelt", "ted-eu"}) == IMPLEMENTED_NORMALIZERS
+        assert (
+            frozenset({"world-bank", "gdelt", "ted-eu", "stack-exchange"})
+            == IMPLEMENTED_NORMALIZERS
+        )
 
     def test_the_adapter_module_is_the_web_ngram_one(self) -> None:
         """Mission 1.10 asserted that no module existed at all. One does now, and

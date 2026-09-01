@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.40
-Last amended: 2026-09-01 (Sprint 1 / Mission 1.17)
+Version: 1.42
+Last amended: 2026-09-02 (Sprint 1 / Mission 1.18)
 
 ## Boot Sequence
 
@@ -49,6 +49,8 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.42 | 2026-09-02 | **Stack Exchange collected, normalized, and correctly producing NOTHING.** A fourth record kind -- `community_question`, the first named for a SHAPE rather than for the first source to reach it -- and `stack-exchange-question@1.0.0`. **15 NormalizedRecords, all `VALID`**, which no adapter here had managed: GDELT is `PARTIAL` for H-29/H-30 and TED for H-37, and nothing is open here. **The first adapter whose period is `ESTABLISHED` on the source's own evidence**, so `observed_at` is a real moment for the first time. **OUTCOME S0: 0 Signals, 0 Claims, 0 Evidence.** 35 distinct tags over 15 questions, three tags repeated, no two questions sharing a tag set, and one question in both non-trivial cohorts: **a tag is a subject, not a problem**. The cohort was not weakened and no second query was run. Two latent normalizer defects found by tests in paths the real data never took |
+| 1.41 | 2026-09-01 | **Stack Exchange APPROVES under the local profile; no collector built.** The first approving review for a community-content source, and the first where the positive rights come from a CONTENT LICENCE rather than a platform's terms: the API Terms decide ACCESS and are silent on reuse, CC BY-SA 4.0 decides REUSE and grants commercial use. The API carve-out removes an obstacle and **grants nothing**. **ShareAlike is avoided by the profile, not answered** -- it attaches to Adapted Material that is SHARED and this profile shares nothing, so it must be re-reviewed before anything is published. `PLATFORM_LICENSED` argued, not set: `THIRD_PARTY` means *separate permission is required* and CC BY-SA already reaches us. Terms were **operator-supplied** after HTTP 403; **no 403 retried, no header varied**. Owner objects excluded at acquisition; the Data Dump registered so it could be refused by name |
 | 1.40 | 2026-09-01 | **The registry and the runtime agree, and nothing was inherited to get there.** Five sources gained a `local-private-research-v1` review, each version 1 of its own line, evidence reused and decisions re-made. **ADR-027 unchanged, no fallback**: `ted-eu` is still approving locally and REFUSED commercially. Four ELIGIBLE; OpenAlex approves and stays blocked on two unsatisfied conditions, and is the one place the local profile is **stricter** (scholarly authorship, MINIMISED posture). **The named GDELT gap is closed for this profile**: `gdelt-doc-api` and `gdelt-bulk-files` are now blocked BY NAME, because a narrowing that exists only in the review text is not a narrowing. Loader bug fixed: condition and evidence row ids omitted the profile, so two reviews of one source sharing a condition key collided |
 | 1.39 | 2026-09-01 | **No source added, and the blocker is the product.** Ten sources cover `problem` or `desire` and none approves. Stack Exchange won the selection and could not proceed: its two outstanding documents sit behind an anti-bot interstitial this environment cannot reach at all, and **no bypass was attempted**. **The larger finding: the runtime declares `local-private-research-v1` and exactly ONE review exists under it.** `world-bank`, `gdelt`, `eurostat`, `fred` and `openalex` are all REFUSED at the gate today -- the deployment holds 15 of 23 RawRecords it could not re-collect, gathered before ADR-027 existed and carrying no `use_profile` in their provenance. The gate is right; the review nobody wrote is what is missing. Next: local-profile reviews FIRST, then Stack Exchange |
 | 1.38 | 2026-09-01 | **The first ReliabilityAssessment, and the first evidence score.** A generic operator tool with **no default for any judgement field** -- value, reviewer, rationale and limitation are all refused blank, and the packet is FACTS while the file is JUDGEMENT. Recorded: `HUMAN_REVIEW` **0.5** by a named person over the TED procurement scope, on 4 document-backed basis rows. **The Evidence is now SCORABLE and `q_i = min(components)` names RELIABILITY as the limiting component** -- score 50.0, support 0.5, uncertainty 0.5. **Level stayed 1**: the category gate and unknown independence both hold, so reliability alone cannot reach Level 4. Nothing persisted downstream, profile still `UNCALIBRATED`, D-03 untouched. `scoring.evidence.reliability` stays NULL -- resolved late from the assessment with the binding recorded (ADR-026) |
@@ -431,7 +433,7 @@ none of them is negotiable (`source-registry-v1.md` §1, ADR-013):
   product, and a permission obtained by describing a smaller product is a
   permission for a product we are not building.
 
-### Collection — three collectors, and what bounds them
+### Collection — four collectors, and what bounds them
 
 Since Mission 1.5 the World Bank Indicators collector exists
 (`world-bank-collector-v1.md`) and is the reference architecture. Since Mission
@@ -439,8 +441,12 @@ Since Mission 1.5 the World Bank Indicators collector exists
 (`gdelt-web-ngram-collector-v1.md`), reading a published gzipped file rather than
 a paginated API. Since Mission 1.15.7 the TED Search API collector exists
 (`ted-eu-search-api-collector-v1.md`), posting a composed JSON body to a
-documented search endpoint. Five rules apply to all three and to every collector
-that follows:
+documented search endpoint. Since Mission 1.18 the Stack Exchange questions
+collector exists (`stack-exchange-questions-v1.md` §12), the first that reaches a
+source whose positive rights come from a CONTENT LICENCE rather than a platform's
+terms, and the first to perform **field minimisation through the source's own
+filter mechanism** rather than after the fact. Five rules apply to all four and to
+every collector that follows:
 
 - **No authorization, no collection.** `collect` takes an
   `AcquisitionAuthorizationContext` as its first positional parameter, with no
@@ -544,16 +550,33 @@ the row id says WHICH transformation of it. The normalization timestamp is in
 none of them.
 
 **Record kinds are a registry and a kind exists because DATA exists** (Mission
-1.10). Two now: `numeric_observation`, and `lexical_frequency_observation` — one
+1.10). **Four now**: `numeric_observation`; `lexical_frequency_observation` — one
 occurrence count for one lexical term, one language, one period, and **no
-geography key at all**. Widening the first to fit the second would have let a
-World Bank record exist without a geography, which is the existing model getting
-worse for a new source's sake.
+geography key at all**; `procurement_notice` (Mission 1.15.8); and
+`community_question` (Mission 1.18). Widening the first to fit the second would
+have let a World Bank record exist without a geography, which is the existing
+model getting worse for a new source's sake, and the same argument produced the
+third and the fourth.
+
+**A kind is named for a SHAPE, never for the first source to reach it** (Mission
+1.18). `community_question` is one public question a person asked on a community
+Q&A site: a title, the text, the SITE's own tags, a creation instant and the
+answer metadata. `stack_exchange_question` would have made the vocabulary a list
+of vendors — the site is a FIELD and the source is PROVENANCE. Three things it
+must never be read as saying, each written into the payload rather than left to a
+reader: the tags are the site's vocabulary and are never translated into a
+taxonomy of ours; an accepted answer means only that the ASKER accepted one, never
+that the problem is solved; and the score and view count are source counters, not
+importance, not demand and not market size. Author identity is `null` because it
+was never acquired, and a raw record that carries `owner`, `last_editor` or
+`comments` is REFUSED at normalization rather than stripped.
 
 That is a different rule from the one governing adapters. A vocabulary row lets
 the model describe a shape and lets the database refuse an unregistered one; the
-claim that **code** exists is `NORMALIZER_REGISTRY` and `IMPLEMENTED_NORMALIZERS`,
-and GDELT is in neither.
+claim that **code** exists is `NORMALIZER_REGISTRY` and `IMPLEMENTED_NORMALIZERS`.
+When Mission 1.10 wrote this, GDELT was in neither; all four sources are in both
+now, and the distinction is the same one — a registered kind with no adapter
+behind it would still be a promise the code does not keep.
 
 **A revision is not an overwrite and an upgrade is not a replacement.** A revised
 RawRecord produces a new normalized row with the previous one superseded; a newer
@@ -569,11 +592,29 @@ collector is implemented" — which Mission 1.5 made false while leaving
 normalization exactly as unavailable. `normalization_block` now derives it from
 what exists, and a future Eurostat collector with no normalizer stays blocked.
 
-**Three adapters exist** (Missions 1.10.1 and 1.15.8): `world-bank-indicators-numeric` and
-`gdelt-web-ngram-lexical`. Both are offline and deterministic, and both are
-asserted so over the **AST** rather than over the file's text — a substring scan
-fails on the docstring that explains the rule, and weakening it until it passes
-is how a structural check stops checking (`testing-strategy.md` §23).
+**Four adapters exist** (Missions 1.10.1, 1.15.8 and 1.18):
+`world-bank-indicators-numeric`, `gdelt-web-ngram-lexical`,
+`ted-search-api-notice` and `stack-exchange-question`. All are offline and
+deterministic, and asserted so over the **AST** rather than over the file's text —
+a substring scan fails on the docstring that explains the rule, and weakening it
+until it passes is how a structural check stops checking
+(`testing-strategy.md` §23).
+
+**An `ESTABLISHED` period is possible, and Mission 1.18 is the first to earn
+one.** Stack Exchange's `creation_date` is a Unix epoch second, which is an
+unambiguous instant — unlike TED's offset-without-a-time (H-37) or GDELT's unzoned
+bucket (H-29) — so `observed_at` is a real moment there and NULL everywhere else.
+This does not weaken the rule above it: the timezone is still stated rather than
+chosen, and what changed is that one source finally states it.
+
+**Every `community_question` record is `VALID`, and that is not an oversight.**
+The adapter has **no `PARTIAL` branch at all**: a record either carries the four
+facts the kind requires or it is refused. A missing question body leaves the
+record `VALID` with `question.body: null`, because `NormalizationQualityReason`
+has no member that would truthfully name that absence and reaching for the nearest
+one would put a wrong code where a consumer branches. Adding a member to a
+generated closed enum is a contract change with an ADR behind it, and no record in
+the real sample calls for one.
 
 **A known absence is stated, never filled in.** Every GDELT normalized record is
 `PARTIAL`, carrying `PERIOD_TIMEZONE_NOT_ESTABLISHED` and `LANGUAGE_NOT_MAPPED`,
@@ -1395,6 +1436,38 @@ would retrieve the corpus; there is **no fallback** to `ted-open-data-sparql`,
 which is authorised and unimplemented, because a fallback turns a reviewed route
 into a runtime choice; and the four monetary semantics stay under their own
 names, with no `price_paid` and no currency conversion.
+
+**Stack Exchange is eligible, collected, normalized — and produced NOTHING
+downstream, correctly** (Mission 1.18, `stack-exchange-questions-v1.md` §14).
+**15 RawRecords, 15 NormalizedRecords all `VALID`, 0 Signals, 0 Claims, 0
+Evidence, 0 ReliabilityAssessments.** Not blocked and not deferred: a derivation
+was considered against the real questions and there was nothing to derive.
+
+**A tag identifies a SUBJECT and never a PROBLEM**, and the sample is the
+evidence rather than the argument. 15 questions carry 35 distinct tags; exactly
+three appear more than once; no two questions share a complete tag set; no quoted
+identifier repeats in any title. `python` is on all 15 because it is what the
+query asked for, so a cohort built on it is a property of the retrieval.
+`google-cloud-platform` groups duplicate Eventarc processing, a `setup.py` type
+error and Google Docs text extraction. `deep-learning` groups the same `setup.py`
+error and a backpropagation question. **One question is in both cohorts**, which
+one repeated problem cannot be.
+
+Getting past that would take semantic inference over question text, which is an
+INFERRED step no Signal may rest on. **The cohort was not weakened to produce
+output and no second query was run to find a friendlier sample** — a support
+threshold lowered until something appears is a threshold that measures the
+analyst. What would change the answer is a different ACQUISITION SHAPE, not a
+different rule: many questions about one narrow tool, where a concrete failure
+could actually recur. That is a mission with its own bounded acquisition and its
+own review of what the query selects for.
+
+**The consequence for the portfolio is the uncomfortable one.** `problem` now has
+an approving, collected, normalized source and still no evidence, because what a
+public Q&A site publishes is somebody asking how to do something, once each. **No
+source in the portfolio observes the same subject twice**, and that — not the
+absence of a `problem` source — is the gap with the most leverage. No proxy is
+proposed, because a proxy nobody can validate is worse than an acknowledged gap.
 
 **No collector may be implemented for a source that is not collector-eligible.**
 D-07 is resolved and the registry exists. Two sources pass the gate; one has a

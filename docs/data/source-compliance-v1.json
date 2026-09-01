@@ -14,7 +14,7 @@
       "evidence_url": "https://ec.europa.eu/eurostat/web/main/help/copyright-notice",
       "evidence_section": "General principles; Exceptions; How to re-use Eurostat material for commercial purposes; How to cite Eurostat products",
       "attribution": {
-        "notes": "Citation must give the dataset DOI and the access date; both are per-retrieval values and neither can be defaulted. Modifications must be stated with a non-responsibility disclaimer, and the exact disclaimer wording is NOT in the retrieved evidence -- so the disclaimer is required as SUPPLIED text rather than composed here. Inventing the sentence would be the opposite of preserving a required notice exactly.",
+        "notes": "Citation must give the dataset DOI and the access date; both are per-retrieval values and neither can be defaulted. Modifications must be stated with a non-responsibility disclaimer, and the exact disclaimer wording is NOT in the retrieved evidence -- so the disclaimer is required as SUPPLIED text rather than composed here. Inventing the sentence would be the opposite of preserving a required notice exactly.\n\nADR-031 APPLIES HERE TOO, AND IS DELIBERATELY NOT DECLARED YET. CC BY 4.0 requires 'a URI or hyperlink to the Licensed Material to the extent reasonably practicable', and Mission 1.18 added `SOURCE_ITEM_LINK` to the vocabulary so it can be expressed. Declaring it here would be correct and would immediately fail closed: this source's collector supplies no per-item link, so `build_draft` could not render the obligation and no record could be built. Mission 1.18 was told not to modify this source, and changing a collector it was told not to touch in order to satisfy a condition it added is the wrong order. Recorded as a finding with a named follow-up: declare the element and teach the collector to supply the item URL, in a mission that owns this source.",
         "requirements": [
           {
             "element": "SOURCE_CREDIT",
@@ -145,7 +145,7 @@
       "evidence_url": "https://ec.europa.eu/eurostat/web/main/help/copyright-notice",
       "evidence_section": "General principles; Exceptions; How to re-use Eurostat material for commercial purposes; How to cite Eurostat products",
       "attribution": {
-        "notes": "Citation must give the dataset DOI and the access date; both are per-retrieval values and neither can be defaulted. Modifications must be stated with a non-responsibility disclaimer, and the exact disclaimer wording is NOT in the retrieved evidence -- so the disclaimer is required as SUPPLIED text rather than composed here. Inventing the sentence would be the opposite of preserving a required notice exactly.",
+        "notes": "Citation must give the dataset DOI and the access date; both are per-retrieval values and neither can be defaulted. Modifications must be stated with a non-responsibility disclaimer, and the exact disclaimer wording is NOT in the retrieved evidence -- so the disclaimer is required as SUPPLIED text rather than composed here. Inventing the sentence would be the opposite of preserving a required notice exactly.\n\nADR-031 APPLIES HERE TOO, AND IS DELIBERATELY NOT DECLARED YET. CC BY 4.0 requires 'a URI or hyperlink to the Licensed Material to the extent reasonably practicable', and Mission 1.18 added `SOURCE_ITEM_LINK` to the vocabulary so it can be expressed. Declaring it here would be correct and would immediately fail closed: this source's collector supplies no per-item link, so `build_draft` could not render the obligation and no record could be built. Mission 1.18 was told not to modify this source, and changing a collector it was told not to touch in order to satisfy a condition it added is the wrong order. Recorded as a finding with a named follow-up: declare the element and teach the collector to supply the item URL, in a mission that owns this source.",
         "requirements": [
           {
             "element": "SOURCE_CREDIT",
@@ -568,6 +568,114 @@
       }
     },
     {
+      "source_id": "stack-exchange",
+      "use_profile_id": "local-private-research-v1",
+      "review_version": 1,
+      "evidence_url": "https://stackoverflow.com/legal/terms-of-service/public",
+      "evidence_section": "Subscriber Content (CC BY-SA 4.0); API carve-out from the storage restriction; API Terms of Use attribution requirement",
+      "attribution": {
+        "notes": "TWO OBLIGATIONS FROM TWO DOCUMENTS, and they are not the same one said twice. The API Terms require that an Application 'visually indicate that the Stack Exchange Network is the source' -- an obligation about the PRODUCT SURFACE, owed because of how the data was reached. CC BY-SA 4.0 requires attribution and a licence identifier -- an obligation about the CONTENT, owed because of what the data is. A surface that satisfied one would not satisfy the other.\n\nThe per-question source reference is SUPPLIED rather than fixed, because the licence's attribution runs to the specific material and a constant string would attribute every question to the network in general.\n\nA GAP THE FIRST CC BY-SA SOURCE EXPOSED, recorded rather than worked around. CC BY-SA 4.0 requires 'a URI or hyperlink to the Licensed Material to the extent reasonably practicable', and `AttributionElement` has no member for a per-item link: SOURCE_CREDIT, LICENCE_IDENTIFIER, EXACT_NOTICE, MODIFICATION_STATEMENT, DATASET_DOI, ACCESS_DATE and DISCLAIMER are the whole vocabulary. DATASET_DOI is the nearest and is wrong -- it names a DOI for a dataset, not a link to one contributed item.\n\nThe gap is not new and is not specific to this source: World Bank and Eurostat are CC BY 4.0 and carry the same requirement, configured with the same three elements. Adding a member to a closed enum is a contract change with an ADR behind it (Ontology V2 §14.2), and doing it as a side effect of a source mission is exactly the change-control violation docs/CLAUDE.md describes. Recorded as an open question.\n\nWhat is NOT lost meanwhile: the per-question canonical URL is acquired and persisted in provenance, so the link a future element would render is already held. The gap is in what the attribution CONTRACT can express, not in what the data supports.\n\nADR-031. SOURCE_ITEM_LINK was added to the attribution vocabulary in Mission 1.18 and declared here, because CC BY and CC BY-SA both require 'a URI or hyperlink to the Licensed Material to the extent reasonably practicable' and no member could express it. The obligation did not change; what changed is the configuration's ability to record it. The condition had been reporting SATISFIED over an under-declared obligation -- a correct mechanism check across an incomplete list, which is a worse shape than a failing check.",
+        "requirements": [
+          {
+            "element": "SOURCE_CREDIT",
+            "text": "Stack Exchange Network",
+            "supplied": false,
+            "when_modified": false
+          },
+          {
+            "element": "LICENCE_IDENTIFIER",
+            "text": "CC BY-SA 4.0",
+            "supplied": false,
+            "when_modified": false
+          },
+          {
+            "element": "MODIFICATION_STATEMENT",
+            "text": null,
+            "supplied": true,
+            "when_modified": true
+          },
+          {
+            "element": "SOURCE_ITEM_LINK",
+            "text": null,
+            "supplied": true,
+            "when_modified": false
+          }
+        ]
+      },
+      "data_minimisation": {
+        "allowed": [
+          "question_id",
+          "site",
+          "title",
+          "body",
+          "tags",
+          "creation_label",
+          "answer_count",
+          "is_answered",
+          "accepted_answer_id",
+          "score",
+          "view_count",
+          "question_url",
+          "content_licence"
+        ],
+        "excluded": [
+          "owner",
+          "owner_display_name",
+          "owner_user_id",
+          "owner_profile_url",
+          "owner_reputation",
+          "owner_profile_image",
+          "owner_account_id",
+          "last_editor",
+          "comments",
+          "natural_person_name",
+          "personal_identifier"
+        ],
+        "notes": "THE FIRST SOURCE IN THE PORTFOLIO WHERE THE PERSONAL DATA IS THE POINT OF THE RECORD RATHER THAN AN EDGE CASE. A Stack Exchange question is authored by an identifiable person and the API returns an `owner` object by default: display name, account id, profile link, reputation, avatar. None of it is needed to observe that somebody asked how to accomplish something.\n\nExcluded AT ACQUISITION through the API's own `filter` mechanism, not dropped afterwards. A request that fetched the owner object and discarded it has still fetched it, and no method removes a field from a record already collected.\n\n`comments` is excluded for the same reason and a second one: a comment is a different utterance by a different person, and acquiring it would widen the personal-data surface without widening what the evidence establishes."
+      },
+      "resource_scope": {
+        "third_party_denied": true,
+        "licence_allowlist": [
+          "CC-BY-SA-4.0"
+        ],
+        "licence_allowlist_note": "Subscriber Content is CC BY-SA 4.0 under the Public Network Terms. A resource whose licence is recorded as anything else is denied rather than assumed to be the same, because the Terms distinguish Subscriber Content from other Network Content and only the first carries this licence.",
+        "allowed_dataset_families": [
+          "stack-exchange-questions"
+        ],
+        "excluded_dataset_families": [
+          "stack-exchange-data-dump",
+          "stack-exchange-users",
+          "stack-exchange-teams",
+          "stack-exchange-chat",
+          "stack-exchange-jobs",
+          "stack-exchange-companies"
+        ],
+        "require_dataset_family": true,
+        "excluded_note": "Excluded BY NAME rather than merely unlisted. The Data Dump is a separate route with a separate rights question that this review did not ask; users, Teams, chat, jobs and companies are separate content categories the review did not assess. A source-level approval is not a wildcard over everything the platform publishes."
+      },
+      "route_authorization": {
+        "allowed_labels": [
+          "stack-exchange-api"
+        ],
+        "blocked_labels": [
+          "stack-exchange-data-dump"
+        ],
+        "preferred_label": "stack-exchange-api",
+        "basis": "Mission 1.18 local review condition OFFICIAL API ONLY. The API Terms permit an Application to programmatically query the Network through the API Services, and that is the authorised route.\n\n`stack-exchange-data-dump` is BLOCKED BY NAME, and the route was registered in the same mission so that it could be. Stack Exchange really does publish periodic Data Dumps of Subscriber Content, so the route is a fact about the source; refusing a route that the registry does not record would be refusing nothing, and the validator is right that naming a permitted path without refusing an excluded one records a preference rather than a restriction.\n\nThe review did not assess the Data Dump. A whole-corpus download is a different rights question at a different volume, and the excluded dataset families refuse it a second time at the resource gate. HTML retrieval and browser automation are refused by the review's `browser_automation: NOT_PERMITTED` and have no access profile at all."
+      },
+      "datasets": [
+        {
+          "resource_id": "questions/stackoverflow",
+          "name": "Stack Overflow questions (official API, bounded queries)",
+          "dataset_family": "stack-exchange-questions",
+          "rights_basis": "NAMED_LICENCE",
+          "licence": "CC-BY-SA-4.0",
+          "content_origin": "PLATFORM_LICENSED",
+          "basis": "Mission 1.18. ONE SITE, ONE CONTENT TYPE. Questions on `stackoverflow`, through the official API, in bounded queries.\n\nWHY THIS SITE. The opportunity domain is software and developer tooling, and Stack Overflow is where problems in that domain are asked. The other ~180 network sites are not assumed to carry equal opportunity value and are not authorised: `cooking` and `scifi` are the same platform and a different subject, and a review that said 'Stack Exchange' would have approved them without looking.\n\nWHY CONTENT_ORIGIN IS THIRD_PARTY, which is the load-bearing field. The content is written by users and licensed by them under CC BY-SA 4.0; Stack Exchange hosts and publishes it. It is NOT platform-licensed in the sense TED's notices are, where the publisher holds the rights it grants. That distinction is why the attribution obligation runs to the material and why ShareAlike attaches to the content rather than to a platform term.\n\nWHY PLATFORM_LICENSED AND NOT THIRD_PARTY, which was the mission's closest modelling call and the one that decided whether this resource is reachable at all.\n\nThe content is written by users. Stack Exchange does not own it, and a reader must not conclude from this field that it does. But the enum is not asking who owns the material -- it is asking whether a separate permission is still needed. THIRD_PARTY means 'the platform's approval grants nothing over it, and separate permission from the owner IS REQUIRED'. Here that permission already exists and already reaches us: each contributor grants CC BY-SA 4.0 to everyone by contributing under the Public Network Terms, and there is nobody left to ask.\n\nPLATFORM_LICENSED's own test is 'the platform produces or licenses this resource, and THE REVIEWED TERMS COVER IT'. The Public Network Terms are the reviewed terms and they cover Subscriber Content explicitly, by naming its licence. The documentary link holds at both ends, which is the same reasoning Mission 1.15.7 recorded for TED under a different instrument.\n\nClassified THIRD_PARTY, this resource is refused by `third_party_denied` and the source is approving but unreachable -- which would have been the wrong answer for the right-sounding reason, and is why the field is argued rather than set."
+        }
+      ]
+    },
+    {
       "source_id": "ted-eu",
       "use_profile_id": "local-private-research-v1",
       "review_version": 2,
@@ -664,7 +772,7 @@
       "evidence_url": "https://datacatalog.worldbank.org/public-licenses",
       "evidence_section": "Creative Commons Attribution 4.0 (CC-BY 4.0); Microdata Research License; License Specified Externally; Custom License",
       "attribution": {
-        "notes": "CC-BY 4.0 permits commercial use provided appropriate credit is given AND changes are indicated. The licence prescribes no exact sentence, so the credit string is configuration; the requirement that changes be indicated is not, which is why MODIFICATION_STATEMENT is supplied per artefact rather than defaulted. The licence identifier is per DATASET -- the same platform distributes CC-BY 4.0 and ODbL data -- so it cannot be a fixed string either.",
+        "notes": "CC-BY 4.0 permits commercial use provided appropriate credit is given AND changes are indicated. The licence prescribes no exact sentence, so the credit string is configuration; the requirement that changes be indicated is not, which is why MODIFICATION_STATEMENT is supplied per artefact rather than defaulted. The licence identifier is per DATASET -- the same platform distributes CC-BY 4.0 and ODbL data -- so it cannot be a fixed string either.\n\nADR-031 APPLIES HERE TOO, AND IS DELIBERATELY NOT DECLARED YET. CC BY 4.0 requires 'a URI or hyperlink to the Licensed Material to the extent reasonably practicable', and Mission 1.18 added `SOURCE_ITEM_LINK` to the vocabulary so it can be expressed. Declaring it here would be correct and would immediately fail closed: this source's collector supplies no per-item link, so `build_draft` could not render the obligation and no record could be built. Mission 1.18 was told not to modify this source, and changing a collector it was told not to touch in order to satisfy a condition it added is the wrong order. Recorded as a finding with a named follow-up: declare the element and teach the collector to supply the item URL, in a mission that owns this source.",
         "requirements": [
           {
             "element": "SOURCE_CREDIT",
@@ -770,7 +878,7 @@
       "evidence_url": "https://datacatalog.worldbank.org/public-licenses",
       "evidence_section": "Creative Commons Attribution 4.0 (CC-BY 4.0); Microdata Research License; License Specified Externally; Custom License",
       "attribution": {
-        "notes": "CC-BY 4.0 permits commercial use provided appropriate credit is given AND changes are indicated. The licence prescribes no exact sentence, so the credit string is configuration; the requirement that changes be indicated is not, which is why MODIFICATION_STATEMENT is supplied per artefact rather than defaulted. The licence identifier is per DATASET -- the same platform distributes CC-BY 4.0 and ODbL data -- so it cannot be a fixed string either.",
+        "notes": "CC-BY 4.0 permits commercial use provided appropriate credit is given AND changes are indicated. The licence prescribes no exact sentence, so the credit string is configuration; the requirement that changes be indicated is not, which is why MODIFICATION_STATEMENT is supplied per artefact rather than defaulted. The licence identifier is per DATASET -- the same platform distributes CC-BY 4.0 and ODbL data -- so it cannot be a fixed string either.\n\nADR-031 APPLIES HERE TOO, AND IS DELIBERATELY NOT DECLARED YET. CC BY 4.0 requires 'a URI or hyperlink to the Licensed Material to the extent reasonably practicable', and Mission 1.18 added `SOURCE_ITEM_LINK` to the vocabulary so it can be expressed. Declaring it here would be correct and would immediately fail closed: this source's collector supplies no per-item link, so `build_draft` could not render the obligation and no record could be built. Mission 1.18 was told not to modify this source, and changing a collector it was told not to touch in order to satisfy a condition it added is the wrong order. Recorded as a finding with a named follow-up: declare the element and teach the collector to supply the item URL, in a mission that owns this source.",
         "requirements": [
           {
             "element": "SOURCE_CREDIT",

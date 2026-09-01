@@ -41,7 +41,8 @@
         "MODIFICATION_STATEMENT",
         "DATASET_DOI",
         "ACCESS_DATE",
-        "DISCLAIMER"
+        "DISCLAIMER",
+        "SOURCE_ITEM_LINK"
       ],
       "description": "One required part of a source's attribution obligation. A closed enum because the renderer branches exhaustively: an element it does not recognise must be a contract change, never a silently dropped requirement."
     },

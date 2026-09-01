@@ -303,11 +303,20 @@ class TestRecordKinds:
         organisations in roles and several distinct dates; widening
         `numeric_observation` to hold it would have given a World Bank
         population figure an award status.
+
+        Mission 1.18 added the fourth, and it is the first named for a SHAPE
+        rather than for the first source to reach it. A `community_question` is
+        a document a person wrote asking how to accomplish something: it carries
+        no measured value, counts no term, and is nobody's procurement. Public
+        Q&A sites other than Stack Overflow publish the same shape, so naming
+        the kind `stack_exchange_question` would have made the vocabulary a list
+        of vendors -- the SITE is a field, and the source is provenance.
         """
         assert set(RECORD_KINDS) == {
             "numeric_observation",
             "lexical_frequency_observation",
             "procurement_notice",
+            "community_question",
         }
 
     def test_no_hypothetical_kind_is_declared(self) -> None:
@@ -646,7 +655,7 @@ class TestSelection:
             select_normalizer(raw_view(), {})
 
     def test_the_registry_holds_one_adapter_per_collector(self) -> None:
-        """Two now. The key is `(source_id, collector_id)` rather than the source
+        """Four now. The key is `(source_id, collector_id)` rather than the source
         alone — a second collector for one source parses a different shape, and
         handing it to the wrong adapter would produce plausible nonsense rather
         than an error."""
@@ -654,6 +663,7 @@ class TestSelection:
 
         assert sorted(NORMALIZER_REGISTRY) == [
             ("gdelt", "gdelt-web-ngram"),
+            ("stack-exchange", "stack-exchange-questions"),
             ("ted-eu", "ted-search-api"),
             ("world-bank", "world-bank-indicators"),
         ]

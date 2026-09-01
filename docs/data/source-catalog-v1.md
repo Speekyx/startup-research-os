@@ -82,7 +82,7 @@ Activities are assessed separately, because their conditions differ. A source ma
 | `pypi` | developer | public api | yes | no | not addressed | conditional | not addressed | not addressed | not addressed | UNKNOWN | PSEUDONYMOUS | `REQUIRES_REVIEW` | **no** |
 | `reddit` | community | official api | yes | yes | unclear | conditional | not assessed | not assessed | not assessed | UNKNOWN | PSEUDONYMOUS | `REQUIRES_REVIEW` | **no** |
 | `spotify` | content_platform | official api | yes | yes | **not permitted** | **not permitted** | **not permitted** | **not permitted** | **not permitted** | UNKNOWN | UNKNOWN | `PROHIBITED` | **no** |
-| `stack-exchange` | forum | official api | yes | no | unclear | conditional | not addressed | not addressed | unclear | UNKNOWN | PSEUDONYMOUS | `REQUIRES_REVIEW` | **no** |
+| `stack-exchange` | forum | dataset download, official api | yes | no | unclear | conditional | not addressed | not addressed | unclear | UNKNOWN | PSEUDONYMOUS | `REQUIRES_REVIEW` | **no** |
 | `steam` | gaming | official api | yes | yes | not addressed | conditional | conditional | not addressed | **not permitted** | documented | PSEUDONYMOUS | `RESTRICTED` | **no** |
 | `ted-eu` | public_procurement | dataset download, official api | yes | no | permitted | permitted | permitted | permitted | permitted | UNKNOWN | IDENTIFIABLE | `REQUIRES_REVIEW` | **no** |
 | `tiktok` | social | official api | yes | yes | **not permitted** | **not permitted** | **not permitted** | not assessed | **not permitted** | UNKNOWN | IDENTIFIABLE | `PROHIBITED` | **no** |
@@ -1298,12 +1298,14 @@ Question-and-answer network including Stack Overflow. Questions are explicit sta
 |---|---|---|---|---|
 | 1 | 2026-08-29 | `mission-1.0` | `REQUIRES_REVIEW` | 0 |
 | 2 ← current | 2026-08-29 | `mission-1.3` | `REQUIRES_REVIEW` | 1 |
+| 1 | 2026-09-01 | `mission-1.18` | `APPROVED_WITH_CONDITIONS` | 3 |
 
 **Access profiles** (how, not whether)
 
 | Method | Label | Requires | Secret references | Rate limit | Cost |
 |---|---|---|---|---|---|
 | `OFFICIAL_API` | stack-exchange-api | api key, dev app | `STACK_EXCHANGE_API_KEY` | **UNKNOWN** | `UNKNOWN` |
+| `DATASET_DOWNLOAD` | stack-exchange-data-dump | nothing | — | **UNKNOWN** | `FREE` |
 
 **Assessment**
 

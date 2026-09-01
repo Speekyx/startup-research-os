@@ -185,6 +185,7 @@ class AttributionElement(str, Enum):
     DATASET_DOI = "DATASET_DOI"  # The persistent identifier of the specific dataset used. A per-resource value; it cannot be defaulted
     ACCESS_DATE = "ACCESS_DATE"  # The date the data was retrieved. A per-retrieval value; it cannot be defaulted
     DISCLAIMER = "DISCLAIMER"  # A disclaimer the terms require alongside modified data, supplied as text rather than composed by this system when the exact wording is not in the recorded evidence
+    SOURCE_ITEM_LINK = "SOURCE_ITEM_LINK"  # A link to the specific item the content came from, where the licence requires the material itself to be locatable -- CC BY and CC BY-SA both do. A per-item value; it cannot be defaulted, because a fixed link would attribute every item to one place (ADR-031)
 
 
 class AcquisitionErrorCode(str, Enum):

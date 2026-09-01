@@ -230,6 +230,7 @@ export const ATTRIBUTION_ELEMENT_VALUES = [
   "DATASET_DOI",
   "ACCESS_DATE",
   "DISCLAIMER",
+  "SOURCE_ITEM_LINK",
 ] as const;
 export type AttributionElement = (typeof ATTRIBUTION_ELEMENT_VALUES)[number];
 export function isAttributionElement(v: unknown): v is AttributionElement {

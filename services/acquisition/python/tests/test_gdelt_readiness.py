@@ -103,7 +103,7 @@ class TestNoCollectorWasImplemented:
         assert "gdelt" in IMPLEMENTED_COLLECTORS
         # `ted-eu` joined in Mission 1.15.7, by the same route: approval, then a
         # concrete authorised resource, then code.
-        assert set(IMPLEMENTED_COLLECTORS) == {"world-bank", "gdelt", "ted-eu"}
+        assert set(IMPLEMENTED_COLLECTORS) == {"world-bank", "gdelt", "ted-eu", "stack-exchange"}
 
     def test_gdelt_is_not_enabled(self, gdelt) -> None:
         assert gdelt.collector_enabled is False
