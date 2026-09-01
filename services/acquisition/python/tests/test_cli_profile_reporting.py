@@ -179,7 +179,7 @@ class TestStaleScansTheRequestedProfile:
         Merging the two would put every unreviewed source into a queue under any profile but
         the legacy one, which is noise dressed as work."""
         out = run(capsys, "--use-profile", LOCAL_PROFILE, "stale")
-        assert "NO REVIEW UNDER THIS PROFILE (23)" in out
+        assert "NO REVIEW UNDER THIS PROFILE (22)" in out
         assert "Not a stalled review" in out
 
     def test_the_legacy_view_still_finds_the_sources_awaiting_review(self, capsys) -> None:

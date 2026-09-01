@@ -1,0 +1,233 @@
+# Stack Exchange Questions V1 — Review and Authorisation
+
+**Authoritative.** Mission 1.18. The first approving review for a
+community-content source, and the first where the positive rights come from a
+**content licence** rather than from a platform's terms.
+
+**Verdict: `APPROVED_WITH_CONDITIONS` under `local-private-research-v1`.**
+ELIGIBLE, resource-ready, and **no collector exists yet** — implementation is the
+remaining work.
+
+**No research data was collected.** Counts unchanged.
+
+---
+
+## 1. The three open questions, and what closed them
+
+| | Question | Outcome |
+|---|---|---|
+| 1 | Retrieve the Public Network Terms and the Responsible AI policy and assess commercial reuse, storage and model processing | **Closed.** ToS operator-supplied; RAI policy retrieved directly and found normatively empty for a third party |
+| 2 | The precise attribution obligations CC BY-SA imposes on derived analytics, and whether share-alike reaches aggregated outputs | **Avoided, not answered** — see §4 |
+| 3 | Whether Stack Data Licensing is the required route | **Closed narrowly** — see §5 |
+
+## 2. Evidence provenance, stated exactly
+
+| Document | How it was obtained |
+|---|---|
+| Public Network Terms of Service | **Operator-supplied first-party evidence.** This environment received HTTP 403 |
+| API Terms of Use | **Operator-supplied first-party evidence.** This environment received HTTP 403 |
+| Consolidated Responsible AI policy | **Retrieved directly** by this environment, HTTP 200, 2026-09-01 |
+
+The two 403s came from one ordinary HTTPS request each, with a truthful
+User-Agent naming the project. **Neither was retried, and no header was varied to
+look like a browser.** Varying it would have been the circumvention the mission
+brief and the registry contract both forbid, and the resulting approval would
+have been indistinguishable from a correct one until it mattered.
+
+The documents are official Stack Overflow pages; their retrieval into this
+repository was operator-mediated, and the evidence records say so in their own
+text rather than leaving a reader to assume otherwise.
+
+## 3. The two layers, kept apart
+
+**This is what the review turns on.** API access permission and content reuse
+permission are different questions with different sources:
+
+- **The API Terms decide ACCESS.** They permit an Application to programmatically
+  query and connect to the Network, and they are **silent** on storage,
+  analytics and commercial use. Silence is recorded as silence.
+- **The content licence decides REUSE.** Subscriber Content — which is what
+  questions are — is **CC BY-SA 4.0**, which permits reproduction and adaptation
+  for any purpose including commercial, subject to attribution and ShareAlike.
+
+**The API carve-out removes an obstacle; it grants nothing.** The Terms' storage
+restriction expressly excludes *"other than Subscriber Content or content made
+available via the Stack Overflow API"*, so it does not reach what this collector
+would acquire. Read as a standalone licence it would be a grant by absence, which
+is the reading rule 8 of the registry contract forbids.
+
+**Commercial use is positively granted, by the licence.** That mattered because
+local is not non-commercial: the research evaluates commercial products, so the
+right had to be granted rather than assumed away by the deployment being a laptop.
+
+## 4. ShareAlike is avoided by the profile, not answered by the review
+
+CC BY-SA 4.0's ShareAlike obligation attaches to Adapted Material that is
+**Shared**. `local-private-research-v1` shares nothing: no redistribution, no
+resale, no customer-facing access.
+
+So the classification question — *is a derived analytic artefact Adapted Material
+at all* — **does not have to be decided**, and it was not.
+
+It is carried as an open question rather than closed, because a review that
+quietly relied on *"we do not publish"* without writing it down would be one
+deployment change away from being wrong. **The moment any output is published,
+this review must be redone.**
+
+## 5. Stack Data Licensing, narrowly
+
+Neither governing document states that a separate Stack Data Licensing agreement
+is required for ordinary official-API use.
+
+**That is the whole finding.** It does not generalise to *"Stack Data Licensing is
+never required"* — a different volume, purpose or route could be governed
+differently, and the existence of a paid product is neither a prohibition on the
+free API nor a permission for anything.
+
+## 6. Model processing
+
+**Inference is permitted; training is neither assessed nor authorised.**
+
+Reading and classifying licensed text is use within CC BY-SA's own grant to
+reproduce and to produce Adapted Material. Training is a contested and materially
+different act, the profile forbids it, and the review deliberately did not reach
+for a basis it does not need.
+
+**The AI Addendum is not the answer either way.** It is scoped to Stack's own AI
+Features, AI Inputs and AI Outputs. It is not a third-party grant, and it is not
+on its face a prohibition on an external party analysing ordinary Subscriber
+Content.
+
+**The Responsible AI policy is normatively empty for us**, and this is worth
+recording because the document exists and a later reader will find it. Every
+operative sentence has Stack as its subject: *"Stack is responsible for
+implementing this policy"*, *"We ensure AI systems are designed and trained to be
+fair and unbiased"*, *"The Stack Legal Team ensures that our business understands
+and complies with applicable law"*. It is corporate governance about how Stack
+builds AI. It grants a third party nothing and forbids a third party nothing, and
+it was used as neither.
+
+## 7. The resource
+
+```text
+questions/stackoverflow          family: stack-exchange-questions
+route:      stack-exchange-api   (OFFICIAL_API, https://api.stackexchange.com/2.3/)
+licence:    CC-BY-SA-4.0         rights basis: NAMED_LICENCE
+origin:     PLATFORM_LICENSED    (§8)
+```
+
+**One site, one content type.** Stack Overflow questions. The opportunity domain
+is software and developer tooling, and that is where those problems are asked.
+The other ~180 network sites are **not** authorised and are not assumed to carry
+equal opportunity value — `cooking` and `scifi` are the same platform and a
+different subject, and a review that said "Stack Exchange" would have approved
+them without looking.
+
+**Refused by name**, at two gates: the Data Dump (route authorisation **and**
+excluded dataset family), and users, Teams, chat, jobs and companies (excluded
+families). The Data Dump route was **registered in this mission so that it could
+be refused** — it genuinely exists, and deleting it to keep the registry tidy
+would falsify a fact about the source to obtain a permission (ADR-028).
+
+## 8. `PLATFORM_LICENSED`, and why it was the closest call
+
+The content is written by users. **Stack Exchange does not own it**, and this
+field must not be read as saying it does.
+
+But the enum is not asking who owns the material. `THIRD_PARTY` means *"the
+platform's approval grants nothing over it, and separate permission from the owner
+is required"* — and that permission already exists and already reaches us: each
+contributor grants CC BY-SA 4.0 to everyone by contributing under the Terms, and
+there is nobody left to ask.
+
+`PLATFORM_LICENSED`'s own test is *"the platform produces or licenses this
+resource, and **the reviewed terms cover it**"*. The Public Network Terms are the
+reviewed terms and they cover Subscriber Content explicitly, by naming its
+licence. The documentary link holds at both ends — the same reasoning Mission
+1.15.7 recorded for TED under a different instrument.
+
+Classified `THIRD_PARTY`, the resource is refused by `third_party_denied` and the
+source is approving but unreachable: the wrong answer for a right-sounding
+reason, which is why the field is argued rather than set.
+
+## 9. Personal data — the first source where it is the point
+
+A Stack Exchange question is authored by an identifiable person, and the API
+returns an `owner` object by default: display name, account id, profile link,
+reputation, avatar. **None of it is needed to observe that somebody asked how to
+accomplish something.**
+
+| Allowed | Excluded |
+|---|---|
+| `question_id`, `site`, `title`, `body`, `tags`, `creation_label`, `answer_count`, `is_answered`, `accepted_answer_id`, `score`, `view_count`, `question_url`, `content_licence` | `owner` and every field under it, `last_editor`, `comments`, `natural_person_name`, `personal_identifier` |
+
+**Excluded at acquisition**, through the API's own `filter` mechanism — not
+dropped afterwards. A request that fetched the owner object and discarded it has
+still fetched it, and no method removes a field from a record already collected.
+
+`comments` is excluded for that reason and a second one: a comment is a different
+utterance by a different person, and acquiring it would widen the personal-data
+surface without widening what the evidence establishes.
+
+## 10. Attribution — two obligations from two documents
+
+They are not the same one said twice:
+
+- **API Terms**: an Application must *"visually indicate that the Stack Exchange
+  Network is the source"* — an obligation about the **product surface**, owed
+  because of how the data was reached.
+- **CC BY-SA 4.0**: attribution and a licence identifier — an obligation about
+  the **content**, owed because of what the data is.
+
+A surface satisfying one would not satisfy the other. Configured as
+`SOURCE_CREDIT` (*Stack Exchange Network*), `LICENCE_IDENTIFIER` (*CC BY-SA 4.0*)
+and `MODIFICATION_STATEMENT` (supplied per artefact, when modified).
+
+### A gap the first CC BY-SA source exposed
+
+CC BY-SA 4.0 also requires *"a URI or hyperlink to the Licensed Material to the
+extent reasonably practicable"*, and **`AttributionElement` has no member for a
+per-item link.** `DATASET_DOI` is the nearest and is wrong — it names a DOI for a
+dataset, not a link to one contributed item.
+
+The gap is **not specific to this source**: World Bank and Eurostat are CC BY 4.0
+and carry the same requirement, configured with the same three elements. Adding a
+member to a closed enum is a contract change with an ADR behind it, and doing it
+as a side effect of a source mission is the change-control violation
+`docs/CLAUDE.md` describes. Recorded as an open question.
+
+**Nothing is lost meanwhile**: the per-question canonical URL is in the allowed
+field list, so the link a future element would render is already held. The gap is
+in what the attribution *contract* can express, not in what the data supports.
+
+## 11. Conditions
+
+| Key | Verification | What it enforces |
+|---|---|---|
+| `stack-exchange-attribution` | CAPABILITY `source-attribution-display` | Both attribution obligations on every derived surface |
+| `stack-exchange-official-api-only` | CAPABILITY `source-route-binding` | Official API only; Data Dump refused by name |
+| `stack-exchange-personal-data-minimisation` | CAPABILITY `source-field-minimisation` | Owner and account objects excluded at acquisition |
+
+All three verify **satisfied**. Stack Exchange is ELIGIBLE.
+
+## 12. What does not exist yet
+
+**No collector, no RawRecord, no record kind, no normalizer, no Signal, no Claim,
+no Evidence.** `readiness` reports `elig yes / rsrc yes / impl no / enab no`, next
+step *implement a collector*.
+
+The official API **is reachable** from this environment (`/2.3/info` returned HTTP
+200), so acquisition is not blocked by the environment — only by the collector not
+being written.
+
+## 13. Known limitations
+
+1. ShareAlike classification is avoided by the profile, not resolved (§4).
+2. Model training is not assessed and not authorised (§6).
+3. The Stack Data Licensing finding is narrow (§5).
+4. The Public Network Terms and API Terms were operator-supplied; re-read them
+   directly at the next review.
+5. `AttributionElement` cannot express a per-item link (§10).
+6. Only `stackoverflow` is authorised; no other network site is.
+7. No job-size ceiling has been reviewed, which is an unasked question rather
+   than a licence.

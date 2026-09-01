@@ -682,6 +682,9 @@ class TestSourceRegistryApi:
             for s in body["sources"]
             if [o for o in body["sources"] if o["source_id"] == s["source_id"]][1:]
         ]
+        # Mission 1.18 added a seventh: every profile alignment grows this set,
+        # which is the prediction the comment above made and the reason it is
+        # written as a defect rather than a fixed number.
         assert set(duplicated) == {
             "ted-eu",
             "world-bank",
@@ -689,6 +692,7 @@ class TestSourceRegistryApi:
             "eurostat",
             "fred",
             "openalex",
+            "stack-exchange",
         }, duplicated
         for source in body["sources"]:
             if source["collector_enabled"] and source["source_id"] not in duplicated:

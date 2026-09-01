@@ -511,11 +511,21 @@ class TestLoadedRegistry:
         # which sources carry conditions is a fact the catalog owns, and pinning
         # it here made this test fail whenever a later review approved a source
         # -- a growth tripwire wearing the clothes of a count assertion.
-        expected = {s.source_id for s in catalog if s.review and s.review.required_conditions}
+        # DERIVED ACROSS EVERY PROFILE, which is what the view reports. This used
+        # to read the legacy review only and then add `ted-eu` by hand, because
+        # ted-eu's conditions live under local-private-research-v1. Mission 1.17
+        # gave five more sources local conditions and Mission 1.18 a seventh, so
+        # the hand-added set was about to become the growth tripwire the comment
+        # below already warns against -- one name appended per mission until
+        # somebody deletes the assertion for being noisy.
+        expected = {
+            source.source_id
+            for source in catalog
+            for review in source.reviews_by_profile().values()
+            if review.required_conditions
+        }
         assert expected, "no source carries a condition; this test would prove nothing"
-        # ted-eu joined this set when it gained required conditions under
-        # local-private-research-v1 (Mission 1.15.5).
-        assert {r[0] for r in rows} == expected | {"ted-eu"}
+        assert {r[0] for r in rows} == expected
         for source_id, total, unsatisfied, actual_total, actual_unsatisfied in rows:
             assert total == actual_total, source_id
             assert unsatisfied == actual_unsatisfied, source_id

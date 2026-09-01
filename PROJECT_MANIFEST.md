@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.39
+Version: 1.40
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-01 (Sprint 1 / Mission 1.17)
+Last amended: 2026-09-01 (Sprint 1 / Mission 1.18)
 
 ---
 
@@ -13,6 +13,52 @@ Last amended: 2026-09-01 (Sprint 1 / Mission 1.17)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.40 — 2026-09-01 (Sprint 1 / Mission 1.18)
+
+Authorized by the Mission 1.18 brief §1-§50.
+
+**Stack Exchange APPROVES under `local-private-research-v1`, and no collector was
+built.** The governance half is complete and the implementation half is not
+started -- an outcome the brief's §37 did not list, stated plainly rather than
+dressed as one of its four.
+
+**The first approving review for a community-content source, and the first where
+the positive rights come from a CONTENT LICENCE rather than a platform's terms.**
+The two layers stay apart: the API Terms decide ACCESS and are silent on storage,
+analytics and commercial use, and silence is recorded as silence; CC BY-SA 4.0
+decides REUSE and grants commercial use, which mattered because local is not
+non-commercial. The API carve-out removes an obstacle and **grants nothing** --
+read as a standalone licence it would be a grant by absence.
+
+**ShareAlike is AVOIDED by the profile, not answered by the review.** The
+obligation attaches to Adapted Material that is SHARED and this profile shares
+nothing, so the classification question did not have to be decided. Carried open,
+because a review quietly relying on "we do not publish" is one deployment change
+away from being wrong.
+
+**`PLATFORM_LICENSED` was the closest call and is argued rather than set.** Users
+own the content, but `THIRD_PARTY` means *separate permission from the owner is
+required* -- and CC BY-SA already reaches us, so there is nobody left to ask.
+Classified `THIRD_PARTY`, the resource is refused by its own scope and the source
+is approving but unreachable: the wrong answer for a right-sounding reason.
+
+**Evidence provenance is stated exactly.** The Public Network Terms and API Terms
+were **operator-supplied** because this environment received HTTP 403 for both;
+the Responsible AI policy was retrieved directly and is **normatively empty for a
+third party** -- every operative sentence has Stack as its subject. **No 403 was
+retried and no header was varied.**
+
+**Personal data is the point of the record here for the first time.** Owner,
+account, profile and comment objects are excluded AT ACQUISITION through the API's
+own filter. The Data Dump route was **registered so that it could be refused by
+name**, because deleting it would falsify a fact about the source to obtain a
+permission.
+
+**A gap the first CC BY-SA source exposed:** `AttributionElement` cannot express
+the per-item link CC BY-SA requires, and the gap reaches World Bank and Eurostat
+too. Recorded, not fixed -- a closed enum needs an ADR. Research counts unchanged
+at 23/23/8/8/8, 1 assessment, 0 opportunities. No research data collected
 
 ## 1.39 — 2026-09-01 (Sprint 1 / Mission 1.17)
 
