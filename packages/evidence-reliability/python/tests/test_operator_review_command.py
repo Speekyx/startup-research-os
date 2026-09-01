@@ -125,6 +125,17 @@ class TestTheReviewerIsAPerson(unittest.TestCase):
                 command._build(review(reviewed_by=name))
             self.assertIn("names nobody", str(caught.exception))
 
+    def test_a_placeholder_identity_is_refused(self):
+        """Worse than a blank, because a blank is refused and this is recorded.
+
+        Found by real use: a reviewer pasted a template shape into the field
+        that exists to say who is accountable.
+        """
+        for name in ("<MON IDENTITE REELLE>", "<your name>", "[name here]"):
+            with self.subTest(name=name), self.assertRaises(ValueError) as caught:
+                command._build(review(reviewed_by=name))
+            self.assertIn("placeholder", str(caught.exception))
+
     def test_a_real_name_is_accepted(self):
         self.assertEqual(command._build(review(reviewed_by="T. Chm")).reviewed_by, "T. Chm")
 

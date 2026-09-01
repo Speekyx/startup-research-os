@@ -2527,3 +2527,47 @@ whatever a future TED reliability rests on, it rests on retrieved documents.
 **The general rule: when a mission correctly declines to produce data, the tests
 it owes are the ones that pin why.** A mission that produces nothing and tests
 nothing is indistinguishable from one that forgot.
+
+---
+
+## 61. A tool for recording a decision is one default away from making it (Mission 1.15.13)
+
+Mission 1.15.12 stopped because the reliability contract reserves one act to an
+accountable person. Mission 1.15.13 built the tool that lets a person perform it,
+and the entire test suite for that tool is organised around a single risk: that
+somewhere between the packet and the database, the software starts deciding.
+
+Every test names a specific route:
+
+```text
+a value nobody entered                      -> refused
+a reviewer nobody can ask                   -> refused
+a limitation nobody wrote                   -> refused
+a rationale nobody wrote                    -> refused
+a template that ships a helpful default     -> failing build
+a packet that proposes a value              -> failing build
+```
+
+The last two are the interesting ones, because they fail on the **absence of a
+refusal** rather than on a bad input. `test_the_template_has_every_judgement_field_blank`
+does not exercise a code path; it asserts that a code path never acquires a
+convenience. If someone adds `"reliability": 0.7` to a template "to save typing",
+the build breaks before anyone records a judgement they did not make.
+
+**No fixture encodes a plausible reliability.** The value throughout is `0.42`.
+A `0.9` in a reliability test is a number someone eventually copies into a real
+assessment, because it looks like a judgement — and unlike most fixture values,
+this one would end up in `min()` where nobody can argue with it.
+
+### The refusal real use found, that the design missed
+
+The reviewer's first submission put `<MON IDENTITÉ RÉELLE>` in `reviewed_by`. A
+blank was refused; a placeholder was recorded. So the field that exists to say
+who is accountable was **strictly worse protected against a template shape than
+against nothing at all** — and the shape reads as an identity to anyone scanning
+the row later.
+
+**The general rule: a validator that rejects emptiness has not yet rejected
+meaninglessness.** Blank, whitespace, `"TODO"`, `"<name>"` and `"N/A"` are all
+the same failure wearing different clothes, and only the first one is usually
+tested.

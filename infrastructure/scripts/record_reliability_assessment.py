@@ -238,6 +238,16 @@ def _build(review: dict[str, Any]) -> ReliabilityAssessment:
         )
 
     reviewed_by = str(review["reviewed_by"]).strip()
+    # A placeholder is worse than a blank, because a blank is refused and a
+    # placeholder is recorded. Found by real use in Mission 1.15.13, where the
+    # reviewer pasted a template shape into the field that exists to say who is
+    # accountable.
+    if reviewed_by.startswith("<") or reviewed_by.startswith("["):
+        raise ValueError(
+            f"{reviewed_by!r} is a placeholder, not a name. `reviewed_by` is the field a "
+            "later reader uses to ask who decided this; a template shape recorded there "
+            "reads as an identity and answers nobody"
+        )
     if reviewed_by.lower() in IMPERSONAL:
         raise ValueError(
             f"{reviewed_by!r} names nobody. `reviewed_by` is what a later reader uses to "

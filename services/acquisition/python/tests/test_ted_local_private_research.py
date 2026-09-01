@@ -522,8 +522,15 @@ class TestNothingReachedTheDatabase:
         # rather than a count -- see the reliability and opportunity tests in
         # this class, which are the boundary Mission 1.15.11 stopped at.
 
-    def test_no_reliability_assessment_was_created(self) -> None:
-        assert self._count("SELECT count(*) FROM epistemic.reliability_assessments") == 0
+    # `test_no_reliability_assessment_was_created` was DELETED in Mission
+    # 1.15.13, when a named reviewer recorded one for the TED procurement scope.
+    #
+    # Deleted rather than moved or narrowed, for the reason testing-strategy §59
+    # gives: the absence it asserted had stopped being "these are independent
+    # processes" -- which is still true and is asserted structurally, by the AST
+    # test that keeps policy state out of the reliability package -- and become
+    # "nobody has done the second one yet", which is a progress marker wearing a
+    # test's clothes.
 
     def test_no_opportunity_or_embedding_was_created(self) -> None:
         for query in (
