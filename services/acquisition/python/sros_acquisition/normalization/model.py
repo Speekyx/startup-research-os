@@ -770,7 +770,13 @@ class LexicalFrequencyObservation:
 # ontology, and that is a decision with an ADR behind it.
 MONETARY_AMOUNT_TYPES: dict[str, str] = {
     "TOTAL_VALUE": (
-        "The total value the notice states for the procurement it reports. TED field `total-value`."
+        # eForms BT-161, VERBATIM. Mission 1.15.12 read the definition out of
+        # the Publications Office's own SDK, and it says more than our earlier
+        # wording did: the figure INCLUDES OPTIONS AND RENEWALS, so it is not
+        # what was paid and not necessarily what will be. Anything downstream
+        # reading it as revenue or a price is wrong at the source.
+        "The value of all contracts awarded in this notice, including options and renewals "
+        "(eForms BT-161, notice level). TED field `total-value`."
     ),
     "TENDER_VALUE": (
         "The value of a tender. TED field `tender-value`; published per lot, so "

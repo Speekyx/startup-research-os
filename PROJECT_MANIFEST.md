@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.35
+Version: 1.36
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-01 (Sprint 1 / Mission 1.15.11)
+Last amended: 2026-09-01 (Sprint 1 / Mission 1.15.12)
 
 ---
 
@@ -13,6 +13,57 @@ Last amended: 2026-09-01 (Sprint 1 / Mission 1.15.11)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.36 — 2026-09-01 (Sprint 1 / Mission 1.15.12)
+
+Authorized by the Mission 1.15.12 brief §1-§44.
+
+**The first reliability review against real Evidence, and the first to reach the
+end of the framework and stop. Outcome B: no assessment created.**
+
+**What the specification said, read from the Publications Office's own eForms SDK
+1.15.1.** `TOTAL_VALUE` is **BT-161**, notice-level, non-repeatable, and its
+definition is *"The value of all contracts awarded in this notice, **including
+options and renewals**"* — so the figure is not what was paid and not necessarily
+what will be. Anything downstream reading it as revenue or a price is wrong at
+the source, before any interpretation layer is involved. The normalizer's own
+description said less than that and is corrected.
+
+**The finding with the sharpest bearing on a contrast.** BT-161 carries a privacy
+block (BT-195 to BT-198): the value may be **lawfully withheld** from immediate
+publication and released later. A cohort built from published values covers the
+**published subset**, and its maximum and minimum are the extremes of what was
+published rather than of what was awarded. The missingness is not random, and an
+extreme is the statistic most exposed to it.
+
+**TED validates conformance, never truth.** 60 published rules name BT-161 and
+every one is a presence, absence or notice-type constraint. There is a rule that
+it must not appear in a prior information notice; there is none that the amount
+is correct.
+
+**Why no number exists to record.** `DOCUMENTED_METHOD` requires the document to
+supply the value and eForms states no error rate or completeness bound;
+`CALIBRATED_EMPIRICALLY` requires outcome data that does not exist;
+`HUMAN_REVIEW` requires a named accountable reviewer, and a model may not stand
+in for one. The contract closes the last door outright: *"No threshold labels…
+No categorical mapping. Not from source type, not from evidence level, not from
+anything."* **The same shape as the TED database-right acceptance** — one act
+reserved to a person, and a mission that performed it anyway would defeat the
+design rather than complete it.
+
+**The inventory was re-measured, not assumed.** Mission 1.14's "7 Evidence rows,
+3 scopes" is now **8 rows, 4 scopes**; TED is the fourth and overlaps none. The
+count rose because a new kind of QUESTION was asked, not because observations
+arrived.
+
+**Everything orthogonal stayed orthogonal.** `observation_category`
+`UNCATEGORISED`, `independence_state` `UNKNOWN`, `evidence_level` 1, all
+untouched. Reliability was derived from none of the five 1.0 values around it,
+guaranteed structurally: `resolve_reliability` takes scope, candidates and
+supplied, and an AST test asserts the package names no confidence, level, support
+or approval-state identifier. Counts unchanged at 23/23/8/8/8/8, **0
+ReliabilityAssessments**, 0 opportunities, 0 embeddings, 0 scores. No LLM, no TED
+API call. H-36A, H-36B, H-37 and H-38 untouched
 
 ## 1.35 — 2026-09-01 (Sprint 1 / Mission 1.15.11)
 

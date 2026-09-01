@@ -13,6 +13,14 @@
 on every one, all `NON_SCORABLE` with `MISSING_RELIABILITY`. Zero assessments
 exist. **That is still true after this mission**, and §11 says why.
 
+**Amended by Mission 1.15.12**, the first review carried out against real
+Evidence rather than against the framework. It is now **8 Claims and 8 Evidence
+rows over 4 scopes**, still zero assessments, still every row `NON_SCORABLE`.
+The mission reviewed the TED procurement scope against first-party eForms
+specifications and stopped at the number: no origin lets a document review or a
+model supply one, and the reviewer has to be a person. See
+`ted-eu-evidence-reliability-v1.md`.
+
 ---
 
 ## 1. What reliability means
@@ -86,22 +94,29 @@ reviewed for one purpose reaches another.
 
 ### 2.3 How much review this actually costs
 
-The seven real Evidence rows fall under **three** scopes:
+The **eight** real Evidence rows fall under **four** scopes, re-measured in
+Mission 1.15.12 rather than carried forward:
 
 ```text
-world-bank / indicator/SP.POP.TOTL / numeric_observation
+world-bank / indicator/SP.POP.TOTL / numeric_observation                  4 rows
            / OBSERVED / source_reported_metric_period_change
 
-gdelt / web-ngrams/1gram / lexical_frequency_observation
+gdelt / web-ngrams/1gram / lexical_frequency_observation                  2 rows
       / OBSERVED / source_reported_term_frequency_change
 
-gdelt / web-ngrams/1gram / lexical_frequency_observation
+gdelt / web-ngrams/1gram / lexical_frequency_observation                  1 row
       / OBSERVED / source_reported_term_frequency_contrast
+
+ted-eu / notices/eforms-contract-and-award / procurement_notice           1 row
+       / OBSERVED / source_reported_procurement_value_contrast
 ```
 
-Three reviews, not seven — and it stays three however many World Bank
-observations arrive, because the scope is over the measurement and not over the
-row. That ratio is the design's whole justification.
+Four reviews, not eight — and it stays four however many World Bank observations
+or TED notices arrive, because the scope is over the measurement and not over the
+row. That ratio is the design's whole justification, and the way it grew is the
+evidence for it: **the count rose when a new kind of QUESTION was asked, not when
+new observations arrived.** Mission 1.15.10 added eight TED raw records and
+Mission 1.15.11 added one Claim; the scope count moved by one, once.
 
 ## 3. Compliance is not reliability
 

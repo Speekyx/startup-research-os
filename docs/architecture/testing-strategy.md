@@ -2492,3 +2492,38 @@ the record of a guard that was useful three times and then retired.
 absent for a REASON.** When the absence becomes "we have not got there yet",
 it is a progress marker wearing a test's clothes, and the honest move is to
 delete it and let the tests of the stage that did arrive carry the weight.
+
+---
+
+## 60. Test the machinery you are not allowed to use (Mission 1.15.12)
+
+Mission 1.15.12 reviewed the reliability of the TED Evidence and created no
+assessment: the framework's three origins each require something the mission
+could not supply, and the only one that fits needs a named accountable human.
+That is Outcome B, and it was the correct result.
+
+A mission that produces no row can still leave the code better tested, and the
+distinction it turns on is between the **scope** and the **assessment**:
+
+- the **scope** is real. It is what the live Evidence row resolves to, it is the
+  fourth of four, and it was measured against the database rather than assumed
+  from Mission 1.14's "seven rows, three scopes";
+- the **assessment** is synthetic, with a deliberately implausible fixture value
+  (`0.42`) that no test asserts anything about.
+
+So the suite proves what *would* happen if a reviewer wrote one: it applies to
+the TED scope, it does not reach a second TED resource, another record kind, an
+`INFERRED` claim, another proposition kind, World Bank or GDELT. Five parts, all
+or nothing, with no TED special case in the matcher.
+
+**The fixture value being implausible is deliberate.** A fixture of `0.9` in a
+reliability test is a number someone will eventually copy into a real
+assessment, because it looks like a judgement. `0.42` cannot be mistaken for one.
+
+**And the guard that makes Outcome B structural rather than cautious is also
+tested**: an assessment whose only basis is reviewer reasoning is refused, so
+whatever a future TED reliability rests on, it rests on retrieved documents.
+
+**The general rule: when a mission correctly declines to produce data, the tests
+it owes are the ones that pin why.** A mission that produces nothing and tests
+nothing is indistinguishable from one that forgot.
