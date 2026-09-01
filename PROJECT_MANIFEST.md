@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.34
+Version: 1.35
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-01 (Sprint 1 / Mission 1.15.10)
+Last amended: 2026-09-01 (Sprint 1 / Mission 1.15.11)
 
 ---
 
@@ -13,6 +13,49 @@ Last amended: 2026-09-01 (Sprint 1 / Mission 1.15.10)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.35 — 2026-09-01 (Sprint 1 / Mission 1.15.11)
+
+Authorized by the Mission 1.15.11 brief §1-§44.
+
+**The TED Signal interpreted, and the sentence is the enforcement.** A fourth
+template on the existing interpreter — **`observed-signal-restatement@1.1.0`**,
+not a TED-specific one, because a template is specific to a Signal type and never
+to a publisher. One `OBSERVED` Claim, one revision, one Evidence row, through the
+production path, idempotent on redelivery.
+
+**What the Claim says, and the three words that keep it honest.** *"…within a
+bounded set of 3 `CONTRACT_AWARD_NOTICE` notices classified under `CPV` division
+`90`, the largest `TOTAL_VALUE` amount at `NOTICE` scope stated in `EUR` exceeded
+the smallest by 686545.02."* Shortened to *"division 90 contracts vary by
+686545.02"* it becomes a claim about a population nobody sampled, and **"within a
+bounded set of 3"** is what stops it. No market, no demand, no willingness to
+pay, no price, no average, no trend — and no date, because H-37 is open and the
+acquisition window bounded RETRIEVAL rather than the proposition.
+
+**The cohort membership is the identity; the amount is wording.** A revised
+amount appends a revision, a fourth qualifying notice is a different proposition.
+The three member values are NOT copied into the Claim: they are reachable through
+Evidence → Signal → `signal_inputs` → `normalized_records`, and one fact in two
+places eventually disagrees with itself.
+
+**`observation_category` stayed `UNCATEGORISED`, and it was the closest call.** A
+contract award notice records a purchase, which is `MARKET_ACTIVITY`'s own first
+example, and `MARKET_ACTIVITY` is the **only** gate to `EvidenceLevel` 4. What
+this row carries is a maximum minus a minimum over published notices, and a
+spread is a property of records rather than economic activity. Recorded as an
+open question rather than settled in passing.
+
+**Support 3 is still one source.** `independence_state` `UNKNOWN`, one Evidence
+row naming one `source_id`, `evidence_level` 1, reliability **NULL** and the row
+`NON_SCORABLE`. `derivation_confidence = 1.0` was not allowed to become any of
+reliability, claim probability or market confidence.
+
+**No interpretation-support threshold was invented**, because the Claim adds no
+inference beyond the Signal and the contract already forbids arbitrary ones. The
+seven existing Claims keep `1.0.0` and gained no revision. Counts: 23 raw, 23
+normalized, 8 signals, **8 claims, 8 revisions, 8 evidence**, 0 opportunities, 0
+reliability assessments, 0 embeddings, 0 scores. No LLM was called
 
 ## 1.34 — 2026-09-01 (Sprint 1 / Mission 1.15.10)
 

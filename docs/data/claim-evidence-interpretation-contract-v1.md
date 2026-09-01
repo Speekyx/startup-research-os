@@ -28,6 +28,14 @@ Signals. Nothing in this contract was weakened to let them exist; the two
 changes the implementation forced were both additions (migration 0018) and both
 are recorded in ADR-025.
 
+**Mission 1.15.11 added an eighth**, from the one real TED
+`procurement_value_contrast` Signal, and required **no change to this contract
+at all** -- not a widened rule, not an exemption, not a new refusal reason. The
+one question it forced was whether an additional interpretation-support
+threshold applies to a claim that adds no inference beyond its Signal; §11
+already answers it, and the answer is that inventing one would be the arbitrary
+number this contract names. See `ted-eu-observed-claims-evidence-v1.md`.
+
 ---
 
 ## 1. What this contract is for

@@ -226,7 +226,7 @@ class TestStructurallyObserved:
         assert interpretation.model_version is None
         assert interpretation.prompt_version is None
         assert interpretation.interpreter_id == "observed-signal-restatement"
-        assert interpretation.interpreter_version == "1.0.0"
+        assert interpretation.interpreter_version == "1.1.0"
 
     def test_interpretation_confidence_is_one(self):
         """It says the template read the Signal correctly. Nothing else."""
@@ -630,3 +630,451 @@ class TestNotImplemented:
                     if node.slice.value == forbidden:
                         reads.append(f"{path.name}:{node.lineno} subscript")
         assert reads == []
+
+
+# ---------------------------------------------------------------------------
+# Mission 1.15.11 -- the procurement value contrast.
+#
+# The template whose whole difficulty is what it must NOT say. Every test below
+# is either "the bound is in the sentence" or "the market interpretation is
+# not".
+# ---------------------------------------------------------------------------
+
+# SYNTHETIC, shaped after the real TED signal: three division-90 award notices
+# with EUR total values 73415.22, 440000 and 759960.24.
+_TED_NOTICES = ("125972-2023", "126676-2023", "127668-2023")
+
+
+def _ted_payload(notice_id: str) -> dict:
+    return {
+        "notice": {
+            "class": "CONTRACT_AWARD_NOTICE",
+            "publication_number": notice_id,
+            "source_type": "can-standard",
+            "source_type_scheme": "ted-notice-type",
+        },
+        "series": {"resource_id": "notices/eforms-contract-and-award"},
+        # Present in the real payload and deliberately never read: the offset's
+        # meaning is H-37, and this template states nothing temporal.
+        "period": {"label": "2023-03-01+01:00", "timezone_state": "NOT_ESTABLISHED"},
+        "classification": {"codes": [{"code": "90911200", "scheme": "CPV", "label": None}]},
+    }
+
+
+def procurement(**overrides) -> SignalView:
+    notices = overrides.pop("notice_ids", _TED_NOTICES)
+    kwargs = {
+        "signal_id": "sig-procurement",
+        "signal_type_id": "procurement_value_contrast",
+        "source_ids": ("ted-eu",),
+        "magnitude": Decimal("686545.02"),
+        "magnitude_kind": "ABSOLUTE_DIFFERENCE",
+        "magnitude_unit": "EUR",
+        "magnitude_unit_state": "INHERITED",
+        "direction": SignalDirection.NOT_APPLICABLE,
+        "derivation_confidence": 1.0,
+        "extractor_id": "procurement-value-contrast",
+        "extractor_version": "1.0.1",
+        "scope": {
+            "source_ids": ["ted-eu"],
+            "currencies": ["EUR"],
+            "amount_types": ["TOTAL_VALUE"],
+            "amount_scopes": ["NOTICE"],
+            "notice_classes": ["CONTRACT_AWARD_NOTICE"],
+            "classification_scheme": "CPV",
+            "classification_codes": ["90715200", "90911200", "90911300", "90919300"],
+        },
+        "source_name": "Tenders Electronic Daily (EU public procurement)",
+        "temporal_basis": "NONE",
+        "temporal_window": {
+            "basis": "NONE",
+            "resolution": "DAY",
+            "observation_count": len(notices),
+            # Carried by the real Signal and never read by this template.
+            "period_labels": ["2023-03-01+01:00"] * len(notices),
+        },
+        "inputs": tuple(
+            SignalLineage(
+                normalized_record_id=f"rec-ted-{i}",
+                raw_record_id=f"raw-ted-{i}",
+                source_id="ted-eu",
+                observation_key=f"ted-eu|{notice}",
+                record_kind_id="procurement_notice",
+                period_label="2023-03-01+01:00",
+                role="CONTRIBUTED",
+                payload=_ted_payload(notice),
+            )
+            for i, notice in enumerate(notices)
+        ),
+    }
+    kwargs.update(overrides)
+    return SignalView(**kwargs)
+
+
+def _statement(signal: SignalView) -> str:
+    outcome = INTERPRETER.interpret(signal, REQUEST)
+    assert outcome.refusal is None, outcome.refusal
+    assert outcome.draft is not None
+    return outcome.draft.statement
+
+
+class TestTheProcurementRestatement:
+    def test_it_says_the_whole_bounded_proposition(self) -> None:
+        assert _statement(procurement()) == (
+            "Tenders Electronic Daily (EU public procurement) reported that, in its "
+            '"notices/eforms-contract-and-award" resource, within a bounded set of 3 '
+            '"CONTRACT_AWARD_NOTICE" notices classified under "CPV" division "90", the '
+            'largest "TOTAL_VALUE" amount at "NOTICE" scope stated in "EUR" exceeded the '
+            "smallest by 686545.02."
+        )
+
+    def test_the_bound_is_in_the_sentence(self) -> None:
+        """The one shortening that would change what is asserted.
+
+        "Division 90 contracts vary by 686545.02" is a claim about every
+        division-90 contract. The words that stop it are "within a bounded set
+        of 3", and they are asserted here rather than trusted to survive an
+        edit.
+        """
+        statement = _statement(procurement())
+        assert "within a bounded set of 3" in statement
+        assert "notices classified under" in statement
+
+    def test_it_is_a_maximum_minus_a_minimum_and_says_so(self) -> None:
+        statement = _statement(procurement())
+        assert "the largest" in statement
+        assert "exceeded the smallest by" in statement
+        for word in ("average", "median", "mean", "typical", "price", "per contract"):
+            assert word not in statement.lower()
+
+    def test_the_magnitude_is_exact(self) -> None:
+        assert "686545.02" in _statement(procurement())
+
+    def test_an_equal_cohort_does_not_borrow_the_exceeded_wording(self) -> None:
+        statement = _statement(procurement(magnitude=Decimal("0")))
+        assert "was equal to the smallest" in statement
+        assert "exceeded" not in statement
+
+    def test_it_is_observed_and_deterministic(self) -> None:
+        outcome = INTERPRETER.interpret(procurement(), REQUEST)
+        draft = outcome.draft
+        assert draft is not None
+        assert draft.claim_type is ClaimType.OBSERVED
+        assert draft.origin is ClaimOrigin.DETERMINISTIC_EXTRACTION
+        assert draft.temporality is ClaimTemporality.EVERGREEN
+        assert draft.interpretation.kind is ClaimInterpretationKind.DETERMINISTIC
+        assert draft.interpretation.interpreter_version == "1.1.0"
+        assert draft.interpretation.model_version is None
+        assert draft.interpretation.prompt_version is None
+
+    def test_it_is_attributed_and_never_asserts_the_fact_bare(self) -> None:
+        statement = _statement(procurement())
+        assert statement.startswith("Tenders Electronic Daily (EU public procurement) reported")
+
+
+class TestWhatItRefusesToSay:
+    """The mission brief's forbidden list, asserted rather than described."""
+
+    FORBIDDEN = (
+        "market",
+        "demand",
+        "willingness",
+        "customers",
+        "buyers",
+        "revenue",
+        "opportunity",
+        "growth",
+        "attractive",
+        "profitable",
+        "pricing",
+        "saas",
+        "arpu",
+        "cleaning",
+        "environmental",
+    )
+
+    def test_no_market_vocabulary_survives_the_template(self) -> None:
+        statement = _statement(procurement()).lower()
+        for word in self.FORBIDDEN:
+            assert word not in statement, word
+
+    def test_the_cpv_division_is_not_translated_into_a_market_name(self) -> None:
+        """Division 90 is cleaning and environmental services, and the claim
+        does not know that. Naming the market would be a classification this
+        layer has no vocabulary for and no reviewed mapping behind."""
+        statement = _statement(procurement())
+        assert '"CPV" division "90"' in statement
+
+    def test_the_model_guard_would_catch_a_market_wording_anyway(self) -> None:
+        """The template is the protection; this asserts the backstop exists.
+
+        A statement naming a market is refused by `build_claim` for any OBSERVED
+        claim, so an edit to the template that reintroduced the word does not
+        reach the database.
+        """
+        from sros_claim_model import INTERPRETIVE_VOCABULARY
+
+        assert "market" in INTERPRETIVE_VOCABULARY
+        assert "willingness to pay" in INTERPRETIVE_VOCABULARY
+
+
+class TestNothingTemporal:
+    """H-37 is open, and this template is why it does not have to close."""
+
+    def test_the_statement_carries_no_date_no_window_and_no_chronology(self) -> None:
+        statement = _statement(procurement()).lower()
+        for token in (
+            "2023",
+            "march",
+            "recently",
+            "between",
+            "before",
+            "after",
+            "during",
+            "increase",
+            "decrease",
+            "trend",
+        ):
+            assert token not in statement, token
+
+    def test_the_period_label_reaches_the_signal_and_not_the_claim(self) -> None:
+        """The acquisition window bounded RETRIEVAL, not the proposition.
+
+        The label is present on every contributing record and in the Signal's
+        own window; the claim states none of it.
+        """
+        signal = procurement()
+        assert signal.period_labels  # the Signal carries them
+        outcome = INTERPRETER.interpret(signal, REQUEST)
+        draft = outcome.draft
+        assert draft is not None
+        assert "2023-03-01" not in draft.statement
+        assert "period_label" not in draft.cited_facts
+        assert "2023-03-01+01:00" not in str(draft.cited_facts)
+
+    def test_a_temporal_basis_is_refused_rather_than_phrased(self) -> None:
+        outcome = INTERPRETER.interpret(procurement(temporal_basis="ORDERED_PERIODS"), REQUEST)
+        assert outcome.draft is None
+        assert outcome.refusal is not None
+        assert outcome.refusal.reason is ClaimEvidenceRefusalReason.INCOMPATIBLE_TEMPORAL_SEMANTICS
+
+
+class TestTheCohortSurvivesIntoTheProposition:
+    def test_all_three_notices_are_named_and_support_is_not_reduced(self) -> None:
+        outcome = INTERPRETER.interpret(procurement(), REQUEST)
+        draft = outcome.draft
+        assert draft is not None
+        assert draft.cited_facts["notice_ids"] == list(_TED_NOTICES)
+
+    def test_the_member_amounts_are_not_copied_into_the_claim(self) -> None:
+        """Reachable through provenance, so not duplicated here.
+
+        The magnitude is wording rather than identity, and the member values are
+        one join away through Evidence -> Signal -> signal_inputs.
+        """
+        outcome = INTERPRETER.interpret(procurement(), REQUEST)
+        draft = outcome.draft
+        assert draft is not None
+        facts = str(draft.cited_facts)
+        for value in ("73415.22", "440000", "759960.24", "686545.02"):
+            assert value not in facts, value
+
+    def test_every_cohort_dimension_is_in_the_identity(self) -> None:
+        outcome = INTERPRETER.interpret(procurement(), REQUEST)
+        draft = outcome.draft
+        assert draft is not None
+        facts = draft.cited_facts
+        assert facts["proposition"] == "source_reported_procurement_value_contrast"
+        assert facts["source_id"] == "ted-eu"
+        assert facts["notice_class"] == "CONTRACT_AWARD_NOTICE"
+        assert facts["amount_type"] == "TOTAL_VALUE"
+        assert facts["amount_scope"] == "NOTICE"
+        assert facts["currency"] == "EUR"
+        assert facts["classification_scheme"] == "CPV"
+        assert facts["classification_division"] == "90"
+        assert facts["classification_codes"] == [
+            "90715200",
+            "90911200",
+            "90911300",
+            "90919300",
+        ]
+        assert facts["relation"] == "DIFFERS"
+
+    def test_a_revised_amount_restates_the_same_proposition(self) -> None:
+        """The magnitude is wording. TED correcting 759960.24 does not create a
+        second claim; it appends a revision to this one."""
+        first = INTERPRETER.interpret(procurement(), REQUEST).draft
+        revised = INTERPRETER.interpret(procurement(magnitude=Decimal("686545.03")), REQUEST).draft
+        assert first is not None and revised is not None
+        assert first.proposition_key == revised.proposition_key
+        assert first.statement != revised.statement
+
+    def test_a_fourth_notice_is_a_different_proposition(self) -> None:
+        """The cohort IS the subject, so its membership is its identity.
+
+        This is the half that differs from the lexical templates: there the
+        periods are fixed by the query, here the members are the claim.
+        """
+        first = INTERPRETER.interpret(procurement(), REQUEST).draft
+        wider = INTERPRETER.interpret(
+            procurement(notice_ids=(*_TED_NOTICES, "999999-2023")), REQUEST
+        ).draft
+        assert first is not None and wider is not None
+        assert first.proposition_key != wider.proposition_key
+
+    def test_an_all_equal_cohort_is_a_different_proposition(self) -> None:
+        differs = INTERPRETER.interpret(procurement(), REQUEST).draft
+        equal = INTERPRETER.interpret(procurement(magnitude=Decimal("0")), REQUEST).draft
+        assert differs is not None and equal is not None
+        assert differs.proposition_key != equal.proposition_key
+
+    def test_a_repeated_notice_is_refused_rather_than_counted_twice(self) -> None:
+        outcome = INTERPRETER.interpret(
+            procurement(notice_ids=("125972-2023", "125972-2023")), REQUEST
+        )
+        assert outcome.draft is None
+        assert outcome.refusal is not None
+        assert outcome.refusal.reason is ClaimEvidenceRefusalReason.AMBIGUOUS_SIGNAL_LINEAGE
+
+    def test_a_notice_without_an_identifier_is_refused(self) -> None:
+        signal = procurement()
+        first = signal.inputs[0]
+        broken = {**first.payload, "notice": {"class": "CONTRACT_AWARD_NOTICE"}}
+        inputs = (
+            SignalLineage(
+                normalized_record_id=first.normalized_record_id,
+                raw_record_id=first.raw_record_id,
+                source_id=first.source_id,
+                observation_key=first.observation_key,
+                record_kind_id=first.record_kind_id,
+                period_label=first.period_label,
+                role=first.role,
+                payload=broken,
+            ),
+            *signal.inputs[1:],
+        )
+        outcome = INTERPRETER.interpret(procurement(inputs=inputs), REQUEST)
+        assert outcome.draft is None
+        assert outcome.refusal is not None
+        assert outcome.refusal.reason is ClaimEvidenceRefusalReason.SIGNAL_LINEAGE_UNAVAILABLE
+
+
+class TestTheCohortDimensionsAreRefusedRatherThanPicked:
+    @pytest.mark.parametrize(
+        "field,values",
+        [
+            ("currencies", ["EUR", "PLN"]),
+            ("amount_types", ["TOTAL_VALUE", "ESTIMATED_VALUE"]),
+            ("amount_scopes", ["NOTICE", "LOT"]),
+            ("notice_classes", ["CONTRACT_AWARD_NOTICE", "CONTRACT_NOTICE"]),
+        ],
+    )
+    def test_two_values_on_one_dimension_is_ambiguous(self, field: str, values: list) -> None:
+        scope = {**procurement().scope, field: values}
+        outcome = INTERPRETER.interpret(procurement(scope=scope), REQUEST)
+        assert outcome.draft is None
+        assert outcome.refusal is not None
+        assert outcome.refusal.reason is ClaimEvidenceRefusalReason.AMBIGUOUS_SIGNAL_LINEAGE
+
+    def test_codes_spanning_two_divisions_have_no_single_subject(self) -> None:
+        """The real acquisition excluded exactly these notices one layer down.
+
+        `127009-2023` spans divisions 77 and 90. If such a cohort ever reached
+        this template, naming one division would say the contrast is about a
+        category half of it is not in.
+        """
+        scope = {**procurement().scope, "classification_codes": ["77310000", "90911200"]}
+        outcome = INTERPRETER.interpret(procurement(scope=scope), REQUEST)
+        assert outcome.draft is None
+        assert outcome.refusal is not None
+        assert outcome.refusal.reason is ClaimEvidenceRefusalReason.AMBIGUOUS_SIGNAL_LINEAGE
+
+    def test_no_classification_scheme_is_refused(self) -> None:
+        scope = {k: v for k, v in procurement().scope.items() if k != "classification_scheme"}
+        outcome = INTERPRETER.interpret(procurement(scope=scope), REQUEST)
+        assert outcome.draft is None
+        assert outcome.refusal is not None
+        assert outcome.refusal.reason is ClaimEvidenceRefusalReason.SIGNAL_LINEAGE_UNAVAILABLE
+
+
+class TestTheEvidenceItProduces:
+    def _evidence(self):
+        outcome = INTERPRETER.interpret(procurement(), REQUEST)
+        assert outcome.draft is not None
+        assert len(outcome.draft.evidence) == 1
+        return outcome.draft.evidence[0]
+
+    def test_it_supports_the_claim_it_restates(self) -> None:
+        evidence = self._evidence()
+        assert evidence.direction is EvidenceDirection.SUPPORTS
+        assert evidence.signal_id == "sig-procurement"
+        assert evidence.source_id == "ted-eu"
+
+    def test_support_three_is_still_one_source(self) -> None:
+        """Three notices from TED are three rows from ONE publisher.
+
+        The Signal has support 3 and the Evidence is a single row naming a
+        single `source_id`, which is what stops aggregation from reading it as
+        three independent observations.
+        """
+        assert self._evidence().independence_state is EvidenceIndependenceState.UNKNOWN
+        assert self._evidence().independence_group_id is None
+
+    def test_a_concluded_purchase_does_not_become_market_activity_here(self) -> None:
+        """The mission's closest call, pinned so it cannot drift silently.
+
+        MARKET_ACTIVITY is the only gate to EvidenceLevel 4. What this row
+        carries is a maximum minus a minimum over published notices, which is a
+        property of records rather than economic activity.
+        """
+        assert self._evidence().observation_category is EvidenceObservationCategory.UNCATEGORISED
+
+    def test_derivation_confidence_does_not_become_reliability(self) -> None:
+        """1.0 says the arithmetic is established. It says nothing about TED."""
+        signal = procurement()
+        assert signal.derivation_confidence == 1.0
+        evidence = self._evidence()
+        assert evidence.reliability is None
+        assert evidence.relevance == 1.0
+        assert evidence.directness == 1.0
+        assert evidence.extraction_confidence == 1.0
+
+    def test_the_claim_confidence_is_about_the_reading_not_the_world(self) -> None:
+        outcome = INTERPRETER.interpret(procurement(), REQUEST)
+        assert outcome.draft is not None
+        assert outcome.draft.interpretation_confidence == 1.0
+        assert outcome.draft.evidence[0].reliability is None
+
+
+class TestTheExistingThreeTemplatesDidNotMove:
+    """The version bump is additive, and this is what makes that checkable."""
+
+    def test_the_numeric_statement_is_unchanged(self) -> None:
+        assert _statement(numeric()) == (
+            'World Bank Open Data reported that "SP.POP.TOTL" for "Germany" increased '
+            'between "2018" and "2019" by 187180.'
+        )
+
+    def test_the_numeric_proposition_key_is_unchanged(self) -> None:
+        outcome = INTERPRETER.interpret(numeric(), REQUEST)
+        assert outcome.draft is not None
+        assert outcome.draft.proposition_key == proposition_key(
+            {
+                "proposition": "source_reported_metric_period_change",
+                "source_id": "world-bank",
+                "resource_id": "indicator/SP.POP.TOTL",
+                "metric_scheme": "world-bank-indicator",
+                "metric_id": "SP.POP.TOTL",
+                "geography_source_code": "DEU",
+                "period_label_from": "2018",
+                "period_label_to": "2019",
+                "direction": "INCREASING",
+            }
+        )
+
+    def test_the_lexical_change_statement_is_unchanged(self) -> None:
+        assert _statement(lexical_change()) == (
+            'The GDELT Project reported that, in its "web-ngrams/1gram" stream under source '
+            'language label "ENGLISH", the term "climate" appeared 11 more times in source '
+            'bucket "20260830190000" than in the preceding source bucket "20260830184500".'
+        )
