@@ -79,6 +79,11 @@ class AttributionFacts:
 
     licence_identifier: str | None = None
     dataset_doi: str | None = None
+    # ADR-031. A link to the specific item, where the licence requires the
+    # material itself to be locatable -- CC BY and CC BY-SA both do. Per item,
+    # so it cannot be defaulted: a fixed link would attribute every item to one
+    # place, which is what the clause is written against.
+    source_item_link: str | None = None
     access_date: date | None = None
     modification_statement: str | None = None
     disclaimer: str | None = None
@@ -87,6 +92,8 @@ class AttributionFacts:
     def value_for(self, element: AttributionElement) -> str | None:
         if element is AttributionElement.LICENCE_IDENTIFIER:
             return self.licence_identifier
+        if element is AttributionElement.SOURCE_ITEM_LINK:
+            return self.source_item_link
         if element is AttributionElement.DATASET_DOI:
             return self.dataset_doi
         if element is AttributionElement.ACCESS_DATE:

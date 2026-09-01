@@ -347,6 +347,10 @@
         {
           "value": "DISCLAIMER",
           "description": "A disclaimer the terms require alongside modified data, supplied as text rather than composed by this system when the exact wording is not in the recorded evidence"
+        },
+        {
+          "value": "SOURCE_ITEM_LINK",
+          "description": "A link to the specific item the content came from, where the licence requires the material itself to be locatable -- CC BY and CC BY-SA both do. A per-item value; it cannot be defaulted, because a fixed link would attribute every item to one place (ADR-031)"
         }
       ]
     },

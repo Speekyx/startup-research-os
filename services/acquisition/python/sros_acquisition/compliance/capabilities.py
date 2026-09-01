@@ -137,9 +137,16 @@ def _check_attribution_surface(compliance: SourceCompliance) -> tuple[str, ...]:
     failures: list[str] = []
     obligation = compliance.attribution
 
+    # EVERY supplied element, and it has to stay every one. The probe's whole
+    # meaning is "with nothing missing, does this render" -- so a member added
+    # to AttributionElement and forgotten here makes the probe fail for a source
+    # whose configuration is correct, which is how a conformance check starts
+    # reporting on itself instead of on the system. ADR-031 added
+    # `source_item_link`.
     complete = AttributionFacts(
         licence_identifier="probe-licence",
         dataset_doi="10.0000/probe",
+        source_item_link="https://example.invalid/probe-item",
         access_date=date(2026, 1, 1),
         modification_statement="probe modification",
         disclaimer="probe disclaimer",
@@ -190,6 +197,14 @@ def _without(facts: AttributionFacts, element: AttributionElement) -> Attributio
         return replace(facts, licence_identifier=None)
     if element is AttributionElement.DATASET_DOI:
         return replace(facts, dataset_doi=None)
+    # ADR-031. Added when SOURCE_ITEM_LINK joined the vocabulary -- and the
+    # omission was caught by this function's own design: a name table would have
+    # returned the facts unchanged and the probe would have passed a source
+    # whose link could silently disappear. The explicit branch made the miss
+    # visible instead, which is what the docstring above claims and this is the
+    # first time it was tested.
+    if element is AttributionElement.SOURCE_ITEM_LINK:
+        return replace(facts, source_item_link=None)
     if element is AttributionElement.ACCESS_DATE:
         return replace(facts, access_date=None)
     if element is AttributionElement.MODIFICATION_STATEMENT:
