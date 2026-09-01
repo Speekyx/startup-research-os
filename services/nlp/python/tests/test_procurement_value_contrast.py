@@ -157,7 +157,7 @@ def reasons_of(outcome) -> set[SignalRefusalReason]:
 
 class TestRegistration:
     def test_the_extractor_is_registered(self) -> None:
-        assert EXTRACTOR_REGISTRY["procurement-value-contrast"].extractor_version == "1.0.0"
+        assert EXTRACTOR_REGISTRY["procurement-value-contrast"].extractor_version == "1.0.1"
 
     def test_it_is_the_transaction_value_family(self, extractor) -> None:
         assert extractor.family is SignalQuantityFamily.TRANSACTION_VALUE
@@ -382,6 +382,28 @@ class TestTheSignal:
         assert scope["notice_classes"] == ["CONTRACT_AWARD_NOTICE"]
         assert scope["classification_scheme"] == "CPV"
 
+    def test_the_scope_carries_every_members_codes(self, extractor, request_) -> None:
+        """Mission 1.15.10. The scope describes the COHORT, not its first member.
+
+        The first real cohort had three members with three different CPV codes,
+        all in division 90. Version 1.0.0 named only the first member's, chosen
+        by amount order -- so the scope claimed two codes that two of the three
+        contracts did not carry. Every fixture until then shared one code, which
+        is exactly why real data found it and the suite had not.
+        """
+        members = [
+            notice("a", cpv=("90911200", "90911300"), amounts=[amount(value="10")]),
+            notice("b", cpv=("90715200",), amounts=[amount(value="20")]),
+            notice("c", cpv=("90919300",), amounts=[amount(value="30")]),
+        ]
+        scope = derive(extractor, request_, members).drafts[0].scope.to_json()
+        assert scope["classification_codes"] == [
+            "90715200",
+            "90911200",
+            "90911300",
+            "90919300",
+        ]
+
     def test_the_scope_names_one_source(self, extractor, request_) -> None:
         """§14. Three notices from TED are repeated within-source observations,
         never multi-source evidence."""
@@ -545,7 +567,7 @@ class TestProvenance:
             extractor, request_, [notice("a"), notice("b", amounts=[amount(value="9")])]
         ).drafts[0]
         assert draft.derivation.extractor_id == "procurement-value-contrast"
-        assert draft.derivation.extractor_version == "1.0.0"
+        assert draft.derivation.extractor_version == "1.0.1"
 
 
 # ================================================================ determinism

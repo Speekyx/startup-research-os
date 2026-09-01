@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.34
-Last amended: 2026-09-01 (Sprint 1 / Mission 1.15.9)
+Version: 1.35
+Last amended: 2026-09-01 (Sprint 1 / Mission 1.15.10)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.35 | 2026-09-01 | **Exact decimals, and the first real TED Signal.** `ted-search-api@1.1.0` parses with `parse_float=Decimal` and renders through `canonical_number`, so a fractional tender value reaches jsonb as an exact STRING; `parse_int` stays unset because a JSON integer was never at risk. **The normalizer is NOT bumped** -- its output is unchanged, and what changed is the inputs it accepts, declared in `supported_collector_versions`. One bounded acquisition on 2023-03-01 in CPV division 90 produced **1 TRANSACTION_VALUE Signal**: support 3, 686545.02 EUR, `ABSOLUTE_DIFFERENCE`, `NON_TEMPORAL`. Two defects real data exposed: `cpv_division` never reached the composed query, and the cohort scope carried only the FIRST member's codes -- `procurement-value-contrast@1.0.1`. **No Claim, no Evidence.** H-36A/B, H-37, H-38 untouched |
 | 1.34 | 2026-09-01 | **A third Signal quantity family, and a derivation that correctly produced nothing.** `TRANSACTION_VALUE` (ADR-029): the `procurement_notice` kind mapped to neither existing family, and `MEASURED_SERIES` could not be widened without making `metric` optional for every series signal ever written. `procurement-value-contrast@1.0.0` is NON-TEMPORAL by construction -- basis `NONE`, no date read, members ordered by amount -- keeps four monetary semantics apart, converts no currency, and is **not** willingness-to-pay. **0 real Signals**: the two EUR award totals are CPV 90 and CPV 66, which are two markets. **H-37 and H-38 stay OPEN** |
 | 1.33 | 2026-09-01 | **The third record kind, and the first canonical procurement notices.** `procurement_notice` holds what neither existing kind could without getting worse, and carries no `observation.value` because a notice has no single measurement. `ted-search-api-notice@1.0.0`: one notice one record with lots structured inside it, four monetary semantics kept apart, no `price_paid`, no currency converted, every language kept with no canonical display value. **A published DATE does not become a moment** -- `observed_at` NULL, naive bounds, **H-37** open with the source value preserved. Three real notices normalized, idempotent, all `PARTIAL`. **No TED Signal, Claim or Evidence** |
 | 1.32 | 2026-09-01 | **The first TED acquisition, and the first concrete TED resource.** A source-level approval is not a resource-level one: TED authorised `"datasets": []` and every resource failed closed, which is why `AUTHORIZATION_READY` sat beside `resource_ready` NO for six missions. **One** resource authorised -- eForms contract and award notices from 2023-03-01 through the Search API -- then `ted-search-api@1.0.0`, the third collector: four gates before a socket, one route with **no fallback**, bounds with **no defaults**, **no exhaustion mode**, four monetary semantics kept apart, no currency converted. **3 real RawRecords**, idempotent on re-run. **H-36A NOT ESTABLISHED, H-36B NOT ADDRESSED, no normalizer, no Signal, no Claim** |
@@ -1363,14 +1364,18 @@ competition gap, distribution feasibility, retention or revenue potential.** The
 are factual, source-level claims about two publications. The first Claims
 existing does not make Opportunity discovery ready.
 
-**`ted-eu` is eligible, resource-ready and collected, under ONE profile and
-through ONE route.** The operator recorded the acceptance in Mission 1.15.6.1,
-Mission 1.15.7 authorised one concrete resource and wrote
-`ted-search-api@1.0.0`, and three real RawRecords exist. **Nothing downstream
-does**: there is no TED normalizer, and the mapping from a notice to a canonical
-record is Mission 1.15.8. `ted-bulk-xml`, the historical CSV and
-`commercial-multi-tenant-research-v1` are refused exactly as before, and H-36A
-and H-36B are untouched.
+**`ted-eu` is eligible, resource-ready, collected, normalized and derived from,
+under ONE profile and through ONE route.** The operator recorded the acceptance
+in Mission 1.15.6.1; Mission 1.15.7 authorised one concrete resource and wrote
+`ted-search-api@1.0.0`; Mission 1.15.8 added the `procurement_notice` kind and
+`ted-search-api-notice@1.0.0`; Mission 1.15.9 added `TRANSACTION_VALUE` and
+correctly derived nothing; Mission 1.15.10 repaired the Decimal invariant as
+`ted-search-api@1.1.0` and derived **one** Signal from an acquisition designed
+for comparability. **11 RawRecords, 11 NormalizedRecords all `PARTIAL`, 1
+Signal.** Nothing downstream of it: no Claim cites the TED Signal and no
+Evidence references it. `ted-bulk-xml`, the historical CSV and
+`commercial-multi-tenant-research-v1` are refused exactly as before, and H-36A,
+H-36B, H-37 and H-38 are untouched.
 
 **Four rules bound that collector, and each is enforced rather than promised**
 (`ted-eu-search-api-collector-v1.md`): every bound is required with no default,

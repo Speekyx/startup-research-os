@@ -102,7 +102,17 @@ class ProcurementValueContrastExtractor:
     """One cohort of comparable settled procurement values, contrasted."""
 
     extractor_id = "procurement-value-contrast"
-    extractor_version = "1.0.0"
+    # 1.0.1 -- Mission 1.15.10. The scope carried the CPV codes of ONE member,
+    # picked by amount order, and presented them as the cohort's. The first real
+    # cohort had three members with three different codes -- 90911200/90911300,
+    # 90715200, 90919300 -- so the scope named two codes that two of the three
+    # contracts do not carry. A defect real data exposed and fixtures had not:
+    # every fixture notice shared one code.
+    #
+    # A fix rather than a semantic change, and still a version bump, because the
+    # same identity would otherwise produce different content -- which the model
+    # reports as NON_DETERMINISTIC_OUTPUT rather than writing over.
+    extractor_version = "1.0.1"
     signal_type_id = "procurement_value_contrast"
     record_kind_id = PROCUREMENT_NOTICE
     family = SignalQuantityFamily.TRANSACTION_VALUE
@@ -408,13 +418,16 @@ class ProcurementValueContrastExtractor:
 
         values = [member[1] for member in ordered]
         notice = observations[0].section("notice")
-        classification = observations[0].section("classification")
-        codes = classification.get("codes")
+        # The UNION across every member, not the first member's. The cohort is
+        # keyed on the CPV division, so its members share a division and differ
+        # below it -- and a scope naming one member's codes describes that
+        # member rather than the cohort.
         classification_codes = tuple(
             sorted(
                 {
                     str(entry.get("code"))
-                    for entry in (codes if isinstance(codes, list) else [])
+                    for observation in observations
+                    for entry in _codes_of(observation)
                     if isinstance(entry, dict) and entry.get("code")
                 }
             )
@@ -471,3 +484,9 @@ class ProcurementValueContrastExtractor:
             research_session_id=request.research_session_id,
         )
         return GroupOutcome(drafts=(draft,))
+
+
+def _codes_of(observation: NormalizedObservation) -> list[object]:
+    """The classification entries of one observation, or an empty list."""
+    codes = observation.section("classification").get("codes")
+    return codes if isinstance(codes, list) else []

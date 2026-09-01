@@ -1,10 +1,13 @@
 # TED-EU Search API Collector V1
 
-**Authoritative.** Mission 1.15.7, Phase B. `ted-search-api@1.0.0`: what it may
-do, what it cannot do, and where each limit is enforced.
+**Authoritative.** Mission 1.15.7 Phase B, revised by Mission 1.15.10 Phase A.
+`ted-search-api@1.1.0`: what it may do, what it cannot do, and where each limit
+is enforced.
 
-**One real bounded acquisition has run.** Three RawRecords, one HTTP request, one
-page. **No normalizer, no Signal, no Claim, no Evidence, no Opportunity, no
+**Three real bounded acquisitions have run**, one under 1.0.0 and two under
+1.1.0, one HTTP request and one page each. The notices they collected have since
+been normalized (Mission 1.15.8) and one Signal has been derived from them
+(Missions 1.15.9 and 1.15.10). **Still no Claim, no Evidence, no Opportunity, no
 embedding, no score.**
 
 ---
@@ -13,7 +16,8 @@ embedding, no score.**
 
 | | |
 |---|---|
-| Collector | `ted-search-api`, version `1.0.0` |
+| Collector | `ted-search-api`, version `1.1.0` |
+| Previous version | `1.0.0`, superseded by the repair in §5.1; records collected under it are still readable, see §5.2 |
 | Module | `sros_acquisition/collection/ted_search_api.py` |
 | Route | `ted-search-api`, and no other |
 | Resource | `notices/eforms-contract-and-award`, and no other |
@@ -147,7 +151,59 @@ amounts without it is refused.
 **No currency is converted.** No rate, no table, no arithmetic on an amount, no
 normalisation to EUR. A three-lot notice with `["EUR", "EUR", "SEK"]` keeps SEK.
 
-## 6. Raw identity, lots and languages
+### 5.1 Exact decimals, and the version bump that came with them
+
+`1.0.0` parsed the response with a bare `json.loads`, so every JSON number
+carrying a fractional part became a **binary float**. The manifest's invariant
+is that a number crossing a boundary keeps its decimal identity, and a float
+does not: `0.1 + 0.2` is the standard demonstration, and a tender value is
+exactly the kind of number where the last cents are the point.
+
+`1.1.0` parses with `parse_float=Decimal` and then renders each `Decimal` back
+through `canonical_number`, so what reaches jsonb is a **fixed-point string**:
+
+```text
+1.0.0   "value": 73415.22        jsonb_typeof -> number   (a float, already lossy)
+1.1.0   "value": "73415.22"      jsonb_typeof -> string   (exact, as published)
+```
+
+`parse_int` is deliberately **not** set. An integer in JSON is already exact in
+Python, and wrapping it would change the shape of a value that was never at
+risk. Integers therefore stay `number` in jsonb, and only fractional values
+become strings. That asymmetry is intentional and is asserted by the tests.
+
+This is a **payload-shape change**, which is why it is a version bump and not a
+patch: a record collected under `1.0.0` and one collected under `1.1.0` for the
+same notice do not have byte-identical payloads.
+
+### 5.2 What the bump does NOT do
+
+It does not invalidate anything already collected. The normalizer declares
+`supported_collector_versions = {"1.0.0", "1.1.0"}` and reads both shapes, and
+it is **not** itself bumped, because its own output is unchanged: it already
+went through `canonical_number` on the way out. The float-era records remain
+readable and remain lossy, and re-collecting a notice under `1.1.0` supersedes
+the old payload through the ordinary revision path, not through a migration.
+
+## 6. Narrowing by CPV division
+
+`cpv_division` is a **two-digit** string. It is not a filter applied after the
+fact: it is rendered into the expert query itself, as
+`(classification-cpv=90*)`, and joined to the date bounds with `AND`. What the
+service sees is already narrowed, which is the only place narrowing counts —
+a client-side filter would still have asked TED for everything.
+
+It is part of the idempotency key, so the same window at two different
+divisions is two different acquisitions rather than one that quietly changed
+meaning.
+
+**A notice can carry codes from more than one division**, and TED matches it if
+any of them match. Narrowing to `90` therefore returns notices that are partly
+about something else, and it does **not** return every notice that touches
+division 90 in a window if the query bound the window differently. Neither is a
+defect; both are what a prefix match on a repeated field means.
+
+## 7. Raw identity, lots and languages
 
 **Identity is source-native.** `publication-number`, plus `notice-identifier` and
 `notice-version` where the source publishes them. Never page position, never
@@ -170,7 +226,7 @@ instant, because no mission has established TED's temporal semantics — no
 timezone, no certification. H-29's discipline applied to a second source before
 anybody needs it: a plausible instant is worse than a declared absence.
 
-## 7. Provenance
+## 8. Provenance
 
 Every record carries, through `build_raw_record` and not through anything this
 collector invents: source, access profile, access method, endpoint, review
@@ -188,7 +244,7 @@ native field lists, the notice types, the date window, the page,
 Collector keys are merged **under** the governance facts, so none can shadow a
 review version or a rights basis by choosing a name.
 
-## 8. Rate limiting and pacing
+## 9. Rate limiting and pacing
 
 TED's rate limit is **UNKNOWN** and stays that way. `TED_PACING` is one second
 between requests and at most twenty requests per job, `origin =
@@ -196,7 +252,7 @@ INTERNAL_SAFETY_POLICY`, with a basis recorded on the policy itself. Timeouts,
 the redirect refusal and the response ceiling come from the shared transport
 config. **None of it is a claim about a TED quota.**
 
-## 9. Failure handling
+## 10. Failure handling
 
 Missing use profile; authorization refused; missing human decision; unauthorized
 resource, route or field; missing bounds; timeout; connection failure; non-2xx;
@@ -205,7 +261,7 @@ resource, route or field; missing bounds; timeout; connection failure; non-2xx;
 fails mid-collection keeps the drafts already built and reports the failure
 beside them; nothing valid-looking is persisted from an invalid response.
 
-## 10. The production path
+## 11. The production path
 
 ```text
 runtime use profile
@@ -228,7 +284,9 @@ The job also checks `collector_enabled` before anything is fetched: eligibility
 says *may we*, enablement says *is it switched on here*, and a job must not take
 that decision on an operator's behalf.
 
-## 11. The first real acquisition
+## 12. The real acquisitions
+
+### 12.1 The first, Mission 1.15.7, under `1.0.0`
 
 | | |
 |---|---|
@@ -247,13 +305,55 @@ that decision on an operator's behalf.
 Re-run identically: **0 new, 3 unchanged**. Same idempotency key, same record
 ids, nothing superseded.
 
-## 12. Retention
+### 12.2 Mission 1.15.10, under `1.1.0`
+
+Two executions, because the first one exposed a defect described in §12.3.
+
+| | 12.2a, as executed | 12.2b, as declared |
+|---|---|---|
+| CPV division declared | `90` | `90` |
+| CPV division **in the query** | *absent* | `(classification-cpv=90*)` |
+| Window | 2023-03-01, one day | 2023-03-01, one day |
+| Notice types | `can-standard` | `can-standard` |
+| HTTP requests | **1** | **1** |
+| RawRecords | 3 new, 1 revised | 4 new |
+| Natural-person data received | **none** | **none** |
+
+12.2b re-run identically: **0 new, unchanged**.
+
+The window and division were chosen **before execution** for comparability, not
+for volume: a Signal in this family needs at least two amounts of the same amount
+type, scope, currency and notice class, and 2023-03-01 in division 90 was picked
+because that exact day already held the one division-90 EUR award total the
+system had, so it was where a cohort could plausibly grow.
+
+Every value in the table above is read back from `raw_records.provenance`. The
+**bounds are the exception**: they are declared in the job payload and recorded
+nowhere, which is a gap in the record rather than a property of the acquisition. The 1.15.9 attempt on a different division had returned no qualifying
+cohort at all, and that was recorded as a valid result rather than widened away.
+
+### 12.3 The defect 12.2a exposed, and why it is written down here
+
+`cpv_division` reached the dataclass, the composed query and the idempotency key,
+but `TedSearchJobPayload.from_payload` **never read it**. The declared
+acquisition and the executed one therefore disagreed, and the executed one was
+**broader**: it asked TED for every notice type in the window, not only division
+90.
+
+Nothing downstream was corrupted — the extra notices are ordinary TED notices,
+lawfully within the same authorised resource and the same bounds — but a
+narrowing that exists only in the caller's intent is not a narrowing. The gate
+that now protects this asserts the **composed query string**, which is the only
+artefact the source ever sees, rather than the dataclass field, which the source
+never sees.
+
+## 13. Retention
 
 TED-specific retention is `NOT_ADDRESSED` — no restriction was found on either
 official route. The platform baseline applies: **30 days raw**, taken from the
 context, with no parameter in this collector that could widen it.
 
-## 13. What this collector cannot do
+## 14. What this collector cannot do
 
 - reach `ted-open-data-sparql`, the bulk packages or the historical CSV;
 - run without an `AcquisitionAuthorizationContext`;

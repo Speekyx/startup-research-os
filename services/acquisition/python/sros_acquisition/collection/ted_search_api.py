@@ -50,6 +50,7 @@ import json
 from collections.abc import Iterator, Mapping, Sequence
 from dataclasses import dataclass
 from datetime import UTC, date, datetime
+from decimal import Decimal
 from typing import Any
 
 from sros_contracts import AcquisitionErrorCode, ResourceContentOrigin
@@ -58,11 +59,18 @@ from ..compliance import AcquisitionAuthorizationContext
 from ..compliance.resources import ResourceDescriptor
 from .errors import AcquisitionFailedError, AcquisitionFailure, code_for_status
 from .pacing import PacingPolicy, RequestPacer
-from .records import RawRecordDraft, build_raw_record, canonical_fingerprint, observation_key
+from .records import (
+    RawRecordDraft,
+    build_raw_record,
+    canonical_fingerprint,
+    canonical_number,
+    observation_key,
+)
 from .transport import HttpResponse, JsonPostTransport, JsonRequest, host_of
 
 __all__ = [
     "CONCEPTUAL_FIELDS",
+    "CPV_DIVISION_LENGTH",
     "DEFAULT_CONCEPTUAL_FIELDS",
     "EFORMS_PUBLICATION_START",
     "MAX_FIELDS_PER_PAGE",
@@ -83,9 +91,23 @@ __all__ = [
 ]
 
 TED_COLLECTOR_ID = "ted-search-api"
-# 1.0.0: the first version. A version bump here is what makes a changed payload
-# shape or a changed field selection reportable rather than absorbed.
-TED_COLLECTOR_VERSION = "1.0.0"
+# 1.1.0 -- Mission 1.15.10 §5. **1.0.0 parsed the response with a plain
+# `json.loads`**, so every non-integer JSON number passed through IEEE-754
+# before reaching the record. It was exact for the amounts TED actually sent and
+# it contradicted the manifest's own rule outright, which is a defect whether or
+# not it had yet corrupted anything.
+#
+# 1.1.0 parses with `parse_float=Decimal` and stores each such number as an
+# exact decimal STRING, the convention `canonical_number` records for the World
+# Bank collector and `normalized-record-v1.md` §6.1 gives the reason for: JSON
+# has one numeric type and cannot carry the difference between `1` and `1.0`,
+# which the source distinguished.
+#
+# **The payload shape therefore changes**, which is exactly why this is a
+# version bump rather than an edit. 1.0.0 stays the historical provenance of the
+# three records it collected, and they are not rewritten: `decimal_from` accepts
+# `int`, `Decimal` and `str`, so both shapes normalize to the same exact value.
+TED_COLLECTOR_VERSION = "1.1.0"
 
 # The route this collector binds to, by LABEL. It is resolved out of
 # `context.access`, which after Mission 1.15.6 carries only reviewed routes --
@@ -108,6 +130,10 @@ EFORMS_PUBLICATION_START = date(2023, 3, 1)
 # validated against the API's own `checkQuerySyntax` mode, which rejects an
 # unsupported value for `notice-type` by name.
 NOTICE_TYPES = ("cn-standard", "can-standard")
+
+# A CPV division is two digits. The same granularity the Signal cohort key uses,
+# named here so a query and a cohort cannot drift apart silently.
+CPV_DIVISION_LENGTH = 2
 
 # Documented by TED, quoted rather than chosen: the pagination mode of the
 # public search API retrieves at most 15k notices for a query, at most 250 per
@@ -374,6 +400,15 @@ class TedSearchRequest:
     bounds: TedSearchBounds
     conceptual_fields: tuple[str, ...] = DEFAULT_CONCEPTUAL_FIELDS
     notice_types: tuple[str, ...] = NOTICE_TYPES
+    # Mission 1.15.10. A CPV DIVISION -- two digits -- to narrow the acquisition
+    # to one procurement subject at the granularity the Signal cohort key uses.
+    #
+    # **It narrows and never widens, and it decides nothing.** Eligibility for a
+    # cohort is settled AFTER normalization, by the extractor reading each
+    # notice's own classification. So this filter keeps an acquisition small; if
+    # the source's wildcard means something narrower than a division prefix, the
+    # result is fewer notices, never a wrong cohort.
+    cpv_division: str | None = None
 
     def __post_init__(self) -> None:
         if not self.conceptual_fields:
@@ -388,6 +423,14 @@ class TedSearchRequest:
                 f"notice types {list(unknown)} are outside this resource. It contains "
                 f"{list(NOTICE_TYPES)} and nothing else, and widening it is a review act"
             )
+        if self.cpv_division is not None and (
+            len(self.cpv_division) != CPV_DIVISION_LENGTH or not self.cpv_division.isdigit()
+        ):
+            raise ValueError(
+                f"cpv_division is a {CPV_DIVISION_LENGTH}-digit CPV division, not "
+                f"{self.cpv_division!r}. A longer prefix would filter below the "
+                "granularity the cohort key uses, and a shorter one is not a division"
+            )
 
     @property
     def expert_query(self) -> str:
@@ -398,12 +441,14 @@ class TedSearchRequest:
         of this resource, and a raw query parameter would route around all three.
         """
         types = " ".join(self.notice_types)
-        return (
-            f"(notice-type IN ({types}))"
-            f" AND (publication-date>={_ted_date(self.bounds.date_start)})"
-            f" AND (publication-date<={_ted_date(self.bounds.date_end)})"
-            " SORT BY publication-date"
-        )
+        clauses = [
+            f"(notice-type IN ({types}))",
+            f"(publication-date>={_ted_date(self.bounds.date_start)})",
+            f"(publication-date<={_ted_date(self.bounds.date_end)})",
+        ]
+        if self.cpv_division is not None:
+            clauses.append(f"(classification-cpv={self.cpv_division}*)")
+        return " AND ".join(clauses) + " SORT BY publication-date"
 
 
 def _ted_date(value: date) -> str:
@@ -799,7 +844,10 @@ class TedSearchApiCollector:
                 )
             )
         try:
-            body = json.loads(response.text)
+            # `parse_float=Decimal`, and deliberately NOT `parse_int`: an integer
+            # is already exact, and turning it into a Decimal would erase the
+            # source's own distinction between `1` and `1.0`.
+            body = json.loads(response.text, parse_float=Decimal)
         except ValueError:
             raise AcquisitionFailedError(
                 AcquisitionFailure(
@@ -854,9 +902,11 @@ class TedSearchApiCollector:
             notice_version=int(version)
             if isinstance(version, int | str) and _digit(version)
             else None,
-            # Verbatim. Every array stays an array, so a notice with several
-            # lots keeps all of them and nothing is collapsed on the way in.
-            fields=dict(item),
+            # Verbatim, with every exact decimal rendered as a STRING. See
+            # `_canonical_numbers`: the structure, the keys and the ordering are
+            # the source's own, and only the representation of a non-integer
+            # number changes.
+            fields=_canonical_fields(dict(item)),
             retrieved_at=moment,
         )
 
@@ -874,6 +924,40 @@ class TedSearchApiCollector:
                 context={"path": response.url_path},
             )
         )
+
+
+def _canonical_fields(item: dict[str, object]) -> dict[str, object]:
+    """One notice, with every exact decimal rendered as a string."""
+    rendered = _canonical_numbers(item)
+    assert isinstance(rendered, dict)  # noqa: S101 - a dict in, a dict out
+    return rendered
+
+
+def _canonical_numbers(value: object) -> object:
+    """The same structure, with every `Decimal` rendered as an exact string.
+
+    Mission 1.15.10. `json.loads(..., parse_float=Decimal)` hands back `Decimal`
+    objects, which `json.dumps` cannot serialise -- so they have to become
+    something, and a string is the only representation that survives the rest of
+    the path intact.
+
+    `canonical_number` states the four properties this relies on, and two of
+    them are about what happens AFTER this function: `json.dumps` writes a large
+    float in scientific notation and PostgreSQL `JSONB` rewrites that as an
+    integer, so a fingerprint computed in Python would disagree with anything
+    re-reading the stored payload -- about a record nobody changed.
+
+    **Integers are left alone.** They are already exact, and converting them
+    would erase the distinction between `1` and `1.0` that the source drew and
+    that a JSON number cannot carry.
+    """
+    if isinstance(value, Decimal):
+        return canonical_number(value)
+    if isinstance(value, dict):
+        return {key: _canonical_numbers(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_canonical_numbers(item) for item in value]
+    return value
 
 
 def _one(value: object) -> object:

@@ -147,7 +147,11 @@ class TestRegistrationAndLineage:
         spec = NORMALIZER_REGISTRY[("ted-eu", "ted-search-api")]
         assert spec.normalizer_id == TED_NORMALIZER_ID
         assert spec.normalizer_version == TED_NORMALIZER_VERSION
-        assert spec.supported_collector_versions == frozenset({"1.0.0"})
+        # BOTH, since Mission 1.15.10. 1.1.0 writes an exact decimal as a
+        # STRING where 1.0.0 wrote a JSON number, and `decimal_from` reads both
+        # to the same exact value -- so the adapter's own semantics are
+        # unchanged and it was deliberately not bumped.
+        assert spec.supported_collector_versions == frozenset({"1.0.0", "1.1.0"})
 
     def test_selection_finds_it_for_a_real_record(self) -> None:
         spec = select_normalizer(raw(as_stored(fx.CONTRACT_NOTICE)))

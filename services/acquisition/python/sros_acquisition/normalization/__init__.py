@@ -138,18 +138,25 @@ GDELT_WEB_NGRAM_NORMALIZER_SPEC = NormalizerSpec(
     build=lambda context: GdeltWebNgramLexicalNormalizer(context.retention),
 )
 
-# Mission 1.15.8. The THIRD adapter. `supported_collector_versions` carries the
-# 1.x line the resource's collector has published: 1.0.0 wrote the three records
-# that exist. A version outside it is refused rather than attempted, because a
-# collector version this adapter has never seen may have changed the payload
-# shape, and a parse that half-works on an unknown one is worse than one that
-# stops.
+# Mission 1.15.8, extended in 1.15.10. The THIRD adapter.
+#
+# **BOTH collector versions, and the reason is a decision rather than a
+# convenience.** 1.1.0 changed the payload shape: an exact decimal is now a
+# STRING where 1.0.0 wrote a JSON number. That is a real difference, and it is
+# NOT a difference this adapter can see -- `decimal_from` accepts `int`,
+# `Decimal` and `str` and returns the same exact value for all three, so a
+# 1.0.0 record and a 1.1.0 record of the same notice normalize identically.
+#
+# So the normalizer is NOT bumped. `normalized-record-v1.md` §21 puts a version
+# on what a record MEANS, and nothing here means anything different; bumping it
+# because an upstream version changed would make every stored record look
+# superseded by a change that did not touch them.
 TED_SEARCH_API_NORMALIZER_SPEC = NormalizerSpec(
     normalizer_id=TED_NORMALIZER_ID,
     normalizer_version=TED_NORMALIZER_VERSION,
     source_id="ted-eu",
     collector_id="ted-search-api",
-    supported_collector_versions=frozenset({"1.0.0"}),
+    supported_collector_versions=frozenset({"1.0.0", "1.1.0"}),
     schema_id=NORMALIZATION_SCHEMA_ID,
     schema_version=NORMALIZATION_SCHEMA_VERSION,
     build=lambda context: TedSearchApiNoticeNormalizer(context.retention),
