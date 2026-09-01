@@ -244,8 +244,9 @@ derivation gets a run record, never a row in a table of signals (ADR-021).
 
 ### 11.2 Mission 1.15.10 — one Signal, and what the data corrected
 
-The acquisition was designed for comparability first: one CPV division, one
-three-day window, award notices, chosen before execution. Four more notices
+The acquisition was designed for comparability first: one CPV division, one day
+(2023-03-01, the day that already held the system's only division-90 EUR award
+total), award notices only, chosen before execution. Four more notices
 arrived, three of them award notices with a EUR total value in division 90.
 
 | | |

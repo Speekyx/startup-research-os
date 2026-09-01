@@ -313,20 +313,23 @@ Two executions, because the first one exposed a defect described in §12.3.
 |---|---|---|
 | CPV division declared | `90` | `90` |
 | CPV division **in the query** | *absent* | `(classification-cpv=90*)` |
-| Window | 2023-03-06 to 2023-03-08 | 2023-03-06 to 2023-03-08 |
-| Bounds | `max_pages=1`, `max_records=5`, `page_size=5` | `max_pages=1`, `max_records=8`, `page_size=8` |
+| Window | 2023-03-01, one day | 2023-03-01, one day |
+| Notice types | `can-standard` | `can-standard` |
 | HTTP requests | **1** | **1** |
-| RawRecords | 4 new, 1 revised | 4 new |
+| RawRecords | 3 new, 1 revised | 4 new |
 | Natural-person data received | **none** | **none** |
 
 12.2b re-run identically: **0 new, unchanged**.
 
 The window and division were chosen **before execution** for comparability, not
-for volume: a Signal in this family needs at least two amounts that are of the
-same amount type, the same scope, the same currency and the same notice class,
-and division 90 in early March 2023 was picked because it plausibly held several
-awarded contracts in EUR rather than because it was the largest bucket
-available. The 1.15.9 attempt on a different division had returned no qualifying
+for volume: a Signal in this family needs at least two amounts of the same amount
+type, scope, currency and notice class, and 2023-03-01 in division 90 was picked
+because that exact day already held the one division-90 EUR award total the
+system had, so it was where a cohort could plausibly grow.
+
+Every value in the table above is read back from `raw_records.provenance`. The
+**bounds are the exception**: they are declared in the job payload and recorded
+nowhere, which is a gap in the record rather than a property of the acquisition. The 1.15.9 attempt on a different division had returned no qualifying
 cohort at all, and that was recorded as a valid result rather than widened away.
 
 ### 12.3 The defect 12.2a exposed, and why it is written down here

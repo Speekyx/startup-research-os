@@ -151,16 +151,30 @@ three of the dimensions of the cohort key.
 ### What exact bounded query was defined BEFORE execution?
 
 ```text
-(notice-type IN (cn-standard can-standard))
+(notice-type IN (can-standard))
+  AND (publication-date>=20230301)
+  AND (publication-date<=20230301)
   AND (classification-cpv=90*)
-  AND (publication-date>=20230306)
-  AND (publication-date<=20230308)
 SORT BY publication-date
 ```
 
-with `max_pages=1`, `max_records=8`, `page_size=8`, on route `ted-search-api`,
-resource `notices/eforms-contract-and-award`, profile
-`local-private-research-v1`.
+on route `ted-search-api`, resource `notices/eforms-contract-and-award`, profile
+`local-private-research-v1`, one page.
+
+**This query is quoted from `raw_records.provenance.expert_query`**, which is the
+collector's own record of what it sent, and the window from `provenance.date_window`.
+An earlier draft of this report stated a three-day window in March and both
+notice types; neither is what the collector sent, and the record is what settles
+it. The bounds are declared in the job payload and are the one part of the
+acquisition that leaves **no trace in the record** — noted here as a gap rather
+than restated from memory.
+
+The window is a **single day, 2023-03-01**, and it was chosen for the reason the
+division was: that day already held the one division-90 EUR award total the
+system had (`125972-2023`), so it was the day on which a cohort could plausibly
+grow. Only award notices were requested; `cn-standard` was dropped, because a
+contract notice states what a buyer expects to spend and cannot join a cohort of
+concluded values.
 
 ### Was the query widened after seeing the result?
 
@@ -205,17 +219,23 @@ service's limits, no exploratory request.
 | | Execution 1 (broader than declared) | Execution 2 (as declared) |
 |---|---|---|
 | HTTP requests | 1 | 1 |
-| Notices returned | 5 | 4 |
-| New RawRecords | 4 | 4 |
-| Revised RawRecords | 1 | 0 |
+| Window sent | 2023-03-01 to 2023-03-01 | 2023-03-01 to 2023-03-01 |
+| Notice types sent | `can-standard` | `can-standard` |
+| CPV in the query | **absent** | `classification-cpv=90*` |
+| Notices returned | 4 | 4 |
+| New RawRecords | **3** | **4** |
+| Revised RawRecords | 1 (`125972-2023`) | 0 |
 | Natural-person fields requested | none | none |
 | Natural-person data received | none | none |
+
+Every row above is read back from `raw_records.provenance`, not from the job
+that was submitted.
 
 Execution 2 re-run identically: **0 new, unchanged**.
 
 ### How many new NormalizedRecords resulted?
 
-**8**, all `PARTIAL`. `PARTIAL` is the ceiling for this adapter while H-37 is
+**8** (7 new plus the revision of `125972-2023`), all `PARTIAL`. `PARTIAL` is the ceiling for this adapter while H-37 is
 open, and that is a truthful quality statement rather than a defect.
 
 ### What collector version do the new RawRecords record?
@@ -346,7 +366,7 @@ the largest EUR total value exceeded the smallest by 686 545.02 EUR.*
 
 It does not support:
 
-- **growth, decline or any trend.** Three notices in one three-day window are
+- **growth, decline or any trend.** Three notices all published on one day are
   `NON_TEMPORAL`, and H-37 blocks a temporal reading regardless;
 - **willingness to pay.** The magnitude is a spread between two contracts, not a
   price anyone offered or accepted. That named buyers paid named amounts is

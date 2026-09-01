@@ -28,7 +28,7 @@ value that had no problem. The normalizer is **not** bumped and now declares
 so bumping it would announce a difference that does not exist.
 
 **A bounded acquisition designed for comparability, not for volume.** One CPV
-division, one three-day window, award notices, all declared before execution. The
+division, one day (2023-03-01), award notices only, all declared before execution. The
 first execution was **broader than declared**: `cpv_division` reached the
 dataclass, the query and the idempotency key but `from_payload` never read it. A
 narrowing that exists only in the caller's intent is not a narrowing, and the
