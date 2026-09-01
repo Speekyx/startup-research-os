@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.37
+Version: 1.38
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-01 (Sprint 1 / Mission 1.15.13)
+Last amended: 2026-09-01 (Sprint 1 / Mission 1.16)
 
 ---
 
@@ -13,6 +13,40 @@ Last amended: 2026-09-01 (Sprint 1 / Mission 1.15.13)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.38 — 2026-09-01 (Sprint 1 / Mission 1.16)
+
+Authorized by the Mission 1.16 brief §0-§35.
+
+**No source was added, and the measured blocker is the mission's product.** Ten
+sources cover `problem` or `desire`; six are `RESTRICTED` on retrieved terms and
+four are `REQUIRES_REVIEW`. Stack Exchange was selected on the brief's criteria
+and could not proceed: the two documents its review needs are served behind an
+anti-bot interstitial, and this environment cannot reach the host at all. Reddit
+is equally unreachable. **No bypass was attempted, and no review was written on
+unread documents** -- uncertainty is never permission.
+
+**`problem` is nominally covered and substantively is not.** TED is the only
+approving source carrying it, and what TED observes is a public buyer's
+procurement need, not a user finding a tool frustrating.
+
+**The larger finding, which nobody had noticed.** The runtime declares
+`SROS_USE_PROFILE=local-private-research-v1` and **exactly one review in the
+registry is under that profile**. `build_authorization('world-bank',
+'local-private-research-v1')` is **REFUSED**, and so are gdelt, eurostat, fred
+and openalex. **The deployment holds 15 of 23 RawRecords and 7 of 8 Evidence rows
+it could not re-collect today** -- they were gathered before ADR-027 existed and
+their provenance carries no `use_profile` at all. The gate is working exactly as
+designed; what is missing is the review nobody has written for the profile the
+runtime actually declares. It also caps every future source mission silently.
+
+**Also corrected (§0):** the 1.15.13 authorship record. The rationale and stated
+limitation were **AI-assisted in wording** and adopted by the reviewer; the
+number was the reviewer's alone. The persisted assessment is untouched.
+
+Nothing collected, created or changed. Counts identical: 23/23/8/8/8/8, 1
+assessment, 0 opportunities, 0 embeddings, 0 scores. H-36A, H-36B, H-37, H-38
+untouched
 
 ## 1.37 — 2026-09-01 (Sprint 1 / Mission 1.15.13)
 
