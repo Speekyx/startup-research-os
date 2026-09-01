@@ -2198,3 +2198,84 @@ except Exception as exc:  # unreachable host, driver error
 **And it says which happened.** Returning "no decisions" silently would be
 §49's defect again — a guard that cannot tell *no* from *I could not check*. The
 refusal is identical either way; the reader's understanding of it is not.
+
+---
+
+## 52. A default that is also a real state cannot be omitted (Mission 1.15.6.3)
+
+`evaluate_readiness(source, profile, config, decisions=())` has a default that
+reads as *nothing supplied*. It is not. `()` is a real, load-bearing state
+meaning **this deployment holds no operator decision**, and the function is
+right to treat it as one.
+
+So a call site that omits the argument is not accepting a default. It is
+**asserting an absence it never checked**, in a signature where the assertion is
+invisible: the wrong call is shorter than the right one, type-checks, runs, and
+returns a plausible answer.
+
+Three CLI call sites omitted it. `readiness` reported the source blocked by the
+one condition an operator had recorded, and `authorization` printed a built
+context followed by *pass the eligibility gate*.
+
+**The generalisation.** When a parameter's default is a legitimate value of the
+domain rather than a sentinel, omission is unreviewable. Two ways out, and both
+are used here:
+
+- **make the two states distinguishable** — `_live_eligibility` takes
+  `decisions: Sequence[...] | None = None`, where `None` means *the caller has
+  not read them, go read* and `()` means *the caller read them and found none*;
+- **fence the omission** when the signature cannot change, because
+  `evaluate_readiness`'s `()` default is correct for every caller that genuinely
+  has no database:
+
+```python
+offenders = [
+    f"line {node.lineno}"
+    for node in ast.walk(tree)
+    if isinstance(node, ast.Call)
+    and getattr(node.func, "id", None) == "evaluate_readiness"
+    and not any(kw.arg == "decisions" for kw in node.keywords)
+]
+assert offenders == []
+```
+
+**A fence on a keyword rather than on an attribute**, which is the new shape.
+§48's fence catches reading the wrong thing; this one catches *not passing* the
+right thing, and an omission leaves no token to grep for.
+
+**And the test that made this checkable at all injects at the seam.** The
+persisted half is supplied by replacing `cli._recorded_decisions`, so the cases
+describe a deployment holding an operator decision without requiring the machine
+running them to hold one — §49, applied to a whole file rather than one
+assertion.
+
+---
+
+## 53. Assert the words, not where the editor wrapped them (Mission 1.15.6.3)
+
+A test read an operator's recorded acknowledgement out of PostgreSQL and
+asserted three phrases appeared in it, verbatim, including the newlines that
+happened to fall inside two of them.
+
+A second deployment recorded **the same acknowledgement, character for
+character**, wrapped at different columns. Two assertions failed on a row that
+was correct, and the only lawful repairs were to rewrite a governance row nobody
+had withdrawn or to fix the test.
+
+**The evidence is the words.** Where a person's editor broke the lines is not a
+property of the decision, so it is not something a test may depend on:
+
+```python
+reason = re.sub(r"\s+", " ", stored)
+assert "review version 2, et pour rien d’autre" in reason
+```
+
+The phrase is still asserted whole and in order. Only the thing carrying no
+meaning is dropped.
+
+**The general rule: an assertion over human-authored free text should depend on
+the text and on nothing the text was transported through.** Line wrapping,
+trailing whitespace and the width of somebody's terminal all belong to the
+transport. This is §42's lesson in another medium — a test that pins an
+incidental of the environment it was written in reports a failure about the
+environment and looks like a failure about the subject.

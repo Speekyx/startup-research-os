@@ -36,6 +36,7 @@ import json
 import os
 import pathlib
 import sys
+from collections.abc import Sequence
 from datetime import UTC, datetime
 from typing import Any
 
@@ -133,6 +134,7 @@ def _live_eligibility(
     profile: str,
     config: ComplianceConfig,
     now: datetime | None = None,
+    decisions: Sequence[ConditionVerificationRecord] | None = None,
 ) -> tuple[EligibilityResult, tuple[ConditionVerificationRecord, ...]]:
     """The gate, on the EFFECTIVE verification state.
 
@@ -144,9 +146,20 @@ def _live_eligibility(
     The records come back with the verdict rather than being discarded: a
     command that prints "blocked" without being able to say which condition
     failed is the sort of output people work around instead of using.
+
+    **`decisions=None` is not `decisions=()`** (Mission 1.15.6.3). `None` means
+    the caller has not read them and this function should; the empty tuple means
+    the caller read them and this deployment holds none. A command that reports
+    twice about one source -- `show` prints the gate and the readiness beside it
+    -- reads once and passes the same set to both, so the two halves of its own
+    output cannot disagree and an unreachable database is reported once rather
+    than once per consultation.
     """
     records = resolve_effective_verifications(
-        source, profile, config, _recorded_decisions(source, profile)
+        source,
+        profile,
+        config,
+        _recorded_decisions(source, profile) if decisions is None else decisions,
     )
     result = evaluate_eligibility(source, profile, now, satisfied_condition_keys(list(records)))
     return result, records
@@ -282,7 +295,11 @@ def cmd_show(args: argparse.Namespace) -> int:
     source = catalog.get(args.source_id)
     profile = _cli_profile(args)
     review = _profile_review(source, profile)
-    result, records = _live_eligibility(source, profile, _compliance(args))
+    # Read once, used by both halves of this command's output (Mission
+    # 1.15.6.3). The gate verdict and the readiness line below it are two views
+    # of one deployment state, and reading twice is how they could differ.
+    decisions = _recorded_decisions(source, profile)
+    result, records = _live_eligibility(source, profile, _compliance(args), decisions=decisions)
     retention = resolve_retention(source.retention_override)
 
     print(f"{source.canonical_name}  ({source.source_id})")
@@ -416,7 +433,7 @@ def cmd_show(args: argparse.Namespace) -> int:
     print(f"\n  COLLECTOR ELIGIBLE: {'yes' if result.eligible else 'NO'}")
     for reason in result.blocking_reasons:
         print(f"    - {reason}")
-    readiness = evaluate_readiness(source, _cli_profile(args), _compliance(args))
+    readiness = evaluate_readiness(source, profile, _compliance(args), decisions=decisions)
     print(f"  RESOURCE READY:     {'yes' if readiness.resource_ready else 'NO'}")
     for gap in readiness.resource_gaps:
         print(f"    - {gap}")
@@ -611,13 +628,19 @@ def cmd_authorization(args: argparse.Namespace) -> int:
     """
     catalog = _catalog(args)
     source = catalog.get(args.source_id)
+    profile = _cli_profile(args)
+    # Read once and reused by the footer below, which asks the same question
+    # about the same deployment (Mission 1.15.6.3). Before that, this command
+    # built a context from the operator's recorded decision and then printed a
+    # next step derived from a readiness that had never seen it -- so the footer
+    # told the reader to pass a gate the lines above it had just passed.
+    decisions = _recorded_decisions(source, profile)
     try:
-        profile = _cli_profile(args)
         context = build_authorization(
             source,
             profile,
             _compliance(args),
-            decisions=_recorded_decisions(source, profile),
+            decisions=decisions,
         )
     except AcquisitionNotAuthorizedError as exc:
         print(f"REFUSED: no acquisition authorization for {source.source_id}", file=sys.stderr)
@@ -693,7 +716,7 @@ def cmd_authorization(args: argparse.Namespace) -> int:
     if not context.datasets:
         print("    none. Every resource fails closed")
 
-    readiness = evaluate_readiness(source, _cli_profile(args), _compliance(args))
+    readiness = evaluate_readiness(source, profile, _compliance(args), decisions=decisions)
     print(f"\n  NEXT STEP: {readiness.next_step}")
     return 0
 
@@ -708,8 +731,20 @@ def cmd_readiness(args: argparse.Namespace) -> int:
     """
     catalog = _catalog(args)
     config = _compliance(args)
+    profile = _cli_profile(args)
     sources = [catalog.get(args.source_id)] if args.source_id else list(catalog)
-    rows = [evaluate_readiness(source, _cli_profile(args), config) for source in sources]
+    # Mission 1.15.6.3. `decisions` defaults to `()`, which is a real state
+    # meaning THIS DEPLOYMENT HOLDS NONE -- so omitting it did not request a
+    # default, it asserted an absence nobody had checked, and this report
+    # answered `UNKNOWN` for every decision an operator had recorded.
+    #
+    # `_recorded_decisions` returns immediately for a review with no human
+    # condition, so scanning the whole catalog opens a connection only for the
+    # sources that could have one.
+    rows = [
+        evaluate_readiness(source, profile, config, decisions=_recorded_decisions(source, profile))
+        for source in sources
+    ]
 
     if args.json:
         print(json.dumps([r.to_json() for r in rows], indent=2))
@@ -718,7 +753,7 @@ def cmd_readiness(args: argparse.Namespace) -> int:
     def mark(value: bool) -> str:
         return "yes" if value else "no "
 
-    print(_profile_banner(_cli_profile(args)))
+    print(_profile_banner(profile))
     print(f"{'source':<22} {'elig':<5} {'rsrc':<5} {'impl':<5} {'enab':<5} next step")
     for row in rows:
         print(
