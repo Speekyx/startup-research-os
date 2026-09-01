@@ -1132,7 +1132,9 @@ class TestRecordedVerification:
         root = pathlib.Path(sros_acquisition.__file__).parent
         for package in ("registry", "compliance"):
             assert list((root / package).rglob("*collector*.py")) == []
-        assert frozenset({"world-bank", "gdelt"}) == sros_acquisition.IMPLEMENTED_COLLECTORS
+        assert (
+            frozenset({"world-bank", "gdelt", "ted-eu"}) == sros_acquisition.IMPLEMENTED_COLLECTORS
+        )
 
     def test_an_eligible_source_with_no_collector_cannot_be_enabled(self, capsys) -> None:
         """§25, restated on the source that still proves it.

@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.30
+Version: 1.31
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-08-31 (Sprint 1 / Mission 1.15.6)
+Last amended: 2026-09-01 (Sprint 1 / Mission 1.15.7)
 
 ---
 
@@ -13,6 +13,49 @@ Last amended: 2026-08-31 (Sprint 1 / Mission 1.15.6)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.31 — 2026-09-01 (Sprint 1 / Mission 1.15.7)
+
+Authorized by the Mission 1.15.7 brief §4-§8 (Phase A, resource governance) and
+§9-§44 (Phase B, the collector and one bounded real acquisition).
+
+**The first TED acquisition, and the first concrete TED resource.** TED had been
+`AUTHORIZATION_READY` since Mission 1.15.6.1 and uncollectable, because a
+source-level approval is not a resource-level one: the compliance entry
+authorised `"datasets": []`, so every resource failed closed. Phase A authorised
+**one** — `notices/eforms-contract-and-award`, eForms contract notices and
+contract award notices published from 2023-03-01, through the Search API — on
+Commission Decision 2011/833/EU as a `NAMED_LICENCE` with `PLATFORM_LICENSED`
+content origin, and on nothing new. `resource_ready` moved NO to YES.
+
+**`ted-search-api@1.0.0`**, the third implemented collector. Four gates before a
+socket: bounds, route, resource, fields. One route with **no fallback** —
+`ted-open-data-sparql` is authorised, is in the context, and is not implemented.
+Bounds with **no defaults** at every level including the job payload, because
+TED's rate limit is UNKNOWN and the operator acceptance behind this source is
+conditioned on the queries being bounded. **No exhaustion mode**: the API's
+`ITERATION` scroll retrieves every notice for a query with no limit, and the
+collector sends `PAGE_NUMBER` and never a token. Four monetary semantics kept
+apart under their own names, **no `price_paid`**, **no currency conversion**, no
+language chosen, no lot collapsed.
+
+**The API contract was established from first-party sources only** — the
+service's own OpenAPI document and its own `checkQuerySyntax` mode, which
+validates a query without executing it and retrieved no notices. It also settled
+two things that could only have been guessed: the API omits a field entirely
+when a notice has no value for it, so exactly one field per notice is required;
+and it adds a `links` object to every notice regardless of the field selection,
+which was inspected before any record was accepted and contains only the
+notice's own URLs per language and format.
+
+**One real bounded acquisition**: one HTTP request, one page, one day's window,
+**3 RawRecords**. Re-run identically: 0 new, 3 unchanged. Raw records 12 to 15.
+
+**H-36A remains NOT ESTABLISHED. H-36B remains NOT ADDRESSED.** No legal
+clearance. Bulk XML, the historical CSV and the commercial profile refused
+exactly as before. **No NormalizedRecord, Signal, Claim, Evidence, Opportunity,
+embedding or score was created**, and the recorded human decision is byte-for-byte
+the row Mission 1.15.6.1 wrote
 
 ## 1.30 — 2026-08-31 (Sprint 1 / Mission 1.15.6)
 

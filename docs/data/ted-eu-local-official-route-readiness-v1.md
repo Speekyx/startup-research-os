@@ -204,6 +204,14 @@ What still stands between this and a **collector** is no longer a permission. It
 is a concrete resource: TED authorises zero datasets, so `resource_ready` is
 **no**.
 
+**Amended by Mission 1.15.7.** Phase A authorised one concrete resource --
+`notices/eforms-contract-and-award`, eForms contract and award notices from
+2023-03-01 through the Search API -- and `resource_ready` is now **YES** for it
+and for nothing else (`ted-eu-search-api-resource-v1.md`). Phase B wrote
+`ted-search-api@1.0.0` and ran one bounded acquisition. **H-36A and H-36B did
+not move**, no legal clearance exists, and the bulk packages, the historical CSV
+and the commercial profile are refused exactly as before.
+
 | Condition | Verification | State | Established by |
 |---|---|---|---|
 | `ted-attribution` | CAPABILITY `source-attribution-display` | **SATISFIED** | the live verifiers |
@@ -249,8 +257,10 @@ normal path without any caller merging verification sources by hand. See
 
 ## Next mission
 
-**TED Official Search API Collector V1 — Local Private Research Profile**, if and
-when the operator records the one remaining confirmation.
+**Written in Mission 1.15.7**, after the operator recorded the confirmation in
+1.15.6.1. What it had to do is below, and
+[`ted-eu-search-api-collector-v1.md`](ted-eu-search-api-collector-v1.md) records
+what it does. **The next mission is now 1.15.8, TED Raw to Normalized V1.**
 
 It must: obtain its route from `context.access` and bind to `ted-search-api`;
 request only the fields `context.authorize_fields` permits; issue bounded,

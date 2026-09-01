@@ -690,20 +690,34 @@ class TestOneHumanDecisionRemains:
 
 class TestNothingWasBuilt:
     def test_no_ted_collector_or_normalizer_exists(self) -> None:
+        """Inverted in Mission 1.15.7, which authorised a concrete resource and
+        wrote the Search API collector -- in that order.
+
+        **The half that still holds is the half kept.** There is no TED
+        normalizer, no Signal, no Claim and no Evidence, and 1.15.7's stop
+        condition is exactly that line. Deleting this test would have lost it.
+        """
         from sros_acquisition import IMPLEMENTED_COLLECTORS, IMPLEMENTED_NORMALIZERS
 
-        assert "ted-eu" not in IMPLEMENTED_COLLECTORS
+        assert "ted-eu" in IMPLEMENTED_COLLECTORS
         assert "ted-eu" not in IMPLEMENTED_NORMALIZERS
 
     def test_no_ted_module_exists_in_the_acquisition_package(self) -> None:
-        """§16. No API client, no SPARQL client, no downloader, no parser."""
+        """Inverted in Mission 1.15.7. ONE TED module exists and it is the
+        Search API collector; no SPARQL client, no bulk downloader, no parser
+        for a route the review refuses.
+
+        Still an equality rather than an absence, because the risk this guards
+        moved rather than ended: a second TED module appearing is now the thing
+        worth catching, and `ted_open_data_sparql.py` is the one it would be.
+        """
         package = REPO_ROOT / "services" / "acquisition" / "python" / "sros_acquisition"
-        offenders = [
-            p.relative_to(REPO_ROOT).as_posix()
+        modules = sorted(
+            p.name
             for p in package.rglob("*.py")
             if "ted" in p.stem.lower() or "sparql" in p.stem.lower()
-        ]
-        assert offenders == [], offenders
+        )
+        assert modules == ["ted_search_api.py"], modules
 
     def test_no_sparql_client_was_added_anywhere(self) -> None:
         for root in ("services", "packages"):
@@ -714,12 +728,15 @@ class TestNothingWasBuilt:
 
     def test_verification_needs_no_network_and_no_collector(self, ted, compliance) -> None:
         """§32. Both capabilities run against configuration alone: no endpoint is
-        contacted, and neither asks whether a collector exists."""
+        contacted, and neither asks whether a collector exists.
+
+        The collector arrived in Mission 1.15.7 and this still passes unchanged
+        in substance, which is the actual claim: the capabilities verify against
+        configuration and would give the same four answers with no collector in
+        the tree. What is asserted is that they never consult the registry, not
+        that the registry is empty."""
         records = verify_source(ted, LOCAL_PROFILE, compliance, environ={})
         assert len(records) == 4
-        from sros_acquisition import IMPLEMENTED_COLLECTORS
-
-        assert "ted-eu" not in IMPLEMENTED_COLLECTORS
         assert result_for(records, ROUTE_ONLY) is ConditionVerificationResult.SATISFIED
 
     def test_the_compliance_package_reaches_no_network(self) -> None:
@@ -751,10 +768,13 @@ class TestNothingReachedTheDatabase:
     def test_no_ted_research_row_exists(self) -> None:
         """§17, §27. Policy documents are evidence; procurement notices are
         research data, and none was fetched."""
-        assert (
-            self._count("SELECT count(*) FROM acquisition.raw_records WHERE source_id = 'ted-eu'")
-            == 0
-        )
+        # RAW records are DEPLOYMENT state and are no longer asserted here.
+        # Mission 1.15.7 authorised a resource and collected three notices, so
+        # this count is legitimately non-zero on a machine that has run it and
+        # zero on one that has not -- which is exactly the confusion §49 forbids
+        # a test from encoding. What stays REPOSITORY-true is the line below:
+        # there is no TED normalizer, so no TED notice can become a canonical
+        # record on any machine.
         assert (
             self._count(
                 "SELECT count(*) FROM acquisition.normalized_records WHERE source_id = 'ted-eu'"

@@ -45,11 +45,17 @@ ATTRIBUTION = "ted-attribution"
 
 MOMENT = datetime(2026, 8, 31, 20, 9, 29, tzinfo=UTC)
 
-# The two sentences `AcquisitionReadiness.next_step` chooses between here. Named
-# rather than inlined because the whole defect was reporting the first where the
-# second was true.
+# The sentences `AcquisitionReadiness.next_step` chooses between. Named rather
+# than inlined because the whole defect was reporting the first where a later
+# one was true.
+#
+# **`REAL_STEP` moves as the mission does, and that is the point.** It was
+# "authorise a concrete resource" when this file was written and became the
+# enable step when Mission 1.15.7 authorised the resource and wrote the
+# collector. What these tests protect is not which sentence appears -- it is
+# that `GATE_STEP` does NOT, because the gate passes.
 GATE_STEP = "pass the eligibility gate"
-RESOURCE_STEP = "authorise a concrete resource"
+REAL_STEP = "enable the collector in this deployment"
 
 
 def decision(
@@ -126,16 +132,18 @@ class TestReportingAgreesWithTheGate:
         assert "review conditions not satisfied" not in out
 
     def test_readiness_reports_the_real_blocker_instead(self, capsys, holds_the_decision) -> None:
-        """`resource_ready` is still NO, and that is what stands in the way.
-        Generic: it comes from `next_step`, with no source named anywhere."""
+        """Whatever actually stands in the way is what is reported. Generic: it
+        comes from `next_step`, with no source named anywhere."""
         out, _ = run(capsys, "--use-profile", LOCAL_PROFILE, "readiness", "ted-eu")
-        assert RESOURCE_STEP in readiness_row(out)
+        row = readiness_row(out)
+        assert REAL_STEP in row
+        assert GATE_STEP not in row
 
     def test_show_reports_the_same_eligibility(self, capsys, holds_the_decision) -> None:
         out, _ = run(capsys, "--use-profile", LOCAL_PROFILE, "show", "ted-eu")
         assert "COLLECTOR ELIGIBLE: yes" in out
-        assert "RESOURCE READY:     NO" in out
-        assert f"NEXT STEP:          {RESOURCE_STEP}" in out
+        assert "RESOURCE READY:     yes" in out
+        assert f"NEXT STEP:          {REAL_STEP}" in out
 
     def test_the_authorization_footer_names_the_real_next_blocker(
         self, capsys, holds_the_decision
@@ -144,7 +152,7 @@ class TestReportingAgreesWithTheGate:
         pass the gate it had just passed."""
         out, _ = run(capsys, "--use-profile", LOCAL_PROFILE, "authorization", "ted-eu")
         assert "AUTHORIZATION  ted-eu" in out
-        assert f"NEXT STEP: {RESOURCE_STEP}" in out
+        assert f"NEXT STEP: {REAL_STEP}" in out
         assert GATE_STEP not in out
 
     def test_every_command_gives_the_same_answer(self, capsys, holds_the_decision) -> None:

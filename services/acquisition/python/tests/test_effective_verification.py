@@ -316,11 +316,17 @@ class TestEffectiveAuthorization:
         assert context.authorize_fields(None)
 
     def test_the_resource_gate_is_unchanged(self, ted, compliance) -> None:
-        """§19. `resource_ready` is still NO, and the excluded families still are."""
+        """§19, amended by Mission 1.15.7 which authorised ONE concrete resource.
+
+        The property this protects never was "zero datasets" -- it was that a
+        satisfied human condition changes the SOURCE gate and reaches nothing
+        below it. The excluded families are excluded for the same reason as
+        before, with an authorised resource now sitting beside them.
+        """
         context = build_authorization(
             ted, LOCAL_PROFILE, compliance, decisions=(decision(),), environ={}, now=MOMENT
         )
-        assert context.datasets == ()
+        assert [d.resource_id for d in context.datasets] == ["notices/eforms-contract-and-award"]
         assert {
             "ted-bulk-xml-daily",
             "ted-bulk-xml-monthly",

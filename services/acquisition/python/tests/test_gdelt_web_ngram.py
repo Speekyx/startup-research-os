@@ -524,10 +524,11 @@ class TestNoCollectorAndNoData:
     def test_gdelt_became_implemented_in_the_mission_after_this_one(self, gdelt) -> None:
         """Mission 1.9.2 authorised the resources and wrote no code; Mission
         1.9.3 wrote the collector. The order is the point, and it is why this
-        assertion moved rather than being deleted."""
+        assertion moved rather than being deleted -- again in Mission 1.15.7,
+        which took `ted-eu` through the same two steps."""
         from sros_acquisition import IMPLEMENTED_COLLECTORS
 
-        assert set(IMPLEMENTED_COLLECTORS) == {"world-bank", "gdelt"}
+        assert set(IMPLEMENTED_COLLECTORS) == {"world-bank", "gdelt", "ted-eu"}
 
     def test_gdelt_is_still_disabled(self, gdelt) -> None:
         assert gdelt.collector_enabled is False

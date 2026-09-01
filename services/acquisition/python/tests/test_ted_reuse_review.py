@@ -254,10 +254,13 @@ class TestOpenQuestions:
 
 
 class TestNothingWasBuilt:
-    def test_no_ted_collector_exists(self, catalog) -> None:
+    def test_ted_gained_its_collector_six_missions_later(self, catalog) -> None:
+        """Inverted in Mission 1.15.7. What this recorded when written -- that a
+        reuse review builds nothing -- is preserved by the normalizer assertion
+        below, which is still true and is 1.15.7's stop condition."""
         from sros_acquisition import IMPLEMENTED_COLLECTORS
 
-        assert "ted-eu" not in IMPLEMENTED_COLLECTORS
+        assert "ted-eu" in IMPLEMENTED_COLLECTORS
 
     def test_no_ted_normalizer_exists(self, catalog) -> None:
         from sros_acquisition import IMPLEMENTED_NORMALIZERS
@@ -299,11 +302,23 @@ class TestNothingWasCollected:
             row = conn.execute(query).fetchone()
         return int(row[0]) if row else -1
 
-    def test_no_raw_record_has_source_id_ted_eu(self) -> None:
+    def test_no_ted_notice_became_a_canonical_record(self) -> None:
+        """Inverted in Mission 1.15.7, which collected three notices.
+
+        The raw count is DEPLOYMENT state: non-zero on a machine that has run
+        the collector, zero on one that has not, and asserting either would be
+        the confusion §49 forbids. What remains repository-true is that no TED
+        notice can become a canonical record, because no TED normalizer exists.
+        """
         assert (
-            self._count("SELECT count(*) FROM acquisition.raw_records WHERE source_id = 'ted-eu'")
+            self._count(
+                "SELECT count(*) FROM acquisition.normalized_records WHERE source_id = 'ted-eu'"
+            )
             == 0
         )
+        from sros_acquisition import IMPLEMENTED_NORMALIZERS
+
+        assert "ted-eu" not in IMPLEMENTED_NORMALIZERS
 
     def test_no_normalized_record_has_source_id_ted_eu(self) -> None:
         assert (

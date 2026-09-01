@@ -101,7 +101,9 @@ class TestNoCollectorWasImplemented:
 
         assert gdelt.review.approval_state is SourceApprovalState.APPROVED_WITH_CONDITIONS
         assert "gdelt" in IMPLEMENTED_COLLECTORS
-        assert set(IMPLEMENTED_COLLECTORS) == {"world-bank", "gdelt"}
+        # `ted-eu` joined in Mission 1.15.7, by the same route: approval, then a
+        # concrete authorised resource, then code.
+        assert set(IMPLEMENTED_COLLECTORS) == {"world-bank", "gdelt", "ted-eu"}
 
     def test_gdelt_is_not_enabled(self, gdelt) -> None:
         assert gdelt.collector_enabled is False

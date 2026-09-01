@@ -458,9 +458,10 @@ class TestEligibilityAgreesEverywhere:
         was the whole point of that mission: eligibility is not implementation.
 
         Mission 1.9.2 authorised its resources and Mission 1.9.3 wrote the
-        collector, in that order. The assertion moved rather than being deleted,
-        because the sequence it records is the thing worth keeping.
+        collector, in that order. Mission 1.15.7 did the same for `ted-eu`. The
+        assertion moved rather than being deleted, because the sequence it
+        records is the thing worth keeping.
         """
         from sros_acquisition import IMPLEMENTED_COLLECTORS
 
-        assert set(IMPLEMENTED_COLLECTORS) == {"world-bank", "gdelt"}
+        assert set(IMPLEMENTED_COLLECTORS) == {"world-bank", "gdelt", "ted-eu"}

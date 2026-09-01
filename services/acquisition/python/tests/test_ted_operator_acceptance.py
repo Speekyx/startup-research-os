@@ -444,17 +444,20 @@ class TestTheAuthorizationBuilds:
         assert context.authorize_fields(("tender_full_text",))
         assert context.authorize_fields(None)
 
-    def test_the_context_still_authorises_no_concrete_resource(
+    def test_the_context_authorises_exactly_the_one_reviewed_resource(
         self, ted, compliance, complete
     ) -> None:
-        """§10, and the qualifier `AUTHORIZATION_READY` must not hide.
+        """§10, inverted by Mission 1.15.7 -- which did what this predicted.
 
-        TED authorises zero datasets, so a collector holding this context would
-        be refused every resource it asked for. `resource_ready` is NO, and the
-        collector mission's first act is a governance one.
+        When written, TED authorised zero datasets and this said the collector
+        mission's first act would be a governance one. It was: Phase A of
+        1.15.7 authorised one concrete resource before any code existed. The
+        assertion that survives is the sharper half -- a resource NOBODY
+        reviewed is still refused, which is what `authorized_dataset` returning
+        `None` for an invented id means.
         """
         context = build_authorization(ted, LOCAL_PROFILE, compliance, complete, environ={})
-        assert context.datasets == ()
+        assert [d.resource_id for d in context.datasets] == ["notices/eforms-contract-and-award"]
         assert context.authorized_dataset("anything") is None
 
     def test_the_commercial_profile_still_refuses_with_the_same_records(
@@ -732,20 +735,32 @@ class TestNoAutoAcceptancePathExists:
 
 class TestNothingWasBuilt:
     def test_no_ted_collector_or_normalizer_exists(self) -> None:
+        """Inverted in Mission 1.15.7, which authorised a concrete resource and
+        wrote the Search API collector -- in that order.
+
+        **The half that still holds is the half kept.** There is no TED
+        normalizer, no Signal, no Claim and no Evidence, and 1.15.7's stop
+        condition is exactly that line. Deleting this test would have lost it.
+        """
         from sros_acquisition import IMPLEMENTED_COLLECTORS, IMPLEMENTED_NORMALIZERS
 
-        assert "ted-eu" not in IMPLEMENTED_COLLECTORS
+        assert "ted-eu" in IMPLEMENTED_COLLECTORS
         assert "ted-eu" not in IMPLEMENTED_NORMALIZERS
 
-    def test_no_ted_module_exists(self) -> None:
-        """§20. Even though authorization readiness was the subject."""
+    def test_exactly_one_ted_module_exists_and_it_is_the_search_api(self) -> None:
+        """§20 held for this mission and was inverted by Mission 1.15.7.
+
+        The equality is the point: the collector that exists reaches the ONE
+        reviewed route it implements, and a `ted_open_data_sparql.py` appearing
+        beside it would be a second route nobody's mission authorised.
+        """
         package = REPO_ROOT / "services" / "acquisition" / "python" / "sros_acquisition"
-        offenders = [
-            p.relative_to(REPO_ROOT).as_posix()
+        modules = sorted(
+            p.name
             for p in package.rglob("*.py")
             if "ted" in p.stem.lower() or "sparql" in p.stem.lower()
-        ]
-        assert offenders == [], offenders
+        )
+        assert modules == ["ted_search_api.py"], modules
 
 
 @needs_postgres
@@ -979,10 +994,13 @@ class TestTheRegistryHoldsExactlyOneAcceptance:
 
     def test_no_ted_research_row_exists(self) -> None:
         """§21. TED rows stay 0 whatever this machine holds elsewhere."""
-        assert (
-            self._count("SELECT count(*) FROM acquisition.raw_records WHERE source_id = 'ted-eu'")
-            == 0
-        )
+        # RAW records are DEPLOYMENT state and are no longer asserted here.
+        # Mission 1.15.7 authorised a resource and collected three notices, so
+        # this count is legitimately non-zero on a machine that has run it and
+        # zero on one that has not -- which is exactly the confusion §49 forbids
+        # a test from encoding. What stays REPOSITORY-true is the line below:
+        # there is no TED normalizer, so no TED notice can become a canonical
+        # record on any machine.
         assert (
             self._count(
                 "SELECT count(*) FROM acquisition.normalized_records WHERE source_id = 'ted-eu'"
