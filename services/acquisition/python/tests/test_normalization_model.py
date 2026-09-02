@@ -311,12 +311,20 @@ class TestRecordKinds:
         Q&A sites other than Stack Overflow publish the same shape, so naming
         the kind `stack_exchange_question` would have made the vocabulary a list
         of vendors -- the SITE is a field, and the source is provenance.
+
+        Mission 1.19 added the fifth on the same rule and named it for the shape
+        again: `content_request_count`, not `wikimedia_pageview`. Any platform
+        publishing how many times a named item was requested has this shape, and
+        the name says REQUEST rather than VIEW because "view" implies a person
+        looked -- an implication that, put in the VOCABULARY, nothing downstream
+        could unmake.
         """
         assert set(RECORD_KINDS) == {
             "numeric_observation",
             "lexical_frequency_observation",
             "procurement_notice",
             "community_question",
+            "content_request_count",
         }
 
     def test_no_hypothetical_kind_is_declared(self) -> None:
@@ -665,6 +673,7 @@ class TestSelection:
             ("gdelt", "gdelt-web-ngram"),
             ("stack-exchange", "stack-exchange-questions"),
             ("ted-eu", "ted-search-api"),
+            ("wikimedia-pageviews", "wikimedia-pageviews-per-article"),
             ("world-bank", "world-bank-indicators"),
         ]
 

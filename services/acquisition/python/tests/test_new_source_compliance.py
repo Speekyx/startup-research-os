@@ -375,18 +375,29 @@ class TestWikimediaIsBlockedForTheRecordedReason:
         ]
         assert any("Attribution-ShareAlike 4.0" in title for title in titles)
 
-    def test_no_capability_was_built_for_a_source_that_cannot_use_one(self) -> None:
-        """§7, §13: do not build unused abstractions.
+    def test_the_identification_capability_exists_now_that_a_condition_names_it(self) -> None:
+        """The rule held and its conclusion flipped, which is the rule working.
 
-        A request-identification capability is what Wikimedia's User-Agent
-        condition would need. Building it now would register a capability no
-        condition on any approving source names, which the compliance validator
-        rejects outright.
+        Mission 1.8 asserted that NO request-identification capability existed,
+        because building one then would have registered an abstraction no
+        condition on any approving source named -- which the compliance
+        validator rejects outright.
+
+        Mission 1.19 approved Wikimedia under the LOCAL profile, and its
+        `wikimedia-client-identification` condition names
+        `source-client-identification`. So the capability exists because a
+        condition demanded it, in that order, and the assertion moved rather
+        than being deleted: a capability with no condition behind it would still
+        be the unused abstraction §7 forbids.
         """
         from sros_acquisition.compliance.capabilities import CAPABILITIES
 
+        assert "source-client-identification" in CAPABILITIES
         assert not [
-            name for name in CAPABILITIES if "user-agent" in name or "identification" in name
+            name
+            for name in CAPABILITIES
+            if ("user-agent" in name or "identification" in name)
+            and name != "source-client-identification"
         ]
 
 
@@ -464,4 +475,10 @@ class TestEligibilityAgreesEverywhere:
         """
         from sros_acquisition import IMPLEMENTED_COLLECTORS
 
-        assert set(IMPLEMENTED_COLLECTORS) == {"world-bank", "gdelt", "ted-eu", "stack-exchange"}
+        assert set(IMPLEMENTED_COLLECTORS) == {
+            "world-bank",
+            "gdelt",
+            "ted-eu",
+            "stack-exchange",
+            "wikimedia-pageviews",
+        }

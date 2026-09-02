@@ -581,6 +581,6 @@ class TestCollectionStaysInsideItsBoundary:
         import sros_acquisition
 
         assert (
-            frozenset({"world-bank", "gdelt", "ted-eu", "stack-exchange"})
+            frozenset({"world-bank", "gdelt", "ted-eu", "stack-exchange", "wikimedia-pageviews"})
             == sros_acquisition.IMPLEMENTED_COLLECTORS
         )

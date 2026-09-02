@@ -539,7 +539,13 @@ class TestNoCollectorAndNoData:
         which took `ted-eu` through the same two steps."""
         from sros_acquisition import IMPLEMENTED_COLLECTORS
 
-        assert set(IMPLEMENTED_COLLECTORS) == {"world-bank", "gdelt", "ted-eu", "stack-exchange"}
+        assert set(IMPLEMENTED_COLLECTORS) == {
+            "world-bank",
+            "gdelt",
+            "ted-eu",
+            "stack-exchange",
+            "wikimedia-pageviews",
+        }
 
     def test_gdelt_is_still_disabled(self, gdelt) -> None:
         assert gdelt.collector_enabled is False

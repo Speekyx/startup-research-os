@@ -18,7 +18,12 @@ from types import MappingProxyType
 
 from sros_contracts import SignalQuantityFamily
 
-from .facts import LEXICAL_FREQUENCY_OBSERVATION, NUMERIC_OBSERVATION, PROCUREMENT_NOTICE
+from .facts import (
+    CONTENT_REQUEST_COUNT,
+    LEXICAL_FREQUENCY_OBSERVATION,
+    NUMERIC_OBSERVATION,
+    PROCUREMENT_NOTICE,
+)
 
 __all__ = [
     "SIGNAL_EXTRACTORS",
@@ -80,6 +85,22 @@ SIGNAL_TYPES: Mapping[str, SignalTypeSpec] = MappingProxyType(
                 "pay."
             ),
         ),
+        # Mission 1.19, ADR-032.
+        "content_request_change": SignalTypeSpec(
+            id="content_request_change",
+            family=SignalQuantityFamily.CONTENT_REQUEST_VOLUME,
+            summary=(
+                "The change in one content item's request count between two ADJACENT "
+                "periods of one platform's own publication, under one requester class and "
+                "one access channel. Both members are the SAME item, so every item-level "
+                "confounder cancels exactly. The CALENDAR does not, and neither do news "
+                "events: a weekday-to-weekend difference is a difference in the calendar, "
+                "which makes an INFERENCE from this signal unsound rather than the "
+                "subtraction untrue. Says a platform counted a different number of "
+                "requests on two adjacent periods; says nothing about readers, users, "
+                "customers, interest, demand, adoption, popularity, a trend or a market."
+            ),
+        ),
         "numeric_period_change": SignalTypeSpec(
             id="numeric_period_change",
             family=SignalQuantityFamily.MEASURED_SERIES,
@@ -102,6 +123,9 @@ _FAMILY_RECORD_KIND: Mapping[SignalQuantityFamily, str] = MappingProxyType(
         # Mission 1.15.9, ADR-029. A transaction value reads a procurement
         # notice, which carries an amount semantic and a currency and no metric.
         SignalQuantityFamily.TRANSACTION_VALUE: PROCUREMENT_NOTICE,
+        # Mission 1.19, ADR-032. A content request count carries an item, a
+        # platform and a requester class, and no metric and no geography.
+        SignalQuantityFamily.CONTENT_REQUEST_VOLUME: CONTENT_REQUEST_COUNT,
     }
 )
 

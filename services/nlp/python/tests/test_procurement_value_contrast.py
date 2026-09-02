@@ -170,6 +170,11 @@ class TestRegistration:
             "lexical-frequency-contrast",
             "lexical-frequency-change",
             "procurement-value-contrast",
+            # Mission 1.19, ADR-032. The fifth extractor and the first over a
+            # `content_request_count`. Still an EQUALITY: an extractor
+            # appearing without a record kind that needs it is what this
+            # catches.
+            "content-request-change",
         }
         for name in ("numeric-period-change", "lexical-frequency-contrast"):
             assert EXTRACTOR_REGISTRY[name].family is not SignalQuantityFamily.TRANSACTION_VALUE

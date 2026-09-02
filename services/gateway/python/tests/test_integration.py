@@ -682,9 +682,12 @@ class TestSourceRegistryApi:
             for s in body["sources"]
             if [o for o in body["sources"] if o["source_id"] == s["source_id"]][1:]
         ]
-        # Mission 1.18 added a seventh: every profile alignment grows this set,
-        # which is the prediction the comment above made and the reason it is
-        # written as a defect rather than a fixed number.
+        # Mission 1.18 added a seventh and Mission 1.19 an eighth: every profile
+        # alignment grows this set, which is the prediction the comment above
+        # made and the reason it is written as a defect rather than a fixed
+        # number. It stays an EQUALITY so the growth is visible in a diff, and
+        # it will fail the day somebody fixes the join -- which is what a
+        # tripwire asserting a defect is for.
         assert set(duplicated) == {
             "ted-eu",
             "world-bank",
@@ -693,6 +696,7 @@ class TestSourceRegistryApi:
             "fred",
             "openalex",
             "stack-exchange",
+            "wikimedia-pageviews",
         }, duplicated
         for source in body["sources"]:
             if source["collector_enabled"] and source["source_id"] not in duplicated:

@@ -37,6 +37,7 @@ __all__ = [
     "DEFAULT_COMPLIANCE_PATH",
     "AccessRestriction",
     "AcquisitionBounds",
+    "ClientIdentification",
     "AuthorizedDataset",
     "AttributionObligation",
     "AttributionRequirement",
@@ -374,6 +375,89 @@ class RouteAuthorization:
 
 
 @dataclass(frozen=True)
+class ClientIdentification:
+    """How this client must identify itself, where the source REQUIRES it.
+
+    Mission 1.19. Wikimedia is the first source in the portfolio whose access
+    policy makes identification a **condition of access** rather than a
+    courtesy: *"The API requires an HTTP User-Agent header for all requests"*
+    and *"Clients making requests without a User-Agent header may be blocked
+    without notice"*. The Foundation's User-Agent Policy goes further and
+    refuses non-descriptive defaults **by name** -- `python-requests/x` is the
+    example it gives -- and directs clients not to copy a browser string.
+
+    **This is an objective property of what a collector is configured to send**,
+    so it belongs to a mechanical verification kind rather than to a person
+    (ADR-028). Writing it as `HUMAN_CONFIRMATION` would create the bootstrap
+    that ADR-028 exists to name: nothing can be authorised until somebody
+    confirms behaviour, and nobody can confirm behaviour until the collector
+    exists.
+
+    `None` means **no identification obligation was reviewed** for this
+    (source, profile), which is not the same as "any string is fine". Every
+    entry predating this mission is in that state, and the capability reports
+    *unimplemented* rather than *satisfied* when it is absent -- the same shape
+    `route_authorization` uses, for the same reason.
+    """
+
+    source_id: str
+    # The exact string the collector must send. Not a template with holes: a
+    # value the capability can inspect, because a pattern nobody instantiated
+    # cannot be checked against the policy that refuses generic defaults.
+    user_agent: str
+    # Where a person can be reached about this client. The policy asks for it
+    # explicitly, and a User-Agent that names a client nobody can contact
+    # satisfies the letter and defeats the purpose.
+    contact: str
+    basis: str = ""
+
+    # Refused BY NAME rather than by a cleverness test. The policy names the
+    # first; the rest are the shapes a collector reaches for when it wants to
+    # look like something it is not.
+    FORBIDDEN_PREFIXES = ("python-requests", "curl/", "wget/", "httpx/", "Mozilla/", "Opera/")
+
+    def __post_init__(self) -> None:
+        where = f"{self.source_id}.client_identification"
+        if not self.user_agent.strip():
+            raise SourceRegistryError(
+                f"{where}.user_agent",
+                "required: an identification obligation with no string to send is a "
+                "condition that cannot be checked and an access rule that cannot be met",
+            )
+        if not self.contact.strip():
+            raise SourceRegistryError(
+                f"{where}.contact",
+                "required: the policy asks for contact information so an operator can be "
+                "reached, and a client nobody can contact meets the letter and defeats it",
+            )
+        if self.contact.strip() not in self.user_agent:
+            raise SourceRegistryError(
+                f"{where}.user_agent",
+                "must contain the declared contact. Two places recording one fact drift, "
+                "and the one that drifts is the string actually sent",
+            )
+        if not self.basis.strip():
+            raise SourceRegistryError(
+                where,
+                "required: an identification rule with no stated basis cannot be "
+                "re-checked, and the string would survive every later review by looking "
+                "deliberate",
+            )
+
+    def refusals(self) -> tuple[str, ...]:
+        """Why this declaration would not satisfy the policy. Empty is passing."""
+        failures: list[str] = []
+        for prefix in self.FORBIDDEN_PREFIXES:
+            if self.user_agent.lower().startswith(prefix.lower()):
+                failures.append(
+                    f"the declared User-Agent begins with {prefix!r}, which the policy "
+                    "refuses: a generic library default identifies nobody, and a browser "
+                    "string identifies somebody we are not"
+                )
+        return tuple(failures)
+
+
+@dataclass(frozen=True)
 class AcquisitionBounds:
     """How much of a source one job may take, decided by the review.
 
@@ -610,6 +694,9 @@ class SourceCompliance:
     route_authorization: RouteAuthorization | None = None
     datasets: tuple[AuthorizedDataset, ...] = ()
     acquisition_bounds: AcquisitionBounds | None = None
+    # How this client must identify itself, where the source requires it
+    # (Mission 1.19). `None` means unasked, never unrestricted.
+    client_identification: ClientIdentification | None = None
 
     def dataset(self, resource_id: str) -> AuthorizedDataset | None:
         """`None` for an unauthorised resource. The caller must refuse, not
@@ -799,6 +886,18 @@ def _source_from_json(entry: object) -> SourceCompliance:
         else None
     )
 
+    client_raw = entry.get("client_identification")
+    client = (
+        ClientIdentification(
+            source_id=source_id,
+            user_agent=str(client_raw.get("user_agent") or ""),
+            contact=str(client_raw.get("contact") or ""),
+            basis=str(client_raw.get("basis") or ""),
+        )
+        if isinstance(client_raw, dict)
+        else None
+    )
+
     return SourceCompliance(
         source_id=source_id,
         use_profile_id=str(entry.get("use_profile_id") or LEGACY_USE_PROFILE),
@@ -812,6 +911,7 @@ def _source_from_json(entry: object) -> SourceCompliance:
         route_authorization=routes,
         datasets=datasets,
         acquisition_bounds=bounds,
+        client_identification=client,
     )
 
 

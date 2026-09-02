@@ -79,13 +79,14 @@ __all__ = [
 ]
 
 INTERPRETER_ID = "observed-signal-restatement"
-INTERPRETER_VERSION = "1.1.0"
+INTERPRETER_VERSION = "1.2.0"
 
 SUPPORTED_SIGNAL_TYPES: tuple[str, ...] = (
     "numeric_period_change",
     "lexical_frequency_change",
     "lexical_frequency_contrast",
     "procurement_value_contrast",
+    "content_request_change",
 )
 
 # Read by every template and passed by no caller. The claim type this
@@ -167,6 +168,13 @@ _ACCEPTED_BASES: Mapping[str, frozenset[str]] = {
     # unestablished. A Signal of this type arriving on any other basis would
     # mean H-37 had closed, and the sentence to write then is a decision.
     "procurement_value_contrast": frozenset({"NONE"}),
+    # COMPARABLE_INSTANTS and nothing else. The day bucket's timezone is
+    # ESTABLISHED on the platform's own documentation, so the two periods are on
+    # a shared timeline and the wording may name calendar days. A Signal of this
+    # type arriving on ORDERED_PERIODS would mean the zone had become
+    # unestablished, and the sentence to write then is a decision, not a
+    # default.
+    "content_request_change": frozenset({"COMPARABLE_INSTANTS"}),
 }
 
 
@@ -273,6 +281,8 @@ class ObservedSignalRestatementInterpreter:
             return self._numeric_period_change(signal, request)
         if signal.signal_type_id == "lexical_frequency_change":
             return self._lexical_frequency_change(signal, request)
+        if signal.signal_type_id == "content_request_change":
+            return self._content_request_change(signal, request)
         if signal.signal_type_id == "procurement_value_contrast":
             return self._procurement_value_contrast(signal, request)
         return self._lexical_frequency_contrast(signal, request)
@@ -323,6 +333,60 @@ class ObservedSignalRestatementInterpreter:
                 f'{source_name} reported that "{metric_id}" for "{geography}" '
                 f"{_movement(signal)} "
                 f'between "{earlier}" and "{later}" by {_plain(abs(signal.magnitude))}.'
+            )
+        return self._build(signal, request, source_id, statement, facts)
+
+    def _content_request_change(
+        self, signal: SignalView, request: InterpretationRequest
+    ) -> ClaimDraft:
+        """ "{Source} counted N more requests for "{item}" on {day} than on {day}."
+
+        **COUNTED, not measured, observed or recorded.** The verb is the whole
+        template: the platform performed a count of HTTP responses, and every
+        other verb available here would suggest it observed a person.
+
+        **The requester class is IN THE SENTENCE**, not only in the scope. A
+        reader who meets this claim without it cannot know whether the number
+        includes bots, and the platform's own class name is the only honest way
+        to say it -- "human" would be a promotion the platform explicitly
+        refuses to make about its own heuristic.
+
+        **No trend vocabulary and no adjacent-day inference.** The two calendar
+        days are named because a claim that cannot say WHICH days is not
+        checkable, and nothing beyond "on this day and on that day" is said. A
+        weekday-to-weekend difference is a difference in the calendar, and the
+        claim's own wording is what stops it reading as anything more.
+        """
+        source_id = signal.single_source()
+        source_name = _source_name(signal, source_id)
+        item = _one_scope_value(signal, "content_ids", label="the content item")
+        platform = _one_scope_value(signal, "content_platforms", label="the content platform")
+        audience = _one_scope_value(signal, "audience_classes", label="the requester class")
+        earlier, later = _two_labels(signal)
+
+        facts = {
+            "proposition": "platform_counted_content_request_change",
+            "source_id": source_id,
+            "content_platform": platform,
+            "content_id": item,
+            "audience_class": audience,
+            "period_label_from": earlier,
+            "period_label_to": later,
+            "direction": signal.direction.value,
+        }
+
+        if signal.direction is SignalDirection.UNCHANGED:
+            statement = (
+                f'{source_name} counted the same number of requests for "{item}" on '
+                f'"{platform}" on "{later}" as on "{earlier}", under its own requester '
+                f'class "{audience}".'
+            )
+        else:
+            more_or_fewer = "more" if signal.direction is SignalDirection.INCREASING else "fewer"
+            statement = (
+                f"{source_name} counted {_plain(abs(signal.magnitude))} {more_or_fewer} "
+                f'requests for "{item}" on "{platform}" on "{later}" than on "{earlier}", '
+                f'under its own requester class "{audience}".'
             )
         return self._build(signal, request, source_id, statement, facts)
 

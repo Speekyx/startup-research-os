@@ -417,6 +417,14 @@ class SignalScope:
     notice_classes: tuple[str, ...] = ()
     classification_codes: tuple[str, ...] = ()
     classification_scheme: str | None = None
+    # Mission 1.19, ADR-032. The dimensions a CONTENT_REQUEST_VOLUME derivation
+    # is about. Absent from every other family's scope, which is the same rule
+    # the lexical kind follows for geography: a dimension no input carries has
+    # no key, never a null.
+    content_ids: tuple[str, ...] = ()
+    content_platforms: tuple[str, ...] = ()
+    audience_classes: tuple[str, ...] = ()
+    access_channels: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
         if not self.source_ids:
@@ -435,6 +443,16 @@ class SignalScope:
                 "a classification code means nothing without the vocabulary it came "
                 "from. 90911200 is a CPV code, and a reader cannot know that from the "
                 "digits alone"
+            )
+        # ADR-032. An item id means nothing without the platform that issued
+        # it: `Kubernetes` is an en.wikipedia article title, and a reader cannot
+        # know that from the string alone. Same argument as the classification
+        # scheme above.
+        if self.content_ids and not self.content_platforms:
+            raise ValueError(
+                "a content id means nothing without the platform that issued it. "
+                "'Kubernetes' is an en.wikipedia.org article title, and a reader cannot "
+                "know that from the string alone"
             )
         if self.source_language_labels and not self.source_language_scheme:
             raise ValueError(
@@ -456,6 +474,10 @@ class SignalScope:
             ("currencies", self.currencies),
             ("notice_classes", self.notice_classes),
             ("classification_codes", self.classification_codes),
+            ("content_ids", self.content_ids),
+            ("content_platforms", self.content_platforms),
+            ("audience_classes", self.audience_classes),
+            ("access_channels", self.access_channels),
         ):
             if values:
                 payload[key] = list(values)
@@ -864,6 +886,27 @@ def build_signal(
             raise ValueError(
                 "a TRANSACTION_VALUE signal states its currency. A number of money with "
                 "no currency is not readable, and no rate exists to supply one"
+            )
+    elif spec.family is SignalQuantityFamily.CONTENT_REQUEST_VOLUME:
+        # Mission 1.19, ADR-032. `metric_ids` is deliberately NOT permitted: a
+        # request count is a count of interactions with a publication, not an
+        # instance of a measured series. That absence is why MEASURED_SERIES
+        # could not be widened to hold this family.
+        if scope.metric_ids or scope.terms:
+            raise ValueError(
+                "a CONTENT_REQUEST_VOLUME signal carries no metric and no term. It is a "
+                "count of requests for one item, not an instance of a series and not a "
+                "count of tokens"
+            )
+        if not scope.content_ids:
+            raise ValueError("a CONTENT_REQUEST_VOLUME signal states the content item it is about")
+        if not scope.audience_classes:
+            raise ValueError(
+                "a CONTENT_REQUEST_VOLUME signal states the requester class it counted. "
+                "The same item over the same period carries a different count for "
+                "human-attributed traffic than for all traffic, and a signal that did "
+                "not say which one it aggregated would be two measurements wearing one "
+                "name"
             )
     elif not scope.metric_ids:
         raise ValueError("a MEASURED_SERIES signal states the metric it is about")

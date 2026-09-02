@@ -294,7 +294,8 @@ class TestNoSemanticPromotion:
     def test_nothing_in_the_payload_names_demand_or_a_market(self, normalizer) -> None:
         """The boundary §3 of the brief asks to be structural and tested.
 
-        One question is one person asking one thing once. Every word below is a
+        One record is one published question, once, by an author this system
+        never acquired and therefore cannot count. Every word below is a
         step somebody will be tempted to take because the data looks like it
         supports them.
         """

@@ -88,7 +88,7 @@ Activities are assessed separately, because their conditions differ. A source ma
 | `tiktok` | social | official api | yes | yes | **not permitted** | **not permitted** | **not permitted** | not assessed | **not permitted** | UNKNOWN | IDENTIFIABLE | `PROHIBITED` | **no** |
 | `twitch` | creator | official api | yes | yes | not assessed | not assessed | not assessed | not assessed | not assessed | UNKNOWN | PSEUDONYMOUS | `REQUIRES_REVIEW` | **no** |
 | `usaspending` | public_procurement | official api | yes | no | not addressed | not addressed | not addressed | not addressed | not addressed | UNKNOWN | UNKNOWN | `REQUIRES_REVIEW` | **no** |
-| `wikimedia-pageviews` | knowledge | public api | yes | no | permitted | conditional | not addressed | not addressed | conditional | documented | NONE_EXPECTED | `REQUIRES_REVIEW` | **no** |
+| `wikimedia-pageviews` | knowledge | dataset download, official api | yes | no | permitted | conditional | not addressed | not addressed | conditional | documented | NONE_EXPECTED | `REQUIRES_REVIEW` | **no** |
 | `world-bank` | economic_data | public api | yes | no | permitted | permitted | permitted | permitted | conditional | UNKNOWN | NONE_EXPECTED | `APPROVED_WITH_CONDITIONS` | **no** |
 | `x-twitter` | social | official api | yes | yes | not assessed | not assessed | not assessed | not assessed | not assessed | UNKNOWN | IDENTIFIABLE | `REQUIRES_REVIEW` | **no** |
 | `youtube` | content_platform | official api | yes | yes | not addressed | conditional | conditional | conditional | **not permitted** | UNKNOWN | PSEUDONYMOUS | `PROHIBITED` | **no** |
@@ -1675,12 +1675,14 @@ Per-article view counts across Wikimedia projects. Measures attention directly a
 |---|---|---|---|---|
 | 1 | 2026-08-30 | `mission-1.7` | `APPROVED_WITH_CONDITIONS` | 3 |
 | 2 ← current | 2026-08-30 | `mission-1.8` | `REQUIRES_REVIEW` | 4 |
+| 1 | 2026-09-02 | `mission-1.19` | `APPROVED_WITH_CONDITIONS` | 5 |
 
 **Access profiles** (how, not whether)
 
 | Method | Label | Requires | Secret references | Rate limit | Cost |
 |---|---|---|---|---|---|
-| `PUBLIC_API` | wikimedia-analytics-api | nothing | — | 200/60s (documented) | `FREE_WITH_LIMITS` |
+| `OFFICIAL_API` | wikimedia-analytics-api | nothing | — | 200/60s (documented) | `FREE_WITH_LIMITS` |
+| `DATASET_DOWNLOAD` | wikimedia-dumps | nothing | — | **UNKNOWN** | `FREE` |
 
 **Assessment**
 

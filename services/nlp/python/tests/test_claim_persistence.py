@@ -102,7 +102,7 @@ class TestPersistence:
             # Opportunity exists.
             assert claim[3] is None
             assert claim[4] == INTERPRETER
-            assert claim[5] == "1.1.0"
+            assert claim[5] == "1.2.0"
             assert claim[6] == "DETERMINISTIC"
             # A DETERMINISTIC interpretation names no model, and the CHECK
             # refuses one that does.

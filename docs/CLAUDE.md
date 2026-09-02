@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.42
-Last amended: 2026-09-02 (Sprint 1 / Mission 1.18)
+Version: 1.43
+Last amended: 2026-09-02 (Sprint 1 / Mission 1.19)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.43 | 2026-09-02 | **A named open question answered by the operator's own page, and the first source whose obligations run the other way.** H-24 asked whether aggregate pageview counts are CC BY-SA Licensed Material; the Analytics API access policy answers under a heading called *Data licensing*: they are **CC0 1.0**. The first instrument in this catalog to waive the **sui generis database right BY NAME**. **CC0 imposes nothing on the OUTPUT**, so attribution here is a courtesy and no condition asserts one -- what Wikimedia imposes is a condition on the REQUEST, and the collector gained a fifth gate that refuses a socket when the transport would send an identity the review did not declare (ADR-028). **A fifth record kind** `content_request_count`, saying REQUEST rather than VIEW, with `audience.class` REQUIRED; **a fourth quantity family** `CONTENT_REQUEST_VOLUME` (ADR-032), because widening `MEASURED_SERIES` would have cost the FAMILY its meaning rather than `metric` its meaning. **Outcome S1: 18 Signals, 18 OBSERVED Claims, 18 Evidence, all NON_SCORABLE.** The calendar confounder is written into the type and every Claim; the cross-item contrast was considered and refused |
 | 1.42 | 2026-09-02 | **Stack Exchange collected, normalized, and correctly producing NOTHING.** A fourth record kind -- `community_question`, the first named for a SHAPE rather than for the first source to reach it -- and `stack-exchange-question@1.0.0`. **15 NormalizedRecords, all `VALID`**, which no adapter here had managed: GDELT is `PARTIAL` for H-29/H-30 and TED for H-37, and nothing is open here. **The first adapter whose period is `ESTABLISHED` on the source's own evidence**, so `observed_at` is a real moment for the first time. **OUTCOME S0: 0 Signals, 0 Claims, 0 Evidence.** 35 distinct tags over 15 questions, three tags repeated, no two questions sharing a tag set, and one question in both non-trivial cohorts: **a tag is a subject, not a problem**. The cohort was not weakened and no second query was run. Two latent normalizer defects found by tests in paths the real data never took |
 | 1.41 | 2026-09-01 | **Stack Exchange APPROVES under the local profile; no collector built.** The first approving review for a community-content source, and the first where the positive rights come from a CONTENT LICENCE rather than a platform's terms: the API Terms decide ACCESS and are silent on reuse, CC BY-SA 4.0 decides REUSE and grants commercial use. The API carve-out removes an obstacle and **grants nothing**. **ShareAlike is avoided by the profile, not answered** -- it attaches to Adapted Material that is SHARED and this profile shares nothing, so it must be re-reviewed before anything is published. `PLATFORM_LICENSED` argued, not set: `THIRD_PARTY` means *separate permission is required* and CC BY-SA already reaches us. Terms were **operator-supplied** after HTTP 403; **no 403 retried, no header varied**. Owner objects excluded at acquisition; the Data Dump registered so it could be refused by name |
 | 1.40 | 2026-09-01 | **The registry and the runtime agree, and nothing was inherited to get there.** Five sources gained a `local-private-research-v1` review, each version 1 of its own line, evidence reused and decisions re-made. **ADR-027 unchanged, no fallback**: `ted-eu` is still approving locally and REFUSED commercially. Four ELIGIBLE; OpenAlex approves and stays blocked on two unsatisfied conditions, and is the one place the local profile is **stricter** (scholarly authorship, MINIMISED posture). **The named GDELT gap is closed for this profile**: `gdelt-doc-api` and `gdelt-bulk-files` are now blocked BY NAME, because a narrowing that exists only in the review text is not a narrowing. Loader bug fixed: condition and evidence row ids omitted the profile, so two reviews of one source sharing a condition key collided |
@@ -433,7 +434,7 @@ none of them is negotiable (`source-registry-v1.md` §1, ADR-013):
   product, and a permission obtained by describing a smaller product is a
   permission for a product we are not building.
 
-### Collection — four collectors, and what bounds them
+### Collection — five collectors, and what bounds them
 
 Since Mission 1.5 the World Bank Indicators collector exists
 (`world-bank-collector-v1.md`) and is the reference architecture. Since Mission
@@ -445,8 +446,11 @@ documented search endpoint. Since Mission 1.18 the Stack Exchange questions
 collector exists (`stack-exchange-questions-v1.md` §12), the first that reaches a
 source whose positive rights come from a CONTENT LICENCE rather than a platform's
 terms, and the first to perform **field minimisation through the source's own
-filter mechanism** rather than after the fact. Five rules apply to all four and to
-every collector that follows:
+filter mechanism** rather than after the fact. Since Mission 1.19 the Wikimedia
+Analytics pageviews collector exists (`wikimedia-pageviews-v1.md` §9), the first
+whose rights come from a WAIVER rather than a licence with conditions, and the
+first with a **fifth gate: identity**. Five rules apply to all five and to every
+collector that follows:
 
 - **No authorization, no collection.** `collect` takes an
   `AcquisitionAuthorizationContext` as its first positional parameter, with no
@@ -463,6 +467,31 @@ every collector that follows:
 - **Exactly one file may import a network client**
   (`collection/transport.py`). The registry and compliance packages decide
   whether collection may happen and stay network-free.
+
+**A source may impose its obligation on the REQUEST rather than on the output**
+(Mission 1.19). Every source before Wikimedia conditioned what we may DO with the
+data: attribute the material, name the licence, do not distort the meaning. CC0
+imposes none of those. What the Analytics API access policy imposes is that *"The
+API requires an HTTP User-Agent header for all requests"* and that clients sending
+none *"may be blocked without notice"*, with the Foundation's User-Agent Policy
+refusing non-descriptive defaults **by name**.
+
+That is an objective property of collector CONFIGURATION, so it is verified by a
+capability rather than confirmed by a person (ADR-028), and
+`context.client_identification` carries it. **The collector asks the context
+whether the identity the transport will SEND is the identity the review DECLARED,
+before a socket opens.** A declaration nobody sends verifies against a document
+instead of against behaviour. `None` means unasked, never unrestricted, and the
+capability reports *unimplemented* rather than *satisfied* when it is absent --
+the same shape `route_authorization` uses.
+
+**Attribution can be a courtesy rather than a condition, and the two must stay
+distinguishable** (Mission 1.19). CC0 1.0 contains no attribution requirement and
+Section 2 surrenders the rights that would let one be imposed. A credit is still
+rendered onto every record -- a derived surface should say where its numbers came
+from, and `build_normalized` refuses a record with no notice attached -- but **no
+condition asserts an obligation the licence does not create**. Writing one would
+leave a later reader unable to tell a duty from a habit.
 
 Identity is three separate things and confusing any two is a defect:
 `observation_key` says WHICH observation, `content_hash` says WHAT the source
@@ -550,10 +579,10 @@ the row id says WHICH transformation of it. The normalization timestamp is in
 none of them.
 
 **Record kinds are a registry and a kind exists because DATA exists** (Mission
-1.10). **Four now**: `numeric_observation`; `lexical_frequency_observation` — one
+1.10). **Five now**: `numeric_observation`; `lexical_frequency_observation` — one
 occurrence count for one lexical term, one language, one period, and **no
-geography key at all**; `procurement_notice` (Mission 1.15.8); and
-`community_question` (Mission 1.18). Widening the first to fit the second would
+geography key at all**; `procurement_notice` (Mission 1.15.8);
+`community_question` (Mission 1.18); and `content_request_count` (Mission 1.19). Widening the first to fit the second would
 have let a World Bank record exist without a geography, which is the existing
 model getting worse for a new source's sake, and the same argument produced the
 third and the fourth.
@@ -570,6 +599,21 @@ that the problem is solved; and the score and view count are source counters, no
 importance, not demand and not market size. Author identity is `null` because it
 was never acquired, and a raw record that carries `owner`, `last_editor` or
 `comments` is REFUSED at normalization rather than stripped.
+
+**A kind's NAME may not carry an interpretation** (Mission 1.19).
+`content_request_count` is how many times a named item was REQUESTED on a
+platform in a period, by one class of requester. Not `wikimedia_pageview`, by the
+rule above — and not `content_view_count` either, because the operator's own
+definition is *"a request for content of a page that receives a response of 200 OK
+or 304 Not Modified"* and "view" implies a person looked. A field name survives
+every later caveat, so an implication put in the vocabulary is one nothing
+downstream can unmake.
+
+**`audience.class` is REQUIRED on that kind**, which is the design decision worth
+arguing rather than assuming. The same item over the same period carries a
+different count for human-attributed traffic than for all traffic; a record that
+could not say which one it held would be two measurements wearing one name, and
+every comparison built on it would silently mix them.
 
 That is a different rule from the one governing adapters. A vocabulary row lets
 the model describe a shape and lets the database refuse an unregistered one; the
@@ -592,9 +636,9 @@ collector is implemented" — which Mission 1.5 made false while leaving
 normalization exactly as unavailable. `normalization_block` now derives it from
 what exists, and a future Eurostat collector with no normalizer stays blocked.
 
-**Four adapters exist** (Missions 1.10.1, 1.15.8 and 1.18):
+**Five adapters exist** (Missions 1.10.1, 1.15.8, 1.18 and 1.19):
 `world-bank-indicators-numeric`, `gdelt-web-ngram-lexical`,
-`ted-search-api-notice` and `stack-exchange-question`. All are offline and
+`ted-search-api-notice`, `stack-exchange-question` and `wikimedia-pageview`. All are offline and
 deterministic, and asserted so over the **AST** rather than over the file's text —
 a substring scan fails on the docstring that explains the rule, and weakening it
 until it passes is how a structural check stops checking
@@ -606,6 +650,17 @@ unambiguous instant — unlike TED's offset-without-a-time (H-37) or GDELT's unz
 bucket (H-29) — so `observed_at` is a real moment there and NULL everywhere else.
 This does not weaken the rule above it: the timezone is still stated rather than
 chosen, and what changed is that one source finally states it.
+
+**Mission 1.19 earned one a different way, and the difference matters.** A
+Wikimedia day bucket is `ESTABLISHED` **on documentation rather than on shape**:
+the Analytics API's concepts page designates `Research:Page view` as the complete
+definition, and that page states a *"UTC timestamp of the request"* and *"daily
+partitioning 0:00 UTC - 23:59 UTC"*. GDELT's H-29 stays open for the opposite
+reason — nothing there states the zone at all, and a bucket that merely LOOKS like
+a day is not a bucket somebody documented. That the API REFERENCE does not restate
+it is recorded as an open question rather than smoothed over. **A DAY is still an
+interval**: half-open `[start, start + 1 day)`, and `observed_at` is the
+interval's start, which is never the instant a request happened.
 
 **Every `community_question` record is `VALID`, and that is not an oversight.**
 The adapter has **no `PARTIAL` branch at all**: a record either carries the four
@@ -651,8 +706,8 @@ Eight rules, and none is negotiable:
   sharing a key are refused as `AMBIGUOUS_OBSERVATION_LINEAGE`. **D-08 is failed
   closed on, not solved.**
 - **The Signal family is not the demand family.** `quantity_family` is
-  `LEXICAL_FREQUENCY | MEASURED_SERIES` and says what kind of QUANTITY the signal
-  is about. `PAIN / DESIRE / BEHAVIORAL / MARKET` classify demand, and neither
+  `LEXICAL_FREQUENCY | MEASURED_SERIES | TRANSACTION_VALUE | CONTENT_REQUEST_VOLUME`
+  and says what kind of QUANTITY the signal is about. `PAIN / DESIRE / BEHAVIORAL / MARKET` classify demand, and neither
   derivation the two real sources support is evidence of demand — a GDELT term
   count may equally be a news event, a crisis, a celebrity or the weather.
   **Ontology V2 §3.6 is unchanged**; what stops being true is the claim that
@@ -1437,6 +1492,42 @@ which is authorised and unimplemented, because a fallback turns a reviewed route
 into a runtime choice; and the four monetary semantics stay under their own
 names, with no `price_paid` and no currency conversion.
 
+**Wikimedia Analytics pageviews is eligible, collected, normalized, derived
+from, claimed and evidenced** (Mission 1.19, `wikimedia-pageviews-v1.md`). **21
+RawRecords, 21 NormalizedRecords all `VALID`, 18 Signals, 18 OBSERVED Claims, 18
+Evidence rows, every one `NON_SCORABLE`.** Outcome S1, and the contrast with
+Mission 1.18 is the point: S0 there because a truthful derivation did not exist,
+S1 here because one does.
+
+**The blocker was a NAMED QUESTION and the answer was one page away.** Mission
+1.8 downgraded this source on H-24 -- are aggregate pageview counts Licensed
+Material under CC BY-SA? -- and that framing had one possibility it did not
+consider. The Analytics API access policy answers under a heading called *Data
+licensing*: the data is **CC0 1.0**, not CC BY-SA at all. **H-24 is answered for
+the LOCAL profile only**; applying it commercially is a review act nobody has
+performed, and approval never transfers (ADR-027).
+
+**The first instrument in this catalog to waive the sui generis database right BY
+NAME.** CC0 §1 defines Copyright and Related Rights to include *"database rights
+(such as those arising under Directive 96/9/EC)"* and §2 waives them *"overtly,
+fully, permanently, irrevocably and unconditionally"*. It resolves nothing about
+TED's H-36A/H-36B. It shows what a resolution looks like.
+
+**A confounder that is written into the record rather than into a caveat.** Both
+members of a `content-request-change` are the SAME item, so prominence, title,
+age and link structure cancel exactly -- which is why the cross-item contrast was
+considered and REFUSED, since none of those cancel there and nothing in the
+record can measure them. **The calendar does not cancel**: 2024-03-02 and 03-03
+are a weekend and both larger articles fall about 40 per cent. That makes an
+INFERENCE from the signal unsound rather than the subtraction untrue, and the
+signal type, the migration and every Claim say so in their own words.
+
+**A request is not a reader.** The claims say *counted*, name the platform's own
+requester class in the sentence, and `user` means *not identified as automated*
+rather than *human* -- the operator documents its own detection as heuristic. No
+reliability was invented and no reliability mission was started: eighteen
+`NON_SCORABLE` rows are the design working.
+
 **Stack Exchange is eligible, collected, normalized — and produced NOTHING
 downstream, correctly** (Mission 1.18, `stack-exchange-questions-v1.md` §14).
 **15 RawRecords, 15 NormalizedRecords all `VALID`, 0 Signals, 0 Claims, 0
@@ -1464,10 +1555,21 @@ own review of what the query selects for.
 
 **The consequence for the portfolio is the uncomfortable one.** `problem` now has
 an approving, collected, normalized source and still no evidence, because what a
-public Q&A site publishes is somebody asking how to do something, once each. **No
-source in the portfolio observes the same subject twice**, and that — not the
-absence of a `problem` source — is the gap with the most leverage. No proxy is
-proposed, because a proxy nobody can validate is worse than an acknowledged gap.
+public Q&A site publishes is a published question, once each. **Not fifteen
+people**: author identity is never acquired, so the deployment cannot count
+distinct askers and no document may word itself as though it could (Mission 1.19
+§0).
+
+**The gap is narrower than Mission 1.18 first wrote it, and the correction
+matters** (Mission 1.19 §0). It said *"no source in the portfolio observes the
+same subject twice"*, which contradicts semantics already implemented here:
+`lexical-frequency-change@1.0.0` re-observes one lexical stream across adjacent
+buckets and `numeric-period-change@1.0.0` re-observes one metric across periods.
+Repeated observation of an ENTITY is not missing. What is missing is **Evidence
+establishing repeated comparable USER-PROBLEM instances for one narrowly defined
+problem** — a series re-observes a stream, and neither re-observes a user meeting
+the same difficulty. No proxy is proposed, because a proxy nobody can validate is
+worse than an acknowledged gap.
 
 **No collector may be implemented for a source that is not collector-eligible.**
 D-07 is resolved and the registry exists. Two sources pass the gate; one has a

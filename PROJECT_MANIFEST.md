@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.41
+Version: 1.42
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-02 (Sprint 1 / Mission 1.18)
+Last amended: 2026-09-02 (Sprint 1 / Mission 1.19)
 
 ---
 
@@ -13,6 +13,85 @@ Last amended: 2026-09-02 (Sprint 1 / Mission 1.18)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.42 — 2026-09-02 (Sprint 1 / Mission 1.19)
+
+Authorized by the Mission 1.19 brief §0-§32.
+
+**OUTCOME S1, and the blocker was a question somebody had already written down.**
+Wikimedia Analytics pageviews joins the portfolio approved, collected,
+normalized, derived from, claimed and evidenced: **21 RawRecords, 21
+NormalizedRecords all VALID, 18 Signals, 18 OBSERVED Claims, 18 Evidence rows**,
+every one NON_SCORABLE. Mission 1.18 was S0 because a truthful derivation did not
+exist; this one is S1 because it does.
+
+**H-24 IS ANSWERED, AND THE ANSWER WAS ONE PAGE AWAY IN THE OPERATOR'S OWN
+DOCUMENTATION.** Mission 1.8 downgraded this source on a named question: are
+aggregate pageview COUNTS Licensed Material under CC BY-SA? That framing had one
+possibility it did not consider. The Analytics API access policy carries a
+section headed *Data licensing* whose entire content is *"Data provided by the
+API is available under the CC0 1.0 license"* -- not the documentation-site footer
+Mission 1.7 misread, but a dedicated heading about the data the API returns.
+
+**CC0 1.0 IS THE STRONGEST BASIS IN THE PORTFOLIO, and it is the first instrument
+here to waive the sui generis database right BY NAME** -- the right that has
+blocked TED for eleven missions. It resolves nothing about TED; it shows what a
+resolution looks like. Storage, retention, commercial use, derived analytics and
+model processing come from one instrument.
+
+**THE OBLIGATIONS RUN THE OTHER WAY, AND THAT IS THE STRUCTURAL FIRST.** Every
+earlier source imposed conditions on the OUTPUT. CC0 imposes none. What Wikimedia
+imposes is a condition on the REQUEST -- the API requires a User-Agent and clients
+without one *"may be blocked without notice"* -- so the collector gained a fifth
+gate that refuses to open a socket when the transport would send an identity the
+review did not declare. `source-client-identification` was built because a
+condition named it, in that order (ADR-028), and Mission 1.8's assertion that no
+such capability existed moved rather than being deleted.
+
+**ATTRIBUTION IS A COURTESY HERE, NOT A CONDITION** -- a portfolio first. CC0
+imposes none, a credit is rendered anyway because a derived surface should say
+where its numbers came from, and **no condition asserts a duty the licence does
+not create**, so a later reader can tell the two apart.
+
+**A FIFTH RECORD KIND AND A FOURTH QUANTITY FAMILY.** `content_request_count`
+(migration 0025), named for a SHAPE and saying REQUEST rather than VIEW because
+the operator's definition is *"a request ... that receives a response of 200 OK or
+304"* and "view" implies a person looked. `audience.class` is REQUIRED: the same
+item on the same day carries a different count for `user` than for `all-agents`.
+`CONTENT_REQUEST_VOLUME` (ADR-032, migration 0026) exists because widening
+`MEASURED_SERIES` would not have cost `metric` its meaning the way a procurement
+value would -- **it would have cost the FAMILY its meaning**, by making a
+page-request change and a population change the same kind of quantity.
+
+**THE CONFOUNDER IS IN THE RECORD, NOT IN A CAVEAT.** Both members of a
+`content-request-change` are the SAME item, so every item-level confounder
+cancels exactly -- which is why the cross-item contrast was considered and NOT
+implemented. The calendar does not cancel, and the sample shows it: 2024-03-02
+and 03-03 are a weekend and both larger articles fall ~40 per cent. That makes an
+INFERENCE unsound rather than the subtraction untrue, and the signal type, the
+migration and every Claim say so in their own words.
+
+**Runner-up recorded rather than discarded.** `npm-registry` has higher marginal
+novelty on adoption and fails rule 8: its Open-Source Terms grant replication via
+the Public APIs and say nothing about `derived_analytics` or `model_processing`.
+Its retrieved evidence is written down so a later mission starts from documents
+rather than repeating the retrieval. `pypi` is third: no official download-count
+route, and a documented history of over-approval in this repository.
+
+**Two Mission 1.18 overstatements corrected first (§0).** Fifteen questions are
+fifteen published observations, **not fifteen people** -- author identity was
+never acquired, so the repair is the sentence. And *"no source observes the same
+subject twice"* was too broad: GDELT and World Bank both re-observe a stream. The
+precise gap is **no Evidence establishing repeated comparable USER-PROBLEM
+instances for one narrowly defined problem**, and it is still open.
+
+**A latent validator defect, exposed by the third migration to widen one
+constraint.** `strip_constraint` stopped only at a depth-zero comma, which never
+occurs inside a folded `ALTER TABLE ... ADD CONSTRAINT` -- so stripping a
+superseded definition deleted every later ALTER with it, and a closed enum with a
+CHECK reported none. Fixed at the scanner. **Counts: 59/59 records, 26/26/26/26
+Signals, Claims, Revisions and Evidence, 1 assessment, 0 opportunities.** No
+reliability invented, Gateway defect untouched and its tripwire grew to eight
 
 ## 1.41 — 2026-09-02 (Sprint 1 / Mission 1.18, completed)
 

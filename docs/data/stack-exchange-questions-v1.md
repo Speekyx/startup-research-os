@@ -334,6 +334,11 @@ rule: many questions about ONE narrow tool, where a repeated concrete failure co
 recur. That is a mission with its own bounded acquisition and its own review of
 what the query selects for, not a parameter on this one.
 
+**One wording correction, made in Mission 1.19 §0.** A sample of 15 is **15
+distinct published solution-seeking observations**, not 15 people. Author identity
+is never acquired here, so the deployment cannot count distinct askers, and the
+repair is the sentence rather than an acquisition.
+
 ## 15. Known limitations
 
 1. ShareAlike classification is avoided by the profile, not resolved (§4).

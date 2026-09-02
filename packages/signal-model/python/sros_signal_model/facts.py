@@ -28,6 +28,7 @@ from sros_contracts import (
 )
 
 __all__ = [
+    "CONTENT_REQUEST_COUNT",
     "FACT_RULES",
     "LEXICAL_FREQUENCY_OBSERVATION",
     "NUMERIC_OBSERVATION",
@@ -45,6 +46,8 @@ NUMERIC_OBSERVATION = "numeric_observation"
 LEXICAL_FREQUENCY_OBSERVATION = "lexical_frequency_observation"
 # The third, added in Mission 1.15.8 and reachable by a derivation since 1.15.9.
 PROCUREMENT_NOTICE = "procurement_notice"
+# The fifth kind and the fourth reachable one, added in Mission 1.19 (ADR-032).
+CONTENT_REQUEST_COUNT = "content_request_count"
 
 
 @dataclass(frozen=True)
@@ -62,11 +65,17 @@ class FactRule:
 
 
 _BOTH_KINDS = frozenset({NUMERIC_OBSERVATION, LEXICAL_FREQUENCY_OBSERVATION})
+# Mission 1.19. The kinds that carry a countable quantity over a period. Named
+# separately from `_BOTH_KINDS` rather than folded into it, because the facts a
+# content request count supplies are a STRICT SUBSET of what a numeric
+# observation supplies -- it has no geography and no term -- and a single widened
+# constant would have granted it those by omission.
+_COUNTING_KINDS = frozenset({*_BOTH_KINDS, CONTENT_REQUEST_COUNT})
 
 FACT_RULES: Mapping[Fact, FactRule] = MappingProxyType(
     {
         Fact.EXACT_NUMERIC_VALUE: FactRule(
-            supplied_by=_BOTH_KINDS,
+            supplied_by=_COUNTING_KINDS,
             withheld_by=frozenset({Reason.VALUE_NOT_REPORTED, Reason.MALFORMED_NUMERIC_VALUE}),
         ),
         Fact.LEXICAL_TERM: FactRule(
@@ -75,20 +84,20 @@ FACT_RULES: Mapping[Fact, FactRule] = MappingProxyType(
         ),
         # Needs no timezone. String equality over a value the source published.
         Fact.SOURCE_PERIOD_LABEL: FactRule(
-            supplied_by=_BOTH_KINDS,
+            supplied_by=_COUNTING_KINDS,
             withheld_by=frozenset({Reason.PERIOD_NOT_SUPPORTED}),
         ),
         # ORDER and GLOBAL INSTANT are different questions. This one is withheld
         # by an unestablished timezone ONLY because no source is certified below;
         # a certification would grant it without anyone asserting a zone (H-32).
         Fact.SOURCE_RELATIVE_ORDER: FactRule(
-            supplied_by=_BOTH_KINDS,
+            supplied_by=_COUNTING_KINDS,
             withheld_by=frozenset(
                 {Reason.PERIOD_NOT_SUPPORTED, Reason.PERIOD_TIMEZONE_NOT_ESTABLISHED}
             ),
         ),
         Fact.COMPARABLE_INSTANT: FactRule(
-            supplied_by=_BOTH_KINDS,
+            supplied_by=_COUNTING_KINDS,
             withheld_by=frozenset(
                 {Reason.PERIOD_NOT_SUPPORTED, Reason.PERIOD_TIMEZONE_NOT_ESTABLISHED}
             ),

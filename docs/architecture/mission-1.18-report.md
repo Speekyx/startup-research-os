@@ -496,10 +496,17 @@ problem, on real data rather than on argument; and that the pipeline can be run
 end to end and correctly stop before asserting anything.
 
 **Does not establish.** Any pain, desire, willingness to pay, pricing power,
-competition gap, distribution feasibility, retention or revenue potential. 15
-questions asked on one day about one tag are 15 people asking 15 things once. The
-`problem` family gained a source that is **collected and normalized** and still
-gained **no evidence**, and the honest reading is that the portfolio's
+competition gap, distribution feasibility, retention or revenue potential. What
+the sample contains is **15 distinct published solution-seeking observations**,
+each asked once, in one bounded window about one tag.
+
+**It is not 15 people, and this report originally said it was.** Author identity
+was deliberately never acquired, so the deployment cannot count distinct askers
+and must not word itself as though it could — the correct repair is the sentence,
+not an acquisition. Corrected in Mission 1.19 §0.
+
+The `problem` family gained a source that is **collected and normalized** and
+still gained **no evidence**, and the honest reading is that the portfolio's
 demand-side gap is unchanged.
 
 ---
@@ -516,13 +523,22 @@ that finding: **`problem` now has an approving, collected, normalized source and
 still no evidence**, because what a public Q&A site publishes is *somebody asked
 how to do something*, one time each.
 
-So the gap with the most leverage is no longer *find a source for `problem`*. It
-is: **no source in the portfolio observes the same subject twice.** Retention needs
-it by definition; a repeated problem needs it; distinguishing a one-off question
-from a recurring failure needs it. Everything registered is an aggregate
-(World Bank), a one-shot public record (TED), a corpus count (GDELT) or a
-single utterance (Stack Exchange). No proxy is proposed, because a proxy nobody can
-validate is worse than an acknowledged gap.
+So the gap with the most leverage is no longer *find a source for `problem`*.
+
+**The first wording of that gap was too broad, and Mission 1.19 §0 narrowed it.**
+It read *"no source in the portfolio observes the same subject twice"*, which
+contradicts semantics this repository already implements:
+`lexical-frequency-change@1.0.0` compares the SAME lexical stream across adjacent
+source buckets, and `numeric-period-change@1.0.0` compares the SAME
+source-reported metric across periods. Repeated observation of an entity is not
+what is missing.
+
+The precise gap is: **SROS holds no Evidence establishing repeated comparable
+USER-PROBLEM instances for one narrowly defined problem.** A frequency series and
+a metric series both re-observe a stream; neither re-observes a user encountering
+the same difficulty. Distinguishing a one-off question from a recurring failure
+needs the second thing, and nothing in the portfolio produces it. No proxy is
+proposed, because a proxy nobody can validate is worse than an acknowledged gap.
 
 Two shapes could close it and both are review questions, not engineering ones: a
 source that publishes the same entity's state on a schedule, or an acquisition

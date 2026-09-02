@@ -524,7 +524,7 @@ class NormalizedLanguageMapping(str, Enum):
 
 
 class SignalQuantityFamily(str, Enum):
-    """What kind of quantity a derived Signal is about. Closed because consumers branch exhaustively on it and the families have different scope shapes -- a lexical signal carries a term and NO geography key, a series signal carries a metric and a geography -- so an unhandled third value is a bug rather than a gap. It is deliberately NOT DemandSignalFamily: PAIN/DESIRE/BEHAVIORAL/MARKET classify demand, and a count of how often a token occurred in news text is not evidence of demand. It is also not the registry called signal_family, which says what a SOURCE could expose (ADR-017). Three relations, three subjects, three names.
+    """What kind of quantity a derived Signal is about. Closed because consumers branch exhaustively on it and the families have different scope shapes -- a lexical signal carries a term and NO geography key, a series signal carries a metric and a geography -- so an unhandled third value is a bug rather than a gap. It is deliberately NOT DemandSignalFamily: PAIN/DESIRE/BEHAVIORAL/MARKET classify demand, and a count of how often a token occurred in news text is not evidence of demand. It is also not the registry called signal_family, which says what a SOURCE could expose (ADR-017). Three relations, three subjects, three names -- four since ADR-032.
 
     See signal-taxonomy-v1.md; Mission 1.11 §5.
     """
@@ -532,6 +532,7 @@ class SignalQuantityFamily(str, Enum):
     LEXICAL_FREQUENCY = "LEXICAL_FREQUENCY"  # How often language tokens occur in text a source processed. Carries a term and a source language label, and no geography key at all
     MEASURED_SERIES = "MEASURED_SERIES"  # A numeric quantity a source measures or reports over a period. Carries a metric and a geography
     TRANSACTION_VALUE = "TRANSACTION_VALUE"  # The monetary value at which a transaction between named parties was recorded, as the source published it. Carries an amount semantic, a currency and a procurement classification, and NO metric -- there is no series it is an instance of, which is why MEASURED_SERIES could not be widened to hold it (ADR-029). The currency is the unit and is INHERITED, and a derivation whose inputs disagree on currency is refused rather than converted. It is NOT willingness-to-pay: that a buyer paid this is established, that a market exists or that a comparable buyer would pay a comparable amount for a different product is not
+    CONTENT_REQUEST_VOLUME = "CONTENT_REQUEST_VOLUME"  # How many times a named content item was REQUESTED on a platform during a period, by one class of requester, as the platform counted it. Carries an item, a platform, a requester class and an access channel, and NO metric and NO geography -- there is no measured state of the world it is an instance of, which is why MEASURED_SERIES could not be widened to hold it (ADR-032). Widening that family would not have cost `metric` its meaning the way a procurement value would; it would have cost the FAMILY its meaning, by making a pageview change and a population change the same kind of quantity. The name says REQUEST rather than VIEW deliberately: 'view' implies a person looked, and a field name survives every later caveat. It is NOT attention, curiosity, interest, popularity, adoption or demand
 
 
 class SignalDirection(str, Enum):

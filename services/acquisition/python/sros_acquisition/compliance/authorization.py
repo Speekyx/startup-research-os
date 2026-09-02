@@ -42,6 +42,7 @@ from .config import (
     AcquisitionBounds,
     AttributionObligation,
     AuthorizedDataset,
+    ClientIdentification,
     ComplianceConfig,
     DataMinimisationProfile,
     ResourceScope,
@@ -169,6 +170,38 @@ class AcquisitionAuthorizationContext:
     # `None` when no review has set a ceiling for this source. Not "unbounded":
     # unasked (Mission 1.9.2 §15).
     acquisition_bounds: AcquisitionBounds | None = None
+    # How this client must identify itself, where the source's access policy
+    # makes identification a CONDITION OF ACCESS rather than a courtesy
+    # (Mission 1.19). `None` means unasked, never unrestricted -- the same
+    # reading `route_authorization` and `acquisition_bounds` carry above.
+    client_identification: ClientIdentification | None = None
+
+    def authorize_client_identification(self, user_agent: str) -> tuple[str, ...]:
+        """Why this outbound identity is refused for this source, or nothing.
+
+        Mission 1.19. Called by a collector BEFORE a socket opens, with the
+        string the transport will actually send. The point is that the review
+        and the wire cannot disagree silently: a declaration nobody sends is a
+        condition that verifies against a document instead of against
+        behaviour.
+
+        A source with no declared obligation returns no refusals. That is not a
+        permissive default -- it is the honest answer for the twenty-eight
+        entries whose reviews never asked, and the capability that gates the
+        CONDITION fails closed for exactly those.
+        """
+        declared = self.client_identification
+        if declared is None:
+            return ()
+        failures = list(declared.refusals())
+        if user_agent.strip() != declared.user_agent.strip():
+            failures.append(
+                f"the transport would send {user_agent!r} and the review declared "
+                f"{declared.user_agent!r}. The source's access policy makes the "
+                "identification a condition of access, so a mismatch is a refusal rather "
+                "than a note"
+            )
+        return tuple(failures)
 
     def authorized_dataset(self, resource_id: str) -> AuthorizedDataset | None:
         """The entry that authorises one resource, or `None`.
@@ -410,6 +443,7 @@ def build_authorization(
         data_minimisation=compliance.data_minimisation,
         datasets=compliance.datasets,
         acquisition_bounds=compliance.acquisition_bounds,
+        client_identification=compliance.client_identification,
         route_authorization=compliance.route_authorization,
         verifications=tuple(records),
         issued_at=moment,

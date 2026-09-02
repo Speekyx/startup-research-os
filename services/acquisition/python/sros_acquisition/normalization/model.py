@@ -503,6 +503,41 @@ class RecordKind:
 # standing rule about that: IMPLEMENTED_COLLECTORS gains a name as the LAST step
 # of building a collector, never as preparation for one.
 RECORD_KINDS: dict[str, RecordKind] = {
+    # Mission 1.19, migration 0025. GENERIC, not `wikimedia_pageview`: any
+    # platform publishing how many times a named item was requested in a period
+    # has this shape. And the name says REQUEST rather than VIEW because the
+    # operator's own definition is "a request for content of a page that
+    # receives a response of 200 OK or 304 Not Modified" -- "view" implies a
+    # person looked, and putting that implication in the VOCABULARY is where
+    # nothing downstream could unmake it.
+    #
+    # `audience.class` is REQUIRED rather than optional, and it is the one
+    # design decision here worth arguing. The same item on the same day carries
+    # a different count for human-attributed traffic than for all traffic; a
+    # record that could not say which one it held would be two measurements
+    # wearing one name, and every comparison built on it would be silently
+    # mixing them.
+    "content_request_count": RecordKind(
+        kind_id="content_request_count",
+        required=(
+            "content.id",
+            "content.platform",
+            "period",
+            "audience.class",
+            "observation.count",
+        ),
+        optional=(
+            "content.url",
+            "audience.access_channel",
+            "observation.unit",
+        ),
+        description=(
+            "How many times one named content item was requested on one platform during "
+            "one period, by one class of requester. It asserts that the platform COUNTED "
+            "that many requests, and never that a person read, a reader existed, a user "
+            "adopted, or that interest, demand, popularity or a market exists."
+        ),
+    ),
     # Mission 1.18, migration 0024. GENERIC, not `stack_exchange_question`: a
     # public Q&A question is a shape other sources share, and naming the kind
     # after the first source to reach it would make the vocabulary a list of

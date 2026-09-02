@@ -6,10 +6,15 @@
 question on Stack Overflow with these source fields. That is the whole assertion.
 
 **What it does not mean**, and every one of these is a step somebody will be
-tempted to take because the data looks like it supports them: a repeated problem,
-a validated problem, product demand, dissatisfaction, willingness to pay,
-purchase intent, a market need, or a commercial opportunity. One question is one
-person asking one thing once.
+tempted to take because the data looks like it supports them: a repeated problem, a
+validated problem, product demand, dissatisfaction, willingness to pay,
+purchase intent, a market need, or a commercial opportunity. One record is one
+PUBLISHED QUESTION, once.
+
+**And it is not one PERSON either.** Author identity is never acquired, so this
+system cannot count distinct askers and must not word itself as though it could.
+Fifteen records are fifteen published solution-seeking observations; how many
+people wrote them is a fact the deployment deliberately does not hold.
 
 **The tags are the SITE's vocabulary and stay in it.** `python`, `pandas`,
 `google-cloud-platform` are preserved verbatim and never mapped to a taxonomy of
