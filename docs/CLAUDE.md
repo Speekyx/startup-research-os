@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.53
-Last amended: 2026-09-02 (Sprint 1 / Mission 1.26)
+Version: 1.54
+Last amended: 2026-09-02 (Sprint 1 / Mission 1.27)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.54 | 2026-09-02 | **EXPLORATORY_V2_NOT_PROMISING, and the classifier is PARKED.** Three V2 variants, one selected by a frozen rule, frozen, run once on the Mission 1.26 holdout: **0 provisional true SAME against 4 references** where the frozen criterion required 2. 88 evaluations, 1.53 USD, 0 retries, counters unchanged. **V1 was never failing to SEE the abstraction** -- its own rationale states the shared goal and then rejects it. **The most informative artifact was an empty field**: V2 required the model to name an abstraction covering both questions, and `shared_problem_if_any` came back empty 39 times in 40. More scaffolding made it MORE conservative. **A selection rule must defeat both collapses**, so the frozen rule demands a true positive and caps the SAME share. **A ceiling you might exceed is bounded, not argued away** -- output capped at 1200 tokens to make 3.00 USD real. **A split disjoint by PAIR is not disjoint by OBSERVATION**, so the brief's own suggested prompt example was a holdout leak and was refused. Production stays NOT_AUTHORISED |
 | 1.53 | 2026-09-02 | **REFERENCE_SET_INSUFFICIENT, and the gate was allowed to fail.** The 40 labels came back **AI_ASSISTED_PROVISIONAL**, not human -- the operator chose to proceed with them rather than spend another labelling mission, which is a real decision recorded at document level and changes nothing about what they are. Development holds **2** SAME_FAMILY against a preregistered 4 (holdout passes at 4). **Two results reported apart**: the composition gate fails, and the human reference requirement is separately NOT_ESTABLISHED -- one verdict would let either hide the other. Nothing moved: no pair changed split, no label revised, no threshold lowered, no re-sampling. **A loader asked for HUMAN_OPERATOR refuses these files**, so the distinction is structural rather than prose. Mission 1.25's genuine human holdout is NOT merged in to help the threshold. 0 model calls, counters unchanged; production stays NOT_AUTHORISED |
 | 1.52 | 2026-09-02 | **A dataset mission, and the reason it came before a V2 classifier.** Mission 1.25's ten human-scored pairs with two positives rejected a trivial classifier and cannot build one; and when the operator reviewed them, five labels changed with three moving TOWARD the model, so *V1 is far too conservative* was half an artifact of an AI-assisted reference. **40 new pairs, none shared with 1.25**, deterministic stratified sampling over five feature bands, **24/16 split frozen before any label**. **No model output entered the selection** -- a dataset chosen by a classifier's errors can only ever measure that classifier -- asserted by parsing the sampler's code with docstrings excluded, because it says *not a prediction* precisely because it reads none. **Strata are sampling mechanisms, never expected labels.** The sample is ENRICHED and may never state a prevalence. **Holdout isolation is structural**: separate files, so the development loader cannot reach a holdout label. `DATASET_PREPARATION_COMPLETE` is not a model evaluation, and 1.25's MODEL_EVALUATION_FAILED is untouched |
 | 1.51 | 2026-09-02 | **The human operator reviewed the frozen holdout, and the criterion still fails -- but the reference was half the story.** Re-scored the SAME frozen predictions against HUMAN_OPERATOR labels: no model call, nothing frozen touched, the provisional scoring preserved as history. Every precondition now met against human ground truth -- 10 labelled, 2 human SAME, 0 false SAME -- and **0 true SAME**, so `MODEL_EVALUATION_FAILED` stands. **Zero false positives is still not a pass**, being what a constant-DIFFERENT classifier scores. **Five of ten labels changed and on three the human moved TOWARD the model**: the provisional reference had called two pairs a family the operator does not, and one decidable that the operator finds undecidable. Missed positives fall 4 -> 2. So *the model is far too conservative* was half an artifact of an AI-assisted reference -- a finding that generalises. **The full 20-pair set is MIXED provenance** and must never be reported as fully human |
@@ -300,6 +301,47 @@ positives in the scored split, which this 89-question corpus did not supply: one
 defensible SAME in 40 candidate pairs is a finding about the corpus, not about
 the classifier. **No synthetic positive may substitute** -- a constructed pair
 can test a parser and can never establish semantic accuracy against real data.
+
+### Problem-family classification is PARKED, and production stays closed
+
+Added in 1.54 (Mission 1.27, `mission-1.27-report.md`). Three V2 variants were
+built, one was selected by a rule frozen beforehand, frozen, and run once on the
+Mission 1.26 holdout. **`EXPLORATORY_V2_NOT_PROMISING`**: 0 provisional true SAME
+against 4 provisional SAME references, where the frozen criterion required 2.
+
+- **V1 was not failing to SEE the abstraction.** Its own rationale on a pair a
+  human called SAME reads *"both involve a client failing to reach a service
+  running inside a Docker container, but the specific blocked goals differ"*. It
+  wrote the shared abstraction down and rejected it, and that is demonstrated
+  behaviour rather than a hypothesis about a prompt.
+- **The most informative artifact was an empty field.** V2 required the model to
+  name an abstraction covering both questions before deciding.
+  `shared_problem_if_any` came back empty on 39 of 40 evaluations. The model is
+  not rejecting candidate abstractions; it is not generating them.
+- **More scaffolding made it more conservative.** Adding the shared-abstraction
+  requirement dropped true positives to zero; adding a permissive reminder on top
+  restored the baseline and no further.
+- **A selection rule must defeat BOTH collapses.** One that only demands a
+  positive is passed by a classifier saying SAME to everything; one that only
+  forbids false positives is passed by a classifier that never says SAME. The
+  frozen rule demands a true positive AND caps the SAME share, and tests score
+  both degenerate classifiers.
+- **A ceiling you might exceed is bounded, not argued away.** The first hard
+  maximum was 4.44 USD against a 3.00 ceiling, because the estimate assumed the
+  adapter's 4096-token output default. Capping output at 1200 -- the schema
+  allows 1080 characters -- made the bound real at 1.89 USD.
+- **A split disjoint by PAIR is not disjoint by OBSERVATION.** Over a fixed
+  corpus it cannot be, so a prompt example drawn from development can still carry
+  holdout content. Mission 1.27's suggested illustration was the exact
+  abstraction of a holdout pair and was refused; a test asserts no prompt names
+  any corpus question id.
+
+**PARK_PROBLEM_FAMILY_CLASSIFIER.** No V3. The project moves toward the
+Opportunity Engine over evidence paths already valid -- SROS holds 26 canonical
+Evidence rows from other source families -- while this relation stays
+NOT_AUTHORISED. Genuinely human reference labels remain required before any
+production claim, and are now the second condition rather than the first: on this
+evidence a classifier worth validating does not yet exist.
 
 ### A reference set is built before the classifier that will be scored on it
 

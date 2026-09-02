@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.52
+Version: 1.53
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-02 (Sprint 1 / Mission 1.26)
+Last amended: 2026-09-02 (Sprint 1 / Mission 1.27)
 
 ---
 
@@ -13,6 +13,56 @@ Last amended: 2026-09-02 (Sprint 1 / Mission 1.26)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.53 — 2026-09-02 (Sprint 1 / Mission 1.27)
+
+Authorized by the Mission 1.27 brief §0-§16.
+
+**OUTCOME: `EXPLORATORY_V2_NOT_PROMISING`. Recommendation:
+`PARK_PROBLEM_FAMILY_CLASSIFIER`.** 88 logical evaluations, **1.53 USD**, 0
+retries, every canonical counter unchanged, and no Signal, Claim, Evidence,
+ReliabilityAssessment, Opportunity or Score created. Production problem-family
+inference remains **NOT_AUTHORISED**.
+
+**WHAT V1 ACTUALLY DID, from its own outputs.** 17 of 20 decisions DIFFERENT, 15
+of them under one reason code, and goal fields filled to the 240-character cap
+with frameworks and ports. On two pairs a human later called SAME, its rationale
+*states the shared abstraction and then rejects it*. V1 was not failing to see
+it. Everything beyond that is hypothesis and is labelled as such.
+
+**THREE VARIANTS, A FROZEN RULE, ONE SELECTION.** Goal and blocker separated with
+the goal capped at 120 characters; then a required shared-abstraction attempt;
+then a permissive reminder. On DEVELOPMENT: V2-A and V2-C each found 1 of 2
+provisional positives with 0 false, V2-B found 0 and was ineligible. The rule
+broke the tie on simplicity. **Adding scaffolding made the classifier MORE
+conservative, not less.**
+
+**THE HOLDOUT SAID NO.** V2-A frozen with a prompt hash, run once: 0 provisional
+true SAME against 4 references, where the criterion frozen beforehand required 2.
+
+**THE MOST INFORMATIVE ARTIFACT WAS AN EMPTY FIELD.** V2 required the model to
+name a problem abstraction covering both questions before deciding.
+`shared_problem_if_any` came back empty on **39 of 40** evaluations. The model is
+not rejecting candidate abstractions; it is not generating them. That is not a
+prompt needing another turn of tuning.
+
+**Three rules this mission added to the repository.** A selection rule must
+defeat BOTH collapses -- constant-DIFFERENT and constant-SAME -- so the frozen
+rule demands a true positive and caps the SAME share. A cost ceiling you might
+exceed is bounded rather than argued away: output was capped at 1200 tokens to
+make 3.00 USD a real bound instead of a nominal one. And **a split disjoint by
+PAIR is not disjoint by OBSERVATION**: the brief's own suggested prompt
+illustration was the exact abstraction of a holdout pair, and the development
+pair that would have replaced it shares an observation with another holdout pair.
+Both were refused and a test asserts no prompt names a corpus question id.
+
+**Nothing historical was rewritten.** Mission 1.25 remains
+`MODEL_EVALUATION_FAILED`, Mission 1.26 remains `REFERENCE_SET_INSUFFICIENT`, and
+the genuine `HUMAN_OPERATOR` holdout remains what it is.
+
+**Next: the Opportunity Engine over evidence paths already valid.** SROS holds 26
+canonical Evidence rows from other source families; this relation is parked, not
+the system
 
 ## 1.52 — 2026-09-02 (Sprint 1 / Mission 1.26 close)
 

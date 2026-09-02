@@ -1,0 +1,74 @@
+{
+  "$comment": "Mission 1.27 §9. The V2 candidate selected on DEVELOPMENT by the frozen rule and frozen before any HOLDOUT call. EXPLORATORY_V2_CANDIDATE_FROZEN is NOT validation: it records that one variant met the development selection rule and that nothing about it may change from this point.\n\nThe hash covers the system instructions, the task text and the output schema. A later run that produces a different hash is running a different classifier, whatever its version string says.",
+  "mission": "1.27",
+  "status": "EXPLORATORY_V2_CANDIDATE_FROZEN",
+  "variant": "V2-A",
+  "prompt_id": "semantic-problem-family-v2",
+  "prompt_version": "2.0.0",
+  "prompt_sha256": "f314a3addae19367ebe7b074876086bbebfa58f5ab19755c55e5375b654eea52",
+  "rubric_version": "problem-family-rubric@1.0.0",
+  "relation": "SAME_PROBLEM_FAMILY",
+  "classifier_version": "problem-family-classifier@2.0.0-exploratory",
+  "output_schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "goal_a",
+      "blocker_a",
+      "goal_b",
+      "blocker_b",
+      "shared_problem_if_any",
+      "decision",
+      "brief_rationale"
+    ],
+    "properties": {
+      "goal_a": {
+        "type": "string",
+        "maxLength": 120,
+        "description": "What person A was trying to accomplish. Short."
+      },
+      "blocker_a": {
+        "type": "string",
+        "maxLength": 160,
+        "description": "What stopped person A."
+      },
+      "goal_b": {
+        "type": "string",
+        "maxLength": 120
+      },
+      "blocker_b": {
+        "type": "string",
+        "maxLength": 160
+      },
+      "shared_problem_if_any": {
+        "type": "string",
+        "maxLength": 120,
+        "description": "One sentence naming a problem abstraction that covers BOTH, or the empty string if none exists that is narrow enough to be useful."
+      },
+      "decision": {
+        "type": "string",
+        "enum": [
+          "SAME_PROBLEM_FAMILY",
+          "DIFFERENT_PROBLEM_FAMILY",
+          "ABSTAIN"
+        ]
+      },
+      "brief_rationale": {
+        "type": "string",
+        "maxLength": 400,
+        "description": "Two sentences at most, bound to what the questions say."
+      }
+    }
+  },
+  "model_route": {
+    "tier": "STRONG_MODEL",
+    "provider": "anthropic",
+    "model": "claude-sonnet-5",
+    "max_output_tokens": 1200,
+    "temperature": "provider default, not set by SROS"
+  },
+  "selection_rule": "Frozen before the first real call. A V2 candidate is eligible on DEVELOPMENT only if it produces at least 1 provisional true SAME_FAMILY, at most 2 provisional false SAME_FAMILY, calls SAME on no more than half the scored pairs, and returns schema-valid structured output through the authorised Gateway route.\n\nAmong eligible variants the order is: more provisional true SAME; then fewer provisional false SAME; then fewer unnecessary ABSTAIN on non-UNCERTAIN references; then the simpler procedure. Ties beyond that go to the earlier variant, so the ordering is total and the choice is reproducible.\n\nIf no variant is eligible the outcome is EXPLORATORY_V2_DEVELOPMENT_FAILED and the holdout is neither called nor inspected.",
+  "selected_because": "V2-A and V2-C tied on 1 provisional true SAME and 0 provisional false SAME. The frozen rule breaks that tie on unnecessary ABSTAIN (equal) and then on the simpler procedure, which is V2-A. V2-B was ineligible: 0 provisional true SAME.",
+  "holdout_criterion": "Frozen before any holdout call. The frozen candidate is provisionally promising only if the split holds at least 12 non-UNCERTAIN references and at least 4 provisional SAME_FAMILY references, and the classifier produces at least 2 provisional true SAME, at most 1 provisional false SAME, and does not collapse to a constant decision.\n\nPassing means EXPLORATORY_V2_PROMISING_PENDING_HUMAN_VALIDATION and nothing stronger. It is not MODEL_VALIDATED, not PRODUCTION_READY, not HUMAN_VALIDATED: the references are AI_ASSISTED_PROVISIONAL and the development process has already had access to them, so this measures provisional agreement rather than independent human validation.",
+  "not_validation": "This is not MODEL_VALIDATED, not PRODUCTION_READY and not HUMAN_VALIDATED. Production problem-family inference remains NOT_AUTHORISED."
+}

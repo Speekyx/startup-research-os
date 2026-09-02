@@ -69,6 +69,13 @@ from .family_prompt import (
     FAMILY_PROMPT_VERSION,
     render_family_prompt,
 )
+from .family_prompt_v2 import (
+    V2_OUTPUT_SCHEMA,
+    V2_PROMPT_ID,
+    V2_VARIANTS,
+    V2Variant,
+    render_v2_prompt,
+)
 from .family_rubric import (
     FAMILY_GRANULARITY,
     FAMILY_INSUFFICIENT_ALONE,
@@ -122,8 +129,27 @@ from .rubric import (
     ReasonCode,
     WorkedExample,
 )
+from .v2_selection import (
+    V2_HOLDOUT_CRITERION,
+    V2_SELECTION_RULE,
+    HoldoutCriterion,
+    SelectionRule,
+    VariantResult,
+    select_variant,
+)
 
 __all__ = [
+    "select_variant",
+    "VariantResult",
+    "SelectionRule",
+    "HoldoutCriterion",
+    "V2_SELECTION_RULE",
+    "V2_HOLDOUT_CRITERION",
+    "render_v2_prompt",
+    "V2Variant",
+    "V2_VARIANTS",
+    "V2_PROMPT_ID",
+    "V2_OUTPUT_SCHEMA",
     "load_reference_labels",
     "load_holdout_labels",
     "load_development_labels",

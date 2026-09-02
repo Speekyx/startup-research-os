@@ -1661,3 +1661,238 @@ class TestTheMission126LabelsAreProvisionalAndSayySo:
         for split in (Split.DEVELOPMENT, Split.HOLDOUT):
             raw = json.loads(self.paths().labels(split).read_text(encoding="utf-8"))
             assert not {row["pair_id"] for row in raw["labels"]} & prior_ids
+
+
+class TestV2IsExploratoryAndBounded:
+    """Mission 1.27 §15. The relation is unchanged; only how the question is
+    asked varies, and the variants are capped at three."""
+
+    DOCS = pathlib.Path(__file__).resolve().parents[4] / "docs" / "data"
+
+    def test_there_are_at_most_three_variants(self) -> None:
+        from sros_semantic_equivalence import V2_VARIANTS
+
+        assert len(V2_VARIANTS) <= 3
+        assert len({v.name for v in V2_VARIANTS}) == len(V2_VARIANTS)
+        assert len({v.version for v in V2_VARIANTS}) == len(V2_VARIANTS)
+
+    def test_the_rubric_is_untouched_by_v2(self) -> None:
+        """V2 may explain the relation more clearly. It may not widen it."""
+        from sros_semantic_equivalence import FAMILY_RUBRIC_TEXT, FAMILY_RUBRIC_VERSION
+
+        assert FAMILY_RUBRIC_VERSION == "problem-family-rubric@1.0.0"
+        assert "however long the shared string" in FAMILY_RUBRIC_TEXT
+
+    def test_every_variant_carries_the_unchanged_rubric_as_trusted_context(self) -> None:
+        from sros_semantic_equivalence import (
+            FAMILY_RUBRIC_TEXT,
+            V2_VARIANTS,
+            QuestionForPrompt,
+            render_v2_prompt,
+        )
+
+        a = QuestionForPrompt("1", "t", "b", ("docker",))
+        b = QuestionForPrompt("2", "t", "b", ("docker",))
+        for variant in V2_VARIANTS:
+            prompt = render_v2_prompt(variant, a, b)
+            assert prompt.trusted_context == FAMILY_RUBRIC_TEXT
+
+    def test_abstain_survives_in_every_variant(self) -> None:
+        from sros_semantic_equivalence import V2_OUTPUT_SCHEMA, FamilyDecision
+
+        assert "ABSTAIN" in V2_OUTPUT_SCHEMA["properties"]["decision"]["enum"]
+        assert set(V2_OUTPUT_SCHEMA["properties"]["decision"]["enum"]) == {
+            d.value for d in FamilyDecision
+        }
+
+    def test_no_numeric_confidence_is_requested(self) -> None:
+        """§3 offers `confidence` as one option. The repository's standing
+        invariant is that a self-reported certainty is not a probability, and
+        that invariant is not this mission's to change."""
+        from sros_semantic_equivalence import V2_OUTPUT_SCHEMA
+
+        assert "confidence" not in V2_OUTPUT_SCHEMA["properties"]
+        for field in V2_OUTPUT_SCHEMA["properties"].values():
+            assert field["type"] != "number", field
+
+    def test_the_goal_field_is_shorter_than_v1s(self) -> None:
+        """The one change every variant shares, and the direct counter to V1's
+        demonstrated habit of filling a 240-character goal field with
+        implementation detail."""
+        from sros_semantic_equivalence import FAMILY_OUTPUT_SCHEMA, V2_OUTPUT_SCHEMA
+
+        v1_goal = FAMILY_OUTPUT_SCHEMA["properties"]["blocked_goal_a"]["maxLength"]
+        v2_goal = V2_OUTPUT_SCHEMA["properties"]["goal_a"]["maxLength"]
+        assert v2_goal < v1_goal
+        assert "blocker_a" in V2_OUTPUT_SCHEMA["properties"]
+
+    def test_no_variant_prompt_names_a_corpus_question(self) -> None:
+        """**The leakage test.** §4's suggested positive illustration is the
+        exact abstraction of a HOLDOUT pair, and the one development SAME pair
+        that would serve instead shares an observation with a holdout pair --
+        the Mission 1.26 split is disjoint by PAIR, not by OBSERVATION. So no
+        prompt may name any question id."""
+        import re
+
+        from sros_semantic_equivalence import V2_VARIANTS
+
+        batch = json.loads(
+            (self.DOCS / "problem-family-human-reference-batch-v1.json").read_text(encoding="utf-8")
+        )
+        ids = {p["a_question_id"] for p in batch["pairs"]} | {
+            p["b_question_id"] for p in batch["pairs"]
+        }
+        for variant in V2_VARIANTS:
+            text = variant.template.system_instructions + variant.template.task_template
+            found = set(re.findall(r"\b780\d{5}\b", text))
+            assert not found, (variant.name, found)
+            assert not found & ids
+
+
+class TestTheV2SelectionRuleIsFrozenAndDefeatsBothCollapses:
+    """§7. A rule that only demands a positive is passed by a classifier that
+    says SAME to everything; a rule that only forbids false positives is passed
+    by one that never says SAME. This demands both."""
+
+    def _result(self, **kwargs):
+        from sros_semantic_equivalence import VariantResult
+
+        base = dict(
+            variant="X",
+            version="9.9.9",
+            complexity_rank=0,
+            scored=20,
+            same_predictions=0,
+            different_predictions=20,
+            abstentions=0,
+            true_same=0,
+            false_same=0,
+            missed_same=0,
+            agreements=0,
+            abstain_on_scored=0,
+        )
+        base.update(kwargs)
+        return VariantResult(**base)
+
+    def test_a_constant_different_variant_is_refused(self) -> None:
+        from sros_semantic_equivalence import V2_SELECTION_RULE, select_variant
+
+        winner, refused = select_variant([self._result()], V2_SELECTION_RULE)
+        assert winner is None
+        assert any("never says SAME" in r for _, reasons in refused for r in reasons)
+
+    def test_a_variant_collapsing_toward_same_is_refused(self) -> None:
+        from sros_semantic_equivalence import V2_SELECTION_RULE, select_variant
+
+        collapsed = self._result(
+            same_predictions=19, different_predictions=1, true_same=2, false_same=17
+        )
+        winner, refused = select_variant([collapsed], V2_SELECTION_RULE)
+        assert winner is None
+        reasons = " ".join(r for _, rs in refused for r in rs)
+        assert "collapse toward SAME" in reasons
+
+    def test_the_tie_break_order_is_total_and_reproducible(self) -> None:
+        """Mission 1.27 needed it: two variants tied on positives and negatives,
+        and the rule broke the tie on simplicity rather than on preference."""
+        from sros_semantic_equivalence import V2_SELECTION_RULE, select_variant
+
+        simple = self._result(variant="A", complexity_rank=0, same_predictions=1, true_same=1)
+        complex_ = self._result(variant="C", complexity_rank=2, same_predictions=1, true_same=1)
+        winner, _ = select_variant([complex_, simple], V2_SELECTION_RULE)
+        assert winner is not None and winner.variant == "A"
+
+    def test_more_true_positives_beats_simplicity(self) -> None:
+        from sros_semantic_equivalence import V2_SELECTION_RULE, select_variant
+
+        simple = self._result(variant="A", complexity_rank=0, same_predictions=1, true_same=1)
+        better = self._result(variant="C", complexity_rank=2, same_predictions=2, true_same=2)
+        winner, _ = select_variant([simple, better], V2_SELECTION_RULE)
+        assert winner is not None and winner.variant == "C"
+
+    def test_the_holdout_criterion_cannot_yield_a_validation_word(self) -> None:
+        """§11. Passing means promising-pending-human-validation and nothing
+        stronger, and the statement itself says so."""
+        from sros_semantic_equivalence import V2_HOLDOUT_CRITERION
+
+        statement = V2_HOLDOUT_CRITERION.statement
+        assert "not MODEL_VALIDATED" in statement
+        assert "not PRODUCTION_READY" in statement
+        assert "not HUMAN_VALIDATED" in statement
+        assert V2_HOLDOUT_CRITERION.min_true_same >= 2
+
+
+class TestMission127RecordsAreProvisionalAndProductionStaysClosed:
+    """§13 and §16. No epistemic row was created and no status was overwritten."""
+
+    DOCS = pathlib.Path(__file__).resolve().parents[4] / "docs" / "data"
+
+    def test_every_v2_run_declares_a_provisional_reference(self) -> None:
+        for name in ("problem-family-v2-v2-dev-1.json", "problem-family-v2-v2-holdout-1.json"):
+            raw = json.loads((self.DOCS / name).read_text(encoding="utf-8"))
+            assert raw["reference_origin"] == "AI_ASSISTED_PROVISIONAL"
+            assert raw["human_ground_truth_established"] is False
+            assert "Never accuracy" in raw["epistemic_note"]
+
+    def test_the_frozen_candidate_is_not_marked_production_ready(self) -> None:
+        raw = json.loads(
+            (self.DOCS / "problem-family-v2-frozen-candidate.json").read_text(encoding="utf-8")
+        )
+        assert raw["status"] == "EXPLORATORY_V2_CANDIDATE_FROZEN"
+        assert "NOT_AUTHORISED" in raw["not_validation"]
+        blob = json.dumps(raw)
+        for forbidden in ("MODEL_VALIDATED", "PRODUCTION_READY", "HUMAN_VALIDATED"):
+            assert f'"{forbidden}"' not in blob, forbidden
+
+    def test_the_frozen_prompt_hash_still_matches_the_code(self) -> None:
+        """A later run producing a different hash is running a different
+        classifier, whatever its version string says."""
+        import hashlib
+
+        from sros_semantic_equivalence import V2_OUTPUT_SCHEMA, V2_VARIANTS
+
+        raw = json.loads(
+            (self.DOCS / "problem-family-v2-frozen-candidate.json").read_text(encoding="utf-8")
+        )
+        variant = next(v for v in V2_VARIANTS if v.name == raw["variant"])
+        digest = hashlib.sha256(
+            (
+                variant.template.system_instructions
+                + "\x00"
+                + variant.template.task_template
+                + "\x00"
+                + json.dumps(V2_OUTPUT_SCHEMA, sort_keys=True)
+            ).encode()
+        ).hexdigest()
+        assert digest == raw["prompt_sha256"]
+
+    def test_the_earlier_mission_statuses_are_untouched(self) -> None:
+        for name, outcome in (
+            ("problem-family-evaluation-holdout.json", "MODEL_EVALUATION_FAILED"),
+            ("problem-family-evaluation-holdout-human.json", "MODEL_EVALUATION_FAILED"),
+        ):
+            raw = json.loads((self.DOCS / name).read_text(encoding="utf-8"))
+            assert raw["outcome"] == outcome, name
+        reference = json.loads(
+            (self.DOCS / "problem-family-holdout-human-labels-v1.json").read_text(encoding="utf-8")
+        )
+        assert reference["reference_label_origin"] == "HUMAN_OPERATOR"
+
+    def test_the_holdout_was_run_once_with_one_frozen_variant(self) -> None:
+        """§10: one pass, no second attempt because the result looked bad."""
+        raw = json.loads(
+            (self.DOCS / "problem-family-v2-v2-holdout-1.json").read_text(encoding="utf-8")
+        )
+        assert len(raw["variants"]) == 1
+        assert raw["variants"][0]["result"]["variant"] == "V2-A"
+        assert raw["split"] == "HOLDOUT"
+
+    def test_retries_and_cost_are_accounted_per_variant(self) -> None:
+        """§8: retries same-route, bounded, counted and reported separately."""
+        for name in ("problem-family-v2-v2-dev-1.json", "problem-family-v2-v2-holdout-1.json"):
+            raw = json.loads((self.DOCS / name).read_text(encoding="utf-8"))
+            for variant in raw["variants"]:
+                assert "schema_retries" in variant
+                assert "schema_failures" in variant
+                assert variant["result"]["usage"]["cost_units"] >= 0
+            assert raw["max_output_tokens"] == 1200
