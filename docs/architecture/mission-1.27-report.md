@@ -1,5 +1,18 @@
 # Mission 1.27 — Exploratory Problem-Family Classifier V2
 
+> **Amended 2026-09-02 (Mission 1.28 §0), report text only.** The §12 bullet
+> below stated the empty-field counts with the verb reversed, reading *"left
+> empty on 1 of 24 development rows and 0 of 16 holdout rows"* where the
+> persisted runs show those are the counts of rows where the field was
+> **filled**. The 39-of-40 figure in §14 was correct and is unchanged, as is
+> every count, prediction, prompt version, cost and outcome. **The two sentences
+> were always describing the same data**; one of them named the wrong side of it.
+> Verified against `docs/data/problem-family-v2-v2-dev-1.json` and
+> `problem-family-v2-v2-holdout-1.json`: for the frozen candidate V2-A,
+> `shared_problem_if_any` is non-empty on exactly one row
+> (`78089075::78097003`, development) and empty on the other 39.
+> `EXPLORATORY_V2_NOT_PROMISING` and `PARK_PROBLEM_FAMILY_CLASSIFIER` stand.
+
 **Outcome: `EXPLORATORY_V2_NOT_PROMISING`.**
 
 A candidate was selected on DEVELOPMENT by a rule frozen beforehand, frozen, and
@@ -179,9 +192,10 @@ the latter. Nothing below is a controlled comparison.
 - **Do the rationales show the intended abstraction?** Only where it fires. The
   one development SAME reads *"Both involve confusion over how 'localhost'
   resolves across Docker networking boundaries"* — which is the level the rubric
-  asks for. But **`shared_problem_if_any` was left empty on 1 of 24 development
-  rows and 0 of 16 holdout rows**: the model almost never proposed an abstraction
-  at all. It is not rejecting candidate abstractions; it is not generating them.
+  asks for. But **`shared_problem_if_any` was FILLED on only 1 of 24 development
+  rows and 0 of 16 holdout rows — that is, left empty on 39 of those 40**: the
+  model almost never proposed an abstraction at all. It is not rejecting
+  candidate abstractions; it is not generating them.
 - **Are failures caused by thin source text?** Not visibly. The four missed
   holdout positives are questions with substantial bodies.
 

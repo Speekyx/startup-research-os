@@ -2682,3 +2682,29 @@ this repository that means two things a developer machine hides:
 The cheapest reliable check is to run the zero-dependency suite in an
 interpreter that genuinely lacks pytest, rather than trusting that the runner's
 name implies the condition it describes.
+
+
+## §65 — A new tenant table breaks two tests, and that is the guard working
+
+Mission 1.28. Migration 0029 added `research.opportunity_hypothesis_revisions`
+and `research.opportunity_hypothesis_evidence`, and two existing tests failed
+immediately:
+
+- `test_integration.py::test_the_schema_holds_exactly_the_expected_tables`
+- `test_rls.py::test_every_tenant_table_has_exactly_one_policy`
+
+Both hold an **explicit list** of every tenant table rather than deriving one
+from the live schema, and the failure is the design: a derived list would pass
+for a table with no row-level-security policy, because it would discover that
+table and then check it against itself. The explicit list is what makes a new
+table a decision somebody records rather than a row that quietly appears.
+
+**The repair is to declare the tables, never to relax the assertion.** Widening
+either test to "at least these tables" would mean the next tenant table with a
+missing policy ships green -- and a tenant boundary is the one thing in this
+repository where a silent gap is unrecoverable rather than inconvenient.
+
+The general rule, and the third instance of it after §23 and §64: **when a
+structural check fails because the structure changed, update the declaration of
+what the structure is.** Narrowing the check is how a structural check stops
+checking.

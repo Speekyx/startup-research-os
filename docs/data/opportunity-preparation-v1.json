@@ -1,0 +1,967 @@
+{
+  "mission": "1.28",
+  "use_profile_id": "local-private-research-v1",
+  "use_profile_note": "DECLARED by the runtime, never inferred (ADR-027). The Evidence rows do not themselves record a use profile: most were collected before ADR-027 existed.",
+  "procedures": {
+    "dimension_taxonomy": "opportunity-evidence-dimensions@1.0.0",
+    "dimension_map": "signal-type-dimension-map@1.0.0",
+    "eligibility": "opportunity-input-eligibility@1.0.0",
+    "grouping": "source-native-subject-grouping@1.0.0",
+    "packet": "opportunity-evidence-packet@1.0.0",
+    "sufficiency": "opportunity-sufficiency@1.0.0",
+    "external_synthesis_gate": "opportunity-external-synthesis-gate@1.0.0"
+  },
+  "sufficiency_rule": "Pre-registered for Mission 1.28. A packet is HYPOTHESIS_FORMABLE only if it holds at least 2 Evidence rows that are ELIGIBLE_CONTEXT or ELIGIBLE_SCORING, and those rows together carry at least 2 distinct counting dimensions, where TREND_OR_CHANGE does not count because every Evidence row in this repository carries it by construction.\n\nFormable means a question can be asked without manufacturing its answer. It is NOT scoring-ready, NOT validated, and NOT a finding that an opportunity exists. A packet whose rows are all NON_SCORABLE can be FORMABLE and can still contribute nothing to any score.\n\nA packet holding rows nobody has assessed is HYPOTHESIS_REQUIRES_REVIEW rather than insufficient: unanswered is not the same as answered no, and merging them would let an open question look like a settled one.",
+  "totals": {
+    "evidence_rows_inspected": 26,
+    "eligible_context": 26,
+    "eligible_scoring": 0,
+    "requires_review": 0,
+    "ineligible": 0,
+    "excluded_from_packets": 0,
+    "packets_built": 9,
+    "packets_formable": 0,
+    "packets_insufficient": 9,
+    "opportunity_hypotheses_generated": 0,
+    "model_calls": 0,
+    "cost_units": 0.0
+  },
+  "evidence_dimension_distribution": {
+    "AUDIENCE_OR_USAGE": 18,
+    "BUYER_OR_BUDGET_EXISTENCE": 1,
+    "ECONOMIC_VALUE": 1,
+    "MARKET_ACTIVITY": 1,
+    "TREND_OR_CHANGE": 18
+  },
+  "source_family_composition": {
+    "economic_data": 4,
+    "knowledge": 18,
+    "news": 3,
+    "public_procurement": 1
+  },
+  "rows": [
+    {
+      "evidence_id": "05c769b1-f3be-4749-b93a-fca564a1fdcb",
+      "source_id": "world-bank",
+      "source_family": "economic_data",
+      "signal_type_id": "numeric_period_change",
+      "dimensions": [],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "084a6942-592e-40b3-9ac6-55b3413be374",
+      "source_id": "world-bank",
+      "source_family": "economic_data",
+      "signal_type_id": "numeric_period_change",
+      "dimensions": [],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "13a5eadb-977d-4de0-9c35-d0ff53442074",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at"
+      ]
+    },
+    {
+      "evidence_id": "1b93db71-eaed-45c5-a2fa-9e4edea7bc49",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at"
+      ]
+    },
+    {
+      "evidence_id": "33f8c97d-a55f-479c-aa77-7e021d77e1a3",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at"
+      ]
+    },
+    {
+      "evidence_id": "42059751-1a43-4db4-8413-a511ba290623",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at"
+      ]
+    },
+    {
+      "evidence_id": "448135b8-209b-4842-b9da-31d8468b34d6",
+      "source_id": "gdelt",
+      "source_family": "news",
+      "signal_type_id": "lexical_frequency_change",
+      "dimensions": [],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "487f62c6-2fcf-4790-9773-6e99214d0003",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at"
+      ]
+    },
+    {
+      "evidence_id": "516182ff-0122-4d13-9d8a-92bb38065a75",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at"
+      ]
+    },
+    {
+      "evidence_id": "5a909ff9-3173-4ccb-820b-a2da3402d84f",
+      "source_id": "world-bank",
+      "source_family": "economic_data",
+      "signal_type_id": "numeric_period_change",
+      "dimensions": [],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "6cf92ad6-77ed-4126-b356-41e65856430b",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at"
+      ]
+    },
+    {
+      "evidence_id": "6ff9590b-4b59-461a-955b-90fd1b2de330",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at"
+      ]
+    },
+    {
+      "evidence_id": "729c6193-762e-4b4f-8ff5-a3933e41bed1",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at"
+      ]
+    },
+    {
+      "evidence_id": "92c105c1-e126-4aa6-a11a-4a2fb294c168",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at"
+      ]
+    },
+    {
+      "evidence_id": "c35faf7a-e6a3-4600-96a1-73d521063be2",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at"
+      ]
+    },
+    {
+      "evidence_id": "c3bd9af2-6c1e-4bee-9add-ff52b5493833",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at"
+      ]
+    },
+    {
+      "evidence_id": "d20c9938-ab00-45da-9ef0-66b9da9710cc",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at"
+      ]
+    },
+    {
+      "evidence_id": "d48e9694-c4d5-4a03-9a28-a4d6fa5053d0",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at"
+      ]
+    },
+    {
+      "evidence_id": "de1f0dc6-4f5b-42c4-bdb9-fa927f795f07",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at"
+      ]
+    },
+    {
+      "evidence_id": "e2d80a32-b28e-4578-bd4b-c992c2e45124",
+      "source_id": "gdelt",
+      "source_family": "news",
+      "signal_type_id": "lexical_frequency_change",
+      "dimensions": [],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "e4c321bc-3ddd-46ec-91bb-c0e5e7afd70a",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at"
+      ]
+    },
+    {
+      "evidence_id": "e6271f31-7738-417f-a5f7-24b984c54110",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at"
+      ]
+    },
+    {
+      "evidence_id": "f1e0b7a4-d570-429a-91a4-fadff84cdce1",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at"
+      ]
+    },
+    {
+      "evidence_id": "f21a9e62-0651-460d-8c9b-079bb9b7f776",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at"
+      ]
+    },
+    {
+      "evidence_id": "f28abcdd-4d4b-4651-8dcd-5e5fe380fdfd",
+      "source_id": "gdelt",
+      "source_family": "news",
+      "signal_type_id": "lexical_frequency_contrast",
+      "dimensions": [],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "f753e610-c904-4db5-825a-31dbceb6c373",
+      "source_id": "world-bank",
+      "source_family": "economic_data",
+      "signal_type_id": "numeric_period_change",
+      "dimensions": [],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at",
+        "evidence_dimension"
+      ]
+    }
+  ],
+  "packets": [
+    {
+      "packet_id": "e63e94f49b249426b85d3eee5640feb4ab397cbaecf03c1b8592e72920daf76a",
+      "subject": "gdelt:lexical-term:ENGLISH|climate",
+      "size": 1,
+      "source_ids": [
+        "gdelt"
+      ],
+      "source_families": [
+        "news"
+      ],
+      "signal_type_ids": [
+        "lexical_frequency_change"
+      ],
+      "dimensions": [],
+      "counting_dimensions": [],
+      "eligibility_counts": {
+        "ELIGIBLE_CONTEXT": 1
+      },
+      "independence": "independence is UNKNOWN for 1 of 1 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 0,
+      "sufficiency": {
+        "status": "HYPOTHESIS_INSUFFICIENT_EVIDENCE",
+        "reasons": [
+          "1 eligible Evidence rows; the rule requires 2",
+          "0 distinct counting dimensions (none); the rule requires 2"
+        ],
+        "eligible_rows": 1,
+        "distinct_counting_dimensions": 0,
+        "distinct_dimensions_literal": 0,
+        "scoring_ready": false
+      },
+      "external_synthesis": {
+        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+        "refusal_reasons": [
+          "gdelt: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
+        ],
+        "per_source": [
+          [
+            "gdelt",
+            "NOT_ASSESSED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "acd4b1a9e691a006e67471698273400a34d312848c0bb157da526a323419f85a",
+      "subject": "gdelt:lexical-term:ENGLISH|climate|weather",
+      "size": 1,
+      "source_ids": [
+        "gdelt"
+      ],
+      "source_families": [
+        "news"
+      ],
+      "signal_type_ids": [
+        "lexical_frequency_contrast"
+      ],
+      "dimensions": [],
+      "counting_dimensions": [],
+      "eligibility_counts": {
+        "ELIGIBLE_CONTEXT": 1
+      },
+      "independence": "independence is UNKNOWN for 1 of 1 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 0,
+      "sufficiency": {
+        "status": "HYPOTHESIS_INSUFFICIENT_EVIDENCE",
+        "reasons": [
+          "1 eligible Evidence rows; the rule requires 2",
+          "0 distinct counting dimensions (none); the rule requires 2"
+        ],
+        "eligible_rows": 1,
+        "distinct_counting_dimensions": 0,
+        "distinct_dimensions_literal": 0,
+        "scoring_ready": false
+      },
+      "external_synthesis": {
+        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+        "refusal_reasons": [
+          "gdelt: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
+        ],
+        "per_source": [
+          [
+            "gdelt",
+            "NOT_ASSESSED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "d51d243d39fe23fc9d80d9a31301a16d26bbcd5252eb52e94832e7bfc18e6c47",
+      "subject": "gdelt:lexical-term:ENGLISH|weather",
+      "size": 1,
+      "source_ids": [
+        "gdelt"
+      ],
+      "source_families": [
+        "news"
+      ],
+      "signal_type_ids": [
+        "lexical_frequency_change"
+      ],
+      "dimensions": [],
+      "counting_dimensions": [],
+      "eligibility_counts": {
+        "ELIGIBLE_CONTEXT": 1
+      },
+      "independence": "independence is UNKNOWN for 1 of 1 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 0,
+      "sufficiency": {
+        "status": "HYPOTHESIS_INSUFFICIENT_EVIDENCE",
+        "reasons": [
+          "1 eligible Evidence rows; the rule requires 2",
+          "0 distinct counting dimensions (none); the rule requires 2"
+        ],
+        "eligible_rows": 1,
+        "distinct_counting_dimensions": 0,
+        "distinct_dimensions_literal": 0,
+        "scoring_ready": false
+      },
+      "external_synthesis": {
+        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+        "refusal_reasons": [
+          "gdelt: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
+        ],
+        "per_source": [
+          [
+            "gdelt",
+            "NOT_ASSESSED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "8f4fce64b57846c5ea378d27918a09b11b2c7871173cf7acbdd206c0758b64d6",
+      "subject": "ted-eu:CPV-division:90",
+      "size": 1,
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "signal_type_ids": [
+        "procurement_value_contrast"
+      ],
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility_counts": {
+        "ELIGIBLE_CONTEXT": 1
+      },
+      "independence": "independence is UNKNOWN for 1 of 1 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 0,
+      "sufficiency": {
+        "status": "HYPOTHESIS_INSUFFICIENT_EVIDENCE",
+        "reasons": [
+          "1 eligible Evidence rows; the rule requires 2"
+        ],
+        "eligible_rows": 1,
+        "distinct_counting_dimensions": 3,
+        "distinct_dimensions_literal": 3,
+        "scoring_ready": false
+      },
+      "external_synthesis": {
+        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+        "refusal_reasons": [
+          "ted-eu: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
+        ],
+        "per_source": [
+          [
+            "ted-eu",
+            "NOT_ASSESSED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "1aa0c4ed11f4f5f8705877aa4adf0d88d3843391f7cfc5120def46ba49f12ec6",
+      "subject": "wikimedia-pageviews:content:en.wikipedia.org|Docker_(software)",
+      "size": 6,
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "source_families": [
+        "knowledge"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "counting_dimensions": [
+        "AUDIENCE_OR_USAGE"
+      ],
+      "eligibility_counts": {
+        "ELIGIBLE_CONTEXT": 6
+      },
+      "independence": "independence is UNKNOWN for 6 of 6 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 0,
+      "sufficiency": {
+        "status": "HYPOTHESIS_INSUFFICIENT_EVIDENCE",
+        "reasons": [
+          "1 distinct counting dimensions (AUDIENCE_OR_USAGE); the rule requires 2"
+        ],
+        "eligible_rows": 6,
+        "distinct_counting_dimensions": 1,
+        "distinct_dimensions_literal": 2,
+        "scoring_ready": false
+      },
+      "external_synthesis": {
+        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+        "refusal_reasons": [
+          "wikimedia-pageviews: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
+        ],
+        "per_source": [
+          [
+            "wikimedia-pageviews",
+            "NOT_ASSESSED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "c790d7938b69d37def0a0e576be6a96d7e19cebadfa5f1263db2cbb0bc0a1166",
+      "subject": "wikimedia-pageviews:content:en.wikipedia.org|Kubernetes",
+      "size": 6,
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "source_families": [
+        "knowledge"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "counting_dimensions": [
+        "AUDIENCE_OR_USAGE"
+      ],
+      "eligibility_counts": {
+        "ELIGIBLE_CONTEXT": 6
+      },
+      "independence": "independence is UNKNOWN for 6 of 6 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 0,
+      "sufficiency": {
+        "status": "HYPOTHESIS_INSUFFICIENT_EVIDENCE",
+        "reasons": [
+          "1 distinct counting dimensions (AUDIENCE_OR_USAGE); the rule requires 2"
+        ],
+        "eligible_rows": 6,
+        "distinct_counting_dimensions": 1,
+        "distinct_dimensions_literal": 2,
+        "scoring_ready": false
+      },
+      "external_synthesis": {
+        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+        "refusal_reasons": [
+          "wikimedia-pageviews: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
+        ],
+        "per_source": [
+          [
+            "wikimedia-pageviews",
+            "NOT_ASSESSED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "6ac9dadff20ddbe3c8168d4479224f24e42f2358770b1ad61a0cfa1d8952dd2a",
+      "subject": "wikimedia-pageviews:content:en.wikipedia.org|Podman",
+      "size": 6,
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "source_families": [
+        "knowledge"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "counting_dimensions": [
+        "AUDIENCE_OR_USAGE"
+      ],
+      "eligibility_counts": {
+        "ELIGIBLE_CONTEXT": 6
+      },
+      "independence": "independence is UNKNOWN for 6 of 6 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 0,
+      "sufficiency": {
+        "status": "HYPOTHESIS_INSUFFICIENT_EVIDENCE",
+        "reasons": [
+          "1 distinct counting dimensions (AUDIENCE_OR_USAGE); the rule requires 2"
+        ],
+        "eligible_rows": 6,
+        "distinct_counting_dimensions": 1,
+        "distinct_dimensions_literal": 2,
+        "scoring_ready": false
+      },
+      "external_synthesis": {
+        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+        "refusal_reasons": [
+          "wikimedia-pageviews: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
+        ],
+        "per_source": [
+          [
+            "wikimedia-pageviews",
+            "NOT_ASSESSED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "1f3a4a742e39268d07433a6f2a41cd3a08446f6796c57ed899ae27e1fde41b77",
+      "subject": "world-bank:metric-geography:SP.POP.TOTL|DE",
+      "size": 2,
+      "source_ids": [
+        "world-bank"
+      ],
+      "source_families": [
+        "economic_data"
+      ],
+      "signal_type_ids": [
+        "numeric_period_change"
+      ],
+      "dimensions": [],
+      "counting_dimensions": [],
+      "eligibility_counts": {
+        "ELIGIBLE_CONTEXT": 2
+      },
+      "independence": "independence is UNKNOWN for 2 of 2 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 0,
+      "sufficiency": {
+        "status": "HYPOTHESIS_INSUFFICIENT_EVIDENCE",
+        "reasons": [
+          "0 distinct counting dimensions (none); the rule requires 2"
+        ],
+        "eligible_rows": 2,
+        "distinct_counting_dimensions": 0,
+        "distinct_dimensions_literal": 0,
+        "scoring_ready": false
+      },
+      "external_synthesis": {
+        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+        "refusal_reasons": [
+          "world-bank: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
+        ],
+        "per_source": [
+          [
+            "world-bank",
+            "NOT_ASSESSED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "1dfc739d7e5665bc5ab95e279533b593e2cf75a1fa13ea890941adc48bc9ed7b",
+      "subject": "world-bank:metric-geography:SP.POP.TOTL|FR",
+      "size": 2,
+      "source_ids": [
+        "world-bank"
+      ],
+      "source_families": [
+        "economic_data"
+      ],
+      "signal_type_ids": [
+        "numeric_period_change"
+      ],
+      "dimensions": [],
+      "counting_dimensions": [],
+      "eligibility_counts": {
+        "ELIGIBLE_CONTEXT": 2
+      },
+      "independence": "independence is UNKNOWN for 2 of 2 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 0,
+      "sufficiency": {
+        "status": "HYPOTHESIS_INSUFFICIENT_EVIDENCE",
+        "reasons": [
+          "0 distinct counting dimensions (none); the rule requires 2"
+        ],
+        "eligible_rows": 2,
+        "distinct_counting_dimensions": 0,
+        "distinct_dimensions_literal": 0,
+        "scoring_ready": false
+      },
+      "external_synthesis": {
+        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+        "refusal_reasons": [
+          "world-bank: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
+        ],
+        "per_source": [
+          [
+            "world-bank",
+            "NOT_ASSESSED"
+          ]
+        ]
+      }
+    }
+  ],
+  "epistemic_note": "No Opportunity, Signal, Claim, Evidence, ReliabilityAssessment or Score was created by this run. Every packet is a gathering of references; nothing here asserts that an opportunity exists."
+}

@@ -36,6 +36,8 @@ TENANT_TABLES = [
     "research.research_gaps",
     "research.opportunities",
     "research.opportunity_session_observations",
+    "research.opportunity_hypothesis_revisions",
+    "research.opportunity_hypothesis_evidence",
     "research.research_plans",
     "research.research_jobs",
     "research.research_job_dependencies",

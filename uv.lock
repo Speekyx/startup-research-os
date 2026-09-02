@@ -18,6 +18,7 @@ members = [
     "sros-gateway",
     "sros-llm-gateway",
     "sros-nlp",
+    "sros-opportunity",
     "sros-orchestrator",
     "sros-semantic-equivalence",
     "sros-signal-model",
@@ -1688,6 +1689,17 @@ requires-dist = [
     { name = "sros-contracts", editable = "packages/contracts/python" },
     { name = "sros-signal-model", editable = "packages/signal-model/python" },
 ]
+
+[[package]]
+name = "sros-opportunity"
+version = "0.1.0"
+source = { editable = "packages/opportunity-engine/python" }
+dependencies = [
+    { name = "sros-contracts" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "sros-contracts", editable = "packages/contracts/python" }]
 
 [[package]]
 name = "sros-orchestrator"
