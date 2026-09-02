@@ -3,25 +3,26 @@
   "use_profile_id": "local-private-research-v1",
   "use_profile_note": "DECLARED by the runtime, never inferred (ADR-027). The Evidence rows do not themselves record a use profile: most were collected before ADR-027 existed.",
   "procedures": {
+    "subject_registry": "canonical-subject-registry@1.0.0",
     "dimension_taxonomy": "opportunity-evidence-dimensions@1.0.0",
     "dimension_map": "signal-type-dimension-map@1.0.0",
     "eligibility": "opportunity-input-eligibility@1.0.0",
-    "grouping": "source-native-subject-grouping@1.0.0",
+    "grouping": "source-native-subject-grouping@1.1.0",
     "packet": "opportunity-evidence-packet@1.0.0",
     "sufficiency": "opportunity-sufficiency@1.0.0",
     "external_synthesis_gate": "opportunity-external-synthesis-gate@1.0.0"
   },
   "sufficiency_rule": "Pre-registered for Mission 1.28. A packet is HYPOTHESIS_FORMABLE only if it holds at least 2 Evidence rows that are ELIGIBLE_CONTEXT or ELIGIBLE_SCORING, and those rows together carry at least 2 distinct counting dimensions, where TREND_OR_CHANGE does not count because every Evidence row in this repository carries it by construction.\n\nFormable means a question can be asked without manufacturing its answer. It is NOT scoring-ready, NOT validated, and NOT a finding that an opportunity exists. A packet whose rows are all NON_SCORABLE can be FORMABLE and can still contribute nothing to any score.\n\nA packet holding rows nobody has assessed is HYPOTHESIS_REQUIRES_REVIEW rather than insufficient: unanswered is not the same as answered no, and merging them would let an open question look like a settled one.",
   "totals": {
-    "evidence_rows_inspected": 26,
-    "eligible_context": 26,
+    "evidence_rows_inspected": 27,
+    "eligible_context": 27,
     "eligible_scoring": 0,
     "requires_review": 0,
     "ineligible": 0,
     "excluded_from_packets": 0,
     "packets_built": 9,
-    "packets_formable": 0,
-    "packets_insufficient": 9,
+    "packets_formable": 1,
+    "packets_insufficient": 8,
     "opportunity_hypotheses_generated": 0,
     "model_calls": 0,
     "cost_units": 0.0
@@ -31,10 +32,12 @@
     "BUYER_OR_BUDGET_EXISTENCE": 1,
     "ECONOMIC_VALUE": 1,
     "MARKET_ACTIVITY": 1,
+    "PROBLEM_OR_NEED": 1,
     "TREND_OR_CHANGE": 18
   },
   "source_family_composition": {
     "economic_data": 4,
+    "forum": 1,
     "knowledge": 18,
     "news": 3,
     "public_procurement": 1
@@ -84,6 +87,25 @@
       "dimensions": [
         "AUDIENCE_OR_USAGE",
         "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at"
+      ]
+    },
+    {
+      "evidence_id": "16a8c39c-d72a-4252-9c67-7be2165e9cae",
+      "source_id": "stack-exchange",
+      "source_family": "forum",
+      "signal_type_id": "community_question_volume",
+      "dimensions": [
+        "PROBLEM_OR_NEED"
       ],
       "eligibility": "ELIGIBLE_CONTEXT",
       "reasons": [
@@ -550,9 +572,66 @@
   ],
   "packets": [
     {
-      "packet_id": "e63e94f49b249426b85d3eee5640feb4ab397cbaecf03c1b8592e72920daf76a",
+      "packet_id": "c25451c569909207357d0af19698e4737b7c85961fcf393bf632ba8b8242110e",
+      "subject": "subject:docker",
+      "size": 7,
+      "canonical_subject_id": "docker",
+      "source_ids": [
+        "stack-exchange",
+        "wikimedia-pageviews"
+      ],
+      "source_families": [
+        "forum",
+        "knowledge"
+      ],
+      "signal_type_ids": [
+        "community_question_volume",
+        "content_request_change"
+      ],
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "PROBLEM_OR_NEED",
+        "TREND_OR_CHANGE"
+      ],
+      "counting_dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "PROBLEM_OR_NEED"
+      ],
+      "eligibility_counts": {
+        "ELIGIBLE_CONTEXT": 7
+      },
+      "independence": "independence is UNKNOWN for 7 of 7 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 0,
+      "sufficiency": {
+        "status": "HYPOTHESIS_FORMABLE",
+        "reasons": [
+          "7 eligible rows carrying 2 counting dimensions. 0 of them are scoring-eligible, so this packet is formable and not scoring-ready."
+        ],
+        "eligible_rows": 7,
+        "distinct_counting_dimensions": 2,
+        "distinct_dimensions_literal": 3,
+        "scoring_ready": false
+      },
+      "external_synthesis": {
+        "availability": "AVAILABLE",
+        "refusal_reasons": [],
+        "per_source": [
+          [
+            "stack-exchange",
+            "PERMITTED"
+          ],
+          [
+            "wikimedia-pageviews",
+            "PERMITTED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "2fd041e7794b060c28a22263956a52ea38ba506775852278384ff1cfb84684e8",
       "subject": "gdelt:lexical-term:ENGLISH|climate",
       "size": 1,
+      "canonical_subject_id": null,
       "source_ids": [
         "gdelt"
       ],
@@ -592,9 +671,10 @@
       }
     },
     {
-      "packet_id": "acd4b1a9e691a006e67471698273400a34d312848c0bb157da526a323419f85a",
+      "packet_id": "27ba6e3a2116abbb9cb85f6a59bcbac84b2c17d065de9eb9a1b13b13a981a6f0",
       "subject": "gdelt:lexical-term:ENGLISH|climate|weather",
       "size": 1,
+      "canonical_subject_id": null,
       "source_ids": [
         "gdelt"
       ],
@@ -634,9 +714,10 @@
       }
     },
     {
-      "packet_id": "d51d243d39fe23fc9d80d9a31301a16d26bbcd5252eb52e94832e7bfc18e6c47",
+      "packet_id": "f9b973610600881acf89e1bf1f9156691b520a693a3ef7d89be3bff2ba5c4959",
       "subject": "gdelt:lexical-term:ENGLISH|weather",
       "size": 1,
+      "canonical_subject_id": null,
       "source_ids": [
         "gdelt"
       ],
@@ -676,9 +757,104 @@
       }
     },
     {
-      "packet_id": "8f4fce64b57846c5ea378d27918a09b11b2c7871173cf7acbdd206c0758b64d6",
+      "packet_id": "05184eed14b50fd4f3a3a350428894a881e4d87cd5ec02a6164d8aefaeae98d3",
+      "subject": "subject:kubernetes",
+      "size": 6,
+      "canonical_subject_id": "kubernetes",
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "source_families": [
+        "knowledge"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "counting_dimensions": [
+        "AUDIENCE_OR_USAGE"
+      ],
+      "eligibility_counts": {
+        "ELIGIBLE_CONTEXT": 6
+      },
+      "independence": "independence is UNKNOWN for 6 of 6 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 0,
+      "sufficiency": {
+        "status": "HYPOTHESIS_INSUFFICIENT_EVIDENCE",
+        "reasons": [
+          "1 distinct counting dimensions (AUDIENCE_OR_USAGE); the rule requires 2"
+        ],
+        "eligible_rows": 6,
+        "distinct_counting_dimensions": 1,
+        "distinct_dimensions_literal": 2,
+        "scoring_ready": false
+      },
+      "external_synthesis": {
+        "availability": "AVAILABLE",
+        "refusal_reasons": [],
+        "per_source": [
+          [
+            "wikimedia-pageviews",
+            "PERMITTED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "94d41dcb033246464fec94f2066812eb1de1bfdefe99dcc15dfd942a28f76f8f",
+      "subject": "subject:podman",
+      "size": 6,
+      "canonical_subject_id": "podman",
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "source_families": [
+        "knowledge"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "counting_dimensions": [
+        "AUDIENCE_OR_USAGE"
+      ],
+      "eligibility_counts": {
+        "ELIGIBLE_CONTEXT": 6
+      },
+      "independence": "independence is UNKNOWN for 6 of 6 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 0,
+      "sufficiency": {
+        "status": "HYPOTHESIS_INSUFFICIENT_EVIDENCE",
+        "reasons": [
+          "1 distinct counting dimensions (AUDIENCE_OR_USAGE); the rule requires 2"
+        ],
+        "eligible_rows": 6,
+        "distinct_counting_dimensions": 1,
+        "distinct_dimensions_literal": 2,
+        "scoring_ready": false
+      },
+      "external_synthesis": {
+        "availability": "AVAILABLE",
+        "refusal_reasons": [],
+        "per_source": [
+          [
+            "wikimedia-pageviews",
+            "PERMITTED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "b97deef05a0c92a966752491f65cf99e1b19255dc622db64ee761b264607bba2",
       "subject": "ted-eu:CPV-division:90",
       "size": 1,
+      "canonical_subject_id": null,
       "source_ids": [
         "ted-eu"
       ],
@@ -727,147 +903,10 @@
       }
     },
     {
-      "packet_id": "1aa0c4ed11f4f5f8705877aa4adf0d88d3843391f7cfc5120def46ba49f12ec6",
-      "subject": "wikimedia-pageviews:content:en.wikipedia.org|Docker_(software)",
-      "size": 6,
-      "source_ids": [
-        "wikimedia-pageviews"
-      ],
-      "source_families": [
-        "knowledge"
-      ],
-      "signal_type_ids": [
-        "content_request_change"
-      ],
-      "dimensions": [
-        "AUDIENCE_OR_USAGE",
-        "TREND_OR_CHANGE"
-      ],
-      "counting_dimensions": [
-        "AUDIENCE_OR_USAGE"
-      ],
-      "eligibility_counts": {
-        "ELIGIBLE_CONTEXT": 6
-      },
-      "independence": "independence is UNKNOWN for 6 of 6 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
-      "scoring_eligible": 0,
-      "sufficiency": {
-        "status": "HYPOTHESIS_INSUFFICIENT_EVIDENCE",
-        "reasons": [
-          "1 distinct counting dimensions (AUDIENCE_OR_USAGE); the rule requires 2"
-        ],
-        "eligible_rows": 6,
-        "distinct_counting_dimensions": 1,
-        "distinct_dimensions_literal": 2,
-        "scoring_ready": false
-      },
-      "external_synthesis": {
-        "availability": "AVAILABLE",
-        "refusal_reasons": [],
-        "per_source": [
-          [
-            "wikimedia-pageviews",
-            "PERMITTED"
-          ]
-        ]
-      }
-    },
-    {
-      "packet_id": "c790d7938b69d37def0a0e576be6a96d7e19cebadfa5f1263db2cbb0bc0a1166",
-      "subject": "wikimedia-pageviews:content:en.wikipedia.org|Kubernetes",
-      "size": 6,
-      "source_ids": [
-        "wikimedia-pageviews"
-      ],
-      "source_families": [
-        "knowledge"
-      ],
-      "signal_type_ids": [
-        "content_request_change"
-      ],
-      "dimensions": [
-        "AUDIENCE_OR_USAGE",
-        "TREND_OR_CHANGE"
-      ],
-      "counting_dimensions": [
-        "AUDIENCE_OR_USAGE"
-      ],
-      "eligibility_counts": {
-        "ELIGIBLE_CONTEXT": 6
-      },
-      "independence": "independence is UNKNOWN for 6 of 6 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
-      "scoring_eligible": 0,
-      "sufficiency": {
-        "status": "HYPOTHESIS_INSUFFICIENT_EVIDENCE",
-        "reasons": [
-          "1 distinct counting dimensions (AUDIENCE_OR_USAGE); the rule requires 2"
-        ],
-        "eligible_rows": 6,
-        "distinct_counting_dimensions": 1,
-        "distinct_dimensions_literal": 2,
-        "scoring_ready": false
-      },
-      "external_synthesis": {
-        "availability": "AVAILABLE",
-        "refusal_reasons": [],
-        "per_source": [
-          [
-            "wikimedia-pageviews",
-            "PERMITTED"
-          ]
-        ]
-      }
-    },
-    {
-      "packet_id": "6ac9dadff20ddbe3c8168d4479224f24e42f2358770b1ad61a0cfa1d8952dd2a",
-      "subject": "wikimedia-pageviews:content:en.wikipedia.org|Podman",
-      "size": 6,
-      "source_ids": [
-        "wikimedia-pageviews"
-      ],
-      "source_families": [
-        "knowledge"
-      ],
-      "signal_type_ids": [
-        "content_request_change"
-      ],
-      "dimensions": [
-        "AUDIENCE_OR_USAGE",
-        "TREND_OR_CHANGE"
-      ],
-      "counting_dimensions": [
-        "AUDIENCE_OR_USAGE"
-      ],
-      "eligibility_counts": {
-        "ELIGIBLE_CONTEXT": 6
-      },
-      "independence": "independence is UNKNOWN for 6 of 6 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
-      "scoring_eligible": 0,
-      "sufficiency": {
-        "status": "HYPOTHESIS_INSUFFICIENT_EVIDENCE",
-        "reasons": [
-          "1 distinct counting dimensions (AUDIENCE_OR_USAGE); the rule requires 2"
-        ],
-        "eligible_rows": 6,
-        "distinct_counting_dimensions": 1,
-        "distinct_dimensions_literal": 2,
-        "scoring_ready": false
-      },
-      "external_synthesis": {
-        "availability": "AVAILABLE",
-        "refusal_reasons": [],
-        "per_source": [
-          [
-            "wikimedia-pageviews",
-            "PERMITTED"
-          ]
-        ]
-      }
-    },
-    {
-      "packet_id": "1f3a4a742e39268d07433a6f2a41cd3a08446f6796c57ed899ae27e1fde41b77",
+      "packet_id": "41aa06016452a133b27e95ec282d89e9d6e0e9ea72f531798e0ee61233380ed6",
       "subject": "world-bank:metric-geography:SP.POP.TOTL|DE",
       "size": 2,
+      "canonical_subject_id": null,
       "source_ids": [
         "world-bank"
       ],
@@ -906,9 +945,10 @@
       }
     },
     {
-      "packet_id": "1dfc739d7e5665bc5ab95e279533b593e2cf75a1fa13ea890941adc48bc9ed7b",
+      "packet_id": "79ec586ccce6427d3b548450f07ee981fcd31f2fae6574b0aa6eda597563242d",
       "subject": "world-bank:metric-geography:SP.POP.TOTL|FR",
       "size": 2,
+      "canonical_subject_id": null,
       "source_ids": [
         "world-bank"
       ],

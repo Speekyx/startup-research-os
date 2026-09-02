@@ -424,12 +424,27 @@ class TestTheRerunIsGovernanceOnly:
         assert blocked[0]["subject"].startswith("ted-eu:")
         assert ["ted-eu", "NOT_ASSESSED"] in blocked[0]["external_synthesis"]["per_source"]
 
-    def test_egress_authorization_did_not_make_any_packet_formable(self) -> None:
-        """§11: the two gates stay separate. Permission to send is not evidence."""
+    def test_egress_and_sufficiency_are_separate_gates(self) -> None:
+        """Mission 1.29 §11 asserted this as "no packet is formable", which was
+        true when egress was the only thing that had moved. Mission 1.30 then
+        made one packet formable with EVIDENCE, which is the right way for that
+        number to change and would have broken a literal assertion.
+
+        The property Mission 1.29 was protecting survives intact and is asserted
+        directly: authorization to send is not evidence. Packets that are
+        AVAILABLE for external synthesis and still insufficient exist, so the
+        one gate demonstrably does not imply the other."""
         report = self._report()
-        assert report["totals"]["packets_formable"] == 0
-        for packet in report["packets"]:
-            assert packet["sufficiency"]["status"] == "HYPOTHESIS_INSUFFICIENT_EVIDENCE"
+        available_and_insufficient = [
+            p
+            for p in report["packets"]
+            if p["external_synthesis"]["availability"] == "AVAILABLE"
+            and p["sufficiency"]["status"] == "HYPOTHESIS_INSUFFICIENT_EVIDENCE"
+        ]
+        assert available_and_insufficient, (
+            "every authorized packet is formable, so this run cannot show that "
+            "egress authorization and evidence sufficiency are independent"
+        )
 
     def test_no_model_call_and_no_opportunity(self) -> None:
         totals = self._report()["totals"]
@@ -437,8 +452,13 @@ class TestTheRerunIsGovernanceOnly:
         assert totals["cost_units"] == 0.0
         assert totals["opportunity_hypotheses_generated"] == 0
 
-    def test_the_canonical_evidence_counts_are_unchanged(self) -> None:
+    def test_egress_governance_created_no_evidence(self) -> None:
+        """Mission 1.29 pinned 26 because IT created nothing. Mission 1.30
+        legitimately added one row, so the literal moved to that mission's own
+        tests and what stays here is the invariant a governance mission owns:
+        every row is context-only, and none was promoted to scoring by anything
+        Mission 1.29 did."""
         totals = self._report()["totals"]
-        assert totals["evidence_rows_inspected"] == 26
-        assert totals["eligible_context"] == 26
         assert totals["eligible_scoring"] == 0
+        assert totals["eligible_context"] == totals["evidence_rows_inspected"]
+        assert totals["ineligible"] == 0

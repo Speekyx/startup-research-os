@@ -175,6 +175,12 @@ class TestRegistration:
             # appearing without a record kind that needs it is what this
             # catches.
             "content-request-change",
+            # Mission 1.30, ADR-034. The sixth, and the first over a
+            # `community_question` -- a record kind that had existed since
+            # Mission 1.18 with nothing able to read it. The EQUALITY is kept
+            # deliberately: a subset check here would let an extractor appear
+            # without anybody deciding it should.
+            "community-question-volume",
         }
         for name in ("numeric-period-change", "lexical-frequency-contrast"):
             assert EXTRACTOR_REGISTRY[name].family is not SignalQuantityFamily.TRANSACTION_VALUE

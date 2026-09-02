@@ -33,6 +33,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 DOCS = ROOT / "docs" / "data"
 CATALOG = DOCS / "source-catalog-v1.json"
+SUBJECT_REGISTRY = DOCS / "canonical-subject-registry-v1.json"
 OUTPUT = DOCS / "opportunity-preparation-v1.json"
 
 DEFAULT_USE_PROFILE = "local-private-research-v1"
@@ -141,6 +142,7 @@ def build_report(use_profile: str) -> dict[str, object]:
         build_packet,
         evaluate,
         group_by_subject,
+        load_subject_registry,
         map_signal_type,
     )
 
@@ -211,7 +213,14 @@ def build_report(use_profile: str) -> dict[str, object]:
     ]
     excluded = len(assessed) - len(admissible)
 
-    groups = group_by_subject([(f, s) for f, _, s in admissible])  # type: ignore[arg-type,misc]
+    # Mission 1.30 §4. The reviewed registry, so evidence from two source
+    # families that a person mapped to one subject lands in one packet. An
+    # unmapped identifier keeps its own source-native key exactly as before.
+    registry = load_subject_registry(SUBJECT_REGISTRY)
+    groups = group_by_subject(
+        [(f, s) for f, _, s in admissible],  # type: ignore[arg-type,misc]
+        registry=registry,
+    )
     eligibility_by_id = {f.evidence_id: e for f, e, _ in admissible}
 
     packets: list[dict[str, object]] = []
@@ -236,6 +245,7 @@ def build_report(use_profile: str) -> dict[str, object]:
                 "packet_id": packet.packet_id,
                 "subject": packet.subject_label,
                 "size": packet.size,
+                "canonical_subject_id": group.canonical_subject_id,
                 "source_ids": list(packet.source_ids),
                 "source_families": list(packet.source_families),
                 "signal_type_ids": list(packet.signal_type_ids),
@@ -284,6 +294,7 @@ def build_report(use_profile: str) -> dict[str, object]:
             "existed."
         ),
         "procedures": {
+            "subject_registry": registry.registry_version,
             "dimension_taxonomy": DIMENSION_TAXONOMY_VERSION,
             "dimension_map": DIMENSION_MAP_VERSION,
             "eligibility": ELIGIBILITY_PROCEDURE_VERSION,

@@ -1,0 +1,64 @@
+{
+  "$comment": "Mission 1.30 §4. An explicit, reviewed mapping from EXACT source-native identifiers onto a canonical subject, so that Evidence from two source families can enter one Opportunity packet. Every entry names a full source-native subject key verbatim and states the basis on which a person decided the two identifiers name the same subject. There is NO string distance, NO token overlap, NO stem, NO synonym table, NO embedding and NO threshold: an identifier appears here or it does not, and an unmapped identifier keeps its source-native key and its own packet.\n\nTHIS IS NOT SAME_PROBLEM_FAMILY UNDER ANOTHER NAME. That relation asks whether two OBSERVATIONS express the same problem, is a judgement about meaning, and is PARKED (Mission 1.27). This asserts that two IDENTIFIERS, in two published vocabularies, name the same SUBJECT -- a question a person answers by reading two pages, recorded once, and checkable by anybody who reads the same two pages.\n\nA subject_id is OURS and is not a source identifier. It is deliberately lowercase and unadorned so that nobody mistakes it for a Wikipedia article title or a Stack Overflow tag.",
+  "registry_version": "canonical-subject-registry@1.0.0",
+  "reviewed_by": "mission-1.30",
+  "reviewed_at": "2026-09-02T00:00:00+00:00",
+  "identifier_key_format": "<source_id>:<scheme>:<part>|<part>...  -- the exact string SubjectKey renders, matched by equality and never by pattern",
+  "subjects": [
+    {
+      "subject_id": "docker",
+      "display_name": "Docker",
+      "description": "The Docker container platform, as a subject of published material. NOT the company, NOT a market, NOT a product this project proposes.",
+      "identifiers": [
+        {
+          "key": "wikimedia-pageviews:content:en.wikipedia.org|Docker_(software)",
+          "source_id": "wikimedia-pageviews",
+          "basis": "The English Wikipedia article whose title is `Docker_(software)`. The parenthetical disambiguator is the encyclopedia's own, and it exists precisely to separate the container platform from the other things called Docker -- so the identifier is more specific than the word, not less."
+        },
+        {
+          "key": "stack-exchange:community-tag:stackoverflow|docker",
+          "source_id": "stack-exchange",
+          "basis": "The Stack Overflow tag `docker`. Stack Overflow publishes a description for each tag and maintains tag synonyms, so the tag is a curated site identifier rather than a free-text match on a word: a question about a dock worker does not receive it. The tag is a SUBJECT and not a problem (Mission 1.18), which is exactly the granularity this registry maps."
+        }
+      ]
+    },
+    {
+      "subject_id": "kubernetes",
+      "display_name": "Kubernetes",
+      "description": "The Kubernetes container orchestration system, as a subject of published material.",
+      "identifiers": [
+        {
+          "key": "wikimedia-pageviews:content:en.wikipedia.org|Kubernetes",
+          "source_id": "wikimedia-pageviews",
+          "basis": "The English Wikipedia article titled `Kubernetes`. It needs no disambiguator because the encyclopedia records no other subject under that title."
+        },
+        {
+          "key": "stack-exchange:community-tag:stackoverflow|kubernetes",
+          "source_id": "stack-exchange",
+          "basis": "The Stack Overflow tag `kubernetes`. Mapped for completeness of the registry; NO Evidence reaches this identifier today, because the questions this deployment holds under it arrived through a `tagged=docker` query and are a biased subset rather than a count (Mission 1.30 §0)."
+        }
+      ]
+    },
+    {
+      "subject_id": "podman",
+      "display_name": "Podman",
+      "description": "The Podman container engine, as a subject of published material.",
+      "identifiers": [
+        {
+          "key": "wikimedia-pageviews:content:en.wikipedia.org|Podman",
+          "source_id": "wikimedia-pageviews",
+          "basis": "The English Wikipedia article titled `Podman`."
+        },
+        {
+          "key": "stack-exchange:community-tag:stackoverflow|podman",
+          "source_id": "stack-exchange",
+          "basis": "The Stack Overflow tag `podman`. Mapped for completeness; NO Evidence reaches this identifier today, because this deployment holds no questions carrying it."
+        }
+      ]
+    }
+  ],
+  "deliberately_absent": {
+    "container_tooling": "There is no canonical subject grouping Docker, Podman and Kubernetes together. They are three subjects and stay three packets. A registry entry uniting them would be an assertion that questions and pageviews about one bear on the others -- a judgement about meaning, which is the PARKED relation reached by hand instead of by a classifier. Doing it deterministically would not make it deterministic; it would make it unargued.",
+    "docker_compose": "The Stack Overflow tag `docker-compose` is NOT mapped to the `docker` subject. It is a different tool with its own tag, and folding it in would be a synonym judgement this registry has no basis for. 25 held questions carry it, which is exactly the kind of number that makes an unjustified merge tempting."
+  }
+}

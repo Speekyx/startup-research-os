@@ -79,7 +79,7 @@ __all__ = [
 ]
 
 INTERPRETER_ID = "observed-signal-restatement"
-INTERPRETER_VERSION = "1.2.0"
+INTERPRETER_VERSION = "1.3.0"
 
 SUPPORTED_SIGNAL_TYPES: tuple[str, ...] = (
     "numeric_period_change",
@@ -87,6 +87,7 @@ SUPPORTED_SIGNAL_TYPES: tuple[str, ...] = (
     "lexical_frequency_contrast",
     "procurement_value_contrast",
     "content_request_change",
+    "community_question_volume",
 )
 
 # Read by every template and passed by no caller. The claim type this
@@ -175,6 +176,12 @@ _ACCEPTED_BASES: Mapping[str, frozenset[str]] = {
     # unestablished, and the sentence to write then is a decision, not a
     # default.
     "content_request_change": frozenset({"COMPARABLE_INSTANTS"}),
+    # NONE and nothing else. One count over one window relates its members by
+    # membership, not by order, so there is no before and no after to phrase. A
+    # Signal of this type arriving on an ORDERED basis would mean the derivation
+    # had started comparing windows, and the sentence to write then is a
+    # decision rather than a default.
+    "community_question_volume": frozenset({"NONE"}),
 }
 
 
@@ -283,6 +290,8 @@ class ObservedSignalRestatementInterpreter:
             return self._lexical_frequency_change(signal, request)
         if signal.signal_type_id == "content_request_change":
             return self._content_request_change(signal, request)
+        if signal.signal_type_id == "community_question_volume":
+            return self._community_question_volume(signal, request)
         if signal.signal_type_id == "procurement_value_contrast":
             return self._procurement_value_contrast(signal, request)
         return self._lexical_frequency_contrast(signal, request)
@@ -388,6 +397,52 @@ class ObservedSignalRestatementInterpreter:
                 f'requests for "{item}" on "{platform}" on "{later}" than on "{earlier}", '
                 f'under its own requester class "{audience}".'
             )
+        return self._build(signal, request, source_id, statement, facts)
+
+    def _community_question_volume(
+        self, signal: SignalView, request: InterpretationRequest
+    ) -> ClaimDraft:
+        """ "{Source} published N questions carrying its own tag "{tag}" on "{site}"…"
+
+        **PUBLISHED and CARRYING, not asked, reported or received.** The verbs
+        are the template. What the record establishes is that questions exist on
+        a site bearing a label; who wrote them, whether they are distinct people,
+        and whether any two are about the same thing are all outside it.
+
+        **"its own tag" is in the sentence, not only in the scope.** A tag is the
+        SITE's vocabulary and never a taxonomy of ours (Mission 1.18), and a
+        reader who met this claim without that phrase could take `docker` for a
+        category somebody here defined.
+
+        **The window is named because a count that cannot say over what is not
+        checkable.** The two labels are the earliest and latest contributing
+        question, so the sentence bounds itself by its own inputs rather than by
+        a query nobody can see.
+
+        **No count of people and no trend.** "questions" is the unit and the only
+        unit; the claim says nothing about askers, and the window basis is NONE
+        so there is nothing to compare it to.
+        """
+        source_id = signal.single_source()
+        source_name = _source_name(signal, source_id)
+        tag = _one_scope_value(signal, "community_tags", label="the community tag")
+        site = _one_scope_value(signal, "community_sites", label="the community site")
+        earliest, latest = _two_labels(signal)
+
+        facts = {
+            "proposition": "community_site_published_questions_carrying_tag",
+            "source_id": source_id,
+            "community_site": site,
+            "community_tag": tag,
+            "period_label_from": earliest,
+            "period_label_to": latest,
+        }
+
+        statement = (
+            f"{source_name} published {_plain(signal.magnitude)} questions carrying its "
+            f'own tag "{tag}" on "{site}", created between source timestamps "{earliest}" '
+            f'and "{latest}".'
+        )
         return self._build(signal, request, source_id, statement, facts)
 
     # ------------------------------------------------------ lexical templates
