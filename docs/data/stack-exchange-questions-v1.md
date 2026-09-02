@@ -339,7 +339,43 @@ distinct published solution-seeking observations**, not 15 people. Author identi
 is never acquired here, so the deployment cannot count distinct askers, and the
 repair is the sentence rather than an acquisition.
 
-## 15. Known limitations
+## 15. A second acquisition, deliberately narrow, and the same answer
+
+**Mission 1.20** asked the question §14 said would change the answer: many
+questions about ONE narrow tool rather than many tools under one language. The
+bounds were committed before any content was read — `tagged=docker`, 2024-03-01
+to 2024-03-31, `page_size` 100, `max_pages` 2, `max_records` 200 — and the
+acquisition returned **89 questions in one request**, `has_more` false, no
+identity field, idempotent on re-run. Same resource, same route, same collector,
+same filter: changing the value of an authorised query parameter is not a new
+activity, so no review version was opened.
+
+**It failed differently, and that is why it settles the question.** The narrow
+corpus delivered exactly what a signature rule wants: exact, stable,
+tool-specific diagnostics. Three questions share **182 characters** of identical
+Docker daemon error —
+
+```text
+Error response from daemon: failed to create task for container: failed to create
+shim task: OCI runtime create failed: runc create failed: unable to start
+container process: exec: "
+```
+
+— and the shared string **ends exactly where the failure begins**. After
+`exec: "` the three questions are a file-mode problem, a path missing from the
+image, and a binary not on `$PATH`. Two characters further and every question is
+alone. Across all 89, **no error line of 40 characters or more repeats verbatim
+in two questions at all**; every key that does have support (`no such file or
+directory`, `connection refused`, `exit code 1`, `ValueError`) is a string any
+tool in any language emits.
+
+**Outcome S0 again: 0 Signals, 0 Claims, 0 Evidence.** Mission 1.18's S0 could be
+blamed on the acquisition. This one cannot: a diagnostic names the error
+ENVELOPE, and what makes two failures the same is underneath it. Deciding that is
+a judgement about meaning, so the next step is an INFERRED layer or a source
+carrying explicit issue identity — **not another Stack Exchange query**.
+
+## 16. Known limitations
 
 1. ShareAlike classification is avoided by the profile, not resolved (§4).
 2. Model training is not assessed and not authorised (§6).
@@ -353,7 +389,10 @@ repair is the sentence rather than an acquisition.
 8. The empirical finding in §14 is about **this sample**: 15 questions, one day,
    one tag. It is evidence that a tag is not a problem; it is not a proof that no
    Stack Overflow cohort could ever carry a Signal.
-9. A missing question body leaves the record `VALID` with `question.body: null`.
+9. Mission 1.20's finding is about DETERMINISTIC equivalence over question
+   text. It does not establish that no repeated problem exists in the corpus,
+   only that no rule available to this system can identify one (§15).
+10. A missing question body leaves the record `VALID` with `question.body: null`.
    `NormalizationQualityReason` has no member that would truthfully name that
    absence, and adding one to a generated closed enum is a contract change with an
    ADR behind it that no record in the real sample calls for.

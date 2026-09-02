@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.42
+Version: 1.43
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-02 (Sprint 1 / Mission 1.19)
+Last amended: 2026-09-02 (Sprint 1 / Mission 1.20)
 
 ---
 
@@ -13,6 +13,66 @@ Last amended: 2026-09-02 (Sprint 1 / Mission 1.19)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.43 — 2026-09-02 (Sprint 1 / Mission 1.20)
+
+Authorized by the Mission 1.20 brief §0-§33.
+
+**OUTCOME S0, AND THIS ONE CLOSES A DIRECTION.** A deliberately narrow Stack
+Overflow acquisition -- 89 real questions tagged `docker` over one pre-registered
+month -- produced **0 Signals, 0 Claims, 0 Evidence**. 89 more observations and
+not one more Signal, which is the honest shape of the mission.
+
+**THE FINDING IS NOT "NO REPEATS WERE FOUND".** Three questions share **182
+characters** of exact, stable, tool-specific Docker daemon diagnostic -- far more
+than any signature rule would demand -- and the shared string ends at `exec: "`,
+exactly where the wrapper stops and the failure begins. After it: a file mode, a
+path missing from an image, a binary not on `$PATH`. **Support is 3 at every
+prefix length up to 182 and 1 from 184.** A rule needs a length, and every length
+is either the envelope or the instance. Across all 89 questions **no error line
+of 40 characters or more repeats verbatim in two of them**, and every key that
+does have support (`no such file or directory` 5, `connection refused` 3, `exit
+code 1` 3, `ValueError` 2) is a string any tool in any language emits.
+
+**WHY THIS S0 SETTLES WHAT MISSION 1.18's DID NOT.** That failure had an
+explanation -- a language tag selects a subject -- and the fix was to narrow.
+This mission made that move, the narrow corpus delivered exactly what a signature
+rule wants, and it failed for a deeper reason: **a diagnostic names the ENVELOPE,
+and what makes two failures the same is underneath it.** So the failure is not in
+the acquisition and a third acquisition would not address it. **No further
+mission should attempt repeated-problem detection with another deterministic
+Stack Exchange query.** The remaining directions are semantic INFERENCE --
+forbidden today and an `INFERRED` claim by construction -- or a source with
+**explicit issue identity**, where the publisher links two reports of one fault
+and the judgement sits with somebody who has the context. The second is smaller
+and more honest, and every registered candidate of that shape is `RESTRICTED`.
+
+**THE ACQUISITION WAS PRE-REGISTERED IN ITS OWN COMMIT**, before any question
+content was read, so git history shows the order rather than the report asserting
+it. Docker was selected on stated criteria and needed no tie-break: Kubernetes is
+a platform rather than a tool, and Podman's volume would have made the window a
+guess -- and a guess returning eight questions produces an S0 that tests nothing.
+No count query was run to compare candidates, because that is selection on
+expected yield.
+
+**TWO OVERSTATEMENTS CORRECTED FIRST, both in prose.** A TED award notice does
+not state *what one public buyer paid one supplier*: BT-161 is the value of ALL
+contracts awarded, options and renewals included, published rather than paid and
+lawfully withholdable (Mission 1.15.12). Corrected in four current documents;
+ADR-029 keeps its argument and gains a dated note, and the applied migrations,
+the catalog review notes and the historical reports are left as records. And *"the
+portfolio observes no PERSON"* was too broad -- what is missing is a **stable
+requester identity across repeated interactions**, and the repair is the sentence
+rather than an acquisition.
+
+**No governance delta, no collector bump, no new record kind.** Changing the
+value of an authorised query parameter is the same activity on the same resource,
+and the tag restriction belongs to acquisition and provenance rather than to the
+shape of one question. **Counts: 148/148 records, 26/26/26/26 Signals, Claims,
+Revisions and Evidence, 1 assessment, 0 opportunities.** Zero identity fields
+acquired, no similarity measure used anywhere in the analysis, existing sources
+untouched, and no existing assertion needed repointing -- which is what an S0
+should look like from the outside
 
 ## 1.42 — 2026-09-02 (Sprint 1 / Mission 1.19)
 

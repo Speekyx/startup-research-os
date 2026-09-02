@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.43
-Last amended: 2026-09-02 (Sprint 1 / Mission 1.19)
+Version: 1.44
+Last amended: 2026-09-02 (Sprint 1 / Mission 1.20)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.44 | 2026-09-02 | **The deterministic route to repeated-problem evidence is CLOSED, and it took two acquisitions to establish it.** A pre-registered narrow acquisition -- 89 real Stack Overflow questions tagged `docker`, one request, committed before any content was read -- produced **0 Signals, 0 Claims, 0 Evidence**. The finding is not that nothing repeated: three questions share **182 characters** of exact tool-specific Docker daemon diagnostic, and the shared string ends at `exec: "`, exactly where the wrapper stops and the failure begins. Support is 3 up to length 182 and 1 from 184, so **a rule needs a length and every length is either the envelope or the instance**. Mission 1.18's S0 could be blamed on selecting by a language tag; this one cannot. **A diagnostic names the ENVELOPE**, so no further mission should try another deterministic Stack Exchange query -- the choice is semantic INFERENCE or a source with explicit issue identity. Two overstatements corrected first: a TED notice publishes a TOTAL_VALUE rather than what a buyer PAID, and the portfolio lacks a stable REQUESTER IDENTITY rather than any person at all |
 | 1.43 | 2026-09-02 | **A named open question answered by the operator's own page, and the first source whose obligations run the other way.** H-24 asked whether aggregate pageview counts are CC BY-SA Licensed Material; the Analytics API access policy answers under a heading called *Data licensing*: they are **CC0 1.0**. The first instrument in this catalog to waive the **sui generis database right BY NAME**. **CC0 imposes nothing on the OUTPUT**, so attribution here is a courtesy and no condition asserts one -- what Wikimedia imposes is a condition on the REQUEST, and the collector gained a fifth gate that refuses a socket when the transport would send an identity the review did not declare (ADR-028). **A fifth record kind** `content_request_count`, saying REQUEST rather than VIEW, with `audience.class` REQUIRED; **a fourth quantity family** `CONTENT_REQUEST_VOLUME` (ADR-032), because widening `MEASURED_SERIES` would have cost the FAMILY its meaning rather than `metric` its meaning. **Outcome S1: 18 Signals, 18 OBSERVED Claims, 18 Evidence, all NON_SCORABLE.** The calendar confounder is written into the type and every Claim; the cross-item contrast was considered and refused |
 | 1.42 | 2026-09-02 | **Stack Exchange collected, normalized, and correctly producing NOTHING.** A fourth record kind -- `community_question`, the first named for a SHAPE rather than for the first source to reach it -- and `stack-exchange-question@1.0.0`. **15 NormalizedRecords, all `VALID`**, which no adapter here had managed: GDELT is `PARTIAL` for H-29/H-30 and TED for H-37, and nothing is open here. **The first adapter whose period is `ESTABLISHED` on the source's own evidence**, so `observed_at` is a real moment for the first time. **OUTCOME S0: 0 Signals, 0 Claims, 0 Evidence.** 35 distinct tags over 15 questions, three tags repeated, no two questions sharing a tag set, and one question in both non-trivial cohorts: **a tag is a subject, not a problem**. The cohort was not weakened and no second query was run. Two latent normalizer defects found by tests in paths the real data never took |
 | 1.41 | 2026-09-01 | **Stack Exchange APPROVES under the local profile; no collector built.** The first approving review for a community-content source, and the first where the positive rights come from a CONTENT LICENCE rather than a platform's terms: the API Terms decide ACCESS and are silent on reuse, CC BY-SA 4.0 decides REUSE and grants commercial use. The API carve-out removes an obstacle and **grants nothing**. **ShareAlike is avoided by the profile, not answered** -- it attaches to Adapted Material that is SHARED and this profile shares nothing, so it must be re-reviewed before anything is published. `PLATFORM_LICENSED` argued, not set: `THIRD_PARTY` means *separate permission is required* and CC BY-SA already reaches us. Terms were **operator-supplied** after HTTP 403; **no 403 retried, no header varied**. Owner objects excluded at acquisition; the Data Dump registered so it could be refused by name |
@@ -1099,9 +1100,19 @@ family.**
   proxy is proposed**, because a proxy nobody can validate is worse than an
   acknowledged gap.
 - **WILLINGNESS_TO_PAY gained its first candidates.** `ted-eu` and `usaspending`
-  record contract awards: what a buyer paid a named supplier. `LISTED_PRICE` and
-  `TRANSACTION` are different evidence classes and a pricing page is only ever
-  the first — the distinction the portfolio had no source able to make.
+  record contract awards, which is a `TRANSACTION` class of evidence rather than
+  a `LISTED_PRICE`, and a pricing page is only ever the first — the distinction
+  the portfolio had no source able to make.
+
+  **What a TED award notice states is narrower than "what a buyer paid", and
+  this bullet said the wrong thing until Mission 1.20 §0.** Mission 1.15.12
+  established from the Publications Office's own SDK 1.15.1 that BT-161 is *"the
+  value of all contracts awarded in this notice, INCLUDING OPTIONS AND
+  RENEWALS"*. It is a PUBLISHED value, not money paid, not necessarily one
+  supplier, not realised expenditure and not a price — and it may be lawfully
+  withheld (BT-195 to BT-198), so any cohort covers the published subset only.
+  The candidate is still the portfolio's only lawful route toward transaction
+  evidence; what it evidences is just less than the earlier wording implied.
 - **`ted-eu` is the closest any blocked source has come.** One retrieved sentence
   grants five of six load-bearing activities: *"the procurement notices ... can
   be freely reused, for commercial or non-commercial purposes"* — a GRANT, not
@@ -1527,6 +1538,32 @@ requester class in the sentence, and `user` means *not identified as automated*
 rather than *human* -- the operator documents its own detection as heuristic. No
 reliability was invented and no reliability mission was started: eighteen
 `NON_SCORABLE` rows are the design working.
+
+**The deterministic route to repeated-problem evidence is CLOSED, and it took
+two acquisitions to establish it** (Mission 1.20). A second Stack Exchange
+acquisition — pre-registered before any content was read, `tagged=docker` over
+one month, 89 questions, one request — produced **0 Signals, 0 Claims, 0
+Evidence**, and it failed differently from Mission 1.18.
+
+**The narrow corpus delivered what a signature rule wants.** Three questions
+share 182 characters of exact, stable, tool-specific Docker daemon diagnostic —
+and the shared string ends at `exec: "`, exactly where the wrapper stops and the
+failure begins. After it: a file mode, a path missing from an image, a binary not
+on `$PATH`. Support is 3 at every prefix length up to 182 and 1 from 184. **A
+rule needs a length, and every length is either the envelope or the instance.**
+Across all 89 questions, no error line of 40 characters or more repeats verbatim
+in two of them.
+
+**So the failure is not in the acquisition and a third one would not address
+it.** A diagnostic names the ENVELOPE; what makes two failures the same is
+underneath it, and deciding that is a judgement about meaning. **No further
+mission should attempt repeated-problem detection with another deterministic
+Stack Exchange acquisition.** The two remaining directions are semantic
+INFERENCE — forbidden today, and an `INFERRED` claim by construction — or a
+source carrying **explicit issue identity**, where the publisher links two
+reports of one fault and the judgement sits with somebody who has the context.
+The second is the smaller and more honest step, and every registered candidate of
+that shape is `RESTRICTED` on retrieved terms.
 
 **Stack Exchange is eligible, collected, normalized — and produced NOTHING
 downstream, correctly** (Mission 1.18, `stack-exchange-questions-v1.md` §14).
