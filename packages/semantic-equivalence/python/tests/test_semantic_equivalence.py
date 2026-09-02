@@ -1538,3 +1538,126 @@ class TestMission125RemainsUntouched:
             "DIFFERENT_PROBLEM_FAMILY",
             "ABSTAIN",
         }
+
+
+class TestTheMission126LabelsAreProvisionalAndSayySo:
+    """The labels exist, the operator chose to proceed with them, and they are
+    NOT human ground truth. Every assertion here is about that distinction,
+    because it is the one a later reader will otherwise get wrong."""
+
+    DOCS = pathlib.Path(__file__).resolve().parents[4] / "docs" / "data"
+
+    def paths(self):
+        from sros_semantic_equivalence import ReferenceDatasetPaths
+
+        return ReferenceDatasetPaths(directory=self.DOCS)
+
+    def test_both_splits_are_labelled_and_load(self) -> None:
+        from sros_semantic_equivalence import load_development_labels, load_holdout_labels
+
+        assert len(load_development_labels(self.paths()).labels) == 24
+        assert len(load_holdout_labels(self.paths()).labels) == 16
+
+    def test_neither_split_establishes_human_ground_truth(self) -> None:
+        from sros_semantic_equivalence import (
+            ReferenceOrigin,
+            load_development_labels,
+            load_holdout_labels,
+        )
+
+        for labels in (load_development_labels(self.paths()), load_holdout_labels(self.paths())):
+            assert labels.human_ground_truth_established is False
+            assert labels.origins == frozenset({ReferenceOrigin.AI_ASSISTED_PROVISIONAL})
+
+    def test_a_caller_requiring_human_labels_is_refused(self) -> None:
+        """**The load-bearing test.** A future mission that asks for human
+        ground truth must not silently receive these. The loader refuses, and
+        the refusal names both origins."""
+        from sros_semantic_equivalence import (
+            ReferenceOrigin,
+            load_development_labels,
+            load_holdout_labels,
+        )
+
+        for loader in (load_development_labels, load_holdout_labels):
+            with pytest.raises(ValueError, match="required HUMAN_OPERATOR"):
+                loader(self.paths(), expected_origin=ReferenceOrigin.HUMAN_OPERATOR)
+
+    def test_the_files_never_claim_a_human_origin(self) -> None:
+        from sros_semantic_equivalence import Split
+
+        for split in (Split.DEVELOPMENT, Split.HOLDOUT):
+            raw = json.loads(self.paths().labels(split).read_text(encoding="utf-8"))
+            assert raw["reference_origin"] == "AI_ASSISTED_PROVISIONAL"
+            assert raw["reference_reviewer"] == "GPT-5.6 Sol"
+            assert raw["human_ground_truth_established"] is False
+            assert "HUMAN_OPERATOR" not in json.dumps(raw["labels"])
+
+    def test_the_operator_decision_is_recorded_without_upgrading_anything(self) -> None:
+        """The decision to proceed is real and visible. It is a document-level
+        note, not a field on a label, because the schema needs no new column to
+        hold a decision about a whole file -- and because a per-label flag would
+        eventually be read as per-label approval."""
+        from sros_semantic_equivalence import ReferenceLabel, Split
+
+        raw = json.loads(self.paths().labels(Split.HOLDOUT).read_text(encoding="utf-8"))
+        assert "operator_decision" in raw
+        assert "does not upgrade the labels" in raw["operator_decision"]
+        assert "operator_accepted" not in json.dumps(raw["labels"])
+        assert "operator_accepted" not in ReferenceLabel.__dataclass_fields__
+
+    def test_the_persisted_distribution_is_what_the_report_states(self) -> None:
+        """Read from the files rather than restated, so the report and the data
+        cannot drift apart."""
+        from collections import Counter
+
+        from sros_semantic_equivalence import Split
+
+        expected = {
+            Split.DEVELOPMENT: {"SAME_FAMILY": 2, "DIFFERENT_FAMILY": 18, "UNCERTAIN": 4},
+            Split.HOLDOUT: {"SAME_FAMILY": 4, "DIFFERENT_FAMILY": 11, "UNCERTAIN": 1},
+        }
+        for split, counts in expected.items():
+            raw = json.loads(self.paths().labels(split).read_text(encoding="utf-8"))
+            actual = Counter(row["decision_as_supplied"] for row in raw["labels"])
+            assert dict(actual) == counts, split
+
+    def test_the_development_split_fails_the_preregistered_positive_gate(self) -> None:
+        """`REFERENCE_SET_INSUFFICIENT`, pinned. Two positives against a
+        threshold of four. The gate was declared before the labels existed and
+        is not moved to meet them."""
+        from collections import Counter
+
+        from sros_semantic_equivalence import Split
+
+        raw = json.loads(self.paths().labels(Split.DEVELOPMENT).read_text(encoding="utf-8"))
+        counts = Counter(row["decision_as_supplied"] for row in raw["labels"])
+        assert counts["SAME_FAMILY"] == 2
+        assert counts["SAME_FAMILY"] < 4
+
+    def test_every_labelled_pair_belongs_to_the_frozen_batch_and_its_own_split(self) -> None:
+        """No pair moved between partitions to help a threshold."""
+        from sros_semantic_equivalence import Split
+
+        batch = json.loads(
+            (self.DOCS / "problem-family-human-reference-batch-v1.json").read_text(encoding="utf-8")
+        )
+        assignment = {p["pair_id"]: p["split"] for p in batch["pairs"]}
+        for split in (Split.DEVELOPMENT, Split.HOLDOUT):
+            raw = json.loads(self.paths().labels(split).read_text(encoding="utf-8"))
+            for row in raw["labels"]:
+                assert assignment[row["pair_id"]] == split.value, row["pair_id"]
+
+    def test_the_mission_125_human_holdout_is_not_merged_in(self) -> None:
+        """It remains genuinely HUMAN_OPERATOR, in its own file, counting toward
+        neither this batch nor its composition gate."""
+        from sros_semantic_equivalence import Split
+
+        prior = json.loads(
+            (self.DOCS / "problem-family-holdout-human-labels-v1.json").read_text(encoding="utf-8")
+        )
+        assert prior["reference_label_origin"] == "HUMAN_OPERATOR"
+        prior_ids = {row["pair_id"] for row in prior["labels"]}
+        for split in (Split.DEVELOPMENT, Split.HOLDOUT):
+            raw = json.loads(self.paths().labels(split).read_text(encoding="utf-8"))
+            assert not {row["pair_id"] for row in raw["labels"]} & prior_ids

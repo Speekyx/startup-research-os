@@ -1,0 +1,185 @@
+{
+  "$comment": "Mission 1.26 reference labels for the SAME_PROBLEM_FAMILY relation.\n\nNOT HUMAN GROUND TRUTH, AND NOT THE HUMAN_OPERATOR SET. These 40 labels were produced by GPT-5.6 Sol after reviewing the blind batch and attempting to follow the operator's demonstrated decisions from Mission 1.25. They are AI_ASSISTED_PROVISIONAL, and the repository must never describe them as HUMAN_OPERATOR, human ground truth, expert labels, or independently human-reviewed labels.\n\nTHE OPERATOR CHOSE TO PROCEED USING THEM. That is a project decision about how to spend attention, and it changes nothing about what the labels are: `human_ground_truth_established` is false, and it is recorded in `operator_decision` at document level rather than as a field on a label, because the schema needs no new column to hold a decision about a whole file.\n\nMISSION 1.25's HUMAN HOLDOUT IS A DIFFERENT THING AND STAYS ONE. Its 10 pairs are genuinely HUMAN_OPERATOR, they are not merged into this set, and merging them to satisfy a composition threshold here is exactly what must not happen.\n\nWHAT THEY WERE WRITTEN AGAINST. The blind batch: no model had seen any pair under this rubric, no prediction existed, and no model output entered the sampling that chose them. That makes them a usable provisional reference for exploratory DEVELOPMENT work. It does not make them validated holdout evidence.\n\nNo Stack Overflow author identity appears anywhere -- none was ever acquired.",
+  "dataset_id": "problem-family-human-reference-v1",
+  "relation": "SAME_PROBLEM_FAMILY",
+  "split": "HOLDOUT",
+  "reference_origin": "AI_ASSISTED_PROVISIONAL",
+  "reference_reviewer": "GPT-5.6 Sol",
+  "human_ground_truth_established": false,
+  "operator_decision": "The operator reviewed the provenance and chose to proceed with these provisional labels rather than spend a further mission hand-labelling. Recorded because the decision is real and should be visible; it does not upgrade the labels, and no downstream artifact may read it as consent to treat them as human ground truth.",
+  "rubric_version": "problem-family-rubric@1.0.0",
+  "sampling_version": "problem-family-human-reference-sampling@1.0.0",
+  "split_version": "problem-family-human-reference-split@1.0.0",
+  "candidate_generator_version": "docker-problem-family-candidates@1.0.0",
+  "enrichment_warning": "This 40-pair set is an EVALUATION-ORIENTED ENRICHED SAMPLE. Strata were sampled at deliberately unequal rates -- the low-similarity stratum holds 275 of the 711 available pairs and contributes 8, the wrapper stratum holds 2 and contributes both -- so the proportion of any label in it is NOT an estimate of how often that label occurs among Docker Stack Exchange pairs. It may be used to develop and evaluate a classifier. It may never be used to state a prevalence.",
+  "counts": {
+    "total": 16,
+    "by_decision": {
+      "SAME_FAMILY": 4,
+      "UNCERTAIN": 1,
+      "DIFFERENT_FAMILY": 11
+    }
+  },
+  "labels": [
+    {
+      "pair_id": "78088481::78103907",
+      "a_question_id": "78088481",
+      "b_question_id": "78103907",
+      "reviewer": "GPT-5.6 Sol",
+      "decision_as_supplied": "SAME_FAMILY",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "rubric_version": "problem-family-rubric@1.0.0",
+      "stratum": "A_HIGH_SPECIFICITY"
+    },
+    {
+      "pair_id": "78090939::78105296",
+      "a_question_id": "78090939",
+      "b_question_id": "78105296",
+      "reviewer": "GPT-5.6 Sol",
+      "decision_as_supplied": "UNCERTAIN",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "rubric_version": "problem-family-rubric@1.0.0",
+      "stratum": "A_HIGH_SPECIFICITY"
+    },
+    {
+      "pair_id": "78096175::78100773",
+      "a_question_id": "78096175",
+      "b_question_id": "78100773",
+      "reviewer": "GPT-5.6 Sol",
+      "decision_as_supplied": "DIFFERENT_FAMILY",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "rubric_version": "problem-family-rubric@1.0.0",
+      "stratum": "A_HIGH_SPECIFICITY"
+    },
+    {
+      "pair_id": "78098246::78098969",
+      "a_question_id": "78098246",
+      "b_question_id": "78098969",
+      "reviewer": "GPT-5.6 Sol",
+      "decision_as_supplied": "DIFFERENT_FAMILY",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "rubric_version": "problem-family-rubric@1.0.0",
+      "stratum": "A_HIGH_SPECIFICITY"
+    },
+    {
+      "pair_id": "78086836::78098246",
+      "a_question_id": "78086836",
+      "b_question_id": "78098246",
+      "reviewer": "GPT-5.6 Sol",
+      "decision_as_supplied": "DIFFERENT_FAMILY",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "rubric_version": "problem-family-rubric@1.0.0",
+      "stratum": "B_MEDIUM_SPECIFICITY"
+    },
+    {
+      "pair_id": "78089171::78093369",
+      "a_question_id": "78089171",
+      "b_question_id": "78093369",
+      "reviewer": "GPT-5.6 Sol",
+      "decision_as_supplied": "DIFFERENT_FAMILY",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "rubric_version": "problem-family-rubric@1.0.0",
+      "stratum": "B_MEDIUM_SPECIFICITY"
+    },
+    {
+      "pair_id": "78093369::78102512",
+      "a_question_id": "78093369",
+      "b_question_id": "78102512",
+      "reviewer": "GPT-5.6 Sol",
+      "decision_as_supplied": "DIFFERENT_FAMILY",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "rubric_version": "problem-family-rubric@1.0.0",
+      "stratum": "B_MEDIUM_SPECIFICITY"
+    },
+    {
+      "pair_id": "78095654::78105118",
+      "a_question_id": "78095654",
+      "b_question_id": "78105118",
+      "reviewer": "GPT-5.6 Sol",
+      "decision_as_supplied": "DIFFERENT_FAMILY",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "rubric_version": "problem-family-rubric@1.0.0",
+      "stratum": "C_LOW_SPECIFICITY"
+    },
+    {
+      "pair_id": "78096903::78099350",
+      "a_question_id": "78096903",
+      "b_question_id": "78099350",
+      "reviewer": "GPT-5.6 Sol",
+      "decision_as_supplied": "DIFFERENT_FAMILY",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "rubric_version": "problem-family-rubric@1.0.0",
+      "stratum": "C_LOW_SPECIFICITY"
+    },
+    {
+      "pair_id": "78096903::78102669",
+      "a_question_id": "78096903",
+      "b_question_id": "78102669",
+      "reviewer": "GPT-5.6 Sol",
+      "decision_as_supplied": "DIFFERENT_FAMILY",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "rubric_version": "problem-family-rubric@1.0.0",
+      "stratum": "C_LOW_SPECIFICITY"
+    },
+    {
+      "pair_id": "78099519::78099680",
+      "a_question_id": "78099519",
+      "b_question_id": "78099680",
+      "reviewer": "GPT-5.6 Sol",
+      "decision_as_supplied": "SAME_FAMILY",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "rubric_version": "problem-family-rubric@1.0.0",
+      "stratum": "D_DIAGNOSTIC_WRAPPER"
+    },
+    {
+      "pair_id": "78086387::78097003",
+      "a_question_id": "78086387",
+      "b_question_id": "78097003",
+      "reviewer": "GPT-5.6 Sol",
+      "decision_as_supplied": "SAME_FAMILY",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "rubric_version": "problem-family-rubric@1.0.0",
+      "stratum": "E_DIFFERENT_TAGS_SHARED_TOKENS"
+    },
+    {
+      "pair_id": "78086542::78103907",
+      "a_question_id": "78086542",
+      "b_question_id": "78103907",
+      "reviewer": "GPT-5.6 Sol",
+      "decision_as_supplied": "DIFFERENT_FAMILY",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "rubric_version": "problem-family-rubric@1.0.0",
+      "stratum": "E_DIFFERENT_TAGS_SHARED_TOKENS"
+    },
+    {
+      "pair_id": "78088692::78097184",
+      "a_question_id": "78088692",
+      "b_question_id": "78097184",
+      "reviewer": "GPT-5.6 Sol",
+      "decision_as_supplied": "SAME_FAMILY",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "rubric_version": "problem-family-rubric@1.0.0",
+      "stratum": "E_DIFFERENT_TAGS_SHARED_TOKENS"
+    },
+    {
+      "pair_id": "78097574::78105004",
+      "a_question_id": "78097574",
+      "b_question_id": "78105004",
+      "reviewer": "GPT-5.6 Sol",
+      "decision_as_supplied": "DIFFERENT_FAMILY",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "rubric_version": "problem-family-rubric@1.0.0",
+      "stratum": "E_DIFFERENT_TAGS_SHARED_TOKENS"
+    },
+    {
+      "pair_id": "78098568::78105118",
+      "a_question_id": "78098568",
+      "b_question_id": "78105118",
+      "reviewer": "GPT-5.6 Sol",
+      "decision_as_supplied": "DIFFERENT_FAMILY",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "rubric_version": "problem-family-rubric@1.0.0",
+      "stratum": "E_DIFFERENT_TAGS_SHARED_TOKENS"
+    }
+  ]
+}

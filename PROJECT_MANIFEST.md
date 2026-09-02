@@ -1,6 +1,6 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.51
+Version: 1.52
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
@@ -13,6 +13,50 @@ Last amended: 2026-09-02 (Sprint 1 / Mission 1.26)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.52 — 2026-09-02 (Sprint 1 / Mission 1.26 close)
+
+The reference batch was labelled. **Outcome: `REFERENCE_SET_INSUFFICIENT`**, with
+**zero model calls** and every canonical counter unchanged.
+
+**THE LABELS ARE NOT HUMAN.** All 40 are `AI_ASSISTED_PROVISIONAL`, reviewer
+GPT-5.6 Sol. The operator chose to proceed with them rather than spend another
+mission hand-labelling -- recorded as a document-level `operator_decision`,
+because the decision concerns a whole file and a per-label flag would need a
+migration for nothing and would eventually be read as per-label approval. They
+must never be described as HUMAN_OPERATOR, human ground truth, expert labels or
+independently human-reviewed labels, and **a loader asked for HUMAN_OPERATOR
+refuses them**.
+
+**TWO RESULTS, REPORTED APART.** Composition: development holds **2**
+`SAME_FAMILY` against a preregistered 4 and FAILS; holdout holds 4 and PASSES.
+Epistemic: the human reference requirement is **NOT_ESTABLISHED**, independent of
+the arithmetic. They fail for unrelated reasons and a single verdict would let
+one hide the other.
+
+**NOTHING WAS MOVED.** No pair changed split, no label was revised, no threshold
+lowered, no re-sampling with different quotas. The whole value of a preregistered
+gate is that it is allowed to fail, and this is the second consecutive mission
+where holding a rule cost the project its result.
+
+**WHAT THE FAILURE IS NOT.** Not evidence that the relation is invalid, that a V2
+cannot work, that Stack Exchange cannot contribute recurring-problem evidence, or
+that families are rare. The sample is enriched and estimates no prevalence. It
+means only that under the frozen sampling and these provisional labels, the
+development split lacks positives for the preregistered requirement.
+
+**MISSION 1.25's HUMAN HOLDOUT IS NOT MERGED IN** to satisfy the threshold. Its
+10 pairs, 2 `HUMAN_OPERATOR` positives, 0 true SAME predictions and
+`MODEL_EVALUATION_FAILED` remain the strongest evidence about V1, separately
+queryable.
+
+**What the mission did deliver** is the infrastructure: blind batch creation,
+deterministic stratified sampling, a split frozen before labels, structural
+holdout isolation across separate files, and provenance that demonstrably
+refuses to hand human-labelled data to a caller who has none. The provisional set
+is usable for EXPLORATORY development; **production problem-family inference
+remains NOT_AUTHORISED**, and a backlog item blocks the word *validated* until
+genuinely human labels exist
 
 ## 1.51 — 2026-09-02 (Sprint 1 / Mission 1.26)
 

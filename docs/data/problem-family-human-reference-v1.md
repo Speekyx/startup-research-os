@@ -143,7 +143,7 @@ the broader wording must not be used.
 |---|---|
 | pairs | **40**, none shared with Mission 1.25 |
 | split | **24 development / 16 holdout**, frozen before labels |
-| labels | **none yet** — the artifact carries no label and no prediction |
+| labels | **40, `AI_ASSISTED_PROVISIONAL`** — see §12. The BATCH artifact still carries no label and no prediction; the labels live in two separate per-split files |
 | model calls | **0** |
 | Signals / Claims / Evidence / Opportunities created | **0** |
 
@@ -174,3 +174,42 @@ partitions, never relabelling, and never looking at a model prediction to decide
 
 If both hold, the outcome is `REFERENCE_SET_READY_FOR_V2_DEVELOPMENT`, which
 still authorises no production inference.
+
+
+---
+
+## 12. The labels arrived, and the gate failed
+
+**Outcome: `REFERENCE_SET_INSUFFICIENT`.** See `mission-1.26-report.md`.
+
+**The 40 labels are `AI_ASSISTED_PROVISIONAL`, reviewer GPT-5.6 Sol.** They are
+not the human reference this document was written to describe, and the wording
+above about *what a human-labelled set would give us* stands as the reason the
+mission was run rather than as a description of what it produced. The operator
+chose to proceed with the provisional labels rather than spend another mission
+hand-labelling; that decision is recorded and changes nothing about what they
+are.
+
+| | total | SAME_FAMILY | DIFFERENT_FAMILY | UNCERTAIN | non-UNCERTAIN |
+|---|---|---|---|---|---|
+| DEVELOPMENT | 24 | **2** | 18 | 4 | 20 |
+| HOLDOUT | 16 | **4** | 11 | 1 | 15 |
+| TOTAL | 40 | 6 | 29 | 5 | 35 |
+
+Against §11's gates: **holdout PASSES**, **development FAILS on positives** (2
+against a threshold of 4). Nothing was moved to change that — the value of a
+preregistered gate is that it is allowed to fail.
+
+Separately and independently, the **human reference requirement remains
+NOT_ESTABLISHED**, because every label here is AI-assisted. The two results are
+reported apart because they fail for unrelated reasons and one verdict would let
+either hide the other.
+
+**Mission 1.25's genuinely human holdout is not merged in** to help the
+threshold. It stays `HUMAN_OPERATOR`, in its own file, as separate historical
+evidence about V1.
+
+**Backlog: acquire additional genuinely human problem-family reference labels
+before any claim that a classifier V2 is production-validated.** This blocks the
+word *validated* and blocks production inference; it does not block exploratory
+development.
