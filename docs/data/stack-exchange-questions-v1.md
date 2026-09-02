@@ -362,8 +362,10 @@ container process: exec: "
 ```
 
 — and the shared string **ends exactly where the failure begins**. After
-`exec: "` the three questions are a file-mode problem, a path missing from the
-image, and a binary not on `$PATH`. Two characters further and every question is
+`exec: "` the source's own bytes read `permission denied`, `no such file or
+directory` and `executable file not found in $PATH` — and describing those as a
+file mode, a missing path and a `$PATH` lookup is an ANALYST reading rather than
+a structured fact the source published (Mission 1.21 §0). Two characters further and every question is
 alone. Across all 89, **no error line of 40 characters or more repeats verbatim
 in two questions at all**; every key that does have support (`no such file or
 directory`, `connection refused`, `exit code 1`, `ValueError`) is a string any

@@ -46,9 +46,14 @@ OCI_LINES = {
     ),
 }
 
-# What each question's failure actually WAS, once the shared wrapper ends. Three
-# unrelated root causes: a file mode, a path that does not exist in the image,
-# and a binary that is not on PATH.
+# The SOURCE's own bytes, once the shared wrapper ends. Three unrelated failures.
+#
+# These are quoted, not interpreted. Mission 1.21 §0: calling them "a file mode",
+# "a path absent from the image" and "a PATH lookup" is an ANALYST reading -- a
+# useful sentence for a human, and NOT a source-native structured fact and NOT
+# the product of any deterministic step. Nothing in this repository derives,
+# stores or asserts those descriptions, and the assertions below compare only the
+# strings the source published.
 OCI_ROOT_CAUSES = {
     "78086542": "permission denied",
     "78099519": "no such file or directory",
