@@ -5247,10 +5247,10 @@
       ],
       "access_profiles": [
         {
-          "access_method": "PUBLIC_API",
+          "access_method": "OFFICIAL_API",
           "label": "wikimedia-analytics-api",
-          "endpoint_url": null,
-          "documentation_url": "https://doc.wikimedia.org/analytics-api/",
+          "endpoint_url": "https://wikimedia.org/api/rest_v1/",
+          "documentation_url": "https://doc.wikimedia.org/generated-data-platform/aqs/analytics-api/",
           "requires_authentication": false,
           "requires_api_key": false,
           "requires_oauth": false,
@@ -5265,7 +5265,28 @@
           "rate_limit_daily_quota": null,
           "rate_limit_origin": "DOCUMENTED",
           "acquisition_cost": "FREE_WITH_LIMITS",
-          "notes": "200 requests per minute for an unauthenticated client that sends a descriptive User-Agent; 10 per minute for a client that does not. OAuth raises the limit further. Documented on the Wikimedia APIs rate-limit page, retrieved 2026-08-30."
+          "notes": "The Analytics API, documented by the Wikimedia Foundation at doc.wikimedia.org. No authentication and no API key. Endpoint recorded in Mission 1.19: the host allowlist the transport uses is derived from the authorised routes, so a route with no endpoint authorises nothing. Documented pacing: the Robot Policy asks for fewer than 10 concurrent requests and an average below 20 per second, and the access policy asks callers to wait for each request to finish before sending the next. The 200-per-minute figure recorded in Mission 1.7 comes from the Wikimedia APIs rate-limit page for an unauthenticated client sending a User-Agent."
+        },
+        {
+          "access_method": "DATASET_DOWNLOAD",
+          "label": "wikimedia-dumps",
+          "endpoint_url": "https://dumps.wikimedia.org/",
+          "documentation_url": "https://doc.wikimedia.org/generated-data-platform/aqs/analytics-api/documentation/access-policy.html",
+          "requires_authentication": false,
+          "requires_api_key": false,
+          "requires_oauth": false,
+          "requires_account": false,
+          "requires_developer_app": false,
+          "requires_approval": false,
+          "approval_process_notes": null,
+          "secret_references": [],
+          "rate_limit_known": false,
+          "rate_limit_requests": null,
+          "rate_limit_period_seconds": null,
+          "rate_limit_daily_quota": null,
+          "rate_limit_origin": "UNKNOWN",
+          "acquisition_cost": "FREE",
+          "notes": "Registered in Mission 1.19 SO THAT IT COULD BE REFUSED BY NAME. The Analytics API access policy states in its own words that 'Datasets provided via the API can also be downloaded in bulk via dumps.wikimedia.org', so the route genuinely exists and the registry must record it. It is BLOCKED under local-private-research-v1: a whole-corpus download is a different volume question that this review did not ask, and a narrowing that exists only in review prose is not a narrowing (ADR-028)."
         }
       ],
       "retention_override": null,
@@ -5416,6 +5437,108 @@
               "section_reference": "Section 1 (Adapted Material); Section 2 (Scope — Licence grant)",
               "summarized_finding": "Section 2 grants the licensee the right to 'reproduce and Share the Licensed Material, in whole or in part' and to 'produce, reproduce, and Share Adapted Material', with no exclusion of commercial purposes and no restriction on text and data mining or automated processing. Adapted Material is defined in Section 1 as material derived from or based upon the Licensed Material in a manner requiring permission under the Copyright and Similar Rights held by the Licensor. Retrieved to test whether the licence supplies the storage and model-processing grants the Wikimedia terms do not state. It supplies them FOR LICENSED MATERIAL, and whether aggregate pageview counts are Licensed Material is the unresolved question.",
               "retrieved_at": "2026-08-30T00:00:00+00:00"
+            }
+          ]
+        },
+        {
+          "review_version": 1,
+          "assessed_use_profile": "local-private-research-v1",
+          "approval_state": "APPROVED_WITH_CONDITIONS",
+          "reviewed_by": "mission-1.19",
+          "reviewed_at": "2026-09-02T00:00:00+00:00",
+          "review_interval_days": 180,
+          "automated_access": "PERMITTED_WITH_CONDITIONS",
+          "api_use": "PERMITTED_WITH_CONDITIONS",
+          "browser_automation": "NOT_PERMITTED",
+          "commercial_use": "PERMITTED",
+          "storage": "PERMITTED",
+          "retention": "PERMITTED",
+          "redistribution": "PERMITTED",
+          "derived_analytics": "PERMITTED",
+          "model_processing": "PERMITTED_WITH_CONDITIONS",
+          "personal_data_handling": "NOT_ADDRESSED",
+          "attribution_required": "PERMITTED",
+          "personal_data_risk": "NONE_EXPECTED",
+          "contains_user_generated_content": false,
+          "contains_user_identifiers": false,
+          "contains_location": false,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": false,
+          "discard_identifiers_after_normalization": false,
+          "jurisdiction_review_required": false,
+          "conditions": [
+            "Send the declared User-Agent on every request: it names the client, its version and a contact URL, per the Wikimedia Foundation User-Agent Policy. The Analytics API access policy states that clients sending no User-Agent may be blocked without notice.",
+            "Acquire through the Analytics API only. The bulk dumps route is registered and blocked by name.",
+            "Acquire only aggregate per-article view counts. The editor, edit, unique-device, country-breakdown and media endpoints are outside this review and are excluded by name.",
+            "Stay far inside the documented pacing guidance: the Robot Policy asks for fewer than 10 concurrent requests and an average below 20 per second, and the access policy asks callers to wait for each request to finish before sending the next. This collector is serial and single-digit per job.",
+            "Model INFERENCE over the acquired counts is permitted. Model TRAINING and embeddings are not performed under this profile, and nothing in this review rests on the permission CC0 would give for them."
+          ],
+          "required_conditions": [
+            {
+              "key": "wikimedia-client-identification",
+              "description": "Every request carries the declared User-Agent naming the client, its version and a contact URL, and it is not a generic library default or a copied browser string.",
+              "verification": "CAPABILITY",
+              "verification_detail": "source-client-identification"
+            },
+            {
+              "key": "wikimedia-official-api-only",
+              "description": "Acquisition binds to the Analytics API route and to no other. The bulk dumps route is refused by name and carries no endpoint in the authorization context.",
+              "verification": "CAPABILITY",
+              "verification_detail": "source-route-binding"
+            },
+            {
+              "key": "wikimedia-aggregate-only",
+              "description": "The field selection is authorised before a request is composed. Any field naming a person, an editor, an IP address or a country is refused by name, and an unreviewed field fails closed.",
+              "verification": "CAPABILITY",
+              "verification_detail": "source-field-minimisation"
+            }
+          ],
+          "open_questions": [
+            "The daily bucket boundary is UTC on the strength of a definition page the API's own documentation designates ('For a complete definition of a page view and extra background information, see Research:Page view'), which states a 'UTC timestamp of the request' and 'daily partitioning 0:00 UTC - 23:59 UTC'. The API REFERENCE itself does not restate it. Confirm at the next review, or ask the Analytics team, so that the period's ESTABLISHED state rests on the reference rather than on a linked page.",
+            "H-24 is answered for THIS profile and not for the commercial one. The commercial review v2 is REQUIRES_REVIEW because it could not establish whether aggregate pageview counts are Licensed Material under CC BY-SA; the answer retrieved here is that they are not CC BY-SA at all but CC0 1.0. Applying it to the commercial profile is a commercial-profile review act that has not happened, and approval never transfers (ADR-027).",
+            "Wikimedia Enterprise is presented as the route for high-volume commercial reuse without stating a threshold at which it becomes mandatory. Nothing in this review rests on the free route being adequate at any volume above the single-digit-requests-per-job this collector performs."
+          ],
+          "review_notes": "THE BLOCKER WAS A NAMED QUESTION AND THE ANSWER WAS ONE PAGE AWAY IN THE OPERATOR'S OWN DOCUMENTATION. Commercial review v2 (Mission 1.8) downgraded this source with H-24: 'determine whether aggregate pageview COUNTS are Licensed Material under CC BY-SA 4.0. If they are, Section 2 grants storage and the production of Adapted Material and this source is approvable.' That framing had one possibility it did not consider, and it is the true one: the counts are not CC BY-SA at all.\n\nThe Analytics API access policy carries a section headed 'Data licensing' whose entire content is: 'Data provided by the API is available under the CC0 1.0 license'. That is not the documentation-site footer Mission 1.7 misread and Mission 1.8 correctly rejected -- it is a dedicated heading on the API's own access-policy page, about the data the API returns.\n\nCC0 1.0 IS THE STRONGEST RIGHTS BASIS IN THIS PORTFOLIO, and its own text says why. Section 1 defines Copyright and Related Rights to include 'rights protecting the extraction, dissemination, use and reuse of data in a Work' and 'database rights (such as those arising under Directive 96/9/EC)'. Section 2 waives all of them 'overtly, fully, permanently, irrevocably and unconditionally' and 'for any purpose whatsoever, including without limitation commercial'. Storage, derived analytics, commercial use, retention and redistribution are granted by one instrument, and the sui generis database right is waived BY NAME -- the first time any source in this catalog addresses the right that has blocked TED for eleven missions. It resolves nothing about TED; it shows what a resolution looks like.\n\nWHAT IS CONDITIONAL IS THE MANNER OF ACCESS, NOT THE RIGHT TO THE DATA. The access policy makes the User-Agent a condition of access in its own words -- 'The API requires an HTTP User-Agent header for all requests' and 'Clients making requests without a User-Agent header may be blocked without notice' -- and the Foundation's User-Agent Policy refuses non-descriptive defaults by name. That is an objective property of collector configuration, so it is verified by a capability rather than confirmed by a person (ADR-028).\n\nATTRIBUTION IS A COURTESY HERE, NOT A CONDITION, and this is the first source in the portfolio for which that is true. CC0 imposes no attribution requirement. A credit and a licence identifier are still rendered onto every record, because a derived surface should say where its numbers came from and because the pipeline refuses a record with no notice attached -- but no condition asserts an obligation that the licence does not impose.\n\nNO PERSONAL DATA, AND IT IS STRUCTURAL RATHER THAN FILTERED. The per-article endpoint returns project, article, granularity, timestamp, access, agent and views. There is no user object to exclude, unlike Stack Exchange where exclusion was the point of the review. The endpoints that DO touch contributors -- editors, edits -- and the ones that break views down by country are outside this review and excluded by name.\n\nWHAT THIS SOURCE OBSERVES, STATED NARROWLY. A pageview is defined by the operator as 'a request for content of a page that receives a response of 200 OK or 304 Not Modified'. It is a REQUEST COUNT. It is not a reader, not a person, not a customer, not demand, not interest and not a market. The source separates self-identified bots ('spider') and heuristically detected automation ('automated') from the 'user' class, which is more than any other source in this catalog does -- and the operator documents the detection as best-effort, which is recorded as a limitation rather than smoothed over.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "Wikimedia Analytics API - Access policy",
+              "document_url": "https://doc.wikimedia.org/generated-data-platform/aqs/analytics-api/documentation/access-policy.html",
+              "section_reference": "Data licensing; Client identification; Data downloads; Rate limits",
+              "summarized_finding": "Retrieved directly, HTTP 200, 2026-09-02. Under a heading 'Data licensing' the page states in full: 'Data provided by the API is available under the CC0 1.0 license'. Under 'Client identification' it states 'The API requires an HTTP User-Agent header for all requests' and 'Clients making requests without a User-Agent header may be blocked without notice', and gives the preferred format '<client name>/<version> (<contact information>) <library/framework name>/<version>'. Under 'Data downloads' it states that datasets provided via the API can also be downloaded in bulk via dumps.wikimedia.org. Under 'Rate limits' it directs callers to wait for each request to finish before sending another. This is the document that answers H-24, and it answers it with a licence the question did not consider.",
+              "retrieved_at": "2026-09-02T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_LICENCE",
+              "document_title": "Creative Commons CC0 1.0 Universal - Legal Code",
+              "document_url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode",
+              "section_reference": "Section 1 (Copyright and Related Rights); Section 2 (Waiver); Section 3 (Public License Fallback)",
+              "summarized_finding": "Retrieved directly, HTTP 200, 2026-09-02. Section 1 defines 'Copyright and Related Rights' to include 'rights protecting the extraction, dissemination, use and reuse of data in a Work' and 'database rights (such as those arising under Directive 96/9/EC of the European Parliament and of the Council of 11 March 1996 on the legal protection of databases)'. Section 2 states that the Affirmer 'overtly, fully, permanently, irrevocably and unconditionally waives, abandons, and surrenders all of Affirmer's Copyright and Related Rights', 'in all territories worldwide', 'in any current or future medium' and 'for any purpose whatsoever, including without limitation commercial, advertising or promotional purposes'. Section 3 supplies a royalty-free, irrevocable, unconditional licence should the waiver be judged ineffective. No attribution condition appears anywhere in the instrument.",
+              "retrieved_at": "2026-09-02T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "Wikimedia Analytics API - Page views (concepts)",
+              "document_url": "https://doc.wikimedia.org/generated-data-platform/aqs/analytics-api/concepts/page-views.html",
+              "section_reference": "Page views; Spiders and automated traffic",
+              "summarized_finding": "Retrieved directly, HTTP 200, 2026-09-02. Defines the measurement: 'A page view is a request for content of a page that receives a response of 200 OK or 304 Not Modified (a redirect to cached version of the page).' Records exclusions: most Special-namespace requests are not counted, edits are not page views, and redirects are not counted as views of the target page. States that 'Page views associated with user agents that self-identify as bots receive the spider category' and that 'Other automated traffic, identified as such based on a set of heuristics, receives the automated category instead' -- so the source itself separates the agent classes, and documents the second as heuristic. Refers the reader to 'Research:Page view' for the complete definition.",
+              "retrieved_at": "2026-09-02T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_ACCESS_CONTROL",
+              "document_title": "Wikimedia Foundation User-Agent Policy",
+              "document_url": "https://foundation.wikimedia.org/wiki/Policy:User-Agent_policy",
+              "section_reference": "Format; blocked defaults",
+              "summarized_finding": "Retrieved directly, HTTP 200, 2026-09-02. States that 'User-Agent strings that begin with non-descriptive default values, such as python-requests/x, may also be blocked from Wikimedia sites' and that 'Scripts should use an informative User-Agent string with contact information, or they may be blocked without notice'. The obligation is therefore specific enough to check mechanically: a declared string, a contact inside it, and no generic-default or browser prefix.",
+              "retrieved_at": "2026-09-02T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_ACCESS_CONTROL",
+              "document_title": "Wikimedia Robot policy",
+              "document_url": "https://wikitech.wikimedia.org/wiki/Robot_policy",
+              "section_reference": "Generally applicable rules; API rules",
+              "summarized_finding": "Retrieved directly, HTTP 200, 2026-09-02. States 'ensure that the maximum concurrent number of requests is fewer than 10 overall, and keep the average requests per second below 20', that all activity is subject to cross-API rate limiting global to Wikimedia sites, and that bots which repeatedly circumvent the limits may be blocked. This is documented pacing guidance from the operator; the collector's own serial single-digit pacing is OURS and is far inside it.",
+              "retrieved_at": "2026-09-02T00:00:00+00:00"
             }
           ]
         }

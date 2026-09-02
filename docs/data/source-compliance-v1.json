@@ -979,6 +979,106 @@
       },
       "use_profile_id": "local-private-research-v1",
       "$comment": "Mission 1.17. THE SAME CONFIGURATION, FOR A DIFFERENT PROFILE, and the duplication is deliberate rather than lazy: the obligations these settings satisfy are the SOURCE's, and a source does not require less attribution or permit a wider licence set because the deployment stopped being multi-tenant. What the local profile narrows is what is DONE with the data, and that is carried by the profile definition, not by this file. Copying configuration is not copying a decision -- the decision is the review, and ADR-027 forbids sharing that."
+    },
+    {
+      "source_id": "wikimedia-pageviews",
+      "use_profile_id": "local-private-research-v1",
+      "review_version": 1,
+      "evidence_url": "https://doc.wikimedia.org/generated-data-platform/aqs/analytics-api/documentation/access-policy.html",
+      "evidence_section": "Data licensing (CC0 1.0); Client identification; Data downloads; Rate limits",
+      "client_identification": {
+        "user_agent": "startup-research-os/1.0 (+https://github.com/Speekyx/startup-research-os)",
+        "contact": "https://github.com/Speekyx/startup-research-os",
+        "basis": "Wikimedia Analytics API access policy, section 'Client identification': 'The API requires an HTTP User-Agent header for all requests' and 'Clients making requests without a User-Agent header may be blocked without notice'. The Foundation's User-Agent Policy refuses non-descriptive defaults by name ('python-requests/x') and directs clients not to copy a browser string. The contact is the project's own public repository, which the policy accepts ('a URL for a relevant external website'). The declared string is the transport's own configured User-Agent, byte for byte: the collector refuses to open a socket when the two differ, so the review and the wire cannot disagree silently."
+      },
+      "attribution": {
+        "notes": "THE FIRST SOURCE IN THE PORTFOLIO WHOSE LICENCE IMPOSES NO ATTRIBUTION AT ALL. CC0 1.0 is a waiver, not a licence with conditions: its text contains no attribution requirement, and Section 2 surrenders the rights that would let one be imposed.\n\nA credit is rendered anyway, and the distinction is recorded rather than blurred. Two reasons, neither of which is an obligation. First, a derived surface should say where its numbers came from, and a reader who meets a view count with no provenance cannot check it. Second, the pipeline refuses to normalize a raw record that carries no rendered notice, which is a property of this system rather than of the licence.\n\nSO NO CONDITION ASSERTS AN ATTRIBUTION OBLIGATION HERE. Writing one would record a duty the instrument does not create, and a later reader would have no way to tell an obligation from a courtesy. The CC BY-SA notice that Wikimedia ARTICLE TEXT carries is a different question about different material, and no article text is acquired.",
+        "requirements": [
+          {
+            "element": "SOURCE_CREDIT",
+            "text": "Wikimedia Foundation, Wikimedia Analytics API",
+            "supplied": false,
+            "when_modified": false
+          },
+          {
+            "element": "LICENCE_IDENTIFIER",
+            "text": "CC0 1.0",
+            "supplied": false,
+            "when_modified": false
+          },
+          {
+            "element": "SOURCE_ITEM_LINK",
+            "text": null,
+            "supplied": true,
+            "when_modified": false
+          }
+        ]
+      },
+      "data_minimisation": {
+        "allowed": [
+          "project",
+          "article",
+          "granularity",
+          "timestamp",
+          "access",
+          "agent",
+          "views"
+        ],
+        "excluded": [
+          "editor",
+          "user_text",
+          "user_id",
+          "user_name",
+          "ip",
+          "country",
+          "natural_person_name",
+          "personal_identifier"
+        ],
+        "notes": "THE OPPOSITE SHAPE FROM STACK EXCHANGE, AND WORTH SAYING SO. There is no personal data to exclude from the per-article endpoint: it returns a project, an article title, a granularity, a day bucket, an access method, an agent class and a count. The minimisation profile is short because the endpoint is narrow, not because the review was.\n\nThe excluded names are the fields the endpoints NEXT DOOR return. `editor`, `user_text` and `user_id` belong to the editors and edits endpoints, which observe identifiable contributors; `country` belongs to the by-country breakdowns, which are a different privacy question the Foundation itself treats separately. None is reachable through the authorised resource, and each is refused by name so that a later widening has to be a review act rather than a parameter change.\n\n`agent` is ALLOWED and is load-bearing rather than incidental: it is the field that lets a record say whether a count is the 'user' class or includes spiders and automated traffic. Dropping it would make every count mean less while looking cleaner."
+      },
+      "resource_scope": {
+        "third_party_denied": true,
+        "licence_allowlist": [
+          "CC0-1.0"
+        ],
+        "licence_allowlist_note": "The Analytics API access policy states the data it provides is CC0 1.0. A resource whose licence is recorded as anything else is denied rather than assumed to be the same: Wikimedia publishes ARTICLE TEXT under CC BY-SA 4.0 and GFDL, and the two must not be allowed to borrow each other's terms.",
+        "allowed_dataset_families": [
+          "wikimedia-pageviews-per-article"
+        ],
+        "excluded_dataset_families": [
+          "wikimedia-dumps",
+          "wikimedia-editors",
+          "wikimedia-edits",
+          "wikimedia-unique-devices",
+          "wikimedia-pageviews-by-country",
+          "wikimedia-top-articles",
+          "wikimedia-media-files",
+          "wikimedia-commons"
+        ],
+        "require_dataset_family": true,
+        "excluded_note": "Excluded BY NAME rather than merely unlisted. The editors and edits endpoints observe identifiable contributors; the by-country breakdowns are a privacy question the Foundation treats separately; unique devices is a different measurement with a different definition; the top-articles endpoints return a ranking rather than a series and would invite a popularity reading nobody reviewed. A source-level approval is not a wildcard over everything the platform measures."
+      },
+      "route_authorization": {
+        "allowed_labels": [
+          "wikimedia-analytics-api"
+        ],
+        "blocked_labels": [
+          "wikimedia-dumps"
+        ],
+        "preferred_label": "wikimedia-analytics-api",
+        "basis": "Mission 1.19 local review condition OFFICIAL API ONLY. The Analytics API is the documented route and the one the access policy governs.\n\n`wikimedia-dumps` is BLOCKED BY NAME, and the route was registered in the same mission so that it could be. The access policy says in its own words that the datasets are also available in bulk from dumps.wikimedia.org, so the route is a fact about the source; refusing a route the registry does not record would be refusing nothing (ADR-028).\n\nThe review did not assess bulk download. CC0 would permit it, which is exactly why the restriction has to be OURS and has to be written down: the reason to stay on the API is a bounded, checkable acquisition posture, not a limit the licence imposes. Browser automation is refused by the review's `browser_automation: NOT_PERMITTED` and has no access profile at all."
+      },
+      "datasets": [
+        {
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "name": "English Wikipedia per-article daily page views (Analytics API)",
+          "dataset_family": "wikimedia-pageviews-per-article",
+          "rights_basis": "NAMED_LICENCE",
+          "licence": "CC0-1.0",
+          "content_origin": "PLATFORM_LICENSED",
+          "basis": "Mission 1.19. ONE PROJECT, ONE ENDPOINT, ONE GRANULARITY. Daily view counts for named articles on `en.wikipedia.org`, through the Analytics API.\n\nWHY ONE PROJECT. Wikimedia runs over 300 Wikipedias plus Commons, Wiktionary, Wikisource and more. They are the same platform and different corpora with different editorial communities and different reader populations, and a review that said 'Wikimedia' would have approved all of them without looking. The opportunity domain this deployment researches is English-language software and product, which is where `en.wikipedia.org` sits.\n\nWHY CONTENT_ORIGIN IS PLATFORM_LICENSED, AND WHY IT IS NOT A CLOSE CALL HERE. Unlike Stack Exchange, where the content is written by users and the classification had to be argued, a pageview count is produced by the Wikimedia Foundation from its own request logs. The Foundation is the producer and the licensor, it states the licence on its own access-policy page, and there is no third party with a claim over the aggregate. The documentary link holds at both ends with nothing left over.\n\nWHAT THE RESOURCE OBSERVES. The operator's own definition: 'A page view is a request for content of a page that receives a response of 200 OK or 304 Not Modified'. A count of requests, per article, per UTC day, per agent class. It is not a count of people and the source does not claim it is."
+        }
+      ]
     }
   ]
 }

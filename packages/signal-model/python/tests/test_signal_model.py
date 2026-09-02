@@ -877,6 +877,12 @@ class TestDerivationIdentityAndParameters(unittest.TestCase):
         not have been written at all. Its data shape is the `procurement_notice`
         record kind Mission 1.15.8 added.
 
+        `content_request_change` joined in Mission 1.19 under ADR-032, over the
+        `content_request_count` record kind migration 0025 added. It is the
+        second type whose basis is COMPARABLE_INSTANTS, and it could exist only
+        because the platform documents its day bucket as UTC -- the fact GDELT's
+        H-29 still lacks.
+
         The rule the original assertion protected is unchanged: every type is
         justified by a data shape this repository holds, and each declares the
         family whose record kind it reads."""
@@ -887,6 +893,7 @@ class TestDerivationIdentityAndParameters(unittest.TestCase):
                 "lexical_frequency_change",
                 "numeric_period_change",
                 "procurement_value_contrast",
+                "content_request_change",
             },
         )
         for spec in SIGNAL_TYPES.values():
@@ -1144,11 +1151,28 @@ class TestTaxonomyBoundaries(unittest.TestCase):
         services is a transaction that happened; whether it evidences demand
         anybody could sell into is an inference this axis does not make, and
         Ontology V2 §3.6 is not amended.
+
+        `CONTENT_REQUEST_VOLUME` was added in Mission 1.19 under ADR-032, and it
+        is the one most easily mistaken for a demand family: a page request
+        LOOKS like somebody wanting something. It is a count of HTTP responses.
+        The names refused here are the evidence that the distinction was made
+        deliberately rather than by luck.
         """
         values = {member.value for member in SignalQuantityFamily}
-        self.assertEqual(values, {"LEXICAL_FREQUENCY", "MEASURED_SERIES", "TRANSACTION_VALUE"})
+        self.assertEqual(
+            values,
+            {
+                "LEXICAL_FREQUENCY",
+                "MEASURED_SERIES",
+                "TRANSACTION_VALUE",
+                "CONTENT_REQUEST_VOLUME",
+            },
+        )
         self.assertFalse(values & {"PAIN", "DESIRE", "BEHAVIORAL", "MARKET"})
         self.assertNotIn("WILLINGNESS_TO_PAY", values)
+        # Every name that would have put the interpretation in the vocabulary.
+        for tempting in ("CONTENT_VIEWS", "ATTENTION", "CONTENT_POPULARITY", "ADOPTION"):
+            self.assertNotIn(tempting, values)
 
     def test_a_signal_carries_no_demand_family_and_no_motivation(self):
         draft = lexical_signal()

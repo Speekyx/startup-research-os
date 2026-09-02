@@ -69,7 +69,9 @@ IMPLEMENTED_COLLECTORS: frozenset[str] = frozenset(
     # refused a database holding raw records for a source this codebase
     # "cannot collect from", which was true of the SET and false of the
     # repository -- the collector existed and had not been declared here.
-    {"world-bank", "gdelt", "ted-eu", "stack-exchange"}
+    # `wikimedia-pageviews` joined in Mission 1.19, the first source whose
+    # rights basis is a WAIVER (CC0 1.0) rather than a licence with conditions.
+    {"world-bank", "gdelt", "ted-eu", "stack-exchange", "wikimedia-pageviews"}
 )
 
 

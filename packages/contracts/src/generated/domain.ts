@@ -654,13 +654,14 @@ export function isNormalizedLanguageMapping(v: unknown): v is NormalizedLanguage
 }
 
 /**
- * What kind of quantity a derived Signal is about. Closed because consumers branch exhaustively on it and the families have different scope shapes -- a lexical signal carries a term and NO geography key, a series signal carries a metric and a geography -- so an unhandled third value is a bug rather than a gap. It is deliberately NOT DemandSignalFamily: PAIN/DESIRE/BEHAVIORAL/MARKET classify demand, and a count of how often a token occurred in news text is not evidence of demand. It is also not the registry called signal_family, which says what a SOURCE could expose (ADR-017). Three relations, three subjects, three names.
+ * What kind of quantity a derived Signal is about. Closed because consumers branch exhaustively on it and the families have different scope shapes -- a lexical signal carries a term and NO geography key, a series signal carries a metric and a geography -- so an unhandled third value is a bug rather than a gap. It is deliberately NOT DemandSignalFamily: PAIN/DESIRE/BEHAVIORAL/MARKET classify demand, and a count of how often a token occurred in news text is not evidence of demand. It is also not the registry called signal_family, which says what a SOURCE could expose (ADR-017). Three relations, three subjects, three names -- four since ADR-032.
  * @see signal-taxonomy-v1.md; Mission 1.11 §5
  */
 export const SIGNAL_QUANTITY_FAMILY_VALUES = [
   "LEXICAL_FREQUENCY",
   "MEASURED_SERIES",
   "TRANSACTION_VALUE",
+  "CONTENT_REQUEST_VOLUME",
 ] as const;
 export type SignalQuantityFamily = (typeof SIGNAL_QUANTITY_FAMILY_VALUES)[number];
 export function isSignalQuantityFamily(v: unknown): v is SignalQuantityFamily {

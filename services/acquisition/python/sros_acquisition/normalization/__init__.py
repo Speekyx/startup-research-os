@@ -105,6 +105,11 @@ from .ted_search_api import (
     TED_NORMALIZER_VERSION,
     TedSearchApiNoticeNormalizer,
 )
+from .wikimedia_pageviews import (
+    WM_NORMALIZER_ID,
+    WM_NORMALIZER_VERSION,
+    WikimediaPageviewNormalizer,
+)
 from .world_bank import (
     WORLD_BANK_NORMALIZER_ID,
     WORLD_BANK_NORMALIZER_VERSION,
@@ -182,17 +187,36 @@ STACK_EXCHANGE_QUESTION_NORMALIZER_SPEC = NormalizerSpec(
     build=StackExchangeQuestionNormalizer,
 )
 
+# Mission 1.19. Fifth adapter, first CC0 source, and the first whose period is
+# an INTERVAL with an established timezone -- the day bucket is UTC on the
+# operator's own documentation, which GDELT's never was.
+WIKIMEDIA_PAGEVIEW_NORMALIZER_SPEC = NormalizerSpec(
+    normalizer_id=WM_NORMALIZER_ID,
+    normalizer_version=WM_NORMALIZER_VERSION,
+    source_id="wikimedia-pageviews",
+    collector_id="wikimedia-pageviews-per-article",
+    supported_collector_versions=frozenset({"1.0.0"}),
+    schema_id="normalization.v1",
+    schema_version=1,
+    build=WikimediaPageviewNormalizer,
+)
+
 for _spec in (
     WORLD_BANK_NORMALIZER_SPEC,
     GDELT_WEB_NGRAM_NORMALIZER_SPEC,
     TED_SEARCH_API_NORMALIZER_SPEC,
     STACK_EXCHANGE_QUESTION_NORMALIZER_SPEC,
+    WIKIMEDIA_PAGEVIEW_NORMALIZER_SPEC,
 ):
     if _spec.key not in NORMALIZER_REGISTRY:
         register_normalizer(_spec)
 
 __all__ = [
     "DEFAULT_GEOGRAPHY_MAP_PATH",
+    "WIKIMEDIA_PAGEVIEW_NORMALIZER_SPEC",
+    "WM_NORMALIZER_ID",
+    "WM_NORMALIZER_VERSION",
+    "WikimediaPageviewNormalizer",
     "GDELT_WEB_NGRAM_NORMALIZER_ID",
     "GDELT_WEB_NGRAM_NORMALIZER_SPEC",
     "GDELT_WEB_NGRAM_NORMALIZER_VERSION",

@@ -160,14 +160,40 @@ def strip_constraint(body: str, name: str) -> str:
     )
     if match is None:
         return body
-    start, depth, index = match.start(), 0, match.end()
+    start, depth, index, opened = match.start(), 0, match.end(), False
     while index < len(body):
         char = body[index]
         if char == "(":
-            depth += 1
+            depth, opened = depth + 1, True
         elif char == ")":
             depth -= 1
-        elif char == "," and depth == 0:
+            if opened and depth == 0:
+                # The definition's own parentheses have closed, which is where
+                # it ends. Mission 1.19 added this terminator and the defect it
+                # fixes is worth naming: the scanner used to stop only at a
+                # depth-0 COMMA, which exists inside a CREATE TABLE body and
+                # NEVER inside an `ALTER TABLE ... ADD CONSTRAINT` folded in
+                # from a later migration -- the captured ALTER text stops before
+                # its own semicolon. So stripping a superseded ALTER definition
+                # ran to the END OF THE BODY and deleted every later ALTER with
+                # it.
+                #
+                # Invisible while the newest definition was also the last one,
+                # which held from Mission 1.15.9 until a THIRD migration widened
+                # the same constraint. Then the strip removed the CURRENT
+                # definition too, and the column reported NO CHECK CONSTRAINT
+                # for a closed enum that had one -- a silent over-reach rather
+                # than an error.
+                index += 1
+                # A definition inside a CREATE TABLE body is followed by the
+                # comma that separates it from the next one; leaving it would
+                # produce a doubled separator in the folded text.
+                while index < len(body) and body[index].isspace():
+                    index += 1
+                if index < len(body) and body[index] == ",":
+                    index += 1
+                break
+        elif char in ",;" and depth == 0:
             index += 1
             break
         index += 1

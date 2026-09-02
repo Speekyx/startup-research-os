@@ -469,7 +469,7 @@ class TestTheAdapterAndTheVocabularyStaySeparateClaims:
         from sros_acquisition import IMPLEMENTED_NORMALIZERS
 
         assert (
-            frozenset({"world-bank", "gdelt", "ted-eu", "stack-exchange"})
+            frozenset({"world-bank", "gdelt", "ted-eu", "stack-exchange", "wikimedia-pageviews"})
             == IMPLEMENTED_NORMALIZERS
         )
 
@@ -482,10 +482,28 @@ class TestTheAdapterAndTheVocabularyStaySeparateClaims:
             assert not (package / name).exists()
 
     def test_the_model_change_reached_no_model_or_network(self) -> None:
-        """§17. Deterministic structural representation only."""
-        source = pathlib.Path(model_module.__file__).read_text(encoding="utf-8")
-        for forbidden in ("httpx", "requests", "anthropic", "openai", "qdrant", "embed"):
-            assert forbidden not in source.lower()
+        """§17. Deterministic structural representation only.
+
+        **Over the IMPORTS rather than over the text**, and the change is
+        Mission 1.19's, made when the substring version failed on a record-kind
+        description containing the English word "requests". `testing-strategy.md`
+        §23 names that exact shape: a substring scan fails on the prose that
+        explains the rule, and weakening the prose until it passes is how a
+        structural check stops checking. Narrowing the CHECK instead loses
+        nothing -- a module cannot reach a network without importing something
+        that can, and an import is what the AST sees.
+        """
+        import ast
+
+        tree = ast.parse(pathlib.Path(model_module.__file__).read_text(encoding="utf-8"))
+        imported: set[str] = set()
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                imported.update(alias.name.split(".")[0] for alias in node.names)
+            elif isinstance(node, ast.ImportFrom) and node.module:
+                imported.add(node.module.split(".")[0])
+        for forbidden in ("httpx", "requests", "urllib", "socket", "anthropic", "openai", "qdrant"):
+            assert forbidden not in imported, forbidden
 
     def test_the_registry_row_exists_without_an_adapter(self) -> None:
         """The deliberate split, asserted so it stays deliberate: the vocabulary

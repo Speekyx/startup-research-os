@@ -629,7 +629,8 @@ class TestTheCollectorIsRegistered:
         from sros_acquisition import IMPLEMENTED_COLLECTORS
 
         assert (
-            frozenset({"world-bank", "gdelt", "ted-eu", "stack-exchange"}) == IMPLEMENTED_COLLECTORS
+            frozenset({"world-bank", "gdelt", "ted-eu", "stack-exchange", "wikimedia-pageviews"})
+            == IMPLEMENTED_COLLECTORS
         )
 
     def test_the_module_lives_in_the_collection_package(self) -> None:
@@ -655,7 +656,7 @@ class TestTheCollectorIsRegistered:
         from sros_acquisition import IMPLEMENTED_NORMALIZERS
 
         assert (
-            frozenset({"world-bank", "gdelt", "ted-eu", "stack-exchange"})
+            frozenset({"world-bank", "gdelt", "ted-eu", "stack-exchange", "wikimedia-pageviews"})
             == IMPLEMENTED_NORMALIZERS
         )
 

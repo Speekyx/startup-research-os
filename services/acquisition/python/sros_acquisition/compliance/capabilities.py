@@ -428,6 +428,25 @@ def _check_field_minimisation(compliance: SourceCompliance) -> tuple[str, ...]:
     return tuple(failures)
 
 
+def _check_client_identification(compliance: SourceCompliance) -> tuple[str, ...]:
+    """The collector identifies itself the way the source's policy requires.
+
+    Mission 1.19. **`None` fails rather than passes**, which is the whole
+    reason this is a capability and not a comment: a condition must never rest
+    on a restriction that does not exist, and an entry that never declared an
+    identification obligation has not satisfied one. The same shape
+    `_check_route_binding` uses for `route_authorization`.
+    """
+    identification = compliance.client_identification
+    if identification is None:
+        return (
+            "no client identification is declared for this (source, profile). The "
+            "condition names an obligation the configuration cannot express, so it is "
+            "unimplemented rather than satisfied",
+        )
+    return identification.refusals()
+
+
 # ------------------------------------------------------------------- registry
 
 CAPABILITIES: dict[str, ComplianceCapability] = {
@@ -488,6 +507,16 @@ CAPABILITIES: dict[str, ComplianceCapability] = {
                 "never a filter applied to what came back."
             ),
             check=_check_field_minimisation,
+        ),
+        ComplianceCapability(
+            name="source-client-identification",
+            description=(
+                "Verifies that the configuration declares the User-Agent the source's "
+                "access policy requires, that it carries a contact, and that it is not a "
+                "generic library default or a copied browser string. Generic mechanism; "
+                "the obligation and its wording belong to each source's own policy."
+            ),
+            check=_check_client_identification,
         ),
         ComplianceCapability(
             name="fred-copyright-series-filter",

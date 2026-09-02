@@ -1133,7 +1133,7 @@ class TestRecordedVerification:
         for package in ("registry", "compliance"):
             assert list((root / package).rglob("*collector*.py")) == []
         assert (
-            frozenset({"world-bank", "gdelt", "ted-eu", "stack-exchange"})
+            frozenset({"world-bank", "gdelt", "ted-eu", "stack-exchange", "wikimedia-pageviews"})
             == sros_acquisition.IMPLEMENTED_COLLECTORS
         )
 
