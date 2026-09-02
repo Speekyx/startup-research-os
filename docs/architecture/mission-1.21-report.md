@@ -124,6 +124,18 @@ Reading the licence as covering the fetch would be grant-by-absence where the
 operator did not leave an absence — the reading rule 8 of the registry contract
 forbids by name.
 
+**This is an SROS POLICY DECISION, not a legal conclusion** (Mission 1.22 §0).
+What is established is that **no sufficient positive access basis for the
+intended automated route was established under this repository's own rules**, and
+that **the published robots directive disallows that route**. Together those make
+the source fail closed here.
+
+**Nothing here claims that robots.txt by itself makes REST access unlawful.**
+That is a legal question this system does not decide (`source-registry-v1.md` §0:
+this is not a legal decision engine). A different operator, a different posture or
+an answer from TDF could all change the SROS decision without anything about the
+law having changed. The fail-closed outcome stands and its basis is ours.
+
 ---
 
 ## 3. GOVERNANCE
@@ -176,9 +188,16 @@ asserts it.
 
 ## 4. RESOURCE, PRE-REGISTRATION, REAL DATA
 
-**Pre-registration committed before content inspection** (`824469b`), naming the
-deployment, resource `bug/LibreOffice/Writer`, the window, the caps, the field
-allowlist and the two-step design. It is kept as written.
+**Pre-registration committed before any substantive issue content,
+duplicate-bearing corpus or duplicate-density result was inspected** (`824469b`),
+naming the deployment, resource `bug/LibreOffice/Writer`, the window, the caps,
+the field allowlist and the two-step design. It is kept as written.
+
+**Two minimal metadata-only reachability probes had already occurred**, and this
+report originally said the commit came "before content inspection" without that
+qualifier — too absolute for what had happened (Mission 1.22 §0). The probes are
+unchanged, disclosed in the section below, and were feasibility checks against
+§5 and §12 rather than inspections of issue content.
 
 **No acquisition was performed.** The review refused the route before the
 acquisition step, which is the gate working in the order it is supposed to.

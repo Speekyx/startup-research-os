@@ -102,6 +102,13 @@ decided access. TDF publishes no API terms at all, and its only access statement
 is negative. Reading the licence as covering the fetch would be exactly the
 grant-by-absence that rule 8 of the registry contract forbids.
 
+**An SROS POLICY DECISION, not a legal conclusion** (Mission 1.22 §0). Two things
+are established: no sufficient positive access basis for the intended automated
+route exists under this repository's rules, and the published robots directive
+disallows that route. **Neither amounts to a claim that robots.txt by itself makes
+REST access unlawful** — that is a legal question this system does not decide.
+The source stays blocked in SROS, and the reason is ours rather than a court's.
+
 **One question would change the verdict**, and it is written down rather than
 assumed: does TDF intend the robots directive to cover programmatic REST use, or
 is it aimed at page crawlers? **No message has been sent**, and nothing here

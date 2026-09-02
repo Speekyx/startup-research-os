@@ -1,8 +1,15 @@
 # Mission 1.21 — Acquisition pre-registration
 
-**Committed BEFORE any issue content was inspected.** Mission 1.21 §16, the same
-discipline Mission 1.20 used, and the point of a separate commit is that git
-history shows the order rather than the report asserting it.
+**Committed before any substantive issue content, duplicate-bearing corpus or
+duplicate-density result was inspected.** Mission 1.21 §16, the same discipline
+Mission 1.20 used, and the point of a separate commit is that git history shows
+the order rather than the report asserting it.
+
+**Two minimal metadata-only reachability probes had already occurred**, and the
+sentence above is worded to say so rather than to imply otherwise (Mission 1.22
+§0). The earlier wording — *"before any issue content was inspected"* — was too
+absolute for what had happened; the probes are unchanged and are described in
+full immediately below.
 
 **What had been touched before this document was written**, stated exactly: two
 reachability probes. `bugs.documentfoundation.org/rest/bug?...&limit=2` returned
