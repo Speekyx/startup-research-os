@@ -1,4 +1,4 @@
-"""Mission 1.24 §0.A — readiness is seven gates, not one environment variable.
+"""Mission 1.24 §0.A — readiness is ten gates, not one environment variable.
 
 The failure this pins is a specific and tempting one. Mission 1.23 proved the
 governance gate refused with `PROVIDER_NOT_CONFIGURED`, derived from whether
@@ -12,6 +12,7 @@ cannot make a call**, because those are the ones a shallow check misses.
 
 from __future__ import annotations
 
+import pathlib
 from contextlib import contextmanager
 from typing import Any
 
@@ -77,8 +78,19 @@ def gates(result: Any) -> dict[str, bool]:
     return {g.name: g.passed for g in result.gates}
 
 
+# The real provider policy, by absolute path. A relative default would resolve
+# against whatever directory pytest was invoked from, and these tests must read
+# the same reviewed file the runtime does rather than a fixture of it: the
+# posture is a governance fact, and a test that stubbed it would assert the stub.
+POLICY = (
+    pathlib.Path(__file__).resolve().parents[4] / "docs" / "data" / "model-provider-policy-v1.json"
+)
+
+
 def evaluate(db: FakeDatabase, env: dict[str, str]) -> Any:
-    return evaluate_inference_readiness(db, "stack-exchange", "local-private-research-v1", env)
+    return evaluate_inference_readiness(
+        db, "stack-exchange", "local-private-research-v1", env, policy_path=POLICY
+    )
 
 
 class TestTheTierIsNotAnImplementationDetail:
@@ -195,10 +207,21 @@ class TestGovernanceIsReadFromTheDatabaseAndFailsClosed:
 class TestTheReportIsUsableByAnOperator:
     def test_every_gate_is_evaluated_even_after_one_fails(self) -> None:
         """The rule `authorize_external_inference` follows. An operator shown one
-        failure fixes it and is refused again, once per remaining gate."""
+        failure fixes it and is refused again, once per remaining gate.
+
+        Ten gates: four configuration, one adapter-capability, three
+        governance and two provider-policy. With nothing configured and two
+        governance answers missing, seven fail at once and three still pass --
+        which is the report an operator can actually act on, rather than the
+        first failure and silence about the rest."""
         result = evaluate(FakeDatabase(transmission=None, egress=None), {})
-        assert len(result.gates) == 7
-        assert len(result.failed) == 6
+        assert len(result.gates) == 10
+        assert len(result.failed) == 7
+        assert [g.name for g in result.gates if g.passed] == [
+            "source-model-processing-permitted",
+            "provider-policy-approved",
+            "adapter-is-on-the-assessed-route",
+        ]
 
     def test_only_non_secret_actions_are_ever_suggested(self) -> None:
         """A readiness tool that told an operator where to put a key is a tool

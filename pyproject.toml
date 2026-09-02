@@ -13,6 +13,7 @@ members = [
     "packages/signal-model/python",
     "packages/claim-model/python",
     "packages/evidence-reliability/python",
+    "packages/semantic-equivalence/python",
     "services/workers/python",
     "services/research-orchestrator/python",
     "services/acquisition/python",
@@ -27,6 +28,7 @@ sros-evidence-aggregation = { workspace = true }
 sros-signal-model = { workspace = true }
 sros-claim-model = { workspace = true }
 sros-evidence-reliability = { workspace = true }
+sros-semantic-equivalence = { workspace = true }
 sros-workers = { workspace = true }
 sros-orchestrator = { workspace = true }
 sros-acquisition = { workspace = true }

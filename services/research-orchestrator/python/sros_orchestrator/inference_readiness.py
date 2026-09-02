@@ -13,9 +13,13 @@ key exists* would report ready for a system that cannot make a call.
     tier is bound          that tier resolves to a provider at all
     tier is anthropic      it resolves to the provider the policy approved
     model is named         ADR-006 forbids a hard-coded model, so config must name one
+    adapter serves tier    the implemented adapter advertises support for that tier
     credential present     ANTHROPIC_API_KEY is set (its VALUE is never read here)
-    source review          external_model_transmission permitted for (source, profile)
+    source processing      model_processing permitted for (source, profile)
+    source transmission    external_model_transmission permitted for (source, profile)
     profile egress         external_model_egress permits this class of egress
+    provider approved      the reviewed data-use posture is APPROVED
+    route matches          the adapter reaches the route the policy actually assessed
 
 **Every gate is evaluated even after one fails**, the same rule
 `authorize_external_inference` follows and for the same reason: an operator told
@@ -37,14 +41,18 @@ check exists so an operator learns what to configure before that refusal.
 from __future__ import annotations
 
 import os
+import pathlib
 from collections.abc import Mapping
 from contextlib import AbstractContextManager
 from dataclasses import dataclass
 from typing import Any, Protocol
 
 from sros_contracts import LlmTier
+from sros_llm_gateway.config import load_config_from_env
+from sros_llm_gateway.providers.anthropic import DEFAULT_ENDPOINT, AnthropicProvider
 
 __all__ = [
+    "PROVIDER_POLICY_PATH",
     "SEMANTIC_EQUIVALENCE_TIER",
     "APPROVED_PROVIDER",
     "CREDENTIAL_ENV",
@@ -81,6 +89,19 @@ APPROVED_PROVIDER = "anthropic"
 
 # Read for PRESENCE only. The value is never read, printed, logged or returned.
 CREDENTIAL_ENV = "ANTHROPIC_API_KEY"
+
+# The provider policy Mission 1.23 wrote. Read as DATA: this module reports what
+# the review concluded and never re-decides it.
+PROVIDER_POLICY_PATH = "docs/data/model-provider-policy-v1.json"
+
+# The route the policy assessed, expressed as the thing that can be CHECKED
+# about a configured adapter. The policy's own words are "the Anthropic API
+# accessed with an API key under the Commercial Terms of Service", and it says in
+# the same sentence that the consumer products are a DIFFERENT route with
+# different terms. What distinguishes them mechanically is the endpoint the
+# adapter posts to and the fact that it authenticates with an API key -- so that
+# is what is asserted, rather than the prose being trusted to describe itself.
+APPROVED_ROUTE_ENDPOINT = DEFAULT_ENDPOINT
 
 _TIER_ENV_PREFIX = {
     LlmTier.FAST_MODEL: "LLM_TIER_FAST",
@@ -170,15 +191,20 @@ _EGRESS_PERMITTED = "PERMITTED_TO_APPROVED_PROVIDERS"
 
 
 def _tier_gates(env: Mapping[str, str]) -> list[ReadinessGate]:
-    prefix = _TIER_ENV_PREFIX[SEMANTIC_EQUIVALENCE_TIER]
-    provider = (env.get(f"{prefix}_PROVIDER") or "").strip()
-    model = (env.get(f"{prefix}_MODEL") or "").strip()
+    """Resolve the binding through the GATEWAY'S OWN loader.
 
-    # `config.py` treats the literal string "null" as unconfigured, and the
-    # shipped .env.example uses it. Reproduced rather than reinvented: a
-    # readiness check that disagreed with the loader about what "configured"
-    # means would be worse than no check.
-    bound = bool(provider) and provider != "null"
+    Re-reading `LLM_TIER_*` here would be a second implementation of what
+    "configured" means, and the shipped `.env.example` binds the literal string
+    `null` -- which `config.py` treats as unconfigured and a naive check would
+    treat as a provider named "null". Asking `load_config_from_env` removes the
+    question: this module cannot disagree with the loader about the answer,
+    because it is not computing one.
+    """
+    prefix = _TIER_ENV_PREFIX[SEMANTIC_EQUIVALENCE_TIER]
+    binding = load_config_from_env(dict(env)).binding_for(SEMANTIC_EQUIVALENCE_TIER)
+    provider = (binding.provider or "").strip()
+    model = (binding.model or "").strip()
+    bound = binding.configured
 
     return [
         ReadinessGate(
@@ -218,6 +244,28 @@ def _tier_gates(env: Mapping[str, str]) -> list[ReadinessGate]:
             operator_action=(
                 f"set {prefix}_MODEL to the model identifier for this route" if not model else ""
             ),
+        ),
+        ReadinessGate(
+            name="adapter-serves-this-tier",
+            passed=bound
+            and provider == APPROVED_PROVIDER
+            and AnthropicProvider(api_key="unused-presence-placeholder").supports(
+                SEMANTIC_EQUIVALENCE_TIER
+            ),
+            observed=(
+                f"AnthropicProvider.supports({SEMANTIC_EQUIVALENCE_TIER.value})="
+                f"{AnthropicProvider(api_key='unused-presence-placeholder').supports(SEMANTIC_EQUIVALENCE_TIER)}"
+            ),
+            detail=(
+                "the implemented adapter must advertise this tier. It deliberately does NOT "
+                "advertise EMBEDDING_MODEL, so the router cannot send embedding volume to a "
+                "paid API -- and a tier the adapter refuses is a routing dead end that "
+                "configuration alone cannot fix. "
+                "The adapter validates no model identifier against a list, so a wrong name "
+                "is a provider-side error at call time rather than a readiness failure. "
+                "That is a real limit of this check and is stated rather than papered over"
+            ),
+            operator_action="",
         ),
         ReadinessGate(
             name="provider-credential-present",
@@ -317,11 +365,70 @@ def _governance_gates(
     ]
 
 
+def _provider_policy_gates(policy_path: pathlib.Path) -> list[ReadinessGate]:
+    """What the review concluded about the provider, read as data.
+
+    This module re-decides nothing. A posture is a review act recorded in
+    `model-provider-policy-v1.json`, and the gate reports it.
+    """
+    import json
+
+    raw = json.loads(policy_path.read_text(encoding="utf-8"))
+    entry = next(
+        (p for p in raw.get("providers") or () if p.get("provider_id") == APPROVED_PROVIDER),
+        None,
+    )
+    posture = (entry or {}).get("posture") or "NOT_ASSESSED"
+    route = (entry or {}).get("route_assessed") or ""
+
+    # The policy assessed the API-key route under the Commercial Terms and says
+    # in the same breath that the consumer products are a different route. The
+    # adapter is on the assessed route when it posts to the documented API
+    # endpoint; a redirected endpoint would be a route nobody reviewed.
+    endpoint = AnthropicProvider(api_key="unused-presence-placeholder").endpoint
+    on_route = endpoint == APPROVED_ROUTE_ENDPOINT
+
+    return [
+        ReadinessGate(
+            name="provider-policy-approved",
+            passed=posture == "APPROVED",
+            observed=f"posture={posture}",
+            detail=(
+                f"{APPROVED_PROVIDER!r} must be APPROVED in {PROVIDER_POLICY_PATH}. The posture "
+                "rests on the provider's own contract text, and a provider changing its terms "
+                "changes that file rather than this code"
+            ),
+            operator_action=(
+                "review the provider's data-use posture; this is a governance act"
+                if posture != "APPROVED"
+                else ""
+            ),
+        ),
+        ReadinessGate(
+            name="adapter-is-on-the-assessed-route",
+            passed=on_route,
+            observed=f"endpoint={endpoint}",
+            detail=(
+                "the reviewed route is the API accessed with an API key under the Commercial "
+                f"Terms: {route[:120]}... An adapter pointed elsewhere would be a route nobody "
+                "assessed, whatever the posture says"
+            ),
+            operator_action=(
+                "the adapter endpoint does not match the assessed route; this needs a review, "
+                "not configuration"
+                if not on_route
+                else ""
+            ),
+        ),
+    ]
+
+
 def evaluate_inference_readiness(
     db: RegistryDatabase,
     source_id: str,
     use_profile_id: str,
     env: Mapping[str, str] | None = None,
+    policy_path: pathlib.Path | None = None,
 ) -> InferenceReadiness:
     """Every gate, evaluated, in the order an operator would meet them.
 
@@ -330,7 +437,12 @@ def evaluate_inference_readiness(
     rather than a variable. Both are reported whatever the other says.
     """
     environ = env if env is not None else os.environ
-    gates = tuple(_tier_gates(environ) + _governance_gates(db, source_id, use_profile_id))
+    policy = policy_path or pathlib.Path(PROVIDER_POLICY_PATH)
+    gates = tuple(
+        _tier_gates(environ)
+        + _governance_gates(db, source_id, use_profile_id)
+        + _provider_policy_gates(policy)
+    )
     return InferenceReadiness(
         ready=all(g.passed for g in gates),
         source_id=source_id,

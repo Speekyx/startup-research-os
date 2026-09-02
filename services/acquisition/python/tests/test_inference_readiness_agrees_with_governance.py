@@ -121,3 +121,73 @@ class TestTheReadinessCheckIsNotAnAuthorization:
                 roots.add(node.module.split(".")[0])
         for forbidden in ("anthropic", "httpx", "requests", "openai", "google"):
             assert forbidden not in roots, forbidden
+
+
+class TestTheAuthorizationSatisfiesTheClassifiersProtocol:
+    """`sros_semantic_equivalence` must not import the source registry, so it
+    declares the authorization it needs as a structural Protocol. A structural
+    contract nothing checks is a contract that drifts on the first field rename.
+    """
+
+    def test_a_real_authorization_satisfies_the_protocol(self) -> None:
+        from sros_acquisition.compliance.inference import (
+            InferenceAuthorization,
+            InferenceRefusalReason,
+        )
+        from sros_semantic_equivalence import ExternalInferenceAuthorization
+
+        refusal = InferenceAuthorization(
+            authorized=False,
+            source_id="stack-exchange",
+            use_profile_id=LOCAL_PROFILE,
+            provider_id="a-provider",
+            refusal_reasons=(InferenceRefusalReason.PROVIDER_NOT_CONFIGURED,),
+        )
+        assert isinstance(refusal, ExternalInferenceAuthorization)
+        assert refusal.authorized is False
+        assert refusal.refusal_reasons
+
+    def test_the_classifier_refuses_a_real_refusal_before_building_a_prompt(self) -> None:
+        """End to end across the two packages: the acquisition gate produces a
+        refusal, and the classifier declines it without constructing a prompt or
+        touching a gateway. The gateway double raises if it is called at all."""
+        from sros_acquisition.compliance.inference import InferenceAuthorization
+        from sros_semantic_equivalence import (
+            CandidatePair,
+            ClassificationRefusedError,
+            QuestionForPrompt,
+            classify_pair,
+        )
+
+        class _ExplodingGateway:
+            def complete(self, request: object) -> object:  # pragma: no cover - must not run
+                raise AssertionError("the gateway was reached despite a refusal")
+
+        refusal = InferenceAuthorization(
+            authorized=False,
+            source_id="stack-exchange",
+            use_profile_id=LOCAL_PROFILE,
+            provider_id="a-provider",
+            refusal_reasons=("PROVIDER_NOT_CONFIGURED",),
+        )
+        pair = CandidatePair(
+            a_key="k1", b_key="k2", a_question_id="1", b_question_id="2", score=1, reasons=("x",)
+        )
+        with pytest.raises(ClassificationRefusedError):
+            classify_pair(
+                _ExplodingGateway(),
+                refusal,
+                pair,
+                QuestionForPrompt("1", "t", "b"),
+                QuestionForPrompt("2", "t", "b"),
+                workspace_id="w",
+                inference_run_id="run",
+            )
+
+    def test_the_two_packages_agree_on_the_tier(self) -> None:
+        """One decision, two constants. They drift unless something compares
+        them."""
+        from sros_orchestrator.inference_readiness import SEMANTIC_EQUIVALENCE_TIER
+        from sros_semantic_equivalence import SEMANTIC_TIER
+
+        assert SEMANTIC_TIER is SEMANTIC_EQUIVALENCE_TIER
