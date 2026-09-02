@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.55
-Last amended: 2026-09-02 (Sprint 1 / Mission 1.28)
+Version: 1.56
+Last amended: 2026-09-02 (Sprint 1 / Mission 1.29)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.56 | 2026-09-02 | **OPPORTUNITY_SYNTHESIS_EGRESS_PARTIALLY_READY: three decisions recorded, and the fourth deliberately not.** `wikimedia-pageviews` **PERMITTED** on CC0 1.0, which waives database rights BY NAME and leaves no act for a licence to restrict -- and no attribution condition was written, because CC0 creates none. `world-bank` and `gdelt` **PERMITTED_WITH_CONDITIONS**. **8 of 9 packets are now egress-authorized and 0 became formable**, which is the design working: permission to send is not evidence. **CC BY 4.0 grants 'reproduce AND Share' as two acts**, so reproduction stands alone and a contracted processor is not 'the public' -- the transmission allowlist is CC-BY-4.0 ONLY, TIGHTER than acquisition's, because ODbL's Publicly Use is unanswered. **GDELT's grant runs to datasets it RELEASES**, so ngram aggregates are covered and third-party article text is a PROHIBITED representation; its citation obligation attaches to 'any use' and is live where CC BY's is not. **TED was assessed UNCLEAR and NOT recorded**: appending a review orphans the operator's HUMAN_CONFIRMATION acceptance, which no verifier may re-satisfy, so TED would have stopped being acquirable as a side effect of assessing egress -- §0 forbids exactly that. NOT_ASSESSED and UNCLEAR both refuse, so nothing operational was traded away. **A source whose approval rests on a human decision cannot be cheaply amended.** New refusal code UNRESOLVED, because an operator can close an open question and cannot argue with a decision. 0 model calls, 0.00 USD, counters unchanged, authorizable pairs 8 before and 8 after |
 | 1.55 | 2026-09-02 | **OUTCOME B: the Opportunity Engine works and the current evidence cannot support a hypothesis -- blocked TWICE, for unrelated reasons.** 26 Evidence rows inspected, **26 ELIGIBLE_CONTEXT and 0 ELIGIBLE_SCORING**, 9 packets grouped by source-native subject, **0 formable, 0 opportunities, 0 model calls, 0.00 USD**, counters unchanged. **The failure is symmetric and that is the finding**: the one packet with commercial dimensions (TED, CPV division 90) has ONE row, and the packets with six rows (Wikimedia Docker / Podman / Kubernetes) have ONE dimension. Evidence is deep where it is narrow and broad where it is shallow. **The second blocker is independent of the evidence**: `external_model_transmission` is NOT_ASSESSED for all four sources that HAVE Evidence and PERMITTED only for `stack-exchange`, which has none -- **the one source cleared to leave the deployment is the one with nothing to send**. Three signal types map to NO dimension on purpose; a GDELT term count measures what media PUBLISHED, which is producer behaviour and not audience behaviour. **TREND_OR_CHANGE cannot satisfy a diversity requirement** because every Signal here is a derivation and so every row carries change. Docker, Podman and Kubernetes stay three packets: merging them deterministically would not make it deterministic, it would make it unargued. Migration 0029 makes the hypothesis/validated distinction a CHECK constraint. No score, rank or weight exists |
 | 1.54 | 2026-09-02 | **EXPLORATORY_V2_NOT_PROMISING, and the classifier is PARKED.** Three V2 variants, one selected by a frozen rule, frozen, run once on the Mission 1.26 holdout: **0 provisional true SAME against 4 references** where the frozen criterion required 2. 88 evaluations, 1.53 USD, 0 retries, counters unchanged. **V1 was never failing to SEE the abstraction** -- its own rationale states the shared goal and then rejects it. **The most informative artifact was an empty field**: V2 required the model to name an abstraction covering both questions, and `shared_problem_if_any` came back empty 39 times in 40. More scaffolding made it MORE conservative. **A selection rule must defeat both collapses**, so the frozen rule demands a true positive and caps the SAME share. **A ceiling you might exceed is bounded, not argued away** -- output capped at 1200 tokens to make 3.00 USD real. **A split disjoint by PAIR is not disjoint by OBSERVATION**, so the brief's own suggested prompt example was a holdout leak and was refused. Production stays NOT_AUTHORISED |
 | 1.53 | 2026-09-02 | **REFERENCE_SET_INSUFFICIENT, and the gate was allowed to fail.** The 40 labels came back **AI_ASSISTED_PROVISIONAL**, not human -- the operator chose to proceed with them rather than spend another labelling mission, which is a real decision recorded at document level and changes nothing about what they are. Development holds **2** SAME_FAMILY against a preregistered 4 (holdout passes at 4). **Two results reported apart**: the composition gate fails, and the human reference requirement is separately NOT_ESTABLISHED -- one verdict would let either hide the other. Nothing moved: no pair changed split, no label revised, no threshold lowered, no re-sampling. **A loader asked for HUMAN_OPERATOR refuses these files**, so the distinction is structural rather than prose. Mission 1.25's genuine human holdout is NOT merged in to help the threshold. 0 model calls, counters unchanged; production stays NOT_AUTHORISED |
@@ -302,6 +303,83 @@ positives in the scored split, which this 89-question corpus did not supply: one
 defensible SAME in 40 candidate pairs is a finding about the corpus, not about
 the classifier. **No synthetic positive may substitute** -- a constructed pair
 can test a parser and can never establish semantic accuracy against real data.
+
+### Opportunity synthesis egress — three sources open, one unrecorded
+
+Added in 1.56 (Mission 1.29, `opportunity-synthesis-egress-governance-v1.md`).
+**`OPPORTUNITY_SYNTHESIS_EGRESS_PARTIALLY_READY`.** The processing purpose
+assessed is **bounded external inference for Opportunity hypothesis synthesis**,
+under `local-private-research-v1`, and a different purpose is a different
+assessment.
+
+| source | decision | why |
+|---|---|---|
+| `wikimedia-pageviews` | **PERMITTED** | CC0 1.0 waives everything, database rights by name |
+| `world-bank` | **PERMITTED_WITH_CONDITIONS** | CC BY 4.0 §2(a)(1); **CC-BY-4.0 only**, not ODbL |
+| `gdelt` | **PERMITTED_WITH_CONDITIONS** | its grant covers datasets it RELEASES, not article text |
+| `ted-eu` | assessed UNCLEAR, **not recorded** | recording it would have broken acquisition |
+
+- **`reproduce` and `Share` are two granted acts, and only one is limited.**
+  CC BY 4.0 §2(a)(1) grants *"reproduce and Share the Licensed Material"*; §1
+  defines Share as providing material *"to the public"*; §3(a)(1) triggers
+  attribution only *"If You Share"*. A contracted processor performing inference
+  for one operator is not the public, so a transmission is reproduction, which is
+  granted outright and carries no credit obligation. Attribution still happens,
+  because every Claim statement names its source in its own wording -- a property
+  the data has, not a mitigation applied at transmission.
+- **A transmission allowlist may be TIGHTER than an acquisition allowlist**, and
+  here it is. Acquisition permits CC-BY-4.0 or ODbL-1.0; transmission permits
+  CC-BY-4.0 alone, because ODbL's share-alike attaches to Derivative Databases
+  and its *Publicly Use* definition is unanswered. No ODbL resource is held, so
+  the narrowing costs nothing now and stops a later dataset inheriting a
+  permission nobody assessed.
+- **A grant's SUBJECT bounds it.** GDELT permits *"unlimited and unrestricted
+  use ... of any kind"* over *"all datasets released by the GDELT Project"* --
+  which are ngram aggregates. **Third-party news article text is not a
+  GDELT-released dataset**, so it is a prohibited representation. No article text
+  is held, so the bound constrains a future collector, which is exactly when a
+  scope limit is worth writing down.
+- **An obligation attached to USE is live where one attached to SHARING is not.**
+  GDELT requires citation on *"any use or redistribution"*; CC BY 4.0 requires it
+  only on Sharing. Two licences, two different answers to the same transmission.
+- **RECORDING A DECISION IS NOT FREE.** TED's `UNCLEAR` required appending a
+  review version, and appending one orphans the operator's acceptance of
+  `ted-database-right-residual-exposure-accepted` -- a `HUMAN_CONFIRMATION`
+  condition **no verifier may satisfy, by design**. Verified against the real
+  deployment: with the new version in place, `build_authorization('ted-eu')`
+  refused and TED stopped being acquirable. Mission 1.29 §0 forbids letting a
+  transmission assessment rewrite acquisition eligibility, so the append was
+  **withdrawn**. `NOT_ASSESSED` and `UNCLEAR` both refuse at the gate, so nothing
+  operational was traded away; the distinction lives in the governance document,
+  with **H-39** named and the operator's acceptance sentence written down.
+  **Writing it down is not recording it**, exactly as in Mission 1.15.6.
+- **A source whose approval rests on a HUMAN decision cannot be cheaply
+  amended.** The other three sources' conditions are CAPABILITY-verified, so a
+  version bump costs a re-check and nothing else. That asymmetry is invisible
+  until a mission tries to amend one.
+- **UNRESOLVED is not REFUSED.** `UNCLEAR` and `NOT_ADDRESSED` had no refusal code
+  of their own and reported as a decision against. An operator can close an open
+  question and cannot argue with a decision, so
+  `SOURCE_EXTERNAL_MODEL_TRANSMISSION_UNRESOLVED` now names them -- the argument
+  ADR-033 made for `NOT_ASSESSED`, one state further along.
+- **The permitted representation is an ALLOWLIST enforced in the serializer.**
+  `opportunity-transmission-representation@1.0.0`: nine permitted top-level keys,
+  named prohibited representations, personal-data markers checked at every depth.
+  An unrecognised key refuses, because a denylist is a list somebody must remember
+  to extend. A payload exceeding it is **refused rather than trimmed** -- a
+  trimmed payload is a different packet from the one the decision authorised.
+- **No raw source payload is transmitted at all.** The packet carries internal
+  ids, procedure versions, source-native subject keys, dimension names, this
+  repository's own bound sentences, and Claim STATEMENTS it composed. No collected
+  record, no API response body, no article text, no notice payload, no personal
+  data.
+- **Governance authorization never changes epistemic meaning.** A permitted
+  Wikimedia request count is still not a reader, a customer, demand or adoption;
+  a permitted World Bank population change is still not market demand; a permitted
+  GDELT term count still never satisfies a demand claim.
+
+**8 of 9 packets are egress-authorized and 0 are formable.** Permission to send is
+not evidence, the two gates stay separate, and a test asserts it.
 
 ### The Opportunity Engine exists, and it correctly forms nothing yet
 

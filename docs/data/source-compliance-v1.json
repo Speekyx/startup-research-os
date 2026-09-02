@@ -464,7 +464,7 @@
     },
     {
       "source_id": "gdelt",
-      "review_version": 1,
+      "review_version": 2,
       "evidence_url": "https://www.gdeltproject.org/about.html",
       "evidence_section": "Terms of Use",
       "attribution": {
@@ -875,7 +875,7 @@
     },
     {
       "source_id": "world-bank",
-      "review_version": 1,
+      "review_version": 2,
       "evidence_url": "https://datacatalog.worldbank.org/public-licenses",
       "evidence_section": "Creative Commons Attribution 4.0 (CC-BY 4.0); Microdata Research License; License Specified Externally; Custom License",
       "attribution": {
@@ -984,7 +984,7 @@
     {
       "source_id": "wikimedia-pageviews",
       "use_profile_id": "local-private-research-v1",
-      "review_version": 1,
+      "review_version": 2,
       "evidence_url": "https://doc.wikimedia.org/generated-data-platform/aqs/analytics-api/documentation/access-policy.html",
       "evidence_section": "Data licensing (CC0 1.0); Client identification; Data downloads; Rate limits",
       "client_identification": {

@@ -447,6 +447,7 @@ Global news monitoring: events, themes, tone and entity mentions extracted from 
 | 2 | 2026-08-30 | `mission-1.8` | `APPROVED_WITH_CONDITIONS` | 1 |
 | 3 ← current | 2026-08-30 | `mission-1.9.2` | `APPROVED_WITH_CONDITIONS` | 4 |
 | 1 | 2026-09-01 | `mission-1.17` | `APPROVED_WITH_CONDITIONS` | 4 |
+| 2 | 2026-09-02 | `mission-1.29` | `APPROVED_WITH_CONDITIONS` | 5 |
 
 **Required conditions** — all must be satisfied before a collector may run
 
@@ -1702,6 +1703,7 @@ Per-article view counts across Wikimedia projects. Measures attention directly a
 | 1 | 2026-08-30 | `mission-1.7` | `APPROVED_WITH_CONDITIONS` | 3 |
 | 2 ← current | 2026-08-30 | `mission-1.8` | `REQUIRES_REVIEW` | 4 |
 | 1 | 2026-09-02 | `mission-1.19` | `APPROVED_WITH_CONDITIONS` | 5 |
+| 2 | 2026-09-02 | `mission-1.29` | `APPROVED_WITH_CONDITIONS` | 5 |
 
 **Access profiles** (how, not whether)
 
@@ -1773,6 +1775,7 @@ Country-level development and economic indicators. Market-context data for Marke
 | 1 | 2026-08-29 | `mission-1.0` | `REQUIRES_REVIEW` | 1 |
 | 2 ← current | 2026-08-29 | `mission-1.3` | `APPROVED_WITH_CONDITIONS` | 1 |
 | 1 | 2026-09-01 | `mission-1.17` | `APPROVED_WITH_CONDITIONS` | 1 |
+| 2 | 2026-09-02 | `mission-1.29` | `APPROVED_WITH_CONDITIONS` | 2 |
 
 **Required conditions** — all must be satisfied before a collector may run
 

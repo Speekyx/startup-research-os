@@ -74,6 +74,13 @@ class SourcePolicyStanding:
     permits_external_model_transmission: bool | None
     #: Why, in the caller's own words. Required, so a refusal can be cited.
     basis: str
+    #: The registry's OWN value for the transmission activity, quoted rather
+    #: than re-encoded (Mission 1.29). The boolean above decides; this says what
+    #: the reviewer actually recorded, so the engine can report UNCLEAR as
+    #: unresolved instead of flattening it to "refused" -- the same distinction
+    #: ADR-033 draws for NOT_ASSESSED, one state further along. Empty means the
+    #: caller did not supply it, and the message falls back to the boolean.
+    transmission_state: str = ""
 
     def __post_init__(self) -> None:
         if not self.basis.strip():

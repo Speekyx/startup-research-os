@@ -581,14 +581,12 @@
         "scoring_ready": false
       },
       "external_synthesis": {
-        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
-        "refusal_reasons": [
-          "gdelt: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
-        ],
+        "availability": "AVAILABLE",
+        "refusal_reasons": [],
         "per_source": [
           [
             "gdelt",
-            "NOT_ASSESSED"
+            "PERMITTED"
           ]
         ]
       }
@@ -625,14 +623,12 @@
         "scoring_ready": false
       },
       "external_synthesis": {
-        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
-        "refusal_reasons": [
-          "gdelt: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
-        ],
+        "availability": "AVAILABLE",
+        "refusal_reasons": [],
         "per_source": [
           [
             "gdelt",
-            "NOT_ASSESSED"
+            "PERMITTED"
           ]
         ]
       }
@@ -669,14 +665,12 @@
         "scoring_ready": false
       },
       "external_synthesis": {
-        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
-        "refusal_reasons": [
-          "gdelt: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
-        ],
+        "availability": "AVAILABLE",
+        "refusal_reasons": [],
         "per_source": [
           [
             "gdelt",
-            "NOT_ASSESSED"
+            "PERMITTED"
           ]
         ]
       }
@@ -768,14 +762,12 @@
         "scoring_ready": false
       },
       "external_synthesis": {
-        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
-        "refusal_reasons": [
-          "wikimedia-pageviews: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
-        ],
+        "availability": "AVAILABLE",
+        "refusal_reasons": [],
         "per_source": [
           [
             "wikimedia-pageviews",
-            "NOT_ASSESSED"
+            "PERMITTED"
           ]
         ]
       }
@@ -816,14 +808,12 @@
         "scoring_ready": false
       },
       "external_synthesis": {
-        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
-        "refusal_reasons": [
-          "wikimedia-pageviews: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
-        ],
+        "availability": "AVAILABLE",
+        "refusal_reasons": [],
         "per_source": [
           [
             "wikimedia-pageviews",
-            "NOT_ASSESSED"
+            "PERMITTED"
           ]
         ]
       }
@@ -864,14 +854,12 @@
         "scoring_ready": false
       },
       "external_synthesis": {
-        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
-        "refusal_reasons": [
-          "wikimedia-pageviews: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
-        ],
+        "availability": "AVAILABLE",
+        "refusal_reasons": [],
         "per_source": [
           [
             "wikimedia-pageviews",
-            "NOT_ASSESSED"
+            "PERMITTED"
           ]
         ]
       }
@@ -907,14 +895,12 @@
         "scoring_ready": false
       },
       "external_synthesis": {
-        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
-        "refusal_reasons": [
-          "world-bank: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
-        ],
+        "availability": "AVAILABLE",
+        "refusal_reasons": [],
         "per_source": [
           [
             "world-bank",
-            "NOT_ASSESSED"
+            "PERMITTED"
           ]
         ]
       }
@@ -950,14 +936,12 @@
         "scoring_ready": false
       },
       "external_synthesis": {
-        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
-        "refusal_reasons": [
-          "world-bank: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
-        ],
+        "availability": "AVAILABLE",
+        "refusal_reasons": [],
         "per_source": [
           [
             "world-bank",
-            "NOT_ASSESSED"
+            "PERMITTED"
           ]
         ]
       }

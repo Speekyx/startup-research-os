@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.54
+Version: 1.55
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-02 (Sprint 1 / Mission 1.28)
+Last amended: 2026-09-02 (Sprint 1 / Mission 1.29)
 
 ---
 
@@ -13,6 +13,76 @@ Last amended: 2026-09-02 (Sprint 1 / Mission 1.28)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.55 — 2026-09-02 (Sprint 1 / Mission 1.29)
+
+Authorized by the Mission 1.29 brief §0-§18.
+
+**OUTCOME: `OPPORTUNITY_SYNTHESIS_EGRESS_PARTIALLY_READY`.** Three of the four
+source families that contribute canonical Evidence now have an
+`external_model_transmission` decision; the fourth was assessed and could not be
+recorded. **8 of 9 Opportunity packets are egress-authorized, 0 are formable, 0
+model calls, 0.00 USD**, every canonical counter unchanged and authorizable
+(source, profile) pairs 8 before and 8 after.
+
+**THE DECISIONS.** `wikimedia-pageviews` **PERMITTED** -- the only unconditional
+permission in this catalog, because CC0 1.0 waives all Copyright and Related
+Rights including database rights BY NAME and leaves no act for a licence to
+restrict. **No attribution condition was written**, because CC0 creates none and
+Mission 1.19 established that inventing one leaves a reader unable to tell a duty
+from a habit. `world-bank` and `gdelt` **PERMITTED_WITH_CONDITIONS**.
+
+**TWO ACTS, ONE LIMIT.** CC BY 4.0 §2(a)(1) grants *"reproduce and Share"*, §1
+defines Share as providing material *"to the public"*, and §3(a)(1) triggers
+attribution only on Sharing. A contracted processor is not the public, so a
+transmission is reproduction -- granted outright, with no boilerplate to paste
+into a prompt. **The transmission allowlist is CC-BY-4.0 ONLY, tighter than
+acquisition's**, because ODbL's *Publicly Use* is unanswered and an unanswered
+question is not a permission.
+
+**A GRANT'S SUBJECT BOUNDS IT.** GDELT permits *"unlimited and unrestricted use
+... of any kind"* over *"all datasets released by the GDELT Project"* -- ngram
+aggregates. **Third-party article text is not a GDELT-released dataset** and is a
+prohibited representation. And GDELT's citation obligation attaches to *"any
+use"*, so it is LIVE where CC BY's, which begins *"If You Share"*, is not.
+
+**RECORDING A DECISION IS NOT FREE, AND THAT IS THE MISSION'S REAL FINDING.**
+TED's `UNCLEAR` required appending a review version, and appending one **orphans
+the operator's acceptance** of `ted-database-right-residual-exposure-accepted` --
+a `HUMAN_CONFIRMATION` condition **no verifier may satisfy, by design**. Verified
+against the real deployment rather than predicted: `build_authorization('ted-eu')`
+refused and TED stopped being acquirable. §0 forbids letting a transmission
+assessment rewrite acquisition eligibility, so **the append was withdrawn**.
+NOT_ASSESSED and UNCLEAR both refuse, so nothing operational was lost; the
+distinction lives in the governance document with **H-39** named and the operator
+acceptance sentence written down -- and **writing it down is not recording it**.
+**A source whose approval rests on a human decision cannot be cheaply amended**,
+and that cost is invisible until a mission tries.
+
+**UNRESOLVED IS NOT REFUSED.** `UNCLEAR` and `NOT_ADDRESSED` had no refusal code
+and reported as a decision against. An operator can close an open question and
+cannot argue with a decision.
+
+**THE REPRESENTATION IS AN ALLOWLIST ENFORCED IN THE SERIALIZER**, not a promise:
+nine permitted keys, named prohibited representations, personal-data markers at
+every depth, refused rather than trimmed. **No raw source payload is transmitted
+at all** -- only ids, procedure versions, subject keys, dimension bounds and Claim
+statements this repository composed. One fail-open was found and fixed: the deep
+scan tested `isinstance(dict)` while accepting any `Mapping`.
+
+**THE MISSION 1.23 HAZARD FIRED AS DESIGNED.** The append stalled three
+compliance pins and dropped authorizable pairs 8 -> 5; a performed re-check
+asserting byte-identical `required_conditions` restored them to 8. A bespoke
+before/after eligibility check had reported 0 regressions and MISSED it, because
+it read the catalog and the pin lives in a separate file (`testing-strategy.md`
+§66). Ten tests broke under the full append and
+**withdrawing TED reverted seven of them cleanly**, leaving three real repairs and
+none weakened -- two now name v1 explicitly and are stricter for it.
+
+**Next: targeted evidence completion for subjects already in the packets**, not
+broad source expansion. Wikimedia's three subjects need one genuinely different
+dimension; TED's needs a second row and stays egress-blocked until H-39 closes.
+Do not start scoring or ranking
 
 ## 1.54 — 2026-09-02 (Sprint 1 / Mission 1.28)
 
@@ -1836,6 +1906,7 @@ Additionally authoritative:
 - docs/data/problem-family-rubric-v1.md (added in 1.49)
 - docs/data/problem-family-human-reference-v1.md (added in 1.51)
 - docs/data/opportunity-engine-foundation-v1.md (added in 1.54)
+- docs/data/opportunity-synthesis-egress-governance-v1.md (added in 1.55)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.
