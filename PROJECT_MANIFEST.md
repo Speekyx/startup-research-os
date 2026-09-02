@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.44
+Version: 1.45
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-02 (Sprint 1 / Mission 1.21)
+Last amended: 2026-09-02 (Sprint 1 / Mission 1.22)
 
 ---
 
@@ -13,6 +13,68 @@ Last amended: 2026-09-02 (Sprint 1 / Mission 1.21)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.45 — 2026-09-02 (Sprint 1 / Mission 1.22)
+
+Authorized by the Mission 1.22 brief §0-§51.
+
+**OUTCOME A: THE MODEL ROUTE IS NOT AUTHORISED, AND SEPARATELY NOT CONFIGURED.**
+No model was called, no question text left this machine, no component was built.
+0 model calls, 0 tokens, 0 cost, and every count unchanged at 148/148 records and
+26/26/26/26 Signals, Claims, Revisions and Evidence.
+
+**THE GOVERNANCE GATE, AND THE STRUCTURAL FINDING UNDERNEATH IT.** The Stack
+Exchange review permits model INFERENCE -- *"Reading and classifying licensed
+text is use within the licence's own grant to reproduce and to produce Adapted
+Material"* -- and is **silent on TRANSMISSION** of that text to an external
+provider. Those are different acts with different exposure. **The profile is
+silent too, and has no word for the question**: `model_inference: true` says the
+ACTIVITY is in scope and `deployment: LOCAL` says where the SYSTEM runs, while
+nothing says where inference RUNS. No occurrence of *provider*, *third party*,
+*transmit* or *egress* appears in the profile, in any condition on the review, or
+in any document under `docs/` -- each absence searched for rather than assumed,
+and each asserted by a test. **So `model_processing` is one field answering a
+question that turns out to be two**, which is the same shape Mission 1.15.4 found
+when every review had assessed a use case the model never recorded.
+
+**THE SECOND GATE IS INDEPENDENT.** Every inference tier is `null`, every
+credential is empty, and the only implemented providers are `anthropic` and
+`gemini`, both external, plus test doubles. **There is no local inference
+provider**: `local` appears once, as the EMBEDDING tier, and embeddings are
+forbidden. §6's instruction to prefer a local route has no candidate to prefer.
+Configuring a provider would not answer the governance question, and answering it
+would not configure a provider.
+
+**A DESIGN, NOT A COMPONENT.** `semantic-problem-equivalence-v1.md` records the
+architecture -- bounded deterministic candidate generation that is never
+evidence, a versioned rubric with mandatory ABSTAIN, untrusted question text
+structurally separated from instructions, a classifier with no tools, uncalibrated
+confidence semantics, pairwise-only Signals, provenance outliving the current
+configuration -- and nothing was built, because building half a machine whose
+other half is unauthorised is the unused abstraction this repository refuses
+elsewhere. Mission 1.20's three Docker hard negatives are carried into the rubric
+section so they are not rediscovered.
+
+**§47's evaluation report was deliberately NOT created.** A rubric section, an
+empty confusion matrix and "not evaluated" in every row would look like an
+evaluation that returned nothing, when none was performed. No operator labelling
+batch was requested either: asking a person to label pairs for a classifier that
+cannot run spends attention on a step that cannot complete.
+
+**Two 1.21 wordings corrected first.** Its pre-registration claim was too absolute
+-- two metadata-only probes had already occurred -- and its robots finding is now
+stated as an SROS POLICY DECISION rather than a legal conclusion: no sufficient
+positive access basis exists under this repository's rules and the directive
+disallows the route, and **neither amounts to a claim that robots.txt makes REST
+access unlawful**. No acquisition became authorised by either correction.
+
+**THE BLOCKER MOVED FROM THE WORLD TO THIS DEPLOYMENT.** 1.18 and 1.20 found the
+DATA could not support deterministic identity; 1.21 found the SOURCES publishing
+identity could not be reached; 1.22 finds that **the model route has not been
+assessed and the profile cannot express the question**. The first two were
+findings about the world; this one is about SROS, and is therefore the one this
+project can resolve. Recommended next: a governance mission that asks where
+inference may happen and gives the profile a field for the answer
 
 ## 1.44 — 2026-09-02 (Sprint 1 / Mission 1.21)
 
