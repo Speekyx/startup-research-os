@@ -1,6 +1,6 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.50
+Version: 1.51
 Last amended: 2026-09-02 (Sprint 1 / Mission 1.25)
 
 ## Boot Sequence
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.51 | 2026-09-02 | **The human operator reviewed the frozen holdout, and the criterion still fails -- but the reference was half the story.** Re-scored the SAME frozen predictions against HUMAN_OPERATOR labels: no model call, nothing frozen touched, the provisional scoring preserved as history. Every precondition now met against human ground truth -- 10 labelled, 2 human SAME, 0 false SAME -- and **0 true SAME**, so `MODEL_EVALUATION_FAILED` stands. **Zero false positives is still not a pass**, being what a constant-DIFFERENT classifier scores. **Five of ten labels changed and on three the human moved TOWARD the model**: the provisional reference had called two pairs a family the operator does not, and one decidable that the operator finds undecidable. Missed positives fall 4 -> 2. So *the model is far too conservative* was half an artifact of an AI-assisted reference -- a finding that generalises. **The full 20-pair set is MIXED provenance** and must never be reported as fully human |
 | 1.50 | 2026-09-02 | **MODEL_EVALUATION_FAILED on a frozen criterion, and it is worth more than Mission 1.24's pass.** A SECOND relation -- `SAME_PROBLEM_FAMILY`, do two observations express substantially the same blocked goal -- **not a looser version of the exact one**, which stays intact and unweakened. The relation changed rather than a threshold: *would the fix transfer* needs the fix, and loosening it would have kept that requirement while answering more permissively. **The criterion was built so a constant classifier cannot pass** -- `min_true_same` demands a demonstrated positive in the scored split -- **and then it caught the real run**: 4 SAME_FAMILY references in the holdout, **zero found**, one SAME in twenty overall and that one the rubric's own quoted example. **Every disagreement is one-directional**, so either the rubric is too strict or the reference too generous, and this cannot separate them -- the rubric and its reference disagree about the rubric's own borderline example. **The rubric was NOT widened after seeing the results**; 1.24 kept a rule in the flattering direction and this keeps one in the costly one. Reference is AI_ASSISTED_PROVISIONAL, so what was measured is agreement between two assistants. 20 calls, 0.38 USD, no Signal, no Claim, no Evidence |
 | 1.49 | 2026-09-02 | **Two corrections before Mission 1.25 proper, and the first is the most misleading thing this repository had said.** Mission 1.24's 40 reference labels were supplied `AI_ASSISTED_PROVISIONAL` by a different assistant, **not by a human**, and the claim was embedded in a filename, a section heading, two type names and a `reviewer` field naming a person who did not judge. `ReferenceOrigin` is now required and never defaulted; `human_ground_truth_established` is true only when EVERY label is human; the origin rides on the RESULT because a result is what gets quoted. **No history rewritten** -- every label, prediction and cost is unchanged, and 1.24 stays EVALUATION_INSUFFICIENT for the reason the correction does not touch. Second: **SROS does have Evidence** -- 26 rows from other source families -- so the gap is *no validated recurring-problem semantic evidence from Stack Exchange*, bounded to EXACT equivalence over one candidate set, and nothing establishes that problem-FAMILY evidence is unavailable |
 | 1.48 | 2026-09-02 | **OUTCOME B: the first model-mediated inference ran, and produced no epistemic row.** 40 real labelled pairs through the Gateway on the approved route, 0.61 USD, **zero false SAME** -- and **zero SAME of any kind**, over a holdout containing no SAME label to test against, so a classifier hard-coded to answer DIFFERENT scores identically. Precision on SAME undefined, recall 0/1. **The predeclared criterion was wrong in a way only data could show**: V1 wanted a positive *anywhere in the reference set* and the only one fell in DEVELOPMENT; V2 wants it in the scored split and returns EVALUATION_INSUFFICIENT on the same run. V1 is KEPT, because rewriting a rule after the fact means it was never binding. **A structural guard decided the architecture**: validate_signals.py forbids a Gateway import anywhere in sros_nlp, so the classifier lives in its own package and the guard was left alone. Authorization is resolved BEFORE any source text is serialised, not before the socket. No confidence number is requested from the model at all. The three Mission 1.20 hard negatives were classified correctly and prove nothing -- the rubric quotes them, so they are in-sample by construction and pinned to development. **No production inference, no Signal, no INFERRED Claim, no Evidence**, and the blocker is a corpus that yielded one defensible SAME in 40 pairs |
@@ -324,6 +325,16 @@ indistinguishable in storage without one.
   everything -- or ABSTAIN to everything -- fails by construction.
   `defeats_a_constant_classifier` computes the property from the numbers rather
   than asserting it in prose, and tests score both constant classifiers.
+- **A provenance-aware re-scoring is an ADDITION, never a rewrite.** When the
+  operator reviewed Mission 1.25's frozen holdout, the frozen predictions were
+  re-scored with no model call and nothing frozen touched, and the provisional
+  result was preserved beside the new one. **A split may reach human ground truth
+  while its siblings have not**, so a reference set can be MIXED -- and a mixed set
+  is never reported as human.
+- **An AI-assisted reference can be wrong in the generous direction.** On that
+  holdout the human moved TOWARD the model on three of five changed labels, halving
+  the apparent miss rate. A conclusion drawn about a classifier from a provisional
+  reference is partly a conclusion about the reference.
 - **A reference label carries its ORIGIN.** `AI_ASSISTED_PROVISIONAL` labels are
   usable for scoring and are not ground truth; `human_ground_truth_established`
   is true only when EVERY label is human, and the origin rides on the RESULT

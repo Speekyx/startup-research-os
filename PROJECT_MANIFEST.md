@@ -1,6 +1,6 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.49
+Version: 1.50
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
@@ -13,6 +13,42 @@ Last amended: 2026-09-02 (Sprint 1 / Mission 1.25)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.50 — 2026-09-02 (Sprint 1 / Mission 1.25, human holdout re-scoring)
+
+Authorized by the Mission 1.25 continuation. **No model call, and nothing frozen
+touched**: rubric, prompt, candidate set, split, predictions and acceptance
+criterion are unchanged, and the provisional scoring is preserved beside the new
+result rather than replaced.
+
+**THE CRITERION STILL FAILS, AND NOW AGAINST HUMAN GROUND TRUTH.** The scored
+holdout meets every precondition -- 10 labelled pairs, 2 human `SAME_FAMILY`, 0
+false positives -- and the model produced **0** true `SAME_PROBLEM_FAMILY`.
+`MODEL_EVALUATION_FAILED` stands. **Zero false positives is not a pass**: it is
+what a classifier hard-coded to answer DIFFERENT scores, which is why the
+criterion asks a second question.
+
+**BUT THE REFERENCE WAS HALF THE STORY, AND THAT IS THE FINDING.** Five of ten
+labels changed under human review, and **on three the operator moved TOWARD the
+model**: the provisional reference had called two pairs a family the operator
+does not, and one pair decidable that the operator finds undecidable -- and the
+classifier had already answered DIFFERENT, DIFFERENT and ABSTAIN on exactly
+those. Missed positives fall from 4 to 2 and agreement rises from 5/10 to 6/10.
+
+So Mission 1.25's reading that the classifier is *strictly more conservative than
+the reference* was half an artifact of an AI-assisted reference. **A conclusion
+drawn about a classifier from a provisional reference is partly a conclusion
+about the reference**, which generalises past this mission.
+
+**The one-directional pattern survives at half the size**: two human-confirmed
+families were still missed, so the classifier cannot yet demonstrate it can find
+one.
+
+**PROVENANCE IS MIXED AND STAYS SO.** The scored holdout has human ground truth;
+the development split remains `AI_ASSISTED_PROVISIONAL`. The full 20-pair set
+must never be reported as fully human. `HUMAN_OPERATOR` was added as a reference
+origin -- a person, so it establishes ground truth, and deliberately not filed as
+expert or non-expert because neither is ours to assert on their behalf
 
 ## 1.49 — 2026-09-02 (Sprint 1 / Mission 1.25)
 

@@ -993,3 +993,99 @@ class TestTheFamilyCriterionCannotBePassedByAConstantClassifier:
         predictions["0::1"] = "SAME_PROBLEM_FAMILY"
         result = evaluate(labels, predictions, criterion=FAMILY_V1_ACCEPTANCE)
         assert result.outcome == "EVALUATION_INSUFFICIENT"
+
+
+class TestAHumanOriginEstablishesGroundTruthForItsSplitOnly:
+    """Mission 1.25, after the operator reviewed the frozen holdout.
+
+    A split can reach human ground truth while its siblings have not. The set is
+    then MIXED, and a mixed set reported as human is the error this contract
+    exists to prevent.
+    """
+
+    def _label(self, origin: ReferenceOrigin, pair_id: str, split: Split) -> ReferenceLabel:
+        return ReferenceLabel(
+            pair_id=pair_id,
+            a_question_id=pair_id.split("::")[0],
+            b_question_id=pair_id.split("::")[1],
+            reviewer="whoever judged",
+            origin=origin,
+            decision=ReferenceDecision.SAME,
+            labelled_at="2026-09-02T00:00:00+00:00",
+            split=split,
+        )
+
+    def test_the_operator_is_a_person_and_establishes_ground_truth(self) -> None:
+        """Filed as neither expert nor non-expert, because neither is ours to
+        assert on their behalf."""
+        assert ReferenceOrigin.HUMAN_OPERATOR.establishes_human_ground_truth
+        assert ReferenceOrigin("HUMAN_OPERATOR") is ReferenceOrigin.HUMAN_OPERATOR
+
+    def test_a_set_mixing_a_reviewed_split_with_an_unreviewed_one_is_not_human(self) -> None:
+        """The exact shape Mission 1.25 ended in: a human holdout beside a
+        provisional development split."""
+        mixed = LabelSet(
+            (
+                self._label(ReferenceOrigin.HUMAN_OPERATOR, "1::2", Split.HOLDOUT),
+                self._label(ReferenceOrigin.AI_ASSISTED_PROVISIONAL, "3::4", Split.DEVELOPMENT),
+            )
+        )
+        assert not mixed.human_ground_truth_established
+        assert mixed.origins == frozenset(
+            {ReferenceOrigin.HUMAN_OPERATOR, ReferenceOrigin.AI_ASSISTED_PROVISIONAL}
+        )
+
+    def test_the_reviewed_split_alone_does_establish_it(self) -> None:
+        holdout_only = LabelSet(
+            (self._label(ReferenceOrigin.HUMAN_OPERATOR, "1::2", Split.HOLDOUT),)
+        )
+        assert holdout_only.human_ground_truth_established
+
+    def test_zero_false_positives_still_fails_without_a_true_one(self) -> None:
+        """The result the human re-scoring produced, pinned. Every precondition
+        met against human ground truth, and still a failure -- because a
+        constant-DIFFERENT classifier records the same zero."""
+        from sros_semantic_equivalence import FAMILY_V1_ACCEPTANCE
+
+        rows = []
+        for i in range(10):
+            rows.append(
+                ReferenceLabel(
+                    pair_id=f"{i}::{i + 1}",
+                    a_question_id=str(i),
+                    b_question_id=str(i + 1),
+                    reviewer="operator",
+                    origin=ReferenceOrigin.HUMAN_OPERATOR,
+                    decision=(ReferenceDecision.SAME if i < 2 else ReferenceDecision.DIFFERENT),
+                    labelled_at="2026-09-02T00:00:00+00:00",
+                    split=Split.HOLDOUT,
+                )
+            )
+        labels = LabelSet(tuple(rows))
+        predictions = {r.pair_id: "DIFFERENT_PROBLEM_FAMILY" for r in rows}
+        result = evaluate(labels, predictions, criterion=FAMILY_V1_ACCEPTANCE)
+        assert result.human_ground_truth_established is True
+        assert result.positives == 2
+        assert result.false_same == ()
+        assert result.true_same == ()
+        assert result.outcome == "MODEL_EVALUATION_FAILED"
+
+    def test_the_stored_human_holdout_records_its_mixed_context(self) -> None:
+        """Read from the committed file, so the record and the claim cannot
+        drift apart."""
+        import json
+
+        path = (
+            pathlib.Path(__file__).resolve().parents[4]
+            / "docs"
+            / "data"
+            / "problem-family-holdout-human-labels-v1.json"
+        )
+        raw = json.loads(path.read_text(encoding="utf-8"))
+        assert raw["reference_label_origin"] == "HUMAN_OPERATOR"
+        assert raw["development_split_origin"] == "AI_ASSISTED_PROVISIONAL"
+        assert raw["full_reference_set_provenance"] == "MIXED"
+        assert {row["origin"] for row in raw["labels"]} == {"HUMAN_OPERATOR"}
+        # the provisional reference is preserved, never replaced
+        assert (path.parent / "problem-family-reference-labels-v1.json").exists()
+        assert (path.parent / "problem-family-evaluation-holdout.json").exists()

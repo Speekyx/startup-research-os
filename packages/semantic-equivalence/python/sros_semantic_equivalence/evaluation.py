@@ -109,13 +109,24 @@ class ReferenceOrigin(StrEnum):
     #: that does not require expertise, and not for one that does.
     HUMAN_NON_EXPERT = "HUMAN_NON_EXPERT"
 
+    #: The operator of this deployment judged the pair. A person, so it
+    #: establishes ground truth -- and deliberately NOT filed as expert or
+    #: non-expert, because neither is ours to assert on their behalf. The family
+    #: relation was designed to be answerable without the domain expertise the
+    #: exact relation needed, which is what makes this origin sufficient for it.
+    HUMAN_OPERATOR = "HUMAN_OPERATOR"
+
     #: Produced with AI assistance and not confirmed by a person. Mission 1.24's
     #: reference set is this, and the repository must not describe it otherwise.
     AI_ASSISTED_PROVISIONAL = "AI_ASSISTED_PROVISIONAL"
 
     @property
     def establishes_human_ground_truth(self) -> bool:
-        return self in (ReferenceOrigin.HUMAN_EXPERT, ReferenceOrigin.HUMAN_NON_EXPERT)
+        return self in (
+            ReferenceOrigin.HUMAN_EXPERT,
+            ReferenceOrigin.HUMAN_NON_EXPERT,
+            ReferenceOrigin.HUMAN_OPERATOR,
+        )
 
 
 class ReferenceDecision(StrEnum):

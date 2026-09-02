@@ -1,6 +1,8 @@
 # Mission 1.25 — Recurring Problem Family Inference V1
 
-**Outcome: `MODEL_EVALUATION_FAILED` on the frozen criterion.** The classifier
+**Outcome: `MODEL_EVALUATION_FAILED` on the frozen criterion — against both the
+provisional reference AND, in the addendum below, against human ground truth for
+the scored holdout.** The classifier
 found **zero** of the four `SAME_FAMILY` references in the scored holdout. No
 production inference, no Signal, no INFERRED Claim, no Evidence.
 
@@ -36,9 +38,10 @@ on the fake provider. The whole path ran end to end against the real route.
 0.38 USD.
 
 **4. Did the scored holdout contain positive SAME_FAMILY references?**
-**Yes — exactly 4**, out of 10 labelled holdout pairs. The criterion required at
-least 2. **This is the thing Mission 1.24 lacked**, and having it is why this
-mission produced an answer.
+**Yes.** 4 against the provisional reference, and **2 against human ground truth**
+after the operator reviewed the split (see the addendum). Both clear the
+criterion's minimum of 2. **This is the thing Mission 1.24 lacked**, and having it
+is why this mission produced an answer.
 
 **5. Can an always-DIFFERENT classifier pass?**
 **No.** `min_true_same = 1` makes both constant classifiers fail by construction,
@@ -109,6 +112,11 @@ semantic validation NOT_ESTABLISHED. It failed, so both are open.
 ---
 
 ## Where the disagreement is, and it is one-directional
+
+> **Revised by the addendum.** Human review of the holdout showed that three of
+> these "missed positives" were the provisional reference being generous, not the
+> classifier being tight. The pattern below survives at **half the size**. The
+> section is kept as written because it is what the provisional scoring said.
 
 **Every disagreement is the model refusing a family the reference asserted.**
 Eight missed positives across both splits; zero cases of the model asserting a
@@ -235,3 +243,92 @@ set. It does have 26 canonical Evidence rows from other source families, so
 cross-source convergence is not blocked by an absence of Evidence in general; it
 is blocked by the absence of *this* evidence, which is a narrower and more useful
 statement.
+
+
+---
+
+# ADDENDUM — the holdout re-scored against human labels
+
+**Added after the frozen holdout was independently reviewed by the human
+operator.** Nothing frozen was touched: the rubric, prompt, candidate set, split,
+model predictions and acceptance criterion are unchanged, **no model call was
+made**, and the original scoring against the provisional reference is preserved
+unmodified as historical data. This is an additional provenance-aware result.
+
+## Provenance, and it is MIXED
+
+| | |
+|---|---|
+| scored holdout reference | **`HUMAN_OPERATOR`** — human ground truth **established for this split** |
+| development reference | still `AI_ASSISTED_PROVISIONAL` |
+| **full 20-pair reference set** | **MIXED — must not be reported as fully human ground truth** |
+
+## The result, against the same frozen criterion
+
+| clause | required | actual | |
+|---|---|---|---|
+| labelled scored pairs | ≥ 8 | **10** | pass |
+| human `SAME_FAMILY` in the scored split | ≥ 2 | **2** | pass, at the minimum |
+| false `SAME_PROBLEM_FAMILY` | 0 | **0** | pass |
+| **true `SAME_PROBLEM_FAMILY`** | **≥ 1** | **0** | **FAIL** |
+
+**`MODEL_EVALUATION_FAILED`, unchanged.** Every precondition the criterion sets
+for being *able* to test is now met against human ground truth, and the model
+still never produced a single `SAME_PROBLEM_FAMILY` on the holdout.
+
+**Zero false positives is not a pass here and must not be read as one.** That is
+the number a classifier hard-coded to answer DIFFERENT also achieves, which is
+exactly why the criterion asks a second question. The answer to it is 0.
+
+Confusion, human reference: `DIFFERENT→DIFFERENT_PROBLEM_FAMILY` 5,
+`SAME→DIFFERENT_PROBLEM_FAMILY` 2, `UNCERTAIN→ABSTAIN` 1,
+`UNCERTAIN→DIFFERENT_PROBLEM_FAMILY` 2. Agreements 6/10.
+
+## What the human review changed, and it is the most interesting part
+
+**Five of the ten labels changed**, and the direction is not what the provisional
+scoring implied.
+
+| pair | provisional | human | |
+|---|---|---|---|
+| `78086323::78097216` | SAME_FAMILY | DIFFERENT_FAMILY | **the model was right** |
+| `78096486::78097886` | SAME_FAMILY | DIFFERENT_FAMILY | **the model was right** |
+| `78095639::78105296` | DIFFERENT_FAMILY | UNCERTAIN | **the model was right** (it abstained) |
+| `78096355::78097579` | DIFFERENT_FAMILY | UNCERTAIN | model still off |
+| `78096355::78103879` | DIFFERENT_FAMILY | UNCERTAIN | model still off |
+
+**On three of the five changes the human moved TOWARD the model.** The
+provisional reference had called two pairs a family that the operator does not,
+and had called one pair decidable that the operator finds undecidable — and the
+classifier had already answered DIFFERENT, DIFFERENT and ABSTAIN on those three.
+
+So the Mission 1.25 reading that *the model is strictly more conservative than
+the reference* was **half an artifact of the reference**. Against human labels:
+
+- **missed positives fall from 4 to 2**;
+- agreements rise from 5/10 to 6/10;
+- and the model's single abstention turns out to be correct.
+
+**The one-directional pattern survives, at half the size.** Two genuine
+human-confirmed families were still called DIFFERENT: `78086387::78097071` and
+`78089075::78089578`. The classifier is more conservative than a person, and by
+less than it looked.
+
+## What this does and does not settle
+
+**Settled**: the earlier reading that the rubric might be far too strict is
+weakened. Three of the four "missed positives" that motivated it were the
+provisional reference being generous, not the rubric being tight. That is a
+finding about **AI-assisted references**, and it generalises beyond this mission:
+a provisional reference agreed with a second assistant's looser instinct, and a
+person disagreed with both.
+
+**Not settled**: two real families remain unfound, so the classifier still cannot
+demonstrate it can identify one. And with exactly two positives in the scored
+split — the bare minimum the criterion accepts — this holdout can distinguish a
+working classifier from a constant one, and little more. A larger human-labelled
+holdout is what would make the next answer worth more than this one.
+
+**Unchanged**: no production inference, no Signal, no INFERRED Claim, no
+Evidence, no Opportunity, and no rubric or criterion was altered after seeing
+either scoring.
