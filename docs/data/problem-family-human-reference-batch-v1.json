@@ -1,0 +1,1002 @@
+{
+  "dataset_id": "problem-family-human-reference-v1",
+  "relation": "SAME_PROBLEM_FAMILY",
+  "sampling_version": "problem-family-human-reference-sampling@1.0.0",
+  "split_version": "problem-family-human-reference-split@1.0.0",
+  "rubric_version": "problem-family-rubric@1.0.0",
+  "candidate_generator_version": "docker-problem-family-candidates@1.0.0",
+  "reference_origin_expected": "HUMAN_OPERATOR",
+  "human_ground_truth_established": false,
+  "labels_present": false,
+  "corpus_size": 89,
+  "eligible_pairs": 731,
+  "excluded_prior_pairs": 20,
+  "available_pairs": 711,
+  "counts": {
+    "total": 40,
+    "development": 24,
+    "holdout": 16,
+    "by_stratum": {
+      "A_HIGH_SPECIFICITY": 10,
+      "B_MEDIUM_SPECIFICITY": 8,
+      "C_LOW_SPECIFICITY": 8,
+      "D_DIAGNOSTIC_WRAPPER": 2,
+      "E_DIFFERENT_TAGS_SHARED_TOKENS": 12
+    },
+    "by_stratum_and_split": {
+      "A_HIGH_SPECIFICITY": {
+        "DEVELOPMENT": 6,
+        "HOLDOUT": 4
+      },
+      "B_MEDIUM_SPECIFICITY": {
+        "DEVELOPMENT": 5,
+        "HOLDOUT": 3
+      },
+      "C_LOW_SPECIFICITY": {
+        "DEVELOPMENT": 5,
+        "HOLDOUT": 3
+      },
+      "D_DIAGNOSTIC_WRAPPER": {
+        "DEVELOPMENT": 1,
+        "HOLDOUT": 1
+      },
+      "E_DIFFERENT_TAGS_SHARED_TOKENS": {
+        "DEVELOPMENT": 7,
+        "HOLDOUT": 5
+      }
+    }
+  },
+  "stratum_populations_available": {
+    "A_HIGH_SPECIFICITY": 53,
+    "B_MEDIUM_SPECIFICITY": 136,
+    "C_LOW_SPECIFICITY": 275,
+    "D_DIAGNOSTIC_WRAPPER": 2,
+    "E_DIFFERENT_TAGS_SHARED_TOKENS": 245
+  },
+  "enrichment_warning": "This 40-pair set is an EVALUATION-ORIENTED ENRICHED SAMPLE. Strata were sampled at deliberately unequal rates -- the low-similarity stratum holds 275 of the 711 available pairs and contributes 8, the wrapper stratum holds 2 and contributes both -- so the proportion of any label in it is NOT an estimate of how often that label occurs among Docker Stack Exchange pairs. It may be used to develop and evaluate a classifier. It may never be used to state a prevalence.",
+  "selection_rules": [
+    "eligibility is the FROZEN Mission 1.25 rule, imported unchanged; this module adds no eligibility criterion of its own",
+    "every pair labelled in Mission 1.25 is excluded by canonical unordered pair id (20 pairs)",
+    "strata are deterministic feature bands, never expected labels: a shared diagnostic fragment first, then no-shared-tag, then the rarest shared tag at >= 2.7, >= 1.9, or below",
+    "quotas A_HIGH_SPECIFICITY=10, B_MEDIUM_SPECIFICITY=8, C_LOW_SPECIFICITY=8, D_DIAGNOSTIC_WRAPPER=2, E_DIFFERENT_TAGS_SHARED_TOKENS=12, summing to 40, declared before any pair was drawn",
+    "within a stratum, pairs are ordered by sha256(sampling seed | pair id) and the quota is taken from the front. NOT by candidate rank, which would reproduce the family ordering inside every band",
+    "the split is assigned WITHIN each stratum by sha256(split seed | pair id), so both partitions carry the same mix of shapes, totalling 24 development and 16 holdout",
+    "NO model output of any kind enters this: not a prediction, a confidence, an explanation, or the fact that a pair was ever predicted"
+  ],
+  "pairs": [
+    {
+      "pair_id": "78086387::78096175",
+      "a_question_id": "78086387",
+      "b_question_id": "78096175",
+      "a_observation_key": "stack-exchange|stackoverflow|78086387",
+      "b_observation_key": "stack-exchange|stackoverflow|78096175",
+      "candidate_rank": 51,
+      "stratum": "A_HIGH_SPECIFICITY",
+      "split": "DEVELOPMENT",
+      "deterministic_features": {
+        "shared_tags": [
+          "django",
+          "postgresql"
+        ],
+        "shared_title_tokens": [
+          "docker"
+        ],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "django",
+        "rarest_shared_tag_rarity": 3.39,
+        "eligibility_reasons": [
+          "shares 2 site tag(s) beyond the query tag, rarest 'django' (rarity 3.4)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78086387::78101562",
+      "a_question_id": "78086387",
+      "b_question_id": "78101562",
+      "a_observation_key": "stack-exchange|stackoverflow|78086387",
+      "b_observation_key": "stack-exchange|stackoverflow|78101562",
+      "candidate_rank": 105,
+      "stratum": "A_HIGH_SPECIFICITY",
+      "split": "DEVELOPMENT",
+      "deterministic_features": {
+        "shared_tags": [
+          "linux"
+        ],
+        "shared_title_tokens": [
+          "docker"
+        ],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "linux",
+        "rarest_shared_tag_rarity": 2.879,
+        "eligibility_reasons": [
+          "shares 1 site tag(s) beyond the query tag, rarest 'linux' (rarity 2.9)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78088329::78089171",
+      "a_question_id": "78088329",
+      "b_question_id": "78089171",
+      "a_observation_key": "stack-exchange|stackoverflow|78088329",
+      "b_observation_key": "stack-exchange|stackoverflow|78089171",
+      "candidate_rank": 36,
+      "stratum": "A_HIGH_SPECIFICITY",
+      "split": "DEVELOPMENT",
+      "deterministic_features": {
+        "shared_tags": [
+          "kubernetes"
+        ],
+        "shared_title_tokens": [],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "kubernetes",
+        "rarest_shared_tag_rarity": 3.795,
+        "eligibility_reasons": [
+          "shares 1 site tag(s) beyond the query tag, rarest 'kubernetes' (rarity 3.8)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78088481::78103907",
+      "a_question_id": "78088481",
+      "b_question_id": "78103907",
+      "a_observation_key": "stack-exchange|stackoverflow|78088481",
+      "b_observation_key": "stack-exchange|stackoverflow|78103907",
+      "candidate_rank": 39,
+      "stratum": "A_HIGH_SPECIFICITY",
+      "split": "HOLDOUT",
+      "deterministic_features": {
+        "shared_tags": [
+          "mongodb",
+          "node.js"
+        ],
+        "shared_title_tokens": [
+          "mongodb"
+        ],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "mongodb",
+        "rarest_shared_tag_rarity": 3.795,
+        "eligibility_reasons": [
+          "shares 2 site tag(s) beyond the query tag, rarest 'mongodb' (rarity 3.8)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78089075::78103907",
+      "a_question_id": "78089075",
+      "b_question_id": "78103907",
+      "a_observation_key": "stack-exchange|stackoverflow|78089075",
+      "b_observation_key": "stack-exchange|stackoverflow|78103907",
+      "candidate_rank": 111,
+      "stratum": "A_HIGH_SPECIFICITY",
+      "split": "DEVELOPMENT",
+      "deterministic_features": {
+        "shared_tags": [
+          "node.js"
+        ],
+        "shared_title_tokens": [
+          "nodejs"
+        ],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "node.js",
+        "rarest_shared_tag_rarity": 2.879,
+        "eligibility_reasons": [
+          "shares 1 site tag(s) beyond the query tag, rarest 'node.js' (rarity 2.9)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78090939::78105296",
+      "a_question_id": "78090939",
+      "b_question_id": "78105296",
+      "a_observation_key": "stack-exchange|stackoverflow|78090939",
+      "b_observation_key": "stack-exchange|stackoverflow|78105296",
+      "candidate_rank": 43,
+      "stratum": "A_HIGH_SPECIFICITY",
+      "split": "HOLDOUT",
+      "deterministic_features": {
+        "shared_tags": [
+          "deployment"
+        ],
+        "shared_title_tokens": [
+          "application"
+        ],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "deployment",
+        "rarest_shared_tag_rarity": 3.795,
+        "eligibility_reasons": [
+          "shares 1 site tag(s) beyond the query tag, rarest 'deployment' (rarity 3.8)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78096175::78099350",
+      "a_question_id": "78096175",
+      "b_question_id": "78099350",
+      "a_observation_key": "stack-exchange|stackoverflow|78096175",
+      "b_observation_key": "stack-exchange|stackoverflow|78099350",
+      "candidate_rank": 113,
+      "stratum": "A_HIGH_SPECIFICITY",
+      "split": "DEVELOPMENT",
+      "deterministic_features": {
+        "shared_tags": [
+          "docker-compose",
+          "postgresql"
+        ],
+        "shared_title_tokens": [],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "postgresql",
+        "rarest_shared_tag_rarity": 2.879,
+        "eligibility_reasons": [
+          "shares 2 site tag(s) beyond the query tag, rarest 'postgresql' (rarity 2.9)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78096175::78100773",
+      "a_question_id": "78096175",
+      "b_question_id": "78100773",
+      "a_observation_key": "stack-exchange|stackoverflow|78096175",
+      "b_observation_key": "stack-exchange|stackoverflow|78100773",
+      "candidate_rank": 114,
+      "stratum": "A_HIGH_SPECIFICITY",
+      "split": "HOLDOUT",
+      "deterministic_features": {
+        "shared_tags": [
+          "postgresql"
+        ],
+        "shared_title_tokens": [
+          "postgresql"
+        ],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "postgresql",
+        "rarest_shared_tag_rarity": 2.879,
+        "eligibility_reasons": [
+          "shares 1 site tag(s) beyond the query tag, rarest 'postgresql' (rarity 2.9)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78098246::78098969",
+      "a_question_id": "78098246",
+      "b_question_id": "78098969",
+      "a_observation_key": "stack-exchange|stackoverflow|78098246",
+      "b_observation_key": "stack-exchange|stackoverflow|78098969",
+      "candidate_rank": 117,
+      "stratum": "A_HIGH_SPECIFICITY",
+      "split": "HOLDOUT",
+      "deterministic_features": {
+        "shared_tags": [
+          "linux"
+        ],
+        "shared_title_tokens": [],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "linux",
+        "rarest_shared_tag_rarity": 2.879,
+        "eligibility_reasons": [
+          "shares 1 site tag(s) beyond the query tag, rarest 'linux' (rarity 2.9)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78102252::78103994",
+      "a_question_id": "78102252",
+      "b_question_id": "78103994",
+      "a_observation_key": "stack-exchange|stackoverflow|78102252",
+      "b_observation_key": "stack-exchange|stackoverflow|78103994",
+      "candidate_rank": 61,
+      "stratum": "A_HIGH_SPECIFICITY",
+      "split": "DEVELOPMENT",
+      "deterministic_features": {
+        "shared_tags": [
+          "google-cloud-platform",
+          "python"
+        ],
+        "shared_title_tokens": [
+          "gcp"
+        ],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "google-cloud-platform",
+        "rarest_shared_tag_rarity": 3.39,
+        "eligibility_reasons": [
+          "shares 2 site tag(s) beyond the query tag, rarest 'google-cloud-platform' (rarity 3.4)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78086836::78098246",
+      "a_question_id": "78086836",
+      "b_question_id": "78098246",
+      "a_observation_key": "stack-exchange|stackoverflow|78086836",
+      "b_observation_key": "stack-exchange|stackoverflow|78098246",
+      "candidate_rank": 144,
+      "stratum": "B_MEDIUM_SPECIFICITY",
+      "split": "HOLDOUT",
+      "deterministic_features": {
+        "shared_tags": [
+          "python"
+        ],
+        "shared_title_tokens": [],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "python",
+        "rarest_shared_tag_rarity": 2.091,
+        "eligibility_reasons": [
+          "shares 1 site tag(s) beyond the query tag, rarest 'python' (rarity 2.1)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78089113::78089171",
+      "a_question_id": "78089113",
+      "b_question_id": "78089171",
+      "a_observation_key": "stack-exchange|stackoverflow|78089113",
+      "b_observation_key": "stack-exchange|stackoverflow|78089171",
+      "candidate_rank": 418,
+      "stratum": "B_MEDIUM_SPECIFICITY",
+      "split": "DEVELOPMENT",
+      "deterministic_features": {
+        "shared_tags": [
+          "dockerfile"
+        ],
+        "shared_title_tokens": [],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "dockerfile",
+        "rarest_shared_tag_rarity": 1.924,
+        "eligibility_reasons": [
+          "shares 1 site tag(s) beyond the query tag, rarest 'dockerfile' (rarity 1.9)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78089171::78093369",
+      "a_question_id": "78089171",
+      "b_question_id": "78093369",
+      "a_observation_key": "stack-exchange|stackoverflow|78089171",
+      "b_observation_key": "stack-exchange|stackoverflow|78093369",
+      "candidate_rank": 432,
+      "stratum": "B_MEDIUM_SPECIFICITY",
+      "split": "HOLDOUT",
+      "deterministic_features": {
+        "shared_tags": [
+          "dockerfile"
+        ],
+        "shared_title_tokens": [],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "dockerfile",
+        "rarest_shared_tag_rarity": 1.924,
+        "eligibility_reasons": [
+          "shares 1 site tag(s) beyond the query tag, rarest 'dockerfile' (rarity 1.9)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78091298::78098246",
+      "a_question_id": "78091298",
+      "b_question_id": "78098246",
+      "a_observation_key": "stack-exchange|stackoverflow|78091298",
+      "b_observation_key": "stack-exchange|stackoverflow|78098246",
+      "candidate_rank": 159,
+      "stratum": "B_MEDIUM_SPECIFICITY",
+      "split": "DEVELOPMENT",
+      "deterministic_features": {
+        "shared_tags": [
+          "python"
+        ],
+        "shared_title_tokens": [],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "python",
+        "rarest_shared_tag_rarity": 2.091,
+        "eligibility_reasons": [
+          "shares 1 site tag(s) beyond the query tag, rarest 'python' (rarity 2.1)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78091354::78095654",
+      "a_question_id": "78091354",
+      "b_question_id": "78095654",
+      "a_observation_key": "stack-exchange|stackoverflow|78091354",
+      "b_observation_key": "stack-exchange|stackoverflow|78095654",
+      "candidate_rank": 23,
+      "stratum": "B_MEDIUM_SPECIFICITY",
+      "split": "DEVELOPMENT",
+      "deterministic_features": {
+        "shared_tags": [
+          "dockerfile"
+        ],
+        "shared_title_tokens": [
+          "build",
+          "docker"
+        ],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "dockerfile",
+        "rarest_shared_tag_rarity": 1.924,
+        "eligibility_reasons": [
+          "shares 1 site tag(s) beyond the query tag, rarest 'dockerfile' (rarity 1.9)",
+          "shares 2 title token(s)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78093369::78102512",
+      "a_question_id": "78093369",
+      "b_question_id": "78102512",
+      "a_observation_key": "stack-exchange|stackoverflow|78093369",
+      "b_observation_key": "stack-exchange|stackoverflow|78102512",
+      "candidate_rank": 468,
+      "stratum": "B_MEDIUM_SPECIFICITY",
+      "split": "HOLDOUT",
+      "deterministic_features": {
+        "shared_tags": [
+          "dockerfile"
+        ],
+        "shared_title_tokens": [
+          "docker"
+        ],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "dockerfile",
+        "rarest_shared_tag_rarity": 1.924,
+        "eligibility_reasons": [
+          "shares 1 site tag(s) beyond the query tag, rarest 'dockerfile' (rarity 1.9)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78098380::78104298",
+      "a_question_id": "78098380",
+      "b_question_id": "78104298",
+      "a_observation_key": "stack-exchange|stackoverflow|78098380",
+      "b_observation_key": "stack-exchange|stackoverflow|78104298",
+      "candidate_rank": 32,
+      "stratum": "B_MEDIUM_SPECIFICITY",
+      "split": "DEVELOPMENT",
+      "deterministic_features": {
+        "shared_tags": [
+          "dockerfile"
+        ],
+        "shared_title_tokens": [
+          "docker",
+          "file"
+        ],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "dockerfile",
+        "rarest_shared_tag_rarity": 1.924,
+        "eligibility_reasons": [
+          "shares 1 site tag(s) beyond the query tag, rarest 'dockerfile' (rarity 1.9)",
+          "shares 2 title token(s)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78102512::78104298",
+      "a_question_id": "78102512",
+      "b_question_id": "78104298",
+      "a_observation_key": "stack-exchange|stackoverflow|78102512",
+      "b_observation_key": "stack-exchange|stackoverflow|78104298",
+      "candidate_rank": 476,
+      "stratum": "B_MEDIUM_SPECIFICITY",
+      "split": "DEVELOPMENT",
+      "deterministic_features": {
+        "shared_tags": [
+          "dockerfile"
+        ],
+        "shared_title_tokens": [
+          "docker"
+        ],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "dockerfile",
+        "rarest_shared_tag_rarity": 1.924,
+        "eligibility_reasons": [
+          "shares 1 site tag(s) beyond the query tag, rarest 'dockerfile' (rarity 1.9)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78091032::78100506",
+      "a_question_id": "78091032",
+      "b_question_id": "78100506",
+      "a_observation_key": "stack-exchange|stackoverflow|78091032",
+      "b_observation_key": "stack-exchange|stackoverflow|78100506",
+      "candidate_rank": 605,
+      "stratum": "C_LOW_SPECIFICITY",
+      "split": "DEVELOPMENT",
+      "deterministic_features": {
+        "shared_tags": [
+          "docker-compose"
+        ],
+        "shared_title_tokens": [],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "docker-compose",
+        "rarest_shared_tag_rarity": 1.27,
+        "eligibility_reasons": [
+          "shares 1 site tag(s) beyond the query tag, rarest 'docker-compose' (rarity 1.3)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78092962::78096175",
+      "a_question_id": "78092962",
+      "b_question_id": "78096175",
+      "a_observation_key": "stack-exchange|stackoverflow|78092962",
+      "b_observation_key": "stack-exchange|stackoverflow|78096175",
+      "candidate_rank": 637,
+      "stratum": "C_LOW_SPECIFICITY",
+      "split": "DEVELOPMENT",
+      "deterministic_features": {
+        "shared_tags": [
+          "docker-compose"
+        ],
+        "shared_title_tokens": [
+          "docker"
+        ],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "docker-compose",
+        "rarest_shared_tag_rarity": 1.27,
+        "eligibility_reasons": [
+          "shares 1 site tag(s) beyond the query tag, rarest 'docker-compose' (rarity 1.3)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78095654::78097218",
+      "a_question_id": "78095654",
+      "b_question_id": "78097218",
+      "a_observation_key": "stack-exchange|stackoverflow|78095654",
+      "b_observation_key": "stack-exchange|stackoverflow|78097218",
+      "candidate_rank": 663,
+      "stratum": "C_LOW_SPECIFICITY",
+      "split": "DEVELOPMENT",
+      "deterministic_features": {
+        "shared_tags": [
+          "docker-compose"
+        ],
+        "shared_title_tokens": [],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "docker-compose",
+        "rarest_shared_tag_rarity": 1.27,
+        "eligibility_reasons": [
+          "shares 1 site tag(s) beyond the query tag, rarest 'docker-compose' (rarity 1.3)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78095654::78099949",
+      "a_question_id": "78095654",
+      "b_question_id": "78099949",
+      "a_observation_key": "stack-exchange|stackoverflow|78095654",
+      "b_observation_key": "stack-exchange|stackoverflow|78099949",
+      "candidate_rank": 666,
+      "stratum": "C_LOW_SPECIFICITY",
+      "split": "DEVELOPMENT",
+      "deterministic_features": {
+        "shared_tags": [
+          "docker-compose"
+        ],
+        "shared_title_tokens": [],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "docker-compose",
+        "rarest_shared_tag_rarity": 1.27,
+        "eligibility_reasons": [
+          "shares 1 site tag(s) beyond the query tag, rarest 'docker-compose' (rarity 1.3)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78095654::78105118",
+      "a_question_id": "78095654",
+      "b_question_id": "78105118",
+      "a_observation_key": "stack-exchange|stackoverflow|78095654",
+      "b_observation_key": "stack-exchange|stackoverflow|78105118",
+      "candidate_rank": 75,
+      "stratum": "C_LOW_SPECIFICITY",
+      "split": "HOLDOUT",
+      "deterministic_features": {
+        "shared_tags": [
+          "docker-compose"
+        ],
+        "shared_title_tokens": [
+          "docker",
+          "multiple"
+        ],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "docker-compose",
+        "rarest_shared_tag_rarity": 1.27,
+        "eligibility_reasons": [
+          "shares 1 site tag(s) beyond the query tag, rarest 'docker-compose' (rarity 1.3)",
+          "shares 2 title token(s)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78096903::78099350",
+      "a_question_id": "78096903",
+      "b_question_id": "78099350",
+      "a_observation_key": "stack-exchange|stackoverflow|78096903",
+      "b_observation_key": "stack-exchange|stackoverflow|78099350",
+      "candidate_rank": 680,
+      "stratum": "C_LOW_SPECIFICITY",
+      "split": "HOLDOUT",
+      "deterministic_features": {
+        "shared_tags": [
+          "docker-compose"
+        ],
+        "shared_title_tokens": [],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "docker-compose",
+        "rarest_shared_tag_rarity": 1.27,
+        "eligibility_reasons": [
+          "shares 1 site tag(s) beyond the query tag, rarest 'docker-compose' (rarity 1.3)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78096903::78102669",
+      "a_question_id": "78096903",
+      "b_question_id": "78102669",
+      "a_observation_key": "stack-exchange|stackoverflow|78096903",
+      "b_observation_key": "stack-exchange|stackoverflow|78102669",
+      "candidate_rank": 683,
+      "stratum": "C_LOW_SPECIFICITY",
+      "split": "HOLDOUT",
+      "deterministic_features": {
+        "shared_tags": [
+          "docker-compose"
+        ],
+        "shared_title_tokens": [],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "docker-compose",
+        "rarest_shared_tag_rarity": 1.27,
+        "eligibility_reasons": [
+          "shares 1 site tag(s) beyond the query tag, rarest 'docker-compose' (rarity 1.3)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78102669::78103425",
+      "a_question_id": "78102669",
+      "b_question_id": "78103425",
+      "a_observation_key": "stack-exchange|stackoverflow|78102669",
+      "b_observation_key": "stack-exchange|stackoverflow|78103425",
+      "candidate_rank": 728,
+      "stratum": "C_LOW_SPECIFICITY",
+      "split": "DEVELOPMENT",
+      "deterministic_features": {
+        "shared_tags": [
+          "docker-compose"
+        ],
+        "shared_title_tokens": [],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "docker-compose",
+        "rarest_shared_tag_rarity": 1.27,
+        "eligibility_reasons": [
+          "shares 1 site tag(s) beyond the query tag, rarest 'docker-compose' (rarity 1.3)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78086542::78099519",
+      "a_question_id": "78086542",
+      "b_question_id": "78099519",
+      "a_observation_key": "stack-exchange|stackoverflow|78086542",
+      "b_observation_key": "stack-exchange|stackoverflow|78099519",
+      "candidate_rank": 239,
+      "stratum": "D_DIAGNOSTIC_WRAPPER",
+      "split": "DEVELOPMENT",
+      "deterministic_features": {
+        "shared_tags": [],
+        "shared_title_tokens": [
+          "compose",
+          "docker"
+        ],
+        "shared_diagnostic": " error response from daemon: failed to create task for container: failed to create shim task: oci runtime ",
+        "rarest_shared_tag": "",
+        "rarest_shared_tag_rarity": 0.0,
+        "eligibility_reasons": [
+          "shares 2 title token(s)",
+          "shares a 106-character diagnostic fragment, which qualifies the pair and promotes it by nothing: a shared wrapper is not a shared goal"
+        ]
+      }
+    },
+    {
+      "pair_id": "78099519::78099680",
+      "a_question_id": "78099519",
+      "b_question_id": "78099680",
+      "a_observation_key": "stack-exchange|stackoverflow|78099519",
+      "b_observation_key": "stack-exchange|stackoverflow|78099680",
+      "candidate_rank": 400,
+      "stratum": "D_DIAGNOSTIC_WRAPPER",
+      "split": "HOLDOUT",
+      "deterministic_features": {
+        "shared_tags": [],
+        "shared_title_tokens": [
+          "docker",
+          "run"
+        ],
+        "shared_diagnostic": " error response from daemon: failed to create task for container: failed to create shim task: oci runti",
+        "rarest_shared_tag": "",
+        "rarest_shared_tag_rarity": 0.0,
+        "eligibility_reasons": [
+          "shares 2 title token(s)",
+          "shares a 103-character diagnostic fragment, which qualifies the pair and promotes it by nothing: a shared wrapper is not a shared goal"
+        ]
+      }
+    },
+    {
+      "pair_id": "78086323::78086387",
+      "a_question_id": "78086323",
+      "b_question_id": "78086387",
+      "a_observation_key": "stack-exchange|stackoverflow|78086323",
+      "b_observation_key": "stack-exchange|stackoverflow|78086387",
+      "candidate_rank": 89,
+      "stratum": "E_DIFFERENT_TAGS_SHARED_TOKENS",
+      "split": "DEVELOPMENT",
+      "deterministic_features": {
+        "shared_tags": [],
+        "shared_title_tokens": [
+          "container",
+          "docker",
+          "while"
+        ],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "",
+        "rarest_shared_tag_rarity": 0.0,
+        "eligibility_reasons": [
+          "shares 3 title token(s)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78086387::78097003",
+      "a_question_id": "78086387",
+      "b_question_id": "78097003",
+      "a_observation_key": "stack-exchange|stackoverflow|78086387",
+      "b_observation_key": "stack-exchange|stackoverflow|78097003",
+      "candidate_rank": 203,
+      "stratum": "E_DIFFERENT_TAGS_SHARED_TOKENS",
+      "split": "HOLDOUT",
+      "deterministic_features": {
+        "shared_tags": [],
+        "shared_title_tokens": [
+          "container",
+          "docker"
+        ],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "",
+        "rarest_shared_tag_rarity": 0.0,
+        "eligibility_reasons": [
+          "shares 2 title token(s)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78086501::78103425",
+      "a_question_id": "78086501",
+      "b_question_id": "78103425",
+      "a_observation_key": "stack-exchange|stackoverflow|78086501",
+      "b_observation_key": "stack-exchange|stackoverflow|78103425",
+      "candidate_rank": 222,
+      "stratum": "E_DIFFERENT_TAGS_SHARED_TOKENS",
+      "split": "DEVELOPMENT",
+      "deterministic_features": {
+        "shared_tags": [],
+        "shared_title_tokens": [
+          "database",
+          "docker"
+        ],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "",
+        "rarest_shared_tag_rarity": 0.0,
+        "eligibility_reasons": [
+          "shares 2 title token(s)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78086542::78103907",
+      "a_question_id": "78086542",
+      "b_question_id": "78103907",
+      "a_observation_key": "stack-exchange|stackoverflow|78086542",
+      "b_observation_key": "stack-exchange|stackoverflow|78103907",
+      "candidate_rank": 244,
+      "stratum": "E_DIFFERENT_TAGS_SHARED_TOKENS",
+      "split": "HOLDOUT",
+      "deterministic_features": {
+        "shared_tags": [],
+        "shared_title_tokens": [
+          "container",
+          "create"
+        ],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "",
+        "rarest_shared_tag_rarity": 0.0,
+        "eligibility_reasons": [
+          "shares 2 title token(s)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78087887::78103879",
+      "a_question_id": "78087887",
+      "b_question_id": "78103879",
+      "a_observation_key": "stack-exchange|stackoverflow|78087887",
+      "b_observation_key": "stack-exchange|stackoverflow|78103879",
+      "candidate_rank": 270,
+      "stratum": "E_DIFFERENT_TAGS_SHARED_TOKENS",
+      "split": "DEVELOPMENT",
+      "deterministic_features": {
+        "shared_tags": [],
+        "shared_title_tokens": [
+          "container",
+          "docker"
+        ],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "",
+        "rarest_shared_tag_rarity": 0.0,
+        "eligibility_reasons": [
+          "shares 2 title token(s)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78088692::78097184",
+      "a_question_id": "78088692",
+      "b_question_id": "78097184",
+      "a_observation_key": "stack-exchange|stackoverflow|78088692",
+      "b_observation_key": "stack-exchange|stackoverflow|78097184",
+      "candidate_rank": 281,
+      "stratum": "E_DIFFERENT_TAGS_SHARED_TOKENS",
+      "split": "HOLDOUT",
+      "deterministic_features": {
+        "shared_tags": [],
+        "shared_title_tokens": [
+          "container",
+          "env"
+        ],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "",
+        "rarest_shared_tag_rarity": 0.0,
+        "eligibility_reasons": [
+          "shares 2 title token(s)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78089075::78097003",
+      "a_question_id": "78089075",
+      "b_question_id": "78097003",
+      "a_observation_key": "stack-exchange|stackoverflow|78089075",
+      "b_observation_key": "stack-exchange|stackoverflow|78097003",
+      "candidate_rank": 92,
+      "stratum": "E_DIFFERENT_TAGS_SHARED_TOKENS",
+      "split": "DEVELOPMENT",
+      "deterministic_features": {
+        "shared_tags": [],
+        "shared_title_tokens": [
+          "connect",
+          "docker",
+          "inside"
+        ],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "",
+        "rarest_shared_tag_rarity": 0.0,
+        "eligibility_reasons": [
+          "shares 3 title token(s)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78097003::78098380",
+      "a_question_id": "78097003",
+      "b_question_id": "78098380",
+      "a_observation_key": "stack-exchange|stackoverflow|78097003",
+      "b_observation_key": "stack-exchange|stackoverflow|78098380",
+      "candidate_rank": 357,
+      "stratum": "E_DIFFERENT_TAGS_SHARED_TOKENS",
+      "split": "DEVELOPMENT",
+      "deterministic_features": {
+        "shared_tags": [],
+        "shared_title_tokens": [
+          "container",
+          "docker"
+        ],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "",
+        "rarest_shared_tag_rarity": 0.0,
+        "eligibility_reasons": [
+          "shares 2 title token(s)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78097216::78099680",
+      "a_question_id": "78097216",
+      "b_question_id": "78099680",
+      "a_observation_key": "stack-exchange|stackoverflow|78097216",
+      "b_observation_key": "stack-exchange|stackoverflow|78099680",
+      "candidate_rank": 378,
+      "stratum": "E_DIFFERENT_TAGS_SHARED_TOKENS",
+      "split": "DEVELOPMENT",
+      "deterministic_features": {
+        "shared_tags": [],
+        "shared_title_tokens": [
+          "container",
+          "docker"
+        ],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "",
+        "rarest_shared_tag_rarity": 0.0,
+        "eligibility_reasons": [
+          "shares 2 title token(s)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78097574::78105004",
+      "a_question_id": "78097574",
+      "b_question_id": "78105004",
+      "a_observation_key": "stack-exchange|stackoverflow|78097574",
+      "b_observation_key": "stack-exchange|stackoverflow|78105004",
+      "candidate_rank": 386,
+      "stratum": "E_DIFFERENT_TAGS_SHARED_TOKENS",
+      "split": "HOLDOUT",
+      "deterministic_features": {
+        "shared_tags": [],
+        "shared_title_tokens": [
+          "build",
+          "docker"
+        ],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "",
+        "rarest_shared_tag_rarity": 0.0,
+        "eligibility_reasons": [
+          "shares 2 title token(s)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78097574::78105286",
+      "a_question_id": "78097574",
+      "b_question_id": "78105286",
+      "a_observation_key": "stack-exchange|stackoverflow|78097574",
+      "b_observation_key": "stack-exchange|stackoverflow|78105286",
+      "candidate_rank": 387,
+      "stratum": "E_DIFFERENT_TAGS_SHARED_TOKENS",
+      "split": "DEVELOPMENT",
+      "deterministic_features": {
+        "shared_tags": [],
+        "shared_title_tokens": [
+          "build",
+          "docker"
+        ],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "",
+        "rarest_shared_tag_rarity": 0.0,
+        "eligibility_reasons": [
+          "shares 2 title token(s)"
+        ]
+      }
+    },
+    {
+      "pair_id": "78098568::78105118",
+      "a_question_id": "78098568",
+      "b_question_id": "78105118",
+      "a_observation_key": "stack-exchange|stackoverflow|78098568",
+      "b_observation_key": "stack-exchange|stackoverflow|78105118",
+      "candidate_rank": 398,
+      "stratum": "E_DIFFERENT_TAGS_SHARED_TOKENS",
+      "split": "HOLDOUT",
+      "deterministic_features": {
+        "shared_tags": [],
+        "shared_title_tokens": [
+          "docker",
+          "network"
+        ],
+        "shared_diagnostic": "",
+        "rarest_shared_tag": "",
+        "rarest_shared_tag_rarity": 0.0,
+        "eligibility_reasons": [
+          "shares 2 title token(s)"
+        ]
+      }
+    }
+  ]
+}

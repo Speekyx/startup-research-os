@@ -88,6 +88,29 @@ from .prompt import (
     QuestionForPrompt,
     render_equivalence_prompt,
 )
+from .reference_dataset import (
+    DATASET_ID,
+    PRIOR_DATASET_ID,
+    HoldoutAccessError,
+    ReferenceDatasetPaths,
+    load_development_labels,
+    load_holdout_labels,
+    load_reference_labels,
+)
+from .reference_sampling import (
+    BATCH_SIZE,
+    DEVELOPMENT_SIZE,
+    ENRICHMENT_WARNING,
+    HOLDOUT_SIZE,
+    SAMPLING_VERSION,
+    SPLIT_VERSION,
+    STRATUM_QUOTAS,
+    ReferenceBatch,
+    SampledPair,
+    Stratum,
+    classify_stratum,
+    sample_reference_batch,
+)
 from .relations import FORBIDDEN_IMPLICATIONS, EquivalenceRelation
 from .rubric import (
     GRANULARITY,
@@ -101,6 +124,25 @@ from .rubric import (
 )
 
 __all__ = [
+    "load_reference_labels",
+    "load_holdout_labels",
+    "load_development_labels",
+    "ReferenceDatasetPaths",
+    "HoldoutAccessError",
+    "PRIOR_DATASET_ID",
+    "DATASET_ID",
+    "sample_reference_batch",
+    "classify_stratum",
+    "Stratum",
+    "SampledPair",
+    "ReferenceBatch",
+    "STRATUM_QUOTAS",
+    "SPLIT_VERSION",
+    "SAMPLING_VERSION",
+    "HOLDOUT_SIZE",
+    "ENRICHMENT_WARNING",
+    "DEVELOPMENT_SIZE",
+    "BATCH_SIZE",
     "render_family_prompt",
     "FAMILY_PROMPT_VERSION",
     "FAMILY_PROMPT_ID",
