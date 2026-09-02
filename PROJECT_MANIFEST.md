@@ -1,6 +1,6 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.48
+Version: 1.49
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
@@ -13,6 +13,61 @@ Last amended: 2026-09-02 (Sprint 1 / Mission 1.25)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.49 — 2026-09-02 (Sprint 1 / Mission 1.25)
+
+Authorized by the Mission 1.25 brief §0-§15.
+
+**OUTCOME: `MODEL_EVALUATION_FAILED` on a frozen criterion, and the failure is
+worth more than Mission 1.24's pass.** 20 pairs through the Gateway on the
+approved route, **0.38 USD**, and every count unchanged at 148/148 records and
+26/26/26/26 Signals, Claims, Revisions and Evidence. Catalog still 29 sources.
+No production inference, no Signal, no INFERRED Claim, no Evidence.
+
+**A SECOND RELATION, NOT A LOOSER FIRST ONE.** `SAME_PROBLEM_FAMILY` asks whether
+two observations express substantially the same user problem or blocked goal, at
+a level where one intervention could help both -- even where the causes and fixes
+differ. The exact relation stays intact, unweakened and not redefined. The two
+are held apart in code by `relations.py`, with the forbidden implications kept as
+data a test checks rather than prose a reviewer must remember.
+
+**THE RELATION CHANGED RATHER THAN A THRESHOLD.** Mission 1.24 found its question
+hard to label for a structural reason: *would the fix transfer?* requires knowing
+the fix. Loosening it would have kept that requirement while answering more
+permissively.
+
+**THE CRITERION WAS BUILT SO A CONSTANT CLASSIFIER CANNOT PASS**, which is what
+Mission 1.24 lacked. `min_true_same` demands a demonstrated positive in the
+scored split; tests score a constant-DIFFERENT and a constant-ABSTAIN classifier
+and watch both fail. **Then it caught the real run**: the scored holdout held 4
+`SAME_FAMILY` references and the model found **zero**, saying SAME once in twenty
+overall -- on the rubric's own quoted example, which is in-sample by construction.
+
+**EVERY DISAGREEMENT IS ONE-DIRECTIONAL.** Eight missed positives, zero asserted
+families the reference denied. Either the rubric is too strict or the reference
+too generous, and this evaluation cannot separate them -- the rubric and its
+reference disagree about the rubric's own borderline example, with the model
+siding with the rubric. **A question for a person, not for a rerun.**
+
+**THE RUBRIC WAS NOT WIDENED AFTER SEEING THE RESULTS**, and the criterion was
+not altered. Mission 1.24 kept a rule in the direction that flattered the
+project; this keeps one in the direction that cost it.
+
+**THE REFERENCE IS `AI_ASSISTED_PROVISIONAL`**, written blind and never sent to
+the classifier, so what was measured is agreement between two assistants.
+`human_ground_truth` stays NOT_ESTABLISHED, carried through to every evaluation
+result rather than asserted in prose.
+
+**Candidate generation was inspected, not assumed.** The existing generator is
+not too narrow -- 731 of 3 916 pairs, 84 of 89 observations reached -- but its
+ORDERING was built for the other relation. The qualifying predicate is imported
+unchanged with a test pinning it; only the ordering is versioned, with a shared
+diagnostic at weight ZERO and tags weighted by the rarest shared one.
+
+**One structured response in twenty was malformed** -- a key emitted as the
+literal `"parameter name"` -- and the Gateway refused rather than guessing, which
+is correct and unchanged. The runner retries once against the same route and
+counts it; that is not the cross-provider fallback ADR-006 forbids
 
 ## 1.48 — 2026-09-02 (Sprint 1 / Mission 1.25 §0-§1 corrections)
 
@@ -1525,6 +1580,7 @@ Additionally authoritative:
 - docs/data/world-bank-normalizer-v1.md (added in 1.9)
 - docs/data/model-inference-execution-governance-v1.md (added in 1.46)
 - docs/data/problem-equivalence-evaluation-v1.md (added in 1.47)
+- docs/data/problem-family-rubric-v1.md (added in 1.49)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

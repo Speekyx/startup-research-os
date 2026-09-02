@@ -1,0 +1,39 @@
+{
+  "criterion": {
+    "name": "family-v1-positive-coverage-and-false-positive-avoidance",
+    "relation": "SAME_PROBLEM_FAMILY",
+    "max_false_same": 0,
+    "min_labelled_holdout": 8,
+    "min_positive_labels": 2,
+    "min_true_same": 1,
+    "defeats_a_constant_classifier": true,
+    "statement": "Frozen before any family prediction existed. The classifier passes only if ALL of the following hold on the scored split: at least 8 labelled pairs; at least 2 pairs the reference calls SAME_FAMILY, IN THAT SPLIT rather than anywhere in the reference set; ZERO false SAME_PROBLEM_FAMILY, meaning a pair the reference called DIFFERENT or UNCERTAIN that the model called SAME; and at least ONE true SAME_PROBLEM_FAMILY, meaning a pair the reference called SAME that the model also called SAME.\n\nTHE LAST CLAUSE IS THE ONE MISSION 1.24 LACKED. Without it a classifier that answers DIFFERENT to everything, or ABSTAIN to everything, records zero false positives and passes -- which is exactly what happened, and why that evaluation established nothing. Requiring a demonstrated positive makes both constant classifiers fail by construction.\n\nAbstention is still never counted as an error, because the alternative to an abstention is a guess. But abstaining on EVERY positive now fails the true-SAME clause, which is the honest way to price caution: free when it is caution, and not free when it is refusal to ever commit.\n\nNo accuracy, precision or recall figure is a pass condition. A proportion over a few dozen pairs has an interval wider than any difference it could show, and quoting one would make a small experiment look calibrated."
+  },
+  "split": "HOLDOUT",
+  "labelled": 10,
+  "positives": 4,
+  "confusion_matrix": {
+    "SAME->DIFFERENT_PROBLEM_FAMILY": 4,
+    "DIFFERENT->DIFFERENT_PROBLEM_FAMILY": 5,
+    "DIFFERENT->ABSTAIN": 1
+  },
+  "false_same": [],
+  "true_same": [],
+  "false_different": [
+    "78086323::78097216",
+    "78086387::78097071",
+    "78089075::78089578",
+    "78096486::78097886"
+  ],
+  "abstentions": 1,
+  "agreements": 5,
+  "outcome": "MODEL_EVALUATION_FAILED",
+  "notes": [
+    "0 correctly identified positive(s); the criterion requires at least 1. A classifier that never says SAME_PROBLEM_FAMILY cannot pass, which is the point of this clause",
+    "HUMAN GROUND TRUTH IS NOT ESTABLISHED for this reference set (AI_ASSISTED_PROVISIONAL). The outcome above is agreement against that reference, never against truth"
+  ],
+  "reference_origins": [
+    "AI_ASSISTED_PROVISIONAL"
+  ],
+  "human_ground_truth_established": false
+}

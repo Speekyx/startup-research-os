@@ -57,6 +57,18 @@ from .family_candidates import (
     generate_family_candidates,
     tag_rarity,
 )
+from .family_classifier import (
+    FAMILY_CLASSIFIER_TASK,
+    FamilyClassification,
+    classify_family_pair,
+)
+from .family_prompt import (
+    FAMILY_OUTPUT_SCHEMA,
+    FAMILY_PROMPT,
+    FAMILY_PROMPT_ID,
+    FAMILY_PROMPT_VERSION,
+    render_family_prompt,
+)
 from .family_rubric import (
     FAMILY_GRANULARITY,
     FAMILY_INSUFFICIENT_ALONE,
@@ -89,6 +101,14 @@ from .rubric import (
 )
 
 __all__ = [
+    "render_family_prompt",
+    "FAMILY_PROMPT_VERSION",
+    "FAMILY_PROMPT_ID",
+    "FAMILY_PROMPT",
+    "FAMILY_OUTPUT_SCHEMA",
+    "classify_family_pair",
+    "FamilyClassification",
+    "FAMILY_CLASSIFIER_TASK",
     "select_family_review_batch",
     "assign_family_split",
     "FAMILY_SPLIT_SEED",
