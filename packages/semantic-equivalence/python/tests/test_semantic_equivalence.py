@@ -29,6 +29,7 @@ from sros_semantic_equivalence import (
     RUBRIC_VERSION,
     SEMANTIC_TIER,
     V1_ACCEPTANCE,
+    V2_ACCEPTANCE,
     WORKED_EXAMPLES,
     ClassificationRefusedError,
     EquivalenceDecision,
@@ -569,3 +570,83 @@ class TestTheAcceptanceCriterionIsAboutFalsePositives:
                     labelled_at="2026-09-02T00:00:00+00:00",
                     split=Split.HOLDOUT,
                 )
+
+
+class TestTheCriterionDefectMission124Exposed:
+    """V1 asked for a positive *anywhere in the reference set*. Mission 1.24's
+    labels put the only SAME in DEVELOPMENT and left the HOLDOUT with none, so
+    V1 recorded a pass that a classifier hard-coded to answer DIFFERENT would
+    also have recorded.
+
+    V2 changes one word: the positive must be in the split being scored. Both
+    are kept, because the run was scored under V1 and rewriting V1 would leave
+    that report describing a rule that no longer exists.
+    """
+
+    def _labels(self, holdout_has_positive: bool) -> LabelSet:
+        rows = [
+            HumanLabel(
+                pair_id=f"{i}::{i + 1}",
+                a_question_id=str(i),
+                b_question_id=str(i + 1),
+                reviewer="a named reviewer",
+                decision=HumanDecision.DIFFERENT,
+                labelled_at="2026-09-02T00:00:00+00:00",
+                split=Split.HOLDOUT,
+            )
+            for i in range(16)
+        ]
+        rows.append(
+            HumanLabel(
+                pair_id="900::901",
+                a_question_id="900",
+                b_question_id="901",
+                reviewer="a named reviewer",
+                decision=HumanDecision.SAME,
+                labelled_at="2026-09-02T00:00:00+00:00",
+                split=Split.HOLDOUT if holdout_has_positive else Split.DEVELOPMENT,
+            )
+        )
+        return LabelSet(tuple(rows))
+
+    def _all_different(self, labels: LabelSet) -> dict:
+        return {label.pair_id: EquivalenceDecision.DIFFERENT_PROBLEM for label in labels.labels}
+
+    def test_v1_passes_a_holdout_with_no_positive_in_it(self) -> None:
+        """The defect, reproduced. Not a hypothetical: this is Mission 1.24's
+        actual shape."""
+        labels = self._labels(holdout_has_positive=False)
+        result = evaluate(labels, self._all_different(labels), criterion=V1_ACCEPTANCE)
+        assert result.outcome == "MODEL_EVALUATION_PASSED"
+        assert result.false_same == ()
+
+    def test_v2_calls_the_same_data_insufficient(self) -> None:
+        labels = self._labels(holdout_has_positive=False)
+        result = evaluate(labels, self._all_different(labels), criterion=V2_ACCEPTANCE)
+        assert result.outcome == "EVALUATION_INSUFFICIENT"
+
+    def test_v2_still_passes_when_the_scored_split_can_actually_test(self) -> None:
+        """V2 is stricter about WHERE the positive is, not about anything else.
+        A holdout that contains one behaves as before."""
+        labels = self._labels(holdout_has_positive=True)
+        predictions = self._all_different(labels)
+        result = evaluate(labels, predictions, criterion=V2_ACCEPTANCE)
+        assert result.outcome == "MODEL_EVALUATION_PASSED"
+        assert result.false_different == ("900::901",)
+
+    def test_a_constant_different_classifier_is_what_both_must_catch(self) -> None:
+        """The failure mode in one sentence: answering DIFFERENT to everything
+        produces zero false SAME. Only a positive in the scored split can tell
+        that apart from a classifier that works."""
+        labels = self._labels(holdout_has_positive=True)
+        constant = self._all_different(labels)
+        result = evaluate(labels, constant, criterion=V2_ACCEPTANCE)
+        assert result.false_same == ()
+        assert result.false_different  # the positive is what exposes it
+
+    def test_both_criteria_stay_addressable_by_name(self) -> None:
+        """A result records which rule scored it. A criterion that vanished
+        would leave historical outcomes unreproducible."""
+        from sros_semantic_equivalence import ACCEPTANCE_CRITERIA
+
+        assert set(ACCEPTANCE_CRITERIA) == {V1_ACCEPTANCE.name, V2_ACCEPTANCE.name}

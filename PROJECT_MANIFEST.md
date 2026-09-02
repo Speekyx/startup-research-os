@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.46
+Version: 1.47
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-02 (Sprint 1 / Mission 1.23)
+Last amended: 2026-09-02 (Sprint 1 / Mission 1.24)
 
 ---
 
@@ -13,6 +13,71 @@ Last amended: 2026-09-02 (Sprint 1 / Mission 1.23)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.47 — 2026-09-02 (Sprint 1 / Mission 1.24)
+
+Authorized by the Mission 1.24 brief §0-§35.
+
+**OUTCOME B: EVALUATION_INSUFFICIENT_FOR_PRODUCTION_EQUIVALENCE.** The first
+model-mediated inference this repository has ever run, and it produced **no
+epistemic row at all**. 40 real labelled pairs through the Gateway on the
+approved route, **0.61 USD**, and every count unchanged at 148/148 records and
+26/26/26/26 Signals, Claims, Revisions and Evidence. Catalog still 29 sources.
+
+**ZERO FALSE SAME, AND THE NUMBER IS WORTH ALMOST NOTHING.** The classifier
+produced **zero SAME of any kind** across 40 pairs, and the holdout contained
+**no SAME label to test against**. A classifier hard-coded to answer DIFFERENT
+records exactly the same score. Precision on SAME is undefined -- there were no
+predictions -- and recall is 0/1: the single positive in the whole reference set
+was missed.
+
+**THE PREDECLARED CRITERION WAS WRONG, AND ONLY DATA COULD SHOW IT.** V1 required
+a positive *anywhere in the reference set*, and the only one fell in DEVELOPMENT
+while the HOLDOUT held none. V2 requires it *in the split being scored* and
+returns EVALUATION_INSUFFICIENT on the identical run and data. **V1 is kept and
+Mission 1.24 stays scored under it**: a rule rewritten after seeing the result was
+never binding, and the discipline matters more in the direction that would have
+made the outcome look better.
+
+**A STRUCTURAL GUARD DECIDED THE ARCHITECTURE.** `validate_signals.py` forbids a
+Gateway import anywhere under `sros_nlp` and requires every module there to be
+classified, so a model-calling component cannot live in the signal layer. The
+guard was left untouched and `packages/semantic-equivalence` carries the work --
+depending on contracts and the Gateway and on nothing else, in particular not on
+the source registry, because a classifier able to read it could decide its own
+authorization.
+
+**AUTHORIZATION IS RESOLVED BEFORE ANY SOURCE TEXT IS SERIALISED**, not before
+the socket. A refused pair produces no prompt containing question text, asserted
+with a gateway double that raises if it is reached. Question text is
+`UntrustedText` and can occupy no other region; the classifier gets no tools, no
+browsing and no execution. **No confidence number is requested from the model at
+all**: a self-reported certainty is not a probability, and the only safe handling
+is to mark it uncalibrated and never do arithmetic on it, at which point asking
+for it buys nothing.
+
+**THE THREE MISSION 1.20 HARD NEGATIVES WERE CLASSIFIED CORRECTLY AND PROVE
+NOTHING.** The rubric quotes one by id and describes the pattern the other two
+share, so they are in-sample by construction. All three are pinned to
+development, each with its reason recorded, because counting them as holdout
+successes would have inflated the result.
+
+**TWO DISAGREEMENTS RECORDED RATHER THAN TUNED AWAY.** The missed positive is a
+Next.js build-time env var and a Compose build-stage env var: the same class of
+misconfiguration under two different components, and both readings survive the
+rubric. The rubric was NOT revised to capture it -- one example is n=1, the
+revision would loosen toward more SAMEs, and no holdout positive exists against
+which to measure the false-positive cost. Separately, the reviewer answered
+UNCERTAIN on the rubric's own borderline worked example, where the rubric states
+DIFFERENT: the rubric's author and its reviewer read a boundary example
+differently, which is a defect in the example.
+
+**No production inference, no model-derived Signal, no INFERRED Claim, no
+Evidence, no Opportunity.** The blocker is a reference set with real positives in
+the scored split, and this 89-question corpus yielded one defensible SAME in 40
+candidate pairs -- a finding about the corpus rather than about the classifier.
+No synthetic positive may substitute: a constructed pair can test a parser and
+can never establish semantic accuracy against real data
 
 ## 1.46 — 2026-09-02 (Sprint 1 / Mission 1.23)
 
@@ -1423,6 +1488,7 @@ Additionally authoritative:
 - docs/data/normalized-record-v1.md (added in 1.9)
 - docs/data/world-bank-normalizer-v1.md (added in 1.9)
 - docs/data/model-inference-execution-governance-v1.md (added in 1.46)
+- docs/data/problem-equivalence-evaluation-v1.md (added in 1.47)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

@@ -31,6 +31,7 @@ from enum import StrEnum
 from .rubric import RUBRIC_VERSION, EquivalenceDecision
 
 __all__ = [
+    "ACCEPTANCE_CRITERIA",
     "SPLIT_SEED",
     "HOLDOUT_FRACTION",
     "HOLDOUT_EXCLUSIONS",
@@ -40,6 +41,7 @@ __all__ = [
     "LabelSet",
     "AcceptanceCriterion",
     "V1_ACCEPTANCE",
+    "V2_ACCEPTANCE",
     "EvaluationResult",
     "assign_split",
     "evaluate",
@@ -224,6 +226,30 @@ V1_ACCEPTANCE = AcceptanceCriterion(
 )
 
 
+V2_ACCEPTANCE = AcceptanceCriterion(
+    name="v2-false-positive-avoidance-with-a-testable-split",
+    max_false_same=0,
+    min_labelled_holdout=12,
+    min_positive_labels=1,
+    statement=(
+        "As V1, with one word changed and it is the word that mattered. The positive "
+        "minimum applies to THE SPLIT BEING SCORED, not to the reference set as a whole. "
+        "V1 said 'at least one SAME anywhere in the reference set', and Mission 1.24's run "
+        "satisfied it with a single SAME that fell in DEVELOPMENT while the HOLDOUT held "
+        "none -- so the holdout could not distinguish the classifier from one hard-coded to "
+        "answer DIFFERENT, and it recorded a pass that a constant answer would also have "
+        "recorded. The rest is unchanged: zero false SAME, at least 12 labelled pairs in the "
+        "scored split, abstention never counted against the model, and no accuracy figure as "
+        "a pass condition."
+    ),
+)
+
+# Which criterion a run was scored under is part of its record. V1 is kept
+# because Mission 1.24 was scored under it and rewriting it would leave that
+# report describing a rule that no longer exists.
+ACCEPTANCE_CRITERIA = {c.name: c for c in (V1_ACCEPTANCE, V2_ACCEPTANCE)}
+
+
 @dataclass(frozen=True)
 class EvaluationResult:
     """The measured outcome, and whether it meets the predeclared criterion."""
@@ -298,7 +324,15 @@ def evaluate(
         if predicted is label.decision.as_model_decision():
             agreements += 1
 
-    positives = len(labels.positives)
+    # V1 counts positives across the whole reference set; V2 counts them in the
+    # split being scored. The criterion carries which, so a historical result
+    # stays reproducible under the rule it was actually scored against.
+    if criterion.name.startswith("v1-"):
+        positives = len(labels.positives)
+    else:
+        positives = sum(
+            1 for label in labels.for_split(split) if label.decision is HumanDecision.SAME
+        )
     notes: list[str] = []
     if len(scored) < criterion.min_labelled_holdout:
         outcome = "EVALUATION_INSUFFICIENT"
@@ -309,8 +343,9 @@ def evaluate(
     elif positives < criterion.min_positive_labels:
         outcome = "EVALUATION_INSUFFICIENT"
         notes.append(
-            "the reference set contains no SAME label, so a classifier answering DIFFERENT "
-            "to everything would score perfectly and nothing would have been measured"
+            "no SAME label is available to this criterion, so a classifier answering "
+            "DIFFERENT to everything would score perfectly and nothing would have been "
+            "measured about whether a SAME prediction can be trusted"
         )
     elif len(false_same) > criterion.max_false_same:
         outcome = "MODEL_EVALUATION_FAILED"

@@ -30,9 +30,11 @@ from .classifier import (
     classify_pair,
 )
 from .evaluation import (
+    ACCEPTANCE_CRITERIA,
     HOLDOUT_EXCLUSIONS,
     SPLIT_SEED,
     V1_ACCEPTANCE,
+    V2_ACCEPTANCE,
     AcceptanceCriterion,
     EvaluationResult,
     HumanDecision,
@@ -76,7 +78,9 @@ __all__ = [
     "RUBRIC_VERSION",
     "SEMANTIC_TIER",
     "SPLIT_SEED",
+    "ACCEPTANCE_CRITERIA",
     "V1_ACCEPTANCE",
+    "V2_ACCEPTANCE",
     "WORKED_EXAMPLES",
     "AcceptanceCriterion",
     "CandidatePair",

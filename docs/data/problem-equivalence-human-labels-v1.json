@@ -1,0 +1,470 @@
+{
+  "$comment": "Mission 1.24 §10. The human reference set. Supplied by the operator BLIND: no model had seen any pair and no prediction existed when these were written, and the labels are never sent to the model. No Stack Overflow author identity appears anywhere -- none was ever acquired. `reviewer` names the person accountable for the judgement, which is a different thing and is required.\n\nTHE HOLDOUT CONTAINS NO SAME LABEL. 16 DIFFERENT and 1 UNCERTAIN; the single SAME in the reference set fell in DEVELOPMENT. That is a fact about the corpus rather than about the reviewer, and it bounds hard what a holdout result can demonstrate: a classifier answering DIFFERENT to every pair would record zero false SAME there. Recorded here so no reading of the evaluation can miss it.",
+  "rubric_version": "problem-equivalence-rubric@1.0.0",
+  "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+  "batch_selection_version": "review-batch-selection@1.0.0",
+  "labelled_at": "2026-09-02T00:00:00+00:00",
+  "counts": {
+    "total": 40,
+    "by_split": {
+      "HOLDOUT": 17,
+      "DEVELOPMENT": 23
+    },
+    "by_decision": {
+      "DIFFERENT": 36,
+      "UNCERTAIN": 3,
+      "SAME": 1
+    },
+    "development_by_decision": {
+      "DIFFERENT": 20,
+      "UNCERTAIN": 2,
+      "SAME": 1
+    },
+    "holdout_by_decision": {
+      "DIFFERENT": 16,
+      "UNCERTAIN": 1
+    }
+  },
+  "labels": [
+    {
+      "pair_id": "78086323::78089075",
+      "a_question_id": "78086323",
+      "b_question_id": "78089075",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "HOLDOUT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78086323::78097216",
+      "a_question_id": "78086323",
+      "b_question_id": "78097216",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "DEVELOPMENT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78086387::78087887",
+      "a_question_id": "78086387",
+      "b_question_id": "78087887",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "DEVELOPMENT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78086387::78097071",
+      "a_question_id": "78086387",
+      "b_question_id": "78097071",
+      "reviewer": "thibchm",
+      "decision": "UNCERTAIN",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "HOLDOUT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78086542::78099519",
+      "a_question_id": "78086542",
+      "b_question_id": "78099519",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "DEVELOPMENT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78086542::78099680",
+      "a_question_id": "78086542",
+      "b_question_id": "78099680",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "DEVELOPMENT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78086639::78092806",
+      "a_question_id": "78086639",
+      "b_question_id": "78092806",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "DEVELOPMENT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78088430::78090396",
+      "a_question_id": "78088430",
+      "b_question_id": "78090396",
+      "reviewer": "thibchm",
+      "decision": "UNCERTAIN",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "DEVELOPMENT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78088481::78089563",
+      "a_question_id": "78088481",
+      "b_question_id": "78089563",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "HOLDOUT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78088481::78096903",
+      "a_question_id": "78088481",
+      "b_question_id": "78096903",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "HOLDOUT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78088692::78098380",
+      "a_question_id": "78088692",
+      "b_question_id": "78098380",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "HOLDOUT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78089113::78090158",
+      "a_question_id": "78089113",
+      "b_question_id": "78090158",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "HOLDOUT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78089113::78092816",
+      "a_question_id": "78089113",
+      "b_question_id": "78092816",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "DEVELOPMENT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78089113::78095654",
+      "a_question_id": "78089113",
+      "b_question_id": "78095654",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "HOLDOUT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78089113::78102512",
+      "a_question_id": "78089113",
+      "b_question_id": "78102512",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "DEVELOPMENT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78089171::78098380",
+      "a_question_id": "78089171",
+      "b_question_id": "78098380",
+      "reviewer": "thibchm",
+      "decision": "SAME",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "DEVELOPMENT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78089563::78096903",
+      "a_question_id": "78089563",
+      "b_question_id": "78096903",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "DEVELOPMENT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78090158::78093369",
+      "a_question_id": "78090158",
+      "b_question_id": "78093369",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "HOLDOUT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78090939::78097579",
+      "a_question_id": "78090939",
+      "b_question_id": "78097579",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "HOLDOUT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78091032::78092816",
+      "a_question_id": "78091032",
+      "b_question_id": "78092816",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "DEVELOPMENT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78091032::78096903",
+      "a_question_id": "78091032",
+      "b_question_id": "78096903",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "DEVELOPMENT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78091032::78102512",
+      "a_question_id": "78091032",
+      "b_question_id": "78102512",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "HOLDOUT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78091354::78092816",
+      "a_question_id": "78091354",
+      "b_question_id": "78092816",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "HOLDOUT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78091354::78098380",
+      "a_question_id": "78091354",
+      "b_question_id": "78098380",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "DEVELOPMENT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78091723::78097184",
+      "a_question_id": "78091723",
+      "b_question_id": "78097184",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "HOLDOUT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78092648::78102252",
+      "a_question_id": "78092648",
+      "b_question_id": "78102252",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "DEVELOPMENT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78092816::78095639",
+      "a_question_id": "78092816",
+      "b_question_id": "78095639",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "DEVELOPMENT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78092816::78098380",
+      "a_question_id": "78092816",
+      "b_question_id": "78098380",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "DEVELOPMENT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78092816::78102512",
+      "a_question_id": "78092816",
+      "b_question_id": "78102512",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "DEVELOPMENT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78093369::78105004",
+      "a_question_id": "78093369",
+      "b_question_id": "78105004",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "DEVELOPMENT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78095654::78098380",
+      "a_question_id": "78095654",
+      "b_question_id": "78098380",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "HOLDOUT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78095654::78102512",
+      "a_question_id": "78095654",
+      "b_question_id": "78102512",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "DEVELOPMENT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78095654::78103425",
+      "a_question_id": "78095654",
+      "b_question_id": "78103425",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "DEVELOPMENT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78096175::78097071",
+      "a_question_id": "78096175",
+      "b_question_id": "78097071",
+      "reviewer": "thibchm",
+      "decision": "UNCERTAIN",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "DEVELOPMENT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78096355::78097579",
+      "a_question_id": "78096355",
+      "b_question_id": "78097579",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "DEVELOPMENT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78096355::78103879",
+      "a_question_id": "78096355",
+      "b_question_id": "78103879",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "HOLDOUT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78097216::78103879",
+      "a_question_id": "78097216",
+      "b_question_id": "78103879",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "HOLDOUT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78097579::78103879",
+      "a_question_id": "78097579",
+      "b_question_id": "78103879",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "HOLDOUT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78098380::78102512",
+      "a_question_id": "78098380",
+      "b_question_id": "78102512",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "HOLDOUT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    },
+    {
+      "pair_id": "78099519::78099680",
+      "a_question_id": "78099519",
+      "b_question_id": "78099680",
+      "reviewer": "thibchm",
+      "decision": "DIFFERENT",
+      "labelled_at": "2026-09-02T00:00:00+00:00",
+      "split": "DEVELOPMENT",
+      "rubric_version": "problem-equivalence-rubric@1.0.0",
+      "rationale": ""
+    }
+  ]
+}

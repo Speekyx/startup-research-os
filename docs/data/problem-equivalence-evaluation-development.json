@@ -1,0 +1,28 @@
+{
+  "criterion": {
+    "name": "v1-false-positive-avoidance",
+    "max_false_same": 0,
+    "min_labelled_holdout": 12,
+    "min_positive_labels": 1,
+    "statement": "The classifier passes only if it produces ZERO false SAME_PROBLEM decisions on the holdout -- a pair the reviewer labelled DIFFERENT or UNCERTAIN and the model called SAME. A model may ABSTAIN freely; abstention is never counted against it, because the alternative to an abstention here is a guess. The evaluation is only reportable at all with at least 12 labelled holdout pairs and at least one SAME anywhere in the reference set: with no positive, a classifier that answered DIFFERENT to everything would score perfectly, and nothing would have been measured. Below either threshold the outcome is EVALUATION_INSUFFICIENT rather than a pass. No accuracy, precision or recall figure is a pass condition, because a proportion over a few dozen pairs has an interval wider than any difference it could show."
+  },
+  "split": "DEVELOPMENT",
+  "labelled": 23,
+  "positives": 1,
+  "confusion_matrix": {
+    "DIFFERENT->DIFFERENT_PROBLEM": 20,
+    "UNCERTAIN->DIFFERENT_PROBLEM": 1,
+    "SAME->DIFFERENT_PROBLEM": 1,
+    "UNCERTAIN->ABSTAIN": 1
+  },
+  "false_same": [],
+  "false_different": [
+    "78089171::78098380"
+  ],
+  "abstentions": 1,
+  "agreements": 21,
+  "outcome": "MODEL_EVALUATION_PASSED",
+  "notes": [
+    "zero false SAME over 23 labelled holdout pairs. This is a small sample and is NOT a calibration: no probability may be attached to any decision"
+  ]
+}

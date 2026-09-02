@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.47
-Last amended: 2026-09-02 (Sprint 1 / Mission 1.23)
+Version: 1.48
+Last amended: 2026-09-02 (Sprint 1 / Mission 1.24)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.48 | 2026-09-02 | **OUTCOME B: the first model-mediated inference ran, and produced no epistemic row.** 40 real labelled pairs through the Gateway on the approved route, 0.61 USD, **zero false SAME** -- and **zero SAME of any kind**, over a holdout containing no SAME label to test against, so a classifier hard-coded to answer DIFFERENT scores identically. Precision on SAME undefined, recall 0/1. **The predeclared criterion was wrong in a way only data could show**: V1 wanted a positive *anywhere in the reference set* and the only one fell in DEVELOPMENT; V2 wants it in the scored split and returns EVALUATION_INSUFFICIENT on the same run. V1 is KEPT, because rewriting a rule after the fact means it was never binding. **A structural guard decided the architecture**: validate_signals.py forbids a Gateway import anywhere in sros_nlp, so the classifier lives in its own package and the guard was left alone. Authorization is resolved BEFORE any source text is serialised, not before the socket. No confidence number is requested from the model at all. The three Mission 1.20 hard negatives were classified correctly and prove nothing -- the rubric quotes them, so they are in-sample by construction and pinned to development. **No production inference, no Signal, no INFERRED Claim, no Evidence**, and the blocker is a corpus that yielded one defensible SAME in 40 pairs |
 | 1.47 | 2026-09-02 | **OUTCOME B: the inference execution boundary EXISTS, and it is closed on one named gate.** No model was called and no source content left this machine. ADR-033 separates three questions that were one or none: `model_processing` asks may a model READ, the new **`external_model_transmission`** asks may it LEAVE, and a **provider policy** asks what the processor DOES with what it receives -- decided on first-party contract text, so one route is APPROVED on a terms clause committing not to train on customer content and one is NOT_APPROVED because its **unpaid** route says it develops machine learning technologies from submitted input. The profile gained **`external_model_egress`**, the word Mission 1.22 found missing. **NOT_ASSESSED is a state, not a default that decides**: migration 0027 adds both columns nullable and writes no existing row, and 0028 writes only the two decisions actually made. **The activity is deliberately NOT one of rule 8's six** -- it gates ONE operation, so World Bank's collector never fails because nobody assessed egress for World Bank, and that is asserted over every source rather than assumed. Stack Exchange local review **v2 appended, v1 not rewritten**, PERMITTED_WITH_CONDITIONS on CC BY-SA §2, with conditions naming a PROPERTY and no vendor. **Appending v2 broke acquisition for the source** -- a compliance configuration is pinned to a review version -- and the repair was to PERFORM the re-check, provable because v2's `required_conditions` are byte-identical to v1's. Live gate: source PERMITTED, profile PERMITTED, provider APPROVED, configured **no** -> `PROVIDER_NOT_CONFIGURED`. Mission 1.22 may RESUME **after operator configuration**, and the blocker is finally one an operator can clear |
 | 1.46 | 2026-09-02 | **OUTCOME A: the semantic-inference route is NOT AUTHORISED, and separately NOT CONFIGURED.** No model was called, no question text left this machine, no component was built. **The governance gate carries the structural finding**: the Stack Exchange review permits model INFERENCE and is silent on TRANSMISSION of licensed text to an external provider, and so is the profile -- `model_inference: true` says the ACTIVITY is in scope, `deployment: LOCAL` says where the SYSTEM runs, and **nothing says where inference RUNS**. No occurrence of *provider*, *third party*, *transmit* or *egress* in the profile, in any condition, or in any doc. **One field answering a question that is two** -- the Mission 1.15.4 shape again. The second gate is independent: every inference tier is `null`, every credential empty, and **no local inference provider exists**. A DESIGN was recorded and nothing built; §47's evaluation report was deliberately not created, because an empty one looks like an evaluation that returned nothing. **The blocker moved from the world to this deployment**, so the next mission is governance: ask where inference may happen, and give the profile a field for the answer |
 | 1.45 | 2026-09-02 | **EXPLICIT ISSUE IDENTITY ROUTE = BLOCKED BY SOURCE GOVERNANCE, and the structure was never the problem.** Three public trackers document a publisher-declared canonical duplicate relation as issue state (Bugzilla `dupe_of`, Launchpad `duplicate_of_link` + `duplicates_collection_link`, Debian merges), so Mission 1.20's proposed route is real. **Every candidate with a usable data licence also disallows the API path in robots.txt, and the one deployment that permits it has no data licence.** The Document Foundation Bugzilla releases all contributions under CC BY-SA 4.0 and honours `include_fields` -- the best minimisation posture in the catalog -- and its robots file is `Disallow: /` with an allowlist of six CGI paths, none of them `/rest/`. **A content licence is not an access grant**: Mission 1.18 established that separation and this is the first time it blocked a source whose licence was perfect. Launchpad adds a second, durable blocker -- 41 fields including `owner_link` and no field allowlist. **0 acquisitions, 0 records, catalog unchanged at 29** -- registering a candidate turned out to require a LEGACY-profile review that neither has, so the registration was reverted rather than made to fit and the finding lives in an Authoritative document. Both deterministic routes are now exhausted, so Mission 1.22 should be semantic INFERENCE |
@@ -232,6 +233,68 @@ source in order to obtain a permission.
   TED's `fields` parameter does -- **collect-then-filter is not available as an
   excuse**, because a request that discarded the contact block afterwards
   retrieved the contact block. No method removes fields from a collected record.
+
+### Semantic problem equivalence — built, evaluated, and not in production
+
+Added in 1.48 (Mission 1.24, `problem-equivalence-evaluation-v1.md`). The first
+model-mediated inference this repository has run, and it produced no epistemic
+row at all.
+
+**The classifier exists and lives in its own package.**
+`validate_signals.py` forbids a Gateway import anywhere in `sros_nlp` and
+requires every module there to be classified, so a model-calling component
+cannot live in the signal layer. The guard was left untouched and
+`packages/semantic-equivalence` carries the work, depending on contracts and the
+Gateway and on nothing else -- in particular not on `sros_acquisition`, because
+a classifier able to read the source registry could decide its own authorization.
+
+- **Authorization is resolved before any source text is serialised**, not before
+  the socket. `classify_pair` refuses on an unauthorized decision before
+  `render_equivalence_prompt` is called, so a refused pair leaves no string
+  containing question text for a later bug to send. A test hands it a gateway
+  double that raises if reached.
+- **A candidate is not a prediction.** The generator is deterministic, versioned
+  and capped after a total ordering, and its output means *worth asking about*.
+  Its recall limit is carried on the result object: a pair it did not surface is
+  UNCONSIDERED, never different, and no statement derived from the set may be
+  worded as describing all repeated problems.
+- **Granularity is fixed by the rubric, once, and never per pair.** The question
+  is what a reader would CHANGE, not what the true root cause is -- question text
+  usually cannot establish one, because the asker does not know it. Same tool,
+  same tags, same wrapper diagnostic however long, same generic error class and
+  same broad symptom are each insufficient BY CONSTRUCTION rather than below a
+  threshold.
+- **ABSTAIN is mandatory and is never counted against the model.** The
+  alternative to an abstention on this corpus is a guess, and a wrong SAME is the
+  costly error.
+- **No confidence number is requested from the model.** A self-reported certainty
+  is not a probability, and the only safe handling is to mark it uncalibrated and
+  never do arithmetic on it -- at which point asking for it buys nothing and
+  invites a later reader to multiply by it.
+- **Question text is `UntrustedText` and can occupy no other region.** The
+  classifier is given no tools, no browsing and no execution, so an instruction
+  inside a body has nothing to reach even if obeyed.
+- **A price rests on a retrieved document**, like every other value here. The
+  cost unit is one US dollar, stated rather than assumed, and the table models
+  neither caching nor batch nor a negotiated rate.
+
+**THE EVALUATION PASSED ITS PREDECLARED CRITERION AND ESTABLISHED NOTHING.** 40
+real labelled pairs, zero false SAME -- and **zero SAME of any kind**, over a
+holdout containing no SAME label. A classifier hard-coded to answer DIFFERENT
+records the same score. Precision on SAME is undefined and recall is 0/1.
+
+**The criterion was wrong in a way only data could show.** V1 required a positive
+*anywhere in the reference set*; the only one fell in DEVELOPMENT. V2 requires it
+in the split being scored, and returns EVALUATION_INSUFFICIENT on the same run.
+**V1 is kept**, because Mission 1.24 was scored under it and rewriting a rule
+after the fact means it was never binding.
+
+**So no production inference ran**, and there is no model-derived Signal, no
+INFERRED Claim and no Evidence. The blocker is a reference set with real
+positives in the scored split, which this 89-question corpus did not supply: one
+defensible SAME in 40 candidate pairs is a finding about the corpus, not about
+the classifier. **No synthetic positive may substitute** -- a constructed pair
+can test a parser and can never establish semantic accuracy against real data.
 
 ### Model inference execution — where it may run, and when content may leave
 
