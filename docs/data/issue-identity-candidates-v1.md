@@ -8,6 +8,17 @@ be acquired under `local-private-research-v1`.
 reports mean the same thing. The SOURCE must already have said so, as issue
 state.
 
+> **Result: The structure exists. The access does not.** Every
+> candidate that publishes a usable data licence also publishes a robots
+> directive that disallows the API path, and the one deployment whose directive
+> permits it publishes no data licence at all. **EXPLICIT ISSUE IDENTITY ROUTE =
+> BLOCKED BY SOURCE GOVERNANCE.**
+
+**This document was first written before the access layer was checked**, and its
+earlier revision named a winner. The correction is kept in git history rather
+than smoothed over: reading the licence before reading the access directive is
+the process failure §4 of the report records.
+
 ---
 
 ## 1. The structural gate, applied first
@@ -27,45 +38,46 @@ excluded by name.
 | **GitLab** | closing an issue as a duplicate is a quick action and a system note | **no** — no canonical field in the documented model |
 | **GitHub** | `state_reason` records that an issue was closed as a duplicate | **no** — the CLOSE REASON is state; the canonical TARGET is not a documented field. And `github` is `RESTRICTED` and was not reopened (§4) |
 
-**Three shapes pass the structural gate.** That alone answers the question
-Mission 1.20 left open: **the explicit-identity route exists.** Whether it is
-reachable is a separate question, and it is the one that decided this mission.
+**Three shapes pass the structural gate**, which answers the question Mission
+1.20 left open: **publisher-declared issue identity is real and is documented.**
+The obstacle is somewhere else.
 
 ---
 
-## 2. Winner — The Document Foundation Bugzilla (LibreOffice)
+## 2. The five-column view
 
-`https://bugs.documentfoundation.org/rest/`
+| Deployment | Identity relation | Data licence | Minimisation at acquisition | Operator access directive | Verdict |
+|---|---|---|---|---|---|
+| **TDF Bugzilla** (LibreOffice) | `dupe_of` | **CC BY-SA 4.0**, stated on the deployment | **`include_fields`, verified** | **`Disallow: /`; `/rest/` not allowed** | assessed RESTRICTED |
+| **Launchpad** (Ubuntu) | `duplicate_of_link` **and** `duplicates_collection_link` | metadata *"freely for any purpose"* | **none — 41 fields, allowlist ignored** | **`Disallow: /api/`; names Claude agents; `ai-input=no`** | assessed RESTRICTED |
+| **Mozilla Bugzilla** | `dupe_of` | **not addressed** | `include_fields` | `Disallow: /`, `Crawl-delay: 30` | not pursued |
+| **Debian BTS** | merges | **not addressed** | — | `Disallow: /` for `*` | not pursued |
+| **kernel.org Bugzilla** | `dupe_of` | **not addressed** | `include_fields` | **allows `/rest/`** | not pursued |
 
-| | |
-|---|---|
-| Identity relation | `dupe_of`, a documented Bugzilla REST field |
-| Route | official Bugzilla REST API, no authentication, public bugs only |
-| Data licence | **CC BY-SA 4.0**, stated by the deployment itself |
-| Field allowlist | `include_fields`, documented and **verified working** |
-| Identity on the wire | **none**, when the allowlist omits it |
+**Read the last two columns together.** The two deployments that grant the most
+are the two that most clearly forbid the fetch, and the only deployment whose
+robots directive permits the API path is one that never licensed its data.
 
-**The licence statement is on the tracker, not on the software, and that
-distinction is §11's whole point.** The front page of the deployment states:
+---
+
+## 3. The Document Foundation Bugzilla — everything favourable except the fetch
+
+`https://bugs.documentfoundation.org/rest/` · **not registered** (see §7) · assessed **RESTRICTED**
+
+**The data side is the best in the catalog for this purpose.** The deployment's
+own front page states:
 
 > "Please note that all contributions to The Document Foundation Bugzilla are
 > considered to be released under the Creative Commons Attribution-ShareAlike
 > 4.0 International License, unless otherwise specified."
 
-**TDF states licences per deployment**, which is the strongest available evidence
-that this one is meant seriously: the LibreOffice website is CC BY-SA **3.0**,
-the TDF Wiki is CC BY-SA **3.0 Unported**, and the Bugzilla is CC BY-SA **4.0**.
-Three properties, three separate statements, three different versions. Nobody
-copied a footer.
+**A licence on the tracker, not on the tracker software** — the §11 distinction,
+made by the operator rather than by us. And TDF states licences **per property**:
+the LibreOffice website is CC BY-SA 3.0, the TDF Wiki is CC BY-SA 3.0 Unported,
+the Bugzilla is CC BY-SA 4.0. Three properties, three statements, three
+versions. Nobody copied a footer.
 
-**CC BY-SA 4.0 is an instrument this repository has already read in full**
-(Mission 1.18, for Stack Exchange): it grants reproduction and the production of
-Adapted Material for any purpose including commercial, subject to attribution and
-ShareAlike — and ShareAlike attaches to Adapted Material that is **Shared**,
-which `local-private-research-v1` does not do.
-
-**What decided it against the runner-up is a mechanism, not a preference.**
-Bugzilla REST documents `include_fields`, and a live probe of this deployment
+**Minimisation would have been the best the catalog has seen.** A live probe
 returned exactly the six requested fields and nothing else:
 
 ```json
@@ -73,107 +85,137 @@ returned exactly the six requested fields and nothing else:
            "resolution": "FIXED", "component": "LibreOffice", "id": 29381}]}
 ```
 
-No reporter, no assignee, no CC list, no comments — **absent from the wire, not
-filtered afterwards.**
+No reporter, no assignee, no CC list, no comments — absent from the wire rather
+than filtered afterwards.
 
-**What the relation does NOT establish:** that the classification is objectively
-correct, that two different people reported it, how many users are affected, how
-severe it is, whether it is still current, or that anyone would pay to fix it.
-It establishes that **the publisher classified one bug as a duplicate of
-another.**
+**And the access layer refuses.** `robots.txt` is `User-agent: * / Disallow: /`
+followed by an allowlist of six specific CGI paths. `/rest/` is not among them.
 
----
+The file is **curated, not boilerplate**: it allows `/show_bug.cgi` while
+disallowing `/show_bug.cgi*ctype=*`, and disallows `/page.cgi*id=user_activity*`
+specifically. Somebody was making choices in that file, and `/rest/` is not in
+the set they chose.
 
-## 3. Runner-up — Launchpad (Ubuntu and hosted projects)
+**A content licence is not an access grant, and Mission 1.18 established that
+here first.** For Stack Exchange the licence decided reuse and the *API Terms*
+decided access. TDF publishes no API terms at all, and its only access statement
+is negative. Reading the licence as covering the fetch would be exactly the
+grant-by-absence that rule 8 of the registry contract forbids.
 
-`https://api.launchpad.net/1.0/`
-
-**Structurally the richest of the three**, and it loses on acquisition
-mechanics.
-
-Launchpad exposes the relation in **both directions**: a duplicate carries
-`duplicate_of_link`, and the canonical bug carries `duplicates_collection_link`
-and `number_of_duplicates`. Nothing else surveyed lets the canonical issue
-enumerate its own duplicates.
-
-**Its rights position is genuinely elegant**, and worth recording because it
-splits exactly where this mission's minimisation does. From Launchpad's own
-policies page, under *Bugs copyright*:
-
-> "All bug comments are the property of the people who created them. Metadata
-> and statistics generated by the Launchpad Bug Tracker are the property of
-> Canonical Ltd and may be used freely for any purpose as long as accreditation
-> and the Launchpad URL are given along with that data."
-
-A positive grant over **exactly the metadata this mission wants**, freely and for
-any purpose, with a clear condition — and comments, which this mission does not
-want, expressly outside it.
-
-**It loses on §12.** A live probe of `api.launchpad.net/1.0/bugs/1` returned
-**41 fields including `owner_link`**, and adding a field allowlist changed
-nothing — 41 fields again. Launchpad's API has no field-selection mechanism for
-an entry representation.
-
-So acquiring the duplicate relation from Launchpad means **receiving a person
-link on every request and discarding it afterwards**, which is the practice this
-repository refuses by name: *a request that fetched the owner object and
-discarded it has still fetched it, and no method removes a field from a record
-already collected* (Mission 1.18 §9).
-
-**Recorded rather than discarded.** If a future mission needs the
-canonical-side enumeration Launchpad uniquely offers, the rights evidence is here
-and the blocker is named: minimisation at acquisition, not permission.
+**One question would change the verdict**, and it is written down rather than
+assumed: does TDF intend the robots directive to cover programmatic REST use, or
+is it aimed at page crawlers? **No message has been sent**, and nothing here
+implies one was.
 
 ---
 
-## 4. Third — Mozilla Bugzilla
+## 4. Launchpad — two blockers, and the second is the durable one
 
-`https://bugzilla.mozilla.org/rest/`
+`https://api.launchpad.net/1.0/` · **not registered** (see §7) · assessed **RESTRICTED**
 
-Same `dupe_of`, same `include_fields`, and by far the largest corpus of the
-three. **It loses on §7 criterion 3, legal clarity.**
+**Structurally the richest model surveyed.** A duplicate carries
+`duplicate_of_link`; the canonical bug carries `duplicates_collection_link` and
+`number_of_duplicates`. Nothing else lets the canonical issue enumerate its own
+duplicates.
 
-No first-party document found states a licence for bug content on that
-deployment. The Mozilla Websites & Communications Terms of Use say content is
+**The rights split is the most elegant this catalog has recorded**, and it lands
+exactly where this mission's minimisation does. From *Bugs copyright*:
 
-> "generally made available for public sharing and reuse through open licenses
-> such as Creative Commons … In most cases we ask Mozilla contributors to release
-> Content under open licenses."
+> "All bug comments are the property of the people who created them. Metadata and
+> statistics generated by the Launchpad Bug Tracker are the property of Canonical
+> Ltd and may be used freely for any purpose as long as accreditation and the
+> Launchpad URL are given along with that data."
 
-**"Generally", "such as" and "in most cases" describe a practice, not a grant**,
-and the deployment's own footer links *Legal* without stating a data licence.
-Under rule 8 of the source registry contract, that is `NOT_ADDRESSED` and it
-blocks — and reading it as a grant would be the over-read that produced three
-withdrawn approvals in Mission 1.7.
+A positive grant over the metadata a duplicate relation lives in, freely and for
+any purpose — with comments, which this mission does not want, expressly outside
+it.
 
-**Not a criticism of Mozilla and not a permanent verdict.** It is the difference
-between a foundation that put a licence line on its tracker and one that did not,
-and the second may simply not have been asked.
+**Blocker 1, access.** `robots.txt` disallows `/api/` for every user agent, names
+**ClaudeBot, Claude-User and Claude-SearchBot** in a long AI-agent block list
+with `Disallow: /` and `DisallowAITraining: /`, and sets `Content-Signal:
+ai-train=no, search=yes, ai-input=no`. `ai-input=no` is an explicit signal
+against using the content as input to an AI system, which is what this deployment
+would be.
+
+**Blocker 2, minimisation, and it does not depend on permission.** A probe
+returned **41 fields including `owner_link`**, and supplying a field allowlist
+returned 41 fields again. The API has no field selection for an entry.
+
+So acquiring the relation means receiving a person link on every request and
+discarding it — the practice Mission 1.18 refused by name: *a request that
+fetched the owner object and discarded it has still fetched it.*
+
+**Blocker 2 is the one to remember.** Permission can change with a message; an
+API's field model cannot.
 
 ---
 
-## 5. Also considered, and why not
+## 5. Mozilla, Debian, kernel.org
 
-- **Debian BTS** — `merged-with` is real publisher-declared identity and the
-  route is first-party. The Debian WWW Pages License covers `www.debian.org`
-  pages; nothing found licenses BTS report content. Same failure as Mozilla.
-- **Jira (public deployments)** — `duplicates` is a link type rather than a field
-  on the issue, so §5 admits it only weakly; and each public deployment carries
-  its own operator's terms, which multiplies the governance work per corpus
-  rather than settling it.
-- **GitHub** — `RESTRICTED` on retrieved terms, and §4 forbids reopening a
-  restricted source because its data model is attractive. No new governing
-  evidence was sought and none was found in passing.
+- **Mozilla Bugzilla** — same `dupe_of`, same `include_fields`, largest corpus,
+  and no first-party statement licensing bug content. The Websites &
+  Communications Terms say content is *"generally made available … through open
+  licenses such as Creative Commons"* and *"in most cases we ask"* — a
+  description of practice, not a grant. `NOT_ADDRESSED` blocks under rule 8, and
+  robots.txt is `Disallow: /` with `Crawl-delay: 30` besides. **Not a criticism
+  and not permanent**: it is the difference between a foundation that put a
+  licence line on its tracker and one that has not been asked.
+- **Debian BTS** — `merged-with` is genuine publisher-declared identity. The
+  Debian WWW Pages License covers `www.debian.org`; nothing found licenses BTS
+  report content, and `robots.txt` disallows everything for every agent except
+  five named search engines.
+- **bugzilla.kernel.org** — **the only deployment whose robots directive permits
+  the API path**: `Allow: /` with disallows on `*.cgi` patterns, which `/rest/`
+  is not. It publishes no data licence at all, so commercial use, storage and
+  derived analytics are each `NOT_ADDRESSED`. The one door that is open leads to
+  a room with no permissions in it.
 
 ---
 
 ## 6. What this landscape establishes
 
-**The explicit-identity route is available**, and the winner was decided by two
-first-party facts rather than by preference: a licence stated on the deployment
-itself, and a field allowlist that works.
+**The explicit-identity route exists and is not reachable.** Three trackers
+document a canonical duplicate relation as issue state; every one of them fails
+the local-private profile on the access layer, the licence layer, or the
+minimisation layer — and the failures are not correlated in a way that leaves a
+gap to walk through.
 
-**And the runner-up's failure is the more interesting one.** Launchpad grants
-more and exposes more, and cannot be minimised at acquisition. A route can be
-permitted and still be unusable under a posture, which is the same shape Mission
-1.15.6 recorded for TED's bulk XML from the other direction.
+**The pattern is worth stating on its own**, because it will recur: an operator
+can license its content generously and still not want automated agents fetching
+it, and those are two different documents saying two different things. This
+repository has treated access and reuse as separate layers since Mission 1.18.
+This is the first time the separation blocked a source whose licence was
+perfect.
+
+**No message has been sent to any operator.** The two questions that would change
+the verdicts are written down in §3 and §4 above, and writing a question down is
+not asking it.
+
+---
+
+## 7. Why neither candidate is registered in the catalog
+
+**Not an omission, and worth naming because it is a real constraint the
+repository has never met before.**
+
+A source registered today must carry a review under the LEGACY profile.
+`SourceRecord.review` is typed `PolicyReview | None`, so the MODEL allows a
+source without one — but eighteen tests and two generated documents assume it is
+present, because every source registered before now was first assessed under the
+commercial profile and later re-assessed locally.
+
+These two were assessed **only** under `local-private-research-v1`, which is the
+first time that shape has arisen. Registering one would mean making the
+legacy-profile review optional catalog-wide: a change to what a registered source
+IS, touching the generated review-results and coverage documents and the tests
+that guard them.
+
+**That is an architectural change and it belongs in its own mission with an
+ADR**, not in the diff of a source mission — the change-control rule
+`docs/CLAUDE.md` §Change control states. So the evidence lives here, in an
+Authoritative document, and the catalog is untouched at 29 sources.
+
+**The follow-up is named rather than left implicit:** decide whether a source may
+be registered under a modern profile only, and if so, make the legacy review
+optional everywhere it is assumed. Until then, a candidate assessed only under a
+modern profile is recorded in a document like this one.

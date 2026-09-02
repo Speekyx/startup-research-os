@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.43
+Version: 1.44
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-02 (Sprint 1 / Mission 1.20)
+Last amended: 2026-09-02 (Sprint 1 / Mission 1.21)
 
 ---
 
@@ -13,6 +13,75 @@ Last amended: 2026-09-02 (Sprint 1 / Mission 1.20)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.44 — 2026-09-02 (Sprint 1 / Mission 1.21)
+
+Authorized by the Mission 1.21 brief §0-§38.
+
+**EXPLICIT ISSUE IDENTITY ROUTE = BLOCKED BY SOURCE GOVERNANCE.** 0 acquisitions,
+0 records, 0 Signals, 0 Claims, 0 Evidence, and **the catalog is unchanged at 29
+sources** -- the whole output is one Authoritative document and the tests that
+pin it, which is the right shape for a mission whose product is a governance
+finding.
+
+**THE STRUCTURE EXISTS AND THE ACCESS DOES NOT.** Three public trackers document
+a publisher-declared canonical duplicate relation as issue state -- Bugzilla's
+`dupe_of` (*"The bug ID of the bug that this bug is a duplicate of"*), Launchpad's
+`duplicate_of_link` plus `duplicates_collection_link`, and Debian's merges. So
+Mission 1.20's proposed next route is real. **Every candidate publishing a usable
+data licence also publishes a robots directive disallowing the API path, and the
+only deployment whose directive permits it -- bugzilla.kernel.org -- publishes no
+data licence at all.**
+
+**THE DOCUMENT FOUNDATION BUGZILLA WON THE DATA QUESTION OUTRIGHT AND LOST THE
+ACCESS ONE.** Its front page releases all contributions under **CC BY-SA 4.0** --
+a licence on the TRACKER rather than on the tracker software, and TDF states them
+per property (website 3.0, wiki 3.0 Unported, Bugzilla 4.0), so nobody copied a
+footer. Bugzilla REST honours `include_fields`: a probe returned exactly six
+fields, no reporter, no assignee, no comments -- the best minimisation posture in
+the catalog. And `robots.txt` is `User-agent: * / Disallow: /` with an allowlist
+of six CGI paths, none of them `/rest/`. The file is **curated, not boilerplate**
+-- it allows `/show_bug.cgi` while disallowing `/show_bug.cgi*ctype=*`.
+
+**A CONTENT LICENCE IS NOT AN ACCESS GRANT**, and Mission 1.18 established that
+separation for Stack Exchange, where the API Terms supplied what the licence did
+not. TDF publishes no API terms and its only access statement is negative. **This
+is the first time the two-layer rule blocked a source whose licence was
+perfect.**
+
+**LAUNCHPAD CARRIES TWO INDEPENDENT BLOCKERS**, and the second is the durable
+one. Its *Bugs copyright* grants tracker metadata *"freely for any purpose"* while
+leaving comments with their authors -- splitting exactly where this mission's
+minimisation does. But its robots file disallows `/api/`, names **ClaudeBot,
+Claude-User and Claude-SearchBot**, and sets `Content-Signal: ai-input=no`; and
+its API returned **41 fields including `owner_link` with a field allowlist
+ignored**, so the relation cannot be acquired without fetching a person link and
+discarding it. Permission can change with a message; an API's field model cannot.
+
+**TWO PROCESS FAILURES OF OURS, BOTH DISCLOSED.** Two metadata-only probes
+reached TDF's `/rest/` **before** its robots.txt was read -- wrong order, no
+request after the reading, nothing persisted, and the corrective rule is that
+robots.txt is read before the first probe. And the two candidates were briefly
+registered in the catalog before it emerged that **a registered source must carry
+a LEGACY-profile review**: eighteen tests and two generated documents assume one,
+and these were assessed only under `local-private-research-v1`. The registration
+was reverted rather than made to fit, because making the legacy review optional
+catalog-wide is an architectural change that belongs in its own mission with an
+ADR. The two sources were also removed from the local database, with the FK
+closure read first and the blast radius counted: 2 sources, 2 access profiles, 9
+capabilities, 6 evidence rows, 2 reviews, 2 coverage rows, and **every research
+table unchanged**.
+
+**Two 1.20 wordings corrected first.** Its Docker root-cause descriptions are
+ANALYST readings rather than source-native facts, and no deterministic step
+produced them. And *"not fixable by narrowing further"* claimed more than 89
+questions can carry: the wording is now the project decision it actually is.
+
+**CONSEQUENCE: BOTH DETERMINISTIC ROUTES ARE EXHAUSTED** -- text-derived identity
+broad (1.18) and narrow (1.20), and source-native identity here -- so **Mission
+1.22 should be Semantic Problem Equivalence / INFERRED Claims V1**, which arrives
+with its difficulty measured rather than assumed. No inference was started, no
+operator was contacted, and no existing source was touched
 
 ## 1.43 — 2026-09-02 (Sprint 1 / Mission 1.20)
 
