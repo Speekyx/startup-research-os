@@ -27,7 +27,7 @@ from __future__ import annotations
 from collections.abc import Iterator, Mapping
 from dataclasses import dataclass, field
 from typing import Any, Protocol
-from urllib.parse import urlparse
+from urllib.parse import quote, urlparse
 
 from sros_contracts import AcquisitionErrorCode
 
@@ -44,12 +44,28 @@ __all__ = [
     "Transport",
     "TransportConfig",
     "host_of",
+    "path_segment",
 ]
 
 # Identifies this client to the source. §11: a collector that will not say who
 # it is cannot be contacted when it misbehaves, which is a worse position for
 # everyone than being identifiable.
 DEFAULT_USER_AGENT = "startup-research-os/1.0 (+https://github.com/Speekyx/startup-research-os)"
+
+
+def path_segment(value: str) -> str:
+    """One path segment, percent-encoded so it cannot become two.
+
+    Lives HERE rather than in a collector because `urllib` may only be imported
+    by this module (CI enforces it by grep), and because making a composed path
+    safe is the transport's business rather than the caller's. `host_of` sits
+    here for the same reason.
+
+    `safe=""` on purpose: a real value can contain `/` -- `AC/DC` is a Wikipedia
+    article -- and an unescaped one silently becomes a different path segment,
+    which is a request for something nobody asked for.
+    """
+    return quote(value, safe="")
 
 
 def host_of(url: str) -> str:

@@ -489,6 +489,21 @@ removed the CURRENT definition too, and the column reported *no CHECK constraint
 for a closed enum that had one. A silent over-reach rather than an error, fixed
 at the scanner: a definition now ends when its own parentheses close.
 
+**One guard caught something my local run did not, and the gap was mine.** CI
+greps `sros_acquisition` for a network-client import outside
+`collection/transport.py`, and the first version of this collector imported
+`urllib.parse.quote` to percent-encode an article title. `urllib.parse` is string
+manipulation rather than a network client, but the guard is a coarse import
+pattern **on purpose** — a narrow one would have to know which submodules are
+safe, and the day it is wrong is the day a collector opens a socket. So the
+encoding moved into `transport.py` as `path_segment`, beside `host_of`, which is
+where composing a safe URL belonged anyway.
+
+The lesson is about verification, not about the guard: I ran the validators, the
+generated-document checks, ruff, mypy and every suite, and **CI also has inline
+grep steps that are not any of those**. They are now part of what gets run before
+a push.
+
 **Eighteen existing assertions were repointed and none was weakened.** Five
 inventory equalities (`IMPLEMENTED_COLLECTORS`, `IMPLEMENTED_NORMALIZERS`,
 `RECORD_KINDS`, `NORMALIZER_REGISTRY`, `EXTRACTOR_REGISTRY`) grew by one entry

@@ -46,7 +46,6 @@ import time
 from dataclasses import dataclass
 from datetime import UTC, date, datetime
 from typing import Any
-from urllib.parse import quote
 
 from sros_contracts import AcquisitionErrorCode, ResourceContentOrigin
 
@@ -55,7 +54,14 @@ from ..compliance.resources import ResourceDescriptor
 from .errors import AcquisitionFailedError, AcquisitionFailure
 from .pacing import PacingPolicy, RequestPacer
 from .records import RawRecordDraft, build_raw_record, canonical_fingerprint, observation_key
-from .transport import DEFAULT_USER_AGENT, HttpRequest, HttpResponse, Transport, host_of
+from .transport import (
+    DEFAULT_USER_AGENT,
+    HttpRequest,
+    HttpResponse,
+    Transport,
+    host_of,
+    path_segment,
+)
 
 __all__ = [
     "WM_ACCESS",
@@ -235,7 +241,7 @@ class WikimediaPageviewsRequest:
                 WM_PROJECT,
                 WM_ACCESS,
                 WM_AGENT,
-                quote(article, safe=""),
+                path_segment(article),
                 WM_GRANULARITY,
                 self.bounds.from_date.strftime("%Y%m%d"),
                 self.bounds.to_date.strftime("%Y%m%d"),
@@ -626,4 +632,4 @@ def _article_url(article: str) -> str:
     guessed: the project is a constant of this collector, and the title is the
     one the SOURCE echoed.
     """
-    return f"https://{WM_PROJECT}/wiki/{quote(article, safe='')}"
+    return f"https://{WM_PROJECT}/wiki/{path_segment(article)}"
