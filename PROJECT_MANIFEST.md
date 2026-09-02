@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.45
+Version: 1.46
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-02 (Sprint 1 / Mission 1.22)
+Last amended: 2026-09-02 (Sprint 1 / Mission 1.23)
 
 ---
 
@@ -13,6 +13,79 @@ Last amended: 2026-09-02 (Sprint 1 / Mission 1.22)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.46 — 2026-09-02 (Sprint 1 / Mission 1.23)
+
+Authorized by the Mission 1.23 brief §0-§40.
+
+**OUTCOME B: READY_FOR_OPERATOR_CONFIGURATION.** The governance question is
+answered, the runtime gate is built and exercised, and the boundary is closed on
+exactly one remaining condition. **No model was called, no source content left
+this machine, 0 model calls, 0 tokens, 0 cost**, and every count is unchanged at
+148/148 records and 26/26/26/26 Signals, Claims, Revisions and Evidence. The
+catalog stays at 29 sources.
+
+**THREE QUESTIONS THAT WERE ONE OR NONE** (ADR-033). `model_processing` asks may
+a model READ this material -- Stack Exchange had answered it. The new
+`external_model_transmission` asks may the material LEAVE this deployment so a
+THIRD PARTY's model can read it. A new provider policy asks what that processor
+DOES with what it receives. Different exposure, different counterparty, different
+instrument. **Reinterpreting the first to mean the second would have granted
+twenty-nine sources a permission nobody assessed**, so it was not touched.
+
+**THE PROFILE GAINED THE WORD IT WAS MISSING.** `external_model_egress` closes
+the gap Mission 1.22 named: `model_inference` said the ACTIVITY was in scope,
+`deployment: LOCAL` said where the SYSTEM runs, and nothing said where inference
+RUNS. Local is `PERMITTED_TO_APPROVED_PROVIDERS`; commercial is `NOT_ASSESSED`
+**written out rather than inherited**, because whether a public multi-tenant
+service may send third-party licensed content to a processor is a materially
+harder question and a mission that answered it in passing would answer it for a
+product nobody has built.
+
+**NOT_ASSESSED IS A STATE, NOT A DEFAULT THAT DECIDES.** Migration 0027 adds both
+columns nullable with no default and writes **no existing row** -- a mass UPDATE
+would have invented sixty-four answers. Migration 0028 then writes only the two
+decisions actually made, as a second migration because 0027 is applied and an
+applied migration is immutable.
+
+**DELIBERATELY NOT ONE OF RULE 8'S SIX.** The activity gates ONE operation, so
+World Bank's deterministic collector never becomes ineligible because nobody
+assessed model egress for World Bank. Asserted over **every** registered source
+rather than assumed: no acquisition refusal mentions the activity or the word
+*egress*.
+
+**A PROVIDER IS APPROVED ON ITS OWN CONTRACT TEXT, AND THE ROUTE IS WHAT IS
+ASSESSED.** One route is APPROVED on commercial terms committing that the
+provider may not train models on customer content, with documented bounded
+retention. One is NOT_APPROVED because its **unpaid** route states that submitted
+content is used to develop machine learning technologies, that human reviewers may
+read input and output, and that confidential information should not be submitted.
+The same vendor's paid route is a different assessment nobody has made. **No
+source review names a vendor** -- the condition states the PROPERTY a provider
+must have, because naming a company would put provider governance inside the
+source registry.
+
+**APPENDING A REVIEW VERSION IS NOT FREE, AND THAT WAS FOUND THE HARD WAY.**
+Stack Exchange local review v2 broke deterministic acquisition for the source: a
+compliance configuration is pinned to a review version, on the stated ground that
+a re-review can change what a condition means. **The guard is right and the repair
+was to perform the re-check rather than silence it** -- v2's `required_conditions`
+are byte-identical to v1's, asserted in code before the version was bumped and
+pinned by a test, so a future review that DOES alter a required condition cannot
+be waved through by editing a number.
+
+**THE BOUNDARY IS CLOSED, BY NAME.** Live: source `PERMITTED_WITH_CONDITIONS`,
+profile `PERMITTED_TO_APPROVED_PROVIDERS`, provider `APPROVED`, configured **no**
+-> `PROVIDER_NOT_CONFIGURED`. No credential was fabricated, committed, or pasted
+into a tracked file. **Mission 1.22's evaluation may RESUME after operator
+configuration** -- and for the first time in this sequence the blocker is neither
+the data nor the world nor a missing word, but a configuration step an operator
+can clear.
+
+**One older violation disclosed rather than left in a transcript**: Mission 1.19
+edited an applied migration and committed it, which the 0026 checksum caught when
+0027 would not apply. Repaired in the local ledger row only, verified from a fresh
+connection, with no schema object altered and no migration file edited to fix it
 
 ## 1.45 — 2026-09-02 (Sprint 1 / Mission 1.22)
 
@@ -1349,6 +1422,7 @@ Additionally authoritative:
 - docs/data/world-bank-collector-v1.md (added in 1.8)
 - docs/data/normalized-record-v1.md (added in 1.9)
 - docs/data/world-bank-normalizer-v1.md (added in 1.9)
+- docs/data/model-inference-execution-governance-v1.md (added in 1.46)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

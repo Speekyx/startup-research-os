@@ -721,6 +721,64 @@ def cmd_authorization(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_inference_authorization(args: argparse.Namespace) -> int:
+    """Can source X under profile Y be sent to provider Z for inference?
+
+    Mission 1.23 §28. The question an operator actually has before wiring a
+    model, and the answer names EVERY gate rather than the first one that
+    refused -- fixing one and being refused again three times is the experience
+    this command exists to prevent.
+
+    Reaches no network and calls no model. It reports permissions.
+    """
+    from .compliance.inference import authorize_external_inference, load_provider_policy
+
+    catalog = _catalog(args)
+    # `get` raises SourceRegistryError for an unknown id, and its message already
+    # lists the known sources. Letting it propagate matches every other command
+    # here; a None check would be dead code, which is how mypy found it.
+    source = catalog.get(args.source_id)
+    profile_id = _cli_profile(args)
+    profile = next((p for p in catalog.use_profiles if p.use_profile_id == profile_id), None)
+    if profile is None:
+        print(f"REFUSED  {profile_id!r} is not a registered use profile", file=sys.stderr)
+        return 1
+
+    policy = load_provider_policy(args.provider_policy)
+    posture = policy.posture_for(args.provider)
+
+    # Whether a credential exists is a fact about the ENVIRONMENT, resolved here
+    # and passed in, so the governance module stays a governance module.
+    configured = (
+        bool(os.environ.get(args.credential_env, "").strip()) if args.credential_env else False
+    )
+
+    decision = authorize_external_inference(
+        source, profile, args.provider, policy=policy, provider_configured=configured
+    )
+
+    print(_profile_banner(profile_id))
+    print(f"source    {decision.source_id}")
+    print(f"provider  {decision.provider_id}   ({posture.route_assessed or 'route not assessed'})")
+    print()
+    print("  gate                        state")
+    print(f"  source transmission         {decision.source_transmission_state}")
+    print(f"  profile egress              {decision.profile_egress_state}")
+    print(f"  provider posture            {decision.provider_posture}")
+    print(f"  provider configured         {'yes' if decision.provider_configured else 'no'}")
+    print()
+    if decision.authorized:
+        print("AUTHORIZED  every gate passes. Nothing has been sent: this command reports")
+        print("            permissions, and a caller must still hold this decision before")
+        print("            it builds a request.")
+        return 0
+    print("REFUSED")
+    for reason, why in zip(decision.refusal_reasons, decision.detail, strict=False):
+        print(f"  {reason}")
+        print(f"      {why}")
+    return 1
+
+
 def cmd_readiness(args: argparse.Namespace) -> int:
     """The four separate facts, for one source or all of them.
 
@@ -1030,6 +1088,27 @@ def build_parser() -> argparse.ArgumentParser:
     readiness.add_argument("source_id", nargs="?")
     readiness.add_argument("--json", action="store_true")
     readiness.set_defaults(func=cmd_readiness)
+
+    inference = sub.add_parser(
+        "inference-authorization",
+        help="can this source, under this profile, be sent to this provider for inference",
+    )
+    inference.add_argument("source_id")
+    inference.add_argument(
+        "--provider",
+        required=True,
+        help="the model provider id, as recorded in the provider policy",
+    )
+    inference.add_argument(
+        "--credential-env",
+        default=None,
+        help=(
+            "environment variable that would hold this provider's credential. Its "
+            "PRESENCE is read; its value is never printed"
+        ),
+    )
+    inference.add_argument("--provider-policy", default=None)
+    inference.set_defaults(func=cmd_inference_authorization)
 
     stale = sub.add_parser("stale", help="reviews that are due or never concluded")
     stale.set_defaults(func=cmd_stale)

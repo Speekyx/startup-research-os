@@ -55,6 +55,10 @@ __all__ = [
     "APPROVING_STATES",
     "AUTHORITATIVE_EVIDENCE_TYPES",
     "ASSESSED_ACTIVITIES",
+    "EXTERNAL_MODEL_EGRESS_STATES",
+    "EGRESS_NOT_ASSESSED",
+    "EGRESS_DENIED",
+    "EGRESS_PERMITTED_TO_APPROVED_PROVIDERS",
     "SOURCE_ID_PATTERN",
     "USE_PROFILE_ID_PATTERN",
     "LEGACY_USE_PROFILE",
@@ -79,6 +83,21 @@ USE_PROFILE_ID_PATTERN = r"^[a-z][a-z0-9-]*-v[0-9]+$"
 # policy conclusion -- the catalog's own `assessed_use_case` prose has said
 # "a COMMERCIAL multi-tenant SaaS" since Mission 1.0.
 LEGACY_USE_PROFILE = "commercial-multi-tenant-research-v1"
+
+
+# What a deployment permits by way of sending source-derived content to a
+# third-party model processor (ADR-033). Three states, and the default refuses.
+#
+# A BOOLEAN COULD NOT CARRY THIS. `false` would conflate *decided against* with
+# *never asked*, and those are the two states this repository spends most of its
+# care keeping apart.
+EGRESS_NOT_ASSESSED = "NOT_ASSESSED"
+EGRESS_DENIED = "DENIED"
+EGRESS_PERMITTED_TO_APPROVED_PROVIDERS = "PERMITTED_TO_APPROVED_PROVIDERS"
+
+EXTERNAL_MODEL_EGRESS_STATES: frozenset[str] = frozenset(
+    {EGRESS_NOT_ASSESSED, EGRESS_DENIED, EGRESS_PERMITTED_TO_APPROVED_PROVIDERS}
+)
 
 
 @dataclass(frozen=True)
@@ -121,6 +140,16 @@ class AssessedUseProfile:
     model_inference: bool = True
     model_training: bool = False
     embeddings: bool = False
+    # Mission 1.23, ADR-033. WHERE inference may execute, which `model_inference`
+    # above never said: that field states the ACTIVITY is in scope, and
+    # `deployment` states where SROS runs. Neither says whether source-derived
+    # content may leave for a third-party processor.
+    #
+    # Defaults to NOT_ASSESSED so a profile written before ADR-033 refuses
+    # external inference rather than inheriting a permission nobody granted. A
+    # LOCAL inference provider would need `model_inference` and NOT this, which
+    # is the clearest statement of why they are two fields.
+    external_model_egress: str = EGRESS_NOT_ASSESSED
     personal_data_posture: str = "MINIMISED"
     notes: str | None = None
 
@@ -138,6 +167,25 @@ class AssessedUseProfile:
                 "use_profile",
                 "a profile with no description is a subject nobody can check a review against",
             )
+        if self.external_model_egress not in EXTERNAL_MODEL_EGRESS_STATES:
+            raise SourceRegistryError(
+                "use_profile.external_model_egress",
+                f"{self.external_model_egress!r} is not one of "
+                f"{sorted(EXTERNAL_MODEL_EGRESS_STATES)}. An unrecognised state cannot "
+                "fail closed, because nothing downstream knows which way it points",
+            )
+
+    @property
+    def permits_external_model_egress(self) -> bool:
+        """Whether this deployment permits source-derived content to leave for a
+        third-party model processor.
+
+        `NOT_ASSESSED` and `DENIED` both answer no, and the DISTINCTION between
+        them is why the field is not a boolean: one is a decision and the other
+        is a question nobody asked. Callers that only need the yes/no use this;
+        callers that must explain a refusal read the state itself.
+        """
+        return self.external_model_egress == EGRESS_PERMITTED_TO_APPROVED_PROVIDERS
 
     @property
     def is_active(self) -> bool:
@@ -177,9 +225,21 @@ ASSESSED_ACTIVITIES: tuple[str, ...] = (
     "redistribution",
     "derived_analytics",
     "model_processing",
+    # Mission 1.23, ADR-033. `model_processing` asks whether a model may READ
+    # this material. This asks whether the material may LEAVE the local
+    # deployment so that a third party's model can read it. They are different
+    # acts with different exposure, and until this existed no review could scope
+    # itself to a location -- there was no slot to put the answer in.
+    #
+    # NOT one of rule 8's materially required activities. Those six gate whether
+    # a source may be collected from at all; this gates ONE operation. A World
+    # Bank deterministic acquisition must not fail because nobody assessed LLM
+    # egress for it.
+    "external_model_transmission",
     "personal_data_handling",
     "attribution_required",
 )
+
 
 SOURCE_ID_PATTERN = r"^[a-z0-9][a-z0-9._-]{0,127}$"
 

@@ -22,7 +22,8 @@
       "model_training": false,
       "embeddings": false,
       "personal_data_posture": "MINIMISED",
-      "notes": "Recorded by Mission 1.15.5 as a MIGRATION INTERPRETATION of the historical review scope, not as a new policy conclusion. No verdict, assessment, condition, open question or evidence row was changed by attaching it."
+      "notes": "Recorded by Mission 1.15.5 as a MIGRATION INTERPRETATION of the historical review scope, not as a new policy conclusion. No verdict, assessment, condition, open question or evidence row was changed by attaching it.\n\nMission 1.23, ADR-033. `external_model_egress` is NOT_ASSESSED, stated EXPLICITLY rather than inherited from the default. This profile describes a public multi-tenant service, and whether customer-facing processing may send third-party licensed content to an external model provider is a materially harder question than the local one -- it was not asked here, and a mission that answered it in passing would be answering it for a product nobody has built. It refuses external inference, and it refuses it as an open question rather than as a decision.",
+      "external_model_egress": "NOT_ASSESSED"
     },
     {
       "use_profile_id": "local-private-research-v1",
@@ -43,7 +44,8 @@
       "model_training": false,
       "embeddings": false,
       "personal_data_posture": "MINIMISED",
-      "notes": "A profile narrows WHAT IS DONE WITH A SOURCE. It never widens what a source permits, and an approval here never transfers to commercial-multi-tenant-research-v1."
+      "notes": "A profile narrows WHAT IS DONE WITH A SOURCE. It never widens what a source permits, and an approval here never transfers to commercial-multi-tenant-research-v1.\n\nMission 1.23, ADR-033. `external_model_egress` states what `model_inference` never could: whether source-derived content may LEAVE this deployment for a third-party model processor. Set to PERMITTED_TO_APPROVED_PROVIDERS -- permitted, and only to a provider whose data-use posture has been reviewed and approved. `deployment: LOCAL` still means where SROS runs and is not reinterpreted as on-device processing; `raw_redistribution: false` still means publishing and is not repurposed as a processor rule. A LOCAL inference provider would need `model_inference` and NOT this field, which is the clearest statement of why they are two.",
+      "external_model_egress": "PERMITTED_TO_APPROVED_PROVIDERS"
     }
   ],
   "reviewer": "mission-1.9.2",
@@ -3903,6 +3905,104 @@
               "retrieved_at": "2026-09-01T00:00:00+00:00"
             }
           ]
+        },
+        {
+          "review_version": 2,
+          "assessed_use_profile": "local-private-research-v1",
+          "approval_state": "APPROVED_WITH_CONDITIONS",
+          "reviewed_by": "mission-1.23",
+          "reviewed_at": "2026-09-02T00:00:00+00:00",
+          "review_interval_days": 365,
+          "automated_access": "PERMITTED_WITH_CONDITIONS",
+          "api_use": "PERMITTED_WITH_CONDITIONS",
+          "browser_automation": "NOT_PERMITTED",
+          "commercial_use": "PERMITTED_WITH_CONDITIONS",
+          "storage": "PERMITTED",
+          "retention": "NOT_ADDRESSED",
+          "redistribution": "PERMITTED_WITH_CONDITIONS",
+          "derived_analytics": "PERMITTED_WITH_CONDITIONS",
+          "model_processing": "PERMITTED_WITH_CONDITIONS",
+          "personal_data_handling": "PERMITTED_WITH_CONDITIONS",
+          "attribution_required": "PERMITTED",
+          "personal_data_risk": "IDENTIFIABLE",
+          "contains_user_generated_content": true,
+          "contains_user_identifiers": true,
+          "contains_location": false,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": false,
+          "discard_identifiers_after_normalization": true,
+          "jurisdiction_review_required": false,
+          "conditions": [
+            "Every product surface derived from Stack Exchange visually indicates that the Stack Exchange Network is the source, and carries the CC BY-SA 4.0 attribution the licence requires.",
+            "Acquisition uses the official Stack Exchange API and no other route. HTML retrieval, browser automation and the Data Dump are refused by name.",
+            "Owner, account and profile objects are excluded at acquisition through the API's own field filter, not discarded afterwards.",
+            "Source-derived content may be transmitted to an external model provider ONLY where that provider's reviewed data-use posture is APPROVED: its terms must commit that content submitted for inference is not used to train its models, and its retention must be documented and bounded.",
+            "The transmission is for INFERENCE. Nothing in this review authorises a provider to train on transmitted Stack Exchange content, and a provider whose route does so is not eligible whatever its other properties."
+          ],
+          "required_conditions": [
+            {
+              "key": "stack-exchange-attribution",
+              "description": "Every product surface derived from Stack Exchange visually indicates that the Stack Exchange Network is the source, and carries the CC BY-SA 4.0 attribution the licence requires.",
+              "verification": "CAPABILITY",
+              "verification_detail": "source-attribution-display"
+            },
+            {
+              "key": "stack-exchange-official-api-only",
+              "description": "Acquisition uses the official Stack Exchange API and no other route. HTML retrieval, browser automation and the Data Dump are refused by name.",
+              "verification": "CAPABILITY",
+              "verification_detail": "source-route-binding"
+            },
+            {
+              "key": "stack-exchange-personal-data-minimisation",
+              "description": "Owner, account and profile objects are excluded at acquisition through the API's own field filter, not discarded afterwards.",
+              "verification": "CAPABILITY",
+              "verification_detail": "source-field-minimisation"
+            }
+          ],
+          "open_questions": [
+            "SHARE-ALIKE IS AVOIDED, NOT ANSWERED. CC BY-SA 4.0's ShareAlike obligation triggers on SHARED Adapted Material, and local-private-research-v1 shares nothing. Whether a given derived artefact would BE Adapted Material is unresolved and does not need resolving while nothing leaves the machine. It becomes load-bearing the moment any output is published, and this review must be redone before that happens.",
+            "MODEL TRAINING IS NOT ASSESSED AND NOT AUTHORISED. The profile forbids it, so the review did not need to reach it, and the governing documents were not read for it. The AI Addendum is scoped to Stack's own AI Features and is not a third-party grant; the Consolidated Responsible AI policy governs Stack's internal conduct only. Neither establishes a third-party training right, and neither was treated as establishing one.",
+            "STACK DATA LICENSING, NARROWLY. Neither the Public Network Terms nor the API Terms state that a separate Stack Data Licensing agreement is required for ordinary official-API use. That is the whole finding: it does not generalise to other volumes, purposes or routes, and another first-party document could establish otherwise for a different use.",
+            "The Public Network Terms and API Terms were OPERATOR-SUPPLIED because this environment received HTTP 403 for both. Re-read them directly at the next review.",
+            "Whether transmitting licensed question text to a processor is 'Sharing' under CC BY-SA 4.0 is NOT decided here, and nothing rests on deciding it. Section 2 grants reproduction and the production of Adapted Material for any purpose including commercial, so the reproduction involved in sending text for inference is inside the grant either way. The classification would begin to matter if output were published, and this profile publishes nothing -- the same position §4 records for ShareAlike.",
+            "Provider-side retention is BOUNDED rather than zero on the approved route (30 days, documented). A zero-retention requirement was NOT invented: no existing policy in this repository requires one, and inventing a requirement in order to look strict would refuse a route on a rule nobody wrote."
+          ],
+          "review_notes": "APPENDED AS VERSION 2, AND VERSION 1 IS NOT REWRITTEN. What is new is one activity the contract could not previously express; every assessment, condition and evidence row from v1 is carried forward unchanged.\n\nTHE DISTINCTION THIS REVIEW EXISTS TO MAKE. `model_processing` was and remains PERMITTED_WITH_CONDITIONS: a model may read this material, on the licence's own grant to reproduce and to produce Adapted Material. `external_model_transmission` is a different question -- may the material LEAVE this deployment so that a third party's model can read it -- and until ADR-033 there was no slot to answer it in. v1 did not decline to answer; it could not.\n\nTHE ANSWER, AND ITS BASIS. PERMITTED_WITH_CONDITIONS. The reproduction involved in sending question text to a processor for inference is inside CC BY-SA 4.0's Section 2 grant, which permits reproduction and the production of Adapted Material for any purpose including commercial and imposes no restriction on the means. What the licence does NOT do is say anything about what a processor may do with the text once it has it -- that is a contractual question about a provider, answered by a provider's own terms and recorded in model-provider-policy-v1.json rather than here.\n\nTWO INSTRUMENTS, TWO QUESTIONS, AND NEITHER SUBSTITUTES FOR THE OTHER. CC BY-SA does not approve a named provider, and no provider's terms grant copyright permission over Stack Exchange material. This review answers whether THIS SOURCE's material may undergo the activity; the provider policy answers what a given processor does with what it receives; the profile answers whether this deployment permits the class of egress at all. Runtime authorization requires all three and fails closed on any missing answer.\n\nNO VENDOR IS NAMED HERE, deliberately. The condition expresses a PROPERTY a provider must have -- no training on submitted content, documented bounded retention -- rather than a company that has it today. A source review that named a vendor would have to be re-versioned every time a provider list changed, and would put provider governance inside the source registry where it does not belong.\n\nPERSONAL DATA IS UNCHANGED AND IS THE REASON THIS IS COMFORTABLE. Owner, account, profile and comment objects were excluded AT ACQUISITION and are not in the corpus at all, so what would be transmitted is a public question title and body with no author attached. That is not a mitigation applied at transmission time; it is a property the data already has.\n\nATTRIBUTION IS NOT EXPANDED. CC BY-SA's attribution obligation runs to material made available to others; sending text to a processor for private inference is not a public display, and nothing here requires licence boilerplate to be pasted into a prompt. The obligation on derived PRODUCT SURFACES is unchanged and still verified by `stack-exchange-attribution`.\n\nWHAT THIS DOES NOT AUTHORISE. It authorises no provider by name, configures nothing, and sends nothing. It does not authorise training on transmitted content, embeddings, or any use of the commercial profile, which has NOT assessed this activity.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_TERMS",
+              "document_title": "Stack Overflow Public Network Terms of Service",
+              "document_url": "https://stackoverflow.com/legal/terms-of-service/public",
+              "section_reference": "Subscriber Content; Content Permissions, Restrictions, and Creative Commons Licensing; API carve-out; AI Addendum. Last updated 2025-11-13.",
+              "summarized_finding": "OPERATOR-SUPPLIED FIRST-PARTY EVIDENCE: this environment received HTTP 403 for this URL and the retrieval was performed by the operator outside it. The 403 was not retried or bypassed. FINDINGS: Subscriber Content -- which is what questions and answers are -- is licensed CC BY-SA 4.0, and contributed Public Content may be copied and redistributed subject to attribution. The storage restriction applying to other Network Content expressly excludes 'other than Subscriber Content or content made available via the Stack Overflow API', so it does not reach API-delivered questions; that exclusion removes an obstacle and is not itself a licence. The AI Addendum is scoped to Stack's own AI Features, AI Inputs and AI Outputs and is neither a third-party grant nor, on its face, a prohibition on an external party analysing ordinary Subscriber Content.",
+              "retrieved_at": "2026-09-01T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_TERMS",
+              "document_title": "Stack Exchange, Inc. API Terms of Use",
+              "document_url": "https://stackoverflow.com/legal/api-terms-of-use",
+              "section_reference": "API Services; governing terms; attribution; termination.",
+              "summarized_finding": "OPERATOR-SUPPLIED FIRST-PARTY EVIDENCE: this environment received HTTP 403 for this URL and the retrieval was performed by the operator outside it. The 403 was not retried or bypassed. FINDINGS: the API Services allow Applications to programmatically query and connect to the Stack Exchange Network, governed by both the API Agreement and the Public Network Terms. Applications must 'visually indicate that the Stack Exchange Network is the source'. NO standalone storage prohibition, NO explicit analytics prohibition and NO explicit commercial-use grant or prohibition was found in the API Terms themselves -- so the API Terms decide ACCESS and the content licence decides REUSE, and the silences are recorded as silences rather than read as permission.",
+              "retrieved_at": "2026-09-01T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_TERMS",
+              "document_title": "Stack Exchange Consolidated Responsible AI policy",
+              "document_url": "https://policies.stackoverflow.co/company/consolidated-responsible-ai-policy",
+              "section_reference": "1. Objectives; 2. Accountability; 3. Responsible AI guiding principles; 4. AI governance operating framework; 5. Ongoing monitoring. Last updated 2025-07-01.",
+              "summarized_finding": "RETRIEVED DIRECTLY by this environment (HTTP 200, 2026-09-01), unlike the two documents above. NORMATIVELY EMPTY FOR A THIRD PARTY: every operative sentence has Stack as its subject -- 'Stack is responsible for implementing this policy', 'We ensure AI systems are designed and trained to be fair and unbiased', 'The Stack Legal Team ensures that our business understands and complies with applicable law'. It is corporate governance about how Stack builds and deploys its own AI. It grants an external party nothing and forbids an external party nothing, and it was used as neither a permission nor a restriction.",
+              "retrieved_at": "2026-09-01T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_LICENCE",
+              "document_title": "Creative Commons Attribution-ShareAlike 4.0 International — Legal Code",
+              "document_url": "https://creativecommons.org/licenses/by-sa/4.0/legalcode",
+              "section_reference": "Section 2(a)(1) Licence grant; Section 2(a)(4) Media and formats",
+              "summarized_finding": "Cited for the narrow question this review adds, and for nothing else. Section 2 grants the licensee the right to reproduce and Share the Licensed Material and to produce, reproduce and Share Adapted Material, for any purpose including commercial, and permits exercise of those rights in all media and formats with the technical modifications necessary to do so. The reproduction involved in transmitting question text to a processor for inference is inside that grant. The licence says nothing about what a processor may do with received text, which is why a separate provider assessment exists.",
+              "retrieved_at": "2026-09-02T00:00:00+00:00"
+            }
+          ],
+          "external_model_transmission": "PERMITTED_WITH_CONDITIONS"
         }
       ],
       "signal_coverage": [

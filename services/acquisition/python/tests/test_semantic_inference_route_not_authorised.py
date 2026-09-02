@@ -39,6 +39,24 @@ def local_review(catalog_json: dict, source_id: str) -> dict:
     return max(reviews, key=lambda r: r["review_version"])
 
 
+def review_version(catalog_json: dict, source_id: str, version: int) -> dict:
+    """One SPECIFIC version, for assertions about what a review said at a point
+    in time.
+
+    `local_review` returns the newest, which is what runtime cares about. The
+    tests below that describe what Mission 1.22 FOUND must pin the version they
+    found it in: reviews are append-only, so v1 remains readable forever, and an
+    assertion about it that silently followed the latest version would stop
+    describing history the moment a later mission appended.
+    """
+    entry = next(s for s in catalog_json["sources"] if s["source_id"] == source_id)
+    return next(
+        r
+        for r in entry["reviews"]
+        if r["assessed_use_profile"] == LOCAL_PROFILE and r["review_version"] == version
+    )
+
+
 def local_profile(catalog_json: dict) -> dict:
     return next(p for p in catalog_json["use_profiles"] if p["use_profile_id"] == LOCAL_PROFILE)
 
@@ -50,47 +68,117 @@ class TestTransmissionToAThirdPartyWasNeverAssessed:
     def test_the_review_permits_inference_as_an_activity(self, catalog_json) -> None:
         """Half the question is answered, and it is the half that does not
         decide anything here."""
-        review = local_review(catalog_json, "stack-exchange")
+        review = review_version(catalog_json, "stack-exchange", 1)
         assert review["model_processing"] == "PERMITTED_WITH_CONDITIONS"
         assert "MODEL INFERENCE IS PERMITTED" in review["review_notes"]
+        # and it is still the answer, carried forward unchanged into v2
+        assert local_review(catalog_json, "stack-exchange")["model_processing"] == (
+            "PERMITTED_WITH_CONDITIONS"
+        )
 
     def test_and_the_basis_is_about_reading_not_about_transmitting(self, catalog_json) -> None:
         """The recorded basis is the licence's grant to reproduce and to produce
         Adapted Material — which answers *may a model read this*, not *may this
         leave the deployment so a third party's model can read it*."""
-        notes = local_review(catalog_json, "stack-exchange")["review_notes"]
+        notes = review_version(catalog_json, "stack-exchange", 1)["review_notes"]
         assert "Reading and classifying licensed text" in notes
         assert "grant to reproduce and to produce Adapted Material" in notes
 
-    def test_no_condition_on_the_review_mentions_a_provider(self, catalog_json) -> None:
-        review = local_review(catalog_json, "stack-exchange")
-        blob = json.dumps(review["conditions"] + review["required_conditions"]).lower()
+    def test_v1_asked_nothing_about_a_provider_and_v2_asks_for_a_property(
+        self, catalog_json
+    ) -> None:
+        """Mission 1.22 found that no condition mentioned a provider, as evidence
+        that the question had never been asked. Mission 1.23 asked it, and this
+        assertion moved rather than being deleted.
+
+        **v2 still names no vendor.** Its condition expresses the PROPERTY a
+        provider must have -- no training on submitted content, documented
+        bounded retention -- because a source review that named a company would
+        need re-versioning every time a provider list changed, and would put
+        provider governance inside the source registry where it does not belong.
+        """
+        v1 = review_version(catalog_json, "stack-exchange", 1)
+        was = json.dumps(v1["conditions"] + v1["required_conditions"]).lower()
         for word in ("provider", "third party", "third-party", "transmit", "external service"):
-            assert word not in blob, word
+            assert word not in was, word
 
-    def test_the_profile_has_no_field_for_where_inference_happens(self, catalog_json) -> None:
-        """The structural finding, pinned. `model_inference` says the ACTIVITY is
-        in scope; `deployment: LOCAL` says where the SYSTEM runs. Neither says
-        where inference runs, and the profile has no word for it.
+        v2 = review_version(catalog_json, "stack-exchange", 2)
+        now = json.dumps(v2["conditions"] + v2["required_conditions"]).lower()
+        assert "external model provider" in now
+        for vendor in ("anthropic", "gemini", "openai", "google", "mistral"):
+            assert vendor not in now, vendor
+        assert v2["external_model_transmission"] == "PERMITTED_WITH_CONDITIONS"
+        assert "external_model_transmission" not in v1, "v1 must not be rewritten"
 
-        The same shape as Mission 1.15.4: a distinction the system needs, with no
-        slot to record it, found by the first mission that needed it.
+    def test_the_profile_now_has_the_field_it_was_missing(self, catalog_json) -> None:
+        """The structural finding, and its repair.
+
+        Mission 1.22 found that `model_inference` said the ACTIVITY was in scope
+        and `deployment: LOCAL` said where the SYSTEM ran, while nothing said
+        where inference RUNS -- the same shape as Mission 1.15.4, a distinction
+        the system needed with no slot to record it. ADR-033 added
+        `external_model_egress`, and this assertion moved from *the field is
+        absent* to *the field exists and every profile states it in its own
+        words*.
+
+        The two older fields are asserted UNCHANGED. The repair was to add a
+        word, not to reinterpret `deployment` as a claim about processing
+        location, which would have granted a permission nobody assessed.
         """
         profile = local_profile(catalog_json)
         assert profile["model_inference"] is True
         assert profile["deployment"] == "LOCAL"
-        blob = json.dumps(profile).lower()
-        for word in ("provider", "third party", "third-party", "transmit", "egress"):
-            assert word not in blob, word
+        assert profile["external_model_egress"] == "PERMITTED_TO_APPROVED_PROVIDERS"
 
-    def test_no_repository_document_authorises_the_transfer(self) -> None:
-        """Searched rather than assumed. If a later mission adds such a document,
-        this test is where the absence stops being true."""
+        # The commercial profile refuses, and refuses as an OPEN QUESTION rather
+        # than as a decision -- stated explicitly, not inherited from a default.
+        commercial = next(
+            p
+            for p in catalog_json["use_profiles"]
+            if p["use_profile_id"] == "commercial-multi-tenant-research-v1"
+        )
+        assert commercial["external_model_egress"] == "NOT_ASSESSED"
+
+    def test_the_activity_the_contract_could_not_express_now_exists(self) -> None:
+        """The precise defect Mission 1.22 named: one field answering a question
+        that is two."""
+        from sros_acquisition.registry.models import ASSESSED_ACTIVITIES
+
+        assert "model_processing" in ASSESSED_ACTIVITIES
+        assert "external_model_transmission" in ASSESSED_ACTIVITIES
+
+    def test_the_authorising_document_now_exists_and_still_refuses(self) -> None:
+        """Mission 1.22 searched every document rather than assuming, and found
+        none that authorised the transfer. Its docstring said this test was
+        where that absence would stop being true. Mission 1.23 is that mission.
+
+        So the assertion inverts: the document exists, and what it authorises is
+        CONDITIONAL. It must still state that nothing has been sent -- an
+        authorising document that quietly dropped the open gate would be the
+        failure mode this test was written to catch.
+        """
+        doc = REPO_ROOT / "docs" / "data" / "model-inference-execution-governance-v1.md"
+        assert doc.exists()
+        text = doc.read_text(encoding="utf-8")
+        assert "PROVIDER_NOT_CONFIGURED" in text
+        assert "authorises no transmission" in text
+        assert "commercial-multi-tenant-research-v1" in text and "NOT_ASSESSED" in text
+
+    def test_no_other_document_authorises_it_by_a_side_door(self) -> None:
+        """The original search, kept. One document may authorise this, under
+        gates; a second one appearing elsewhere would mean the boundary had been
+        restated somewhere it is not governed.
+        """
+        allowed = {
+            "semantic-problem-equivalence-v1.md",  # DESCRIBES the gap
+            "model-inference-execution-governance-v1.md",  # governs it
+            "mission-1.23-report.md",  # reports this mission
+        }
         hits = []
         for path in (REPO_ROOT / "docs").rglob("*.md"):
+            if path.name in allowed:
+                continue
             text = path.read_text(encoding="utf-8", errors="ignore").lower()
-            if "semantic-problem-equivalence" in path.name:
-                continue  # the architecture document DESCRIBES the gap
             if "authorised to send" in text or "may transmit source content" in text:
                 hits.append(path.name)
         assert not hits, hits
@@ -193,4 +281,8 @@ def test_the_design_records_what_would_have_to_change() -> None:
     change."""
     architecture = ARCHITECTURE.read_text(encoding="utf-8")
     assert "What would have to be true before this is built" in architecture
-    assert "None of the four is a code change" in architecture
+    # Mission 1.23 §0 corrected the closing sentence: the original claimed none of
+    # the four was a code change, which is untrue of the profile field and of a
+    # local provider. What must hold is that none may be silently inferred.
+    assert "may be silently inferred from the current configuration" in architecture
+    assert "contract and schema change" in architecture
