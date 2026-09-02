@@ -649,12 +649,26 @@ class TestTheCriterionDefectMission124Exposed:
         assert result.false_same == ()
         assert result.false_different  # the positive is what exposes it
 
-    def test_both_criteria_stay_addressable_by_name(self) -> None:
+    def test_every_criterion_stays_addressable_by_name(self) -> None:
         """A result records which rule scored it. A criterion that vanished
-        would leave historical outcomes unreproducible."""
-        from sros_semantic_equivalence import ACCEPTANCE_CRITERIA
+        would leave historical outcomes unreproducible, which is why V1 is kept
+        even though V2 supersedes it."""
+        from sros_semantic_equivalence import ACCEPTANCE_CRITERIA, FAMILY_V1_ACCEPTANCE
 
-        assert set(ACCEPTANCE_CRITERIA) == {V1_ACCEPTANCE.name, V2_ACCEPTANCE.name}
+        assert set(ACCEPTANCE_CRITERIA) == {
+            V1_ACCEPTANCE.name,
+            V2_ACCEPTANCE.name,
+            FAMILY_V1_ACCEPTANCE.name,
+        }
+
+    def test_only_the_family_criterion_defeats_a_constant_classifier(self) -> None:
+        """The property Mission 1.25 §9 requires, and the exact record of which
+        criteria lacked it."""
+        from sros_semantic_equivalence import FAMILY_V1_ACCEPTANCE
+
+        assert not V1_ACCEPTANCE.defeats_a_constant_classifier
+        assert not V2_ACCEPTANCE.defeats_a_constant_classifier
+        assert FAMILY_V1_ACCEPTANCE.defeats_a_constant_classifier
 
 
 class TestAReferenceLabelSaysWhereItCameFrom:
@@ -781,3 +795,201 @@ class TestAReferenceLabelSaysWhereItCameFrom:
         assert raw["human_ground_truth"] == "NOT_ESTABLISHED"
         assert {row["origin"] for row in raw["labels"]} == {"AI_ASSISTED_PROVISIONAL"}
         assert not (path.parent / "problem-equivalence-human-labels-v1.json").exists()
+
+
+class TestTheFamilyRelationIsSeparateFromTheExactOne:
+    """Mission 1.25 §4. Two relations, and the failure mode is that they become
+    one field: both are pairs of question ids with a decision beside them, so a
+    mix-up is invisible in the data."""
+
+    def test_the_two_relations_have_different_vocabularies(self) -> None:
+        from sros_semantic_equivalence import EquivalenceRelation, FamilyDecision
+
+        exact = EquivalenceRelation.EXACT_ACTIONABLE_EQUIVALENCE.decision_values()
+        family = EquivalenceRelation.SAME_PROBLEM_FAMILY.decision_values()
+        assert exact[0] == "SAME_PROBLEM"
+        assert family[0] == "SAME_PROBLEM_FAMILY"
+        assert exact != family
+        assert {d.value for d in FamilyDecision} == set(family)
+
+    def test_neither_relation_borrows_the_others_decision(self) -> None:
+        """A family decision string is not a member of the exact enum, and the
+        reverse, so a value written into the wrong field fails to parse rather
+        than silently meaning something else."""
+        from sros_semantic_equivalence import EquivalenceDecision, FamilyDecision
+
+        with pytest.raises(ValueError):
+            EquivalenceDecision("SAME_PROBLEM_FAMILY")
+        with pytest.raises(ValueError):
+            FamilyDecision("SAME_PROBLEM")
+
+    def test_the_family_proposition_claims_nothing_forbidden(self) -> None:
+        """The sentence a Signal may carry, checked against the list of things a
+        reader would otherwise infer."""
+        from sros_semantic_equivalence import FORBIDDEN_IMPLICATIONS, EquivalenceRelation
+
+        rendered = EquivalenceRelation.SAME_PROBLEM_FAMILY.proposition_template.format(
+            procedure="problem-family-rubric@1.0.0", a="A", b="B"
+        ).lower()
+        assert "same recurring problem family" in rendered
+        for forbidden in FORBIDDEN_IMPLICATIONS:
+            assert forbidden not in rendered, forbidden
+
+    def test_the_rubric_forbids_what_the_relation_forbids(self) -> None:
+        from sros_semantic_equivalence import FAMILY_RUBRIC_TEXT
+
+        assert "not ask whether the fix" in FAMILY_RUBRIC_TEXT
+        assert "SAME answer here never implies that" in FAMILY_RUBRIC_TEXT
+
+    def test_shared_technology_alone_is_insufficient_by_construction(self) -> None:
+        """The corpus is 89 Docker questions. A relation satisfied by shared
+        technology returns SAME for everything and means nothing."""
+        from sros_semantic_equivalence import FAMILY_INSUFFICIENT_ALONE
+
+        blob = " ".join(FAMILY_INSUFFICIENT_ALONE).lower()
+        for phrase in (
+            "same tool",
+            "same site tags",
+            "wrapper",
+            "generic error class",
+            "broad category of component",
+        ):
+            assert phrase in blob, phrase
+
+    def test_the_family_rubric_has_a_real_qualifying_example(self) -> None:
+        """Unlike the exact rubric, whose qualifying example had to be
+        constructed. That difference is itself a finding about the relations."""
+        from sros_semantic_equivalence import FAMILY_WORKED_EXAMPLES
+
+        qualifying = [e for e in FAMILY_WORKED_EXAMPLES if e.kind == "qualifying"]
+        assert len(qualifying) == 1
+        assert qualifying[0].real is True
+
+    def test_every_kind_of_worked_example_is_present(self) -> None:
+        from sros_semantic_equivalence import FAMILY_WORKED_EXAMPLES
+
+        assert {e.kind for e in FAMILY_WORKED_EXAMPLES} >= {
+            "qualifying",
+            "non-qualifying",
+            "borderline",
+            "abstention",
+        }
+
+
+class TestTheFamilyCandidateOrderingReusesRecall:
+    """§6. The qualifying rule is imported rather than restated, so the two
+    relations cannot come to consider different pairs."""
+
+    def test_both_generators_consider_exactly_the_same_pairs(self) -> None:
+        from sros_semantic_equivalence import generate_family_candidates
+
+        exact = generate_candidates(TRIO + [UNRELATED], cap=10_000)
+        family = generate_family_candidates(TRIO + [UNRELATED], cap=10_000)
+        assert {p.pair_id for p in exact.pairs} == {p.pair_id for p in family.pairs}
+
+    def test_a_shared_wrapper_promotes_nothing(self) -> None:
+        """Weight zero, and the zero is the argument: Mission 1.20 established
+        that an identical wrapper precedes unrelated blocked goals."""
+        from sros_semantic_equivalence.family_candidates import DIAGNOSTIC_WEIGHT
+
+        assert DIAGNOSTIC_WEIGHT == 0.0
+
+    def test_the_ordering_is_reproducible(self) -> None:
+        from sros_semantic_equivalence import generate_family_candidates
+
+        first = generate_family_candidates(TRIO + [UNRELATED])
+        second = generate_family_candidates(list(reversed(TRIO + [UNRELATED])))
+        assert [p.pair_id for p in first.pairs] == [p.pair_id for p in second.pairs]
+
+    def test_a_tag_on_every_observation_contributes_nothing(self) -> None:
+        from sros_semantic_equivalence import tag_rarity
+
+        rarity = tag_rarity(tuple(TRIO + [UNRELATED]))
+        assert rarity["docker"] == 0.0
+        assert rarity["python"] > 0.0
+
+    def test_the_generator_carries_its_own_version(self) -> None:
+        """An artifact must never be ambiguous about which ordering produced it."""
+        from sros_semantic_equivalence import (
+            CANDIDATE_GENERATOR_VERSION,
+            FAMILY_CANDIDATE_GENERATOR_VERSION,
+            generate_family_candidates,
+        )
+
+        assert FAMILY_CANDIDATE_GENERATOR_VERSION != CANDIDATE_GENERATOR_VERSION
+        assert (
+            generate_family_candidates(TRIO).generator_version == FAMILY_CANDIDATE_GENERATOR_VERSION
+        )
+
+
+class TestTheFamilyCriterionCannotBePassedByAConstantClassifier:
+    """§9, and the whole reason this criterion differs from Mission 1.24's."""
+
+    def _labels(self, positives: int, split: Split = Split.HOLDOUT) -> LabelSet:
+        rows = []
+        for i in range(12):
+            rows.append(
+                ReferenceLabel(
+                    pair_id=f"{i}::{i + 1}",
+                    a_question_id=str(i),
+                    b_question_id=str(i + 1),
+                    reviewer="a named person",
+                    origin=ReferenceOrigin.HUMAN_EXPERT,
+                    decision=(
+                        ReferenceDecision.SAME if i < positives else ReferenceDecision.DIFFERENT
+                    ),
+                    labelled_at="2026-09-02T00:00:00+00:00",
+                    split=split,
+                )
+            )
+        return LabelSet(tuple(rows))
+
+    def test_always_different_fails(self) -> None:
+        from sros_semantic_equivalence import FAMILY_V1_ACCEPTANCE
+
+        labels = self._labels(positives=3)
+        predictions = {label.pair_id: "DIFFERENT_PROBLEM_FAMILY" for label in labels.labels}
+        result = evaluate(labels, predictions, criterion=FAMILY_V1_ACCEPTANCE)
+        assert result.outcome == "MODEL_EVALUATION_FAILED"
+        assert result.false_same == ()
+        assert result.true_same == ()
+
+    def test_always_abstain_fails(self) -> None:
+        from sros_semantic_equivalence import FAMILY_V1_ACCEPTANCE
+
+        labels = self._labels(positives=3)
+        predictions = {label.pair_id: "ABSTAIN" for label in labels.labels}
+        result = evaluate(labels, predictions, criterion=FAMILY_V1_ACCEPTANCE)
+        assert result.outcome == "MODEL_EVALUATION_FAILED"
+        assert result.abstentions == 12
+
+    def test_one_true_positive_and_no_false_positive_passes(self) -> None:
+        from sros_semantic_equivalence import FAMILY_V1_ACCEPTANCE
+
+        labels = self._labels(positives=3)
+        predictions = {label.pair_id: "DIFFERENT_PROBLEM_FAMILY" for label in labels.labels}
+        predictions["0::1"] = "SAME_PROBLEM_FAMILY"
+        result = evaluate(labels, predictions, criterion=FAMILY_V1_ACCEPTANCE)
+        assert result.outcome == "MODEL_EVALUATION_PASSED"
+        assert result.true_same == ("0::1",)
+
+    def test_one_false_positive_fails_however_many_true_ones(self) -> None:
+        from sros_semantic_equivalence import FAMILY_V1_ACCEPTANCE
+
+        labels = self._labels(positives=3)
+        predictions = {label.pair_id: "DIFFERENT_PROBLEM_FAMILY" for label in labels.labels}
+        predictions["0::1"] = "SAME_PROBLEM_FAMILY"
+        predictions["11::12"] = "SAME_PROBLEM_FAMILY"
+        result = evaluate(labels, predictions, criterion=FAMILY_V1_ACCEPTANCE)
+        assert result.outcome == "MODEL_EVALUATION_FAILED"
+        assert result.false_same == ("11::12",)
+
+    def test_too_few_positives_in_the_scored_split_is_insufficient(self) -> None:
+        """The Mission 1.24 shape, refused up front this time."""
+        from sros_semantic_equivalence import FAMILY_V1_ACCEPTANCE
+
+        labels = self._labels(positives=1)
+        predictions = {label.pair_id: "DIFFERENT_PROBLEM_FAMILY" for label in labels.labels}
+        predictions["0::1"] = "SAME_PROBLEM_FAMILY"
+        result = evaluate(labels, predictions, criterion=FAMILY_V1_ACCEPTANCE)
+        assert result.outcome == "EVALUATION_INSUFFICIENT"

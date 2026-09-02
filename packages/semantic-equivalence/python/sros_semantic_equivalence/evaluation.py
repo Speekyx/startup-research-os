@@ -35,6 +35,7 @@ from collections import Counter
 from dataclasses import dataclass, field
 from enum import StrEnum
 
+from .relations import EquivalenceRelation
 from .rubric import RUBRIC_VERSION, EquivalenceDecision
 
 __all__ = [
@@ -48,6 +49,7 @@ __all__ = [
     "ReferenceOrigin",
     "LabelSet",
     "AcceptanceCriterion",
+    "FAMILY_V1_ACCEPTANCE",
     "V1_ACCEPTANCE",
     "V2_ACCEPTANCE",
     "EvaluationResult",
@@ -248,12 +250,36 @@ class AcceptanceCriterion:
     min_positive_labels: int
     statement: str
 
+    #: How many positives the model must actually GET RIGHT in the scored split.
+    #: Zero on the exact-equivalence criteria, which measured false positives
+    #: only; at least one on any criterion that must be unpassable by a
+    #: classifier answering DIFFERENT or ABSTAIN to everything (Mission 1.25 §9).
+    min_true_same: int = 0
+
+    #: Which relation this criterion scores. A criterion applied to the wrong
+    #: relation would compare a family decision against an equivalence label and
+    #: report agreement it never measured.
+    relation: EquivalenceRelation = EquivalenceRelation.EXACT_ACTIONABLE_EQUIVALENCE
+
+    @property
+    def defeats_a_constant_classifier(self) -> bool:
+        """Can a classifier that never says SAME pass this criterion?
+
+        The property Mission 1.25 §9 requires, computed from the numbers rather
+        than asserted in the statement text -- a statement claiming it while the
+        numbers allowed it would be worse than no claim.
+        """
+        return self.min_true_same >= 1
+
     def to_json(self) -> dict[str, object]:
         return {
             "name": self.name,
+            "relation": self.relation.value,
             "max_false_same": self.max_false_same,
             "min_labelled_holdout": self.min_labelled_holdout,
             "min_positive_labels": self.min_positive_labels,
+            "min_true_same": self.min_true_same,
+            "defeats_a_constant_classifier": self.defeats_a_constant_classifier,
             "statement": self.statement,
         }
 
@@ -296,10 +322,40 @@ V2_ACCEPTANCE = AcceptanceCriterion(
     ),
 )
 
+FAMILY_V1_ACCEPTANCE = AcceptanceCriterion(
+    name="family-v1-positive-coverage-and-false-positive-avoidance",
+    max_false_same=0,
+    min_labelled_holdout=8,
+    min_positive_labels=2,
+    min_true_same=1,
+    relation=EquivalenceRelation.SAME_PROBLEM_FAMILY,
+    statement=(
+        "Frozen before any family prediction existed. The classifier passes only if ALL "
+        "of the following hold on the scored split: at least 8 labelled pairs; at least 2 "
+        "pairs the reference calls SAME_FAMILY, IN THAT SPLIT rather than anywhere in the "
+        "reference set; ZERO false SAME_PROBLEM_FAMILY, meaning a pair the reference "
+        "called DIFFERENT or UNCERTAIN that the model called SAME; and at least ONE true "
+        "SAME_PROBLEM_FAMILY, meaning a pair the reference called SAME that the model also "
+        "called SAME.\n\n"
+        "THE LAST CLAUSE IS THE ONE MISSION 1.24 LACKED. Without it a classifier that "
+        "answers DIFFERENT to everything, or ABSTAIN to everything, records zero false "
+        "positives and passes -- which is exactly what happened, and why that evaluation "
+        "established nothing. Requiring a demonstrated positive makes both constant "
+        "classifiers fail by construction.\n\n"
+        "Abstention is still never counted as an error, because the alternative to an "
+        "abstention is a guess. But abstaining on EVERY positive now fails the true-SAME "
+        "clause, which is the honest way to price caution: free when it is caution, and "
+        "not free when it is refusal to ever commit.\n\n"
+        "No accuracy, precision or recall figure is a pass condition. A proportion over a "
+        "few dozen pairs has an interval wider than any difference it could show, and "
+        "quoting one would make a small experiment look calibrated."
+    ),
+)
+
 # Which criterion a run was scored under is part of its record. V1 is kept
 # because Mission 1.24 was scored under it and rewriting it would leave that
 # report describing a rule that no longer exists.
-ACCEPTANCE_CRITERIA = {c.name: c for c in (V1_ACCEPTANCE, V2_ACCEPTANCE)}
+ACCEPTANCE_CRITERIA = {c.name: c for c in (V1_ACCEPTANCE, V2_ACCEPTANCE, FAMILY_V1_ACCEPTANCE)}
 
 
 @dataclass(frozen=True)
@@ -312,6 +368,7 @@ class EvaluationResult:
     positives: int
     matrix: dict[str, int] = field(default_factory=dict)
     false_same: tuple[str, ...] = ()
+    true_same: tuple[str, ...] = ()
     false_different: tuple[str, ...] = ()
     abstentions: int = 0
     agreements: int = 0
@@ -336,6 +393,7 @@ class EvaluationResult:
             "positives": self.positives,
             "confusion_matrix": dict(self.matrix),
             "false_same": list(self.false_same),
+            "true_same": list(self.true_same),
             "false_different": list(self.false_different),
             "abstentions": self.abstentions,
             "agreements": self.agreements,
@@ -359,6 +417,7 @@ def evaluate(
     with no prediction is not an error and not an abstention -- it is a pair the
     run did not reach, and counting it either way would move the result.
     """
+    positive, negative, abstain = criterion.relation.decision_values()
     scored = [label for label in labels.for_split(split) if label.pair_id in predictions]
     matrix: Counter[str] = Counter()
     false_same: list[str] = []
@@ -366,22 +425,26 @@ def evaluate(
     abstentions = 0
     agreements = 0
 
+    true_same: list[str] = []
     for label in scored:
-        predicted = predictions[label.pair_id]
-        matrix[f"{label.decision.value}->{predicted.value}"] += 1
-        if predicted is EquivalenceDecision.ABSTAIN:
+        predicted = str(predictions[label.pair_id])
+        matrix[f"{label.decision.value}->{predicted}"] += 1
+        if predicted == abstain:
             abstentions += 1
-        if (
-            predicted is EquivalenceDecision.SAME_PROBLEM
-            and label.decision is not ReferenceDecision.SAME
-        ):
+        if predicted == positive and label.decision is not ReferenceDecision.SAME:
             false_same.append(label.pair_id)
-        if (
-            predicted is EquivalenceDecision.DIFFERENT_PROBLEM
-            and label.decision is ReferenceDecision.SAME
-        ):
+        if predicted == positive and label.decision is ReferenceDecision.SAME:
+            true_same.append(label.pair_id)
+        if predicted == negative and label.decision is ReferenceDecision.SAME:
             false_different.append(label.pair_id)
-        if predicted is label.decision.as_model_decision():
+        if (
+            predicted
+            == {
+                ReferenceDecision.SAME: positive,
+                ReferenceDecision.DIFFERENT: negative,
+                ReferenceDecision.UNCERTAIN: abstain,
+            }[label.decision]
+        ):
             agreements += 1
 
     # V1 counts positives across the whole reference set; V2 counts them in the
@@ -406,6 +469,13 @@ def evaluate(
             "no SAME label is available to this criterion, so a classifier answering "
             "DIFFERENT to everything would score perfectly and nothing would have been "
             "measured about whether a SAME prediction can be trusted"
+        )
+    elif len(true_same) < criterion.min_true_same:
+        outcome = "MODEL_EVALUATION_FAILED"
+        notes.append(
+            f"{len(true_same)} correctly identified positive(s); the criterion requires at "
+            f"least {criterion.min_true_same}. A classifier that never says "
+            f"{positive} cannot pass, which is the point of this clause"
         )
     elif len(false_same) > criterion.max_false_same:
         outcome = "MODEL_EVALUATION_FAILED"
@@ -436,6 +506,7 @@ def evaluate(
         positives=positives,
         matrix=dict(matrix),
         false_same=tuple(false_same),
+        true_same=tuple(true_same),
         false_different=tuple(false_different),
         abstentions=abstentions,
         agreements=agreements,

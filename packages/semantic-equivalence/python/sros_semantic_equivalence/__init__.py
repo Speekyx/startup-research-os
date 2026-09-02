@@ -10,8 +10,14 @@ opens no socket, and names no provider.
 
 from .batch import (
     BATCH_SELECTION_VERSION,
+    FAMILY_BATCH_SELECTION_VERSION,
+    FAMILY_HOLDOUT_EXCLUSIONS,
+    FAMILY_HOLDOUT_FRACTION,
+    FAMILY_SPLIT_SEED,
     ReviewBatch,
     ReviewItem,
+    assign_family_split,
+    select_family_review_batch,
     select_review_batch,
 )
 from .candidates import (
@@ -31,6 +37,7 @@ from .classifier import (
 )
 from .evaluation import (
     ACCEPTANCE_CRITERIA,
+    FAMILY_V1_ACCEPTANCE,
     HOLDOUT_EXCLUSIONS,
     SPLIT_SEED,
     V1_ACCEPTANCE,
@@ -45,6 +52,22 @@ from .evaluation import (
     assign_split,
     evaluate,
 )
+from .family_candidates import (
+    FAMILY_CANDIDATE_GENERATOR_VERSION,
+    generate_family_candidates,
+    tag_rarity,
+)
+from .family_rubric import (
+    FAMILY_GRANULARITY,
+    FAMILY_INSUFFICIENT_ALONE,
+    FAMILY_RELATION,
+    FAMILY_RUBRIC_TEXT,
+    FAMILY_RUBRIC_VERSION,
+    FAMILY_WORKED_EXAMPLES,
+    FamilyDecision,
+    FamilyReasonCode,
+    FamilyWorkedExample,
+)
 from .prompt import (
     EQUIVALENCE_PROMPT,
     OUTPUT_SCHEMA,
@@ -53,6 +76,7 @@ from .prompt import (
     QuestionForPrompt,
     render_equivalence_prompt,
 )
+from .relations import FORBIDDEN_IMPLICATIONS, EquivalenceRelation
 from .rubric import (
     GRANULARITY,
     INSUFFICIENT_ALONE,
@@ -65,6 +89,27 @@ from .rubric import (
 )
 
 __all__ = [
+    "select_family_review_batch",
+    "assign_family_split",
+    "FAMILY_SPLIT_SEED",
+    "FAMILY_HOLDOUT_FRACTION",
+    "FAMILY_HOLDOUT_EXCLUSIONS",
+    "FAMILY_BATCH_SELECTION_VERSION",
+    "tag_rarity",
+    "generate_family_candidates",
+    "FamilyWorkedExample",
+    "FamilyReasonCode",
+    "FamilyDecision",
+    "EquivalenceRelation",
+    "FORBIDDEN_IMPLICATIONS",
+    "FAMILY_WORKED_EXAMPLES",
+    "FAMILY_V1_ACCEPTANCE",
+    "FAMILY_RUBRIC_VERSION",
+    "FAMILY_RUBRIC_TEXT",
+    "FAMILY_RELATION",
+    "FAMILY_INSUFFICIENT_ALONE",
+    "FAMILY_GRANULARITY",
+    "FAMILY_CANDIDATE_GENERATOR_VERSION",
     "BATCH_SELECTION_VERSION",
     "CANDIDATE_GENERATOR_VERSION",
     "CLASSIFIER_TASK",
