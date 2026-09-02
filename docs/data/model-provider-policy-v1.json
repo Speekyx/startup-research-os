@@ -1,0 +1,88 @@
+{
+  "$comment": "Mission 1.23, ADR-033. What each MODEL PROVIDER contractually does with content sent to it. This is a fact about the PROVIDER and never about a source: no vendor name appears in any source review, and no source term appears here. The join happens once, at runtime authorization. Every posture rests on retrieved first-party documents with a retrieval date, exactly as a source review does -- and like a source review, an APPROVED posture records what a provider commits to, not a guarantee and not a legal opinion.",
+  "policy_version": 1,
+  "reviewed_by": "mission-1.23",
+  "reviewed_at": "2026-09-02T00:00:00+00:00",
+  "review_interval_days": 180,
+  "posture_states": [
+    {
+      "state": "APPROVED",
+      "description": "The provider's own terms commit, for the API route SROS would use, that content submitted for inference is not used to train its models, and its retention posture is documented and bounded. Sufficient for external model transmission where a source and a profile both permit it."
+    },
+    {
+      "state": "NOT_APPROVED",
+      "description": "The reviewed route uses submitted content in a way this deployment's posture does not accept, or the terms do not establish that it does not. Refused."
+    },
+    {
+      "state": "NOT_ASSESSED",
+      "description": "Nobody has reviewed this provider. The default for any provider absent from this file, and it refuses -- uncertainty is never permission."
+    },
+    {
+      "state": "NEVER_PRODUCTION",
+      "description": "A test double. It cannot become a production route however it is configured."
+    }
+  ],
+  "providers": [
+    {
+      "provider_id": "anthropic",
+      "display_name": "Anthropic API",
+      "route_assessed": "The Anthropic API accessed with an API key under the Commercial Terms of Service. Consumer products (Claude Free, Pro, Max) are a DIFFERENT route with different terms and are not assessed here.",
+      "posture": "APPROVED",
+      "trains_on_submitted_content": "NO_BY_CONTRACT",
+      "retention": "BOUNDED_30_DAYS",
+      "content_ownership": "CUSTOMER_RETAINS_INPUTS_AND_OWNS_OUTPUTS",
+      "operator_action_required": "Set ANTHROPIC_API_KEY and bind an inference tier to this provider. Nothing in this file configures anything.",
+      "notes": "The clearest of the two implemented providers, and the sentence that decides it is a contractual commitment rather than a policy page: 'Anthropic may not train models on Customer Content from Services.' Ownership is stated in the same paragraph and runs the right way -- the customer retains Inputs and owns Outputs, and Anthropic disclaims rights it receives. Retention is documented separately and is bounded rather than zero, which is recorded as BOUNDED_30_DAYS rather than smoothed into a stronger word. This is what the provider commits to; it is not a guarantee and it is not a legal opinion.",
+      "evidence": [
+        {
+          "document_type": "OFFICIAL_TERMS",
+          "document_title": "Anthropic Commercial Terms of Service",
+          "document_url": "https://www.anthropic.com/legal/commercial-terms",
+          "section_reference": "B. Customer Content",
+          "summarized_finding": "Retrieved directly, HTTP 200, 2026-09-02. States that 'Customer (a) retains all rights to its Inputs, and (b) owns its Outputs', that 'Anthropic disclaims any rights it receives to the Customer Content under these Terms', and that 'Anthropic may not train models on Customer Content from Services.' Inputs are defined as submissions to the Services and Outputs as responses generated to Inputs, together Customer Content. Section D.4 restricts the customer from using the Services to build a competing product or train competing models -- a restriction on us, not a data-use grant to Anthropic.",
+          "retrieved_at": "2026-09-02T00:00:00+00:00"
+        },
+        {
+          "document_type": "OFFICIAL_PRIVACY_POLICY",
+          "document_title": "Anthropic Privacy Center — How long do you store my organization's data?",
+          "document_url": "https://privacy.anthropic.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data",
+          "section_reference": "Standard Retention Timeframe (Commercial Customers)",
+          "summarized_finding": "Retrieved directly, HTTP 200, 2026-09-02; the article is dated July 1, 2026 and states it covers commercial products such as the Anthropic API, explicitly distinguishing them from consumer products. States that 'For Anthropic API users, we automatically delete inputs and outputs on our backend within 30 days of receipt or generation'. Bounded rather than zero, and recorded as such.",
+          "retrieved_at": "2026-09-02T00:00:00+00:00"
+        }
+      ]
+    },
+    {
+      "provider_id": "gemini",
+      "display_name": "Google Gemini API",
+      "route_assessed": "The Gemini API on UNPAID quota, which is the route a deployment with no billing account reaches. Paid quota is a different route and is NOT assessed here.",
+      "posture": "NOT_APPROVED",
+      "trains_on_submitted_content": "YES_ON_THE_ASSESSED_ROUTE",
+      "retention": "UNKNOWN_ON_THE_ASSESSED_ROUTE",
+      "content_ownership": "GOOGLE_DOES_NOT_CLAIM_GENERATED_CONTENT",
+      "operator_action_required": "None applicable. A paid-quota route would be a different assessment and would need a billing account this deployment does not have.",
+      "notes": "Refused on the route this deployment would actually reach, and the refusal is the terms' own words rather than an inference from silence. The Gemini API Terms define Unpaid Services to include 'unpaid quota in Gemini API' and state that Google uses submitted content and generated responses 'to provide, improve, and develop Google products and services and machine learning technologies', that 'human reviewers may read, annotate, and process your API input and output', and -- decisively for a deployment holding licensed third-party text -- 'Do not submit sensitive, confidential, or personal information to the Unpaid Services.'\n\nTHIS IS NOT A JUDGEMENT ABOUT GOOGLE OR ABOUT GEMINI. It is a statement about ONE route: the free one, which is the one an unconfigured deployment lands on. A paid-quota assessment could reach a different answer and would need its own evidence and its own billing relationship. Recording the distinction is the point -- a later reader must not read this row as 'Gemini is refused'.",
+      "evidence": [
+        {
+          "document_type": "OFFICIAL_TERMS",
+          "document_title": "Gemini API Additional Terms of Service",
+          "document_url": "https://ai.google.dev/gemini-api/terms",
+          "section_reference": "Unpaid Services — How Google Uses Your Data",
+          "summarized_finding": "Retrieved directly, HTTP 200, 2026-09-02. Defines Unpaid Services as 'Any Services that are offered free of charge like direct interactions with Google AI Studio or unpaid quota in Gemini API'. States that for those services 'Google uses the content you submit to the Services and any generated responses to provide, improve, and develop Google products and services and machine learning technologies', that 'To help with quality and improve our products, human reviewers may read, annotate, and process your API input and output', and that users should 'not submit sensitive, confidential, or personal information to the Unpaid Services.' Notes that for users in the EEA, Switzerland or the UK the Paid Services data terms apply to all Services -- a jurisdictional carve-out this review does not rely on, because the deployment's location is a fact nobody has established here.",
+          "retrieved_at": "2026-09-02T00:00:00+00:00"
+        }
+      ]
+    },
+    {
+      "provider_id": "fake",
+      "display_name": "In-process test double",
+      "route_assessed": "Not a service. `EchoProvider` and `FailingProvider` exist so tests can exercise the Gateway without a network.",
+      "posture": "NEVER_PRODUCTION",
+      "trains_on_submitted_content": "NOT_APPLICABLE",
+      "retention": "NOT_APPLICABLE",
+      "content_ownership": "NOT_APPLICABLE",
+      "operator_action_required": "None. Binding a production tier to this provider is refused by name rather than by its posture being unfavourable.",
+      "notes": "Registered so that it can be refused explicitly. A test double that fell through to NOT_ASSESSED would be refused for the wrong reason, and a reader debugging a refusal would learn nothing from it."
+    }
+  ]
+}

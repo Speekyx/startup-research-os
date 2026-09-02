@@ -39,8 +39,10 @@ could not group would contradict neither.
 
 ## 2. Gate one — the governance question, and the vocabulary it has no word for
 
-**The Stack Exchange local review permits model inference and is silent on
-third-party transmission.** Its own words:
+**The Stack Exchange local review permits model inference AS AN ACTIVITY and is
+silent on third-party transmission** — and the silence is structural rather than
+an omission: **the contract had no way to represent execution location**, so no
+review could have scoped itself to one. Its own words:
 
 > "MODEL INFERENCE IS PERMITTED; TRAINING IS NEITHER ASSESSED NOR AUTHORISED.
 > Reading and classifying licensed text is use within the licence's own grant to
@@ -221,5 +223,9 @@ describing it in the vocabulary the deterministic path uses.
 4. **A human-labelled evaluation set** with real positives, collected blind to
    model output, before any production run.
 
-**None of the four is a code change**, which is why this mission produced a design
-and no component.
+**None of the four may be silently inferred from the current configuration**
+(corrected in Mission 1.23 §0; the original sentence claimed none was a code
+change, which is untrue of (2) and (3)). Items 1 and 4 are governance and
+operator work; **item 2 is a contract and schema change with an ADR behind it**,
+and item 3 is either configuration covered by item 1 or a real piece of
+engineering. That is why this mission produced a design and no component.

@@ -133,6 +133,7 @@ iOS application listings, ratings and customer reviews. Reviews are a dense sour
 | redistribution | **not permitted** |
 | derived analytics | not addressed |
 | model processing | not addressed |
+| external model transmission | not assessed |
 | personal data handling | not addressed |
 | attribution required | conditional |
 
@@ -191,6 +192,7 @@ Social platform on the open AT Protocol, with a public firehose that needs no ke
 | redistribution | not addressed |
 | derived analytics | not addressed |
 | model processing | not addressed |
+| external model transmission | not assessed |
 | personal data handling | unclear |
 | attribution required | not addressed |
 
@@ -248,6 +250,7 @@ Real-time community chat. REQUIRES_REVIEW: the Developer Terms of Service return
 | redistribution | not assessed |
 | derived analytics | not assessed |
 | model processing | not assessed |
+| external model transmission | not assessed |
 | personal data handling | not assessed |
 | attribution required | not assessed |
 
@@ -321,6 +324,7 @@ None of these is satisfied *by the catalog*, and none can be: satisfaction is en
 | redistribution | conditional |
 | derived analytics | permitted |
 | model processing | permitted |
+| external model transmission | not assessed |
 | personal data handling | not addressed |
 | attribution required | permitted |
 
@@ -396,6 +400,7 @@ None of these is satisfied *by the catalog*, and none can be: satisfaction is en
 | redistribution | conditional |
 | derived analytics | permitted |
 | model processing | permitted |
+| external model transmission | not assessed |
 | personal data handling | not addressed |
 | attribution required | permitted |
 
@@ -471,6 +476,7 @@ None of these is satisfied *by the catalog*, and none can be: satisfaction is en
 | redistribution | conditional |
 | derived analytics | permitted |
 | model processing | permitted |
+| external model transmission | not assessed |
 | personal data handling | not addressed |
 | attribution required | conditional |
 
@@ -544,6 +550,7 @@ Code hosting with public repository metadata and issue trackers. Issues are expl
 | redistribution | **not permitted** |
 | derived analytics | **not permitted** |
 | model processing | not addressed |
+| external model transmission | not assessed |
 | personal data handling | conditional |
 | attribution required | not addressed |
 
@@ -602,6 +609,7 @@ Android application listings, ratings and reviews.
 | redistribution | not addressed |
 | derived analytics | not addressed |
 | model processing | not addressed |
+| external model transmission | not assessed |
 | personal data handling | not addressed |
 | attribution required | not addressed |
 
@@ -661,6 +669,7 @@ Relative search interest over time and geography. The most direct available prox
 | redistribution | not assessed |
 | derived analytics | not assessed |
 | model processing | not assessed |
+| external model transmission | not assessed |
 | personal data handling | not addressed |
 | attribution required | not assessed |
 
@@ -723,6 +732,7 @@ Technology and startup discussion. Useful for early product launches and develop
 | redistribution | **not permitted** |
 | derived analytics | **not permitted** |
 | model processing | not addressed |
+| external model transmission | not assessed |
 | personal data handling | not addressed |
 | attribution required | not addressed |
 
@@ -776,6 +786,7 @@ Model, dataset and application hub. REQUIRES_REVIEW: the Terms of Service were r
 | redistribution | not addressed |
 | derived analytics | not addressed |
 | model processing | not addressed |
+| external model transmission | not assessed |
 | personal data handling | not addressed |
 | attribution required | not addressed |
 
@@ -831,6 +842,7 @@ Instagram and Facebook platform APIs. RESTRICTED: the Platform Terms were read, 
 | redistribution | **not permitted** |
 | derived analytics | conditional |
 | model processing | not addressed |
+| external model transmission | not assessed |
 | personal data handling | conditional |
 | attribution required | not assessed |
 
@@ -891,6 +903,7 @@ The JavaScript package registry. Its terms grant replication through the public 
 | redistribution | not addressed |
 | derived analytics | not addressed |
 | model processing | not addressed |
+| external model transmission | not assessed |
 | personal data handling | not addressed |
 | attribution required | not addressed |
 
@@ -963,6 +976,7 @@ None of these is satisfied *by the catalog*, and none can be: satisfaction is en
 | redistribution | permitted |
 | derived analytics | permitted |
 | model processing | permitted |
+| external model transmission | not assessed |
 | personal data handling | not addressed |
 | attribution required | not addressed |
 
@@ -1027,6 +1041,7 @@ Visual discovery and saving platform. REQUIRES_REVIEW: the Developer Terms could
 | redistribution | **not permitted** |
 | derived analytics | **not permitted** |
 | model processing | **not permitted** |
+| external model transmission | not assessed |
 | personal data handling | unclear |
 | attribution required | not addressed |
 
@@ -1087,6 +1102,7 @@ Daily product launches with community voting and comments. A direct view of what
 | redistribution | not addressed |
 | derived analytics | not addressed |
 | model processing | not addressed |
+| external model transmission | not assessed |
 | personal data handling | not addressed |
 | attribution required | not addressed |
 
@@ -1149,6 +1165,7 @@ The Python package index. Its terms address API abuse specifically and prohibit 
 | redistribution | not addressed |
 | derived analytics | not addressed |
 | model processing | not addressed |
+| external model transmission | not assessed |
 | personal data handling | conditional |
 | attribution required | not addressed |
 
@@ -1211,6 +1228,7 @@ Threaded discussion communities. A primary candidate for PAIN and DESIRE signals
 | redistribution | not assessed |
 | derived analytics | not assessed |
 | model processing | not assessed |
+| external model transmission | not assessed |
 | personal data handling | not assessed |
 | attribution required | not assessed |
 
@@ -1264,6 +1282,7 @@ Music and podcast streaming. Assessed and PROHIBITED: the Developer Terms forbid
 | redistribution | **not permitted** |
 | derived analytics | **not permitted** |
 | model processing | **not permitted** |
+| external model transmission | not assessed |
 | personal data handling | not assessed |
 | attribution required | not assessed |
 
@@ -1299,6 +1318,7 @@ Question-and-answer network including Stack Overflow. Questions are explicit sta
 | 1 | 2026-08-29 | `mission-1.0` | `REQUIRES_REVIEW` | 0 |
 | 2 ← current | 2026-08-29 | `mission-1.3` | `REQUIRES_REVIEW` | 1 |
 | 1 | 2026-09-01 | `mission-1.18` | `APPROVED_WITH_CONDITIONS` | 3 |
+| 2 | 2026-09-02 | `mission-1.23` | `APPROVED_WITH_CONDITIONS` | 4 |
 
 **Access profiles** (how, not whether)
 
@@ -1320,6 +1340,7 @@ Question-and-answer network including Stack Overflow. Questions are explicit sta
 | redistribution | unclear |
 | derived analytics | not addressed |
 | model processing | unclear |
+| external model transmission | not assessed |
 | personal data handling | not addressed |
 | attribution required | permitted |
 
@@ -1373,6 +1394,7 @@ PC game store and community. The obvious gaming source, and RESTRICTED: the API 
 | redistribution | **not permitted** |
 | derived analytics | not addressed |
 | model processing | not addressed |
+| external model transmission | not assessed |
 | personal data handling | conditional |
 | attribution required | conditional |
 
@@ -1440,6 +1462,7 @@ The EU's official public procurement journal. Contract award notices record what
 | redistribution | permitted |
 | derived analytics | permitted |
 | model processing | permitted |
+| external model transmission | not assessed |
 | personal data handling | conditional |
 | attribution required | conditional |
 
@@ -1531,6 +1554,7 @@ Short-form video platform. Candidate for consumer trend and desire signals.
 | redistribution | **not permitted** |
 | derived analytics | **not permitted** |
 | model processing | not assessed |
+| external model transmission | not assessed |
 | personal data handling | **not permitted** |
 | attribution required | not assessed |
 
@@ -1578,6 +1602,7 @@ Live streaming, predominantly gaming. REQUIRES_REVIEW: the Developer Services Ag
 | redistribution | not assessed |
 | derived analytics | not assessed |
 | model processing | not assessed |
+| external model transmission | not assessed |
 | personal data handling | not assessed |
 | attribution required | not assessed |
 
@@ -1633,6 +1658,7 @@ US federal contract and grant awards: who received public money, from which agen
 | redistribution | not addressed |
 | derived analytics | not addressed |
 | model processing | not addressed |
+| external model transmission | not assessed |
 | personal data handling | not addressed |
 | attribution required | not addressed |
 
@@ -1697,6 +1723,7 @@ Per-article view counts across Wikimedia projects. Measures attention directly a
 | redistribution | conditional |
 | derived analytics | permitted |
 | model processing | not addressed |
+| external model transmission | not assessed |
 | personal data handling | not addressed |
 | attribution required | conditional |
 
@@ -1776,6 +1803,7 @@ None of these is satisfied *by the catalog*, and none can be: satisfaction is en
 | redistribution | conditional |
 | derived analytics | permitted |
 | model processing | permitted |
+| external model transmission | not assessed |
 | personal data handling | not addressed |
 | attribution required | permitted |
 
@@ -1834,6 +1862,7 @@ Short-form social platform. REQUIRES_REVIEW: the Developer Agreement and Policy 
 | redistribution | not assessed |
 | derived analytics | not assessed |
 | model processing | not assessed |
+| external model transmission | not assessed |
 | personal data handling | not assessed |
 | attribution required | not assessed |
 
@@ -1898,6 +1927,7 @@ Video platform with comments and engagement metrics. Comments carry desire and c
 | redistribution | **not permitted** |
 | derived analytics | **not permitted** |
 | model processing | not addressed |
+| external model transmission | not assessed |
 | personal data handling | conditional |
 | attribution required | not addressed |
 

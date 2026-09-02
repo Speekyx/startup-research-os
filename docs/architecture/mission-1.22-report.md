@@ -75,10 +75,26 @@ review states its basis in its own words:
 **No — and the honest answer is that it was never assessed.**
 
 §5 asked whether the review covers (A) local inference only, (B) transmission to
-an external third-party provider, or (C) both. **It covers A.** The recorded basis
-answers *may a model read this text*. It does not reach *may this text leave the
-local deployment so that a third party's model can read it*, and those are
-different acts with different exposure.
+an external third-party provider, or (C) both.
+
+**None of the three, as stated — and the correction matters** (Mission 1.23 §0).
+The review authorises **MODEL INFERENCE AS AN ACTIVITY**. It does not say
+"locally"; **the model had no way to represent execution location at all**, so
+the review could not have scoped itself to a location even if its author had
+wanted to.
+
+**Two different things were being confused**, and separating them is what Mission
+1.23 exists to do:
+
+- **inference permission** — may a model read this material? *Answered: yes.*
+- **execution-location representation** — where may that reading happen, and does
+  the material leave this deployment to get there? *Not represented anywhere in
+  the contract, so never assessed.*
+
+**Local inference introduces no third-party content transmission**, so it does not
+trigger the newly discovered activity and is covered by the existing permission.
+Transmission to an external provider is the act that was never assessed, because
+the model had no word for it.
 
 **The profile is silent too, and that is the finding worth keeping.**
 
@@ -276,7 +292,15 @@ is a different kind of blocker from the three before it.
 The first two were findings about the world. This one is a finding about SROS,
 and it is therefore the one this project can actually resolve.
 
-**Four things would have to be true, and none is a code change:**
+**Four things are required before production semantic inference can run. Some
+are governance or operator decisions; others require explicit contract or
+engineering work. None may be silently inferred from the current
+configuration.**
+
+*(Corrected in Mission 1.23 §0. The original sentence said none of the four was a
+code change, which its own next lines contradicted: a profile field is a schema
+and contract change with an ADR behind it, and a local inference provider is
+engineering.)*
 
 1. **A review act** assessing transmission of licensed source content to an
    external provider, for this source and this profile — the same shape as every
@@ -293,8 +317,9 @@ and it is therefore the one this project can actually resolve.
 
 **The recommended next mission is (1) and (2) together**: a governance mission
 that asks where inference may happen and gives the profile a word for the answer.
-It is small, it is squarely inside what this repository does well, and until it
-happens every future inference mission stops exactly here.
+(1) is a review act; **(2) is a genuine cross-cutting contract change** with an
+ADR, a migration and an effect on every profile at once. Until both happen, every
+future inference mission stops exactly here.
 
 **Nothing about this result makes inference safe or unsafe.** It says the question
 was never asked, and that asking it is the next piece of work.

@@ -31,6 +31,7 @@ from sros_contracts import (
 )
 
 from .models import (
+    EGRESS_NOT_ASSESSED,
     LEGACY_USE_PROFILE,
     AccessProfile,
     AssessedUseProfile,
@@ -195,6 +196,10 @@ def _use_profile_from_json(raw: object) -> AssessedUseProfile:
         model_inference=bool(raw.get("model_inference", True)),
         model_training=bool(raw.get("model_training", False)),
         embeddings=bool(raw.get("embeddings", False)),
+        # ADR-033. Absent means NOT_ASSESSED: a profile written before the
+        # field existed refuses external inference rather than inheriting a
+        # permission nobody granted.
+        external_model_egress=str(raw.get("external_model_egress") or EGRESS_NOT_ASSESSED),
         personal_data_posture=str(raw.get("personal_data_posture") or "MINIMISED"),
         notes=raw.get("notes"),
     )

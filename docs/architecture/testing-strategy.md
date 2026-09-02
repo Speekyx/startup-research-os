@@ -2571,3 +2571,38 @@ the row later.
 meaninglessness.** Blank, whitespace, `"TODO"`, `"<name>"` and `"N/A"` are all
 the same failure wearing different clothes, and only the first one is usually
 tested.
+
+## 62. An assertion about an absence needs a version pin (Mission 1.23)
+
+Mission 1.22 wrote four tests whose subject was a **gap**: the profile has no
+field for where inference happens, no condition mentions a provider, no document
+authorises the transfer. They were good tests. They searched rather than assumed,
+and one carried a docstring saying it was where the absence would stop being true.
+
+Mission 1.23 closed the gap on purpose, and all four failed. That is the design
+working — but two of them failed for a **second, accidental reason** that is the
+lesson here.
+
+Their helper read the source's **newest** review. Appending review v2 silently
+moved what they were asserting about, so a test written to describe *what Mission
+1.22 found in v1* began describing v2 and failed on prose it had never seen.
+
+**Reviews are append-only, so an assertion about what a review SAID must name the
+version it said it in.** `local_review()` returns the newest, which is what
+runtime cares about; `review_version(catalog, source, 1)` returns the one a
+finding was made against. A historical claim that follows the latest version
+stops being a historical claim the moment anybody appends.
+
+**Repointing beats deleting.** All four assertions moved rather than being
+removed: v1 stays pinned as the record of what was found, and a new assertion
+tests the closure — the field exists, both profiles state it, the condition still
+names no vendor. A deleted test leaves no evidence the gap was ever real; a
+repointed one shows the before and the after in the same file.
+
+**The corollary for the closure assertions themselves.** `test_the_bump_was_only
+_legitimate_because_nothing_verified_changed` asserts that v1's and v2's
+`required_conditions` are equal. That is not a tautology about the current data:
+it is the precondition that made bumping a pinned compliance version honest, and
+it fails the day a review edits a condition the configuration verifies. **Assert
+the precondition of a judgement call, not just its outcome** — the outcome is
+what someone will edit to make a build pass.

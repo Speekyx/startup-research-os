@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.46
-Last amended: 2026-09-02 (Sprint 1 / Mission 1.22)
+Version: 1.47
+Last amended: 2026-09-02 (Sprint 1 / Mission 1.23)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.47 | 2026-09-02 | **OUTCOME B: the inference execution boundary EXISTS, and it is closed on one named gate.** No model was called and no source content left this machine. ADR-033 separates three questions that were one or none: `model_processing` asks may a model READ, the new **`external_model_transmission`** asks may it LEAVE, and a **provider policy** asks what the processor DOES with what it receives -- decided on first-party contract text, so one route is APPROVED on a terms clause committing not to train on customer content and one is NOT_APPROVED because its **unpaid** route says it develops machine learning technologies from submitted input. The profile gained **`external_model_egress`**, the word Mission 1.22 found missing. **NOT_ASSESSED is a state, not a default that decides**: migration 0027 adds both columns nullable and writes no existing row, and 0028 writes only the two decisions actually made. **The activity is deliberately NOT one of rule 8's six** -- it gates ONE operation, so World Bank's collector never fails because nobody assessed egress for World Bank, and that is asserted over every source rather than assumed. Stack Exchange local review **v2 appended, v1 not rewritten**, PERMITTED_WITH_CONDITIONS on CC BY-SA §2, with conditions naming a PROPERTY and no vendor. **Appending v2 broke acquisition for the source** -- a compliance configuration is pinned to a review version -- and the repair was to PERFORM the re-check, provable because v2's `required_conditions` are byte-identical to v1's. Live gate: source PERMITTED, profile PERMITTED, provider APPROVED, configured **no** -> `PROVIDER_NOT_CONFIGURED`. Mission 1.22 may RESUME **after operator configuration**, and the blocker is finally one an operator can clear |
 | 1.46 | 2026-09-02 | **OUTCOME A: the semantic-inference route is NOT AUTHORISED, and separately NOT CONFIGURED.** No model was called, no question text left this machine, no component was built. **The governance gate carries the structural finding**: the Stack Exchange review permits model INFERENCE and is silent on TRANSMISSION of licensed text to an external provider, and so is the profile -- `model_inference: true` says the ACTIVITY is in scope, `deployment: LOCAL` says where the SYSTEM runs, and **nothing says where inference RUNS**. No occurrence of *provider*, *third party*, *transmit* or *egress* in the profile, in any condition, or in any doc. **One field answering a question that is two** -- the Mission 1.15.4 shape again. The second gate is independent: every inference tier is `null`, every credential empty, and **no local inference provider exists**. A DESIGN was recorded and nothing built; §47's evaluation report was deliberately not created, because an empty one looks like an evaluation that returned nothing. **The blocker moved from the world to this deployment**, so the next mission is governance: ask where inference may happen, and give the profile a field for the answer |
 | 1.45 | 2026-09-02 | **EXPLICIT ISSUE IDENTITY ROUTE = BLOCKED BY SOURCE GOVERNANCE, and the structure was never the problem.** Three public trackers document a publisher-declared canonical duplicate relation as issue state (Bugzilla `dupe_of`, Launchpad `duplicate_of_link` + `duplicates_collection_link`, Debian merges), so Mission 1.20's proposed route is real. **Every candidate with a usable data licence also disallows the API path in robots.txt, and the one deployment that permits it has no data licence.** The Document Foundation Bugzilla releases all contributions under CC BY-SA 4.0 and honours `include_fields` -- the best minimisation posture in the catalog -- and its robots file is `Disallow: /` with an allowlist of six CGI paths, none of them `/rest/`. **A content licence is not an access grant**: Mission 1.18 established that separation and this is the first time it blocked a source whose licence was perfect. Launchpad adds a second, durable blocker -- 41 fields including `owner_link` and no field allowlist. **0 acquisitions, 0 records, catalog unchanged at 29** -- registering a candidate turned out to require a LEGACY-profile review that neither has, so the registration was reverted rather than made to fit and the finding lives in an Authoritative document. Both deterministic routes are now exhausted, so Mission 1.22 should be semantic INFERENCE |
 | 1.44 | 2026-09-02 | **The deterministic route to repeated-problem evidence is CLOSED, and it took two acquisitions to establish it.** A pre-registered narrow acquisition -- 89 real Stack Overflow questions tagged `docker`, one request, committed before any content was read -- produced **0 Signals, 0 Claims, 0 Evidence**. The finding is not that nothing repeated: three questions share **182 characters** of exact tool-specific Docker daemon diagnostic, and the shared string ends at `exec: "`, exactly where the wrapper stops and the failure begins. Support is 3 up to length 182 and 1 from 184, so **a rule needs a length and every length is either the envelope or the instance**. Mission 1.18's S0 could be blamed on selecting by a language tag; this one cannot. **A diagnostic names the ENVELOPE**, so no further mission should try another deterministic Stack Exchange query -- the choice is semantic INFERENCE or a source with explicit issue identity. Two overstatements corrected first: a TED notice publishes a TOTAL_VALUE rather than what a buyer PAID, and the portfolio lacks a stable REQUESTER IDENTITY rather than any person at all |
@@ -231,6 +232,59 @@ source in order to obtain a permission.
   TED's `fields` parameter does -- **collect-then-filter is not available as an
   excuse**, because a request that discarded the contact block afterwards
   retrieved the contact block. No method removes fields from a collected record.
+
+### Model inference execution — where it may run, and when content may leave
+
+Added in 1.47 (Mission 1.23, ADR-033,
+`model-inference-execution-governance-v1.md`). Placed after route binding because
+it is the same shape one layer out: a permission to USE is not a permission to
+SEND.
+
+**`model_processing` and `external_model_transmission` are different questions.**
+The first asks whether a model may READ the material; the second asks whether the
+material may LEAVE this deployment so that a THIRD PARTY's model can read it.
+Different exposure, different counterparty, different instrument deciding it.
+Reinterpreting the first to cover the second would grant every registered source
+a permission nobody assessed.
+
+- **Four gates, all required, evaluated before any source text is serialised.**
+  The source's review must permit the transmission for that profile; the profile's
+  `external_model_egress` must permit the class of egress; the provider's reviewed
+  posture must be `APPROVED`; and that provider must actually be configured.
+  `authorize_external_inference` is the single place the source domain and the
+  provider domain meet.
+- **Every gate reports even after one refuses**, with its own reason code. An
+  operator told only the first failure fixes it and is refused again, once per
+  remaining gate — and four gates collapsed into one boolean is how a governance
+  decision comes to look like an outage.
+- **`NOT_ASSESSED` is a state and not a default that decides.** Both new fields
+  distinguish *nobody looked* from *somebody looked and said no*. Both refuse; one
+  is a decision that can be cited and the other is an open question, and the
+  registry exists to keep them apart. Every review written before ADR-033 reads
+  `NOT_ASSESSED`, truthfully.
+- **This is NOT one of rule 8's six materially required activities.** It gates one
+  operation. A deterministic acquisition never fails because nobody assessed model
+  egress for its source, and that property is asserted over every registered
+  source rather than assumed.
+- **A provider is approved on its own contract text**, never on preference, and
+  the ROUTE is what is assessed: a vendor's paid and unpaid routes are different
+  assessments, and one being reviewed says nothing about the other. Postures live
+  in `model-provider-policy-v1.json`, so a provider changing its terms changes a
+  data file rather than code.
+- **No source review names a vendor.** A review states the PROPERTY a provider
+  must have — no training on submitted content, documented bounded retention.
+  Naming a company would put provider governance inside the source registry and
+  force a re-version every time a provider list changed.
+- **Appending a review version invalidates its verifications, and that is
+  correct.** A compliance configuration is pinned to a review version, because a
+  re-review can change what a condition means. Bumping the number is honest only
+  when the `required_conditions` set is unchanged — assert that equality, do not
+  assume it. A review version is not free, and a mission that bumps one owes the
+  re-check.
+- **The boundary is CLOSED today.** No provider is configured, so nothing can be
+  sent, and the refusal says `PROVIDER_NOT_CONFIGURED` by name rather than by
+  silence. Configuring one is an operator act performed outside this repository:
+  **no credential is committed, fabricated, or pasted into a tracked file.**
 
 ### A condition is verified where it can be, and confirmed where it cannot
 
