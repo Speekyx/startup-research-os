@@ -1,6 +1,6 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.58
+Version: 1.59
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
@@ -13,6 +13,35 @@ Last amended: 2026-09-03 (Sprint 1 / Mission 1.31.1)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.59 — 2026-09-03 (Sprint 1 / Mission 1.32)
+
+**`COMMERCIAL_EVIDENCE_CREATED_NO_OPPORTUNITY_DIMENSION`.** The held Docker
+corpus was asked whether `has_accepted_answer` could support `SOLUTION_GAP` or
+`SOLUTION_DISSATISFACTION`. It supports neither, and the measurement is real
+anyway: **88 eligible questions, 34 with an accepted answer, 54 without** (38
+answered but unaccepted, 16 with zero answers, 0 missing the flag).
+
+The semantics were **frozen before any Signal existed**, in
+`docs/data/answer-acceptance-semantics-v1.md`, and both dimensions were refused
+there. `SOLUTION_GAP`'s own `never_means` forbids reading an absence of evidence
+as evidence of absence; `SOLUTION_DISSATISFACTION` needs somebody evaluating
+something, and an asker is not.
+
+New: signal type `community_question_without_accepted_answer_volume` (migration
+0031, reusing the ADR-034 family), extractor
+`community-question-without-accepted-answer@1.0.0`, interpreter template seven
+(`observed-signal-restatement@1.4.1`), and
+`infrastructure/scripts/run_community_question_acceptance.py`.
+
+Counters: Signals, Claims and Evidence 27 -> 28; ClaimRevisions 27 -> 29, because
+the first wording implied a denominator and was corrected in place as revision 2.
+**RawRecords and NormalizedRecords unchanged at 148** — nothing was acquired. The
+Docker packet went 7 -> 8 rows with **counting dimensions unchanged at 2**, still
+`HYPOTHESIS_FORMABLE`, still `AVAILABLE`, independence `UNKNOWN` for 8 of 8. 0
+model calls, no Opportunity revision, problem-family still PARKED.
+
+Report: `docs/architecture/mission-1.32-report.md`.
 
 ## 1.58 — 2026-09-03 (Sprint 1 / Mission 1.31.1)
 
@@ -2091,6 +2120,7 @@ Additionally authoritative:
 - docs/data/opportunity-synthesis-egress-governance-v1.md (added in 1.55)
 - docs/data/targeted-evidence-completion-v1.md (added in 1.56)
 - docs/data/canonical-subject-registry-v1.json (added in 1.56)
+- docs/data/answer-acceptance-semantics-v1.md (added in 1.59)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

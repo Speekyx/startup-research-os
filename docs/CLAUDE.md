@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.59
-Last amended: 2026-09-03 (Sprint 1 / Mission 1.31.1)
+Version: 1.60
+Last amended: 2026-09-03 (Sprint 1 / Mission 1.32)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.60 | 2026-09-03 | **COMMERCIAL_EVIDENCE_CREATED_NO_OPPORTUNITY_DIMENSION: a real measurement that maps to nothing, on purpose.** 88 held Docker questions, **34 with an accepted answer and 54 without** -- 38 answered but unaccepted, 16 with zero answers, **0 missing the flag** -- and the Signal maps to `frozenset()`. **The assessment was FROZEN BEFORE the Signal existed**, which is the whole of §0: a dimension chosen after seeing that the packet needed one is a rationalisation. `SOLUTION_GAP` is settled by its own `never_means` -- *that absence of evidence of a solution is evidence of its absence* -- and `SOLUTION_DISSATISFACTION` by the fact that **the asker is not evaluating a product**. **Acceptance is ONE PERSON'S ACTION**: only the asker may accept, so `false` reports a non-action by one participant, and an asker who solved it elsewhere or never returned leaves it false whatever answers arrived. **The 16 zero-answer questions look like the sharpest possible gap evidence and isolating them does not rescue the inference**, it makes the same inference over a smaller set. **The state is OBSERVED LATE**: the questions carry creation instants and the flag is whatever it was at collection, so the claim says *at the source state observed* and never *during*. **A claim shaped like a numerator invites a rate**: revision 1 read *Of the questions ... 54 had no accepted answer* and named no denominator, so `1.4.1` asserts a SET; revision 1 is preserved. **Docker packet 7 -> 8 rows with counting dimensions UNCHANGED at 2** -- a zero-dimension row adds size and never diversity -- still HYPOTHESIS_FORMABLE, still AVAILABLE, independence UNKNOWN for 8 of 8 because it is a **second measurement over the same corpus**. **Two defects fixed**: an interpreter version bump re-INSERTED Evidence because the idempotency key embeds it, and the new row formed its own tenth packet because `subject_key` knew one signal type. RawRecords and NormalizedRecords unchanged at 148, 0 model calls, no Opportunity revision, problem-family still PARKED |
 | 1.59 | 2026-09-03 | **FIRST_OPPORTUNITY_HYPOTHESIS_CREATED. SROS holds its first Opportunity.** Same packet, **byte-identical prompt hash**, corrected audit: one call, 0 retries, 0.0392 USD, decision FORM_HYPOTHESIS, every clause of the frozen gate passed. Opportunities 0 -> **1**, revisions 0 -> **1**, evidence links 0 -> **7**, and RawRecords, NormalizedRecords, Signals, Claims, ClaimRevisions, Evidence, ReliabilityAssessments, Embeddings and Scores ALL UNCHANGED. **Mission 1.31 is untouched** and keeps its rejection under audit@1.0.0. **§1's five required cases found that guard@1.1.0 handled four**: a denial whose marker FOLLOWS its term -- *competitors ARE NOT established* -- was still flagged, and 1.2.0 adds that one grammatical form, cancelled by an intervening comma so *buyers would pay, which is not established* still fails. Checking them also exposed an off-by-one in `_phrase_position` that had misaligned every term not at the start of a sentence. **The two runs agree on every structural judgement** -- same actor refusal, same 12 unsupported dimensions, same 7 citations, both asserting no commercial claim -- so what changed was the audit and not the answer. `market_scope` is GLOBAL because the column is NOT NULL and Ontology V2 §4 defines GLOBAL as the ABSENCE of a restriction, recorded as a limitation on the row. Four TED tests repaired: a global Opportunity count is now deployment state |
 | 1.58 | 2026-09-02 | **The first real Opportunity synthesis ran, and my own gate refused a good answer.** `OPPORTUNITY_SYNTHESIS_OUTPUT_REJECTED`: one call, 0.0383 USD, model returned FORM_HYPOTHESIS with a careful bounded hypothesis, and the frozen gate refused it on ONE clause -- *\"No statement in the packet establishes ... whether anyone would pay, whether competitors already serve this space\"* -- which is an ENUMERATION OF ABSENCES and exactly what §6 required. **A token guard cannot see negation**, so it read a denial as an assertion (testing-strategy §67, the §23 failure in a new place). **The verdict was KEPT and the guard fixed for next time**: §12 forbids weakening a gate after seeing the answer, and this was called a defect only because it rejected an output I judged sound. **0 Opportunities persisted, every counter unchanged.** The model did the hard part well: actor UNKNOWN_NOT_SUPPORTED rather than an invented persona, intervention as a CLASS, pageviews restated as FLUCTUATION rather than growth, `commercial_claims_supported` EMPTY, and it independently said the 88 questions are *a count of questions, not of people* and *not evidence they share a single problem* -- reaching the parked boundary unprompted. Two earlier attempts were abandoned because MY output cap (1500) was smaller than the schema I asked for could serialise |
 | 1.57 | 2026-09-02 | **TARGETED_EVIDENCE_COMPLETION_SUCCESS: the first FORMABLE packet, and NOTHING was acquired to get it.** The `docker` packet is HYPOTHESIS_FORMABLE and AVAILABLE_FOR_EXTERNAL_SYNTHESIS on 7 rows across two source families with two counting dimensions. Counters 26 -> 27 for Signals, Claims, ClaimRevisions and Evidence; RawRecords and NormalizedRecords UNCHANGED at 148. **The minimum needed was zero**: Mission 1.20's `tagged=docker` retrieval provably did not truncate -- one page of size 100 returned 89, and a short page means the set was exhausted -- so a complete count already existed. **A truncated count is not merely imprecise, it is ANTI-INFORMATIVE**: capped at 30 it would report the bound and read as LARGER than a complete 88, which is why the extractor refuses instead of qualifying, and why Kubernetes was not acquired. **89 returned, 88 counted**: one question came back from a `tagged=docker` query carrying no `docker` tag, so what the query asked and what the site says are different facts and the site's answer is the one a claim can rest on. ADR-034 adds COMMUNITY_QUESTION_VOLUME: **a request is what a READER makes of a server, a question is what a PERSON publishes about being stuck**, and widening CONTENT_REQUEST_VOLUME would have cost the FAMILY its meaning. New dimension PROBLEM_OR_NEED, with RECURRENCE_OR_FREQUENCY deliberately refused because it needs the PARKED relation. A canonical subject registry joins two vocabularies by EXACT equality with a stated basis. Sufficiency rule unchanged, reliability unchanged, independence still UNKNOWN, 0 model calls |
@@ -306,6 +307,100 @@ positives in the scored split, which this 89-question corpus did not supply: one
 defensible SAME in 40 candidate pairs is a finding about the corpus, not about
 the classifier. **No synthetic positive may substitute** -- a constructed pair
 can test a parser and can never establish semantic accuracy against real data.
+
+### An unaccepted answer is one person's non-action, and nothing more
+
+Added in 1.60 (Mission 1.32, `answer-acceptance-semantics-v1.md`,
+`mission-1.32-report.md`). **`COMMERCIAL_EVIDENCE_CREATED_NO_OPPORTUNITY_DIMENSION`**:
+a valid bounded Signal, Claim and Evidence row that maps to **no Opportunity
+dimension at all**, and §9 named that in advance as a legitimate outcome.
+
+    88 eligible  ->  34 accepted  |  38 answered-unaccepted  +  16 zero-answer  =  54
+    community_question_without_accepted_answer_volume  ->  frozenset()
+
+- **THE ASSESSMENT WAS FROZEN BEFORE THE SIGNAL EXISTED.** The semantics document
+  was written and committed before any derivation ran, and it records
+  `NO_EXISTING_DIMENSION` against both candidates. **A dimension chosen after
+  seeing that the packet needed one is not a finding, it is a rationalisation**,
+  and the ordering is the only thing that distinguishes them afterwards.
+- **`has_accepted_answer` means the ASKER clicked accept.** Only the asker may,
+  so `false` reports a non-action by exactly one participant. An asker who solved
+  the problem elsewhere, lost interest or never returned leaves it `false`
+  whatever answers arrived. The normalizer carries the source's own sentence in
+  the payload beside the value: *"the asker marked an answer accepted; not a
+  statement that the problem is objectively resolved"*.
+- **`SOLUTION_GAP` is settled by its own `never_means`**, which reads *that
+  absence of evidence of a solution is evidence of its absence*. An unaccepted
+  question is exactly that absence, so mapping it there would require rewriting
+  the dimension -- and §20 forbids changing a taxonomy definition to obtain a
+  better outcome.
+- **`SOLUTION_DISSATISFACTION` fails for a simpler reason: the asker is not
+  evaluating a product.** There is no object of dissatisfaction anywhere in the
+  record. A question is a request for help, never a verdict on a tool.
+- **The 16 zero-answer questions are the strongest case and still fail.** Nobody
+  could even answer looks like the sharpest possible gap evidence. A question can
+  go unanswered because it is unclear, duplicated, too specific or badly timed,
+  and a community's non-answer is not a statement that no solution exists.
+  **Isolating the sharper subset does not rescue the inference; it makes the same
+  inference over a smaller set.**
+- **Zero dimensions is a REGISTERED DECISION, not an unknown type.**
+  `map_signal_type` returns `None` where nobody has decided and a mapping with
+  `frozenset()` where somebody decided none applies -- the Mission 1.28
+  distinction, reached for the first time by a type somebody argued about.
+- **A zero-dimension row adds SIZE and never DIVERSITY**, which is the arithmetic
+  that makes this outcome honest: the packet went 7 -> 8 rows with counting
+  dimensions unchanged at 2, so nothing moved sufficiency by existing.
+- **The state is OBSERVED LATE and the wording must say so.** The questions carry
+  their own creation instants; the flag is whatever it was at collection, which
+  may be years after. A claim saying *N had no accepted answer during March* would
+  be false, so the window and the observation are named as two different things.
+- **A sentence shaped like a numerator invites a rate.** Revision 1 read *"Of the
+  questions ... created between T1 and T2, 54 had no answer marked accepted"* --
+  true, and still wrong, because it presents the number as a fraction of a
+  population it never states and a reader would supply 88, which is not the
+  population in that span. `1.4.1` asserts a SET and its bounds. **Revision 1 is
+  preserved**: the claim history is append-only and the wrong wording is part of
+  it.
+- **A missing flag is not `false`** (ADR-023, one field along from an absent
+  lexical term). A record omitting `has_accepted_answer` withholds the fact and
+  the derivation refuses rather than counting it as unaccepted -- **even when two
+  good records remain**, because the population would then be *the records that
+  happened to carry the field*, which is not the population the claim names. All
+  88 carried it, so the path is exercised by tests rather than by data.
+- **The same family, a different type.** `COMMUNITY_QUESTION_VOLUME` is reused
+  because this is a different MEASUREMENT over the same kind of QUANTITY, and a
+  second family would assert the two counts are incommensurable when they are
+  directly comparable. It is a separate signal TYPE rather than a parameter,
+  because a parameter that silently changes what a Signal asserts is a hidden
+  behaviour with a name.
+- **A second measurement over one corpus is not a second finding.** Independence
+  is `UNKNOWN` for 8 of 8, and the new row is the least independent in the packet:
+  it counts a subset of the very records the existing `community_question_volume`
+  row counted.
+
+**Two defects, both general mechanisms rather than typos.** An interpreter
+version bump re-INSERTED Evidence, because the idempotency key embeds
+`extraction_method` and that embeds the version -- so a re-derivation after any
+version change is an INSERT, not a no-op, and `scoring.evidence` has no
+`superseded_at` to record a supersession with. And the new row formed its own
+tenth packet, because `subject_key` recognised one signal type: **which
+measurement was taken over a subject is not part of the subject's identity**, and
+nothing else in the pipeline signals that a grouping key needs updating.
+
+**No commercial dimension is reachable from the reviewed portfolio, and the
+reason is GRAIN rather than permission.** The two `public_procurement` sources
+are collector-capable and publish subject vocabularies that do not name products
+-- TED's own packet key is literally `ted-eu:CPV-division:90` -- while every
+product-grain source (`github`, `product-hunt`, `apple-app-store`, `google-play`,
+`steam`) is `RESTRICTED`. So the next step is a desk review of what the registry
+can express, not an acquisition: acquiring first produces Evidence in its own
+packet that can never join `subject:docker`.
+
+**RawRecords and NormalizedRecords unchanged at 148**, 0 model calls, 0.00 USD,
+no Opportunity revision (`OPPORTUNITY_REVISION_NOT_YET_WARRANTED`), no score, no
+rank, and problem-family inference stays **PARKED** -- 54 unaccepted Docker
+questions invite *how many are the same problem?*, which is exactly the parked
+relation.
 
 ### The first Opportunity exists, and it is a hypothesis that says what it lacks
 

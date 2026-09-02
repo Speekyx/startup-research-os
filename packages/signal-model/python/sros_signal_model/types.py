@@ -121,6 +121,26 @@ SIGNAL_TYPES: Mapping[str, SignalTypeSpec] = MappingProxyType(
                 "difficulty, demand, adoption, a market or willingness to pay."
             ),
         ),
+        # Mission 1.32. Same family as the volume type: still a count of
+        # community questions, so no new family is warranted.
+        "community_question_without_accepted_answer_volume": SignalTypeSpec(
+            id="community_question_without_accepted_answer_volume",
+            family=SignalQuantityFamily.COMMUNITY_QUESTION_VOLUME,
+            summary=(
+                "How many public questions carrying one tag from a community site's own "
+                "vocabulary, created inside one bounded window, had NO ACCEPTED ANSWER at "
+                "the source state this deployment observed. Acceptance is one person's "
+                "action -- only the asker may accept -- and the state is read whenever the "
+                "record was collected, which may be long after the question was written. "
+                "Says that many askers had not marked an answer accepted when we looked. "
+                "Says NOTHING about whether any problem is solved, whether anyone is "
+                "dissatisfied, whether existing tools are adequate, whether a solution "
+                "gap exists, whether anyone would pay, or whether any two of the questions "
+                "concern the same problem -- that last being the relation Mission 1.27 "
+                "PARKED. A record carrying no flag WITHHOLDS the fact and is never counted "
+                "as unaccepted."
+            ),
+        ),
         "numeric_period_change": SignalTypeSpec(
             id="numeric_period_change",
             family=SignalQuantityFamily.MEASURED_SERIES,

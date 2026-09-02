@@ -32,6 +32,9 @@ from .base import (
     group_key_of,
 )
 from .community_question_volume import CommunityQuestionVolumeExtractor
+from .community_question_without_accepted_answer import (
+    CommunityQuestionWithoutAcceptedAnswerExtractor,
+)
 from .content_request_change import ContentRequestChangeExtractor
 from .lexical_frequency_change import LexicalFrequencyChangeExtractor
 from .lexical_frequency_contrast import LexicalFrequencyContrastExtractor
@@ -68,6 +71,9 @@ _CONTENT_REQUEST = ContentRequestChangeExtractor()
 # a record kind that had existed since Mission 1.18 with nothing able to read
 # it -- and the first in the COMMUNITY_QUESTION_VOLUME family.
 _QUESTION_VOLUME = CommunityQuestionVolumeExtractor()
+# Mission 1.32. The second derivation over a `community_question`, reading a
+# field Mission 1.18 stored and nothing had ever read.
+_QUESTION_UNACCEPTED = CommunityQuestionWithoutAcceptedAnswerExtractor()
 
 EXTRACTOR_REGISTRY: Mapping[str, SignalExtractor] = MappingProxyType(
     {
@@ -77,6 +83,7 @@ EXTRACTOR_REGISTRY: Mapping[str, SignalExtractor] = MappingProxyType(
         _PROCUREMENT.extractor_id: _PROCUREMENT,
         _CONTENT_REQUEST.extractor_id: _CONTENT_REQUEST,
         _QUESTION_VOLUME.extractor_id: _QUESTION_VOLUME,
+        _QUESTION_UNACCEPTED.extractor_id: _QUESTION_UNACCEPTED,
     }
 )
 

@@ -2809,3 +2809,60 @@ way.
 **The general rule: when a global count graduates from "always zero" to "zero
 until some mission legitimately writes one", replace it with an assertion about
 what THIS subject may not do, not with a looser bound on everyone.**
+
+## §69 — A version identifier inside an idempotency key makes every re-run an INSERT
+
+Mission 1.32 corrected the WORDING of a Claim. Nothing about the proposition
+changed, nothing about the Signal changed, and the correction moved the
+interpreter from `1.4.0` to `1.4.1`.
+
+`scoring.evidence` keys idempotency on
+`(workspace_id, claim_id, signal_id, extraction_method)`, and `extraction_method`
+is the string `observed-signal-restatement@<version>`. So the re-run did not
+recognise the row it had written minutes earlier. It inserted a second one:
+
+    evidence A   claim C   signal S   observed-signal-restatement@1.4.0
+    evidence B   claim C   signal S   observed-signal-restatement@1.4.1
+
+**Two rows asserting the same relation between the same Signal and the same
+Claim, differing only by the version of the deterministic interpreter that
+phrased them.** A packet counts Evidence rows, so one measurement would have
+looked like two findings in every future packet build over that subject -- which
+is exactly what the independence rules exist to prevent, arriving by a route
+those rules cannot see.
+
+**The general shape.** An idempotency key that embeds a version answers the
+question *has this exact procedure produced this row?* and not *does a row for
+this fact exist?* Both are legitimate questions. The trap is that the second is
+the one a reader assumes, and the two coincide until the first version bump.
+
+**Why deletion rather than supersession.** `scoring.evidence` has no
+`superseded_at` column, so there was no supersession to record. The row was
+minutes old, created by the same mission, superseded within it by the same
+interpreter emitting the same relation with corrected prose, and cited by
+nothing. Deletion was the only instrument the schema offered.
+
+**What the guard had to read first.** Not a list of tables to keep -- a survivor
+list silently approves every cascade it does not name (`orphaned-raw-records`,
+the same lesson). The FK closure:
+
+    scoring.evidence -> research.opportunity_hypothesis_evidence   ON DELETE CASCADE
+
+so the script refused unless it could show zero Opportunity hypotheses cited the
+row and exactly one successor for the same `(claim, signal)` would survive it.
+Both held, and both were printed before the `DELETE` ran.
+
+**The test that would have caught it does not exist and should not.** Nothing is
+wrong with the idempotency key; what was wrong was the assumption that correcting
+prose is free. The durable artifact is this section and the report's §2.1, not an
+assertion. What IS asserted is the consequence: the packet holds exactly 8 rows,
+and `Evidence rows from the 1.32 signal type` is exactly 1.
+
+**A related instance, same mission.** The new Evidence formed its own tenth
+packet, because `subject_key` recognised `community_question_volume` and nothing
+else. **Which MEASUREMENT was taken over a subject is not part of that subject's
+identity**, and no other stage of the pipeline signals that a grouping key needs
+extending when a second measurement arrives. The fix lists both types explicitly
+rather than prefix-matching `community_question_*`, because a future
+`community_question_…` type might legitimately be about something else and would
+join the packet by accident.
