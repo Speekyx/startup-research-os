@@ -192,11 +192,26 @@ container process: exec: "
 **182 characters, identical, exact, stable and tool-specific.** This is more than
 §12 asks for. And here is what the three questions were actually about:
 
-| Question | After `exec: "` | The real problem |
+| Question | After `exec: "` — the SOURCE's own bytes | An analyst reading of it |
 |---|---|---|
 | `78086542` | `/usr/src/app/entrypoint.sh": permission denied` | a file mode |
 | `78099519` | `/app/.venv/bin/pipenv": stat …: no such file or directory` | a path absent from the image |
 | `78099680` | `gunicorn": executable file not found in $PATH` | a PATH lookup |
+
+**The right-hand column is an analyst description and nothing more** (Mission
+1.21 §0). It is offered so a reader can see why the three are unrelated; it is
+NOT a source-native structured fact, and no deterministic step produced it.
+Nothing in this mission derived, stored or asserted it.
+
+**What the deterministic finding actually is**, stated without that column:
+
+1. three records share the exact 182-character wrapper;
+2. their suffixes diverge;
+3. **no approved deterministic normalization rule can justify collapsing those
+   suffixes into one problem identity.**
+
+That is the whole result. The middle column is the source's own bytes; the
+right-hand one is a human sentence about them.
 
 **The shared string ends exactly where the failure begins.** Those 182 characters
 are runc saying *I could not start the process*; everything after is *why*.
@@ -352,9 +367,21 @@ acquisition**, and the two failures are different:
 - **Broad (Mission 1.18):** the only available key was a tag, and a tag is a
   subject. Fixable in principle by narrowing.
 - **Narrow (Mission 1.20):** exact tool-specific diagnostics were available and
-  plentiful, and they name the error envelope rather than the failure. **Not
-  fixable by narrowing further** — a narrower tool yields fewer questions and the
-  same envelopes.
+  plentiful, and they name the error envelope rather than the failure.
+
+**What follows from that is a project decision, not a proof** (Mission 1.21 §0).
+This experiment does not establish that no conceivable narrower Stack Exchange
+corpus could ever expose a source-native identifier — an experiment over 89
+questions cannot establish a universal negative, and a mission that claimed one
+would be overreaching in the direction this repository spends its effort
+avoiding.
+
+**The decision is:** the project will not spend another mission trying to obtain
+repeated-problem identity by deterministic Stack Exchange query narrowing. What
+Missions 1.18 and 1.20 together establish is that the CURRENT approach has
+reached a semantic boundary — one where the available keys name subjects or
+envelopes, and closing the gap would take a judgement neither mission is
+permitted to make.
 
 So the next work should **not** be another Stack Exchange query. Two directions
 remain, and choosing between them is a decision with its own mission:

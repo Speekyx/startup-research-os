@@ -1548,17 +1548,26 @@ Evidence**, and it failed differently from Mission 1.18.
 **The narrow corpus delivered what a signature rule wants.** Three questions
 share 182 characters of exact, stable, tool-specific Docker daemon diagnostic —
 and the shared string ends at `exec: "`, exactly where the wrapper stops and the
-failure begins. After it: a file mode, a path missing from an image, a binary not
-on `$PATH`. Support is 3 at every prefix length up to 182 and 1 from 184. **A
+failure begins. After it the source's own bytes read `permission denied`, `no
+such file or directory` and `executable file not found in $PATH` — three
+unrelated failures. **Calling those a file mode, a missing path and a `$PATH`
+lookup is an ANALYST reading and not a source-native fact** (Mission 1.21 §0);
+the deterministic finding is that the suffixes diverge and that no approved
+normalization rule can collapse them into one problem identity. Support is 3 at every prefix length up to 182 and 1 from 184. **A
 rule needs a length, and every length is either the envelope or the instance.**
 Across all 89 questions, no error line of 40 characters or more repeats verbatim
 in two of them.
 
-**So the failure is not in the acquisition and a third one would not address
-it.** A diagnostic names the ENVELOPE; what makes two failures the same is
-underneath it, and deciding that is a judgement about meaning. **No further
-mission should attempt repeated-problem detection with another deterministic
-Stack Exchange acquisition.** The two remaining directions are semantic
+**A diagnostic names the ENVELOPE; what makes two failures the same is underneath
+it, and deciding that is a judgement about meaning.**
+
+**What follows is a PROJECT DECISION, not a proof** (Mission 1.21 §0). An
+experiment over 89 questions cannot establish that no narrower Stack Exchange
+corpus could ever expose a source-native identifier. What Missions 1.18 and 1.20
+establish is that the current approach has reached a **semantic boundary**. The
+decision taken on that evidence: **the project will not spend another mission
+trying to obtain repeated-problem identity by deterministic Stack Exchange query
+narrowing.** The two remaining directions are semantic
 INFERENCE — forbidden today, and an `INFERRED` claim by construction — or a
 source carrying **explicit issue identity**, where the publisher links two
 reports of one fault and the judgement sits with somebody who has the context.

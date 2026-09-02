@@ -26,8 +26,12 @@ not one more Signal, which is the honest shape of the mission.
 **THE FINDING IS NOT "NO REPEATS WERE FOUND".** Three questions share **182
 characters** of exact, stable, tool-specific Docker daemon diagnostic -- far more
 than any signature rule would demand -- and the shared string ends at `exec: "`,
-exactly where the wrapper stops and the failure begins. After it: a file mode, a
-path missing from an image, a binary not on `$PATH`. **Support is 3 at every
+exactly where the wrapper stops and the failure begins. After it the source's own
+bytes read `permission denied`, `no such file or directory` and `executable file
+not found in $PATH`. **Describing those as a file mode, a missing path and a
+`$PATH` lookup is an ANALYST reading rather than a source-native fact** (Mission
+1.21 §0); the deterministic finding is that the suffixes diverge and no approved
+normalization rule can collapse them into one problem identity. **Support is 3 at every
 prefix length up to 182 and 1 from 184.** A rule needs a length, and every length
 is either the envelope or the instance. Across all 89 questions **no error line
 of 40 characters or more repeats verbatim in two of them**, and every key that
@@ -39,9 +43,12 @@ explanation -- a language tag selects a subject -- and the fix was to narrow.
 This mission made that move, the narrow corpus delivered exactly what a signature
 rule wants, and it failed for a deeper reason: **a diagnostic names the ENVELOPE,
 and what makes two failures the same is underneath it.** So the failure is not in
-the acquisition and a third acquisition would not address it. **No further
-mission should attempt repeated-problem detection with another deterministic
-Stack Exchange query.** The remaining directions are semantic INFERENCE --
+the acquisition. **What follows is a PROJECT DECISION and not a proof** (Mission
+1.21 §0): 89 questions cannot establish that no narrower corpus could ever expose
+a source-native identifier. What 1.18 and 1.20 establish is that the current
+approach has reached a **semantic boundary**, and the decision taken on that
+evidence is that **the project will not spend another mission seeking
+repeated-problem identity by deterministic Stack Exchange query narrowing.** The remaining directions are semantic INFERENCE --
 forbidden today and an `INFERRED` claim by construction -- or a source with
 **explicit issue identity**, where the publisher links two reports of one fault
 and the judgement sits with somebody who has the context. The second is smaller
