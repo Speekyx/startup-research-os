@@ -1161,7 +1161,7 @@ It names machine learning, text mining, training and inference **nowhere**.
 **Why it matters.** This is the single activity standing between `ted-eu` and an
 approving verdict, and `ted-eu` would be the portfolio's **first
 WILLINGNESS_TO_PAY source** — a family with no registered candidate at all before
-Mission 1.15. A contract award notice records what a buyer paid a named supplier,
+Mission 1.15, narrowed in Mission 1.20 §0. A contract award notice records a PUBLISHED TOTAL_VALUE for the contracts it awarded — options and renewals included, not money paid and not necessarily one supplier (Mission 1.15.12) —
 which is a transaction rather than a listed price.
 
 **Why it is unresolved.** Silence is not permission (`source-registry-v1.md` §1

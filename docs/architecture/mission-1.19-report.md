@@ -88,8 +88,17 @@ evidence at all.
 |---|---|---|---|
 | Macro context | World Bank | did a reported national metric move | anything about a product or a person |
 | Publication volume | GDELT | how often a token appeared in news text | who read it, or whether anyone wanted anything |
-| Public procurement | TED | what one public buyer paid one supplier | whether a private market exists |
+| Public procurement | TED | the TOTAL_VALUE a notice PUBLISHED for the contracts it awarded | what was paid, by whom to whom, or whether a private market exists |
 | Solution-seeking | Stack Exchange | that somebody published a question | that the problem repeats, or that anyone would pay |
+
+**The TED row was wrongly worded when this report was first written**, and
+Mission 1.20 §0 corrected it. It read *"what one public buyer paid one
+supplier"*, which contradicts what Mission 1.15.12 established from the
+Publications Office's own SDK: **BT-161 is the value of ALL contracts awarded in
+the notice, options and renewals included.** It is not money paid, not
+necessarily one supplier, not realised expenditure, not revenue, not a price and
+not willingness to pay -- and it can be lawfully withheld, so a cohort covers the
+published subset. The corrected row says only what the source publishes.
 
 **Nothing in that table observes an interaction.** Every row is either a
 publication, a document, or a state of the world reported by an institution.
@@ -532,11 +541,23 @@ importing something that can.
 
 Recomputed, and it is not the one this mission closed.
 
-**The portfolio now observes an interaction, and still observes no PERSON.** A
-pageview is one request; nothing links two requests to one requester, and
-Wikimedia deliberately publishes no such link. So the gap Mission 1.19 §0
-restated remains exactly where it was: **no Evidence establishes repeated
-comparable USER-PROBLEM instances for one narrowly defined problem.**
+**The portfolio now observes an interaction, and observes no STABLE REQUESTER
+IDENTITY across repeated interactions.**
+
+**This sentence was too broad when first written**, and Mission 1.20 §0 narrowed
+it. It read *"still observes no PERSON"*, which is not true: a Stack Exchange
+question is a human-authored solution-seeking utterance, and the portfolio holds
+fifteen of them. What it does not hold is any link from one interaction to
+another by the same requester -- a pageview is one request and Wikimedia
+deliberately publishes no such link, and Stack Exchange author identity was
+deliberately not acquired.
+
+**The repair is the sentence, not an acquisition.** Acquiring identity to make
+the old wording true would invert the minimisation posture both reviews rest on.
+
+So the gap remains exactly where Mission 1.19 §0 restated it: **no Evidence
+establishes repeated comparable USER-PROBLEM instances for one narrowly defined
+problem.**
 
 What this mission changes is which half is missing. The portfolio now has one
 half of the convergence §23 describes — a repeated, comparable, per-entity series

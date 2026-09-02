@@ -1099,9 +1099,19 @@ family.**
   proxy is proposed**, because a proxy nobody can validate is worse than an
   acknowledged gap.
 - **WILLINGNESS_TO_PAY gained its first candidates.** `ted-eu` and `usaspending`
-  record contract awards: what a buyer paid a named supplier. `LISTED_PRICE` and
-  `TRANSACTION` are different evidence classes and a pricing page is only ever
-  the first — the distinction the portfolio had no source able to make.
+  record contract awards, which is a `TRANSACTION` class of evidence rather than
+  a `LISTED_PRICE`, and a pricing page is only ever the first — the distinction
+  the portfolio had no source able to make.
+
+  **What a TED award notice states is narrower than "what a buyer paid", and
+  this bullet said the wrong thing until Mission 1.20 §0.** Mission 1.15.12
+  established from the Publications Office's own SDK 1.15.1 that BT-161 is *"the
+  value of all contracts awarded in this notice, INCLUDING OPTIONS AND
+  RENEWALS"*. It is a PUBLISHED value, not money paid, not necessarily one
+  supplier, not realised expenditure and not a price — and it may be lawfully
+  withheld (BT-195 to BT-198), so any cohort covers the published subset only.
+  The candidate is still the portfolio's only lawful route toward transaction
+  evidence; what it evidences is just less than the earlier wording implied.
 - **`ted-eu` is the closest any blocked source has come.** One retrieved sentence
   grants five of six load-bearing activities: *"the procurement notices ... can
   be freely reused, for commercial or non-commercial purposes"* — a GRANT, not

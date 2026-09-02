@@ -96,7 +96,7 @@ That is the distinction this family preserves and does not collapse:
 
 | | |
 |---|---|
-| **Established** | a named buyer paid a named supplier a stated amount for a stated procurement, and the source published it |
+| **Established** | a named buyer awarded a stated procurement and the source published a TOTAL_VALUE for it (see the note below) |
 | **Not established** | that a market exists, that a comparable buyer would pay a comparable amount for a different product, or that anything about a SaaS follows |
 
 A family named `WILLINGNESS_TO_PAY` would put the second reading in the field a
@@ -142,3 +142,23 @@ closes it.
 quantity is *the value a transaction settled at*; procurement is the mechanism
 this source happens to publish. A future auction, tender or grant source would
 be the same quantity under a different mechanism.
+
+---
+
+## Amended by Mission 1.20 §0 — what a TOTAL_VALUE establishes
+
+**The decision stands; one supporting sentence was narrower than this ADR
+claimed.** The table above originally read *"a named buyer paid a named supplier
+a stated amount"*. Mission 1.15.12 established, from the Publications Office's
+own eForms SDK 1.15.1, that **BT-161 is the value of all contracts awarded in the
+notice, INCLUDING OPTIONS AND RENEWALS** — a PUBLISHED value, not money paid, not
+necessarily one supplier, and not realised expenditure. It may also be lawfully
+withheld (BT-195 to BT-198), so a cohort covers the published subset.
+
+Nothing about the family changes. `TRANSACTION_VALUE` is still the right name for
+the quantity, `MEASURED_SERIES` still could not hold it, and it is still not
+willingness-to-pay. What narrows is the ESTABLISHED row: the source published a
+value for an award, and the stronger reading was this ADR's, not the source's.
+
+Recorded here rather than by rewriting the argument, because an ADR is the record
+of a decision and this is a later finding about one of its premises.

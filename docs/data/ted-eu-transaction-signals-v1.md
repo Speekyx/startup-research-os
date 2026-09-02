@@ -61,7 +61,7 @@ distinction is preserved here rather than collapsed:
 
 | | |
 |---|---|
-| **Established** | a named buyer paid a named supplier a stated amount for a stated procurement, and the source published it |
+| **Established** | the source PUBLISHED a TOTAL_VALUE for the contracts a notice awarded — the value of ALL contracts awarded in the notice, options and renewals included -- not money paid, not necessarily one supplier, and not realised expenditure (Mission 1.15.12; corrected here in Mission 1.20 §0) |
 | **Not established** | that a market exists; that a comparable buyer would pay a comparable amount for a *different* product; that anything about a SaaS follows |
 
 A family or type named `WILLINGNESS_TO_PAY` would put the second reading in the
