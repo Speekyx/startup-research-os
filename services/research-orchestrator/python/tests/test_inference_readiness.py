@@ -1,5 +1,11 @@
 """Mission 1.24 §0.A — readiness is ten gates, not one environment variable.
 
+**stdlib `unittest`, nothing installed.** This package belongs to the
+zero-dependency suite, and `run_python_tests.py` runs it with no pytest on the
+path. A `import pytest` here passes locally and breaks CI, which is exactly what
+it did on the first push of this mission: a gate not run under the conditions CI
+uses is a gate not run.
+
 The failure this pins is a specific and tempting one. Mission 1.23 proved the
 governance gate refused with `PROVIDER_NOT_CONFIGURED`, derived from whether
 `ANTHROPIC_API_KEY` was set. A reader could conclude that supplying the key makes
@@ -13,10 +19,10 @@ cannot make a call**, because those are the ones a shallow check misses.
 from __future__ import annotations
 
 import pathlib
+import unittest
 from contextlib import contextmanager
 from typing import Any
 
-import pytest
 from sros_contracts import LlmTier
 from sros_orchestrator.inference_readiness import (
     APPROVED_PROVIDER,
@@ -93,7 +99,7 @@ def evaluate(db: FakeDatabase, env: dict[str, str]) -> Any:
     )
 
 
-class TestTheTierIsNotAnImplementationDetail:
+class TestTheTierIsNotAnImplementationDetail(unittest.TestCase):
     def test_the_component_requests_a_tier_and_never_a_provider(self) -> None:
         """ADR-006's whole indirection. A component naming a provider would make
         provider selection a code change and put routing outside configuration."""
@@ -119,7 +125,7 @@ class TestTheTierIsNotAnImplementationDetail:
         assert SEMANTIC_EQUIVALENCE_TIER is not LlmTier.EMBEDDING_MODEL
 
 
-class TestACredentialAloneIsNotReadiness:
+class TestACredentialAloneIsNotReadiness(unittest.TestCase):
     def test_the_key_alone_leaves_the_system_unable_to_call(self) -> None:
         """**The load-bearing test.** Governance fully permits, the credential is
         present, and the deployment still cannot make a call because the tier is
@@ -163,25 +169,28 @@ class TestACredentialAloneIsNotReadiness:
         assert gates(result)["gateway-tier-model-named"] is False
 
 
-class TestGovernanceIsReadFromTheDatabaseAndFailsClosed:
-    @pytest.mark.parametrize(
-        ("kwargs", "gate"),
-        [
+class TestGovernanceIsReadFromTheDatabaseAndFailsClosed(unittest.TestCase):
+    def test_each_governance_absence_or_refusal_blocks(self) -> None:
+        """A NULL column reads NOT_ASSESSED and refuses, exactly as ADR-033
+        specifies. `None` and an explicit refusal both block, and the point of
+        keeping them distinct is what they say, not what they permit.
+
+        `subTest` rather than a parametrize decorator: this suite runs under
+        stdlib unittest, and every case is reported separately either way.
+        """
+        cases = [
             ({"model_processing": None}, "source-model-processing-permitted"),
             ({"transmission": None}, "source-external-model-transmission-permitted"),
             ({"transmission": "NOT_PERMITTED"}, "source-external-model-transmission-permitted"),
             ({"egress": None}, "profile-external-model-egress-permitted"),
             ({"egress": "DENIED"}, "profile-external-model-egress-permitted"),
             ({"egress": "NOT_ASSESSED"}, "profile-external-model-egress-permitted"),
-        ],
-    )
-    def test_each_governance_absence_or_refusal_blocks(self, kwargs: dict, gate: str) -> None:
-        """A NULL column reads NOT_ASSESSED and refuses, exactly as ADR-033
-        specifies. `None` and an explicit refusal both block, and the point of
-        keeping them distinct is what they say, not what they permit."""
-        result = evaluate(FakeDatabase(**kwargs), dict(CONFIGURED_ENV))
-        assert not result.ready
-        assert gates(result)[gate] is False
+        ]
+        for kwargs, gate in cases:
+            with self.subTest(gate=gate, **kwargs):
+                result = evaluate(FakeDatabase(**kwargs), dict(CONFIGURED_ENV))
+                assert not result.ready
+                assert gates(result)[gate] is False
 
     def test_a_missing_review_blocks_rather_than_defaulting(self) -> None:
         """ADR-027: approval never transfers between profiles, so no review means
@@ -204,7 +213,7 @@ class TestGovernanceIsReadFromTheDatabaseAndFailsClosed:
         assert by_name["source-external-model-transmission-permitted"] is False
 
 
-class TestTheReportIsUsableByAnOperator:
+class TestTheReportIsUsableByAnOperator(unittest.TestCase):
     def test_every_gate_is_evaluated_even_after_one_fails(self) -> None:
         """The rule `authorize_external_inference` follows. An operator shown one
         failure fixes it and is refused again, once per remaining gate.

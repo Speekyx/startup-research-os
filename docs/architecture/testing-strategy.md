@@ -2647,3 +2647,38 @@ result establishes less than it appears to.
 **A test pins the failure mode itself**, not just the two criteria: a
 constant-`DIFFERENT` classifier is scored under both, passes V1 and is refused by
 V2. That is the property, and it survives a future edit to either statement.
+
+## 64. Run the gate the way CI runs it, not the way your machine runs it (Mission 1.24)
+
+Mission 1.24 added a test module to `services/research-orchestrator/python/tests`
+and imported `pytest`. Every local gate passed, including
+`run_python_tests.py`, because pytest is installed in the development
+environment. CI failed on the first push.
+
+That package belongs to the **zero-dependency suite**. `run_python_tests.py`
+runs it under stdlib `unittest` with nothing installed, for the reason ADR-009
+gives: a check that cannot run is a check that gets skipped. An `import pytest`
+in one of its modules is invisible locally and fatal in CI.
+
+**This is the second time this class of failure has landed.** Mission 1.19
+imported `urllib.parse.quote` outside `collection/transport.py`; the CI guard is
+an inline `grep` in the workflow file, not a validator, so no local command ran
+it. Both were repaired the same way -- move the code, never narrow the guard --
+and both had the same root cause: *the gate was run, but not under the conditions
+CI uses.*
+
+**The rule: a green local run is evidence only if the environment matches.** For
+this repository that means two things a developer machine hides:
+
+- **Which suite a package belongs to decides what may be imported.** The
+  zero-dependency list is in `run_python_tests.py`. A package there is
+  unittest-only; use `subTest` where you reach for `parametrize`, and
+  `assertRaises` where you reach for `pytest.raises`. A package only in
+  `run_pytest_suites.py` may use pytest freely.
+- **Some CI steps have no local command at all.** The two inline `grep` guards
+  in the workflow are the standing example. Read the workflow before believing a
+  local run is complete.
+
+The cheapest reliable check is to run the zero-dependency suite in an
+interpreter that genuinely lacks pytest, rather than trusting that the runner's
+name implies the condition it describes.

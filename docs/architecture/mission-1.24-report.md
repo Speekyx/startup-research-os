@@ -235,9 +235,18 @@ and the CI mypy targets.
 
 **Gates.** Nine validators, four generated-doc `--check` steps plus the new
 review-batch check, `ruff check`, `ruff format --check`, `mypy` across 159 source
-files, both CI inline greps, `migrate --plan`, and both suites — 555 tests across
+files, both CI inline greps, `migrate --plan`, and both suites — 571 tests across
 8 packages plus all pytest suites across 8 packages, with 0 failures and 0 errors.
 49 tests in the new package, including six adversarial question bodies.
+
+**A gate passed locally and failed in CI, for the second time in this
+sequence.** The new orchestrator test module imported `pytest`, which is
+invisible on a development machine and fatal in the zero-dependency suite that
+package belongs to. Repaired by rewriting the module for stdlib `unittest` --
+`subTest` instead of `parametrize` -- rather than by adding pytest to a
+zero-dependency package. Mission 1.19's `urllib` import had the same root cause:
+the gate was run, but not under the conditions CI uses. Recorded as
+`testing-strategy.md` §64.
 
 **A correction to the operator.** I stated that `infrastructure/compose/.env` is
 tracked by git and that the credential must not go there. It is **git-ignored**
