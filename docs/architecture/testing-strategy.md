@@ -2779,3 +2779,33 @@ corrected guard reached the next mission instead of rescuing that one.
 
 **When a guard rejects something you believe is correct, fix the guard and keep
 the verdict.** Doing both is what makes the fix credible.
+
+
+## §68 — A global row count becomes deployment state the moment it can be non-zero
+
+Mission 1.31.1. Four TED review tests asserted
+`SELECT count(*) FROM research.opportunities == 0` as a proxy for *this review
+created nothing*. Mission 1.31.1 legitimately persisted the first Opportunity and
+all four failed.
+
+**The precedent was already written in those tests' own comments.** RawRecords
+left the same assertion in Mission 1.15.7 and NormalizedRecords in 1.15.8, each
+with a note saying the count is *"legitimately non-zero on a machine that has run
+it and zero on one that has not -- which is exactly the confusion §49 forbids a
+test from encoding"*. `research.opportunities` has now joined them, and the
+repair is the one the comments describe.
+
+**The replacement must be stronger, not merely narrower.** Dropping the clause
+would lose a real property. What replaced it is deployment-independent and says
+more than the count did:
+
+    no Opportunity hypothesis cites TED Evidence
+
+That holds on any machine, however many Opportunities exist, and it fails loudly
+if a future mission pulls a TED row into a packet -- which the count never would
+have caught, because a TED-citing Opportunity would have made the count 1 either
+way.
+
+**The general rule: when a global count graduates from "always zero" to "zero
+until some mission legitimately writes one", replace it with an assertion about
+what THIS subject may not do, not with a looser bound on everyone.**

@@ -25,6 +25,11 @@ this space"* -- which is the enumeration §6 and §16 require. The recorded verd
 for that run is NOT revised: §12 forbids weakening a gate after seeing the answer,
 and the fix reaches the next mission rather than rescuing that one.
 
+**1.2.0 adds the subject-of-its-own-denial form**, required by Mission 1.31.1 §1
+as a precondition and made before any output for that run existed. Checking the
+five cases §1 lists also surfaced an off-by-one in `_phrase_position` that had
+silently misaligned every term not at the start of a sentence.
+
 **The number check is the sharpest instrument here.** A model asserting scale
 almost always does it with a figure, so every integer in the prose must appear in
 a supplied statement or in the packet's own structural facts. `88` passes because
@@ -56,7 +61,7 @@ __all__ = [
 ]
 
 PERSISTENCE_GATE_VERSION = "opportunity-synthesis-persistence-gate@1.0.0"
-AUDIT_VERSION = "opportunity-synthesis-audit@1.1.0"
+AUDIT_VERSION = "opportunity-synthesis-audit@1.2.0"
 
 #: §7. World-knowledge tokens a model reaches for when it stops reading the
 #: packet. Each is permitted only if a supplied statement actually contains it,

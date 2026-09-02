@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.57
+Version: 1.58
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-02 (Sprint 1 / Mission 1.31)
+Last amended: 2026-09-03 (Sprint 1 / Mission 1.31.1)
 
 ---
 
@@ -13,6 +13,67 @@ Last amended: 2026-09-02 (Sprint 1 / Mission 1.31)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.58 — 2026-09-03 (Sprint 1 / Mission 1.31.1)
+
+Authorized by the Mission 1.31.1 brief §0-§22.
+
+**OUTCOME: `FIRST_OPPORTUNITY_HYPOTHESIS_CREATED`. SROS holds its first
+Opportunity.** One logical call, **0 retries**, 5 967 in / 2 722 out, **0.0392
+USD** against a 0.25 ceiling. Decision `FORM_HYPOTHESIS`, every clause of the
+frozen gate passed, and one Opportunity, one revision and **seven** Evidence
+links were persisted -- all at `ELIGIBLE_CONTEXT`.
+
+**EVERYTHING ELSE IS UNCHANGED.** RawRecords 148, NormalizedRecords 148, Signals,
+Claims, ClaimRevisions and Evidence 27 each, ReliabilityAssessments 1, Embeddings
+0, Scores 0, sources 29.
+
+**MISSION 1.31 IS UNTOUCHED** and keeps `OPPORTUNITY_SYNTHESIS_OUTPUT_REJECTED`
+under `audit@1.0.0` in its own artifact. This run wrote a new one. Neither
+rewrites the other.
+
+**THE PROMPT HASH IS BYTE-IDENTICAL.** `synthesis_prompt_hash()` still returns the
+value Mission 1.31 recorded, so the question was re-asked and not re-tuned: the
+packet, the evidence, the schema and the prompt are the same, and only the audit
+differed.
+
+**§1's FIVE REQUIRED CASES FOUND THAT `guard@1.1.0` HANDLED FOUR.** The fifth --
+*competitors ARE NOT established by the evidence* -- is a denial whose marker
+FOLLOWS its term, and 1.1.0 only cleared markers that preceded one. `@1.2.0` adds
+that single grammatical form, cancelled by an intervening comma or contrastive
+word, so *buyers would pay, which is not established* still fails. Order alone was
+not enough; grammar was. Checking the cases also exposed an **off-by-one** in
+`_phrase_position`, which returned the position of the character captured before
+the word -- the one that stops `supermarket` matching `market` -- and had
+misaligned the tail for every term not at the start of a sentence.
+
+**THE TWO RUNS AGREE ON EVERY STRUCTURAL JUDGEMENT**, which is the strongest
+available evidence that Mission 1.31's rejection was a guard defect and not a
+model failure: same `UNKNOWN_NOT_SUPPORTED` actor, same twelve unsupported
+dimensions, same seven citations, `commercial_claims_supported` empty in both.
+This run's wording is arguably more careful -- *"at least momentary unserved need
+at the point of asking"* bounds the reading to the instant of publication, and its
+intervention field declines to name a class at all because *"the packet itself
+does not support naming a product, feature, or service class"*.
+
+**`market_scope` IS GLOBAL AND THAT IS NOT A MARKET CLAIM.** The column is NOT
+NULL and the packet establishes no geography; Ontology V2 §4 defines GLOBAL as the
+ABSENCE of a geographic restriction. The limitation is persisted on the revision
+rather than left for a reader to infer.
+
+**FOUR TED REVIEW TESTS WERE REPAIRED, on a precedent already written in their own
+comments.** They asserted `research.opportunities == 0` as a proxy for *this
+review created nothing*; that count is now legitimately non-zero on a machine that
+has run the pipeline, exactly as RawRecords and NormalizedRecords became in
+Missions 1.15.7 and 1.15.8. The replacement is stronger rather than looser: **no
+Opportunity hypothesis cites TED Evidence**, on any machine
+(`testing-strategy.md` §68).
+
+**Next: targeted commercial evidence completion, not ranking.** There is one
+Opportunity and nothing to rank it against, every supporting row is NON_SCORABLE,
+and D-03 is untouched. The hypothesis names its own priority, and the narrowest
+reachable dimension is SOLUTION_DISSATISFACTION over the accepted-answer field
+already held and deliberately unread
 
 ## 1.57 — 2026-09-02 (Sprint 1 / Mission 1.31)
 

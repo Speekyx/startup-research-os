@@ -37,12 +37,12 @@ DOCS = ROOT / "docs" / "data"
 CATALOG = DOCS / "source-catalog-v1.json"
 SUBJECT_REGISTRY = DOCS / "canonical-subject-registry-v1.json"
 PROVIDER_POLICY = DOCS / "model-provider-policy-v1.json"
-ARTIFACT = DOCS / "opportunity-synthesis-run-v1.json"
+ARTIFACT = DOCS / "opportunity-synthesis-run-v1.1.json"
 
 WORKSPACE_ID = "00000000-0000-4000-8000-000000000001"
 USE_PROFILE = "local-private-research-v1"
 SUBJECT = "docker"
-CORRELATION_ID = "mission-1.31-synthesis"
+CORRELATION_ID = "mission-1.31.1-synthesis"
 
 #: §10. Output is capped so the hard maximum is a real bound rather than the
 #: adapter's 4096-token default -- the lesson Mission 1.27 paid for when its
@@ -209,6 +209,121 @@ def _build_packet():
             standings,
         )
     raise SystemExit(f"no packet for canonical subject {SUBJECT!r}")
+
+
+def _persist(output, packet, evidence_to_claim, eligibility_at_citation, prompt_hash, model):
+    """One Opportunity, one revision, one link per cited Evidence, in ONE transaction.
+
+    Through the Mission 1.28 schema and no other. A revision is never overwritten:
+    this writes revision 1, and later evidence produces revision 2.
+
+    **`market_scope` is GLOBAL and that is not a market claim.** The column is NOT
+    NULL and the packet establishes no geography at all; Ontology V2 §4 defines
+    GLOBAL as the ABSENCE of a geographic restriction rather than an assertion
+    about a worldwide market. The limitation is written into the row so a reader
+    cannot take it for the other thing.
+    """
+    import uuid
+
+    import psycopg
+    from sros_contracts.market_scope import MarketScope
+    from sros_opportunity import SYNTHESIS_PROCEDURE_VERSION, SYNTHESIS_PROMPT_VERSION
+    from sros_opportunity.validation import AUDIT_VERSION
+
+    opportunity_id = str(uuid.uuid4())
+    revision_id = str(uuid.uuid4())
+    scope = MarketScope.global_()
+
+    cited_evidence = [
+        e for e in packet.evidence_ids if e in set(output.get("supporting_evidence_ids") or ())
+    ]
+    limitations = [
+        "Every supporting Evidence row is ELIGIBLE_CONTEXT, NON_SCORABLE and "
+        "MISSING_RELIABILITY: no reviewed reliability applies, so this hypothesis "
+        "can contribute to no score.",
+        "independence_state is UNKNOWN for every supporting row. Two source "
+        "families is diversity, never established independence, and the row count "
+        "is not a count of independent findings.",
+        "market_scope is recorded GLOBAL because the column is NOT NULL and the "
+        "evidence establishes no geography. Ontology V2 §4 defines GLOBAL as the "
+        "ABSENCE of a geographic restriction; it is not a claim about a worldwide "
+        "market.",
+        "The Stack Exchange count is a count of published questions, not of "
+        "people, and not evidence that any two of them share a problem: that "
+        "relation is PARKED (Mission 1.27).",
+        "The Wikimedia rows are day-over-day request differences under the "
+        "platform's own heuristic requester class. Two of the six are decreases, "
+        "and the calendar does not cancel.",
+    ]
+
+    with psycopg.connect(os.environ["DATABASE_URL"]) as conn:
+        role = os.environ.get("APP_DB_ROLE", "sros_app")
+        with conn.transaction():
+            conn.execute(f"SET LOCAL ROLE {role}")
+            conn.execute("SELECT set_config('app.workspace_id', %s, true)", (WORKSPACE_ID,))
+            conn.execute(
+                """INSERT INTO research.opportunities
+                       (id, workspace_id, title, summary, market_scope, market_scope_key,
+                        status, creation_procedure, packet_id, use_profile_id)
+                   VALUES (%s, %s, %s, %s, %s, %s,
+                           'OPPORTUNITY_HYPOTHESIS', %s, %s, %s)""",
+                (
+                    opportunity_id,
+                    WORKSPACE_ID,
+                    str(output.get("subject") or packet.subject_label)[:200],
+                    str(output.get("hypothesis_statement") or ""),
+                    json.dumps(scope.to_json(), sort_keys=True),
+                    scope.key(),
+                    SYNTHESIS_PROCEDURE_VERSION,
+                    packet.packet_id,
+                    USE_PROFILE,
+                ),
+            )
+            conn.execute(
+                """INSERT INTO research.opportunity_hypothesis_revisions
+                       (id, workspace_id, opportunity_id, revision, target_actor,
+                        observed_need_or_change, candidate_intervention,
+                        hypothesis_statement, reasoning_summary,
+                        supported_dimensions, unsupported_dimensions,
+                        epistemic_limitations, uncertainties,
+                        procedure_version, model_version, prompt_version, created_by)
+                   VALUES (%s, %s, %s, 1, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
+                (
+                    revision_id,
+                    WORKSPACE_ID,
+                    opportunity_id,
+                    str(output.get("target_actor_if_supported") or "UNKNOWN_NOT_SUPPORTED"),
+                    str(output.get("observed_need") or ""),
+                    str(output.get("candidate_intervention_class") or ""),
+                    str(output.get("hypothesis_statement") or ""),
+                    str(output.get("evidence_bound_reasoning_summary") or ""),
+                    list(output.get("supported_dimensions") or ()),
+                    list(output.get("unsupported_dimensions") or ()),
+                    limitations,
+                    list(output.get("critical_uncertainties") or ()),
+                    f"{SYNTHESIS_PROCEDURE_VERSION}|{AUDIT_VERSION}|prompt={prompt_hash}",
+                    model,
+                    SYNTHESIS_PROMPT_VERSION,
+                    "mission-1.31.1",
+                ),
+            )
+            for evidence_id in cited_evidence:
+                conn.execute(
+                    """INSERT INTO research.opportunity_hypothesis_evidence
+                           (id, workspace_id, revision_id, evidence_id, claim_id,
+                            eligibility_at_citation, dimensions)
+                       VALUES (%s, %s, %s, %s, %s, %s, %s)""",
+                    (
+                        str(uuid.uuid4()),
+                        WORKSPACE_ID,
+                        revision_id,
+                        evidence_id,
+                        evidence_to_claim[evidence_id],
+                        eligibility_at_citation,
+                        list(output.get("supported_dimensions") or ()),
+                    ),
+                )
+    return opportunity_id, revision_id, len(cited_evidence)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -386,8 +501,23 @@ def main(argv: list[str] | None = None) -> int:
     for note in decision.notes:
         print(f"        note: {note[:200]}")
 
+    persisted: dict[str, object] = {"opportunity_id": None, "revision_id": None, "links": 0}
+    if decision.persist:
+        opportunity_id, revision_id, links = _persist(
+            output, packet, evidence_to_claim, "ELIGIBLE_CONTEXT", prompt_hash, model
+        )
+        persisted = {
+            "opportunity_id": opportunity_id,
+            "revision_id": revision_id,
+            "links": links,
+        }
+        print(
+            f"\n    PERSISTED Opportunity {opportunity_id} revision {revision_id}, "
+            f"{links} evidence link(s)"
+        )
+
     artifact = {
-        "mission": "1.31",
+        "mission": "1.31.1",
         "packet_id": packet.packet_id,
         "subject": packet.subject_label,
         "procedure": SYNTHESIS_PROCEDURE_VERSION,
@@ -434,6 +564,7 @@ def main(argv: list[str] | None = None) -> int:
                 for entry in (decision.audit.fields if decision.audit else ())
             ],
         },
+        "persisted": persisted,
         "ran_at": datetime.now(UTC).isoformat(),
     }
     ARTIFACT.write_text(json.dumps(artifact, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
