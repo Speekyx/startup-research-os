@@ -14,6 +14,17 @@ acquisition rather than a rewording.
 and Mission 1.13.1 paid for that distinction already. Hyphens and slashes split;
 possessives and plurals fold.
 
+**A term under a DENIAL is not an assertion** (added in 1.1.0, Mission 1.31). The
+guard exists to stop this engine ASSERTING an unsupported commercial fact. A
+sentence that says *no statement establishes whether anyone would pay* is
+enumerating an absence, which is the most valuable thing a hypothesis can do and
+is exactly what §6 and §16 require of one. Version 1.0.0 flagged it, refused a
+sound output, and cost Mission 1.31 its outcome -- the same shape as
+`testing-strategy.md` §23, where a substring scan fired on the docstring
+explaining the rule. A denial marker earlier in the same sentence now clears the
+term, and only in that sentence: `no evidence of X. Buyers would pay.` still
+fails on the second sentence.
+
 **A guard is the second line.** The first is not asking the model for the
 sentence at all -- the §10 output schema separates `supported_dimensions` from
 `unsupported_dimensions` and requires every factual statement to name a Claim or
@@ -30,6 +41,7 @@ from dataclasses import dataclass
 from .dimensions import EvidenceDimension
 
 __all__ = [
+    "DENIAL_MARKERS",
     "GUARD_VERSION",
     "FORBIDDEN_TERMS",
     "VALIDATION_WORDS",
@@ -38,7 +50,7 @@ __all__ = [
     "check_no_validation_language",
 ]
 
-GUARD_VERSION = "opportunity-claim-guard@1.0.0"
+GUARD_VERSION = "opportunity-claim-guard@1.1.0"
 
 _D = EvidenceDimension
 
@@ -100,6 +112,36 @@ VALIDATION_WORDS: frozenset[str] = frozenset(
 )
 
 
+#: Markers that turn a forbidden term into an enumerated ABSENCE rather than an
+#: assertion, when they appear EARLIER IN THE SAME SENTENCE. Deliberately narrow:
+#: each is a phrase that scopes what follows it, so a later clause in the same
+#: sentence is inside the denial.
+DENIAL_MARKERS: tuple[str, ...] = (
+    "no statement",
+    "no evidence",
+    "no claim",
+    "nothing",
+    "not establish",
+    "does not",
+    "do not",
+    "did not",
+    "cannot",
+    "is not",
+    "are not",
+    "was not",
+    "were not",
+    "never",
+    "without",
+    "absent",
+    "unsupported",
+    "unknown",
+    "whether",
+    "neither",
+    "lacks",
+    "lacking",
+)
+
+
 @dataclass(frozen=True)
 class GuardViolation:
     term: str
@@ -132,6 +174,45 @@ def _contains_phrase(tokens: list[str], phrase: str) -> bool:
     return False
 
 
+def _sentences(text: str) -> list[str]:
+    """Split on sentence enders, keeping em-dash clauses together.
+
+    A denial scopes the clauses that follow it within one sentence, so the
+    sentence is the right unit: `no evidence of X. Buyers would pay.` must still
+    fail on the second sentence.
+    """
+    return [part for part in re.split(r"(?<=[.!?])\s+|\n+", text) if part.strip()]
+
+
+def _asserted(text: str, phrase: str) -> bool:
+    """Whether `phrase` is ASSERTED somewhere in `text`, rather than denied.
+
+    True when at least one sentence contains the phrase with no denial marker
+    before it. A sentence enumerating an absence clears; a bare assertion does
+    not, even if another sentence in the same text denies something else.
+    """
+    for sentence in _sentences(text):
+        tokens = _tokens(sentence)
+        if not _contains_phrase(tokens, phrase):
+            continue
+        lowered = sentence.lower()
+        position = _phrase_position(lowered, phrase)
+        if position is None:
+            return True
+        if not any(
+            (index := lowered.find(marker)) != -1 and index < position for marker in DENIAL_MARKERS
+        ):
+            return True
+    return False
+
+
+def _phrase_position(lowered: str, phrase: str) -> int | None:
+    """Where the phrase's first word starts, for comparing against a marker."""
+    first = phrase.split()[0]
+    match = re.search(rf"(^|[^a-z]){re.escape(first)}", lowered)
+    return match.start() if match else None
+
+
 def check_statement(
     text: str, supported_dimensions: frozenset[EvidenceDimension]
 ) -> tuple[GuardViolation, ...]:
@@ -140,6 +221,9 @@ def check_statement(
     violations: list[GuardViolation] = []
     for term, required in sorted(FORBIDDEN_TERMS.items()):
         if not _contains_phrase(tokens, term):
+            continue
+        # Added in 1.1.0. Enumerating an absence is not asserting a fact.
+        if not _asserted(text, term):
             continue
         if required is None:
             violations.append(

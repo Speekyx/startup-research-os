@@ -1,0 +1,185 @@
+{
+  "mission": "1.31",
+  "packet_id": "c25451c569909207357d0af19698e4737b7c85961fcf393bf632ba8b8242110e",
+  "subject": "subject:docker",
+  "procedure": "opportunity-synthesis@1.0.0",
+  "prompt_version": "1.0.0",
+  "prompt_sha256": "dfd28a0a77e2cae23a268e39eb1c432f23f905810b26dc129f6fd99f7491195e",
+  "provider": "anthropic",
+  "model": "claude-sonnet-5",
+  "logical_calls": 1,
+  "schema_retries": 0,
+  "abandoned_attempts_before_output_cap_fix": 2,
+  "abandoned_attempts_note": "Attempts spent against a 1500-token output cap that was smaller than the requested schema can serialise. Both failed schema validation with the last five required fields missing, so no answer was produced and none was rejected. The cap was raised to 3000 and nothing about the task, prompt, schema or evidence changed.",
+  "input_tokens": 5967,
+  "output_tokens": 2632,
+  "cost_units": 0.038254,
+  "hard_maximum_cost_units": 0.071284,
+  "max_output_tokens": 3000,
+  "authorization_resolved_before_serialization": true,
+  "egress": {
+    "availability": "AVAILABLE",
+    "per_source": [
+      [
+        "stack-exchange",
+        "PERMITTED"
+      ],
+      [
+        "wikimedia-pageviews",
+        "PERMITTED"
+      ]
+    ]
+  },
+  "transmitted_payload_keys": [
+    "claims",
+    "dimension_bounds",
+    "dimensions",
+    "evidence_ids",
+    "independence",
+    "packet_id",
+    "procedures",
+    "source_families",
+    "subject"
+  ],
+  "evidence_ids": [
+    "13a5eadb-977d-4de0-9c35-d0ff53442074",
+    "16a8c39c-d72a-4252-9c67-7be2165e9cae",
+    "1b93db71-eaed-45c5-a2fa-9e4edea7bc49",
+    "487f62c6-2fcf-4790-9773-6e99214d0003",
+    "516182ff-0122-4d13-9d8a-92bb38065a75",
+    "6cf92ad6-77ed-4126-b356-41e65856430b",
+    "f1e0b7a4-d570-429a-91a4-fadff84cdce1"
+  ],
+  "claim_ids": [
+    "05cac6f6-17f4-4008-b68b-9787bb4ac774",
+    "1829e497-f582-4017-b88d-4d277375ccf7",
+    "459e9fec-3ad1-4955-81c6-2aa0f2179bc5",
+    "565bbcb7-9e70-418b-9a8e-a1549b23a230",
+    "6e4c3f21-8881-4453-b4ff-af1b47c464b5",
+    "b3d0d2d0-daa0-4854-a4c0-a31684841b03",
+    "c58949e4-d8a7-4636-9c53-3bbac3b7b7c0"
+  ],
+  "model_output": {
+    "decision": "FORM_HYPOTHESIS",
+    "subject": "subject:docker",
+    "target_actor_if_supported": "UNKNOWN_NOT_SUPPORTED",
+    "observed_need": "The packet shows requests to a Wikipedia article on \"Docker_(software)\" fluctuating day to day in early March 2024, and 88 questions filed under the \"docker\" tag on Stack Overflow within a bounded window. Together these only establish that some attention/usage activity around the topic \"docker\" occurred and that some actors posed questions in a public forum consistent with being blocked or seeking information on this subject -- not who those actors are, what specifically blocked them, or whether the same need recurred.",
+    "candidate_intervention_class": "An information/support-content class of intervention (e.g., a resource that addresses commonly-surfaced topics under the \"docker\" tag) -- posed only as a class worth investigating further, not a defined product or feature set.",
+    "hypothesis_statement": "Given evidence of (a) day-to-day fluctuation in requests for the \"Docker_(software)\" Wikipedia article and (b) a bounded count of 88 questions filed under the \"docker\" tag on Stack Overflow, it is worth investigating whether there exists an underserved information or problem-solving need among people encountering the subject \"docker\" -- without any claim as to who these people are, why they engaged, whether the same actors recur, or whether any commercial response is warranted.",
+    "supported_dimensions": [
+      "AUDIENCE_OR_USAGE",
+      "PROBLEM_OR_NEED"
+    ],
+    "unsupported_dimensions": [
+      "BUYER_OR_BUDGET_EXISTENCE",
+      "COMPETITIVE_SUPPLY",
+      "DISTRIBUTION_SIGNAL",
+      "ECONOMIC_VALUE",
+      "FEASIBILITY_SIGNAL",
+      "MARKET_ACTIVITY",
+      "RECURRENCE_OR_FREQUENCY",
+      "REGULATORY_OR_STRUCTURAL_DRIVER",
+      "SOLUTION_DISSATISFACTION",
+      "SOLUTION_GAP",
+      "WILLINGNESS_TO_PAY",
+      "TREND_OR_CHANGE"
+    ],
+    "supporting_evidence_ids": [
+      "13a5eadb-977d-4de0-9c35-d0ff53442074",
+      "16a8c39c-d72a-4252-9c67-7be2165e9cae",
+      "1b93db71-eaed-45c5-a2fa-9e4edea7bc49",
+      "487f62c6-2fcf-4790-9773-6e99214d0003",
+      "516182ff-0122-4d13-9d8a-92bb38065a75",
+      "6cf92ad6-77ed-4126-b356-41e65856430b",
+      "f1e0b7a4-d570-429a-91a4-fadff84cdce1"
+    ],
+    "supporting_claim_ids": [
+      "565bbcb7-9e70-418b-9a8e-a1549b23a230",
+      "6e4c3f21-8881-4453-b4ff-af1b47c464b5",
+      "05cac6f6-17f4-4008-b68b-9787bb4ac774",
+      "c58949e4-d8a7-4636-9c53-3bbac3b7b7c0",
+      "b3d0d2d0-daa0-4854-a4c0-a31684841b03",
+      "459e9fec-3ad1-4955-81c6-2aa0f2179bc5",
+      "1829e497-f582-4017-b88d-4d277375ccf7"
+    ],
+    "source_families": [
+      "forum",
+      "knowledge"
+    ],
+    "independence_status": "Independence is UNKNOWN for 7 of 7 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings.",
+    "reliability_status": "Every row is NON_SCORABLE with MISSING_RELIABILITY: no reviewed reliability applies to any of these measurements. 0 of 7 rows are scoring-eligible; this packet cannot contribute to any score.",
+    "evidence_bound_reasoning_summary": "Six rows report day-over-day differences in raw HTTP request counts for one Wikipedia article, under the platform's own heuristic requester classification; these establish only that recorded requests changed between adjacent daily observations of the same stream -- not readership, not sustained trend, not causation, and adjacent days do not cancel the calendar per the supplied caveat. One row reports a count of 88 questions carrying the \"docker\" tag on Stack Overflow within a bounded window, which is a count of questions, not of people (authors are not identified), not evidence the questions share a single problem, and not evidence of severity, recurrence, or unmet need. Together, these support only that some usage/attention activity exists around the topic and that some actors posed questions consistent with an unserved need in a very general sense. No statement in the packet establishes who these actors are (readers vs. bots vs. repeat askers), whether any need recurred, whether money moved, whether anyone would pay, whether a buyer exists, whether competitors already serve this space, whether any channel is reachable, whether any solution gap or dissatisfaction exists, or any regulatory driver. All rows are non-scorable with unknown independence, so the hypothesis is bounded to what a plain reading of the counts allows.",
+    "critical_uncertainties": [
+      "Whether the Wikipedia request counts reflect human readers or automated traffic, given the operator's own heuristic classification",
+      "Whether the same actor(s) generated multiple Stack Overflow questions under the 'docker' tag",
+      "Whether the 88 tagged questions share any common underlying problem or are simply filed under a shared subject label",
+      "Whether any of these actors would pay for anything addressing their need",
+      "Whether a buyer with budget authority exists in this space",
+      "Whether any existing solution already serves the need reflected in these questions",
+      "Whether the day-over-day pageview differences reflect any sustained trend beyond the bounded window observed",
+      "Whether independence across the 7 rows exists at all, since it is marked UNKNOWN",
+      "Whether any regulatory or structural driver shapes activity around this subject",
+      "Whether a reachable distribution channel exists for engaging these actors",
+      "Whether the need, if any, recurs beyond the single bounded window observed",
+      "Whether any economic value or transaction is associated with this activity"
+    ],
+    "commercial_claims_supported": [],
+    "commercial_claims_not_supported": [
+      "That a market exists for docker-related products or services",
+      "That anyone would pay for a solution addressing docker-related questions",
+      "That a buyer or budget exists in this space",
+      "That competitors are weak or a gap exists in current offerings",
+      "That users are dissatisfied with existing docker resources",
+      "That adoption of docker is rising or falling",
+      "That the observed request or question counts indicate market size",
+      "That a distribution channel is available to reach these actors",
+      "That any regulatory or structural driver compels activity here",
+      "That the need, if any, is frequent or recurring",
+      "That money moves in connection with this activity",
+      "That the request count differences represent a continuing trend",
+      "That the Stack Overflow questions represent a shared, well-defined problem",
+      "That the Wikipedia request counts represent distinct human readers"
+    ]
+  },
+  "persistence": {
+    "gate_version": "opportunity-synthesis-persistence-gate@1.0.0",
+    "persist": false,
+    "refusal_reasons": [
+      "evidence_bound_reasoning_summary audited BOUND_EXCEEDED: 'competitors' appears in no supplied statement; prior knowledge is not available as factual support (§7); 'competitors' asserts COMPETITIVE_SUPPLY, which no eligible evidence in this packet supports. The missing commercial evidence must appear as missing evidence, not as a hedged sentence.; 'would pay' asserts WILLINGNESS_TO_PAY, which no eligible evidence in this packet supports. The missing commercial evidence must appear as missing evidence, not as a hedged sentence."
+    ],
+    "notes": [],
+    "audit_version": "opportunity-synthesis-audit@1.0.0",
+    "audit": [
+      {
+        "field": "observed_need",
+        "verdict": "SUPPORTED",
+        "findings": []
+      },
+      {
+        "field": "candidate_intervention_class",
+        "verdict": "SUPPORTED",
+        "findings": []
+      },
+      {
+        "field": "hypothesis_statement",
+        "verdict": "SUPPORTED",
+        "findings": []
+      },
+      {
+        "field": "evidence_bound_reasoning_summary",
+        "verdict": "BOUND_EXCEEDED",
+        "findings": [
+          "'competitors' appears in no supplied statement; prior knowledge is not available as factual support (§7)",
+          "'competitors' asserts COMPETITIVE_SUPPLY, which no eligible evidence in this packet supports. The missing commercial evidence must appear as missing evidence, not as a hedged sentence.",
+          "'would pay' asserts WILLINGNESS_TO_PAY, which no eligible evidence in this packet supports. The missing commercial evidence must appear as missing evidence, not as a hedged sentence."
+        ]
+      },
+      {
+        "field": "target_actor_if_supported",
+        "verdict": "NOT_FACTUAL",
+        "findings": []
+      }
+    ]
+  },
+  "ran_at": "2026-09-02T19:27:48.011631+00:00"
+}

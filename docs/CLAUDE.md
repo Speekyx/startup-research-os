@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.57
-Last amended: 2026-09-02 (Sprint 1 / Mission 1.30)
+Version: 1.58
+Last amended: 2026-09-02 (Sprint 1 / Mission 1.31)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.58 | 2026-09-02 | **The first real Opportunity synthesis ran, and my own gate refused a good answer.** `OPPORTUNITY_SYNTHESIS_OUTPUT_REJECTED`: one call, 0.0383 USD, model returned FORM_HYPOTHESIS with a careful bounded hypothesis, and the frozen gate refused it on ONE clause -- *\"No statement in the packet establishes ... whether anyone would pay, whether competitors already serve this space\"* -- which is an ENUMERATION OF ABSENCES and exactly what §6 required. **A token guard cannot see negation**, so it read a denial as an assertion (testing-strategy §67, the §23 failure in a new place). **The verdict was KEPT and the guard fixed for next time**: §12 forbids weakening a gate after seeing the answer, and this was called a defect only because it rejected an output I judged sound. **0 Opportunities persisted, every counter unchanged.** The model did the hard part well: actor UNKNOWN_NOT_SUPPORTED rather than an invented persona, intervention as a CLASS, pageviews restated as FLUCTUATION rather than growth, `commercial_claims_supported` EMPTY, and it independently said the 88 questions are *a count of questions, not of people* and *not evidence they share a single problem* -- reaching the parked boundary unprompted. Two earlier attempts were abandoned because MY output cap (1500) was smaller than the schema I asked for could serialise |
 | 1.57 | 2026-09-02 | **TARGETED_EVIDENCE_COMPLETION_SUCCESS: the first FORMABLE packet, and NOTHING was acquired to get it.** The `docker` packet is HYPOTHESIS_FORMABLE and AVAILABLE_FOR_EXTERNAL_SYNTHESIS on 7 rows across two source families with two counting dimensions. Counters 26 -> 27 for Signals, Claims, ClaimRevisions and Evidence; RawRecords and NormalizedRecords UNCHANGED at 148. **The minimum needed was zero**: Mission 1.20's `tagged=docker` retrieval provably did not truncate -- one page of size 100 returned 89, and a short page means the set was exhausted -- so a complete count already existed. **A truncated count is not merely imprecise, it is ANTI-INFORMATIVE**: capped at 30 it would report the bound and read as LARGER than a complete 88, which is why the extractor refuses instead of qualifying, and why Kubernetes was not acquired. **89 returned, 88 counted**: one question came back from a `tagged=docker` query carrying no `docker` tag, so what the query asked and what the site says are different facts and the site's answer is the one a claim can rest on. ADR-034 adds COMMUNITY_QUESTION_VOLUME: **a request is what a READER makes of a server, a question is what a PERSON publishes about being stuck**, and widening CONTENT_REQUEST_VOLUME would have cost the FAMILY its meaning. New dimension PROBLEM_OR_NEED, with RECURRENCE_OR_FREQUENCY deliberately refused because it needs the PARKED relation. A canonical subject registry joins two vocabularies by EXACT equality with a stated basis. Sufficiency rule unchanged, reliability unchanged, independence still UNKNOWN, 0 model calls |
 | 1.56 | 2026-09-02 | **OPPORTUNITY_SYNTHESIS_EGRESS_PARTIALLY_READY: three decisions recorded, and the fourth deliberately not.** `wikimedia-pageviews` **PERMITTED** on CC0 1.0, which waives database rights BY NAME and leaves no act for a licence to restrict -- and no attribution condition was written, because CC0 creates none. `world-bank` and `gdelt` **PERMITTED_WITH_CONDITIONS**. **8 of 9 packets are now egress-authorized and 0 became formable**, which is the design working: permission to send is not evidence. **CC BY 4.0 grants 'reproduce AND Share' as two acts**, so reproduction stands alone and a contracted processor is not 'the public' -- the transmission allowlist is CC-BY-4.0 ONLY, TIGHTER than acquisition's, because ODbL's Publicly Use is unanswered. **GDELT's grant runs to datasets it RELEASES**, so ngram aggregates are covered and third-party article text is a PROHIBITED representation; its citation obligation attaches to 'any use' and is live where CC BY's is not. **TED was assessed UNCLEAR and NOT recorded**: appending a review orphans the operator's HUMAN_CONFIRMATION acceptance, which no verifier may re-satisfy, so TED would have stopped being acquirable as a side effect of assessing egress -- §0 forbids exactly that. NOT_ASSESSED and UNCLEAR both refuse, so nothing operational was traded away. **A source whose approval rests on a human decision cannot be cheaply amended.** New refusal code UNRESOLVED, because an operator can close an open question and cannot argue with a decision. 0 model calls, 0.00 USD, counters unchanged, authorizable pairs 8 before and 8 after |
 | 1.55 | 2026-09-02 | **OUTCOME B: the Opportunity Engine works and the current evidence cannot support a hypothesis -- blocked TWICE, for unrelated reasons.** 26 Evidence rows inspected, **26 ELIGIBLE_CONTEXT and 0 ELIGIBLE_SCORING**, 9 packets grouped by source-native subject, **0 formable, 0 opportunities, 0 model calls, 0.00 USD**, counters unchanged. **The failure is symmetric and that is the finding**: the one packet with commercial dimensions (TED, CPV division 90) has ONE row, and the packets with six rows (Wikimedia Docker / Podman / Kubernetes) have ONE dimension. Evidence is deep where it is narrow and broad where it is shallow. **The second blocker is independent of the evidence**: `external_model_transmission` is NOT_ASSESSED for all four sources that HAVE Evidence and PERMITTED only for `stack-exchange`, which has none -- **the one source cleared to leave the deployment is the one with nothing to send**. Three signal types map to NO dimension on purpose; a GDELT term count measures what media PUBLISHED, which is producer behaviour and not audience behaviour. **TREND_OR_CHANGE cannot satisfy a diversity requirement** because every Signal here is a derivation and so every row carries change. Docker, Podman and Kubernetes stay three packets: merging them deterministically would not make it deterministic, it would make it unargued. Migration 0029 makes the hypothesis/validated distinction a CHECK constraint. No score, rank or weight exists |
@@ -304,6 +305,54 @@ positives in the scored split, which this 89-question corpus did not supply: one
 defensible SAME in 40 candidate pairs is a finding about the corpus, not about
 the classifier. **No synthetic positive may substitute** -- a constructed pair
 can test a parser and can never establish semantic accuracy against real data.
+
+### The synthesis path works, and a guard that cannot see negation does not
+
+Added in 1.58 (Mission 1.31, `mission-1.31-report.md`,
+`opportunity-synthesis-run-v1.json`). The first bounded Opportunity synthesis ran
+against the real `docker` packet through the approved route.
+**`OPPORTUNITY_SYNTHESIS_OUTPUT_REJECTED`**, and the rejection was mine.
+
+- **A forbidden term under a DENIAL is not an assertion.** The model wrote *"No
+  statement in the packet establishes ... whether anyone would pay, whether
+  competitors already serve this space"*, which is the enumeration of absences
+  §6 and §16 require. `opportunity-claim-guard@1.0.0` flagged `would pay` and
+  `competitors` and refused the output. `@1.1.0` clears a term when a denial
+  marker precedes it **in the same sentence**, and only then: scope is one
+  sentence, a marker after the term does not clear it, and the marker list is
+  narrow.
+- **When a guard rejects something you believe is correct, fix the guard and KEEP
+  the verdict.** The run keeps `audit@1.0.0`, no Opportunity was persisted, and
+  the corrected guard reaches the next mission. §12 forbids weakening a gate
+  after seeing the answer, and this was identified as a defect *because* it
+  rejected an answer that looked good -- which is exactly the reasoning that rule
+  distrusts. Doing both is what makes the fix credible.
+- **Bounding an output below what the requested schema can serialise is a defect,
+  not a discipline.** Two attempts were abandoned because the cap was 1500 and
+  the 17-field schema admits about 1800 tokens. Mission 1.27's lesson stands; the
+  arithmetic is now done against the schema. Raising a transport bound and
+  re-running is not retry-shopping, because no answer existed to reject -- and
+  both wasted attempts are counted in the artifact.
+- **The synthesis itself did the hard part.** `target_actor_if_supported` came
+  back `UNKNOWN_NOT_SUPPORTED` rather than an invented persona; the intervention
+  is a CLASS, "not a defined product or feature set"; the pageview evidence is
+  restated as day-to-day FLUCTUATION rather than growth, which is right because
+  two of the six rows are decreases; `commercial_claims_supported` is EMPTY; and
+  the model independently wrote that the question count is *a count of questions,
+  not of people* and *not evidence the questions share a single problem* --
+  arriving at the boundary Mission 1.27 parked without being told.
+- **Authorization resolved before serialization**, the transmitted payload was
+  the nine-key Mission 1.29 allowlist and nothing else, and the prompt kept its
+  regions apart with every claim statement as `UntrustedText` labelled by its
+  Evidence and Claim ids.
+- **The whole frozen gate ran and only one clause failed.** Ids all belonged to
+  the packet, every Evidence was cited with its Claim, no dimension was
+  over-claimed, all eleven mandatory unsupported dimensions were reported,
+  independence stayed UNKNOWN and reliability stayed NON_SCORABLE.
+
+**0 Opportunities, 0 scores, counters unchanged, problem-family still PARKED.**
+A persisted hypothesis would still contribute to no score: every row is
+`NON_SCORABLE` with `MISSING_RELIABILITY`, and D-03 is untouched.
 
 ### A count is complete or it is refused, and a subject may span two vocabularies
 
