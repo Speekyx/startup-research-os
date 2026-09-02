@@ -73,13 +73,32 @@ magnitude above this experiment.
 
 ---
 
-## HUMAN EVALUATION
+## REFERENCE EVALUATION
+
+> **Corrected in Mission 1.25 §0, and the correction matters more than anything
+> else on this page.** This section was headed HUMAN EVALUATION and described a
+> named human reviewer. **The 40 labels were supplied `AI_ASSISTED_PROVISIONAL`
+> by GPT-5.6 Sol**, not by an independent human domain expert. Every label,
+> prediction, cost and outcome below is unchanged; what was wrong was the
+> description. `human_ground_truth` is **NOT_ESTABLISHED** and stays so until a
+> person actually reviews these pairs.
+>
+> What remains true of the reference set: it was written **blind**, before any
+> model call, and was never sent to the classifier. That makes it a usable
+> provisional reference. It does not make it truth, and an evaluation scored
+> against it has measured **agreement between two assistants**.
+>
+> The two disagreements below are therefore **not human inter-rater
+> disagreement**. They are disagreement between the rubric's stated expectation
+> and an AI-assisted provisional label.
 
 | | |
 |---|---|
-| operator batch | 40 pairs |
+| batch | 40 pairs |
+| reference origin | **`AI_ASSISTED_PROVISIONAL`** (GPT-5.6 Sol) |
+| human ground truth | **NOT_ESTABLISHED** |
 | rubric version | `problem-equivalence-rubric@1.0.0` |
-| labels | 36 DIFFERENT, 3 UNCERTAIN, **1 SAME** |
+| label distribution | 36 DIFFERENT, 3 UNCERTAIN, **1 SAME** |
 | development / holdout | 23 / 17 |
 | positives in development | 1 |
 | **positives in holdout** | **0** |
@@ -164,7 +183,7 @@ constant-`DIFFERENT` classifier passes V1 and is refused by V2.
 **Not performed.** Predeclared candidate count: none, because the phase was not
 entered. Model calls: 0. SAME / DIFFERENT / ABSTAIN: not applicable. Cost: 0.
 
-The evaluation formally passed, and §22 B's condition — *human labelled data
+The evaluation formally passed, and §22 B's condition — *labelled reference data
 insufficient, especially no positive examples* — holds in substance for the split
 that decides. Running production would have spent money to emit predictions whose
 SAME arm has no measured precision behind it.
@@ -268,8 +287,16 @@ before anyone knew it existed. That is a finding about public Q&A rather than
 about the classifier: people ask about their own configuration, and two people's
 configurations are rarely the same problem at the granularity a fix would share.
 
-**SROS is NOT ready for a cross-source convergence mission.** Convergence
-combines evidence, and this mission produced none. The honest next question is
+**This mission produced no recurring-problem evidence, and that is a narrower
+statement than the sentence it replaces** (corrected in Mission 1.25 §1). SROS
+holds 26 canonical Evidence rows from other source families, so the blocker is
+not an absence of Evidence in general. The precise gap is **no validated
+recurring-problem semantic evidence from Stack Exchange** — and even that is
+bounded to EXACT actionable problem equivalence over one candidate set. **Nothing
+here establishes that Stack Exchange cannot contribute recurring problem-FAMILY
+evidence**, which is a looser relation this mission never evaluated.
+
+The honest next question is
 not *how do we make the classifier say SAME more often* — the direction V1 exists
 to resist — but **whether a corpus exists in which repeated problems are common
 enough to be worth detecting**, which is an acquisition question with its own

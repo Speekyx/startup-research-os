@@ -1,5 +1,5 @@
 {
-  "$comment": "Mission 1.24 §10. The human reference set. Supplied by the operator BLIND: no model had seen any pair and no prediction existed when these were written, and the labels are never sent to the model. No Stack Overflow author identity appears anywhere -- none was ever acquired. `reviewer` names the person accountable for the judgement, which is a different thing and is required.\n\nTHE HOLDOUT CONTAINS NO SAME LABEL. 16 DIFFERENT and 1 UNCERTAIN; the single SAME in the reference set fell in DEVELOPMENT. That is a fact about the corpus rather than about the reviewer, and it bounds hard what a holdout result can demonstrate: a classifier answering DIFFERENT to every pair would record zero false SAME there. Recorded here so no reading of the evaluation can miss it.",
+  "$comment": "Mission 1.24 §10, CORRECTED IN MISSION 1.25 §0. The reference set the evaluation was scored against.\n\nTHESE ARE NOT HUMAN LABELS, AND THIS FILE ONCE SAID THEY WERE. They were supplied AI_ASSISTED_PROVISIONAL by GPT-5.6 Sol, not by an independent human domain expert. `reviewer` originally read `thibchm`, which attributed a judgement to a person who did not make it. The decisions themselves are unchanged -- every pair keeps the label it was given, and Mission 1.24's predictions, costs and outcome are untouched -- because the error was in how the set was DESCRIBED, never in what it contains.\n\nWHAT IS STILL TRUE OF THEM. They were written BLIND: no model had seen any pair and no prediction existed when they were produced, and they were never sent to the classifier. That makes them a usable provisional reference and an independent one in the sense that matters for scoring. It does not make them ground truth.\n\nWHAT MUST NOT BE SAID ABOUT THEM. Not human ground truth, not expert ground truth, not a human-reviewed reference, and the two Mission 1.24 disagreements are NOT human inter-rater disagreement -- they are disagreement between the rubric's stated expectation and an AI-assisted provisional label. `human_ground_truth` is NOT_ESTABLISHED and stays so until a person actually reviews these pairs.\n\nMISSION 1.24 REMAINS EVALUATION_INSUFFICIENT either way, and for a reason this correction does not touch: the holdout contained no SAME label at all, so nothing could have been measured about a SAME prediction whoever wrote the references.\n\nNo Stack Overflow author identity appears anywhere -- none was ever acquired.",
   "rubric_version": "problem-equivalence-rubric@1.0.0",
   "candidate_generator_version": "docker-lexical-candidates@1.0.0",
   "batch_selection_version": "review-batch-selection@1.0.0",
@@ -30,441 +30,484 @@
       "pair_id": "78086323::78089075",
       "a_question_id": "78086323",
       "b_question_id": "78089075",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "HOLDOUT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78086323::78097216",
       "a_question_id": "78086323",
       "b_question_id": "78097216",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "DEVELOPMENT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78086387::78087887",
       "a_question_id": "78086387",
       "b_question_id": "78087887",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "DEVELOPMENT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78086387::78097071",
       "a_question_id": "78086387",
       "b_question_id": "78097071",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "UNCERTAIN",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "HOLDOUT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78086542::78099519",
       "a_question_id": "78086542",
       "b_question_id": "78099519",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "DEVELOPMENT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78086542::78099680",
       "a_question_id": "78086542",
       "b_question_id": "78099680",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "DEVELOPMENT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78086639::78092806",
       "a_question_id": "78086639",
       "b_question_id": "78092806",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "DEVELOPMENT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78088430::78090396",
       "a_question_id": "78088430",
       "b_question_id": "78090396",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "UNCERTAIN",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "DEVELOPMENT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78088481::78089563",
       "a_question_id": "78088481",
       "b_question_id": "78089563",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "HOLDOUT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78088481::78096903",
       "a_question_id": "78088481",
       "b_question_id": "78096903",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "HOLDOUT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78088692::78098380",
       "a_question_id": "78088692",
       "b_question_id": "78098380",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "HOLDOUT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78089113::78090158",
       "a_question_id": "78089113",
       "b_question_id": "78090158",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "HOLDOUT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78089113::78092816",
       "a_question_id": "78089113",
       "b_question_id": "78092816",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "DEVELOPMENT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78089113::78095654",
       "a_question_id": "78089113",
       "b_question_id": "78095654",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "HOLDOUT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78089113::78102512",
       "a_question_id": "78089113",
       "b_question_id": "78102512",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "DEVELOPMENT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78089171::78098380",
       "a_question_id": "78089171",
       "b_question_id": "78098380",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "SAME",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "DEVELOPMENT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78089563::78096903",
       "a_question_id": "78089563",
       "b_question_id": "78096903",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "DEVELOPMENT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78090158::78093369",
       "a_question_id": "78090158",
       "b_question_id": "78093369",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "HOLDOUT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78090939::78097579",
       "a_question_id": "78090939",
       "b_question_id": "78097579",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "HOLDOUT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78091032::78092816",
       "a_question_id": "78091032",
       "b_question_id": "78092816",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "DEVELOPMENT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78091032::78096903",
       "a_question_id": "78091032",
       "b_question_id": "78096903",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "DEVELOPMENT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78091032::78102512",
       "a_question_id": "78091032",
       "b_question_id": "78102512",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "HOLDOUT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78091354::78092816",
       "a_question_id": "78091354",
       "b_question_id": "78092816",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "HOLDOUT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78091354::78098380",
       "a_question_id": "78091354",
       "b_question_id": "78098380",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "DEVELOPMENT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78091723::78097184",
       "a_question_id": "78091723",
       "b_question_id": "78097184",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "HOLDOUT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78092648::78102252",
       "a_question_id": "78092648",
       "b_question_id": "78102252",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "DEVELOPMENT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78092816::78095639",
       "a_question_id": "78092816",
       "b_question_id": "78095639",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "DEVELOPMENT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78092816::78098380",
       "a_question_id": "78092816",
       "b_question_id": "78098380",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "DEVELOPMENT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78092816::78102512",
       "a_question_id": "78092816",
       "b_question_id": "78102512",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "DEVELOPMENT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78093369::78105004",
       "a_question_id": "78093369",
       "b_question_id": "78105004",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "DEVELOPMENT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78095654::78098380",
       "a_question_id": "78095654",
       "b_question_id": "78098380",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "HOLDOUT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78095654::78102512",
       "a_question_id": "78095654",
       "b_question_id": "78102512",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "DEVELOPMENT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78095654::78103425",
       "a_question_id": "78095654",
       "b_question_id": "78103425",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "DEVELOPMENT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78096175::78097071",
       "a_question_id": "78096175",
       "b_question_id": "78097071",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "UNCERTAIN",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "DEVELOPMENT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78096355::78097579",
       "a_question_id": "78096355",
       "b_question_id": "78097579",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "DEVELOPMENT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78096355::78103879",
       "a_question_id": "78096355",
       "b_question_id": "78103879",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "HOLDOUT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78097216::78103879",
       "a_question_id": "78097216",
       "b_question_id": "78103879",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "HOLDOUT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78097579::78103879",
       "a_question_id": "78097579",
       "b_question_id": "78103879",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "HOLDOUT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78098380::78102512",
       "a_question_id": "78098380",
       "b_question_id": "78102512",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "HOLDOUT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     },
     {
       "pair_id": "78099519::78099680",
       "a_question_id": "78099519",
       "b_question_id": "78099680",
-      "reviewer": "thibchm",
+      "reviewer": "GPT-5.6 Sol",
       "decision": "DIFFERENT",
       "labelled_at": "2026-09-02T00:00:00+00:00",
       "split": "DEVELOPMENT",
       "rubric_version": "problem-equivalence-rubric@1.0.0",
-      "rationale": ""
+      "rationale": "",
+      "origin": "AI_ASSISTED_PROVISIONAL"
     }
-  ]
+  ],
+  "reference_label_origin": "AI_ASSISTED_PROVISIONAL",
+  "human_ground_truth": "NOT_ESTABLISHED",
+  "superseded_filename": "problem-equivalence-human-labels-v1.json"
 }

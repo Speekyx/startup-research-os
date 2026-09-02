@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.47
+Version: 1.48
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-02 (Sprint 1 / Mission 1.24)
+Last amended: 2026-09-02 (Sprint 1 / Mission 1.25)
 
 ---
 
@@ -13,6 +13,42 @@ Last amended: 2026-09-02 (Sprint 1 / Mission 1.24)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.48 — 2026-09-02 (Sprint 1 / Mission 1.25 §0-§1 corrections)
+
+Authorized by the Mission 1.25 brief §0-§1. Documentation corrections made before
+the mission proper begins. **No evaluation history was rewritten**: every label,
+prediction, cost and outcome from Mission 1.24 is unchanged.
+
+**THE REFERENCE LABELS WERE NOT HUMAN, AND THE REPOSITORY SAID THEY WERE.**
+Mission 1.24's 40 labels were supplied `AI_ASSISTED_PROVISIONAL` by GPT-5.6 Sol,
+not by an independent human domain expert. The claim was embedded in a filename
+(`problem-equivalence-human-labels-v1.json`), a report section heading (HUMAN
+EVALUATION), two type names (`HumanLabel`, `HumanDecision`) and a `reviewer`
+field naming a person who did not make the judgements.
+
+`ReferenceOrigin` is now required on every label and never defaulted, and
+`human_ground_truth_established` is derived from it -- true only when EVERY label
+came from a human, because a mixed set reported as `True` would be read as
+unmixed. The origin is recorded on the RESULT as well as on the labels, since a
+result is what gets quoted. **`human_ground_truth = NOT_ESTABLISHED`** for that
+set, and the two Mission 1.24 disagreements are **not** human inter-rater
+disagreement.
+
+**What the reference set still is**: written blind, before any model call, never
+sent to the classifier. That makes it valid for scoring, and what it measured is
+**agreement between two assistants** rather than accuracy. Mission 1.24 remains
+EVALUATION_INSUFFICIENT for the reason this correction does not touch -- the
+holdout held no SAME label at all.
+
+**AND SROS DOES HAVE EVIDENCE.** Mission 1.24 concluded SROS was not ready for
+cross-source convergence *because this mission produced no evidence*, which does
+not follow: **26 canonical Evidence rows** exist from other source families. The
+precise gap is **no validated recurring-problem semantic evidence from Stack
+Exchange**, bounded twice over -- to EXACT actionable problem equivalence, and to
+one candidate set. Nothing there establishes that Stack Exchange cannot
+contribute recurring problem-FAMILY evidence, a looser relation nobody has
+evaluated
 
 ## 1.47 — 2026-09-02 (Sprint 1 / Mission 1.24)
 

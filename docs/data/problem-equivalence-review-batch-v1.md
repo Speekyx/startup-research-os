@@ -1,4 +1,4 @@
-# Problem-equivalence review batch V1 — blind human labels
+# Problem-equivalence review batch V1 — blind reference labels
 
 **Mission 1.24 §8. Generated, never hand-picked.** Regenerate with
 `python infrastructure/scripts/render_equivalence_batch.py`.
@@ -9,9 +9,15 @@
 - corpus: 89 Docker `community_question` observations (`mission-1.20-normalize`)
 - pairs: **40** — 23 development, 17 holdout
 
-> **No model has seen any of these pairs and no prediction exists.** Nothing in
-> this file was produced by an LLM. The labels you write here are the reference
-> set; the classifier is scored against them, never the other way round.
+> **No model has seen any of these pairs and no prediction exists.** The labels
+> written here are the reference set, and the classifier is scored against them,
+> never the other way round.
+
+> **Record who or what produced them.** A reference label is not automatically
+> human, and Mission 1.24 learned this the expensive way: its 40 labels were
+> AI-assisted and provisional, and the repository described them as human ground
+> truth until Mission 1.25 corrected it. `ReferenceOrigin` is required on every
+> label, and `human_ground_truth` stays NOT_ESTABLISHED until a person reviews.
 
 ## How to answer
 

@@ -1,10 +1,17 @@
-"""Human labels, the development/holdout split, and the predeclared criterion.
+"""Reference labels, the development/holdout split, and the predeclared criterion.
 
 Mission 1.24 §8 to §12.
 
-**Human labels are the reference and the model never creates its own.** A model
-scored against its own output measures self-consistency, and self-consistency is
-what a confidently wrong classifier has the most of.
+**The reference labels are not the model's own output, and the model never
+creates them.** A model scored against its own predictions measures
+self-consistency, which is what a confidently wrong classifier has the most of.
+
+**But a reference label is not automatically human, and this contract now says
+which it is.** Mission 1.24's 40 labels were supplied `AI_ASSISTED_PROVISIONAL`
+by a different assistant, not by an independent human domain expert. Describing
+them as human ground truth would have been the most misleading sentence in this
+repository, so `ReferenceOrigin` is required on every label and
+`human_ground_truth_established` is derived from it rather than assumed.
 
 **The split is computed from the pair id, before any label or prediction
 exists.** A split chosen later -- however honestly -- is a split that could have
@@ -36,8 +43,9 @@ __all__ = [
     "HOLDOUT_FRACTION",
     "HOLDOUT_EXCLUSIONS",
     "Split",
-    "HumanDecision",
-    "HumanLabel",
+    "ReferenceDecision",
+    "ReferenceLabel",
+    "ReferenceOrigin",
     "LabelSet",
     "AcceptanceCriterion",
     "V1_ACCEPTANCE",
@@ -82,8 +90,34 @@ class Split(StrEnum):
     HOLDOUT = "HOLDOUT"
 
 
-class HumanDecision(StrEnum):
-    """What an operator may answer.
+class ReferenceOrigin(StrEnum):
+    """Where a reference label came from. Required, never defaulted.
+
+    The distinction that matters is whether a HUMAN judged the pair. An
+    AI-assisted label is a usable provisional reference -- blind to the model's
+    predictions, written before any call, far cheaper to obtain -- and it is not
+    ground truth. An evaluation scored against one has measured agreement
+    between two assistants, which is worth knowing and is a different claim.
+    """
+
+    #: A person with domain knowledge judged the pair.
+    HUMAN_EXPERT = "HUMAN_EXPERT"
+
+    #: A person without domain knowledge judged the pair. Enough for a relation
+    #: that does not require expertise, and not for one that does.
+    HUMAN_NON_EXPERT = "HUMAN_NON_EXPERT"
+
+    #: Produced with AI assistance and not confirmed by a person. Mission 1.24's
+    #: reference set is this, and the repository must not describe it otherwise.
+    AI_ASSISTED_PROVISIONAL = "AI_ASSISTED_PROVISIONAL"
+
+    @property
+    def establishes_human_ground_truth(self) -> bool:
+        return self in (ReferenceOrigin.HUMAN_EXPERT, ReferenceOrigin.HUMAN_NON_EXPERT)
+
+
+class ReferenceDecision(StrEnum):
+    """What a reviewer may answer.
 
     `UNCERTAIN` is the human counterpart of the classifier's ABSTAIN and is not
     a missing label: a reviewer who cannot decide from the published text has
@@ -97,9 +131,9 @@ class HumanDecision(StrEnum):
 
     def as_model_decision(self) -> EquivalenceDecision:
         return {
-            HumanDecision.SAME: EquivalenceDecision.SAME_PROBLEM,
-            HumanDecision.DIFFERENT: EquivalenceDecision.DIFFERENT_PROBLEM,
-            HumanDecision.UNCERTAIN: EquivalenceDecision.ABSTAIN,
+            ReferenceDecision.SAME: EquivalenceDecision.SAME_PROBLEM,
+            ReferenceDecision.DIFFERENT: EquivalenceDecision.DIFFERENT_PROBLEM,
+            ReferenceDecision.UNCERTAIN: EquivalenceDecision.ABSTAIN,
         }[self]
 
 
@@ -120,20 +154,22 @@ def assign_split(
 
 
 @dataclass(frozen=True)
-class HumanLabel:
-    """One operator judgement, with the provenance §10 requires.
+class ReferenceLabel:
+    """One reference judgement, with the provenance §10 requires.
 
     No Stack Overflow author identity appears, because none was ever acquired.
-    `reviewer` is the person accountable for the judgement, which is a different
+    `reviewer` names whoever or whatever is accountable, which is a different
     thing and is required: an unattributed reference label is one nobody can
-    question later.
+    question later. `origin` says what KIND of reviewer that was, and is the
+    field that stops a provisional label being read as ground truth.
     """
 
     pair_id: str
     a_question_id: str
     b_question_id: str
     reviewer: str
-    decision: HumanDecision
+    origin: ReferenceOrigin
+    decision: ReferenceDecision
     labelled_at: str
     split: Split
     rubric_version: str = RUBRIC_VERSION
@@ -167,17 +203,33 @@ class HumanLabel:
 
 @dataclass(frozen=True)
 class LabelSet:
-    labels: tuple[HumanLabel, ...] = ()
+    labels: tuple[ReferenceLabel, ...] = ()
 
-    def for_split(self, split: Split) -> tuple[HumanLabel, ...]:
+    def for_split(self, split: Split) -> tuple[ReferenceLabel, ...]:
         return tuple(label for label in self.labels if label.split is split)
 
     def distribution(self) -> dict[str, int]:
         return dict(Counter(label.decision.value for label in self.labels))
 
     @property
-    def positives(self) -> tuple[HumanLabel, ...]:
-        return tuple(label for label in self.labels if label.decision is HumanDecision.SAME)
+    def origins(self) -> frozenset[ReferenceOrigin]:
+        return frozenset(label.origin for label in self.labels)
+
+    @property
+    def human_ground_truth_established(self) -> bool:
+        """True only if EVERY label came from a human.
+
+        All, not any. A set mixing human and AI-assisted labels is not human
+        ground truth with an asterisk; it is a mixed set, and a reader told
+        `True` would reasonably assume otherwise.
+        """
+        return bool(self.labels) and all(
+            origin.establishes_human_ground_truth for origin in self.origins
+        )
+
+    @property
+    def positives(self) -> tuple[ReferenceLabel, ...]:
+        return tuple(label for label in self.labels if label.decision is ReferenceDecision.SAME)
 
 
 @dataclass(frozen=True)
@@ -266,6 +318,12 @@ class EvaluationResult:
     outcome: str = ""
     notes: tuple[str, ...] = ()
 
+    # Recorded on the RESULT, not merely on the labels, because the result is
+    # what gets quoted. An outcome read without its reference origin is an
+    # outcome read as ground truth.
+    reference_origins: tuple[str, ...] = ()
+    human_ground_truth_established: bool = False
+
     @property
     def passed(self) -> bool:
         return self.outcome == "MODEL_EVALUATION_PASSED"
@@ -283,6 +341,8 @@ class EvaluationResult:
             "agreements": self.agreements,
             "outcome": self.outcome,
             "notes": list(self.notes),
+            "reference_origins": list(self.reference_origins),
+            "human_ground_truth_established": self.human_ground_truth_established,
         }
 
 
@@ -313,12 +373,12 @@ def evaluate(
             abstentions += 1
         if (
             predicted is EquivalenceDecision.SAME_PROBLEM
-            and label.decision is not HumanDecision.SAME
+            and label.decision is not ReferenceDecision.SAME
         ):
             false_same.append(label.pair_id)
         if (
             predicted is EquivalenceDecision.DIFFERENT_PROBLEM
-            and label.decision is HumanDecision.SAME
+            and label.decision is ReferenceDecision.SAME
         ):
             false_different.append(label.pair_id)
         if predicted is label.decision.as_model_decision():
@@ -331,7 +391,7 @@ def evaluate(
         positives = len(labels.positives)
     else:
         positives = sum(
-            1 for label in labels.for_split(split) if label.decision is HumanDecision.SAME
+            1 for label in labels.for_split(split) if label.decision is ReferenceDecision.SAME
         )
     notes: list[str] = []
     if len(scored) < criterion.min_labelled_holdout:
@@ -360,8 +420,17 @@ def evaluate(
             "sample and is NOT a calibration: no probability may be attached to any decision"
         )
 
+    if not labels.human_ground_truth_established:
+        notes.append(
+            "HUMAN GROUND TRUTH IS NOT ESTABLISHED for this reference set ("
+            + ", ".join(sorted(o.value for o in labels.origins))
+            + "). The outcome above is agreement against that reference, never against truth"
+        )
+
     return EvaluationResult(
         criterion=criterion,
+        reference_origins=tuple(sorted(o.value for o in labels.origins)),
+        human_ground_truth_established=labels.human_ground_truth_established,
         split=split,
         labelled=len(scored),
         positives=positives,

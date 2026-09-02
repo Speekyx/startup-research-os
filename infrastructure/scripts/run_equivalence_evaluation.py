@@ -22,7 +22,7 @@ import sys
 import time
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-LABELS = ROOT / "docs" / "data" / "problem-equivalence-human-labels-v1.json"
+LABELS = ROOT / "docs" / "data" / "problem-equivalence-reference-labels-v1.json"
 BATCH = ROOT / "docs" / "data" / "problem-equivalence-review-batch-v1.json"
 RESULTS_DIR = ROOT / "docs" / "data"
 CATALOG = ROOT / "docs" / "data" / "source-catalog-v1.json"
@@ -112,8 +112,8 @@ def main(argv: list[str] | None = None) -> int:
         CANDIDATE_GENERATOR_VERSION,
         PROMPT_VERSION,
         RUBRIC_VERSION,
-        HumanDecision,
         QuestionForPrompt,
+        ReferenceDecision,
         Split,
         classify_pair,
     )
@@ -141,7 +141,7 @@ def main(argv: list[str] | None = None) -> int:
 
     gateway = _gateway()
     print(f"{split.value}: {len(targets)} labelled pairs, prompt {PROMPT_VERSION}")
-    print("the human labels are NOT sent to the model; only the two questions are\n")
+    print("the reference labels are NOT sent to the model; only the two questions are\n")
 
     results = []
     started = time.monotonic()
@@ -171,7 +171,7 @@ def main(argv: list[str] | None = None) -> int:
         results.append(classification.to_json())
         # Compared through the canonical mapping, not by a prefix: UNCERTAIN maps
         # to ABSTAIN, and a string comparison flags that agreement as a conflict.
-        expected = HumanDecision(row["decision"]).as_model_decision()
+        expected = ReferenceDecision(row["decision"]).as_model_decision()
         agree = "  " if classification.decision is expected else "!!"
         print(
             f"{index:3d}/{len(targets)}  {agree} {row['pair_id']:22s} "
