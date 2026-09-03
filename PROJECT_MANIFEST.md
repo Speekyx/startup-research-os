@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.50
+Version: 1.52
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-02 (Sprint 1 / Mission 1.25)
+Last amended: 2026-09-02 (Sprint 1 / Mission 1.26)
 
 ---
 
@@ -13,6 +13,98 @@ Last amended: 2026-09-02 (Sprint 1 / Mission 1.25)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.52 — 2026-09-02 (Sprint 1 / Mission 1.26 close)
+
+The reference batch was labelled. **Outcome: `REFERENCE_SET_INSUFFICIENT`**, with
+**zero model calls** and every canonical counter unchanged.
+
+**THE LABELS ARE NOT HUMAN.** All 40 are `AI_ASSISTED_PROVISIONAL`, reviewer
+GPT-5.6 Sol. The operator chose to proceed with them rather than spend another
+mission hand-labelling -- recorded as a document-level `operator_decision`,
+because the decision concerns a whole file and a per-label flag would need a
+migration for nothing and would eventually be read as per-label approval. They
+must never be described as HUMAN_OPERATOR, human ground truth, expert labels or
+independently human-reviewed labels, and **a loader asked for HUMAN_OPERATOR
+refuses them**.
+
+**TWO RESULTS, REPORTED APART.** Composition: development holds **2**
+`SAME_FAMILY` against a preregistered 4 and FAILS; holdout holds 4 and PASSES.
+Epistemic: the human reference requirement is **NOT_ESTABLISHED**, independent of
+the arithmetic. They fail for unrelated reasons and a single verdict would let
+one hide the other.
+
+**NOTHING WAS MOVED.** No pair changed split, no label was revised, no threshold
+lowered, no re-sampling with different quotas. The whole value of a preregistered
+gate is that it is allowed to fail, and this is the second consecutive mission
+where holding a rule cost the project its result.
+
+**WHAT THE FAILURE IS NOT.** Not evidence that the relation is invalid, that a V2
+cannot work, that Stack Exchange cannot contribute recurring-problem evidence, or
+that families are rare. The sample is enriched and estimates no prevalence. It
+means only that under the frozen sampling and these provisional labels, the
+development split lacks positives for the preregistered requirement.
+
+**MISSION 1.25's HUMAN HOLDOUT IS NOT MERGED IN** to satisfy the threshold. Its
+10 pairs, 2 `HUMAN_OPERATOR` positives, 0 true SAME predictions and
+`MODEL_EVALUATION_FAILED` remain the strongest evidence about V1, separately
+queryable.
+
+**What the mission did deliver** is the infrastructure: blind batch creation,
+deterministic stratified sampling, a split frozen before labels, structural
+holdout isolation across separate files, and provenance that demonstrably
+refuses to hand human-labelled data to a caller who has none. The provisional set
+is usable for EXPLORATORY development; **production problem-family inference
+remains NOT_AUTHORISED**, and a backlog item blocks the word *validated* until
+genuinely human labels exist
+
+## 1.51 — 2026-09-02 (Sprint 1 / Mission 1.26)
+
+Authorized by the Mission 1.26 brief §0-§14. **A DATASET mission: no model call,
+no classifier, no prompt, no evaluation.** Every canonical research counter is
+unchanged and no Signal, Claim, Evidence or Opportunity was created.
+
+**MISSION 1.25 IS PRESERVED EXACTLY.** `MODEL_EVALUATION_FAILED` stands in both
+its scorings and is not reinterpreted. Its development split remains
+`AI_ASSISTED_PROVISIONAL`, its human holdout stays in its own file, and its full
+20-pair set stays MIXED provenance. Nothing in this mission reads, merges or
+supersedes it: it remains separately queryable as `problem-family-evaluation-v1`.
+
+**WHY A DATASET MISSION AT ALL.** Ten human-scored pairs holding two positives
+were enough to reject a trivial classifier and are not enough to build or
+credibly evaluate a successor. And when the operator reviewed those ten, five
+labels changed and on three the human moved TOWARD the classifier -- so the
+earlier reading that V1 was far too conservative was half an artifact of an
+AI-assisted reference. **A conclusion drawn about a classifier from a provisional
+reference is partly a conclusion about the reference.**
+
+**40 NEW PAIRS, NONE SHARED WITH MISSION 1.25**, drawn from the 711 available
+under the frozen eligibility rule by deterministic stratified sampling across
+five feature bands, split **24 development / 16 holdout** before any label
+existed. `problem-family-human-reference-v1`,
+`problem-family-human-reference-sampling@1.0.0`.
+
+**NO MODEL OUTPUT ENTERED THE SELECTION.** Not a prediction, a confidence, an
+explanation, or the fact that a pair was ever predicted. A dataset selected by an
+earlier classifier's errors can only ever measure that classifier, so the sampler
+imports no gateway and no run artifact -- asserted by parsing its code with
+docstrings excluded, since the module says *not a prediction* precisely because
+it reads none.
+
+**THE SAMPLE IS ENRICHED AND SAYS NOTHING ABOUT PREVALENCE.** Bands are drawn at
+deliberately unequal rates: the low-similarity band holds 275 available pairs and
+contributes 8, the wrapper band holds 2 and contributes both. The warning rides
+on the dataset object.
+
+**HOLDOUT ISOLATION IS STRUCTURAL.** The splits' labels will live in separate
+files, and the development loader cannot reach a holdout label because it never
+opens that file. Provenance is mandatory on load with no default, and
+`HUMAN_OPERATOR` establishes human ground truth without being called expert
+review -- the system does not establish that fact.
+
+**Awaiting the operator's 40 labels.** The composition gates -- 12 non-UNCERTAIN,
+4 SAME and 4 DIFFERENT in the holdout; 16, 4 and 4 in development -- are declared
+now and are dataset gates, never classifier success criteria
 
 ## 1.50 — 2026-09-02 (Sprint 1 / Mission 1.25, human holdout re-scoring)
 
@@ -1617,6 +1709,7 @@ Additionally authoritative:
 - docs/data/model-inference-execution-governance-v1.md (added in 1.46)
 - docs/data/problem-equivalence-evaluation-v1.md (added in 1.47)
 - docs/data/problem-family-rubric-v1.md (added in 1.49)
+- docs/data/problem-family-human-reference-v1.md (added in 1.51)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

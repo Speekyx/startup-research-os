@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.51
-Last amended: 2026-09-02 (Sprint 1 / Mission 1.25)
+Version: 1.53
+Last amended: 2026-09-02 (Sprint 1 / Mission 1.26)
 
 ## Boot Sequence
 
@@ -49,6 +49,8 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.53 | 2026-09-02 | **REFERENCE_SET_INSUFFICIENT, and the gate was allowed to fail.** The 40 labels came back **AI_ASSISTED_PROVISIONAL**, not human -- the operator chose to proceed with them rather than spend another labelling mission, which is a real decision recorded at document level and changes nothing about what they are. Development holds **2** SAME_FAMILY against a preregistered 4 (holdout passes at 4). **Two results reported apart**: the composition gate fails, and the human reference requirement is separately NOT_ESTABLISHED -- one verdict would let either hide the other. Nothing moved: no pair changed split, no label revised, no threshold lowered, no re-sampling. **A loader asked for HUMAN_OPERATOR refuses these files**, so the distinction is structural rather than prose. Mission 1.25's genuine human holdout is NOT merged in to help the threshold. 0 model calls, counters unchanged; production stays NOT_AUTHORISED |
+| 1.52 | 2026-09-02 | **A dataset mission, and the reason it came before a V2 classifier.** Mission 1.25's ten human-scored pairs with two positives rejected a trivial classifier and cannot build one; and when the operator reviewed them, five labels changed with three moving TOWARD the model, so *V1 is far too conservative* was half an artifact of an AI-assisted reference. **40 new pairs, none shared with 1.25**, deterministic stratified sampling over five feature bands, **24/16 split frozen before any label**. **No model output entered the selection** -- a dataset chosen by a classifier's errors can only ever measure that classifier -- asserted by parsing the sampler's code with docstrings excluded, because it says *not a prediction* precisely because it reads none. **Strata are sampling mechanisms, never expected labels.** The sample is ENRICHED and may never state a prevalence. **Holdout isolation is structural**: separate files, so the development loader cannot reach a holdout label. `DATASET_PREPARATION_COMPLETE` is not a model evaluation, and 1.25's MODEL_EVALUATION_FAILED is untouched |
 | 1.51 | 2026-09-02 | **The human operator reviewed the frozen holdout, and the criterion still fails -- but the reference was half the story.** Re-scored the SAME frozen predictions against HUMAN_OPERATOR labels: no model call, nothing frozen touched, the provisional scoring preserved as history. Every precondition now met against human ground truth -- 10 labelled, 2 human SAME, 0 false SAME -- and **0 true SAME**, so `MODEL_EVALUATION_FAILED` stands. **Zero false positives is still not a pass**, being what a constant-DIFFERENT classifier scores. **Five of ten labels changed and on three the human moved TOWARD the model**: the provisional reference had called two pairs a family the operator does not, and one decidable that the operator finds undecidable. Missed positives fall 4 -> 2. So *the model is far too conservative* was half an artifact of an AI-assisted reference -- a finding that generalises. **The full 20-pair set is MIXED provenance** and must never be reported as fully human |
 | 1.50 | 2026-09-02 | **MODEL_EVALUATION_FAILED on a frozen criterion, and it is worth more than Mission 1.24's pass.** A SECOND relation -- `SAME_PROBLEM_FAMILY`, do two observations express substantially the same blocked goal -- **not a looser version of the exact one**, which stays intact and unweakened. The relation changed rather than a threshold: *would the fix transfer* needs the fix, and loosening it would have kept that requirement while answering more permissively. **The criterion was built so a constant classifier cannot pass** -- `min_true_same` demands a demonstrated positive in the scored split -- **and then it caught the real run**: 4 SAME_FAMILY references in the holdout, **zero found**, one SAME in twenty overall and that one the rubric's own quoted example. **Every disagreement is one-directional**, so either the rubric is too strict or the reference too generous, and this cannot separate them -- the rubric and its reference disagree about the rubric's own borderline example. **The rubric was NOT widened after seeing the results**; 1.24 kept a rule in the flattering direction and this keeps one in the costly one. Reference is AI_ASSISTED_PROVISIONAL, so what was measured is agreement between two assistants. 20 calls, 0.38 USD, no Signal, no Claim, no Evidence |
 | 1.49 | 2026-09-02 | **Two corrections before Mission 1.25 proper, and the first is the most misleading thing this repository had said.** Mission 1.24's 40 reference labels were supplied `AI_ASSISTED_PROVISIONAL` by a different assistant, **not by a human**, and the claim was embedded in a filename, a section heading, two type names and a `reviewer` field naming a person who did not judge. `ReferenceOrigin` is now required and never defaulted; `human_ground_truth_established` is true only when EVERY label is human; the origin rides on the RESULT because a result is what gets quoted. **No history rewritten** -- every label, prediction and cost is unchanged, and 1.24 stays EVALUATION_INSUFFICIENT for the reason the correction does not touch. Second: **SROS does have Evidence** -- 26 rows from other source families -- so the gap is *no validated recurring-problem semantic evidence from Stack Exchange*, bounded to EXACT equivalence over one candidate set, and nothing establishes that problem-FAMILY evidence is unavailable |
@@ -298,6 +300,56 @@ positives in the scored split, which this 89-question corpus did not supply: one
 defensible SAME in 40 candidate pairs is a finding about the corpus, not about
 the classifier. **No synthetic positive may substitute** -- a constructed pair
 can test a parser and can never establish semantic accuracy against real data.
+
+### A reference set is built before the classifier that will be scored on it
+
+Added in 1.52 (Mission 1.26, `problem-family-human-reference-v1.md`). A DATASET
+mission with no model call, no classifier and no evaluation.
+
+**Ten human-scored pairs with two positives can reject a trivial classifier and
+cannot build one.** Mission 1.25's did reject one. Developing against two
+positives is fitting to two examples, and evaluating against two is measuring
+nothing with an interval.
+
+- **A dataset selected by a classifier's errors can only ever measure that
+  classifier.** The obvious way to build a second reference set is to show the
+  reviewer the pairs V1 got wrong; the result can never score anything again.
+  So the sampler reads frozen candidate features and NOTHING from any run --
+  enforced by parsing its code with docstrings excluded, because the module says
+  *not a prediction, not a confidence* precisely because it reads neither.
+- **Strata are sampling mechanisms, never expected labels.** They name what two
+  questions share lexically, which is exactly what a reviewer is needed to look
+  past. A band called SAME-ish would be a label leaking into a sampler.
+- **An enriched sample may develop and evaluate; it may never state a
+  prevalence.** Bands are drawn at deliberately unequal rates, so the proportion
+  of any label in the set estimates nothing. The warning rides on the dataset
+  object so a report cannot omit it by forgetting.
+- **The split is frozen before any label exists, and assigned WITHIN each band**
+  so neither partition is short of a question shape. A split decided later --
+  however honestly -- is one that could have been decided to help.
+- **Holdout isolation is structural, not conventional.** The two splits' labels
+  live in separate FILES; `load_development_labels` cannot reach a holdout label
+  because it does not open that file. A `split` column would place both a metre
+  apart and rely on every caller filtering correctly, which is a rule, and rules
+  get forgotten by whoever is in a hurry.
+- **Provenance is mandatory on load with no default.** A label file without a
+  declared origin is refused rather than assumed human.
+- **`HUMAN_OPERATOR` is human ground truth and is not expert ground truth.** The
+  system does not establish expertise and it is not ours to assert on someone's
+  behalf. Wording is *human operator reference*, never *expert review*.
+
+**The set was labelled, and the gate failed** (Mission 1.26 close). The 40 labels
+came back `AI_ASSISTED_PROVISIONAL` rather than human, and the development split
+holds 2 positives against a preregistered threshold of 4:
+**`REFERENCE_SET_INSUFFICIENT`**, with the human reference requirement separately
+**NOT_ESTABLISHED**. Nothing was moved to make either pass. The provisional set
+is usable for EXPLORATORY development work and is not validated holdout evidence,
+so **production problem-family inference stays NOT_AUTHORISED** and a backlog
+item blocks the word *validated* until genuinely human labels exist.
+
+**A complete dataset is not an answer.** `DATASET_PREPARATION_COMPLETE` says the
+next question can be asked well; it says nothing about whether any classifier can
+find a problem family.
 
 ### Problem-family inference — implemented, evaluated, and it did not pass
 

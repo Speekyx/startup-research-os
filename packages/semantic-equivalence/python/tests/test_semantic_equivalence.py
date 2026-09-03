@@ -10,6 +10,7 @@ and the holdout are for.
 from __future__ import annotations
 
 import ast
+import json
 import pathlib
 
 import pytest
@@ -1089,3 +1090,574 @@ class TestAHumanOriginEstablishesGroundTruthForItsSplitOnly:
         # the provisional reference is preserved, never replaced
         assert (path.parent / "problem-family-reference-labels-v1.json").exists()
         assert (path.parent / "problem-family-evaluation-holdout.json").exists()
+
+
+class TestTheHumanReferenceBatchIsBlindToEveryModel:
+    """Mission 1.26 §3 and §6. The obvious way to build a second reference set
+    is to show the reviewer the pairs V1 got wrong. That produces a dataset
+    which can measure nothing afterwards, because every future classifier would
+    be scored on a sample an earlier one's mistakes selected."""
+
+    SAMPLER = PACKAGE / "reference_sampling.py"
+
+    def test_the_sampler_imports_no_model_no_gateway_and_no_classifier(self) -> None:
+        tree = ast.parse(self.SAMPLER.read_text(encoding="utf-8"))
+        roots: set[str] = set()
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                roots |= {a.name.split(".")[0] for a in node.names}
+            elif isinstance(node, ast.ImportFrom) and node.module:
+                roots.add(node.module.split(".")[0])
+        for forbidden in ("sros_llm_gateway", "anthropic", "httpx", "requests", "urllib"):
+            assert forbidden not in roots, forbidden
+        # and no sibling module that holds predictions or calls a provider
+        for sibling in ("classifier", "family_classifier", "prompt", "family_prompt"):
+            assert sibling not in roots, sibling
+
+    @staticmethod
+    def _code_strings(path: pathlib.Path) -> set[str]:
+        """Every string literal and attribute name in the CODE, docstrings and
+        comments excluded.
+
+        A plain substring scan over the source fails on the docstring that
+        explains the rule -- the sampler says "not a prediction, not a
+        confidence" precisely because it reads neither. That is
+        `testing-strategy.md` §23 recurring, and weakening the check until it
+        passes is how a structural test stops checking. So the docstrings are
+        dropped and what remains is what the module could actually read.
+        """
+        tree = ast.parse(path.read_text(encoding="utf-8"))
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Module | ast.ClassDef | ast.FunctionDef):
+                body = node.body
+                if (
+                    body
+                    and isinstance(body[0], ast.Expr)
+                    and isinstance(body[0].value, ast.Constant)
+                    and isinstance(body[0].value.value, str)
+                ):
+                    body.pop(0)
+        found: set[str] = set()
+        for node in ast.walk(tree):
+            # Reading a field looks like exactly two things: an attribute
+            # access, or a string used as a subscript key. Free prose strings
+            # are excluded for the same reason docstrings are -- the module's
+            # own `selection_rules` says "not a prediction, ... or the fact that
+            # a pair was ever predicted", which is the sentence promising the
+            # absence, and matching on it would fail the check for keeping its
+            # own promise.
+            if isinstance(node, ast.Attribute):
+                found.add(node.attr.lower())
+            elif isinstance(node, ast.Name):
+                found.add(node.id.lower())
+            elif (
+                isinstance(node, ast.Subscript)
+                and isinstance(node.slice, ast.Constant)
+                and isinstance(node.slice.value, str)
+            ):
+                found.add(node.slice.value.lower())
+        return found
+
+    def test_the_sampler_reads_no_model_field(self) -> None:
+        """The failure mode is a FIELD being read, not a package imported:
+        `classifications`, `decision` and `cost_units` all live in plain JSON a
+        sampler could open without importing anything."""
+        code = " ".join(self._code_strings(self.SAMPLER))
+        for field in (
+            "classifications",
+            "predicted",
+            "prediction",
+            "confidence",
+            "cost_units",
+            "reason_code",
+            "rationale",
+            "problem-family-run-",
+        ):
+            assert field not in code, field
+
+    def test_the_renderer_reads_no_run_artifact(self) -> None:
+        renderer = (
+            pathlib.Path(__file__).resolve().parents[4]
+            / "infrastructure"
+            / "scripts"
+            / "render_human_reference_batch.py"
+        )
+        code = " ".join(self._code_strings(renderer))
+        for field in ("problem-family-run-", "classifications", "confidence"):
+            assert field not in code, field
+
+
+class TestTheSampledBatchHasTheDeclaredShape:
+    """§9's acceptance criteria, asserted against the COMMITTED artifact.
+
+    Reading the shipped file rather than re-running the sampler is deliberate:
+    what a later mission loads is the file, and the renderer's `--check` gate
+    already asserts that the file matches a fresh sampler run. Between them the
+    artifact and the code cannot drift apart.
+    """
+
+    DOCS = pathlib.Path(__file__).resolve().parents[4] / "docs" / "data"
+
+    def batch(self) -> dict:
+        return json.loads(
+            (self.DOCS / "problem-family-human-reference-batch-v1.json").read_text(encoding="utf-8")
+        )
+
+    def prior(self) -> set[str]:
+        raw = json.loads(
+            (self.DOCS / "problem-family-reference-labels-v1.json").read_text(encoding="utf-8")
+        )
+        return {row["pair_id"] for row in raw["labels"]}
+
+    def test_exactly_forty_pairs_split_twenty_four_and_sixteen(self) -> None:
+        from sros_semantic_equivalence import BATCH_SIZE, DEVELOPMENT_SIZE, HOLDOUT_SIZE
+
+        counts = self.batch()["counts"]
+        assert counts["total"] == BATCH_SIZE == 40
+        assert counts["development"] == DEVELOPMENT_SIZE == 24
+        assert counts["holdout"] == HOLDOUT_SIZE == 16
+
+    def test_every_pair_is_unique_and_in_exactly_one_split(self) -> None:
+        pairs = self.batch()["pairs"]
+        ids = [p["pair_id"] for p in pairs]
+        assert len(set(ids)) == len(ids) == 40
+        dev = {p["pair_id"] for p in pairs if p["split"] == "DEVELOPMENT"}
+        hold = {p["pair_id"] for p in pairs if p["split"] == "HOLDOUT"}
+        assert not dev & hold
+        assert len(dev) + len(hold) == 40
+
+    def test_no_mission_125_pair_is_reused(self) -> None:
+        """Deduplicated by canonical unordered pair identity, which `pair_id`
+        already is: it sorts its two question ids."""
+        ids = {p["pair_id"] for p in self.batch()["pairs"]}
+        assert not ids & self.prior()
+
+    def test_every_stratum_is_present_in_both_splits(self) -> None:
+        """The split is assigned WITHIN each band, so neither partition is short
+        of a question shape. §10 applies its composition gates per split, which a
+        globally hashed split could quietly break."""
+        from sros_semantic_equivalence import Stratum
+
+        by_split = self.batch()["counts"]["by_stratum_and_split"]
+        for stratum in Stratum:
+            assert by_split[stratum.value]["DEVELOPMENT"] >= 1, stratum
+            assert by_split[stratum.value]["HOLDOUT"] >= 1, stratum
+
+    def test_the_batch_carries_no_label_and_no_prediction(self) -> None:
+        """Scanned over the PAIR ROWS, not the whole document: the selection
+        rules and the enrichment warning both contain the word `prediction`,
+        because they are the sentences promising there is none."""
+        raw = self.batch()
+        assert raw["labels_present"] is False
+        assert raw["human_ground_truth_established"] is False
+        rows = json.dumps(raw["pairs"]).lower()
+        for word in ("same_family", "different_family", "label", "prediction", "confidence"):
+            assert word not in rows, word
+
+    def test_the_enrichment_warning_rides_on_the_dataset(self) -> None:
+        """So a later report cannot omit it by forgetting to copy it."""
+        warning = self.batch()["enrichment_warning"]
+        assert "NOT an estimate" in warning
+        assert "never be used to state a prevalence" in warning
+
+    def test_every_pair_records_the_features_that_selected_it(self) -> None:
+        """§4: a future reader must be able to see why a pair was surfaced
+        without rerunning anything."""
+        for pair in self.batch()["pairs"]:
+            features = pair["deterministic_features"]
+            assert pair["candidate_rank"] >= 1
+            assert pair["stratum"]
+            assert features["eligibility_reasons"]
+
+    def test_the_dataset_declares_its_own_identity_and_versions(self) -> None:
+        """§11: mission origin, rubric, sampling and split versions all survive."""
+        raw = self.batch()
+        assert raw["dataset_id"] == "problem-family-human-reference-v1"
+        assert raw["relation"] == "SAME_PROBLEM_FAMILY"
+        assert raw["rubric_version"] == "problem-family-rubric@1.0.0"
+        assert raw["sampling_version"].startswith("problem-family-human-reference-sampling@")
+        assert raw["split_version"].startswith("problem-family-human-reference-split@")
+
+
+class TestTheSamplerIsDeterministicAndRefusesToShrink:
+    """Determinism and quota behaviour, on a synthetic corpus so these run with
+    no database."""
+
+    def _corpus(self) -> list:
+        """Enough observations, with enough tag variety, to populate every band."""
+        rows = []
+        for i in range(40):
+            # A rare tag must still be SHARED to band a pair, so each rare tag
+            # gets a few carriers. A tag appearing exactly once can never place a
+            # pair anywhere, which is what an earlier version of this fixture got
+            # wrong: stratum A came out empty and the quota check fired.
+            # Rare enough to reach the high-specificity band: about two
+            # carriers each in a 40-observation corpus. `i % 3` gave four
+            # carriers, which lands in MEDIUM and left stratum A empty.
+            tags = ["docker"]
+            if i % 4 == 0:
+                tags.append(f"rare-{i // 8}")
+            elif i % 8 == 1:
+                # Five carriers in forty: rarity ~2.1, inside the MEDIUM band.
+                # Ten carriers gave 1.39 and fell into LOW, leaving B empty.
+                tags.append("medium-tag")
+            elif i % 4 == 2:
+                tags.append("common-tag")
+            rows.append(
+                QuestionObservation(
+                    observation_key=f"k{i}",
+                    question_id=f"{100 + i}",
+                    title=f"container service startup problem number {i % 7} in docker",
+                    body=(
+                        WRAPPER + f'"/bin/thing-{i}": permission denied'
+                        if i % 13 == 0
+                        else f"I am trying to run service {i % 5} and it will not start."
+                    ),
+                    tags=tuple(tags),
+                )
+            )
+        return rows
+
+    def test_a_rerun_produces_the_same_pairs_splits_and_order(self) -> None:
+        """sha256 over a fixed seed, so the dataset a report describes is the
+        dataset a later run reproduces. `hash()` is salted per process and would
+        differ between the run that recorded it and the run that checked it."""
+        from sros_semantic_equivalence import (
+            FAMILY_RUBRIC_VERSION,
+            Stratum,
+            generate_family_candidates,
+            sample_reference_batch,
+            tag_rarity,
+        )
+
+        corpus = self._corpus()
+        candidates = generate_family_candidates(corpus, cap=10_000)
+        rarity = tag_rarity(tuple(corpus))
+        # Small quotas, because the point here is the ORDERING and the SPLIT,
+        # not the production composition. Sizing a synthetic corpus until it
+        # satisfies real quotas would be tuning a fixture to a constant.
+        draws = [
+            sample_reference_batch(
+                candidates,
+                rarity,
+                excluded_pair_ids=frozenset(),
+                rubric_version=FAMILY_RUBRIC_VERSION,
+                quotas=dict.fromkeys(Stratum, 1),
+            )
+            for _ in range(2)
+        ]
+        assert [p.pair_id for p in draws[0].pairs] == [p.pair_id for p in draws[1].pairs]
+        assert [p.split for p in draws[0].pairs] == [p.split for p in draws[1].pairs]
+        assert [p.stratum for p in draws[0].pairs] == [p.stratum for p in draws[1].pairs]
+
+    def test_a_quota_larger_than_its_stratum_is_refused_not_reduced(self) -> None:
+        """The composition was declared before sampling; shrinking it here would
+        change the dataset without changing its recorded version."""
+        from sros_semantic_equivalence import (
+            FAMILY_RUBRIC_VERSION,
+            generate_family_candidates,
+            sample_reference_batch,
+            tag_rarity,
+        )
+
+        corpus = self._corpus()
+        candidates = generate_family_candidates(corpus, cap=10_000)
+        everything = frozenset(p.pair_id for p in candidates.pairs)
+        with pytest.raises(ValueError, match="quota"):
+            sample_reference_batch(
+                candidates,
+                tag_rarity(tuple(corpus)),
+                excluded_pair_ids=everything,
+                rubric_version=FAMILY_RUBRIC_VERSION,
+            )
+
+    def test_strata_are_feature_bands_and_never_labels(self) -> None:
+        from sros_semantic_equivalence import Stratum
+
+        for stratum in Stratum:
+            assert "SAME" not in stratum.value
+            assert "DIFFERENT_FAMILY" not in stratum.value
+
+    def test_the_quotas_sum_to_the_batch_size(self) -> None:
+        from sros_semantic_equivalence import BATCH_SIZE, STRATUM_QUOTAS
+
+        assert sum(STRATUM_QUOTAS.values()) == BATCH_SIZE
+
+
+class TestHoldoutIsolationIsStructural:
+    """§6.7. A single labelled file with a `split` column would put both splits
+    a metre apart and rely on every future caller filtering correctly, which is
+    a rule, and rules get forgotten by the person in a hurry."""
+
+    def _paths(self, tmp_path):
+        from sros_semantic_equivalence import ReferenceDatasetPaths
+
+        return ReferenceDatasetPaths(directory=tmp_path)
+
+    def _write(self, paths, split_value: str, *, origin="HUMAN_OPERATOR", dataset=None, rows=1):
+        from sros_semantic_equivalence import DATASET_ID, Split
+
+        payload = {
+            "dataset_id": dataset or DATASET_ID,
+            "split": split_value,
+            "reference_origin": origin,
+            "labels": [
+                {
+                    "pair_id": f"{i}::{i + 1}",
+                    "a_question_id": str(i),
+                    "b_question_id": str(i + 1),
+                    "reviewer": "operator",
+                    "decision_as_supplied": "SAME_FAMILY",
+                    "labelled_at": "2026-09-02T00:00:00+00:00",
+                    "rubric_version": "problem-family-rubric@1.0.0",
+                }
+                for i in range(rows)
+            ],
+        }
+        paths.labels(Split(split_value)).write_text(json.dumps(payload), encoding="utf-8")
+
+    def test_development_and_holdout_are_different_files(self, tmp_path) -> None:
+        from sros_semantic_equivalence import Split
+
+        paths = self._paths(tmp_path)
+        assert paths.labels(Split.DEVELOPMENT) != paths.labels(Split.HOLDOUT)
+
+    def test_loading_development_cannot_reach_holdout_labels(self, tmp_path) -> None:
+        """The holdout file exists and is full; the development interface still
+        returns nothing from it, because it never opens it."""
+        from sros_semantic_equivalence import load_development_labels
+
+        paths = self._paths(tmp_path)
+        self._write(paths, "HOLDOUT", rows=5)
+        with pytest.raises(FileNotFoundError, match="not been labelled"):
+            load_development_labels(paths)
+
+    def test_a_file_whose_content_disagrees_with_its_name_is_refused(self, tmp_path) -> None:
+        """Otherwise the split boundary is decorative: holdout rows in a
+        development file would load without complaint."""
+        from sros_semantic_equivalence import HoldoutAccessError, Split, load_reference_labels
+
+        paths = self._paths(tmp_path)
+        payload = json.loads(
+            json.dumps(
+                {
+                    "dataset_id": "problem-family-human-reference-v1",
+                    "split": "HOLDOUT",
+                    "reference_origin": "HUMAN_OPERATOR",
+                    "labels": [],
+                }
+            )
+        )
+        paths.labels(Split.DEVELOPMENT).write_text(json.dumps(payload), encoding="utf-8")
+        with pytest.raises(HoldoutAccessError):
+            load_reference_labels(paths, Split.DEVELOPMENT)
+
+    def test_provenance_is_mandatory_with_no_default(self, tmp_path) -> None:
+        """The Mission 1.25 §0 lesson, written into the loader."""
+        from sros_semantic_equivalence import Split, load_reference_labels
+
+        paths = self._paths(tmp_path)
+        paths.labels(Split.HOLDOUT).write_text(
+            json.dumps(
+                {
+                    "dataset_id": "problem-family-human-reference-v1",
+                    "split": "HOLDOUT",
+                    "labels": [],
+                }
+            ),
+            encoding="utf-8",
+        )
+        with pytest.raises(ValueError, match="no reference_origin"):
+            load_reference_labels(paths, Split.HOLDOUT)
+
+    def test_a_caller_may_require_an_origin_and_is_refused_a_different_one(self, tmp_path) -> None:
+        from sros_semantic_equivalence import ReferenceOrigin, load_holdout_labels
+
+        paths = self._paths(tmp_path)
+        self._write(paths, "HOLDOUT", origin="AI_ASSISTED_PROVISIONAL")
+        with pytest.raises(ValueError, match="required HUMAN_OPERATOR"):
+            load_holdout_labels(paths, expected_origin=ReferenceOrigin.HUMAN_OPERATOR)
+
+    def test_the_mission_125_dataset_is_never_loaded_through_this_interface(self, tmp_path) -> None:
+        """§11: the two datasets stay separately queryable. Merging them would
+        lose mission origin, sampling version and the association between a
+        label and the prediction it was scored against."""
+        from sros_semantic_equivalence import PRIOR_DATASET_ID, Split, load_reference_labels
+
+        paths = self._paths(tmp_path)
+        self._write(paths, "HOLDOUT", dataset=PRIOR_DATASET_ID)
+        with pytest.raises(ValueError, match="expected 'problem-family-human-reference-v1'"):
+            load_reference_labels(paths, Split.HOLDOUT)
+
+    def test_a_human_operator_set_establishes_ground_truth_for_its_split(self, tmp_path) -> None:
+        from sros_semantic_equivalence import ReferenceOrigin, load_holdout_labels
+
+        paths = self._paths(tmp_path)
+        self._write(paths, "HOLDOUT", rows=3)
+        labels = load_holdout_labels(paths, expected_origin=ReferenceOrigin.HUMAN_OPERATOR)
+        assert labels.human_ground_truth_established
+        assert len(labels.labels) == 3
+
+
+class TestMission125RemainsUntouched:
+    """§0. History is preserved, not reinterpreted."""
+
+    DOCS = pathlib.Path(__file__).resolve().parents[4] / "docs" / "data"
+
+    def test_the_provisional_reference_is_still_provisional(self) -> None:
+        raw = json.loads(
+            (self.DOCS / "problem-family-reference-labels-v1.json").read_text(encoding="utf-8")
+        )
+        assert raw["reference_label_origin"] == "AI_ASSISTED_PROVISIONAL"
+        assert raw["human_ground_truth"] == "NOT_ESTABLISHED"
+        development = [r for r in raw["labels"] if r["split"] == "DEVELOPMENT"]
+        assert {r["origin"] for r in development} == {"AI_ASSISTED_PROVISIONAL"}
+
+    def test_the_human_holdout_is_stored_separately_and_says_the_set_is_mixed(self) -> None:
+        raw = json.loads(
+            (self.DOCS / "problem-family-holdout-human-labels-v1.json").read_text(encoding="utf-8")
+        )
+        assert raw["reference_label_origin"] == "HUMAN_OPERATOR"
+        assert raw["development_split_origin"] == "AI_ASSISTED_PROVISIONAL"
+        assert raw["full_reference_set_provenance"] == "MIXED"
+
+    def test_both_mission_125_outcomes_still_read_failed(self) -> None:
+        for name in (
+            "problem-family-evaluation-holdout.json",
+            "problem-family-evaluation-holdout-human.json",
+        ):
+            raw = json.loads((self.DOCS / name).read_text(encoding="utf-8"))
+            assert raw["outcome"] == "MODEL_EVALUATION_FAILED", name
+
+    def test_the_frozen_predictions_are_still_there(self) -> None:
+        raw = json.loads(
+            (self.DOCS / "problem-family-run-fam-holdout-1.json").read_text(encoding="utf-8")
+        )
+        assert raw["pairs"] == 10
+        assert {c["decision"] for c in raw["classifications"]} == {
+            "DIFFERENT_PROBLEM_FAMILY",
+            "ABSTAIN",
+        }
+
+
+class TestTheMission126LabelsAreProvisionalAndSayySo:
+    """The labels exist, the operator chose to proceed with them, and they are
+    NOT human ground truth. Every assertion here is about that distinction,
+    because it is the one a later reader will otherwise get wrong."""
+
+    DOCS = pathlib.Path(__file__).resolve().parents[4] / "docs" / "data"
+
+    def paths(self):
+        from sros_semantic_equivalence import ReferenceDatasetPaths
+
+        return ReferenceDatasetPaths(directory=self.DOCS)
+
+    def test_both_splits_are_labelled_and_load(self) -> None:
+        from sros_semantic_equivalence import load_development_labels, load_holdout_labels
+
+        assert len(load_development_labels(self.paths()).labels) == 24
+        assert len(load_holdout_labels(self.paths()).labels) == 16
+
+    def test_neither_split_establishes_human_ground_truth(self) -> None:
+        from sros_semantic_equivalence import (
+            ReferenceOrigin,
+            load_development_labels,
+            load_holdout_labels,
+        )
+
+        for labels in (load_development_labels(self.paths()), load_holdout_labels(self.paths())):
+            assert labels.human_ground_truth_established is False
+            assert labels.origins == frozenset({ReferenceOrigin.AI_ASSISTED_PROVISIONAL})
+
+    def test_a_caller_requiring_human_labels_is_refused(self) -> None:
+        """**The load-bearing test.** A future mission that asks for human
+        ground truth must not silently receive these. The loader refuses, and
+        the refusal names both origins."""
+        from sros_semantic_equivalence import (
+            ReferenceOrigin,
+            load_development_labels,
+            load_holdout_labels,
+        )
+
+        for loader in (load_development_labels, load_holdout_labels):
+            with pytest.raises(ValueError, match="required HUMAN_OPERATOR"):
+                loader(self.paths(), expected_origin=ReferenceOrigin.HUMAN_OPERATOR)
+
+    def test_the_files_never_claim_a_human_origin(self) -> None:
+        from sros_semantic_equivalence import Split
+
+        for split in (Split.DEVELOPMENT, Split.HOLDOUT):
+            raw = json.loads(self.paths().labels(split).read_text(encoding="utf-8"))
+            assert raw["reference_origin"] == "AI_ASSISTED_PROVISIONAL"
+            assert raw["reference_reviewer"] == "GPT-5.6 Sol"
+            assert raw["human_ground_truth_established"] is False
+            assert "HUMAN_OPERATOR" not in json.dumps(raw["labels"])
+
+    def test_the_operator_decision_is_recorded_without_upgrading_anything(self) -> None:
+        """The decision to proceed is real and visible. It is a document-level
+        note, not a field on a label, because the schema needs no new column to
+        hold a decision about a whole file -- and because a per-label flag would
+        eventually be read as per-label approval."""
+        from sros_semantic_equivalence import ReferenceLabel, Split
+
+        raw = json.loads(self.paths().labels(Split.HOLDOUT).read_text(encoding="utf-8"))
+        assert "operator_decision" in raw
+        assert "does not upgrade the labels" in raw["operator_decision"]
+        assert "operator_accepted" not in json.dumps(raw["labels"])
+        assert "operator_accepted" not in ReferenceLabel.__dataclass_fields__
+
+    def test_the_persisted_distribution_is_what_the_report_states(self) -> None:
+        """Read from the files rather than restated, so the report and the data
+        cannot drift apart."""
+        from collections import Counter
+
+        from sros_semantic_equivalence import Split
+
+        expected = {
+            Split.DEVELOPMENT: {"SAME_FAMILY": 2, "DIFFERENT_FAMILY": 18, "UNCERTAIN": 4},
+            Split.HOLDOUT: {"SAME_FAMILY": 4, "DIFFERENT_FAMILY": 11, "UNCERTAIN": 1},
+        }
+        for split, counts in expected.items():
+            raw = json.loads(self.paths().labels(split).read_text(encoding="utf-8"))
+            actual = Counter(row["decision_as_supplied"] for row in raw["labels"])
+            assert dict(actual) == counts, split
+
+    def test_the_development_split_fails_the_preregistered_positive_gate(self) -> None:
+        """`REFERENCE_SET_INSUFFICIENT`, pinned. Two positives against a
+        threshold of four. The gate was declared before the labels existed and
+        is not moved to meet them."""
+        from collections import Counter
+
+        from sros_semantic_equivalence import Split
+
+        raw = json.loads(self.paths().labels(Split.DEVELOPMENT).read_text(encoding="utf-8"))
+        counts = Counter(row["decision_as_supplied"] for row in raw["labels"])
+        assert counts["SAME_FAMILY"] == 2
+        assert counts["SAME_FAMILY"] < 4
+
+    def test_every_labelled_pair_belongs_to_the_frozen_batch_and_its_own_split(self) -> None:
+        """No pair moved between partitions to help a threshold."""
+        from sros_semantic_equivalence import Split
+
+        batch = json.loads(
+            (self.DOCS / "problem-family-human-reference-batch-v1.json").read_text(encoding="utf-8")
+        )
+        assignment = {p["pair_id"]: p["split"] for p in batch["pairs"]}
+        for split in (Split.DEVELOPMENT, Split.HOLDOUT):
+            raw = json.loads(self.paths().labels(split).read_text(encoding="utf-8"))
+            for row in raw["labels"]:
+                assert assignment[row["pair_id"]] == split.value, row["pair_id"]
+
+    def test_the_mission_125_human_holdout_is_not_merged_in(self) -> None:
+        """It remains genuinely HUMAN_OPERATOR, in its own file, counting toward
+        neither this batch nor its composition gate."""
+        from sros_semantic_equivalence import Split
+
+        prior = json.loads(
+            (self.DOCS / "problem-family-holdout-human-labels-v1.json").read_text(encoding="utf-8")
+        )
+        assert prior["reference_label_origin"] == "HUMAN_OPERATOR"
+        prior_ids = {row["pair_id"] for row in prior["labels"]}
+        for split in (Split.DEVELOPMENT, Split.HOLDOUT):
+            raw = json.loads(self.paths().labels(split).read_text(encoding="utf-8"))
+            assert not {row["pair_id"] for row in raw["labels"]} & prior_ids
