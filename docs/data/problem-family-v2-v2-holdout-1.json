@@ -1,0 +1,283 @@
+{
+  "run_id": "v2-holdout-1",
+  "mission": "1.27",
+  "split": "HOLDOUT",
+  "relation": "SAME_PROBLEM_FAMILY",
+  "rubric_version": "problem-family-rubric@1.0.0",
+  "reference_origin": "AI_ASSISTED_PROVISIONAL",
+  "human_ground_truth_established": false,
+  "epistemic_note": "PROVISIONAL AGREEMENT against an AI_ASSISTED_PROVISIONAL reference. Never accuracy, validated accuracy, or a human benchmark.",
+  "max_output_tokens": 1200,
+  "variants": [
+    {
+      "result": {
+        "variant": "V2-A",
+        "prompt_version": "2.0.0",
+        "scored_pairs": 15,
+        "predictions": {
+          "SAME_PROBLEM_FAMILY": 0,
+          "DIFFERENT_PROBLEM_FAMILY": 15,
+          "ABSTAIN": 1
+        },
+        "provisional_true_same": 0,
+        "provisional_false_same": 0,
+        "provisional_missed_same": 4,
+        "agreements": 12,
+        "abstain_on_non_uncertain_references": 0,
+        "same_share_of_scored": 0.0,
+        "schema_valid": true,
+        "schema_retries": 0,
+        "usage": {
+          "input_tokens": 92730,
+          "output_tokens": 7210,
+          "cost_units": 0.25756
+        },
+        "epistemic_note": "Every count is agreement against an AI_ASSISTED_PROVISIONAL reference. Not accuracy, not validated accuracy, not a human benchmark."
+      },
+      "schema_retries": [],
+      "schema_failures": [],
+      "classifications": [
+        {
+          "pair_id": "78088481::78103907",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Connect a Node.js API service to a MongoDB service, both running under docker-compose",
+          "blocker_a": "Connection refused when using the mongo hostname/credentials in the connection string despite compose networking being set up; likely auth/connection string or network configuration issue between compose services",
+          "goal_b": "Run a Node.js server and a MongoDB instance together inside a single container/image",
+          "blocker_b": "The apt package name 'mongodb' has no installation candidate on the base image, so the Dockerfile build fails before the container can even be assembled",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A already has both services running as separate compose containers and is blocked by a runtime network/connection-string issue between them; person B is blocked earlier, at build time, because the package needed to co-install MongoDB inside a single image cannot be found. Both involve Node.js and MongoDB in Docker, but the blocked goals -- inter-service connectivity versus package installability for a single-container setup -- require different interventions.",
+          "usage": {
+            "input_tokens": 5506,
+            "output_tokens": 478,
+            "cost_units": 0.015792
+          }
+        },
+        {
+          "pair_id": "78090939::78105296",
+          "decision": "ABSTAIN",
+          "goal_a": "Deploy a Spring Boot Java app to Render using a Docker container",
+          "blocker_a": "The jar file appears corrupt/invalid when run in the container, possibly related to file size or build/upload issues",
+          "goal_b": "Deploy an Angular application to OpenShift via a GitLab-based container workflow",
+          "blocker_b": "No specific failure is described; the person is asking for general step-by-step guidance on the deployment workflow, not reporting a blockage",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A has a concrete blocked goal (corrupt jarfile preventing app run on Render), but person B's question is a request for general deployment guidance with no stated failure or blockage. Since B's goal/blocker is not established as a problem, no meaningful comparison of blocked goals can be made.",
+          "usage": {
+            "input_tokens": 5083,
+            "output_tokens": 404,
+            "cost_units": 0.014206000000000002
+          }
+        },
+        {
+          "pair_id": "78096175::78100773",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Persist Postgres data/migrations across docker-compose restarts",
+          "blocker_a": "Using an external named volume with docker-compose down/up, data appears lost and migrations must be rerun",
+          "goal_b": "Have an init SQL script create a schema and table inside a Postgres container on startup",
+          "blocker_b": "The docker-entrypoint-initdb.d script runs but the schema/table are not created, only the database appears",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A is about data/state not persisting across container restarts due to volume/lifecycle handling, while B is about an initialization SQL script not producing the expected schema/table on first run. These are different blocked goals -- persistence across runs vs. correct execution of init scripts -- even though both involve Postgres in Docker.",
+          "usage": {
+            "input_tokens": 5655,
+            "output_tokens": 407,
+            "cost_units": 0.015380000000000001
+          }
+        },
+        {
+          "pair_id": "78098246::78098969",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Pass a command-line port argument to a Flask app so a shell script argument reaches the running container's process.",
+          "blocker_a": "The run script/CMD in the Dockerfile isn't actually passing sys.argv[1] to userapi.py, so app_port is never set and raises ValueError.",
+          "goal_b": "Set up an automated deployment/update workflow for a continuously running python script on a remote Raspberry Pi.",
+          "blocker_b": "Unsure how to orchestrate pulling git updates, stopping and restarting the script automatically without manual intervention.",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is blocked by a command-line argument not being passed through to a script inside a Docker container, while Person B is trying to design a remote deployment/update workflow for a persistent script. These are different blocked goals -- argument propagation versus deployment automation -- with no single intervention addressing both.",
+          "usage": {
+            "input_tokens": 5288,
+            "output_tokens": 447,
+            "cost_units": 0.015046
+          }
+        },
+        {
+          "pair_id": "78086836::78098246",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get a Python script using pyjwt/oauthlib RSA signing to run correctly inside a Docker container",
+          "blocker_a": "Inside the Docker image, jwt.algorithms lacks the 'hashes' attribute, causing an AttributeError, despite matching package versions locally",
+          "goal_b": "Get a Flask API running in Docker to start listening on a dynamically specified port passed at runtime",
+          "blocker_b": "The startup script/CMD does not actually pass the port argument through to the Python script, so sys.argv is empty and the app raises a ValueError",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is blocked by a dependency/version conflict causing an AttributeError in a JWT/OAuth library inside Docker, while Person B is blocked by a shell/CMD argument-passing issue preventing a port number from reaching their Flask script. These are different blocked goals (library compatibility vs. argument propagation) with no single shared intervention.",
+          "usage": {
+            "input_tokens": 5389,
+            "output_tokens": 471,
+            "cost_units": 0.015488000000000002
+          }
+        },
+        {
+          "pair_id": "78089171::78093369",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get a Next.js env variable to have a value at runtime in a Kubernetes-deployed app",
+          "blocker_a": "NEXT_PUBLIC_ variables are inlined at build time, so values set only in the k8s ConfigMap at runtime never reach the compiled app",
+          "goal_b": "Get the psycopg PostgreSQL Python library to install successfully in a Docker image build",
+          "blocker_b": "pip install of psycopg fails on Alpine because required build toolchain/native dependencies for compiling it are missing",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is blocked by a build-time/run-time lifecycle mismatch for env variables, while person B is blocked by missing native build dependencies needed to compile a Python package on Alpine. These are different blocked goals with unrelated interventions (documentation about variable injection timing vs. adding OS packages for compilation).",
+          "usage": {
+            "input_tokens": 6116,
+            "output_tokens": 447,
+            "cost_units": 0.016702
+          }
+        },
+        {
+          "pair_id": "78093369::78102512",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get the psycopg Python library to build/install successfully inside an Alpine-based Docker image",
+          "blocker_a": "pip install fails with exit code 1 because required build dependencies for compiling psycopg on musl/Alpine are missing",
+          "goal_b": "Mount multiple distinct Docker volumes into the same target path inside one container",
+          "blocker_b": "Docker daemon rejects the run command with 'Duplicate mount point' since two -v flags specify the same target directory",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A is about getting a Python package to compile in an Alpine image due to missing build toolchain dependencies, while B is about Docker's volume mount semantics preventing two volumes from sharing one target path. These are unrelated blocked goals with no single intervention addressing both.",
+          "usage": {
+            "input_tokens": 5148,
+            "output_tokens": 413,
+            "cost_units": 0.014426
+          }
+        },
+        {
+          "pair_id": "78095654::78105118",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Share a single built DLL artifact across multiple Docker image builds instead of rebuilding it per project",
+          "blocker_a": "Each Dockerfile independently builds the shared dependency, with no known mechanism to build once and reuse across images",
+          "goal_b": "Have Docker Compose services (in host network mode) communicate using a specific host network interface rather than the default one",
+          "blocker_b": "Docker defaults to using the ens0 interface's IP, and there's no known way to direct it to use ens192 instead",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A wants to avoid duplicate builds of a shared artifact across Dockerfiles, while person B wants to control which host network interface Docker/Compose binds to. These are unrelated blocked goals (build artifact sharing vs. network interface selection) with no single intervention addressing both.",
+          "usage": {
+            "input_tokens": 4445,
+            "output_tokens": 429,
+            "cost_units": 0.01318
+          }
+        },
+        {
+          "pair_id": "78096903::78099350",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Use an environment variable to name a network in the top-level `networks:` section of a compose/stack file",
+          "blocker_a": "`docker stack config` does not substitute `${network}` when used as a key under the root `networks:` section, though it works when used as a value under a service's `networks:` list",
+          "goal_b": "Get a Go CLI application container to successfully connect to a Postgres database container via Docker Compose",
+          "blocker_b": "Running the app container standalone with `docker run` (bypassing compose networking) and using `localhost` as the DB host causes connection refused, since the containers aren't on the same compose network/service-name resolution isn't used",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A is blocked by Compose/stack variable-substitution not applying to YAML map keys in the top-level networks section, a templating/interpolation limitation. B is blocked by inter-container network reachability (using localhost instead of the compose service name) between a Go app and Postgres. These are different blocked goals with different interventions -- one is about docker-compose variable interpolation semantics, the other about container networking configuration.",
+          "usage": {
+            "input_tokens": 6442,
+            "output_tokens": 508,
+            "cost_units": 0.017964
+          }
+        },
+        {
+          "pair_id": "78096903::78102669",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Define a Docker Compose/stack network name dynamically using an environment variable at the top-level networks key.",
+          "blocker_a": "Docker stack config does not interpolate environment variables when used as YAML keys under the root \"networks\" section.",
+          "goal_b": "Keep a Hawkbit server with MySQL backend running reliably long-term via docker-compose.",
+          "blocker_b": "MySQL data/volume appears to be lost after a few hours, causing \"Unknown database\" errors, seemingly due to a volume misconfiguration.",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is blocked by Compose/stack variable interpolation not applying to YAML keys in the networks section, while person B is blocked by persistent volume/data loss causing database connectivity failure after uptime. These are different blocked goals -- one about environment variable substitution scope, the other about data persistence -- and no single intervention addresses both.",
+          "usage": {
+            "input_tokens": 6151,
+            "output_tokens": 453,
+            "cost_units": 0.016832
+          }
+        },
+        {
+          "pair_id": "78099519::78099680",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get a Dockerized JupyterLab app (installed via pipenv) to start via docker compose",
+          "blocker_a": "Container fails: exec \"/app/.venv/bin/pipenv\": stat ... no such file or directory -- pipenv virtualenv binary not present at expected path, likely because host bind mount overwrote /app and hid the built venv",
+          "goal_b": "Get a FastAPI app to run under gunicorn managing uvicorn workers inside a Docker container",
+          "blocker_b": "Container fails: exec \"gunicorn\": executable file not found in $PATH -- gunicorn was installed only in the builder stage, not copied/available in runtime stage's venv/PATH",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Both show the same \"OCI runtime create failed ... executable file not found/no such file\" daemon wrapper text, but A's issue is a missing venv binary likely due to a volume mount overwriting /app, while B's issue is a missing binary because it wasn't installed/copied into the runtime stage's environment -- different blocked goals needing different interventions (fixing bind-mount/build artifact placement vs. fixing multistage dependency copying).",
+          "usage": {
+            "input_tokens": 7120,
+            "output_tokens": 539,
+            "cost_units": 0.01963
+          }
+        },
+        {
+          "pair_id": "78086387::78097003",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Run Django migrations against Postgres during the Docker image build, inside a single container",
+          "blocker_a": "Postgres server wasn't actually running/listening on localhost at the RUN step when migrate was invoked, causing connection refused",
+          "goal_b": "Have a PHP app inside one container reach another service (InfluxDB) over the Docker Compose network",
+          "blocker_b": "Used 'localhost' which refers to the app container itself rather than the target service's container, so the service name/network alias was needed instead",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A is about a service not yet being started/available within a single-container build step, while B is about cross-container network addressing (localhost vs service name) in multi-container Compose; these require different interventions (process lifecycle vs. Docker networking/DNS).",
+          "usage": {
+            "input_tokens": 7844,
+            "output_tokens": 411,
+            "cost_units": 0.019798
+          }
+        },
+        {
+          "pair_id": "78086542::78103907",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get a Docker container's entrypoint script to run so the app starts successfully.",
+          "blocker_a": "The copied entrypoint.sh lacks execute permission, causing \"permission denied\" when the container tries to run it.",
+          "goal_b": "Run both a Node.js server and a MongoDB instance together inside a single Docker container.",
+          "blocker_b": "The apt package name 'mongodb' is not available in the base image's package repository, so the build fails to install it.",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A is blocked by a file-permission issue preventing an entrypoint script from executing, while B is blocked by an unavailable apt package needed to co-locate two services in one container. These are different blocked goals despite both being Docker build/run failures.",
+          "usage": {
+            "input_tokens": 5113,
+            "output_tokens": 397,
+            "cost_units": 0.014196
+          }
+        },
+        {
+          "pair_id": "78088692::78097184",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Reliably read an env var value from inside a running container, regardless of shell/session context",
+          "blocker_a": "Confused by shell/session-dependent behavior: variable visible in poetry-activated exec session but not in plain exec session, unclear why container output differs by invocation context",
+          "goal_b": "Get GitHub Actions workflow env variables (non-secret) propagated into a docker-compose managed container running on a remote server",
+          "blocker_b": "GitHub Actions `env.*` variables are not substituted/exported into the SSH script the way `secrets.*` are, so docker-compose's `${VAR}` substitution doesn't pick them up",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A is puzzled by inconsistent shell-session visibility of an already-injected env var inside a running container, while B is trying to propagate CI workflow variables through SSH/export into docker-compose's variable substitution at build/deploy time. These are different blocked goals (session/shell scoping confusion vs. cross-system variable propagation from CI to compose), so no single intervention addresses both beyond the generic 'docker env vars' category.",
+          "usage": {
+            "input_tokens": 5571,
+            "output_tokens": 519,
+            "cost_units": 0.016332
+          }
+        },
+        {
+          "pair_id": "78097574::78105004",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get a multistage Docker build to produce a working netCDF4 install with full native performance carried over from the compile stage",
+          "blocker_a": "Copying the venv (with netCDF4/h5py) into the final stage causes a large slowdown in netCDF read/write, suspected missing/incorrectly linked native C libraries",
+          "goal_b": "Get a Rails app's Docker build to install system packages so Node/Ruby toolchain setup succeeds",
+          "blocker_b": "apt-get install of libc-bin segfaults under emulated arm64 (qemu), causing dpkg post-install script to fail and the build to abort",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A is about a native library losing correct linkage/performance when copied between multistage build stages, while B is about a package's post-install script segfaulting under QEMU emulation during a single apt-get step. These are different blocked goals (runtime library linkage/performance vs. architecture-emulation package installation failure) that no single intervention would address.",
+          "usage": {
+            "input_tokens": 7200,
+            "output_tokens": 479,
+            "cost_units": 0.019190000000000002
+          }
+        },
+        {
+          "pair_id": "78098568::78105118",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Manage/join a pre-existing external Docker network from Terraform-provisioned containers",
+          "blocker_a": "Terraform docker provider has no clear way to mark/reference a network as 'external' like docker-compose does; labels attempt didn't work",
+          "goal_b": "Have Docker Compose services using host network mode communicate over a specific network interface",
+          "blocker_b": "Docker defaults to using one NIC (ens0) and there's no apparent way to direct it to bind/use a different interface (ens192)",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A is about referencing/creating an externally-managed Docker network via Terraform tooling, while B is about selecting which host network interface a host-mode container uses; these are different blocked goals despite both being 'docker networking' issues.",
+          "usage": {
+            "input_tokens": 4659,
+            "output_tokens": 408,
+            "cost_units": 0.013398
+          }
+        }
+      ]
+    }
+  ]
+}

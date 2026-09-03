@@ -1,0 +1,1183 @@
+{
+  "run_id": "v2-dev-1",
+  "mission": "1.27",
+  "split": "DEVELOPMENT",
+  "relation": "SAME_PROBLEM_FAMILY",
+  "rubric_version": "problem-family-rubric@1.0.0",
+  "reference_origin": "AI_ASSISTED_PROVISIONAL",
+  "human_ground_truth_established": false,
+  "epistemic_note": "PROVISIONAL AGREEMENT against an AI_ASSISTED_PROVISIONAL reference. Never accuracy, validated accuracy, or a human benchmark.",
+  "max_output_tokens": 1200,
+  "variants": [
+    {
+      "result": {
+        "variant": "V2-A",
+        "prompt_version": "2.0.0",
+        "scored_pairs": 20,
+        "predictions": {
+          "SAME_PROBLEM_FAMILY": 1,
+          "DIFFERENT_PROBLEM_FAMILY": 22,
+          "ABSTAIN": 1
+        },
+        "provisional_true_same": 1,
+        "provisional_false_same": 0,
+        "provisional_missed_same": 1,
+        "agreements": 18,
+        "abstain_on_non_uncertain_references": 1,
+        "same_share_of_scored": 0.05,
+        "schema_valid": true,
+        "schema_retries": 0,
+        "usage": {
+          "input_tokens": 151250,
+          "output_tokens": 11039,
+          "cost_units": 0.41289
+        },
+        "epistemic_note": "Every count is agreement against an AI_ASSISTED_PROVISIONAL reference. Not accuracy, not validated accuracy, not a human benchmark."
+      },
+      "schema_retries": [],
+      "schema_failures": [],
+      "classifications": [
+        {
+          "pair_id": "78086387::78096175",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Run Django with Postgres inside a single Docker container and run migrations during the build",
+          "blocker_a": "Postgres service wasn't running/reachable on localhost:5432 when `migrate` ran during the Docker build step, causing connection refused",
+          "goal_b": "Have Postgres data and migration state persist across docker-compose container restarts",
+          "blocker_b": "Data appears lost after `docker-compose down`/up again, requiring re-running migrations, likely due to volume/persistence misconfiguration",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is blocked by Postgres not being up/reachable at build time so migrations fail immediately; Person B's Postgres runs fine but its data/migration state doesn't persist across container restarts. These are different blocked goals (service availability during build vs. data persistence across runs), not addressable by a single intervention.",
+          "usage": {
+            "input_tokens": 6524,
+            "output_tokens": 435,
+            "cost_units": 0.017398
+          }
+        },
+        {
+          "pair_id": "78086387::78101562",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get Django app to connect to Postgres and run migrations during Docker image build",
+          "blocker_a": "Postgres service isn't running/accessible on localhost:5432 at the RUN step, causing psycopg2 connection refused",
+          "goal_b": "Reduce the final size of a Docker image running a Laravel/PHP app",
+          "blocker_b": "The Dockerfile installs many packages (yum, Oracle client, chromium, etc.) on a CentOS base, bloating the image to 6GB, with no clear strategy to slim it down",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is blocked by a database connectivity/lifecycle issue during migrations at build time, while person B is trying to reduce image size due to excessive installed packages; these are different blocked goals with different interventions (fixing DB service startup vs. optimizing image layers/base image).",
+          "usage": {
+            "input_tokens": 7926,
+            "output_tokens": 436,
+            "cost_units": 0.020212
+          }
+        },
+        {
+          "pair_id": "78088329::78089171",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Understand whether nested/overlapping volume mounts are necessary or redundant, to correctly translate a docker-compose volume setup into Kubernetes.",
+          "blocker_a": "Confusion about why sub-directory volumes are mounted separately when a parent directory volume already covers them, and uncertainty about how to replicate this in volumeClaimTemplates.",
+          "goal_b": "Get a NEXT_PUBLIC_ environment variable to have its configured value available to the app at runtime in a Kubernetes production/QA environment.",
+          "blocker_b": "The variable is set via a Kubernetes ConfigMap at pod runtime, but Next.js inlines NEXT_PUBLIC_ variables at build time, so the value set in the pod's env never reaches the compiled client code.",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is trying to understand volume mount semantics/overlap to design a storage layout in Kubernetes, while person B is trying to get a build-time-inlined environment variable to reflect a runtime-supplied value. These are different blocked goals (storage mounting design vs. configuration lifecycle timing) with no single intervention addressing both.",
+          "usage": {
+            "input_tokens": 5929,
+            "output_tokens": 539,
+            "cost_units": 0.017248
+          }
+        },
+        {
+          "pair_id": "78089075::78103907",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Connect to a ClickHouse server's HTTP/TCP interfaces from the host/browser and from a Node.js client",
+          "blocker_a": "Connections to ports 8123/9000 are refused despite using host networking; port/binding misunderstanding with the client library",
+          "goal_b": "Run both a Node.js server and a MongoDB instance together inside a single Docker container",
+          "blocker_b": "The Dockerfile's apt-get install of the 'mongodb' package fails because no installation candidate exists on that base image",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A is about a network/connection refusal when reaching a running ClickHouse service's ports, while B is about a package installation failure preventing MongoDB from even being installed in the image. These are different blocked goals (connectivity vs. build-time package availability) with no single shared intervention.",
+          "usage": {
+            "input_tokens": 5694,
+            "output_tokens": 427,
+            "cost_units": 0.015658000000000002
+          }
+        },
+        {
+          "pair_id": "78096175::78099350",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Persist Postgres database data across docker-compose container restarts.",
+          "blocker_a": "Data is lost/migrations must be rerun after `docker-compose down` and up again, despite using a named volume.",
+          "goal_b": "Connect a Go CLI application container to a PostgreSQL container over Docker Compose network.",
+          "blocker_b": "Connection is refused because the app uses 'localhost' instead of the Postgres service name/network address when run via docker.",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is trying to make database data survive container restarts (volume persistence), while person B is trying to establish network connectivity between an app container and a database container. Both involve Postgres in Docker, but the blocked goals—data persistence vs. network connection—are distinct and would need different interventions.",
+          "usage": {
+            "input_tokens": 6382,
+            "output_tokens": 410,
+            "cost_units": 0.016863999999999997
+          }
+        },
+        {
+          "pair_id": "78102252::78103994",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get a custom Dockerfile-based SDK image with extra Python deps used by Dataflow workers",
+          "blocker_a": "Workers still report ModuleNotFoundError for 'unidecode', implying they use the default SDK image instead of the custom one specified via --sdk_container_image",
+          "goal_b": "Build and push a Docker image for a Python app via GCP Cloud Build",
+          "blocker_b": "Cloud Build's docker build step cannot find /workspace/Dockerfile because it isn't present in the repo/build context",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A is about a Dataflow pipeline not picking up a custom SDK container image so a dependency is missing at runtime, while B is about Cloud Build failing to locate a Dockerfile in the build context. These are different blocked goals (runtime dependency resolution in a pipeline vs. build context file location) even though both involve Docker and GCP.",
+          "usage": {
+            "input_tokens": 5725,
+            "output_tokens": 456,
+            "cost_units": 0.01601
+          }
+        },
+        {
+          "pair_id": "78089113::78089171",
+          "decision": "ABSTAIN",
+          "goal_a": "Build a working Docker image from a customized Grafana source fork",
+          "blocker_a": "Build fails during the multi-stage Dockerfile build process (specific failure truncated/unclear in the text)",
+          "goal_b": "Have Next.js environment variables be readable in production/QA at runtime",
+          "blocker_b": "NEXT_PUBLIC_ variables are inlined at build time, but the values are only supplied later via a Kubernetes ConfigMap at runtime, so process.env is undefined",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Question A's actual blocking issue/error is truncated and not established in the visible text, so we cannot compare it to B's clear build-time/runtime configuration lifecycle issue. Without knowing what specifically stopped person A, we cannot determine if this is the same problem family.",
+          "usage": {
+            "input_tokens": 7932,
+            "output_tokens": 408,
+            "cost_units": 0.019944
+          }
+        },
+        {
+          "pair_id": "78091298::78098246",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Build a Docker image via Bazel's rules_oci using a custom Python toolchain, with correct entrypoint and file layout",
+          "blocker_a": "Unclear how to set the python toolchain binary as entrypoint and isolate app code into /app within the Bazel-built oci_image",
+          "goal_b": "Run a Flask app in a Docker container while passing a custom port number as a command-line argument",
+          "blocker_b": "The Dockerfile CMD doesn't pass the port argument to the script (run.sh/userapi.py), so sys.argv lacks the port and the app raises ValueError",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is trying to configure a Bazel/rules_oci build pipeline to produce a correctly structured Docker image with a custom Python toolchain, while person B is trying to get a startup script/CMD to forward a port argument to a Flask script. These are different blocked goals: build-system image construction versus runtime argument passing, so no single intervention addresses both.",
+          "usage": {
+            "input_tokens": 6737,
+            "output_tokens": 480,
+            "cost_units": 0.018274
+          }
+        },
+        {
+          "pair_id": "78091354::78095654",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get a working multi-stage Docker build that produces a runnable production build of a Nest.js app",
+          "blocker_a": "The nest CLI (a dev dependency) isn't available in PATH during the production stage's `npm run build` step, causing \"nest: not found\"",
+          "goal_b": "Avoid redundant work by building a shared DLL dependency once and reusing it across multiple Docker image builds",
+          "blocker_b": "No mechanism described for sharing a build artifact between separate Dockerfiles/projects; each currently rebuilds the DLL independently",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A is blocked by a missing CLI tool/dependency availability in a multi-stage build's production stage, while B is about architecting artifact sharing across multiple independent Docker builds. These are different blocked goals -- one intervention (fixing PATH/dependency install) would not address the other (build artifact reuse strategy).",
+          "usage": {
+            "input_tokens": 5402,
+            "output_tokens": 454,
+            "cost_units": 0.015344000000000002
+          }
+        },
+        {
+          "pair_id": "78098380::78104298",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get env variables from one shared file available both at Docker build time and at container runtime",
+          "blocker_a": "docker-compose's env_file only injects variables into the running container, not into the Dockerfile build (RUN) steps, without duplicating declarations",
+          "goal_b": "Get a JVM argument (--add-opens) applied correctly when launching a Java app in a container",
+          "blocker_b": "Placing --add-opens as a separate ENTRYPOINT array element after the jar/app arguments means it's passed to the app instead of the JVM, so it has no effect",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A wants a single config source to feed both build-time and run-time environment variables, blocked by docker-compose's env_file lifecycle scoping; Person B wants a JVM flag to take effect, blocked by incorrect placement/ordering of ENTRYPOINT arguments relative to the java command. These are different blocked goals with different interventions, not a shared configuration-lifecycle confusion.",
+          "usage": {
+            "input_tokens": 6240,
+            "output_tokens": 480,
+            "cost_units": 0.01728
+          }
+        },
+        {
+          "pair_id": "78102512::78104298",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Mount two separate docker volumes into the same target directory in a container",
+          "blocker_a": "Docker daemon rejects it with \"Duplicate mount point\" error since two -v flags target the same destination path",
+          "goal_b": "Pass a JVM argument (--add-opens) to a Java app launched via ENTRYPOINT in a Dockerfile",
+          "blocker_b": "The --add-opens flag placed as a separate ENTRYPOINT array element after program args isn't being applied, likely due to incorrect ENTRYPOINT/CMD syntax for passing JVM options",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A wants multiple volumes mounted at the same target path and is blocked by Docker's mount-point uniqueness constraint, while Person B wants a JVM argument applied to a Java process launched from ENTRYPOINT and is blocked by incorrect argument placement in the Dockerfile. These are unrelated blocked goals -- volume mounting semantics versus JVM argument configuration -- with no single intervention addressing both.",
+          "usage": {
+            "input_tokens": 5023,
+            "output_tokens": 500,
+            "cost_units": 0.015046
+          }
+        },
+        {
+          "pair_id": "78091032::78100506",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Learn how to containerize and run a basic C program with Docker Compose, including live-reload",
+          "blocker_a": "General unfamiliarity with using Docker/Docker Compose for a C project; no specific error, just confusion about setup",
+          "goal_b": "Keep a replicated KeyDB cluster (load-balanced via HAProxy) stable and reachable after upgrading KeyDB version",
+          "blocker_b": "Post-upgrade (6.3.2+) primary-replica communication times out intermittently, causing nodes to flap up/down in HAProxy",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A seeks basic guidance on containerizing a simple C program with Docker Compose and live-reload, with no actual error encountered; person B faces intermittent replication/connectivity failures in a KeyDB cluster after a version upgrade. These are unrelated blocked goals despite both using docker-compose.",
+          "usage": {
+            "input_tokens": 5531,
+            "output_tokens": 454,
+            "cost_units": 0.015602
+          }
+        },
+        {
+          "pair_id": "78092962::78096175",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get Poetry to use the system Python environment instead of creating a venv, so uvicorn is found at container runtime",
+          "blocker_a": "Despite `poetry env use system`, running via docker-compose still triggers venv creation and \"uvicorn\" command not found",
+          "goal_b": "Persist PostgreSQL data across container restarts/re-runs so migrations aren't lost",
+          "blocker_b": "Data is not persisting between `docker-compose down`/up cycles despite using a named external volume, requiring re-migration each time",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is blocked on getting Poetry/Python tooling to resolve dependencies and expose an executable correctly, while person B is blocked on persisting database volume data across container lifecycles; these are different blocked goals with different interventions (Poetry env configuration vs. Docker volume persistence).",
+          "usage": {
+            "input_tokens": 5505,
+            "output_tokens": 437,
+            "cost_units": 0.015380000000000001
+          }
+        },
+        {
+          "pair_id": "78095654::78097218",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Avoid rebuilding a shared DLL dependency separately for two .NET Docker images.",
+          "blocker_a": "Unsure how to build a common artifact once and share it across multiple Dockerfiles/images.",
+          "goal_b": "Get an ActiveMQ Artemis container to start successfully while mounting a local config file into a specific directory.",
+          "blocker_b": "Mounting a file into /home/jboss/broker/etc/ causes the whole directory to be replaced (hiding the broker binary), so launch.sh cannot find the artemis executable.",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A wants to avoid duplicate builds of a shared artifact across multiple Docker images, while person B wants a single container's volume mount to coexist with existing files needed at startup. These are different blocked goals with no common intervention beyond both being generic Docker-Compose configuration questions.",
+          "usage": {
+            "input_tokens": 6116,
+            "output_tokens": 446,
+            "cost_units": 0.016692
+          }
+        },
+        {
+          "pair_id": "78095654::78099949",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Avoid rebuilding a shared DLL separately for two .NET Docker projects",
+          "blocker_a": "No known mechanism to build a shared artifact once and reuse it across multiple Dockerfiles/images",
+          "goal_b": "Compose a Docker Swarm stack file by merging reusable YAML fragments (service defaults + placement) per service",
+          "blocker_b": "YAML anchor merge (`<<`) causes the `deploy` key to be fully overwritten rather than deep-merged, losing the shared restart/endpoint defaults",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A wants to avoid redundant compilation of a shared build artifact across multiple Docker images, while person B is struggling with YAML anchor/merge semantics causing key overwrites in a single compose file. These are different blocked goals -- build artifact sharing versus YAML fragment composition -- with no single intervention addressing both.",
+          "usage": {
+            "input_tokens": 6166,
+            "output_tokens": 457,
+            "cost_units": 0.016902
+          }
+        },
+        {
+          "pair_id": "78102669::78103425",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Keep a Hawkbit server's database connection persistent and stable over long uptime",
+          "blocker_a": "MySQL container's data volume appears to lose the 'hawkbit' database after a restart, causing Flyway to fail with 'Unknown database'",
+          "goal_b": "Use a single database connection string that works both when running the API locally and when running it inside Docker",
+          "blocker_b": "The connection string uses a Docker Compose service hostname (postgres-db) which is not resolvable when running the API outside Docker, requiring different configuration for each context",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A is about a MySQL data volume not persisting across container restarts, causing database loss; B is about wanting one connection string usable both locally and in Docker due to hostname resolution differences. These are different blocked goals with different interventions despite both involving Docker Compose and a database.",
+          "usage": {
+            "input_tokens": 6166,
+            "output_tokens": 435,
+            "cost_units": 0.016682000000000002
+          }
+        },
+        {
+          "pair_id": "78086542::78099519",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get their Docker Compose container to start running their entrypoint script",
+          "blocker_a": "The entrypoint.sh script lacks executable permission, causing \"permission denied\" when the container tries to exec it",
+          "goal_b": "Get their Docker Compose container to start running JupyterLab via pipenv",
+          "blocker_b": "The pipenv binary at /app/.venv/bin/pipenv doesn't exist (likely because a bind-mounted volume overwrote the installed venv), causing \"no such file or directory\"",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Both share the identical \"OCI runtime create failed... exec:\" daemon wrapper text, but A's blockage is a permission bit on a script the image contains while B's is a missing executable path likely due to volume-mount overwrite of the venv. These are different root blockages requiring different interventions, so the shared string is symptom-only.",
+          "usage": {
+            "input_tokens": 6374,
+            "output_tokens": 443,
+            "cost_units": 0.017178
+          }
+        },
+        {
+          "pair_id": "78086323::78086387",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get a Telegraf/Node.js bot to reach the Telegram API from within a container run with host networking",
+          "blocker_a": "Requests to api.telegram.org time out (ETIMEDOUT) only when the container uses --network host, though the same request works without host networking",
+          "goal_b": "Get a Django app's migrations to run against a PostgreSQL database being set up inside the same container during the Docker build",
+          "blocker_b": "Postgres isn't accepting connections at the point migrations run during the build (connection refused on localhost:5432), likely because the server isn't running/ready at that build step",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is blocked by network reachability to an external HTTPS API under host networking mode, while person B is blocked by a local Postgres service not being available/running at the point a build-time command tries to connect to it. These are different blocked goals (external network egress vs. same-container service startup ordering) with no single shared intervention.",
+          "usage": {
+            "input_tokens": 7374,
+            "output_tokens": 461,
+            "cost_units": 0.019358
+          }
+        },
+        {
+          "pair_id": "78086501::78103425",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get a Golang+React+MySQL app running via docker compose successfully",
+          "blocker_a": "Go binary \"nd\" not found at container start (build/CMD issue) and MySQL container failing to initialize because no root password/empty-password env var was set",
+          "goal_b": "Use one identical database connection string whether the API runs locally or inside Docker, without extra config per environment",
+          "blocker_b": "Host name in the connection string (the postgres service name) is not resolvable/reachable when the API runs outside Docker on the host machine",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A is trying to fix a broken Dockerfile build/CMD path and missing MySQL root-password env var causing container startup failures, while B is trying to unify a connection string across local and containerized environments via networking/hostname resolution. These are different blocked goals (build/CMD and env-var initialization vs. cross-environment network addressing) with no single intervention covering both.",
+          "usage": {
+            "input_tokens": 6150,
+            "output_tokens": 458,
+            "cost_units": 0.01688
+          }
+        },
+        {
+          "pair_id": "78087887::78103879",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get wkhtmltopdf to run successfully inside a Docker container as a non-root user",
+          "blocker_a": "Permission/ownership mismatch on /tmp (XDG_RUNTIME_DIR) for UID 1000 causing wkhtmltopdf to crash with exit code -11",
+          "goal_b": "Authenticate a containerized Spring Boot app to an external SQL Server database",
+          "blocker_b": "No Kerberos ticket available inside the container to use SQL Server Integrated Security",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is fighting a filesystem permissions/UID mismatch that crashes a PDF-rendering tool, while person B is fighting an authentication mechanism (Kerberos) unavailable in a container for database access. Both occur \"in Docker\" but the blocked goals and needed interventions (fixing runtime directory ownership vs. switching auth strategy) are unrelated.",
+          "usage": {
+            "input_tokens": 4982,
+            "output_tokens": 461,
+            "cost_units": 0.014574
+          }
+        },
+        {
+          "pair_id": "78089075::78097003",
+          "decision": "SAME_PROBLEM_FAMILY",
+          "goal_a": "Connect to a ClickHouse server (HTTP/TCP interface) running in a Docker container from the host/browser and from a Node.js client.",
+          "blocker_a": "Despite using --network=host, connections to localhost:8123/9000 from browser and Node.js client are refused (ECONNREFUSED).",
+          "goal_b": "Have a PHP application inside a Docker container connect to another service (InfluxDB) also running in Docker via curl.",
+          "blocker_b": "Using 'localhost' from inside the app container fails (curl error 7) because localhost refers to the container itself, not the influx service; switching to the service name 'influx' causes a different curl error (6).",
+          "shared_problem_if_any": "Both involve confusion over how 'localhost' resolves across Docker networking boundaries when trying to reach a service from another process/container.",
+          "brief_rationale": "Both people are trying to reach a service running in a Docker container using 'localhost' and are blocked because Docker's networking makes 'localhost' resolve to the wrong network namespace rather than the target service, a single explanation of Docker network/localhost semantics would address both.",
+          "usage": {
+            "input_tokens": 7000,
+            "output_tokens": 512,
+            "cost_units": 0.01912
+          }
+        },
+        {
+          "pair_id": "78097003::78098380",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get a PHP script running in one container to make an HTTP request to another service in the same Docker Compose setup",
+          "blocker_a": "Using 'localhost' inside the container resolves to the container itself, not the target service, so curl fails; switching to the service name causes a different curl error (curl 6)",
+          "goal_b": "Have environment variables from a single .env file available both during the Docker image build and at container runtime",
+          "blocker_b": "docker-compose's env_file option only injects variables into the running container, not into the Dockerfile build step, so build-time RUN commands can't see them",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is blocked by inter-container network addressing (localhost vs service name) for making an HTTP call, while person B is blocked by a build-time vs run-time lifecycle gap for environment variable propagation. These are different blocked goals requiring different interventions, not a shared configuration-lifecycle confusion or shared networking problem.",
+          "usage": {
+            "input_tokens": 7583,
+            "output_tokens": 462,
+            "cost_units": 0.019786
+          }
+        },
+        {
+          "pair_id": "78097216::78099680",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get a Java servlet REST API deployed via multi-stage Docker build to respond correctly to client requests",
+          "blocker_a": "The .war built in the maven stage and copied to the tomcat stage caused 404s, while a locally-built .war worked; build artifact wasn't correctly carried between stages",
+          "goal_b": "Run a FastAPI app under gunicorn (managing uvicorn workers) inside a Docker container built with a multi-stage build",
+          "blocker_b": "The gunicorn executable installed in the builder stage's virtualenv was not found in $PATH at runtime because only the venv, not the gunicorn binary path setup, was carried over correctly",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Both involve multi-stage Docker builds where something built in an earlier stage misbehaves later, but A's blockage is an application returning wrong HTTP responses due to a mis-copied .war artifact, while B's blockage is an executable missing from PATH at container start; these require different diagnostic and fix approaches.",
+          "usage": {
+            "input_tokens": 6789,
+            "output_tokens": 489,
+            "cost_units": 0.018468
+          }
+        },
+        {
+          "pair_id": "78097574::78105286",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get netCDF4 python package working correctly (full performance) when copied via a multistage Docker build",
+          "blocker_a": "Copying the venv (with netCDF4) from the compile stage to the final stage causes a severe slowdown, likely due to missing/incorrectly linked C libraries",
+          "goal_b": "Successfully build a large C++/robotics Docker image targeting a Raspberry Pi 4B (ARM) architecture",
+          "blocker_b": "The build runs out of memory (OOM) on the low-RAM Pi, and cross-building for ARM on a stronger AMD machine also fails with the compiler being killed due to memory limits",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A is trying to preserve correct native library linkage/performance for a Python package copied between Docker build stages, while B is trying to complete a memory-intensive C++ compilation within resource-constrained (RAM) build environments across architectures. These are different blocked goals -- library linkage/performance versus memory exhaustion during compilation -- and no single intervention would address both.",
+          "usage": {
+            "input_tokens": 6000,
+            "output_tokens": 499,
+            "cost_units": 0.01699
+          }
+        }
+      ]
+    },
+    {
+      "result": {
+        "variant": "V2-B",
+        "prompt_version": "2.1.0",
+        "scored_pairs": 20,
+        "predictions": {
+          "SAME_PROBLEM_FAMILY": 0,
+          "DIFFERENT_PROBLEM_FAMILY": 23,
+          "ABSTAIN": 1
+        },
+        "provisional_true_same": 0,
+        "provisional_false_same": 0,
+        "provisional_missed_same": 2,
+        "agreements": 17,
+        "abstain_on_non_uncertain_references": 1,
+        "same_share_of_scored": 0.0,
+        "schema_valid": true,
+        "schema_retries": 0,
+        "usage": {
+          "input_tokens": 153914,
+          "output_tokens": 10969,
+          "cost_units": 0.417518
+        },
+        "epistemic_note": "Every count is agreement against an AI_ASSISTED_PROVISIONAL reference. Not accuracy, not validated accuracy, not a human benchmark."
+      },
+      "schema_retries": [],
+      "schema_failures": [],
+      "classifications": [
+        {
+          "pair_id": "78086387::78096175",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Run Django migrations against Postgres during a single-container Dockerfile build, then serve the app.",
+          "blocker_a": "Postgres server was not actually running/listening on localhost when `RUN python manage.py migrate` executed at build time, so the connection was refused.",
+          "goal_b": "Have migrated database data persist across `docker-compose down`/re-up cycles.",
+          "blocker_b": "Data (or the perception of it) is lost between runs despite using a named volume, requiring re-running migrations each time.",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is blocked by Postgres not being reachable/running at the moment migrations run during a build, while person B is blocked by data/state not persisting across container recreation with a volume. These are different blocked goals (service startup/ordering vs. data persistence) requiring different interventions, despite both involving Django+Postgres+Docker.",
+          "usage": {
+            "input_tokens": 6635,
+            "output_tokens": 442,
+            "cost_units": 0.01769
+          }
+        },
+        {
+          "pair_id": "78086387::78101562",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get Django to connect to Postgres during the Docker image build (running migrations at build time)",
+          "blocker_a": "Postgres server not reachable at localhost:5432 during `RUN` build step because the service isn't actually running/listening when migrate runs",
+          "goal_b": "Reduce the final size of a Docker image built for a Laravel/PHP application",
+          "blocker_b": "A large, monolithic CentOS-based Dockerfile installing many packages, dev tools and Oracle client libraries, producing a 6GB image with no size-reduction strategy (e.g., multi-stage build, slimmer base image)",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is blocked by a database connectivity/lifecycle issue when running migrations during the build, while person B is trying to shrink an oversized final image due to excessive installed packages. No single intervention (e.g., a fix for Postgres startup ordering) would address image-size optimization, and vice versa.",
+          "usage": {
+            "input_tokens": 8037,
+            "output_tokens": 467,
+            "cost_units": 0.020744000000000002
+          }
+        },
+        {
+          "pair_id": "78088329::78089171",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Understand why a docker-compose volume layout mounts nested paths, to correctly translate it into Kubernetes volumeClaimTemplates.",
+          "blocker_a": "Doesn't understand the purpose/semantics of mounting a subdirectory volume when the parent directory is also mounted, so unsure how many volumes to define in k8s.",
+          "goal_b": "Get a Next.js environment variable to be available at runtime in a Kubernetes/production deployment, as it is in local dev/docker.",
+          "blocker_b": "NEXT_PUBLIC_ variables are inlined at build time, but the value is only supplied via a ConfigMap at pod runtime, so process.env is undefined in prod/qa.",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is trying to understand volume mount semantics/overlap to translate a compose config into Kubernetes storage, while person B is blocked by a build-time vs runtime configuration lifecycle mismatch for environment variables. These are distinct blocked goals with no single shared intervention.",
+          "usage": {
+            "input_tokens": 6040,
+            "output_tokens": 496,
+            "cost_units": 0.01704
+          }
+        },
+        {
+          "pair_id": "78089075::78103907",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Connect to a ClickHouse server's HTTP/native interfaces from outside the container (browser and Node.js client)",
+          "blocker_a": "Connections to ports 8123/9000 are refused despite using host networking; unclear why the ports aren't reachable from host/browser/node client",
+          "goal_b": "Run both a Node.js server and a MongoDB instance together inside a single container",
+          "blocker_b": "Dockerfile build fails because 'apt-get install mongodb' has no installation candidate on the node:16 base image",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A is about a network/connectivity failure reaching a running service's exposed ports, while B is about a package installation failure during image build for combining two services in one container. These are different blocked goals with different interventions (network diagnosis vs. package availability/Dockerfile design).",
+          "usage": {
+            "input_tokens": 5805,
+            "output_tokens": 424,
+            "cost_units": 0.01585
+          }
+        },
+        {
+          "pair_id": "78096175::78099350",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Persist Postgres database data across docker-compose down/up cycles",
+          "blocker_a": "Volume marked external but migrations must be rerun after each 'down', suggesting data loss between runs",
+          "goal_b": "Connect a Go CLI app container to a Postgres container over Docker Compose",
+          "blocker_b": "App uses 'localhost' as host and runs containers separately via docker run instead of compose networking, causing connection refused",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A is about data persistence across container restarts (volume/lifecycle issue), while B is about inter-container network connectivity (hostname resolution). These are different blocked goals with different interventions, despite both using Postgres and Docker Compose.",
+          "usage": {
+            "input_tokens": 6493,
+            "output_tokens": 387,
+            "cost_units": 0.016856000000000003
+          }
+        },
+        {
+          "pair_id": "78102252::78103994",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get a custom Docker SDK image with extra Python dependencies used by Dataflow workers",
+          "blocker_a": "Workers still use default Beam SDK and raise ModuleNotFoundError for 'unidecode' despite custom image/template config",
+          "goal_b": "Build and push a Docker image for a Python app via GCP Cloud Build",
+          "blocker_b": "Cloud Build's docker build step can't find the Dockerfile in /workspace, failing with a symlink evaluation error",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A is about Dataflow workers not picking up a custom SDK container image with extra Python packages, while B is about Cloud Build failing to locate a Dockerfile during the build step. Both involve Docker and GCP but the blocked goals and needed interventions are unrelated.",
+          "usage": {
+            "input_tokens": 5836,
+            "output_tokens": 420,
+            "cost_units": 0.015872
+          }
+        },
+        {
+          "pair_id": "78089113::78089171",
+          "decision": "ABSTAIN",
+          "goal_a": "Build a working Docker image from a customized fork of Grafana's source code",
+          "blocker_a": "The multi-stage Dockerfile build fails (truncated body, exact failure/error not shown in the excerpt)",
+          "goal_b": "Get a Next.js app's environment variables to be available at runtime in production/QA",
+          "blocker_b": "NEXT_PUBLIC_ variables set via a Kubernetes ConfigMap at runtime are undefined because Next.js inlines NEXT_PUBLIC_ vars at build time, not runtime",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Question A's body is truncated before any error or failure is stated, so the actual blocker for person A is not established. Without knowing what stopped A, no comparison of blocked goals can be made, so ABSTAIN is required per the rubric.",
+          "usage": {
+            "input_tokens": 8043,
+            "output_tokens": 413,
+            "cost_units": 0.020215999999999998
+          }
+        },
+        {
+          "pair_id": "78091298::78098246",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Build a Docker image via Bazel rules_oci with a custom Python toolchain, setting entrypoint and layout correctly",
+          "blocker_a": "Unclear how to configure the entrypoint (toolchain + binary) and isolate app code into a /app folder using the py_layer.bzl approach",
+          "goal_b": "Run a Flask API in Docker so it starts on a configurable port passed at runtime",
+          "blocker_b": "The CMD in the Dockerfile/run.sh doesn't pass the port argument to the python script, so sys.argv lacks the port and the app raises ValueError",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is trying to correctly assemble a Bazel-built Docker image (entrypoint/toolchain/layering) while person B is trying to get a command-line argument passed through a shell script into a Python app's CMD; these are unrelated blocked goals with no shared intervention.",
+          "usage": {
+            "input_tokens": 6848,
+            "output_tokens": 455,
+            "cost_units": 0.018246
+          }
+        },
+        {
+          "pair_id": "78091354::78095654",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get a production Docker build of a Nest.js app to succeed by running the build command",
+          "blocker_a": "The Nest CLI (a dev dependency) is missing from node_modules/.bin in the production stage, so 'nest' is not found when npm run build executes",
+          "goal_b": "Avoid duplicating the build of a shared DLL across two separate Docker images/projects",
+          "blocker_b": "No clear mechanism to build a shared artifact once and reuse it across multiple Dockerfiles instead of rebuilding it per project",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is blocked by a missing CLI tool during a multi-stage build's dependency separation, while person B wants to avoid redundant builds of a shared artifact across multiple images; no single intervention (e.g. fixing PATH/dev-dependency availability) addresses artifact sharing across Dockerfiles.",
+          "usage": {
+            "input_tokens": 5513,
+            "output_tokens": 446,
+            "cost_units": 0.015486
+          }
+        },
+        {
+          "pair_id": "78098380::78104298",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get env variables from a single .env file available both at Docker build time and at container runtime",
+          "blocker_a": "docker-compose's env_file only injects variables into the running container, not into the Dockerfile build step (RUN commands), and duplicating ARG/ENV per variable is impractical",
+          "goal_b": "Get a JVM argument (--add-opens) correctly applied when starting a Java application in a container",
+          "blocker_b": "Placing the flag as an entrypoint argument after the jar name means it's passed to the application instead of the JVM, so it's ignored",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A is about propagating configuration values across build and runtime lifecycle phases via env files, while B is about correctly ordering/placing a JVM flag in an ENTRYPOINT so it's parsed by the JVM rather than the application. No single intervention (documentation, tool, or workflow) addresses both distinct blockers.",
+          "usage": {
+            "input_tokens": 6351,
+            "output_tokens": 455,
+            "cost_units": 0.017252
+          }
+        },
+        {
+          "pair_id": "78102512::78104298",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Mount multiple distinct docker volumes into the same target path inside one container",
+          "blocker_a": "Docker daemon rejects duplicate mount points, so multiple volumes cannot share one target directory",
+          "goal_b": "Pass a JVM argument (--add-opens) to a Java application started via Docker ENTRYPOINT",
+          "blocker_b": "The argument is placed after the jar in ENTRYPOINT so it's treated as a program argument, not a JVM option, so it has no effect",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A wants to mount multiple volumes to the same container path and is blocked by Docker's duplicate mount point restriction; B wants a JVM flag to take effect and is blocked by how ENTRYPOINT arguments are parsed by java. No single tool or documentation fix addresses both volume-mount semantics and Java command-line argument placement.",
+          "usage": {
+            "input_tokens": 5134,
+            "output_tokens": 443,
+            "cost_units": 0.014698000000000001
+          }
+        },
+        {
+          "pair_id": "78091032::78100506",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Learn how to containerize and run a simple C program with Docker Compose, including live-reload",
+          "blocker_a": "Lack of understanding of how to set up Docker/Docker Compose for a C project; no specific error, just general confusion",
+          "goal_b": "Keep a redundant KeyDB cluster (load-balanced via HAProxy) stable and reachable in production",
+          "blocker_b": "Upgrading KeyDB past 6.0.18 causes replication/connection failures between primary and secondary nodes, making them flap up/down",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A is a beginner asking how to containerize a basic C program with Compose, with no established failure; B is a specific version-upgrade replication instability in a KeyDB cluster. No single intervention addresses both a how-to onboarding question and a production database replication regression.",
+          "usage": {
+            "input_tokens": 5642,
+            "output_tokens": 427,
+            "cost_units": 0.015554000000000002
+          }
+        },
+        {
+          "pair_id": "78092962::78096175",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Have Poetry install dependencies system-wide (no venv) so uvicorn is found when run via docker-compose",
+          "blocker_a": "Poetry still creates a virtualenv when built via docker-compose, causing uvicorn command not found, despite `poetry env use system` working in a plain docker run",
+          "goal_b": "Persist Postgres database data across container restarts/re-runs",
+          "blocker_b": "Data is lost after `docker-compose down` and re-up, requiring re-running migrations, despite a named volume being declared",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is blocked on getting Poetry to install packages system-wide so the CMD can find an executable, while Person B is blocked on getting Postgres data to persist across container recreation via volumes; these are different blocked goals with different interventions (build-time dependency/environment configuration vs. volume/data persistence).",
+          "usage": {
+            "input_tokens": 5616,
+            "output_tokens": 442,
+            "cost_units": 0.015652
+          }
+        },
+        {
+          "pair_id": "78095654::78097218",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Share a single built artifact (DLL) across multiple Docker images/builds instead of rebuilding it per project.",
+          "blocker_a": "No known Docker mechanism to build the shared dependency once and reuse it in multiple Dockerfiles without duplicating the build.",
+          "goal_b": "Mount a local config file into a specific directory inside a running ActiveMQ Artemis container.",
+          "blocker_b": "Mounting a file onto an existing directory (broker/etc) causes the volume mount to overwrite/hide sibling files (like the artemis binary directory structure), breaking the container's launch script.",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A wants to avoid duplicate builds of a shared artifact across Dockerfiles, while B is trying to bind-mount a config file into a container without breaking the container's expected filesystem layout; these are different blocked goals (build-time artifact sharing vs. runtime volume-mount interference) with no single shared intervention.",
+          "usage": {
+            "input_tokens": 6227,
+            "output_tokens": 472,
+            "cost_units": 0.017174000000000002
+          }
+        },
+        {
+          "pair_id": "78095654::78099949",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Avoid rebuilding a shared DLL separately for two .NET Docker images; build it once and reuse it.",
+          "blocker_a": "Not clear how to build a shared artifact once and make it available to multiple separate Dockerfiles.",
+          "goal_b": "Merge reusable YAML fragments (anchors/aliases) into a single service config in a docker-compose/stack file without losing nested keys.",
+          "blocker_b": "YAML merge key (`<<:`) overwrites the whole `deploy` map instead of merging nested fields, so placement constraints replace restart policy defaults.",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A wants to share a compiled build artifact across multiple Dockerfiles to avoid duplicate builds, while person B is struggling with YAML anchor/merge-key semantics overwriting nested keys in a compose file. These are different blocked goals (build artifact reuse vs. YAML merge behavior) with no single shared intervention.",
+          "usage": {
+            "input_tokens": 6277,
+            "output_tokens": 474,
+            "cost_units": 0.017294
+          }
+        },
+        {
+          "pair_id": "78102669::78103425",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Keep a Hawkbit server's MySQL database persistent and reachable across container restarts",
+          "blocker_a": "MySQL container loses/recreates its data after restart (volume mount path mismatch), causing 'Unknown database' errors after hours of uptime",
+          "goal_b": "Use a single database connection string that works both when running the API locally and when running it inside Docker",
+          "blocker_b": "The hostname in the connection string (a Docker service name) is not resolvable from the host machine when running the API locally, requiring different configuration per environment",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is trying to keep a MySQL volume/data persistent across container restarts, blocked by data loss causing missing database errors; Person B is trying to unify local vs containerized network addressing for a database connection string. Both involve Docker + databases but the blocked goals (volume persistence vs. hostname resolution across environments) are unrelated, so no single intervention addresses both.",
+          "usage": {
+            "input_tokens": 6277,
+            "output_tokens": 466,
+            "cost_units": 0.017214
+          }
+        },
+        {
+          "pair_id": "78086542::78099519",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Start a Docker Compose container running a custom entrypoint script",
+          "blocker_a": "Container fails to start: entrypoint.sh exec fails with \"permission denied\" (script likely not executable)",
+          "goal_b": "Start a Docker Compose container running Jupyter Lab via pipenv",
+          "blocker_b": "Container fails to start: exec fails because /app/.venv/bin/pipenv does not exist, since the bind-mounted volume overwrites the installed virtualenv",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Both share the OCI runtime \"failed to create task\" wrapper text, but A's issue is a non-executable entrypoint script (permission denied) while B's issue is a missing binary caused by volume mounts overwriting the installed environment (stat: no such file). These are different blocked goals requiring different interventions, so this is the classic shared-symptom-only wrapper case.",
+          "usage": {
+            "input_tokens": 6485,
+            "output_tokens": 448,
+            "cost_units": 0.01745
+          }
+        },
+        {
+          "pair_id": "78086323::78086387",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get a Telegraf bot in a container to reach the Telegram API over the network",
+          "blocker_a": "Running with --network host causes outbound HTTPS requests to time out (ETIMEDOUT), though they work without host networking",
+          "goal_b": "Get Django to connect to a Postgres database as part of the Docker build process",
+          "blocker_b": "Postgres service isn't actually running/reachable at localhost:5432 during the RUN step of the build (build-time vs runtime service lifecycle confusion), causing connection refused",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is blocked by host-network mode breaking outbound DNS/HTTPS to an external API, while person B is blocked by trying to run a stateful database service during a stateless Docker build step where it can't persist or be reachable. These are different blocked goals (external network egress vs. build-time service availability) with no single shared intervention beyond both being generic Docker/networking issues.",
+          "usage": {
+            "input_tokens": 7485,
+            "output_tokens": 463,
+            "cost_units": 0.0196
+          }
+        },
+        {
+          "pair_id": "78086501::78103425",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get a multi-container Golang+React+MySQL app running via docker compose",
+          "blocker_a": "Backend binary not found at runtime (\"nd: not found\") and MySQL container fails because no root password/env var is set, so it's never initialized",
+          "goal_b": "Use one connection string that works both for the app running locally and running inside Docker, without extra config",
+          "blocker_b": "The hostname \"postgres-db\" used in the connection string only resolves inside the docker-compose network, not from a locally-run process, so a single string can't reach the DB in both contexts",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A is trying to fix broken container startup (missing binary due to a Dockerfile CMD typo, and an uninitialized MySQL container missing required env vars), while B is trying to unify network addressing of a database across local and containerized execution contexts. These are different blocked goals -- one about getting containers to start correctly, the other about cross-environment hostname resolution -- and no single intervention addresses both.",
+          "usage": {
+            "input_tokens": 6261,
+            "output_tokens": 477,
+            "cost_units": 0.017292000000000002
+          }
+        },
+        {
+          "pair_id": "78087887::78103879",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get wkhtmltopdf to run successfully inside a Docker container as a non-root user",
+          "blocker_a": "Runtime directory /tmp ownership/permission mismatch causing a QStandardPaths warning, and after chmod fixes, wkhtmltopdf crashes with a segfault-like exit code -11",
+          "goal_b": "Get a Spring Boot app running in a Docker container to authenticate to an external SQL Server database",
+          "blocker_b": "Integrated Security (Kerberos) authentication is unavailable inside the container, unlike on the dev machine, so the app cannot connect to SQL Server",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is trying to get a PDF-rendering binary to run correctly under a non-root user with correct runtime directory permissions, while person B is trying to authenticate a database connection using Kerberos-based integrated security from within a container. These are different blocked goals (filesystem permissions/runtime crash vs. authentication mechanism unavailable) with no single intervention addressing both.",
+          "usage": {
+            "input_tokens": 5093,
+            "output_tokens": 496,
+            "cost_units": 0.015146
+          }
+        },
+        {
+          "pair_id": "78089075::78097003",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Connect to a ClickHouse server's HTTP/native interface running inside a Docker container, from outside that container (browser/Node.js)",
+          "blocker_a": "Despite using --network=host, requests to localhost ports 8123/9000 are refused (ECONNREFUSED), suggesting the service isn't actually reachable that way",
+          "goal_b": "Have a PHP script (running inside a Docker container) successfully make an HTTP request to another service (InfluxDB) also running in Docker",
+          "blocker_b": "Using 'localhost' inside the PHP container resolves to the container itself, not the influx service, causing curl errors; using the compose service name causes a different curl error",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A is about a host-machine client failing to reach a container's exposed ports despite host networking, while B is about one container's process needing to reach a sibling container across a Docker network via correct hostname/DNS. Both surface as 'connection refused/curl error' but the blocked goals -- host-to-container port exposure vs inter-container service discovery -- differ, so no single intervention addresses both.",
+          "usage": {
+            "input_tokens": 7111,
+            "output_tokens": 514,
+            "cost_units": 0.019362
+          }
+        },
+        {
+          "pair_id": "78097003::78098380",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Make a PHP curl call from inside a container reach another service (InfluxDB) running in a sibling container.",
+          "blocker_a": "Using `localhost` in PHP curl resolves to the app container itself, not the influx container, causing connection errors; switching to service name causes a different curl error (6).",
+          "goal_b": "Have a single set of environment variables available both during Docker image build and during container runtime, sourced from one .env file.",
+          "blocker_b": "`env_file` in docker-compose only injects variables at container runtime, not during the Dockerfile build step, so build-time RUN commands can't see them.",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is blocked by inter-container network addressing (localhost vs service name resolution) when making an HTTP call, while person B is blocked by a build-time vs run-time configuration lifecycle gap for environment variables. These are different blocked goals with different interventions: DNS/networking guidance for containers versus build-arg/env-var lifecycle tooling.",
+          "usage": {
+            "input_tokens": 7694,
+            "output_tokens": 481,
+            "cost_units": 0.020198
+          }
+        },
+        {
+          "pair_id": "78097216::78099680",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get a REST API deployed via multi-stage Docker build to respond correctly to client requests",
+          "blocker_a": "Multi-stage build's WAR file, when built inside the container, resulted in a 404 (likely wrong artifact/context), unlike a locally-built WAR copied directly",
+          "goal_b": "Run a FastAPI app under gunicorn+uvicorn workers in a Docker container",
+          "blocker_b": "The gunicorn executable installed in a builder stage's virtual environment was not available in the final runtime stage's PATH, causing \"executable file not found\"",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A's blocked goal is getting a servlet API to respond correctly (a 404 routing/artifact issue), while person B's blocked goal is getting an executable available in the final stage's PATH; both use multi-stage builds but the actual blockages and interventions differ (WAR build/deployment correctness vs. missing binary in runtime image).",
+          "usage": {
+            "input_tokens": 6900,
+            "output_tokens": 469,
+            "cost_units": 0.01849
+          }
+        },
+        {
+          "pair_id": "78097574::78105286",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get a Python package (netCDF4) copied correctly between multistage Docker build stages without losing runtime performance",
+          "blocker_a": "Copying the venv with netCDF4 to the final stage causes a big slowdown in netCDF read/write ops, suspected missing linked C libs",
+          "goal_b": "Build a large C++ Docker image (VINS-Fusion) for ARM on a resource-constrained Raspberry Pi, or cross-build elsewhere for that architecture",
+          "blocker_b": "Build runs out of RAM (OOM) on the Pi and the compiler is killed during cross-architecture build due to insufficient memory",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is trying to preserve correct library linkage/performance when copying a Python package between Docker build stages, while Person B is trying to complete a memory-intensive C++ compilation within limited RAM on constrained hardware. These are different blocked goals (library linking/performance vs. resource exhaustion during compilation) with no single shared intervention.",
+          "usage": {
+            "input_tokens": 6111,
+            "output_tokens": 492,
+            "cost_units": 0.017142
+          }
+        }
+      ]
+    },
+    {
+      "result": {
+        "variant": "V2-C",
+        "prompt_version": "2.2.0",
+        "scored_pairs": 20,
+        "predictions": {
+          "SAME_PROBLEM_FAMILY": 1,
+          "DIFFERENT_PROBLEM_FAMILY": 22,
+          "ABSTAIN": 1
+        },
+        "provisional_true_same": 1,
+        "provisional_false_same": 0,
+        "provisional_missed_same": 1,
+        "agreements": 18,
+        "abstain_on_non_uncertain_references": 1,
+        "same_share_of_scored": 0.05,
+        "schema_valid": true,
+        "schema_retries": 0,
+        "usage": {
+          "input_tokens": 164546,
+          "output_tokens": 10913,
+          "cost_units": 0.438222
+        },
+        "epistemic_note": "Every count is agreement against an AI_ASSISTED_PROVISIONAL reference. Not accuracy, not validated accuracy, not a human benchmark."
+      },
+      "schema_retries": [],
+      "schema_failures": [],
+      "classifications": [
+        {
+          "pair_id": "78086387::78096175",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Run Django + Postgres migrations inside a single Docker image being built",
+          "blocker_a": "Postgres server isn't running/reachable at build time when migrate is invoked in RUN step, causing connection refused",
+          "goal_b": "Have Postgres data persist across docker-compose container restarts",
+          "blocker_b": "Data/migrations are lost after 'docker-compose down' and re-up, despite a named volume, requiring re-migration each time",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A is blocked trying to connect to a database server during image build because Postgres isn't up yet; B is blocked trying to make already-working data survive container restarts. These are different blocked goals (connectivity at build time vs. data persistence), so no single intervention addresses both.",
+          "usage": {
+            "input_tokens": 7078,
+            "output_tokens": 400,
+            "cost_units": 0.018156
+          }
+        },
+        {
+          "pair_id": "78086387::78101562",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get Django to connect to a PostgreSQL database during the Docker image build (running migrations at build time).",
+          "blocker_a": "Postgres service isn't running/listening on localhost when `manage.py migrate` executes in the same RUN step, causing connection refused.",
+          "goal_b": "Reduce the final size of a Docker image built for a Laravel/PHP application.",
+          "blocker_b": "The Dockerfile installs many packages/dependencies (yum installs, Oracle client, Chromium, etc.) on a heavy base image, inflating the image to 6GB, with no clear guidance on how to trim it.",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is blocked by a database service not being available when Django tries to connect during the build, while person B is blocked by wanting a smaller final image size due to many installed packages. These are different blocked goals -- database connectivity/lifecycle timing versus image size optimization -- and no single intervention addresses both.",
+          "usage": {
+            "input_tokens": 8480,
+            "output_tokens": 467,
+            "cost_units": 0.021630000000000003
+          }
+        },
+        {
+          "pair_id": "78088329::78089171",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Understand whether nested volume mounts are redundant and how to translate a compose volume layout into Kubernetes volumeClaimTemplates.",
+          "blocker_a": "Confusion about why sub-path volumes are mounted separately when a parent directory volume already covers them, with no failure being reported.",
+          "goal_b": "Have a Next.js app read environment variable values correctly in a Kubernetes production/QA deployment.",
+          "blocker_b": "NEXT_PUBLIC_ variables set via a k8s ConfigMap at pod runtime are undefined in the running app because Next.js inlines NEXT_PUBLIC_ vars at build time, before the ConfigMap value exists.",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A is a conceptual question about volume mount semantics and translating compose volumes to Kubernetes, with no blockage or failure described; B is about an environment variable being undefined due to build-time vs runtime lifecycle mismatch. These are different blocked goals with no single intervention addressing both.",
+          "usage": {
+            "input_tokens": 6483,
+            "output_tokens": 491,
+            "cost_units": 0.017876
+          }
+        },
+        {
+          "pair_id": "78089075::78103907",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Connect to a ClickHouse server running in Docker from a Node.js client / browser",
+          "blocker_a": "Connection refused when accessing ClickHouse's HTTP/TCP ports (8123/9000) despite using host networking",
+          "goal_b": "Run both a Node.js server and MongoDB together inside a single Docker container",
+          "blocker_b": "Dockerfile build fails because apt-get cannot find an installable 'mongodb' package on the base image",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is trying to reach a running database service's network port from a client, while person B is trying to get a package installed during image build to co-locate two services in one container; these are different blocked goals (network connectivity vs. build-time package availability) even though both involve Docker and a database-like service.",
+          "usage": {
+            "input_tokens": 6248,
+            "output_tokens": 407,
+            "cost_units": 0.016566
+          }
+        },
+        {
+          "pair_id": "78096175::78099350",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Make PostgreSQL data persist across docker-compose restarts (avoid re-running migrations).",
+          "blocker_a": "Volume defined as external but not actually preserving data; data lost when containers are brought down and re-run.",
+          "goal_b": "Get a Go application to successfully connect to and write data into a PostgreSQL database running via Docker Compose.",
+          "blocker_b": "App container uses 'localhost' as the DB host, which doesn't resolve to the postgres service container, causing connection refused.",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A wants stored database data to survive a restart, while person B wants their application to establish a network connection to the database; no single intervention addresses both blocked goals. Both merely involve Postgres in Docker Compose, which the rubric flags as an insufficient shared category.",
+          "usage": {
+            "input_tokens": 6936,
+            "output_tokens": 420,
+            "cost_units": 0.018072
+          }
+        },
+        {
+          "pair_id": "78102252::78103994",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get a custom Python dependency available to Dataflow pipeline workers via a custom SDK container image",
+          "blocker_a": "Workers still report ModuleNotFoundError for the package even after building/pushing a custom Docker image with the dependency installed, suggesting workers use default SDK not the custom image",
+          "goal_b": "Build and push a Docker image to Artifact Registry via Google Cloud Build",
+          "blocker_b": "Cloud Build's docker build step cannot find the Dockerfile at /workspace/Dockerfile, likely due to missing file or wrong build context path",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is trying to get a runtime dependency recognized by Dataflow worker containers, while person B is trying to get Cloud Build to locate a Dockerfile to build an image; these are different blocked goals despite both involving Docker and GCP.",
+          "usage": {
+            "input_tokens": 6279,
+            "output_tokens": 441,
+            "cost_units": 0.016968
+          }
+        },
+        {
+          "pair_id": "78089113::78089171",
+          "decision": "ABSTAIN",
+          "goal_a": "Build a working Docker image from a customized fork of Grafana's source code.",
+          "blocker_a": "The multi-stage Dockerfile build fails/errors somewhere in its build stages (details truncated, but the build process for the custom Grafana source is not completing).",
+          "goal_b": "Have a Next.js app read environment variable values correctly when deployed to a Kubernetes environment.",
+          "blocker_b": "NEXT_PUBLIC_ variables are inlined at build time, but the value is only supplied at pod runtime via a ConfigMap, so it's undefined in prod/qa despite being set on the pod.",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Question A's actual blocking issue is truncated/not stated (no error shown, just the Dockerfile), so we cannot establish what stopped person A. Without a clear blocked goal for A, no comparison to B's build-time/runtime env var confusion can be made.",
+          "usage": {
+            "input_tokens": 8486,
+            "output_tokens": 443,
+            "cost_units": 0.021402
+          }
+        },
+        {
+          "pair_id": "78091298::78098246",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Build a Docker image via Bazel's rules_oci with a custom Python toolchain, setting correct entrypoint and app layout",
+          "blocker_a": "Unclear how to configure the py_binary/entrypoint and isolate app code into /app within the oci_image bazel rules",
+          "goal_b": "Run a Flask app in a container that starts on a port passed in as a command-line argument",
+          "blocker_b": "The run script/CMD doesn't actually forward the port argument to the python script, so sys.argv has no port and the app raises ValueError",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is trying to structure a Bazel-built OCI image (entrypoint/layering) while person B is trying to get a startup argument passed correctly to a Flask script; these are unrelated blocked goals despite both being Docker/Python related.",
+          "usage": {
+            "input_tokens": 7291,
+            "output_tokens": 426,
+            "cost_units": 0.018842
+          }
+        },
+        {
+          "pair_id": "78091354::78095654",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get the Nest.js CLI available so the production build stage can build the app",
+          "blocker_a": "NODE_ENV=production causes npm ci to skip dev dependencies, so 'nest' binary is missing from node_modules/.bin during npm run build",
+          "goal_b": "Avoid rebuilding a shared DLL separately for each of two .NET Docker images; build it once and reuse the artifact",
+          "blocker_b": "No known mechanism/workflow to build a common dependency once and share the resulting artifact across multiple separate Dockerfiles/images",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A is about a missing CLI binary due to dependency pruning in a production build stage, while B is about avoiding duplicate builds of a shared artifact across multiple images. No single intervention addresses both blocked goals.",
+          "usage": {
+            "input_tokens": 5956,
+            "output_tokens": 421,
+            "cost_units": 0.016122
+          }
+        },
+        {
+          "pair_id": "78098380::78104298",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get env variables from a single .env file available both at Docker build time and container runtime",
+          "blocker_a": "docker-compose's env_file only injects variables at container runtime, not during the Dockerfile build/RUN steps",
+          "goal_b": "Get a JVM argument (--add-opens) applied when running a Java app inside a container",
+          "blocker_b": "Placing the JVM flag after the -jar argument in the ENTRYPOINT array means it is passed as a program argument to the jar, not to the JVM, so it has no effect",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A is about a configuration value (env vars) being supplied at one lifecycle phase (runtime) but needed at another (build), while B is about correctly ordering/positioning a JVM flag in an ENTRYPOINT so it's parsed by the JVM rather than the application. These are different blocked goals with no single shared intervention.",
+          "usage": {
+            "input_tokens": 6794,
+            "output_tokens": 446,
+            "cost_units": 0.018048
+          }
+        },
+        {
+          "pair_id": "78102512::78104298",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Mount two separate docker volumes to the same target path inside one container",
+          "blocker_a": "Docker daemon rejects the config with \"Duplicate mount point\" since two volumes cannot share one target",
+          "goal_b": "Pass a JVM argument (--add-opens) to a Java app run via ENTRYPOINT in a container",
+          "blocker_b": "The argument placed after the jar name in the ENTRYPOINT array is treated as a program argument, not a JVM option, so it's not applied",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A wants to mount two volumes at one target directory and is blocked by Docker's mount uniqueness constraint; person B wants a JVM flag to take effect and is blocked by ENTRYPOINT argument ordering/parsing. No single intervention addresses both blocked goals beyond both being generic Dockerfile/config issues.",
+          "usage": {
+            "input_tokens": 5577,
+            "output_tokens": 440,
+            "cost_units": 0.015554000000000002
+          }
+        },
+        {
+          "pair_id": "78091032::78100506",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Set up a basic C development environment in Docker with compose and live-reload",
+          "blocker_a": "Doesn't know how to structure a Dockerfile/compose setup for compiling and running a C program",
+          "goal_b": "Maintain a stable, replicated KeyDB cluster behind HAProxy for an application",
+          "blocker_b": "After upgrading KeyDB versions, replication/connection between primary and secondary nodes becomes unstable, causing HAProxy to mark nodes down intermittently",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is trying to learn how to containerize and run a basic C program with live-reload, while person B is trying to fix replication instability between KeyDB nodes after a version upgrade. These are unrelated blocked goals with no single intervention addressing both.",
+          "usage": {
+            "input_tokens": 6085,
+            "output_tokens": 413,
+            "cost_units": 0.016300000000000002
+          }
+        },
+        {
+          "pair_id": "78092962::78096175",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get Poetry to use the system Python environment (no venv) so uvicorn is found when running via docker-compose",
+          "blocker_a": "Poetry still creates a virtualenv under docker-compose despite `poetry env use system`, so the installed `uvicorn` command isn't found at container start",
+          "goal_b": "Keep PostgreSQL data persisted across container restarts/recreations",
+          "blocker_b": "Database appears to lose migrated data after `docker-compose down` and re-up, despite a named volume being configured (declared external)",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is trying to get Poetry-managed Python dependencies runnable without a virtualenv inside a container; person B is trying to make database data survive container recreation via volumes. These are different blocked goals with no single shared intervention.",
+          "usage": {
+            "input_tokens": 6059,
+            "output_tokens": 418,
+            "cost_units": 0.016298
+          }
+        },
+        {
+          "pair_id": "78095654::78097218",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Share a single compiled build artifact (DLL) between multiple Docker images/builds instead of rebuilding it separately.",
+          "blocker_a": "Not knowing a mechanism to build the DLL once and reuse it across multiple Dockerfiles.",
+          "goal_b": "Mount a local config file into a specific existing directory inside an ActiveMQ Artemis container without breaking the container's startup.",
+          "blocker_b": "Mounting a single file to a path inside a directory (broker/etc) caused the whole directory to be replaced/hidden, so the launch script couldn't find the broker binary at broker/bin/artemis.",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A wants to avoid redundant compilation by sharing a build artifact across Docker images, while person B wants to mount a config file into a container without disrupting existing directory contents. These are distinct blocked goals (build efficiency vs. volume-mount directory shadowing) with no single intervention addressing both.",
+          "usage": {
+            "input_tokens": 6670,
+            "output_tokens": 475,
+            "cost_units": 0.01809
+          }
+        },
+        {
+          "pair_id": "78095654::78099949",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Build a shared .NET DLL once and reuse it across multiple Docker images instead of rebuilding it per project.",
+          "blocker_a": "No known Docker mechanism to build a shared artifact once and share it among multiple separate Dockerfiles.",
+          "goal_b": "Merge YAML anchor fragments in a docker-compose file so that combined service configs retain fields from multiple merged sources.",
+          "blocker_b": "YAML merge key (`<<:`) overwrites rather than deep-merges the `deploy` key, so the placement fragment replaces rather than combines with the defaults fragment.",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A wants to avoid duplicate builds of a shared artifact across Dockerfiles, while person B is blocked by YAML anchor/merge-key overwrite semantics in a single compose file. No single intervention addresses both: one concerns build artifact reuse across images, the other concerns YAML merging semantics for compose configuration.",
+          "usage": {
+            "input_tokens": 6720,
+            "output_tokens": 476,
+            "cost_units": 0.0182
+          }
+        },
+        {
+          "pair_id": "78102669::78103425",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Keep a Hawkbit server's MySQL database persistent and reachable across container restarts so the app keeps working long-term.",
+          "blocker_a": "MySQL container loses its data volume/state after a reboot, causing \"Unknown database\" errors after a few hours.",
+          "goal_b": "Use a single database connection string that works both when running the API locally and when running it inside Docker.",
+          "blocker_b": "Host resolution/port differs between local and Docker environments, so no single connection string configuration is confirmed to work in both without extra config; no failure is actually reported yet.",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is trying to keep a database's data/state persistent across container restarts, while person B is trying to unify connection configuration across local and containerized environments with no failure reported. These are different blocked goals -- data persistence versus environment-agnostic configuration -- and no single intervention addresses both.",
+          "usage": {
+            "input_tokens": 6720,
+            "output_tokens": 446,
+            "cost_units": 0.0179
+          }
+        },
+        {
+          "pair_id": "78086542::78099519",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get docker-compose up to successfully start the backend container using an entrypoint script.",
+          "blocker_a": "The entrypoint script /usr/src/app/entrypoint.sh is not executable, causing \"permission denied\" when the container tries to run it.",
+          "goal_b": "Get docker compose up to successfully start a Jupyter Lab container running inside a pipenv virtual environment.",
+          "blocker_b": "The command path /app/.venv/bin/pipenv does not exist inside the container (mount overwrote the built venv or venv wasn't created there), causing \"no such file or directory\".",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Both share the identical \"OCI runtime create failed... exec:\" daemon wrapper string, but A is blocked by a script lacking execute permission while B is blocked by a missing binary path likely due to a volume mount overwriting the build artifacts. These are different blocked goals (fixing file permissions vs. getting the right executable present at runtime), so this is the classic shared-wrapper, different-family case.",
+          "usage": {
+            "input_tokens": 6928,
+            "output_tokens": 491,
+            "cost_units": 0.018766
+          }
+        },
+        {
+          "pair_id": "78086323::78086387",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get a Node.js Telegram bot to reach Telegram's API from a container run with host networking",
+          "blocker_a": "Requests to api.telegram.org time out (ETIMEDOUT) only when the container uses --network host, despite working with default networking and manual curl succeeding inside the container",
+          "goal_b": "Run database migrations against a PostgreSQL server during a Docker image build",
+          "blocker_b": "Postgres isn't actually running/listening when migrate is invoked inside the RUN step of the build, so the connection is refused (a build-time lifecycle issue: starting a service and expecting it to persist/be reachable within a single RUN layer)",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A is about a network-mode-specific failure reaching an external HTTPS API, while B is about a database service not being up/reachable during a build-time RUN step; these are different blocked goals (external API connectivity vs. local service startup/lifecycle during image build) with no single shared intervention.",
+          "usage": {
+            "input_tokens": 7928,
+            "output_tokens": 474,
+            "cost_units": 0.020596
+          }
+        },
+        {
+          "pair_id": "78086501::78103425",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get a Golang+React+MySQL app to run via docker-compose successfully",
+          "blocker_a": "Backend binary \"nd\" not found at runtime (build/copy issue) and MySQL container fails because no root password/env var was specified",
+          "goal_b": "Use a single database connection string that works both when running the API locally and when running it inside Docker",
+          "blocker_b": "The hostname in the connection string (service name \"postgres-db\") is only resolvable inside the Docker network, not from a locally-run process",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A is trying to fix a broken multi-service compose setup where a binary isn't found and MySQL isn't initialized, while B is trying to unify a connection string across local and containerized environments. No single intervention addresses both: one is about build/env misconfiguration causing container startup failure, the other is about network hostname resolution across environments.",
+          "usage": {
+            "input_tokens": 6704,
+            "output_tokens": 436,
+            "cost_units": 0.017768
+          }
+        },
+        {
+          "pair_id": "78087887::78103879",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get wkhtmltopdf to run successfully inside a container as a non-root user",
+          "blocker_a": "Permission/ownership mismatch on /tmp (XDG_RUNTIME_DIR) causes a runtime warning, and after chmod changes wkhtmltopdf crashes with exit code -11",
+          "goal_b": "Authenticate a Spring Boot app running in a container against an external SQL Server database",
+          "blocker_b": "No Kerberos ticket is available inside the container for Integrated Security authentication",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is trying to get a PDF-rendering binary to run without crashing under a non-root container user, blocked by filesystem permission/ownership issues; person B is trying to authenticate a database connection using Windows Integrated Security, blocked by the absence of a Kerberos ticket in the container. No single intervention addresses both a runtime-directory permission crash and a Kerberos authentication gap.",
+          "usage": {
+            "input_tokens": 5536,
+            "output_tokens": 470,
+            "cost_units": 0.015772
+          }
+        },
+        {
+          "pair_id": "78089075::78097003",
+          "decision": "SAME_PROBLEM_FAMILY",
+          "goal_a": "Connect to a ClickHouse server (HTTP/TCP) running in a Docker container from a browser/Node.js client on the host.",
+          "blocker_a": "Connection refused when using \"localhost\" from the host/Node app, despite using --network=host, suggesting a network/interface addressing mismatch between IPv4/IPv6 or container networking.",
+          "goal_b": "Connect from PHP code running inside one Docker container to another service (InfluxDB) also running in Docker Compose.",
+          "blocker_b": "Using \"localhost\" inside the app container refers to the container itself, not the influx service, causing curl error 7; switching to the service name \"influx\" causes curl error 6 (name resolution/network issue).",
+          "shared_problem_if_any": "Both involve confusion about what \"localhost\" resolves to when client and target service run in separate Docker network contexts.",
+          "brief_rationale": "Both A and B are trying to reach a networked service from a different Docker networking context, and both are blocked by the same \"localhost inside Docker does not mean what you expect\" confusion (A using host network but querying HTTP/TCP still refused, B using localhost inside an app container that doesn't map to another container). A single piece of documentation/tool explaining Docker networking and localhost vs container/service names would address both.",
+          "usage": {
+            "input_tokens": 7554,
+            "output_tokens": 560,
+            "cost_units": 0.020708000000000004
+          }
+        },
+        {
+          "pair_id": "78097003::78098380",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Connect via PHP curl from within a container to another service (InfluxDB) running in Docker Compose",
+          "blocker_a": "Using 'localhost' resolves to the app container itself, not the influx service; using service name causes a different connection error (curl 6)",
+          "goal_b": "Have variables defined in a single .env file available both during Dockerfile build and at container runtime",
+          "blocker_b": "docker-compose's env_file only injects variables at container runtime, not during the image build step, so RUN commands can't see them",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is trying to establish network connectivity between containers over Docker's internal networking (a hostname/DNS resolution issue), while person B is trying to propagate configuration values across build and runtime lifecycle phases. No single intervention addresses both: one is about service discovery/networking, the other about build-vs-runtime variable scoping.",
+          "usage": {
+            "input_tokens": 8137,
+            "output_tokens": 443,
+            "cost_units": 0.020704
+          }
+        },
+        {
+          "pair_id": "78097216::78099680",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get a Java REST API built via multi-stage Docker build to correctly serve requests from a Tomcat container",
+          "blocker_a": "The multi-stage build's copied .war file did not deploy/route correctly, causing 404s, though root cause unclear from post",
+          "goal_b": "Run a FastAPI app under gunicorn+uvicorn workers inside a Docker container built with multi-stage build",
+          "blocker_b": "The gunicorn executable was not found in $PATH at container runtime because it was installed in the builder stage's environment not carried/found in the runtime stage's venv",
+          "shared_problem_if_any": "",
+          "brief_rationale": "Person A is trying to get an already-working web app to serve requests correctly (a routing/deployment behavior issue), while Person B is trying to get a specific executable to be found at runtime (a missing binary/path issue in a multi-stage build). Both involve multi-stage Docker builds copying artifacts between stages, but the blocked goals differ: serving requests correctly vs. locating an executable, so no single intervention addresses both.",
+          "usage": {
+            "input_tokens": 7343,
+            "output_tokens": 498,
+            "cost_units": 0.019666
+          }
+        },
+        {
+          "pair_id": "78097574::78105286",
+          "decision": "DIFFERENT_PROBLEM_FAMILY",
+          "goal_a": "Get a multi-stage Docker build to produce a final image where netCDF4 performs correctly (no read/write slowdown)",
+          "blocker_a": "Copying the venv (with netCDF4/h5py) from the compile stage to the final stage causes a large slowdown, likely due to missing/mis-linked external C libraries",
+          "goal_b": "Build a large Docker image (VINS-Fusion) for ARM on a resource-constrained Raspberry Pi, or cross-build it elsewhere for the Pi",
+          "blocker_b": "The build runs out of RAM (OOM) on the Pi, and cross-architecture emulation/build on stronger AMD machines also fails or isn't straightforward",
+          "shared_problem_if_any": "",
+          "brief_rationale": "A is about correctly carrying over native library linkage in a multi-stage build so a Python C-extension performs correctly, while B is about surviving memory limits during a large C++ compilation build on constrained hardware or cross-compiling for a different architecture. No single intervention addresses both a linking/performance issue and a resource/architecture constraint during build.",
+          "usage": {
+            "input_tokens": 6554,
+            "output_tokens": 511,
+            "cost_units": 0.018218
+          }
+        }
+      ]
+    }
+  ]
+}
