@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.71
-Last amended: 2026-09-03 (Sprint 1 / Mission 1.41)
+Version: 1.72
+Last amended: 2026-09-04 (Sprint 1 / Mission 1.42)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.72 | 2026-09-04 | **READY_FOR_SECOND_PILOT_RELIABILITY_REVIEW: the question is prepared for a scope that is BROADER than the mission that prompted it, and software supplied no answer.** The brief expected 4 Evidence rows on 2 Claims; the live scope holds **6 rows across 4 Claims**, resolving to **exactly one** scope which is exactly the expected five-part one. **That is not §30 C.** Drift would be Evidence rows failing to match the five-part scope; what differs is the COUNT INSIDE it, because **a reliability scope carries no classification division and no currency** -- so one judgement here binds the SEK claim and the **division-90** claim too, whose only witness is the Signal derived in Mission 1.15.10 **before the second pilot existed**. Mission 1.40 recorded the same property from the other side. **THE NEAR MISS IS THE WHOLE TEST**: the existing TED `0.5` shares source, resource, record kind AND `claim_type: OBSERVED` -- **four of five** -- and the single differing field is `proposition_kind`, exercised through the REAL resolver in both directions and confirmed by **6 leak checks, 0 leaks**. **NOTHING NEW WAS RETRIEVED, because nothing new was needed**: the convergent proposition reads the same BT-161 field of the same notices, so 3 of 4 existing basis rows are REUSED and BT-195-BT-198 is **PARTIALLY_APPLICABLE** -- the FACT is unchanged and its WEIGHT is not, since withholding bounds a named cohort and cannot falsify an existential. **FOUR RELIABILITY QUESTIONS ARE GENUINELY NEW** and none has a documentary answer: an existential is MONOTONE, and whether that makes it more dependable or merely **harder to falsify** is a judgement; it carries no period (H-37); it asserts about a CLASS; and **two cohorts are asserted to witness one proposition**, a step that does not exist for the detailed claim. **THE LARGEST RESIDUAL UNKNOWN HAS NO DOCUMENT AND NO MITIGATION**: whether a published notice can be corrected or superseded, which bears directly on whether a witnessing cohort still witnesses. **ENGINEERING VALIDATION IS RECORDED AND REFUSED AS BASIS** -- currency grain being correctly bounded does not imply reliability, `DISJOINT` overlap does not imply independence (UNKNOWN on all 6 rows, 0 groups), and rewarding the system numerically because its own tests pass is the error the separation exists to prevent. **0 assessments, 0 basis rows, 0 network requests, 0 model calls, every canonical counter unchanged**, `scoring.evidence.reliability` NULL on all 39 rows, profile still UNCALIBRATED, Problem-Family still PARKED. **The next action is a HUMAN decision and Mission 1.42.1 was NOT started** |
 | 1.71 | 2026-09-03 | **PROCUREMENT_COHORT_GRAIN_REPAIRED_REAL_MULTI_EVIDENCE_CREATED: Claims with more than one Evidence row, 0 -> 2.** Two real canonical Claims, two genuinely distinct witnesses each, **revision 1 on both**, and the real aggregator receiving `raw_evidence_count = 2`. **ZERO network acquisitions**: the frozen windows were reconstructed from the 177 records Mission 1.40 already persisted. **TWO DEFECTS OF ONE SHAPE, both found by real data and both a docstring disagreeing with its code.** The cohort key called currency and amount scope load-bearing and contained neither; `derive` refuses unless each is single-valued, so **the implementation was wrong, not the documentation** -- a dimension the validation demands be equal is what makes a cohort comparable. And `_persist_evidence` said *idempotent on (workspace_id, claim_id, signal_id)* while the query added `AND extraction_method`, so a new interpreter version INSERTED a second row. **Evidence identity is epistemic; the procedure that produced it is provenance** -- `extraction_method` is still written and still read, it just no longer decides. **A CHANGED assessment is neither unchanged nor a second observation, and no third answer was invented**: a disagreeing row is REPORTED as a conflict and nothing is written, because representing a revision needs a model this architecture lacks. Extractor **1.0.1 -> 1.1.0**, MINOR because **adding a field to a grouping key can only SPLIT groups, never merge them** -- and §6 verified it rather than arguing it: division 90 re-derived with magnitude, currency, direction, amount types, scopes and codes **all identical**, its 3 inputs still one group. **Window A went from 0 derived cohorts to 2**; single-member PLN, DKK and CZK cohorts now refuse for the right reason. **§22/§23 enforced rather than assumed**: window B's unchanged EUR cohort was SKIPPED as an existing witness, because a new procedure version over identical membership is historical versioning and not a second observation. **NO FX CONVERSION** anywhere. Overlap DISJOINT and independence still UNKNOWN on all six rows with 0 groups -- disjoint records are not independent evidence. **The audit itself had a defect**: `multi_evidence_claims` was computed over SCORABLE units and reported 0 while two real ones existed. 0 model calls, 0 embeddings, 0 new assessments, Opportunity untouched |
 | 1.70 | 2026-09-03 | **SECOND_PILOT_REAL_MULTI_EVIDENCE_NOT_OBSERVED: the convergence contract was never the blocker, and a currency guard was.** CPV division **92 'Recreational, cultural and sporting services'** selected under a frozen ordinal rule, every label verified ONE CONCEPT PER FETCH against the Publications Office authority register. **A bulk EUR-Lex extraction was retrieved and REFUSED**: it gave `90000000-8` where this repository's own division-90 data uses a different check digit, and labelled 92000000 *Miscellaneous services*, which the register contradicts -- a summarising model over a long annex produces plausible output, and plausible output carrying an official label is worse than none. Acquisition ran to the frozen plan: **177 notices across two frozen windows, both COMPLETE_BOUNDED_QUERY**. Then **three of four cohorts were REFUSED for mixed currencies** (EUR/PLN, DKK/EUR, CZK/EUR/SEK) and window A produced NO Signal at all, so division 92 has ONE witness and `claims with >1 Evidence` is still **0**. §37 forbids widening the window, switching category or regrouping, and none was done. **THE EXTRACTOR'S COHORT KEY DOES NOT CONTAIN WHAT ITS DOCSTRING SAYS**: it names notice class, amount scope, currency and CPV division as load-bearing, and the key holds `source_id | record_kind_id | resource_id | notice_class | cpv_division` -- currency and amount scope are validated AFTER grouping and refuse the WHOLE cohort rather than splitting it. Had currency been a grouping dimension, window A would very likely have yielded EUR cohorts and this mission would have succeeded. **NOT FIXED**, because changing a grouping key after seeing which data it rejected is the shape §37 and §41 both refuse. **A DUPLICATE EVIDENCE ROW WAS CREATED BY THIS RUN AND REMOVED**: re-interpreting the pre-existing division-90 Signal wrote a second Evidence row differing only by interpreter version (1.1.0 -> 1.4.1), which is §13's forbidden case verbatim and Mission 1.32's known idempotency defect, and which briefly made the corpus report a FALSE `claims with >1 evidence: 1`. **The existing TED assessment BINDS to the new division-92 DETAILED claim** -- its scope carries no classification division -- **and not to either convergent claim**, because proposition_kind differs. 0 model calls, 0 embeddings, 0 new assessments, 0 independence groups, no Opportunity |
 | 1.69 | 2026-09-03 | **PROPOSITION_CONVERGENCE_CONTRACT_READY: `max(members)` finally receives more than one member.** ADR-035 introduces the distinction the Claim model did not make -- **PROPOSITION IDENTITY facts decide WHAT is asserted, WITNESS facts decide WHICH observation demonstrates it** -- with one test applied field by field: *if changing F changes what the Claim asserts it is identity; if it only changes which observation witnesses the same assertion it may be witness*. **A witness fact is not discarded**, it stops being an identity: `notice_ids` stays on the Signal and is recovered in a test from the persisted scope. **OBSERVED convergence is legitimate and narrow**: an existential over a publication passes §2's own question -- *can a person go and read it there* -- and the broader proposition is ENTAILED BY the detailed one rather than a weakened copy, which is why it is a new kind and `notice_ids` stays identity on the old one. **The constructor refuses a non-OBSERVED contract**, so the unbuilt INFERRED layer cannot be built here by accident, and it refuses one without `source_id` in identity, because attribution is part of an OBSERVED proposition. **The TED template's own objection was answered rather than ignored**: *a proposition that cannot say WHICH notices is not checkable* -- checkability MOVES to the witness, and the bound stays in the wording as *at least one bounded set*. **CONVERGENCE IS NOT INDEPENDENCE**: two disjoint cohorts collapse into ONE group because independence stays UNKNOWN, saturation still receives one group, and that is correct rather than a shortfall. **A test caught a vocabulary collision**: `ObservationOverlap` was drafted with `UNKNOWN`, which `EvidenceIndependenceState` already has, and sharing a member name is how a mapping gets written by accident -- renamed `UNESTABLISHED`. Proved through the REAL repository and REAL aggregator on synthetic fixtures in a disposable workspace: one Claim, two Evidence, **one revision**, idempotent replay, Docker/Podman/Kubernetes still three keys. **Not wired into the production job**, so no Signal here can witness two Claims. 0 acquisitions, 0 model calls, 0 embeddings, every live counter unchanged, feasibility audit byte-identical |
@@ -318,6 +319,93 @@ positives in the scored split, which this 89-question corpus did not supply: one
 defensible SAME in 40 candidate pairs is a finding about the corpus, not about
 the classifier. **No synthetic positive may substitute** -- a constructed pair
 can test a parser and can never establish semantic accuracy against real data.
+
+### A scope broader than the mission that prompted it
+
+Added in 1.72 (Mission 1.42, `mission-1.42-report.md`,
+`second-pilot-convergent-reliability-review-packet-v1.md`).
+**`READY_FOR_SECOND_PILOT_RELIABILITY_REVIEW`**: the question prepared, no
+judgement supplied, **0 assessments created**.
+
+    expected  4 Evidence rows / 2 Claims        live  6 rows / 4 Claims
+    reliability scopes  1, and it is the expected five-part one
+    resolver  NO_APPLICABLE_ASSESSMENT          leak checks  6 run, 0 leaks
+
+- **A COUNT DIFFERENCE IS NOT A SCOPE DIFFERENCE, and the distinction decides the
+  outcome.** §30 C is drift *if the live Evidence rows do not match the expected
+  five-part scope*. They match it exactly. What differs is how many rows sit
+  INSIDE that one scope, because **a reliability scope carries no classification
+  division and no currency** -- so it reaches the SEK claim and the
+  **division-90** claim as well as the two multi-Evidence division-92 ones.
+  Mission 1.40 recorded the same property from the other side, when the existing
+  TED assessment bound to the new division-92 DETAILED claim.
+- **THE OPERATOR IS THEREFORE BEING ASKED A WIDER QUESTION THAN THE BRIEF
+  DESCRIBED, AND IT IS SAID WHERE THEY WILL READ IT.** One judgement binds six
+  rows across four Claims and two CPV divisions, and the division-90 Claim's only
+  witness is the Signal derived in Mission 1.15.10, **before the second pilot
+  existed**. A mission that quietly delivers a wider corpus than its brief
+  described has changed the question without saying so.
+- **THE NEAR MISS IS THE WHOLE TEST.** The existing TED `0.5` shares
+  `source_id`, `resource_id`, `record_kind_id` **and** `claim_type: OBSERVED`
+  with the scope under review -- four of five, and the fourth discriminates
+  nothing because every Evidence row here is OBSERVED. The single differing field
+  is `proposition_kind`, and that alone is sufficient: exercised through the REAL
+  resolver in both directions, and confirmed by six leak checks that vary only
+  that field and hold every other byte identical.
+- **NOTHING NEW WAS RETRIEVED, BECAUSE NOTHING NEW WAS NEEDED.** The convergent
+  proposition reads the same BT-161 field of the same notices through the same
+  route. Three of the four held basis rows are **REUSED**, and the field
+  repository is MORE load-bearing than before: the companion currency field is
+  what makes a currency-pure cohort expressible at all.
+- **BT-195-BT-198 IS `PARTIALLY_APPLICABLE`, WHICH IS A REAL THIRD ANSWER.** The
+  FACT that a result value may be lawfully withheld is unchanged; its **weight**
+  is not. Under the detailed claim withholding bounds what a named cohort
+  represents; under an existential it cannot falsify the claim at all. How much
+  that matters is the reviewer's call, and the packet says so rather than
+  deciding it.
+- **FOUR RELIABILITY QUESTIONS ARE GENUINELY NEW, AND NONE HAS A DOCUMENTARY
+  ANSWER.** An existential is **monotone** -- once a qualifying cohort is
+  published, no later notice can falsify it -- and whether that makes the
+  proposition more dependable or merely **harder to falsify** is a judgement, and
+  they are not the same thing. It carries no period, because H-37 leaves TED's
+  publication-date semantics unestablished. It asserts about a CLASS. And **two
+  cohorts are asserted to witness one proposition**, an SROS step that does not
+  exist for the detailed claim.
+- **THE LARGEST RESIDUAL UNKNOWN HAS NO DOCUMENT AND NO MITIGATION**: whether TED
+  permits a published BT-161 to be corrected or amended, and whether a corrected
+  notice supersedes an earlier one. It bears directly on whether a witnessing
+  cohort still witnesses, and it is recorded as OPEN rather than reasoned around.
+- **ENGINEERING VALIDATION IS RECORDED SEPARATELY AND REFUSED AS BASIS.** Mission
+  1.41 reproduced the division-90 Signal semantically, Mission 1.39 proved the
+  convergence contract through the real repository, and the currency and scope
+  guards are tested. All of it establishes that the implementation does what its
+  specification says and **nothing** about how dependable TED's source-reported
+  amounts are. **Currency grain being correctly bounded does not imply
+  reliability**, and **`DISJOINT` observation overlap does not imply
+  independence** -- UNKNOWN on all six rows with 0 groups. Rewarding the system
+  numerically because its own tests pass is the error the separation exists to
+  prevent, and a test asserts no candidate basis row is one of our own missions.
+- **NO NUMBER APPEARS IN ANY JUDGEMENT POSITION.** Every judgement field is
+  `null` or empty, seven confirmations are unchecked, the scale is `[0.0, 1.0]`
+  with **no threshold labels**, and the reviewer is not inferred from a git
+  author, a PR author, an OS username, the existing assessment or the
+  conversation. The scan strips `$comment` and `$note` keys at any depth, because
+  a rule may name the values it forbids and a field may not -- the
+  `testing-strategy.md` §23 shape, met for a fifth time and handled structurally.
+- **NOTHING MOVED.** 0 assessments, 0 basis rows, 0 network requests, 0 model
+  calls, 0 independence groups. `scoring.evidence.reliability` is NULL on all 39
+  rows before and after, because reliability binds late. `REFERENCE_PROFILE_V1`
+  is still `UNCALIBRATED`, both multi-Evidence Claims are still `UNAVAILABLE`,
+  and Problem-Family is still PARKED.
+
+**The next action is a HUMAN decision, and Mission 1.42.1 was deliberately not
+started.** If the operator answers **NO**, the scope keeps no assessment, the six
+rows stay `NON_SCORABLE`, and corpus expansion continues without inventing a
+value -- **NO is a real answer to *do I have enough information*.** If the
+operator answers **YES** and supplies a reliability, a reviewer, a rationale and
+a stated limitation, **Mission 1.42.1 -- Second Pilot Operator Reliability
+Decision V1** may persist exactly one assessment and then run the first real
+scorable multi-Evidence diagnostic.
 
 ### A key that does not contain what its docstring calls load-bearing
 

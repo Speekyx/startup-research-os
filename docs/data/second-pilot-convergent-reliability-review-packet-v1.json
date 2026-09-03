@@ -1,0 +1,650 @@
+{
+  "$comment": "Mission 1.42 §14. The reliability question for ONE exact scope, prepared and NOT answered. Every judgement field is blank and this generator has no code path that could fill one. The existing TED assessment appears only as OTHER-SCOPE historical context: its value belongs to a different proposition kind, it is not a baseline, and §4 forbids treating it as a starting point. GENERATED -- edit convergent_reliability_findings.json and re-render.",
+  "artifact_version": "second-pilot-convergent-reliability-review-packet@1.0.0",
+  "generated_by": "mission-1.42",
+  "outcome": "READY_FOR_SECOND_PILOT_RELIABILITY_REVIEW",
+  "reliability_scale": {
+    "range": "[0.0, 1.0]",
+    "threshold_labels": null,
+    "$note": "The architecture defines no meaning for any particular value and no threshold vocabulary. A packet that invented one would be legislating."
+  },
+  "what_reliability_means": {
+    "the_question": "How dependable is THIS kind of measurement for THIS kind of proposition?",
+    "it_is_not": [
+      "whether TED is generally trustworthy",
+      "whether TED is legally approved for use",
+      "whether public procurement is a reliable domain",
+      "whether CPV division 92 is commercially attractive",
+      "whether the market is real",
+      "whether the Claim is true",
+      "whether the Opportunity is good",
+      "whether this Evidence is independent",
+      "whether EUR is a reliable currency",
+      "whether recreational, cultural and sporting services are worth pursuing"
+    ],
+    "scope_is_five_fields": "source_id, resource_id, record_kind_id, claim_type, proposition_kind. Matched in full or not at all. No CPV division, no currency, no notice class, no subject and no row id enters it -- ADR-026 and the live model both, verified against the contract rather than assumed."
+  },
+  "measured_scopes": [
+    {
+      "scope": {
+        "source_id": "ted-eu",
+        "resource_id": "notices/eforms-contract-and-award",
+        "record_kind_id": "procurement_notice",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "source_published_classification_value_contrast_witnessed"
+      },
+      "evidence_count": 6,
+      "outcome": "NO_APPLICABLE_ASSESSMENT",
+      "reliability": null,
+      "detail": "no assessment covers this measurement for this purpose. Reliability stays NULL and the record is NON_SCORABLE, which is the honest state: a default here would be the source coefficient this layer exists to prevent"
+    }
+  ],
+  "scope_breadth_finding": {
+    "$note": "§1. Mission 1.41 reported two Claims with two Evidence rows each, so the brief expected four rows. The live deployment holds more, and this records WHY that is not SECOND_PILOT_RELIABILITY_SCOPE_DRIFT: drift would be a reliability scope other than the expected five-part one, and there is exactly one scope and it is the expected one. A reliability scope carries NO classification division and NO currency, so it reaches every convergent Claim from this measurement -- not only the multi-Evidence ones.",
+    "brief_expected_evidence_rows": 4,
+    "brief_expected_claims": 2,
+    "live_evidence_rows": 6,
+    "live_claims": 4,
+    "live_multi_evidence_claims": 2,
+    "is_scope_drift": false,
+    "distinct_classification_divisions_in_scope": [
+      "90",
+      "92"
+    ],
+    "distinct_currencies_in_scope": [
+      "EUR",
+      "SEK"
+    ],
+    "what_this_changes_for_the_reviewer": "One judgement on this scope binds every row above, including the division-90 Claim -- whose only witness is the Signal derived in Mission 1.15.10, before the second pilot existed -- and the single-witness Claims. The reviewer is not answering only for the two multi-Evidence division-92 Claims.",
+    "precedent": "Mission 1.40 recorded the same property from the other side: the existing TED assessment binds to the new division-92 DETAILED claim because its scope carries no division either."
+  },
+  "affected_rows": [
+    {
+      "claim_id": "02248c91-a384-442d-8c78-80ba4c1bd2b1",
+      "claim_revision": 1,
+      "evidence_id": "a77d8ea7-16f7-4259-831d-163c637ffccc",
+      "signal_id": "f09ecbb8-6b0d-5134-affb-c2ed796049a2",
+      "witness_observation_keys": [
+        "ted-eu|notice|125594-2023",
+        "ted-eu|notice|126590-2023",
+        "ted-eu|notice|127645-2023",
+        "ted-eu|notice|129501-2023",
+        "ted-eu|notice|130635-2023",
+        "ted-eu|notice|131315-2023",
+        "ted-eu|notice|131879-2023",
+        "ted-eu|notice|135637-2023",
+        "ted-eu|notice|136794-2023",
+        "ted-eu|notice|137895-2023",
+        "ted-eu|notice|138840-2023",
+        "ted-eu|notice|139177-2023"
+      ],
+      "notice_class": "CONTRACT_AWARD_NOTICE",
+      "currency": "EUR",
+      "classification_division": "92",
+      "direction": "SUPPORTS",
+      "relevance": 1.0,
+      "directness": 1.0,
+      "extraction_confidence": 1.0,
+      "observation_category": "UNCATEGORISED",
+      "independence_state": "UNKNOWN",
+      "independence_group_id": null,
+      "evidence_reliability_column": null
+    },
+    {
+      "claim_id": "02248c91-a384-442d-8c78-80ba4c1bd2b1",
+      "claim_revision": 1,
+      "evidence_id": "cf9f792d-9811-43b7-b089-dcf3e835225a",
+      "signal_id": "4e8ee7f7-e3b4-5c56-917c-ec11e6b480c5",
+      "witness_observation_keys": [
+        "ted-eu|notice|142829-2023",
+        "ted-eu|notice|143965-2023",
+        "ted-eu|notice|145891-2023",
+        "ted-eu|notice|146311-2023",
+        "ted-eu|notice|147434-2023",
+        "ted-eu|notice|148094-2023",
+        "ted-eu|notice|148516-2023",
+        "ted-eu|notice|149442-2023",
+        "ted-eu|notice|150477-2023",
+        "ted-eu|notice|151497-2023",
+        "ted-eu|notice|152153-2023",
+        "ted-eu|notice|152446-2023",
+        "ted-eu|notice|153337-2023",
+        "ted-eu|notice|153458-2023"
+      ],
+      "notice_class": "CONTRACT_AWARD_NOTICE",
+      "currency": "EUR",
+      "classification_division": "92",
+      "direction": "SUPPORTS",
+      "relevance": 1.0,
+      "directness": 1.0,
+      "extraction_confidence": 1.0,
+      "observation_category": "UNCATEGORISED",
+      "independence_state": "UNKNOWN",
+      "independence_group_id": null,
+      "evidence_reliability_column": null
+    },
+    {
+      "claim_id": "6389d1bf-6dea-47e8-8508-dcf009fe352d",
+      "claim_revision": 1,
+      "evidence_id": "ce349b01-1ea4-4d11-b162-e745e2c82163",
+      "signal_id": "f0749978-bdda-5778-9b09-97aa8aad9ff0",
+      "witness_observation_keys": [
+        "ted-eu|notice|143293-2023",
+        "ted-eu|notice|150763-2023"
+      ],
+      "notice_class": "CONTRACT_NOTICE",
+      "currency": "SEK",
+      "classification_division": "92",
+      "direction": "SUPPORTS",
+      "relevance": 1.0,
+      "directness": 1.0,
+      "extraction_confidence": 1.0,
+      "observation_category": "UNCATEGORISED",
+      "independence_state": "UNKNOWN",
+      "independence_group_id": null,
+      "evidence_reliability_column": null
+    },
+    {
+      "claim_id": "73e834c4-ddad-4093-9727-79720e074b4b",
+      "claim_revision": 1,
+      "evidence_id": "b7dc27bf-53c8-4e80-9c83-5980c80fa46c",
+      "signal_id": "97ff6d37-1a2d-5725-ad97-d846767b8631",
+      "witness_observation_keys": [
+        "ted-eu|notice|125972-2023",
+        "ted-eu|notice|126676-2023",
+        "ted-eu|notice|127668-2023"
+      ],
+      "notice_class": "CONTRACT_AWARD_NOTICE",
+      "currency": "EUR",
+      "classification_division": "90",
+      "direction": "SUPPORTS",
+      "relevance": 1.0,
+      "directness": 1.0,
+      "extraction_confidence": 1.0,
+      "observation_category": "UNCATEGORISED",
+      "independence_state": "UNKNOWN",
+      "independence_group_id": null,
+      "evidence_reliability_column": null
+    },
+    {
+      "claim_id": "bf4e4b48-fdf9-48f6-9c69-2178eb361e18",
+      "claim_revision": 1,
+      "evidence_id": "09bfc370-59d2-4aca-83b8-cf717a1cc329",
+      "signal_id": "5ed1cb05-c51a-5b3c-aa72-64350a5b96f1",
+      "witness_observation_keys": [
+        "ted-eu|notice|140202-2023",
+        "ted-eu|notice|140858-2023",
+        "ted-eu|notice|141464-2023",
+        "ted-eu|notice|144439-2023",
+        "ted-eu|notice|145394-2023",
+        "ted-eu|notice|145981-2023",
+        "ted-eu|notice|146205-2023",
+        "ted-eu|notice|147412-2023",
+        "ted-eu|notice|147699-2023",
+        "ted-eu|notice|147879-2023",
+        "ted-eu|notice|148317-2023",
+        "ted-eu|notice|149711-2023",
+        "ted-eu|notice|151372-2023",
+        "ted-eu|notice|153861-2023",
+        "ted-eu|notice|153977-2023",
+        "ted-eu|notice|154729-2023",
+        "ted-eu|notice|154922-2023"
+      ],
+      "notice_class": "CONTRACT_NOTICE",
+      "currency": "EUR",
+      "classification_division": "92",
+      "direction": "SUPPORTS",
+      "relevance": 1.0,
+      "directness": 1.0,
+      "extraction_confidence": 1.0,
+      "observation_category": "UNCATEGORISED",
+      "independence_state": "UNKNOWN",
+      "independence_group_id": null,
+      "evidence_reliability_column": null
+    },
+    {
+      "claim_id": "bf4e4b48-fdf9-48f6-9c69-2178eb361e18",
+      "claim_revision": 1,
+      "evidence_id": "1ad1dc6d-7528-4527-bccd-0a09f47112ac",
+      "signal_id": "d5f054e4-8141-5349-a57e-0336dee82a8a",
+      "witness_observation_keys": [
+        "ted-eu|notice|125200-2023",
+        "ted-eu|notice|125573-2023",
+        "ted-eu|notice|125613-2023",
+        "ted-eu|notice|126222-2023",
+        "ted-eu|notice|126587-2023",
+        "ted-eu|notice|128213-2023",
+        "ted-eu|notice|130061-2023",
+        "ted-eu|notice|131312-2023",
+        "ted-eu|notice|131744-2023",
+        "ted-eu|notice|131786-2023",
+        "ted-eu|notice|132094-2023",
+        "ted-eu|notice|133177-2023",
+        "ted-eu|notice|134418-2023",
+        "ted-eu|notice|136023-2023",
+        "ted-eu|notice|136204-2023",
+        "ted-eu|notice|137030-2023",
+        "ted-eu|notice|137080-2023",
+        "ted-eu|notice|137620-2023",
+        "ted-eu|notice|137701-2023",
+        "ted-eu|notice|138226-2023"
+      ],
+      "notice_class": "CONTRACT_NOTICE",
+      "currency": "EUR",
+      "classification_division": "92",
+      "direction": "SUPPORTS",
+      "relevance": 1.0,
+      "directness": 1.0,
+      "extraction_confidence": 1.0,
+      "observation_category": "UNCATEGORISED",
+      "independence_state": "UNKNOWN",
+      "independence_group_id": null,
+      "evidence_reliability_column": null
+    }
+  ],
+  "detailed_versus_convergent": {
+    "detailed_proposition_kind": "source_reported_procurement_value_contrast",
+    "convergent_proposition_kind": "source_published_classification_value_contrast_witnessed",
+    "detailed_asserts": "that within a NAMED bounded set of notices, the largest stated amount of a named semantic exceeded the smallest, or equalled it. The cohort membership is part of the identity.",
+    "convergent_asserts": "that the source published AT LEAST ONE bounded set of notices of a named class under a named classification division whose stated amounts of that semantic stand in the named relation. Cohort membership moved to Evidence provenance and is no longer part of the identity.",
+    "shared_measurement_semantics": [
+      "the same source, the same resource and the same record kind",
+      "the same amount semantic: BT-161, the value of all contracts awarded in a notice, including options and renewals",
+      "the same field: notice level, non-repeatable, with a companion currency field",
+      "the same reading direction: SROS reports what TED STATED, and never what anyone paid",
+      "the same conformance boundary: TED validates that a value is present and well formed, never that it is correct"
+    ],
+    "reliability_questions_that_are_shared": [
+      "does the stated amount mean what the SDK says it means",
+      "can a stated amount be wrong without TED detecting it",
+      "can a notice be corrected or amended after publication",
+      "is the classification assigned by the contracting authority to its own contract"
+    ],
+    "reliability_questions_that_are_NEW": [
+      "an EXISTENTIAL proposition is monotone: once a qualifying cohort has been published, no later notice can make it false. A reviewer must decide whether that makes the proposition more dependable, or merely harder to falsify -- these are not the same thing.",
+      "the proposition carries NO PERIOD, because H-37 leaves TED's publication-date semantics unestablished. So it asserts something about the source's publication with no time bound at all.",
+      "the assertion is about a CLASS rather than about named notices, so it depends on the classification being what the source says it is for at least the witnessing cohort -- and on SROS having projected that classification correctly.",
+      "two cohorts are asserted to witness ONE proposition. That is an SROS convergence step, and if its identity fields were wrong, a Claim would carry Evidence that does not bear on it. This failure mode does not exist for the detailed proposition."
+    ],
+    "what_did_not_change": "the underlying TED values, fields and semantics. Mission 1.39 changed the shape of the proposition, not the measurement."
+  },
+  "documentary_review_matrix": [
+    {
+      "question": "What does the measured amount mean?",
+      "authoritative_document_available": true,
+      "document": "eForms SDK 1.15.1 business-term definitions (business-term_en.xml), BT-161",
+      "factual_answer": "BT-161 is 'The value of all contracts awarded in this notice, including options and renewals'.",
+      "applies_to_detailed": true,
+      "applies_to_convergent": true,
+      "open_question": false,
+      "relevance": "It bounds what the amounts in either proposition are. An amount including options and renewals is not a price and not a payment, and both propositions inherit that."
+    },
+    {
+      "question": "How is the amount represented, and is a currency paired with it?",
+      "authoritative_document_available": true,
+      "document": "eForms SDK 1.15.1 field repository (fields.json), BT-161-NoticeResult",
+      "factual_answer": "TOTAL_VALUE is BT-161, notice level, non-repeatable, at efac:NoticeResult/cbc:TotalAmount, with a companion currency field.",
+      "applies_to_detailed": true,
+      "applies_to_convergent": true,
+      "open_question": false,
+      "relevance": "The companion currency field is what makes a currency-pure cohort expressible at all. It is a fact about the FIELD, and it does not say the value in it is right."
+    },
+    {
+      "question": "Does TED validate that a stated amount is correct?",
+      "authoritative_document_available": true,
+      "document": "eForms SDK 1.15.1 business rules (rule_en.xml), BR-BT-00161-*",
+      "factual_answer": "60 published rules govern where BT-161 may appear. All are presence, absence or notice-type constraints; none concerns the amount's correctness.",
+      "applies_to_detailed": true,
+      "applies_to_convergent": true,
+      "open_question": false,
+      "relevance": "The central shared limitation. Conformance validation is not truth validation, and a value can be wrong and still conform."
+    },
+    {
+      "question": "Can a result value be withheld from publication?",
+      "authoritative_document_available": true,
+      "document": "eForms SDK 1.15.1 business-term definitions, BT-195 to BT-198",
+      "factual_answer": "Result values, of which BT-161 is one, may be withheld from immediate publication with a justification and a later date.",
+      "applies_to_detailed": true,
+      "applies_to_convergent": true,
+      "open_question": false,
+      "relevance": "Its WEIGHT differs between the two propositions, and that difference is a reviewer's to judge. A detailed cohort covers only the published subset, so withholding bounds what the cohort represents. An EXISTENTIAL proposition asserts that something WAS published, so an unpublished value does not falsify it -- which does not make the measurement better, only the proposition narrower."
+    },
+    {
+      "question": "Can a notice be corrected or amended after publication, and can that change whether a cohort still qualifies?",
+      "authoritative_document_available": false,
+      "factual_answer": null,
+      "applies_to_detailed": true,
+      "applies_to_convergent": true,
+      "open_question": true,
+      "relevance": "OPEN. No retrieved first-party document establishes TED's correction and amendment policy for a published BT-161, nor whether a corrected notice supersedes an earlier one in this resource. This is the question a reviewer is most likely to want answered, and no document currently held answers it."
+    },
+    {
+      "question": "Who assigns the CPV classification, and can it change after publication?",
+      "authoritative_document_available": true,
+      "document": "docs/data/docker-commercial-scope-mapping-v1.md (Mission 1.35), on CPV's own semantics",
+      "factual_answer": "A contracting authority assigns a CPV code to ITS OWN contract. A CPV class therefore contains procurements and never products. Whether an assigned code can later be corrected is NOT established by any document held.",
+      "applies_to_detailed": true,
+      "applies_to_convergent": true,
+      "open_question": true,
+      "relevance": "The convergent proposition asserts about a division, so what the division membership rests on is load-bearing. Half of this is established and half is open, and the open half is recorded rather than smoothed over."
+    },
+    {
+      "question": "Does the source report the values, or does SROS infer them?",
+      "authoritative_document_available": true,
+      "document": "eForms SDK 1.15.1 field repository plus the collector and normalizer contracts",
+      "factual_answer": "The values are read from the notice payload as published. No amount is computed, no currency is converted, and no value is imputed.",
+      "applies_to_detailed": true,
+      "applies_to_convergent": true,
+      "open_question": false,
+      "relevance": "It fixes what a reliability judgement is ABOUT: the dependability of a source-reported figure, not of an SROS estimate."
+    }
+  ],
+  "failure_modes": [
+    {
+      "failure_mode": "a stated amount is wrong and conforms anyway",
+      "origin": "SOURCE",
+      "documented": true,
+      "effect_on_the_bounded_proposition": "the relation between two stated amounts could differ from the relation between the underlying facts. The proposition says the STATED amounts differ, so it survives, but a reader who takes it for a fact about contracts does not.",
+      "current_mitigation": "the claim's own wording is bounded to what the source stated",
+      "residual_unknown": "the rate at which stated amounts are wrong is unmeasured and unmeasurable from the source's own documents"
+    },
+    {
+      "failure_mode": "a result value is withheld from publication",
+      "origin": "SOURCE",
+      "documented": true,
+      "effect_on_the_bounded_proposition": "the published subset is not the whole. For an existential this does not falsify the claim; it bounds what the claim covers.",
+      "current_mitigation": "the proposition is existential and says 'at least one bounded set'",
+      "residual_unknown": "how often withholding happens in this classification"
+    },
+    {
+      "failure_mode": "a published notice is later corrected, amended or superseded",
+      "origin": "HISTORICAL_REVISION",
+      "documented": false,
+      "effect_on_the_bounded_proposition": "a witnessing cohort could stop exhibiting the asserted relation, or its classification could change. The Claim would then rest on Evidence whose witness no longer qualifies.",
+      "current_mitigation": "none. The corpus was collected once and nothing re-checks it.",
+      "residual_unknown": "OPEN, and it is the largest one. No held document establishes the correction policy."
+    },
+    {
+      "failure_mode": "two currencies compared as one distribution",
+      "origin": "EXTRACTOR",
+      "documented": true,
+      "effect_on_the_bounded_proposition": "would make the asserted relation meaningless",
+      "current_mitigation": "currency is a cohort-key field since procurement-value-contrast 1.1.0, and a mixed cohort is refused with INCOMPATIBLE_SERIES. Both guards are present: the key prevents the mixture and the validation catches a caller who forces one.",
+      "residual_unknown": "none identified for currency; the guard is structural and tested"
+    },
+    {
+      "failure_mode": "a per-lot value compared with a whole-notice value",
+      "origin": "EXTRACTOR",
+      "documented": true,
+      "effect_on_the_bounded_proposition": "would compare two different quantities",
+      "current_mitigation": "amount scope is a cohort-key field since 1.1.0, with the same double guard",
+      "residual_unknown": "none identified"
+    },
+    {
+      "failure_mode": "a notice's classification is projected to the wrong division",
+      "origin": "NORMALIZER",
+      "documented": true,
+      "effect_on_the_bounded_proposition": "the Claim would assert about a class the witness is not in",
+      "current_mitigation": "a notice classified across several divisions joins NO cohort rather than the first one listed; the division is read from the notice's own codes",
+      "residual_unknown": "whether a single-division notice's code is itself correct is a SOURCE question, not a projection one"
+    },
+    {
+      "failure_mode": "two cohorts that do not witness the same proposition are treated as if they did",
+      "origin": "CONVERGENCE_CONTRACT",
+      "documented": true,
+      "effect_on_the_bounded_proposition": "the Claim would carry Evidence that does not bear on it. THIS FAILURE MODE DOES NOT EXIST FOR THE DETAILED PROPOSITION, and it is the one convergence introduced.",
+      "current_mitigation": "source-published-value-contrast-witnessed@1.0.0 fixes ten identity fields, refuses a fact set carrying anything it does not classify, and is deterministic over persisted facts with no similarity, no embedding and no model",
+      "residual_unknown": "whether the ten identity fields are the RIGHT ten is a design judgement that real data has now exercised twice and not refuted"
+    },
+    {
+      "failure_mode": "one witness counted twice",
+      "origin": "CONVERGENCE_CONTRACT",
+      "documented": true,
+      "effect_on_the_bounded_proposition": "would manufacture corroboration out of one observation",
+      "current_mitigation": "witness_key over the witness facts, plus Evidence identity repaired in Mission 1.41 so an interpreter version bump can no longer insert a second row",
+      "residual_unknown": "none identified; both guards are tested"
+    },
+    {
+      "failure_mode": "the acquisition window shaped which cohorts exist",
+      "origin": "COLLECTOR",
+      "documented": true,
+      "effect_on_the_bounded_proposition": "the witnesses that exist are the ones two frozen seven-day windows contained. An existential is not damaged by this -- it needs one qualifying cohort, not a representative sample -- but the proposition must never be read as saying anything about how COMMON such cohorts are.",
+      "current_mitigation": "the proposition's own wording is existential and its does_not_establish list names prevalence, proportion and typicality",
+      "residual_unknown": "none for the existential reading; the risk is entirely in how a later reader summarises it"
+    }
+  ],
+  "engineering_validation_inputs": {
+    "$note": "§9. Recorded SEPARATELY from documentary basis, and deliberately NOT offered as one. These are facts about software behaving as specified. The reliability contract admits documents and a reviewer's documented judgement as basis; a passing test is neither, and rewarding the system numerically because its tests pass is the failure §7 names.",
+    "may_be_used_as_reliability_basis": false,
+    "inputs": [
+      "Mission 1.41 re-derived the historical division-90 Signal under extractor 1.1.0 from its exact persisted inputs and reproduced magnitude, currency, direction, amount types, amount scopes and classification codes identically, with its three inputs still forming one group.",
+      "Mission 1.39 proved the convergence contract on synthetic fixtures through the real repository: one Claim, two Evidence rows, one revision, idempotent replay.",
+      "Mission 1.41 repaired Evidence identity so that re-interpreting an unchanged Signal under a new interpreter version cannot insert a second row.",
+      "The currency and amount-scope cohort guards are exercised by tests, including a forced mixed cohort that still refuses."
+    ],
+    "what_they_establish": "that the implementation does what its specification says.",
+    "what_they_do_not_establish": "anything about how dependable TED's source-reported amounts are."
+  },
+  "candidate_basis_rows": [
+    {
+      "basis_type": "MEASUREMENT_METHODOLOGY",
+      "document_title": "eForms SDK 1.15.1 business-term definitions (business-term_en.xml)",
+      "document_url": "https://docs.ted.europa.eu/eforms/latest/",
+      "section_reference": "business-term|description|BT-161",
+      "retrieved_at": "2026-09-01",
+      "summarized_finding": "BT-161 is 'The value of all contracts awarded in this notice, including options and renewals'."
+    },
+    {
+      "basis_type": "SOURCE_DOCUMENTATION",
+      "document_title": "eForms SDK 1.15.1 field repository (fields.json)",
+      "document_url": "https://docs.ted.europa.eu/eforms/latest/",
+      "section_reference": "BT-161-NoticeResult",
+      "retrieved_at": "2026-09-01",
+      "summarized_finding": "TOTAL_VALUE is BT-161, notice level, non-repeatable, at XPath efac:NoticeResult/cbc:TotalAmount, with a companion currency field."
+    },
+    {
+      "basis_type": "KNOWN_LIMITATION",
+      "document_title": "eForms SDK 1.15.1 business rules (rule_en.xml)",
+      "document_url": "https://docs.ted.europa.eu/eforms/latest/",
+      "section_reference": "BR-BT-00161-*",
+      "retrieved_at": "2026-09-01",
+      "summarized_finding": "60 published rules govern where BT-161 may appear. All are presence, absence or notice-type constraints; none concerns the amount's correctness."
+    },
+    {
+      "basis_type": "KNOWN_LIMITATION",
+      "document_title": "eForms SDK 1.15.1 business-term definitions, BT-195 to BT-198",
+      "document_url": "https://docs.ted.europa.eu/eforms/latest/",
+      "section_reference": "business-term|description|BT-195",
+      "retrieved_at": "2026-09-01",
+      "summarized_finding": "Result values, of which BT-161 is one, may be withheld from immediate publication with a justification and a later date."
+    }
+  ],
+  "existing_basis_applicability": [
+    {
+      "document_title": "eForms SDK 1.15.1 business-term definitions (business-term_en.xml)",
+      "section_reference": "business-term|description|BT-161",
+      "verdict": "REUSED",
+      "why": "It defines what the measured amount MEANS, and the convergent proposition asserts about the same amounts. Nothing about the definition depends on whether the cohort is named."
+    },
+    {
+      "document_title": "eForms SDK 1.15.1 field repository (fields.json)",
+      "section_reference": "BT-161-NoticeResult",
+      "verdict": "REUSED",
+      "why": "The field, its level and its companion currency are the same. If anything it is more load-bearing now: the companion currency field is what makes a currency-pure cohort expressible."
+    },
+    {
+      "document_title": "eForms SDK 1.15.1 business rules (rule_en.xml)",
+      "section_reference": "BR-BT-00161-*",
+      "verdict": "REUSED",
+      "why": "TED validates conformance and never correctness. That limitation is identical under either proposition."
+    },
+    {
+      "document_title": "eForms SDK 1.15.1 business-term definitions, BT-195 to BT-198",
+      "section_reference": "business-term|description|BT-195",
+      "verdict": "PARTIALLY_APPLICABLE",
+      "why": "The FACT is unchanged and its WEIGHT is not. Under the detailed proposition, withholding bounds what a named cohort represents. Under an existential it cannot falsify the claim, because the claim asserts that something WAS published. The reviewer decides how much that matters; software should not decide it for them."
+    }
+  ],
+  "open_questions": [
+    "Whether TED permits a published BT-161 to be corrected or amended, and whether a corrected notice supersedes an earlier one in this resource. NO first-party document currently held answers this, and it is the question with the most direct bearing on whether a witnessing cohort still witnesses.",
+    "Whether an assigned CPV code can be corrected after publication. Mission 1.35 established WHO assigns a code; nothing held establishes whether it can change.",
+    "Whether an existential proposition with no period is more dependable than a bounded one, or merely harder to falsify. This is a judgement about the proposition rather than a fact about the source, and it is exactly the kind of thing a named reviewer is for.",
+    "How often division-92 notices withhold their result values. Unmeasured, and not measurable from the source's own documentation."
+  ],
+  "what_a_value_would_not_do": [
+    "it would not calibrate anything: REFERENCE_PROFILE_V1 stays UNCALIBRATED, and reliability review is not calibration",
+    "it would not establish independence: both Claims' Evidence stays UNKNOWN with zero groups, and DISJOINT observation membership is a different axis",
+    "it would not become a TED-wide coefficient: the existing detailed scope keeps its own assessment and neither reaches the other",
+    "it would not apply to CPV division 92 as a category: the scope carries no classification division at all",
+    "it would not make the Claims true, and it would not make the aggregation output a probability",
+    "it would not change any source's governance standing"
+  ],
+  "other_scope_historical_context": [
+    {
+      "$note": "A DIFFERENT scope's persisted assessment, reproduced as fact. §4: it shows what documentation was accepted and how the workflow is structured. It is not a baseline for this scope and must not be copied.",
+      "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+      "version": 1,
+      "scope": {
+        "source_id": "ted-eu",
+        "resource_id": "notices/eforms-contract-and-award",
+        "record_kind_id": "procurement_notice",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "source_reported_procurement_value_contrast"
+      },
+      "origin": "HUMAN_REVIEW",
+      "reviewed_by": "thibchm",
+      "reliability": 0.5,
+      "is_the_scope_under_review": false,
+      "basis_row_count": 4
+    },
+    {
+      "$note": "A DIFFERENT scope's persisted assessment, reproduced as fact. §4: it shows what documentation was accepted and how the workflow is structured. It is not a baseline for this scope and must not be copied.",
+      "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+      "version": 1,
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "origin": "HUMAN_REVIEW",
+      "reviewed_by": "thibchm",
+      "reliability": 0.65,
+      "is_the_scope_under_review": false,
+      "basis_row_count": 2
+    }
+  ],
+  "leak_checks": [
+    {
+      "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+      "assessment_proposition_kind": "source_reported_procurement_value_contrast",
+      "probed_proposition_kind": "platform_counted_content_request_change",
+      "only_field_differing": "proposition_kind",
+      "scopes_identical": false,
+      "resolved": false,
+      "outcome": "NO_APPLICABLE_ASSESSMENT"
+    },
+    {
+      "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+      "assessment_proposition_kind": "source_reported_procurement_value_contrast",
+      "probed_proposition_kind": "source_published_classification_value_contrast_witnessed",
+      "only_field_differing": "proposition_kind",
+      "scopes_identical": false,
+      "resolved": false,
+      "outcome": "NO_APPLICABLE_ASSESSMENT"
+    },
+    {
+      "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+      "assessment_proposition_kind": "source_reported_procurement_value_contrast",
+      "probed_proposition_kind": "source_reported_procurement_value_contrast",
+      "only_field_differing": "proposition_kind",
+      "scopes_identical": true,
+      "resolved": true,
+      "outcome": "RESOLVED"
+    },
+    {
+      "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+      "assessment_proposition_kind": "platform_counted_content_request_change",
+      "probed_proposition_kind": "platform_counted_content_request_change",
+      "only_field_differing": "proposition_kind",
+      "scopes_identical": true,
+      "resolved": true,
+      "outcome": "RESOLVED"
+    },
+    {
+      "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+      "assessment_proposition_kind": "platform_counted_content_request_change",
+      "probed_proposition_kind": "source_published_classification_value_contrast_witnessed",
+      "only_field_differing": "proposition_kind",
+      "scopes_identical": false,
+      "resolved": false,
+      "outcome": "NO_APPLICABLE_ASSESSMENT"
+    },
+    {
+      "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+      "assessment_proposition_kind": "platform_counted_content_request_change",
+      "probed_proposition_kind": "source_reported_procurement_value_contrast",
+      "only_field_differing": "proposition_kind",
+      "scopes_identical": false,
+      "resolved": false,
+      "outcome": "NO_APPLICABLE_ASSESSMENT"
+    }
+  ],
+  "operator_worksheet": {
+    "scope": {
+      "source_id": "ted-eu",
+      "resource_id": "notices/eforms-contract-and-award",
+      "record_kind_id": "procurement_notice",
+      "claim_type": "OBSERVED",
+      "proposition_kind": "source_published_classification_value_contrast_witnessed"
+    },
+    "question_1": "Do I have enough documented information to make an accountable reliability judgement for this exact measurement and this exact proposition?",
+    "question_1_answer": null,
+    "if_no": "Leave the ReliabilityAssessment absent. All 6 Evidence rows across 4 Claims stay NON_SCORABLE and the resolver keeps returning NO_APPLICABLE_ASSESSMENT, which is the designed behaviour rather than a gap. NO is a real answer.",
+    "judgement": {
+      "review_decision": null,
+      "reliability": null,
+      "reviewed_by": null,
+      "reviewer_rationale": "",
+      "stated_limitation": "",
+      "$note": "Blank because a reliability value is a HUMAN judgement for one exact measurement-crossed-with-proposition scope. Software prepared every fact above and supplied no answer, suggested none, and has no code path that could. §16 forbids a recommended value, a range and any threshold adjective, and a test scans this object for all three."
+    },
+    "confirmations": [
+      {
+        "checked": false,
+        "statement": "This is not a source-wide TED score."
+      },
+      {
+        "checked": false,
+        "statement": "This is not a probability the Claim is true."
+      },
+      {
+        "checked": false,
+        "statement": "This is not copied from the existing TED 0.5."
+      },
+      {
+        "checked": false,
+        "statement": "This is not a score for CPV division 92."
+      },
+      {
+        "checked": false,
+        "statement": "This does not establish independence."
+      },
+      {
+        "checked": false,
+        "statement": "This does not calibrate the aggregation profile."
+      },
+      {
+        "checked": false,
+        "statement": "This judgement was made by the named reviewer."
+      }
+    ]
+  },
+  "what_this_packet_is_not": [
+    "it is not a recommendation, and it contains no value, no range and no threshold adjective for the scope under review",
+    "it is not an assessment: nothing is persisted and ReliabilityAssessments stay at two",
+    "it does not name a reviewer: §17 forbids inferring one from a git author, a PR author, an OS username, an earlier assessment or this conversation",
+    "it does not treat the existing TED 0.5 as a baseline, a starting point or a default; that value belongs to a different proposition kind and appears here only as historical other-scope context"
+  ]
+}
