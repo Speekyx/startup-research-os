@@ -1,6 +1,6 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.62
+Version: 1.63
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
@@ -13,6 +13,38 @@ Last amended: 2026-09-03 (Sprint 1 / Mission 1.31.1)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.63 — 2026-09-03 (Sprint 1 / Mission 1.36)
+
+**`READY_FOR_OPERATOR_RELIABILITY_REVIEW`.** The reliability question is prepared
+for the Docker Opportunity's Evidence, and software supplied no answer.
+
+**Three distinct reliability scopes over the 8 rows, not two.** The two Stack
+Exchange signal types share four of the five scope fields and persist different
+`proposition_kind` values, so they are two reliability questions rather than one.
+1 + 1 + 6 = 8, every row in exactly one scope.
+
+**No reliability value appears anywhere** — no number, no range, no
+recommendation, no adjective ranking a source. `reliability: null` means no
+assessment exists, never 0.0 or 0.5, and the scale carries no threshold labels.
+
+Wikimedia's pageview methodology was retrieved; Stack Exchange's is unreachable
+because the site's robots policy blocks the crawler, so several questions a
+reviewer needs — above all whether an accepted answer can later change —
+are open, and the operator supplying the documents is the route Mission 1.18
+used.
+
+New: `docs/data/docker-evidence-reliability-review-packet-v1.md` and its
+machine-readable packet with a blank operator worksheet, a packet builder that
+has no field in which to put a value, and 38 tests whose load-bearing assertions
+are negative.
+
+**0 assessments created, all fourteen counters unchanged**,
+`scoring.evidence.reliability` NULL on every row, profile still `UNCALIBRATED`,
+four of five D-03 blockers open. Next: **stop and request the operator's
+reliability decisions**.
+
+Report: `docs/architecture/mission-1.36-report.md`.
 
 ## 1.62 — 2026-09-03 (Sprint 1 / Mission 1.35)
 
@@ -2218,6 +2250,7 @@ Additionally authoritative:
 - docs/data/observation-scope-rules-v1.json (added in 1.61)
 - docs/data/scope-relation-registry-v1.json (added in 1.61)
 - docs/data/docker-commercial-scope-mapping-v1.md (added in 1.62)
+- docs/data/docker-evidence-reliability-review-packet-v1.md (added in 1.63)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

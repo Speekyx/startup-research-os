@@ -1,0 +1,546 @@
+{
+  "$comment": "Mission 1.36 §13. A REVIEW PREPARATION packet for the reliability scopes the Docker Opportunity's Evidence binds to. It states, per exact five-part scope, what the measurement observes, what the proposition asserts, what first-party methodology documentation says, which failure modes that documentation supports, and what remains unknown.\n\nEVERY JUDGEMENT FIELD IS BLANK AND WILL STAY BLANK UNTIL AN ACCOUNTABLE PERSON FILLS IT. No reliability value appears anywhere in this document, and none is suggested, recommended, bounded or hinted at. `reliability: null` means NO ASSESSMENT EXISTS -- not 0.0, not 0.5, not 'unknown so assume the middle'. Unknown is never defaulted.\n\nWHAT RELIABILITY ASKS: how dependable is THIS MEASUREMENT for THIS PROPOSITION KIND? It is not source popularity, prestige, policy status, legal approval, relevance, extraction confidence or model confidence, and a source may hold several different assessments. A scope matches only when ALL FIVE fields match exactly.\n\nNO MODEL PRODUCED ANY CONTENT HERE. The findings are quotations and observations from first-party documents and from acquisition provenance recorded at collection time.",
+  "artifact_version": "docker-evidence-reliability-review-packet@1.0.0",
+  "prepared_by": "mission-1.36",
+  "prepared_at": "2026-09-03T00:00:00+00:00",
+  "outcome": "READY_FOR_OPERATOR_RELIABILITY_REVIEW",
+  "contract": {
+    "scope_identity": [
+      "source_id",
+      "resource_id",
+      "record_kind_id",
+      "claim_type",
+      "proposition_kind"
+    ],
+    "deliberately_excluded_from_scope_identity": [
+      "signal_type_id -- the derivation between a measurement and a proposition is the interpreter's business, and whether it read the Signal correctly is extraction_confidence",
+      "subject, Opportunity id, Evidence id",
+      "source approval state, use profile -- governance answers MAY WE USE IT, reliability answers HOW DEPENDABLE IS THIS MEASUREMENT FOR THIS PROPOSITION",
+      "evidence dimension"
+    ],
+    "closed_origins": [
+      "HUMAN_REVIEW",
+      "DOCUMENTED_METHOD",
+      "CALIBRATED_EMPIRICALLY"
+    ],
+    "there_is_no_model_origin": "No MODEL_GUESSED, no LLM_REVIEW. A model may help a reviewer read documentation and may never be the epistemic source.",
+    "scale": "[0.0, 1.0], with NO threshold labels. The architecture defines no meaning for 0.9, 0.7 or 0.5, and this packet invents none.",
+    "null_means": "UNKNOWN / NO ASSESSMENT. It does not mean 0.0, 0.5 or any other number.",
+    "human_review_requires": [
+      "a reliability value the reviewer chose",
+      "reviewed_by naming the person",
+      "a rationale in the reviewer's own words",
+      "a stated_limitation naming a failure mode",
+      "at least one document-backed basis",
+      "and NO calibration_dataset_ref, which belongs only to CALIBRATED_EMPIRICALLY"
+    ]
+  },
+  "scope_count": 3,
+  "evidence_rows_covered": 8,
+  "scopes": [
+    {
+      "scope": {
+        "source_id": "stack-exchange",
+        "resource_id": "questions/stackoverflow",
+        "record_kind_registry": "normalization_record_kind",
+        "record_kind_id": "community_question",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "community_site_published_questions_carrying_tag"
+      },
+      "assessment_key_candidate": null,
+      "evidence_count": 1,
+      "evidence_ids": [
+        "16a8c39c-d72a-4252-9c67-7be2165e9cae"
+      ],
+      "signal_types_represented": [
+        "community_question_volume"
+      ],
+      "current_resolver_status": {
+        "reliability_on_evidence_rows": [
+          "NULL"
+        ],
+        "resolution": "NO_APPLICABLE_ASSESSMENT",
+        "scorable": false,
+        "note": "No reliability assessment matches this exact five-part scope, so the resolver returns NO_APPLICABLE_ASSESSMENT and every row is NON_SCORABLE with MISSING_RELIABILITY. That is the designed behaviour, not a gap to fill with a default."
+      },
+      "separately_known_and_not_reliability": {
+        "$comment": "§12. These are different components answering different questions. A deterministic extractor reading a Signal perfectly says nothing about whether the underlying measurement is dependable for this proposition.",
+        "relevance": [
+          1.0
+        ],
+        "directness": [
+          1.0
+        ],
+        "extraction_confidence": [
+          1.0
+        ],
+        "derivation_confidence": [
+          1.0
+        ],
+        "independence_state": [
+          "UNKNOWN"
+        ],
+        "evidence_level": [
+          1
+        ],
+        "observation_category": [
+          "UNCATEGORISED"
+        ]
+      },
+      "measurement_definition": "A count of public questions that carry one named tag from one community site's own tag vocabulary, created inside a bounded window, as returned by one bounded retrieval of that site's API. The tag list is the site's own; nothing is translated into a taxonomy of this project's.",
+      "proposition_definition": "That the site PUBLISHED that many questions carrying its own named tag, created between two named source timestamps. It asserts nothing about how many PEOPLE asked -- author identity is never acquired -- and nothing about whether any two questions concern the same problem, which is the relation Mission 1.27 parked.",
+      "acquisition_provenance": {
+        "$comment": "Recorded by the collector AT COLLECTION TIME from the source's own responses. First-party evidence about the retrieval even where the publisher's documentation is unreachable now.",
+        "tooling": [
+          "collector stack-exchange-questions@1.0.0; normalizer stack-exchange-question@1.0.0; quality VALID"
+        ],
+        "tagged": "docker",
+        "site": "stackoverflow",
+        "filter": "!SyjNl4V)kvv2kw3Qt6",
+        "page": 1,
+        "page_size": 100,
+        "max_pages": 2,
+        "max_records": 200,
+        "quota_max": 300,
+        "quota_remaining": 299,
+        "date_window": [
+          "2024-03-01",
+          "2024-03-31"
+        ],
+        "resource_id": "questions/stackoverflow",
+        "endpoint": "https://api.stackexchange.com/2.3/"
+      },
+      "authoritative_documents": [
+        {
+          "title": "Stack Exchange API v2.3 -- publisher documentation",
+          "url": "https://api.stackexchange.com/docs/questions",
+          "section": "not retrieved",
+          "retrieved_at": "2026-09-03",
+          "basis_type": "UNREACHABLE",
+          "summarized_finding": "NOT RETRIEVED. The publisher's API documentation host is not accessible to this environment's fetcher, and the site's own robots policy blocks the crawler. No retry with a varied header was attempted, no mirror or cached copy was consulted, and no third-party summary was substituted. Mission 1.18 met the same wall and resolved it by the operator supplying the documents; that route remains available and is the recommended one here."
+        },
+        {
+          "title": "Acquisition provenance recorded by the collector",
+          "url": "internal: acquisition.raw_records.provenance",
+          "section": "per-record provenance",
+          "retrieved_at": "2024-03 acquisition, read 2026-09-03",
+          "basis_type": "FIRST_PARTY_RESPONSE_AT_COLLECTION",
+          "summarized_finding": "The collector recorded, from the API's own responses at collection time: tagged=docker, site=stackoverflow, filter=!SyjNl4V)kvv2kw3Qt6, page=1, page_size=100, date_window 2024-03-01 to 2024-03-31, quota_max=300 with quota_remaining=299 after the call. One page of size 100 returned 89 records, so the result set was exhausted and the retrieval was not truncated (Mission 1.30). 88 of those 89 carry the `docker` tag in the site's own tag list."
+        }
+      ],
+      "methodology_findings": [
+        "The retrieval is bounded and its bounds are recorded per record, so completeness can be argued from provenance rather than assumed.",
+        "One page of size 100 returned 89 records. A short page means the result set was exhausted, which is why this count is complete rather than a bound of ours (Mission 1.30).",
+        "What the query asked for and what the source says are different facts: 89 records came back from a tagged=docker query and 88 carry the tag. The measurement counts the second.",
+        "A filter id was supplied at acquisition, so the fields returned were selected at the source rather than discarded afterwards -- a minimisation property, and also a completeness caveat a reviewer should note: what is absent from the record may be absent because it was never requested."
+      ],
+      "failure_modes": [
+        {
+          "failure_mode": "Retagging after creation",
+          "supported_by_documentation": false,
+          "how_it_could_misrepresent_the_claim": "If a question's tags can be edited after it is asked, the set carrying the tag at retrieval time is not the set that carried it when the questions were created. The claim is bounded to the state observed, but a reader may hear a statement about March 2024.",
+          "mitigation_or_bound": "The claim already says the questions were created between named source timestamps and does not say the tag was applied then.",
+          "residual_unknown": "WHETHER AND HOW OFTEN TAGS CHANGE IS NOT ESTABLISHED, because the publisher documentation could not be retrieved."
+        },
+        {
+          "failure_mode": "Deleted questions disappear from the API",
+          "supported_by_documentation": false,
+          "how_it_could_misrepresent_the_claim": "If deleted questions are excluded from results, a retrieval run later than the creation window counts survivors rather than publications, and the count would drift downward over time for reasons unrelated to the subject.",
+          "mitigation_or_bound": "The retrieval date is recorded, so any claim is anchored to a state at a time.",
+          "residual_unknown": "The publisher's deletion and visibility semantics are NOT ESTABLISHED from documentation."
+        },
+        {
+          "failure_mode": "Pagination incompleteness",
+          "supported_by_documentation": false,
+          "how_it_could_misrepresent_the_claim": "A truncated retrieval reports OUR bound rather than the world, and reads as a larger number than a complete count would.",
+          "mitigation_or_bound": "ALREADY CLOSED for this retrieval by provenance: one page of size 100 returned 89, which is below the bound, so the set was exhausted. The extractor refuses rather than qualifying when this cannot be shown.",
+          "residual_unknown": "None for this window. A future window would need the same demonstration."
+        },
+        {
+          "failure_mode": "Creation timestamp instability",
+          "supported_by_documentation": false,
+          "how_it_could_misrepresent_the_claim": "The window bounds come from the questions' own creation instants. If those could change, the window would not describe what it claims to.",
+          "mitigation_or_bound": "A creation instant is an epoch second and this repository treats it as ESTABLISHED, which is why `observed_at` is a real moment for this source alone.",
+          "residual_unknown": "Whether the publisher ever revises a creation timestamp is NOT ESTABLISHED."
+        }
+      ],
+      "unresolved_questions": [
+        "Can a question's tags be edited after creation, and is there any record of the tag set at creation time?",
+        "Are deleted questions excluded from API results, and does the API expose deletion at all?",
+        "Does a retrieval represent the state at retrieval time or at event time?",
+        "What exactly does the `tagged` parameter match -- exact tag, or tag plus synonyms?",
+        "THESE ARE OPEN BECAUSE THE PUBLISHER'S DOCUMENTATION IS UNREACHABLE FROM THIS ENVIRONMENT, not because they were not asked. The operator may be able to retrieve them, as in Mission 1.18."
+      ],
+      "candidate_basis_rows": [
+        {
+          "basis_type": "FIRST_PARTY_RESPONSE_AT_COLLECTION",
+          "document_title": "Stack Exchange API response provenance for the March 2024 docker retrieval",
+          "document_url": "internal: acquisition.raw_records.provenance",
+          "section_reference": "tagged, site, filter, page, page_size, date_window, quota",
+          "retrieved_at": "2026-09-03",
+          "summarized_finding": "One bounded page of size 100 returned 89 records within a stated date window; 88 carry the site's own docker tag."
+        }
+      ],
+      "documentation_status": "PARTIAL_PUBLISHER_DOCUMENTATION_UNREACHABLE",
+      "operator_judgement": {
+        "$comment": "EVERY FIELD HERE IS THE OPERATOR'S. Software did not fill any of them and has no code path that could: no number, no range, no recommendation, no adjective. `reliability: null` means NO ASSESSMENT EXISTS. It does not mean 0.0, 0.5, or any other value, and unknown is never defaulted.",
+        "reliability": null,
+        "reviewed_by": null,
+        "reviewer_rationale": "",
+        "stated_limitation": "",
+        "reviewer_decision": null,
+        "origin_if_reviewed": "HUMAN_REVIEW"
+      }
+    },
+    {
+      "scope": {
+        "source_id": "stack-exchange",
+        "resource_id": "questions/stackoverflow",
+        "record_kind_registry": "normalization_record_kind",
+        "record_kind_id": "community_question",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "community_site_questions_without_accepted_answer"
+      },
+      "assessment_key_candidate": null,
+      "evidence_count": 1,
+      "evidence_ids": [
+        "17735944-da2f-4469-837f-8f3fe71922aa"
+      ],
+      "signal_types_represented": [
+        "community_question_without_accepted_answer_volume"
+      ],
+      "current_resolver_status": {
+        "reliability_on_evidence_rows": [
+          "NULL"
+        ],
+        "resolution": "NO_APPLICABLE_ASSESSMENT",
+        "scorable": false,
+        "note": "No reliability assessment matches this exact five-part scope, so the resolver returns NO_APPLICABLE_ASSESSMENT and every row is NON_SCORABLE with MISSING_RELIABILITY. That is the designed behaviour, not a gap to fill with a default."
+      },
+      "separately_known_and_not_reliability": {
+        "$comment": "§12. These are different components answering different questions. A deterministic extractor reading a Signal perfectly says nothing about whether the underlying measurement is dependable for this proposition.",
+        "relevance": [
+          1.0
+        ],
+        "directness": [
+          1.0
+        ],
+        "extraction_confidence": [
+          1.0
+        ],
+        "derivation_confidence": [
+          1.0
+        ],
+        "independence_state": [
+          "UNKNOWN"
+        ],
+        "evidence_level": [
+          1
+        ],
+        "observation_category": [
+          "UNCATEGORISED"
+        ]
+      },
+      "measurement_definition": "A count of the public questions above -- same site, same tag, same bounded retrieval -- that had NO answer marked accepted by their asker at the source state observed. The acceptance flag is read at collection time and the questions' creation instants bound a different thing from the acceptance state.",
+      "proposition_definition": "That the site published that many tagged questions, created between two named source timestamps, which had no answer marked accepted by their asker AT THE SOURCE STATE OBSERVED. Mission 1.32 established what it does not assert: not that any problem is unsolved, not that anybody is dissatisfied, not that a solution gap exists, not willingness to pay, and not recurrence.",
+      "acquisition_provenance": {
+        "$comment": "Recorded by the collector AT COLLECTION TIME from the source's own responses. First-party evidence about the retrieval even where the publisher's documentation is unreachable now.",
+        "tooling": [
+          "collector stack-exchange-questions@1.0.0; normalizer stack-exchange-question@1.0.0; quality VALID"
+        ],
+        "tagged": "docker",
+        "site": "stackoverflow",
+        "filter": "!SyjNl4V)kvv2kw3Qt6",
+        "page": 1,
+        "page_size": 100,
+        "max_pages": 2,
+        "max_records": 200,
+        "quota_max": 300,
+        "quota_remaining": 299,
+        "date_window": [
+          "2024-03-01",
+          "2024-03-31"
+        ],
+        "resource_id": "questions/stackoverflow",
+        "endpoint": "https://api.stackexchange.com/2.3/"
+      },
+      "authoritative_documents": [
+        {
+          "title": "Stack Exchange API v2.3 -- publisher documentation",
+          "url": "https://api.stackexchange.com/docs/questions",
+          "section": "not retrieved",
+          "retrieved_at": "2026-09-03",
+          "basis_type": "UNREACHABLE",
+          "summarized_finding": "NOT RETRIEVED, for the same reason as the sibling scope: the host is inaccessible to this environment's fetcher and the site's robots policy blocks the crawler. No bypass attempted."
+        },
+        {
+          "title": "Normalizer-recorded source semantics for the acceptance flag",
+          "url": "internal: acquisition.normalized_records.payload.answers.accepted_answer_semantics",
+          "section": "answers.accepted_answer_semantics",
+          "retrieved_at": "2026-09-03",
+          "basis_type": "FIRST_PARTY_MODEL_SEMANTICS",
+          "summarized_finding": "Every normalized record carries, beside the flag: 'the asker marked an answer accepted; not a statement that the problem is objectively resolved'. The flag records ONE PARTICIPANT'S ACTION -- only the asker may accept -- so `false` reports a non-action by exactly one person."
+        }
+      ],
+      "methodology_findings": [
+        "The flag was present on all 88 eligible records, so the derivation's refusal path for a withheld flag was not exercised on real data (Mission 1.32).",
+        "The measurement unions two facts that mean different things: 38 questions were answered with none accepted, and 16 received no answers at all. The split is recorded in `answer-acceptance-semantics-v1.md` precisely because a single count of 54 conflates them.",
+        "The window and the observation are different times. The questions carry creation instants; the acceptance flag is whatever it was when the record was collected, which may be much later. The claim says 'at the source state observed' and never 'during' the window.",
+        "This scope shares source, resource, record kind and claim type with the sibling scope and differs ONLY in proposition kind -- which is exactly why they are two scopes and not one."
+      ],
+      "failure_modes": [
+        {
+          "failure_mode": "Acceptance state changes after publication",
+          "supported_by_documentation": false,
+          "how_it_could_misrepresent_the_claim": "If an asker can accept an answer years later, or un-accept one, then the count describes a moving state. A count taken at another time would differ with nothing in the record explaining why. THIS IS THE CENTRAL RELIABILITY QUESTION FOR THIS SCOPE and it is the one the unreachable documentation would answer.",
+          "mitigation_or_bound": "The claim is worded 'at the source state observed', so it is already bounded to the retrieval rather than to the window. The collection timestamp is recorded.",
+          "residual_unknown": "Whether acceptance is revocable, and how often it changes, is NOT ESTABLISHED."
+        },
+        {
+          "failure_mode": "Late acceptance systematically biases a recent window",
+          "supported_by_documentation": false,
+          "how_it_could_misrepresent_the_claim": "If acceptance accrues over time, questions retrieved soon after creation would show fewer accepted answers than the same questions later, so the count would depend on the lag between the window and the retrieval.",
+          "mitigation_or_bound": "The retrieval here happened well after the March 2024 window, which reduces but does not eliminate the concern, and nothing quantifies it.",
+          "residual_unknown": "The distribution of time-to-acceptance is not published and this repository has not measured it."
+        },
+        {
+          "failure_mode": "The two component facts are not separable in the count",
+          "supported_by_documentation": true,
+          "how_it_could_misrepresent_the_claim": "A zero-answer question and an answered-but-unaccepted question are different situations, and the measurement is their union.",
+          "mitigation_or_bound": "The split is recorded in the frozen semantics document and can be recomputed from the held records without re-acquisition.",
+          "residual_unknown": "None. This one is fully characterised."
+        },
+        {
+          "failure_mode": "Retagging, deletion, pagination, timestamp instability",
+          "supported_by_documentation": false,
+          "how_it_could_misrepresent_the_claim": "Every failure mode of the sibling scope applies here too, because this measurement is taken over the same retrieval.",
+          "mitigation_or_bound": "Pagination is closed by the same provenance argument. The others are open in the same way.",
+          "residual_unknown": "See the sibling scope."
+        }
+      ],
+      "unresolved_questions": [
+        "Can an accepted answer be un-accepted or changed after the fact, and by whom?",
+        "Is there any published distribution of how long after a question is asked an answer tends to be accepted?",
+        "Does the API expose the acceptance timestamp, so that acceptance-at-window-close could be distinguished from acceptance-at-retrieval?",
+        "Plus every unresolved question of the sibling scope, which shares the retrieval."
+      ],
+      "candidate_basis_rows": [
+        {
+          "basis_type": "FIRST_PARTY_MODEL_SEMANTICS",
+          "document_title": "Normalizer-recorded acceptance semantics",
+          "document_url": "internal: acquisition.normalized_records.payload.answers.accepted_answer_semantics",
+          "section_reference": "answers.accepted_answer_semantics",
+          "retrieved_at": "2026-09-03",
+          "summarized_finding": "The source's own sentence, carried in every record: the asker marked an answer accepted; not a statement that the problem is objectively resolved."
+        }
+      ],
+      "documentation_status": "PARTIAL_PUBLISHER_DOCUMENTATION_UNREACHABLE",
+      "operator_judgement": {
+        "$comment": "EVERY FIELD HERE IS THE OPERATOR'S. Software did not fill any of them and has no code path that could: no number, no range, no recommendation, no adjective. `reliability: null` means NO ASSESSMENT EXISTS. It does not mean 0.0, 0.5, or any other value, and unknown is never defaulted.",
+        "reliability": null,
+        "reviewed_by": null,
+        "reviewer_rationale": "",
+        "stated_limitation": "",
+        "reviewer_decision": null,
+        "origin_if_reviewed": "HUMAN_REVIEW"
+      }
+    },
+    {
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_registry": "normalization_record_kind",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "assessment_key_candidate": null,
+      "evidence_count": 6,
+      "evidence_ids": [
+        "13a5eadb-977d-4de0-9c35-d0ff53442074",
+        "1b93db71-eaed-45c5-a2fa-9e4edea7bc49",
+        "487f62c6-2fcf-4790-9773-6e99214d0003",
+        "516182ff-0122-4d13-9d8a-92bb38065a75",
+        "6cf92ad6-77ed-4126-b356-41e65856430b",
+        "f1e0b7a4-d570-429a-91a4-fadff84cdce1"
+      ],
+      "signal_types_represented": [
+        "content_request_change"
+      ],
+      "current_resolver_status": {
+        "reliability_on_evidence_rows": [
+          "NULL"
+        ],
+        "resolution": "NO_APPLICABLE_ASSESSMENT",
+        "scorable": false,
+        "note": "No reliability assessment matches this exact five-part scope, so the resolver returns NO_APPLICABLE_ASSESSMENT and every row is NON_SCORABLE with MISSING_RELIABILITY. That is the designed behaviour, not a gap to fill with a default."
+      },
+      "separately_known_and_not_reliability": {
+        "$comment": "§12. These are different components answering different questions. A deterministic extractor reading a Signal perfectly says nothing about whether the underlying measurement is dependable for this proposition.",
+        "relevance": [
+          1.0
+        ],
+        "directness": [
+          1.0
+        ],
+        "extraction_confidence": [
+          1.0
+        ],
+        "derivation_confidence": [
+          1.0
+        ],
+        "independence_state": [
+          "UNKNOWN"
+        ],
+        "evidence_level": [
+          1
+        ],
+        "observation_category": [
+          "UNCATEGORISED"
+        ]
+      },
+      "measurement_definition": "A count of REQUESTS for one named Wikipedia article on one project, for one UTC day, restricted to the requester class the platform calls `user`, differenced across two adjacent days. The normalizer records the source's own words in every payload: 'a count of requests for the page that received HTTP 200 or 304, as the platform defines a page view. Not readers, not people, not users, not customers, not interest, not demand, not adoption and not a market.'",
+      "proposition_definition": "That the platform COUNTED a change in requests for that article between two named source days, attributed to the platform and bounded to its own requester class. It asserts nothing about readers, people, adoption, interest or demand, and nothing about Docker beyond that an encyclopedia article of that exact title was requested.",
+      "acquisition_provenance": {
+        "$comment": "Recorded by the collector AT COLLECTION TIME from the source's own responses. First-party evidence about the retrieval even where the publisher's documentation is unreachable now.",
+        "tooling": [
+          "collector wikimedia-pageviews-per-article@1.0.0; normalizer wikimedia-pageview@1.0.0; quality VALID"
+        ],
+        "article": "Docker_(software)",
+        "project": "en.wikipedia.org",
+        "access": "all-access",
+        "agent": "user",
+        "agent_semantics": "'user' is the source's own class for traffic it did not attribute to a self-identified bot or detect as automated. The operator documents that detection as heuristic",
+        "granularity": "daily",
+        "date_window": [
+          "2024-03-01",
+          "2024-03-07"
+        ],
+        "max_days": 7,
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "endpoint": "https://wikimedia.org/api/rest_v1/",
+        "user_agent": "startup-research-os/1.0 (+https://github.com/Speekyx/startup-research-os)"
+      },
+      "authoritative_documents": [
+        {
+          "title": "Research:Page view",
+          "url": "https://meta.wikimedia.org/wiki/Research:Page_view",
+          "section": "Definition; Tagging",
+          "retrieved_at": "2026-09-03",
+          "basis_type": "OFFICIAL_METHODOLOGY",
+          "summarized_finding": "A request counts as a pageview only if it meets ALL of: HTTP response 200 OK or 304 Not Modified; host is a WMF wiki domain; the X-Analytics header does not contain preview=1; the header does not indicate an automatically-called Special page; and it either carries pageview=1 or meets the MIME-type and URL-path requirements. Explicitly NOT counted: edit attempts (action=edit), edit-preview submissions (action=submit), preview pages, automatically-triggered Special pages such as Special:CentralAutoLogin, and API requests other than mobile app requests. Under Tagging, the Spider tag is applied where the 'User agent header is identified as a spider by ua-parser and additional custom regex based identification' -- that is, by pattern matching against known signatures."
+        },
+        {
+          "title": "Data Platform / Data Lake / Traffic / Pageviews",
+          "url": "https://wikitech.wikimedia.org/wiki/Data_Platform/Data_Lake/Traffic/Pageviews",
+          "section": "Events and known problems since 2015-05-01",
+          "retrieved_at": "2026-09-03",
+          "basis_type": "OFFICIAL_METHODOLOGY",
+          "summarized_finding": "The page maintains a list of known data-quality events. One recorded from 2016-07-20: 'An update to Windows caused Chrome 41 user agents to appear to be erroneously requesting the Main page of a few wikis.' The page describes the filtering methodology (spider and bot filtering, mobile/desktop differentiation, capitalisation normalisation) and does NOT document whether published values can be revised, recomputed or backfilled, nor any remediation procedure for the incident it records."
+        }
+      ],
+      "methodology_findings": [
+        "The counted unit is a REQUEST meeting a documented HTTP and header test, not a reader and not a session.",
+        "The exclusion list is explicit and enumerable, which means what is excluded is checkable rather than a matter of interpretation.",
+        "Automated-traffic classification is by ua-parser plus custom regular expressions -- pattern matching against known signatures. The collector recorded the same understanding at acquisition time: `user` is the source's own class for traffic it did not attribute to a self-identified bot or detect as automated, and the operator documents that detection as heuristic.",
+        "The day bucket is UTC on the strength of the definition page the API's own documentation designates, which is why this repository treats the period as ESTABLISHED for this source and NOT_ESTABLISHED for GDELT.",
+        "The retrieval used access=all-access and agent=user at daily granularity for one named article, so the measurement's own bounds are recorded per record rather than inferred."
+      ],
+      "failure_modes": [
+        {
+          "failure_mode": "Automated traffic classified as `user`",
+          "supported_by_documentation": true,
+          "how_it_could_misrepresent_the_claim": "The claim says the platform counted requests in its `user` class. If pattern-based detection misses an automated client, the count includes it. The claim stays literally true -- the platform did count it that way -- while a reader inclined to hear 'people' hears something the measurement never said.",
+          "mitigation_or_bound": "The claim wording never says people or readers, and the normalizer stores the source's own class semantics in every payload, so the bound travels with the data rather than living in a report.",
+          "residual_unknown": "The rate at which detection misses automated clients is not published, and this repository has no way to estimate it."
+        },
+        {
+          "failure_mode": "A user-agent population shift distorts the series",
+          "supported_by_documentation": true,
+          "how_it_could_misrepresent_the_claim": "The publisher records an incident where a Windows update made Chrome 41 user agents appear to request the Main page of several wikis. A comparable event during a measured window would move a day-over-day difference for reasons unrelated to the article.",
+          "mitigation_or_bound": "The known-problems list is published and dated, so a window can be checked against it. The measured window here is 2024-03-01 to 2024-03-07.",
+          "residual_unknown": "Whether the list is exhaustive, and whether undetected events of the same shape occur."
+        },
+        {
+          "failure_mode": "Historical values change after publication",
+          "supported_by_documentation": false,
+          "how_it_could_misrepresent_the_claim": "If published counts can be recomputed or backfilled, a claim citing a value is a claim about the value as of the retrieval, and a later reader re-querying could find a different number with nothing recording that it moved.",
+          "mitigation_or_bound": "The raw record stores what was returned and when it was collected, so the repository can always say what it was told and when. Mission 1.19's re-run reported `new: 0, unchanged: 21, revised: 0`, which is one observation of stability and not a policy.",
+          "residual_unknown": "THE PUBLISHER'S REVISION PRACTICE IS NOT DOCUMENTED on the pages retrieved. This is an absence of documentation, not evidence of stability, and it is the largest open question for this scope."
+        },
+        {
+          "failure_mode": "The calendar moves the difference",
+          "supported_by_documentation": false,
+          "how_it_could_misrepresent_the_claim": "Adjacent-day differences within a week straddle weekends. Mission 1.19 recorded that 2024-03-02 and 03-03 are a Saturday and a Sunday and that both larger articles fall roughly 40 per cent across them.",
+          "mitigation_or_bound": "The signal type, the migration and every Claim state the confounder in their own words, so it is written into the record rather than into a caveat. It makes an INFERENCE from the signal unsound rather than the subtraction untrue.",
+          "residual_unknown": "No calendar model exists in this repository, and none is proposed here."
+        }
+      ],
+      "unresolved_questions": [
+        "Can published per-article pageview values be revised, recomputed or backfilled after publication, and if so on what schedule and with what notice? Not documented on the pages retrieved.",
+        "Is the known-problems list intended to be exhaustive?",
+        "What is the documented behaviour when an article is renamed or redirected during a measured window?"
+      ],
+      "candidate_basis_rows": [
+        {
+          "basis_type": "OFFICIAL_METHODOLOGY",
+          "document_title": "Research:Page view",
+          "document_url": "https://meta.wikimedia.org/wiki/Research:Page_view",
+          "section_reference": "Definition; Tagging",
+          "retrieved_at": "2026-09-03",
+          "summarized_finding": "The pageview definition is an explicit conjunction of HTTP-status, host and header conditions with an enumerated exclusion list; automated traffic is tagged by ua-parser plus custom regex."
+        },
+        {
+          "basis_type": "OFFICIAL_METHODOLOGY",
+          "document_title": "Data Platform / Data Lake / Traffic / Pageviews",
+          "document_url": "https://wikitech.wikimedia.org/wiki/Data_Platform/Data_Lake/Traffic/Pageviews",
+          "section_reference": "Events and known problems since 2015-05-01",
+          "retrieved_at": "2026-09-03",
+          "summarized_finding": "A dated known-problems list exists and records a 2016 user-agent classification incident; revision and backfill practice is not documented."
+        }
+      ],
+      "documentation_status": "RETRIEVED",
+      "operator_judgement": {
+        "$comment": "EVERY FIELD HERE IS THE OPERATOR'S. Software did not fill any of them and has no code path that could: no number, no range, no recommendation, no adjective. `reliability: null` means NO ASSESSMENT EXISTS. It does not mean 0.0, 0.5, or any other value, and unknown is never defaulted.",
+        "reliability": null,
+        "reviewed_by": null,
+        "reviewer_rationale": "",
+        "stated_limitation": "",
+        "reviewer_decision": null,
+        "origin_if_reviewed": "HUMAN_REVIEW"
+      }
+    }
+  ],
+  "existing_assessments_and_why_they_do_not_apply": {
+    "$comment": "§16. No inheritance. An assessment applies only where ALL FIVE fields match exactly, and the one that exists matches none of the scopes above on any of the five.",
+    "assessments": [
+      {
+        "source_id": "ted-eu",
+        "resource_id": "notices/eforms-contract-and-award",
+        "record_kind_id": "procurement_notice",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "source_reported_procurement_value_contrast",
+        "version": 1
+      }
+    ],
+    "matches_any_docker_scope": false
+  },
+  "worksheet": {
+    "$comment": "§14. One worksheet per scope, and NOTHING IS PREFILLED. If the answer to question 1 is NO, the correct action is to leave the reliability absent -- an absent assessment is a working state, not a gap.",
+    "questions": [
+      "1. Do I have enough documented information to make a reliability judgement for this exact scope? YES / NO",
+      "2. If NO: leave reliability absent. The Evidence stays NON_SCORABLE, which is the designed behaviour.",
+      "3. If YES: reliability value in [0.0, 1.0] ____________",
+      "4. Rationale, in my own words ____________",
+      "5. Stated limitation / the failure mode this value does NOT cover ____________",
+      "6. Reviewer identity ____________",
+      "7. Confirm this value is NOT: a source-quality score; a legal or governance approval score; '0.5 because unknown'; model-generated; a calibrated probability."
+    ],
+    "reminders": [
+      "A source may hold several different assessments. You are not scoring Stack Exchange or Wikimedia; you are judging one measurement for one proposition kind.",
+      "The two Stack Exchange scopes share four of five fields and differ only in proposition kind. They may legitimately receive different values, or one may be judgeable and the other not.",
+      "The existing TED assessment applies to none of these scopes and must not be inherited.",
+      "A value here does not calibrate the aggregation profile and does not make production scoring ready."
+    ]
+  }
+}

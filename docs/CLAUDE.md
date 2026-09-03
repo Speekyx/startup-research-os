@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.63
-Last amended: 2026-09-03 (Sprint 1 / Mission 1.35)
+Version: 1.64
+Last amended: 2026-09-03 (Sprint 1 / Mission 1.36)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.64 | 2026-09-03 | **READY_FOR_OPERATOR_RELIABILITY_REVIEW: the question is prepared and software supplied no answer.** **THREE reliability scopes over the 8 Docker rows, not two** -- §0 forbids assuming two because two source families exist, and counting found three: the two Stack Exchange signal types persist **different proposition kinds**, so they share FOUR of five scope fields and are still two different reliability questions. 1 + 1 + 6 = 8, every row in exactly one scope. **NO NUMBER APPEARS ANYWHERE** -- no value, no range, no recommendation, no adjective ranking a source; `reliability: null` documented as NO ASSESSMENT EXISTS and never as 0.0 or 0.5; the scale stated with **no threshold labels** because the architecture defines none. **0 assessments created, all 14 counters unchanged, `scoring.evidence.reliability` NULL on every row** because reliability resolves late. **Wikimedia methodology RETRIEVED**: a pageview is a conjunction of HTTP/host/header tests with an enumerated exclusion list, and spider tagging is *ua-parser and additional custom regex* -- pattern matching, matching what the collector recorded as heuristic. Its largest gap: **revision and backfill practice is NOT DOCUMENTED**, which is an absence of documentation and not evidence of stability. **Stack Exchange documentation UNREACHABLE** (robots policy blocks the crawler); no retry, no mirror, no third-party summary -- so whether an accepted answer can later change is OPEN, and the operator supplying the documents is the route Mission 1.18 used. **The TED assessment shares `claim_type` with all three Docker scopes and differs on the other four** -- every row here is OBSERVED, so that field discriminates nothing and is exactly where a leak would start if matching were ever partial. **Four of five D-03 blockers remain open**, reported separately. A test caught a factual overstatement in my own packet and it was corrected rather than the test loosened |
 | 1.63 | 2026-09-03 | **NO_AUTHORITATIVE_DOCKER_CATEGORY_RELATION_FOUND: the search happened and the registry is still empty.** Six candidates, six rejections, failing in **three distinct ways**: things that NAME Docker without classifying it (its own docs say *an open platform for developing, shipping, and running applications* and assign no category; the OCI defines three SPECIFICATIONS and uses *container engine* as a term with no register behind it -- **a term is not a category**, it has no identifier, no publisher deciding membership and no member list); things that CLASSIFY PRODUCTS without containing Docker; and things that classify **something else**. **The CNCF Landscape was refused on a countable fact**: its `landscape.yml` holds 1,138,659 bytes, 2,512 name fields and 15 categories, the word Docker occurs 53 times, and the five items named for it are Swarm (Orchestration), Compose (App Definition), Hub, a Wasm entry and **`Docker (member)`, the COMPANY** -- **the container platform is not an item at all**, and the three products sit in three DIFFERENT categories, so there is not even a single wrong answer to be tempted by. Independently: it calls itself *a map* that *attempts to categorize most of* the space with a **300-GitHub-star inclusion rule**, and a popularity threshold is not a classification rule. **CPV is `CPV_NOT_SUITABLE_FOR_DIRECT_PRODUCT_RELATION` on WHO ASSIGNS A CODE**: a contracting authority assigns one to ITS OWN CONTRACT, so a CPV class contains procurements and never products. UNSPSC returned HTTP 403 and stays UNRESOLVED rather than guessed. **The direction of reasoning was the methodology** -- ask what contains Docker, never what would reach the evidence we hold. 0 relations before and after, 0 model calls, all 13 counters unchanged. Next: **Reliability / Scoring Eligibility Foundation**, chosen explicitly over a second pilot |
 | 1.62 | 2026-09-03 | **MULTI_SCOPE_ARCHITECTURE_READY_SCOPE_RELATIONS_UNPOPULATED: the engine can now say WHAT LEVEL a row observes, and there are no edges.** `SubjectScopeType` = PRODUCT | CATEGORY | MARKET | GEOGRAPHY, each with a `means` and a `never_means`, and **MARKET's example is literally 'none'** because no registered source observes one. **The assumption broken**: `build_packet` unioned dimensions with NO SCOPE TERM, so membership WAS the claim of aboutness -- found in seven places and listed in the report. **The relation registry ships EMPTY and that is the result**: Mission 1.33 refused to say which category contains Docker and §33 forbids inventing one, so the capability exists holding zero edges and NO Evidence row can currently be contextual. **Real demonstration on 28 rows**: Docker resolves PRODUCT (8 rows, DIRECT), TED resolves CATEGORY on the publisher's own authority (CPV is a classification by its own name), and offering TED to Docker is REFUSED `NO_PERMITTED_RELATION` -- **the refusal is the demonstration**. 25 of 28 scopes resolved, **3 UNDETERMINED** (GDELT terms; a word names no level) and nothing mass-labelled. **NO MIGRATION**: scope is DERIVED at build time from identifiers already held, because persisting a derivation is what source-registry §3 refuses for eligibility. **Compatibility PROVEN not asserted**: regenerating the preparation artifact changed EXACTLY ONE FIELD, the registry version. **No union of direct and contextual dimensions exists on the packet** -- a test enumerates every public attribute -- because that union is the sentence *Docker supports MARKET_ACTIVITY*. No transitivity, no MODEL_INFERRED origin, WTP still unreachable, revision 1 and its 7 links untouched, all 13 counters verified unchanged |
 | 1.61 | 2026-09-03 | **COMMERCIAL_SOURCE_GRAIN_MISMATCH: the sources that can name Docker carry no commercial semantics, and the sources that carry commercial semantics cannot name Docker.** A desk review of all 29 registered sources. **5 can identify Docker at grain** -- `github`, `product-hunt`, `reddit`, `stack-exchange`, `wikimedia-pageviews` -- 7 reach it only as a MENTION and 17 not at all. **3 could support a missing commercial dimension and all 3 are blocked.** 0 acquisitions, 0 model calls, **every one of the thirteen counters verified unchanged against the live database**. **21 of 29 have no `local-private-research-v1` review**, so ADR-027 refuses them whatever their terms say -- and that is NOT twenty-one opportunities: GitHub's and Product Hunt's findings are about the PURPOSE of the use, which the local profile does not change, because **local deployment never implies non-commercial use**. GitHub's AUP section 7 is an allowlist applying *regardless of whether the information was scraped, collected through our API, or obtained otherwise*, permitting research use **only if publications are open access**; Product Hunt's docs say twice that the API *must not be used for commercial purposes*. **GitHub has the best grain in the portfolio and the strongest unclaimed dimension (COMPETITIVE_SUPPLY), and is NOT_RECOMMENDED.** **No source supports SOLUTION_GAP and none supports WILLINGNESS_TO_PAY at any grain** -- the taxonomy's own never_means already refuses a listed price, a budget line and a contract total. **THE BINDING CONSTRAINT IS ARCHITECTURAL**: `CanonicalSubject` has no scope field and a packet holds one subject, so SROS models GEOGRAPHIC scope on an Opportunity and no SUBJECT scope at all -- while MARKET_ACTIVITY and ECONOMIC_VALUE already ask about *the bounded scope observed*. TED is authorized, collected, normalized, extracted and carries three commercial dimensions, and its subject key is `ted-eu:CPV-division:90`. Next: **Multi-Scope Opportunity Evidence Architecture V1**, before any acquisition |
@@ -310,6 +311,84 @@ positives in the scored split, which this 89-question corpus did not supply: one
 defensible SAME in 40 candidate pairs is a finding about the corpus, not about
 the classifier. **No synthetic positive may substitute** -- a constructed pair
 can test a parser and can never establish semantic accuracy against real data.
+
+### A reliability scope is counted, never assumed, and the number is not software's
+
+Added in 1.64 (Mission 1.36, `docker-evidence-reliability-review-packet-v1.md`).
+**`READY_FOR_OPERATOR_RELIABILITY_REVIEW`**: the question prepared, no judgement
+supplied, **0 assessments created**.
+
+    8 Docker Evidence rows  ->  3 reliability scopes  ->  0 reviewed values
+    stack-exchange | questions/stackoverflow | community_question | OBSERVED
+        community_site_published_questions_carrying_tag        1 row
+        community_site_questions_without_accepted_answer       1 row
+    wikimedia-pageviews | metrics/pageviews/per-article/... | content_request_count
+        platform_counted_content_request_change                6 rows
+
+- **THREE SCOPES, NOT TWO, AND THAT IS THE SUBSTANTIVE RESULT.** Two source
+  families invite the assumption of two scopes; §0 forbids it and counting
+  refutes it. The two Stack Exchange signal types share `source_id`,
+  `resource_id`, `record_kind_id` and `claim_type` -- **four of five** -- and
+  persist DIFFERENT `proposition_kind` values, so *how many questions carry this
+  tag* and *how many carry it without an accepted answer* are two reliability
+  questions. Splitting them was not a choice: the persisted discriminators
+  differ.
+- **`signal_type_id` is not part of scope identity.** Whether the interpreter
+  read the Signal correctly is `extraction_confidence`, a different field
+  answering a different question, and a deterministic extractor reading a Signal
+  perfectly says nothing about whether the underlying measurement is dependable.
+- **SOFTWARE MAY PREPARE THE QUESTION AND MAY NOT ANSWER IT.** No value, no
+  range, no recommendation, no adjective ranking a source appears anywhere in the
+  packet, and a test enumerates it to prove that. `reliability: null` means NO
+  ASSESSMENT EXISTS -- not 0.0, not 0.5, not *unknown so assume the middle*. The
+  scale is `[0.0, 1.0]` with **no threshold labels**, because the architecture
+  defines no meaning for 0.9 or 0.7 and a packet that invented one would be
+  legislating.
+- **AN ASSESSMENT SHARING FOUR FIELDS IS AS INAPPLICABLE AS ONE SHARING NONE.**
+  The TED assessment shares `claim_type: OBSERVED` with all three Docker scopes,
+  because every Evidence row in this repository is OBSERVED -- so that field
+  discriminates nothing on its own and **is exactly where a leak would start if
+  matching were ever partial, nearest-match or fuzzy**. All five must match.
+- **§16's list of things that are NOT a review**: asking for the mission, having
+  accepted a value for another scope before, approving the project, saying
+  *continue*, or choosing the pilot subject. Each scope needs its own judgement
+  from a named person.
+- **A RETRIEVED METHODOLOGY AND AN UNREACHABLE ONE ARE DIFFERENT STATES.**
+  Wikimedia's pageview definition was retrieved: a conjunction of HTTP-status,
+  host and header conditions with an enumerated exclusion list, and spider
+  tagging by *"ua-parser and additional custom regex based identification"* --
+  pattern matching, which is what the collector already recorded as heuristic.
+  Stack Exchange's is **unreachable** because the site's robots policy blocks the
+  crawler; no retry with a varied header, no mirror, no cached copy, no
+  third-party summary. **The operator supplying the documents is the route
+  Mission 1.18 used and it remains open.**
+- **AN ABSENCE OF DOCUMENTATION IS NOT EVIDENCE OF STABILITY.** Wikimedia's
+  revision and backfill practice is not documented on the pages retrieved, and
+  Mission 1.19's `revised: 0` is one observation rather than a policy. For Stack
+  Exchange the central open question is whether an accepted answer can later be
+  un-accepted -- which would make scope 2 a count of a moving state.
+- **NO is a real answer to *do I have enough information*.** Worksheet question 1
+  has a defined consequence: leave the reliability absent, and the Evidence stays
+  `NON_SCORABLE`, which is the designed behaviour rather than a gap.
+- **A VALUE WOULD NOT CALIBRATE ANYTHING.** Reliability review is not
+  calibration. `REFERENCE_PROFILE_V1` stays `UNCALIBRATED`, no Opportunity score
+  exists, no ranking happened, and independence stays `UNKNOWN` on all 8 rows
+  with 0 groups -- which continues to cap evidence levels for reasons reliability
+  cannot touch.
+- **FOUR OF FIVE D-03 BLOCKERS REMAIN OPEN**, reported separately so *some
+  Evidence became scorable* can never be read as *D-03 resolved*. Blocker 4 --
+  an authorised half-life -- is not required by THESE rows because every claim in
+  the corpus is `EVERGREEN`, which is a property of this corpus and not a
+  resolution.
+
+**A `$comment` is where a RULE is written and a rule may name the values it
+forbids; a FIELD may not.** A scan asserting no number appears failed four times
+across four missions on exactly the sentences doing the work
+(`testing-strategy.md` §23), so the fix was generalised rather than patched again:
+`$comment` keys are stripped at any depth before scanning. **A test also caught a
+factual overstatement in this mission's own packet** -- it claimed the TED
+assessment matched on zero fields when it shares one -- and the document was
+corrected rather than the test loosened.
 
 ### A term is not a category, and a map is not a taxonomy
 
