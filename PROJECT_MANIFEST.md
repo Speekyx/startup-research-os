@@ -1,6 +1,6 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.61
+Version: 1.62
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
@@ -13,6 +13,34 @@ Last amended: 2026-09-03 (Sprint 1 / Mission 1.31.1)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.62 — 2026-09-03 (Sprint 1 / Mission 1.35)
+
+**`NO_AUTHORITATIVE_DOCKER_CATEGORY_RELATION_FOUND`.** The scope-relation
+capability built in Mission 1.34 went looking for its first edge. Six
+authoritative candidates, six rejections, **0 relations before and after**.
+
+They fail in three distinct ways: sources that NAME Docker without classifying it
+(its own documentation describes it functionally; the OCI defines specifications
+and uses *container engine* as a term with no register behind it), a source that
+classifies products but does not contain Docker (the CNCF Landscape lists Swarm,
+Compose, Hub, a Wasm entry and the COMPANY - **not the container platform**), and
+sources that classify what is *bought* rather than what a thing is (CPV, UNSPSC).
+
+CPV is `CPV_NOT_SUITABLE_FOR_DIRECT_PRODUCT_RELATION` because a contracting
+authority assigns a code to its own contract, so a CPV class contains
+procurements and never products. UNSPSC returned HTTP 403 and is recorded
+unresolved rather than guessed.
+
+New: `docs/data/docker-commercial-scope-mapping-v1.md` and its machine-readable
+record, plus 24 tests holding the documented refusal. The relation registry now
+records why it is empty.
+
+**0 model calls, 0 new canonical records**, all thirteen counters unchanged.
+Next: **Reliability / Scoring Eligibility Foundation**, chosen explicitly over a
+second pilot Opportunity.
+
+Report: `docs/architecture/mission-1.35-report.md`.
 
 ## 1.61 — 2026-09-03 (Sprint 1 / Mission 1.34)
 
@@ -2189,6 +2217,7 @@ Additionally authoritative:
 - docs/data/commercial-dimension-source-feasibility-v1.md (added in 1.60)
 - docs/data/observation-scope-rules-v1.json (added in 1.61)
 - docs/data/scope-relation-registry-v1.json (added in 1.61)
+- docs/data/docker-commercial-scope-mapping-v1.md (added in 1.62)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.
