@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.60
-Last amended: 2026-09-03 (Sprint 1 / Mission 1.32)
+Version: 1.61
+Last amended: 2026-09-03 (Sprint 1 / Mission 1.33)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.61 | 2026-09-03 | **COMMERCIAL_SOURCE_GRAIN_MISMATCH: the sources that can name Docker carry no commercial semantics, and the sources that carry commercial semantics cannot name Docker.** A desk review of all 29 registered sources. **5 can identify Docker at grain** -- `github`, `product-hunt`, `reddit`, `stack-exchange`, `wikimedia-pageviews` -- 7 reach it only as a MENTION and 17 not at all. **3 could support a missing commercial dimension and all 3 are blocked.** 0 acquisitions, 0 model calls, **every one of the thirteen counters verified unchanged against the live database**. **21 of 29 have no `local-private-research-v1` review**, so ADR-027 refuses them whatever their terms say -- and that is NOT twenty-one opportunities: GitHub's and Product Hunt's findings are about the PURPOSE of the use, which the local profile does not change, because **local deployment never implies non-commercial use**. GitHub's AUP section 7 is an allowlist applying *regardless of whether the information was scraped, collected through our API, or obtained otherwise*, permitting research use **only if publications are open access**; Product Hunt's docs say twice that the API *must not be used for commercial purposes*. **GitHub has the best grain in the portfolio and the strongest unclaimed dimension (COMPETITIVE_SUPPLY), and is NOT_RECOMMENDED.** **No source supports SOLUTION_GAP and none supports WILLINGNESS_TO_PAY at any grain** -- the taxonomy's own never_means already refuses a listed price, a budget line and a contract total. **THE BINDING CONSTRAINT IS ARCHITECTURAL**: `CanonicalSubject` has no scope field and a packet holds one subject, so SROS models GEOGRAPHIC scope on an Opportunity and no SUBJECT scope at all -- while MARKET_ACTIVITY and ECONOMIC_VALUE already ask about *the bounded scope observed*. TED is authorized, collected, normalized, extracted and carries three commercial dimensions, and its subject key is `ted-eu:CPV-division:90`. Next: **Multi-Scope Opportunity Evidence Architecture V1**, before any acquisition |
 | 1.60 | 2026-09-03 | **COMMERCIAL_EVIDENCE_CREATED_NO_OPPORTUNITY_DIMENSION: a real measurement that maps to nothing, on purpose.** 88 held Docker questions, **34 with an accepted answer and 54 without** -- 38 answered but unaccepted, 16 with zero answers, **0 missing the flag** -- and the Signal maps to `frozenset()`. **The assessment was FROZEN BEFORE the Signal existed**, which is the whole of §0: a dimension chosen after seeing that the packet needed one is a rationalisation. `SOLUTION_GAP` is settled by its own `never_means` -- *that absence of evidence of a solution is evidence of its absence* -- and `SOLUTION_DISSATISFACTION` by the fact that **the asker is not evaluating a product**. **Acceptance is ONE PERSON'S ACTION**: only the asker may accept, so `false` reports a non-action by one participant, and an asker who solved it elsewhere or never returned leaves it false whatever answers arrived. **The 16 zero-answer questions look like the sharpest possible gap evidence and isolating them does not rescue the inference**, it makes the same inference over a smaller set. **The state is OBSERVED LATE**: the questions carry creation instants and the flag is whatever it was at collection, so the claim says *at the source state observed* and never *during*. **A claim shaped like a numerator invites a rate**: revision 1 read *Of the questions ... 54 had no accepted answer* and named no denominator, so `1.4.1` asserts a SET; revision 1 is preserved. **Docker packet 7 -> 8 rows with counting dimensions UNCHANGED at 2** -- a zero-dimension row adds size and never diversity -- still HYPOTHESIS_FORMABLE, still AVAILABLE, independence UNKNOWN for 8 of 8 because it is a **second measurement over the same corpus**. **Two defects fixed**: an interpreter version bump re-INSERTED Evidence because the idempotency key embeds it, and the new row formed its own tenth packet because `subject_key` knew one signal type. RawRecords and NormalizedRecords unchanged at 148, 0 model calls, no Opportunity revision, problem-family still PARKED |
 | 1.59 | 2026-09-03 | **FIRST_OPPORTUNITY_HYPOTHESIS_CREATED. SROS holds its first Opportunity.** Same packet, **byte-identical prompt hash**, corrected audit: one call, 0 retries, 0.0392 USD, decision FORM_HYPOTHESIS, every clause of the frozen gate passed. Opportunities 0 -> **1**, revisions 0 -> **1**, evidence links 0 -> **7**, and RawRecords, NormalizedRecords, Signals, Claims, ClaimRevisions, Evidence, ReliabilityAssessments, Embeddings and Scores ALL UNCHANGED. **Mission 1.31 is untouched** and keeps its rejection under audit@1.0.0. **§1's five required cases found that guard@1.1.0 handled four**: a denial whose marker FOLLOWS its term -- *competitors ARE NOT established* -- was still flagged, and 1.2.0 adds that one grammatical form, cancelled by an intervening comma so *buyers would pay, which is not established* still fails. Checking them also exposed an off-by-one in `_phrase_position` that had misaligned every term not at the start of a sentence. **The two runs agree on every structural judgement** -- same actor refusal, same 12 unsupported dimensions, same 7 citations, both asserting no commercial claim -- so what changed was the audit and not the answer. `market_scope` is GLOBAL because the column is NOT NULL and Ontology V2 §4 defines GLOBAL as the ABSENCE of a restriction, recorded as a limitation on the row. Four TED tests repaired: a global Opportunity count is now deployment state |
 | 1.58 | 2026-09-02 | **The first real Opportunity synthesis ran, and my own gate refused a good answer.** `OPPORTUNITY_SYNTHESIS_OUTPUT_REJECTED`: one call, 0.0383 USD, model returned FORM_HYPOTHESIS with a careful bounded hypothesis, and the frozen gate refused it on ONE clause -- *\"No statement in the packet establishes ... whether anyone would pay, whether competitors already serve this space\"* -- which is an ENUMERATION OF ABSENCES and exactly what §6 required. **A token guard cannot see negation**, so it read a denial as an assertion (testing-strategy §67, the §23 failure in a new place). **The verdict was KEPT and the guard fixed for next time**: §12 forbids weakening a gate after seeing the answer, and this was called a defect only because it rejected an output I judged sound. **0 Opportunities persisted, every counter unchanged.** The model did the hard part well: actor UNKNOWN_NOT_SUPPORTED rather than an invented persona, intervention as a CLASS, pageviews restated as FLUCTUATION rather than growth, `commercial_claims_supported` EMPTY, and it independently said the 88 questions are *a count of questions, not of people* and *not evidence they share a single problem* -- reaching the parked boundary unprompted. Two earlier attempts were abandoned because MY output cap (1500) was smaller than the schema I asked for could serialise |
@@ -307,6 +308,93 @@ positives in the scored split, which this 89-question corpus did not supply: one
 defensible SAME in 40 candidate pairs is a finding about the corpus, not about
 the classifier. **No synthetic positive may substitute** -- a constructed pair
 can test a parser and can never establish semantic accuracy against real data.
+
+### Commercial evidence lives at a broader scope than a product subject
+
+Added in 1.61 (Mission 1.33, `commercial-dimension-source-feasibility-v1.md`,
+`mission-1.33-report.md`). **`COMMERCIAL_SOURCE_GRAIN_MISMATCH`**, over all 29
+registered sources, with no acquisition and no model call.
+
+    can name Docker          5   ->  0 carry a usable commercial dimension today
+    reach it as a MENTION    7
+    cannot reach it         17
+    carry real commercial semantics at CATEGORY scope: ted-eu, usaspending,
+                                                       world-bank, fred, eurostat
+
+- **THE TWO HALVES DO NOT OVERLAP.** The sources that can name Docker carry no
+  commercial semantics; the sources that carry commercial semantics cannot name
+  Docker. That is the finding, and it is not fixed by acquiring anything.
+- **21 of 29 have no `local-private-research-v1` review**, so ADR-027 refuses
+  them at the gate whatever their terms say. **That is not twenty-one
+  opportunities.** For the right-grain candidates the commercial finding is about
+  the PURPOSE of the use, and **local deployment never implies non-commercial
+  use** -- so a local review would meet the same clause and fail on it.
+- **GitHub has the best grain in the portfolio and is NOT_RECOMMENDED.** A
+  repository full name is exact and publisher-assigned, and a public repository
+  IS a supplied solution -- `COMPETITIVE_SUPPLY` is the strongest unclaimed
+  commercial dimension available anywhere here. The Acceptable Use Policies
+  section 7 is an ALLOWLIST that applies *"regardless of whether the information
+  was scraped, collected through our API, or obtained otherwise"* and permits
+  research use **only if resulting publications are open access**. The one thing
+  that would move it is a commitment to publish open access, which is a product
+  decision and not a review.
+- **A GitHub issue is a defect report, not an evaluation.** It names an artifact
+  and says it is broken; `SOLUTION_DISSATISFACTION` needs a statement that the
+  artifact is inadequate for the reporter's need, and separating the two means
+  reading prose -- an INFERRED step that does not exist.
+- **NO SOURCE SUPPORTS `SOLUTION_GAP`, at any grain.** Every candidate route --
+  unanswered questions, empty results, a thin ecosystem -- is an absence of
+  evidence, which the dimension's own `never_means` refuses by name.
+- **NO SOURCE SUPPORTS `WILLINGNESS_TO_PAY`, at any grain**, and the taxonomy had
+  already committed to that before the mission asked: not *a listed price, which
+  is an ask and not a transaction*, not *a budget line, which is a capacity and
+  not a decision*, not *a public contract total, which includes options and
+  renewals*.
+- **A near-miss identifier is still a miss.** PyPI's `docker` package is the
+  official Docker SDK for Python, published by the platform's own vendor -- and a
+  client library is a DIFFERENT ARTIFACT from the platform, so its downloads
+  measure adoption of the SDK. *All packages that integrate with Docker* is a
+  coherent set and it is a CATEGORY, not the subject.
+- **A vendor is not the subject.** USAspending could match `Docker, Inc.` as a
+  recipient, and the canonical registry says in its own words that
+  `subject:docker` is the container platform and NOT the company.
+- **`WRONG_DOMAIN` is a different verdict from `WRONG_GRAIN`.** An App Store id
+  is beautifully precise; it names a different class of thing. Forcing
+  product-shaped identifiers into a container-tooling Opportunity because the
+  shape matches is the error, and product-grain was exactly the property the
+  mission was hunting for.
+
+**THE BINDING CONSTRAINT IS ARCHITECTURAL, NOT A SOURCE LIMITATION.**
+`CanonicalSubject` carries `subject_id`, `display_name`, `description` and
+`identifiers` and **no scope field**; `subject_for()` returns one subject per key;
+a packet holds one `subject`. So an Evidence row belongs to exactly one subject
+and an Opportunity's subject is the subject of every row supporting it.
+
+Two facts make it concrete. **SROS already models GEOGRAPHIC scope on an
+Opportunity and models no SUBJECT scope at all** -- `MarketScope` is
+`GLOBAL | REGION | COUNTRY | MULTI_COUNTRY` and the first Opportunity carries
+GLOBAL as a recorded limitation. And **the dimension vocabulary already assumes
+an answer**: `MARKET_ACTIVITY` asks about *"the bounded scope observed"* and
+`ECONOMIC_VALUE` about *"the bounded activity observed"*, so those questions were
+written expecting an observation to carry its own scope. The packet model has
+nowhere to put it, and the only way to keep a claim honest is to keep the
+observation out entirely.
+
+**TED is the case that proves it.** Authorized locally, collector implemented,
+normalizer implemented, extractor implemented, one Signal derived, Evidence
+already mapping to `MARKET_ACTIVITY`, `BUYER_OR_BUDGET_EXISTENCE` and
+`ECONOMIC_VALUE`. Its subject key is `ted-eu:CPV-division:90`. Every piece exists
+and the vocabulary cannot name a product.
+
+**A feasibility verdict is not a permission, and the three questions stay apart**
+-- grain, epistemic warrant and governance are separate columns, and a source can
+be right-grain and refused or authorized and useless. **Nothing was acquired, no
+model was called, the canonical subject registry gained no identifier, and all
+thirteen counters were verified unchanged against the live database.**
+
+**The recommendation is `NO_CURRENT_SOURCE_CAN_CLOSE_DOCKER_COMMERCIAL_DIMENSION`
+and a Multi-Scope Opportunity Evidence Architecture mission**, because acquiring
+first produces Evidence in its own packet that can never join `subject:docker`.
 
 ### An unaccepted answer is one person's non-action, and nothing more
 
