@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.56
+Version: 1.57
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-02 (Sprint 1 / Mission 1.30)
+Last amended: 2026-09-02 (Sprint 1 / Mission 1.31)
 
 ---
 
@@ -13,6 +13,63 @@ Last amended: 2026-09-02 (Sprint 1 / Mission 1.30)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.57 — 2026-09-02 (Sprint 1 / Mission 1.31)
+
+Authorized by the Mission 1.31 brief §0-§25.
+
+**OUTCOME: `OPPORTUNITY_SYNTHESIS_OUTPUT_REJECTED`.** The first bounded
+Opportunity synthesis ran against the real `docker` packet through the approved
+route. One logical call, 0 retries, **0.0383 USD** against a 0.25 ceiling. The
+model returned `FORM_HYPOTHESIS` with a careful, well-cited, bounded hypothesis,
+and **the frozen persistence gate refused it on exactly one clause -- which is a
+defect in the guard, not an over-reach by the model.** No Opportunity persisted;
+every canonical counter unchanged.
+
+**THE REJECTED SENTENCE IS THE ONE THAT OBEYED THE BRIEF.** The model wrote *"No
+statement in the packet establishes ... whether anyone would pay, whether
+competitors already serve this space ..."*, which is the enumeration of absences
+§6 and §16 require. A token-based guard flagged `would pay` and `competitors`
+because **it cannot see negation** -- `testing-strategy.md` §23 in a new place,
+where a scan fires on the text that obeys the rule.
+
+**THE VERDICT WAS KEPT AND THE GUARD FIXED FOR NEXT TIME.** §12 forbids weakening
+a gate after seeing the answer, and this was identified as a defect BECAUSE it
+rejected an output that looked sound -- exactly the reasoning that rule distrusts.
+So the run keeps `audit@1.0.0`, nothing was persisted, and
+`opportunity-claim-guard@1.1.0` reaches the next mission instead of rescuing this
+one. The fix is scoped to one sentence, ignores markers appearing after the term,
+and is tested against the exact rejected clause.
+
+**TWO ATTEMPTS WERE ABANDONED BEFORE THAT, AND THE CAUSE WAS ALSO MINE.**
+`max_output_tokens` was 1500 and the 17-field schema admits about 1800 tokens, so
+the first call and its one permitted retry both came back missing five required
+fields -- the model never finished an answer. **Bounding an output below what the
+requested schema can serialise is a defect, not a discipline.** Raising a
+transport bound and re-running is not the retry-shopping §10 forbids, because no
+answer existed to reject; both wasted attempts are counted in the artifact.
+
+**THE SYNTHESIS DID THE HARD PART WELL.** `target_actor_if_supported` came back
+`UNKNOWN_NOT_SUPPORTED` rather than an invented persona; the intervention is a
+CLASS and says so; the pageview evidence is restated as day-to-day FLUCTUATION
+rather than growth, which is right because two of six rows are decreases;
+`commercial_claims_supported` is EMPTY; all eleven mandatory unsupported
+dimensions were reported plus `TREND_OR_CHANGE` unprompted; and the model
+independently wrote that the question count is *a count of questions, not of
+people* and *not evidence the questions share a single problem* -- reaching the
+boundary Mission 1.27 parked without being told about it.
+
+**EVERY OTHER GATE HELD.** Authorization resolved before serialization; the
+transmitted payload was the nine-key Mission 1.29 allowlist and nothing else;
+prompt regions stayed apart with each claim statement as `UntrustedText` labelled
+by its ids; cited ids all belonged to the packet; every Evidence was cited with
+its Claim; independence stayed UNKNOWN and reliability stayed NON_SCORABLE.
+
+**Next: re-run the bounded synthesis under the corrected guard**, one call at
+about 0.04 USD on an unchanged packet and prompt hash. It needs operator
+authorisation because it re-asks a question this mission spent its allowance on.
+Do not build ranking whatever it returns: every row is still NON_SCORABLE and
+D-03 is untouched
 
 ## 1.56 — 2026-09-02 (Sprint 1 / Mission 1.30)
 

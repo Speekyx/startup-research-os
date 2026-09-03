@@ -2742,3 +2742,40 @@ what the append actually stalled was the **compliance configuration's pin**, a
 separate file with its own version field. The validator caught it; the bespoke
 check did not. When a change touches a versioned artifact, enumerate everything
 pinned to that version before deciding what to re-run.
+
+
+## §67 — A keyword guard reads the sentence that obeys the rule as a violation
+
+Mission 1.31. The synthesis model wrote exactly what the brief asked for:
+
+    "No statement in the packet establishes ... whether anyone would pay,
+     whether competitors already serve this space ..."
+
+`check_statement` flagged `would pay` and `competitors`, the frozen persistence
+gate refused the output, and the mission's outcome went from A to C on a clause
+that was **enumerating absences** -- the single most valuable thing a hypothesis
+can do here.
+
+**This is §23 in a new place.** There, a substring scan fired on the docstring
+explaining the rule and the repair was to parse the AST with docstrings excluded.
+Here, a token scan fired on a denial and the repair is that a forbidden term under
+a denial marker, earlier in the same sentence, is not an assertion.
+
+Three properties the fix keeps, and each is a way the naive version of it fails:
+
+- **Scope is one SENTENCE.** `no evidence establishes willingness to pay. Buyers
+  would pay 40 EUR.` must still fail on the second sentence.
+- **Order matters.** A marker AFTER the term does not clear it, or
+  `buyers would pay, which is not established` would pass.
+- **The markers are narrow and each scopes what follows it.** A general
+  sentiment-style negation detector would clear far too much.
+
+**And the harder rule, which is about missions rather than about code.** The fix
+was NOT applied retroactively. Mission 1.31 §12 forbids weakening a gate after
+seeing the answer, and although this was a defect rather than a loosening, it was
+identified as a defect BECAUSE it rejected an output that looked good. So the run
+kept its verdict under `audit@1.0.0`, no Opportunity was persisted, and the
+corrected guard reached the next mission instead of rescuing that one.
+
+**When a guard rejects something you believe is correct, fix the guard and keep
+the verdict.** Doing both is what makes the fix credible.
