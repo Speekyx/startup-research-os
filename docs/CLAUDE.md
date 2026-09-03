@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.48
-Last amended: 2026-09-02 (Sprint 1 / Mission 1.24)
+Version: 1.51
+Last amended: 2026-09-02 (Sprint 1 / Mission 1.25)
 
 ## Boot Sequence
 
@@ -49,6 +49,9 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.51 | 2026-09-02 | **The human operator reviewed the frozen holdout, and the criterion still fails -- but the reference was half the story.** Re-scored the SAME frozen predictions against HUMAN_OPERATOR labels: no model call, nothing frozen touched, the provisional scoring preserved as history. Every precondition now met against human ground truth -- 10 labelled, 2 human SAME, 0 false SAME -- and **0 true SAME**, so `MODEL_EVALUATION_FAILED` stands. **Zero false positives is still not a pass**, being what a constant-DIFFERENT classifier scores. **Five of ten labels changed and on three the human moved TOWARD the model**: the provisional reference had called two pairs a family the operator does not, and one decidable that the operator finds undecidable. Missed positives fall 4 -> 2. So *the model is far too conservative* was half an artifact of an AI-assisted reference -- a finding that generalises. **The full 20-pair set is MIXED provenance** and must never be reported as fully human |
+| 1.50 | 2026-09-02 | **MODEL_EVALUATION_FAILED on a frozen criterion, and it is worth more than Mission 1.24's pass.** A SECOND relation -- `SAME_PROBLEM_FAMILY`, do two observations express substantially the same blocked goal -- **not a looser version of the exact one**, which stays intact and unweakened. The relation changed rather than a threshold: *would the fix transfer* needs the fix, and loosening it would have kept that requirement while answering more permissively. **The criterion was built so a constant classifier cannot pass** -- `min_true_same` demands a demonstrated positive in the scored split -- **and then it caught the real run**: 4 SAME_FAMILY references in the holdout, **zero found**, one SAME in twenty overall and that one the rubric's own quoted example. **Every disagreement is one-directional**, so either the rubric is too strict or the reference too generous, and this cannot separate them -- the rubric and its reference disagree about the rubric's own borderline example. **The rubric was NOT widened after seeing the results**; 1.24 kept a rule in the flattering direction and this keeps one in the costly one. Reference is AI_ASSISTED_PROVISIONAL, so what was measured is agreement between two assistants. 20 calls, 0.38 USD, no Signal, no Claim, no Evidence |
+| 1.49 | 2026-09-02 | **Two corrections before Mission 1.25 proper, and the first is the most misleading thing this repository had said.** Mission 1.24's 40 reference labels were supplied `AI_ASSISTED_PROVISIONAL` by a different assistant, **not by a human**, and the claim was embedded in a filename, a section heading, two type names and a `reviewer` field naming a person who did not judge. `ReferenceOrigin` is now required and never defaulted; `human_ground_truth_established` is true only when EVERY label is human; the origin rides on the RESULT because a result is what gets quoted. **No history rewritten** -- every label, prediction and cost is unchanged, and 1.24 stays EVALUATION_INSUFFICIENT for the reason the correction does not touch. Second: **SROS does have Evidence** -- 26 rows from other source families -- so the gap is *no validated recurring-problem semantic evidence from Stack Exchange*, bounded to EXACT equivalence over one candidate set, and nothing establishes that problem-FAMILY evidence is unavailable |
 | 1.48 | 2026-09-02 | **OUTCOME B: the first model-mediated inference ran, and produced no epistemic row.** 40 real labelled pairs through the Gateway on the approved route, 0.61 USD, **zero false SAME** -- and **zero SAME of any kind**, over a holdout containing no SAME label to test against, so a classifier hard-coded to answer DIFFERENT scores identically. Precision on SAME undefined, recall 0/1. **The predeclared criterion was wrong in a way only data could show**: V1 wanted a positive *anywhere in the reference set* and the only one fell in DEVELOPMENT; V2 wants it in the scored split and returns EVALUATION_INSUFFICIENT on the same run. V1 is KEPT, because rewriting a rule after the fact means it was never binding. **A structural guard decided the architecture**: validate_signals.py forbids a Gateway import anywhere in sros_nlp, so the classifier lives in its own package and the guard was left alone. Authorization is resolved BEFORE any source text is serialised, not before the socket. No confidence number is requested from the model at all. The three Mission 1.20 hard negatives were classified correctly and prove nothing -- the rubric quotes them, so they are in-sample by construction and pinned to development. **No production inference, no Signal, no INFERRED Claim, no Evidence**, and the blocker is a corpus that yielded one defensible SAME in 40 pairs |
 | 1.47 | 2026-09-02 | **OUTCOME B: the inference execution boundary EXISTS, and it is closed on one named gate.** No model was called and no source content left this machine. ADR-033 separates three questions that were one or none: `model_processing` asks may a model READ, the new **`external_model_transmission`** asks may it LEAVE, and a **provider policy** asks what the processor DOES with what it receives -- decided on first-party contract text, so one route is APPROVED on a terms clause committing not to train on customer content and one is NOT_APPROVED because its **unpaid** route says it develops machine learning technologies from submitted input. The profile gained **`external_model_egress`**, the word Mission 1.22 found missing. **NOT_ASSESSED is a state, not a default that decides**: migration 0027 adds both columns nullable and writes no existing row, and 0028 writes only the two decisions actually made. **The activity is deliberately NOT one of rule 8's six** -- it gates ONE operation, so World Bank's collector never fails because nobody assessed egress for World Bank, and that is asserted over every source rather than assumed. Stack Exchange local review **v2 appended, v1 not rewritten**, PERMITTED_WITH_CONDITIONS on CC BY-SA §2, with conditions naming a PROPERTY and no vendor. **Appending v2 broke acquisition for the source** -- a compliance configuration is pinned to a review version -- and the repair was to PERFORM the re-check, provable because v2's `required_conditions` are byte-identical to v1's. Live gate: source PERMITTED, profile PERMITTED, provider APPROVED, configured **no** -> `PROVIDER_NOT_CONFIGURED`. Mission 1.22 may RESUME **after operator configuration**, and the blocker is finally one an operator can clear |
 | 1.46 | 2026-09-02 | **OUTCOME A: the semantic-inference route is NOT AUTHORISED, and separately NOT CONFIGURED.** No model was called, no question text left this machine, no component was built. **The governance gate carries the structural finding**: the Stack Exchange review permits model INFERENCE and is silent on TRANSMISSION of licensed text to an external provider, and so is the profile -- `model_inference: true` says the ACTIVITY is in scope, `deployment: LOCAL` says where the SYSTEM runs, and **nothing says where inference RUNS**. No occurrence of *provider*, *third party*, *transmit* or *egress* in the profile, in any condition, or in any doc. **One field answering a question that is two** -- the Mission 1.15.4 shape again. The second gate is independent: every inference tier is `null`, every credential empty, and **no local inference provider exists**. A DESIGN was recorded and nothing built; §47's evaluation report was deliberately not created, because an empty one looks like an evaluation that returned nothing. **The blocker moved from the world to this deployment**, so the next mission is governance: ask where inference may happen, and give the profile a field for the answer |
@@ -295,6 +298,123 @@ positives in the scored split, which this 89-question corpus did not supply: one
 defensible SAME in 40 candidate pairs is a finding about the corpus, not about
 the classifier. **No synthetic positive may substitute** -- a constructed pair
 can test a parser and can never establish semantic accuracy against real data.
+
+### Problem-family inference — implemented, evaluated, and it did not pass
+
+Added in 1.50 (Mission 1.25, `problem-family-rubric-v1.md`,
+`mission-1.25-report.md`). A SECOND relation, never a looser first one.
+
+**`EXACT_ACTIONABLE_EQUIVALENCE` and `SAME_PROBLEM_FAMILY` are different
+questions**, held apart by `relations.py`: different rubrics, reason codes,
+prompts, criteria and propositions, and a `relation` field on every artifact
+because two pairwise judgements with different meanings and the same shape are
+indistinguishable in storage without one.
+
+    SAME_PROBLEM_FAMILY  =/=>  EXACT_ACTIONABLE_EQUIVALENCE
+    SAME_PROBLEM_FAMILY  =/=>  same root cause, same fix, the same bug
+    SAME_PROBLEM_FAMILY  =/=>  permission to merge records
+    EXACT_ACTIONABLE_EQUIVALENCE  =/=>  a source-native duplicate
+
+- **The relation changed rather than a threshold.** Mission 1.24 found its own
+  question hard to label for a structural reason -- *would the fix transfer?*
+  needs the fix -- and loosening it would have kept that requirement while
+  answering more permissively. The family question asks what each person was
+  trying to do and what stopped them, which is answerable from published text.
+- **A criterion must be unpassable by a constant classifier.** `min_true_same`
+  requires a demonstrated positive in the SCORED split, so answering DIFFERENT to
+  everything -- or ABSTAIN to everything -- fails by construction.
+  `defeats_a_constant_classifier` computes the property from the numbers rather
+  than asserting it in prose, and tests score both constant classifiers.
+- **A provenance-aware re-scoring is an ADDITION, never a rewrite.** When the
+  operator reviewed Mission 1.25's frozen holdout, the frozen predictions were
+  re-scored with no model call and nothing frozen touched, and the provisional
+  result was preserved beside the new one. **A split may reach human ground truth
+  while its siblings have not**, so a reference set can be MIXED -- and a mixed set
+  is never reported as human.
+- **An AI-assisted reference can be wrong in the generous direction.** On that
+  holdout the human moved TOWARD the model on three of five changed labels, halving
+  the apparent miss rate. A conclusion drawn about a classifier from a provisional
+  reference is partly a conclusion about the reference.
+- **A reference label carries its ORIGIN.** `AI_ASSISTED_PROVISIONAL` labels are
+  usable for scoring and are not ground truth; `human_ground_truth_established`
+  is true only when EVERY label is human, and the origin rides on the RESULT
+  because a result is what gets quoted.
+- **Candidate recall is shared and only ORDERING is versioned.** The qualifying
+  predicate is imported rather than restated, with a test asserting both
+  relations consider the same pairs. For the family ordering a shared diagnostic
+  weighs ZERO -- not a small constant, which would claim it contributes a little
+  when Mission 1.20 refutes that -- and tags are weighted by the RAREST shared
+  one, because summing rewards sharing a whole stack. **Rarity measures
+  specificity, not concern**, and that limit is stated rather than hidden.
+
+**THE EVALUATION FAILED, AND THE FAILURE IS INFORMATIVE.** 20 pairs, 0.38 USD, 4
+`SAME_FAMILY` references in the scored holdout -- and **zero** of them found. The
+model said SAME once in twenty, on the rubric's own quoted example. Zero false
+positives again, and again nearly free.
+
+**Every disagreement is one-directional**: the model refusing a family the
+reference asserted, never the reverse. Either the rubric is too strict or the
+reference too generous, and **this evaluation cannot separate them** -- the
+rubric and its reference even disagree about the rubric's own borderline example,
+with the model siding with the rubric. That is a question for a person, and no
+rerun answers it.
+
+**The rubric was NOT widened after seeing the results**, and the criterion was
+not altered. Mission 1.24 kept a rule in the flattering direction; this is the
+same discipline in the costly one.
+
+### Reference labels are not automatically human, and the contract says which
+
+Added in 1.49 (Mission 1.25 §0). Placed immediately after the semantic-equivalence
+invariant because it corrects a claim that invariant made.
+
+**Mission 1.24's 40 reference labels were supplied `AI_ASSISTED_PROVISIONAL` by a
+different assistant, not by an independent human domain expert.** The repository
+described them as human labels, in a filename, a section heading, a type name and
+a `reviewer` field naming a person who did not make the judgements. Every label,
+prediction, cost and outcome is unchanged -- the error was in the DESCRIPTION,
+and it was the most misleading thing this repository had said.
+
+- **`ReferenceOrigin` is required on every label and never defaulted.**
+  `HUMAN_EXPERT`, `HUMAN_NON_EXPERT`, `AI_ASSISTED_PROVISIONAL`. Only the first
+  two establish ground truth, and `human_ground_truth_established` is true only
+  when EVERY label in a set came from a human -- all, not any, because a mixed
+  set told a reader `True` would be read as unmixed.
+- **The origin is recorded on the RESULT, not only on the labels.** A result is
+  what gets quoted, and an outcome read without its reference origin is an
+  outcome read as truth. Every evaluation scored against a non-human reference
+  carries a note saying so in its own output.
+- **A provisional reference is still useful and still not truth.** Mission 1.24's
+  was written blind, before any model call, and was never sent to the classifier.
+  That is what makes it valid for scoring. What it measured is **agreement
+  between two assistants**, which is a real finding and a different claim from
+  accuracy.
+- **`human_ground_truth = NOT_ESTABLISHED`** for that set, and stays so until a
+  person reviews those pairs. Disagreements between the rubric and that reference
+  are **not human inter-rater disagreement** and must never be described as such.
+
+**Mission 1.24 remains EVALUATION_INSUFFICIENT either way**, for a reason this
+correction does not touch: the holdout contained no SAME label at all, so nothing
+could have been measured about a SAME prediction whoever wrote the references.
+
+### SROS has Evidence; what it lacks is validated recurring-problem evidence
+
+Added in 1.49 (Mission 1.25 §1), correcting a second overstatement.
+
+Mission 1.24 concluded that *SROS is not ready for cross-source convergence*
+because *this mission produced no evidence*. The first clause does not follow
+from the second. **SROS holds 26 canonical Evidence rows** from other source
+families, so the blocker is not an absence of Evidence in general.
+
+**The precise gap is: no validated recurring-problem semantic evidence from Stack
+Exchange.** And even that is bounded twice over -- to EXACT actionable problem
+equivalence, and to one candidate set. **Nothing in Mission 1.24 establishes that
+Stack Exchange cannot contribute recurring problem-FAMILY evidence**, which is a
+looser relation nobody has evaluated.
+
+The general rule this is an instance of: **a finding about one relation over one
+bounded set is not a finding about a source, and a finding about a source is not
+a finding about the system.** Each widening needs its own evidence.
 
 ### Model inference execution — where it may run, and when content may leave
 

@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.47
+Version: 1.50
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-02 (Sprint 1 / Mission 1.24)
+Last amended: 2026-09-02 (Sprint 1 / Mission 1.25)
 
 ---
 
@@ -13,6 +13,133 @@ Last amended: 2026-09-02 (Sprint 1 / Mission 1.24)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.50 — 2026-09-02 (Sprint 1 / Mission 1.25, human holdout re-scoring)
+
+Authorized by the Mission 1.25 continuation. **No model call, and nothing frozen
+touched**: rubric, prompt, candidate set, split, predictions and acceptance
+criterion are unchanged, and the provisional scoring is preserved beside the new
+result rather than replaced.
+
+**THE CRITERION STILL FAILS, AND NOW AGAINST HUMAN GROUND TRUTH.** The scored
+holdout meets every precondition -- 10 labelled pairs, 2 human `SAME_FAMILY`, 0
+false positives -- and the model produced **0** true `SAME_PROBLEM_FAMILY`.
+`MODEL_EVALUATION_FAILED` stands. **Zero false positives is not a pass**: it is
+what a classifier hard-coded to answer DIFFERENT scores, which is why the
+criterion asks a second question.
+
+**BUT THE REFERENCE WAS HALF THE STORY, AND THAT IS THE FINDING.** Five of ten
+labels changed under human review, and **on three the operator moved TOWARD the
+model**: the provisional reference had called two pairs a family the operator
+does not, and one pair decidable that the operator finds undecidable -- and the
+classifier had already answered DIFFERENT, DIFFERENT and ABSTAIN on exactly
+those. Missed positives fall from 4 to 2 and agreement rises from 5/10 to 6/10.
+
+So Mission 1.25's reading that the classifier is *strictly more conservative than
+the reference* was half an artifact of an AI-assisted reference. **A conclusion
+drawn about a classifier from a provisional reference is partly a conclusion
+about the reference**, which generalises past this mission.
+
+**The one-directional pattern survives at half the size**: two human-confirmed
+families were still missed, so the classifier cannot yet demonstrate it can find
+one.
+
+**PROVENANCE IS MIXED AND STAYS SO.** The scored holdout has human ground truth;
+the development split remains `AI_ASSISTED_PROVISIONAL`. The full 20-pair set
+must never be reported as fully human. `HUMAN_OPERATOR` was added as a reference
+origin -- a person, so it establishes ground truth, and deliberately not filed as
+expert or non-expert because neither is ours to assert on their behalf
+
+## 1.49 — 2026-09-02 (Sprint 1 / Mission 1.25)
+
+Authorized by the Mission 1.25 brief §0-§15.
+
+**OUTCOME: `MODEL_EVALUATION_FAILED` on a frozen criterion, and the failure is
+worth more than Mission 1.24's pass.** 20 pairs through the Gateway on the
+approved route, **0.38 USD**, and every count unchanged at 148/148 records and
+26/26/26/26 Signals, Claims, Revisions and Evidence. Catalog still 29 sources.
+No production inference, no Signal, no INFERRED Claim, no Evidence.
+
+**A SECOND RELATION, NOT A LOOSER FIRST ONE.** `SAME_PROBLEM_FAMILY` asks whether
+two observations express substantially the same user problem or blocked goal, at
+a level where one intervention could help both -- even where the causes and fixes
+differ. The exact relation stays intact, unweakened and not redefined. The two
+are held apart in code by `relations.py`, with the forbidden implications kept as
+data a test checks rather than prose a reviewer must remember.
+
+**THE RELATION CHANGED RATHER THAN A THRESHOLD.** Mission 1.24 found its question
+hard to label for a structural reason: *would the fix transfer?* requires knowing
+the fix. Loosening it would have kept that requirement while answering more
+permissively.
+
+**THE CRITERION WAS BUILT SO A CONSTANT CLASSIFIER CANNOT PASS**, which is what
+Mission 1.24 lacked. `min_true_same` demands a demonstrated positive in the
+scored split; tests score a constant-DIFFERENT and a constant-ABSTAIN classifier
+and watch both fail. **Then it caught the real run**: the scored holdout held 4
+`SAME_FAMILY` references and the model found **zero**, saying SAME once in twenty
+overall -- on the rubric's own quoted example, which is in-sample by construction.
+
+**EVERY DISAGREEMENT IS ONE-DIRECTIONAL.** Eight missed positives, zero asserted
+families the reference denied. Either the rubric is too strict or the reference
+too generous, and this evaluation cannot separate them -- the rubric and its
+reference disagree about the rubric's own borderline example, with the model
+siding with the rubric. **A question for a person, not for a rerun.**
+
+**THE RUBRIC WAS NOT WIDENED AFTER SEEING THE RESULTS**, and the criterion was
+not altered. Mission 1.24 kept a rule in the direction that flattered the
+project; this keeps one in the direction that cost it.
+
+**THE REFERENCE IS `AI_ASSISTED_PROVISIONAL`**, written blind and never sent to
+the classifier, so what was measured is agreement between two assistants.
+`human_ground_truth` stays NOT_ESTABLISHED, carried through to every evaluation
+result rather than asserted in prose.
+
+**Candidate generation was inspected, not assumed.** The existing generator is
+not too narrow -- 731 of 3 916 pairs, 84 of 89 observations reached -- but its
+ORDERING was built for the other relation. The qualifying predicate is imported
+unchanged with a test pinning it; only the ordering is versioned, with a shared
+diagnostic at weight ZERO and tags weighted by the rarest shared one.
+
+**One structured response in twenty was malformed** -- a key emitted as the
+literal `"parameter name"` -- and the Gateway refused rather than guessing, which
+is correct and unchanged. The runner retries once against the same route and
+counts it; that is not the cross-provider fallback ADR-006 forbids
+
+## 1.48 — 2026-09-02 (Sprint 1 / Mission 1.25 §0-§1 corrections)
+
+Authorized by the Mission 1.25 brief §0-§1. Documentation corrections made before
+the mission proper begins. **No evaluation history was rewritten**: every label,
+prediction, cost and outcome from Mission 1.24 is unchanged.
+
+**THE REFERENCE LABELS WERE NOT HUMAN, AND THE REPOSITORY SAID THEY WERE.**
+Mission 1.24's 40 labels were supplied `AI_ASSISTED_PROVISIONAL` by GPT-5.6 Sol,
+not by an independent human domain expert. The claim was embedded in a filename
+(`problem-equivalence-human-labels-v1.json`), a report section heading (HUMAN
+EVALUATION), two type names (`HumanLabel`, `HumanDecision`) and a `reviewer`
+field naming a person who did not make the judgements.
+
+`ReferenceOrigin` is now required on every label and never defaulted, and
+`human_ground_truth_established` is derived from it -- true only when EVERY label
+came from a human, because a mixed set reported as `True` would be read as
+unmixed. The origin is recorded on the RESULT as well as on the labels, since a
+result is what gets quoted. **`human_ground_truth = NOT_ESTABLISHED`** for that
+set, and the two Mission 1.24 disagreements are **not** human inter-rater
+disagreement.
+
+**What the reference set still is**: written blind, before any model call, never
+sent to the classifier. That makes it valid for scoring, and what it measured is
+**agreement between two assistants** rather than accuracy. Mission 1.24 remains
+EVALUATION_INSUFFICIENT for the reason this correction does not touch -- the
+holdout held no SAME label at all.
+
+**AND SROS DOES HAVE EVIDENCE.** Mission 1.24 concluded SROS was not ready for
+cross-source convergence *because this mission produced no evidence*, which does
+not follow: **26 canonical Evidence rows** exist from other source families. The
+precise gap is **no validated recurring-problem semantic evidence from Stack
+Exchange**, bounded twice over -- to EXACT actionable problem equivalence, and to
+one candidate set. Nothing there establishes that Stack Exchange cannot
+contribute recurring problem-FAMILY evidence, a looser relation nobody has
+evaluated
 
 ## 1.47 — 2026-09-02 (Sprint 1 / Mission 1.24)
 
@@ -1489,6 +1616,7 @@ Additionally authoritative:
 - docs/data/world-bank-normalizer-v1.md (added in 1.9)
 - docs/data/model-inference-execution-governance-v1.md (added in 1.46)
 - docs/data/problem-equivalence-evaluation-v1.md (added in 1.47)
+- docs/data/problem-family-rubric-v1.md (added in 1.49)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

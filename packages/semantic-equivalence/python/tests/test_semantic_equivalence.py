@@ -33,12 +33,13 @@ from sros_semantic_equivalence import (
     WORKED_EXAMPLES,
     ClassificationRefusedError,
     EquivalenceDecision,
-    HumanDecision,
-    HumanLabel,
     LabelSet,
     QuestionForPrompt,
     QuestionObservation,
     ReasonCode,
+    ReferenceDecision,
+    ReferenceLabel,
+    ReferenceOrigin,
     Split,
     assign_split,
     classify_pair,
@@ -492,14 +493,15 @@ class TestTheAcceptanceCriterionIsAboutFalsePositives:
             V1_ACCEPTANCE.statement
         )
 
-    def _labels(self, decisions: dict[str, HumanDecision]) -> LabelSet:
+    def _labels(self, decisions: dict[str, ReferenceDecision]) -> LabelSet:
         return LabelSet(
             tuple(
-                HumanLabel(
+                ReferenceLabel(
                     pair_id=pid,
                     a_question_id=pid.split("::")[0],
                     b_question_id=pid.split("::")[1],
                     reviewer="a named reviewer",
+                    origin=ReferenceOrigin.HUMAN_EXPERT,
                     decision=d,
                     labelled_at="2026-09-02T00:00:00+00:00",
                     split=Split.HOLDOUT,
@@ -510,8 +512,8 @@ class TestTheAcceptanceCriterionIsAboutFalsePositives:
 
     def test_one_false_same_fails_however_good_the_rest_is(self) -> None:
         labels = self._labels(
-            {f"{i}::{i + 1}": HumanDecision.DIFFERENT for i in range(20)}
-            | {"90::91": HumanDecision.SAME}
+            {f"{i}::{i + 1}": ReferenceDecision.DIFFERENT for i in range(20)}
+            | {"90::91": ReferenceDecision.SAME}
         )
         predictions = {
             label.pair_id: EquivalenceDecision.DIFFERENT_PROBLEM for label in labels.labels
@@ -523,8 +525,8 @@ class TestTheAcceptanceCriterionIsAboutFalsePositives:
 
     def test_abstention_is_never_counted_against_the_model(self) -> None:
         labels = self._labels(
-            {f"{i}::{i + 1}": HumanDecision.DIFFERENT for i in range(20)}
-            | {"90::91": HumanDecision.SAME}
+            {f"{i}::{i + 1}": ReferenceDecision.DIFFERENT for i in range(20)}
+            | {"90::91": ReferenceDecision.SAME}
         )
         predictions = {label.pair_id: EquivalenceDecision.ABSTAIN for label in labels.labels}
         result = evaluate(labels, predictions)
@@ -534,7 +536,7 @@ class TestTheAcceptanceCriterionIsAboutFalsePositives:
     def test_a_reference_set_with_no_positive_cannot_pass(self) -> None:
         """§20. With no SAME anywhere, a classifier answering DIFFERENT to
         everything scores perfectly and nothing has been measured."""
-        labels = self._labels({f"{i}::{i + 1}": HumanDecision.DIFFERENT for i in range(20)})
+        labels = self._labels({f"{i}::{i + 1}": ReferenceDecision.DIFFERENT for i in range(20)})
         predictions = {
             label.pair_id: EquivalenceDecision.DIFFERENT_PROBLEM for label in labels.labels
         }
@@ -542,7 +544,7 @@ class TestTheAcceptanceCriterionIsAboutFalsePositives:
         assert result.outcome == "EVALUATION_INSUFFICIENT"
 
     def test_too_few_labelled_pairs_is_insufficient_not_a_pass(self) -> None:
-        labels = self._labels({"1::2": HumanDecision.SAME, "3::4": HumanDecision.DIFFERENT})
+        labels = self._labels({"1::2": ReferenceDecision.SAME, "3::4": ReferenceDecision.DIFFERENT})
         predictions = {
             "1::2": EquivalenceDecision.SAME_PROBLEM,
             "3::4": EquivalenceDecision.ABSTAIN,
@@ -552,7 +554,7 @@ class TestTheAcceptanceCriterionIsAboutFalsePositives:
 
     def test_an_unpredicted_pair_is_not_scored_either_way(self) -> None:
         """A pair the run did not reach is neither an error nor an abstention."""
-        labels = self._labels({"1::2": HumanDecision.SAME, "3::4": HumanDecision.DIFFERENT})
+        labels = self._labels({"1::2": ReferenceDecision.SAME, "3::4": ReferenceDecision.DIFFERENT})
         result = evaluate(labels, {"1::2": EquivalenceDecision.SAME_PROBLEM})
         assert result.labelled == 1
 
@@ -561,12 +563,13 @@ class TestTheAcceptanceCriterionIsAboutFalsePositives:
         meaninglessness."""
         for bad in ("", "   ", "TODO", "<name>", "N/A"):
             with pytest.raises(ValueError, match="named reviewer"):
-                HumanLabel(
+                ReferenceLabel(
                     pair_id="1::2",
                     a_question_id="1",
                     b_question_id="2",
                     reviewer=bad,
-                    decision=HumanDecision.SAME,
+                    origin=ReferenceOrigin.HUMAN_EXPERT,
+                    decision=ReferenceDecision.SAME,
                     labelled_at="2026-09-02T00:00:00+00:00",
                     split=Split.HOLDOUT,
                 )
@@ -585,24 +588,26 @@ class TestTheCriterionDefectMission124Exposed:
 
     def _labels(self, holdout_has_positive: bool) -> LabelSet:
         rows = [
-            HumanLabel(
+            ReferenceLabel(
                 pair_id=f"{i}::{i + 1}",
                 a_question_id=str(i),
                 b_question_id=str(i + 1),
                 reviewer="a named reviewer",
-                decision=HumanDecision.DIFFERENT,
+                origin=ReferenceOrigin.HUMAN_EXPERT,
+                decision=ReferenceDecision.DIFFERENT,
                 labelled_at="2026-09-02T00:00:00+00:00",
                 split=Split.HOLDOUT,
             )
             for i in range(16)
         ]
         rows.append(
-            HumanLabel(
+            ReferenceLabel(
                 pair_id="900::901",
                 a_question_id="900",
                 b_question_id="901",
                 reviewer="a named reviewer",
-                decision=HumanDecision.SAME,
+                origin=ReferenceOrigin.HUMAN_EXPERT,
+                decision=ReferenceDecision.SAME,
                 labelled_at="2026-09-02T00:00:00+00:00",
                 split=Split.HOLDOUT if holdout_has_positive else Split.DEVELOPMENT,
             )
@@ -644,9 +649,443 @@ class TestTheCriterionDefectMission124Exposed:
         assert result.false_same == ()
         assert result.false_different  # the positive is what exposes it
 
-    def test_both_criteria_stay_addressable_by_name(self) -> None:
+    def test_every_criterion_stays_addressable_by_name(self) -> None:
         """A result records which rule scored it. A criterion that vanished
-        would leave historical outcomes unreproducible."""
-        from sros_semantic_equivalence import ACCEPTANCE_CRITERIA
+        would leave historical outcomes unreproducible, which is why V1 is kept
+        even though V2 supersedes it."""
+        from sros_semantic_equivalence import ACCEPTANCE_CRITERIA, FAMILY_V1_ACCEPTANCE
 
-        assert set(ACCEPTANCE_CRITERIA) == {V1_ACCEPTANCE.name, V2_ACCEPTANCE.name}
+        assert set(ACCEPTANCE_CRITERIA) == {
+            V1_ACCEPTANCE.name,
+            V2_ACCEPTANCE.name,
+            FAMILY_V1_ACCEPTANCE.name,
+        }
+
+    def test_only_the_family_criterion_defeats_a_constant_classifier(self) -> None:
+        """The property Mission 1.25 §9 requires, and the exact record of which
+        criteria lacked it."""
+        from sros_semantic_equivalence import FAMILY_V1_ACCEPTANCE
+
+        assert not V1_ACCEPTANCE.defeats_a_constant_classifier
+        assert not V2_ACCEPTANCE.defeats_a_constant_classifier
+        assert FAMILY_V1_ACCEPTANCE.defeats_a_constant_classifier
+
+
+class TestAReferenceLabelSaysWhereItCameFrom:
+    """Mission 1.25 §0. The correction this contract exists to make impossible
+    to repeat.
+
+    Mission 1.24 scored a real evaluation against 40 labels an assistant
+    produced, and the repository called them human ground truth -- in a
+    filename, a section heading, two type names and a `reviewer` field naming a
+    person who had not judged. Nothing in the code could have contradicted it,
+    because nothing in the code recorded where a label came from.
+    """
+
+    def _label(self, origin: ReferenceOrigin, pair_id: str = "1::2") -> ReferenceLabel:
+        return ReferenceLabel(
+            pair_id=pair_id,
+            a_question_id="1",
+            b_question_id="2",
+            reviewer="whoever or whatever judged",
+            origin=origin,
+            decision=ReferenceDecision.SAME,
+            labelled_at="2026-09-02T00:00:00+00:00",
+            split=Split.HOLDOUT,
+        )
+
+    def test_origin_is_required_and_has_no_default(self) -> None:
+        """A default would be chosen once and inherited forever, and the
+        convenient default is the flattering one."""
+        with pytest.raises(TypeError):
+            ReferenceLabel(  # type: ignore[call-arg]
+                pair_id="1::2",
+                a_question_id="1",
+                b_question_id="2",
+                reviewer="somebody",
+                decision=ReferenceDecision.SAME,
+                labelled_at="2026-09-02T00:00:00+00:00",
+                split=Split.HOLDOUT,
+            )
+
+    def test_only_a_human_origin_establishes_ground_truth(self) -> None:
+        assert ReferenceOrigin.HUMAN_EXPERT.establishes_human_ground_truth
+        assert ReferenceOrigin.HUMAN_NON_EXPERT.establishes_human_ground_truth
+        assert not ReferenceOrigin.AI_ASSISTED_PROVISIONAL.establishes_human_ground_truth
+
+    def test_a_mixed_set_is_not_human_ground_truth(self) -> None:
+        """ALL, not any. A set reported `True` because one label was human would
+        be read as though every label were."""
+        mixed = LabelSet(
+            (
+                self._label(ReferenceOrigin.HUMAN_EXPERT, "1::2"),
+                self._label(ReferenceOrigin.AI_ASSISTED_PROVISIONAL, "3::4"),
+            )
+        )
+        assert not mixed.human_ground_truth_established
+        assert len(mixed.origins) == 2
+
+    def test_an_empty_set_establishes_nothing(self) -> None:
+        assert not LabelSet(()).human_ground_truth_established
+
+    def test_the_result_carries_the_origin_and_says_so_in_its_notes(self) -> None:
+        """The origin rides on the RESULT, not only on the labels, because the
+        result is what gets quoted. An outcome read without it is an outcome
+        read as truth."""
+        labels = LabelSet(
+            tuple(
+                ReferenceLabel(
+                    pair_id=f"{i}::{i + 1}",
+                    a_question_id=str(i),
+                    b_question_id=str(i + 1),
+                    reviewer="an assistant",
+                    origin=ReferenceOrigin.AI_ASSISTED_PROVISIONAL,
+                    decision=ReferenceDecision.DIFFERENT if i else ReferenceDecision.SAME,
+                    labelled_at="2026-09-02T00:00:00+00:00",
+                    split=Split.HOLDOUT,
+                )
+                for i in range(16)
+            )
+        )
+        predictions = {
+            label.pair_id: EquivalenceDecision.DIFFERENT_PROBLEM for label in labels.labels
+        }
+        result = evaluate(labels, predictions, criterion=V2_ACCEPTANCE)
+        assert result.human_ground_truth_established is False
+        assert result.reference_origins == ("AI_ASSISTED_PROVISIONAL",)
+        assert any("HUMAN GROUND TRUTH IS NOT ESTABLISHED" in note for note in result.notes)
+        assert "human_ground_truth_established" in result.to_json()
+
+    def test_a_human_set_says_so_without_the_warning(self) -> None:
+        labels = LabelSet(
+            tuple(
+                ReferenceLabel(
+                    pair_id=f"{i}::{i + 1}",
+                    a_question_id=str(i),
+                    b_question_id=str(i + 1),
+                    reviewer="a named person",
+                    origin=ReferenceOrigin.HUMAN_EXPERT,
+                    decision=ReferenceDecision.DIFFERENT if i else ReferenceDecision.SAME,
+                    labelled_at="2026-09-02T00:00:00+00:00",
+                    split=Split.HOLDOUT,
+                )
+                for i in range(16)
+            )
+        )
+        predictions = {
+            label.pair_id: EquivalenceDecision.DIFFERENT_PROBLEM for label in labels.labels
+        }
+        result = evaluate(labels, predictions, criterion=V2_ACCEPTANCE)
+        assert result.human_ground_truth_established is True
+        assert not any("NOT ESTABLISHED" in note for note in result.notes)
+
+    def test_the_stored_mission_124_reference_set_is_provisional(self) -> None:
+        """Read from the committed file rather than asserted in prose, so the
+        record and the claim cannot drift apart."""
+        import json
+
+        path = (
+            pathlib.Path(__file__).resolve().parents[4]
+            / "docs"
+            / "data"
+            / "problem-equivalence-reference-labels-v1.json"
+        )
+        raw = json.loads(path.read_text(encoding="utf-8"))
+        assert raw["reference_label_origin"] == "AI_ASSISTED_PROVISIONAL"
+        assert raw["human_ground_truth"] == "NOT_ESTABLISHED"
+        assert {row["origin"] for row in raw["labels"]} == {"AI_ASSISTED_PROVISIONAL"}
+        assert not (path.parent / "problem-equivalence-human-labels-v1.json").exists()
+
+
+class TestTheFamilyRelationIsSeparateFromTheExactOne:
+    """Mission 1.25 §4. Two relations, and the failure mode is that they become
+    one field: both are pairs of question ids with a decision beside them, so a
+    mix-up is invisible in the data."""
+
+    def test_the_two_relations_have_different_vocabularies(self) -> None:
+        from sros_semantic_equivalence import EquivalenceRelation, FamilyDecision
+
+        exact = EquivalenceRelation.EXACT_ACTIONABLE_EQUIVALENCE.decision_values()
+        family = EquivalenceRelation.SAME_PROBLEM_FAMILY.decision_values()
+        assert exact[0] == "SAME_PROBLEM"
+        assert family[0] == "SAME_PROBLEM_FAMILY"
+        assert exact != family
+        assert {d.value for d in FamilyDecision} == set(family)
+
+    def test_neither_relation_borrows_the_others_decision(self) -> None:
+        """A family decision string is not a member of the exact enum, and the
+        reverse, so a value written into the wrong field fails to parse rather
+        than silently meaning something else."""
+        from sros_semantic_equivalence import EquivalenceDecision, FamilyDecision
+
+        with pytest.raises(ValueError):
+            EquivalenceDecision("SAME_PROBLEM_FAMILY")
+        with pytest.raises(ValueError):
+            FamilyDecision("SAME_PROBLEM")
+
+    def test_the_family_proposition_claims_nothing_forbidden(self) -> None:
+        """The sentence a Signal may carry, checked against the list of things a
+        reader would otherwise infer."""
+        from sros_semantic_equivalence import FORBIDDEN_IMPLICATIONS, EquivalenceRelation
+
+        rendered = EquivalenceRelation.SAME_PROBLEM_FAMILY.proposition_template.format(
+            procedure="problem-family-rubric@1.0.0", a="A", b="B"
+        ).lower()
+        assert "same recurring problem family" in rendered
+        for forbidden in FORBIDDEN_IMPLICATIONS:
+            assert forbidden not in rendered, forbidden
+
+    def test_the_rubric_forbids_what_the_relation_forbids(self) -> None:
+        from sros_semantic_equivalence import FAMILY_RUBRIC_TEXT
+
+        assert "not ask whether the fix" in FAMILY_RUBRIC_TEXT
+        assert "SAME answer here never implies that" in FAMILY_RUBRIC_TEXT
+
+    def test_shared_technology_alone_is_insufficient_by_construction(self) -> None:
+        """The corpus is 89 Docker questions. A relation satisfied by shared
+        technology returns SAME for everything and means nothing."""
+        from sros_semantic_equivalence import FAMILY_INSUFFICIENT_ALONE
+
+        blob = " ".join(FAMILY_INSUFFICIENT_ALONE).lower()
+        for phrase in (
+            "same tool",
+            "same site tags",
+            "wrapper",
+            "generic error class",
+            "broad category of component",
+        ):
+            assert phrase in blob, phrase
+
+    def test_the_family_rubric_has_a_real_qualifying_example(self) -> None:
+        """Unlike the exact rubric, whose qualifying example had to be
+        constructed. That difference is itself a finding about the relations."""
+        from sros_semantic_equivalence import FAMILY_WORKED_EXAMPLES
+
+        qualifying = [e for e in FAMILY_WORKED_EXAMPLES if e.kind == "qualifying"]
+        assert len(qualifying) == 1
+        assert qualifying[0].real is True
+
+    def test_every_kind_of_worked_example_is_present(self) -> None:
+        from sros_semantic_equivalence import FAMILY_WORKED_EXAMPLES
+
+        assert {e.kind for e in FAMILY_WORKED_EXAMPLES} >= {
+            "qualifying",
+            "non-qualifying",
+            "borderline",
+            "abstention",
+        }
+
+
+class TestTheFamilyCandidateOrderingReusesRecall:
+    """§6. The qualifying rule is imported rather than restated, so the two
+    relations cannot come to consider different pairs."""
+
+    def test_both_generators_consider_exactly_the_same_pairs(self) -> None:
+        from sros_semantic_equivalence import generate_family_candidates
+
+        exact = generate_candidates(TRIO + [UNRELATED], cap=10_000)
+        family = generate_family_candidates(TRIO + [UNRELATED], cap=10_000)
+        assert {p.pair_id for p in exact.pairs} == {p.pair_id for p in family.pairs}
+
+    def test_a_shared_wrapper_promotes_nothing(self) -> None:
+        """Weight zero, and the zero is the argument: Mission 1.20 established
+        that an identical wrapper precedes unrelated blocked goals."""
+        from sros_semantic_equivalence.family_candidates import DIAGNOSTIC_WEIGHT
+
+        assert DIAGNOSTIC_WEIGHT == 0.0
+
+    def test_the_ordering_is_reproducible(self) -> None:
+        from sros_semantic_equivalence import generate_family_candidates
+
+        first = generate_family_candidates(TRIO + [UNRELATED])
+        second = generate_family_candidates(list(reversed(TRIO + [UNRELATED])))
+        assert [p.pair_id for p in first.pairs] == [p.pair_id for p in second.pairs]
+
+    def test_a_tag_on_every_observation_contributes_nothing(self) -> None:
+        from sros_semantic_equivalence import tag_rarity
+
+        rarity = tag_rarity(tuple(TRIO + [UNRELATED]))
+        assert rarity["docker"] == 0.0
+        assert rarity["python"] > 0.0
+
+    def test_the_generator_carries_its_own_version(self) -> None:
+        """An artifact must never be ambiguous about which ordering produced it."""
+        from sros_semantic_equivalence import (
+            CANDIDATE_GENERATOR_VERSION,
+            FAMILY_CANDIDATE_GENERATOR_VERSION,
+            generate_family_candidates,
+        )
+
+        assert FAMILY_CANDIDATE_GENERATOR_VERSION != CANDIDATE_GENERATOR_VERSION
+        assert (
+            generate_family_candidates(TRIO).generator_version == FAMILY_CANDIDATE_GENERATOR_VERSION
+        )
+
+
+class TestTheFamilyCriterionCannotBePassedByAConstantClassifier:
+    """§9, and the whole reason this criterion differs from Mission 1.24's."""
+
+    def _labels(self, positives: int, split: Split = Split.HOLDOUT) -> LabelSet:
+        rows = []
+        for i in range(12):
+            rows.append(
+                ReferenceLabel(
+                    pair_id=f"{i}::{i + 1}",
+                    a_question_id=str(i),
+                    b_question_id=str(i + 1),
+                    reviewer="a named person",
+                    origin=ReferenceOrigin.HUMAN_EXPERT,
+                    decision=(
+                        ReferenceDecision.SAME if i < positives else ReferenceDecision.DIFFERENT
+                    ),
+                    labelled_at="2026-09-02T00:00:00+00:00",
+                    split=split,
+                )
+            )
+        return LabelSet(tuple(rows))
+
+    def test_always_different_fails(self) -> None:
+        from sros_semantic_equivalence import FAMILY_V1_ACCEPTANCE
+
+        labels = self._labels(positives=3)
+        predictions = {label.pair_id: "DIFFERENT_PROBLEM_FAMILY" for label in labels.labels}
+        result = evaluate(labels, predictions, criterion=FAMILY_V1_ACCEPTANCE)
+        assert result.outcome == "MODEL_EVALUATION_FAILED"
+        assert result.false_same == ()
+        assert result.true_same == ()
+
+    def test_always_abstain_fails(self) -> None:
+        from sros_semantic_equivalence import FAMILY_V1_ACCEPTANCE
+
+        labels = self._labels(positives=3)
+        predictions = {label.pair_id: "ABSTAIN" for label in labels.labels}
+        result = evaluate(labels, predictions, criterion=FAMILY_V1_ACCEPTANCE)
+        assert result.outcome == "MODEL_EVALUATION_FAILED"
+        assert result.abstentions == 12
+
+    def test_one_true_positive_and_no_false_positive_passes(self) -> None:
+        from sros_semantic_equivalence import FAMILY_V1_ACCEPTANCE
+
+        labels = self._labels(positives=3)
+        predictions = {label.pair_id: "DIFFERENT_PROBLEM_FAMILY" for label in labels.labels}
+        predictions["0::1"] = "SAME_PROBLEM_FAMILY"
+        result = evaluate(labels, predictions, criterion=FAMILY_V1_ACCEPTANCE)
+        assert result.outcome == "MODEL_EVALUATION_PASSED"
+        assert result.true_same == ("0::1",)
+
+    def test_one_false_positive_fails_however_many_true_ones(self) -> None:
+        from sros_semantic_equivalence import FAMILY_V1_ACCEPTANCE
+
+        labels = self._labels(positives=3)
+        predictions = {label.pair_id: "DIFFERENT_PROBLEM_FAMILY" for label in labels.labels}
+        predictions["0::1"] = "SAME_PROBLEM_FAMILY"
+        predictions["11::12"] = "SAME_PROBLEM_FAMILY"
+        result = evaluate(labels, predictions, criterion=FAMILY_V1_ACCEPTANCE)
+        assert result.outcome == "MODEL_EVALUATION_FAILED"
+        assert result.false_same == ("11::12",)
+
+    def test_too_few_positives_in_the_scored_split_is_insufficient(self) -> None:
+        """The Mission 1.24 shape, refused up front this time."""
+        from sros_semantic_equivalence import FAMILY_V1_ACCEPTANCE
+
+        labels = self._labels(positives=1)
+        predictions = {label.pair_id: "DIFFERENT_PROBLEM_FAMILY" for label in labels.labels}
+        predictions["0::1"] = "SAME_PROBLEM_FAMILY"
+        result = evaluate(labels, predictions, criterion=FAMILY_V1_ACCEPTANCE)
+        assert result.outcome == "EVALUATION_INSUFFICIENT"
+
+
+class TestAHumanOriginEstablishesGroundTruthForItsSplitOnly:
+    """Mission 1.25, after the operator reviewed the frozen holdout.
+
+    A split can reach human ground truth while its siblings have not. The set is
+    then MIXED, and a mixed set reported as human is the error this contract
+    exists to prevent.
+    """
+
+    def _label(self, origin: ReferenceOrigin, pair_id: str, split: Split) -> ReferenceLabel:
+        return ReferenceLabel(
+            pair_id=pair_id,
+            a_question_id=pair_id.split("::")[0],
+            b_question_id=pair_id.split("::")[1],
+            reviewer="whoever judged",
+            origin=origin,
+            decision=ReferenceDecision.SAME,
+            labelled_at="2026-09-02T00:00:00+00:00",
+            split=split,
+        )
+
+    def test_the_operator_is_a_person_and_establishes_ground_truth(self) -> None:
+        """Filed as neither expert nor non-expert, because neither is ours to
+        assert on their behalf."""
+        assert ReferenceOrigin.HUMAN_OPERATOR.establishes_human_ground_truth
+        assert ReferenceOrigin("HUMAN_OPERATOR") is ReferenceOrigin.HUMAN_OPERATOR
+
+    def test_a_set_mixing_a_reviewed_split_with_an_unreviewed_one_is_not_human(self) -> None:
+        """The exact shape Mission 1.25 ended in: a human holdout beside a
+        provisional development split."""
+        mixed = LabelSet(
+            (
+                self._label(ReferenceOrigin.HUMAN_OPERATOR, "1::2", Split.HOLDOUT),
+                self._label(ReferenceOrigin.AI_ASSISTED_PROVISIONAL, "3::4", Split.DEVELOPMENT),
+            )
+        )
+        assert not mixed.human_ground_truth_established
+        assert mixed.origins == frozenset(
+            {ReferenceOrigin.HUMAN_OPERATOR, ReferenceOrigin.AI_ASSISTED_PROVISIONAL}
+        )
+
+    def test_the_reviewed_split_alone_does_establish_it(self) -> None:
+        holdout_only = LabelSet(
+            (self._label(ReferenceOrigin.HUMAN_OPERATOR, "1::2", Split.HOLDOUT),)
+        )
+        assert holdout_only.human_ground_truth_established
+
+    def test_zero_false_positives_still_fails_without_a_true_one(self) -> None:
+        """The result the human re-scoring produced, pinned. Every precondition
+        met against human ground truth, and still a failure -- because a
+        constant-DIFFERENT classifier records the same zero."""
+        from sros_semantic_equivalence import FAMILY_V1_ACCEPTANCE
+
+        rows = []
+        for i in range(10):
+            rows.append(
+                ReferenceLabel(
+                    pair_id=f"{i}::{i + 1}",
+                    a_question_id=str(i),
+                    b_question_id=str(i + 1),
+                    reviewer="operator",
+                    origin=ReferenceOrigin.HUMAN_OPERATOR,
+                    decision=(ReferenceDecision.SAME if i < 2 else ReferenceDecision.DIFFERENT),
+                    labelled_at="2026-09-02T00:00:00+00:00",
+                    split=Split.HOLDOUT,
+                )
+            )
+        labels = LabelSet(tuple(rows))
+        predictions = {r.pair_id: "DIFFERENT_PROBLEM_FAMILY" for r in rows}
+        result = evaluate(labels, predictions, criterion=FAMILY_V1_ACCEPTANCE)
+        assert result.human_ground_truth_established is True
+        assert result.positives == 2
+        assert result.false_same == ()
+        assert result.true_same == ()
+        assert result.outcome == "MODEL_EVALUATION_FAILED"
+
+    def test_the_stored_human_holdout_records_its_mixed_context(self) -> None:
+        """Read from the committed file, so the record and the claim cannot
+        drift apart."""
+        import json
+
+        path = (
+            pathlib.Path(__file__).resolve().parents[4]
+            / "docs"
+            / "data"
+            / "problem-family-holdout-human-labels-v1.json"
+        )
+        raw = json.loads(path.read_text(encoding="utf-8"))
+        assert raw["reference_label_origin"] == "HUMAN_OPERATOR"
+        assert raw["development_split_origin"] == "AI_ASSISTED_PROVISIONAL"
+        assert raw["full_reference_set_provenance"] == "MIXED"
+        assert {row["origin"] for row in raw["labels"]} == {"HUMAN_OPERATOR"}
+        # the provisional reference is preserved, never replaced
+        assert (path.parent / "problem-family-reference-labels-v1.json").exists()
+        assert (path.parent / "problem-family-evaluation-holdout.json").exists()

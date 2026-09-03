@@ -21,7 +21,9 @@
 | rubric | `problem-equivalence-rubric@1.0.0` |
 | prompt | `semantic-problem-equivalence@1.0.0`, unchanged between the two runs |
 | route | STRONG_MODEL tier → the approved provider, through the LLM Gateway |
-| human labels | 40, supplied blind by a named reviewer before any model call |
+| reference labels | 40, supplied **blind** before any model call |
+| reference origin | **`AI_ASSISTED_PROVISIONAL`** (GPT-5.6 Sol) |
+| human ground truth | **NOT_ESTABLISHED** |
 | model calls | 40 |
 | tokens | 225 207 in, 15 986 out |
 | cost | **0.61 units (USD), priced** |
@@ -37,7 +39,7 @@ holdout was run once against the same artifact.
 | | development | holdout |
 |---|---|---|
 | labelled and predicted | 23 | 17 |
-| human SAME / DIFFERENT / UNCERTAIN | 1 / 20 / 2 | 0 / 16 / 1 |
+| reference SAME / DIFFERENT / UNCERTAIN | 1 / 20 / 2 | 0 / 16 / 1 |
 | model SAME / DIFFERENT / ABSTAIN | 0 / 22 / 1 | 0 / 17 / 0 |
 | **false SAME** | **0** | **0** |
 | false DIFFERENT | 1 | 0 |
@@ -93,6 +95,12 @@ constant-DIFFERENT classifier as the thing they must tell apart.
 
 ## 4. The disagreements, both of them worth reading
 
+> **Corrected in Mission 1.25 §0.** Neither is human inter-rater disagreement.
+> Both are disagreement between the rubric's stated expectation and an
+> **AI-assisted provisional** reference label. No person has reviewed these
+> pairs, so `human_ground_truth` is NOT_ESTABLISHED, and nothing below may be
+> read as a human judging the rubric.
+
 ### The missed positive — `78089171::78098380`
 
 - **A**: a Next.js `NEXT_PUBLIC_` variable is undefined in a Kubernetes pod even
@@ -100,7 +108,7 @@ constant-DIFFERENT classifier as the thing they must tell apart.
 - **B**: `docker-compose`'s `env_file` supplies variables at container runtime,
   and they are absent during the Dockerfile build.
 
-The reviewer called it SAME. The model called it `DIFFERENT_PROBLEM` /
+The provisional reference called it SAME. The model called it `DIFFERENT_PROBLEM` /
 `SAME_STACK_DIFFERENT_CONCERN`, reasoning that one is Next.js and Kubernetes and
 the other is Compose, and that neither fix addresses the other.
 
@@ -117,12 +125,12 @@ anywhere in the holdout against which the false-positive cost of loosening could
 be measured. Tuning here would be fitting to the single data point that the
 evaluation was least able to check.
 
-### The rubric disagreeing with its own reviewer — `78088430::78090396`
+### The rubric disagreeing with its own reference — `78088430::78090396`
 
 This pair is the rubric's own **borderline worked example**, where the rubric
-states `DIFFERENT_PROBLEM`. The model agreed with the rubric. **The reviewer said
-UNCERTAIN.** So the rubric's author and the reference reviewer disagree about a
-pair the rubric uses to define its boundary. Recorded rather than resolved: a
+states `DIFFERENT_PROBLEM`. The model agreed with the rubric. **The provisional
+reference said UNCERTAIN.** So the rubric's stated expectation and its reference
+set disagree about a pair the rubric uses to define its boundary. Recorded rather than resolved: a
 boundary example both parties do not read the same way is a defect in the
 example, and fixing it is a rubric version bump with its own evaluation.
 
@@ -180,8 +188,8 @@ never a correction of those.
 
 ## 8. What would change the answer
 
-**A reference set with real positives in the scored split.** That is the whole
-blocker, and it is not a tooling problem. This 89-question corpus yielded one
+**A reference set with real positives in the scored split, and ideally a human
+one.** That is the whole blocker, and it is not a tooling problem. This 89-question corpus yielded one
 defensible SAME out of 40 candidate pairs, which is itself a finding about the
 corpus rather than about the classifier.
 

@@ -190,3 +190,124 @@ def select_review_batch(
         ),
         recall_limitation=candidates.recall_limitation,
     )
+
+
+# ---------------------------------------------------------------------------
+# Mission 1.25: the family batch.
+
+FAMILY_BATCH_SELECTION_VERSION = "family-review-batch-selection@1.0.0"
+FAMILY_BATCH_SIZE = 20
+
+# Higher than the 0.5 Mission 1.24 used, and declared here BEFORE any label
+# exists, with its reason. This mission plans NO prompt development: the family
+# prompt is written once and frozen, so a large development set buys nothing,
+# while a large holdout buys positive coverage in the split that decides. That
+# is the whole lesson of Mission 1.24, whose single positive fell in development
+# and left the holdout unable to distinguish caution from correctness.
+FAMILY_HOLDOUT_FRACTION = 0.6
+FAMILY_SPLIT_SEED = "mission-1.25/problem-family-rubric@1.0.0"
+
+# Pairs the family rubric quotes or whose pattern it describes. IN-SAMPLE by
+# construction: the classifier is shown their answer in its own instructions, so
+# getting them right shows it can read its rubric and is not evidence of
+# generalisation. Pinned to development, each with its reason, exactly as
+# Mission 1.24 did -- and they are INCLUDED rather than dropped, because a batch
+# without the cases a classifier must get right tests nothing.
+FAMILY_HOLDOUT_EXCLUSIONS: dict[str, str] = {
+    "78089171::78098380": (
+        "the rubric's qualifying worked example, quoted by id with its decision stated"
+    ),
+    "78086542::78099680": (
+        "the rubric's non-qualifying worked example, quoted by id with its decision stated"
+    ),
+    "78093369::78105004": (
+        "the rubric's borderline worked example, quoted by id with its decision stated"
+    ),
+    "78096175::78097071": (
+        "the rubric's abstention worked example, quoted by id with its decision stated"
+    ),
+}
+
+
+def assign_family_split(pair_id: str) -> Split:
+    """The family split. Same mechanism as `assign_split`, different seed and
+    fraction, and its own exclusion list."""
+    if pair_id in FAMILY_HOLDOUT_EXCLUSIONS:
+        return Split.DEVELOPMENT
+    return assign_split(pair_id, seed=FAMILY_SPLIT_SEED, holdout=FAMILY_HOLDOUT_FRACTION)
+
+
+def select_family_review_batch(
+    candidates: CandidateSet,
+    observations: dict[str, QuestionObservation],
+    *,
+    rubric_version: str,
+    size: int = FAMILY_BATCH_SIZE,
+) -> ReviewBatch:
+    """The top of the family ordering, plus the rubric's own examples.
+
+    **Two sources, both declared before the batch existed.** The ordering
+    supplies the pairs nobody has judged; the exclusion list supplies the four
+    the rubric already decides, so the reviewer's answers can be compared with
+    the rubric's stated expectations. A batch drawn only from the ordering would
+    have no case where a disagreement is diagnostic.
+
+    Deliberately around 20 pairs rather than 40: Mission 1.25 §7 asks for a small
+    batch, and a reviewer's attention is the scarcest input in this pipeline.
+    """
+    by_rank = {pair.pair_id: (rank, pair) for rank, pair in enumerate(candidates.pairs, start=1)}
+
+    chosen: list[tuple[int, CandidatePair]] = []
+    seen: set[str] = set()
+    for pair_id in FAMILY_HOLDOUT_EXCLUSIONS:
+        entry = by_rank.get(pair_id)
+        if entry is not None:
+            chosen.append(entry)
+            seen.add(pair_id)
+
+    for rank, pair in enumerate(candidates.pairs, start=1):
+        if len(chosen) >= size:
+            break
+        if pair.pair_id in seen:
+            continue
+        chosen.append((rank, pair))
+        seen.add(pair.pair_id)
+
+    chosen.sort(key=lambda item: item[0])
+
+    items = []
+    for rank, pair in chosen:
+        a = observations[pair.a_question_id]
+        b = observations[pair.b_question_id]
+        items.append(
+            ReviewItem(
+                pair_id=pair.pair_id,
+                rank=rank,
+                split=assign_family_split(pair.pair_id),
+                a_question_id=a.question_id,
+                b_question_id=b.question_id,
+                a_title=a.title_text(),
+                b_title=b.title_text(),
+                a_tags=a.tags,
+                b_tags=b.tags,
+                a_excerpt=_excerpt(a),
+                b_excerpt=_excerpt(b),
+                surfaced_because=pair.reasons,
+                shared_diagnostic=pair.longest_shared_diagnostic,
+                holdout_exclusion_reason=FAMILY_HOLDOUT_EXCLUSIONS.get(pair.pair_id, ""),
+            )
+        )
+
+    return ReviewBatch(
+        selection_version=FAMILY_BATCH_SELECTION_VERSION,
+        candidate_generator_version=candidates.generator_version,
+        rubric_version=rubric_version,
+        items=tuple(items),
+        selection_rule=(
+            f"the {len(FAMILY_HOLDOUT_EXCLUSIONS)} pairs the rubric itself decides, plus "
+            f"the highest-ranked remaining pairs in family-candidate order, to {size} "
+            "total. Both sources declared before the batch was produced; no pair was "
+            "chosen for what it might show"
+        ),
+        recall_limitation=candidates.recall_limitation,
+    )
