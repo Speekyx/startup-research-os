@@ -13,7 +13,12 @@ writes one JSON artifact under `docs/data/` and nothing else.
 
 Usage:
 
-    python infrastructure/scripts/build_reliability_review_packet.py
+    uv run --package sros-nlp python infrastructure/scripts/build_reliability_review_packet.py
+
+Connects to a deployment, so `DATABASE_URL` must be set -- it lives in
+`infrastructure/compose/.env` rather than in the shell -- and it runs through
+`uv` because a bare `python` resolves `sros_contracts` from the path insert above
+and cannot import `psycopg`.
 """
 
 from __future__ import annotations
