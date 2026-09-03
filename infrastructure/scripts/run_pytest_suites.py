@@ -54,6 +54,7 @@ from testing import registry_state  # noqa: E402
 SUITES = [
     "packages/contracts/python",
     "packages/llm-gateway/python",
+    "packages/semantic-equivalence/python",
     "services/workers/python",
     "services/acquisition/python",
     "services/nlp/python",

@@ -1,0 +1,1015 @@
+{
+  "run_id": "dev-1",
+  "split": "DEVELOPMENT",
+  "rubric_version": "problem-equivalence-rubric@1.0.0",
+  "prompt_version": "1.0.0",
+  "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+  "pairs": 23,
+  "input_tokens": 131191,
+  "output_tokens": 8952,
+  "cost_units": 0.351902,
+  "cost_units_are_priced": true,
+  "wall_clock_seconds": 125.7,
+  "classifications": [
+    {
+      "pair_id": "78086323::78097216",
+      "a_question_id": "78086323",
+      "b_question_id": "78097216",
+      "a_observation_key": "stack-exchange|stackoverflow|78086323",
+      "b_observation_key": "stack-exchange|stackoverflow|78097216",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SAME_STACK_DIFFERENT_CONCERN",
+      "rationale": "A is about a Node.js Telegraf bot failing outbound HTTPS requests (ETIMEDOUT) specifically when Docker network mode is set to host, an issue tied to container networking configuration. B is about a Java Tomcat servlet returning 404 due to a multi-stage Docker build producing a bad/incomplete WAR file. These involve entirely different components (network mode vs. build artifact) and different failure mechanisms; a fix for one gives no insight into the other.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "docker run --privileged -itd --network host --name ttelegraf hardc0der/ttelegraf:latest"
+        },
+        {
+          "side": "A",
+          "fragment": "errno: 'ETIMEDOUT'"
+        },
+        {
+          "side": "B",
+          "fragment": "I was receiving a 404 Error."
+        },
+        {
+          "side": "B",
+          "fragment": "I tried removing the first stage of building the .war file in the container itself ... and surprisingly that time ... it was working as expected"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "dev-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 6178,
+        "output_tokens": 448,
+        "cost_units": 0.016836,
+        "priced": true,
+        "latency_ms": 5687.760000000708
+      }
+    },
+    {
+      "pair_id": "78086387::78087887",
+      "a_question_id": "78086387",
+      "b_question_id": "78087887",
+      "a_observation_key": "stack-exchange|stackoverflow|78086387",
+      "b_observation_key": "stack-exchange|stackoverflow|78087887",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SAME_STACK_DIFFERENT_CONCERN",
+      "rationale": "A is about Django/Postgres in a single Docker container failing to connect to the database during build-time migrations because Postgres isn't running/reachable at build time. B is about wkhtmltopdf crashing with a segfault related to /tmp permissions and XDG_RUNTIME_DIR ownership under a non-root user. These are unrelated subsystems (database connectivity vs. runtime directory permissions for a PDF rendering tool) with different fixes in different components.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "connection to server at \"localhost\" (127.0.0.1), port 5432 failed: Connection refused"
+        },
+        {
+          "side": "A",
+          "fragment": "psycopg2.OperationalError: connection to server at \"localhost\""
+        },
+        {
+          "side": "B",
+          "fragment": "QStandardPaths: runtime directory '/tmp' is not owned by UID 1000"
+        },
+        {
+          "side": "B",
+          "fragment": "wkhtmltopdf exited with non-zero code -11. error:\n    Unknown Error"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "dev-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 6045,
+        "output_tokens": 459,
+        "cost_units": 0.01668,
+        "priced": true,
+        "latency_ms": 5841.177400026936
+      }
+    },
+    {
+      "pair_id": "78086542::78099519",
+      "a_question_id": "78086542",
+      "b_question_id": "78099519",
+      "a_observation_key": "stack-exchange|stackoverflow|78086542",
+      "b_observation_key": "stack-exchange|stackoverflow|78099519",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SHARED_WRAPPER_DIVERGENT_TERMINAL_CAUSE",
+      "rationale": "Both share the identical OCI runtime create failed / shim task daemon wrapper diagnostic, but the terminal causes differ: A fails with \"permission denied\" on an existing entrypoint script (a file-mode issue), while B fails with \"no such file or directory\" because the referenced pipenv binary path doesn't exist (likely due to volume mount overwriting /app or a wrong venv path). Fixing A's permission bits would not address B's missing executable path problem, so these are different actionable failures despite the shared wrapper text.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "exec: \"/usr/src/app/entrypoint.sh\": permission denied"
+        },
+        {
+          "side": "B",
+          "fragment": "exec: \"/app/.venv/bin/pipenv\": stat /app/.venv/bin/pipenv: no such file or directory: unknown"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "dev-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 5758,
+        "output_tokens": 419,
+        "cost_units": 0.015706,
+        "priced": true,
+        "latency_ms": 5509.526999958325
+      }
+    },
+    {
+      "pair_id": "78086542::78099680",
+      "a_question_id": "78086542",
+      "b_question_id": "78099680",
+      "a_observation_key": "stack-exchange|stackoverflow|78086542",
+      "b_observation_key": "stack-exchange|stackoverflow|78099680",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SHARED_WRAPPER_DIVERGENT_TERMINAL_CAUSE",
+      "rationale": "Both share the identical OCI runtime create failed / shim task wrapper diagnostic, but the terminal causes differ: A is a permission denied error on an existing entrypoint script (a file mode issue), while B is executable file not found in $PATH (gunicorn missing from the venv/PATH). Fixing one (chmod +x entrypoint.sh) would not address the other (installing gunicorn or fixing PATH).",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "exec: \"/usr/src/app/entrypoint.sh\": permission denied"
+        },
+        {
+          "side": "B",
+          "fragment": "exec: \"gunicorn\": executable file not found in $PATH: unknown"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "dev-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 5328,
+        "output_tokens": 364,
+        "cost_units": 0.014296,
+        "priced": true,
+        "latency_ms": 4216.172200045548
+      }
+    },
+    {
+      "pair_id": "78086639::78092806",
+      "a_question_id": "78086639",
+      "b_question_id": "78092806",
+      "a_observation_key": "stack-exchange|stackoverflow|78086639",
+      "b_observation_key": "stack-exchange|stackoverflow|78092806",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SAME_STACK_DIFFERENT_CONCERN",
+      "rationale": "A is about configuring a container to auto-start on login, a feature/configuration request with no failure. B is about a WSL backend error preventing Docker Desktop from running at all, tied to Hyper-V/WSL access rights. Both use Docker Desktop but address entirely different subsystems and concerns; a fix for one gives no insight into the other.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "Is there a way to set a container to auto-start on login as well?"
+        },
+        {
+          "side": "B",
+          "fragment": "I encounter an \"Unexpected WSL error\". The error message suggests that it might be related to access rights issues"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "dev-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 4217,
+        "output_tokens": 328,
+        "cost_units": 0.011713999999999999,
+        "priced": true,
+        "latency_ms": 4726.017099979799
+      }
+    },
+    {
+      "pair_id": "78088430::78090396",
+      "a_question_id": "78088430",
+      "b_question_id": "78090396",
+      "a_observation_key": "stack-exchange|stackoverflow|78088430",
+      "b_observation_key": "stack-exchange|stackoverflow|78090396",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SAME_STACK_DIFFERENT_CONCERN",
+      "rationale": "This is the exact borderline example given in the rubric: A describes a working WordPress+MySQL deployment that fails intermittently under concurrent load with 'Error Establishing a Database Connection', while B describes a deployment that never works at all, with a malformed environment entry (WORDPRESS_DB_HOST=db: 3306 as a single YAML key). One is a capacity/connection-handling issue in a functioning stack; the other is a configuration syntax error preventing startup. The fixes are unrelated.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "if you just open multiple tabs (~10) and hit reload the message \"Error Establishing a Database Connection\" pops up, even if containers don't crash and keep running"
+        },
+        {
+          "side": "B",
+          "fragment": "WORDPRESS_DB_HOST=db: 3306"
+        },
+        {
+          "side": "B",
+          "fragment": "the Wordpress web UI dosen't work"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "dev-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 7437,
+        "output_tokens": 429,
+        "cost_units": 0.019164,
+        "priced": true,
+        "latency_ms": 4930.2217999938875
+      }
+    },
+    {
+      "pair_id": "78089113::78092816",
+      "a_question_id": "78089113",
+      "b_question_id": "78092816",
+      "a_observation_key": "stack-exchange|stackoverflow|78089113",
+      "b_observation_key": "stack-exchange|stackoverflow|78092816",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SAME_STACK_DIFFERENT_CONCERN",
+      "rationale": "A is about building a custom Grafana Docker image from forked source, involving a multi-stage Dockerfile build process. B is about a Postgres container in docker-compose where an init SQL script does not create the expected table. These concern entirely different components (image build pipeline vs. database initialization script) and no shared actionable failure concept exists between them.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "We have fork from the Grafana source and make changes mainly the UI. Now, I want to create docker image and faced issue."
+        },
+        {
+          "side": "B",
+          "fragment": "when I try to connect to the container via dbeaver or pycharm, the table is non existent"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "dev-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 7014,
+        "output_tokens": 335,
+        "cost_units": 0.017378,
+        "priced": true,
+        "latency_ms": 5642.320899991319
+      }
+    },
+    {
+      "pair_id": "78089113::78102512",
+      "a_question_id": "78089113",
+      "b_question_id": "78102512",
+      "a_observation_key": "stack-exchange|stackoverflow|78089113",
+      "b_observation_key": "stack-exchange|stackoverflow|78102512",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "INSUFFICIENT_DETAIL",
+      "rationale": "A concerns building a custom Grafana Docker image from a forked source tree, with a Dockerfile build process issue, while B concerns mounting two separate docker volumes to the same target path inside a container, causing a 'Duplicate mount point' error. These are entirely different subsystems (image build vs. volume mounting) with no shared actionable failure concept; a fix for one gives no insight into the other.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "We have fork from the Grafana source and make changes mainly the UI. Now, I want to create docker image and faced issue."
+        },
+        {
+          "side": "B",
+          "fragment": "docker: Error response from daemon: Duplicate mount point: /rootdir1."
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "dev-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 6348,
+        "output_tokens": 348,
+        "cost_units": 0.016176,
+        "priced": true,
+        "latency_ms": 4741.904499998782
+      }
+    },
+    {
+      "pair_id": "78089171::78098380",
+      "a_question_id": "78089171",
+      "b_question_id": "78098380",
+      "a_observation_key": "stack-exchange|stackoverflow|78089171",
+      "b_observation_key": "stack-exchange|stackoverflow|78098380",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SAME_STACK_DIFFERENT_CONCERN",
+      "rationale": "A concerns NEXT_PUBLIC_ env vars baked at build time not resolving correctly at runtime in Kubernetes, tied to Next.js's client-side env var handling and its build/runtime split. B concerns Docker Compose's env_file mechanism only injecting vars at container runtime, not during the Dockerfile build stage, with no Next.js or Kubernetes involvement. The fix for one (Next.js build-arg vs runtime env handling, or K8s ConfigMap injection) does not address the other (Compose build-arg passing via ARG/build.args).",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "in a prod/qa environment in k8s it has no value, even though the env is in the POD"
+        },
+        {
+          "side": "A",
+          "fragment": "NEXT_PUBLIC_BFF_ORM_CLIENT"
+        },
+        {
+          "side": "B",
+          "fragment": "it does not work with env_file option as it only passes the env variables to the containers. The env variables are not available during the build"
+        },
+        {
+          "side": "B",
+          "fragment": "I'd like to have all variables from oneSourceOfTruth.env available in the Dockerfile during the build step ... as well as in the container during runtime"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "dev-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 6661,
+        "output_tokens": 512,
+        "cost_units": 0.018442,
+        "priced": true,
+        "latency_ms": 6635.303899995051
+      }
+    },
+    {
+      "pair_id": "78089563::78096903",
+      "a_question_id": "78089563",
+      "b_question_id": "78096903",
+      "a_observation_key": "stack-exchange|stackoverflow|78089563",
+      "b_observation_key": "stack-exchange|stackoverflow|78096903",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "INSUFFICIENT_DETAIL",
+      "rationale": "Question A concerns a Spark worker failing with a Kerberos authentication NullPointerException tied to missing username resolution in a Bitnami Spark container on Windows. Question B concerns Docker Compose/stack not substituting environment variables as YAML map keys in the networks section. These are unrelated components and failure concepts with no overlapping actionable fix.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "Exception in thread \"main\" org.apache.hadoop.security.KerberosAuthException: failure to login"
+        },
+        {
+          "side": "B",
+          "fragment": "docker stack config shows that the generated config does nothing with ${network} key, it leaves as it is"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "dev-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 5755,
+        "output_tokens": 340,
+        "cost_units": 0.01491,
+        "priced": true,
+        "latency_ms": 9935.263800027315
+      }
+    },
+    {
+      "pair_id": "78091032::78092816",
+      "a_question_id": "78091032",
+      "b_question_id": "78092816",
+      "a_observation_key": "stack-exchange|stackoverflow|78091032",
+      "b_observation_key": "stack-exchange|stackoverflow|78092816",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "INSUFFICIENT_DETAIL",
+      "rationale": "A is a broad how-to request about running a basic C program with Docker Compose and live-reload, with no actual failure or error reported. B describes a specific failure: an init SQL script for postgres runs but the resulting table is missing when connecting via a client. These are unrelated actionable concepts, and A does not even establish a failure to compare.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "I want to isolate my development environment to create a project in C. But I don't know how to use Docker with C."
+        },
+        {
+          "side": "A",
+          "fragment": "How can I make a docker compose and how to run it. And still with live-reload?"
+        },
+        {
+          "side": "B",
+          "fragment": "when I try to connect to the container via dbeaver or pycharm, the table is non existent"
+        },
+        {
+          "side": "B",
+          "fragment": "I have also run the sql script manually and it works perfect."
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "dev-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 5087,
+        "output_tokens": 387,
+        "cost_units": 0.014044,
+        "priced": true,
+        "latency_ms": 5357.072999991942
+      }
+    },
+    {
+      "pair_id": "78091032::78096903",
+      "a_question_id": "78091032",
+      "b_question_id": "78096903",
+      "a_observation_key": "stack-exchange|stackoverflow|78091032",
+      "b_observation_key": "stack-exchange|stackoverflow|78096903",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "INSUFFICIENT_DETAIL",
+      "rationale": "A is a broad how-to question about setting up Docker Compose for a C program with live-reload, with no specific failure described. B is a specific issue about environment variable substitution not working when used as a YAML key in the top-level networks section of a compose file. These concern completely different components and neither establishes a shared actionable failure concept.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "How can I make a docker compose and how to run it. And still with live-reload?"
+        },
+        {
+          "side": "B",
+          "fragment": "docker stack config shows that the generated config does nothing with ${network} key, it leaves as it is."
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "dev-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 4435,
+        "output_tokens": 311,
+        "cost_units": 0.01198,
+        "priced": true,
+        "latency_ms": 4179.6086999820545
+      }
+    },
+    {
+      "pair_id": "78091354::78098380",
+      "a_question_id": "78091354",
+      "b_question_id": "78098380",
+      "a_observation_key": "stack-exchange|stackoverflow|78091354",
+      "b_observation_key": "stack-exchange|stackoverflow|78098380",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SAME_STACK_DIFFERENT_CONCERN",
+      "rationale": "A concerns the Nest CLI binary not being found in PATH during the production build stage of a multi-stage Dockerfile, caused by devDependencies/PATH setup in a multi-stage build. B concerns propagating .env variables from a single env file into both the Dockerfile build step and container runtime via docker-compose. These are different subsystems (build tool PATH/dependency resolution vs. environment variable propagation) and a fix for one gives no guidance for the other.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "sh: 1: nest: not found"
+        },
+        {
+          "side": "A",
+          "fragment": "It seems that the Nest.js CLI is not available in the PATH during the production build"
+        },
+        {
+          "side": "B",
+          "fragment": "I'd like to have all variables from oneSourceOfTruth.env available in the Dockerfile during the build step"
+        },
+        {
+          "side": "B",
+          "fragment": "it does not work with env_file option as it only passes the env variables to the containers"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "dev-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 6345,
+        "output_tokens": 435,
+        "cost_units": 0.01704,
+        "priced": true,
+        "latency_ms": 5276.874999981374
+      }
+    },
+    {
+      "pair_id": "78092648::78102252",
+      "a_question_id": "78092648",
+      "b_question_id": "78102252",
+      "a_observation_key": "stack-exchange|stackoverflow|78092648",
+      "b_observation_key": "stack-exchange|stackoverflow|78102252",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SAME_STACK_DIFFERENT_CONCERN",
+      "rationale": "A is about persisting/rotating logs from ephemeral cron-triggered Docker containers so past job output can be inspected. B is about a Dataflow pipeline failing with ModuleNotFoundError because the custom SDK container image with the dependency isn't being used by workers. These concern entirely different subsystems (logging/log persistence vs. dependency installation/container image selection in Dataflow) despite sharing Docker/GCP tags.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "how do we change it to make the logs persist, rotate and are visible outside the container?"
+        },
+        {
+          "side": "B",
+          "fragment": "ModuleNotFoundError: No module named 'unidecode'"
+        },
+        {
+          "side": "B",
+          "fragment": "I understand that the workers are using de default beam sdk, is correct that? how I can fix it?"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "dev-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 4977,
+        "output_tokens": 395,
+        "cost_units": 0.013904000000000001,
+        "priced": true,
+        "latency_ms": 5712.502999987919
+      }
+    },
+    {
+      "pair_id": "78092816::78095639",
+      "a_question_id": "78092816",
+      "b_question_id": "78095639",
+      "a_observation_key": "stack-exchange|stackoverflow|78092816",
+      "b_observation_key": "stack-exchange|stackoverflow|78095639",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SAME_STACK_DIFFERENT_CONCERN",
+      "rationale": "A concerns Postgres init-script tables not persisting/appearing despite compose init mount, a data-initialization issue inside a single container's volume/init lifecycle. B concerns a browser-side DNS resolution failure (ERR_NAME_NOT_RESOLVED) when the Angular client, running in the host browser, tries to resolve a Docker-network-only hostname 'backend'. These are different components (Postgres init scripts vs. browser networking to compose service names) and different failure classes; a fix for one gives no insight into the other.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "the initial table is nowhere to be found"
+        },
+        {
+          "side": "A",
+          "fragment": "volumes:\n      - ./init-schema.sql:/docker-entrypoint-initdb.d/init-db-01.sql"
+        },
+        {
+          "side": "B",
+          "fragment": "GET http://backend:8080/questions net::ERR_NAME_NOT_RESOLVED"
+        },
+        {
+          "side": "B",
+          "fragment": "frontend application is makeing request to\nRequest URL:\nhttp://backend:8080/questions"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "dev-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 5832,
+        "output_tokens": 484,
+        "cost_units": 0.016504,
+        "priced": true,
+        "latency_ms": 7208.6596000008285
+      }
+    },
+    {
+      "pair_id": "78092816::78098380",
+      "a_question_id": "78092816",
+      "b_question_id": "78098380",
+      "a_observation_key": "stack-exchange|stackoverflow|78092816",
+      "b_observation_key": "stack-exchange|stackoverflow|78098380",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SAME_STACK_DIFFERENT_CONCERN",
+      "rationale": "A concerns postgres init scripts not creating the expected table/schema on container startup via docker-compose. B concerns env_file variables from an .env file not being available during the Dockerfile build step. Both use docker-compose but address entirely different subsystems (database initialization vs. build-time environment variable propagation), so a fix for one gives no guidance for the other.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "the initial table is nowhere to be found"
+        },
+        {
+          "side": "A",
+          "fragment": "docker-entrypoint-initdb.d/init-db-01.sql"
+        },
+        {
+          "side": "B",
+          "fragment": "available in the Dockerfile during the build step via docker compose build as well as in the container during runtime"
+        },
+        {
+          "side": "B",
+          "fragment": "it does not work with env_file option as it only passes the env variables to the containers"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "dev-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 6359,
+        "output_tokens": 391,
+        "cost_units": 0.016628,
+        "priced": true,
+        "latency_ms": 5052.424199995585
+      }
+    },
+    {
+      "pair_id": "78092816::78102512",
+      "a_question_id": "78092816",
+      "b_question_id": "78102512",
+      "a_observation_key": "stack-exchange|stackoverflow|78092816",
+      "b_observation_key": "stack-exchange|stackoverflow|78102512",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SAME_STACK_DIFFERENT_CONCERN",
+      "rationale": "A concerns a postgres init script (docker-entrypoint-initdb.d) not creating the expected table despite volumes and container starting fine. B concerns mounting two separate docker volumes to the same target path causing a 'Duplicate mount point' daemon error. These are different subsystems (DB init script execution vs. volume mount configuration) and different actionable fixes; knowing one fix would not inform the other.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "the table is non existent... when I try to connect to the container via dbeaver or pycharm"
+        },
+        {
+          "side": "B",
+          "fragment": "docker: Error response from daemon: Duplicate mount point: /rootdir1."
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "dev-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 5142,
+        "output_tokens": 348,
+        "cost_units": 0.013764000000000002,
+        "priced": true,
+        "latency_ms": 5204.8165000160225
+      }
+    },
+    {
+      "pair_id": "78093369::78105004",
+      "a_question_id": "78093369",
+      "b_question_id": "78105004",
+      "a_observation_key": "stack-exchange|stackoverflow|78093369",
+      "b_observation_key": "stack-exchange|stackoverflow|78105004",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SHARED_GENERIC_ERROR_ONLY",
+      "rationale": "Both fail during a Docker build with a generic 'did not complete successfully: exit code' message, but the actual failures are unrelated: A fails installing a Python package (psycopg) due to missing build dependencies, while B fails due to a QEMU segfault when configuring libc-bin under emulated arm64 architecture during apt-get install. The fixes address entirely different components (Python package build deps vs. cross-architecture emulation/package manager issue).",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "pip install -r ./requirements/local.txt\" did not complete successfully: exit code: 1"
+        },
+        {
+          "side": "A",
+          "fragment": "What dependencies do I need to add to my dockerfile for psycopg to install?"
+        },
+        {
+          "side": "B",
+          "fragment": "qemu: uncaught target signal 11 (Segmentation fault) - core dumped"
+        },
+        {
+          "side": "B",
+          "fragment": "dpkg: error processing package libc-bin (--configure)"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "dev-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 6002,
+        "output_tokens": 438,
+        "cost_units": 0.016384,
+        "priced": true,
+        "latency_ms": 5988.1927000242285
+      }
+    },
+    {
+      "pair_id": "78095654::78102512",
+      "a_question_id": "78095654",
+      "b_question_id": "78102512",
+      "a_observation_key": "stack-exchange|stackoverflow|78095654",
+      "b_observation_key": "stack-exchange|stackoverflow|78102512",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SAME_STACK_DIFFERENT_CONCERN",
+      "rationale": "Question A is about sharing a build artifact (DLL) across multiple Dockerfiles/images to avoid redundant builds, a build-time concern. Question B is about mounting multiple distinct volumes onto the same target path in a running container, a runtime volume-mount configuration concern. These involve entirely different components (build process vs. volume mounting) and no fix for one addresses the other.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "Is there a way to build it once and share it among the Dockerfiles?"
+        },
+        {
+          "side": "B",
+          "fragment": "Duplicate mount point: /rootdir1."
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "dev-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 4134,
+        "output_tokens": 324,
+        "cost_units": 0.011508000000000001,
+        "priced": true,
+        "latency_ms": 3703.5437000449747
+      }
+    },
+    {
+      "pair_id": "78095654::78103425",
+      "a_question_id": "78095654",
+      "b_question_id": "78103425",
+      "a_observation_key": "stack-exchange|stackoverflow|78095654",
+      "b_observation_key": "stack-exchange|stackoverflow|78103425",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SAME_STACK_DIFFERENT_CONCERN",
+      "rationale": "A concerns sharing a compiled build artifact (DLL) across multiple Dockerfiles to avoid duplicate builds, a build/Dockerfile structuring concern. B concerns using a single connection string that works both locally and inside Docker, a networking/configuration concern for database access. These target different components and no fix for one addresses the other.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "build it once and share it among the Dockerfiles"
+        },
+        {
+          "side": "B",
+          "fragment": "Is it possible to have an API with the same connectionstring for running locally and in Docker?"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "dev-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 4163,
+        "output_tokens": 314,
+        "cost_units": 0.011466,
+        "priced": true,
+        "latency_ms": 4716.092700022273
+      }
+    },
+    {
+      "pair_id": "78096175::78097071",
+      "a_question_id": "78096175",
+      "b_question_id": "78097071",
+      "a_observation_key": "stack-exchange|stackoverflow|78096175",
+      "b_observation_key": "stack-exchange|stackoverflow|78097071",
+      "decision": "ABSTAIN",
+      "reason_code": "INSUFFICIENT_DETAIL",
+      "rationale": "This matches the ABSTENTION worked example exactly (same question IDs). B describes no actual failure/error, just a request for setup guidance on running install scripts from an npm package during docker-compose build; there is no established failure concept to compare against A's volume-persistence issue.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "after I go docker-compose down and I run the containers I have to migrate again"
+        },
+        {
+          "side": "B",
+          "fragment": "I'm not sure how to go about doing this since the database/prisma are all being managed by an npm package"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "dev-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 5395,
+        "output_tokens": 289,
+        "cost_units": 0.01368,
+        "priced": true,
+        "latency_ms": 4506.475599948317
+      }
+    },
+    {
+      "pair_id": "78096355::78097579",
+      "a_question_id": "78096355",
+      "b_question_id": "78097579",
+      "a_observation_key": "stack-exchange|stackoverflow|78096355",
+      "b_observation_key": "stack-exchange|stackoverflow|78097579",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SAME_STACK_DIFFERENT_CONCERN",
+      "rationale": "A concerns scheduled/CommandLineRunner logs not appearing in Docker console output, a logging/output visibility issue. B concerns the app running fine (logs show startup) but the exposed port not being reachable via curl, a networking/port-binding issue. These are different subsystems (logging output vs network port exposure) and a fix for one would not inform the other.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "it works fine with my eclipseIDE and showing in console that required output, but not work well with docker."
+        },
+        {
+          "side": "A",
+          "fragment": "not only for scheduled tasks, its not working for commandLineRunner functions as well."
+        },
+        {
+          "side": "B",
+          "fragment": "curl: (7) Failed to connect to 127.0.0.1 port 8090 after 0 ms: Connection refused"
+        },
+        {
+          "side": "B",
+          "fragment": "Tomcat started on port 8090 (http) with context path ''"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "dev-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 6075,
+        "output_tokens": 421,
+        "cost_units": 0.01636,
+        "priced": true,
+        "latency_ms": 5470.920199993998
+      }
+    },
+    {
+      "pair_id": "78099519::78099680",
+      "a_question_id": "78099519",
+      "b_question_id": "78099680",
+      "a_observation_key": "stack-exchange|stackoverflow|78099519",
+      "b_observation_key": "stack-exchange|stackoverflow|78099680",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SHARED_WRAPPER_DIVERGENT_TERMINAL_CAUSE",
+      "rationale": "Both share the identical OCI runtime create failed / runc create failed wrapper diagnostic, but the terminal causes differ: A's executable is missing because the pipenv venv path referenced (/app/.venv/bin/pipenv) doesn't exist due to a bind-mount overwriting /app after build, while B's failure is that 'gunicorn' was never installed into the runtime-stage virtualenv (installed only in the builder stage) so it's absent from PATH. Fixing one (mount/path mismatch) does not address the other (missing dependency in copied venv).",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "exec: \"/app/.venv/bin/pipenv\": stat /app/.venv/bin/pipenv: no such file or directory: unknown"
+        },
+        {
+          "side": "B",
+          "fragment": "exec: \"gunicorn\": executable file not found in $PATH: unknown"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "dev-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 6504,
+        "output_tokens": 433,
+        "cost_units": 0.017338,
+        "priced": true,
+        "latency_ms": 5490.907700033858
+      }
+    }
+  ]
+}

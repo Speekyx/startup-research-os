@@ -1,6 +1,22 @@
 # Semantic Problem Equivalence V1 — architecture, and the gate it did not pass
 
-**Authoritative for the DESIGN. Nothing here is built.** Mission 1.22 §48.
+**Authoritative for the DESIGN.** Mission 1.22 §48.
+
+> **BUILT IN MISSION 1.24, and the design held.** Everything below was
+> implemented in `packages/semantic-equivalence` without a structural change:
+> deterministic bounded candidate generation, a versioned rubric with mandatory
+> ABSTAIN, untrusted question text structurally separated, a classifier with no
+> tools, uncalibrated confidence semantics, pairwise-only Signals, provenance
+> outliving the configuration. What changed is one placement decision the design
+> did not anticipate: `validate_signals.py` forbids a Gateway import anywhere in
+> `sros_nlp`, so the classifier lives in its own package rather than in the
+> signal layer, and the guard was left alone.
+>
+> **The evaluation did not pass in substance.** See
+> `problem-equivalence-evaluation-v1.md`: 40 real labelled pairs, zero false
+> SAME, and **zero SAME of any kind**, over a holdout containing no SAME label to
+> test against. No production inference, no Signal, no INFERRED Claim, no
+> Evidence.
 
 > **No inference was performed and no model was called.** Two independent gates
 > refused before any question text could be sent anywhere: the governance one
@@ -38,6 +54,11 @@ could not group would contradict neither.
 ---
 
 ## 2. Gate one — the governance question, and the vocabulary it has no word for
+
+> **CLOSED by Mission 1.23** (ADR-033). `external_model_transmission` exists on a
+> source review, `external_model_egress` exists on a use profile, and Stack
+> Exchange's local review v2 answers the first. The section below is kept as the
+> record of what was missing and why.
 
 **The Stack Exchange local review permits model inference AS AN ACTIVITY and is
 silent on third-party transmission** — and the silence is structural rather than
@@ -87,6 +108,11 @@ field that can carry the answer. Both belong to a governance mission.
 ---
 
 ## 3. Gate two — no inference route exists to prefer
+
+> **CLOSED by operator configuration in Mission 1.24.** The STRONG_MODEL tier is
+> bound to the approved provider with a named model and a present credential, and
+> `sros-inference readiness` reports all ten gates passing. The env block below
+> shows the state as Mission 1.22 found it.
 
 Independent of governance, and it fails on its own:
 

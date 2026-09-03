@@ -2606,3 +2606,79 @@ it is the precondition that made bumping a pinned compliance version honest, and
 it fails the day a review edits a condition the configuration verifies. **Assert
 the precondition of a judgement call, not just its outcome** — the outcome is
 what someone will edit to make a build pass.
+
+## 63. A predeclared criterion is only as good as the split it is checked on (Mission 1.24)
+
+Mission 1.24 wrote its acceptance criterion before any label existed, which is
+the right discipline, and the criterion still failed to measure the thing it was
+written to measure.
+
+It required **zero false SAME on the holdout**, at least 12 labelled holdout
+pairs, and **at least one SAME anywhere in the reference set**. Every clause was
+satisfied. The scored outcome was a pass.
+
+**The last clause was the defect.** The single SAME label fell in DEVELOPMENT and
+the holdout contained none, so on the holdout a classifier hard-coded to answer
+`DIFFERENT_PROBLEM` would have recorded the same zero. The criterion measured
+false-positive avoidance on a split where a false positive was structurally
+impossible to distinguish from correct caution.
+
+**The general rule: a criterion about errors of one kind needs the split it is
+scored on to contain examples that can produce that kind of error.** A precision
+bar checked on a split with no positives is a bar checked on nothing. This is the
+same shape as §61's warning about a tool one default away from making a decision:
+the artifact was present and reviewable, and its content was wrong in a way only
+running it could reveal.
+
+### What was done about it, and what was deliberately not
+
+A **V2 criterion** moves the positive requirement to the split being scored, and
+scores the identical run and data as `EVALUATION_INSUFFICIENT`.
+
+**V1 was kept, and the mission's result stays scored under V1.** This is the part
+worth arguing about, because the temptation runs the other way: V2 makes the
+project look more rigorous, so retro-scoring under it is flattering. It is still
+wrong. A criterion rewritten after seeing the outcome was never binding, and the
+direction of the rewrite does not change that -- a rule loosened after a failure
+and a rule tightened after a pass are the same defect. The honest record is the
+rule as it stood, the result it produced, and a separate statement of why that
+result establishes less than it appears to.
+
+**A test pins the failure mode itself**, not just the two criteria: a
+constant-`DIFFERENT` classifier is scored under both, passes V1 and is refused by
+V2. That is the property, and it survives a future edit to either statement.
+
+## 64. Run the gate the way CI runs it, not the way your machine runs it (Mission 1.24)
+
+Mission 1.24 added a test module to `services/research-orchestrator/python/tests`
+and imported `pytest`. Every local gate passed, including
+`run_python_tests.py`, because pytest is installed in the development
+environment. CI failed on the first push.
+
+That package belongs to the **zero-dependency suite**. `run_python_tests.py`
+runs it under stdlib `unittest` with nothing installed, for the reason ADR-009
+gives: a check that cannot run is a check that gets skipped. An `import pytest`
+in one of its modules is invisible locally and fatal in CI.
+
+**This is the second time this class of failure has landed.** Mission 1.19
+imported `urllib.parse.quote` outside `collection/transport.py`; the CI guard is
+an inline `grep` in the workflow file, not a validator, so no local command ran
+it. Both were repaired the same way -- move the code, never narrow the guard --
+and both had the same root cause: *the gate was run, but not under the conditions
+CI uses.*
+
+**The rule: a green local run is evidence only if the environment matches.** For
+this repository that means two things a developer machine hides:
+
+- **Which suite a package belongs to decides what may be imported.** The
+  zero-dependency list is in `run_python_tests.py`. A package there is
+  unittest-only; use `subTest` where you reach for `parametrize`, and
+  `assertRaises` where you reach for `pytest.raises`. A package only in
+  `run_pytest_suites.py` may use pytest freely.
+- **Some CI steps have no local command at all.** The two inline `grep` guards
+  in the workflow are the standing example. Read the workflow before believing a
+  local run is complete.
+
+The cheapest reliable check is to run the zero-dependency suite in an
+interpreter that genuinely lacks pytest, rather than trusting that the runner's
+name implies the condition it describes.

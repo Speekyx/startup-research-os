@@ -19,6 +19,7 @@ members = [
     "sros-llm-gateway",
     "sros-nlp",
     "sros-orchestrator",
+    "sros-semantic-equivalence",
     "sros-signal-model",
     "sros-workers",
     "startup-research-os",
@@ -1703,6 +1704,21 @@ requires-dist = [
     { name = "sros-contracts", editable = "packages/contracts/python" },
     { name = "sros-llm-gateway", editable = "packages/llm-gateway/python" },
     { name = "sros-workers", editable = "services/workers/python" },
+]
+
+[[package]]
+name = "sros-semantic-equivalence"
+version = "0.1.0"
+source = { editable = "packages/semantic-equivalence/python" }
+dependencies = [
+    { name = "sros-contracts" },
+    { name = "sros-llm-gateway" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "sros-contracts", editable = "packages/contracts/python" },
+    { name = "sros-llm-gateway", editable = "packages/llm-gateway/python" },
 ]
 
 [[package]]

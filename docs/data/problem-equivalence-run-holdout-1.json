@@ -1,0 +1,763 @@
+{
+  "run_id": "holdout-1",
+  "split": "HOLDOUT",
+  "rubric_version": "problem-equivalence-rubric@1.0.0",
+  "prompt_version": "1.0.0",
+  "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+  "pairs": 17,
+  "input_tokens": 94016,
+  "output_tokens": 7034,
+  "cost_units": 0.258372,
+  "cost_units_are_priced": true,
+  "wall_clock_seconds": 90.9,
+  "classifications": [
+    {
+      "pair_id": "78086323::78089075",
+      "a_question_id": "78086323",
+      "b_question_id": "78089075",
+      "a_observation_key": "stack-exchange|stackoverflow|78086323",
+      "b_observation_key": "stack-exchange|stackoverflow|78089075",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SAME_STACK_DIFFERENT_CONCERN",
+      "rationale": "Both involve --network host in Docker, but A is about an outbound request to an external API (api.telegram.org) timing out from inside the container, likely due to network stack/DNS/routing quirks with host networking on Ubuntu, while B is about connecting to a service running inside the same container's host-networked port from the host machine itself, with an ECONNREFUSED on localhost. The fix for A (outbound connectivity to an external HTTPS endpoint) would not inform a fix for B (inbound/local port binding and address resolution issues on IPv6 ::1 vs IPv4). These are different subsystems: outbound client requests vs. local server port exposure.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "FetchError: request to https://api.telegram.org/bot... failed, reason:"
+        },
+        {
+          "side": "A",
+          "fragment": "errno: 'ETIMEDOUT', code: 'ETIMEDOUT'"
+        },
+        {
+          "side": "B",
+          "fragment": "Error: connect ECONNREFUSED ::1:9000"
+        },
+        {
+          "side": "B",
+          "fragment": "I am using host network in docker, so I should be able to connect this interface from my browser."
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "holdout-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 5914,
+        "output_tokens": 501,
+        "cost_units": 0.016838,
+        "priced": true,
+        "latency_ms": 6721.192199969664
+      }
+    },
+    {
+      "pair_id": "78086387::78097071",
+      "a_question_id": "78086387",
+      "b_question_id": "78097071",
+      "a_observation_key": "stack-exchange|stackoverflow|78086387",
+      "b_observation_key": "stack-exchange|stackoverflow|78097071",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SAME_STACK_DIFFERENT_CONCERN",
+      "rationale": "A describes a single-container Dockerfile where Django tries to connect to Postgres at build time via 'localhost' before the postgres service is running, causing a clear connection-refused error during RUN. B describes a compose setup where an npm package manages Prisma schema/migrations, and the asker doesn't know how to trigger the db table creation during compose build/run -- no connection error or specific misconfiguration is shown. The fix for A (service ordering/host resolution at build time) does not address B's actual question of orchestrating an npm package's install scripts against postgres.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "connection to server at \"localhost\" (127.0.0.1), port 5432 failed: Connection refused"
+        },
+        {
+          "side": "A",
+          "fragment": "RUN python manage.py makemigrations &amp;&amp; python manage.py migrate #Error"
+        },
+        {
+          "side": "B",
+          "fragment": "I'm not sure how to go about doing this since the database/prisma are all being managed by an npm package, and not directly"
+        },
+        {
+          "side": "B",
+          "fragment": "it errors out when I build the project"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "holdout-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 6919,
+        "output_tokens": 480,
+        "cost_units": 0.018638,
+        "priced": true,
+        "latency_ms": 6127.059299964458
+      }
+    },
+    {
+      "pair_id": "78088481::78089563",
+      "a_question_id": "78088481",
+      "b_question_id": "78089563",
+      "a_observation_key": "stack-exchange|stackoverflow|78088481",
+      "b_observation_key": "stack-exchange|stackoverflow|78089563",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SAME_STACK_DIFFERENT_CONCERN",
+      "rationale": "A is about a Node.js app failing to connect to MongoDB in a Docker Compose network (ECONNREFUSED to mongo container), a networking/connection-string misconfiguration. B is about a Spark executor container failing with a Kerberos/user-identity NullPointerException due to missing username in the container's user context. These involve entirely different components (Mongo connectivity vs. Spark/Kerberos user resolution) and different fixes.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "MongooseServerSelectionError: connect ECONNREFUSED 172.28.0.2:27017"
+        },
+        {
+          "side": "B",
+          "fragment": "Exception in thread \"main\" org.apache.hadoop.security.KerberosAuthException: failure to login: javax.security.auth.login.LoginException: java.lang.NullPointerException: invalid null input: name"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "holdout-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 6187,
+        "output_tokens": 411,
+        "cost_units": 0.016484000000000002,
+        "priced": true,
+        "latency_ms": 5244.165699987207
+      }
+    },
+    {
+      "pair_id": "78088481::78096903",
+      "a_question_id": "78088481",
+      "b_question_id": "78096903",
+      "a_observation_key": "stack-exchange|stackoverflow|78088481",
+      "b_observation_key": "stack-exchange|stackoverflow|78096903",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SAME_STACK_DIFFERENT_CONCERN",
+      "rationale": "A is about a Node.js app failing to connect to MongoDB in a compose network, with connection refused at the mongo container's IP - a service connectivity/config issue. B is about docker-compose/stack not substituting environment variables as map keys under the top-level networks section, a YAML/env-var interpolation limitation unrelated to connectivity. No shared actionable concept: the fix for one (network addressing/auth for mongo connection) has nothing to teach about environment variable substitution in compose YAML keys.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "MongooseServerSelectionError: connect ECONNREFUSED 172.28.0.2:27017"
+        },
+        {
+          "side": "A",
+          "fragment": "const url = 'mongodb://mongo:pass@mongo:27017'"
+        },
+        {
+          "side": "B",
+          "fragment": "docker stack config shows that the generated config does nothing with ${network} key, it leaves as it is."
+        },
+        {
+          "side": "B",
+          "fragment": "networks:\n  ${network}:\n    driver: overlay\n    attachable: true"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "holdout-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 4936,
+        "output_tokens": 470,
+        "cost_units": 0.014572000000000002,
+        "priced": true,
+        "latency_ms": 5548.133300035261
+      }
+    },
+    {
+      "pair_id": "78088692::78098380",
+      "a_question_id": "78088692",
+      "b_question_id": "78098380",
+      "a_observation_key": "stack-exchange|stackoverflow|78088692",
+      "b_observation_key": "stack-exchange|stackoverflow|78098380",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SAME_STACK_DIFFERENT_CONCERN",
+      "rationale": "A is about a shell/login-context discrepancy: env_file variables show up in some exec sessions but not others depending on shell/profile activation, at container runtime. B is about env_file variables not being available during the Dockerfile build step (docker compose build), wanting them accessible both at build time and runtime. These concern different subsystems (runtime shell environment propagation vs. build-time ARG/ENV injection) and different fixes (login shell vs profile config vs. Dockerfile ARG/ENV wiring), so a fix for one wouldn't resolve the other.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "When I trigger this command from a terminal session without acitvated environment I get nothing."
+        },
+        {
+          "side": "B",
+          "fragment": "it does not work with env_file option as it only passes the env variables to the containers. The env variables are not available during the build"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "holdout-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 5547,
+        "output_tokens": 402,
+        "cost_units": 0.015113999999999999,
+        "priced": true,
+        "latency_ms": 5457.599300018046
+      }
+    },
+    {
+      "pair_id": "78089113::78090158",
+      "a_question_id": "78089113",
+      "b_question_id": "78090158",
+      "a_observation_key": "stack-exchange|stackoverflow|78089113",
+      "b_observation_key": "stack-exchange|stackoverflow|78090158",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "INSUFFICIENT_DETAIL",
+      "rationale": "A describes building a multi-stage Dockerfile for a customized Grafana fork, with a truncated body that doesn't clearly state a specific failure symptom before cutoff. B asks how to persist downloaded model files into a new image so they aren't re-downloaded at runtime, an image-layering/commit question. These concern entirely different components and goals (Grafana build pipeline vs. persisting downloaded model artifacts), with no shared actionable failure concept established.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "We have fork from the Grafana source and make changes mainly the UI. Now, I want to create docker image and faced issue."
+        },
+        {
+          "side": "B",
+          "fragment": "I want to create a new image from builded and stored models in. How can I do it?"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "holdout-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 6166,
+        "output_tokens": 366,
+        "cost_units": 0.015992,
+        "priced": true,
+        "latency_ms": 5178.775799984578
+      }
+    },
+    {
+      "pair_id": "78089113::78095654",
+      "a_question_id": "78089113",
+      "b_question_id": "78095654",
+      "a_observation_key": "stack-exchange|stackoverflow|78089113",
+      "b_observation_key": "stack-exchange|stackoverflow|78095654",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "INSUFFICIENT_DETAIL",
+      "rationale": "Question A concerns a multi-stage Grafana Dockerfile build failing at some point in a long custom build process, while Question B is a conceptual question about sharing a single build artifact (a DLL) across multiple Dockerfiles/images for .NET projects. These are entirely different technical concerns: A is about troubleshooting a specific build failure, B is about build architecture/artifact sharing strategy, not a failure at all.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "We have fork from the Grafana source and make changes mainly the UI. Now, I want to create docker image and faced issue."
+        },
+        {
+          "side": "B",
+          "fragment": "I have two .NET projects which depend on the same DLL. Currently, this DLL is building for each of the projects. Is there a way to build it once and share it among the Dockerfiles?"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "holdout-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 6006,
+        "output_tokens": 388,
+        "cost_units": 0.015892,
+        "priced": true,
+        "latency_ms": 5487.422400037758
+      }
+    },
+    {
+      "pair_id": "78090158::78093369",
+      "a_question_id": "78090158",
+      "b_question_id": "78093369",
+      "a_observation_key": "stack-exchange|stackoverflow|78090158",
+      "b_observation_key": "stack-exchange|stackoverflow|78093369",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SAME_STACK_DIFFERENT_CONCERN",
+      "rationale": "A is about persisting downloaded model artifacts into a new image layer so they aren't re-downloaded at runtime -- a build-time caching/layering concept. B is about a pip install failure for psycopg due to missing build dependencies in an Alpine image -- a package/dependency resolution concept. Both are Dockerfile issues but address entirely different subsystems and fixes.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "I want to create a new image from builded and stored models in. How can I do it?"
+        },
+        {
+          "side": "B",
+          "fragment": "did not complete successfully: exit code: 1"
+        },
+        {
+          "side": "B",
+          "fragment": "What dependencies do I need to add to my dockerfile for psycopg to install?"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "holdout-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 4350,
+        "output_tokens": 359,
+        "cost_units": 0.012289999999999999,
+        "priced": true,
+        "latency_ms": 4837.79019996291
+      }
+    },
+    {
+      "pair_id": "78090939::78097579",
+      "a_question_id": "78090939",
+      "b_question_id": "78097579",
+      "a_observation_key": "stack-exchange|stackoverflow|78090939",
+      "b_observation_key": "stack-exchange|stackoverflow|78097579",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SAME_STACK_DIFFERENT_CONCERN",
+      "rationale": "A concerns a corrupt/invalid jar file at deploy time (likely due to a malformed Dockerfile COPY path and incomplete ENTRYPOINT, causing 'Invalid or corrupt jarfile'), while B concerns a running Spring Boot app whose port cannot be reached from outside despite starting successfully, pointing to a port mapping/publish issue in `docker run`. These are different subsystems: build/packaging integrity vs. network port exposure at runtime. A fix for one (fixing jar packaging or Dockerfile syntax) would not address the other (adding -p flag or port binding).",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "Error: Invalid or corrupt jarfile agilstratApi.jar"
+        },
+        {
+          "side": "A",
+          "fragment": "COPY /out/artifacts/agilstratApi_jar agilstratApi.jar"
+        },
+        {
+          "side": "B",
+          "fragment": "curl: (7) Failed to connect to 127.0.0.1 port 8090 after 0 ms: Connection refused"
+        },
+        {
+          "side": "B",
+          "fragment": "I run the container via docker run -it javaproj."
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "holdout-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 6313,
+        "output_tokens": 499,
+        "cost_units": 0.017616,
+        "priced": true,
+        "latency_ms": 5490.092199994251
+      }
+    },
+    {
+      "pair_id": "78091032::78102512",
+      "a_question_id": "78091032",
+      "b_question_id": "78102512",
+      "a_observation_key": "stack-exchange|stackoverflow|78091032",
+      "b_observation_key": "stack-exchange|stackoverflow|78102512",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "INSUFFICIENT_DETAIL",
+      "rationale": "Question A is a broad how-to request about setting up a Docker Compose environment for a C program with live-reload, establishing no specific failure at all. Question B describes a concrete, specific error: mounting two different volumes to the same target path produces a 'Duplicate mount point' error. These do not share any actionable failure concept -- A has none to compare.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "How can I make a docker compose and how to run it. And still with live-reload?"
+        },
+        {
+          "side": "B",
+          "fragment": "docker: Error response from daemon: Duplicate mount point: /rootdir1."
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "holdout-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 4421,
+        "output_tokens": 316,
+        "cost_units": 0.012002,
+        "priced": true,
+        "latency_ms": 3921.75270000007
+      }
+    },
+    {
+      "pair_id": "78091354::78092816",
+      "a_question_id": "78091354",
+      "b_question_id": "78092816",
+      "a_observation_key": "stack-exchange|stackoverflow|78091354",
+      "b_observation_key": "stack-exchange|stackoverflow|78092816",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SAME_STACK_DIFFERENT_CONCERN",
+      "rationale": "A is about a Node/Nest.js Docker multi-stage build failing because the Nest CLI binary is missing from PATH in the production stage (a devDependency/PATH issue in a Node build). B is about a Postgres docker-compose setup where the init SQL script does not appear to create the expected table, likely due to init-scripts only running on first volume creation or case-sensitivity in the SQL. These involve completely different tools, subsystems, and fixes -- one is a Node build tooling issue, the other is a Postgres initialization/data-persistence issue. No shared actionable failure concept exists between them.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "sh: 1: nest: not found"
+        },
+        {
+          "side": "A",
+          "fragment": "How can I ensure that the Nest.js CLI is available in the PATH during the production build"
+        },
+        {
+          "side": "B",
+          "fragment": "the table is nowhere to be found"
+        },
+        {
+          "side": "B",
+          "fragment": "volumes:\n      - ./init-schema.sql:/docker-entrypoint-initdb.d/init-db-01.sql"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "holdout-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 5794,
+        "output_tokens": 476,
+        "cost_units": 0.016347999999999998,
+        "priced": true,
+        "latency_ms": 5267.23930001026
+      }
+    },
+    {
+      "pair_id": "78091723::78097184",
+      "a_question_id": "78091723",
+      "b_question_id": "78097184",
+      "a_observation_key": "stack-exchange|stackoverflow|78091723",
+      "b_observation_key": "stack-exchange|stackoverflow|78097184",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SAME_STACK_DIFFERENT_CONCERN",
+      "rationale": "A is about docker buildx rejecting a tag string because shell command substitution isn't evaluated inside the GitHub Actions tag field, causing an invalid reference format. B is about GitHub Actions env vars not propagating through an SSH deploy step into a docker-compose environment section. Both involve GitHub Actions and Docker, but the concepts and components to fix (tag string construction vs. env variable propagation into compose) are unrelated.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "ERROR: invalid tag \"***/image-micro-service:$(date +'%Y-%m-%d%H-%M-%S')\": invalid reference format"
+        },
+        {
+          "side": "B",
+          "fragment": "But 'variables' are not.\\nI read doc (they tell that I will have access through env)."
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "holdout-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 5097,
+        "output_tokens": 386,
+        "cost_units": 0.014054000000000002,
+        "priced": true,
+        "latency_ms": 5306.302000011783
+      }
+    },
+    {
+      "pair_id": "78095654::78098380",
+      "a_question_id": "78095654",
+      "b_question_id": "78098380",
+      "a_observation_key": "stack-exchange|stackoverflow|78095654",
+      "b_observation_key": "stack-exchange|stackoverflow|78098380",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SAME_STACK_DIFFERENT_CONCERN",
+      "rationale": "A is about sharing a compiled build artifact (DLL) across multiple Dockerfiles/images to avoid redundant builds. B is about propagating env variables from a single .env file into both the Dockerfile build stage and the running container. These concern different subsystems (build artifact sharing vs. environment variable propagation) and a fix for one would not inform the other.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "Is there a way to build it once and share it among the Dockerfiles?"
+        },
+        {
+          "side": "B",
+          "fragment": "I'd like to have all variables from oneSourceOfTruth.env available in the Dockerfile during the build step ... as well as in the container during runtime"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "holdout-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 5351,
+        "output_tokens": 347,
+        "cost_units": 0.014172,
+        "priced": true,
+        "latency_ms": 4292.453499976546
+      }
+    },
+    {
+      "pair_id": "78096355::78103879",
+      "a_question_id": "78096355",
+      "b_question_id": "78103879",
+      "a_observation_key": "stack-exchange|stackoverflow|78096355",
+      "b_observation_key": "stack-exchange|stackoverflow|78103879",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SAME_STACK_DIFFERENT_CONCERN",
+      "rationale": "A is about scheduled/CommandLineRunner log output not appearing in Docker console, a logging/output visibility issue. B is about SQL Server Integrated Security/Kerberos authentication failing inside a container due to lack of a ticket. Both are Spring Boot in Docker, but the subsystems (logging output vs. authentication/JDBC security) and the fixes involved are entirely unrelated.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "schedule logs not showing in docker"
+        },
+        {
+          "side": "A",
+          "fragment": "not work well with docker"
+        },
+        {
+          "side": "B",
+          "fragment": "there is no Kerberos Ticket available to work with"
+        },
+        {
+          "side": "B",
+          "fragment": "switch to a username/password combo"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "holdout-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 4212,
+        "output_tokens": 365,
+        "cost_units": 0.012074,
+        "priced": true,
+        "latency_ms": 5876.683500013314
+      }
+    },
+    {
+      "pair_id": "78097216::78103879",
+      "a_question_id": "78097216",
+      "b_question_id": "78103879",
+      "a_observation_key": "stack-exchange|stackoverflow|78097216",
+      "b_observation_key": "stack-exchange|stackoverflow|78103879",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SAME_STACK_DIFFERENT_CONCERN",
+      "rationale": "A is about a multi-stage Docker build producing a WAR that fails to deploy correctly in Tomcat (404 errors), pointing to a build/artifact packaging issue. B is about Spring Boot's JDBC connection to SQL Server failing due to lack of Kerberos ticket for Integrated Security inside a container, an authentication/connectivity concern. Both use Java and Docker but address entirely different subsystems: build pipeline vs. database authentication.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "I was expecting to receive a success response in postman when I was sending a valid POST request to the tomcat server running in the docker container. But in place I was receiving a 404 Error."
+        },
+        {
+          "side": "A",
+          "fragment": "multi-staged build process of docker"
+        },
+        {
+          "side": "B",
+          "fragment": "there is no Kerberos Ticket available to work with"
+        },
+        {
+          "side": "B",
+          "fragment": "Is it even possible to add the JDBC Auth lib to the container and use it?"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "holdout-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 5173,
+        "output_tokens": 447,
+        "cost_units": 0.014816000000000001,
+        "priced": true,
+        "latency_ms": 5597.671700001229
+      }
+    },
+    {
+      "pair_id": "78097579::78103879",
+      "a_question_id": "78097579",
+      "b_question_id": "78103879",
+      "a_observation_key": "stack-exchange|stackoverflow|78097579",
+      "b_observation_key": "stack-exchange|stackoverflow|78103879",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SAME_STACK_DIFFERENT_CONCERN",
+      "rationale": "A is about a Spring Boot app not exposing/binding its port correctly in Docker, causing connection refused on curl - a networking/port-publishing misconfiguration. B is about SQL Server Integrated Security (Kerberos) authentication not working from inside a container, an authentication/credentials concern. Both share Java/Spring Boot/Docker tags but address entirely different subsystems (network port exposure vs. database authentication), so a fix for one gives no guidance for the other.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "curl: (7) Failed to connect to 127.0.0.1 port 8090 after 0 ms: Connection refused"
+        },
+        {
+          "side": "A",
+          "fragment": "EXPOSE 8090"
+        },
+        {
+          "side": "B",
+          "fragment": "there is no Kerberos Ticket available to work with"
+        },
+        {
+          "side": "B",
+          "fragment": "Is it even possible to add the JDBC Auth lib to the container and use it?"
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "holdout-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 5937,
+        "output_tokens": 436,
+        "cost_units": 0.016234000000000002,
+        "priced": true,
+        "latency_ms": 5290.203700016718
+      }
+    },
+    {
+      "pair_id": "78098380::78102512",
+      "a_question_id": "78098380",
+      "b_question_id": "78102512",
+      "a_observation_key": "stack-exchange|stackoverflow|78098380",
+      "b_observation_key": "stack-exchange|stackoverflow|78102512",
+      "decision": "DIFFERENT_PROBLEM",
+      "reason_code": "SAME_STACK_DIFFERENT_CONCERN",
+      "rationale": "Question A concerns making env_file variables available at build-time (ARG/ENV) versus run-time in a Dockerfile/compose setup, a build-arg propagation issue. Question B concerns a 'Duplicate mount point' error when trying to mount two separate volumes to the same target path in a single container, a volume-mount configuration issue. These are unrelated subsystems (build-time env vars vs volume mounting) and no shared fix would address both.",
+      "evidence": [
+        {
+          "side": "A",
+          "fragment": "I'd like to have all variables from oneSourceOfTruth.env available in the Dockerfile during the build step via docker compose build as well as in the container during runtime"
+        },
+        {
+          "side": "B",
+          "fragment": "docker: Error response from daemon: Duplicate mount point: /rootdir1."
+        }
+      ],
+      "confidence_semantics": "UNCALIBRATED_MODEL_JUDGEMENT_NO_NUMERIC_CONFIDENCE",
+      "provenance": {
+        "rubric_version": "problem-equivalence-rubric@1.0.0",
+        "prompt_id": "semantic-problem-equivalence",
+        "prompt_version": "1.0.0",
+        "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5",
+        "routing_version": "1.0.0",
+        "inference_run_id": "holdout-1",
+        "source_id": "stack-exchange",
+        "use_profile_id": "local-private-research-v1"
+      },
+      "usage": {
+        "input_tokens": 5693,
+        "output_tokens": 385,
+        "cost_units": 0.015236,
+        "priced": true,
+        "latency_ms": 5261.2353000440635
+      }
+    }
+  ]
+}

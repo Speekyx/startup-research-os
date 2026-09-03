@@ -5,9 +5,24 @@ answered, the runtime gate is built and exercised, and the boundary is closed on
 exactly one remaining condition: no approved provider is configured. **No model
 was called. No source content left this machine. 0 model calls, 0 tokens, 0 cost.**
 
-Every research count is unchanged: **148 raw / 148 normalized / 26 Signals /
-26 Claims / 26 Revisions / 26 Evidence / 1 session / 0 Opportunities / 0
-Opportunity scores / 0 research gaps.** The catalog remains at **29 sources**.
+Every research count is unchanged, in the canonical shape earlier reports use:
+
+| | Before | After |
+|---|---|---|
+| RawRecords | 148 | **148** |
+| NormalizedRecords | 148 | **148** |
+| Signals / Claims / ClaimRevisions / Evidence | 26 / 26 / 26 / 26 | **26 / 26 / 26 / 26** |
+| ReliabilityAssessments | 1 | **1** |
+| Opportunities / Embeddings / Scores | 0 | **0** |
+| Registered sources | 29 | **29** |
+| **Model calls / tokens / cost** | — | **0 / 0 / 0** |
+
+> **Corrected in Mission 1.24 §0.B.** This summary originally read *"1 session"*
+> in the slot every earlier report gives to **ReliabilityAssessments**. Both
+> counts are genuinely 1 in the live database, so no number was wrong -- the
+> LABEL was, and a canonical count line whose rows drift is one a reader can no
+> longer compare across missions. The ResearchSession count is real and belongs
+> in provenance, not in this row.
 
 ---
 

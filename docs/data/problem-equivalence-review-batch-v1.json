@@ -1,0 +1,1304 @@
+{
+  "selection_version": "review-batch-selection@1.0.0",
+  "candidate_generator_version": "docker-lexical-candidates@1.0.0",
+  "rubric_version": "problem-equivalence-rubric@1.0.0",
+  "selection_rule": "ranks 1..20 in candidate order, then every 2rd thereafter. Declared before the batch was produced and computed from the candidate ordering alone, so no pair was chosen for what it might show",
+  "recall_limitation": "Scope: the 60 pairs surfaced by docker-lexical-candidates@1.0.0 out of 3916 possible pairs over 89 observations, capped at 60. A pair this generator did not surface is UNCONSIDERED, not different. No statement derived from this set describes all repeated problems in the corpus, and none may be worded as though it did.",
+  "development_count": 23,
+  "holdout_count": 17,
+  "items": [
+    {
+      "pair_id": "78086542::78099519",
+      "rank": 1,
+      "split": "DEVELOPMENT",
+      "a": {
+        "question_id": "78086542",
+        "title": "Docker compose/ failed to create task for container",
+        "tags": [
+          "python",
+          "docker",
+          "pycharm"
+        ],
+        "excerpt": "error: shop-backend-database | 2024-03-01 08:31:53.031 utc [1] log: database system is ready to accept connections error response from daemon: failed to create task for container: failed to create shim task: oci runtime create failed: runc "
+      },
+      "b": {
+        "question_id": "78099519",
+        "title": "Cannot run a \"docker compose up\"",
+        "tags": [
+          "docker",
+          "jupyter",
+          "pipenv"
+        ],
+        "excerpt": "error when i ran sudo docker compose up as follwoing: [+] running 1/0 ✔ container docker-webapp-1 recreated 0.1s attaching to webapp-1 error response from daemon: failed to create task for container: failed to create shim task: oci runtime "
+      },
+      "surfaced_because": [
+        "shares 2 title token(s)",
+        "shares a 106-character diagnostic fragment"
+      ],
+      "shared_diagnostic": " error response from daemon: failed to create task for container: failed to create shim task: oci runtime ",
+      "holdout_exclusion_reason": "the same shared-wrapper pattern the rubric describes and names; in-sample by description even though the ids are not quoted"
+    },
+    {
+      "pair_id": "78086542::78099680",
+      "rank": 2,
+      "split": "DEVELOPMENT",
+      "a": {
+        "question_id": "78086542",
+        "title": "Docker compose/ failed to create task for container",
+        "tags": [
+          "python",
+          "docker",
+          "pycharm"
+        ],
+        "excerpt": "error: shop-backend-database | 2024-03-01 08:31:53.031 utc [1] log: database system is ready to accept connections error response from daemon: failed to create task for container: failed to create shim task: oci runtime create failed: runc "
+      },
+      "b": {
+        "question_id": "78099680",
+        "title": "Unable to run uvicorn under gunicorn in a Docker container",
+        "tags": [
+          "docker",
+          "fastapi",
+          "gunicorn",
+          "uvicorn"
+        ],
+        "excerpt": "error: (.venv) bob /volumes/2tbwdb/code/uvitest [main] $ docker compose up -d [+] running 0/1 ⠹ container uvitest-uvitest-1 starting 0.2s error response from daemon: failed to create task for container: failed to create shim task: oci runti"
+      },
+      "surfaced_because": [
+        "shares 2 title token(s)",
+        "shares a 104-character diagnostic fragment"
+      ],
+      "shared_diagnostic": "s error response from daemon: failed to create task for container: failed to create shim task: oci runti",
+      "holdout_exclusion_reason": "quoted verbatim in the rubric's non-qualifying worked example, so the classifier is shown the answer in its own instructions"
+    },
+    {
+      "pair_id": "78099519::78099680",
+      "rank": 3,
+      "split": "DEVELOPMENT",
+      "a": {
+        "question_id": "78099519",
+        "title": "Cannot run a \"docker compose up\"",
+        "tags": [
+          "docker",
+          "jupyter",
+          "pipenv"
+        ],
+        "excerpt": "error when i ran sudo docker compose up as follwoing: [+] running 1/0 ✔ container docker-webapp-1 recreated 0.1s attaching to webapp-1 error response from daemon: failed to create task for container: failed to create shim task: oci runtime "
+      },
+      "b": {
+        "question_id": "78099680",
+        "title": "Unable to run uvicorn under gunicorn in a Docker container",
+        "tags": [
+          "docker",
+          "fastapi",
+          "gunicorn",
+          "uvicorn"
+        ],
+        "excerpt": "error: (.venv) bob /volumes/2tbwdb/code/uvitest [main] $ docker compose up -d [+] running 0/1 ⠹ container uvitest-uvitest-1 starting 0.2s error response from daemon: failed to create task for container: failed to create shim task: oci runti"
+      },
+      "surfaced_because": [
+        "shares 2 title token(s)",
+        "shares a 103-character diagnostic fragment"
+      ],
+      "shared_diagnostic": " error response from daemon: failed to create task for container: failed to create shim task: oci runti",
+      "holdout_exclusion_reason": "the same shared-wrapper pattern the rubric describes and names; in-sample by description even though the ids are not quoted"
+    },
+    {
+      "pair_id": "78093369::78105004",
+      "rank": 4,
+      "split": "DEVELOPMENT",
+      "a": {
+        "question_id": "78093369",
+        "title": "installing psycopg in alpine docker image",
+        "tags": [
+          "docker",
+          "dockerfile",
+          "psycopg2",
+          "docker-image"
+        ],
+        "excerpt": "error occurs when the image is loaded: error: failed to solve: process \"/bin/sh -c pip install -r ./requirements/local.txt\" did not complete successfully: exit code: 1 i tried to install various dependencies in my dockerfile. but always the"
+      },
+      "b": {
+        "question_id": "78105004",
+        "title": "Docker build fails because unable to install `libc-bin`",
+        "tags": [
+          "ruby-on-rails",
+          "docker",
+          "kamal"
+        ],
+        "excerpt": "error processing package libc-bin (--configure): 63.34 installed libc-bin package post-installation script subprocess returned error exit status 139 63.44 errors were encountered while processing: 63.44 libc-bin 63.54 e: sub-process /usr/bi"
+      },
+      "surfaced_because": [
+        "shares a 45-character diagnostic fragment"
+      ],
+      "shared_diagnostic": "\" did not complete successfully: exit code: 1",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78097579::78103879",
+      "rank": 5,
+      "split": "HOLDOUT",
+      "a": {
+        "question_id": "78097579",
+        "title": "Spring Boot Application doesn't expose the port in Docker",
+        "tags": [
+          "java",
+          "spring-boot",
+          "docker",
+          "port"
+        ],
+        "excerpt": "failed to connect to 127.0.0.1 port 8090 after 0 ms: connection refused i run the container via docker run -it javaproj . here's the application.properties: server.port=8090 spring.mvc.static-path-pattern=/static/** and the dockerfile: from"
+      },
+      "b": {
+        "question_id": "78103879",
+        "title": "Spring Boot App in Docker container - SQL Server Integrated Security",
+        "tags": [
+          "java",
+          "sql-server",
+          "spring",
+          "spring-boot",
+          "docker"
+        ],
+        "excerpt": "I have a Spring Boot App (RESTful Service) that runs in a Docker Container and the Database Server is outside of the Docker Cluster, it´s on a special server cluster. In dev, the app works with \"Integrated security\" without a problem (because of my account), but in a docker container, there is no Kerberos Ticket availa"
+      },
+      "surfaced_because": [
+        "shares 2 site tag(s) beyond the query tag",
+        "shares 3 title token(s)"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78088430::78090396",
+      "rank": 6,
+      "split": "DEVELOPMENT",
+      "a": {
+        "question_id": "78088430",
+        "title": "Dockerized Wordpress environment has load issues and service disruption",
+        "tags": [
+          "wordpress",
+          "docker",
+          "docker-compose"
+        ],
+        "excerpt": "exceptionally fast but still ok, but if you just open multiple tabs (~10) and hit reload the message \"error establishing a database connection” pops up, even if containers don't crash and keep running. then it just takes a few seconds to co"
+      },
+      "b": {
+        "question_id": "78090396",
+        "title": "Wordpress Web UI dosen't load in browser",
+        "tags": [
+          "wordpress",
+          "docker",
+          "docker-compose"
+        ],
+        "excerpt": "When I deploy the docker compose configuration that I wrote the Phpmyadmin starts, but my the Wordpress web UI dosen't work. version: '3.1' services: wordpress: image: wordpress:latest restart: always ports: - 8000:80 environment: WORDPRESS_DB_HOST=db: 3306 WORDPRESS_DB_USER: wordpress WORDPRESS_DB_PASSWORD: wordpress "
+      },
+      "surfaced_because": [
+        "shares 2 site tag(s) beyond the query tag",
+        "shares 2 title token(s)"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": "quoted in the rubric's borderline worked example, with its decision stated"
+    },
+    {
+      "pair_id": "78092816::78098380",
+      "rank": 7,
+      "split": "DEVELOPMENT",
+      "a": {
+        "question_id": "78092816",
+        "title": "I am using docker-compose.yml to generate a docker container and initial schemas. Everything loads fine, but the initial table is nowhere to be found",
+        "tags": [
+          "database",
+          "docker",
+          "docker-compose",
+          "dockerfile",
+          "docker-container"
+        ],
+        "excerpt": "timeout: 45s interval: 10s retries: 10 restart: always environment: - postgres_user=root - postgres_password=password - postgres_db=mydatabasename_db - app_db_user=appuser - app_db_pass=appass - app_db_name=appname volumes: - ./init-schema."
+      },
+      "b": {
+        "question_id": "78098380",
+        "title": "Make docker env variables from an `.env` file available in build step (Dockerfile) & during run-time in container",
+        "tags": [
+          "docker",
+          "docker-compose",
+          "dockerfile",
+          "environment-variables"
+        ],
+        "excerpt": "error during the precompile task since the env variables are not available in the dockerfile (where we execute the precompile task). that's exactly the problem ;)"
+      },
+      "surfaced_because": [
+        "shares 2 site tag(s) beyond the query tag",
+        "shares 2 title token(s)"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78092816::78102512",
+      "rank": 8,
+      "split": "DEVELOPMENT",
+      "a": {
+        "question_id": "78092816",
+        "title": "I am using docker-compose.yml to generate a docker container and initial schemas. Everything loads fine, but the initial table is nowhere to be found",
+        "tags": [
+          "database",
+          "docker",
+          "docker-compose",
+          "dockerfile",
+          "docker-container"
+        ],
+        "excerpt": "timeout: 45s interval: 10s retries: 10 restart: always environment: - postgres_user=root - postgres_password=password - postgres_db=mydatabasename_db - app_db_user=appuser - app_db_pass=appass - app_db_name=appname volumes: - ./init-schema."
+      },
+      "b": {
+        "question_id": "78102512",
+        "title": "docker: Error response from daemon: Duplicate mount point:: Mounting multiple docker volumes on same docker container having same target?",
+        "tags": [
+          "docker",
+          "docker-compose",
+          "dockerfile"
+        ],
+        "excerpt": "error message docker: error response from daemon: duplicate mount point: /rootdir1. i have gone through 1 . however, the problem is different. i am trying to mount multiple docker volume in same target location inside same docker container."
+      },
+      "surfaced_because": [
+        "shares 2 site tag(s) beyond the query tag",
+        "shares 2 title token(s)"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78095654::78098380",
+      "rank": 9,
+      "split": "HOLDOUT",
+      "a": {
+        "question_id": "78095654",
+        "title": "Docker single build artifact for multiple images",
+        "tags": [
+          "docker",
+          "docker-compose",
+          "dockerfile"
+        ],
+        "excerpt": "I have two .NET projects which depend on the same DLL. Currently, this DLL is building for each of the projects. Is there a way to build it once and share it among the Dockerfiles?"
+      },
+      "b": {
+        "question_id": "78098380",
+        "title": "Make docker env variables from an `.env` file available in build step (Dockerfile) & during run-time in container",
+        "tags": [
+          "docker",
+          "docker-compose",
+          "dockerfile",
+          "environment-variables"
+        ],
+        "excerpt": "error during the precompile task since the env variables are not available in the dockerfile (where we execute the precompile task). that's exactly the problem ;)"
+      },
+      "surfaced_because": [
+        "shares 2 site tag(s) beyond the query tag",
+        "shares 2 title token(s)"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78095654::78102512",
+      "rank": 10,
+      "split": "DEVELOPMENT",
+      "a": {
+        "question_id": "78095654",
+        "title": "Docker single build artifact for multiple images",
+        "tags": [
+          "docker",
+          "docker-compose",
+          "dockerfile"
+        ],
+        "excerpt": "I have two .NET projects which depend on the same DLL. Currently, this DLL is building for each of the projects. Is there a way to build it once and share it among the Dockerfiles?"
+      },
+      "b": {
+        "question_id": "78102512",
+        "title": "docker: Error response from daemon: Duplicate mount point:: Mounting multiple docker volumes on same docker container having same target?",
+        "tags": [
+          "docker",
+          "docker-compose",
+          "dockerfile"
+        ],
+        "excerpt": "error message docker: error response from daemon: duplicate mount point: /rootdir1. i have gone through 1 . however, the problem is different. i am trying to mount multiple docker volume in same target location inside same docker container."
+      },
+      "surfaced_because": [
+        "shares 2 site tag(s) beyond the query tag",
+        "shares 2 title token(s)"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78095654::78103425",
+      "rank": 11,
+      "split": "DEVELOPMENT",
+      "a": {
+        "question_id": "78095654",
+        "title": "Docker single build artifact for multiple images",
+        "tags": [
+          "docker",
+          "docker-compose",
+          "dockerfile"
+        ],
+        "excerpt": "I have two .NET projects which depend on the same DLL. Currently, this DLL is building for each of the projects. Is there a way to build it once and share it among the Dockerfiles?"
+      },
+      "b": {
+        "question_id": "78103425",
+        "title": "Using a single connectionstring for local and in docker (Database Access)",
+        "tags": [
+          "docker",
+          "docker-compose",
+          "dockerfile"
+        ],
+        "excerpt": "error detail=true\" }, docker-compose.yaml version: '3.4' services: example-api: image: ${docker_registry-}api container_name: example-api restart: always build: context: . dockerfile: src/api/dockerfile depends_on: - postgres-db postgres-db"
+      },
+      "surfaced_because": [
+        "shares 2 site tag(s) beyond the query tag",
+        "shares 2 title token(s)"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78096175::78097071",
+      "rank": 12,
+      "split": "DEVELOPMENT",
+      "a": {
+        "question_id": "78096175",
+        "title": "My postgresql database doesn't persist between docker runs",
+        "tags": [
+          "django",
+          "postgresql",
+          "docker",
+          "docker-compose"
+        ],
+        "excerpt": "I am learning docker and postgresql and I have problem with persisting data between the re-runs of the app. My docker-compose.yml: version: '3.7' services: web: build: . command: python3 /code/manage.py runserver 0.0.0.0:8000 volumes: - .:/code ports: - 8000:8000 depends_on: - db db: image: postgres:15 volumes: - postg"
+      },
+      "b": {
+        "question_id": "78097071",
+        "title": "How can I set up a database through an npm package in a Docker container?",
+        "tags": [
+          "postgresql",
+          "docker",
+          "npm",
+          "docker-compose",
+          "prisma"
+        ],
+        "excerpt": "errors out when i build the project. dockerfile (project a) arg owner from node:20-buster-slim env node_env 'development' env owner \"username\" run apt-get update && apt-get install libssl-dev ca-certificates -y # create app directory workdi"
+      },
+      "surfaced_because": [
+        "shares 2 site tag(s) beyond the query tag",
+        "shares 2 title token(s)"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": "quoted in the rubric's abstention worked example, with its decision stated"
+    },
+    {
+      "pair_id": "78096355::78097579",
+      "rank": 13,
+      "split": "DEVELOPMENT",
+      "a": {
+        "question_id": "78096355",
+        "title": "why spring boot schedule logs not showing in docker.?",
+        "tags": [
+          "java",
+          "spring-boot",
+          "docker"
+        ],
+        "excerpt": "error. not only for scheduled tasks, its not working for commandlinerunner functions as well. here is my application properties file logging.level.com.priyan.algoservice=info java 21 spring boot 3.2.3 docker version 25.0.3 is there anything"
+      },
+      "b": {
+        "question_id": "78097579",
+        "title": "Spring Boot Application doesn't expose the port in Docker",
+        "tags": [
+          "java",
+          "spring-boot",
+          "docker",
+          "port"
+        ],
+        "excerpt": "failed to connect to 127.0.0.1 port 8090 after 0 ms: connection refused i run the container via docker run -it javaproj . here's the application.properties: server.port=8090 spring.mvc.static-path-pattern=/static/** and the dockerfile: from"
+      },
+      "surfaced_because": [
+        "shares 2 site tag(s) beyond the query tag",
+        "shares 2 title token(s)"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78096355::78103879",
+      "rank": 14,
+      "split": "HOLDOUT",
+      "a": {
+        "question_id": "78096355",
+        "title": "why spring boot schedule logs not showing in docker.?",
+        "tags": [
+          "java",
+          "spring-boot",
+          "docker"
+        ],
+        "excerpt": "error. not only for scheduled tasks, its not working for commandlinerunner functions as well. here is my application properties file logging.level.com.priyan.algoservice=info java 21 spring boot 3.2.3 docker version 25.0.3 is there anything"
+      },
+      "b": {
+        "question_id": "78103879",
+        "title": "Spring Boot App in Docker container - SQL Server Integrated Security",
+        "tags": [
+          "java",
+          "sql-server",
+          "spring",
+          "spring-boot",
+          "docker"
+        ],
+        "excerpt": "I have a Spring Boot App (RESTful Service) that runs in a Docker Container and the Database Server is outside of the Docker Cluster, it´s on a special server cluster. In dev, the app works with \"Integrated security\" without a problem (because of my account), but in a docker container, there is no Kerberos Ticket availa"
+      },
+      "surfaced_because": [
+        "shares 2 site tag(s) beyond the query tag",
+        "shares 2 title token(s)"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78098380::78102512",
+      "rank": 15,
+      "split": "HOLDOUT",
+      "a": {
+        "question_id": "78098380",
+        "title": "Make docker env variables from an `.env` file available in build step (Dockerfile) & during run-time in container",
+        "tags": [
+          "docker",
+          "docker-compose",
+          "dockerfile",
+          "environment-variables"
+        ],
+        "excerpt": "error during the precompile task since the env variables are not available in the dockerfile (where we execute the precompile task). that's exactly the problem ;)"
+      },
+      "b": {
+        "question_id": "78102512",
+        "title": "docker: Error response from daemon: Duplicate mount point:: Mounting multiple docker volumes on same docker container having same target?",
+        "tags": [
+          "docker",
+          "docker-compose",
+          "dockerfile"
+        ],
+        "excerpt": "error message docker: error response from daemon: duplicate mount point: /rootdir1. i have gone through 1 . however, the problem is different. i am trying to mount multiple docker volume in same target location inside same docker container."
+      },
+      "surfaced_because": [
+        "shares 2 site tag(s) beyond the query tag",
+        "shares 2 title token(s)"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78086639::78092806",
+      "rank": 16,
+      "split": "DEVELOPMENT",
+      "a": {
+        "question_id": "78086639",
+        "title": "How to get a Windows Docker Container to auto start on login with Docker Desktop?",
+        "tags": [
+          "docker",
+          "docker-desktop"
+        ],
+        "excerpt": "Docker Desktop (on Windows) has an option to auto-start at login, which causes the Docker Desktop app to start on login. Is there a way to set a container to auto-start on login as well? For example, I am running the conduktor-console container, which provides a web interface for managing Kafka brokers. Currently, I ha"
+      },
+      "b": {
+        "question_id": "78092806",
+        "title": "Unexpected WSL Error on Docker Desktop with Hyper-V on Windows 11",
+        "tags": [
+          "docker",
+          "windows-subsystem-for-linux",
+          "hyper-v",
+          "docker-desktop",
+          "windows-11"
+        ],
+        "excerpt": "error\". the error message suggests that it might be related to access rights issues, especially after waking the computer or when it's not connected to the domain/active directory. the recommended steps include shutting down wsl using wsl -"
+      },
+      "surfaced_because": [
+        "shares 1 site tag(s) beyond the query tag",
+        "shares 3 title token(s)"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78091723::78097184",
+      "rank": 17,
+      "split": "HOLDOUT",
+      "a": {
+        "question_id": "78091723",
+        "title": "invalid reference format on building docker image on github actions",
+        "tags": [
+          "docker",
+          "github"
+        ],
+        "excerpt": "error on adding tag on my docker file /usr/bin/docker buildx build --iidfile /tmp/docker-build-push-snaljd/iidfile --tag ***/image-micro-service:$(date +'%y-%m-%d%h-%m-%s') --metadata-file /tmp/docker-build-push-snaljd/metadata-file . error"
+      },
+      "b": {
+        "question_id": "78097184",
+        "title": "Can't pass env variables from GitHub Actions to Docker container",
+        "tags": [
+          "docker",
+          "github",
+          "github-actions"
+        ],
+        "excerpt": "I'm trying to pass variables in GitHub: I have the following step in workflow: - name: SSH into VPS and deploy uses: appleboy/ssh-action@master with: host: ${{ secrets.VPSHOST }} username: ${{ secrets.USERNAME }} key: ${{ secrets.SSH_KEY }} script: | export BLOG_POSTGRES_DB=${{ env.BLOG_POSTGRES_DB }} export BLOG_POSTG"
+      },
+      "surfaced_because": [
+        "shares 1 site tag(s) beyond the query tag",
+        "shares 3 title token(s)"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78097216::78103879",
+      "rank": 18,
+      "split": "HOLDOUT",
+      "a": {
+        "question_id": "78097216",
+        "title": "Postman Requests From Host Machine Are Not Able to Reach Tomcat Server Running On Docker Container",
+        "tags": [
+          "java",
+          "docker",
+          "rest",
+          "servlets",
+          "containers"
+        ],
+        "excerpt": "error. i tried removing the first stage of building the .war file in the container itself by copying the .war file generated in local to the webapps folder of the tomcat container. and surprisingly that time when i started the docker contai"
+      },
+      "b": {
+        "question_id": "78103879",
+        "title": "Spring Boot App in Docker container - SQL Server Integrated Security",
+        "tags": [
+          "java",
+          "sql-server",
+          "spring",
+          "spring-boot",
+          "docker"
+        ],
+        "excerpt": "I have a Spring Boot App (RESTful Service) that runs in a Docker Container and the Database Server is outside of the Docker Cluster, it´s on a special server cluster. In dev, the app works with \"Integrated security\" without a problem (because of my account), but in a docker container, there is no Kerberos Ticket availa"
+      },
+      "surfaced_because": [
+        "shares 1 site tag(s) beyond the query tag",
+        "shares 3 title token(s)"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78086323::78089075",
+      "rank": 19,
+      "split": "HOLDOUT",
+      "a": {
+        "question_id": "78086323",
+        "title": "Getting ETIMEDOUT while running Telegraf bot in docker container with network mode host",
+        "tags": [
+          "node.js",
+          "docker",
+          "docker-network",
+          "telegraf"
+        ],
+        "excerpt": "error instantly: fetcherror: request to https://api.telegram.org/bot6411340281:[redacted]/setmycommands failed, reason: at clientrequest.<anonymous> (/usr/src/app/node_modules/node-fetch/lib/index.js:1501:11) at clientrequest.emit (node:eve"
+      },
+      "b": {
+        "question_id": "78089075",
+        "title": "Can not connect with click-house running inside docker with nodejs",
+        "tags": [
+          "node.js",
+          "docker",
+          "clickhouse"
+        ],
+        "excerpt": "error. same is true for port 9000 as well. i am using host network in docker, so i should be able to connect this interface from my browser. same is happening for nodejs as well const { clickhouse } = require(\"clickhouse\"); const clickhouse"
+      },
+      "surfaced_because": [
+        "shares 1 site tag(s) beyond the query tag",
+        "shares 2 title token(s)"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78086323::78097216",
+      "rank": 20,
+      "split": "DEVELOPMENT",
+      "a": {
+        "question_id": "78086323",
+        "title": "Getting ETIMEDOUT while running Telegraf bot in docker container with network mode host",
+        "tags": [
+          "node.js",
+          "docker",
+          "docker-network",
+          "telegraf"
+        ],
+        "excerpt": "error instantly: fetcherror: request to https://api.telegram.org/bot6411340281:[redacted]/setmycommands failed, reason: at clientrequest.<anonymous> (/usr/src/app/node_modules/node-fetch/lib/index.js:1501:11) at clientrequest.emit (node:eve"
+      },
+      "b": {
+        "question_id": "78097216",
+        "title": "Postman Requests From Host Machine Are Not Able to Reach Tomcat Server Running On Docker Container",
+        "tags": [
+          "java",
+          "docker",
+          "rest",
+          "servlets",
+          "containers"
+        ],
+        "excerpt": "error. i tried removing the first stage of building the .war file in the container itself by copying the .war file generated in local to the webapps folder of the tomcat container. and surprisingly that time when i started the docker contai"
+      },
+      "surfaced_because": [
+        "shares 4 title token(s)"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78086387::78087887",
+      "rank": 21,
+      "split": "DEVELOPMENT",
+      "a": {
+        "question_id": "78086387",
+        "title": "Troubles with postgres while building docker container",
+        "tags": [
+          "django",
+          "linux",
+          "postgresql",
+          "docker",
+          "devops"
+        ],
+        "excerpt": "error occured during this operation. log basicly says that django cant connect to postgress db. > [9/9] run python manage.py makemigrations && python manage.py migrate: 3.377 /usr/local/lib/python3.12/site-packages/django/core/management/co"
+      },
+      "b": {
+        "question_id": "78087887",
+        "title": "QStandardPaths: runtime directory '/tmp' is not owned by UID 1000, but a directory permissions 0777 owned by UID 0 GID 0 in docker container",
+        "tags": [
+          "linux",
+          "docker",
+          "permissions"
+        ],
+        "excerpt": "error appeared when i installed wkhtmltopdf in my container. here is part of my dockerfile env xdg_runtime_dir=/tmp run python3.9 -m venv /py && \\ ... apk add wkhtmltopdf && \\ ... adduser --disabled-password --no-create-home ozangue && \\ .."
+      },
+      "surfaced_because": [
+        "shares 1 site tag(s) beyond the query tag",
+        "shares 2 title token(s)"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78086387::78097071",
+      "rank": 23,
+      "split": "HOLDOUT",
+      "a": {
+        "question_id": "78086387",
+        "title": "Troubles with postgres while building docker container",
+        "tags": [
+          "django",
+          "linux",
+          "postgresql",
+          "docker",
+          "devops"
+        ],
+        "excerpt": "error occured during this operation. log basicly says that django cant connect to postgress db. > [9/9] run python manage.py makemigrations && python manage.py migrate: 3.377 /usr/local/lib/python3.12/site-packages/django/core/management/co"
+      },
+      "b": {
+        "question_id": "78097071",
+        "title": "How can I set up a database through an npm package in a Docker container?",
+        "tags": [
+          "postgresql",
+          "docker",
+          "npm",
+          "docker-compose",
+          "prisma"
+        ],
+        "excerpt": "errors out when i build the project. dockerfile (project a) arg owner from node:20-buster-slim env node_env 'development' env owner \"username\" run apt-get update && apt-get install libssl-dev ca-certificates -y # create app directory workdi"
+      },
+      "surfaced_because": [
+        "shares 1 site tag(s) beyond the query tag",
+        "shares 2 title token(s)"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78088481::78089563",
+      "rank": 25,
+      "split": "HOLDOUT",
+      "a": {
+        "question_id": "78088481",
+        "title": "Docker Compose MongoDB connection",
+        "tags": [
+          "node.js",
+          "mongodb",
+          "docker",
+          "nginx",
+          "docker-compose"
+        ],
+        "excerpt": "error that i get is: mongooseserverselectionerror: connect econnrefused 172.28.0.2:27017"
+      },
+      "b": {
+        "question_id": "78089563",
+        "title": "Error when running spark job using bitnami docker compose on Windows",
+        "tags": [
+          "windows",
+          "docker",
+          "apache-spark",
+          "docker-compose",
+          "bitnami"
+        ],
+        "excerpt": "exception is that i have added mapping for port 7077, as i need to submit job using that port. then i create simplest possible job with pyspark, submit it, and worker exits with exit code 1, master spawn workers in an endless loop. when i g"
+      },
+      "surfaced_because": [
+        "shares 1 site tag(s) beyond the query tag",
+        "shares 2 title token(s)"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78088481::78096903",
+      "rank": 27,
+      "split": "HOLDOUT",
+      "a": {
+        "question_id": "78088481",
+        "title": "Docker Compose MongoDB connection",
+        "tags": [
+          "node.js",
+          "mongodb",
+          "docker",
+          "nginx",
+          "docker-compose"
+        ],
+        "excerpt": "error that i get is: mongooseserverselectionerror: connect econnrefused 172.28.0.2:27017"
+      },
+      "b": {
+        "question_id": "78096903",
+        "title": "docker compose file, set keys from environment",
+        "tags": [
+          "docker",
+          "docker-compose"
+        ],
+        "excerpt": "I'm trying to use environment variables in my docker compose file, with docker stack. When I to use an environment variable like this, it works: services: service_test01: networks: - ${network} # more options here... networks: some_network: driver: overlay attachable: true However, if I try to use ${network} instead of"
+      },
+      "surfaced_because": [
+        "shares 1 site tag(s) beyond the query tag",
+        "shares 2 title token(s)"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78088692::78098380",
+      "rank": 29,
+      "split": "HOLDOUT",
+      "a": {
+        "question_id": "78088692",
+        "title": "strange behavior when getting env var in container",
+        "tags": [
+          "django",
+          "docker",
+          "environment-variables",
+          "python-poetry"
+        ],
+        "excerpt": "I need to get an env var from an docker container. This build is triggered with a docker compose file and I passed also the env variables with env_file . When I login to the container with docker exec -it conatinerName bash I can echo the variable and get correct output. Even when I trigger docker exec -it containerNam"
+      },
+      "b": {
+        "question_id": "78098380",
+        "title": "Make docker env variables from an `.env` file available in build step (Dockerfile) & during run-time in container",
+        "tags": [
+          "docker",
+          "docker-compose",
+          "dockerfile",
+          "environment-variables"
+        ],
+        "excerpt": "error during the precompile task since the env variables are not available in the dockerfile (where we execute the precompile task). that's exactly the problem ;)"
+      },
+      "surfaced_because": [
+        "shares 1 site tag(s) beyond the query tag",
+        "shares 2 title token(s)"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78089113::78090158",
+      "rank": 31,
+      "split": "HOLDOUT",
+      "a": {
+        "question_id": "78089113",
+        "title": "Docker image from customized Grafana source code",
+        "tags": [
+          "docker",
+          "docker-compose",
+          "dockerfile",
+          "grafana"
+        ],
+        "excerpt": "error to build the image. but, when i comment out the the below code the dashboard is fine. run if [[ \"$bingo\" = \"true\" ]]; then \\ go install github.com/bwplotka/bingo@latest && \\ bingo get -v; \\ fi my questions: what does this code do? the"
+      },
+      "b": {
+        "question_id": "78090158",
+        "title": "How to create a new image from existing docker image?",
+        "tags": [
+          "docker",
+          "dockerfile"
+        ],
+        "excerpt": "I have a docker file that has 3rd party application which downloads models from internet when build the docker image. Docker file: FROM my-third-party-address # add arguments # run commands ENTRYPOINT[\"/run-application.sh\"] When I build and run this dockerfile, it downloads models and puts the image directory. I execut"
+      },
+      "surfaced_because": [
+        "shares 1 site tag(s) beyond the query tag",
+        "shares 2 title token(s)"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78089113::78092816",
+      "rank": 33,
+      "split": "DEVELOPMENT",
+      "a": {
+        "question_id": "78089113",
+        "title": "Docker image from customized Grafana source code",
+        "tags": [
+          "docker",
+          "docker-compose",
+          "dockerfile",
+          "grafana"
+        ],
+        "excerpt": "error to build the image. but, when i comment out the the below code the dashboard is fine. run if [[ \"$bingo\" = \"true\" ]]; then \\ go install github.com/bwplotka/bingo@latest && \\ bingo get -v; \\ fi my questions: what does this code do? the"
+      },
+      "b": {
+        "question_id": "78092816",
+        "title": "I am using docker-compose.yml to generate a docker container and initial schemas. Everything loads fine, but the initial table is nowhere to be found",
+        "tags": [
+          "database",
+          "docker",
+          "docker-compose",
+          "dockerfile",
+          "docker-container"
+        ],
+        "excerpt": "timeout: 45s interval: 10s retries: 10 restart: always environment: - postgres_user=root - postgres_password=password - postgres_db=mydatabasename_db - app_db_user=appuser - app_db_pass=appass - app_db_name=appname volumes: - ./init-schema."
+      },
+      "surfaced_because": [
+        "shares 2 site tag(s) beyond the query tag"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78089113::78095654",
+      "rank": 35,
+      "split": "HOLDOUT",
+      "a": {
+        "question_id": "78089113",
+        "title": "Docker image from customized Grafana source code",
+        "tags": [
+          "docker",
+          "docker-compose",
+          "dockerfile",
+          "grafana"
+        ],
+        "excerpt": "error to build the image. but, when i comment out the the below code the dashboard is fine. run if [[ \"$bingo\" = \"true\" ]]; then \\ go install github.com/bwplotka/bingo@latest && \\ bingo get -v; \\ fi my questions: what does this code do? the"
+      },
+      "b": {
+        "question_id": "78095654",
+        "title": "Docker single build artifact for multiple images",
+        "tags": [
+          "docker",
+          "docker-compose",
+          "dockerfile"
+        ],
+        "excerpt": "I have two .NET projects which depend on the same DLL. Currently, this DLL is building for each of the projects. Is there a way to build it once and share it among the Dockerfiles?"
+      },
+      "surfaced_because": [
+        "shares 2 site tag(s) beyond the query tag"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78089113::78102512",
+      "rank": 37,
+      "split": "DEVELOPMENT",
+      "a": {
+        "question_id": "78089113",
+        "title": "Docker image from customized Grafana source code",
+        "tags": [
+          "docker",
+          "docker-compose",
+          "dockerfile",
+          "grafana"
+        ],
+        "excerpt": "error to build the image. but, when i comment out the the below code the dashboard is fine. run if [[ \"$bingo\" = \"true\" ]]; then \\ go install github.com/bwplotka/bingo@latest && \\ bingo get -v; \\ fi my questions: what does this code do? the"
+      },
+      "b": {
+        "question_id": "78102512",
+        "title": "docker: Error response from daemon: Duplicate mount point:: Mounting multiple docker volumes on same docker container having same target?",
+        "tags": [
+          "docker",
+          "docker-compose",
+          "dockerfile"
+        ],
+        "excerpt": "error message docker: error response from daemon: duplicate mount point: /rootdir1. i have gone through 1 . however, the problem is different. i am trying to mount multiple docker volume in same target location inside same docker container."
+      },
+      "surfaced_because": [
+        "shares 2 site tag(s) beyond the query tag"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78089171::78098380",
+      "rank": 39,
+      "split": "DEVELOPMENT",
+      "a": {
+        "question_id": "78089171",
+        "title": "In the nextjs project environment variable in k8s is undefined",
+        "tags": [
+          "kubernetes",
+          "next.js",
+          "dockerfile",
+          "environment-variables"
+        ],
+        "excerpt": "not found\") } ... } async function fetchdata() { const apitest = process.env['next_public_bff_orm_status'] if (!apitest) { console.log(\"api teste sem valor\") } ... } dockerfile: from node:lts as dependencies workdir /front copy package.json"
+      },
+      "b": {
+        "question_id": "78098380",
+        "title": "Make docker env variables from an `.env` file available in build step (Dockerfile) & during run-time in container",
+        "tags": [
+          "docker",
+          "docker-compose",
+          "dockerfile",
+          "environment-variables"
+        ],
+        "excerpt": "error during the precompile task since the env variables are not available in the dockerfile (where we execute the precompile task). that's exactly the problem ;)"
+      },
+      "surfaced_because": [
+        "shares 2 site tag(s) beyond the query tag"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78089563::78096903",
+      "rank": 41,
+      "split": "DEVELOPMENT",
+      "a": {
+        "question_id": "78089563",
+        "title": "Error when running spark job using bitnami docker compose on Windows",
+        "tags": [
+          "windows",
+          "docker",
+          "apache-spark",
+          "docker-compose",
+          "bitnami"
+        ],
+        "excerpt": "exception is that i have added mapping for port 7077, as i need to submit job using that port. then i create simplest possible job with pyspark, submit it, and worker exits with exit code 1, master spawn workers in an endless loop. when i g"
+      },
+      "b": {
+        "question_id": "78096903",
+        "title": "docker compose file, set keys from environment",
+        "tags": [
+          "docker",
+          "docker-compose"
+        ],
+        "excerpt": "I'm trying to use environment variables in my docker compose file, with docker stack. When I to use an environment variable like this, it works: services: service_test01: networks: - ${network} # more options here... networks: some_network: driver: overlay attachable: true However, if I try to use ${network} instead of"
+      },
+      "surfaced_because": [
+        "shares 1 site tag(s) beyond the query tag",
+        "shares 2 title token(s)"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78090158::78093369",
+      "rank": 43,
+      "split": "HOLDOUT",
+      "a": {
+        "question_id": "78090158",
+        "title": "How to create a new image from existing docker image?",
+        "tags": [
+          "docker",
+          "dockerfile"
+        ],
+        "excerpt": "I have a docker file that has 3rd party application which downloads models from internet when build the docker image. Docker file: FROM my-third-party-address # add arguments # run commands ENTRYPOINT[\"/run-application.sh\"] When I build and run this dockerfile, it downloads models and puts the image directory. I execut"
+      },
+      "b": {
+        "question_id": "78093369",
+        "title": "installing psycopg in alpine docker image",
+        "tags": [
+          "docker",
+          "dockerfile",
+          "psycopg2",
+          "docker-image"
+        ],
+        "excerpt": "error occurs when the image is loaded: error: failed to solve: process \"/bin/sh -c pip install -r ./requirements/local.txt\" did not complete successfully: exit code: 1 i tried to install various dependencies in my dockerfile. but always the"
+      },
+      "surfaced_because": [
+        "shares 1 site tag(s) beyond the query tag",
+        "shares 2 title token(s)"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78090939::78097579",
+      "rank": 45,
+      "split": "HOLDOUT",
+      "a": {
+        "question_id": "78090939",
+        "title": "Springboot application, deploy in Render fail",
+        "tags": [
+          "java",
+          "spring-boot",
+          "docker",
+          "deployment"
+        ],
+        "excerpt": "error: error: invalid or corrupt jarfile agilstratapi.jar i don't know how to solve it. something curious that may have something to do with it, when i upload the changes to the remote repository, it gives me this warning: warning: file out"
+      },
+      "b": {
+        "question_id": "78097579",
+        "title": "Spring Boot Application doesn't expose the port in Docker",
+        "tags": [
+          "java",
+          "spring-boot",
+          "docker",
+          "port"
+        ],
+        "excerpt": "failed to connect to 127.0.0.1 port 8090 after 0 ms: connection refused i run the container via docker run -it javaproj . here's the application.properties: server.port=8090 spring.mvc.static-path-pattern=/static/** and the dockerfile: from"
+      },
+      "surfaced_because": [
+        "shares 2 site tag(s) beyond the query tag"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78091032::78092816",
+      "rank": 47,
+      "split": "DEVELOPMENT",
+      "a": {
+        "question_id": "78091032",
+        "title": "How to use Docker compose in c program?",
+        "tags": [
+          "c",
+          "docker",
+          "docker-compose",
+          "dockerfile"
+        ],
+        "excerpt": "I want to isolate my development environment to create a project in C. But I don't know how to use Docker with C. I'm getting confused about running the program and I would like someone to help me. Take for example a \"hello world\" with an input. basic as a program. How can I make a docker compose and how to run it. And"
+      },
+      "b": {
+        "question_id": "78092816",
+        "title": "I am using docker-compose.yml to generate a docker container and initial schemas. Everything loads fine, but the initial table is nowhere to be found",
+        "tags": [
+          "database",
+          "docker",
+          "docker-compose",
+          "dockerfile",
+          "docker-container"
+        ],
+        "excerpt": "timeout: 45s interval: 10s retries: 10 restart: always environment: - postgres_user=root - postgres_password=password - postgres_db=mydatabasename_db - app_db_user=appuser - app_db_pass=appass - app_db_name=appname volumes: - ./init-schema."
+      },
+      "surfaced_because": [
+        "shares 2 site tag(s) beyond the query tag"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78091032::78096903",
+      "rank": 49,
+      "split": "DEVELOPMENT",
+      "a": {
+        "question_id": "78091032",
+        "title": "How to use Docker compose in c program?",
+        "tags": [
+          "c",
+          "docker",
+          "docker-compose",
+          "dockerfile"
+        ],
+        "excerpt": "I want to isolate my development environment to create a project in C. But I don't know how to use Docker with C. I'm getting confused about running the program and I would like someone to help me. Take for example a \"hello world\" with an input. basic as a program. How can I make a docker compose and how to run it. And"
+      },
+      "b": {
+        "question_id": "78096903",
+        "title": "docker compose file, set keys from environment",
+        "tags": [
+          "docker",
+          "docker-compose"
+        ],
+        "excerpt": "I'm trying to use environment variables in my docker compose file, with docker stack. When I to use an environment variable like this, it works: services: service_test01: networks: - ${network} # more options here... networks: some_network: driver: overlay attachable: true However, if I try to use ${network} instead of"
+      },
+      "surfaced_because": [
+        "shares 1 site tag(s) beyond the query tag",
+        "shares 2 title token(s)"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78091032::78102512",
+      "rank": 51,
+      "split": "HOLDOUT",
+      "a": {
+        "question_id": "78091032",
+        "title": "How to use Docker compose in c program?",
+        "tags": [
+          "c",
+          "docker",
+          "docker-compose",
+          "dockerfile"
+        ],
+        "excerpt": "I want to isolate my development environment to create a project in C. But I don't know how to use Docker with C. I'm getting confused about running the program and I would like someone to help me. Take for example a \"hello world\" with an input. basic as a program. How can I make a docker compose and how to run it. And"
+      },
+      "b": {
+        "question_id": "78102512",
+        "title": "docker: Error response from daemon: Duplicate mount point:: Mounting multiple docker volumes on same docker container having same target?",
+        "tags": [
+          "docker",
+          "docker-compose",
+          "dockerfile"
+        ],
+        "excerpt": "error message docker: error response from daemon: duplicate mount point: /rootdir1. i have gone through 1 . however, the problem is different. i am trying to mount multiple docker volume in same target location inside same docker container."
+      },
+      "surfaced_because": [
+        "shares 2 site tag(s) beyond the query tag"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78091354::78092816",
+      "rank": 53,
+      "split": "HOLDOUT",
+      "a": {
+        "question_id": "78091354",
+        "title": "Nest.js CLI not found in Docker multi-stage build",
+        "tags": [
+          "docker",
+          "dockerfile",
+          "nest"
+        ],
+        "excerpt": "error message i'm getting is: sh: 1: nest: not found it seems that the nest.js cli is not available in the path during the production build, even though it's installed as a dev dependency in my package.json. #11 [prod 1/2] run ls /app/node_"
+      },
+      "b": {
+        "question_id": "78092816",
+        "title": "I am using docker-compose.yml to generate a docker container and initial schemas. Everything loads fine, but the initial table is nowhere to be found",
+        "tags": [
+          "database",
+          "docker",
+          "docker-compose",
+          "dockerfile",
+          "docker-container"
+        ],
+        "excerpt": "timeout: 45s interval: 10s retries: 10 restart: always environment: - postgres_user=root - postgres_password=password - postgres_db=mydatabasename_db - app_db_user=appuser - app_db_pass=appass - app_db_name=appname volumes: - ./init-schema."
+      },
+      "surfaced_because": [
+        "shares 1 site tag(s) beyond the query tag",
+        "shares 2 title token(s)"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78091354::78098380",
+      "rank": 55,
+      "split": "DEVELOPMENT",
+      "a": {
+        "question_id": "78091354",
+        "title": "Nest.js CLI not found in Docker multi-stage build",
+        "tags": [
+          "docker",
+          "dockerfile",
+          "nest"
+        ],
+        "excerpt": "error message i'm getting is: sh: 1: nest: not found it seems that the nest.js cli is not available in the path during the production build, even though it's installed as a dev dependency in my package.json. #11 [prod 1/2] run ls /app/node_"
+      },
+      "b": {
+        "question_id": "78098380",
+        "title": "Make docker env variables from an `.env` file available in build step (Dockerfile) & during run-time in container",
+        "tags": [
+          "docker",
+          "docker-compose",
+          "dockerfile",
+          "environment-variables"
+        ],
+        "excerpt": "error during the precompile task since the env variables are not available in the dockerfile (where we execute the precompile task). that's exactly the problem ;)"
+      },
+      "surfaced_because": [
+        "shares 1 site tag(s) beyond the query tag",
+        "shares 2 title token(s)"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78092648::78102252",
+      "rank": 57,
+      "split": "DEVELOPMENT",
+      "a": {
+        "question_id": "78092648",
+        "title": "How to Make Batch Jobs Logs Available When the Jobs Run Inside Ephemeral Docker Containers?",
+        "tags": [
+          "python",
+          "docker",
+          "google-cloud-platform",
+          "logging",
+          "cron"
+        ],
+        "excerpt": "Context So, basically I am running a cron job (python ETL script) via a docker container. That means, every day at 12.30 am my cron job runs docker run $IMAGE In the Dockerfile I have the script like # Run the script at container boot time. CMD [\"./run_manager.sh\"] This is how the run_manager.sh looks like. python3 mai"
+      },
+      "b": {
+        "question_id": "78102252",
+        "title": "ModuleNotFoundError message when run gcp dataflow pipeline with python",
+        "tags": [
+          "python",
+          "docker",
+          "google-cloud-platform",
+          "google-cloud-dataflow",
+          "apache-beam"
+        ],
+        "excerpt": "error is the same, please someone can help me? i understand that the workers are using de default beam sdk, is correct that? how i can fix it?"
+      },
+      "surfaced_because": [
+        "shares 2 site tag(s) beyond the query tag"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    },
+    {
+      "pair_id": "78092816::78095639",
+      "rank": 59,
+      "split": "DEVELOPMENT",
+      "a": {
+        "question_id": "78092816",
+        "title": "I am using docker-compose.yml to generate a docker container and initial schemas. Everything loads fine, but the initial table is nowhere to be found",
+        "tags": [
+          "database",
+          "docker",
+          "docker-compose",
+          "dockerfile",
+          "docker-container"
+        ],
+        "excerpt": "timeout: 45s interval: 10s retries: 10 restart: always environment: - postgres_user=root - postgres_password=password - postgres_db=mydatabasename_db - app_db_user=appuser - app_db_pass=appass - app_db_name=appname volumes: - ./init-schema."
+      },
+      "b": {
+        "question_id": "78095639",
+        "title": "Angular client application failing to resolve address for backend service from docker container",
+        "tags": [
+          "angular",
+          "docker",
+          "docker-compose"
+        ],
+        "excerpt": "error can someone help with this why the request is failing, i can across some solution that say to use ip address of backend service in the http url i don't think that's good choice"
+      },
+      "surfaced_because": [
+        "shares 1 site tag(s) beyond the query tag",
+        "shares 2 title token(s)"
+      ],
+      "shared_diagnostic": "",
+      "holdout_exclusion_reason": ""
+    }
+  ]
+}

@@ -206,6 +206,7 @@ jobs:
         run: |
           uv run mypy packages/contracts/python/sros_contracts \
                       packages/llm-gateway/python/sros_llm_gateway \
+                      packages/semantic-equivalence/python/sros_semantic_equivalence \
                       services/workers/python/sros_workers \
                       packages/evidence-aggregation/python/sros_evidence_aggregation \
                       packages/signal-model/python/sros_signal_model \
