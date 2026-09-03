@@ -1,11 +1,17 @@
-"""Mission 1.36.1 §23. Three operator decisions, and what none of them changed.
+"""Mission 1.36.1 §23. Three operator decisions, and what only one of them changed.
 
-**These test what is TRUE, not what is expected after a confirmation that has not
-happened.** The Wikimedia assessment is prepared and validated and is not
-persisted, because the recording tool requires a confirmation typed by a person
-and §7 forbids bypassing that guard. So the assertions here cover the review
-file, the refusals, and the state that must not have moved -- and a test claiming
-six rows resolve would be asserting a future.
+**These test what is TRUE.** The first version of this file was written before
+the operator confirmed, so it asserted that nothing resolved and that the TED
+assessment was the only one -- correct then, and a test claiming six rows resolve
+would have been asserting a future. The operator has since typed `record it`, so
+two assertions were re-pointed at the new present and every other one is
+unchanged, because everything else really did stay put.
+
+What did NOT move is the interesting half: `scoring.evidence.reliability` is
+still NULL on all eight rows (reliability binds late, ADR-026), both Stack
+Exchange scopes still have no assessment, the TED assessment is untouched at
+version 1, and the negative checks still find no leak -- now over six checks
+rather than three, because a second assessment doubled the ways one could leak.
 """
 
 from __future__ import annotations
@@ -20,6 +26,7 @@ DOCS = REPO_ROOT / "docs" / "data"
 REVIEW = DOCS / "docker-wikimedia-reliability-review-v1.json"
 PACKET = DOCS / "docker-evidence-reliability-review-packet-v1.json"
 RESOLUTION = DOCS / "docker-reliability-resolution-v1.json"
+DIAGNOSTIC = DOCS / "docker-diagnostic-aggregation-v1.json"
 DECISIONS = DOCS / "docker-reliability-operator-decisions-v1.md"
 PREPARATION = DOCS / "opportunity-preparation-v1.json"
 
@@ -50,6 +57,10 @@ def packet() -> dict:
 
 def resolution() -> dict:
     return json.loads(RESOLUTION.read_text(encoding="utf-8"))
+
+
+def diagnostic() -> dict:
+    return json.loads(DIAGNOSTIC.read_text(encoding="utf-8"))
 
 
 def decisions() -> str:
@@ -152,11 +163,22 @@ class TestTheRefusalsCreatedNothing:
                 assert entry["outcomes"] == ["NO_APPLICABLE_ASSESSMENT"]
                 assert entry["reliability"] == ["None"]
 
-    def test_only_the_ted_assessment_is_current(self) -> None:
+    def test_the_two_current_assessments_are_ted_and_wikimedia_and_nothing_else(self) -> None:
+        """Two scopes reviewed, three scopes in use. The Stack Exchange pair has
+        no row at all, which is what a NO leaves behind."""
         current = resolution()["current_assessments"]
-        assert len(current) == 1
-        assert current[0]["source_id"] == "ted-eu"
-        assert current[0]["version"] == 1
+        assert {a["source_id"] for a in current} == {"ted-eu", "wikimedia-pageviews"}
+        assert len(current) == 2
+        for a in current:
+            assert a["version"] == 1, a
+            assert a["origin"] == "HUMAN_REVIEW", a
+            assert a["reviewed_by"] == "thibchm", a
+
+    def test_the_ted_assessment_was_not_superseded_by_the_new_one(self) -> None:
+        """A new scope is a new line, never a revision of somebody else's."""
+        ted = next(a for a in resolution()["current_assessments"] if a["source_id"] == "ted-eu")
+        assert ted["proposition_kind"] == "source_reported_procurement_value_contrast"
+        assert ted["version"] == 1
 
     def test_the_refusal_is_recorded_as_prose_and_not_as_data(self) -> None:
         text = decisions()
@@ -182,11 +204,28 @@ class TestNothingLeakedAndNothingMoved:
         leaks = [n for n in negatives if n["resolved"] and not n["scopes_are_identical"]]
         assert leaks == []
 
-    def test_no_docker_row_resolves_anything_yet(self) -> None:
+    def test_six_rows_resolve_and_the_two_refused_scopes_do_not(self) -> None:
+        """1 + 1 + 6 = 8, and the split follows the operator's decisions exactly."""
         totals = resolution()["totals"]
         assert totals["docker_evidence_rows"] == 8
-        assert totals["resolved"] == 0
-        assert totals["no_applicable_assessment"] == 8
+        assert totals["resolved"] == 6
+        assert totals["no_applicable_assessment"] == 2
+        for row in resolution()["rows"]:
+            if row["outcome"] == "RESOLVED":
+                assert row["scope"]["source_id"] == "wikimedia-pageviews"
+                assert row["reliability"] == 0.65
+                assert row["assessment_version"] == 1
+                assert row["assessment_origin"] == "HUMAN_REVIEW"
+                assert row["reviewed_by"] == "thibchm"
+            else:
+                assert row["scope"]["source_id"] == "stack-exchange"
+                assert row["reliability"] is None
+
+    def test_all_six_resolved_rows_bind_the_same_single_assessment(self) -> None:
+        """One scope, one assessment. Six bindings to six ids would mean the
+        scope key was not doing its job."""
+        bound = {r["assessment_id"] for r in resolution()["rows"] if r["outcome"] == "RESOLVED"}
+        assert len(bound) == 1
 
     def test_the_evidence_reliability_column_is_null_everywhere(self) -> None:
         """§11. Reliability is late-bound and the column stays NULL."""
@@ -259,3 +298,94 @@ class TestTheConfirmationGuardWasRespected:
             text = path.read_text(encoding="utf-8")
             assert "echo 'record it'" not in text
             assert 'echo "record it"' not in text
+
+
+# ===================================== §15, now that its precondition is true
+
+
+class TestTheDiagnosticAggregation:
+    """§15 was conditional on at least one row becoming scorable. Six did.
+
+    Every assertion here is about the diagnostic staying a diagnostic.
+    """
+
+    def test_every_output_carries_the_three_required_words(self) -> None:
+        assert diagnostic()["$banner"] == [
+            "UNCALIBRATED",
+            "DIAGNOSTIC ONLY",
+            "NOT AN OPPORTUNITY SCORE",
+        ]
+        for entry in diagnostic()["scorable"] + diagnostic()["unavailable"]:
+            assert entry["$banner"] == diagnostic()["$banner"], entry["claim_id"]
+
+    def test_the_profile_is_still_uncalibrated(self) -> None:
+        """A reviewed value is not a fitted parameter. D-03 is not resolved."""
+        assert diagnostic()["profile"]["status"] == "UNCALIBRATED"
+        for entry in diagnostic()["scorable"]:
+            assert entry["profile_status"] == "UNCALIBRATED"
+            assert entry["calibrated"] is False
+
+    def test_nothing_was_persisted(self) -> None:
+        totals = diagnostic()["totals"]
+        assert totals["opportunity_scores_created"] == 0
+        assert totals["rows_persisted"] == 0
+
+    def test_it_is_eight_single_record_aggregations_not_one(self) -> None:
+        """Reliability resolving does not turn six observations of one article
+        into an aggregation. Eight Evidence rows, eight distinct Claims."""
+        totals = diagnostic()["totals"]
+        assert totals["claims_aggregated"] == 8
+        assert totals["evidence_rows_per_claim"] == 1
+        claims = {e["claim_id"] for e in diagnostic()["scorable"] + diagnostic()["unavailable"]}
+        assert len(claims) == 8
+        for entry in diagnostic()["scorable"] + diagnostic()["unavailable"]:
+            assert entry["evidence_considered"] == 1
+
+    def test_reliability_is_the_limiting_component_on_every_scorable_claim(self) -> None:
+        """`q_i = min(components)`, and every other factor is 1.0 on these rows,
+        so the reviewed value is exactly what the score is made of."""
+        assert len(diagnostic()["scorable"]) == 6
+        for entry in diagnostic()["scorable"]:
+            assert entry["limiting_component"] == "reliability"
+            assert entry["q"] == 0.65
+            assert entry["components"]["reliability"] == 0.65
+            for name in ("relevance", "directness", "extraction_confidence"):
+                assert entry["components"][name] == 1.0, name
+
+    def test_the_two_refused_scopes_are_reported_separately_and_score_nothing(self) -> None:
+        """§15 asks for them apart, because a claim with no reviewed reliability
+        is a different state from a claim with a low one."""
+        unavailable = diagnostic()["unavailable"]
+        assert len(unavailable) == 2
+        for entry in unavailable:
+            assert entry["source_id"] == "stack-exchange"
+            assert entry["aggregation_status"] == "UNAVAILABLE"
+            assert entry["q"] is None
+            assert entry["non_scorable_reasons"] == ["MISSING_RELIABILITY"]
+            assert entry["uncertainty_mass"] == 1.0
+            assert entry["evidence_level"]["evidence_level"] == 0
+
+    def test_a_reviewed_value_did_not_raise_the_evidence_level(self) -> None:
+        """Level stays 1. The category gate and unknown independence both hold,
+        and reliability cannot reach either of them -- the same result Mission
+        1.15.13 recorded for TED at a different number."""
+        for entry in diagnostic()["scorable"]:
+            assert entry["evidence_level"]["evidence_level"] == 1
+            assert entry["independence_state"] == "UNKNOWN"
+            assert entry["independence_group_count"] <= 1
+            blocked = " ".join(entry["evidence_level"]["blocked_reasons"])
+            assert "established independence" in blocked
+            assert "MARKET_ACTIVITY" in blocked
+
+    def test_uncertainty_is_reported_rather_than_absorbed(self) -> None:
+        """The four masses sum to 1 and none of them is a probability."""
+        for entry in diagnostic()["scorable"]:
+            total = (
+                entry["supported_mass"]
+                + entry["contradicted_mass"]
+                + entry["conflict_mass"]
+                + entry["uncertainty_mass"]
+            )
+            assert abs(total - 1.0) < 1e-9
+            assert entry["uncertainty_mass"] > 0.0
+            assert entry["contradiction_strength"] == 0.0

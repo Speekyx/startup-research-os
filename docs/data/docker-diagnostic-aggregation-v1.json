@@ -1,0 +1,520 @@
+{
+  "$comment": "Mission 1.36.1 §15. DIAGNOSTIC ONLY, over an UNCALIBRATED profile, and NOT an Opportunity Score. Nothing here is persisted: scoring.scores does not exist and this script writes one JSON artifact and no database row. Eight Docker Evidence rows sit on EIGHT distinct Claims, so these are eight SINGLE-RECORD aggregations -- reliability resolving does not turn six observations of one article into an aggregation. The reliability on every item came from the resolver's binding and never from scoring.evidence.reliability, which is still NULL on every row (ADR-026 Decision 2).",
+  "$banner": [
+    "UNCALIBRATED",
+    "DIAGNOSTIC ONLY",
+    "NOT AN OPPORTUNITY SCORE"
+  ],
+  "artifact_version": "docker-diagnostic-aggregation@1.0.0",
+  "generated_by": "mission-1.36.1",
+  "profile": {
+    "id": "reference-v1",
+    "version": "1.0.0",
+    "status": "UNCALIBRATED",
+    "note": "UNCALIBRATED. No parameter in this profile was fitted to labelled data, so every number below is a demonstration that the equations run and is not a measurement of anything. D-03 is not resolved."
+  },
+  "totals": {
+    "claims_aggregated": 8,
+    "claims_with_scorable_evidence": 6,
+    "claims_with_unavailable_evidence": 2,
+    "evidence_rows_per_claim": 1,
+    "opportunity_scores_created": 0,
+    "rows_persisted": 0
+  },
+  "scorable": [
+    {
+      "$banner": [
+        "UNCALIBRATED",
+        "DIAGNOSTIC ONLY",
+        "NOT AN OPPORTUNITY SCORE"
+      ],
+      "claim_id": "565bbcb7-9e70-418b-9a8e-a1549b23a230",
+      "evidence_id": "13a5eadb-977d-4de0-9c35-d0ff53442074",
+      "source_id": "wikimedia-pageviews",
+      "proposition_kind": "platform_counted_content_request_change",
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "reliability": 0.65,
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1,
+        "assessment_origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm"
+      },
+      "evidence_considered": 1,
+      "scorable_evidence": 1,
+      "unavailable_evidence": 0,
+      "aggregation_status": "COMPLETE",
+      "missing_requirements": [],
+      "support_strength": 0.6500000000000001,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.6500000000000001,
+      "contradicted_mass": 0.0,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 0.34999999999999987,
+      "evidence_level": {
+        "evidence_level": 1,
+        "label": "Weak Signal",
+        "reasons": [
+          "1 scorable supporting record(s)"
+        ],
+        "blocked_reasons": [
+          "Repeated Signal needs 2 supporting groups of established independence, found 0 (plus 1 unknown-provenance group, which does not count)",
+          "Market Evidence needs a supporting record categorised MARKET_ACTIVITY or DIRECT_VALIDATION with established provenance; quantity of opinion cannot substitute for it",
+          "Direct Validation needs a supporting record categorised DIRECT_VALIDATION with established provenance"
+        ]
+      },
+      "q": 0.65,
+      "limiting_component": "reliability",
+      "components": {
+        "relevance": 1.0,
+        "directness": 1.0,
+        "reliability": 0.65,
+        "extraction_confidence": 1.0,
+        "freshness": 1.0
+      },
+      "non_scorable_reasons": [],
+      "independence_state": "UNKNOWN",
+      "unknown_independence_count": 1,
+      "independence_group_count": 1,
+      "source_count": 1,
+      "profile_id": "reference-v1",
+      "profile_version": "1.0.0",
+      "profile_status": "UNCALIBRATED",
+      "calibrated": false,
+      "algorithm_version": "1.0.0"
+    },
+    {
+      "$banner": [
+        "UNCALIBRATED",
+        "DIAGNOSTIC ONLY",
+        "NOT AN OPPORTUNITY SCORE"
+      ],
+      "claim_id": "05cac6f6-17f4-4008-b68b-9787bb4ac774",
+      "evidence_id": "1b93db71-eaed-45c5-a2fa-9e4edea7bc49",
+      "source_id": "wikimedia-pageviews",
+      "proposition_kind": "platform_counted_content_request_change",
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "reliability": 0.65,
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1,
+        "assessment_origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm"
+      },
+      "evidence_considered": 1,
+      "scorable_evidence": 1,
+      "unavailable_evidence": 0,
+      "aggregation_status": "COMPLETE",
+      "missing_requirements": [],
+      "support_strength": 0.6500000000000001,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.6500000000000001,
+      "contradicted_mass": 0.0,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 0.34999999999999987,
+      "evidence_level": {
+        "evidence_level": 1,
+        "label": "Weak Signal",
+        "reasons": [
+          "1 scorable supporting record(s)"
+        ],
+        "blocked_reasons": [
+          "Repeated Signal needs 2 supporting groups of established independence, found 0 (plus 1 unknown-provenance group, which does not count)",
+          "Market Evidence needs a supporting record categorised MARKET_ACTIVITY or DIRECT_VALIDATION with established provenance; quantity of opinion cannot substitute for it",
+          "Direct Validation needs a supporting record categorised DIRECT_VALIDATION with established provenance"
+        ]
+      },
+      "q": 0.65,
+      "limiting_component": "reliability",
+      "components": {
+        "relevance": 1.0,
+        "directness": 1.0,
+        "reliability": 0.65,
+        "extraction_confidence": 1.0,
+        "freshness": 1.0
+      },
+      "non_scorable_reasons": [],
+      "independence_state": "UNKNOWN",
+      "unknown_independence_count": 1,
+      "independence_group_count": 1,
+      "source_count": 1,
+      "profile_id": "reference-v1",
+      "profile_version": "1.0.0",
+      "profile_status": "UNCALIBRATED",
+      "calibrated": false,
+      "algorithm_version": "1.0.0"
+    },
+    {
+      "$banner": [
+        "UNCALIBRATED",
+        "DIAGNOSTIC ONLY",
+        "NOT AN OPPORTUNITY SCORE"
+      ],
+      "claim_id": "c58949e4-d8a7-4636-9c53-3bbac3b7b7c0",
+      "evidence_id": "487f62c6-2fcf-4790-9773-6e99214d0003",
+      "source_id": "wikimedia-pageviews",
+      "proposition_kind": "platform_counted_content_request_change",
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "reliability": 0.65,
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1,
+        "assessment_origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm"
+      },
+      "evidence_considered": 1,
+      "scorable_evidence": 1,
+      "unavailable_evidence": 0,
+      "aggregation_status": "COMPLETE",
+      "missing_requirements": [],
+      "support_strength": 0.6500000000000001,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.6500000000000001,
+      "contradicted_mass": 0.0,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 0.34999999999999987,
+      "evidence_level": {
+        "evidence_level": 1,
+        "label": "Weak Signal",
+        "reasons": [
+          "1 scorable supporting record(s)"
+        ],
+        "blocked_reasons": [
+          "Repeated Signal needs 2 supporting groups of established independence, found 0 (plus 1 unknown-provenance group, which does not count)",
+          "Market Evidence needs a supporting record categorised MARKET_ACTIVITY or DIRECT_VALIDATION with established provenance; quantity of opinion cannot substitute for it",
+          "Direct Validation needs a supporting record categorised DIRECT_VALIDATION with established provenance"
+        ]
+      },
+      "q": 0.65,
+      "limiting_component": "reliability",
+      "components": {
+        "relevance": 1.0,
+        "directness": 1.0,
+        "reliability": 0.65,
+        "extraction_confidence": 1.0,
+        "freshness": 1.0
+      },
+      "non_scorable_reasons": [],
+      "independence_state": "UNKNOWN",
+      "unknown_independence_count": 1,
+      "independence_group_count": 1,
+      "source_count": 1,
+      "profile_id": "reference-v1",
+      "profile_version": "1.0.0",
+      "profile_status": "UNCALIBRATED",
+      "calibrated": false,
+      "algorithm_version": "1.0.0"
+    },
+    {
+      "$banner": [
+        "UNCALIBRATED",
+        "DIAGNOSTIC ONLY",
+        "NOT AN OPPORTUNITY SCORE"
+      ],
+      "claim_id": "b3d0d2d0-daa0-4854-a4c0-a31684841b03",
+      "evidence_id": "516182ff-0122-4d13-9d8a-92bb38065a75",
+      "source_id": "wikimedia-pageviews",
+      "proposition_kind": "platform_counted_content_request_change",
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "reliability": 0.65,
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1,
+        "assessment_origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm"
+      },
+      "evidence_considered": 1,
+      "scorable_evidence": 1,
+      "unavailable_evidence": 0,
+      "aggregation_status": "COMPLETE",
+      "missing_requirements": [],
+      "support_strength": 0.6500000000000001,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.6500000000000001,
+      "contradicted_mass": 0.0,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 0.34999999999999987,
+      "evidence_level": {
+        "evidence_level": 1,
+        "label": "Weak Signal",
+        "reasons": [
+          "1 scorable supporting record(s)"
+        ],
+        "blocked_reasons": [
+          "Repeated Signal needs 2 supporting groups of established independence, found 0 (plus 1 unknown-provenance group, which does not count)",
+          "Market Evidence needs a supporting record categorised MARKET_ACTIVITY or DIRECT_VALIDATION with established provenance; quantity of opinion cannot substitute for it",
+          "Direct Validation needs a supporting record categorised DIRECT_VALIDATION with established provenance"
+        ]
+      },
+      "q": 0.65,
+      "limiting_component": "reliability",
+      "components": {
+        "relevance": 1.0,
+        "directness": 1.0,
+        "reliability": 0.65,
+        "extraction_confidence": 1.0,
+        "freshness": 1.0
+      },
+      "non_scorable_reasons": [],
+      "independence_state": "UNKNOWN",
+      "unknown_independence_count": 1,
+      "independence_group_count": 1,
+      "source_count": 1,
+      "profile_id": "reference-v1",
+      "profile_version": "1.0.0",
+      "profile_status": "UNCALIBRATED",
+      "calibrated": false,
+      "algorithm_version": "1.0.0"
+    },
+    {
+      "$banner": [
+        "UNCALIBRATED",
+        "DIAGNOSTIC ONLY",
+        "NOT AN OPPORTUNITY SCORE"
+      ],
+      "claim_id": "459e9fec-3ad1-4955-81c6-2aa0f2179bc5",
+      "evidence_id": "6cf92ad6-77ed-4126-b356-41e65856430b",
+      "source_id": "wikimedia-pageviews",
+      "proposition_kind": "platform_counted_content_request_change",
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "reliability": 0.65,
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1,
+        "assessment_origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm"
+      },
+      "evidence_considered": 1,
+      "scorable_evidence": 1,
+      "unavailable_evidence": 0,
+      "aggregation_status": "COMPLETE",
+      "missing_requirements": [],
+      "support_strength": 0.6500000000000001,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.6500000000000001,
+      "contradicted_mass": 0.0,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 0.34999999999999987,
+      "evidence_level": {
+        "evidence_level": 1,
+        "label": "Weak Signal",
+        "reasons": [
+          "1 scorable supporting record(s)"
+        ],
+        "blocked_reasons": [
+          "Repeated Signal needs 2 supporting groups of established independence, found 0 (plus 1 unknown-provenance group, which does not count)",
+          "Market Evidence needs a supporting record categorised MARKET_ACTIVITY or DIRECT_VALIDATION with established provenance; quantity of opinion cannot substitute for it",
+          "Direct Validation needs a supporting record categorised DIRECT_VALIDATION with established provenance"
+        ]
+      },
+      "q": 0.65,
+      "limiting_component": "reliability",
+      "components": {
+        "relevance": 1.0,
+        "directness": 1.0,
+        "reliability": 0.65,
+        "extraction_confidence": 1.0,
+        "freshness": 1.0
+      },
+      "non_scorable_reasons": [],
+      "independence_state": "UNKNOWN",
+      "unknown_independence_count": 1,
+      "independence_group_count": 1,
+      "source_count": 1,
+      "profile_id": "reference-v1",
+      "profile_version": "1.0.0",
+      "profile_status": "UNCALIBRATED",
+      "calibrated": false,
+      "algorithm_version": "1.0.0"
+    },
+    {
+      "$banner": [
+        "UNCALIBRATED",
+        "DIAGNOSTIC ONLY",
+        "NOT AN OPPORTUNITY SCORE"
+      ],
+      "claim_id": "1829e497-f582-4017-b88d-4d277375ccf7",
+      "evidence_id": "f1e0b7a4-d570-429a-91a4-fadff84cdce1",
+      "source_id": "wikimedia-pageviews",
+      "proposition_kind": "platform_counted_content_request_change",
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "reliability": 0.65,
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1,
+        "assessment_origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm"
+      },
+      "evidence_considered": 1,
+      "scorable_evidence": 1,
+      "unavailable_evidence": 0,
+      "aggregation_status": "COMPLETE",
+      "missing_requirements": [],
+      "support_strength": 0.6500000000000001,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.6500000000000001,
+      "contradicted_mass": 0.0,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 0.34999999999999987,
+      "evidence_level": {
+        "evidence_level": 1,
+        "label": "Weak Signal",
+        "reasons": [
+          "1 scorable supporting record(s)"
+        ],
+        "blocked_reasons": [
+          "Repeated Signal needs 2 supporting groups of established independence, found 0 (plus 1 unknown-provenance group, which does not count)",
+          "Market Evidence needs a supporting record categorised MARKET_ACTIVITY or DIRECT_VALIDATION with established provenance; quantity of opinion cannot substitute for it",
+          "Direct Validation needs a supporting record categorised DIRECT_VALIDATION with established provenance"
+        ]
+      },
+      "q": 0.65,
+      "limiting_component": "reliability",
+      "components": {
+        "relevance": 1.0,
+        "directness": 1.0,
+        "reliability": 0.65,
+        "extraction_confidence": 1.0,
+        "freshness": 1.0
+      },
+      "non_scorable_reasons": [],
+      "independence_state": "UNKNOWN",
+      "unknown_independence_count": 1,
+      "independence_group_count": 1,
+      "source_count": 1,
+      "profile_id": "reference-v1",
+      "profile_version": "1.0.0",
+      "profile_status": "UNCALIBRATED",
+      "calibrated": false,
+      "algorithm_version": "1.0.0"
+    }
+  ],
+  "unavailable": [
+    {
+      "$banner": [
+        "UNCALIBRATED",
+        "DIAGNOSTIC ONLY",
+        "NOT AN OPPORTUNITY SCORE"
+      ],
+      "claim_id": "6e4c3f21-8881-4453-b4ff-af1b47c464b5",
+      "evidence_id": "16a8c39c-d72a-4252-9c67-7be2165e9cae",
+      "source_id": "stack-exchange",
+      "proposition_kind": "community_site_published_questions_carrying_tag",
+      "reliability_resolution": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "assessment_origin": null,
+        "reviewed_by": null
+      },
+      "evidence_considered": 1,
+      "scorable_evidence": 0,
+      "unavailable_evidence": 1,
+      "aggregation_status": "UNAVAILABLE",
+      "missing_requirements": [
+        "16a8c39c-d72a-4252-9c67-7be2165e9cae: MISSING_RELIABILITY"
+      ],
+      "support_strength": 0.0,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.0,
+      "contradicted_mass": 0.0,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 1.0,
+      "evidence_level": {
+        "evidence_level": 0,
+        "label": "Hypothesis",
+        "reasons": [],
+        "blocked_reasons": [
+          "no scorable supporting evidence",
+          "Market Evidence needs a supporting record categorised MARKET_ACTIVITY or DIRECT_VALIDATION with established provenance; quantity of opinion cannot substitute for it",
+          "Direct Validation needs a supporting record categorised DIRECT_VALIDATION with established provenance"
+        ]
+      },
+      "q": null,
+      "limiting_component": null,
+      "components": {
+        "relevance": 1.0,
+        "directness": 1.0,
+        "reliability": null,
+        "extraction_confidence": 1.0,
+        "freshness": 1.0
+      },
+      "non_scorable_reasons": [
+        "MISSING_RELIABILITY"
+      ],
+      "independence_state": "UNKNOWN",
+      "unknown_independence_count": 0,
+      "independence_group_count": 0,
+      "source_count": 0,
+      "profile_id": "reference-v1",
+      "profile_version": "1.0.0",
+      "profile_status": "UNCALIBRATED",
+      "calibrated": false,
+      "algorithm_version": "1.0.0"
+    },
+    {
+      "$banner": [
+        "UNCALIBRATED",
+        "DIAGNOSTIC ONLY",
+        "NOT AN OPPORTUNITY SCORE"
+      ],
+      "claim_id": "2a634f95-207d-478f-af40-12c9454f21d6",
+      "evidence_id": "17735944-da2f-4469-837f-8f3fe71922aa",
+      "source_id": "stack-exchange",
+      "proposition_kind": "community_site_questions_without_accepted_answer",
+      "reliability_resolution": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "assessment_origin": null,
+        "reviewed_by": null
+      },
+      "evidence_considered": 1,
+      "scorable_evidence": 0,
+      "unavailable_evidence": 1,
+      "aggregation_status": "UNAVAILABLE",
+      "missing_requirements": [
+        "17735944-da2f-4469-837f-8f3fe71922aa: MISSING_RELIABILITY"
+      ],
+      "support_strength": 0.0,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.0,
+      "contradicted_mass": 0.0,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 1.0,
+      "evidence_level": {
+        "evidence_level": 0,
+        "label": "Hypothesis",
+        "reasons": [],
+        "blocked_reasons": [
+          "no scorable supporting evidence",
+          "Market Evidence needs a supporting record categorised MARKET_ACTIVITY or DIRECT_VALIDATION with established provenance; quantity of opinion cannot substitute for it",
+          "Direct Validation needs a supporting record categorised DIRECT_VALIDATION with established provenance"
+        ]
+      },
+      "q": null,
+      "limiting_component": null,
+      "components": {
+        "relevance": 1.0,
+        "directness": 1.0,
+        "reliability": null,
+        "extraction_confidence": 1.0,
+        "freshness": 1.0
+      },
+      "non_scorable_reasons": [
+        "MISSING_RELIABILITY"
+      ],
+      "independence_state": "UNKNOWN",
+      "unknown_independence_count": 0,
+      "independence_group_count": 0,
+      "source_count": 0,
+      "profile_id": "reference-v1",
+      "profile_version": "1.0.0",
+      "profile_status": "UNCALIBRATED",
+      "calibrated": false,
+      "algorithm_version": "1.0.0"
+    }
+  ]
+}

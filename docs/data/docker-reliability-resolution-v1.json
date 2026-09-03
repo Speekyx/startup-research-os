@@ -10,12 +10,20 @@
       "proposition_kind": "source_reported_procurement_value_contrast",
       "origin": "HUMAN_REVIEW",
       "reviewed_by": "thibchm"
+    },
+    {
+      "id": "e2419f13-c031-44d5-837c-c56a867baf34",
+      "version": 1,
+      "source_id": "wikimedia-pageviews",
+      "proposition_kind": "platform_counted_content_request_change",
+      "origin": "HUMAN_REVIEW",
+      "reviewed_by": "thibchm"
     }
   ],
   "totals": {
     "docker_evidence_rows": 8,
-    "resolved": 0,
-    "no_applicable_assessment": 8,
+    "resolved": 6,
+    "no_applicable_assessment": 2,
     "evidence_rows_with_non_null_reliability_column": 0
   },
   "by_scope": [
@@ -58,13 +66,13 @@
       "proposition_kind": "platform_counted_content_request_change",
       "evidence_count": 6,
       "outcomes": [
-        "NO_APPLICABLE_ASSESSMENT"
+        "RESOLVED"
       ],
       "reliability": [
-        "None"
+        "0.65"
       ],
       "assessment_ids": [
-        "None"
+        "e2419f13-c031-44d5-837c-c56a867baf34"
       ]
     }
   ],
@@ -78,12 +86,14 @@
         "claim_type": "OBSERVED",
         "proposition_kind": "platform_counted_content_request_change"
       },
-      "outcome": "NO_APPLICABLE_ASSESSMENT",
-      "scorable": false,
-      "reliability": null,
-      "assessment_id": null,
-      "assessment_version": null,
-      "detail": "no assessment covers this measurement for this purpose. Reliability stays NULL and the record is NON_SCORABLE, which is the honest state: a default here would be the source coefficient this layer exists to prevent",
+      "outcome": "RESOLVED",
+      "scorable": true,
+      "reliability": 0.65,
+      "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+      "assessment_version": 1,
+      "assessment_origin": "HUMAN_REVIEW",
+      "reviewed_by": "thibchm",
+      "detail": "HUMAN_REVIEW assessment v1",
       "evidence_row_reliability_column": null
     },
     {
@@ -100,6 +110,8 @@
       "reliability": null,
       "assessment_id": null,
       "assessment_version": null,
+      "assessment_origin": null,
+      "reviewed_by": null,
       "detail": "no assessment covers this measurement for this purpose. Reliability stays NULL and the record is NON_SCORABLE, which is the honest state: a default here would be the source coefficient this layer exists to prevent",
       "evidence_row_reliability_column": null
     },
@@ -117,6 +129,8 @@
       "reliability": null,
       "assessment_id": null,
       "assessment_version": null,
+      "assessment_origin": null,
+      "reviewed_by": null,
       "detail": "no assessment covers this measurement for this purpose. Reliability stays NULL and the record is NON_SCORABLE, which is the honest state: a default here would be the source coefficient this layer exists to prevent",
       "evidence_row_reliability_column": null
     },
@@ -129,12 +143,14 @@
         "claim_type": "OBSERVED",
         "proposition_kind": "platform_counted_content_request_change"
       },
-      "outcome": "NO_APPLICABLE_ASSESSMENT",
-      "scorable": false,
-      "reliability": null,
-      "assessment_id": null,
-      "assessment_version": null,
-      "detail": "no assessment covers this measurement for this purpose. Reliability stays NULL and the record is NON_SCORABLE, which is the honest state: a default here would be the source coefficient this layer exists to prevent",
+      "outcome": "RESOLVED",
+      "scorable": true,
+      "reliability": 0.65,
+      "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+      "assessment_version": 1,
+      "assessment_origin": "HUMAN_REVIEW",
+      "reviewed_by": "thibchm",
+      "detail": "HUMAN_REVIEW assessment v1",
       "evidence_row_reliability_column": null
     },
     {
@@ -146,12 +162,14 @@
         "claim_type": "OBSERVED",
         "proposition_kind": "platform_counted_content_request_change"
       },
-      "outcome": "NO_APPLICABLE_ASSESSMENT",
-      "scorable": false,
-      "reliability": null,
-      "assessment_id": null,
-      "assessment_version": null,
-      "detail": "no assessment covers this measurement for this purpose. Reliability stays NULL and the record is NON_SCORABLE, which is the honest state: a default here would be the source coefficient this layer exists to prevent",
+      "outcome": "RESOLVED",
+      "scorable": true,
+      "reliability": 0.65,
+      "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+      "assessment_version": 1,
+      "assessment_origin": "HUMAN_REVIEW",
+      "reviewed_by": "thibchm",
+      "detail": "HUMAN_REVIEW assessment v1",
       "evidence_row_reliability_column": null
     },
     {
@@ -163,12 +181,14 @@
         "claim_type": "OBSERVED",
         "proposition_kind": "platform_counted_content_request_change"
       },
-      "outcome": "NO_APPLICABLE_ASSESSMENT",
-      "scorable": false,
-      "reliability": null,
-      "assessment_id": null,
-      "assessment_version": null,
-      "detail": "no assessment covers this measurement for this purpose. Reliability stays NULL and the record is NON_SCORABLE, which is the honest state: a default here would be the source coefficient this layer exists to prevent",
+      "outcome": "RESOLVED",
+      "scorable": true,
+      "reliability": 0.65,
+      "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+      "assessment_version": 1,
+      "assessment_origin": "HUMAN_REVIEW",
+      "reviewed_by": "thibchm",
+      "detail": "HUMAN_REVIEW assessment v1",
       "evidence_row_reliability_column": null
     },
     {
@@ -180,12 +200,14 @@
         "claim_type": "OBSERVED",
         "proposition_kind": "platform_counted_content_request_change"
       },
-      "outcome": "NO_APPLICABLE_ASSESSMENT",
-      "scorable": false,
-      "reliability": null,
-      "assessment_id": null,
-      "assessment_version": null,
-      "detail": "no assessment covers this measurement for this purpose. Reliability stays NULL and the record is NON_SCORABLE, which is the honest state: a default here would be the source coefficient this layer exists to prevent",
+      "outcome": "RESOLVED",
+      "scorable": true,
+      "reliability": 0.65,
+      "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+      "assessment_version": 1,
+      "assessment_origin": "HUMAN_REVIEW",
+      "reviewed_by": "thibchm",
+      "detail": "HUMAN_REVIEW assessment v1",
       "evidence_row_reliability_column": null
     },
     {
@@ -197,12 +219,14 @@
         "claim_type": "OBSERVED",
         "proposition_kind": "platform_counted_content_request_change"
       },
-      "outcome": "NO_APPLICABLE_ASSESSMENT",
-      "scorable": false,
-      "reliability": null,
-      "assessment_id": null,
-      "assessment_version": null,
-      "detail": "no assessment covers this measurement for this purpose. Reliability stays NULL and the record is NON_SCORABLE, which is the honest state: a default here would be the source coefficient this layer exists to prevent",
+      "outcome": "RESOLVED",
+      "scorable": true,
+      "reliability": 0.65,
+      "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+      "assessment_version": 1,
+      "assessment_origin": "HUMAN_REVIEW",
+      "reviewed_by": "thibchm",
+      "detail": "HUMAN_REVIEW assessment v1",
       "evidence_row_reliability_column": null
     }
   ],
@@ -236,6 +260,36 @@
       "scopes_are_identical": false,
       "outcome": "NO_APPLICABLE_ASSESSMENT",
       "resolved": false
+    },
+    {
+      "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+      "assessment_scope_source": "wikimedia-pageviews",
+      "assessment_scope_proposition": "platform_counted_content_request_change",
+      "tested_against_source": "stack-exchange",
+      "tested_against_proposition": "community_site_published_questions_carrying_tag",
+      "scopes_are_identical": false,
+      "outcome": "NO_APPLICABLE_ASSESSMENT",
+      "resolved": false
+    },
+    {
+      "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+      "assessment_scope_source": "wikimedia-pageviews",
+      "assessment_scope_proposition": "platform_counted_content_request_change",
+      "tested_against_source": "stack-exchange",
+      "tested_against_proposition": "community_site_questions_without_accepted_answer",
+      "scopes_are_identical": false,
+      "outcome": "NO_APPLICABLE_ASSESSMENT",
+      "resolved": false
+    },
+    {
+      "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+      "assessment_scope_source": "wikimedia-pageviews",
+      "assessment_scope_proposition": "platform_counted_content_request_change",
+      "tested_against_source": "wikimedia-pageviews",
+      "tested_against_proposition": "platform_counted_content_request_change",
+      "scopes_are_identical": true,
+      "outcome": "RESOLVED",
+      "resolved": true
     }
   ]
 }

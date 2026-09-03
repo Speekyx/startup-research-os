@@ -2,8 +2,11 @@
 
 **Status:** Recorded by Mission 1.36.1, 2026-09-03.
 **Reviewer:** `thibchm`
-**Outcome:** `OPERATOR_CONFIRMATION_REQUIRED` — one assessment is prepared and
-validated, and **the operator must type the confirmation themselves.**
+**Outcome:** `DOCKER_RELIABILITY_PARTIALLY_REVIEWED`. The mission reached
+`OPERATOR_CONFIRMATION_REQUIRED` and stopped there; the operator confirmed at a
+terminal on 2026-09-03 and **one assessment is now recorded**. Two of the three
+scopes in use remain deliberately unassessed, which is why this is `PARTIALLY`
+and not `DOCKER_EVIDENCE_SCORING_ELIGIBILITY_READY`.
 
 ---
 
@@ -17,7 +20,7 @@ is for.
 |---|---|---|
 | 1 · `stack-exchange` / `…published_questions_carrying_tag` | **NO** | no assessment |
 | 2 · `stack-exchange` / `…questions_without_accepted_answer` | **NO** | no assessment |
-| 3 · `wikimedia-pageviews` / `platform_counted_content_request_change` | **YES** | `0.65`, HUMAN_REVIEW, pending confirmation |
+| 3 · `wikimedia-pageviews` / `platform_counted_content_request_change` | **YES** | `0.65`, HUMAN_REVIEW, **recorded** |
 
 **No scope drift.** All three five-part keys were re-verified against the live
 database and against the Mission 1.36 packet before anything else. Had one
@@ -130,7 +133,11 @@ not turn it into a Docker-wide coefficient:
 
 ---
 
-## 4. Why this mission stopped
+## 4. Why this mission stopped, and how it was unblocked
+
+**The operator confirmed on 2026-09-03 and the assessment is now recorded.** This
+section is kept as written, because how it stopped is the part worth preserving:
+the guard is the contract, not an obstacle to it.
 
 The recording tool requires a confirmation **typed by a person**, and refuses
 when there is no terminal:
@@ -176,22 +183,68 @@ two Stack Exchange rows still `NO_APPLICABLE_ASSESSMENT`,
 `scoring.evidence.reliability` still `NULL` on every row, and the negative checks
 still showing no leak.
 
+**That is exactly what it reported.** Assessment
+`e2419f13-c031-44d5-837c-c56a867baf34`, version 1, `HUMAN_REVIEW`, `thibchm`, two
+document-backed basis rows, no calibration reference. Six rows `RESOLVED` at
+`0.65` binding that one id, two still `NO_APPLICABLE_ASSESSMENT`, and the
+negative checks now run **six** rather than three, because a second assessment
+doubles the ways one could leak, and still find none.
+
 ---
 
 ## 5. State as this mission leaves it
 
-Verified against the live database after the attempt:
+Verified against the live database after the operator confirmed:
 
-| | |
-|---|---:|
-| ReliabilityAssessments | **1** (TED only, unchanged) |
-| Reliability basis rows | **4** |
-| Docker rows `RESOLVED` | **0** |
-| Docker rows `NO_APPLICABLE_ASSESSMENT` | **8** |
-| `scoring.evidence.reliability` non-NULL | **0** |
-| Negative resolver checks run / leaks | **3 / 0** |
-| Opportunities / revisions / links | **1 / 1 / 7** |
-| Scores | **0** (`scoring.scores` absent) |
+| | before | after |
+|---|---:|---:|
+| ReliabilityAssessments | 1 | **2** |
+| Reliability basis rows | 4 | **6** |
+| Docker rows `RESOLVED` | 0 | **6** |
+| Docker rows `NO_APPLICABLE_ASSESSMENT` | 8 | **2** |
+| `scoring.evidence.reliability` non-NULL | 0 | **0** |
+| Negative resolver checks run / leaks | 3 / 0 | **6 / 0** |
+| Opportunities / revisions / links | 1 / 1 / 7 | **1 / 1 / 7** |
+| Scores | 0 | **0** (`scoring.scores` absent) |
 
-No diagnostic aggregation ran, because §15 makes it conditional on at least one
-row becoming scorable and none did.
+Two rows of that table are the ones to read twice.
+`scoring.evidence.reliability` is **still NULL on every row**, because
+reliability binds late (ADR-026 Decision 2): the resolver produces the number and
+the binding at read time, and the Evidence row is never rewritten. And the
+**Opportunity did not move** — reliability changing does not change what a
+hypothesis said.
+
+## 6. The diagnostic aggregation
+
+§15's precondition became true, so it ran: `allow_uncalibrated=True`, over the
+real `aggregate()`, writing
+[docker-diagnostic-aggregation-v1.json](docker-diagnostic-aggregation-v1.json)
+and **no database row**. Every entry carries the three required words:
+**UNCALIBRATED, DIAGNOSTIC ONLY, NOT AN OPPORTUNITY SCORE.**
+
+**Eight Evidence rows sit on eight distinct Claims**, so these are eight
+single-record aggregations rather than one eight-record aggregation. Reliability
+resolving does not turn six observations of one Wikipedia article into an
+aggregation, and summing them would invent a claim nobody made.
+
+| | six Wikimedia claims | two Stack Exchange claims |
+|---|---|---|
+| status | `COMPLETE` | `UNAVAILABLE` |
+| `q` | `0.650` | none |
+| limiting component | **`reliability`** | none; `MISSING_RELIABILITY` |
+| support strength | 0.65 | 0 |
+| contradiction strength | 0.0 | 0.0 |
+| supported mass | 0.65 | 0.0 |
+| uncertainty mass | 0.35 | **1.0** |
+| Evidence level | **1**, Weak Signal | **0** |
+
+**The reviewed value is exactly what the score is made of.** `q = min(components)`
+and relevance, directness, extraction confidence and freshness are all `1.0`, so
+`reliability` is the limiting component on all six. That is the same shape
+Mission 1.15.13 found for TED at a different number, and it is the honest result:
+the score is a restatement of one human judgement, not a corroboration of it.
+
+**Level stayed 1, and reliability could not have raised it.** The blocked reasons
+say why: *Repeated Signal needs 2 supporting groups of established independence,
+found 0*, and Market Evidence needs a record categorised `MARKET_ACTIVITY`. Both
+gates are about things a reliability value does not touch.

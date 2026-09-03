@@ -166,10 +166,13 @@ def main() -> int:
             "outcome": resolution.outcome.value,
             "scorable": resolution.scorable,
             "reliability": resolution.reliability,
+            # `version` and `origin`, not `assessment_version`: this branch was
+            # unreachable while every binding was None, so the first row that
+            # actually resolved is what typed it.
             "assessment_id": (resolution.binding.assessment_id if resolution.binding else None),
-            "assessment_version": (
-                resolution.binding.assessment_version if resolution.binding else None
-            ),
+            "assessment_version": (resolution.binding.version if resolution.binding else None),
+            "assessment_origin": (resolution.binding.origin.value if resolution.binding else None),
+            "reviewed_by": (resolution.binding.reviewed_by if resolution.binding else None),
             "detail": resolution.detail,
             "evidence_row_reliability_column": row["supplied"],
         }
