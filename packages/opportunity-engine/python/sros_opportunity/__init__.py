@@ -81,6 +81,44 @@ from .packet import (
     OpportunityEvidencePacket,
     build_packet,
 )
+from .scope_relations import (
+    SCOPE_RELATION_REGISTRY_VERSION,
+    EvidenceSupportRole,
+    ScopeRelation,
+    ScopeRelationRegistry,
+    ScopeRelationStatus,
+    ScopeRelationType,
+    load_scope_relations,
+)
+from .scope_resolution import (
+    SCOPE_RESOLUTION_VERSION,
+    ObservationScopeRules,
+    SourceNativeScopeRule,
+    load_scope_rules,
+    opportunity_subject_scope,
+    resolve_observation_scope,
+)
+from .scoped_evidence import (
+    SCOPE_AWARE_EVIDENCE_VERSION,
+    ContextAdmission,
+    ContextRefusalReason,
+    ScopedDimension,
+    ScopedEvidence,
+    admit_evidence,
+)
+from .scoped_packet import (
+    SCOPED_PACKET_VERSION,
+    ScopedOpportunityEvidencePacket,
+    build_scoped_packet,
+)
+from .scopes import (
+    OBSERVATION_SCOPE_VERSION,
+    SCOPE_TYPE_DEFINITIONS,
+    ObservationScope,
+    ScopeOrigin,
+    ScopeStatus,
+    SubjectScopeType,
+)
 from .subjects import (
     SUBJECT_REGISTRY_VERSION,
     CanonicalSubject,
@@ -129,6 +167,34 @@ from .validation import (
 )
 
 __all__ = [
+    "OBSERVATION_SCOPE_VERSION",
+    "SCOPE_TYPE_DEFINITIONS",
+    "ObservationScope",
+    "ScopeOrigin",
+    "ScopeStatus",
+    "SubjectScopeType",
+    "SCOPE_RELATION_REGISTRY_VERSION",
+    "EvidenceSupportRole",
+    "ScopeRelation",
+    "ScopeRelationRegistry",
+    "ScopeRelationStatus",
+    "ScopeRelationType",
+    "load_scope_relations",
+    "SCOPE_RESOLUTION_VERSION",
+    "ObservationScopeRules",
+    "SourceNativeScopeRule",
+    "load_scope_rules",
+    "opportunity_subject_scope",
+    "resolve_observation_scope",
+    "SCOPE_AWARE_EVIDENCE_VERSION",
+    "ContextAdmission",
+    "ContextRefusalReason",
+    "ScopedDimension",
+    "ScopedEvidence",
+    "admit_evidence",
+    "SCOPED_PACKET_VERSION",
+    "ScopedOpportunityEvidencePacket",
+    "build_scoped_packet",
     "COMMERCIAL_DIMENSIONS",
     "COUNTING_DIMENSIONS",
     "DIMENSION_DEFINITIONS",

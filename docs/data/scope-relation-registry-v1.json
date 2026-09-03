@@ -1,0 +1,34 @@
+{
+  "$comment": "Mission 1.34 §4, §5, §29, §33. Reviewed edges saying that one scope CONTAINS another, so that Evidence observed at a broader scope may be admitted to an Opportunity's packet as CONTEXT -- at its own scope, never as evidence about the subject.\n\nTHIS REGISTRY IS EMPTY, AND THAT IS THE RESULT RATHER THAN AN OVERSIGHT. Mission 1.33 established that no source-native taxonomy in the portfolio states which commercial category contains Docker, and refused to assert one. Mission 1.34 builds the capability to represent such an edge and adds none: an edge invented to demonstrate the architecture would be exactly the move both missions exist to refuse, and it would be indistinguishable in the data from one somebody had actually established.\n\nAN EDGE ASSERTS THE NAMED RELATION AND NOTHING MORE. `SUBJECT_WITHIN_CATEGORY` says the product falls inside the classification. It does not say the two are interchangeable, that what is observed of the category is true of the product, or that the product is representative of the category. Mission 1.34 §7 is the whole argument: the containment holds and the inference does not.\n\nNO TRANSITIVE EXPANSION. If a product is within a category and that category is within a market, nothing here or in code concludes that the product is within the market. Each edge is asked for by name, because transitivity silently multiplies what one reviewed edge licenses and the review that authorised the first never saw the third.\n\nMATCHING IS BY EXACT SCOPE-ID EQUALITY on both endpoints. No string distance, no token overlap, no stem, no synonym table, no embedding, no model. There is no MODEL_INFERRED origin, here or in code.",
+  "registry_version": "scope-relation-registry@1.0.0",
+  "reviewed_by": "mission-1.34",
+  "reviewed_at": "2026-09-03T00:00:00+00:00",
+  "relation_types": {
+    "SUBJECT_WITHIN_CATEGORY": "narrower PRODUCT is inside broader CATEGORY",
+    "CATEGORY_WITHIN_MARKET": "narrower CATEGORY is inside broader MARKET",
+    "SCOPE_WITHIN_GEOGRAPHY": "narrower PRODUCT, CATEGORY or MARKET is observed within a GEOGRAPHY"
+  },
+  "required_per_relation": [
+    "narrower_scope_id",
+    "narrower_scope_type",
+    "broader_scope_id",
+    "broader_scope_type",
+    "relation_type",
+    "origin (SOURCE_NATIVE | HUMAN_REVIEWED | DETERMINISTIC_REGISTRY)",
+    "basis",
+    "reviewed_by",
+    "reviewed_at",
+    "status (ACTIVE | WITHDRAWN)"
+  ],
+  "relations": [],
+  "explicitly_not_recorded": [
+    {
+      "would_be": "subject:docker -> ted-eu:CPV-division:90",
+      "why": "Mission 1.33 §33 and Mission 1.34 §33 both forbid it by name. Nothing retrieved establishes that CPV division 90 contains Docker, no CPV code was selected, and the collector expands no CPV code into a label -- so this repository does not know what division 90 covers and must not act as though it did. Division 90 is in the corpus because Mission 1.15.10 ran a bounded acquisition there, and that is a fact about a test acquisition, not about Docker."
+    },
+    {
+      "would_be": "subject:docker -> any category",
+      "why": "Establishing one requires reading an authoritative source-native taxonomy and recording which of its classes contains the container platform. That is a future mission's job (Docker Commercial Scope Mapping), with the same discipline the canonical subject registry uses: exact identifiers, a stated basis, decided once by a person who read the pages."
+    }
+  ]
+}

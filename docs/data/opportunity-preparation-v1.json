@@ -3,7 +3,7 @@
   "use_profile_id": "local-private-research-v1",
   "use_profile_note": "DECLARED by the runtime, never inferred (ADR-027). The Evidence rows do not themselves record a use profile: most were collected before ADR-027 existed.",
   "procedures": {
-    "subject_registry": "canonical-subject-registry@1.0.0",
+    "subject_registry": "canonical-subject-registry@1.1.0",
     "dimension_taxonomy": "opportunity-evidence-dimensions@1.0.0",
     "dimension_map": "signal-type-dimension-map@1.0.0",
     "eligibility": "opportunity-input-eligibility@1.0.0",

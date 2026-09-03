@@ -1,6 +1,6 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.60
+Version: 1.61
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
@@ -13,6 +13,41 @@ Last amended: 2026-09-03 (Sprint 1 / Mission 1.31.1)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.61 — 2026-09-03 (Sprint 1 / Mission 1.34)
+
+**`MULTI_SCOPE_ARCHITECTURE_READY_SCOPE_RELATIONS_UNPOPULATED`.** The engine can
+now say what LEVEL of thing an Evidence row observes, separately from the subject
+an Opportunity is about.
+
+`SubjectScopeType` — `PRODUCT | CATEGORY | MARKET | GEOGRAPHY` — with
+`ObservationScope`, a typed `ScopeRelation` model, three support roles
+(`DIRECT_SUBJECT_EVIDENCE`, `BROADER_SCOPE_CONTEXT`, `GEOGRAPHIC_CONTEXT`), a
+`ScopedDimension` triple that cannot be read without its scope, and a
+fail-closed admission gate.
+
+**The relation registry ships empty, and that is the outcome.** Mission 1.33
+refused to assert which category contains Docker and §33 forbids inventing one,
+so the capability holds zero edges and no Evidence row can currently be
+contextual. Demonstrated on the real 28-row corpus: Docker resolves `PRODUCT`
+(8 rows, direct), TED resolves `CATEGORY` on the publisher's own authority, and
+offering TED to the Docker Opportunity is refused `NO_PERMITTED_RELATION`.
+
+**No migration.** Scope is derived at packet-build time from identifiers already
+held; persisting a derivation is what `source-registry-v1.md` §3 refuses.
+Compatibility was proven by regenerating the preparation artifact: exactly one
+field differed, the registry version.
+
+New: `docs/data/observation-scope-rules-v1.json`,
+`docs/data/scope-relation-registry-v1.json`,
+`docs/data/opportunity-multiscope-sufficiency-design-v1.md` (design only, not
+activated), and 65 tests. The canonical subject registry moved to
+`canonical-subject-registry@1.1.0`.
+
+**0 model calls, 0 network calls, 0 new canonical records**, all thirteen
+counters verified unchanged, Opportunity revision 1 and its 7 links untouched.
+
+Report: `docs/architecture/mission-1.34-report.md`.
 
 ## 1.60 — 2026-09-03 (Sprint 1 / Mission 1.33)
 
@@ -2152,6 +2187,8 @@ Additionally authoritative:
 - docs/data/canonical-subject-registry-v1.json (added in 1.56)
 - docs/data/answer-acceptance-semantics-v1.md (added in 1.59)
 - docs/data/commercial-dimension-source-feasibility-v1.md (added in 1.60)
+- docs/data/observation-scope-rules-v1.json (added in 1.61)
+- docs/data/scope-relation-registry-v1.json (added in 1.61)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

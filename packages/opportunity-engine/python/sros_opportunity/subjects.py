@@ -32,6 +32,8 @@ import pathlib
 from dataclasses import dataclass
 from typing import Any
 
+from .scopes import SubjectScopeType
+
 __all__ = [
     "SUBJECT_REGISTRY_VERSION",
     "CanonicalSubject",
@@ -40,7 +42,7 @@ __all__ = [
     "load_subject_registry",
 ]
 
-SUBJECT_REGISTRY_VERSION = "canonical-subject-registry@1.0.0"
+SUBJECT_REGISTRY_VERSION = "canonical-subject-registry@1.1.0"
 
 
 @dataclass(frozen=True)
@@ -68,6 +70,15 @@ class CanonicalSubject:
     display_name: str
     description: str
     identifiers: tuple[SubjectIdentifier, ...]
+    #: Mission 1.34 §1. WHAT LEVEL OF THING this subject is, declared by the
+    #: person who wrote the entry rather than derived from any source. Required
+    #: at 1.1.0: the description already said it in prose -- *the Docker
+    #: container platform* -- and a level a machine cannot read is a level that
+    #: cannot stop a category observation being attached to a product.
+    #:
+    #: This is NOT a parent, a category or a relation. It says what the subject
+    #: IS, and says nothing about what contains it (§33).
+    scope_type: SubjectScopeType
 
     def __post_init__(self) -> None:
         if not self.identifiers:
@@ -133,6 +144,10 @@ def load_subject_registry(path: str | pathlib.Path) -> CanonicalSubjectRegistry:
                     )
                     for item in entry.get("identifiers") or ()
                 ),
+                # Required, with no default. A subject whose level nobody
+                # declared would be silently classified by whichever consumer
+                # read it first.
+                scope_type=SubjectScopeType(str(entry["scope_type"])),
             )
         )
     return CanonicalSubjectRegistry(

@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.61
-Last amended: 2026-09-03 (Sprint 1 / Mission 1.33)
+Version: 1.62
+Last amended: 2026-09-03 (Sprint 1 / Mission 1.34)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.62 | 2026-09-03 | **MULTI_SCOPE_ARCHITECTURE_READY_SCOPE_RELATIONS_UNPOPULATED: the engine can now say WHAT LEVEL a row observes, and there are no edges.** `SubjectScopeType` = PRODUCT | CATEGORY | MARKET | GEOGRAPHY, each with a `means` and a `never_means`, and **MARKET's example is literally 'none'** because no registered source observes one. **The assumption broken**: `build_packet` unioned dimensions with NO SCOPE TERM, so membership WAS the claim of aboutness -- found in seven places and listed in the report. **The relation registry ships EMPTY and that is the result**: Mission 1.33 refused to say which category contains Docker and §33 forbids inventing one, so the capability exists holding zero edges and NO Evidence row can currently be contextual. **Real demonstration on 28 rows**: Docker resolves PRODUCT (8 rows, DIRECT), TED resolves CATEGORY on the publisher's own authority (CPV is a classification by its own name), and offering TED to Docker is REFUSED `NO_PERMITTED_RELATION` -- **the refusal is the demonstration**. 25 of 28 scopes resolved, **3 UNDETERMINED** (GDELT terms; a word names no level) and nothing mass-labelled. **NO MIGRATION**: scope is DERIVED at build time from identifiers already held, because persisting a derivation is what source-registry §3 refuses for eligibility. **Compatibility PROVEN not asserted**: regenerating the preparation artifact changed EXACTLY ONE FIELD, the registry version. **No union of direct and contextual dimensions exists on the packet** -- a test enumerates every public attribute -- because that union is the sentence *Docker supports MARKET_ACTIVITY*. No transitivity, no MODEL_INFERRED origin, WTP still unreachable, revision 1 and its 7 links untouched, all 13 counters verified unchanged |
 | 1.61 | 2026-09-03 | **COMMERCIAL_SOURCE_GRAIN_MISMATCH: the sources that can name Docker carry no commercial semantics, and the sources that carry commercial semantics cannot name Docker.** A desk review of all 29 registered sources. **5 can identify Docker at grain** -- `github`, `product-hunt`, `reddit`, `stack-exchange`, `wikimedia-pageviews` -- 7 reach it only as a MENTION and 17 not at all. **3 could support a missing commercial dimension and all 3 are blocked.** 0 acquisitions, 0 model calls, **every one of the thirteen counters verified unchanged against the live database**. **21 of 29 have no `local-private-research-v1` review**, so ADR-027 refuses them whatever their terms say -- and that is NOT twenty-one opportunities: GitHub's and Product Hunt's findings are about the PURPOSE of the use, which the local profile does not change, because **local deployment never implies non-commercial use**. GitHub's AUP section 7 is an allowlist applying *regardless of whether the information was scraped, collected through our API, or obtained otherwise*, permitting research use **only if publications are open access**; Product Hunt's docs say twice that the API *must not be used for commercial purposes*. **GitHub has the best grain in the portfolio and the strongest unclaimed dimension (COMPETITIVE_SUPPLY), and is NOT_RECOMMENDED.** **No source supports SOLUTION_GAP and none supports WILLINGNESS_TO_PAY at any grain** -- the taxonomy's own never_means already refuses a listed price, a budget line and a contract total. **THE BINDING CONSTRAINT IS ARCHITECTURAL**: `CanonicalSubject` has no scope field and a packet holds one subject, so SROS models GEOGRAPHIC scope on an Opportunity and no SUBJECT scope at all -- while MARKET_ACTIVITY and ECONOMIC_VALUE already ask about *the bounded scope observed*. TED is authorized, collected, normalized, extracted and carries three commercial dimensions, and its subject key is `ted-eu:CPV-division:90`. Next: **Multi-Scope Opportunity Evidence Architecture V1**, before any acquisition |
 | 1.60 | 2026-09-03 | **COMMERCIAL_EVIDENCE_CREATED_NO_OPPORTUNITY_DIMENSION: a real measurement that maps to nothing, on purpose.** 88 held Docker questions, **34 with an accepted answer and 54 without** -- 38 answered but unaccepted, 16 with zero answers, **0 missing the flag** -- and the Signal maps to `frozenset()`. **The assessment was FROZEN BEFORE the Signal existed**, which is the whole of §0: a dimension chosen after seeing that the packet needed one is a rationalisation. `SOLUTION_GAP` is settled by its own `never_means` -- *that absence of evidence of a solution is evidence of its absence* -- and `SOLUTION_DISSATISFACTION` by the fact that **the asker is not evaluating a product**. **Acceptance is ONE PERSON'S ACTION**: only the asker may accept, so `false` reports a non-action by one participant, and an asker who solved it elsewhere or never returned leaves it false whatever answers arrived. **The 16 zero-answer questions look like the sharpest possible gap evidence and isolating them does not rescue the inference**, it makes the same inference over a smaller set. **The state is OBSERVED LATE**: the questions carry creation instants and the flag is whatever it was at collection, so the claim says *at the source state observed* and never *during*. **A claim shaped like a numerator invites a rate**: revision 1 read *Of the questions ... 54 had no accepted answer* and named no denominator, so `1.4.1` asserts a SET; revision 1 is preserved. **Docker packet 7 -> 8 rows with counting dimensions UNCHANGED at 2** -- a zero-dimension row adds size and never diversity -- still HYPOTHESIS_FORMABLE, still AVAILABLE, independence UNKNOWN for 8 of 8 because it is a **second measurement over the same corpus**. **Two defects fixed**: an interpreter version bump re-INSERTED Evidence because the idempotency key embeds it, and the new row formed its own tenth packet because `subject_key` knew one signal type. RawRecords and NormalizedRecords unchanged at 148, 0 model calls, no Opportunity revision, problem-family still PARKED |
 | 1.59 | 2026-09-03 | **FIRST_OPPORTUNITY_HYPOTHESIS_CREATED. SROS holds its first Opportunity.** Same packet, **byte-identical prompt hash**, corrected audit: one call, 0 retries, 0.0392 USD, decision FORM_HYPOTHESIS, every clause of the frozen gate passed. Opportunities 0 -> **1**, revisions 0 -> **1**, evidence links 0 -> **7**, and RawRecords, NormalizedRecords, Signals, Claims, ClaimRevisions, Evidence, ReliabilityAssessments, Embeddings and Scores ALL UNCHANGED. **Mission 1.31 is untouched** and keeps its rejection under audit@1.0.0. **§1's five required cases found that guard@1.1.0 handled four**: a denial whose marker FOLLOWS its term -- *competitors ARE NOT established* -- was still flagged, and 1.2.0 adds that one grammatical form, cancelled by an intervening comma so *buyers would pay, which is not established* still fails. Checking them also exposed an off-by-one in `_phrase_position` that had misaligned every term not at the start of a sentence. **The two runs agree on every structural judgement** -- same actor refusal, same 12 unsupported dimensions, same 7 citations, both asserting no commercial claim -- so what changed was the audit and not the answer. `market_scope` is GLOBAL because the column is NOT NULL and Ontology V2 §4 defines GLOBAL as the ABSENCE of a restriction, recorded as a limitation on the row. Four TED tests repaired: a global Opportunity count is now deployment state |
@@ -308,6 +309,93 @@ positives in the scored split, which this 89-question corpus did not supply: one
 defensible SAME in 40 candidate pairs is a finding about the corpus, not about
 the classifier. **No synthetic positive may substitute** -- a constructed pair
 can test a parser and can never establish semantic accuracy against real data.
+
+### An observation says what LEVEL it is about, or it says nothing
+
+Added in 1.62 (Mission 1.34, `mission-1.34-report.md`,
+`scope-architecture-demonstration-v1.json`).
+**`MULTI_SCOPE_ARCHITECTURE_READY_SCOPE_RELATIONS_UNPOPULATED`.**
+
+    Evidence row  ->  ObservationScope  ->  [ reviewed ScopeRelation ]  ->  role
+    subject:docker      PRODUCT              (none exist)                 DIRECT
+    ted-eu:CPV-division:90  CATEGORY         (none exist)                 REFUSED
+
+- **THE ASSUMPTION THAT WAS THERE.** `build_packet` unioned its rows' dimensions
+  with **no scope term in the expression**, so membership in a packet WAS the
+  claim that the row was about that packet's subject. Fine while every row
+  observes the subject; exactly wrong the moment a procurement notice about a
+  purchasing CATEGORY sits beside a question about a PRODUCT.
+- **Four levels, each defined by what it IS.** §1 forbids defining PRODUCT as
+  *narrower than CATEGORY*, because a vocabulary whose members are defined by
+  their neighbours cannot refuse a new case. Each carries a `never_means`, and
+  **`MARKET`'s example in this repository is "none"** -- no registered source
+  observes one and nothing was invented so the vocabulary would look complete.
+- **SUBJECT SCOPE IS NOT MARKET SCOPE.** `MarketScope` says WHERE an Opportunity
+  applies; `SubjectScopeType` says what level of thing an observation is about.
+  Both contain the word GEOGRAPHY and they answer different questions -- a World
+  Bank series is ABOUT Germany, which is a subject, and where an Opportunity
+  applies is a separate field nobody touched. Merging them would be the Mission
+  1.15.4 shape again: one field answering a question that is two.
+- **UNDETERMINED is a STATUS, never a fifth type.** A level saying *nobody
+  classified this* would give every consumer branching exhaustively over levels a
+  branch for an absence. 3 of 28 rows are UNDETERMINED -- the GDELT lexical terms,
+  because a word names no level of thing -- and **nothing was mass-labelled
+  PRODUCT to make the corpus tidy** (§12).
+- **THE RELATION REGISTRY SHIPS EMPTY, AND THAT IS THE RESULT.** Mission 1.33
+  refused to assert which commercial category contains Docker; §33 forbids
+  inventing one here. So the capability exists and holds zero edges, and **no
+  Evidence row in this deployment can currently be contextual** -- contextual
+  requires an edge. The registry records what it did NOT write and why.
+- **NO TRANSITIVE EXPANSION.** Product-in-category plus category-in-market does
+  not yield product-in-market. Transitivity looks free and silently multiplies
+  what one reviewed edge licenses, and the review that authorised the first never
+  saw the third.
+- **There is no `MODEL_INFERRED` origin**, in the enum or anywhere in the
+  mission. Scope identity and containment are exact equality or a reviewed
+  registry entry: no distance, no token overlap, no stem, no synonym table, no
+  embedding, no model.
+- **NO FACTUAL DIMENSION PROPAGATION** (§25). A broader observation is retained
+  AT ITS OWN SCOPE. `CATEGORY:X has MARKET_ACTIVITY` stays
+  `context(CATEGORY:X).MARKET_ACTIVITY` and never becomes
+  `product(docker).MARKET_ACTIVITY` -- no inheritance, no promotion, no
+  lower-confidence variant, no parameter that would enable one.
+- **The packet offers NO UNION of direct and contextual dimensions**, and a test
+  enumerates every public attribute to prove it, because that union is the
+  sentence *Docker supports MARKET_ACTIVITY* and it must not be one attribute
+  access away. Sufficiency reads the DIRECT half alone, so a future category row
+  cannot satisfy a rule written for direct product evidence. **That is a
+  structural no, not a policy no**: a policy no is relaxed by editing a
+  threshold.
+- **The wording carries the scope in the SUBJECT of the sentence**, not in a
+  trailing qualifier, because a qualifier is what a summariser drops.
+
+**NO MIGRATION, AND THAT WAS A DECISION.** The scope is DERIVED at packet-build
+time from identifiers already held, by the same `subject_key` procedure grouping
+uses. Persisting it would freeze a derivation in a column, which
+`source-registry-v1.md` §3 refuses for eligibility and for the same reason. So no
+new tenant table, no RLS change, no historical backfill, and the ledger stays at
+0031.
+
+**COMPATIBILITY WAS PROVEN RATHER THAN ASSERTED.** Regenerating
+`opportunity-preparation-v1.json` after every change in the mission produced
+**exactly one differing field across the whole artifact** -- the recorded
+`subject_registry` version, 1.0.0 -> 1.1.0. Every packet id, dimension set,
+eligibility count and sufficiency verdict identical. The Docker packet is still
+8 rows and HYPOTHESIS_FORMABLE, and the scoped packet's direct half reproduces
+it.
+
+**Two things the tests found and one clause that was removed rather than
+written.** The first gate applied §15's dimension clause to DIRECT rows, which
+refused Mission 1.32's deliberately dimensionless row -- §15 states its
+conditions for broader-scope INCLUSION, and a direct row is not included on the
+strength of anything. And §15's *provenance is preserved* is already enforced by
+`EvidenceFacets` and `ObservationScope`, so a duplicate check could never fire:
+**an unreachable guard reads as protection while protecting nothing**, and the
+tests assert the two upstream constructors instead.
+
+**Opportunity revision 1 and its 7 links are untouched**, no revision 2 exists,
+reliability is still one assessment, independence is still UNKNOWN everywhere, 0
+model calls, 0.00 USD, and problem-family inference stays **PARKED**.
 
 ### Commercial evidence lives at a broader scope than a product subject
 

@@ -1,6 +1,6 @@
 {
-  "$comment": "Mission 1.30 §4. An explicit, reviewed mapping from EXACT source-native identifiers onto a canonical subject, so that Evidence from two source families can enter one Opportunity packet. Every entry names a full source-native subject key verbatim and states the basis on which a person decided the two identifiers name the same subject. There is NO string distance, NO token overlap, NO stem, NO synonym table, NO embedding and NO threshold: an identifier appears here or it does not, and an unmapped identifier keeps its source-native key and its own packet.\n\nTHIS IS NOT SAME_PROBLEM_FAMILY UNDER ANOTHER NAME. That relation asks whether two OBSERVATIONS express the same problem, is a judgement about meaning, and is PARKED (Mission 1.27). This asserts that two IDENTIFIERS, in two published vocabularies, name the same SUBJECT -- a question a person answers by reading two pages, recorded once, and checkable by anybody who reads the same two pages.\n\nA subject_id is OURS and is not a source identifier. It is deliberately lowercase and unadorned so that nobody mistakes it for a Wikipedia article title or a Stack Overflow tag.",
-  "registry_version": "canonical-subject-registry@1.0.0",
+  "$comment": "Mission 1.30 §4. An explicit, reviewed mapping from EXACT source-native identifiers onto a canonical subject, so that Evidence from two source families can enter one Opportunity packet. Every entry names a full source-native subject key verbatim and states the basis on which a person decided the two identifiers name the same subject. There is NO string distance, NO token overlap, NO stem, NO synonym table, NO embedding and NO threshold: an identifier appears here or it does not, and an unmapped identifier keeps its source-native key and its own packet.\n\nTHIS IS NOT SAME_PROBLEM_FAMILY UNDER ANOTHER NAME. That relation asks whether two OBSERVATIONS express the same problem, is a judgement about meaning, and is PARKED (Mission 1.27). This asserts that two IDENTIFIERS, in two published vocabularies, name the same SUBJECT -- a question a person answers by reading two pages, recorded once, and checkable by anybody who reads the same two pages.\n\nA subject_id is OURS and is not a source identifier. It is deliberately lowercase and unadorned so that nobody mistakes it for a Wikipedia article title or a Stack Overflow tag.\n\nMISSION 1.34 (1.1.0). Every subject now declares `scope_type`: WHAT LEVEL OF THING it is, from the vocabulary PRODUCT | CATEGORY | MARKET | GEOGRAPHY. It is a property of the subject, declared by the person who wrote the entry, and the description already said it in prose. IT IS NOT A PARENT AND NOT A RELATION: nothing here says what contains `docker`, and Mission 1.34 deliberately adds no such edge -- Mission 1.33 refused to assert which commercial category contains it, and inventing one to demonstrate an architecture would be exactly the move both missions exist to refuse.",
+  "registry_version": "canonical-subject-registry@1.1.0",
   "reviewed_by": "mission-1.30",
   "reviewed_at": "2026-09-02T00:00:00+00:00",
   "identifier_key_format": "<source_id>:<scheme>:<part>|<part>...  -- the exact string SubjectKey renders, matched by equality and never by pattern",
@@ -20,7 +20,9 @@
           "source_id": "stack-exchange",
           "basis": "The Stack Overflow tag `docker`. Stack Overflow publishes a description for each tag and maintains tag synonyms, so the tag is a curated site identifier rather than a free-text match on a word: a question about a dock worker does not receive it. The tag is a SUBJECT and not a problem (Mission 1.18), which is exactly the granularity this registry maps."
         }
-      ]
+      ],
+      "scope_type": "PRODUCT",
+      "scope_type_basis": "Docker is one bounded, separately identifiable piece of software published under its own name. It is not a classification containing several things and not a space of economic exchange, so PRODUCT is the level and no other level in the vocabulary fits it."
     },
     {
       "subject_id": "kubernetes",
@@ -37,7 +39,9 @@
           "source_id": "stack-exchange",
           "basis": "The Stack Overflow tag `kubernetes`. Mapped for completeness of the registry; NO Evidence reaches this identifier today, because the questions this deployment holds under it arrived through a `tagged=docker` query and are a biased subset rather than a count (Mission 1.30 §0)."
         }
-      ]
+      ],
+      "scope_type": "PRODUCT",
+      "scope_type_basis": "Kubernetes is one bounded, separately identifiable piece of software published under its own name. It is not a classification containing several things and not a space of economic exchange, so PRODUCT is the level and no other level in the vocabulary fits it."
     },
     {
       "subject_id": "podman",
@@ -54,7 +58,9 @@
           "source_id": "stack-exchange",
           "basis": "The Stack Overflow tag `podman`. Mapped for completeness; NO Evidence reaches this identifier today, because this deployment holds no questions carrying it."
         }
-      ]
+      ],
+      "scope_type": "PRODUCT",
+      "scope_type_basis": "Podman is one bounded, separately identifiable piece of software published under its own name. It is not a classification containing several things and not a space of economic exchange, so PRODUCT is the level and no other level in the vocabulary fits it."
     }
   ],
   "deliberately_absent": {

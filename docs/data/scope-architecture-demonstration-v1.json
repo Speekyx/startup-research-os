@@ -1,0 +1,223 @@
+{
+  "$comment": "Mission 1.34 §32. The scope architecture exercised on the REAL corpus, with no network call, no model call and no write of any kind. It shows that Docker Evidence resolves to PRODUCT and is admitted as DIRECT, that TED Evidence resolves to CATEGORY and stays there, and that offering TED to the Docker Opportunity is REFUSED because no reviewed relation connects the two scopes. The refusal is the demonstration.",
+  "artifact_version": "scope-architecture-demonstration@1.0.0",
+  "generated_by": "mission-1.34",
+  "procedures": {
+    "scoped_packet": "scope-aware-opportunity-packet@1.0.0",
+    "observation_scope": "observation-scope@1.0.0",
+    "scope_aware_evidence": "scope-aware-evidence@1.0.0",
+    "subject_registry": "canonical-subject-registry@1.1.0",
+    "scope_rules": "observation-scope-rules@1.0.0",
+    "scope_relations": "scope-relation-registry@1.0.0"
+  },
+  "totals": {
+    "evidence_rows_inspected": 28,
+    "scopes_resolved": 25,
+    "scopes_undetermined": 3,
+    "reviewed_scope_relations": 0,
+    "model_calls": 0,
+    "network_calls": 0,
+    "rows_written": 0
+  },
+  "scopes_by_id": {
+    "gdelt:lexical-term:ENGLISH|climate": {
+      "scope_type": null,
+      "status": "UNDETERMINED",
+      "origin": null,
+      "evidence_rows": 1
+    },
+    "gdelt:lexical-term:ENGLISH|climate|weather": {
+      "scope_type": null,
+      "status": "UNDETERMINED",
+      "origin": null,
+      "evidence_rows": 1
+    },
+    "gdelt:lexical-term:ENGLISH|weather": {
+      "scope_type": null,
+      "status": "UNDETERMINED",
+      "origin": null,
+      "evidence_rows": 1
+    },
+    "subject:docker": {
+      "scope_type": "PRODUCT",
+      "status": "RESOLVED",
+      "origin": "HUMAN_REVIEWED",
+      "evidence_rows": 8
+    },
+    "subject:kubernetes": {
+      "scope_type": "PRODUCT",
+      "status": "RESOLVED",
+      "origin": "HUMAN_REVIEWED",
+      "evidence_rows": 6
+    },
+    "subject:podman": {
+      "scope_type": "PRODUCT",
+      "status": "RESOLVED",
+      "origin": "HUMAN_REVIEWED",
+      "evidence_rows": 6
+    },
+    "ted-eu:CPV-division:90": {
+      "scope_type": "CATEGORY",
+      "status": "RESOLVED",
+      "origin": "SOURCE_NATIVE",
+      "evidence_rows": 1
+    },
+    "world-bank:metric-geography:SP.POP.TOTL|DE": {
+      "scope_type": "GEOGRAPHY",
+      "status": "RESOLVED",
+      "origin": "SOURCE_NATIVE",
+      "evidence_rows": 2
+    },
+    "world-bank:metric-geography:SP.POP.TOTL|FR": {
+      "scope_type": "GEOGRAPHY",
+      "status": "RESOLVED",
+      "origin": "SOURCE_NATIVE",
+      "evidence_rows": 2
+    }
+  },
+  "docker_packet": {
+    "packet_id": "ad45fe6a7db4dbacdaebacac4a44ffe7f8aedee334caf2e10dd4b1e54e389293",
+    "opportunity_scope_id": "subject:docker",
+    "opportunity_scope_type": "PRODUCT",
+    "direct_evidence": 8,
+    "contextual_evidence": 0,
+    "scope_relations_used": 0,
+    "direct_dimensions": [
+      "AUDIENCE_OR_USAGE",
+      "PROBLEM_OR_NEED",
+      "TREND_OR_CHANGE"
+    ],
+    "direct_counting_dimensions": [
+      "AUDIENCE_OR_USAGE",
+      "PROBLEM_OR_NEED"
+    ],
+    "contextual_dimensions_by_scope": {},
+    "role_counts": {
+      "DIRECT_SUBJECT_EVIDENCE": 8
+    },
+    "limitations": [
+      "This packet holds no broader-scope contextual evidence. Every row in it is observed of the Opportunity's own subject."
+    ]
+  },
+  "ted_evidence": [
+    {
+      "evidence_id": "d48e9694-c4d5-4a03-9a28-a4d6fa5053d0",
+      "scope_id": "ted-eu:CPV-division:90",
+      "scope_type": "CATEGORY",
+      "origin": "SOURCE_NATIVE",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "attached_to_docker": false,
+      "refused_because": "NO_PERMITTED_RELATION"
+    }
+  ],
+  "refusal_counts": {
+    "NO_PERMITTED_RELATION": 17,
+    "SCOPE_UNDETERMINED": 3
+  },
+  "refusals": [
+    {
+      "evidence_id": "05c769b1-f3be-4749-b93a-fca564a1fdcb",
+      "reason": "NO_PERMITTED_RELATION",
+      "detail": "05c769b1-f3be-4749-b93a-fca564a1fdcb: observes 'world-bank:metric-geography:SP.POP.TOTL|DE' while this Opportunity is about 'subject:docker', and no ACTIVE reviewed relation says the second is contained in the first. §15 admits nothing on resemblance, so this row is refused rather than attached weakly."
+    },
+    {
+      "evidence_id": "084a6942-592e-40b3-9ac6-55b3413be374",
+      "reason": "NO_PERMITTED_RELATION",
+      "detail": "084a6942-592e-40b3-9ac6-55b3413be374: observes 'world-bank:metric-geography:SP.POP.TOTL|FR' while this Opportunity is about 'subject:docker', and no ACTIVE reviewed relation says the second is contained in the first. §15 admits nothing on resemblance, so this row is refused rather than attached weakly."
+    },
+    {
+      "evidence_id": "33f8c97d-a55f-479c-aa77-7e021d77e1a3",
+      "reason": "NO_PERMITTED_RELATION",
+      "detail": "33f8c97d-a55f-479c-aa77-7e021d77e1a3: observes 'subject:kubernetes' while this Opportunity is about 'subject:docker', and no ACTIVE reviewed relation says the second is contained in the first. §15 admits nothing on resemblance, so this row is refused rather than attached weakly."
+    },
+    {
+      "evidence_id": "42059751-1a43-4db4-8413-a511ba290623",
+      "reason": "NO_PERMITTED_RELATION",
+      "detail": "42059751-1a43-4db4-8413-a511ba290623: observes 'subject:podman' while this Opportunity is about 'subject:docker', and no ACTIVE reviewed relation says the second is contained in the first. §15 admits nothing on resemblance, so this row is refused rather than attached weakly."
+    },
+    {
+      "evidence_id": "448135b8-209b-4842-b9da-31d8468b34d6",
+      "reason": "SCOPE_UNDETERMINED",
+      "detail": "448135b8-209b-4842-b9da-31d8468b34d6: this row's observation scope is UNDETERMINED. §12 forbids manufacturing one, so it is not attached -- to this Opportunity or to any other."
+    },
+    {
+      "evidence_id": "5a909ff9-3173-4ccb-820b-a2da3402d84f",
+      "reason": "NO_PERMITTED_RELATION",
+      "detail": "5a909ff9-3173-4ccb-820b-a2da3402d84f: observes 'world-bank:metric-geography:SP.POP.TOTL|DE' while this Opportunity is about 'subject:docker', and no ACTIVE reviewed relation says the second is contained in the first. §15 admits nothing on resemblance, so this row is refused rather than attached weakly."
+    },
+    {
+      "evidence_id": "6ff9590b-4b59-461a-955b-90fd1b2de330",
+      "reason": "NO_PERMITTED_RELATION",
+      "detail": "6ff9590b-4b59-461a-955b-90fd1b2de330: observes 'subject:podman' while this Opportunity is about 'subject:docker', and no ACTIVE reviewed relation says the second is contained in the first. §15 admits nothing on resemblance, so this row is refused rather than attached weakly."
+    },
+    {
+      "evidence_id": "729c6193-762e-4b4f-8ff5-a3933e41bed1",
+      "reason": "NO_PERMITTED_RELATION",
+      "detail": "729c6193-762e-4b4f-8ff5-a3933e41bed1: observes 'subject:podman' while this Opportunity is about 'subject:docker', and no ACTIVE reviewed relation says the second is contained in the first. §15 admits nothing on resemblance, so this row is refused rather than attached weakly."
+    },
+    {
+      "evidence_id": "92c105c1-e126-4aa6-a11a-4a2fb294c168",
+      "reason": "NO_PERMITTED_RELATION",
+      "detail": "92c105c1-e126-4aa6-a11a-4a2fb294c168: observes 'subject:kubernetes' while this Opportunity is about 'subject:docker', and no ACTIVE reviewed relation says the second is contained in the first. §15 admits nothing on resemblance, so this row is refused rather than attached weakly."
+    },
+    {
+      "evidence_id": "c35faf7a-e6a3-4600-96a1-73d521063be2",
+      "reason": "NO_PERMITTED_RELATION",
+      "detail": "c35faf7a-e6a3-4600-96a1-73d521063be2: observes 'subject:kubernetes' while this Opportunity is about 'subject:docker', and no ACTIVE reviewed relation says the second is contained in the first. §15 admits nothing on resemblance, so this row is refused rather than attached weakly."
+    },
+    {
+      "evidence_id": "c3bd9af2-6c1e-4bee-9add-ff52b5493833",
+      "reason": "NO_PERMITTED_RELATION",
+      "detail": "c3bd9af2-6c1e-4bee-9add-ff52b5493833: observes 'subject:podman' while this Opportunity is about 'subject:docker', and no ACTIVE reviewed relation says the second is contained in the first. §15 admits nothing on resemblance, so this row is refused rather than attached weakly."
+    },
+    {
+      "evidence_id": "d20c9938-ab00-45da-9ef0-66b9da9710cc",
+      "reason": "NO_PERMITTED_RELATION",
+      "detail": "d20c9938-ab00-45da-9ef0-66b9da9710cc: observes 'subject:kubernetes' while this Opportunity is about 'subject:docker', and no ACTIVE reviewed relation says the second is contained in the first. §15 admits nothing on resemblance, so this row is refused rather than attached weakly."
+    },
+    {
+      "evidence_id": "d48e9694-c4d5-4a03-9a28-a4d6fa5053d0",
+      "reason": "NO_PERMITTED_RELATION",
+      "detail": "d48e9694-c4d5-4a03-9a28-a4d6fa5053d0: observes 'ted-eu:CPV-division:90' while this Opportunity is about 'subject:docker', and no ACTIVE reviewed relation says the second is contained in the first. §15 admits nothing on resemblance, so this row is refused rather than attached weakly."
+    },
+    {
+      "evidence_id": "de1f0dc6-4f5b-42c4-bdb9-fa927f795f07",
+      "reason": "NO_PERMITTED_RELATION",
+      "detail": "de1f0dc6-4f5b-42c4-bdb9-fa927f795f07: observes 'subject:podman' while this Opportunity is about 'subject:docker', and no ACTIVE reviewed relation says the second is contained in the first. §15 admits nothing on resemblance, so this row is refused rather than attached weakly."
+    },
+    {
+      "evidence_id": "e2d80a32-b28e-4578-bd4b-c992c2e45124",
+      "reason": "SCOPE_UNDETERMINED",
+      "detail": "e2d80a32-b28e-4578-bd4b-c992c2e45124: this row's observation scope is UNDETERMINED. §12 forbids manufacturing one, so it is not attached -- to this Opportunity or to any other."
+    },
+    {
+      "evidence_id": "e4c321bc-3ddd-46ec-91bb-c0e5e7afd70a",
+      "reason": "NO_PERMITTED_RELATION",
+      "detail": "e4c321bc-3ddd-46ec-91bb-c0e5e7afd70a: observes 'subject:kubernetes' while this Opportunity is about 'subject:docker', and no ACTIVE reviewed relation says the second is contained in the first. §15 admits nothing on resemblance, so this row is refused rather than attached weakly."
+    },
+    {
+      "evidence_id": "e6271f31-7738-417f-a5f7-24b984c54110",
+      "reason": "NO_PERMITTED_RELATION",
+      "detail": "e6271f31-7738-417f-a5f7-24b984c54110: observes 'subject:podman' while this Opportunity is about 'subject:docker', and no ACTIVE reviewed relation says the second is contained in the first. §15 admits nothing on resemblance, so this row is refused rather than attached weakly."
+    },
+    {
+      "evidence_id": "f21a9e62-0651-460d-8c9b-079bb9b7f776",
+      "reason": "NO_PERMITTED_RELATION",
+      "detail": "f21a9e62-0651-460d-8c9b-079bb9b7f776: observes 'subject:kubernetes' while this Opportunity is about 'subject:docker', and no ACTIVE reviewed relation says the second is contained in the first. §15 admits nothing on resemblance, so this row is refused rather than attached weakly."
+    },
+    {
+      "evidence_id": "f28abcdd-4d4b-4651-8dcd-5e5fe380fdfd",
+      "reason": "SCOPE_UNDETERMINED",
+      "detail": "f28abcdd-4d4b-4651-8dcd-5e5fe380fdfd: this row's observation scope is UNDETERMINED. §12 forbids manufacturing one, so it is not attached -- to this Opportunity or to any other."
+    },
+    {
+      "evidence_id": "f753e610-c904-4db5-825a-31dbceb6c373",
+      "reason": "NO_PERMITTED_RELATION",
+      "detail": "f753e610-c904-4db5-825a-31dbceb6c373: observes 'world-bank:metric-geography:SP.POP.TOTL|FR' while this Opportunity is about 'subject:docker', and no ACTIVE reviewed relation says the second is contained in the first. §15 admits nothing on resemblance, so this row is refused rather than attached weakly."
+    }
+  ]
+}
