@@ -1,0 +1,191 @@
+{
+  "$comment": "Mission 1.37 §36, §24, §25. The CONTRACT a calibration reference dataset must satisfy. It contains NO examples, real or invented: §36 forbids populating it with invented examples presented as real labels, and an example in a schema is the thing a later reader copies. `units` and `labels` are empty by design and their emptiness is the honest state of the system.",
+  "artifact_version": "calibration-reference-dataset-schema@1.0.0",
+  "generated_by": "mission-1.37",
+  "status": "SCHEMA_ONLY_NO_DATASET_EXISTS",
+
+  "dataset_identity": {
+    "required": [
+      "dataset_id",
+      "dataset_version",
+      "created_at",
+      "procedure_version",
+      "code_revision",
+      "reference_origin",
+      "human_ground_truth_established"
+    ],
+    "immutability": "A dataset_version is immutable once any experiment references it. A correction creates a new version and never edits a label in place (§25).",
+    "reference_origin": {
+      "contract": "Mission 1.25 ReferenceOrigin, required on every label and never defaulted",
+      "permitted": ["HUMAN_EXPERT", "HUMAN_NON_EXPERT", "AI_ASSISTED_PROVISIONAL"],
+      "establishes_ground_truth": ["HUMAN_EXPERT", "HUMAN_NON_EXPERT"],
+      "human_ground_truth_established": "true only when EVERY label in the set is human. All, never any: a mixed set reported as true would be read as unmixed."
+    }
+  },
+
+  "unit_schema": {
+    "name": "ClaimEvidenceSnapshot",
+    "one_unit_is": "one Claim revision with its COMPLETE eligible Evidence set as aggregation saw it",
+    "fields": {
+      "unit_id": {"type": "string", "required": true, "note": "stable, and derived from the content rather than from creation order"},
+      "workspace_id": {"type": "uuid", "required": true},
+      "claim_id": {"type": "uuid", "required": true},
+      "claim_revision": {"type": "integer", "required": true, "note": "a claim reworded in a later revision is a different unit; the aggregation was over that wording"},
+      "proposition_key": {"type": "string", "required": true},
+      "proposition_kind": {"type": "string", "required": true, "note": "a leakage grouping key"},
+      "claim_type": {"type": "enum", "required": true, "values": ["OBSERVED", "INFERRED", "PREDICTED", "RECOMMENDED", "HYPOTHESIS"]},
+      "claim_temporality": {"type": "enum", "required": true},
+      "claim_feature": {"type": "string", "required": false, "note": "null is legitimate and means no half-life applies; it is not a missing value to fill"},
+      "subject_key": {"type": "string", "required": true, "note": "a leakage grouping key"},
+      "domain": {"type": "string", "required": true, "note": "recorded for the bias evaluation and for the second-pilot diversity requirement"},
+      "evidence_ids": {"type": "array<uuid>", "required": true, "min_items": 1},
+      "evidence_set_is_complete": {"type": "boolean", "required": true, "must_be": true, "note": "a unit built from a subset is a unit about a different evidence set"},
+      "evidence_snapshot_digest": {"type": "string", "required": true, "note": "the engine's own digest, so the unit can be checked against a re-run"},
+      "per_evidence": {
+        "type": "array<object>",
+        "required": true,
+        "item_fields": [
+          "evidence_id",
+          "direction",
+          "relevance",
+          "directness",
+          "extraction_confidence",
+          "reliability_resolved",
+          "reliability_assessment_id",
+          "reliability_assessment_version",
+          "reliability_resolution_outcome",
+          "observation_category",
+          "independence_state",
+          "independence_group_id",
+          "observed_at",
+          "collected_at",
+          "source_id",
+          "source_family",
+          "resource_id",
+          "record_kind_id"
+        ],
+        "note": "reliability is recorded as RESOLVED plus its binding, never as a copy on the evidence row: scoring.evidence.reliability is NULL by design (ADR-026 Decision 2)"
+      },
+      "verified_lineage": {
+        "type": "array<object>",
+        "required": true,
+        "note": "which record derived from which, established rather than assumed. Independence is the model's most load-bearing input, so a dataset without traced lineage cannot calibrate it. D-12 blocks the automatic form; until then this is annotated by hand and the annotation carries provenance.",
+        "empty_means": "no lineage was traced, which forces every record to UNKNOWN and must be recorded as such rather than read as independence"
+      },
+      "aggregation_output": {
+        "type": "object",
+        "required": true,
+        "fields": [
+          "aggregation_profile_id",
+          "aggregation_profile_version",
+          "aggregation_profile_status",
+          "algorithm_version",
+          "support_strength",
+          "contradiction_strength",
+          "supported_mass",
+          "contradicted_mass",
+          "conflict_mass",
+          "uncertainty_mass",
+          "evidence_score",
+          "evidence_level",
+          "aggregation_status",
+          "limiting_components",
+          "non_scorable_reasons",
+          "independence_group_count",
+          "unknown_independence_count"
+        ],
+        "note": "recorded so a re-run can be checked, NOT as a target. The model's own output is never the label."
+      },
+      "split_assignment": {"type": "enum", "required": true, "values": ["DEVELOPMENT", "DEVELOPMENT_EVALUATION", "HOLDOUT"]},
+      "leakage_group_key": {"type": "string", "required": true, "note": "the (reliability_scope, proposition_kind, subject_key) tuple, rendered. Every unit sharing it must share a split."}
+    },
+    "forbidden_fields": [
+      "opportunity_score",
+      "opportunity_rank",
+      "startup_outcome",
+      "revenue",
+      "predicted_success",
+      "model_generated_support_estimate",
+      "llm_rationale_as_label"
+    ]
+  },
+
+  "label_schema": {
+    "unit_of_judgement": "an ordered PAIR of unit_ids",
+    "why_pairs": "the absolute score scale has no anchor (strategy correction C-2), so a reviewer can defensibly order two evidence sets and cannot defensibly place one on an absolute scale",
+    "fields": {
+      "label_id": {"type": "string", "required": true},
+      "first_unit_id": {"type": "string", "required": true},
+      "second_unit_id": {"type": "string", "required": true},
+      "judgement": {"type": "enum", "required": true, "values": ["FIRST_BETTER_SUPPORTED", "SECOND_BETTER_SUPPORTED", "NOT_DISTINGUISHABLE"]},
+      "reviewer_id": {"type": "string", "required": true, "note": "a named accountable person; 'operator' and other impersonal placeholders are refused, following the reliability recorder's precedent"},
+      "reference_origin": {"type": "enum", "required": true},
+      "reviewed_at": {"type": "date", "required": true},
+      "presentation_order_seed": {"type": "string", "required": true, "note": "pairs are shown in randomised order and the seed is recorded, so an order effect can be measured rather than argued about"},
+      "reviewer_saw_model_output": {"type": "boolean", "required": true, "must_be": false, "note": "a reviewer who has seen the score is no longer independent"},
+      "rationale": {"type": "string", "required": false, "note": "free text, retained for audit, never parsed into a number"},
+      "confidence_self_reported": {"type": "null", "required": false, "must_be": null, "note": "deliberately absent. A self-reported certainty is not a probability, and the only safe handling is to never do arithmetic on it, at which point asking buys nothing (Mission 1.24 precedent)."}
+    },
+    "disagreement": {
+      "representation": "every reviewer's judgement is retained as its own row. Judgements are never averaged into a consensus value.",
+      "adjudication_state": {"type": "enum", "values": ["NOT_REQUIRED", "PENDING", "ADJUDICATED", "IRRECONCILABLE"], "required": true},
+      "majority_vote": "refused as the default. Disagreement on a pair is often information about the pair rather than an error by one reviewer.",
+      "irreconcilable": "a permitted terminal state. A pair two qualified reviewers order differently after adjudication is evidence the pair is near-indistinguishable, and forcing a resolution manufactures a label."
+    },
+    "revision": {
+      "policy": "append-only",
+      "note": "a corrected label creates a new dataset version. A label a historical profile was scored against is never overwritten, or that profile becomes unverifiable."
+    }
+  },
+
+  "split_manifest_schema": {
+    "required": ["manifest_id", "dataset_version", "grouping_rule", "group_assignments", "manifest_hash", "frozen_at"],
+    "grouping_rule": "(reliability_scope, proposition_kind, subject_key)",
+    "invariants": [
+      "every unit belongs to exactly one split",
+      "every unit sharing a leakage_group_key shares a split",
+      "development and holdout labels are stored in SEPARATE FILES, so a development loader cannot reach a holdout label by forgetting to filter",
+      "the manifest is frozen and hashed before any parameter is fitted"
+    ],
+    "temporal_variant": {
+      "required_when": "any claim of temporal generalisation, and any fitted half-life",
+      "rule": "a cut date, fit before it, evaluate after it. A random shuffle across time is not temporal validation.",
+      "currently": "UNRUNNABLE, 0 temporally sensitive claims"
+    }
+  },
+
+  "coverage_report_schema": {
+    "note": "required BEFORE any fitting. A dataset that has not reported its coverage cannot be judged adequate, and the empty cells are the point.",
+    "dimensions": [
+      "support_only",
+      "contradiction_present",
+      "mixed_support_and_contradiction",
+      "conflict_mass_non_zero",
+      "single_source_claims",
+      "multi_source_claims",
+      "multi_evidence_claims",
+      "independence_established_claims",
+      "independence_unknown_claims",
+      "evergreen_claims",
+      "temporally_sensitive_claims",
+      "distinct_proposition_kinds",
+      "distinct_source_families",
+      "distinct_subjects",
+      "distinct_domains",
+      "distinct_reliability_scopes",
+      "limiting_component_distribution",
+      "unavailable_units_retained"
+    ],
+    "echo_hazard_check": {
+      "required": true,
+      "rule": "the count of units whose limiting component is NOT reliability must be reported. A dataset where reliability limits every unit can only measure reliability pass-through.",
+      "current_corpus_value": 0
+    }
+  },
+
+  "units": [],
+  "labels": [],
+  "split_manifest": null,
+
+  "emptiness_is_the_state": "No unit, no label and no manifest exists. Nothing here has been populated with an example, because an example in a schema is what a later reader copies, and a fabricated label is indistinguishable from a real one once it has been copied."
+}
