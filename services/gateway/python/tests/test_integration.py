@@ -107,6 +107,8 @@ class TestSchemaRuntime:
             "research.research_gaps",
             "research.opportunities",
             "research.opportunity_session_observations",
+            "research.opportunity_hypothesis_revisions",
+            "research.opportunity_hypothesis_evidence",
             "acquisition.raw_records",
             "acquisition.normalized_records",
             "nlp.signals",

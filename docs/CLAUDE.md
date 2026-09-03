@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.54
-Last amended: 2026-09-02 (Sprint 1 / Mission 1.27)
+Version: 1.55
+Last amended: 2026-09-02 (Sprint 1 / Mission 1.28)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.55 | 2026-09-02 | **OUTCOME B: the Opportunity Engine works and the current evidence cannot support a hypothesis -- blocked TWICE, for unrelated reasons.** 26 Evidence rows inspected, **26 ELIGIBLE_CONTEXT and 0 ELIGIBLE_SCORING**, 9 packets grouped by source-native subject, **0 formable, 0 opportunities, 0 model calls, 0.00 USD**, counters unchanged. **The failure is symmetric and that is the finding**: the one packet with commercial dimensions (TED, CPV division 90) has ONE row, and the packets with six rows (Wikimedia Docker / Podman / Kubernetes) have ONE dimension. Evidence is deep where it is narrow and broad where it is shallow. **The second blocker is independent of the evidence**: `external_model_transmission` is NOT_ASSESSED for all four sources that HAVE Evidence and PERMITTED only for `stack-exchange`, which has none -- **the one source cleared to leave the deployment is the one with nothing to send**. Three signal types map to NO dimension on purpose; a GDELT term count measures what media PUBLISHED, which is producer behaviour and not audience behaviour. **TREND_OR_CHANGE cannot satisfy a diversity requirement** because every Signal here is a derivation and so every row carries change. Docker, Podman and Kubernetes stay three packets: merging them deterministically would not make it deterministic, it would make it unargued. Migration 0029 makes the hypothesis/validated distinction a CHECK constraint. No score, rank or weight exists |
 | 1.54 | 2026-09-02 | **EXPLORATORY_V2_NOT_PROMISING, and the classifier is PARKED.** Three V2 variants, one selected by a frozen rule, frozen, run once on the Mission 1.26 holdout: **0 provisional true SAME against 4 references** where the frozen criterion required 2. 88 evaluations, 1.53 USD, 0 retries, counters unchanged. **V1 was never failing to SEE the abstraction** -- its own rationale states the shared goal and then rejects it. **The most informative artifact was an empty field**: V2 required the model to name an abstraction covering both questions, and `shared_problem_if_any` came back empty 39 times in 40. More scaffolding made it MORE conservative. **A selection rule must defeat both collapses**, so the frozen rule demands a true positive and caps the SAME share. **A ceiling you might exceed is bounded, not argued away** -- output capped at 1200 tokens to make 3.00 USD real. **A split disjoint by PAIR is not disjoint by OBSERVATION**, so the brief's own suggested prompt example was a holdout leak and was refused. Production stays NOT_AUTHORISED |
 | 1.53 | 2026-09-02 | **REFERENCE_SET_INSUFFICIENT, and the gate was allowed to fail.** The 40 labels came back **AI_ASSISTED_PROVISIONAL**, not human -- the operator chose to proceed with them rather than spend another labelling mission, which is a real decision recorded at document level and changes nothing about what they are. Development holds **2** SAME_FAMILY against a preregistered 4 (holdout passes at 4). **Two results reported apart**: the composition gate fails, and the human reference requirement is separately NOT_ESTABLISHED -- one verdict would let either hide the other. Nothing moved: no pair changed split, no label revised, no threshold lowered, no re-sampling. **A loader asked for HUMAN_OPERATOR refuses these files**, so the distinction is structural rather than prose. Mission 1.25's genuine human holdout is NOT merged in to help the threshold. 0 model calls, counters unchanged; production stays NOT_AUTHORISED |
 | 1.52 | 2026-09-02 | **A dataset mission, and the reason it came before a V2 classifier.** Mission 1.25's ten human-scored pairs with two positives rejected a trivial classifier and cannot build one; and when the operator reviewed them, five labels changed with three moving TOWARD the model, so *V1 is far too conservative* was half an artifact of an AI-assisted reference. **40 new pairs, none shared with 1.25**, deterministic stratified sampling over five feature bands, **24/16 split frozen before any label**. **No model output entered the selection** -- a dataset chosen by a classifier's errors can only ever measure that classifier -- asserted by parsing the sampler's code with docstrings excluded, because it says *not a prediction* precisely because it reads none. **Strata are sampling mechanisms, never expected labels.** The sample is ENRICHED and may never state a prevalence. **Holdout isolation is structural**: separate files, so the development loader cannot reach a holdout label. `DATASET_PREPARATION_COMPLETE` is not a model evaluation, and 1.25's MODEL_EVALUATION_FAILED is untouched |
@@ -301,6 +302,97 @@ positives in the scored split, which this 89-question corpus did not supply: one
 defensible SAME in 40 candidate pairs is a finding about the corpus, not about
 the classifier. **No synthetic positive may substitute** -- a constructed pair
 can test a parser and can never establish semantic accuracy against real data.
+
+### The Opportunity Engine exists, and it correctly forms nothing yet
+
+Added in 1.55 (Mission 1.28, `opportunity-engine-foundation-v1.md`,
+`mission-1.28-report.md`). **`OPPORTUNITY_ENGINE_READY_BUT_CURRENT_EVIDENCE_INSUFFICIENT`.**
+
+```text
+Evidence -> facets -> dimension mapping -> eligibility -> subject grouping
+         -> packet -> sufficiency -> [ external synthesis gate ] -> hypothesis
+```
+
+Everything before the gate is deterministic, versioned and reaches no network and
+no model. `packages/opportunity-engine` depends on `sros-contracts` and nothing
+else -- not on `sros_acquisition`, because an engine able to read the source
+registry could decide its own authorization; not on the Gateway, because a
+package that cannot import a provider cannot call one by accident; not on
+`sros_semantic_equivalence`, asserted over the AST.
+
+- **An Opportunity here is a HYPOTHESIS, enforced by a CHECK constraint.**
+  Migration 0029's `status` admits `OPPORTUNITY_HYPOTHESIS`,
+  `HYPOTHESIS_WITHDRAWN` and `HYPOTHESIS_SUPERSEDED`. `VALIDATED_OPPORTUNITY`,
+  `PROVEN_MARKET`, `WINNING_IDEA`, `PRODUCT_MARKET_FIT` and
+  `HIGH_CONFIDENCE_BUSINESS` are not members, in the enum or in the database: a
+  state that does not exist cannot be reached by a caller passing a string.
+  `unsupported_dimensions` is required non-empty, because a record listing only
+  its support is a sales document.
+- **A dimension travels with the sentence that bounds it.** A mapping that
+  assigns dimensions and states no `bound` is refused at construction. A
+  Wikimedia request is not a reader, a TED BT-161 total includes options and
+  renewals and is never willingness to pay, and GDELT lexical frequency maps to
+  **nothing at all** -- it measures what media organisations PUBLISHED, which is
+  producer behaviour and not audience behaviour, so it is not even
+  `AUDIENCE_OR_USAGE`.
+- **Zero dimensions is a real answer, and `None` is a different one.** A
+  registered signal type mapping to `frozenset()` is a decision with a rationale;
+  an unregistered type returns `None` and lands in `REQUIRES_REVIEW`, because
+  nobody has decided what it bears on.
+- **`TREND_OR_CHANGE` never counts toward evidence diversity.** A Signal in this
+  repository IS a derivation over two or more observations, so every Evidence row
+  carries change by construction, and a dimension the whole corpus has separates
+  nothing. Counting it would let one measurement repeated six times look like two
+  kinds of evidence. The qualifier was chosen with the corpus visible, so both
+  counts are reported and it decides a label rather than the outcome.
+- **`ELIGIBLE_CONTEXT` is not a weaker `ELIGIBLE_SCORING`.** Nothing promotes
+  across the line: no threshold, no override, no `force_scoring` parameter, and
+  the only route to scoring is a reliability a reviewed assessment resolved. All
+  26 rows are context-only today.
+- **Grouping is by exact source-native subject and by nothing else.** Docker,
+  Podman and Kubernetes are three packets. Merging them would be a
+  `SAME_PROBLEM_FAMILY`-shaped judgement reached by hand instead of by the
+  classifier Mission 1.27 parked -- and **doing it deterministically would not
+  make it deterministic, it would make it unargued.** No string distance, no
+  token overlap, no stem, no synonym table, no threshold.
+- **A packet holds references, never copied truth**, and `packet_id` is sha256
+  over the procedure versions and the ordered evidence ids -- reproducible, and
+  excluding the construction time for the reason `observation_key` excludes the
+  retrieval time.
+- **A packet never says "multiple independent sources".** Every row here is
+  `UNKNOWN`, six rows about one article are six observations of one stream, and
+  the phrase is structurally unreachable.
+- **A packet is authorised whole or not at all.** One untransmittable source
+  makes it `UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS`; it is never silently trimmed,
+  because a packet that dropped a source and still called itself the packet would
+  let a model reason over a corpus a report described differently. Authorization
+  is resolved BEFORE serialization, so a refused packet leaves no string
+  containing source-derived text.
+- **Each forbidden commercial term names the dimension that would license it**,
+  so a refusal says which evidence is missing rather than which word was typed.
+  `TAM`, `market size`, `MRR` and `product-market fit` are licensed by nothing at
+  all. Matching is over tokens: `supermarket` is not `market`.
+
+**THE CORPUS FAILS SYMMETRICALLY, AND THAT IS THE FINDING.** Nine packets, none
+formable. The one with commercial dimensions -- TED, CPV division 90, carrying
+`MARKET_ACTIVITY`, `BUYER_OR_BUDGET_EXISTENCE` and `ECONOMIC_VALUE` -- holds ONE
+row. The three with six rows each hold ONE counting dimension. **SROS's evidence
+is deep where it is narrow and broad where it is shallow**, and nine of fourteen
+dimensions are answered by nothing.
+
+**THE SECOND BLOCKER HAS NOTHING TO DO WITH THE EVIDENCE.** Under
+`local-private-research-v1`, `external_model_transmission` is **NOT_ASSESSED** for
+`wikimedia-pageviews`, `world-bank`, `gdelt` and `ted-eu` -- every source that
+contributes Evidence -- and `PERMITTED_WITH_CONDITIONS` for `stack-exchange`
+alone, which contributes none. **The one source cleared to leave this deployment
+is the one source with nothing to send.** Mission 1.23 assessed egress for the
+source Mission 1.24 was about, and the Opportunity Engine needs the other four.
+No coherent packet could have reached a model whatever the evidence looked like,
+which is why the run cost nothing.
+
+**No ranking, no score, no weight, no leaderboard** (§15), asserted over the AST.
+Scoring stays blocked by D-03 and is a different blocker from this one:
+formability never required scoring-eligibility.
 
 ### Problem-family classification is PARKED, and production stays closed
 

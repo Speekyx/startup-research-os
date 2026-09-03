@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.53
+Version: 1.54
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-02 (Sprint 1 / Mission 1.27)
+Last amended: 2026-09-02 (Sprint 1 / Mission 1.28)
 
 ---
 
@@ -13,6 +13,81 @@ Last amended: 2026-09-02 (Sprint 1 / Mission 1.27)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.54 — 2026-09-02 (Sprint 1 / Mission 1.28)
+
+Authorized by the Mission 1.28 brief §0-§22.
+
+**OUTCOME: `OPPORTUNITY_ENGINE_READY_BUT_CURRENT_EVIDENCE_INSUFFICIENT`.** The
+architecture is built, tested and runs end to end over the real 26 canonical
+Evidence rows. **26 rows inspected, 26 ELIGIBLE_CONTEXT, 0 ELIGIBLE_SCORING, 9
+packets, 0 formable, 0 opportunity hypotheses, 0 model calls, 0.00 USD**, and
+every canonical counter unchanged.
+
+**§0 CORRECTION, REPORT TEXT ONLY.** Mission 1.27's §12 contradicted its §14 on
+how often `shared_problem_if_any` came back empty. The persisted runs settle it:
+**39 of 40 is correct**, and the §12 sentence named the right numbers with the
+verb reversed -- 1 of 24 and 0 of 16 are the counts of rows where the field was
+FILLED. No prediction, prompt version, cost or outcome touched.
+`EXPLORATORY_V2_NOT_PROMISING` and `PARK_PROBLEM_FAMILY_CLASSIFIER` stand.
+
+**WHAT ALREADY EXISTED, AND IT WAS MORE THAN NOTHING.** `research.opportunities`
+has been a real RLS-protected table since Mission 0.1 with identity, scope and a
+repository, and `research.claims.opportunity_id` already points at it. What was
+missing was everything epistemic: status, procedure, evidence links, dimensions,
+limitations, revisions. So the table was EXTENDED, never replaced -- a second
+table would be a second place an opportunity can live, and one outside
+`research.opportunities` escapes the RLS policy and every rule written about it.
+
+**THE FAILURE IS SYMMETRIC, AND THAT IS THE FINDING.** The one packet carrying
+commercial dimensions -- TED, CPV division 90 -- holds **one row**. The three
+packets holding **six rows** each -- Wikimedia's Docker, Podman and Kubernetes --
+carry **one counting dimension**. SROS's evidence is deep where it is narrow and
+broad where it is shallow, and **nine of fourteen dimensions are answered by
+nothing at all**, including every dimension that would make an opportunity
+commercially interesting.
+
+**THE SECOND BLOCKER IS INDEPENDENT OF THE FIRST.** All nine packets are
+`UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS`, and not because of the evidence:
+`external_model_transmission` is **NOT_ASSESSED** for every source that HAS
+Evidence and PERMITTED only for `stack-exchange`, which has none. **The one source
+cleared to leave this deployment is the one source with nothing to send.** No
+packet could have reached a model whatever the evidence looked like, so the §17
+ceiling of 1.00 USD was never approached.
+
+**THREE SIGNAL TYPES MAP TO NO DIMENSION, ON PURPOSE.** `numeric_period_change`
+because what a period change bears on depends on WHICH indicator moved and no
+reviewed indicator map exists; both GDELT lexical types because a term count
+measures what media organisations PUBLISHED -- producer behaviour, not audience
+behaviour -- so it is not even `AUDIENCE_OR_USAGE`. Adding a dimension so a source
+had somewhere to land would be a taxonomy fitted to a sample.
+
+**`TREND_OR_CHANGE` CANNOT SATISFY A DIVERSITY REQUIREMENT.** A Signal in this
+repository IS a derivation over two or more observations, so every Evidence row
+carries change by construction and a universal dimension separates nothing. The
+qualifier was chosen with the corpus visible, is reported under both readings,
+and **decides a label rather than the outcome**: under the literal reading the
+three Wikimedia packets would be formable and all three would still be blocked at
+the egress gate.
+
+**DOCKER, PODMAN AND KUBERNETES STAY THREE PACKETS.** Merging them would be a
+`SAME_PROBLEM_FAMILY`-shaped judgement reached by hand instead of by the
+classifier Mission 1.27 parked. **Doing it deterministically would not make it
+deterministic; it would make it unargued.**
+
+**Migration 0029 is forward-only and non-destructive**, and its point is a CHECK
+constraint: three hypothesis-grade states and no `VALIDATED_OPPORTUNITY`,
+`PROVEN_MARKET`, `WINNING_IDEA`, `PRODUCT_MARKET_FIT` or
+`HIGH_CONFIDENCE_BUSINESS`. **No score, rank, weight or leaderboard exists** in
+the package or the schema, asserted over the AST. 72 new tests; two existing
+schema tests failed on the new tenant tables and were REPAIRED rather than
+relaxed, because a widened tenancy assertion ships the next missing RLS policy
+green.
+
+**Next: assess `external_model_transmission` for the four sources that have
+Evidence.** It is a reading-and-deciding mission of the shape Mission 1.23
+already ran, and until it happens no packet from this corpus can reach a model
+however good the evidence gets. Do not start ranking
 
 ## 1.53 — 2026-09-02 (Sprint 1 / Mission 1.27)
 
@@ -1760,6 +1835,7 @@ Additionally authoritative:
 - docs/data/problem-equivalence-evaluation-v1.md (added in 1.47)
 - docs/data/problem-family-rubric-v1.md (added in 1.49)
 - docs/data/problem-family-human-reference-v1.md (added in 1.51)
+- docs/data/opportunity-engine-foundation-v1.md (added in 1.54)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.
