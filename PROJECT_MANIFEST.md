@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.63
+Version: 1.64
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-03 (Sprint 1 / Mission 1.31.1)
+Last amended: 2026-09-03 (Sprint 1 / Mission 1.36.1)
 
 ---
 
@@ -13,6 +13,36 @@ Last amended: 2026-09-03 (Sprint 1 / Mission 1.31.1)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.64 — 2026-09-03 (Sprint 1 / Mission 1.36.1)
+
+**`OPERATOR_CONFIRMATION_REQUIRED`.** The operator reviewed all three reliability
+scopes and decided differently about them: **NO** on both Stack Exchange scopes,
+and **0.65 / `HUMAN_REVIEW` / `thibchm`** on the Wikimedia one. The assessment
+that decision authorises is written and validated end to end, and **not
+persisted** — the recording tool requires a confirmation typed by a person, and
+§7 forbids bypassing the guard that enforces it. **0 assessments created, every
+canonical counter unchanged.**
+
+**A NO is not a number.** The refusal on scopes 1 and 2 is recorded as prose,
+because a refusal recorded as data would be a value and the next reader would use
+it as one. It does not mean `reliability = 0`, `0.5`, low reliability or an
+unreliable source: it means **no human reliability judgement exists**, the
+reliability stays `NULL`, and the Evidence stays `NON_SCORABLE`.
+
+**Mission 1.36 shipped a real defect and this mission found it.** The packet's
+`candidate_basis_rows` carried `basis_type` values that are not members of
+`ReliabilityBasisType`, so the rows it prepared could not have recorded an
+assessment — which is the one thing candidate basis rows are for. Repaired
+against the TED precedent, with the narrative document list's field renamed
+`document_kind`, and a test now asserts every row's type against the contract.
+
+New: `docs/data/docker-reliability-operator-decisions-v1.md`,
+`docs/data/docker-wikimedia-reliability-review-v1.json`,
+`docs/data/docker-reliability-resolution-v1.json`,
+`infrastructure/scripts/report_docker_reliability_resolution.py`.
+
+Report: `docs/architecture/mission-1.36.1-report.md`.
 
 ## 1.63 — 2026-09-03 (Sprint 1 / Mission 1.36)
 
@@ -2251,6 +2281,7 @@ Additionally authoritative:
 - docs/data/scope-relation-registry-v1.json (added in 1.61)
 - docs/data/docker-commercial-scope-mapping-v1.md (added in 1.62)
 - docs/data/docker-evidence-reliability-review-packet-v1.md (added in 1.63)
+- docs/data/docker-reliability-operator-decisions-v1.md (added in 1.64)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

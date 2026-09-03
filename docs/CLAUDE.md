@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.64
-Last amended: 2026-09-03 (Sprint 1 / Mission 1.36)
+Version: 1.65
+Last amended: 2026-09-03 (Sprint 1 / Mission 1.36.1)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.65 | 2026-09-03 | **OPERATOR_CONFIRMATION_REQUIRED: three human decisions carried faithfully, and the one assessment they authorise is NOT persisted.** The operator reviewed all three scopes and decided DIFFERENTLY about them -- **NO** on both Stack Exchange scopes, **0.65 / HUMAN_REVIEW / thibchm** on the Wikimedia one -- which is exactly what a per-scope judgement is for. **A NO IS NOT A NUMBER**: the refusal is recorded as PROSE, because a refusal recorded as data would be a value and the next reader would use it as one; it does not mean 0, 0.5, low reliability or an unreliable source, it means **no human reliability judgement exists**. **The TTY guard fired and was respected** -- *no terminal to confirm on. A reliability assessment is a human decision and this is not a step a pipeline runs* -- because piping the confirmation in would produce a row attributed to a person who did not type it, which is the failure the whole contract exists to prevent, so the mission STOPS and hands the operator the command. **0 assessments, 0 model calls, every one of the seventeen counters verified unchanged** against the live database, as §24 anticipates. **MISSION 1.36 SHIPPED A REAL DEFECT AND THIS MISSION FOUND IT**: the packet's `candidate_basis_rows` carried `basis_type` values that are not members of `ReliabilityBasisType`, so the rows it prepared **could not have recorded an assessment** -- the one thing candidate basis rows are for -- and nothing caught it because the packet is JSON and the enum lives in the contracts package. **D-03 blocker 2 is OPEN, not PARTIAL**: §19 anticipated PARTIAL, which describes the state AFTER confirmation, and reporting it now would be reporting a future. **§15's diagnostic was SKIPPED because it is conditional on a row becoming scorable and none did** -- running it anyway would produce a number computed from nothing, in an artifact later read as a result. No average, no *Docker 65%*, profile still UNCALIBRATED, independence still UNKNOWN with 0 groups |
 | 1.64 | 2026-09-03 | **READY_FOR_OPERATOR_RELIABILITY_REVIEW: the question is prepared and software supplied no answer.** **THREE reliability scopes over the 8 Docker rows, not two** -- §0 forbids assuming two because two source families exist, and counting found three: the two Stack Exchange signal types persist **different proposition kinds**, so they share FOUR of five scope fields and are still two different reliability questions. 1 + 1 + 6 = 8, every row in exactly one scope. **NO NUMBER APPEARS ANYWHERE** -- no value, no range, no recommendation, no adjective ranking a source; `reliability: null` documented as NO ASSESSMENT EXISTS and never as 0.0 or 0.5; the scale stated with **no threshold labels** because the architecture defines none. **0 assessments created, all 14 counters unchanged, `scoring.evidence.reliability` NULL on every row** because reliability resolves late. **Wikimedia methodology RETRIEVED**: a pageview is a conjunction of HTTP/host/header tests with an enumerated exclusion list, and spider tagging is *ua-parser and additional custom regex* -- pattern matching, matching what the collector recorded as heuristic. Its largest gap: **revision and backfill practice is NOT DOCUMENTED**, which is an absence of documentation and not evidence of stability. **Stack Exchange documentation UNREACHABLE** (robots policy blocks the crawler); no retry, no mirror, no third-party summary -- so whether an accepted answer can later change is OPEN, and the operator supplying the documents is the route Mission 1.18 used. **The TED assessment shares `claim_type` with all three Docker scopes and differs on the other four** -- every row here is OBSERVED, so that field discriminates nothing and is exactly where a leak would start if matching were ever partial. **Four of five D-03 blockers remain open**, reported separately. A test caught a factual overstatement in my own packet and it was corrected rather than the test loosened |
 | 1.63 | 2026-09-03 | **NO_AUTHORITATIVE_DOCKER_CATEGORY_RELATION_FOUND: the search happened and the registry is still empty.** Six candidates, six rejections, failing in **three distinct ways**: things that NAME Docker without classifying it (its own docs say *an open platform for developing, shipping, and running applications* and assign no category; the OCI defines three SPECIFICATIONS and uses *container engine* as a term with no register behind it -- **a term is not a category**, it has no identifier, no publisher deciding membership and no member list); things that CLASSIFY PRODUCTS without containing Docker; and things that classify **something else**. **The CNCF Landscape was refused on a countable fact**: its `landscape.yml` holds 1,138,659 bytes, 2,512 name fields and 15 categories, the word Docker occurs 53 times, and the five items named for it are Swarm (Orchestration), Compose (App Definition), Hub, a Wasm entry and **`Docker (member)`, the COMPANY** -- **the container platform is not an item at all**, and the three products sit in three DIFFERENT categories, so there is not even a single wrong answer to be tempted by. Independently: it calls itself *a map* that *attempts to categorize most of* the space with a **300-GitHub-star inclusion rule**, and a popularity threshold is not a classification rule. **CPV is `CPV_NOT_SUITABLE_FOR_DIRECT_PRODUCT_RELATION` on WHO ASSIGNS A CODE**: a contracting authority assigns one to ITS OWN CONTRACT, so a CPV class contains procurements and never products. UNSPSC returned HTTP 403 and stays UNRESOLVED rather than guessed. **The direction of reasoning was the methodology** -- ask what contains Docker, never what would reach the evidence we hold. 0 relations before and after, 0 model calls, all 13 counters unchanged. Next: **Reliability / Scoring Eligibility Foundation**, chosen explicitly over a second pilot |
 | 1.62 | 2026-09-03 | **MULTI_SCOPE_ARCHITECTURE_READY_SCOPE_RELATIONS_UNPOPULATED: the engine can now say WHAT LEVEL a row observes, and there are no edges.** `SubjectScopeType` = PRODUCT | CATEGORY | MARKET | GEOGRAPHY, each with a `means` and a `never_means`, and **MARKET's example is literally 'none'** because no registered source observes one. **The assumption broken**: `build_packet` unioned dimensions with NO SCOPE TERM, so membership WAS the claim of aboutness -- found in seven places and listed in the report. **The relation registry ships EMPTY and that is the result**: Mission 1.33 refused to say which category contains Docker and §33 forbids inventing one, so the capability exists holding zero edges and NO Evidence row can currently be contextual. **Real demonstration on 28 rows**: Docker resolves PRODUCT (8 rows, DIRECT), TED resolves CATEGORY on the publisher's own authority (CPV is a classification by its own name), and offering TED to Docker is REFUSED `NO_PERMITTED_RELATION` -- **the refusal is the demonstration**. 25 of 28 scopes resolved, **3 UNDETERMINED** (GDELT terms; a word names no level) and nothing mass-labelled. **NO MIGRATION**: scope is DERIVED at build time from identifiers already held, because persisting a derivation is what source-registry §3 refuses for eligibility. **Compatibility PROVEN not asserted**: regenerating the preparation artifact changed EXACTLY ONE FIELD, the registry version. **No union of direct and contextual dimensions exists on the packet** -- a test enumerates every public attribute -- because that union is the sentence *Docker supports MARKET_ACTIVITY*. No transitivity, no MODEL_INFERRED origin, WTP still unreachable, revision 1 and its 7 links untouched, all 13 counters verified unchanged |
@@ -311,6 +312,84 @@ positives in the scored split, which this 89-question corpus did not supply: one
 defensible SAME in 40 candidate pairs is a finding about the corpus, not about
 the classifier. **No synthetic positive may substitute** -- a constructed pair
 can test a parser and can never establish semantic accuracy against real data.
+
+### A refusal is recorded as prose, and a human confirmation is not automatable
+
+Added in 1.65 (Mission 1.36.1, `docker-reliability-operator-decisions-v1.md`,
+`mission-1.36.1-report.md`). **`OPERATOR_CONFIRMATION_REQUIRED`**: the operator's
+three decisions carried faithfully, **0 assessments created**, every canonical
+counter unchanged.
+
+    scope 1  stack-exchange | ...published_questions_carrying_tag   NO  -> no row
+    scope 2  stack-exchange | ...questions_without_accepted_answer  NO  -> no row
+    scope 3  wikimedia-pageviews | platform_counted_..._change  0.65 HUMAN_REVIEW
+                                                   -> written, validated, UNCONFIRMED
+
+- **A NO IS NOT A NUMBER, AND IT IS NOT A ROW EITHER.** The refusal on scopes 1
+  and 2 is recorded as **prose**. Not a numeric assessment, not a placeholder,
+  not a documentary-only assessment: **a refusal recorded as data would be a
+  value**, and the next reader would treat it as one. It does not mean
+  `reliability = 0`, `0.5`, low reliability or an unreliable source. It means
+  **no human reliability judgement exists**, the reliability stays `NULL`, the
+  resolver returns `NO_APPLICABLE_ASSESSMENT`, and the Evidence stays
+  `NON_SCORABLE` -- the designed behaviour rather than a gap.
+- **THE TTY GUARD IS THE CONTRACT, NOT AN OBSTACLE TO IT.**
+  `record_reliability_assessment.py` refuses with *"no terminal to confirm on. A
+  reliability assessment is a human decision and this is not a step a pipeline
+  runs"*. Supplying the confirmation string from a pipeline would produce a row
+  whose `reviewed_by` names a person who did not type it, which is precisely the
+  failure the whole reliability contract is built to prevent. **A guard removed
+  to make a pipeline pass is a guard that never was**, so the mission stops and
+  prints the command the operator must run.
+- **A MISSION MUST NOT REPORT A FUTURE.** The tests assert what is true today --
+  the review file's exact values, the refusals, the counters that did not move --
+  and **not** that six rows resolve, which will only be true after somebody
+  confirms. For the same reason **D-03 blocker 2 is OPEN rather than PARTIAL**:
+  §19 anticipated PARTIAL, and PARTIAL describes the state after confirmation.
+- **A CONDITIONAL DIAGNOSTIC THAT CANNOT RUN IS SKIPPED, NOT APPROXIMATED.**
+  §15's aggregation is conditional on at least one row becoming scorable and none
+  did. Running it over eight `NON_SCORABLE` rows would produce a number computed
+  from nothing, in an artifact a later reader would take for a result.
+- **`0.65` BELONGS TO ONE SCOPE.** Six Evidence rows matching it do not make it a
+  Docker coefficient: no average reliability, no overall Docker reliability, no
+  mean Evidence Score, no *Docker confidence*, no *Docker 65%*. Scopes 1 and 2
+  remain **unknown, and unknown is not a low number**. It carries **no label** --
+  the contract defines no threshold vocabulary, so it is not *good*, *medium*,
+  *high* or *65% confident*. It calibrates nothing (`REFERENCE_PROFILE_V1` stays
+  `UNCALIBRATED`) and establishes no independence (`UNKNOWN` on all 8 rows, 0
+  groups), which continues to cap evidence levels for reasons reliability cannot
+  touch.
+- **THE NEGATIVE CHECK WAS RUN RATHER THAN ASSUMED.** The real resolver was
+  offered the TED assessment against each of the three Docker scopes: **3 checks,
+  0 leaks.** Worth running because TED **shares `claim_type: OBSERVED` with all
+  three** -- every Evidence row here is OBSERVED, so that field discriminates
+  nothing and is exactly where a leak would start if matching were ever partial,
+  nearest or fuzzy.
+
+**MISSION 1.36 SHIPPED A REAL DEFECT AND THIS MISSION FOUND IT BY TRYING TO USE
+ITS OUTPUT.** The packet's `candidate_basis_rows` carried `basis_type` values --
+`OFFICIAL_METHODOLOGY`, `FIRST_PARTY_RESPONSE_AT_COLLECTION`,
+`FIRST_PARTY_MODEL_SEMANTICS` -- that are **not members of
+`ReliabilityBasisType`**, so the constructor raises on all three and the rows the
+packet prepared **could not have recorded an assessment**, which is the one thing
+candidate basis rows are for. Nothing caught it because the packet is a JSON
+document and the enum lives in the contracts package. Repaired against the one
+precedent, the TED assessment: a document defining **how** a measurement is
+computed is `MEASUREMENT_METHODOLOGY`, one recording **what can go wrong** is
+`KNOWN_LIMITATION`, one recording how a corpus was assembled is
+`CORPUS_CONSTRUCTION_METHOD`. And `authoritative_documents[].basis_type` became
+**`document_kind`**, because that field is a narrative list of what was read --
+**including a document that was NOT read** -- and reusing the contract's field
+name for it is what made an invalid value look valid. A test now checks every
+candidate row against the enum.
+
+**Next is Mission 1.37 -- Evidence Aggregation Calibration Strategy V1, but not
+yet.** Its premises include *one Wikimedia `HUMAN_REVIEW` assessment* and *real
+scorable Evidence*, and neither is true until the operator confirms. Confirm,
+regenerate the resolution report, record outcome A, then start 1.37. **Do not
+spend another mission forcing Stack Exchange reliability**: the operator decided
+the available documentation is insufficient, and the publisher's pages are
+unreachable because the site's robots policy blocks the crawler.
 
 ### A reliability scope is counted, never assumed, and the number is not software's
 
