@@ -67,6 +67,8 @@ from sros_contracts import (
 
 __all__ = [
     "CONVERGENT_INTERPRETER_ID",
+    "PROJECTS_FROM",
+    "PROJECTS_ONTO",
     "CONVERGENT_INTERPRETER_VERSION",
     "convergent_draft",
 ]
@@ -76,8 +78,8 @@ CONVERGENT_INTERPRETER_VERSION = "1.0.0"
 
 # The detailed proposition kind this projects FROM, and the contract it projects
 # ONTO. Stated as a pair so a reader can see that exactly one route exists.
-_PROJECTS_FROM = "source_reported_procurement_value_contrast"
-_PROJECTS_ONTO = "source_published_classification_value_contrast_witnessed"
+PROJECTS_FROM = "source_reported_procurement_value_contrast"
+PROJECTS_ONTO = "source_published_classification_value_contrast_witnessed"
 
 _CLAIM_TYPE = ClaimType.OBSERVED
 _ORIGIN = ClaimOrigin.DETERMINISTIC_EXTRACTION
@@ -138,19 +140,19 @@ def convergent_draft(detailed: ClaimDraft, *, signal_type_id: str) -> ClaimDraft
     whatever is in the mapping, so a fact nobody placed is a fact that decides.
     """
     facts = dict(detailed.cited_facts)
-    if facts.get("proposition") != _PROJECTS_FROM:
+    if facts.get("proposition") != PROJECTS_FROM:
         raise _refuse(
             ClaimEvidenceRefusalReason.UNSUPPORTED_SIGNAL_TYPE,
-            f"this interpreter projects {_PROJECTS_FROM!r} and was handed "
+            f"this interpreter projects {PROJECTS_FROM!r} and was handed "
             f"{facts.get('proposition')!r}. There is no fallback: a generic projection "
             "over an unknown proposition would emit an assertion nobody specified",
         )
 
-    contract = contract_for(_PROJECTS_ONTO)
+    contract = contract_for(PROJECTS_ONTO)
     if contract is None:
         raise _refuse(
             ClaimEvidenceRefusalReason.PROPOSITION_NOT_IDENTIFIABLE,
-            f"no convergence contract is registered for {_PROJECTS_ONTO!r}",
+            f"no convergence contract is registered for {PROJECTS_ONTO!r}",
         )
 
     projected = _project(contract, facts)

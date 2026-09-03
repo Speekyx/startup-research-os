@@ -259,10 +259,11 @@ class NothingWasAcquiredOrCreated(unittest.TestCase):
 
     def test_the_corpus_shape_did_not_move(self) -> None:
         """§37. Before equals after, because nothing was created."""
+        # The corpus SHAPE, not its size. Mission 1.40 acquired a second pilot
+        # and the counts moved; what did not move is the one thing this asserts.
         self.assertEqual({u["evidence_count"] for u in audit()["units"]}, {1})
         self.assertEqual(audit()["coverage"]["multi_evidence_claims"], 0)
-        self.assertEqual(audit()["totals"]["claims"], 28)
-        self.assertEqual(audit()["totals"]["evidence_rows"], 28)
+        self.assertEqual(audit()["totals"]["claims"], audit()["totals"]["evidence_rows"])
 
 
 class TheRepairIsLeftToItsOwnMission(unittest.TestCase):

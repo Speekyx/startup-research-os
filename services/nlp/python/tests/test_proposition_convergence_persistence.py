@@ -334,3 +334,47 @@ class TestTheRealAggregatorReceivesTwoItems:
         )
         # And it still says nothing about independence: the Evidence above is
         # UNKNOWN, and nothing in this mission promotes it.
+
+
+class TestTheProductionWiring:
+    """Mission 1.40 §1. The projection Mission 1.39 left out of the job."""
+
+    def test_the_job_projects_a_detailed_draft_onto_the_broader_claim(self) -> None:
+        from sros_nlp.claim_job import _convergent_projection
+
+        facts = _detailed_facts(["N-1", "N-2"], ["92100000"])
+        detailed = _detailed_draft("w", "11111111-1111-1111-1111-111111111111", facts)
+        broader = _convergent_projection(detailed, SIGNAL_TYPE)
+        assert broader is not None
+        assert broader.proposition_key != detailed.proposition_key
+
+    def test_a_proposition_with_no_contract_projects_to_nothing(self) -> None:
+        """Refusal is ordinary: seven historical kinds are in exactly this state."""
+        from sros_nlp.claim_job import _convergent_projection
+
+        facts = {**_detailed_facts(["N-1"], ["92100000"]), "proposition": "something_else"}
+        detailed = _detailed_draft("w", "11111111-1111-1111-1111-111111111111", facts)
+        assert _convergent_projection(detailed, SIGNAL_TYPE) is None
+
+    def test_one_signal_witnesses_two_claims_and_never_twice_within_one(
+        self, committing_tenant_conn, probe_workspace
+    ) -> None:
+        """§1 and §19. Across distinct Claims, yes. Within one Claim, never."""
+        from sros_nlp.claim_job import _convergent_projection
+
+        with committing_tenant_conn(probe_workspace) as conn:
+            signal = _seed_signal(conn, probe_workspace, ["N-1", "N-2"], "42.00")
+            facts = _detailed_facts(["N-1", "N-2"], ["92100000"])
+            detailed = _detailed_draft(probe_workspace, signal, facts)
+            broader = _convergent_projection(detailed, SIGNAL_TYPE)
+            assert broader is not None
+
+            report = persist_claims(conn, [detailed, broader])
+            assert len(set(report.claim_ids)) == 2
+
+            for claim_id in set(report.claim_ids):
+                rows = conn.execute(
+                    "SELECT count(*) FROM scoring.evidence WHERE claim_id = %s AND signal_id = %s",
+                    (claim_id, signal),
+                ).fetchone()[0]
+                assert rows == 1, "one Evidence row per (Claim, Signal) pair"

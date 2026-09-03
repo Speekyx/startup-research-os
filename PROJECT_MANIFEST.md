@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.68
+Version: 1.69
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-03 (Sprint 1 / Mission 1.39)
+Last amended: 2026-09-03 (Sprint 1 / Mission 1.40)
 
 ---
 
@@ -13,6 +13,40 @@ Last amended: 2026-09-03 (Sprint 1 / Mission 1.39)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.69 — 2026-09-03 (Sprint 1 / Mission 1.40)
+
+**`SECOND_PILOT_REAL_MULTI_EVIDENCE_NOT_OBSERVED`.** CPV division 92,
+"Recreational, cultural and sporting services", selected under a frozen ordinal
+rule with every label verified one concept per fetch against the Publications
+Office authority register. 177 notices acquired across two frozen windows, both
+complete bounded queries.
+
+**Three of four cohorts were refused for mixed currencies** and window A produced
+no Signal at all, so the corpus still has 0 Claims with more than one Evidence
+row. §37 forbids widening the window or switching category, and neither was done.
+
+**The extractor's cohort key does not contain what its docstring says**: currency
+and amount scope are named as load-bearing dimensions and are absent from the key,
+so a currency-mixed division is refused whole rather than split. Not fixed here,
+because changing a grouping key after seeing which data it rejected is the shape
+§37 and §41 refuse.
+
+**A duplicate Evidence row was created by this run and removed**: re-interpreting
+the pre-existing division-90 Signal wrote a second row differing only by
+interpreter version, briefly making the corpus report a false multi-record Claim.
+
+Counters: RawRecords and NormalizedRecords 148 → 325, Signals 28 → 29, Claims
+28 → 31, Evidence 28 → 31. Reliability assessments, Opportunities, independence
+groups and scope relations all unchanged.
+
+New: `docs/data/second-pilot-ted-category-selection-v1.json`,
+`docs/data/second-pilot-acquisition-run-v1.json`,
+`docs/data/second-pilot-pipeline-run-v1.json`,
+`infrastructure/scripts/run_second_pilot_acquisition.py`,
+`infrastructure/scripts/run_second_pilot_pipeline.py`.
+
+Report: `docs/architecture/mission-1.40-report.md`.
 
 ## 1.68 — 2026-09-03 (Sprint 1 / Mission 1.39)
 
@@ -2402,6 +2436,7 @@ Additionally authoritative:
 - docs/data/calibration-reference-dataset-schema-v1.json (added in 1.66)
 - docs/data/second-pilot-selection-v1.json (added in 1.67)
 - docs/data/proposition-convergence-contract-v1.md (added in 1.68)
+- docs/data/second-pilot-ted-category-selection-v1.json (added in 1.69)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.
