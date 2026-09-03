@@ -1,0 +1,691 @@
+{
+  "$comment": "Mission 1.33. A DESK REVIEW of whether any registered source can produce an observation at the grain of subject:docker that would support a commercial Opportunity dimension. Nothing here is an acquisition, an authorization or a change to any source's governance verdict: the `local_review` and `commercial_review` columns are COPIED from source-catalog-v1.json and the rest is this mission's judgement about grain and epistemic warrant. A source may be right-grain and refused, or authorized and useless; the three questions are kept apart on purpose.",
+  "artifact_version": "commercial-dimension-source-feasibility@1.0.0",
+  "reviewed_by": "mission-1.33",
+  "reviewed_at": "2026-09-03T00:00:00+00:00",
+  "catalog_version": "1.5",
+  "canonical_subject_id": "docker",
+  "use_profile": "local-private-research-v1",
+  "outcome": "COMMERCIAL_SOURCE_GRAIN_MISMATCH",
+  "grain_rule": "A source is relevant only if it publishes an identifier that NAMES the container platform. A broad category, an industry code, a macroeconomic indicator, a lexical term, a news mention and a fuzzy text match are each insufficient by themselves, and no similarity, embedding or model matching was used to bridge the gap.",
+  "verdict_vocabulary": [
+    "FEASIBLE_NOW",
+    "FEASIBLE_AFTER_GOVERNANCE_REVIEW",
+    "FEASIBLE_AFTER_COLLECTOR_IMPLEMENTATION",
+    "FEASIBLE_AFTER_GOVERNANCE_AND_IMPLEMENTATION",
+    "WRONG_GRAIN",
+    "WRONG_DOMAIN",
+    "NO_VALID_COMMERCIAL_DIMENSION",
+    "RESTRICTED",
+    "TECHNICALLY_BLOCKED",
+    "UNKNOWN_REQUIRES_REVIEW"
+  ],
+  "sources": [
+    {
+      "source_id": "apple-app-store",
+      "source_family": "app_store",
+      "identifier_grain": {
+        "kind": "IOS_APP_LISTING",
+        "example": "an App Store app id",
+        "note": "The catalog is consumer iOS apps. Docker is developer infrastructure and is not listed in it at any grain."
+      },
+      "can_identify_docker": "NO",
+      "potential_dimensions": [],
+      "epistemic_warrant": "",
+      "would_not_establish": [
+        "Nothing at subject:docker. The source does not observe this class of thing."
+      ],
+      "local_review": "NONE",
+      "commercial_review": "v2 RESTRICTED",
+      "acquisition_status": "REFUSED_AT_THE_GATE",
+      "collector_status": "NOT_IMPLEMENTED",
+      "external_transmission": "NOT_ASSESSED",
+      "primary_blocker": "DOMAIN. Forcing consumer iOS apps into a container-tooling Opportunity because the identifiers happen to be product-shaped is exactly what Mission 1.33 §7 forbids. Governance is adverse or unresolved on top of that, and does not need to be reached.",
+      "verdict": "WRONG_DOMAIN",
+      "acquisition_priority": "NOT_RECOMMENDED"
+    },
+    {
+      "source_id": "bluesky",
+      "source_family": "social",
+      "identifier_grain": {
+        "kind": "POST_OR_HANDLE",
+        "example": "a post or account handle",
+        "note": "A social or chat stream with no product-grain identifier. Docker is recoverable only as a word inside a message."
+      },
+      "can_identify_docker": "NO",
+      "potential_dimensions": [],
+      "epistemic_warrant": "",
+      "would_not_establish": [
+        "Nothing at subject:docker."
+      ],
+      "local_review": "NONE",
+      "commercial_review": "v2 REQUIRES_REVIEW",
+      "acquisition_status": "REFUSED_AT_THE_GATE",
+      "collector_status": "NOT_IMPLEMENTED",
+      "external_transmission": "NOT_ASSESSED",
+      "primary_blocker": "GRAIN, and governance is unresolved on documents that could not be retrieved. Discord additionally gates message content behind a privileged intent nobody has applied for.",
+      "verdict": "WRONG_GRAIN",
+      "acquisition_priority": "NOT_RECOMMENDED"
+    },
+    {
+      "source_id": "discord",
+      "source_family": "community",
+      "identifier_grain": {
+        "kind": "GUILD_OR_MESSAGE",
+        "example": "a server or message",
+        "note": "A social or chat stream with no product-grain identifier. Docker is recoverable only as a word inside a message."
+      },
+      "can_identify_docker": "NO",
+      "potential_dimensions": [],
+      "epistemic_warrant": "",
+      "would_not_establish": [
+        "Nothing at subject:docker."
+      ],
+      "local_review": "NONE",
+      "commercial_review": "v1 REQUIRES_REVIEW",
+      "acquisition_status": "REFUSED_AT_THE_GATE",
+      "collector_status": "NOT_IMPLEMENTED",
+      "external_transmission": "NOT_ASSESSED",
+      "primary_blocker": "GRAIN, and governance is unresolved on documents that could not be retrieved. Discord additionally gates message content behind a privileged intent nobody has applied for.",
+      "verdict": "WRONG_GRAIN",
+      "acquisition_priority": "NOT_RECOMMENDED"
+    },
+    {
+      "source_id": "eurostat",
+      "source_family": "economic_data",
+      "identifier_grain": {
+        "kind": "MACRO_INDICATOR",
+        "example": "an SDMX dataset and dimension code",
+        "note": "An economy-scale series. There is no depth of this vocabulary at which a software product appears."
+      },
+      "can_identify_docker": "NO",
+      "potential_dimensions": [],
+      "epistemic_warrant": "",
+      "would_not_establish": [
+        "Nothing at subject:docker, and nothing at any product scope. A national aggregate is not evidence about a tool."
+      ],
+      "local_review": "v1 APPROVED_WITH_CONDITIONS",
+      "commercial_review": "v2 APPROVED_WITH_CONDITIONS",
+      "acquisition_status": "AUTHORIZABLE_UNDER_LOCAL_PROFILE",
+      "collector_status": "NOT_IMPLEMENTED",
+      "external_transmission": "NOT_ASSESSED",
+      "primary_blocker": "GRAIN, absolutely rather than nearly. These sources are locally authorized and two of them have working collectors; the vocabulary simply has no product level.",
+      "verdict": "WRONG_GRAIN",
+      "acquisition_priority": "NOT_RECOMMENDED"
+    },
+    {
+      "source_id": "fred",
+      "source_family": "economic_data",
+      "identifier_grain": {
+        "kind": "MACRO_INDICATOR",
+        "example": "an economic time series identifier",
+        "note": "An economy-scale series. There is no depth of this vocabulary at which a software product appears."
+      },
+      "can_identify_docker": "NO",
+      "potential_dimensions": [],
+      "epistemic_warrant": "",
+      "would_not_establish": [
+        "Nothing at subject:docker, and nothing at any product scope. A national aggregate is not evidence about a tool."
+      ],
+      "local_review": "v1 APPROVED_WITH_CONDITIONS",
+      "commercial_review": "v2 APPROVED_WITH_CONDITIONS",
+      "acquisition_status": "AUTHORIZABLE_UNDER_LOCAL_PROFILE",
+      "collector_status": "NOT_IMPLEMENTED",
+      "external_transmission": "NOT_ASSESSED",
+      "primary_blocker": "GRAIN, absolutely rather than nearly. These sources are locally authorized and two of them have working collectors; the vocabulary simply has no product level.",
+      "verdict": "WRONG_GRAIN",
+      "acquisition_priority": "NOT_RECOMMENDED"
+    },
+    {
+      "source_id": "gdelt",
+      "source_family": "news",
+      "identifier_grain": {
+        "kind": "LEXICAL_TERM",
+        "example": "the term 'docker' under a source language label",
+        "note": "A term occurrence in a news corpus. Mission 1.33 §1 excludes lexical term occurrence from acceptable identifiers by name, and the engine already maps this signal type to no dimension because it measures what media PUBLISHED."
+      },
+      "can_identify_docker": "MENTION",
+      "potential_dimensions": [],
+      "epistemic_warrant": "",
+      "would_not_establish": "No dimension is claimed, so there is nothing this row would establish.",
+      "local_review": "v2 APPROVED_WITH_CONDITIONS",
+      "commercial_review": "v3 APPROVED_WITH_CONDITIONS",
+      "acquisition_status": "AUTHORIZABLE_UNDER_LOCAL_PROFILE",
+      "collector_status": "IMPLEMENTED",
+      "external_transmission": "PERMITTED_WITH_CONDITIONS",
+      "primary_blocker": "GRAIN. A word is not a product identifier, and the same string names a dock worker, a surname and a container platform.",
+      "verdict": "WRONG_GRAIN",
+      "acquisition_priority": "NOT_RECOMMENDED"
+    },
+    {
+      "source_id": "github",
+      "source_family": "developer",
+      "identifier_grain": {
+        "kind": "REPOSITORY_FULL_NAME",
+        "example": "moby/moby, docker/compose, docker/cli",
+        "note": "A repository full name is an exact, publisher-assigned identifier, and the Docker organisation publishes the platform's own repositories under it. The grain is as good as anything in the portfolio."
+      },
+      "can_identify_docker": "YES",
+      "potential_dimensions": [
+        "COMPETITIVE_SUPPLY",
+        "FEASIBILITY_SIGNAL"
+      ],
+      "epistemic_warrant": "A public repository IS a supplied solution: somebody has built and published something, which is what COMPETITIVE_SUPPLY asks. Repository metadata also bears on whether an intervention could be built and operated, which is FEASIBILITY_SIGNAL's question, because working implementations demonstrate buildability.",
+      "would_not_establish": [
+        "The dimension's own never_means, verbatim: not 'that competitors are weak', and not 'that a crowded space is closed or an empty one is open'. Star counts speak to neither.",
+        "Market share, revenue or commercial success. A repository has no customers.",
+        "SOLUTION_DISSATISFACTION. An issue is a defect report against a named artifact, not an evaluative statement that the artifact is inadequate for the reporter's need; separating the two requires reading prose, which is an INFERRED step and is not authorised.",
+        "Willingness to pay, a buyer, or a budget. None of those appears anywhere in repository metadata."
+      ],
+      "local_review": "NONE",
+      "commercial_review": "v2 RESTRICTED",
+      "acquisition_status": "REFUSED_AT_THE_GATE",
+      "collector_status": "NOT_IMPLEMENTED",
+      "external_transmission": "NOT_ASSESSED",
+      "primary_blocker": "GOVERNANCE, AND THE FINDING IS ABOUT THE PURPOSE RATHER THAN THE DEPLOYMENT. The Acceptable Use Policies section 7 is an ALLOWLIST that applies 'regardless of whether the information was scraped, collected through our API, or obtained otherwise', and it permits research use only where resulting publications are OPEN ACCESS. SROS produces proprietary insights used to launch commercial products, which the local profile does not change (see the deployment-model invariant: local deployment never implies non-commercial use). So the missing local-profile review is predictably not the thing standing in the way.",
+      "verdict": "RESTRICTED",
+      "acquisition_priority": "NOT_RECOMMENDED"
+    },
+    {
+      "source_id": "google-play",
+      "source_family": "app_store",
+      "identifier_grain": {
+        "kind": "ANDROID_APP_LISTING",
+        "example": "a Play package name",
+        "note": "The catalog is consumer Android apps. Docker is developer infrastructure and is not listed in it at any grain."
+      },
+      "can_identify_docker": "NO",
+      "potential_dimensions": [],
+      "epistemic_warrant": "",
+      "would_not_establish": [
+        "Nothing at subject:docker. The source does not observe this class of thing."
+      ],
+      "local_review": "NONE",
+      "commercial_review": "v2 RESTRICTED",
+      "acquisition_status": "REFUSED_AT_THE_GATE",
+      "collector_status": "NOT_IMPLEMENTED",
+      "external_transmission": "NOT_ASSESSED",
+      "primary_blocker": "DOMAIN. Forcing consumer Android apps into a container-tooling Opportunity because the identifiers happen to be product-shaped is exactly what Mission 1.33 §7 forbids. Governance is adverse or unresolved on top of that, and does not need to be reached.",
+      "verdict": "WRONG_DOMAIN",
+      "acquisition_priority": "NOT_RECOMMENDED"
+    },
+    {
+      "source_id": "google-trends",
+      "source_family": "search_trends",
+      "identifier_grain": {
+        "kind": "SEARCH_TERM",
+        "example": "the query string 'docker'",
+        "note": "A search term, which is a word and not a product identifier, with the same ambiguity GDELT has."
+      },
+      "can_identify_docker": "MENTION",
+      "potential_dimensions": [],
+      "epistemic_warrant": "",
+      "would_not_establish": "No dimension is claimed, so there is nothing this row would establish.",
+      "local_review": "NONE",
+      "commercial_review": "v3 REQUIRES_REVIEW",
+      "acquisition_status": "REFUSED_AT_THE_GATE",
+      "collector_status": "NOT_IMPLEMENTED",
+      "external_transmission": "NOT_ASSESSED",
+      "primary_blocker": "ACCESS. The API is an alpha programme this deployment has not been admitted to, and the terms governing it were unreachable without programme access. Grain would still be the problem if it were open.",
+      "verdict": "WRONG_GRAIN",
+      "acquisition_priority": "NOT_RECOMMENDED"
+    },
+    {
+      "source_id": "hacker-news",
+      "source_family": "community",
+      "identifier_grain": {
+        "kind": "POST_OR_COMMENT",
+        "example": "Docker as a word inside a story title or comment",
+        "note": "No product identifier exists. A story is about a URL, and the subject is recoverable only by reading text."
+      },
+      "can_identify_docker": "MENTION",
+      "potential_dimensions": [],
+      "epistemic_warrant": "",
+      "would_not_establish": "No dimension is claimed, so there is nothing this row would establish.",
+      "local_review": "NONE",
+      "commercial_review": "v3 RESTRICTED",
+      "acquisition_status": "REFUSED_AT_THE_GATE",
+      "collector_status": "NOT_IMPLEMENTED",
+      "external_transmission": "NOT_ASSESSED",
+      "primary_blocker": "GOVERNANCE, decisively, and grain behind it. The Y Combinator Terms prohibit data mining, robots and scraping over Site content and prohibit commercial derivative works, so commercial_use is NOT_PERMITTED -- again a finding about the purpose, which the local profile does not change.",
+      "verdict": "RESTRICTED",
+      "acquisition_priority": "NOT_RECOMMENDED"
+    },
+    {
+      "source_id": "huggingface",
+      "source_family": "developer",
+      "identifier_grain": {
+        "kind": "MODEL_OR_DATASET_ID",
+        "example": "repositories of models and datasets",
+        "note": "The Hub indexes machine-learning artifacts. Docker is not one, and a passing mention in a model card is text."
+      },
+      "can_identify_docker": "MENTION",
+      "potential_dimensions": [],
+      "epistemic_warrant": "",
+      "would_not_establish": "No dimension is claimed, so there is nothing this row would establish.",
+      "local_review": "NONE",
+      "commercial_review": "v1 REQUIRES_REVIEW",
+      "acquisition_status": "REFUSED_AT_THE_GATE",
+      "collector_status": "NOT_IMPLEMENTED",
+      "external_transmission": "NOT_ASSESSED",
+      "primary_blocker": "DOMAIN. The catalog is ML artifacts; the subject is container tooling. Governance is separately unresolved on a 2022 document nobody has confirmed is current.",
+      "verdict": "WRONG_DOMAIN",
+      "acquisition_priority": "NOT_RECOMMENDED"
+    },
+    {
+      "source_id": "meta-instagram",
+      "source_family": "social",
+      "identifier_grain": {
+        "kind": "POST",
+        "example": "an Instagram post",
+        "note": "The catalog is social posts. Docker is developer infrastructure and is not listed in it at any grain."
+      },
+      "can_identify_docker": "NO",
+      "potential_dimensions": [],
+      "epistemic_warrant": "",
+      "would_not_establish": [
+        "Nothing at subject:docker. The source does not observe this class of thing."
+      ],
+      "local_review": "NONE",
+      "commercial_review": "v1 RESTRICTED",
+      "acquisition_status": "REFUSED_AT_THE_GATE",
+      "collector_status": "NOT_IMPLEMENTED",
+      "external_transmission": "NOT_ASSESSED",
+      "primary_blocker": "DOMAIN. Forcing social posts into a container-tooling Opportunity because the identifiers happen to be product-shaped is exactly what Mission 1.33 §7 forbids. Governance is adverse or unresolved on top of that, and does not need to be reached.",
+      "verdict": "WRONG_DOMAIN",
+      "acquisition_priority": "NOT_RECOMMENDED"
+    },
+    {
+      "source_id": "npm-registry",
+      "source_family": "developer",
+      "identifier_grain": {
+        "kind": "PACKAGE_NAME",
+        "example": "dockerode, and other packages that drive Docker",
+        "note": "No npm package IS Docker: the platform is not distributed through npm. What the registry carries is packages that INTEGRATE with Docker, which Mission 1.33 §6 forbids merging into subject:docker without a canonical relationship model that does not exist."
+      },
+      "can_identify_docker": "MENTION",
+      "potential_dimensions": [],
+      "epistemic_warrant": "",
+      "would_not_establish": "No dimension is claimed, so there is nothing this row would establish.",
+      "local_review": "NONE",
+      "commercial_review": "v2 REQUIRES_REVIEW",
+      "acquisition_status": "REFUSED_AT_THE_GATE",
+      "collector_status": "NOT_IMPLEMENTED",
+      "external_transmission": "NOT_ASSESSED",
+      "primary_blocker": "GRAIN, and governance behind it. An ecosystem of Docker-adjacent packages is a different subject from Docker, and joining them would be a category-scope claim the engine cannot express. Governance is separately unresolved: the terms grant replication in as many words, and leave commercial use, derived analytics and model processing unaddressed, which rule 8 blocks.",
+      "verdict": "WRONG_GRAIN",
+      "acquisition_priority": "NOT_RECOMMENDED"
+    },
+    {
+      "source_id": "openalex",
+      "source_family": "knowledge",
+      "identifier_grain": {
+        "kind": "SCHOLARLY_CONCEPT",
+        "example": "works whose topic matches containerisation",
+        "note": "A scholarly work about Docker is a topical match rather than a product identifier, and a topic assignment is a classification somebody else made on criteria this repository has not reviewed."
+      },
+      "can_identify_docker": "MENTION",
+      "potential_dimensions": [],
+      "epistemic_warrant": "",
+      "would_not_establish": "No dimension is claimed, so there is nothing this row would establish.",
+      "local_review": "v1 APPROVED_WITH_CONDITIONS",
+      "commercial_review": "v1 APPROVED_WITH_CONDITIONS",
+      "acquisition_status": "AUTHORIZABLE_UNDER_LOCAL_PROFILE",
+      "collector_status": "NOT_IMPLEMENTED",
+      "external_transmission": "NOT_ASSESSED",
+      "primary_blocker": "GRAIN, and it is not eligible either: the source is APPROVED_WITH_CONDITIONS locally with BOTH conditions unsatisfied on this deployment, so it is approving and not eligible. Scholarly publication counts also carry no commercial semantics of any kind.",
+      "verdict": "WRONG_GRAIN",
+      "acquisition_priority": "NOT_RECOMMENDED"
+    },
+    {
+      "source_id": "pinterest",
+      "source_family": "product_discovery",
+      "identifier_grain": {
+        "kind": "PIN_OR_BOARD",
+        "example": "a Pin or board",
+        "note": "The catalog is visual product discovery. Docker is developer infrastructure and is not listed in it at any grain."
+      },
+      "can_identify_docker": "NO",
+      "potential_dimensions": [],
+      "epistemic_warrant": "",
+      "would_not_establish": [
+        "Nothing at subject:docker. The source does not observe this class of thing."
+      ],
+      "local_review": "NONE",
+      "commercial_review": "v2 RESTRICTED",
+      "acquisition_status": "REFUSED_AT_THE_GATE",
+      "collector_status": "NOT_IMPLEMENTED",
+      "external_transmission": "NOT_ASSESSED",
+      "primary_blocker": "DOMAIN. Forcing visual product discovery into a container-tooling Opportunity because the identifiers happen to be product-shaped is exactly what Mission 1.33 §7 forbids. Governance is adverse or unresolved on top of that, and does not need to be reached.",
+      "verdict": "WRONG_DOMAIN",
+      "acquisition_priority": "NOT_RECOMMENDED"
+    },
+    {
+      "source_id": "product-hunt",
+      "source_family": "product_discovery",
+      "identifier_grain": {
+        "kind": "PRODUCT_LISTING",
+        "example": "a Product Hunt post for a named developer tool",
+        "note": "A launch post is a product-grain listing with a stable identifier, which is the right shape for enumerating tools. Whether the platform lists Docker itself and which adjacent tools it carries was NOT verified: doing so would mean querying the API this review cannot use."
+      },
+      "can_identify_docker": "YES",
+      "potential_dimensions": [
+        "COMPETITIVE_SUPPLY"
+      ],
+      "epistemic_warrant": "A catalog of launched products is a record of who has shipped something into a space, which is what COMPETITIVE_SUPPLY asks.",
+      "would_not_establish": [
+        "Market demand. A listing records a launch, not a want.",
+        "Commercial success or revenue. Upvotes are a site counter.",
+        "Product quality or user satisfaction. Votes are not evaluations.",
+        "The dimension's own never_means, verbatim: not 'that a crowded space is closed or an empty one is open'."
+      ],
+      "local_review": "NONE",
+      "commercial_review": "v2 RESTRICTED",
+      "acquisition_status": "REFUSED_AT_THE_GATE",
+      "collector_status": "NOT_IMPLEMENTED",
+      "external_transmission": "NOT_ASSESSED",
+      "primary_blocker": "GOVERNANCE, AND AGAIN ABOUT THE PURPOSE. The API documentation states twice, in plain words, that 'the Product Hunt API must not be used for commercial purposes' and names the route to change that: written permission from the company. Non-commercial use is permitted and ours is commercial under BOTH profiles, so a local review reaches the same wall. The route is operator correspondence, which is a human act performed outside this repository.",
+      "verdict": "RESTRICTED",
+      "acquisition_priority": "PRIORITY_3"
+    },
+    {
+      "source_id": "pypi",
+      "source_family": "developer",
+      "identifier_grain": {
+        "kind": "PACKAGE_NAME",
+        "example": "the `docker` package, the official Docker SDK for Python",
+        "note": "The closest near-miss in the portfolio, and it is still a miss. A Python client library published by the platform's vendor is a DIFFERENT ARTIFACT from the platform: its download count measures adoption of the SDK, and reading it as adoption of Docker would be the exact substitution the subject registry exists to prevent."
+      },
+      "can_identify_docker": "MENTION",
+      "potential_dimensions": [],
+      "epistemic_warrant": "",
+      "would_not_establish": "No dimension is claimed, so there is nothing this row would establish.",
+      "local_review": "NONE",
+      "commercial_review": "v2 REQUIRES_REVIEW",
+      "acquisition_status": "REFUSED_AT_THE_GATE",
+      "collector_status": "NOT_IMPLEMENTED",
+      "external_transmission": "NOT_ASSESSED",
+      "primary_blocker": "GRAIN, and the weakest governance footing in the catalog. PyPI is the one source that once reached an approving state with NOT ONE required activity positively permitted; the cited document contains prohibitions and no grant.",
+      "verdict": "WRONG_GRAIN",
+      "acquisition_priority": "NOT_RECOMMENDED"
+    },
+    {
+      "source_id": "reddit",
+      "source_family": "community",
+      "identifier_grain": {
+        "kind": "SUBREDDIT",
+        "example": "a Docker-specific subreddit",
+        "note": "A subreddit is a source-native, publisher-assigned identifier, structurally comparable to a Stack Overflow tag. It is the one identifier in the portfolio that could plausibly join the canonical subject on the same basis the Stack Exchange tag did."
+      },
+      "can_identify_docker": "YES",
+      "potential_dimensions": [
+        "SOLUTION_DISSATISFACTION"
+      ],
+      "epistemic_warrant": "Unlike a question site, a discussion forum carries EVALUATIVE statements about named tools -- a post saying a specific product became unusable for a stated reason is dissatisfaction with what somebody uses today, which is the dimension's actual question. Mission 1.32 established that a request for help is not; a complaint about a named solution may be.",
+      "would_not_establish": [
+        "That the complainers would switch, or that a complaint is representative -- the dimension's own never_means.",
+        "SOLUTION_GAP. That somebody dislikes a tool is not evidence that no adequate tool exists.",
+        "Willingness to pay or any transaction.",
+        "Any count of PEOPLE. Author identity is not acquired anywhere in this system."
+      ],
+      "local_review": "NONE",
+      "commercial_review": "v2 REQUIRES_REVIEW",
+      "acquisition_status": "REFUSED_AT_THE_GATE",
+      "collector_status": "NOT_IMPLEMENTED",
+      "external_transmission": "NOT_ASSESSED",
+      "primary_blocker": "TWO INDEPENDENT BLOCKERS, AND THE SECOND IS THE HARDER ONE. Governance is genuinely UNKNOWN rather than adverse: the Data API Terms, Developer Terms and Responsible Builder Policy could not be retrieved, commercial_use is UNCLEAR, and there is no local-profile review. Separately, distinguishing an evaluative complaint from a request for help inside free text is a semantic reading -- an INFERRED extraction path that does not exist, and whose nearest relative (SAME_PROBLEM_FAMILY) is PARKED.",
+      "verdict": "UNKNOWN_REQUIRES_REVIEW",
+      "acquisition_priority": "PRIORITY_2"
+    },
+    {
+      "source_id": "spotify",
+      "source_family": "content_platform",
+      "identifier_grain": {
+        "kind": "TRACK_OR_ARTIST",
+        "example": "a Spotify track or artist id",
+        "note": "The catalog is music. Docker is developer infrastructure and is not listed in it at any grain."
+      },
+      "can_identify_docker": "NO",
+      "potential_dimensions": [],
+      "epistemic_warrant": "",
+      "would_not_establish": [
+        "Nothing at subject:docker. The source does not observe this class of thing."
+      ],
+      "local_review": "NONE",
+      "commercial_review": "v1 PROHIBITED",
+      "acquisition_status": "REFUSED_AT_THE_GATE",
+      "collector_status": "NOT_IMPLEMENTED",
+      "external_transmission": "NOT_ASSESSED",
+      "primary_blocker": "DOMAIN. Forcing music into a container-tooling Opportunity because the identifiers happen to be product-shaped is exactly what Mission 1.33 §7 forbids. Governance is adverse or unresolved on top of that, and does not need to be reached.",
+      "verdict": "WRONG_DOMAIN",
+      "acquisition_priority": "NOT_RECOMMENDED"
+    },
+    {
+      "source_id": "stack-exchange",
+      "source_family": "forum",
+      "identifier_grain": {
+        "kind": "COMMUNITY_TAG",
+        "example": "stack-exchange:community-tag:stackoverflow|docker",
+        "note": "A curated site tag with a published description and maintained synonyms. It names the container platform and is already in the canonical subject registry."
+      },
+      "can_identify_docker": "YES",
+      "potential_dimensions": [],
+      "epistemic_warrant": "",
+      "would_not_establish": "No dimension is claimed, so there is nothing this row would establish.",
+      "local_review": "v2 APPROVED_WITH_CONDITIONS",
+      "commercial_review": "v2 REQUIRES_REVIEW",
+      "acquisition_status": "AUTHORIZABLE_UNDER_LOCAL_PROFILE",
+      "collector_status": "IMPLEMENTED",
+      "external_transmission": "PERMITTED_WITH_CONDITIONS",
+      "primary_blocker": "Its native semantics are exhausted for commercial purposes. A question is a request for help; Mission 1.32 established that the acceptance flag reaches no commercial dimension, and the remaining structure -- tag co-occurrence, vote and view counters -- is either the PARKED problem-family relation or counters the normalizer already refuses to promote.",
+      "verdict": "NO_VALID_COMMERCIAL_DIMENSION",
+      "acquisition_priority": "NOT_RECOMMENDED"
+    },
+    {
+      "source_id": "steam",
+      "source_family": "gaming",
+      "identifier_grain": {
+        "kind": "STEAM_APP_ID",
+        "example": "a Steam app id",
+        "note": "The catalog is games. Docker is developer infrastructure and is not listed in it at any grain."
+      },
+      "can_identify_docker": "NO",
+      "potential_dimensions": [],
+      "epistemic_warrant": "",
+      "would_not_establish": [
+        "Nothing at subject:docker. The source does not observe this class of thing."
+      ],
+      "local_review": "NONE",
+      "commercial_review": "v1 RESTRICTED",
+      "acquisition_status": "REFUSED_AT_THE_GATE",
+      "collector_status": "NOT_IMPLEMENTED",
+      "external_transmission": "NOT_ASSESSED",
+      "primary_blocker": "DOMAIN. Forcing games into a container-tooling Opportunity because the identifiers happen to be product-shaped is exactly what Mission 1.33 §7 forbids. Governance is adverse or unresolved on top of that, and does not need to be reached.",
+      "verdict": "WRONG_DOMAIN",
+      "acquisition_priority": "NOT_RECOMMENDED"
+    },
+    {
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "identifier_grain": {
+        "kind": "CPV_DIVISION",
+        "example": "ted-eu:CPV-division:90",
+        "note": "A two-digit CPV division is a procurement CATEGORY. The vocabulary does not name products at any depth, and the collector deliberately expands no CPV code into a label."
+      },
+      "can_identify_docker": "NO",
+      "potential_dimensions": [],
+      "epistemic_warrant": "",
+      "would_not_establish": [
+        "Nothing at subject:docker. The observation's subject is a procurement category, and attaching it to a product would assert an identity nobody established."
+      ],
+      "local_review": "v2 APPROVED_WITH_CONDITIONS",
+      "commercial_review": "v5 REQUIRES_REVIEW",
+      "acquisition_status": "AUTHORIZABLE_UNDER_LOCAL_PROFILE",
+      "collector_status": "IMPLEMENTED",
+      "external_transmission": "NOT_ASSESSED",
+      "primary_blocker": "GRAIN, and it is the mission's central case. TED carries REAL commercial semantics -- an existing Evidence row already maps to MARKET_ACTIVITY, BUYER_OR_BUDGET_EXISTENCE and ECONOMIC_VALUE -- and it is fully built: authorized locally, collector implemented, normalizer implemented, extractor implemented, one Signal already derived. The single thing it cannot do is name Docker.",
+      "verdict": "WRONG_GRAIN",
+      "acquisition_priority": "PRIORITY_1_CONDITIONAL"
+    },
+    {
+      "source_id": "tiktok",
+      "source_family": "social",
+      "identifier_grain": {
+        "kind": "POST",
+        "example": "a TikTok post",
+        "note": "The catalog is short video. Docker is developer infrastructure and is not listed in it at any grain."
+      },
+      "can_identify_docker": "NO",
+      "potential_dimensions": [],
+      "epistemic_warrant": "",
+      "would_not_establish": [
+        "Nothing at subject:docker. The source does not observe this class of thing."
+      ],
+      "local_review": "NONE",
+      "commercial_review": "v2 PROHIBITED",
+      "acquisition_status": "REFUSED_AT_THE_GATE",
+      "collector_status": "NOT_IMPLEMENTED",
+      "external_transmission": "NOT_ASSESSED",
+      "primary_blocker": "DOMAIN. Forcing short video into a container-tooling Opportunity because the identifiers happen to be product-shaped is exactly what Mission 1.33 §7 forbids. Governance is adverse or unresolved on top of that, and does not need to be reached.",
+      "verdict": "WRONG_DOMAIN",
+      "acquisition_priority": "NOT_RECOMMENDED"
+    },
+    {
+      "source_id": "twitch",
+      "source_family": "creator",
+      "identifier_grain": {
+        "kind": "CHANNEL",
+        "example": "a Twitch channel",
+        "note": "The catalog is live streaming. Docker is developer infrastructure and is not listed in it at any grain."
+      },
+      "can_identify_docker": "NO",
+      "potential_dimensions": [],
+      "epistemic_warrant": "",
+      "would_not_establish": [
+        "Nothing at subject:docker. The source does not observe this class of thing."
+      ],
+      "local_review": "NONE",
+      "commercial_review": "v1 REQUIRES_REVIEW",
+      "acquisition_status": "REFUSED_AT_THE_GATE",
+      "collector_status": "NOT_IMPLEMENTED",
+      "external_transmission": "NOT_ASSESSED",
+      "primary_blocker": "DOMAIN. Forcing live streaming into a container-tooling Opportunity because the identifiers happen to be product-shaped is exactly what Mission 1.33 §7 forbids. Governance is adverse or unresolved on top of that, and does not need to be reached.",
+      "verdict": "WRONG_DOMAIN",
+      "acquisition_priority": "NOT_RECOMMENDED"
+    },
+    {
+      "source_id": "usaspending",
+      "source_family": "public_procurement",
+      "identifier_grain": {
+        "kind": "PSC_OR_NAICS_PLUS_RECIPIENT",
+        "example": "a product/service code, plus a recipient organisation name",
+        "note": "The same category vocabulary problem as TED, with an extra trap: a recipient name could read as Docker. The canonical subject registry says in its own words that subject:docker is the container platform and NOT the company, so a contract awarded to a vendor is evidence about that vendor and not about the platform."
+      },
+      "can_identify_docker": "NO",
+      "potential_dimensions": [],
+      "epistemic_warrant": "",
+      "would_not_establish": [
+        "Nothing at subject:docker, for the reason above.",
+        "A contract naming a vendor would not establish anything about the vendor's product either: an award total includes options and renewals."
+      ],
+      "local_review": "NONE",
+      "commercial_review": "v1 REQUIRES_REVIEW",
+      "acquisition_status": "REFUSED_AT_THE_GATE",
+      "collector_status": "NOT_IMPLEMENTED",
+      "external_transmission": "NOT_ASSESSED",
+      "primary_blocker": "GRAIN, plus unresolved governance -- no licence or terms document has been retrieved, and there is no local-profile review.",
+      "verdict": "WRONG_GRAIN",
+      "acquisition_priority": "NOT_RECOMMENDED"
+    },
+    {
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "identifier_grain": {
+        "kind": "ENCYCLOPEDIA_ARTICLE",
+        "example": "wikimedia-pageviews:content:en.wikipedia.org|Docker_(software)",
+        "note": "The article title carries the encyclopedia's own parenthetical disambiguator, which exists precisely to separate the container platform from other things called Docker."
+      },
+      "can_identify_docker": "YES",
+      "potential_dimensions": [],
+      "epistemic_warrant": "",
+      "would_not_establish": "No dimension is claimed, so there is nothing this row would establish.",
+      "local_review": "v2 APPROVED_WITH_CONDITIONS",
+      "commercial_review": "v2 REQUIRES_REVIEW",
+      "acquisition_status": "AUTHORIZABLE_UNDER_LOCAL_PROFILE",
+      "collector_status": "IMPLEMENTED",
+      "external_transmission": "PERMITTED",
+      "primary_blocker": "A request is something a reader makes of a server. It reaches AUDIENCE_OR_USAGE and no commercial dimension: nothing in a view count observes a transaction, a budget, a supplier or an evaluation.",
+      "verdict": "NO_VALID_COMMERCIAL_DIMENSION",
+      "acquisition_priority": "NOT_RECOMMENDED"
+    },
+    {
+      "source_id": "world-bank",
+      "source_family": "economic_data",
+      "identifier_grain": {
+        "kind": "MACRO_INDICATOR",
+        "example": "a macroeconomic indicator for a country",
+        "note": "An economy-scale series. There is no depth of this vocabulary at which a software product appears."
+      },
+      "can_identify_docker": "NO",
+      "potential_dimensions": [],
+      "epistemic_warrant": "",
+      "would_not_establish": [
+        "Nothing at subject:docker, and nothing at any product scope. A national aggregate is not evidence about a tool."
+      ],
+      "local_review": "v2 APPROVED_WITH_CONDITIONS",
+      "commercial_review": "v2 APPROVED_WITH_CONDITIONS",
+      "acquisition_status": "AUTHORIZABLE_UNDER_LOCAL_PROFILE",
+      "collector_status": "IMPLEMENTED",
+      "external_transmission": "PERMITTED_WITH_CONDITIONS",
+      "primary_blocker": "GRAIN, absolutely rather than nearly. These sources are locally authorized and two of them have working collectors; the vocabulary simply has no product level.",
+      "verdict": "WRONG_GRAIN",
+      "acquisition_priority": "NOT_RECOMMENDED"
+    },
+    {
+      "source_id": "x-twitter",
+      "source_family": "social",
+      "identifier_grain": {
+        "kind": "POST_OR_HANDLE",
+        "example": "a post or account handle",
+        "note": "A social or chat stream with no product-grain identifier. Docker is recoverable only as a word inside a message."
+      },
+      "can_identify_docker": "NO",
+      "potential_dimensions": [],
+      "epistemic_warrant": "",
+      "would_not_establish": [
+        "Nothing at subject:docker."
+      ],
+      "local_review": "NONE",
+      "commercial_review": "v1 REQUIRES_REVIEW",
+      "acquisition_status": "REFUSED_AT_THE_GATE",
+      "collector_status": "NOT_IMPLEMENTED",
+      "external_transmission": "NOT_ASSESSED",
+      "primary_blocker": "GRAIN, and governance is unresolved on documents that could not be retrieved. Discord additionally gates message content behind a privileged intent nobody has applied for.",
+      "verdict": "WRONG_GRAIN",
+      "acquisition_priority": "NOT_RECOMMENDED"
+    },
+    {
+      "source_id": "youtube",
+      "source_family": "content_platform",
+      "identifier_grain": {
+        "kind": "VIDEO_ID",
+        "example": "a YouTube video id",
+        "note": "The catalog is video. Docker is developer infrastructure and is not listed in it at any grain."
+      },
+      "can_identify_docker": "NO",
+      "potential_dimensions": [],
+      "epistemic_warrant": "",
+      "would_not_establish": [
+        "Nothing at subject:docker. The source does not observe this class of thing."
+      ],
+      "local_review": "NONE",
+      "commercial_review": "v2 PROHIBITED",
+      "acquisition_status": "REFUSED_AT_THE_GATE",
+      "collector_status": "NOT_IMPLEMENTED",
+      "external_transmission": "NOT_ASSESSED",
+      "primary_blocker": "DOMAIN. Forcing video into a container-tooling Opportunity because the identifiers happen to be product-shaped is exactly what Mission 1.33 §7 forbids. Governance is adverse or unresolved on top of that, and does not need to be reached.",
+      "verdict": "WRONG_DOMAIN",
+      "acquisition_priority": "NOT_RECOMMENDED"
+    }
+  ]
+}

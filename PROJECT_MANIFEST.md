@@ -1,6 +1,6 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.59
+Version: 1.60
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
@@ -13,6 +13,36 @@ Last amended: 2026-09-03 (Sprint 1 / Mission 1.31.1)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.60 — 2026-09-03 (Sprint 1 / Mission 1.33)
+
+**`COMMERCIAL_SOURCE_GRAIN_MISMATCH`.** A desk review of all 29 registered
+sources, asking which could produce an observation at the grain of
+`subject:docker` that would support a commercial Opportunity dimension.
+
+**The sources that can name Docker carry no commercial semantics; the sources
+that carry commercial semantics cannot name Docker.** 5 identify Docker at grain,
+7 reach it only as a mention, 17 not at all. 3 could support a missing commercial
+dimension and all 3 are blocked — `github` and `product-hunt` by findings about
+the PURPOSE of the use, which the local profile does not change, and `reddit` by
+unretrievable terms plus a missing inference layer.
+
+**The binding constraint is architectural.** `CanonicalSubject` has no scope
+field and a packet holds one subject, so SROS models geographic scope on an
+Opportunity and no subject scope at all — while `MARKET_ACTIVITY` and
+`ECONOMIC_VALUE` already ask about *the bounded scope observed*. TED is
+authorized, collected, normalized, extracted and carries three commercial
+dimensions; its subject key is `ted-eu:CPV-division:90`.
+
+New: `docs/data/commercial-dimension-source-feasibility-v1.md` and its
+machine-readable matrix, plus 34 tests holding the three questions apart.
+
+**0 acquisitions, 0 model calls, 0 new canonical records**, and all thirteen
+counters verified unchanged against the live database. Recommendation:
+`NO_CURRENT_SOURCE_CAN_CLOSE_DOCKER_COMMERCIAL_DIMENSION`, and a **Multi-Scope
+Opportunity Evidence Architecture V1** mission before any acquisition.
+
+Report: `docs/architecture/mission-1.33-report.md`.
 
 ## 1.59 — 2026-09-03 (Sprint 1 / Mission 1.32)
 
@@ -2121,6 +2151,7 @@ Additionally authoritative:
 - docs/data/targeted-evidence-completion-v1.md (added in 1.56)
 - docs/data/canonical-subject-registry-v1.json (added in 1.56)
 - docs/data/answer-acceptance-semantics-v1.md (added in 1.59)
+- docs/data/commercial-dimension-source-feasibility-v1.md (added in 1.60)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.
