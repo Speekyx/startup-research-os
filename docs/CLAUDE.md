@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.62
-Last amended: 2026-09-03 (Sprint 1 / Mission 1.34)
+Version: 1.63
+Last amended: 2026-09-03 (Sprint 1 / Mission 1.35)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.63 | 2026-09-03 | **NO_AUTHORITATIVE_DOCKER_CATEGORY_RELATION_FOUND: the search happened and the registry is still empty.** Six candidates, six rejections, failing in **three distinct ways**: things that NAME Docker without classifying it (its own docs say *an open platform for developing, shipping, and running applications* and assign no category; the OCI defines three SPECIFICATIONS and uses *container engine* as a term with no register behind it -- **a term is not a category**, it has no identifier, no publisher deciding membership and no member list); things that CLASSIFY PRODUCTS without containing Docker; and things that classify **something else**. **The CNCF Landscape was refused on a countable fact**: its `landscape.yml` holds 1,138,659 bytes, 2,512 name fields and 15 categories, the word Docker occurs 53 times, and the five items named for it are Swarm (Orchestration), Compose (App Definition), Hub, a Wasm entry and **`Docker (member)`, the COMPANY** -- **the container platform is not an item at all**, and the three products sit in three DIFFERENT categories, so there is not even a single wrong answer to be tempted by. Independently: it calls itself *a map* that *attempts to categorize most of* the space with a **300-GitHub-star inclusion rule**, and a popularity threshold is not a classification rule. **CPV is `CPV_NOT_SUITABLE_FOR_DIRECT_PRODUCT_RELATION` on WHO ASSIGNS A CODE**: a contracting authority assigns one to ITS OWN CONTRACT, so a CPV class contains procurements and never products. UNSPSC returned HTTP 403 and stays UNRESOLVED rather than guessed. **The direction of reasoning was the methodology** -- ask what contains Docker, never what would reach the evidence we hold. 0 relations before and after, 0 model calls, all 13 counters unchanged. Next: **Reliability / Scoring Eligibility Foundation**, chosen explicitly over a second pilot |
 | 1.62 | 2026-09-03 | **MULTI_SCOPE_ARCHITECTURE_READY_SCOPE_RELATIONS_UNPOPULATED: the engine can now say WHAT LEVEL a row observes, and there are no edges.** `SubjectScopeType` = PRODUCT | CATEGORY | MARKET | GEOGRAPHY, each with a `means` and a `never_means`, and **MARKET's example is literally 'none'** because no registered source observes one. **The assumption broken**: `build_packet` unioned dimensions with NO SCOPE TERM, so membership WAS the claim of aboutness -- found in seven places and listed in the report. **The relation registry ships EMPTY and that is the result**: Mission 1.33 refused to say which category contains Docker and §33 forbids inventing one, so the capability exists holding zero edges and NO Evidence row can currently be contextual. **Real demonstration on 28 rows**: Docker resolves PRODUCT (8 rows, DIRECT), TED resolves CATEGORY on the publisher's own authority (CPV is a classification by its own name), and offering TED to Docker is REFUSED `NO_PERMITTED_RELATION` -- **the refusal is the demonstration**. 25 of 28 scopes resolved, **3 UNDETERMINED** (GDELT terms; a word names no level) and nothing mass-labelled. **NO MIGRATION**: scope is DERIVED at build time from identifiers already held, because persisting a derivation is what source-registry §3 refuses for eligibility. **Compatibility PROVEN not asserted**: regenerating the preparation artifact changed EXACTLY ONE FIELD, the registry version. **No union of direct and contextual dimensions exists on the packet** -- a test enumerates every public attribute -- because that union is the sentence *Docker supports MARKET_ACTIVITY*. No transitivity, no MODEL_INFERRED origin, WTP still unreachable, revision 1 and its 7 links untouched, all 13 counters verified unchanged |
 | 1.61 | 2026-09-03 | **COMMERCIAL_SOURCE_GRAIN_MISMATCH: the sources that can name Docker carry no commercial semantics, and the sources that carry commercial semantics cannot name Docker.** A desk review of all 29 registered sources. **5 can identify Docker at grain** -- `github`, `product-hunt`, `reddit`, `stack-exchange`, `wikimedia-pageviews` -- 7 reach it only as a MENTION and 17 not at all. **3 could support a missing commercial dimension and all 3 are blocked.** 0 acquisitions, 0 model calls, **every one of the thirteen counters verified unchanged against the live database**. **21 of 29 have no `local-private-research-v1` review**, so ADR-027 refuses them whatever their terms say -- and that is NOT twenty-one opportunities: GitHub's and Product Hunt's findings are about the PURPOSE of the use, which the local profile does not change, because **local deployment never implies non-commercial use**. GitHub's AUP section 7 is an allowlist applying *regardless of whether the information was scraped, collected through our API, or obtained otherwise*, permitting research use **only if publications are open access**; Product Hunt's docs say twice that the API *must not be used for commercial purposes*. **GitHub has the best grain in the portfolio and the strongest unclaimed dimension (COMPETITIVE_SUPPLY), and is NOT_RECOMMENDED.** **No source supports SOLUTION_GAP and none supports WILLINGNESS_TO_PAY at any grain** -- the taxonomy's own never_means already refuses a listed price, a budget line and a contract total. **THE BINDING CONSTRAINT IS ARCHITECTURAL**: `CanonicalSubject` has no scope field and a packet holds one subject, so SROS models GEOGRAPHIC scope on an Opportunity and no SUBJECT scope at all -- while MARKET_ACTIVITY and ECONOMIC_VALUE already ask about *the bounded scope observed*. TED is authorized, collected, normalized, extracted and carries three commercial dimensions, and its subject key is `ted-eu:CPV-division:90`. Next: **Multi-Scope Opportunity Evidence Architecture V1**, before any acquisition |
 | 1.60 | 2026-09-03 | **COMMERCIAL_EVIDENCE_CREATED_NO_OPPORTUNITY_DIMENSION: a real measurement that maps to nothing, on purpose.** 88 held Docker questions, **34 with an accepted answer and 54 without** -- 38 answered but unaccepted, 16 with zero answers, **0 missing the flag** -- and the Signal maps to `frozenset()`. **The assessment was FROZEN BEFORE the Signal existed**, which is the whole of §0: a dimension chosen after seeing that the packet needed one is a rationalisation. `SOLUTION_GAP` is settled by its own `never_means` -- *that absence of evidence of a solution is evidence of its absence* -- and `SOLUTION_DISSATISFACTION` by the fact that **the asker is not evaluating a product**. **Acceptance is ONE PERSON'S ACTION**: only the asker may accept, so `false` reports a non-action by one participant, and an asker who solved it elsewhere or never returned leaves it false whatever answers arrived. **The 16 zero-answer questions look like the sharpest possible gap evidence and isolating them does not rescue the inference**, it makes the same inference over a smaller set. **The state is OBSERVED LATE**: the questions carry creation instants and the flag is whatever it was at collection, so the claim says *at the source state observed* and never *during*. **A claim shaped like a numerator invites a rate**: revision 1 read *Of the questions ... 54 had no accepted answer* and named no denominator, so `1.4.1` asserts a SET; revision 1 is preserved. **Docker packet 7 -> 8 rows with counting dimensions UNCHANGED at 2** -- a zero-dimension row adds size and never diversity -- still HYPOTHESIS_FORMABLE, still AVAILABLE, independence UNKNOWN for 8 of 8 because it is a **second measurement over the same corpus**. **Two defects fixed**: an interpreter version bump re-INSERTED Evidence because the idempotency key embeds it, and the new row formed its own tenth packet because `subject_key` knew one signal type. RawRecords and NormalizedRecords unchanged at 148, 0 model calls, no Opportunity revision, problem-family still PARKED |
@@ -309,6 +310,70 @@ positives in the scored split, which this 89-question corpus did not supply: one
 defensible SAME in 40 candidate pairs is a finding about the corpus, not about
 the classifier. **No synthetic positive may substitute** -- a constructed pair
 can test a parser and can never establish semantic accuracy against real data.
+
+### A term is not a category, and a map is not a taxonomy
+
+Added in 1.63 (Mission 1.35, `docker-commercial-scope-mapping-v1.md`).
+**`NO_AUTHORITATIVE_DOCKER_CATEGORY_RELATION_FOUND`**: the capability Mission
+1.34 built went looking for its first edge and found none. **0 relations before,
+0 after.**
+
+- **THREE DISTINCT FAILURE MODES, and only one could ever be fixed by looking
+  harder.** Things that NAME Docker without classifying it; things that classify
+  products without containing Docker; and things that classify **what is bought**
+  rather than what a thing is.
+- **A TERM IS NOT A CATEGORY.** The OCI calls Docker a *container engine* and
+  Docker's own docs call it *an open platform for developing, shipping, and
+  running applications*. Neither is a classification: a category needs an
+  identifier, a publisher who decides membership, and other members. A widely
+  used noun phrase has none of the three, so there is nothing to address as a
+  broader scope.
+- **A MAP IS NOT A TAXONOMY, and the CNCF Landscape says so itself** -- *"a map
+  through the previously uncharted terrain"* that *"attempts to categorize most
+  of the projects and product offerings"*, with an inclusion rule of **"at least
+  300 GitHub stars"**. A popularity threshold tells you a project is well known,
+  not what kind of thing it is.
+- **AND IT WAS REFUSED ON A FACT BEFORE THE JUDGEMENT WAS NEEDED.** Its
+  `landscape.yml` (1,138,659 bytes, 2,512 name fields, 15 categories) names five
+  Docker items -- `Docker Swarm`, `Docker Compose`, `Docker Hub`, `Docker (Wasm)`
+  and `Docker (member)`, which is the COMPANY -- and **the container platform is
+  not an item in it at all**. The other 48 occurrences of the word sit in other
+  products' descriptions and integration lists. **You cannot borrow a map's
+  category for something the map does not contain**, and the three Docker
+  products sit in three different categories, so there is not even a single wrong
+  answer available.
+- **CPV fails on WHO ASSIGNS A CODE, not on coarseness.** Division `48000000`
+  *Software package and information systems* exists. But a contracting authority
+  assigns a CPV code to **its own contract**; nobody assigns one to a product and
+  no publisher maintains a product-to-CPV mapping. **A CPV class contains
+  procurements and never products** -- a tender buying Docker licences is
+  classified by what that buyer was buying.
+- **The direction of reasoning was the methodology.** The question asked was
+  *what authoritative category contains the Docker product?*, never *what
+  category would connect Docker to the commercial evidence we already hold?* CPV
+  was investigated only after the first question was answered. Reversing the
+  order is how a bridge gets built to a destination somebody picked first.
+- **The two vocabularies that actually IDENTIFY Docker are the two that carry no
+  parent.** Stack Overflow tags are flat; Wikipedia categories are editorial and
+  excluded by name. The highest-priority route -- a source-native taxonomy -- had
+  nothing to offer.
+- **An unreachable source stays UNRESOLVED.** `unspsc.org` returned HTTP 403; no
+  retry with a varied header, no mirror, no cached copy, and no model recall
+  substituted for a document. Uncertainty is never permission, and it is not a
+  finding either.
+- **An empty registry now says WHY it is empty.** *Empty because nobody looked*
+  and *empty because somebody looked* are different facts, and the registry
+  records the second with its reviewer and date.
+
+**Docker was chosen as a pilot because SROS had evidence about it, not because it
+was well classified, and those turn out to be different properties.** A future
+pilot subject should be chosen partly for sitting in a published classification,
+so the multi-scope architecture has something real to hold.
+
+**Next is Reliability / Scoring Eligibility Foundation, chosen explicitly over a
+second pilot**: it unblocks scoring for evidence already held, where a second
+pilot spends acquisition effort before knowing whether anything can be scored at
+all. Do not spend further missions on Docker taxonomy.
 
 ### An observation says what LEVEL it is about, or it says nothing
 

@@ -29,6 +29,12 @@
     {
       "would_be": "subject:docker -> any category",
       "why": "Establishing one requires reading an authoritative source-native taxonomy and recording which of its classes contains the container platform. That is a future mission's job (Docker Commercial Scope Mapping), with the same discipline the canonical subject registry uses: exact identifiers, a stated basis, decided once by a person who read the pages."
+    },
+    {
+      "would_be": "subject:docker -> <any authoritative CATEGORY>",
+      "why": "Mission 1.35 went looking for one and found none. Docker's own documentation DESCRIBES the product ('an open platform for developing, shipping, and running applications') and assigns no category. The OCI defines specifications and uses 'container engine' as a term with no register behind it. The CNCF Landscape names five Docker items -- Swarm, Compose, Hub, a Wasm entry and the COMPANY as a member -- and does NOT list the container platform itself, so there is no category of its to borrow; it also calls itself a map that 'attempts to categorize most of' the space, with a 300-GitHub-star inclusion rule. CPV classifies the subject of a PROCUREMENT and its codes are assigned by a buyer to a contract, so a CPV class contains procurements and never products. UNSPSC was unreachable (HTTP 403) and is recorded as unresolved rather than guessed. Full record: docker-commercial-scope-mapping-v1.json.",
+      "reviewed_by": "mission-1.35",
+      "reviewed_at": "2026-09-03T00:00:00+00:00"
     }
   ]
 }

@@ -1,0 +1,152 @@
+{
+  "$comment": "Mission 1.35 §5, §23, §25. A bounded taxonomy investigation: is there an authoritative taxonomy that classifies the Docker PRODUCT into a broader CATEGORY, so that a reviewed SUBJECT_WITHIN_CATEGORY relation could be recorded? The answer is NO, and this artifact records what was inspected, what each source actually says, and why each candidate was rejected -- so that another reviewer can reach the same conclusion from the same documents rather than taking this one on trust.\n\nNO RELATION WAS CREATED. The scope relation registry still holds zero relations. NOTHING WAS INGESTED: the documents below were read for this question only and no RawRecord, NormalizedRecord, Signal, Claim or Evidence was created from any of them. NO MODEL WAS CALLED, and no fuzzy matching, embedding or similarity of any kind was used -- every finding below is a quotation or a count from a first-party document.\n\nDIRECTION OF REASONING (§3): the question asked was 'what authoritative category, if any, contains the Docker product?', NOT 'what evidence would connect Docker to the commercial data we happen to hold?'. CPV was investigated because §7 requires it, after the product-category question had already been answered, and never as a starting point.",
+  "artifact_version": "docker-commercial-scope-mapping@1.0.0",
+  "reviewed_by": "mission-1.35",
+  "reviewed_at": "2026-09-03T00:00:00+00:00",
+  "outcome": "NO_AUTHORITATIVE_DOCKER_CATEGORY_RELATION_FOUND",
+  "relation_sought": {
+    "relation_type": "SUBJECT_WITHIN_CATEGORY",
+    "narrower_scope_id": "subject:docker",
+    "narrower_scope_type": "PRODUCT",
+    "broader_scope_id": null,
+    "broader_scope_type": "CATEGORY",
+    "would_have_meant": "The bounded PRODUCT represented by subject:docker is legitimately classified within CATEGORY X according to the cited basis.",
+    "would_never_have_meant": [
+      "that Docker equals the category",
+      "that every observation about the category applies to Docker",
+      "that Docker represents the category",
+      "that every member of the category is comparable to Docker",
+      "that the category's economic value is Docker's economic value",
+      "that the category's buyers are Docker's buyers",
+      "that the category's demand is Docker's demand"
+    ]
+  },
+  "subject_under_investigation": {
+    "scope_id": "subject:docker",
+    "scope_type": "PRODUCT",
+    "is": "The Docker container platform, as a subject of published material.",
+    "is_not": "Docker, Inc. Company identity is a different subject, and §4 forbids using contracts awarded to the company, its industry classification, its revenue category or its corporate NAICS/PSC code as evidence about the product.",
+    "source_native_identifiers": [
+      "wikimedia-pageviews:content:en.wikipedia.org|Docker_(software)",
+      "stack-exchange:community-tag:stackoverflow|docker"
+    ]
+  },
+  "candidates": [
+    {
+      "taxonomy": "Docker's own product documentation",
+      "publisher": "Docker, Inc.",
+      "document": "https://docs.docker.com/get-started/docker-overview/",
+      "retrieved_at": "2026-09-03",
+      "what_it_classifies": "Nothing. It DESCRIBES the product functionally.",
+      "classifies_products": false,
+      "classifies_activities": false,
+      "classifies_procurements": false,
+      "category_identifier": null,
+      "category_label": null,
+      "finding": "The page opens 'Docker is an open platform for developing, shipping, and running applications' and uses the phrases 'The Docker platform' and 'Docker's container-based platform'. It assigns no categorical label and names no class that Docker is a member of.",
+      "can_contain_subject_docker": false,
+      "limitations": "A functional description is not a classification. There is no category identifier to put in a relation's broader endpoint, and no class with other members.",
+      "verdict": "REJECTED_DESCRIBES_RATHER_THAN_CLASSIFIES",
+      "why": "§2 priority 2 asks for official Docker documentation EXPLICITLY IDENTIFYING its product category. It does not do that."
+    },
+    {
+      "taxonomy": "Open Container Initiative specifications",
+      "publisher": "Open Container Initiative (Linux Foundation)",
+      "document": "https://opencontainers.org/about/overview/",
+      "retrieved_at": "2026-09-03",
+      "what_it_classifies": "Nothing. It defines three SPECIFICATIONS: Runtime, Image and Distribution.",
+      "classifies_products": false,
+      "classifies_activities": false,
+      "classifies_procurements": false,
+      "category_identifier": null,
+      "category_label": "container engine (used as a term, not as a register)",
+      "finding": "The overview uses the term 'container engine' with Docker as an example, and records that Docker donated its container format and runtime, runC, to the OCI. It positions Docker as an external reference point for the user experience the standards should support. It does not classify Docker into any of its own named specification categories, and it maintains no register of container engines.",
+      "can_contain_subject_docker": false,
+      "limitations": "A term is not a category. 'Container engine' has no identifier issued by any authority, no membership list, and no publisher who decides what is in it -- so there is nothing to address as a broader scope.",
+      "verdict": "REJECTED_DEFINES_STANDARDS_NOT_A_TAXONOMY",
+      "why": "A ScopeRelation needs a stable broader_scope_id. A widely used noun phrase is not one."
+    },
+    {
+      "taxonomy": "CNCF Landscape",
+      "publisher": "Cloud Native Computing Foundation (Linux Foundation)",
+      "document": "https://github.com/cncf/landscape and its landscape.yml data file",
+      "retrieved_at": "2026-09-03",
+      "what_it_classifies": "Cloud native projects and product offerings, placed into categories and subcategories.",
+      "classifies_products": true,
+      "classifies_activities": false,
+      "classifies_procurements": false,
+      "category_identifier": "category slugs exist, e.g. Runtime, Orchestration & Management, App Definition and Development",
+      "category_label": "see above",
+      "finding": "REJECTED ON A FACT RATHER THAN ON A JUDGEMENT. The landscape data file (1,138,659 bytes, 2,512 name fields, 15 top-level categories) contains exactly five items whose name includes the word Docker: 'Docker Swarm' (Orchestration & Management), 'Docker Compose' (App Definition and Development), 'Docker Hub', 'Docker (Wasm)', and 'Docker (member)'. The Docker container PLATFORM -- the thing subject:docker names -- is not an item in the landscape at all. Every other occurrence of the word (53 in total) sits inside another product's description or its summary_integrations list.",
+      "can_contain_subject_docker": false,
+      "limitations": "Three separate Docker-branded PRODUCTS sit in three DIFFERENT categories, and 'Docker (member)' is the COMPANY, which §4 excludes. Using any of them would mean substituting a different artifact for the subject -- the same trap Mission 1.33 identified when PyPI's `docker` package turned out to be the Python SDK rather than the platform. Separately, and independently sufficient: the repository describes itself as 'a map through the previously uncharted terrain of cloud native technologies' that 'attempts to categorize most of the projects and product offerings', with an inclusion rule of 'at least 300 GitHub stars'. A popularity threshold is not a classification rule, and a map that admits it covers 'most of' a space cannot be cited as authoritative for what a thing IS.",
+      "verdict": "REJECTED_SUBJECT_ABSENT_AND_SOURCE_IS_A_MAP",
+      "why": "You cannot borrow a map's category for something the map does not contain."
+    },
+    {
+      "taxonomy": "Common Procurement Vocabulary (CPV)",
+      "publisher": "European Commission / Publications Office of the European Union",
+      "document": "https://op.europa.eu/en/web/eu-vocabularies/dataset/-/resource?uri=http://publications.europa.eu/resource/dataset/cpv ; division 48000000 'Software package and information systems' confirmed present in first-party TED procurement records",
+      "retrieved_at": "2026-09-03",
+      "what_it_classifies": "The SUBJECT OF A PROCUREMENT. The Publications Office states the Commission drafted the CPV 'to make public procurement more transparent and efficient'.",
+      "classifies_products": false,
+      "classifies_activities": false,
+      "classifies_procurements": true,
+      "category_identifier": "48000000 (Software package and information systems) is the nearest software division",
+      "category_label": "Software package and information systems",
+      "finding": "CPV does have software classes, so coarseness is not the whole objection. The decisive point is WHO ASSIGNS A CPV CODE AND TO WHAT: a contracting authority assigns a code to ITS OWN CONTRACT. Nobody assigns a CPV code to a product, and no publisher maintains a mapping from products to CPV classes. So a CPV class contains procurements, never products -- and a tender that happened to buy Docker licences would be classified by what that buyer was buying, which is a fact about the contract.",
+      "can_contain_subject_docker": false,
+      "limitations": "There is no container or containerisation class at any depth of the hierarchy, and the SROS TED collector deliberately expands no CPV code into a label, so this repository does not even hold the vocabulary.",
+      "verdict": "CPV_NOT_SUITABLE_FOR_DIRECT_PRODUCT_RELATION",
+      "why": "§7 anticipates exactly this answer. A procurement classification cannot be the broader endpoint of a PRODUCT relation, however convenient its evidence would be."
+    },
+    {
+      "taxonomy": "UNSPSC (United Nations Standard Products and Services Code)",
+      "publisher": "GS1 US",
+      "document": "https://www.unspsc.org/",
+      "retrieved_at": "2026-09-03",
+      "what_it_classifies": "NOT ESTABLISHED from a first-party document in this environment.",
+      "classifies_products": null,
+      "classifies_activities": null,
+      "classifies_procurements": null,
+      "category_identifier": null,
+      "category_label": null,
+      "finding": "The publisher's own site returned HTTP 403 from this environment on 2026-09-03. No retry with a varied header was attempted, no mirror was consulted, and no cached or third-party summary was used. The question is recorded as UNRESOLVED rather than answered from recall.",
+      "can_contain_subject_docker": null,
+      "limitations": "Nothing is asserted about UNSPSC. It is named here so that a later reviewer knows it was considered and why it produced no finding.",
+      "verdict": "UNRESOLVED_SOURCE_UNREACHABLE",
+      "why": "Uncertainty is never permission. An unread document establishes nothing in either direction."
+    },
+    {
+      "taxonomy": "SROS's own source-native vocabularies",
+      "publisher": "the registered sources themselves",
+      "document": "docs/data/source-catalog-v1.json and the canonical subject registry",
+      "retrieved_at": "2026-09-03",
+      "what_it_classifies": "Varies by source.",
+      "classifies_products": false,
+      "classifies_activities": false,
+      "classifies_procurements": true,
+      "category_identifier": null,
+      "category_label": null,
+      "finding": "Checked because §2 ranks a source-native official taxonomy FIRST. Stack Overflow tags are flat -- a tag has synonyms and a description, and no parent -- so `docker` reaches no category. Wikipedia has editorially assigned categories, which §2 excludes by name. TED publishes CPV, addressed above. World Bank, FRED, Eurostat and GDELT publish no product taxonomy at all.",
+      "can_contain_subject_docker": false,
+      "limitations": "None of the two vocabularies that actually identify Docker -- the Stack Overflow tag and the Wikipedia article -- carries a usable parent.",
+      "verdict": "REJECTED_NO_SOURCE_NATIVE_PARENT_EXISTS",
+      "why": "The highest-priority route in §2 has nothing to offer for this subject."
+    }
+  ],
+  "boundedness_note": {
+    "$comment": "§15 and §16 were never reached, and that is worth recording so a later reader does not think the tests were skipped.",
+    "detail": "No candidate survived far enough to be tested for overbreadth or overprecision. Had one survived, the questions would have been whether commercial Evidence about the category is specific enough to inform the Docker Opportunity (rejecting 'software', 'technology', 'IT', 'digital services' as CATEGORY_TOO_BROAD_FOR_CONTEXT), and whether the category exists independently of the Opportunity rather than being a bridge invented to reach TED."
+  },
+  "what_was_not_done": [
+    "No ScopeRelation was created. The registry still holds zero relations.",
+    "No Docker to CPV link of any kind, at division 90 or anywhere else.",
+    "No canonical subject identifier was added, changed or aliased.",
+    "No second Docker subject was created.",
+    "No TED Evidence was attached to the Docker Opportunity.",
+    "No Opportunity revision, no Evidence link, no research record of any kind.",
+    "No model call, no embedding, no similarity, no fuzzy matching.",
+    "No governance decision for any source was changed."
+  ]
+}
