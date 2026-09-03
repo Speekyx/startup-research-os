@@ -141,7 +141,9 @@ class LexicalFrequencyContrastExtractor:
 
     # -------------------------------------------------------------- grouping
 
-    def group_key(self, observation: NormalizedObservation) -> str | None:
+    def group_key(
+        self, observation: NormalizedObservation, derivation: SignalDerivation
+    ) -> str | None:
         """One key per bucket, per exact source language label, per gram size.
 
         **The period label is EXACT and that is what respects H-32.** Two buckets
@@ -188,7 +190,7 @@ class LexicalFrequencyContrastExtractor:
         derivation: SignalDerivation,
         request: DerivationRequest,
     ) -> GroupOutcome:
-        homogeneity = self._homogeneous(group)
+        homogeneity = self._homogeneous(group, derivation)
         if homogeneity is not None:
             return GroupOutcome(refusals=(homogeneity,))
 
@@ -243,11 +245,13 @@ class LexicalFrequencyContrastExtractor:
 
     # ---------------------------------------------------------------- checks
 
-    def _homogeneous(self, group: CandidateGroup) -> GroupRefusal | None:
+    def _homogeneous(
+        self, group: CandidateGroup, derivation: SignalDerivation
+    ) -> GroupRefusal | None:
         if not group.observations:
             return None
         first = group.observations[0]
-        expected = self.group_key(first)
+        expected = self.group_key(first, derivation)
         for observation in group.observations[1:]:
             if observation.record_kind_id != self.record_kind_id:
                 return GroupRefusal(
@@ -260,7 +264,7 @@ class LexicalFrequencyContrastExtractor:
                     group_key=group.key,
                     observation_keys=group.observation_keys,
                 )
-            if self.group_key(observation) != expected:
+            if self.group_key(observation, derivation) != expected:
                 return GroupRefusal(
                     reason=SignalRefusalReason.INCOMPATIBLE_SERIES,
                     detail=(

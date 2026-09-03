@@ -259,11 +259,15 @@ class NothingWasAcquiredOrCreated(unittest.TestCase):
 
     def test_the_corpus_shape_did_not_move(self) -> None:
         """§37. Before equals after, because nothing was created."""
-        # The corpus SHAPE, not its size. Mission 1.40 acquired a second pilot
-        # and the counts moved; what did not move is the one thing this asserts.
-        self.assertEqual({u["evidence_count"] for u in audit()["units"]}, {1})
-        self.assertEqual(audit()["coverage"]["multi_evidence_claims"], 0)
-        self.assertEqual(audit()["totals"]["claims"], audit()["totals"]["evidence_rows"])
+        # Mission 1.40 left the corpus with one Evidence per Claim, and its
+        # report said so. Mission 1.41 repaired the cohort grain and that stopped
+        # being true -- which is the outcome, not a regression. What this test
+        # still guards is that Mission 1.40 itself created no multi-Evidence
+        # Claim, and that fact lives in its own artifact rather than in a live
+        # counter a later mission is expected to move.
+        selection_outcome = selection()["outcome"]
+        self.assertEqual(selection_outcome, "MULTI_EVIDENCE_CLAIM_ARCHITECTURE_GAP")
+        self.assertGreaterEqual(audit()["totals"]["evidence_rows"], audit()["totals"]["claims"])
 
 
 class TheRepairIsLeftToItsOwnMission(unittest.TestCase):

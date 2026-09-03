@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.69
+Version: 1.70
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-03 (Sprint 1 / Mission 1.40)
+Last amended: 2026-09-03 (Sprint 1 / Mission 1.41)
 
 ---
 
@@ -13,6 +13,38 @@ Last amended: 2026-09-03 (Sprint 1 / Mission 1.40)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.70 — 2026-09-03 (Sprint 1 / Mission 1.41)
+
+**`PROCUREMENT_COHORT_GRAIN_REPAIRED_REAL_MULTI_EVIDENCE_CREATED`**, with
+`REAL_MULTI_EVIDENCE_AGGREGATION_UNAVAILABLE_MISSING_RELIABILITY` beside it.
+**Claims with more than one Evidence row: 0 → 2**, on real canonical data, with
+zero network acquisitions.
+
+**Two defects of one shape, both a docstring disagreeing with its code.** The
+cohort key called currency and amount scope load-bearing and contained neither;
+`_persist_evidence` claimed idempotency on `(workspace, claim, signal)` while the
+query added `extraction_method`. The validation settled the first: `derive`
+refuses unless currency and scope are single-valued, so the implementation was
+wrong.
+
+Extractor `procurement-value-contrast` 1.0.1 → 1.1.0. Minor, because adding a
+field to a grouping key can only split groups — verified against the historical
+division-90 Signal, which re-derived with every semantic field identical.
+
+Evidence identity is now epistemic; interpreter version is provenance. A changed
+assessment is reported as a conflict and nothing is written.
+
+Counters: Signals 29 → 33, Claims 31 → 37, ClaimRevisions 32 → 38, Evidence
+31 → 39. RawRecords, NormalizedRecords, ReliabilityAssessments, Opportunities,
+independence groups and scope relations all unchanged.
+
+New: `docs/data/procurement-grain-reproducibility-v1.json`,
+`docs/data/second-pilot-regrain-run-v1.json`,
+`docs/data/second-pilot-aggregation-v1.json`, and three scripts under
+`infrastructure/scripts/`.
+
+Report: `docs/architecture/mission-1.41-report.md`.
 
 ## 1.69 — 2026-09-03 (Sprint 1 / Mission 1.40)
 

@@ -120,7 +120,7 @@ def observation(
 
 def derive(observations, terms=("climate",), **parameters):
     derivation = CHANGE.resolve({"terms": list(terms), **parameters})
-    keys = {CHANGE.group_key(o) for o in observations}
+    keys = {CHANGE.group_key(o, derivation) for o in observations}
     group = CandidateGroup(key=sorted(k or "" for k in keys)[0], observations=tuple(observations))
     return CHANGE.derive(group, derivation, REQUEST)
 

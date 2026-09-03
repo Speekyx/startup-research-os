@@ -307,10 +307,16 @@ class MissingIsNotWeak(unittest.TestCase):
 class TheFeasibilityMeasurement(unittest.TestCase):
     """§26. Measured against the live database, not quoted from a report."""
 
-    def test_the_aggregation_layer_has_never_aggregated(self) -> None:
-        """The mission's one-sentence result."""
-        self.assertEqual({u["evidence_count"] for u in audit()["units"]}, {1})
-        self.assertEqual(audit()["coverage"]["multi_evidence_claims"], 0)
+    def test_the_aggregation_layer_has_now_aggregated(self) -> None:
+        """Mission 1.37's one-sentence result was *the aggregation layer has
+        never aggregated*. Mission 1.41 made it false, which is what it was for.
+
+        The assertion is re-pointed rather than deleted: what it really guards is
+        that this counter is MEASURED, and a test asserting 0 forever would have
+        been a test asserting the project never progresses.
+        """
+        self.assertGreater(audit()["coverage"]["multi_evidence_claims"], 0)
+        self.assertGreater(audit()["coverage"]["max_evidence_per_claim"], 1)
 
     def test_the_empty_coverage_dimensions_are_the_finding(self) -> None:
         coverage = audit()["coverage"]
@@ -319,7 +325,6 @@ class TheFeasibilityMeasurement(unittest.TestCase):
             "mixed_support_and_contradiction",
             "conflict_mass_non_zero",
             "multi_source_claims",
-            "multi_evidence_claims",
             "independence_established_claims",
             "temporally_sensitive_claims",
             "claims_with_a_claim_feature",

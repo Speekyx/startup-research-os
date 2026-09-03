@@ -76,6 +76,9 @@ class ClaimPersistenceReport:
     revised: int = 0
     evidence_new: int = 0
     evidence_unchanged: int = 0
+    # Reported rather than raised: one conflicting relation must not abandon a
+    # batch of sound ones, and a conflict is a finding a person has to read.
+    evidence_conflicts: tuple[dict[str, object], ...] = ()
     claim_ids: tuple[str, ...] = ()
     # Which claim each Signal ended up in, so the run's considered-inputs can
     # name it without a second lookup.
@@ -94,6 +97,7 @@ class ClaimPersistenceReport:
             "revisions_created": self.revisions_created,
             "evidence_new": self.evidence_new,
             "evidence_unchanged": self.evidence_unchanged,
+            "evidence_conflicts": [dict(c) for c in self.evidence_conflicts],
             "claim_ids": list(self.claim_ids),
         }
 
@@ -407,25 +411,87 @@ def _append_revision(
         )
 
 
+# The fields that say WHAT this Signal asserts about this Claim. Two rows
+# agreeing on all of them are one epistemic relation, however many procedures
+# produced them. `extraction_method` is deliberately absent: see below.
+_EVIDENCE_EPISTEMIC_FIELDS = (
+    "direction",
+    "relevance",
+    "directness",
+    "extraction_confidence",
+    "observation_category",
+    "independence_state",
+)
+
+
 def _persist_evidence(
     conn: Any, draft: ClaimDraft, claim_id: str, report: ClaimPersistenceReport
 ) -> None:
     """One row per cited Signal, in THIS transaction.
 
-    Idempotent on `(workspace_id, claim_id, signal_id)`: a redelivery finds the
-    row and writes nothing. There is no unique constraint behind that -- a claim
-    may legitimately carry two records citing one Signal when a human adds one --
-    so the check is the interpreter's, over the rows it generated.
+    **Idempotent on `(workspace_id, claim_id, signal_id)`, and Mission 1.41
+    repaired the query to match that sentence.** It used to add
+    `AND extraction_method = %s`, so re-interpreting an unchanged Signal under a
+    new interpreter version INSERTED a second row: same Signal, same Claim, same
+    witness, two Evidence. Mission 1.32 documented the mechanism and Mission 1.40
+    hit it on real data, briefly making the corpus report a multi-record Claim
+    that was one measurement counted twice.
+
+    **Evidence identity is epistemic; the procedure that produced it is
+    provenance.** `extraction_method` is still written and still read -- it just
+    no longer decides whether a relation is new. That is §8's distinction, and it
+    is the same one ADR-035 drew between proposition identity and witness
+    identity, one layer down.
+
+    **A changed epistemic assessment is neither unchanged nor a second
+    observation, and this repair does not invent a third answer.** If a row
+    exists for the same Signal and Claim but disagrees on a load-bearing factor,
+    it is reported as a conflict and NOTHING is written: the historical row keeps
+    its values, and no silent overwrite happens. Representing a legitimate
+    revision of an Evidence relation needs a model this architecture does not
+    have (§10, `EVIDENCE_RELATION_REVISION_MODEL_GAP`), and inventing one while
+    fixing a duplicate is how the fix becomes the next defect.
+
+    There is still no unique constraint behind this. A claim may legitimately
+    carry two records citing one Signal when a human adds one, so the check stays
+    the interpreter's, over the rows it generated.
     """
     for item in draft.evidence:
         existing = conn.execute(
-            """SELECT id FROM scoring.evidence
-                WHERE workspace_id = %s AND claim_id = %s AND signal_id = %s
-                  AND extraction_method = %s""",
-            (draft.workspace_id, claim_id, item.signal_id, _extraction_method(draft)),
+            """SELECT id, direction, relevance, directness, extraction_confidence,
+                      observation_category, independence_state, extraction_method
+                 FROM scoring.evidence
+                WHERE workspace_id = %s AND claim_id = %s AND signal_id = %s""",
+            (draft.workspace_id, claim_id, item.signal_id),
         ).fetchone()
         if existing is not None:
-            report.evidence_unchanged += 1
+            incoming = (
+                item.direction.value,
+                item.relevance,
+                item.directness,
+                item.extraction_confidence,
+                item.observation_category.value,
+                item.independence_state.value,
+            )
+            if tuple(existing[1:7]) == incoming:
+                report.evidence_unchanged += 1
+                continue
+            report.evidence_conflicts += (
+                {
+                    "claim_id": claim_id,
+                    "signal_id": item.signal_id,
+                    "evidence_id": str(existing[0]),
+                    "existing_extraction_method": existing[7],
+                    "incoming_extraction_method": _extraction_method(draft),
+                    "detail": (
+                        "an Evidence relation already exists for this Signal and Claim and "
+                        "disagrees on a load-bearing factor. Nothing was written: a revision "
+                        "of an epistemic relation has no representation here, and overwriting "
+                        "the historical values would destroy the assessment a stored result "
+                        "was computed from"
+                    ),
+                },
+            )
             continue
         conn.execute(
             """INSERT INTO scoring.evidence (

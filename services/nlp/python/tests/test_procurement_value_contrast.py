@@ -142,7 +142,10 @@ def request_() -> DerivationRequest:
 
 def derive(extractor, request_, observations, amount_type: str = "TOTAL_VALUE"):
     derivation = extractor.resolve({"amount_type": amount_type})
-    key = extractor.group_key(observations[0]) or "group"
+    key = (
+        extractor.group_key(observations[0], extractor.resolve({"amount_type": "TOTAL_VALUE"}))
+        or "group"
+    )
     return extractor.derive(
         CandidateGroup(key=key, observations=tuple(observations)), derivation, request_
     )
@@ -157,7 +160,8 @@ def reasons_of(outcome) -> set[SignalRefusalReason]:
 
 class TestRegistration:
     def test_the_extractor_is_registered(self) -> None:
-        assert EXTRACTOR_REGISTRY["procurement-value-contrast"].extractor_version == "1.0.1"
+        # 1.1.0: Mission 1.41 put currency and amount scope in the cohort key.
+        assert EXTRACTOR_REGISTRY["procurement-value-contrast"].extractor_version == ("1.1.0")
 
     def test_it_is_the_transaction_value_family(self, extractor) -> None:
         assert extractor.family is SignalQuantityFamily.TRANSACTION_VALUE
@@ -243,14 +247,22 @@ class TestEligibility:
         assert outcome.drafts == ()
 
     def test_a_different_amount_type_is_not_this_cohort(self, extractor, request_) -> None:
-        """§8. A total value and an estimated value are different facts."""
-        outcome = derive(
-            extractor,
-            request_,
-            [notice("a"), notice("b", amounts=[amount(amount_type="ESTIMATED_VALUE")])],
-        )
+        """§8. A total value and an estimated value are different facts.
+
+        Since 1.1.0 the exclusion happens at GROUPING rather than after it: a
+        notice carrying no amount of the wanted semantic gets no key at all, so
+        the real job never puts it in this cohort. Asserting that directly is
+        stronger than asserting the refusal a hand-built mixed group produces,
+        and it is the behaviour the job actually has.
+        """
+        derivation = extractor.resolve({"amount_type": "TOTAL_VALUE"})
+        estimated = notice("b", amounts=[amount(amount_type="ESTIMATED_VALUE")])
+        assert extractor.group_key(estimated, derivation) is None
+        assert extractor.group_key(notice("a"), derivation) is not None
+
+        # And a caller who forces them together anyway is still refused.
+        outcome = derive(extractor, request_, [notice("a"), estimated])
         assert outcome.drafts == ()
-        assert SignalRefusalReason.INSUFFICIENT_INPUT_OBSERVATIONS in reasons_of(outcome)
 
     def test_an_unpaired_amount_never_enters(self, extractor, request_) -> None:
         """§6, H-38. The source declares arrays and states nothing about their
@@ -308,31 +320,54 @@ class TestComparability:
     def test_notice_classes_do_not_share_a_cohort(self, extractor) -> None:
         """§9. A call for competition and a report of an outcome describe
         different procurement stages."""
-        award = extractor.group_key(notice("a"))
-        call = extractor.group_key(notice("b", notice_class="CONTRACT_NOTICE"))
+        award = extractor.group_key(notice("a"), extractor.resolve({"amount_type": "TOTAL_VALUE"}))
+        call = extractor.group_key(
+            notice("b", notice_class="CONTRACT_NOTICE"),
+            extractor.resolve({"amount_type": "TOTAL_VALUE"}),
+        )
         assert award != call
 
     def test_different_cpv_divisions_do_not_share_a_cohort(self, extractor) -> None:
         """The decision this design turns on, and the reason the three real
         records produced nothing: cleaning and insurance are not one market."""
-        cleaning = extractor.group_key(notice("a", cpv=("90911200",)))
-        insurance = extractor.group_key(notice("b", cpv=("66510000",)))
+        cleaning = extractor.group_key(
+            notice("a", cpv=("90911200",)), extractor.resolve({"amount_type": "TOTAL_VALUE"})
+        )
+        insurance = extractor.group_key(
+            notice("b", cpv=("66510000",)), extractor.resolve({"amount_type": "TOTAL_VALUE"})
+        )
         assert cleaning != insurance
 
     def test_one_division_across_several_codes_is_one_cohort(self, extractor) -> None:
         """`90911200` and `90911300` are cleaning services twice. Requiring the
         full code would split a genuine cohort into singletons."""
-        one = extractor.group_key(notice("a", cpv=("90911200",)))
-        two = extractor.group_key(notice("b", cpv=("90911300", "90911200")))
+        one = extractor.group_key(
+            notice("a", cpv=("90911200",)), extractor.resolve({"amount_type": "TOTAL_VALUE"})
+        )
+        two = extractor.group_key(
+            notice("b", cpv=("90911300", "90911200")),
+            extractor.resolve({"amount_type": "TOTAL_VALUE"}),
+        )
         assert one == two
 
     def test_a_notice_spanning_divisions_joins_no_cohort(self, extractor) -> None:
         """It has no one subject. Reading `codes[0]` would make the cohort
         depend on the order the source happened to publish them in."""
-        assert extractor.group_key(notice("a", cpv=("33000000", "34000000"))) is None
+        assert (
+            extractor.group_key(
+                notice("a", cpv=("33000000", "34000000")),
+                extractor.resolve({"amount_type": "TOTAL_VALUE"}),
+            )
+            is None
+        )
 
     def test_a_notice_with_no_classification_joins_no_cohort(self, extractor) -> None:
-        assert extractor.group_key(notice("a", cpv=())) is None
+        assert (
+            extractor.group_key(
+                notice("a", cpv=()), extractor.resolve({"amount_type": "TOTAL_VALUE"})
+            )
+            is None
+        )
 
     def test_another_record_kind_is_refused(self, extractor, request_) -> None:
         lexical = NormalizedObservation(
@@ -584,7 +619,7 @@ class TestProvenance:
             extractor, request_, [notice("a"), notice("b", amounts=[amount(value="9")])]
         ).drafts[0]
         assert draft.derivation.extractor_id == "procurement-value-contrast"
-        assert draft.derivation.extractor_version == "1.0.1"
+        assert draft.derivation.extractor_version == "1.1.0"
 
 
 # ================================================================ determinism

@@ -137,8 +137,19 @@ class SignalExtractor(Protocol):
         """
         ...
 
-    def group_key(self, observation: NormalizedObservation) -> str | None:
-        """Which candidate group this record belongs to, or `None` to skip it."""
+    def group_key(
+        self, observation: NormalizedObservation, derivation: SignalDerivation
+    ) -> str | None:
+        """Which candidate group this record belongs to, or `None` to skip it.
+
+        **The derivation is passed in because comparability can depend on it**
+        (Mission 1.41). A procurement cohort is comparable only when its members
+        share a currency and an amount scope, and which amount an observation
+        contributes is chosen by the derivation's `amount_type` parameter -- so a
+        key computed without it cannot know which currency the record will bring.
+        Most extractors ignore it, and that is fine: an argument nobody reads is
+        cheaper than a grouping that cannot see what makes its members alike.
+        """
         ...
 
     def derive(

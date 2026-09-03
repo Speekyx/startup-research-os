@@ -141,7 +141,7 @@ def request_() -> DerivationRequest:
 
 def derive(extractor, request_, observations, *, tag="docker", page_size=100):
     derivation = extractor.resolve({"tag": tag, "retrieval_page_size": page_size})
-    key = extractor.group_key(observations[0]) or "group"
+    key = extractor.group_key(observations[0], derivation) or "group"
     group = CandidateGroup(key=key, observations=tuple(observations))
     return extractor.derive(group, derivation, request_)
 
@@ -446,16 +446,21 @@ class TestScopeAndFamily:
         assert isinstance(EXTRACTOR_REGISTRY[extractor.extractor_id], type(extractor))
 
     def test_two_sites_are_never_one_group(self, extractor) -> None:
-        one = extractor.group_key(observation("1", "2024-03-01"))
+        one = extractor.group_key(
+            observation("1", "2024-03-01"),
+            extractor.resolve({"tag": "docker", "retrieval_page_size": 100}),
+        )
         two = extractor.group_key(
-            observation("2", "2024-03-01", scheme="stack-exchange-tags:serverfault")
+            observation("2", "2024-03-01", scheme="stack-exchange-tags:serverfault"),
+            extractor.resolve({"tag": "docker", "retrieval_page_size": 100}),
         )
         assert one != two
 
     def test_a_record_of_another_kind_has_no_key(self, extractor) -> None:
-        assert extractor.group_key(observation("1", "2024-03-01", record_kind_id="web_page")) is (
-            None
-        )
+        assert extractor.group_key(
+            observation("1", "2024-03-01", record_kind_id="web_page"),
+            extractor.resolve({"tag": "docker", "retrieval_page_size": 100}),
+        ) is (None)
 
 
 # ======================================================= what the code may not do

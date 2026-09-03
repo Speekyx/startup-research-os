@@ -176,14 +176,18 @@ def lexical_observation(
     )
 
 
-def group_of(extractor, observations):
-    keys = {extractor.group_key(o) for o in observations}
+def group_of(extractor, observations, parameters=None):
+    # Mission 1.41: the derivation reaches `group_key`, and some extractors
+    # refuse an empty parameter set outright, so the caller's parameters are
+    # threaded through rather than an empty mapping being assumed.
+    derivation = extractor.resolve(parameters or {})
+    keys = {extractor.group_key(o, derivation) for o in observations}
     return CandidateGroup(key=sorted(k or "" for k in keys)[0], observations=tuple(observations))
 
 
 def derive(extractor, observations, parameters=None):
     derivation = extractor.resolve(parameters or {})
-    return extractor.derive(group_of(extractor, observations), derivation, REQUEST)
+    return extractor.derive(group_of(extractor, observations, parameters), derivation, REQUEST)
 
 
 # ================================================== numeric_period_change (§35)
