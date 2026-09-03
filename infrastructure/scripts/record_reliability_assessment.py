@@ -30,9 +30,14 @@ typed when nobody wants to be the reviewer.
 
 Usage:
 
-    python infrastructure/scripts/record_reliability_assessment.py --packet ted-eu-procurement-contrast
-    python infrastructure/scripts/record_reliability_assessment.py --review-file my-review.json
-    python infrastructure/scripts/record_reliability_assessment.py --review-file my-review.json --apply
+    uv run --package sros-nlp python infrastructure/scripts/record_reliability_assessment.py --packet ted-eu-procurement-contrast
+    uv run --package sros-nlp python infrastructure/scripts/record_reliability_assessment.py --review-file my-review.json
+    uv run --package sros-nlp python infrastructure/scripts/record_reliability_assessment.py --review-file my-review.json --apply
+
+All three connect to a deployment, so `DATABASE_URL` must be set (it lives in
+`infrastructure/compose/.env`, not in the shell) and a bare `python` cannot
+import `psycopg` -- which is imported AFTER the DATABASE_URL check, so the first
+error hides the second.
 
 Related: `evidence-reliability-contract-v1.md` (what a value means), ADR-026
 (scope and binding), `ted-eu-evidence-reliability-v1.md` (the documentary review

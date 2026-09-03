@@ -279,8 +279,23 @@ the operator supplying the documents.
 
 The review file is [docs/data/docker-wikimedia-reliability-review-v1.json](../data/docker-wikimedia-reliability-review-v1.json).
 
-```bash
-python infrastructure/scripts/record_reliability_assessment.py --review-file docs/data/docker-wikimedia-reliability-review-v1.json --apply
+**The first version of this section printed a command that does not run, and the
+operator hit it.** Two reasons, and the first hides the second: `DATABASE_URL`
+lives in `infrastructure/compose/.env` rather than in the shell, so the tool
+refuses with *DATABASE_URL is not set. This writes to a deployment, not to the
+tree* — and behind that refusal, a bare `python` cannot import `psycopg`, which
+the script imports only after the `DATABASE_URL` check. `sros_contracts` resolves
+through the script's own `sys.path` insert, so the missing dependency is the one
+that is actually installed rather than vendored. Run it through `uv`.
+
+PowerShell, in one tab:
+
+```powershell
+$env:DATABASE_URL = ((Select-String -Path infrastructure\compose\.env -Pattern '^DATABASE_URL=' | Select-Object -First 1).Line -replace '^DATABASE_URL=', '')
+```
+
+```powershell
+uv run --package sros-nlp python infrastructure/scripts/record_reliability_assessment.py --review-file docs/data/docker-wikimedia-reliability-review-v1.json --apply
 ```
 
 It prints the assessment and asks for a confirmation. **Type `record it`.**
@@ -288,8 +303,8 @@ Anything else aborts and writes nothing.
 
 Then, to see what changed:
 
-```bash
-python infrastructure/scripts/report_docker_reliability_resolution.py
+```powershell
+uv run --package sros-nlp python infrastructure/scripts/report_docker_reliability_resolution.py
 ```
 
 Expected afterwards: six Wikimedia rows `RESOLVED` at `0.65` against one new

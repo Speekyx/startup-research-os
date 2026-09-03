@@ -143,10 +143,23 @@ and Mission 1.36.1 §7 forbids bypassing it. Piping the confirmation string in
 would defeat the one control that makes `reviewed_by` mean anything.
 
 So the review file is written, validated end to end through the real workflow,
-and **left for the operator to confirm**:
+and **left for the operator to confirm**.
 
-```bash
-python infrastructure/scripts/record_reliability_assessment.py --review-file docs/data/docker-wikimedia-reliability-review-v1.json --apply
+**Two things the invocation needs, and both were missing from this document's
+first version.** `DATABASE_URL` lives in `infrastructure/compose/.env` and not in
+the shell, and the tool refuses without it — *this writes to a deployment, not to
+the tree*. And a bare `python` finds `sros_contracts` through the script's own
+`sys.path` insert but **not `psycopg`**, which is imported after that refusal, so
+the first error hides the second. Run it through `uv`.
+
+PowerShell, in one tab:
+
+```powershell
+$env:DATABASE_URL = ((Select-String -Path infrastructure\compose\.env -Pattern '^DATABASE_URL=' | Select-Object -First 1).Line -replace '^DATABASE_URL=', '')
+```
+
+```powershell
+uv run --package sros-nlp python infrastructure/scripts/record_reliability_assessment.py --review-file docs/data/docker-wikimedia-reliability-review-v1.json --apply
 ```
 
 It will print the assessment and ask you to type `record it`. Anything else
@@ -154,8 +167,8 @@ aborts and writes nothing.
 
 **After you confirm**, this reports what changed:
 
-```bash
-python infrastructure/scripts/report_docker_reliability_resolution.py
+```powershell
+uv run --package sros-nlp python infrastructure/scripts/report_docker_reliability_resolution.py
 ```
 
 Expected: six Wikimedia rows `RESOLVED` at `0.65` against one new assessment,
