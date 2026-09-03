@@ -1,0 +1,38 @@
+{
+  "_provenance": [
+    "Mission 1.36.1. The judgement fields below are the OPERATOR'S, supplied",
+    "explicitly by thibchm. Software chose no value, suggested none, and has",
+    "no code path that could. The basis rows are reused verbatim from the",
+    "Mission 1.36 review packet; no replacement documentation was retrieved."
+  ],
+  "scope": {
+    "source_id": "wikimedia-pageviews",
+    "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+    "record_kind_id": "content_request_count",
+    "claim_type": "OBSERVED",
+    "proposition_kind": "platform_counted_content_request_change"
+  },
+  "origin": "HUMAN_REVIEW",
+  "reliability": 0.65,
+  "reviewed_by": "thibchm",
+  "rationale": "The Wikimedia pageview measurement has documented first-party counting rules that explicitly define which requests are included and excluded, and automated traffic is classified using user-agent and custom-pattern detection. The measurement therefore has a documented methodology and a bounded meaning for the proposition that Wikimedia counted changes in requests to the Docker article.",
+  "stated_limitation": "Automated traffic detection is heuristic, and the retrieved Wikimedia documentation does not establish a complete revision/backfill policy for historical pageview values. Historical measurements may therefore be affected by classification changes or later revisions.",
+  "basis": [
+    {
+      "basis_type": "MEASUREMENT_METHODOLOGY",
+      "document_title": "Research:Page view",
+      "document_url": "https://meta.wikimedia.org/wiki/Research:Page_view",
+      "section_reference": "Definition; Tagging",
+      "retrieved_at": "2026-09-03",
+      "summarized_finding": "The pageview definition is an explicit conjunction of HTTP-status, host and header conditions with an enumerated exclusion list; automated traffic is tagged by ua-parser plus custom regex."
+    },
+    {
+      "basis_type": "KNOWN_LIMITATION",
+      "document_title": "Data Platform / Data Lake / Traffic / Pageviews",
+      "document_url": "https://wikitech.wikimedia.org/wiki/Data_Platform/Data_Lake/Traffic/Pageviews",
+      "section_reference": "Events and known problems since 2015-05-01",
+      "retrieved_at": "2026-09-03",
+      "summarized_finding": "A dated known-problems list exists and records a 2016 user-agent classification incident; revision and backfill practice is not documented."
+    }
+  ]
+}

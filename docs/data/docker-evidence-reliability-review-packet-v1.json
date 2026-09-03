@@ -116,16 +116,16 @@
           "url": "https://api.stackexchange.com/docs/questions",
           "section": "not retrieved",
           "retrieved_at": "2026-09-03",
-          "basis_type": "UNREACHABLE",
-          "summarized_finding": "NOT RETRIEVED. The publisher's API documentation host is not accessible to this environment's fetcher, and the site's own robots policy blocks the crawler. No retry with a varied header was attempted, no mirror or cached copy was consulted, and no third-party summary was substituted. Mission 1.18 met the same wall and resolved it by the operator supplying the documents; that route remains available and is the recommended one here."
+          "summarized_finding": "NOT RETRIEVED. The publisher's API documentation host is not accessible to this environment's fetcher, and the site's own robots policy blocks the crawler. No retry with a varied header was attempted, no mirror or cached copy was consulted, and no third-party summary was substituted. Mission 1.18 met the same wall and resolved it by the operator supplying the documents; that route remains available and is the recommended one here.",
+          "document_kind": "UNREACHABLE"
         },
         {
           "title": "Acquisition provenance recorded by the collector",
           "url": "internal: acquisition.raw_records.provenance",
           "section": "per-record provenance",
           "retrieved_at": "2024-03 acquisition, read 2026-09-03",
-          "basis_type": "FIRST_PARTY_RESPONSE_AT_COLLECTION",
-          "summarized_finding": "The collector recorded, from the API's own responses at collection time: tagged=docker, site=stackoverflow, filter=!SyjNl4V)kvv2kw3Qt6, page=1, page_size=100, date_window 2024-03-01 to 2024-03-31, quota_max=300 with quota_remaining=299 after the call. One page of size 100 returned 89 records, so the result set was exhausted and the retrieval was not truncated (Mission 1.30). 88 of those 89 carry the `docker` tag in the site's own tag list."
+          "summarized_finding": "The collector recorded, from the API's own responses at collection time: tagged=docker, site=stackoverflow, filter=!SyjNl4V)kvv2kw3Qt6, page=1, page_size=100, date_window 2024-03-01 to 2024-03-31, quota_max=300 with quota_remaining=299 after the call. One page of size 100 returned 89 records, so the result set was exhausted and the retrieval was not truncated (Mission 1.30). 88 of those 89 carry the `docker` tag in the site's own tag list.",
+          "document_kind": "FIRST_PARTY_RESPONSE_AT_COLLECTION"
         }
       ],
       "methodology_findings": [
@@ -173,7 +173,7 @@
       ],
       "candidate_basis_rows": [
         {
-          "basis_type": "FIRST_PARTY_RESPONSE_AT_COLLECTION",
+          "basis_type": "CORPUS_CONSTRUCTION_METHOD",
           "document_title": "Stack Exchange API response provenance for the March 2024 docker retrieval",
           "document_url": "internal: acquisition.raw_records.provenance",
           "section_reference": "tagged, site, filter, page, page_size, date_window, quota",
@@ -270,16 +270,16 @@
           "url": "https://api.stackexchange.com/docs/questions",
           "section": "not retrieved",
           "retrieved_at": "2026-09-03",
-          "basis_type": "UNREACHABLE",
-          "summarized_finding": "NOT RETRIEVED, for the same reason as the sibling scope: the host is inaccessible to this environment's fetcher and the site's robots policy blocks the crawler. No bypass attempted."
+          "summarized_finding": "NOT RETRIEVED, for the same reason as the sibling scope: the host is inaccessible to this environment's fetcher and the site's robots policy blocks the crawler. No bypass attempted.",
+          "document_kind": "UNREACHABLE"
         },
         {
           "title": "Normalizer-recorded source semantics for the acceptance flag",
           "url": "internal: acquisition.normalized_records.payload.answers.accepted_answer_semantics",
           "section": "answers.accepted_answer_semantics",
           "retrieved_at": "2026-09-03",
-          "basis_type": "FIRST_PARTY_MODEL_SEMANTICS",
-          "summarized_finding": "Every normalized record carries, beside the flag: 'the asker marked an answer accepted; not a statement that the problem is objectively resolved'. The flag records ONE PARTICIPANT'S ACTION -- only the asker may accept -- so `false` reports a non-action by exactly one person."
+          "summarized_finding": "Every normalized record carries, beside the flag: 'the asker marked an answer accepted; not a statement that the problem is objectively resolved'. The flag records ONE PARTICIPANT'S ACTION -- only the asker may accept -- so `false` reports a non-action by exactly one person.",
+          "document_kind": "FIRST_PARTY_MODEL_SEMANTICS"
         }
       ],
       "methodology_findings": [
@@ -326,7 +326,7 @@
       ],
       "candidate_basis_rows": [
         {
-          "basis_type": "FIRST_PARTY_MODEL_SEMANTICS",
+          "basis_type": "MEASUREMENT_METHODOLOGY",
           "document_title": "Normalizer-recorded acceptance semantics",
           "document_url": "internal: acquisition.normalized_records.payload.answers.accepted_answer_semantics",
           "section_reference": "answers.accepted_answer_semantics",
@@ -427,16 +427,16 @@
           "url": "https://meta.wikimedia.org/wiki/Research:Page_view",
           "section": "Definition; Tagging",
           "retrieved_at": "2026-09-03",
-          "basis_type": "OFFICIAL_METHODOLOGY",
-          "summarized_finding": "A request counts as a pageview only if it meets ALL of: HTTP response 200 OK or 304 Not Modified; host is a WMF wiki domain; the X-Analytics header does not contain preview=1; the header does not indicate an automatically-called Special page; and it either carries pageview=1 or meets the MIME-type and URL-path requirements. Explicitly NOT counted: edit attempts (action=edit), edit-preview submissions (action=submit), preview pages, automatically-triggered Special pages such as Special:CentralAutoLogin, and API requests other than mobile app requests. Under Tagging, the Spider tag is applied where the 'User agent header is identified as a spider by ua-parser and additional custom regex based identification' -- that is, by pattern matching against known signatures."
+          "summarized_finding": "A request counts as a pageview only if it meets ALL of: HTTP response 200 OK or 304 Not Modified; host is a WMF wiki domain; the X-Analytics header does not contain preview=1; the header does not indicate an automatically-called Special page; and it either carries pageview=1 or meets the MIME-type and URL-path requirements. Explicitly NOT counted: edit attempts (action=edit), edit-preview submissions (action=submit), preview pages, automatically-triggered Special pages such as Special:CentralAutoLogin, and API requests other than mobile app requests. Under Tagging, the Spider tag is applied where the 'User agent header is identified as a spider by ua-parser and additional custom regex based identification' -- that is, by pattern matching against known signatures.",
+          "document_kind": "OFFICIAL_METHODOLOGY"
         },
         {
           "title": "Data Platform / Data Lake / Traffic / Pageviews",
           "url": "https://wikitech.wikimedia.org/wiki/Data_Platform/Data_Lake/Traffic/Pageviews",
           "section": "Events and known problems since 2015-05-01",
           "retrieved_at": "2026-09-03",
-          "basis_type": "OFFICIAL_METHODOLOGY",
-          "summarized_finding": "The page maintains a list of known data-quality events. One recorded from 2016-07-20: 'An update to Windows caused Chrome 41 user agents to appear to be erroneously requesting the Main page of a few wikis.' The page describes the filtering methodology (spider and bot filtering, mobile/desktop differentiation, capitalisation normalisation) and does NOT document whether published values can be revised, recomputed or backfilled, nor any remediation procedure for the incident it records."
+          "summarized_finding": "The page maintains a list of known data-quality events. One recorded from 2016-07-20: 'An update to Windows caused Chrome 41 user agents to appear to be erroneously requesting the Main page of a few wikis.' The page describes the filtering methodology (spider and bot filtering, mobile/desktop differentiation, capitalisation normalisation) and does NOT document whether published values can be revised, recomputed or backfilled, nor any remediation procedure for the incident it records.",
+          "document_kind": "OFFICIAL_METHODOLOGY"
         }
       ],
       "methodology_findings": [
@@ -483,7 +483,7 @@
       ],
       "candidate_basis_rows": [
         {
-          "basis_type": "OFFICIAL_METHODOLOGY",
+          "basis_type": "MEASUREMENT_METHODOLOGY",
           "document_title": "Research:Page view",
           "document_url": "https://meta.wikimedia.org/wiki/Research:Page_view",
           "section_reference": "Definition; Tagging",
@@ -491,7 +491,7 @@
           "summarized_finding": "The pageview definition is an explicit conjunction of HTTP-status, host and header conditions with an enumerated exclusion list; automated traffic is tagged by ua-parser plus custom regex."
         },
         {
-          "basis_type": "OFFICIAL_METHODOLOGY",
+          "basis_type": "KNOWN_LIMITATION",
           "document_title": "Data Platform / Data Lake / Traffic / Pageviews",
           "document_url": "https://wikitech.wikimedia.org/wiki/Data_Platform/Data_Lake/Traffic/Pageviews",
           "section_reference": "Events and known problems since 2015-05-01",

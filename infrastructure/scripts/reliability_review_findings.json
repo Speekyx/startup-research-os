@@ -1,5 +1,5 @@
 {
-  "$comment": "Mission 1.36. The AUTHORED documentary input to build_reliability_review_packet.py, keyed by proposition kind. It carries what the methodology documentation says and what it does not say. IT CONTAINS NO RELIABILITY VALUE, NO RANGE, NO RECOMMENDATION AND NO ADJECTIVE RANKING A SOURCE, because none of those is software's to write.",
+  "$comment": "Mission 1.36. The AUTHORED documentary input to build_reliability_review_packet.py, keyed by proposition kind. It carries what the methodology documentation says and what it does not say. IT CONTAINS NO RELIABILITY VALUE, NO RANGE, NO RECOMMENDATION AND NO ADJECTIVE RANKING A SOURCE, because none of those is software's to write. CORRECTED IN MISSION 1.36.1: `candidate_basis_rows[].basis_type` now carries real `ReliabilityBasisType` members. The first version invented strings that the contract would have refused, so the rows this packet prepared could not have recorded an assessment -- which is what they are for. The narrative document list's field is now `document_kind`, because reusing the contract's field name for a list that includes an UNREACHABLE document is what made the mistake invisible.",
   "artifact_comment": "Mission 1.36 §13. A REVIEW PREPARATION packet for the reliability scopes the Docker Opportunity's Evidence binds to. It states, per exact five-part scope, what the measurement observes, what the proposition asserts, what first-party methodology documentation says, which failure modes that documentation supports, and what remains unknown.\n\nEVERY JUDGEMENT FIELD IS BLANK AND WILL STAY BLANK UNTIL AN ACCOUNTABLE PERSON FILLS IT. No reliability value appears anywhere in this document, and none is suggested, recommended, bounded or hinted at. `reliability: null` means NO ASSESSMENT EXISTS -- not 0.0, not 0.5, not 'unknown so assume the middle'. Unknown is never defaulted.\n\nWHAT RELIABILITY ASKS: how dependable is THIS MEASUREMENT for THIS PROPOSITION KIND? It is not source popularity, prestige, policy status, legal approval, relevance, extraction confidence or model confidence, and a source may hold several different assessments. A scope matches only when ALL FIVE fields match exactly.\n\nNO MODEL PRODUCED ANY CONTENT HERE. The findings are quotations and observations from first-party documents and from acquisition provenance recorded at collection time.",
   "contract": {
     "scope_identity": [
@@ -15,7 +15,11 @@
       "source approval state, use profile -- governance answers MAY WE USE IT, reliability answers HOW DEPENDABLE IS THIS MEASUREMENT FOR THIS PROPOSITION",
       "evidence dimension"
     ],
-    "closed_origins": ["HUMAN_REVIEW", "DOCUMENTED_METHOD", "CALIBRATED_EMPIRICALLY"],
+    "closed_origins": [
+      "HUMAN_REVIEW",
+      "DOCUMENTED_METHOD",
+      "CALIBRATED_EMPIRICALLY"
+    ],
     "there_is_no_model_origin": "No MODEL_GUESSED, no LLM_REVIEW. A model may help a reviewer read documentation and may never be the epistemic source.",
     "scale": "[0.0, 1.0], with NO threshold labels. The architecture defines no meaning for 0.9, 0.7 or 0.5, and this packet invents none.",
     "null_means": "UNKNOWN / NO ASSESSMENT. It does not mean 0.0, 0.5 or any other number.",
@@ -39,16 +43,16 @@
           "url": "https://meta.wikimedia.org/wiki/Research:Page_view",
           "section": "Definition; Tagging",
           "retrieved_at": "2026-09-03",
-          "basis_type": "OFFICIAL_METHODOLOGY",
-          "summarized_finding": "A request counts as a pageview only if it meets ALL of: HTTP response 200 OK or 304 Not Modified; host is a WMF wiki domain; the X-Analytics header does not contain preview=1; the header does not indicate an automatically-called Special page; and it either carries pageview=1 or meets the MIME-type and URL-path requirements. Explicitly NOT counted: edit attempts (action=edit), edit-preview submissions (action=submit), preview pages, automatically-triggered Special pages such as Special:CentralAutoLogin, and API requests other than mobile app requests. Under Tagging, the Spider tag is applied where the 'User agent header is identified as a spider by ua-parser and additional custom regex based identification' -- that is, by pattern matching against known signatures."
+          "summarized_finding": "A request counts as a pageview only if it meets ALL of: HTTP response 200 OK or 304 Not Modified; host is a WMF wiki domain; the X-Analytics header does not contain preview=1; the header does not indicate an automatically-called Special page; and it either carries pageview=1 or meets the MIME-type and URL-path requirements. Explicitly NOT counted: edit attempts (action=edit), edit-preview submissions (action=submit), preview pages, automatically-triggered Special pages such as Special:CentralAutoLogin, and API requests other than mobile app requests. Under Tagging, the Spider tag is applied where the 'User agent header is identified as a spider by ua-parser and additional custom regex based identification' -- that is, by pattern matching against known signatures.",
+          "document_kind": "OFFICIAL_METHODOLOGY"
         },
         {
           "title": "Data Platform / Data Lake / Traffic / Pageviews",
           "url": "https://wikitech.wikimedia.org/wiki/Data_Platform/Data_Lake/Traffic/Pageviews",
           "section": "Events and known problems since 2015-05-01",
           "retrieved_at": "2026-09-03",
-          "basis_type": "OFFICIAL_METHODOLOGY",
-          "summarized_finding": "The page maintains a list of known data-quality events. One recorded from 2016-07-20: 'An update to Windows caused Chrome 41 user agents to appear to be erroneously requesting the Main page of a few wikis.' The page describes the filtering methodology (spider and bot filtering, mobile/desktop differentiation, capitalisation normalisation) and does NOT document whether published values can be revised, recomputed or backfilled, nor any remediation procedure for the incident it records."
+          "summarized_finding": "The page maintains a list of known data-quality events. One recorded from 2016-07-20: 'An update to Windows caused Chrome 41 user agents to appear to be erroneously requesting the Main page of a few wikis.' The page describes the filtering methodology (spider and bot filtering, mobile/desktop differentiation, capitalisation normalisation) and does NOT document whether published values can be revised, recomputed or backfilled, nor any remediation procedure for the incident it records.",
+          "document_kind": "OFFICIAL_METHODOLOGY"
         }
       ],
       "methodology_findings": [
@@ -95,7 +99,7 @@
       ],
       "candidate_basis_rows": [
         {
-          "basis_type": "OFFICIAL_METHODOLOGY",
+          "basis_type": "MEASUREMENT_METHODOLOGY",
           "document_title": "Research:Page view",
           "document_url": "https://meta.wikimedia.org/wiki/Research:Page_view",
           "section_reference": "Definition; Tagging",
@@ -103,7 +107,7 @@
           "summarized_finding": "The pageview definition is an explicit conjunction of HTTP-status, host and header conditions with an enumerated exclusion list; automated traffic is tagged by ua-parser plus custom regex."
         },
         {
-          "basis_type": "OFFICIAL_METHODOLOGY",
+          "basis_type": "KNOWN_LIMITATION",
           "document_title": "Data Platform / Data Lake / Traffic / Pageviews",
           "document_url": "https://wikitech.wikimedia.org/wiki/Data_Platform/Data_Lake/Traffic/Pageviews",
           "section_reference": "Events and known problems since 2015-05-01",
@@ -122,16 +126,16 @@
           "url": "https://api.stackexchange.com/docs/questions",
           "section": "not retrieved",
           "retrieved_at": "2026-09-03",
-          "basis_type": "UNREACHABLE",
-          "summarized_finding": "NOT RETRIEVED. The publisher's API documentation host is not accessible to this environment's fetcher, and the site's own robots policy blocks the crawler. No retry with a varied header was attempted, no mirror or cached copy was consulted, and no third-party summary was substituted. Mission 1.18 met the same wall and resolved it by the operator supplying the documents; that route remains available and is the recommended one here."
+          "summarized_finding": "NOT RETRIEVED. The publisher's API documentation host is not accessible to this environment's fetcher, and the site's own robots policy blocks the crawler. No retry with a varied header was attempted, no mirror or cached copy was consulted, and no third-party summary was substituted. Mission 1.18 met the same wall and resolved it by the operator supplying the documents; that route remains available and is the recommended one here.",
+          "document_kind": "UNREACHABLE"
         },
         {
           "title": "Acquisition provenance recorded by the collector",
           "url": "internal: acquisition.raw_records.provenance",
           "section": "per-record provenance",
           "retrieved_at": "2024-03 acquisition, read 2026-09-03",
-          "basis_type": "FIRST_PARTY_RESPONSE_AT_COLLECTION",
-          "summarized_finding": "The collector recorded, from the API's own responses at collection time: tagged=docker, site=stackoverflow, filter=!SyjNl4V)kvv2kw3Qt6, page=1, page_size=100, date_window 2024-03-01 to 2024-03-31, quota_max=300 with quota_remaining=299 after the call. One page of size 100 returned 89 records, so the result set was exhausted and the retrieval was not truncated (Mission 1.30). 88 of those 89 carry the `docker` tag in the site's own tag list."
+          "summarized_finding": "The collector recorded, from the API's own responses at collection time: tagged=docker, site=stackoverflow, filter=!SyjNl4V)kvv2kw3Qt6, page=1, page_size=100, date_window 2024-03-01 to 2024-03-31, quota_max=300 with quota_remaining=299 after the call. One page of size 100 returned 89 records, so the result set was exhausted and the retrieval was not truncated (Mission 1.30). 88 of those 89 carry the `docker` tag in the site's own tag list.",
+          "document_kind": "FIRST_PARTY_RESPONSE_AT_COLLECTION"
         }
       ],
       "methodology_findings": [
@@ -179,7 +183,7 @@
       ],
       "candidate_basis_rows": [
         {
-          "basis_type": "FIRST_PARTY_RESPONSE_AT_COLLECTION",
+          "basis_type": "CORPUS_CONSTRUCTION_METHOD",
           "document_title": "Stack Exchange API response provenance for the March 2024 docker retrieval",
           "document_url": "internal: acquisition.raw_records.provenance",
           "section_reference": "tagged, site, filter, page, page_size, date_window, quota",
@@ -198,16 +202,16 @@
           "url": "https://api.stackexchange.com/docs/questions",
           "section": "not retrieved",
           "retrieved_at": "2026-09-03",
-          "basis_type": "UNREACHABLE",
-          "summarized_finding": "NOT RETRIEVED, for the same reason as the sibling scope: the host is inaccessible to this environment's fetcher and the site's robots policy blocks the crawler. No bypass attempted."
+          "summarized_finding": "NOT RETRIEVED, for the same reason as the sibling scope: the host is inaccessible to this environment's fetcher and the site's robots policy blocks the crawler. No bypass attempted.",
+          "document_kind": "UNREACHABLE"
         },
         {
           "title": "Normalizer-recorded source semantics for the acceptance flag",
           "url": "internal: acquisition.normalized_records.payload.answers.accepted_answer_semantics",
           "section": "answers.accepted_answer_semantics",
           "retrieved_at": "2026-09-03",
-          "basis_type": "FIRST_PARTY_MODEL_SEMANTICS",
-          "summarized_finding": "Every normalized record carries, beside the flag: 'the asker marked an answer accepted; not a statement that the problem is objectively resolved'. The flag records ONE PARTICIPANT'S ACTION -- only the asker may accept -- so `false` reports a non-action by exactly one person."
+          "summarized_finding": "Every normalized record carries, beside the flag: 'the asker marked an answer accepted; not a statement that the problem is objectively resolved'. The flag records ONE PARTICIPANT'S ACTION -- only the asker may accept -- so `false` reports a non-action by exactly one person.",
+          "document_kind": "FIRST_PARTY_MODEL_SEMANTICS"
         }
       ],
       "methodology_findings": [
@@ -254,7 +258,7 @@
       ],
       "candidate_basis_rows": [
         {
-          "basis_type": "FIRST_PARTY_MODEL_SEMANTICS",
+          "basis_type": "MEASUREMENT_METHODOLOGY",
           "document_title": "Normalizer-recorded acceptance semantics",
           "document_url": "internal: acquisition.normalized_records.payload.answers.accepted_answer_semantics",
           "section_reference": "answers.accepted_answer_semantics",

@@ -1,0 +1,241 @@
+{
+  "$comment": "Mission 1.36.1 §9, §12, §10. What the REAL resolver returns for the eight Docker Evidence rows, and the negative checks proving no assessment reaches a scope it was not reviewed for. Read-only: nothing here writes, and the numbers are the code's answers rather than a report's expectations.",
+  "artifact_version": "docker-reliability-resolution@1.0.0",
+  "generated_by": "mission-1.36.1",
+  "current_assessments": [
+    {
+      "id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+      "version": 1,
+      "source_id": "ted-eu",
+      "proposition_kind": "source_reported_procurement_value_contrast",
+      "origin": "HUMAN_REVIEW",
+      "reviewed_by": "thibchm"
+    }
+  ],
+  "totals": {
+    "docker_evidence_rows": 8,
+    "resolved": 0,
+    "no_applicable_assessment": 8,
+    "evidence_rows_with_non_null_reliability_column": 0
+  },
+  "by_scope": [
+    {
+      "source_id": "stack-exchange",
+      "resource_id": "questions/stackoverflow",
+      "record_kind_id": "community_question",
+      "proposition_kind": "community_site_published_questions_carrying_tag",
+      "evidence_count": 1,
+      "outcomes": [
+        "NO_APPLICABLE_ASSESSMENT"
+      ],
+      "reliability": [
+        "None"
+      ],
+      "assessment_ids": [
+        "None"
+      ]
+    },
+    {
+      "source_id": "stack-exchange",
+      "resource_id": "questions/stackoverflow",
+      "record_kind_id": "community_question",
+      "proposition_kind": "community_site_questions_without_accepted_answer",
+      "evidence_count": 1,
+      "outcomes": [
+        "NO_APPLICABLE_ASSESSMENT"
+      ],
+      "reliability": [
+        "None"
+      ],
+      "assessment_ids": [
+        "None"
+      ]
+    },
+    {
+      "source_id": "wikimedia-pageviews",
+      "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+      "record_kind_id": "content_request_count",
+      "proposition_kind": "platform_counted_content_request_change",
+      "evidence_count": 6,
+      "outcomes": [
+        "NO_APPLICABLE_ASSESSMENT"
+      ],
+      "reliability": [
+        "None"
+      ],
+      "assessment_ids": [
+        "None"
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "evidence_id": "13a5eadb-977d-4de0-9c35-d0ff53442074",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "outcome": "NO_APPLICABLE_ASSESSMENT",
+      "scorable": false,
+      "reliability": null,
+      "assessment_id": null,
+      "assessment_version": null,
+      "detail": "no assessment covers this measurement for this purpose. Reliability stays NULL and the record is NON_SCORABLE, which is the honest state: a default here would be the source coefficient this layer exists to prevent",
+      "evidence_row_reliability_column": null
+    },
+    {
+      "evidence_id": "16a8c39c-d72a-4252-9c67-7be2165e9cae",
+      "scope": {
+        "source_id": "stack-exchange",
+        "resource_id": "questions/stackoverflow",
+        "record_kind_id": "community_question",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "community_site_published_questions_carrying_tag"
+      },
+      "outcome": "NO_APPLICABLE_ASSESSMENT",
+      "scorable": false,
+      "reliability": null,
+      "assessment_id": null,
+      "assessment_version": null,
+      "detail": "no assessment covers this measurement for this purpose. Reliability stays NULL and the record is NON_SCORABLE, which is the honest state: a default here would be the source coefficient this layer exists to prevent",
+      "evidence_row_reliability_column": null
+    },
+    {
+      "evidence_id": "17735944-da2f-4469-837f-8f3fe71922aa",
+      "scope": {
+        "source_id": "stack-exchange",
+        "resource_id": "questions/stackoverflow",
+        "record_kind_id": "community_question",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "community_site_questions_without_accepted_answer"
+      },
+      "outcome": "NO_APPLICABLE_ASSESSMENT",
+      "scorable": false,
+      "reliability": null,
+      "assessment_id": null,
+      "assessment_version": null,
+      "detail": "no assessment covers this measurement for this purpose. Reliability stays NULL and the record is NON_SCORABLE, which is the honest state: a default here would be the source coefficient this layer exists to prevent",
+      "evidence_row_reliability_column": null
+    },
+    {
+      "evidence_id": "1b93db71-eaed-45c5-a2fa-9e4edea7bc49",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "outcome": "NO_APPLICABLE_ASSESSMENT",
+      "scorable": false,
+      "reliability": null,
+      "assessment_id": null,
+      "assessment_version": null,
+      "detail": "no assessment covers this measurement for this purpose. Reliability stays NULL and the record is NON_SCORABLE, which is the honest state: a default here would be the source coefficient this layer exists to prevent",
+      "evidence_row_reliability_column": null
+    },
+    {
+      "evidence_id": "487f62c6-2fcf-4790-9773-6e99214d0003",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "outcome": "NO_APPLICABLE_ASSESSMENT",
+      "scorable": false,
+      "reliability": null,
+      "assessment_id": null,
+      "assessment_version": null,
+      "detail": "no assessment covers this measurement for this purpose. Reliability stays NULL and the record is NON_SCORABLE, which is the honest state: a default here would be the source coefficient this layer exists to prevent",
+      "evidence_row_reliability_column": null
+    },
+    {
+      "evidence_id": "516182ff-0122-4d13-9d8a-92bb38065a75",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "outcome": "NO_APPLICABLE_ASSESSMENT",
+      "scorable": false,
+      "reliability": null,
+      "assessment_id": null,
+      "assessment_version": null,
+      "detail": "no assessment covers this measurement for this purpose. Reliability stays NULL and the record is NON_SCORABLE, which is the honest state: a default here would be the source coefficient this layer exists to prevent",
+      "evidence_row_reliability_column": null
+    },
+    {
+      "evidence_id": "6cf92ad6-77ed-4126-b356-41e65856430b",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "outcome": "NO_APPLICABLE_ASSESSMENT",
+      "scorable": false,
+      "reliability": null,
+      "assessment_id": null,
+      "assessment_version": null,
+      "detail": "no assessment covers this measurement for this purpose. Reliability stays NULL and the record is NON_SCORABLE, which is the honest state: a default here would be the source coefficient this layer exists to prevent",
+      "evidence_row_reliability_column": null
+    },
+    {
+      "evidence_id": "f1e0b7a4-d570-429a-91a4-fadff84cdce1",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "outcome": "NO_APPLICABLE_ASSESSMENT",
+      "scorable": false,
+      "reliability": null,
+      "assessment_id": null,
+      "assessment_version": null,
+      "detail": "no assessment covers this measurement for this purpose. Reliability stays NULL and the record is NON_SCORABLE, which is the honest state: a default here would be the source coefficient this layer exists to prevent",
+      "evidence_row_reliability_column": null
+    }
+  ],
+  "negative_checks": [
+    {
+      "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+      "assessment_scope_source": "ted-eu",
+      "assessment_scope_proposition": "source_reported_procurement_value_contrast",
+      "tested_against_source": "stack-exchange",
+      "tested_against_proposition": "community_site_published_questions_carrying_tag",
+      "scopes_are_identical": false,
+      "outcome": "NO_APPLICABLE_ASSESSMENT",
+      "resolved": false
+    },
+    {
+      "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+      "assessment_scope_source": "ted-eu",
+      "assessment_scope_proposition": "source_reported_procurement_value_contrast",
+      "tested_against_source": "stack-exchange",
+      "tested_against_proposition": "community_site_questions_without_accepted_answer",
+      "scopes_are_identical": false,
+      "outcome": "NO_APPLICABLE_ASSESSMENT",
+      "resolved": false
+    },
+    {
+      "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+      "assessment_scope_source": "ted-eu",
+      "assessment_scope_proposition": "source_reported_procurement_value_contrast",
+      "tested_against_source": "wikimedia-pageviews",
+      "tested_against_proposition": "platform_counted_content_request_change",
+      "scopes_are_identical": false,
+      "outcome": "NO_APPLICABLE_ASSESSMENT",
+      "resolved": false
+    }
+  ]
+}

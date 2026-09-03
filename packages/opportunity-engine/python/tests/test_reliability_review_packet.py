@@ -244,13 +244,19 @@ class TestThePreparationIsUsable:
                 assert basis["summarized_finding"].strip()
 
     def test_an_unreachable_publisher_is_recorded_as_unreachable(self) -> None:
-        """No mirror, no cached copy, no third-party substitute."""
+        """No mirror, no cached copy, no third-party substitute.
+
+        The field is `document_kind` since Mission 1.36.1, and this test is where
+        the rename pays for itself: a document nobody could READ was carrying a
+        key called `basis_type`, and a reliability basis is by definition a
+        document that WAS retrieved.
+        """
         se = [s for s in scopes() if s["scope"]["source_id"] == "stack-exchange"]
         assert se
         for scope in se:
             assert scope["documentation_status"] == "PARTIAL_PUBLISHER_DOCUMENTATION_UNREACHABLE"
             unreachable = [
-                d for d in scope["authoritative_documents"] if d["basis_type"] == "UNREACHABLE"
+                d for d in scope["authoritative_documents"] if d["document_kind"] == "UNREACHABLE"
             ]
             assert unreachable
             assert "No retry with a varied header" in " ".join(
