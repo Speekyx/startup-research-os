@@ -1,0 +1,50 @@
+{
+  "$comment": "Mission 1.34 §2, §3, §12. WHAT LEVEL OF THING each source-native identifier scheme names, for the Evidence rows whose keys the canonical subject registry does NOT map. A rule matches on (source_id, scheme) by EXACT EQUALITY and on nothing else: no string distance, no token overlap, no stem, no synonym table, no embedding, no model matching. A scheme with no rule here resolves to UNDETERMINED, which fails closed at the §15 gate rather than defaulting to a level.\n\nA RULE IS SOURCE_NATIVE ONLY WHERE THE SOURCE'S OWN VOCABULARY SAYS WHAT IT IS. `CPV-division` is a division of the Common Procurement Vocabulary, which is a classification by its own name and construction, so calling it a CATEGORY rests on the publisher's authority rather than on ours. Where a scheme's level depends on WHAT a particular identifier names rather than on the scheme -- an encyclopedia article may be about a product, a person or a country -- NO RULE IS WRITTEN, because a rule there would classify by source instead of by subject. Those identifiers reach a level only through the canonical subject registry, where a person recorded what each one names.\n\nNOTHING HERE IS A RELATION. A rule says what a scheme's identifiers ARE. It never says one contains another; see scope-relation-registry-v1.json, which is empty on purpose.",
+  "registry_version": "observation-scope-rules@1.0.0",
+  "reviewed_by": "mission-1.34",
+  "reviewed_at": "2026-09-03T00:00:00+00:00",
+  "match": "(source_id, scheme) by exact equality; the rendered SubjectKey is <source_id>:<scheme>:<part>|<part>...",
+  "rules": [
+    {
+      "source_id": "ted-eu",
+      "scheme": "CPV-division",
+      "scope_type": "CATEGORY",
+      "origin": "SOURCE_NATIVE",
+      "basis": "A CPV division is a top-level division of the Common Procurement Vocabulary, the classification the European Union publishes for describing the subject of a procurement. The vocabulary is a classification by its own name and by its own construction: a division contains many distinct purchases by many buyers from many suppliers. So a division names a CATEGORY on the publisher's authority. It names no product, and the collector deliberately expands no CPV code into a label, so nothing here knows or asserts what any particular division contains.",
+      "never_means": [
+        "any particular product purchased under that division",
+        "a market, which is a space of exchange rather than a filing rule",
+        "that what is observed of the division is true of anything inside it"
+      ]
+    },
+    {
+      "source_id": "world-bank",
+      "scheme": "metric-geography",
+      "scope_type": "GEOGRAPHY",
+      "origin": "SOURCE_NATIVE",
+      "basis": "A World Bank indicator observation is a measurement OF a country or aggregate: the key is <indicator>|<geography code> and the thing the number describes is the place. The indicator says what was measured of it. GEOGRAPHY here is the SubjectScopeType -- what the observation is about -- and it is not MarketScope, which says where an Opportunity applies and is a separate, orthogonal question (§17).",
+      "never_means": [
+        "a market in that place",
+        "that anything observed of the place is true of anything sold there",
+        "where an Opportunity applies; that is MarketScope and this vocabulary never answers it"
+      ]
+    }
+  ],
+  "deliberately_absent": [
+    {
+      "source_id": "wikimedia-pageviews",
+      "scheme": "content",
+      "why": "An encyclopedia article may be about a product, a person, an event, a country or an idea, so the SCHEME cannot say what level of thing any particular article names. Writing a rule here would classify by source rather than by subject. Wikimedia identifiers reach a level through the canonical subject registry, where a person recorded that `Docker_(software)` names the container platform."
+    },
+    {
+      "source_id": "stack-exchange",
+      "scheme": "community-tag",
+      "why": "The same reason. A site tag may name a product, a language, a technique or a concept. `docker` reaches PRODUCT through the canonical subject registry and not through its scheme."
+    },
+    {
+      "source_id": "gdelt",
+      "scheme": "lexical-term",
+      "why": "A term is a word in a news corpus and names no level of thing at all: the same string may be a product, a surname and an occupation. These rows resolve to UNDETERMINED, which is the correct answer rather than a gap, and they already map to no Opportunity dimension."
+    }
+  ]
+}

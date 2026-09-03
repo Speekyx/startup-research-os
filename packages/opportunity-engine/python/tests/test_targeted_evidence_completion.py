@@ -19,6 +19,7 @@ from sros_opportunity import (
     EvidenceDimension,
     PacketEligibility,
     SubjectIdentifier,
+    SubjectScopeType,
     build_packet,
     evaluate,
     group_by_subject,
@@ -84,7 +85,15 @@ class TestDeterministicSubjectIdentity:
 
     def test_a_subject_with_no_identifiers_is_refused(self) -> None:
         with pytest.raises(ValueError, match="maps\nnothing|maps nothing"):
-            CanonicalSubject(subject_id="x", display_name="X", description="", identifiers=())
+            CanonicalSubject(
+                subject_id="x",
+                display_name="X",
+                description="",
+                identifiers=(),
+                # Mission 1.34: a subject declares WHAT LEVEL OF THING it is,
+                # required with no default.
+                scope_type=SubjectScopeType.PRODUCT,
+            )
 
     def test_one_identifier_may_not_name_two_subjects(self) -> None:
         shared = SubjectIdentifier(key="s:k:v", source_id="s", basis="b")
@@ -92,8 +101,8 @@ class TestDeterministicSubjectIdentity:
             CanonicalSubjectRegistry(
                 registry_version="v",
                 subjects=(
-                    CanonicalSubject("a", "A", "", (shared,)),
-                    CanonicalSubject("b", "B", "", (shared,)),
+                    CanonicalSubject("a", "A", "", (shared,), SubjectScopeType.PRODUCT),
+                    CanonicalSubject("b", "B", "", (shared,), SubjectScopeType.PRODUCT),
                 ),
             )
 
