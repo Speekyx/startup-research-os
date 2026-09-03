@@ -16,6 +16,7 @@ not a runtime dependency of a service until one exists.
 from __future__ import annotations
 
 from .facts import (
+    COMMUNITY_QUESTION,
     CONTENT_REQUEST_COUNT,
     FACT_RULES,
     LEXICAL_FREQUENCY_OBSERVATION,
@@ -60,6 +61,7 @@ from .types import (
 __all__ = [
     "FACT_RULES",
     "LEXICAL_FREQUENCY_OBSERVATION",
+    "COMMUNITY_QUESTION",
     "CONTENT_REQUEST_COUNT",
     "PROCUREMENT_NOTICE",
     "MINIMUM_DISTINCT_OBSERVATIONS",

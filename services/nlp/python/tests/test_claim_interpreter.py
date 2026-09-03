@@ -226,7 +226,7 @@ class TestStructurallyObserved:
         assert interpretation.model_version is None
         assert interpretation.prompt_version is None
         assert interpretation.interpreter_id == "observed-signal-restatement"
-        assert interpretation.interpreter_version == "1.2.0"
+        assert interpretation.interpreter_version == "1.3.0"
 
     def test_interpretation_confidence_is_one(self):
         """It says the template read the Signal correctly. Nothing else."""
@@ -763,7 +763,7 @@ class TestTheProcurementRestatement:
         assert draft.origin is ClaimOrigin.DETERMINISTIC_EXTRACTION
         assert draft.temporality is ClaimTemporality.EVERGREEN
         assert draft.interpretation.kind is ClaimInterpretationKind.DETERMINISTIC
-        assert draft.interpretation.interpreter_version == "1.2.0"
+        assert draft.interpretation.interpreter_version == "1.3.0"
         assert draft.interpretation.model_version is None
         assert draft.interpretation.prompt_version is None
 

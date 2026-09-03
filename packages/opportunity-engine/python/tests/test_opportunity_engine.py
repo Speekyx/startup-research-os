@@ -736,13 +736,22 @@ class TestTheRealRunIsRecordedHonestly:
         return json.loads(path.read_text(encoding="utf-8"))
 
     def test_the_run_inspected_every_canonical_evidence_row(self) -> None:
+        """The corpus was 26 at Mission 1.28 and is 27 since Mission 1.30 derived
+        a question-volume Signal, so the literal is gone and the PROPERTY is
+        asserted instead: the total agrees with the rows the report itself
+        lists. That is stricter -- a run that inspected fewer rows than it
+        enumerated used to pass and now cannot."""
         report = self._report()
-        assert report["totals"]["evidence_rows_inspected"] == 26
+        assert report["totals"]["evidence_rows_inspected"] == len(report["rows"])
+        assert report["totals"]["evidence_rows_inspected"] >= 26
 
     def test_no_evidence_row_is_scoring_eligible(self) -> None:
+        """The load-bearing half is the zero. Every row is context-only because
+        no reviewed reliability resolves for any measurement-by-purpose scope in
+        use, and Mission 1.30's new row is no exception."""
         report = self._report()
         assert report["totals"]["eligible_scoring"] == 0
-        assert report["totals"]["eligible_context"] == 26
+        assert report["totals"]["eligible_context"] == report["totals"]["evidence_rows_inspected"]
 
     def test_no_opportunity_was_generated_and_no_model_was_called(self) -> None:
         report = self._report()

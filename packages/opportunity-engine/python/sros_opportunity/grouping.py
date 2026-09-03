@@ -22,6 +22,14 @@ no token overlap, no stem, no synonym table and no threshold.
 does not drop singletons: whether one row is enough is `sufficiency.py`'s
 question, and silently discarding the groups that will fail would hide the shape
 of the corpus from the report.
+
+**Mission 1.30 added the one exception, and it is a registry rather than a rule.**
+A source-native key starts with the source id, so evidence from two source
+families could never share a packet however obviously it concerned the same
+subject. `CanonicalSubjectRegistry` maps EXACT rendered keys onto a canonical
+subject, by equality and by nothing else, with a stated basis per entry. Passing
+no registry leaves the behaviour of 1.0.0 exactly unchanged; an unmapped
+identifier keeps its own key and its own packet either way.
 """
 
 from __future__ import annotations
@@ -32,6 +40,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from .facets import EvidenceFacets
+from .subjects import CanonicalSubjectRegistry
 
 __all__ = [
     "GROUPING_PROCEDURE_VERSION",
@@ -41,7 +50,7 @@ __all__ = [
     "group_by_subject",
 ]
 
-GROUPING_PROCEDURE_VERSION = "source-native-subject-grouping@1.0.0"
+GROUPING_PROCEDURE_VERSION = "source-native-subject-grouping@1.1.0"
 
 
 @dataclass(frozen=True, order=True)
@@ -104,6 +113,16 @@ def subject_key(
             return None
         return SubjectKey(source_id, "metric-geography", metrics + geographies)
 
+    if signal_type_id == "community_question_volume":
+        # Mission 1.30, ADR-034. The site AND the tag: the same tag string means
+        # different things on different sites, so a key carrying only the tag
+        # would merge two vocabularies.
+        tags = _strs(scope, "community_tags")
+        sites = _strs(scope, "community_sites")
+        if not tags:
+            return None
+        return SubjectKey(source_id, "community-tag", sites + tags)
+
     if signal_type_id == "procurement_value_contrast":
         codes = _strs(scope, "classification_codes")
         scheme = str(scope.get("classification_scheme") or "")
@@ -122,23 +141,36 @@ def subject_key(
 
 @dataclass(frozen=True)
 class CandidateGroup:
-    """Evidence rows sharing one source-native subject."""
+    """Evidence rows sharing one subject, source-native or canonical."""
 
     key: SubjectKey | None
     facets: tuple[EvidenceFacets, ...]
+    #: Set where a reviewed registry mapped this group's source-native keys onto
+    #: one canonical subject. `key` is then None, because the group has several
+    #: source-native keys and naming one would make its source the subject's
+    #: owner.
+    canonical_subject_id: str | None = None
 
     @property
     def label(self) -> str:
+        if self.canonical_subject_id is not None:
+            return f"subject:{self.canonical_subject_id}"
         return str(self.key) if self.key is not None else "UNGROUPED"
 
 
 def group_by_subject(
     rows: Sequence[tuple[EvidenceFacets, Mapping[str, Any] | None]],
+    registry: CanonicalSubjectRegistry | None = None,
 ) -> list[CandidateGroup]:
     """Group by subject key, ordered so the result is reproducible.
 
     Rows whose signal type has no subject rule each become their own group,
     labelled `UNGROUPED`, rather than being merged or discarded.
+
+    When a `registry` is supplied and a rendered source-native key appears in it,
+    the CANONICAL subject id becomes the group token, so two source families that
+    a person mapped to one subject land in one packet. An unmapped key is
+    untouched, and passing no registry reproduces 1.0.0 exactly.
     """
     buckets: dict[str, list[EvidenceFacets]] = defaultdict(list)
     keys: dict[str, SubjectKey | None] = {}
@@ -149,14 +181,20 @@ def group_by_subject(
         if key is None:
             ungrouped.append(CandidateGroup(None, (facets,)))
             continue
-        token = str(key)
-        keys[token] = key
+        canonical = registry.subject_for(str(key)) if registry is not None else None
+        token = canonical if canonical is not None else str(key)
+        # A canonical group has NO single SubjectKey, because it has several --
+        # one per contributing source. Recording the first would name one source
+        # as the subject's owner, so it records none and the LABEL carries the
+        # identity.
+        keys[token] = None if canonical is not None else key
         buckets[token].append(facets)
 
     groups = [
         CandidateGroup(
             keys[token],
             tuple(sorted(buckets[token], key=lambda f: f.evidence_id)),
+            canonical_subject_id=token if keys[token] is None else None,
         )
         for token in sorted(buckets)
     ]

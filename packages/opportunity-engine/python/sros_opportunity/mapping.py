@@ -147,6 +147,38 @@ SIGNAL_DIMENSION_MAP: dict[str, SignalDimensionMapping] = {
             ),
         ),
         SignalDimensionMapping(
+            signal_type_id="community_question_volume",
+            dimensions=frozenset({_D.PROBLEM_OR_NEED}),
+            rationale=(
+                "PROBLEM_OR_NEED asks whether some actor is blocked, burdened or "
+                "unserved. A public question on a Q&A site is, by the site's own design, "
+                "a person stating they are stuck and asking for help, so a count of such "
+                "questions filed under one site tag is direct evidence that actors "
+                "published requests for help in that subject area. It is a genuinely "
+                "different question from the one AUDIENCE_OR_USAGE answers: that one "
+                "says something attended to a subject, this one says somebody said they "
+                "were stuck on it, and neither implies the other. "
+                "RECURRENCE_OR_FREQUENCY is deliberately ABSENT and is the mapping a "
+                "reader most wants. It would require knowing that the questions concern "
+                "the same problem, which is the relation Mission 1.27 PARKED and which "
+                "Missions 1.18 and 1.20 established this deployment cannot decide. "
+                "Claiming it would recreate SAME_PROBLEM_FAMILY under another name."
+            ),
+            bound=(
+                "A count of public questions carrying one identifier from one community "
+                "site's own tag vocabulary, created inside one bounded window, over "
+                "records this deployment holds and complete only because that retrieval "
+                "demonstrably did not truncate. NOT a count of PEOPLE: author identity "
+                "is never acquired, so distinct askers cannot be counted and one person "
+                "may have asked several times. NOT evidence that the questions share a "
+                "problem. NOT severity, difficulty, recurrence, or that anything is "
+                "unsolved -- an accepted answer means only that the asker accepted one. "
+                "NOT demand, market size, adoption, buyers or willingness to pay. And "
+                "the tag is a SUBJECT, not a problem: it names the area a question was "
+                "filed under, in the site's own vocabulary, and nothing finer."
+            ),
+        ),
+        SignalDimensionMapping(
             signal_type_id="numeric_period_change",
             dimensions=frozenset(),
             rationale=(

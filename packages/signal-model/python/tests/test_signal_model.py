@@ -883,6 +883,14 @@ class TestDerivationIdentityAndParameters(unittest.TestCase):
         because the platform documents its day bucket as UTC -- the fact GDELT's
         H-29 still lacks.
 
+        `community_question_volume` joined in Mission 1.30 under ADR-034, over
+        the `community_question` record kind Mission 1.18 added and nothing had
+        derived from since. It is the first type that counts PUBLICATIONS rather
+        than reading a measured value out of each input, which is why its family
+        could not be `CONTENT_REQUEST_VOLUME`: a request is something a reader
+        makes of a server, and a question is something a person publishes about
+        being stuck.
+
         The rule the original assertion protected is unchanged: every type is
         justified by a data shape this repository holds, and each declares the
         family whose record kind it reads."""
@@ -894,6 +902,7 @@ class TestDerivationIdentityAndParameters(unittest.TestCase):
                 "numeric_period_change",
                 "procurement_value_contrast",
                 "content_request_change",
+                "community_question_volume",
             },
         )
         for spec in SIGNAL_TYPES.values():
@@ -1157,6 +1166,15 @@ class TestTaxonomyBoundaries(unittest.TestCase):
         LOOKS like somebody wanting something. It is a count of HTTP responses.
         The names refused here are the evidence that the distinction was made
         deliberately rather than by luck.
+
+        `COMMUNITY_QUESTION_VOLUME` was added in Mission 1.30 under ADR-034, and
+        it is the one that comes CLOSEST to a demand family without being one: a
+        person publishing that they are stuck looks a great deal like a need.
+        It is a count of published questions. It says nothing about how many
+        PEOPLE -- author identity is never acquired -- nothing about whether two
+        questions share a problem, which is the relation Mission 1.27 parked,
+        and nothing about anybody wanting to buy anything. `PAIN` is refused
+        here for exactly the reason it is tempting.
         """
         values = {member.value for member in SignalQuantityFamily}
         self.assertEqual(
@@ -1166,12 +1184,23 @@ class TestTaxonomyBoundaries(unittest.TestCase):
                 "MEASURED_SERIES",
                 "TRANSACTION_VALUE",
                 "CONTENT_REQUEST_VOLUME",
+                "COMMUNITY_QUESTION_VOLUME",
             },
         )
         self.assertFalse(values & {"PAIN", "DESIRE", "BEHAVIORAL", "MARKET"})
         self.assertNotIn("WILLINGNESS_TO_PAY", values)
         # Every name that would have put the interpretation in the vocabulary.
         for tempting in ("CONTENT_VIEWS", "ATTENTION", "CONTENT_POPULARITY", "ADOPTION"):
+            self.assertNotIn(tempting, values)
+        # Mission 1.30. The names that would have put the interpretation in THIS
+        # family's vocabulary, and each was available and rejected.
+        for tempting in (
+            "PROBLEM_VOLUME",
+            "PROBLEM_FREQUENCY",
+            "USER_PAIN_VOLUME",
+            "COMMUNITY_DEMAND",
+            "UNMET_NEED_VOLUME",
+        ):
             self.assertNotIn(tempting, values)
 
     def test_a_signal_carries_no_demand_family_and_no_motivation(self):

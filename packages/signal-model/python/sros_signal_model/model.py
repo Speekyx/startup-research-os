@@ -425,6 +425,13 @@ class SignalScope:
     content_platforms: tuple[str, ...] = ()
     audience_classes: tuple[str, ...] = ()
     access_channels: tuple[str, ...] = ()
+    # Mission 1.30, ADR-034. The dimensions a COMMUNITY_QUESTION_VOLUME
+    # derivation is about. Absent from every other family's scope, by the rule
+    # the lexical kind follows for geography: a dimension no input carries has
+    # no key, never a null.
+    community_sites: tuple[str, ...] = ()
+    community_tags: tuple[str, ...] = ()
+    community_tag_scheme: str | None = None
 
     def __post_init__(self) -> None:
         if not self.source_ids:
@@ -478,6 +485,8 @@ class SignalScope:
             ("content_platforms", self.content_platforms),
             ("audience_classes", self.audience_classes),
             ("access_channels", self.access_channels),
+            ("community_sites", self.community_sites),
+            ("community_tags", self.community_tags),
         ):
             if values:
                 payload[key] = list(values)
@@ -485,6 +494,8 @@ class SignalScope:
             payload["source_language_scheme"] = self.source_language_scheme
         if self.classification_scheme:
             payload["classification_scheme"] = self.classification_scheme
+        if self.community_tag_scheme:
+            payload["community_tag_scheme"] = self.community_tag_scheme
         return payload
 
 
@@ -907,6 +918,34 @@ def build_signal(
                 "human-attributed traffic than for all traffic, and a signal that did "
                 "not say which one it aggregated would be two measurements wearing one "
                 "name"
+            )
+    elif spec.family is SignalQuantityFamily.COMMUNITY_QUESTION_VOLUME:
+        # Mission 1.30, ADR-034. `metric_ids` and `terms` are deliberately NOT
+        # permitted: a question count is a count of publications, not an
+        # instance of a measured series and not a count of tokens. A tag is not
+        # a lexical term -- it is a label the SITE assigns from its own
+        # vocabulary, and a reader who saw `terms` here would think the site had
+        # been searched for a word.
+        if scope.metric_ids or scope.terms:
+            raise ValueError(
+                "a COMMUNITY_QUESTION_VOLUME signal carries no metric and no term. It "
+                "counts questions filed under a site's own tag, not instances of a "
+                "series and not occurrences of a token"
+            )
+        if not scope.community_tags:
+            raise ValueError("a COMMUNITY_QUESTION_VOLUME signal states the tag it counted")
+        if not scope.community_sites:
+            raise ValueError(
+                "a COMMUNITY_QUESTION_VOLUME signal states the site it counted on. The "
+                "same tag string means different things on different sites, and a count "
+                "that could not say which site it came from would be two vocabularies "
+                "wearing one name"
+            )
+        if not scope.community_tag_scheme:
+            raise ValueError(
+                "a COMMUNITY_QUESTION_VOLUME signal states the tag VOCABULARY it read. "
+                "A tag is the site's own label and never a taxonomy of ours, and the "
+                "scheme is what keeps that visible one layer down"
             )
     elif not scope.metric_ids:
         raise ValueError("a MEASURED_SERIES signal states the metric it is about")

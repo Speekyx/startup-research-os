@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.55
+Version: 1.56
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-02 (Sprint 1 / Mission 1.29)
+Last amended: 2026-09-02 (Sprint 1 / Mission 1.30)
 
 ---
 
@@ -13,6 +13,70 @@ Last amended: 2026-09-02 (Sprint 1 / Mission 1.29)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.56 — 2026-09-02 (Sprint 1 / Mission 1.30)
+
+Authorized by the Mission 1.30 brief §0-§23.
+
+**OUTCOME: `TARGETED_EVIDENCE_COMPLETION_SUCCESS`.** The `docker` packet is
+**HYPOTHESIS_FORMABLE** and **AVAILABLE_FOR_EXTERNAL_SYNTHESIS**, on 7 Evidence
+rows across two source families carrying two counting dimensions. Signals,
+Claims, ClaimRevisions and Evidence 26 -> **27**; **RawRecords and
+NormalizedRecords UNCHANGED at 148**; Opportunities, Embeddings and Scores still
+0; **0 model calls, 0.00 USD**.
+
+**THE MINIMUM NEEDED WAS ZERO.** §7 says collect the minimum and prefer fewer.
+Mission 1.20 had already collected `tagged=docker` over 2024-03-01 to
+2024-03-31, and that retrieval **provably did not truncate**: one page with
+`page_size = 100` returned 89 records, and a short page means the result set was
+exhausted. So a complete set already existed for one subject and nothing was
+acquired.
+
+**A TRUNCATED COUNT IS NOT MERELY IMPRECISE, IT IS ANTI-INFORMATIVE**, and that
+is why Kubernetes and Podman were not reached. Capped at §7's 30 records, a
+retrieval returning 30 would report OUR BOUND rather than the world -- and would
+read as a LARGER number than a complete count of 88. The extractor therefore
+REFUSES rather than qualifying, which is ADR-021's rule applied to a failure mode
+that counting introduces and change never had.
+
+**89 RETURNED, 88 COUNTED.** One record came back from a `tagged=docker` query
+carrying no `docker` tag at all. What the query asked and what the site says are
+different facts, and the site's own tag list is the one a claim about the site's
+tag can rest on. It also settles Kubernetes: its two held questions arrived
+through a Docker query and are a biased subset, not a count.
+
+**ADR-034, A FIFTH QUANTITY FAMILY, AND THE NEAR MISS WAS THE DANGER.**
+`CONTENT_REQUEST_VOLUME` would have fitted field for field. **A request is
+something a READER makes of a server; a question is something a PERSON publishes
+about being stuck.** Widening it would not have cost a FIELD its meaning, it
+would have cost the FAMILY its meaning. `PROBLEM_VOLUME`, `USER_PAIN_VOLUME` and
+`COMMUNITY_DEMAND` were available and all wrong: a family named for problems
+would make the PARKED relation look answered by a count. The new record kind
+supplies the temporal facts and NOT `EXACT_NUMERIC_VALUE`, because a question
+carries no measured value.
+
+**`PROBLEM_OR_NEED`, WITH `RECURRENCE_OR_FREQUENCY` REFUSED.** A published
+question is a person saying they are stuck. Recurrence would require knowing the
+questions concern the same problem, which is the relation Mission 1.27 parked, so
+claiming it would recreate `SAME_PROBLEM_FAMILY` under another name.
+
+**A CANONICAL SUBJECT REGISTRY MAY JOIN TWO VOCABULARIES; A CLASSIFIER MAY NOT.**
+Packets were source-scoped by construction. The registry maps EXACT rendered keys
+with a stated basis per entry, by equality and nothing else -- no distance, no
+token overlap, no stem, no synonym table, no threshold -- and records what it
+refuses: nothing unites Docker, Podman and Kubernetes, and `docker-compose` is
+not folded into `docker`.
+
+**NOTHING ELSE MOVED.** The sufficiency rule is unchanged at
+`opportunity-sufficiency@1.0.0`, `TREND_OR_CHANGE` still does not count, the new
+row is `ELIGIBLE_CONTEXT` with reliability NULL and `eligible_scoring` is still
+0, and independence is `UNKNOWN` on all seven rows -- two source families is
+diversity, not established independence. 33 new tests; six existing updated and
+four made STRICTER, including two Mission 1.28 totals that now assert the count
+agrees with the report's own row list.
+
+**Next: Mission 1.31, First Bounded Opportunity Synthesis V1** -- recommended by
+the NEXT-STEP RULE and not started
 
 ## 1.55 — 2026-09-02 (Sprint 1 / Mission 1.29)
 
@@ -1907,6 +1971,8 @@ Additionally authoritative:
 - docs/data/problem-family-human-reference-v1.md (added in 1.51)
 - docs/data/opportunity-engine-foundation-v1.md (added in 1.54)
 - docs/data/opportunity-synthesis-egress-governance-v1.md (added in 1.55)
+- docs/data/targeted-evidence-completion-v1.md (added in 1.56)
+- docs/data/canonical-subject-registry-v1.json (added in 1.56)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

@@ -31,6 +31,7 @@ from .base import (
     SignalExtractor,
     group_key_of,
 )
+from .community_question_volume import CommunityQuestionVolumeExtractor
 from .content_request_change import ContentRequestChangeExtractor
 from .lexical_frequency_change import LexicalFrequencyChangeExtractor
 from .lexical_frequency_contrast import LexicalFrequencyContrastExtractor
@@ -63,6 +64,10 @@ _PROCUREMENT = ProcurementValueContrastExtractor()
 # Mission 1.19, ADR-032. The first derivation over a `content_request_count`,
 # and the first in the CONTENT_REQUEST_VOLUME family.
 _CONTENT_REQUEST = ContentRequestChangeExtractor()
+# Mission 1.30, ADR-034. The first derivation over a `community_question` --
+# a record kind that had existed since Mission 1.18 with nothing able to read
+# it -- and the first in the COMMUNITY_QUESTION_VOLUME family.
+_QUESTION_VOLUME = CommunityQuestionVolumeExtractor()
 
 EXTRACTOR_REGISTRY: Mapping[str, SignalExtractor] = MappingProxyType(
     {
@@ -71,6 +76,7 @@ EXTRACTOR_REGISTRY: Mapping[str, SignalExtractor] = MappingProxyType(
         _LEXICAL_CHANGE.extractor_id: _LEXICAL_CHANGE,
         _PROCUREMENT.extractor_id: _PROCUREMENT,
         _CONTENT_REQUEST.extractor_id: _CONTENT_REQUEST,
+        _QUESTION_VOLUME.extractor_id: _QUESTION_VOLUME,
     }
 )
 

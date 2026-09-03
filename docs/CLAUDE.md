@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.56
-Last amended: 2026-09-02 (Sprint 1 / Mission 1.29)
+Version: 1.57
+Last amended: 2026-09-02 (Sprint 1 / Mission 1.30)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.57 | 2026-09-02 | **TARGETED_EVIDENCE_COMPLETION_SUCCESS: the first FORMABLE packet, and NOTHING was acquired to get it.** The `docker` packet is HYPOTHESIS_FORMABLE and AVAILABLE_FOR_EXTERNAL_SYNTHESIS on 7 rows across two source families with two counting dimensions. Counters 26 -> 27 for Signals, Claims, ClaimRevisions and Evidence; RawRecords and NormalizedRecords UNCHANGED at 148. **The minimum needed was zero**: Mission 1.20's `tagged=docker` retrieval provably did not truncate -- one page of size 100 returned 89, and a short page means the set was exhausted -- so a complete count already existed. **A truncated count is not merely imprecise, it is ANTI-INFORMATIVE**: capped at 30 it would report the bound and read as LARGER than a complete 88, which is why the extractor refuses instead of qualifying, and why Kubernetes was not acquired. **89 returned, 88 counted**: one question came back from a `tagged=docker` query carrying no `docker` tag, so what the query asked and what the site says are different facts and the site's answer is the one a claim can rest on. ADR-034 adds COMMUNITY_QUESTION_VOLUME: **a request is what a READER makes of a server, a question is what a PERSON publishes about being stuck**, and widening CONTENT_REQUEST_VOLUME would have cost the FAMILY its meaning. New dimension PROBLEM_OR_NEED, with RECURRENCE_OR_FREQUENCY deliberately refused because it needs the PARKED relation. A canonical subject registry joins two vocabularies by EXACT equality with a stated basis. Sufficiency rule unchanged, reliability unchanged, independence still UNKNOWN, 0 model calls |
 | 1.56 | 2026-09-02 | **OPPORTUNITY_SYNTHESIS_EGRESS_PARTIALLY_READY: three decisions recorded, and the fourth deliberately not.** `wikimedia-pageviews` **PERMITTED** on CC0 1.0, which waives database rights BY NAME and leaves no act for a licence to restrict -- and no attribution condition was written, because CC0 creates none. `world-bank` and `gdelt` **PERMITTED_WITH_CONDITIONS**. **8 of 9 packets are now egress-authorized and 0 became formable**, which is the design working: permission to send is not evidence. **CC BY 4.0 grants 'reproduce AND Share' as two acts**, so reproduction stands alone and a contracted processor is not 'the public' -- the transmission allowlist is CC-BY-4.0 ONLY, TIGHTER than acquisition's, because ODbL's Publicly Use is unanswered. **GDELT's grant runs to datasets it RELEASES**, so ngram aggregates are covered and third-party article text is a PROHIBITED representation; its citation obligation attaches to 'any use' and is live where CC BY's is not. **TED was assessed UNCLEAR and NOT recorded**: appending a review orphans the operator's HUMAN_CONFIRMATION acceptance, which no verifier may re-satisfy, so TED would have stopped being acquirable as a side effect of assessing egress -- §0 forbids exactly that. NOT_ASSESSED and UNCLEAR both refuse, so nothing operational was traded away. **A source whose approval rests on a human decision cannot be cheaply amended.** New refusal code UNRESOLVED, because an operator can close an open question and cannot argue with a decision. 0 model calls, 0.00 USD, counters unchanged, authorizable pairs 8 before and 8 after |
 | 1.55 | 2026-09-02 | **OUTCOME B: the Opportunity Engine works and the current evidence cannot support a hypothesis -- blocked TWICE, for unrelated reasons.** 26 Evidence rows inspected, **26 ELIGIBLE_CONTEXT and 0 ELIGIBLE_SCORING**, 9 packets grouped by source-native subject, **0 formable, 0 opportunities, 0 model calls, 0.00 USD**, counters unchanged. **The failure is symmetric and that is the finding**: the one packet with commercial dimensions (TED, CPV division 90) has ONE row, and the packets with six rows (Wikimedia Docker / Podman / Kubernetes) have ONE dimension. Evidence is deep where it is narrow and broad where it is shallow. **The second blocker is independent of the evidence**: `external_model_transmission` is NOT_ASSESSED for all four sources that HAVE Evidence and PERMITTED only for `stack-exchange`, which has none -- **the one source cleared to leave the deployment is the one with nothing to send**. Three signal types map to NO dimension on purpose; a GDELT term count measures what media PUBLISHED, which is producer behaviour and not audience behaviour. **TREND_OR_CHANGE cannot satisfy a diversity requirement** because every Signal here is a derivation and so every row carries change. Docker, Podman and Kubernetes stay three packets: merging them deterministically would not make it deterministic, it would make it unargued. Migration 0029 makes the hypothesis/validated distinction a CHECK constraint. No score, rank or weight exists |
 | 1.54 | 2026-09-02 | **EXPLORATORY_V2_NOT_PROMISING, and the classifier is PARKED.** Three V2 variants, one selected by a frozen rule, frozen, run once on the Mission 1.26 holdout: **0 provisional true SAME against 4 references** where the frozen criterion required 2. 88 evaluations, 1.53 USD, 0 retries, counters unchanged. **V1 was never failing to SEE the abstraction** -- its own rationale states the shared goal and then rejects it. **The most informative artifact was an empty field**: V2 required the model to name an abstraction covering both questions, and `shared_problem_if_any` came back empty 39 times in 40. More scaffolding made it MORE conservative. **A selection rule must defeat both collapses**, so the frozen rule demands a true positive and caps the SAME share. **A ceiling you might exceed is bounded, not argued away** -- output capped at 1200 tokens to make 3.00 USD real. **A split disjoint by PAIR is not disjoint by OBSERVATION**, so the brief's own suggested prompt example was a holdout leak and was refused. Production stays NOT_AUTHORISED |
@@ -303,6 +304,70 @@ positives in the scored split, which this 89-question corpus did not supply: one
 defensible SAME in 40 candidate pairs is a finding about the corpus, not about
 the classifier. **No synthetic positive may substitute** -- a constructed pair
 can test a parser and can never establish semantic accuracy against real data.
+
+### A count is complete or it is refused, and a subject may span two vocabularies
+
+Added in 1.57 (Mission 1.30, ADR-034, `targeted-evidence-completion-v1.md`,
+`canonical-subject-registry-v1.json`). **`TARGETED_EVIDENCE_COMPLETION_SUCCESS`**:
+the `docker` packet is HYPOTHESIS_FORMABLE and AVAILABLE_FOR_EXTERNAL_SYNTHESIS,
+on 7 Evidence rows across two source families carrying two counting dimensions.
+
+- **A TRUNCATED COUNT IS NOT MERELY IMPRECISE, IT IS ANTI-INFORMATIVE.** If a
+  retrieval capped at 100 returns 100, the magnitude is OUR BOUND and says
+  nothing about the world -- and it reads as a LARGER number than a complete
+  count of 88. So completeness is a PRECONDITION and never a caveat: the
+  extractor refuses rather than qualifying, which is ADR-021's rule applied to a
+  failure mode counting introduces and change never had.
+- **A short page is the proof.** Mission 1.20 ran one page with `page_size = 100`
+  and got 89, so the result set was exhausted. The caller supplies the page size
+  as a PARAMETER and the extractor does the reasoning: a caller handing over a
+  number is doing something a caller handing over a verdict is not, and the
+  number enters the derivation fingerprint.
+- **What the query asked and what the source says are different facts.** One of
+  the 89 records came back from `tagged=docker` carrying no `docker` tag at all.
+  The count is of questions **carrying the tag** (88), because the Claim says
+  *carrying the site's own tag* and the tag list is the site's own vocabulary. It
+  also means Kubernetes cannot borrow that evidence: its two held questions
+  arrived through a Docker query and are a biased subset, not a count.
+- **The minimum needed was ZERO, and that is a result rather than a shortcut.**
+  §7 says collect the minimum and prefer fewer. A complete set already existed
+  for one subject, so no acquisition happened -- RawRecords and NormalizedRecords
+  are unchanged at 148 while Signals, Claims and Evidence went 26 -> 27.
+- **A fifth quantity family, because the near miss was the danger** (ADR-034).
+  `CONTENT_REQUEST_VOLUME` would have fitted field for field. **A request is
+  something a READER makes of a server; a question is something a PERSON
+  publishes about being stuck.** Widening it would not have cost a FIELD its
+  meaning, it would have cost the FAMILY its meaning, and every consumer
+  branching exhaustively on it would have treated the two alike without deciding
+  to. `PROBLEM_VOLUME`, `USER_PAIN_VOLUME` and `COMMUNITY_DEMAND` were available
+  names and all are wrong: a family named for problems would make the PARKED
+  relation look answered by a count.
+- **The new kind supplies the temporal facts and NOT `EXACT_NUMERIC_VALUE`.** A
+  question carries no measured value, so `_TEMPORAL_KINDS` is separate from
+  `_COUNTING_KINDS` -- the same subset-becoming-equality trap Mission 1.19
+  avoided one family earlier.
+- **`PROBLEM_OR_NEED`, and `RECURRENCE_OR_FREQUENCY` REFUSED.** A published
+  question is a person saying they are stuck, which is what the first dimension
+  asks. The second is the mapping a reader most wants and it needs to know the
+  questions concern the same problem -- the PARKED relation -- so claiming it
+  would recreate `SAME_PROBLEM_FAMILY` under another name.
+- **A canonical subject registry may join two vocabularies; a classifier may
+  not.** `SubjectKey` starts with the source id, so packets were source-scoped by
+  construction. The registry maps EXACT rendered keys with a stated basis per
+  entry, matched by equality and nothing else -- no distance, no token overlap,
+  no stem, no synonym table, no threshold. **It asserts that two IDENTIFIERS name
+  the same SUBJECT**, decided once by a person reading two pages; it does not
+  assert that two OBSERVATIONS express the same problem. It records what it
+  refuses too: nothing unites Docker, Podman and Kubernetes, and `docker-compose`
+  is not folded into `docker`.
+- **Nothing else moved.** The sufficiency rule is still
+  `opportunity-sufficiency@1.0.0`, `TREND_OR_CHANGE` still does not count, the
+  new row is `ELIGIBLE_CONTEXT` with reliability NULL, `eligible_scoring` is
+  still 0, and independence is still `UNKNOWN` on all seven rows -- **two source
+  families is diversity, not established independence.**
+
+**Formable is not scoring-ready and not an Opportunity.** 0 Opportunities, 0
+model calls, 0.00 USD, and problem-family inference stays PARKED.
 
 ### Opportunity synthesis egress — three sources open, one unrecorded
 

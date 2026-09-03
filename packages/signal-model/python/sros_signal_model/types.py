@@ -19,6 +19,7 @@ from types import MappingProxyType
 from sros_contracts import SignalQuantityFamily
 
 from .facts import (
+    COMMUNITY_QUESTION,
     CONTENT_REQUEST_COUNT,
     LEXICAL_FREQUENCY_OBSERVATION,
     NUMERIC_OBSERVATION,
@@ -101,6 +102,25 @@ SIGNAL_TYPES: Mapping[str, SignalTypeSpec] = MappingProxyType(
                 "customers, interest, demand, adoption, popularity, a trend or a market."
             ),
         ),
+        # Mission 1.30, ADR-034.
+        "community_question_volume": SignalTypeSpec(
+            id="community_question_volume",
+            family=SignalQuantityFamily.COMMUNITY_QUESTION_VOLUME,
+            summary=(
+                "How many public questions carrying one tag from a community site's own "
+                "vocabulary were created on that site inside one bounded window, counted "
+                "over records this deployment holds. NON-TEMPORAL as a relation: nothing "
+                "is ordered, compared across periods or read as a trend -- it is one "
+                "count over one window, and a second window would be a second signal "
+                "rather than a change. Complete only where the retrieval demonstrably "
+                "did not truncate, which the derivation must establish and refuses "
+                "without. Says people published that many questions filed under that "
+                "tag; says nothing about how many PEOPLE (author identity is never "
+                "acquired), nothing about whether the questions share a problem (the "
+                "relation Mission 1.27 parked), and nothing about severity, recurrence, "
+                "difficulty, demand, adoption, a market or willingness to pay."
+            ),
+        ),
         "numeric_period_change": SignalTypeSpec(
             id="numeric_period_change",
             family=SignalQuantityFamily.MEASURED_SERIES,
@@ -126,6 +146,10 @@ _FAMILY_RECORD_KIND: Mapping[SignalQuantityFamily, str] = MappingProxyType(
         # Mission 1.19, ADR-032. A content request count carries an item, a
         # platform and a requester class, and no metric and no geography.
         SignalQuantityFamily.CONTENT_REQUEST_VOLUME: CONTENT_REQUEST_COUNT,
+        # Mission 1.30, ADR-034. A question volume reads community questions,
+        # which carry a site tag list and a creation instant and no measured
+        # value at all.
+        SignalQuantityFamily.COMMUNITY_QUESTION_VOLUME: COMMUNITY_QUESTION,
     }
 )
 

@@ -81,6 +81,13 @@ from .packet import (
     OpportunityEvidencePacket,
     build_packet,
 )
+from .subjects import (
+    SUBJECT_REGISTRY_VERSION,
+    CanonicalSubject,
+    CanonicalSubjectRegistry,
+    SubjectIdentifier,
+    load_subject_registry,
+)
 from .sufficiency import (
     SUFFICIENCY_PROCEDURE_VERSION,
     SUFFICIENCY_V1,
@@ -117,10 +124,13 @@ __all__ = [
     "PROHIBITED_REPRESENTATIONS",
     "SIGNAL_DIMENSION_MAP",
     "SUFFICIENCY_PROCEDURE_VERSION",
+    "SUBJECT_REGISTRY_VERSION",
     "SUFFICIENCY_V1",
     "TRANSMISSION_REPRESENTATION_VERSION",
     "VALIDATION_WORDS",
     "CandidateGroup",
+    "CanonicalSubject",
+    "CanonicalSubjectRegistry",
     "DimensionDefinition",
     "EligibilityDecision",
     "EvidenceDimension",
@@ -139,6 +149,7 @@ __all__ = [
     "RepresentationViolation",
     "SignalDimensionMapping",
     "SourcePolicyStanding",
+    "SubjectIdentifier",
     "SubjectKey",
     "SufficiencyResult",
     "SufficiencyRule",
@@ -153,6 +164,7 @@ __all__ = [
     "counting_dimensions",
     "evaluate",
     "group_by_subject",
+    "load_subject_registry",
     "map_signal_type",
     "serialize_packet_for_model",
     "subject_key",

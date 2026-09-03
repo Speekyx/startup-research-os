@@ -28,6 +28,7 @@ from sros_contracts import (
 )
 
 __all__ = [
+    "COMMUNITY_QUESTION",
     "CONTENT_REQUEST_COUNT",
     "FACT_RULES",
     "LEXICAL_FREQUENCY_OBSERVATION",
@@ -48,6 +49,9 @@ LEXICAL_FREQUENCY_OBSERVATION = "lexical_frequency_observation"
 PROCUREMENT_NOTICE = "procurement_notice"
 # The fifth kind and the fourth reachable one, added in Mission 1.19 (ADR-032).
 CONTENT_REQUEST_COUNT = "content_request_count"
+# The fourth kind, added in Mission 1.18 and reachable by a derivation since
+# Mission 1.30 (ADR-034).
+COMMUNITY_QUESTION = "community_question"
 
 
 @dataclass(frozen=True)
@@ -71,6 +75,14 @@ _BOTH_KINDS = frozenset({NUMERIC_OBSERVATION, LEXICAL_FREQUENCY_OBSERVATION})
 # observation supplies -- it has no geography and no term -- and a single widened
 # constant would have granted it those by omission.
 _COUNTING_KINDS = frozenset({*_BOTH_KINDS, CONTENT_REQUEST_COUNT})
+# Mission 1.30, ADR-034. The kinds that carry a placeable moment. Named
+# separately AGAIN, and for the same reason Mission 1.19 named `_COUNTING_KINDS`
+# separately: a community question supplies a creation instant and supplies NO
+# numeric value at all -- it is a question, not a measurement -- so folding it
+# into `_COUNTING_KINDS` would have granted it `EXACT_NUMERIC_VALUE` by
+# omission. The set of facts a kind supplies is a strict subset relationship,
+# and a widened constant is how a subset silently becomes an equality.
+_TEMPORAL_KINDS = frozenset({*_COUNTING_KINDS, COMMUNITY_QUESTION})
 
 FACT_RULES: Mapping[Fact, FactRule] = MappingProxyType(
     {
@@ -84,20 +96,20 @@ FACT_RULES: Mapping[Fact, FactRule] = MappingProxyType(
         ),
         # Needs no timezone. String equality over a value the source published.
         Fact.SOURCE_PERIOD_LABEL: FactRule(
-            supplied_by=_COUNTING_KINDS,
+            supplied_by=_TEMPORAL_KINDS,
             withheld_by=frozenset({Reason.PERIOD_NOT_SUPPORTED}),
         ),
         # ORDER and GLOBAL INSTANT are different questions. This one is withheld
         # by an unestablished timezone ONLY because no source is certified below;
         # a certification would grant it without anyone asserting a zone (H-32).
         Fact.SOURCE_RELATIVE_ORDER: FactRule(
-            supplied_by=_COUNTING_KINDS,
+            supplied_by=_TEMPORAL_KINDS,
             withheld_by=frozenset(
                 {Reason.PERIOD_NOT_SUPPORTED, Reason.PERIOD_TIMEZONE_NOT_ESTABLISHED}
             ),
         ),
         Fact.COMPARABLE_INSTANT: FactRule(
-            supplied_by=_COUNTING_KINDS,
+            supplied_by=_TEMPORAL_KINDS,
             withheld_by=frozenset(
                 {Reason.PERIOD_NOT_SUPPORTED, Reason.PERIOD_TIMEZONE_NOT_ESTABLISHED}
             ),
