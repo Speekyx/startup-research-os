@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.71
+Version: 1.72
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-04 (Sprint 1 / Mission 1.42)
+Last amended: 2026-09-04 (Sprint 1 / Mission 1.42a)
 
 ---
 
@@ -13,6 +13,39 @@ Last amended: 2026-09-04 (Sprint 1 / Mission 1.42)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.72 — 2026-09-04 (Sprint 1 / Mission 1.42a)
+
+**`HUMAN_RELIABILITY_RUBRIC_READY`**, with
+`RELIABILITY_RUBRIC_PROVENANCE_MODEL_GAP` recorded beside it.
+`human-reliability-assessment-rubric@1.0.0` supplies the step the architecture
+never defined: from documented facts to an accountable human judgement, or to a
+reasoned refusal to make one.
+
+Five dimensions accepted, six rejected. The rejections carry the boundary:
+measurement-to-proposition fit is `directness` and became a hard stop rather than
+a dimension; a separate reviewer-confidence field was refused because the
+dimension profile already answers it.
+
+UNKNOWN is not LOW structurally — `NOT_ESTABLISHED` and `CONTRADICTED` carry no
+ordinal rank — and the module contains no arithmetic operator of any kind.
+
+Scale recommendation: `KEEP_NUMERIC_FIELD_BUT_REQUIRE_ORDINAL_REVIEW_PROFILE_FIRST`.
+Two anchors defined by their role in `q = min(components)`, no intermediate
+anchors, no migration, and both historical assessments unchanged and
+`PARTIALLY_REPRESENTABLE`.
+
+The TED convergent worked example is prepared with every judgement field blank.
+No reliability was assigned, suggested or ranged.
+
+Counters: all unchanged. 0 assessments, 0 basis rows, 0 model calls, 0
+acquisitions.
+
+New: `docs/data/human-reliability-assessment-rubric-v1.md` and `.json`,
+`packages/evidence-reliability/python/sros_evidence_reliability/rubric.py`,
+`infrastructure/scripts/render_reliability_rubric.py` with a CI `--check`.
+
+Report: `docs/architecture/mission-1.42a-report.md`.
 
 ## 1.71 — 2026-09-04 (Sprint 1 / Mission 1.42)
 
@@ -2500,6 +2533,7 @@ Additionally authoritative:
 - docs/data/proposition-convergence-contract-v1.md (added in 1.68)
 - docs/data/second-pilot-ted-category-selection-v1.json (added in 1.69)
 - docs/data/second-pilot-convergent-reliability-review-packet-v1.md (added in 1.71)
+- docs/data/human-reliability-assessment-rubric-v1.md (added in 1.72)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

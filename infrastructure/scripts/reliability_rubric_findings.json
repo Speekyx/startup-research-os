@@ -1,0 +1,142 @@
+{
+  "$comment": "Mission 1.42a authored input. The RUBRIC itself is code (sros_evidence_reliability.rubric); this file holds the two things that are readings of existing material rather than rubric structure: how the two historical assessments map onto the dimensions, and the factual findings for the TED worked example. Every judgement field is absent by construction -- there is no key here a value could go in.",
+  "historical_compatibility": {
+    "$comment": "§11, §24. STRUCTURAL only. Neither assessment is re-reviewed, re-scored, changed or used to derive an anchor. The question answered is narrow: can the rationale and stated limitation the reviewer actually wrote be expressed under the new rubric?",
+    "assessments": [
+      {
+        "scope_proposition_kind": "source_reported_procurement_value_contrast",
+        "reliability_unchanged": true,
+        "dimensions_addressed": [
+          {
+            "dimension_id": "MEASUREMENT_DEFINITION",
+            "evidence_in_the_original_text": "the rationale says the structured meaning and publication process of the amount are documented, and the limitation names that it includes options and renewals that may never be exercised"
+          },
+          {
+            "dimension_id": "SOURCE_SIDE_VALIDATION",
+            "evidence_in_the_original_text": "the rationale says the amount is buyer-supplied rather than independently verified, and the limitation repeats that the publisher does not verify it for economic accuracy"
+          },
+          {
+            "dimension_id": "COMPLETENESS_AND_MISSINGNESS",
+            "evidence_in_the_original_text": "the limitation says some result values may lawfully be withheld and that the published subset may therefore be incomplete in a non-random way, and identifies that a maximum-minus-minimum contrast is particularly sensitive to missing extremes"
+          }
+        ],
+        "dimensions_not_addressed": [
+          "HISTORICAL_MUTABILITY",
+          "SOURCE_SIDE_CHECKABILITY"
+        ],
+        "rubric_provenance_recordable": false,
+        "verdict": "PARTIALLY_REPRESENTABLE",
+        "note": "Three of five dimensions are recoverable from what the reviewer wrote, in their own words and without interpretation. Two were not considered, which is not a criticism of the review: no rubric existed to ask about them. This is exactly the shape the rubric is meant to remove."
+      },
+      {
+        "scope_proposition_kind": "platform_counted_content_request_change",
+        "reliability_unchanged": true,
+        "dimensions_addressed": [
+          {
+            "dimension_id": "MEASUREMENT_DEFINITION",
+            "evidence_in_the_original_text": "the rationale says the counting rules explicitly define which requests are included and excluded, and that the measurement has a bounded meaning for the proposition"
+          },
+          {
+            "dimension_id": "SOURCE_SIDE_VALIDATION",
+            "evidence_in_the_original_text": "the rationale says automated traffic is classified using user-agent and custom-pattern detection, and the limitation says that detection is heuristic"
+          },
+          {
+            "dimension_id": "HISTORICAL_MUTABILITY",
+            "evidence_in_the_original_text": "the limitation says the retrieved documentation does not establish a complete revision or backfill policy, and that historical measurements may therefore be affected by classification changes or later revisions"
+          },
+          {
+            "dimension_id": "COMPLETENESS_AND_MISSINGNESS",
+            "evidence_in_the_original_text": "the rationale names the explicit include and exclude rules as what bounds the measurement"
+          }
+        ],
+        "dimensions_not_addressed": [
+          "SOURCE_SIDE_CHECKABILITY"
+        ],
+        "rubric_provenance_recordable": false,
+        "verdict": "PARTIALLY_REPRESENTABLE",
+        "note": "Four of five, and the fourth is the interesting one. HISTORICAL_MUTABILITY was derived for this rubric from the open question in the TED convergent packet, and this reviewer had already written it down unprompted for a different source months earlier. That is corroboration that the dimension is real rather than invented -- bounded by the fact that both reviews have the same reviewer, so it is not independent in the strong sense."
+      }
+    ],
+    "combined_finding": "HISTORICAL_REVIEW_MISSING_RUBRIC_FIELDS",
+    "combined_note": "Both reviews are PARTIALLY_REPRESENTABLE and neither can record which procedure produced it, because no column exists for that. Nothing was rewritten: the two values, their rationales, their limitations, their versions and their basis rows are untouched, and a review performed before a rubric existed is not made invalid by the rubric arriving."
+  },
+  "ted_worked_example": {
+    "$comment": "§20-§23. Factual findings only, carried over from the Mission 1.42 packet. No dimension state is assigned here except NOT_ESTABLISHED, which is a statement about what this review's basis CONTAINS rather than a judgement about sufficiency.",
+    "dimension_findings": [
+      {
+        "dimension_id": "MEASUREMENT_DEFINITION",
+        "facts": [
+          "The eForms SDK 1.15.1 business-term definition defines BT-161 as the value of all contracts awarded in the notice, including options and renewals.",
+          "The field repository records BT-161 at notice level, non-repeatable, with a companion currency field.",
+          "The proposition names a source-native classification division, and the classification is assigned by the contracting authority to its own contract."
+        ],
+        "software_assigned_state": null
+      },
+      {
+        "dimension_id": "SOURCE_SIDE_VALIDATION",
+        "facts": [
+          "Sixty business rules in the SDK govern where BT-161 may appear.",
+          "All sixty are presence, absence or notice-type constraints; none concerns whether the stated amount is correct.",
+          "The amount is supplied by the contracting authority."
+        ],
+        "software_assigned_state": null
+      },
+      {
+        "dimension_id": "HISTORICAL_MUTABILITY",
+        "facts": [
+          "No document in this review's basis states whether a published notice may later be corrected, amended or superseded in this resource.",
+          "No document in this review's basis states whether an assigned classification code may change after publication."
+        ],
+        "software_assigned_state": "NOT_ESTABLISHED"
+      },
+      {
+        "dimension_id": "COMPLETENESS_AND_MISSINGNESS",
+        "facts": [
+          "BT-195 to BT-198 document that a result value may be lawfully withheld, with a justification and a later publication date.",
+          "How often notices in the reviewed classification withhold their result values is not measurable from the source's own documentation.",
+          "Under the convergent existential proposition, withholding cannot falsify the claim, which is a different relationship from the one it has to a claim about a named cohort."
+        ],
+        "software_assigned_state": null
+      },
+      {
+        "dimension_id": "SOURCE_SIDE_CHECKABILITY",
+        "facts": [
+          "The individual notices behind each witness are recoverable through SROS lineage and are addressable at the source.",
+          "No document in this review's basis states how long a published notice remains retrievable."
+        ],
+        "software_assigned_state": null
+      }
+    ],
+    "material_unknown_candidates": [
+      {
+        "dimension_id": "HISTORICAL_MUTABILITY",
+        "what_is_not_established": "whether the source permits a published BT-161 value to be corrected, and whether a corrected notice supersedes an earlier one in the reviewed resource"
+      },
+      {
+        "dimension_id": "MEASUREMENT_DEFINITION",
+        "what_is_not_established": "whether an assigned classification code may change after publication"
+      },
+      {
+        "dimension_id": "COMPLETENESS_AND_MISSINGNESS",
+        "what_is_not_established": "how often notices in the reviewed classification withhold their result values"
+      },
+      {
+        "dimension_id": "SOURCE_SIDE_CHECKABILITY",
+        "what_is_not_established": "how long a published notice remains retrievable at the source"
+      }
+    ],
+    "not_a_rubric_input": [
+      "Engineering validation. The currency and amount-scope cohort guards, the semantic reproduction of the historical division-90 Signal, and the determinism of the convergence contract establish that the implementation does what its specification says, and nothing about how dependable the source's published amounts are.",
+      "Observation overlap. DISJOINT witnesses are temporally separated, not epistemically independent, and independence is a different Evidence component.",
+      "The existing assessment at another proposition kind. It belongs to a different scope, it is not a baseline, and it may not be copied."
+    ]
+  },
+  "provenance_gap": {
+    "$comment": "§25. Recorded rather than repaired: the mission is not authorised to force a schema change it does not need for its own correctness.",
+    "finding": "RELIABILITY_RUBRIC_PROVENANCE_MODEL_GAP",
+    "what_is_missing": "epistemic.reliability_assessments has no column naming the review procedure that produced a value. A future assessment therefore cannot say, in queryable form, that it was made under this rubric at this version.",
+    "why_the_basis_table_is_not_the_answer": "A reliability basis row names a retrieved document ABOUT THE MEASUREMENT. The rubric is the procedure the reviewer followed, not evidence about the source, and filing it as a basis row would inflate the documentary basis of every future assessment with a document that says nothing about the publisher.",
+    "narrowest_repair": "Two nullable TEXT columns, review_rubric_id and review_rubric_version, written only by assessments created after adoption and never backfilled. Nullable because the two existing rows legitimately predate the rubric, and backfilling them would fabricate a provenance that does not exist.",
+    "materiality": "It restricts rather than breaks reproducibility. A completed worksheet plus the rationale still lets a second reviewer follow the first one's reasoning, which is what §17 requires; what cannot be done today is ASK the database which assessments were made under which procedure."
+  }
+}
