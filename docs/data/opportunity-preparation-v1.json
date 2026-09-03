@@ -7,15 +7,15 @@
     "dimension_taxonomy": "opportunity-evidence-dimensions@1.0.0",
     "dimension_map": "signal-type-dimension-map@1.0.0",
     "eligibility": "opportunity-input-eligibility@1.0.0",
-    "grouping": "source-native-subject-grouping@1.1.0",
+    "grouping": "source-native-subject-grouping@1.2.0",
     "packet": "opportunity-evidence-packet@1.0.0",
     "sufficiency": "opportunity-sufficiency@1.0.0",
     "external_synthesis_gate": "opportunity-external-synthesis-gate@1.0.0"
   },
   "sufficiency_rule": "Pre-registered for Mission 1.28. A packet is HYPOTHESIS_FORMABLE only if it holds at least 2 Evidence rows that are ELIGIBLE_CONTEXT or ELIGIBLE_SCORING, and those rows together carry at least 2 distinct counting dimensions, where TREND_OR_CHANGE does not count because every Evidence row in this repository carries it by construction.\n\nFormable means a question can be asked without manufacturing its answer. It is NOT scoring-ready, NOT validated, and NOT a finding that an opportunity exists. A packet whose rows are all NON_SCORABLE can be FORMABLE and can still contribute nothing to any score.\n\nA packet holding rows nobody has assessed is HYPOTHESIS_REQUIRES_REVIEW rather than insufficient: unanswered is not the same as answered no, and merging them would let an open question look like a settled one.",
   "totals": {
-    "evidence_rows_inspected": 27,
-    "eligible_context": 27,
+    "evidence_rows_inspected": 28,
+    "eligible_context": 28,
     "eligible_scoring": 0,
     "requires_review": 0,
     "ineligible": 0,
@@ -37,7 +37,7 @@
   },
   "source_family_composition": {
     "economic_data": 4,
-    "forum": 1,
+    "forum": 2,
     "knowledge": 18,
     "news": 3,
     "public_procurement": 1
@@ -116,6 +116,24 @@
       "missing_factors": [
         "reliability",
         "observed_at"
+      ]
+    },
+    {
+      "evidence_id": "17735944-da2f-4469-837f-8f3fe71922aa",
+      "source_id": "stack-exchange",
+      "source_family": "forum",
+      "signal_type_id": "community_question_without_accepted_answer_volume",
+      "dimensions": [],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at",
+        "evidence_dimension"
       ]
     },
     {
@@ -572,9 +590,9 @@
   ],
   "packets": [
     {
-      "packet_id": "c25451c569909207357d0af19698e4737b7c85961fcf393bf632ba8b8242110e",
+      "packet_id": "29749d5984be679b3586f2566d1fff36b93910e730704b2bc9d02bffe53d6d36",
       "subject": "subject:docker",
-      "size": 7,
+      "size": 8,
       "canonical_subject_id": "docker",
       "source_ids": [
         "stack-exchange",
@@ -586,6 +604,7 @@
       ],
       "signal_type_ids": [
         "community_question_volume",
+        "community_question_without_accepted_answer_volume",
         "content_request_change"
       ],
       "dimensions": [
@@ -598,16 +617,16 @@
         "PROBLEM_OR_NEED"
       ],
       "eligibility_counts": {
-        "ELIGIBLE_CONTEXT": 7
+        "ELIGIBLE_CONTEXT": 8
       },
-      "independence": "independence is UNKNOWN for 7 of 7 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "independence": "independence is UNKNOWN for 8 of 8 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
       "scoring_eligible": 0,
       "sufficiency": {
         "status": "HYPOTHESIS_FORMABLE",
         "reasons": [
-          "7 eligible rows carrying 2 counting dimensions. 0 of them are scoring-eligible, so this packet is formable and not scoring-ready."
+          "8 eligible rows carrying 2 counting dimensions. 0 of them are scoring-eligible, so this packet is formable and not scoring-ready."
         ],
-        "eligible_rows": 7,
+        "eligible_rows": 8,
         "distinct_counting_dimensions": 2,
         "distinct_dimensions_literal": 3,
         "scoring_ready": false
@@ -628,7 +647,7 @@
       }
     },
     {
-      "packet_id": "2fd041e7794b060c28a22263956a52ea38ba506775852278384ff1cfb84684e8",
+      "packet_id": "b9f384f61fa5642485c0362e60346f180b95286fd217d07413ff952589c320ea",
       "subject": "gdelt:lexical-term:ENGLISH|climate",
       "size": 1,
       "canonical_subject_id": null,
@@ -671,7 +690,7 @@
       }
     },
     {
-      "packet_id": "27ba6e3a2116abbb9cb85f6a59bcbac84b2c17d065de9eb9a1b13b13a981a6f0",
+      "packet_id": "5294d37515e840239603db4b692376d8eefe3d08ee69f932c157003b1aece1c0",
       "subject": "gdelt:lexical-term:ENGLISH|climate|weather",
       "size": 1,
       "canonical_subject_id": null,
@@ -714,7 +733,7 @@
       }
     },
     {
-      "packet_id": "f9b973610600881acf89e1bf1f9156691b520a693a3ef7d89be3bff2ba5c4959",
+      "packet_id": "bd61b411a9facdcfe555fc527bf8ff09342f5f714663372d3ed3424fd3428db0",
       "subject": "gdelt:lexical-term:ENGLISH|weather",
       "size": 1,
       "canonical_subject_id": null,
@@ -757,7 +776,7 @@
       }
     },
     {
-      "packet_id": "05184eed14b50fd4f3a3a350428894a881e4d87cd5ec02a6164d8aefaeae98d3",
+      "packet_id": "ad67e4bf289a312faa59e1862497b365998cf5ee657e9aa2a0dba984f8bfd4d0",
       "subject": "subject:kubernetes",
       "size": 6,
       "canonical_subject_id": "kubernetes",
@@ -804,7 +823,7 @@
       }
     },
     {
-      "packet_id": "94d41dcb033246464fec94f2066812eb1de1bfdefe99dcc15dfd942a28f76f8f",
+      "packet_id": "3e98c80390ee22a67c07e43ee3af224ad5a09fc17da1ef6513ca86ca4bf5f83f",
       "subject": "subject:podman",
       "size": 6,
       "canonical_subject_id": "podman",
@@ -851,7 +870,7 @@
       }
     },
     {
-      "packet_id": "b97deef05a0c92a966752491f65cf99e1b19255dc622db64ee761b264607bba2",
+      "packet_id": "dfada0440e92e218389711cb0339ae375965ebcaa97c69f9506aeea380a2803e",
       "subject": "ted-eu:CPV-division:90",
       "size": 1,
       "canonical_subject_id": null,
@@ -903,7 +922,7 @@
       }
     },
     {
-      "packet_id": "41aa06016452a133b27e95ec282d89e9d6e0e9ea72f531798e0ee61233380ed6",
+      "packet_id": "5b0675ad3ad3e800bdb955dab187a38077dc1847afc2443e0793c7927e957d6f",
       "subject": "world-bank:metric-geography:SP.POP.TOTL|DE",
       "size": 2,
       "canonical_subject_id": null,
@@ -945,7 +964,7 @@
       }
     },
     {
-      "packet_id": "79ec586ccce6427d3b548450f07ee981fcd31f2fae6574b0aa6eda597563242d",
+      "packet_id": "f9b9fffa5a35f7ceca9c33ed6b8d74c50694f61ce08856b4f1a35f28396db1ab",
       "subject": "world-bank:metric-geography:SP.POP.TOTL|FR",
       "size": 2,
       "canonical_subject_id": null,

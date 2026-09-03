@@ -15,6 +15,7 @@ from __future__ import annotations
 import uuid
 
 import pytest
+from sros_nlp.interpreters import INTERPRETER_VERSION
 
 from .conftest import OTHER_SESSION, PROBE_SESSION, needs_postgres
 from .test_signal_persistence import _seed_numeric
@@ -102,7 +103,11 @@ class TestPersistence:
             # Opportunity exists.
             assert claim[3] is None
             assert claim[4] == INTERPRETER
-            assert claim[5] == "1.3.0"
+            # The interpreter version as PERSISTED. Against the module
+            # constant, because provenance needs the claim to record which
+            # interpreter phrased it, and that number moves whenever a
+            # template is added -- Mission 1.32's seventh took it to 1.4.1.
+            assert claim[5] == INTERPRETER_VERSION
             assert claim[6] == "DETERMINISTIC"
             # A DETERMINISTIC interpretation names no model, and the CHECK
             # refuses one that does.

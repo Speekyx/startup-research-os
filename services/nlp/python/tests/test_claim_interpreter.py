@@ -34,6 +34,7 @@ from sros_contracts import (
     SignalDirection,
 )
 from sros_nlp.interpreters import (
+    INTERPRETER_VERSION,
     InterpretationRequest,
     ObservedSignalRestatementInterpreter,
     SignalLineage,
@@ -226,7 +227,11 @@ class TestStructurallyObserved:
         assert interpretation.model_version is None
         assert interpretation.prompt_version is None
         assert interpretation.interpreter_id == "observed-signal-restatement"
-        assert interpretation.interpreter_version == "1.3.0"
+        # Against the module constant, not a literal. This asserts that the
+        # claim records WHICH interpreter phrased it, which is what provenance
+        # needs; the number itself moves every time a template is added, and
+        # Mission 1.32's seventh template moved it from 1.3.0 to 1.4.1.
+        assert interpretation.interpreter_version == INTERPRETER_VERSION
 
     def test_interpretation_confidence_is_one(self):
         """It says the template read the Signal correctly. Nothing else."""
@@ -763,7 +768,7 @@ class TestTheProcurementRestatement:
         assert draft.origin is ClaimOrigin.DETERMINISTIC_EXTRACTION
         assert draft.temporality is ClaimTemporality.EVERGREEN
         assert draft.interpretation.kind is ClaimInterpretationKind.DETERMINISTIC
-        assert draft.interpretation.interpreter_version == "1.3.0"
+        assert draft.interpretation.interpreter_version == INTERPRETER_VERSION
         assert draft.interpretation.model_version is None
         assert draft.interpretation.prompt_version is None
 
@@ -1078,3 +1083,160 @@ class TestTheExistingThreeTemplatesDidNotMove:
             'language label "ENGLISH", the term "climate" appeared 11 more times in source '
             'bucket "20260830190000" than in the preceding source bucket "20260830184500".'
         )
+
+
+# ============================================ Mission 1.32: acceptance, restated
+
+_ACCEPTANCE_PAYLOAD = {
+    "record_kind": "community_question",
+    "tags": {"scheme": "stack-exchange-tags:stackoverflow", "values": ["docker"]},
+    "answers": {
+        "count": 0,
+        "has_accepted_answer": False,
+        "accepted_answer_id": None,
+        "accepted_answer_semantics": (
+            "the asker marked an answer accepted; not a statement that the problem is "
+            "objectively resolved"
+        ),
+    },
+    "question": {"id": "78086323", "site": "stackoverflow", "title": "a title"},
+}
+
+
+def acceptance(**overrides) -> SignalView:
+    """The Mission 1.32 Signal, shaped as the real one is."""
+    labels = overrides.pop("period_labels", ("1709280363", "1710000000"))
+    kwargs = {
+        "signal_id": "sig-acceptance",
+        "signal_type_id": "community_question_without_accepted_answer_volume",
+        "source_ids": ("stack-exchange",),
+        "magnitude": Decimal("54"),
+        "magnitude_kind": "OBSERVATION_COUNT",
+        "magnitude_unit": None,
+        "magnitude_unit_state": "DIMENSIONLESS",
+        "direction": SignalDirection.NOT_APPLICABLE,
+        "derivation_confidence": 1.0,
+        "extractor_id": "community-question-without-accepted-answer",
+        "extractor_version": "1.0.0",
+        "scope": {
+            "source_ids": ["stack-exchange"],
+            "community_sites": ["stackoverflow"],
+            "community_tags": ["docker"],
+            "community_tag_scheme": "stack-exchange-tags:stackoverflow",
+        },
+        "source_name": "Stack Exchange API",
+        "temporal_basis": "NONE",
+        "temporal_window": {"period_labels": list(labels), "resolution": "INSTANT"},
+        "inputs": tuple(
+            SignalLineage(
+                normalized_record_id=f"rec-a{i}",
+                raw_record_id=f"raw-a{i}",
+                source_id="stack-exchange",
+                observation_key=f"stack-exchange|stackoverflow|{label}",
+                record_kind_id="community_question",
+                period_label=label,
+                role="CONTRIBUTED",
+                payload=_ACCEPTANCE_PAYLOAD,
+            )
+            for i, label in enumerate(labels)
+        ),
+    }
+    kwargs.update(overrides)
+    return SignalView(**kwargs)
+
+
+class TestTheAcceptanceRestatement:
+    """§4 and §5. The verb phrase is the whole template."""
+
+    def test_it_says_the_whole_bounded_proposition(self) -> None:
+        assert _statement(acceptance()) == (
+            'Stack Exchange API published 54 questions carrying its own tag "docker" on '
+            '"stackoverflow", created between source timestamps "1709280363" and '
+            '"1710000000", that had no answer marked accepted by their asker at the '
+            "source state observed."
+        )
+
+    def test_it_asserts_a_set_and_never_a_share_of_one(self) -> None:
+        """The correction Mission 1.32 made mid-flight. *"Of the questions ...,
+        54 had no accepted answer"* is true and still wrong: it is shaped like a
+        numerator, and the denominator a reader would supply is not the one the
+        window describes."""
+        statement = _statement(acceptance())
+        assert not statement.startswith("Of the")
+        for rate_word in (" of the questions", "percent", "%", "rate", "share", "out of"):
+            assert rate_word not in statement.lower(), rate_word
+
+    def test_the_window_is_attached_to_the_counted_questions(self) -> None:
+        """ "created between" binds the timestamps to the questions counted, not
+        to the acceptance state, which was read later."""
+        assert "created between source timestamps" in _statement(acceptance())
+
+    def test_the_acceptance_state_is_dated_to_the_observation_not_the_window(self) -> None:
+        statement = _statement(acceptance())
+        assert "at the source state observed" in statement
+        assert "during" not in statement
+
+    def test_it_never_says_unanswered_unsolved_or_open(self) -> None:
+        """Every shorter wording imports a claim about the problem."""
+        statement = _statement(acceptance()).lower()
+        for forbidden in (
+            "unanswered",
+            "unsolved",
+            "unresolved",
+            "outstanding",
+            "still open",
+            "ignored",
+            "neglected",
+            "gap",
+            "dissatisf",
+            "pain",
+            "demand",
+            "need",
+        ):
+            assert forbidden not in statement, forbidden
+
+    def test_it_names_the_asker_as_the_one_who_did_not_accept(self) -> None:
+        """Acceptance is one participant's action, and the sentence says whose."""
+        assert "by their asker" in _statement(acceptance())
+
+    def test_the_tag_is_marked_as_the_source_s_own(self) -> None:
+        assert 'its own tag "docker"' in _statement(acceptance())
+
+    def test_the_proposition_key_names_the_site_and_the_tag(self) -> None:
+        outcome = INTERPRETER.interpret(acceptance(), REQUEST)
+        assert outcome.draft is not None
+        assert outcome.draft.proposition_key == proposition_key(
+            {
+                "proposition": "community_site_questions_without_accepted_answer",
+                "source_id": "stack-exchange",
+                "community_site": "stackoverflow",
+                "community_tag": "docker",
+                "period_label_from": "1709280363",
+                "period_label_to": "1710000000",
+            }
+        )
+
+    def test_a_different_tag_is_a_different_proposition(self) -> None:
+        """The count is about one tag, and two tags never share an identity."""
+        other = acceptance(
+            scope={
+                "source_ids": ["stack-exchange"],
+                "community_sites": ["stackoverflow"],
+                "community_tags": ["kubernetes"],
+                "community_tag_scheme": "stack-exchange-tags:stackoverflow",
+            }
+        )
+        first = INTERPRETER.interpret(acceptance(), REQUEST).draft
+        second = INTERPRETER.interpret(other, REQUEST).draft
+        assert first is not None and second is not None
+        assert first.proposition_key != second.proposition_key
+
+    def test_the_claim_is_observed_and_carries_no_temporality_beyond_it(self) -> None:
+        outcome = INTERPRETER.interpret(acceptance(), REQUEST)
+        assert outcome.draft is not None
+        assert outcome.draft.claim_type is ClaimType.OBSERVED
+        assert outcome.draft.temporality is ClaimTemporality.EVERGREEN
+        assert outcome.draft.origin is ClaimOrigin.DETERMINISTIC_EXTRACTION
+        assert outcome.draft.interpretation.kind is ClaimInterpretationKind.DETERMINISTIC
+        assert outcome.draft.interpretation.model_version is None
+        assert outcome.draft.interpretation.prompt_version is None

@@ -50,7 +50,7 @@ __all__ = [
     "group_by_subject",
 ]
 
-GROUPING_PROCEDURE_VERSION = "source-native-subject-grouping@1.1.0"
+GROUPING_PROCEDURE_VERSION = "source-native-subject-grouping@1.2.0"
 
 
 @dataclass(frozen=True, order=True)
@@ -113,7 +113,16 @@ def subject_key(
             return None
         return SubjectKey(source_id, "metric-geography", metrics + geographies)
 
-    if signal_type_id == "community_question_volume":
+    if signal_type_id in (
+        "community_question_volume",
+        # Mission 1.32. A different MEASUREMENT over the same SUBJECT: the tag
+        # on the site is what the key names, and which count was taken over it
+        # is not part of the subject's identity. Listing the types explicitly
+        # rather than prefix-matching, because a future
+        # `community_question_*` type might legitimately be about something
+        # else and would join this packet by accident.
+        "community_question_without_accepted_answer_volume",
+    ):
         # Mission 1.30, ADR-034. The site AND the tag: the same tag string means
         # different things on different sites, so a key carrying only the tag
         # would merge two vocabularies.

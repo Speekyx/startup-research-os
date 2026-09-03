@@ -79,7 +79,7 @@ __all__ = [
 ]
 
 INTERPRETER_ID = "observed-signal-restatement"
-INTERPRETER_VERSION = "1.3.0"
+INTERPRETER_VERSION = "1.4.1"
 
 SUPPORTED_SIGNAL_TYPES: tuple[str, ...] = (
     "numeric_period_change",
@@ -88,6 +88,7 @@ SUPPORTED_SIGNAL_TYPES: tuple[str, ...] = (
     "procurement_value_contrast",
     "content_request_change",
     "community_question_volume",
+    "community_question_without_accepted_answer_volume",
 )
 
 # Read by every template and passed by no caller. The claim type this
@@ -182,6 +183,9 @@ _ACCEPTED_BASES: Mapping[str, frozenset[str]] = {
     # had started comparing windows, and the sentence to write then is a
     # decision rather than a default.
     "community_question_volume": frozenset({"NONE"}),
+    # NONE, as for the volume type: one count over one window, related by
+    # membership rather than by order.
+    "community_question_without_accepted_answer_volume": frozenset({"NONE"}),
 }
 
 
@@ -292,6 +296,8 @@ class ObservedSignalRestatementInterpreter:
             return self._content_request_change(signal, request)
         if signal.signal_type_id == "community_question_volume":
             return self._community_question_volume(signal, request)
+        if signal.signal_type_id == "community_question_without_accepted_answer_volume":
+            return self._community_question_without_accepted_answer(signal, request)
         if signal.signal_type_id == "procurement_value_contrast":
             return self._procurement_value_contrast(signal, request)
         return self._lexical_frequency_contrast(signal, request)
@@ -442,6 +448,59 @@ class ObservedSignalRestatementInterpreter:
             f"{source_name} published {_plain(signal.magnitude)} questions carrying its "
             f'own tag "{tag}" on "{site}", created between source timestamps "{earliest}" '
             f'and "{latest}".'
+        )
+        return self._build(signal, request, source_id, statement, facts)
+
+    def _community_question_without_accepted_answer(
+        self, signal: SignalView, request: InterpretationRequest
+    ) -> ClaimDraft:
+        """ "{Source} published N questions ... that had no answer marked accepted ..."
+
+        **"marked accepted by their asker", not "unanswered" and not "unsolved".**
+        The verb phrase is the whole template. Acceptance is one participant's
+        action, and every shorter wording available here -- unanswered,
+        unresolved, open, outstanding -- imports a claim about the problem that
+        the source does not make. The normalizer says so in the payload beside
+        the value.
+
+        **"at the source state observed", because the flag is read late.** These
+        questions were created in a bounded window and the acceptance state was
+        whatever it was when the record was collected, which may be years later.
+        A sentence saying *during* the window would be false, so the window and
+        the observation are named as two different things.
+
+        **The tag is the SITE's own**, phrased as it is in the volume template,
+        because a tag is a subject and never a taxonomy of ours.
+
+        **It asserts a SET, never a share of one.** The first wording read *"Of
+        the questions ... created between T1 and T2, 54 had no answer marked
+        accepted"*, which is true and still wrong: it presents the number as a
+        fraction of a population it never states, and a reader supplying one
+        would reach for 88 -- which is not the population in that span, since
+        those timestamps bound the 54 THEMSELVES and the last accepted question
+        falls outside them. A sentence shaped like a numerator invites a rate
+        whatever the surrounding prose says.
+        """
+        source_id = signal.single_source()
+        source_name = _source_name(signal, source_id)
+        tag = _one_scope_value(signal, "community_tags", label="the community tag")
+        site = _one_scope_value(signal, "community_sites", label="the community site")
+        earliest, latest = _two_labels(signal)
+
+        facts = {
+            "proposition": "community_site_questions_without_accepted_answer",
+            "source_id": source_id,
+            "community_site": site,
+            "community_tag": tag,
+            "period_label_from": earliest,
+            "period_label_to": latest,
+        }
+
+        statement = (
+            f"{source_name} published {_plain(signal.magnitude)} questions carrying its "
+            f'own tag "{tag}" on "{site}", created between source timestamps '
+            f'"{earliest}" and "{latest}", that had no answer marked accepted by their '
+            "asker at the source state observed."
         )
         return self._build(signal, request, source_id, statement, facts)
 

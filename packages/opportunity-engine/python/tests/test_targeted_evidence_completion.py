@@ -12,6 +12,7 @@ import pathlib
 
 import pytest
 from sros_opportunity import (
+    GROUPING_PROCEDURE_VERSION,
     SUBJECT_REGISTRY_VERSION,
     CanonicalSubject,
     CanonicalSubjectRegistry,
@@ -276,11 +277,17 @@ class TestTheRealRun:
         assert report()["totals"]["eligible_scoring"] == 0
 
     def test_independence_is_still_unknown_across_two_families(self) -> None:
-        """§14. Two source families is diversity, not established independence."""
+        """§14. Two source families is diversity, not established independence.
+
+        Phrased against the packet's OWN size rather than the seven rows it held
+        when this was written: the guarantee is that independence is unknown for
+        *all* of them, and a mission that adds an eighth row does not weaken it.
+        """
         packet = next(
             p for p in report()["packets"] if p["sufficiency"]["status"] == "HYPOTHESIS_FORMABLE"
         )
-        assert "independence is UNKNOWN for 7 of 7" in packet["independence"]
+        size = packet["size"]
+        assert f"independence is UNKNOWN for {size} of {size}" in packet["independence"]
         assert "independent sources" not in packet["independence"]
 
     def test_the_formable_packet_is_egress_authorized(self) -> None:
@@ -296,15 +303,30 @@ class TestTheRealRun:
         assert totals["cost_units"] == 0.0
         assert totals["opportunity_hypotheses_generated"] == 0
 
-    def test_exactly_one_evidence_row_was_added(self) -> None:
-        """§21. 26 -> 27, and no synthetic evidence."""
+    def test_no_evidence_row_is_scoring_eligible(self) -> None:
+        """§21. Originally *26 -> 27, and no synthetic evidence*.
+
+        The first half of that was a GLOBAL count read as if it were this
+        mission's delta, so every later mission that adds Evidence broke it.
+        Mission 1.32 added the twenty-eighth row and did exactly that. What 1.30
+        established, and what is worth keeping, is the second half: every row it
+        inspected was context-eligible, and none was promoted to scoring by the
+        act of being counted. The floor holds because 1.30's rows are all still
+        there.
+        """
         totals = report()["totals"]
-        assert totals["evidence_rows_inspected"] == 27
-        assert totals["eligible_context"] == 27
+        assert totals["evidence_rows_inspected"] >= 27
+        assert totals["eligible_context"] == totals["evidence_rows_inspected"]
+        assert totals["eligible_scoring"] == 0
 
     def test_the_run_records_the_registry_it_grouped_under(self) -> None:
+        """The point is that the artifact NAMES its procedures, so a reader can
+        tell which version produced it. Grouping is asserted against the module
+        constant rather than a literal: it is allowed to move, and when it does
+        the artifact must move with it. Sufficiency stays a literal because it is
+        frozen, and a test that read it from the module could not tell."""
         assert report()["procedures"]["subject_registry"] == SUBJECT_REGISTRY_VERSION
-        assert report()["procedures"]["grouping"] == "source-native-subject-grouping@1.1.0"
+        assert report()["procedures"]["grouping"] == GROUPING_PROCEDURE_VERSION
         assert report()["procedures"]["sufficiency"] == "opportunity-sufficiency@1.0.0"
 
 

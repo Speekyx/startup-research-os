@@ -891,6 +891,18 @@ class TestDerivationIdentityAndParameters(unittest.TestCase):
         makes of a server, and a question is something a person publishes about
         being stuck.
 
+        `community_question_without_accepted_answer_volume` joined in Mission
+        1.32, over the SAME record kind and in the SAME family. It is the first
+        type that is a second MEASUREMENT over a shape another type already
+        reads, which is why it is a type rather than a parameter on the sixth:
+        "how many questions carry this tag" and "how many carry it without an
+        accepted answer" are different propositions, and a parameter that
+        silently changes what a Signal asserts is a hidden behaviour with a name.
+        It is also the first registered type that maps to NO Opportunity
+        dimension -- an acceptance flag is one participant's action and reaches
+        neither SOLUTION_GAP nor SOLUTION_DISSATISFACTION -- which is a fact
+        about the mapping and not about whether the data shape is real.
+
         The rule the original assertion protected is unchanged: every type is
         justified by a data shape this repository holds, and each declares the
         family whose record kind it reads."""
@@ -903,6 +915,7 @@ class TestDerivationIdentityAndParameters(unittest.TestCase):
                 "procurement_value_contrast",
                 "content_request_change",
                 "community_question_volume",
+                "community_question_without_accepted_answer_volume",
             },
         )
         for spec in SIGNAL_TYPES.values():

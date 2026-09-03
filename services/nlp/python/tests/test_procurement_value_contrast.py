@@ -181,6 +181,12 @@ class TestRegistration:
             # deliberately: a subset check here would let an extractor appear
             # without anybody deciding it should.
             "community-question-volume",
+            # Mission 1.32. The seventh, and the SECOND over a
+            # `community_question`: a different measurement over the same
+            # records, registered as its own type rather than as a parameter on
+            # the sixth, because "how many questions" and "how many without an
+            # accepted answer" are different propositions.
+            "community-question-without-accepted-answer",
         }
         for name in ("numeric-period-change", "lexical-frequency-contrast"):
             assert EXTRACTOR_REGISTRY[name].family is not SignalQuantityFamily.TRANSACTION_VALUE

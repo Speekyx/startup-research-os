@@ -6,8 +6,10 @@ what fixes the measurement's meaning. Not from the source: `world-bank` could
 publish an indicator that maps somewhere and one that maps nowhere, and mapping
 by publisher would give both the same answer.
 
-**Zero dimensions is a real answer and is the answer twice here.** Two of the
-five implemented signal types map to nothing at all, each for a stated reason.
+**Zero dimensions is a real answer and is the answer three times here.** Three of
+the seven implemented signal types map to nothing at all, each for a stated
+reason -- and one of them, Mission 1.32's acceptance count, was tested against two
+named dimensions and rejected by both.
 The brief permits zero; this module treats it as the default and requires a
 positive argument for every member it adds.
 
@@ -176,6 +178,33 @@ SIGNAL_DIMENSION_MAP: dict[str, SignalDimensionMapping] = {
                 "NOT demand, market size, adoption, buyers or willingness to pay. And "
                 "the tag is a SUBJECT, not a problem: it names the area a question was "
                 "filed under, in the site's own vocabulary, and nothing finer."
+            ),
+        ),
+        SignalDimensionMapping(
+            signal_type_id="community_question_without_accepted_answer_volume",
+            dimensions=frozenset(),
+            rationale=(
+                "UNMAPPED, decided in `answer-acceptance-semantics-v1.md` before the "
+                "Signal existed, and the two dimensions it was tested against are the two "
+                "a reader will reach for.\n\n"
+                "SOLUTION_GAP asks whether evidence shows that NO ADEQUATE SOLUTION "
+                "EXISTS, and its own never_means already answers this: `that absence of "
+                "evidence of a solution is evidence of its absence`. A missing acceptance "
+                "IS absence of evidence of a solution, on one site, for one question, as "
+                "one person left it. Even the sharper subset -- questions that received "
+                "zero answers at all -- falls short, because nobody answering on one site "
+                "is consistent with a poorly framed question, a niche configuration, an "
+                "answer that exists in documentation, or an asker who solved it and never "
+                "returned.\n\n"
+                "SOLUTION_DISSATISFACTION asks whether actors are DISSATISFIED with what "
+                "they use today, and there is no dissatisfaction datum anywhere in the "
+                "record. The asker is not evaluating a product; they are asking a "
+                "question. Mapping it there would not stretch the evidence, it would "
+                "change the subject.\n\n"
+                "RECURRENCE_OR_FREQUENCY is refused for the reason it is always refused "
+                "here: it would require knowing the questions concern the same problem, "
+                "which is the relation Mission 1.27 PARKED.\n\n"
+                "No new dimension was invented so this measurement had somewhere to go."
             ),
         ),
         SignalDimensionMapping(
