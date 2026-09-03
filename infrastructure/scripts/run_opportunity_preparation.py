@@ -84,6 +84,7 @@ def _standings(use_profile: str) -> dict[str, object]:
             use_profile_id=use_profile,
             permits_local_processing=approval.startswith("APPROVED"),
             permits_external_model_transmission=permits_transmission,
+            transmission_state=transmission,
             basis=(
                 f"{use_profile} review v{review.review_version}: {approval}; "
                 f"external_model_transmission={transmission}"

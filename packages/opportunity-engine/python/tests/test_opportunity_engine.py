@@ -750,14 +750,23 @@ class TestTheRealRunIsRecordedHonestly:
         assert report["totals"]["model_calls"] == 0
         assert report["totals"]["cost_units"] == 0.0
 
-    def test_every_packet_is_blocked_at_the_egress_gate(self) -> None:
-        """The second, independent blocker: the one source authorised for
-        external transmission is the one source with no Evidence."""
+    def test_the_egress_gate_is_evaluated_for_every_packet(self) -> None:
+        """Mission 1.28 asserted here that EVERY packet was blocked at this gate,
+        which was true then and is the state Mission 1.29 was chartered to
+        change: three of the four contributing sources now have a transmission
+        decision, and TED does not. The specific counts belong to
+        `test_transmission_governance.py`; what this keeps is the property that
+        matters to Mission 1.28's own claim -- the gate runs on every packet and
+        records an answer, so no packet reaches a model without one."""
         report = self._report()
+        assert report["packets"]
         for packet in report["packets"]:
-            assert (
-                packet["external_synthesis"]["availability"] == "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS"
+            gate = packet["external_synthesis"]
+            assert gate["availability"] in (
+                "AVAILABLE",
+                "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
             )
+            assert gate["per_source"], packet["subject"]
 
     def test_no_packet_claims_independent_sources(self) -> None:
         report = self._report()

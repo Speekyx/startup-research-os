@@ -67,6 +67,11 @@ APPROVING_ASSESSMENTS = frozenset(
     {PolicyAssessment.PERMITTED, PolicyAssessment.PERMITTED_WITH_CONDITIONS}
 )
 
+# Reached the question, left it open. Refuses like every non-approving state and
+# reports itself differently, because the operator act that clears it is a
+# different act (Mission 1.29).
+UNRESOLVED_ASSESSMENTS = frozenset({PolicyAssessment.UNCLEAR, PolicyAssessment.NOT_ADDRESSED})
+
 
 class InferenceRefusalReason:
     """Why external inference was refused, one code per gate.
@@ -78,6 +83,13 @@ class InferenceRefusalReason:
 
     SOURCE_TRANSMISSION_NOT_ASSESSED = "SOURCE_EXTERNAL_MODEL_TRANSMISSION_NOT_ASSESSED"
     SOURCE_TRANSMISSION_REFUSED = "SOURCE_EXTERNAL_MODEL_TRANSMISSION_REFUSED"
+    # Added in Mission 1.29. UNCLEAR and NOT_ADDRESSED refuse exactly as
+    # NOT_PERMITTED does and mean something different: the reviewer reached the
+    # question and left it open, rather than answering no. An operator can close
+    # an open question and cannot argue with a decision, so collapsing the two
+    # sends them looking for a decision nobody made. Same argument ADR-033 made
+    # for NOT_ASSESSED, one state further along.
+    SOURCE_TRANSMISSION_UNRESOLVED = "SOURCE_EXTERNAL_MODEL_TRANSMISSION_UNRESOLVED"
     SOURCE_REVIEW_MISSING = "SOURCE_REVIEW_MISSING_FOR_PROFILE"
     PROFILE_EGRESS_NOT_ASSESSED = "PROFILE_EXTERNAL_MODEL_EGRESS_NOT_ASSESSED"
     PROFILE_EGRESS_DENIED = "PROFILE_EXTERNAL_MODEL_EGRESS_DENIED"
@@ -248,6 +260,14 @@ def authorize_external_inference(
                 "not assessed whether material may be transmitted to a third-party model "
                 "processor. Model INFERENCE being permitted is a different activity "
                 "(ADR-033)"
+            )
+        elif assessment in UNRESOLVED_ASSESSMENTS:
+            reasons.append(InferenceRefusalReason.SOURCE_TRANSMISSION_UNRESOLVED)
+            detail.append(
+                f"the review of {source.source_id!r} under {profile.use_profile_id!r} records "
+                f"external model transmission as {assessment.value}: the reviewer reached the "
+                "question and left it open rather than answering no. This refuses, and it is "
+                "an open question an operator can close rather than a decision to argue with"
             )
         elif assessment not in APPROVING_ASSESSMENTS:
             reasons.append(InferenceRefusalReason.SOURCE_TRANSMISSION_REFUSED)

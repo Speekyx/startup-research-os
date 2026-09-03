@@ -1377,6 +1377,97 @@
               "excerpt": "our existing legacy search infrastructure is struggling to handle the ever-growing volume of searches"
             }
           ]
+        },
+        {
+          "review_version": 2,
+          "assessed_use_profile": "local-private-research-v1",
+          "approval_state": "APPROVED_WITH_CONDITIONS",
+          "reviewed_by": "mission-1.29",
+          "reviewed_at": "2026-09-02T00:00:00+00:00",
+          "review_interval_days": 365,
+          "automated_access": "PERMITTED",
+          "api_use": "PERMITTED",
+          "browser_automation": "NOT_ADDRESSED",
+          "commercial_use": "PERMITTED",
+          "storage": "PERMITTED",
+          "retention": "NOT_ADDRESSED",
+          "redistribution": "PERMITTED_WITH_CONDITIONS",
+          "derived_analytics": "PERMITTED",
+          "model_processing": "PERMITTED",
+          "personal_data_handling": "NOT_ADDRESSED",
+          "attribution_required": "PERMITTED_WITH_CONDITIONS",
+          "personal_data_risk": "PSEUDONYMOUS",
+          "contains_user_generated_content": false,
+          "contains_user_identifiers": true,
+          "contains_location": false,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": false,
+          "discard_identifiers_after_normalization": true,
+          "jurisdiction_review_required": false,
+          "conditions": [
+            "Every product surface derived from GDELT carries a citation to the GDELT Project and a link to https://www.gdeltproject.org/, as its terms require on use and on redistribution."
+          ],
+          "required_conditions": [
+            {
+              "key": "gdelt-attribution",
+              "description": "Every product surface derived from GDELT carries a citation to the GDELT Project and a link to https://www.gdeltproject.org/, as its terms require on use and on redistribution.",
+              "verification": "CAPABILITY",
+              "verification_detail": "source-attribution-display"
+            }
+          ],
+          "open_questions": [
+            "H-29: the WEB-NGRAM bucket timezone is unestablished. It blocks `observed_at` and cross-source temporal alignment, not acquisition, and this review does not close it.",
+            "H-30: the CLD2 language label mapping is unestablished. It blocks a canonical language tag, not acquisition, and this review does not close it.",
+            "The second GDELT access profile (DOC API) has never been reviewed. It is not authorised by this review and must not be reached by route resolution.",
+            "Transmission of third-party news ARTICLE TEXT is NOT ADDRESSED and is a prohibited representation under this decision. GDELT's grant covers what GDELT releases; an article body reaches publisher rights these terms do not speak to. No article text is held, so this bounds a future collector rather than the present one."
+          ],
+          "review_notes": "APPENDED AS A NEW VERSION. Version 1 is not rewritten: every activity assessment, condition, evidence row and open question is carried forward unchanged.\n\nPROCESSING PURPOSE ASSESSED: bounded external inference for Opportunity hypothesis synthesis, under local-private-research-v1. NOT public redistribution, NOT customer-facing redistribution, NOT model training, NOT fine-tuning, NOT embedding, NOT raw-source resale. A different purpose is a different assessment.\n\nWHAT WOULD ACTUALLY BE TRANSMITTED, established by reading the serializer rather than by imagining a whole source. The Opportunity synthesis packet carries: an internal packet id; a subject key built from source-native identifiers; procedure version strings; source family names; dimension names and the repository's own bound sentences; an independence sentence; internal evidence ids; and the Claim STATEMENTS, which are sentences this repository composed. It carries NO raw source payload, no collected record, no API response body and no field the normalizer did not already reduce to a canonical fact.\n\nTHE DECISION AND ITS BASIS. PERMITTED_WITH_CONDITIONS. GDELT's own Terms of Use, re-retrieved for this review, state that 'all datasets released by the GDELT Project are available for unlimited and unrestricted use for any academic, commercial, or governmental use of any kind without fee' and that users 'may redistribute, rehost, republish, and mirror any of the GDELT datasets in any form'. A grant permitting redistribution in any form comfortably contains a transmission to a processor, which is far less than redistribution. The single stated obligation is a citation to the GDELT Project and a link to https://www.gdeltproject.org/.\n\nTHE CONDITION IS ABOUT SCOPE, AND IT IS THE WHOLE POINT OF THIS ENTRY. The grant runs to datasets THE GDELT PROJECT RELEASES. The authorised resources are `web-ngrams/1gram` and `web-ngrams/2gram`: counts of how often a term appeared, which are GDELT's own aggregation and are recorded in this catalog as `content_origin: PLATFORM_LICENSED`. **Third-party news article text is not a GDELT-released dataset**, and a permission over an aggregate measurement is not a permission over the articles the aggregate was computed from. So the permitted representation is the aggregate lexical measurement and the Claim derived from it; article bodies, headlines, publisher-attributed text and article URLs are a PROHIBITED representation under this decision.\n\nTHAT CONDITION COSTS NOTHING TO MEET AND IS STILL WORTH WRITING. This deployment holds no article text at all: the collector reads gzipped ngram files and nothing else, so there is no article body anywhere in the corpus to transmit. The condition therefore constrains a future collector rather than the present one, which is exactly when a scope limit should be written down.\n\nTHE CITATION OBLIGATION IS TRIGGERED, UNLIKE THE OTHERS HERE. GDELT's wording attaches the citation to 'any use or redistribution', not only to redistribution -- so unlike CC BY 4.0, whose obligation begins 'If You Share', this one is live for a transmission. It is met as a property of the payload rather than by boilerplate: every transmitted Claim statement opens 'The GDELT Project reported that', and v1's `gdelt-attribution` condition continues to govern product surfaces unchanged.\n\nWHAT THE PERMISSION DOES NOT CHANGE. A change in how often a term appeared in a news corpus measures what media organisations published. It does not become demand, want, interest or market activity, and the standing repository invariant is unaltered: GDELT lexical frequency alone never satisfies a demand claim, not weakly, not with low relevance and not with a caveat.\n\nWHAT IS NOT AUTHORISED. No provider by name. No training, fine-tuning or embedding. The DOC API, never reviewed and not reachable. And no article text, by the condition above.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_TERMS",
+              "document_title": "The GDELT Project - About / Terms of Use",
+              "document_url": "https://www.gdeltproject.org/about.html",
+              "section_reference": "Terms of Use",
+              "summarized_finding": "APPLICABILITY TO THIS PROFILE: RE-RETRIEVED 2026-09-01 and unchanged. The page states that all datasets released by the GDELT Project are available for unlimited and unrestricted use for any academic, commercial or governmental use of any kind without fee, and that the datasets may be redistributed, rehosted, republished and mirrored in any form. The single stated obligation is that any use or redistribution include a citation to the GDELT Project and a link to https://www.gdeltproject.org/. The grant is general and does not single out AI or machine-learning processing either to permit or to forbid it; model_processing is recorded as PERMITTED on the strength of 'any kind', and the absence of an AI-specific clause is noted rather than read as a restriction.",
+              "retrieved_at": "2026-08-30T00:00:00+00:00",
+              "excerpt": "Any use or redistribution of the data must include a citation to the GDELT Project and a link to this website (https://www.gdeltproject.org/)."
+            },
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "The GDELT Project - Announcing The Web News Ngram Datasets (WEB-NGRAM)",
+              "document_url": "https://blog.gdeltproject.org/announcing-the-web-news-ngram-datasets-web-ngram/",
+              "section_reference": "Dataset description and file format",
+              "summarized_finding": "APPLICABILITY TO THIS PROFILE: RE-RETRIEVED 2026-09-01 and unchanged. The operator's own announcement of the dataset, published 2019-09-30 and linked from the GDELT data page as its documentation. It states the publication path 'http://data.gdeltproject.org/gdeltv3/web/ngrams/YYYYMMDDHHMMSS.1gram/2gram.txt.gz'; that every 15 minutes two gzipped UTF-8 files are produced, one for unigrams and one for bigrams, typically 7-10, 22-25, 37-40 and 52-55 minutes after the hour; that each row represents a unique language/word/phrase, is tab delimited and has no header row; and that the four columns are DATE ('The date in YYYYMMDDHHMMSS format'), LANG ('The human-readable language name as output by CLD2'), NGRAM ('The word or phrase') and COUNT ('The number of times the word/phrase was mentioned in articles of that language published in that given 15 minute interval'). Coverage at release is stated as 42 billion words in 142 languages from 2019-01-01 to present. No timezone is stated for DATE, and none is inferred here. Each file spans every language rather than being partitioned by one, which is why a job cannot request fewer languages than a file contains.",
+              "retrieved_at": "2026-08-30T00:00:00+00:00",
+              "excerpt": "Each row represents a unique language/word/phrase and is tab delimited with the following columns (there is no header row)"
+            },
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "The GDELT Project - Data",
+              "document_url": "https://www.gdeltproject.org/data.html",
+              "section_reference": "GDELT WEB-NGRAM",
+              "summarized_finding": "APPLICABILITY TO THIS PROFILE: RE-RETRIEVED 2026-09-01 and unchanged. The operator's dataset index lists WEB-NGRAM as a current product -- 'Global online news ngrams in 152 languages' -- and links to the announcement above as its documentation. The language count is higher than the 142 the 2019 announcement states, so the dataset has grown; both figures are recorded with their dates rather than one being chosen. The page states no timezone for GDELT timestamps anywhere, which is why review 3 leaves the DATE timezone as an open question instead of asserting UTC.",
+              "retrieved_at": "2026-08-30T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "The GDELT Project - Using The New Web NGrams Dataset To Find Relevant Coverage",
+              "document_url": "https://blog.gdeltproject.org/using-the-new-web-ngrams-dataset-to-find-relevant-coverage/",
+              "section_reference": "Legacy search infrastructure and the quadgram dataset",
+              "summarized_finding": "APPLICABILITY TO THIS PROFILE: RE-RETRIEVED 2026-09-01 and unchanged. Published 2026-06-30. The operator states that 'While the transition of our search and API infrastructure to Spanner is still underway, our existing legacy search infrastructure is struggling to handle the ever-growing volume of searches', and asks that 'Researchers should try to switch their searches to use these ngram files instead of the search APIs for the time being until we have completed our migration to Spanner'. Read carefully, that recommendation names the QUADGRAM dataset the same post announces -- per-minute files at storage.googleapis.com/data.gdeltproject.org/gdeltv5/weblegacy/ngrams/, whose ngrams file keys quadgram counts to a per-document DOCID and whose companion toc.json.gz carries title, img and url. This review rejects that dataset and does NOT claim GDELT recommended WEB-NGRAM. What the document does establish first-party is the state of the legacy search infrastructure, which is the reason the DOC API route is deferred rather than retried.",
+              "retrieved_at": "2026-08-30T00:00:00+00:00",
+              "excerpt": "our existing legacy search infrastructure is struggling to handle the ever-growing volume of searches"
+            },
+            {
+              "document_type": "OFFICIAL_TERMS",
+              "document_title": "The GDELT Project — About / Terms of Use",
+              "document_url": "https://www.gdeltproject.org/about.html",
+              "section_reference": "Terms of Use (scope of grant and citation obligation)",
+              "summarized_finding": "Re-retrieved for Mission 1.29, 2026-09-02, and unchanged. States that 'all datasets released by the GDELT Project are available for unlimited and unrestricted use for any academic, commercial, or governmental use of any kind without fee', that users 'may redistribute, rehost, republish, and mirror any of the GDELT datasets in any form', and that 'any use or redistribution of the data must include a citation to the GDELT Project and a link to this website (https://www.gdeltproject.org/)'. Two properties decide this review. The grant's SUBJECT is datasets GDELT RELEASES, which is what limits it to the ngram aggregates and not to the articles they were computed from. And the citation obligation attaches to 'any use', not only to redistribution, so it is live for a transmission in a way CC BY 4.0's Section 3(a)(1) obligation is not.",
+              "retrieved_at": "2026-09-02T00:00:00+00:00"
+            }
+          ],
+          "external_model_transmission": "PERMITTED_WITH_CONDITIONS"
         }
       ]
     },
@@ -5641,6 +5732,110 @@
               "retrieved_at": "2026-09-02T00:00:00+00:00"
             }
           ]
+        },
+        {
+          "review_version": 2,
+          "assessed_use_profile": "local-private-research-v1",
+          "approval_state": "APPROVED_WITH_CONDITIONS",
+          "reviewed_by": "mission-1.29",
+          "reviewed_at": "2026-09-02T00:00:00+00:00",
+          "review_interval_days": 180,
+          "automated_access": "PERMITTED_WITH_CONDITIONS",
+          "api_use": "PERMITTED_WITH_CONDITIONS",
+          "browser_automation": "NOT_PERMITTED",
+          "commercial_use": "PERMITTED",
+          "storage": "PERMITTED",
+          "retention": "PERMITTED",
+          "redistribution": "PERMITTED",
+          "derived_analytics": "PERMITTED",
+          "model_processing": "PERMITTED_WITH_CONDITIONS",
+          "personal_data_handling": "NOT_ADDRESSED",
+          "attribution_required": "PERMITTED",
+          "personal_data_risk": "NONE_EXPECTED",
+          "contains_user_generated_content": false,
+          "contains_user_identifiers": false,
+          "contains_location": false,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": false,
+          "discard_identifiers_after_normalization": false,
+          "jurisdiction_review_required": false,
+          "conditions": [
+            "Send the declared User-Agent on every request: it names the client, its version and a contact URL, per the Wikimedia Foundation User-Agent Policy. The Analytics API access policy states that clients sending no User-Agent may be blocked without notice.",
+            "Acquire through the Analytics API only. The bulk dumps route is registered and blocked by name.",
+            "Acquire only aggregate per-article view counts. The editor, edit, unique-device, country-breakdown and media endpoints are outside this review and are excluded by name.",
+            "Stay far inside the documented pacing guidance: the Robot Policy asks for fewer than 10 concurrent requests and an average below 20 per second, and the access policy asks callers to wait for each request to finish before sending the next. This collector is serial and single-digit per job.",
+            "Model INFERENCE over the acquired counts is permitted. Model TRAINING and embeddings are not performed under this profile, and nothing in this review rests on the permission CC0 would give for them."
+          ],
+          "required_conditions": [
+            {
+              "key": "wikimedia-client-identification",
+              "description": "Every request carries the declared User-Agent naming the client, its version and a contact URL, and it is not a generic library default or a copied browser string.",
+              "verification": "CAPABILITY",
+              "verification_detail": "source-client-identification"
+            },
+            {
+              "key": "wikimedia-official-api-only",
+              "description": "Acquisition binds to the Analytics API route and to no other. The bulk dumps route is refused by name and carries no endpoint in the authorization context.",
+              "verification": "CAPABILITY",
+              "verification_detail": "source-route-binding"
+            },
+            {
+              "key": "wikimedia-aggregate-only",
+              "description": "The field selection is authorised before a request is composed. Any field naming a person, an editor, an IP address or a country is refused by name, and an unreviewed field fails closed.",
+              "verification": "CAPABILITY",
+              "verification_detail": "source-field-minimisation"
+            }
+          ],
+          "open_questions": [
+            "The daily bucket boundary is UTC on the strength of a definition page the API's own documentation designates ('For a complete definition of a page view and extra background information, see Research:Page view'), which states a 'UTC timestamp of the request' and 'daily partitioning 0:00 UTC - 23:59 UTC'. The API REFERENCE itself does not restate it. Confirm at the next review, or ask the Analytics team, so that the period's ESTABLISHED state rests on the reference rather than on a linked page.",
+            "H-24 is answered for THIS profile and not for the commercial one. The commercial review v2 is REQUIRES_REVIEW because it could not establish whether aggregate pageview counts are Licensed Material under CC BY-SA; the answer retrieved here is that they are not CC BY-SA at all but CC0 1.0. Applying it to the commercial profile is a commercial-profile review act that has not happened, and approval never transfers (ADR-027).",
+            "Wikimedia Enterprise is presented as the route for high-volume commercial reuse without stating a threshold at which it becomes mandatory. Nothing in this review rests on the free route being adequate at any volume above the single-digit-requests-per-job this collector performs.",
+            "This review authorises transmission of the DERIVED canonical representation described in the review notes. It does not assess transmission of a bulk-dumps payload, because that route is refused by name in v1 and no such payload is held."
+          ],
+          "review_notes": "APPENDED AS A NEW VERSION. Version 1 is not rewritten: every activity assessment, condition, evidence row and open question is carried forward unchanged, and what is new is one activity the contract could not previously express.\n\nPROCESSING PURPOSE ASSESSED: bounded external inference for Opportunity hypothesis synthesis, under local-private-research-v1. NOT public redistribution, NOT customer-facing redistribution, NOT model training, NOT fine-tuning, NOT embedding, NOT raw-source resale. A different purpose is a different assessment.\n\nWHAT WOULD ACTUALLY BE TRANSMITTED, established by reading the serializer rather than by imagining a whole source. The Opportunity synthesis packet carries: an internal packet id; a subject key built from source-native identifiers; procedure version strings; source family names; dimension names and the repository's own bound sentences; an independence sentence; internal evidence ids; and the Claim STATEMENTS, which are sentences this repository composed. It carries NO raw source payload, no collected record, no API response body and no field the normalizer did not already reduce to a canonical fact.\n\nTHE DECISION, AND WHY IT IS THE UNCONDITIONAL ONE. PERMITTED, and this is the only source in the catalog where that word is available without a condition attached. The authorised resource `metrics/pageviews/per-article/en.wikipedia.org` is licensed CC0 1.0 by the operator's own Analytics API access policy, under a heading reading 'Data licensing'. CC0 Section 2 waives 'all of Affirmer's Copyright and Related Rights' -- defined in Section 1 to include database rights under Directive 96/9/EC by name -- 'overtly, fully, permanently, irrevocably and unconditionally', 'in all territories worldwide', 'in any current or future medium' and 'for any purpose whatsoever, including without limitation commercial'. There is no act of reproduction, transfer or communication left for a licence to restrict, so there is no condition to impose and none is invented.\n\nNO ATTRIBUTION CONDITION IS WRITTEN HERE, DELIBERATELY. Mission 1.19 established the rule and it binds this review: CC0 creates no attribution obligation, a credit rendered onto a record is a COURTESY, and writing a condition asserting an obligation the licence does not create would leave a later reader unable to tell a duty from a habit. The Claim statements name Wikimedia Analytics in their own wording regardless, which is a property the data already has rather than a mitigation applied at transmission time.\n\nWHAT THE PERMISSION DOES NOT CHANGE. It is a governance decision and not an epistemic one. The transmitted measurement remains a count of requests for one article on one wiki in one day under the platform's own requester class. It does not become a reader count, a customer count, demand, adoption, popularity or willingness to pay, and the operator's own automated-traffic classification remains heuristic by its own documentation. Authorization to transmit a measurement is never permission to restate it as something else.\n\nWHAT IS NOT AUTHORISED. No provider by name -- that is model-provider-policy-v1.json, joined once at runtime. No training, no fine-tuning, no embedding. Nothing about the commercial profile, whose H-24 remains unresolved and whose review has NOT assessed this activity. And no route other than the Analytics API, which v1's conditions already bind and this version does not touch.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "Wikimedia Analytics API - Access policy",
+              "document_url": "https://doc.wikimedia.org/generated-data-platform/aqs/analytics-api/documentation/access-policy.html",
+              "section_reference": "Data licensing; Client identification; Data downloads; Rate limits",
+              "summarized_finding": "Retrieved directly, HTTP 200, 2026-09-02. Under a heading 'Data licensing' the page states in full: 'Data provided by the API is available under the CC0 1.0 license'. Under 'Client identification' it states 'The API requires an HTTP User-Agent header for all requests' and 'Clients making requests without a User-Agent header may be blocked without notice', and gives the preferred format '<client name>/<version> (<contact information>) <library/framework name>/<version>'. Under 'Data downloads' it states that datasets provided via the API can also be downloaded in bulk via dumps.wikimedia.org. Under 'Rate limits' it directs callers to wait for each request to finish before sending another. This is the document that answers H-24, and it answers it with a licence the question did not consider.",
+              "retrieved_at": "2026-09-02T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_LICENCE",
+              "document_title": "Creative Commons CC0 1.0 Universal - Legal Code",
+              "document_url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode",
+              "section_reference": "Section 1 (Copyright and Related Rights); Section 2 (Waiver); Section 3 (Public License Fallback)",
+              "summarized_finding": "Retrieved directly, HTTP 200, 2026-09-02. Section 1 defines 'Copyright and Related Rights' to include 'rights protecting the extraction, dissemination, use and reuse of data in a Work' and 'database rights (such as those arising under Directive 96/9/EC of the European Parliament and of the Council of 11 March 1996 on the legal protection of databases)'. Section 2 states that the Affirmer 'overtly, fully, permanently, irrevocably and unconditionally waives, abandons, and surrenders all of Affirmer's Copyright and Related Rights', 'in all territories worldwide', 'in any current or future medium' and 'for any purpose whatsoever, including without limitation commercial, advertising or promotional purposes'. Section 3 supplies a royalty-free, irrevocable, unconditional licence should the waiver be judged ineffective. No attribution condition appears anywhere in the instrument.",
+              "retrieved_at": "2026-09-02T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_API_DOCS",
+              "document_title": "Wikimedia Analytics API - Page views (concepts)",
+              "document_url": "https://doc.wikimedia.org/generated-data-platform/aqs/analytics-api/concepts/page-views.html",
+              "section_reference": "Page views; Spiders and automated traffic",
+              "summarized_finding": "Retrieved directly, HTTP 200, 2026-09-02. Defines the measurement: 'A page view is a request for content of a page that receives a response of 200 OK or 304 Not Modified (a redirect to cached version of the page).' Records exclusions: most Special-namespace requests are not counted, edits are not page views, and redirects are not counted as views of the target page. States that 'Page views associated with user agents that self-identify as bots receive the spider category' and that 'Other automated traffic, identified as such based on a set of heuristics, receives the automated category instead' -- so the source itself separates the agent classes, and documents the second as heuristic. Refers the reader to 'Research:Page view' for the complete definition.",
+              "retrieved_at": "2026-09-02T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_ACCESS_CONTROL",
+              "document_title": "Wikimedia Foundation User-Agent Policy",
+              "document_url": "https://foundation.wikimedia.org/wiki/Policy:User-Agent_policy",
+              "section_reference": "Format; blocked defaults",
+              "summarized_finding": "Retrieved directly, HTTP 200, 2026-09-02. States that 'User-Agent strings that begin with non-descriptive default values, such as python-requests/x, may also be blocked from Wikimedia sites' and that 'Scripts should use an informative User-Agent string with contact information, or they may be blocked without notice'. The obligation is therefore specific enough to check mechanically: a declared string, a contact inside it, and no generic-default or browser prefix.",
+              "retrieved_at": "2026-09-02T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_ACCESS_CONTROL",
+              "document_title": "Wikimedia Robot policy",
+              "document_url": "https://wikitech.wikimedia.org/wiki/Robot_policy",
+              "section_reference": "Generally applicable rules; API rules",
+              "summarized_finding": "Retrieved directly, HTTP 200, 2026-09-02. States 'ensure that the maximum concurrent number of requests is fewer than 10 overall, and keep the average requests per second below 20', that all activity is subject to cross-API rate limiting global to Wikimedia sites, and that bots which repeatedly circumvent the limits may be blocked. This is documented pacing guidance from the operator; the collector's own serial single-digit pacing is OURS and is far inside it.",
+              "retrieved_at": "2026-09-02T00:00:00+00:00"
+            }
+          ],
+          "external_model_transmission": "PERMITTED"
         }
       ]
     },
@@ -5862,6 +6057,83 @@
               "retrieved_at": "2026-08-29T00:00:00+00:00"
             }
           ]
+        },
+        {
+          "review_version": 2,
+          "assessed_use_profile": "local-private-research-v1",
+          "approval_state": "APPROVED_WITH_CONDITIONS",
+          "reviewed_by": "mission-1.29",
+          "reviewed_at": "2026-09-02T00:00:00+00:00",
+          "review_interval_days": 365,
+          "automated_access": "PERMITTED",
+          "api_use": "PERMITTED",
+          "browser_automation": "NOT_ADDRESSED",
+          "commercial_use": "PERMITTED",
+          "storage": "PERMITTED",
+          "retention": "PERMITTED",
+          "redistribution": "PERMITTED_WITH_CONDITIONS",
+          "derived_analytics": "PERMITTED",
+          "model_processing": "PERMITTED",
+          "personal_data_handling": "NOT_ADDRESSED",
+          "attribution_required": "PERMITTED",
+          "personal_data_risk": "NONE_EXPECTED",
+          "contains_user_generated_content": false,
+          "contains_user_identifiers": false,
+          "contains_location": null,
+          "sensitive_data_possible": false,
+          "pseudonymization_expected": false,
+          "discard_identifiers_after_normalization": false,
+          "jurisdiction_review_required": false,
+          "conditions": [
+            "A product surface exists that displays the required World Bank attribution and a statement of any modifications, on every view derived from this source.",
+            "The collector requests only datasets whose recorded licence is CC-BY 4.0 or ODbL, and skips every other licence.",
+            "The Microdata Library is excluded from every request path."
+          ],
+          "required_conditions": [
+            {
+              "key": "attribution-surface",
+              "description": "A product surface exists that displays the required World Bank attribution and a statement of any modifications, on every view derived from this source.",
+              "verification": "CAPABILITY",
+              "verification_detail": "source-attribution-display"
+            },
+            {
+              "key": "dataset-licence-allowlist",
+              "description": "The collector requests only datasets whose recorded licence is CC-BY 4.0 or ODbL, and skips every other licence.",
+              "verification": "CAPABILITY",
+              "verification_detail": "dataset-licence-filter"
+            },
+            {
+              "key": "microdata-excluded",
+              "description": "The Microdata Library is excluded from every request path.",
+              "verification": "ACCESS_METHOD",
+              "verification_detail": "indicators-api-only"
+            }
+          ],
+          "open_questions": [
+            "The Data Catalog labels externally-licensed and custom-licensed datasets individually. The allowlist condition fails closed on anything not known to be CC BY 4.0, and that remains the mechanism rather than a resolved question.",
+            "Whether transmitting a derived statement to a contracted processor is Sharing under CC BY 4.0 is NOT decided here, and nothing rests on deciding it: Section 2(a)(1) grants reproduction as a separate act, so the transmission is inside the grant on either reading. The question is recorded because a later mission contemplating a PUBLIC surface would have to answer it, and would find the attribution obligation live.",
+            "ODbL-1.0 datasets are inside the acquisition allowlist and OUTSIDE this transmission decision. Whether ODbL permits this transmission is NOT ADDRESSED. No ODbL resource is authorised or held today, so the question is open rather than blocking."
+          ],
+          "review_notes": "APPENDED AS A NEW VERSION. Version 1 is not rewritten: every activity assessment, condition, evidence row and open question is carried forward unchanged.\n\nPROCESSING PURPOSE ASSESSED: bounded external inference for Opportunity hypothesis synthesis, under local-private-research-v1. NOT public redistribution, NOT customer-facing redistribution, NOT model training, NOT fine-tuning, NOT embedding, NOT raw-source resale. A different purpose is a different assessment.\n\nWHAT WOULD ACTUALLY BE TRANSMITTED, established by reading the serializer rather than by imagining a whole source. The Opportunity synthesis packet carries: an internal packet id; a subject key built from source-native identifiers; procedure version strings; source family names; dimension names and the repository's own bound sentences; an independence sentence; internal evidence ids; and the Claim STATEMENTS, which are sentences this repository composed. It carries NO raw source payload, no collected record, no API response body and no field the normalizer did not already reduce to a canonical fact.\n\nTHE DECISION AND ITS BASIS. PERMITTED_WITH_CONDITIONS, on the CC BY 4.0 legal code retrieved directly for this review rather than on the Data Catalog summary page v1 rests on. Section 2(a)(1) grants the licensee the right to 'reproduce and Share the Licensed Material, in whole or in part' -- two acts joined by 'and', so reproduction is granted in its own right and does not depend on Sharing. Transmitting a derived statement to a processor for private inference is at most reproduction. It is not Sharing: Section 1 defines Share as providing material 'to the public', and a contracted processor performing inference for one operator is not the public.\n\nTHE ATTRIBUTION OBLIGATION IS NOT TRIGGERED, AND ATTRIBUTION HAPPENS ANYWAY. Section 3(a)(1) opens 'If You Share the Licensed Material', so an act that is not Sharing does not carry the credit obligation and no licence boilerplate needs pasting into a prompt. The obligation on derived PRODUCT SURFACES is unchanged and still carried by v1's `attribution-surface` condition. Separately, every transmitted Claim statement opens 'World Bank Open Data reported that', so the source is named in the payload as a property of how this repository writes claims.\n\nTHE DATABASE RIGHT IS ADDRESSED BY THE LICENCE RATHER THAN LEFT OPEN. Section 4 states that where the Licensed Rights include Sui Generis Database Rights applying to the licensee's use, the licensee is granted the right to extract and reuse the contents. Unlike TED, there is no unresolved database-right question here, because the instrument speaks to it.\n\nTHE CONDITION, AND IT IS NARROWER THAN ACQUISITION'S. v1 authorises acquisition from datasets licensed CC-BY-4.0 OR ODbL-1.0. **This transmission decision covers CC-BY-4.0 ONLY.** ODbL is deliberately excluded: its share-alike obligations attach to Derivative and Collective Databases and its definition of Publicly Use is a question this review has not answered, and an unanswered question is not a permission. Every authorised indicator resource in this catalog -- including `indicator/SP.POP.TOTL`, the only one with canonical Evidence -- records `licence: CC-BY-4.0`, so the narrowing costs this deployment nothing today and prevents an ODbL dataset acquired later from inheriting a permission nobody assessed. That the transmission allowlist is TIGHTER than the acquisition allowlist is the point: they are different questions.\n\nWHAT THE PERMISSION DOES NOT CHANGE. The canonical Evidence concerns SP.POP.TOTL, a demographic stock. A permission to transmit a population change is not permission to restate it as market demand, buyer count, customer count or a commercial opportunity. Governance and epistemic interpretation stay separate.\n\nWHAT IS NOT AUTHORISED. No provider by name. No training, fine-tuning or embedding. No Microdata Library content, excluded outright by v1. No ODbL dataset. Nothing about the commercial profile.",
+          "evidence": [
+            {
+              "document_type": "OFFICIAL_LICENCE",
+              "document_title": "World Bank Data Catalog — Data Access and Licensing",
+              "document_url": "https://datacatalog.worldbank.org/public-licenses",
+              "section_reference": "Creative Commons Attribution 4.0 (CC-BY 4.0); Microdata Research License; License Specified Externally; Custom License",
+              "summarized_finding": "APPLICABILITY TO THIS PROFILE: RE-RETRIEVED 2026-09-01 and unchanged. CC-BY 4.0 is the DEFAULT licence for datasets the World Bank itself produces and distributes as open data, and it permits copying, modification and distribution in any format FOR ANY PURPOSE, INCLUDING COMMERCIAL USE, provided appropriate credit is given and changes are indicated. Additional mandatory terms impose mediation and UNCITRAL arbitration for disputes. Crucially the page states that many datasets carry OTHER licences: ODbL adds a share-alike obligation on redistribution; the Microdata Research License permits statistical and scientific research only and forbids redistribution without prior written agreement; and 'License Specified Externally' and 'Custom License' datasets carry third-party terms. Licensing is therefore per dataset, not per platform.",
+              "retrieved_at": "2026-08-29T00:00:00+00:00"
+            },
+            {
+              "document_type": "OFFICIAL_LICENCE",
+              "document_title": "Creative Commons Attribution 4.0 International — Legal Code",
+              "document_url": "https://creativecommons.org/licenses/by/4.0/legalcode",
+              "section_reference": "Section 1 (Definitions: Share); Section 2(a)(1) (Licence grant); Section 3(a)(1) (Attribution); Section 4 (Sui Generis Database Rights)",
+              "summarized_finding": "Retrieved directly for Mission 1.29, 2026-09-02. Section 2(a)(1) grants the licensee the right to 'reproduce and Share the Licensed Material, in whole or in part; and produce, reproduce, and Share Adapted Material' -- reproduction and Sharing are separate granted acts. Section 1 defines Share as to 'provide material to the public by any means or process that requires permission under the Licensed Rights, such as reproduction, public display, public performance, distribution, dissemination, communication, or importation', so the operative limit is TO THE PUBLIC. Section 3(a)(1) begins 'If You Share the Licensed Material (including in modified form), You must: retain the following if it is supplied by the Licensor', so the attribution obligation is triggered by Sharing and not by reproduction. Section 4 provides that where the Licensed Rights include Sui Generis Database Rights applying to the licensee's use, the licensee is granted the right to extract and reuse the database contents, with adapted databases subject to the attribution condition. This is the instrument itself; v1 rested on the Data Catalog page that names it.",
+              "retrieved_at": "2026-09-02T00:00:00+00:00"
+            }
+          ],
+          "external_model_transmission": "PERMITTED_WITH_CONDITIONS"
         }
       ],
       "signal_coverage": [

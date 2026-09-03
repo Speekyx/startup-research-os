@@ -256,10 +256,26 @@ class TestCrossProfileIsolation:
             assert legacy is not None, source_id
             assert local is not None, source_id
             assert local is not legacy, source_id
-            # Separate version lines: the local review is the first of its own.
-            assert local.review_version == 1, source_id
+            # Separate version lines. Mission 1.17 wrote v1 of each local line;
+            # Mission 1.29 appended v2 to world-bank and gdelt to record a
+            # transmission decision, so the invariant is that the line EXISTS and
+            # starts at 1 -- not that it stopped at a particular number. What
+            # inheritance would look like is a local review that is the legacy
+            # object, or none at all, and both are asserted above.
+            local_line = sorted(
+                r.review_version
+                for r in source.review_history
+                if r.assessed_use_profile == LOCAL_PROFILE
+            )
+            assert local_line[0] == 1, source_id
+            assert local.review_version == max(local_line), source_id
             assert local.assessed_use_profile == LOCAL_PROFILE, source_id
-            assert local.reviewed_by == "mission-1.17", source_id
+            first = next(
+                r
+                for r in source.review_history
+                if r.assessed_use_profile == LOCAL_PROFILE and r.review_version == 1
+            )
+            assert first.reviewed_by == "mission-1.17", source_id
 
 
 # ============================= the gate cannot be asked without a subject

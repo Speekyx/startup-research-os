@@ -102,11 +102,18 @@ class TestInferenceAndTransmissionAreDistinct:
         does not carry, which is exactly true here -- nobody looked -- and is
         distinguishable from both PERMITTED and NOT_PERMITTED.
         """
-        world_bank = catalog.get("world-bank").review_for(LOCAL_PROFILE)
-        assert world_bank is not None
-        assert world_bank.assessment(EXTERNAL_MODEL_TRANSMISSION).value == "NOT_ASSESSED"
+        # Mission 1.29 assessed world-bank at v2, so the review written BEFORE the
+        # activity is v1 and this names it rather than relying on "current"
+        # happening to be unassessed. The property is the same and the test is
+        # stricter: a historical review still carries no opinion about an
+        # activity that did not exist when it was written.
+        history = catalog.get("world-bank").review_history
+        v1 = next(
+            r for r in history if r.assessed_use_profile == LOCAL_PROFILE and r.review_version == 1
+        )
+        assert v1.assessment(EXTERNAL_MODEL_TRANSMISSION).value == "NOT_ASSESSED"
         # And its model_processing answer is untouched by the new field existing.
-        assert world_bank.assessment("model_processing").value != "NOT_ASSESSED"
+        assert v1.assessment("model_processing").value != "NOT_ASSESSED"
 
     def test_stack_exchange_v1_was_not_edited(self, catalog) -> None:
         """The new answer is version 2, appended. v1 still carries what Mission
@@ -229,9 +236,11 @@ class TestOnlyEXTERNALInferenceRequiresTheNewAssessment:
         activity, which is the clearest statement of why they are two fields.
         Asserted through the decision: the refusal names TRANSMISSION, never
         inference."""
-        decision = decide(
-            catalog, profiles, "world-bank", LOCAL_PROFILE, "anthropic", policy=policy
-        )
+        # `eurostat` stands where world-bank used to: it permits model_processing
+        # under the local profile and nobody has assessed TRANSMISSION for it, so
+        # it still isolates the two fields. Mission 1.29 assessed world-bank, and
+        # a test about an unassessed activity needs a source that has one.
+        decision = decide(catalog, profiles, "eurostat", LOCAL_PROFILE, "anthropic", policy=policy)
         assert not decision.authorized
         assert InferenceRefusalReason.SOURCE_TRANSMISSION_NOT_ASSESSED in decision.refusal_reasons
         assert not any("model_processing" in r.lower() for r in decision.refusal_reasons)

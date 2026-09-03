@@ -89,6 +89,15 @@ from .sufficiency import (
     SufficiencyRule,
     evaluate,
 )
+from .transmission import (
+    PERMITTED_PAYLOAD_KEYS,
+    PERSONAL_DATA_MARKERS,
+    PROHIBITED_REPRESENTATIONS,
+    TRANSMISSION_REPRESENTATION_VERSION,
+    RepresentationBoundError,
+    RepresentationViolation,
+    check_representation,
+)
 
 __all__ = [
     "COMMERCIAL_DIMENSIONS",
@@ -103,9 +112,13 @@ __all__ = [
     "GUARD_VERSION",
     "HYPOTHESIS_PROCEDURE_VERSION",
     "PACKET_PROCEDURE_VERSION",
+    "PERMITTED_PAYLOAD_KEYS",
+    "PERSONAL_DATA_MARKERS",
+    "PROHIBITED_REPRESENTATIONS",
     "SIGNAL_DIMENSION_MAP",
     "SUFFICIENCY_PROCEDURE_VERSION",
     "SUFFICIENCY_V1",
+    "TRANSMISSION_REPRESENTATION_VERSION",
     "VALIDATION_WORDS",
     "CandidateGroup",
     "DimensionDefinition",
@@ -122,6 +135,8 @@ __all__ = [
     "OpportunityStatus",
     "PacketEligibility",
     "ReliabilityStatus",
+    "RepresentationBoundError",
+    "RepresentationViolation",
     "SignalDimensionMapping",
     "SourcePolicyStanding",
     "SubjectKey",
@@ -133,6 +148,7 @@ __all__ = [
     "authorize_packet_for_external_synthesis",
     "build_packet",
     "check_no_validation_language",
+    "check_representation",
     "check_statement",
     "counting_dimensions",
     "evaluate",

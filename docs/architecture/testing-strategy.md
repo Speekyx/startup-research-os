@@ -2708,3 +2708,37 @@ The general rule, and the third instance of it after §23 and §64: **when a
 structural check fails because the structure changed, update the declaration of
 what the structure is.** Narrowing the check is how a structural check stops
 checking.
+
+
+## §66 — A version bump is a code change, and the tests that pin it say so
+
+Mission 1.29. Appending a review version to four sources broke **ten** tests
+across the acquisition suite, and every one of them was right to break.
+Withdrawing one of those four appends reverted seven cleanly, which is its own
+small lesson: a broken-test count measures the change, so re-measure it after
+the change shrinks.
+
+Two kinds, and they need different repairs:
+
+- **Tests that pin a NUMBER** (`assert local.review_version == 1`,
+  `assert versions == [1, 2]`). The number moved and the assertion follows it.
+  Nine of these, of which seven concerned the withdrawn append.
+- **Tests that pin a FACT that happened to be true of the current version.**
+  Three used `world-bank` as the example of *a review written before this
+  activity existed reads as NOT_ASSESSED*. That is still true -- of **v1**. The
+  repair is to name v1 explicitly, which makes the test STRICTER: it no longer
+  depends on "current" happening to be unassessed, and it keeps testing the
+  property it was written for.
+
+**Prefer the second repair whenever it is available.** A test that reaches for
+"the current review" to demonstrate a historical property is a test that will
+break again on the next amendment, and the person fixing it the third time will
+be tempted to delete it.
+
+**And the harder lesson: a check that passes does not mean the check covered the
+change.** Mission 1.29 ran an eligibility comparison before and after the append
+and got *0 regressions* -- because `evaluate_eligibility` reads the CATALOG, and
+what the append actually stalled was the **compliance configuration's pin**, a
+separate file with its own version field. The validator caught it; the bespoke
+check did not. When a change touches a versioned artifact, enumerate everything
+pinned to that version before deciding what to re-run.

@@ -38,6 +38,7 @@ from dataclasses import dataclass
 
 from .eligibility import SourcePolicyStanding
 from .packet import OpportunityEvidencePacket
+from .transmission import RepresentationBoundError, check_representation
 
 __all__ = [
     "EGRESS_PROCEDURE_VERSION",
@@ -115,11 +116,21 @@ def authorize_packet_for_external_synthesis(
                 "question an operator can close, not a prohibition."
             )
         elif not permitted:
-            per_source.append((source_id, "REFUSED"))
-            reasons.append(
-                f"{source_id}: external_model_transmission is refused under "
-                f"{standing.use_profile_id}: {standing.basis}"
-            )
+            state = standing.transmission_state or "NOT_PERMITTED"
+            unresolved = state in ("UNCLEAR", "NOT_ADDRESSED")
+            per_source.append((source_id, "UNRESOLVED" if unresolved else "REFUSED"))
+            if unresolved:
+                reasons.append(
+                    f"{source_id}: external_model_transmission is {state} under "
+                    f"{standing.use_profile_id}. The reviewer reached the question and "
+                    "left it open rather than answering no, so this is an open question "
+                    f"an operator can close: {standing.basis}"
+                )
+            else:
+                reasons.append(
+                    f"{source_id}: external_model_transmission is {state} under "
+                    f"{standing.use_profile_id}: {standing.basis}"
+                )
         else:
             per_source.append((source_id, "PERMITTED"))
 
@@ -175,20 +186,27 @@ def serialize_packet_for_model(
             )
         )
 
-    return json.dumps(
-        {
-            "packet_id": packet.packet_id,
-            "subject": packet.subject_label,
-            "procedures": packet.procedures,
-            "source_families": list(packet.source_families),
-            "dimensions": sorted(d.value for d in packet.dimensions),
-            "dimension_bounds": list(packet.dimension_bounds),
-            "independence": packet.independence_summary(),
-            "claims": [
-                {"claim_id": cid, "statement": claim_statements[cid]} for cid in packet.claim_ids
-            ],
-            "evidence_ids": list(packet.evidence_ids),
-        },
-        indent=2,
-        sort_keys=True,
-    )
+    payload = {
+        "packet_id": packet.packet_id,
+        "subject": packet.subject_label,
+        "procedures": packet.procedures,
+        "source_families": list(packet.source_families),
+        "dimensions": sorted(d.value for d in packet.dimensions),
+        "dimension_bounds": list(packet.dimension_bounds),
+        "independence": packet.independence_summary(),
+        "claims": [
+            {"claim_id": cid, "statement": claim_statements[cid]} for cid in packet.claim_ids
+        ],
+        "evidence_ids": list(packet.evidence_ids),
+    }
+
+    # The representation bound, checked on the assembled payload rather than
+    # trusted from the code above. Mission 1.29 §3: a source decision names a
+    # representation, and this is where the name becomes enforceable. A payload
+    # that exceeds it is refused rather than trimmed -- trimming would send a
+    # different packet than the one the decision authorised.
+    violations = check_representation(payload)
+    if violations:
+        raise RepresentationBoundError(violations)
+
+    return json.dumps(payload, indent=2, sort_keys=True)
