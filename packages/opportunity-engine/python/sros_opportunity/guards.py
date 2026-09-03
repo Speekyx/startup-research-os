@@ -25,6 +25,16 @@ explaining the rule. A denial marker earlier in the same sentence now clears the
 term, and only in that sentence: `no evidence of X. Buyers would pay.` still
 fails on the second sentence.
 
+**A term can also be the SUBJECT of its own denial** (added in 1.2.0, Mission
+1.31.1 §1, before that mission's call). *Competitors are not established by the
+evidence* is a denial whose marker FOLLOWS the term, so the ordering rule alone
+flagged it. The two forms are told apart by grammar rather than by order: there
+the term is the subject and the negation is its copula, whereas in *buyers would
+pay, which is not established* the negation sits in a relative clause behind a
+comma and must not license what precedes it. Only
+`<term> (is|are|was|were|has|have|had) (not|never|no)` clears, and an intervening
+comma or contrastive word cancels it.
+
 **A guard is the second line.** The first is not asking the model for the
 sentence at all -- the §10 output schema separates `supported_dimensions` from
 `unsupported_dimensions` and requires every factual statement to name a Claim or
@@ -50,7 +60,7 @@ __all__ = [
     "check_no_validation_language",
 ]
 
-GUARD_VERSION = "opportunity-claim-guard@1.1.0"
+GUARD_VERSION = "opportunity-claim-guard@1.2.0"
 
 _D = EvidenceDimension
 
@@ -184,12 +194,45 @@ def _sentences(text: str) -> list[str]:
     return [part for part in re.split(r"(?<=[.!?])\s+|\n+", text) if part.strip()]
 
 
+#: Words that, between a term and a following negation, mean the negation belongs
+#: to a DIFFERENT clause -- so it cannot be the term's own copula.
+_CLAUSE_BREAKS: tuple[str, ...] = (
+    ",",
+    ";",
+    " which ",
+    " although ",
+    " though ",
+    " but ",
+    " yet ",
+)
+
+#: `<term> (is|are|was|were|has|have|had) (not|never|no) ...` -- the term is the
+#: subject and the negation is its own predicate.
+_COPULAR_DENIAL = re.compile(r"^\s*(?:is|are|was|were|has|have|had)\s+(?:not|never|no)\b")
+
+
+def _subject_of_its_own_denial(lowered: str, phrase: str, position: int) -> bool:
+    """Whether the term at `position` is the subject of a negation that follows.
+
+    Deliberately narrow. The negated copula must begin immediately after the
+    phrase, and any clause break in between disqualifies it -- which is what
+    keeps `buyers would pay, which is not established` an assertion while
+    clearing `competitors are not established by the evidence`.
+    """
+    tail = lowered[position + len(phrase) :]
+    prefix = tail[: max(tail.lower().find("not"), 0)] if "not" in tail[:40] else tail[:40]
+    if any(marker in prefix for marker in _CLAUSE_BREAKS):
+        return False
+    return bool(_COPULAR_DENIAL.match(tail))
+
+
 def _asserted(text: str, phrase: str) -> bool:
     """Whether `phrase` is ASSERTED somewhere in `text`, rather than denied.
 
-    True when at least one sentence contains the phrase with no denial marker
-    before it. A sentence enumerating an absence clears; a bare assertion does
-    not, even if another sentence in the same text denies something else.
+    True when at least one sentence contains the phrase, with no denial marker
+    before it and no negated copula immediately after it. A sentence enumerating
+    an absence clears; a bare assertion does not, even if another sentence in the
+    same text denies something else.
     """
     for sentence in _sentences(text):
         tokens = _tokens(sentence)
@@ -199,18 +242,31 @@ def _asserted(text: str, phrase: str) -> bool:
         position = _phrase_position(lowered, phrase)
         if position is None:
             return True
-        if not any(
+        if any(
             (index := lowered.find(marker)) != -1 and index < position for marker in DENIAL_MARKERS
         ):
-            return True
+            continue
+        # 1.2.0. The term may be the SUBJECT of its own denial, where the marker
+        # necessarily follows it rather than preceding it.
+        if _subject_of_its_own_denial(lowered, phrase, position):
+            continue
+        return True
     return False
 
 
 def _phrase_position(lowered: str, phrase: str) -> int | None:
-    """Where the phrase's first word starts, for comparing against a marker."""
+    """Where the phrase's first word starts, for comparing against a marker.
+
+    `match.end() - len(first)`, NOT `match.start()`: the pattern captures the
+    character before the word so that `supermarket` cannot match `market`, and
+    `start()` therefore points at that character rather than at the word. The
+    difference is one byte and it silently misaligned the tail for every term
+    not at the beginning of a sentence -- so `market demand is never
+    established` cleared and `demand is never established` did not.
+    """
     first = phrase.split()[0]
     match = re.search(rf"(^|[^a-z]){re.escape(first)}", lowered)
-    return match.start() if match else None
+    return match.end() - len(first) if match else None
 
 
 def check_statement(

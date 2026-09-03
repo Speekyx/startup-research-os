@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.58
-Last amended: 2026-09-02 (Sprint 1 / Mission 1.31)
+Version: 1.59
+Last amended: 2026-09-03 (Sprint 1 / Mission 1.31.1)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.59 | 2026-09-03 | **FIRST_OPPORTUNITY_HYPOTHESIS_CREATED. SROS holds its first Opportunity.** Same packet, **byte-identical prompt hash**, corrected audit: one call, 0 retries, 0.0392 USD, decision FORM_HYPOTHESIS, every clause of the frozen gate passed. Opportunities 0 -> **1**, revisions 0 -> **1**, evidence links 0 -> **7**, and RawRecords, NormalizedRecords, Signals, Claims, ClaimRevisions, Evidence, ReliabilityAssessments, Embeddings and Scores ALL UNCHANGED. **Mission 1.31 is untouched** and keeps its rejection under audit@1.0.0. **§1's five required cases found that guard@1.1.0 handled four**: a denial whose marker FOLLOWS its term -- *competitors ARE NOT established* -- was still flagged, and 1.2.0 adds that one grammatical form, cancelled by an intervening comma so *buyers would pay, which is not established* still fails. Checking them also exposed an off-by-one in `_phrase_position` that had misaligned every term not at the start of a sentence. **The two runs agree on every structural judgement** -- same actor refusal, same 12 unsupported dimensions, same 7 citations, both asserting no commercial claim -- so what changed was the audit and not the answer. `market_scope` is GLOBAL because the column is NOT NULL and Ontology V2 §4 defines GLOBAL as the ABSENCE of a restriction, recorded as a limitation on the row. Four TED tests repaired: a global Opportunity count is now deployment state |
 | 1.58 | 2026-09-02 | **The first real Opportunity synthesis ran, and my own gate refused a good answer.** `OPPORTUNITY_SYNTHESIS_OUTPUT_REJECTED`: one call, 0.0383 USD, model returned FORM_HYPOTHESIS with a careful bounded hypothesis, and the frozen gate refused it on ONE clause -- *\"No statement in the packet establishes ... whether anyone would pay, whether competitors already serve this space\"* -- which is an ENUMERATION OF ABSENCES and exactly what §6 required. **A token guard cannot see negation**, so it read a denial as an assertion (testing-strategy §67, the §23 failure in a new place). **The verdict was KEPT and the guard fixed for next time**: §12 forbids weakening a gate after seeing the answer, and this was called a defect only because it rejected an output I judged sound. **0 Opportunities persisted, every counter unchanged.** The model did the hard part well: actor UNKNOWN_NOT_SUPPORTED rather than an invented persona, intervention as a CLASS, pageviews restated as FLUCTUATION rather than growth, `commercial_claims_supported` EMPTY, and it independently said the 88 questions are *a count of questions, not of people* and *not evidence they share a single problem* -- reaching the parked boundary unprompted. Two earlier attempts were abandoned because MY output cap (1500) was smaller than the schema I asked for could serialise |
 | 1.57 | 2026-09-02 | **TARGETED_EVIDENCE_COMPLETION_SUCCESS: the first FORMABLE packet, and NOTHING was acquired to get it.** The `docker` packet is HYPOTHESIS_FORMABLE and AVAILABLE_FOR_EXTERNAL_SYNTHESIS on 7 rows across two source families with two counting dimensions. Counters 26 -> 27 for Signals, Claims, ClaimRevisions and Evidence; RawRecords and NormalizedRecords UNCHANGED at 148. **The minimum needed was zero**: Mission 1.20's `tagged=docker` retrieval provably did not truncate -- one page of size 100 returned 89, and a short page means the set was exhausted -- so a complete count already existed. **A truncated count is not merely imprecise, it is ANTI-INFORMATIVE**: capped at 30 it would report the bound and read as LARGER than a complete 88, which is why the extractor refuses instead of qualifying, and why Kubernetes was not acquired. **89 returned, 88 counted**: one question came back from a `tagged=docker` query carrying no `docker` tag, so what the query asked and what the site says are different facts and the site's answer is the one a claim can rest on. ADR-034 adds COMMUNITY_QUESTION_VOLUME: **a request is what a READER makes of a server, a question is what a PERSON publishes about being stuck**, and widening CONTENT_REQUEST_VOLUME would have cost the FAMILY its meaning. New dimension PROBLEM_OR_NEED, with RECURRENCE_OR_FREQUENCY deliberately refused because it needs the PARKED relation. A canonical subject registry joins two vocabularies by EXACT equality with a stated basis. Sufficiency rule unchanged, reliability unchanged, independence still UNKNOWN, 0 model calls |
 | 1.56 | 2026-09-02 | **OPPORTUNITY_SYNTHESIS_EGRESS_PARTIALLY_READY: three decisions recorded, and the fourth deliberately not.** `wikimedia-pageviews` **PERMITTED** on CC0 1.0, which waives database rights BY NAME and leaves no act for a licence to restrict -- and no attribution condition was written, because CC0 creates none. `world-bank` and `gdelt` **PERMITTED_WITH_CONDITIONS**. **8 of 9 packets are now egress-authorized and 0 became formable**, which is the design working: permission to send is not evidence. **CC BY 4.0 grants 'reproduce AND Share' as two acts**, so reproduction stands alone and a contracted processor is not 'the public' -- the transmission allowlist is CC-BY-4.0 ONLY, TIGHTER than acquisition's, because ODbL's Publicly Use is unanswered. **GDELT's grant runs to datasets it RELEASES**, so ngram aggregates are covered and third-party article text is a PROHIBITED representation; its citation obligation attaches to 'any use' and is live where CC BY's is not. **TED was assessed UNCLEAR and NOT recorded**: appending a review orphans the operator's HUMAN_CONFIRMATION acceptance, which no verifier may re-satisfy, so TED would have stopped being acquirable as a side effect of assessing egress -- §0 forbids exactly that. NOT_ASSESSED and UNCLEAR both refuse, so nothing operational was traded away. **A source whose approval rests on a human decision cannot be cheaply amended.** New refusal code UNRESOLVED, because an operator can close an open question and cannot argue with a decision. 0 model calls, 0.00 USD, counters unchanged, authorizable pairs 8 before and 8 after |
@@ -305,6 +306,53 @@ positives in the scored split, which this 89-question corpus did not supply: one
 defensible SAME in 40 candidate pairs is a finding about the corpus, not about
 the classifier. **No synthetic positive may substitute** -- a constructed pair
 can test a parser and can never establish semantic accuracy against real data.
+
+### The first Opportunity exists, and it is a hypothesis that says what it lacks
+
+Added in 1.59 (Mission 1.31.1, `mission-1.31.1-report.md`,
+`opportunity-synthesis-run-v1.1.json`). **`FIRST_OPPORTUNITY_HYPOTHESIS_CREATED`**:
+one Opportunity, one revision, seven Evidence links, all at `ELIGIBLE_CONTEXT`.
+
+    Opportunity 06113a8b  ->  revision 1  ->  7 Evidence links
+    status OPPORTUNITY_HYPOTHESIS, packet c25451c5, use profile local-private-research-v1
+
+- **A re-run is legitimate when the PROCEDURE changed and the question did not.**
+  The packet, the evidence, the schema and the prompt were byte-identical --
+  `synthesis_prompt_hash()` still returns the hash Mission 1.31 recorded -- and
+  only the audit differed. Mission 1.31's verdict stands under `audit@1.0.0` in
+  its own artifact; this run wrote a new one. **Neither rewrites the other.**
+- **A term can be the SUBJECT of its own denial.** `guard@1.1.0` cleared a denial
+  marker appearing BEFORE a term, which left *competitors are not established by
+  the evidence* flagged. `@1.2.0` adds `<term> (is|are|was|were|has|have|had)
+  (not|never|no)`, cancelled by an intervening comma or contrastive word -- so
+  *buyers would pay, which is not established* still fails. Order alone was not
+  enough; grammar was.
+- **A guard that matches on a token boundary must not confuse the boundary with
+  the token.** `_phrase_position` returned `match.start()`, which pointed at the
+  character captured before the word so that `supermarket` cannot match `market`.
+  Every term not at the start of a sentence had its tail misaligned by one byte.
+- **The two runs agree on every structural judgement**, which is the strongest
+  available evidence that the earlier rejection was a guard defect rather than a
+  model failure: same `UNKNOWN_NOT_SUPPORTED` actor, same twelve unsupported
+  dimensions, same seven citations, `commercial_claims_supported` empty in both.
+- **`market_scope` is GLOBAL and that is not a market claim.** The column is NOT
+  NULL and the packet establishes no geography; Ontology V2 §4 defines GLOBAL as
+  the ABSENCE of a geographic restriction. The limitation is persisted on the
+  revision so a reader cannot take it for the other thing.
+- **The hypothesis says what it lacks, in the row.** Twelve unsupported
+  dimensions and five limitations are stored as arrays, not prose: NON_SCORABLE
+  and MISSING_RELIABILITY on every row; independence UNKNOWN and two families is
+  not two independent sources; the question count is of questions and not of
+  people and not evidence any two share a problem; two of six Wikimedia rows are
+  DECREASES and the calendar does not cancel.
+- **A global row count becomes deployment state the moment it can legitimately be
+  non-zero** (`testing-strategy.md` §68). Four TED tests asserted
+  `research.opportunities == 0`; they now assert that no Opportunity hypothesis
+  cites TED Evidence, which is deployment-independent and catches more.
+
+**Nothing was scored or ranked**, `scoring.scores` still does not exist, every
+supporting row is still `NON_SCORABLE`, D-03 is untouched, and problem-family
+inference stays PARKED.
 
 ### The synthesis path works, and a guard that cannot see negation does not
 

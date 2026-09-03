@@ -327,12 +327,28 @@ class TestNothingReachedTheDatabase:
     # "nobody has done the second one yet", which is a progress marker wearing a
     # test's clothes.
 
-    def test_no_opportunity_or_embedding_was_created(self) -> None:
-        for query in (
-            "SELECT count(*) FROM research.opportunities",
-            "SELECT count(*) FROM nlp.embedding_provenance",
-        ):
-            assert self._count(query) == 0, query
+    def test_no_embedding_exists_and_no_opportunity_cites_ted(self) -> None:
+        """`research.opportunities` joined RAW and NORMALIZED as DEPLOYMENT state
+        in Mission 1.31.1, which legitimately persisted the first hypothesis over
+        a Docker packet. A global count is now non-zero on a machine that has run
+        the pipeline and zero on one that has not, which is the confusion §49
+        forbids a test from encoding -- the same reasoning that removed the two
+        record counts above.
+
+        What stays REPOSITORY-true, and what this asserts instead, is stronger:
+        no Opportunity hypothesis cites TED Evidence on any machine. That holds
+        however many Opportunities exist, and it fails loudly if a future mission
+        pulls a TED row into a packet."""
+        assert self._count("SELECT count(*) FROM nlp.embedding_provenance") == 0
+        assert (
+            self._count(
+                """SELECT count(*)
+                     FROM research.opportunity_hypothesis_evidence l
+                     JOIN scoring.evidence e ON e.id = l.evidence_id
+                    WHERE e.source_id = 'ted-eu'"""
+            )
+            == 0
+        )
 
     # §34 asks that the production rows be unchanged, and this file deliberately
     # does NOT assert 12 / 12 / 7 / 7 / 7. Those are facts about one database and

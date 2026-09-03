@@ -521,8 +521,8 @@ class TestTheGuardCanSeeNegation:
     def test_the_versions_record_that_this_changed(self) -> None:
         from sros_opportunity.guards import GUARD_VERSION
 
-        assert GUARD_VERSION == "opportunity-claim-guard@1.1.0"
-        assert AUDIT_VERSION == "opportunity-synthesis-audit@1.1.0"
+        assert GUARD_VERSION == "opportunity-claim-guard@1.2.0"
+        assert AUDIT_VERSION == "opportunity-synthesis-audit@1.2.0"
 
     def test_the_committed_run_keeps_its_original_verdict(self) -> None:
         """The artifact records the 1.0.0 decision and is not re-evaluated."""
@@ -532,3 +532,142 @@ class TestTheGuardCanSeeNegation:
         artifact = json.loads(path.read_text(encoding="utf-8"))
         assert artifact["persistence"]["audit_version"] == "opportunity-synthesis-audit@1.0.0"
         assert artifact["persistence"]["persist"] is False
+
+
+class TestMission1311PreCallRequirements:
+    """Mission 1.31.1 §1. The five cases that must pass BEFORE the provider is called.
+
+    They are listed in the brief as a precondition, so they are a gate rather
+    than a regression suite: if any fails, the call does not happen.
+
+    Running them found that `guard@1.1.0` handled four of the five. The fifth is
+    a denial whose marker FOLLOWS its term -- *competitors are not established* --
+    because 1.1.0 only cleared a marker that preceded one. `@1.2.0` adds that
+    single grammatical form and nothing else.
+    """
+
+    #: (text, must_be_flagged). The five from §1, in order.
+    REQUIRED = (
+        ("No evidence establishes willingness to pay.", False),
+        ("No evidence establishes willingness to pay. Buyers would pay 40 EUR.", True),
+        ("Competitors are not established by the evidence.", False),
+        ("Competitors already serve this market.", True),
+        ("Buyers would pay, which is not established.", True),
+    )
+
+    def test_the_five_required_cases(self) -> None:
+        for text, must_flag in self.REQUIRED:
+            flagged = bool(check_statement(text, frozenset()))
+            assert flagged is must_flag, text
+
+    def test_a_denial_marker_after_an_assertion_does_not_clear_it(self) -> None:
+        """§1 case 5, stated as its own property because it is the one the
+        subject-of-its-own-denial form could most easily break."""
+        for text in (
+            "Buyers would pay, which is not established.",
+            "Revenue would follow, but nothing is established.",
+            "Competitors serve this space, although that is not evidenced.",
+        ):
+            assert check_statement(text, frozenset()), text
+
+    def test_a_term_may_be_the_subject_of_its_own_denial(self) -> None:
+        for text in (
+            "Competitors are not established by the evidence.",
+            "Willingness to pay is not established.",
+            "Buyers are not identified anywhere in the packet.",
+            "Market demand is never established here.",
+        ):
+            assert not check_statement(text, frozenset()), text
+
+    def test_the_phrase_position_is_the_word_not_the_character_before_it(self) -> None:
+        """An off-by-one found by these cases and fixed before the call.
+
+        The pattern captures the character preceding the word so that
+        `supermarket` cannot match `market`, which makes `match.start()` point
+        one byte early. Every term not at the start of a sentence had its tail
+        misaligned, so `market demand is never established` cleared while
+        `demand is never established` did not."""
+        from sros_opportunity.guards import _phrase_position
+
+        assert _phrase_position("market demand is here", "demand") == 7
+        assert _phrase_position("demand is here", "demand") == 0
+
+    def test_the_token_boundary_still_holds(self) -> None:
+        """The reason `_phrase_position` looks the way it does at all."""
+        assert not check_statement("Supermarkets appear in the corpus.", frozenset())
+
+    def test_the_guard_and_audit_versions_moved_together(self) -> None:
+        from sros_opportunity.guards import GUARD_VERSION
+
+        assert GUARD_VERSION == "opportunity-claim-guard@1.2.0"
+        assert AUDIT_VERSION == "opportunity-synthesis-audit@1.2.0"
+
+    def test_mission_1_31_keeps_its_historical_verdict(self) -> None:
+        """§0. The earlier run is evidence and is not re-evaluated."""
+        artifact = json.loads(
+            (DOCS / "opportunity-synthesis-run-v1.json").read_text(encoding="utf-8")
+        )
+        assert artifact["persistence"]["audit_version"] == "opportunity-synthesis-audit@1.0.0"
+        assert artifact["persistence"]["persist"] is False
+        assert artifact["mission"] == "1.31"
+
+
+class TestMission1311RunArtifact:
+    """§18 and §19, over the re-run's own artifact."""
+
+    def _artifact(self) -> dict | None:
+        path = DOCS / "opportunity-synthesis-run-v1.1.json"
+        if not path.exists():
+            return None
+        return json.loads(path.read_text(encoding="utf-8"))
+
+    def test_it_is_a_separate_artifact_from_mission_1_31(self) -> None:
+        artifact = self._artifact()
+        if artifact is None:
+            pytest.skip("the re-run has not happened yet")
+        assert artifact["mission"] == "1.31.1"
+        assert (DOCS / "opportunity-synthesis-run-v1.json").exists()
+
+    def test_the_packet_is_the_same_one(self) -> None:
+        artifact = self._artifact()
+        if artifact is None:
+            pytest.skip("the re-run has not happened yet")
+        historical = json.loads(
+            (DOCS / "opportunity-synthesis-run-v1.json").read_text(encoding="utf-8")
+        )
+        assert artifact["packet_id"] == historical["packet_id"]
+        assert artifact["evidence_ids"] == historical["evidence_ids"]
+        assert artifact["claim_ids"] == historical["claim_ids"]
+
+    def test_the_semantic_prompt_did_not_change(self) -> None:
+        """§2. No prompt tuning: the same hash the code still produces."""
+        artifact = self._artifact()
+        if artifact is None:
+            pytest.skip("the re-run has not happened yet")
+        historical = json.loads(
+            (DOCS / "opportunity-synthesis-run-v1.json").read_text(encoding="utf-8")
+        )
+        assert artifact["prompt_sha256"] == synthesis_prompt_hash()
+        assert artifact["prompt_sha256"] == historical["prompt_sha256"]
+
+    def test_one_call_and_the_ceiling_held(self) -> None:
+        artifact = self._artifact()
+        if artifact is None:
+            pytest.skip("the re-run has not happened yet")
+        assert artifact["logical_calls"] == 1
+        assert artifact["schema_retries"] <= 1
+        assert artifact["cost_units"] <= 0.25
+        assert artifact["hard_maximum_cost_units"] <= 0.25
+
+    def test_it_was_audited_by_the_corrected_gate(self) -> None:
+        artifact = self._artifact()
+        if artifact is None:
+            pytest.skip("the re-run has not happened yet")
+        assert artifact["persistence"]["audit_version"] == "opportunity-synthesis-audit@1.2.0"
+
+    def test_egress_resolved_before_serialization(self) -> None:
+        artifact = self._artifact()
+        if artifact is None:
+            pytest.skip("the re-run has not happened yet")
+        assert artifact["egress"]["availability"] == "AVAILABLE"
+        assert artifact["authorization_resolved_before_serialization"] is True

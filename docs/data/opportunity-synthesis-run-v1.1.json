@@ -1,0 +1,184 @@
+{
+  "mission": "1.31.1",
+  "packet_id": "c25451c569909207357d0af19698e4737b7c85961fcf393bf632ba8b8242110e",
+  "subject": "subject:docker",
+  "procedure": "opportunity-synthesis@1.0.0",
+  "prompt_version": "1.0.0",
+  "prompt_sha256": "dfd28a0a77e2cae23a268e39eb1c432f23f905810b26dc129f6fd99f7491195e",
+  "provider": "anthropic",
+  "model": "claude-sonnet-5",
+  "logical_calls": 1,
+  "schema_retries": 0,
+  "abandoned_attempts_before_output_cap_fix": 0,
+  "abandoned_attempts_note": "Attempts spent against a 1500-token output cap that was smaller than the requested schema can serialise. Both failed schema validation with the last five required fields missing, so no answer was produced and none was rejected. The cap was raised to 3000 and nothing about the task, prompt, schema or evidence changed.",
+  "input_tokens": 5967,
+  "output_tokens": 2722,
+  "cost_units": 0.039154,
+  "hard_maximum_cost_units": 0.071284,
+  "max_output_tokens": 3000,
+  "authorization_resolved_before_serialization": true,
+  "egress": {
+    "availability": "AVAILABLE",
+    "per_source": [
+      [
+        "stack-exchange",
+        "PERMITTED"
+      ],
+      [
+        "wikimedia-pageviews",
+        "PERMITTED"
+      ]
+    ]
+  },
+  "transmitted_payload_keys": [
+    "claims",
+    "dimension_bounds",
+    "dimensions",
+    "evidence_ids",
+    "independence",
+    "packet_id",
+    "procedures",
+    "source_families",
+    "subject"
+  ],
+  "evidence_ids": [
+    "13a5eadb-977d-4de0-9c35-d0ff53442074",
+    "16a8c39c-d72a-4252-9c67-7be2165e9cae",
+    "1b93db71-eaed-45c5-a2fa-9e4edea7bc49",
+    "487f62c6-2fcf-4790-9773-6e99214d0003",
+    "516182ff-0122-4d13-9d8a-92bb38065a75",
+    "6cf92ad6-77ed-4126-b356-41e65856430b",
+    "f1e0b7a4-d570-429a-91a4-fadff84cdce1"
+  ],
+  "claim_ids": [
+    "05cac6f6-17f4-4008-b68b-9787bb4ac774",
+    "1829e497-f582-4017-b88d-4d277375ccf7",
+    "459e9fec-3ad1-4955-81c6-2aa0f2179bc5",
+    "565bbcb7-9e70-418b-9a8e-a1549b23a230",
+    "6e4c3f21-8881-4453-b4ff-af1b47c464b5",
+    "b3d0d2d0-daa0-4854-a4c0-a31684841b03",
+    "c58949e4-d8a7-4636-9c53-3bbac3b7b7c0"
+  ],
+  "model_output": {
+    "decision": "FORM_HYPOTHESIS",
+    "subject": "subject:docker",
+    "target_actor_if_supported": "UNKNOWN_NOT_SUPPORTED",
+    "observed_need": "The packet shows (a) day-to-day changes in request counts for the \"Docker_(software)\" Wikipedia article under the platform's own \"user\" requester class, and (b) 88 questions filed under the \"docker\" tag on Stack Overflow within a bounded window. Together these establish only that some attention exists toward a topic called \"docker\" (an encyclopedia article being requested, and public questions being filed under that subject tag) and that at least some of those questions reflect an actor filing a question -- i.e., some need or gap in understanding at the moment of asking. Neither the identity, role, nor recurrence of any actor is established.",
+    "candidate_intervention_class": "Not determinable beyond: any investigation would need to characterize what specific problem the class of \"docker\"-tagged questions represents before any intervention class could be named; the packet itself does not support naming a product, feature, or service class -- only that a topic attracts requests and that questions get filed under it.",
+    "hypothesis_statement": "There is evidence worth further investigation that some actors attend to the \"Docker_(software)\" Wikipedia article (with day-to-day request-count fluctuations under the platform's own heuristic requester classification) and that some actors file public questions tagged \"docker\" on Stack Overflow within a bounded window, indicating at least momentary unserved need at the point of asking; whether this reflects any recurring, severe, or commercially addressable need, and who the relevant actor is, is not established and would require further investigation before any intervention can be scoped.",
+    "supported_dimensions": [
+      "AUDIENCE_OR_USAGE",
+      "PROBLEM_OR_NEED"
+    ],
+    "unsupported_dimensions": [
+      "BUYER_OR_BUDGET_EXISTENCE",
+      "COMPETITIVE_SUPPLY",
+      "DISTRIBUTION_SIGNAL",
+      "ECONOMIC_VALUE",
+      "FEASIBILITY_SIGNAL",
+      "MARKET_ACTIVITY",
+      "RECURRENCE_OR_FREQUENCY",
+      "REGULATORY_OR_STRUCTURAL_DRIVER",
+      "SOLUTION_DISSATISFACTION",
+      "SOLUTION_GAP",
+      "WILLINGNESS_TO_PAY",
+      "TREND_OR_CHANGE"
+    ],
+    "supporting_evidence_ids": [
+      "13a5eadb-977d-4de0-9c35-d0ff53442074",
+      "16a8c39c-d72a-4252-9c67-7be2165e9cae",
+      "1b93db71-eaed-45c5-a2fa-9e4edea7bc49",
+      "487f62c6-2fcf-4790-9773-6e99214d0003",
+      "516182ff-0122-4d13-9d8a-92bb38065a75",
+      "6cf92ad6-77ed-4126-b356-41e65856430b",
+      "f1e0b7a4-d570-429a-91a4-fadff84cdce1"
+    ],
+    "supporting_claim_ids": [
+      "565bbcb7-9e70-418b-9a8e-a1549b23a230",
+      "6e4c3f21-8881-4453-b4ff-af1b47c464b5",
+      "05cac6f6-17f4-4008-b68b-9787bb4ac774",
+      "c58949e4-d8a7-4636-9c53-3bbac3b7b7c0",
+      "b3d0d2d0-daa0-4854-a4c0-a31684841b03",
+      "459e9fec-3ad1-4955-81c6-2aa0f2179bc5",
+      "1829e497-f582-4017-b88d-4d277375ccf7"
+    ],
+    "source_families": [
+      "forum",
+      "knowledge"
+    ],
+    "independence_status": "Independence is UNKNOWN for 7 of 7 rows; this packet does not establish that its evidence is independent, and the count of rows (7) is not a count of independent findings.",
+    "reliability_status": "Every row is NON_SCORABLE with MISSING_RELIABILITY: no reviewed reliability applies to any of these measurements, and 0 of 7 rows are scoring-eligible; this packet cannot contribute to any score.",
+    "evidence_bound_reasoning_summary": "Six rows report day-over-day differences in Wikipedia pageview request counts for \"Docker_(software)\" under the platform's own heuristic \"user\" requester classification; these are request counts, not reader counts, and the differences are movements within one source stream between adjacent calendar days, not a trend that is shown to continue or that reflects any commercial signal. One row reports a count (88) of Stack Overflow questions carrying the \"docker\" tag within a bounded window; this is a subject label from the site's own vocabulary, not a shared problem, and author identity is not captured, so distinct askers cannot be counted. Together these support only that a \"docker\"-labeled topic receives measured attention (AUDIENCE_OR_USAGE) and that some actor was sufficiently blocked or curious to file a public question (PROBLEM_OR_NEED) at least once within the window. No statement in the packet speaks to recurrence by the same actor, money changing hands, willingness to pay, existence of a buyer, competitive supply, distribution channels, regulatory drivers, dissatisfaction with existing solutions, or feasibility of any intervention. Both source families (forum, knowledge) carry UNKNOWN independence and MISSING_RELIABILITY across all 7 rows, so no scoring or confidence claim can be attached to any of this.",
+    "critical_uncertainties": [
+      "Whether any of the 88 tagged questions share the same underlying problem, or represent 88 distinct problems",
+      "Whether the same actor authored more than one of the 88 questions (author identity is not captured)",
+      "Whether pageview fluctuations reflect human readers, automated traffic, or a mix, given the heuristic requester classification",
+      "Whether any actor involved has budget or purchasing authority",
+      "Whether any money moves in connection with this topic",
+      "Whether existing solutions for whatever need drove the questions are adequate or inadequate",
+      "Whether actors are dissatisfied with anything they currently use",
+      "Whether the need recurs for the same actor over time or is a one-off",
+      "Whether any regulatory or structural driver shapes this activity",
+      "Whether any distribution channel exists to reach the actors who asked these questions",
+      "Whether an intervention of any kind is feasible to build or operate",
+      "Whether the pageview movements are attributable to any cause connected to the questions"
+    ],
+    "commercial_claims_supported": [],
+    "commercial_claims_not_supported": [
+      "That a market for docker-related products or services exists or has any measurable size",
+      "That any actor would pay for a solution to whatever prompted the tagged questions",
+      "That a buyer with budget authority exists in this space",
+      "That competitors already serve or fail to serve this need",
+      "That any distribution channel is available to reach these actors",
+      "That the pageview trend will continue beyond the observed days",
+      "That the need is frequent or recurring for any single actor",
+      "That any regulatory or structural driver forces this activity",
+      "That actors are dissatisfied with current solutions",
+      "That a solution gap exists",
+      "That the observed request or question counts translate into demand",
+      "That money moves in this activity at all",
+      "That the topic's popularity indicates commercial opportunity",
+      "That an intervention of any kind is feasible or worth building"
+    ]
+  },
+  "persistence": {
+    "gate_version": "opportunity-synthesis-persistence-gate@1.0.0",
+    "persist": true,
+    "refusal_reasons": [],
+    "notes": [],
+    "audit_version": "opportunity-synthesis-audit@1.2.0",
+    "audit": [
+      {
+        "field": "observed_need",
+        "verdict": "SUPPORTED",
+        "findings": []
+      },
+      {
+        "field": "candidate_intervention_class",
+        "verdict": "SUPPORTED",
+        "findings": []
+      },
+      {
+        "field": "hypothesis_statement",
+        "verdict": "SUPPORTED",
+        "findings": []
+      },
+      {
+        "field": "evidence_bound_reasoning_summary",
+        "verdict": "SUPPORTED",
+        "findings": []
+      },
+      {
+        "field": "target_actor_if_supported",
+        "verdict": "NOT_FACTUAL",
+        "findings": []
+      }
+    ]
+  },
+  "persisted": {
+    "opportunity_id": "06113a8b-a83d-423d-8046-18f87d7dbc01",
+    "revision_id": "efca07a9-b283-473a-887b-a2ae82989bbe",
+    "links": 7
+  },
+  "ran_at": "2026-09-02T19:51:58.200592+00:00"
+}
