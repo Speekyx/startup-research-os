@@ -228,9 +228,44 @@ class TestNothingWasBuiltAndNothingWasCalled:
     def test_no_inferred_claim_interpreter_exists(self) -> None:
         """`validate_claims.py` already fails the build on a non-OBSERVED claim
         type in the interpretation package. This asserts the simpler fact: no
-        module was added that would need it."""
+        module was added that would need it.
+
+        The enumeration is deliberate -- a new module has to be argued for here
+        rather than appearing. `convergent_witness` was added by Mission 1.39 and
+        is structurally OBSERVED: it projects one OBSERVED draft onto a broader
+        OBSERVED proposition, and `PropositionConvergenceContract` refuses a
+        non-OBSERVED claim type in its constructor.
+
+        The property is asserted below rather than left to the names, because a
+        module list is only evidence about what exists and not about what it
+        does.
+        """
         interpreters = {p.stem for p in (NLP / "interpreters").glob("*.py")}
-        assert interpreters == {"__init__", "base", "observed_restatement"}
+        assert interpreters == {
+            "__init__",
+            "base",
+            "observed_restatement",
+            "convergent_witness",
+        }
+
+    def test_every_interpreter_module_is_structurally_observed(self) -> None:
+        """The property the enumeration above is a proxy for.
+
+        Parsed over the AST so a docstring naming `ClaimType.INFERRED` -- as the
+        surrounding prose reasonably might -- cannot fail it
+        (`testing-strategy.md` §23).
+        """
+        import ast
+
+        for path in (NLP / "interpreters").glob("*.py"):
+            tree = ast.parse(path.read_text(encoding="utf-8"))
+            for node in ast.walk(tree):
+                if (
+                    isinstance(node, ast.Attribute)
+                    and isinstance(node.value, ast.Name)
+                    and node.value.id == "ClaimType"
+                ):
+                    assert node.attr == "OBSERVED", f"{path.name} names ClaimType.{node.attr}"
 
     def test_no_prompt_was_added_for_semantic_equivalence(self) -> None:
         prompts = GATEWAY / "prompts"

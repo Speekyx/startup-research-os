@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.67
+Version: 1.68
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-03 (Sprint 1 / Mission 1.38)
+Last amended: 2026-09-03 (Sprint 1 / Mission 1.39)
 
 ---
 
@@ -13,6 +13,39 @@ Last amended: 2026-09-03 (Sprint 1 / Mission 1.38)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.68 — 2026-09-03 (Sprint 1 / Mission 1.39)
+
+**`PROPOSITION_CONVERGENCE_CONTRACT_READY`.** Two genuinely distinct observations
+can now support one Claim. Every live canonical counter is unchanged and the
+calibration feasibility audit is byte-identical.
+
+**ADR-035 introduces the distinction the Claim model did not make**: proposition
+identity facts decide what is asserted, witness observation facts decide which
+observation demonstrates it. A witness fact is not discarded — it stops being an
+identity.
+
+**OBSERVED convergence is legitimate and narrow.** An existential over a
+publication passes the epistemic contract's own test, and the broader proposition
+is entailed by the detailed one rather than a weakened copy, which is why it is a
+new proposition kind and `notice_ids` stays identity on the old one.
+
+**`max(members)` finally receives more than one member**, proved through the real
+repository and the real aggregator against synthetic fixtures in a disposable
+workspace: one Claim, two Evidence rows, one revision, idempotent replay.
+Independence stays UNKNOWN and saturation still receives one group, which is
+correct rather than a shortfall.
+
+A test caught a vocabulary collision: `ObservationOverlap` was drafted with
+`UNKNOWN`, which `EvidenceIndependenceState` already has. Renamed `UNESTABLISHED`.
+
+New: `docs/architecture/adr/ADR-035-proposition-identity-and-witness-identity.md`,
+`docs/data/proposition-convergence-contract-v1.md` and its generated artifact,
+`packages/claim-model/python/sros_claim_model/convergence.py`,
+`services/nlp/python/sros_nlp/interpreters/convergent_witness.py`,
+`infrastructure/scripts/render_convergence_contract.py` (CI `--check`).
+
+Report: `docs/architecture/mission-1.39-report.md`.
 
 ## 1.67 — 2026-09-03 (Sprint 1 / Mission 1.38)
 
@@ -2368,6 +2401,7 @@ Additionally authoritative:
 - docs/data/evidence-aggregation-calibration-strategy-v1.md (added in 1.66)
 - docs/data/calibration-reference-dataset-schema-v1.json (added in 1.66)
 - docs/data/second-pilot-selection-v1.json (added in 1.67)
+- docs/data/proposition-convergence-contract-v1.md (added in 1.68)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

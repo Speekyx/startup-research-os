@@ -1,0 +1,173 @@
+{
+  "$comment": "Mission 1.39 §34. GENERATED from sros_claim_model.convergence by infrastructure/scripts/render_convergence_contract.py; edit the registry, not this file, and re-render. A convergence-enabled proposition kind declares WHICH facts decide the assertion and WHICH decide the witness, before any observation is processed. Convergence defined as 'drop fields until the hashes match' is a coincidence with a procedure, not a contract.",
+  "artifact_version": "proposition-convergence-contract@1.0.0",
+  "generated_by": "mission-1.39",
+  "outcome": "PROPOSITION_CONVERGENCE_CONTRACT_READY",
+  "claim_type_policy": {
+    "permitted": [
+      "OBSERVED"
+    ],
+    "why": "An OBSERVED claim asserts what a source reported, attributed, and an existential over a publication is a faithful restatement: a reader can go and read it there, and it stays true if the source was wrong. An INFERRED convergence would need the interpretation layer docs/CLAUDE.md records as deliberately unbuilt, and the constructor refuses one so it cannot be built here by accident.",
+    "refused_reasoning_steps": [
+      "generalising from samples",
+      "estimating prevalence",
+      "asserting the class usually behaves this way",
+      "combining source meanings",
+      "inferring a latent phenomenon"
+    ]
+  },
+  "source_boundary_policy": {
+    "values": [
+      "SAME_SOURCE_AND_RESOURCE"
+    ],
+    "v1_rule": "SAME_SOURCE_AND_RESOURCE",
+    "why": "Attribution is part of an OBSERVED proposition. 'Wikimedia counted X' and 'TED reported Z' are different propositions with different falsifiers, and rendering them into similar English does not make them one. No cross-source member exists in the enum: a member nobody may pass is an invitation.",
+    "source_id_is_always_identity": true
+  },
+  "identity_versus_witness_rule": {
+    "test": "If changing field F changes WHAT the Claim asserts, F is proposition identity. If changing F only changes WHICH observation witnesses the same assertion, F may be witness identity.",
+    "witness_facts_are_retained": "A witness fact stays on the Signal, on the Evidence and in provenance. It stops being an identity; it does not stop existing.",
+    "unclassified_facts_are_refused": "qualify() refuses a fact set carrying a fact the contract classifies as neither. The key is built from whatever is in the mapping, so a fact nobody placed is a fact that decides."
+  },
+  "qualification_predicate": {
+    "outcomes": [
+      "QUALIFIES",
+      "DOES_NOT_QUALIFY",
+      "MISSING_REQUIRED_FACT"
+    ],
+    "inputs": [
+      "the persisted proposition facts",
+      "the Signal type id"
+    ],
+    "forbidden_mechanisms": [
+      "embeddings",
+      "cosine or any vector similarity",
+      "LLM equivalence",
+      "fuzzy string matching",
+      "semantic clustering",
+      "SAME_PROBLEM_FAMILY"
+    ],
+    "why_three_valued": "'this observation is not about that proposition' and 'this observation did not carry the facts to tell' are different situations, and only the second is fixable upstream."
+  },
+  "overlap_semantics": {
+    "values": [
+      "DISJOINT",
+      "OVERLAPPING",
+      "UNESTABLISHED"
+    ],
+    "is_not_independence": true,
+    "why": "DISJOINT says two witnesses read different records. It does not say the two Evidence rows are independent corroboration: they can still share the publisher, the collection mechanism, the methodology and the population. independence_state stays UNKNOWN and the conservative unknown-provenance collapse remains authoritative.",
+    "member_name_collision_avoided": "ObservationOverlap uses UNESTABLISHED rather than UNKNOWN, because EvidenceIndependenceState already has UNKNOWN and two vocabularies sharing a member name is how a mapping between them gets written by accident."
+  },
+  "duplicate_witness_policy": {
+    "rule": "two Evidence rows on one Claim must have different witness keys",
+    "witness_key": "proposition_key over the witness facts, namespaced by proposition kind",
+    "why_not_uuids": "a guard comparing generated ids would agree that the same cohort inserted twice is two witnesses"
+  },
+  "temporality_handling": {
+    "rule": "declared on the contract, never inferred from the observation",
+    "this_contract": "EVERGREEN",
+    "why": "H-37 is open: a TED notice publishes an offset without a time, so the source establishes no instant this claim could be bounded by. An existential over a publication needs none -- once witnessed, it stays witnessed."
+  },
+  "scope_handling": {
+    "rule": "a convergent proposition carries its own ObservationScope, derived at packet build time from the identifiers it holds, exactly as Mission 1.34 specified. Different scopes do not converge because the statement template matches.",
+    "multi_scope_architecture_changed": false
+  },
+  "backward_compatibility": {
+    "historical_proposition_kinds": [
+      "source_reported_metric_period_change",
+      "platform_counted_content_request_change",
+      "community_site_published_questions_carrying_tag",
+      "community_site_questions_without_accepted_answer",
+      "source_reported_term_frequency_change",
+      "source_reported_term_frequency_contrast",
+      "source_reported_procurement_value_contrast"
+    ],
+    "kinds_with_a_convergence_contract": [],
+    "guarantee": "proposition_key is unchanged and was not touched. Convergence computes the same hash over a smaller mapping, which is what a different fact set has always produced. No historical template changed, no historical key changed, and convergence is opt-in per proposition kind."
+  },
+  "production_wiring": {
+    "wired_into_the_claim_interpretation_job": false,
+    "why": "Mission 1.39 settles the contract. Until a later mission decides to run it against live records, no Signal in this deployment can witness two Claims, so the double-counting boundary is enforced by absence rather than by a rule."
+  },
+  "contracts": [
+    {
+      "contract_id": "source-published-value-contrast-witnessed",
+      "version": "1.0.0",
+      "proposition_kind": "source_published_classification_value_contrast_witnessed",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "source_boundary": "SAME_SOURCE_AND_RESOURCE",
+      "identity_fields": [
+        "proposition",
+        "source_id",
+        "resource_id",
+        "notice_class",
+        "amount_type",
+        "amount_scope",
+        "currency",
+        "classification_scheme",
+        "classification_division",
+        "relation"
+      ],
+      "witness_fields": [
+        "notice_ids",
+        "classification_codes"
+      ],
+      "qualifying_signal_types": [
+        "procurement_value_contrast"
+      ],
+      "establishes": "that the named source published, in the named resource, at least one bounded set of notices of the named class under the named classification division whose stated amounts of the named type, scope and currency stand in the named relation",
+      "does_not_establish": [
+        "how many such sets exist",
+        "what proportion of the division's notices they are",
+        "that the relation is typical, representative or usual for the division",
+        "any trend, growth or change over time",
+        "demand, market size, buyer preference or willingness to pay",
+        "that the amounts are prices, or that anybody paid them",
+        "that the witnesses are independent of one another"
+      ]
+    }
+  ],
+  "forbidden_convergence_examples": [
+    {
+      "example": "two Wikimedia articles on the same day",
+      "facts_differing": [
+        "content_id"
+      ],
+      "why_refused": "platform_counted_content_request_change has no convergence contract, and if it did, content_id would be identity: merging them merges Docker with Podman, which Mission 1.38 measured as twelve real claim pairs one field apart"
+    },
+    {
+      "example": "a TED observation and a World Bank observation",
+      "facts_differing": [
+        "source_id"
+      ],
+      "why_refused": "source_id is always identity for an OBSERVED claim"
+    },
+    {
+      "example": "two cohorts in different CPV divisions",
+      "facts_differing": [
+        "classification_division"
+      ],
+      "why_refused": "the division is what the assertion is about"
+    },
+    {
+      "example": "a DIFFERS cohort and an EQUAL cohort",
+      "facts_differing": [
+        "relation"
+      ],
+      "why_refused": "two assertions, not two readings of one"
+    },
+    {
+      "example": "the same cohort processed twice",
+      "facts_differing": [],
+      "why_refused": "identical witness key. Replay is idempotent and adds no Evidence row"
+    }
+  ],
+  "test_fixtures": {
+    "contract_and_near_misses": "packages/claim-model/python/tests/test_proposition_convergence.py",
+    "persistence_and_aggregation": "services/nlp/python/tests/test_proposition_convergence_persistence.py",
+    "all_fixtures_are_synthetic": true,
+    "written_to_a_disposable_workspace": true
+  }
+}
