@@ -1,0 +1,1616 @@
+{
+  "$comment": "Mission 1.43 §0. The calibration shape of the live corpus, measured through the REAL resolver and the REAL aggregator. UNCALIBRATED, DIAGNOSTIC ONLY, NOT AN OPPORTUNITY SCORE. Nothing is persisted and no parameter is fitted.",
+  "$banner": [
+    "UNCALIBRATED",
+    "DIAGNOSTIC ONLY",
+    "NOT AN OPPORTUNITY SCORE",
+    "NOT A PROBABILITY"
+  ],
+  "artifact_version": "calibration-corpus-baseline@1.0.0",
+  "generated_by": "mission-1.43",
+  "totals": {
+    "claims": 43,
+    "evidence_rows": 57,
+    "scorable_claims": 28,
+    "multi_evidence_claims": 8,
+    "scorable_multi_evidence_claims": 2,
+    "max_evidence_per_claim": 4,
+    "current_reliability_assessments": 3
+  },
+  "mechanisms_exercised": {
+    "$note": "Which aggregation mechanism any real Claim has actually put to work. A mechanism no Claim exercises cannot be calibrated, however many rows the corpus holds.",
+    "claims_with_more_than_one_scorable_item": 2,
+    "claims_with_more_than_one_support_group": 0,
+    "claims_with_established_independence": 0,
+    "claims_with_contradiction": 0,
+    "claims_temporally_sensitive": 0,
+    "claims_with_claim_feature": 0,
+    "claims_where_aggregator_differs_from_pass_through": 0
+  },
+  "diversity": {
+    "source_ids": {
+      "gdelt": 3,
+      "stack-exchange": 2,
+      "ted-eu": 10,
+      "wikimedia-pageviews": 24,
+      "world-bank": 4
+    },
+    "source_families": {
+      "community_qa": 2,
+      "encyclopedia_readership": 24,
+      "news_corpus": 3,
+      "official_statistics": 4,
+      "public_procurement": 10
+    },
+    "proposition_kinds": {
+      "community_site_published_questions_carrying_tag": 1,
+      "community_site_questions_without_accepted_answer": 1,
+      "platform_counted_content_request_change": 18,
+      "platform_counted_content_request_change_witnessed": 6,
+      "source_published_classification_value_contrast_witnessed": 4,
+      "source_reported_metric_period_change": 4,
+      "source_reported_procurement_value_contrast": 6,
+      "source_reported_term_frequency_change": 2,
+      "source_reported_term_frequency_contrast": 1
+    },
+    "claim_types": {
+      "OBSERVED": 43
+    },
+    "temporalities": {
+      "EVERGREEN": 43
+    },
+    "observation_categories": {
+      "UNCATEGORISED": 43
+    },
+    "independence_states": {
+      "UNKNOWN": 43
+    },
+    "limiting_components": {
+      "reliability": 28
+    },
+    "distinct_reliability_values": {
+      "0.5": 6,
+      "0.55": 4,
+      "0.65": 18
+    },
+    "evidence_counts": {
+      "1": 35,
+      "2": 3,
+      "3": 4,
+      "4": 1
+    }
+  },
+  "units": [
+    {
+      "claim_id": "02248c91-a384-442d-8c78-80ba4c1bd2b1",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "proposition_kind": "source_published_classification_value_contrast_witnessed",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 2,
+      "support_count": 2,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "46d63faee823239159d2aa35224fd793b03a07d081d9b095ec2c4f46231a85e6"
+      ],
+      "distinct_reliability_values": [
+        0.55
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 1,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 2,
+      "established_independence_groups": 0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence_count": 2,
+      "support_strength": 0.55,
+      "limiting_components": [
+        "reliability"
+      ],
+      "evidence_level": 1,
+      "reliability_pass_through": 0.55,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "05cac6f6-17f4-4008-b68b-9787bb4ac774",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "encyclopedia_readership",
+      "proposition_kind": "platform_counted_content_request_change",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "6404d1de3406b8bc501b5d2ea23c613e65001a6c513bc76561017535d2dad80e"
+      ],
+      "distinct_reliability_values": [
+        0.65
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 1,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 1,
+      "established_independence_groups": 0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence_count": 1,
+      "support_strength": 0.6500000000000001,
+      "limiting_components": [
+        "reliability"
+      ],
+      "evidence_level": 1,
+      "reliability_pass_through": 0.65,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "0651a63c-6756-4dc9-a215-7ea03d80c658",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "encyclopedia_readership",
+      "proposition_kind": "platform_counted_content_request_change",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "6404d1de3406b8bc501b5d2ea23c613e65001a6c513bc76561017535d2dad80e"
+      ],
+      "distinct_reliability_values": [
+        0.65
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 1,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 1,
+      "established_independence_groups": 0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence_count": 1,
+      "support_strength": 0.6500000000000001,
+      "limiting_components": [
+        "reliability"
+      ],
+      "evidence_level": 1,
+      "reliability_pass_through": 0.65,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "1324d79c-54c6-4bba-9d7f-2320133f2ea8",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "encyclopedia_readership",
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 3,
+      "support_count": 3,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "99f5da032a44949fe5f4b7b91b637a4b7a696b1636adade475586cde518fdaf3"
+      ],
+      "distinct_reliability_values": [],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 0,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 0,
+      "established_independence_groups": 0,
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence_count": 0,
+      "support_strength": 0.0,
+      "limiting_components": [],
+      "evidence_level": 0,
+      "reliability_pass_through": null,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "1829e497-f582-4017-b88d-4d277375ccf7",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "encyclopedia_readership",
+      "proposition_kind": "platform_counted_content_request_change",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "6404d1de3406b8bc501b5d2ea23c613e65001a6c513bc76561017535d2dad80e"
+      ],
+      "distinct_reliability_values": [
+        0.65
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 1,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 1,
+      "established_independence_groups": 0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence_count": 1,
+      "support_strength": 0.6500000000000001,
+      "limiting_components": [
+        "reliability"
+      ],
+      "evidence_level": 1,
+      "reliability_pass_through": 0.65,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "1e00a6dc-051c-4431-b13b-cc879f01a526",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "proposition_kind": "source_reported_procurement_value_contrast",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "d6cbc7ba1a79129b80faa1d01d3db862ba7fd6ad23ef9003768de896eeb09d32"
+      ],
+      "distinct_reliability_values": [
+        0.5
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 1,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 1,
+      "established_independence_groups": 0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence_count": 1,
+      "support_strength": 0.5,
+      "limiting_components": [
+        "reliability"
+      ],
+      "evidence_level": 1,
+      "reliability_pass_through": 0.5,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "212ecb46-6bb0-4c7b-9b73-d8e5000afaf5",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "encyclopedia_readership",
+      "proposition_kind": "platform_counted_content_request_change",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "6404d1de3406b8bc501b5d2ea23c613e65001a6c513bc76561017535d2dad80e"
+      ],
+      "distinct_reliability_values": [
+        0.65
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 1,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 1,
+      "established_independence_groups": 0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence_count": 1,
+      "support_strength": 0.6500000000000001,
+      "limiting_components": [
+        "reliability"
+      ],
+      "evidence_level": 1,
+      "reliability_pass_through": 0.65,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "2a634f95-207d-478f-af40-12c9454f21d6",
+      "source_id": "stack-exchange",
+      "source_family": "community_qa",
+      "proposition_kind": "community_site_questions_without_accepted_answer",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "079768c25295ebf7e6586cb058ecab7405fedac4968a11cae75d9108a3c81c7e"
+      ],
+      "distinct_reliability_values": [],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 0,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 0,
+      "established_independence_groups": 0,
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence_count": 0,
+      "support_strength": 0.0,
+      "limiting_components": [],
+      "evidence_level": 0,
+      "reliability_pass_through": null,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "330638b0-4faa-4f44-877f-cbd653bf7df5",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "proposition_kind": "source_reported_procurement_value_contrast",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "d6cbc7ba1a79129b80faa1d01d3db862ba7fd6ad23ef9003768de896eeb09d32"
+      ],
+      "distinct_reliability_values": [
+        0.5
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 1,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 1,
+      "established_independence_groups": 0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence_count": 1,
+      "support_strength": 0.5,
+      "limiting_components": [
+        "reliability"
+      ],
+      "evidence_level": 1,
+      "reliability_pass_through": 0.5,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "343bbbde-35d1-4979-bf40-8103f3579bf4",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "encyclopedia_readership",
+      "proposition_kind": "platform_counted_content_request_change",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "6404d1de3406b8bc501b5d2ea23c613e65001a6c513bc76561017535d2dad80e"
+      ],
+      "distinct_reliability_values": [
+        0.65
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 1,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 1,
+      "established_independence_groups": 0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence_count": 1,
+      "support_strength": 0.6500000000000001,
+      "limiting_components": [
+        "reliability"
+      ],
+      "evidence_level": 1,
+      "reliability_pass_through": 0.65,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "39449935-d841-4e76-b920-dd727204c199",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "encyclopedia_readership",
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 2,
+      "support_count": 2,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "99f5da032a44949fe5f4b7b91b637a4b7a696b1636adade475586cde518fdaf3"
+      ],
+      "distinct_reliability_values": [],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 0,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 0,
+      "established_independence_groups": 0,
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence_count": 0,
+      "support_strength": 0.0,
+      "limiting_components": [],
+      "evidence_level": 0,
+      "reliability_pass_through": null,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "3bd0b9be-d175-41c5-a923-e4166f481ea2",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "encyclopedia_readership",
+      "proposition_kind": "platform_counted_content_request_change",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "6404d1de3406b8bc501b5d2ea23c613e65001a6c513bc76561017535d2dad80e"
+      ],
+      "distinct_reliability_values": [
+        0.65
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 1,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 1,
+      "established_independence_groups": 0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence_count": 1,
+      "support_strength": 0.6500000000000001,
+      "limiting_components": [
+        "reliability"
+      ],
+      "evidence_level": 1,
+      "reliability_pass_through": 0.65,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "459e9fec-3ad1-4955-81c6-2aa0f2179bc5",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "encyclopedia_readership",
+      "proposition_kind": "platform_counted_content_request_change",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "6404d1de3406b8bc501b5d2ea23c613e65001a6c513bc76561017535d2dad80e"
+      ],
+      "distinct_reliability_values": [
+        0.65
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 1,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 1,
+      "established_independence_groups": 0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence_count": 1,
+      "support_strength": 0.6500000000000001,
+      "limiting_components": [
+        "reliability"
+      ],
+      "evidence_level": 1,
+      "reliability_pass_through": 0.65,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "560f27d6-d75c-4bdd-9060-312a0f07538b",
+      "source_id": "world-bank",
+      "source_family": "official_statistics",
+      "proposition_kind": "source_reported_metric_period_change",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "11654121014d70b3a8ab93cec97525c10f5776d3919ed67d55fb3cc207d79ab7"
+      ],
+      "distinct_reliability_values": [],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 0,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 0,
+      "established_independence_groups": 0,
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence_count": 0,
+      "support_strength": 0.0,
+      "limiting_components": [],
+      "evidence_level": 0,
+      "reliability_pass_through": null,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "565bbcb7-9e70-418b-9a8e-a1549b23a230",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "encyclopedia_readership",
+      "proposition_kind": "platform_counted_content_request_change",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "6404d1de3406b8bc501b5d2ea23c613e65001a6c513bc76561017535d2dad80e"
+      ],
+      "distinct_reliability_values": [
+        0.65
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 1,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 1,
+      "established_independence_groups": 0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence_count": 1,
+      "support_strength": 0.6500000000000001,
+      "limiting_components": [
+        "reliability"
+      ],
+      "evidence_level": 1,
+      "reliability_pass_through": 0.65,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "6389d1bf-6dea-47e8-8508-dcf009fe352d",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "proposition_kind": "source_published_classification_value_contrast_witnessed",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "46d63faee823239159d2aa35224fd793b03a07d081d9b095ec2c4f46231a85e6"
+      ],
+      "distinct_reliability_values": [
+        0.55
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 1,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 1,
+      "established_independence_groups": 0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence_count": 1,
+      "support_strength": 0.55,
+      "limiting_components": [
+        "reliability"
+      ],
+      "evidence_level": 1,
+      "reliability_pass_through": 0.55,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "63c3ccc6-4e4f-40d4-92f3-3cbdb5f04c40",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "encyclopedia_readership",
+      "proposition_kind": "platform_counted_content_request_change",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "6404d1de3406b8bc501b5d2ea23c613e65001a6c513bc76561017535d2dad80e"
+      ],
+      "distinct_reliability_values": [
+        0.65
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 1,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 1,
+      "established_independence_groups": 0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence_count": 1,
+      "support_strength": 0.6500000000000001,
+      "limiting_components": [
+        "reliability"
+      ],
+      "evidence_level": 1,
+      "reliability_pass_through": 0.65,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "6d03f533-9155-4631-89e2-843cb028b010",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "proposition_kind": "source_reported_procurement_value_contrast",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "d6cbc7ba1a79129b80faa1d01d3db862ba7fd6ad23ef9003768de896eeb09d32"
+      ],
+      "distinct_reliability_values": [
+        0.5
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 1,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 1,
+      "established_independence_groups": 0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence_count": 1,
+      "support_strength": 0.5,
+      "limiting_components": [
+        "reliability"
+      ],
+      "evidence_level": 1,
+      "reliability_pass_through": 0.5,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "6e4c3f21-8881-4453-b4ff-af1b47c464b5",
+      "source_id": "stack-exchange",
+      "source_family": "community_qa",
+      "proposition_kind": "community_site_published_questions_carrying_tag",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "dcee58a547179fead7265ecaa02c8699be95cba1abe55112927ed87068d429ba"
+      ],
+      "distinct_reliability_values": [],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 0,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 0,
+      "established_independence_groups": 0,
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence_count": 0,
+      "support_strength": 0.0,
+      "limiting_components": [],
+      "evidence_level": 0,
+      "reliability_pass_through": null,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "6eefe19d-9112-466b-a03e-b34413cd6869",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "encyclopedia_readership",
+      "proposition_kind": "platform_counted_content_request_change",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "6404d1de3406b8bc501b5d2ea23c613e65001a6c513bc76561017535d2dad80e"
+      ],
+      "distinct_reliability_values": [
+        0.65
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 1,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 1,
+      "established_independence_groups": 0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence_count": 1,
+      "support_strength": 0.6500000000000001,
+      "limiting_components": [
+        "reliability"
+      ],
+      "evidence_level": 1,
+      "reliability_pass_through": 0.65,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "73e834c4-ddad-4093-9727-79720e074b4b",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "proposition_kind": "source_published_classification_value_contrast_witnessed",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "46d63faee823239159d2aa35224fd793b03a07d081d9b095ec2c4f46231a85e6"
+      ],
+      "distinct_reliability_values": [
+        0.55
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 1,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 1,
+      "established_independence_groups": 0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence_count": 1,
+      "support_strength": 0.55,
+      "limiting_components": [
+        "reliability"
+      ],
+      "evidence_level": 1,
+      "reliability_pass_through": 0.55,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "78195b94-99bf-47a3-8c83-26bdb930aa67",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "encyclopedia_readership",
+      "proposition_kind": "platform_counted_content_request_change",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "6404d1de3406b8bc501b5d2ea23c613e65001a6c513bc76561017535d2dad80e"
+      ],
+      "distinct_reliability_values": [
+        0.65
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 1,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 1,
+      "established_independence_groups": 0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence_count": 1,
+      "support_strength": 0.6500000000000001,
+      "limiting_components": [
+        "reliability"
+      ],
+      "evidence_level": 1,
+      "reliability_pass_through": 0.65,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "7e2382a2-0d06-469d-b60e-6afb4c4dfad4",
+      "source_id": "gdelt",
+      "source_family": "news_corpus",
+      "proposition_kind": "source_reported_term_frequency_change",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "6eba3bb7341c27f6e53927e0a7ed7baa78be9d173d85cff28e74d1921b4468d4"
+      ],
+      "distinct_reliability_values": [],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 0,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 0,
+      "established_independence_groups": 0,
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence_count": 0,
+      "support_strength": 0.0,
+      "limiting_components": [],
+      "evidence_level": 0,
+      "reliability_pass_through": null,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "81738129-3993-4450-acc4-c683c7d2b23e",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "encyclopedia_readership",
+      "proposition_kind": "platform_counted_content_request_change",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "6404d1de3406b8bc501b5d2ea23c613e65001a6c513bc76561017535d2dad80e"
+      ],
+      "distinct_reliability_values": [
+        0.65
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 1,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 1,
+      "established_independence_groups": 0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence_count": 1,
+      "support_strength": 0.6500000000000001,
+      "limiting_components": [
+        "reliability"
+      ],
+      "evidence_level": 1,
+      "reliability_pass_through": 0.65,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "8a551705-741e-431c-ab2d-1edd4d24f1ad",
+      "source_id": "world-bank",
+      "source_family": "official_statistics",
+      "proposition_kind": "source_reported_metric_period_change",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "11654121014d70b3a8ab93cec97525c10f5776d3919ed67d55fb3cc207d79ab7"
+      ],
+      "distinct_reliability_values": [],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 0,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 0,
+      "established_independence_groups": 0,
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence_count": 0,
+      "support_strength": 0.0,
+      "limiting_components": [],
+      "evidence_level": 0,
+      "reliability_pass_through": null,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "8ab0d96d-95f3-4a61-935c-afe2ef3e319b",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "encyclopedia_readership",
+      "proposition_kind": "platform_counted_content_request_change",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "6404d1de3406b8bc501b5d2ea23c613e65001a6c513bc76561017535d2dad80e"
+      ],
+      "distinct_reliability_values": [
+        0.65
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 1,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 1,
+      "established_independence_groups": 0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence_count": 1,
+      "support_strength": 0.6500000000000001,
+      "limiting_components": [
+        "reliability"
+      ],
+      "evidence_level": 1,
+      "reliability_pass_through": 0.65,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "97dec365-7ee8-4c93-947f-36fd9abf1d1b",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "encyclopedia_readership",
+      "proposition_kind": "platform_counted_content_request_change",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "6404d1de3406b8bc501b5d2ea23c613e65001a6c513bc76561017535d2dad80e"
+      ],
+      "distinct_reliability_values": [
+        0.65
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 1,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 1,
+      "established_independence_groups": 0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence_count": 1,
+      "support_strength": 0.6500000000000001,
+      "limiting_components": [
+        "reliability"
+      ],
+      "evidence_level": 1,
+      "reliability_pass_through": 0.65,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "9bda8081-aebb-48a7-a31d-3fab8e2345a6",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "encyclopedia_readership",
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 3,
+      "support_count": 3,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "99f5da032a44949fe5f4b7b91b637a4b7a696b1636adade475586cde518fdaf3"
+      ],
+      "distinct_reliability_values": [],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 0,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 0,
+      "established_independence_groups": 0,
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence_count": 0,
+      "support_strength": 0.0,
+      "limiting_components": [],
+      "evidence_level": 0,
+      "reliability_pass_through": null,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "a2707d23-28ef-491d-9ae6-2e09a39e947d",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "encyclopedia_readership",
+      "proposition_kind": "platform_counted_content_request_change",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "6404d1de3406b8bc501b5d2ea23c613e65001a6c513bc76561017535d2dad80e"
+      ],
+      "distinct_reliability_values": [
+        0.65
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 1,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 1,
+      "established_independence_groups": 0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence_count": 1,
+      "support_strength": 0.6500000000000001,
+      "limiting_components": [
+        "reliability"
+      ],
+      "evidence_level": 1,
+      "reliability_pass_through": 0.65,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "a4809b1a-56a4-4ae2-a2e3-9ee2f68e4dd3",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "encyclopedia_readership",
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 3,
+      "support_count": 3,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "99f5da032a44949fe5f4b7b91b637a4b7a696b1636adade475586cde518fdaf3"
+      ],
+      "distinct_reliability_values": [],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 0,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 0,
+      "established_independence_groups": 0,
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence_count": 0,
+      "support_strength": 0.0,
+      "limiting_components": [],
+      "evidence_level": 0,
+      "reliability_pass_through": null,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "aab81833-ca25-4798-b540-e3db965375d0",
+      "source_id": "world-bank",
+      "source_family": "official_statistics",
+      "proposition_kind": "source_reported_metric_period_change",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "11654121014d70b3a8ab93cec97525c10f5776d3919ed67d55fb3cc207d79ab7"
+      ],
+      "distinct_reliability_values": [],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 0,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 0,
+      "established_independence_groups": 0,
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence_count": 0,
+      "support_strength": 0.0,
+      "limiting_components": [],
+      "evidence_level": 0,
+      "reliability_pass_through": null,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "b3d0d2d0-daa0-4854-a4c0-a31684841b03",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "encyclopedia_readership",
+      "proposition_kind": "platform_counted_content_request_change",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "6404d1de3406b8bc501b5d2ea23c613e65001a6c513bc76561017535d2dad80e"
+      ],
+      "distinct_reliability_values": [
+        0.65
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 1,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 1,
+      "established_independence_groups": 0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence_count": 1,
+      "support_strength": 0.6500000000000001,
+      "limiting_components": [
+        "reliability"
+      ],
+      "evidence_level": 1,
+      "reliability_pass_through": 0.65,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "bf4e4b48-fdf9-48f6-9c69-2178eb361e18",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "proposition_kind": "source_published_classification_value_contrast_witnessed",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 2,
+      "support_count": 2,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "46d63faee823239159d2aa35224fd793b03a07d081d9b095ec2c4f46231a85e6"
+      ],
+      "distinct_reliability_values": [
+        0.55
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 1,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 2,
+      "established_independence_groups": 0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence_count": 2,
+      "support_strength": 0.55,
+      "limiting_components": [
+        "reliability"
+      ],
+      "evidence_level": 1,
+      "reliability_pass_through": 0.55,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "c20aee0c-f5ea-4b55-8520-eb2a2f7f5d9a",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "encyclopedia_readership",
+      "proposition_kind": "platform_counted_content_request_change",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "6404d1de3406b8bc501b5d2ea23c613e65001a6c513bc76561017535d2dad80e"
+      ],
+      "distinct_reliability_values": [
+        0.65
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 1,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 1,
+      "established_independence_groups": 0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence_count": 1,
+      "support_strength": 0.6500000000000001,
+      "limiting_components": [
+        "reliability"
+      ],
+      "evidence_level": 1,
+      "reliability_pass_through": 0.65,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "c58949e4-d8a7-4636-9c53-3bbac3b7b7c0",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "encyclopedia_readership",
+      "proposition_kind": "platform_counted_content_request_change",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "6404d1de3406b8bc501b5d2ea23c613e65001a6c513bc76561017535d2dad80e"
+      ],
+      "distinct_reliability_values": [
+        0.65
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 1,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 1,
+      "established_independence_groups": 0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence_count": 1,
+      "support_strength": 0.6500000000000001,
+      "limiting_components": [
+        "reliability"
+      ],
+      "evidence_level": 1,
+      "reliability_pass_through": 0.65,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "d23a8b89-ad7f-434f-937d-eb25d23617ee",
+      "source_id": "gdelt",
+      "source_family": "news_corpus",
+      "proposition_kind": "source_reported_term_frequency_change",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "6eba3bb7341c27f6e53927e0a7ed7baa78be9d173d85cff28e74d1921b4468d4"
+      ],
+      "distinct_reliability_values": [],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 0,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 0,
+      "established_independence_groups": 0,
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence_count": 0,
+      "support_strength": 0.0,
+      "limiting_components": [],
+      "evidence_level": 0,
+      "reliability_pass_through": null,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "dfa8c0f5-8e59-437f-b18b-90e9ac854776",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "proposition_kind": "source_reported_procurement_value_contrast",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "d6cbc7ba1a79129b80faa1d01d3db862ba7fd6ad23ef9003768de896eeb09d32"
+      ],
+      "distinct_reliability_values": [
+        0.5
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 1,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 1,
+      "established_independence_groups": 0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence_count": 1,
+      "support_strength": 0.5,
+      "limiting_components": [
+        "reliability"
+      ],
+      "evidence_level": 1,
+      "reliability_pass_through": 0.5,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "dff657c2-3ee8-429c-b308-4e0d8f3894d2",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "encyclopedia_readership",
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 3,
+      "support_count": 3,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "99f5da032a44949fe5f4b7b91b637a4b7a696b1636adade475586cde518fdaf3"
+      ],
+      "distinct_reliability_values": [],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 0,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 0,
+      "established_independence_groups": 0,
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence_count": 0,
+      "support_strength": 0.0,
+      "limiting_components": [],
+      "evidence_level": 0,
+      "reliability_pass_through": null,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "e740d102-4bf2-4f9c-bc01-e82c9fb4ac99",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "encyclopedia_readership",
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 4,
+      "support_count": 4,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "99f5da032a44949fe5f4b7b91b637a4b7a696b1636adade475586cde518fdaf3"
+      ],
+      "distinct_reliability_values": [],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 0,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 0,
+      "established_independence_groups": 0,
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence_count": 0,
+      "support_strength": 0.0,
+      "limiting_components": [],
+      "evidence_level": 0,
+      "reliability_pass_through": null,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "ec8fc694-c0f5-402f-9985-c2c93d0f15e9",
+      "source_id": "gdelt",
+      "source_family": "news_corpus",
+      "proposition_kind": "source_reported_term_frequency_contrast",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "cc96f373c5c2499c3b08dc7b65aa3c086511f3d6e55271a77ba22af95f3b1d4e"
+      ],
+      "distinct_reliability_values": [],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 0,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 0,
+      "established_independence_groups": 0,
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence_count": 0,
+      "support_strength": 0.0,
+      "limiting_components": [],
+      "evidence_level": 0,
+      "reliability_pass_through": null,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "edf6b49e-058f-4432-aece-acac0694008e",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "proposition_kind": "source_reported_procurement_value_contrast",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "d6cbc7ba1a79129b80faa1d01d3db862ba7fd6ad23ef9003768de896eeb09d32"
+      ],
+      "distinct_reliability_values": [
+        0.5
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 1,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 1,
+      "established_independence_groups": 0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence_count": 1,
+      "support_strength": 0.5,
+      "limiting_components": [
+        "reliability"
+      ],
+      "evidence_level": 1,
+      "reliability_pass_through": 0.5,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "ef1a9208-1375-42c9-ac93-c319bf7adc6b",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "proposition_kind": "source_reported_procurement_value_contrast",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "d6cbc7ba1a79129b80faa1d01d3db862ba7fd6ad23ef9003768de896eeb09d32"
+      ],
+      "distinct_reliability_values": [
+        0.5
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 1,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 1,
+      "established_independence_groups": 0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence_count": 1,
+      "support_strength": 0.5,
+      "limiting_components": [
+        "reliability"
+      ],
+      "evidence_level": 1,
+      "reliability_pass_through": 0.5,
+      "aggregator_differs_from_pass_through": false
+    },
+    {
+      "claim_id": "efb39063-6458-4d2c-88f9-ccfdf86ac8b6",
+      "source_id": "world-bank",
+      "source_family": "official_statistics",
+      "proposition_kind": "source_reported_metric_period_change",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "evidence_count": 1,
+      "support_count": 1,
+      "contradiction_count": 0,
+      "reliability_scopes": [
+        "11654121014d70b3a8ab93cec97525c10f5776d3919ed67d55fb3cc207d79ab7"
+      ],
+      "distinct_reliability_values": [],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "runtime_support_groups": 0,
+      "runtime_contradiction_groups": 0,
+      "max_group_members": 0,
+      "established_independence_groups": 0,
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence_count": 0,
+      "support_strength": 0.0,
+      "limiting_components": [],
+      "evidence_level": 0,
+      "reliability_pass_through": null,
+      "aggregator_differs_from_pass_through": false
+    }
+  ]
+}

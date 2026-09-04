@@ -64,9 +64,14 @@ class CalibrationDidNotHappen(unittest.TestCase):
         input to scoring and observes nothing new about the world.
         """
         totals = load(AUDIT)["totals"]
-        self.assertEqual(totals["claims"], 37)
-        self.assertEqual(totals["evidence_rows"], 39)
+        # Totals are deployment state and grow when a mission adds real research
+        # rows -- Mission 1.43 did. What is invariant is that REVIEWING
+        # reliability adds none: it supplies an input to scoring and observes
+        # nothing new about the world.
+        self.assertGreaterEqual(totals["claims"], 37)
+        self.assertGreaterEqual(totals["evidence_rows"], 39)
         self.assertGreaterEqual(totals["current_reliability_assessments"], 2)
+        self.assertEqual(load(AUDIT)["profile"]["status"], "UNCALIBRATED")
 
 
 class BoundariesThatStayWhereTheyWere(unittest.TestCase):

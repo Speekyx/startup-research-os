@@ -371,8 +371,77 @@ _PROCUREMENT_VALUE_CONTRAST_WITNESSED = PropositionConvergenceContract(
     ),
 )
 
+
+_CONTENT_REQUEST_CHANGE_WITNESSED = PropositionConvergenceContract(
+    contract_id="platform-counted-content-request-change-witnessed",
+    version="1.0.0",
+    proposition_kind="platform_counted_content_request_change_witnessed",
+    claim_type=ClaimType.OBSERVED,
+    # EVERGREEN for the same reason the procurement one is, reached from the
+    # opposite direction. Wikimedia's day bucket IS documented -- the Analytics
+    # API states UTC partitioning, which is why the detailed claim may name its
+    # days at all. The existential still carries no period: once the platform has
+    # published a qualifying pair of buckets, it has published one, and that does
+    # not stop being true. **A source with established timestamps does not make a
+    # claim temporal**; what would is a proposition whose truth decays, and a
+    # statement about what a platform once counted is not one.
+    temporality=ClaimTemporality.EVERGREEN,
+    source_boundary=SourceBoundary.SAME_SOURCE_AND_RESOURCE,
+    identity_fields=(
+        "proposition",
+        # Attribution. The claim is about what THIS platform counted.
+        "source_id",
+        # Which platform's counts. A different wiki is a different population.
+        "content_platform",
+        # Which item was counted. Docker, Podman and Kubernetes are three
+        # subjects and merging them is the Mission 1.38 failure by another route.
+        "content_id",
+        # WHOSE requests were counted. Mission 1.19 made this REQUIRED on the
+        # record kind precisely because the same item over the same period
+        # carries a different number per requester class -- two measurements
+        # wearing one name is what that decision refused, and dropping it here
+        # would undo it.
+        "audience_class",
+        # The property asserted: that requests rose, fell, or held. Three
+        # different assertions, exactly as the procurement contract's `relation`.
+        "direction",
+    ),
+    witness_fields=(
+        # WHICH pair of buckets was read. Changing these changes which
+        # observation demonstrates the assertion, never the assertion -- the
+        # ADR-035 test, and the same role `notice_ids` plays for procurement.
+        # They stay on the Signal and in provenance, so the witness remains
+        # recoverable; they stop being identity.
+        "period_label_from",
+        "period_label_to",
+    ),
+    qualifying_signal_types=("content_request_change",),
+    establishes=(
+        "that the named platform counted, for the named item under the named requester "
+        "class, at least one pair of adjacent published day buckets whose request counts "
+        "stand in the named direction"
+    ),
+    does_not_establish=(
+        "how many such pairs exist",
+        "what proportion of the item's history they are",
+        "that the direction is typical, usual or continuing",
+        "any trend, growth, decline or momentum",
+        "that a person read anything, since a request is what a reader makes of a server",
+        "audience size, interest, demand or adoption",
+        "that the witnesses are independent of one another",
+        "that the calendar is controlled for, since a weekday and a weekend are "
+        "different days and the pairs are not matched on that",
+    ),
+)
+
 CONVERGENCE_CONTRACTS: Mapping[str, PropositionConvergenceContract] = MappingProxyType(
-    {_PROCUREMENT_VALUE_CONTRAST_WITNESSED.proposition_kind: _PROCUREMENT_VALUE_CONTRAST_WITNESSED}
+    {
+        contract.proposition_kind: contract
+        for contract in (
+            _PROCUREMENT_VALUE_CONTRAST_WITNESSED,
+            _CONTENT_REQUEST_CHANGE_WITNESSED,
+        )
+    }
 )
 
 

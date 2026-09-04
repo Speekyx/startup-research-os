@@ -1,0 +1,285 @@
+{
+  "$comment": "Mission 1.43 §1, §3, §5, §7. The PREREGISTERED plan: the gap matrix, the routes considered, the one selected, and the target structure -- all frozen BEFORE any derivation ran. This is a PREPARATION artifact in the Mission 1.36 / 1.42 sense: it records the question and the plan as they stood beforehand, and it must not be rewritten once the outcome is known. What actually happened is recorded separately.",
+  "artifact_version": "calibration-corpus-expansion-plan@1.0.0",
+  "generated_by": "mission-1.43",
+  "frozen_before_any_derivation": true,
+
+  "ordering_disclosure": {
+    "$note": "§12 requires the convergence contract to be defined before results are inspected. §0 requires the live corpus to be MEASURED first. Both were honoured, and the overlap is disclosed rather than glossed.",
+    "what_was_measured_first": "The §0 baseline, which necessarily includes how many Claims each source and proposition kind holds and how their directions are distributed. That is existing corpus state, not the result of this mission's derivation.",
+    "why_it_does_not_taint_the_contract": "The identity/witness classification below follows from the ADR-035 test applied to FACT NAMES -- does changing this field change WHAT is asserted, or only WHICH observation witnesses it -- and does not depend on how many rows carry each value. The same classification would be written if every article had exactly one day-pair, in which case the contract would simply yield no multi-Evidence Claim and the mission would report PREREGISTERED_CORPUS_SHAPE_NOT_OBSERVED."
+  },
+
+  "the_algebraic_finding": {
+    "$note": "Measured across all 37 live Claims, and the reason this mission is not primarily about adding rows.",
+    "claims_where_aggregator_differs_from_pass_through": 0,
+    "claims_with_more_than_one_support_group": 0,
+    "statement": "With exactly ONE support group, the full aggregator is not merely empirically equal to the Mission 1.37 B-2 reliability pass-through baseline -- it is ALGEBRAICALLY identical to it. Saturation computes S = 1 - prod(1 - g) over groups, which for a single group is that group's strength; group strength is max(members); and B-2 is the reliability-limited strongest item, which is the same max over the same q values.",
+    "consequence": "No amount of additional single-group Evidence can ever make the two differ. The aggregation layer becomes measurable only when a Claim carries MORE THAN ONE provenance group -- which requires ESTABLISHED independence -- or when contradiction opens the contradiction side of the mass decomposition.",
+    "why_this_reframes_corpus_expansion": "Adding rows of the shapes the corpus already has increases volume and cannot increase calibration information. The load-bearing missing shapes are independence and contradiction, and both are blocked by facts about provenance rather than by effort."
+  },
+
+  "gap_matrix": {
+    "$note": "CALIBRATION_VALUE is qualitative and its four values are defined here rather than assumed. No numeric importance score is assigned anywhere.",
+    "calibration_value_definitions": {
+      "CRITICAL": "Without it, an aggregation mechanism cannot be exercised AT ALL, so no parameter governing it can be evaluated.",
+      "HIGH": "The mechanism runs but over a degenerate case, so its parameters have no observable effect.",
+      "USEFUL": "Adds variation to something already exercised.",
+      "LOW": "Adds volume to a shape already represented."
+    },
+    "dimensions": [
+      {
+        "dimension": "ESTABLISHED_INDEPENDENCE",
+        "current_count": 0,
+        "current_examples": "none; every Evidence row in the corpus is independence_state UNKNOWN, and 0 EvidenceIndependenceGroups exist",
+        "calibration_value": "CRITICAL",
+        "missing_shape": "one Claim whose supporting Evidence forms two or more groups of ESTABLISHED independence, so saturation combines them and multi_source_min_groups has an observable effect",
+        "possible_real_source_route": "two sources measuring the SAME proposition through demonstrably different data generation. No pair of registered sources currently does: each measures a different quantity, so this is blocked by what the portfolio observes rather than by governance."
+      },
+      {
+        "dimension": "CONTRADICTION",
+        "current_count": 0,
+        "current_examples": "none; all 39 Evidence rows are SUPPORTS",
+        "calibration_value": "CRITICAL",
+        "missing_shape": "Evidence bearing AGAINST the exact same bounded proposition, so contradicted_mass and conflict_mass stop being their c = 0 values",
+        "possible_real_source_route": "requires two measurements of ONE proposition that disagree. Every current proposition kind embeds its own measurement identity, so a second measurement of the same proposition does not exist. A decrease does not contradict an increase: under the detailed kinds direction is part of proposition identity, and under an existential a counterexample does not falsify."
+      },
+      {
+        "dimension": "MULTI_SOURCE_FAMILY",
+        "current_count": 5,
+        "current_examples": "public_procurement 10, encyclopedia_readership 18, official_statistics 4, news_corpus 3, community_qa 2",
+        "calibration_value": "USEFUL",
+        "missing_shape": "already present at CLAIM level; absent at MULTI-EVIDENCE level, where only public_procurement appears",
+        "possible_real_source_route": "a convergence contract for a second source family's proposition kind, from Signals already held"
+      },
+      {
+        "dimension": "MULTI_EVIDENCE",
+        "current_count": 2,
+        "current_examples": "two TED convergent Claims, two Evidence each",
+        "calibration_value": "HIGH",
+        "missing_shape": "multi-Evidence outside one source, one proposition kind and one reliability scope; and any Claim with more than two witnesses, so group cardinality varies at all",
+        "possible_real_source_route": "existing Wikimedia Signals, via a convergence contract"
+      },
+      {
+        "dimension": "MULTI_PROPOSITION_KIND",
+        "current_count": 8,
+        "current_examples": "eight kinds across five sources",
+        "calibration_value": "USEFUL",
+        "missing_shape": "a second kind that supports convergence; today exactly one does",
+        "possible_real_source_route": "as above"
+      },
+      {
+        "dimension": "TEMPORALITY",
+        "current_count": 0,
+        "current_examples": "none; all 37 Claims are EVERGREEN",
+        "calibration_value": "CRITICAL",
+        "missing_shape": "a Claim whose truth condition decays, so freshness has anything to act on",
+        "possible_real_source_route": "NONE from the OBSERVED layer. Every OBSERVED restatement is a historical fact about what a source published, and a historical fact does not decay. Temporal sensitivity belongs to the INFERRED layer, which is deliberately unbuilt."
+      },
+      {
+        "dimension": "CLAIM_FEATURE_DIVERSITY",
+        "current_count": 0,
+        "current_examples": "no Claim carries a claim_feature",
+        "calibration_value": "CRITICAL",
+        "missing_shape": "follows TEMPORALITY exactly; a claim_feature without a temporally sensitive Claim governs nothing",
+        "possible_real_source_route": "same as TEMPORALITY"
+      },
+      {
+        "dimension": "RELIABILITY_VARIATION",
+        "current_count": 3,
+        "current_examples": "0.5 on 6 claims, 0.55 on 4, 0.65 on 18",
+        "calibration_value": "USEFUL",
+        "missing_shape": "variation WITHIN one Claim. Reliability is scope-level, and every Evidence row on a Claim shares a scope, so within-Claim q is constant by construction and max(members) has nothing to choose between.",
+        "possible_real_source_route": "only a Claim whose Evidence spans two reliability scopes, which requires two sources supporting one proposition -- the same blocker as ESTABLISHED_INDEPENDENCE"
+      },
+      {
+        "dimension": "SUPPORT_STRENGTH_VARIATION",
+        "current_count": 3,
+        "current_examples": "identical to the reliability values, because reliability limits 28 of 28 scorable Claims",
+        "calibration_value": "LOW",
+        "missing_shape": "a Claim where something OTHER than reliability is the limiting component",
+        "possible_real_source_route": "relevance, directness and extraction confidence are 1.0 on every row by construction of the deterministic interpreters. §26 forbids altering them, so this cannot be created without a genuinely partial interpretation."
+      },
+      {
+        "dimension": "DOMAIN_DIVERSITY",
+        "current_count": 5,
+        "current_examples": "developer tooling, public procurement, encyclopedia readership, official statistics, news corpus",
+        "calibration_value": "LOW",
+        "missing_shape": "a consumer, education or creator domain",
+        "possible_real_source_route": "every such source is GOVERNANCE_BLOCKED at the eligibility gate under local-private-research-v1"
+      },
+      {
+        "dimension": "SCOPE_DIVERSITY",
+        "current_count": 3,
+        "current_examples": "PRODUCT for Docker-family subjects, CATEGORY for the TED CPV division, UNDETERMINED for GDELT terms",
+        "calibration_value": "LOW",
+        "missing_shape": "MARKET scope, which no registered source observes",
+        "possible_real_source_route": "none; Mission 1.34 recorded that MARKET's example in this repository is literally none"
+      }
+    ]
+  },
+
+  "live_governance": {
+    "$note": "§2. Read from the LIVE deployment under local-private-research-v1, not from an earlier report. Condition satisfaction is per-deployment verification state, which is why a source whose collector has run in the past can be blocked now.",
+    "use_profile": "local-private-research-v1",
+    "eligible_now": ["eurostat", "fred", "ted-eu", "world-bank"],
+    "approved_with_unsatisfied_conditions": [
+      {"source_id": "wikimedia-pageviews", "unsatisfied": ["wikimedia-aggregate-only", "wikimedia-client-identification", "wikimedia-official-api-only"]},
+      {"source_id": "stack-exchange", "unsatisfied": ["stack-exchange-attribution", "stack-exchange-official-api-only", "stack-exchange-owner-fields-excluded"]},
+      {"source_id": "gdelt", "unsatisfied": ["gdelt-attribution"]},
+      {"source_id": "openalex", "unsatisfied": ["openalex-contact-configured", "openalex-spend-bounded"]}
+    ],
+    "not_reviewed_under_this_profile": 21,
+    "consequence_for_this_mission": "Any route needing a NETWORK ACQUISITION from Wikimedia, Stack Exchange, GDELT or OpenAlex is blocked today. The selected route needs none: it re-derives from Signals already lawfully collected, and re-interpretation of held records exercises no acquisition authorization."
+  },
+
+  "candidate_routes": [
+    {
+      "source": "wikimedia-pageviews",
+      "domain": "encyclopedia readership",
+      "resource": "metrics/pageviews/per-article/en.wikipedia.org",
+      "proposition_kind": "a NEW convergent kind projected from platform_counted_content_request_change",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "possible_multi_evidence_shape": "an existential over day-pairs: several day-over-day changes in one direction for one article each witness one broader proposition. 18 held Signals across 3 articles and 2 directions.",
+      "possible_contradiction_shape": "NONE. A decrease does not contradict an existential about increases; it witnesses a different proposition.",
+      "possible_independence_shape": "NONE. Every witness comes from one publisher, one pipeline and one documented counting method.",
+      "published_taxonomy_or_scope_basis": "the platform's own article identifier and its own requester class",
+      "reliability_status": "NO_RELIABILITY_SCOPE_YET for the new kind; the existing 0.65 binds the DETAILED kind and must not be widened",
+      "governance_status": "no acquisition required; re-derivation only",
+      "expected_calibration_information_value": "HIGH for structure: second source family, second convergence-capable kind, second measurement mechanism, and the first Claims with MORE THAN TWO witnesses. LOW for numbers, because it will be NON_SCORABLE until a reviewer looks at the new scope.",
+      "engineering_work_required": "one convergence contract entry, and generalising the convergent interpreter's single hard-wired projection pair into a route table",
+      "verdict": "SELECT"
+    },
+    {
+      "source": "ted-eu",
+      "domain": "public procurement",
+      "resource": "notices/eforms-contract-and-award",
+      "proposition_kind": "source_published_classification_value_contrast_witnessed under another CPV division",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "possible_multi_evidence_shape": "yes, the shape already present",
+      "possible_contradiction_shape": "NONE",
+      "possible_independence_shape": "NONE",
+      "published_taxonomy_or_scope_basis": "CPV",
+      "reliability_status": "APPLICABLE_RELIABILITY at 0.55, so it would be scorable",
+      "governance_status": "ELIGIBLE, acquisition possible",
+      "expected_calibration_information_value": "LOW. It would be scorable, which is tempting, and it repeats the same proposition kind, reliability scope, UNKNOWN provenance grouping, q limiter and EVERGREEN semantics. By the algebraic finding it cannot make the aggregator differ from pass-through.",
+      "engineering_work_required": "none beyond acquisition",
+      "verdict": "TOO_SIMILAR_TO_CURRENT_CORPUS"
+    },
+    {
+      "source": "world-bank",
+      "domain": "official statistics",
+      "resource": "indicator series",
+      "proposition_kind": "source_reported_metric_period_change",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "possible_multi_evidence_shape": "an existential over period-pairs, structurally the same move as Wikimedia",
+      "possible_contradiction_shape": "NONE",
+      "possible_independence_shape": "NONE",
+      "published_taxonomy_or_scope_basis": "the publisher's indicator and geography codes",
+      "reliability_status": "NO_RELIABILITY_SCOPE_YET; World Bank has no assessment at all",
+      "governance_status": "ELIGIBLE",
+      "expected_calibration_information_value": "comparable to Wikimedia in kind, lower in degree: only 4 held Signals across 4 Claims, so fewer witnesses per proposition and no Claim with more than two.",
+      "engineering_work_required": "the same contract work",
+      "verdict": "QUALIFIED_ALTERNATIVE"
+    },
+    {
+      "source": "stack-exchange",
+      "domain": "community question answering",
+      "resource": "questions/stackoverflow",
+      "proposition_kind": "community_site_published_questions_carrying_tag",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "possible_multi_evidence_shape": "would need a second bounded query over a different window, which is an acquisition",
+      "possible_contradiction_shape": "NONE",
+      "possible_independence_shape": "NONE",
+      "published_taxonomy_or_scope_basis": "the site's own tag vocabulary",
+      "reliability_status": "the operator reviewed both Stack Exchange scopes and answered NO, so no assessment exists and none should be sought",
+      "governance_status": "GOVERNANCE_BLOCKED for acquisition: three conditions unsatisfied in this deployment",
+      "expected_calibration_information_value": "moderate, unreachable",
+      "engineering_work_required": "acquisition plus contract work",
+      "verdict": "GOVERNANCE_BLOCKED"
+    },
+    {
+      "source": "gdelt",
+      "domain": "news corpus",
+      "resource": "web-ngrams",
+      "proposition_kind": "source_reported_term_frequency_change",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN, and H-29 leaves the bucket timezone unestablished",
+      "possible_multi_evidence_shape": "possible in principle over adjacent buckets",
+      "possible_contradiction_shape": "NONE",
+      "possible_independence_shape": "NONE",
+      "published_taxonomy_or_scope_basis": "none; a term names no level of thing, and its ObservationScope is UNDETERMINED",
+      "reliability_status": "NO_RELIABILITY_SCOPE_YET",
+      "governance_status": "GOVERNANCE_BLOCKED for acquisition: gdelt-attribution unsatisfied",
+      "expected_calibration_information_value": "low; only 3 held Evidence rows and the weakest epistemic footing in the corpus",
+      "engineering_work_required": "contract work",
+      "verdict": "TOO_SIMILAR_TO_CURRENT_CORPUS"
+    },
+    {
+      "source": "eurostat / fred",
+      "domain": "official statistics",
+      "resource": "none authorised",
+      "proposition_kind": "n/a",
+      "claim_type": "n/a",
+      "temporality": "n/a",
+      "possible_multi_evidence_shape": "unknown",
+      "possible_contradiction_shape": "unknown",
+      "possible_independence_shape": "in principle the most interesting in the catalog -- a second statistical agency publishing a series about the same subject as World Bank would be the portfolio's only candidate for ESTABLISHED independence",
+      "published_taxonomy_or_scope_basis": "publisher-native series codes",
+      "reliability_status": "NO_RELIABILITY_SCOPE_YET",
+      "governance_status": "eligible at source level, but NO CONCRETE RESOURCE IS AUTHORISED and no collector exists",
+      "expected_calibration_information_value": "potentially CRITICAL, because it is the one visible route to a second provenance group",
+      "engineering_work_required": "resource authorisation, a collector, a normalizer, an extractor -- several missions",
+      "verdict": "QUALIFIED_ALTERNATIVE"
+    }
+  ],
+
+  "selection": {
+    "primary_route": "wikimedia-pageviews convergent existential over day-pairs, from Signals already held",
+    "secondary_route": null,
+    "secondary_route_rationale": "§6 permits a second route only if the first cannot address more than one high-priority shape AND the second is nearly free. Neither holds: World Bank would add the same structural shape with fewer witnesses, and adding it would double the contract work for no new mechanism.",
+    "why_selected": [
+      "It is the only route that exercises a mechanism the corpus has never exercised -- group cardinality above two -- without any acquisition.",
+      "It adds a second source family, a second convergence-capable proposition kind and a second measurement mechanism to the multi-Evidence shape, which today is entirely one TED kind.",
+      "It requires ZERO network calls, which matters beyond efficiency: Wikimedia acquisition is currently blocked by three unsatisfied conditions, so re-derivation is the only open door.",
+      "It reuses Mission 1.39's convergence machinery unchanged rather than widening the ontology."
+    ],
+    "why_not_the_scorable_option": "Another TED division would be immediately scorable and would teach nothing: by the algebraic finding above, a second single-group Claim cannot make the aggregator differ from the pass-through baseline. §4 and §25 both point away from it, and choosing it because the number would appear is choosing the appearance of progress."
+  },
+
+  "preregistered_target": {
+    "$note": "§7. Semantic, not a row count. Frozen before any derivation.",
+    "TARGET_A": "at least one real Claim carrying two or more Evidence rows, from a source family other than public procurement, under a proposition kind that does not exist in the corpus today",
+    "TARGET_B": "at least one real Claim carrying MORE THAN TWO Evidence rows, so max(members) receives a group larger than any the corpus has ever formed",
+    "not_targeted": [
+      "contradiction -- §8; no legitimate contradiction of the same proposition is reachable, and the counter stays 0",
+      "established independence -- §9; every witness shares publisher, pipeline and method, so UNKNOWN remains correct and 0 groups are created",
+      "temporality -- §10; an OBSERVED restatement of what a source published is a historical fact and does not decay, so converting one would be populating a counter",
+      "a reliability value -- §15, §17; the new kind is a new scope and no assessment will be created"
+    ],
+    "expected_secondary_outcome": "NEW_CORPUS_SHAPE_NON_SCORABLE_MISSING_RELIABILITY, because the new proposition kind has no reviewed reliability and none may be invented or copied",
+    "failure_condition": "If the contract yields no Claim with two or more witnesses, the outcome is PREREGISTERED_CORPUS_SHAPE_NOT_OBSERVED and the contract stays as written rather than being loosened until something converges."
+  },
+
+  "bounds": {
+    "$note": "§18, §19. There is no acquisition, so the bounds are on what may be re-derived.",
+    "network_acquisition_required": false,
+    "network_acquisition_reason": "Every input already exists: 21 Wikimedia RawRecords, their NormalizedRecords, and 18 derived Signals. §20 requires deterministic reprocessing where existing material suffices, and it does.",
+    "inputs": "the existing platform_counted_content_request_change Signals and nothing else",
+    "new_records": 0,
+    "new_normalized_records": 0,
+    "new_signals": 0,
+    "procedure": "the existing claim interpretation runtime, with one new convergence contract",
+    "may_not": [
+      "acquire any record",
+      "re-derive any Signal",
+      "modify any existing Claim, revision or Evidence row",
+      "create an EvidenceIndependenceGroup",
+      "create or widen a ReliabilityAssessment"
+    ]
+  }
+}

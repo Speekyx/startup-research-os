@@ -127,6 +127,40 @@
         "that the amounts are prices, or that anybody paid them",
         "that the witnesses are independent of one another"
       ]
+    },
+    {
+      "contract_id": "platform-counted-content-request-change-witnessed",
+      "version": "1.0.0",
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "claim_type": "OBSERVED",
+      "temporality": "EVERGREEN",
+      "source_boundary": "SAME_SOURCE_AND_RESOURCE",
+      "identity_fields": [
+        "proposition",
+        "source_id",
+        "content_platform",
+        "content_id",
+        "audience_class",
+        "direction"
+      ],
+      "witness_fields": [
+        "period_label_from",
+        "period_label_to"
+      ],
+      "qualifying_signal_types": [
+        "content_request_change"
+      ],
+      "establishes": "that the named platform counted, for the named item under the named requester class, at least one pair of adjacent published day buckets whose request counts stand in the named direction",
+      "does_not_establish": [
+        "how many such pairs exist",
+        "what proportion of the item's history they are",
+        "that the direction is typical, usual or continuing",
+        "any trend, growth, decline or momentum",
+        "that a person read anything, since a request is what a reader makes of a server",
+        "audience size, interest, demand or adoption",
+        "that the witnesses are independent of one another",
+        "that the calendar is controlled for, since a weekday and a weekend are different days and the pairs are not matched on that"
+      ]
     }
   ],
   "forbidden_convergence_examples": [

@@ -67,6 +67,7 @@ from sros_contracts import (
 
 __all__ = [
     "CONVERGENT_INTERPRETER_ID",
+    "PROJECTION_ROUTES",
     "PROJECTS_FROM",
     "PROJECTS_ONTO",
     "CONVERGENT_INTERPRETER_VERSION",
@@ -76,10 +77,29 @@ __all__ = [
 CONVERGENT_INTERPRETER_ID = "observed-convergent-witness"
 CONVERGENT_INTERPRETER_VERSION = "1.0.0"
 
-# The detailed proposition kind this projects FROM, and the contract it projects
-# ONTO. Stated as a pair so a reader can see that exactly one route exists.
+# The detailed proposition kinds this projects FROM, each with the contract it
+# projects ONTO. Mission 1.39 wrote this as a single pair so a reader could see
+# that exactly one route existed; Mission 1.43 added a second, so it is a TABLE
+# and a reader can still see every route at once.
+#
+# **There is still no fallback.** A detailed kind absent from this table has no
+# broader claim to make, which is the state five of the seven historical kinds
+# remain in. A generic projection over an unregistered proposition would emit an
+# assertion nobody specified.
+PROJECTION_ROUTES: dict[str, str] = {
+    "source_reported_procurement_value_contrast": (
+        "source_published_classification_value_contrast_witnessed"
+    ),
+    "platform_counted_content_request_change": (
+        "platform_counted_content_request_change_witnessed"
+    ),
+}
+
+# Kept as names because Mission 1.39's tests and Mission 1.40's wiring read them,
+# and because the procurement route is still the one the production job was first
+# built around. They name ONE route, never the whole table.
 PROJECTS_FROM = "source_reported_procurement_value_contrast"
-PROJECTS_ONTO = "source_published_classification_value_contrast_witnessed"
+PROJECTS_ONTO = PROJECTION_ROUTES[PROJECTS_FROM]
 
 _CLAIM_TYPE = ClaimType.OBSERVED
 _ORIGIN = ClaimOrigin.DETERMINISTIC_EXTRACTION
@@ -113,7 +133,7 @@ def _project(
     return projected
 
 
-def _render(facts: Mapping[str, object]) -> str:
+def _render_procurement(facts: Mapping[str, object]) -> str:
     """The sentence, bounded in its own wording.
 
     *"at least one bounded set"* is the whole of §6 in four words. Without it the
@@ -131,6 +151,56 @@ def _render(facts: Mapping[str, object]) -> str:
     )
 
 
+_REQUEST_DIRECTION_VERB = {
+    "INCREASING": "were higher in the later bucket than in the earlier one",
+    "DECREASING": "were lower in the later bucket than in the earlier one",
+    "UNCHANGED": "were the same in both buckets",
+}
+
+
+def _render_content_request(facts: Mapping[str, object]) -> str:
+    """The sentence, carrying every bound the detailed template earned.
+
+    *"at least one pair"* does the same work *"at least one bounded set"* does
+    for procurement: without it the sentence reads as a claim about the item's
+    history, which is a population nobody sampled.
+
+    Three bounds are carried across verbatim rather than summarised away, because
+    the detailed template established each of them and a broader claim inherits
+    every one. **COUNTED, not viewed** -- the platform's own definition is a
+    request receiving a 200 or 304, and every other verb would suggest it saw a
+    person. **The requester class is IN THE SENTENCE**, because a reader who
+    meets this claim without it cannot know whether bots are included, and the
+    platform refuses to call its own heuristic "human". And **adjacent published
+    day buckets**, which ADR-023 guarantees: a pair derives only when the labels
+    are exactly one published bucket apart, so nothing here spans a gap nobody
+    read.
+    """
+    direction = str(facts["direction"])
+    verb = _REQUEST_DIRECTION_VERB.get(direction)
+    if verb is None:
+        raise _refuse(
+            ClaimEvidenceRefusalReason.PROPOSITION_NOT_IDENTIFIABLE,
+            f"no wording is registered for direction {direction!r}. A projection that "
+            "invented one would assert a relation nobody specified",
+        )
+    return (
+        f'The source "{facts["source_id"]}" counted, on "{facts["content_platform"]}", '
+        f"at least one pair of adjacent published day buckets in which requests for "
+        f'"{facts["content_id"]}" under its own requester class '
+        f'"{facts["audience_class"]}" {verb}.'
+    )
+
+
+# One renderer per route. A route with no renderer cannot be projected: the
+# sentence is where every bound the detailed template earned is carried, so a
+# generic sentence would be a proposition nobody wrote.
+_RENDERERS = {
+    "source_published_classification_value_contrast_witnessed": _render_procurement,
+    "platform_counted_content_request_change_witnessed": _render_content_request,
+}
+
+
 def convergent_draft(detailed: ClaimDraft, *, signal_type_id: str) -> ClaimDraft:
     """The broader Claim a detailed cohort draft also witnesses.
 
@@ -140,19 +210,29 @@ def convergent_draft(detailed: ClaimDraft, *, signal_type_id: str) -> ClaimDraft
     whatever is in the mapping, so a fact nobody placed is a fact that decides.
     """
     facts = dict(detailed.cited_facts)
-    if facts.get("proposition") != PROJECTS_FROM:
+    detailed_kind = facts.get("proposition")
+    onto = PROJECTION_ROUTES.get(str(detailed_kind))
+    if onto is None:
         raise _refuse(
             ClaimEvidenceRefusalReason.UNSUPPORTED_SIGNAL_TYPE,
-            f"this interpreter projects {PROJECTS_FROM!r} and was handed "
-            f"{facts.get('proposition')!r}. There is no fallback: a generic projection "
+            f"this interpreter projects {sorted(PROJECTION_ROUTES)} and was handed "
+            f"{detailed_kind!r}. There is no fallback: a generic projection "
             "over an unknown proposition would emit an assertion nobody specified",
         )
 
-    contract = contract_for(PROJECTS_ONTO)
+    contract = contract_for(onto)
     if contract is None:
         raise _refuse(
             ClaimEvidenceRefusalReason.PROPOSITION_NOT_IDENTIFIABLE,
-            f"no convergence contract is registered for {PROJECTS_ONTO!r}",
+            f"no convergence contract is registered for {onto!r}",
+        )
+
+    render = _RENDERERS.get(onto)
+    if render is None:
+        raise _refuse(
+            ClaimEvidenceRefusalReason.PROPOSITION_NOT_IDENTIFIABLE,
+            f"no wording is registered for {onto!r}. The sentence carries the bounds "
+            "the detailed template earned, so a generic one would drop them silently",
         )
 
     projected = _project(contract, facts)
@@ -181,7 +261,7 @@ def convergent_draft(detailed: ClaimDraft, *, signal_type_id: str) -> ClaimDraft
         claim_type=_CLAIM_TYPE,
         temporality=contract.temporality,
         origin=_ORIGIN,
-        statement=_render(projected),
+        statement=render(projected),
         facts=identity,
         evidence=list(detailed.evidence),
         interpretation=_DETERMINISTIC,

@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.75
-Last amended: 2026-09-04 (Sprint 1 / Mission 1.42.1)
+Version: 1.76
+Last amended: 2026-09-04 (Sprint 1 / Mission 1.43)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.76 | 2026-09-04 | **CALIBRATION_REFERENCE_CORPUS_MEANINGFULLY_EXPANDED, and the measurement that reframes what expansion is FOR.** Measured over all 37 Claims before any work: **0 with more than one support group, 0 where the aggregator differs from the Mission 1.37 B-2 pass-through baseline** -- and with ONE group that identity is **ALGEBRAIC, not incidental**: saturation over a single group is that group's strength, which is `max(members)`, which is what B-2 reports. **So no quantity of additional single-group Evidence can ever make them differ**; the aggregation layer becomes measurable only through ESTABLISHED INDEPENDENCE or CONTRADICTION, and a §37 fixture proves the converse by giving two `KNOWN_INDEPENDENT` items and watching support strength EXCEED pass-through. **A SECOND CONVERGENCE CONTRACT, FROM DATA ALREADY HELD**: `platform-counted-content-request-change-witnessed@1.0.0` over the 18 Wikimedia Signals, **0 network requests** -- which was not merely cheaper but the only open door, because Wikimedia acquisition is currently blocked by three unsatisfied conditions in this deployment. Claims 37 -> **43**, Evidence 39 -> **57**, Claims with >1 Evidence 2 -> **8**, and **max Evidence per Claim 2 -> 4**: group cardinality varies for the first time `{1,2}` -> `{1,2,3,4}`. **THE SCORABLE OPTION WAS REFUSED**: another TED division would have been immediately scorable and, by the finding above, could not have taught anything -- choosing it because a number would appear is choosing the appearance of progress. **`audience_class` STAYS IDENTITY** because Mission 1.19 made it REQUIRED so one item over one period cannot carry two counts under one name. **NOTHING WAS MANUFACTURED**: no contradiction (a decrease does not contradict an increase, and an existential is not falsified by a counterexample), no independence (one publisher, one pipeline, one method), **no temporality -- and the reason is architectural: every OBSERVED restatement is a historical fact about what a source published, and a historical fact does not decay**, even where the source's timestamps are documented. Secondary **NEW_CORPUS_SHAPE_NON_SCORABLE_MISSING_RELIABILITY**: a new kind is a new scope and none was invented or copied. **Leakage-safe splits are still NOT plausible** -- six new Claims share one scope and one kind, so they are ONE group. 0 model calls, 0 embeddings, 0 assessments, 0 independence groups, 0 scores, profile still UNCALIBRATED |
 | 1.75 | 2026-09-04 | **SECOND_PILOT_OPERATOR_RELIABILITY_DECISION_PERSISTED: `max(members)` received TWO REAL ITEMS for the first time, and the number did not move.** The operator typed the confirmation, and **two counters moved while thirteen did not**: ReliabilityAssessments 2 -> **3**, basis rows 6 -> **10**. Assessment `d1afa4be` v1, `0.55`, HUMAN_REVIEW, thibchm, `human-reliability-assessment-rubric@1.0.0` -- **the first assessment in this repository that can say which procedure produced it**, while both historical rows keep NULL because they predate the rubric and backfilling would fabricate provenance. **ALL SIX CONVERGENT ROWS RESOLVE and NOT ONE STORES THE NUMBER**: `scoring.evidence.reliability` is NULL on all 39 rows, because reliability binds late and a stale copy could outlive its assessment. **9 leak checks, 0 leaks** -- a third current assessment is a third set of ways to leak, and neither TED scope reaches the other on `proposition_kind` alone. **BOTH REAL MULTI-EVIDENCE CLAIMS BECAME SCORABLE, 0 -> 2**, `raw = 2`, `scorable = 2`, and the grouping arithmetic finally ran: **ONE support group of kind UNKNOWN with TWO members and `collapsed_member_count` 1**. Mission 1.41 had `raw = 2` with `scorable = 0`, so `max(members)` had never seen both. **AND THE RESULT IS `IDENTICAL_TO_RELIABILITY_PASS_THROUGH`, WHICH IS NOT A FAILURE**: both rows share one assessment, independence is UNKNOWN so they collapse into one group, and `max()` of two identical `q` values is that value -- the full aggregator and Mission 1.37's B-2 baseline agree **because the corpus gives them nothing to disagree about**. `q = 0.55` with **`reliability` limiting on 28 of 28**, masses 0.55/0/0/0.45, EvidenceScore 55.0, **level 1 blocked on *2 supporting groups of established independence, found 0*** -- reliability reaches none of the three blockers. **DISJOINT IS NOT INDEPENDENCE**, 0 groups created. Target variable `{0.5: 6, 0.55: 4, 0.65: 18}`, still all reviewed reliability. **A THIRD DEFECT OF THE SAME SHAPE**: the reporter read `group.members`, the attribute is `member_evidence_ids`, and `max(..., default=0)` never evaluated its generator while zero groups existed -- **a branch no data has ever entered is not tested by a passing suite**, found by the operator running it. 0 model calls, 0 acquisitions, 0 scores, profile still UNCALIBRATED |
 | 1.74 | 2026-09-04 | **OPERATOR_CONFIRMATION_REQUIRED, for the second time and for the same reason: the value is authorised and the keystroke is not.** Everything a mission may legitimately do is done -- migration **0032** adds `review_rubric_id` and `review_rubric_version`, the operator's completed review is frozen as an artifact that conforms to the rubric it names, and the dry run validates at **version 1, HUMAN_REVIEW, thibchm, 0.55, human-reliability-assessment-rubric@1.0.0, 4 document-backed basis rows**. **0 assessments persisted, 0 model calls, 0 acquisitions, every counter unchanged.** The brief supplied the operator's VALUES and cannot supply the operator's KEYSTROKE: piping the confirmation, patching `isatty` or writing the row by hand would each produce an assessment whose `reviewed_by` names a person who did not type it. **THE SCOPE WAS NOT NARROWED, AND THAT WAS THE LIVE TEMPTATION** -- the second pilot produced the two multi-Evidence division-92 Claims and the assessment is NOT about them: the scope carries no division and no currency, so one judgement binds **divisions 90 AND 92, EUR AND SEK**, 6 rows across 4 Claims. **NOTHING IS BACKFILLED AND NULL IS THE TRUE ANSWER**: both historical rows read NULL after the migration, because writing a rubric id onto a review that did not use one fabricates the provenance the column was added to record -- and **the basis table was considered and REJECTED as the place for it**, since a basis row names a document ABOUT THE MEASUREMENT. **BOTH HALVES OR NEITHER**, enforced twice: a CHECK constraint and `__post_init__`. **`UNSURE` SURVIVES AS `UNSURE`** on retrievability -- not YES, not NO, not low confidence, not 0.5 -- and is carried into the stated limitation rather than quietly resolved. `0.55` is neither 0.5 nor 0.65 nor their mean, and a test asserts all three. **A PRE-EXISTING TEST PINNED THE BINDING'S KEY SET** and was re-pointed rather than deleted: which procedure produced a value IS part of reconstructing it, which is the property that test asserts. Pre-persistence baseline recorded honestly: **0/6 resolved, 0 scorable, `max(members)` receiving 0** |
 | 1.73 | 2026-09-04 | **HUMAN_RELIABILITY_RUBRIC_READY: the architecture defined the question, the scope, the reviewer and the evidence, and then handed over a blank numeric field.** `human-reliability-assessment-rubric@1.0.0` is that missing middle, and it is a DECISION PROCEDURE rather than a scoring function -- **the module contains no arithmetic operator of any kind**, asserted over its AST, because the one failure to avoid was solving arbitrary numbers with different arbitrary numbers. **FIVE dimensions accepted and SIX rejected, and the rejections are the substance**: `MEASUREMENT_TO_PROPOSITION_FIT` **is `directness`** and scoring it here would make one weakness count twice -- its residue is not a gradient but a MIS-SPECIFIED SCOPE, so it became a hard stop; `CLASSIFICATION_DEPENDABILITY` folded in, because a dimension for it would be a rubric shaped around one publisher's taxonomy; `KNOWN_FAILURE_MODES` and `RESIDUAL_UNKNOWN` are the OUTPUT of the five, not a sixth question; and a separate **reviewer-confidence field was refused** because basis completeness is READ OFF the profile and two fields answering one question eventually disagree. **UNKNOWN IS NOT LOW, STRUCTURALLY**: `NOT_ESTABLISHED` and `CONTRADICTED` carry **no ordinal rank**, so neither can be interpolated, averaged or read as the bottom of a scale. **NO INTERMEDIATE ANCHORS**, deliberately -- nothing in this repository anchors the absolute scale, so one would have to be invented; the two anchors that exist are defined by what the value DOES in `q = min(components)` rather than by an adjective, and **`0.0` is a POSITIVE FINDING and not the absence of an assessment**. Recommendation **`KEEP_NUMERIC_FIELD_BUT_REQUIRE_ORDINAL_REVIEW_PROFILE_FIRST`**: no migration, no code change, both historical values kept, and the number becomes a summary of a RECORDED PROFILE which is what a second reviewer reproduces. **THE EXISTING ARCHITECTURE ALREADY ANSWERED HALF THE DISAGREEMENT QUESTION** -- the resolver refuses on >1 current assessment, so while a disagreement is open the honest state is ABSENCE; what is missing is disagreeing WITHOUT superseding. **THE WIKIMEDIA REVIEWER HAD ALREADY WRITTEN `HISTORICAL_MUTABILITY` DOWN UNPROMPTED**, months before this rubric derived it from TED's open question -- corroboration that the dimensions are real, bounded by both reviews sharing a reviewer. Both historical assessments are **PARTIALLY_REPRESENTABLE** and **unchanged**. Secondary: **`RELIABILITY_RUBRIC_PROVENANCE_MODEL_GAP`** -- no column records which procedure produced a value, and **the basis table is not the answer** because a basis row names a document about the MEASUREMENT. 0 assessments, 0 model calls, 0 acquisitions, every counter unchanged, and **the TED worksheet is prepared and UNANSWERED** |
@@ -322,6 +323,86 @@ positives in the scored split, which this 89-question corpus did not supply: one
 defensible SAME in 40 candidate pairs is a finding about the corpus, not about
 the classifier. **No synthetic positive may substitute** -- a constructed pair
 can test a parser and can never establish semantic accuracy against real data.
+
+### One provenance group makes the aggregator and the baseline the same number
+
+Added in 1.76 (Mission 1.43, `mission-1.43-report.md`,
+`calibration-corpus-expansion-plan-v1.json`).
+**`CALIBRATION_REFERENCE_CORPUS_MEANINGFULLY_EXPANDED`**, with
+**`NEW_CORPUS_SHAPE_NON_SCORABLE_MISSING_RELIABILITY`** beside it.
+
+    Claims 37 -> 43     Evidence 39 -> 57     Claims with >1 Evidence 2 -> 8
+    max Evidence per Claim 2 -> 4    group cardinality {1,2} -> {1,2,3,4}
+    network requests 0    new Signals 0    new assessments 0    scores 0
+
+- **THE MEASUREMENT CAME FIRST AND IT REFRAMED THE MISSION.** Across all 37
+  Claims: **0 with more than one support group, and 0 where the aggregator
+  differs from the B-2 reliability pass-through baseline.** With exactly one
+  group that identity is **ALGEBRAIC**: `S = 1 - prod(1 - g)` over one group is
+  that group's strength, group strength is `max(members)`, and B-2 is the
+  reliability-limited strongest item -- the same maximum over the same `q`
+  values. **No quantity of additional single-group Evidence can ever make them
+  differ**, so corpus expansion measured in rows is expansion that cannot help.
+- **THE MECHANISM WORKS; THIS CORPUS GIVES IT NOTHING TO WORK ON.** A §37 fixture
+  hands the aggregator two `KNOWN_INDEPENDENT` items and support strength
+  **exceeds** the pass-through value. What is missing is not the code but
+  provenance facts: ESTABLISHED INDEPENDENCE or CONTRADICTION, and both are
+  blocked by what the portfolio observes rather than by effort.
+- **THE SCORABLE OPTION WAS REFUSED, AND THAT WAS THE DECISION.** Another TED
+  division would have been immediately scorable, which is exactly what made it
+  tempting, and it repeats the same proposition kind, reliability scope,
+  unknown-provenance grouping, `q` limiter and EVERGREEN semantics. **Choosing it
+  because a number would appear is choosing the appearance of progress.**
+- **ZERO NETWORK REQUESTS, AND THAT WAS NOT MERELY THE CHEAPER CHOICE.** Live
+  governance under `local-private-research-v1` was re-read from the DEPLOYMENT
+  rather than from an old report: only `eurostat`, `fred`, `ted-eu` and
+  `world-bank` are eligible now, and **Wikimedia is blocked by three unsatisfied
+  conditions**. Re-derivation from Signals already lawfully collected was the
+  only open door to the highest-information route.
+- **A SECOND CONVERGENCE CONTRACT, AND THE SAME ADR-035 TEST.**
+  `platform-counted-content-request-change-witnessed@1.0.0`: the day labels are
+  WITNESS, everything else is identity. **`audience_class` stays identity**
+  because Mission 1.19 made it REQUIRED precisely so that one item over one
+  period cannot carry two different counts under one name -- dropping it here
+  would undo that decision from the other end. `direction` stays identity for the
+  reason the procurement contract's `relation` does.
+- **THE PROJECTION IS A TABLE NOW, NOT A PAIR, AND STILL HAS NO FALLBACK.**
+  Mission 1.39 wrote one hard-wired pair *"so a reader can see that exactly one
+  route exists"*; a reader can still see every route at once, and five historical
+  kinds have no contract and do not converge.
+- **NOTHING WAS MANUFACTURED.** No contradiction: a decrease does not contradict
+  an increase, because under the detailed kind direction is proposition identity
+  and under an existential a counterexample does not falsify. No independence:
+  every witness shares publisher, pipeline and method, and different days are
+  temporal separation. **No temporality, and the reason is architectural** --
+  every OBSERVED restatement is a historical fact about what a source published,
+  and a historical fact does not decay. Wikimedia's buckets ARE documented UTC,
+  and **a source with established timestamps still does not make a Claim
+  temporal**; what would is a proposition whose truth decays, which belongs to
+  the INFERRED layer nobody has built.
+- **A NEW KIND IS A NEW RELIABILITY SCOPE.** The six new Claims are
+  `NON_SCORABLE` with no applicable assessment, the existing Wikimedia `0.65`
+  binds the DETAILED kind only, and §15 forbids widening it. Structure created,
+  numeric path deliberately left closed.
+- **LEAKAGE-SAFE CALIBRATION SPLITS ARE STILL NOT PLAUSIBLE.** The six new Claims
+  share one reliability scope and one proposition kind, so under Mission 1.37's
+  rule they are **one** group, and entirely non-scorable. More Claims did not
+  become more independent units.
+- **§37 EARNED ITS PLACE ON THE FIRST RUN.** This mission's own script read
+  `result.level.evidence_level`, where the attribute is `result.level.level`. It
+  failed immediately because the data was not empty -- the same class as Mission
+  1.42.1's `group.members`, caught before it shipped. Every new reporting
+  expression now executes against non-empty fixtures the live corpus does not
+  contain, and none of them is persisted.
+
+**The next mission is NOT a human calibration reference set.** Labelling this
+corpus would ask a person to compare cases the aggregator itself cannot
+distinguish. Two narrower missions come first: a **reliability review preparation
+for the new Wikimedia scope**, which would make six real multi-Evidence Claims
+scorable including one with **four** witnesses; and an **independence-capable
+route**, which the gap matrix identifies as Eurostat or FRED beside World Bank --
+a second statistical agency publishing about the same subject is the only visible
+path to a second provenance group.
 
 ### The value is authorised; the keystroke is not
 

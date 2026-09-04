@@ -1,0 +1,100 @@
+{
+  "$comment": "Mission 1.43. The RESULT of the frozen plan: what re-interpreting held Signals under the new convergence contract actually produced. No acquisition, no derivation, no new Signal, no reliability.",
+  "artifact_version": "calibration-corpus-expansion-run@1.0.0",
+  "generated_by": "mission-1.43",
+  "network_acquisitions": 0,
+  "signals_derived": 0,
+  "signal_type_reprocessed": "content_request_change",
+  "detailed_kind": "platform_counted_content_request_change",
+  "convergent_kind": "platform_counted_content_request_change_witnessed",
+  "counters_before": {
+    "raw_records": 325,
+    "normalized_records": 325,
+    "signals": 33,
+    "claims": 37,
+    "claim_revisions": 38,
+    "evidence": 39,
+    "reliability_assessments": 3,
+    "reliability_basis_rows": 10,
+    "opportunities": 1,
+    "independence_groups": 0,
+    "evidence_reliability_written": 0
+  },
+  "held_signals_reprocessed": 18,
+  "interpretation": {
+    "claims_new": 6,
+    "evidence_new": 18,
+    "signals_considered": 18,
+    "signals_refused": 0,
+    "evidence_conflicts": 0
+  },
+  "counters_after": {
+    "raw_records": 325,
+    "normalized_records": 325,
+    "signals": 33,
+    "claims": 43,
+    "claim_revisions": 44,
+    "evidence": 57,
+    "reliability_assessments": 3,
+    "reliability_basis_rows": 10,
+    "opportunities": 1,
+    "independence_groups": 0,
+    "evidence_reliability_written": 0
+  },
+  "convergent_claims": [
+    {
+      "claim_id": "e740d102-4bf2-4f9c-bc01-e82c9fb4ac99",
+      "revision": 1,
+      "content_id": "Docker_(software)",
+      "direction": "INCREASING",
+      "audience_class": "user",
+      "evidence_count": 4
+    },
+    {
+      "claim_id": "9bda8081-aebb-48a7-a31d-3fab8e2345a6",
+      "revision": 1,
+      "content_id": "Kubernetes",
+      "direction": "DECREASING",
+      "audience_class": "user",
+      "evidence_count": 3
+    },
+    {
+      "claim_id": "1324d79c-54c6-4bba-9d7f-2320133f2ea8",
+      "revision": 1,
+      "content_id": "Kubernetes",
+      "direction": "INCREASING",
+      "audience_class": "user",
+      "evidence_count": 3
+    },
+    {
+      "claim_id": "dff657c2-3ee8-429c-b308-4e0d8f3894d2",
+      "revision": 1,
+      "content_id": "Podman",
+      "direction": "DECREASING",
+      "audience_class": "user",
+      "evidence_count": 3
+    },
+    {
+      "claim_id": "a4809b1a-56a4-4ae2-a2e3-9ee2f68e4dd3",
+      "revision": 1,
+      "content_id": "Podman",
+      "direction": "INCREASING",
+      "audience_class": "user",
+      "evidence_count": 3
+    },
+    {
+      "claim_id": "39449935-d841-4e76-b920-dd727204c199",
+      "revision": 1,
+      "content_id": "Docker_(software)",
+      "direction": "DECREASING",
+      "audience_class": "user",
+      "evidence_count": 2
+    }
+  ],
+  "deltas": {
+    "claims": 6,
+    "claim_revisions": 6,
+    "evidence": 18
+  },
+  "committed": true
+}
