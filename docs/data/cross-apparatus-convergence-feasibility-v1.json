@@ -1,0 +1,431 @@
+{
+  "$comment": "Mission 1.47. Can two genuinely different measurement apparatuses ALREADY HELD in this corpus bear on one bounded OBSERVED proposition, without weakening proposition identity? This record is a FEASIBILITY finding. It creates no Claim, no Evidence, no independence group and no reliability assessment, and it selects no route. Section 0 holdings are measured separately into cross-apparatus-holdings-baseline-v1.json by infrastructure/scripts/measure_cross_apparatus_holdings.py; this document is authored and rendered by infrastructure/scripts/render_cross_apparatus_convergence_feasibility.py.",
+  "record_version": "1.0.0",
+  "mission": "1.47",
+  "recorded_at": "2026-09-04",
+  "recorded_by": "mission-1.47",
+
+  "primary_outcome": "FORMALLY_VALID_BUT_INFORMATIONALLY_WEAK",
+  "primary_outcome_statement": "A narrow, source-faithful proposition over the Docker subject IS independently entailed by both held apparatuses. It is also so weak that it discards exactly what each apparatus measures. Strengthen it in any direction that carries information and only one apparatus supports it. So the convergence that is available is not worth building, and the convergence that would be worth building is not available.",
+
+  "secondary_findings": [
+    {
+      "code": "CROSS_APPARATUS_EVIDENCE_IS_COMPLEMENTARY_NOT_CORROBORATING",
+      "statement": "Above the existential floor the two apparatuses answer different questions. The repository recorded this before this mission asked: the Opportunity engine's own mapping rationale for community_question_volume says the PROBLEM_OR_NEED question is 'a genuinely different question from the one AUDIENCE_OR_USAGE answers: that one says something attended to a subject, this one says somebody said they were stuck on it, and neither implies the other.' That is complementarity stated by the codebase, not inferred by this mission.",
+      "why_not_primary": "Outcome C says the apparatuses 'do not independently support the same Claim'. For the existential floor they DO, so C as written would be false of the one candidate that passes semantics. D is true of it."
+    },
+    {
+      "code": "CONVERGENCE_CONTRACT_ARCHITECTURE_GAP",
+      "statement": "PropositionConvergenceContract structurally cannot express a cross-apparatus proposition. Two independent refusals: the constructor raises unless 'source_id' is in identity_fields, and SourceBoundary has exactly one member, SAME_SOURCE_AND_RESOURCE. Its docstring states the absence is deliberate -- 'A cross-source value is deliberately absent rather than present-and-unused. An enum member nobody may pass is an invitation.'",
+      "why_not_primary": "Reporting the architecture as the blocker would imply that widening the contract unlocks this route. It does not: the proposition would still be near-tautological and independence would still be UNKNOWN. Mission 1.46 refused outcome B for the same reason -- a blocker downstream of the real one misattributes the failure to a layer that never got to fail."
+    },
+    {
+      "code": "PROVENANCE_INDEPENDENCE_NOT_ESTABLISHED",
+      "statement": "Independence for the Docker pair is UNKNOWN, and it is NOT refuted. This is a different state from Mission 1.46's, and the difference decides what a future mission may attempt.",
+      "why_not_primary": "Same upstream argument. Independence is evaluated only after same-proposition semantics pass (section 12), and the semantics finding is what outcome D names."
+    },
+    {
+      "code": "SINGLE_ROOT_CAUSE_BLOCKS_TWO_INDEPENDENT_GATES",
+      "statement": "Gate 6 (established independence) and reliability readiness fail for ONE documented reason: Stack Exchange's own methodology documentation is unreachable because the site's robots policy blocks this environment's fetcher. No retry, no varied header, no mirror, no cached copy and no third-party summary was used, and none was attempted in this mission. The same absence that stopped Mission 1.36 from preparing a Stack Exchange reliability question stops this mission from documenting its measurement lineage."
+    }
+  ],
+
+  "selected_route": null,
+  "selected_route_reason": "No pair passes all eight section 26 gates. Section 26 forbids a least-bad fallback and section 25 forbids a weighted score, so the slot is left empty rather than filled with the closest candidate.",
+
+  "apparatus_definition": {
+    "definition": "A measurement apparatus is a (source_id, proposition_kind) pair: one publisher operating one measurement contract that yields one kind of proposition.",
+    "why_not_source": "A source is too coarse. wikimedia-pageviews operates two apparatuses over one corpus (a detailed adjacent-day change and a witnessed existential), and so does ted-eu. Counting sources would report four apparatuses where nine exist, and would merge two reliability scopes that the contract already holds apart.",
+    "why_proposition_kind": "proposition_kind is the discriminator Mission 1.13.1 writes into research.claims.proposition_facts, and it is the fifth field of the five-part reliability scope in evidence-reliability-contract-v1.md. Using it here means the apparatus inventory and the reliability scope inventory are the same partition, so a new apparatus is a new reliability question by construction.",
+    "counted_not_assumed": "Nine apparatuses over four sources, measured. Mission 1.36 section 0 found three reliability scopes where two source families invited two, and the same discipline applies here."
+  },
+
+  "subject_overlap": {
+    "method": "The reviewed canonical-subject registry (canonical-subject-registry-v1.json, exact equality, no distance, no token overlap, no stem, no synonym table, no embedding) crossed with which side actually carries Evidence.",
+    "pre_selection_refused": "Wikimedia + Stack Exchange was NOT pre-selected. The overlap was measured first, across all nine apparatuses, and the pair fell out of the measurement.",
+    "measured": [
+      {"subject_id": "docker", "wikimedia_evidence": 12, "stack_exchange_evidence": 2, "cross_apparatus": true},
+      {"subject_id": "kubernetes", "wikimedia_evidence": 12, "stack_exchange_evidence": 0, "cross_apparatus": false},
+      {"subject_id": "podman", "wikimedia_evidence": 12, "stack_exchange_evidence": 0, "cross_apparatus": false}
+    ],
+    "result": "Docker is the ONLY cross-apparatus shared subject in the held corpus, and that is a measured result rather than an assumption. The registry itself already recorded why the other two fail: kubernetes is mapped 'for completeness of the registry; NO Evidence reaches this identifier today, because the questions this deployment holds under it arrived through a tagged=docker query and are a biased subset rather than a count', and podman because 'this deployment holds no questions carrying it'.",
+    "non_overlaps": "gdelt (climate, weather), ted-eu (CPV divisions 90 and 92) and world-bank (SP.POP.TOTL over DEU and FRA) share no subject with any other apparatus and with each other. No registry entry maps them, and inventing one would be the deterministic-but-unargued merge Mission 1.28 refused."
+  },
+
+  "time_overlap": {
+    "wikimedia_detailed": {
+      "grain": "whole UTC day buckets, ESTABLISHED on the operator's own Research:Page view definition",
+      "held": "2024-03-01 .. 2024-03-07, giving 6 adjacent-day changes",
+      "note": "7 of the 31 days of March 2024"
+    },
+    "wikimedia_witnessed": {
+      "grain": "none",
+      "held": "period_label, period_label_from and period_label_to are ALL null on both witnessed Claims",
+      "note": "The witnessed apparatus asserts an unbounded existential. It carries no period in proposition identity at all, which is a stronger fact than a wide period."
+    },
+    "stack_exchange": {
+      "grain": "Unix epoch seconds, the observed extent of the retrieved questions rather than a period the source defines",
+      "held_tag": "1709280363 .. 1709612240 = 2024-03-01T08:06:03Z .. 2024-03-05T04:17:20Z",
+      "held_unaccepted": "1709280363 .. 1709612094 = 2024-03-01T08:06:03Z .. 2024-03-05T04:14:54Z"
+    },
+    "aligned": false,
+    "alignment_finding": "The windows OVERLAP and are NOT ALIGNED. Stack Exchange starts 8h06m into 2024-03-01 and ends 4h17m into 2024-03-05; Wikimedia holds whole UTC days. Aligning them would require sub-daily Wikimedia counts, and the finest grain this deployment holds is a day. So no exactly-aligned bounded period exists for any quantitative comparison.",
+    "containment": "Both windows are contained in March 2024. Containment is weaker than alignment and is all an existential needs, which is precisely the section 5 warning arriving in the time column."
+  },
+
+  "deterministic_temporary_aggregation": {
+    "needed": false,
+    "available": false,
+    "needed_reason": "An existential over a containing period is entailed by a single qualifying observation inside it. No sum, mean or monthly aggregate is required to establish it, so section 10's diagnostic-aggregation permission is never invoked.",
+    "available_reason": "Even if it were wanted, it is refused. Section 10 permits summing held daily Wikimedia counts to an exact March 2024 window only 'if the complete required daily observations are actually held'. This deployment holds 7 of 31 March days. Completeness is NOT established, so no monthly aggregate was manufactured.",
+    "both_reported_because": "Reporting only 'not needed' would leave a reader believing the aggregate was available and merely unused."
+  },
+
+  "candidate_propositions": [
+    {
+      "id": "P-A1",
+      "class": "A",
+      "class_name": "direct observable class abstraction",
+      "statement": "At least one public platform recorded, during March 2024, an event of a defined class that it attributes to the subject `docker`.",
+      "event_class_definition": "The ONLY definition under which both apparatuses qualify is a disjunction: (a) a content request counted under Wikimedia's own Research:Page view definition for the article `Docker_(software)` on `en.wikipedia.org` under requester class `user`; OR (b) a question published on `stackoverflow` carrying the site's own tag `docker`.",
+      "formal_validity": "VALID",
+      "information_value": "NEAR_TAUTOLOGICAL",
+      "verdict": "FORMALLY_VALID_BUT_INFORMATIONALLY_WEAK"
+    },
+    {
+      "id": "P-B1",
+      "class": "B",
+      "class_name": "cross-platform existence",
+      "statement": "Subject-related activity attributed to `docker` occurred on more than one independently operated platform during March 2024.",
+      "formal_validity": "NOT_ORDINARY_CORROBORATION",
+      "information_value": "HIGHER_THAN_P_A1",
+      "verdict": "JOINT_CONJUNCTION_NOT_CORROBORATION",
+      "why": "No single apparatus entails it. Wikimedia alone establishes one platform; Stack Exchange alone establishes one platform; the claim that there were TWO is entailed only by their conjunction. That is a JOINT proposition, and putting two Evidence rows into two support groups on it would report a conjunction as independent corroboration -- the exact shape section 4 rejects."
+    },
+    {
+      "id": "P-C1",
+      "class": "C",
+      "class_name": "latent behavioural construct",
+      "statement": "Developers showed interest in Docker during March 2024.",
+      "formal_validity": "NOT_OBSERVED",
+      "information_value": "WOULD_BE_HIGH",
+      "verdict": "LATENT_INFERENCE_REQUIRED",
+      "why": "Requires pageviews -> interest and questions -> pain, both named in section 6's forbidden list. No reviewed inference contract exists. This is the proposition a reader most wants and it is not OBSERVED. Not implemented, and not proposed."
+    },
+    {
+      "id": "P-A2",
+      "class": "A",
+      "class_name": "direct observable class abstraction, strengthened",
+      "statement": "Public platform activity attributed to `docker` was higher in one bounded sub-period of March 2024 than in another.",
+      "formal_validity": "INVALID",
+      "information_value": "WOULD_BE_USEFUL",
+      "verdict": "SHARED_SUBJECT_NOT_SAME_PROPOSITION",
+      "why": "This is the first strengthening that would carry information, and it fails immediately on two counts. It requires comparing 88 questions against N content requests, which section 11 forbids -- they are not two measurements of one numeric quantity and may not be averaged, normalised or scaled into a shared pseudo-metric. And it requires exactly-aligned bounded sub-periods, which the measured grains do not provide. Recorded because the failure of the FIRST informative strengthening is the substance of the primary outcome."
+    }
+  ],
+
+  "entailment_table": [
+    {
+      "candidate": "P-A1",
+      "evidence_a": "wikimedia-pageviews | platform_counted_content_request_change | Docker_(software)",
+      "evidence_b": "stack-exchange | community_site_published_questions_carrying_tag | docker",
+      "a_alone_entails_full_claim": "YES",
+      "b_alone_entails_full_claim": "YES",
+      "requires_both_jointly": "NO",
+      "requires_latent_inference": "NO",
+      "source_identity_improperly_removed": "NO_BUT_RELOCATED",
+      "source_identity_note": "This is the finding worth reading twice. The proposition's SUBJECT is genuinely source-independent -- 'at least one public platform' names no publisher. But its PREDICATE is not: the only definition of the qualifying event class enumerates the two publishers' own mechanisms. So source attribution is not removed, it is relocated from the subject of the sentence into the definition of its predicate, where it is harder to see. A proposition that looks source-independent and is not is worse than one that is openly attributed.",
+      "standard_two_group_corroboration": "FORMALLY_YES"
+    },
+    {
+      "candidate": "P-B1",
+      "evidence_a": "wikimedia-pageviews | platform_counted_content_request_change | Docker_(software)",
+      "evidence_b": "stack-exchange | community_site_published_questions_carrying_tag | docker",
+      "a_alone_entails_full_claim": "NO",
+      "b_alone_entails_full_claim": "NO",
+      "requires_both_jointly": "YES",
+      "requires_latent_inference": "NO",
+      "source_identity_improperly_removed": "NO",
+      "standard_two_group_corroboration": "NO"
+    },
+    {
+      "candidate": "P-C1",
+      "evidence_a": "wikimedia-pageviews | platform_counted_content_request_change | Docker_(software)",
+      "evidence_b": "stack-exchange | community_site_published_questions_carrying_tag | docker",
+      "a_alone_entails_full_claim": "NO",
+      "b_alone_entails_full_claim": "NO",
+      "requires_both_jointly": "NO",
+      "requires_latent_inference": "YES",
+      "source_identity_improperly_removed": "NO",
+      "standard_two_group_corroboration": "NO"
+    },
+    {
+      "candidate": "P-A2",
+      "evidence_a": "wikimedia-pageviews | platform_counted_content_request_change | Docker_(software)",
+      "evidence_b": "stack-exchange | community_site_published_questions_carrying_tag | docker",
+      "a_alone_entails_full_claim": "NO",
+      "b_alone_entails_full_claim": "NO",
+      "requires_both_jointly": "YES",
+      "requires_latent_inference": "NO",
+      "source_identity_improperly_removed": "NO",
+      "standard_two_group_corroboration": "NO"
+    }
+  ],
+
+  "section_16_diagnostic": {
+    "wikimedia_content_id": "Docker_(software)",
+    "wikimedia_platform": "en.wikipedia.org",
+    "wikimedia_requester_class": "user",
+    "stack_exchange_tag": "docker",
+    "stack_exchange_site": "stackoverflow",
+    "canonical_subject_id": "docker",
+    "questions": [
+      {"n": 1, "question": "Is 'public platform activity' explicitly operationalised?", "answer": "ONLY_AS_A_DISJUNCTION", "note": "It can be given an explicit, checkable definition, and the only one that admits both members enumerates both members. A class whose definition is the list of the things it was built to contain is explicit and circular at once."},
+      {"n": 2, "question": "Does a page request qualify by definition?", "answer": "YES_BY_STIPULATION", "note": "Only because clause (a) stipulates it."},
+      {"n": 3, "question": "Does a published tagged question qualify by definition?", "answer": "YES_BY_STIPULATION", "note": "Only because clause (b) stipulates it."},
+      {"n": 4, "question": "Does either one alone entail the entire claim?", "answer": "YES", "note": "Under the disjunctive definition, each alone entails the existential."},
+      {"n": 5, "question": "Is the period exactly aligned?", "answer": "NO", "note": "Measured: Stack Exchange 2024-03-01T08:06:03Z .. 2024-03-05T04:17:20Z against whole UTC day buckets. Both are contained in March 2024, and containment is not alignment. The proposition survives this only because it is weak enough not to need alignment."},
+      {"n": 6, "question": "Is subject identity exact?", "answer": "YES", "note": "Reviewed registry, exact equality of rendered identifier keys, both sides carrying Evidence."},
+      {"n": 7, "question": "Does the abstraction silently imply humans?", "answer": "NO", "note": "Held out deliberately. `user` is Wikimedia's own class name for traffic not identified as automated by ua-parser plus custom regex, and it does not mean human, person, reader or customer. A Stack Exchange question is not one unique person: author identity was never acquired, so distinct askers cannot be counted."},
+      {"n": 8, "question": "Does it silently imply attention?", "answer": "NO", "note": "The wording is 'recorded an event of a defined class', not 'attended to'."},
+      {"n": 9, "question": "Does it silently imply problem severity?", "answer": "NO"},
+      {"n": 10, "question": "Does it silently imply demand?", "answer": "NO"}
+    ],
+    "verdict": "Questions 7 to 10 are all NO and 1 to 6 are defensible only in the qualified senses recorded above. So it IS a formal OBSERVED convergence candidate, and section 5's separate test is what decides it: FORMAL_CONVERGENCE_VALIDITY is VALID and PROPOSITION_INFORMATION_VALUE is NEAR_TAUTOLOGICAL."
+  },
+
+  "independence_analysis": {
+    "publisher_a": "Wikimedia Foundation",
+    "publisher_b": "Stack Exchange, Inc.",
+    "event_generation_a": "HTTP requests arriving at Wikimedia servers, counted under the operator's own pageview definition -- a conjunction of HTTP status, host and header conditions with an enumerated exclusion list.",
+    "event_generation_b": "Questions composed and published by people on stackoverflow.com.",
+    "collection_pipeline_a": "Wikimedia Analytics Pageviews API, first-party, documented.",
+    "collection_pipeline_b": "Stack Exchange API questions endpoint, first-party.",
+    "classification_a": "Requester class assigned by ua-parser plus additional custom regex, which the operator documents as heuristic pattern matching.",
+    "classification_b": "Tags assigned by askers and community curators from the site's own vocabulary.",
+    "shared_upstream_documented": false,
+    "shared_event_feed": false,
+    "republished_values": false,
+    "cross_import": false,
+    "common_measurement_producer": false,
+    "state": "UNKNOWN",
+    "state_justification": "Section 13 permits KNOWN_INDEPENDENT only where documentary evidence establishes genuinely distinct measurement lineages, and forbids converting 'no dependency found' into independence. This deployment holds first-party documentation of Wikimedia's lineage (Research:Page view) and holds NONE for Stack Exchange: the publisher's methodology pages are unreachable because the site's robots policy blocks this environment's fetcher. So one lineage is documented and one is not, and half a documentary basis does not establish a distinction between two.",
+    "not_refuted": "This is materially different from Mission 1.46. There, independence was REFUTED by a documented common upstream -- FRED republishes the World Bank series by its own declaration, and the World Bank names Eurostat among its own sources -- which closed the direction permanently. Here nothing suggests a shared upstream and none is documented; what is missing is the affirmative documentation of one side. An unknown can be resolved by a retrievable document. A documented common producer cannot.",
+    "no_bypass_attempted": "No request was made to Stack Exchange documentation in this mission. Its robots policy blocks the crawler, and no retry, header variation, mirror, cached copy or third-party summary is permitted to stand in for a first-party document."
+  },
+
+  "complementarity_analysis": {
+    "corroborating_definition": "Two Evidence items each bear on the same proposition.",
+    "complementary_definition": "Two Evidence items bear on different propositions or dimensions that together make an Opportunity hypothesis more informative.",
+    "wikimedia_dimensions": ["AUDIENCE_OR_USAGE", "TREND_OR_CHANGE"],
+    "stack_exchange_dimensions": ["PROBLEM_OR_NEED"],
+    "dimension_overlap": [],
+    "codebase_already_recorded_it": "packages/opportunity-engine/python/sros_opportunity/mapping.py, community_question_volume rationale: PROBLEM_OR_NEED is 'a genuinely different question from the one AUDIENCE_OR_USAGE answers: that one says something attended to a subject, this one says somebody said they were stuck on it, and neither implies the other.' Written before this mission and not for it.",
+    "observation_category_note": "The Evidence rows themselves do NOT record the distinction: observation_category is UNCATEGORISED on all 57 rows in the corpus, including all 14 Docker rows. The complementarity lives in the Opportunity engine's signal-type-to-dimension map, not on the Evidence row. So no existing category was coerced and none was invented, because the field that would have been coerced carries no distinction to coerce.",
+    "no_fake_common_category": "AUDIENCE_OR_USAGE and PROBLEM_OR_NEED were NOT collapsed into a shared category. Section 20 forbids it and nothing here needed it.",
+    "consequence": "These two Evidence items may both be valuable to the SAME Opportunity. That does not mean they belong on the SAME Claim. Opportunity-level evidence diversity is not Claim-level corroboration, and collapsing the first into the second is the error this mission exists to avoid."
+  },
+
+  "convergence_contract_capability": {
+    "question": "CAN_CURRENT_CONVERGENCE_CONTRACT_EXPRESS_CROSS_APPARATUS_PROPOSITION?",
+    "answer": "NO",
+    "refusals": [
+      {
+        "mechanism": "PropositionConvergenceContract.__post_init__",
+        "location": "packages/claim-model/python/sros_claim_model/convergence.py:138",
+        "rule": "raises ValueError unless 'source_id' is in identity_fields",
+        "quoted": "`source_id` is always identity for an OBSERVED proposition",
+        "consequence": "Two publishers cannot share one proposition key. A second source forms its own Claim."
+      },
+      {
+        "mechanism": "SourceBoundary",
+        "location": "packages/claim-model/python/sros_claim_model/convergence.py:57",
+        "rule": "exactly one member, SAME_SOURCE_AND_RESOURCE",
+        "quoted": "A cross-source value is deliberately absent rather than present-and-unused. An enum member nobody may pass is an invitation.",
+        "consequence": "There is no value a caller could pass to widen the boundary, so the refusal is structural rather than a policy check."
+      }
+    ],
+    "deliberate_not_oversight": "The docstring states the reasoning: an OBSERVED claim asserts what a named source reported, so 'Wikimedia counted X' and 'TED reported Z' are different propositions with different falsifiers, and rendering them into similar English does not make them one.",
+    "not_implemented": "No contract was written, no enum member was added and no constructor guard was relaxed. Section 18 says do not implement one yet, and section 9 forbids removing source_id from proposition identity merely to let two sources merge."
+  },
+
+  "proposed_identity_and_witness_fields": {
+    "$comment": "Recorded for section 19 as an exercise, NOT as a design to build. The exercise is what exposes the defect.",
+    "candidate": "P-A1",
+    "identity_fields": ["canonical_subject_id", "event_class_definition_id", "period_bound", "claim_type"],
+    "witness_fields": ["source_id", "resource_id", "source_native_subject_id", "source_platform", "period_label_from", "period_label_to", "audience_class"],
+    "disjoint": true,
+    "complete": false,
+    "complete_failure": "`audience_class` is REQUIRED on the content_request_count kind precisely so that one item over one period cannot carry two different counts under one name (Mission 1.19). It has no counterpart on the Stack Exchange side, so it can only be a witness fact here -- which means the identity set cannot say which requester class the proposition is about, while the Wikimedia apparatus cannot state a count without one. A fact that is load-bearing for one witness and absent for the other cannot be demoted to witness without the proposition losing the ability to say what it is about.",
+    "second_failure": "`event_class_definition_id` is the disjunction. It is an identity fact that names both publishers' mechanisms, so moving `source_id` to witness does not make the proposition source-independent -- it moves the attribution one level down. No fact disappears, and one becomes much harder to see.",
+    "verdict": "REJECTED under section 19. The merge is only available by dropping a fact that is defensible for neither apparatus."
+  },
+
+  "reliability_readiness": [
+    {"apparatus": "wikimedia-pageviews | platform_counted_content_request_change", "current_scope_resolves": "RESOLVED", "value": 0.65, "origin": "HUMAN_REVIEW"},
+    {"apparatus": "wikimedia-pageviews | platform_counted_content_request_change_witnessed", "current_scope_resolves": "RESOLVED", "value": 0.6, "origin": "HUMAN_REVIEW"},
+    {"apparatus": "stack-exchange | community_site_published_questions_carrying_tag", "current_scope_resolves": "NO_APPLICABLE_ASSESSMENT", "value": null, "origin": null},
+    {"apparatus": "stack-exchange | community_site_questions_without_accepted_answer", "current_scope_resolves": "NO_APPLICABLE_ASSESSMENT", "value": null, "origin": null},
+    {"apparatus": "ted-eu | source_reported_procurement_value_contrast", "current_scope_resolves": "RESOLVED", "value": 0.5, "origin": "HUMAN_REVIEW"},
+    {"apparatus": "ted-eu | source_published_classification_value_contrast_witnessed", "current_scope_resolves": "RESOLVED", "value": 0.55, "origin": "HUMAN_REVIEW"},
+    {"apparatus": "world-bank | source_reported_metric_period_change", "current_scope_resolves": "NO_APPLICABLE_ASSESSMENT", "value": null, "origin": null},
+    {"apparatus": "gdelt | source_reported_term_frequency_change", "current_scope_resolves": "NO_APPLICABLE_ASSESSMENT", "value": null, "origin": null},
+    {"apparatus": "gdelt | source_reported_term_frequency_contrast", "current_scope_resolves": "NO_APPLICABLE_ASSESSMENT", "value": null, "origin": null}
+  ],
+
+  "reliability_consequence": {
+    "new_proposition_kind_is_new_scope": "A cross-apparatus proposition would carry a NEW proposition_kind, so it would be a NEW five-part reliability scope on BOTH sides. Neither Wikimedia's 0.65 nor its 0.6 transfers, and no value is inherited by proposition similarity.",
+    "both_sides_would_need_review": true,
+    "stack_exchange_already_refused": "The Stack Exchange side needs exactly the judgement the operator has already declined. In Mission 1.36.1 the operator answered NO on BOTH Stack Exchange scopes and the refusal was recorded as prose rather than as a value, because a refusal recorded as data would be a number the next reader would use. The reason was that the available documentation is insufficient -- the same robots-blocked documentation that leaves independence UNKNOWN here.",
+    "why_this_matters": "The cross-apparatus route does not merely need new reliability reviews. It needs a Stack Exchange reliability review whose blocker a mission cannot clear, because the blocker is a publisher's access policy and bypassing it is out of bounds."
+  },
+
+  "calibration_information_value": {
+    "structurally_identifying": "YES",
+    "structurally_identifying_why": "Two KNOWN_INDEPENDENT items on one Claim form two groups under _group_key, and saturation over two groups is 1 - (1 - g_A)(1 - g_B), which can exceed max(g_A, g_B). That would be the first case in this repository where the full aggregator differs from the B-2 pass-through baseline.",
+    "semantically_useful": "NO",
+    "semantically_useful_why": "The proposition that achieves it is 'at least one platform recorded something about Docker in March 2024', in a corpus assembled by going looking for Docker data. A calibration case asks a reviewer which of two evidence sets is better supported. Asking that about a near-tautology measures the reviewer's patience rather than the aggregator.",
+    "both_reported_because": "Section 22 requires both, and reporting only the first would present a structural exercise as an epistemic gain. A proposition can identify a mechanism and teach nothing about evidence strength, and this one does."
+  },
+
+  "decision_matrix": [
+    {
+      "pair": "wikimedia-pageviews + stack-exchange over subject `docker`",
+      "candidate": "P-A1",
+      "SUBJECT_MATCH": "YES",
+      "TIME_MATCH": "CONTAINMENT_ONLY",
+      "EACH_EVIDENCE_SUPPORTS_FULL_PROPOSITION": "YES",
+      "LATENT_INFERENCE_REQUIRED": "NO",
+      "COMPLEMENTARY_ONLY": "NO_AT_THIS_PROPOSITION_STRENGTH",
+      "PROVENANCE_INDEPENDENCE": "UNKNOWN",
+      "CONVERGENCE_CONTRACT_FIT": "NO",
+      "RELIABILITY_READINESS": "BOTH_SIDES_WOULD_NEED_NEW_REVIEW",
+      "CALIBRATION_INFORMATION_VALUE": "STRUCTURALLY_IDENTIFYING_NOT_SEMANTICALLY_USEFUL",
+      "VERDICT": "FORMALLY_VALID_BUT_INFORMATIONALLY_WEAK"
+    },
+    {
+      "pair": "wikimedia-pageviews + stack-exchange over subject `docker`",
+      "candidate": "P-A2",
+      "SUBJECT_MATCH": "YES",
+      "TIME_MATCH": "NO",
+      "EACH_EVIDENCE_SUPPORTS_FULL_PROPOSITION": "NO",
+      "LATENT_INFERENCE_REQUIRED": "NO",
+      "COMPLEMENTARY_ONLY": "YES",
+      "PROVENANCE_INDEPENDENCE": "NOT_REACHED",
+      "CONVERGENCE_CONTRACT_FIT": "NOT_REACHED",
+      "RELIABILITY_READINESS": "NOT_REACHED",
+      "CALIBRATION_INFORMATION_VALUE": "NOT_REACHED",
+      "VERDICT": "SHARED_SUBJECT_NOT_SAME_PROPOSITION"
+    },
+    {
+      "pair": "wikimedia-pageviews + stack-exchange over subject `docker`",
+      "candidate": "P-B1",
+      "SUBJECT_MATCH": "YES",
+      "TIME_MATCH": "CONTAINMENT_ONLY",
+      "EACH_EVIDENCE_SUPPORTS_FULL_PROPOSITION": "NO",
+      "LATENT_INFERENCE_REQUIRED": "NO",
+      "COMPLEMENTARY_ONLY": "NO_IT_IS_CONJUNCTIVE",
+      "PROVENANCE_INDEPENDENCE": "NOT_REACHED",
+      "CONVERGENCE_CONTRACT_FIT": "NOT_REACHED",
+      "RELIABILITY_READINESS": "NOT_REACHED",
+      "CALIBRATION_INFORMATION_VALUE": "NOT_REACHED",
+      "VERDICT": "JOINT_CONJUNCTION_NOT_CORROBORATION"
+    },
+    {
+      "pair": "wikimedia-pageviews + stack-exchange over subject `docker`",
+      "candidate": "P-C1",
+      "SUBJECT_MATCH": "YES",
+      "TIME_MATCH": "CONTAINMENT_ONLY",
+      "EACH_EVIDENCE_SUPPORTS_FULL_PROPOSITION": "NO",
+      "LATENT_INFERENCE_REQUIRED": "YES",
+      "COMPLEMENTARY_ONLY": "NOT_REACHED",
+      "PROVENANCE_INDEPENDENCE": "NOT_REACHED",
+      "CONVERGENCE_CONTRACT_FIT": "NOT_REACHED",
+      "RELIABILITY_READINESS": "NOT_REACHED",
+      "CALIBRATION_INFORMATION_VALUE": "NOT_REACHED",
+      "VERDICT": "CROSS_APPARATUS_CONVERGENCE_REQUIRES_INFERRED_BRIDGE"
+    }
+  ],
+
+  "gate_evaluation": {
+    "$comment": "Section 26. Evaluated for the ONLY candidate that reaches the gates, P-A1.",
+    "candidate": "P-A1",
+    "gates": [
+      {"n": 1, "gate": "exact subject identity", "result": "PASS", "why": "Reviewed registry, exact equality, Evidence on both sides (12 and 2)."},
+      {"n": 2, "gate": "compatible period", "result": "PASS_BY_WEAKNESS", "why": "Both windows are contained in March 2024. They are not aligned, and the proposition is weak enough not to need alignment. For any proposition that needs alignment this gate is a hard FAIL."},
+      {"n": 3, "gate": "each source alone supports full same proposition", "result": "PASS", "why": "Under the disjunctive event-class definition."},
+      {"n": 4, "gate": "no latent inference", "result": "PASS", "why": "Each side is a directly observed publication or counting event. No promotion to interest, demand, adoption, popularity, pain or willingness to pay."},
+      {"n": 5, "gate": "no complementary-only structure", "result": "PASS_AT_THIS_STRENGTH_ONLY", "why": "At the existential floor both bear on one proposition. One step above it they split into AUDIENCE_OR_USAGE and PROBLEM_OR_NEED and become complementary. The gate passes only where the proposition has discarded the distinction."},
+      {"n": 6, "gate": "established independence", "result": "FAIL", "why": "UNKNOWN. Stack Exchange's measurement lineage is not documented in the held basis, and its publisher documentation is robots-blocked."},
+      {"n": 7, "gate": "convergence contract representable", "result": "FAIL", "why": "Two structural refusals in code: source_id mandatory in identity, and SourceBoundary has one member."},
+      {"n": 8, "gate": "proposition is not merely a misleading pseudo-market construct", "result": "FAIL", "why": "'Public platform activity related to Docker was observed during March 2024' reads as though it says something about Docker's standing. It says that two platforms published something about Docker in a month chosen because this corpus holds Docker data. That is the near-tautological abstraction section 5 warns against presenting as market corroboration."}
+    ],
+    "gates_passed": 5,
+    "gates_failed": 3,
+    "all_eight": false
+  },
+
+  "hypothetical_aggregation": {
+    "$comment": "Section 24. NON-PERSISTED diagnostic, symbolic. No reliability value is assigned to either side, because neither has one for a cross-apparatus proposition_kind and fabricating one is forbidden.",
+    "persisted": false,
+    "fixture_shape": "one Claim, two Evidence items, both KNOWN_INDEPENDENT",
+    "group_a": {"members": ["evidence_wikimedia"], "independence_state": "KNOWN_INDEPENDENT", "group_key": "(INDEPENDENT, evidence_id)", "strength": "g_A = r_A"},
+    "group_b": {"members": ["evidence_stack_exchange"], "independence_state": "KNOWN_INDEPENDENT", "group_key": "(INDEPENDENT, evidence_id)", "strength": "g_B = r_B"},
+    "saturation": "S = 1 - (1 - g_A)(1 - g_B)",
+    "baseline_b2": "max(g_A, g_B)",
+    "differs": "S - max(g_A, g_B) = min(g_A, g_B) * (1 - max(g_A, g_B)), which is strictly positive whenever both g are in (0, 1). So the full aggregator differs from the B-2 pass-through baseline for ANY pair of non-zero independent strengths.",
+    "q_unresolved": "q is left unresolved on both sides. r_A and r_B are symbolic and no number is supplied, because neither apparatus has a reviewed reliability for a cross-apparatus proposition_kind.",
+    "what_this_shows": "The mechanism is ready and has been ready since Mission 1.43 proved it on fixtures. What is missing has never been the arithmetic. It is a real pair entitled to inhabit the shape, and this mission establishes that the held corpus does not contain one.",
+    "what_this_does_not_show": "That the shape is worth reaching. The same fixture would differ from B-2 for a proposition of no value, which is exactly the P-A1 case, and section 23 forbids designing a proposition to make the number move."
+  },
+
+  "counters": {
+    "$comment": "Measured before and after. Section 29 requires every research counter unchanged.",
+    "raw_records": {"before": 325, "after": 325},
+    "normalized_records": {"before": 325, "after": 325},
+    "signals": {"before": 33, "after": 33},
+    "claims": {"before": 43, "after": 43},
+    "claim_revisions": {"before": 44, "after": 44},
+    "evidence": {"before": 57, "after": 57},
+    "reliability_assessments": {"before": 4, "after": 4},
+    "reliability_basis_rows": {"before": 12, "after": 12},
+    "independence_groups": {"before": 0, "after": 0},
+    "opportunities": {"before": 1, "after": 1},
+    "opportunity_revisions": {"before": 1, "after": 1},
+    "opportunity_evidence_links": {"before": 7, "after": 7},
+    "embeddings": {"before": 0, "after": 0},
+    "scores": {"before": "table absent", "after": "table absent"},
+    "registered_sources": {"before": 29, "after": 29},
+    "evidence_with_stored_reliability": {"before": 0, "after": 0}
+  },
+
+  "network_budget": {
+    "RESEARCH_DATA_REQUESTS": 0,
+    "APPARATUS_DOCUMENTATION_REQUESTS": 0,
+    "GOVERNANCE_DOCUMENT_REQUESTS": 0,
+    "note": "Zero requests of every kind. Every apparatus fact used here was already held: Wikimedia's Research:Page view definition from Mission 1.19, the Stack Exchange documentation gap recorded in Mission 1.36's packet, and the provenance statements in the source catalog. No Stack Exchange documentation request was attempted, because its robots policy blocks this environment's fetcher and no bypass, header variation, mirror or third-party summary may stand in for a first-party document."
+  },
+
+  "model_use": {
+    "llm_calls": 0,
+    "usd": 0.0,
+    "embeddings": 0,
+    "semantic_classifier_used": false,
+    "problem_family_status": "PARKED"
+  },
+
+  "next_mission_recommendation": {
+    "do_not_implement_p_a1": "Section 38 is explicit for outcome D: do not implement it merely to make the aggregator produce a different number. Look for a better proposition family or a contradiction-capable route.",
+    "the_structural_observation": "The two routes to making the aggregator differ from B-2 are ESTABLISHED INDEPENDENCE and CONTRADICTION (Mission 1.43). This mission found that the propositions easiest to converge are existentials, and an existential is MONOTONE: a counterexample does not falsify it, so an existential can never produce a contradiction case. The propositions that CAN be contradicted are point or universal claims, and those are exactly the ones only one apparatus supports. So the same weakness that makes cross-apparatus convergence available makes contradiction unavailable, and both roads out of the B-2 identity are blocked by one property of this corpus.",
+    "recommended": "A mission that asks what TYPE of measurement apparatus would be needed, rather than which held pair can be made to fit. Specifically: an apparatus observing the same phenomenon as one already held, with a documented measurement lineage, capable of producing a FALSIFIABLE point claim rather than an existential -- because that is the only shape that can yield either an independent second group or a contradiction.",
+    "not_recommended": "Adding sources at random; widening the convergence contract; implementing P-A1; acquiring more Wikimedia or Stack Exchange data. None of them touches the finding.",
+    "explicitly_not_started": "Mission 1.48 was not started. Section 38 says do not start automatically, and the outcome is D rather than A, so the Mission 1.48 described there is not the right next mission anyway."
+  },
+
+  "deployment_local_human_confirmations_require_migration_checklist": {
+    "$comment": "Section 34. Recorded, not repaired.",
+    "finding": "TED's local review v3 acceptance is a HUMAN_CONFIRMATION verification recorded in this deployment's database. It is not portable through git: a clone of this repository does not carry it, and TED would be INELIGIBLE under local-private-research-v1 in a fresh deployment until a named operator recorded it again.",
+    "not_made_portable": "No replay mechanism was created and none is proposed here. record_ted_operator_acceptance.py still refuses against v3, and its own guard says the acceptance has to be made again by a person rather than replayed.",
+    "future_concern": "A deployment or migration checklist is required whenever this system is stood up elsewhere. That is a future deployment concern and not a Mission 1.47 repair."
+  }
+}
