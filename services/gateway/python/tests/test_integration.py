@@ -156,6 +156,12 @@ class TestSchemaRuntime:
             # CONSIDERED and did not cite (GAP-5, ADR-025).
             "research.claim_interpretation_runs",
             "research.claim_interpretation_inputs",
+            # 0034_deterministic_derivation_provenance. The durable counterpart
+            # to the two above: an interpretation run EXPIRES and cascades, so
+            # it cannot hold the record of why a Claim is true (ADR-037). These
+            # two carry no expiry and nothing references the run tables.
+            "research.threshold_registrations",
+            "research.claim_derivations",
         }
 
     def test_the_source_eligibility_view_exists(self, database) -> None:

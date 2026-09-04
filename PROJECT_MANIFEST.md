@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.83
+Version: 1.84
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-04 (Sprint 1 / Mission 1.50)
+Last amended: 2026-09-04 (Sprint 1 / Mission 1.51)
 
 ---
 
@@ -13,6 +13,48 @@ Last amended: 2026-09-04 (Sprint 1 / Mission 1.50)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.84 — 2026-09-04 (Sprint 1 / Mission 1.51)
+
+**`DETERMINISTIC_DERIVATION_PROVENANCE_SCHEMA_IMPLEMENTED`.** Migration 0034
+creates the two additive records ADR-037 froze: `research.threshold_registrations`
+and `research.claim_derivations`. Additive only, no backfill, no data migration,
+zero existing rows changed and zero production rows created.
+
+The load-bearing proof is a DELETE rather than a sentence. A real interpretation
+run with a bounded expiry and a real input row naming the same Signal are
+inserted, a durable derivation is inserted independently, the run is deleted
+through the ordinary mechanism, and both are re-read: the inputs cascaded to zero
+and the derivation survived. Deleting a Signal cited by a derivation raises a
+foreign key violation, so retention cannot silently take the reasoning with it.
+
+The deferrable finding was found by the database rather than by reasoning. The
+foreign keys were first plain ON DELETE NO ACTION, on the argument that NO ACTION
+is checked at the end of the statement. An undeferred NO ACTION is checked at the
+end of each cascading statement, and the cascade removing claim_revisions runs
+before the one removing the derivations citing them, so every committing test's
+teardown failed. DEFERRABLE INITIALLY DEFERRED moves the check to COMMIT, where a
+workspace deletion has removed both sides and a lone Signal purge has not.
+
+The two idempotency keys differ deliberately and a test reads both from the live
+schema to pin it. Derivation records are append-only with no supersession column,
+bound to the ClaimRevision. Threshold provenance is not Claim identity: the key
+includes provenance_status, and the table stores no proposition key, no claim id
+and no calibration eligibility, which is derived from status instead.
+
+origin_detail, claims, evidence and both interpretation tables are untouched. The
+single ALTER is a semantically vacuous unique constraint on claim_revisions that a
+composite tenant-safe foreign key requires.
+
+The pytest leak check now reports the database unchanged across 28 tenant tables,
+up from 26, having picked both new tables up automatically.
+
+New: `infrastructure/db/migrations/0034_deterministic_derivation_provenance.sql`,
+`docs/data/deterministic-derivation-provenance-schema-v1.json` and `.md`, one
+script under `infrastructure/scripts/`, and 28 database tests in
+`services/nlp/python`.
+
+Report: `docs/architecture/mission-1.51-report.md`.
 
 ## 1.83 — 2026-09-04 (Sprint 1 / Mission 1.50)
 
@@ -3009,6 +3051,7 @@ Additionally authoritative:
 - docs/data/falsifiable-evidence-apparatus-requirements-v1.md (added in 1.81)
 - docs/data/source-independent-claim-semantics-v1.md (added in 1.82)
 - docs/data/deterministic-inferred-claim-contract-v1.md (added in 1.83)
+- docs/data/deterministic-derivation-provenance-schema-v1.md (added in 1.84)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

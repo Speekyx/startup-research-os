@@ -1,0 +1,225 @@
+{
+  "$comment": "Mission 1.51. The two additive persistent records ADR-037 froze, as implemented by migration 0034. Authored; rendered and validated by infrastructure/scripts/render_derivation_provenance_schema.py. No evaluator, no INFERRED Claim, no Evidence and no production row was created.",
+  "record_version": "1.0.0",
+  "mission": "1.51",
+  "recorded_at": "2026-09-04",
+  "governs": "ADR-037",
+  "implementation_note_not_new_adr": "ADR-037 already governs the semantics. This mission resolved only the schema-level details it deliberately left open -- table names, SQL types, FK actions, constraints, supersession semantics and the equivalence-basis representation -- so it ships an implementation record rather than a second ADR that would restate a decision already made.",
+
+  "primary_outcome": "DETERMINISTIC_DERIVATION_PROVENANCE_SCHEMA_IMPLEMENTED",
+  "primary_outcome_statement": "Both additive records exist, are constrained, are migrated and are tested, including the retention proof the whole verdict rests on. No evaluator was built and no INFERRED Claim exists.",
+
+  "migration": {
+    "head_before": "0033_correspondence_evidence_locator",
+    "number": "0034",
+    "file": "infrastructure/db/migrations/0034_deterministic_derivation_provenance.sql",
+    "additive_only": true,
+    "backfill": false,
+    "data_migration": false,
+    "deletions": false,
+    "forward_only": "The repository has no down migrations and none was invented (ADR-008: plain numbered SQL with a core.schema_migrations ledger).",
+    "existing_rows_changed": 0
+  },
+
+  "tables": [
+    {
+      "name": "research.threshold_registrations",
+      "purpose": "A bound, frozen with its provenance.",
+      "primary_key": "id",
+      "tenant_key": "UNIQUE (workspace_id, id)",
+      "columns": [
+        "id", "workspace_id", "threshold_operator", "threshold_value", "unit",
+        "metric_definition_id", "scope_subject_id", "scope_population", "scope_time_bound",
+        "provenance_status", "recorded_at", "recorded_by", "provenance_reference",
+        "norm_issuer", "norm_document_id", "norm_version", "norm_section", "created_at"
+      ],
+      "idempotency_key": "(workspace_id, metric_definition_id, scope_subject_id, scope_population, scope_time_bound, threshold_operator, threshold_value, provenance_status)",
+      "idempotency_note": "It INCLUDES provenance_status deliberately, so one logical bound may be registered once as PREREGISTERED and once as EXTERNAL_NORM without being merged. ADR-037 §3 forbids equating threshold provenance with Claim identity, and a key that omitted the status would do exactly that.",
+      "stores_no_claim_identity": true,
+      "stores_no_claim_identity_evidence": "The table has no proposition_key, no claim_id and no calibration_eligible column, and a test asserts all three absences."
+    },
+    {
+      "name": "research.claim_derivations",
+      "purpose": "One deterministic evaluation: one rule, one Signal, one ClaimRevision, one result.",
+      "primary_key": "id",
+      "tenant_key": "UNIQUE (workspace_id, id)",
+      "columns": [
+        "id", "workspace_id", "claim_revision_id", "input_signal_id", "input_observed_claim_id",
+        "derivation_rule_id", "derivation_rule_version", "evaluator_version", "measurement_value",
+        "threshold_registration_id", "evaluation_result", "semantic_equivalence_basis_id",
+        "interpretation_kind", "model_version", "rationale", "created_at"
+      ],
+      "idempotency_key": "(workspace_id, claim_revision_id, input_signal_id, derivation_rule_version)",
+      "idempotency_note": "It INCLUDES derivation_rule_version and must. Evidence keys on (workspace, claim, signal) because Mission 1.41 REMOVED the procedure version so a bump could not INSERT a duplicate; a derivation record MUST be distinct per rule version, because replaying a different rule is different reasoning about the same relation."
+    }
+  ],
+
+  "foreign_keys": [
+    {"column": "workspace_id", "references": "core.workspaces (id)", "on_delete": "CASCADE", "why": "Deleting a tenant removes its data. That is tenant deletion, not retention."},
+    {"column": "(workspace_id, claim_revision_id)", "references": "research.claim_revisions (workspace_id, id)", "on_delete": "NO ACTION DEFERRABLE INITIALLY DEFERRED", "why": "Composite so a derivation can never cite a revision in another workspace."},
+    {"column": "(workspace_id, input_signal_id)", "references": "nlp.signals (workspace_id, id)", "on_delete": "NO ACTION DEFERRABLE INITIALLY DEFERRED", "why": "Every row of nlp.signals carries a populated expires_at, so CASCADE would let a future retention purge delete the reasoning along with its input -- the exact defect ADR-037 found in the interpretation-run tables."},
+    {"column": "(workspace_id, input_observed_claim_id)", "references": "research.claims (workspace_id, id)", "on_delete": "NO ACTION DEFERRABLE INITIALLY DEFERRED", "why": "Optional context; the Signal is the load-bearing input."},
+    {"column": "(workspace_id, threshold_registration_id)", "references": "research.threshold_registrations (workspace_id, id)", "on_delete": "NO ACTION DEFERRABLE INITIALLY DEFERRED", "why": "A directional result names what it compared against, and that bound must not vanish under it."}
+  ],
+
+  "no_foreign_key_to_expiring_runs": true,
+  "no_foreign_key_to_expiring_runs_evidence": "Neither new table references research.claim_interpretation_runs or research.claim_interpretation_inputs, and a test reads pg_constraint to assert it structurally rather than by inspection. Those two tables are unmodified.",
+
+  "the_deferrable_finding": {
+    "$comment": "Not designed in advance. The tenancy teardown found it, and the fix is precise enough to be worth recording.",
+    "what_happened": "The FKs were first written as plain ON DELETE NO ACTION, on the reasoning that NO ACTION is checked at the end of the statement while RESTRICT is checked immediately, so a workspace cascade would still succeed. That was wrong in a way only the database could show: an UNDEFERRED NO ACTION is checked at the end of each CASCADING statement, and the cascade that removes claim_revisions runs before the one that removes the derivations citing them. Every committing test's teardown failed.",
+    "the_fix": "DEFERRABLE INITIALLY DEFERRED, which moves the check to COMMIT.",
+    "why_it_is_correct_rather_than_convenient": "At COMMIT a workspace deletion has removed both sides, so tenant deletion works. A lone Signal purge still has a derivation pointing at it, so it still fails. Both guarantees hold, and neither was traded for the other.",
+    "the_stale_row_it_left": "One committing test had already written a derivation before its teardown failed, leaving a disposable `signal-probe` workspace behind. It was inspected before anything was deleted: the row was confined to that test workspace and the canonical dev workspace was untouched at 33 Signals, 43 Claims and 44 revisions. It was removed through the same mechanism the failed teardown would have used, and the migration was then rolled back and re-applied so the deployment matches the migration file exactly."
+  },
+
+  "vocabularies": {
+    "threshold_provenance_status": {
+      "values": ["PREREGISTERED", "SOURCE_NATIVE", "EXTERNAL_NORM", "POST_HOC", "UNKNOWN"],
+      "constraint": "threshold_registrations_provenance_status_check",
+      "calibration_eligible": ["PREREGISTERED", "SOURCE_NATIVE", "EXTERNAL_NORM"],
+      "calibration_ineligible": ["POST_HOC", "UNKNOWN"],
+      "eligibility_is_derived_not_stored": true,
+      "eligibility_is_derived_not_stored_why": "There is no calibration_eligible column. It is fully determined by provenance_status, and two authorities for one fact eventually disagree."
+    },
+    "evaluation_result": {
+      "values": ["SUPPORTS", "CONTRADICTS", "NOT_APPLICABLE", "UNKNOWN"],
+      "constraint": "claim_derivations_evaluation_result_check",
+      "neutral_deliberately_absent": "A NEUTRAL row would assert that an observation bears on the Claim without bearing either way, which is a positive finding and a different thing from not knowing. UNKNOWN must never become it."
+    },
+    "interpretation_kind": {
+      "values": ["DETERMINISTIC", "MODEL_DERIVED"],
+      "pairing_constraint": "claim_derivations_model_version_pairing_check",
+      "pairing_rule": "DETERMINISTIC requires model_version NULL; MODEL_DERIVED requires one. The same pairing migration 0016 enforces on claims, so a deterministic derivation cannot quietly acquire a model."
+    }
+  },
+
+  "status_specific_constraints": [
+    {"constraint": "threshold_registrations_reference_required_check", "rule": "PREREGISTERED, SOURCE_NATIVE and EXTERNAL_NORM must carry a non-empty provenance_reference. POST_HOC and UNKNOWN need none, because their whole content is that the origin is late or unestablished, and demanding a citation would invite a fabricated one."},
+    {"constraint": "threshold_registrations_external_norm_check", "rule": "EXTERNAL_NORM must identify issuer, document, version and section. A norm that cannot be identified is not a norm."},
+    {"constraint": "threshold_registrations_norm_fields_scoped_check", "rule": "Norm fields may be present ONLY for EXTERNAL_NORM, so a POST_HOC bound cannot borrow an issuer's authority by filling one in."},
+    {"constraint": "claim_derivations_threshold_required_check", "rule": "SUPPORTS and CONTRADICTS must name a threshold registration. NOT_APPLICABLE and UNKNOWN stop before the comparison and need none."},
+    {"constraint": "claim_derivations_rationale_present_check", "rule": "A blank rationale is refused. It is an explanation for a reader, and an empty one is not."}
+  ],
+
+  "preregistration": {
+    "rule": "threshold_registrations.recorded_at < observation.retrieved_at",
+    "timestamp_retained": "recorded_at",
+    "published_at_deliberately_not_used": "The bias preregistration guards against is the analyst's, and an analyst can only be influenced by data that reached them. A figure public for years before this system retrieved it was not known to whoever froze the bound.",
+    "commit_time_deliberately_not_used": "A commit records when a file changed, not when a measurement became available to the decision process.",
+    "human_foreknowledge_limit_retained": "The database proves that this system did not yet hold the measurement. It does not prove that no human knew it, and the column comment says so, so a future calibration mission cannot read PREREGISTERED as the stronger claim.",
+    "evaluator_not_implemented": "This mission stores the timestamp and does not compare it. The comparison belongs to the evaluator."
+  },
+
+  "binding_and_versioning": {
+    "binds_to": "CLAIM_REVISION",
+    "binds_to_why": "A threshold proposition can stay the same while the rule version, the inputs or the rationale change. Binding to the Claim would let a later derivation silently rewrite the reasoning behind an earlier revision.",
+    "supersession_model": "APPEND_ONLY",
+    "supersession_model_why": "There is no supersession column and no is_current flag. Rule v2 re-evaluating the same Signal against the same revision creates a SECOND row and leaves the first intact, because two rule versions disagreeing is a finding worth seeing rather than a conflict to resolve by overwriting. It satisfies §16's four requirements with no machinery: old reasoning never disappears, the latest never rewrites history, contradictory outcomes across versions stay inspectable side by side, and the rows are ordered by created_at.",
+    "old_derivations_can_disappear": false,
+    "a_claim_can_outlive_its_derivation": false,
+    "evidence_id_deliberately_absent": "No evidence_id column. Evidence is already uniquely identified by (workspace, claim, signal), so a pointer would be a second authority -- and adding one would suggest a single authoritative derivation exists when append-only deliberately permits several. Whether a re-evaluation under a new rule version may CHANGE an existing Evidence row is evaluator behaviour, and the schema supports either answer without prejudging it."
+  },
+
+  "semantic_equivalence_basis": {
+    "option_selected": "B",
+    "representation": "an opaque durable identifier stored on the derivation row (semantic_equivalence_basis_id TEXT NOT NULL)",
+    "third_table_created": false,
+    "why": "ADR-037 §13 required only that a future derivation point to a stable, auditable basis. Judging that two publishers measure the same quantity is a documentary judgement a person makes, and the canonical subject registry already establishes the pattern of a reviewed artifact referenced by exact identifier. A table would be a broad equivalence subsystem this mission was told not to build, and §13 says prefer minimum schema.",
+    "open_for_later": "Whether the authoritative basis becomes a table or stays a reviewed document is still open, and the column does not prejudge it: an identifier resolves against either."
+  },
+
+  "tenancy": {
+    "rls_enabled": true,
+    "rls_forced": true,
+    "policy": "tenant_isolation FOR ALL USING/WITH CHECK workspace_id = core.current_workspace_id()",
+    "policy_style_copied_from": "migration 0029, unchanged",
+    "composite_fks": "Every FK is composite on (workspace_id, ...), so a cross-workspace reference is structurally impossible rather than merely filtered.",
+    "three_layers": "The repository filter is layer one, RLS is layer two, the composite FK is layer three, and none replaces another (ADR-005, ADR-012).",
+    "leak_check_now_covers_them": "The pytest suite's global leak check reports 28 tenant tables where it reported 26, having picked both up automatically."
+  },
+
+  "what_was_not_touched": {
+    "research_claims": "unchanged",
+    "scoring_evidence": "unchanged",
+    "origin_detail": "unchanged in schema, semantics and every existing value",
+    "claim_interpretation_runs": "unchanged",
+    "claim_interpretation_inputs": "unchanged",
+    "one_addition_to_an_existing_table": {
+      "what": "ALTER TABLE research.claim_revisions ADD CONSTRAINT claim_revisions_workspace_id_key UNIQUE (workspace_id, id)",
+      "why": "A composite FK needs a matching unique constraint in its target, and claim_revisions had PRIMARY KEY (id) and UNIQUE (workspace_id, claim_id, revision) but not this one.",
+      "why_it_is_safe": "SEMANTICALLY VACUOUS: id is already unique on its own, so (workspace_id, id) cannot constrain anything new, and no existing row can violate it. Both other referenced tables (nlp.signals, research.claims) already carry the identical constraint, so this brings claim_revisions into line rather than inventing a pattern.",
+      "columns_changed": 0
+    }
+  },
+
+  "repository_layer": {
+    "created": false,
+    "why": "§27 permits one only if required to test inserts, uniqueness and constraints. The constraints are SQL, so the tests exercise them directly through the existing tenant-connection fixtures. A repository would be evaluator scaffolding, and the evaluator is the next mission's."
+  },
+
+  "domain_types": {
+    "created": false,
+    "why": "§28 warns against duplicate semantic vocabularies in multiple packages. The vocabularies live in the CHECK constraints today, and a Python mirror written before the evaluator exists would be a second authority with no consumer. The owning package is decided when the evaluator is."
+  },
+
+  "tests": {
+    "file": "services/nlp/python/tests/test_derivation_provenance_schema.py",
+    "count": 28,
+    "owner_package": "services/nlp/python",
+    "owner_why": "That package owns Claim persistence and already has the tenant-connection, probe-workspace and privileged-connection fixtures these need. §29 puts SQL-constraint tests with the package owning the research schema abstractions, and §40 forbids moving imports until tests happen to pass.",
+    "retention_proof": {
+      "runs": true,
+      "method": "Inserts a real interpretation run with a bounded expiry and a real input row naming the same Signal, inserts a durable derivation independently, DELETES the run through the ordinary mechanism, then re-reads both.",
+      "result": "The interpretation inputs cascaded to 0; the derivation survived. Asserted against real rows and a real DELETE, not against mocks.",
+      "why_it_matters": "ADR-037's entire schema verdict rests on this distinction. If it ever fails, a Claim can again outlive the record of how it was derived."
+    },
+    "idempotency_contrast": {
+      "runs": true,
+      "result": "Rule v1 and v2 over one (revision, signal) produce TWO derivation rows; the same rule version twice is refused by claim_derivations_identity_key. A companion test reads the live schema and asserts that the derivation key CONTAINS derivation_rule_version while no Evidence key contains extraction_method -- the deliberate difference Mission 1.41 created, pinned so a future evaluator cannot collapse it."
+    },
+    "signal_purge_refused": "Deleting a Signal cited by a derivation raises ForeignKeyViolation, so retention cannot silently take the reasoning with it."
+  },
+
+  "counters": {
+    "raw_records": {"before": 325, "after": 325},
+    "normalized_records": {"before": 325, "after": 325},
+    "signals": {"before": 33, "after": 33},
+    "claims": {"before": 43, "after": 43},
+    "claim_revisions": {"before": 44, "after": 44},
+    "evidence": {"before": 57, "after": 57},
+    "inferred_claims": {"before": 0, "after": 0},
+    "reliability_assessments": {"before": 4, "after": 4},
+    "reliability_basis_rows": {"before": 12, "after": 12},
+    "independence_groups": {"before": 0, "after": 0},
+    "opportunities": {"before": 1, "after": 1},
+    "opportunity_revisions": {"before": 1, "after": 1},
+    "opportunity_evidence_links": {"before": 7, "after": 7},
+    "embeddings": {"before": 0, "after": 0},
+    "registered_sources": {"before": 29, "after": 29},
+    "claim_interpretation_runs": {"before": 12, "after": 12},
+    "claim_interpretation_inputs": {"before": 64, "after": 64},
+    "threshold_registrations": {"before": 0, "after": 0},
+    "claim_derivations": {"before": 0, "after": 0},
+    "scores": {"before": "ABSENT", "after": "ABSENT"}
+  },
+
+  "network_budget": {"RESEARCH_DATA_REQUESTS": 0, "APPARATUS_DOCUMENTATION_REQUESTS": 0, "GOVERNANCE_DOCUMENT_REQUESTS": 0},
+  "model_use": {"llm_calls": 0, "usd": 0.0, "embeddings": 0, "problem_family_status": "PARKED"},
+  "source_selected": null,
+  "evaluator_implemented": false,
+  "inferred_claim_created": false,
+  "evidence_created": false,
+
+  "next_mission_recommendation": {
+    "recommended": "Mission 1.52 -- Deterministic Inferred Claim Evaluator Foundation V1",
+    "scope": "The evaluator package ADR-037 specified and this mission did not create: measurement witness, threshold lookup, equivalence gate, deterministic result, INFERRED Claim draft, derivation row, Evidence direction.",
+    "must_not": ["acquire research data", "select a source", "weaken validate_claims.py", "call a model"],
+    "prefer": "Synthetic or already-held diagnostic data until the evaluator itself is proven.",
+    "still_open": [
+      "whether the semantic-equivalence basis becomes a table or stays a reviewed document",
+      "whether a re-evaluation under a new rule version may change an existing Evidence row"
+    ],
+    "explicitly_not_started": "Mission 1.52 was not started."
+  }
+}
