@@ -301,6 +301,16 @@ jobs:
       # publication with its foreknowledge limit stated, and no migration.
       - name: Deterministic inferred Claim contract is rendered from its record
         run: uv run python infrastructure/scripts/render_deterministic_inferred_contract.py --check
+      # Mission 1.51 §42. Renders the derivation-provenance schema record and
+      # cross-checks it against MIGRATION 0034 itself: the tables it claims must
+      # be created there, no foreign key may reference a retention-bounded
+      # interpretation run, every non-workspace FK must be NO ACTION DEFERRABLE,
+      # NEUTRAL must not be an evaluation result, calibration eligibility must be
+      # derived rather than stored, and the migration must contain no DROP,
+      # DELETE, TRUNCATE or UPDATE. Both are repository files, so it is
+      # deterministic from an empty database.
+      - name: Derivation provenance schema matches its migration
+        run: uv run python infrastructure/scripts/render_derivation_provenance_schema.py --check
 
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.

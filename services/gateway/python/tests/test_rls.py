@@ -70,6 +70,12 @@ TENANT_TABLES = [
     # researching that the claims themselves do not make.
     "research.claim_interpretation_runs",
     "research.claim_interpretation_inputs",
+    # 0034. Durable derivation provenance and the threshold registrations it
+    # cites. Tenant data like everything above, and deliberately WITHOUT the
+    # bounded expiry the interpretation runs carry: these hold the record of why
+    # a Claim is true, and a Claim must not outlive its own reasoning (ADR-037).
+    "research.threshold_registrations",
+    "research.claim_derivations",
 ]
 
 # Deliberately NOT policy-bearing. Listed here so that adding a policy to one of
