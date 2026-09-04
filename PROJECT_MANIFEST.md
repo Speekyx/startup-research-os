@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.78
+Version: 1.79
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-04 (Sprint 1 / Mission 1.45)
+Last amended: 2026-09-04 (Sprint 1 / Mission 1.46)
 
 ---
 
@@ -13,6 +13,48 @@ Last amended: 2026-09-04 (Sprint 1 / Mission 1.45)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.79 — 2026-09-04 (Sprint 1 / Mission 1.46)
+
+**`COMMON_UPSTREAM_SOURCE_PREVENTS_INDEPENDENCE`.** Neither World Bank + Eurostat
+nor World Bank + FRED can produce two established independent provenance groups
+over one bounded proposition.
+
+FRED republishes the exact World Bank series already held: its own page names
+Source "World Bank", Release "World Development Indicators" and Source Code
+SP.POP.TOTL, and its suggested citation credits the World Bank as author and FRED
+as the retrieval point. Semantically identical, and dependent for that reason.
+
+Eurostat fails both gates. The World Bank's own indicator metadata names
+"Eurostat: Demographic Statistics" as one of four sources for SP.POP.TOTL, and
+Eurostat's ESMS metadata states that population data are collected by Eurostat
+from National Statistical Institutes under Regulation (EU) No 1260/2013. And the
+measurements differ anyway: de facto population at midyear against usually
+resident population on 1 January.
+
+The structural finding is that for official macro statistics the international
+publishers are distribution layers over national producers, so adding a second
+statistical publisher cannot create a second provenance group for a national
+aggregate.
+
+No route was selected and no least-bad fallback was taken. No qualified
+alternative was named inside the eligible statistical portfolio, because it is
+exactly the three publishers that share producers.
+
+The mandatory precondition was completed first: the operator's TED local review
+v3 acceptance was recorded through the supported domain API under a new
+verifier_version naming the v3 text, with 17 of 17 post-write checks passing and
+TED eligible again under local-private-research-v1.
+
+Zero research-data requests, one METADATA_ONLY call persisting no RawRecord, zero
+model calls, zero embeddings, and every research counter unchanged.
+
+New: `docs/data/independent-statistical-route-feasibility-v1.json` and `.md`,
+`docs/data/statistical-holdings-baseline-v1.json`, two scripts under
+`infrastructure/scripts/`, and
+`packages/evidence-aggregation/python/tests/test_independent_statistical_route.py`.
+
+Report: `docs/architecture/mission-1.46-report.md`.
 
 ## 1.78 — 2026-09-04 (Sprint 1 / Mission 1.45)
 
@@ -2746,6 +2788,7 @@ Additionally authoritative:
 - docs/data/wikimedia-convergent-reliability-review-packet-v1.md (added in 1.76)
 - docs/data/wikimedia-convergent-operator-reliability-review-v1.md (added in 1.77)
 - docs/data/ted-eu-official-reuse-response-v1.md (added in 1.78)
+- docs/data/independent-statistical-route-feasibility-v1.md (added in 1.79)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.
