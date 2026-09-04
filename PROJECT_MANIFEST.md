@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.75
+Version: 1.76
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-04 (Sprint 1 / Mission 1.43)
+Last amended: 2026-09-04 (Sprint 1 / Mission 1.44)
 
 ---
 
@@ -13,6 +13,38 @@ Last amended: 2026-09-04 (Sprint 1 / Mission 1.43)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.76 — 2026-09-04 (Sprint 1 / Mission 1.44)
+
+**`READY_FOR_WIKIMEDIA_CONVERGENT_RELIABILITY_REVIEW`.** The reliability question
+for the convergent Wikimedia proposition kind is prepared and not answered, under
+`human-reliability-assessment-rubric@1.0.0`.
+
+18 Evidence rows across 6 Claims with cardinalities {4,3,3,3,3,2}, collapsing to
+exactly one five-part scope that resolves `NO_APPLICABLE_ASSESSMENT`.
+
+The almost-match is tighter than TED's: the existing Wikimedia `0.65` shares four
+of five scope fields and differs only on `proposition_kind`. Thirty leak checks
+over every proposition kind in the corpus, zero leaks.
+
+Software asserted one dimension state and deliberately not the obvious one.
+Mission 1.42 could assert `NOT_ESTABLISHED` for TED's mutability because the
+basis said nothing; here it says something and not enough — a known-problems list
+records an incident and states no revision policy — and that is a judgement about
+sufficiency, so `HISTORICAL_MUTABILITY` stays blank.
+
+Nothing was fetched, no assessment or basis row was persisted, and every
+canonical counter is unchanged.
+
+A third latent defect of the same shape was found by the §37 fixture requirement:
+`ReliabilityBinding.to_json()` crashed on an optional field four generators
+already pass as `None`, in a branch the live corpus never reaches.
+
+New: `docs/data/wikimedia-convergent-reliability-review-packet-v1.json` and
+`.md`, and `infrastructure/scripts/build_wikimedia_convergent_reliability_packet.py`
+with its authored findings input.
+
+Report: `docs/architecture/mission-1.44-report.md`.
 
 ## 1.75 — 2026-09-04 (Sprint 1 / Mission 1.43)
 
@@ -2627,6 +2659,7 @@ Additionally authoritative:
 - docs/data/second-pilot-convergent-reliability-review-packet-v1.md (added in 1.71)
 - docs/data/human-reliability-assessment-rubric-v1.md (added in 1.72)
 - docs/data/second-pilot-convergent-operator-reliability-review-v1.md (added in 1.73)
+- docs/data/wikimedia-convergent-reliability-review-packet-v1.md (added in 1.76)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

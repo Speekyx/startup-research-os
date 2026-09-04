@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.76
-Last amended: 2026-09-04 (Sprint 1 / Mission 1.43)
+Version: 1.77
+Last amended: 2026-09-04 (Sprint 1 / Mission 1.44)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.77 | 2026-09-04 | **READY_FOR_WIKIMEDIA_CONVERGENT_RELIABILITY_REVIEW: the closest near miss yet, and the distinction between *nothing* and *not enough*.** 18 Evidence across 6 Claims, cardinalities **{4,3,3,3,3,2}**, collapsing to **exactly one** five-part scope resolving NO_APPLICABLE_ASSESSMENT. **THE ALMOST-MATCH IS TIGHTER THAN TED'S**: same publisher, same resource, same record kind, same claim type, and a reviewed **0.65 sitting one field away** -- the most inviting number in the repository to reach for. `proposition_kind` alone decides it, verified through the REAL resolver in both directions and by **30 leak checks, 0 leaks**, probing EVERY proposition kind in the corpus rather than a chosen few. **SOFTWARE ASSERTED EXACTLY ONE STATE AND DELIBERATELY NOT THE OBVIOUS ONE.** Mission 1.42 could assert `NOT_ESTABLISHED` for TED's mutability because the basis said NOTHING; here it says SOMETHING AND NOT ENOUGH -- a dated known-problems list records a 2016 user-agent classification incident and states no revision policy -- and *something and not enough* is a judgement about SUFFICIENCY, so `HISTORICAL_MUTABILITY` was left **blank**, which is precisely where a helpful generator would have filled it in. The one assertion is `SOURCE_SIDE_CHECKABILITY = NOT_ESTABLISHED`, because the basis is two documents and neither addresses what the source exposes for inspection. **THE NEW QUESTION CONVERGENCE INTRODUCES**: multiple witnesses of ONE METHODOLOGY do not insure against a METHODOLOGY-LEVEL failure -- a localised problem matters LESS to an existential, and a systematic reclassification matters MORE, because the witnesses share a counting rule and their independence is UNKNOWN. So the known-problems document is **PARTIALLY_APPLICABLE with its weight moving in two directions at once**, and the reviewer decides which governs. **NOTHING WAS FETCHED** -- the convergent proposition reads the same measurement through the same rules. **A THIRD DEFECT OF THE SAME SHAPE, FOUND BY §37 ON ITS FIRST RUN**: `ReliabilityBinding.to_json()` called `.isoformat()` on a field four generators already pass as `None`, and had never crashed because NO LIVE BINDING HAD EVER BEEN SERIALISED in this scope. 0 assessments, 0 basis rows, 0 network requests, 0 model calls, every counter unchanged, all 18 rows still NON_SCORABLE and all six Claims still UNAVAILABLE |
 | 1.76 | 2026-09-04 | **CALIBRATION_REFERENCE_CORPUS_MEANINGFULLY_EXPANDED, and the measurement that reframes what expansion is FOR.** Measured over all 37 Claims before any work: **0 with more than one support group, 0 where the aggregator differs from the Mission 1.37 B-2 pass-through baseline** -- and with ONE group that identity is **ALGEBRAIC, not incidental**: saturation over a single group is that group's strength, which is `max(members)`, which is what B-2 reports. **So no quantity of additional single-group Evidence can ever make them differ**; the aggregation layer becomes measurable only through ESTABLISHED INDEPENDENCE or CONTRADICTION, and a §37 fixture proves the converse by giving two `KNOWN_INDEPENDENT` items and watching support strength EXCEED pass-through. **A SECOND CONVERGENCE CONTRACT, FROM DATA ALREADY HELD**: `platform-counted-content-request-change-witnessed@1.0.0` over the 18 Wikimedia Signals, **0 network requests** -- which was not merely cheaper but the only open door, because Wikimedia acquisition is currently blocked by three unsatisfied conditions in this deployment. Claims 37 -> **43**, Evidence 39 -> **57**, Claims with >1 Evidence 2 -> **8**, and **max Evidence per Claim 2 -> 4**: group cardinality varies for the first time `{1,2}` -> `{1,2,3,4}`. **THE SCORABLE OPTION WAS REFUSED**: another TED division would have been immediately scorable and, by the finding above, could not have taught anything -- choosing it because a number would appear is choosing the appearance of progress. **`audience_class` STAYS IDENTITY** because Mission 1.19 made it REQUIRED so one item over one period cannot carry two counts under one name. **NOTHING WAS MANUFACTURED**: no contradiction (a decrease does not contradict an increase, and an existential is not falsified by a counterexample), no independence (one publisher, one pipeline, one method), **no temporality -- and the reason is architectural: every OBSERVED restatement is a historical fact about what a source published, and a historical fact does not decay**, even where the source's timestamps are documented. Secondary **NEW_CORPUS_SHAPE_NON_SCORABLE_MISSING_RELIABILITY**: a new kind is a new scope and none was invented or copied. **Leakage-safe splits are still NOT plausible** -- six new Claims share one scope and one kind, so they are ONE group. 0 model calls, 0 embeddings, 0 assessments, 0 independence groups, 0 scores, profile still UNCALIBRATED |
 | 1.75 | 2026-09-04 | **SECOND_PILOT_OPERATOR_RELIABILITY_DECISION_PERSISTED: `max(members)` received TWO REAL ITEMS for the first time, and the number did not move.** The operator typed the confirmation, and **two counters moved while thirteen did not**: ReliabilityAssessments 2 -> **3**, basis rows 6 -> **10**. Assessment `d1afa4be` v1, `0.55`, HUMAN_REVIEW, thibchm, `human-reliability-assessment-rubric@1.0.0` -- **the first assessment in this repository that can say which procedure produced it**, while both historical rows keep NULL because they predate the rubric and backfilling would fabricate provenance. **ALL SIX CONVERGENT ROWS RESOLVE and NOT ONE STORES THE NUMBER**: `scoring.evidence.reliability` is NULL on all 39 rows, because reliability binds late and a stale copy could outlive its assessment. **9 leak checks, 0 leaks** -- a third current assessment is a third set of ways to leak, and neither TED scope reaches the other on `proposition_kind` alone. **BOTH REAL MULTI-EVIDENCE CLAIMS BECAME SCORABLE, 0 -> 2**, `raw = 2`, `scorable = 2`, and the grouping arithmetic finally ran: **ONE support group of kind UNKNOWN with TWO members and `collapsed_member_count` 1**. Mission 1.41 had `raw = 2` with `scorable = 0`, so `max(members)` had never seen both. **AND THE RESULT IS `IDENTICAL_TO_RELIABILITY_PASS_THROUGH`, WHICH IS NOT A FAILURE**: both rows share one assessment, independence is UNKNOWN so they collapse into one group, and `max()` of two identical `q` values is that value -- the full aggregator and Mission 1.37's B-2 baseline agree **because the corpus gives them nothing to disagree about**. `q = 0.55` with **`reliability` limiting on 28 of 28**, masses 0.55/0/0/0.45, EvidenceScore 55.0, **level 1 blocked on *2 supporting groups of established independence, found 0*** -- reliability reaches none of the three blockers. **DISJOINT IS NOT INDEPENDENCE**, 0 groups created. Target variable `{0.5: 6, 0.55: 4, 0.65: 18}`, still all reviewed reliability. **A THIRD DEFECT OF THE SAME SHAPE**: the reporter read `group.members`, the attribute is `member_evidence_ids`, and `max(..., default=0)` never evaluated its generator while zero groups existed -- **a branch no data has ever entered is not tested by a passing suite**, found by the operator running it. 0 model calls, 0 acquisitions, 0 scores, profile still UNCALIBRATED |
 | 1.74 | 2026-09-04 | **OPERATOR_CONFIRMATION_REQUIRED, for the second time and for the same reason: the value is authorised and the keystroke is not.** Everything a mission may legitimately do is done -- migration **0032** adds `review_rubric_id` and `review_rubric_version`, the operator's completed review is frozen as an artifact that conforms to the rubric it names, and the dry run validates at **version 1, HUMAN_REVIEW, thibchm, 0.55, human-reliability-assessment-rubric@1.0.0, 4 document-backed basis rows**. **0 assessments persisted, 0 model calls, 0 acquisitions, every counter unchanged.** The brief supplied the operator's VALUES and cannot supply the operator's KEYSTROKE: piping the confirmation, patching `isatty` or writing the row by hand would each produce an assessment whose `reviewed_by` names a person who did not type it. **THE SCOPE WAS NOT NARROWED, AND THAT WAS THE LIVE TEMPTATION** -- the second pilot produced the two multi-Evidence division-92 Claims and the assessment is NOT about them: the scope carries no division and no currency, so one judgement binds **divisions 90 AND 92, EUR AND SEK**, 6 rows across 4 Claims. **NOTHING IS BACKFILLED AND NULL IS THE TRUE ANSWER**: both historical rows read NULL after the migration, because writing a rubric id onto a review that did not use one fabricates the provenance the column was added to record -- and **the basis table was considered and REJECTED as the place for it**, since a basis row names a document ABOUT THE MEASUREMENT. **BOTH HALVES OR NEITHER**, enforced twice: a CHECK constraint and `__post_init__`. **`UNSURE` SURVIVES AS `UNSURE`** on retrievability -- not YES, not NO, not low confidence, not 0.5 -- and is carried into the stated limitation rather than quietly resolved. `0.55` is neither 0.5 nor 0.65 nor their mean, and a test asserts all three. **A PRE-EXISTING TEST PINNED THE BINDING'S KEY SET** and was re-pointed rather than deleted: which procedure produced a value IS part of reconstructing it, which is the property that test asserts. Pre-persistence baseline recorded honestly: **0/6 resolved, 0 scorable, `max(members)` receiving 0** |
@@ -323,6 +324,89 @@ positives in the scored split, which this 89-question corpus did not supply: one
 defensible SAME in 40 candidate pairs is a finding about the corpus, not about
 the classifier. **No synthetic positive may substitute** -- a constructed pair
 can test a parser and can never establish semantic accuracy against real data.
+
+### Nothing is a fact; not enough is a judgement
+
+Added in 1.77 (Mission 1.44, `wikimedia-convergent-reliability-review-packet-v1.md`,
+`mission-1.44-report.md`). **`READY_FOR_WIKIMEDIA_CONVERGENT_RELIABILITY_REVIEW`**:
+the question prepared, no judgement supplied, **0 assessments created**.
+
+    18 Evidence / 6 Claims / cardinalities {4,3,3,3,3,2}  ->  ONE five-part scope
+    resolver  NO_APPLICABLE_ASSESSMENT     leak checks  30 run, 0 leaks
+    dimension states  4 blank, 1 asserted  reliability  null   gate  UNANSWERED
+
+- **THE ALMOST-MATCH IS TIGHTER THAN TED'S, AND THE NUMBER IS MORE INVITING.**
+  The existing Wikimedia `0.65` shares source, resource, record kind AND claim
+  type with the scope under review, and differs only on `proposition_kind`. That
+  is sufficient, and it was proved rather than asserted: the real resolver in
+  both directions, plus 30 leak checks over every proposition kind in the corpus.
+  There is no closest-match logic, no fallback, and **a scope naming only the
+  publisher matches nothing by construction**.
+- **SOFTWARE ASSERTED ONE STATE, AND NOT THE ONE A READER WOULD EXPECT.** Mission
+  1.42 could assert `NOT_ESTABLISHED` for TED's mutability because the held basis
+  said **nothing**. Here the basis says **something and not enough**: a dated
+  known-problems list records that a 2016 user-agent classification incident
+  occurred, and states no revision policy. **Whether an incident list without a
+  policy is `PARTIALLY_DOCUMENTED` or `NOT_ESTABLISHED` is a judgement about
+  sufficiency**, so `HISTORICAL_MUTABILITY` was left blank -- exactly where a
+  generator trying to be useful would have filled it in. The single assertion is
+  `SOURCE_SIDE_CHECKABILITY = NOT_ESTABLISHED`, which is a checkable claim about
+  what the corpus contains.
+- **MULTIPLE WITNESSES OF ONE METHODOLOGY DO NOT INSURE AGAINST A
+  METHODOLOGY-LEVEL FAILURE.** This is the question convergence introduces here
+  and does not inherit. An existential survives losing one witness, which looks
+  like robustness -- but every witness shares one counting rule, one tagging
+  mechanism and one pipeline, and independence is UNKNOWN, so a **systematic**
+  reclassification could remove them all at once. A **localised** problem
+  therefore matters LESS than it does to a named-pair claim, and a systematic one
+  matters MORE. The known-problems document is `PARTIALLY_APPLICABLE` with its
+  weight moving in **two directions at once**, and which reading governs is the
+  reviewer's.
+- **AN EXISTENTIAL IS MONOTONE OVER PUBLICATION AND NOT OVER REVISION.** Once a
+  qualifying pair is published nothing later falsifies it -- unless the published
+  value itself can be recomputed, in which case the witness that established it
+  can stop being one. The usual monotonicity argument depends on a revision
+  policy this basis does not state.
+- **NOTHING WAS FETCHED.** The convergent proposition reads the same BT-equivalent
+  measurement through the same rules, so both held documents still describe it:
+  `Research:Page view` is **REUSED** and more load-bearing than before, because
+  `audience_class` is one of the six identity fields the contract keeps.
+- **`user` IS NEVER TRANSLATED.** It is the platform's own class name for traffic
+  not identified as automated by ua-parser plus custom regex, and it does not mean
+  human, person, reader or customer. A test scans for the translation.
+- **WITNESS CARDINALITY IS NOT RELIABILITY.** One Claim has four witnesses and
+  another has two, and the four-witness measurement is not thereby more
+  dependable. Cardinality belongs to aggregation; reliability belongs to
+  measurement crossed with proposition. **Four witnesses is also not four
+  independent sources**: independence stays `UNKNOWN` on all 18 rows with 0
+  groups.
+- **THE SCOPE CARRIES NO ARTICLE, DIRECTION, REQUESTER CLASS, PERIOD OR WITNESS
+  COUNT**, so this is ONE question rather than six, and Docker, Kubernetes and
+  Podman do not get separate reviews.
+- **THE HISTORICAL ASSESSMENT KEEPS ITS NULL RUBRIC PROVENANCE**, which is true
+  rather than missing: it predates the rubric, and backfilling would fabricate
+  the provenance the column exists to record. A future assessment for the new
+  scope CAN record `human-reliability-assessment-rubric@1.0.0`, because migration
+  0032 added the columns.
+- **A THIRD DEFECT OF THE SAME SHAPE, AND §37 CAUGHT IT ON ITS FIRST RUN.**
+  `ReliabilityBinding.to_json()` called `.isoformat()` on a field four generators
+  already pass as `None`, and had never crashed because **no live binding had
+  ever been serialised** -- every row in this scope resolves to no assessment, so
+  the resolved branch is unreachable from the corpus. The type said `datetime`
+  while the codebase treated it as optional in four places. After Mission 1.36.1's
+  `binding.assessment_version` and Mission 1.42.1's `group.members`: **a branch no
+  data has ever entered is not tested by a passing suite**, and the fixture
+  requirement exists because of them.
+
+**The next action is a HUMAN REVIEW of this scope, and nothing else
+automatically.** If the gate returns `NUMERIC_JUDGEMENT_PERMITTED` with a value,
+reviewer, rationale and limitation, a later mission may persist exactly one
+assessment, and **six real multi-Evidence Claims become scorable including the
+first with four witnesses**. After that, **do not proceed to calibration**:
+Mission 1.43's finding still governs, these six Claims each have one provenance
+group, and with one group the full aggregator is algebraically the pass-through
+baseline. The next strategic mission remains an **independence-capable evidence
+route**.
 
 ### One provenance group makes the aggregator and the baseline the same number
 

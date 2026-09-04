@@ -1,0 +1,1368 @@
+{
+  "$comment": "Mission 1.44 §32, §33. The reliability question for ONE exact scope, prepared and NOT answered, under human-reliability-assessment-rubric@1.0.0. Every judgement field is blank except the one absence the rubric permits software to assert. The existing Wikimedia 0.65 appears only as HISTORICAL_OTHER_SCOPE_CONTEXT: it belongs to a different proposition kind, it is not a baseline, an anchor or a starting point, and it may not be copied. GENERATED -- edit wikimedia_convergent_reliability_findings.json and re-render.",
+  "artifact_version": "wikimedia-convergent-reliability-review-packet@1.0.0",
+  "generated_by": "mission-1.44",
+  "outcome": "READY_FOR_WIKIMEDIA_CONVERGENT_RELIABILITY_REVIEW",
+  "review_rubric": {
+    "id": "human-reliability-assessment-rubric",
+    "version": "1.0.0"
+  },
+  "reliability_scale": {
+    "range": "[0.0, 1.0]",
+    "threshold_labels": null,
+    "$note": "The architecture defines no meaning for any particular value and no threshold vocabulary. The rubric's two anchors are defined by what a value DOES in q = min(components), and it has no intermediate anchors."
+  },
+  "what_reliability_means": {
+    "the_question": "How dependable is THIS kind of measurement, for THIS kind of proposition?",
+    "it_is_not": [
+      "whether Wikimedia is a reputable organisation",
+      "whether Wikipedia is popular",
+      "the probability that any Claim is true",
+      "user interest, audience size, product adoption or demand",
+      "market size or commercial value",
+      "whether the source is governance-approved for use",
+      "whether our extractor read the Signal correctly",
+      "how directly the Evidence bears on a Claim",
+      "whether two Evidence rows are independent",
+      "how recently the observation was made"
+    ],
+    "scope_is_five_fields": "source_id, resource_id, record_kind_id, claim_type, proposition_kind. Matched in full or not at all. The scope carries no article, no direction, no requester class and no period, so one judgement would bind every Claim of this kind."
+  },
+  "measured_scopes": [
+    {
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change_witnessed"
+      },
+      "evidence_count": 18,
+      "claim_count": 6,
+      "outcome": "NO_APPLICABLE_ASSESSMENT",
+      "reliability": null,
+      "detail": "no assessment covers this measurement for this purpose. Reliability stays NULL and the record is NON_SCORABLE, which is the honest state: a default here would be the source coefficient this layer exists to prevent"
+    }
+  ],
+  "convergence_contract": {
+    "contract_id": "platform-counted-content-request-change-witnessed",
+    "version": "1.0.0",
+    "identity_fields": [
+      "proposition",
+      "source_id",
+      "content_platform",
+      "content_id",
+      "audience_class",
+      "direction"
+    ],
+    "witness_fields": [
+      "period_label_from",
+      "period_label_to"
+    ],
+    "establishes": "that the named platform counted, for the named item under the named requester class, at least one pair of adjacent published day buckets whose request counts stand in the named direction",
+    "does_not_establish": [
+      "how many such pairs exist",
+      "what proportion of the item's history they are",
+      "that the direction is typical, usual or continuing",
+      "any trend, growth, decline or momentum",
+      "that a person read anything, since a request is what a reader makes of a server",
+      "audience size, interest, demand or adoption",
+      "that the witnesses are independent of one another",
+      "that the calendar is controlled for, since a weekday and a weekend are different days and the pairs are not matched on that"
+    ],
+    "$note": "Inspected, not modified. `audience_class` and `direction` remain proposition identity: one item over one period carries a different count per requester class, and an increase and a decrease are two assertions rather than a disagreement."
+  },
+  "affected_claims": [
+    {
+      "claim_id": "e740d102-4bf2-4f9c-bc01-e82c9fb4ac99",
+      "claim_revision": 1,
+      "content_id": "Docker_(software)",
+      "direction": "INCREASING",
+      "audience_class": "user",
+      "content_platform": "en.wikipedia.org",
+      "witness_count": 4,
+      "evidence_ids": [
+        "637d5ff5-f33a-43ec-8353-2366fb2af211",
+        "9c502023-3aca-4ab5-ba45-745feb7aeeee",
+        "c2afb9fe-03ef-44a7-a88e-6e82f14bf860",
+        "faab3b4e-85fb-4257-98b5-66ca16908d75"
+      ],
+      "signal_ids": [
+        "2a35b936-78e0-5bc0-b999-4d9564c61d65",
+        "a8da7709-a1b4-5bdf-bf4f-37f759d399d1",
+        "d2d8a9ba-458c-58e5-87fa-7cc660881784",
+        "d3d42b57-95a4-56c0-800e-7ff955a43a0d"
+      ]
+    },
+    {
+      "claim_id": "1324d79c-54c6-4bba-9d7f-2320133f2ea8",
+      "claim_revision": 1,
+      "content_id": "Kubernetes",
+      "direction": "INCREASING",
+      "audience_class": "user",
+      "content_platform": "en.wikipedia.org",
+      "witness_count": 3,
+      "evidence_ids": [
+        "3fd59732-af9b-4dbe-86f7-9acca886e391",
+        "8c8f097d-d6d9-460f-a36e-0b7ef875a4a3",
+        "fd6c1111-43f3-4f03-8426-243b678bb382"
+      ],
+      "signal_ids": [
+        "064d12bf-e7bb-56e7-a90c-bdd08e89d2ac",
+        "23319b7e-6eac-5141-b63d-665233c0dc2c",
+        "bb97ace5-d778-56b9-b691-03d200d46754"
+      ]
+    },
+    {
+      "claim_id": "9bda8081-aebb-48a7-a31d-3fab8e2345a6",
+      "claim_revision": 1,
+      "content_id": "Kubernetes",
+      "direction": "DECREASING",
+      "audience_class": "user",
+      "content_platform": "en.wikipedia.org",
+      "witness_count": 3,
+      "evidence_ids": [
+        "792d07dc-e6ec-4c9e-8217-41318588f28d",
+        "d0983e5c-ea2a-44b3-8de4-8cc70e8a74a3",
+        "f4a8b828-a5d2-425e-a4c4-4a595616037d"
+      ],
+      "signal_ids": [
+        "70c4b334-1a20-5df3-a306-a80e980877e3",
+        "bb4c3d28-b1c2-5b5f-999d-da62a1f90453",
+        "f36a5b74-efb2-54b6-8ba0-ad46d44e2f8c"
+      ]
+    },
+    {
+      "claim_id": "a4809b1a-56a4-4ae2-a2e3-9ee2f68e4dd3",
+      "claim_revision": 1,
+      "content_id": "Podman",
+      "direction": "INCREASING",
+      "audience_class": "user",
+      "content_platform": "en.wikipedia.org",
+      "witness_count": 3,
+      "evidence_ids": [
+        "15964f84-3748-45a1-84c7-ad0637f300e8",
+        "c2d04ad8-14af-46a3-b465-8e992125b107",
+        "cdf30329-463e-46b1-bbe9-c9fb58c3ee65"
+      ],
+      "signal_ids": [
+        "645c4937-bb1d-59af-8932-0f7a3903e2da",
+        "8312acd0-a26d-54e2-bbee-d412733cbee6",
+        "92a6778c-f182-58f9-81bf-dfd490549097"
+      ]
+    },
+    {
+      "claim_id": "dff657c2-3ee8-429c-b308-4e0d8f3894d2",
+      "claim_revision": 1,
+      "content_id": "Podman",
+      "direction": "DECREASING",
+      "audience_class": "user",
+      "content_platform": "en.wikipedia.org",
+      "witness_count": 3,
+      "evidence_ids": [
+        "38f0b7c9-aeea-4f45-a170-a5163b22b3be",
+        "a5c63adb-06d9-4f4f-9445-7fda4493d7c8",
+        "c94b88c9-7eaa-48c8-a248-c42ae0bf87b7"
+      ],
+      "signal_ids": [
+        "23caed60-98ba-5b62-aa99-89b78d761691",
+        "34abb53f-19dd-59d3-8a7b-572c7d51a5e8",
+        "756358e8-2fd1-5c20-badb-4d7f678fb76b"
+      ]
+    },
+    {
+      "claim_id": "39449935-d841-4e76-b920-dd727204c199",
+      "claim_revision": 1,
+      "content_id": "Docker_(software)",
+      "direction": "DECREASING",
+      "audience_class": "user",
+      "content_platform": "en.wikipedia.org",
+      "witness_count": 2,
+      "evidence_ids": [
+        "17ab3887-7caf-4a81-a7d1-856bfbbdbdac",
+        "261994f7-e52e-4e40-a879-262192659696"
+      ],
+      "signal_ids": [
+        "2cfb6517-fd0a-5591-afe3-aef158e628dc",
+        "75307a0c-2c92-5ca1-a91c-76630e9f75ed"
+      ]
+    }
+  ],
+  "affected_rows": [
+    {
+      "claim_id": "1324d79c-54c6-4bba-9d7f-2320133f2ea8",
+      "evidence_id": "3fd59732-af9b-4dbe-86f7-9acca886e391",
+      "signal_id": "bb97ace5-d778-56b9-b691-03d200d46754",
+      "witness_observation_keys": [
+        "wikimedia-pageviews|en.wikipedia.org|user|Kubernetes|2024030400",
+        "wikimedia-pageviews|en.wikipedia.org|user|Kubernetes|2024030500"
+      ],
+      "period_label_from": null,
+      "period_label_to": null,
+      "direction": "SUPPORTS",
+      "relevance": 1.0,
+      "directness": 1.0,
+      "extraction_confidence": 1.0,
+      "observation_category": "UNCATEGORISED",
+      "independence_state": "UNKNOWN",
+      "independence_group_id": null,
+      "evidence_reliability_column": null
+    },
+    {
+      "claim_id": "1324d79c-54c6-4bba-9d7f-2320133f2ea8",
+      "evidence_id": "8c8f097d-d6d9-460f-a36e-0b7ef875a4a3",
+      "signal_id": "23319b7e-6eac-5141-b63d-665233c0dc2c",
+      "witness_observation_keys": [
+        "wikimedia-pageviews|en.wikipedia.org|user|Kubernetes|2024030500",
+        "wikimedia-pageviews|en.wikipedia.org|user|Kubernetes|2024030600"
+      ],
+      "period_label_from": null,
+      "period_label_to": null,
+      "direction": "SUPPORTS",
+      "relevance": 1.0,
+      "directness": 1.0,
+      "extraction_confidence": 1.0,
+      "observation_category": "UNCATEGORISED",
+      "independence_state": "UNKNOWN",
+      "independence_group_id": null,
+      "evidence_reliability_column": null
+    },
+    {
+      "claim_id": "1324d79c-54c6-4bba-9d7f-2320133f2ea8",
+      "evidence_id": "fd6c1111-43f3-4f03-8426-243b678bb382",
+      "signal_id": "064d12bf-e7bb-56e7-a90c-bdd08e89d2ac",
+      "witness_observation_keys": [
+        "wikimedia-pageviews|en.wikipedia.org|user|Kubernetes|2024030300",
+        "wikimedia-pageviews|en.wikipedia.org|user|Kubernetes|2024030400"
+      ],
+      "period_label_from": null,
+      "period_label_to": null,
+      "direction": "SUPPORTS",
+      "relevance": 1.0,
+      "directness": 1.0,
+      "extraction_confidence": 1.0,
+      "observation_category": "UNCATEGORISED",
+      "independence_state": "UNKNOWN",
+      "independence_group_id": null,
+      "evidence_reliability_column": null
+    },
+    {
+      "claim_id": "39449935-d841-4e76-b920-dd727204c199",
+      "evidence_id": "17ab3887-7caf-4a81-a7d1-856bfbbdbdac",
+      "signal_id": "75307a0c-2c92-5ca1-a91c-76630e9f75ed",
+      "witness_observation_keys": [
+        "wikimedia-pageviews|en.wikipedia.org|user|Docker_(software)|2024030100",
+        "wikimedia-pageviews|en.wikipedia.org|user|Docker_(software)|2024030200"
+      ],
+      "period_label_from": null,
+      "period_label_to": null,
+      "direction": "SUPPORTS",
+      "relevance": 1.0,
+      "directness": 1.0,
+      "extraction_confidence": 1.0,
+      "observation_category": "UNCATEGORISED",
+      "independence_state": "UNKNOWN",
+      "independence_group_id": null,
+      "evidence_reliability_column": null
+    },
+    {
+      "claim_id": "39449935-d841-4e76-b920-dd727204c199",
+      "evidence_id": "261994f7-e52e-4e40-a879-262192659696",
+      "signal_id": "2cfb6517-fd0a-5591-afe3-aef158e628dc",
+      "witness_observation_keys": [
+        "wikimedia-pageviews|en.wikipedia.org|user|Docker_(software)|2024030400",
+        "wikimedia-pageviews|en.wikipedia.org|user|Docker_(software)|2024030500"
+      ],
+      "period_label_from": null,
+      "period_label_to": null,
+      "direction": "SUPPORTS",
+      "relevance": 1.0,
+      "directness": 1.0,
+      "extraction_confidence": 1.0,
+      "observation_category": "UNCATEGORISED",
+      "independence_state": "UNKNOWN",
+      "independence_group_id": null,
+      "evidence_reliability_column": null
+    },
+    {
+      "claim_id": "9bda8081-aebb-48a7-a31d-3fab8e2345a6",
+      "evidence_id": "792d07dc-e6ec-4c9e-8217-41318588f28d",
+      "signal_id": "bb4c3d28-b1c2-5b5f-999d-da62a1f90453",
+      "witness_observation_keys": [
+        "wikimedia-pageviews|en.wikipedia.org|user|Kubernetes|2024030200",
+        "wikimedia-pageviews|en.wikipedia.org|user|Kubernetes|2024030300"
+      ],
+      "period_label_from": null,
+      "period_label_to": null,
+      "direction": "SUPPORTS",
+      "relevance": 1.0,
+      "directness": 1.0,
+      "extraction_confidence": 1.0,
+      "observation_category": "UNCATEGORISED",
+      "independence_state": "UNKNOWN",
+      "independence_group_id": null,
+      "evidence_reliability_column": null
+    },
+    {
+      "claim_id": "9bda8081-aebb-48a7-a31d-3fab8e2345a6",
+      "evidence_id": "d0983e5c-ea2a-44b3-8de4-8cc70e8a74a3",
+      "signal_id": "70c4b334-1a20-5df3-a306-a80e980877e3",
+      "witness_observation_keys": [
+        "wikimedia-pageviews|en.wikipedia.org|user|Kubernetes|2024030100",
+        "wikimedia-pageviews|en.wikipedia.org|user|Kubernetes|2024030200"
+      ],
+      "period_label_from": null,
+      "period_label_to": null,
+      "direction": "SUPPORTS",
+      "relevance": 1.0,
+      "directness": 1.0,
+      "extraction_confidence": 1.0,
+      "observation_category": "UNCATEGORISED",
+      "independence_state": "UNKNOWN",
+      "independence_group_id": null,
+      "evidence_reliability_column": null
+    },
+    {
+      "claim_id": "9bda8081-aebb-48a7-a31d-3fab8e2345a6",
+      "evidence_id": "f4a8b828-a5d2-425e-a4c4-4a595616037d",
+      "signal_id": "f36a5b74-efb2-54b6-8ba0-ad46d44e2f8c",
+      "witness_observation_keys": [
+        "wikimedia-pageviews|en.wikipedia.org|user|Kubernetes|2024030600",
+        "wikimedia-pageviews|en.wikipedia.org|user|Kubernetes|2024030700"
+      ],
+      "period_label_from": null,
+      "period_label_to": null,
+      "direction": "SUPPORTS",
+      "relevance": 1.0,
+      "directness": 1.0,
+      "extraction_confidence": 1.0,
+      "observation_category": "UNCATEGORISED",
+      "independence_state": "UNKNOWN",
+      "independence_group_id": null,
+      "evidence_reliability_column": null
+    },
+    {
+      "claim_id": "a4809b1a-56a4-4ae2-a2e3-9ee2f68e4dd3",
+      "evidence_id": "15964f84-3748-45a1-84c7-ad0637f300e8",
+      "signal_id": "92a6778c-f182-58f9-81bf-dfd490549097",
+      "witness_observation_keys": [
+        "wikimedia-pageviews|en.wikipedia.org|user|Podman|2024030500",
+        "wikimedia-pageviews|en.wikipedia.org|user|Podman|2024030600"
+      ],
+      "period_label_from": null,
+      "period_label_to": null,
+      "direction": "SUPPORTS",
+      "relevance": 1.0,
+      "directness": 1.0,
+      "extraction_confidence": 1.0,
+      "observation_category": "UNCATEGORISED",
+      "independence_state": "UNKNOWN",
+      "independence_group_id": null,
+      "evidence_reliability_column": null
+    },
+    {
+      "claim_id": "a4809b1a-56a4-4ae2-a2e3-9ee2f68e4dd3",
+      "evidence_id": "c2d04ad8-14af-46a3-b465-8e992125b107",
+      "signal_id": "645c4937-bb1d-59af-8932-0f7a3903e2da",
+      "witness_observation_keys": [
+        "wikimedia-pageviews|en.wikipedia.org|user|Podman|2024030600",
+        "wikimedia-pageviews|en.wikipedia.org|user|Podman|2024030700"
+      ],
+      "period_label_from": null,
+      "period_label_to": null,
+      "direction": "SUPPORTS",
+      "relevance": 1.0,
+      "directness": 1.0,
+      "extraction_confidence": 1.0,
+      "observation_category": "UNCATEGORISED",
+      "independence_state": "UNKNOWN",
+      "independence_group_id": null,
+      "evidence_reliability_column": null
+    },
+    {
+      "claim_id": "a4809b1a-56a4-4ae2-a2e3-9ee2f68e4dd3",
+      "evidence_id": "cdf30329-463e-46b1-bbe9-c9fb58c3ee65",
+      "signal_id": "8312acd0-a26d-54e2-bbee-d412733cbee6",
+      "witness_observation_keys": [
+        "wikimedia-pageviews|en.wikipedia.org|user|Podman|2024030300",
+        "wikimedia-pageviews|en.wikipedia.org|user|Podman|2024030400"
+      ],
+      "period_label_from": null,
+      "period_label_to": null,
+      "direction": "SUPPORTS",
+      "relevance": 1.0,
+      "directness": 1.0,
+      "extraction_confidence": 1.0,
+      "observation_category": "UNCATEGORISED",
+      "independence_state": "UNKNOWN",
+      "independence_group_id": null,
+      "evidence_reliability_column": null
+    },
+    {
+      "claim_id": "dff657c2-3ee8-429c-b308-4e0d8f3894d2",
+      "evidence_id": "38f0b7c9-aeea-4f45-a170-a5163b22b3be",
+      "signal_id": "756358e8-2fd1-5c20-badb-4d7f678fb76b",
+      "witness_observation_keys": [
+        "wikimedia-pageviews|en.wikipedia.org|user|Podman|2024030200",
+        "wikimedia-pageviews|en.wikipedia.org|user|Podman|2024030300"
+      ],
+      "period_label_from": null,
+      "period_label_to": null,
+      "direction": "SUPPORTS",
+      "relevance": 1.0,
+      "directness": 1.0,
+      "extraction_confidence": 1.0,
+      "observation_category": "UNCATEGORISED",
+      "independence_state": "UNKNOWN",
+      "independence_group_id": null,
+      "evidence_reliability_column": null
+    },
+    {
+      "claim_id": "dff657c2-3ee8-429c-b308-4e0d8f3894d2",
+      "evidence_id": "a5c63adb-06d9-4f4f-9445-7fda4493d7c8",
+      "signal_id": "23caed60-98ba-5b62-aa99-89b78d761691",
+      "witness_observation_keys": [
+        "wikimedia-pageviews|en.wikipedia.org|user|Podman|2024030100",
+        "wikimedia-pageviews|en.wikipedia.org|user|Podman|2024030200"
+      ],
+      "period_label_from": null,
+      "period_label_to": null,
+      "direction": "SUPPORTS",
+      "relevance": 1.0,
+      "directness": 1.0,
+      "extraction_confidence": 1.0,
+      "observation_category": "UNCATEGORISED",
+      "independence_state": "UNKNOWN",
+      "independence_group_id": null,
+      "evidence_reliability_column": null
+    },
+    {
+      "claim_id": "dff657c2-3ee8-429c-b308-4e0d8f3894d2",
+      "evidence_id": "c94b88c9-7eaa-48c8-a248-c42ae0bf87b7",
+      "signal_id": "34abb53f-19dd-59d3-8a7b-572c7d51a5e8",
+      "witness_observation_keys": [
+        "wikimedia-pageviews|en.wikipedia.org|user|Podman|2024030400",
+        "wikimedia-pageviews|en.wikipedia.org|user|Podman|2024030500"
+      ],
+      "period_label_from": null,
+      "period_label_to": null,
+      "direction": "SUPPORTS",
+      "relevance": 1.0,
+      "directness": 1.0,
+      "extraction_confidence": 1.0,
+      "observation_category": "UNCATEGORISED",
+      "independence_state": "UNKNOWN",
+      "independence_group_id": null,
+      "evidence_reliability_column": null
+    },
+    {
+      "claim_id": "e740d102-4bf2-4f9c-bc01-e82c9fb4ac99",
+      "evidence_id": "637d5ff5-f33a-43ec-8353-2366fb2af211",
+      "signal_id": "d2d8a9ba-458c-58e5-87fa-7cc660881784",
+      "witness_observation_keys": [
+        "wikimedia-pageviews|en.wikipedia.org|user|Docker_(software)|2024030300",
+        "wikimedia-pageviews|en.wikipedia.org|user|Docker_(software)|2024030400"
+      ],
+      "period_label_from": null,
+      "period_label_to": null,
+      "direction": "SUPPORTS",
+      "relevance": 1.0,
+      "directness": 1.0,
+      "extraction_confidence": 1.0,
+      "observation_category": "UNCATEGORISED",
+      "independence_state": "UNKNOWN",
+      "independence_group_id": null,
+      "evidence_reliability_column": null
+    },
+    {
+      "claim_id": "e740d102-4bf2-4f9c-bc01-e82c9fb4ac99",
+      "evidence_id": "9c502023-3aca-4ab5-ba45-745feb7aeeee",
+      "signal_id": "d3d42b57-95a4-56c0-800e-7ff955a43a0d",
+      "witness_observation_keys": [
+        "wikimedia-pageviews|en.wikipedia.org|user|Docker_(software)|2024030200",
+        "wikimedia-pageviews|en.wikipedia.org|user|Docker_(software)|2024030300"
+      ],
+      "period_label_from": null,
+      "period_label_to": null,
+      "direction": "SUPPORTS",
+      "relevance": 1.0,
+      "directness": 1.0,
+      "extraction_confidence": 1.0,
+      "observation_category": "UNCATEGORISED",
+      "independence_state": "UNKNOWN",
+      "independence_group_id": null,
+      "evidence_reliability_column": null
+    },
+    {
+      "claim_id": "e740d102-4bf2-4f9c-bc01-e82c9fb4ac99",
+      "evidence_id": "c2afb9fe-03ef-44a7-a88e-6e82f14bf860",
+      "signal_id": "a8da7709-a1b4-5bdf-bf4f-37f759d399d1",
+      "witness_observation_keys": [
+        "wikimedia-pageviews|en.wikipedia.org|user|Docker_(software)|2024030500",
+        "wikimedia-pageviews|en.wikipedia.org|user|Docker_(software)|2024030600"
+      ],
+      "period_label_from": null,
+      "period_label_to": null,
+      "direction": "SUPPORTS",
+      "relevance": 1.0,
+      "directness": 1.0,
+      "extraction_confidence": 1.0,
+      "observation_category": "UNCATEGORISED",
+      "independence_state": "UNKNOWN",
+      "independence_group_id": null,
+      "evidence_reliability_column": null
+    },
+    {
+      "claim_id": "e740d102-4bf2-4f9c-bc01-e82c9fb4ac99",
+      "evidence_id": "faab3b4e-85fb-4257-98b5-66ca16908d75",
+      "signal_id": "2a35b936-78e0-5bc0-b999-4d9564c61d65",
+      "witness_observation_keys": [
+        "wikimedia-pageviews|en.wikipedia.org|user|Docker_(software)|2024030600",
+        "wikimedia-pageviews|en.wikipedia.org|user|Docker_(software)|2024030700"
+      ],
+      "period_label_from": null,
+      "period_label_to": null,
+      "direction": "SUPPORTS",
+      "relevance": 1.0,
+      "directness": 1.0,
+      "extraction_confidence": 1.0,
+      "observation_category": "UNCATEGORISED",
+      "independence_state": "UNKNOWN",
+      "independence_group_id": null,
+      "evidence_reliability_column": null
+    }
+  ],
+  "detailed_versus_convergent": {
+    "detailed_proposition_kind": "platform_counted_content_request_change",
+    "convergent_proposition_kind": "platform_counted_content_request_change_witnessed",
+    "detailed_asserts": "that the platform counted, for a NAMED pair of adjacent published day buckets, more or fewer requests for a named item under a named requester class in the later bucket than the earlier one",
+    "convergent_asserts": "that the platform counted, for that item under that requester class, AT LEAST ONE pair of adjacent published day buckets standing in the named direction",
+    "what_moved": "period_label_from and period_label_to moved from proposition identity to witness provenance. They are not discarded: they remain on the Signal and are recoverable through Evidence -> Signal -> signal_inputs -> normalized_records.",
+    "what_did_not_change": "the underlying measurement. Both propositions read the same per-article daily request counts, produced by the same counting rules, under the same requester class, on the same project. The convergent claim reads no new field and applies no new arithmetic.",
+    "shared_measurement_semantics": [
+      "same source, same resource, same record kind",
+      "same pageview counting rules and the same enumerated exclusions",
+      "same requester-class tagging mechanism",
+      "same reading direction: what the platform COUNTED, never what a person did",
+      "same adjacency guarantee, since a pair derives only when the labels are exactly one published bucket apart"
+    ],
+    "reliability_questions_that_are_shared": [
+      "whether the pageview definition means what a reader takes it to mean",
+      "whether requester-class tagging separates automated from non-automated traffic dependably",
+      "whether the published daily values are complete",
+      "whether a published value can later change"
+    ],
+    "reliability_questions_that_are_NEW": [
+      "MULTIPLE WITNESSES OF ONE METHODOLOGY DO NOT INSURE AGAINST A METHODOLOGY-LEVEL FAILURE. An existential survives the loss of one witness, which looks like robustness. But every witness of a convergent Claim here shares one counting rule, one tagging mechanism and one publication pipeline, and independence is UNKNOWN -- so a SYSTEMATIC change, such as a retroactive reclassification of a requester class, could remove every witness at once. Whether that makes the proposition more dependable than the detailed one, or merely differently exposed, is a judgement.",
+      "AN EXISTENTIAL IS MONOTONE OVER PUBLICATION AND NOT OVER REVISION. Once a qualifying pair has been published, no later day can falsify the claim. But if a published value may itself be recomputed, the witness that established it can stop being a witness -- so the usual monotonicity argument for existentials depends on a revision policy this basis does not state.",
+      "IT CARRIES NO PERIOD, so a reader cannot tell from the claim WHEN the qualifying pair fell, and the wording must carry that bound instead.",
+      "SEVERAL DAY-PAIRS ARE ASSERTED TO WITNESS ONE PROPOSITION, which is an SROS interpretation step that does not exist for the detailed claim."
+    ]
+  },
+  "documentary_review_matrix": [
+    {
+      "question": "What is counted?",
+      "answer": "A pageview, defined by the platform as an explicit conjunction of HTTP-status, host and header conditions, with an enumerated exclusion list.",
+      "document": "Research:Page view",
+      "section": "Definition",
+      "open": false
+    },
+    {
+      "question": "How is automated traffic separated?",
+      "answer": "By tagging: ua-parser plus custom regex pattern matching. The platform describes its own detection rather than asserting that the remainder is human.",
+      "document": "Research:Page view",
+      "section": "Tagging",
+      "open": false
+    },
+    {
+      "question": "What does the requester class `user` mean?",
+      "answer": "The platform's own class name for traffic NOT identified as automated by that tagging. It is a source-native label and does not mean human, person, reader or customer.",
+      "document": "Research:Page view",
+      "section": "Tagging",
+      "open": false
+    },
+    {
+      "question": "Are known problems documented?",
+      "answer": "Yes. A dated known-problems list exists and records a 2016 user-agent classification incident.",
+      "document": "Data Platform / Data Lake / Traffic / Pageviews",
+      "section": "Events and known problems since 2015-05-01",
+      "open": false
+    },
+    {
+      "question": "Is there a revision or backfill POLICY for published values?",
+      "answer": "NOT ESTABLISHED by the held basis. An incident list records that a classification problem occurred; it does not state whether published values are recomputed, corrected, or left as published, nor how a consumer would tell.",
+      "document": "Data Platform / Data Lake / Traffic / Pageviews",
+      "section": "Events and known problems since 2015-05-01",
+      "open": true
+    },
+    {
+      "question": "Did the pageview definition or the tagging rules change across the witness periods?",
+      "answer": "NOT ESTABLISHED by the held basis. Neither document is versioned against the 2024-03 dates the witnesses fall in.",
+      "document": null,
+      "section": null,
+      "open": true
+    },
+    {
+      "question": "How long does a published per-article daily value remain retrievable?",
+      "answer": "NOT ESTABLISHED by the held basis. Neither document addresses retention or long-term availability.",
+      "document": null,
+      "section": null,
+      "open": true
+    }
+  ],
+  "failure_modes": [
+    {
+      "failure_mode": "traffic that a reader would call automated is tagged as the `user` class, or the reverse",
+      "rubric_dimension": "SOURCE_SIDE_VALIDATION",
+      "origin": "SOURCE_CLASSIFICATION",
+      "documented": true,
+      "factual_effect_on_measurement": "the counted population under a requester class differs from what its name suggests, by an amount the documentation does not bound",
+      "effect_on_convergent_proposition": "the same as on the detailed one, and NOT reduced by having several witnesses: every witness is tagged by the same mechanism",
+      "current_mitigation": "the claim's own wording names the platform's own class rather than translating it, and says COUNTED rather than viewed",
+      "residual_unknown": "how large the misclassification is; the documentation states the method, not its error rate"
+    },
+    {
+      "failure_mode": "a published value is later recomputed, corrected or reclassified",
+      "rubric_dimension": "HISTORICAL_MUTABILITY",
+      "origin": "SOURCE_HISTORY",
+      "documented": false,
+      "factual_effect_on_measurement": "re-reading the same observation could yield a different value, so the record is not established as stable",
+      "effect_on_convergent_proposition": "SHARPER here than for the detailed claim. A revision that removes one qualifying pair leaves the existential standing if another survives; a SYSTEMATIC reclassification could remove every witness at once, because the witnesses share a methodology and their independence is UNKNOWN",
+      "current_mitigation": "none. Nothing in this repository detects an upstream revision.",
+      "residual_unknown": "the revision policy itself, and whether a consumer could tell that a value had changed"
+    },
+    {
+      "failure_mode": "a documented known problem covers one of the witnessing days",
+      "rubric_dimension": "COMPLETENESS_AND_MISSINGNESS",
+      "origin": "SOURCE_HISTORY",
+      "documented": true,
+      "factual_effect_on_measurement": "a value inside an incident window may not mean what the definition says it means",
+      "effect_on_convergent_proposition": "an existential needs one surviving witness, so a localised incident is less damaging than it is to a named-pair claim",
+      "current_mitigation": "none automated. The known-problems list exists and is dated; nothing in this repository cross-references witness dates against it.",
+      "residual_unknown": "whether any witness date in 2024-03 falls inside a listed incident. The held finding names a 2016 incident and this review did not enumerate the list."
+    },
+    {
+      "failure_mode": "requests are missing for an interval, through an outage or a pipeline gap",
+      "rubric_dimension": "COMPLETENESS_AND_MISSINGNESS",
+      "origin": "SOURCE",
+      "documented": true,
+      "factual_effect_on_measurement": "a bucket under-counts without saying so",
+      "effect_on_convergent_proposition": "a spurious direction could qualify a pair that should not have qualified, and an existential does not require the pair to be typical",
+      "current_mitigation": "the claim asserts only what the platform counted, not what happened",
+      "residual_unknown": "whether the known-problems list is complete"
+    },
+    {
+      "failure_mode": "an absent term is treated as a zero rather than an absence",
+      "rubric_dimension": "COMPLETENESS_AND_MISSINGNESS",
+      "origin": "EXTRACTOR",
+      "documented": true,
+      "factual_effect_on_measurement": "none observed; ADR-023 forbids zero-filling and the extractor refuses instead",
+      "effect_on_convergent_proposition": "none",
+      "current_mitigation": "ADR-023, and a derivation that refuses rather than filling",
+      "residual_unknown": "none"
+    },
+    {
+      "failure_mode": "two day-pairs that do not witness the same proposition are treated as if they do",
+      "rubric_dimension": "MEASUREMENT_DEFINITION",
+      "origin": "CONVERGENCE_CONTRACT",
+      "documented": true,
+      "factual_effect_on_measurement": "none on the source; the risk is in the SROS interpretation step",
+      "effect_on_convergent_proposition": "THIS FAILURE MODE DOES NOT EXIST FOR THE DETAILED CLAIM. It is created by convergence.",
+      "current_mitigation": "six fixed identity fields, deterministic, refusing any fact the contract does not classify; article, requester class and direction all stay identity",
+      "residual_unknown": "none identified"
+    },
+    {
+      "failure_mode": "one witness counted twice",
+      "rubric_dimension": "MEASUREMENT_DEFINITION",
+      "origin": "CONVERGENCE_CONTRACT",
+      "documented": true,
+      "factual_effect_on_measurement": "none on the source",
+      "effect_on_convergent_proposition": "would inflate apparent witness count without adding an observation",
+      "current_mitigation": "witness_key over the witness facts, plus the Mission 1.41 Evidence identity repair",
+      "residual_unknown": "none identified"
+    },
+    {
+      "failure_mode": "the acquisition window shaped which day-pairs exist to witness",
+      "rubric_dimension": "COMPLETENESS_AND_MISSINGNESS",
+      "origin": "COLLECTOR",
+      "documented": true,
+      "factual_effect_on_measurement": "none; the window bounds what was observed rather than what is true",
+      "effect_on_convergent_proposition": "the existential wording carries it, and the risk is entirely in how a reader summarises the claim",
+      "current_mitigation": "the claim says AT LEAST ONE pair and names no period",
+      "residual_unknown": "none"
+    },
+    {
+      "failure_mode": "the per-article identity does not name the article a reader means",
+      "rubric_dimension": "MEASUREMENT_DEFINITION",
+      "origin": "NORMALIZER",
+      "documented": true,
+      "factual_effect_on_measurement": "none observed; the platform's own title on the named project is used verbatim",
+      "effect_on_convergent_proposition": "none",
+      "current_mitigation": "the platform's own article identifier is carried unchanged and is proposition identity",
+      "residual_unknown": "whether a later page move would silently change what the identifier names"
+    }
+  ],
+  "existing_basis_applicability": [
+    {
+      "document_title": "Research:Page view",
+      "section_reference": "Definition; Tagging",
+      "basis_type": "MEASUREMENT_METHODOLOGY",
+      "verdict": "REUSED",
+      "why": "It defines what a pageview IS and how requester classes are tagged. The convergent proposition reads exactly the same measurement through exactly the same rules; what changed is which observation witnesses the assertion, not what was measured. It is if anything MORE load-bearing here, because the requester class is one of the six identity fields the contract keeps."
+    },
+    {
+      "document_title": "Data Platform / Data Lake / Traffic / Pageviews",
+      "section_reference": "Events and known problems since 2015-05-01",
+      "basis_type": "KNOWN_LIMITATION",
+      "verdict": "PARTIALLY_APPLICABLE",
+      "why": "The FACT is unchanged and remains a real limitation: a dated known-problems list exists, it records a classification incident, and revision practice is not stated. Its WEIGHT moves in two directions at once under an existential, and which dominates is a judgement. A LOCALISED problem matters LESS, because an existential needs only one surviving witness. A SYSTEMATIC reclassification matters MORE, because the several witnesses of one convergent Claim share a methodology and their independence is UNKNOWN, so they can all fail together. The reviewer decides which reading governs; software records both."
+    }
+  ],
+  "engineering_validation_inputs": {
+    "$note": "§24. Recorded SEPARATELY and marked NOT_RELIABILITY_BASIS. Passing tests establish that the implementation does what its specification says, and nothing about how dependable the platform's counting is.",
+    "may_be_used_as_reliability_basis": false,
+    "classification": "ENGINEERING_VALIDATION_INPUT",
+    "inputs": [
+      "The convergence contract is deterministic, has six fixed identity fields and refuses any fact it does not classify.",
+      "witness_key over the witness facts prevents one day-pair being counted as two witnesses.",
+      "The Mission 1.41 Evidence identity repair means re-interpreting an unchanged Signal cannot insert a second row.",
+      "Witness day-pairs remain recoverable through Evidence to Signal to signal_inputs to normalized_records.",
+      "Mission 1.43 added a non-empty-fixture test class so reporting branches the live corpus never enters are executed.",
+      "The canonical cardinalities were measured rather than asserted: 18 Evidence across 6 Claims."
+    ],
+    "what_they_establish": "that the implementation does what its specification says.",
+    "what_they_do_not_establish": "anything about how dependable the platform's request counting is for this proposition."
+  },
+  "what_a_value_would_not_do": [
+    "It would not calibrate anything. REFERENCE_PROFILE_V1 stays UNCALIBRATED and reliability review is not calibration.",
+    "It would not establish independence. All 18 rows stay UNKNOWN with 0 groups.",
+    "It would not become a Wikimedia-wide coefficient. The scope is five fields; wikimedia-pageviews alone matches nothing.",
+    "It would not apply to Docker, Kubernetes or Podman separately. The scope carries no article.",
+    "It would not differ by direction or by witness count. The scope carries neither.",
+    "It would not make the Claims true, and it would not make any aggregation output a probability.",
+    "It would not, on its own, make the full aggregator differ from the reliability pass-through baseline. Mission 1.43 established that with one provenance group those are algebraically the same number, and these six Claims each have one."
+  ],
+  "historical_other_scope_context": [
+    {
+      "$note": "An ACTUAL PERSISTED FACT about a DIFFERENT scope, recorded so a reviewer can see what documentation was already accepted and which questions a reviewer previously found material. It is NOT a baseline, an anchor, a starting point, a prior or a range, and it may not be copied.",
+      "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+      "version": 1,
+      "scope": {
+        "source_id": "ted-eu",
+        "resource_id": "notices/eforms-contract-and-award",
+        "record_kind_id": "procurement_notice",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "source_published_classification_value_contrast_witnessed"
+      },
+      "origin": "HUMAN_REVIEW",
+      "reviewed_by": "thibchm",
+      "reliability": 0.55,
+      "review_rubric": "human-reliability-assessment-rubric@1.0.0",
+      "predates_the_rubric": false,
+      "is_the_scope_under_review": false,
+      "basis_rows": [
+        {
+          "basis_type": "KNOWN_LIMITATION",
+          "document_title": "eForms SDK 1.15.1 business rules (rule_en.xml)",
+          "section_reference": "BR-BT-00161-*",
+          "document_url": "https://docs.ted.europa.eu/eforms/latest/",
+          "retrieved_at": "2026-09-01T00:00:00+00:00",
+          "summarized_finding": "60 published rules govern where BT-161 may appear. All are presence, absence or notice-type constraints; none concerns the amount's correctness."
+        },
+        {
+          "basis_type": "KNOWN_LIMITATION",
+          "document_title": "eForms SDK 1.15.1 business-term definitions, BT-195 to BT-198",
+          "section_reference": "business-term|description|BT-195",
+          "document_url": "https://docs.ted.europa.eu/eforms/latest/",
+          "retrieved_at": "2026-09-01T00:00:00+00:00",
+          "summarized_finding": "Result values, of which BT-161 is one, may be withheld from immediate publication with a justification and a later date."
+        },
+        {
+          "basis_type": "MEASUREMENT_METHODOLOGY",
+          "document_title": "eForms SDK 1.15.1 business-term definitions (business-term_en.xml)",
+          "section_reference": "business-term|description|BT-161",
+          "document_url": "https://docs.ted.europa.eu/eforms/latest/",
+          "retrieved_at": "2026-09-01T00:00:00+00:00",
+          "summarized_finding": "BT-161 is 'The value of all contracts awarded in this notice, including options and renewals'."
+        },
+        {
+          "basis_type": "SOURCE_DOCUMENTATION",
+          "document_title": "eForms SDK 1.15.1 field repository (fields.json)",
+          "section_reference": "BT-161-NoticeResult",
+          "document_url": "https://docs.ted.europa.eu/eforms/latest/",
+          "retrieved_at": "2026-09-01T00:00:00+00:00",
+          "summarized_finding": "TOTAL_VALUE is BT-161, notice level, non-repeatable, at XPath efac:NoticeResult/cbc:TotalAmount, with a companion currency field."
+        }
+      ]
+    },
+    {
+      "$note": "An ACTUAL PERSISTED FACT about a DIFFERENT scope, recorded so a reviewer can see what documentation was already accepted and which questions a reviewer previously found material. It is NOT a baseline, an anchor, a starting point, a prior or a range, and it may not be copied.",
+      "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+      "version": 1,
+      "scope": {
+        "source_id": "ted-eu",
+        "resource_id": "notices/eforms-contract-and-award",
+        "record_kind_id": "procurement_notice",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "source_reported_procurement_value_contrast"
+      },
+      "origin": "HUMAN_REVIEW",
+      "reviewed_by": "thibchm",
+      "reliability": 0.5,
+      "review_rubric": null,
+      "predates_the_rubric": true,
+      "is_the_scope_under_review": false,
+      "basis_rows": [
+        {
+          "basis_type": "KNOWN_LIMITATION",
+          "document_title": "eForms SDK 1.15.1 business rules (rule_en.xml)",
+          "section_reference": "BR-BT-00161-*",
+          "document_url": "https://github.com/OP-TED/eForms-SDK/blob/1.15.1/translations/rule_en.xml",
+          "retrieved_at": "2026-09-01T00:00:00+00:00",
+          "summarized_finding": "60 published rules govern where BT-161 may appear. All are presence, absence or notice-type constraints; none concerns the amount's correctness."
+        },
+        {
+          "basis_type": "KNOWN_LIMITATION",
+          "document_title": "eForms SDK 1.15.1 business-term definitions, BT-195 to BT-198",
+          "section_reference": "business-term|description|BT-195",
+          "document_url": "https://github.com/OP-TED/eForms-SDK/blob/1.15.1/translations/business-term_en.xml",
+          "retrieved_at": "2026-09-01T00:00:00+00:00",
+          "summarized_finding": "Result values, of which BT-161 is one, may be withheld from immediate publication with a justification and a later date."
+        },
+        {
+          "basis_type": "MEASUREMENT_METHODOLOGY",
+          "document_title": "eForms SDK 1.15.1 business-term definitions (business-term_en.xml)",
+          "section_reference": "business-term|description|BT-161",
+          "document_url": "https://github.com/OP-TED/eForms-SDK/blob/1.15.1/translations/business-term_en.xml",
+          "retrieved_at": "2026-09-01T00:00:00+00:00",
+          "summarized_finding": "BT-161 is 'The value of all contracts awarded in this notice, including options and renewals'."
+        },
+        {
+          "basis_type": "SOURCE_DOCUMENTATION",
+          "document_title": "eForms SDK 1.15.1 field repository (fields.json)",
+          "section_reference": "BT-161-NoticeResult",
+          "document_url": "https://github.com/OP-TED/eForms-SDK/blob/1.15.1/fields/fields.json",
+          "retrieved_at": "2026-09-01T00:00:00+00:00",
+          "summarized_finding": "TOTAL_VALUE is BT-161, notice level, non-repeatable, at XPath efac:NoticeResult/cbc:TotalAmount, with a companion currency field."
+        }
+      ]
+    },
+    {
+      "$note": "An ACTUAL PERSISTED FACT about a DIFFERENT scope, recorded so a reviewer can see what documentation was already accepted and which questions a reviewer previously found material. It is NOT a baseline, an anchor, a starting point, a prior or a range, and it may not be copied.",
+      "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+      "version": 1,
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "origin": "HUMAN_REVIEW",
+      "reviewed_by": "thibchm",
+      "reliability": 0.65,
+      "review_rubric": null,
+      "predates_the_rubric": true,
+      "is_the_scope_under_review": false,
+      "basis_rows": [
+        {
+          "basis_type": "KNOWN_LIMITATION",
+          "document_title": "Data Platform / Data Lake / Traffic / Pageviews",
+          "section_reference": "Events and known problems since 2015-05-01",
+          "document_url": "https://wikitech.wikimedia.org/wiki/Data_Platform/Data_Lake/Traffic/Pageviews",
+          "retrieved_at": "2026-09-03T00:00:00+00:00",
+          "summarized_finding": "A dated known-problems list exists and records a 2016 user-agent classification incident; revision and backfill practice is not documented."
+        },
+        {
+          "basis_type": "MEASUREMENT_METHODOLOGY",
+          "document_title": "Research:Page view",
+          "section_reference": "Definition; Tagging",
+          "document_url": "https://meta.wikimedia.org/wiki/Research:Page_view",
+          "retrieved_at": "2026-09-03T00:00:00+00:00",
+          "summarized_finding": "The pageview definition is an explicit conjunction of HTTP-status, host and header conditions with an enumerated exclusion list; automated traffic is tagged by ua-parser plus custom regex."
+        }
+      ]
+    }
+  ],
+  "leak_checks": {
+    "run": 30,
+    "leaks_found": 0,
+    "checks": [
+      {
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_source_id": "ted-eu",
+        "assessment_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "probed_proposition_kind": "community_site_published_questions_carrying_tag",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_source_id": "ted-eu",
+        "assessment_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "probed_proposition_kind": "community_site_questions_without_accepted_answer",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_source_id": "ted-eu",
+        "assessment_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "probed_proposition_kind": "platform_counted_content_request_change",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_source_id": "ted-eu",
+        "assessment_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "probed_proposition_kind": "platform_counted_content_request_change_witnessed",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_source_id": "ted-eu",
+        "assessment_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "probed_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": true,
+        "resolved": true,
+        "outcome": "RESOLVED"
+      },
+      {
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_source_id": "ted-eu",
+        "assessment_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "probed_proposition_kind": "source_reported_metric_period_change",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_source_id": "ted-eu",
+        "assessment_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "probed_proposition_kind": "source_reported_procurement_value_contrast",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_source_id": "ted-eu",
+        "assessment_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "probed_proposition_kind": "source_reported_term_frequency_change",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_source_id": "ted-eu",
+        "assessment_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "probed_proposition_kind": "source_reported_term_frequency_contrast",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_source_id": "ted-eu",
+        "assessment_proposition_kind": "source_reported_procurement_value_contrast",
+        "probed_proposition_kind": "community_site_published_questions_carrying_tag",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_source_id": "ted-eu",
+        "assessment_proposition_kind": "source_reported_procurement_value_contrast",
+        "probed_proposition_kind": "community_site_questions_without_accepted_answer",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_source_id": "ted-eu",
+        "assessment_proposition_kind": "source_reported_procurement_value_contrast",
+        "probed_proposition_kind": "platform_counted_content_request_change",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_source_id": "ted-eu",
+        "assessment_proposition_kind": "source_reported_procurement_value_contrast",
+        "probed_proposition_kind": "platform_counted_content_request_change_witnessed",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_source_id": "ted-eu",
+        "assessment_proposition_kind": "source_reported_procurement_value_contrast",
+        "probed_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_source_id": "ted-eu",
+        "assessment_proposition_kind": "source_reported_procurement_value_contrast",
+        "probed_proposition_kind": "source_reported_metric_period_change",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_source_id": "ted-eu",
+        "assessment_proposition_kind": "source_reported_procurement_value_contrast",
+        "probed_proposition_kind": "source_reported_procurement_value_contrast",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": true,
+        "resolved": true,
+        "outcome": "RESOLVED"
+      },
+      {
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_source_id": "ted-eu",
+        "assessment_proposition_kind": "source_reported_procurement_value_contrast",
+        "probed_proposition_kind": "source_reported_term_frequency_change",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_source_id": "ted-eu",
+        "assessment_proposition_kind": "source_reported_procurement_value_contrast",
+        "probed_proposition_kind": "source_reported_term_frequency_contrast",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_source_id": "wikimedia-pageviews",
+        "assessment_proposition_kind": "platform_counted_content_request_change",
+        "probed_proposition_kind": "community_site_published_questions_carrying_tag",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_source_id": "wikimedia-pageviews",
+        "assessment_proposition_kind": "platform_counted_content_request_change",
+        "probed_proposition_kind": "community_site_questions_without_accepted_answer",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_source_id": "wikimedia-pageviews",
+        "assessment_proposition_kind": "platform_counted_content_request_change",
+        "probed_proposition_kind": "platform_counted_content_request_change",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": true,
+        "resolved": true,
+        "outcome": "RESOLVED"
+      },
+      {
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_source_id": "wikimedia-pageviews",
+        "assessment_proposition_kind": "platform_counted_content_request_change",
+        "probed_proposition_kind": "platform_counted_content_request_change_witnessed",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_source_id": "wikimedia-pageviews",
+        "assessment_proposition_kind": "platform_counted_content_request_change",
+        "probed_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_source_id": "wikimedia-pageviews",
+        "assessment_proposition_kind": "platform_counted_content_request_change",
+        "probed_proposition_kind": "source_reported_metric_period_change",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_source_id": "wikimedia-pageviews",
+        "assessment_proposition_kind": "platform_counted_content_request_change",
+        "probed_proposition_kind": "source_reported_procurement_value_contrast",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_source_id": "wikimedia-pageviews",
+        "assessment_proposition_kind": "platform_counted_content_request_change",
+        "probed_proposition_kind": "source_reported_term_frequency_change",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_source_id": "wikimedia-pageviews",
+        "assessment_proposition_kind": "platform_counted_content_request_change",
+        "probed_proposition_kind": "source_reported_term_frequency_contrast",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_source_id": "ted-eu",
+        "assessment_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "probed_proposition_kind": "platform_counted_content_request_change_witnessed",
+        "only_field_differing": "the whole five-part key",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_source_id": "ted-eu",
+        "assessment_proposition_kind": "source_reported_procurement_value_contrast",
+        "probed_proposition_kind": "platform_counted_content_request_change_witnessed",
+        "only_field_differing": "the whole five-part key",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_source_id": "wikimedia-pageviews",
+        "assessment_proposition_kind": "platform_counted_content_request_change",
+        "probed_proposition_kind": "platform_counted_content_request_change_witnessed",
+        "only_field_differing": "the whole five-part key",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      }
+    ]
+  },
+  "software_assignable_states": {
+    "$note": "The rubric permits software exactly one state, NOT_ESTABLISHED, and only where the claim is about what THIS review's basis CONTAINS. §17 says use it narrowly. Exactly one dimension qualifies.",
+    "SOURCE_SIDE_CHECKABILITY": {
+      "state": "NOT_ESTABLISHED",
+      "justification": "The review's basis is two documents. One defines the pageview and its tagging; the other lists known problems. Neither addresses what the source exposes for inspection, or for how long. That is a checkable statement about the corpus rather than a judgement about sufficiency."
+    },
+    "not_assigned_and_why": {
+      "HISTORICAL_MUTABILITY": "NOT assigned, although it is the dimension a reader would expect. The basis is not silent: it records that a classification incident happened. Whether an incident list without a revision policy is PARTIALLY_DOCUMENTED or NOT_ESTABLISHED is a judgement about whether what IS documented is enough, and that is the reviewer's. This is where this scope differs from the TED convergent one, whose basis contained nothing at all on the equivalent question.",
+      "MEASUREMENT_DEFINITION": "NOT assigned. The definition is documented; whether it is documented ENOUGH for this proposition is a judgement.",
+      "SOURCE_SIDE_VALIDATION": "NOT assigned. The tagging mechanism is documented and is heuristic; how much that bounds the measurement is a judgement.",
+      "COMPLETENESS_AND_MISSINGNESS": "NOT assigned. A known-problems list exists; whether it bounds the missingness is a judgement."
+    }
+  },
+  "operator_worksheet": {
+    "$note": "§25-§29. Every field below is the reviewer's, except the one absence the rubric permits software to assert about what this review's basis CONTAINS.",
+    "scope": {
+      "source_id": "wikimedia-pageviews",
+      "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+      "record_kind_id": "content_request_count",
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change_witnessed"
+    },
+    "review_rubric": {
+      "id": "human-reliability-assessment-rubric",
+      "version": "1.0.0"
+    },
+    "dimension_state_options": [
+      "DOCUMENTED_AND_BOUNDED",
+      "DOCUMENTED_WITH_UNBOUNDED_LIMITATION",
+      "PARTIALLY_DOCUMENTED",
+      "NOT_ESTABLISHED",
+      "CONTRADICTED"
+    ],
+    "hard_stops": [
+      {
+        "id": "MEASUREMENT_SEMANTICS_NOT_ESTABLISHED",
+        "condition": "`MEASUREMENT_DEFINITION` is `NOT_ESTABLISHED`.",
+        "factual_trigger_present": null,
+        "reviewer_decision": null
+      },
+      {
+        "id": "PROPOSITION_EXCEEDS_MEASUREMENT",
+        "condition": "The proposition asserts something the measurement does not observe.",
+        "factual_trigger_present": null,
+        "reviewer_decision": null
+      },
+      {
+        "id": "AUTHORITATIVE_DOCUMENTS_CONTRADICT",
+        "condition": "Any dimension is `CONTRADICTED` and the conflict is unreconciled.",
+        "factual_trigger_present": null,
+        "reviewer_decision": null
+      },
+      {
+        "id": "SOURCE_OBSERVATIONS_NOT_RECOVERABLE",
+        "condition": "The Evidence rows in scope cannot be traced back to the observations the source published.",
+        "factual_trigger_present": null,
+        "reviewer_decision": null
+      }
+    ],
+    "material_unknowns": [
+      {
+        "unknown": "whether a published per-article daily value may later be revised, recomputed or corrected, and whether a consumer could tell that it had been",
+        "rubric_dimension": "HISTORICAL_MUTABILITY",
+        "documentary_status": "PARTIAL",
+        "why_partial": "the held basis records that a classification incident OCCURRED in 2016, which establishes that something can go wrong; it does not state what the platform then does to already-published values, which is a different question",
+        "materiality_question": "Could resolution of this unknown reasonably alter how dependable this measurement is for this proposition?",
+        "permitted_answers": [
+          "YES",
+          "NO",
+          "UNSURE"
+        ],
+        "reviewer_answer": null
+      },
+      {
+        "unknown": "whether requester-class tagging may be re-applied retroactively to values already published",
+        "rubric_dimension": "SOURCE_SIDE_VALIDATION",
+        "documentary_status": "PARTIAL",
+        "why_partial": "the 2016 incident is documented as a classification problem; whether its correction changed previously published numbers is not stated",
+        "materiality_question": "Could resolution of this unknown reasonably alter how dependable this measurement is for this proposition?",
+        "permitted_answers": [
+          "YES",
+          "NO",
+          "UNSURE"
+        ],
+        "reviewer_answer": null
+      },
+      {
+        "unknown": "whether a systematic reclassification would remove EVERY witness of one convergent Claim at once, given that the witnesses share one methodology and their independence is UNKNOWN",
+        "rubric_dimension": "HISTORICAL_MUTABILITY",
+        "documentary_status": "NOT_ESTABLISHED",
+        "why_partial": "no held document addresses the question, and it is the one convergence introduces rather than inherits",
+        "materiality_question": "Could resolution of this unknown reasonably alter how dependable this measurement is for this proposition?",
+        "permitted_answers": [
+          "YES",
+          "NO",
+          "UNSURE"
+        ],
+        "reviewer_answer": null
+      },
+      {
+        "unknown": "whether the pageview definition or the tagging rules changed across the 2024-03 witness periods",
+        "rubric_dimension": "MEASUREMENT_DEFINITION",
+        "documentary_status": "NOT_ESTABLISHED",
+        "why_partial": "neither held document is versioned against those dates",
+        "materiality_question": "Could resolution of this unknown reasonably alter how dependable this measurement is for this proposition?",
+        "permitted_answers": [
+          "YES",
+          "NO",
+          "UNSURE"
+        ],
+        "reviewer_answer": null
+      },
+      {
+        "unknown": "how long a published per-article daily value remains retrievable at the source",
+        "rubric_dimension": "SOURCE_SIDE_CHECKABILITY",
+        "documentary_status": "NOT_ESTABLISHED",
+        "why_partial": "neither held document addresses retention or long-term availability",
+        "materiality_question": "Could resolution of this unknown reasonably alter how dependable this measurement is for this proposition?",
+        "permitted_answers": [
+          "YES",
+          "NO",
+          "UNSURE"
+        ],
+        "reviewer_answer": null
+      },
+      {
+        "unknown": "whether any of the six witness dates in 2024-03 falls inside an entry on the known-problems list",
+        "rubric_dimension": "COMPLETENESS_AND_MISSINGNESS",
+        "documentary_status": "NOT_ESTABLISHED",
+        "why_partial": "the held finding names a 2016 incident; the list was not enumerated against the witness dates in this review, and doing so is a documentation task rather than a judgement",
+        "materiality_question": "Could resolution of this unknown reasonably alter how dependable this measurement is for this proposition?",
+        "permitted_answers": [
+          "YES",
+          "NO",
+          "UNSURE"
+        ],
+        "reviewer_answer": null
+      }
+    ],
+    "numeric_judgement_gate_options": [
+      "NUMERIC_JUDGEMENT_PERMITTED",
+      "NUMERIC_JUDGEMENT_NOT_JUSTIFIED",
+      "DOCUMENTATION_INSUFFICIENT",
+      "REVIEW_BLOCKED_BY_CONTRADICTION",
+      "REVIEWER_DISAGREEMENT_UNRESOLVED"
+    ],
+    "judgement": {
+      "dimension_states": {
+        "MEASUREMENT_DEFINITION": null,
+        "SOURCE_SIDE_VALIDATION": null,
+        "HISTORICAL_MUTABILITY": null,
+        "COMPLETENESS_AND_MISSINGNESS": null,
+        "SOURCE_SIDE_CHECKABILITY": "NOT_ESTABLISHED"
+      },
+      "hard_stops_triggered": null,
+      "numeric_judgement_gate": "UNANSWERED",
+      "reliability": null,
+      "reviewed_by": null,
+      "rationale": "",
+      "stated_limitation": "",
+      "review_timestamp": null
+    },
+    "if_the_gate_is_not_permitted": "Leave the assessment absent. All 18 Evidence rows across 6 Claims stay NON_SCORABLE, the resolver keeps returning NO_APPLICABLE_ASSESSMENT, and the six Claims remain UNAVAILABLE. That is the designed behaviour rather than a gap, and it is a complete review.",
+    "rubric_provenance_for_a_future_assessment": {
+      "review_rubric_id": "human-reliability-assessment-rubric",
+      "review_rubric_version": "1.0.0",
+      "$note": "Migration 0032 added these columns, so an assessment for this scope CAN record which procedure produced it. The two pre-rubric assessments keep NULL, which is true rather than missing."
+    }
+  },
+  "what_this_packet_is_not": [
+    "NOT a reliability judgement. Every judgement field is blank.",
+    "NOT a recommendation, a range, an anchor or a starting point.",
+    "NOT a re-review of the detailed Wikimedia assessment, which is untouched.",
+    "NOT an assertion that the existing 0.65 is near the right answer for this scope."
+  ]
+}

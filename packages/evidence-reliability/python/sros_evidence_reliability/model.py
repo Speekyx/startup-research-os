@@ -205,7 +205,11 @@ class ReliabilityAssessment:
     rationale: str
     stated_limitation: str
     reviewed_by: str
-    reviewed_at: datetime
+    # Optional because a REPORT may construct an assessment without reading the
+    # timestamp column, which four generators already do. The persisted column
+    # is NOT NULL, so `None` here means *this object was built for reporting*
+    # and never *this review has no date*.
+    reviewed_at: datetime | None
     basis: tuple[ReliabilityBasis, ...] = ()
     calibration_dataset_ref: str | None = None
     # Which review PROCEDURE produced this judgement (Mission 1.42.1, migration
@@ -310,7 +314,7 @@ class ReliabilityBinding:
     origin: ReliabilityAssessmentOrigin
     reliability: float
     reviewed_by: str
-    reviewed_at: datetime
+    reviewed_at: datetime | None
     review_rubric_id: str | None = None
     review_rubric_version: str | None = None
 
@@ -322,7 +326,7 @@ class ReliabilityBinding:
             "origin": self.origin.value,
             "reliability": self.reliability,
             "reviewed_by": self.reviewed_by,
-            "reviewed_at": self.reviewed_at.isoformat(),
+            "reviewed_at": (self.reviewed_at.isoformat() if self.reviewed_at is not None else None),
             "review_rubric_id": self.review_rubric_id,
             "review_rubric_version": self.review_rubric_version,
         }
