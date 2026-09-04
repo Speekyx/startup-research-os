@@ -35,7 +35,7 @@ from __future__ import annotations
 import pytest
 from sros_acquisition.cli import main
 
-from .conftest import LEGACY_PROFILE, LOCAL_PROFILE, REPO_ROOT
+from .conftest import LEGACY_PROFILE, LOCAL_PROFILE, REPO_ROOT, current_review_version
 
 CATALOG = REPO_ROOT / "docs" / "data" / "source-catalog-v1.json"
 COMPLIANCE = REPO_ROOT / "docs" / "data" / "source-compliance-v1.json"
@@ -134,8 +134,15 @@ class TestListReportsOneProfilePerRow:
 class TestShowReportsTheRequestedProfile:
     def test_it_shows_the_requested_review_not_the_legacy_one(self, capsys) -> None:
         out = run(capsys, "--use-profile", LOCAL_PROFILE, "show", "ted-eu")
-        assert "POLICY REVIEW v2  APPROVED_WITH_CONDITIONS" in out
-        assert "by mission-1.15.6" in out
+        # The property is that `show` reports the LOCAL review rather than the
+        # legacy one, not that the local line is frozen at v2. It was pinned to
+        # "v2 ... by mission-1.15.6" and Mission 1.45 appended v3.
+        version = current_review_version()
+        assert f"POLICY REVIEW v{version}  APPROVED_WITH_CONDITIONS" in out
+        # And the legacy review is a different version in a different state, so
+        # naming it would be the failure this test exists to catch.
+        legacy_version = current_review_version(use_profile=LEGACY_PROFILE)
+        assert f"POLICY REVIEW v{legacy_version}  REQUIRES_REVIEW" not in out
 
     def test_it_lists_every_profile_the_source_is_reviewed_under(self, capsys) -> None:
         """A standing is a table. A reader shown one profile could not tell

@@ -333,12 +333,7 @@ class PolicyEvidence:
             raise SourceRegistryError("evidence.document_type", "must be a PolicyEvidenceType")
         if not self.document_title.strip():
             raise SourceRegistryError("evidence.document_title", "required")
-        if not self.document_url.startswith(("http://", "https://")):
-            raise SourceRegistryError(
-                "evidence.document_url",
-                "must be an absolute http(s) URL: an assessment that cannot be "
-                "re-opened cannot be re-verified when the platform changes its terms",
-            )
+        self._check_locator()
         if not self.summarized_finding.strip():
             raise SourceRegistryError(
                 "evidence.summarized_finding",
@@ -356,6 +351,56 @@ class PolicyEvidence:
                 "evidence.excerpt",
                 "excerpts are capped at 1000 characters. A longer one is a copy of a "
                 "third-party document, not a reference to it",
+            )
+
+    # A correspondence locator is addressed differently because it is a
+    # different kind of thing (migration 0033).
+    _CORRESPONDENCE_TYPES = (
+        PolicyEvidenceType.OPERATOR_CORRESPONDENCE,
+        PolicyEvidenceType.LEGAL_REVIEW,
+    )
+
+    def _check_locator(self) -> None:
+        """Where the document is addressed, and how it is checked.
+
+        A published page is identified by its ADDRESS: it changes under a stable
+        URL, so re-opening it is how you find out whether it still says what the
+        review claims. That is the whole argument for requiring http(s), and it
+        does not reach a letter. Correspondence is fixed when it is sent, cannot
+        be silently amended, and is re-verified by producing the message.
+
+        So the two correspondence types may address themselves with `mailto:`,
+        and must then carry a fingerprint. **Both halves or neither**: a mailbox
+        with no fingerprint names a channel rather than a document, and a
+        fingerprint with no locator names bytes nobody can ask about.
+        """
+        if self.document_url.startswith(("http://", "https://")):
+            return
+        if self.document_type not in self._CORRESPONDENCE_TYPES:
+            raise SourceRegistryError(
+                "evidence.document_url",
+                "must be an absolute http(s) URL: an assessment that cannot be "
+                "re-opened cannot be re-verified when the platform changes its terms",
+            )
+        address = self.document_url.removeprefix("mailto:")
+        if not self.document_url.startswith("mailto:") or address.count("@") != 1:
+            raise SourceRegistryError(
+                "evidence.document_url",
+                "correspondence may be addressed by a single `mailto:` mailbox "
+                "instead of a URL, because a letter has no address to fetch. "
+                "Nothing else may be",
+            )
+        if not address.split("@")[0] or not address.split("@")[1]:
+            raise SourceRegistryError(
+                "evidence.document_url",
+                "a `mailto:` locator needs a mailbox on both sides of the @",
+            )
+        if self.document_fingerprint is None or not self.document_fingerprint.strip():
+            raise SourceRegistryError(
+                "evidence.document_fingerprint",
+                "required for mailto-addressed correspondence: there is no address "
+                "to re-fetch, so the checksum of the artifact read is the only "
+                "thing a later reader can check",
             )
 
     @property

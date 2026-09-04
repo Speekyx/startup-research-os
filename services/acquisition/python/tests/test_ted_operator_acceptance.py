@@ -48,6 +48,7 @@ from .conftest import (
     LOCAL_PROFILE,
     REPO_ROOT,
     _postgres_available,
+    current_review_version,
     needs_postgres,
 )
 
@@ -408,7 +409,7 @@ class TestTheAuthorizationBuilds:
         context = build_authorization(ted, LOCAL_PROFILE, compliance, complete, environ={})
         assert context.source_id == "ted-eu"
         assert context.use_profile_id == LOCAL_PROFILE
-        assert context.review_version == 2
+        assert context.review_version == current_review_version()
         assert context.approval_state is SourceApprovalState.APPROVED_WITH_CONDITIONS
 
     def test_it_carries_exactly_the_two_authorised_routes(self, ted, compliance, complete) -> None:
@@ -858,8 +859,16 @@ class TestTheRegistryHoldsExactlyOneAcceptance:
         assert "review version 2, et pour rien d’autre" in reason
         assert "aucun avocat n’a validé" in reason
 
-    def test_only_the_current_review_version_is_satisfied(self) -> None:
-        """§14. v1 owns its own row and stays FALSE. A future v3 would too."""
+    def test_a_satisfaction_belongs_to_one_review_version_and_never_transfers(self) -> None:
+        """§14. v1 owns its own row and stays FALSE. **A future v3 would too.**
+
+        Mission 1.45 appended v3, and that sentence came true: the acceptance
+        recorded on 2026-09-01 belongs to v2 and did NOT follow the review
+        forward, so TED is ineligible under this profile until a named operator
+        records it again. That is the guarantee working, not a regression, and
+        it is why this now asserts the invariant rather than the snapshot --
+        AT MOST ONE version carries a satisfaction, and no version inherits one.
+        """
         import psycopg
 
         with psycopg.connect(DATABASE_URL) as conn:
@@ -871,7 +880,13 @@ class TestTheRegistryHoldsExactlyOneAcceptance:
                     ORDER BY r.review_version""",
                 (RESIDUAL,),
             ).fetchall()
-        assert rows == [(1, False), (2, True)], rows
+        satisfied = [version for version, ok in rows if ok]
+        assert len(satisfied) <= 1, rows
+        # v1 never acquired one, and every version that exists owns a row.
+        assert [version for version, _ in rows] == sorted(v for v, _ in rows), rows
+        assert (1, False) in rows, rows
+        # The acceptance that exists belongs to the version it was made about.
+        assert satisfied == [2], rows
 
     def test_the_database_still_refuses_a_boolean_with_no_evidence(self) -> None:
         """The trigger, asserted against a condition that has NO verification.
@@ -1000,8 +1015,15 @@ class TestTheRegistryHoldsExactlyOneAcceptance:
             ).fetchall()
         versions = [r[0] for r in rows]
         identifiers = [r[1] for r in rows]
-        assert versions == [1, 2], versions
-        assert len(set(identifiers)) == 2, "v1 and v2 must not share a condition row"
+        # Pinned to [1, 2] until Mission 1.45 appended v3. What this asserts is
+        # that each version OWNS its rows -- a contiguous append-only line where
+        # every version has its own -- not how many versions there are.
+        assert versions == list(range(1, len(versions) + 1)), versions
+        assert len(versions) >= 2, versions
+        assert len(set(identifiers)) == len(identifiers), (
+            "every review version must own its own condition row; sharing one is "
+            "how a satisfaction silently follows a review forward"
+        )
 
     def test_no_ted_research_row_exists(self) -> None:
         """§21. TED rows stay 0 whatever this machine holds elsewhere."""

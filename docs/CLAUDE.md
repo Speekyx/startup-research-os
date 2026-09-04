@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.78
-Last amended: 2026-09-04 (Sprint 1 / Mission 1.44.1)
+Version: 1.79
+Last amended: 2026-09-04 (Sprint 1 / Mission 1.45)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.79 | 2026-09-04 | **TED_OFFICIAL_REUSE_GUIDANCE_RECONCILED: the Publications Office answered, and the answer is bounded exactly where it stops.** A written reply of 2026-09-04 from the **Head of Sector -- Copyright and legal issues**, case **2026-COP-201**, answering a request that described this system BY NAME as *a commercial software-as-a-service application* and enumerated automated retrieval, repeated collection through bulk downloads OR the Search API, minimised storage, commercial analytical use, automated processing and derived aggregate signals. **TED notices and metadata may be reused for both commercial and non-commercial purposes, provided the source is acknowledged and according to the copyright notice; whether or not the EU asserts copyright over the database should not prevent reuse; and the way the data are retrieved is not relevant in this regard.** **H-36A IS SPLIT RATHER THAN ANSWERED, AND THE SPLIT IS THE FINDING**: database-right **EXISTENCE** stays `NOT_ESTABLISHED` -- the reply says **copyright** over the database while Directive 96/9/EC creates TWO rights, copyright in the arrangement (Art. 3) and the **sui generis** right of the maker (Art. 7), and *whether or not* is a refusal to say -- while whether such a right **BLOCKS REUSE** becomes `OFFICIAL_FIRST_PARTY_GUIDANCE_INDICATES_NOT_A_BLOCKER`. **The abstract legal ontology is unresolved and does not have to be resolved, because the body that would assert the right says it should not stand in the way.** `NOT_ESTABLISHED` was NOT changed to `NO_RIGHT_EXISTS`. **H-36B becomes `RETRIEVAL_METHOD_NEUTRALITY_FOR_REUSE`**, bounded twice: not a database-right grant, and not *any acquisition method is allowed* -- reuse rights and technical access are different questions, and no circumvention, rate-limit evasion or undocumented endpoint is authorised. **THE BULK ROUTE STAYS BLOCKED AND ITS BLOCKER CHANGED IDENTITY**: it was blocked for database-right exposure, which the reply weakens, and it stays blocked because bulk XML offers **no field selection**, so minimisation cannot happen AT acquisition -- re-grounded rather than relaxed. **QUESTIONS 4 AND 5 WERE NOT ANSWERED, AND THE SECOND IS LOAD-BEARING**: the scope of *SIMAP's system metadata* stays `UNRESOLVED`, so **no structured TED notice field is classified CC0** -- reading the reply's metadata sentence as covering notice fields would answer the operator's own question in the reuser's favour with a sentence not addressed to it. The COM_REUSE vs CC BY catalogue mapping stays `NOT_FULLY_RESOLVED` and is **non-blocking**, because reuse is authorised directly and does not depend on catalogue metadata. **ATTRIBUTION GOT STRICTER, NOT LOOSER**: the legal notice's procurement-notice sentence states no acknowledgement condition and the reply does, which is **Article 6(2)(a)** applied to the notice corpus itself -- three regimes stay apart, NOTICES acknowledge, EDITORIAL is CC BY credit plus indication of changes, CC0 owes nothing. **THE COMMERCIAL PROFILE'S BLOCKER CHANGED IDENTITY AND DID NOT CLEAR**: all six activities were already PERMITTED and H-36 was the blocker; what blocks it now is `raw_redistribution`, `raw_resale` and `customer_facing_source_access`, **which the operator's own question never described** -- a reply answers the question asked, and commercial purpose is not unrestricted redistribution. **APPENDING ORPHANS THE OPERATOR'S ACCEPTANCE BY DESIGN**: local v2 -> v3, commercial v5 -> v6, **255 insertions and 0 deletions**, three capability conditions re-verified mechanically and the HUMAN_CONFIRMATION one cannot be, so **TED is INELIGIBLE under the local profile until a named operator records it again**. Mission 1.29 withdrew an append to avoid exactly this and the precedent was weighed: there, recording an UNCLEAR verdict that refused anyway gained nothing, so breaking acquisition was pure loss; here the record gains the load-bearing answer of the whole TED arc, and **what the operator accepted has itself changed**. `record_ted_operator_acceptance.py` **refuses against v3 and was NOT repointed** -- its own guard says *the acceptance has to be made again by a person, not replayed*, and repointing it would turn a replay into a record of a decision nobody has taken. **THE FIRST OPERATOR_CORRESPONDENCE ROW FOUND A MODEL GAP**: the type has been permitted since migration 0004 and every evidence row was required to carry an `http(s)` URL, enforced in the schema, the model AND the validator -- **a letter has no URL**, so the enum permitted a class of evidence the URL rule refused, invisibly, because nobody had tried. The rule's own justification is about **published pages**, which change under a stable address; correspondence is fixed when sent. **Migration 0033** lets correspondence address itself by `mailto:` and requires a **fingerprint**, both halves or neither. **THE ARTIFACT IS NOT COMMITTED**: it carries a named official's direct phone and email and the operator's personal address, and this repository is public -- so the SHA-256, the operative text and the re-opening mailbox are preserved instead, because a governance record that breached the minimisation obligation it exists to check would be a poor record. **NO PERSONAL-DATA FIELD EXISTS IN ANY OF THE 188 TED RECORDS HELD**, measured over 97 raw and 34 normalized payload paths, and the collector retrieved LESS than authorised. 0 research-data requests, 6 governance document requests over 4 URLs, 0 model calls, **0 reliability changes and TED's 0.5 and 0.55 unchanged** -- a more permissive reuse position must never raise a reliability. **44 tests failed on the append and every one was repaired by keeping the property and dropping the incidental number**, including the two OPERATOR_CORRESPONDENCE tripwires Mission 1.15.4 installed for this exact moment, and a test whose own docstring had predicted it: *v1 owns its own row and stays FALSE. A future v3 would too.* Training, embeddings and external model egress all unchanged; H-39 untouched; Problem-Family still PARKED |
 | 1.78 | 2026-09-04 | **WIKIMEDIA_CONVERGENT_OPERATOR_RELIABILITY_DECISION_PERSISTED: `max(members)` received FOUR real items, and the number still did not move.** The operator typed the confirmation, and **two counters moved while thirteen did not**: ReliabilityAssessments 3 -> **4**, basis rows 10 -> **12**. Assessment `19e0ce16` v1, `0.6`, HUMAN_REVIEW, thibchm, `human-reliability-assessment-rubric@1.0.0` -- the **second** assessment that can say which procedure produced it, while both pre-rubric rows keep NULL because backfilling would fabricate the provenance the column records. **ALL 18 CONVERGENT ROWS RESOLVE AND NOT ONE STORES THE NUMBER**: `scoring.evidence.reliability` is NULL on all 57 rows before and after. **36 leak checks, 0 leaks** -- a fourth current assessment is a fourth set of ways to leak, and the detailed Wikimedia `0.65` sharing FOUR of five scope fields still does not reach this scope. **ALL SIX MULTI-EVIDENCE CLAIMS BECAME SCORABLE, 2 -> 8 corpus-wide**, and the grouping arithmetic finally ran at cardinality above two: `max(members)` received **4, 3, 3, 3, 3, 2** real canonical items with `collapsed_member_count` 3, 2, 2, 2, 2, 1. **AND THE RESULT IS `IDENTICAL_TO_RELIABILITY_PASS_THROUGH` ON ALL SIX, WHICH MISSION 1.43 PREDICTED ALGEBRAICALLY**: one group per Claim, saturation over one group is that group's strength, group strength is `max()` over identical reliability-limited `q` values, and B-2 reports the same maximum. So §18's **`AGGREGATION_MECHANISM_STILL_UNIDENTIFIABLE_FROM_REAL_CORPUS`** is reported explicitly, and **calibration is NOT recommended merely because the scorable count increased**. `q = 0.6` with **`reliability` limiting on 34 of 34**, masses 0.6/0/0/0.4, EvidenceScore 60.0, **level 1 blocked on *2 supporting groups of established independence, found 0 (plus 1 unknown-provenance group, which does not count)*** -- reliability reaches none of the three blockers. **FOUR WITNESSES IS NOT CORROBORATION**: one publisher, one counting methodology, one classification mechanism, one pipeline, independence UNKNOWN on all 18 rows, **0 groups created**, and the reviewer wrote that sentence into the stated limitation themselves. Target variable `{0.5: 6, 0.55: 4, 0.6: 6, 0.65: 18}` -- a fourth value and not a fourth kind of thing. **THE MIDPOINT COINCIDENCE WAS NOT TREATED AS EVIDENCE**: `0.6` is exactly halfway between the detailed `0.65` and the convergent TED `0.55`, an averaging test was written, it failed, and **the test was removed rather than the operator's value questioned** -- software cannot prove a number's provenance from the number, so what is asserted is only that it equals none of the three it might have been copied from. **A PRE-PERSISTENCE TEST CLASS ASSERTED THE ABSENCE OF THE ASSESSMENT** and was re-pointed rather than deleted, and it caught a real omission: the rendered review page still said *Nothing yet*. 0 model calls, 0 network requests, 0 calibration labels, 0 parameters fitted, 0 scores, 0 Opportunity changes, 0 embeddings, profile still UNCALIBRATED, Problem-Family still PARKED |
 | 1.77 | 2026-09-04 | **READY_FOR_WIKIMEDIA_CONVERGENT_RELIABILITY_REVIEW: the closest near miss yet, and the distinction between *nothing* and *not enough*.** 18 Evidence across 6 Claims, cardinalities **{4,3,3,3,3,2}**, collapsing to **exactly one** five-part scope resolving NO_APPLICABLE_ASSESSMENT. **THE ALMOST-MATCH IS TIGHTER THAN TED'S**: same publisher, same resource, same record kind, same claim type, and a reviewed **0.65 sitting one field away** -- the most inviting number in the repository to reach for. `proposition_kind` alone decides it, verified through the REAL resolver in both directions and by **30 leak checks, 0 leaks**, probing EVERY proposition kind in the corpus rather than a chosen few. **SOFTWARE ASSERTED EXACTLY ONE STATE AND DELIBERATELY NOT THE OBVIOUS ONE.** Mission 1.42 could assert `NOT_ESTABLISHED` for TED's mutability because the basis said NOTHING; here it says SOMETHING AND NOT ENOUGH -- a dated known-problems list records a 2016 user-agent classification incident and states no revision policy -- and *something and not enough* is a judgement about SUFFICIENCY, so `HISTORICAL_MUTABILITY` was left **blank**, which is precisely where a helpful generator would have filled it in. The one assertion is `SOURCE_SIDE_CHECKABILITY = NOT_ESTABLISHED`, because the basis is two documents and neither addresses what the source exposes for inspection. **THE NEW QUESTION CONVERGENCE INTRODUCES**: multiple witnesses of ONE METHODOLOGY do not insure against a METHODOLOGY-LEVEL failure -- a localised problem matters LESS to an existential, and a systematic reclassification matters MORE, because the witnesses share a counting rule and their independence is UNKNOWN. So the known-problems document is **PARTIALLY_APPLICABLE with its weight moving in two directions at once**, and the reviewer decides which governs. **NOTHING WAS FETCHED** -- the convergent proposition reads the same measurement through the same rules. **A THIRD DEFECT OF THE SAME SHAPE, FOUND BY §37 ON ITS FIRST RUN**: `ReliabilityBinding.to_json()` called `.isoformat()` on a field four generators already pass as `None`, and had never crashed because NO LIVE BINDING HAD EVER BEEN SERIALISED in this scope. 0 assessments, 0 basis rows, 0 network requests, 0 model calls, every counter unchanged, all 18 rows still NON_SCORABLE and all six Claims still UNAVAILABLE |
 | 1.76 | 2026-09-04 | **CALIBRATION_REFERENCE_CORPUS_MEANINGFULLY_EXPANDED, and the measurement that reframes what expansion is FOR.** Measured over all 37 Claims before any work: **0 with more than one support group, 0 where the aggregator differs from the Mission 1.37 B-2 pass-through baseline** -- and with ONE group that identity is **ALGEBRAIC, not incidental**: saturation over a single group is that group's strength, which is `max(members)`, which is what B-2 reports. **So no quantity of additional single-group Evidence can ever make them differ**; the aggregation layer becomes measurable only through ESTABLISHED INDEPENDENCE or CONTRADICTION, and a §37 fixture proves the converse by giving two `KNOWN_INDEPENDENT` items and watching support strength EXCEED pass-through. **A SECOND CONVERGENCE CONTRACT, FROM DATA ALREADY HELD**: `platform-counted-content-request-change-witnessed@1.0.0` over the 18 Wikimedia Signals, **0 network requests** -- which was not merely cheaper but the only open door, because Wikimedia acquisition is currently blocked by three unsatisfied conditions in this deployment. Claims 37 -> **43**, Evidence 39 -> **57**, Claims with >1 Evidence 2 -> **8**, and **max Evidence per Claim 2 -> 4**: group cardinality varies for the first time `{1,2}` -> `{1,2,3,4}`. **THE SCORABLE OPTION WAS REFUSED**: another TED division would have been immediately scorable and, by the finding above, could not have taught anything -- choosing it because a number would appear is choosing the appearance of progress. **`audience_class` STAYS IDENTITY** because Mission 1.19 made it REQUIRED so one item over one period cannot carry two counts under one name. **NOTHING WAS MANUFACTURED**: no contradiction (a decrease does not contradict an increase, and an existential is not falsified by a counterexample), no independence (one publisher, one pipeline, one method), **no temporality -- and the reason is architectural: every OBSERVED restatement is a historical fact about what a source published, and a historical fact does not decay**, even where the source's timestamps are documented. Secondary **NEW_CORPUS_SHAPE_NON_SCORABLE_MISSING_RELIABILITY**: a new kind is a new scope and none was invented or copied. **Leakage-safe splits are still NOT plausible** -- six new Claims share one scope and one kind, so they are ONE group. 0 model calls, 0 embeddings, 0 assessments, 0 independence groups, 0 scores, profile still UNCALIBRATED |
@@ -325,6 +326,129 @@ positives in the scored split, which this 89-question corpus did not supply: one
 defensible SAME in 40 candidate pairs is a finding about the corpus, not about
 the classifier. **No synthetic positive may substitute** -- a constructed pair
 can test a parser and can never establish semantic accuracy against real data.
+
+### A reply answers the question that was asked
+
+Added in 1.79 (Mission 1.45, `ted-eu-official-reuse-response-v1.md`,
+`mission-1.45-report.md`). **`TED_OFFICIAL_REUSE_GUIDANCE_RECONCILED`**: the
+Publications Office answered the clarification request this repository has
+carried as an unsent draft since Mission 1.15.3.
+
+    reviews appended   local v2 -> v3   commercial v5 -> v6   255 ins / 0 del
+    research data requests  0     governance document requests  6 over 4 URLs
+    reliability changes     0     personal-data fields found    0 of 188 records
+
+- **A REPLY IS AN ANSWER TO THE QUESTION THAT WAS ASKED, AND THAT CUTS BOTH
+  WAYS.** The request described this system BY NAME as *a commercial
+  software-as-a-service application*, so the commercial half of the answer rests
+  on the widest honest description of the product rather than on a narrowed one --
+  which is the Source governance rule read forwards. And the request never
+  described **raw redistribution, resale or customer-facing source access**, so
+  the reply cannot authorise them. **Commercial purpose is not unrestricted
+  redistribution**, and the commercial profile stays `REQUIRES_REVIEW` with its
+  blocker changed from H-36 to the part of the profile nobody asked about.
+- **H-36A WAS SPLIT RATHER THAN ANSWERED.** Database-right **EXISTENCE** stays
+  `NOT_ESTABLISHED`: the reply says **copyright** over the database, and Directive
+  96/9/EC creates two rights -- copyright in the arrangement (Art. 3) and the
+  **sui generis** right of the maker (Art. 7) -- so it does not name the right the
+  question named, and *"whether or not"* is a refusal to say. Whether such a right
+  **BLOCKS REUSE** becomes `OFFICIAL_FIRST_PARTY_GUIDANCE_INDICATES_NOT_A_BLOCKER`.
+  **The abstract legal ontology is unresolved and does not have to be resolved for
+  this purpose**, because the body that would assert the right says it should not
+  stand in the way. `NOT_ESTABLISHED` was not changed to `NO_RIGHT_EXISTS` and on
+  this evidence never may be.
+- **H-36B IS `RETRIEVAL_METHOD_NEUTRALITY_FOR_REUSE`, AND IT IS NOT AN ACCESS
+  PERMISSION.** *"The way in which the data are retrieved is not relevant in this
+  regard"* answers a question that named both routes. It is not a database-right
+  grant, and it is not *any acquisition method is allowed*: **reuse rights and
+  technical access rules are different questions**, and no circumvention,
+  anti-bot bypass, authentication bypass, rate-limit evasion or undocumented
+  endpoint is authorised.
+- **THE BULK ROUTE STAYS BLOCKED AND ITS BLOCKER CHANGED IDENTITY.** It was
+  blocked because Mission 1.15.3 placed the highest database-right exposure
+  there, and the reply weakens exactly that. It stays blocked because the bulk
+  packages offer **no field selection**, so minimisation cannot happen AT
+  acquisition -- and a bulk package delivers the whole notice including the
+  contact block. **Re-grounded, not relaxed.**
+- **THE TWO QUESTIONS THAT WERE NOT ANSWERED ARE RECORDED AS NOT ANSWERED.** The
+  scope of *"SIMAP's system metadata"* stays `UNRESOLVED`, so **no structured TED
+  notice field is classified CC0** -- reading the reply's metadata sentence as
+  covering notice fields would answer the operator's own question in the reuser's
+  favour with a sentence not addressed to it. The COM_REUSE versus CC BY
+  catalogue mapping stays `NOT_FULLY_RESOLVED` and is **non-blocking**, because
+  reuse is authorised directly and does not depend on catalogue metadata:
+  **legal authorisation and catalogue metadata consistency are separate
+  questions.**
+- **ATTRIBUTION GOT STRICTER, WHICH IS NOT THE DIRECTION GOOD NEWS USUALLY
+  MOVES.** The legal notice's procurement-notice sentence states no
+  acknowledgement condition; the reply does, and that is **Article 6(2)(a)** of
+  the Re-use Decision applied to the notice corpus itself rather than only to the
+  CC BY editorial content. **Where two first-party statements differ in
+  strictness the stricter governs.** Three regimes stay apart and no universal
+  rule is invented: notices acknowledge, editorial content is CC BY credit plus
+  indication of changes, CC0 material owes nothing.
+- **APPENDING A REVIEW ORPHANS THE OPERATOR'S ACCEPTANCE, BY DESIGN, AND THAT WAS
+  THE DECISION.** Verifications are pinned to condition rows, so a new version
+  creates new ones. Mission 1.29 WITHDREW an append rather than pay this, and the
+  precedent was weighed: there, recording an `UNCLEAR` verdict that refused at the
+  gate anyway gained nothing operational, so breaking acquisition was pure loss.
+  Here the record gains the load-bearing answer of the whole TED arc and an
+  attribution obligation the reply IMPOSES -- and **the thing the operator
+  accepted has itself changed.** A residual that is smaller is still a residual,
+  and the honest way to say *what you accepted is now different* is to ask for the
+  acceptance again. **TED is INELIGIBLE under the local profile until a named
+  operator records it**, and `record_ted_operator_acceptance.py` **was not
+  repointed**: its own guard says *"the acceptance has to be made again by a
+  person, not replayed"*, and repointing it would turn a replay of a decision
+  already made into a record of one nobody has taken.
+- **THE FIRST `OPERATOR_CORRESPONDENCE` ROW FOUND A MODEL GAP THAT HAD BEEN THERE
+  SINCE MIGRATION 0004.** The type was permitted and every evidence row was
+  required to carry an absolute `http(s)` URL -- enforced in the schema, in
+  `PolicyEvidence.__post_init__` and in `validate_source_registry.py`. **A letter
+  has no URL**, so the enum permitted a class of evidence the URL rule refused,
+  and the refusal was invisible because nobody had tried. **The rule's own
+  justification does not reach it**: *"an assessment that cannot be re-opened
+  cannot be re-verified when the platform changes its terms"* is an argument about
+  PUBLISHED PAGES, which change under a stable address, while correspondence is
+  fixed when it is sent and is re-verified by producing the message. Migration
+  0033 lets correspondence and legal review address themselves by `mailto:` and
+  requires a `document_fingerprint` -- **both halves or neither**. Every other
+  type still requires `http(s)`, and a fingerprint is still not demanded of a
+  published page.
+- **THE ARTIFACT IS FINGERPRINTED AND NOT COMMITTED.** It carries a named
+  official's direct telephone number and email and the operator's personal
+  address, and this repository is public. **A governance record that had to
+  breach the minimisation obligation it exists to check would be a poor record**,
+  so what is preserved is the SHA-256, the operative text in full, and the
+  first-party mailbox the matter is re-opened through.
+- **NOTHING DOWNSTREAM MOVED, AND ONE SEPARATION IS NOW ENFORCED BY A TEST.**
+  Reuse asks *may this system use the data*; reliability asks *how dependably does
+  this measurement support this proposition*. **A more permissive reuse position
+  must never raise a reliability**, and TED's `0.5` and `0.55` are unchanged. The
+  legal notice's ten-year public window and its accuracy disclaimer are recorded
+  as `POTENTIAL_FUTURE_RELIABILITY_BASIS` and as nothing else. **Public
+  retrievability is not internal preservation**, and neither withdraws reuse
+  permission for data lawfully obtained earlier.
+- **HISTORY WAS NOT REWRITTEN.** 255 insertions and 0 deletions; every review
+  written before 2026-09-04 still records that no authoritative reply was held,
+  and the unsent request still records that nothing was sent. **A reply arriving
+  does not retroactively make this repository the sender.**
+- **44 TESTS FAILED ON THE APPEND AND EVERY ONE KEPT ITS PROPERTY.** Version
+  lines pinned to their length, fixtures hard-coding `review_version=2`, and
+  tests reading *the current review* to check what an EARLIER mission recorded --
+  the last of which is the subtle one: a test that follows `current` to assert
+  what Mission 1.15.1 said is a test asserting that no later mission may ever
+  answer an open question. The two tripwires Mission 1.15.4 installed for this
+  exact moment fired and were re-pointed rather than deleted, and one test's own
+  docstring had already predicted it: *"v1 owns its own row and stays FALSE. **A
+  future v3 would too.**"*
+
+**The next action is the operator recording the acceptance for review v3**, whose
+exact statement is written out in the reconciliation document 12.2 -- and writing
+it down is not recording it. After that the roadmap is unchanged: **an
+independence-capable evidence route**, Eurostat or FRED beside World Bank.
+**Mission 1.43's finding is arithmetic and a governance answer does not touch
+it.**
 
 ### Nothing is a fact; not enough is a judgement
 

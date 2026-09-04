@@ -30,7 +30,7 @@ from sros_acquisition.registry import (
 from sros_acquisition.registry.repositories import read_eligibility
 from sros_contracts import ConditionVerification, SourceApprovalState
 
-from .conftest import LEGACY_PROFILE, needs_postgres
+from .conftest import LEGACY_PROFILE, evidence_is_addressable, needs_postgres
 
 APPROVED_IN_1_3 = {"world-bank", "eurostat", "fred"}
 
@@ -155,7 +155,7 @@ class TestReviewVersioning:
         for source in catalog:
             for item in source.review.evidence:
                 assert item.retrieved_at is not None, source.source_id
-                assert item.document_url.startswith("https://"), source.source_id
+                assert evidence_is_addressable(item), (source.source_id, item.document_url)
 
 
 # ==================================================== conditions and eligibility

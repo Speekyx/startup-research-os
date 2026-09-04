@@ -138,8 +138,15 @@ class TestH36Open:
     def test_the_open_question_records_that_the_decision_was_searched(self, catalog) -> None:
         """The difference from Mission 1.15.1: an unknown became an established
         absence. The question must say the instrument was read, or a future
-        reviewer will retrieve it again."""
-        questions = " ".join(review(catalog, "ted-eu").open_questions).lower()
+        reviewer will retrieve it again.
+
+        Pinned to v3, this mission's own version. It read the CURRENT review
+        until Mission 1.45 appended v6 and reconciled H-36 against a first-party
+        reply -- which is what an open question is FOR. A test that reads
+        `current` to check what one mission recorded asserts that no later
+        mission may ever answer it.
+        """
+        questions = " ".join(review(catalog, "ted-eu", 3).open_questions).lower()
         assert "read in full" in questions
         assert "96/9" in questions or "extraction" in questions
 

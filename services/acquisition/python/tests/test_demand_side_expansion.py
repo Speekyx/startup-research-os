@@ -17,6 +17,8 @@ import pytest
 from sros_acquisition.registry import APPROVING_STATES
 from sros_contracts import PolicyAssessment, SourceApprovalState
 
+from .conftest import evidence_is_addressable
+
 # Reviewed this round, with the verdict each ended at.
 REVIEWED_IN_1_15 = {
     "pinterest": SourceApprovalState.RESTRICTED,
@@ -124,7 +126,7 @@ class TestEvidenceBackedVerdicts:
         current = review(catalog, source_id)
         assert current.evidence, source_id
         for item in current.evidence:
-            assert item.document_url.startswith("https://"), source_id
+            assert evidence_is_addressable(item), (source_id, item.document_url)
             assert item.summarized_finding.strip(), source_id
             assert item.retrieved_at is not None, source_id
 

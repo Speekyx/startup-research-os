@@ -34,7 +34,7 @@ from sros_acquisition.cli import main
 from sros_acquisition.compliance.verification import ConditionVerificationRecord
 from sros_contracts import ConditionVerification, ConditionVerificationResult
 
-from .conftest import LEGACY_PROFILE, LOCAL_PROFILE, REPO_ROOT
+from .conftest import LEGACY_PROFILE, LOCAL_PROFILE, REPO_ROOT, current_review_version
 
 CATALOG = REPO_ROOT / "docs" / "data" / "source-catalog-v1.json"
 COMPLIANCE = REPO_ROOT / "docs" / "data" / "source-compliance-v1.json"
@@ -62,7 +62,7 @@ def decision(
     *,
     condition_key: str = RESIDUAL,
     source_id: str = "ted-eu",
-    review_version: int = 2,
+    review_version: int = current_review_version(),
     verifier: str = "local-operator",
     result: ConditionVerificationResult = ConditionVerificationResult.SATISFIED,
     verification: ConditionVerification = ConditionVerification.HUMAN_CONFIRMATION,

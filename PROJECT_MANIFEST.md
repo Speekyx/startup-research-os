@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.77
+Version: 1.78
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-04 (Sprint 1 / Mission 1.44.1)
+Last amended: 2026-09-04 (Sprint 1 / Mission 1.45)
 
 ---
 
@@ -13,6 +13,54 @@ Last amended: 2026-09-04 (Sprint 1 / Mission 1.44.1)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.78 — 2026-09-04 (Sprint 1 / Mission 1.45)
+
+**`TED_OFFICIAL_REUSE_GUIDANCE_RECONCILED`.** The Publications Office answered
+the clarification request this repository has carried as an unsent draft since
+Mission 1.15.3.
+
+Written reply of 2026-09-04 from the Head of Sector for Copyright and legal
+issues, case 2026-COP-201, answering a request that described this system by name
+as a commercial software-as-a-service application. TED notices and metadata may
+be reused for both commercial and non-commercial purposes, provided the source is
+acknowledged and according to the copyright notice; whether or not the EU asserts
+copyright over the database should not prevent reuse; and the way the data are
+retrieved is not relevant in this regard.
+
+H-36A is split rather than answered: database-right EXISTENCE stays
+NOT_ESTABLISHED, because the reply says copyright rather than sui generis and
+says "whether or not"; whether such a right BLOCKS reuse is
+OFFICIAL_FIRST_PARTY_GUIDANCE_INDICATES_NOT_A_BLOCKER. H-36B becomes
+RETRIEVAL_METHOD_NEUTRALITY_FOR_REUSE, bounded: not a database-right grant, and
+not permission to bypass any technical control.
+
+Questions 4 and 5 of the request received no answer. The scope of "SIMAP's system
+metadata" stays UNRESOLVED and no structured notice field is classified CC0. The
+COM_REUSE versus CC BY catalogue mapping stays NOT_FULLY_RESOLVED and is
+non-blocking.
+
+Local review v2 to v3, commercial v5 to v6, append-only: 255 insertions and 0
+deletions. The local verdict stays APPROVED_WITH_CONDITIONS and the commercial
+verdict stays REQUIRES_REVIEW, with its blocker changed from H-36 to raw
+redistribution, resale and customer-facing access, none of which the request
+described.
+
+Appending orphans the operator's 2026-09-01 acceptance by design, so TED is
+INELIGIBLE under the local profile until a named operator records it again.
+
+Migration 0033: OPERATOR_CORRESPONDENCE was a permitted evidence type that the
+http-only URL rule made unstorable. Correspondence may now address itself by a
+mailto locator and must then carry a fingerprint.
+
+Zero research-data requests, zero model calls, zero reliability changes, and no
+personal-data field in any of the 188 TED records held.
+
+New: `docs/data/ted-eu-official-reuse-response-v1.md`,
+`infrastructure/db/migrations/0033_correspondence_evidence_locator.sql`,
+`services/acquisition/python/tests/test_ted_official_reuse_response.py`.
+
+Report: `docs/architecture/mission-1.45-report.md`.
 
 ## 1.77 — 2026-09-04 (Sprint 1 / Mission 1.44.1)
 
@@ -2697,6 +2745,7 @@ Additionally authoritative:
 - docs/data/second-pilot-convergent-operator-reliability-review-v1.md (added in 1.73)
 - docs/data/wikimedia-convergent-reliability-review-packet-v1.md (added in 1.76)
 - docs/data/wikimedia-convergent-operator-reliability-review-v1.md (added in 1.77)
+- docs/data/ted-eu-official-reuse-response-v1.md (added in 1.78)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.
