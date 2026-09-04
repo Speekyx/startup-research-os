@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.79
+Version: 1.80
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-04 (Sprint 1 / Mission 1.46)
+Last amended: 2026-09-04 (Sprint 1 / Mission 1.47)
 
 ---
 
@@ -13,6 +13,57 @@ Last amended: 2026-09-04 (Sprint 1 / Mission 1.46)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.80 — 2026-09-04 (Sprint 1 / Mission 1.47)
+
+**`FORMALLY_VALID_BUT_INFORMATIONALLY_WEAK`.** A narrow, source-faithful
+proposition over the Docker subject is independently entailed by both held
+apparatuses, and it discards exactly what each of them measures.
+
+An apparatus is `(source, proposition_kind)` rather than a source: four sources
+operate nine apparatuses, two of them running two each over one corpus. The
+subject overlap was measured across all nine before any pair was considered, and
+Docker is the only cross-apparatus shared subject in the held corpus, with
+Wikimedia carrying 12 Evidence rows against Stack Exchange's 2, while kubernetes
+and podman carry 12 and 0.
+
+The one candidate that passes same-proposition semantics is an existential, and
+the only definition of its event class that admits both members is a disjunction
+of the two publishers' own mechanisms. So source attribution is not removed but
+relocated, from the subject of the sentence into the definition of its predicate.
+The first strengthening that would carry information fails twice over, on the
+prohibition against normalising unlike quantities and on period alignment.
+
+The Stack Exchange window runs from 2024-03-01T08:06:03Z to 2024-03-05T04:17:20Z
+against whole UTC day buckets, so the windows overlap and are not aligned. Both
+sit inside March 2024, and containment is weaker than alignment. No monthly
+aggregate was manufactured: an existential needs none, and 7 of 31 March days are
+held so completeness was not established either.
+
+Five of the eight gates pass. Independence is UNKNOWN and, unlike Mission 1.46's,
+is not refuted. Two independent gates fail on one root cause: Stack Exchange's own
+methodology documentation is unreachable because the site's robots policy blocks
+this environment's fetcher, which leaves its measurement lineage undocumented and
+is the same insufficiency for which the operator already declined both Stack
+Exchange reliability scopes in Mission 1.36.1.
+
+The convergence contract structurally cannot express a cross-apparatus
+proposition, proved through the real constructor: source_id is mandatory in
+identity fields and SourceBoundary has exactly one member.
+
+No route was selected and no least-bad fallback was taken. The architecture gap
+and the independence gap are recorded as findings rather than as the outcome,
+because both sit downstream of the proposition being near-tautological.
+
+Zero requests of any kind, zero model calls, zero embeddings, and every one of
+fifteen research counters unchanged.
+
+New: `docs/data/cross-apparatus-convergence-feasibility-v1.json` and `.md`,
+`docs/data/cross-apparatus-holdings-baseline-v1.json`, two scripts under
+`infrastructure/scripts/`, and
+`packages/evidence-aggregation/python/tests/test_cross_apparatus_convergence.py`.
+
+Report: `docs/architecture/mission-1.47-report.md`.
 
 ## 1.79 — 2026-09-04 (Sprint 1 / Mission 1.46)
 
@@ -2789,6 +2840,7 @@ Additionally authoritative:
 - docs/data/wikimedia-convergent-operator-reliability-review-v1.md (added in 1.77)
 - docs/data/ted-eu-official-reuse-response-v1.md (added in 1.78)
 - docs/data/independent-statistical-route-feasibility-v1.md (added in 1.79)
+- docs/data/cross-apparatus-convergence-feasibility-v1.md (added in 1.80)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.
