@@ -53,13 +53,20 @@ class CalibrationDidNotHappen(unittest.TestCase):
         self.assertEqual(profile["status"], "UNCALIBRATED")
         self.assertEqual(profile["half_life_days"], {})
 
-    def test_the_feasibility_audit_still_reports_the_pre_mission_corpus(self):
-        # Preparing a question changes no canonical counter, so this artifact is
-        # stale only if the mission wrote something. It did not.
+    def test_reliability_review_never_changes_the_structural_corpus(self):
+        """The property, not the incidental number.
+
+        This asserted `current_reliability_assessments == 2` until Mission
+        1.42.1 legitimately made it 3 -- the same shape repaired in Missions
+        1.31.1, 1.32, 1.38, 1.40 and 1.41. **A count that can legitimately grow
+        is deployment state** (`testing-strategy.md` §68). What is invariant is
+        that reviewing reliability creates no RESEARCH rows: it supplies an
+        input to scoring and observes nothing new about the world.
+        """
         totals = load(AUDIT)["totals"]
         self.assertEqual(totals["claims"], 37)
         self.assertEqual(totals["evidence_rows"], 39)
-        self.assertEqual(totals["current_reliability_assessments"], 2)
+        self.assertGreaterEqual(totals["current_reliability_assessments"], 2)
 
 
 class BoundariesThatStayWhereTheyWere(unittest.TestCase):

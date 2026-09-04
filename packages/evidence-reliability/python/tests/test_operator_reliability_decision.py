@@ -425,5 +425,163 @@ class TheHumanConfirmationGuardIsIntact(unittest.TestCase):
         self.assertIn("UNSURE", text)
 
 
+class WhatTheDecisionActuallyDid(unittest.TestCase):
+    """§10-§22, measured. Reads the resolution artifact, which is checked in.
+
+    That artifact is generated against the live deployment by
+    `report_convergent_reliability_resolution.py`; these assert the properties
+    that must hold in it rather than querying a database, so they survive CI's
+    empty one.
+    """
+
+    @staticmethod
+    def resolution() -> dict:
+        return json.loads(
+            (DOCS / "second-pilot-convergent-reliability-resolution-v1.json").read_text(
+                encoding="utf-8"
+            )
+        )
+
+    def test_all_six_convergent_rows_resolve_to_one_assessment(self):
+        bindings = self.resolution()["resolution"]["bindings"]
+        self.assertEqual(len(bindings), 6)
+        for binding in bindings:
+            self.assertEqual(binding["outcome"], "RESOLVED")
+            self.assertEqual(binding["reliability"], 0.55)
+            self.assertEqual(binding["origin"], "HUMAN_REVIEW")
+            self.assertEqual(binding["reviewed_by"], "thibchm")
+        self.assertEqual(len({b["assessment_id"] for b in bindings}), 1)
+        self.assertEqual({b["assessment_version"] for b in bindings}, {1})
+
+    def test_every_binding_names_the_rubric_that_produced_the_value(self):
+        for binding in self.resolution()["resolution"]["bindings"]:
+            self.assertEqual(
+                binding["review_rubric"], f"{rubric.RUBRIC_ID}@{rubric.RUBRIC_VERSION}"
+            )
+
+    def test_no_reliability_was_written_onto_any_evidence_row(self):
+        """ADR-026 Decision 2. Six rows resolve a number and none stores it."""
+        resolution = self.resolution()["resolution"]
+        self.assertEqual(resolution["evidence_reliability_column_non_null"], 0)
+        for binding in resolution["bindings"]:
+            self.assertIsNone(binding["evidence_reliability_column"])
+
+    def test_the_leak_checks_ran_over_three_assessments_and_found_none(self):
+        checks = self.resolution()["leak_checks"]
+        self.assertEqual(checks["leaks_found"], 0)
+        # A third current assessment is a third set of ways to leak.
+        self.assertGreater(checks["run"], 6)
+        for check in checks["checks"]:
+            self.assertEqual(check["only_field_differing"], "proposition_kind")
+            self.assertIs(check["resolved"], check["scopes_identical"])
+
+    def test_both_multi_evidence_claims_became_scorable(self):
+        multi = [
+            c
+            for c in self.resolution()["aggregation_diagnostic"]["claims"]
+            if c["raw_evidence_count"] > 1
+        ]
+        self.assertEqual(len(multi), 2)
+        for claim in multi:
+            self.assertEqual(claim["raw_evidence_count"], 2)
+            self.assertEqual(claim["scorable_evidence_count"], 2)
+            self.assertEqual(claim["aggregation_status"], "COMPLETE")
+
+    def test_max_members_finally_received_two_real_items(self):
+        """Mission 1.41 had raw=2 and scorable=0, so it never saw both."""
+        for claim in self.resolution()["aggregation_diagnostic"]["claims"]:
+            if claim["raw_evidence_count"] < 2:
+                continue
+            self.assertEqual(claim["max_members_received"], 2)
+            self.assertEqual(claim["collapsed_member_count"], 1)
+
+    def test_two_witnesses_collapse_into_one_unknown_provenance_group(self):
+        """DISJOINT membership is temporal separation, not independence."""
+        for claim in self.resolution()["aggregation_diagnostic"]["claims"]:
+            if claim["raw_evidence_count"] < 2:
+                continue
+            self.assertEqual(claim["support_group_count"], 1)
+            self.assertEqual(claim["unknown_independence_count"], 2)
+            self.assertEqual(claim["independence_groups_created"], 0)
+            for group in claim["support_groups"]:
+                self.assertEqual(group["kind"], "UNKNOWN")
+
+    def test_the_result_is_never_reported_as_corroboration(self):
+        for claim in self.resolution()["aggregation_diagnostic"]["claims"]:
+            if claim["scorable_evidence_count"] < 2:
+                continue
+            self.assertIn("NO_INDEPENDENT_CORROBORATION", claim["multi_evidence_verdict"])
+            level = claim["evidence_level"]
+            self.assertEqual(level["evidence_level"], 1)
+            self.assertTrue(any("established independence" in r for r in level["blocked_reasons"]))
+
+    def test_reliability_is_the_limiting_component_and_q_is_the_reviewed_value(self):
+        for claim in self.resolution()["aggregation_diagnostic"]["claims"]:
+            if claim["scorable_evidence_count"] < 1:
+                continue
+            self.assertEqual(claim["limiting_components"], ["reliability"])
+            for contribution in claim["contributions"]:
+                self.assertEqual(contribution["q"], 0.55)
+
+    def test_the_full_aggregator_matches_the_pass_through_baseline(self):
+        """§20. Not a failure: the grouping logic ran, and added nothing."""
+        for claim in self.resolution()["aggregation_diagnostic"]["claims"]:
+            if claim["scorable_evidence_count"] < 2:
+                continue
+            self.assertEqual(
+                claim["versus_reliability_pass_through"],
+                "IDENTICAL_TO_RELIABILITY_PASS_THROUGH",
+            )
+            self.assertEqual(claim["masses"]["support_strength"], 0.55)
+            self.assertEqual(claim["reliability_pass_through_baseline"], 0.55)
+
+    def test_there_is_still_no_contradiction_case(self):
+        for claim in self.resolution()["aggregation_diagnostic"]["claims"]:
+            self.assertEqual(claim["contradiction_case"], "NO_REAL_CONTRADICTION_CASE_YET")
+            self.assertEqual(claim["masses"]["contradiction_strength"], 0.0)
+            self.assertEqual(claim["masses"]["conflict_mass"], 0.0)
+
+    def test_the_diagnostic_is_uncalibrated_and_nothing_was_persisted(self):
+        document = self.resolution()
+        self.assertIn("UNCALIBRATED", document["$banner"])
+        self.assertIn("NOT AN OPPORTUNITY SCORE", document["$banner"])
+        for claim in document["aggregation_diagnostic"]["claims"]:
+            self.assertIs(claim["calibrated"], False)
+            self.assertEqual(claim["profile_status"], "UNCALIBRATED")
+
+    def test_the_calibration_audit_moved_only_scorability(self):
+        audit = json.loads(AUDIT.read_text(encoding="utf-8"))
+        totals = audit["totals"]
+        # The corpus did not grow: reliability review creates no research rows.
+        self.assertEqual(totals["claims"], 37)
+        self.assertEqual(totals["evidence_rows"], 39)
+        self.assertEqual(totals["current_reliability_assessments"], 3)
+        coverage = audit["coverage"]
+        self.assertEqual(coverage["multi_evidence_claims"], 2)
+        self.assertEqual(coverage["scorable_multi_evidence_claims"], 2)
+        self.assertEqual(coverage["independence_established_claims"], 0)
+        self.assertEqual(coverage["contradiction_present"], 0)
+        self.assertEqual(coverage["temporally_sensitive_claims"], 0)
+        self.assertEqual(audit["profile"]["status"], "UNCALIBRATED")
+
+    def test_the_review_artifact_now_points_at_what_it_produced(self):
+        persisted = review()["persisted_assessment"]
+        self.assertIsNotNone(persisted)
+        self.assertEqual(persisted["version"], 1)
+        bindings = self.resolution()["resolution"]["bindings"]
+        self.assertEqual(persisted["id"], bindings[0]["assessment_id"])
+
+    def test_the_two_historical_assessments_are_still_current_and_rubric_free(self):
+        others = [
+            a
+            for a in self.resolution()["current_assessments"]
+            if not a["is_the_scope_under_review"]
+        ]
+        self.assertEqual(len(others), 2)
+        self.assertEqual({a["reliability"] for a in others}, {0.5, 0.65})
+        for assessment in others:
+            self.assertIsNone(assessment["review_rubric"])
+
+
 if __name__ == "__main__":
     unittest.main()

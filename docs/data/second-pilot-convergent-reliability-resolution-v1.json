@@ -17,6 +17,16 @@
   },
   "current_assessments": [
     {
+      "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+      "proposition_kind": "source_published_classification_value_contrast_witnessed",
+      "version": 1,
+      "reliability": 0.55,
+      "origin": "HUMAN_REVIEW",
+      "reviewed_by": "thibchm",
+      "review_rubric": "human-reliability-assessment-rubric@1.0.0",
+      "is_the_scope_under_review": true
+    },
+    {
       "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
       "proposition_kind": "source_reported_procurement_value_contrast",
       "version": 1,
@@ -40,78 +50,78 @@
   "resolution": {
     "evidence_rows": 6,
     "claims": 4,
-    "resolved_rows": 0,
+    "resolved_rows": 6,
     "bindings": [
       {
         "evidence_id": "a77d8ea7-16f7-4259-831d-163c637ffccc",
         "claim_id": "02248c91-a384-442d-8c78-80ba4c1bd2b1",
-        "outcome": "NO_APPLICABLE_ASSESSMENT",
-        "reliability": null,
-        "assessment_id": null,
-        "assessment_version": null,
-        "origin": null,
-        "reviewed_by": null,
-        "review_rubric": null,
+        "outcome": "RESOLVED",
+        "reliability": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm",
+        "review_rubric": "human-reliability-assessment-rubric@1.0.0",
         "evidence_reliability_column": null
       },
       {
         "evidence_id": "cf9f792d-9811-43b7-b089-dcf3e835225a",
         "claim_id": "02248c91-a384-442d-8c78-80ba4c1bd2b1",
-        "outcome": "NO_APPLICABLE_ASSESSMENT",
-        "reliability": null,
-        "assessment_id": null,
-        "assessment_version": null,
-        "origin": null,
-        "reviewed_by": null,
-        "review_rubric": null,
+        "outcome": "RESOLVED",
+        "reliability": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm",
+        "review_rubric": "human-reliability-assessment-rubric@1.0.0",
         "evidence_reliability_column": null
       },
       {
         "evidence_id": "ce349b01-1ea4-4d11-b162-e745e2c82163",
         "claim_id": "6389d1bf-6dea-47e8-8508-dcf009fe352d",
-        "outcome": "NO_APPLICABLE_ASSESSMENT",
-        "reliability": null,
-        "assessment_id": null,
-        "assessment_version": null,
-        "origin": null,
-        "reviewed_by": null,
-        "review_rubric": null,
+        "outcome": "RESOLVED",
+        "reliability": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm",
+        "review_rubric": "human-reliability-assessment-rubric@1.0.0",
         "evidence_reliability_column": null
       },
       {
         "evidence_id": "b7dc27bf-53c8-4e80-9c83-5980c80fa46c",
         "claim_id": "73e834c4-ddad-4093-9727-79720e074b4b",
-        "outcome": "NO_APPLICABLE_ASSESSMENT",
-        "reliability": null,
-        "assessment_id": null,
-        "assessment_version": null,
-        "origin": null,
-        "reviewed_by": null,
-        "review_rubric": null,
+        "outcome": "RESOLVED",
+        "reliability": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm",
+        "review_rubric": "human-reliability-assessment-rubric@1.0.0",
         "evidence_reliability_column": null
       },
       {
         "evidence_id": "09bfc370-59d2-4aca-83b8-cf717a1cc329",
         "claim_id": "bf4e4b48-fdf9-48f6-9c69-2178eb361e18",
-        "outcome": "NO_APPLICABLE_ASSESSMENT",
-        "reliability": null,
-        "assessment_id": null,
-        "assessment_version": null,
-        "origin": null,
-        "reviewed_by": null,
-        "review_rubric": null,
+        "outcome": "RESOLVED",
+        "reliability": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm",
+        "review_rubric": "human-reliability-assessment-rubric@1.0.0",
         "evidence_reliability_column": null
       },
       {
         "evidence_id": "1ad1dc6d-7528-4527-bccd-0a09f47112ac",
         "claim_id": "bf4e4b48-fdf9-48f6-9c69-2178eb361e18",
-        "outcome": "NO_APPLICABLE_ASSESSMENT",
-        "reliability": null,
-        "assessment_id": null,
-        "assessment_version": null,
-        "origin": null,
-        "reviewed_by": null,
-        "review_rubric": null,
+        "outcome": "RESOLVED",
+        "reliability": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm",
+        "review_rubric": "human-reliability-assessment-rubric@1.0.0",
         "evidence_reliability_column": null
       }
     ],
@@ -119,9 +129,36 @@
     "$note": "ADR-026 Decision 2. Every binding is produced at resolve time and no reliability is written onto scoring.evidence."
   },
   "leak_checks": {
-    "run": 6,
+    "run": 9,
     "leaks_found": 0,
     "checks": [
+      {
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "probed_proposition_kind": "platform_counted_content_request_change",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "probed_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": true,
+        "resolved": true,
+        "outcome": "RESOLVED"
+      },
+      {
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "probed_proposition_kind": "source_reported_procurement_value_contrast",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
       {
         "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
         "assessment_proposition_kind": "source_reported_procurement_value_contrast",
@@ -181,7 +218,7 @@
   "aggregation_diagnostic": {
     "$note": "The real aggregator, allow_uncalibrated=True, nothing persisted. `max_members_received` is the size of the largest support group, which is what `max(members)` actually saw.",
     "multi_evidence_claims": 2,
-    "scorable_multi_evidence_claims": 0,
+    "scorable_multi_evidence_claims": 2,
     "claims": [
       {
         "$banner": [
@@ -196,75 +233,89 @@
         "currency": "EUR",
         "classification_division": "92",
         "raw_evidence_count": 2,
-        "scorable_evidence_count": 0,
-        "non_scorable_evidence_count": 2,
-        "aggregation_status": "UNAVAILABLE",
-        "missing_requirements": [
-          "a77d8ea7-16f7-4259-831d-163c637ffccc: MISSING_RELIABILITY",
-          "cf9f792d-9811-43b7-b089-dcf3e835225a: MISSING_RELIABILITY"
-        ],
+        "scorable_evidence_count": 2,
+        "non_scorable_evidence_count": 0,
+        "aggregation_status": "COMPLETE",
+        "missing_requirements": [],
         "contributions": [
           {
             "evidence_id": "a77d8ea7-16f7-4259-831d-163c637ffccc",
             "direction": "SUPPORTS",
-            "scorable": false,
-            "q": null,
+            "scorable": true,
+            "q": 0.55,
             "components": {
               "relevance": 1.0,
               "directness": 1.0,
-              "reliability": null,
+              "reliability": 0.55,
               "extraction_confidence": 1.0,
               "freshness": 1.0
             },
-            "limiting_component": null,
-            "non_scorable_reasons": [
-              "MISSING_RELIABILITY"
-            ]
+            "limiting_component": "reliability",
+            "non_scorable_reasons": []
           },
           {
             "evidence_id": "cf9f792d-9811-43b7-b089-dcf3e835225a",
             "direction": "SUPPORTS",
-            "scorable": false,
-            "q": null,
+            "scorable": true,
+            "q": 0.55,
             "components": {
               "relevance": 1.0,
               "directness": 1.0,
-              "reliability": null,
+              "reliability": 0.55,
               "extraction_confidence": 1.0,
               "freshness": 1.0
             },
-            "limiting_component": null,
-            "non_scorable_reasons": [
-              "MISSING_RELIABILITY"
-            ]
+            "limiting_component": "reliability",
+            "non_scorable_reasons": []
           }
         ],
-        "support_group_count": 0,
-        "support_groups": [],
-        "max_members_received": 0,
+        "support_group_count": 1,
+        "support_groups": [
+          {
+            "group_id": "__unknown_independence__",
+            "kind": "UNKNOWN",
+            "direction": "SUPPORTS",
+            "strength": 0.55,
+            "representative_evidence_id": "a77d8ea7-16f7-4259-831d-163c637ffccc",
+            "member_evidence_ids": [
+              "a77d8ea7-16f7-4259-831d-163c637ffccc",
+              "cf9f792d-9811-43b7-b089-dcf3e835225a"
+            ],
+            "collapsed_member_count": 1
+          }
+        ],
+        "max_members_received": 2,
+        "collapsed_member_count": 1,
         "contradiction_group_count": 0,
-        "unknown_independence_count": 0,
+        "unknown_independence_count": 2,
         "independence_groups_created": 0,
         "masses": {
-          "support_strength": 0.0,
+          "support_strength": 0.55,
           "contradiction_strength": 0.0,
-          "supported_mass": 0.0,
+          "supported_mass": 0.55,
           "contradicted_mass": 0.0,
           "conflict_mass": 0.0,
-          "uncertainty_mass": 1.0
+          "uncertainty_mass": 0.44999999999999996
         },
         "evidence_level": {
-          "evidence_level": 0,
-          "label": "Hypothesis",
-          "reasons": [],
+          "evidence_level": 1,
+          "label": "Weak Signal",
+          "reasons": [
+            "2 scorable supporting record(s)"
+          ],
           "blocked_reasons": [
-            "no scorable supporting evidence",
+            "Repeated Signal needs 2 supporting groups of established independence, found 0 (plus 1 unknown-provenance group, which does not count)",
             "Market Evidence needs a supporting record categorised MARKET_ACTIVITY or DIRECT_VALIDATION with established provenance; quantity of opinion cannot substitute for it",
             "Direct Validation needs a supporting record categorised DIRECT_VALIDATION with established provenance"
           ]
         },
-        "limiting_components": [],
-        "reliability_pass_through_baseline": null,
+        "limiting_components": [
+          "reliability"
+        ],
+        "reliability_pass_through_baseline": 0.55,
+        "versus_reliability_pass_through": "IDENTICAL_TO_RELIABILITY_PASS_THROUGH",
+        "multi_evidence_verdict": "MULTI_EVIDENCE_PROCESSING_OCCURRED / NO_INDEPENDENT_CORROBORATION",
+        "contradiction_case": "NO_REAL_CONTRADICTION_CASE_YET",
         "profile_id": "reference-v1",
         "profile_version": "1.0.0",
         "profile_status": "UNCALIBRATED",
@@ -283,57 +334,73 @@
         "currency": "SEK",
         "classification_division": "92",
         "raw_evidence_count": 1,
-        "scorable_evidence_count": 0,
-        "non_scorable_evidence_count": 1,
-        "aggregation_status": "UNAVAILABLE",
-        "missing_requirements": [
-          "ce349b01-1ea4-4d11-b162-e745e2c82163: MISSING_RELIABILITY"
-        ],
+        "scorable_evidence_count": 1,
+        "non_scorable_evidence_count": 0,
+        "aggregation_status": "COMPLETE",
+        "missing_requirements": [],
         "contributions": [
           {
             "evidence_id": "ce349b01-1ea4-4d11-b162-e745e2c82163",
             "direction": "SUPPORTS",
-            "scorable": false,
-            "q": null,
+            "scorable": true,
+            "q": 0.55,
             "components": {
               "relevance": 1.0,
               "directness": 1.0,
-              "reliability": null,
+              "reliability": 0.55,
               "extraction_confidence": 1.0,
               "freshness": 1.0
             },
-            "limiting_component": null,
-            "non_scorable_reasons": [
-              "MISSING_RELIABILITY"
-            ]
+            "limiting_component": "reliability",
+            "non_scorable_reasons": []
           }
         ],
-        "support_group_count": 0,
-        "support_groups": [],
-        "max_members_received": 0,
+        "support_group_count": 1,
+        "support_groups": [
+          {
+            "group_id": "__unknown_independence__",
+            "kind": "UNKNOWN",
+            "direction": "SUPPORTS",
+            "strength": 0.55,
+            "representative_evidence_id": "ce349b01-1ea4-4d11-b162-e745e2c82163",
+            "member_evidence_ids": [
+              "ce349b01-1ea4-4d11-b162-e745e2c82163"
+            ],
+            "collapsed_member_count": 0
+          }
+        ],
+        "max_members_received": 1,
+        "collapsed_member_count": 0,
         "contradiction_group_count": 0,
-        "unknown_independence_count": 0,
+        "unknown_independence_count": 1,
         "independence_groups_created": 0,
         "masses": {
-          "support_strength": 0.0,
+          "support_strength": 0.55,
           "contradiction_strength": 0.0,
-          "supported_mass": 0.0,
+          "supported_mass": 0.55,
           "contradicted_mass": 0.0,
           "conflict_mass": 0.0,
-          "uncertainty_mass": 1.0
+          "uncertainty_mass": 0.44999999999999996
         },
         "evidence_level": {
-          "evidence_level": 0,
-          "label": "Hypothesis",
-          "reasons": [],
+          "evidence_level": 1,
+          "label": "Weak Signal",
+          "reasons": [
+            "1 scorable supporting record(s)"
+          ],
           "blocked_reasons": [
-            "no scorable supporting evidence",
+            "Repeated Signal needs 2 supporting groups of established independence, found 0 (plus 1 unknown-provenance group, which does not count)",
             "Market Evidence needs a supporting record categorised MARKET_ACTIVITY or DIRECT_VALIDATION with established provenance; quantity of opinion cannot substitute for it",
             "Direct Validation needs a supporting record categorised DIRECT_VALIDATION with established provenance"
           ]
         },
-        "limiting_components": [],
-        "reliability_pass_through_baseline": null,
+        "limiting_components": [
+          "reliability"
+        ],
+        "reliability_pass_through_baseline": 0.55,
+        "versus_reliability_pass_through": "IDENTICAL_TO_RELIABILITY_PASS_THROUGH",
+        "multi_evidence_verdict": null,
+        "contradiction_case": "NO_REAL_CONTRADICTION_CASE_YET",
         "profile_id": "reference-v1",
         "profile_version": "1.0.0",
         "profile_status": "UNCALIBRATED",
@@ -352,57 +419,73 @@
         "currency": "EUR",
         "classification_division": "90",
         "raw_evidence_count": 1,
-        "scorable_evidence_count": 0,
-        "non_scorable_evidence_count": 1,
-        "aggregation_status": "UNAVAILABLE",
-        "missing_requirements": [
-          "b7dc27bf-53c8-4e80-9c83-5980c80fa46c: MISSING_RELIABILITY"
-        ],
+        "scorable_evidence_count": 1,
+        "non_scorable_evidence_count": 0,
+        "aggregation_status": "COMPLETE",
+        "missing_requirements": [],
         "contributions": [
           {
             "evidence_id": "b7dc27bf-53c8-4e80-9c83-5980c80fa46c",
             "direction": "SUPPORTS",
-            "scorable": false,
-            "q": null,
+            "scorable": true,
+            "q": 0.55,
             "components": {
               "relevance": 1.0,
               "directness": 1.0,
-              "reliability": null,
+              "reliability": 0.55,
               "extraction_confidence": 1.0,
               "freshness": 1.0
             },
-            "limiting_component": null,
-            "non_scorable_reasons": [
-              "MISSING_RELIABILITY"
-            ]
+            "limiting_component": "reliability",
+            "non_scorable_reasons": []
           }
         ],
-        "support_group_count": 0,
-        "support_groups": [],
-        "max_members_received": 0,
+        "support_group_count": 1,
+        "support_groups": [
+          {
+            "group_id": "__unknown_independence__",
+            "kind": "UNKNOWN",
+            "direction": "SUPPORTS",
+            "strength": 0.55,
+            "representative_evidence_id": "b7dc27bf-53c8-4e80-9c83-5980c80fa46c",
+            "member_evidence_ids": [
+              "b7dc27bf-53c8-4e80-9c83-5980c80fa46c"
+            ],
+            "collapsed_member_count": 0
+          }
+        ],
+        "max_members_received": 1,
+        "collapsed_member_count": 0,
         "contradiction_group_count": 0,
-        "unknown_independence_count": 0,
+        "unknown_independence_count": 1,
         "independence_groups_created": 0,
         "masses": {
-          "support_strength": 0.0,
+          "support_strength": 0.55,
           "contradiction_strength": 0.0,
-          "supported_mass": 0.0,
+          "supported_mass": 0.55,
           "contradicted_mass": 0.0,
           "conflict_mass": 0.0,
-          "uncertainty_mass": 1.0
+          "uncertainty_mass": 0.44999999999999996
         },
         "evidence_level": {
-          "evidence_level": 0,
-          "label": "Hypothesis",
-          "reasons": [],
+          "evidence_level": 1,
+          "label": "Weak Signal",
+          "reasons": [
+            "1 scorable supporting record(s)"
+          ],
           "blocked_reasons": [
-            "no scorable supporting evidence",
+            "Repeated Signal needs 2 supporting groups of established independence, found 0 (plus 1 unknown-provenance group, which does not count)",
             "Market Evidence needs a supporting record categorised MARKET_ACTIVITY or DIRECT_VALIDATION with established provenance; quantity of opinion cannot substitute for it",
             "Direct Validation needs a supporting record categorised DIRECT_VALIDATION with established provenance"
           ]
         },
-        "limiting_components": [],
-        "reliability_pass_through_baseline": null,
+        "limiting_components": [
+          "reliability"
+        ],
+        "reliability_pass_through_baseline": 0.55,
+        "versus_reliability_pass_through": "IDENTICAL_TO_RELIABILITY_PASS_THROUGH",
+        "multi_evidence_verdict": null,
+        "contradiction_case": "NO_REAL_CONTRADICTION_CASE_YET",
         "profile_id": "reference-v1",
         "profile_version": "1.0.0",
         "profile_status": "UNCALIBRATED",
@@ -421,75 +504,89 @@
         "currency": "EUR",
         "classification_division": "92",
         "raw_evidence_count": 2,
-        "scorable_evidence_count": 0,
-        "non_scorable_evidence_count": 2,
-        "aggregation_status": "UNAVAILABLE",
-        "missing_requirements": [
-          "09bfc370-59d2-4aca-83b8-cf717a1cc329: MISSING_RELIABILITY",
-          "1ad1dc6d-7528-4527-bccd-0a09f47112ac: MISSING_RELIABILITY"
-        ],
+        "scorable_evidence_count": 2,
+        "non_scorable_evidence_count": 0,
+        "aggregation_status": "COMPLETE",
+        "missing_requirements": [],
         "contributions": [
           {
             "evidence_id": "09bfc370-59d2-4aca-83b8-cf717a1cc329",
             "direction": "SUPPORTS",
-            "scorable": false,
-            "q": null,
+            "scorable": true,
+            "q": 0.55,
             "components": {
               "relevance": 1.0,
               "directness": 1.0,
-              "reliability": null,
+              "reliability": 0.55,
               "extraction_confidence": 1.0,
               "freshness": 1.0
             },
-            "limiting_component": null,
-            "non_scorable_reasons": [
-              "MISSING_RELIABILITY"
-            ]
+            "limiting_component": "reliability",
+            "non_scorable_reasons": []
           },
           {
             "evidence_id": "1ad1dc6d-7528-4527-bccd-0a09f47112ac",
             "direction": "SUPPORTS",
-            "scorable": false,
-            "q": null,
+            "scorable": true,
+            "q": 0.55,
             "components": {
               "relevance": 1.0,
               "directness": 1.0,
-              "reliability": null,
+              "reliability": 0.55,
               "extraction_confidence": 1.0,
               "freshness": 1.0
             },
-            "limiting_component": null,
-            "non_scorable_reasons": [
-              "MISSING_RELIABILITY"
-            ]
+            "limiting_component": "reliability",
+            "non_scorable_reasons": []
           }
         ],
-        "support_group_count": 0,
-        "support_groups": [],
-        "max_members_received": 0,
+        "support_group_count": 1,
+        "support_groups": [
+          {
+            "group_id": "__unknown_independence__",
+            "kind": "UNKNOWN",
+            "direction": "SUPPORTS",
+            "strength": 0.55,
+            "representative_evidence_id": "09bfc370-59d2-4aca-83b8-cf717a1cc329",
+            "member_evidence_ids": [
+              "09bfc370-59d2-4aca-83b8-cf717a1cc329",
+              "1ad1dc6d-7528-4527-bccd-0a09f47112ac"
+            ],
+            "collapsed_member_count": 1
+          }
+        ],
+        "max_members_received": 2,
+        "collapsed_member_count": 1,
         "contradiction_group_count": 0,
-        "unknown_independence_count": 0,
+        "unknown_independence_count": 2,
         "independence_groups_created": 0,
         "masses": {
-          "support_strength": 0.0,
+          "support_strength": 0.55,
           "contradiction_strength": 0.0,
-          "supported_mass": 0.0,
+          "supported_mass": 0.55,
           "contradicted_mass": 0.0,
           "conflict_mass": 0.0,
-          "uncertainty_mass": 1.0
+          "uncertainty_mass": 0.44999999999999996
         },
         "evidence_level": {
-          "evidence_level": 0,
-          "label": "Hypothesis",
-          "reasons": [],
+          "evidence_level": 1,
+          "label": "Weak Signal",
+          "reasons": [
+            "2 scorable supporting record(s)"
+          ],
           "blocked_reasons": [
-            "no scorable supporting evidence",
+            "Repeated Signal needs 2 supporting groups of established independence, found 0 (plus 1 unknown-provenance group, which does not count)",
             "Market Evidence needs a supporting record categorised MARKET_ACTIVITY or DIRECT_VALIDATION with established provenance; quantity of opinion cannot substitute for it",
             "Direct Validation needs a supporting record categorised DIRECT_VALIDATION with established provenance"
           ]
         },
-        "limiting_components": [],
-        "reliability_pass_through_baseline": null,
+        "limiting_components": [
+          "reliability"
+        ],
+        "reliability_pass_through_baseline": 0.55,
+        "versus_reliability_pass_through": "IDENTICAL_TO_RELIABILITY_PASS_THROUGH",
+        "multi_evidence_verdict": "MULTI_EVIDENCE_PROCESSING_OCCURRED / NO_INDEPENDENT_CORROBORATION",
+        "contradiction_case": "NO_REAL_CONTRADICTION_CASE_YET",
         "profile_id": "reference-v1",
         "profile_version": "1.0.0",
         "profile_status": "UNCALIBRATED",

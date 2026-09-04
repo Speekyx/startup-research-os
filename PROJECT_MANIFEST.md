@@ -1,6 +1,6 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.73
+Version: 1.74
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
@@ -13,6 +13,35 @@ Last amended: 2026-09-04 (Sprint 1 / Mission 1.42.1)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.74 — 2026-09-04 (Sprint 1 / Mission 1.42.1 close-out)
+
+**`SECOND_PILOT_OPERATOR_RELIABILITY_DECISION_PERSISTED`.** The operator typed
+the confirmation. ReliabilityAssessments 2 → **3**, basis rows 6 → **10**, and
+thirteen other counters unchanged.
+
+Assessment `d1afa4be` v1, `0.55`, `HUMAN_REVIEW`, `thibchm`, under
+`human-reliability-assessment-rubric@1.0.0` — the first assessment that records
+which procedure produced it. Both historical assessments keep NULL provenance and
+neither is superseded.
+
+All six convergent Evidence rows resolve, and `scoring.evidence.reliability` is
+still NULL on all 39: reliability binds late. Nine leak checks, zero leaks.
+
+**Both real multi-Evidence Claims became scorable, 0 → 2**, and `max(members)`
+received two real items for the first time — one support group of kind UNKNOWN
+with two members, because DISJOINT membership is not independence. Zero
+independence groups created.
+
+The result is `IDENTICAL_TO_RELIABILITY_PASS_THROUGH` on both Claims, which is
+not a failure: the mechanism ran, and the corpus gives it nothing to disagree
+about. `q = 0.55` limited by reliability, masses 0.55/0/0/0.45, EvidenceScore
+55.0, level 1 blocked on established independence.
+
+`REFERENCE_PROFILE_V1` remains `UNCALIBRATED`. D-03 blocker 2 → PARTIAL; the
+other four unchanged.
+
+Report: `docs/architecture/mission-1.42.1-report.md`.
 
 ## 1.73 — 2026-09-04 (Sprint 1 / Mission 1.42.1)
 

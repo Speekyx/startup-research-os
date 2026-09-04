@@ -89,5 +89,5 @@ The four documents Mission 1.42 prepared, all first-party eForms SDK 1.15.1 and 
 
 ## Outcome
 
-**Not yet persisted.** Null until the operator types the confirmation. The human reasoning above is complete and immutable; the outcome pointer is written once, after persistence, by report_convergent_reliability_resolution.py, which also records the six resolver bindings and the aggregation diagnostic.
+Persisted as assessment `d1afa4be-8462-4461-be20-112cdc55ee7e` version 1, recorded 2026-09-04T04:44:36.565929+00:00.
 

@@ -404,6 +404,23 @@ def main() -> int:
 
     rendered = json.dumps(document, indent=2, ensure_ascii=False) + "\n"
 
+    # Mission 1.42.1. A PREPARATION packet records the question AS IT STOOD when
+    # it was put to a reviewer. Once the reviewer has answered, the live state is
+    # no longer what this file is for: regenerating it would turn the question
+    # into a stale copy of the answer -- which now lives in
+    # `second-pilot-convergent-reliability-resolution-v1.json` -- and would
+    # quietly rewrite the record of what the operator was actually asked. The
+    # Mission 1.36 Docker packet was frozen the same way once Mission 1.36.1
+    # persisted a value against one of its scopes.
+    answered = [e for e in resolutions if e["outcome"] != "NO_APPLICABLE_ASSESSMENT"]
+    if answered and OUT.exists():
+        print(
+            f"FROZEN   {OUT.name} is a preparation record and its question has been "
+            "answered. See second-pilot-convergent-reliability-resolution-v1.json "
+            "for what the decision produced."
+        )
+        return 0
+
     if args.check:
         if not OUT.exists():
             print(f"REFUSED: {OUT.name} does not exist; run without --check first")

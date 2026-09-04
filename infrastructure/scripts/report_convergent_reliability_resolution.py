@@ -285,8 +285,16 @@ def main() -> int:
                 "contributions": [c.to_json() for c in result.contributions],
                 "support_group_count": result.support_group_count,
                 "support_groups": [g.to_json() for g in result.groups.support],
+                # `member_evidence_ids`, not `members`. This branch was
+                # unreachable until a row became scorable, so the wrong name sat
+                # here looking fine -- the same shape as Mission 1.36.1's
+                # `binding.assessment_version`, and the same lesson: a branch no
+                # data has ever entered is not tested by a passing suite.
                 "max_members_received": max(
-                    (len(g.members) for g in result.groups.support), default=0
+                    (len(g.member_evidence_ids) for g in result.groups.support), default=0
+                ),
+                "collapsed_member_count": sum(
+                    g.collapsed_member_count for g in result.groups.support
                 ),
                 "contradiction_group_count": result.contradiction_group_count,
                 "unknown_independence_count": result.unknown_independence_count,
@@ -297,6 +305,28 @@ def main() -> int:
                     {c.limiting_component for c in result.contributions if c.limiting_component}
                 ),
                 "reliability_pass_through_baseline": pass_through,
+                # §20. B-2 reports the reliability-limited strongest item and
+                # ignores every other mechanism. Matching it is NOT a failure:
+                # the finding is that the real grouping logic ran on real data,
+                # not that it produced a bigger number.
+                "versus_reliability_pass_through": (
+                    "IDENTICAL_TO_RELIABILITY_PASS_THROUGH"
+                    if pass_through is not None
+                    and abs(result.masses.support_strength - pass_through) < 1e-9
+                    else "DIFFERS_FROM_RELIABILITY_PASS_THROUGH"
+                ),
+                # §17. One group means the mechanism ran and found no second
+                # line of evidence. Saying both halves is the honest reading.
+                "multi_evidence_verdict": (
+                    "MULTI_EVIDENCE_PROCESSING_OCCURRED / NO_INDEPENDENT_CORROBORATION"
+                    if result.scorable_evidence_count > 1 and result.support_group_count == 1
+                    else None
+                ),
+                "contradiction_case": (
+                    "NO_REAL_CONTRADICTION_CASE_YET"
+                    if result.contradiction_group_count == 0
+                    else "CONTRADICTION_PRESENT"
+                ),
                 "profile_id": result.aggregation_profile_id,
                 "profile_version": result.aggregation_profile_version,
                 "profile_status": result.aggregation_profile_status,

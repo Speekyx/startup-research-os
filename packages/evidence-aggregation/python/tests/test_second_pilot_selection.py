@@ -244,10 +244,16 @@ class NothingWasAcquiredOrCreated(unittest.TestCase):
         text = json.dumps(selection())
         self.assertNotIn("SAME_PROBLEM_FAMILY", text)
 
-    def test_no_reliability_assessment_was_created(self) -> None:
-        """§20. Two, unchanged."""
+    def test_this_mission_created_no_reliability_assessment(self) -> None:
+        """§20. What Mission 1.38 did, not what the deployment holds now.
+
+        The live count was pinned at 2 and Mission 1.42.1 legitimately made it
+        3. The assertion that belongs to THIS mission is its own record of
+        having created none; the global total is deployment state and belongs to
+        whichever mission last changed it.
+        """
         self.assertIn("Two, unchanged", selection()["what_this_mission_did_not_do"]["reliability"])
-        self.assertEqual(audit()["totals"]["current_reliability_assessments"], 2)
+        self.assertGreaterEqual(audit()["totals"]["current_reliability_assessments"], 2)
 
     def test_no_score_and_no_ranking(self) -> None:
         """§39."""
