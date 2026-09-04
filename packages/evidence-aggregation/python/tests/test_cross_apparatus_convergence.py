@@ -31,8 +31,7 @@ import json
 import pathlib
 import unittest
 
-from sros_claim_model.convergence import PropositionConvergenceContract, SourceBoundary
-from sros_contracts import ClaimType, EvidenceDirection, EvidenceIndependenceState
+from sros_contracts import EvidenceDirection, EvidenceIndependenceState
 from sros_evidence_aggregation.independence import group_by_independence
 from sros_evidence_aggregation.items import EvidenceItem, ItemContribution
 
@@ -488,26 +487,12 @@ class ValidIndependenceRequiresDocumentedLineages(unittest.TestCase):
 
 
 class SourceIdentityIsNotDroppedWithoutAContract(unittest.TestCase):
-    def test_the_real_contract_refuses_a_proposition_without_source_id(self):
-        """Gate 7 proved through the REAL constructor, not asserted in prose."""
-        with self.assertRaises(ValueError) as raised:
-            PropositionConvergenceContract(
-                contract_id="cross-apparatus-activity",
-                version="1.0.0",
-                proposition_kind="public_platform_activity_witnessed",
-                claim_type=ClaimType.OBSERVED,
-                temporality=None,
-                source_boundary=SourceBoundary.SAME_SOURCE_AND_RESOURCE,
-                identity_fields=("proposition", "canonical_subject_id", "period_bound"),
-                witness_fields=("source_id", "resource_id", "period_label_from"),
-                qualifying_signal_types=("content_request_change",),
-                establishes="at least one platform recorded a qualifying event",
-                does_not_establish=("prevalence",),
-            )
-        self.assertIn("source_id", str(raised.exception))
-
-    def test_the_source_boundary_enum_has_no_cross_source_member(self):
-        self.assertEqual({member.value for member in SourceBoundary}, {"SAME_SOURCE_AND_RESOURCE"})
+    """Gate 7 itself is proved against the REAL constructor in
+    `packages/claim-model/python/tests/test_cross_apparatus_contract_boundary.py`,
+    because that is the package owning `PropositionConvergenceContract` and the
+    zero-dependency runner puts only a suite's own package on its path. What is
+    asserted here is that this record REPORTS the refusal, and reports what the
+    refusal cost."""
 
     def test_the_record_reports_the_contract_cannot_express_it(self):
         capability = record()["convergence_contract_capability"]
