@@ -212,6 +212,7 @@ jobs:
                       packages/evidence-aggregation/python/sros_evidence_aggregation \
                       packages/signal-model/python/sros_signal_model \
                       packages/claim-model/python/sros_claim_model \
+                      packages/inferred-claim-evaluator/python/sros_inferred_claim_evaluator \
                       packages/evidence-reliability/python/sros_evidence_reliability \
                       services/acquisition/python/sros_acquisition \
                       services/nlp/python/sros_nlp \
@@ -311,6 +312,20 @@ jobs:
       # deterministic from an empty database.
       - name: Derivation provenance schema matches its migration
         run: uv run python infrastructure/scripts/render_derivation_provenance_schema.py --check
+      # Mission 1.52 §42. Renders the deterministic-evaluator record and
+      # cross-checks it against the repository rather than against itself: the
+      # evaluator package must exist at the path ADR-037 Q3 named, import none of
+      # the five forbidden packages, read no clock, reach no database or network
+      # client, and expose exactly the four-member EvaluationResult vocabulary.
+      # The suite and its one shared path must be registered in the
+      # zero-dependency runner, `validate_claims.py` must still restrict the
+      # interpreters to OBSERVED, no interpreter may import the evaluator,
+      # migration 0034 must still declare `claim_revision_id NOT NULL` (the
+      # central finding rests on it), and INFERRED must not appear among the
+      # evidence-requirement trigger's exemptions. Every input is a repository
+      # file, so it is deterministic from an empty database.
+      - name: Deterministic evaluator record matches the package it describes
+        run: uv run python infrastructure/scripts/render_deterministic_inferred_evaluator.py --check
 
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.

@@ -15,6 +15,7 @@ members = [
     "packages/evidence-reliability/python",
     "packages/semantic-equivalence/python",
     "packages/opportunity-engine/python",
+    "packages/inferred-claim-evaluator/python",
     "services/workers/python",
     "services/research-orchestrator/python",
     "services/acquisition/python",
@@ -28,6 +29,7 @@ sros-llm-gateway = { workspace = true }
 sros-evidence-aggregation = { workspace = true }
 sros-signal-model = { workspace = true }
 sros-claim-model = { workspace = true }
+sros-inferred-claim-evaluator = { workspace = true }
 sros-evidence-reliability = { workspace = true }
 sros-semantic-equivalence = { workspace = true }
 sros-opportunity = { workspace = true }

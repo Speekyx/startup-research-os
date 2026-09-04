@@ -16,6 +16,7 @@ members = [
     "sros-evidence-aggregation",
     "sros-evidence-reliability",
     "sros-gateway",
+    "sros-inferred-claim-evaluator",
     "sros-llm-gateway",
     "sros-nlp",
     "sros-opportunity",
@@ -1662,6 +1663,21 @@ requires-dist = [
     { name = "sros-llm-gateway", editable = "packages/llm-gateway/python" },
     { name = "sros-orchestrator", editable = "services/research-orchestrator/python" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.30,<1" },
+]
+
+[[package]]
+name = "sros-inferred-claim-evaluator"
+version = "0.1.0"
+source = { editable = "packages/inferred-claim-evaluator/python" }
+dependencies = [
+    { name = "sros-claim-model" },
+    { name = "sros-contracts" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "sros-claim-model", editable = "packages/claim-model/python" },
+    { name = "sros-contracts", editable = "packages/contracts/python" },
 ]
 
 [[package]]

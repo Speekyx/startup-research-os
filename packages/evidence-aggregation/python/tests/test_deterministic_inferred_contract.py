@@ -360,8 +360,27 @@ class InterpreterGuardRemainsUntouched(unittest.TestCase):
     def test_the_boundary_is_zero_dependency_compatible(self):
         self.assertTrue(contract()["Q3_evaluator_boundary"]["zero_dependency_compatible"])
 
-    def test_the_package_was_not_created(self):
-        self.assertFalse((REPO_ROOT / "packages" / "inferred-claim-evaluator").exists())
+    def test_the_evaluator_sits_where_the_contract_named_it(self):
+        """Mission 1.50 asserted this package DID NOT EXIST, which was true of a
+        contract mission that wrote no code. Mission 1.52 created it, and a test
+        asserting 0 forever is a test asserting the contract is never implemented
+        -- the repair shape of Missions 1.31.1, 1.40, 1.41 and 1.44.1.
+
+        What survives is the boundary, which is what this class is actually for:
+        the evaluator lives at the path Q3 named."""
+        proposed = REPO_ROOT / contract()["Q3_evaluator_boundary"]["proposed_package"]
+        self.assertTrue(proposed.is_dir())
+
+    def test_it_was_not_hosted_in_the_interpretation_package(self):
+        """The load-bearing half. Hosting it in `sros_nlp/interpreters` would
+        require weakening `validate_claims.py`, and a guard removed to let new
+        work through is a guard that never was."""
+        interpreters = REPO_ROOT / "services" / "nlp" / "python" / "sros_nlp" / "interpreters"
+        for module in interpreters.glob("*.py"):
+            with self.subTest(module=module.name):
+                self.assertNotIn(
+                    "sros_inferred_claim_evaluator", module.read_text(encoding="utf-8")
+                )
 
 
 # ==================================================== §41.22-28 nothing moved

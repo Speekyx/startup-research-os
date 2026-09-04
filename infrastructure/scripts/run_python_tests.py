@@ -33,6 +33,9 @@ SUITES = [
     "packages/signal-model/python",
     "packages/claim-model/python",
     "packages/evidence-reliability/python",
+    # Mission 1.52. The deterministic INFERRED evaluator: pure functions over
+    # contracts and the claim model, with no database and no network.
+    "packages/inferred-claim-evaluator/python",
     "services/workers/python",
     "services/research-orchestrator/python",
 ]
@@ -46,6 +49,12 @@ SHARED_PATHS = [
     "packages/contracts/python",
     "packages/llm-gateway/python",
     "packages/evidence-aggregation/python",
+    # Mission 1.52. The evaluator builds a source-independent proposition key
+    # with the REAL `proposition_key`, so claim-model is a declared dependency
+    # in its pyproject and has to be importable without an install. One named
+    # package, not the monorepo: a suite that reaches further still fails here,
+    # which is the Mission 1.47 lesson this list exists to keep enforcing.
+    "packages/claim-model/python",
     "services/workers/python",
     "services/research-orchestrator/python",
 ]
