@@ -271,6 +271,18 @@ jobs:
       # (Mission 1.37).
       - name: Cross-apparatus convergence feasibility is rendered from its record
         run: uv run python infrastructure/scripts/render_cross_apparatus_convergence_feasibility.py --check
+      # Mission 1.48 §35. Renders the apparatus-requirements record and refuses
+      # the shapes the mission exists to avoid: a monotone proposition family
+      # marked falsifiable or contradiction-capable, a preferred family that is
+      # monotone, a weighted numeric score where §5 allows only qualitative
+      # states, a selected source, a blank requirement, a specification written
+      # around a named source, or a moved counter.
+      #
+      # `measure_falsifiable_apparatus_gap_baseline.py` is deliberately NOT
+      # checked here for the usual reason: it measures a DEPLOYMENT, and this
+      # job starts from an empty one (Mission 1.37).
+      - name: Falsifiable apparatus requirements are rendered from their record
+        run: uv run python infrastructure/scripts/render_falsifiable_apparatus_requirements.py --check
 
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
