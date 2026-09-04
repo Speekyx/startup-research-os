@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.84
+Version: 1.85
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-04 (Sprint 1 / Mission 1.51)
+Last amended: 2026-09-05 (Sprint 1 / Mission 1.52)
 
 ---
 
@@ -13,6 +13,57 @@ Last amended: 2026-09-04 (Sprint 1 / Mission 1.51)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.85 — 2026-09-05 (Sprint 1 / Mission 1.52)
+
+**`REFUSAL_DERIVATION_BINDING_CONTRACT_GAP`, with
+`DETERMINISTIC_EVALUATOR_FOUNDATION_IMPLEMENTED` reported beside it.** The
+deterministic evaluator exists, runs and refuses correctly. What it cannot do is
+write a refusal down.
+
+Proven in a disposable probe workspace rather than reasoned about: an INFERRED
+claim with no Evidence is refused by the evidence-requirement trigger, whose
+exemptions are HYPOTHESIS, MANUAL and WITHDRAWN and nothing else; and a
+derivation with a NULL claim_revision_id is refused by migration 0034. Both
+refusals are individually correct, and jointly they leave a NOT_APPLICABLE or
+UNKNOWN evaluation nowhere to store its provenance without first fabricating the
+Claim the evaluation just declined to establish. Nothing was widened to get past
+it: INFERRED was not added to the exemptions, claim_revision_id was not made
+nullable, no Claim was created and no table was invented.
+
+The Evidence re-evaluation question resolves by policy instead, and the
+distinction is why the first is the primary outcome. `scoring.evidence` has no
+revision or supersession column, so a rule-version change produces another
+derivation record, never an automatic alteration of canonical Evidence, and a
+disagreement is reported for operator review. That needs no schema change; the
+refusal gap needs a decision nobody has taken.
+
+`packages/inferred-claim-evaluator` sits at the path ADR-037 Q3 named and joins
+the zero-dependency runner with one named shared package rather than the
+monorepo. Four gates run in order, equivalence first, so the direction the
+arithmetic would have produced cannot leak into a refusal. No unit is converted,
+no time window aligned, no threshold selected, no independence adjudicated, no
+reliability scored, and interpretation confidence is taken from the reviewed
+equivalence decision rather than invented.
+
+The aggregator needs no change, proved from its signature: `aggregate()` takes no
+claim type and `EvidenceItem` carries none. A correction was made in the process
+— EvidenceDirection does have a NEUTRAL member, so the guarantee that a refusal
+never becomes NEUTRAL is producer-side rather than type-side, and the record says
+so rather than repeating the mistake.
+
+0 requests of every kind, 0 model calls, 0 embeddings, every counter unchanged,
+0 INFERRED Claims, 0 derivation rows, 0 threshold registrations, no migration,
+`validate_claims.py` untouched, profile still UNCALIBRATED, Problem-Family still
+PARKED, validator probed with 55 deliberate violations and 55 caught, 1313
+bare-python tests run before commit and 3186 pytest tests after.
+
+New: `packages/inferred-claim-evaluator/`,
+`docs/data/deterministic-inferred-evaluator-foundation-v1.json` and `.md`, one
+script under `infrastructure/scripts/`, and a downstream compatibility suite in
+`packages/evidence-aggregation/python`.
+
+Report: `docs/architecture/mission-1.52-report.md`.
 
 ## 1.84 — 2026-09-04 (Sprint 1 / Mission 1.51)
 
@@ -3052,6 +3103,7 @@ Additionally authoritative:
 - docs/data/source-independent-claim-semantics-v1.md (added in 1.82)
 - docs/data/deterministic-inferred-claim-contract-v1.md (added in 1.83)
 - docs/data/deterministic-derivation-provenance-schema-v1.md (added in 1.84)
+- docs/data/deterministic-inferred-evaluator-foundation-v1.md (added in 1.85)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.
