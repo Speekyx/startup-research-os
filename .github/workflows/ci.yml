@@ -326,6 +326,18 @@ jobs:
       # file, so it is deterministic from an empty database.
       - name: Deterministic evaluator record matches the package it describes
         run: uv run python infrastructure/scripts/render_deterministic_inferred_evaluator.py --check
+      # Mission 1.53 §45. Renders the refusal-provenance design and checks it
+      # against the repository rather than against itself: the reason codes it
+      # lists must be the ones the evaluator's `_refuse` calls actually raise
+      # (read from the AST, because `__all__` entries look identical to a
+      # scan), migration 0034 must still declare `claim_revision_id NOT NULL`
+      # and the identity key whose NULL behaviour decides Option B, the
+      # migration head must not have moved, and `validate_claims.py` must
+      # still restrict the interpreters to OBSERVED. It also refuses a record
+      # that selects the expiring run logs, stores a key with no preimage, or
+      # puts a nullable column in the refusal identity key.
+      - name: Refusal provenance design matches the evaluator it describes
+        run: uv run python infrastructure/scripts/render_refusal_provenance_design.py --check
 
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.

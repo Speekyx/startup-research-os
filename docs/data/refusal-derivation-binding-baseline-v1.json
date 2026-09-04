@@ -1,0 +1,283 @@
+{
+  "mission": "1.53 — Refusal Derivation Binding Design V1",
+  "measured_at": "2026-09-05",
+  "measured_against": "the live development deployment, read directly rather than quoted from a report",
+  "main_commit": "78e322c",
+  "migration_head": "0034_deterministic_derivation_provenance",
+  "server_version": "16.4",
+  "counters": {
+    "raw_records": 325,
+    "normalized_records": 325,
+    "signals": 33,
+    "claims": 43,
+    "claim_revisions": 44,
+    "evidence": 57,
+    "reliability_assessments": 4,
+    "threshold_registrations": 0,
+    "claim_derivations": 0,
+    "opportunities": 1,
+    "opportunity_revisions": 1,
+    "claim_interpretation_runs": 12,
+    "claim_interpretation_inputs": 64,
+    "inferred_claims": 0,
+    "opportunity_evidence_links": 7,
+    "independence_groups": 0,
+    "embeddings": 0,
+    "sources": 29
+  },
+  "workspaces": [
+    "dev",
+    "dev-other"
+  ],
+  "scoring_scores_absent": true,
+  "claim_derivations": {
+    "columns": [
+      {
+        "column": "id",
+        "type": "uuid",
+        "nullable": "NO"
+      },
+      {
+        "column": "workspace_id",
+        "type": "uuid",
+        "nullable": "NO"
+      },
+      {
+        "column": "claim_revision_id",
+        "type": "uuid",
+        "nullable": "NO"
+      },
+      {
+        "column": "input_signal_id",
+        "type": "uuid",
+        "nullable": "NO"
+      },
+      {
+        "column": "input_observed_claim_id",
+        "type": "uuid",
+        "nullable": "YES"
+      },
+      {
+        "column": "derivation_rule_id",
+        "type": "text",
+        "nullable": "NO"
+      },
+      {
+        "column": "derivation_rule_version",
+        "type": "text",
+        "nullable": "NO"
+      },
+      {
+        "column": "evaluator_version",
+        "type": "text",
+        "nullable": "NO"
+      },
+      {
+        "column": "measurement_value",
+        "type": "numeric",
+        "nullable": "NO"
+      },
+      {
+        "column": "threshold_registration_id",
+        "type": "uuid",
+        "nullable": "YES"
+      },
+      {
+        "column": "evaluation_result",
+        "type": "text",
+        "nullable": "NO"
+      },
+      {
+        "column": "semantic_equivalence_basis_id",
+        "type": "text",
+        "nullable": "NO"
+      },
+      {
+        "column": "interpretation_kind",
+        "type": "text",
+        "nullable": "NO"
+      },
+      {
+        "column": "model_version",
+        "type": "text",
+        "nullable": "YES"
+      },
+      {
+        "column": "rationale",
+        "type": "text",
+        "nullable": "NO"
+      },
+      {
+        "column": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": "NO"
+      }
+    ],
+    "constraints": [
+      {
+        "name": "claim_derivations_evaluation_result_check",
+        "definition": "CHECK ((evaluation_result = ANY (ARRAY['SUPPORTS'::text, 'CONTRADICTS'::text, 'NOT_APPLICABLE'::text, 'UNKNOWN'::text])))"
+      },
+      {
+        "name": "claim_derivations_identity_key",
+        "definition": "UNIQUE (workspace_id, claim_revision_id, input_signal_id, derivation_rule_version)"
+      },
+      {
+        "name": "claim_derivations_interpretation_kind_check",
+        "definition": "CHECK ((interpretation_kind = ANY (ARRAY['DETERMINISTIC'::text, 'MODEL_DERIVED'::text])))"
+      },
+      {
+        "name": "claim_derivations_model_version_pairing_check",
+        "definition": "CHECK ((((interpretation_kind = 'DETERMINISTIC'::text) AND (model_version IS NULL)) OR ((interpretation_kind = 'MODEL_DERIVED'::text) AND (model_version IS NOT NULL))))"
+      },
+      {
+        "name": "claim_derivations_observed_claim_tenant_fkey",
+        "definition": "FOREIGN KEY (workspace_id, input_observed_claim_id) REFERENCES research.claims(workspace_id, id) DEFERRABLE INITIALLY DEFERRED"
+      },
+      {
+        "name": "claim_derivations_pkey",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "claim_derivations_rationale_present_check",
+        "definition": "CHECK ((length(btrim(rationale)) > 0))"
+      },
+      {
+        "name": "claim_derivations_revision_tenant_fkey",
+        "definition": "FOREIGN KEY (workspace_id, claim_revision_id) REFERENCES research.claim_revisions(workspace_id, id) DEFERRABLE INITIALLY DEFERRED"
+      },
+      {
+        "name": "claim_derivations_signal_tenant_fkey",
+        "definition": "FOREIGN KEY (workspace_id, input_signal_id) REFERENCES nlp.signals(workspace_id, id) DEFERRABLE INITIALLY DEFERRED"
+      },
+      {
+        "name": "claim_derivations_threshold_required_check",
+        "definition": "CHECK (((evaluation_result = ANY (ARRAY['NOT_APPLICABLE'::text, 'UNKNOWN'::text])) OR (threshold_registration_id IS NOT NULL)))"
+      },
+      {
+        "name": "claim_derivations_threshold_tenant_fkey",
+        "definition": "FOREIGN KEY (workspace_id, threshold_registration_id) REFERENCES research.threshold_registrations(workspace_id, id) DEFERRABLE INITIALLY DEFERRED"
+      },
+      {
+        "name": "claim_derivations_workspace_id_fkey",
+        "definition": "FOREIGN KEY (workspace_id) REFERENCES core.workspaces(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "claim_derivations_workspace_id_id_key",
+        "definition": "UNIQUE (workspace_id, id)"
+      }
+    ]
+  },
+  "interpretation_runs": {
+    "with_expires_at": 12,
+    "total": 12,
+    "expires_at_range": [
+      "2026-11-29 05:17:01.128739+00:00",
+      "2026-12-03 05:21:35.336570+00:00"
+    ]
+  },
+  "interpretation_inputs_foreign_keys": [
+    {
+      "name": "claim_interpretation_inputs_claim_tenant_fkey",
+      "definition": "FOREIGN KEY (workspace_id, claim_id) REFERENCES research.claims(workspace_id, id) ON DELETE CASCADE"
+    },
+    {
+      "name": "claim_interpretation_inputs_run_tenant_fkey",
+      "definition": "FOREIGN KEY (workspace_id, run_id) REFERENCES research.claim_interpretation_runs(workspace_id, id) ON DELETE CASCADE"
+    },
+    {
+      "name": "claim_interpretation_inputs_signal_tenant_fkey",
+      "definition": "FOREIGN KEY (workspace_id, signal_id) REFERENCES nlp.signals(workspace_id, id) ON DELETE CASCADE"
+    },
+    {
+      "name": "claim_interpretation_inputs_signal_type_fkey",
+      "definition": "FOREIGN KEY (signal_type_registry, signal_type_id) REFERENCES registry.registry_entries(registry, id)"
+    },
+    {
+      "name": "claim_interpretation_inputs_workspace_id_fkey",
+      "definition": "FOREIGN KEY (workspace_id) REFERENCES core.workspaces(id) ON DELETE CASCADE"
+    }
+  ],
+  "trigger": {
+    "function": "research.require_evidence_for_generated_claim",
+    "present": true,
+    "exemption_lines": [
+      "IF NEW.lifecycle = 'WITHDRAWN' THEN",
+      "IF NEW.claim_type = 'HYPOTHESIS' OR NEW.origin = 'MANUAL' THEN"
+    ],
+    "mentions_inferred": false
+  },
+  "proposition_facts_key_frequency": {
+    "proposition": 43,
+    "source_id": 43,
+    "direction": 30,
+    "period_label_from": 26,
+    "period_label_to": 26,
+    "audience_class": 24,
+    "content_id": 24,
+    "content_platform": 24,
+    "resource_id": 17,
+    "relation": 11,
+    "amount_scope": 10,
+    "amount_type": 10,
+    "classification_division": 10,
+    "classification_scheme": 10,
+    "currency": 10,
+    "notice_class": 10,
+    "classification_codes": 6,
+    "notice_ids": 6,
+    "geography_source_code": 4,
+    "metric_id": 4,
+    "metric_scheme": 4,
+    "gram_size": 3,
+    "language_source_label": 3,
+    "language_source_scheme": 3,
+    "term_scheme": 3,
+    "community_site": 2,
+    "community_tag": 2,
+    "term": 2,
+    "period_label": 1,
+    "term_a": 1,
+    "term_b": 1
+  },
+  "conflict_reproved": {
+    "server_version": "16.4",
+    "A_inferred_claim_without_evidence": {
+      "refused": true,
+      "error": "CheckViolation",
+      "sqlstate": "23514",
+      "message": "claim 81de0366-9888-420e-b979-775e4a277921 (INFERRED / DETERMINISTIC_EXTRACTION) has no evidence. An automatically generated claim must cite at least one evidence record; a proposition a machine asser"
+    },
+    "A2_hypothesis_without_evidence_is_exempt": {
+      "refused": false,
+      "note": "accepted; rolled back deliberately"
+    },
+    "B_derivation_with_null_revision": {
+      "refused": true,
+      "error": "NotNullViolation",
+      "sqlstate": "23502",
+      "message": "null value in column \"claim_revision_id\" of relation \"claim_derivations\" violates not-null constraint"
+    },
+    "C_duplicate_refusals_admitted_by_nullable_identity_key": 3,
+    "C_directional_duplicate_still_refused": {
+      "refused": true,
+      "error": "UniqueViolation",
+      "sqlstate": "23505",
+      "message": "duplicate key value violates unique constraint \"identity_probe_workspace_id_claim_revision_id_input_signal__key\""
+    },
+    "D_canonical_inputs_bound_to_runs": 64,
+    "D_inputs_run_fk_is_cascade": true,
+    "D_derivations_reference_runs": 0,
+    "probe_workspace_removed": true,
+    "workspaces_after": [
+      "dev",
+      "dev-other"
+    ],
+    "after_claims": 43,
+    "after_claim_derivations": 0,
+    "after_evidence": 57
+  },
+  "claims_carrying_the_proposition_discriminator": 43,
+  "claims_carrying_a_proposition_kind_key": 0,
+  "claims_with_key_and_preimage": 43
+}
