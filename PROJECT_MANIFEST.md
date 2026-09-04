@@ -1,6 +1,6 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.64
+Version: 1.65
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
@@ -13,6 +13,30 @@ Last amended: 2026-09-03 (Sprint 1 / Mission 1.36.1)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.65 — 2026-09-03 (Sprint 1 / Mission 1.36.1 close-out)
+
+**`DOCKER_RELIABILITY_PARTIALLY_REVIEWED`.** The operator typed the confirmation
+the mission could not, so the Wikimedia assessment is recorded:
+`e2419f13-c031-44d5-837c-c56a867baf34`, version 1, `HUMAN_REVIEW`, `thibchm`,
+`0.65`, two document-backed basis rows.
+
+**Two counters moved and fifteen did not.** ReliabilityAssessments 1 to 2, basis
+rows 4 to 6. Six Wikimedia Evidence rows now resolve against that one assessment,
+both Stack Exchange scopes stay `NO_APPLICABLE_ASSESSMENT`, TED is untouched at
+version 1, and the negative checks went from three to six and still find no leak.
+
+**`scoring.evidence.reliability` is still NULL on all 28 rows.** Six rows resolve
+a number and none stores it, because reliability binds late (ADR-026 Decision 2).
+
+**§15's diagnostic aggregation ran**, its precondition finally true: eight
+single-record aggregations, `q = 0.650` on the six with `reliability` as the
+limiting component, level still 1, the two refused scopes `UNAVAILABLE` with
+`uncertainty_mass` 1.0, profile still `UNCALIBRATED`, nothing persisted. D-03
+blocker 2 moves OPEN to PARTIAL; the other four do not move.
+
+New: `docs/data/docker-diagnostic-aggregation-v1.json`,
+`infrastructure/scripts/report_docker_diagnostic_aggregation.py`.
 
 ## 1.64 — 2026-09-03 (Sprint 1 / Mission 1.36.1)
 
@@ -2282,6 +2306,7 @@ Additionally authoritative:
 - docs/data/docker-commercial-scope-mapping-v1.md (added in 1.62)
 - docs/data/docker-evidence-reliability-review-packet-v1.md (added in 1.63)
 - docs/data/docker-reliability-operator-decisions-v1.md (added in 1.64)
+- docs/data/docker-diagnostic-aggregation-v1.json (added in 1.65)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.
