@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.82
+Version: 1.83
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-04 (Sprint 1 / Mission 1.49)
+Last amended: 2026-09-04 (Sprint 1 / Mission 1.50)
 
 ---
 
@@ -13,6 +13,60 @@ Last amended: 2026-09-04 (Sprint 1 / Mission 1.49)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.83 — 2026-09-04 (Sprint 1 / Mission 1.50)
+
+**`DETERMINISTIC_INFERRED_CLAIM_CONTRACT_READY`** (ADR-037). The minimum additive
+contract for source-attributed OBSERVED inputs, deterministic derivation, and a
+source-independent INFERRED Claim. All four mandatory questions resolved, schema
+necessity BOTH_REQUIRED and fully specified, and no migration created.
+
+The Claim and the Evidence need nothing new. The reasoning has nowhere durable to
+live, and the verdict rests on a measured fact rather than a preference. The
+closest existing structure is claim_interpretation_inputs, one row per run and
+signal, but all twelve rows of its parent claim_interpretation_runs carry a
+populated expires_at about ninety days out and the inputs foreign key is ON
+DELETE CASCADE. When a run expires every input row goes with it, so a Claim would
+outlive the record of how it was derived.
+
+origin_detail keeps one responsibility. It answers where a Claim came from on all
+43 live Claims; a reasoning step answers a different question, and putting both
+there is one free-text field answering two independent questions.
+
+Evidence attaches directly, on existing architectural intent: the epistemic
+semantics already say an INFERRED claim carries the Signals it reasoned from as
+Evidence. No Claim-to-Claim relation is required. Attachment and derivation
+provenance are both required and neither substitutes for the other.
+
+Derivation provenance binds to the ClaimRevision, with one rule and many
+evaluations, because one prose rationale cannot explain both why one source
+supports and why another contradicts. Its idempotency key deliberately differs
+from Evidence's: Evidence must not duplicate on a version bump, and a derivation
+record must be distinct per rule version.
+
+Threshold provenance is not proposition identity, and never changes entailment.
+Preregistration is defined against retrieval rather than publication, and the
+rule states that it cannot exclude human foreknowledge.
+
+interpretation_confidence is not a gap. Its documented meaning is confidence that
+the wording faithfully states what the Signals showed, which for a deterministic
+threshold Claim is confidence in the semantic-equivalence mapping rather than in
+the arithmetic. There is no derivation_confidence field and there must not be
+one.
+
+The evaluator belongs in a new package that was not created, because hosting it
+in the interpreters would require weakening validate_claims.py.
+
+Purely additive. 43 Claims, 44 revisions and 57 Evidence untouched. Zero requests
+of any kind, zero model calls, zero embeddings, seventeen counters unchanged,
+zero INFERRED Claims and zero migrations.
+
+New: `docs/architecture/adr/ADR-037-deterministic-inferred-claim-contract.md`,
+`docs/data/deterministic-inferred-claim-contract-v1.json` and `.md`, one script
+under `infrastructure/scripts/`, and tests in `claim-model` and
+`evidence-aggregation`.
+
+Report: `docs/architecture/mission-1.50-report.md`.
 
 ## 1.82 — 2026-09-04 (Sprint 1 / Mission 1.49)
 
@@ -2954,6 +3008,7 @@ Additionally authoritative:
 - docs/data/cross-apparatus-convergence-feasibility-v1.md (added in 1.80)
 - docs/data/falsifiable-evidence-apparatus-requirements-v1.md (added in 1.81)
 - docs/data/source-independent-claim-semantics-v1.md (added in 1.82)
+- docs/data/deterministic-inferred-claim-contract-v1.md (added in 1.83)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.
