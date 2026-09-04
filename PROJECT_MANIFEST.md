@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.72
+Version: 1.74
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-04 (Sprint 1 / Mission 1.42a)
+Last amended: 2026-09-04 (Sprint 1 / Mission 1.42.1)
 
 ---
 
@@ -13,6 +13,66 @@ Last amended: 2026-09-04 (Sprint 1 / Mission 1.42a)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.74 — 2026-09-04 (Sprint 1 / Mission 1.42.1 close-out)
+
+**`SECOND_PILOT_OPERATOR_RELIABILITY_DECISION_PERSISTED`.** The operator typed
+the confirmation. ReliabilityAssessments 2 → **3**, basis rows 6 → **10**, and
+thirteen other counters unchanged.
+
+Assessment `d1afa4be` v1, `0.55`, `HUMAN_REVIEW`, `thibchm`, under
+`human-reliability-assessment-rubric@1.0.0` — the first assessment that records
+which procedure produced it. Both historical assessments keep NULL provenance and
+neither is superseded.
+
+All six convergent Evidence rows resolve, and `scoring.evidence.reliability` is
+still NULL on all 39: reliability binds late. Nine leak checks, zero leaks.
+
+**Both real multi-Evidence Claims became scorable, 0 → 2**, and `max(members)`
+received two real items for the first time — one support group of kind UNKNOWN
+with two members, because DISJOINT membership is not independence. Zero
+independence groups created.
+
+The result is `IDENTICAL_TO_RELIABILITY_PASS_THROUGH` on both Claims, which is
+not a failure: the mechanism ran, and the corpus gives it nothing to disagree
+about. `q = 0.55` limited by reliability, masses 0.55/0/0/0.45, EvidenceScore
+55.0, level 1 blocked on established independence.
+
+`REFERENCE_PROFILE_V1` remains `UNCALIBRATED`. D-03 blocker 2 → PARTIAL; the
+other four unchanged.
+
+Report: `docs/architecture/mission-1.42.1-report.md`.
+
+## 1.73 — 2026-09-04 (Sprint 1 / Mission 1.42.1)
+
+**`OPERATOR_CONFIRMATION_REQUIRED`**, reached with everything else complete.
+Migration 0032 adds `review_rubric_id` and `review_rubric_version`, both
+nullable; the operator's completed review is frozen as an artifact that conforms
+to the rubric it names; and the dry run validates at version 1, `HUMAN_REVIEW`,
+`thibchm`, `0.55`, `human-reliability-assessment-rubric@1.0.0`, four
+document-backed basis rows.
+
+**0 assessments persisted.** A brief can supply a reviewer's values and cannot
+supply their keystroke, and piping the confirmation would produce a row whose
+`reviewed_by` names a person who did not type it.
+
+The scope was not narrowed to the second pilot: it carries no classification
+division and no currency, so one judgement binds six Evidence rows across four
+Claims, divisions 90 and 92, EUR and SEK.
+
+Nothing was backfilled — both historical assessments read NULL, which is true
+rather than missing — and the basis table was considered and rejected as the
+place for rubric provenance.
+
+Counters unchanged: ReliabilityAssessments 2, basis rows 6, and
+`scoring.evidence.reliability` NULL on all 39 rows.
+
+New: `infrastructure/db/migrations/0032_reliability_review_rubric_provenance.sql`,
+`docs/data/second-pilot-convergent-operator-reliability-review-v1.json` and
+`.md`, `docs/data/second-pilot-convergent-reliability-resolution-v1.json`, and
+two scripts under `infrastructure/scripts/`.
+
+Report: `docs/architecture/mission-1.42.1-report.md`.
 
 ## 1.72 — 2026-09-04 (Sprint 1 / Mission 1.42a)
 
@@ -2534,6 +2594,7 @@ Additionally authoritative:
 - docs/data/second-pilot-ted-category-selection-v1.json (added in 1.69)
 - docs/data/second-pilot-convergent-reliability-review-packet-v1.md (added in 1.71)
 - docs/data/human-reliability-assessment-rubric-v1.md (added in 1.72)
+- docs/data/second-pilot-convergent-operator-reliability-review-v1.md (added in 1.73)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

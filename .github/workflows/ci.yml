@@ -249,6 +249,12 @@ jobs:
       # an empty deployment changes nothing about its output.
       - name: Human reliability assessment rubric is in sync
         run: uv run python infrastructure/scripts/render_reliability_rubric.py --check
+      # Mission 1.42.1 §3. The completed operator review is AUTHORED, so this
+      # checks it conforms to the rubric it names -- states are states, the gate
+      # is a gate, the basis is document-backed -- and renders the readable half.
+      # It never judges the judgement, and it reads no database.
+      - name: Operator reliability review conforms to its rubric
+        run: uv run python infrastructure/scripts/render_operator_reliability_review.py --check
 
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.

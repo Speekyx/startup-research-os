@@ -64,7 +64,8 @@ ROWS = """
 
 ASSESSMENTS = """
     SELECT id, version, source_id, resource_id, record_kind_id, claim_type,
-           proposition_kind, reliability, origin, reviewed_by, stated_limitation
+           proposition_kind, reliability, origin, reviewed_by, stated_limitation,
+           review_rubric_id, review_rubric_version
       FROM epistemic.reliability_assessments
      WHERE superseded_at IS NULL
      ORDER BY source_id, proposition_kind
@@ -184,6 +185,8 @@ def main() -> int:
                 for b in a["_basis"]
             ),
             calibration_dataset_ref=None,
+            review_rubric_id=a["review_rubric_id"],
+            review_rubric_version=a["review_rubric_version"],
         )
         for a in assessments_raw
     ]
@@ -340,6 +343,11 @@ def main() -> int:
                 "origin": a["origin"],
                 "reviewed_by": a["reviewed_by"],
                 "reliability": float(a["reliability"]),
+                "review_rubric": (
+                    f"{a['review_rubric_id']}@{a['review_rubric_version']}"
+                    if a["review_rubric_id"]
+                    else None
+                ),
                 "is_the_scope_under_review": a["proposition_kind"] == CONVERGENT_KIND,
                 "basis_row_count": len(a["_basis"]),
             }
@@ -395,6 +403,23 @@ def main() -> int:
     }
 
     rendered = json.dumps(document, indent=2, ensure_ascii=False) + "\n"
+
+    # Mission 1.42.1. A PREPARATION packet records the question AS IT STOOD when
+    # it was put to a reviewer. Once the reviewer has answered, the live state is
+    # no longer what this file is for: regenerating it would turn the question
+    # into a stale copy of the answer -- which now lives in
+    # `second-pilot-convergent-reliability-resolution-v1.json` -- and would
+    # quietly rewrite the record of what the operator was actually asked. The
+    # Mission 1.36 Docker packet was frozen the same way once Mission 1.36.1
+    # persisted a value against one of its scopes.
+    answered = [e for e in resolutions if e["outcome"] != "NO_APPLICABLE_ASSESSMENT"]
+    if answered and OUT.exists():
+        print(
+            f"FROZEN   {OUT.name} is a preparation record and its question has been "
+            "answered. See second-pilot-convergent-reliability-resolution-v1.json "
+            "for what the decision produced."
+        )
+        return 0
 
     if args.check:
         if not OUT.exists():

@@ -185,9 +185,19 @@ class ReliabilityIsAnInputNotALabel(unittest.TestCase):
         self.assertEqual(set(counts), {"reliability"})
         self.assertEqual(sum(counts.values()), audit()["totals"]["claims_with_scorable_evidence"])
 
-    def test_the_assessments_themselves_were_not_touched(self) -> None:
-        """§33. Two, and no third."""
-        self.assertEqual(audit()["totals"]["current_reliability_assessments"], 2)
+    def test_reliability_is_consumed_as_an_input_and_never_refitted(self) -> None:
+        """§33. The property, not the count.
+
+        This pinned two assessments, and Mission 1.42.1 legitimately reviewed a
+        third scope. What Mission 1.37 established does not depend on how many
+        exist: aggregation calibration CONSUMES reviewed reliability and may not
+        refit it, so every distinct support strength is a value a named person
+        decided, and the profile stays UNCALIBRATED however many there are.
+        """
+        totals = audit()["totals"]
+        self.assertGreaterEqual(totals["current_reliability_assessments"], 2)
+        self.assertEqual(audit()["profile"]["status"], "UNCALIBRATED")
+        self.assertEqual(audit()["reference_target_tables_present"], [])
 
 
 class TheDatasetContract(unittest.TestCase):
@@ -332,10 +342,23 @@ class TheFeasibilityMeasurement(unittest.TestCase):
         ):
             self.assertEqual(coverage[dimension], 0, dimension)
 
-    def test_the_target_variable_has_two_values_and_both_are_reliability_values(self) -> None:
+    def test_every_target_value_is_a_reviewed_reliability_value(self) -> None:
+        """The property, not the count.
+
+        This pinned `{"0.5", "0.65"}` until Mission 1.42.1 reviewed a third
+        scope and made it `{"0.5", "0.55", "0.65"}` -- **a count that can
+        legitimately grow is deployment state** (`testing-strategy.md` §68).
+        What Mission 1.37 actually established survives every such review: the
+        target variable is REVIEWED RELIABILITY and nothing else, because
+        reliability is the limiting component on every scorable claim, so
+        `min()` returns it unchanged. A fourth reviewed scope will add a fourth
+        value and change none of that.
+        """
         strengths = audit()["distinct_support_strengths"]
-        self.assertEqual(len(strengths), 2)
-        self.assertEqual(set(strengths), {"0.5", "0.65"})
+        self.assertTrue(strengths)
+        limiting = audit()["limiting_component_counts"]
+        self.assertEqual(set(limiting), {"reliability"})
+        self.assertEqual(sum(strengths.values()), limiting["reliability"])
 
     def test_no_reference_label_table_exists(self) -> None:
         self.assertEqual(audit()["reference_target_tables_present"], [])

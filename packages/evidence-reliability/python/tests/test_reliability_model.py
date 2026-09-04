@@ -533,6 +533,12 @@ class TestPrecedenceAndBinding(unittest.TestCase):
                 "assessment_key",
                 "origin",
                 "reliability",
+                # Mission 1.42.1. WHICH review procedure produced the number is
+                # part of reconstructing it, so the binding names it. Null for
+                # assessments made before a rubric existed, which is true rather
+                # than missing.
+                "review_rubric_id",
+                "review_rubric_version",
                 "reviewed_at",
                 "reviewed_by",
                 "version",

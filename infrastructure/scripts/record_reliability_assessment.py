@@ -289,6 +289,20 @@ def _build(review: dict[str, Any]) -> ReliabilityAssessment:
     )
 
     origin = ReliabilityAssessmentOrigin(str(review.get("origin", "HUMAN_REVIEW")))
+
+    # Which review PROCEDURE produced the judgement (Mission 1.42.1). Optional,
+    # because a review made without a rubric is a real thing and NULL is the
+    # honest record of it -- but never half-supplied, and never defaulted to the
+    # current rubric, which would claim a procedure the reviewer did not follow.
+    rubric = review.get("review_rubric") or {}
+    rubric_id = rubric.get("id")
+    rubric_version = rubric.get("version")
+    if (rubric_id is None) != (rubric_version is None):
+        raise ValueError(
+            "review_rubric needs both `id` and `version` or neither. An id with no "
+            "version names a moving target, and a version with no id names nothing"
+        )
+
     return ReliabilityAssessment(
         id=str(uuid.uuid4()),
         scope=scope,
@@ -301,6 +315,8 @@ def _build(review: dict[str, Any]) -> ReliabilityAssessment:
         reviewed_at=datetime.now(UTC),
         basis=basis,
         calibration_dataset_ref=review.get("calibration_dataset_ref"),
+        review_rubric_id=rubric_id,
+        review_rubric_version=rubric_version,
     )
 
 
@@ -339,8 +355,9 @@ def _persist(conn: Any, assessment: ReliabilityAssessment, version: int, superse
         """INSERT INTO epistemic.reliability_assessments
                (id, assessment_key, version, source_id, resource_id, record_kind_registry,
                 record_kind_id, claim_type, proposition_kind, reliability, origin,
-                calibration_dataset_ref, rationale, stated_limitation, reviewed_by, reviewed_at)
-           VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
+                calibration_dataset_ref, rationale, stated_limitation, reviewed_by, reviewed_at,
+                review_rubric_id, review_rubric_version)
+           VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
         (
             assessment.id,
             assessment.key,
@@ -358,6 +375,8 @@ def _persist(conn: Any, assessment: ReliabilityAssessment, version: int, superse
             assessment.stated_limitation,
             assessment.reviewed_by,
             assessment.reviewed_at,
+            assessment.review_rubric_id,
+            assessment.review_rubric_version,
         ),
     )
     for item in assessment.basis:
@@ -426,6 +445,12 @@ def main() -> int:
         )
         print(f"  reviewed_by         {assessment.reviewed_by}")
         print(f"  reliability         {assessment.reliability}")
+        rubric = (
+            f"{assessment.review_rubric_id}@{assessment.review_rubric_version}"
+            if assessment.review_rubric_id
+            else "none (this review records no rubric)"
+        )
+        print(f"  review rubric       {rubric}")
         print(f"\n  rationale\n    {assessment.rationale}")
         print(f"\n  stated_limitation\n    {assessment.stated_limitation}")
         print(
