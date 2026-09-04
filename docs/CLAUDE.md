@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.67
-Last amended: 2026-09-03 (Sprint 1 / Mission 1.37)
+Version: 1.68
+Last amended: 2026-09-03 (Sprint 1 / Mission 1.38)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.68 | 2026-09-03 | **MULTI_EVIDENCE_CLAIM_ARCHITECTURE_GAP: convergence is ONE proposition fact away, and that fact is the one that says WHAT WAS MEASURED.** Mission 1.37 found the symptom -- one Evidence per Claim -- and this is the cause. **The persistence layer already supports N Evidence on one Claim**: `_persist_one` looks a draft up by `proposition_key` and attaches evidence to the claim it finds, and the aggregation framework's own §1 asks *given several Evidence records bearing on one Claim*. **The interpreter can never produce two drafts with the same key**: all seven templates put `source_id` in their facts PLUS the measurement's own identity -- `content_id`, `metric_id`, `community_tag`, `term`, `notice_ids` -- plus the period labels. So two Signals converge only if they are the SAME measurement, which §13 forbids. **Measured: 28 Claims, 28 distinct keys, closest pairs differ by EXACTLY ONE fact, and in twelve pairs that fact is `content_id`** -- Docker, Podman and Kubernetes on the same day, which is exactly what removing the field would merge. **HALF THE BEHAVIOUR IS CORRECT AND MUST NOT BE REPAIRED**: for an OBSERVED claim attribution IS the claim, so *Wikimedia counted X* and *Stack Exchange published Y* are two propositions and deleting `source_id` is not the fix. **Six candidates, and the pattern is the finding**: the two that pass taxonomy and governance (TED CPV, a non-developer Stack Exchange tag) fail on the architecture; the two that pass the architecture vacuously fail on taxonomy (Wikimedia articles, GDELT terms); the best domain diversity (Steam, App Store, Google Play, Product Hunt) is BLOCKED AT THE ELIGIBILITY GATE and §4 is a hard stop. **Only four of 29 sources are eligible, resource-ready and collector-implemented.** Identity was NOT weakened to avoid the outcome: the concrete convergence that should work -- two DISJOINT TED cohorts in one division -- needs `notice_ids` and `classification_codes` removed, and §8 forbids that. 0 acquisitions, 0 model calls, 0 embeddings, every counter unchanged, audit byte-identical |
 | 1.67 | 2026-09-03 | **CALIBRATION_STRATEGY_READY_REFERENCE_DATA_MISSING: the aggregation layer has never aggregated.** Measured against the live database, not quoted: **28 Claims, 28 Evidence rows, and the distinct evidence-count-per-claim is `[1]`**. So saturation has never combined two groups, independence collapse has never collapsed anything, `max(members)` has never had more than one member, contradiction accumulation has never run, and three of the four masses have only ever taken their `c = 0` values. **`min()` is currently indistinguishable from `return reliability`**, because relevance, directness and extraction confidence are 1.0 on every row and every Claim is EVERGREEN. **THE TARGET VARIABLE HAS TWO VALUES AND BOTH ARE REVIEWED RELIABILITY VALUES** (0.5 x1, 0.65 x18), `reliability` limits 19 of 19 scorable claims, and the leakage rule yields **2 groups among 19 units**, which cannot be split at all -- so the §29 echo hazard is not a risk here, it is the entire dataset. **THE MISSION 1.1 PLAN PROPOSES THE WRONG TARGET, and correcting it is the substantive finding**: its §5 asks *do claims scoring 70-80 resolve favourably more often* with a *Brier-style summary*, which is an OUTCOME-RESOLUTION target measuring the state of the WORLD, against a framework whose §1 says *Not a truth estimator ... every quantity describes the state of the evidence*. The plan states the counter-argument in the same section and keeps the metric anyway. **A SECOND GAP RESTRICTS RATHER THAN BLOCKS**: nothing anchors the ABSOLUTE scale, so calibration targets the ORDINAL construct -- which pair of evidence sets is better supported -- and absolute level is out of scope until the framework supplies an anchor. **Baseline B-2, the reliability pass-through, is the one that decides whether any of this is worth doing**, and today it is numerically identical to the full aggregator on 19 of 19. `TEMPORAL_CALIBRATION_DATA_MISSING` (0 temporal Claims, 0 claim features), `SAMPLE_REQUIREMENT_NOT_YET_QUANTIFIED`, and **3 of 14 gate conditions are recorded as BLOCKERS rather than given invented numbers**. 0 parameters changed, 0 profiles calibrated, 0 model calls, 0 acquisitions, D-03 unchanged |
 | 1.66 | 2026-09-03 | **DOCKER_RELIABILITY_PARTIALLY_REVIEWED: the operator typed the confirmation, and the two counters that moved are the whole story.** ReliabilityAssessments 1 -> **2**, basis rows 4 -> **6**, and **fifteen other counters unchanged**. Six Wikimedia rows now RESOLVE `0.65` against assessment `e2419f13-...` v1, both Stack Exchange scopes stay NO_APPLICABLE_ASSESSMENT, and the TED assessment is untouched at v1 with `superseded_at` NULL, because **a different scope is a different question and not a revision of somebody else's answer**. **`scoring.evidence.reliability` IS STILL NULL ON ALL 28 ROWS** -- six rows resolve a number and not one stores it, because reliability binds LATE (ADR-026 Decision 2), so a score names the assessment and version it used and a stale copy cannot outlive the assessment it came from. **The negative checks went 3 to 6 and still found 0 leaks**, because a second assessment doubles the ways one could leak. **§15's diagnostic ran, and its shape is the argument for calibration**: EIGHT Evidence rows sit on EIGHT distinct Claims, so these are eight SINGLE-RECORD aggregations and reliability resolving does not turn six observations of one article into an aggregation. `q = 0.650` on all six with **`reliability` as the limiting component**, because `q = min(components)` and every other factor is 1.0 -- **the score is a restatement of one human judgement, not a corroboration of it**. Level stayed **1**, blocked by independence and by the MARKET_ACTIVITY gate, neither of which reliability touches; the two refused scopes report `UNAVAILABLE` with `uncertainty_mass` **1.0**. Profile still UNCALIBRATED, **0 scores persisted**, D-03 blocker 2 moves OPEN -> **PARTIAL** and the other four do not move. **A THIRD DEFECT SURFACED, AND ONLY BECAUSE A ROW FINALLY RESOLVED**: the resolution report read `binding.assessment_version`, which is not a field -- unreachable while every binding was None, the same shape as Mission 1.36's invalid basis types. **Code that could not have worked, unnoticed because the path was never taken** |
 | 1.65 | 2026-09-03 | **OPERATOR_CONFIRMATION_REQUIRED: three human decisions carried faithfully, and the one assessment they authorise is NOT persisted.** The operator reviewed all three scopes and decided DIFFERENTLY about them -- **NO** on both Stack Exchange scopes, **0.65 / HUMAN_REVIEW / thibchm** on the Wikimedia one -- which is exactly what a per-scope judgement is for. **A NO IS NOT A NUMBER**: the refusal is recorded as PROSE, because a refusal recorded as data would be a value and the next reader would use it as one; it does not mean 0, 0.5, low reliability or an unreliable source, it means **no human reliability judgement exists**. **The TTY guard fired and was respected** -- *no terminal to confirm on. A reliability assessment is a human decision and this is not a step a pipeline runs* -- because piping the confirmation in would produce a row attributed to a person who did not type it, which is the failure the whole contract exists to prevent, so the mission STOPS and hands the operator the command. **0 assessments, 0 model calls, every one of the seventeen counters verified unchanged** against the live database, as §24 anticipates. **MISSION 1.36 SHIPPED A REAL DEFECT AND THIS MISSION FOUND IT**: the packet's `candidate_basis_rows` carried `basis_type` values that are not members of `ReliabilityBasisType`, so the rows it prepared **could not have recorded an assessment** -- the one thing candidate basis rows are for -- and nothing caught it because the packet is JSON and the enum lives in the contracts package. **D-03 blocker 2 is OPEN, not PARTIAL**: §19 anticipated PARTIAL, which describes the state AFTER confirmation, and reporting it now would be reporting a future. **§15's diagnostic was SKIPPED because it is conditional on a row becoming scorable and none did** -- running it anyway would produce a number computed from nothing, in an artifact later read as a result. No average, no *Docker 65%*, profile still UNCALIBRATED, independence still UNKNOWN with 0 groups |
@@ -314,6 +315,73 @@ positives in the scored split, which this 89-question corpus did not supply: one
 defensible SAME in 40 candidate pairs is a finding about the corpus, not about
 the classifier. **No synthetic positive may substitute** -- a constructed pair
 can test a parser and can never establish semantic accuracy against real data.
+
+### A Claim is isomorphic to its Signal, and that is why nothing aggregates
+
+Added in 1.68 (Mission 1.38, `second-pilot-selection-v1.json`,
+`mission-1.38-report.md`). **`MULTI_EVIDENCE_CLAIM_ARCHITECTURE_GAP`**: no second
+pilot selected, **0 acquisitions**, every canonical counter unchanged.
+
+    persistence:  looks up by proposition_key, attaches evidence  ->  supports N
+    interpreter:  source_id + measurement identity + period labels ->  always 1
+
+- **MISSION 1.37 FOUND THE SYMPTOM; THIS IS THE CAUSE.** One Evidence per Claim
+  is not an accident of the corpus. Every implemented interpretation is a
+  ONE-TO-ONE RESTATEMENT of one Signal, so a Claim is isomorphic to its Signal by
+  construction.
+- **THE STORAGE LAYER IS NOT THE BLOCKER.** `_persist_one` in
+  `claim_repositories.py` looks a draft up by `proposition_key` and, when a claim
+  exists, calls `_persist_evidence` against that claim id. The database, the
+  repository and the aggregation framework are all written for N -- framework §1
+  asks *"Given several Evidence records bearing on one Claim"*.
+- **CONVERGENCE IS ONE FACT AWAY, AND THAT FACT IS THE MEASUREMENT.** All seven
+  templates carry `source_id` plus the measurement's own identity (`content_id`
+  and `audience_class`; `metric_id` and `geography_source_code`; `community_site`
+  and `community_tag`; `term` and `gram_size`; `notice_ids` and
+  `classification_codes`) plus the period labels. Measured over the live corpus:
+  **28 Claims, 28 distinct keys, the closest pairs differ by EXACTLY ONE fact,
+  and in twelve pairs it is `content_id`** -- Docker, Podman and Kubernetes on
+  the same day. Removing it would merge them.
+- **HALF THE BEHAVIOUR IS CORRECT AND MUST NOT BE REPAIRED.** For an OBSERVED
+  claim, **attribution IS the claim** (Mission 1.13.1). *"Wikimedia counted X"*
+  and *"Stack Exchange published Y"* are two different propositions, and merging
+  them across sources would be wrong rather than merely permissive. **Deleting
+  `source_id` is not the fix.**
+- **THE TWO STACK EXCHANGE TEMPLATES HAVE IDENTICAL KEY SHAPES** and differ only
+  in the `proposition` value itself -- two propositions by deliberate design,
+  which is the same fact Mission 1.36 recorded from the reliability side.
+- **IDENTITY WAS NOT WEAKENED TO AVOID THE OUTCOME.** The concrete convergence
+  that should be possible -- two DISJOINT TED notice cohorts in one CPV division
+  and period, each independently establishing that division-X totals differ --
+  needs `notice_ids` AND `classification_codes` removed from the facts. §8
+  forbids that, and doing it while also acquiring would be designing the Claim
+  after seeing which records would conveniently merge.
+- **ONLY FOUR OF 29 SOURCES ARE COLLECTABLE**: `gdelt`, `stack-exchange`,
+  `ted-eu`, `wikimedia-pageviews`. Twenty-two are blocked at the eligibility
+  gate, **including every consumer, gaming, creator and app-store route** a
+  domain-diversity preference would reach for. Governance is a hard stop: no
+  scraping workaround, no unofficial mirror, no anti-bot circumvention.
+- **THE CANDIDATE PATTERN IS THE FINDING.** The two candidates that pass taxonomy
+  and governance fail on the architecture. The two that pass the architecture
+  check fail on taxonomy -- Wikipedia categories are editorial and excluded by
+  name, and a term is not a category (Mission 1.35). The candidate with the best
+  diversity is governance-blocked. A second developer tool is refused by §1 and
+  §6: it is already collected and contributes nothing.
+- **A CPV DIVISION MAY NOT BE NAMED FROM MEMORY.** Mission 1.33 recorded that the
+  collector deliberately expands no CPV code into a label, so selecting a
+  division for its DOMAIN requires retrieving the official CPV table first.
+
+**Next is the narrowest proposition-identity repair, before any acquisition.** It
+must decide whether a bounded existence-or-contrast proposition over a
+source-native class is a legitimate `OBSERVED` claim or needs the `INFERRED`
+layer this contract records as deliberately unbuilt; which identity fields may be
+omitted **without letting unrelated observations collapse**, as a rule rather
+than per template; how two Evidence rows over an OVERLAPPING population are
+marked, given that a second measurement over one corpus is not a second finding
+(Mission 1.32); and whether the convergence rule can stay deterministic and
+source-bounded, since embeddings, similarity and model equivalence are forbidden
+for it. **Do not return to Docker, and do not re-run the pilot selection until
+the contract exists** -- the matrix would come back identical.
 
 ### The aggregation layer has never aggregated, and that is the calibration blocker
 

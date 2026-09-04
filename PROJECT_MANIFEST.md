@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.66
+Version: 1.67
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-03 (Sprint 1 / Mission 1.37)
+Last amended: 2026-09-03 (Sprint 1 / Mission 1.38)
 
 ---
 
@@ -13,6 +13,35 @@ Last amended: 2026-09-03 (Sprint 1 / Mission 1.37)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.67 — 2026-09-03 (Sprint 1 / Mission 1.38)
+
+**`MULTI_EVIDENCE_CLAIM_ARCHITECTURE_GAP`.** No second pilot selected, no
+acquisition, every canonical counter unchanged, and the calibration feasibility
+audit byte-identical before and after.
+
+**Mission 1.37 found the symptom, this found the cause.** One Evidence per Claim
+is not an accident of the corpus: every implemented interpretation is a
+one-to-one restatement of one Signal. The persistence layer already supports N
+Evidence on one Claim, and the aggregation framework is written for N; only the
+production path cannot reach it.
+
+**Convergence is one proposition fact away, and that fact is the measurement.**
+All seven templates carry `source_id` plus the measurement identity plus the
+period labels. Measured: 28 Claims, 28 distinct keys, closest pairs differ by
+exactly one fact, and in twelve pairs it is `content_id` — Docker, Podman and
+Kubernetes on the same day.
+
+**Half the behaviour is correct and must not be repaired**: for an OBSERVED
+claim, attribution is the claim, so deleting `source_id` is not the fix.
+
+Six candidates evaluated. The two that pass taxonomy and governance fail on the
+architecture; the two that pass the architecture fail on taxonomy; the best
+domain diversity is blocked at the eligibility gate, where 22 of 29 sources sit.
+
+New: `docs/data/second-pilot-selection-v1.json`.
+
+Report: `docs/architecture/mission-1.38-report.md`.
 
 ## 1.66 — 2026-09-03 (Sprint 1 / Mission 1.37)
 
@@ -2338,6 +2367,7 @@ Additionally authoritative:
 - docs/data/docker-diagnostic-aggregation-v1.json (added in 1.65)
 - docs/data/evidence-aggregation-calibration-strategy-v1.md (added in 1.66)
 - docs/data/calibration-reference-dataset-schema-v1.json (added in 1.66)
+- docs/data/second-pilot-selection-v1.json (added in 1.67)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

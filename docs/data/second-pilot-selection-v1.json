@@ -1,0 +1,173 @@
+{
+  "$comment": "Mission 1.38 §5, §34. The second-pilot candidate matrix, and the reason no acquisition followed it. §34 requires this artifact to be frozen BEFORE the first research acquisition for a chosen pilot; no acquisition happened, because every candidate fails the same requirement for the same reason and the reason is not source-side. Ordinal reasoning throughout: §3 forbids a numeric candidate score, and there is none here.",
+  "artifact_version": "second-pilot-selection@1.0.0",
+  "generated_by": "mission-1.38",
+  "outcome": "MULTI_EVIDENCE_CLAIM_ARCHITECTURE_GAP",
+  "selected_pilot": null,
+  "acquisition_performed": false,
+
+  "why_no_selection_was_frozen": "A selection is frozen so acquisition can be held to it. Acquisition would have been pointless: the mission's load-bearing requirement (§8) is one Claim with two or more Evidence rows, reached because two Signals interpret to the SAME proposition_key, and no source can produce that under the current interpreter. The matrix below is still recorded in full, because which candidates exist and why each is blocked is the input the repair mission needs.",
+
+  "governance_state_read_at_selection": {
+    "read_from": "sros-source --use-profile local-private-research-v1 readiness, against the live catalog",
+    "note": "§4 and §31 forbid reusing historical verdicts. This is the current state, not a quotation.",
+    "eligible_resource_ready_and_collector_implemented": [
+      "gdelt",
+      "stack-exchange",
+      "ted-eu",
+      "wikimedia-pageviews"
+    ],
+    "eligible_but_no_authorised_resource_and_no_collector": ["eurostat", "fred"],
+    "blocked_at_the_eligibility_gate": [
+      "apple-app-store", "bluesky", "discord", "github", "google-play", "google-trends",
+      "hacker-news", "huggingface", "meta-instagram", "npm-registry", "openalex",
+      "pinterest", "product-hunt", "pypi", "reddit", "spotify", "steam", "tiktok",
+      "twitch", "usaspending", "x-twitter", "youtube"
+    ],
+    "consequence": "Every consumer, gaming, creator and app-store route §33 would prefer is blocked at the gate. The collectable universe for a second pilot is exactly four sources."
+  },
+
+  "candidates": [
+    {
+      "candidate": "A TED-EU CPV division other than 90",
+      "domain": "public procurement of a non-developer category",
+      "subject_scope": "CATEGORY",
+      "authoritative_taxonomy": "Common Procurement Vocabulary (CPV), an official EU classification with published codes",
+      "canonical_identifier": "ted-eu:CPV-division:<NN>, the shape the existing packet already uses",
+      "available_source_families": ["public_procurement"],
+      "multi_evidence_claim_path": "BLOCKED. `source_reported_procurement_value_contrast` puts `notice_ids` AND `classification_codes` in its proposition facts, so two disjoint notice cohorts in one division are two propositions. Convergence would require dropping both, which is the identity weakening §8 forbids.",
+      "commercial_evidence_path": "MARKET_ACTIVITY, BUYER_OR_BUDGET_EXISTENCE and ECONOMIC_VALUE, already mapped and already demonstrated on division 90",
+      "governance_status": "ELIGIBLE, resource-ready, collector implemented, under local-private-research-v1",
+      "collector_status": "IMPLEMENTED, ted-search-api@1.1.0",
+      "calibration_diversity_contribution": "a second CATEGORY subject and a second reliability scope, but the same measurement family and the same source",
+      "primary_limitation": "The repository deliberately expands no CPV code into a label (Mission 1.33), so selecting a division for its DOMAIN would require first retrieving the official CPV table. Choosing one without that retrieval would mean supplying the label from memory, which is exactly what the collector refuses to do.",
+      "verdict": "NO_MULTI_EVIDENCE_PATH",
+      "note": "The strongest candidate on taxonomy and on commercial evidence, and §32 explicitly permits it. It fails only on the requirement this mission exists for."
+    },
+    {
+      "candidate": "a non-developer Stack Exchange site and tag, for example a board-games or photography site",
+      "domain": "consumer hobby / community Q&A",
+      "subject_scope": "PRODUCT or CATEGORY depending on the tag",
+      "authoritative_taxonomy": "the site's own tag vocabulary, source-native and published",
+      "canonical_identifier": "stack-exchange:<site>:tag:<tag>",
+      "available_source_families": ["community_qa"],
+      "multi_evidence_claim_path": "BLOCKED, and instructively. The two implemented signal types produce fact sets with IDENTICAL key shapes -- source_id, community_site, community_tag, period_label_from, period_label_to -- differing only in the `proposition` value itself. They are two propositions by deliberate design (Mission 1.36 established that they share four of five reliability scope fields and differ on proposition kind), so they cannot converge.",
+      "commercial_evidence_path": "PROBLEM_OR_NEED only. Mission 1.32 established that an unaccepted answer maps to no commercial dimension at all, and that finding is about the measurement rather than about Docker.",
+      "governance_status": "ELIGIBLE, resource-ready, collector implemented; CC BY-SA 4.0 with ShareAlike avoided rather than answered",
+      "collector_status": "IMPLEMENTED, stack-exchange-questions",
+      "calibration_diversity_contribution": "genuinely non-developer domain, and a second subject in a source family Docker already uses",
+      "primary_limitation": "Mission 1.18 established that a tag identifies a SUBJECT and never a PROBLEM, and Missions 1.18 and 1.20 closed the deterministic route to repeated-problem evidence. Nothing suggests a different site changes that.",
+      "verdict": "NO_MULTI_EVIDENCE_PATH"
+    },
+    {
+      "candidate": "a consumer, gaming or entertainment Wikipedia article via wikimedia-pageviews",
+      "domain": "consumer / entertainment",
+      "subject_scope": "PRODUCT",
+      "authoritative_taxonomy": "NONE USABLE. Wikipedia categories are editorial and Mission 1.35 excluded them by name; the article title is a stable source-native identifier but is not a classification.",
+      "canonical_identifier": "wikimedia:en.wikipedia.org:<article>",
+      "available_source_families": ["reference_encyclopedia"],
+      "multi_evidence_claim_path": "BLOCKED, and this is where the gap is easiest to see. Twelve pairs of existing claims differ in EXACTLY ONE proposition fact, `content_id`. Two articles on the same platform, same audience class, same period pair and same direction are two propositions -- correctly, because merging them would merge Docker with Podman.",
+      "commercial_evidence_path": "NONE. A request is not a reader, and the dimension mapping is AUDIENCE_OR_USAGE at most. Mission 1.19 wrote that into the record kind's own name.",
+      "governance_status": "ELIGIBLE, resource-ready, collector implemented; CC0 1.0, the least encumbered instrument in the catalog",
+      "collector_status": "IMPLEMENTED, wikimedia-pageviews",
+      "calibration_diversity_contribution": "domain diversity only; the same measurement, the same reliability scope, and the existing assessment would resolve for it",
+      "primary_limitation": "§3 criterion 2 fails outright: no published taxonomy classifies the subject.",
+      "verdict": "WRONG_GRAIN"
+    },
+    {
+      "candidate": "a consumer or entertainment lexical term via GDELT web ngrams",
+      "domain": "news coverage of a consumer topic",
+      "subject_scope": "UNDETERMINED",
+      "authoritative_taxonomy": "NONE. Mission 1.35: a term is not a category -- it has no identifier, no publisher deciding membership and no member list.",
+      "canonical_identifier": "none available",
+      "available_source_families": ["news_corpus"],
+      "multi_evidence_claim_path": "BLOCKED. Both GDELT templates pin term, gram size, language scheme and period labels.",
+      "commercial_evidence_path": "NONE, and deliberately so. Mission 1.28 mapped GDELT lexical frequency to NO Opportunity dimension at all: it measures what media organisations PUBLISHED, which is producer behaviour and not audience behaviour.",
+      "governance_status": "ELIGIBLE, resource-ready, collector implemented",
+      "collector_status": "IMPLEMENTED, gdelt-web-ngram",
+      "calibration_diversity_contribution": "the only source that could contribute a claim mapping to zero dimensions, which is a real diagnostic shape",
+      "primary_limitation": "no taxonomy, no commercial path, and Mission 1.34 already resolved GDELT rows as UNDETERMINED scope because a word names no level of thing",
+      "verdict": "WRONG_GRAIN"
+    },
+    {
+      "candidate": "a consumer product via Steam, Apple App Store, Google Play or Product Hunt",
+      "domain": "gaming and consumer applications, the domain §33 most prefers",
+      "subject_scope": "PRODUCT",
+      "authoritative_taxonomy": "each platform publishes a product identifier and a store category, which would satisfy §3 criterion 2 well",
+      "canonical_identifier": "unavailable, because the source is unreachable under governance",
+      "available_source_families": ["app_marketplace", "game_marketplace"],
+      "multi_evidence_claim_path": "not reached",
+      "commercial_evidence_path": "the best available in principle -- COMPETITIVE_SUPPLY and MARKET_ACTIVITY at true product grain",
+      "governance_status": "BLOCKED AT THE ELIGIBILITY GATE for all four under local-private-research-v1",
+      "collector_status": "none, and none may be built for a source that is not collector-eligible",
+      "calibration_diversity_contribution": "would be the largest of any candidate",
+      "primary_limitation": "§4 is a hard gate. No scraping workaround, no unofficial mirror, no anti-bot circumvention. Mission 1.33 established that Product Hunt's docs prohibit commercial use twice and GitHub's AUP section 7 permits research use only with open-access publication.",
+      "verdict": "GOVERNANCE_BLOCKED"
+    },
+    {
+      "candidate": "a second developer-tooling subject such as Kubernetes or Podman",
+      "domain": "developer tooling, the same as Docker",
+      "subject_scope": "PRODUCT",
+      "authoritative_taxonomy": "none, for the reasons Mission 1.35 recorded about Docker",
+      "canonical_identifier": "already in the canonical subject registry",
+      "available_source_families": ["reference_encyclopedia", "community_qa"],
+      "multi_evidence_claim_path": "BLOCKED, identically",
+      "commercial_evidence_path": "NONE, identically",
+      "governance_status": "ELIGIBLE",
+      "collector_status": "IMPLEMENTED, and data is already held",
+      "calibration_diversity_contribution": "none. Twelve of the existing claim pairs differ from Docker's only in `content_id`.",
+      "primary_limitation": "§1 and §6 both refuse it: engineering convenience is not information value, and this is the case that proves it -- the data is already collected and contributes nothing.",
+      "verdict": "TOO_SIMILAR_TO_DOCKER"
+    }
+  ],
+
+  "the_blocking_finding": {
+    "summary": "Every candidate fails the multi-Evidence requirement, and none of them fails it for a source-side reason. The blocker is that every implemented interpreter template embeds the measurement identity in its proposition facts, so two Signals converge only if they are the same measurement -- which §13 forbids.",
+    "evidence": {
+      "persistence_supports_convergence": "`_persist_one` in claim_repositories.py looks a draft up by proposition_key and, when a claim exists, calls `_persist_evidence` against that claim id. The database and the repository fully support N Evidence rows on one Claim.",
+      "the_interpreter_never_produces_it": "All seven templates in observed_restatement.py put `source_id` in the facts, plus the measurement's own identity: metric_id and geography, or content_id and audience_class, or community_site and community_tag, or term and gram_size, or notice_ids and classification_codes. Every one also pins the period labels.",
+      "measured": {
+        "claims": 28,
+        "distinct_proposition_keys": 28,
+        "closest_pairs_differ_by": 1,
+        "the_single_differing_field": "content_id",
+        "pairs_differing_only_by_content_id": 12,
+        "note": "Convergence is one field away, and that field is exactly the one that says WHAT was measured. Removing it would merge the Docker claim with the Podman claim."
+      }
+    },
+    "why_this_is_a_gap_and_not_merely_a_design": "The Evidence Aggregation framework's own §1 asks 'Given several Evidence records bearing on one Claim' -- it is written for N. The claim model documents a Claim as the unit evidence ACCUMULATES against. The storage layer supports it. Only the production path cannot reach it.",
+    "why_it_is_also_partly_correct": "For an OBSERVED claim, attribution IS the claim (Mission 1.13.1). 'Wikimedia counted X' and 'Stack Exchange published Y' are two different propositions, and merging them across sources would be wrong rather than merely permissive. So the repair is not to delete source_id.",
+    "a_concrete_convergence_that_should_be_possible": {
+      "case": "two DISJOINT TED notice cohorts in one CPV division and period, each showing a stated-total contrast",
+      "why_they_should_converge": "each independently establishes 'TED published award notices in division X whose stated totals differ', and neither cohort is privileged",
+      "why_they_cannot": "`notice_ids` and `classification_codes` are in the proposition facts, so the cohort membership IS the proposition",
+      "why_this_mission_did_not_fix_it": "§8 forbids weakening identity, and §46 says a MULTI_EVIDENCE_CLAIM_ARCHITECTURE_GAP is repaired in a mission of its own, before more acquisition. Removing two identity fields while also acquiring would be designing the Claim after seeing which records would conveniently merge, which §9 forbids by name."
+    }
+  },
+
+  "what_this_mission_did_not_do": {
+    "acquisition": "none. No RawRecord, NormalizedRecord, Signal, Claim or Evidence was created.",
+    "canonical_subject": "none added. §35's procedure was not invoked because no pilot was selected.",
+    "docker": "untouched. No Docker acquisition, no taxonomy search, no Stack Exchange reliability revisit, no Opportunity revision.",
+    "reliability": "no new assessment. Two, unchanged.",
+    "problem_family": "PARKED. §40's merge route was never considered, and no classifier ran.",
+    "model_calls": 0,
+    "embeddings": 0,
+    "opportunity_score": "none; scoring.scores does not exist",
+    "calibration": "no labels, no splits, no fitted parameters, no CALIBRATED profile"
+  },
+
+  "next_mission": {
+    "recommended": "the narrowest proposition-identity repair, before any further acquisition",
+    "per_section_46": "If MULTI_EVIDENCE_CLAIM_ARCHITECTURE_GAP: repair only the exact proposition identity/convergence gap before more acquisition.",
+    "the_exact_gap": "there is no interpretation kind whose proposition is stated at a level several distinct measurements can each establish. Every implemented template is a one-to-one restatement of one Signal.",
+    "what_the_repair_must_decide": [
+      "whether a bounded EXISTENCE or CONTRAST proposition over a source-native class is a legitimate OBSERVED claim, or whether it requires the INFERRED layer that docs/CLAUDE.md records as deliberately unbuilt",
+      "which identity fields may be omitted from such a proposition WITHOUT letting unrelated observations collapse, stated as a rule rather than per template",
+      "how two Evidence rows over an overlapping population are marked, given that independence stays UNKNOWN and Mission 1.32 established that a second measurement over one corpus is not a second finding",
+      "whether the convergence rule can be deterministic and source-bounded, since §41 forbids embeddings, vector similarity and model equivalence for this decision"
+    ],
+    "candidate_to_carry_forward": "candidate A, a TED CPV division other than 90, which is the only candidate that fails on the architecture alone rather than also on taxonomy, governance or commercial path. Selecting the division still requires retrieving the official CPV table first.",
+    "not_started_by_this_mission": true
+  }
+}
