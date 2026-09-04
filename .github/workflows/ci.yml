@@ -292,6 +292,15 @@ jobs:
       # independent corroboration.
       - name: Source-independent Claim semantics are rendered from their record
         run: uv run python infrastructure/scripts/render_source_independent_claim_semantics.py --check
+      # Mission 1.50 §40. Renders the deterministic inferred Claim contract and
+      # enforces the ADR-037 decisions: exactly one model selected per mandatory
+      # question, threshold provenance never Claim identity, POST_HOC and UNKNOWN
+      # never calibration-eligible, a semantic mismatch never CONTRADICTS, UNKNOWN
+      # never mapped to an EvidenceDirection, no confidence on an exact
+      # entailment, preregistration compared against retrieval rather than
+      # publication with its foreknowledge limit stated, and no migration.
+      - name: Deterministic inferred Claim contract is rendered from its record
+        run: uv run python infrastructure/scripts/render_deterministic_inferred_contract.py --check
 
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
