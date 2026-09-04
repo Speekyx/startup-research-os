@@ -1,0 +1,627 @@
+{
+  "$comment": "Mission 1.37 §36. A preregistered calibration STRATEGY. Nothing here has been executed: no parameter was fitted, no profile became CALIBRATED, no reference label exists. Every classification below was made by reading the current implementation and the governing documents, and the basis is recorded per element rather than asserted collectively. The feasibility result is measured in calibration-feasibility-audit-v1.json against the live database.",
+  "artifact_version": "evidence-aggregation-calibration-strategy@1.0.0",
+  "generated_by": "mission-1.37",
+  "status": "PREREGISTERED_STRATEGY_NOT_EXECUTED",
+  "outcome": "CALIBRATION_STRATEGY_READY_REFERENCE_DATA_MISSING",
+
+  "governs": {
+    "algorithm_version": "1.0.0",
+    "profile_id": "reference-v1",
+    "profile_version": "1.0.0",
+    "profile_status": "UNCALIBRATED",
+    "supersedes": null,
+    "builds_on": "docs/domain/evidence-aggregation-calibration-plan-v1.md",
+    "relationship_to_prior_plan": "The Mission 1.1 plan is not replaced. It is corrected on one point and made executable on several. See `corrections_to_prior_plan`."
+  },
+
+  "corrections_to_prior_plan": [
+    {
+      "id": "C-1",
+      "severity": "TARGET_CONSTRUCT_CONFLICT",
+      "prior_text": "evidence-aggregation-calibration-plan-v1.md §5: 'Do claims scoring 70-80 resolve favourably more often than those scoring 30-40? Reliability diagram plus a Brier-style summary'",
+      "problem": "That is an outcome-resolution target, and it measures the state of the WORLD. evidence-aggregation-framework-v1.md §1 says the framework is 'Not a truth estimator. Nothing here estimates whether the claim is true. Every quantity describes the state of the evidence, which is a different kind of thing from the state of the world.' A calibration curve against resolution fits the aggregator to a construct the framework explicitly disclaims, and a Brier-style summary is a probability metric applied to a quantity the same document says four times is not a probability.",
+      "resolution": "The reference target is the declared construct: evidential support strength given a bounded Claim and its complete eligible Evidence set. Outcome resolution is reclassified as a SEPARATE downstream validation question that belongs to the Opportunity layer, not to Evidence Aggregation.",
+      "note": "The prior plan already contains the counter-argument in its own §5 caution. It kept the metric anyway. This mission resolves the contradiction in favour of the framework."
+    },
+    {
+      "id": "C-2",
+      "severity": "SCALE_ANCHOR_UNDERSPECIFIED",
+      "problem": "Neither evidence-aggregation-framework-v1.md nor scoring-framework-v1.1.md supplies an ABSOLUTE anchor for the score scale. §4.1 of the scoring framework defines a score as 'an assessed magnitude on a defined scale' and fixes the range at 0-100; nothing states what makes 65 correct rather than 55 for a given evidence set. A reviewer asked for an absolute strength has no anchor either, so agreement between reviewer and model would be agreement on an undefined scale.",
+      "resolution": "Calibration targets the ORDINAL construct, which IS defined and IS observable: whether evidence set A supports its claim more strongly than evidence set B supports its claim. Absolute-level calibration is recorded as OUT OF SCOPE until the framework supplies an anchor, and no metric in this strategy claims to validate absolute level.",
+      "note": "This is why the outcome is not CALIBRATION_TARGET_SEMANTICS_UNDERDEFINED: the construct is defined and the ordinal form is observable. What is underdefined is the absolute scale, which restricts the metrics rather than blocking the work."
+    },
+    {
+      "id": "C-3",
+      "severity": "PRIORITY_UNRUNNABLE",
+      "prior_text": "evidence-aggregation-calibration-plan-v1.md §1: 'P-1 and P-2 are the priorities.'",
+      "problem": "P-1 is the half-life. Measured against the live corpus, 0 of 28 Claims are temporally sensitive and 0 carry a claim_feature, so P-1 has no data at all and cannot be the first thing fitted. P-2 is saturation damping, which only manifests across MULTIPLE independent groups; 0 Claims have more than one Evidence row, so P-2 has no data either.",
+      "resolution": "Both remain the most important parameters and neither is currently fittable. The blocking work is corpus shape, not method."
+    }
+  ],
+
+  "construct": {
+    "name": "evidential support strength for a bounded Claim",
+    "definition_source": "docs/domain/evidence-aggregation-framework-v1.md §1",
+    "definition_quote": "Given several Evidence records bearing on one Claim, how strongly does the accumulated evidence support it, how strongly does it contradict it, and how much do we simply not know?",
+    "measures": "the state of the evidence",
+    "does_not_measure": [
+      "the state of the world",
+      "whether the Claim is true",
+      "the probability that the Claim is true",
+      "startup success, revenue, MRR, product-market fit, willingness to pay",
+      "Opportunity quality or Opportunity rank",
+      "how permitted, well-known or reputable a source is"
+    ],
+    "scale_status": "ORDINAL_DEFINED_ABSOLUTE_UNANCHORED",
+    "calibratable_form": "relative ordering of evidence sets by support strength, plus monotonic response to controlled perturbation",
+    "not_calibratable_without_framework_change": "absolute level, i.e. what makes 65 correct rather than 55"
+  },
+
+  "active_formula": {
+    "item_quality": "q_i = min(relevance, directness, reliability, extraction_confidence, freshness)",
+    "freshness_evergreen": "1.0",
+    "freshness_temporal": "2 ** (-age_days / H), and MISSING_TEMPORAL_PARAMETER when H is absent",
+    "group_strength": "max(q_i within an independence group)",
+    "unknown_independence": "all unknown-provenance records for one claim and one direction collapse into ONE group",
+    "saturation": "S = 1 - prod(1 - g_i), computed as -expm1(sum(log1p(-g_i))) over sorted inputs",
+    "masses": {
+      "supported_mass": "s * (1 - c)",
+      "contradicted_mass": "c * (1 - s)",
+      "conflict_mass": "s * c",
+      "uncertainty_mass": "(1 - s) * (1 - c)"
+    },
+    "evidence_score": "100 * supported_mass",
+    "level": "highest level whose own conditions hold; independence gates 2 and 3, observation category gates 4 and 5"
+  },
+
+  "element_inventory": [
+    {
+      "element": "relevance",
+      "classification": "HUMAN_ASSESSED_INPUT",
+      "basis": "framework §4 lists it as an evidence item input; the interpreter sets it per Evidence row and no profile parameter touches it. Calibration consumes it and must not fit it."
+    },
+    {
+      "element": "directness",
+      "classification": "HUMAN_ASSESSED_INPUT",
+      "basis": "as relevance. Whether it earns its place in the required set is prior-plan P-6, which is a question about required_item_fields and not about the value."
+    },
+    {
+      "element": "extraction_confidence",
+      "classification": "HUMAN_ASSESSED_INPUT",
+      "basis": "set by the interpreter and defined as confidence in the READING, not in the world (claim-interpretation contract). Not a calibration parameter."
+    },
+    {
+      "element": "reliability",
+      "classification": "HUMAN_ASSESSED_INPUT",
+      "basis": "ADR-026 and framework §14: a reviewed assessment for a measurement x proposition scope, with origins HUMAN_REVIEW, DOCUMENTED_METHOD, CALIBRATED_EMPIRICALLY. §4 of this mission forbids refitting it. Aggregation calibration CONSUMES reviewed reliability and never rewrites it."
+    },
+    {
+      "element": "freshness",
+      "classification": "DERIVED_VALUE",
+      "basis": "computed from temporality, observed_at, now and H. Not supplied and not stored; its parameter is H."
+    },
+    {
+      "element": "q_i composition set (which five components)",
+      "classification": "EMPIRICALLY_CALIBRATABLE_PARAMETER",
+      "basis": "profile.required_item_fields is a profile field, and the prior plan records it as P-6. Which components are REQUIRED is a profile decision; that a missing required component makes the record non-scorable is structural."
+    },
+    {
+      "element": "min() as the composition rule",
+      "classification": "STRUCTURAL_INVARIANT",
+      "basis": "items.py states the epistemic argument: a weighted average lets a strong dimension pay for a weak one, and the two cases that matters for are exactly the two the system must not get wrong. It is a conservative BOUND chosen so error runs in the recoverable direction. The prior plan §2 calls it 'a candidate for revision' while stating its rationale is 'epistemic rather than empirical'. Classified structural, with the revision question recorded separately as an UNRESOLVED_SEMANTIC_CHOICE rather than as a fitted parameter.",
+      "see_also": "U-1"
+    },
+    {
+      "element": "group_strength = max(members)",
+      "classification": "STRUCTURAL_INVARIANT",
+      "basis": "independence.py: not the sum, because ten copies would overwhelm one original; not the mean, because a duplicate is not counter-evidence. Both alternatives are refuted by meaning, not by data."
+    },
+    {
+      "element": "unknown-independence collapse into one group per direction",
+      "classification": "EMPIRICALLY_CALIBRATABLE_PARAMETER",
+      "basis": "prior-plan P-3. independence.py says in its own words that the rule 'is deliberately strict, it is stated as strict, and it is the kind of parameter calibration can later relax with evidence'. The CONSERVATIVE DIRECTION is structural; the degree is not."
+    },
+    {
+      "element": "saturation S = 1 - prod(1 - g)",
+      "classification": "STRUCTURAL_INVARIANT",
+      "basis": "saturation.py names four required properties: bounded on [0,1], one strong observation matters, more independent evidence helps, marginal gain falls. The form was chosen for its shape, and the module states explicitly that it has no probabilistic derivation."
+    },
+    {
+      "element": "saturation damping / correction",
+      "classification": "EMPIRICALLY_CALIBRATABLE_PARAMETER",
+      "basis": "prior-plan P-2 and framework §16 finding S-1: the score saturates towards 100 and the framework calls that its first-priority calibration target. No damping constant exists today, and framework §16 says adding one now 'would mean choosing its value with no data'."
+    },
+    {
+      "element": "separate support and contradiction aggregation",
+      "classification": "STRUCTURAL_INVARIANT",
+      "basis": "framework §8 and masses.py: s - c cannot distinguish no evidence from overwhelming evidence both ways, and those are the two states the system most needs to tell apart."
+    },
+    {
+      "element": "four-mass decomposition",
+      "classification": "STRUCTURAL_INVARIANT",
+      "basis": "algebraic identity summing to 1 exactly, guarded at runtime. Not fitted, not fittable."
+    },
+    {
+      "element": "flat contradiction penalty",
+      "classification": "NOT_APPLICABLE",
+      "basis": "no such term exists. masses.py states there is no `score -= 20 if contradicted` anywhere; contradiction enters continuously through c. There is no coefficient to fit, and introducing one would be an architectural change rather than a calibration."
+    },
+    {
+      "element": "EvidenceScore = 100 * supported_mass",
+      "classification": "STRUCTURAL_INVARIANT",
+      "basis": "a scale mapping, not a parameter. scoring-framework-v1.1.md §4.1 fixes the 0-100 score scale."
+    },
+    {
+      "element": "repeated_signal_min_groups = 2",
+      "classification": "STRUCTURAL_INVARIANT",
+      "basis": "profile.py raises below 2: 'a threshold of 1 would make a single record a repetition'. Definitional, and enforced in code."
+    },
+    {
+      "element": "multi_source_min_groups = 3",
+      "classification": "EMPIRICALLY_CALIBRATABLE_PARAMETER",
+      "basis": "prior-plan P-4. The definitional floor is 2; that the bar is 3 is a choice. profile.py's own docstring says a calibrated profile may raise it."
+    },
+    {
+      "element": "multi_source_min_families = 2",
+      "classification": "STRUCTURAL_INVARIANT",
+      "basis": "profile.py raises below 2: 'Multi-source requires at least 2 source families by definition'. Whether MORE than 2 should be required is P-5 and is calibratable; the floor is not."
+    },
+    {
+      "element": "levels 4 and 5 requiring an observation category",
+      "classification": "STRUCTURAL_INVARIANT",
+      "basis": "levels.py: no quantity of stated opinion reaches Market Evidence, because accumulating opinions produces more opinion. A semantic gate, not a threshold."
+    },
+    {
+      "element": "levels 4 and 5 requiring established provenance",
+      "classification": "STRUCTURAL_INVARIANT",
+      "basis": "levels.py: 'Market Evidence resting on a record nobody has placed is the popularity-becomes-truth failure wearing a better label.'"
+    },
+    {
+      "element": "level does not fall with contradiction",
+      "classification": "STRUCTURAL_INVARIANT",
+      "basis": "framework §10: a contested claim still has whatever evidence it has. Level describes supporting evidence only."
+    },
+    {
+      "element": "half-life H per claim feature",
+      "classification": "EMPIRICALLY_CALIBRATABLE_PARAMETER",
+      "basis": "prior-plan P-1, framework §9, recency.py. The map is EMPTY on purpose and a temporally sensitive claim with no authorised H fails closed."
+    },
+    {
+      "element": "half-life functional form 2 ** (-age / H)",
+      "classification": "UNRESOLVED_SEMANTIC_CHOICE",
+      "basis": "recency.py argues half-life over LINEAR decay, because linear reaches exactly zero at a boundary somebody has to choose. It does not argue exponential over any other monotone decreasing form, and no data has tested it. Recorded as unresolved rather than structural.",
+      "see_also": "U-2"
+    },
+    {
+      "element": "EVERGREEN freshness = 1.0",
+      "classification": "STRUCTURAL_INVARIANT",
+      "basis": "recency.py: an evergreen claim genuinely has no decay, and this is not a default standing in for a missing value."
+    },
+    {
+      "element": "missing required component -> non-scorable, never 0.0",
+      "classification": "STRUCTURAL_INVARIANT",
+      "basis": "framework §6 and items.py: a zero would enter the mathematics as a MEASURED weakness, and this is an absence of measurement. §21 of this mission restates it."
+    },
+    {
+      "element": "source_count and source_family_count",
+      "classification": "DERIVED_VALUE",
+      "basis": "framework §11 and engine.py: diagnostics only, never multiplied into a score. Diversity stays in the explanation where a reader can weigh it."
+    },
+    {
+      "element": "ALGORITHM_VERSION",
+      "classification": "NOT_APPLICABLE",
+      "basis": "identifies the equations, which calibration does not change. A calibrated profile changes the profile version, never this."
+    }
+  ],
+
+  "unresolved_semantic_choices": [
+    {
+      "id": "U-1",
+      "question": "Is min() the right composition, or a defensible bound that a soft-minimum could improve?",
+      "why_unresolved": "The argument for min() is epistemic (error should run conservative) and the argument against is informational (five components at 0.9 with one at 0.3 score identically to all six at 0.3). Both are true. Data can show whether the discarded gradient carries ordering information; it cannot show which epistemic posture is correct.",
+      "how_it_would_be_settled": "An ablation on a reference set with VARIATION IN THE NON-LIMITING COMPONENTS. The current corpus has none: relevance, directness and extraction_confidence are 1.0 on every row, so min() is currently indistinguishable from `return reliability`.",
+      "changed_in_this_mission": false
+    },
+    {
+      "id": "U-2",
+      "question": "Is exponential half-life the right decay form?",
+      "why_unresolved": "recency.py argues against linear decay only. No alternative monotone form was compared, and no observation has tested any of them.",
+      "changed_in_this_mission": false
+    },
+    {
+      "id": "U-3",
+      "question": "What absolute level does a support strength of 0.65 assert?",
+      "why_unresolved": "See correction C-2. No document supplies an anchor.",
+      "consequence": "Absolute-level calibration is out of scope. Ordinal calibration is not.",
+      "changed_in_this_mission": false
+    }
+  ],
+
+  "calibration_unit": {
+    "name": "ClaimEvidenceSnapshot",
+    "definition": "One Claim revision together with its COMPLETE eligible Evidence set, every component value as aggregation saw it, the reliability binding per row, the independence grouping, the claim temporality, the aggregation output, and exactly one reference judgement.",
+    "rationale": "A scalar score detached from the evidence that produced it cannot be re-derived, cannot be ablated, and cannot be checked for leakage. §6 requires reproducibility, and reproducibility means the unit carries its own preimage.",
+    "completeness_rule": "The evidence set must be COMPLETE for the claim revision. A unit built from a subset would be a unit about a different evidence set, and the reference judgement would be about material the model never saw.",
+    "required_fields": [
+      "unit_id",
+      "workspace_id",
+      "claim_id",
+      "claim_revision",
+      "proposition_key",
+      "proposition_kind",
+      "claim_type",
+      "claim_temporality",
+      "claim_feature",
+      "subject_key",
+      "domain",
+      "evidence_ids",
+      "evidence_snapshot_digest",
+      "per_evidence_components",
+      "reliability_bindings",
+      "independence_groups",
+      "observation_categories",
+      "source_ids",
+      "source_families",
+      "observed_at_per_evidence",
+      "aggregation_profile_id",
+      "aggregation_profile_version",
+      "algorithm_version",
+      "aggregation_output",
+      "reference_target",
+      "split_assignment"
+    ],
+    "forbidden_fields": [
+      "opportunity_score",
+      "opportunity_rank",
+      "predicted_outcome",
+      "startup_success",
+      "revenue",
+      "model_generated_support_estimate"
+    ]
+  },
+
+  "reference_targets": {
+    "recommended": "A_ACCOUNTABLE_HUMAN_ORDINAL_JUDGEMENT",
+    "evaluated": [
+      {
+        "id": "A_ACCOUNTABLE_HUMAN_ORDINAL_JUDGEMENT",
+        "verdict": "RECOMMENDED",
+        "what_is_labelled": "a PAIR of ClaimEvidenceSnapshots, judged as: the first is better supported by its evidence than the second, the second better than the first, or the two are not distinguishable.",
+        "who_provides_it": "named human reviewers, recorded with provenance, following the Mission 1.26 ReferenceOrigin contract",
+        "measures_the_construct": true,
+        "why": "It asks exactly the question framework §1 says aggregation answers, and it asks it in the form the scale supports. A reviewer comparing two evidence sets needs no absolute anchor, and the model's ordering is directly testable against theirs.",
+        "bias_risks": [
+          "reviewers may read the CLAIM's plausibility rather than the EVIDENCE's support, which is the same conflation the framework warns about; the elicitation must present the evidence set as primary and must ask about support rather than about truth",
+          "reviewers may anchor on source prestige, which is exactly the compliance-is-not-reliability error",
+          "presentation order effects; pairs must be shown in randomised order",
+          "reviewer fatigue over long evidence sets"
+        ],
+        "availability": "requires reviewers and elicitation tooling; neither exists",
+        "repeatability": "high; the same pair can be re-judged and agreement measured",
+        "cost": "human time per pair, scaling with evidence-set size",
+        "leakage_risk": "a reviewer who has seen the model's score for a pair is no longer independent; scores must never be shown during elicitation"
+      },
+      {
+        "id": "B_DOCUMENTED_EXTERNAL_OUTCOME",
+        "verdict": "REJECTED_WRONG_CONSTRUCT",
+        "what_is_labelled": "whether a bounded proposition was later borne out by an authoritative observation",
+        "measures_the_construct": false,
+        "why_rejected": "It measures the state of the WORLD. framework §1: 'Not a truth estimator. Nothing here estimates whether the claim is true.' Fitting the aggregator to outcome resolution would make it a truth estimator by the back door, and would license exactly the probability reading the framework forbids in four places. This is the prior plan's §5 target, corrected here as C-1.",
+        "note": "Outcome data is not worthless. It is the right target for a LATER layer that predicts, and for validating the Opportunity layer. It is the wrong target for Evidence Aggregation, and §2 of this mission forbids it unless the framework establishes the measurement relationship. It does not."
+      },
+      {
+        "id": "C_SOURCE_NATIVE_GROUND_TRUTH",
+        "verdict": "REJECTED_DOES_NOT_EXIST",
+        "measures_the_construct": false,
+        "why_rejected": "No registered source publishes a judgement of how strongly a body of evidence supports a proposition. Sources publish observations. Mission 1.20 established the closest analogue -- publisher-declared duplicate relations -- and that answers an identity question, not a support question. All 29 registered sources were reviewed for signal coverage in Mission 1.11 and none carries this."
+      },
+      {
+        "id": "D_MODEL_GENERATED_LABELS",
+        "verdict": "FORBIDDEN",
+        "why_rejected": "§8 and §35 of this mission, and the Mission 1.25 correction: an AI-assisted reference measures agreement between two assistants, which is a real finding and a different claim from accuracy. `Claude says support = 0.8` is not calibration data. A model may prepare material for a reviewer and may never be the reference."
+      },
+      {
+        "id": "E_PROBLEM_FAMILY_LABELS",
+        "verdict": "FORBIDDEN",
+        "why_rejected": "§9 of this mission. SAME_PROBLEM_FAMILY answers a semantic equivalence question about two observations, not a support-strength question about a claim and its evidence. The relation stays PARKED and NOT_AUTHORISED."
+      }
+    ]
+  },
+
+  "reviewer_protocol": {
+    "status": "DESIGNED_NOT_STAFFED",
+    "unit_of_judgement": "an ordered pair of ClaimEvidenceSnapshots",
+    "response_set": ["FIRST_BETTER_SUPPORTED", "SECOND_BETTER_SUPPORTED", "NOT_DISTINGUISHABLE"],
+    "abstention": "NOT_DISTINGUISHABLE is a first-class answer and is never counted as an error against the model. Forcing a preference on a genuinely indistinguishable pair manufactures a label.",
+    "reviewer_count": "NOT_YET_QUANTIFIED",
+    "reviewer_count_basis": "The number follows from the agreement statistic the acceptance gate requires and from the disagreement rate, which is unmeasured because no pair has ever been judged. §8 forbids inventing a count to make the document look complete. A pilot of pairs judged by at least two reviewers is required first, precisely to measure that rate; two is the floor because one reviewer produces a model of that reviewer (prior plan §4.1), not a justified target.",
+    "blinding": "reviewers see the Claim statement and the complete evidence set. They never see the Evidence Score, any mass, the reliability values, the profile, or another reviewer's answer.",
+    "disagreement_representation": "retained per unit, never averaged away. A pair two qualified reviewers order differently is evidence that the pair is near-indistinguishable, which is information about the pair.",
+    "adjudication": "documented procedure required before use; majority vote is refused as the default because disagreement is often information about the pair rather than an error by one reviewer.",
+    "provenance": "every label carries a ReferenceOrigin (Mission 1.25 contract). human_ground_truth_established is true only when EVERY label in the set is human.",
+    "label_revision": "append-only. A revised label creates a new dataset version and never overwrites the label a historical result was scored against."
+  },
+
+  "leakage_model": {
+    "why": "Two ClaimEvidenceSnapshots can differ in every id and still be the same measurement pattern. Wikimedia pageviews for the Docker article on day N and day N+1 share a source, a resource, a record kind, a proposition kind, a reliability assessment and a subject; splitting them across train and holdout would present memorisation as generalisation.",
+    "grouping_key_candidates": [
+      {"key": "reliability_scope", "reason": "units sharing a scope share a reliability VALUE, so a fitted parameter could learn that value rather than the aggregation", "verdict": "REQUIRED"},
+      {"key": "proposition_kind", "reason": "units sharing a proposition kind were produced by one interpreter template and share sentence structure", "verdict": "REQUIRED"},
+      {"key": "subject_key", "reason": "units about one subject share the world they describe", "verdict": "REQUIRED"},
+      {"key": "source_id", "reason": "implied by reliability_scope, which starts with source_id", "verdict": "IMPLIED_BY_RELIABILITY_SCOPE"},
+      {"key": "opportunity_id", "reason": "units cited by one Opportunity revision were selected together", "verdict": "REQUIRED_WHERE_PRESENT"},
+      {"key": "time_period", "reason": "adjacent observations of one stream are near-duplicates", "verdict": "REQUIRED_FOR_TEMPORAL_CLAIMS"}
+    ],
+    "composite_rule": "split by the tuple (reliability_scope, proposition_kind, subject_key), with every unit sharing that tuple assigned to exactly one split. A unit may belong to at most one split, enforced rather than conventional.",
+    "feasibility_warning": "Applied to the CURRENT corpus this rule produces 2 groups among 19 scorable units, which cannot be split into development and holdout at all. That is a fact about the corpus, not an argument for weakening the rule."
+  },
+
+  "split_discipline": {
+    "workflow": [
+      "reference dataset version frozen",
+      "split manifest computed and frozen, with a hash",
+      "development split used for fitting and model selection",
+      "parameters frozen and recorded",
+      "holdout evaluated ONCE under the preregistered procedure",
+      "result reported whether flattering or not"
+    ],
+    "holdout_isolation": "structural, following Mission 1.26: development and holdout labels live in SEPARATE FILES, so a development loader cannot reach a holdout label by forgetting to filter. A split column relies on every caller remembering a rule.",
+    "exploratory_split": "if model selection needs repeated evaluation, a third development-evaluation split is declared up front. Repeated evaluation on the holdout is forbidden and one final evaluation is the contract.",
+    "temporal_holdout": {
+      "required_for": "any claim that calibration generalises forward in time, and any fitted half-life",
+      "rule": "fit on units whose observations precede a cut date, evaluate after it. A random shuffle across time is not temporal validation.",
+      "current_status": "UNRUNNABLE. 0 of 28 Claims are temporally sensitive."
+    },
+    "prior_precedent_note": "Mission 1.26's split SIZES and thresholds are not copied. That dataset answered a different question with a different unit; reusing its numbers would be borrowing a justification rather than making one."
+  },
+
+  "metrics": {
+    "permitted": [
+      {"metric": "pairwise ordinal agreement against reviewer judgements", "detects": "the model ordering evidence sets differently from accountable human judgement, which is the construct failing"},
+      {"metric": "rank correlation within a leakage group", "detects": "ordering failure that a global correlation would hide by rewarding between-group separation the grouping already explains"},
+      {"metric": "monotonicity under controlled perturbation", "detects": "a component whose increase decreases the score, or a duplicate that raises it; both are defects rather than miscalibrations"},
+      {"metric": "duplicate robustness", "detects": "independence collapse failing on real lineage rather than on synthetic fixtures"},
+      {"metric": "source-concentration robustness", "detects": "source identity leaking into strength, which framework §11 forbids"},
+      {"metric": "ablation loss per mechanism", "detects": "a mechanism that costs nothing to remove and is therefore not earning its complexity"},
+      {"metric": "coverage and availability rates", "detects": "a parameter change that buys ordering quality by making more records non-scorable"},
+      {"metric": "stability under re-run", "detects": "non-determinism, which framework §13 requires to be absent"}
+    ],
+    "forbidden": [
+      {"metric": "Brier score", "why": "a probability scoring rule. EvidenceScore is not a probability."},
+      {"metric": "reliability diagram / calibration curve against outcome frequency", "why": "requires an event frequency to calibrate against, and asserts the score is a probability of that event. Also the C-1 construct conflict."},
+      {"metric": "log loss", "why": "as Brier."},
+      {"metric": "AUC read as discrimination of truth", "why": "presumes an outcome label, which is the rejected target B."},
+      {"metric": "accuracy against a thresholded score", "why": "invents a decision threshold the framework does not define, then measures against it."}
+    ],
+    "metric_selection_rule": "A metric enters this list only with a stated failure it detects. A metric chosen because it is a standard name detects nothing in particular."
+  },
+
+  "baselines": {
+    "rule": "improvement is defined BEFORE results are seen, and a new profile is never called better merely because its numbers differ.",
+    "required": [
+      {"id": "B-0", "baseline": "REFERENCE_PROFILE_V1 unchanged", "why": "the incumbent. A candidate that does not beat it has not earned a version."},
+      {"id": "B-1", "baseline": "constant output", "why": "defeats any metric that rewards a degenerate answer, the Mission 1.27 lesson."},
+      {"id": "B-2", "baseline": "reliability pass-through: report the single reliability value and ignore every other mechanism", "why": "THE CRITICAL BASELINE. On the current corpus the full aggregator and this baseline are numerically identical on 19 of 19 scorable claims. If a fitted profile cannot beat it, the aggregation layer adds nothing measurable and no calibration should be claimed."},
+      {"id": "B-3", "baseline": "evidence count", "why": "the mentions-equal-confidence failure the whole framework exists to prevent. If counting wins, the model is a mention counter with extra steps."},
+      {"id": "B-4", "baseline": "max q over records, no saturation and no grouping", "why": "isolates what saturation and independence grouping contribute."}
+    ]
+  },
+
+  "temporal_strategy": {
+    "status": "TEMPORAL_CALIBRATION_DATA_MISSING",
+    "measured": {
+      "temporally_sensitive_claims": 0,
+      "claims_carrying_a_claim_feature": 0,
+      "authorised_half_lives": 0
+    },
+    "consequence": "H cannot be fitted, and no universal H and no Docker H may be chosen. The empty half_life_days map stays empty and temporally sensitive claims keep failing closed.",
+    "what_would_permit_fitting": [
+      "Claims declared TEMPORALLY_SENSITIVE with a claim_feature, which requires the interpretation layer to assign one",
+      "the same proposition re-observed at several ages, so decay is separable from between-claim variation",
+      "reference judgements at more than one age for the same claim, so the reviewer's ordering can be compared against the model's decay",
+      "a forward-time holdout the fitting never saw"
+    ],
+    "per_feature_rule": "a claim feature with insufficient data gets NO half-life and continues to report MISSING_TEMPORAL_PARAMETER. Fitting H to a handful of examples and shipping it would defeat the reason the map is empty.",
+    "domain_variation": "whether H varies by domain is unanswerable before any H exists, and is recorded as a question rather than assumed either way."
+  },
+
+  "level_threshold_strategy": {
+    "structural_and_not_fittable": [
+      "repeated_signal_min_groups floor of 2",
+      "multi_source_min_families floor of 2",
+      "levels 4 and 5 requiring an observation category",
+      "levels 4 and 5 requiring established provenance",
+      "level not falling with contradiction"
+    ],
+    "numeric_and_validatable": [
+      "multi_source_min_groups above the floor of 2",
+      "multi_source_min_families above the floor of 2"
+    ],
+    "validation_method": "against reviewer judgements of evidence MATURITY, elicited separately from support strength, because a level and a score answer different questions and one target cannot validate both.",
+    "current_feasibility": "UNRUNNABLE. 0 claims have established independence, 0 carry a market or validation category, and every claim sits at level 0 or 1. No threshold above the structural floor has ever been exercised by real data.",
+    "forbidden": "loosening a level because current data stays at level 1. Mission 1.36.1 recorded that the Wikimedia diagnostic is level 1 and that reliability cannot raise it; that is the gates working."
+  },
+
+  "independence_strategy": {
+    "epistemic_status": "independence is an epistemic property established by tracing lineage, never inferred from difference",
+    "never_independent_by_default": ["different Evidence ids", "different dates", "different source families", "different subjects"],
+    "affects": ["group formation", "saturation input count", "levels 2 and 3", "levels 4 and 5 through the provenance condition"],
+    "calibratable_element": "the STRICTNESS of the unknown-provenance rule (prior-plan P-3), not the direction of it",
+    "prerequisite": "verified lineage, which D-12 blocks. A dataset without traced provenance cannot calibrate the mechanism that depends on provenance.",
+    "measured_today": {"independence_established_claims": 0, "independence_groups": 0},
+    "created_in_this_mission": 0
+  },
+
+  "contradiction_strategy": {
+    "structural": "there is no flat contradiction penalty to calibrate; contradiction enters continuously through c",
+    "what_calibration_must_test": [
+      "support only",
+      "contradiction only",
+      "mixed with asymmetric strength",
+      "genuine conflict, where s and c are both high and the correct reading is contested rather than weak"
+    ],
+    "measured_today": {"claims_with_any_contradiction": 0, "claims_with_non_zero_conflict_mass": 0},
+    "consequence": "the contradiction half of the model has never run on real data. Three of the four masses have only ever taken the values they take when c = 0."
+  },
+
+  "missing_evidence_strategy": {
+    "invariant": "UNAVAILABLE is not a low score. A claim with no applicable reliability assessment reports uncertainty_mass 1.0 and no score at all.",
+    "forbidden_in_calibration": ["mapping UNAVAILABLE to 0", "mapping UNAVAILABLE to 50", "imputing a missing component", "dropping unavailable units silently"],
+    "required": "unavailable units are RETAINED in the dataset and reported as a coverage statistic. A parameter change that raises ordering quality by making more records non-scorable must be visible as such."
+  },
+
+  "profile_versioning": {
+    "rule": "reference-v1@1.0.0 is never mutated into a calibrated profile. A calibrated profile is a NEW versioned object.",
+    "existing_enforcement": "profile.py refuses CALIBRATED without a calibration_dataset_ref, and RETIRED profiles remain runnable-for-reading so historical results stay reproducible.",
+    "required_provenance_on_a_calibrated_profile": [
+      "profile_id",
+      "version",
+      "status",
+      "algorithm_version",
+      "calibration_procedure_version",
+      "calibration_dataset_id",
+      "calibration_dataset_version",
+      "split_manifest_hash",
+      "fitted_parameters_with_uncertainty",
+      "objective_function",
+      "metrics_and_their_values",
+      "development_results",
+      "holdout_results",
+      "baseline_comparison_results",
+      "created_at",
+      "code_revision",
+      "applies_to_scope",
+      "stated_limitations"
+    ],
+    "point_estimate_rule": "every fitted parameter carries a stated uncertainty. A point estimate with no interval is a guess with a decimal point.",
+    "scoping": "applies_to scopes a calibrated profile to where its calibration holds. Claims outside it keep failing closed rather than borrowing a calibration that never covered them."
+  },
+
+  "dataset_immutability": {
+    "rule": "once preregistered, a dataset version is immutable. Corrections create a new version.",
+    "why": "a calibrated score must remain reproducible against the exact dataset revision that produced it. Overwriting a label used by a historical profile makes that profile unverifiable.",
+    "label_history": "append-only, following the ClaimRevision precedent."
+  },
+
+  "acceptance_gate": {
+    "status": "PREREGISTERED_PARTIALLY_QUANTIFIED",
+    "conditions": [
+      {"id": "G-1", "condition": "the reference target semantics are frozen and the ordinal restriction is recorded", "quantified": true},
+      {"id": "G-2", "condition": "a versioned reference dataset exists with per-label provenance and every label human", "quantified": true},
+      {"id": "G-3", "condition": "an inter-reviewer agreement statistic is reported for the pilot", "quantified": false, "blocker": "the acceptable level cannot be set before the disagreement rate is measured"},
+      {"id": "G-4", "condition": "the leakage grouping rule is applied and no group spans two splits", "quantified": true},
+      {"id": "G-5", "condition": "coverage is adequate across the §11 dimensions", "quantified": false, "blocker": "adequacy per dimension depends on the number of fitted parameters, which depends on which parameters a candidate profile moves"},
+      {"id": "G-6", "condition": "parameters are frozen before the holdout is opened, with a recorded hash", "quantified": true},
+      {"id": "G-7", "condition": "the holdout is evaluated exactly once", "quantified": true},
+      {"id": "G-8", "condition": "the candidate beats baseline B-2, the reliability pass-through, by a margin declared in advance", "quantified": false, "blocker": "the margin cannot be set before any ordinal agreement has been measured"},
+      {"id": "G-9", "condition": "the candidate beats B-1 and B-3 outright", "quantified": true},
+      {"id": "G-10", "condition": "every fitted parameter carries an uncertainty interval", "quantified": true},
+      {"id": "G-11", "condition": "bias evaluation complete per prior-plan §6, including the unflattering parts", "quantified": true},
+      {"id": "G-12", "condition": "the synthetic sensitivity harness passes against the candidate", "quantified": true},
+      {"id": "G-13", "condition": "the result is reproducible from repository plus dataset alone", "quantified": true},
+      {"id": "G-14", "condition": "limitations documented, including every coverage dimension the dataset did not reach", "quantified": true}
+    ],
+    "unquantified_conditions_are_blockers": "G-3, G-5 and G-8 cannot be given numbers today without inventing them. §27 and §30 both forbid that, so they are recorded as blockers rather than filled in.",
+    "partial_calibration": "there is no partial state. AggregationProfileStatus has no value for it, on purpose."
+  },
+
+  "sample_size": {
+    "status": "SAMPLE_REQUIREMENT_NOT_YET_QUANTIFIED",
+    "why": "adequacy depends on the number of parameters a candidate moves, the reviewer disagreement rate, the group structure after the leakage rule, the coverage required per dimension and the holdout size. Four of those five are unmeasured because no pair has ever been judged.",
+    "analysis_required_first": [
+      "a reviewer pilot measuring the disagreement rate on real pairs",
+      "a decision about which parameters a first candidate profile moves",
+      "the group count after applying the leakage rule to a real corpus",
+      "a power analysis for the chosen ordinal agreement statistic at the target margin"
+    ],
+    "forbidden": "stating a round number such as 100, 500 or 1000 without that derivation."
+  },
+
+  "echo_hazard_controls": {
+    "hazard": "Mission 1.36.1 demonstrated that when four components are 1.0 and reliability is 0.65, q is 0.65. A dataset dominated by such units would reward a model for reproducing reliability judgements and would call it calibration.",
+    "measured_severity": "TOTAL on the current corpus: reliability is the limiting component on 19 of 19 scorable claims, and the only two distinct support strengths are 0.5 and 0.65, which are exactly the two reviewed reliability values.",
+    "controls": [
+      "baseline B-2 is mandatory: the candidate must beat a pure reliability pass-through",
+      "the dataset must contain units where the limiting component is NOT reliability, and the count is reported per limiting component",
+      "the dataset must contain units where the multi-record mechanisms are active, since a single-record claim exercises no aggregation at all",
+      "correlation between the aggregation output and reliability values is reported as a DIAGNOSTIC and never as evidence of calibration",
+      "a coverage report showing the distribution of limiting components is required before any fitting"
+    ]
+  },
+
+  "feasibility": {
+    "measured_against": "the live database, by infrastructure/scripts/audit_calibration_feasibility.py",
+    "artifact": "docs/data/calibration-feasibility-audit-v1.json",
+    "answer": "NO",
+    "headline": "Every Claim in this deployment has exactly one Evidence row, so the aggregation layer has never aggregated.",
+    "evidence": {
+      "claims": 28,
+      "evidence_rows": 28,
+      "distinct_evidence_counts_per_claim": [1],
+      "claims_with_scorable_evidence": 19,
+      "claims_unavailable": 9,
+      "claims_with_more_than_one_evidence_row": 0,
+      "claims_with_any_contradiction": 0,
+      "claims_with_non_zero_conflict_mass": 0,
+      "claims_with_established_independence": 0,
+      "temporally_sensitive_claims": 0,
+      "claims_with_a_claim_feature": 0,
+      "claims_categorised_market_or_validation": 0,
+      "distinct_proposition_kinds_among_scorable": 2,
+      "distinct_source_ids_among_scorable": 2,
+      "distinct_support_strengths": {"0.5": 1, "0.65": 18},
+      "limiting_component_counts": {"reliability": 19},
+      "reference_target_tables_present": []
+    },
+    "consequences": [
+      "the saturation operator has never combined two groups on real data",
+      "independence collapse has never collapsed anything on real data",
+      "group_strength = max(members) has never had more than one member",
+      "contradiction accumulation has never run, and three of the four masses have only ever taken their c = 0 values",
+      "min() is currently indistinguishable from `return reliability`, because the other four components are 1.0 everywhere",
+      "the target variable has two distinct values and both are reviewed reliability values, so the echo hazard is not a risk here but the entire dataset",
+      "the leakage grouping rule yields 2 groups among 19 scorable units, too few to split at all"
+    ],
+    "note_on_scope_reach": "The Wikimedia assessment resolves for 18 Evidence rows, not the 6 Docker ones. Its scope is a measurement crossed with a proposition kind and carries no subject, so it reaches the Podman and Kubernetes rows on the same measurement. That is the reliability contract working as designed and it is worth stating, because a reader may assume a review performed during a Docker mission is about Docker."
+  },
+
+  "blockers": [
+    {"id": "BL-1", "blocker": "no reference label of any kind exists, and no table could hold one", "blocks": "every metric", "owner": "a reference-set construction mission"},
+    {"id": "BL-2", "blocker": "no Claim has more than one Evidence row, so no aggregation mechanism has real-data exercise", "blocks": "saturation, independence collapse, contradiction, ablation", "owner": "corpus shape, not method"},
+    {"id": "BL-3", "blocker": "no contradicting Evidence exists", "blocks": "contradiction and conflict calibration"},
+    {"id": "BL-4", "blocker": "no temporally sensitive Claim and no claim_feature exists", "blocks": "P-1 half-life entirely"},
+    {"id": "BL-5", "blocker": "no established independence, and D-12 blocks verified lineage", "blocks": "P-3 and levels 2 and 3"},
+    {"id": "BL-6", "blocker": "the absolute score scale has no anchor", "blocks": "absolute-level calibration; ordinal calibration is unaffected", "see": "C-2"},
+    {"id": "BL-7", "blocker": "G-3, G-5 and G-8 cannot be quantified before a reviewer pilot", "blocks": "a complete numeric acceptance gate"},
+    {"id": "BL-8", "blocker": "reviewer elicitation tooling and reviewers do not exist", "blocks": "target A in practice"}
+  ],
+
+  "d03_state_after_this_mission": {
+    "1_reliability_definition_authority": "RESOLVED",
+    "2_reviewed_reliability_for_scopes_in_use": "PARTIAL",
+    "3_calibrated_aggregation_profile": "OPEN",
+    "4_temporal_half_life": "OPEN",
+    "5_evidence_level_thresholds_fitted": "OPEN",
+    "changed_by_this_mission": "none. A strategy is not a calibration."
+  },
+
+  "next_mission": {
+    "recommended": "a reference-set FEASIBILITY mission that first makes multi-record Claims possible, not a labelling mission",
+    "why": "BL-2 is upstream of BL-1. There is nothing with the required shape to label: a reference judgement about a single-record claim tests reliability pass-through and nothing else. Labelling the current corpus would produce a dataset that can only measure the component this mission is forbidden to fit.",
+    "specific_precondition": "two Signals must interpret to the SAME proposition_key, which the architecture permits and no current data does. That is what puts two Evidence rows on one Claim.",
+    "second_pilot": {
+      "required": true,
+      "why": "Docker is one subject, one measurement family and one reliability scope. A second pilot is how the coverage dimensions get any variation at all.",
+      "selection_constraints": [
+        "not developer tooling",
+        "exercises different Evidence families from CONTENT_REQUEST_VOLUME and COMMUNITY_QUESTION_VOLUME",
+        "sits in a published product or category taxonomy, which Mission 1.35 established Docker does not",
+        "offers a route to commercial evidence at the right grain",
+        "contributes genuine calibration diversity rather than another copy of the Docker measurement pattern"
+      ],
+      "forbidden_selection_basis": "ease of fetching"
+    },
+    "not_started_by_this_mission": true
+  }
+}

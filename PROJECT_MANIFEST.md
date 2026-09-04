@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.65
+Version: 1.66
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-03 (Sprint 1 / Mission 1.36.1)
+Last amended: 2026-09-03 (Sprint 1 / Mission 1.37)
 
 ---
 
@@ -13,6 +13,35 @@ Last amended: 2026-09-03 (Sprint 1 / Mission 1.36.1)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.66 — 2026-09-03 (Sprint 1 / Mission 1.37)
+
+**`CALIBRATION_STRATEGY_READY_REFERENCE_DATA_MISSING`.** A preregistered
+calibration methodology for the Evidence Aggregation framework, and no reference
+data to run it on. 0 parameters fitted, 0 profiles calibrated, 0 model calls, 0
+acquisitions, D-03 unchanged.
+
+**Measured against the live database: every Claim has exactly one Evidence row.**
+28 Claims, 28 Evidence rows, distinct evidence-count-per-claim `[1]`. The
+aggregation layer has never aggregated, so saturation, independence collapse and
+contradiction accumulation have no real-data exercise at all, and `min()` is
+indistinguishable from returning the reliability value.
+
+**The Mission 1.1 calibration plan proposes the wrong target**, and correcting it
+is this mission's substantive finding. Its §5 calibration curve against outcome
+resolution measures the state of the world, against a framework whose §1 says it
+is not a truth estimator.
+
+**A second gap restricts rather than blocks:** nothing anchors the absolute score
+scale, so calibration targets the ordinal construct and absolute level is out of
+scope until the framework supplies an anchor.
+
+New: `docs/data/evidence-aggregation-calibration-strategy-v1.md` and its
+machine-readable artifact, `docs/data/calibration-reference-dataset-schema-v1.json`
+(empty by design), `docs/data/calibration-feasibility-audit-v1.json`,
+`infrastructure/scripts/audit_calibration_feasibility.py`.
+
+Report: `docs/architecture/mission-1.37-report.md`.
 
 ## 1.65 — 2026-09-03 (Sprint 1 / Mission 1.36.1 close-out)
 
@@ -2307,6 +2336,8 @@ Additionally authoritative:
 - docs/data/docker-evidence-reliability-review-packet-v1.md (added in 1.63)
 - docs/data/docker-reliability-operator-decisions-v1.md (added in 1.64)
 - docs/data/docker-diagnostic-aggregation-v1.json (added in 1.65)
+- docs/data/evidence-aggregation-calibration-strategy-v1.md (added in 1.66)
+- docs/data/calibration-reference-dataset-schema-v1.json (added in 1.66)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

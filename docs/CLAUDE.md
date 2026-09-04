@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.66
-Last amended: 2026-09-03 (Sprint 1 / Mission 1.36.1)
+Version: 1.67
+Last amended: 2026-09-03 (Sprint 1 / Mission 1.37)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.67 | 2026-09-03 | **CALIBRATION_STRATEGY_READY_REFERENCE_DATA_MISSING: the aggregation layer has never aggregated.** Measured against the live database, not quoted: **28 Claims, 28 Evidence rows, and the distinct evidence-count-per-claim is `[1]`**. So saturation has never combined two groups, independence collapse has never collapsed anything, `max(members)` has never had more than one member, contradiction accumulation has never run, and three of the four masses have only ever taken their `c = 0` values. **`min()` is currently indistinguishable from `return reliability`**, because relevance, directness and extraction confidence are 1.0 on every row and every Claim is EVERGREEN. **THE TARGET VARIABLE HAS TWO VALUES AND BOTH ARE REVIEWED RELIABILITY VALUES** (0.5 x1, 0.65 x18), `reliability` limits 19 of 19 scorable claims, and the leakage rule yields **2 groups among 19 units**, which cannot be split at all -- so the §29 echo hazard is not a risk here, it is the entire dataset. **THE MISSION 1.1 PLAN PROPOSES THE WRONG TARGET, and correcting it is the substantive finding**: its §5 asks *do claims scoring 70-80 resolve favourably more often* with a *Brier-style summary*, which is an OUTCOME-RESOLUTION target measuring the state of the WORLD, against a framework whose §1 says *Not a truth estimator ... every quantity describes the state of the evidence*. The plan states the counter-argument in the same section and keeps the metric anyway. **A SECOND GAP RESTRICTS RATHER THAN BLOCKS**: nothing anchors the ABSOLUTE scale, so calibration targets the ORDINAL construct -- which pair of evidence sets is better supported -- and absolute level is out of scope until the framework supplies an anchor. **Baseline B-2, the reliability pass-through, is the one that decides whether any of this is worth doing**, and today it is numerically identical to the full aggregator on 19 of 19. `TEMPORAL_CALIBRATION_DATA_MISSING` (0 temporal Claims, 0 claim features), `SAMPLE_REQUIREMENT_NOT_YET_QUANTIFIED`, and **3 of 14 gate conditions are recorded as BLOCKERS rather than given invented numbers**. 0 parameters changed, 0 profiles calibrated, 0 model calls, 0 acquisitions, D-03 unchanged |
 | 1.66 | 2026-09-03 | **DOCKER_RELIABILITY_PARTIALLY_REVIEWED: the operator typed the confirmation, and the two counters that moved are the whole story.** ReliabilityAssessments 1 -> **2**, basis rows 4 -> **6**, and **fifteen other counters unchanged**. Six Wikimedia rows now RESOLVE `0.65` against assessment `e2419f13-...` v1, both Stack Exchange scopes stay NO_APPLICABLE_ASSESSMENT, and the TED assessment is untouched at v1 with `superseded_at` NULL, because **a different scope is a different question and not a revision of somebody else's answer**. **`scoring.evidence.reliability` IS STILL NULL ON ALL 28 ROWS** -- six rows resolve a number and not one stores it, because reliability binds LATE (ADR-026 Decision 2), so a score names the assessment and version it used and a stale copy cannot outlive the assessment it came from. **The negative checks went 3 to 6 and still found 0 leaks**, because a second assessment doubles the ways one could leak. **§15's diagnostic ran, and its shape is the argument for calibration**: EIGHT Evidence rows sit on EIGHT distinct Claims, so these are eight SINGLE-RECORD aggregations and reliability resolving does not turn six observations of one article into an aggregation. `q = 0.650` on all six with **`reliability` as the limiting component**, because `q = min(components)` and every other factor is 1.0 -- **the score is a restatement of one human judgement, not a corroboration of it**. Level stayed **1**, blocked by independence and by the MARKET_ACTIVITY gate, neither of which reliability touches; the two refused scopes report `UNAVAILABLE` with `uncertainty_mass` **1.0**. Profile still UNCALIBRATED, **0 scores persisted**, D-03 blocker 2 moves OPEN -> **PARTIAL** and the other four do not move. **A THIRD DEFECT SURFACED, AND ONLY BECAUSE A ROW FINALLY RESOLVED**: the resolution report read `binding.assessment_version`, which is not a field -- unreachable while every binding was None, the same shape as Mission 1.36's invalid basis types. **Code that could not have worked, unnoticed because the path was never taken** |
 | 1.65 | 2026-09-03 | **OPERATOR_CONFIRMATION_REQUIRED: three human decisions carried faithfully, and the one assessment they authorise is NOT persisted.** The operator reviewed all three scopes and decided DIFFERENTLY about them -- **NO** on both Stack Exchange scopes, **0.65 / HUMAN_REVIEW / thibchm** on the Wikimedia one -- which is exactly what a per-scope judgement is for. **A NO IS NOT A NUMBER**: the refusal is recorded as PROSE, because a refusal recorded as data would be a value and the next reader would use it as one; it does not mean 0, 0.5, low reliability or an unreliable source, it means **no human reliability judgement exists**. **The TTY guard fired and was respected** -- *no terminal to confirm on. A reliability assessment is a human decision and this is not a step a pipeline runs* -- because piping the confirmation in would produce a row attributed to a person who did not type it, which is the failure the whole contract exists to prevent, so the mission STOPS and hands the operator the command. **0 assessments, 0 model calls, every one of the seventeen counters verified unchanged** against the live database, as §24 anticipates. **MISSION 1.36 SHIPPED A REAL DEFECT AND THIS MISSION FOUND IT**: the packet's `candidate_basis_rows` carried `basis_type` values that are not members of `ReliabilityBasisType`, so the rows it prepared **could not have recorded an assessment** -- the one thing candidate basis rows are for -- and nothing caught it because the packet is JSON and the enum lives in the contracts package. **D-03 blocker 2 is OPEN, not PARTIAL**: §19 anticipated PARTIAL, which describes the state AFTER confirmation, and reporting it now would be reporting a future. **§15's diagnostic was SKIPPED because it is conditional on a row becoming scorable and none did** -- running it anyway would produce a number computed from nothing, in an artifact later read as a result. No average, no *Docker 65%*, profile still UNCALIBRATED, independence still UNKNOWN with 0 groups |
 | 1.64 | 2026-09-03 | **READY_FOR_OPERATOR_RELIABILITY_REVIEW: the question is prepared and software supplied no answer.** **THREE reliability scopes over the 8 Docker rows, not two** -- §0 forbids assuming two because two source families exist, and counting found three: the two Stack Exchange signal types persist **different proposition kinds**, so they share FOUR of five scope fields and are still two different reliability questions. 1 + 1 + 6 = 8, every row in exactly one scope. **NO NUMBER APPEARS ANYWHERE** -- no value, no range, no recommendation, no adjective ranking a source; `reliability: null` documented as NO ASSESSMENT EXISTS and never as 0.0 or 0.5; the scale stated with **no threshold labels** because the architecture defines none. **0 assessments created, all 14 counters unchanged, `scoring.evidence.reliability` NULL on every row** because reliability resolves late. **Wikimedia methodology RETRIEVED**: a pageview is a conjunction of HTTP/host/header tests with an enumerated exclusion list, and spider tagging is *ua-parser and additional custom regex* -- pattern matching, matching what the collector recorded as heuristic. Its largest gap: **revision and backfill practice is NOT DOCUMENTED**, which is an absence of documentation and not evidence of stability. **Stack Exchange documentation UNREACHABLE** (robots policy blocks the crawler); no retry, no mirror, no third-party summary -- so whether an accepted answer can later change is OPEN, and the operator supplying the documents is the route Mission 1.18 used. **The TED assessment shares `claim_type` with all three Docker scopes and differs on the other four** -- every row here is OBSERVED, so that field discriminates nothing and is exactly where a leak would start if matching were ever partial. **Four of five D-03 blockers remain open**, reported separately. A test caught a factual overstatement in my own packet and it was corrected rather than the test loosened |
@@ -313,6 +314,102 @@ positives in the scored split, which this 89-question corpus did not supply: one
 defensible SAME in 40 candidate pairs is a finding about the corpus, not about
 the classifier. **No synthetic positive may substitute** -- a constructed pair
 can test a parser and can never establish semantic accuracy against real data.
+
+### The aggregation layer has never aggregated, and that is the calibration blocker
+
+Added in 1.67 (Mission 1.37, `evidence-aggregation-calibration-strategy-v1.md`,
+`calibration-feasibility-audit-v1.json`, `mission-1.37-report.md`).
+**`CALIBRATION_STRATEGY_READY_REFERENCE_DATA_MISSING`**: a preregistered
+methodology, and no reference data to run it on. **0 parameters fitted, 0
+profiles calibrated, 0 model calls, 0 acquisitions.**
+
+    28 Claims  ->  28 Evidence rows  ->  distinct evidence-count-per-claim = [1]
+
+- **EVERY CLAIM HAS EXACTLY ONE EVIDENCE ROW.** Measured, not assumed. So the
+  saturation operator has never combined two groups on real data, independence
+  collapse has never collapsed anything, `group_strength = max(members)` has
+  never had more than one member, contradiction accumulation has never run, and
+  three of the four masses have only ever taken their `c = 0` values. **The
+  mechanisms calibration would fit have no real-data exercise at all.**
+- **`min()` IS CURRENTLY INDISTINGUISHABLE FROM `return reliability`.** Relevance,
+  directness and extraction confidence are `1.0` on every Evidence row, and every
+  Claim is `EVERGREEN` so freshness is `1.0` too. A composition rule cannot be
+  tested against data in which only one input ever varies.
+- **THE TARGET VARIABLE HAS TWO VALUES AND BOTH ARE REVIEWED RELIABILITY
+  VALUES** -- `0.5` once and `0.65` eighteen times -- and `reliability` is the
+  limiting component on **19 of 19** scorable claims. Mission 1.36.1's echo
+  hazard is therefore not a risk to guard against here; it is the entire dataset.
+  Applying the leakage rule `(reliability_scope, proposition_kind, subject_key)`
+  yields **2 groups among 19 units**, which cannot be split into development and
+  holdout, and that is a fact about the corpus rather than an argument for
+  weakening the rule.
+- **THE MISSION 1.1 CALIBRATION PLAN PROPOSES THE WRONG TARGET.** Its §5 asks
+  *"Do claims scoring 70-80 resolve favourably more often than those scoring
+  30-40? Reliability diagram plus a Brier-style summary"*. That is an
+  OUTCOME-RESOLUTION target: it measures the state of the WORLD, and applies a
+  probability scoring rule to a quantity the framework calls not-a-probability
+  four times. Framework §1: *"Not a truth estimator. Nothing here estimates
+  whether the claim is true. Every quantity describes the state of the evidence,
+  which is a different kind of thing from the state of the world."* **The plan
+  contains its own counter-argument in the same section and keeps the metric
+  anyway**, and Mission 1.37 resolves the contradiction in favour of the
+  framework. Outcome data is not worthless -- it is the right target for a layer
+  that PREDICTS, which is the Opportunity layer, not this one.
+- **A SECOND GAP RESTRICTS RATHER THAN BLOCKS.** Nothing in the repository
+  anchors the ABSOLUTE scale: `scoring-framework-v1.1.md` §4.1 fixes 0-100 and
+  nothing says what makes 65 correct rather than 55. A reviewer has no anchor
+  either. So calibration targets the **ORDINAL** construct, which is defined and
+  observable -- which of two evidence sets is better supported by its own
+  evidence -- and absolute-level calibration is out of scope until the framework
+  supplies an anchor. That is why the outcome is not
+  `CALIBRATION_TARGET_SEMANTICS_UNDERDEFINED`.
+- **BASELINE B-2 DECIDES WHETHER ANY OF THIS IS WORTH DOING.** A reliability
+  pass-through reports the reviewed value and ignores every other mechanism. On
+  the current corpus it is **numerically identical to the full aggregator on 19
+  of 19 scorable claims**. A fitted profile that cannot beat it means the
+  aggregation layer adds nothing measurable, and no calibration should be
+  claimed.
+- **STRUCTURAL IS NOT THE SAME AS HARD-CODED, AND NUMERIC IS NOT THE SAME AS
+  FITTABLE.** `min()` and `max(members)` are structural because their
+  alternatives are refuted by MEANING; the `repeated_signal_min_groups` floor of
+  2 is structural because "repeated" cannot mean one. `multi_source_min_groups =
+  3` sits above its floor and IS fittable. **There is no flat contradiction
+  penalty to calibrate**, because no such term exists -- contradiction enters
+  continuously through `c`.
+- **RELIABILITY IS AN INPUT, NEVER A LABEL.** Aggregation calibration consumes
+  reviewed reliability and may not refit it. Wikimedia's `0.65` and TED's `0.5`
+  are judgements for one measurement-crossed-with-proposition scope each.
+- **THREE GATE CONDITIONS ARE BLOCKERS RATHER THAN NUMBERS.** The acceptable
+  inter-reviewer agreement, coverage adequacy per dimension, and the margin by
+  which a candidate must beat B-2 cannot be quantified before a reviewer pilot.
+  §27 and §30 forbid inventing them, and **a gate weak enough for current data to
+  pass would not be a gate**. Sample size is
+  `SAMPLE_REQUIREMENT_NOT_YET_QUANTIFIED` for the same reason.
+- **`TEMPORAL_CALIBRATION_DATA_MISSING`**: 0 temporally sensitive Claims and 0
+  carrying a `claim_feature`, so `H` cannot be fitted at all. No universal
+  half-life and no Docker half-life; Docker's Claims are `EVERGREEN` and carry
+  **zero** information about decay.
+- **A GENERATED ARTIFACT THAT MEASURES A DEPLOYMENT CANNOT BE CHECKED IN CI.**
+  The four `--check` steps CI runs render repository files into repository files.
+  The feasibility audit measures the live corpus, and CI's integration job starts
+  from an empty database -- so a check step there would be permanently red or
+  loosened until it verified nothing. It ships with a deterministic `--check` as
+  an OPERATOR gate. **The same distinction blocks the Mission 1.36.1 backlog item**
+  for `build_reliability_review_packet.py`, which reads the database too.
+
+**The next mission is NOT a labelling mission.** The blocker underneath the
+missing labels is that nothing has the required shape to label: a reference
+judgement about a single-record claim tests reliability pass-through and nothing
+else. The precondition is architectural and already permitted -- **two Signals
+must interpret to the same `proposition_key`**, which is what puts two Evidence
+rows on one Claim. It should arrive with a **second pilot from a substantially
+different domain**: not developer tooling, different Evidence families, sitting
+in a published product taxonomy (which Mission 1.35 established Docker does not),
+with a route to commercial evidence at the right grain. **Chosen for calibration
+diversity, never for ease of fetching.**
+
+**D-03 is unchanged.** A strategy is not a calibration, `REFERENCE_PROFILE_V1` is
+still `UNCALIBRATED`, and `services/scoring` is still blocked.
 
 ### A refusal is recorded as prose, a confirmation is typed, and a value binds late
 

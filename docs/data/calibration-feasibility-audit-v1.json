@@ -1,0 +1,1107 @@
+{
+  "$comment": "Mission 1.37 §26. Measured against the LIVE database, never quoted from an earlier report. Read-only: it writes one JSON artifact and no database row, and every aggregation runs under allow_uncalibrated=True. The empty cells are the finding -- a coverage dimension with zero cases cannot be fitted or validated, and a dimension with one distinct target value cannot be either.",
+  "artifact_version": "calibration-feasibility-audit@1.0.0",
+  "generated_by": "mission-1.37",
+  "profile": {
+    "profile_id": "reference-v1",
+    "version": "1.0.0",
+    "status": "UNCALIBRATED",
+    "algorithm_version": "1.0.0",
+    "half_life_days": {},
+    "level_thresholds": {
+      "repeated_signal_min_groups": 2,
+      "multi_source_min_groups": 3,
+      "multi_source_min_families": 2
+    }
+  },
+  "totals": {
+    "claims": 28,
+    "evidence_rows": 28,
+    "claims_with_scorable_evidence": 19,
+    "claims_unavailable": 9,
+    "current_reliability_assessments": 2,
+    "aggregation_status": {
+      "COMPLETE": 19,
+      "UNAVAILABLE": 9
+    },
+    "evidence_level": {
+      "0": 9,
+      "1": 19
+    }
+  },
+  "coverage": {
+    "support_only": 19,
+    "contradiction_present": 0,
+    "mixed_support_and_contradiction": 0,
+    "neutral_present": 0,
+    "conflict_mass_non_zero": 0,
+    "single_source_claims": 19,
+    "multi_source_claims": 0,
+    "multi_evidence_claims": 0,
+    "independence_established_claims": 0,
+    "independence_unknown_claims": 19,
+    "evergreen_claims": 19,
+    "temporally_sensitive_claims": 0,
+    "claims_with_a_claim_feature": 0,
+    "distinct_proposition_kinds": 2,
+    "distinct_source_ids": 2,
+    "distinct_observation_categories": 1,
+    "categorised_market_or_validation": 0
+  },
+  "limiting_component_counts": {
+    "reliability": 19
+  },
+  "distinct_support_strengths": {
+    "0.5": 1,
+    "0.65": 18
+  },
+  "reference_target_tables_present": [],
+  "units": [
+    {
+      "claim_id": "05cac6f6-17f4-4008-b68b-9787bb4ac774",
+      "evidence_count": 1,
+      "proposition_kind": "platform_counted_content_request_change",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "RESOLVED"
+      ],
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence": 1,
+      "non_scorable_evidence": 0,
+      "support_strength": 0.6500000000000001,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.6500000000000001,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 0.34999999999999987,
+      "evidence_level": 1,
+      "limiting_components": [
+        "reliability"
+      ],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "0651a63c-6756-4dc9-a215-7ea03d80c658",
+      "evidence_count": 1,
+      "proposition_kind": "platform_counted_content_request_change",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "RESOLVED"
+      ],
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence": 1,
+      "non_scorable_evidence": 0,
+      "support_strength": 0.6500000000000001,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.6500000000000001,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 0.34999999999999987,
+      "evidence_level": 1,
+      "limiting_components": [
+        "reliability"
+      ],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "1829e497-f582-4017-b88d-4d277375ccf7",
+      "evidence_count": 1,
+      "proposition_kind": "platform_counted_content_request_change",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "RESOLVED"
+      ],
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence": 1,
+      "non_scorable_evidence": 0,
+      "support_strength": 0.6500000000000001,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.6500000000000001,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 0.34999999999999987,
+      "evidence_level": 1,
+      "limiting_components": [
+        "reliability"
+      ],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "1e00a6dc-051c-4431-b13b-cc879f01a526",
+      "evidence_count": 1,
+      "proposition_kind": "source_reported_procurement_value_contrast",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "ted-eu"
+      ],
+      "signal_type_ids": [
+        "procurement_value_contrast"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "RESOLVED"
+      ],
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence": 1,
+      "non_scorable_evidence": 0,
+      "support_strength": 0.5,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.5,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 0.5,
+      "evidence_level": 1,
+      "limiting_components": [
+        "reliability"
+      ],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "212ecb46-6bb0-4c7b-9b73-d8e5000afaf5",
+      "evidence_count": 1,
+      "proposition_kind": "platform_counted_content_request_change",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "RESOLVED"
+      ],
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence": 1,
+      "non_scorable_evidence": 0,
+      "support_strength": 0.6500000000000001,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.6500000000000001,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 0.34999999999999987,
+      "evidence_level": 1,
+      "limiting_components": [
+        "reliability"
+      ],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "2a634f95-207d-478f-af40-12c9454f21d6",
+      "evidence_count": 1,
+      "proposition_kind": "community_site_questions_without_accepted_answer",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "stack-exchange"
+      ],
+      "signal_type_ids": [
+        "community_question_without_accepted_answer_volume"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "NO_APPLICABLE_ASSESSMENT"
+      ],
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence": 0,
+      "non_scorable_evidence": 1,
+      "support_strength": 0.0,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.0,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 1.0,
+      "evidence_level": 0,
+      "limiting_components": [],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "343bbbde-35d1-4979-bf40-8103f3579bf4",
+      "evidence_count": 1,
+      "proposition_kind": "platform_counted_content_request_change",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "RESOLVED"
+      ],
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence": 1,
+      "non_scorable_evidence": 0,
+      "support_strength": 0.6500000000000001,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.6500000000000001,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 0.34999999999999987,
+      "evidence_level": 1,
+      "limiting_components": [
+        "reliability"
+      ],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "3bd0b9be-d175-41c5-a923-e4166f481ea2",
+      "evidence_count": 1,
+      "proposition_kind": "platform_counted_content_request_change",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "RESOLVED"
+      ],
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence": 1,
+      "non_scorable_evidence": 0,
+      "support_strength": 0.6500000000000001,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.6500000000000001,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 0.34999999999999987,
+      "evidence_level": 1,
+      "limiting_components": [
+        "reliability"
+      ],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "459e9fec-3ad1-4955-81c6-2aa0f2179bc5",
+      "evidence_count": 1,
+      "proposition_kind": "platform_counted_content_request_change",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "RESOLVED"
+      ],
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence": 1,
+      "non_scorable_evidence": 0,
+      "support_strength": 0.6500000000000001,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.6500000000000001,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 0.34999999999999987,
+      "evidence_level": 1,
+      "limiting_components": [
+        "reliability"
+      ],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "560f27d6-d75c-4bdd-9060-312a0f07538b",
+      "evidence_count": 1,
+      "proposition_kind": "source_reported_metric_period_change",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "world-bank"
+      ],
+      "signal_type_ids": [
+        "numeric_period_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "NO_APPLICABLE_ASSESSMENT"
+      ],
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence": 0,
+      "non_scorable_evidence": 1,
+      "support_strength": 0.0,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.0,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 1.0,
+      "evidence_level": 0,
+      "limiting_components": [],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "565bbcb7-9e70-418b-9a8e-a1549b23a230",
+      "evidence_count": 1,
+      "proposition_kind": "platform_counted_content_request_change",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "RESOLVED"
+      ],
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence": 1,
+      "non_scorable_evidence": 0,
+      "support_strength": 0.6500000000000001,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.6500000000000001,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 0.34999999999999987,
+      "evidence_level": 1,
+      "limiting_components": [
+        "reliability"
+      ],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "63c3ccc6-4e4f-40d4-92f3-3cbdb5f04c40",
+      "evidence_count": 1,
+      "proposition_kind": "platform_counted_content_request_change",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "RESOLVED"
+      ],
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence": 1,
+      "non_scorable_evidence": 0,
+      "support_strength": 0.6500000000000001,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.6500000000000001,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 0.34999999999999987,
+      "evidence_level": 1,
+      "limiting_components": [
+        "reliability"
+      ],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "6e4c3f21-8881-4453-b4ff-af1b47c464b5",
+      "evidence_count": 1,
+      "proposition_kind": "community_site_published_questions_carrying_tag",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "stack-exchange"
+      ],
+      "signal_type_ids": [
+        "community_question_volume"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "NO_APPLICABLE_ASSESSMENT"
+      ],
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence": 0,
+      "non_scorable_evidence": 1,
+      "support_strength": 0.0,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.0,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 1.0,
+      "evidence_level": 0,
+      "limiting_components": [],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "6eefe19d-9112-466b-a03e-b34413cd6869",
+      "evidence_count": 1,
+      "proposition_kind": "platform_counted_content_request_change",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "RESOLVED"
+      ],
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence": 1,
+      "non_scorable_evidence": 0,
+      "support_strength": 0.6500000000000001,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.6500000000000001,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 0.34999999999999987,
+      "evidence_level": 1,
+      "limiting_components": [
+        "reliability"
+      ],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "78195b94-99bf-47a3-8c83-26bdb930aa67",
+      "evidence_count": 1,
+      "proposition_kind": "platform_counted_content_request_change",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "RESOLVED"
+      ],
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence": 1,
+      "non_scorable_evidence": 0,
+      "support_strength": 0.6500000000000001,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.6500000000000001,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 0.34999999999999987,
+      "evidence_level": 1,
+      "limiting_components": [
+        "reliability"
+      ],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "7e2382a2-0d06-469d-b60e-6afb4c4dfad4",
+      "evidence_count": 1,
+      "proposition_kind": "source_reported_term_frequency_change",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "gdelt"
+      ],
+      "signal_type_ids": [
+        "lexical_frequency_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "NO_APPLICABLE_ASSESSMENT"
+      ],
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence": 0,
+      "non_scorable_evidence": 1,
+      "support_strength": 0.0,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.0,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 1.0,
+      "evidence_level": 0,
+      "limiting_components": [],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "81738129-3993-4450-acc4-c683c7d2b23e",
+      "evidence_count": 1,
+      "proposition_kind": "platform_counted_content_request_change",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "RESOLVED"
+      ],
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence": 1,
+      "non_scorable_evidence": 0,
+      "support_strength": 0.6500000000000001,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.6500000000000001,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 0.34999999999999987,
+      "evidence_level": 1,
+      "limiting_components": [
+        "reliability"
+      ],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "8a551705-741e-431c-ab2d-1edd4d24f1ad",
+      "evidence_count": 1,
+      "proposition_kind": "source_reported_metric_period_change",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "world-bank"
+      ],
+      "signal_type_ids": [
+        "numeric_period_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "NO_APPLICABLE_ASSESSMENT"
+      ],
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence": 0,
+      "non_scorable_evidence": 1,
+      "support_strength": 0.0,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.0,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 1.0,
+      "evidence_level": 0,
+      "limiting_components": [],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "8ab0d96d-95f3-4a61-935c-afe2ef3e319b",
+      "evidence_count": 1,
+      "proposition_kind": "platform_counted_content_request_change",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "RESOLVED"
+      ],
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence": 1,
+      "non_scorable_evidence": 0,
+      "support_strength": 0.6500000000000001,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.6500000000000001,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 0.34999999999999987,
+      "evidence_level": 1,
+      "limiting_components": [
+        "reliability"
+      ],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "97dec365-7ee8-4c93-947f-36fd9abf1d1b",
+      "evidence_count": 1,
+      "proposition_kind": "platform_counted_content_request_change",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "RESOLVED"
+      ],
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence": 1,
+      "non_scorable_evidence": 0,
+      "support_strength": 0.6500000000000001,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.6500000000000001,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 0.34999999999999987,
+      "evidence_level": 1,
+      "limiting_components": [
+        "reliability"
+      ],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "a2707d23-28ef-491d-9ae6-2e09a39e947d",
+      "evidence_count": 1,
+      "proposition_kind": "platform_counted_content_request_change",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "RESOLVED"
+      ],
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence": 1,
+      "non_scorable_evidence": 0,
+      "support_strength": 0.6500000000000001,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.6500000000000001,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 0.34999999999999987,
+      "evidence_level": 1,
+      "limiting_components": [
+        "reliability"
+      ],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "aab81833-ca25-4798-b540-e3db965375d0",
+      "evidence_count": 1,
+      "proposition_kind": "source_reported_metric_period_change",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "world-bank"
+      ],
+      "signal_type_ids": [
+        "numeric_period_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "NO_APPLICABLE_ASSESSMENT"
+      ],
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence": 0,
+      "non_scorable_evidence": 1,
+      "support_strength": 0.0,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.0,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 1.0,
+      "evidence_level": 0,
+      "limiting_components": [],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "b3d0d2d0-daa0-4854-a4c0-a31684841b03",
+      "evidence_count": 1,
+      "proposition_kind": "platform_counted_content_request_change",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "RESOLVED"
+      ],
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence": 1,
+      "non_scorable_evidence": 0,
+      "support_strength": 0.6500000000000001,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.6500000000000001,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 0.34999999999999987,
+      "evidence_level": 1,
+      "limiting_components": [
+        "reliability"
+      ],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "c20aee0c-f5ea-4b55-8520-eb2a2f7f5d9a",
+      "evidence_count": 1,
+      "proposition_kind": "platform_counted_content_request_change",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "RESOLVED"
+      ],
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence": 1,
+      "non_scorable_evidence": 0,
+      "support_strength": 0.6500000000000001,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.6500000000000001,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 0.34999999999999987,
+      "evidence_level": 1,
+      "limiting_components": [
+        "reliability"
+      ],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "c58949e4-d8a7-4636-9c53-3bbac3b7b7c0",
+      "evidence_count": 1,
+      "proposition_kind": "platform_counted_content_request_change",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "RESOLVED"
+      ],
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence": 1,
+      "non_scorable_evidence": 0,
+      "support_strength": 0.6500000000000001,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.6500000000000001,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 0.34999999999999987,
+      "evidence_level": 1,
+      "limiting_components": [
+        "reliability"
+      ],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "d23a8b89-ad7f-434f-937d-eb25d23617ee",
+      "evidence_count": 1,
+      "proposition_kind": "source_reported_term_frequency_change",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "gdelt"
+      ],
+      "signal_type_ids": [
+        "lexical_frequency_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "NO_APPLICABLE_ASSESSMENT"
+      ],
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence": 0,
+      "non_scorable_evidence": 1,
+      "support_strength": 0.0,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.0,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 1.0,
+      "evidence_level": 0,
+      "limiting_components": [],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "ec8fc694-c0f5-402f-9985-c2c93d0f15e9",
+      "evidence_count": 1,
+      "proposition_kind": "source_reported_term_frequency_contrast",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "gdelt"
+      ],
+      "signal_type_ids": [
+        "lexical_frequency_contrast"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "NO_APPLICABLE_ASSESSMENT"
+      ],
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence": 0,
+      "non_scorable_evidence": 1,
+      "support_strength": 0.0,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.0,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 1.0,
+      "evidence_level": 0,
+      "limiting_components": [],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "efb39063-6458-4d2c-88f9-ccfdf86ac8b6",
+      "evidence_count": 1,
+      "proposition_kind": "source_reported_metric_period_change",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "world-bank"
+      ],
+      "signal_type_ids": [
+        "numeric_period_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "NO_APPLICABLE_ASSESSMENT"
+      ],
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence": 0,
+      "non_scorable_evidence": 1,
+      "support_strength": 0.0,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.0,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 1.0,
+      "evidence_level": 0,
+      "limiting_components": [],
+      "independent_support_groups": 0
+    }
+  ]
+}
