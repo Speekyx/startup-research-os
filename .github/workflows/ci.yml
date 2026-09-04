@@ -255,6 +255,8 @@ jobs:
       # It never judges the judgement, and it reads no database.
       - name: Operator reliability review conforms to its rubric
         run: uv run python infrastructure/scripts/render_operator_reliability_review.py --check
+      - name: Wikimedia operator reliability review conforms to its rubric
+        run: uv run python infrastructure/scripts/render_wikimedia_operator_reliability_review.py --check
 
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.

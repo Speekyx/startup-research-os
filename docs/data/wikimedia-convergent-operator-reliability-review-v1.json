@@ -1,0 +1,149 @@
+{
+  "$comment": "Mission 1.44.1 §1. A COMPLETED human review, not a preparation packet -- which is why it carries a number where the Mission 1.44 packet carried a blank. Every judgement field below was supplied by the named reviewer under human-reliability-assessment-rubric@1.0.0. Software recorded them and computed none of them. AUTHORED AND IMMUTABLE: this file is the reproducible record of one person's reasoning, and it is also the exact input the persistence command consumes, so there is one source of truth rather than two that can drift.",
+  "artifact_version": "wikimedia-convergent-operator-reliability-review@1.0.0",
+  "generated_by": "mission-1.44.1",
+  "what_this_is_not": [
+    "HUMAN_REVIEW, and NOT CALIBRATION. REFERENCE_PROFILE_V1 remains UNCALIBRATED and this value fits no parameter.",
+    "NOT A PROBABILITY that any Claim is true.",
+    "NOT SOURCE-WIDE. The scope is five fields; wikimedia-pageviews alone matches nothing.",
+    "NOT AN AUDIENCE SCORE. A request is what a reader makes of a server, and the requester class is the platform's own label rather than a statement about people.",
+    "NOT A PRODUCT SCORE. It says nothing about Docker, Kubernetes or Podman as products, and the scope carries no article at all.",
+    "NOT INDEPENDENT CORROBORATION. The witnesses share one publisher, one counting methodology, one requester-classification mechanism and one pipeline, and independence stays UNKNOWN.",
+    "NOT a judgement about the detailed Wikimedia proposition, whose 0.65 belongs to a different scope and is untouched."
+  ],
+  "review_rubric": {
+    "id": "human-reliability-assessment-rubric",
+    "version": "1.0.0"
+  },
+  "scope": {
+    "source_id": "wikimedia-pageviews",
+    "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+    "record_kind_id": "content_request_count",
+    "claim_type": "OBSERVED",
+    "proposition_kind": "platform_counted_content_request_change_witnessed"
+  },
+  "scope_note": "Exactly five fields, matched in full or not at all. The existing wikimedia-pageviews assessment at 0.65 shares FOUR of them and differs on proposition_kind, which is a different reliability question and not a baseline for this one. The scope carries no article, no direction, no requester class, no period and no witness count, so one judgement binds every convergent Evidence row from this measurement.",
+  "convergence_contract": {
+    "contract_id": "platform-counted-content-request-change-witnessed",
+    "version": "1.0.0"
+  },
+  "covers": {
+    "$comment": "Measured by Mission 1.44 against the live deployment, not assumed.",
+    "evidence_rows": 18,
+    "claims": 6,
+    "witness_cardinalities": [
+      4,
+      3,
+      3,
+      3,
+      3,
+      2
+    ],
+    "articles": [
+      "Docker_(software)",
+      "Kubernetes",
+      "Podman"
+    ],
+    "directions": [
+      "INCREASING",
+      "DECREASING"
+    ],
+    "audience_classes": [
+      "user"
+    ]
+  },
+  "rubric_profile": {
+    "$comment": "§ Operator ordinal profile. The five states the reviewer assigned. Mission 1.44 pre-filled exactly one, SOURCE_SIDE_CHECKABILITY, as a claim about what the review's basis CONTAINS; the reviewer confirmed it and assigned the other four.",
+    "MEASUREMENT_DEFINITION": "DOCUMENTED_AND_BOUNDED",
+    "SOURCE_SIDE_VALIDATION": "DOCUMENTED_WITH_UNBOUNDED_LIMITATION",
+    "HISTORICAL_MUTABILITY": "PARTIALLY_DOCUMENTED",
+    "COMPLETENESS_AND_MISSINGNESS": "PARTIALLY_DOCUMENTED",
+    "SOURCE_SIDE_CHECKABILITY": "NOT_ESTABLISHED"
+  },
+  "rubric_profile_note": "NOT_ESTABLISHED is not 0, not low, not a midpoint, not 0.5 and not a weakness on a scale. It has no ordinal rank in the rubric precisely so that it cannot be interpolated or averaged, and nothing here converts it to a number.",
+  "material_unknowns": [
+    {
+      "dimension_id": "HISTORICAL_MUTABILITY",
+      "what_is_not_established": "whether a published per-article daily value may later be revised, recomputed or corrected, and whether a consumer could tell that it had been",
+      "documentary_status": "PARTIAL",
+      "reviewer_materiality": "YES"
+    },
+    {
+      "dimension_id": "SOURCE_SIDE_VALIDATION",
+      "what_is_not_established": "whether requester-class tagging may be re-applied retroactively to values already published",
+      "documentary_status": "PARTIAL",
+      "reviewer_materiality": "YES"
+    },
+    {
+      "dimension_id": "HISTORICAL_MUTABILITY",
+      "what_is_not_established": "whether a systematic reclassification would remove EVERY witness of one convergent Claim at once, given that the witnesses share one methodology and their independence is UNKNOWN",
+      "documentary_status": "NOT_ESTABLISHED",
+      "reviewer_materiality": "NO"
+    },
+    {
+      "dimension_id": "MEASUREMENT_DEFINITION",
+      "what_is_not_established": "whether the pageview definition or the tagging rules changed across the 2024-03 witness periods",
+      "documentary_status": "NOT_ESTABLISHED",
+      "reviewer_materiality": "NO"
+    },
+    {
+      "dimension_id": "SOURCE_SIDE_CHECKABILITY",
+      "what_is_not_established": "how long a published per-article daily value remains retrievable at the source",
+      "documentary_status": "NOT_ESTABLISHED",
+      "reviewer_materiality": "UNSURE"
+    },
+    {
+      "dimension_id": "COMPLETENESS_AND_MISSINGNESS",
+      "what_is_not_established": "whether any of the six witness dates in 2024-03 falls inside an entry on the known-problems list",
+      "documentary_status": "NOT_ESTABLISHED",
+      "reviewer_materiality": "UNSURE"
+    }
+  ],
+  "material_unknowns_note": "Two UNSURE answers are preserved as UNSURE. UNSURE is not YES, not NO, not low confidence and not a number, and the rubric permits it precisely because a reviewer who cannot yet tell whether an unknown matters has said something real. Both are carried into the stated limitation rather than quietly resolved.",
+  "hard_stops_triggered": [],
+  "hard_stops_answered": {
+    "MEASUREMENT_SEMANTICS_NOT_ESTABLISHED": "NO",
+    "PROPOSITION_EXCEEDS_MEASUREMENT": "NO",
+    "AUTHORITATIVE_DOCUMENTS_CONTRADICT": "NO",
+    "SOURCE_OBSERVATIONS_NOT_RECOVERABLE": "NO"
+  },
+  "hard_stops_note": "None triggered, and the fourth answer is the one worth reading twice. SOURCE_SIDE_CHECKABILITY is NOT_ESTABLISHED and SOURCE_OBSERVATIONS_NOT_RECOVERABLE is NO, which are consistent rather than contradictory: the first says the held basis does not establish long-term checkability, the second would be the stronger claim that the observations are KNOWN to be unrecoverable. The reviewer answered the weaker fact and the stronger claim separately, and software did not derive one from the other.",
+  "numeric_judgement_gate": "NUMERIC_JUDGEMENT_PERMITTED",
+  "gate_note": "A human decision, taken against the profile above. The rubric defines the gate as judgement rather than an arithmetic function; nothing recomputed it from the ordinal states, and the two YES materiality answers did not automatically refuse it, because §13 of the rubric forbids blocking on every unknown.",
+  "origin": "HUMAN_REVIEW",
+  "reliability": 0.6,
+  "reviewed_by": "thibchm",
+  "reliability_note": "Supplied by the reviewer. Not rounded, not rescaled, not derived from the ordinal ranks, not anchored to the 0.65 at the detailed Wikimedia scope, not copied from the 0.55 at the convergent TED scope, and not an average of anything. It is a human summary of the recorded ordinal profile above, and the profile is what a second reviewer reproduces.",
+  "rationale": "The reliability judgement is based on first-party Wikimedia documentation that defines the pageview measurement, requester-class tagging rules, documented exclusions, and known-problem history.\n\nThe measurement definition is documented and bounded for this proposition, while requester classification relies on documented heuristic tagging. Historical revision behaviour and completeness are only partially documented, and source-side long-term checkability is not established.\n\nI consider the documentary basis sufficient to permit a numeric reliability judgement while preserving unresolved questions concerning retroactive revision/reclassification and long-term retrievability.",
+  "stated_limitation": "The held documentation does not fully establish how historical pageview values or requester classifications may be revised or reprocessed after publication, nor how a consumer would detect such changes.\n\nLong-term retrievability of historical daily values remains unestablished, and it is also unresolved whether any reviewed witness date coincides with a documented known-problem period.\n\nMultiple witnesses share the same publisher, counting methodology, requester-classification mechanism and pipeline, so witness cardinality does not establish independent corroboration.",
+  "rationale_and_limitation_note": "Both texts were PREPARED AS DRAFTS by the assistant and are recorded here so the reviewer can read the exact wording before it becomes theirs. They are NOT yet human-authored: the accountable persistence workflow prints this file and requires the reviewer to type a confirmation stating that what it contains is THEIR judgement, and that keystroke is what converts a draft into a review. Until it is typed, this file is a proposal.",
+  "basis": [
+    {
+      "basis_type": "MEASUREMENT_METHODOLOGY",
+      "document_title": "Research:Page view",
+      "document_url": "https://meta.wikimedia.org/wiki/Research:Page_view",
+      "section_reference": "Definition; Tagging",
+      "retrieved_at": "2026-09-03",
+      "summarized_finding": "The pageview definition is an explicit conjunction of HTTP-status, host and header conditions with an enumerated exclusion list; automated traffic is tagged by ua-parser plus custom regex.",
+      "applicability_to_this_scope": "REUSED",
+      "why": "It defines what a pageview IS and how requester classes are tagged. The convergent proposition reads exactly the same measurement through exactly the same rules, and the document is if anything more load-bearing here, because audience_class is one of the six identity fields the convergence contract keeps."
+    },
+    {
+      "basis_type": "KNOWN_LIMITATION",
+      "document_title": "Data Platform / Data Lake / Traffic / Pageviews",
+      "document_url": "https://wikitech.wikimedia.org/wiki/Data_Platform/Data_Lake/Traffic/Pageviews",
+      "section_reference": "Events and known problems since 2015-05-01",
+      "retrieved_at": "2026-09-03",
+      "summarized_finding": "A dated known-problems list exists and records a 2016 user-agent classification incident; revision and backfill practice is not documented.",
+      "applicability_to_this_scope": "PARTIALLY_APPLICABLE",
+      "why": "The fact is unchanged and remains a real limitation. Its weight moves in two directions at once under an existential: a LOCALISED problem matters less, because only one surviving witness is needed, while a SYSTEMATIC reclassification matters more, because the several witnesses share a methodology and their independence is UNKNOWN. The reviewer weighed both."
+    }
+  ],
+  "basis_note": "Both documents were already held on the detailed Wikimedia assessment and NOTHING WAS FETCHED for this review: the convergent proposition reads the same measurement through the same rules. No SROS engineering validation is among them. The convergence contract's determinism, the witness-key duplicate guard, the Evidence idempotency repair, lineage recovery and passing CI establish that the implementation does what its specification says, and nothing about how dependable the platform's counting is.",
+  "persisted_assessment": {
+    "id": "19e0ce16-957f-4543-9b15-738a77b13060",
+    "version": 1,
+    "recorded_at": "2026-09-04T06:51:19.661075+00:00"
+  },
+  "persisted_assessment_note": "This field was null until the accountable workflow recorded the assessment, and it was filled in with the id, version and timestamp only after the reviewer had typed the confirmation. It is here so this file states what its own judgement PRODUCED rather than what it hoped to produce, and so the review and the row it created can be read against each other."
+}
