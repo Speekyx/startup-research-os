@@ -549,15 +549,23 @@ class WhatTheDecisionActuallyDid(unittest.TestCase):
             self.assertIs(claim["calibrated"], False)
             self.assertEqual(claim["profile_status"], "UNCALIBRATED")
 
-    def test_the_calibration_audit_moved_only_scorability(self):
+    def test_the_reliability_decision_moved_scorability_and_not_the_corpus(self):
+        """The property, read from THIS mission's own artifact.
+
+        This pinned `claims == 37` and `evidence_rows == 39` against the shared
+        live audit, and Mission 1.43 legitimately grew both by adding real
+        Claims. The corpus totals belong to whichever mission last changed them;
+        what belongs to this one is its own delta, which is recorded in its own
+        resolution artifact and is exactly nothing.
+        """
+        run = self.resolution()
+        self.assertEqual(run["resolution"]["evidence_reliability_column_non_null"], 0)
         audit = json.loads(AUDIT.read_text(encoding="utf-8"))
-        totals = audit["totals"]
-        # The corpus did not grow: reliability review creates no research rows.
-        self.assertEqual(totals["claims"], 37)
-        self.assertEqual(totals["evidence_rows"], 39)
-        self.assertEqual(totals["current_reliability_assessments"], 3)
+        self.assertGreaterEqual(audit["totals"]["current_reliability_assessments"], 3)
+        self.assertEqual(audit["coverage"]["scorable_multi_evidence_claims"], 2)
+        self.assertEqual(audit["profile"]["status"], "UNCALIBRATED")
         coverage = audit["coverage"]
-        self.assertEqual(coverage["multi_evidence_claims"], 2)
+        self.assertGreaterEqual(coverage["multi_evidence_claims"], 2)
         self.assertEqual(coverage["scorable_multi_evidence_claims"], 2)
         self.assertEqual(coverage["independence_established_claims"], 0)
         self.assertEqual(coverage["contradiction_present"], 0)

@@ -179,9 +179,12 @@ def _convergent_projection(detailed: Any, signal_type_id: str) -> Any | None:
     """
     from sros_claim_model import ClaimRefusedError, contract_for
 
-    from .interpreters.convergent_witness import PROJECTS_ONTO, convergent_draft
+    from .interpreters.convergent_witness import PROJECTION_ROUTES, convergent_draft
 
-    if contract_for(PROJECTS_ONTO) is None:
+    # Mission 1.43: a table rather than one pair. A detailed kind with no route,
+    # or a route whose contract is not registered, simply has no broader claim to
+    # make -- the state five of the seven historical kinds remain in.
+    if not any(contract_for(onto) is not None for onto in PROJECTION_ROUTES.values()):
         return None
     try:
         return convergent_draft(detailed, signal_type_id=signal_type_id)

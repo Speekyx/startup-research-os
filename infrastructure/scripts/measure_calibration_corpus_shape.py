@@ -85,6 +85,7 @@ def main() -> int:
         EvidenceIndependenceState,
         EvidenceObservationCategory,
         ReliabilityAssessmentOrigin,
+        ReliabilityBasisType,
     )
     from sros_evidence_aggregation import REFERENCE_PROFILE_V1, EvidenceItem, aggregate
     from sros_evidence_reliability import (
@@ -93,7 +94,6 @@ def main() -> int:
         ReliabilityScope,
         resolve_reliability,
     )
-    from sros_contracts import ReliabilityBasisType
 
     with psycopg.connect(url) as conn, conn.cursor() as cur:
         cur.execute(ROWS)
@@ -201,8 +201,7 @@ def main() -> int:
         qs = [c.q for c in result.contributions if c.q is not None]
         pass_through = max(qs) if qs else None
         differs = (
-            pass_through is not None
-            and abs(result.masses.support_strength - pass_through) > 1e-9
+            pass_through is not None and abs(result.masses.support_strength - pass_through) > 1e-9
         )
 
         units.append(
@@ -216,9 +215,7 @@ def main() -> int:
                 "claim_feature": members[0]["claim_feature"],
                 "evidence_count": len(members),
                 "support_count": sum(1 for m in members if m["direction"] == "SUPPORTS"),
-                "contradiction_count": sum(
-                    1 for m in members if m["direction"] == "CONTRADICTS"
-                ),
+                "contradiction_count": sum(1 for m in members if m["direction"] == "CONTRADICTS"),
                 "reliability_scopes": sorted(scopes),
                 "distinct_reliability_values": sorted(
                     {v for v in resolved.values() if v is not None}
@@ -272,9 +269,7 @@ def main() -> int:
             "evidence_rows": len(rows),
             "scorable_claims": len(scorable),
             "multi_evidence_claims": sum(1 for u in units if u["evidence_count"] > 1),
-            "scorable_multi_evidence_claims": sum(
-                1 for u in scorable if u["evidence_count"] > 1
-            ),
+            "scorable_multi_evidence_claims": sum(1 for u in scorable if u["evidence_count"] > 1),
             "max_evidence_per_claim": max((u["evidence_count"] for u in units), default=0),
             "current_reliability_assessments": len(live),
         },
@@ -294,9 +289,7 @@ def main() -> int:
                 1 for u in units if u["established_independence_groups"] > 0
             ),
             "claims_with_contradiction": sum(1 for u in units if u["contradiction_count"] > 0),
-            "claims_temporally_sensitive": sum(
-                1 for u in units if u["temporality"] != "EVERGREEN"
-            ),
+            "claims_temporally_sensitive": sum(1 for u in units if u["temporality"] != "EVERGREEN"),
             "claims_with_claim_feature": sum(1 for u in units if u["claim_feature"]),
             "claims_where_aggregator_differs_from_pass_through": sum(
                 1 for u in units if u["aggregator_differs_from_pass_through"]
@@ -322,10 +315,12 @@ def main() -> int:
 
     print(" | ".join(BANNER))
     totals = document["totals"]
-    print(f"\nclaims {totals['claims']}  evidence {totals['evidence_rows']}  "
-          f"scorable {totals['scorable_claims']}  "
-          f"multi-Evidence {totals['multi_evidence_claims']} "
-          f"(scorable {totals['scorable_multi_evidence_claims']})")
+    print(
+        f"\nclaims {totals['claims']}  evidence {totals['evidence_rows']}  "
+        f"scorable {totals['scorable_claims']}  "
+        f"multi-Evidence {totals['multi_evidence_claims']} "
+        f"(scorable {totals['scorable_multi_evidence_claims']})"
+    )
     print("\nmechanisms exercised by at least one real Claim:")
     for name, count in document["mechanisms_exercised"].items():
         if name.startswith("$"):
@@ -333,8 +328,13 @@ def main() -> int:
         flag = "" if count else "   <-- NEVER"
         print(f"  {name:52} {count}{flag}")
     print("\ndiversity:")
-    for name in ("source_families", "proposition_kinds", "limiting_components",
-                 "distinct_reliability_values", "evidence_counts"):
+    for name in (
+        "source_families",
+        "proposition_kinds",
+        "limiting_components",
+        "distinct_reliability_values",
+        "evidence_counts",
+    ):
         print(f"  {name:28} {document['diversity'][name]}")
     print(f"\nwrote {out.name}")
     return 0

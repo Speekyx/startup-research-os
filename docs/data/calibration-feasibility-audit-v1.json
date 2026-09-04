@@ -15,17 +15,17 @@
     }
   },
   "totals": {
-    "claims": 37,
-    "evidence_rows": 39,
+    "claims": 43,
+    "evidence_rows": 57,
     "claims_with_scorable_evidence": 28,
-    "claims_unavailable": 9,
+    "claims_unavailable": 15,
     "current_reliability_assessments": 3,
     "aggregation_status": {
       "COMPLETE": 28,
-      "UNAVAILABLE": 9
+      "UNAVAILABLE": 15
     },
     "evidence_level": {
-      "0": 9,
+      "0": 15,
       "1": 28
     }
   },
@@ -37,9 +37,9 @@
     "conflict_mass_non_zero": 0,
     "single_source_claims": 28,
     "multi_source_claims": 0,
-    "multi_evidence_claims": 2,
+    "multi_evidence_claims": 8,
     "scorable_multi_evidence_claims": 2,
-    "max_evidence_per_claim": 2,
+    "max_evidence_per_claim": 4,
     "independence_established_claims": 0,
     "independence_unknown_claims": 28,
     "evergreen_claims": 28,
@@ -172,6 +172,42 @@
       "limiting_components": [
         "reliability"
       ],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "1324d79c-54c6-4bba-9d7f-2320133f2ea8",
+      "evidence_count": 3,
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "NO_APPLICABLE_ASSESSMENT"
+      ],
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence": 0,
+      "non_scorable_evidence": 3,
+      "support_strength": 0.0,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.0,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 1.0,
+      "evidence_level": 0,
+      "limiting_components": [],
       "independent_support_groups": 0
     },
     {
@@ -398,6 +434,42 @@
       "limiting_components": [
         "reliability"
       ],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "39449935-d841-4e76-b920-dd727204c199",
+      "evidence_count": 2,
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "NO_APPLICABLE_ASSESSMENT"
+      ],
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence": 0,
+      "non_scorable_evidence": 2,
+      "support_strength": 0.0,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.0,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 1.0,
+      "evidence_level": 0,
+      "limiting_components": [],
       "independent_support_groups": 0
     },
     {
@@ -1001,6 +1073,42 @@
       "independent_support_groups": 0
     },
     {
+      "claim_id": "9bda8081-aebb-48a7-a31d-3fab8e2345a6",
+      "evidence_count": 3,
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "NO_APPLICABLE_ASSESSMENT"
+      ],
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence": 0,
+      "non_scorable_evidence": 3,
+      "support_strength": 0.0,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.0,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 1.0,
+      "evidence_level": 0,
+      "limiting_components": [],
+      "independent_support_groups": 0
+    },
+    {
       "claim_id": "a2707d23-28ef-491d-9ae6-2e09a39e947d",
       "evidence_count": 1,
       "proposition_kind": "platform_counted_content_request_change",
@@ -1036,6 +1144,42 @@
       "limiting_components": [
         "reliability"
       ],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "a4809b1a-56a4-4ae2-a2e3-9ee2f68e4dd3",
+      "evidence_count": 3,
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "NO_APPLICABLE_ASSESSMENT"
+      ],
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence": 0,
+      "non_scorable_evidence": 3,
+      "support_strength": 0.0,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.0,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 1.0,
+      "evidence_level": 0,
+      "limiting_components": [],
       "independent_support_groups": 0
     },
     {
@@ -1298,6 +1442,78 @@
       "limiting_components": [
         "reliability"
       ],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "dff657c2-3ee8-429c-b308-4e0d8f3894d2",
+      "evidence_count": 3,
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "NO_APPLICABLE_ASSESSMENT"
+      ],
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence": 0,
+      "non_scorable_evidence": 3,
+      "support_strength": 0.0,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.0,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 1.0,
+      "evidence_level": 0,
+      "limiting_components": [],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "e740d102-4bf2-4f9c-bc01-e82c9fb4ac99",
+      "evidence_count": 4,
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "NO_APPLICABLE_ASSESSMENT"
+      ],
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence": 0,
+      "non_scorable_evidence": 4,
+      "support_strength": 0.0,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.0,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 1.0,
+      "evidence_level": 0,
+      "limiting_components": [],
       "independent_support_groups": 0
     },
     {

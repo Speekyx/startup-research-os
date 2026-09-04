@@ -66,9 +66,21 @@ def contract() -> PropositionConvergenceContract:
 
 
 class TheContractDeclaresItselfCompletely(unittest.TestCase):
-    def test_exactly_one_contract_is_registered(self) -> None:
-        """§15: generic machinery, one narrow proposition to prove it."""
-        self.assertEqual(set(CONVERGENCE_CONTRACTS), {KIND})
+    def test_every_registered_contract_is_opt_in_and_none_is_generic(self) -> None:
+        """§15 said: generic machinery, one narrow proposition to prove it.
+
+        Mission 1.43 registered a second, so the count is deployment-of-the-code
+        state and pinning it would assert that no proposition kind may ever
+        converge again. **The property that made "exactly one" worth asserting
+        is that convergence is OPT-IN PER KIND**: there is no default contract
+        and no fallback, so every one of the eight historical kinds that has not
+        been given a contract still does not converge. That is what is checked.
+        """
+        self.assertIn(KIND, CONVERGENCE_CONTRACTS)
+        for kind, registered in CONVERGENCE_CONTRACTS.items():
+            self.assertEqual(registered.proposition_kind, kind)
+        # No contract exists for a kind nobody registered, and none is invented.
+        self.assertIsNone(contract_for("a_proposition_kind_nobody_registered"))
 
     def test_it_is_observed_and_evergreen(self) -> None:
         self.assertIs(contract().claim_type, ClaimType.OBSERVED)

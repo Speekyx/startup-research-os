@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.74
+Version: 1.75
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-04 (Sprint 1 / Mission 1.42.1)
+Last amended: 2026-09-04 (Sprint 1 / Mission 1.43)
 
 ---
 
@@ -13,6 +13,38 @@ Last amended: 2026-09-04 (Sprint 1 / Mission 1.42.1)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.75 — 2026-09-04 (Sprint 1 / Mission 1.43)
+
+**`CALIBRATION_REFERENCE_CORPUS_MEANINGFULLY_EXPANDED`**, with
+`NEW_CORPUS_SHAPE_NON_SCORABLE_MISSING_RELIABILITY` beside it.
+
+Measured before any work: 0 of 37 Claims have more than one support group, and 0
+show an aggregator result differing from the B-2 reliability pass-through
+baseline. With one group that identity is algebraic, so adding single-group
+Evidence cannot make them differ. The aggregation layer becomes measurable only
+through established independence or contradiction.
+
+A second convergence contract,
+`platform-counted-content-request-change-witnessed@1.0.0`, over the 18 Wikimedia
+Signals already held. **Zero network requests** — and not merely for economy:
+Wikimedia acquisition is blocked by three unsatisfied conditions in this
+deployment.
+
+Claims 37 → 43, ClaimRevisions 38 → 44, Evidence 39 → 57, Claims with more than
+one Evidence 2 → 8, max Evidence per Claim 2 → 4. Every other counter unchanged.
+
+Another TED division was refused as `TOO_SIMILAR_TO_CURRENT_CORPUS` despite being
+immediately scorable. Nothing was manufactured: no contradiction, no
+independence, no temporality.
+
+New: `docs/data/calibration-corpus-expansion-plan-v1.json` (frozen in its own
+commit before any derivation), `calibration-corpus-baseline-v1.json`,
+`calibration-corpus-shape-after-v1.json`,
+`calibration-corpus-expansion-run-v1.json`, and two scripts under
+`infrastructure/scripts/`.
+
+Report: `docs/architecture/mission-1.43-report.md`.
 
 ## 1.74 — 2026-09-04 (Sprint 1 / Mission 1.42.1 close-out)
 
