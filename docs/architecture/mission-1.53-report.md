@@ -304,6 +304,18 @@ classes were first named `TheEvidenceRequirement…`, and pytest collected **zer
 tests** without saying so. The repository's convention is a `Test` prefix;
 renaming took collection from 0 to 15.
 
+**A third trap was not caught before it mattered, and CI found it.** One test
+asserted `total > 0` on `claim_interpretation_runs` before checking that every
+run carries an expiry. That passed locally against the dev database and **failed
+in CI, which starts empty** — Mission 1.37's rule that an artifact measuring a
+deployment cannot be checked in CI, and `testing-strategy.md` §68's rule that a
+count which can legitimately change is deployment state, both arriving one layer
+along in a test rather than in a generated document. Split into the schema
+invariant (`expires_at` exists), which holds on an empty database, and the
+observation (no run that exists lacks one), which is vacuously true there and
+load-bearing on a populated one. The live 12-of-12 count stays in the mission
+record, where deployment state belongs.
+
 **66. Validator probes?** **66 deliberate violations, 66 caught**, and the real
 record still validates. Each is a claim the record could plausibly have made and
 must not: a hash-only target, a nullable column inside the identity key, a reason

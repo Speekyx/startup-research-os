@@ -215,15 +215,37 @@ class TestANullableColumnStopsAUniqueConstraining:
 class TestTheRunLogsStillExpire:
     """§46.4 and §46.6. Option C is refused from live state."""
 
-    def test_every_interpretation_run_carries_an_expiry(self, privileged_conn):
-        total, with_expiry = privileged_conn.execute(
+    def test_an_interpretation_run_can_carry_an_expiry(self, privileged_conn):
+        """The SCHEMA property, which holds on an empty database.
+
+        `12 of 12 runs carry an expires_at` is deployment state and lives in the
+        mission record, not here: CI starts from an empty database, so a test
+        asserting a live count is red for a reason that has nothing to do with
+        the code (`testing-strategy.md` §68, and Mission 1.37's rule that an
+        artifact measuring a deployment cannot be checked in CI). This version
+        first failed in CI for exactly that reason.
+        """
+        column = privileged_conn.execute(
             """
-            SELECT count(*), count(*) FILTER (WHERE expires_at IS NOT NULL)
-            FROM research.claim_interpretation_runs
+            SELECT count(*) FROM information_schema.columns
+            WHERE table_schema = 'research'
+              AND table_name = 'claim_interpretation_runs'
+              AND column_name = 'expires_at'
             """
-        ).fetchone()
-        assert total > 0, "the claim needs live rows to be about"
-        assert with_expiry == total
+        ).fetchone()[0]
+        assert column == 1
+
+    def test_no_run_that_exists_lacks_one(self, privileged_conn):
+        """Vacuous on an empty database and load-bearing on a populated one,
+        which is the honest split: the row above is the invariant, this is the
+        observation."""
+        without_expiry = privileged_conn.execute(
+            """
+            SELECT count(*) FROM research.claim_interpretation_runs
+            WHERE expires_at IS NULL
+            """
+        ).fetchone()[0]
+        assert without_expiry == 0
 
     def test_inputs_cascade_from_their_run(self, privileged_conn):
         cascades = privileged_conn.execute(
