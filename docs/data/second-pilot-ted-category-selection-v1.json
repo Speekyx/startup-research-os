@@ -1,0 +1,171 @@
+{
+  "$comment": "Mission 1.40 §5, §7, §16, §30. FROZEN BEFORE ANY TED RESEARCH QUERY. The category, the two publication windows and the cohort-partition rule are all fixed here, so acquisition can be held to them. §37 forbids switching category or widening the period after seeing results; if the frozen plan yields fewer than two qualifying witnesses, that is the reported outcome.",
+  "artifact_version": "second-pilot-ted-category-selection@1.0.0",
+  "generated_by": "mission-1.40",
+  "frozen_at": "2026-09-03",
+  "frozen_before_any_research_query": true,
+  "taxonomy_provenance": {
+    "taxonomy": "Common Procurement Vocabulary (CPV)",
+    "publisher": "Publications Office of the European Union",
+    "originating_body": "Directorate-General for Internal Market, Industry, Entrepreneurship and SMEs",
+    "dataset_uri": "http://publications.europa.eu/resource/dataset/cpv",
+    "version": "2008, marked LATEST on the Publications Office dataset record",
+    "governing_instrument": "Commission Regulation (EC) No 213/2008 of 28 November 2007 amending Regulation (EC) No 2195/2002 of the European Parliament and of the Council on the Common Procurement Vocabulary (CPV), OJ L 74, 15.3.2008",
+    "label_authority": "https://publications.europa.eu/resource/authority/cpv/cpv/<code>",
+    "retrieved_at": "2026-09-03",
+    "how_each_label_was_established": "one fetch per candidate against the Publications Office authority register, which returns a single concept. No label was taken from memory, from a third-party CPV table, from a blog, from a search snippet or from an LLM.",
+    "a_bulk_extraction_was_refused": {
+      "what": "a division-level table extracted in one pass from the EUR-Lex HTML of Regulation 213/2008",
+      "why_refused": "it was internally inconsistent and demonstrably wrong. It reported 90000000-8 while this repository's own division-90 data uses a different check digit, and it labelled 92000000 'Miscellaneous services', which the authority register contradicts. A summarising model reading a very long annex produces plausible-looking output, and plausible-looking output carrying an official label is worse than no output.",
+      "consequence": "every candidate label below was verified individually, one concept per fetch"
+    }
+  },
+  "selection_rule": {
+    "preregistered": true,
+    "ordinal_not_numeric": true,
+    "note": "§3 and §4 forbid a numeric candidate score. These are applied in order.",
+    "criteria_in_order": [
+      "1. OFFICIAL CPV IDENTITY. The code and label must come from the Publications Office authority register.",
+      "2. NON-DEVELOPER DOMAIN. Excludes software, developer tooling, container technology, IT infrastructure, cloud, programming and developer services, because this mission exists partly to create domain diversity beyond Docker.",
+      "3. NOT THE EXISTING PILOT. Division 90 was the bounded technical pilot and §6 forbids reusing it for convenience.",
+      "4. IN A PREFERRED NON-DEVELOPER COMMERCIAL AREA named by §4: consumer services, education, creative industries, entertainment, hospitality, marketing, media, or non-sensitive health-related services.",
+      "5. FURTHEST FROM BOTH EXISTING SUBJECTS. Among those remaining, prefer the division whose official label most directly names the creative, entertainment and sport domain, which is furthest from Docker's developer tooling and from division 90's environmental services.",
+      "6. COLLECTOR COMPATIBILITY WITH NO SEMANTIC REMAPPING. The collector's `cpv_division` parameter takes a two-digit division, which is exactly the granularity the extractor's cohort key uses. No mapping step is required."
+    ],
+    "tie_break_declared_in_advance": "criterion 5 is the tie-break, and it was written before the candidates were listed"
+  },
+  "candidates": [
+    {
+      "code": "92000000",
+      "official_label": "Recreational, cultural and sporting services",
+      "label_verified_at": "https://publications.europa.eu/resource/authority/cpv/cpv/92000000",
+      "division": "92",
+      "developer_domain": false,
+      "preferred_area": "creative industries, entertainment, sport",
+      "verdict": "SELECT"
+    },
+    {
+      "code": "80000000",
+      "official_label": "Education and training services",
+      "label_verified_at": "https://publications.europa.eu/resource/authority/cpv/cpv/80000000",
+      "division": "80",
+      "developer_domain": false,
+      "preferred_area": "education",
+      "verdict": "QUALIFIED_ALTERNATIVE",
+      "why_not_selected": "passes every criterion and loses only on criterion 5"
+    },
+    {
+      "code": "55000000",
+      "official_label": "Hotel, restaurant and retail trade services",
+      "label_verified_at": "https://publications.europa.eu/resource/authority/cpv/cpv/55000000",
+      "division": "55",
+      "developer_domain": false,
+      "preferred_area": "hospitality, consumer services",
+      "verdict": "QUALIFIED_ALTERNATIVE",
+      "why_not_selected": "as above"
+    },
+    {
+      "code": "85000000",
+      "official_label": "Health and social work services",
+      "label_verified_at": "https://publications.europa.eu/resource/authority/cpv/cpv/85000000",
+      "division": "85",
+      "developer_domain": false,
+      "preferred_area": "health-related services",
+      "verdict": "QUALIFIED_ALTERNATIVE",
+      "why_not_selected": "passes criteria 1-3 and is the candidate closest to sensitive subject matter; §4 admits only non-sensitive health-related services, and a division whose label spans social work is not obviously that. Set aside rather than argued about, since criterion 5 already decides."
+    },
+    {
+      "code": "72000000",
+      "official_label": "IT services: consulting, software development, Internet and support",
+      "label_verified_at": "https://publications.europa.eu/resource/authority/cpv/cpv/72000000",
+      "division": "72",
+      "developer_domain": true,
+      "verdict": "EXCLUDED_DEVELOPER_DOMAIN",
+      "why": "the official label names software development and IT services by name, which criterion 2 excludes"
+    },
+    {
+      "code": "90000000",
+      "official_label": "Sewage, refuse, cleaning and environmental services",
+      "label_verified_at": "https://publications.europa.eu/resource/authority/cpv/cpv/90000000",
+      "division": "90",
+      "developer_domain": false,
+      "verdict": "EXCLUDED_EXISTING_PILOT",
+      "why": "§6. Data, a reliability assessment and a collector exercise already exist for it, and every one of those is a reason for convenience rather than information value"
+    }
+  ],
+  "selected": {
+    "pilot_id": "cpv-division-92",
+    "code": "92000000",
+    "division": "92",
+    "official_label": "Recreational, cultural and sporting services",
+    "subject_scope_type": "CATEGORY",
+    "why_category_not_product": "a CPV division is a class a contracting authority assigns to its own contract. It contains procurements, never products (Mission 1.35), so PRODUCT would be a fabrication and CATEGORY is the natural grain.",
+    "why_non_developer": "the official label names recreation, culture and sport. It contains no software, no IT service and no developer activity.",
+    "market_scope_note": "geography is a SEPARATE axis. CATEGORY answers WHAT and MarketScope answers WHERE (§32, Mission 1.34). Nothing here sets a MarketScope, and TED's coverage is not folded into the subject scope.",
+    "not_related_to_docker": true,
+    "known_limitations": [
+      "a division is coarse: it groups every recreational, cultural and sporting procurement together",
+      "what a notice states is a published amount under the notice's own semantics, never a price paid, never revenue, and never willingness to pay",
+      "TED coverage for eForms begins 2023-03-01, so no earlier window exists"
+    ]
+  },
+  "acquisition_plan": {
+    "frozen_before_results": true,
+    "source_id": "ted-eu",
+    "resource_id": "notices/eforms-contract-and-award",
+    "route": "ted-search-api-notices",
+    "forbidden_routes": [
+      "ted-bulk-xml-daily",
+      "ted-bulk-xml-monthly",
+      "ted-csv-historical"
+    ],
+    "cpv_division": "92",
+    "windows": [
+      {
+        "witness": "A",
+        "date_start": "2023-03-01",
+        "date_end": "2023-03-07"
+      },
+      {
+        "witness": "B",
+        "date_start": "2023-03-08",
+        "date_end": "2023-03-14"
+      }
+    ],
+    "window_rule": "the first two consecutive non-overlapping seven-day publication windows from the start of eForms coverage (2023-03-01). Chosen by rule rather than by search: no result count was inspected before freezing, and §37 forbids widening either window afterwards.",
+    "bounds": {
+      "max_pages": 2,
+      "max_records": 100,
+      "page_size": 50
+    },
+    "fields": "the collector's reviewed conceptual field set, unchanged",
+    "minimisation": "the authorization's allowed field list already excludes every contact and personal-data field; nothing here widens it",
+    "completeness_semantics": "COMPLETE_BOUNDED_QUERY when a page returns fewer notices than the page size, which is how the collector detects exhaustion; CENSORED_BY_RESULT_LIMIT if a bound is reached. Recorded from the run rather than assumed."
+  },
+  "cohort_partition_rule": {
+    "preregistered": true,
+    "rule": "one witness cohort per frozen publication window",
+    "why_this_is_source_native_and_deterministic": "the extractor's own cohort key groups by (source, record kind, resource, notice class, CPV division), so every division-92 award notice inside ONE acquisition forms ONE cohort. Two disjoint publication windows are therefore two disjoint cohorts, and the publication date is the source's own field and the query's own bound.",
+    "why_it_is_independent_of_the_result": "the windows were fixed before any notice was retrieved and before any amount was seen. §16 forbids partitioning by favourable or unfavourable result, by high and low value after inspecting amounts, and by arbitrary manual grouping; a date window decided in advance is none of those.",
+    "why_the_two_cohorts_converge": "the convergent proposition carries NO period -- it is EVERGREEN because H-37 is open and a TED notice publishes an offset without a time -- so the window is not part of the assertion. The two DETAILED claims stay distinct, because their notice_ids differ.",
+    "each_witness_must_qualify_alone": "§17. Each cohort must satisfy the qualification predicate on its own and must on its own exhibit differing stated totals. A pair that only jointly establishes the proposition is not two witnesses."
+  },
+  "contract_under_test": {
+    "contract_id": "source-published-value-contrast-witnessed",
+    "version": "1.0.0",
+    "proposition_kind": "source_published_classification_value_contrast_witnessed",
+    "frozen": true,
+    "note": "§41. Mission 1.40 tests V1 as frozen. If real data is legitimately shaped for convergence and V1 cannot represent it, the outcome is PROPOSITION_CONVERGENCE_REAL_DATA_GAP and the contract is NOT patched here."
+  },
+  "declared_non_goals": [
+    "no Opportunity and no Opportunity synthesis",
+    "no Opportunity Score and no ranking",
+    "no ReliabilityAssessment created",
+    "no calibration labels, splits or fitted parameters",
+    "no independence group",
+    "no scope relation, and no relation to Docker",
+    "no WILLINGNESS_TO_PAY, at any grain",
+    "no external model call and no embedding"
+  ],
+  "frozen_selection_sha256": "d473b49e7bdc63dd8e65cce100b74dda84891bf0393158003af3747c2b35aa2f"
+}

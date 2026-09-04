@@ -177,7 +177,13 @@ class ReliabilityIsAnInputNotALabel(unittest.TestCase):
 
     def test_the_echo_hazard_is_measured_rather_than_asserted(self) -> None:
         self.assertTrue(strategy()["echo_hazard_controls"]["measured_severity"].startswith("TOTAL"))
-        self.assertEqual(audit()["limiting_component_counts"], {"reliability": 19})
+        # The PROPERTY, not the count. Mission 1.40 legitimately grew the corpus
+        # from 19 scorable claims to 20, and a pinned number would have failed on
+        # a change that strengthens the finding rather than weakening it
+        # (`testing-strategy.md` §68).
+        counts = audit()["limiting_component_counts"]
+        self.assertEqual(set(counts), {"reliability"})
+        self.assertEqual(sum(counts.values()), audit()["totals"]["claims_with_scorable_evidence"])
 
     def test_the_assessments_themselves_were_not_touched(self) -> None:
         """§33. Two, and no third."""

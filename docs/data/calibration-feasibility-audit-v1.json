@@ -15,32 +15,32 @@
     }
   },
   "totals": {
-    "claims": 28,
-    "evidence_rows": 28,
-    "claims_with_scorable_evidence": 19,
-    "claims_unavailable": 9,
+    "claims": 31,
+    "evidence_rows": 31,
+    "claims_with_scorable_evidence": 20,
+    "claims_unavailable": 11,
     "current_reliability_assessments": 2,
     "aggregation_status": {
-      "COMPLETE": 19,
-      "UNAVAILABLE": 9
+      "COMPLETE": 20,
+      "UNAVAILABLE": 11
     },
     "evidence_level": {
-      "0": 9,
-      "1": 19
+      "0": 11,
+      "1": 20
     }
   },
   "coverage": {
-    "support_only": 19,
+    "support_only": 20,
     "contradiction_present": 0,
     "mixed_support_and_contradiction": 0,
     "neutral_present": 0,
     "conflict_mass_non_zero": 0,
-    "single_source_claims": 19,
+    "single_source_claims": 20,
     "multi_source_claims": 0,
     "multi_evidence_claims": 0,
     "independence_established_claims": 0,
-    "independence_unknown_claims": 19,
-    "evergreen_claims": 19,
+    "independence_unknown_claims": 20,
+    "evergreen_claims": 20,
     "temporally_sensitive_claims": 0,
     "claims_with_a_claim_feature": 0,
     "distinct_proposition_kinds": 2,
@@ -49,14 +49,50 @@
     "categorised_market_or_validation": 0
   },
   "limiting_component_counts": {
-    "reliability": 19
+    "reliability": 20
   },
   "distinct_support_strengths": {
-    "0.5": 1,
+    "0.5": 2,
     "0.65": 18
   },
   "reference_target_tables_present": [],
   "units": [
+    {
+      "claim_id": "02248c91-a384-442d-8c78-80ba4c1bd2b1",
+      "evidence_count": 1,
+      "proposition_kind": "source_published_classification_value_contrast_witnessed",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "ted-eu"
+      ],
+      "signal_type_ids": [
+        "procurement_value_contrast"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "NO_APPLICABLE_ASSESSMENT"
+      ],
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence": 0,
+      "non_scorable_evidence": 1,
+      "support_strength": 0.0,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.0,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 1.0,
+      "evidence_level": 0,
+      "limiting_components": [],
+      "independent_support_groups": 0
+    },
     {
       "claim_id": "05cac6f6-17f4-4008-b68b-9787bb4ac774",
       "evidence_count": 1,
@@ -510,6 +546,44 @@
       "independent_support_groups": 0
     },
     {
+      "claim_id": "6d03f533-9155-4631-89e2-843cb028b010",
+      "evidence_count": 1,
+      "proposition_kind": "source_reported_procurement_value_contrast",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "ted-eu"
+      ],
+      "signal_type_ids": [
+        "procurement_value_contrast"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "RESOLVED"
+      ],
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence": 1,
+      "non_scorable_evidence": 0,
+      "support_strength": 0.5,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.5,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 0.5,
+      "evidence_level": 1,
+      "limiting_components": [
+        "reliability"
+      ],
+      "independent_support_groups": 0
+    },
+    {
       "claim_id": "6e4c3f21-8881-4453-b4ff-af1b47c464b5",
       "evidence_count": 1,
       "proposition_kind": "community_site_published_questions_carrying_tag",
@@ -581,6 +655,42 @@
       "limiting_components": [
         "reliability"
       ],
+      "independent_support_groups": 0
+    },
+    {
+      "claim_id": "73e834c4-ddad-4093-9727-79720e074b4b",
+      "evidence_count": 1,
+      "proposition_kind": "source_published_classification_value_contrast_witnessed",
+      "temporality": "EVERGREEN",
+      "claim_feature": null,
+      "source_ids": [
+        "ted-eu"
+      ],
+      "signal_type_ids": [
+        "procurement_value_contrast"
+      ],
+      "observation_categories": [
+        "UNCATEGORISED"
+      ],
+      "independence_states": [
+        "UNKNOWN"
+      ],
+      "directions": [
+        "SUPPORTS"
+      ],
+      "reliability_outcomes": [
+        "NO_APPLICABLE_ASSESSMENT"
+      ],
+      "aggregation_status": "UNAVAILABLE",
+      "scorable_evidence": 0,
+      "non_scorable_evidence": 1,
+      "support_strength": 0.0,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.0,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 1.0,
+      "evidence_level": 0,
+      "limiting_components": [],
       "independent_support_groups": 0
     },
     {

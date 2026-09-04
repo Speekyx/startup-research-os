@@ -166,6 +166,29 @@ class ClaimInterpretationJobResult:
         }
 
 
+def _convergent_projection(detailed: Any, signal_type_id: str) -> Any | None:
+    """The broader Claim this detailed draft also witnesses, or `None`.
+
+    Mission 1.40 §1, wiring the interpreter Mission 1.39 deliberately left out of
+    the production path. Kept as one small function so the decision is visible in
+    a diff rather than buried in the loop.
+
+    `None` on refusal, and refusal is ordinary: a detailed proposition with no
+    registered convergence contract simply has no broader claim to make, which is
+    the state every one of the seven historical proposition kinds is in.
+    """
+    from sros_claim_model import ClaimRefusedError, contract_for
+
+    from .interpreters.convergent_witness import PROJECTS_ONTO, convergent_draft
+
+    if contract_for(PROJECTS_ONTO) is None:
+        return None
+    try:
+        return convergent_draft(detailed, signal_type_id=signal_type_id)
+    except ClaimRefusedError:
+        return None
+
+
 def run_claim_interpretation_job(
     payload: object,
     connection_factory: Callable[[str], Any],
@@ -241,6 +264,23 @@ def run_claim_interpretation_job(
             outcome = interpreter.interpret(signal, request)
             if outcome.draft is not None:
                 drafts.append(outcome.draft)
+                # Mission 1.40 §1. The SAME Signal may additionally witness a
+                # broader convergence-enabled proposition, when one is
+                # registered for the detailed proposition it just produced.
+                #
+                # **Across two Claims, never twice within one.** The two drafts
+                # carry different proposition keys by construction -- the
+                # broader one is built from the contract's identity facts alone
+                # -- so `_persist_evidence` writes one Evidence row per (Claim,
+                # Signal) pair and the duplicate-witness guard never has to
+                # choose between them.
+                #
+                # A refusal here does not fail the run: the detailed claim is
+                # already sound, and the projection declining is a fact about
+                # the contract rather than about the Signal.
+                convergent = _convergent_projection(outcome.draft, signal.signal_type_id)
+                if convergent is not None:
+                    drafts.append(convergent)
                 considered.append(
                     ConsideredSignal(
                         signal_id=signal.signal_id,
