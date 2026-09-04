@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.72
-Last amended: 2026-09-04 (Sprint 1 / Mission 1.42)
+Version: 1.73
+Last amended: 2026-09-04 (Sprint 1 / Mission 1.42a)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.73 | 2026-09-04 | **HUMAN_RELIABILITY_RUBRIC_READY: the architecture defined the question, the scope, the reviewer and the evidence, and then handed over a blank numeric field.** `human-reliability-assessment-rubric@1.0.0` is that missing middle, and it is a DECISION PROCEDURE rather than a scoring function -- **the module contains no arithmetic operator of any kind**, asserted over its AST, because the one failure to avoid was solving arbitrary numbers with different arbitrary numbers. **FIVE dimensions accepted and SIX rejected, and the rejections are the substance**: `MEASUREMENT_TO_PROPOSITION_FIT` **is `directness`** and scoring it here would make one weakness count twice -- its residue is not a gradient but a MIS-SPECIFIED SCOPE, so it became a hard stop; `CLASSIFICATION_DEPENDABILITY` folded in, because a dimension for it would be a rubric shaped around one publisher's taxonomy; `KNOWN_FAILURE_MODES` and `RESIDUAL_UNKNOWN` are the OUTPUT of the five, not a sixth question; and a separate **reviewer-confidence field was refused** because basis completeness is READ OFF the profile and two fields answering one question eventually disagree. **UNKNOWN IS NOT LOW, STRUCTURALLY**: `NOT_ESTABLISHED` and `CONTRADICTED` carry **no ordinal rank**, so neither can be interpolated, averaged or read as the bottom of a scale. **NO INTERMEDIATE ANCHORS**, deliberately -- nothing in this repository anchors the absolute scale, so one would have to be invented; the two anchors that exist are defined by what the value DOES in `q = min(components)` rather than by an adjective, and **`0.0` is a POSITIVE FINDING and not the absence of an assessment**. Recommendation **`KEEP_NUMERIC_FIELD_BUT_REQUIRE_ORDINAL_REVIEW_PROFILE_FIRST`**: no migration, no code change, both historical values kept, and the number becomes a summary of a RECORDED PROFILE which is what a second reviewer reproduces. **THE EXISTING ARCHITECTURE ALREADY ANSWERED HALF THE DISAGREEMENT QUESTION** -- the resolver refuses on >1 current assessment, so while a disagreement is open the honest state is ABSENCE; what is missing is disagreeing WITHOUT superseding. **THE WIKIMEDIA REVIEWER HAD ALREADY WRITTEN `HISTORICAL_MUTABILITY` DOWN UNPROMPTED**, months before this rubric derived it from TED's open question -- corroboration that the dimensions are real, bounded by both reviews sharing a reviewer. Both historical assessments are **PARTIALLY_REPRESENTABLE** and **unchanged**. Secondary: **`RELIABILITY_RUBRIC_PROVENANCE_MODEL_GAP`** -- no column records which procedure produced a value, and **the basis table is not the answer** because a basis row names a document about the MEASUREMENT. 0 assessments, 0 model calls, 0 acquisitions, every counter unchanged, and **the TED worksheet is prepared and UNANSWERED** |
 | 1.72 | 2026-09-04 | **READY_FOR_SECOND_PILOT_RELIABILITY_REVIEW: the question is prepared for a scope that is BROADER than the mission that prompted it, and software supplied no answer.** The brief expected 4 Evidence rows on 2 Claims; the live scope holds **6 rows across 4 Claims**, resolving to **exactly one** scope which is exactly the expected five-part one. **That is not §30 C.** Drift would be Evidence rows failing to match the five-part scope; what differs is the COUNT INSIDE it, because **a reliability scope carries no classification division and no currency** -- so one judgement here binds the SEK claim and the **division-90** claim too, whose only witness is the Signal derived in Mission 1.15.10 **before the second pilot existed**. Mission 1.40 recorded the same property from the other side. **THE NEAR MISS IS THE WHOLE TEST**: the existing TED `0.5` shares source, resource, record kind AND `claim_type: OBSERVED` -- **four of five** -- and the single differing field is `proposition_kind`, exercised through the REAL resolver in both directions and confirmed by **6 leak checks, 0 leaks**. **NOTHING NEW WAS RETRIEVED, because nothing new was needed**: the convergent proposition reads the same BT-161 field of the same notices, so 3 of 4 existing basis rows are REUSED and BT-195-BT-198 is **PARTIALLY_APPLICABLE** -- the FACT is unchanged and its WEIGHT is not, since withholding bounds a named cohort and cannot falsify an existential. **FOUR RELIABILITY QUESTIONS ARE GENUINELY NEW** and none has a documentary answer: an existential is MONOTONE, and whether that makes it more dependable or merely **harder to falsify** is a judgement; it carries no period (H-37); it asserts about a CLASS; and **two cohorts are asserted to witness one proposition**, a step that does not exist for the detailed claim. **THE LARGEST RESIDUAL UNKNOWN HAS NO DOCUMENT AND NO MITIGATION**: whether a published notice can be corrected or superseded, which bears directly on whether a witnessing cohort still witnesses. **ENGINEERING VALIDATION IS RECORDED AND REFUSED AS BASIS** -- currency grain being correctly bounded does not imply reliability, `DISJOINT` overlap does not imply independence (UNKNOWN on all 6 rows, 0 groups), and rewarding the system numerically because its own tests pass is the error the separation exists to prevent. **0 assessments, 0 basis rows, 0 network requests, 0 model calls, every canonical counter unchanged**, `scoring.evidence.reliability` NULL on all 39 rows, profile still UNCALIBRATED, Problem-Family still PARKED. **The next action is a HUMAN decision and Mission 1.42.1 was NOT started** |
 | 1.71 | 2026-09-03 | **PROCUREMENT_COHORT_GRAIN_REPAIRED_REAL_MULTI_EVIDENCE_CREATED: Claims with more than one Evidence row, 0 -> 2.** Two real canonical Claims, two genuinely distinct witnesses each, **revision 1 on both**, and the real aggregator receiving `raw_evidence_count = 2`. **ZERO network acquisitions**: the frozen windows were reconstructed from the 177 records Mission 1.40 already persisted. **TWO DEFECTS OF ONE SHAPE, both found by real data and both a docstring disagreeing with its code.** The cohort key called currency and amount scope load-bearing and contained neither; `derive` refuses unless each is single-valued, so **the implementation was wrong, not the documentation** -- a dimension the validation demands be equal is what makes a cohort comparable. And `_persist_evidence` said *idempotent on (workspace_id, claim_id, signal_id)* while the query added `AND extraction_method`, so a new interpreter version INSERTED a second row. **Evidence identity is epistemic; the procedure that produced it is provenance** -- `extraction_method` is still written and still read, it just no longer decides. **A CHANGED assessment is neither unchanged nor a second observation, and no third answer was invented**: a disagreeing row is REPORTED as a conflict and nothing is written, because representing a revision needs a model this architecture lacks. Extractor **1.0.1 -> 1.1.0**, MINOR because **adding a field to a grouping key can only SPLIT groups, never merge them** -- and §6 verified it rather than arguing it: division 90 re-derived with magnitude, currency, direction, amount types, scopes and codes **all identical**, its 3 inputs still one group. **Window A went from 0 derived cohorts to 2**; single-member PLN, DKK and CZK cohorts now refuse for the right reason. **§22/§23 enforced rather than assumed**: window B's unchanged EUR cohort was SKIPPED as an existing witness, because a new procedure version over identical membership is historical versioning and not a second observation. **NO FX CONVERSION** anywhere. Overlap DISJOINT and independence still UNKNOWN on all six rows with 0 groups -- disjoint records are not independent evidence. **The audit itself had a defect**: `multi_evidence_claims` was computed over SCORABLE units and reported 0 while two real ones existed. 0 model calls, 0 embeddings, 0 new assessments, Opportunity untouched |
 | 1.70 | 2026-09-03 | **SECOND_PILOT_REAL_MULTI_EVIDENCE_NOT_OBSERVED: the convergence contract was never the blocker, and a currency guard was.** CPV division **92 'Recreational, cultural and sporting services'** selected under a frozen ordinal rule, every label verified ONE CONCEPT PER FETCH against the Publications Office authority register. **A bulk EUR-Lex extraction was retrieved and REFUSED**: it gave `90000000-8` where this repository's own division-90 data uses a different check digit, and labelled 92000000 *Miscellaneous services*, which the register contradicts -- a summarising model over a long annex produces plausible output, and plausible output carrying an official label is worse than none. Acquisition ran to the frozen plan: **177 notices across two frozen windows, both COMPLETE_BOUNDED_QUERY**. Then **three of four cohorts were REFUSED for mixed currencies** (EUR/PLN, DKK/EUR, CZK/EUR/SEK) and window A produced NO Signal at all, so division 92 has ONE witness and `claims with >1 Evidence` is still **0**. §37 forbids widening the window, switching category or regrouping, and none was done. **THE EXTRACTOR'S COHORT KEY DOES NOT CONTAIN WHAT ITS DOCSTRING SAYS**: it names notice class, amount scope, currency and CPV division as load-bearing, and the key holds `source_id | record_kind_id | resource_id | notice_class | cpv_division` -- currency and amount scope are validated AFTER grouping and refuse the WHOLE cohort rather than splitting it. Had currency been a grouping dimension, window A would very likely have yielded EUR cohorts and this mission would have succeeded. **NOT FIXED**, because changing a grouping key after seeing which data it rejected is the shape §37 and §41 both refuse. **A DUPLICATE EVIDENCE ROW WAS CREATED BY THIS RUN AND REMOVED**: re-interpreting the pre-existing division-90 Signal wrote a second Evidence row differing only by interpreter version (1.1.0 -> 1.4.1), which is §13's forbidden case verbatim and Mission 1.32's known idempotency defect, and which briefly made the corpus report a FALSE `claims with >1 evidence: 1`. **The existing TED assessment BINDS to the new division-92 DETAILED claim** -- its scope carries no classification division -- **and not to either convergent claim**, because proposition_kind differs. 0 model calls, 0 embeddings, 0 new assessments, 0 independence groups, no Opportunity |
@@ -319,6 +320,101 @@ positives in the scored split, which this 89-question corpus did not supply: one
 defensible SAME in 40 candidate pairs is a finding about the corpus, not about
 the classifier. **No synthetic positive may substitute** -- a constructed pair
 can test a parser and can never establish semantic accuracy against real data.
+
+### A number is a summary of a profile, or it is an impression
+
+Added in 1.73 (Mission 1.42a, `human-reliability-assessment-rubric-v1.md`,
+`mission-1.42a-report.md`). **`HUMAN_RELIABILITY_RUBRIC_READY`**, with
+`RELIABILITY_RUBRIC_PROVENANCE_MODEL_GAP` recorded beside it.
+
+    DOCUMENTED FACTS  ->  [ the rubric ]  ->  HUMAN JUDGEMENT  ->  Assessment
+    dimensions accepted 5    rejected 6    hard stops 4    anchors 2 (0 intermediate)
+
+- **THE GAP WAS NEVER DECIMAL PRECISION.** Mission 1.14 defined what reliability
+  means, ADR-026 the scope it binds to, and the review guide said to write the
+  failure mode down first. A reviewer who had done all of it still had no
+  procedure making `0.45` rather than `0.65` defensible, because **nothing in
+  this repository anchors the absolute scale** -- which is exactly why the
+  contract forbids threshold labels and why Mission 1.37 found only the ORDINAL
+  construct defined.
+- **A DECISION PROCEDURE, NOT A SCORING FUNCTION.** The rubric module contains
+  **no arithmetic operator at all** -- no `BinOp`, no `sum`, `min`, `max` or
+  `round` -- asserted over its AST. The ordinal ranks order three states and are
+  never summed. Replacing arbitrary numbers with a weighted average of invented
+  sub-scores is the one failure this mission existed to avoid.
+- **THE REJECTIONS ARE THE SUBSTANCE.** `MEASUREMENT_TO_PROPOSITION_FIT` **is
+  `directness`**, already a component of `q = min(components)`, and scoring it
+  again would make one weakness count twice -- while its reliability-native
+  residue is not a gradient at all: a proposition asking more than the
+  measurement observes is a **mis-specified scope**, so it became a HARD STOP.
+  `CLASSIFICATION_DEPENDABILITY` folded into the five, because a dimension of its
+  own would be a rubric shaped around one publisher's taxonomy.
+  `KNOWN_FAILURE_MODES` and `RESIDUAL_UNKNOWN` are the OUTPUT of the five rather
+  than a sixth question. And **a separate reviewer-confidence field was refused**:
+  basis completeness is READ OFF the dimension profile, and two fields answering
+  one question eventually disagree.
+- **UNKNOWN IS NOT LOW, AND THE ENFORCEMENT IS STRUCTURAL RATHER THAN A WARNING.**
+  `NOT_ESTABLISHED` and `CONTRADICTED` carry **no ordinal rank**, so neither can
+  be interpolated, averaged, or quietly read as the bottom of the scale. An
+  absence of documented revision is still not evidence of stability.
+- **NO INTERMEDIATE ANCHORS.** The two that exist are defined by what the value
+  DOES -- `1.0` can never be the limiting component in `q = min(components)`,
+  `0.0` makes the Evidence contribute nothing -- never by an adjective, because
+  an adjective is the threshold vocabulary the contract refuses. **`0.0` is a
+  POSITIVE FINDING and is not the absence of an assessment**: absence means
+  nobody judged.
+- **`KEEP_NUMERIC_FIELD_BUT_REQUIRE_ORDINAL_REVIEW_PROFILE_FIRST`.** The numeric
+  field stays -- no migration, no code change, the resolver and the aggregator
+  untouched, both historical values kept -- and the ordinal profile must be
+  completed **before the number is offered**. The number then summarises a
+  recorded profile, and **the profile is what a second reviewer reproduces**.
+  Anchored discrete values were refused as premature: the grid would have to be
+  invented today, it could not represent the existing `0.65`, and with two data
+  points there is no evidence about what granularity reviewers can resolve.
+- **A NUMERIC JUDGEMENT MAY BE REFUSED, AND REFUSING IS A COMPLETE REVIEW.** Four
+  hard stops make one unavailable, each because the question has **no answer**
+  rather than a low one. A material unknown is deliberately NOT among them, and
+  `UNSURE` is a real materiality answer.
+- **THE EXISTING ARCHITECTURE ALREADY ANSWERED HALF THE DISAGREEMENT QUESTION,
+  AND THE RUBRIC RECORDS THAT RATHER THAN REINVENTING IT.** The resolver refuses
+  when more than one current assessment matches a scope, so two open answers
+  cannot both be current and **while a disagreement is open the honest state is
+  the ABSENCE of an assessment**. Supersession already retains the earlier
+  review. What is not representable is disagreeing **without** superseding. Two
+  reviews are never averaged.
+- **SOFTWARE MAY ASSERT EXACTLY ONE STATE.** `NOT_ESTABLISHED`, because *no
+  document in this review's basis addresses this question* is a checkable claim
+  about the corpus. Every other state judges whether what IS documented is
+  ENOUGH, and that is the reviewer's.
+- **THE WIKIMEDIA REVIEWER HAD ALREADY WRITTEN `HISTORICAL_MUTABILITY` DOWN,
+  UNPROMPTED.** The dimension was derived here from TED's open correction
+  question, and the 0.65 review's stated limitation had named the same property
+  months earlier for a different source. That is corroboration the dimensions are
+  real rather than invented -- **bounded honestly**, since both reviews share a
+  reviewer and it is not independent replication.
+- **BOTH HISTORICAL ASSESSMENTS ARE `PARTIALLY_REPRESENTABLE` AND UNCHANGED.**
+  TED's rationale reaches three of five dimensions, Wikimedia's four. Neither was
+  re-reviewed, re-scored or used to derive an anchor, and **a review performed
+  before a rubric existed is not made invalid by the rubric arriving.**
+- **`RELIABILITY_RUBRIC_PROVENANCE_MODEL_GAP`, recorded and not repaired.** No
+  column names the procedure that produced a value, and **the basis table is not
+  the answer** -- a basis row names a retrieved document ABOUT THE MEASUREMENT,
+  and filing the rubric there would inflate every future assessment's documentary
+  basis with a document that says nothing about the publisher. The narrowest
+  repair is two nullable columns written only by new assessments and **never
+  backfilled**. It restricts rather than breaks reproducibility, which is why it
+  is a secondary finding: a completed worksheet still lets a second reviewer
+  follow the reasoning, and what is lost is the ability to ASK THE DATABASE.
+- **A RUBRIC IS NOT A CALIBRATION.** `REFERENCE_PROFILE_V1` stays `UNCALIBRATED`.
+  The rubric governs how a human assesses a reliability INPUT; Mission 1.37's
+  strategy governs how aggregation parameters would be fitted.
+
+**The next action is a HUMAN REVIEW of the TED convergent scope under this
+rubric, and Mission 1.42.1 was deliberately not started.** The worked example
+ships with factual findings under all five dimensions, one software-assigned
+`NOT_ESTABLISHED`, four material-unknown questions, and **every judgement field
+blank**. If the completed rubric concludes `NUMERIC_JUDGEMENT_NOT_JUSTIFIED`, the
+scope keeps no assessment and the six Evidence rows stay `NON_SCORABLE`.
 
 ### A scope broader than the mission that prompted it
 

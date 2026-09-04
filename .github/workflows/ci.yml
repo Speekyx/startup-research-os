@@ -244,6 +244,11 @@ jobs:
       # about its output.
       - name: Proposition convergence contract is in sync
         run: uv run python infrastructure/scripts/render_convergence_contract.py --check
+      # Mission 1.42a §27. The reliability rubric and its worked example. Reads
+      # the rubric module and the checked-in review packet, never a database, so
+      # an empty deployment changes nothing about its output.
+      - name: Human reliability assessment rubric is in sync
+        run: uv run python infrastructure/scripts/render_reliability_rubric.py --check
 
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
