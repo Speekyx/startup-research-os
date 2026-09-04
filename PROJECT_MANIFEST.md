@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.81
+Version: 1.82
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-04 (Sprint 1 / Mission 1.48)
+Last amended: 2026-09-04 (Sprint 1 / Mission 1.49)
 
 ---
 
@@ -13,6 +13,62 @@ Last amended: 2026-09-04 (Sprint 1 / Mission 1.48)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.82 — 2026-09-04 (Sprint 1 / Mission 1.49)
+
+**`SOURCE_INDEPENDENT_PROPOSITIONS_BELONG_TO_INFERRED_LAYER`** (ADR-036). A
+proposition about the world, rather than about a publisher, is an INFERRED Claim.
+The layer already exists, it was defined for exactly this, and nobody has built
+it.
+
+`claim-epistemic-semantics-v1.md` §4 defines INFERRED as a claim that asserts
+something about the world that the measurement is evidence for and that the
+source did not itself report. That is the source-independent proposition,
+verbatim, written in Mission 1.13. No new ClaimType, no subtype, no migration.
+
+The assumption that INFERRED means model-generated is false, and the taxonomy
+refutes it twice. By type, INFERRED is derived analytically while PREDICTED is a
+model-generated estimate. By axis, claim_type is the epistemic category and
+interpretation_kind is the procedure, and migration 0016's CHECK constraint ties
+interpretation_kind to the presence of a model_version rather than to claim_type.
+So INFERRED plus DETERMINISTIC is representable today and has never been written.
+
+A cross-source OBSERVED convergence Claim was rejected on the project's own
+sentence: an OBSERVED claim that should have been INFERRED is a fabrication with
+a citation attached. A new Claim type was found unnecessary rather than wrong,
+because interpretation_kind already carries the distinction it would encode.
+Deliberate absence was evaluated seriously and rejected because it is not the
+conservative option: the layer is already defined, and the unstated cost is that
+the system remains unable to say that two sources disagree.
+
+Three exclusions carry the new identity. The measurement value is not proposition
+identity, or 110 and 105 would be two Claims. source_id is not identity in the
+new layer and remains identity for OBSERVED. Direction is not identity, the exact
+inversion of the OBSERVED layer.
+
+Source independence of the proposition is never provenance loss: every witness
+keeps source_id and the full chain to RawRecord. Reliability is unaffected
+because Claim identity and Evidence reliability scope are different things.
+Measurement reliability and derivation validity must never be multiplied. A
+threshold must be preregistered, source-native or an external norm to be
+calibration-eligible.
+
+Fixtures ran through the real aggregator: two independent supports give two
+groups and strength 0.8 against a strongest member of 0.6; a support and a
+contradiction on one Claim give contradiction 0.5 and four masses summing to 1.0;
+a republication stays one group at 0.6.
+
+Purely additive. 43 Claims, 44 revisions and 57 Evidence keep their identities
+and meaning, zero identities rewritten, zero migrations recommended. Zero
+requests of any kind, zero model calls, zero embeddings, all sixteen counters
+unchanged.
+
+New: `docs/architecture/adr/ADR-036-source-independent-claim-semantics.md`,
+`docs/data/source-independent-claim-semantics-v1.json` and `.md`, one script
+under `infrastructure/scripts/`, and tests in `evidence-aggregation` and
+`claim-model`.
+
+Report: `docs/architecture/mission-1.49-report.md`.
 
 ## 1.81 — 2026-09-04 (Sprint 1 / Mission 1.48)
 
@@ -2897,6 +2953,7 @@ Additionally authoritative:
 - docs/data/independent-statistical-route-feasibility-v1.md (added in 1.79)
 - docs/data/cross-apparatus-convergence-feasibility-v1.md (added in 1.80)
 - docs/data/falsifiable-evidence-apparatus-requirements-v1.md (added in 1.81)
+- docs/data/source-independent-claim-semantics-v1.md (added in 1.82)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.
