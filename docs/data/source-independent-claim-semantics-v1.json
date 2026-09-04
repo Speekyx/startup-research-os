@@ -1,0 +1,393 @@
+{
+  "$comment": "Mission 1.49. Where a source-independent proposition belongs in SROS. Authored; rendered and validated by infrastructure/scripts/render_source_independent_claim_semantics.py. The decision is recorded as ADR-036. No Claim, Evidence, ClaimType member or interpreter was created or modified.",
+  "record_version": "1.0.0",
+  "mission": "1.49",
+  "recorded_at": "2026-09-04",
+  "adr": "ADR-036",
+
+  "primary_outcome": "SOURCE_INDEPENDENT_PROPOSITIONS_BELONG_TO_INFERRED_LAYER",
+  "primary_outcome_statement": "The layer already exists, it was defined for exactly this, and nobody has built it. `claim-epistemic-semantics-v1.md` §4 defines INFERRED as a claim that 'asserts something about the world that the measurement is evidence for, and that the source did not itself report' -- which is the source-independent proposition, verbatim, written in Mission 1.13 before the question was asked. No new ClaimType, no subtype and no schema change is required.",
+  "claim_type_naming_verdict": "INFERRED_IS_SEMANTICALLY_CORRECT",
+
+  "the_central_correction": {
+    "$comment": "§3 warned against assuming INFERRED == LLM. The repository already refutes it, in two independent places.",
+    "assumption_refused": "INFERRED means model-generated.",
+    "why_it_is_false": [
+      "The taxonomy separates them BY TYPE. `INFERRED` is documented as *derived analytically from one or more observations*; `PREDICTED` is *a model-generated estimate*. The model-associated type is PREDICTED, not INFERRED.",
+      "The taxonomy separates them BY AXIS. `claim_type` is the epistemic category and `interpretation_kind` is the procedure -- DETERMINISTIC or MODEL_DERIVED -- and migration 0016's CHECK constraint ties `interpretation_kind` to the presence of a `model_version`, NOT to `claim_type`. So the two axes are orthogonal by construction.",
+      "The semantics document says it outright: *'A deterministic extractor can produce an INFERRED-type claim, and an LLM can produce an OBSERVED-type one.'* `ClaimOrigin.INFERRED` and `ClaimType.INFERRED` are explicitly named as different fields answering different questions."
+    ],
+    "consequence": "`INFERRED` + `interpretation_kind = DETERMINISTIC` is representable in the current schema today, with no migration. It has simply never been written: all 43 live Claims are OBSERVED, all 43 are DETERMINISTIC, and 0 carry a model_version.",
+    "measured": {"live_claim_types": {"OBSERVED": 43}, "live_interpretation_kinds": {"DETERMINISTIC": 43}, "claims_with_model_version": 0}
+  },
+
+  "semantic_definitions": {
+    "OBSERVED_SOURCE_ATTRIBUTED_PROPOSITION": {
+      "truth_condition": "The named source published, counted or reported the stated thing.",
+      "falsifier": "The source did not publish, count or report it as claimed.",
+      "source_id": "PROPOSITION IDENTITY",
+      "why_source_id_must_stay": "For an OBSERVED claim the attribution IS the claim (Mission 1.38). 'Wikimedia counted X' and 'Stack Exchange published Y' are two propositions with two different falsifiers. Removing `source_id` would not merge two Claims about one fact; it would rewrite what all 43 existing Claims mean."
+    },
+    "SOURCE_INDEPENDENT_PROPOSITION": {
+      "truth_condition": "The stated condition holds of the external phenomenon, not of any publisher.",
+      "falsifier": "An incompatible observation under equivalent measurement semantics.",
+      "source_id": "WITNESS PROVENANCE, never proposition identity",
+      "the_reasoning_step_is_mandatory": "Moving from 'a source reported X' to 'X is the case' is an inference, and §4 requires the assumption to be written down. Without it, the same sentence is *'an OBSERVED claim that quietly dropped its attribution'*."
+    }
+  },
+
+  "model_comparison": {
+    "$comment": "§26. Qualitative only, no weighted score.",
+    "dimensions": [
+      "SEMANTIC_HONESTY",
+      "HISTORICAL_COMPATIBILITY",
+      "PROVENANCE_PRESERVATION",
+      "CORROBORATION_REACHABILITY",
+      "CONTRADICTION_REACHABILITY",
+      "RELIABILITY_COMPATIBILITY",
+      "DETERMINISTIC_RULE_COMPATIBILITY",
+      "MODEL_EGRESS_REQUIREMENT",
+      "IMPLEMENTATION_COMPLEXITY",
+      "CALIBRATION_USEFULNESS"
+    ],
+    "models": [
+      {
+        "id": "A",
+        "name": "INFERRED WORLD CLAIM",
+        "SEMANTIC_HONESTY": "STRONG",
+        "HISTORICAL_COMPATIBILITY": "STRONG",
+        "PROVENANCE_PRESERVATION": "STRONG",
+        "CORROBORATION_REACHABILITY": "STRONG",
+        "CONTRADICTION_REACHABILITY": "STRONG",
+        "RELIABILITY_COMPATIBILITY": "STRONG",
+        "DETERMINISTIC_RULE_COMPATIBILITY": "STRONG",
+        "MODEL_EGRESS_REQUIREMENT": "NONE",
+        "IMPLEMENTATION_COMPLEXITY": "MEDIUM",
+        "CALIBRATION_USEFULNESS": "STRONG",
+        "verdict": "PREFERRED",
+        "why": "The reasoning step is stated rather than hidden, which is the whole difference between an inference and a fabrication. It is purely additive: existing OBSERVED Claims keep their meaning and become the INPUTS. And the type already exists with exactly these semantics, so the change is a contract and an evaluator rather than a taxonomy amendment."
+      },
+      {
+        "id": "B",
+        "name": "CROSS-SOURCE OBSERVED CONVERGENCE",
+        "SEMANTIC_HONESTY": "WEAK",
+        "HISTORICAL_COMPATIBILITY": "MEDIUM",
+        "PROVENANCE_PRESERVATION": "STRONG",
+        "CORROBORATION_REACHABILITY": "STRONG",
+        "CONTRADICTION_REACHABILITY": "WEAK",
+        "RELIABILITY_COMPATIBILITY": "MEDIUM",
+        "DETERMINISTIC_RULE_COMPATIBILITY": "STRONG",
+        "MODEL_EGRESS_REQUIREMENT": "NONE",
+        "IMPLEMENTATION_COMPLEXITY": "MEDIUM",
+        "CALIBRATION_USEFULNESS": "MEDIUM",
+        "verdict": "REJECTED",
+        "why": "It fails on the question §2 said not to answer by implementation convenience: can something be OBSERVED if no single source observed THAT proposition? No. The repository already wrote the refutation, in a document that predates the question by many missions: **'An OBSERVED claim that should have been INFERRED is a fabrication with a citation attached.'** A source-independent proposition filed as OBSERVED is precisely an OBSERVED claim that dropped its attribution -- and it would drop it while KEEPING the citations, which is what makes it worse than an honest inference rather than better."
+      },
+      {
+        "id": "C",
+        "name": "DETERMINISTIC MEASUREMENT CLAIM",
+        "SEMANTIC_HONESTY": "STRONG",
+        "HISTORICAL_COMPATIBILITY": "STRONG",
+        "PROVENANCE_PRESERVATION": "STRONG",
+        "CORROBORATION_REACHABILITY": "STRONG",
+        "CONTRADICTION_REACHABILITY": "STRONG",
+        "RELIABILITY_COMPATIBILITY": "MEDIUM",
+        "DETERMINISTIC_RULE_COMPATIBILITY": "STRONG",
+        "MODEL_EGRESS_REQUIREMENT": "NONE",
+        "IMPLEMENTATION_COMPLEXITY": "WEAK",
+        "CALIBRATION_USEFULNESS": "STRONG",
+        "verdict": "UNNECESSARY",
+        "why": "It is semantically sound and it solves a problem that is already solved. The distinction it would encode -- deterministic derivation versus model inference -- is exactly what `interpretation_kind` carries, on an axis orthogonal to `claim_type`. Adding a sixth ClaimType would put one distinction in two places, and `ClaimType` is a closed enum whose amendment needs a new ontology version. **A second answer to a question already answered eventually disagrees with the first.**"
+      },
+      {
+        "id": "D",
+        "name": "DELIBERATELY ABSENT",
+        "SEMANTIC_HONESTY": "STRONG",
+        "HISTORICAL_COMPATIBILITY": "STRONG",
+        "PROVENANCE_PRESERVATION": "STRONG",
+        "CORROBORATION_REACHABILITY": "NONE",
+        "CONTRADICTION_REACHABILITY": "NONE",
+        "RELIABILITY_COMPATIBILITY": "STRONG",
+        "DETERMINISTIC_RULE_COMPATIBILITY": "NOT_APPLICABLE",
+        "MODEL_EGRESS_REQUIREMENT": "NONE",
+        "IMPLEMENTATION_COMPLEXITY": "NONE",
+        "CALIBRATION_USEFULNESS": "NONE",
+        "verdict": "REJECTED",
+        "why": "It was taken seriously, because §2 forbids dismissing it merely because the aggregator could not then be calibrated, and epistemic conservatism is a real virtue here. It is rejected for a different reason: **it is not actually the conservative option.** The INFERRED layer is already DEFINED in the ontology, in the generated contract and in the epistemic semantics document. Choosing D does not decline to build something; it leaves a defined capability permanently unbuilt while the system keeps producing propositions that cannot corroborate or contradict. And it would not be honest about the cost: the system would remain unable to say that two sources disagree, which is the one signal that tells an operator to go and look."
+      }
+    ]
+  },
+
+  "inference_taxonomy": {
+    "$comment": "§4. Which kinds of inference can create a source-independent proposition, and which are a different epistemic act.",
+    "kinds": [
+      {
+        "kind": "DETERMINISTIC_DERIVATION",
+        "can_create_source_independent_proposition": "YES",
+        "example": "110 >= 100",
+        "note": "Exact, reproducible from the inputs and the parameters alone. Carries `interpretation_kind = DETERMINISTIC`, no model and no prompt. This is the only kind Mission 1.50 should implement."
+      },
+      {
+        "kind": "RULE_BASED_INFERENCE",
+        "can_create_source_independent_proposition": "YES_WITH_A_STATED_RULE",
+        "example": "a reviewed unit or population equivalence applied before comparison",
+        "note": "Deterministic, but the RULE is a judgement somebody made. It needs its own provenance and review, and it must not be smuggled in as part of the comparison."
+      },
+      {
+        "kind": "STATISTICAL_INFERENCE",
+        "can_create_source_independent_proposition": "NOT_YET",
+        "example": "a confidence interval around a measured quantity",
+        "note": "Would require parameters this project has never fitted and a calibrated profile that does not exist. Out of scope."
+      },
+      {
+        "kind": "MODEL_ASSISTED_INFERENCE",
+        "can_create_source_independent_proposition": "PERMITTED_BY_SEMANTICS_NOT_BY_THIS_MISSION",
+        "example": "a model proposing an interpretation of several Signals",
+        "note": "The semantics already allow it -- `MODEL_DERIVED` interpretation of an INFERRED claim -- with the model as provenance and never as evidence. Mission 1.50 must not use it."
+      },
+      {
+        "kind": "GENERATIVE_SYNTHESIS",
+        "can_create_source_independent_proposition": "NO",
+        "example": "'Developers want Docker' from pageviews plus questions",
+        "note": "A latent behavioural construct. Not a derivation from measurements at all, and §14's invariant forbids promoting it silently. This is the act that must never be confused with `110 >= 100`."
+      }
+    ],
+    "the_distinction_that_matters": "`110 >= 100` and 'developers want Docker' are both called inference in ordinary speech and are not the same epistemic act. The first is a comparison whose result anyone can recompute from the inputs; the second invents a construct the measurement never observed. Filing both under one word is how the second acquires the credibility of the first."
+  },
+
+  "threshold_state_identity": {
+    "$comment": "§8, §9, §10. Proposed for the source-independent layer ONLY. Nothing here applies retroactively to OBSERVED Claims.",
+    "proposition_identity_fields": [
+      "claim_type",
+      "proposition",
+      "canonical_subject_id",
+      "metric_definition_id",
+      "time_bound",
+      "population_or_geography",
+      "unit",
+      "threshold_operator",
+      "threshold_value"
+    ],
+    "witness_provenance_fields": [
+      "source_id",
+      "resource_id",
+      "source_native_metric_id",
+      "source_native_subject_id",
+      "measurement_value",
+      "measurement_timestamp",
+      "methodology_version",
+      "record_locator"
+    ],
+    "threshold_in_identity": true,
+    "threshold_in_identity_why": "`M >= 100` and `M >= 200` are different propositions with different falsifiers. The threshold is what the Claim asserts.",
+    "measurement_value_in_identity": false,
+    "measurement_value_in_identity_why": "This is the load-bearing exclusion. If the observed value were identity, 110 from source A and 105 from source B would produce two different Claims -- which is the exact failure Mission 1.48 diagnosed, reproduced one layer up. The value is what a WITNESS reports; the threshold is what the CLAIM asserts.",
+    "source_id_in_identity": false,
+    "source_id_in_identity_why": "A source-independent proposition is about the phenomenon. If `source_id` were identity, two sources could never share the Claim and the whole layer would be pointless.",
+    "source_id_preserved_where": "In the witness provenance of every Evidence row, and through the full existing chain: Evidence -> Signal -> signal_inputs -> NormalizedRecord -> RawRecord -> Source. **Source independence of the PROPOSITION must never mean provenance loss.**",
+    "direction_in_identity": false,
+    "direction_in_identity_why": "SUPPORTS and CONTRADICTS are Evidence direction relative to a FIXED proposition, not facts about which proposition it is. This is the precise inversion of the OBSERVED layer, where Mission 1.48 found `direction` IS identity -- and it is why the same measurement stream that cannot contradict at the OBSERVED layer can contradict at this one."
+  },
+
+  "evaluation_function": {
+    "$comment": "§18. Conceptual. No implementation.",
+    "signature": "evaluate_measurement_against_claim(claim, measurement) -> SUPPORTS | CONTRADICTS | NOT_APPLICABLE | UNKNOWN",
+    "rules": [
+      {"outcome": "SUPPORTS", "condition": "measurement semantics are equivalent to the Claim's AND value satisfies the threshold operator"},
+      {"outcome": "CONTRADICTS", "condition": "measurement semantics are equivalent to the Claim's AND value does not satisfy the threshold operator"},
+      {"outcome": "NOT_APPLICABLE", "condition": "measurement semantics are NOT equivalent -- a different population, unit, period, adjustment or metric definition. The measurement bears on a different proposition and must not be attached"},
+      {"outcome": "UNKNOWN", "condition": "measurement-equivalence or provenance cannot be established. Attaches nothing rather than guessing"}
+    ],
+    "no_model": true,
+    "no_probability": true,
+    "why_deterministic": "Every branch is a comparison over canonical values under a declared equivalence. Nothing here needs a model, and a probability would be a number nobody fitted."
+  },
+
+  "measurement_equivalence_gate": {
+    "$comment": "§12. Separate from independence, and required first.",
+    "required_over": ["metric definition", "subject", "time", "population", "geography", "unit", "adjustment", "methodology semantics"],
+    "why_separate_from_independence": "A source can be independent and measure something DIFFERENT, in which case its disagreement is not disagreement. A source can measure exactly the same thing and be a REPUBLICATION, in which case its agreement is not corroboration. **Both gates are required and neither implies the other**, which is Mission 1.46 and Mission 1.47 stated as one rule."
+  },
+
+  "independence_stays_separate": {
+    "$comment": "§13.",
+    "rule": "Independence is a property of Evidence provenance, never of Claim identity.",
+    "consequence": "One source-independent Claim may carry Evidence that is UNKNOWN, KNOWN_INDEPENDENT and KNOWN_DEPENDENT at once, and its MEANING does not change. Only the aggregation over it changes.",
+    "why_not_in_identity": "Putting independence in Claim identity would make the same proposition become a different proposition when a reviewer learned something about provenance, which is a fact about our knowledge rather than about the world."
+  },
+
+  "reliability_semantics": {
+    "$comment": "§14, §15.",
+    "scope_stays_source_relative": true,
+    "scope": ["source_id", "resource_id", "record_kind_id", "claim_type", "proposition_kind"],
+    "why_compatible": "Claim IDENTITY and Evidence reliability SCOPE are different things, and this is the resolution of the apparent conflict. The Claim's proposition is source-independent; the Evidence attached to it is still a particular source's measurement, and reliability still asks *how dependably does THIS source's measurement support THIS kind of proposition*. That question is still source-relative, so the five-part scope is unchanged.",
+    "new_proposition_kind_is_a_new_scope": "A source-independent proposition_kind, and `claim_type = INFERRED`, both differ from every existing scope. So every Evidence row attached to such a Claim would resolve NO_APPLICABLE_ASSESSMENT until a human reviews that scope. **No value is inherited by proposition similarity**, and none is assigned here.",
+    "measurement_reliability_vs_derivation_validity": {
+      "MEASUREMENT_RELIABILITY": "How dependable is the source's measurement? A human judgement against documentary basis.",
+      "DERIVATION_VALIDITY": "Does 110 entail >= 100? Exact, deterministic, and either true or false.",
+      "must_not_be_multiplied": "They are different kinds of quantity and there is no coefficient that combines them. Multiplying an exact entailment by a reviewed reliability would produce a number that is neither, and would let a sound derivation look doubtful because its input is uncertain -- which the four-mass decomposition already represents correctly through uncertainty mass.",
+      "derivation_provenance_required": true
+    }
+  },
+
+  "derivation_provenance": {
+    "$comment": "§16. Required for any source-independent Claim. Not built here.",
+    "minimum_fields": [
+      "derivation_rule_id",
+      "derivation_rule_version",
+      "input_signal_ids and/or input_claim_ids",
+      "preregistered parameters including the threshold",
+      "threshold_provenance_status",
+      "created_at",
+      "claim_type",
+      "interpretation_kind"
+    ],
+    "an_existing_field_and_its_limit": "`ClaimDraft.rationale` exists in the model, is wired through `_persist_one`, and lands in `research.claims.origin_detail`. It is populated on all 43 live Claims -- with a PROVENANCE sentence such as *'Restated from signal <id> (content-request-change@1.0.0).'*, not a reasoning step, because an OBSERVED restatement has no reasoning step to record. Whether a reasoning step may share a column named `origin_detail` is a design question for Mission 1.50: it is the shape Mission 1.15.4 warned about, one field answering a question that is two. **It is recorded and not repaired here.**"
+  },
+
+  "threshold_preregistration": {
+    "$comment": "§17. Mission 1.48 identified the hindsight risk; this is the rule.",
+    "statuses": [
+      {"status": "PREREGISTERED", "meaning": "the threshold was frozen and recorded BEFORE any candidate measurement was inspected", "calibration_eligible": true},
+      {"status": "SOURCE_NATIVE", "meaning": "the threshold is published by the source itself or by an external standard the source names", "calibration_eligible": true},
+      {"status": "EXTERNAL_NORM", "meaning": "the threshold comes from a named external norm, standard or regulation independent of this project", "calibration_eligible": true},
+      {"status": "POST_HOC", "meaning": "the threshold was chosen after inspecting candidate measurements", "calibration_eligible": false},
+      {"status": "UNKNOWN", "meaning": "the provenance of the threshold is not recorded", "calibration_eligible": false}
+    ],
+    "the_rule": "A POST_HOC or UNKNOWN threshold may still produce a Claim -- the proposition is not false because its bound was chosen late -- but it is CALIBRATION_INELIGIBLE. A threshold picked to make a case work measures the analyst, and Mission 1.24 refused a rule rewritten after the fact for the same reason: a rule rewritten after seeing the result was never binding.",
+    "unknown_is_not_permitted_to_default": "UNKNOWN is calibration-ineligible rather than assumed preregistered. Uncertainty is never permission."
+  },
+
+  "architecture_boundary": {
+    "$comment": "§19, §28. Where the evaluation belongs. Nothing is implemented.",
+    "evaluation_belongs_in": "B",
+    "options": {
+      "A": "existing interpreter framework -- REFUSED",
+      "B": "a separate evaluator -- PREFERRED",
+      "C": "a Claim derivation service -- a plausible later shape of B",
+      "D": "the Opportunity engine -- REFUSED, wrong layer entirely",
+      "E": "nowhere yet -- rejected, since the semantics are now decided"
+    },
+    "why_separate": "`validate_claims.py` fails the build on any `ClaimType.X` access in the interpretation package where X is not OBSERVED, over the AST. That guard is CORRECT and must be left alone: it is what keeps the source-attributed OBSERVED contract from being widened by accident. Putting source-independent evaluation in the same package would require weakening it, and **a guard removed to let new work through is a guard that never was**. A separate evaluator keeps the OBSERVED interpreter exactly as narrow as it is.",
+    "future_boundary": "OBSERVED source fact -> deterministic evaluation -> INFERRED source-independent Claim -> Evidence SUPPORTS/CONTRADICTS -> aggregation",
+    "evidence_attachment": "Option 2 -- Evidence links the SIGNAL and its OBSERVED provenance to the source-independent Claim. Option 1 loses the reasoning step's inputs; option 3 (a ClaimRelation) is more machinery than the case needs today and is recorded as a possible refinement rather than a requirement."
+  },
+
+  "cross_source_observed_convergence_reconsidered": {
+    "$comment": "§20.",
+    "verdict": "NO_LONGER_NEEDED_FOR_WORLD_PROPOSITIONS",
+    "reasoning": "Mission 1.47 wanted a cross-source OBSERVED convergence contract because it was the only visible route to two Evidence rows on one Claim. With the INFERRED layer decided, world-level propositions have a correct home and the contract is not needed for them. What remains legitimately OBSERVED is what a source itself observed.",
+    "source_boundary_not_widened": "`SourceBoundary` still has one member and was not touched. Mission 1.47's finding that the contract structurally refuses cross-source propositions is now a FEATURE rather than a gap: it is the mechanism keeping OBSERVED honest."
+  },
+
+  "semantic_invariants": [
+    {"id": "I1", "statement": "Existing OBSERVED Claims remain source-attributed."},
+    {"id": "I2", "statement": "`source_id` remains proposition identity for OBSERVED."},
+    {"id": "I3", "statement": "A source-independent Claim's proposition identity must not contain `source_id`."},
+    {"id": "I4", "statement": "A source-independent Claim's provenance must still carry `source_id` per witness."},
+    {"id": "I5", "statement": "The observed measurement value is a witness fact, never THRESHOLD_STATE proposition identity."},
+    {"id": "I6", "statement": "Threshold operator and threshold value are proposition identity."},
+    {"id": "I7", "statement": "Evidence direction is relative to the fixed proposition, never part of its identity."},
+    {"id": "I8", "statement": "Different measurements may SUPPORT or CONTRADICT the same source-independent Claim."},
+    {"id": "I9", "statement": "Semantic measurement equivalence is required before attachment."},
+    {"id": "I10", "statement": "Independence is evaluated separately from semantic equivalence, and neither implies the other."},
+    {"id": "I11", "statement": "Reliability remains source-scoped and five-part."},
+    {"id": "I12", "statement": "No reliability inheritance by proposition similarity."},
+    {"id": "I13", "statement": "No source-independent Claim without derivation provenance."},
+    {"id": "I14", "statement": "No latent construct silently promoted to deterministic inference."},
+    {"id": "I15", "statement": "Historical Claims remain immutable in meaning."}
+  ],
+
+  "fixtures": {
+    "$comment": "§25. SYNTHETIC, non-persisted, driven through the REAL aggregator where they reach it. Reliability values are fixture-owned and are not reviewed values.",
+    "A_independent_corroboration": {
+      "claim": "M >= 100",
+      "witnesses": [{"source": "A", "measurement": 110, "direction": "SUPPORTS"}, {"source": "B", "measurement": 105, "direction": "SUPPORTS"}],
+      "independence": "KNOWN_INDEPENDENT both",
+      "support_groups": 2,
+      "support_strength": 0.8,
+      "strongest_member": 0.6,
+      "exceeds_pass_through": true,
+      "note": "The first shape in this repository that would make the full aggregator differ from the B-2 baseline."
+    },
+    "B_contradiction": {
+      "claim": "M >= 100",
+      "witnesses": [{"source": "A", "measurement": 110, "direction": "SUPPORTS"}, {"source": "B", "measurement": 90, "direction": "CONTRADICTS"}],
+      "same_claim_identity": true,
+      "support_groups": 1,
+      "contradiction_groups": 1,
+      "support_strength": 0.6,
+      "contradiction_strength": 0.5,
+      "masses": {"supported": 0.3, "contradicted": 0.2, "conflict": 0.3, "uncertainty": 0.2},
+      "sum": 1.0,
+      "note": "Both witnesses inhabit ONE Claim because the measurement value is not identity. That is the whole architectural point, demonstrated."
+    },
+    "C_semantic_mismatch": {
+      "claim": "usually-resident population on 1 January >= X",
+      "measurement": "de facto population at midyear",
+      "expected": "NOT_APPLICABLE",
+      "not": "CONTRADICTS",
+      "note": "Mission 1.46's real case. A shared year label is not a shared reference date, and a measurement of a different quantity is not a disagreement about this one. It never reaches the aggregator."
+    },
+    "D_dependent_republication": {
+      "claim": "M >= 100",
+      "witnesses": [{"source": "A", "measurement": 110}, {"source": "B", "measurement": 110, "note": "republished from A"}],
+      "independence": "KNOWN_DEPENDENT, one shared lineage",
+      "support_groups": 1,
+      "support_strength": 0.6,
+      "became_corroboration": false,
+      "note": "Mission 1.46's FRED case. Both attach to the Claim and collapse into ONE group, so republication raises observed volume and not evidence strength."
+    },
+    "E_post_hoc_threshold": {
+      "claim": "M >= 100, threshold chosen after inspecting the measurements",
+      "threshold_provenance_status": "POST_HOC",
+      "calibration_eligible": false,
+      "note": "The Claim is not false; it is ineligible as a calibration case."
+    }
+  },
+
+  "historical_compatibility": {
+    "claims_unchanged": 43,
+    "revisions_unchanged": 44,
+    "evidence_unchanged": 57,
+    "proposition_identities_rewritten": 0,
+    "migrations_recommended": 0,
+    "statement": "The decision is purely ADDITIVE. Every existing Claim keeps its proposition identity, its meaning and its Evidence, and becomes an INPUT to the new layer rather than being reinterpreted by it. No migration that changes the meaning of a historical Claim is recommended, now or later."
+  },
+
+  "counters": {
+    "raw_records": {"before": 325, "after": 325},
+    "normalized_records": {"before": 325, "after": 325},
+    "signals": {"before": 33, "after": 33},
+    "claims": {"before": 43, "after": 43},
+    "claim_revisions": {"before": 44, "after": 44},
+    "evidence": {"before": 57, "after": 57},
+    "reliability_assessments": {"before": 4, "after": 4},
+    "reliability_basis_rows": {"before": 12, "after": 12},
+    "independence_groups": {"before": 0, "after": 0},
+    "opportunities": {"before": 1, "after": 1},
+    "opportunity_revisions": {"before": 1, "after": 1},
+    "opportunity_evidence_links": {"before": 7, "after": 7},
+    "embeddings": {"before": 0, "after": 0},
+    "registered_sources": {"before": 29, "after": 29},
+    "evidence_with_stored_reliability": {"before": 0, "after": 0},
+    "scores": {"before": "ABSENT", "after": "ABSENT"}
+  },
+
+  "network_budget": {"RESEARCH_DATA_REQUESTS": 0, "APPARATUS_DOCUMENTATION_REQUESTS": 0, "GOVERNANCE_DOCUMENT_REQUESTS": 0},
+  "model_use": {"llm_calls": 0, "usd": 0.0, "embeddings": 0, "semantic_matching_used": false, "problem_family_status": "PARKED"},
+  "source_selected": null,
+
+  "next_mission_recommendation": {
+    "recommended": "Mission 1.50 -- Deterministic Inferred Claim Contract V1",
+    "scope": "The minimum ADDITIVE implementation contract for: source-attributed OBSERVED inputs -> deterministic derivation -> source-independent INFERRED Claim, with derivation provenance and no model use.",
+    "must_decide": [
+      "whether the reasoning step may share `origin_detail` or needs its own column",
+      "whether Evidence attaches directly or a derivation relation is required",
+      "where the evaluator lives, given that `validate_claims.py` must stay untouched",
+      "how a threshold's preregistration status is recorded and enforced"
+    ],
+    "must_not": ["use a model", "widen SourceBoundary", "add a ClaimType member", "alter proposition_key", "touch an existing Claim"],
+    "explicitly_not_started": "Mission 1.50 was not started."
+  }
+}

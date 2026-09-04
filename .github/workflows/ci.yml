@@ -283,6 +283,15 @@ jobs:
       # job starts from an empty one (Mission 1.37).
       - name: Falsifiable apparatus requirements are rendered from their record
         run: uv run python infrastructure/scripts/render_falsifiable_apparatus_requirements.py --check
+      # Mission 1.49 §37. Renders the source-independent Claim semantics record
+      # and enforces the ADR-036 invariants: OBSERVED keeps `source_id` as
+      # proposition identity, the source-independent layer does not, provenance
+      # still carries it per witness, the threshold is identity and the measured
+      # value is not, a post-hoc threshold is never calibration-eligible, a
+      # semantic mismatch is never CONTRADICTS, and a republication never becomes
+      # independent corroboration.
+      - name: Source-independent Claim semantics are rendered from their record
+        run: uv run python infrastructure/scripts/render_source_independent_claim_semantics.py --check
 
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
