@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.70
+Version: 1.71
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-03 (Sprint 1 / Mission 1.41)
+Last amended: 2026-09-04 (Sprint 1 / Mission 1.42)
 
 ---
 
@@ -13,6 +13,36 @@ Last amended: 2026-09-03 (Sprint 1 / Mission 1.41)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.71 — 2026-09-04 (Sprint 1 / Mission 1.42)
+
+**`READY_FOR_SECOND_PILOT_RELIABILITY_REVIEW`.** The reliability question for the
+convergent TED proposition kind is prepared and **not answered**. 0
+ReliabilityAssessments, 0 basis rows, 0 network requests, 0 model calls, every
+canonical research counter unchanged.
+
+The brief expected four Evidence rows on two Claims. The live scope holds **six
+rows across four Claims**, resolving to exactly one scope, which is exactly the
+expected five-part one. That is not scope drift: a reliability scope carries no
+classification division and no currency, so it also reaches the SEK claim and the
+division-90 claim. One judgement binds all six rows.
+
+The existing TED `0.5` shares four of five scope fields and does not bind, on
+`proposition_kind` alone — exercised through the real resolver in both directions
+and confirmed by six leak checks with zero leaks. Nothing new was retrieved:
+three of four held basis rows are REUSED and BT-195–BT-198 is
+PARTIALLY_APPLICABLE, because withholding cannot falsify an existential.
+
+Engineering validation is recorded separately and refused as documentary basis.
+Correct currency grain does not imply reliability, and DISJOINT overlap does not
+imply independence.
+
+New: `docs/data/second-pilot-convergent-reliability-review-packet-v1.json`,
+`docs/data/second-pilot-convergent-reliability-review-packet-v1.md`, and
+`infrastructure/scripts/build_convergent_reliability_packet.py` with its
+authored findings input.
+
+Report: `docs/architecture/mission-1.42-report.md`.
 
 ## 1.70 — 2026-09-03 (Sprint 1 / Mission 1.41)
 
@@ -2469,6 +2499,7 @@ Additionally authoritative:
 - docs/data/second-pilot-selection-v1.json (added in 1.67)
 - docs/data/proposition-convergence-contract-v1.md (added in 1.68)
 - docs/data/second-pilot-ted-category-selection-v1.json (added in 1.69)
+- docs/data/second-pilot-convergent-reliability-review-packet-v1.md (added in 1.71)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.
