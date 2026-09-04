@@ -228,7 +228,7 @@ def run_signal_derivation_job(
 
         groups: dict[str, list[Any]] = {}
         for observation in observations:
-            key = extractor.group_key(observation)
+            key = extractor.group_key(observation, derivation)
             if key is None:
                 continue
             groups.setdefault(key, []).append(observation)

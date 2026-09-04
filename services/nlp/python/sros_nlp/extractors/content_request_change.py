@@ -141,7 +141,9 @@ class ContentRequestChangeExtractor:
 
     # -------------------------------------------------------------- grouping
 
-    def group_key(self, observation: NormalizedObservation) -> str | None:
+    def group_key(
+        self, observation: NormalizedObservation, derivation: SignalDerivation
+    ) -> str | None:
         """One key per REQUEST SERIES.
 
         Every field is part of what makes two counts measurements of the same
@@ -176,7 +178,7 @@ class ContentRequestChangeExtractor:
         derivation: SignalDerivation,
         request: DerivationRequest,
     ) -> GroupOutcome:
-        homogeneity = self._homogeneous(group)
+        homogeneity = self._homogeneous(group, derivation)
         if homogeneity is not None:
             return GroupOutcome(refusals=(homogeneity,))
 
@@ -209,7 +211,9 @@ class ContentRequestChangeExtractor:
 
     # ---------------------------------------------------------------- checks
 
-    def _homogeneous(self, group: CandidateGroup) -> GroupRefusal | None:
+    def _homogeneous(
+        self, group: CandidateGroup, derivation: SignalDerivation
+    ) -> GroupRefusal | None:
         """Refuse a group whose members are not one series.
 
         Grouping already separates them, so this fires only when a CALLER hands
@@ -219,7 +223,7 @@ class ContentRequestChangeExtractor:
         if not group.observations:
             return None
         first = group.observations[0]
-        expected = self.group_key(first)
+        expected = self.group_key(first, derivation)
         for observation in group.observations[1:]:
             if observation.record_kind_id != self.record_kind_id:
                 return GroupRefusal(
@@ -232,7 +236,7 @@ class ContentRequestChangeExtractor:
                     group_key=group.key,
                     observation_keys=group.observation_keys,
                 )
-            if self.group_key(observation) != expected:
+            if self.group_key(observation, derivation) != expected:
                 return GroupRefusal(
                     reason=SignalRefusalReason.INCOMPATIBLE_SERIES,
                     detail=(

@@ -1,0 +1,222 @@
+{
+  "$comment": "Mission 1.41 §31, §32. The REAL Evidence Aggregator over REAL canonical multi-Evidence Claims. UNCALIBRATED, DIAGNOSTIC ONLY, NOT AN OPPORTUNITY SCORE. Nothing is persisted, no reliability was invented, and no independence was manufactured -- both witnesses of each Claim are UNKNOWN provenance and collapse into one conservative group, which is correct and is not corroboration.",
+  "$banner": [
+    "UNCALIBRATED",
+    "DIAGNOSTIC ONLY",
+    "NOT AN OPPORTUNITY SCORE"
+  ],
+  "artifact_version": "second-pilot-aggregation@1.0.0",
+  "generated_by": "mission-1.41",
+  "multi_evidence_claims": 2,
+  "claims": [
+    {
+      "$banner": [
+        "UNCALIBRATED",
+        "DIAGNOSTIC ONLY",
+        "NOT AN OPPORTUNITY SCORE"
+      ],
+      "claim_id": "02248c91-a384-442d-8c78-80ba4c1bd2b1",
+      "claim_revision": 1,
+      "notice_class": "CONTRACT_AWARD_NOTICE",
+      "currency": "EUR",
+      "classification_division": "92",
+      "witnesses": [
+        {
+          "evidence_id": "a77d8ea7-16f7-4259-831d-163c637ffccc",
+          "signal_id": "f09ecbb8-6b0d-5134-affb-c2ed796049a2",
+          "witness_digest_prefix": "6ee93a5d",
+          "notice_ids": [
+            "ted-eu|notice|125594-2023",
+            "ted-eu|notice|126590-2023",
+            "ted-eu|notice|127645-2023",
+            "ted-eu|notice|129501-2023",
+            "ted-eu|notice|130635-2023",
+            "ted-eu|notice|131315-2023",
+            "ted-eu|notice|131879-2023",
+            "ted-eu|notice|135637-2023",
+            "ted-eu|notice|136794-2023",
+            "ted-eu|notice|137895-2023",
+            "ted-eu|notice|138840-2023",
+            "ted-eu|notice|139177-2023"
+          ],
+          "independence_state": "UNKNOWN",
+          "independence_group_id": null,
+          "reliability_column": null,
+          "extraction_method": "observed-convergent-witness@1.0.0"
+        },
+        {
+          "evidence_id": "cf9f792d-9811-43b7-b089-dcf3e835225a",
+          "signal_id": "4e8ee7f7-e3b4-5c56-917c-ec11e6b480c5",
+          "witness_digest_prefix": "8e723328",
+          "notice_ids": [
+            "ted-eu|notice|142829-2023",
+            "ted-eu|notice|143965-2023",
+            "ted-eu|notice|145891-2023",
+            "ted-eu|notice|146311-2023",
+            "ted-eu|notice|147434-2023",
+            "ted-eu|notice|148094-2023",
+            "ted-eu|notice|148516-2023",
+            "ted-eu|notice|149442-2023",
+            "ted-eu|notice|150477-2023",
+            "ted-eu|notice|151497-2023",
+            "ted-eu|notice|152153-2023",
+            "ted-eu|notice|152446-2023",
+            "ted-eu|notice|153337-2023",
+            "ted-eu|notice|153458-2023"
+          ],
+          "independence_state": "UNKNOWN",
+          "independence_group_id": null,
+          "reliability_column": null,
+          "extraction_method": "observed-convergent-witness@1.0.0"
+        }
+      ],
+      "distinct_witnesses": 2,
+      "observation_overlap": "DISJOINT",
+      "raw_evidence_count": 2,
+      "scorable_evidence_count": 0,
+      "non_scorable_evidence_count": 2,
+      "aggregation_status": "UNAVAILABLE",
+      "missing_requirements": [
+        "a77d8ea7-16f7-4259-831d-163c637ffccc: MISSING_RELIABILITY",
+        "cf9f792d-9811-43b7-b089-dcf3e835225a: MISSING_RELIABILITY"
+      ],
+      "support_group_count": 0,
+      "contradiction_group_count": 0,
+      "support_groups": [],
+      "unknown_independence_count": 0,
+      "masses": {
+        "support_strength": 0.0,
+        "contradiction_strength": 0.0,
+        "supported_mass": 0.0,
+        "contradicted_mass": 0.0,
+        "conflict_mass": 0.0,
+        "uncertainty_mass": 1.0
+      },
+      "evidence_level": {
+        "evidence_level": 0,
+        "label": "Hypothesis",
+        "reasons": [],
+        "blocked_reasons": [
+          "no scorable supporting evidence",
+          "Market Evidence needs a supporting record categorised MARKET_ACTIVITY or DIRECT_VALIDATION with established provenance; quantity of opinion cannot substitute for it",
+          "Direct Validation needs a supporting record categorised DIRECT_VALIDATION with established provenance"
+        ]
+      },
+      "limiting_components": [],
+      "profile_id": "reference-v1",
+      "profile_version": "1.0.0",
+      "profile_status": "UNCALIBRATED",
+      "calibrated": false
+    },
+    {
+      "$banner": [
+        "UNCALIBRATED",
+        "DIAGNOSTIC ONLY",
+        "NOT AN OPPORTUNITY SCORE"
+      ],
+      "claim_id": "bf4e4b48-fdf9-48f6-9c69-2178eb361e18",
+      "claim_revision": 1,
+      "notice_class": "CONTRACT_NOTICE",
+      "currency": "EUR",
+      "classification_division": "92",
+      "witnesses": [
+        {
+          "evidence_id": "09bfc370-59d2-4aca-83b8-cf717a1cc329",
+          "signal_id": "5ed1cb05-c51a-5b3c-aa72-64350a5b96f1",
+          "witness_digest_prefix": "3dfc0200",
+          "notice_ids": [
+            "ted-eu|notice|140202-2023",
+            "ted-eu|notice|140858-2023",
+            "ted-eu|notice|141464-2023",
+            "ted-eu|notice|144439-2023",
+            "ted-eu|notice|145394-2023",
+            "ted-eu|notice|145981-2023",
+            "ted-eu|notice|146205-2023",
+            "ted-eu|notice|147412-2023",
+            "ted-eu|notice|147699-2023",
+            "ted-eu|notice|147879-2023",
+            "ted-eu|notice|148317-2023",
+            "ted-eu|notice|149711-2023",
+            "ted-eu|notice|151372-2023",
+            "ted-eu|notice|153861-2023",
+            "ted-eu|notice|153977-2023",
+            "ted-eu|notice|154729-2023",
+            "ted-eu|notice|154922-2023"
+          ],
+          "independence_state": "UNKNOWN",
+          "independence_group_id": null,
+          "reliability_column": null,
+          "extraction_method": "observed-convergent-witness@1.0.0"
+        },
+        {
+          "evidence_id": "1ad1dc6d-7528-4527-bccd-0a09f47112ac",
+          "signal_id": "d5f054e4-8141-5349-a57e-0336dee82a8a",
+          "witness_digest_prefix": "b0523209",
+          "notice_ids": [
+            "ted-eu|notice|125200-2023",
+            "ted-eu|notice|125573-2023",
+            "ted-eu|notice|125613-2023",
+            "ted-eu|notice|126222-2023",
+            "ted-eu|notice|126587-2023",
+            "ted-eu|notice|128213-2023",
+            "ted-eu|notice|130061-2023",
+            "ted-eu|notice|131312-2023",
+            "ted-eu|notice|131744-2023",
+            "ted-eu|notice|131786-2023",
+            "ted-eu|notice|132094-2023",
+            "ted-eu|notice|133177-2023",
+            "ted-eu|notice|134418-2023",
+            "ted-eu|notice|136023-2023",
+            "ted-eu|notice|136204-2023",
+            "ted-eu|notice|137030-2023",
+            "ted-eu|notice|137080-2023",
+            "ted-eu|notice|137620-2023",
+            "ted-eu|notice|137701-2023",
+            "ted-eu|notice|138226-2023"
+          ],
+          "independence_state": "UNKNOWN",
+          "independence_group_id": null,
+          "reliability_column": null,
+          "extraction_method": "observed-convergent-witness@1.0.0"
+        }
+      ],
+      "distinct_witnesses": 2,
+      "observation_overlap": "DISJOINT",
+      "raw_evidence_count": 2,
+      "scorable_evidence_count": 0,
+      "non_scorable_evidence_count": 2,
+      "aggregation_status": "UNAVAILABLE",
+      "missing_requirements": [
+        "09bfc370-59d2-4aca-83b8-cf717a1cc329: MISSING_RELIABILITY",
+        "1ad1dc6d-7528-4527-bccd-0a09f47112ac: MISSING_RELIABILITY"
+      ],
+      "support_group_count": 0,
+      "contradiction_group_count": 0,
+      "support_groups": [],
+      "unknown_independence_count": 0,
+      "masses": {
+        "support_strength": 0.0,
+        "contradiction_strength": 0.0,
+        "supported_mass": 0.0,
+        "contradicted_mass": 0.0,
+        "conflict_mass": 0.0,
+        "uncertainty_mass": 1.0
+      },
+      "evidence_level": {
+        "evidence_level": 0,
+        "label": "Hypothesis",
+        "reasons": [],
+        "blocked_reasons": [
+          "no scorable supporting evidence",
+          "Market Evidence needs a supporting record categorised MARKET_ACTIVITY or DIRECT_VALIDATION with established provenance; quantity of opinion cannot substitute for it",
+          "Direct Validation needs a supporting record categorised DIRECT_VALIDATION with established provenance"
+        ]
+      },
+      "limiting_components": [],
+      "profile_id": "reference-v1",
+      "profile_version": "1.0.0",
+      "profile_status": "UNCALIBRATED",
+      "calibrated": false
+    }
+  ]
+}

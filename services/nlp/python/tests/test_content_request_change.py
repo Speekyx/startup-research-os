@@ -128,7 +128,7 @@ def request_() -> DerivationRequest:
 
 def derive(extractor, request_, observations):
     derivation = extractor.resolve({})
-    key = extractor.group_key(observations[0]) or "group"
+    key = extractor.group_key(observations[0], extractor.resolve({})) or "group"
     group = CandidateGroup(key=key, observations=tuple(observations))
     return extractor.derive(group, derivation, request_)
 
@@ -192,8 +192,12 @@ class TestTwoPopulationsNeverBecomeOneSeries:
         """The field easiest to drop and worst to drop. `user` and `all-agents`
         are different counts of the same article-day, and a group that mixed
         them would subtract one population from another."""
-        user = extractor.group_key(observation("2024-03-01", 100, agent="user"))
-        every = extractor.group_key(observation("2024-03-01", 400, agent="all-agents"))
+        user = extractor.group_key(
+            observation("2024-03-01", 100, agent="user"), extractor.resolve({})
+        )
+        every = extractor.group_key(
+            observation("2024-03-01", 400, agent="all-agents"), extractor.resolve({})
+        )
         assert user != every
 
     def test_mixing_requester_classes_is_refused_not_averaged(self, extractor, request_) -> None:
@@ -215,8 +219,12 @@ class TestTwoPopulationsNeverBecomeOneSeries:
         assert outcome.refusals[0].reason is SignalRefusalReason.INCOMPATIBLE_SERIES
 
     def test_two_access_channels_are_never_one_series(self, extractor) -> None:
-        a = extractor.group_key(observation("2024-03-01", 100, access="all-access"))
-        b = extractor.group_key(observation("2024-03-01", 60, access="desktop"))
+        a = extractor.group_key(
+            observation("2024-03-01", 100, access="all-access"), extractor.resolve({})
+        )
+        b = extractor.group_key(
+            observation("2024-03-01", 60, access="desktop"), extractor.resolve({})
+        )
         assert a != b
 
     def test_another_record_kind_is_refused_by_kind(self, extractor, request_) -> None:

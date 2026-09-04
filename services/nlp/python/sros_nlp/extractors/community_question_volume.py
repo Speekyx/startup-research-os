@@ -167,7 +167,9 @@ class CommunityQuestionVolumeExtractor:
 
     # -------------------------------------------------------------- grouping
 
-    def group_key(self, observation: NormalizedObservation) -> str | None:
+    def group_key(
+        self, observation: NormalizedObservation, derivation: SignalDerivation
+    ) -> str | None:
         """One key per SITE and TAG VOCABULARY.
 
         The tag itself is deliberately NOT in the key. A question carries several
@@ -208,7 +210,7 @@ class CommunityQuestionVolumeExtractor:
         raw_page_size = derivation.parameters[PAGE_SIZE_PARAMETER]
         page_size = raw_page_size if isinstance(raw_page_size, int) else 0
 
-        homogeneity = self._homogeneous(group)
+        homogeneity = self._homogeneous(group, derivation)
         if homogeneity is not None:
             return GroupOutcome(refusals=(homogeneity,))
 
@@ -302,12 +304,14 @@ class CommunityQuestionVolumeExtractor:
 
     # ---------------------------------------------------------------- checks
 
-    def _homogeneous(self, group: CandidateGroup) -> GroupRefusal | None:
+    def _homogeneous(
+        self, group: CandidateGroup, derivation: SignalDerivation
+    ) -> GroupRefusal | None:
         """Refuse a group whose members are not one site and one vocabulary."""
         if not group.observations:
             return None
         first = group.observations[0]
-        expected = self.group_key(first)
+        expected = self.group_key(first, derivation)
         for observation in group.observations[1:]:
             if observation.record_kind_id != self.record_kind_id:
                 return GroupRefusal(
@@ -320,7 +324,7 @@ class CommunityQuestionVolumeExtractor:
                     group_key=group.key,
                     observation_keys=group.observation_keys,
                 )
-            if self.group_key(observation) != expected:
+            if self.group_key(observation, derivation) != expected:
                 return GroupRefusal(
                     reason=SignalRefusalReason.INCOMPATIBLE_SERIES,
                     detail=(

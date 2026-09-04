@@ -1,0 +1,63 @@
+{
+  "$comment": "Mission 1.41 §6, §7. The historical division-90 Signal, re-derived from its exact persisted inputs under the repaired 1.1.0 grouping. Signal UUID equality is deliberately NOT required: the extractor version participates in deterministic identity, so a legitimate bump moves it. What must not move is the MEANING, and that is what is compared field by field below. Read-only.",
+  "artifact_version": "procurement-grain-reproducibility@1.0.0",
+  "generated_by": "mission-1.41",
+  "semantically_reproduced": true,
+  "differing_fields": [],
+  "comparison": {
+    "historical_signal_id": "97ff6d37-1a2d-5725-ad97-d846767b8631",
+    "historical_inputs": 3,
+    "regrouped_into_n_groups": 1,
+    "records_with_no_key": 0,
+    "magnitude": {
+      "old": "686545.02",
+      "new": "686545.02"
+    },
+    "currency": {
+      "old": "EUR",
+      "new": "EUR"
+    },
+    "direction": {
+      "old": "NOT_APPLICABLE",
+      "new": "NOT_APPLICABLE"
+    },
+    "amount_types": {
+      "old": [
+        "TOTAL_VALUE"
+      ],
+      "new": [
+        "TOTAL_VALUE"
+      ]
+    },
+    "amount_scopes": {
+      "old": [
+        "NOTICE"
+      ],
+      "new": [
+        "NOTICE"
+      ]
+    },
+    "classification_codes": {
+      "old": [
+        "90715200",
+        "90911200",
+        "90911300",
+        "90919300"
+      ],
+      "new": [
+        "90715200",
+        "90911200",
+        "90911300",
+        "90919300"
+      ]
+    },
+    "notice_ids": {
+      "old": null,
+      "new": null
+    },
+    "extractor_version": {
+      "old": "1.0.1",
+      "new": "1.1.0"
+    }
+  }
+}

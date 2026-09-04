@@ -1,0 +1,209 @@
+{
+  "extractor_version": "1.1.0",
+  "network_acquisitions": 0,
+  "windows": [
+    {
+      "witness": "A",
+      "date_start": "2023-03-01",
+      "date_end": "2023-03-07",
+      "normalized_records": 94,
+      "records_with_no_key": 60,
+      "cohorts": [
+        {
+          "window": "A",
+          "records": 1,
+          "notice_classes": [
+            "CONTRACT_NOTICE"
+          ],
+          "amount_scopes": [
+            "NOTICE"
+          ],
+          "currencies": [
+            "DKK"
+          ],
+          "cpv_divisions": [
+            "92"
+          ],
+          "status": "REFUSED",
+          "refusals": [
+            "INSUFFICIENT_INPUT_OBSERVATIONS"
+          ],
+          "refusal_detail": [
+            "1 contract(s) in this cohort carry a 'TOTAL_VALUE' amount paired with exactly one currency; a contrast needs 2. One contract stating an amount is an observation, not a derivation, and lowering the floor would make it one by decree"
+          ]
+        },
+        {
+          "window": "A",
+          "records": 12,
+          "notice_classes": [
+            "CONTRACT_AWARD_NOTICE"
+          ],
+          "amount_scopes": [
+            "NOTICE"
+          ],
+          "currencies": [
+            "EUR"
+          ],
+          "cpv_divisions": [
+            "92"
+          ],
+          "status": "DERIVED",
+          "refusals": [],
+          "refusal_detail": [],
+          "persisted_signal_ids": [
+            "f09ecbb8-6b0d-5134-affb-c2ed796049a2"
+          ]
+        },
+        {
+          "window": "A",
+          "records": 20,
+          "notice_classes": [
+            "CONTRACT_NOTICE"
+          ],
+          "amount_scopes": [
+            "NOTICE"
+          ],
+          "currencies": [
+            "EUR"
+          ],
+          "cpv_divisions": [
+            "92"
+          ],
+          "status": "DERIVED",
+          "refusals": [],
+          "refusal_detail": [],
+          "persisted_signal_ids": [
+            "d5f054e4-8141-5349-a57e-0336dee82a8a"
+          ]
+        },
+        {
+          "window": "A",
+          "records": 1,
+          "notice_classes": [
+            "CONTRACT_AWARD_NOTICE"
+          ],
+          "amount_scopes": [
+            "NOTICE"
+          ],
+          "currencies": [
+            "PLN"
+          ],
+          "cpv_divisions": [
+            "92"
+          ],
+          "status": "REFUSED",
+          "refusals": [
+            "INSUFFICIENT_INPUT_OBSERVATIONS"
+          ],
+          "refusal_detail": [
+            "1 contract(s) in this cohort carry a 'TOTAL_VALUE' amount paired with exactly one currency; a contrast needs 2. One contract stating an amount is an observation, not a derivation, and lowering the floor would make it one by decree"
+          ]
+        }
+      ]
+    },
+    {
+      "witness": "B",
+      "date_start": "2023-03-08",
+      "date_end": "2023-03-14",
+      "normalized_records": 83,
+      "records_with_no_key": 49,
+      "cohorts": [
+        {
+          "window": "B",
+          "records": 1,
+          "notice_classes": [
+            "CONTRACT_NOTICE"
+          ],
+          "amount_scopes": [
+            "NOTICE"
+          ],
+          "currencies": [
+            "CZK"
+          ],
+          "cpv_divisions": [
+            "92"
+          ],
+          "status": "REFUSED",
+          "refusals": [
+            "INSUFFICIENT_INPUT_OBSERVATIONS"
+          ],
+          "refusal_detail": [
+            "1 contract(s) in this cohort carry a 'TOTAL_VALUE' amount paired with exactly one currency; a contrast needs 2. One contract stating an amount is an observation, not a derivation, and lowering the floor would make it one by decree"
+          ]
+        },
+        {
+          "window": "B",
+          "records": 14,
+          "notice_classes": [
+            "CONTRACT_AWARD_NOTICE"
+          ],
+          "amount_scopes": [
+            "NOTICE"
+          ],
+          "currencies": [
+            "EUR"
+          ],
+          "cpv_divisions": [
+            "92"
+          ],
+          "status": "SKIPPED_EXISTING_WITNESS",
+          "refusals": [],
+          "refusal_detail": [],
+          "existing_signal_id": "4e8ee7f7-e3b4-5c56-917c-ec11e6b480c5"
+        },
+        {
+          "window": "B",
+          "records": 17,
+          "notice_classes": [
+            "CONTRACT_NOTICE"
+          ],
+          "amount_scopes": [
+            "NOTICE"
+          ],
+          "currencies": [
+            "EUR"
+          ],
+          "cpv_divisions": [
+            "92"
+          ],
+          "status": "DERIVED",
+          "refusals": [],
+          "refusal_detail": [],
+          "persisted_signal_ids": [
+            "5ed1cb05-c51a-5b3c-aa72-64350a5b96f1"
+          ]
+        },
+        {
+          "window": "B",
+          "records": 2,
+          "notice_classes": [
+            "CONTRACT_NOTICE"
+          ],
+          "amount_scopes": [
+            "NOTICE"
+          ],
+          "currencies": [
+            "SEK"
+          ],
+          "cpv_divisions": [
+            "92"
+          ],
+          "status": "DERIVED",
+          "refusals": [],
+          "refusal_detail": [],
+          "persisted_signal_ids": [
+            "f0749978-bdda-5778-9b09-97aa8aad9ff0"
+          ]
+        }
+      ]
+    }
+  ],
+  "skipped_as_existing_witness": [
+    {
+      "window": "B",
+      "signal_id": "4e8ee7f7-e3b4-5c56-917c-ec11e6b480c5",
+      "records": 14
+    }
+  ],
+  "interpretation": "ClaimInterpretationJobResult(interpreter='observed-signal-restatement@1.4.1', run=InterpretationRunRecord(workspace_id='00000000-0000-4000-8000-000000000001', interpreter_id='observed-signal-restatement', interpreter_version='1.4.1', interpretation_kind='DETERMINISTIC', correlation_id='m141-interpret-ee1f211b-ecdd-4d0e-b4cf-5fdf9b49508e', started_at=datetime.datetime(2026, 9, 3, 19, 48, 9, 787103, tzinfo=datetime.timezone.utc), finished_at=datetime.datetime(2026, 9, 3, 19, 48, 10, 435481, tzinfo=datetime.timezone.utc), expires_at=datetime.datetime(2026, 12, 2, 19, 48, 10, 435481, tzinfo=datetime.timezone.utc), research_session_id='1676fe2d-4ffe-434f-9f98-69fd282eaff9', signals_considered=6, signals_cited=6, signals_excluded=0, signals_refused=0, claims_new=6, claims_unchanged=6, revisions_created=6, evidence_new=8, evidence_unchanged=4, refusals=(), truncated_by=None), persisted=ClaimPersistenceReport(new=6, unchanged=6, revised=0, evidence_new=8, evidence_unchanged=4, evidence_conflicts=(), claim_ids=('1e00a6dc-051c-4431-b13b-cc879f01a526', '73e834c4-ddad-4093-9727-79720e074b4b', 'dfa8c0f5-8e59-437f-b18b-90e9ac854776', 'bf4e4b48-fdf9-48f6-9c69-2178eb361e18', '330638b0-4faa-4f44-877f-cbd653bf7df5', '02248c91-a384-442d-8c78-80ba4c1bd2b1', '6d03f533-9155-4631-89e2-843cb028b010', '02248c91-a384-442d-8c78-80ba4c1bd2b1', 'edf6b49e-058f-4432-aece-acac0694008e', 'bf4e4b48-fdf9-48f6-9c69-2178eb361e18', 'ef1a9208-1375-42c9-ac93-c319bf7adc6b', '6389d1bf-6dea-47e8-8508-dcf009fe352d'), claim_by_signal={'97ff6d37-1a2d-5725-ad97-d846767b8631': '73e834c4-ddad-4093-9727-79720e074b4b', '5ed1cb05-c51a-5b3c-aa72-64350a5b96f1': 'bf4e4b48-fdf9-48f6-9c69-2178eb361e18', 'f09ecbb8-6b0d-5134-affb-c2ed796049a2': '02248c91-a384-442d-8c78-80ba4c1bd2b1', '4e8ee7f7-e3b4-5c56-917c-ec11e6b480c5': '02248c91-a384-442d-8c78-80ba4c1bd2b1', 'd5f054e4-8141-5349-a57e-0336dee82a8a': 'bf4e4b48-fdf9-48f6-9c69-2178eb361e18', 'f0749978-bdda-5778-9b09-97aa8aad9ff0': '6389d1bf-6dea-47e8-8508-dcf009fe352d'}), considered=(ConsideredSignal(signal_id='97ff6d37-1a2d-5725-ad97-d846767b8631', signal_type_id='procurement_value_contrast', role=<ClaimInterpretationInputRole.CITED: 'CITED'>, claim_id='73e834c4-ddad-4093-9727-79720e074b4b', reason_code=None, detail=None), ConsideredSignal(signal_id='5ed1cb05-c51a-5b3c-aa72-64350a5b96f1', signal_type_id='procurement_value_contrast', role=<ClaimInterpretationInputRole.CITED: 'CITED'>, claim_id='bf4e4b48-fdf9-48f6-9c69-2178eb361e18', reason_code=None, detail=None), ConsideredSignal(signal_id='f09ecbb8-6b0d-5134-affb-c2ed796049a2', signal_type_id='procurement_value_contrast', role=<ClaimInterpretationInputRole.CITED: 'CITED'>, claim_id='02248c91-a384-442d-8c78-80ba4c1bd2b1', reason_code=None, detail=None), ConsideredSignal(signal_id='4e8ee7f7-e3b4-5c56-917c-ec11e6b480c5', signal_type_id='procurement_value_contrast', role=<ClaimInterpretationInputRole.CITED: 'CITED'>, claim_id='02248c91-a384-442d-8c78-80ba4c1bd2b1', reason_code=None, detail=None), ConsideredSignal(signal_id='d5f054e4-8141-5349-a57e-0336dee82a8a', signal_type_id='procurement_value_contrast', role=<ClaimInterpretationInputRole.CITED: 'CITED'>, claim_id='bf4e4b48-fdf9-48f6-9c69-2178eb361e18', reason_code=None, detail=None), ConsideredSignal(signal_id='f0749978-bdda-5778-9b09-97aa8aad9ff0', signal_type_id='procurement_value_contrast', role=<ClaimInterpretationInputRole.CITED: 'CITED'>, claim_id='6389d1bf-6dea-47e8-8508-dcf009fe352d', reason_code=None, detail=None)), run_id='c2efd5da-fb7d-4809-88b3-f151d32274a9', idempotency_key='00000000-0000-4000-8000-000000000001|1676fe2d-4ffe-434f-9f98-69fd282eaff9|observed-signal-restatement|*|procurement_value_contrast|200')"
+}

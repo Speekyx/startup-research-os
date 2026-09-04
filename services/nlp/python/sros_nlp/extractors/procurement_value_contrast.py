@@ -112,7 +112,27 @@ class ProcurementValueContrastExtractor:
     # A fix rather than a semantic change, and still a version bump, because the
     # same identity would otherwise produce different content -- which the model
     # reports as NON_DETERMINISTIC_OUTPUT rather than writing over.
-    extractor_version = "1.0.1"
+    # 1.1.0 -- Mission 1.41. The cohort key gained `currency` and `amount_scope`.
+    #
+    # The docstring below already called both "load-bearing" and the key did not
+    # contain either: they were validated AFTER grouping and refused the WHOLE
+    # cohort. Mission 1.40 acquired 177 real division-92 notices and lost three
+    # of four cohorts to that -- EUR+PLN, DKK+EUR, CZK+EUR+SEK -- because a
+    # currency-heterogeneous division is one group under the old key and no
+    # group at all after validation.
+    #
+    # MINOR rather than major, and the reason is structural: adding a field to a
+    # grouping key can only SPLIT groups, never merge them. Every cohort that
+    # derived under 1.0.1 had one currency and one scope by construction -- the
+    # validation refused anything else -- so each stays exactly one group with
+    # exactly the same members, and its magnitude, relation and scope are
+    # unchanged. Mission 1.41 §6 verifies that against the historical division-90
+    # Signal rather than asserting it.
+    #
+    # It is still a version bump: the same identity would otherwise produce
+    # different content for inputs that used to refuse, which the model reports
+    # as NON_DETERMINISTIC_OUTPUT rather than writing over.
+    extractor_version = "1.1.0"
     signal_type_id = "procurement_value_contrast"
     record_kind_id = PROCUREMENT_NOTICE
     family = SignalQuantityFamily.TRANSACTION_VALUE
@@ -163,8 +183,13 @@ class ProcurementValueContrastExtractor:
 
     # -------------------------------------------------------------- grouping
 
-    def group_key(self, observation: NormalizedObservation) -> str | None:
-        """One key per comparable cohort. Five dimensions, each load-bearing.
+    def group_key(
+        self, observation: NormalizedObservation, derivation: SignalDerivation
+    ) -> str | None:
+        """One key per comparable cohort. Seven dimensions, each load-bearing.
+
+        **Source, record kind and resource**, because a cohort spanning two
+        publications is a statement about neither.
 
         **Notice class**, because a call for competition and a report of an
         outcome describe different procurement stages: an estimated value in a
@@ -182,7 +207,22 @@ class ProcurementValueContrastExtractor:
 
         The amount semantic is the derivation PARAMETER rather than a grouping
         dimension, so a run states which one it is about instead of silently
-        emitting one signal per semantic.
+        emitting one signal per semantic. **It is passed in** because currency
+        and scope are properties of the amount that parameter selects: which
+        currency a notice contributes is not knowable without knowing which
+        amount is wanted.
+
+        **Currency and amount scope became key fields in 1.1.0** (Mission 1.41).
+        Until then this docstring named them load-bearing and the key omitted
+        them, so they were checked after grouping and refused the whole cohort.
+        The refusal was right and its granularity was not: two currencies are
+        indeed never one distribution, which is an argument for putting them in
+        DIFFERENT cohorts rather than for discarding both.
+
+        A record whose amount cannot be read for this derivation joins no group.
+        That is not a new exclusion -- such a record could never have contributed
+        a member -- it just happens earlier, where it is visible as a skip rather
+        than as a cohort that mysteriously fell one short.
         """
         if observation.record_kind_id != self.record_kind_id:
             return None
@@ -190,12 +230,21 @@ class ProcurementValueContrastExtractor:
         division = self._cpv_division(observation)
         if division is None:
             return None
+        wanted = derivation.parameters.get("amount_type")
+        if not isinstance(wanted, str):
+            return None
+        entry = self._eligible_amount(observation, wanted)
+        if entry is None:
+            return None
+        _, currency, scope = entry
         return group_key_of(
             [
                 ("source_id", observation.source_id),
                 ("record_kind_id", observation.record_kind_id),
                 ("resource_id", observation.resource_id),
                 ("notice_class", notice.get("class")),
+                ("amount_scope", scope),
+                ("currency", currency),
                 ("cpv_division", division),
             ]
         )
@@ -230,7 +279,7 @@ class ProcurementValueContrastExtractor:
         derivation: SignalDerivation,
         request: DerivationRequest,
     ) -> GroupOutcome:
-        homogeneity = self._homogeneous(group)
+        homogeneity = self._homogeneous(group, derivation)
         if homogeneity is not None:
             return GroupOutcome(refusals=(homogeneity,))
 
@@ -318,11 +367,13 @@ class ProcurementValueContrastExtractor:
 
     # ---------------------------------------------------------------- checks
 
-    def _homogeneous(self, group: CandidateGroup) -> GroupRefusal | None:
+    def _homogeneous(
+        self, group: CandidateGroup, derivation: SignalDerivation
+    ) -> GroupRefusal | None:
         if not group.observations:
             return None
         first = group.observations[0]
-        expected = self.group_key(first)
+        expected = self.group_key(first, derivation)
         for observation in group.observations[1:]:
             if observation.record_kind_id != self.record_kind_id:
                 return GroupRefusal(
@@ -335,7 +386,7 @@ class ProcurementValueContrastExtractor:
                     group_key=group.key,
                     observation_keys=group.observation_keys,
                 )
-            if self.group_key(observation) != expected:
+            if self.group_key(observation, derivation) != expected:
                 return GroupRefusal(
                     reason=SignalRefusalReason.INCOMPATIBLE_SERIES,
                     detail=(

@@ -276,7 +276,14 @@ def build(conn) -> dict:
         "conflict_mass_non_zero": sum(1 for u in scorable if u["conflict_mass"] > 0.0),
         "single_source_claims": sum(1 for u in scorable if len(u["source_ids"]) == 1),
         "multi_source_claims": sum(1 for u in scorable if len(u["source_ids"]) > 1),
-        "multi_evidence_claims": sum(1 for u in scorable if u["evidence_count"] > 1),
+        # Mission 1.41: over ALL units, not just scorable ones. This counter was
+        # computed over `scorable` and therefore reported 0 while the corpus held
+        # two real multi-Evidence Claims whose reliability is unresolved -- which
+        # is the exact shape a second pilot produces, and the exact counter this
+        # whole arc tracks. Scorability is reported separately below.
+        "multi_evidence_claims": sum(1 for u in units if u["evidence_count"] > 1),
+        "scorable_multi_evidence_claims": sum(1 for u in scorable if u["evidence_count"] > 1),
+        "max_evidence_per_claim": max((u["evidence_count"] for u in units), default=0),
         "independence_established_claims": sum(
             1 for u in scorable if u["independent_support_groups"] > 0
         ),

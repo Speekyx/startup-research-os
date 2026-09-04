@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.70
-Last amended: 2026-09-03 (Sprint 1 / Mission 1.40)
+Version: 1.71
+Last amended: 2026-09-03 (Sprint 1 / Mission 1.41)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.71 | 2026-09-03 | **PROCUREMENT_COHORT_GRAIN_REPAIRED_REAL_MULTI_EVIDENCE_CREATED: Claims with more than one Evidence row, 0 -> 2.** Two real canonical Claims, two genuinely distinct witnesses each, **revision 1 on both**, and the real aggregator receiving `raw_evidence_count = 2`. **ZERO network acquisitions**: the frozen windows were reconstructed from the 177 records Mission 1.40 already persisted. **TWO DEFECTS OF ONE SHAPE, both found by real data and both a docstring disagreeing with its code.** The cohort key called currency and amount scope load-bearing and contained neither; `derive` refuses unless each is single-valued, so **the implementation was wrong, not the documentation** -- a dimension the validation demands be equal is what makes a cohort comparable. And `_persist_evidence` said *idempotent on (workspace_id, claim_id, signal_id)* while the query added `AND extraction_method`, so a new interpreter version INSERTED a second row. **Evidence identity is epistemic; the procedure that produced it is provenance** -- `extraction_method` is still written and still read, it just no longer decides. **A CHANGED assessment is neither unchanged nor a second observation, and no third answer was invented**: a disagreeing row is REPORTED as a conflict and nothing is written, because representing a revision needs a model this architecture lacks. Extractor **1.0.1 -> 1.1.0**, MINOR because **adding a field to a grouping key can only SPLIT groups, never merge them** -- and §6 verified it rather than arguing it: division 90 re-derived with magnitude, currency, direction, amount types, scopes and codes **all identical**, its 3 inputs still one group. **Window A went from 0 derived cohorts to 2**; single-member PLN, DKK and CZK cohorts now refuse for the right reason. **§22/§23 enforced rather than assumed**: window B's unchanged EUR cohort was SKIPPED as an existing witness, because a new procedure version over identical membership is historical versioning and not a second observation. **NO FX CONVERSION** anywhere. Overlap DISJOINT and independence still UNKNOWN on all six rows with 0 groups -- disjoint records are not independent evidence. **The audit itself had a defect**: `multi_evidence_claims` was computed over SCORABLE units and reported 0 while two real ones existed. 0 model calls, 0 embeddings, 0 new assessments, Opportunity untouched |
 | 1.70 | 2026-09-03 | **SECOND_PILOT_REAL_MULTI_EVIDENCE_NOT_OBSERVED: the convergence contract was never the blocker, and a currency guard was.** CPV division **92 'Recreational, cultural and sporting services'** selected under a frozen ordinal rule, every label verified ONE CONCEPT PER FETCH against the Publications Office authority register. **A bulk EUR-Lex extraction was retrieved and REFUSED**: it gave `90000000-8` where this repository's own division-90 data uses a different check digit, and labelled 92000000 *Miscellaneous services*, which the register contradicts -- a summarising model over a long annex produces plausible output, and plausible output carrying an official label is worse than none. Acquisition ran to the frozen plan: **177 notices across two frozen windows, both COMPLETE_BOUNDED_QUERY**. Then **three of four cohorts were REFUSED for mixed currencies** (EUR/PLN, DKK/EUR, CZK/EUR/SEK) and window A produced NO Signal at all, so division 92 has ONE witness and `claims with >1 Evidence` is still **0**. §37 forbids widening the window, switching category or regrouping, and none was done. **THE EXTRACTOR'S COHORT KEY DOES NOT CONTAIN WHAT ITS DOCSTRING SAYS**: it names notice class, amount scope, currency and CPV division as load-bearing, and the key holds `source_id | record_kind_id | resource_id | notice_class | cpv_division` -- currency and amount scope are validated AFTER grouping and refuse the WHOLE cohort rather than splitting it. Had currency been a grouping dimension, window A would very likely have yielded EUR cohorts and this mission would have succeeded. **NOT FIXED**, because changing a grouping key after seeing which data it rejected is the shape §37 and §41 both refuse. **A DUPLICATE EVIDENCE ROW WAS CREATED BY THIS RUN AND REMOVED**: re-interpreting the pre-existing division-90 Signal wrote a second Evidence row differing only by interpreter version (1.1.0 -> 1.4.1), which is §13's forbidden case verbatim and Mission 1.32's known idempotency defect, and which briefly made the corpus report a FALSE `claims with >1 evidence: 1`. **The existing TED assessment BINDS to the new division-92 DETAILED claim** -- its scope carries no classification division -- **and not to either convergent claim**, because proposition_kind differs. 0 model calls, 0 embeddings, 0 new assessments, 0 independence groups, no Opportunity |
 | 1.69 | 2026-09-03 | **PROPOSITION_CONVERGENCE_CONTRACT_READY: `max(members)` finally receives more than one member.** ADR-035 introduces the distinction the Claim model did not make -- **PROPOSITION IDENTITY facts decide WHAT is asserted, WITNESS facts decide WHICH observation demonstrates it** -- with one test applied field by field: *if changing F changes what the Claim asserts it is identity; if it only changes which observation witnesses the same assertion it may be witness*. **A witness fact is not discarded**, it stops being an identity: `notice_ids` stays on the Signal and is recovered in a test from the persisted scope. **OBSERVED convergence is legitimate and narrow**: an existential over a publication passes §2's own question -- *can a person go and read it there* -- and the broader proposition is ENTAILED BY the detailed one rather than a weakened copy, which is why it is a new kind and `notice_ids` stays identity on the old one. **The constructor refuses a non-OBSERVED contract**, so the unbuilt INFERRED layer cannot be built here by accident, and it refuses one without `source_id` in identity, because attribution is part of an OBSERVED proposition. **The TED template's own objection was answered rather than ignored**: *a proposition that cannot say WHICH notices is not checkable* -- checkability MOVES to the witness, and the bound stays in the wording as *at least one bounded set*. **CONVERGENCE IS NOT INDEPENDENCE**: two disjoint cohorts collapse into ONE group because independence stays UNKNOWN, saturation still receives one group, and that is correct rather than a shortfall. **A test caught a vocabulary collision**: `ObservationOverlap` was drafted with `UNKNOWN`, which `EvidenceIndependenceState` already has, and sharing a member name is how a mapping gets written by accident -- renamed `UNESTABLISHED`. Proved through the REAL repository and REAL aggregator on synthetic fixtures in a disposable workspace: one Claim, two Evidence, **one revision**, idempotent replay, Docker/Podman/Kubernetes still three keys. **Not wired into the production job**, so no Signal here can witness two Claims. 0 acquisitions, 0 model calls, 0 embeddings, every live counter unchanged, feasibility audit byte-identical |
 | 1.68 | 2026-09-03 | **MULTI_EVIDENCE_CLAIM_ARCHITECTURE_GAP: convergence is ONE proposition fact away, and that fact is the one that says WHAT WAS MEASURED.** Mission 1.37 found the symptom -- one Evidence per Claim -- and this is the cause. **The persistence layer already supports N Evidence on one Claim**: `_persist_one` looks a draft up by `proposition_key` and attaches evidence to the claim it finds, and the aggregation framework's own §1 asks *given several Evidence records bearing on one Claim*. **The interpreter can never produce two drafts with the same key**: all seven templates put `source_id` in their facts PLUS the measurement's own identity -- `content_id`, `metric_id`, `community_tag`, `term`, `notice_ids` -- plus the period labels. So two Signals converge only if they are the SAME measurement, which §13 forbids. **Measured: 28 Claims, 28 distinct keys, closest pairs differ by EXACTLY ONE fact, and in twelve pairs that fact is `content_id`** -- Docker, Podman and Kubernetes on the same day, which is exactly what removing the field would merge. **HALF THE BEHAVIOUR IS CORRECT AND MUST NOT BE REPAIRED**: for an OBSERVED claim attribution IS the claim, so *Wikimedia counted X* and *Stack Exchange published Y* are two propositions and deleting `source_id` is not the fix. **Six candidates, and the pattern is the finding**: the two that pass taxonomy and governance (TED CPV, a non-developer Stack Exchange tag) fail on the architecture; the two that pass the architecture vacuously fail on taxonomy (Wikimedia articles, GDELT terms); the best domain diversity (Steam, App Store, Google Play, Product Hunt) is BLOCKED AT THE ELIGIBILITY GATE and §4 is a hard stop. **Only four of 29 sources are eligible, resource-ready and collector-implemented.** Identity was NOT weakened to avoid the outcome: the concrete convergence that should work -- two DISJOINT TED cohorts in one division -- needs `notice_ids` and `classification_codes` removed, and §8 forbids that. 0 acquisitions, 0 model calls, 0 embeddings, every counter unchanged, audit byte-identical |
@@ -317,6 +318,81 @@ positives in the scored split, which this 89-question corpus did not supply: one
 defensible SAME in 40 candidate pairs is a finding about the corpus, not about
 the classifier. **No synthetic positive may substitute** -- a constructed pair
 can test a parser and can never establish semantic accuracy against real data.
+
+### A key that does not contain what its docstring calls load-bearing
+
+Added in 1.71 (Mission 1.41, `mission-1.41-report.md`).
+**`PROCUREMENT_COHORT_GRAIN_REPAIRED_REAL_MULTI_EVIDENCE_CREATED`**, with
+`REAL_MULTI_EVIDENCE_AGGREGATION_UNAVAILABLE_MISSING_RELIABILITY` beside it.
+
+    Claims with >1 Evidence   0 -> 2        max Evidence per Claim   1 -> 2
+    network acquisitions      0             new ReliabilityAssessments 0
+
+- **TWO DEFECTS OF ONE SHAPE, AND BOTH WERE A DOCSTRING DISAGREEING WITH ITS
+  CODE.** The cohort key called currency and amount scope *load-bearing* and
+  contained neither. `_persist_evidence` said *"Idempotent on `(workspace_id,
+  claim_id, signal_id)`"* and the query added `AND extraction_method`. Real data
+  found both; fixtures had not.
+- **THE VALIDATION SETTLED THE SEMANTIC QUESTION.** `derive` refuses a cohort
+  unless `len(currencies) == 1` and `len(scopes) == 1`. **A dimension the
+  validation demands be equal is part of what makes a cohort comparable**, so the
+  implementation was wrong rather than the documentation. The refusal was right;
+  its GRANULARITY was not -- two currencies are never one distribution, which
+  argues for two cohorts and not for discarding both.
+- **ADDING A FIELD TO A GROUPING KEY CAN ONLY SPLIT, NEVER MERGE**, which is why
+  the bump is MINOR. Every cohort that derived before had one currency and one
+  scope by construction. **Verified rather than argued**: the historical
+  division-90 Signal re-derived from its exact inputs with magnitude, currency,
+  direction, amount types, amount scopes and classification codes **all
+  identical**, and its three inputs still forming one group.
+- **SIGNAL UUID EQUALITY WAS NOT REQUIRED, AND SAYING SO MATTERS.** The extractor
+  version participates in deterministic identity, so a legitimate bump moves the
+  id. What must not move is what the observation MEANS.
+- **A NEW PROCEDURE VERSION OVER UNCHANGED MEMBERSHIP IS HISTORICAL VERSIONING,
+  NOT A SECOND OBSERVATION.** Re-deriving window B's unchanged EUR cohort would
+  have produced a new Signal for the same witness, so it was **skipped and
+  reported**. Manufacturing witness multiplicity is the one thing a mission
+  chasing a multi-record Claim must not do.
+- **EVIDENCE IDENTITY IS EPISTEMIC; THE PROCEDURE IS PROVENANCE.**
+  `extraction_method` is still written and still read; it no longer decides
+  whether a relation is new. That is the same distinction ADR-035 drew between
+  proposition identity and witness identity, one layer down.
+- **A CHANGED ASSESSMENT IS NEITHER UNCHANGED NOR A SECOND OBSERVATION, AND NO
+  THIRD ANSWER WAS INVENTED.** A row disagreeing on a load-bearing factor is
+  reported as a conflict and **nothing is written**: the historical values
+  survive, and representing a legitimate revision needs a model this architecture
+  does not have. Inventing one while fixing a duplicate is how a fix becomes the
+  next defect.
+- **NO FX CONVERSION, ANYWHERE.** Currency stays source-native and different
+  currencies became different cohorts. A test asserts the extractor contains no
+  conversion helper.
+- **DISJOINT RECORDS ARE NOT INDEPENDENT EVIDENCE.** Both Claims' witnesses have
+  `DISJOINT` observation membership and `independence_state = UNKNOWN`, with **0
+  independence groups**. Two publication windows are temporal separation, not
+  epistemic independence.
+- **THE AGGREGATOR RECEIVED TWO AND THE GROUPING ARITHMETIC DID NOT RUN.**
+  `raw_evidence_count = 2`, `scorable = 0`: the convergent proposition kind has
+  no applicable assessment, and non-scorable items are excluded before grouping.
+  So `max(members)` did not see two members here. Reporting the structural path
+  without a `q` is the honest reading.
+- **THE AUDIT ITSELF HAD A DEFECT.** `multi_evidence_claims` was computed over
+  SCORABLE units, so it reported **0** while the corpus held two real
+  multi-Evidence Claims whose reliability is unresolved -- exactly the shape a
+  second pilot produces, and exactly the counter this arc tracks. Scorability is
+  now a separate counter.
+- **THREE PRE-EXISTING TESTS ASSERTED THAT NO CLAIM HAS TWO EVIDENCE ROWS**, and
+  this mission made that false, which is what it was for. Re-pointed rather than
+  deleted: **a test asserting 0 forever is a test asserting the project never
+  progresses.**
+
+**Next is Mission 1.42 -- Second Pilot Convergent Evidence Reliability Review
+Preparation V1**, for the exact new scope
+`ted-eu | notices/eforms-contract-and-award | procurement_notice | OBSERVED |
+source_published_classification_value_contrast_witnessed`. Both multi-Evidence
+Claims are `UNAVAILABLE` for precisely that reason. **Prepare the question and
+let a named person answer it.** Two multi-record Claims are two: still no
+contradiction case, no established independence, no temporal claim, and no
+scorable multi-record Claim at all.
 
 ### A cohort key that does not contain what its docstring says
 
