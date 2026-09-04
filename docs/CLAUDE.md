@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.73
-Last amended: 2026-09-04 (Sprint 1 / Mission 1.42a)
+Version: 1.74
+Last amended: 2026-09-04 (Sprint 1 / Mission 1.42.1)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.74 | 2026-09-04 | **OPERATOR_CONFIRMATION_REQUIRED, for the second time and for the same reason: the value is authorised and the keystroke is not.** Everything a mission may legitimately do is done -- migration **0032** adds `review_rubric_id` and `review_rubric_version`, the operator's completed review is frozen as an artifact that conforms to the rubric it names, and the dry run validates at **version 1, HUMAN_REVIEW, thibchm, 0.55, human-reliability-assessment-rubric@1.0.0, 4 document-backed basis rows**. **0 assessments persisted, 0 model calls, 0 acquisitions, every counter unchanged.** The brief supplied the operator's VALUES and cannot supply the operator's KEYSTROKE: piping the confirmation, patching `isatty` or writing the row by hand would each produce an assessment whose `reviewed_by` names a person who did not type it. **THE SCOPE WAS NOT NARROWED, AND THAT WAS THE LIVE TEMPTATION** -- the second pilot produced the two multi-Evidence division-92 Claims and the assessment is NOT about them: the scope carries no division and no currency, so one judgement binds **divisions 90 AND 92, EUR AND SEK**, 6 rows across 4 Claims. **NOTHING IS BACKFILLED AND NULL IS THE TRUE ANSWER**: both historical rows read NULL after the migration, because writing a rubric id onto a review that did not use one fabricates the provenance the column was added to record -- and **the basis table was considered and REJECTED as the place for it**, since a basis row names a document ABOUT THE MEASUREMENT. **BOTH HALVES OR NEITHER**, enforced twice: a CHECK constraint and `__post_init__`. **`UNSURE` SURVIVES AS `UNSURE`** on retrievability -- not YES, not NO, not low confidence, not 0.5 -- and is carried into the stated limitation rather than quietly resolved. `0.55` is neither 0.5 nor 0.65 nor their mean, and a test asserts all three. **A PRE-EXISTING TEST PINNED THE BINDING'S KEY SET** and was re-pointed rather than deleted: which procedure produced a value IS part of reconstructing it, which is the property that test asserts. Pre-persistence baseline recorded honestly: **0/6 resolved, 0 scorable, `max(members)` receiving 0** |
 | 1.73 | 2026-09-04 | **HUMAN_RELIABILITY_RUBRIC_READY: the architecture defined the question, the scope, the reviewer and the evidence, and then handed over a blank numeric field.** `human-reliability-assessment-rubric@1.0.0` is that missing middle, and it is a DECISION PROCEDURE rather than a scoring function -- **the module contains no arithmetic operator of any kind**, asserted over its AST, because the one failure to avoid was solving arbitrary numbers with different arbitrary numbers. **FIVE dimensions accepted and SIX rejected, and the rejections are the substance**: `MEASUREMENT_TO_PROPOSITION_FIT` **is `directness`** and scoring it here would make one weakness count twice -- its residue is not a gradient but a MIS-SPECIFIED SCOPE, so it became a hard stop; `CLASSIFICATION_DEPENDABILITY` folded in, because a dimension for it would be a rubric shaped around one publisher's taxonomy; `KNOWN_FAILURE_MODES` and `RESIDUAL_UNKNOWN` are the OUTPUT of the five, not a sixth question; and a separate **reviewer-confidence field was refused** because basis completeness is READ OFF the profile and two fields answering one question eventually disagree. **UNKNOWN IS NOT LOW, STRUCTURALLY**: `NOT_ESTABLISHED` and `CONTRADICTED` carry **no ordinal rank**, so neither can be interpolated, averaged or read as the bottom of a scale. **NO INTERMEDIATE ANCHORS**, deliberately -- nothing in this repository anchors the absolute scale, so one would have to be invented; the two anchors that exist are defined by what the value DOES in `q = min(components)` rather than by an adjective, and **`0.0` is a POSITIVE FINDING and not the absence of an assessment**. Recommendation **`KEEP_NUMERIC_FIELD_BUT_REQUIRE_ORDINAL_REVIEW_PROFILE_FIRST`**: no migration, no code change, both historical values kept, and the number becomes a summary of a RECORDED PROFILE which is what a second reviewer reproduces. **THE EXISTING ARCHITECTURE ALREADY ANSWERED HALF THE DISAGREEMENT QUESTION** -- the resolver refuses on >1 current assessment, so while a disagreement is open the honest state is ABSENCE; what is missing is disagreeing WITHOUT superseding. **THE WIKIMEDIA REVIEWER HAD ALREADY WRITTEN `HISTORICAL_MUTABILITY` DOWN UNPROMPTED**, months before this rubric derived it from TED's open question -- corroboration that the dimensions are real, bounded by both reviews sharing a reviewer. Both historical assessments are **PARTIALLY_REPRESENTABLE** and **unchanged**. Secondary: **`RELIABILITY_RUBRIC_PROVENANCE_MODEL_GAP`** -- no column records which procedure produced a value, and **the basis table is not the answer** because a basis row names a document about the MEASUREMENT. 0 assessments, 0 model calls, 0 acquisitions, every counter unchanged, and **the TED worksheet is prepared and UNANSWERED** |
 | 1.72 | 2026-09-04 | **READY_FOR_SECOND_PILOT_RELIABILITY_REVIEW: the question is prepared for a scope that is BROADER than the mission that prompted it, and software supplied no answer.** The brief expected 4 Evidence rows on 2 Claims; the live scope holds **6 rows across 4 Claims**, resolving to **exactly one** scope which is exactly the expected five-part one. **That is not §30 C.** Drift would be Evidence rows failing to match the five-part scope; what differs is the COUNT INSIDE it, because **a reliability scope carries no classification division and no currency** -- so one judgement here binds the SEK claim and the **division-90** claim too, whose only witness is the Signal derived in Mission 1.15.10 **before the second pilot existed**. Mission 1.40 recorded the same property from the other side. **THE NEAR MISS IS THE WHOLE TEST**: the existing TED `0.5` shares source, resource, record kind AND `claim_type: OBSERVED` -- **four of five** -- and the single differing field is `proposition_kind`, exercised through the REAL resolver in both directions and confirmed by **6 leak checks, 0 leaks**. **NOTHING NEW WAS RETRIEVED, because nothing new was needed**: the convergent proposition reads the same BT-161 field of the same notices, so 3 of 4 existing basis rows are REUSED and BT-195-BT-198 is **PARTIALLY_APPLICABLE** -- the FACT is unchanged and its WEIGHT is not, since withholding bounds a named cohort and cannot falsify an existential. **FOUR RELIABILITY QUESTIONS ARE GENUINELY NEW** and none has a documentary answer: an existential is MONOTONE, and whether that makes it more dependable or merely **harder to falsify** is a judgement; it carries no period (H-37); it asserts about a CLASS; and **two cohorts are asserted to witness one proposition**, a step that does not exist for the detailed claim. **THE LARGEST RESIDUAL UNKNOWN HAS NO DOCUMENT AND NO MITIGATION**: whether a published notice can be corrected or superseded, which bears directly on whether a witnessing cohort still witnesses. **ENGINEERING VALIDATION IS RECORDED AND REFUSED AS BASIS** -- currency grain being correctly bounded does not imply reliability, `DISJOINT` overlap does not imply independence (UNKNOWN on all 6 rows, 0 groups), and rewarding the system numerically because its own tests pass is the error the separation exists to prevent. **0 assessments, 0 basis rows, 0 network requests, 0 model calls, every canonical counter unchanged**, `scoring.evidence.reliability` NULL on all 39 rows, profile still UNCALIBRATED, Problem-Family still PARKED. **The next action is a HUMAN decision and Mission 1.42.1 was NOT started** |
 | 1.71 | 2026-09-03 | **PROCUREMENT_COHORT_GRAIN_REPAIRED_REAL_MULTI_EVIDENCE_CREATED: Claims with more than one Evidence row, 0 -> 2.** Two real canonical Claims, two genuinely distinct witnesses each, **revision 1 on both**, and the real aggregator receiving `raw_evidence_count = 2`. **ZERO network acquisitions**: the frozen windows were reconstructed from the 177 records Mission 1.40 already persisted. **TWO DEFECTS OF ONE SHAPE, both found by real data and both a docstring disagreeing with its code.** The cohort key called currency and amount scope load-bearing and contained neither; `derive` refuses unless each is single-valued, so **the implementation was wrong, not the documentation** -- a dimension the validation demands be equal is what makes a cohort comparable. And `_persist_evidence` said *idempotent on (workspace_id, claim_id, signal_id)* while the query added `AND extraction_method`, so a new interpreter version INSERTED a second row. **Evidence identity is epistemic; the procedure that produced it is provenance** -- `extraction_method` is still written and still read, it just no longer decides. **A CHANGED assessment is neither unchanged nor a second observation, and no third answer was invented**: a disagreeing row is REPORTED as a conflict and nothing is written, because representing a revision needs a model this architecture lacks. Extractor **1.0.1 -> 1.1.0**, MINOR because **adding a field to a grouping key can only SPLIT groups, never merge them** -- and §6 verified it rather than arguing it: division 90 re-derived with magnitude, currency, direction, amount types, scopes and codes **all identical**, its 3 inputs still one group. **Window A went from 0 derived cohorts to 2**; single-member PLN, DKK and CZK cohorts now refuse for the right reason. **§22/§23 enforced rather than assumed**: window B's unchanged EUR cohort was SKIPPED as an existing witness, because a new procedure version over identical membership is historical versioning and not a second observation. **NO FX CONVERSION** anywhere. Overlap DISJOINT and independence still UNKNOWN on all six rows with 0 groups -- disjoint records are not independent evidence. **The audit itself had a defect**: `multi_evidence_claims` was computed over SCORABLE units and reported 0 while two real ones existed. 0 model calls, 0 embeddings, 0 new assessments, Opportunity untouched |
@@ -320,6 +321,79 @@ positives in the scored split, which this 89-question corpus did not supply: one
 defensible SAME in 40 candidate pairs is a finding about the corpus, not about
 the classifier. **No synthetic positive may substitute** -- a constructed pair
 can test a parser and can never establish semantic accuracy against real data.
+
+### The value is authorised; the keystroke is not
+
+Added in 1.74 (Mission 1.42.1, `mission-1.42.1-report.md`,
+`second-pilot-convergent-operator-reliability-review-v1.md`).
+**`OPERATOR_CONFIRMATION_REQUIRED`**, reached with everything else complete.
+
+    migration 0032   review_rubric_id, review_rubric_version -- both nullable
+    dry run          version 1, HUMAN_REVIEW, thibchm, 0.55, 4 basis rows
+    persisted        NOTHING. ReliabilityAssessments 2 -> 2
+
+- **A MISSION BRIEF CAN SUPPLY A REVIEWER'S VALUES AND CANNOT SUPPLY THEIR
+  KEYSTROKE.** `record_reliability_assessment.py` asks through `input()` and
+  refuses on `EOFError`. Piping the confirmation, patching `isatty`, or writing
+  the row with hand-written SQL would each produce an assessment whose
+  `reviewed_by` names a person who did not type it -- the exact failure the
+  reliability contract exists to prevent. **A guard removed to make a pipeline
+  pass is a guard that never was**, and this is the second mission to stop at it.
+- **THE SCOPE WAS NOT NARROWED, AND THAT WAS THE LIVE TEMPTATION.** The second
+  pilot produced the two multi-Evidence division-92 Claims, so writing the
+  assessment as though it were about them would have felt natural and would have
+  been wrong. A reliability scope carries **no classification division and no
+  currency**, so this one judgement binds divisions **90 and 92** and **EUR and
+  SEK** -- six rows across four Claims. Narrowing it would have changed the
+  architecture rather than the value.
+- **NULL IS THE TRUE ANSWER FOR A REVIEW THAT PREDATES THE RUBRIC.** Migration
+  0032 adds two NULLABLE columns with no `DEFAULT`, writes no row, and both
+  historical assessments read NULL afterwards -- verified against the deployment.
+  Backfilling them would fabricate the provenance the column was added to record.
+- **THE BASIS TABLE WAS CONSIDERED AND REJECTED AS THE PLACE FOR IT.** A basis
+  row names a retrieved document **about the measurement**. The rubric is the
+  procedure the reviewer followed, and filing it there would inflate every future
+  assessment's documentary basis with a document that says nothing about the
+  publisher.
+- **BOTH HALVES OR NEITHER, ENFORCED TWICE.** A CHECK constraint in the database
+  and a guard in `__post_init__`: an id with no version names a moving target,
+  and a version with no id names nothing at all.
+- **`UNSURE` SURVIVES AS `UNSURE`.** Long-term retrievability is answered
+  `UNSURE`, and it is not YES, not NO, not *low confidence* and not `0.5`. It is
+  carried into the stated limitation rather than quietly resolved, because a
+  reviewer who cannot yet tell whether an unknown matters has said something
+  real.
+- **THE GATE WAS RECORDED, NOT RECOMPUTED.** `NUMERIC_JUDGEMENT_PERMITTED` is the
+  operator's decision; nothing derives it from the five ordinal states, because
+  the rubric defines the gate as judgement rather than an arithmetic function.
+- **`0.55` IS NEITHER 0.5 NOR 0.65 NOR THEIR MEAN**, and a test asserts all
+  three -- the shapes a nudging or averaging bug would take. Neither historical
+  assessment is superseded, because a different `proposition_kind` is a different
+  question and `_next_version` correctly finds no same-scope row.
+- **NOTHING NEW WAS FETCHED FOR THE BASIS.** The four held eForms SDK documents,
+  including the one Mission 1.42 called `PARTIALLY_APPLICABLE` -- that verdict is
+  about how much WEIGHT a reviewer gives it under an existential proposition, not
+  about whether the document belongs. **No SROS engineering validation is among
+  them**, and a test enforces it.
+- **A PRE-EXISTING TEST PINNED THE BINDING'S KEY SET, AND WAS RE-POINTED RATHER
+  THAN DELETED.** `ReliabilityBinding.to_json()` gained the two provenance keys,
+  and the test asserts that the binding names everything needed to reconstruct
+  the number -- which is exactly WHY they were added. Same repair shape as
+  Missions 1.31.1, 1.32, 1.38, 1.40 and 1.41.
+- **THE PRE-PERSISTENCE BASELINE IS RECORDED HONESTLY**: 0 of 6 rows resolved, 0
+  scorable, `max(members)` receiving 0 members, 6 leak checks and 0 leaks. That
+  is what the assessment will change, and reporting it now means the change can
+  be measured rather than asserted.
+
+**The next action is the operator typing the confirmation.** After that,
+`report_convergent_reliability_resolution.py --link-review` measures the six
+bindings, reruns the aggregator with the RESOLVED reliability, and records
+whether `max(members)` finally received two real items -- and **two witnesses of
+UNKNOWN provenance will still collapse into ONE group, which is correct and is
+not corroboration.** Then **Mission 1.43 -- Calibration Reference Corpus
+Expansion V1**, not calibration: two Claims sharing one assessment, with no
+contradiction case, no established independence and no temporal Claim, is not a
+dataset.
 
 ### A number is a summary of a profile, or it is an impression
 

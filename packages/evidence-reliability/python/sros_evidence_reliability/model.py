@@ -208,6 +208,13 @@ class ReliabilityAssessment:
     reviewed_at: datetime
     basis: tuple[ReliabilityBasis, ...] = ()
     calibration_dataset_ref: str | None = None
+    # Which review PROCEDURE produced this judgement (Mission 1.42.1, migration
+    # 0032). `None` means the review predates any rubric -- which is true of
+    # every assessment made before one existed -- and never that the reviewer
+    # worked without one. Not backfilled, because a rubric id on a review that
+    # did not use one is fabricated provenance.
+    review_rubric_id: str | None = None
+    review_rubric_version: str | None = None
     superseded_at: datetime | None = None
     superseded_reason: str | None = None
 
@@ -260,6 +267,12 @@ class ReliabilityAssessment:
                 "withdrawal nobody can explain"
             )
 
+        if (self.review_rubric_id is None) != (self.review_rubric_version is None):
+            raise ValueError(
+                "rubric provenance is both halves or neither. An id with no version "
+                "names a moving target, and a version with no id names nothing"
+            )
+
     @property
     def is_current(self) -> bool:
         return self.superseded_at is None
@@ -277,6 +290,8 @@ class ReliabilityAssessment:
             reliability=self.reliability,
             reviewed_by=self.reviewed_by,
             reviewed_at=self.reviewed_at,
+            review_rubric_id=self.review_rubric_id,
+            review_rubric_version=self.review_rubric_version,
         )
 
 
@@ -296,6 +311,8 @@ class ReliabilityBinding:
     reliability: float
     reviewed_by: str
     reviewed_at: datetime
+    review_rubric_id: str | None = None
+    review_rubric_version: str | None = None
 
     def to_json(self) -> dict[str, object]:
         return {
@@ -306,6 +323,8 @@ class ReliabilityBinding:
             "reliability": self.reliability,
             "reviewed_by": self.reviewed_by,
             "reviewed_at": self.reviewed_at.isoformat(),
+            "review_rubric_id": self.review_rubric_id,
+            "review_rubric_version": self.review_rubric_version,
         }
 
 

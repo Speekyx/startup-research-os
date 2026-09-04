@@ -64,7 +64,8 @@ ROWS = """
 
 ASSESSMENTS = """
     SELECT id, version, source_id, resource_id, record_kind_id, claim_type,
-           proposition_kind, reliability, origin, reviewed_by, stated_limitation
+           proposition_kind, reliability, origin, reviewed_by, stated_limitation,
+           review_rubric_id, review_rubric_version
       FROM epistemic.reliability_assessments
      WHERE superseded_at IS NULL
      ORDER BY source_id, proposition_kind
@@ -184,6 +185,8 @@ def main() -> int:
                 for b in a["_basis"]
             ),
             calibration_dataset_ref=None,
+            review_rubric_id=a["review_rubric_id"],
+            review_rubric_version=a["review_rubric_version"],
         )
         for a in assessments_raw
     ]
@@ -340,6 +343,11 @@ def main() -> int:
                 "origin": a["origin"],
                 "reviewed_by": a["reviewed_by"],
                 "reliability": float(a["reliability"]),
+                "review_rubric": (
+                    f"{a['review_rubric_id']}@{a['review_rubric_version']}"
+                    if a["review_rubric_id"]
+                    else None
+                ),
                 "is_the_scope_under_review": a["proposition_kind"] == CONVERGENT_KIND,
                 "basis_row_count": len(a["_basis"]),
             }
