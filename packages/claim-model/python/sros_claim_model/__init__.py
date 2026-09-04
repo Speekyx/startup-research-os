@@ -15,6 +15,21 @@ exists.
 
 from __future__ import annotations
 
+from .convergence import (
+    CONVERGENCE_CONTRACTS,
+    ObservationOverlap,
+    PropositionConvergenceContract,
+    QualificationOutcome,
+    SourceBoundary,
+    contract_for,
+    convergent_proposition_key,
+    distinct_witnesses,
+    identity_facts,
+    overlap_between,
+    qualify,
+    witness_facts,
+    witness_key,
+)
 from .model import (
     AUTOMATED_ORIGINS,
     INTERPRETIVE_VOCABULARY,
@@ -30,6 +45,19 @@ from .model import (
 )
 
 __all__ = [
+    "CONVERGENCE_CONTRACTS",
+    "ObservationOverlap",
+    "PropositionConvergenceContract",
+    "QualificationOutcome",
+    "SourceBoundary",
+    "contract_for",
+    "convergent_proposition_key",
+    "distinct_witnesses",
+    "identity_facts",
+    "overlap_between",
+    "qualify",
+    "witness_facts",
+    "witness_key",
     "AUTOMATED_ORIGINS",
     "INTERPRETIVE_VOCABULARY",
     "ClaimDraft",

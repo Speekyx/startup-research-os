@@ -238,6 +238,13 @@ jobs:
       - name: Sensitivity analysis matches the implementation
         run: uv run python -m sros_evidence_aggregation.sensitivity --check
 
+      # Mission 1.39 §34. The convergence registry rendered into its artifact.
+      # It reads repository code and no database, so unlike the calibration
+      # feasibility audit it can live here: an empty deployment changes nothing
+      # about its output.
+      - name: Proposition convergence contract is in sync
+        run: uv run python infrastructure/scripts/render_convergence_contract.py --check
+
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
   # Pinned to the same versions as infrastructure/compose.

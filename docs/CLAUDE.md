@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.68
-Last amended: 2026-09-03 (Sprint 1 / Mission 1.38)
+Version: 1.69
+Last amended: 2026-09-03 (Sprint 1 / Mission 1.39)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.69 | 2026-09-03 | **PROPOSITION_CONVERGENCE_CONTRACT_READY: `max(members)` finally receives more than one member.** ADR-035 introduces the distinction the Claim model did not make -- **PROPOSITION IDENTITY facts decide WHAT is asserted, WITNESS facts decide WHICH observation demonstrates it** -- with one test applied field by field: *if changing F changes what the Claim asserts it is identity; if it only changes which observation witnesses the same assertion it may be witness*. **A witness fact is not discarded**, it stops being an identity: `notice_ids` stays on the Signal and is recovered in a test from the persisted scope. **OBSERVED convergence is legitimate and narrow**: an existential over a publication passes §2's own question -- *can a person go and read it there* -- and the broader proposition is ENTAILED BY the detailed one rather than a weakened copy, which is why it is a new kind and `notice_ids` stays identity on the old one. **The constructor refuses a non-OBSERVED contract**, so the unbuilt INFERRED layer cannot be built here by accident, and it refuses one without `source_id` in identity, because attribution is part of an OBSERVED proposition. **The TED template's own objection was answered rather than ignored**: *a proposition that cannot say WHICH notices is not checkable* -- checkability MOVES to the witness, and the bound stays in the wording as *at least one bounded set*. **CONVERGENCE IS NOT INDEPENDENCE**: two disjoint cohorts collapse into ONE group because independence stays UNKNOWN, saturation still receives one group, and that is correct rather than a shortfall. **A test caught a vocabulary collision**: `ObservationOverlap` was drafted with `UNKNOWN`, which `EvidenceIndependenceState` already has, and sharing a member name is how a mapping gets written by accident -- renamed `UNESTABLISHED`. Proved through the REAL repository and REAL aggregator on synthetic fixtures in a disposable workspace: one Claim, two Evidence, **one revision**, idempotent replay, Docker/Podman/Kubernetes still three keys. **Not wired into the production job**, so no Signal here can witness two Claims. 0 acquisitions, 0 model calls, 0 embeddings, every live counter unchanged, feasibility audit byte-identical |
 | 1.68 | 2026-09-03 | **MULTI_EVIDENCE_CLAIM_ARCHITECTURE_GAP: convergence is ONE proposition fact away, and that fact is the one that says WHAT WAS MEASURED.** Mission 1.37 found the symptom -- one Evidence per Claim -- and this is the cause. **The persistence layer already supports N Evidence on one Claim**: `_persist_one` looks a draft up by `proposition_key` and attaches evidence to the claim it finds, and the aggregation framework's own §1 asks *given several Evidence records bearing on one Claim*. **The interpreter can never produce two drafts with the same key**: all seven templates put `source_id` in their facts PLUS the measurement's own identity -- `content_id`, `metric_id`, `community_tag`, `term`, `notice_ids` -- plus the period labels. So two Signals converge only if they are the SAME measurement, which §13 forbids. **Measured: 28 Claims, 28 distinct keys, closest pairs differ by EXACTLY ONE fact, and in twelve pairs that fact is `content_id`** -- Docker, Podman and Kubernetes on the same day, which is exactly what removing the field would merge. **HALF THE BEHAVIOUR IS CORRECT AND MUST NOT BE REPAIRED**: for an OBSERVED claim attribution IS the claim, so *Wikimedia counted X* and *Stack Exchange published Y* are two propositions and deleting `source_id` is not the fix. **Six candidates, and the pattern is the finding**: the two that pass taxonomy and governance (TED CPV, a non-developer Stack Exchange tag) fail on the architecture; the two that pass the architecture vacuously fail on taxonomy (Wikimedia articles, GDELT terms); the best domain diversity (Steam, App Store, Google Play, Product Hunt) is BLOCKED AT THE ELIGIBILITY GATE and §4 is a hard stop. **Only four of 29 sources are eligible, resource-ready and collector-implemented.** Identity was NOT weakened to avoid the outcome: the concrete convergence that should work -- two DISJOINT TED cohorts in one division -- needs `notice_ids` and `classification_codes` removed, and §8 forbids that. 0 acquisitions, 0 model calls, 0 embeddings, every counter unchanged, audit byte-identical |
 | 1.67 | 2026-09-03 | **CALIBRATION_STRATEGY_READY_REFERENCE_DATA_MISSING: the aggregation layer has never aggregated.** Measured against the live database, not quoted: **28 Claims, 28 Evidence rows, and the distinct evidence-count-per-claim is `[1]`**. So saturation has never combined two groups, independence collapse has never collapsed anything, `max(members)` has never had more than one member, contradiction accumulation has never run, and three of the four masses have only ever taken their `c = 0` values. **`min()` is currently indistinguishable from `return reliability`**, because relevance, directness and extraction confidence are 1.0 on every row and every Claim is EVERGREEN. **THE TARGET VARIABLE HAS TWO VALUES AND BOTH ARE REVIEWED RELIABILITY VALUES** (0.5 x1, 0.65 x18), `reliability` limits 19 of 19 scorable claims, and the leakage rule yields **2 groups among 19 units**, which cannot be split at all -- so the §29 echo hazard is not a risk here, it is the entire dataset. **THE MISSION 1.1 PLAN PROPOSES THE WRONG TARGET, and correcting it is the substantive finding**: its §5 asks *do claims scoring 70-80 resolve favourably more often* with a *Brier-style summary*, which is an OUTCOME-RESOLUTION target measuring the state of the WORLD, against a framework whose §1 says *Not a truth estimator ... every quantity describes the state of the evidence*. The plan states the counter-argument in the same section and keeps the metric anyway. **A SECOND GAP RESTRICTS RATHER THAN BLOCKS**: nothing anchors the ABSOLUTE scale, so calibration targets the ORDINAL construct -- which pair of evidence sets is better supported -- and absolute level is out of scope until the framework supplies an anchor. **Baseline B-2, the reliability pass-through, is the one that decides whether any of this is worth doing**, and today it is numerically identical to the full aggregator on 19 of 19. `TEMPORAL_CALIBRATION_DATA_MISSING` (0 temporal Claims, 0 claim features), `SAMPLE_REQUIREMENT_NOT_YET_QUANTIFIED`, and **3 of 14 gate conditions are recorded as BLOCKERS rather than given invented numbers**. 0 parameters changed, 0 profiles calibrated, 0 model calls, 0 acquisitions, D-03 unchanged |
 | 1.66 | 2026-09-03 | **DOCKER_RELIABILITY_PARTIALLY_REVIEWED: the operator typed the confirmation, and the two counters that moved are the whole story.** ReliabilityAssessments 1 -> **2**, basis rows 4 -> **6**, and **fifteen other counters unchanged**. Six Wikimedia rows now RESOLVE `0.65` against assessment `e2419f13-...` v1, both Stack Exchange scopes stay NO_APPLICABLE_ASSESSMENT, and the TED assessment is untouched at v1 with `superseded_at` NULL, because **a different scope is a different question and not a revision of somebody else's answer**. **`scoring.evidence.reliability` IS STILL NULL ON ALL 28 ROWS** -- six rows resolve a number and not one stores it, because reliability binds LATE (ADR-026 Decision 2), so a score names the assessment and version it used and a stale copy cannot outlive the assessment it came from. **The negative checks went 3 to 6 and still found 0 leaks**, because a second assessment doubles the ways one could leak. **§15's diagnostic ran, and its shape is the argument for calibration**: EIGHT Evidence rows sit on EIGHT distinct Claims, so these are eight SINGLE-RECORD aggregations and reliability resolving does not turn six observations of one article into an aggregation. `q = 0.650` on all six with **`reliability` as the limiting component**, because `q = min(components)` and every other factor is 1.0 -- **the score is a restatement of one human judgement, not a corroboration of it**. Level stayed **1**, blocked by independence and by the MARKET_ACTIVITY gate, neither of which reliability touches; the two refused scopes report `UNAVAILABLE` with `uncertainty_mass` **1.0**. Profile still UNCALIBRATED, **0 scores persisted**, D-03 blocker 2 moves OPEN -> **PARTIAL** and the other four do not move. **A THIRD DEFECT SURFACED, AND ONLY BECAUSE A ROW FINALLY RESOLVED**: the resolution report read `binding.assessment_version`, which is not a field -- unreachable while every binding was None, the same shape as Mission 1.36's invalid basis types. **Code that could not have worked, unnoticed because the path was never taken** |
@@ -315,6 +316,80 @@ positives in the scored split, which this 89-question corpus did not supply: one
 defensible SAME in 40 candidate pairs is a finding about the corpus, not about
 the classifier. **No synthetic positive may substitute** -- a constructed pair
 can test a parser and can never establish semantic accuracy against real data.
+
+### Proposition identity and witness identity are different kinds of fact
+
+Added in 1.69 (Mission 1.39, ADR-035, `proposition-convergence-contract-v1.md`).
+**`PROPOSITION_CONVERGENCE_CONTRACT_READY`**: two genuinely distinct observations
+can support one Claim, **0 live rows changed**.
+
+    PROPOSITION IDENTITY FACTS   what exact assertion is this Claim?
+    WITNESS OBSERVATION FACTS    which observation demonstrates that assertion?
+
+- **THE TEST, APPLIED FIELD BY FIELD.** If changing field F changes **what** the
+  Claim asserts, F is proposition identity. If changing F only changes **which**
+  observation witnesses the same assertion, F may be witness identity. A
+  convergence-enabled proposition kind declares both sets, they must be disjoint,
+  and a fact classified as **neither is refused** -- the key is built from
+  whatever is in the mapping, so a fact nobody placed is a fact that decides.
+- **A WITNESS FACT IS NOT DISCARDED. IT STOPS BEING AN IDENTITY.** `notice_ids`
+  leaves the key and stays on the Signal, on the Evidence and in provenance; a
+  test recovers both cohorts from the persisted signal scopes.
+- **THE PERSISTENCE LAYER WAS NEVER THE BLOCKER**, which Mission 1.38 established
+  and this confirms by using it unchanged.
+- **OBSERVED CONVERGENCE IS LEGITIMATE, AND NARROW.** An existential over a
+  publication passes `claim-epistemic-semantics-v1.md` §2's own question -- *does
+  a source report this, such that a person could go and read it there?* -- and §3's
+  truth condition, since the claim stays true if the source was wrong. The broader
+  proposition is **entailed by** the detailed one and asserts less, which is why
+  it is a NEW proposition kind and `notice_ids` remains identity on the old one.
+- **THE CONSTRUCTOR ENFORCES THE TWO BOUNDARIES.** A non-`OBSERVED` contract is
+  refused, so the INFERRED layer this contract records as deliberately unbuilt
+  cannot be built by accident; and a contract without `source_id` in identity is
+  refused, because attribution is part of an OBSERVED proposition. The source
+  boundary enum has ONE member, `SAME_SOURCE_AND_RESOURCE` -- a cross-source
+  member nobody may pass would be an invitation.
+- **THE EXISTING TEMPLATE'S OBJECTION WAS ANSWERED, NOT IGNORED.** Its docstring
+  says *"a proposition that cannot say WHICH notices is not checkable, and one
+  that omits its bound reads as a fact about a market"*. Both are right.
+  **Checkability MOVES** to the witness, reachable through Evidence -> Signal ->
+  signal_inputs -> normalized_records. **The bound stays in the wording**: the
+  statement carries *"at least one bounded set"*, and the contract refuses to be
+  constructed with an empty `does_not_establish`.
+- **CONVERGENCE IS NOT INDEPENDENCE, AND THE TWO VOCABULARIES SHARE NO MEMBER
+  NAME.** `DISJOINT` says two witnesses read different records; they can still
+  share the publisher, the collection mechanism, the methodology and the
+  population. **A test caught the collision**: `ObservationOverlap` was drafted
+  with `UNKNOWN`, which `EvidenceIndependenceState` already has, and two
+  vocabularies sharing a member name is how a mapping between them gets written by
+  accident. Renamed `UNESTABLISHED`.
+- **`max(members)` FINALLY HAS A CHOICE TO MAKE.** Independence stays `UNKNOWN`,
+  so the conservative rule collapses both witnesses into ONE group with TWO
+  members, and saturation still receives one group. **That is correct rather than
+  a shortfall**: two witnesses of unestablished provenance raise observed volume,
+  not evidence strength, and it must never be reported as corroboration.
+- **A REVISION IS A CHANGED ASSERTION, NOT ADDITIONAL SUPPORT.** Two Evidence
+  rows, one Claim, **one revision**. Replaying a Signal adds nothing.
+- **NOTHING HISTORICAL MOVED.** `proposition_key` was not touched -- convergence
+  computes the same hash over a smaller mapping, which is what a different fact
+  set has always produced. No historical template changed and **no historical
+  proposition kind gained a contract**: convergence is opt-in per kind, which is
+  why Docker, Podman and Kubernetes still have three distinct keys.
+- **NOT WIRED INTO THE PRODUCTION JOB.** No Signal in this deployment can witness
+  two Claims, so the double-counting boundary is enforced by absence rather than
+  by a rule. One Signal witnessing both a detailed and a broader Claim is
+  permitted ACROSS Claims and never WITHIN one.
+- **SYNTHETIC DATA TESTS ARCHITECTURE.** Every fixture went into a disposable
+  workspace, the reliability values were `0.4` and `0.7` precisely so nobody can
+  mistake them for the reviewed `0.5` and `0.65`, and the calibration feasibility
+  audit is **byte-identical**: still zero multi-Evidence Claims in the live corpus.
+  **Only real research rows can change calibration feasibility.**
+
+**Next is Mission 1.40 -- Second Pilot TED Category Multi-Evidence Acquisition
+V1**, which reopens the second-pilot path without returning to Docker. It must
+retrieve the official CPV taxonomy before selecting a category: Mission 1.33
+recorded that the collector deliberately expands no CPV code into a label, and
+Mission 1.39 deliberately did not choose one.
 
 ### A Claim is isomorphic to its Signal, and that is why nothing aggregates
 
