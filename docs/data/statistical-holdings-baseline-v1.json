@@ -1,0 +1,288 @@
+{
+  "$comment": "Mission 1.46 §0. What statistical evidence this deployment holds, measured BEFORE any candidate pair was considered. A candidate chosen first and then justified against whatever is held is a rationalisation, so the order is the point. Reads only: no RawRecord, Signal, Claim or Evidence was created.",
+  "artifact_version": "statistical-holdings-baseline@1.0.0",
+  "generated_by": "mission-1.46",
+  "statistical_sources_examined": [
+    "world-bank",
+    "eurostat",
+    "fred"
+  ],
+  "holdings": {
+    "world-bank": {
+      "source_id": "world-bank",
+      "raw_records": 6,
+      "normalized_records": 6,
+      "record_kinds": 1,
+      "metrics": 1,
+      "geographies": 2,
+      "periods": 3
+    },
+    "eurostat": {
+      "source_id": "eurostat",
+      "raw_records": 0,
+      "normalized_records": 0,
+      "record_kinds": 0,
+      "metrics": 0,
+      "geographies": 0,
+      "periods": 0
+    },
+    "fred": {
+      "source_id": "fred",
+      "raw_records": 0,
+      "normalized_records": 0,
+      "record_kinds": 0,
+      "metrics": 0,
+      "geographies": 0,
+      "periods": 0
+    }
+  },
+  "observations": {
+    "world-bank": [
+      {
+        "metric_id": "SP.POP.TOTL",
+        "metric_scheme": "world-bank-indicator",
+        "resource_id": "indicator/SP.POP.TOTL",
+        "dataset": "indicators",
+        "frequency": "ANNUAL",
+        "geography_source_code": "DEU",
+        "geography_canonical": "DE",
+        "geography_kind": "COUNTRY",
+        "period_type": "YEAR",
+        "period_label": "2018",
+        "period_timezone_state": null,
+        "unit": null,
+        "unit_state": "NOT_PUBLISHED",
+        "value_state": "REPORTED",
+        "record_kind": "numeric_observation"
+      },
+      {
+        "metric_id": "SP.POP.TOTL",
+        "metric_scheme": "world-bank-indicator",
+        "resource_id": "indicator/SP.POP.TOTL",
+        "dataset": "indicators",
+        "frequency": "ANNUAL",
+        "geography_source_code": "DEU",
+        "geography_canonical": "DE",
+        "geography_kind": "COUNTRY",
+        "period_type": "YEAR",
+        "period_label": "2019",
+        "period_timezone_state": null,
+        "unit": null,
+        "unit_state": "NOT_PUBLISHED",
+        "value_state": "REPORTED",
+        "record_kind": "numeric_observation"
+      },
+      {
+        "metric_id": "SP.POP.TOTL",
+        "metric_scheme": "world-bank-indicator",
+        "resource_id": "indicator/SP.POP.TOTL",
+        "dataset": "indicators",
+        "frequency": "ANNUAL",
+        "geography_source_code": "DEU",
+        "geography_canonical": "DE",
+        "geography_kind": "COUNTRY",
+        "period_type": "YEAR",
+        "period_label": "2020",
+        "period_timezone_state": null,
+        "unit": null,
+        "unit_state": "NOT_PUBLISHED",
+        "value_state": "REPORTED",
+        "record_kind": "numeric_observation"
+      },
+      {
+        "metric_id": "SP.POP.TOTL",
+        "metric_scheme": "world-bank-indicator",
+        "resource_id": "indicator/SP.POP.TOTL",
+        "dataset": "indicators",
+        "frequency": "ANNUAL",
+        "geography_source_code": "FRA",
+        "geography_canonical": "FR",
+        "geography_kind": "COUNTRY",
+        "period_type": "YEAR",
+        "period_label": "2018",
+        "period_timezone_state": null,
+        "unit": null,
+        "unit_state": "NOT_PUBLISHED",
+        "value_state": "REPORTED",
+        "record_kind": "numeric_observation"
+      },
+      {
+        "metric_id": "SP.POP.TOTL",
+        "metric_scheme": "world-bank-indicator",
+        "resource_id": "indicator/SP.POP.TOTL",
+        "dataset": "indicators",
+        "frequency": "ANNUAL",
+        "geography_source_code": "FRA",
+        "geography_canonical": "FR",
+        "geography_kind": "COUNTRY",
+        "period_type": "YEAR",
+        "period_label": "2019",
+        "period_timezone_state": null,
+        "unit": null,
+        "unit_state": "NOT_PUBLISHED",
+        "value_state": "REPORTED",
+        "record_kind": "numeric_observation"
+      },
+      {
+        "metric_id": "SP.POP.TOTL",
+        "metric_scheme": "world-bank-indicator",
+        "resource_id": "indicator/SP.POP.TOTL",
+        "dataset": "indicators",
+        "frequency": "ANNUAL",
+        "geography_source_code": "FRA",
+        "geography_canonical": "FR",
+        "geography_kind": "COUNTRY",
+        "period_type": "YEAR",
+        "period_label": "2020",
+        "period_timezone_state": null,
+        "unit": null,
+        "unit_state": "NOT_PUBLISHED",
+        "value_state": "REPORTED",
+        "record_kind": "numeric_observation"
+      }
+    ],
+    "eurostat": [],
+    "fred": []
+  },
+  "signals": {
+    "community_question_volume": 1,
+    "community_question_without_accepted_answer_volume": 1,
+    "content_request_change": 18,
+    "lexical_frequency_change": 2,
+    "lexical_frequency_contrast": 1,
+    "numeric_period_change": 4,
+    "procurement_value_contrast": 6
+  },
+  "claims": {
+    "world-bank": [
+      {
+        "id": "560f27d6-d75c-4bdd-9060-312a0f07538b",
+        "claim_type": "OBSERVED",
+        "temporality": "EVERGREEN",
+        "proposition_facts": {
+          "direction": "INCREASING",
+          "metric_id": "SP.POP.TOTL",
+          "source_id": "world-bank",
+          "proposition": "source_reported_metric_period_change",
+          "resource_id": "indicator/SP.POP.TOTL",
+          "metric_scheme": "world-bank-indicator",
+          "period_label_to": "2020",
+          "period_label_from": "2019",
+          "geography_source_code": "FRA"
+        },
+        "statement": "World Bank Open Data reported that \"SP.POP.TOTL\" for \"France\" increased between \"2019\" and \"2020\" by 219049.",
+        "current_revision": 1
+      },
+      {
+        "id": "8a551705-741e-431c-ab2d-1edd4d24f1ad",
+        "claim_type": "OBSERVED",
+        "temporality": "EVERGREEN",
+        "proposition_facts": {
+          "direction": "INCREASING",
+          "metric_id": "SP.POP.TOTL",
+          "source_id": "world-bank",
+          "proposition": "source_reported_metric_period_change",
+          "resource_id": "indicator/SP.POP.TOTL",
+          "metric_scheme": "world-bank-indicator",
+          "period_label_to": "2019",
+          "period_label_from": "2018",
+          "geography_source_code": "DEU"
+        },
+        "statement": "World Bank Open Data reported that \"SP.POP.TOTL\" for \"Germany\" increased between \"2018\" and \"2019\" by 187180.",
+        "current_revision": 1
+      },
+      {
+        "id": "aab81833-ca25-4798-b540-e3db965375d0",
+        "claim_type": "OBSERVED",
+        "temporality": "EVERGREEN",
+        "proposition_facts": {
+          "direction": "INCREASING",
+          "metric_id": "SP.POP.TOTL",
+          "source_id": "world-bank",
+          "proposition": "source_reported_metric_period_change",
+          "resource_id": "indicator/SP.POP.TOTL",
+          "metric_scheme": "world-bank-indicator",
+          "period_label_to": "2020",
+          "period_label_from": "2019",
+          "geography_source_code": "DEU"
+        },
+        "statement": "World Bank Open Data reported that \"SP.POP.TOTL\" for \"Germany\" increased between \"2019\" and \"2020\" by 67909.",
+        "current_revision": 1
+      },
+      {
+        "id": "efb39063-6458-4d2c-88f9-ccfdf86ac8b6",
+        "claim_type": "OBSERVED",
+        "temporality": "EVERGREEN",
+        "proposition_facts": {
+          "direction": "INCREASING",
+          "metric_id": "SP.POP.TOTL",
+          "source_id": "world-bank",
+          "proposition": "source_reported_metric_period_change",
+          "resource_id": "indicator/SP.POP.TOTL",
+          "metric_scheme": "world-bank-indicator",
+          "period_label_to": "2019",
+          "period_label_from": "2018",
+          "geography_source_code": "FRA"
+        },
+        "statement": "World Bank Open Data reported that \"SP.POP.TOTL\" for \"France\" increased between \"2018\" and \"2019\" by 223713.",
+        "current_revision": 1
+      }
+    ],
+    "eurostat": [],
+    "fred": []
+  },
+  "evidence": {
+    "world-bank": [
+      {
+        "id": "05c769b1-f3be-4749-b93a-fca564a1fdcb",
+        "claim_id": "8a551705-741e-431c-ab2d-1edd4d24f1ad",
+        "direction": "SUPPORTS",
+        "relevance": 1.0,
+        "directness": 1.0,
+        "extraction_confidence": 1.0,
+        "reliability": null,
+        "independence_state": "UNKNOWN",
+        "independence_group_id": null,
+        "observation_category": "UNCATEGORISED"
+      },
+      {
+        "id": "084a6942-592e-40b3-9ac6-55b3413be374",
+        "claim_id": "560f27d6-d75c-4bdd-9060-312a0f07538b",
+        "direction": "SUPPORTS",
+        "relevance": 1.0,
+        "directness": 1.0,
+        "extraction_confidence": 1.0,
+        "reliability": null,
+        "independence_state": "UNKNOWN",
+        "independence_group_id": null,
+        "observation_category": "UNCATEGORISED"
+      },
+      {
+        "id": "5a909ff9-3173-4ccb-820b-a2da3402d84f",
+        "claim_id": "aab81833-ca25-4798-b540-e3db965375d0",
+        "direction": "SUPPORTS",
+        "relevance": 1.0,
+        "directness": 1.0,
+        "extraction_confidence": 1.0,
+        "reliability": null,
+        "independence_state": "UNKNOWN",
+        "independence_group_id": null,
+        "observation_category": "UNCATEGORISED"
+      },
+      {
+        "id": "f753e610-c904-4db5-825a-31dbceb6c373",
+        "claim_id": "efb39063-6458-4d2c-88f9-ccfdf86ac8b6",
+        "direction": "SUPPORTS",
+        "relevance": 1.0,
+        "directness": 1.0,
+        "extraction_confidence": 1.0,
+        "reliability": null,
+        "independence_state": "UNKNOWN",
+        "independence_group_id": null,
+        "observation_category": "UNCATEGORISED"
+      }
+    ],
+    "eurostat": [],
+    "fred": []
+  }
+}

@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.79
-Last amended: 2026-09-04 (Sprint 1 / Mission 1.45)
+Version: 1.80
+Last amended: 2026-09-04 (Sprint 1 / Mission 1.46)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.80 | 2026-09-04 | **COMMON_UPSTREAM_SOURCE_PREVENTS_INDEPENDENCE: the international publishers are distribution layers over one national producer, so a second publisher is not a second provenance group.** Both candidate routes fail and **each fails on more than one gate**. **FRED REPUBLISHES THE EXACT SERIES ALREADY HELD**, by its own declaration: Source *World Bank*, Release *World Development Indicators*, **Source Code `SP.POP.TOTL`**, and a suggested citation reading *World Bank ... retrieved from FRED*. It is not a similar measurement, it is THE measurement, carrying the World Bank source note word for word -- so the pair that matches semantically matches **because it is one series**, which is the trap §13 names. **EUROSTAT FAILS BOTH GATES INDEPENDENTLY.** The World Bank's own indicator metadata lists **'Eurostat: Demographic Statistics'** among four `sourceOrganization` entries for SP.POP.TOTL, so for EU member states Eurostat is **UPSTREAM OF** the World Bank rather than beside it; and Eurostat's ESMS metadata states population data are **collected by Eurostat from National Statistical Institutes** under **Regulation (EU) No 1260/2013**, so Eurostat compiles what Destatis and INSEE transmit rather than enumerating anyone. **AND THE MEASUREMENTS ARE NOT THE SAME ANYWAY**: World Bank counts the **de facto** population at **midyear**, Eurostat the **usually resident** population on **1 January** -- a shared year label is not a shared reference date, §16 exactly. **NEITHER WAS REJECTED ON AN UNKNOWN**, which is the distinction that closes the direction: both were rejected on provenance the publishers THEMSELVES DOCUMENT, and an unknown could have been resolved by more reading. **THE STRUCTURAL FINDING**: the measurement of how many people live in Germany happens ONCE, at Destatis, and Eurostat, the World Bank and FRED are three routes to it -- so *add another statistical publisher* cannot ever yield a second group for a national aggregate, and independence over this family would need two genuinely different measurement APPARATUSES. **NO ROUTE WAS SELECTED AND NO SLOT WAS FILLED**: §25 forbids a least-bad fallback, and §14's qualified alternative is **NONE inside the eligible portfolio**, because the eligible `economic_data` family is exactly the three publishers just shown to share producers -- naming a fourth would mean reaching outside the eligible set or inventing one. **GOVERNANCE WAS NOT THE BLOCKER AND THE ENGINEERING GAP WAS NOT THE FINDING**: all three sources are eligible today with **0 unsatisfied conditions**, and Eurostat and FRED really do lack a resource, a collector and a normalizer -- but the routes died upstream of that, and reporting the second obstacle would have hidden the first. **THE MODEL IS READY AND IS NOT THE GAP**: `_group_key` puts a `KNOWN_INDEPENDENT` item in its OWN group, so two such rows form two groups and enter saturation as `1-(1-g_A)(1-g_B)` -- proven on non-empty fixtures for **all three** independence states so every branch executes, without rediscovering Mission 1.43's arithmetic. **What is missing is a real pair entitled to the shape.** **§10 WAS ANSWERED AND OUTCOME B WAS REFUSED**: the held Claims carry `source_id` as proposition identity, so two publishers cannot support one source-attributed OBSERVED proposition -- but `INDEPENDENT_ROUTE_REQUIRES_INFERRED_STATISTICAL_CLAIM` is deliberately NOT reported, because the blocker sits upstream of the Claim architecture and reporting B would misattribute the failure to a layer that never got to fail. Source attribution was not proposed for deletion. **THE PRECONDITION WAS COMPLETED FIRST**: the operator's TED local v3 acceptance recorded through `record_verifications` with `verifier_version` **`ted-v3-official-reuse-acknowledgement-v1`** -- NOT `acknowledgement-v1`, which names the materially different v2 text -- stored byte-for-byte and asserted against the supplied string, **17/17 post-write checks**, TED eligible again locally at v3 and commercial still REQUIRES_REVIEW. 0 research-data requests, 1 METADATA_ONLY call persisting no RawRecord, 5 documentation requests, 0 model calls, 0 embeddings, 0 independence groups, every research counter unchanged, profile still UNCALIBRATED, Problem-Family still PARKED |
 | 1.79 | 2026-09-04 | **TED_OFFICIAL_REUSE_GUIDANCE_RECONCILED: the Publications Office answered, and the answer is bounded exactly where it stops.** A written reply of 2026-09-04 from the **Head of Sector -- Copyright and legal issues**, case **2026-COP-201**, answering a request that described this system BY NAME as *a commercial software-as-a-service application* and enumerated automated retrieval, repeated collection through bulk downloads OR the Search API, minimised storage, commercial analytical use, automated processing and derived aggregate signals. **TED notices and metadata may be reused for both commercial and non-commercial purposes, provided the source is acknowledged and according to the copyright notice; whether or not the EU asserts copyright over the database should not prevent reuse; and the way the data are retrieved is not relevant in this regard.** **H-36A IS SPLIT RATHER THAN ANSWERED, AND THE SPLIT IS THE FINDING**: database-right **EXISTENCE** stays `NOT_ESTABLISHED` -- the reply says **copyright** over the database while Directive 96/9/EC creates TWO rights, copyright in the arrangement (Art. 3) and the **sui generis** right of the maker (Art. 7), and *whether or not* is a refusal to say -- while whether such a right **BLOCKS REUSE** becomes `OFFICIAL_FIRST_PARTY_GUIDANCE_INDICATES_NOT_A_BLOCKER`. **The abstract legal ontology is unresolved and does not have to be resolved, because the body that would assert the right says it should not stand in the way.** `NOT_ESTABLISHED` was NOT changed to `NO_RIGHT_EXISTS`. **H-36B becomes `RETRIEVAL_METHOD_NEUTRALITY_FOR_REUSE`**, bounded twice: not a database-right grant, and not *any acquisition method is allowed* -- reuse rights and technical access are different questions, and no circumvention, rate-limit evasion or undocumented endpoint is authorised. **THE BULK ROUTE STAYS BLOCKED AND ITS BLOCKER CHANGED IDENTITY**: it was blocked for database-right exposure, which the reply weakens, and it stays blocked because bulk XML offers **no field selection**, so minimisation cannot happen AT acquisition -- re-grounded rather than relaxed. **QUESTIONS 4 AND 5 WERE NOT ANSWERED, AND THE SECOND IS LOAD-BEARING**: the scope of *SIMAP's system metadata* stays `UNRESOLVED`, so **no structured TED notice field is classified CC0** -- reading the reply's metadata sentence as covering notice fields would answer the operator's own question in the reuser's favour with a sentence not addressed to it. The COM_REUSE vs CC BY catalogue mapping stays `NOT_FULLY_RESOLVED` and is **non-blocking**, because reuse is authorised directly and does not depend on catalogue metadata. **ATTRIBUTION GOT STRICTER, NOT LOOSER**: the legal notice's procurement-notice sentence states no acknowledgement condition and the reply does, which is **Article 6(2)(a)** applied to the notice corpus itself -- three regimes stay apart, NOTICES acknowledge, EDITORIAL is CC BY credit plus indication of changes, CC0 owes nothing. **THE COMMERCIAL PROFILE'S BLOCKER CHANGED IDENTITY AND DID NOT CLEAR**: all six activities were already PERMITTED and H-36 was the blocker; what blocks it now is `raw_redistribution`, `raw_resale` and `customer_facing_source_access`, **which the operator's own question never described** -- a reply answers the question asked, and commercial purpose is not unrestricted redistribution. **APPENDING ORPHANS THE OPERATOR'S ACCEPTANCE BY DESIGN**: local v2 -> v3, commercial v5 -> v6, **255 insertions and 0 deletions**, three capability conditions re-verified mechanically and the HUMAN_CONFIRMATION one cannot be, so **TED is INELIGIBLE under the local profile until a named operator records it again**. Mission 1.29 withdrew an append to avoid exactly this and the precedent was weighed: there, recording an UNCLEAR verdict that refused anyway gained nothing, so breaking acquisition was pure loss; here the record gains the load-bearing answer of the whole TED arc, and **what the operator accepted has itself changed**. `record_ted_operator_acceptance.py` **refuses against v3 and was NOT repointed** -- its own guard says *the acceptance has to be made again by a person, not replayed*, and repointing it would turn a replay into a record of a decision nobody has taken. **THE FIRST OPERATOR_CORRESPONDENCE ROW FOUND A MODEL GAP**: the type has been permitted since migration 0004 and every evidence row was required to carry an `http(s)` URL, enforced in the schema, the model AND the validator -- **a letter has no URL**, so the enum permitted a class of evidence the URL rule refused, invisibly, because nobody had tried. The rule's own justification is about **published pages**, which change under a stable address; correspondence is fixed when sent. **Migration 0033** lets correspondence address itself by `mailto:` and requires a **fingerprint**, both halves or neither. **THE ARTIFACT IS NOT COMMITTED**: it carries a named official's direct phone and email and the operator's personal address, and this repository is public -- so the SHA-256, the operative text and the re-opening mailbox are preserved instead, because a governance record that breached the minimisation obligation it exists to check would be a poor record. **NO PERSONAL-DATA FIELD EXISTS IN ANY OF THE 188 TED RECORDS HELD**, measured over 97 raw and 34 normalized payload paths, and the collector retrieved LESS than authorised. 0 research-data requests, 6 governance document requests over 4 URLs, 0 model calls, **0 reliability changes and TED's 0.5 and 0.55 unchanged** -- a more permissive reuse position must never raise a reliability. **44 tests failed on the append and every one was repaired by keeping the property and dropping the incidental number**, including the two OPERATOR_CORRESPONDENCE tripwires Mission 1.15.4 installed for this exact moment, and a test whose own docstring had predicted it: *v1 owns its own row and stays FALSE. A future v3 would too.* Training, embeddings and external model egress all unchanged; H-39 untouched; Problem-Family still PARKED |
 | 1.78 | 2026-09-04 | **WIKIMEDIA_CONVERGENT_OPERATOR_RELIABILITY_DECISION_PERSISTED: `max(members)` received FOUR real items, and the number still did not move.** The operator typed the confirmation, and **two counters moved while thirteen did not**: ReliabilityAssessments 3 -> **4**, basis rows 10 -> **12**. Assessment `19e0ce16` v1, `0.6`, HUMAN_REVIEW, thibchm, `human-reliability-assessment-rubric@1.0.0` -- the **second** assessment that can say which procedure produced it, while both pre-rubric rows keep NULL because backfilling would fabricate the provenance the column records. **ALL 18 CONVERGENT ROWS RESOLVE AND NOT ONE STORES THE NUMBER**: `scoring.evidence.reliability` is NULL on all 57 rows before and after. **36 leak checks, 0 leaks** -- a fourth current assessment is a fourth set of ways to leak, and the detailed Wikimedia `0.65` sharing FOUR of five scope fields still does not reach this scope. **ALL SIX MULTI-EVIDENCE CLAIMS BECAME SCORABLE, 2 -> 8 corpus-wide**, and the grouping arithmetic finally ran at cardinality above two: `max(members)` received **4, 3, 3, 3, 3, 2** real canonical items with `collapsed_member_count` 3, 2, 2, 2, 2, 1. **AND THE RESULT IS `IDENTICAL_TO_RELIABILITY_PASS_THROUGH` ON ALL SIX, WHICH MISSION 1.43 PREDICTED ALGEBRAICALLY**: one group per Claim, saturation over one group is that group's strength, group strength is `max()` over identical reliability-limited `q` values, and B-2 reports the same maximum. So §18's **`AGGREGATION_MECHANISM_STILL_UNIDENTIFIABLE_FROM_REAL_CORPUS`** is reported explicitly, and **calibration is NOT recommended merely because the scorable count increased**. `q = 0.6` with **`reliability` limiting on 34 of 34**, masses 0.6/0/0/0.4, EvidenceScore 60.0, **level 1 blocked on *2 supporting groups of established independence, found 0 (plus 1 unknown-provenance group, which does not count)*** -- reliability reaches none of the three blockers. **FOUR WITNESSES IS NOT CORROBORATION**: one publisher, one counting methodology, one classification mechanism, one pipeline, independence UNKNOWN on all 18 rows, **0 groups created**, and the reviewer wrote that sentence into the stated limitation themselves. Target variable `{0.5: 6, 0.55: 4, 0.6: 6, 0.65: 18}` -- a fourth value and not a fourth kind of thing. **THE MIDPOINT COINCIDENCE WAS NOT TREATED AS EVIDENCE**: `0.6` is exactly halfway between the detailed `0.65` and the convergent TED `0.55`, an averaging test was written, it failed, and **the test was removed rather than the operator's value questioned** -- software cannot prove a number's provenance from the number, so what is asserted is only that it equals none of the three it might have been copied from. **A PRE-PERSISTENCE TEST CLASS ASSERTED THE ABSENCE OF THE ASSESSMENT** and was re-pointed rather than deleted, and it caught a real omission: the rendered review page still said *Nothing yet*. 0 model calls, 0 network requests, 0 calibration labels, 0 parameters fitted, 0 scores, 0 Opportunity changes, 0 embeddings, profile still UNCALIBRATED, Problem-Family still PARKED |
 | 1.77 | 2026-09-04 | **READY_FOR_WIKIMEDIA_CONVERGENT_RELIABILITY_REVIEW: the closest near miss yet, and the distinction between *nothing* and *not enough*.** 18 Evidence across 6 Claims, cardinalities **{4,3,3,3,3,2}**, collapsing to **exactly one** five-part scope resolving NO_APPLICABLE_ASSESSMENT. **THE ALMOST-MATCH IS TIGHTER THAN TED'S**: same publisher, same resource, same record kind, same claim type, and a reviewed **0.65 sitting one field away** -- the most inviting number in the repository to reach for. `proposition_kind` alone decides it, verified through the REAL resolver in both directions and by **30 leak checks, 0 leaks**, probing EVERY proposition kind in the corpus rather than a chosen few. **SOFTWARE ASSERTED EXACTLY ONE STATE AND DELIBERATELY NOT THE OBVIOUS ONE.** Mission 1.42 could assert `NOT_ESTABLISHED` for TED's mutability because the basis said NOTHING; here it says SOMETHING AND NOT ENOUGH -- a dated known-problems list records a 2016 user-agent classification incident and states no revision policy -- and *something and not enough* is a judgement about SUFFICIENCY, so `HISTORICAL_MUTABILITY` was left **blank**, which is precisely where a helpful generator would have filled it in. The one assertion is `SOURCE_SIDE_CHECKABILITY = NOT_ESTABLISHED`, because the basis is two documents and neither addresses what the source exposes for inspection. **THE NEW QUESTION CONVERGENCE INTRODUCES**: multiple witnesses of ONE METHODOLOGY do not insure against a METHODOLOGY-LEVEL failure -- a localised problem matters LESS to an existential, and a systematic reclassification matters MORE, because the witnesses share a counting rule and their independence is UNKNOWN. So the known-problems document is **PARTIALLY_APPLICABLE with its weight moving in two directions at once**, and the reviewer decides which governs. **NOTHING WAS FETCHED** -- the convergent proposition reads the same measurement through the same rules. **A THIRD DEFECT OF THE SAME SHAPE, FOUND BY §37 ON ITS FIRST RUN**: `ReliabilityBinding.to_json()` called `.isoformat()` on a field four generators already pass as `None`, and had never crashed because NO LIVE BINDING HAD EVER BEEN SERIALISED in this scope. 0 assessments, 0 basis rows, 0 network requests, 0 model calls, every counter unchanged, all 18 rows still NON_SCORABLE and all six Claims still UNAVAILABLE |
@@ -326,6 +327,97 @@ positives in the scored split, which this 89-question corpus did not supply: one
 defensible SAME in 40 candidate pairs is a finding about the corpus, not about
 the classifier. **No synthetic positive may substitute** -- a constructed pair
 can test a parser and can never establish semantic accuracy against real data.
+
+### A second publisher is not a second provenance group
+
+Added in 1.80 (Mission 1.46, `independent-statistical-route-feasibility-v1.md`,
+`mission-1.46-report.md`). **`COMMON_UPSTREAM_SOURCE_PREVENTS_INDEPENDENCE`**:
+neither World Bank + Eurostat nor World Bank + FRED can produce the first Claim
+with two ESTABLISHED independent provenance groups.
+
+    Destatis / INSEE        the measurement happens ONCE, here
+        |
+        +-- Regulation (EU) 1260/2013 --> Eurostat
+        |                                     |
+        +-- via NSOs -------------------------+--> World Bank WDI --> FRED
+
+- **DIFFERENT PUBLISHERS ARE NOT INDEPENDENT EVIDENCE, and both rejections rest
+  on the publishers' own words.** FRED names Source *World Bank*, Release *World
+  Development Indicators* and **Source Code `SP.POP.TOTL`** -- the exact series
+  this repository already holds -- with a suggested citation reading *"World Bank
+  ... retrieved from FRED"*. The World Bank's indicator metadata names **"Eurostat:
+  Demographic Statistics"** among its four `sourceOrganization` entries, and
+  Eurostat's ESMS metadata says population data are **collected by Eurostat from
+  National Statistical Institutes**. Independence is a fact about MEASUREMENT
+  LINEAGE, never about the hostname, the organisation, the database or the page.
+- **THE PAIR THAT MATCHES PERFECTLY MATCHES BECAUSE IT IS ONE SERIES.** FRED
+  reproduces the World Bank source note word for word. Semantic equivalence on its
+  own is not evidence of anything, and a mission hunting for a same-proposition
+  partner will find its cleanest match in a republication. That is why §7 is TWO
+  gates and why YES on one is not progress.
+- **THE OTHER PAIR FAILS BOTH GATES INDEPENDENTLY.** Beyond the shared upstream,
+  the World Bank counts the **de facto** population at **midyear** while Eurostat
+  counts the **usually resident** population on **1 January**. A shared year label
+  is not a shared reference date.
+- **NEITHER WAS REJECTED ON AN UNKNOWN, WHICH IS WHAT CLOSES THE DIRECTION.** An
+  unknown can be resolved by more reading; a documented common producer cannot.
+  §6 requires the ABSENCE of a documented common upstream before
+  `KNOWN_INDEPENDENT` may be recorded, and here it is present and published.
+- **THE STRUCTURAL FINDING IS WORTH MORE THAN A ROUTE WOULD HAVE BEEN.** For
+  official macro statistics the international publishers are DISTRIBUTION LAYERS
+  over national producers. The measurement of how many people live in Germany
+  happens once, at Destatis. So **"add another statistical publisher" can never
+  yield a second provenance group for a national aggregate**, however many are
+  added. Independence over this family would need two genuinely different
+  measurement APPARATUSES observing the same phenomenon.
+- **NO ROUTE WAS SELECTED AND NO SLOT WAS FILLED.** §25 forbids a least-bad
+  fallback, and §14's qualified alternative is **NONE inside the eligible
+  portfolio**: the eligible `economic_data` family is exactly
+  `{world-bank, eurostat, fred}`, the three publishers just shown to share
+  producers. Naming a fourth would mean reaching outside the eligible set or
+  inventing a candidate, so the slot was left empty.
+- **GOVERNANCE WAS NOT THE BLOCKER, AND THE ENGINEERING GAP WAS NOT THE FINDING.**
+  All three sources are `APPROVED_WITH_CONDITIONS` under
+  `local-private-research-v1` with **0 unsatisfied conditions**. Eurostat and FRED
+  genuinely lack a registered resource, a collector and a normalizer -- and the
+  routes died upstream of that, so `STATISTICAL_RESOURCE_OR_COLLECTOR_GAP` is not
+  the outcome. **Reporting the second obstacle would have hidden the first.**
+- **THE MODEL IS READY AND IS NOT THE GAP.** `_group_key` puts a
+  `KNOWN_INDEPENDENT` item in its OWN group keyed by `evidence_id`, so two such
+  rows on one Claim form two groups and enter saturation as
+  `S = 1 - (1 - g_A)(1 - g_B)`, which can differ from `max(g_A, g_B)`. Asserted on
+  non-empty fixtures for **all three** independence states so every branch
+  executes, without rediscovering Mission 1.43's arithmetic. **What is missing is
+  a real source pair entitled to inhabit the shape**, and 0 independence groups
+  exist before and after.
+- **§10 WAS ANSWERED AND OUTCOME B WAS REFUSED.** The held World Bank Claims carry
+  `source_id` as PROPOSITION IDENTITY, so two publishers cannot both support one
+  source-attributed OBSERVED proposition; a second source forms its own Claim.
+  Both routes out -- a multi-source OBSERVED convergence contract in the ADR-035
+  line, or an INFERRED Claim -- were identified and neither was built.
+  **`INDEPENDENT_ROUTE_REQUIRES_INFERRED_STATISTICAL_CLAIM` is deliberately NOT
+  the outcome**, because the blocker sits UPSTREAM of the Claim architecture and
+  reporting B would misattribute the failure to a layer that never got to fail.
+  Source attribution was not proposed for deletion (Mission 1.38).
+- **NOTHING WAS ACQUIRED TO ANSWER A FEASIBILITY QUESTION.**
+  `RESEARCH_DATA_REQUESTS = 0`. One `METADATA_ONLY` call -- the World Bank
+  indicator metadata endpoint, which returns a description and a source list and
+  **no observations** -- persisted no RawRecord. Five documentation requests, all
+  first-party; the one web search was navigational and established nothing.
+- **NO SIMILARITY MACHINERY DECIDED ANYTHING.** Every equivalence and every
+  dependence judgement is document-backed and auditable (§11). 0 model calls, 0
+  embeddings, Problem-Family still PARKED.
+
+**The next mission is NOT an acquisition and NOT calibration.** Acquiring Eurostat
+or FRED population would add rows that cannot become a second group, which is the
+expansion Mission 1.43 proved cannot help; and with one group the aggregator is
+still algebraically the pass-through baseline, so labelling would ask a person to
+compare cases the aggregator cannot distinguish. **The question worth a mission is
+upstream of any acquisition**: whether a bounded proposition can be defined that
+two genuinely different measurement apparatuses ALREADY IN THIS CORPUS both bear
+on, without weakening proposition identity. That is a proposition-design question
+in the ADR-035 line, and it may conclude that the INFERRED layer is required -- a
+decision this mission does not make.
 
 ### A reply answers the question that was asked
 

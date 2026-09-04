@@ -257,6 +257,8 @@ jobs:
         run: uv run python infrastructure/scripts/render_operator_reliability_review.py --check
       - name: Wikimedia operator reliability review conforms to its rubric
         run: uv run python infrastructure/scripts/render_wikimedia_operator_reliability_review.py --check
+      - name: Statistical independence route feasibility is rendered from its record
+        run: uv run python infrastructure/scripts/render_statistical_route_feasibility.py --check
 
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.

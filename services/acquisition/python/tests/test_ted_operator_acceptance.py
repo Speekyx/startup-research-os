@@ -513,14 +513,30 @@ class TestTheAcceptanceIsDeploymentStateEitherWay:
             ):
                 assert not verifier.startswith(machine), verifier
 
-    def test_any_acceptance_present_is_scoped_to_the_local_review_v2(self) -> None:
+    def test_any_acceptance_present_is_scoped_to_a_local_review(self) -> None:
+        """Named v2 until Mission 1.46 recorded the v3 acceptance.
+
+        The scope that must never depend on the deployment is the PROFILE: an
+        acceptance is a decision about local private research and may never
+        appear under the commercial profile. WHICH local version carries one is
+        deployment state -- v2 on a machine that stopped at Mission 1.15.6.1,
+        v2 and v3 on one that has completed Mission 1.46.
+        """
         for _, _, profile, version in self._rows():
             assert profile == LOCAL_PROFILE
-            assert version == 2
+            assert version >= 2
 
-    def test_there_is_never_more_than_one(self) -> None:
-        """§19. One decision, not a history of changes of mind."""
-        assert len(self._rows()) <= 1
+    def test_there_is_never_more_than_one_per_review_version(self) -> None:
+        """§19. One decision, not a history of changes of mind.
+
+        This asserted `<= 1` outright, and Mission 1.46 legitimately recorded a
+        SECOND acceptance -- for review v3, whose text is materially different
+        from v2's. **Two acceptances of two different statements are not a change
+        of mind**; two acceptances of the SAME statement would be, and that is
+        what stays forbidden.
+        """
+        versions = [version for _, _, _, version in self._rows()]
+        assert len(versions) == len(set(versions)), versions
 
     def test_without_it_ted_is_refused_for_exactly_that_condition(self, ted, compliance) -> None:
         """The other side of the same invariant. Where no acceptance is recorded
@@ -787,25 +803,28 @@ class TestTheRegistryHoldsExactlyOneAcceptance:
         return int(row[0]) if row else -1
 
     def test_exactly_one_verification_row_exists_and_no_duplicate(self) -> None:
-        """§19. One acceptance, not two. Re-recording would put a second
-        SATISFIED row in an append-only log and make one decision look like a
-        withdrawal followed by a change of mind."""
-        assert (
-            self._count(
-                "SELECT count(*) FROM registry.source_condition_verifications "
-                "WHERE condition_key = %s",
-                RESIDUAL,
-            )
-            == 1
-        )
-        assert (
-            self._count(
-                "SELECT count(*) FROM registry.source_condition_verifications "
-                "WHERE condition_key = %s AND result = 'SATISFIED'",
-                RESIDUAL,
-            )
-            == 1
-        )
+        """§19. One acceptance PER REVIEW VERSION, not two.
+
+        Re-recording the same decision would put a second SATISFIED row in an
+        append-only log and make one decision look like a withdrawal followed by
+        a change of mind. Accepting a DIFFERENT statement for a NEW review
+        version is not that, and Mission 1.46 did exactly that for v3 -- so the
+        count is per version, and every row is still SATISFIED.
+        """
+        import psycopg
+
+        with psycopg.connect(DATABASE_URL) as conn:
+            rows = conn.execute(
+                """SELECT r.review_version, v.result
+                     FROM registry.source_condition_verifications v
+                     JOIN registry.source_review_conditions c ON c.id = v.condition_id
+                     JOIN registry.source_policy_reviews r ON r.id = c.review_id
+                    WHERE v.condition_key = %s""",
+                (RESIDUAL,),
+            ).fetchall()
+        versions = [version for version, _ in rows]
+        assert len(versions) == len(set(versions)), versions
+        assert all(result == "SATISFIED" for _, result in rows), rows
 
     def test_the_row_is_attached_to_the_right_source_profile_review_condition(self) -> None:
         """§3. Structural scope, asserted through the joins rather than trusted."""
@@ -881,12 +900,15 @@ class TestTheRegistryHoldsExactlyOneAcceptance:
                 (RESIDUAL,),
             ).fetchall()
         satisfied = [version for version, ok in rows if ok]
-        assert len(satisfied) <= 1, rows
-        # v1 never acquired one, and every version that exists owns a row.
+        # Mission 1.45 pinned this to `satisfied == [2]` while v3 awaited the
+        # operator. Mission 1.46 recorded v3, so what is asserted is the
+        # invariant rather than which version happens to hold a decision: v1
+        # never acquired one, every version owns its own row, and the CURRENT
+        # review is satisfied only if a decision was made ABOUT it.
         assert [version for version, _ in rows] == sorted(v for v, _ in rows), rows
         assert (1, False) in rows, rows
-        # The acceptance that exists belongs to the version it was made about.
-        assert satisfied == [2], rows
+        assert 1 not in satisfied, rows
+        assert max(version for version, _ in rows) in satisfied, rows
 
     def test_the_database_still_refuses_a_boolean_with_no_evidence(self) -> None:
         """The trigger, asserted against a condition that has NO verification.
