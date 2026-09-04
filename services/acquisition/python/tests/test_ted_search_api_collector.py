@@ -61,7 +61,7 @@ from sros_contracts import (
 )
 
 from . import ted_search_fixtures as fx
-from .conftest import LEGACY_PROFILE, LOCAL_PROFILE, REPO_ROOT
+from .conftest import LEGACY_PROFILE, LOCAL_PROFILE, REPO_ROOT, current_review_version
 
 COLLECTOR_SOURCE = (
     REPO_ROOT
@@ -92,7 +92,7 @@ def decision() -> ConditionVerificationRecord:
     """The persisted operator acceptance, as `read_human_decisions` returns it."""
     return ConditionVerificationRecord(
         source_id="ted-eu",
-        review_version=2,
+        review_version=current_review_version(),
         condition_key=RESIDUAL,
         verification=ConditionVerification.HUMAN_CONFIRMATION,
         verifier="local-operator",
@@ -790,7 +790,7 @@ class TestProvenance:
         assert provenance["resource_id"] == RESOURCE_ID
         assert provenance["dataset_family"] == "ted-search-api-notices"
         assert provenance["rights_basis"] == "NAMED_LICENCE"
-        assert provenance["review_version"] == 2
+        assert provenance["review_version"] == current_review_version()
         assert provenance["condition_snapshot"][RESIDUAL] == "SATISFIED"
 
     def test_the_draft_records_the_query_that_produced_it(self, context) -> None:

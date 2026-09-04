@@ -37,7 +37,7 @@ from sros_acquisition.registry import (
 from sros_acquisition.registry.repositories import load_catalog_into, read_eligibility
 from sros_contracts import SourceAccessMethod
 
-from .conftest import LEGACY_PROFILE, REPO_ROOT, needs_postgres
+from .conftest import LEGACY_PROFILE, REPO_ROOT, evidence_is_addressable, needs_postgres
 
 CATALOG_PATH = REPO_ROOT / "docs/data/source-catalog-v1.json"
 
@@ -111,7 +111,7 @@ class TestPolicyReview:
         the platform changes its terms, which is the moment it matters."""
         for source in catalog:
             for item in source.review.evidence:
-                assert item.document_url.startswith("https://"), item.document_url
+                assert evidence_is_addressable(item), item.document_url
                 assert item.summarized_finding.strip()
                 assert item.retrieved_at is not None
 

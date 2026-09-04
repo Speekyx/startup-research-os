@@ -87,9 +87,13 @@ class TestEveryTargetSourceHasAnExplicitDecision:
 
     def test_ted_is_deliberately_still_unassessed_and_still_refuses(self) -> None:
         """The decision exists and is not in the registry. See TED_STAYS_UNASSESSED."""
+        # Pinned to v2 until Mission 1.45 appended v3 on first-party evidence.
+        # What Mission 1.29 established is that IT recorded nothing for TED, so
+        # what is asserted is that no TED review is its work -- across every
+        # version, which is stronger than naming one.
+        for past in _local_reviews(TED_STAYS_UNASSESSED):
+            assert past["reviewed_by"] != "mission-1.29", past["review_version"]
         review = _current(TED_STAYS_UNASSESSED)
-        assert review["review_version"] == 2
-        assert review["reviewed_by"] != "mission-1.29"
         assert review.get("external_model_transmission") in (None, "NOT_ASSESSED")
         # And the acceptance that would have been orphaned is still the one that
         # makes TED acquirable, carried on this same review.
@@ -173,9 +177,12 @@ class TestHistoryIsPreserved:
             "wikimedia-pageviews": 2,
             "world-bank": 2,
             "gdelt": 2,
-            # ted-eu is absent: it gained NO version, which is the point.
+            # ted-eu is absent: it gained NO version FROM THIS MISSION, which
+            # is the point. It counted TED's reviews and got 2; Mission 1.45
+            # later appended v3 on evidence that has nothing to do with egress,
+            # so the count is deployment state and the authorship is the claim.
         }
-        assert len(_local_reviews("ted-eu")) == 2
+        assert not [r for r in _local_reviews("ted-eu") if r["reviewed_by"] == "mission-1.29"]
         for source_id, count in expected_counts.items():
             assert len(_local_reviews(source_id)) == count, source_id
 
@@ -214,18 +221,25 @@ class TestHistoryIsPreserved:
     def test_ted_conditions_and_open_questions_survive(self) -> None:
         """§7. Every TED finding is intact, and none was reinterpreted -- which
         here means the review was not touched at all."""
-        current = _current("ted-eu")
-        keys = {c["key"] for c in current["required_conditions"]}
-        assert keys == {
+        # Read `_current` until Mission 1.45 appended v3 and reconciled H-36
+        # against a first-party reply. This mission's claim is about the review
+        # IT declined to touch, so it names v2 -- and the four required keys are
+        # asserted on the current review too, because Mission 1.45 was obliged to
+        # keep that set unchanged for its own bump to be honest.
+        untouched = next(r for r in _local_reviews("ted-eu") if r["review_version"] == 2)
+        expected = {
             "ted-attribution",
             "ted-official-route-only",
             "ted-personal-data-minimisation",
             "ted-database-right-residual-exposure-accepted",
         }
-        joined = " ".join(current["open_questions"])
+        assert {c["key"] for c in untouched["required_conditions"]} == expected
+        assert {c["key"] for c in _current("ted-eu")["required_conditions"]} == expected
+        joined = " ".join(untouched["open_questions"])
         assert "H-36A" in joined and "NOT ESTABLISHED" in joined
         assert "H-36B" in joined and "NOT ADDRESSED" in joined
-        assert current["redistribution"] == "NOT_PERMITTED"
+        assert untouched["redistribution"] == "NOT_PERMITTED"
+        assert _current("ted-eu")["redistribution"] == "NOT_PERMITTED"
 
     def test_the_ted_reasoning_is_recorded_where_it_could_be(self) -> None:
         """Not in the review -- appending one was the thing that could not be

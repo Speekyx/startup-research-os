@@ -38,7 +38,7 @@ from sros_acquisition.registry.models import (
 )
 from sros_contracts import SourceApprovalState
 
-from .conftest import LEGACY_PROFILE, LOCAL_PROFILE, REPO_ROOT
+from .conftest import LEGACY_PROFILE, LOCAL_PROFILE, REPO_ROOT, current_review_version
 
 UNKNOWN_PROFILE = "invented-profile-v1"
 
@@ -148,16 +148,21 @@ class TestOneSourceTwoAnswers:
         local = sorted(
             r.review_version for r in ted.review_history if r.assessed_use_profile == LOCAL_PROFILE
         )
-        assert legacy == [1, 2, 3, 4, 5]
         # Version 1 under a second profile is a FIRST review of a new question,
-        # not a duplicate of the legacy v1. Mission 1.15.6 appended v2, which is
-        # what an append-only line is FOR: it reclassified two conditions from
-        # HUMAN_CONFIRMATION to CAPABILITY and changed no policy conclusion,
-        # rather than editing v1 in place.
-        assert local == [1, 2]
-        # And the two lines still advance independently: appending to one must
-        # never renumber or disturb the other.
-        assert legacy[-1] == 5
+        # not a duplicate of the legacy v1. Mission 1.15.6 appended local v2 and
+        # Mission 1.45 appended local v3 and legacy v6, which is what an
+        # append-only line is FOR.
+        #
+        # This asserted the exact lists `[1, 2, 3, 4, 5]` and `[1, 2]`, and both
+        # grew legitimately. A line length is deployment state
+        # (`testing-strategy.md` §68) and pinning it asserts that no further
+        # review may ever be written. What is asserted now is the SHAPE, which is
+        # what append-only actually means: each line starts at 1, has no gaps and
+        # no duplicates, and the two advance independently.
+        assert legacy == list(range(1, len(legacy) + 1))
+        assert local == list(range(1, len(local) + 1))
+        assert len(legacy) >= 5
+        assert len(local) >= 2
 
     def test_exactly_one_current_review_per_source_and_profile(self, catalog) -> None:
         for source in catalog.sources:
@@ -174,11 +179,25 @@ class TestOneSourceTwoAnswers:
         """§29. Attaching a profile to history is a migration interpretation of
         what those reviews assessed, never a new policy conclusion."""
         ted = source_of(catalog, "ted-eu")
-        v5 = ted.review_for(LEGACY_PROFILE)
-        assert v5.review_version == 5
+        # Pinned to v5, the version Mission 1.15.5 wrote this about. It followed
+        # `review_for(LEGACY_PROFILE)` until Mission 1.45 appended v6, and a test
+        # asserting that a migration interpretation changed nothing has to name
+        # the version that interpretation produced.
+        v5 = next(
+            r
+            for r in ted.review_history
+            if r.assessed_use_profile == LEGACY_PROFILE and r.review_version == 5
+        )
         assert v5.reviewed_by == "mission-1.15.2" or v5.reviewed_by == "mission-1.15.4"
         assert len(v5.conditions) == 11
         assert v5.required_conditions == ()
+        # And it was not edited in place when v6 was appended: v6 carries strictly
+        # more conditions and still requires none, because this profile is still
+        # REQUIRES_REVIEW.
+        v6 = ted.review_for(LEGACY_PROFILE)
+        assert v6.review_version > v5.review_version
+        assert len(v6.conditions) > len(v5.conditions)
+        assert v6.required_conditions == ()
 
 
 # ==================================== approval never transfers between profiles
@@ -386,8 +405,18 @@ class TestTedUnderTheLocalProfile:
         # own reviewer rather than instead of it: the append-only guarantee is
         # only worth testing from both sides, and a test that followed the
         # current version alone would pass against a v1 rewritten in place.
-        assert local.review_version == 2
-        assert local.reviewed_by == "mission-1.15.6"
+        # This named v2 and `mission-1.15.6`, and Mission 1.45 appended v3. What
+        # the comment above actually argues for is testing the append-only
+        # guarantee FROM BOTH SIDES, so the current version is followed wherever
+        # it is and v1 is still checked by name.
+        assert local.review_version == current_review_version()
+        assert local.reviewed_by in ("mission-1.15.6", "mission-1.45")
+        v2 = next(
+            r
+            for r in ted.review_history
+            if r.assessed_use_profile == LOCAL_PROFILE and r.review_version == 2
+        )
+        assert v2.reviewed_by == "mission-1.15.6"
         v1 = next(
             r
             for r in ted.review_history

@@ -679,7 +679,7 @@
     {
       "source_id": "ted-eu",
       "use_profile_id": "local-private-research-v1",
-      "review_version": 2,
+      "review_version": 3,
       "evidence_url": "https://ted.europa.eu/en/legal-notice",
       "evidence_section": "Copyright notice",
       "attribution": {

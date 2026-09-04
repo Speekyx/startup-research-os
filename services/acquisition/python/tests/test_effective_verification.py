@@ -40,7 +40,7 @@ from sros_acquisition.compliance.verification import (
 from sros_acquisition.registry import evaluate_eligibility
 from sros_contracts import ConditionVerification, ConditionVerificationResult
 
-from .conftest import LEGACY_PROFILE, LOCAL_PROFILE, REPO_ROOT
+from .conftest import LEGACY_PROFILE, LOCAL_PROFILE, REPO_ROOT, current_review_version
 
 RESIDUAL = "ted-database-right-residual-exposure-accepted"
 ROUTE_ONLY = "ted-official-route-only"
@@ -71,7 +71,7 @@ def decision(
     *,
     condition_key: str = RESIDUAL,
     source_id: str = "ted-eu",
-    review_version: int = 2,
+    review_version: int = current_review_version(),
     verifier: str = "local-operator",
     result: ConditionVerificationResult = ConditionVerificationResult.SATISFIED,
     verification: ConditionVerification = ConditionVerification.HUMAN_CONFIRMATION,

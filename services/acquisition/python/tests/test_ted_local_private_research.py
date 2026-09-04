@@ -80,22 +80,60 @@ def findings(review_obj) -> str:
 
 
 class TestNoFabricatedOperatorResponse:
-    def test_no_operator_correspondence_evidence_exists_for_ted(self, catalog) -> None:
-        """§32. The load-bearing guard. A user-written transcription describing a
-        Publications Office reply exists outside this repository; it is a
-        summary, it says so itself, and it may not become first-party authority
-        by being pasted into a review."""
+    """§32, and the tripwire fired in Mission 1.45.
+
+    What this class guarded was that a USER-WRITTEN TRANSCRIPTION describing a
+    Publications Office reply -- a summary that says so itself -- may not become
+    first-party authority by being pasted into a review. It enforced that by
+    asserting that NO `OPERATOR_CORRESPONDENCE` row existed anywhere, *"so the
+    first one to appear should be a deliberate act with a real document behind
+    it, and this assertion is what makes it deliberate."*
+
+    **A real document arrived**: a written reply from the Publications Office's
+    Head of Sector for Copyright, case 2026-COP-201, with the exported message
+    fingerprinted. So the assertion is re-pointed rather than deleted, and it
+    now guards the same property in the only form still available -- that there
+    is EXACTLY ONE such row, that it is the one Mission 1.45 recorded, and that
+    it carries the checksum that distinguishes a document from a description of
+    one. An assertion that no correspondence may ever exist is an assertion that
+    the operator may never receive an answer.
+    """
+
+    EXPECTED = "mailto:op-copyright@publications.europa.eu"
+
+    def test_ted_carries_exactly_one_operator_correspondence_row(self, catalog) -> None:
+        rows = [
+            item
+            for past in source_of(catalog, "ted-eu").review_history
+            for item in past.evidence
+            if item.document_type is PolicyEvidenceType.OPERATOR_CORRESPONDENCE
+        ]
+        # One per review version that records it: local v3 and commercial v6.
+        assert len(rows) == 2, [r.document_title for r in rows]
+        for item in rows:
+            assert item.document_url == self.EXPECTED
+            assert "2026-COP-201" in item.document_title
+            assert (item.document_fingerprint or "").startswith("sha256:")
+
+    def test_no_correspondence_row_predates_the_reply(self, catalog) -> None:
+        """The historical timeline is the point of §32 and is preserved: every
+        review written before 2026-09-04 recorded that no authoritative reply was
+        held, and none of them acquired one retroactively."""
         for past in source_of(catalog, "ted-eu").review_history:
+            if past.reviewed_at.date().isoformat() >= "2026-09-04":
+                continue
             for item in past.evidence:
                 assert item.document_type is not PolicyEvidenceType.OPERATOR_CORRESPONDENCE, (
                     item.document_title
                 )
 
-    def test_no_source_at_all_carries_operator_correspondence_yet(self, catalog) -> None:
-        """Stated across the whole catalog rather than for TED alone: the first
-        one to appear should be a deliberate act with a real document behind it,
-        and this assertion is what makes it deliberate."""
+    def test_no_other_source_carries_operator_correspondence(self, catalog) -> None:
+        """Still stated across the whole catalog. TED is the only source that
+        wrote to a publisher and the only one that received an answer; the next
+        one should be as deliberate as this one was."""
         for source in catalog.sources:
+            if source.source_id == "ted-eu":
+                continue
             for past in source.review_history:
                 for item in past.evidence:
                     assert item.document_type is not PolicyEvidenceType.OPERATOR_CORRESPONDENCE, (

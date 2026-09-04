@@ -26,7 +26,13 @@ import pytest
 from sros_acquisition.registry import APPROVING_STATES
 from sros_contracts import PolicyAssessment, SourceApprovalState
 
-from .conftest import LEGACY_PROFILE, NEVER_EVIDENCE, TED_FIRST_PARTY_PREFIXES, needs_postgres
+from .conftest import (
+    LEGACY_PROFILE,
+    NEVER_EVIDENCE,
+    TED_FIRST_PARTY_PREFIXES,
+    evidence_is_addressable,
+    needs_postgres,
+)
 
 # The instrument TED's own legal notice names. Establishing it was this
 # mission's one real advance; reading it was not possible.
@@ -131,7 +137,7 @@ class TestEvidence:
         v2 = review(catalog, "ted-eu", 2)
         assert len(v2.evidence) >= 3
         for item in v2.evidence:
-            assert item.document_url.startswith("https://")
+            assert evidence_is_addressable(item), item.document_url
             assert item.summarized_finding.strip()
             assert item.retrieved_at is not None
 
@@ -235,14 +241,19 @@ class TestConditionsPreserved:
 
 class TestOpenQuestions:
     def test_h34_names_the_instrument_to_retrieve(self, catalog) -> None:
-        questions = " ".join(review(catalog, "ted-eu").open_questions)
+        """Pinned to v2, like the rest of this file. It read the CURRENT review
+        until Mission 1.45 appended v6, and a test about what Mission 1.15.1
+        recorded must name Mission 1.15.1's version -- otherwise it asserts that
+        no later mission may ever re-word an open question."""
+        questions = " ".join(review(catalog, "ted-eu", 2).open_questions)
         assert "2011/833" in questions
         assert "reuse" in questions.lower()
 
     def test_the_database_right_question_was_recorded(self, catalog) -> None:
         """H-36. New this round, and it could block TED even if H-34 closes
-        favourably."""
-        questions = " ".join(review(catalog, "ted-eu").open_questions).lower()
+        favourably. Pinned to v2 for the reason above; Mission 1.45 reconciled
+        H-36A and H-36B on v6 and did not touch this version."""
+        questions = " ".join(review(catalog, "ted-eu", 2).open_questions).lower()
         assert "database" in questions
         assert "extraction" in questions or "re-utilisation" in questions
 

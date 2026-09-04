@@ -59,7 +59,55 @@ TED_FIRST_PARTY_PREFIXES = (
     "https://op.europa.eu",
     "https://publications.europa.eu",
     "https://data.europa.eu",
+    # Mission 1.45. Correspondence has no page to fetch, so it addresses itself
+    # by the mailbox the matter is re-opened through -- and that mailbox is
+    # first-party in exactly the sense these prefixes test for: the TED legal
+    # notice publishes it as the copyright contact for SIMAP.
+    "mailto:op-copyright@publications.europa.eu",
 )
+
+
+# Mission 1.45. A human decision is pinned to the review version it was made
+# about, so a fixture standing in for one has to name the version the catalog
+# actually carries. Hard-coding it makes every legitimate review append look
+# like a broken test, which is the shape `testing-strategy.md` §68 warns about.
+def current_review_version(source_id: str = "ted-eu", use_profile: str = LOCAL_PROFILE) -> int:
+    """Read from the catalog FILE, so a fixture never needs the catalog fixture.
+
+    Evaluated at import time as a default argument, which is safe here because
+    the catalog does not change during a run.
+    """
+    import json
+
+    catalog = json.loads(
+        (REPO_ROOT / "docs" / "data" / "source-catalog-v1.json").read_text(encoding="utf-8")
+    )
+    source = next(s for s in catalog["sources"] if s["source_id"] == source_id)
+    return max(
+        r["review_version"] for r in source["reviews"] if r["assessed_use_profile"] == use_profile
+    )
+
+
+# Mission 1.45. Evidence must name a document a later reader can get back to.
+# For a published page that is an https URL. Correspondence has no page, so it
+# names the mailbox the matter is re-opened through AND the checksum of the
+# artifact read -- both halves, or it is naming a channel rather than a document
+# (migration 0033).
+def evidence_is_addressable(item) -> bool:
+    from sros_contracts import PolicyEvidenceType
+
+    if item.document_url.startswith("https://"):
+        return True
+    correspondence = item.document_type in (
+        PolicyEvidenceType.OPERATOR_CORRESPONDENCE,
+        PolicyEvidenceType.LEGAL_REVIEW,
+    )
+    return (
+        correspondence
+        and item.document_url.startswith("mailto:")
+        and bool((item.document_fingerprint or "").strip())
+    )
+
 
 # Hosts that are never evidence, whatever they happen to be serving (§3).
 NEVER_EVIDENCE = ("google", "bing", "duckduckgo", "archive.org", "webcache", "github")

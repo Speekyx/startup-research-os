@@ -198,8 +198,16 @@ class TestDocumentLicenceIsNotDatabaseLicence:
 
     def test_the_two_halves_of_h36_are_tracked_separately(self, catalog) -> None:
         """§10. Subsistence and grant are different questions with different
-        answers, and collapsing them loses which one is open."""
-        questions = review(catalog, "ted-eu").open_questions
+        answers, and collapsing them loses which one is open.
+
+        Pinned to v4, Mission 1.15.3's own version. **The property survived the
+        answer and was strengthened by it**: Mission 1.45 received a first-party
+        reply and split H-36A again, into database-right EXISTENCE, still not
+        established, and whether such a right BLOCKS reuse, which the publisher
+        addressed. Two halves became three, and this test still guards the
+        version that first refused to collapse them.
+        """
+        questions = review(catalog, "ted-eu", 4).open_questions
         subsistence = next(q for q in questions if q.startswith("H-36A"))
         grant = next(q for q in questions if q.startswith("H-36B"))
         assert "maker" in subsistence.lower()
@@ -209,9 +217,10 @@ class TestDocumentLicenceIsNotDatabaseLicence:
 
     def test_the_database_maker_was_not_concluded_from_architecture(self, catalog) -> None:
         """§10. Naming a publisher is not naming a maker, and the review must
-        say so rather than quietly treating them as the same."""
+        say so rather than quietly treating them as the same. Pinned to v4 for
+        the reason above."""
         subsistence = next(
-            q for q in review(catalog, "ted-eu").open_questions if q.startswith("H-36A")
+            q for q in review(catalog, "ted-eu", 4).open_questions if q.startswith("H-36A")
         )
         assert "publisher" in subsistence.lower()
         assert "no dct:creator" in subsistence.lower()

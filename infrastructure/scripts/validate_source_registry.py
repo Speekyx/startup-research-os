@@ -55,7 +55,7 @@ from sros_acquisition.registry.retention import (  # noqa: E402
     BASELINE_NORMALIZED_DAYS,
     BASELINE_RAW_DAYS,
 )
-from sros_contracts import PolicyAssessment  # noqa: E402
+from sros_contracts import PolicyAssessment, PolicyEvidenceType  # noqa: E402
 
 DEFAULT_CATALOG = ROOT / "docs" / "data" / "source-catalog-v1.json"
 
@@ -221,8 +221,24 @@ def main(argv: list[str]) -> int:
                     )
 
             for item in review.evidence:
-                if not item.document_url.startswith(("http://", "https://")):
-                    errors.append(f"{sid}: evidence {item.document_title!r} has no usable URL")
+                # Correspondence has no address to fetch, so it addresses itself
+                # by the mailbox the matter is re-opened through, and must then
+                # carry a fingerprint (migration 0033). Nothing else may.
+                correspondence = item.document_type in (
+                    PolicyEvidenceType.OPERATOR_CORRESPONDENCE,
+                    PolicyEvidenceType.LEGAL_REVIEW,
+                )
+                if item.document_url.startswith(("http://", "https://")):
+                    continue
+                if correspondence and item.document_url.startswith("mailto:"):
+                    if not (item.document_fingerprint or "").strip():
+                        errors.append(
+                            f"{sid}: correspondence {item.document_title!r} is addressed "
+                            "by a mailbox and carries no fingerprint, so it names a "
+                            "channel rather than a document"
+                        )
+                    continue
+                errors.append(f"{sid}: evidence {item.document_title!r} has no usable URL")
                 if item.retrieved_at > now:
                     errors.append(
                         f"{sid}: evidence {item.document_title!r} was retrieved in the future"

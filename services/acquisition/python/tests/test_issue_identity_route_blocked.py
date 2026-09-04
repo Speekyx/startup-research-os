@@ -198,12 +198,20 @@ class TestWhatFollowsFromBeingBlocked:
         assert "The structure exists" in text
         assert "The access does not" in text
 
-    def test_no_operator_was_contacted(self) -> None:
+    def test_no_operator_was_contacted_about_these_sources(self) -> None:
         """The repository may PREPARE a question and may never imply it asked
-        one. No `OPERATOR_CORRESPONDENCE` evidence exists anywhere in the
-        catalog, which is the tripwire Mission 1.15.4 installed."""
+        one, and THIS mission's document still says no message has been sent.
+
+        The catalog-wide half of Mission 1.15.4's tripwire moved on in Mission
+        1.45: the operator did write to the Publications Office about TED, and
+        received a reply. That is a different source and a different question,
+        so what is asserted here is what this mission is about -- none of the
+        issue-identity candidates was contacted.
+        """
         catalog = json.loads(CATALOG.read_text(encoding="utf-8"))
         for entry in catalog["sources"]:
+            if entry["source_id"] == "ted-eu":
+                continue
             for review in entry["reviews"]:
                 for evidence in review.get("evidence") or ():
                     assert evidence["document_type"] != "OPERATOR_CORRESPONDENCE"
