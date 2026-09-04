@@ -1,0 +1,190 @@
+{
+  "$comment": "Mission 1.48 sections 1, 2, 5, 11, 12, 13, 14. The trade-off this project has now observed rather than predicted: the proposition shapes easiest to make cross-apparatus are the ones that cannot be contradicted, and the shapes that can be contradicted are the ones only one apparatus supports. Authored. Rendered by infrastructure/scripts/render_falsifiable_apparatus_requirements.py.",
+  "record_version": "1.0.0",
+  "mission": "1.48",
+  "recorded_at": "2026-09-04",
+
+  "falsifiability_definition": {
+    "$comment": "Section 1. A project-local operational definition, not a philosophical one.",
+    "a_claim_is_falsifiable_here_when_it_states": [
+      "an exact subject or entity",
+      "an exact measured property",
+      "an exact bounded period or point in time",
+      "an exact geography or population where applicable",
+      "an exact unit, category or state",
+      "explicit truth conditions",
+      "explicit falsifier conditions"
+    ],
+    "and_the_decisive_test": "There must exist an observation that would count as CONTRADICTS, and a different observation that would count as SUPPORTS, WITHOUT either changing proposition identity. If the contradicting observation would produce a different proposition_key, the Claim is not falsifiable in this architecture -- it is merely replaceable.",
+    "why_that_test": "This is the test that separates a genuine falsifier from a second Claim. It is architecture-aware on purpose: a proposition can be philosophically falsifiable and still unfalsifiable HERE, because identity decides which Claim an observation attaches to."
+  },
+
+  "proposition_families": [
+    {
+      "id": "EXACT_POINT_VALUE",
+      "shape": "Metric M for entity E at time T is X.",
+      "monotone": false,
+      "falsifiable": true,
+      "falsifier": "a measurement of M for E at T, under the same definition and unit, whose value is not X",
+      "FALSIFIABILITY": "STRONG",
+      "SAME_PROPOSITION_MATCHABILITY": "STRONG",
+      "INDEPENDENT_MEASUREMENT_PLAUSIBILITY": "MEDIUM",
+      "CONTRADICTION_CAPABILITY": "STRONG",
+      "RELIABILITY_REVIEWABILITY": "STRONG",
+      "SOURCE_NATIVE_SEMANTICS": "STRONG",
+      "CALIBRATION_INFORMATION_VALUE": "STRONG",
+      "CURRENT_MODEL_FIT": "WEAK",
+      "current_model_fit_note": "The value is NOT currently part of proposition identity -- Mission 1.13.1 deliberately excluded the magnitude so a revised figure appends a revision rather than forking the Claim. That is correct for a restatement and it means a differing value currently produces a REVISION, not a contradiction."
+    },
+    {
+      "id": "THRESHOLD_STATE",
+      "shape": "Metric M for entity E at time T is >= X.",
+      "monotone": false,
+      "falsifiable": true,
+      "falsifier": "a measurement of M for E at T under the same definition and unit that is < X",
+      "FALSIFIABILITY": "STRONG",
+      "SAME_PROPOSITION_MATCHABILITY": "STRONG",
+      "INDEPENDENT_MEASUREMENT_PLAUSIBILITY": "MEDIUM",
+      "CONTRADICTION_CAPABILITY": "STRONG",
+      "RELIABILITY_REVIEWABILITY": "STRONG",
+      "SOURCE_NATIVE_SEMANTICS": "MEDIUM",
+      "CALIBRATION_INFORMATION_VALUE": "STRONG",
+      "CURRENT_MODEL_FIT": "WEAK",
+      "current_model_fit_note": "The threshold X is ours rather than the source's, which is why SOURCE_NATIVE_SEMANTICS is only MEDIUM: no held source publishes a threshold, so the bound would be chosen by us and would need its own governance. Its advantage over EXACT_POINT_VALUE is that it tolerates measurement noise without becoming a different proposition."
+    },
+    {
+      "id": "EXACT_DIRECTION",
+      "shape": "Metric M for entity E increased from T1 to T2.",
+      "monotone": false,
+      "falsifiable": true,
+      "falsifier": "a measurement showing M did not increase from T1 to T2 under the same definition",
+      "FALSIFIABILITY": "STRONG",
+      "SAME_PROPOSITION_MATCHABILITY": "MEDIUM",
+      "INDEPENDENT_MEASUREMENT_PLAUSIBILITY": "MEDIUM",
+      "CONTRADICTION_CAPABILITY": "NOT_APPLICABLE",
+      "RELIABILITY_REVIEWABILITY": "STRONG",
+      "SOURCE_NATIVE_SEMANTICS": "STRONG",
+      "CALIBRATION_INFORMATION_VALUE": "MEDIUM",
+      "CURRENT_MODEL_FIT": "WEAK",
+      "current_model_fit_note": "CONTRADICTION_CAPABILITY is NOT_APPLICABLE rather than WEAK, and the reason is structural rather than a matter of degree: `direction` IS proposition identity in all three implemented templates, so an INCREASING and a DECREASING observation produce two different proposition keys and therefore two Claims. The contradicting observation cannot reach the Claim it would contradict."
+    },
+    {
+      "id": "BOUNDED_CATEGORY_STATE",
+      "shape": "Entity E had state S during interval P.",
+      "monotone": false,
+      "falsifiable": true,
+      "falsifier": "an observation that E had a state incompatible with S throughout P, under the same state vocabulary",
+      "FALSIFIABILITY": "MEDIUM",
+      "SAME_PROPOSITION_MATCHABILITY": "MEDIUM",
+      "INDEPENDENT_MEASUREMENT_PLAUSIBILITY": "MEDIUM",
+      "CONTRADICTION_CAPABILITY": "MEDIUM",
+      "RELIABILITY_REVIEWABILITY": "MEDIUM",
+      "SOURCE_NATIVE_SEMANTICS": "MEDIUM",
+      "CALIBRATION_INFORMATION_VALUE": "MEDIUM",
+      "CURRENT_MODEL_FIT": "WEAK",
+      "current_model_fit_note": "Requires a shared state vocabulary across two apparatuses, which is a reviewed equivalence this project does not have and Mission 1.35 established it could not borrow: a term is not a category."
+    },
+    {
+      "id": "RATE_OR_PROPORTION",
+      "shape": "At least X% of defined population U had property P during window W.",
+      "monotone": false,
+      "falsifiable": true,
+      "falsifier": "a measurement over the same defined population U showing the proportion below X%",
+      "FALSIFIABILITY": "MEDIUM",
+      "SAME_PROPOSITION_MATCHABILITY": "WEAK",
+      "INDEPENDENT_MEASUREMENT_PLAUSIBILITY": "WEAK",
+      "CONTRADICTION_CAPABILITY": "MEDIUM",
+      "RELIABILITY_REVIEWABILITY": "WEAK",
+      "SOURCE_NATIVE_SEMANTICS": "WEAK",
+      "CALIBRATION_INFORMATION_VALUE": "MEDIUM",
+      "CURRENT_MODEL_FIT": "WEAK",
+      "current_model_fit_note": "A proportion needs a DENOMINATOR that both apparatuses define identically, and Mission 1.32 already refused a claim shaped like a numerator for exactly this reason. Population equivalence across two apparatuses is the hardest thing on this list to establish."
+    },
+    {
+      "id": "SOURCE_ATTRIBUTED_EXISTENTIAL_WITNESS",
+      "shape": "Source S recorded at least one qualifying event of class C for subject E.",
+      "monotone": true,
+      "falsifiable": false,
+      "falsifier": "NONE AVAILABLE",
+      "FALSIFIABILITY": "WEAK",
+      "SAME_PROPOSITION_MATCHABILITY": "STRONG",
+      "INDEPENDENT_MEASUREMENT_PLAUSIBILITY": "STRONG",
+      "CONTRADICTION_CAPABILITY": "NOT_APPLICABLE",
+      "RELIABILITY_REVIEWABILITY": "STRONG",
+      "SOURCE_NATIVE_SEMANTICS": "STRONG",
+      "CALIBRATION_INFORMATION_VALUE": "WEAK",
+      "CURRENT_MODEL_FIT": "STRONG",
+      "current_model_fit_note": "This is the family the project ALREADY implements, and the trade-off in one row: the best fit and the best matchability, and no falsifier at all.",
+      "monotone_note": "MONOTONE_EXISTENTIAL_NOT_CONTRADICTION_CAPABLE. Once a qualifying event is published the proposition is permanently true, so no later observation can falsify it. Another apparatus recording nothing is not a counterexample -- it is silence about a different apparatus. A counterexample would have to show that the named source did NOT record the event, which is a claim about the source's own records rather than about the world."
+    },
+    {
+      "id": "SOURCE_ATTRIBUTED_HISTORICAL_RESTATEMENT",
+      "shape": "Source S reported that metric M for E changed by X between T1 and T2.",
+      "monotone": true,
+      "falsifiable": false,
+      "falsifier": "NONE AVAILABLE ACROSS SOURCES",
+      "FALSIFIABILITY": "WEAK",
+      "SAME_PROPOSITION_MATCHABILITY": "WEAK",
+      "INDEPENDENT_MEASUREMENT_PLAUSIBILITY": "WEAK",
+      "CONTRADICTION_CAPABILITY": "NOT_APPLICABLE",
+      "RELIABILITY_REVIEWABILITY": "STRONG",
+      "SOURCE_NATIVE_SEMANTICS": "STRONG",
+      "CALIBRATION_INFORMATION_VALUE": "WEAK",
+      "CURRENT_MODEL_FIT": "STRONG",
+      "current_model_fit_note": "The other family the project already implements. It is a historical fact about a PUBLICATION, and a historical fact does not decay and cannot be contradicted by a different publisher: 'Source A reported X' and 'Source B reported Y' are both true at once."
+    }
+  ],
+
+  "the_tradeoff": {
+    "statement": "The proposition shapes that are easiest to make cross-apparatus are exactly the ones that cannot be contradicted, and the shapes that can be contradicted are exactly the ones only one apparatus supports.",
+    "easy_to_converge_hard_to_falsify": [
+      "SOURCE_ATTRIBUTED_EXISTENTIAL_WITNESS",
+      "SOURCE_ATTRIBUTED_HISTORICAL_RESTATEMENT"
+    ],
+    "falsifiable_hard_to_converge": [
+      "EXACT_POINT_VALUE",
+      "THRESHOLD_STATE",
+      "EXACT_DIRECTION"
+    ],
+    "why": "An existential is satisfied by ONE qualifying observation, so almost any apparatus that observes anything about the subject can entail it -- and for the same reason no observation can refute it. A point or threshold claim asserts something specific enough that a second measurement can disagree, and specific enough that the second apparatus must match on subject, period, unit, population and operational definition before its disagreement counts as disagreement rather than as a different question.",
+    "observed_not_predicted": "Mission 1.47 reached the first half by trying to converge two apparatuses and finding only an existential worked. This mission reached the second half by finding that the contradiction machinery is fully functional and structurally unreachable. The trade-off is now an observed architectural fact of the project rather than a hypothesis."
+  },
+
+  "rejected_as_contradiction_targets": [
+    {
+      "family": "existential witness Claims",
+      "code": "MONOTONE_EXISTENTIAL_NOT_CONTRADICTION_CAPABLE",
+      "why": "Monotone. A counterexample from another apparatus does not falsify an existential: 'at least one platform recorded an event related to Docker' is not contradicted by 'another platform recorded none'."
+    },
+    {
+      "family": "source-attributed historical restatements",
+      "code": "SOURCE_ATTRIBUTED_STATEMENTS_ARE_JOINTLY_SATISFIABLE",
+      "why": "'Source A reported X' and 'Source B reported Y' are both true simultaneously whatever X and Y are. Differing values are not a disagreement about the world; they are two facts about two publications."
+    },
+    {
+      "family": "open-ended conjunctions",
+      "code": "JOINT_CONJUNCTION_NOT_A_SINGLE_PROPOSITION",
+      "why": "A conjunction is falsified by refuting any conjunct, so a contradicting observation does not bear on the whole Claim. Mission 1.47 refused the same shape from the corroboration side."
+    },
+    {
+      "family": "vague qualitative latent constructs",
+      "code": "NO_OPERATIONAL_FALSIFIER",
+      "why": "'Developers showed interest' has no observation that would count as refuting it, because the construct has no operational definition. Unfalsifiable and, separately, not OBSERVED."
+    }
+  ],
+
+  "live_demonstration": {
+    "$comment": "Measured on the live corpus, not constructed. The most contradiction-looking pair this repository holds, and three independent reasons it is not one.",
+    "claim_pairs_differing_only_in_direction": 3,
+    "subjects": ["Docker_(software)", "Kubernetes", "Podman"],
+    "proposition_kind": "platform_counted_content_request_change_witnessed",
+    "pair": [
+      "The source counted at least one pair of adjacent day buckets in which requests were HIGHER in the later bucket.",
+      "The source counted at least one pair of adjacent day buckets in which requests were LOWER in the later bucket."
+    ],
+    "reason_1_two_claims": "They differ only in `direction`, and `direction` is proposition identity, so they are TWO Claims. A contradicting observation cannot reach the Claim it would contradict.",
+    "reason_2_jointly_true": "Both are existentials over the same held series and BOTH ARE TRUE. Requests rose on some adjacent pairs and fell on others.",
+    "reason_3_monotone": "Even if they inhabited one Claim, neither could falsify the other: a counterexample does not refute an existential.",
+    "conclusion": "The pair that most looks like a contradiction is not one for three independent reasons, and only the first is architectural."
+  }
+}

@@ -1,0 +1,314 @@
+{
+  "$comment": "Mission 1.48. What a future measurement apparatus must observe in order to produce a useful, falsifiable same-proposition case -- and the architectural fact that must change before any apparatus can. Authored; rendered and validated by infrastructure/scripts/render_falsifiable_apparatus_requirements.py. Section 0 measurements live in falsifiable-evidence-apparatus-gap-baseline-v1.json; the proposition-family analysis in falsifiability-vs-convergence-tradeoff-v1.json.",
+  "record_version": "1.0.0",
+  "mission": "1.48",
+  "recorded_at": "2026-09-04",
+
+  "primary_outcome": "CONTRADICTION_CLAIM_IDENTITY_ARCHITECTURE_GAP",
+  "primary_outcome_statement": "The contradiction machinery is fully functional and structurally unreachable. Incompatible observations cannot inhabit one Claim identity under current semantics, so no Claim this architecture can build is capable of being contradicted. And the identity fact responsible -- source attribution -- is the SAME one that blocked corroboration in Mission 1.47. Both roads out of the B-2 identity are closed by one architectural decision, and no new apparatus can open either.",
+
+  "the_unification": {
+    "$comment": "The finding this mission adds that Mission 1.47 could not see from its side.",
+    "statement": "Mission 1.47 found that two apparatuses cannot share one Claim because `source_id` is proposition identity. This mission finds that two apparatuses cannot DISAGREE on one Claim for exactly the same reason. Corroboration and contradiction are the only two routes by which the real aggregator becomes distinguishable from the B-2 baseline, and both require two observations to inhabit ONE Claim. Source attribution in proposition identity forbids that.",
+    "consequence": "The binding constraint is NOT a missing apparatus. A new apparatus, however well chosen, would interpret to facts carrying its own `source_id`, produce its own `proposition_key`, and therefore its own Claim -- where it can neither join a support group nor contradict anything. Acquiring it would add rows and change nothing.",
+    "measured": "All 43 Claims carry `source_id` in proposition identity, and 0 would merge if it were dropped.",
+    "not_a_bug": "Source attribution is correct for an OBSERVED claim and Mission 1.38 established why: for an OBSERVED claim the attribution IS the claim. 'Wikimedia counted X' and 'Stack Exchange published Y' are two propositions. The gap is not that this is wrong; it is that the project has no OTHER claim layer, and the layer that would carry a source-independent proposition is the INFERRED one, which is deliberately unbuilt."
+  },
+
+  "structural_reconstruction": {
+    "$comment": "Section 0. Re-derived from live code and live data rather than quoted from mission reports.",
+    "A_one_group_equals_b2": {
+      "established": true,
+      "how": "The REAL aggregate() was run over all 43 live Claims with reliability resolved through the REAL resolver, and B-2 was computed independently as max(q) over scorable supporting items.",
+      "result": "aggregator_differs_from_b2_cases = 0, max_support_groups_on_one_claim = 1",
+      "why_algebraic": "Saturation over one group is that group's strength; group strength is max() over its members; B-2 reports the same maximum. Equal by algebra, not coincidence, so no quantity of additional single-group Evidence can separate them."
+    },
+    "B_two_independent_groups_can_differ": {
+      "established": true,
+      "how": "Non-persisted fixture, two KNOWN_INDEPENDENT SUPPORTS items through the real aggregator.",
+      "result": "2 support groups, and S = 1 - (1-g_A)(1-g_B) exceeds max(g_A, g_B) for fixture-owned strengths in (0,1)."
+    },
+    "C_contradiction_produces_non_zero_mass": {
+      "established": true,
+      "how": "Non-persisted fixture, one SUPPORTS and one CONTRADICTS on one claim_id, through the real aggregator.",
+      "result": "support_strength 0.6, contradiction_strength 0.5, supported_mass 0.3, contradicted_mass 0.2, conflict_mass 0.3, uncertainty_mass 0.2, summing to 1.0.",
+      "conclusion": "The machinery is NOT the gap. It works exactly as specified and has never been reached."
+    }
+  },
+
+  "why_contradiction_is_unreachable": {
+    "$comment": "Section 9. DATA ABSENCE or ARCHITECTURE PREVENTION? Architecture prevention, twice over.",
+    "verdict": "ARCHITECTURE_PREVENTION",
+    "blocker_1_direction_is_identity": {
+      "fact": "`direction` is written into `proposition_facts` by all three implemented restatement templates, and `proposition_key()` names direction among the facts a proposition is about.",
+      "consequence": "An INCREASING and a DECREASING observation of the same metric over the same period produce two different proposition keys, hence two Claims. The contradicting observation cannot reach the Claim it would contradict.",
+      "live_evidence": "Three Claim pairs in the corpus differ ONLY in `direction` -- the Wikimedia witnessed existentials for Docker, Kubernetes and Podman."
+    },
+    "blocker_2_no_interpreter_can_emit_contradicts": {
+      "fact": "`EvidenceDirection.SUPPORTS` appears exactly ONCE in the whole interpreters package, as a hard-coded literal. `EvidenceDirection.CONTRADICTS` appears nowhere in it.",
+      "quoted_reason": "The template says why: 'The claim IS this Signal said back. It cannot bear against itself, and a NEUTRAL row would assert the Signal bears on nothing.'",
+      "consequence": "Even if claim identity permitted it, no implemented interpreter could produce the contradicting row.",
+      "live_evidence": "All 57 Evidence rows in the corpus are SUPPORTS. Not one CONTRADICTS row has ever existed."
+    },
+    "blocker_3_source_id_is_identity": {
+      "fact": "All 43 Claims carry `source_id` in proposition identity.",
+      "consequence": "The cross-source case -- two apparatuses reporting incompatible values -- cannot arise, because the two observations form two Claims before their values are ever compared. This is the blocker that also closes corroboration, and it is the deepest of the three.",
+      "note": "Blockers 1 and 2 are single-source blockers and could in principle be revisited per template. Blocker 3 is a decision about what an OBSERVED claim means."
+    },
+    "is_it_repairable_here": "No, and it is deliberately not repaired. Section 9 forbids it, and the repair is a Claim-semantics design question with an ADR behind it rather than an edit."
+  },
+
+  "source_attribution_and_contradiction": {
+    "$comment": "Section 10.",
+    "the_semantic_problem": "'Source A reported X' and 'Source B reported Y' are both TRUE simultaneously, whatever X and Y are. They are two facts about two publications, not a disagreement about the world. So differing values can never constitute a contradiction between source-attributed OBSERVED Claims.",
+    "what_a_real_cross_source_contradiction_requires": "A",
+    "options_considered": [
+      {
+        "option": "A",
+        "description": "a source-independent INFERRED Claim",
+        "assessment": "This is what a cross-source contradiction actually needs. A proposition like 'Metric M for E at T is X' asserts about the WORLD, so two measurements of it can genuinely disagree. It is INFERRED by construction, because moving from 'a source reported X' to 'X is the case' is an inference step.",
+        "status": "NOT_IMPLEMENTED_AND_NOT_IMPLEMENTED_HERE"
+      },
+      {
+        "option": "B",
+        "description": "a reviewed convergence layer",
+        "assessment": "A governed cross-source OBSERVED convergence contract could let two attributed observations witness one proposition. Mission 1.47 proved the current contract structurally refuses this, on two independent guards. It would be a smaller change than the INFERRED layer and it inherits the near-tautology problem: the propositions such a contract can express faithfully are the weak ones.",
+        "status": "REFUSED_BY_CURRENT_CONTRACT"
+      },
+      {
+        "option": "C",
+        "description": "a new deterministic measurement Claim type",
+        "assessment": "A third claim type between OBSERVED and INFERRED would need its own epistemic semantics, its own reliability scope treatment and its own ADR. Recorded as an option and not preferred: the taxonomy is a closed enum of five and widening it is the largest of these changes.",
+        "status": "NOT_PROPOSED"
+      },
+      {
+        "option": "D",
+        "description": "another existing mechanism",
+        "assessment": "None found. Claim revisions represent a CHANGED assertion rather than a disagreement, and Mission 1.41 already established that a disagreeing row is reported as a conflict and nothing is written.",
+        "status": "NONE_AVAILABLE"
+      }
+    ],
+    "source_id_was_not_removed": "No change was made and none is proposed as a convenience. Section 10 forbids removing `source_id`, Mission 1.38 established that attribution IS the claim for an OBSERVED proposition, and Mission 1.47 refused the same shortcut from the corroboration side."
+  },
+
+  "preferred_proposition_family": {
+    "selected": "THRESHOLD_STATE",
+    "shape": "Metric M for entity E at time T is >= X, under a named operational definition and unit.",
+    "why_selected": "It is the only family that is falsifiable AND tolerant of the measurement noise that two genuinely independent apparatuses always produce. An EXACT_POINT_VALUE claim is contradicted by a rounding difference, which would manufacture false contradictions and make independent corroboration nearly impossible -- two honest apparatuses rarely publish the identical number. A threshold admits a real falsifier (a measurement below X) while letting two apparatuses that disagree slightly both SUPPORT it. It therefore serves BOTH routes, which no other family on the list does.",
+    "why_not_exact_point_value": "Strongest source-native semantics and the worst noise behaviour. It is the family to prefer only if a future apparatus pair is known to publish to identical precision under an identical definition, which nothing in this portfolio does.",
+    "why_not_exact_direction": "`direction` is proposition identity today, so its CONTRADICTION_CAPABILITY is NOT_APPLICABLE rather than weak: the contradicting observation forms a different Claim.",
+    "why_not_the_existential_families": "Monotone, hence not contradiction-capable at all, and Mission 1.47 established that the informative value of the cross-apparatus existential is near-tautological.",
+    "the_cost_of_the_choice": "X is OURS rather than the source's, so a threshold introduces a governance question the other families do not have: who chooses X, on what basis, and how is it prevented from being chosen after seeing the data. That is a real cost and it is recorded rather than discounted. This project already refuses 'an arbitrary number wearing the costume of a rule', and a threshold picked to make a case work would be exactly that. The threshold must be frozen BEFORE the second measurement is retrieved.",
+    "current_model_fit": "WEAK",
+    "current_model_fit_reason": "Not because the family is wrong, but because of the architecture gap above: no threshold Claim can host two sources' Evidence while `source_id` is identity."
+  },
+
+  "apparatus_requirements": {
+    "$comment": "Section 6. A SEARCH SPECIFICATION for a future mission, written from the evidence requirement backwards. No source, vendor, API or website is named anywhere in it, deliberately.",
+    "apparatus_observes": "A quantity that some OTHER already-held apparatus also observes, about the same subject, over the same kind of period -- where 'the same quantity' means the same measured property of the same population, not merely a related one.",
+    "apparatus_emits": "A numeric measurement with an explicit unit, an explicit population or geography, and an explicit bounded period, attributable to a named measurement definition.",
+    "subject_granularity": "EXACT and externally identifiable: the apparatus must publish an identifier for the subject that an existing reviewed registry entry can be matched to by EXACT EQUALITY. No distance, no token overlap, no stem, no synonym table, no embedding.",
+    "time_granularity": "The apparatus must publish a period whose boundaries are DEFINED by the source, not inferred from the extent of what was retrieved. It must be alignable to the partner apparatus's grain by exact equality of a defined interval, not by overlap or containment.",
+    "unit_semantics": "An explicitly published unit, and either the SAME unit as the partner apparatus or a deterministic reviewed unit equivalence. No currency conversion, no normalisation, no rescaling.",
+    "population_or_geography_semantics": "An explicitly published population or geography definition, and either identical to the partner's or connected by a reviewed equivalence. A shared label is not a shared population: Mission 1.46 found de facto midyear population and usually-resident 1 January population sharing a year label and measuring different things.",
+    "methodology_documentation": "DOCUMENTED, first-party, and RETRIEVABLE by this deployment through a lawful route. This is the requirement Mission 1.47 found decisive and it is not negotiable.",
+    "lineage_documentation": "DOCUMENTED. The upstream producer must be IDENTIFIED, so that independence can be established affirmatively rather than inferred from the absence of a found dependency.",
+    "upstream_producer": "IDENTIFIED, and DIFFERENT from the partner apparatus's upstream producer. Mission 1.46 established that for official macro statistics the international publishers are distribution layers over one national producer, so a second publisher of the same series is not a second producer.",
+    "revision_policy": "DOCUMENTED_OR_BOUNDED. A measurement that can be silently restated makes a contradiction indistinguishable from a revision, which is the exact ambiguity Mission 1.41 refused to resolve by inventing a third answer.",
+    "observation_recoverability": "ESTABLISHED_ENOUGH_FOR_REVIEW: a reviewer must be able to check what the source said at the time, or the source must document that it cannot be checked. Either is reviewable; silence is not.",
+    "measurement_definition": "BOUNDED and published. A reviewer must be able to identify the five-part reliability scope (source, resource, record kind, claim type, proposition kind) from the documentation.",
+    "missingness": "DOCUMENTED_ENOUGH_FOR_REVIEW. Whether an absent value means zero, withheld or not-collected must be answerable, because a missing observation is not a contradiction and the two must be distinguishable.",
+    "independence_comparability": "POSSIBLE: the documentation must be sufficient to establish that this apparatus's event-generation and collection do not share an upstream with the partner's.",
+    "contradiction_comparability": "POSSIBLE: the apparatus must publish a value that could be compared against the partner's on the SAME proposition, once the architecture permits one proposition to hold both."
+  },
+
+  "reliability_reviewability_gate": {
+    "$comment": "Section 15. Promoted here to a FIRST-CLASS acquisition-search criterion.",
+    "rule": "A theoretically ideal apparatus whose methodology cannot be reviewed is not useful to this system, and must not be promoted because its observations are attractive.",
+    "minimum": [
+      "first-party measurement definition available and retrievable",
+      "first-party methodology or provenance documentation available and retrievable",
+      "known limitations accessible",
+      "a reviewer can identify the five-part reliability scope",
+      "the documentation can be lawfully retained and cited"
+    ],
+    "why_first_class": "Mission 1.47 proved the cost of learning this late. Stack Exchange's observations are excellent and its methodology documentation is unreachable because the site's robots policy blocks this environment's fetcher -- and no bypass, header variation, mirror or third-party summary may stand in for a first-party document. That single absence left independence UNKNOWN AND is the reason the operator declined both Stack Exchange reliability scopes in Mission 1.36.1. One inaccessible document disqualified an otherwise strong apparatus on two separate gates.",
+    "consequence_for_search": "Documentation retrievability must be checked BEFORE an apparatus is treated as a candidate, not after its data looks useful."
+  },
+
+  "governance_compatibility_gate": {
+    "$comment": "Section 16. Defined, not exercised. No source governance review was performed.",
+    "requirements": [
+      "a lawful acquisition route exists",
+      "eligible under the target use profile, with the profile named",
+      "field minimisation is possible AT acquisition rather than after it",
+      "retention compatible with the retention policy",
+      "derived analytical use permitted",
+      "no circumvention of any kind is required: no anti-bot bypass, no rate-limit evasion, no undocumented endpoint, no authentication bypass",
+      "provenance documentation is retrievable through a permitted route"
+    ],
+    "separate_gate": "Governance is a separate gate from epistemic usefulness, in both directions. An apparatus can be perfectly reviewable and refused, or fully authorised and useless."
+  },
+
+  "independence_capable_pair_template": {
+    "$comment": "Section 7. Generic, no source named.",
+    "apparatus_A": {"producer": "<producer A>", "pipeline": "<collection pipeline A>", "methodology": "<published measurement definition A>"},
+    "apparatus_B": {"producer": "<producer B>", "pipeline": "<collection pipeline B>", "methodology": "<published measurement definition B>"},
+    "shared_claim": "Metric M for entity E at time T is >= X, under operational definition D and unit U.",
+    "independence_proof_requires": [
+      "no direct republication of one apparatus's values by the other",
+      "no shared upstream measurement producer",
+      "neither consuming the other's values as an input",
+      "genuinely distinct event-generation or measurement processes",
+      "first-party documentary support for each lineage"
+    ],
+    "explicitly_insufficient": "Organisational separation. Two different companies, hostnames, databases or web pages establish nothing: Mission 1.46 found one publisher reproducing another's series verbatim, source code and all."
+  },
+
+  "contradiction_capable_pair_template": {
+    "$comment": "Section 8. Generic, no source named.",
+    "claim": "Metric M for entity E at time T is >= X, under operational definition D and unit U.",
+    "evidence_A": "SUPPORTS -- a measurement of M for E at T under D and U that is >= X",
+    "evidence_B": "CONTRADICTS -- a measurement of M for E at T under D and U that is < X",
+    "both_must_share": ["proposition identity", "subject", "period", "geography or population", "unit", "operational definition"],
+    "or": "an explicitly governed deterministic equivalence for any of the last four.",
+    "blocked_today_by": "Proposition identity. Under current semantics Evidence A and Evidence B would carry different `source_id` values, produce different proposition keys and land on two different Claims -- so the shape above cannot be built from real data, only from fixtures."
+  },
+
+  "not_a_contradiction": {
+    "$comment": "Section 4. Each of these looks like a contradiction and is not.",
+    "cases": [
+      {"case": "an INCREASING Claim beside a DECREASING Claim", "why": "direction is proposition identity, so these are two Claims and neither bears on the other"},
+      {"case": "different periods", "why": "two measurements of different times are both true; a value changing over time is not a disagreement"},
+      {"case": "different geography or population", "why": "different populations, different quantities"},
+      {"case": "different units", "why": "not comparable without a reviewed equivalence"},
+      {"case": "different measurement definitions", "why": "measuring different things; Mission 1.46's midyear de facto against 1 January usually-resident population"},
+      {"case": "different requester classes", "why": "a count under one audience class is not a count under another; Mission 1.19 made the class REQUIRED for exactly this reason"},
+      {"case": "a missing observation", "why": "absence of a record is not evidence against; a NON-SCORABLE or absent item contributes nothing and does not contradict"},
+      {"case": "another source being silent", "why": "silence is not a counterexample, and for a monotone existential it could not be one even in principle"},
+      {"case": "one source reporting a different but compatible statistic", "why": "a semantic mismatch, not a disagreement: the observations are about different propositions"}
+    ]
+  },
+
+  "falsifier_specification": {
+    "$comment": "Section 14. Machine-auditable later. Stated for the preferred family.",
+    "claim": "Metric M for entity E at time T is >= X, under operational definition D and unit U",
+    "SUPPORT_CONDITION": "a source-native measurement of M for E at T, under D and U, whose value is >= X",
+    "CONTRADICT_CONDITION": "a source-native measurement of M for E at T, under D and U, whose value is < X",
+    "NON_EVIDENCE_CONDITION": "no record of M for E at T -- contributes nothing, contradicts nothing",
+    "SEMANTIC_MISMATCH_CONDITION": "a measurement under a different population, unit, period or operational definition -- bears on a different proposition and must not be attached",
+    "UNKNOWN_CONDITION": "a measurement whose lineage or measurement-definition equivalence is not established -- attaches with independence UNKNOWN and must not be counted as a second provenance group"
+  },
+
+  "portfolio_matrix": {
+    "$comment": "Section 17. Diagnostic. Measured from the live deployment and the registry, with no acquisition and no undocumented capability inferred. No total, no ranking.",
+    "held_apparatuses": [
+      {"apparatus": "wikimedia-pageviews | platform_counted_content_request_change", "FALSIFIABLE_POINT_CLAIM": "NO", "DOCUMENTED_LINEAGE": "YES", "POTENTIAL_SECOND_MEASUREMENT": "NO", "CONTRADICTION_CAPABLE": "NO", "SAME_SUBJECT_PARTNER": "YES", "RELIABILITY_REVIEWABLE": "YES", "CURRENTLY_ELIGIBLE": "YES", "CURRENTLY_HELD": "YES"},
+      {"apparatus": "wikimedia-pageviews | platform_counted_content_request_change_witnessed", "FALSIFIABLE_POINT_CLAIM": "NO", "DOCUMENTED_LINEAGE": "YES", "POTENTIAL_SECOND_MEASUREMENT": "NO", "CONTRADICTION_CAPABLE": "NO", "SAME_SUBJECT_PARTNER": "YES", "RELIABILITY_REVIEWABLE": "YES", "CURRENTLY_ELIGIBLE": "YES", "CURRENTLY_HELD": "YES"},
+      {"apparatus": "stack-exchange | community_site_published_questions_carrying_tag", "FALSIFIABLE_POINT_CLAIM": "NO", "DOCUMENTED_LINEAGE": "NO", "POTENTIAL_SECOND_MEASUREMENT": "NO", "CONTRADICTION_CAPABLE": "NO", "SAME_SUBJECT_PARTNER": "YES", "RELIABILITY_REVIEWABLE": "NO", "CURRENTLY_ELIGIBLE": "YES", "CURRENTLY_HELD": "YES"},
+      {"apparatus": "stack-exchange | community_site_questions_without_accepted_answer", "FALSIFIABLE_POINT_CLAIM": "NO", "DOCUMENTED_LINEAGE": "NO", "POTENTIAL_SECOND_MEASUREMENT": "NO", "CONTRADICTION_CAPABLE": "NO", "SAME_SUBJECT_PARTNER": "YES", "RELIABILITY_REVIEWABLE": "NO", "CURRENTLY_ELIGIBLE": "YES", "CURRENTLY_HELD": "YES"},
+      {"apparatus": "ted-eu | source_reported_procurement_value_contrast", "FALSIFIABLE_POINT_CLAIM": "NO", "DOCUMENTED_LINEAGE": "YES", "POTENTIAL_SECOND_MEASUREMENT": "NO", "CONTRADICTION_CAPABLE": "NO", "SAME_SUBJECT_PARTNER": "NO", "RELIABILITY_REVIEWABLE": "YES", "CURRENTLY_ELIGIBLE": "YES", "CURRENTLY_HELD": "YES"},
+      {"apparatus": "ted-eu | source_published_classification_value_contrast_witnessed", "FALSIFIABLE_POINT_CLAIM": "NO", "DOCUMENTED_LINEAGE": "YES", "POTENTIAL_SECOND_MEASUREMENT": "NO", "CONTRADICTION_CAPABLE": "NO", "SAME_SUBJECT_PARTNER": "NO", "RELIABILITY_REVIEWABLE": "YES", "CURRENTLY_ELIGIBLE": "YES", "CURRENTLY_HELD": "YES"},
+      {"apparatus": "world-bank | source_reported_metric_period_change", "FALSIFIABLE_POINT_CLAIM": "NO", "DOCUMENTED_LINEAGE": "YES", "POTENTIAL_SECOND_MEASUREMENT": "YES", "CONTRADICTION_CAPABLE": "NO", "SAME_SUBJECT_PARTNER": "NO", "RELIABILITY_REVIEWABLE": "YES", "CURRENTLY_ELIGIBLE": "YES", "CURRENTLY_HELD": "YES"},
+      {"apparatus": "gdelt | source_reported_term_frequency_change", "FALSIFIABLE_POINT_CLAIM": "NO", "DOCUMENTED_LINEAGE": "NO", "POTENTIAL_SECOND_MEASUREMENT": "NO", "CONTRADICTION_CAPABLE": "NO", "SAME_SUBJECT_PARTNER": "NO", "RELIABILITY_REVIEWABLE": "NO", "CURRENTLY_ELIGIBLE": "YES", "CURRENTLY_HELD": "YES"},
+      {"apparatus": "gdelt | source_reported_term_frequency_contrast", "FALSIFIABLE_POINT_CLAIM": "NO", "DOCUMENTED_LINEAGE": "NO", "POTENTIAL_SECOND_MEASUREMENT": "NO", "CONTRADICTION_CAPABLE": "NO", "SAME_SUBJECT_PARTNER": "NO", "RELIABILITY_REVIEWABLE": "NO", "CURRENTLY_ELIGIBLE": "YES", "CURRENTLY_HELD": "YES"}
+    ],
+    "finding": "FALSIFIABLE_POINT_CLAIM is NO for all nine, and CONTRADICTION_CAPABLE is NO for all nine. Every implemented proposition kind is either a source-attributed historical restatement or a monotone existential, which are precisely the two families the trade-off record marks unfalsifiable. This is not a coincidence of the corpus: it is what the only implemented interpreter produces.",
+    "note_on_world_bank": "`world-bank` is the single apparatus marked POTENTIAL_SECOND_MEASUREMENT, because a national statistical aggregate is a quantity other publishers also publish. Mission 1.46 established that those publishers are distribution layers over the same national producer, so the potential is real in shape and refuted in fact for this series."
+  },
+
+  "registered_but_unheld": {
+    "$comment": "Section 18. Registry and existing governance metadata only. No research observation was fetched, no browsing, no new governance review. At most three candidates, and they are NOT selected acquisition routes.",
+    "live_eligibility_measured": {"eligible": 7, "eligible_with_collector": 5, "blocked_at_the_eligibility_gate": 22, "total_registered": 29},
+    "candidates": [
+      {
+        "source_id": "eurostat",
+        "state": "KNOWN_MISMATCH",
+        "why": "Eligible under the local profile with no resource and no collector, and it publishes exact point values with documented ESMS methodology, so on apparatus SHAPE it fits well. It is a KNOWN_MISMATCH rather than promising because Mission 1.46 established on the publishers' own documentation that Eurostat is UPSTREAM OF the World Bank for the series this deployment holds, and that Eurostat itself compiles what National Statistical Institutes transmit. It would be a second publisher, not a second producer."
+      },
+      {
+        "source_id": "fred",
+        "state": "KNOWN_MISMATCH",
+        "why": "Same eligibility shape. Refuted more sharply: FRED's own page names Source 'World Bank', Release 'World Development Indicators' and Source Code SP.POP.TOTL. It republishes the exact series already held."
+      },
+      {
+        "source_id": "usaspending",
+        "state": "INSUFFICIENT_INFORMATION",
+        "why": "A second public-procurement apparatus beside TED, blocked at the eligibility gate today. It is recorded as INSUFFICIENT_INFORMATION rather than promising because it observes a DIFFERENT jurisdiction's contracts, so it is not a second measurement of the same phenomenon -- it would produce complementary evidence, which Mission 1.47 established is not Claim-level corroboration. Establishing otherwise would need a governance review this mission may not perform."
+      }
+    ],
+    "conclusion": "No registered source is PROMISING_FROM_EXISTING_DOCUMENTATION for the required apparatus type. The two whose SHAPE fits best are the two Mission 1.46 already refuted on provenance, which is the same answer arriving from a different direction.",
+    "no_source_was_selected": true
+  },
+
+  "route_comparison": {
+    "$comment": "Section 20. Qualitative, grounded in architecture and corpus. Not chosen by which yields a larger EvidenceScore.",
+    "result": "NEITHER_CURRENTLY_ACTIONABLE",
+    "why": "Both routes require two observations to inhabit ONE Claim, and source attribution in proposition identity forbids that. Neither is blocked by a missing apparatus, so neither becomes actionable by acquiring one.",
+    "which_is_preferable_once_unblocked": "INDEPENDENT_CORROBORATION",
+    "why_preferable": "Corroboration is strictly easier than contradiction. It requires exact subject, period, unit, population and definition alignment plus established independence. Contradiction requires ALL of that AND an actual disagreement between two apparatuses that agree on everything else -- which is a fact about the world that cannot be arranged in advance. A mission can plan for corroboration; it can only hope for contradiction.",
+    "and_the_asymmetry_worth_recording": "A contradiction is also the more informative outcome when it occurs, because it is the only case that tells the operator something is WRONG rather than merely supported. The recommendation prefers corroboration on tractability, not on value."
+  },
+
+  "calibration_relevance": {
+    "$comment": "Section 21. Both are required, and Mission 1.47 showed they can diverge.",
+    "STRUCTURALLY_IDENTIFYING": "YES",
+    "structurally_identifying_why": "A THRESHOLD_STATE Claim with two independent supporting measurements produces two support groups, and saturation exceeds max(g_A, g_B) -- the first case where the full aggregator differs from B-2. With one supporting and one contradicting measurement it produces non-zero contradiction and conflict mass, which no real Claim has ever produced.",
+    "SEMANTICALLY_USEFUL": "YES",
+    "semantically_useful_why": "Unlike Mission 1.47's existential, a threshold claim carries information a person would act on: whether a measured quantity is above a bound, and whether two independent measurements agree about that. A reviewer comparing two such evidence sets is comparing something real, which is what a calibration reference judgement requires.",
+    "both_satisfied": true
+  },
+
+  "opportunity_usefulness": {
+    "$comment": "Section 22. Information-value criterion only.",
+    "supports": [
+      "presence or absence of a real phenomenon, at a stated bound",
+      "measurable change, where two bounded periods are each observed",
+      "independent confirmation, where two lineages are established",
+      "disagreement requiring investigation, which is the only signal that tells an operator to go and look"
+    ],
+    "does_not_support": "Nothing here is promoted to market demand, willingness to pay or product-market fit. A threshold claim about a measured quantity is a threshold claim about a measured quantity.",
+    "note": "This is why the preferred family is worth having beyond aggregator diagnostics: the fourth item is a research capability the system does not currently have at all, because no Claim can currently disagree with anything."
+  },
+
+  "counters": {
+    "raw_records": {"before": 325, "after": 325},
+    "normalized_records": {"before": 325, "after": 325},
+    "signals": {"before": 33, "after": 33},
+    "claims": {"before": 43, "after": 43},
+    "claim_revisions": {"before": 44, "after": 44},
+    "evidence": {"before": 57, "after": 57},
+    "reliability_assessments": {"before": 4, "after": 4},
+    "reliability_basis_rows": {"before": 12, "after": 12},
+    "independence_groups": {"before": 0, "after": 0},
+    "opportunities": {"before": 1, "after": 1},
+    "opportunity_revisions": {"before": 1, "after": 1},
+    "opportunity_evidence_links": {"before": 7, "after": 7},
+    "embeddings": {"before": 0, "after": 0},
+    "registered_sources": {"before": 29, "after": 29},
+    "evidence_with_stored_reliability": {"before": 0, "after": 0},
+    "scores": {"before": "ABSENT", "after": "ABSENT"}
+  },
+
+  "network_budget": {
+    "RESEARCH_DATA_REQUESTS": 0,
+    "APPARATUS_DOCUMENTATION_REQUESTS": 0,
+    "GOVERNANCE_DOCUMENT_REQUESTS": 0,
+    "note": "Zero requests of every kind. Every apparatus and governance fact used here was already held in the repository or measurable from the live deployment."
+  },
+
+  "model_use": {"llm_calls": 0, "usd": 0.0, "embeddings": 0, "semantic_matching_used": false, "problem_family_status": "PARKED"},
+
+  "next_mission_recommendation": {
+    "not_candidate_discovery": "A constrained source search is the WRONG next mission, even though this record freezes the specification it would use. No apparatus can exercise either route while source attribution is proposition identity, so a discovery mission would end by finding a good candidate that cannot be used.",
+    "recommended": "A narrow Claim-semantics and contradiction-reachability DESIGN mission, before any data search. It must decide whether a source-independent proposition belongs in the INFERRED layer, in a governed cross-source OBSERVED convergence contract, or in neither -- and it must decide it as a semantics question with an ADR, not as an edit to a template.",
+    "the_specification_is_frozen_for_later": "The apparatus requirements in this record are deliberately reusable as a search specification. They are not wasted: they are the second half of the work, and they become actionable the moment the first half is decided.",
+    "explicitly_not_started": "Mission 1.49 was not started."
+  },
+
+  "deployment_local_human_confirmations_require_migration_checklist": {
+    "$comment": "Section 34. Carried forward as existing operational debt, unchanged and unsolved.",
+    "finding": "TED's local review v3 acceptance is a HUMAN_CONFIRMATION verification living only in this deployment's database and is not portable through git.",
+    "not_touched": "No replay mechanism was created, and record_ted_operator_acceptance.py was not modified."
+  }
+}

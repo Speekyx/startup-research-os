@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.80
+Version: 1.81
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-04 (Sprint 1 / Mission 1.47)
+Last amended: 2026-09-04 (Sprint 1 / Mission 1.48)
 
 ---
 
@@ -13,6 +13,61 @@ Last amended: 2026-09-04 (Sprint 1 / Mission 1.47)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.81 — 2026-09-04 (Sprint 1 / Mission 1.48)
+
+**`CONTRADICTION_CLAIM_IDENTITY_ARCHITECTURE_GAP`.** The contradiction machinery
+is fully functional and structurally unreachable, and the fact that blocks it is
+the same fact that blocked Mission 1.47.
+
+A non-persisted fixture drives the real aggregator to non-zero contradiction
+strength and non-zero conflict mass, with all four masses summing to one. So the
+arithmetic is not the gap. All 57 live Evidence rows are SUPPORTS and none has
+ever been otherwise.
+
+Nothing was quoted from a mission report. The B-2 identity was re-derived by
+running the real aggregator over all 43 live Claims with reliability resolved
+through the real resolver, against a B-2 computed independently, giving zero
+cases where the two differ and a maximum of one support group per Claim.
+
+Contradiction is blocked three times. Direction is a proposition fact, so an
+increase and a decrease are two Claims. EvidenceDirection.SUPPORTS appears
+exactly once in the whole interpreters package as a hard-coded literal and
+CONTRADICTS appears nowhere. And all 43 Claims carry source_id in proposition
+identity, so two publishers reporting incompatible values form two Claims before
+their values are ever compared.
+
+That third blocker is the unification. Corroboration needs two observations on
+one Claim and contradiction needs two observations on one Claim, so source
+attribution in proposition identity closes both roads out of the baseline with
+one decision. The binding constraint is therefore not a missing apparatus: a new
+apparatus would land on its own Claim and change nothing.
+
+The corpus supplied its own demonstration. Three Claim pairs differ only in
+direction, and the most contradiction-looking pair in the repository is not one
+for three independent reasons: they are two Claims, they are both true at once,
+and a counterexample cannot falsify a monotone existential.
+
+Seven proposition families were evaluated on eight qualitative criteria with no
+weighted numeric score. THRESHOLD_STATE is preferred because it serves both
+routes, and the cost of the choice is recorded: the threshold is ours, so it must
+be frozen before the second measurement is retrieved.
+
+Reliability reviewability is promoted to a first-class search criterion, because
+one robots-blocked methodology page disqualified an otherwise strong apparatus on
+two separate gates in Mission 1.47.
+
+No source was selected and the apparatus specification names none, enforced by a
+validator. Zero requests of any kind, zero model calls, zero embeddings, and all
+sixteen counters unchanged.
+
+New: `docs/data/falsifiable-evidence-apparatus-requirements-v1.json` and `.md`,
+`docs/data/falsifiability-vs-convergence-tradeoff-v1.json`,
+`docs/data/falsifiable-evidence-apparatus-gap-baseline-v1.json`, two scripts
+under `infrastructure/scripts/`, and tests in `evidence-aggregation` and
+`claim-model`.
+
+Report: `docs/architecture/mission-1.48-report.md`.
 
 ## 1.80 — 2026-09-04 (Sprint 1 / Mission 1.47)
 
@@ -2841,6 +2896,7 @@ Additionally authoritative:
 - docs/data/ted-eu-official-reuse-response-v1.md (added in 1.78)
 - docs/data/independent-statistical-route-feasibility-v1.md (added in 1.79)
 - docs/data/cross-apparatus-convergence-feasibility-v1.md (added in 1.80)
+- docs/data/falsifiable-evidence-apparatus-requirements-v1.md (added in 1.81)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.
