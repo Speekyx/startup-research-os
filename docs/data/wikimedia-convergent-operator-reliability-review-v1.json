@@ -31,10 +31,26 @@
     "$comment": "Measured by Mission 1.44 against the live deployment, not assumed.",
     "evidence_rows": 18,
     "claims": 6,
-    "witness_cardinalities": [4, 3, 3, 3, 3, 2],
-    "articles": ["Docker_(software)", "Kubernetes", "Podman"],
-    "directions": ["INCREASING", "DECREASING"],
-    "audience_classes": ["user"]
+    "witness_cardinalities": [
+      4,
+      3,
+      3,
+      3,
+      3,
+      2
+    ],
+    "articles": [
+      "Docker_(software)",
+      "Kubernetes",
+      "Podman"
+    ],
+    "directions": [
+      "INCREASING",
+      "DECREASING"
+    ],
+    "audience_classes": [
+      "user"
+    ]
   },
   "rubric_profile": {
     "$comment": "§ Operator ordinal profile. The five states the reviewer assigned. Mission 1.44 pre-filled exactly one, SOURCE_SIDE_CHECKABILITY, as a claim about what the review's basis CONTAINS; the reviewer confirmed it and assigned the other four.",
@@ -124,6 +140,10 @@
     }
   ],
   "basis_note": "Both documents were already held on the detailed Wikimedia assessment and NOTHING WAS FETCHED for this review: the convergent proposition reads the same measurement through the same rules. No SROS engineering validation is among them. The convergence contract's determinism, the witness-key duplicate guard, the Evidence idempotency repair, lineage recovery and passing CI establish that the implementation does what its specification says, and nothing about how dependable the platform's counting is.",
-  "persisted_assessment": null,
-  "persisted_assessment_note": "null until the accountable workflow records it. Filled in with the assessment id, version and timestamp once the reviewer has typed the confirmation, so this file states what its own judgement produced rather than what it hoped to produce."
+  "persisted_assessment": {
+    "id": "19e0ce16-957f-4543-9b15-738a77b13060",
+    "version": 1,
+    "recorded_at": "2026-09-04T06:51:19.661075+00:00"
+  },
+  "persisted_assessment_note": "This field was null until the accountable workflow recorded the assessment, and it was filled in with the id, version and timestamp only after the reviewer had typed the confirmation. It is here so this file states what its own judgement PRODUCED rather than what it hoped to produce, and so the review and the row it created can be read against each other."
 }

@@ -109,6 +109,6 @@ Both documents were already held on the detailed Wikimedia assessment and NOTHIN
 
 ## What it produced
 
-**Nothing yet.** `persisted_assessment` is `null`: the accountable workflow has not recorded this review, so the scope still resolves `NO_APPLICABLE_ASSESSMENT` and every affected Evidence row is still `NON_SCORABLE`.
+Assessment `19e0ce16-957f-4543-9b15-738a77b13060`, version **1**, recorded 2026-09-04T06:51:19.661075+00:00.
 
-null until the accountable workflow records it. Filled in with the assessment id, version and timestamp once the reviewer has typed the confirmation, so this file states what its own judgement produced rather than what it hoped to produce.
+This field was null until the accountable workflow recorded the assessment, and it was filled in with the id, version and timestamp only after the reviewer had typed the confirmation. It is here so this file states what its own judgement PRODUCED rather than what it hoped to produce, and so the review and the row it created can be read against each other.

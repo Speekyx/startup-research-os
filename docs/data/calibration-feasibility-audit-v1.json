@@ -17,45 +17,46 @@
   "totals": {
     "claims": 43,
     "evidence_rows": 57,
-    "claims_with_scorable_evidence": 28,
-    "claims_unavailable": 15,
-    "current_reliability_assessments": 3,
+    "claims_with_scorable_evidence": 34,
+    "claims_unavailable": 9,
+    "current_reliability_assessments": 4,
     "aggregation_status": {
-      "COMPLETE": 28,
-      "UNAVAILABLE": 15
+      "COMPLETE": 34,
+      "UNAVAILABLE": 9
     },
     "evidence_level": {
-      "0": 15,
-      "1": 28
+      "0": 9,
+      "1": 34
     }
   },
   "coverage": {
-    "support_only": 28,
+    "support_only": 34,
     "contradiction_present": 0,
     "mixed_support_and_contradiction": 0,
     "neutral_present": 0,
     "conflict_mass_non_zero": 0,
-    "single_source_claims": 28,
+    "single_source_claims": 34,
     "multi_source_claims": 0,
     "multi_evidence_claims": 8,
-    "scorable_multi_evidence_claims": 2,
+    "scorable_multi_evidence_claims": 8,
     "max_evidence_per_claim": 4,
     "independence_established_claims": 0,
-    "independence_unknown_claims": 28,
-    "evergreen_claims": 28,
+    "independence_unknown_claims": 34,
+    "evergreen_claims": 34,
     "temporally_sensitive_claims": 0,
     "claims_with_a_claim_feature": 0,
-    "distinct_proposition_kinds": 3,
+    "distinct_proposition_kinds": 4,
     "distinct_source_ids": 2,
     "distinct_observation_categories": 1,
     "categorised_market_or_validation": 0
   },
   "limiting_component_counts": {
-    "reliability": 28
+    "reliability": 34
   },
   "distinct_support_strengths": {
     "0.5": 6,
     "0.55": 4,
+    "0.6": 6,
     "0.65": 18
   },
   "reference_target_tables_present": [],
@@ -196,18 +197,20 @@
         "SUPPORTS"
       ],
       "reliability_outcomes": [
-        "NO_APPLICABLE_ASSESSMENT"
+        "RESOLVED"
       ],
-      "aggregation_status": "UNAVAILABLE",
-      "scorable_evidence": 0,
-      "non_scorable_evidence": 3,
-      "support_strength": 0.0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence": 3,
+      "non_scorable_evidence": 0,
+      "support_strength": 0.6,
       "contradiction_strength": 0.0,
-      "supported_mass": 0.0,
+      "supported_mass": 0.6,
       "conflict_mass": 0.0,
-      "uncertainty_mass": 1.0,
-      "evidence_level": 0,
-      "limiting_components": [],
+      "uncertainty_mass": 0.4,
+      "evidence_level": 1,
+      "limiting_components": [
+        "reliability"
+      ],
       "independent_support_groups": 0
     },
     {
@@ -458,18 +461,20 @@
         "SUPPORTS"
       ],
       "reliability_outcomes": [
-        "NO_APPLICABLE_ASSESSMENT"
+        "RESOLVED"
       ],
-      "aggregation_status": "UNAVAILABLE",
-      "scorable_evidence": 0,
-      "non_scorable_evidence": 2,
-      "support_strength": 0.0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence": 2,
+      "non_scorable_evidence": 0,
+      "support_strength": 0.6,
       "contradiction_strength": 0.0,
-      "supported_mass": 0.0,
+      "supported_mass": 0.6,
       "conflict_mass": 0.0,
-      "uncertainty_mass": 1.0,
-      "evidence_level": 0,
-      "limiting_components": [],
+      "uncertainty_mass": 0.4,
+      "evidence_level": 1,
+      "limiting_components": [
+        "reliability"
+      ],
       "independent_support_groups": 0
     },
     {
@@ -1094,18 +1099,20 @@
         "SUPPORTS"
       ],
       "reliability_outcomes": [
-        "NO_APPLICABLE_ASSESSMENT"
+        "RESOLVED"
       ],
-      "aggregation_status": "UNAVAILABLE",
-      "scorable_evidence": 0,
-      "non_scorable_evidence": 3,
-      "support_strength": 0.0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence": 3,
+      "non_scorable_evidence": 0,
+      "support_strength": 0.6,
       "contradiction_strength": 0.0,
-      "supported_mass": 0.0,
+      "supported_mass": 0.6,
       "conflict_mass": 0.0,
-      "uncertainty_mass": 1.0,
-      "evidence_level": 0,
-      "limiting_components": [],
+      "uncertainty_mass": 0.4,
+      "evidence_level": 1,
+      "limiting_components": [
+        "reliability"
+      ],
       "independent_support_groups": 0
     },
     {
@@ -1168,18 +1175,20 @@
         "SUPPORTS"
       ],
       "reliability_outcomes": [
-        "NO_APPLICABLE_ASSESSMENT"
+        "RESOLVED"
       ],
-      "aggregation_status": "UNAVAILABLE",
-      "scorable_evidence": 0,
-      "non_scorable_evidence": 3,
-      "support_strength": 0.0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence": 3,
+      "non_scorable_evidence": 0,
+      "support_strength": 0.6,
       "contradiction_strength": 0.0,
-      "supported_mass": 0.0,
+      "supported_mass": 0.6,
       "conflict_mass": 0.0,
-      "uncertainty_mass": 1.0,
-      "evidence_level": 0,
-      "limiting_components": [],
+      "uncertainty_mass": 0.4,
+      "evidence_level": 1,
+      "limiting_components": [
+        "reliability"
+      ],
       "independent_support_groups": 0
     },
     {
@@ -1466,18 +1475,20 @@
         "SUPPORTS"
       ],
       "reliability_outcomes": [
-        "NO_APPLICABLE_ASSESSMENT"
+        "RESOLVED"
       ],
-      "aggregation_status": "UNAVAILABLE",
-      "scorable_evidence": 0,
-      "non_scorable_evidence": 3,
-      "support_strength": 0.0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence": 3,
+      "non_scorable_evidence": 0,
+      "support_strength": 0.6,
       "contradiction_strength": 0.0,
-      "supported_mass": 0.0,
+      "supported_mass": 0.6,
       "conflict_mass": 0.0,
-      "uncertainty_mass": 1.0,
-      "evidence_level": 0,
-      "limiting_components": [],
+      "uncertainty_mass": 0.4,
+      "evidence_level": 1,
+      "limiting_components": [
+        "reliability"
+      ],
       "independent_support_groups": 0
     },
     {
@@ -1502,18 +1513,20 @@
         "SUPPORTS"
       ],
       "reliability_outcomes": [
-        "NO_APPLICABLE_ASSESSMENT"
+        "RESOLVED"
       ],
-      "aggregation_status": "UNAVAILABLE",
-      "scorable_evidence": 0,
-      "non_scorable_evidence": 4,
-      "support_strength": 0.0,
+      "aggregation_status": "COMPLETE",
+      "scorable_evidence": 4,
+      "non_scorable_evidence": 0,
+      "support_strength": 0.6,
       "contradiction_strength": 0.0,
-      "supported_mass": 0.0,
+      "supported_mass": 0.6,
       "conflict_mass": 0.0,
-      "uncertainty_mass": 1.0,
-      "evidence_level": 0,
-      "limiting_components": [],
+      "uncertainty_mass": 0.4,
+      "evidence_level": 1,
+      "limiting_components": [
+        "reliability"
+      ],
       "independent_support_groups": 0
     },
     {

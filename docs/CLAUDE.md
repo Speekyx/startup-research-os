@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.77
-Last amended: 2026-09-04 (Sprint 1 / Mission 1.44)
+Version: 1.78
+Last amended: 2026-09-04 (Sprint 1 / Mission 1.44.1)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.78 | 2026-09-04 | **WIKIMEDIA_CONVERGENT_OPERATOR_RELIABILITY_DECISION_PERSISTED: `max(members)` received FOUR real items, and the number still did not move.** The operator typed the confirmation, and **two counters moved while thirteen did not**: ReliabilityAssessments 3 -> **4**, basis rows 10 -> **12**. Assessment `19e0ce16` v1, `0.6`, HUMAN_REVIEW, thibchm, `human-reliability-assessment-rubric@1.0.0` -- the **second** assessment that can say which procedure produced it, while both pre-rubric rows keep NULL because backfilling would fabricate the provenance the column records. **ALL 18 CONVERGENT ROWS RESOLVE AND NOT ONE STORES THE NUMBER**: `scoring.evidence.reliability` is NULL on all 57 rows before and after. **36 leak checks, 0 leaks** -- a fourth current assessment is a fourth set of ways to leak, and the detailed Wikimedia `0.65` sharing FOUR of five scope fields still does not reach this scope. **ALL SIX MULTI-EVIDENCE CLAIMS BECAME SCORABLE, 2 -> 8 corpus-wide**, and the grouping arithmetic finally ran at cardinality above two: `max(members)` received **4, 3, 3, 3, 3, 2** real canonical items with `collapsed_member_count` 3, 2, 2, 2, 2, 1. **AND THE RESULT IS `IDENTICAL_TO_RELIABILITY_PASS_THROUGH` ON ALL SIX, WHICH MISSION 1.43 PREDICTED ALGEBRAICALLY**: one group per Claim, saturation over one group is that group's strength, group strength is `max()` over identical reliability-limited `q` values, and B-2 reports the same maximum. So §18's **`AGGREGATION_MECHANISM_STILL_UNIDENTIFIABLE_FROM_REAL_CORPUS`** is reported explicitly, and **calibration is NOT recommended merely because the scorable count increased**. `q = 0.6` with **`reliability` limiting on 34 of 34**, masses 0.6/0/0/0.4, EvidenceScore 60.0, **level 1 blocked on *2 supporting groups of established independence, found 0 (plus 1 unknown-provenance group, which does not count)*** -- reliability reaches none of the three blockers. **FOUR WITNESSES IS NOT CORROBORATION**: one publisher, one counting methodology, one classification mechanism, one pipeline, independence UNKNOWN on all 18 rows, **0 groups created**, and the reviewer wrote that sentence into the stated limitation themselves. Target variable `{0.5: 6, 0.55: 4, 0.6: 6, 0.65: 18}` -- a fourth value and not a fourth kind of thing. **THE MIDPOINT COINCIDENCE WAS NOT TREATED AS EVIDENCE**: `0.6` is exactly halfway between the detailed `0.65` and the convergent TED `0.55`, an averaging test was written, it failed, and **the test was removed rather than the operator's value questioned** -- software cannot prove a number's provenance from the number, so what is asserted is only that it equals none of the three it might have been copied from. **A PRE-PERSISTENCE TEST CLASS ASSERTED THE ABSENCE OF THE ASSESSMENT** and was re-pointed rather than deleted, and it caught a real omission: the rendered review page still said *Nothing yet*. 0 model calls, 0 network requests, 0 calibration labels, 0 parameters fitted, 0 scores, 0 Opportunity changes, 0 embeddings, profile still UNCALIBRATED, Problem-Family still PARKED |
 | 1.77 | 2026-09-04 | **READY_FOR_WIKIMEDIA_CONVERGENT_RELIABILITY_REVIEW: the closest near miss yet, and the distinction between *nothing* and *not enough*.** 18 Evidence across 6 Claims, cardinalities **{4,3,3,3,3,2}**, collapsing to **exactly one** five-part scope resolving NO_APPLICABLE_ASSESSMENT. **THE ALMOST-MATCH IS TIGHTER THAN TED'S**: same publisher, same resource, same record kind, same claim type, and a reviewed **0.65 sitting one field away** -- the most inviting number in the repository to reach for. `proposition_kind` alone decides it, verified through the REAL resolver in both directions and by **30 leak checks, 0 leaks**, probing EVERY proposition kind in the corpus rather than a chosen few. **SOFTWARE ASSERTED EXACTLY ONE STATE AND DELIBERATELY NOT THE OBVIOUS ONE.** Mission 1.42 could assert `NOT_ESTABLISHED` for TED's mutability because the basis said NOTHING; here it says SOMETHING AND NOT ENOUGH -- a dated known-problems list records a 2016 user-agent classification incident and states no revision policy -- and *something and not enough* is a judgement about SUFFICIENCY, so `HISTORICAL_MUTABILITY` was left **blank**, which is precisely where a helpful generator would have filled it in. The one assertion is `SOURCE_SIDE_CHECKABILITY = NOT_ESTABLISHED`, because the basis is two documents and neither addresses what the source exposes for inspection. **THE NEW QUESTION CONVERGENCE INTRODUCES**: multiple witnesses of ONE METHODOLOGY do not insure against a METHODOLOGY-LEVEL failure -- a localised problem matters LESS to an existential, and a systematic reclassification matters MORE, because the witnesses share a counting rule and their independence is UNKNOWN. So the known-problems document is **PARTIALLY_APPLICABLE with its weight moving in two directions at once**, and the reviewer decides which governs. **NOTHING WAS FETCHED** -- the convergent proposition reads the same measurement through the same rules. **A THIRD DEFECT OF THE SAME SHAPE, FOUND BY §37 ON ITS FIRST RUN**: `ReliabilityBinding.to_json()` called `.isoformat()` on a field four generators already pass as `None`, and had never crashed because NO LIVE BINDING HAD EVER BEEN SERIALISED in this scope. 0 assessments, 0 basis rows, 0 network requests, 0 model calls, every counter unchanged, all 18 rows still NON_SCORABLE and all six Claims still UNAVAILABLE |
 | 1.76 | 2026-09-04 | **CALIBRATION_REFERENCE_CORPUS_MEANINGFULLY_EXPANDED, and the measurement that reframes what expansion is FOR.** Measured over all 37 Claims before any work: **0 with more than one support group, 0 where the aggregator differs from the Mission 1.37 B-2 pass-through baseline** -- and with ONE group that identity is **ALGEBRAIC, not incidental**: saturation over a single group is that group's strength, which is `max(members)`, which is what B-2 reports. **So no quantity of additional single-group Evidence can ever make them differ**; the aggregation layer becomes measurable only through ESTABLISHED INDEPENDENCE or CONTRADICTION, and a §37 fixture proves the converse by giving two `KNOWN_INDEPENDENT` items and watching support strength EXCEED pass-through. **A SECOND CONVERGENCE CONTRACT, FROM DATA ALREADY HELD**: `platform-counted-content-request-change-witnessed@1.0.0` over the 18 Wikimedia Signals, **0 network requests** -- which was not merely cheaper but the only open door, because Wikimedia acquisition is currently blocked by three unsatisfied conditions in this deployment. Claims 37 -> **43**, Evidence 39 -> **57**, Claims with >1 Evidence 2 -> **8**, and **max Evidence per Claim 2 -> 4**: group cardinality varies for the first time `{1,2}` -> `{1,2,3,4}`. **THE SCORABLE OPTION WAS REFUSED**: another TED division would have been immediately scorable and, by the finding above, could not have taught anything -- choosing it because a number would appear is choosing the appearance of progress. **`audience_class` STAYS IDENTITY** because Mission 1.19 made it REQUIRED so one item over one period cannot carry two counts under one name. **NOTHING WAS MANUFACTURED**: no contradiction (a decrease does not contradict an increase, and an existential is not falsified by a counterexample), no independence (one publisher, one pipeline, one method), **no temporality -- and the reason is architectural: every OBSERVED restatement is a historical fact about what a source published, and a historical fact does not decay**, even where the source's timestamps are documented. Secondary **NEW_CORPUS_SHAPE_NON_SCORABLE_MISSING_RELIABILITY**: a new kind is a new scope and none was invented or copied. **Leakage-safe splits are still NOT plausible** -- six new Claims share one scope and one kind, so they are ONE group. 0 model calls, 0 embeddings, 0 assessments, 0 independence groups, 0 scores, profile still UNCALIBRATED |
 | 1.75 | 2026-09-04 | **SECOND_PILOT_OPERATOR_RELIABILITY_DECISION_PERSISTED: `max(members)` received TWO REAL ITEMS for the first time, and the number did not move.** The operator typed the confirmation, and **two counters moved while thirteen did not**: ReliabilityAssessments 2 -> **3**, basis rows 6 -> **10**. Assessment `d1afa4be` v1, `0.55`, HUMAN_REVIEW, thibchm, `human-reliability-assessment-rubric@1.0.0` -- **the first assessment in this repository that can say which procedure produced it**, while both historical rows keep NULL because they predate the rubric and backfilling would fabricate provenance. **ALL SIX CONVERGENT ROWS RESOLVE and NOT ONE STORES THE NUMBER**: `scoring.evidence.reliability` is NULL on all 39 rows, because reliability binds late and a stale copy could outlive its assessment. **9 leak checks, 0 leaks** -- a third current assessment is a third set of ways to leak, and neither TED scope reaches the other on `proposition_kind` alone. **BOTH REAL MULTI-EVIDENCE CLAIMS BECAME SCORABLE, 0 -> 2**, `raw = 2`, `scorable = 2`, and the grouping arithmetic finally ran: **ONE support group of kind UNKNOWN with TWO members and `collapsed_member_count` 1**. Mission 1.41 had `raw = 2` with `scorable = 0`, so `max(members)` had never seen both. **AND THE RESULT IS `IDENTICAL_TO_RELIABILITY_PASS_THROUGH`, WHICH IS NOT A FAILURE**: both rows share one assessment, independence is UNKNOWN so they collapse into one group, and `max()` of two identical `q` values is that value -- the full aggregator and Mission 1.37's B-2 baseline agree **because the corpus gives them nothing to disagree about**. `q = 0.55` with **`reliability` limiting on 28 of 28**, masses 0.55/0/0/0.45, EvidenceScore 55.0, **level 1 blocked on *2 supporting groups of established independence, found 0*** -- reliability reaches none of the three blockers. **DISJOINT IS NOT INDEPENDENCE**, 0 groups created. Target variable `{0.5: 6, 0.55: 4, 0.65: 18}`, still all reviewed reliability. **A THIRD DEFECT OF THE SAME SHAPE**: the reporter read `group.members`, the attribute is `member_evidence_ids`, and `max(..., default=0)` never evaluated its generator while zero groups existed -- **a branch no data has ever entered is not tested by a passing suite**, found by the operator running it. 0 model calls, 0 acquisitions, 0 scores, profile still UNCALIBRATED |
@@ -407,6 +408,78 @@ Mission 1.43's finding still governs, these six Claims each have one provenance
 group, and with one group the full aggregator is algebraically the pass-through
 baseline. The next strategic mission remains an **independence-capable evidence
 route**.
+
+
+**COMPLETED IN 1.78 (Mission 1.44.1, `mission-1.44.1-report.md`,
+`wikimedia-convergent-operator-reliability-review-v1.md`,
+`wikimedia-convergent-reliability-resolution-v1.json`). The operator typed it,
+`max(members)` received FOUR real items, and the prediction held.**
+
+    ReliabilityAssessments  3 -> 4        basis rows  10 -> 12
+    convergent rows RESOLVED  18/18       evidence.reliability written  0
+    scorable multi-Evidence Claims  2 -> 8   max(members) received  4,3,3,3,3,2
+    leak checks  36 run, 0 leaks          independence groups  0
+
+- **`WIKIMEDIA_CONVERGENT_OPERATOR_RELIABILITY_DECISION_PERSISTED`**, with
+  **`AGGREGATION_MECHANISM_STILL_UNIDENTIFIABLE_FROM_REAL_CORPUS`** reported
+  beside it, because §18 requires saying so when support groups per Claim is 1
+  everywhere and contradiction cases are 0.
+- **THE OPERATOR SUPPLIED THE FOUR DIMENSIONS SOFTWARE REFUSED TO FILL IN.**
+  Mission 1.44 asserted only `SOURCE_SIDE_CHECKABILITY = NOT_ESTABLISHED` and
+  left `HISTORICAL_MUTABILITY` **blank** because *something and not enough* is a
+  judgement about sufficiency. It came back `PARTIALLY_DOCUMENTED` -- the answer a
+  helpful generator would have guessed, supplied by the person entitled to guess
+  it. Assessment `19e0ce16` v1, `0.6`, `HUMAN_REVIEW`, `thibchm`,
+  `human-reliability-assessment-rubric@1.0.0`.
+- **TWO `UNSURE` MATERIALITY ANSWERS SURVIVED AS `UNSURE`**, and both hard-stop
+  answers that look inconsistent are not: `SOURCE_SIDE_CHECKABILITY` is
+  `NOT_ESTABLISHED` while `SOURCE_OBSERVATIONS_NOT_RECOVERABLE` is `NO`, because
+  the first is a fact about the basis and the second would be the stronger claim
+  that the observations are KNOWN to be unrecoverable. **Software derived neither
+  from the other.**
+- **`max(members)` FINALLY RECEIVED MORE THAN TWO.** Four real canonical items
+  once, three four times, two once, with `collapsed_member_count` one lower each
+  time. Mission 1.42.1 was the first time it received two; group cardinality above
+  two had never occurred in this repository.
+- **AND THE NUMBER STILL DID NOT MOVE.**
+  `IDENTICAL_TO_RELIABILITY_PASS_THROUGH` on all six, and Mission 1.43 predicted
+  it before this data existed: one group per Claim, saturation over one group is
+  that group's strength, group strength is `max()` over identical
+  reliability-limited `q` values, and B-2 reports the same maximum. **What is new
+  is that the mechanism ran at cardinality four, not that it produced more.**
+  `q = 0.6` limited by `reliability` on **34 of 34**, masses 0.6 / 0 / 0 / 0.4,
+  EvidenceScore **60.0**, level **1**, blocked on *"2 supporting groups of
+  established independence, found 0 (plus 1 unknown-provenance group, which does
+  not count)"*.
+- **FOUR WITNESSES IS NOT CORROBORATION, AND THE REVIEWER WROTE THAT SENTENCE
+  THEMSELVES.** The stated limitation says witness cardinality does not establish
+  independent corroboration -- one publisher, one counting methodology, one
+  requester-classification mechanism, one pipeline, independence `UNKNOWN` on all
+  18 rows, **0 groups created**.
+- **THE MIDPOINT COINCIDENCE WAS NOT TREATED AS EVIDENCE.** `0.6` is exactly
+  halfway between the detailed Wikimedia `0.65` and the convergent TED `0.55`. An
+  averaging check was written, it failed, and **the test was removed rather than
+  the operator's value questioned**: the value was supplied against a recorded
+  ordinal profile, the two historical values belong to different scopes, and
+  **software cannot prove the provenance of a number from the number**. What is
+  asserted is only the checkable thing -- that it equals none of the three values
+  it might have been copied from.
+- **A PRE-PERSISTENCE TEST CLASS ASSERTED THE ABSENCE OF THE ASSESSMENT, AND
+  RE-POINTING IT CAUGHT A REAL OMISSION.** The rendered review page still read
+  *"Nothing yet"* because it had not been re-rendered after the link was written.
+  Same repair shape as Missions 1.36.1, 1.40 and 1.41: **a test asserting that
+  nothing was ever persisted is a test asserting the review is never answered.**
+- **NOTHING ELSE MOVED.** 0 network requests, 0 model calls, 0 calibration labels,
+  0 parameters fitted, 0 Scores, 0 Opportunity changes, 0 rankings, 0 embeddings.
+  The three historical assessments are unchanged and unsuperseded, both pre-rubric
+  rows keep NULL provenance, and `REFERENCE_PROFILE_V1` is still `UNCALIBRATED`.
+
+**The next mission is NOT calibration**, and the reason is arithmetic rather than
+caution: labelling this corpus would ask a person to compare cases the aggregator
+itself cannot distinguish. The target is **ESTABLISHED INDEPENDENCE** --
+**Mission 1.45 -- Independent Statistical Evidence Route Feasibility V1**, over
+Eurostat or FRED beside World Bank, both eligible under
+`local-private-research-v1` today. **It was not started.**
 
 ### One provenance group makes the aggregator and the baseline the same number
 

@@ -1,0 +1,1285 @@
+{
+  "$comment": "Mission 1.44.1. What the operator's decision produced, measured through the REAL resolver and the REAL aggregator. UNCALIBRATED, DIAGNOSTIC ONLY, NOT AN OPPORTUNITY SCORE, NOT A PROBABILITY. No score is persisted, no parameter is fitted, and no independence group is created.",
+  "$banner": [
+    "UNCALIBRATED",
+    "DIAGNOSTIC ONLY",
+    "NOT AN OPPORTUNITY SCORE",
+    "NOT A PROBABILITY"
+  ],
+  "artifact_version": "wikimedia-convergent-reliability-resolution@1.0.0",
+  "generated_by": "mission-1.44.1",
+  "persisted_assessment": {
+    "id": "19e0ce16-957f-4543-9b15-738a77b13060",
+    "version": 1,
+    "reliability": 0.6,
+    "origin": "HUMAN_REVIEW",
+    "reviewed_by": "thibchm",
+    "review_rubric_id": "human-reliability-assessment-rubric",
+    "review_rubric_version": "1.0.0",
+    "recorded_at": "2026-09-04T06:51:19.661075+00:00",
+    "basis_rows": 2
+  },
+  "resolution": {
+    "evidence_rows": 18,
+    "resolved": 18,
+    "evidence_reliability_column_non_null": 0,
+    "bindings": [
+      {
+        "evidence_id": "3fd59732-af9b-4dbe-86f7-9acca886e391",
+        "claim_id": "1324d79c-54c6-4bba-9d7f-2320133f2ea8",
+        "content_id": "Kubernetes",
+        "direction_fact": "INCREASING",
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm",
+        "review_rubric_id": "human-reliability-assessment-rubric",
+        "review_rubric_version": "1.0.0",
+        "evidence_reliability_column": null
+      },
+      {
+        "evidence_id": "8c8f097d-d6d9-460f-a36e-0b7ef875a4a3",
+        "claim_id": "1324d79c-54c6-4bba-9d7f-2320133f2ea8",
+        "content_id": "Kubernetes",
+        "direction_fact": "INCREASING",
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm",
+        "review_rubric_id": "human-reliability-assessment-rubric",
+        "review_rubric_version": "1.0.0",
+        "evidence_reliability_column": null
+      },
+      {
+        "evidence_id": "fd6c1111-43f3-4f03-8426-243b678bb382",
+        "claim_id": "1324d79c-54c6-4bba-9d7f-2320133f2ea8",
+        "content_id": "Kubernetes",
+        "direction_fact": "INCREASING",
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm",
+        "review_rubric_id": "human-reliability-assessment-rubric",
+        "review_rubric_version": "1.0.0",
+        "evidence_reliability_column": null
+      },
+      {
+        "evidence_id": "17ab3887-7caf-4a81-a7d1-856bfbbdbdac",
+        "claim_id": "39449935-d841-4e76-b920-dd727204c199",
+        "content_id": "Docker_(software)",
+        "direction_fact": "DECREASING",
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm",
+        "review_rubric_id": "human-reliability-assessment-rubric",
+        "review_rubric_version": "1.0.0",
+        "evidence_reliability_column": null
+      },
+      {
+        "evidence_id": "261994f7-e52e-4e40-a879-262192659696",
+        "claim_id": "39449935-d841-4e76-b920-dd727204c199",
+        "content_id": "Docker_(software)",
+        "direction_fact": "DECREASING",
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm",
+        "review_rubric_id": "human-reliability-assessment-rubric",
+        "review_rubric_version": "1.0.0",
+        "evidence_reliability_column": null
+      },
+      {
+        "evidence_id": "792d07dc-e6ec-4c9e-8217-41318588f28d",
+        "claim_id": "9bda8081-aebb-48a7-a31d-3fab8e2345a6",
+        "content_id": "Kubernetes",
+        "direction_fact": "DECREASING",
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm",
+        "review_rubric_id": "human-reliability-assessment-rubric",
+        "review_rubric_version": "1.0.0",
+        "evidence_reliability_column": null
+      },
+      {
+        "evidence_id": "d0983e5c-ea2a-44b3-8de4-8cc70e8a74a3",
+        "claim_id": "9bda8081-aebb-48a7-a31d-3fab8e2345a6",
+        "content_id": "Kubernetes",
+        "direction_fact": "DECREASING",
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm",
+        "review_rubric_id": "human-reliability-assessment-rubric",
+        "review_rubric_version": "1.0.0",
+        "evidence_reliability_column": null
+      },
+      {
+        "evidence_id": "f4a8b828-a5d2-425e-a4c4-4a595616037d",
+        "claim_id": "9bda8081-aebb-48a7-a31d-3fab8e2345a6",
+        "content_id": "Kubernetes",
+        "direction_fact": "DECREASING",
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm",
+        "review_rubric_id": "human-reliability-assessment-rubric",
+        "review_rubric_version": "1.0.0",
+        "evidence_reliability_column": null
+      },
+      {
+        "evidence_id": "15964f84-3748-45a1-84c7-ad0637f300e8",
+        "claim_id": "a4809b1a-56a4-4ae2-a2e3-9ee2f68e4dd3",
+        "content_id": "Podman",
+        "direction_fact": "INCREASING",
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm",
+        "review_rubric_id": "human-reliability-assessment-rubric",
+        "review_rubric_version": "1.0.0",
+        "evidence_reliability_column": null
+      },
+      {
+        "evidence_id": "c2d04ad8-14af-46a3-b465-8e992125b107",
+        "claim_id": "a4809b1a-56a4-4ae2-a2e3-9ee2f68e4dd3",
+        "content_id": "Podman",
+        "direction_fact": "INCREASING",
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm",
+        "review_rubric_id": "human-reliability-assessment-rubric",
+        "review_rubric_version": "1.0.0",
+        "evidence_reliability_column": null
+      },
+      {
+        "evidence_id": "cdf30329-463e-46b1-bbe9-c9fb58c3ee65",
+        "claim_id": "a4809b1a-56a4-4ae2-a2e3-9ee2f68e4dd3",
+        "content_id": "Podman",
+        "direction_fact": "INCREASING",
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm",
+        "review_rubric_id": "human-reliability-assessment-rubric",
+        "review_rubric_version": "1.0.0",
+        "evidence_reliability_column": null
+      },
+      {
+        "evidence_id": "38f0b7c9-aeea-4f45-a170-a5163b22b3be",
+        "claim_id": "dff657c2-3ee8-429c-b308-4e0d8f3894d2",
+        "content_id": "Podman",
+        "direction_fact": "DECREASING",
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm",
+        "review_rubric_id": "human-reliability-assessment-rubric",
+        "review_rubric_version": "1.0.0",
+        "evidence_reliability_column": null
+      },
+      {
+        "evidence_id": "a5c63adb-06d9-4f4f-9445-7fda4493d7c8",
+        "claim_id": "dff657c2-3ee8-429c-b308-4e0d8f3894d2",
+        "content_id": "Podman",
+        "direction_fact": "DECREASING",
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm",
+        "review_rubric_id": "human-reliability-assessment-rubric",
+        "review_rubric_version": "1.0.0",
+        "evidence_reliability_column": null
+      },
+      {
+        "evidence_id": "c94b88c9-7eaa-48c8-a248-c42ae0bf87b7",
+        "claim_id": "dff657c2-3ee8-429c-b308-4e0d8f3894d2",
+        "content_id": "Podman",
+        "direction_fact": "DECREASING",
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm",
+        "review_rubric_id": "human-reliability-assessment-rubric",
+        "review_rubric_version": "1.0.0",
+        "evidence_reliability_column": null
+      },
+      {
+        "evidence_id": "637d5ff5-f33a-43ec-8353-2366fb2af211",
+        "claim_id": "e740d102-4bf2-4f9c-bc01-e82c9fb4ac99",
+        "content_id": "Docker_(software)",
+        "direction_fact": "INCREASING",
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm",
+        "review_rubric_id": "human-reliability-assessment-rubric",
+        "review_rubric_version": "1.0.0",
+        "evidence_reliability_column": null
+      },
+      {
+        "evidence_id": "9c502023-3aca-4ab5-ba45-745feb7aeeee",
+        "claim_id": "e740d102-4bf2-4f9c-bc01-e82c9fb4ac99",
+        "content_id": "Docker_(software)",
+        "direction_fact": "INCREASING",
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm",
+        "review_rubric_id": "human-reliability-assessment-rubric",
+        "review_rubric_version": "1.0.0",
+        "evidence_reliability_column": null
+      },
+      {
+        "evidence_id": "c2afb9fe-03ef-44a7-a88e-6e82f14bf860",
+        "claim_id": "e740d102-4bf2-4f9c-bc01-e82c9fb4ac99",
+        "content_id": "Docker_(software)",
+        "direction_fact": "INCREASING",
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm",
+        "review_rubric_id": "human-reliability-assessment-rubric",
+        "review_rubric_version": "1.0.0",
+        "evidence_reliability_column": null
+      },
+      {
+        "evidence_id": "faab3b4e-85fb-4257-98b5-66ca16908d75",
+        "claim_id": "e740d102-4bf2-4f9c-bc01-e82c9fb4ac99",
+        "content_id": "Docker_(software)",
+        "direction_fact": "INCREASING",
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "reviewed_by": "thibchm",
+        "review_rubric_id": "human-reliability-assessment-rubric",
+        "review_rubric_version": "1.0.0",
+        "evidence_reliability_column": null
+      }
+    ]
+  },
+  "leak_checks": {
+    "run": 36,
+    "leaks_found": 0,
+    "checks": [
+      {
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_proposition_kind": "source_reported_procurement_value_contrast",
+        "probed_proposition_kind": "source_reported_procurement_value_contrast",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": true,
+        "resolved": true,
+        "outcome": "RESOLVED"
+      },
+      {
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_proposition_kind": "source_reported_procurement_value_contrast",
+        "probed_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_proposition_kind": "source_reported_procurement_value_contrast",
+        "probed_proposition_kind": "platform_counted_content_request_change",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_proposition_kind": "source_reported_procurement_value_contrast",
+        "probed_proposition_kind": "platform_counted_content_request_change_witnessed",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_proposition_kind": "source_reported_procurement_value_contrast",
+        "probed_proposition_kind": "community_site_published_questions_carrying_tag",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_proposition_kind": "source_reported_procurement_value_contrast",
+        "probed_proposition_kind": "community_site_questions_without_accepted_answer",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_proposition_kind": "source_reported_procurement_value_contrast",
+        "probed_proposition_kind": "source_reported_metric_period_change",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_proposition_kind": "source_reported_procurement_value_contrast",
+        "probed_proposition_kind": "source_reported_term_frequency_change",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_proposition_kind": "source_reported_procurement_value_contrast",
+        "probed_proposition_kind": "source_reported_term_frequency_contrast",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_proposition_kind": "platform_counted_content_request_change",
+        "probed_proposition_kind": "source_reported_procurement_value_contrast",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_proposition_kind": "platform_counted_content_request_change",
+        "probed_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_proposition_kind": "platform_counted_content_request_change",
+        "probed_proposition_kind": "platform_counted_content_request_change",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": true,
+        "resolved": true,
+        "outcome": "RESOLVED"
+      },
+      {
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_proposition_kind": "platform_counted_content_request_change",
+        "probed_proposition_kind": "platform_counted_content_request_change_witnessed",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_proposition_kind": "platform_counted_content_request_change",
+        "probed_proposition_kind": "community_site_published_questions_carrying_tag",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_proposition_kind": "platform_counted_content_request_change",
+        "probed_proposition_kind": "community_site_questions_without_accepted_answer",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_proposition_kind": "platform_counted_content_request_change",
+        "probed_proposition_kind": "source_reported_metric_period_change",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_proposition_kind": "platform_counted_content_request_change",
+        "probed_proposition_kind": "source_reported_term_frequency_change",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_proposition_kind": "platform_counted_content_request_change",
+        "probed_proposition_kind": "source_reported_term_frequency_contrast",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "probed_proposition_kind": "source_reported_procurement_value_contrast",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "probed_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": true,
+        "resolved": true,
+        "outcome": "RESOLVED"
+      },
+      {
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "probed_proposition_kind": "platform_counted_content_request_change",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "probed_proposition_kind": "platform_counted_content_request_change_witnessed",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "probed_proposition_kind": "community_site_published_questions_carrying_tag",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "probed_proposition_kind": "community_site_questions_without_accepted_answer",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "probed_proposition_kind": "source_reported_metric_period_change",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "probed_proposition_kind": "source_reported_term_frequency_change",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "probed_proposition_kind": "source_reported_term_frequency_contrast",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_proposition_kind": "platform_counted_content_request_change_witnessed",
+        "probed_proposition_kind": "source_reported_procurement_value_contrast",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_proposition_kind": "platform_counted_content_request_change_witnessed",
+        "probed_proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_proposition_kind": "platform_counted_content_request_change_witnessed",
+        "probed_proposition_kind": "platform_counted_content_request_change",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_proposition_kind": "platform_counted_content_request_change_witnessed",
+        "probed_proposition_kind": "platform_counted_content_request_change_witnessed",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": true,
+        "resolved": true,
+        "outcome": "RESOLVED"
+      },
+      {
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_proposition_kind": "platform_counted_content_request_change_witnessed",
+        "probed_proposition_kind": "community_site_published_questions_carrying_tag",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_proposition_kind": "platform_counted_content_request_change_witnessed",
+        "probed_proposition_kind": "community_site_questions_without_accepted_answer",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_proposition_kind": "platform_counted_content_request_change_witnessed",
+        "probed_proposition_kind": "source_reported_metric_period_change",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_proposition_kind": "platform_counted_content_request_change_witnessed",
+        "probed_proposition_kind": "source_reported_term_frequency_change",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      },
+      {
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_proposition_kind": "platform_counted_content_request_change_witnessed",
+        "probed_proposition_kind": "source_reported_term_frequency_contrast",
+        "only_field_differing": "proposition_kind",
+        "scopes_identical": false,
+        "resolved": false,
+        "outcome": "NO_APPLICABLE_ASSESSMENT"
+      }
+    ]
+  },
+  "current_assessments": [
+    {
+      "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+      "version": 1,
+      "scope": {
+        "source_id": "ted-eu",
+        "resource_id": "notices/eforms-contract-and-award",
+        "record_kind_id": "procurement_notice",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "source_reported_procurement_value_contrast"
+      },
+      "reliability": 0.5,
+      "reviewed_by": "thibchm",
+      "review_rubric": null,
+      "is_the_scope_under_review": false
+    },
+    {
+      "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+      "version": 1,
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "reliability": 0.65,
+      "reviewed_by": "thibchm",
+      "review_rubric": null,
+      "is_the_scope_under_review": false
+    },
+    {
+      "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+      "version": 1,
+      "scope": {
+        "source_id": "ted-eu",
+        "resource_id": "notices/eforms-contract-and-award",
+        "record_kind_id": "procurement_notice",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "source_published_classification_value_contrast_witnessed"
+      },
+      "reliability": 0.55,
+      "reviewed_by": "thibchm",
+      "review_rubric": "human-reliability-assessment-rubric@1.0.0",
+      "is_the_scope_under_review": false
+    },
+    {
+      "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+      "version": 1,
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change_witnessed"
+      },
+      "reliability": 0.6,
+      "reviewed_by": "thibchm",
+      "review_rubric": "human-reliability-assessment-rubric@1.0.0",
+      "is_the_scope_under_review": true
+    }
+  ],
+  "aggregation_diagnostic": {
+    "$note": "The first time `max(members)` receives groups of THREE and FOUR real canonical items. It is not corroboration: every witness of a Claim sits in ONE unknown-provenance group, because independence is UNKNOWN.",
+    "independence_groups_in_deployment": 0,
+    "claims": [
+      {
+        "claim_id": "e740d102-4bf2-4f9c-bc01-e82c9fb4ac99",
+        "content_id": "Docker_(software)",
+        "direction_fact": "INCREASING",
+        "audience_class": "user",
+        "temporality": "EVERGREEN",
+        "claim_feature": null,
+        "raw_evidence_count": 4,
+        "scorable_evidence_count": 4,
+        "aggregation_status": "COMPLETE",
+        "contributions": [
+          {
+            "evidence_id": "637d5ff5-f33a-43ec-8353-2366fb2af211",
+            "relevance": 1.0,
+            "directness": 1.0,
+            "reliability": 0.6,
+            "extraction_confidence": 1.0,
+            "freshness": 1.0,
+            "scorable": true,
+            "q": 0.6,
+            "limiting_component": "reliability"
+          },
+          {
+            "evidence_id": "9c502023-3aca-4ab5-ba45-745feb7aeeee",
+            "relevance": 1.0,
+            "directness": 1.0,
+            "reliability": 0.6,
+            "extraction_confidence": 1.0,
+            "freshness": 1.0,
+            "scorable": true,
+            "q": 0.6,
+            "limiting_component": "reliability"
+          },
+          {
+            "evidence_id": "c2afb9fe-03ef-44a7-a88e-6e82f14bf860",
+            "relevance": 1.0,
+            "directness": 1.0,
+            "reliability": 0.6,
+            "extraction_confidence": 1.0,
+            "freshness": 1.0,
+            "scorable": true,
+            "q": 0.6,
+            "limiting_component": "reliability"
+          },
+          {
+            "evidence_id": "faab3b4e-85fb-4257-98b5-66ca16908d75",
+            "relevance": 1.0,
+            "directness": 1.0,
+            "reliability": 0.6,
+            "extraction_confidence": 1.0,
+            "freshness": 1.0,
+            "scorable": true,
+            "q": 0.6,
+            "limiting_component": "reliability"
+          }
+        ],
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 4,
+        "collapsed_member_count": 3,
+        "support_groups": [
+          {
+            "group_id": "__unknown_independence__",
+            "kind": "UNKNOWN",
+            "direction": "SUPPORTS",
+            "strength": 0.6,
+            "representative_evidence_id": "637d5ff5-f33a-43ec-8353-2366fb2af211",
+            "member_evidence_ids": [
+              "637d5ff5-f33a-43ec-8353-2366fb2af211",
+              "9c502023-3aca-4ab5-ba45-745feb7aeeee",
+              "c2afb9fe-03ef-44a7-a88e-6e82f14bf860",
+              "faab3b4e-85fb-4257-98b5-66ca16908d75"
+            ],
+            "collapsed_member_count": 3
+          }
+        ],
+        "established_independence_groups": 0,
+        "unknown_independence_count": 4,
+        "independence_groups_created": 0,
+        "masses": {
+          "support_strength": 0.6,
+          "contradiction_strength": 0.0,
+          "supported_mass": 0.6,
+          "contradicted_mass": 0.0,
+          "conflict_mass": 0.0,
+          "uncertainty_mass": 0.4
+        },
+        "evidence_score": 60.0,
+        "evidence_level": {
+          "evidence_level": 1,
+          "label": "Weak Signal",
+          "reasons": [
+            "4 scorable supporting record(s)"
+          ],
+          "blocked_reasons": [
+            "Repeated Signal needs 2 supporting groups of established independence, found 0 (plus 1 unknown-provenance group, which does not count)",
+            "Market Evidence needs a supporting record categorised MARKET_ACTIVITY or DIRECT_VALIDATION with established provenance; quantity of opinion cannot substitute for it",
+            "Direct Validation needs a supporting record categorised DIRECT_VALIDATION with established provenance"
+          ]
+        },
+        "limiting_components": [
+          "reliability"
+        ],
+        "reliability_pass_through_baseline": 0.6,
+        "versus_reliability_pass_through": "IDENTICAL_TO_RELIABILITY_PASS_THROUGH",
+        "multi_evidence_verdict": "MULTI_EVIDENCE_PROCESSING_OCCURRED / NO_INDEPENDENT_CORROBORATION",
+        "contradiction_case": "NO_REAL_CONTRADICTION_CASE_YET",
+        "profile_status": "UNCALIBRATED",
+        "calibrated": false
+      },
+      {
+        "claim_id": "1324d79c-54c6-4bba-9d7f-2320133f2ea8",
+        "content_id": "Kubernetes",
+        "direction_fact": "INCREASING",
+        "audience_class": "user",
+        "temporality": "EVERGREEN",
+        "claim_feature": null,
+        "raw_evidence_count": 3,
+        "scorable_evidence_count": 3,
+        "aggregation_status": "COMPLETE",
+        "contributions": [
+          {
+            "evidence_id": "3fd59732-af9b-4dbe-86f7-9acca886e391",
+            "relevance": 1.0,
+            "directness": 1.0,
+            "reliability": 0.6,
+            "extraction_confidence": 1.0,
+            "freshness": 1.0,
+            "scorable": true,
+            "q": 0.6,
+            "limiting_component": "reliability"
+          },
+          {
+            "evidence_id": "8c8f097d-d6d9-460f-a36e-0b7ef875a4a3",
+            "relevance": 1.0,
+            "directness": 1.0,
+            "reliability": 0.6,
+            "extraction_confidence": 1.0,
+            "freshness": 1.0,
+            "scorable": true,
+            "q": 0.6,
+            "limiting_component": "reliability"
+          },
+          {
+            "evidence_id": "fd6c1111-43f3-4f03-8426-243b678bb382",
+            "relevance": 1.0,
+            "directness": 1.0,
+            "reliability": 0.6,
+            "extraction_confidence": 1.0,
+            "freshness": 1.0,
+            "scorable": true,
+            "q": 0.6,
+            "limiting_component": "reliability"
+          }
+        ],
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 3,
+        "collapsed_member_count": 2,
+        "support_groups": [
+          {
+            "group_id": "__unknown_independence__",
+            "kind": "UNKNOWN",
+            "direction": "SUPPORTS",
+            "strength": 0.6,
+            "representative_evidence_id": "3fd59732-af9b-4dbe-86f7-9acca886e391",
+            "member_evidence_ids": [
+              "3fd59732-af9b-4dbe-86f7-9acca886e391",
+              "8c8f097d-d6d9-460f-a36e-0b7ef875a4a3",
+              "fd6c1111-43f3-4f03-8426-243b678bb382"
+            ],
+            "collapsed_member_count": 2
+          }
+        ],
+        "established_independence_groups": 0,
+        "unknown_independence_count": 3,
+        "independence_groups_created": 0,
+        "masses": {
+          "support_strength": 0.6,
+          "contradiction_strength": 0.0,
+          "supported_mass": 0.6,
+          "contradicted_mass": 0.0,
+          "conflict_mass": 0.0,
+          "uncertainty_mass": 0.4
+        },
+        "evidence_score": 60.0,
+        "evidence_level": {
+          "evidence_level": 1,
+          "label": "Weak Signal",
+          "reasons": [
+            "3 scorable supporting record(s)"
+          ],
+          "blocked_reasons": [
+            "Repeated Signal needs 2 supporting groups of established independence, found 0 (plus 1 unknown-provenance group, which does not count)",
+            "Market Evidence needs a supporting record categorised MARKET_ACTIVITY or DIRECT_VALIDATION with established provenance; quantity of opinion cannot substitute for it",
+            "Direct Validation needs a supporting record categorised DIRECT_VALIDATION with established provenance"
+          ]
+        },
+        "limiting_components": [
+          "reliability"
+        ],
+        "reliability_pass_through_baseline": 0.6,
+        "versus_reliability_pass_through": "IDENTICAL_TO_RELIABILITY_PASS_THROUGH",
+        "multi_evidence_verdict": "MULTI_EVIDENCE_PROCESSING_OCCURRED / NO_INDEPENDENT_CORROBORATION",
+        "contradiction_case": "NO_REAL_CONTRADICTION_CASE_YET",
+        "profile_status": "UNCALIBRATED",
+        "calibrated": false
+      },
+      {
+        "claim_id": "9bda8081-aebb-48a7-a31d-3fab8e2345a6",
+        "content_id": "Kubernetes",
+        "direction_fact": "DECREASING",
+        "audience_class": "user",
+        "temporality": "EVERGREEN",
+        "claim_feature": null,
+        "raw_evidence_count": 3,
+        "scorable_evidence_count": 3,
+        "aggregation_status": "COMPLETE",
+        "contributions": [
+          {
+            "evidence_id": "792d07dc-e6ec-4c9e-8217-41318588f28d",
+            "relevance": 1.0,
+            "directness": 1.0,
+            "reliability": 0.6,
+            "extraction_confidence": 1.0,
+            "freshness": 1.0,
+            "scorable": true,
+            "q": 0.6,
+            "limiting_component": "reliability"
+          },
+          {
+            "evidence_id": "d0983e5c-ea2a-44b3-8de4-8cc70e8a74a3",
+            "relevance": 1.0,
+            "directness": 1.0,
+            "reliability": 0.6,
+            "extraction_confidence": 1.0,
+            "freshness": 1.0,
+            "scorable": true,
+            "q": 0.6,
+            "limiting_component": "reliability"
+          },
+          {
+            "evidence_id": "f4a8b828-a5d2-425e-a4c4-4a595616037d",
+            "relevance": 1.0,
+            "directness": 1.0,
+            "reliability": 0.6,
+            "extraction_confidence": 1.0,
+            "freshness": 1.0,
+            "scorable": true,
+            "q": 0.6,
+            "limiting_component": "reliability"
+          }
+        ],
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 3,
+        "collapsed_member_count": 2,
+        "support_groups": [
+          {
+            "group_id": "__unknown_independence__",
+            "kind": "UNKNOWN",
+            "direction": "SUPPORTS",
+            "strength": 0.6,
+            "representative_evidence_id": "792d07dc-e6ec-4c9e-8217-41318588f28d",
+            "member_evidence_ids": [
+              "792d07dc-e6ec-4c9e-8217-41318588f28d",
+              "d0983e5c-ea2a-44b3-8de4-8cc70e8a74a3",
+              "f4a8b828-a5d2-425e-a4c4-4a595616037d"
+            ],
+            "collapsed_member_count": 2
+          }
+        ],
+        "established_independence_groups": 0,
+        "unknown_independence_count": 3,
+        "independence_groups_created": 0,
+        "masses": {
+          "support_strength": 0.6,
+          "contradiction_strength": 0.0,
+          "supported_mass": 0.6,
+          "contradicted_mass": 0.0,
+          "conflict_mass": 0.0,
+          "uncertainty_mass": 0.4
+        },
+        "evidence_score": 60.0,
+        "evidence_level": {
+          "evidence_level": 1,
+          "label": "Weak Signal",
+          "reasons": [
+            "3 scorable supporting record(s)"
+          ],
+          "blocked_reasons": [
+            "Repeated Signal needs 2 supporting groups of established independence, found 0 (plus 1 unknown-provenance group, which does not count)",
+            "Market Evidence needs a supporting record categorised MARKET_ACTIVITY or DIRECT_VALIDATION with established provenance; quantity of opinion cannot substitute for it",
+            "Direct Validation needs a supporting record categorised DIRECT_VALIDATION with established provenance"
+          ]
+        },
+        "limiting_components": [
+          "reliability"
+        ],
+        "reliability_pass_through_baseline": 0.6,
+        "versus_reliability_pass_through": "IDENTICAL_TO_RELIABILITY_PASS_THROUGH",
+        "multi_evidence_verdict": "MULTI_EVIDENCE_PROCESSING_OCCURRED / NO_INDEPENDENT_CORROBORATION",
+        "contradiction_case": "NO_REAL_CONTRADICTION_CASE_YET",
+        "profile_status": "UNCALIBRATED",
+        "calibrated": false
+      },
+      {
+        "claim_id": "a4809b1a-56a4-4ae2-a2e3-9ee2f68e4dd3",
+        "content_id": "Podman",
+        "direction_fact": "INCREASING",
+        "audience_class": "user",
+        "temporality": "EVERGREEN",
+        "claim_feature": null,
+        "raw_evidence_count": 3,
+        "scorable_evidence_count": 3,
+        "aggregation_status": "COMPLETE",
+        "contributions": [
+          {
+            "evidence_id": "15964f84-3748-45a1-84c7-ad0637f300e8",
+            "relevance": 1.0,
+            "directness": 1.0,
+            "reliability": 0.6,
+            "extraction_confidence": 1.0,
+            "freshness": 1.0,
+            "scorable": true,
+            "q": 0.6,
+            "limiting_component": "reliability"
+          },
+          {
+            "evidence_id": "c2d04ad8-14af-46a3-b465-8e992125b107",
+            "relevance": 1.0,
+            "directness": 1.0,
+            "reliability": 0.6,
+            "extraction_confidence": 1.0,
+            "freshness": 1.0,
+            "scorable": true,
+            "q": 0.6,
+            "limiting_component": "reliability"
+          },
+          {
+            "evidence_id": "cdf30329-463e-46b1-bbe9-c9fb58c3ee65",
+            "relevance": 1.0,
+            "directness": 1.0,
+            "reliability": 0.6,
+            "extraction_confidence": 1.0,
+            "freshness": 1.0,
+            "scorable": true,
+            "q": 0.6,
+            "limiting_component": "reliability"
+          }
+        ],
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 3,
+        "collapsed_member_count": 2,
+        "support_groups": [
+          {
+            "group_id": "__unknown_independence__",
+            "kind": "UNKNOWN",
+            "direction": "SUPPORTS",
+            "strength": 0.6,
+            "representative_evidence_id": "15964f84-3748-45a1-84c7-ad0637f300e8",
+            "member_evidence_ids": [
+              "15964f84-3748-45a1-84c7-ad0637f300e8",
+              "c2d04ad8-14af-46a3-b465-8e992125b107",
+              "cdf30329-463e-46b1-bbe9-c9fb58c3ee65"
+            ],
+            "collapsed_member_count": 2
+          }
+        ],
+        "established_independence_groups": 0,
+        "unknown_independence_count": 3,
+        "independence_groups_created": 0,
+        "masses": {
+          "support_strength": 0.6,
+          "contradiction_strength": 0.0,
+          "supported_mass": 0.6,
+          "contradicted_mass": 0.0,
+          "conflict_mass": 0.0,
+          "uncertainty_mass": 0.4
+        },
+        "evidence_score": 60.0,
+        "evidence_level": {
+          "evidence_level": 1,
+          "label": "Weak Signal",
+          "reasons": [
+            "3 scorable supporting record(s)"
+          ],
+          "blocked_reasons": [
+            "Repeated Signal needs 2 supporting groups of established independence, found 0 (plus 1 unknown-provenance group, which does not count)",
+            "Market Evidence needs a supporting record categorised MARKET_ACTIVITY or DIRECT_VALIDATION with established provenance; quantity of opinion cannot substitute for it",
+            "Direct Validation needs a supporting record categorised DIRECT_VALIDATION with established provenance"
+          ]
+        },
+        "limiting_components": [
+          "reliability"
+        ],
+        "reliability_pass_through_baseline": 0.6,
+        "versus_reliability_pass_through": "IDENTICAL_TO_RELIABILITY_PASS_THROUGH",
+        "multi_evidence_verdict": "MULTI_EVIDENCE_PROCESSING_OCCURRED / NO_INDEPENDENT_CORROBORATION",
+        "contradiction_case": "NO_REAL_CONTRADICTION_CASE_YET",
+        "profile_status": "UNCALIBRATED",
+        "calibrated": false
+      },
+      {
+        "claim_id": "dff657c2-3ee8-429c-b308-4e0d8f3894d2",
+        "content_id": "Podman",
+        "direction_fact": "DECREASING",
+        "audience_class": "user",
+        "temporality": "EVERGREEN",
+        "claim_feature": null,
+        "raw_evidence_count": 3,
+        "scorable_evidence_count": 3,
+        "aggregation_status": "COMPLETE",
+        "contributions": [
+          {
+            "evidence_id": "38f0b7c9-aeea-4f45-a170-a5163b22b3be",
+            "relevance": 1.0,
+            "directness": 1.0,
+            "reliability": 0.6,
+            "extraction_confidence": 1.0,
+            "freshness": 1.0,
+            "scorable": true,
+            "q": 0.6,
+            "limiting_component": "reliability"
+          },
+          {
+            "evidence_id": "a5c63adb-06d9-4f4f-9445-7fda4493d7c8",
+            "relevance": 1.0,
+            "directness": 1.0,
+            "reliability": 0.6,
+            "extraction_confidence": 1.0,
+            "freshness": 1.0,
+            "scorable": true,
+            "q": 0.6,
+            "limiting_component": "reliability"
+          },
+          {
+            "evidence_id": "c94b88c9-7eaa-48c8-a248-c42ae0bf87b7",
+            "relevance": 1.0,
+            "directness": 1.0,
+            "reliability": 0.6,
+            "extraction_confidence": 1.0,
+            "freshness": 1.0,
+            "scorable": true,
+            "q": 0.6,
+            "limiting_component": "reliability"
+          }
+        ],
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 3,
+        "collapsed_member_count": 2,
+        "support_groups": [
+          {
+            "group_id": "__unknown_independence__",
+            "kind": "UNKNOWN",
+            "direction": "SUPPORTS",
+            "strength": 0.6,
+            "representative_evidence_id": "38f0b7c9-aeea-4f45-a170-a5163b22b3be",
+            "member_evidence_ids": [
+              "38f0b7c9-aeea-4f45-a170-a5163b22b3be",
+              "a5c63adb-06d9-4f4f-9445-7fda4493d7c8",
+              "c94b88c9-7eaa-48c8-a248-c42ae0bf87b7"
+            ],
+            "collapsed_member_count": 2
+          }
+        ],
+        "established_independence_groups": 0,
+        "unknown_independence_count": 3,
+        "independence_groups_created": 0,
+        "masses": {
+          "support_strength": 0.6,
+          "contradiction_strength": 0.0,
+          "supported_mass": 0.6,
+          "contradicted_mass": 0.0,
+          "conflict_mass": 0.0,
+          "uncertainty_mass": 0.4
+        },
+        "evidence_score": 60.0,
+        "evidence_level": {
+          "evidence_level": 1,
+          "label": "Weak Signal",
+          "reasons": [
+            "3 scorable supporting record(s)"
+          ],
+          "blocked_reasons": [
+            "Repeated Signal needs 2 supporting groups of established independence, found 0 (plus 1 unknown-provenance group, which does not count)",
+            "Market Evidence needs a supporting record categorised MARKET_ACTIVITY or DIRECT_VALIDATION with established provenance; quantity of opinion cannot substitute for it",
+            "Direct Validation needs a supporting record categorised DIRECT_VALIDATION with established provenance"
+          ]
+        },
+        "limiting_components": [
+          "reliability"
+        ],
+        "reliability_pass_through_baseline": 0.6,
+        "versus_reliability_pass_through": "IDENTICAL_TO_RELIABILITY_PASS_THROUGH",
+        "multi_evidence_verdict": "MULTI_EVIDENCE_PROCESSING_OCCURRED / NO_INDEPENDENT_CORROBORATION",
+        "contradiction_case": "NO_REAL_CONTRADICTION_CASE_YET",
+        "profile_status": "UNCALIBRATED",
+        "calibrated": false
+      },
+      {
+        "claim_id": "39449935-d841-4e76-b920-dd727204c199",
+        "content_id": "Docker_(software)",
+        "direction_fact": "DECREASING",
+        "audience_class": "user",
+        "temporality": "EVERGREEN",
+        "claim_feature": null,
+        "raw_evidence_count": 2,
+        "scorable_evidence_count": 2,
+        "aggregation_status": "COMPLETE",
+        "contributions": [
+          {
+            "evidence_id": "17ab3887-7caf-4a81-a7d1-856bfbbdbdac",
+            "relevance": 1.0,
+            "directness": 1.0,
+            "reliability": 0.6,
+            "extraction_confidence": 1.0,
+            "freshness": 1.0,
+            "scorable": true,
+            "q": 0.6,
+            "limiting_component": "reliability"
+          },
+          {
+            "evidence_id": "261994f7-e52e-4e40-a879-262192659696",
+            "relevance": 1.0,
+            "directness": 1.0,
+            "reliability": 0.6,
+            "extraction_confidence": 1.0,
+            "freshness": 1.0,
+            "scorable": true,
+            "q": 0.6,
+            "limiting_component": "reliability"
+          }
+        ],
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 2,
+        "collapsed_member_count": 1,
+        "support_groups": [
+          {
+            "group_id": "__unknown_independence__",
+            "kind": "UNKNOWN",
+            "direction": "SUPPORTS",
+            "strength": 0.6,
+            "representative_evidence_id": "17ab3887-7caf-4a81-a7d1-856bfbbdbdac",
+            "member_evidence_ids": [
+              "17ab3887-7caf-4a81-a7d1-856bfbbdbdac",
+              "261994f7-e52e-4e40-a879-262192659696"
+            ],
+            "collapsed_member_count": 1
+          }
+        ],
+        "established_independence_groups": 0,
+        "unknown_independence_count": 2,
+        "independence_groups_created": 0,
+        "masses": {
+          "support_strength": 0.6,
+          "contradiction_strength": 0.0,
+          "supported_mass": 0.6,
+          "contradicted_mass": 0.0,
+          "conflict_mass": 0.0,
+          "uncertainty_mass": 0.4
+        },
+        "evidence_score": 60.0,
+        "evidence_level": {
+          "evidence_level": 1,
+          "label": "Weak Signal",
+          "reasons": [
+            "2 scorable supporting record(s)"
+          ],
+          "blocked_reasons": [
+            "Repeated Signal needs 2 supporting groups of established independence, found 0 (plus 1 unknown-provenance group, which does not count)",
+            "Market Evidence needs a supporting record categorised MARKET_ACTIVITY or DIRECT_VALIDATION with established provenance; quantity of opinion cannot substitute for it",
+            "Direct Validation needs a supporting record categorised DIRECT_VALIDATION with established provenance"
+          ]
+        },
+        "limiting_components": [
+          "reliability"
+        ],
+        "reliability_pass_through_baseline": 0.6,
+        "versus_reliability_pass_through": "IDENTICAL_TO_RELIABILITY_PASS_THROUGH",
+        "multi_evidence_verdict": "MULTI_EVIDENCE_PROCESSING_OCCURRED / NO_INDEPENDENT_CORROBORATION",
+        "contradiction_case": "NO_REAL_CONTRADICTION_CASE_YET",
+        "profile_status": "UNCALIBRATED",
+        "calibrated": false
+      }
+    ]
+  }
+}

@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.76
+Version: 1.77
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-04 (Sprint 1 / Mission 1.44)
+Last amended: 2026-09-04 (Sprint 1 / Mission 1.44.1)
 
 ---
 
@@ -13,6 +13,42 @@ Last amended: 2026-09-04 (Sprint 1 / Mission 1.44)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.77 — 2026-09-04 (Sprint 1 / Mission 1.44.1)
+
+**`WIKIMEDIA_CONVERGENT_OPERATOR_RELIABILITY_DECISION_PERSISTED`**, with
+**`AGGREGATION_MECHANISM_STILL_UNIDENTIFIABLE_FROM_REAL_CORPUS`** beside it.
+
+The operator typed the confirmation. ReliabilityAssessments 3 → 4, basis rows
+10 → 12. Assessment `19e0ce16-…` v1, `0.6`, `HUMAN_REVIEW`, `thibchm`,
+`human-reliability-assessment-rubric@1.0.0`. Every other canonical counter
+unchanged.
+
+All 18 convergent Evidence rows resolve to that one assessment, and
+`scoring.evidence.reliability` stays NULL on all 57. Thirty-six leak checks over
+every proposition kind against all four current assessments, zero leaks. The
+three historical assessments are untouched and neither pre-rubric row was
+backfilled.
+
+Six real multi-Evidence Claims became scorable, and `max(members)` received
+**four** real canonical items for the first time, then three four times and two
+once. Scorable multi-Evidence Claims 2 → 8, max scorable cardinality 2 → 4.
+
+And the number did not move. `IDENTICAL_TO_RELIABILITY_PASS_THROUGH` on all six,
+`q = 0.6` limited by reliability on 34 of 34, EvidenceScore 60.0, level 1 blocked
+on established independence. Every Claim forms exactly one unknown-provenance
+group, so the full aggregator and the B-2 baseline are the same number
+algebraically rather than coincidentally. **Four witnesses is not corroboration.**
+
+No calibration label, no parameter fitted, no Score, no Opportunity change, no
+ranking, no embeddings, no network request and no model call. Problem-Family
+stays PARKED.
+
+New: `docs/data/wikimedia-convergent-operator-reliability-review-v1.json` and
+`.md`, `docs/data/wikimedia-convergent-reliability-resolution-v1.json`, and two
+scripts under `infrastructure/scripts/`.
+
+Report: `docs/architecture/mission-1.44.1-report.md`.
 
 ## 1.76 — 2026-09-04 (Sprint 1 / Mission 1.44)
 
@@ -2660,6 +2696,7 @@ Additionally authoritative:
 - docs/data/human-reliability-assessment-rubric-v1.md (added in 1.72)
 - docs/data/second-pilot-convergent-operator-reliability-review-v1.md (added in 1.73)
 - docs/data/wikimedia-convergent-reliability-review-packet-v1.md (added in 1.76)
+- docs/data/wikimedia-convergent-operator-reliability-review-v1.md (added in 1.77)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.
