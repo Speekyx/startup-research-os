@@ -1,0 +1,99 @@
+{
+  "$comment": "Mission 1.62 sections 5, 6 and 7. Sampling, the two frames, and what an absent record means.",
+  "record_version": "1.0.0",
+  "mission": "1.62 — Anchor Operational Closure & Partner Package Completion V1",
+  "recorded_at": "2026-09-05",
+  "apparatus": "Netlas",
+
+  "why_sampling_is_the_first_question": {
+    "from": "Mission 1.61",
+    "rule": "SAMPLING_IS_LOAD_BEARING, Mission 1.59. A sampled population is not a census, and two apparatuses cannot be compared as one count unless both expose the same population definition. V1 implements no estimator to bridge them.",
+    "consequence_if_sampled": "A count over a sample is an estimate of a population, and comparing it against another apparatus's census would compare two different quantities while calling the difference a disagreement."
+  },
+
+  "sampling_verdict": {
+    "result": "SAMPLING_STATUS_UNKNOWN",
+    "options_considered": {
+      "A": "every eligible IPv4 target in the documented frame is attempted for port 22",
+      "B": "observations may be sampled under some conditions",
+      "C": "service observations are sharded or subsampled when density is high",
+      "D": "the system records only a provider-defined subset",
+      "E": "documentation does not establish it"
+    },
+    "selected": "E",
+    "first_party_evidence_held": "The apparatus documents that the IPv4 space is divided into large subnets, that scanning proceeds in cycles, and that when one full scan completes the next begins immediately. It documents a scanned-port list and an address range.",
+    "what_that_evidence_does_not_say": "Nothing states whether every address inside a subnet is attempted, or whether any stage samples.",
+    "documents_inspected": [
+      "https://docs.netlas.io/knowledge-base/data-collection/",
+      "https://docs.netlas.io/knowledge-base/scanning-technology/",
+      "https://docs.netlas.io/faq/",
+      "https://docs.netlas.io/api-reference/",
+      "https://netlas.io/legal/data_collection_policy/"
+    ],
+    "the_refusal": "Silence is NOT mapped to NO_SAMPLING_ESTABLISHED. The phrase 'full scan' describes a cycle completing, not every address being attempted, and reading it as a census guarantee would be reading a positive claim out of an operational word.",
+    "in_enquiry_v1": true
+  },
+
+  "two_frames": {
+    "$comment": "Section 6. These are different quantities and only one is documented.",
+    "ELIGIBLE_FRAME": {
+      "status": "DOCUMENTED",
+      "definition": "IPv4 addresses from 1.0.0.0 to 239.255.255.255, with reserved and special-use ranges excluded. IPv6 is documented as not currently supported. UDP scanning is documented as covering five ports, which does not bear on a TCP port 22 construct.",
+      "source": "https://docs.netlas.io/knowledge-base/scanning-technology/",
+      "what_it_is": "a declaration of which addresses are in scope"
+    },
+    "ATTEMPTED_FRAME": {
+      "status": "NOT_ESTABLISHED",
+      "definition_sought": "which addresses were actually scheduled and probed on port 22 during a given dated scan",
+      "why_not_established": "No published document describes per-scan coverage, and no per-index coverage metadata was found. The indices endpoint path tried returned HTTP 404 and no alternative was located within budget.",
+      "what_it_is": "the population a count is actually over"
+    },
+    "the_rule": "Do not call the metric internet-wide merely because the provider describes its range as the whole IPv4 space. An eligible frame is a declaration and an attempted frame is a measurement, and only the second bounds a count.",
+    "relation_to_A7": "LINEAGE_EXHAUSTIVENESS_IS_NOT_FRAME_EXHAUSTIVENESS. A7 established that every record is produced by the apparatus's own probing. That says nothing whatever about which addresses were reached, and this record is where that distinction is paid for."
+  },
+
+  "missingness_semantics": {
+    "status": "UNKNOWN",
+    "candidate_meanings_none_of_which_is_documented": [
+      "PROBE_ATTEMPTED_NO_QUALIFYING_RESPONSE",
+      "NOT_PROBED",
+      "TIMEOUT",
+      "BLOCKED",
+      "SCAN_FAILURE",
+      "SAMPLING_EXCLUSION"
+    ],
+    "documents_inspected": [
+      "https://docs.netlas.io/faq/",
+      "https://docs.netlas.io/api-reference/",
+      "https://netlas.io/legal/data_collection_policy/"
+    ],
+    "does_this_destroy_the_construct": false,
+    "why_not": "The construct counts positively observed addresses. Mission 1.60 recorded the positive/negative asymmetry as a property of the construct itself: a successful identification is strong evidence that the service was reachable from that measurement path at that time, and a failure to observe is ambiguous.",
+    "what_it_does_bound": "Coverage, and therefore a reliability review. A reviewer cannot bound the negative direction without it.",
+    "the_refusal": "An absent record is never turned into a definite negative.",
+    "in_enquiry_v1": true
+  },
+
+  "exclusions_and_opt_out": {
+    "status": "NOT_ESTABLISHED",
+    "sought": "whether a network operator may request exclusion from scanning, and whether an excluded range is distinguishable in the data",
+    "documents_inspected": [
+      "https://netlas.io/legal/data_collection_policy/",
+      "https://netlas.io/",
+      "https://docs.netlas.io/faq/"
+    ],
+    "finding": "The data collection policy describes how internet-related data is collected rather than personal data, and offers a section on making information private that points at configuring the exposed service rather than at a removal request. No exclusion list, opt-out route or blocklist mechanism is documented.",
+    "why_it_matters": "An excluded range is absent for a reason unrelated to whether a service is running, so exclusions sit inside the missingness question rather than beside it."
+  },
+
+  "verdict": {
+    "sampling": "SAMPLING_STATUS_UNKNOWN",
+    "eligible_frame": "DOCUMENTED",
+    "attempted_frame": "NOT_ESTABLISHED",
+    "missingness": "UNKNOWN",
+    "exclusions": "NOT_ESTABLISHED",
+    "is_this_a_sampling_frame_blocker": false,
+    "why_not": "Outcome F is defined for documentation ESTABLISHING sampling or frame behaviour incompatible with the intended count. Nothing establishes an incompatibility. What exists is silence, and silence is an open question rather than a refutation.",
+    "what_would_make_it_a_blocker": "A first-party statement that service observations are sampled, sharded or subsampled without a published rate, which would make the count an estimate over an undefined subset and end the route for this apparatus."
+  }
+}

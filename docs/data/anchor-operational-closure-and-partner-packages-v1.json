@@ -1,0 +1,262 @@
+{
+  "$comment": "Mission 1.62 sections 34 to 38, 44, 55, 59, 60 and 62. The verdict, the enquiry disposition, the contact channel, the registry additions and the handoff.",
+  "record_version": "1.0.0",
+  "mission": "1.62 — Anchor Operational Closure & Partner Package Completion V1",
+  "recorded_at": "2026-09-05",
+
+  "primary_outcome": "ANCHOR_ENQUIRY_REQUIRED_PARTNER_PACKAGES_COMPLETE",
+  "primary_outcome_statement": "All three partner packages are COMPLETE under one contract, and none of the three individually qualifies: one fails observation-addressability on documented last-seen timestamp semantics, one fails on an acquisition surface that exposes only the requester's own networks, and one is unresolved with four partial slots. The anchor's A7 stands at LEVEL 2 and its A8 stays PARTIAL, with sampling, vantage and missingness unanswered after a second bounded pass over the most likely remaining first-party documents. A current frozen enquiry exists and remains unsent.",
+
+  "secondary_outcomes": {
+    "$comment": "Section 59. Reported independently so no overall outcome hides an individual state.",
+    "ANCHOR_A7": "ANCHOR_A7_PASS",
+    "ANCHOR_A8": "ANCHOR_A8_PARTIAL",
+    "ANCHOR_VANTAGE": "ANCHOR_VANTAGE_NOT_DOCUMENTED",
+    "PORT_22": "PORT_22_WINDOW_COVERAGE_NOT_ESTABLISHED",
+    "SAMPLING": "SAMPLING_STATUS_UNKNOWN",
+    "partners": {
+      "LeakIX": ["PACKAGE_COMPLETE", "INDIVIDUALLY_NOT_QUALIFIED"],
+      "ONYPHE": ["PACKAGE_COMPLETE", "INDIVIDUALLY_UNRESOLVED"],
+      "The Shadowserver Foundation": ["PACKAGE_COMPLETE", "INDIVIDUALLY_NOT_QUALIFIED"]
+    }
+  },
+
+  "why_this_outcome_and_not_another": {
+    "why_not_A": "Outcome A requires anchor A8 to become REVIEWABLE. It did not. Sampling and vantage are still unanswered and both are load-bearing, and a second bounded pass over the API reference, the site root, the legal index and the data collection policy closed neither.",
+    "why_not_C": "Outcome C is for partner packages complete with the anchor unresolved AND no sufficient enquiry or contact path producible. A frozen enquiry exists and remains current, and a published contact page was located, so a path exists.",
+    "why_not_D": "All three partner packages are COMPLETE.",
+    "why_not_E": "Missing documentation is no longer the binding blocker across partners. Every candidate now has working first-party paths and an explicit status in every slot. Two are decided by what their documentation SAYS rather than by what it omits.",
+    "why_not_F": "Outcome F requires documentation ESTABLISHING sampling or frame behaviour incompatible with the count. Nothing establishes an incompatibility; what exists is silence, which is an open question rather than a refutation.",
+    "why_not_G": "Outcome G requires documentation ESTABLISHING that vantage must enter the proposition. The anchor's vantage is undocumented, which is an absence, and an absence is not a statement in either direction.",
+    "why_not_H": "No evidence emerged that the raw banner cannot support the prefix predicate. The anchor's banner field remains queryable with wildcard matching and its transformation policy remains undocumented, which is TRANSFORMATION_UNKNOWN rather than a refutation.",
+    "why_not_I": "No target measurement, count, host record or banner was retrieved."
+  },
+
+  "anchor_gate_table": {
+    "$comment": "Only A5 and A8 detail changed. A7 was not reopened.",
+    "A1": {"verdict": "PASS", "moved": false},
+    "A2": {"verdict": "PASS", "moved": false, "bound": "OBSERVATION_ADDRESSABLE_PATH_REQUIRED; DEFAULT_CURRENT_STATE_PATH_PROHIBITED_FOR_THIS_CONTRACT"},
+    "A3": {"verdict": "PASS", "moved": false, "exposure_class": "RAW_IDENTIFICATION_STRING"},
+    "A4": {"verdict": "PASS", "moved": false},
+    "A5": {"verdict": "PASS_WITH_STATED_BOUNDS", "moved": false, "bound": "the eligible frame is documented; the ATTEMPTED frame is not"},
+    "A6": {"verdict": "PASS", "moved": false},
+    "A7": {"verdict": "PASS", "moved": false, "level": "LEVEL_2"},
+    "A8": {"verdict": "PARTIAL", "moved": false},
+    "A9": {"verdict": "PASS", "moved": false},
+    "pass_count": 7,
+    "pass_with_bounds_count": 1,
+    "partial_count": 1,
+    "which_gates_block": ["A8"],
+    "individually_qualifies": false
+  },
+
+  "a7_was_not_reopened": {
+    "$comment": "The brief forbids reopening A7 merely because it passed at LEVEL 2. This records that the question was asked and answered rather than skipped.",
+    "contradictory_lineage_evidence_found": false,
+    "documents_read_this_mission_that_could_have_contradicted_it": [
+      "https://docs.netlas.io/api-reference/",
+      "https://netlas.io/legal/data_collection_policy/",
+      "https://netlas.io/legal/",
+      "https://netlas.io/"
+    ],
+    "verdict": "The LEVEL 2 basis stands unchanged: an affirmative first-party statement of independent collection with a closed exception clause naming threat intelligence and geolocation, neither of which produces a service-presence observation.",
+    "a7_was_not_used_as_proof_of_anything_else": "LINEAGE_EXHAUSTIVENESS_IS_NOT_FRAME_EXHAUSTIVENESS. A7 is not cited anywhere in this mission as evidence about sampling, coverage or the attempted frame, and the sampling record says so explicitly."
+  },
+
+  "the_a2_bound_restated_with_new_evidence": {
+    "$comment": "Sections 11 and 55. Mission 1.61 inferred this from the data-collection page; the API reference states it directly.",
+    "new_evidence": "The API reference documents that the search request accepts a list of index labels, that the documented example labels are calendar dates, and that if the parameter is not supplied the search is conducted using the latest publicly available internet scan data.",
+    "admissible_path": "an explicitly supplied dated index label, and a scan-date filter expressible in the query language",
+    "prohibited_path": "the default surface, which is the latest scan",
+    "status_words": ["OBSERVATION_ADDRESSABLE_PATH_REQUIRED", "DEFAULT_CURRENT_STATE_PATH_PROHIBITED_FOR_THIS_CONTRACT"],
+    "not_weakened": true
+  },
+
+  "enquiry_v1_disposition": {
+    "$comment": "Section 35. Each of the seven questions compared against the updated operational matrix.",
+    "artifact": "docs/data/anchor-technical-lineage-enquiry-v1.md",
+    "sha256": "310acf288244453cd0a928197386cbf8311ded278e4dcdd22b70412807a049c4",
+    "bytes_unchanged": true,
+    "edited": false,
+    "question_disposition": [
+      {"n": 1, "topic": "SAMPLING", "disposition": "STILL_UNRESOLVED"},
+      {"n": 2, "topic": "PROBE ATTEMPTS", "disposition": "STILL_UNRESOLVED", "note": "the API reference documents client-side throttling and retry parameters, which govern the client retrying the API and not the scanner retrying a probe"},
+      {"n": 3, "topic": "MEANING OF ABSENCE", "disposition": "STILL_UNRESOLVED"},
+      {"n": 4, "topic": "DUPLICATION", "disposition": "STILL_UNRESOLVED", "note": "the query language was found to offer no de-duplication operator, which sharpens the question rather than answering it"},
+      {"n": 5, "topic": "RAW RESPONSE FIDELITY", "disposition": "STILL_UNRESOLVED"},
+      {"n": 6, "topic": "VANTAGE", "disposition": "STILL_UNRESOLVED"},
+      {"n": 7, "topic": "PORT SCHEDULE OVER TIME", "disposition": "STILL_UNRESOLVED"}
+    ],
+    "answered_by_public_docs": 0,
+    "no_longer_load_bearing": 0,
+    "still_unresolved": 7,
+    "verdict": "V1_REMAINS_CURRENT",
+    "superseded": false,
+    "v2_created": false,
+    "why_no_v2": "Section 35. A v2 is created when SOME questions disappear. None did, so v1 is unchanged and remains the current enquiry.",
+    "hash_authority": "Mission 1.61's hash remains authoritative. Section 37 forbids manufacturing a new hash for identical bytes, so no new approval string was generated.",
+    "operative_approval_string": "APPROVE MISSION 1.61 ENQUIRY 310acf288244453cd0a928197386cbf8311ded278e4dcdd22b70412807a049c4",
+    "a_finding_not_added_to_the_enquiry": {
+      "finding": "the count endpoint returning an estimate with an error margin not exceeding three per cent above one thousand results",
+      "why_not_added": "It is documented rather than missing, so it is an answered constraint and not an open question. Adding it would ask the provider to restate its own documentation.",
+      "where_it_is_recorded": "docs/data/anchor-operational-methodology-v1.json, retrieval_surface_facts_established_this_mission"
+    }
+  },
+
+  "contact_channel": {
+    "$comment": "Sections 34 and 38. A valid question and a valid channel are two different facts.",
+    "TECHNICAL_ENQUIRY_REQUIRED": true,
+    "status": "FIRST_PARTY_CONTACT_CHANNEL_NOT_ESTABLISHED",
+    "what_was_found": "A first-party legal page carries a printed contact instruction reading that questions or comments should be sent to an address, and the same page links the company's legal documents. A sales contact route, a status page and published community channels also exist.",
+    "page_carrying_the_channel": "https://netlas.io/legal/",
+    "why_not_established": "The address on that page is served through an email-obfuscation mechanism, so the retrieval returned a placeholder rather than the literal address. The address was NOT resolved by this mission.",
+    "no_address_invented": true,
+    "guesses_refused": ["support@", "info@", "security@", "contact@"],
+    "what_the_operator_can_do": "Open the legal page in a browser, where the obfuscated address renders, and use it as the recipient for the frozen enquiry. That is a one-step action requiring no further research.",
+    "channels_found_but_not_treated_as_the_technical_route": {
+      "sales_contact": "a sales route is published; a sales form is not a technical methodology channel",
+      "community_channels": "published chat and social channels exist; they are first-party but are not a route of record for a written technical enquiry",
+      "status_page": "an incident and status page exists and is not a contact route"
+    },
+    "no_scanning_or_abuse_policy_page_found": "No opt-out, exclusion or abuse-handling route was located on the site root, the legal index or the data collection policy."
+  },
+
+  "reliability_scope_preparation": {
+    "$comment": "Section 44. Shape only. No source registered, no reliability assigned.",
+    "shape": {
+      "source_or_apparatus_identity": "PLACEHOLDER_NOT_REGISTERED",
+      "resource_identity": "PLACEHOLDER_NOT_REGISTERED",
+      "record_kind": "PLACEHOLDER_NOT_DEFINED",
+      "claim_type": "INFERRED",
+      "proposition_kind": "protocol threshold state"
+    },
+    "eventual_review_appears": {
+      "Netlas": "PARTIAL",
+      "ONYPHE": "PARTIAL",
+      "The Shadowserver Foundation": "NOT_REVIEWABLE",
+      "LeakIX": "NOT_REVIEWABLE"
+    },
+    "sources_registered": 0,
+    "reliability_assigned": null
+  },
+
+  "new_requirements_for_the_registry": {
+    "$comment": "Section 55. Added only where the artifacts demonstrate a distinct guard, not because the brief named a candidate.",
+    "requirements": [
+      {
+        "name": "THE_RETRIEVABLE_FRAME_IS_NOT_THE_MEASURED_FRAME",
+        "from": "Mission 1.62",
+        "rule": "An apparatus can measure the whole internet and expose to any given requester only a slice of it. What bounds a Claim is the frame the acquisition surface EXPOSES, never the frame the apparatus MEASURES. Where the exposed slice is defined by who is asking, two requesters retrieve two different populations and no single proposition about the whole can be witnessed through it.",
+        "demonstrated_by": "A partner candidate that performs daily internet-wide scanning and whose reporting API states that a requester only gets data on the networks they are responsible for. It scans everything and can show us only ours.",
+        "distinct_from": "FRAME_INSIDE_THE_DEFINITION concerns an apparatus measuring share within its own reach. LINEAGE_EXHAUSTIVENESS_IS_NOT_FRAME_EXHAUSTIVENESS separates who produced an observation from which addresses were reached. Neither covers a global measured frame with a per-requester retrievable one."
+      },
+      {
+        "name": "DEFAULT_DATA_SURFACE_MUST_NOT_OVERRIDE_QUALIFIED_EXPOSURE_PATH",
+        "from": "Mission 1.62",
+        "rule": "Where an apparatus qualifies only through a non-default observation-addressable surface, a collector must bind explicitly to that surface. A default surface that silently returns the latest state is the rejected temporal object, and a collector omitting the selector reads it while a record elsewhere says the gate passed.",
+        "demonstrated_by": "The anchor's API reference stating that if the index parameter is not supplied, the search is conducted using the latest publicly available internet scan data. The qualifying path requires an argument that is easy to omit, and omitting it is silent.",
+        "distinct_from": "OBSERVATION_ADDRESSABLE_EXPOSURE governs whether a qualifying mechanism EXISTS. This governs whether an implementation USES it, which no existing rule reaches. It is a constraint on collector construction rather than on apparatus selection.",
+        "why_added_despite_being_named_in_the_brief": "Mission 1.61 recorded the bound against one apparatus in one gate table. This mission found the verbatim API sentence that makes omission the default behaviour, which is what turns a per-apparatus note into a rule about how any collector must be written."
+      }
+    ],
+    "registry_size_before": 11,
+    "registry_size_after": 13
+  },
+
+  "counters": {
+    "first_party_document_requests": 24,
+    "budget": 24,
+    "research_data_requests": 0,
+    "measurement_queries_executed": 0,
+    "target_counts_fetched": 0,
+    "target_host_records_fetched": 0,
+    "target_ips_fetched": 0,
+    "target_banners_fetched": 0,
+    "facets_fetched": 0,
+    "downloads_of_measurement_data": 0,
+    "trials_started": 0,
+    "purchases": 0,
+    "outbound_enquiries_sent": 0,
+    "model_calls": 0,
+    "model_cost_usd": 0.0,
+    "embeddings": 0,
+    "canonical_mutations": 0,
+    "sources_registered": 0,
+    "governance_reviews_created": 0,
+    "threshold_registrations_created": 0,
+    "claims_created": 0,
+    "evidence_created": 0,
+    "reliability_assessments_created": 0,
+    "reliability_values_assigned": 0,
+    "independence_groups_created": 0,
+    "scores_created": 0,
+    "opportunity_changes": 0,
+    "mission_1_56_claim_modified": false,
+    "enquiry_v1_edited": false,
+    "enquiries_created": 0,
+    "reference_profile": "UNCALIBRATED",
+    "problem_family": "PARKED"
+  },
+
+  "next_mission_recommendation": {
+    "$comment": "Section 62. Outcome B with fewer than two individually qualified apparatuses, so the enquiry checkpoint governs.",
+    "checkpoint": "STOP_ON_ENQUIRY_CHECKPOINT",
+    "why": "Section 62 permits Mission 1.63 to proceed on qualified apparatuses without the anchor only if TWO independently qualify. Zero do. Pairing needs two qualified apparatuses and there are none.",
+    "a8_was_not_weakened": "The alternative to stopping was declaring A8 REVIEWABLE with sampling and vantage unanswered. Section 62 forbids it and so does the gate.",
+    "name": "Mission 1.63 — Anchor Operational Answer & Second Apparatus Resolution V1",
+    "it_should": [
+      "obtain the operator's decision on sending the frozen enquiry v1, whose hash and approval string are unchanged from Mission 1.61",
+      "read the anchor's indices endpoint documentation, which is named in the API reference and whose per-entry fields were not established, because it is the single cheapest route to port-window coverage",
+      "resolve whether a datascan record is appended per scan or maintained per service, which decides the remaining candidate's B2 outright and is the highest-value unresolved fact in the mission",
+      "read the scanned-ports list page already located in that candidate's documentation navigation, to settle port 22 membership",
+      "establish which fields are removed after thirty days for that candidate, and whether the raw response field is among them",
+      "leave the two not-qualified candidates alone unless new first-party documentation contradicts the gate that failed them"
+    ],
+    "it_must_not": [
+      "fetch a measurement value, a host count, a host record, a facet or a result total",
+      "execute a service search query against target data",
+      "start a trial, demo console or search preview",
+      "purchase access, apply for vetted access, or register a source",
+      "read the anchor's default surface as its observation-addressable one",
+      "treat the anchor's lineage statement as a coverage claim",
+      "evaluate a threshold against the anchor's count endpoint, which is documented as an estimate above one thousand results",
+      "select or rank a pair before two apparatuses individually qualify",
+      "edit the frozen enquiry v1"
+    ]
+  },
+
+  "stop_condition": {
+    "$comment": "Section 62 and STOP CONDITION. What this mission deliberately did not do.",
+    "pair_selected": false,
+    "partners_ranked": false,
+    "measurement_query_executed": false,
+    "count_or_facet_query_executed": false,
+    "target_hosts_retrieved": false,
+    "target_banners_retrieved": false,
+    "observation_window_chosen": false,
+    "numeric_threshold_chosen": false,
+    "threshold_registration_created": false,
+    "trial_started": false,
+    "access_purchased": false,
+    "vetted_access_applied_for": false,
+    "source_registered": false,
+    "governance_review_created": false,
+    "enquiry_sent": false,
+    "enquiry_v1_edited": false,
+    "collector_created": false,
+    "normalizer_created": false,
+    "claim_created": false,
+    "evidence_created": false,
+    "independence_group_created": false,
+    "reliability_assigned": false,
+    "calibration_performed": false,
+    "score_created": false,
+    "opportunity_altered": false,
+    "mission_1_56_claim_modified": false,
+    "model_called": false,
+    "embeddings_created": false,
+    "problem_family_unparked": false,
+    "mission_1_63_started": false,
+    "awaiting": "operator review"
+  }
+}

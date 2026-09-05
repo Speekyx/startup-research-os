@@ -1,0 +1,230 @@
+{
+  "$comment": "Mission 1.62 sections 3, 7 to 11, 15 and 16. Gate A8 for the anchor, as a ten-topic closure matrix, plus the retrieval-surface facts this pass established.",
+  "record_version": "1.0.0",
+  "mission": "1.62 — Anchor Operational Closure & Partner Package Completion V1",
+  "recorded_at": "2026-09-05",
+  "apparatus": "Netlas",
+  "gate": "A8 RELIABILITY_REVIEWABLE",
+
+  "what_this_gate_asks": {
+    "it_asks": "Is enough first-party methodology available for a future human reviewer to judge the dependability of this exact INFERRED measurement scope?",
+    "it_does_not_ask": [
+      "Can we reproduce the apparatus?",
+      "Is the apparatus reliable?"
+    ],
+    "no_value_assigned": true,
+    "reliability_assessments_created": 0,
+    "a8_reviewable_does_not_mean_reliable": "REVIEWABLE says a human can later review reliability. It is not the review, it carries no number, and it inherits nothing from any other source or proposition."
+  },
+
+  "closure_matrix": [
+    {
+      "topic": "SAMPLING",
+      "previous_status": "NOT_ANSWERED",
+      "status": "UNKNOWN",
+      "verdict": "SAMPLING_STATUS_UNKNOWN",
+      "first_party_evidence_held": "The data collection page states that the IPv4 space is divided into large subnets scanned in cycles, and that when one full scan completes the next begins immediately.",
+      "documents_inspected": [
+        "https://docs.netlas.io/knowledge-base/data-collection/",
+        "https://docs.netlas.io/knowledge-base/scanning-technology/",
+        "https://docs.netlas.io/faq/",
+        "https://docs.netlas.io/api-reference/",
+        "https://netlas.io/legal/data_collection_policy/"
+      ],
+      "missing_fact": "whether every address inside a subnet is probed, or a sample of them",
+      "why_load_bearing": "SAMPLING_IS_LOAD_BEARING. A sampled population is not a census, and two apparatuses cannot be compared as one count unless both expose the same population definition. V1 implements no estimator to bridge them.",
+      "silence_is_not_an_answer": "The documentation is silent. Silence is recorded as UNKNOWN and never mapped to NO_SAMPLING_ESTABLISHED.",
+      "in_enquiry_v1": true
+    },
+    {
+      "topic": "FRAME",
+      "previous_status": "ANSWERED",
+      "status": "PARTIAL",
+      "first_party_evidence_held": "The eligible population is documented as IPv4 from 1.0.0.0 to 239.255.255.255 with reserved and special-use ranges excluded, and IPv6 as not currently supported.",
+      "documents_inspected": ["https://docs.netlas.io/knowledge-base/scanning-technology/"],
+      "missing_fact": "the attempted frame: which addresses were actually scheduled and probed in a given cycle",
+      "why_load_bearing": "The eligible frame is a declaration; the attempted frame is what a count is over. Nothing published lets the attempted frame be reconstructed or bounded.",
+      "downgraded_from_answered": "Mission 1.61 recorded FRAME as ANSWERED. Section 6 separates ELIGIBLE_FRAME from ATTEMPTED_FRAME, and only the first is documented. Recording the split is the audit working rather than a reversal.",
+      "in_enquiry_v1": false
+    },
+    {
+      "topic": "MISSINGNESS",
+      "previous_status": "NOT_ANSWERED",
+      "status": "UNKNOWN",
+      "first_party_evidence_held": "none",
+      "documents_inspected": [
+        "https://docs.netlas.io/faq/",
+        "https://docs.netlas.io/api-reference/",
+        "https://netlas.io/legal/data_collection_policy/"
+      ],
+      "missing_fact": "whether the absence of a record can be distinguished as PROBE_ATTEMPTED_NO_QUALIFYING_RESPONSE, NOT_PROBED, TIMEOUT, BLOCKED, SCAN_FAILURE or SAMPLING_EXCLUSION",
+      "why_load_bearing": "It bounds coverage and reliability. It does NOT destroy the positive count, because the construct counts positively observed addresses and the positive/negative asymmetry was recorded in Mission 1.60.",
+      "absence_is_not_a_negative": "A missing service record is not evidence that the service was absent.",
+      "in_enquiry_v1": true
+    },
+    {
+      "topic": "RETRY",
+      "previous_status": "PARTIALLY_ANSWERED",
+      "status": "UNKNOWN",
+      "first_party_evidence_held": "The FAQ states that for each service detected the system makes only one request and saves the response. The API reference documents client-side throttling and retry parameters in the CLI and SDK.",
+      "documents_inspected": [
+        "https://docs.netlas.io/faq/",
+        "https://docs.netlas.io/api-reference/"
+      ],
+      "missing_fact": "how many transport-layer connection attempts an address receives on a port before it is treated as not answering",
+      "the_distinction_that_must_not_be_lost": "The API reference's throttling and retry parameters govern the CLIENT retrying the API. They say nothing about the SCANNER retrying a probe. Reading the first as an answer to the second would be answering a measurement question with a transport-library setting.",
+      "why_load_bearing": "A single-probe scan and a multi-probe scan produce systematically different counts on a lossy path, and the difference would look like a disagreement between apparatuses rather than a difference in method.",
+      "in_enquiry_v1": true
+    },
+    {
+      "topic": "DUPLICATION",
+      "previous_status": "PARTIALLY_ANSWERED",
+      "status": "PARTIAL",
+      "first_party_evidence_held": "Record identity combines the request target and the address, so one host exposing several services yields several records. The query language documents no de-duplication or distinct-value operator.",
+      "documents_inspected": [
+        "https://docs.netlas.io/knowledge-base/field-reference/responses/",
+        "https://docs.netlas.io/knowledge-base/query-language/"
+      ],
+      "missing_fact": "whether one address-and-port pair can produce more than one record within one scan cycle",
+      "why_load_bearing": "It decides whether the distinct rule is a correction or a formality. It bounds the query rather than the construct, because a distinct count is expressible either way.",
+      "in_enquiry_v1": true
+    },
+    {
+      "topic": "DISTINCT_ADDRESS_FIELD",
+      "previous_status": "ANSWERED",
+      "status": "ANSWERED",
+      "first_party_evidence_held": "The address field is documented as the address from which the response was received and is always present. The query language offers no distinct-value operator; the facet endpoint groups results by a chosen field and returns a key with a document count.",
+      "documents_inspected": [
+        "https://docs.netlas.io/knowledge-base/field-reference/responses/",
+        "https://docs.netlas.io/knowledge-base/query-language/",
+        "https://docs.netlas.io/api-reference/"
+      ],
+      "consequence": "The distinct-address rule is a CLIENT-SIDE transformation over retrieved records, not a source-native aggregate. A future collector must count distinct addresses itself and must never use a record count.",
+      "in_enquiry_v1": false
+    },
+    {
+      "topic": "BANNER_FIDELITY",
+      "previous_status": "PARTIALLY_ANSWERED",
+      "status": "PARTIAL",
+      "classification": "TRANSFORMATION_UNKNOWN",
+      "first_party_evidence_held": "The unparsed network response is documented as stored in a raw TCP field, per-protocol banner fields are documented as the initial banner message returned on connection, and the query language documents wildcard matching across banner fields together with numeric port filtering.",
+      "documents_inspected": [
+        "https://docs.netlas.io/knowledge-base/field-reference/responses/",
+        "https://docs.netlas.io/knowledge-base/query-language/"
+      ],
+      "missing_fact": "whether any size cap, truncation, whitespace trimming, re-encoding or normalisation is applied before storage, and whether it affects the first bytes",
+      "why_load_bearing": "The predicate is a literal prefix test on the beginning of the identification string. A transformation affecting the leading bytes changes what the prefix matches.",
+      "not_promoted": "The field is queryable, which is what A3 needed. Queryable is not the same as demonstrably untransformed, so this stays TRANSFORMATION_UNKNOWN rather than RAW_ENOUGH_FOR_PREFIX.",
+      "in_enquiry_v1": true
+    },
+    {
+      "topic": "SCAN_DATE_SEMANTICS",
+      "previous_status": "ANSWERED",
+      "status": "ANSWERED",
+      "first_party_evidence_held": "The per-record scan date records when the scanning that generated the response occurred. The query language expresses an absolute scan-date filter and relative ranges over the record timestamp. The API exposes a request parameter taking a list of index labels, and the documented example labels are calendar dates.",
+      "documents_inspected": [
+        "https://docs.netlas.io/knowledge-base/data-collection/",
+        "https://docs.netlas.io/knowledge-base/query-language/",
+        "https://docs.netlas.io/api-reference/"
+      ],
+      "in_enquiry_v1": false
+    },
+    {
+      "topic": "VANTAGE",
+      "previous_status": "NOT_ANSWERED",
+      "status": "UNKNOWN",
+      "verdict": "VANTAGE_NOT_DOCUMENTED",
+      "first_party_evidence_held": "none beyond a reference to the apparatus's own scanning infrastructure",
+      "documents_inspected": [
+        "https://docs.netlas.io/knowledge-base/scanning-technology/",
+        "https://docs.netlas.io/knowledge-base/field-reference/responses/",
+        "https://docs.netlas.io/api-reference/",
+        "https://netlas.io/",
+        "https://netlas.io/legal/data_collection_policy/"
+      ],
+      "missing_fact": "how many scanner nodes exist, where they are, and whether probing originates from one network or several",
+      "record_side_check": "No documented response field identifies a scanner node, probe origin or scan job. A response object carries a source descriptor with an id, name, availability and label, which describes a DATA SOURCE and not a scanner location; reading it as a vantage field would be reading a catalogue entry as a measurement fact.",
+      "why_load_bearing": "Whether an address answers depends on where the probe came from. Undocumented vantage must not be silently treated as global.",
+      "in_enquiry_v1": true
+    },
+    {
+      "topic": "PORT_22_WINDOW_COVERAGE",
+      "previous_status": "PARTIALLY_ANSWERED",
+      "status": "PARTIAL",
+      "first_party_evidence_held": "Port 22 is on the currently published scanned-port list. The changelog dates expansions of the list size and records no removal.",
+      "documents_inspected": [
+        "https://docs.netlas.io/knowledge-base/scanning-technology/",
+        "https://docs.netlas.io/changelog/",
+        "https://docs.netlas.io/api-reference/"
+      ],
+      "missing_fact": "the port set covered by a given dated scan",
+      "in_enquiry_v1": true
+    }
+  ],
+
+  "tally": {
+    "answered": 2,
+    "partial": 4,
+    "unknown": 4,
+    "not_applicable": 0,
+    "total": 10
+  },
+
+  "retrieval_surface_facts_established_this_mission": {
+    "$comment": "Not part of the A8 matrix. These are facts about the acquisition surface that bear on whether a future threshold comparison is decidable at all, and they were not known before this pass.",
+    "dated_index_parameter": {
+      "finding": "The search request accepts a list of index labels, and the documented examples are calendar dates. The documentation states that if the parameter is not supplied the search runs against the latest publicly available internet scan data.",
+      "consequence": "This is the verbatim confirmation of the Mission 1.61 bound. The admissible observation-addressable path is the explicit dated index; the default is the latest scan.",
+      "status": "ESTABLISHED"
+    },
+    "count_endpoint_is_an_estimate": {
+      "finding": "The count endpoint returns an exact count below one thousand results, and above one thousand the count is documented as an ESTIMATE with an error margin not exceeding three per cent.",
+      "why_this_is_load_bearing": "The construct is a count of distinct addresses over the public IPv4 space and will exceed one thousand by any plausible reading. A threshold comparison resting on that endpoint would be comparing a bound against an estimate whose error band could decide the direction, so a SUPPORTS or CONTRADICTS could be produced by the estimator rather than by the world.",
+      "consequence": "A future route must not evaluate a threshold against the count endpoint. The documented alternative is the download endpoint, described as retrieving results without pagination limits, over which an exact distinct count is computable client-side.",
+      "not_a_disqualification": "This bounds HOW the value must be obtained. It does not bound whether the apparatus can produce it.",
+      "status": "ESTABLISHED",
+      "in_enquiry_v1": false,
+      "why_not_in_the_enquiry": "It is documented rather than missing. It is an answered constraint, not an open question, so it belongs in this record and not in a question to the provider."
+    },
+    "pagination_bound": {
+      "finding": "The paginated search endpoint is documented as returning only the first ten thousand results; a separate download endpoint is documented as retrieving results without pagination limits.",
+      "consequence": "Any exact distinct count over a large population must use the download route, which is a larger retrieval than a count and is therefore a larger governance and cost question for a later mission.",
+      "status": "ESTABLISHED"
+    }
+  },
+
+  "gate_a8_verdict": {
+    "previous_verdict": "PARTIAL",
+    "previous_verdict_mission": "1.61",
+    "verdict": "PARTIAL",
+    "status_word": "ANCHOR_A8_PARTIAL",
+    "reviewable": false,
+    "why_not_reviewable": "Three load-bearing questions remain UNKNOWN. Sampling decides whether the count is a census or an estimate over a subset, and therefore whether it is comparable with any other apparatus at all. Vantage decides whether the population is vantage-relative rather than global. Missingness bounds coverage. A human reviewer could not complete the five-field review without at least the first two.",
+    "why_not_NOT_REVIEWABLE": "Nothing retrieved contradicts reviewability. The remaining questions have not been refused; they have not been published, and each is answerable by the provider in a sentence.",
+    "tolerated_unknowns": [
+      {
+        "topic": "RETRY",
+        "tolerated": false,
+        "why": "Not tolerated. It is in the enquiry, because probe multiplicity moves the positive count directly."
+      },
+      {
+        "topic": "DUPLICATION",
+        "tolerated": true,
+        "why": "A distinct count over the address field is correct whether or not duplicates occur, so the unknown changes the size of a correction and never the correctness of the rule."
+      },
+      {
+        "topic": "MISSINGNESS",
+        "tolerated": false,
+        "why": "Not tolerated for a reliability review, though it does not block the positive construct. It is in the enquiry."
+      }
+    ],
+    "what_moved_this_mission": "Frame split into eligible and attempted, and the attempted half is not documented. Retry moved from PARTIAL to UNKNOWN once the API-level retry parameters were correctly identified as client-side rather than scanner-side. Two retrieval-surface constraints were established that were not known before."
+  },
+
+  "no_reliability_assigned": {
+    "reliability_assessments_created": 0,
+    "value_assigned": null,
+    "inherited_from": null,
+    "statement": "No number, no band, no adjective. A8 closure is about whether a review is possible, and this mission concludes it is not yet."
+  }
+}
