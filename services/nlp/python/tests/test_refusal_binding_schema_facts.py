@@ -272,8 +272,20 @@ class TestTheRunLogsStillExpire:
         assert references == 0
 
 
-class TestNothingWasCreated:
-    """§46.21 to §46.24."""
+class TestTheBindingHeld:
+    """§46.21 to §46.24, re-pointed twice now.
+
+    This began as *nothing was created*, which was the honest assertion for a
+    design mission whose STOP condition existed so a person could review the
+    design before anything was built. Mission 1.54 built the table and Mission
+    1.56 wrote the first rows, so three of these four tests have outlived the
+    absence they asserted.
+
+    What survives each time is the PROPERTY the absence was standing in for. A
+    test asserting that a design is never implemented is a test asserting the
+    project never progresses (Missions 1.41, 1.44.1, 1.52 made the same repair);
+    a test asserting that the binding still holds keeps working after it does.
+    """
 
     def test_the_table_the_design_named_is_the_one_that_got_built(self, privileged_conn):
         """This asserted the table did NOT exist, which was true of Mission 1.53:
@@ -290,20 +302,71 @@ class TestNothingWasCreated:
         ).fetchone()[0]
         assert present is True
 
-    def test_no_inferred_claim_exists(self, privileged_conn):
-        count = privileged_conn.execute(
-            "SELECT count(*) FROM research.claims WHERE claim_type = 'INFERRED'"
-        ).fetchone()[0]
-        assert count == 0
+    def test_no_inferred_claim_was_created_to_host_a_refusal(self, privileged_conn):
+        """This asserted that NO INFERRED Claim exists. Mission 1.56 persisted the
+        first one, so the count is deployment state now.
 
-    def test_no_derivation_or_threshold_row_exists(self, privileged_conn):
-        derivations = privileged_conn.execute(
-            "SELECT count(*) FROM research.claim_derivations"
+        What it was standing in for is ADR-038's actual guarantee: no Claim is
+        ever fabricated so that a refusal has somewhere to live. Every INFERRED
+        Claim carries at least one Evidence row, which is what makes it an
+        assertion something supports rather than a fabrication with provenance
+        attached. Vacuous on an empty database, which is where CI runs it.
+        """
+        evidence_free = privileged_conn.execute(
+            """SELECT count(*) FROM research.claims c
+                WHERE c.claim_type = 'INFERRED'
+                  AND NOT EXISTS (
+                      SELECT 1 FROM scoring.evidence e WHERE e.claim_id = c.id
+                  )"""
         ).fetchone()[0]
-        thresholds = privileged_conn.execute(
-            "SELECT count(*) FROM research.threshold_registrations"
+        assert evidence_free == 0
+
+    def test_every_derivation_names_a_real_revision_and_no_refusal_can(self, privileged_conn):
+        """This asserted that no derivation or threshold row exists at all.
+        Mission 1.56 wrote one of each, under an operator-approved manifest.
+
+        What it was standing in for is the binding ADR-038 turns on. A derivation
+        is bound to a ClaimRevision that EXISTS and the column is NOT NULL, which
+        is precisely why a refusal could not live in that table -- Mission 1.53
+        proved on a live probe that making it nullable silently removes the
+        table's only idempotency guarantee, because PostgreSQL treats NULLs as
+        distinct.
+
+        The structural half needs stating precisely, because the obvious wording
+        is wrong: the refusal table CAN name a Claim, and does. What it names is
+        `input_observed_claim_id`, the OBSERVED observation the evaluation
+        reasoned FROM -- lineage, and an input. What it carries no column for is a
+        Claim or ClaimRevision the refusal itself produced, because it produced
+        none. That distinction is ADR-038 in one row shape, and a test asserting
+        the table mentions no Claim at all would have been asserting something
+        false about a design that is right.
+        """
+        orphans = privileged_conn.execute(
+            """SELECT count(*) FROM research.claim_derivations d
+                WHERE NOT EXISTS (
+                    SELECT 1 FROM research.claim_revisions r WHERE r.id = d.claim_revision_id
+                )"""
         ).fetchone()[0]
-        assert (derivations, thresholds) == (0, 0)
+        assert orphans == 0
+
+        nullable = privileged_conn.execute(
+            """SELECT is_nullable FROM information_schema.columns
+                WHERE table_schema = 'research' AND table_name = 'claim_derivations'
+                  AND column_name = 'claim_revision_id'"""
+        ).fetchone()[0]
+        assert nullable == "NO"
+
+        claim_columns = [
+            row[0]
+            for row in privileged_conn.execute(
+                """SELECT column_name FROM information_schema.columns
+                    WHERE table_schema = 'research'
+                      AND table_name = 'proposition_evaluation_refusals'
+                      AND (column_name LIKE '%%claim%%' OR column_name LIKE '%%revision%%')
+                    ORDER BY column_name"""
+            ).fetchall()
+        ]
+        assert claim_columns == ["input_observed_claim_id"], claim_columns
 
     def test_the_migration_this_design_reasons_about_is_still_applied(self, privileged_conn):
         """This pinned the head at 0034, which was true while no migration

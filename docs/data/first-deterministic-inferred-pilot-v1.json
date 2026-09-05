@@ -1,0 +1,150 @@
+{
+  "mission": "1.56 — First Deterministic Inferred Claim Persistence Pilot V1",
+  "artifact": "pilot execution record",
+  "recorded_at": "2026-09-05",
+  "status": "EXECUTED",
+  "approval": {
+    "manifest_sha256": "7545b5aaa240cd397dba0fcc08be11f2d84bd87448d10f7aaf165e941b6b4add",
+    "approved_by": "thibchm",
+    "the_hash_is_the_approval": "The operator approved a specific document. This record names its hash so a later reader can check that the manifest in the repository is the one that was approved, rather than a manifest that agrees with this record.",
+    "the_manifest_was_not_edited_afterwards": "Its status still reads AWAITING_OPERATOR_APPROVAL, deliberately. Marking it APPROVED would change its bytes and therefore its hash, and a frozen document that no longer answers to the hash it was frozen at is not frozen."
+  },
+  "evaluation": {
+    "result": "CONTRADICTS",
+    "rationale": "Measurement 912 requests does not satisfy the bound >= 1000 registered as POST_HOC, under equivalence basis first-deterministic-inferred-pilot-equivalence-v1.",
+    "refusal_reason": null,
+    "calibration_eligible": false,
+    "proposition_key": "e452cf18200011aa65da75ebea5a0036bd49b2a365612dc3bbb2db8963ba2684",
+    "target_proposition_facts": {
+      "proposition": "metric_threshold_state",
+      "claim_type": "INFERRED",
+      "canonical_subject_id": "kubernetes",
+      "metric_definition_id": "content_request_daily_change:en.wikipedia.org:user:all-access",
+      "time_bound": "2024-03-03/2024-03-04",
+      "population_or_geography": "global",
+      "unit": "requests",
+      "threshold_operator": "GTE",
+      "threshold_value": "1000"
+    },
+    "calls": 1,
+    "second_call_with_adjusted_inputs": 0,
+    "model_calls": 0,
+    "network_requests": 0
+  },
+  "threshold_registration": {
+    "registration_id": "5df908f7-123a-4913-b7a1-2a5f07255e97",
+    "created_by_this_run": true,
+    "provenance_status": "POST_HOC",
+    "recorded_at": "2026-09-05T07:38:38.351865+00:00",
+    "recorded_by": "thibchm",
+    "written_before_the_evaluation": "Phase A commits before the evaluator is constructed, so the bound was not chosen while the measurement was being compared against it."
+  },
+  "persistence": {
+    "path": "DIRECTIONAL",
+    "status": "PERSISTED",
+    "claim_id": "c79f58bb-2241-4908-800b-5765a51cbb95",
+    "claim_revision_id": "6fdef1b1-fc4f-4406-bd7e-e8a633d8a7a2",
+    "derivation_id": "52dbc32b-56ff-4e0c-9ebc-efe0740b4aec",
+    "evidence_id": "800f1421-dcef-4656-9c2a-e3bef039282d",
+    "refusal_id": null,
+    "claim_created": true,
+    "derivation_created": true,
+    "evidence_created": true,
+    "refusal_created": false,
+    "conflict": null
+  },
+  "replay": {
+    "path": "DIRECTIONAL",
+    "status": "REUSED",
+    "claim_id": "c79f58bb-2241-4908-800b-5765a51cbb95",
+    "claim_revision_id": "6fdef1b1-fc4f-4406-bd7e-e8a633d8a7a2",
+    "derivation_id": "52dbc32b-56ff-4e0c-9ebc-efe0740b4aec",
+    "evidence_id": "800f1421-dcef-4656-9c2a-e3bef039282d",
+    "refusal_id": null,
+    "claim_created": false,
+    "derivation_created": false,
+    "evidence_created": false,
+    "refusal_created": false,
+    "conflict": null,
+    "rows_created": 0,
+    "what_it_proves": "Running the whole evaluation and persistence again changed nothing. Idempotency is demonstrated rather than asserted."
+  },
+  "counters": {
+    "before": {
+      "raw_records": 325,
+      "normalized_records": 325,
+      "signals": 33,
+      "claims": 43,
+      "claim_revisions": 44,
+      "evidence": 57,
+      "reliability_assessments": 4,
+      "threshold_registrations": 0,
+      "claim_derivations": 0,
+      "proposition_evaluation_refusals": 0,
+      "opportunities": 1,
+      "opportunity_revisions": 1,
+      "opportunity_evidence_links": 7,
+      "embeddings": 0,
+      "sources": 29
+    },
+    "after": {
+      "raw_records": 325,
+      "normalized_records": 325,
+      "signals": 33,
+      "claims": 44,
+      "claim_revisions": 45,
+      "evidence": 58,
+      "reliability_assessments": 4,
+      "threshold_registrations": 1,
+      "claim_derivations": 1,
+      "proposition_evaluation_refusals": 0,
+      "opportunities": 1,
+      "opportunity_revisions": 1,
+      "opportunity_evidence_links": 7,
+      "embeddings": 0,
+      "sources": 29
+    },
+    "after_replay": {
+      "raw_records": 325,
+      "normalized_records": 325,
+      "signals": 33,
+      "claims": 44,
+      "claim_revisions": 45,
+      "evidence": 58,
+      "reliability_assessments": 4,
+      "threshold_registrations": 1,
+      "claim_derivations": 1,
+      "proposition_evaluation_refusals": 0,
+      "opportunities": 1,
+      "opportunity_revisions": 1,
+      "opportunity_evidence_links": 7,
+      "embeddings": 0,
+      "sources": 29
+    },
+    "delta": {
+      "claims": 1,
+      "claim_revisions": 1,
+      "evidence": 1,
+      "threshold_registrations": 1,
+      "claim_derivations": 1
+    },
+    "inferred_claims_before": 0,
+    "inferred_claims_after": 1
+  },
+  "what_this_run_did_not_do": [
+    "create a ReliabilityAssessment -- the new five-field INFERRED scope will resolve NO_APPLICABLE_ASSESSMENT and the Evidence will be NON_SCORABLE, which is the correct outcome",
+    "copy, inherit or default any reliability value",
+    "create a calibration label or change REFERENCE_PROFILE_V1",
+    "persist any Score or change any ranking",
+    "create an EvidenceIndependenceGroup",
+    "attach anything to the existing Opportunity",
+    "mark UNATTENDED_PRODUCTION_READY true",
+    "acquire data, select a source, or call a model",
+    "run a second candidate"
+  ],
+  "known_limitation": {
+    "flag": "SOURCE_INDEPENDENCE_IS_PARTIAL",
+    "detail": "Only Wikimedia's own logs can measure requests to a Wikipedia article, so this proposition can never accumulate an independent second witness. The pilot proves the canonical path end to end; it does not demonstrate the multi-witness value ADR-036 was built for.",
+    "the_better_family_and_why_it_was_excluded": "World Bank population change is the one held family naming a quantity that exists independently of any measurer. It was excluded because the source publishes NO unit for SP.POP.TOTL -- `unit_state = NOT_PUBLISHED` -- and inferring `persons` is forbidden. Fixing that needs documentation this mission may not fetch."
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "mission": "1.56 — First Deterministic Inferred Claim Persistence Pilot V1",
+  "artifact": "reviewed semantic-equivalence decision",
+  "basis_id": "first-deterministic-inferred-pilot-equivalence-v1",
+  "recorded_at": "2026-09-05",
+
+  "what_this_decides": "Whether the source-native measurement carried by Signal 064d12bf bears on the candidate target proposition. It is a DOCUMENTARY judgement, not a computation: the evaluator consumes this decision and never derives it, and nothing here was produced by a model.",
+
+  "network_requests": 0,
+  "model_calls": 0,
+  "every_document_cited_is_already_held": true,
+
+  "measurement": {
+    "signal_id": "064d12bf-e7bb-56e7-a90c-bdd08e89d2ac",
+    "source_id": "wikimedia-pageviews",
+    "record_kind_id": "content_request_count",
+    "quantity": "the change in the number of content requests for the English Wikipedia article `Kubernetes`, from requester class `user`, over all access channels, between the UTC days 2024-03-03 and 2024-03-04",
+    "value": "912",
+    "unit": "requests",
+    "unit_state": "INHERITED"
+  },
+
+  "target": {
+    "proposition_kind": "metric_threshold_state",
+    "canonical_subject_id": "kubernetes",
+    "metric_definition_id": "content_request_daily_change:en.wikipedia.org:user:all-access",
+    "time_bound": "2024-03-03/2024-03-04",
+    "population_or_geography": "global",
+    "unit": "requests",
+    "threshold_operator": "GTE",
+    "threshold_value": "1000"
+  },
+
+  "documents_relied_on": [
+    {
+      "document": "Research:Page view",
+      "held_since": "Mission 1.36",
+      "what_it_establishes": "The complete definition of a pageview: a conjunction of HTTP-status, host and header conditions with an enumerated exclusion list, a UTC request timestamp, and daily partitioning 0:00 to 23:59 UTC.",
+      "bears_on": ["METRIC_DEFINITION", "TIME_BOUND", "METHODOLOGY_SEMANTICS", "UNIT"]
+    },
+    {
+      "document": "Wikimedia Analytics known problems",
+      "held_since": "Mission 1.44",
+      "what_it_establishes": "A dated incident list, including a 2016 user-agent classification incident, and no stated revision policy.",
+      "bears_on": ["METHODOLOGY_SEMANTICS"],
+      "how_it_is_used": "As a stated LIMITATION, not as support."
+    },
+    {
+      "document": "canonical-subject-registry-v1.json",
+      "held_since": "Mission 1.30",
+      "what_it_establishes": "That `wikimedia-pageviews:content:en.wikipedia.org|Kubernetes` names canonical subject `kubernetes`, on the basis that the encyclopedia records no other subject under that title so the article needs no disambiguator.",
+      "bears_on": ["CANONICAL_SUBJECT"]
+    },
+    {
+      "document": "wikimedia-pageviews-v1.md",
+      "held_since": "Mission 1.19",
+      "what_it_establishes": "The collector's own record that `user` means traffic NOT identified as automated by ua-parser plus custom regex -- a heuristic classification, and never a claim that a person read anything.",
+      "bears_on": ["POPULATION", "METHODOLOGY_SEMANTICS"]
+    }
+  ],
+
+  "dimensions": [
+    {
+      "dimension": "CANONICAL_SUBJECT",
+      "checked": true,
+      "finding": "The measurement's content id is the English Wikipedia article `Kubernetes`; the target's subject is the reviewed canonical subject `kubernetes`, which the registry maps to exactly that article key with a stated basis. Exact, and reviewed before this mission existed."
+    },
+    {
+      "dimension": "METRIC_DEFINITION",
+      "checked": true,
+      "finding": "The target metric is the day-over-day change in content requests, which is precisely what the Signal's extractor computes: the difference between two source-native daily counts. `Research:Page view` supplies the definition of the counted event."
+    },
+    {
+      "dimension": "TIME_BOUND",
+      "checked": true,
+      "finding": "The target names the same two day labels the Signal carries, and Wikimedia documents its own daily partitioning as 0:00 to 23:59 UTC. Mission 1.19 earned `ESTABLISHED` period semantics on that documentation rather than on the label's shape."
+    },
+    {
+      "dimension": "POPULATION",
+      "checked": true,
+      "finding": "Requester class `user`. The target names the platform's own class rather than translating it, so the correspondence is exact even though the class itself is a heuristic. It does NOT mean human, person, reader or customer."
+    },
+    {
+      "dimension": "GEOGRAPHY",
+      "checked": true,
+      "finding": "The per-article endpoint applies no geographic restriction and the access channel is all-access, so the quantity is global by construction. The target says `global` for that reason and not as a default."
+    },
+    {
+      "dimension": "UNIT",
+      "checked": true,
+      "finding": "`requests`, inherited from the source's own measurement contract. The target uses the same word for the same thing, and no conversion occurs."
+    },
+    {
+      "dimension": "ADJUSTMENT",
+      "checked": true,
+      "finding": "None on either side. The measurement is a raw difference of two published counts, seasonally unadjusted, and the target asks for the same."
+    },
+    {
+      "dimension": "METHODOLOGY_SEMANTICS",
+      "checked": true,
+      "finding": "Both sides rest on the same counting rule, because the target is worded from the same document the measurement was produced under. The residuals are recorded as limitations rather than resolved: the requester classification is heuristic, and no revision or backfill policy is documented."
+    }
+  ],
+  "dimensions_checked": 8,
+
+  "verdict": "EQUIVALENT",
+  "why": "The target proposition was written FROM the measurement's own documented semantics rather than matched against them afterwards, so the correspondence is definitional on seven dimensions and reviewed-by-registry on the eighth. Nothing is inferred from a matching label or a similar name.",
+
+  "interpretation_confidence": {
+    "proposed_value": 0.9,
+    "means": "Confidence that the Claim's WORDING faithfully states what the cited Signal showed. It is NOT an evidence strength, not a probability, and it is multiplied by nothing.",
+    "why_not_1_0": "ADR-037 §17 forbids setting it to 1.0 merely because the arithmetic is exact. Two documented residuals bear on the wording: the requester class is produced by a heuristic classifier that has been changed before, and no revision policy is documented, so a recomputed day could in principle differ from the day this system holds.",
+    "why_not_lower": "The wording names the platform's own class and the platform's own day labels rather than translating either, so a reader of `Research:Page view` can check the sentence against the definition line by line.",
+    "decided_by": "proposed here and adopted by the operator's approval of the pilot manifest hash, which is where the human decision for this pilot lives",
+    "not_invented_by_the_evaluator": true,
+    "not_invented_by_the_persistence_layer": true
+  },
+
+  "stated_limitations": [
+    "The requester class `user` is heuristic. It means traffic not identified as automated by ua-parser plus custom regex, and a reclassification has happened before (2016).",
+    "Wikimedia documents no revision or backfill policy for these counts, so `the day as this system holds it` and `the day as the platform would recompute it today` are not established to be the same.",
+    "Only Wikimedia's own logs can measure this quantity, so this proposition can never accumulate an independent second witness. The pilot exercises the INFERRED machinery; it does not demonstrate the multi-witness value the layer exists for.",
+    "A request is not a reader. Nothing here supports a claim about people, attention, demand or interest."
+  ],
+
+  "reviewed_by": "thibchm",
+  "review_mechanism": "prepared from held documents and adopted by the operator's approval of the pilot manifest hash",
+  "no_model_generated_approval": true
+}

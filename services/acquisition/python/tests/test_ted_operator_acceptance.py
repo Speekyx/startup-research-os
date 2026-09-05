@@ -826,31 +826,54 @@ class TestTheRegistryHoldsExactlyOneAcceptance:
         assert len(versions) == len(set(versions)), versions
         assert all(result == "SATISFIED" for _, result in rows), rows
 
-    def test_the_row_is_attached_to_the_right_source_profile_review_condition(self) -> None:
-        """§3. Structural scope, asserted through the joins rather than trusted."""
+    def test_every_row_is_attached_to_the_right_source_profile_review_condition(self) -> None:
+        """§3. Structural scope, asserted through the joins rather than trusted.
+
+        EVERY row, ordered, rather than whichever one the planner returns first.
+        Mission 1.46 recorded a second acceptance against review v3, and the
+        sibling test above was re-pointed for it while this one kept a
+        `fetchone()` with no `ORDER BY` and a hard-coded version 2 -- so with two
+        rows present it passed or failed on row order, which is how it was found.
+
+        What has to hold is deployment-independent: every acceptance names
+        `ted-eu` under the local profile, was recorded by the operator, and
+        satisfies its condition. And no two review versions may share a
+        `verifier_version`, because that is exactly what a REPLAY of an older
+        acknowledgement would look like -- Mission 1.46's v3 statement is a
+        materially different text from v2's, and recording the older name
+        against the newer review would assert an acceptance nobody gave.
+
+        Vacuous on an empty database, like its sibling: CI starts with no
+        registry loaded, and a test asserting that a row exists there would be
+        asserting that the deployment is never empty.
+        """
         import psycopg
 
         with psycopg.connect(DATABASE_URL) as conn:
-            row = conn.execute(
+            rows = conn.execute(
                 """SELECT v.source_id, r.assessed_use_profile, r.review_version,
                           v.condition_key, v.result, v.verifier, v.verifier_version,
                           c.satisfied
                      FROM registry.source_condition_verifications v
                      JOIN registry.source_review_conditions c ON c.id = v.condition_id
                      JOIN registry.source_policy_reviews r ON r.id = c.review_id
-                    WHERE v.condition_key = %s""",
+                    WHERE v.condition_key = %s
+                    ORDER BY r.review_version""",
                 (RESIDUAL,),
-            ).fetchone()
-        assert row == (
-            "ted-eu",
-            LOCAL_PROFILE,
-            2,
-            RESIDUAL,
-            "SATISFIED",
-            "local-operator",
-            "acknowledgement-v1",
-            True,
-        ), row
+            ).fetchall()
+
+        for source_id, profile, _version, key, result, verifier, _name, satisfied in rows:
+            assert (source_id, profile, key, result, verifier, satisfied) == (
+                "ted-eu",
+                LOCAL_PROFILE,
+                RESIDUAL,
+                "SATISFIED",
+                "local-operator",
+                True,
+            ), rows
+
+        names = [name for *_, name, _ in rows]
+        assert len(set(names)) == len(names), rows
 
     def test_the_acknowledgement_is_stored_verbatim_in_the_row(self) -> None:
         """§5. The operator's words are the evidence, so the row carries them
