@@ -1,0 +1,87 @@
+{
+ "construct_id": "C2_HTTP_RESPONSE_TO_IP_ADDRESSED_GET",
+ "role": "CANDIDATE",
+ "product_relevance": {
+  "class": "MODERATE_PRODUCT_RELEVANCE",
+  "what_product_question_it_informs": "The size of the publicly reachable web-service surface addressed by IP, as an infrastructure-exposure signal.",
+  "weakest_truthful_interpretation": "A count of addresses that returned an HTTP response to one exactly specified request. Not sites, not organisations, not adoption of any technology."
+ },
+ "proposition": {
+  "canonical_subject": "HTTP response to an IP-addressed GET on TCP/80",
+  "population": "public IPv4 address space",
+  "population_type": "IP_ADDRESS",
+  "geography": "global, unrestricted",
+  "unit": "distinct public IPv4 address",
+  "deduplication_unit": "IPv4 address",
+  "observation_window_semantics": "the probe time of the scan that produced the response, selectable before retrieval",
+  "predicate": "a request of exactly the form `GET / HTTP/1.1` with the Host header set to the target IP address, sent to TCP port 80, received a syntactically valid HTTP response status line",
+  "request_identity_is_part_of_the_predicate": true,
+  "inclusion_rule": "an address is counted once if at least one qualifying response falls inside W",
+  "exclusion_rule": "redirect hops beyond the first response are not separate observations of the population; a virtual host is not an address",
+  "vantage_semantics": "load-bearing and unresolved",
+  "configuration_assumptions": "port 80 inside the scanned set for both apparatuses"
+ },
+ "what_a_positive_observation_establishes": "That at that moment that address answered one exactly specified HTTP request.",
+ "explicit_non_claims": [
+  "not the number of websites — virtual hosting means one address may serve many, and an IP-addressed request reaches only the default one",
+  "not adoption of any web technology",
+  "not a count of companies, users or customers",
+  "not comparable with any hostname-addressed measurement"
+ ],
+ "virtual_host_and_sni_treatment": {
+  "$comment": "§6 C2 requires these be evaluated rather than assumed away.",
+  "host_header": "Fixed into the predicate as the target IP address, because otherwise two apparatuses sending different Host headers are not measuring the same thing.",
+  "virtual_hosting": "An IP-addressed request reaches the server's default virtual host only. The proposition is therefore about ADDRESSES answering, never about sites.",
+  "sni": "Out of scope on port 80. A TLS variant would have to fix SNI the same way and is not proposed here.",
+  "redirects": "The first response is the observation. An apparatus that stores each redirect hop as a separate document must be able to identify the first hop, or its unit is not the same.",
+  "why_this_is_the_decisive_issue": "It is what turns an apparently easy construct into a same-proposition problem, and it is why one route below is blocked rather than unresolved."
+ },
+ "routes": {
+  "Censys": {
+   "verdict": "UNRESOLVED",
+   "decisive_blocker": "UNRESOLVED_PREDICATE_EXPOSURE",
+   "note": "Its web property dataset is described as internet assets responding to hostname-based scans, which is a different population by its own description. The host dataset carries a LAST-observed timestamp, and the dated snapshot's schema is not public."
+  },
+  "Netlas": {
+   "verdict": "BLOCKED_PREDICATE_NOT_RETRIEVABLE",
+   "decisive_blocker": "REQUEST_IDENTITY_AND_POPULATION",
+   "note": "On ports 80 and 443 it queries not only by IP address but also by domain names, limits virtual sites per IP to 100,000, and saves each response in a redirect chain as a separate document — and which Host header value it sends is not documented. The population and the unit both differ from an IP-addressed GET, and the request identity that would reconcile them is unpublished."
+  },
+  "LeakIX": {
+   "verdict": "BLOCKED_TEMPORAL",
+   "decisive_blocker": "TEMPORAL",
+   "note": "Global blocker."
+  },
+  "Shadowserver": {
+   "verdict": "BLOCKED_FRAME",
+   "decisive_blocker": "FRAME",
+   "note": "Global blocker."
+  },
+  "ONYPHE": {
+   "verdict": "UNRESOLVED",
+   "decisive_blocker": "TEMPORAL",
+   "note": "B2 PARTIAL, global and unchanged."
+  },
+  "Rapid7 Project Sonar": {
+   "verdict": "PLAUSIBLE_ROUTE",
+   "decisive_blocker": null,
+   "note": "Its HTTP study documents the exact request — GET / HTTP/1.1 with the Host header set to the IP address — and stores the complete response including headers as a base64 string, in dated files. Documented request identity is what makes this proposition expressible at all, and it is rare."
+  },
+  "Shodan": {
+   "verdict": "BLOCKED_TEMPORAL",
+   "decisive_blocker": "TEMPORAL",
+   "note": "Global blocker."
+  }
+ },
+ "plausible_apparatus_route_count": 1,
+ "route_shortfall": "SECOND_ROUTE_MISSING",
+ "preregistration_viable": true,
+ "structural_verdict": "NOT_STRUCTURALLY_VIABLE",
+ "failed_hard_conditions": [
+  "at least TWO apparatus routes are PLAUSIBLE"
+ ],
+ "record_version": "1.0.0",
+ "mission": "1.68 — Product-Relevant Measurement Construct Selection V1",
+ "recorded_at": "2026-09-06",
+ "values_consulted_to_choose_this_construct": 0
+}
