@@ -1,7 +1,14 @@
-"""Render and validate the Mission 1.57 independence-route records.
+"""Render and validate the independence-route records.
 
-Four documents: the live baseline, the apparatus search specification, the
-candidates with their decision matrix, and the feasibility verdict.
+Missions 1.57 and 1.58. Five documents: the live baseline, the apparatus search
+specification, the candidates with their decision matrix, the feasibility
+verdict, and — once an operator has withdrawn a selection — the broadened search
+that replaced it.
+
+**A withdrawn selection is APPENDED to, never edited away.** Mission 1.57 chose a
+route; Mission 1.58's operator withdrew it because the rule changed rather than
+because the reasoning was wrong. Deleting `selected_route` would lose what was
+decided against, so the validator refuses a supersession that removed it.
 
 `validate()` enforces the decision RULES rather than the answer. A later mission
 may select a different route; it may not select one by weakening a rule. So the
@@ -31,13 +38,20 @@ BASELINE = DATA / "independence-capable-route-baseline-v1.json"
 REQUIREMENTS = DATA / "independence-capable-apparatus-requirements-v1.json"
 CANDIDATES = DATA / "independence-capable-route-candidates-v1.json"
 FEASIBILITY = DATA / "independence-capable-route-feasibility-v1.json"
+# Mission 1.58. Present once the operator has withdrawn a selection and asked for
+# a broader search; absent before, so this gate is green in both states.
+BROADENED = DATA / "apparatus-search-broadened-v1.json"
 
 RENDERED = {
     BASELINE: DATA / "independence-capable-route-baseline-v1.md",
     REQUIREMENTS: DATA / "independence-capable-apparatus-requirements-v1.md",
     CANDIDATES: DATA / "independence-capable-route-candidates-v1.md",
     FEASIBILITY: DATA / "independence-capable-route-feasibility-v1.md",
+    BROADENED: DATA / "apparatus-search-broadened-v1.md",
 }
+
+GATE_VERDICTS = ("PASS", "FAIL", "UNKNOWN", "PARTIAL", "PASS_IF_NARROWED", "NOT_APPLICABLE")
+RESOLVED_VERDICTS = ("PASS", "NOT_APPLICABLE")
 
 MANDATORY_GATES = 15
 
@@ -111,7 +125,137 @@ def validate() -> tuple[dict, dict, dict, dict]:  # noqa: C901
     _validate_requirements(requirements)
     _validate_candidates(candidates)
     _validate_feasibility(feasibility, candidates)
+    _validate_broadened(feasibility)
     return baseline, requirements, candidates, feasibility
+
+
+def _validate_broadened(feasibility: dict) -> None:  # noqa: C901
+    """Mission 1.58. A withdrawn selection, and the search that replaced it.
+
+    The load-bearing check is the first one: a selection may be withdrawn, and
+    the withdrawal has to be APPENDED rather than applied by editing the
+    selection away. A record whose `selected_route` had simply been deleted would
+    lose the fact that a route was once chosen and what the operator decided
+    against, which is the entire content of the decision.
+    """
+    superseded = feasibility.get("selection_superseded")
+    if not BROADENED.exists():
+        if superseded is not None:
+            raise ValidationError(
+                "the feasibility record says its selection was superseded and names a record "
+                "that does not exist"
+            )
+        return
+
+    broadened = _load(BROADENED)
+    if superseded is None:
+        raise ValidationError(
+            "a broadened search exists and the feasibility record does not record that its "
+            "selection was withdrawn. A superseded selection still reading as current is worse "
+            "than no record of it"
+        )
+    if superseded.get("status") != "WITHDRAWN_BY_OPERATOR":
+        raise ValidationError(f"unexpected supersession status {superseded.get('status')!r}")
+    if superseded.get("superseded_by") != "docs/data/apparatus-search-broadened-v1.json":
+        raise ValidationError("the supersession must name the record that replaced it")
+    if not feasibility.get("selected_route"):
+        raise ValidationError(
+            "the withdrawn selection was edited away rather than appended to. Mission 1.57 chose "
+            "a route, and deleting that fact hides what the operator decided against"
+        )
+
+    decision = broadened["operator_decision"]
+    if decision.get("withdrawn_route") != feasibility["selected_route"]:
+        raise ValidationError("the withdrawal names a route the feasibility record did not select")
+    if not decision.get("stated_reason", "").strip():
+        raise ValidationError("an operator decision states its reason")
+    if not decision.get("the_withdrawn_route_was_not_wrong", "").strip():
+        raise ValidationError(
+            "a rule change is not a correction, and the record must say which it was. Filing a "
+            "sound analysis as an error misdescribes both the analysis and the decision"
+        )
+    for survivor in ("the structural finding", "the negative controls"):
+        if not any(survivor in item for item in decision.get("what_this_does_not_change", [])):
+            raise ValidationError(
+                f"the withdrawal must record that {survivor!r} survives, or a later reader will "
+                "take the whole mission as retracted"
+            )
+
+    amended = broadened["amended_gate_set"]
+    if amended.get("carried_forward") != MANDATORY_GATES:
+        raise ValidationError("the fifteen earlier gates are carried forward, never replaced")
+    for gate in amended["added"]:
+        if gate["n"] <= MANDATORY_GATES:
+            raise ValidationError(f"added gate {gate['n']} collides with a carried-forward gate")
+        if not gate.get("the_cost_of_this_gate", "").strip():
+            raise ValidationError(
+                "a gate that narrows the search states what the narrowing costs, because a gate "
+                "whose cost is unstated is a gate nobody can weigh"
+            )
+
+    route = broadened["candidate_route"]
+    results = route["gate_results"]
+    expected = MANDATORY_GATES + len(amended["added"])
+    if len(results) != expected:
+        raise ValidationError(f"{expected} gates are in force and {len(results)} are reported")
+    for name, verdict in results.items():
+        if verdict not in GATE_VERDICTS:
+            raise ValidationError(f"gate {name} carries verdict {verdict!r}")
+
+    unresolved = {n: v for n, v in results.items() if v not in RESOLVED_VERDICTS}
+    if route.get("selected") is True:
+        if unresolved:
+            raise ValidationError(
+                f"the route is selected with {sorted(unresolved)} unresolved. The gate set is "
+                "conjunctive, and selecting the best route found is not selecting one that "
+                "qualifies"
+            )
+    else:
+        if not unresolved:
+            raise ValidationError("every gate passes and the route is still not selected")
+        if not route.get("why_not_selected", "").strip():
+            raise ValidationError("a refusal to select states its reason")
+        open_gates = {entry["gate"] for entry in route["open_gates"]}
+        reported = {int(name.split("_")[0]) for name in unresolved}
+        if open_gates != reported:
+            raise ValidationError(
+                f"the open-gate list {sorted(open_gates)} disagrees with the unresolved gate "
+                f"results {sorted(reported)}"
+            )
+        for entry in route["open_gates"]:
+            if not entry.get("closable_by", "").strip():
+                raise ValidationError(
+                    f"open gate {entry['gate']} names no way to close it, which makes it a "
+                    "complaint rather than a finding"
+                )
+
+    trap = broadened["the_new_trap"]
+    if not trap.get("rule", "").strip() or not trap.get("found_by", "").strip():
+        raise ValidationError("a named trap states its rule and what surfaced it")
+
+    counters = broadened["counters"]
+    for name in (
+        "research_data_requests",
+        "measurement_values_fetched",
+        "model_calls",
+        "embeddings",
+        "canonical_mutations",
+        "sources_registered",
+        "reviews_created",
+        "threshold_registrations_created",
+        "claims_created",
+        "evidence_created",
+        "independence_groups_created",
+    ):
+        if counters.get(name) != 0:
+            raise ValidationError(f"{name} must be 0 and reads {counters.get(name)!r}")
+
+    nxt = broadened["next_mission_recommendation"]
+    if not any("fetch a measurement value" in item for item in nxt.get("it_must_not", [])):
+        raise ValidationError(
+            "the recommendation must forbid fetching a value, because PREREGISTERED is defined "
+            "against retrieval and the mistake is irreversible"
+        )
 
 
 def _validate_baseline(baseline: dict) -> None:
@@ -921,6 +1065,179 @@ def render_feasibility(record: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
+def render_broadened(record: dict) -> str:
+    lines: list[str] = []
+    add = lines.append
+    add("# Broadened Apparatus Search V1")
+    add("")
+    add(f"**Mission {record['mission']} — recorded {record['recorded_at']}.**")
+    add("")
+    add("> **This document is GENERATED.** Edit the JSON and re-run")
+    add("> `infrastructure/scripts/render_independence_route.py`.")
+    add("")
+    add(f"Supersedes the selection in `{record['supersedes_selection_in']}`.")
+    add("")
+
+    decision = record["operator_decision"]
+    add(f"## The operator decision — `{decision['decision']}`")
+    add("")
+    add(
+        f"`{decision['withdrawn_route']}` withdrawn by `{decision['decided_by']}`: "
+        f"*{decision['stated_reason']}*."
+    )
+    add("")
+    add(f"**What this changes.** {decision['what_this_changes']}")
+    add("")
+    add("**What it does not change.**")
+    add("")
+    for item in decision["what_this_does_not_change"]:
+        add(f"- {item}")
+    add("")
+    add(f"*{decision['the_withdrawn_route_was_not_wrong']}*")
+    add("")
+
+    amended = record["amended_gate_set"]
+    add("## The amended gate set")
+    add("")
+    add(f"{amended['carried_forward']} gates carried forward, {len(amended['added'])} added.")
+    add("")
+    for gate in amended["added"]:
+        add(f"### Gate {gate['n']} — `{gate['gate']}`")
+        add("")
+        add(gate["rule"])
+        add("")
+        add(f"**How it is checked.** {gate['how_it_is_checked']}")
+        add("")
+        add(f"**What it costs.** {gate['the_cost_of_this_gate']}")
+        add("")
+
+    conjunction = record["the_conjunction_this_mission_had_to_satisfy"]
+    add("## The conjunction")
+    add("")
+    add(f"**{conjunction['statement']}**")
+    add("")
+    add(conjunction["why_it_is_hard"])
+    add("")
+
+    add("## Classes surveyed")
+    add("")
+    add(_row(["class", "world quantity", "two apparatuses", "dimension", "verdict"]))
+    add(_row(["---", "---", "---", "---", "---"]))
+    for cls in record["classes_surveyed"]:
+        add(
+            _row(
+                [
+                    f"`{cls['class']}`",
+                    cls["exists_independently_of_a_measurer"],
+                    cls["two_documented_independent_apparatuses"],
+                    cls["opportunity_dimension"],
+                    f"**{cls['verdict']}**",
+                ]
+            )
+        )
+    add("")
+    for cls in record["classes_surveyed"]:
+        add(f"- **`{cls['class']}`** — {cls['why']}")
+    add("")
+
+    trap = record["the_new_trap"]
+    add(f"## The new trap — `{trap['trap']}`")
+    add("")
+    add(trap["rule"])
+    add("")
+    add(trap["why_it_matters_here"])
+    add("")
+    add(f"*Found by: {trap['found_by']}.*")
+    add("")
+
+    route = record["candidate_route"]
+    add(f"## The candidate — `{route['route_id']}`")
+    add("")
+    add(f"> {route['construct']}")
+    add("")
+    add(
+        f"Unit `{route['unit']}`, frame {route['population_or_geography']}. "
+        f"Dimension: {route['opportunity_dimension']}."
+    )
+    add("")
+    asymmetry = route["why_independence_is_structurally_strong_here"]
+    add("### Why the independence argument is structural here")
+    add("")
+    add(asymmetry["the_asymmetry_with_every_earlier_route"])
+    add("")
+    add(f"**Consequence.** {asymmetry['consequence']}")
+    add("")
+    add(f"*Still to document.* {asymmetry['what_still_has_to_be_documented']}")
+    add("")
+
+    add("### Gate results")
+    add("")
+    add(_row(["gate", "verdict"]))
+    add(_row(["---", "---"]))
+    for name, verdict in route["gate_results"].items():
+        add(_row([f"`{name}`", f"**{verdict}**"]))
+    add("")
+    add(route["gate_3_is_conditional_and_the_condition_matters"])
+    add("")
+
+    add("### Open gates")
+    add("")
+    for entry in route["open_gates"]:
+        add(f"**Gate {entry['gate']}.** {entry['what_is_missing']}")
+        add("")
+        add(f"*Closable by:* {entry['closable_by']}")
+        add("")
+
+    add(f"**Selected: {route['selected']}.** {route['why_not_selected']}")
+    add("")
+
+    add(f"## Outcome — `{record['primary_outcome']}`")
+    add("")
+    add(record["primary_outcome_statement"])
+    add("")
+    add(record["not_a_selection"])
+    add("")
+
+    bought = record["what_broadening_actually_bought"]
+    add("## What broadening bought")
+    add("")
+    add(f"**Before.** {bought['before']}")
+    add("")
+    add(f"**After.** {bought['after']}")
+    add("")
+    add(
+        f"**The asymmetry worth carrying forward.** {bought['the_asymmetry_worth_carrying_forward']}"
+    )
+    add("")
+    add(bought["the_law_is_refined_rather_than_refuted"])
+    add("")
+
+    add("## Counters")
+    add("")
+    add(_row(["counter", "value"]))
+    add(_row(["---", "---"]))
+    for key, value in record["counters"].items():
+        add(_row([f"`{key}`", f"**{value}**"]))
+    add("")
+
+    nxt = record["next_mission_recommendation"]
+    add(f"## Next — {nxt['name']}")
+    add("")
+    add(nxt["why_this_and_not_governance_first"])
+    add("")
+    add("It should:")
+    add("")
+    for item in nxt["it_should"]:
+        add(f"- {item}")
+    add("")
+    add("It must not:")
+    add("")
+    for item in nxt["it_must_not"]:
+        add(f"- {item}")
+    add("")
+    return "\n".join(lines) + "\n"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true")
@@ -938,6 +1255,12 @@ def main() -> int:
         RENDERED[CANDIDATES]: render_candidates(candidates),
         RENDERED[FEASIBILITY]: render_feasibility(feasibility),
     }
+    # Rendered when present rather than required, so the gate is green both
+    # before a selection is withdrawn and after.
+    if BROADENED.exists():
+        rendered[RENDERED[BROADENED]] = render_broadened(
+            json.loads(BROADENED.read_text(encoding="utf-8"))
+        )
 
     if args.check:
         for path, text in rendered.items():
@@ -957,7 +1280,15 @@ def main() -> int:
         path.write_text(text, encoding="utf-8", newline="\n")
         print(f"wrote    {path.name} ({len(text.splitlines())} lines)")
     print(f"outcome  {feasibility['primary_outcome']}")
-    print(f"selected {feasibility['selected_route']}")
+    superseded = feasibility.get("selection_superseded")
+    if superseded is None:
+        print(f"selected {feasibility['selected_route']}")
+    else:
+        # Printing the withdrawn route as "selected" would be the one misreading
+        # this record set makes easy.
+        broadened = json.loads(BROADENED.read_text(encoding="utf-8"))
+        print(f"withdrew {feasibility['selected_route']} ({superseded['stated_reason']})")
+        print(f"current  {broadened['primary_outcome']}, selected: none")
     return 0
 
 

@@ -34,6 +34,7 @@ BASELINE = DOCS / "independence-capable-route-baseline-v1.json"
 REQUIREMENTS = DOCS / "independence-capable-apparatus-requirements-v1.json"
 CANDIDATES = DOCS / "independence-capable-route-candidates-v1.json"
 FEASIBILITY = DOCS / "independence-capable-route-feasibility-v1.json"
+BROADENED = DOCS / "apparatus-search-broadened-v1.json"
 
 # Not 0.5, 0.55, 0.6 or 0.65. Nothing reviewed carries these.
 FIXTURE_A = 0.42
@@ -391,3 +392,131 @@ class TestTheComplementarityRefusal(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestTheWithdrawnSelection(unittest.TestCase):
+    """Mission 1.58. The operator withdrew Mission 1.57's route and made product
+    relevance binding. What is tested here is that the withdrawal was recorded as
+    a DECISION rather than applied as an edit."""
+
+    def setUp(self) -> None:
+        if not BROADENED.exists():
+            self.skipTest("no selection has been withdrawn")
+        self.record = _load(BROADENED)
+
+    def test_the_earlier_selection_is_still_readable(self) -> None:
+        """A supersession that deleted `selected_route` would hide what the
+        operator decided against, which is the whole content of the decision."""
+        self.assertTrue(FEASIBILITY_RECORD["selected_route"])
+        self.assertEqual(
+            self.record["operator_decision"]["withdrawn_route"],
+            FEASIBILITY_RECORD["selected_route"],
+        )
+
+    def test_the_earlier_record_points_at_its_successor(self) -> None:
+        superseded = FEASIBILITY_RECORD["selection_superseded"]
+        self.assertEqual(superseded["status"], "WITHDRAWN_BY_OPERATOR")
+        self.assertEqual(
+            superseded["superseded_by"], "docs/data/apparatus-search-broadened-v1.json"
+        )
+
+    def test_a_rule_change_is_not_filed_as_an_error(self) -> None:
+        decision = self.record["operator_decision"]
+        self.assertTrue(decision["the_withdrawn_route_was_not_wrong"].strip())
+        self.assertIn("rule change", decision["what_this_changes"])
+
+    def test_the_structural_finding_survives_the_withdrawal(self) -> None:
+        """The route was withdrawn. The law about where measurement occurs was
+        not, and a reader must not take the whole mission as retracted."""
+        survives = self.record["operator_decision"]["what_this_does_not_change"]
+        self.assertTrue(any("structural finding" in item for item in survives))
+        self.assertTrue(any("negative controls" in item for item in survives))
+
+    def test_the_earlier_gates_are_carried_forward_not_replaced(self) -> None:
+        amended = self.record["amended_gate_set"]
+        self.assertEqual(amended["carried_forward"], 15)
+        for gate in amended["added"]:
+            self.assertGreater(gate["n"], 15)
+
+    def test_the_new_gate_states_what_it_costs(self) -> None:
+        """A gate that narrows the search and does not say what the narrowing
+        costs is a gate nobody can weigh."""
+        for gate in self.record["amended_gate_set"]["added"]:
+            self.assertTrue(gate["the_cost_of_this_gate"].strip())
+
+
+class TestTheBroadenedSearch(unittest.TestCase):
+    def setUp(self) -> None:
+        if not BROADENED.exists():
+            self.skipTest("no broadened search exists")
+        self.record = _load(BROADENED)
+        self.route = self.record["candidate_route"]
+
+    def test_no_route_was_selected_on_partial_gates(self) -> None:
+        """The gate set is conjunctive. Selecting the best route found is not
+        the same as selecting one that qualifies, and the operator asking for a
+        broadened search is not a reason to lower the bar."""
+        unresolved = [
+            name
+            for name, verdict in self.route["gate_results"].items()
+            if verdict not in ("PASS", "NOT_APPLICABLE")
+        ]
+        self.assertTrue(unresolved)
+        self.assertFalse(self.route["selected"])
+        self.assertTrue(self.route["why_not_selected"].strip())
+
+    def test_every_open_gate_names_how_to_close_it(self) -> None:
+        for entry in self.route["open_gates"]:
+            self.assertTrue(entry["closable_by"].strip(), entry["gate"])
+
+    def test_the_open_gates_match_the_unresolved_results(self) -> None:
+        unresolved = {
+            int(name.split("_")[0])
+            for name, verdict in self.route["gate_results"].items()
+            if verdict not in ("PASS", "NOT_APPLICABLE")
+        }
+        self.assertEqual({e["gate"] for e in self.route["open_gates"]}, unresolved)
+
+    def test_the_selected_class_is_product_relevant(self) -> None:
+        pursued = [c for c in self.record["classes_surveyed"] if c["verdict"] == "PURSUED"]
+        self.assertEqual(len(pursued), 1)
+        self.assertNotEqual(pursued[0]["opportunity_dimension"].strip(), "")
+        self.assertEqual(pursued[0]["exists_independently_of_a_measurer"], "YES")
+
+    def test_an_absence_of_evidence_was_not_read_as_evidence(self) -> None:
+        """Mission 1.57 corrected exactly this error in its own record. The
+        correction is applied here rather than forgotten: one apparatus states
+        its provenance affirmatively and the other only by omission, and the
+        gate reads PARTIAL rather than PASS."""
+        self.assertEqual(
+            self.route["gate_results"]["10_first_party_lineage_documentation"], "PARTIAL"
+        )
+        self.assertIn("ABSENCE", self.route["apparatus_b"]["upstream_lineage"])
+
+    def test_the_reading_versus_measuring_trap_is_named(self) -> None:
+        trap = self.record["the_new_trap"]
+        self.assertEqual(trap["trap"], "READING_A_PUBLISHED_VALUE_IS_NOT_MEASURING_IT")
+        self.assertTrue(trap["found_by"].strip())
+
+    def test_nothing_was_mutated_and_no_value_fetched(self) -> None:
+        counters = self.record["counters"]
+        for name in (
+            "research_data_requests",
+            "measurement_values_fetched",
+            "model_calls",
+            "embeddings",
+            "canonical_mutations",
+            "sources_registered",
+            "reviews_created",
+            "claims_created",
+            "evidence_created",
+        ):
+            self.assertEqual(counters[name], 0, name)
+
+    def test_the_next_mission_is_epistemics_before_governance(self) -> None:
+        """Mission 1.57 recommended governance first for a route whose
+        epistemics were closed. Here they are not, and paying for a licence
+        before gate 5 closes would be paying to discover a semantic problem."""
+        nxt = self.record["next_mission_recommendation"]
+        self.assertIn("epistemics are NOT closed", nxt["why_this_and_not_governance_first"])
+        self.assertTrue(any("fetch a measurement value" in i for i in nxt["it_must_not"]))

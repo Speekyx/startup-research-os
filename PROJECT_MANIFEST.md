@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.90
+Version: 1.91
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-05 (Sprint 1 / Mission 1.57)
+Last amended: 2026-09-05 (Sprint 1 / Mission 1.58)
 
 ---
 
@@ -13,6 +13,97 @@ Last amended: 2026-09-05 (Sprint 1 / Mission 1.57)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.91 — 2026-09-05 (Sprint 1 / Mission 1.58)
+
+**`PRODUCT_RELEVANT_INDEPENDENCE_CLASS_IDENTIFIED_GATES_OPEN`.** The operator
+withdrew Mission 1.57's selected route, made product relevance a mandatory gate,
+and the broadened search found the one apparatus class that satisfies the full
+conjunction: a world quantity, two documented independent apparatuses, and a real
+Opportunity dimension. No route in it qualifies yet.
+
+**A withdrawn selection is appended to, never edited away.** Mission 1.57's
+record still reads `selected_route: ROUTE-A`, with the withdrawal recorded beside
+it, because deleting the field would lose what the operator decided against —
+which is the entire content of the decision. The validator refuses a supersession
+that removed it.
+
+**A rule change is not a correction.** Mission 1.57's reasoning was sound under
+the rule it was given: its brief listed subject relevance under preferences and
+omitted it from the selection rule, and the mission flagged that exact
+reservation before asking for approval. Filing a sound analysis as an error would
+misdescribe both the analysis and the decision, so the record says which it was.
+
+**Gate 16, `PRODUCT_RELEVANCE`, is mandatory and its cost is stated.** The
+construct must bear on a named Opportunity dimension. That narrowing intersects
+Mission 1.57's own law directly — product-relevant quantities are overwhelmingly
+platform-mediated, and platform-mediated quantities are measured once — so an
+empty conjunction was the honest possibility going in.
+
+**Seven classes surveyed, one survives.** Package downloads, business registers
+and app-store catalogues are source-exclusive. Web-crawl technology surveys are
+`FRAME_INSIDE_THE_DEFINITION` again: each crawler defines its own site
+population, and one takes its origin list from a single platform's dataset, so
+the frame has a common upstream even where the crawling is independent. Job
+postings against official vacancy statistics are genuinely independent producers
+of two different constructs — a vacancy is not a posting.
+
+**A new trap, found by certificate transparency.**
+`READING_A_PUBLISHED_VALUE_IS_NOT_MEASURING_IT`: several independent log
+operators carrying the same submitted certificate are many copies, not many
+witnesses. Its test is the sharpest this arc has produced — if the two
+apparatuses disagree, is that a fact about the world or a bug? For two readers of
+one published number a disagreement is a bug; for two scanners probing the
+internet it is a real difference in coverage, timing or fingerprinting, which is
+exactly what independent corroboration is supposed to tolerate.
+
+**The surviving class is internet-wide active scanning, and its independence
+argument is structural rather than documentary.** Population figures have an
+upstream producer, so everyone else distributes. Host counts have none, because
+nobody publishes how many hosts run a service — each apparatus must generate the
+number by probing. The failure mode that killed World Bank plus FRED, World Bank
+plus Eurostat and every platform pair is not merely absent here, it is
+structurally unavailable, and that argument cannot be undone by one party
+changing its data-sourcing policy.
+
+**The law is refined rather than refuted.** A quantity is independently
+measurable exactly when no party is in a position to publish it authoritatively,
+and the internet as a whole is such a quantity even though every host on it
+belongs to somebody.
+
+**No route was selected, and that is the point.** Twelve of sixteen gates pass
+and the set is conjunctive, so selecting the best route found is not selecting
+one that qualifies — and the operator asking for a broadened search is not a
+reason to lower the bar. Three gates are open, each naming how to close it: gate
+3, because vendor fingerprinting is proprietary and the construct must be
+narrowed to what the protocol defines or it becomes the CPI-basket failure in a
+new domain; gate 5, because two snapshot censuses of a continuously changing
+population need a shared reference window and one side's cadence article was not
+retrievable; gate 10, because one apparatus states its provenance affirmatively
+and the other only by omission — and an absence of a reference to third-party
+data is an absence rather than a statement, which is Mission 1.57's own
+correction applied rather than forgotten.
+
+**The next mission is epistemics before governance**, inverting Mission 1.57's
+recommendation: there the epistemics were closed and only a review remained; here
+gate 5 decides whether the two apparatuses measure one proposition at all, and
+buying a licence first would be paying to discover a semantic problem.
+
+0 research-data requests, 8 first-party documentation requests, 0 measurement
+values fetched — load-bearing, because PREREGISTERED is defined against retrieval
+and one value would destroy it permanently. 0 canonical mutations, 0 sources
+registered, 0 reviews created, 0 collectors, 0 threshold registrations, 0 Claims,
+0 Evidence, 0 reliability assessments, 0 independence groups, 0 Scores, 0
+Opportunity changes, 0 model calls, 0 embeddings. The Mission 1.56 Claim is
+untouched, the profile is still UNCALIBRATED and Problem-Family is still PARKED.
+Validator probed with 103 deliberate violations and 103 caught, 1453 bare-python
+tests before commit and 3310 pytest tests after.
+
+New: `docs/data/apparatus-search-broadened-v1.json` and its rendered `.md`; the
+supersession appended to `independence-capable-route-feasibility-v1.json`; 14
+further tests in `packages/evidence-aggregation/python`.
+
+Report: `docs/architecture/mission-1.58-report.md`.
 
 ## 1.90 — 2026-09-05 (Sprint 1 / Mission 1.57)
 
@@ -3472,6 +3563,7 @@ Additionally authoritative:
 - docs/data/first-deterministic-inferred-pilot-manifest-v1.md (added in 1.89)
 - docs/data/first-deterministic-inferred-pilot-v1.md (added in 1.89)
 - docs/data/independence-capable-route-feasibility-v1.md (added in 1.90)
+- docs/data/apparatus-search-broadened-v1.md (added in 1.91)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

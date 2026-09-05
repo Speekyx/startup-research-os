@@ -1,0 +1,239 @@
+{
+  "$comment": "Mission 1.58. The operator withdrew Mission 1.57's selected route and made product relevance binding. This record carries that decision, the amended gate set, and the broadened search it required. Mission 1.57's feasibility record is NOT rewritten: it recorded what was true when it was written, and a superseded selection is appended to rather than edited (the same discipline every source review in this repository follows).",
+  "record_version": "1.0.0",
+  "mission": "1.58 — Broadened Apparatus Search V1",
+  "recorded_at": "2026-09-05",
+  "supersedes_selection_in": "docs/data/independence-capable-route-feasibility-v1.json",
+  "operator_decision": {
+    "decision": "WITHDRAW_ROUTE_A_AND_BROADEN",
+    "decided_by": "thibchm",
+    "withdrawn_route": "ROUTE-A-ATMOSPHERIC-CO2-FIXED-SITE",
+    "stated_reason": "the route does not serve the product",
+    "what_this_changes": "Mission 1.57 recorded subject relevance as a PREFERENCE, because its own brief listed it under preferences and omitted it from the selection rule. The operator has made it BINDING. That is a rule change, not a correction: Mission 1.57's reasoning was sound under the rule it was given, and its selection was flagged with exactly this reservation before approval was sought.",
+    "what_this_does_not_change": [
+      "the structural finding, which is about where measurement occurs and is unaffected by which route is preferred",
+      "the negative controls, which still fail",
+      "the independence proof standard",
+      "the FRAME_INSIDE_THE_DEFINITION trap",
+      "the value-inspection rule"
+    ],
+    "the_withdrawn_route_was_not_wrong": "It passed every gate it was measured against, and its epistemic analysis stands. What changed is which gates apply. Recording it as an error would misdescribe both the analysis and the decision."
+  },
+  "amended_gate_set": {
+    "$comment": "The fifteen gates of Mission 1.57 are unchanged and carried forward. One is added, and it is mandatory.",
+    "carried_forward": 15,
+    "added": [
+      {
+        "n": 16,
+        "gate": "PRODUCT_RELEVANCE",
+        "rule": "The measured construct must bear on at least one Opportunity dimension this system already defines. A route that exercises the aggregation machinery on a quantity the product will never research proves the mechanism and calibrates nothing transferable.",
+        "how_it_is_checked": "The construct must map to a named dimension in the existing vocabulary -- AUDIENCE_OR_USAGE, COMPETITIVE_SUPPLY, MARKET_ACTIVITY, PROBLEM_OR_NEED, ECONOMIC_VALUE, BUYER_OR_BUDGET_EXISTENCE -- with the bound sentence that dimension requires. A construct mapping to nothing fails.",
+        "why_it_is_mandatory_now": "The operator's decision. It is written as a gate rather than a preference so the next search cannot reach the same answer by the same route.",
+        "the_cost_of_this_gate": "It is a real narrowing, and it may make the conjunction empty. Mission 1.57 established that product-relevant quantities are overwhelmingly platform-mediated and platform-mediated quantities are measured once. This gate intersects that finding directly, and the honest possibility is that very few routes survive both."
+      }
+    ]
+  },
+  "the_conjunction_this_mission_had_to_satisfy": {
+    "statement": "A quantity that (a) exists independently of any single measurer, (b) has at least two documented independent measurement apparatuses, and (c) bears on an Opportunity dimension.",
+    "why_it_is_hard": "Mission 1.57's law says (a) rules out everything a platform records, and (c) is mostly satisfied by exactly the things platforms record. The two conditions pull in opposite directions, and the search is for the intersection rather than for a good source.",
+    "the_intersection_is_not_empty": "One class satisfies all three, and finding it is this mission's result."
+  },
+  "classes_surveyed": [
+    {
+      "class": "INTERNET_WIDE_ACTIVE_SCANNING",
+      "construct": "publicly reachable hosts responding on a defined port with a protocol-defined service",
+      "exists_independently_of_a_measurer": "YES",
+      "two_documented_independent_apparatuses": "YES",
+      "opportunity_dimension": "AUDIENCE_OR_USAGE and COMPETITIVE_SUPPLY",
+      "verdict": "PURSUED",
+      "why": "The internet is the object, not a publisher. Nobody publishes how many hosts run a service, so every apparatus must generate the number by probing -- which is what makes two of them two MEASUREMENTS rather than two copies."
+    },
+    {
+      "class": "WEB_CRAWL_TECHNOLOGY_SURVEYS",
+      "construct": "share of websites using a technology",
+      "exists_independently_of_a_measurer": "YES",
+      "two_documented_independent_apparatuses": "PARTIALLY",
+      "opportunity_dimension": "AUDIENCE_OR_USAGE",
+      "verdict": "REJECTED",
+      "why": "Each crawler defines its own site population -- a top-N list from one ranking, or its own crawl frontier -- so the frame sits inside the metric definition. FRAME_INSIDE_THE_DEFINITION again, and one prominent crawler takes its origin list from a single platform's dataset, which is a common upstream for the FRAME even where the crawling is independent."
+    },
+    {
+      "class": "PACKAGE_AND_REGISTRY_DOWNLOADS",
+      "construct": "downloads of a package",
+      "exists_independently_of_a_measurer": "NO",
+      "two_documented_independent_apparatuses": "NO",
+      "opportunity_dimension": "AUDIENCE_OR_USAGE",
+      "verdict": "REJECTED",
+      "why": "A registry's own download log is the only apparatus that can measure downloads from that registry. Every derived statistics service consumes it, which is common upstream. Source-exclusive in the Mission 1.56 sense."
+    },
+    {
+      "class": "CERTIFICATE_TRANSPARENCY_LOGS",
+      "construct": "certificates issued for a domain or by an issuer",
+      "exists_independently_of_a_measurer": "YES",
+      "two_documented_independent_apparatuses": "NO",
+      "opportunity_dimension": "COMPETITIVE_SUPPLY",
+      "verdict": "REJECTED",
+      "why": "Several independent log operators, and they carry the SAME certificate submitted to each. Reading a published value from two places is not measuring it twice."
+    },
+    {
+      "class": "JOB_POSTINGS_AND_VACANCY_STATISTICS",
+      "construct": "demand for a named skill or technology",
+      "exists_independently_of_a_measurer": "YES",
+      "two_documented_independent_apparatuses": "YES",
+      "opportunity_dimension": "MARKET_ACTIVITY",
+      "verdict": "REJECTED",
+      "why": "An official employer survey measures VACANCIES and a postings index measures POSTINGS. Genuinely independent producers of two different constructs, which is section 24's trap: independence without the same proposition is useless."
+    },
+    {
+      "class": "BUSINESS_REGISTERS_AND_COMPANY_FORMATION",
+      "construct": "firms operating in a sector",
+      "exists_independently_of_a_measurer": "NO",
+      "two_documented_independent_apparatuses": "NO",
+      "opportunity_dimension": "COMPETITIVE_SUPPLY",
+      "verdict": "REJECTED",
+      "why": "One authoritative register per jurisdiction, and every aggregator consumes it. The register is the upstream producer, exactly as the national statistical institute is for population."
+    },
+    {
+      "class": "APP_STORE_AND_PLATFORM_CATALOGUES",
+      "construct": "applications available or installed",
+      "exists_independently_of_a_measurer": "NO",
+      "two_documented_independent_apparatuses": "NO",
+      "opportunity_dimension": "COMPETITIVE_SUPPLY",
+      "verdict": "REJECTED",
+      "why": "Platform-exclusive by construction, and the platforms are governance-restricted here in any case."
+    }
+  ],
+  "the_new_trap": {
+    "trap": "READING_A_PUBLISHED_VALUE_IS_NOT_MEASURING_IT",
+    "rule": "Two apparatuses that each retrieve an authoritative published record are two READINGS of one fact, not two measurements. Measurement requires that the apparatus GENERATE the value by interacting with the world, so that two apparatuses can legitimately disagree.",
+    "why_it_matters_here": "It is the sharpest available test for this whole search, and it is the reason the scanning class works where every earlier candidate failed. Ask: if the two apparatuses disagree, is that a fact about the world or a bug? For two readers of one published number, a disagreement is a bug. For two scanners probing the internet, a disagreement is a real difference in coverage, timing or fingerprinting -- which is exactly what independent corroboration is supposed to tolerate.",
+    "found_by": "certificate transparency logs, which look like many independent witnesses and are many copies of one submission"
+  },
+  "candidate_route": {
+    "route_id": "ROUTE-D-INTERNET-WIDE-SERVICE-PRESENCE",
+    "proposition_family": "THRESHOLD_STATE",
+    "construct": "the number of publicly reachable IPv4 hosts responding on a defined TCP port with a protocol-defined service banner, observed within a defined reference window",
+    "canonical_subject_type": "a named network service or protocol",
+    "unit": "hosts",
+    "population_or_geography": "the public IPv4 address space, excluding reserved and special-use ranges",
+    "opportunity_dimension": "AUDIENCE_OR_USAGE, with the bound sentence that a reachable host is not an installation, a customer or a user",
+    "apparatus_a": {
+      "producer": "a commercial internet-wide scanning service of academic origin",
+      "measurement_method": "its own scanners perform a small number of connection attempts to every IPv4 address, then complete protocol handshakes to identify running services",
+      "upstream_lineage": "its own scanning infrastructure; its documentation states that all published data derives from its own internet-wide scanning operations",
+      "cadence_documented": "YES -- continuous for the most common ports, with the remainder refreshed approximately daily",
+      "methodology_docs": "retrieved, first-party",
+      "governance_state": "UNREGISTERED_GOVERNANCE_REQUIRED; its terms require a PAID licence for commercial use, permit automated access only through the authorised API, permit storage and derived analytics for paying customers, and restrict redistribution",
+      "reliability_reviewability": "YES"
+    },
+    "apparatus_b": {
+      "producer": "a second commercial internet-wide scanning service",
+      "measurement_method": "its own purpose-built scanners sweep the IPv4 space against a curated port list, identifying around thirty application-layer protocols by banner grabbing and protocol parsing, with its own TLS and HTTP handling",
+      "upstream_lineage": "its own scanning infrastructure, stated first-party. Its documentation makes no reference to third-party or shared scan data -- and an ABSENCE of such a reference is not an affirmative statement that none is used, which is recorded rather than glossed",
+      "cadence_documented": "NO -- a 'Data Update Cycles' section exists in its knowledge base and the article was not retrievable at the paths tried in this mission",
+      "methodology_docs": "retrieved, first-party, for scanning technology",
+      "governance_state": "UNREGISTERED_GOVERNANCE_REQUIRED; terms not retrieved in this mission",
+      "reliability_reviewability": "YES"
+    },
+    "why_independence_is_structurally_strong_here": {
+      "the_asymmetry_with_every_earlier_route": "Population figures have an upstream PRODUCER -- the national statistical institute measures once and everyone else distributes. Host counts have none. Nobody publishes how many hosts run a service, so there is no common upstream measurement available to be republished, and each apparatus must generate its value by probing.",
+      "consequence": "The failure mode that killed World Bank plus FRED, World Bank plus Eurostat, and every platform pair is not merely absent here; it is structurally unavailable.",
+      "what_still_has_to_be_documented": "That neither service ingests the other's scan data. Both describe their own infrastructure; one states its provenance affirmatively and the other does so only by omission."
+    },
+    "gate_results": {
+      "1_same_external_construct": "PASS",
+      "2_exact_canonical_subject": "PASS",
+      "3_metric_definition_compatibility": "PASS_IF_NARROWED",
+      "4_unit_compatibility": "PASS",
+      "5_time_compatibility": "UNKNOWN",
+      "6_population_or_frame": "PASS",
+      "7_each_alone_entails": "PASS",
+      "8_no_shared_upstream": "PASS",
+      "9_different_production": "PASS",
+      "10_first_party_lineage_documentation": "PARTIAL",
+      "11_reliability_reviewability": "PASS",
+      "12_governance_feasibility": "UNKNOWN",
+      "13_threshold_freezable": "PASS",
+      "14_falsifiable_both_ways": "PASS",
+      "15_structurally_useful": "PASS",
+      "16_product_relevance": "PASS"
+    },
+    "gate_3_is_conditional_and_the_condition_matters": "Each vendor's product fingerprinting is proprietary, so 'hosts running product X' is two different operational definitions and no deterministic equivalence is published. The route survives only if the construct is narrowed to something the PROTOCOL defines rather than the vendor -- a service responding on a defined port with a protocol-defined handshake. Both apparatuses document banner grabbing and protocol parsing, so the narrowed construct is available on both sides. Taking the vendor label instead would be the CPI-basket failure in a new domain.",
+    "open_gates": [
+      {
+        "gate": 3,
+        "what_is_missing": "a construct narrow enough that both apparatuses are measuring the same thing. Each vendor's product fingerprinting is proprietary, so 'hosts running product X' is two operational definitions with no published equivalence between them.",
+        "closable_by": "freezing the construct on what the PROTOCOL defines -- a service responding on a defined port with a protocol-defined handshake -- which both sides document as banner grabbing and protocol parsing, rather than on a vendor product label",
+        "if_it_cannot_be_closed": "the pair does not qualify, because taking the vendor label instead would be the CPI-basket failure in a new domain: two indices of two baskets compared as one number"
+      },
+      {
+        "gate": 5,
+        "what_is_missing": "a documented reference window on apparatus B. Two snapshot censuses of a continuously changing population need a shared definition of 'as of when', and one side publishes its cadence while the other's cadence article was not retrievable.",
+        "closable_by": "retrieving one named first-party document -- the 'Data Update Cycles' article -- and establishing whether each record carries an observation timestamp and whether a calendar-day snapshot is defined",
+        "if_it_cannot_be_closed": "the pair does not qualify, because two counts of a moving population taken at unstated times are not measurements of one proposition"
+      },
+      {
+        "gate": 12,
+        "what_is_missing": "a policy review for both apparatuses, and for apparatus A a paid commercial licence. Terms for apparatus B were not retrieved.",
+        "closable_by": "the ordinary source-registration and local-private-research-v1 review, plus a purchasing decision",
+        "note": "This is an unasked question plus a commercial decision, not a refusal. Apparatus A's terms explicitly contemplate commercial use under a paid licence, which is a closable path rather than a prohibition."
+      },
+      {
+        "gate": 10,
+        "what_is_missing": "an affirmative first-party statement from apparatus B that it does not ingest third-party scan data",
+        "closable_by": "further first-party documentation, or written enquiry",
+        "why_it_is_recorded_as_PARTIAL_rather_than_PASS": "Section 15 of the Mission 1.57 standard: partial evidence yields UNKNOWN, and an absence of a reference to third-party data is an absence rather than a statement. Mission 1.57 corrected exactly this error in its own record and the correction is being applied rather than forgotten."
+      }
+    ],
+    "selected": false,
+    "why_not_selected": "Three gates are open and the gate set is conjunctive. Mission 1.57's own rule -- a pair qualifies only if ALL mandatory gates pass -- is not weakened because this route is the best one found and because the operator asked for a broadened search to produce something. Selecting on twelve of sixteen would be exactly the outcome-chasing this whole arc has refused."
+  },
+  "counters": {
+    "research_data_requests": 0,
+    "first_party_method_doc_requests": 7,
+    "governance_doc_requests": 1,
+    "measurement_values_fetched": 0,
+    "model_calls": 0,
+    "embeddings": 0,
+    "canonical_mutations": 0,
+    "sources_registered": 0,
+    "reviews_created": 0,
+    "collectors_implemented": 0,
+    "threshold_registrations_created": 0,
+    "claims_created": 0,
+    "evidence_created": 0,
+    "reliability_assessments_created": 0,
+    "independence_groups_created": 0,
+    "scores_created": 0,
+    "opportunity_changes": 0,
+    "mission_1_56_claim_modified": false,
+    "reference_profile": "UNCALIBRATED",
+    "problem_family": "PARKED"
+  },
+  "primary_outcome": "PRODUCT_RELEVANT_INDEPENDENCE_CLASS_IDENTIFIED_GATES_OPEN",
+  "primary_outcome_statement": "Broadening the search found one class that satisfies the full conjunction -- a world quantity, two documented independent apparatuses, and a real Opportunity dimension -- and no route in it qualifies yet. Three gates are open, each named, each closable by a bounded next step, and none of them is epistemic in the way that killed every previous candidate.",
+  "not_a_selection": "No route is selected. Section 46 of the Mission 1.57 rules permits selection only when every mandatory gate passes, and three do not.",
+  "what_broadening_actually_bought": {
+    "before": "The only route passing every gate measured a quantity the product will never research, and the honest reading was that inside this portfolio there was no alternative.",
+    "after": "There is an alternative, and it is outside the portfolio. It is product-relevant, its independence rests on a STRUCTURAL asymmetry rather than on a documentary coincidence, and what blocks it is a retrievable document, a policy review and a purchase.",
+    "the_asymmetry_worth_carrying_forward": "Nobody publishes how many hosts run a service. That single fact is what makes two scanners two measurements, and it is a better independence argument than any pair of organisational statements -- because it cannot be undone by one of the two changing its data-sourcing policy.",
+    "the_law_is_refined_rather_than_refuted": "Mission 1.57 said platform-recorded quantities are measured once. That stands. What this mission adds is the complement: a quantity is independently measurable exactly when NO party is in a position to publish it authoritatively, and the internet as a whole is such a quantity even though every host on it belongs to somebody."
+  },
+  "next_mission_recommendation": {
+    "name": "Mission 1.59 — Internet-Wide Service-Presence Route Gate Closure V1",
+    "why_this_and_not_governance_first": "Mission 1.57 recommended governance first for a route whose epistemics were closed. Here the epistemics are NOT closed: gate 5 decides whether the two apparatuses measure one proposition at all. Buying a licence for a route that then fails time alignment would be paying to discover a semantic problem.",
+    "it_should": [
+      "retrieve apparatus B's data-update-cycle documentation and establish whether a defined reference window and per-record observation timestamp exist",
+      "retrieve apparatus B's data-use terms",
+      "seek an affirmative first-party statement from apparatus B about third-party scan data, and record UNKNOWN if none is found",
+      "freeze the narrowed protocol-defined construct, or report that it cannot be narrowed without a vendor fingerprint",
+      "re-run all sixteen gates and either select or report which remain open"
+    ],
+    "it_must_not": [
+      "fetch a measurement value, a host count or a result count, which would destroy the PREREGISTERED classification permanently",
+      "accept a vendor product label as the metric definition",
+      "treat an absence of a reference to third-party data as an affirmative statement",
+      "register a source or create a review, which belongs to the governance mission after the epistemics close"
+    ]
+  }
+}
