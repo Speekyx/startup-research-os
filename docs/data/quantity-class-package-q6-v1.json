@@ -1,0 +1,41 @@
+{
+ "class_id": "Q6",
+ "name": "Public attention / information demand",
+ "role": "CANDIDATE",
+ "product_relevance": "MODERATE",
+ "product_relevance_reason": "Attention volume bears on trend discovery, as a proxy. It is not demand, not customers and not willingness to pay.",
+ "exact_world_state_unit": "varies by apparatus, and that is the problem",
+ "population_externally_freezable": "PROVIDER_DEFINED_POPULATION",
+ "temporal_preselection": "STRONG",
+ "routes": [
+  {
+   "apparatus": "Wikimedia",
+   "production": "OWN_MEASUREMENT",
+   "basis": "repository records from Mission 1.19",
+   "note": "A content-request count is produced by Wikimedia's own request logs. Only Wikimedia is positioned to produce it.",
+   "produces_the_class_world_state_unit": true
+  },
+  {
+   "apparatus": "a search engine's trend product",
+   "production": "OWN_MEASUREMENT",
+   "basis": "different event class",
+   "note": "A search is a different event from a content request. Two apparatuses measuring different events are not two witnesses.",
+   "produces_the_class_world_state_unit": false
+  }
+ ],
+ "same_proposition": "NOT_AVAILABLE",
+ "same_proposition_reason": "§17 and §20 name this directly. Wikipedia pageviews and search volume are not two measurements of one event; nor are Stack Exchange questions and Wikipedia views. Mission 1.47 already established the second pair as COMPLEMENTARY_NOT_CORROBORATING on this repository's own corpus.",
+ "independence_plausible": false,
+ "commercial_purpose_compatibility": "ESTABLISHED_FOR_WIKIMEDIA",
+ "bounded_pilot_feasible": "YES_BUT_POINTLESS",
+ "data_volume": "LIGHT",
+ "unresolved_load_bearing_gaps": [],
+ "class_verdict": "COMPLEMENTARY_ONLY",
+ "useful_complementary_signal": true,
+ "suitable_for_same_proposition_independence_experiment": false,
+ "record_version": "1.0.0",
+ "mission": "1.69 — Independent Product-Relevant Quantity Class Selection V1",
+ "recorded_at": "2026-09-06",
+ "exact_construct_frozen": false,
+ "values_consulted": 0
+}

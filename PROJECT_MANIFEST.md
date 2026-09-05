@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.103
+Version: 1.104
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-06 (Sprint 1 / Mission 1.68)
+Last amended: 2026-09-06 (Sprint 1 / Mission 1.69)
 
 ---
 
@@ -13,6 +13,109 @@ Last amended: 2026-09-06 (Sprint 1 / Mission 1.68)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.104 — 2026-09-06 (Sprint 1 / Mission 1.69)
+
+**`FIXED_CORPUS_WEB_MEASUREMENT_PROMISING_BUT_ROUTE_QUALIFICATION_REQUIRED`.** Eight
+quantity classes evaluated outside the scanner class, and **five of them have exactly
+ONE party positioned to produce the quantity while a sixth has none of its own.** Every
+other publisher is a distribution layer.
+
+**THAT IS MISSIONS 1.46 AND 1.57's LAW RECURRING IN FIVE DOMAINS IT HAD NEVER BEEN
+TESTED IN**, and each one was confirmed on the aggregator's or the registry's own words
+rather than reasoned about:
+
+| class | what the producer's own documentation says |
+|---|---|
+| package downloads | *"This table is populated through the Linehaul project by streaming download logs from PyPI to BigQuery."* |
+| code activity | *"Activity archives for dates starting 1/1/2015 are recorded from the Events API"*, *"as reported by the GitHub API"* |
+| publication activity | *"We don't index journals directly — we harvest Crossref and friends"* |
+| procurement | one submitted notice, many publishers (held evidence, Missions 1.15.x) |
+| public attention | each metric produced by exactly the platform that logged it (held evidence, Missions 1.19 and 1.47) |
+
+**THE EXCEPTIONS ARE THE THREE CLASSES NOBODY IS POSITIONED TO PUBLISH
+AUTHORITATIVELY**: what services answer on the internet, what a web server returns for a
+defined request, and what a resolver receives for a defined query. Each must be
+established by asking, which is exactly the condition Mission 1.58 identified. The first
+of the three is the scanner class, parked for a different reason — it has two producers
+and no construct they can both witness.
+
+**Q1 IS THE FIRST CLASS IN THIS ARC WITH TWO ESTABLISHED INDEPENDENT PRODUCERS.** Common
+Crawl fetches pages with its own crawler — *"CCBot identifies itself in its `UserAgent`
+string as: CCBot/2.0"*, on *"dedicated IP address ranges with reverse DNS"* — and stores
+*"the raw response ... but also the HTTP header information"* in dated crawl releases.
+HTTP Archive loads each page itself through *"a private instance of WebPageTest with
+private test agents, which are the actual browsers that test each web page"*, publishes
+*"one row per page tested"* with its crawl date, and documents its request contract down
+to the user agent, the viewport and *"Google Cloud Platform locations based in the
+USA"*. **§36 demanded first-party evidence on both sides rather than an inference from
+the organisations differing, and this is it.**
+
+**AND THE FIXED-CORPUS ADVANTAGE IS ONLY HALF DELIVERED, WHICH IS THE FINDING.** §6
+hoped a frozen corpus would replace each provider's hidden discovery frame. What is
+delivered is that **coverage is INSPECTABLE**, which no scanner offered. What is not is
+that **neither apparatus can be POINTED at a corpus**: Common Crawl selects its own URLs
+and states plainly that *"Common Crawl's dataset is a sample of the web, and we do not
+generally archive any entire website but a randomly selected subset of it"*, while HTTP
+Archive's list comes from the Chrome UX Report. So a joint population over a frozen
+corpus C is C intersected with two independently determined coverages. **Coverage is
+metadata rather than a measurement value and both publish it, so a restriction rule
+could in principle be frozen before any value is retrieved** — and whether that is an
+honest preregistration or a population chosen after looking is the one load-bearing
+question this mission leaves open.
+
+**NOTHING WAS SELECTED, AND OUTCOME B WAS AVAILABLE.** §50's outcome I explicitly does
+not select the class, and selecting Q1 on the expectation that the population question
+resolves would preregister an experiment on an architecture nobody has established.
+**§35's tie-break preference for Q1 was NOT exercised**, because it is a tie-break and
+may not push a class through a failed gate.
+
+**OUTCOME H WAS ALSO REFUSED, IN THE OTHER DIRECTION.** H says no class has two credible
+independent routes. Q1 HAS two, established first-party on both sides; what is
+unresolved is population alignment. Reporting H would have understated what was
+established and sent the next mission hunting routes it already has.
+
+**A DISTINCTION HAD TO BE MADE MACHINE-CHECKABLE MID-MISSION, AND THE VALIDATOR IS WHAT
+FORCED IT.** Its first version counted own-measurement routes as producers, and refused
+the record for public attention: Wikimedia and a search engine both measure their own
+events perfectly, and **a search is not a content request**. The fix was a per-route
+field recording whether a route produces THIS class's world-state unit, which turns §20
+from a sentence into a check. Under it, five classes have one producer, one has none,
+and three have two.
+
+**THE MISSION 1.68 CANDIDATE RULE WAS EXAMINED AND NOT ADOPTED.** Three possible second
+instances were checked and each is better described by a rule the registry already has —
+`SOURCE_EXCLUSIVE_METRIC` for the registry case, and the mirror trap for the two
+aggregators. The standard applied is the one Mission 1.67 set for itself when it adopted
+the previous candidate: a second independent instance **in a different shape**.
+**Registry unchanged at 15.**
+
+**THE SCANNER ARC IS PARKED, NOT REFUTED**, and its reopening conditions are written
+down: an ONYPHE reply, the Netlas operational questions closing, or a positive
+first-party answer to Mission 1.68's one-sentence question. §1 required that and the
+validator enforces it.
+
+**HELD EVIDENCE DID MOST OF THE WORK.** Seven repository findings were reused without
+re-retrieval, and new requests were spent only where a class-specific question had no
+recorded answer. 14 of 24 first-party requests, 4 navigation searches, 8 serious classes
+of 8 with a ninth deliberately not invented, and **0 requests spent reopening the scanner
+class against a cap of 2**.
+
+**0 measurement values, 0 crawls, 0 HTTP measurement requests, 0 dataset downloads, 0
+BigQuery executions, 0 API executions, 0 package, repository, publication, procurement,
+trend or DNS queries, 0 trials, 0 accounts, 0 credential reads, 0 mailbox searches, 0
+enquiries sent.** 0 sources registered, 0 source reviews mutated, 0 governance
+mutations, 0 canonical mutations, 0 thresholds, 0 Claims, 0 Evidence, 0 reliability
+values, 0 model calls, 0 embeddings, no migration, no construct frozen, no pair
+selected. ONYPHE stays `NOT_CHECKED_AFTER_DISPATCH` and Netlas unresolved.
+**`PAIR_ANALYSIS_NOT_READY`.** Validator probed with **127 deliberate violations, 127
+caught** — 124 by rule, 3 by drift — plus **4 of 4 positive controls**, including a
+complementary-only class, a two-producer viable class, a properly evidenced selection
+with its artifact, and an alternative no-selection outcome. **§23 for the tenth time**: a
+guard compared a field to the literal `"NO"` and refused a value reading *"NO. Neither
+can be pointed at a corpus we choose."* — repaired by splitting the verdict into a
+boolean rather than loosening the comparison. **56 new tests**, **2207 bare-python
+tests**, all pytest suites passed with the database unchanged, and all **39** CI gates.
 
 ## 1.103 — 2026-09-06 (Sprint 1 / Mission 1.68)
 

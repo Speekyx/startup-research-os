@@ -1,0 +1,46 @@
+{
+ "class_id": "Q0",
+ "name": "Internet scanner class",
+ "role": "NEGATIVE_CONTROL",
+ "$comment": "§4. Carried from Mission 1.68 without restarting discovery. Zero new requests spent, against a cap of two.",
+ "product_relevance": "MODERATE",
+ "product_relevance_reason": "Observable exposure of public network services bears on technology exposure and infrastructure adoption.",
+ "exact_world_state_unit": "a service observation at an address and port during a window",
+ "population_externally_freezable": "PROVIDER_DEFINED_POPULATION",
+ "temporal_preselection": "MIXED — one apparatus publishes dated immutable artifacts and the rest are maintained current state",
+ "routes": [
+  {
+   "apparatus": "Rapid7 Project Sonar",
+   "production": "OWN_MEASUREMENT",
+   "basis": "Mission 1.68 record",
+   "note": "dated immutable per-port artifacts, transport-level output only",
+   "produces_the_class_world_state_unit": true
+  },
+  {
+   "apparatus": "Netlas",
+   "production": "OWN_MEASUREMENT",
+   "basis": "Mission 1.61 record",
+   "note": "dated index selection and a queryable banner, A8 still PARTIAL",
+   "produces_the_class_world_state_unit": true
+  }
+ ],
+ "same_proposition": "NOT_ESTABLISHED",
+ "independence_plausible": true,
+ "commercial_purpose_compatibility": "UNKNOWN",
+ "bounded_pilot_feasible": "UNKNOWN",
+ "data_volume": "MODERATE",
+ "unresolved_load_bearing_gaps": [
+  "whether any apparatus publishes a record that a port accepted a TCP connection without producing an application response",
+  "ONYPHE's temporal object and datascan port membership",
+  "Netlas's operational reviewability"
+ ],
+ "class_verdict": "UNRESOLVED",
+ "useful_complementary_signal": true,
+ "suitable_for_same_proposition_independence_experiment": "NOT_ESTABLISHED",
+ "carried_not_recomputed": true,
+ "record_version": "1.0.0",
+ "mission": "1.69 — Independent Product-Relevant Quantity Class Selection V1",
+ "recorded_at": "2026-09-06",
+ "exact_construct_frozen": false,
+ "values_consulted": 0
+}

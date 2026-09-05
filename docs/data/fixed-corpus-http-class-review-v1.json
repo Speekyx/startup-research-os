@@ -1,0 +1,78 @@
+{
+ "$comment": "Mission 1.69 §5, §6, §7, §8, §9 and §11. The deep review the mission mandated for Q1, kept separate from its package so the architecture question is readable on its own.",
+ "record_version": "1.0.0",
+ "mission": "1.69 — Independent Product-Relevant Quantity Class Selection V1",
+ "recorded_at": "2026-09-06",
+ "the_architecture_that_was_hoped_for": {
+  "$comment": "§6. Written down as proposed, so what was delivered can be compared against it rather than against a memory of it.",
+  "shape": "Freeze corpus C at T0. Apparatus A observes every eligible item in C during W. Apparatus B independently observes every eligible item in C during W. Both report the same deterministic predicate P.",
+  "why_it_mattered": "It would define the population by C instead of by each provider's hidden discovery frame, which is the blocker that recurred from Mission 1.58 to Mission 1.68."
+ },
+ "what_was_delivered": {
+  "independent_production": "YES, on both sides, first-party.",
+  "dated_artifacts": "YES, on both sides.",
+  "raw_response_and_headers": "YES for Common Crawl, whose WARC stores the raw response including HTTP header information. For HTTP Archive the full WebPageTest result is available as a payload and whether headers are separately queryable was not established.",
+  "coverage_inspectable": "YES. HTTP Archive publishes one row per page tested with its crawl date, so exactly which URLs were tested in a month is knowable. Common Crawl publishes per-crawl indexes.",
+  "apparatus_directable_at_C": false,
+  "apparatus_directable_at_C_reason": "Neither apparatus can be pointed at a corpus we choose. Common Crawl selects its own URLs and HTTP Archive takes its list from the Chrome UX Report."
+ },
+ "the_load_bearing_finding": {
+  "source_says": "Common Crawl's dataset is a sample of the web, and we do not generally archive any entire website but a randomly selected subset of it.",
+  "source_says_provenance": "https://commoncrawl.org/faq",
+  "project_interpretation": "This is the apparatus stating its own sampling in the plainest possible terms. A frozen corpus C is therefore covered by Common Crawl as a random subset, not exhaustively — so the joint population over C is C intersected with two independently determined coverages, and it is determined by what each provider happened to crawl rather than by C.",
+  "why_this_is_not_fatal": "Coverage is METADATA, not a measurement value, and both apparatuses publish it. A rule restricting the population to items both covered could in principle be frozen before any value is retrieved. Whether that is an honest preregistration or a population chosen after looking is exactly the question this mission leaves open.",
+  "why_it_is_not_waved_away": "§25 wants the window frozen before values and §24 wants the population externally controlled. This satisfies the first and only half of the second, and calling that solved would repeat the hidden-frame mistake in a new place."
+ },
+ "http_archive_population": {
+  "source_says": [
+   "The URLs come from the Chrome User Experience Report, a dataset of real user performance data of the most popular websites.",
+   "The Chrome UX Report is a public dataset from Google that aggregates user experiences across millions of websites actively visited by Chrome users."
+  ],
+  "source_says_provenance": [
+   "https://httparchive.org/faq",
+   "https://almanac.httparchive.org/en/2025/methodology"
+  ],
+  "project_interpretation": "The population is defined by a third party's telemetry of what Chrome users visit. It is stable and published, which is more than a scanner's discovery frame, and it is still not ours to freeze."
+ },
+ "request_semantics": {
+  "$comment": "§7. A shared domain list does not make a shared measurement.",
+  "http_archive_documented_configuration": {
+   "source_says": [
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36...Chrome/138.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Linux; Android 8.1.0; Moto G (4))...Chrome/138.0.0.0 Mobile Safari",
+    "Google Cloud Platform locations based in the USA",
+    "All pages are tested with an empty cache in a logged out state, which may not reflect how real users would access them.",
+    "a home page is not necessarily representative of the entire website"
+   ],
+   "source_says_provenance": "https://almanac.httparchive.org/en/2025/methodology",
+   "project_interpretation": "This is an unusually complete request contract, and it is what makes an aligned proposition thinkable at all. It also states its own limitations first-party, which is rare."
+  },
+  "differences_that_would_have_to_be_reconciled": [
+   "user agent: CCBot against a Chrome string",
+   "rendering: real browsers executing JavaScript against a crawler fetch, so a header-level predicate survives and a rendered-content predicate does not",
+   "vantage: a US datacentre against an unstated Common Crawl vantage",
+   "URL identity: home-page oriented against arbitrary URLs",
+   "desktop and mobile are two HTTP Archive populations",
+   "redirect policy, not stated on the pages read"
+  ],
+  "these_are_construct_questions_not_class_blockers": true
+ },
+ "operator_route": {
+  "$comment": "§11 and §37. Assessed architecturally. Nothing was crawled.",
+  "route": "SROS_BOUNDED_HTTP_MEASUREMENT",
+  "what_it_would_solve": "It covers exactly C by construction, removing one of the two coverage frames and leaving a single alignment question instead of two.",
+  "not_automatically_independent": true,
+  "safeguards_it_would_require": [
+   "frozen code version",
+   "frozen request contract",
+   "separate measurement lineage",
+   "append-only raw observations",
+   "no sight of the external apparatus's values before its own run where ordering is load-bearing"
+  ],
+  "governance_complexity": "SUBSTANTIAL, and recorded rather than minimised. It would make this repository an active measurement party against third parties, with robots, rate-limit and politeness obligations it has never had.",
+  "crawled": false,
+  "implemented": false
+ },
+ "verdict": "PROMISING_REQUIRES_ROUTE_QUALIFICATION",
+ "one_load_bearing_question": "Whether a population can be frozen honestly when neither apparatus can be directed at the frozen corpus, so the joint population is the corpus intersected with two independently determined coverages."
+}
