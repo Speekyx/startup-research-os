@@ -1,0 +1,40 @@
+{
+ "$comment": "Mission 1.70 §28 to §30. Feasibility only. No source was registered and no governance decision was recorded.",
+ "record_version": "1.0.0",
+ "mission": "1.70 — Fixed-Corpus Web Route Qualification V1",
+ "recorded_at": "2026-09-06",
+ "exact_predicate_frozen": false,
+ "target_values_retrieved": 0,
+ "this_is_not_a_governance_review": true,
+ "sources_registered": 0,
+ "source_governance_mutated": 0,
+ "routes": {
+  "COMMON_CRAWL": {
+   "source_says": [
+    "a limited, non-assignable, non-transferable, non-sublicensable, non-exclusive, limited license to access and use the Service",
+    "CC strongly recommends that you obtain the advice of legal counsel before making any use, including commercial use, of the Service and/or the Crawled Content.",
+    "CC cannot guarantee the truthfulness, authenticity, quality, lawfulness or accuracy of the Crawled Content."
+   ],
+   "source_says_provenance": "https://commoncrawl.org/terms-of-use",
+   "commercial_use": "NOT_GRANTED_AND_NOT_PROHIBITED",
+   "attribution_required": "NOT_STATED",
+   "redistribution": "the licence is non-transferable and non-sublicensable",
+   "classification": "ROUTE_RIGHTS_REVIEW_REQUIRED",
+   "project_interpretation": "A recommendation to obtain legal advice before commercial use is not a grant. This repository's own source-registry rule is that an approving state requires a GRANT rather than the absence of a prohibition, and that uncertainty is never permission. So the honest classification is that a review is required, not that the route is open."
+  },
+  "HTTP_ARCHIVE": {
+   "classification": "UNKNOWN",
+   "what_was_read": "the FAQ and the site's front page",
+   "source_says_provenance": [
+    "https://httparchive.org/faq",
+    "https://httparchive.org/"
+   ],
+   "project_interpretation": "Neither page carries a licence, terms, copyright or reuse statement. That is recorded as an absence in what was read rather than as a finding that no licence exists.",
+   "no_licence_statement_found_in_the_pages_read": true
+  }
+ },
+ "commercial_purpose_compatibility": "NOT_ESTABLISHED_ON_EITHER_ROUTE",
+ "commercial_purpose_route_gap": false,
+ "commercial_purpose_note": "A gap would mean an otherwise-viable route is incompatible with the project's commercial purpose. Neither route is established as incompatible; neither is established as compatible. Under the deployment model recorded in docs/CLAUDE.md, local deployment never implies non-commercial use, so this cannot be waved through on the grounds that current use is local.",
+ "turned_into_governance_approval": false
+}

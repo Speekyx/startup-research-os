@@ -1,0 +1,131 @@
+{
+ "$comment": "Mission 1.70 §18 to §22. Documentation only. No BigQuery was executed and no HAR was fetched.",
+ "record_version": "1.0.0",
+ "mission": "1.70 — Fixed-Corpus Web Route Qualification V1",
+ "recorded_at": "2026-09-06",
+ "exact_predicate_frozen": false,
+ "target_values_retrieved": 0,
+ "route": "HTTP_ARCHIVE",
+ "run_identity": {
+  "$comment": "§18.",
+  "source_says": [
+   "Crawl dates are always rounded down to the first of the month, regardless of which day they actually started.",
+   "the June 2023 crawl kicks off on the 13th of the month, but the dataset would be accessible on BigQuery under the date `2023-06-01`"
+  ],
+  "source_says_provenance": "https://har.fyi/guides/release-cycle/",
+  "carried_from": "Mission 1.69",
+  "run_addressable_before_values": true,
+  "immutability": "PARTIAL",
+  "immutability_reason": "a run is addressable by its rounded date; no retrieved page states that a published run remains available unchanged"
+ },
+ "population_identity": {
+  "$comment": "§19. Population-critical, and only partly answered.",
+  "source_of_the_url_list": "the Chrome UX Report",
+  "source_says": [
+   "The URLs come from the Chrome User Experience Report, a dataset of real user performance data of the most popular websites.",
+   "one row per page tested in the HTTP Archive. Pages are tested on a monthly basis"
+  ],
+  "source_says_provenance": [
+   "https://httparchive.org/faq",
+   "https://har.fyi/reference/tables/pages/"
+  ],
+  "scheduled_set_public_before_the_run": "NOT_ESTABLISHED",
+  "attempted_set_visible": "PARTIAL",
+  "attempted_set_reason": "the page metadata blob carries retry_count, tested_url and visited, which are attempt-level facts. Whether a page whose test never succeeded appears at all is not stated.",
+  "failed_tests_represented": "NOT_ESTABLISHED",
+  "failed_tests_reason": "the pages table carries no column for a failed, errored or unusable test, and no retrieved page states whether such a page yields a row",
+  "completed_versus_successful_distinguished": "NOT_ESTABLISHED",
+  "classification": "UNKNOWN_BETWEEN_ATTEMPTED_SET_AND_SUCCESSFULLY_FETCHED_SET",
+  "operator_frozen": false,
+  "operator_frozen_reason": "the population is defined by a third party's telemetry of what Chrome users visit, and cannot be replaced by a corpus we choose"
+ },
+ "pages_table": {
+  "columns": [
+   "date",
+   "client",
+   "page",
+   "is_root_page",
+   "root_page",
+   "rank",
+   "wptid",
+   "payload",
+   "summary",
+   "custom_metrics",
+   "lighthouse",
+   "features",
+   "technologies",
+   "metadata"
+  ],
+  "source_says": [
+   "date: YYYY-MM-DD format of the HTTP Archive monthly crawl",
+   "page: The URL of the page being tested",
+   "client: Test environment: 'desktop' or 'mobile'",
+   "rank: Site popularity rank, from CrUX"
+  ],
+  "source_says_provenance": "https://har.fyi/reference/tables/pages/",
+  "failure_indicator_present": false
+ },
+ "page_metadata_blob": {
+  "fields": [
+   "crawl_depth",
+   "layout",
+   "link_depth",
+   "parent_page_test_id",
+   "parent_page_url",
+   "rank",
+   "retry_count",
+   "root_page_test_id",
+   "root_page_url",
+   "tested_url",
+   "visited"
+  ],
+  "source_says": [
+   "tested_url: actual URL of the page that was intended to be tested",
+   "visited: Array of URLs visited during test"
+  ],
+  "source_says_provenance": "https://har.fyi/reference/blobs/page-metadata/",
+  "project_interpretation": "retry_count, tested_url and visited are genuine attempt-level metadata and are more than Common Crawl publishes. What is still missing is a status for the test itself."
+ },
+ "response_availability": {
+  "$comment": "§20. Mission 1.69 left this open and it is now answered.",
+  "classification": "STRUCTURED_RESPONSE_HEADERS_AVAILABLE",
+  "body_available": true,
+  "source_says": [
+   "one row per request per page tested in the HTTP Archive",
+   "request_headers [ARRAY<RECORD>]",
+   "response_headers [ARRAY<RECORD>]",
+   "response_body [STRING] - Text-based response body"
+  ],
+  "source_says_provenance": "https://har.fyi/reference/tables/requests/",
+  "assumed_rather_than_evidenced": false
+ },
+ "redirects": {
+  "$comment": "§21.",
+  "source_says": "is_main_document: Whether this request corresponds with the main HTML document of the page, which is the first HTML request after redirects",
+  "source_says_provenance": "https://har.fyi/reference/tables/requests/",
+  "initial_versus_final_response": "the main document is identified as the first HTML request AFTER redirects, so the row a predicate would naturally bind to is the POST-redirect document",
+  "intermediate_hops_representation": "NOT_ESTABLISHED",
+  "row_identity": "page is the URL of the page being tested and url is the URL of the request; tested_url records the URL intended to be tested, which the documentation notes is useful where redirects create ambiguity",
+  "predicate_binding_chosen": false
+ },
+ "browser_semantics": {
+  "$comment": "§22. Not the same act as a crawler fetch, and saying so is the point.",
+  "execution_apparatus": "a private instance of WebPageTest with private test agents that are real browsers",
+  "source_says": [
+   "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36...Chrome/138.0.0.0 Safari/537.36",
+   "Mozilla/5.0 (Linux; Android 8.1.0; Moto G (4))...Chrome/138.0.0.0 Mobile Safari",
+   "Google Cloud Platform locations based in the USA",
+   "All pages are tested with an empty cache in a logged out state, which may not reflect how real users would access them.",
+   "a home page is not necessarily representative of the entire website"
+  ],
+  "source_says_provenance": "https://almanac.httparchive.org/en/2025/methodology",
+  "carried_from": "Mission 1.69",
+  "javascript_executed": true,
+  "desktop_and_mobile_are_two_populations": true,
+  "treated_as_identical_to_a_bot_fetch": false
+ },
+ "route_status": "ROUTE_PLAUSIBLE_REQUIRES_CONSTRUCT_DETAIL",
+ "route_status_reason": "Structured response headers, text bodies, dated addressable runs, attempt-level metadata and an unusually complete request contract are established. What is not established is whether failed tests are represented, how intermediate redirect hops appear, and the data licence.",
+ "no_bigquery_executed": true,
+ "no_har_downloaded": true
+}

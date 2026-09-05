@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.104
+Version: 1.105
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-06 (Sprint 1 / Mission 1.69)
+Last amended: 2026-09-06 (Sprint 1 / Mission 1.70)
 
 ---
 
@@ -13,6 +13,105 @@ Last amended: 2026-09-06 (Sprint 1 / Mission 1.69)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.105 — 2026-09-06 (Sprint 1 / Mission 1.70)
+
+**`FIXED_CORPUS_WEB_REQUIRES_OPERATOR_CONTROLLED_ROUTE`.** Q1 entered this mission with
+what no earlier class in the arc had held at once — two independently established
+producers, dated artifacts on both sides, raw headers on one, and coverage published
+rather than hidden. It leaves with **the coverage published and its SEMANTICS
+undocumented on both sides simultaneously**, which is the finding.
+
+**NEITHER ROUTE SAYS WHETHER A URL THAT WAS ATTEMPTED AND FAILED APPEARS IN WHAT IT
+PUBLISHES**, and both were checked on their own pages rather than reasoned about. Common
+Crawl's index defines `status` as *"the HTTP status code returned when fetching the
+page"* and its columnar schema carries `fetch_status` — *"HTTP response status code"* —
+`fetch_redirect` and a `content_truncated` field taking `length`, `time`, `disconnect`
+and `unspecified`; nothing on either page says whether a URL fetched unsuccessfully, or
+never captured at all, has a row. HTTP Archive's pages table is **one row per page
+TESTED and carries no failure column**; the attempt-level facts that exist — `retry_count`,
+`tested_url`, `visited` — sit inside a metadata blob and none of them is a test status.
+
+**THAT IS NOT THE HIDDEN-FRAME PROBLEM IN A NEW PLACE, AND THE DIFFERENCE IS WHY IT
+BLOCKS.** A hidden frame means you cannot say which items were eligible. This means you
+cannot say whether an item's **ABSENCE** is a fact about the world or a fact about the
+apparatus — so a joint population over a frozen corpus would carry a denominator neither
+publisher can describe, and every proposition resting on it would inherit that.
+
+**FIVE POPULATION STRATEGIES WERE EVALUATED AND ALL FIVE REJECTED**, including the two
+that would have kept the route alive. Provider-native intersection fails because neither
+apparatus can be pointed at a corpus. Planned-target and attempted co-coverage each need
+a set neither publishes. **Realized successful co-coverage was refused outright**: it
+selects the population on the measurement's own outcome, and a rule written before
+retrieval is preregistered only if what it selects on is DEFINED — **temporal ordering
+is necessary and never sufficient**, which is the reusable half of this mission.
+Missingness-preserving was taken seriously and still needs the missingness to be legible,
+which is the fact that is missing.
+
+**THE DECISION IS `EXTERNALLY_FROZEN_POPULATION_REQUIRES_OPERATOR_FETCHER`, AND TWO
+STRONGER READINGS WERE REFUSED IN OPPOSITE DIRECTIONS.** Calling the architecture
+INVALID would assert that coverage IS success-conditioned, which no retrieved page
+establishes — **undocumented is not established-as-outcome-dependent**. Calling it
+UNRESOLVED would understate a question that did close in one direction: an operator-run
+fetcher supplies directability and legible missingness by construction, which is exactly
+what both external routes lack.
+
+**THE REQUEST CONTRACT WAS TABULATED BEFORE ANY VERDICT WAS ISSUED**: fifteen fields, **4
+DIFFERENT_AND_LOAD_BEARING, 11 UNKNOWN, 0 MATCHABLE**, so
+`REQUEST_CONTRACT_COMPATIBILITY_NOT_ESTABLISHED` and the shared world-state family is
+recorded as PLAUSIBLE_CONDITIONAL rather than asserted. **A browser page load is not a
+crawler fetch**, and HTTP Archive's own `is_main_document` — *"the first HTML request
+after redirects"* — means the row is not the response to the requested URL, so **no
+redirect predicate binding was chosen here**, because that choice belongs to a construct
+nobody has frozen.
+
+**RIGHTS ARE FEASIBILITY AND WERE NOT TURNED INTO APPROVAL.** Common Crawl's terms say
+*"CC strongly recommends that you obtain the advice of legal counsel before making any
+use, including commercial use"* — **a recommendation to seek advice is not a grant** —
+so `ROUTE_RIGHTS_REVIEW_REQUIRED`; HTTP Archive's licence is absent from its FAQ and its
+homepage, so `UNKNOWN` rather than a guess in either direction. **0 sources registered,
+0 governance mutated, 0 approvals.**
+
+**THE OPERATOR ROUTE IS AN ARCHITECTURE AND NOTHING RAN.** `REQUIRES_DEDICATED_REVIEW`
+with the conditions a future review would have to settle written down;
+`INDEPENDENCE_ARCHITECTURE_PLAUSIBLE` and **explicitly not independent because we would
+run it**; implemented **false**, crawled **false**, HTTP measurement requests **0**.
+
+**Q1 STAYS `PROMISING_BUT_ROUTE_QUALIFICATION_REQUIRED`, UNCHANGED**, no class is
+selected, and **`selected-quantity-class-v1.json` does not exist** — §41 makes the
+artifact conditional on strategic viability, and the validator refuses its existence.
+**No construct was frozen and no predicate chosen.** A candidate rule,
+`COVERAGE_SEMANTICS_MUST_DISTINGUISH_ATTEMPT_FROM_SUCCESS`, was **offered and NOT added**
+under the standard Mission 1.67 set for itself — one shape seen twice on two routes is
+one instance, not two — so the **registry is unchanged at 15**.
+
+**Mission 1.69's decision record was not edited**, and the validator refuses any record
+claiming it was.
+
+**Held evidence again did most of the work**: 11 of 20 first-party requests, 4 navigation
+searches, **0 failed**. **0 target-value exposures, 0 crawls, 0 target HTTP requests, 0
+Common Crawl index queries, 0 WARC/WAT/WET downloads, 0 BigQuery executions, 0 HAR
+downloads, 0 API executions, 0 dataset downloads, 0 trials, 0 purchases, 0 accounts, 0
+credential reads, 0 mailbox searches, 0 enquiries sent**, 0 sources registered, 0
+governance or canonical mutations, 0 thresholds, 0 Claims, 0 Evidence, 0 independence
+groups, 0 reliability values, 0 scores, 0 model calls, 0 embeddings, 0 migrations, 0
+crawlers implemented. ONYPHE stays `NOT_CHECKED_AFTER_DISPATCH`, Netlas stays unresolved
+with nothing decoded or guessed, the scanner arc stays parked, **`PAIR_ANALYSIS_NOT_READY`**.
+
+**Verification.** Validator probed with **136 deliberate violations, 136 caught** (133 by
+rule, 3 by drift) plus **5 of 5 positive controls** — an unresolved population, a valid
+pre-value co-coverage architecture, a valid missingness-preserving one, a strategically
+viable Q1 selected with its artifact and no construct, and an alternative no-selection
+outcome — with the fourth checked to be discriminating rather than vacuous. **§23 met for
+the eleventh time** and repaired structurally: a guard refusing any number under a
+reliability-named key fired on `reliability_assessments`, a database row count, and the
+repair scopes the guard to three NAMED census blocks whose reliability-named entries are
+all covered by the hard-zero loop — never a loosening of what it compares. Five ruff
+findings fixed **by hand**, the SIM102 collapse included, and the probe re-run afterwards.
+One tautological test of my own — a no-op `.replace()` guarding a substring — was replaced
+with a structural check over the pages table's actual columns. **104 new tests**; **2311
+bare-python tests**; all pytest suites passed with the database unchanged across 29 tenant
+tables and the baseline re-measured identical afterwards; all **40** CI gates.
 
 ## 1.104 — 2026-09-06 (Sprint 1 / Mission 1.69)
 

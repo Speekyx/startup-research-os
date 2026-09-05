@@ -1,0 +1,103 @@
+{
+ "$comment": "Mission 1.70 §0 and §1. Preconditions from git, baseline live, and the scope held to Q1.",
+ "record_version": "1.0.0",
+ "mission": "1.70 — Fixed-Corpus Web Route Qualification V1",
+ "recorded_at": "2026-09-06",
+ "exact_predicate_frozen": false,
+ "target_values_retrieved": 0,
+ "repository_precondition": {
+  "mission_1_69_merged": true,
+  "pull_request": 114,
+  "pull_request_state": "MERGED",
+  "merge_commit": "36d99dff745f85a44e99092efd388cf35245c342",
+  "merge_commit_short": "36d99df",
+  "operator_reported_main": "36d99df",
+  "operator_report_agrees_with_git": true,
+  "local_main_equals_origin_main": true,
+  "working_tree_clean": true,
+  "branch": "sprint-1/mission-1.70",
+  "migration_head": "0035_refusal_provenance",
+  "selected_quantity_class_artifact_absent": true,
+  "selected_construct_artifact_absent": true,
+  "verified_from_git_not_from_prompt": true
+ },
+ "canonical_baseline": {
+  "$comment": "Measured live. Every counter matched §0 exactly.",
+  "raw_records": 325,
+  "normalized_records": 325,
+  "signals": 33,
+  "claims": 44,
+  "claim_revisions": 45,
+  "evidence": 58,
+  "inferred_claims": 1,
+  "threshold_registrations": 1,
+  "claim_derivations": 1,
+  "proposition_evaluation_refusals": 0,
+  "evidence_supports": 57,
+  "evidence_contradicts": 1,
+  "claims_carrying_both_directions": 0,
+  "reliability_assessments": 4,
+  "evidence_independence_groups": 0,
+  "opportunities": 1,
+  "opportunity_revisions": 1,
+  "opportunity_evidence_links": 7,
+  "registered_sources": 29,
+  "embeddings": 0,
+  "scores_table": "ABSENT",
+  "reference_profile": "UNCALIBRATED",
+  "problem_family": "PARKED",
+  "migration_head": "0035_refusal_provenance",
+  "drift_from_mission_1_69": "none",
+  "measured_live_not_quoted_from_a_report": true
+ },
+ "requirement_registry": {
+  "count_before": 15,
+  "count_after": 15,
+  "requirement_added_this_mission": null
+ },
+ "scope": {
+  "$comment": "§1. Q1 only. The other classes were compared in Mission 1.69 and are not reopened.",
+  "in_scope_class": "FIXED_CORPUS_HTTP_OBSERVATION",
+  "in_scope_routes": [
+   "COMMON_CRAWL",
+   "HTTP_ARCHIVE",
+   "SROS_BOUNDED_HTTP_FETCHER"
+  ],
+  "classes_not_reopened": [
+   "Q0",
+   "Q2",
+   "Q3",
+   "Q4",
+   "Q5",
+   "Q6",
+   "Q7"
+  ],
+  "broad_class_discovery_performed": false,
+  "scanner_class_reopened": false
+ },
+ "parallel_state_untouched": {
+  "onyphe_response_status": "NOT_CHECKED_AFTER_DISPATCH",
+  "onyphe_mailbox_searched": false,
+  "netlas_recipient_status": "NOT_ESTABLISHED",
+  "scanner_arc_status": "PARKED_BUT_REOPENABLE_ON_NEW_FIRST_PARTY_EVIDENCE"
+ },
+ "documentation_budget": {
+  "maximum_first_party_requests": 20,
+  "used": 11,
+  "remaining_unspent": 9,
+  "failed_requests": 0,
+  "navigation_searches": 4,
+  "split": {
+   "common_crawl": 5,
+   "http_archive": 4,
+   "rights": 2,
+   "operator_governance": 0
+  },
+  "caps": {
+   "common_crawl": 6,
+   "http_archive": 8,
+   "rights": 4,
+   "operator_governance": 2
+  }
+ }
+}

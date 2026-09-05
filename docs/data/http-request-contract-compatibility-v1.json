@@ -1,0 +1,140 @@
+{
+ "$comment": "Mission 1.70 §25. The table exists before any overall verdict, because §25 forbids an opaque PASS without it.",
+ "record_version": "1.0.0",
+ "mission": "1.70 — Fixed-Corpus Web Route Qualification V1",
+ "recorded_at": "2026-09-06",
+ "exact_predicate_frozen": false,
+ "target_values_retrieved": 0,
+ "classification_vocabulary": [
+  "MATCHABLE",
+  "DIFFERENT_BUT_NON_LOAD_BEARING",
+  "DIFFERENT_AND_LOAD_BEARING",
+  "UNKNOWN"
+ ],
+ "fields": [
+  {
+   "field": "METHOD",
+   "common_crawl": "NOT_DOCUMENTED",
+   "http_archive": "NOT_DOCUMENTED",
+   "classification": "UNKNOWN",
+   "note": ""
+  },
+  {
+   "field": "SCHEME",
+   "common_crawl": "NOT_DOCUMENTED",
+   "http_archive": "NOT_DOCUMENTED",
+   "classification": "UNKNOWN",
+   "note": ""
+  },
+  {
+   "field": "HOST",
+   "common_crawl": "NOT_DOCUMENTED",
+   "http_archive": "the page URL under test",
+   "classification": "UNKNOWN",
+   "note": ""
+  },
+  {
+   "field": "SNI",
+   "common_crawl": "NOT_DOCUMENTED",
+   "http_archive": "NOT_DOCUMENTED",
+   "classification": "UNKNOWN",
+   "note": ""
+  },
+  {
+   "field": "USER_AGENT",
+   "common_crawl": "CCBot/2.0 (https://commoncrawl.org/faq/)",
+   "http_archive": "a desktop Chrome string and an emulated Moto G4 mobile Chrome string",
+   "classification": "DIFFERENT_AND_LOAD_BEARING",
+   "note": "a server may answer a declared crawler differently from a browser, and any predicate on the response inherits that"
+  },
+  {
+   "field": "ACCEPT_HEADERS",
+   "common_crawl": "NOT_DOCUMENTED",
+   "http_archive": "NOT_DOCUMENTED",
+   "classification": "UNKNOWN",
+   "note": ""
+  },
+  {
+   "field": "REDIRECT_POLICY",
+   "common_crawl": "a fetch_redirect field records the target of a redirect",
+   "http_archive": "the main document is the first HTML request AFTER redirects",
+   "classification": "DIFFERENT_AND_LOAD_BEARING",
+   "note": "one route appears to record the redirect response and the other binds its main-document row to the post-redirect document, so a predicate on the response to the requested URL would not be reading the same thing"
+  },
+  {
+   "field": "JS_EXECUTION",
+   "common_crawl": "not documented; a crawler fetch",
+   "http_archive": "real browsers execute JavaScript",
+   "classification": "DIFFERENT_AND_LOAD_BEARING",
+   "note": "a predicate on rendered content cannot survive this; a predicate on response headers can"
+  },
+  {
+   "field": "COOKIES",
+   "common_crawl": "NOT_DOCUMENTED",
+   "http_archive": "NOT_DOCUMENTED",
+   "classification": "UNKNOWN",
+   "note": ""
+  },
+  {
+   "field": "CACHE",
+   "common_crawl": "NOT_DOCUMENTED",
+   "http_archive": "empty cache, logged out",
+   "classification": "UNKNOWN",
+   "note": ""
+  },
+  {
+   "field": "DNS",
+   "common_crawl": "NOT_DOCUMENTED",
+   "http_archive": "NOT_DOCUMENTED",
+   "classification": "UNKNOWN",
+   "note": ""
+  },
+  {
+   "field": "IP_VERSION",
+   "common_crawl": "IPv6 is used; reverse DNS not yet supported there",
+   "http_archive": "NOT_DOCUMENTED",
+   "classification": "UNKNOWN",
+   "note": ""
+  },
+  {
+   "field": "GEOGRAPHY_VANTAGE",
+   "common_crawl": "NOT_DOCUMENTED",
+   "http_archive": "Google Cloud Platform locations based in the USA",
+   "classification": "DIFFERENT_AND_LOAD_BEARING",
+   "note": "one vantage is stated and the other is not, so they cannot be shown equal"
+  },
+  {
+   "field": "TIMEOUT",
+   "common_crawl": "a truncation reason of time implies a bound",
+   "http_archive": "NOT_DOCUMENTED",
+   "classification": "UNKNOWN",
+   "note": ""
+  },
+  {
+   "field": "RETRY",
+   "common_crawl": "NOT_DOCUMENTED",
+   "http_archive": "a retry_count is recorded per test",
+   "classification": "UNKNOWN",
+   "note": ""
+  }
+ ],
+ "tally": {
+  "MATCHABLE": 0,
+  "DIFFERENT_BUT_NON_LOAD_BEARING": 0,
+  "DIFFERENT_AND_LOAD_BEARING": 4,
+  "UNKNOWN": 11
+ },
+ "overall": "REQUEST_CONTRACT_COMPATIBILITY_NOT_ESTABLISHED",
+ "opaque_pass_issued_without_the_table": false,
+ "same_world_state_family": {
+  "$comment": "§23 and §24.",
+  "classification": "SAME_HTTP_WORLD_STATE_FAMILY_PLAUSIBLE_CONDITIONAL",
+  "why_plausible": "Both routes capture the response headers of the main HTML document — one as raw headers inside a WARC record, the other as a structured array — so at least one non-trivial direct response property family is captured by both.",
+  "what_it_is_conditional_on": "the request contract being alignable, which the table above shows is not established, with four load-bearing differences and eleven unknowns.",
+  "client_relative_propositions_are_allowed_if_explicit": {
+   "statement": "§24 permits a proposition of the form 'response property under request contract R'. It need not pretend to be a client-independent property of the server. But R must then be the SAME on both routes or explicitly equivalent, and equivalence must be documented rather than assumed.",
+   "equivalence_documented": false
+  },
+  "browser_load_treated_as_identical_to_a_bot_fetch": false
+ }
+}

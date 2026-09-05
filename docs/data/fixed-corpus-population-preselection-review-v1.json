@@ -1,0 +1,145 @@
+{
+ "$comment": "Mission 1.70 §3 to §12 and §36 to §38. The blocking question, answered first and answered before any predicate was considered.",
+ "record_version": "1.0.0",
+ "mission": "1.70 — Fixed-Corpus Web Route Qualification V1",
+ "recorded_at": "2026-09-06",
+ "exact_predicate_frozen": false,
+ "target_values_retrieved": 0,
+ "the_four_population_concepts": {
+  "$comment": "§4. Load-bearing, and used as distinct terms throughout.",
+  "TARGET_POPULATION": "entities intended for measurement",
+  "ATTEMPTED_POPULATION": "entities the apparatus actually tried to fetch",
+  "OBSERVABLE_POPULATION": "entities for which a governed observation could in principle be produced",
+  "SUCCESSFUL_OBSERVATION_SET": "entities for which a usable HTTP response exists",
+  "used_interchangeably": false
+ },
+ "coverage_classification_per_route": {
+  "$comment": "§5. What each route's published coverage surface actually means.",
+  "COMMON_CRAWL": {
+   "classification": "UNKNOWN_BETWEEN_CRAWLED_SET_AND_SUCCESSFULLY_FETCHED_SET",
+   "targeted_set_reconstructable": false,
+   "attempted_set_reconstructable": false,
+   "captured_set_reconstructable": true,
+   "why": "the index describes captures, and neither the CDXJ page nor the columnar schema states whether a URL fetched unsuccessfully or never captured appears at all"
+  },
+  "HTTP_ARCHIVE": {
+   "classification": "UNKNOWN_BETWEEN_ATTEMPTED_SET_AND_SUCCESSFULLY_FETCHED_SET",
+   "targeted_set_reconstructable": false,
+   "attempted_set_reconstructable": "PARTIAL",
+   "captured_set_reconstructable": true,
+   "why": "the pages table is one row per page TESTED and carries no failure column; the metadata blob carries retry_count, tested_url and visited, which are attempt-level, but no test status"
+  }
+ },
+ "outcome_dependence": {
+  "$comment": "§6.",
+  "COMMON_CRAWL": "COVERAGE_MAY_BE_OUTCOME_DEPENDENT",
+  "HTTP_ARCHIVE": "COVERAGE_MAY_BE_OUTCOME_DEPENDENT",
+  "why": "On both routes, inclusion plausibly relates to whether the fetch or the page load succeeded, and neither documents it. A truncation reason of disconnect or time on one side and a retry count on the other are exactly the shape of outcome-related inclusion.",
+  "established_as_outcome_dependent": false,
+  "why_that_distinction_matters": "Undocumented is not the same as established. This record says the possibility cannot be ruled out, not that it is true."
+ },
+ "metadata_value_boundary": {
+  "$comment": "§11 and §12.",
+  "COMMON_CRAWL": "YES_WITH_FIELD_LEVEL_PROJECTION",
+  "HTTP_ARCHIVE": "YES_WITH_FIELD_LEVEL_PROJECTION",
+  "the_technical_boundary_is_navigable": true,
+  "the_semantic_boundary_is_not": "A projection can return a coverage list without reading a status column. It cannot tell you whether membership in that list means attempted or captured, and that is what a population rule needs.",
+  "measurement_fields_present_in_coverage_surfaces": {
+   "COMMON_CRAWL": [
+    "status",
+    "fetch_status",
+    "content_truncated"
+   ],
+   "HTTP_ARCHIVE": [
+    "payload",
+    "response_headers",
+    "response_body"
+   ]
+  }
+ },
+ "strategies_evaluated": {
+  "$comment": "§7. All five, each with a stated reason.",
+  "P1_provider_native_intersection": {
+   "verdict": "UNAVAILABLE",
+   "why": "membership is projectable before values and its MEANING is undocumented on both sides, so §37 condition 3 — coverage definition is explicit — cannot be met."
+  },
+  "P2_frozen_C_plus_planned_target_coverage": {
+   "verdict": "UNAVAILABLE",
+   "why": "neither route publishes a target list before a crawl or a run, so there is no planned-target membership to intersect with."
+  },
+  "P3_frozen_C_plus_attempted_coverage": {
+   "verdict": "UNAVAILABLE",
+   "why": "the attempted set is not reconstructable on Common Crawl and only partially so on HTTP Archive, where a page that never succeeded may not appear at all."
+  },
+  "P4_frozen_C_plus_realized_successful_coverage": {
+   "verdict": "AVAILABLE_AND_HIGH_RISK",
+   "why": "this is the only intersection actually constructible, and §7 says not to accept it without a rigorous reason that it is not outcome-conditioned for the predicate family. No such reason exists, because the inclusion criteria are undocumented on both sides.",
+   "accepted": false
+  },
+  "P5_missingness_preserving": {
+   "verdict": "UNAVAILABLE_ON_THE_EXTERNAL_PAIR",
+   "why": "it is the architecture that would preserve a frozen C and it needs OBSERVED, ATTEMPTED_NO_USABLE_RESPONSE and NOT_ATTEMPTED to be distinguishable. Neither route documents that distinction, so an absent entity cannot be told apart from a failed one.",
+   "considered_seriously": true,
+   "why_it_was_the_most_promising": "It does not require directing an apparatus at a corpus. It requires only that missingness be legible, which is a weaker demand — and it still fails, on both routes, for the same reason."
+  }
+ },
+ "conditions_for_A": {
+  "$comment": "§37. All seven required; any UNKNOWN blocks.",
+  "1_identifiers_frozen_before_values": "SATISFIABLE",
+  "2_coverage_membership_obtainable_without_predicate_values": "SATISFIABLE_BY_PROJECTION",
+  "3_coverage_definition_explicit": "UNKNOWN",
+  "4_intersection_rule_frozen_before_values": "SATISFIABLE",
+  "5_no_target_predicate_used_to_decide_membership": "UNKNOWN",
+  "6_denominator_semantics_identical_across_routes": "UNKNOWN",
+  "7_selection_and_missingness_limits_enter_proposition_scope": "SATISFIABLE",
+  "verdict": "NOT_SATISFIED",
+  "blocking_conditions": [
+   3,
+   5,
+   6
+  ]
+ },
+ "conditions_for_B": {
+  "$comment": "§38.",
+  "1_external_population_C_freezable": "SATISFIED",
+  "2_routes_expose_enough_attempt_coverage_metadata": "NOT_SATISFIED",
+  "3_missing_states_distinguishable": "NOT_SATISFIED",
+  "4_construct_can_define_missingness_in_denominator": "BLOCKED_BY_3",
+  "5_missingness_establishable_without_predicate_values": "NOT_SATISFIED",
+  "6_both_routes_witness_the_same_population_level_proposition": "UNKNOWN",
+  "verdict": "NOT_SATISFIED",
+  "blocking_conditions": [
+   2,
+   3,
+   5
+  ]
+ },
+ "denominator_discipline": {
+  "$comment": "§9. The guard that would have made this look solved.",
+  "statement": "Positives over Common Crawl's observed population and positives over HTTP Archive's observed population are not two measurements of one proposition unless the denominator population definition is genuinely identical. Here the two denominators are each undocumented in kind, so they cannot be shown identical even in principle.",
+  "different_denominators_called_the_same_proposition": false
+ },
+ "temporal_ordering": {
+  "$comment": "§10. Recorded for the strategy that would have been chosen.",
+  "T0_population_rule_frozen": "possible",
+  "T1_corpus_and_run_identifiers_frozen": "possible",
+  "T2_coverage_metadata_available": "possible, by projection",
+  "T3_analytic_membership_materialized": "possible",
+  "T4_predicate_values_accessed": "after the above",
+  "why_that_ordering_is_not_sufficient": "The ordering can be honoured and the rule still be unsound, because a rule frozen at T0 that says 'take what both covered' is only as good as what coverage MEANS. Ordering is necessary and it is not the whole of preregistration.",
+  "called_automatically_preregistered": false
+ },
+ "decision": "EXTERNALLY_FROZEN_POPULATION_REQUIRES_OPERATOR_FETCHER",
+ "decision_reasoning": {
+  "why_not_A": "three of the seven conditions are UNKNOWN, and §37 says an unknown condition blocks A outright.",
+  "why_not_B": "the missingness-preserving architecture is the right shape and it needs legible missingness, which neither route provides.",
+  "why_not_D": "D asserts that realized co-coverage IS post-hoc and invalid. What was established is that the inclusion criteria are UNDOCUMENTED on both sides. Asserting invalidity would claim more than the evidence, and this repository has refused that conversion since Mission 1.60.",
+  "why_not_E": "the question did close, in one direction. An externally frozen population with distinguishable missingness cannot be obtained from either archive, because neither can be directed at a corpus and neither publishes attempt-level membership. Reporting it as unresolved would discard that.",
+  "why_C": "an operator-run fetcher supplies both missing properties by construction — it covers exactly the corpus it is given, and it records every attempt including the failures. That is not a preference for building something; it is what the two gaps happen to require."
+ },
+ "what_this_does_not_establish": [
+  "that Common Crawl or HTTP Archive coverage IS outcome-conditioned",
+  "that no other population architecture exists",
+  "that an operator fetcher is authorised, feasible in practice, or independent"
+ ]
+}

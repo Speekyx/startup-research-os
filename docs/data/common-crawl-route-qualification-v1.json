@@ -1,0 +1,127 @@
+{
+ "$comment": "Mission 1.70 §13 to §17. Documentation only. No index was queried and no WARC, WAT or WET file was downloaded.",
+ "record_version": "1.0.0",
+ "mission": "1.70 — Fixed-Corpus Web Route Qualification V1",
+ "recorded_at": "2026-09-06",
+ "exact_predicate_frozen": false,
+ "target_values_retrieved": 0,
+ "route": "COMMON_CRAWL",
+ "crawl_identity": {
+  "$comment": "§13.",
+  "identifiers": "crawls are named as dated releases, for example CC-MAIN-2026-34 and CC-MAIN-2016-30, and are addressed individually",
+  "source_says_provenance": "https://commoncrawl.org/overview",
+  "run_semantics": "the identifier encodes a year and a release number; what the release period denotes was not stated on the pages read",
+  "date_alone_is_not_immutability": true
+ },
+ "immutability": {
+  "$comment": "§16. A date is not a guarantee.",
+  "classification": "PARTIAL",
+  "what_is_established": "a named crawl release is individually addressable, and past releases are listed alongside the current one",
+  "what_is_not_established": "no retrieved page states that a released crawl or its index is retained unchanged, nor whether artifacts are append-only or may be replaced",
+  "inferred_from_a_date": false
+ },
+ "url_selection": {
+  "$comment": "§14. Explicitly required by Mission 1.69, and NOT answered.",
+  "status": "NOT_ESTABLISHED_THIS_MISSION",
+  "what_was_read": "the overview page, which carries no statement about seeds, the frontier, link discovery, sitemaps, popularity or ranking, whether previous crawls feed the next, or whether any target list is published before a crawl",
+  "source_says_provenance": "https://commoncrawl.org/overview",
+  "a_search_summary_offered_an_answer_and_it_was_not_used": {
+   "$comment": "§45. Search summaries are navigation only, and this is the third mission in which one offered a load-bearing answer that no retrieved first-party page carried.",
+   "what_the_summary_reported": "a URL-prioritisation mechanism based on a graph-centrality measure, with seeds drawn within a small link distance of top-ranked hosts, and sitemap-derived additions",
+   "why_it_was_not_used": "no first-party page carrying that statement was opened, and §55 lists Common-Crawl-URL-selection-semantics-guessed among the things the validator must catch. Recording it as established would be exactly that.",
+   "used": false
+  },
+  "target_list_published_before_a_crawl": "NOT_ESTABLISHED"
+ },
+ "coverage_semantics": {
+  "$comment": "§15 and §5. This is the load-bearing section.",
+  "surfaces": [
+   {
+    "surface": "CDXJ index",
+    "fields": [
+     "urlkey",
+     "timestamp",
+     "url",
+     "mime",
+     "mime-detected",
+     "status",
+     "digest",
+     "length",
+     "offset",
+     "filename",
+     "languages",
+     "encoding"
+    ],
+    "source_says": [
+     "status: the HTTP status code returned when fetching the page",
+     "digest: SHA-1 checksum of the contents of the capture"
+    ],
+    "source_says_provenance": "https://commoncrawl.org/cdxj-index"
+   },
+   {
+    "surface": "URL index, columnar",
+    "source_says": [
+     "fetch_status: HTTP response status code",
+     "fetch_redirect: Target location of HTTP redirect",
+     "content_truncated: Non-null if the WARC record payload is truncated. The value indicates the reason for the truncation"
+    ],
+    "truncation_reasons": [
+     "length",
+     "time",
+     "disconnect",
+     "unspecified"
+    ],
+    "source_says_provenance": "https://data.commoncrawl.org/cc-index/table/cc-main/index.html"
+   }
+  ],
+  "url_targeted": "NOT_RECONSTRUCTABLE",
+  "url_fetch_attempted": "NOT_RECONSTRUCTABLE",
+  "url_response_captured": "RECONSTRUCTABLE_FROM_THE_INDEX",
+  "url_indexed": "RECONSTRUCTABLE_FROM_THE_INDEX",
+  "classification": "UNKNOWN_BETWEEN_CRAWLED_SET_AND_SUCCESSFULLY_FETCHED_SET",
+  "project_interpretation": "The index describes captures. Neither retrieved page states whether a URL that was fetched unsuccessfully, or attempted and never captured, appears at all. So presence in the index cannot be read as evidence of an ATTEMPT, and absence cannot be distinguished from never having been targeted.",
+  "this_is_the_reason_the_population_question_fails_here": true
+ },
+ "metadata_value_boundary": {
+  "$comment": "§11 and §12.",
+  "classification": "YES_WITH_FIELD_LEVEL_PROJECTION",
+  "why": "The columnar index is Parquet, so a projection selecting only url and fetch_time is technically expressible without reading fetch_status.",
+  "and_why_that_does_not_settle_it": "The technical boundary is navigable and the SEMANTIC one is not. Projecting a coverage list still yields a list whose meaning — attempted or captured — is undocumented, so the projection buys syntax rather than a population definition.",
+  "the_index_carries_measurement_content": true,
+  "measurement_fields_present_in_the_coverage_surface": [
+   "status",
+   "fetch_status",
+   "content_truncated"
+  ]
+ },
+ "outcome_dependence": {
+  "$comment": "§6.",
+  "classification": "COVERAGE_MAY_BE_OUTCOME_DEPENDENT",
+  "why": "content_truncated records reasons including disconnect and time, which are fetch outcomes, and the index's own status field is an HTTP response code. Whether inclusion depends on the fetch succeeding is undocumented, so it cannot be ruled out."
+ },
+ "http_semantics": {
+  "$comment": "§17. Documentation-only, and mostly absent.",
+  "user_agent": "CCBot/2.0 (https://commoncrawl.org/faq/)",
+  "user_agent_provenance": "https://commoncrawl.org/ccbot",
+  "robots_policy": "an opt-out through robots.txt is documented",
+  "sitemaps": "the crawler is documented as supporting the Sitemap Protocol",
+  "sitemaps_provenance": "https://commoncrawl.org/faq",
+  "http_method": "NOT_DOCUMENTED",
+  "request_headers": "NOT_DOCUMENTED",
+  "redirect_handling": "a fetch_redirect field records the target of a redirect; whether a redirect response is itself captured as a record is not stated",
+  "timeouts_and_retries": "a truncation reason of time implies a bound exists; no policy is documented",
+  "dns_and_tls": "NOT_DOCUMENTED",
+  "response_header_capture": "the raw response including HTTP header information is stored in the WARC record",
+  "response_header_capture_provenance": "https://commoncrawl.org/get-started"
+ },
+ "sampling": {
+  "source_says": "Common Crawl's dataset is a sample of the web, and we do not generally archive any entire website but a randomly selected subset of it.",
+  "source_says_provenance": "https://commoncrawl.org/faq",
+  "carried_from": "Mission 1.69",
+  "called_a_complete_web_corpus": false
+ },
+ "route_status": "ROUTE_PLAUSIBLE_REQUIRES_CONSTRUCT_DETAIL",
+ "route_status_reason": "Its own fetching, raw response with headers, and dated individually addressed releases are established. What is not established is the coverage semantics, the URL selection mechanism and artifact immutability — none of which is a defect of the route and all of which a construct would have to name.",
+ "no_index_query_executed": true,
+ "no_warc_wat_wet_downloaded": true
+}
