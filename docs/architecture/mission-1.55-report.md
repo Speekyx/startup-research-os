@@ -292,6 +292,22 @@ the fixtures name a registered one. The rows are still entirely synthetic; the
 constraint simply refuses Evidence naming a publisher the registry has never
 heard of.
 
+### A guard caught the new module, and I had not run it
+
+`validate_signals.py` requires every module directly under `sros_nlp` to be
+classified as either a SIGNAL module or a CLAIM module, because **`sros_nlp`
+holds two layers with different boundary rules and a module in neither list is
+checked by neither validator**. The orchestrator was in neither, and CI said so:
+
+    ['services/nlp/python/sros_nlp/inferred_persistence.py'] belongs to neither
+    SIGNAL_MODULES nor CLAIM_MODULES
+
+Classified as a CLAIM module, which is what it is — it writes Claims, revisions,
+Evidence, derivations and refusals, and reads no normalized record. The guard did
+exactly what it exists for; what failed was my process, because I ran the render
+`--check` scripts locally and not the boundary validators. **All 24 of CI's
+guards and render checks are now run before commit**, and every one passes.
+
 ---
 
 ## Outcome

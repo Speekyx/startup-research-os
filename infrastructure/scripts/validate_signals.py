@@ -105,6 +105,13 @@ CLAIM_MODULES = frozenset(
     {
         "claim_job.py",
         "claim_repositories.py",
+        # Mission 1.55. The deterministic-evaluation persistence orchestrator
+        # belongs to the CLAIM layer: it writes Claims, revisions, Evidence,
+        # derivations and refusals, and reads no normalized record. It is
+        # classified here rather than left out because this guard's own rule is
+        # that a module in neither list is checked by neither validator -- and it
+        # caught this module the first time CI saw it.
+        "inferred_persistence.py",
     }
 )
 
