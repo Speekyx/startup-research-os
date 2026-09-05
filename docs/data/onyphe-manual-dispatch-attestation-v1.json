@@ -1,0 +1,229 @@
+{
+  "$comment": "Mission 1.66.1. The operator performed the already-approved action and attested to it afterwards. This record APPENDS to history; it rewrites nothing.",
+  "record_version": "1.0.0",
+  "mission": "1.66.1 — ONYPHE Manual Dispatch Attestation Recording V1",
+  "recorded_at": "2026-09-05",
+  "record_id": "onyphe-manual-dispatch-attestation-v1",
+
+  "execution_status": "SENT",
+  "verification_basis": "OPERATOR_ATTESTED",
+
+  "the_history_this_appends_to": {
+    "$comment": "Three states, three records, none overwriting another.",
+    "chain": [
+      {"state": "CONTENT_APPROVED", "established_by": "Mission 1.61", "record": "anchor-technical-lineage-enquiry-v1 approval, and the ONYPHE body frozen in Mission 1.65"},
+      {"state": "DISPATCH_APPROVED", "established_by": "Mission 1.65", "record": "onyphe-dispatch-envelope-v1"},
+      {"state": "APPROVED_AWAITING_MANUAL_EXECUTION", "established_by": "Mission 1.66", "record": "onyphe-enquiry-dispatch-execution-v1"},
+      {"state": "OPERATOR_ATTESTED_SENT", "established_by": "Mission 1.66.1", "record": "onyphe-manual-dispatch-attestation-v1"}
+    ],
+    "mission_1_66_was_correct_when_it_ran": "It recorded that nothing had been established as sent AT EXECUTION TIME, and that was true. The send happened afterwards.",
+    "so_mission_1_66_is_not_rewritten": "Its baseline, its verdict and its execution record keep their original statements. Editing them to read SENT would make a mission report describe a moment it did not observe, which is the failure this whole arc exists to avoid.",
+    "how_the_stale_record_is_handled": "The Mission 1.66 execution record gains ONE appended forward pointer naming this attestation. Nothing in it is altered, and its rendered page now says which record continues it, so a reader cannot take a historical state for the current one."
+  },
+
+  "the_action_that_was_approved": {
+    "dispatch_envelope": "onyphe-dispatch-envelope-v1",
+    "dispatch_envelope_sha256": "12a62853706a3c65f04859577fa3e9f2d4efaeca99cbf16badf759a55b4fe0d2",
+    "enquiry_content_sha256": "0b39ef325fd42836a3b65284a7386cbca7ae8f22afcb9629d5574e0ff0f23e9f",
+    "approved_recipient": "contact@onyphe.io",
+    "approved_channel": "OPERATOR_MANUAL_SEND",
+    "approved_sender": "OPERATOR_CHOSEN_MAILBOX_AT_SEND_TIME",
+    "approved_subject": "Three questions about datascan record semantics and scan configuration",
+    "approved_send_count": 1,
+    "both_hashes_recomputed_this_mission": true,
+    "both_hashes_match": true
+  },
+
+  "the_attestation": {
+    "$comment": "Recorded exactly as the operator gave it. Nothing here was derived, completed or tidied.",
+    "statement": "SENT ONYPHE ENQUIRY",
+    "actual_sender": "thib.chm@gmail.com",
+    "actual_recipient": "contact@onyphe.io",
+    "actual_channel": "OPERATOR_MANUAL_SEND",
+    "actual_subject": "Three questions about datascan record semantics and scan configuration",
+    "send_count": 1,
+    "duplicate_send_count": 0,
+    "sent_at": "2026-09-05T21:57:00+04:00",
+    "sent_at_utc": "2026-09-05T17:57:00Z",
+    "message_id": null,
+    "message_id_status": "NOT_AVAILABLE",
+    "why_no_message_id": "None was supplied. A webmail send commonly exposes none to the sender, and inventing an identifier that looks like the provider's would be fabricating provenance for the one field nobody can check.",
+    "attested_by": "thibchm",
+    "attestation_source": "OPERATOR_STATEMENT"
+  },
+
+  "evidence_level_and_why_it_is_not_higher": {
+    "$comment": "The honest weaker provenance, chosen deliberately.",
+    "level": "OPERATOR_ATTESTED",
+    "is_not": "BYTE_VERIFIED",
+    "what_would_be_required_for_byte_verification": "the exact sent message imported into this repository as an artifact and hashed under the content boundary Mission 1.65 defined, then compared against 0b39ef32…f0f23e9f",
+    "sent_message_artifact_imported": false,
+    "repository_observed_the_send": false,
+    "why_the_repository_could_not_observe_it": "The approved channel is a manual send. It happens in a mail client nothing here can reach, so no guard could witness it and no check can establish it after the fact. This is the distinction Mission 1.66 recorded before there was anything to attest to.",
+    "the_asymmetry_worth_naming": "Every other link in this chain is verifiable by arithmetic. The content answers to a hash, the approval answers to a hash, and the action the approval names is fixed by seven bound fields. The one fact that the message actually left rests on a person saying so, because that is the only evidence that exists for it. The most consequential link is the weakest, and labelling it accurately is the only thing that can be done about it."
+  },
+
+  "execution_matching": {
+    "$comment": "Checked against the approved envelope, field by field.",
+    "recipient": {"approved": "contact@onyphe.io", "actual": "contact@onyphe.io", "verdict": "MATCH"},
+    "channel": {"approved": "OPERATOR_MANUAL_SEND", "actual": "OPERATOR_MANUAL_SEND", "verdict": "MATCH"},
+    "subject": {"approved": "Three questions about datascan record semantics and scan configuration", "actual": "Three questions about datascan record semantics and scan configuration", "verdict": "MATCH"},
+    "send_count": {"approved": 1, "actual": 1, "verdict": "MATCH"},
+    "sender": {
+      "approved": "OPERATOR_CHOSEN_MAILBOX_AT_SEND_TIME",
+      "actual": "thib.chm@gmail.com",
+      "verdict": "ALLOWED_BY_APPROVED_PLACEHOLDER",
+      "why_this_is_not_a_divergence": "The envelope bound a placeholder rather than a mailbox, because under a manual send the sender genuinely is not determined until the operator sends. Naming it now is the placeholder resolving as designed rather than a field being filled in that should have matched something."
+    },
+    "verdict": "EXECUTION_MATCHES_APPROVED_DISPATCH"
+  },
+
+  "the_stated_cost_that_was_actually_paid": {
+    "$comment": "Mission 1.65 wrote this down before anyone could know whether it would matter.",
+    "what_was_stated": "the envelope's hash binds content, recipient and channel but NOT the exact sender, so three of four fields are pinned rather than four",
+    "what_that_means_now": "The approved action never named which mailbox it would come from, and the message came from thib.chm@gmail.com. Nothing was breached: the approval was for an action with a deliberately open sender, and the sender is recorded here as execution provenance.",
+    "why_it_is_worth_recording": "A cost stated in advance and then actually incurred is the cheapest possible evidence that the reasoning was honest rather than decorative. Had the sender mattered, the route was written down at the same time: a re-frozen envelope binding all four fields, carrying a different hash, approved separately."
+  },
+
+  "timing_consistency": {
+    "$comment": "Cheap checks that the attested moment is possible, rather than merely stated.",
+    "approval_not_before": "2026-09-05T17:09:39Z",
+    "approval_lower_bound_basis": "the merge of PR #108, before which the approved envelope hash did not exist on main",
+    "mission_1_66_merged_at": "2026-09-05T17:50:04Z",
+    "attested_send_utc": "2026-09-05T17:57:00Z",
+    "send_after_approval": true,
+    "send_after_mission_1_66_reported_awaiting": true,
+    "consistent": true,
+    "what_this_does_not_establish": "That the send occurred. A time that is possible is not a time that happened, and these checks can only refute an attestation rather than confirm one."
+  },
+
+  "exactly_once": {
+    "$comment": "Load-bearing. One approval authorises one send.",
+    "send_count": 1,
+    "duplicate_send_count": 0,
+    "resent_during_this_mission": false,
+    "follow_up_sent": false,
+    "the_rule": "The enquiry must not be sent again. A second copy, a reminder, a thank-you or a clarification is a NEW outbound action needing its own frozen content and its own dispatch approval.",
+    "if_another_send_is_discovered": "DUPLICATE_DISPATCH_OCCURRED, recorded and reported. A sent message cannot be unsent, so there is no cleanup to perform and none is attempted."
+  },
+
+  "the_frozen_envelope_is_untouched": {
+    "envelope_edited": false,
+    "binding_fields_edited": false,
+    "sender_placeholder_replaced": false,
+    "approval_written_into_the_envelope": false,
+    "enquiry_content_edited": false,
+    "envelope_marked_sent": false,
+    "why_the_envelope_does_not_record_the_send": "The envelope records what was APPROVED. Marking it sent would merge the permission and the event into one document, which is exactly the confusion Mission 1.66 built two sections to prevent."
+  },
+
+  "provider_response": {
+    "$comment": "The mailbox was not inspected, and the record says only what that permits.",
+    "status": "NOT_CHECKED_AFTER_DISPATCH",
+    "is_not": "NO_RESPONSE_EXISTS",
+    "mailbox_searched": false,
+    "repository_holds_a_reply": false,
+    "response_frozen": false,
+    "response_interpreted": false,
+    "why_not_checked": "Nothing in this mission asks for the operator's mailbox to be read, and reading it would be an access nobody requested. Not checked and nothing there are different facts, and only the first is established.",
+    "what_happens_when_a_reply_arrives": "It is frozen verbatim, with sender, received time, thread and a pointer to the dispatch it answers. Reviewing it against B2, the datascan port set and post-30-day retention is a separate mission, because a provider's words and this project's reading of them must stay distinguishable."
+  },
+
+  "apparatus_state_unchanged": {
+    "$comment": "A sent question is not an answer.",
+    "ONYPHE": {"B2": "PARTIAL", "B4": "PARTIAL", "port_22_membership": "UNKNOWN", "post_30d_location_fields": "UNKNOWN", "individual": "INDIVIDUALLY_UNRESOLVED", "changed": false},
+    "Netlas": {"A7": "PASS", "A8": "PARTIAL", "individual": "INDIVIDUALLY_NOT_QUALIFIED", "changed": false},
+    "LeakIX": {"individual": "INDIVIDUALLY_NOT_QUALIFIED", "changed": false},
+    "The Shadowserver Foundation": {"individual": "INDIVIDUALLY_NOT_QUALIFIED", "changed": false},
+    "qualified_count": 0,
+    "pair_analysis_ready": false,
+    "rule": "Question drafted is not answered. Question approved is not answered. Question SENT is not answered. Only a reviewed first-party response may move a gate, and now the sentence is being used for the case it was written for."
+  },
+
+  "netlas_untouched": {
+    "content_approval": "VALID",
+    "recipient": "NOT_ESTABLISHED",
+    "sent": false,
+    "address_guessed": false,
+    "obfuscation_decoded": false,
+    "onyphe_approval_reused_for_netlas": false
+  },
+
+  "counters": {
+    "emails_sent_by_this_repository": 0,
+    "connector_executions": 0,
+    "mailbox_searches": 0,
+    "follow_ups_sent": 0,
+    "netlas_enquiries_sent": 0,
+    "provider_replies_frozen": 0,
+    "provider_replies_interpreted": 0,
+    "research_data_requests": 0,
+    "measurement_queries": 0,
+    "counts_fetched": 0,
+    "host_records_fetched": 0,
+    "banners_fetched": 0,
+    "trials": 0,
+    "purchases": 0,
+    "model_calls": 0,
+    "embeddings": 0,
+    "canonical_mutations": 0,
+    "sources_registered": 0,
+    "governance_reviews_created": 0,
+    "reliability_values_assigned": 0,
+    "independence_groups_created": 0,
+    "apparatus_gates_changed": 0,
+    "pairs_compared": 0,
+    "migrations_created": 0,
+    "reference_profile": "UNCALIBRATED",
+    "problem_family": "PARKED"
+  },
+
+  "canonical_baseline_unchanged": {
+    "$comment": "Email execution provenance is repository evidence. It is never a RawRecord, Signal, Claim or Evidence row.",
+    "raw_records": 325,
+    "normalized_records": 325,
+    "signals": 33,
+    "claims": 44,
+    "claim_revisions": 45,
+    "evidence": 58,
+    "inferred_claims": 1,
+    "threshold_registrations": 1,
+    "claim_derivations": 1,
+    "proposition_evaluation_refusals": 0,
+    "reliability_assessments": 4,
+    "evidence_independence_groups": 0,
+    "opportunities": 1,
+    "opportunity_revisions": 1,
+    "opportunity_evidence_links": 7,
+    "registered_sources": 29,
+    "migration_head": "0035_refusal_provenance",
+    "drift": "none"
+  },
+
+  "primary_outcome": "ONYPHE_MANUAL_DISPATCH_ATTESTED",
+  "primary_outcome_statement": "The operator performed the approved action manually after Mission 1.66 reported it as awaiting execution, and attested to it. Recipient, channel, subject and send count match the approved envelope; the sender is recorded as execution provenance under the placeholder the envelope deliberately left open. The evidence level is OPERATOR_ATTESTED rather than BYTE_VERIFIED, because no sent-message artifact was imported and this repository never observed the send. Mission 1.66 is unchanged, the frozen envelope is unchanged, no apparatus gate moved, and this repository sent nothing.",
+
+  "what_this_is_the_first_of": {
+    "observation": "This is the first outward action this repository has completed. Every earlier mission that reached one stopped before it.",
+    "and_it_was_not_completed_by_this_repository": "The operator sent it. The repository prepared it, froze it, hashed it, refused to send it four times, and recorded that a person did.",
+    "elapsed": "seven minutes between Mission 1.66 merging with the outcome AWAITING and the attested send"
+  },
+
+  "stop_condition": {
+    "email_sent_by_repository": false,
+    "connector_used": false,
+    "mailbox_searched": false,
+    "response_polled": false,
+    "response_interpreted": false,
+    "onyphe_gates_changed": false,
+    "netlas_sent": false,
+    "measurements_retrieved": false,
+    "claims_created": false,
+    "evidence_created": false,
+    "reliability_assigned": false,
+    "pair_analysis_performed": false,
+    "mission_1_66_rewritten": false,
+    "mission_1_67_started": false,
+    "awaiting": "a provider reply, and one address for Netlas"
+  }
+}
