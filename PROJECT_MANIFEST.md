@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.85
+Version: 1.86
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-05 (Sprint 1 / Mission 1.52)
+Last amended: 2026-09-05 (Sprint 1 / Mission 1.53)
 
 ---
 
@@ -13,6 +13,67 @@ Last amended: 2026-09-05 (Sprint 1 / Mission 1.52)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.86 — 2026-09-05 (Sprint 1 / Mission 1.53)
+
+**`INPUT_KEYED_REFUSAL_PROVENANCE_MODEL_SELECTED` (ADR-038).** A refusal gets its
+own append-only record, keyed on the input witness, the candidate target
+proposition, the derivation rule version and the reviewed equivalence basis. It
+names no ClaimRevision, creates no Claim, produces no Evidence, and needs no
+change to claim_derivations, to the evidence-requirement trigger, or to any
+existing schema. No migration was created and no table exists.
+
+Option B was measured rather than dismissed, and it fails on a fact only a live
+probe produces. A temp table mirroring claim_derivations_identity_key accepted
+three identical rows with a NULL claim_revision_id, and refused the duplicate the
+moment the column was populated. PostgreSQL treats NULLs as distinct, so making
+that column nullable silently removes the table's only idempotency guarantee from
+exactly the rows the change exists to add. Its second failure is quieter:
+claim_derivations identifies its proposition only through claim_revision_id, so
+with that NULL the row cannot say what was refused.
+
+Migration 0034 had already anticipated refusals. Its threshold-required check
+makes the registration optional precisely for the two refusal results, and its
+result check admits all four. Two constraints written in one migration disagree
+with each other, which is the finding rather than a tie-breaker.
+
+The candidate target is stored as a key and its exact preimage, in the vocabulary
+research.claims.proposition_facts already uses. Measured: all 43 live Claims
+carry both, the discriminator key is `proposition` on all 43, and the evaluator
+already emits it, so a refusal and the Claim it may later become are comparable
+by key. The key is recomputable, so it is verifiable rather than trusted.
+
+The seven reason codes were read from the evaluator's own refusal calls via the
+AST, and none was invented or renamed. The equivalence basis is NOT NULL because
+the decision contract already requires a non-blank basis id for every verdict,
+which also keeps the identity key free of nullable columns. A changed basis
+creates a new historical row rather than updating an old one, and a later
+SUPPORTS leaves an earlier UNKNOWN entirely alone.
+
+One deviation from the brief is flagged rather than buried: the descriptor
+carries no schema version, because derivation_rule_version already pins which
+fact set was emitted and a second version field would be a second authority for
+one fact. Recorded as OPERATOR_REVIEWABLE_DEVIATION with its cost stated.
+
+Two testing traps were caught. The evidence-requirement trigger is deferrable, so
+a rollback fixture never fires it and the first version of the test reported a
+pass for a rule that never ran. And the new pytest classes were first named
+without a Test prefix, which collected zero tests silently.
+
+0 requests of every kind, 0 model calls, 0 embeddings, every counter unchanged,
+0 INFERRED Claims, 0 derivation rows, 0 threshold registrations, no migration,
+validate_claims.py untouched, profile still UNCALIBRATED, Problem-Family still
+PARKED, validator probed with 66 deliberate violations and 66 caught, 1354
+bare-python tests before commit and 3201 pytest tests after.
+
+New: `docs/architecture/adr/ADR-038-refusal-provenance-binding.md`,
+`docs/data/refusal-derivation-binding-baseline-v1.json`,
+`docs/data/refusal-derivation-binding-design-v1.json` and `.md`, one script under
+`infrastructure/scripts/`, 41 design tests in
+`packages/inferred-claim-evaluator/python` and 15 database tests in
+`services/nlp/python`.
+
+Report: `docs/architecture/mission-1.53-report.md`.
 
 ## 1.85 — 2026-09-05 (Sprint 1 / Mission 1.52)
 
@@ -3104,6 +3165,7 @@ Additionally authoritative:
 - docs/data/deterministic-inferred-claim-contract-v1.md (added in 1.83)
 - docs/data/deterministic-derivation-provenance-schema-v1.md (added in 1.84)
 - docs/data/deterministic-inferred-evaluator-foundation-v1.md (added in 1.85)
+- docs/data/refusal-derivation-binding-design-v1.md (added in 1.86)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

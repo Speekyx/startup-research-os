@@ -1,0 +1,841 @@
+{
+  "mission": "1.53 — Refusal Derivation Binding Design V1",
+  "recorded_at": "2026-09-05",
+  "governs": "ADR-038; consumes ADR-036, ADR-037 and migration 0034",
+  "adr": "ADR-038-refusal-provenance-binding",
+  "primary_outcome": "INPUT_KEYED_REFUSAL_PROVENANCE_MODEL_SELECTED",
+  "primary_outcome_statement": "A refusal is durably recorded in its own append-only record, keyed on the INPUT witness, the CANDIDATE TARGET proposition, the derivation rule version and the reviewed equivalence basis. It names no ClaimRevision, creates no Claim, produces no Evidence, and requires no change to `research.claim_derivations`, to `research.require_evidence_for_generated_claim`, or to any existing schema. **No migration was created.**",
+  "why_not_forced": "Mission 1.52 preferred this shape, which is a reason to test it harder rather than to adopt it. Option B was analysed to the point where its exact cost could be measured, and it failed on two of the ten selection criteria for reasons that only a live probe could establish.",
+  "the_conflict_reproved": {
+    "method": "A disposable workspace `refusal-probe`, created and removed inside one script. Canonical state read before and after: claims 43, claim_derivations 0, evidence 57, workspaces dev and dev-other.",
+    "probe_A": {
+      "attempted": "INSERT an INFERRED claim plus revision with no Evidence",
+      "result": "REFUSED",
+      "sqlstate": "23514",
+      "mechanism": "research.require_evidence_for_generated_claim",
+      "quoted": "claim … (INFERRED / DETERMINISTIC_EXTRACTION) has no evidence. An automatically generated claim must cite at least one evidence record"
+    },
+    "probe_A_first_attempt_was_wrong_and_was_fixed": "The first run used `origin = 'AUTOMATED'`, which is not a member of `claims_origin_check`, so it was refused by the WRONG constraint and proved nothing about the evidence requirement. Reported here because a refusal on an unrelated constraint reads exactly like the refusal you were hoping for.",
+    "probe_A2_control": {
+      "attempted": "the same INSERT with claim_type HYPOTHESIS",
+      "result": "ACCEPTED, then rolled back deliberately",
+      "why_it_matters": "Without this control, probe A shows only that something refused. With it, the refusal is attributable to the exemption list rather than to anything incidental."
+    },
+    "probe_B": {
+      "attempted": "INSERT a claim_derivation with claim_revision_id NULL",
+      "result": "REFUSED",
+      "sqlstate": "23502",
+      "mechanism": "migration 0034 declares claim_revision_id NOT NULL"
+    },
+    "probe_C": {
+      "attempted": "three rows differing in nothing, on a TEMP table mirroring `claim_derivations_identity_key`, with claim_revision_id NULL",
+      "result": "ALL THREE ADMITTED",
+      "control": "the same table refused a duplicate when claim_revision_id was populated",
+      "server_version": "16.4",
+      "why_it_matters": "This is the measurement Mission 1.52 did not make, and it decides Option B. `claim_derivations_identity_key` is UNIQUE (workspace_id, claim_revision_id, input_signal_id, derivation_rule_version), and PostgreSQL treats NULLs as distinct by default — so the moment claim_revision_id is nullable, the table's only idempotency guarantee stops applying to exactly the rows Option B exists to add. Refusal idempotency would be nominal rather than real, and nothing would report it."
+    },
+    "probe_D": {
+      "measured": "the inputs-to-runs foreign key is ON DELETE CASCADE, all 12 interpretation runs carry an expires_at, and claim_derivations references the run tables 0 times",
+      "why_it_matters": "Option C is refuted from live state rather than from Mission 1.50's report."
+    }
+  },
+  "what_0034_already_anticipated": {
+    "constraint": "claim_derivations_threshold_required_check",
+    "definition": "CHECK ((evaluation_result = ANY (ARRAY['NOT_APPLICABLE','UNKNOWN'])) OR (threshold_registration_id IS NOT NULL))",
+    "reading": "Migration 0034 already makes the threshold registration OPTIONAL exactly for the two refusal results, and its `evaluation_result` CHECK already admits all four. So the table was shaped in the expectation that refusals would live in it, and a different constraint — the NOT NULL on claim_revision_id — made that impossible.",
+    "why_this_is_not_an_argument_for_option_B": "It establishes that the intent was reasonable, not that the table can carry it. The two constraints were written in one migration and they disagree, which is the finding rather than a tie-breaker. What Option B would need is not the removal of one NOT NULL but the addition of a proposition descriptor and a second idempotency key — at which point it is Option A inside a table whose name says otherwise."
+  },
+  "definition_of_refusal_provenance": {
+    "is": "A durable audit record of a deterministic attempt to determine whether source-native measurement M bears on candidate proposition P, where the result was NOT_APPLICABLE or UNKNOWN, and therefore no canonical Evidence relation was established and no canonical Claim needs to exist because of the attempt.",
+    "is_not": [
+      "a Claim",
+      "Evidence",
+      "a reliability assessment",
+      "an Opportunity finding",
+      "an execution log",
+      "a system-error record"
+    ],
+    "the_bound_worth_stating": "The evaluator only refuses pairs somebody has ALREADY reviewed: `evaluate` requires a SemanticEquivalenceDecision, and its constructor requires a non-blank basis id. A pair nobody has reviewed produces no evaluation at all, and therefore no refusal. So the refusal store answers *what did we try and decline*, never *what did we never consider*."
+  },
+  "central_distinction": {
+    "directional_derivation_answers": "Why does Signal S support or contradict existing ClaimRevision R?",
+    "refusal_answers": "Why was Signal S NOT attached to candidate proposition P?",
+    "consequence": "The subject of the first is a revision that exists. The subject of the second is a proposition that does not. They are not the same persistent entity, and the fact that both came out of one function call is not a reason to store them in one table."
+  },
+  "audit_questions": {
+    "note": "§2's twenty questions, each mapped to the field that answers it. A design that answers one of these from prose is rejected.",
+    "answers": [
+      {
+        "n": 1,
+        "question": "Which workspace?",
+        "field": "workspace_id"
+      },
+      {
+        "n": 2,
+        "question": "Which Signal?",
+        "field": "input_signal_id"
+      },
+      {
+        "n": 3,
+        "question": "Which optional OBSERVED Claim?",
+        "field": "input_observed_claim_id"
+      },
+      {
+        "n": 4,
+        "question": "Which candidate proposition?",
+        "field": "target_proposition_key + target_proposition_facts"
+      },
+      {
+        "n": 5,
+        "question": "Which metric definition?",
+        "field": "target_proposition_facts.metric_definition_id"
+      },
+      {
+        "n": 6,
+        "question": "Which subject?",
+        "field": "target_proposition_facts.canonical_subject_id"
+      },
+      {
+        "n": 7,
+        "question": "Which time bound?",
+        "field": "target_proposition_facts.time_bound"
+      },
+      {
+        "n": 8,
+        "question": "Which population or geography?",
+        "field": "target_proposition_facts.population_or_geography"
+      },
+      {
+        "n": 9,
+        "question": "Which unit?",
+        "field": "target_proposition_facts.unit"
+      },
+      {
+        "n": 10,
+        "question": "Which threshold and operator?",
+        "field": "target_proposition_facts.threshold_operator + threshold_value"
+      },
+      {
+        "n": 11,
+        "question": "Which threshold registration, if any?",
+        "field": "threshold_registration_id (nullable, conditional)"
+      },
+      {
+        "n": 12,
+        "question": "Which semantic-equivalence basis?",
+        "field": "semantic_equivalence_basis_id"
+      },
+      {
+        "n": 13,
+        "question": "Which derivation rule?",
+        "field": "derivation_rule_id"
+      },
+      {
+        "n": 14,
+        "question": "Which rule version?",
+        "field": "derivation_rule_version"
+      },
+      {
+        "n": 15,
+        "question": "Which evaluator version?",
+        "field": "evaluator_version"
+      },
+      {
+        "n": 16,
+        "question": "Which interpretation kind?",
+        "field": "interpretation_kind"
+      },
+      {
+        "n": 17,
+        "question": "Which result?",
+        "field": "evaluation_result"
+      },
+      {
+        "n": 18,
+        "question": "Why was it refused?",
+        "field": "reason_code"
+      },
+      {
+        "n": 19,
+        "question": "When?",
+        "field": "created_at"
+      },
+      {
+        "n": 20,
+        "question": "Repeated under another rule version?",
+        "field": "a second row; rule version is part of the identity key"
+      }
+    ]
+  },
+  "candidate_target_representation": {
+    "selected": "T1_PLUS_T2",
+    "name": "key plus its exact preimage, in the vocabulary research.claims already uses",
+    "shape": "target_proposition_key TEXT NOT NULL, target_proposition_facts JSONB NOT NULL",
+    "why": "This is not a new representation. All 43 live Claims carry `proposition_key` AND `proposition_facts`, paired by `claims_proposition_facts_paired_check`, and `proposition_key()` is sha256 over `canonical_json(facts)`. The refusal record stores the same pair, produced by the same function over the same fact vocabulary — so a refused candidate and the Claim it may later become are comparable by key, which is what makes the UNKNOWN-then-SUPPORTS transition traceable at all.",
+    "the_key_is_recomputable": "A reader recomputes proposition_key(target_proposition_facts) and compares. The stored key is therefore verifiable rather than trusted — the property Mission 1.51 gave `proposition_facts` when it called it the preimage of the key.",
+    "measured_precedent": {
+      "live_claims_with_key_and_preimage": 43,
+      "discriminator_key": "proposition",
+      "claims_carrying_it": 43,
+      "note": "The discriminator is `proposition`, not `proposition_kind`. The evaluator already emits `\"proposition\": target.proposition_kind`, so no vocabulary divergence exists. This was checked because a divergence here would silently prevent a refusal key from ever equalling its eventual Claim key."
+    },
+    "rejected": [
+      {
+        "model": "T2 alone",
+        "why": "A key without its preimage identifies a proposition nobody can read. §3 says a hash alone is insufficient unless the preimage is durably recoverable, and for a refusal there is no Claim row to recover it from."
+      },
+      {
+        "model": "T3 candidate-proposition registry",
+        "why": "A durable non-Claim target entity is Claims before Claims. It would need identity, lifecycle and governance of its own, and the first question anyone would ask is how it differs from a Claim. Strong presumption against, and nothing here requires it."
+      },
+      {
+        "model": "T4 threshold registration plus partial fields",
+        "why": "REJECTED ON A MEASURED FACT rather than on taste. Three of the seven live reason codes — SEMANTIC_MISMATCH, EQUIVALENCE_NOT_ESTABLISHED, EQUIVALENCE_DIMENSIONS_INCOMPLETE — refuse at gate 1, BEFORE the registration is consulted. T4 therefore fails exactly on the refusals that are most common and most informative."
+      }
+    ]
+  },
+  "json_safeguards": {
+    "why_it_is_not_an_untyped_dump": [
+      "The vocabulary is the one `research.claims.proposition_facts` already uses, not a new one.",
+      "Serialization is `canonical_json`, which is deterministic and already governs the Claim key.",
+      "The key is recomputed from the facts and compared, so a mismatched pair is detectable.",
+      "Constraints mirror the Claim table: object-typed, non-empty, and key-and-facts present together.",
+      "Values are flat strings, as on every live Claim; no nested structure and no prose.",
+      "No field inside the descriptor is load-bearing for anything except identity."
+    ],
+    "target_descriptor_version_deliberately_absent": {
+      "brief_requested": "§31 lists a canonical schema version among the safeguards.",
+      "decision": "NOT included, and flagged rather than quietly dropped.",
+      "why": "`derivation_rule_version` already pins which fact set was emitted: `target_proposition_facts()` lives in the rule module, so any change to the fact vocabulary IS a rule-version change. A separate descriptor version would be a second authority for one fact, which is the pattern this repository refuses — calibration eligibility is derived rather than stored for the same reason, and Mission 1.42a refused a second confidence field on the same argument.",
+      "cost_if_wrong": "If the fact vocabulary ever changes WITHOUT a rule-version change, a reader could not tell which shape a descriptor uses. That would be a rule-versioning defect rather than a descriptor defect, and the implementation mission should assert the coupling with a test rather than add the column.",
+      "status": "OPERATOR_REVIEWABLE_DEVIATION"
+    }
+  },
+  "selected_entity": {
+    "proposed_name": "research.proposition_evaluation_refusals",
+    "name_reasoning": "§30 suggested `claim_evaluation_refusals` and said the name is not mandatory. `claim_` is refused here because no Claim is evaluated and none exists — the row is precisely the case where there is no Claim. Mission 1.10's rule that a kind is named for its shape, and that a name may not carry an interpretation, applies to a table as much as to a record kind.",
+    "fields": [
+      {
+        "group": "IDENTITY",
+        "field": "id",
+        "type": "UUID",
+        "nullable": false,
+        "answers": "the row"
+      },
+      {
+        "group": "IDENTITY",
+        "field": "workspace_id",
+        "type": "UUID",
+        "nullable": false,
+        "answers": "Q1"
+      },
+      {
+        "group": "INPUT",
+        "field": "input_signal_id",
+        "type": "UUID",
+        "nullable": false,
+        "answers": "Q2"
+      },
+      {
+        "group": "INPUT",
+        "field": "input_observed_claim_id",
+        "type": "UUID",
+        "nullable": true,
+        "answers": "Q3"
+      },
+      {
+        "group": "TARGET",
+        "field": "target_proposition_key",
+        "type": "TEXT",
+        "nullable": false,
+        "answers": "Q4"
+      },
+      {
+        "group": "TARGET",
+        "field": "target_proposition_facts",
+        "type": "JSONB",
+        "nullable": false,
+        "answers": "Q4-Q10"
+      },
+      {
+        "group": "RULE",
+        "field": "derivation_rule_id",
+        "type": "TEXT",
+        "nullable": false,
+        "answers": "Q13"
+      },
+      {
+        "group": "RULE",
+        "field": "derivation_rule_version",
+        "type": "TEXT",
+        "nullable": false,
+        "answers": "Q14"
+      },
+      {
+        "group": "RULE",
+        "field": "evaluator_version",
+        "type": "TEXT",
+        "nullable": false,
+        "answers": "Q15"
+      },
+      {
+        "group": "EQUIVALENCE",
+        "field": "semantic_equivalence_basis_id",
+        "type": "TEXT",
+        "nullable": false,
+        "answers": "Q12"
+      },
+      {
+        "group": "THRESHOLD",
+        "field": "threshold_registration_id",
+        "type": "UUID",
+        "nullable": true,
+        "answers": "Q11"
+      },
+      {
+        "group": "OUTCOME",
+        "field": "evaluation_result",
+        "type": "TEXT",
+        "nullable": false,
+        "answers": "Q17"
+      },
+      {
+        "group": "OUTCOME",
+        "field": "reason_code",
+        "type": "TEXT",
+        "nullable": false,
+        "answers": "Q18"
+      },
+      {
+        "group": "PROCEDURE",
+        "field": "interpretation_kind",
+        "type": "TEXT",
+        "nullable": false,
+        "answers": "Q16"
+      },
+      {
+        "group": "PROCEDURE",
+        "field": "model_version",
+        "type": "TEXT",
+        "nullable": true,
+        "answers": "pairs with interpretation_kind, as on claim_derivations"
+      },
+      {
+        "group": "EXPLANATION",
+        "field": "rationale",
+        "type": "TEXT",
+        "nullable": false,
+        "answers": "human-readable only, never the authority for a structured fact"
+      },
+      {
+        "group": "TIME",
+        "field": "created_at",
+        "type": "TIMESTAMPTZ",
+        "nullable": false,
+        "answers": "Q19"
+      }
+    ],
+    "fields_deliberately_absent": [
+      {
+        "field": "claim_revision_id",
+        "why": "There is no revision. Its absence is the entire point of the entity."
+      },
+      {
+        "field": "claim_id",
+        "why": "Same, one level up. A refusal that named a Claim would imply the Claim exists."
+      },
+      {
+        "field": "evidence_id",
+        "why": "A refusal produces no Evidence. Mission 1.51 refused an evidence pointer on claim_derivations for a related reason."
+      },
+      {
+        "field": "measurement_value",
+        "why": "Deliberated and REJECTED. The measurement is recoverable from input_signal_id, and storing it would make the refusal record a second authority for a number the Signal already owns. It also is not part of the proposition, by ADR-036."
+      },
+      {
+        "field": "superseded_at / is_current",
+        "why": "Append-only. §16 and §17: a later SUPPORTS does not make an earlier UNKNOWN false."
+      },
+      {
+        "field": "interpretation_confidence",
+        "why": "It describes how faithfully a WORDING states what Signals showed. A refusal produces no wording and no Claim, so the field would have no referent."
+      }
+    ],
+    "constraints": [
+      {
+        "name": "refusal_result_check",
+        "rule": "evaluation_result IN ('NOT_APPLICABLE','UNKNOWN')",
+        "why": "§11. SUPPORTS, CONTRADICTS and NEUTRAL are structurally unrepresentable here, so a directional result cannot be filed as a refusal by a caller passing a string."
+      },
+      {
+        "name": "refusal_reason_code_check",
+        "rule": "reason_code IN the seven frozen codes",
+        "why": "Result says WHAT, reason code says WHY, and a free-text reason would put the why back into prose."
+      },
+      {
+        "name": "refusal_threshold_conditionality_check",
+        "rule": "reason_code IN ('THRESHOLD_REGISTRATION_MISMATCH','UNIT_MISMATCH','TIME_BOUND_MISMATCH','PREREGISTRATION_TIMING_INCONSISTENT') implies threshold_registration_id IS NOT NULL",
+        "why": "§14. A refusal that reached the registration gate must name the registration it judged. A gate-1 refusal MAY carry one — the evaluator currently passes it — but is not required to, because it never consulted it."
+      },
+      {
+        "name": "refusal_facts_object_check",
+        "rule": "jsonb_typeof(target_proposition_facts) = 'object' AND target_proposition_facts <> '{}'",
+        "why": "Mirrors claims_proposition_facts_object_check and claims_proposition_facts_nonempty_check."
+      },
+      {
+        "name": "refusal_model_version_pairing_check",
+        "rule": "DETERMINISTIC implies model_version IS NULL; MODEL_DERIVED implies NOT NULL",
+        "why": "Mirrors claim_derivations_model_version_pairing_check exactly."
+      },
+      {
+        "name": "refusal_rationale_present_check",
+        "rule": "length(btrim(rationale)) > 0",
+        "why": "Mirrors claim_derivations_rationale_present_check."
+      },
+      {
+        "name": "refusal_identity_key",
+        "rule": "UNIQUE (workspace_id, input_signal_id, target_proposition_key, derivation_rule_version, semantic_equivalence_basis_id)",
+        "why": "Every column is NOT NULL, so the constraint actually constrains — which probe C proved is not automatic."
+      }
+    ],
+    "foreign_keys": [
+      {
+        "column": "workspace_id",
+        "references": "core.workspaces(id)",
+        "on_delete": "CASCADE"
+      },
+      {
+        "column": "(workspace_id, input_signal_id)",
+        "references": "nlp.signals(workspace_id, id)",
+        "on_delete": "NO ACTION DEFERRABLE INITIALLY DEFERRED"
+      },
+      {
+        "column": "(workspace_id, input_observed_claim_id)",
+        "references": "research.claims(workspace_id, id)",
+        "on_delete": "NO ACTION DEFERRABLE INITIALLY DEFERRED"
+      },
+      {
+        "column": "(workspace_id, threshold_registration_id)",
+        "references": "research.threshold_registrations(workspace_id, id)",
+        "on_delete": "NO ACTION DEFERRABLE INITIALLY DEFERRED"
+      }
+    ],
+    "no_foreign_key_to": [
+      "research.claim_interpretation_runs",
+      "research.claim_interpretation_inputs",
+      "research.claim_revisions",
+      "scoring.evidence"
+    ],
+    "row_level_security": "ENABLE and FORCE, with a tenant_isolation policy, exactly as migration 0034 does for both of its tables."
+  },
+  "refusal_result_vocabulary": [
+    "NOT_APPLICABLE",
+    "UNKNOWN"
+  ],
+  "refusal_result_vocabulary_excludes": [
+    "SUPPORTS",
+    "CONTRADICTS",
+    "NEUTRAL"
+  ],
+  "reason_codes": {
+    "read_from": "packages/inferred-claim-evaluator/python/sros_inferred_claim_evaluator/threshold_state.py",
+    "invented_here": 0,
+    "codes": [
+      {
+        "code": "SEMANTIC_MISMATCH",
+        "result": "NOT_APPLICABLE",
+        "gate": 1,
+        "threshold_required": false
+      },
+      {
+        "code": "EQUIVALENCE_NOT_ESTABLISHED",
+        "result": "UNKNOWN",
+        "gate": 1,
+        "threshold_required": false
+      },
+      {
+        "code": "EQUIVALENCE_DIMENSIONS_INCOMPLETE",
+        "result": "UNKNOWN",
+        "gate": 1,
+        "threshold_required": false
+      },
+      {
+        "code": "THRESHOLD_REGISTRATION_MISMATCH",
+        "result": "NOT_APPLICABLE",
+        "gate": 2,
+        "threshold_required": true
+      },
+      {
+        "code": "UNIT_MISMATCH",
+        "result": "NOT_APPLICABLE",
+        "gate": 2,
+        "threshold_required": true
+      },
+      {
+        "code": "TIME_BOUND_MISMATCH",
+        "result": "NOT_APPLICABLE",
+        "gate": 2,
+        "threshold_required": true
+      },
+      {
+        "code": "PREREGISTRATION_TIMING_INCONSISTENT",
+        "result": "UNKNOWN",
+        "gate": 3,
+        "threshold_required": true
+      }
+    ],
+    "result_versus_reason": "The result answers WHAT happened and drives the contract — no Evidence, no Claim. The reason code answers WHY and drives the audit. The rationale is human-readable and is the authority for nothing."
+  },
+  "semantic_equivalence_basis": {
+    "nullable": false,
+    "why_it_can_be_NOT_NULL": "MEASURED from the contract rather than assumed: `SemanticEquivalenceDecision.__post_init__` refuses a blank `basis_id` for EVERY verdict, including UNKNOWN. So no evaluation can occur without one, and no honest representation of an absent basis is needed.",
+    "the_consequence_worth_stating": "An unreviewed pair produces no decision object, so `evaluate` is never called and no refusal exists. The store therefore cannot answer *what did we never look at*, and must not be read as if it could.",
+    "no_fake_identifier_invented": true
+  },
+  "idempotency": {
+    "key": [
+      "workspace_id",
+      "input_signal_id",
+      "target_proposition_key",
+      "derivation_rule_version",
+      "semantic_equivalence_basis_id"
+    ],
+    "every_column_not_null": true,
+    "why_that_matters": "Probe C proved that a UNIQUE containing a nullable column admits unlimited duplicates on PostgreSQL 16.4. Every column here is NOT NULL, so the guarantee is real rather than nominal, and no expression index or sentinel value is required.",
+    "same_inputs_replayed": "IDEMPOTENT — one row.",
+    "different_rule_version": "A NEW row. Replaying a different rule is different reasoning, exactly as for claim_derivations.",
+    "different_basis": {
+      "decision": "A NEW row.",
+      "why": "The reviewed basis is an INPUT to gate 1, and the evaluator's first act is to read its verdict. Changing it changes what was evaluated, so it is a new historical evaluation and not an update to an old one. Recording it as the same refusal would mean overwriting the reasoning that stood while the old basis stood.",
+      "cost_stated": "One Signal-target pair can accumulate several refusal rows over time. That is the intended behaviour of an append-only audit, and the count of rows is never a measure of anything epistemic."
+    },
+    "measurement_value_deliberately_not_in_the_key": "The Signal is in the key and owns its value. Including the value would fork the identity when a source revised a figure, which is the defect ADR-036 keeps out of proposition identity."
+  },
+  "append_only_and_history": {
+    "supersession_column": false,
+    "why_no_supersession": "No consumer needs one. A reader orders refusals by created_at, and each row names the rule version and basis that produced it, so *which reasoning stood when* is answerable without a marker. A supersession flag would additionally require somebody to decide what supersedes what, which is a judgement nothing here is entitled to make.",
+    "unknown_then_supports": {
+      "T0": "Signal S evaluated against candidate P under basis B1 → UNKNOWN → refusal row U persisted.",
+      "T1": "A new reviewed basis B2 establishes EQUIVALENT. Re-evaluation → SUPPORTS.",
+      "T1_writes": [
+        "research.claims (INFERRED)",
+        "research.claim_revisions",
+        "research.claim_derivations",
+        "scoring.evidence"
+      ],
+      "what_happens_to_U": "NOTHING. It is not marked false, not superseded, not deleted, and not rewritten into a SUPPORTS.",
+      "why": "U is a true historical statement: under basis B1, this system could not establish that S bears on P. A later basis does not make that false; it makes it superseded in practice, which is a different thing and is legible from the two rows and their timestamps."
+    }
+  },
+  "domain_refusal_versus_system_failure": {
+    "domain_refusal": [
+      "NOT_APPLICABLE",
+      "UNKNOWN"
+    ],
+    "system_failure": [
+      "database error",
+      "missing contract object",
+      "programming error",
+      "unexpected exception"
+    ],
+    "rule": "System failures are NOT refusal provenance and must never be written here. The result CHECK is a partial guard; the real enforcement is that the persistence command accepts an EvaluationOutcome and nothing else, so an exception has no shape to be filed as.",
+    "precedent": "nlp.signal_derivation_runs and research.claim_interpretation_runs already hold execution records, and a failure belongs with them."
+  },
+  "evaluator_integration": {
+    "evaluator_modified": false,
+    "the_split": "EvaluationOutcome → SUPPORTS/CONTRADICTS → Claim, ClaimRevision, claim_derivation, Evidence (one transaction). NOT_APPLICABLE/UNKNOWN → refusal provenance only (one transaction).",
+    "transactionality": "Each path commits atomically and independently. A refusal write must never create a Claim, Evidence or a threshold mutation as a side effect, and it cannot: the refusal entity has no foreign key to any of them except the optional registration it only reads.",
+    "one_observation_about_the_current_evaluator": "Gate-1 refusals pass the threshold registration to `_refuse`, so `DerivationDraft.threshold_registration_id` is populated even for refusals that never consulted it. The conditional constraint above permits that and never requires it, so no evaluator change is needed. Whether a gate-1 refusal SHOULD carry it is a small question for the implementation mission, and it was not decided here by changing code §24 says not to change."
+  },
+  "option_matrix": {
+    "criteria": [
+      "SEMANTIC_COHERENCE",
+      "NO_FAKE_CLAIM",
+      "TARGET_PROPOSITION_AUDITABILITY",
+      "RETENTION_DURABILITY",
+      "PRESERVES_CLAIM_DERIVATION_INVARIANT",
+      "NO_TRIGGER_WEAKENING",
+      "SCHEMA_MINIMALITY",
+      "QUERYABILITY",
+      "APPEND_ONLY_HISTORY",
+      "IDEMPOTENCY_CLARITY",
+      "MULTI_TENANT_SAFETY",
+      "FUTURE_EVALUATOR_INTEGRATION"
+    ],
+    "A": {
+      "name": "separate input-keyed refusal record",
+      "SEMANTIC_COHERENCE": "STRONG",
+      "NO_FAKE_CLAIM": "STRONG",
+      "TARGET_PROPOSITION_AUDITABILITY": "STRONG",
+      "RETENTION_DURABILITY": "STRONG",
+      "PRESERVES_CLAIM_DERIVATION_INVARIANT": "STRONG",
+      "NO_TRIGGER_WEAKENING": "STRONG",
+      "SCHEMA_MINIMALITY": "MEDIUM",
+      "QUERYABILITY": "STRONG",
+      "APPEND_ONLY_HISTORY": "STRONG",
+      "IDEMPOTENCY_CLARITY": "STRONG",
+      "MULTI_TENANT_SAFETY": "STRONG",
+      "FUTURE_EVALUATOR_INTEGRATION": "STRONG",
+      "note": "SCHEMA_MINIMALITY is MEDIUM and not WEAK: it adds one table and changes none."
+    },
+    "B": {
+      "name": "nullable claim_revision_id on claim_derivations",
+      "SEMANTIC_COHERENCE": "WEAK",
+      "NO_FAKE_CLAIM": "STRONG",
+      "TARGET_PROPOSITION_AUDITABILITY": "FAIL",
+      "RETENTION_DURABILITY": "STRONG",
+      "PRESERVES_CLAIM_DERIVATION_INVARIANT": "FAIL",
+      "NO_TRIGGER_WEAKENING": "STRONG",
+      "SCHEMA_MINIMALITY": "MEDIUM",
+      "QUERYABILITY": "MEDIUM",
+      "APPEND_ONLY_HISTORY": "STRONG",
+      "IDEMPOTENCY_CLARITY": "FAIL",
+      "MULTI_TENANT_SAFETY": "STRONG",
+      "FUTURE_EVALUATOR_INTEGRATION": "MEDIUM",
+      "note": "SCHEMA_MINIMALITY is only MEDIUM because B is not actually smaller once it works: it needs target_proposition_key, target_proposition_facts, reason_code, a second partial unique index and three conditional CHECKs."
+    },
+    "C": {
+      "name": "interpretation-run logs",
+      "SEMANTIC_COHERENCE": "MEDIUM",
+      "NO_FAKE_CLAIM": "STRONG",
+      "TARGET_PROPOSITION_AUDITABILITY": "WEAK",
+      "RETENTION_DURABILITY": "FAIL",
+      "PRESERVES_CLAIM_DERIVATION_INVARIANT": "STRONG",
+      "NO_TRIGGER_WEAKENING": "STRONG",
+      "SCHEMA_MINIMALITY": "STRONG",
+      "QUERYABILITY": "WEAK",
+      "APPEND_ONLY_HISTORY": "WEAK",
+      "IDEMPOTENCY_CLARITY": "WEAK",
+      "MULTI_TENANT_SAFETY": "STRONG",
+      "FUTURE_EVALUATOR_INTEGRATION": "WEAK",
+      "note": "RETENTION_DURABILITY FAILs on live measurement: 12 of 12 runs carry expires_at and the inputs FK is ON DELETE CASCADE. Retention was not redesigned to rescue it."
+    }
+  },
+  "option_verdicts": {
+    "A": "SELECTED. Passes all ten selection criteria.",
+    "B": "REJECTED on TARGET_PROPOSITION_AUDITABILITY and IDEMPOTENCY_CLARITY. `claim_derivations` identifies its proposition only THROUGH claim_revision_id, so with that NULL the row cannot say what was refused; and probe C proved the existing identity key stops constraining the moment the column is nullable. Repairing both means adding a proposition descriptor, a reason code and a second idempotency key to a table whose name and stated meaning are about actual ClaimRevisions — Option A inside the wrong table.",
+    "C": "REJECTED on RETENTION_DURABILITY, from live state rather than from a report."
+  },
+  "selection_criteria_check": [
+    {
+      "n": 1,
+      "criterion": "no fabricated Claim",
+      "met": true,
+      "how": "the entity has no claim_id and no claim_revision_id"
+    },
+    {
+      "n": 2,
+      "criterion": "full candidate target auditable",
+      "met": true,
+      "how": "key plus recomputable preimage in the Claim fact vocabulary"
+    },
+    {
+      "n": 3,
+      "criterion": "durable after run expiry",
+      "met": true,
+      "how": "no foreign key to either interpretation-run table"
+    },
+    {
+      "n": 4,
+      "criterion": "no Evidence for refusal",
+      "met": true,
+      "how": "no evidence_id, and the result CHECK admits no direction"
+    },
+    {
+      "n": 5,
+      "criterion": "append-only historical audit",
+      "met": true,
+      "how": "no supersession column, insert-only"
+    },
+    {
+      "n": 6,
+      "criterion": "workspace-safe",
+      "met": true,
+      "how": "workspace_id, composite tenant FKs, RLS enabled and forced"
+    },
+    {
+      "n": 7,
+      "criterion": "idempotent",
+      "met": true,
+      "how": "five-column UNIQUE with every column NOT NULL"
+    },
+    {
+      "n": 8,
+      "criterion": "evaluator integration clear",
+      "met": true,
+      "how": "the directional/refusal split is explicit and needs no evaluator change"
+    },
+    {
+      "n": 9,
+      "criterion": "existing OBSERVED/INFERRED semantics preserved",
+      "met": true,
+      "how": "nothing existing is altered"
+    },
+    {
+      "n": 10,
+      "criterion": "no silent trigger weakening",
+      "met": true,
+      "how": "the trigger is untouched and needs no exemption, because no Claim is created"
+    }
+  ],
+  "generic_or_family_specific": {
+    "decision": "GENERIC, with one family-specific optional foreign key.",
+    "why": "The descriptor is `proposition_facts` in the vocabulary all 43 live Claims already use across seven proposition kinds, so nothing about the entity is THRESHOLD_STATE-shaped. The only family-specific field is `threshold_registration_id`, which is nullable and conditionally required by reason code — so another proposition family simply never uses it and never trips the constraint.",
+    "not_over_generalised": "No abstraction was added for families that do not exist. The generality is inherited from a representation the repository already had rather than designed for hypothetical futures."
+  },
+  "queryability": {
+    "question": "Show me every evaluation attempt that did not become Evidence.",
+    "answer": "SELECT * FROM research.proposition_evaluation_refusals — one table, no text scanning, no heuristic comparison of two tables.",
+    "why_this_is_a_criterion": "§23. If the answer required diffing claim_derivations against scoring.evidence, refusals would be inferred rather than recorded, and an inference is not an audit."
+  },
+  "validator_probe": {
+    "deliberate_violations": 66,
+    "caught": 66,
+    "the_real_record_still_validates": true,
+    "why": "Each violation is a claim this record could plausibly have made and must not: a hash-only target, a nullable column inside the identity key, a reason code the evaluator never raises, the ephemeral run log selected, a supersession column, a counter that moved, the next mission reported as started."
+  },
+  "unchanged": {
+    "claim_derivations": "untouched; every row still names a real ClaimRevision",
+    "require_evidence_for_generated_claim": "untouched; no INFERRED exemption",
+    "claims_schema": "untouched",
+    "evidence_schema": "untouched",
+    "origin_detail": "untouched",
+    "threshold_provenance_statuses": [
+      "PREREGISTERED",
+      "SOURCE_NATIVE",
+      "EXTERNAL_NORM",
+      "POST_HOC",
+      "UNKNOWN"
+    ],
+    "evidence_reevaluation_policy": "REPORT_NO_AUTOMATIC_WRITE",
+    "source_id_absent_from_inferred_proposition_identity": true
+  },
+  "counters": {
+    "raw_records": {
+      "before": 325,
+      "after": 325
+    },
+    "normalized_records": {
+      "before": 325,
+      "after": 325
+    },
+    "signals": {
+      "before": 33,
+      "after": 33
+    },
+    "claims": {
+      "before": 43,
+      "after": 43
+    },
+    "claim_revisions": {
+      "before": 44,
+      "after": 44
+    },
+    "evidence": {
+      "before": 57,
+      "after": 57
+    },
+    "inferred_claims": {
+      "before": 0,
+      "after": 0
+    },
+    "claim_derivations": {
+      "before": 0,
+      "after": 0
+    },
+    "threshold_registrations": {
+      "before": 0,
+      "after": 0
+    },
+    "reliability_assessments": {
+      "before": 4,
+      "after": 4
+    },
+    "independence_groups": {
+      "before": 0,
+      "after": 0
+    },
+    "opportunities": {
+      "before": 1,
+      "after": 1
+    },
+    "opportunity_revisions": {
+      "before": 1,
+      "after": 1
+    },
+    "opportunity_evidence_links": {
+      "before": 7,
+      "after": 7
+    },
+    "embeddings": {
+      "before": 0,
+      "after": 0
+    },
+    "sources": {
+      "before": 29,
+      "after": 29
+    }
+  },
+  "network_budget": {
+    "research_data_requests": 0,
+    "documentation_requests": 0,
+    "metadata_requests": 0
+  },
+  "model_use": {
+    "llm_calls": 0,
+    "embeddings": 0,
+    "calibration_labels": 0,
+    "parameters_fitted": 0,
+    "problem_family_status": "PARKED",
+    "profile_status": "UNCALIBRATED"
+  },
+  "migration_created": false,
+  "refusal_table_created": false,
+  "claim_revision_id_made_nullable": false,
+  "trigger_exemptions_changed": false,
+  "inferred_claim_created": false,
+  "evidence_created": false,
+  "evaluator_modified": false,
+  "source_selected": null,
+  "opportunity_changed": false,
+  "stop_conditions_honoured": [
+    "no migration created",
+    "no refusal table created",
+    "claim_revision_id not made nullable",
+    "trigger exemptions unchanged",
+    "INFERRED not exempted from the evidence requirement",
+    "no INFERRED Claim created",
+    "no Evidence created",
+    "no evaluator output persisted canonically",
+    "no standing Evidence direction modified",
+    "no data acquired",
+    "no sources discovered",
+    "no ReliabilityAssessment created",
+    "no calibration",
+    "no Scores created",
+    "Opportunity unchanged",
+    "no model called",
+    "no embeddings created",
+    "Problem-Family still PARKED",
+    "Mission 1.54 not started"
+  ],
+  "next_mission_recommendation": {
+    "recommended": "Mission 1.54 — Refusal Provenance Schema V1",
+    "scope": "Implement ONLY the frozen refusal persistence contract: one additive table, its constraints, its identity key and its RLS, with a real DELETE fixture proving a refusal survives interpretation-run expiry. No evaluator-to-canonical persistence yet.",
+    "must_prove": [
+      "a refusal row survives deletion of every interpretation run in its workspace",
+      "the identity key actually constrains, replayed with identical inputs",
+      "a different rule version and a different basis each create a new row",
+      "the result CHECK refuses SUPPORTS, CONTRADICTS and NEUTRAL",
+      "proposition_key recomputed from the stored facts equals the stored key",
+      "a workspace deletion removes refusals without a deferred-constraint failure, which is the trap migration 0034 hit"
+    ],
+    "still_open": [
+      "TARGET_DESCRIPTOR_VERSION_DELIBERATELY_ABSENT is an operator-reviewable deviation from §31",
+      "whether a gate-1 refusal should carry the threshold registration it never consulted",
+      "policy D is decided and still not implemented: no conflict report exists",
+      "no threshold registration exists, so no proposition has a bound frozen before a measurement was retrieved"
+    ],
+    "explicitly_not_started": "Mission 1.54 was not started. The design is frozen and no migration was written."
+  }
+}
