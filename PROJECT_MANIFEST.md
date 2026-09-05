@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.89
+Version: 1.90
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-05 (Sprint 1 / Mission 1.56)
+Last amended: 2026-09-05 (Sprint 1 / Mission 1.57)
 
 ---
 
@@ -13,6 +13,96 @@ Last amended: 2026-09-05 (Sprint 1 / Mission 1.56)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.90 — 2026-09-05 (Sprint 1 / Mission 1.57)
+
+**`INDEPENDENCE_CAPABLE_ROUTE_GOVERNANCE_PENDING`.** One apparatus pair passes
+every mandatory epistemic gate on first-party documentation from both sides.
+Neither apparatus is a registered source, so governance is the sole binding
+blocker, and it is an unasked question rather than a refusal.
+
+**The structural finding is the mission.** A quantity that exists only because a
+platform recorded it can be measured only by that platform; a quantity that
+exists in the world independently of any measurer can be measured by more than
+one apparatus. Every source in this portfolio measures the first kind. Wikimedia's
+request counts exist because Wikimedia's servers logged them; Stack Overflow's
+question counts because Stack Overflow published them; GDELT's frequencies because
+GDELT crawled and counted; TED's totals because contracting authorities filed
+notices there. Each is the sole possible apparatus for its own quantity, so a
+second API, dump, mirror or dashboard is a second copy and never a second
+measurement. It generalises Mission 1.46 one domain over: there the measurement
+happens once at the national producer and the international publishers are
+distribution layers; here it happens once at the platform and every interface is
+one. Two findings, one fact about where measurement actually occurs.
+
+**Ten held apparatuses, one shared subject, and it is the same one Mission 1.47
+found.** `docker`, observed by Wikimedia requests and Stack Exchange questions.
+The pair is `COMPLEMENTARY_NOT_CORROBORATING`: a content request is what a
+reader's client makes of a server, a published question is what a person writes
+about being stuck. ADR-036 removed the identity blocker that stopped those two
+ever reaching one Claim; it did not make a request a question.
+
+**The negative controls were re-run and still fail**, which is the one way this
+mission could have gone wrong. World Bank plus FRED remains dependent
+republication on FRED's own source code; World Bank plus Eurostat remains common
+upstream and semantic mismatch. Neither was promoted on the grounds that the
+Claim architecture changed, because the INFERRED layer fixes identity and repairs
+neither provenance dependence nor a 1 January stock measured against a midyear
+estimate.
+
+**The selected route is an atmospheric mole-fraction pair at one fixed site, and
+the decisive evidence is a calibration scale rather than an organisation chart.**
+The two programmes report on different reference scales, and a republished series
+carries the originator's scale. One states first-party that it operates an
+independent sampling network rather than obtaining data from the other; the other
+describes that data as independent and uses it for comparison, and comparison for
+validation is not consumption. Separate instruments, separate laboratories,
+separate scales.
+
+**Provenance independence is not error independence, and the limitation is
+recorded.** The two share the site and one provides in-kind field support, so a
+site-level artefact would move both. The scale offset also becomes a threshold
+constraint: a bound placed close enough for a calibration difference to decide the
+comparison would manufacture a contradiction, so the next mission must place it
+clear of that offset and record the reasoning before any value is retrieved.
+
+**The validator caught this mission's own record.** The rejected web-traffic route
+was first written `KNOWN_INDEPENDENT` with no documentary basis. §15 requires the
+proof from both sides, so it became `UNKNOWN` — which costs nothing, because that
+route fails for a better reason: each apparatus measures share within its own
+network, both stating so first-party, so the frame sits inside the metric
+definition and any proposition admitting both relocates source attribution into
+its predicate. Mission 1.47's finding recurring, now named as the
+`FRAME_INSIDE_THE_DEFINITION` trap.
+
+**No measurement value was fetched, and that is load-bearing.** PREREGISTERED is
+defined against retrieval, so one value fetched during feasibility work would have
+made an honest preregistration impossible for ever afterwards. Research-data
+requests 0, first-party methodology requests 6, measurement values 0.
+
+**The reservation is stated rather than buried.** The selected construct is not a
+quantity this product will research. Relevance is a preference in the brief and
+not a mandatory gate, so selection is permitted; what the route can establish is
+that the aggregation mechanism works on real independent data, not what its
+parameters should be for a request count. Inside this portfolio there is no
+alternative, and that is the finding rather than a gap in the search.
+
+0 canonical mutations across every counter, 0 sources registered, 0 reviews
+created, 0 collectors, 0 normalizers, 0 threshold registrations, 0 Claims, 0
+Evidence, 0 reliability assessments, 0 independence groups, 0 Scores, 0
+Opportunity changes, 0 model calls, 0 embeddings, the Mission 1.56 Claim
+untouched, profile still UNCALIBRATED, Problem-Family still PARKED, validator
+probed with 79 deliberate violations and 79 caught, 1439 bare-python tests before
+commit and 3310 pytest tests after.
+
+New: `docs/data/independence-capable-route-baseline-v1.json`,
+`independence-capable-apparatus-requirements-v1.json`,
+`independence-capable-route-candidates-v1.json`,
+`independence-capable-route-feasibility-v1.json` and their rendered `.md`;
+`infrastructure/scripts/render_independence_route.py`; 39 tests in
+`packages/evidence-aggregation/python`.
+
+Report: `docs/architecture/mission-1.57-report.md`.
 
 ## 1.89 — 2026-09-05 (Sprint 1 / Mission 1.56)
 
@@ -3381,6 +3471,7 @@ Additionally authoritative:
 - docs/data/deterministic-evaluation-persistence-orchestration-v1.md (added in 1.88)
 - docs/data/first-deterministic-inferred-pilot-manifest-v1.md (added in 1.89)
 - docs/data/first-deterministic-inferred-pilot-v1.md (added in 1.89)
+- docs/data/independence-capable-route-feasibility-v1.md (added in 1.90)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

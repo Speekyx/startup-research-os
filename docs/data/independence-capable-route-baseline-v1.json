@@ -1,0 +1,124 @@
+{
+  "$comment": "Mission 1.57 sections 0 to 3. Measured from the live deployment before any route analysis, so the feasibility record rests on what is there rather than on what Mission 1.56 reported.",
+  "record_version": "1.0.0",
+  "mission": "1.57 — Independence-Capable Evidence Route Feasibility V1",
+  "recorded_at": "2026-09-05",
+
+  "repository_precondition": {
+    "mission_1_56_merged": true,
+    "pull_request": 99,
+    "merge_commit": "6b7c8f4",
+    "local_main_equals_origin_main": true,
+    "working_tree_clean": true,
+    "branch": "sprint-1/mission-1.57",
+    "migration_head": "0035_refusal_provenance",
+    "adr_036": "Accepted",
+    "adr_037": "Accepted",
+    "adr_038": "Accepted",
+    "components_present": [
+      "packages/inferred-claim-evaluator",
+      "services/nlp/python/sros_nlp/inferred_persistence.py",
+      "research.threshold_registrations",
+      "research.claim_derivations",
+      "research.proposition_evaluation_refusals"
+    ],
+    "verified_from": "git and the live database, not from the mission brief"
+  },
+
+  "counters": {
+    "raw_records": 325,
+    "normalized_records": 325,
+    "signals": 33,
+    "claims": 44,
+    "claim_revisions": 45,
+    "evidence": 58,
+    "inferred_claims": 1,
+    "threshold_registrations": 1,
+    "claim_derivations": 1,
+    "proposition_evaluation_refusals": 0,
+    "reliability_assessments": 4,
+    "reliability_basis_rows": 12,
+    "independence_groups": 0,
+    "opportunities": 1,
+    "opportunity_revisions": 1,
+    "opportunity_evidence_links": 7,
+    "embeddings": 0,
+    "sources": 29,
+    "scoring_scores": "ABSENT",
+    "reference_profile": "UNCALIBRATED",
+    "problem_family": "PARKED",
+    "drift": "none"
+  },
+
+  "evidence_direction_census": {
+    "SUPPORTS": 57,
+    "CONTRADICTS": 1,
+    "claims_carrying_both_directions": 0,
+    "what_the_zero_means": "The direction became representable in Mission 1.56 and the contradiction CASE has still not occurred. Contradiction enters the aggregation arithmetic only when one Claim carries evidence in both directions."
+  },
+
+  "first_inferred_claim": {
+    "claim_id": "c79f58bb-2241-4908-800b-5765a51cbb95",
+    "claim_revision_id": "6fdef1b1-fc4f-4406-bd7e-e8a633d8a7a2",
+    "revision": 1,
+    "proposition_key": "e452cf18200011aa65da75ebea5a0036bd49b2a365612dc3bbb2db8963ba2684",
+    "proposition_facts": {
+      "proposition": "metric_threshold_state",
+      "claim_type": "INFERRED",
+      "canonical_subject_id": "kubernetes",
+      "metric_definition_id": "content_request_daily_change:en.wikipedia.org:user:all-access",
+      "time_bound": "2024-03-03/2024-03-04",
+      "population_or_geography": "global",
+      "unit": "requests",
+      "threshold_operator": "GTE",
+      "threshold_value": "1000"
+    },
+    "statement": "content_request_daily_change:en.wikipedia.org:user:all-access for kubernetes over global in 2024-03-03/2024-03-04 is at least 1000 requests.",
+    "interpretation_confidence": 0.9,
+    "evidence_id": "800f1421-dcef-4656-9c2a-e3bef039282d",
+    "evidence_direction": "CONTRADICTS",
+    "evidence_count": 1,
+    "signal_id": "064d12bf-e7bb-56e7-a90c-bdd08e89d2ac",
+    "threshold_registration_id": "5df908f7-123a-4913-b7a1-2a5f07255e97",
+    "threshold": "GTE 1000 requests, POST_HOC",
+    "derivation_id": "52dbc32b-56ff-4e0c-9ebc-efe0740b4aec",
+    "input_observed_claim_id": "97dec365-7ee8-4c93-947f-36fd9abf1d1b",
+    "measurement_value": "912",
+    "reliability_resolution": "NO_APPLICABLE_ASSESSMENT",
+    "scorability": "NON_SCORABLE",
+    "independence_state": "UNKNOWN",
+    "independence_group_id": null,
+    "provenance_groups": 1,
+    "modified_by_this_mission": false
+  },
+
+  "what_mission_1_56_established": [
+    "source-independent proposition identity works canonically, on a real row rather than a fixture",
+    "EvidenceDirection.CONTRADICTS can exist on a real INFERRED Claim",
+    "a future second witness can target the SAME proposition key, because source, measurement value and direction are all excluded from Claim identity",
+    "the persistence path is real rather than fixture-only"
+  ],
+  "what_mission_1_56_did_not_establish": [
+    "independence",
+    "corroboration",
+    "aggregation conflict",
+    "calibration",
+    "anything about a market"
+  ],
+
+  "first_claim_is_not_the_route": {
+    "second_independent_measurement_possible": "NO",
+    "flag": "SOURCE_EXCLUSIVE_METRIC",
+    "reason": "The metric is generated from Wikimedia's own request logs. A second Wikimedia endpoint, a dump, an API wrapper, a mirror, a republisher or a derived dashboard is another PUBLICATION of one measurement, not a second measurement. The number of publication routes is a fact about distribution and says nothing about how many times the quantity was measured.",
+    "consequence": "No alternative Wikimedia interface was searched for, and this Claim is not a candidate for a second witness.",
+    "the_claim_remains": "the completed persistence pilot, and it is untouched by this mission"
+  },
+
+  "structural_exits_from_b2": {
+    "$comment": "Mission 1.43 established by algebra that with ONE support provenance group the full aggregator equals the B-2 reliability pass-through baseline. Two exits exist and no third.",
+    "route_a_established_independent_corroboration": "one source-independent Claim, at least two supporting Evidence items, at least two ESTABLISHED independent provenance groups",
+    "route_b_real_contradiction": "one source-independent Claim, at least one SUPPORTS and at least one CONTRADICTS Evidence item",
+    "why_one_apparatus_pair_serves_both": "Two genuinely independent apparatuses measuring the SAME construct against the SAME frozen threshold produce corroboration if both measurements fall the same side and contradiction if they fall on opposite sides. The route does not have to predict which, which is exactly what keeps it free of outcome-chasing.",
+    "why_this_beats_two_searches": "Searching separately for 'a corroboration source' and 'a contradiction source' presumes the answer before the measurement exists."
+  }
+}
