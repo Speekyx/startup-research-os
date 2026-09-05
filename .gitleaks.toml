@@ -39,7 +39,7 @@ useDefault = true
 
 [allowlist]
 description = """
-Three registry identifiers that are not credentials, matched by exact value.
+Four identifiers that are not credentials, matched by exact value.
 
 `"key"` in source-compliance-v1.json is the stable identifier of an enumerated
 resource-exclusion rule. Two values: the Eurostat trade-data carve-outs the
@@ -57,6 +57,24 @@ It is not a credential and structurally cannot become one: a credential in this
 system is a CONFIGURATION KEY NAME in `secret_references`, and
 validate_source_registry.py refuses a value there.
 
+`e452cf18...` (added in Mission 1.56) is a PROPOSITION KEY: the SHA-256 of the
+canonical facts of one INFERRED Claim, `sha256(canonical_json(facts))`. It tripped
+`generic-api-key` on two counts at once -- the JSON key ends in `_key`, and 64 hex
+characters have high entropy -- which is exactly the shape a real credential has
+and exactly why the rule exists.
+
+It is not a credential and structurally cannot become one. It is DERIVED from
+facts printed two lines below it in the same file, it is RECOMPUTED from those
+facts by `render_inferred_pilot.py` and by the evaluator suite, and a value that
+does not recompute is refused. A secret nobody can regenerate from public data is
+the opposite of a hash everybody can.
+
+This is the first proposition key committed to the repository -- until Mission
+1.56 they existed only as database rows -- so a later mission committing another
+will need its own entry here. That cost is deliberate: a `^[0-9a-f]{64}$` pattern
+would have covered all of them and would also have suppressed a large fraction of
+real API keys, which is the trade this file already refused once.
+
 Matched by exact VALUE, with no path clause, so a real key added to any of these
 files later is still caught -- which is the property that matters.
 """
@@ -67,5 +85,6 @@ regexes = [
   '''^li-ch-trade-1995$''',
   '''^at-trade-cn8$''',
   '''^indicators-api-v2$''',
+  '''^e452cf18200011aa65da75ebea5a0036bd49b2a365612dc3bbb2db8963ba2684$''',
 ]
 regexTarget = "secret"
