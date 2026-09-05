@@ -1,0 +1,184 @@
+{
+  "$comment": "Mission 1.60 sections 29, 30, 40, 44, 45, 46, 47, 49, 61 and 63. The verdict, the synthetic fixtures, and the handoff.",
+  "record_version": "1.0.0",
+  "mission": "1.60 — Observation-Addressable Scanner Pair Selection V1",
+  "recorded_at": "2026-09-05",
+
+  "primary_outcome": "APPARATUS_LINEAGE_NOT_AFFIRMATIVELY_ESTABLISHED",
+  "primary_outcome_statement": "The anchor apparatus requalified on the two gates that killed the previous pairs -- its observation window is selectable in the request and its predicate is expressible against a queryable raw banner -- and it still does not individually qualify, because first-party documentation does not affirmatively establish that no external measurement feed is load-bearing for its host observations. No partner reached pair analysis, so no pair was constructed.",
+  "selected_pair": null,
+  "actionability": null,
+
+  "why_this_outcome_and_not_another": {
+    "$comment": "Section 61 requires exactly one, and the fit is imperfect. Saying so is better than choosing the one whose wording bends most easily.",
+    "the_imperfect_fit": "Outcome G is defined for the case where a promising PAIR exists and lineage remains unproven. Here there is a promising ANCHOR and no pair. The clause is half-satisfied.",
+    "why_it_was_still_chosen": "It names the blocker that is ESTABLISHED rather than merely unexplored, and the one that sits upstream of every partner question: no partner can rescue an anchor whose own measurement lineage is unproven. It is also the blocker that is precisely actionable, by reading or by one written enquiry.",
+    "why_not_C": "NO_OBSERVATION_ADDRESSABLE_PARTNER_IDENTIFIED asserts that the anchor qualifies. It does not, and recording that it does would be exactly the overstatement this arc keeps refusing.",
+    "why_not_B": "ANCHOR_APPARATUS_INVALIDATED overstates it in the other direction. Neither blocking gate is a refutation: A7 is an unproven negative and A8 is a set of operational questions nobody has asked.",
+    "the_second_blocker_is_recorded_not_hidden": "No partner was qualified either, and every partner failed at documentation retrieval rather than at a substantive gate. That is a co-blocker and it is reported beside this outcome rather than folded into it."
+  },
+
+  "gate_summary": {
+    "anchor": {
+      "A1": "PASS", "A2": "PASS", "A3": "PASS", "A4": "PASS", "A5": "PASS_WITH_STATED_BOUNDS",
+      "A6": "PASS", "A7": "PARTIAL", "A8": "PARTIAL", "A9": "PASS"
+    },
+    "pass_count": 6,
+    "pass_with_bounds_count": 1,
+    "partial_count": 2,
+    "individually_qualifies": false,
+    "pair_gates_evaluated": false,
+    "why_pair_gates_not_evaluated": "Section 39. Pairs are generated only between individually qualifying apparatuses, and none was available on either side."
+  },
+
+  "future_target_proposition": {
+    "$comment": "Section 29. Constructed, never created, and no threshold value chosen.",
+    "identity_fields": [
+      "canonical_subject_id",
+      "metric_definition_id",
+      "population_or_geography",
+      "time_bound",
+      "unit",
+      "threshold_operator",
+      "threshold_value"
+    ],
+    "unit": "distinct public IPv4 addresses",
+    "time_bound_form": "[T0, T1) in UTC",
+    "excluded_from_identity": [
+      "scanner name",
+      "vendor name",
+      "measurement value",
+      "evidence direction",
+      "independence state",
+      "reliability",
+      "derivation rule version"
+    ],
+    "representable_by_current_contract": true,
+    "schema_change_required": false,
+    "scanner_identity_required_in_identity": false
+  },
+
+  "window_and_threshold": {
+    "$comment": "Sections 23 and 40.",
+    "window_width_selected": false,
+    "why_not": "Section 23. A width may only be fixed once a pair exists and its cadences impose a minimum comparable interval. Choosing one now would be choosing a number for a route that does not exist.",
+    "minimum_comparable_window": "NOT_ESTABLISHED, because it is a property of a PAIR and no pair was formed",
+    "duplicate_rule_form": "a host observed several times inside the window counts once; a host observed once satisfying the predicate qualifies for the window even if it later stops responding",
+    "why_that_does_not_make_the_claim_unfalsifiable": "Host-level membership is existential within the window, and the CLAIM is a count against a bound. COUNT(distinct qualifying addresses in window) >= X can be contradicted by a count below X. Host-level monotonicity is not Claim-level monotonicity, and confusing the two would have hidden a real falsifiability problem or invented one.",
+    "threshold_selected": false,
+    "threshold_value": null,
+    "can_a_threshold_later_be_preregistered": "NOT_DETERMINABLE_WITHOUT_A_PAIR",
+    "what_is_determinable": "The anchor alone supports the required ordering: its observation window is selectable before retrieval, so a threshold registered at T3 would precede any retrieval at T4. Whether the pair supports it depends on a partner that does not yet exist."
+  },
+
+  "structural_fixtures": {
+    "$comment": "Sections 30, 44 and 45. Synthetic values only, never persisted. The values are 4242 and 1717 against a bound of 3000, chosen so nobody can mistake them for measurements.",
+    "same_target_identity": {
+      "setup": "one source-independent TargetProposition P; a witness above the bound and a witness below it, each annotated with a different synthetic scanner id",
+      "result": "identical proposition_key",
+      "what_it_proves": "scanner identity is witness provenance. Two apparatuses reach ONE Claim, which is the property the whole route depends on and the one a protocol narrowing could quietly have broken.",
+      "executed": true,
+      "persisted": false
+    },
+    "independent_support": {
+      "setup": "same P, both witnesses SUPPORTS, both KNOWN_INDEPENDENT",
+      "result": "2 provenance groups",
+      "control": "both UNKNOWN gives 1 group",
+      "executed": true,
+      "persisted": false
+    },
+    "contradiction": {
+      "setup": "same P, one SUPPORTS and one CONTRADICTS",
+      "result": "one Claim carrying both directions, one group per direction",
+      "executed": true,
+      "persisted": false,
+      "not_a_prediction": "This shows the path is structurally reachable. It says nothing about whether two real scanners would disagree."
+    },
+    "disagreement_diagnostic": {
+      "question": "If the two report different counts for the frozen window, could that be a legitimate result of independent measurement, or must one have misread the other?",
+      "answer": "LEGITIMATE_INDEPENDENT_MEASUREMENT_DIFFERENCE_POSSIBLE",
+      "why": "Each apparatus generates its observations by probing, so a difference can be coverage, packet loss, vantage or timing within the window.",
+      "the_distinction_that_must_survive": "That answer holds only for a pair sharing one population and one window definition. A difference caused by different frames or different time semantics is not a measurement difference at all -- it is two propositions being compared, which is what the last two missions failed on. Only the first kind is legitimate."
+    }
+  },
+
+  "positive_negative_asymmetry": {
+    "$comment": "Section 19. A limitation of the construct itself, recorded rather than discovered later.",
+    "statement": "A successful identification is strong evidence that the service was reachable from that measurement path at that time. A failure to observe is ambiguous: offline, packet loss, ACL, scan exclusion, rate limiting, routing, sampling or measurement failure.",
+    "consequence": "The route counts POSITIVE observed addresses. Non-observation must never be read as the host being definitely absent, and pair equivalence therefore concerns the count-generation procedures rather than per-host negative truth."
+  },
+
+  "governance": {
+    "$comment": "Sections 9, 42 and 43. Deferred entirely.",
+    "sources_registered": 0,
+    "reviews_created": 0,
+    "purchases": 0,
+    "trials_started": 0,
+    "handoff_facts": {
+      "anchor": "ACCESS_APPEARS_PAID for API tiers; FREE_DOCUMENTATION_AVAILABLE; GOVERNANCE_REVIEW_WILL_BE_REQUIRED",
+      "partners": "not established"
+    },
+    "commercial_separately": "Product relevance is an epistemic property and commercial licence rights are a governance one. A technically relevant apparatus may still be commercially unusable, and neither this mission nor the next conflates them."
+  },
+
+  "counters": {
+    "first_party_doc_requests": 10,
+    "budget": 15,
+    "research_data_requests": 0,
+    "target_measurement_requests": 0,
+    "target_host_record_requests": 0,
+    "target_count_requests": 0,
+    "facets_fetched": 0,
+    "trials_started": 0,
+    "purchases": 0,
+    "queries_executed": 0,
+    "model_calls": 0,
+    "model_cost_usd": 0.0,
+    "embeddings": 0,
+    "canonical_mutations": 0,
+    "sources_registered": 0,
+    "governance_reviews_created": 0,
+    "collectors_implemented": 0,
+    "normalizers_implemented": 0,
+    "threshold_registrations_created": 0,
+    "claims_created": 0,
+    "evidence_created": 0,
+    "reliability_assessments_created": 0,
+    "reliability_values_assigned": 0,
+    "independence_groups_created": 0,
+    "scores_created": 0,
+    "opportunity_changes": 0,
+    "mission_1_56_claim_modified": false,
+    "reference_profile": "UNCALIBRATED",
+    "problem_family": "PARKED"
+  },
+
+  "what_survives": {
+    "the_anchor_is_stronger_than_it_was": "It now passes A2 on two independent mechanisms and A3 in the strongest exposure class. The gates that killed the last two pairs are not what blocks it.",
+    "the_blockers_changed_kind": "They are no longer about what the apparatus measures or how it exposes it. A7 is a sentence its documentation does not contain; A8 is a set of operational questions nobody has asked. Both are closable by reading or asking rather than by finding a different apparatus.",
+    "the_requirement_registry": "Nine reusable rules from Missions 1.47 to 1.59 now sit in one record with the mission that paid for each, so route discovery reads a registry rather than a chain of reports. Every one of them was learned AFTER a pair had been chosen.",
+    "the_partner_gap_is_documentation_not_apparatus": "Three partner candidates were left at a documentation wall rather than at a verdict. That is a fact about this mission's reach and it is what the next one should attack first."
+  },
+
+  "next_mission_recommendation": {
+    "name": "Mission 1.61 — Anchor Lineage Confirmation and Partner Documentation Retrieval V1",
+    "why_this": "Section 63. On APPARATUS_LINEAGE_NOT_AFFIRMATIVELY_ESTABLISHED the instruction is not to buy access, and to target the missing lineage proof. Two things block, both are documentation problems, and neither needs a new apparatus class.",
+    "it_should": [
+      "prepare an operator-approved written enquiry to the anchor asking whether host-level service observations are produced by its own probes and whether any external measurement dataset is load-bearing for the presence or absence of a service on a host",
+      "ask the same operational questions a reliability reviewer would: retry behaviour, duplicate handling within a window, address identity counting, and what a missing record means",
+      "pin the anchor's port coverage for port 22 to the window, since the port list is documented as expanding over time",
+      "retrieve working documentation paths for the three partner candidates left at a wall, applying A1 and A2 first",
+      "establish the anchor's vantage model, which was recorded as NOT_ESTABLISHED before pairing rather than after"
+    ],
+    "it_must_not": [
+      "fetch a measurement value, a host count, a host record, a facet or a result total",
+      "execute a service search query against target data",
+      "start a trial, demo console or search preview that reveals target observations, because a zero-cost trial destroys preregistration exactly as a paid one would",
+      "purchase access",
+      "revive the dropped current-state apparatus or search for another query syntax for it",
+      "accept a vendor product label as the metric definition",
+      "read an absence of a reference to third-party data as an affirmative statement",
+      "register a source or create a governance review"
+    ]
+  }
+}

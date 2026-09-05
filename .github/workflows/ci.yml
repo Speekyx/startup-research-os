@@ -397,6 +397,17 @@ jobs:
       # PASS. Also that no measurement value was fetched and nothing was bought.
       - name: Service-presence gate closure matches its decision rules
         run: uv run python infrastructure/scripts/render_service_presence_route.py --check
+      # Mission 1.60 §52. Renders the five selection records and enforces the
+      # accumulated refusals of this arc: a current-state database is not
+      # observation-addressable however good it is, a vendor label is not a
+      # protocol predicate, a timestamp that exists but cannot be selected before
+      # retrieval is not addressability, retrieve-then-filter is not
+      # preregisterable, an absence is not affirmative lineage, two brand names
+      # are not two apparatuses, a free trial is not harmless, a count is not
+      # documentation, and a PARTIAL is not a PASS. Also that the dropped
+      # apparatus stays a negative control and nothing was fetched or bought.
+      - name: Scanner pair selection matches its decision rules
+        run: uv run python infrastructure/scripts/render_scanner_pair_selection.py --check
 
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.

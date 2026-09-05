@@ -1,0 +1,81 @@
+{
+  "$comment": "Mission 1.60 sections 7, 10, 35, 38 and 50. Partner discovery, pruned in the cheapest-gate-first order, with every failed candidate retained so nobody researches it again.",
+  "record_version": "1.0.0",
+  "mission": "1.60 — Observation-Addressable Scanner Pair Selection V1",
+  "recorded_at": "2026-09-05",
+  "search_discipline": {
+    "class_frozen": "INTERNET_WIDE_ACTIVE_SCANNING",
+    "no_new_class_search": "Section 7. The class is settled; only apparatuses within it were sought.",
+    "queried_by_requirement_not_brand": "Section 10. The search asked for active scanners exposing per-observation scan timestamps and raw banners, not for alternatives or competitors to a named vendor. Brand-first search biases toward commercial similarity rather than apparatus requirements.",
+    "pruning_order": [
+      "A1 active measurement producer",
+      "A2 observation-addressable exposure",
+      "A3 protocol-native exposure",
+      "A5 frame documented",
+      "A9 product relevance",
+      "A7 lineage",
+      "A8 reliability reviewability",
+      "pair gates"
+    ],
+    "why_that_order": "Section 38. Expensive lineage and access research is not spent on an apparatus already dead on observation-time exposure."
+  },
+  "candidates": [
+    {
+      "candidate": "the Mission 1.59 current-state apparatus",
+      "identity": "Censys",
+      "status": "NEGATIVE_CONTROL",
+      "first_failing_gate": "A2",
+      "verdict": "SNAPSHOT_TIME_SEMANTICS_NOT_ALIGNABLE",
+      "reconsidered": false,
+      "retained_because": "Section 50. It must remain a negative control so that a later mission does not rediscover it as a promising scanner with an excellent database.",
+      "researched_this_mission": false
+    },
+    {
+      "candidate": "a national-scale non-profit scanning foundation",
+      "identity": "The Shadowserver Foundation",
+      "first_failing_gate": "A6",
+      "verdict": "DOCUMENTATION_NOT_RETRIEVABLE",
+      "detail": "Its network-reporting page states the technical documentation has moved to an external wiki, and the substantive wiki pages did not load at the path tried. So the data model, the record timestamp semantics, the banner exposure and the covered address space could not be established from first-party documentation within budget.",
+      "what_is_known_first_party": "It performs its own daily internet-wide scans, and some of its APIs are public while most are private for partners and direct data consumers.",
+      "why_not_pursued_further": "Section 38. A2 and A5 could not be reached without the wiki, and section 43 forbids closing a mandatory gate on a third-party summary. Its access model also points at a frame question rather than a global one, which would need answering before it could pair.",
+      "not_a_refusal": true,
+      "researched_this_mission": true,
+      "not_a_refusal_detail": "This is a documentation-retrieval failure in this mission, not a finding about the apparatus. It may be revisited with a working documentation path."
+    },
+    {
+      "candidate": "a commercial active-scanning platform with a datascan category",
+      "identity": "ONYPHE",
+      "first_failing_gate": "A6",
+      "verdict": "DOCUMENTATION_NOT_RETRIEVABLE",
+      "detail": "The documented path redirected to another host and the redirected path returned HTTP 404. No first-party statement about observation timestamps, query filtering or banner exposure was obtained.",
+      "why_not_pursued_further": "Section 37 bounds the budget, and section 38 forbids spending it hunting for one vendor's documentation while the anchor's own blocking gates are unresolved.",
+      "not_a_refusal": true,
+      "researched_this_mission": true
+    },
+    {
+      "candidate": "an open event-oriented scanning service",
+      "identity": "LeakIX",
+      "first_failing_gate": "A6",
+      "verdict": "DOCUMENTATION_NOT_RETRIEVABLE",
+      "detail": "The documented API introduction path returned HTTP 404.",
+      "not_a_refusal": true,
+      "researched_this_mission": true
+    }
+  ],
+  "partner_search_result": {
+    "candidates_inspected": 4,
+    "of_which_researched_this_mission": 3,
+    "reached_pair_analysis": 0,
+    "qualifying_partners_found": 0,
+    "why_none_reached_pair_analysis": "Every partner probed failed at A6 rather than at a substantive gate: their first-party technical documentation was not retrievable at the paths tried within budget. That is a fact about this mission's reach, not a finding about those apparatuses, and it is recorded as such.",
+    "what_this_does_and_does_not_establish": {
+      "establishes": "No second observation-addressable scanner was qualified in this mission.",
+      "does_not_establish": "That none exists. Three candidates were left at a documentation wall rather than at a verdict, and a mission with working documentation paths could take any of them further."
+    },
+    "the_honest_shape_of_the_gap": "The anchor was qualified from four first-party documents. The partners were not qualified because their equivalent documents were not reachable. The asymmetry is in documentation access, not in apparatus quality."
+  },
+  "pairs_constructed": {
+    "count": 0,
+    "why": "Section 39. Pairs are generated only between individually qualifying apparatuses. The anchor does not individually qualify (A7 and A8 block it), and no partner was qualified, so there was no pair to test."
+  }
+}

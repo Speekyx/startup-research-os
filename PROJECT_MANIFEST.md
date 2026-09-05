@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.92
+Version: 1.93
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-05 (Sprint 1 / Mission 1.59)
+Last amended: 2026-09-05 (Sprint 1 / Mission 1.60)
 
 ---
 
@@ -13,6 +13,92 @@ Last amended: 2026-09-05 (Sprint 1 / Mission 1.59)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.93 — 2026-09-05 (Sprint 1 / Mission 1.60)
+
+**`APPARATUS_LINEAGE_NOT_AFFIRMATIVELY_ESTABLISHED`.** No pair selected. The
+anchor apparatus requalified on both gates that killed the previous two pairs,
+and what blocks it now is a sentence its documentation does not contain.
+
+**Applying the gates before choosing worked.** That was the whole point of the
+new ordering, and it changed what the mission found. The anchor passes A2 on two
+independent mechanisms: a request parameter selecting a data-collection date, and
+date ranges over a per-record `scan_date` documented as recording when the
+scanning that generated the response occurred, with daily scan volumes
+downloadable as dated files on top. The window is chosen in the request, not
+discovered after retrieval. It also passes A3 in the strongest exposure class
+available: a queryable raw banner field with wildcard matching plus port
+filtering, so the RFC 4253 prefix predicate is expressible against the bytes the
+peer sent rather than against a vendor's service label.
+
+**Six of nine gates pass, one passes with stated bounds, and two are partial.**
+A7 stays PARTIAL because the documentation is not silent about its own scanning —
+it is silent about exhaustiveness, and inferring exhaustiveness from a list of
+enrichment sources would be reading a positive claim out of a negative space.
+That is the same refusal for the fourth mission running, and it is the one most
+tempting to abandon now that everything else about this apparatus works. A8 stays
+PARTIAL on operational questions nobody has asked: retries, duplicate handling
+within a window, address-identity counting, and what a missing record means. But
+its load-bearing classification is a standard-defined prefix on an exposed banner
+rather than a proprietary fingerprint, so what remains unreviewed is operational
+rather than semantic — which is the difference from the dropped apparatus.
+
+**The blockers changed kind.** They are no longer about what the apparatus
+measures or how it exposes it. Both close by reading or asking, not by finding a
+different scanner.
+
+**No partner reached pair analysis, and the reason is recorded honestly.** Three
+candidates were probed and all three failed at A6: their first-party technical
+documentation was not retrievable at the paths tried. That is a fact about this
+mission's reach and not a finding about those apparatuses. The asymmetry is in
+documentation access, not apparatus quality, and the record states what the
+search does not establish — that no qualifying partner exists.
+
+**The outcome fits imperfectly and the record says so**, rather than choosing the
+label whose wording bends most easily. Outcome G is defined for a promising pair
+and there is a promising anchor. It was still chosen because it names the
+established blocker rather than the merely unexplored one, and because no partner
+can rescue an anchor whose own lineage is unproven — while the alternatives would
+either assert the anchor qualifies or call an unproven negative a refutation.
+
+**The requirement registry is the reusable output.** Nine rules from Missions 1.47
+to 1.59 now sit in one record with the mission that paid for each:
+SOURCE_EXCLUSIVE_METRIC, RELIABILITY_REVIEWABILITY, FRAME_INSIDE_THE_DEFINITION,
+AFFIRMATIVE_LINEAGE_REQUIRED, PRODUCT_RELEVANCE,
+READING_A_PUBLISHED_VALUE_IS_NOT_MEASURING_IT, OBSERVATION_ADDRESSABLE_EXPOSURE,
+THE_TEMPORAL_OBJECT_TEST and SAMPLING_IS_LOAD_BEARING. Every one was learned after
+a pair had been chosen, which is exactly why they are now applied before.
+
+**Two small rules were made structural.** A query returning only a count still
+returns a measurement value, and is not metadata because only a number came back.
+A zero-cost trial destroys preregistration exactly as a paid one would, because
+access cost is irrelevant to epistemic contamination.
+
+**A falsifiability trap was caught before it mattered.** A windowed count makes
+host membership an existential within the window, which looks monotone. The claim
+is a count against a bound, which a lower count contradicts. Host-level
+monotonicity is not claim-level monotonicity, and conflating them would have
+invented a falsifiability problem or hidden one.
+
+10 of 15 first-party documentation retrievals, 0 queries executed, 0 counts, 0
+host records, 0 facets, 0 trials, 0 purchases. 0 canonical mutations, 0 sources
+registered, 0 governance reviews, 0 collectors, 0 threshold registrations, 0
+Claims, 0 Evidence, 0 reliability values, 0 independence groups, 0 Scores, 0
+Opportunity changes, 0 model calls, 0 embeddings. The Mission 1.56 Claim is
+untouched, the profile is still UNCALIBRATED and Problem-Family is still PARKED.
+Validator probed with 85 deliberate violations and 85 caught. 1529 bare-python
+tests before commit and 3310 pytest tests after.
+
+New: `docs/data/observation-addressable-scanner-selection-baseline-v1.json`,
+`observation-addressable-apparatus-contract-v1.json`,
+`anchor-scanner-requalification-v1.json`,
+`observation-addressable-partner-candidates-v1.json`,
+`observation-addressable-scanner-pair-selection-v1.json` and their rendered `.md`;
+`infrastructure/scripts/render_scanner_pair_selection.py`; 36 tests in
+`packages/inferred-claim-evaluator/python` and 5 in
+`packages/evidence-aggregation/python`.
+
+Report: `docs/architecture/mission-1.60-report.md`.
 
 ## 1.92 — 2026-09-05 (Sprint 1 / Mission 1.59)
 
@@ -3653,6 +3739,8 @@ Additionally authoritative:
 - docs/data/independence-capable-route-feasibility-v1.md (added in 1.90)
 - docs/data/apparatus-search-broadened-v1.md (added in 1.91)
 - docs/data/internet-wide-service-presence-route-gate-closure-v1.md (added in 1.92)
+- docs/data/observation-addressable-apparatus-contract-v1.md (added in 1.93)
+- docs/data/observation-addressable-scanner-pair-selection-v1.md (added in 1.93)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

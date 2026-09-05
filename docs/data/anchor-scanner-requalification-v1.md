@@ -1,0 +1,110 @@
+# Anchor Scanner Requalification V1
+
+**Mission 1.60 — Observation-Addressable Scanner Pair Selection V1 — recorded 2026-09-05.**
+
+> **This document is GENERATED.** Edit the JSON and re-run
+> `infrastructure/scripts/render_scanner_pair_selection.py`.
+
+**Netlas** (`ANCHOR_CANDIDATE_B`) — the Netlas responses collection, its search API and query language, and a datastore of daily scan volumes.
+
+## Gate results
+
+| gate | verdict |
+| --- | --- |
+| `A1_ACTIVE_MEASUREMENT_PRODUCER` | **PASS** |
+| `A2_OBSERVATION_ADDRESSABLE_EXPOSURE` | **PASS** |
+| `A3_PROTOCOL_NATIVE_OBSERVATION_EXPOSURE` | **PASS** |
+| `A4_OBSERVATION_TIME_DOCUMENTED` | **PASS** |
+| `A5_FRAME_DOCUMENTED` | **PASS_WITH_STATED_BOUNDS** |
+| `A6_NON_VALUE_DOCUMENTATION_AVAILABLE` | **PASS** |
+| `A7_AFFIRMATIVE_MEASUREMENT_LINEAGE` | **PARTIAL** |
+| `A8_RELIABILITY_REVIEWABLE` | **PARTIAL** |
+| `A9_PRODUCT_RELEVANT` | **PASS** |
+
+### `A1_ACTIVE_MEASUREMENT_PRODUCER` — PASS
+
+- `basis`: Its scanning-technology documentation states it operates its own purpose-built scanning infrastructure and identifies roughly thirty application-layer protocols by banner grabbing and protocol parsing, with its own TLS and HTTP handling.
+
+### `A2_OBSERVATION_ADDRESSABLE_EXPOSURE` — PASS
+
+- `time_object`: OBSERVATION_PARTITION_BY_WINDOW
+- `basis`:
+  - the API accepts an `indices` request parameter that selects a particular data-collection DATE, so the window is chosen in the REQUEST
+  - the query language supports date and numeric ranges via `[ TO ]` and one-sided `<`, `>`, `<=`, `>=`
+  - each response document carries a documented `scan_date` recording when the scanning that generated it occurred
+  - daily scan volumes are additionally downloadable as JSON files, which is an observation partition in its strongest form
+- `window_selectable_before_retrieval`: True
+- `requires_result_inspection`: False
+- `timestamp_semantics`: OBSERVATION_TIME
+- `why_this_matters`: This is the exact gate that killed the Mission 1.59 pair, and the anchor passes it on two independent mechanisms rather than one.
+- `time_object_note`: with an event-record shape underneath it: each response document is a discrete observation carrying its own scan_date, and the dated index is the partition over those.
+
+### `A3_PROTOCOL_NATIVE_OBSERVATION_EXPOSURE` — PASS
+
+- `exposure_class`: RAW_IDENTIFICATION_STRING
+- `basis`: The query language exposes a `*.banner` field as queryable with wildcard and prefix matching, and supports port filtering. The predicate can therefore be expressed against the bytes the peer sent rather than against a vendor-assigned service label.
+- `vendor_fingerprint_required`: False
+
+### `A4_OBSERVATION_TIME_DOCUMENTED` — PASS
+
+- `basis`: Its field reference documents two temporal fields and distinguishes them: `scan_date` is when the internet-wide scanning that generated the response occurred; `@timestamp` is when the document was indexed.
+
+### `A5_FRAME_DOCUMENTED` — PASS_WITH_STATED_BOUNDS
+
+- `frame`: the IPv4 space from 1.0.0.0 to 239.255.255.255 excluding reserved and special-use ranges, scanned against a curated list of over 1000 TCP ports and selected UDP ports; IPv6 is not supported
+- `port_22_in_frame`: port 22 is a commonly used TCP port and the curated list is documented as covering over a thousand of them; that it is included is highly likely and is NOT recorded as established, because the published port list was not read field by field in this mission
+- `sampling`: no sampling of service details is documented for this apparatus, in contrast with the dropped one
+- `note`: The port list is documented as periodically expanding, so the frame is a moving target across time. For a windowed count the frame must be pinned to the window, and the record says so rather than assuming stability.
+
+### `A6_NON_VALUE_DOCUMENTATION_AVAILABLE` — PASS
+
+- `basis`: Every fact above came from documentation. No query was executed and no result set was requested.
+
+### `A7_AFFIRMATIVE_MEASUREMENT_LINEAGE` — PARTIAL
+
+- `level`: between LEVEL_2 and LEVEL_4, closer to LEVEL_2
+- `what_is_established`:
+  - it operates its own purpose-built scanning infrastructure
+  - each response document is a single service response collected during scanning
+  - `scan_date` records when the scanning that GENERATED the record occurred, which ties the load-bearing record to its own probing rather than to an unspecified database
+  - its external inputs are named and are enrichment: DNS registry, WHOIS, certificate data, and an external CVE database for vulnerability information
+- `what_is_missing`: an affirmative first-party statement that no external measurement feed is load-bearing for host-level service observations
+- `why_not_upgraded`: Section 26 and the standard carried forward from Mission 1.57: absence remains absence. The documentation is not silent about its own scanning; it is silent about exhaustiveness, and inferring exhaustiveness from a list of enrichment sources would be reading a positive claim out of a negative space.
+- `how_it_could_close`: A first-party technical statement, or an operator-approved written enquiry asking whether host-level observations are produced by its own probes and whether any external measurement dataset is load-bearing for the presence or absence of a service on a host.
+
+### `A8_RELIABILITY_REVIEWABLE` — PARTIAL
+
+- `what_is_reviewable`:
+  - which bytes qualify, because the raw banner is exposed and the predicate is fixed by a published standard rather than by a proprietary classifier
+  - the frame, because the address range and port policy are documented
+  - the observation time, because scan_date is defined
+- `what_is_not_established`:
+  - retry behaviour on failed connections
+  - duplicate handling across scan passes within one window
+  - how IP identity is counted where a host answers on several addresses
+  - what a scan failure or a missing record means
+- `why_this_is_better_than_the_dropped_apparatus`: There the load-bearing classification was a proprietary fingerprint, which is a black box by construction. Here the load-bearing decision is a standard-defined prefix on an exposed banner, so what remains unreviewed is operational rather than semantic.
+- `note`: Section 13 does not demand every engineering detail. It demands that the load-bearing classification not be a black box. That test passes; the operational questions keep the verdict at PARTIAL rather than PASS.
+
+### `A9_PRODUCT_RELEVANT` — PASS
+
+- `basis`: Observable presence of a protocol-speaking service across a defined public frame bears on AUDIENCE_OR_USAGE and COMPETITIVE_SUPPLY under the bounded sentence carried forward.
+
+## Vantage — `NOT_ESTABLISHED`
+
+the scan origin networks, the number and geographic distribution of scanner nodes, and whether source-IP-dependent behaviour materially affects what it observes
+
+If reachability turns out to be materially vantage-relative and no governed equivalence exists, the proposition would have to say 'reachable from this scanner's vantage', which puts scanner identity into Claim identity and fails the route. Asking it before pairing is the whole point of the new ordering.
+
+## Result — `ANCHOR_B_LINEAGE_PARTIAL`
+
+Individually qualifies: **False**. Blocking gates: ['A7', 'A8'].
+
+Section 36 distinguishes an anchor that FAILS a gate from one whose evidence is incomplete. Neither blocking gate is a refutation: A7 is an unproven negative and A8 is a set of operational questions nobody has asked. The anchor is carried forward, not discarded.
+
+**The anchor passes A2 and A3 — the two gates that decided the last mission and the one before it — and it passes A3 in the strongest category available.**
+
+Mission 1.59 dropped a pair because one side's temporal object was wrong and because neither side was shown to expose a protocol-native predicate. The anchor answers both: the window is selectable in the request by dated index or date range, and the predicate can be written against a queryable raw banner rather than a vendor label.
+
+What blocks this apparatus is no longer about what it measures or how it exposes it. It is about what its documentation says regarding where its observations come from, and about operational questions a reviewer would ask. Both are closable by reading or asking, not by finding a different apparatus.
+
