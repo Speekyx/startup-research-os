@@ -1,0 +1,159 @@
+{
+  "$comment": "Mission 1.61 sections 42 to 50 and 60. The verdict, the revised anchor gate table, the new reusable requirements, and the handoff.",
+  "record_version": "1.0.0",
+  "mission": "1.61 — Anchor Lineage Confirmation & Partner Documentation Recovery V1",
+  "recorded_at": "2026-09-05",
+
+  "primary_outcome": "ANCHOR_LINEAGE_CONFIRMED_OPERATIONAL_QUESTIONS_REMAIN",
+  "secondary_outcome": "PARTNER_DOCUMENTATION_RECOVERED",
+  "primary_outcome_statement": "The anchor's first-party documentation affirmatively states that every record is collected by the apparatus itself and enumerates its only exceptions, neither of which bears on service presence. A7 closes at LEVEL 2 after blocking four consecutive missions. A8 stays PARTIAL on three unanswered operational questions, of which sampling is load-bearing. All three partner candidates now have working first-party documentation paths, and none is qualified.",
+  "selected_pair": null,
+  "pair_gates_evaluated": false,
+
+  "anchor_gate_table": {
+    "$comment": "Section 43. The individual contract re-evaluated against what this mission read. Only A7 moved.",
+    "A1": {"verdict": "PASS", "moved": false},
+    "A2": {"verdict": "PASS", "moved": false, "bound_added": "the DEFAULT surface is a maintained current-state view; the pass rests on the dated index mechanism, which is not the default"},
+    "A3": {"verdict": "PASS", "moved": false, "exposure_class": "RAW_IDENTIFICATION_STRING"},
+    "A4": {"verdict": "PASS", "moved": false},
+    "A5": {"verdict": "PASS_WITH_STATED_BOUNDS", "moved": false, "bound_added": "port 22 inclusion in the current list is now ESTABLISHED, which Mission 1.60 recorded as not established"},
+    "A6": {"verdict": "PASS", "moved": false},
+    "A7": {"verdict": "PASS", "moved": true, "previous": "PARTIAL", "level": "LEVEL_2"},
+    "A8": {"verdict": "PARTIAL", "moved": false, "what_changed": "the questions are now enumerated rather than open; 7 of 11 answered in whole or in part"},
+    "A9": {"verdict": "PASS", "moved": false},
+    "pass_count": 7,
+    "pass_with_bounds_count": 1,
+    "partial_count": 1,
+    "which_gates_block": ["A8"],
+    "blocking_gates_previously": ["A7", "A8"],
+    "individually_qualifies": false,
+    "why_not": "The gate set is conjunctive. One PARTIAL is one short, and sampling is not a formality: SAMPLING_IS_LOAD_BEARING says two apparatuses cannot be compared as one count unless both expose the same population definition."
+  },
+
+  "what_changed_and_what_did_not": {
+    "the_refusal_that_ended": "AFFIRMATIVE_LINEAGE_REQUIRED blocked Missions 1.57, 1.58, 1.59 and 1.60. It ended because the apparatus states the positive claim in its own documentation, not because the standard was relaxed. The standard is the same one that refused an absence four times.",
+    "the_standard_was_not_lowered": "LEVEL 2 required an affirmative statement WITH enumerated exceptions, and the exceptions were then checked against the load-bearing predicate one by one. A LEVEL 1 statement would not have closed it, and one of the partner candidates supplies a LEVEL 1 statement in the same mission for contrast.",
+    "the_blocker_narrowed_rather_than_moved": "Mission 1.60 reported two blocking gates and said both close by reading or asking. One closed by reading. The other is what asking is for.",
+    "nothing_was_selected": "No pair, no threshold, no window, no source registration, no governance review."
+  },
+
+  "new_requirements_for_the_registry": {
+    "$comment": "Section 47. Two rules this mission paid for, written so route discovery reads a registry rather than a chain of reports. Appended to the Mission 1.60 contract's requirement registry, which now carries eleven.",
+    "requirements": [
+      {
+        "name": "ENUMERATED_EXCEPTIONS_MAKE_A_LINEAGE_CLAIM_CHECKABLE",
+        "from": "Mission 1.61",
+        "rule": "An affirmative lineage statement is only exhaustive if its exceptions are enumerated and closed. 'We collect everything ourselves, and the only exceptions are X and Y' can be checked against the load-bearing predicate; 'our data comes from scans, sensors, blocklists and many other sources' cannot, because the list does not end. The second is LEVEL 1 however confidently it asserts its own scanning.",
+        "discovered_how": "Both sides in one mission: the anchor supplied a closed clause and a partner candidate supplied an open one, and the difference is the whole distance between a checkable claim and an unfalsifiable one."
+      },
+      {
+        "name": "LINEAGE_EXHAUSTIVENESS_IS_NOT_FRAME_EXHAUSTIVENESS",
+        "from": "Mission 1.61",
+        "rule": "That every record was produced by the apparatus's own probing says nothing about which addresses it reached. A7 asks who produced the observation; A5 asks which addresses were probed. A lineage sentence must never be cited for coverage, and an apparatus can satisfy A7 completely while probing an incomplete or sampled frame.",
+        "discovered_how": "The anchor's lineage clause is the strongest in this arc and its frame is a sampled-or-census question its documentation does not answer. Both are true at once."
+      }
+    ]
+  },
+
+  "drafted_enquiry": {
+    "$comment": "Section 38. The hash lives HERE and not in the enquiry, because writing it into the enquiry would change the bytes it is a hash of. Mission 1.56 settled this shape: a frozen document that no longer answers to the hash it was frozen at is not frozen.",
+    "document": "docs/data/anchor-technical-lineage-enquiry-v1.md",
+    "sha256": "310acf288244453cd0a928197386cbf8311ded278e4dcdd22b70412807a049c4",
+    "status": "AWAITING_OPERATOR_APPROVAL",
+    "sent": false,
+    "questions": 7,
+    "approval_string": "APPROVE MISSION 1.61 ENQUIRY 310acf288244453cd0a928197386cbf8311ded278e4dcdd22b70412807a049c4",
+    "what_approval_authorises": "Sending that text, unchanged, to a first-party channel the operator supplies. Nothing else: no trial, no account, no purchase, no query.",
+    "the_gate_rechecks_it": "The renderer recomputes the hash of the rendered enquiry on every run and refuses if it differs from the value recorded here, so a later edit to the enquiry turns the CI gate red rather than leaving an approval beside a document nobody approved."
+  },
+
+  "counters": {
+    "first_party_doc_requests": 16,
+    "budget": 20,
+    "anchor_requests": 7,
+    "anchor_budget": 8,
+    "partner_requests": 9,
+    "partner_budget": 12,
+    "research_data_requests": 0,
+    "target_measurement_requests": 0,
+    "target_host_record_requests": 0,
+    "target_count_requests": 0,
+    "facets_fetched": 0,
+    "queries_executed": 0,
+    "trials_started": 0,
+    "purchases": 0,
+    "model_calls": 0,
+    "model_cost_usd": 0.0,
+    "embeddings": 0,
+    "canonical_mutations": 0,
+    "sources_registered": 0,
+    "governance_reviews_created": 0,
+    "collectors_implemented": 0,
+    "normalizers_implemented": 0,
+    "threshold_registrations_created": 0,
+    "claims_created": 0,
+    "evidence_created": 0,
+    "reliability_assessments_created": 0,
+    "reliability_values_assigned": 0,
+    "independence_groups_created": 0,
+    "scores_created": 0,
+    "opportunity_changes": 0,
+    "mission_1_56_claim_modified": false,
+    "enquiries_drafted": 1,
+    "enquiries_sent": 0,
+    "reference_profile": "UNCALIBRATED",
+    "problem_family": "PARKED"
+  },
+
+  "next_mission_recommendation": {
+    "name": "Mission 1.62 — Anchor Operational Closure & Partner Package Completion V1",
+    "why_this": "One gate blocks the anchor and it is answerable by one written enquiry. Three partners have working documentation and fourteen of eighteen B-slots unread. Neither needs a new apparatus class and neither needs acquisition.",
+    "it_should": [
+      "send the drafted enquiry, if and only if the operator approves it against its recorded hash, and record the reply as OPERATOR_CORRESPONDENCE evidence",
+      "read the partner pages this mission named but did not open: the anchor partner's Scan and Filters API pages, the second candidate's services scope documentation, and the third candidate's scan and field references",
+      "resolve ACCESS_MODEL_NOT_ESTABLISHED for the reporting-model candidate before evaluating any of its other gates, because a private-to-subscribers API makes every other gate moot",
+      "resolve whether the raw response field survives the documented 30-day field removal for the weekly-scan candidate, because protocol-native exposure ending at 30 days would bound every window",
+      "resolve whether the vulnerability-framed candidate's services scope is a general service index or a filtered view of flagged hosts"
+    ],
+    "it_must_not": [
+      "fetch a measurement value, a host count, a host record, a facet or a result total",
+      "execute a service search query against target data",
+      "start a trial, demo console or search preview, because a zero-cost trial destroys preregistration exactly as a paid one would",
+      "purchase access or register a source",
+      "revive the dropped current-state apparatus",
+      "read the anchor's DEFAULT surface as its observation-addressable one",
+      "treat the anchor's lineage statement as a coverage claim",
+      "select a pair before the partner packages are complete"
+    ]
+  },
+
+  "stop_condition": {
+    "$comment": "Section 62. What this mission deliberately did not do.",
+    "pair_selected": false,
+    "service_search_executed": false,
+    "count_or_facet_requested": false,
+    "host_records_retrieved": false,
+    "measurement_window_chosen": false,
+    "numeric_threshold_chosen": false,
+    "threshold_registration_created": false,
+    "trial_started": false,
+    "access_purchased": false,
+    "source_registered": false,
+    "governance_review_created": false,
+    "enquiry_sent": false,
+    "enquiry_interpreted_as_evidence": false,
+    "collector_or_normalizer_written": false,
+    "claim_evidence_or_independence_group_created": false,
+    "reliability_assigned": false,
+    "calibration_performed": false,
+    "score_created": false,
+    "opportunity_modified": false,
+    "mission_1_56_claim_modified": false,
+    "dropped_apparatus_revived": false,
+    "model_called": false,
+    "embeddings_created": false,
+    "problem_family_unparked": false,
+    "mission_1_62_started": false,
+    "awaiting": "operator review"
+  }
+}

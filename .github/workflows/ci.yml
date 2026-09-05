@@ -409,6 +409,18 @@ jobs:
       - name: Scanner pair selection matches its decision rules
         run: uv run python infrastructure/scripts/render_scanner_pair_selection.py --check
 
+      # Mission 1.61. Checks that an affirmative lineage claim passes A7 only at
+      # LEVEL 2 -- an affirmative statement whose exceptions are ENUMERATED and
+      # each checked against the load-bearing predicate -- that lineage
+      # exhaustiveness is never cited for coverage, that A8 cannot pass while a
+      # question is unanswered, that a recovered documentation path is not a
+      # qualified apparatus, that no partner is ranked or selected, and that the
+      # drafted enquiry is still unsent and still answers to the hash the
+      # closure record froze it at. A later edit to the enquiry turns this red
+      # rather than leaving an approval beside a document nobody approved.
+      - name: Anchor lineage closure matches its decision rules
+        run: uv run python infrastructure/scripts/render_anchor_lineage_closure.py --check
+
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
   # Pinned to the same versions as infrastructure/compose.

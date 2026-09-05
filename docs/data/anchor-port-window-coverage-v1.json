@@ -1,0 +1,62 @@
+{
+  "$comment": "Mission 1.61 sections 12, 40 and 41. Whether port 22 coverage can be pinned to a window, given that the port list is documented as expanding.",
+  "record_version": "1.0.0",
+  "mission": "1.61 — Anchor Lineage Confirmation & Partner Documentation Recovery V1",
+  "recorded_at": "2026-09-05",
+  "apparatus": "Netlas",
+
+  "why_this_is_asked_at_all": {
+    "the_problem": "Mission 1.60 recorded that the apparatus documents its port list as periodically expanding. A count of addresses answering on port 22 during a window is only a measurement of the world if port 22 was actually scanned during that window. If it was not, the count is a fact about the scan schedule wearing the costume of a fact about the internet.",
+    "why_it_is_not_hypothetical": "The changelog records a dated entry in which the number of ports in public scans was doubled. A port list that doubles is a port list that was materially different before, and any construct spanning that boundary would be comparing two different instruments.",
+    "the_direction_that_matters": "A preregistered threshold is registered before retrieval and evaluated over a FUTURE window. So the load-bearing question is forward coverage, not historical reconstruction — but a record that established only the current list would leave a later mission unable to tell which it had established."
+  },
+
+  "classification_vocabulary": {
+    "PORT_22_CONTINUOUSLY_COVERED": "First-party documentation states that port 22 has been and will be scanned continuously, or publishes a per-date coverage record from which continuity can be read.",
+    "PORT_22_VERSIONED_BY_DATE": "The port list as of a given date is recoverable from a published, dated record.",
+    "PORT_22_QUERYABLE_AS_METADATA": "The set of ports covered by a given scan is exposed as queryable metadata on the scan itself.",
+    "PORT_22_NOT_ESTABLISHED": "None of the above is available."
+  },
+
+  "findings": {
+    "current_inclusion": {
+      "status": "ESTABLISHED",
+      "source_url": "https://docs.netlas.io/knowledge-base/scanning-technology/",
+      "finding": "Port 22 is explicitly listed among the scanned TCP ports in the currently published list of more than one thousand curated ports.",
+      "advance_on_mission_1_60": "Mission 1.60 recorded port-22 inclusion as NOT recorded as established. It is established now, for the current list."
+    },
+    "dated_expansion_record": {
+      "status": "PARTIAL",
+      "source_url": "https://docs.netlas.io/changelog/",
+      "finding": "The changelog carries dated entries recording that the number of ports in public scans was doubled, and later that it exceeded one thousand. It does not record which individual ports were added on which date.",
+      "consequence": "The SIZE of the list is dated. The MEMBERSHIP of the list is not. Port 22's presence on a past date is therefore not reconstructable from the changelog."
+    },
+    "removals": {
+      "status": "NONE_RECORDED",
+      "finding": "The changelog records no removal of any previously scanned port.",
+      "what_this_is": "Favourable evidence about direction. Every dated change to the list is an expansion.",
+      "what_this_is_not": "A commitment. An absence of recorded removals is an absence, and this arc has refused to read a positive claim out of a negative space four missions running. It is recorded as evidence about the past, never as a guarantee about the future."
+    },
+    "queryable_scan_metadata": {
+      "status": "NOT_ESTABLISHED",
+      "finding": "No documented mechanism exposes the port set covered by a given scan as queryable metadata. The scan window fields are documented and the port coverage of that scan is not."
+    }
+  },
+
+  "verdict": {
+    "window_addressability_of_port_22": "PORT_22_NOT_ESTABLISHED",
+    "current_inclusion_of_port_22": "ESTABLISHED",
+    "these_are_two_answers_and_not_one": "Port 22 is scanned today, and the coverage of port 22 during any particular window cannot be established from the published surface. Reporting only the first would let a later mission treat a windowed count as instrument-stable when nothing establishes that it is.",
+    "forward_risk": "LOW_BUT_UNCOMMITTED",
+    "why_low": "Port 22 is among the most fundamental ports on the documented list, every recorded change to that list is an expansion, and no removal is recorded.",
+    "why_uncommitted": "Low risk assessed from direction of travel is not a documented commitment, and a threshold registered against a future window would rest on it."
+  },
+
+  "what_this_costs_the_route": {
+    "does_it_block_a_threshold": false,
+    "why_not": "A threshold registered now would be evaluated over a future window, and the current list contains port 22. What it costs is the ability to state, in the Claim's own wording, that the instrument was unchanged across the window.",
+    "the_bound_that_must_be_carried": "Any Claim built on this apparatus must either keep its window short enough that a mid-window schedule change is implausible, or state as a limitation that port-schedule stability across the window is not established.",
+    "the_question_that_would_close_it": "Whether the apparatus will commit that port 22 remains in the public scan list, or will publish the port set covered by each scan. Both are one sentence for the provider and neither is derivable by more reading.",
+    "in_enquiry": true
+  }
+}

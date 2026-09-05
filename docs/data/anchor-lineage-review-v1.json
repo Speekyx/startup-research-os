@@ -1,0 +1,102 @@
+{
+  "$comment": "Mission 1.61 sections 3 to 8. Gate A7. The sentence Missions 1.57 to 1.60 said the documentation did not contain, and what it does and does not establish.",
+  "record_version": "1.0.0",
+  "mission": "1.61 — Anchor Lineage Confirmation & Partner Documentation Recovery V1",
+  "recorded_at": "2026-09-05",
+  "apparatus": "Netlas",
+  "gate": "A7 AFFIRMATIVE_MEASUREMENT_LINEAGE",
+
+  "two_exhaustiveness_questions_that_are_not_one": {
+    "$comment": "Section 3. Four missions have conflated these, and separating them is what makes the verdict readable.",
+    "LINEAGE_EXHAUSTIVENESS": {
+      "question": "Are the host-level service observations produced by the apparatus's own probes, and is any external measurement dataset load-bearing for the presence or absence of a service on a host?",
+      "gate": "A7",
+      "answered_here": true
+    },
+    "SCAN_OR_FRAME_EXHAUSTIVENESS": {
+      "question": "Does the apparatus probe every address in its declared population, on every port of interest, in every cycle?",
+      "gate": "A5",
+      "answered_here": false,
+      "why_not": "A different gate answering a different question. An apparatus can generate every one of its records by its own probing and still probe an incomplete frame. Conflating the two would let a lineage sentence be read as a coverage guarantee, which is exactly the overstatement this arc keeps refusing."
+    },
+    "the_distinction_that_must_survive": "A7 asks WHO produced the observation. A5 asks WHICH addresses were reached. A LEVEL 2 lineage answer says nothing whatever about coverage, and this record must never be cited for coverage."
+  },
+
+  "evidence_levels": {
+    "$comment": "Section 4. The ladder this arc has been climbing, written down so a later mission does not re-invent the rungs.",
+    "LEVEL_0": "No reference to third-party data anywhere in the documentation. An ABSENCE. Refused since Mission 1.57 as AFFIRMATIVE_LINEAGE_REQUIRED: an absence of a reference is an absence, not a statement.",
+    "LEVEL_1": "An affirmative first-party statement that the apparatus operates its own scanning infrastructure. Establishes that it probes; does not establish that nothing else feeds the load-bearing records.",
+    "LEVEL_2": "An affirmative first-party statement that the apparatus's records are produced by its own collection, with any external contributions ENUMERATED, such that a reader can check whether an enumerated exception touches the load-bearing predicate."
+  },
+
+  "level_1_evidence": {
+    "achieved": true,
+    "source_url": "https://docs.netlas.io/knowledge-base/scanning-technology/",
+    "finding": "The apparatus states that it uses its own scanning technology, purpose-built for large-scale internet scanning, and documents the address population, the port list and the transport protocols it scans.",
+    "what_it_establishes": "The apparatus probes the network itself.",
+    "what_it_does_not_establish": "That no external measurement dataset contributes to the records exposed by the search surface."
+  },
+
+  "level_2_evidence": {
+    "achieved": true,
+    "source_url": "https://docs.netlas.io/knowledge-base/data-collection/",
+    "retrieved_twice": true,
+    "why_retrieved_twice": "This is the single most load-bearing sentence in the mission, and the second retrieval asked for it verbatim rather than in summary, so the record quotes the document rather than a paraphrase of it.",
+    "verbatim_affirmative_statement": "All the data is collected independently by Netlas itself. We do not rely on third parties or aggregators — every record is obtained and indexed directly by the platform.",
+    "verbatim_exception_clause": "The only exceptions are the threat intelligence data shown in the IP/Domain Info tool and the geolocation data, which are provided by Netlas partners.",
+    "exception_list_is_closed": true,
+    "why_closed": "The clause reads \"the only exceptions\" and then enumerates two named categories. That is an exhaustive statement with a stated remainder, not an open-ended list ending in \"and other sources\"."
+  },
+
+  "do_the_exceptions_touch_the_load_bearing_predicate": {
+    "$comment": "Section 6. The check that makes LEVEL 2 mean something. An enumerated exception is only harmless once somebody has looked at what it names.",
+    "load_bearing_predicate": "a public IPv4 address accepted a TCP connection on port 22 and sent an identification string beginning with the literal prefix SSH- before negotiation",
+    "exceptions": [
+      {
+        "name": "threat intelligence data",
+        "scope_as_documented": "shown in the IP/Domain Info tool",
+        "bears_on_predicate": false,
+        "why": "A reputation or threat annotation about an address is not the presence or absence of a service on it. Nothing in the predicate reads a threat label, and the predicate is decided from the bytes the peer sent."
+      },
+      {
+        "name": "geolocation data",
+        "scope_as_documented": "provided by Netlas partners",
+        "bears_on_predicate": false,
+        "why": "Where an address is located is not whether it answered on a port. The construct counts distinct addresses and carries no geographic restriction, so no geolocation value enters the count."
+      }
+    ],
+    "conclusion": "Neither enumerated exception is load-bearing for service presence. Both are enrichment ATTACHED TO a record rather than the source OF a record.",
+    "the_reasoning_that_was_refused": "Mission 1.60 refused to infer exhaustiveness from a list of enrichment sources, because reading a positive claim out of a negative space is not evidence. What changed is not the reasoning, it is the document: the apparatus now states the positive claim itself, and the enrichment list is its own stated remainder rather than our inference from it."
+  },
+
+  "gate_a7_verdict": {
+    "previous_verdict": "PARTIAL",
+    "previous_verdict_mission": "1.60",
+    "verdict": "PASS",
+    "level_reached": "LEVEL_2",
+    "basis": "One first-party documentation page, retrieved twice, stating independent collection affirmatively and enumerating its only exceptions, neither of which bears on the load-bearing predicate.",
+    "affirmative_not_inferred": true,
+    "what_this_closes": "AFFIRMATIVE_LINEAGE_REQUIRED for this apparatus. The requirement was recorded in Mission 1.57 and has blocked four consecutive missions.",
+    "what_this_does_not_close": [
+      "A5 frame exhaustiveness, which is a separate gate and stays PASS_WITH_STATED_BOUNDS",
+      "A8 operational reviewability, which is a separate gate and stays open",
+      "the vantage model, which the documentation does not describe",
+      "anything at all about the three partner candidates"
+    ]
+  },
+
+  "bounds_on_this_finding": {
+    "$comment": "Section 7. What a reader must not take from this record.",
+    "it_is_a_documentary_finding": "The apparatus states this about itself in its own documentation. That is the strongest evidence class this arc admits, and it is a first-party assertion rather than an audit.",
+    "it_is_not_an_independent_verification": "Nobody outside the apparatus has verified that every record is self-collected, and this repository has no means to.",
+    "it_is_not_a_coverage_claim": "See SCAN_OR_FRAME_EXHAUSTIVENESS above.",
+    "it_is_not_a_reliability_value": "A7 decides whether the apparatus is a measurement producer. How dependable its measurements are is a reliability review by a named person, and none has been performed.",
+    "it_is_not_independence_from_a_partner": "Independence is a two-sided property. A LEVEL 2 lineage answer from one side establishes that side's provenance and says nothing about whether a partner shares an upstream with it."
+  },
+
+  "what_would_reopen_this": {
+    "documentation_change": "The apparatus widening its exception clause, or replacing 'the only exceptions' with an open-ended list.",
+    "an_enumerated_exception_reaching_the_predicate": "If a future exception named service-presence data, banner data or port-state data from a partner, A7 would reopen immediately and the verdict here would not survive it.",
+    "recheck_required_before": "any threshold registration, because the lineage claim is what makes the two witnesses two measurements rather than two readings."
+  }
+}

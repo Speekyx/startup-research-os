@@ -1,0 +1,144 @@
+{
+  "$comment": "Mission 1.61 sections 9 to 14. Gate A8. The eleven questions a reliability reviewer would ask, each answered, partially answered or not answered, from first-party documentation only.",
+  "record_version": "1.0.0",
+  "mission": "1.61 — Anchor Lineage Confirmation & Partner Documentation Recovery V1",
+  "recorded_at": "2026-09-05",
+  "apparatus": "Netlas",
+  "gate": "A8 RELIABILITY_REVIEWABLE",
+
+  "what_this_gate_is_and_is_not": {
+    "it_asks": "Is enough methodology published that a named person could later perform the five-field reliability review?",
+    "it_does_not_ask": "Is the apparatus reliable?",
+    "no_value_assigned": true,
+    "reliability_assessments_created": 0,
+    "why": "A reliability value is a human judgement against a documentary basis, recorded by a named reviewer under the rubric. This gate only decides whether the basis could exist."
+  },
+
+  "eleven_questions": [
+    {
+      "n": 1,
+      "question": "FRAME. Which address population is actually probed?",
+      "status": "ANSWERED",
+      "source_url": "https://docs.netlas.io/knowledge-base/scanning-technology/",
+      "finding": "The documented population is the IPv4 space from 1.0.0.0 to 239.255.255.255 with reserved and special-use ranges excluded. IPv6 is documented as not currently supported. UDP scanning is documented as covering five ports only, which does not bear on a TCP/22 construct.",
+      "bears_on_gate": "A5, recorded here because a reliability reviewer asks it"
+    },
+    {
+      "n": 2,
+      "question": "PORT COVERAGE. Is port 22 among the ports scanned?",
+      "status": "ANSWERED",
+      "source_url": "https://docs.netlas.io/knowledge-base/scanning-technology/",
+      "finding": "Port 22 is explicitly listed among the scanned TCP ports, in a documented list of more than one thousand curated ports. Mission 1.60 recorded port-22 inclusion as NOT established; it is established now, for the currently published list.",
+      "advance_on_mission_1_60": true
+    },
+    {
+      "n": 3,
+      "question": "SAMPLING. Within the declared frame, is every address probed, or a sample of them?",
+      "status": "NOT_ANSWERED",
+      "source_url": "https://docs.netlas.io/knowledge-base/data-collection/",
+      "finding": "The documentation states that the IPv4 space is divided into large subnets and scanned in cycles, and that when one full scan completes the next begins immediately. It does not state whether every address inside a subnet is probed or a sample of it.",
+      "why_this_matters": "SAMPLING_IS_LOAD_BEARING, from Mission 1.59. A sampled population is not a census, and two apparatuses cannot be compared as one count unless both expose the same population definition. V1 implements no estimator to bridge them.",
+      "in_enquiry": true
+    },
+    {
+      "n": 4,
+      "question": "RETRIES. How many attempts does an address get before it is treated as not answering?",
+      "status": "PARTIALLY_ANSWERED",
+      "source_url": "https://docs.netlas.io/faq/",
+      "finding": "The documentation states that for each service detected, the system makes only one request and saves the response. That describes the application-layer fetch against a service already found. It does not state the transport-layer probe behaviour: how many connection attempts an address receives on a port before it is treated as not answering.",
+      "why_this_matters": "The two are different measurements. A single-probe scan and a three-probe scan produce systematically different counts on a lossy path, and the difference would look like a disagreement between apparatuses rather than a difference in method.",
+      "in_enquiry": true
+    },
+    {
+      "n": 5,
+      "question": "FAILURE SEMANTICS. What does the absence of a record mean?",
+      "status": "NOT_ANSWERED",
+      "source_url": "https://docs.netlas.io/faq/",
+      "finding": "No documentation retrieved distinguishes a host that was probed and did not answer, a host that was filtered, a host lost to packet loss, and a host not yet reached in the current cycle.",
+      "why_this_matters": "Mission 1.60 recorded the positive/negative asymmetry as a property of the construct: a successful identification is strong evidence, a failure to observe is ambiguous. The route therefore counts POSITIVE observed addresses only, and this question does not block that design — but a reviewer cannot bound the negative direction without it.",
+      "in_enquiry": true
+    },
+    {
+      "n": 6,
+      "question": "DUPLICATION. Can one address appear more than once for one port within one scan cycle?",
+      "status": "PARTIALLY_ANSWERED",
+      "source_url": "https://docs.netlas.io/knowledge-base/field-reference/responses/",
+      "finding": "A record's unique identifier is documented as combining the uri and ip fields, so one host exposing several services yields several records. Whether one address-port pair can appear twice within one cycle is not stated.",
+      "why_this_matters": "The duplicate rule the construct needs is that a host observed several times inside the window counts once. That rule is expressible as a distinct count regardless of the answer, so this bounds the query rather than the construct.",
+      "in_enquiry": true
+    },
+    {
+      "n": 7,
+      "question": "DISTINCT-ADDRESS COUNTING. Is one record one host, or one host-port response?",
+      "status": "ANSWERED",
+      "source_url": "https://docs.netlas.io/knowledge-base/field-reference/responses/",
+      "finding": "The ip field is documented as the address from which the response was received and is always present. Record identity combines uri and ip, so a record is one service response rather than one host.",
+      "consequence": "The construct's unit is distinct public IPv4 addresses, so the count must be a distinct count over the address field and never a record count. Recorded here because a row count would silently over-count multi-service hosts.",
+      "in_enquiry": false
+    },
+    {
+      "n": 8,
+      "question": "BANNER CAPTURE. Are the bytes the peer sent stored, and is anything truncated or normalised?",
+      "status": "PARTIALLY_ANSWERED",
+      "source_url": "https://docs.netlas.io/knowledge-base/field-reference/responses/",
+      "finding": "The unparsed network response is documented as stored in a raw TCP field, and per-protocol banner fields are documented as the initial banner message returned by the server upon connection. No truncation policy, size cap or normalisation step is documented.",
+      "why_this_matters": "A3 passed on RAW_IDENTIFICATION_STRING, and the predicate is a literal prefix on the bytes the peer sent. A silent normalisation or a leading-whitespace trim would change what the prefix matches.",
+      "in_enquiry": true
+    },
+    {
+      "n": 9,
+      "question": "SCAN-DATE SEMANTICS. What moment does the per-record scan date record?",
+      "status": "ANSWERED",
+      "source_url": "https://docs.netlas.io/knowledge-base/data-collection/",
+      "finding": "Carried from Mission 1.60, which established from first-party documentation that the per-record scan date records when the scanning that generated the response occurred. The field reference lists the scan date among the service fields without restating the definition, which neither confirms nor contradicts it.",
+      "changelog_note": "A dated changelog entry renames the scan-window fields and changes the indices parameter from an id to a scan label. The semantics are unchanged; the parameter shape is not.",
+      "in_enquiry": false
+    },
+    {
+      "n": 10,
+      "question": "VANTAGE. From how many network locations does the apparatus probe?",
+      "status": "NOT_ANSWERED",
+      "source_url": "https://docs.netlas.io/knowledge-base/scanning-technology/",
+      "finding": "The documentation refers to the apparatus's own scanning infrastructure and provides no scanner node count, no geographic distribution, and no statement about whether probing originates from one network or several. No record field identifies a scanner node, probe origin or scan job.",
+      "in_enquiry": true
+    },
+    {
+      "n": 11,
+      "question": "PORT-SCHEDULE VERSIONING. Is the port list as of a given date recorded or queryable?",
+      "status": "PARTIALLY_ANSWERED",
+      "source_url": "https://docs.netlas.io/changelog/",
+      "finding": "The changelog records dated expansions of the port list, including one entry doubling the number of ports in public scans and a later entry recording that the number exceeded one thousand. It records no removal of any port. It does not record WHICH ports were added on which date, so the port list as of a past date is not reconstructable from it.",
+      "in_enquiry": true
+    }
+  ],
+
+  "tally": {
+    "answered": 4,
+    "partially_answered": 4,
+    "not_answered": 3,
+    "total": 11
+  },
+
+  "gate_a8_verdict": {
+    "previous_verdict": "PARTIAL",
+    "previous_verdict_mission": "1.60",
+    "verdict": "PARTIAL",
+    "moved": true,
+    "how_it_moved": "Mission 1.60 recorded A8 as blocked on operational questions nobody had asked. The questions have now been asked against the published documentation, and seven of eleven are answered in whole or in part. What remains is enumerated rather than open.",
+    "why_not_PASS": "Sampling, failure semantics and vantage are unanswered, and sampling is load-bearing for whether two apparatuses can be compared as one count at all. A reviewer could not complete the five-field review on this basis.",
+    "why_not_FAIL": "Nothing retrieved contradicts reviewability. The remaining questions have not been refused; they have not been published, and each is a question a provider can answer in a sentence.",
+    "what_remains_is_operational_not_semantic": "The load-bearing classification is a standard-defined prefix on an exposed banner rather than a proprietary fingerprint. That is the difference from the apparatus Mission 1.59 dropped, whose black box WAS the classification."
+  },
+
+  "a2_bound_discovered_this_mission": {
+    "$comment": "Section 14. A finding that qualifies a gate a previous mission passed. Recording it is the audit working.",
+    "finding": "The apparatus's DEFAULT search surface is a maintained current-state view. First-party documentation states that when a subnet is fully scanned it automatically replaces the previous version in the default output, and that searching without specifying a particular index returns the most recently collected complete portion of data.",
+    "verbatim_replacement_sentence": "When a subnet is fully scanned, it automatically 'replaces' the previous version in the default output, ensuring the latest complete coverage is always prioritized.",
+    "verbatim_default_sentence": "The best option is to search without specifying a particular index. This allows you to access the most recently collected complete portion of data.",
+    "why_this_matters": "MAINTAINED_CURRENT_STATE_LAST_CHANGE is the temporal object Mission 1.59 rejected, and the default surface here is one. Mission 1.60's A2 PASS rests entirely on the NON-DEFAULT path: the indices parameter selecting a dated scan, plus date ranges over the per-record scan date.",
+    "does_a2_still_pass": true,
+    "why": "A2 requires that a window be selectable in the request before retrieval. The dated mechanism is documented, selectable and not the default. A gate is passed by the existence of a qualifying mechanism, not by it being the recommended one.",
+    "the_bound_that_must_be_carried": "Any future collector for this apparatus must select an index explicitly. A collector that used the default surface would be reading the rejected temporal object while a record elsewhere said the gate had passed, which is the worst available failure of this layer.",
+    "not_recorded_as": "A2_REOPENED. The gate's requirement is met; what changed is that the record now names the way to fail it."
+  }
+}
