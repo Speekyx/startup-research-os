@@ -1,0 +1,183 @@
+{
+  "mission": "1.56 — First Deterministic Inferred Claim Persistence Pilot V1",
+  "artifact": "candidate selection",
+  "recorded_at": "2026-09-05",
+  "selection_is_read_only": true,
+  "network_requests": 0,
+
+  "method": "Every held Signal was inventoried from the live deployment and put through the fifteen hard gates of §4. No source was preselected, and the evaluator was not run: §3 forbids using the expected direction as a selection criterion, and §9 requires the threshold to be frozen before any evaluation exists.",
+
+  "signals_inspected": 33,
+  "families_inspected": 7,
+
+  "families": [
+    {
+      "signal_type_id": "content_request_change",
+      "count": 18,
+      "source": "wikimedia-pageviews",
+      "magnitude_kind": "ABSOLUTE_CHANGE",
+      "unit": "requests",
+      "unit_state": "INHERITED",
+      "temporal_basis": "COMPARABLE_INSTANTS",
+      "verdict": "PASSES",
+      "why": "Unit inherited from the source's own measurement, day buckets documented UTC on Wikimedia's own `Research:Page view` page (Mission 1.19), reviewed canonical subject already registered, and both the counting rule and the known-problems list are HELD by the repository."
+    },
+    {
+      "signal_type_id": "community_question_volume",
+      "count": 1,
+      "source": "stack-exchange",
+      "magnitude_kind": "OBSERVATION_COUNT",
+      "unit": null,
+      "unit_state": "DIMENSIONLESS",
+      "temporal_basis": "NONE",
+      "verdict": "FAILS",
+      "failed_gate": 14,
+      "why": "Stack Exchange's own methodology documentation is UNREACHABLE: the site's robots policy blocks this environment's fetcher, established in Mission 1.36 and confirmed in Mission 1.47. METHODOLOGY_SEMANTICS therefore cannot be reviewed from material the project holds, and §43 forbids browsing to rescue a candidate. This is the same insufficiency for which the operator declined both Stack Exchange reliability scopes in Mission 1.36.1.",
+      "note": "It passes every other gate, including the unit gate, and would otherwise have been a strong candidate on §5B."
+    },
+    {
+      "signal_type_id": "community_question_without_accepted_answer_volume",
+      "count": 1,
+      "source": "stack-exchange",
+      "magnitude_kind": "OBSERVATION_COUNT",
+      "unit": null,
+      "unit_state": "DIMENSIONLESS",
+      "temporal_basis": "NONE",
+      "verdict": "FAILS",
+      "failed_gate": 14,
+      "why": "The same unreachable methodology, plus Mission 1.32's finding that an unaccepted answer reports one participant's non-action -- which makes the METHODOLOGY_SEMANTICS dimension harder rather than easier."
+    },
+    {
+      "signal_type_id": "numeric_period_change",
+      "count": 4,
+      "source": "world-bank",
+      "magnitude_kind": "ABSOLUTE_CHANGE",
+      "unit": null,
+      "unit_state": "NOT_ESTABLISHED",
+      "temporal_basis": "COMPARABLE_INSTANTS",
+      "verdict": "FAILS",
+      "failed_gate": 5,
+      "why": "The normalized records carry `unit_state = NOT_PUBLISHED` and `unit = null`: the World Bank does not publish a unit for SP.POP.TOTL. `TargetProposition` requires a unit, and writing `persons` would be inferring a unit from a metric name -- exactly what `normalized-record-v1.md` forbids and what the normalizer already refused. §43 forbids fetching documentation to establish one.",
+      "note_this_is_the_painful_one": "This is the ONLY held family whose metric names a quantity in the world rather than an artifact on a platform: Germany's population exists whether or not anyone counts it, and Eurostat, Destatis and FRED could each produce a witness. It is the family for which the INFERRED layer's multi-witness value is real, and it is excluded by a missing unit rather than by anything semantic."
+    },
+    {
+      "signal_type_id": "procurement_value_contrast",
+      "count": 6,
+      "source": "ted-eu",
+      "magnitude_kind": "ABSOLUTE_DIFFERENCE",
+      "unit": "EUR (5), SEK (1)",
+      "unit_state": "INHERITED",
+      "temporal_basis": "NONE",
+      "verdict": "FAILS",
+      "failed_gate": 6,
+      "why": "H-37 is open. The period labels are dates carrying an offset but no time -- `2023-03-10+01:00` -- and Mission 1.15.8 recorded that a published DATE does not become a moment: `observed_at` is NULL and the bounds are naive. The time bound is therefore not exact.",
+      "second_concern": "The magnitude is a max-minus-min spread over a cohort SROS assembled, and the subject is `ted-eu:CPV-division:90`, which Mission 1.33 established is a purchasing CATEGORY rather than a product."
+    },
+    {
+      "signal_type_id": "lexical_frequency_change",
+      "count": 2,
+      "source": "gdelt",
+      "magnitude_kind": "ABSOLUTE_CHANGE",
+      "unit": null,
+      "unit_state": "NOT_ESTABLISHED",
+      "temporal_basis": "ORDERED_PERIODS",
+      "verdict": "FAILS",
+      "failed_gates": [5, 6],
+      "why": "No unit, and H-29 leaves the bucket timezone unestablished, so neither the unit nor the time bound is exact."
+    },
+    {
+      "signal_type_id": "lexical_frequency_contrast",
+      "count": 1,
+      "source": "gdelt",
+      "magnitude_kind": "ABSOLUTE_DIFFERENCE",
+      "unit": null,
+      "unit_state": "NOT_ESTABLISHED",
+      "temporal_basis": "SAME_PERIOD_LABEL",
+      "verdict": "FAILS",
+      "failed_gates": [5, 6],
+      "why": "The same two."
+    }
+  ],
+
+  "families_passing": 1,
+  "signals_passing": 18,
+
+  "selection_within_the_passing_family": {
+    "preference_order_applied": "§5 A through F",
+    "outcome": "All 18 are the same family, the same unit, the same number of transformations, the same one-day scope and the same held documentation, so A through F do not discriminate.",
+    "tie_break": "the deterministic (source_id, signal_id) rule §5 names",
+    "all_share_source_id": "wikimedia-pageviews",
+    "selected_by": "the lexicographically smallest signal_id",
+    "selected_signal_id": "064d12bf-e7bb-56e7-a90c-bdd08e89d2ac"
+  },
+
+  "magnitude_was_not_a_selection_criterion": {
+    "asserted": true,
+    "how_it_is_checkable": "The 18 candidates were ordered by `signal_id` and the first was taken. That ordering is blind to magnitude and to direction, and a reader can reproduce it with `SELECT id FROM nlp.signals WHERE signal_type_id='content_request_change' ORDER BY id LIMIT 1`.",
+    "what_was_read_afterwards": "The selected Signal's magnitude and direction were read AFTER the tie-break, for the manifest record.",
+    "not_used": ["measurement magnitude", "expected evaluator direction", "source reliability", "resulting score"]
+  },
+
+  "selected": {
+    "signal_id": "064d12bf-e7bb-56e7-a90c-bdd08e89d2ac",
+    "workspace": "dev",
+    "source_id": "wikimedia-pageviews",
+    "record_kind_id": "content_request_count",
+    "signal_type_id": "content_request_change",
+    "quantity_family": "CONTENT_REQUEST_VOLUME",
+    "extractor": "content-request-change@1.0.0",
+    "magnitude": "912",
+    "magnitude_kind": "ABSOLUTE_CHANGE",
+    "magnitude_unit": "requests",
+    "magnitude_unit_state": "INHERITED",
+    "direction": "INCREASING",
+    "temporal_basis": "COMPARABLE_INSTANTS",
+    "period_labels": ["2024-03-03", "2024-03-04"],
+    "resolution": "DAY",
+    "content_id": "Kubernetes",
+    "content_platform": "en.wikipedia.org",
+    "audience_class": "user",
+    "access_channel": "all-access",
+    "lineage": {
+      "signal_inputs": 2,
+      "normalized_records_present": 2,
+      "raw_records_present": 2,
+      "reaches_source": true
+    }
+  },
+
+  "hard_gates_for_the_selected_candidate": [
+    {"n": 1, "gate": "already held canonically", "met": true, "how": "a live row in nlp.signals in workspace dev, derived in Mission 1.19"},
+    {"n": 2, "gate": "one exact scalar numeric measurement suitable for Decimal", "met": true, "how": "magnitude 912, stored NUMERIC and read as Decimal"},
+    {"n": 3, "gate": "subject identity exact", "met": true, "how": "`canonical-subject-registry-v1.json` maps `wikimedia-pageviews:content:en.wikipedia.org|Kubernetes` to subject `kubernetes` with a stated basis, reviewed in Mission 1.30"},
+    {"n": 4, "gate": "metric definition exact", "met": true, "how": "the metric names the quantity, the content location, the requester class and the access channel, each taken verbatim from the Signal scope"},
+    {"n": 5, "gate": "unit semantics exact", "met": true, "how": "`requests`, INHERITED from the source's own measurement; not inferred here"},
+    {"n": 6, "gate": "time bound exact", "met": true, "how": "2024-03-03 and 2024-03-04, DAY resolution, documented UTC partitioning on the operator's own `Research:Page view` page (Mission 1.19)"},
+    {"n": 7, "gate": "population or geography exact or not applicable", "met": true, "how": "the per-article endpoint applies no geographic restriction and the access channel is all-access, so the quantity is global by construction"},
+    {"n": 8, "gate": "no unit conversion", "met": true, "how": "target unit equals witness unit exactly"},
+    {"n": 9, "gate": "no creative time alignment", "met": true, "how": "the target's time bound is the Signal's own two day labels"},
+    {"n": 10, "gate": "no latent behavioural construct", "met": true, "how": "the proposition is about REQUESTS, never readers, viewers, users, demand or interest. Mission 1.19 named that distinction and the wording keeps it"},
+    {"n": 11, "gate": "expressible as deterministic THRESHOLD_STATE", "met": true, "how": "a Decimal comparison of one change against one frozen bound"},
+    {"n": 12, "gate": "provenance reaches RawRecord and NormalizedRecord", "met": true, "how": "2 signal inputs, both with a normalized record and a raw record present"},
+    {"n": 13, "gate": "governance permits continued analytical use", "met": true, "how": "see the held-data basis below"},
+    {"n": 14, "gate": "equivalence reviewable from held material", "met": true, "how": "`Research:Page view` and the known-problems list are both held; see the equivalence artifact"},
+    {"n": 15, "gate": "no model needed", "met": true, "how": "the comparison is arithmetic and the equivalence is documentary"}
+  ],
+
+  "held_data_analytical_use": {
+    "question": "§42. May this already-held record still be used for local private derived analytical work?",
+    "basis": "The current `local-private-research-v1` review for `wikimedia-pageviews`, version 2, is APPROVED_WITH_CONDITIONS with `derived_analytics = PERMITTED`, `storage = PERMITTED` and `retention = PERMITTED`, read from the live registry.",
+    "licence": "Mission 1.19 answered H-24 from the Analytics API access policy's own `Data licensing` heading: the data is CC0 1.0, which waives copyright and related rights including the sui generis database right BY NAME. There is no reuse condition left for continued analytical use to breach.",
+    "new_collection_is_a_different_question": "Mission 1.43 recorded that Wikimedia is currently BLOCKED for NEW acquisition by three unsatisfied capability conditions. §42 anticipates exactly this: eligibility to COLLECT and permission to keep using what is already held are different questions, and this pilot performs no collection.",
+    "established": true
+  },
+
+  "the_limitation_worth_stating_before_approval": {
+    "concern": "SOURCE_INDEPENDENCE_IS_PARTIAL",
+    "detail": "ADR-036's INFERRED layer exists so that several apparatuses can bear on ONE proposition. This proposition is about requests to a specific article on a specific wiki platform, and only that platform's own logs can measure it. So the pilot exercises the machinery correctly and cannot demonstrate the multi-witness value the layer was built for.",
+    "why_it_is_still_a_legitimate_INFERRED_proposition": "The subject is a quantity of events that occurred -- requests received -- rather than a publication act. The source did not itself report `the change is at least 1000`; it reported two daily counts, and the threshold proposition is entailed by them. That is ADR-036's own test.",
+    "where_the_measurer_does_enter": "The requester class `user` is Wikimedia's OWN classification, produced by ua-parser plus custom regex and documented as heuristic. It is part of the metric definition because Mission 1.19 made `audience.class` REQUIRED so that one item over one period cannot carry two counts under one name. Dropping it to make the proposition look cleaner would break the correspondence with the measurement.",
+    "the_family_that_would_have_been_better": "`numeric_period_change` over World Bank population, excluded on the unit gate above. Recorded so the next mission can see what it would take: a reviewed unit for SP.POP.TOTL, which needs documentation this mission may not fetch.",
+    "not_hidden_from_the_operator": true
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "mission": "1.56 — First Deterministic Inferred Claim Persistence Pilot V1",
+  "artifact": "pilot downstream resolution",
+  "recorded_at": "2026-09-05",
+  "read_only": true,
+  "rows_written": 0,
+  "claim_id": "c79f58bb-2241-4908-800b-5765a51cbb95",
+  "scope": {
+    "source_id": "wikimedia-pageviews",
+    "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+    "record_kind_id": "content_request_count",
+    "claim_type": "INFERRED",
+    "proposition_kind": "metric_threshold_state"
+  },
+  "reliability": {
+    "candidates_offered": 4,
+    "outcome": "NO_APPLICABLE_ASSESSMENT",
+    "reliability": null,
+    "nothing_leaked": [
+      {
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "reliability": 0.55,
+        "fields_shared": 0,
+        "differs_on": [
+          "source_id",
+          "resource_id",
+          "record_kind_id",
+          "claim_type",
+          "proposition_kind"
+        ]
+      },
+      {
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "reliability": 0.5,
+        "fields_shared": 0,
+        "differs_on": [
+          "source_id",
+          "resource_id",
+          "record_kind_id",
+          "claim_type",
+          "proposition_kind"
+        ]
+      },
+      {
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "reliability": 0.65,
+        "fields_shared": 3,
+        "differs_on": [
+          "claim_type",
+          "proposition_kind"
+        ]
+      },
+      {
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "reliability": 0.6,
+        "fields_shared": 3,
+        "differs_on": [
+          "claim_type",
+          "proposition_kind"
+        ]
+      }
+    ],
+    "why_it_matters": "The reviewed Wikimedia 0.65 shares source, resource and record kind with this scope. It differs on claim_type AND proposition_kind, and both halves are real: a threshold proposition is a different question from a restatement of the count, and an INFERRED derivation is a different question from an OBSERVED one. Reaching for the nearest number would have answered neither."
+  },
+  "aggregation": {
+    "profile": "reference-v1",
+    "calibration_state": "UNCALIBRATED",
+    "raw_evidence_count": 1,
+    "scorable_evidence_count": 0,
+    "status": "UNAVAILABLE",
+    "missing_requirements": [
+      "800f1421-dcef-4656-9c2a-e3bef039282d: MISSING_RELIABILITY"
+    ],
+    "non_scorable_evidence_count": 1,
+    "support_group_count": 0,
+    "contradiction_group_count": 0,
+    "evidence_level": 0,
+    "evidence_score": null,
+    "masses": {
+      "support_strength": 0.0,
+      "contradiction_strength": 0.0,
+      "supported_mass": 0.0,
+      "contradicted_mass": 0.0,
+      "conflict_mass": 0.0,
+      "uncertainty_mass": 1.0
+    }
+  },
+  "the_direction_that_had_never_existed": {
+    "evidence_by_direction": {
+      "CONTRADICTS": 1,
+      "SUPPORTS": 57
+    },
+    "claims_carrying_a_contradiction": 1,
+    "claims_carrying_both_directions": 0,
+    "what_this_settles": "Mission 1.48 measured 57 Evidence rows and found every one of them SUPPORTS, then established why: `direction` is proposition identity at the OBSERVED layer, so an interpreter there cannot emit a contradicting row about a Claim it already restated. The INFERRED layer removes direction from identity, and this is the first CONTRADICTS row in the repository.",
+    "what_this_does_NOT_settle": "The CONTRADICTION CASE is still unreached. Contradiction enters the arithmetic when one Claim carries evidence in both directions, and this Claim carries one row. `claims_carrying_both_directions` is the counter to watch, and it is still 0. A second witness disagreeing about the SAME threshold proposition is what would move it, and this proposition can never have one -- only Wikimedia's logs can measure requests to a Wikipedia article, which is the SOURCE_INDEPENDENCE_IS_PARTIAL limitation the operator was asked to weigh before approving."
+  },
+  "why_no_score_is_the_right_answer": "Reliability is purpose-relative and resolved late from a reviewed assessment. None applies to this new scope, so the Evidence is NON_SCORABLE and the aggregation is UNAVAILABLE. That is the designed behaviour: the system stays capable of producing no score, which is what makes a score mean something when one appears."
+}

@@ -1,0 +1,184 @@
+{
+  "mission": "1.56 — First Deterministic Inferred Claim Persistence Pilot V1",
+  "artifact": "pilot write manifest",
+  "recorded_at": "2026-09-05",
+  "status": "AWAITING_OPERATOR_APPROVAL",
+
+  "what_this_authorises": "One attended canonical write. One threshold registration, one evaluator execution over frozen inputs, and one persistence transaction down whichever path the evaluator's own result selects. Nothing else.",
+
+  "evaluator_has_not_run": true,
+  "no_evaluator_result_is_recorded_here": "deliberately. §14 forbids it, because a manifest that already knew the answer would be a manifest written around it.",
+
+  "selected_signal": {
+    "signal_id": "064d12bf-e7bb-56e7-a90c-bdd08e89d2ac",
+    "workspace": "dev",
+    "source_id": "wikimedia-pageviews",
+    "record_kind_id": "content_request_count",
+    "signal_type_id": "content_request_change",
+    "extractor": "content-request-change@1.0.0",
+    "measurement_value": "912",
+    "magnitude_kind": "ABSOLUTE_CHANGE",
+    "unit": "requests",
+    "unit_state": "INHERITED",
+    "period_labels": ["2024-03-03", "2024-03-04"],
+    "content_id": "Kubernetes",
+    "content_platform": "en.wikipedia.org",
+    "audience_class": "user",
+    "access_channel": "all-access",
+    "retrieved_at": "2026-09-01T21:03:47.090178+00:00",
+    "retrieved_at_basis": "Both contributing raw records carry that identical `collected_at`, read from `acquisition.raw_records`. This is the instant ADR-037 makes the preregistration rule compare against, so it is a measured fact rather than a recollection of which mission ran when.",
+    "selected_by": "the deterministic (source_id, signal_id) tie-break of §5, applied after all 18 members of the passing family tied on every preference criterion"
+  },
+
+  "target_proposition": {
+    "facts": {
+      "proposition": "metric_threshold_state",
+      "claim_type": "INFERRED",
+      "canonical_subject_id": "kubernetes",
+      "metric_definition_id": "content_request_daily_change:en.wikipedia.org:user:all-access",
+      "time_bound": "2024-03-03/2024-03-04",
+      "population_or_geography": "global",
+      "unit": "requests",
+      "threshold_operator": "GTE",
+      "threshold_value": "1000"
+    },
+    "proposition_key": "e452cf18200011aa65da75ebea5a0036bd49b2a365612dc3bbb2db8963ba2684",
+    "reads_as": "The change in content requests for the English Wikipedia article Kubernetes, from requester class user over all access channels, between the UTC days 2024-03-03 and 2024-03-04, is at least 1000 requests.",
+    "carries_no": ["source_id", "measurement value", "direction", "signal id"]
+  },
+
+  "threshold_registration": {
+    "metric_definition_id": "content_request_daily_change:en.wikipedia.org:user:all-access",
+    "scope_subject_id": "kubernetes",
+    "scope_population": "global",
+    "scope_time_bound": "2024-03-03/2024-03-04",
+    "unit": "requests",
+    "threshold_operator": "GTE",
+    "threshold_value": "1000",
+    "provenance_status": "POST_HOC",
+    "recorded_by": "thibchm",
+    "provenance_reference": "mission-1.56-pilot-bound: a round decimal bound of 1000 requests, chosen at the order of magnitude of daily request changes for a mid-traffic technical article. Not derived from the measurement.",
+
+    "why_post_hoc": "SROS has held this measurement since Mission 1.19. PREREGISTERED requires `threshold.recorded_at < measurement.retrieved_at`, which no threshold recorded today can satisfy against an already-held measurement. §7 makes that explicit and POST_HOC is the honest classification.",
+    "preregistered_was_attempted": false,
+    "why_preregistered_was_not_attempted": "It is not merely unavailable, it is impossible by construction for held data, and recording it would assert that this system did not hold the measurement when the bound was frozen -- which is false and checkable.",
+    "source_native_considered": "Rejected. Wikimedia publishes counts and no threshold, so nothing in the source's measurement contract supplies this bound.",
+    "external_norm_considered": "Rejected. The project holds no reviewed external norm defining a request-change threshold for an encyclopedia article.",
+    "unknown_considered": "Rejected. The origin and timing of this bound are perfectly well established -- an operator chose it today -- and §7 forbids using UNKNOWN to avoid recording POST_HOC honestly.",
+
+    "the_disclosure_that_matters": "The measurement value 912 was visible before the bound was chosen, because it has been held since Mission 1.19 and the candidate inventory read it. That is unavoidable for held data and is exactly why POST_HOC exists. The bound sits ABOVE the measurement, so the pilot cannot be read as fitted to produce a favourable result -- and both directions were acceptable before it was chosen.",
+    "preregistration_is_arithmetically_impossible": {
+      "rule": "ADR-037 §23. PREREGISTERED requires `threshold.recorded_at < witness.retrieved_at`, and the evaluator enforces it at gate 3.",
+      "measurement_retrieved_at": "2026-09-01T21:03:47.090178+00:00",
+      "threshold_recorded_at_earliest": "2026-09-05, the day this manifest was written. The row does not exist yet and will be recorded later still.",
+      "consequence": "`recorded_at < retrieved_at` is false at every instant at which this bound could be recorded. So a PREREGISTERED label would be REFUSED with PREREGISTRATION_TIMING_INCONSISTENT rather than silently downgraded -- which means POST_HOC is not the cautious choice here, it is the only representable one."
+    },
+    "calibration_eligible": false,
+    "calibration_eligibility_is_not_truth": "POST_HOC changes calibration eligibility and never logical entailment. Whatever the evaluator concludes is as true as the arithmetic makes it."
+  },
+
+  "semantic_equivalence": {
+    "basis_id": "first-deterministic-inferred-pilot-equivalence-v1",
+    "artifact": "docs/data/first-deterministic-inferred-pilot-equivalence-v1.json",
+    "verdict": "EQUIVALENT",
+    "dimensions_checked": 8,
+    "interpretation_confidence": 0.9,
+    "reviewed_by": "thibchm",
+    "adopted_by": "the operator's approval of this manifest hash"
+  },
+
+  "evaluation": {
+    "derivation_rule_id": "threshold-state-evaluator",
+    "derivation_rule_version": "1.0.0",
+    "evaluator_version": "1.0.0",
+    "interpretation_kind": "DETERMINISTIC",
+    "model_version": null,
+    "calls_permitted": 1,
+    "second_call_with_adjusted_inputs": "forbidden by §10 and §21"
+  },
+
+  "allowed_persistence_paths": [
+    {
+      "if_result": ["SUPPORTS", "CONTRADICTS"],
+      "path": "DIRECTIONAL",
+      "writes": ["research.claims", "research.claim_revisions", "scoring.evidence", "research.claim_derivations"]
+    },
+    {
+      "if_result": ["NOT_APPLICABLE", "UNKNOWN"],
+      "path": "REFUSAL",
+      "writes": ["research.proposition_evaluation_refusals"]
+    }
+  ],
+  "all_four_results_are_legitimate": true,
+  "success_is_not_defined_as_supports": true,
+
+  "canonical_mutation_envelope": {
+    "threshold_registrations": 1,
+    "directional_maximum": {
+      "claims": 1,
+      "claim_revisions": 1,
+      "evidence": 1,
+      "claim_derivations": 1,
+      "proposition_evaluation_refusals": 0
+    },
+    "refusal_maximum": {
+      "claims": 0,
+      "claim_revisions": 0,
+      "evidence": 0,
+      "claim_derivations": 0,
+      "proposition_evaluation_refusals": 1
+    },
+    "every_other_counter": "unchanged",
+    "on_violation": "PILOT_MUTATION_ENVELOPE_VIOLATION, and the mission stops"
+  },
+
+  "baseline_counters": {
+    "raw_records": 325,
+    "normalized_records": 325,
+    "signals": 33,
+    "claims": 43,
+    "claim_revisions": 44,
+    "evidence": 57,
+    "inferred_claims": 0,
+    "reliability_assessments": 4,
+    "independence_groups": 0,
+    "threshold_registrations": 0,
+    "claim_derivations": 0,
+    "proposition_evaluation_refusals": 0,
+    "opportunities": 1,
+    "opportunity_revisions": 1,
+    "opportunity_evidence_links": 7,
+    "embeddings": 0,
+    "sources": 29,
+    "migration_head": "0035_refusal_provenance",
+    "scoring_scores": "ABSENT",
+    "reference_profile": "UNCALIBRATED",
+    "problem_family": "PARKED",
+    "workspaces": ["dev", "dev-other"]
+  },
+
+  "what_this_pilot_will_not_do": [
+    "create a ReliabilityAssessment -- the new five-field INFERRED scope will resolve NO_APPLICABLE_ASSESSMENT and the Evidence will be NON_SCORABLE, which is the correct outcome",
+    "copy, inherit or default any reliability value",
+    "create a calibration label or change REFERENCE_PROFILE_V1",
+    "persist any Score or change any ranking",
+    "create an EvidenceIndependenceGroup",
+    "attach anything to the existing Opportunity",
+    "mark UNATTENDED_PRODUCTION_READY true",
+    "acquire data, select a source, or call a model",
+    "run a second candidate"
+  ],
+
+  "known_limitation_the_operator_should_weigh": {
+    "flag": "SOURCE_INDEPENDENCE_IS_PARTIAL",
+    "detail": "Only Wikimedia's own logs can measure requests to a Wikipedia article, so this proposition can never accumulate an independent second witness. The pilot proves the canonical path end to end; it does not demonstrate the multi-witness value ADR-036 was built for.",
+    "the_better_family_and_why_it_was_excluded": "World Bank population change is the one held family naming a quantity that exists independently of any measurer. It was excluded because the source publishes NO unit for SP.POP.TOTL -- `unit_state = NOT_PUBLISHED` -- and inferring `persons` is forbidden. Fixing that needs documentation this mission may not fetch."
+  },
+
+  "approval": {
+    "required_text": "APPROVE MISSION 1.56 PILOT <sha256>",
+    "manifest_is_frozen_once_hashed": true,
+    "any_change_requires_a_new_hash_and_a_new_approval": true,
+    "until_approved": "threshold_registrations stays 0 and no canonical row is written"
+  }
+}

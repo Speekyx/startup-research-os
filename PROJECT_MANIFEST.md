@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.88
+Version: 1.89
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-05 (Sprint 1 / Mission 1.55)
+Last amended: 2026-09-05 (Sprint 1 / Mission 1.56)
 
 ---
 
@@ -13,6 +13,91 @@ Last amended: 2026-09-05 (Sprint 1 / Mission 1.55)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.89 — 2026-09-05 (Sprint 1 / Mission 1.56)
+
+**`FIRST_DETERMINISTIC_INFERRED_CLAIM_PERSISTED`, and the evaluator said
+CONTRADICTS.** One attended write, approved by an operator against a frozen
+manifest hash, and the first canonical INFERRED Claim this repository holds.
+Signal `064d12bf` measured 912 requests against a bound of 1000, so the
+proposition is refuted by its own witness -- and that is the pilot succeeding
+rather than failing, because the manifest declared all four evaluator results
+legitimate before the evaluation ran.
+
+**The repository's first CONTRADICTS Evidence row.** Mission 1.48 measured 57
+Evidence rows, found every one SUPPORTS, and established why: `direction` is
+proposition identity at the OBSERVED layer, so an interpreter there cannot emit a
+contradicting row about a Claim it already restated. ADR-036 removes direction
+from identity at the INFERRED layer, and the direction census now reads
+`SUPPORTS 57, CONTRADICTS 1`. **The contradiction CASE is still unreached**, and
+both halves are reported together: contradiction enters the arithmetic when one
+Claim carries evidence in both directions, `claims_carrying_both_directions` is
+still 0, and this proposition can never acquire a second witness because only
+Wikimedia's own logs can measure requests to a Wikipedia article.
+
+**The approval is a hash, and that is what makes it name a document.** The
+operator typed `APPROVE MISSION 1.56 PILOT <sha256>`; the runner recomputes the
+hash and refuses anything else, proven by a run against a wrong hash that wrote
+nothing. **The manifest was NOT edited afterwards** -- marking it APPROVED would
+change its bytes and therefore its hash, so a frozen document that no longer
+answers to the hash it was frozen at is not frozen. The validator now REFUSES any
+manifest status but `AWAITING_OPERATOR_APPROVAL` for that reason, and the CI gate
+re-checks the recorded hash against the manifest on disk, so a later edit turns
+the gate red instead of leaving "approved" beside a document nobody approved.
+
+**PREREGISTERED was not merely unavailable, it was arithmetically impossible, and
+that is executed rather than argued.** The measurement was retrieved at
+`2026-09-01T21:03:47Z`, read from `acquisition.raw_records`; the bound could not
+be recorded before today. A test hands the real evaluator a PREREGISTERED
+registration with exactly these timings and gets `UNKNOWN /
+PREREGISTRATION_TIMING_INCONSISTENT`. POST_HOC is the only representable
+classification, the bound sits ABOVE the measurement so the pilot cannot be read
+as fitted, and the disclosure that the value was visible when the bound was
+chosen is written into the manifest rather than left out of it.
+
+**The bound was committed before the evaluator was constructed.** Registering a
+threshold on the way past would be the analyst choosing the number while the
+comparison is running, so phase A commits and phase B reads the row that exists.
+
+**Idempotency is demonstrated, not promised.** The whole evaluation and
+persistence replayed: status `REUSED`, 0 rows created, every counter identical.
+The envelope was checked before and after against what the manifest authorised:
+`threshold_registrations +1`, `claims +1`, `claim_revisions +1`, `evidence +1`,
+`claim_derivations +1`, `proposition_evaluation_refusals +0`, and every other
+counter unchanged.
+
+**The new scope reaches no reviewed reliability, and the near miss is the test.**
+Through the REAL resolver, over all four current assessments and their real basis
+rows: `NO_APPLICABLE_ASSESSMENT`. The reviewed Wikimedia `0.65` shares source,
+resource and record kind, and differs on `claim_type` AND `proposition_kind` --
+both differences real, because a threshold proposition is a different question
+from a restatement of the count and an INFERRED derivation is a different
+question from an OBSERVED one. The Evidence is `NON_SCORABLE`, aggregation is
+`UNAVAILABLE`, and that is the designed behaviour rather than a gap.
+
+**A pre-existing defect surfaced and was repaired rather than masked.**
+`test_ted_operator_acceptance.py` ran `fetchone()` with no `ORDER BY` over the
+two acceptance rows Mission 1.46 left behind and pinned review version 2, so it
+passed or failed on row order. It now asserts the property over every row and
+that no two review versions share a `verifier_version`, which is what a replay of
+an older acknowledgement would look like.
+
+0 network requests, 0 model calls, 0 embeddings, 0 acquisitions, 0 sources added,
+0 ReliabilityAssessments created, 0 independence groups, 0 Scores, 0 Opportunity
+changes, no migration, evaluator and orchestrator untouched, profile still
+UNCALIBRATED, Problem-Family still PARKED, validator probed with **76 deliberate
+violations and 76 caught** (each checked to have been refused by its own gate
+rather than by the hash check), **1400 bare-python tests before commit** and 3310
+pytest tests after.
+
+New: `docs/data/first-deterministic-inferred-pilot-candidate-selection-v1.json`,
+`-equivalence-v1.json`, `-manifest-v1.json`, `-v1.json`, `-resolution-v1.json`
+and their rendered `.md`; three scripts under `infrastructure/scripts/`
+(`render_inferred_pilot.py`, `run_inferred_pilot.py`,
+`report_inferred_pilot_resolution.py`); 46 tests in
+`packages/inferred-claim-evaluator/python`.
+
+Report: `docs/architecture/mission-1.56-report.md`.
 
 ## 1.88 — 2026-09-05 (Sprint 1 / Mission 1.55)
 
@@ -3294,6 +3379,8 @@ Additionally authoritative:
 - docs/data/refusal-derivation-binding-design-v1.md (added in 1.86)
 - docs/data/refusal-provenance-schema-v1.md (added in 1.87)
 - docs/data/deterministic-evaluation-persistence-orchestration-v1.md (added in 1.88)
+- docs/data/first-deterministic-inferred-pilot-manifest-v1.md (added in 1.89)
+- docs/data/first-deterministic-inferred-pilot-v1.md (added in 1.89)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

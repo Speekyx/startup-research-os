@@ -361,6 +361,19 @@ jobs:
       # and Policy D must never update, duplicate or delete a standing Evidence row.
       - name: Persistence orchestration matches the module it describes
         run: uv run python infrastructure/scripts/render_persistence_orchestration.py --check
+      # Mission 1.56 §15. Renders the three pilot documents and cross-checks the
+      # records against each other and against the repository: one candidate named
+      # identically by all three, fifteen hard gates each met by something stated,
+      # a target proposition whose key RECOMPUTES from its own facts through the
+      # real claim model, a canonical subject the reviewed registry already holds,
+      # a threshold that is not PREREGISTERED and discloses that the measurement
+      # was visible, an equivalence basis checking all eight frozen dimensions with
+      # a confidence that is neither 1.0 nor evaluator-invented, and a manifest
+      # carrying NO evaluation result. Also prints the manifest SHA-256 the
+      # operator's approval names, so a manifest edited after approval renders a
+      # different hash.
+      - name: Inferred pilot documents match their records
+        run: uv run python infrastructure/scripts/render_inferred_pilot.py --check
 
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
