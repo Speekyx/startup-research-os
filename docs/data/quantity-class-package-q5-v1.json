@@ -1,0 +1,44 @@
+{
+ "class_id": "Q5",
+ "name": "Procurement / transaction activity",
+ "role": "CANDIDATE",
+ "product_relevance": "STRONG",
+ "product_relevance_reason": "A public contract award is one of the few transaction-class facts this portfolio can lawfully reach, and it bears on market activity, buyer existence and economic value — with the bounds Mission 1.20 established, since a published total includes options and renewals and is not what a buyer paid.",
+ "exact_world_state_unit": "a published contract award notice",
+ "population_externally_freezable": "PARTIAL",
+ "temporal_preselection": "MODERATE",
+ "routes": [
+  {
+   "apparatus": "TED",
+   "production": "PUBLISHER_OF_SUBMITTED_DOCUMENTS",
+   "basis": "repository records from Missions 1.15.x",
+   "note": "TED publishes notices submitted by contracting authorities. It does not observe an award; it receives and publishes the document recording one.",
+   "produces_the_class_world_state_unit": false
+  },
+  {
+   "apparatus": "a national procurement portal",
+   "production": "SHARED_UPSTREAM",
+   "basis": "reasoned from held evidence and the Mission 1.46 law",
+   "note": "A national portal carrying the same submitted notice is republishing one document. A different jurisdiction is a different population, not a second witness. NOT newly retrieved this mission, and recorded as reasoning from held evidence rather than as a first-party finding.",
+   "produces_the_class_world_state_unit": false
+  }
+ ],
+ "same_proposition": "NOT_AVAILABLE",
+ "same_proposition_reason": "The award is recorded once, by the authority, in one submitted document. Every publisher of that document is a distribution layer, which is the Mission 1.46 finding in a new domain.",
+ "independence_plausible": false,
+ "commercial_purpose_compatibility": "ESTABLISHED_FOR_TED",
+ "commercial_purpose_note": "TED's reuse position was established in Mission 1.45 and is not re-reviewed here.",
+ "bounded_pilot_feasible": "YES_BUT_POINTLESS",
+ "data_volume": "LIGHT",
+ "unresolved_load_bearing_gaps": [
+  "whether any party independently observes an award rather than republishing the notice — not investigated this mission"
+ ],
+ "class_verdict": "NOT_VIABLE_FOR_INDEPENDENCE_EXPERIMENT",
+ "useful_complementary_signal": true,
+ "suitable_for_same_proposition_independence_experiment": false,
+ "record_version": "1.0.0",
+ "mission": "1.69 — Independent Product-Relevant Quantity Class Selection V1",
+ "recorded_at": "2026-09-06",
+ "exact_construct_frozen": false,
+ "values_consulted": 0
+}

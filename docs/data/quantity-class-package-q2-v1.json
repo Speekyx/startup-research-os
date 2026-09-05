@@ -1,0 +1,47 @@
+{
+ "class_id": "Q2",
+ "name": "Software package ecosystem activity",
+ "role": "MANDATORY",
+ "product_relevance": "MODERATE",
+ "product_relevance_reason": "Package adoption bears on developer-ecosystem activity and competitive supply, as a proxy. It is not revenue and not customers.",
+ "exact_world_state_unit": "a package download event, or a package release event",
+ "population_externally_freezable": "PROVIDER_DEFINED_POPULATION",
+ "temporal_preselection": "STRONG",
+ "routes": [
+  {
+   "apparatus": "PyPI",
+   "production": "OWN_MEASUREMENT",
+   "basis": "first-party documentation retrieved this mission",
+   "note": "The registry's own download logs are the origin.",
+   "source_says": [
+    "This table is populated through the Linehaul project by streaming download logs from PyPI to BigQuery."
+   ],
+   "source_says_provenance": [
+    "https://docs.pypi.org/api/bigquery/"
+   ],
+   "produces_the_class_world_state_unit": true
+  },
+  {
+   "apparatus": "any package analytics site",
+   "production": "MIRROR",
+   "basis": "the same published table",
+   "note": "Analytics products for PyPI downloads read the published BigQuery table rather than observing a download. A second reader of one counter is a second copy, not a second witness.",
+   "produces_the_class_world_state_unit": false
+  }
+ ],
+ "same_proposition": "NOT_AVAILABLE",
+ "same_proposition_reason": "A download event exists only because the registry's edge logged it. Nobody else is positioned to observe it, so the quantity is SOURCE_EXCLUSIVE_METRIC and every other publisher is a distribution layer. This is the Mission 1.46 and 1.57 law, confirmed here on the registry's own documentation.",
+ "independence_plausible": false,
+ "commercial_purpose_compatibility": "UNKNOWN",
+ "bounded_pilot_feasible": "YES_BUT_POINTLESS",
+ "data_volume": "MODERATE",
+ "unresolved_load_bearing_gaps": [],
+ "class_verdict": "NOT_VIABLE_FOR_INDEPENDENCE_EXPERIMENT",
+ "useful_complementary_signal": true,
+ "suitable_for_same_proposition_independence_experiment": false,
+ "record_version": "1.0.0",
+ "mission": "1.69 — Independent Product-Relevant Quantity Class Selection V1",
+ "recorded_at": "2026-09-06",
+ "exact_construct_frozen": false,
+ "values_consulted": 0
+}

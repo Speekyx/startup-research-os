@@ -553,6 +553,21 @@ jobs:
       - name: Construct selection matches its records
         run: uv run python infrastructure/scripts/render_construct_selection.py --check
 
+      # Mission 1.69. A quantity-class pivot, so the gate guards the one distinction the
+      # whole mission turns on: a PRODUCER of the quantity against a publisher of somebody
+      # else's number. It refuses an aggregator, a mirror or a publisher of a submitted
+      # document counted as an independent producer; a route that measures its own events
+      # perfectly but not THIS quantity counted as a second witness, which is how a search
+      # becomes a content request; a different platform counted as a second route rather
+      # than a different population; a provider-defined population called externally
+      # frozen; a shared domain list treated as a shared measurement when the request is
+      # part of the predicate; strategic viability claimed without two producers, an
+      # established proposition, moderate relevance and a bounded pilot; the scanner arc
+      # rewritten from parked into refuted; the registry grown without a second instance
+      # in a different shape; and any crawl, query, download, registration or measurement.
+      - name: Quantity class selection matches its records
+        run: uv run python infrastructure/scripts/render_quantity_class_selection.py --check
+
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
   # Pinned to the same versions as infrastructure/compose.

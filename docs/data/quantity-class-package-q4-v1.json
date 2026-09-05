@@ -1,0 +1,47 @@
+{
+ "class_id": "Q4",
+ "name": "Research / publication activity",
+ "role": "MANDATORY",
+ "product_relevance": "MODERATE",
+ "product_relevance_reason": "Publication activity bears on research momentum and emerging technical domains, as a proxy.",
+ "exact_world_state_unit": "a publication registration event, such as a DOI registration",
+ "population_externally_freezable": "PARTIAL",
+ "temporal_preselection": "STRONG",
+ "routes": [
+  {
+   "apparatus": "Crossref",
+   "production": "OWN_MEASUREMENT",
+   "basis": "the registration agency records the event",
+   "note": "A DOI registration is an event Crossref performs and records. It is the authoritative publisher of it.",
+   "produces_the_class_world_state_unit": true
+  },
+  {
+   "apparatus": "OpenAlex",
+   "production": "AGGREGATOR",
+   "basis": "first-party documentation retrieved this mission",
+   "note": "Its own help centre states it harvests rather than indexes directly. Harvesting Crossref is not a second measurement of a Crossref registration.",
+   "source_says": [
+    "We don't index journals directly — we harvest Crossref and friends, so get in there first."
+   ],
+   "source_says_provenance": [
+    "https://help.openalex.org/hc/en-us/categories/24397217787543-About-the-data"
+   ],
+   "produces_the_class_world_state_unit": false
+  }
+ ],
+ "same_proposition": "NOT_AVAILABLE",
+ "same_proposition_reason": "§15 warns that index diversity is not measurement independence, and this is that case exactly, established on the aggregator's own words. PubMed indexes a different and overlapping corpus under its own criteria, which makes it a different population rather than a second witness.",
+ "independence_plausible": false,
+ "commercial_purpose_compatibility": "UNKNOWN",
+ "bounded_pilot_feasible": "YES_BUT_POINTLESS",
+ "data_volume": "MODERATE",
+ "unresolved_load_bearing_gaps": [],
+ "class_verdict": "NOT_VIABLE_FOR_INDEPENDENCE_EXPERIMENT",
+ "useful_complementary_signal": true,
+ "suitable_for_same_proposition_independence_experiment": false,
+ "record_version": "1.0.0",
+ "mission": "1.69 — Independent Product-Relevant Quantity Class Selection V1",
+ "recorded_at": "2026-09-06",
+ "exact_construct_frozen": false,
+ "values_consulted": 0
+}

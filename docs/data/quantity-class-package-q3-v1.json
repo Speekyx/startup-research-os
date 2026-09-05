@@ -1,0 +1,48 @@
+{
+ "class_id": "Q3",
+ "name": "Public code / repository activity",
+ "role": "MANDATORY",
+ "product_relevance": "MODERATE",
+ "product_relevance_reason": "Repository activity bears on developer-ecosystem momentum and competitive supply, as a proxy.",
+ "exact_world_state_unit": "a public repository event such as a push, fork, issue or release",
+ "population_externally_freezable": "PROVIDER_DEFINED_POPULATION",
+ "temporal_preselection": "STRONG",
+ "routes": [
+  {
+   "apparatus": "GH Archive",
+   "production": "AGGREGATOR",
+   "basis": "first-party documentation retrieved this mission",
+   "note": "An archival intermediary. It records what GitHub reports rather than observing repository activity itself.",
+   "source_says": [
+    "Activity archives for dates starting 1/1/2015 are recorded from the Events API.",
+    "JSON encoded events as reported by the GitHub API"
+   ],
+   "source_says_provenance": [
+    "https://www.gharchive.org/"
+   ],
+   "produces_the_class_world_state_unit": false
+  },
+  {
+   "apparatus": "GitLab or another forge",
+   "production": "OWN_MEASUREMENT",
+   "basis": "different platform",
+   "note": "A different platform is a DIFFERENT POPULATION, not a second route to the same events. §14 is explicit about this.",
+   "produces_the_class_world_state_unit": true
+  }
+ ],
+ "same_proposition": "NOT_AVAILABLE",
+ "same_proposition_reason": "A GitHub event exists because GitHub recorded it, and every downstream archive ingests the same Events API. One measurement upstream.",
+ "independence_plausible": false,
+ "commercial_purpose_compatibility": "UNKNOWN",
+ "bounded_pilot_feasible": "YES_BUT_POINTLESS",
+ "data_volume": "HEAVY",
+ "unresolved_load_bearing_gaps": [],
+ "class_verdict": "NOT_VIABLE_FOR_INDEPENDENCE_EXPERIMENT",
+ "useful_complementary_signal": true,
+ "suitable_for_same_proposition_independence_experiment": false,
+ "record_version": "1.0.0",
+ "mission": "1.69 — Independent Product-Relevant Quantity Class Selection V1",
+ "recorded_at": "2026-09-06",
+ "exact_construct_frozen": false,
+ "values_consulted": 0
+}

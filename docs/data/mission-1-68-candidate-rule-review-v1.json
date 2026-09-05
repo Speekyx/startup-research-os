@@ -1,0 +1,37 @@
+{
+ "$comment": "Mission 1.69 §40. Whether the rule Mission 1.68 offered has found a second independent instance. It has not, and the registry does not grow.",
+ "record_version": "1.0.0",
+ "mission": "1.69 — Independent Product-Relevant Quantity Class Selection V1",
+ "recorded_at": "2026-09-06",
+ "candidate_requirement": {
+  "name": "A_PUBLISHED_SURFACE_IS_THE_SALEABLE_OBSERVATION_NOT_THE_MEASUREMENT_PIPELINE",
+  "offered_by": "Mission 1.68",
+  "meaning": "Where an apparatus performs a multi-stage measurement and publishes only the stage its customers buy, the earlier stages are not retrievable however thoroughly they are performed."
+ },
+ "candidate_second_instances_examined": [
+  {
+   "candidate": "PyPI download counts",
+   "shape": "An aggregate is published and the underlying per-request events are not separately addressable.",
+   "verdict": "NOT_A_SECOND_INSTANCE",
+   "why": "The shape rattles the same way and the mechanism is different. PyPI is not a measurement apparatus publishing one stage of its own pipeline; it is a service whose logs are a byproduct of delivering files. That case is already covered by SOURCE_EXCLUSIVE_METRIC, which says the quantity exists only because the platform recorded it. Filing it under the new rule would put one distinction in two places."
+  },
+  {
+   "candidate": "GH Archive and the GitHub Events API",
+   "shape": "An archive republishes what a platform reports.",
+   "verdict": "NOT_A_SECOND_INSTANCE",
+   "why": "Here the events ARE published. Nothing is withheld; the archive is simply not a second producer. That is the mirror trap, a different rule."
+  },
+  {
+   "candidate": "OpenAlex harvesting Crossref",
+   "shape": "An index harvests a registry.",
+   "verdict": "NOT_A_SECOND_INSTANCE",
+   "why": "Same reason. It is aggregation, not a withheld pipeline stage."
+  }
+ ],
+ "decision": "DO_NOT_ADOPT",
+ "registry_count_before": 15,
+ "registry_count_after": 15,
+ "requirement_added": null,
+ "the_standard_applied": "Mission 1.66.2 offered APPARATUS_CONFIGURATION_MUST_BE_UNIFORM_ACROSS_THE_FRAME and Mission 1.67 adopted it only after finding a second independent instance in a DIFFERENT SHAPE. The same standard is applied here, and the candidates found this mission are the same shape as rules the registry already has rather than a second shape of this one.",
+ "registry_growth_forced": false
+}

@@ -1,0 +1,58 @@
+{
+ "class_id": "Q7",
+ "name": "DNS / certificate / web-infrastructure configuration",
+ "role": "CANDIDATE",
+ "product_relevance": "WEAK",
+ "product_relevance_reason": "A DNS record or a certificate observation is a configuration fact. The reading that would make it strongly product-relevant — that a name pointing at a provider indicates a customer of that provider — is the semantic promotion §22 forbids. Stripped of it, the proposition is about zone contents.",
+ "exact_world_state_unit": "the answer a resolver receives for a defined query at a moment",
+ "population_externally_freezable": "PARTIAL",
+ "temporal_preselection": "STRONG",
+ "routes": [
+  {
+   "apparatus": "OpenINTEL",
+   "production": "OWN_MEASUREMENT",
+   "basis": "first-party documentation retrieved this mission",
+   "note": "Performs its own active DNS measurement daily, over zone-based, top-list based and CT-log-based populations.",
+   "source_says": [
+    "308 million domains measured on a daily basis"
+   ],
+   "source_says_provenance": [
+    "https://openintel.nl/",
+    "https://openintel.nl/data/"
+   ],
+   "produces_the_class_world_state_unit": true
+  },
+  {
+   "apparatus": "Rapid7 Project Sonar forward and reverse DNS studies",
+   "production": "OWN_MEASUREMENT",
+   "basis": "repository records from Mission 1.68",
+   "note": "Publishes dated forward and reverse DNS study files from its own resolution.",
+   "produces_the_class_world_state_unit": true
+  }
+ ],
+ "same_proposition": "PLAUSIBLE_BUT_NOT_ESTABLISHED",
+ "same_proposition_reason": "Two genuinely independent active resolvers exist, which is rare. Their populations differ — zone-derived and top-list-derived against Sonar's own known-name set — so the same alignment question as Q1 applies.",
+ "independence_plausible": true,
+ "certificate_sub_route_refused": {
+  "$comment": "§18. Certificate issuance and active TLS response are not the same fact.",
+  "statement": "Certificate Transparency logs are a transcription of what was submitted to them, and several independent log operators carry the SAME submitted certificate. Mission 1.58 named that READING_A_PUBLISHED_VALUE_IS_NOT_MEASURING_IT, and it applies unchanged here. CT presence is not an active observation and cannot pair with one."
+ },
+ "commercial_purpose_compatibility": "UNKNOWN",
+ "commercial_purpose_note": "OpenINTEL's access conditions and licence were not stated on the pages read.",
+ "bounded_pilot_feasible": "PLAUSIBLE",
+ "data_volume": "HEAVY",
+ "unresolved_load_bearing_gaps": [
+  "whether the two resolvers' populations can be aligned over a frozen name list",
+  "OpenINTEL's access conditions and licence",
+  "whether resolver vantage differences are documented on either side"
+ ],
+ "class_verdict": "PROMISING_REQUIRES_ROUTE_QUALIFICATION",
+ "blocked_from_selection_by": "WEAK product relevance. §33 requires moderate or better for strategic viability, and §22 forbids strengthening the relevance by promoting a configuration fact into a customer relationship.",
+ "useful_complementary_signal": true,
+ "suitable_for_same_proposition_independence_experiment": "PROMISING_NOT_ESTABLISHED",
+ "record_version": "1.0.0",
+ "mission": "1.69 — Independent Product-Relevant Quantity Class Selection V1",
+ "recorded_at": "2026-09-06",
+ "exact_construct_frozen": false,
+ "values_consulted": 0
+}

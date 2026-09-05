@@ -1,0 +1,82 @@
+{
+ "$comment": "Mission 1.69 §10, §13, §26 and §38. Whether each route PRODUCES an observation or reads somebody else's, established first-party where it decided a verdict.",
+ "record_version": "1.0.0",
+ "mission": "1.69 — Independent Product-Relevant Quantity Class Selection V1",
+ "recorded_at": "2026-09-06",
+ "the_rule_applied": "Methodological diversity is not independence. Two apparatuses using different software over the same upstream observations are one measurement; two apparatuses fetching the same public thing themselves may be two, even if their software is similar. Measurement lineage is what is load-bearing.",
+ "findings": [
+  {
+   "class": "Q1",
+   "verdict": "TWO_INDEPENDENT_PRODUCERS",
+   "source_says": [
+    "CCBot identifies itself in its `UserAgent` string as: CCBot/2.0 (https://commoncrawl.org/faq/)",
+    "a private instance of WebPageTest with private test agents, which are the actual browsers that test each web page"
+   ],
+   "source_says_provenance": [
+    "https://commoncrawl.org/ccbot",
+    "https://almanac.httparchive.org/en/2025/methodology"
+   ],
+   "project_interpretation": "Each fetches pages itself, and nothing retrieved describes either ingesting the other. §36 required first-party evidence rather than a guess, and this is it on both sides. It is the first time in this arc that two apparatuses are established as independently producing observations of the same kind of thing."
+  },
+  {
+   "class": "Q7",
+   "verdict": "TWO_INDEPENDENT_PRODUCERS",
+   "source_says": [
+    "308 million domains measured on a daily basis"
+   ],
+   "source_says_provenance": [
+    "https://openintel.nl/"
+   ],
+   "project_interpretation": "Active DNS measurement by OpenINTEL, and Sonar's own forward and reverse DNS studies from the repository record. Two resolvers producing their own answers."
+  },
+  {
+   "class": "Q2",
+   "verdict": "ONE_PRODUCER_PLUS_MIRRORS",
+   "source_says": [
+    "This table is populated through the Linehaul project by streaming download logs from PyPI to BigQuery."
+   ],
+   "source_says_provenance": [
+    "https://docs.pypi.org/api/bigquery/"
+   ],
+   "project_interpretation": "The registry's own edge logs are the origin, and every analytics product reads the published table. A second reader of one counter is a second copy."
+  },
+  {
+   "class": "Q3",
+   "verdict": "ONE_PRODUCER_PLUS_AGGREGATOR",
+   "source_says": [
+    "Activity archives for dates starting 1/1/2015 are recorded from the Events API.",
+    "JSON encoded events as reported by the GitHub API"
+   ],
+   "source_says_provenance": [
+    "https://www.gharchive.org/"
+   ],
+   "project_interpretation": "An archival intermediary by its own description. GitHub records the event; the archive stores what GitHub reports."
+  },
+  {
+   "class": "Q4",
+   "verdict": "ONE_PRODUCER_PLUS_AGGREGATOR",
+   "source_says": [
+    "We don't index journals directly — we harvest Crossref and friends, so get in there first."
+   ],
+   "source_says_provenance": [
+    "https://help.openalex.org/hc/en-us/categories/24397217787543-About-the-data"
+   ],
+   "project_interpretation": "§15 warned that index diversity is not measurement independence. The aggregator says so itself, which is the cleanest possible form of that evidence."
+  },
+  {
+   "class": "Q5",
+   "verdict": "ONE_SUBMITTED_DOCUMENT_MANY_PUBLISHERS",
+   "basis": "repository records from Missions 1.15.x and the Mission 1.46 law",
+   "not_newly_retrieved_this_mission": true,
+   "project_interpretation": "An award is recorded once, by the authority, in one submitted notice. Publishers of that notice are distribution layers."
+  },
+  {
+   "class": "Q6",
+   "verdict": "ONE_PRODUCER_PER_EVENT_CLASS",
+   "basis": "repository records from Missions 1.19 and 1.47",
+   "not_newly_retrieved_this_mission": true,
+   "project_interpretation": "Each attention metric is produced by exactly the platform that logged it, and the metrics are of different events."
+  }
+ ],
+ "the_pattern": "Six of eight classes have exactly one party positioned to produce the quantity. That is Mission 1.57's law recurring across five new domains, and it is why this mission could reject most classes on lineage before spending budget on their semantics."
+}

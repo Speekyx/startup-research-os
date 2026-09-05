@@ -1,0 +1,84 @@
+{
+ "$comment": "Mission 1.69 §0 and §1. Preconditions verified from git, baseline measured live, and the scanner arc preserved as parked rather than refuted.",
+ "record_version": "1.0.0",
+ "mission": "1.69 — Independent Product-Relevant Quantity Class Selection V1",
+ "recorded_at": "2026-09-06",
+ "repository_precondition": {
+  "mission_1_68_merged": true,
+  "pull_request": 113,
+  "pull_request_state": "MERGED",
+  "merge_commit": "ad1175a1ffdccc8fae40cef3fce084acb115d887",
+  "merge_commit_short": "ad1175a",
+  "operator_reported_main": "ad1175a",
+  "operator_report_agrees_with_git": true,
+  "local_main_equals_origin_main": true,
+  "working_tree_clean": true,
+  "branch": "sprint-1/mission-1.69",
+  "migration_head": "0035_refusal_provenance",
+  "selected_construct_artifact_absent": true,
+  "verified_from_git_not_from_prompt": true
+ },
+ "canonical_baseline": {
+  "$comment": "Measured live. Every counter matched §0 exactly.",
+  "raw_records": 325,
+  "normalized_records": 325,
+  "signals": 33,
+  "claims": 44,
+  "claim_revisions": 45,
+  "evidence": 58,
+  "inferred_claims": 1,
+  "threshold_registrations": 1,
+  "claim_derivations": 1,
+  "proposition_evaluation_refusals": 0,
+  "evidence_supports": 57,
+  "evidence_contradicts": 1,
+  "claims_carrying_both_directions": 0,
+  "reliability_assessments": 4,
+  "evidence_independence_groups": 0,
+  "opportunities": 1,
+  "opportunity_revisions": 1,
+  "opportunity_evidence_links": 7,
+  "registered_sources": 29,
+  "embeddings": 0,
+  "scores_table": "ABSENT",
+  "reference_profile": "UNCALIBRATED",
+  "problem_family": "PARKED",
+  "migration_head": "0035_refusal_provenance",
+  "drift_from_mission_1_68": "none",
+  "measured_live_not_quoted_from_a_report": true
+ },
+ "requirement_registry": {
+  "$comment": "§40. Expected to stay at 15.",
+  "count_before": 15,
+  "count_after": 15,
+  "requirement_added_this_mission": null
+ },
+ "scanner_arc_preserved": {
+  "$comment": "§1. Mission 1.68 explicitly refused the stronger claim, and this mission does not make it on its behalf.",
+  "scanner_class_result": "NO_PRODUCT_RELEVANT_CONSTRUCT_WITH_TWO_ROUTES_IDENTIFIED",
+  "status": "PARKED_BUT_REOPENABLE_ON_NEW_FIRST_PARTY_EVIDENCE",
+  "result_is_not": [
+   "SCANNERS_CANNOT_WORK",
+   "SCANNER_CLASS_IMPOSSIBLE",
+   "SCANNER_CLASS_INVALID"
+  ],
+  "reopening_conditions": [
+   "ONYPHE replies to the outstanding enquiry",
+   "the Netlas operational questions close",
+   "the Mission 1.68 one-sentence question gains a positive first-party answer: whether any apparatus publishes, as a separately addressable artifact, a record that a port accepted a TCP connection without producing an application response"
+  ],
+  "historical_missions_rewritten": 0
+ },
+ "the_law_this_mission_applies": {
+  "$comment": "Missions 1.57 and 1.58 established it, and it is what makes this mission tractable rather than a survey.",
+  "law": "A quantity is independently measurable exactly when NO party is in a position to publish it authoritatively.",
+  "corollary": "Where a platform's own records are the origin of a quantity, every other publisher of that quantity is a distribution layer, and adding one is adding a copy rather than a witness.",
+  "how_it_was_used": "Applied to each candidate class BEFORE spending retrieval budget, then checked against first-party documentation rather than assumed."
+ },
+ "parallel_state_untouched": {
+  "onyphe_response_status": "NOT_CHECKED_AFTER_DISPATCH",
+  "onyphe_mailbox_searched": false,
+  "netlas_recipient_status": "NOT_ESTABLISHED",
+  "netlas_address_decoded_or_guessed": false
+ }
+}

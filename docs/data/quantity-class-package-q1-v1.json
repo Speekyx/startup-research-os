@@ -1,0 +1,109 @@
+{
+ "class_id": "Q1",
+ "name": "Fixed-corpus HTTP / HTML observation",
+ "role": "MANDATORY_DEEP",
+ "$comment": "§5 and §6. The class the mission was told to evaluate deeply, and the only one where two apparatuses independently PRODUCE observations of the same kind of thing.",
+ "product_relevance": "MODERATE",
+ "product_relevance_reason": "What a public web server returns for a defined request bears on technology exposure, infrastructure adoption and competitive supply, as a proxy. It is not demand, revenue, willingness to pay, customers or market size.",
+ "exact_world_state_unit": "the response a public HTTP server returns to a defined request at a moment",
+ "why_the_law_favours_this_class": "Nobody publishes what headers a given server returns. There is no authoritative registry of it, so it can only be established by fetching — which is exactly the condition Missions 1.57 and 1.58 identified as making a quantity independently measurable.",
+ "population_externally_freezable": "PARTIAL",
+ "population_finding": {
+  "$comment": "§6 hoped a frozen external corpus would remove the hidden-frame problem. It is only partly delivered, and saying which part matters.",
+  "what_works": "A corpus C can be frozen before measurement, and BOTH apparatuses publish which URLs they covered — HTTP Archive as one row per page tested with its crawl date, Common Crawl through its published crawl indexes. So coverage is INSPECTABLE, which no scanner offered.",
+  "what_does_not_work": "Neither apparatus can be POINTED at C. Common Crawl selects its own URLs and HTTP Archive takes its list from the Chrome UX Report, so the measured population is each provider's own, and what is observable over C is the intersection of C with two independently determined coverages.",
+  "the_consequence": "The population of a joint proposition would be defined by coverage metadata rather than by C alone. Whether that can be frozen honestly before retrieval is the load-bearing question this mission leaves open."
+ },
+ "temporal_preselection": "STRONG",
+ "temporal_basis": {
+  "common_crawl": "crawls are identified as dated releases such as CC-MAIN-2026-34 and addressed individually",
+  "http_archive": "monthly crawls dated and addressed by a rounded date",
+  "source_says": [
+   "Crawl dates are always rounded down to the first of the month, regardless of which day they actually started.",
+   "the June 2023 crawl kicks off on the 13th of the month, but the dataset would be accessible on BigQuery under the date `2023-06-01`"
+  ],
+  "source_says_provenance": "https://har.fyi/guides/release-cycle/"
+ },
+ "routes": [
+  {
+   "apparatus": "Common Crawl",
+   "production": "OWN_MEASUREMENT",
+   "basis": "first-party documentation retrieved this mission",
+   "note": "Fetches pages itself with its own crawler and stores the raw response with HTTP headers, in dated crawl releases. Its own documentation states the dataset is a SAMPLE and that it does not archive an entire website — which is the single most important sentence for this class.",
+   "source_says": [
+    "CCBot identifies itself in its `UserAgent` string as: CCBot/2.0 (https://commoncrawl.org/faq/)",
+    "CCBot is now run on dedicated IP address ranges with reverse DNS",
+    "the raw response is stored. This not only includes the response itself...but also the HTTP header information.",
+    "Common Crawl's dataset is a sample of the web, and we do not generally archive any entire website but a randomly selected subset of it."
+   ],
+   "source_says_provenance": [
+    "https://commoncrawl.org/ccbot",
+    "https://commoncrawl.org/get-started",
+    "https://commoncrawl.org/faq"
+   ],
+   "produces_the_class_world_state_unit": true
+  },
+  {
+   "apparatus": "HTTP Archive",
+   "production": "OWN_MEASUREMENT",
+   "basis": "first-party documentation retrieved this mission",
+   "note": "Loads each page itself with real browsers, publishes which URLs it tested and when, and documents its request configuration in unusual detail. Its population is determined by the Chrome UX Report rather than by us.",
+   "source_says": [
+    "The list of URLs is fed to our private instance of WebPageTest on the 2nd Tuesday of each month.",
+    "a private instance of WebPageTest with private test agents, which are the actual browsers that test each web page",
+    "The URLs come from the Chrome User Experience Report, a dataset of real user performance data of the most popular websites.",
+    "one row per page tested in the HTTP Archive. Pages are tested on a monthly basis"
+   ],
+   "source_says_provenance": [
+    "https://httparchive.org/faq",
+    "https://almanac.httparchive.org/en/2025/methodology",
+    "https://har.fyi/reference/tables/pages/"
+   ],
+   "produces_the_class_world_state_unit": true
+  }
+ ],
+ "same_proposition": "PLAUSIBLE_BUT_NOT_ESTABLISHED",
+ "independence_plausible": true,
+ "independence_basis": "Both fetch pages themselves and neither is documented as ingesting the other. This is established from first-party documentation on BOTH sides, which is what §36 requires rather than an inference from the organisations being different.",
+ "request_semantics_risks": {
+  "$comment": "§7. A shared domain list does not make a shared measurement.",
+  "user_agent": "CCBot/2.0 against a documented desktop and mobile Chrome string — different, and a server may answer differently",
+  "rendering": "HTTP Archive loads pages in real browsers that execute JavaScript; a crawler fetch does not. A predicate on a response HEADER survives this; a predicate on rendered content does not",
+  "vantage": "HTTP Archive tests from Google Cloud Platform locations based in the USA; Common Crawl's vantage is not stated on the pages read",
+  "url_identity": "HTTP Archive is home-page oriented and states that a home page is not necessarily representative of a website; Common Crawl crawls arbitrary URLs",
+  "desktop_and_mobile": "HTTP Archive treats these as two populations, so a joint proposition must name which",
+  "redirects": "HTTP Archive's redirect policy was not stated on the pages read",
+  "caching_and_state": "All HTTP Archive pages are tested with an empty cache in a logged out state, stated first-party",
+  "conclusion": "These are construct-freezing questions for a later mission, not class blockers — except that they must be answerable, and one of them is currently not."
+ },
+ "operator_route_considered": {
+  "$comment": "§11 and §37. Architecture only. Nothing was crawled.",
+  "route": "SROS_BOUNDED_HTTP_MEASUREMENT",
+  "why_it_is_attractive": "An operator-run fetcher covers exactly the frozen corpus C by construction, which removes one of the two hidden coverage frames.",
+  "not_automatically_independent": "Self-operation does not make a route independent. It would need a frozen code version, a frozen request contract, a separate measurement lineage, append-only raw observations, and an ordering rule preventing the external apparatus's values being seen first where order matters.",
+  "governance_complexity": "SUBSTANTIAL. It would make this repository an active measurement party against third parties, with robots, rate-limit and politeness obligations and a governance surface nothing here currently has.",
+  "implemented": false,
+  "crawled": false
+ },
+ "commercial_purpose_compatibility": "UNKNOWN",
+ "commercial_purpose_note": "No licence statement was established for either archive this mission. §30 forbids a governance review here, so this is recorded as unknown rather than assumed either way.",
+ "bounded_pilot_feasible": "PLAUSIBLE",
+ "bounded_pilot_note": "A corpus of a few thousand home-page URLs, one monthly window, and a header-level predicate is small enough to be honest, which §29 asks for.",
+ "data_volume": "MODERATE_IF_BOUNDED",
+ "data_volume_note": "Common Crawl is petabyte-scale in full and its per-crawl index permits bounded selection; HTTP Archive is a BigQuery dataset. Neither requires a full local scan for a bounded pilot.",
+ "unresolved_load_bearing_gaps": [
+  "THE LOAD-BEARING ONE: whether a population can be frozen honestly given that neither apparatus can be pointed at a corpus, so the joint population is C intersected with two independently determined coverages",
+  "Common Crawl's URL selection and seeding, which its FAQ does not state",
+  "whether past Common Crawl and HTTP Archive datasets remain available unchanged",
+  "HTTP Archive's redirect policy and whether response headers are separately queryable",
+  "the data licence of both, for commercial-purpose compatibility"
+ ],
+ "class_verdict": "PROMISING_REQUIRES_ROUTE_QUALIFICATION",
+ "useful_complementary_signal": true,
+ "suitable_for_same_proposition_independence_experiment": "PROMISING_NOT_ESTABLISHED",
+ "record_version": "1.0.0",
+ "mission": "1.69 — Independent Product-Relevant Quantity Class Selection V1",
+ "recorded_at": "2026-09-06",
+ "exact_construct_frozen": false,
+ "values_consulted": 0
+}

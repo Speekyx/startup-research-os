@@ -1,0 +1,88 @@
+{
+ "$comment": "Mission 1.69 §2, §3 and §19. Eight serious quantity classes of a permitted eight. A ninth was NOT invented for count completion.",
+ "record_version": "1.0.0",
+ "mission": "1.69 — Independent Product-Relevant Quantity Class Selection V1",
+ "recorded_at": "2026-09-06",
+ "class_is_not_a_construct": {
+  "$comment": "§2.",
+  "statement": "A quantity class is broader than a construct. This mission selects a class; a later mission freezes the exact proposition. No exact header, technology, keyword or threshold is chosen here.",
+  "exact_construct_frozen_this_mission": false
+ },
+ "budget": {
+  "maximum_serious_classes": 8,
+  "serious_classes": 8,
+  "minimum_meaningful_classes_required": 5,
+  "maximum_first_party_requests": 24,
+  "used": 14,
+  "remaining_unspent": 10,
+  "navigation_searches": 4,
+  "requests_spent_on_Q0": 0,
+  "Q0_request_cap": 2
+ },
+ "classes": [
+  {
+   "id": "Q0",
+   "name": "Internet scanner class",
+   "role": "NEGATIVE_CONTROL"
+  },
+  {
+   "id": "Q1",
+   "name": "Fixed-corpus HTTP / HTML observation",
+   "role": "MANDATORY_DEEP"
+  },
+  {
+   "id": "Q2",
+   "name": "Software package ecosystem activity",
+   "role": "MANDATORY"
+  },
+  {
+   "id": "Q3",
+   "name": "Public code / repository activity",
+   "role": "MANDATORY"
+  },
+  {
+   "id": "Q4",
+   "name": "Research / publication activity",
+   "role": "MANDATORY"
+  },
+  {
+   "id": "Q5",
+   "name": "Procurement / transaction activity",
+   "role": "CANDIDATE"
+  },
+  {
+   "id": "Q6",
+   "name": "Public attention / information demand",
+   "role": "CANDIDATE"
+  },
+  {
+   "id": "Q7",
+   "name": "DNS / certificate / web-infrastructure configuration",
+   "role": "CANDIDATE"
+  },
+  {
+   "id": "Q8",
+   "name": "additional class",
+   "role": "NOT_PROPOSED",
+   "why": "§19 permits one more only if evidence reveals a substantially better route, and §3 forbids weak filler. Nothing read this mission revealed a class with better two-route plausibility than Q1, and proposing one to reach a count would be manufacturing a candidate."
+  }
+ ],
+ "held_evidence_reused": {
+  "$comment": "§31. No source was registered and no review was mutated.",
+  "facts_taken_from_repository_records": [
+   "Mission 1.46: FRED republishes World Bank's SP.POP.TOTL, and Eurostat and the World Bank share national statistical institutes upstream — the distribution-layer law",
+   "Mission 1.47: Wikimedia content requests and Stack Exchange questions are COMPLEMENTARY_NOT_CORROBORATING",
+   "Mission 1.57: a platform-recorded quantity is measurable only by that platform",
+   "Mission 1.58: internet-wide scanning survived because nobody publishes how many hosts run a service",
+   "Mission 1.19: Wikimedia pageviews are produced by Wikimedia's own request logs",
+   "Missions 1.15.x: TED publishes notices submitted by contracting authorities",
+   "Mission 1.68: Rapid7 Sonar publishes dated forward and reverse DNS studies"
+  ],
+  "sources_registered": 0,
+  "source_reviews_mutated": 0
+ },
+ "exhaustiveness": {
+  "claimed": false,
+  "statement": "Eight classes were evaluated under a fixed documentation budget. That no class reached strategic viability does not establish that none exists."
+ }
+}

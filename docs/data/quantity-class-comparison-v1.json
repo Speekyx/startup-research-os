@@ -1,0 +1,162 @@
+{
+ "$comment": "Mission 1.69 §33 and §34. Hard gates first, then a lexicographic tie-break. No weighted numeric score is assigned anywhere.",
+ "record_version": "1.0.0",
+ "mission": "1.69 — Independent Product-Relevant Quantity Class Selection V1",
+ "recorded_at": "2026-09-06",
+ "scoring_method": {
+  "weighted_numeric_score_used": false,
+  "method": "HARD_GATES_THEN_LEXICOGRAPHIC_TIE_BREAK",
+  "tie_break_order": [
+   "exact same-proposition clarity",
+   "independently controlled or frozen population",
+   "independent apparatus production",
+   "temporal preselection",
+   "deterministic observable predicate",
+   "product relevance",
+   "bounded pilot feasibility",
+   "commercial-purpose compatibility",
+   "low unresolved load-bearing uncertainty",
+   "lower operational and data cost"
+  ],
+  "tie_break_reached": false,
+  "why_not_reached": "No class passed the hard gates, so there was nothing to break a tie between. Recording that is not the same as recording a tie.",
+  "q1_tie_break_preference_not_exercised": {
+   "$comment": "§35 gives Q1 a tie-break preference. It was not used, because §35 is explicit that it is a tie-break only and must not push Q1 through failed gates.",
+   "used": false
+  }
+ },
+ "hard_gates_for_strategic_viability": [
+  "at least two named plausible routes",
+  "same-proposition plausibility",
+  "independence plausibility",
+  "moderate-or-better product relevance",
+  "pre-value freeze possible",
+  "bounded pilot plausible"
+ ],
+ "rows": [
+  {
+   "class_id": "Q0",
+   "name": "Internet scanner class",
+   "product_relevance": "MODERATE",
+   "same_proposition": "NOT_ESTABLISHED",
+   "independence_plausible": true,
+   "own_measurement_routes": 2,
+   "population_externally_freezable": "PROVIDER_DEFINED_POPULATION",
+   "unresolved_load_bearing_gaps": 3,
+   "class_verdict": "UNRESOLVED",
+   "useful_complementary_signal": true,
+   "suitable_for_same_proposition_independence_experiment": "NOT_ESTABLISHED"
+  },
+  {
+   "class_id": "Q1",
+   "name": "Fixed-corpus HTTP / HTML observation",
+   "product_relevance": "MODERATE",
+   "same_proposition": "PLAUSIBLE_BUT_NOT_ESTABLISHED",
+   "independence_plausible": true,
+   "own_measurement_routes": 2,
+   "population_externally_freezable": "PARTIAL",
+   "unresolved_load_bearing_gaps": 5,
+   "class_verdict": "PROMISING_REQUIRES_ROUTE_QUALIFICATION",
+   "useful_complementary_signal": true,
+   "suitable_for_same_proposition_independence_experiment": "PROMISING_NOT_ESTABLISHED"
+  },
+  {
+   "class_id": "Q2",
+   "name": "Software package ecosystem activity",
+   "product_relevance": "MODERATE",
+   "same_proposition": "NOT_AVAILABLE",
+   "independence_plausible": false,
+   "own_measurement_routes": 1,
+   "population_externally_freezable": "PROVIDER_DEFINED_POPULATION",
+   "unresolved_load_bearing_gaps": 0,
+   "class_verdict": "NOT_VIABLE_FOR_INDEPENDENCE_EXPERIMENT",
+   "useful_complementary_signal": true,
+   "suitable_for_same_proposition_independence_experiment": false
+  },
+  {
+   "class_id": "Q3",
+   "name": "Public code / repository activity",
+   "product_relevance": "MODERATE",
+   "same_proposition": "NOT_AVAILABLE",
+   "independence_plausible": false,
+   "own_measurement_routes": 1,
+   "population_externally_freezable": "PROVIDER_DEFINED_POPULATION",
+   "unresolved_load_bearing_gaps": 0,
+   "class_verdict": "NOT_VIABLE_FOR_INDEPENDENCE_EXPERIMENT",
+   "useful_complementary_signal": true,
+   "suitable_for_same_proposition_independence_experiment": false
+  },
+  {
+   "class_id": "Q4",
+   "name": "Research / publication activity",
+   "product_relevance": "MODERATE",
+   "same_proposition": "NOT_AVAILABLE",
+   "independence_plausible": false,
+   "own_measurement_routes": 1,
+   "population_externally_freezable": "PARTIAL",
+   "unresolved_load_bearing_gaps": 0,
+   "class_verdict": "NOT_VIABLE_FOR_INDEPENDENCE_EXPERIMENT",
+   "useful_complementary_signal": true,
+   "suitable_for_same_proposition_independence_experiment": false
+  },
+  {
+   "class_id": "Q5",
+   "name": "Procurement / transaction activity",
+   "product_relevance": "STRONG",
+   "same_proposition": "NOT_AVAILABLE",
+   "independence_plausible": false,
+   "own_measurement_routes": 0,
+   "population_externally_freezable": "PARTIAL",
+   "unresolved_load_bearing_gaps": 1,
+   "class_verdict": "NOT_VIABLE_FOR_INDEPENDENCE_EXPERIMENT",
+   "useful_complementary_signal": true,
+   "suitable_for_same_proposition_independence_experiment": false
+  },
+  {
+   "class_id": "Q6",
+   "name": "Public attention / information demand",
+   "product_relevance": "MODERATE",
+   "same_proposition": "NOT_AVAILABLE",
+   "independence_plausible": false,
+   "own_measurement_routes": 1,
+   "population_externally_freezable": "PROVIDER_DEFINED_POPULATION",
+   "unresolved_load_bearing_gaps": 0,
+   "class_verdict": "COMPLEMENTARY_ONLY",
+   "useful_complementary_signal": true,
+   "suitable_for_same_proposition_independence_experiment": false
+  },
+  {
+   "class_id": "Q7",
+   "name": "DNS / certificate / web-infrastructure configuration",
+   "product_relevance": "WEAK",
+   "same_proposition": "PLAUSIBLE_BUT_NOT_ESTABLISHED",
+   "independence_plausible": true,
+   "own_measurement_routes": 2,
+   "population_externally_freezable": "PARTIAL",
+   "unresolved_load_bearing_gaps": 3,
+   "class_verdict": "PROMISING_REQUIRES_ROUTE_QUALIFICATION",
+   "useful_complementary_signal": true,
+   "suitable_for_same_proposition_independence_experiment": "PROMISING_NOT_ESTABLISHED"
+  }
+ ],
+ "the_separation_that_matters": {
+  "$comment": "§21. A class failing the same-proposition test is not useless to SROS, and collapsing the two judgements would throw away most of the portfolio.",
+  "useful_complementary_signal": [
+   "Q0",
+   "Q1",
+   "Q2",
+   "Q3",
+   "Q4",
+   "Q5",
+   "Q6",
+   "Q7"
+  ],
+  "suitable_for_the_independence_experiment": [],
+  "statement": "Every class evaluated carries real complementary value for the Opportunity Engine. None is currently established as suitable for the same-proposition independence experiment. Those are different questions and this mission answers only the second."
+ },
+ "the_pattern_across_rows": {
+  "observation": "Five of eight classes have exactly ONE party positioned to produce the quantity, and one has none of its own — every other publisher of it is a distribution layer.",
+  "reading": "That is Missions 1.46 and 1.57's law recurring across package registries, code forges, publication registries, procurement publishers and attention platforms — five domains it had not been tested in.",
+  "the_exception_and_why": "The three classes with two independent producers are exactly the three whose quantity nobody is positioned to publish authoritatively: what services answer on the internet, what a web server returns for a defined request, and what a resolver receives for a defined query. Each must be established by asking, which is precisely the condition Mission 1.58 identified. The first of the three is the scanner class, which is parked for a different reason — it has two producers and no construct they can both witness, which is Mission 1.68's finding rather than a lineage problem."
+ }
+}
