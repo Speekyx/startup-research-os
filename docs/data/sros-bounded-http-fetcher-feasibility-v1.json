@@ -1,0 +1,71 @@
+{
+ "$comment": "Mission 1.70 §31 to §35. Architecture only. Nothing was fetched, crawled or built, and nothing is authorised here.",
+ "record_version": "1.0.0",
+ "mission": "1.70 — Fixed-Corpus Web Route Qualification V1",
+ "recorded_at": "2026-09-06",
+ "exact_predicate_frozen": false,
+ "target_values_retrieved": 0,
+ "why_it_is_considered": "The population decision established that an externally frozen population with distinguishable missingness cannot be obtained from either archive. An operator-run fetcher supplies both properties by construction. It is considered because of that, not because building something is attractive.",
+ "directability_advantage": {
+  "$comment": "§32.",
+  "covers_exactly_the_frozen_corpus": true,
+  "request_contract_controllable": true,
+  "window_controllable": true,
+  "records_every_attempt": true,
+  "records_failures_explicitly": true,
+  "what_it_would_solve": [
+   "population directability, which neither archive offers",
+   "attempt-level coverage, which neither archive documents",
+   "missingness legibility, which is what strategy P5 needs",
+   "request-contract control, which the compatibility table shows is otherwise unestablished on eleven fields"
+  ]
+ },
+ "governance_feasibility": {
+  "$comment": "§33. This mission does NOT authorise it.",
+  "classification": "REQUIRES_DEDICATED_REVIEW",
+  "the_mechanism_is_not_novel": "This repository already operates reviewed collectors that make HTTP requests to third parties under an authorization context. A bounded, identified, rate-limited request for a public page is not a new kind of act for it.",
+  "what_is_novel_and_why_a_review_is_needed": "Every source in the registry is a named publisher, and a fixed-corpus fetcher measures many third-party sites none of which is a registered source. The source-governance model has no shape for 'a corpus of arbitrary public sites', and inventing one in passing is the change-control shape docs/CLAUDE.md refuses.",
+  "conditions_a_future_review_would_have_to_settle": [
+   "publicly accessible targets only",
+   "a small bounded corpus",
+   "ordinary HTTP or HTTPS with no authentication",
+   "a published identification and User-Agent",
+   "conservative rate limits and per-domain throttling",
+   "an explicit, frozen robots and policy handling rule",
+   "no bypass, no circumvention, no anti-bot evasion",
+   "no vulnerability probing and no destructive requests",
+   "GET or HEAD only, if later approved",
+   "explicit timeouts and no crawling expansion beyond the corpus"
+  ],
+  "authorised_by_this_mission": false
+ },
+ "independence_architecture": {
+  "$comment": "§34. Self-operation is not independence.",
+  "classification": "INDEPENDENCE_ARCHITECTURE_PLAUSIBLE",
+  "automatically_independent": false,
+  "questions_a_later_mission_must_answer": [
+   "independent from WHICH external apparatus, named",
+   "whether measurement production is genuinely separate",
+   "whether corpus or predicate selection could have been influenced by seeing external values",
+   "whether run ordering can prevent contamination",
+   "whether external values can remain unseen until the operator run is sealed",
+   "whether two runs sharing DNS and Internet state remain distinct apparatus observations"
+  ],
+  "safeguards_it_would_require": [
+   "frozen code version",
+   "frozen request contract",
+   "separate measurement lineage",
+   "append-only raw observations",
+   "an ordering rule where ordering is load-bearing"
+  ]
+ },
+ "fallback_not_forced_solution": {
+  "$comment": "§35.",
+  "statement": "If the two archives had qualified directly, no operator fetcher would be proposed. They did not, and only on population. So this is the fallback the mission was told to consider in exactly that case.",
+  "and_it_gets_no_exemption": "One operator fetcher plus one archive must still satisfy the same-proposition requirement. Being ours does not relax it, and the archive's coverage semantics would still have to be legible for the pair to share a population.",
+  "the_honest_residual": "An operator fetcher fixes OUR side of the population problem. It does not fix the archive's, so a pair would still need one archive whose attempt-level coverage is documented. That is the question the next mission inherits."
+ },
+ "implemented": false,
+ "crawled": false,
+ "http_measurement_requests": 0
+}

@@ -568,6 +568,25 @@ jobs:
       - name: Quantity class selection matches its records
         run: uv run python infrastructure/scripts/render_quantity_class_selection.py --check
 
+      # Mission 1.70. A coverage surface is not a population until somebody says what
+      # membership in it means. Refuses: a successfully fetched set called a planned
+      # target set or an attempted set; a co-coverage rule called preregistered when what
+      # it selects on is undefined, so ordering is treated as sufficient; an HTTP status
+      # code in a coverage index called metadata; two different observed denominators
+      # called one proposition; a dated release treated as an immutable one; a browser
+      # page load equated with a crawler fetch, or the main document after redirects
+      # treated as the response to the requested URL; Common Crawl's URL selection
+      # guessed, or taken from a search summary rather than a first-party page; a
+      # recommendation to obtain legal advice read as a grant; an operator-run fetcher
+      # treated as independent because we would run it or as authorised because it is
+      # feasible; rights feasibility turned into governance approval; a class selected on
+      # an unresolved population architecture, or its artifact existing when nothing was
+      # selected; a construct selected at all; Mission 1.69's decision record edited; and
+      # any crawl, index query, WARC or HAR download, BigQuery execution, registration,
+      # governance mutation or measurement.
+      - name: Fixed-corpus web route qualification matches its records
+        run: uv run python infrastructure/scripts/render_web_route_qualification.py --check
+
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
   # Pinned to the same versions as infrastructure/compose.

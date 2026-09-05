@@ -1,0 +1,28 @@
+{
+ "$comment": "Mission 1.70 §13, §16 and §18. Temporal preselection is the one gate both routes come close to passing.",
+ "record_version": "1.0.0",
+ "mission": "1.70 — Fixed-Corpus Web Route Qualification V1",
+ "recorded_at": "2026-09-06",
+ "exact_predicate_frozen": false,
+ "target_values_retrieved": 0,
+ "routes": {
+  "COMMON_CRAWL": {
+   "run_identifier": "a dated crawl release name",
+   "addressable_before_values": true,
+   "immutability": "PARTIAL",
+   "immutability_reason": "individually addressable and not stated to be retained unchanged",
+   "date_treated_as_immutability": false
+  },
+  "HTTP_ARCHIVE": {
+   "run_identifier": "a monthly crawl date, rounded down to the first of the month",
+   "addressable_before_values": true,
+   "immutability": "PARTIAL",
+   "immutability_reason": "addressable by rounded date and not stated to be retained unchanged",
+   "date_treated_as_immutability": false
+  }
+ },
+ "windows_alignable": "PLAUSIBLE",
+ "windows_alignable_reason": "Both publish periodic runs identified before any value is read, so a window could be named on each side in advance. What is not established is whether the two runs cover comparable periods: one is a monthly browser crawl beginning on a stated day, the other a crawl release whose period semantics are not documented.",
+ "overall": "TEMPORAL_COMPATIBILITY_PLAUSIBLE_NOT_ESTABLISHED",
+ "why_this_gate_is_not_the_blocker": "Temporal preselection is the requirement that killed Censys, LeakIX and Shodan, and both web routes satisfy its shape. The blocker here is population, one gate earlier."
+}

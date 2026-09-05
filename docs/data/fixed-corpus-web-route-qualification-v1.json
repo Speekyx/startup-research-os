@@ -1,0 +1,78 @@
+{
+ "$comment": "Mission 1.70 §39 and §40. Route statuses and the Q1 strategic verdict.",
+ "record_version": "1.0.0",
+ "mission": "1.70 — Fixed-Corpus Web Route Qualification V1",
+ "recorded_at": "2026-09-06",
+ "exact_predicate_frozen": false,
+ "target_values_retrieved": 0,
+ "routes": {
+  "COMMON_CRAWL": {
+   "status": "ROUTE_PLAUSIBLE_REQUIRES_CONSTRUCT_DETAIL",
+   "produces_its_own_http_observations": true,
+   "unresolved": [
+    "coverage semantics: whether index membership means attempted or captured",
+    "URL selection mechanism, still not established from a first-party page",
+    "artifact immutability, addressable but not stated to be unchanged",
+    "HTTP method, request headers, DNS, TLS and vantage"
+   ]
+  },
+  "HTTP_ARCHIVE": {
+   "status": "ROUTE_PLAUSIBLE_REQUIRES_CONSTRUCT_DETAIL",
+   "produces_its_own_http_observations": true,
+   "unresolved": [
+    "whether a page that failed to load is represented at all",
+    "how intermediate redirect hops appear as rows",
+    "artifact immutability across historical runs",
+    "the data licence, absent from the FAQ and the front page"
+   ]
+  },
+  "SROS_BOUNDED_HTTP_FETCHER": {
+   "status": "ROUTE_UNRESOLVED",
+   "produces_its_own_http_observations": "WOULD, IF BUILT AND AUTHORISED",
+   "governance": "REQUIRES_DEDICATED_REVIEW",
+   "implemented": false
+  }
+ },
+ "route_status_meaning": {
+  "$comment": "§39. Said explicitly, because the phrase invites the wrong reading.",
+  "ROUTE_QUALIFIED_FOR_CLASS": "structurally suitable for the class, NOT qualified for any exact future construct",
+  "neither_route_reached_it": true
+ },
+ "q1_strategic_conditions": {
+  "$comment": "§40. Eight conditions; condition 1 is the one that fails.",
+  "1_population_architecture_valid": "NOT_SATISFIED",
+  "2_common_crawl_route_at_least_plausible": "SATISFIED",
+  "3_second_route_at_least_plausible_or_governed_operator_fetcher": "SATISFIED_FOR_HTTP_ARCHIVE",
+  "4_two_routes_produce_their_own_http_observations": "SATISFIED",
+  "5_same_http_world_state_family_plausible": "PLAUSIBLE_CONDITIONAL",
+  "6_temporal_preselection_plausible": "SATISFIED",
+  "7_commercial_purpose_not_blocked_on_both_routes": "NOT_ESTABLISHED",
+  "8_future_construct_freezable_without_values": "BLOCKED_BY_1",
+  "verdict": "NOT_STRATEGICALLY_VIABLE",
+  "load_bearing_failure": "condition 1, the population architecture"
+ },
+ "q1_status": "PROMISING_BUT_ROUTE_QUALIFICATION_REQUIRED",
+ "q1_status_changed_this_mission": false,
+ "what_did_change": {
+  "$comment": "The status is unchanged and the mission was not empty. Saying which is the honest report.",
+  "resolved_this_mission": [
+   "HTTP Archive exposes structured response headers and text bodies, which Mission 1.69 left open",
+   "HTTP Archive's main-document row binds to the first HTML request AFTER redirects",
+   "HTTP Archive carries attempt-level metadata: retry_count, tested_url, visited",
+   "Common Crawl's index fields, including that its coverage surface carries HTTP status codes",
+   "Common Crawl's columnar schema semantics for fetch_status, fetch_redirect and content_truncated",
+   "Common Crawl's terms position on commercial use",
+   "that the population question has a definite answer for the external pair"
+  ],
+  "still_unresolved": [
+   "Common Crawl's URL selection mechanism",
+   "whether either route's coverage means attempted or captured",
+   "whether HTTP Archive represents failed tests",
+   "artifact immutability on both sides",
+   "HTTP Archive's data licence",
+   "eleven of fifteen request-contract fields"
+  ]
+ },
+ "no_construct_selected": true,
+ "no_predicate_chosen": true
+}
