@@ -1,0 +1,79 @@
+{
+ "construct_id": "C3_TLS_CERTIFICATE_OBSERVATION",
+ "role": "CANDIDATE",
+ "product_relevance": {
+  "class": "WEAK_PRODUCT_RELEVANCE",
+  "what_product_question_it_informs": "Presence of a TLS-terminating service, as a very indirect infrastructure signal.",
+  "weakest_truthful_interpretation": "A count of addresses that presented a certificate. Certificate presence is not purchase, not adoption, and not use of any product.",
+  "why_weak": "The interpretive distance between observing a certificate and any product decision is large, and every shortening of it requires an inference §7 forbids. §8 lets a weak candidate survive only if nothing stronger is viable, and it may never win a tie against a structurally comparable stronger construct."
+ },
+ "proposition": {
+  "canonical_subject": "TLS certificate presentation on a fixed port",
+  "population": "public IPv4 address space",
+  "population_type": "IP_ADDRESS",
+  "unit": "distinct public IPv4 address",
+  "deduplication_unit": "IPv4 address",
+  "observation_window_semantics": "probe time, selectable before retrieval",
+  "predicate": "a TLS handshake attempt on a fixed port received a certificate",
+  "inclusion_rule": "one qualifying observation inside W",
+  "exclusion_rule": "certificates known only from Certificate Transparency logs are not observations of an address and are excluded",
+  "vantage_semantics": "load-bearing",
+  "configuration_assumptions": "the port inside both scanned sets"
+ },
+ "what_a_positive_observation_establishes": "That an address presented a certificate on a port at a moment.",
+ "explicit_non_claims": [
+  "not a purchase, a subscription or a customer relationship",
+  "not adoption of a certificate authority's product",
+  "not the number of sites, since one address may present many certificates by SNI",
+  "CT-log presence is not an active measurement and is not a substitute for one"
+ ],
+ "routes": {
+  "Censys": {
+   "verdict": "BLOCKED_LINEAGE",
+   "decisive_blocker": "MIXED_LINEAGE",
+   "note": "Its certificate collection is described as downloaded from publicly known CT servers OR found during Censys Internet scans. A collection mixing a log transcription with an active observation cannot witness an active-measurement proposition without a way to separate them, and reading a published log is not measuring."
+  },
+  "Netlas": {
+   "verdict": "UNRESOLVED",
+   "decisive_blocker": "UNRESOLVED_PREDICATE_EXPOSURE",
+   "note": "Certificates are collected and are documented as sometimes the only indicator of a service; the exact observation semantics for this predicate were not resolved."
+  },
+  "LeakIX": {
+   "verdict": "BLOCKED_TEMPORAL",
+   "decisive_blocker": "TEMPORAL",
+   "note": "Global blocker."
+  },
+  "Shadowserver": {
+   "verdict": "BLOCKED_FRAME",
+   "decisive_blocker": "FRAME",
+   "note": "Global blocker."
+  },
+  "ONYPHE": {
+   "verdict": "UNRESOLVED",
+   "decisive_blocker": "TEMPORAL",
+   "note": "B2 PARTIAL, global."
+  },
+  "Rapid7 Project Sonar": {
+   "verdict": "PLAUSIBLE_ROUTE",
+   "decisive_blocker": null,
+   "note": "Two dated certificate studies exist, described as X.509 certificate metadata observed when communicating with endpoints."
+  },
+  "Shodan": {
+   "verdict": "BLOCKED_TEMPORAL",
+   "decisive_blocker": "TEMPORAL",
+   "note": "Global blocker."
+  }
+ },
+ "plausible_apparatus_route_count": 1,
+ "route_shortfall": "SECOND_ROUTE_MISSING",
+ "preregistration_viable": true,
+ "structural_verdict": "NOT_STRUCTURALLY_VIABLE",
+ "failed_hard_conditions": [
+  "product relevance >= MODERATE",
+  "at least TWO apparatus routes are PLAUSIBLE"
+ ],
+ "record_version": "1.0.0",
+ "mission": "1.68 — Product-Relevant Measurement Construct Selection V1",
+ "recorded_at": "2026-09-06",
+ "values_consulted_to_choose_this_construct": 0
+}

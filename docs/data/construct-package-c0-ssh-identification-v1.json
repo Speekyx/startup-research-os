@@ -1,0 +1,80 @@
+{
+ "construct_id": "C0_SSH_IDENTIFICATION",
+ "role": "CONTROL",
+ "$comment": "§31. The existing construct evaluated through the same matrix, so the comparison is not rigged by exempting the incumbent.",
+ "product_relevance": {
+  "class": "MODERATE_PRODUCT_RELEVANCE",
+  "what_product_question_it_informs": "Public exposure of a remote-access protocol across a defined address population, as a technology-exposure and deployment-footprint signal.",
+  "weakest_truthful_interpretation": "A count of addresses whose peer emitted an SSH-prefixed identification string. It is not a count of organisations, users, customers, installations or purchases."
+ },
+ "proposition": {
+  "canonical_subject": "SSH-prefixed protocol identification on TCP/22",
+  "population": "public IPv4 address space",
+  "population_type": "IP_ADDRESS",
+  "geography": "global, unrestricted",
+  "unit": "distinct public IPv4 address",
+  "deduplication_unit": "IPv4 address",
+  "observation_window_semantics": "the time at which the probe that generated the response occurred, selectable before retrieval",
+  "predicate": "TCP port 22 accepted a connection AND, before protocol negotiation, the peer emitted an identification string beginning with the literal prefix SSH-",
+  "protocol_authority": "RFC 4253 §4.2",
+  "inclusion_rule": "an address is counted once if at least one qualifying observation falls inside W",
+  "exclusion_rule": "addresses with no qualifying observation inside W are not counted; an address excluded from scanning is outside the frame rather than a zero",
+  "vantage_semantics": "unspecified across apparatuses; a difference in scanner vantage can change reachability and is not absorbed into reliability",
+  "configuration_assumptions": "TCP/22 must be inside the scanned port set for the window, for every apparatus counted"
+ },
+ "what_a_positive_observation_establishes": "That at that moment, from that vantage, that address accepted a TCP connection on port 22 and sent bytes beginning SSH-.",
+ "explicit_non_claims": [
+  "not the number of SSH servers on the Internet",
+  "not the number of organisations running SSH",
+  "not adoption, market share or installations",
+  "not that the service is reachable from anywhere else"
+ ],
+ "routes": {
+  "Censys": {
+   "verdict": "UNRESOLVED",
+   "decisive_blocker": "UNRESOLVED_PREDICATE_EXPOSURE",
+   "note": "The only Censys surface whose temporal object is right is the dated Universal Internet Dataset snapshot, and whether it carries a raw banner is not documented outside the authenticated console. The Platform surface carries a banner and a LAST-observed timestamp."
+  },
+  "Netlas": {
+   "verdict": "PLAUSIBLE_ROUTE",
+   "decisive_blocker": null,
+   "note": "A2 PASS on an indices parameter selecting a data-collection date; A3 PASS on a queryable banner field with wildcard and prefix matching plus port filtering; A7 PASS since Mission 1.61. A8 stays PARTIAL, which makes this a route requiring deep qualification rather than an implausible one."
+  },
+  "LeakIX": {
+   "verdict": "BLOCKED_TEMPORAL",
+   "decisive_blocker": "TEMPORAL",
+   "note": "Global blocker, carried unchanged."
+  },
+  "Shadowserver": {
+   "verdict": "BLOCKED_FRAME",
+   "decisive_blocker": "FRAME",
+   "note": "Global blocker, carried unchanged."
+  },
+  "ONYPHE": {
+   "verdict": "UNRESOLVED",
+   "decisive_blocker": "TEMPORAL",
+   "note": "B2 PARTIAL and B4 PARTIAL, both global rather than construct-specific. The sent enquiry is outstanding and improves no gate."
+  },
+  "Rapid7 Project Sonar": {
+   "verdict": "BLOCKED_PREDICATE_NOT_RETRIEVABLE",
+   "decisive_blocker": "PREDICATE_NOT_RETRIEVABLE",
+   "note": "The arbitrary-TCP-port resource publishes SYN responses and no response bytes; the HTTP resource is not port 22."
+  },
+  "Shodan": {
+   "verdict": "BLOCKED_TEMPORAL",
+   "decisive_blocker": "TEMPORAL",
+   "note": "Global blocker, carried unchanged."
+  }
+ },
+ "plausible_apparatus_route_count": 1,
+ "route_shortfall": "SECOND_ROUTE_MISSING",
+ "preregistration_viable": true,
+ "structural_verdict": "NOT_STRUCTURALLY_VIABLE",
+ "failed_hard_conditions": [
+  "at least TWO apparatus routes are PLAUSIBLE"
+ ],
+ "record_version": "1.0.0",
+ "mission": "1.68 — Product-Relevant Measurement Construct Selection V1",
+ "recorded_at": "2026-09-06",
+ "values_consulted_to_choose_this_construct": 0
+}

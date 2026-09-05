@@ -1,0 +1,122 @@
+{
+ "$comment": "Mission 1.68 §39. The required comparison. No weighted score is assigned anywhere: §29 fixes the order as hard gates first, then a lexicographic tie-break among survivors.",
+ "record_version": "1.0.0",
+ "mission": "1.68 — Product-Relevant Measurement Construct Selection V1",
+ "recorded_at": "2026-09-06",
+ "scoring_method": {
+  "weighted_numeric_score_used": false,
+  "method": "HARD_GATES_THEN_LEXICOGRAPHIC_TIE_BREAK",
+  "tie_break_order": [
+   "stronger product relevance",
+   "more than two plausible apparatus routes",
+   "fewer unresolved load-bearing questions",
+   "cleaner population identity",
+   "cleaner temporal semantics",
+   "cleaner deterministic predicate",
+   "simpler configuration alignment",
+   "stronger independence plausibility",
+   "lower access and governance complexity"
+  ],
+  "tie_break_reached": false,
+  "why_not_reached": "No construct passed the hard gates, so there was nothing to break a tie between. Recording that is not the same as recording a tie."
+ },
+ "rows": [
+  {
+   "construct_id": "C0_SSH_IDENTIFICATION",
+   "role": "CONTROL",
+   "product_relevance": "MODERATE_PRODUCT_RELEVANCE",
+   "population_type": "IP_ADDRESS",
+   "unit": "distinct public IPv4 address",
+   "plausible_apparatus_route_count": 1,
+   "plausible_routes": [
+    "Netlas"
+   ],
+   "route_shortfall": "SECOND_ROUTE_MISSING",
+   "structural_verdict": "NOT_STRUCTURALLY_VIABLE",
+   "failed_hard_conditions": [
+    "at least TWO apparatus routes are PLAUSIBLE"
+   ]
+  },
+  {
+   "construct_id": "C1_TCP22_SYN_RESPONSIVENESS",
+   "role": "CANDIDATE",
+   "product_relevance": "MODERATE_PRODUCT_RELEVANCE",
+   "population_type": "IP_ADDRESS",
+   "unit": "distinct public IPv4 address",
+   "plausible_apparatus_route_count": 1,
+   "plausible_routes": [
+    "Rapid7 Project Sonar"
+   ],
+   "route_shortfall": "SECOND_ROUTE_MISSING",
+   "structural_verdict": "NOT_STRUCTURALLY_VIABLE",
+   "failed_hard_conditions": [
+    "at least TWO apparatus routes are PLAUSIBLE"
+   ]
+  },
+  {
+   "construct_id": "C2_HTTP_RESPONSE_TO_IP_ADDRESSED_GET",
+   "role": "CANDIDATE",
+   "product_relevance": "MODERATE_PRODUCT_RELEVANCE",
+   "population_type": "IP_ADDRESS",
+   "unit": "distinct public IPv4 address",
+   "plausible_apparatus_route_count": 1,
+   "plausible_routes": [
+    "Rapid7 Project Sonar"
+   ],
+   "route_shortfall": "SECOND_ROUTE_MISSING",
+   "structural_verdict": "NOT_STRUCTURALLY_VIABLE",
+   "failed_hard_conditions": [
+    "at least TWO apparatus routes are PLAUSIBLE"
+   ]
+  },
+  {
+   "construct_id": "C3_TLS_CERTIFICATE_OBSERVATION",
+   "role": "CANDIDATE",
+   "product_relevance": "WEAK_PRODUCT_RELEVANCE",
+   "population_type": "IP_ADDRESS",
+   "unit": "distinct public IPv4 address",
+   "plausible_apparatus_route_count": 1,
+   "plausible_routes": [
+    "Rapid7 Project Sonar"
+   ],
+   "route_shortfall": "SECOND_ROUTE_MISSING",
+   "structural_verdict": "NOT_STRUCTURALLY_VIABLE",
+   "failed_hard_conditions": [
+    "product relevance >= MODERATE",
+    "at least TWO apparatus routes are PLAUSIBLE"
+   ]
+  },
+  {
+   "construct_id": "C4_DNS_RECORD_CONFIGURATION",
+   "role": "CANDIDATE",
+   "product_relevance": "WEAK_PRODUCT_RELEVANCE",
+   "population_type": "DOMAIN_NAME",
+   "unit": "distinct domain name",
+   "plausible_apparatus_route_count": 1,
+   "plausible_routes": [
+    "Rapid7 Project Sonar"
+   ],
+   "route_shortfall": "SECOND_ROUTE_MISSING",
+   "structural_verdict": "NOT_STRUCTURALLY_VIABLE",
+   "failed_hard_conditions": [
+    "product relevance >= MODERATE",
+    "at least TWO apparatus routes are PLAUSIBLE",
+    "the population must be the same type as the arc's target proposition"
+   ]
+  }
+ ],
+ "the_pattern_across_rows": {
+  "$comment": "The finding this mission exists to produce, and it is visible only because five constructs were compared rather than one pursued.",
+  "observation": "Every construct has exactly ONE plausible route, and it is a DIFFERENT apparatus each time.",
+  "detail": {
+   "C0_SSH_IDENTIFICATION": "Netlas",
+   "C1_TCP22_SYN_RESPONSIVENESS": "Rapid7 Project Sonar (sonar.tcp)",
+   "C2_HTTP_RESPONSE_TO_IP_ADDRESSED_GET": "Rapid7 Project Sonar (HTTP study)",
+   "C3_TLS_CERTIFICATE_OBSERVATION": "Rapid7 Project Sonar (certificate studies)",
+   "C4_DNS_RECORD_CONFIGURATION": "Rapid7 Project Sonar (FDNS/RDNS studies)"
+  },
+  "reading": "The apparatuses are individually capable and pairwise disjoint. They are not failing to measure; they are failing to measure THE SAME THING as each other, on the same population, with the same temporal object.",
+  "why_it_happens": "A commercial scanner product sells SERVICES — what is running where — because that is what its customers buy. A service record presupposes a response. The discovery stage, which port answered, is an internal step these products do not publish as a separately addressable artifact. Sonar publishes it because it is a research dataset rather than a search product.",
+  "this_is_an_observation_not_a_verdict": "It is consistent with the evidence gathered and it is not established that no apparatus publishes such a surface. Several cells are UNRESOLVED rather than BLOCKED, and one documented sentence could move them."
+ }
+}

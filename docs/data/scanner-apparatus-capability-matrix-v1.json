@@ -1,0 +1,266 @@
+{
+ "$comment": "Mission 1.68 §3 and §19. Qualification is CONSTRUCT-RELATIVE. An apparatus rejected for the SSH construct is not globally defective, and a blocker must be classified as global or construct-specific before it is carried anywhere.",
+ "record_version": "1.0.0",
+ "mission": "1.68 — Product-Relevant Measurement Construct Selection V1",
+ "recorded_at": "2026-09-06",
+ "why_this_distinction_matters": "Mission 1.67 rejected two apparatuses for the SSH construct. Carrying those rejections into a new construct unexamined would repeat Mission 1.67's answer without repeating its work, and would be wrong in at least one direction: Sonar's failure was about which resource carries response bytes, which a transport-level predicate does not need.",
+ "apparatuses": [
+  {
+   "name": "Censys",
+   "surfaces_evaluated": [
+    "Censys Platform host dataset",
+    "Universal Internet Dataset snapshots"
+   ],
+   "blockers": [
+    {
+     "surface": "Censys Platform host dataset",
+     "kind": "APPARATUS_GLOBAL_BLOCKER",
+     "blocker": "TEMPORAL",
+     "source_says": "When the service was last observed by a Censys scan.",
+     "source_says_provenance": "https://docs.censys.com/docs/platform-host-dataset",
+     "project_interpretation": "host.services.scan_time is a LAST-observed timestamp. That is the temporal object Missions 1.58 and 1.59 rejected, re-confirmed here on current documentation rather than carried over from a report. It is global: no change of predicate repairs it."
+    },
+    {
+     "surface": "Censys Platform historical data",
+     "kind": "APPARATUS_GLOBAL_BLOCKER",
+     "blocker": "TEMPORAL",
+     "source_says": "Every time that Censys performs a scan against a host, Censys preserves a snapshot of that host during that point in time.",
+     "source_says_provenance": "https://docs.censys.com/docs/platform-historical-data",
+     "project_interpretation": "Per-host and per-scan, reached through Service History and Scan History tabs on a host record page after the host has been found. That is inspection-after-discovery, which is the same retrieve-then-inspect shape Shodan fails on."
+    }
+   ],
+   "favourable_facts": [
+    {
+     "fact": "own internet-wide scanning, with a discovery stage separate from service identification",
+     "source_says": [
+      "Censys continually scans the entire public IPv4 address space using automatic protocol detection, examining all possible IP and port combinations.",
+      "Global scan of popular ports. Censys continually and rapidly scans the whole IPv4 space on over 100 ports",
+      "On ports with IANA-assigned protocols, Censys tries to complete a handshake with the assigned protocol"
+     ],
+     "source_says_provenance": "https://docs.censys.com/docs/internet-scanning"
+    },
+    {
+     "fact": "dated, immutable, individually addressed snapshots exist",
+     "source_says": [
+      "a unique ID based on the date it was taken. For example, a snapshot with an ID of `20231107` was taken on Nov. 7, 2023.",
+      "https://file-host-02.censys.io/snapshots/universal-internet-dataset-v2-ipv4/20230416/ipv4-000000000000.avro"
+     ],
+     "source_says_provenance": "https://docs.censys.com/docs/ls-download-censys-universal-internet-dataset",
+     "project_interpretation": "This is the second apparatus in this arc with a dated immutable artifact, alongside Sonar. It is a DIFFERENT resource from the Platform surface and is evaluated as such."
+    }
+   ],
+   "unresolved": [
+    {
+     "question": "does the dated snapshot carry a raw service banner and a per-observation timestamp?",
+     "state": "UNRESOLVED",
+     "why_it_could_not_be_resolved": "The download page makes no mention of raw service banners, and the page describing the datasets does not state whether the downloadable snapshots share the Platform schema. The full field schema is directed to a Data Definitions page inside the authenticated console, which §35 forbids reaching."
+    },
+    {
+     "question": "what are the third-party inputs to the snapshot?",
+     "state": "UNRESOLVED",
+     "source_says": "hosts and virtual hosts in the IPv4 and IPv6 address spaces as observed in scan and enriched with third-party data",
+     "source_says_provenance": "https://docs.censys.com/docs/ls-download-censys-universal-internet-dataset",
+     "project_interpretation": "An open-ended enrichment clause. ENUMERATED_EXCEPTIONS_MAKE_A_LINEAGE_CLAIM_CHECKABLE is unsatisfied until the inputs are enumerated, and whether any of them is a measurement upstream rather than auxiliary enrichment is exactly what an open list cannot answer."
+    }
+   ],
+   "access": {
+    "research_route": "NON_COMMERCIAL_ONLY",
+    "research_route_source_says": [
+     "cannot be used for any commercial purpose"
+    ],
+    "research_route_provenance": "https://docs.censys.com/docs/research-access-to-censys-data",
+    "project_interpretation": "docs/CLAUDE.md §Deployment model states that local deployment never implies non-commercial use, and that the research this system produces is used to launch commercial products. So the research route is not available to this product on its own terms. An Enterprise route exists and would need its own governance review, which this mission does not perform.",
+    "used_as_an_epistemic_disqualifier": false
+   }
+  },
+  {
+   "name": "Netlas",
+   "surfaces_evaluated": [
+    "Netlas Responses collection and search API"
+   ],
+   "blockers": [
+    {
+     "surface": "Netlas Responses collection",
+     "kind": "CONSTRUCT_SPECIFIC_BLOCKER",
+     "blocker": "PREDICATE_POPULATION_ON_WEB_PORTS",
+     "source_says": [
+      "Netlas scanners query them not only by IP address but also by domain names.",
+      "Netlas scanners send requests directly by IP address without using domain names.",
+      "Netlas scanners limit the number of virtual sites per IP to 100,000.",
+      "During this process, each response is saved as a separate document."
+     ],
+     "source_says_provenance": "https://docs.netlas.io/knowledge-base/scanning-technology/",
+     "project_interpretation": "On ports 80 and 443 the population is a mixture of IP-addressed and domain-addressed requests, with up to 100,000 virtual sites per address and each redirect hop stored separately. On every other port the request is sent by IP address without a domain name, so this blocker is specific to a web-port construct and does not reach a construct on another port."
+    }
+   ],
+   "favourable_facts": [
+    {
+     "fact": "the window is chosen in the request and the scan date is defined",
+     "carried_from": "Mission 1.60 and 1.61 records already in the repository",
+     "project_interpretation": "A2 PASS on an indices parameter selecting a data-collection date, plus a documented scan_date meaning when the scanning that generated the response occurred. A7 PASS since Mission 1.61."
+    },
+    {
+     "fact": "the scanned port list is published",
+     "source_says": "the entire IPv4 space against a curated list of commonly used ports",
+     "source_says_provenance": "https://docs.netlas.io/knowledge-base/scanning-technology/",
+     "project_interpretation": "The page publishes an explicit TCP and UDP port list rather than only a count, which is more than ONYPHE publishes for datascan. Whether it is time-addressable is a separate question this mission did not resolve."
+    }
+   ],
+   "unresolved": [
+    {
+     "question": "does a document exist for a port that accepted a TCP connection and returned nothing?",
+     "state": "UNRESOLVED",
+     "source_says": "If the Netlas scanner cannot identify the protocol, the unparsed network response is stored in the `raw_tcp` field.",
+     "source_says_provenance": "https://docs.netlas.io/knowledge-base/scanning-technology/",
+     "project_interpretation": "The sentence describes an unparsed RESPONSE, which presupposes that the peer sent something. The collection is named Responses and its own field reference documents no field for a connection that produced no application data. This is the decisive question for a transport-level construct and the documentation does not answer it."
+    }
+   ],
+   "existing_gate_state_carried_not_recomputed": {
+    "A8_RELIABILITY_REVIEWABLE": "PARTIAL",
+    "$comment": "Carried from the repository. §20 forbids making it pass. Of its ten recorded topics only BANNER_FIDELITY is construct-specific; sampling, frame, missingness, retry, duplication, distinct-address semantics, vantage and port-window coverage are global and survive any change of predicate."
+   }
+  },
+  {
+   "name": "LeakIX",
+   "surfaces_evaluated": [
+    "LeakIX search surface"
+   ],
+   "blockers": [
+    {
+     "surface": "LeakIX search surface",
+     "kind": "APPARATUS_GLOBAL_BLOCKER",
+     "blocker": "TEMPORAL",
+     "carried_from": "Mission 1.62 record already in the repository",
+     "project_interpretation": "Its date fields are an indexing date, a first-detection date and a last-detection date, none of which is an observation event. No change of predicate repairs a temporal architecture."
+    }
+   ],
+   "favourable_facts": [],
+   "unresolved": []
+  },
+  {
+   "name": "Shadowserver",
+   "surfaces_evaluated": [
+    "Shadowserver reporting API"
+   ],
+   "blockers": [
+    {
+     "surface": "Shadowserver reporting API",
+     "kind": "APPARATUS_GLOBAL_BLOCKER",
+     "blocker": "FRAME",
+     "carried_from": "Mission 1.62 record already in the repository",
+     "project_interpretation": "It scans the whole internet daily and a requester retrieves only the networks they are responsible for. The retrievable frame is per-requester whatever the predicate is, so no proposition about the internet can be witnessed through it."
+    }
+   ],
+   "favourable_facts": [],
+   "unresolved": []
+  },
+  {
+   "name": "ONYPHE",
+   "surfaces_evaluated": [
+    "ONYPHE datascan category"
+   ],
+   "blockers": [
+    {
+     "surface": "ONYPHE datascan",
+     "kind": "CONSTRUCT_SPECIFIC_BLOCKER",
+     "blocker": "PREDICATE_IS_AN_APPLICATION_RESPONSE",
+     "source_says": "raw application response received from the scanned service.",
+     "source_says_provenance": "carried from the Mission 1.62 to 1.66.2 records already in the repository",
+     "project_interpretation": "A datascan record is generated by an application response, so the category cannot witness a transport-level predicate. No ONYPHE category in any held record is described as publishing port-openness independent of a response: the categories evidenced are datascan, ctiscan, vulnscan, riskscan, resolver, topsite, threatlist, sniffer and onionscan."
+    }
+   ],
+   "favourable_facts": [
+    {
+     "fact": "B3 protocol-native exposure PASS",
+     "carried_from": "Mission 1.62 to 1.66.2 records"
+    }
+   ],
+   "unresolved": [
+    {
+     "question": "temporal object and datascan TCP/22 membership",
+     "state": "UNRESOLVED",
+     "carried_from": "B2 PARTIAL and B4 PARTIAL, unchanged",
+     "project_interpretation": "Both are global rather than construct-specific: B2 is a temporal-architecture question and B4 is a configuration question, and both would have to be answered for any construct on any ONYPHE port. The sent enquiry is outstanding and improves no gate."
+    }
+   ]
+  },
+  {
+   "name": "Rapid7 Project Sonar",
+   "surfaces_evaluated": [
+    "sonar.tcp study",
+    "Sonar HTTP study"
+   ],
+   "blockers": [
+    {
+     "surface": "sonar.tcp study",
+     "kind": "CONSTRUCT_SPECIFIC_BLOCKER",
+     "blocker": "PREDICATE_NOT_RETRIEVABLE_FOR_AN_APPLICATION_PREDICATE",
+     "source_says": "Project Sonar runs numerous TCP studies every month. The output from these is a GZIP compressed CSV that contains the IP addresses that responded positively to the SYN for the port in question.",
+     "source_says_provenance": "https://github.com/rapid7/sonar/wiki/TCP",
+     "project_interpretation": "This is the Mission 1.67 finding, and classifying it correctly is the point of §3: it is CONSTRUCT-SPECIFIC. A SYN-only output cannot carry an identification string, and a transport-level predicate does not ask it to."
+    }
+   ],
+   "favourable_facts": [
+    {
+     "fact": "dated immutable per-port artifacts, selected before retrieval",
+     "source_says": [
+      "regular snapshots of the responses to zmap probes against common TCP services",
+      "2026-09-05-1788609721-tcp_dns_53.csv.gz",
+      "2026-09-04-1788552721-redis_9051.csv.gz"
+     ],
+     "source_says_provenance": "https://sonardata.rapid7.com/sonar.tcp/",
+     "project_interpretation": "The filename carries a date, a Unix timestamp, a service label and THE PORT. A file is selected by port and date before any value is retrieved, which is what §11 asks for."
+    },
+    {
+     "fact": "the HTTP study stores the complete response and fixes the request",
+     "source_says": [
+      "a HTTP GET / HTTP/1.1 request with the Host header set to the IP address of the system.",
+      "the complete HTTP response, including the HTTP headers stored as a base64-encoded string in the 'data' key."
+     ],
+     "source_says_provenance": "https://github.com/rapid7/sonar/wiki/HTTP",
+     "project_interpretation": "The request identity is documented, which is rare and is what makes an HTTP-level proposition expressible at all. Evaluated as a resource distinct from sonar.tcp."
+    },
+    {
+     "fact": "eligible frame documented with an explicit exclusion",
+     "source_says": "all public IPv4 addresses (about 3.6 billion of them, excluding those opted-out) are scanned",
+     "source_says_provenance": "https://www.rapid7.com/research/project-sonar/"
+    }
+   ],
+   "unresolved": [
+    {
+     "question": "what does the date in a study filename denote?",
+     "state": "UNRESOLVED",
+     "project_interpretation": "Study start, completion or publication is not stated by any retrieved page. §21 says to record that rather than assign semantics to a dated filename."
+    },
+    {
+     "question": "does a TCP/22 study file exist, and for which windows?",
+     "state": "UNRESOLVED",
+     "project_interpretation": "The about page names SSH among the studies Sonar runs, which is not a published file list for port 22. The file listing is paginated far beyond what documentation reading can enumerate, and the API that would list a study's files requires a key, which §35 forbids executing."
+    },
+    {
+     "question": "what is one row, and is a distinct-address count a row count?",
+     "state": "UNRESOLVED",
+     "project_interpretation": "The wiki says the CSV contains the IP addresses that responded. Whether one row is one address, and whether an address can recur within one study file, is not stated."
+    }
+   ]
+  },
+  {
+   "name": "Shodan",
+   "surfaces_evaluated": [
+    "Shodan search and host database",
+    "Shodan Trends"
+   ],
+   "blockers": [
+    {
+     "surface": "Shodan search and host database",
+     "kind": "APPARATUS_GLOBAL_BLOCKER",
+     "blocker": "TEMPORAL",
+     "carried_from": "Mission 1.67 record already in the repository",
+     "project_interpretation": "A database documented as updated in real time, a filter reference documenting no time or date filter, and a per-address history reachable only once an address is known. §23 is explicit that a construct change cannot repair a global temporal architecture, and this is classified LIKELY_GLOBAL_TEMPORAL_BLOCKER on that basis."
+    }
+   ],
+   "favourable_facts": [],
+   "unresolved": []
+  }
+ ]
+}

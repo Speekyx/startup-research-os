@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.102
+Version: 1.103
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-06 (Sprint 1 / Mission 1.67)
+Last amended: 2026-09-06 (Sprint 1 / Mission 1.68)
 
 ---
 
@@ -13,6 +13,118 @@ Last amended: 2026-09-06 (Sprint 1 / Mission 1.67)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.103 — 2026-09-06 (Sprint 1 / Mission 1.68)
+
+**`NO_PRODUCT_RELEVANT_CONSTRUCT_WITH_TWO_ROUTES_IDENTIFIED`.** Five constructs
+evaluated against seven apparatuses, and **every one has exactly ONE plausible route
+— a DIFFERENT apparatus each time.** That pattern is the mission's output, and it is
+visible only because five constructs were compared rather than one pursued.
+
+| construct | its one route |
+|---|---|
+| SSH identification (control) | Netlas |
+| TCP/22 SYN responsiveness | Rapid7 Project Sonar (`sonar.tcp`) |
+| HTTP response to an IP-addressed GET | Rapid7 Project Sonar (HTTP study) |
+| TLS certificate observation | Rapid7 Project Sonar (certificate studies) |
+| DNS record configuration | Rapid7 Project Sonar (FDNS/RDNS) |
+
+**THE APPARATUSES ARE INDIVIDUALLY CAPABLE AND PAIRWISE DISJOINT.** They are not
+failing to measure; they are failing to measure THE SAME THING as each other, on the
+same population, with the same temporal object. **And there is a reason, which is
+about what these products sell**: a commercial scanner publishes SERVICES, because
+that is what its customers buy, and a service record presupposes a response. The
+discovery stage — which port answered — is an internal step they do not publish as a
+separately addressable artifact. Sonar publishes it because `sonar.tcp` is a research
+dataset rather than a search product.
+
+**THE PIVOT WAS ALLOWED AND IS NOT A RELAXATION.** The SSH identification predicate
+is not something this product promises anybody; it was chosen to prove that two
+independently produced observations can witness one source-independent proposition.
+The control was evaluated through the same matrix rather than exempted, and its status
+stays **`NO_TWO_QUALIFIED_APPARATUS_ROUTE_IDENTIFIED`** — never FAILED, BAD_CONSTRUCT
+or INVALID. Its problem is reachability under the apparatus market as documented.
+
+**C1 CAME CLOSEST AND WAS NOT SELECTED, WHICH IS THE WHOLE OF §30.** `sonar.tcp`
+publishes *"regular snapshots of the responses to zmap probes against common TCP
+services"* as dated immutable per-port files — `2026-09-05-1788609721-tcp_dns_53.csv.gz`
+— so a file is selected **by port and by date before any value is retrieved**. That is
+the strongest single route the arc has produced. Its second route is UNRESOLVED rather
+than blocked on two apparatuses, and **selecting on the expectation that the missing
+sentence exists would preregister an experiment on a route nobody has established.**
+
+**THE DECISIVE UNRESOLVED QUESTION IS ONE SENTENCE WIDE**: does any apparatus publish,
+as a separately addressable artifact, a record that a port ACCEPTED A TCP CONNECTION
+WITHOUT PRODUCING AN APPLICATION RESPONSE? Netlas's collection is named Responses, its
+documented fallback field stores *"the unparsed network response"* — which presupposes
+the peer sent something — and no retrieved page says whether a document exists
+otherwise. If it does not, Netlas counts a strict subset and the same-proposition gate
+fails.
+
+**A SYN RESPONSE IS NEVER AN SSH SERVER**, and the validator enforces it structurally
+as well as lexically: a SYN predicate may not carry an SSH subject, must state why the
+two differ, and must refuse the reading in its explicit non-claims. A SYN response is a
+transport-layer fact produced by the TCP stack; the whole content of RFC 4253 §4.2's
+discriminator is absent from it.
+
+**BLOCKERS ARE NOW CLASSIFIED GLOBAL OR CONSTRUCT-SPECIFIC, AND IT MATTERS IN BOTH
+DIRECTIONS.** Sonar's Mission 1.67 rejection was construct-specific and **correctly
+disappears** under a predicate that reads no response bytes — carrying it forward would
+have repeated Mission 1.67's answer without repeating its work. Shodan's and LeakIX's
+temporal architectures and Shadowserver's per-requester frame are **global and survive
+every construct**, because no change of predicate repairs where a timestamp points.
+And a construct-specific blocker **appeared** where it had never applied: on ports 80
+and 443 Netlas queries *"not only by IP address but also by domain names"*, limits
+*"the number of virtual sites per IP to 100,000"*, and saves *"each response as a
+separate document"* across redirects — with the Host header it sends undocumented. On
+every other port it sends requests by IP address without domain names.
+
+**CENSYS WAS RE-EXAMINED RESOURCE BY RESOURCE AND THE SUMMARY GUARD FIRED A THIRD
+TIME.** A search summary reported that Censys *publishes an updated daily snapshot of
+the state of the public address space*; the Platform historical-data page says instead
+that *"Every time that Censys performs a scan against a host, Censys preserves a
+snapshot of that host during that point in time"*, reached through Service History and
+Scan History tabs **after a host is found**. Its host dataset documents
+`host.services.scan_time` as *"When the service was last observed by a Censys scan"* —
+**the exact temporal object Missions 1.58 and 1.59 rejected, re-confirmed on current
+documentation rather than carried over from a report.** This is the first time the
+guard has fired on a summary that was FAVOURABLE to a candidate, which is the direction
+that matters. **The Universal Internet Dataset is genuinely different** — dated
+immutable snapshots addressed by a date-based ID, the second such artifact in this arc
+alongside Sonar — and stays UNRESOLVED because raw banners are not mentioned, the
+schema is directed to a page inside the authenticated console, and its contents are
+described as *"enriched with third-party data"*, an open-ended clause
+`ENUMERATED_EXCEPTIONS_MAKE_A_LINEAGE_CLAIM_CHECKABLE` refuses.
+
+**OUTCOME F WAS AVAILABLE AND REFUSED.** F asserts the apparatus class itself is the
+dominant limitation. The evidence points that way and does not establish it: several
+cells are UNRESOLVED rather than BLOCKED, and reporting F would convert *this mission
+could not establish it* into *it cannot be done* — the conversion this repository has
+refused since Mission 1.60.
+
+**HELD EVIDENCE PAID FOR ITSELF, MEASURABLY.** Eleven retrievals answered a
+seven-apparatus, five-construct matrix; Mission 1.67 spent twenty-four on two
+apparatuses. The difference is the records already in the repository, and this mission
+was partly a test of whether accumulated apparatus knowledge reduces research cost.
+
+**A REUSABLE RULE WAS OFFERED AND NOT ADDED**, under the standard Mission 1.67 itself
+set: `A_PUBLISHED_SURFACE_IS_THE_SALEABLE_OBSERVATION_NOT_THE_MEASUREMENT_PIPELINE` has
+one shape so far, and the frame-uniformity rule was adopted only when a second
+independent instance appeared. **Registry unchanged at 15.**
+
+11 of 18 first-party requests, 3 navigation searches, 5 serious constructs of 6, and a
+sixth deliberately not invented. **0 measurement values retrieved, 0 target-value
+exposures, 0 API executions, 0 dataset downloads, 0 counts, 0 hosts, 0 banners, 0
+trials, 0 accounts, 0 credential reads, 0 mailbox searches, 0 enquiries sent**, 0
+sources registered, 0 governance mutations, 0 canonical mutations, 0 thresholds, 0
+Claims, 0 Evidence, 0 reliability values, 0 model calls, 0 embeddings, no migration.
+ONYPHE stays `NOT_CHECKED_AFTER_DISPATCH`, Netlas unresolved with nothing decoded.
+**Qualified apparatuses 0, `PAIR_ANALYSIS_NOT_READY`, no pair selected or compared.**
+Validator probed with **109 deliberate violations, 109 caught** — 106 by rule, 3 by
+drift — plus **4 of 4 positive controls**, including a two-route viable construct, a
+properly evidenced selection with its artifact, and an alternative no-selection
+outcome. **62 new tests**, **2151 bare-python tests**, all pytest suites passed with
+the database unchanged, and all **38** CI gates.
 
 ## 1.102 — 2026-09-06 (Sprint 1 / Mission 1.67)
 

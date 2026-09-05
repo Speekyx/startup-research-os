@@ -1,0 +1,106 @@
+{
+ "$comment": "Mission 1.68 §0. Preconditions verified from git, canonical baseline measured live, and the SSH construct preserved rather than retired.",
+ "record_version": "1.0.0",
+ "mission": "1.68 — Product-Relevant Measurement Construct Selection V1",
+ "recorded_at": "2026-09-06",
+ "repository_precondition": {
+  "mission_1_67_merged": true,
+  "pull_request": 112,
+  "pull_request_state": "MERGED",
+  "merge_commit": "c4049cdb66a97c7bb726ad47b688e2f07916f661",
+  "merge_commit_short": "c4049cd",
+  "operator_reported_main": "c4049cd",
+  "operator_report_agrees_with_git": true,
+  "local_main_equals_origin_main": true,
+  "working_tree_clean": true,
+  "branch": "sprint-1/mission-1.68",
+  "migration_head": "0035_refusal_provenance",
+  "verified_from_git_not_from_prompt": true
+ },
+ "canonical_baseline": {
+  "$comment": "Measured live. Every counter matched §0 exactly.",
+  "raw_records": 325,
+  "normalized_records": 325,
+  "signals": 33,
+  "claims": 44,
+  "claim_revisions": 45,
+  "evidence": 58,
+  "inferred_claims": 1,
+  "threshold_registrations": 1,
+  "claim_derivations": 1,
+  "proposition_evaluation_refusals": 0,
+  "evidence_supports": 57,
+  "evidence_contradicts": 1,
+  "claims_carrying_both_directions": 0,
+  "reliability_assessments": 4,
+  "evidence_independence_groups": 0,
+  "opportunities": 1,
+  "opportunity_revisions": 1,
+  "opportunity_evidence_links": 7,
+  "registered_sources": 29,
+  "embeddings": 0,
+  "scores_table": "ABSENT",
+  "reference_profile": "UNCALIBRATED",
+  "problem_family": "PARKED",
+  "migration_head": "0035_refusal_provenance",
+  "drift_from_mission_1_67": "none",
+  "measured_live_not_quoted_from_a_report": true
+ },
+ "requirement_registry": {
+  "$comment": "§33. Read from the repository artifact. Expected to stay at 15.",
+  "source_artifact": "docs/data/observation-addressable-apparatus-contract-v1.json",
+  "count_before": 15,
+  "count_after": 15,
+  "names_in_order": [
+   "SOURCE_EXCLUSIVE_METRIC",
+   "RELIABILITY_REVIEWABILITY",
+   "FRAME_INSIDE_THE_DEFINITION",
+   "AFFIRMATIVE_LINEAGE_REQUIRED",
+   "PRODUCT_RELEVANCE",
+   "READING_A_PUBLISHED_VALUE_IS_NOT_MEASURING_IT",
+   "OBSERVATION_ADDRESSABLE_EXPOSURE",
+   "THE_TEMPORAL_OBJECT_TEST",
+   "SAMPLING_IS_LOAD_BEARING",
+   "ENUMERATED_EXCEPTIONS_MAKE_A_LINEAGE_CLAIM_CHECKABLE",
+   "LINEAGE_EXHAUSTIVENESS_IS_NOT_FRAME_EXHAUSTIVENESS",
+   "THE_RETRIEVABLE_FRAME_IS_NOT_THE_MEASURED_FRAME",
+   "DEFAULT_DATA_SURFACE_MUST_NOT_OVERRIDE_QUALIFIED_EXPOSURE_PATH",
+   "APPARATUS_CONFIGURATION_MUST_BE_TIME_ADDRESSABLE",
+   "APPARATUS_CONFIGURATION_MUST_BE_UNIFORM_ACROSS_THE_FRAME"
+  ],
+  "requirement_added_this_mission": null
+ },
+ "current_ssh_construct": {
+  "$comment": "§2. The SSH-identification construct is preserved. Its problem is reachability under the apparatus market as documented, not validity.",
+  "status": "NO_TWO_QUALIFIED_APPARATUS_ROUTE_IDENTIFIED",
+  "status_is_not": [
+   "FAILED",
+   "BAD_CONSTRUCT",
+   "INVALID"
+  ],
+  "proposition": "the number of distinct public IPv4 addresses from which, during a predefined observation window W, TCP port 22 accepted a connection AND the peer emitted an identification string beginning with the literal prefix SSH- before protocol negotiation",
+  "authority": "RFC 4253 §4.2",
+  "count_unit": "DISTINCT_IPV4",
+  "evaluated_as_a_control_this_mission": true,
+  "historical_missions_rewritten": 0
+ },
+ "why_a_construct_pivot_is_allowed": {
+  "$comment": "§1. Stated so a reader cannot mistake this for lowering a standard.",
+  "the_construct_is_an_instrument_not_a_product_requirement": "The SSH identification predicate is not something SROS promises anybody. It was chosen to prove that two independently produced observations can witness one source-independent proposition, so the aggregator stops being algebraically identical to baseline B-2.",
+  "conditions_all_of_which_hold_here": [
+   "product relevance remains explicit and is a gate rather than a preference",
+   "any selected construct is frozen BEFORE any value is retrieved",
+   "no previously observed value informed the candidate set",
+   "every candidate predicate remains source-independent",
+   "a construct is only selected with at least two named apparatus routes",
+   "no historical verdict is rewritten"
+  ],
+  "what_this_is_not": "It is not a relaxation. A construct that no two apparatuses can measure teaches nothing about aggregation, and choosing a measurable one is selecting an experiment rather than weakening a standard."
+ },
+ "parallel_state_untouched": {
+  "onyphe_response_status": "NOT_CHECKED_AFTER_DISPATCH",
+  "onyphe_mailbox_searched": false,
+  "netlas_recipient_status": "NOT_ESTABLISHED",
+  "netlas_address_decoded_or_guessed": false
+ }
+}

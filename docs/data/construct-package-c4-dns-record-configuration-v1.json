@@ -1,0 +1,83 @@
+{
+ "construct_id": "C4_DNS_RECORD_CONFIGURATION",
+ "role": "CANDIDATE",
+ "product_relevance": {
+  "class": "WEAK_PRODUCT_RELEVANCE",
+  "what_product_question_it_informs": "How many names carry a particular DNS configuration, as a very indirect infrastructure signal.",
+  "weakest_truthful_interpretation": "A count of names whose published DNS records have a stated property. It is a fact about DNS configuration and nothing else.",
+  "why_weak": "The tempting reading — that a name pointing at a provider indicates a customer of that provider — is exactly the semantic promotion §6 C4 and §7 forbid. Stripped of it, the proposition is about zone contents."
+ },
+ "proposition": {
+  "canonical_subject": "a stated DNS record property",
+  "population": "a defined set of domain names",
+  "population_type": "DOMAIN_NAME",
+  "unit": "distinct domain name",
+  "deduplication_unit": "domain name",
+  "observation_window_semantics": "resolution time, selectable before retrieval",
+  "predicate": "the name resolved to a record with the stated property",
+  "inclusion_rule": "one qualifying resolution inside W",
+  "exclusion_rule": "names outside the defined set are outside the frame",
+  "vantage_semantics": "load-bearing; resolvers differ",
+  "configuration_assumptions": "the same name set on both sides"
+ },
+ "what_a_positive_observation_establishes": "That a name resolved to a record with a property at a moment, from that resolver.",
+ "explicit_non_claims": [
+  "not that the domain's owner is a customer of anyone",
+  "not adoption, spend or market share",
+  "not comparable with any IP-population measurement"
+ ],
+ "population_incomparability": {
+  "$comment": "§10 and §13. Recorded because this is where the mistake would be made.",
+  "statement": "This construct's population is DOMAIN_NAME. It may never be compared with, combined with, or substituted for an IP_ADDRESS population, and a count of names is not a count of addresses."
+ },
+ "routes": {
+  "Censys": {
+   "verdict": "UNRESOLVED",
+   "decisive_blocker": "UNRESOLVED_PREDICATE_EXPOSURE",
+   "note": "Not investigated for DNS."
+  },
+  "Netlas": {
+   "verdict": "UNRESOLVED",
+   "decisive_blocker": "UNRESOLVED_PREDICATE_EXPOSURE",
+   "note": "Domain data is collected; the observation semantics for a DNS proposition were not resolved."
+  },
+  "LeakIX": {
+   "verdict": "BLOCKED_TEMPORAL",
+   "decisive_blocker": "TEMPORAL",
+   "note": "Global blocker."
+  },
+  "Shadowserver": {
+   "verdict": "BLOCKED_FRAME",
+   "decisive_blocker": "FRAME",
+   "note": "Global blocker."
+  },
+  "ONYPHE": {
+   "verdict": "UNRESOLVED",
+   "decisive_blocker": "TEMPORAL",
+   "note": "B2 PARTIAL, global."
+  },
+  "Rapid7 Project Sonar": {
+   "verdict": "PLAUSIBLE_ROUTE",
+   "decisive_blocker": null,
+   "note": "Forward and reverse DNS studies exist as dated files, described as DNS responses for known forward DNS names and IPv4 PTR responses."
+  },
+  "Shodan": {
+   "verdict": "BLOCKED_TEMPORAL",
+   "decisive_blocker": "TEMPORAL",
+   "note": "Global blocker."
+  }
+ },
+ "plausible_apparatus_route_count": 1,
+ "route_shortfall": "SECOND_ROUTE_MISSING",
+ "preregistration_viable": true,
+ "structural_verdict": "NOT_STRUCTURALLY_VIABLE",
+ "failed_hard_conditions": [
+  "product relevance >= MODERATE",
+  "at least TWO apparatus routes are PLAUSIBLE",
+  "the population must be the same type as the arc's target proposition"
+ ],
+ "record_version": "1.0.0",
+ "mission": "1.68 — Product-Relevant Measurement Construct Selection V1",
+ "recorded_at": "2026-09-06",
+ "values_consulted_to_choose_this_construct": 0
+}

@@ -538,6 +538,21 @@ jobs:
       - name: Scanner discovery matches its records
         run: uv run python infrastructure/scripts/render_scanner_discovery.py --check
 
+      # Mission 1.68. A construct pivot, so the gate guards the distinctions the pivot
+      # made it easy to lose: that a SYN response is a transport-layer fact and never an
+      # SSH server however conventionally port 22 is assigned; that an apparatus blocker
+      # is global or construct-specific, so a global temporal architecture survives every
+      # change of predicate while Sonar's Mission 1.67 rejection correctly does not; that
+      # a count of names is never a count of addresses and a distinct-address count is
+      # never a row count; that two apparatuses querying different populations are not two
+      # routes; that one plausible route is one, and a route needs a named apparatus; that
+      # a dated filename is not observation semantics until something says what the date
+      # denotes; that Sonar's TCP and HTTP studies are different resources; and that no
+      # construct was selected without two routes, no pair was chosen, and nothing was
+      # downloaded, executed, registered or measured.
+      - name: Construct selection matches its records
+        run: uv run python infrastructure/scripts/render_construct_selection.py --check
+
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
   # Pinned to the same versions as infrastructure/compose.

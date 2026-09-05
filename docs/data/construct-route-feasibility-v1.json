@@ -1,0 +1,157 @@
+{
+ "$comment": "Mission 1.68 §19 and §43. The reachability matrix. A route is PLAUSIBLE only with a named apparatus and a first-party basis; a plausible route is NOT a qualified apparatus.",
+ "record_version": "1.0.0",
+ "mission": "1.68 — Product-Relevant Measurement Construct Selection V1",
+ "recorded_at": "2026-09-06",
+ "apparatus_columns": [
+  "Censys",
+  "Netlas",
+  "LeakIX",
+  "Shadowserver",
+  "ONYPHE",
+  "Rapid7 Project Sonar",
+  "Shodan"
+ ],
+ "cell_vocabulary": [
+  "PLAUSIBLE_ROUTE",
+  "BLOCKED_TEMPORAL",
+  "BLOCKED_PREDICATE_NOT_RETRIEVABLE",
+  "BLOCKED_FRAME",
+  "BLOCKED_CONFIGURATION",
+  "BLOCKED_LINEAGE",
+  "BLOCKED_ACCESS",
+  "UNRESOLVED",
+  "NOT_APPLICABLE"
+ ],
+ "matrix": {
+  "C0_SSH_IDENTIFICATION": {
+   "Censys": "UNRESOLVED",
+   "Netlas": "PLAUSIBLE_ROUTE",
+   "LeakIX": "BLOCKED_TEMPORAL",
+   "Shadowserver": "BLOCKED_FRAME",
+   "ONYPHE": "UNRESOLVED",
+   "Rapid7 Project Sonar": "BLOCKED_PREDICATE_NOT_RETRIEVABLE",
+   "Shodan": "BLOCKED_TEMPORAL"
+  },
+  "C1_TCP22_SYN_RESPONSIVENESS": {
+   "Censys": "UNRESOLVED",
+   "Netlas": "UNRESOLVED",
+   "LeakIX": "BLOCKED_TEMPORAL",
+   "Shadowserver": "BLOCKED_FRAME",
+   "ONYPHE": "BLOCKED_PREDICATE_NOT_RETRIEVABLE",
+   "Rapid7 Project Sonar": "PLAUSIBLE_ROUTE",
+   "Shodan": "BLOCKED_TEMPORAL"
+  },
+  "C2_HTTP_RESPONSE_TO_IP_ADDRESSED_GET": {
+   "Censys": "UNRESOLVED",
+   "Netlas": "BLOCKED_PREDICATE_NOT_RETRIEVABLE",
+   "LeakIX": "BLOCKED_TEMPORAL",
+   "Shadowserver": "BLOCKED_FRAME",
+   "ONYPHE": "UNRESOLVED",
+   "Rapid7 Project Sonar": "PLAUSIBLE_ROUTE",
+   "Shodan": "BLOCKED_TEMPORAL"
+  },
+  "C3_TLS_CERTIFICATE_OBSERVATION": {
+   "Censys": "BLOCKED_LINEAGE",
+   "Netlas": "UNRESOLVED",
+   "LeakIX": "BLOCKED_TEMPORAL",
+   "Shadowserver": "BLOCKED_FRAME",
+   "ONYPHE": "UNRESOLVED",
+   "Rapid7 Project Sonar": "PLAUSIBLE_ROUTE",
+   "Shodan": "BLOCKED_TEMPORAL"
+  },
+  "C4_DNS_RECORD_CONFIGURATION": {
+   "Censys": "UNRESOLVED",
+   "Netlas": "UNRESOLVED",
+   "LeakIX": "BLOCKED_TEMPORAL",
+   "Shadowserver": "BLOCKED_FRAME",
+   "ONYPHE": "UNRESOLVED",
+   "Rapid7 Project Sonar": "PLAUSIBLE_ROUTE",
+   "Shodan": "BLOCKED_TEMPORAL"
+  }
+ },
+ "decisive_blockers": {
+  "C0_SSH_IDENTIFICATION": {
+   "Censys": "UNRESOLVED_PREDICATE_EXPOSURE",
+   "Netlas": null,
+   "LeakIX": "TEMPORAL",
+   "Shadowserver": "FRAME",
+   "ONYPHE": "TEMPORAL",
+   "Rapid7 Project Sonar": "PREDICATE_NOT_RETRIEVABLE",
+   "Shodan": "TEMPORAL"
+  },
+  "C1_TCP22_SYN_RESPONSIVENESS": {
+   "Censys": "UNRESOLVED_PREDICATE_EXPOSURE",
+   "Netlas": "UNRESOLVED_PREDICATE_EXPOSURE",
+   "LeakIX": "TEMPORAL",
+   "Shadowserver": "FRAME",
+   "ONYPHE": "PREDICATE_NOT_RETRIEVABLE",
+   "Rapid7 Project Sonar": null,
+   "Shodan": "TEMPORAL"
+  },
+  "C2_HTTP_RESPONSE_TO_IP_ADDRESSED_GET": {
+   "Censys": "UNRESOLVED_PREDICATE_EXPOSURE",
+   "Netlas": "REQUEST_IDENTITY_AND_POPULATION",
+   "LeakIX": "TEMPORAL",
+   "Shadowserver": "FRAME",
+   "ONYPHE": "TEMPORAL",
+   "Rapid7 Project Sonar": null,
+   "Shodan": "TEMPORAL"
+  },
+  "C3_TLS_CERTIFICATE_OBSERVATION": {
+   "Censys": "MIXED_LINEAGE",
+   "Netlas": "UNRESOLVED_PREDICATE_EXPOSURE",
+   "LeakIX": "TEMPORAL",
+   "Shadowserver": "FRAME",
+   "ONYPHE": "TEMPORAL",
+   "Rapid7 Project Sonar": null,
+   "Shodan": "TEMPORAL"
+  },
+  "C4_DNS_RECORD_CONFIGURATION": {
+   "Censys": "UNRESOLVED_PREDICATE_EXPOSURE",
+   "Netlas": "UNRESOLVED_PREDICATE_EXPOSURE",
+   "LeakIX": "TEMPORAL",
+   "Shadowserver": "FRAME",
+   "ONYPHE": "TEMPORAL",
+   "Rapid7 Project Sonar": null,
+   "Shodan": "TEMPORAL"
+  }
+ },
+ "plausible_route_counts": {
+  "C0_SSH_IDENTIFICATION": 1,
+  "C1_TCP22_SYN_RESPONSIVENESS": 1,
+  "C2_HTTP_RESPONSE_TO_IP_ADDRESSED_GET": 1,
+  "C3_TLS_CERTIFICATE_OBSERVATION": 1,
+  "C4_DNS_RECORD_CONFIGURATION": 1
+ },
+ "a_plausible_route_is_not_a_qualified_apparatus": {
+  "statement": "Every PLAUSIBLE_ROUTE in this matrix names an apparatus with a first-party basis and unresolved load-bearing questions. None is qualified, and the qualified-apparatus count is unchanged at zero.",
+  "qualified_apparatus_count": 0,
+  "pair_analysis_state": "PAIR_ANALYSIS_NOT_READY"
+ },
+ "global_versus_construct_specific": {
+  "$comment": "§3 and §11. What survives a change of predicate and what does not.",
+  "global_blockers_that_persist_across_every_construct": {
+   "Shodan": "temporal architecture: a real-time-updated database with no documented time or date filter and per-address-only history",
+   "LeakIX": "temporal: indexing, first-detection and last-detection dates, none of which is an observation event",
+   "Shadowserver": "frame: a requester retrieves only their own networks",
+   "Censys Platform surface": "temporal: a LAST-observed service timestamp, and history reached only after a host is found"
+  },
+  "construct_specific_blockers_that_correctly_disappeared": {
+   "Rapid7 Project Sonar": "Mission 1.67 blocked Sonar on A3 because its arbitrary-TCP resource carries no response bytes. That blocker is construct-specific and does NOT apply to a transport-level predicate, which is the whole point of §3. Sonar becomes the strongest single route in the arc under C1.",
+   "Netlas_banner_fidelity": "One of Netlas's ten A8 topics ceases to be load-bearing for a predicate that reads no banner. The other nine are global and survive."
+  },
+  "construct_specific_blockers_that_appeared": {
+   "Netlas_on_web_ports": "Domain-addressed queries, up to 100,000 virtual sites per address, and each redirect hop stored separately are not a problem for a non-web-port construct and are decisive for C2. On every port other than 80 and 443 Netlas sends requests by IP address without domain names."
+  },
+  "elevated_rather_than_removed": {
+   "vantage": "§16. Moving from a banner predicate to a SYN predicate makes vantage MORE important, not less: a port may respond from one scanner region and not another, and with no application response in the record there is nothing to detect the difference with. Recorded as VANTAGE_COMPATIBILITY_REQUIRED rather than folded into reliability."
+  }
+ },
+ "independence_plausibility": {
+  "$comment": "§17. Not a final pair independence analysis, which belongs to a later mission.",
+  "assessment": "INDEPENDENCE_NOT_DISPROVEN",
+  "reasoning": "No construct was rejected on lineage grounds except C3 for Censys, whose certificate collection mixes Certificate Transparency transcription with its own scanning. Sonar, Netlas, Censys and ONYPHE each state that they operate their own scanning infrastructure. Shared TOOLING — several derive from the same family of internet-scanning software — is not shared DATA, and conflating them would be the error in the opposite direction.",
+  "not_established": "That any two of them are independent. That is the next mission's work and no pair was compared here."
+ }
+}

@@ -1,0 +1,68 @@
+{
+ "$comment": "Mission 1.68 §5 and §6. Five serious candidates of a permitted six. A sixth was NOT invented to fill the slot.",
+ "record_version": "1.0.0",
+ "mission": "1.68 — Product-Relevant Measurement Construct Selection V1",
+ "recorded_at": "2026-09-06",
+ "budget": {
+  "maximum_serious_constructs": 6,
+  "serious_constructs": 5,
+  "maximum_additional_first_party_requests": 18,
+  "used": 11,
+  "remaining_unspent": 7,
+  "navigation_searches": 3
+ },
+ "families_considered": [
+  {
+   "family": "C0",
+   "name": "existing SSH identification",
+   "status": "EVALUATED_AS_CONTROL"
+  },
+  {
+   "family": "C1",
+   "name": "TCP port responsiveness",
+   "status": "EVALUATED"
+  },
+  {
+   "family": "C2",
+   "name": "HTTP-level observable predicate",
+   "status": "EVALUATED"
+  },
+  {
+   "family": "C3",
+   "name": "HTTPS / TLS observable predicate",
+   "status": "EVALUATED"
+  },
+  {
+   "family": "C4",
+   "name": "DNS observable predicate",
+   "status": "EVALUATED"
+  },
+  {
+   "family": "C5",
+   "name": "another first-party apparatus-native construct",
+   "status": "NOT_PROPOSED",
+   "why": "§6 says not to invent a construct merely to fill slot 6. Reading the apparatus documentation surfaced no deterministic surface better than the four evaluated, and proposing a fifth family to reach a count would be manufacturing a candidate."
+  }
+ ],
+ "reuse_of_held_evidence": {
+  "$comment": "§24. This mission tests whether accumulated apparatus knowledge reduces research cost.",
+  "facts_taken_from_repository_records_without_re_retrieval": [
+   "Netlas A2, A3, A4, A7 verdicts and their bases (Missions 1.60, 1.61)",
+   "Netlas A8 topic matrix, ten topics (Mission 1.61)",
+   "ONYPHE B2, B3, B4, B5, B6 verdicts (Missions 1.62 to 1.66.2)",
+   "ONYPHE datascan raw-response field semantics and category list",
+   "LeakIX temporal blocker (Mission 1.62)",
+   "Shadowserver per-requester frame blocker (Mission 1.62)",
+   "Shodan temporal blocker and filter-reference absence (Mission 1.67)",
+   "Sonar TCP SYN-only output, HTTP study existence, eligible frame (Mission 1.67)"
+  ],
+  "new_retrievals_and_why_each_was_necessary": [
+   "Netlas scanning technology, twice, for the port list and then for request addressing and virtual-host handling — both construct-specific and unrecorded",
+   "Netlas responses field reference, for whether a no-response open port is representable",
+   "Sonar HTTP wiki, for the exact request and record format",
+   "Sonar sonar.tcp study page, for the file naming and study description",
+   "four Censys pages, because Censys was dropped on a SEARCH surface and §3 requires construct-relative and resource-specific re-evaluation"
+  ],
+  "cost_reduction_observed": "Eleven retrievals answered a seven-apparatus, five-construct matrix. Mission 1.67 spent twenty-four on two apparatuses. The difference is the held records."
+ }
+}
