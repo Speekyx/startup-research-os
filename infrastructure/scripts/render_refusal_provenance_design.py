@@ -64,7 +64,6 @@ SELECTING_OUTCOMES = frozenset(
 REFUSAL_RESULTS = ("NOT_APPLICABLE", "UNKNOWN")
 FORBIDDEN_RESULTS = ("SUPPORTS", "CONTRADICTS", "NEUTRAL")
 RATINGS = frozenset({"STRONG", "MEDIUM", "WEAK", "FAIL"})
-MIGRATION_HEAD = "0034_deterministic_derivation_provenance"
 
 # The twenty audit questions §2 requires a design to answer from fields.
 AUDIT_QUESTION_COUNT = 20
@@ -308,9 +307,15 @@ def validate(record: dict) -> None:  # noqa: C901
             "the identity key whose NULL behaviour decides Option B is no longer the one 0034 "
             "declares"
         )
-    heads = sorted(p.stem for p in MIGRATIONS.glob("00*.sql"))
-    if heads[-1] != MIGRATION_HEAD:
-        raise ValidationError(f"migration head moved to {heads[-1]}; this mission creates none")
+    # NOT a head pin. Mission 1.53 created no migration, which is a fact about
+    # that commit rather than about the directory forever -- and pinning the head
+    # here made Mission 1.54's legitimate 0035 fail an unrelated check. What the
+    # design's argument depends on is that 0034 is still present, because every
+    # claim it makes about `claim_derivations` reasons about what 0034 created.
+    if not MIGRATION_0034.exists():
+        raise ValidationError(
+            f"{MIGRATION_0034.name} is gone; this design reasons about the table it created"
+        )
 
     guard = VALIDATE_CLAIMS.read_text(encoding="utf-8")
     if "OBSERVED" not in guard or "ClaimType" not in guard:

@@ -275,13 +275,20 @@ class TestTheRunLogsStillExpire:
 class TestNothingWasCreated:
     """§46.21 to §46.24."""
 
-    def test_no_refusal_table_exists_yet(self, privileged_conn):
-        """ADR-038 freezes a design. A mission that also built it would have
-        skipped the review this STOP condition exists for."""
+    def test_the_table_the_design_named_is_the_one_that_got_built(self, privileged_conn):
+        """This asserted the table did NOT exist, which was true of Mission 1.53:
+        a design mission that also built its design would have skipped the review
+        its STOP condition exists for. Mission 1.54 built it, and a test
+        asserting a design is never implemented is not one worth keeping.
+
+        What survives is the link between the two: the table that exists carries
+        the exact name ADR-038 froze. A build under a different name would mean
+        the design and the schema had drifted apart with nothing noticing.
+        """
         present = privileged_conn.execute(
             "SELECT to_regclass('research.proposition_evaluation_refusals') IS NOT NULL"
         ).fetchone()[0]
-        assert present is False
+        assert present is True
 
     def test_no_inferred_claim_exists(self, privileged_conn):
         count = privileged_conn.execute(
@@ -298,8 +305,15 @@ class TestNothingWasCreated:
         ).fetchone()[0]
         assert (derivations, thresholds) == (0, 0)
 
-    def test_the_migration_head_did_not_move(self, privileged_conn):
-        head = privileged_conn.execute(
-            "SELECT max(version) FROM core.schema_migrations"
+    def test_the_migration_this_design_reasons_about_is_still_applied(self, privileged_conn):
+        """This pinned the head at 0034, which was true while no migration
+        followed. Pinning a HEAD makes every later mission edit this test for no
+        epistemic reason; what ADR-038's argument actually depends on is that
+        0034 is still in the ledger, because every claim it makes about
+        `claim_derivations` reasons about what 0034 created.
+        """
+        applied = privileged_conn.execute(
+            "SELECT count(*) FROM core.schema_migrations WHERE version = %s",
+            ("0034_deterministic_derivation_provenance",),
         ).fetchone()[0]
-        assert head == "0034_deterministic_derivation_provenance"
+        assert applied == 1

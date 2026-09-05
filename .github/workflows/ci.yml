@@ -338,6 +338,18 @@ jobs:
       # puts a nullable column in the refusal identity key.
       - name: Refusal provenance design matches the evaluator it describes
         run: uv run python infrastructure/scripts/render_refusal_provenance_design.py --check
+      # Mission 1.54 §49. Renders the refusal-provenance schema record and
+      # cross-checks it against MIGRATION 0035 itself: the table it names must be
+      # created there, its columns and their nullability must match, the identity
+      # key must contain every member it claims and every member must be NOT NULL,
+      # `claim_revision_id` / `evidence_id` / a supersession column must be absent,
+      # no foreign key may reach a retention-bounded interpretation run, the three
+      # provenance FKs must be deferrable, RLS must be enabled and forced, and the
+      # reason codes must be the ones the evaluator's `_refuse` calls raise. Every
+      # scan reads the STATEMENTS rather than the comments, because a migration
+      # that explains what it does NOT touch would otherwise fail its own check.
+      - name: Refusal provenance schema matches its migration
+        run: uv run python infrastructure/scripts/render_refusal_provenance_schema.py --check
 
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
