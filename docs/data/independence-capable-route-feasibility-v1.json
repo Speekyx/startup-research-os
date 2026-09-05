@@ -171,5 +171,21 @@
       "treat public availability as permission"
     ],
     "after_that": "Mission 1.59 would freeze subject, metric, time, population and unit, register the PREREGISTERED threshold BEFORE either measurement is acquired, prepare both reliability-review scopes, and stop before network acquisition. That sequence is what produces the first genuinely preregistered deterministic threshold case rather than another POST_HOC held-data pilot."
+  },
+  "selection_superseded": {
+    "$comment": "APPENDED by Mission 1.58, not a rewrite. Everything above records what was true when it was written and stays exactly as it was: the analysis was sound under the rule it was given, and the reservation below was flagged before approval was sought.",
+    "status": "WITHDRAWN_BY_OPERATOR",
+    "withdrawn_on": "2026-09-05",
+    "withdrawn_by": "thibchm",
+    "stated_reason": "the route does not serve the product",
+    "what_changed": "Subject relevance was a PREFERENCE in the Mission 1.57 brief and is now a MANDATORY gate. The selection is withdrawn because the rule changed, not because the reasoning was wrong.",
+    "superseded_by": "docs/data/apparatus-search-broadened-v1.json",
+    "what_survives_unchanged": [
+      "the structural finding about where measurement occurs",
+      "the negative controls",
+      "the independence proof standard",
+      "the FRAME_INSIDE_THE_DEFINITION trap",
+      "the value-inspection rule"
+    ]
   }
 }
