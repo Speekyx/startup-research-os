@@ -55,8 +55,18 @@ SELECTED_CONSTRUCT = DATA / "selected-construct-v1.json"
 APPARATUS_CONTRACT = DATA / "observation-addressable-apparatus-contract-v1.json"
 DECISION_V1 = DATA / "quantity-class-selection-decision-v1.json"
 
-ORDER = [BASELINE, POPULATION, CC, HA, CONTRACT_COMPAT, TEMPORAL, RIGHTS, FETCHER,
-         QUALIFICATION, DECISION]
+ORDER = [
+    BASELINE,
+    POPULATION,
+    CC,
+    HA,
+    CONTRACT_COMPAT,
+    TEMPORAL,
+    RIGHTS,
+    FETCHER,
+    QUALIFICATION,
+    DECISION,
+]
 
 RENDERED = {
     DECISION: DATA / "mission-1.70-web-route-qualification-v1.md",
@@ -242,7 +252,10 @@ def _check_coverage_classification(population: dict, cc: dict, ha: dict) -> None
 
     outcome = population["outcome_dependence"]
     for route in ("COMMON_CRAWL", "HTTP_ARCHIVE"):
-        if outcome[route] not in {"COVERAGE_MAY_BE_OUTCOME_DEPENDENT", "COVERAGE_NOT_OUTCOME_DEPENDENT"}:
+        if outcome[route] not in {
+            "COVERAGE_MAY_BE_OUTCOME_DEPENDENT",
+            "COVERAGE_NOT_OUTCOME_DEPENDENT",
+        }:
             raise ValidationError(f"{route} outcome dependence is not classified")
     if outcome["established_as_outcome_dependent"] is not False:
         raise ValidationError(
@@ -300,7 +313,10 @@ def _check_population_decision(population: dict) -> None:
         raise ValidationError("the missingness-preserving strategy was not considered seriously")
 
     # §9. Denominators.
-    if population["denominator_discipline"]["different_denominators_called_the_same_proposition"] is not False:
+    if (
+        population["denominator_discipline"]["different_denominators_called_the_same_proposition"]
+        is not False
+    ):
         raise ValidationError("different denominators were called the same proposition")
 
     # §10. Ordering is necessary and not sufficient.
@@ -373,7 +389,11 @@ def _check_routes(cc: dict, ha: dict, qualification: dict) -> None:
     for name, entry in routes.items():
         if entry["status"] not in ROUTE_STATUSES:
             raise ValidationError(f"{name} carries an unknown route status")
-        if entry["status"] != "ROUTE_QUALIFIED_FOR_CLASS" and not entry.get("unresolved") and name != "SROS_BOUNDED_HTTP_FETCHER":
+        if (
+            entry["status"] != "ROUTE_QUALIFIED_FOR_CLASS"
+            and not entry.get("unresolved")
+            and name != "SROS_BOUNDED_HTTP_FETCHER"
+        ):
             raise ValidationError(f"{name} is not qualified and lists nothing unresolved")
     if qualification["route_status_meaning"]["neither_route_reached_it"] is not (
         all(r["status"] != "ROUTE_QUALIFIED_FOR_CLASS" for r in routes.values())
@@ -393,7 +413,9 @@ def _check_compatibility(compat: dict) -> None:
             raise ValidationError(f"{entry['field']} carries an unknown compatibility class")
         tally[entry["classification"]] += 1
     if tally != compat["tally"]:
-        raise ValidationError(f"the recorded tally {compat['tally']} does not match the table {tally}")
+        raise ValidationError(
+            f"the recorded tally {compat['tally']} does not match the table {tally}"
+        )
     if compat["overall"] == "REQUEST_CONTRACT_COMPATIBILITY_ESTABLISHED" and (
         tally["DIFFERENT_AND_LOAD_BEARING"] or tally["UNKNOWN"]
     ):
@@ -412,7 +434,10 @@ def _check_compatibility(compat: dict) -> None:
             "a shared world-state family is asserted unconditionally while the request "
             "contract is unestablished"
         )
-    if family["client_relative_propositions_are_allowed_if_explicit"]["equivalence_documented"] is True:
+    if (
+        family["client_relative_propositions_are_allowed_if_explicit"]["equivalence_documented"]
+        is True
+    ):
         raise ValidationError("request-contract equivalence is claimed as documented")
 
 
@@ -433,9 +458,11 @@ def _check_rights(rights: dict) -> None:
         }:
             raise ValidationError(f"{route} rights classification is not one of the four")
         # A recommendation to seek advice is not a grant.
-        if entry["classification"] == "ROUTE_RIGHTS_PLAUSIBLE" and entry.get(
-            "commercial_use"
-        ) in {"NOT_GRANTED_AND_NOT_PROHIBITED", "NOT_STATED", None}:
+        if entry["classification"] == "ROUTE_RIGHTS_PLAUSIBLE" and entry.get("commercial_use") in {
+            "NOT_GRANTED_AND_NOT_PROHIBITED",
+            "NOT_STATED",
+            None,
+        }:
             raise ValidationError(
                 f"{route} rights are called plausible while commercial use is not granted"
             )
@@ -524,9 +551,10 @@ def _check_decision(decision: dict, qualification: dict, population: dict) -> No
         raise ValidationError(f"the primary outcome {outcome!r} is not defined")
     if outcome == "FIXED_CORPUS_WEB_MEASUREMENT_CLASS_SELECTED" and selected is None:
         raise ValidationError("the selecting outcome was reported with nothing selected")
-    if outcome == "FIXED_CORPUS_WEB_REQUIRES_OPERATOR_CONTROLLED_ROUTE" and population[
-        "decision"
-    ] != "EXTERNALLY_FROZEN_POPULATION_REQUIRES_OPERATOR_FETCHER":
+    if (
+        outcome == "FIXED_CORPUS_WEB_REQUIRES_OPERATOR_CONTROLLED_ROUTE"
+        and population["decision"] != "EXTERNALLY_FROZEN_POPULATION_REQUIRES_OPERATOR_FETCHER"
+    ):
         raise ValidationError(
             "the operator-route outcome was reported without the matching population decision"
         )
@@ -625,7 +653,9 @@ def _check_no_predicate_or_reliability(records: list[dict], baseline: dict, deci
 
 def validate() -> list[dict]:
     records = [_load(path) for path in ORDER]
-    baseline, population, cc, ha, compat, temporal, rights, fetcher, qualification, decision = records
+    baseline, population, cc, ha, compat, temporal, rights, fetcher, qualification, decision = (
+        records
+    )
 
     _check_scope(baseline)
     _check_registry(baseline, decision)
@@ -696,7 +726,9 @@ def render_population(review: dict) -> str:
         "|---|---|---|",
     ]
     for route in ("COMMON_CRAWL", "HTTP_ARCHIVE"):
-        fields = ", ".join(f"`{f}`" for f in boundary["measurement_fields_present_in_coverage_surfaces"][route])
+        fields = ", ".join(
+            f"`{f}`" for f in boundary["measurement_fields_present_in_coverage_surfaces"][route]
+        )
         lines.append(f"| {route} | `{boundary[route]}` | {fields} |")
 
     lines += ["", "## The five strategies", "", "| strategy | verdict |", "|---|---|"]

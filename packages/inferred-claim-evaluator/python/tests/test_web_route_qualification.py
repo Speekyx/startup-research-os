@@ -69,8 +69,18 @@ def entries(block: dict):
 
 class TestRecordsExist(unittest.TestCase):
     def test_every_mission_record_exists(self):
-        for path in (BASELINE, POPULATION, CC, HA, COMPAT, TEMPORAL, RIGHTS, FETCHER,
-                     QUALIFICATION, DECISION):
+        for path in (
+            BASELINE,
+            POPULATION,
+            CC,
+            HA,
+            COMPAT,
+            TEMPORAL,
+            RIGHTS,
+            FETCHER,
+            QUALIFICATION,
+            DECISION,
+        ):
             self.assertTrue(path.exists(), path.name)
 
     def test_the_renderer_exists(self):
@@ -94,9 +104,7 @@ class TestScope(unittest.TestCase):
         self.baseline = load(BASELINE)
 
     def test_the_scope_is_q1_only(self):
-        self.assertEqual(
-            self.baseline["scope"]["in_scope_class"], "FIXED_CORPUS_HTTP_OBSERVATION"
-        )
+        self.assertEqual(self.baseline["scope"]["in_scope_class"], "FIXED_CORPUS_HTTP_OBSERVATION")
 
     def test_no_broad_class_discovery(self):
         self.assertIs(self.baseline["scope"]["broad_class_discovery_performed"], False)
@@ -132,8 +140,12 @@ class TestPopulationConcepts(unittest.TestCase):
 
     def test_all_four_concepts_are_defined(self):
         concepts = self.review["the_four_population_concepts"]
-        for name in ("TARGET_POPULATION", "ATTEMPTED_POPULATION", "OBSERVABLE_POPULATION",
-                     "SUCCESSFUL_OBSERVATION_SET"):
+        for name in (
+            "TARGET_POPULATION",
+            "ATTEMPTED_POPULATION",
+            "OBSERVABLE_POPULATION",
+            "SUCCESSFUL_OBSERVATION_SET",
+        ):
             self.assertTrue(str(concepts[name]).strip(), name)
 
     def test_the_concepts_are_not_used_interchangeably(self):
@@ -182,12 +194,14 @@ class TestMeasurementInsideCoverage(unittest.TestCase):
 
     def test_common_crawl_coverage_carries_a_status_field(self):
         fields = self.review["metadata_value_boundary"][
-            "measurement_fields_present_in_coverage_surfaces"]["COMMON_CRAWL"]
+            "measurement_fields_present_in_coverage_surfaces"
+        ]["COMMON_CRAWL"]
         self.assertTrue({"status", "fetch_status"} & set(fields))
 
     def test_http_archive_coverage_carries_a_measurement_field(self):
         fields = self.review["metadata_value_boundary"][
-            "measurement_fields_present_in_coverage_surfaces"]["HTTP_ARCHIVE"]
+            "measurement_fields_present_in_coverage_surfaces"
+        ]["HTTP_ARCHIVE"]
         self.assertTrue(fields)
 
     def test_the_common_crawl_index_status_is_the_fetch_status(self):
@@ -209,11 +223,13 @@ class TestPopulationDecision(unittest.TestCase):
 
     def test_all_five_strategies_were_evaluated_with_reasons(self):
         strategies = dict(entries(self.review["strategies_evaluated"]))
-        for name in ("P1_provider_native_intersection",
-                     "P2_frozen_C_plus_planned_target_coverage",
-                     "P3_frozen_C_plus_attempted_coverage",
-                     "P4_frozen_C_plus_realized_successful_coverage",
-                     "P5_missingness_preserving"):
+        for name in (
+            "P1_provider_native_intersection",
+            "P2_frozen_C_plus_planned_target_coverage",
+            "P3_frozen_C_plus_attempted_coverage",
+            "P4_frozen_C_plus_realized_successful_coverage",
+            "P5_missingness_preserving",
+        ):
             self.assertIn(name, strategies)
             self.assertTrue(str(strategies[name]["why"]).strip(), name)
 
@@ -227,7 +243,9 @@ class TestPopulationDecision(unittest.TestCase):
     def test_the_missingness_preserving_strategy_was_taken_seriously(self):
         self.assertIs(
             self.review["strategies_evaluated"]["P5_missingness_preserving"][
-                "considered_seriously"], True
+                "considered_seriously"
+            ],
+            True,
         )
 
     def test_the_a_conditions_are_not_satisfied(self):
@@ -235,7 +253,8 @@ class TestPopulationDecision(unittest.TestCase):
 
     def test_the_a_conditions_carry_unknowns(self):
         unknown = [
-            k for k, v in entries(self.review["conditions_for_A"])
+            k
+            for k, v in entries(self.review["conditions_for_A"])
             if isinstance(v, str) and v == "UNKNOWN"
         ]
         self.assertTrue(unknown)
@@ -249,7 +268,9 @@ class TestPopulationDecision(unittest.TestCase):
     def test_two_denominators_are_two_propositions(self):
         self.assertIs(
             self.review["denominator_discipline"][
-                "different_denominators_called_the_same_proposition"], False
+                "different_denominators_called_the_same_proposition"
+            ],
+            False,
         )
 
     def test_the_review_states_what_it_does_not_establish(self):
@@ -271,7 +292,8 @@ class TestCommonCrawlRoute(unittest.TestCase):
     def test_a_search_summary_offered_an_answer_and_was_not_used(self):
         """The Mission 1.63 guard, met again and again refused."""
         summary = self.record["url_selection"][
-            "a_search_summary_offered_an_answer_and_it_was_not_used"]
+            "a_search_summary_offered_an_answer_and_it_was_not_used"
+        ]
         self.assertIs(summary["used"], False)
 
     def test_the_corpus_is_not_called_complete(self):
@@ -303,7 +325,9 @@ class TestHttpArchiveRoute(unittest.TestCase):
         self.assertIs(self.record["redirects"]["predicate_binding_chosen"], False)
 
     def test_a_browser_load_is_not_a_bot_fetch(self):
-        self.assertIs(self.record["browser_semantics"]["treated_as_identical_to_a_bot_fetch"], False)
+        self.assertIs(
+            self.record["browser_semantics"]["treated_as_identical_to_a_bot_fetch"], False
+        )
 
     def test_the_pages_table_carries_no_failure_column(self):
         """One row per page TESTED, and nothing saying whether the test succeeded."""
@@ -341,8 +365,12 @@ class TestRequestContractCompatibility(unittest.TestCase):
         self.assertTrue(self.record["fields"])
 
     def test_the_tally_matches_the_table(self):
-        counted = {"MATCHABLE": 0, "DIFFERENT_BUT_NON_LOAD_BEARING": 0,
-                   "DIFFERENT_AND_LOAD_BEARING": 0, "UNKNOWN": 0}
+        counted = {
+            "MATCHABLE": 0,
+            "DIFFERENT_BUT_NON_LOAD_BEARING": 0,
+            "DIFFERENT_AND_LOAD_BEARING": 0,
+            "UNKNOWN": 0,
+        }
         for entry in self.record["fields"]:
             counted[entry["classification"]] += 1
         self.assertEqual(counted, self.record["tally"])
@@ -365,7 +393,8 @@ class TestRequestContractCompatibility(unittest.TestCase):
     def test_request_equivalence_is_not_claimed_as_documented(self):
         self.assertIs(
             self.record["same_world_state_family"][
-                "client_relative_propositions_are_allowed_if_explicit"]["equivalence_documented"],
+                "client_relative_propositions_are_allowed_if_explicit"
+            ]["equivalence_documented"],
             False,
         )
 
@@ -477,9 +506,7 @@ class TestQualification(unittest.TestCase):
         self.assertTrue(str(self.record["q1_strategic_conditions"]["load_bearing_failure"]).strip())
 
     def test_q1_status_is_unchanged_from_mission_1_69(self):
-        self.assertEqual(
-            self.record["q1_status"], "PROMISING_BUT_ROUTE_QUALIFICATION_REQUIRED"
-        )
+        self.assertEqual(self.record["q1_status"], "PROMISING_BUT_ROUTE_QUALIFICATION_REQUIRED")
         self.assertIs(self.record["q1_status_changed_this_mission"], False)
 
     def test_the_record_lists_what_it_resolved_and_what_it_did_not(self):
@@ -526,16 +553,38 @@ class TestDecision(unittest.TestCase):
 
     def test_every_hard_zero_counter_is_zero(self):
         accounting = self.record["mission_accounting"]
-        for counter in ("TARGET_VALUE_EXPOSURES", "MEASUREMENT_VALUES_RETRIEVED", "CRAWLS",
-                        "TARGET_HTTP_REQUESTS", "HTTP_MEASUREMENT_REQUESTS",
-                        "COMMON_CRAWL_INDEX_QUERIES", "WARC_WAT_WET_DOWNLOADS",
-                        "BIGQUERY_EXECUTIONS", "HAR_DOWNLOADS", "TRIALS", "PURCHASES",
-                        "ACCOUNTS_CREATED", "CREDENTIAL_READS", "MAILBOX_SEARCHES",
-                        "ENQUIRIES_SENT", "SOURCES_REGISTERED", "GOVERNANCE_APPROVALS",
-                        "THRESHOLDS_REGISTERED", "CLAIMS_CREATED", "EVIDENCE_CREATED",
-                        "INDEPENDENCE_GROUPS_CREATED", "RELIABILITY_VALUES_ASSIGNED", "SCORES",
-                        "MODEL_CALLS", "EMBEDDINGS", "MIGRATIONS", "CONSTRUCTS_FROZEN",
-                        "PREDICATES_CHOSEN", "PAIRS_SELECTED", "CRAWLERS_IMPLEMENTED"):
+        for counter in (
+            "TARGET_VALUE_EXPOSURES",
+            "MEASUREMENT_VALUES_RETRIEVED",
+            "CRAWLS",
+            "TARGET_HTTP_REQUESTS",
+            "HTTP_MEASUREMENT_REQUESTS",
+            "COMMON_CRAWL_INDEX_QUERIES",
+            "WARC_WAT_WET_DOWNLOADS",
+            "BIGQUERY_EXECUTIONS",
+            "HAR_DOWNLOADS",
+            "TRIALS",
+            "PURCHASES",
+            "ACCOUNTS_CREATED",
+            "CREDENTIAL_READS",
+            "MAILBOX_SEARCHES",
+            "ENQUIRIES_SENT",
+            "SOURCES_REGISTERED",
+            "GOVERNANCE_APPROVALS",
+            "THRESHOLDS_REGISTERED",
+            "CLAIMS_CREATED",
+            "EVIDENCE_CREATED",
+            "INDEPENDENCE_GROUPS_CREATED",
+            "RELIABILITY_VALUES_ASSIGNED",
+            "SCORES",
+            "MODEL_CALLS",
+            "EMBEDDINGS",
+            "MIGRATIONS",
+            "CONSTRUCTS_FROZEN",
+            "PREDICATES_CHOSEN",
+            "PAIRS_SELECTED",
+            "CRAWLERS_IMPLEMENTED",
+        ):
             self.assertEqual(accounting[counter], 0, counter)
 
     def test_the_budget_was_respected(self):
@@ -547,10 +596,18 @@ class TestDecision(unittest.TestCase):
     def test_onyphe_and_netlas_did_not_move(self):
         parallel = self.record["parallel_state_untouched"]
         self.assertEqual(parallel["onyphe_response_status"], "NOT_CHECKED_AFTER_DISPATCH")
-        for key in ("onyphe_mailbox_searched", "onyphe_gmail_polled", "onyphe_reply_read",
-                    "onyphe_follow_up_sent", "onyphe_state_changed", "netlas_address_decoded",
-                    "netlas_address_guessed", "netlas_enquiry_sent", "netlas_state_changed",
-                    "scanner_arc_reopened"):
+        for key in (
+            "onyphe_mailbox_searched",
+            "onyphe_gmail_polled",
+            "onyphe_reply_read",
+            "onyphe_follow_up_sent",
+            "onyphe_state_changed",
+            "netlas_address_decoded",
+            "netlas_address_guessed",
+            "netlas_enquiry_sent",
+            "netlas_state_changed",
+            "scanner_arc_reopened",
+        ):
             self.assertIs(parallel[key], False, key)
 
     def test_no_canonical_mutation(self):
@@ -584,15 +641,35 @@ class TestMission169IsNotRewritten(unittest.TestCase):
 
 class TestNothingWasMeasured(unittest.TestCase):
     def test_no_record_froze_an_exact_predicate(self):
-        for path in (BASELINE, POPULATION, CC, HA, COMPAT, TEMPORAL, RIGHTS, FETCHER,
-                     QUALIFICATION, DECISION):
+        for path in (
+            BASELINE,
+            POPULATION,
+            CC,
+            HA,
+            COMPAT,
+            TEMPORAL,
+            RIGHTS,
+            FETCHER,
+            QUALIFICATION,
+            DECISION,
+        ):
             record = load(path)
             if "exact_predicate_frozen" in record:
                 self.assertIs(record["exact_predicate_frozen"], False, path.name)
 
     def test_no_record_retrieved_target_values(self):
-        for path in (BASELINE, POPULATION, CC, HA, COMPAT, TEMPORAL, RIGHTS, FETCHER,
-                     QUALIFICATION, DECISION):
+        for path in (
+            BASELINE,
+            POPULATION,
+            CC,
+            HA,
+            COMPAT,
+            TEMPORAL,
+            RIGHTS,
+            FETCHER,
+            QUALIFICATION,
+            DECISION,
+        ):
             record = load(path)
             if "target_values_retrieved" in record:
                 self.assertEqual(record["target_values_retrieved"], 0, path.name)
