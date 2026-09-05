@@ -1,0 +1,109 @@
+{
+  "$comment": "Mission 1.64. The precondition, the approved-enquiry hash verification under three hashing boundaries, and the retrieval ledger.",
+  "record_version": "1.0.0",
+  "mission": "1.64 — Anchor Enquiry Dispatch & ONYPHE Residual Closure V1",
+  "recorded_at": "2026-09-05",
+
+  "repository_precondition": {
+    "mission_1_63_merged": true,
+    "merge_commit": "2430a02",
+    "pull_request": "https://github.com/Speekyx/startup-research-os/pull/106",
+    "local_main_equals_origin_main": true,
+    "working_tree_clean_at_start": true,
+    "branch": "sprint-1/mission-1.64",
+    "migration_head": "0035_refusal_provenance",
+    "verified_from_git_not_from_prompt": true
+  },
+
+  "canonical_baseline": {
+    "raw_records": 325,
+    "normalized_records": 325,
+    "signals": 33,
+    "claims": 44,
+    "claim_revisions": 45,
+    "evidence": 58,
+    "inferred_claims": 1,
+    "threshold_registrations": 1,
+    "claim_derivations": 1,
+    "proposition_evaluation_refusals": 0,
+    "reliability_assessments_current": 4,
+    "independence_groups": 0,
+    "evidence_directions": {"SUPPORTS": 57, "CONTRADICTS": 1},
+    "claims_carrying_both_directions": 0,
+    "opportunities": 1,
+    "opportunity_revisions": 1,
+    "opportunity_evidence_links": 7,
+    "registered_sources": 29,
+    "embeddings": 0,
+    "scoring_scores_table_exists": false,
+    "reference_profile": "UNCALIBRATED",
+    "problem_family": "PARKED",
+    "drift_from_mission_1_63": "none"
+  },
+
+  "approved_enquiry_hash_verification": {
+    "$comment": "Section A1. The hashing boundary is documented rather than assumed, because a hash whose boundary nobody wrote down is a hash two readers can disagree about.",
+    "artifact": "docs/data/anchor-technical-lineage-enquiry-v1.md",
+    "approved_sha256": "310acf288244453cd0a928197386cbf8311ded278e4dcdd22b70412807a049c4",
+    "operator_approval_string": "APPROVE MISSION 1.61 ENQUIRY 310acf288244453cd0a928197386cbf8311ded278e4dcdd22b70412807a049c4",
+    "approval_is_immutable": true,
+    "boundaries_tested": [
+      {"boundary": "raw bytes as stored on disk", "digest": "310acf288244453cd0a928197386cbf8311ded278e4dcdd22b70412807a049c4", "matches": true},
+      {"boundary": "decoded as UTF-8 and re-encoded", "digest": "310acf288244453cd0a928197386cbf8311ded278e4dcdd22b70412807a049c4", "matches": true},
+      {"boundary": "CRLF normalised to LF", "digest": "310acf288244453cd0a928197386cbf8311ded278e4dcdd22b70412807a049c4", "matches": true}
+    ],
+    "why_all_three_agree": "The file is stored LF-only, so the three boundaries collapse to the same byte sequence. That is worth recording rather than assuming: on a Windows working tree a CRLF rewrite would have split them, and a mission that had tested only one boundary would not have known which one the approval named.",
+    "verdict": "HASH_VERIFIED",
+    "bytes_changed": false,
+    "renderer_rewrote_it": false,
+    "subject_or_body_edited": false,
+    "recipient_added_inside_hashed_body": false,
+    "the_recipient_is_outside_the_frozen_range": "The frozen document records the recipient as TO_BE_SUPPLIED_BY_OPERATOR. Writing a real address into it would change its bytes and void the approval, so the address travels in the dispatch packet beside the document rather than inside it."
+  },
+
+  "documentation_ledger": {
+    "$comment": "Part B only. Three targets, six retrievals.",
+    "used": 6,
+    "requests": [
+      {"n": 1, "target": "B3 port set", "url": "https://search.onyphe.io/docs/dorkpedia/scanned-ports-list", "sought": "whether a datascan category section exists beside the ctiscan one", "usable": true},
+      {"n": 2, "target": "B1 record lifecycle", "url": "https://search.onyphe.io/docs/getting-started", "sought": "what a single result represents and whether repeated scans append or update", "usable": true},
+      {"n": 3, "target": "B1 record lifecycle", "url": "https://search.onyphe.io/docs/general-apis/simple", "sought": "how many results are returned per asset and whether they span time", "usable": true},
+      {"n": 4, "target": "B5 retention", "url": "https://search.onyphe.io/docs/data-models/datascan-vulnscan-riskscan", "sought": "per-field retention annotations naming which fields are dropped after thirty days", "usable": true},
+      {"n": 5, "target": "B1 record lifecycle", "url": "https://search.onyphe.io/docs/onyphe-query-language", "sought": "the complete function list, and any de-duplication or latest-only function", "usable": true},
+      {"n": 6, "target": "B1 record lifecycle", "url": "https://search.onyphe.io/docs/general-apis/summary", "sought": "whether a summary aggregates several observations per asset", "usable": true}
+    ]
+  },
+
+  "request_accounting": {
+    "FIRST_PARTY_DOCUMENT_REQUESTS": 6,
+    "MEASUREMENT_QUERIES_EXECUTED": 0,
+    "TARGET_COUNTS_FETCHED": 0,
+    "HOST_RECORDS_FETCHED": 0,
+    "TARGET_BANNERS_FETCHED": 0,
+    "FACETS_FETCHED": 0,
+    "MEASUREMENT_DOWNLOADS": 0,
+    "TRIALS_STARTED": 0,
+    "PURCHASES": 0,
+    "OUTBOUND_ENQUIRIES_SENT": 0,
+    "the_documentation_carried_examples": "The API pages print illustrative outputs including example timestamps. They were read as field documentation and used for no analytical purpose, and no query was issued to obtain any."
+  },
+
+  "canonical_mutations": {
+    "sources_registered": 0,
+    "governance_reviews_created": 0,
+    "threshold_registrations_created": 0,
+    "claims_created": 0,
+    "evidence_created": 0,
+    "reliability_assessments_created": 0,
+    "reliability_values_assigned": 0,
+    "independence_groups_created": 0,
+    "scores_created": 0,
+    "opportunity_changes": 0,
+    "mission_1_56_claim_modified": false,
+    "model_calls": 0,
+    "model_cost_usd": 0.0,
+    "embeddings": 0,
+    "enquiry_v1_edited": false,
+    "enquiries_sent": 0
+  }
+}

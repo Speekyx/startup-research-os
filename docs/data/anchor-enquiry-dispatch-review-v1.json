@@ -1,0 +1,113 @@
+{
+  "$comment": "Mission 1.64 Part A. The approved enquiry is verified, still current, and NOT sent, because the precondition it depends on is an operator action nobody has taken.",
+  "record_version": "1.0.0",
+  "mission": "1.64 — Anchor Enquiry Dispatch & ONYPHE Residual Closure V1",
+  "recorded_at": "2026-09-05",
+
+  "approval": {
+    "artifact": "docs/data/anchor-technical-lineage-enquiry-v1.md",
+    "version": "v1",
+    "approved_sha256": "310acf288244453cd0a928197386cbf8311ded278e4dcdd22b70412807a049c4",
+    "operator_approval_string": "APPROVE MISSION 1.61 ENQUIRY 310acf288244453cd0a928197386cbf8311ded278e4dcdd22b70412807a049c4",
+    "approval_issued_by": "the operator, against Mission 1.61's frozen document",
+    "hash_reverified_this_mission": true,
+    "hash_verdict": "HASH_VERIFIED",
+    "what_the_approval_authorises": "sending that text, unchanged, to a first-party channel the operator supplies",
+    "what_it_does_not_authorise": [
+      "choosing a recipient on the operator's behalf",
+      "sending from the operator's own mail account without a separate explicit instruction",
+      "editing the text",
+      "sending more than once"
+    ]
+  },
+
+  "a2_the_approved_message_is_still_current": {
+    "$comment": "Section A2. A mission must not silently make an approved message obsolete before dispatching it.",
+    "questions_reassessed_against_mission_1_63_state": 7,
+    "still_unresolved": 7,
+    "answered_by_new_anchor_evidence": 0,
+    "verdict": "STILL_CURRENT",
+    "superseded_before_send": false,
+    "why_the_onyphe_work_does_not_touch_it": "All three Part B targets are questions about the candidate apparatus. The enquiry is addressed to the anchor. A question is only the same question when it is about the same apparatus, and none of these are.",
+    "no_new_anchor_evidence_was_read_this_mission": true
+  },
+
+  "a3_recipient": {
+    "$comment": "Sections A3, and the contact-channel precondition.",
+    "contact_page": "https://netlas.io/legal/",
+    "contact_page_exists": true,
+    "exact_address": null,
+    "supplied_by_operator": false,
+    "supplied_at": null,
+    "first_party_display_basis": null,
+    "status": "FIRST_PARTY_CONTACT_CHANNEL_NOT_ESTABLISHED",
+    "why": "The address on that page is served through an email-obfuscation mechanism, so automated retrieval returns a placeholder rather than the literal string. Missions 1.62 and 1.63 both recorded this, and no operator-supplied address has been received.",
+    "address_invented": false,
+    "address_inferred": false,
+    "conventional_mailboxes_considered_and_refused": ["a support mailbox", "an info mailbox", "a hello mailbox", "a security mailbox", "a generic contact mailbox"],
+    "why_refused": "Section 25 of the previous brief and the contact-channel precondition of this one both forbid inferring a mailbox from convention. A guessed address is a fabricated fact about a provider, and sending to one would put an unapproved recipient beside an approved message.",
+    "the_operator_action_that_resolves_it": "Open that page in a browser, where the obfuscated address renders, and supply the exact displayed string.",
+    "no_attempt_was_made_to_decode_the_obfuscation": true,
+    "why_not": "Defeating an anti-scraping mechanism to obtain an address is circumvention. The address is published for people to read, and a person reading it is the route the publisher intended."
+  },
+
+  "a4_dispatch_method": {
+    "$comment": "Section A4. Assessed, and moot until a recipient exists.",
+    "authorised_outbound_mail_mechanism_in_this_repository": "NONE",
+    "what_was_checked": "The repository holds no configured outbound mail sender, no mail transport in the acquisition layer, and no governance record authorising outbound correspondence from this deployment.",
+    "credentials_written": 0,
+    "webmail_scraped": false,
+    "browser_login_automated": false,
+    "provider_api_credentials_invented": false,
+    "a_mail_capable_connector_exists_in_the_environment": true,
+    "was_it_used": false,
+    "why_not": [
+      "The precondition is unmet: there is no verified recipient, so there is nothing to address.",
+      "Sending mail from the operator's own account is an outward-facing action on their behalf. The operator approved the TEXT of the enquiry in Mission 1.61; they have not asked for it to be sent from their account, and an approval of content is not an approval of a channel.",
+      "Section A4 permits only an ALREADY-AUTHORISED outbound mechanism. A connector being present in the environment is not the same as an outbound route this repository holds a standing authorisation to use for research correspondence."
+    ],
+    "conclusion": "Dispatch is blocked upstream of the mechanism question. Even with a mechanism, the recipient is missing; even with a recipient, sending from the operator's account needs the operator to say so."
+  },
+
+  "a5_dispatch": {
+    "sent": false,
+    "sent_at": null,
+    "dispatch_count": 0,
+    "channel": null,
+    "message_id": null,
+    "follow_up_scheduled": false,
+    "retries": 0,
+    "cc_or_bcc": null,
+    "status": "WAITING_FOR_OPERATOR_SUPPLIED_FIRST_PARTY_CONTACT"
+  },
+
+  "a7_sending_would_not_have_answered_anything": {
+    "$comment": "Section A7, recorded even though nothing was sent, because it governs the mission that does send it.",
+    "rule": "A dispatched enquiry is not an answered question. A8 stays PARTIAL until a provider response is received and separately reviewed.",
+    "anchor_a8_before": "PARTIAL",
+    "anchor_a8_after": "PARTIAL",
+    "anchor_gate_changed_this_mission": false
+  },
+
+  "provider_response_intake_boundary": {
+    "$comment": "The intake contract, frozen now so the mission that receives a reply does not invent one under time pressure.",
+    "response_received": false,
+    "if_a_response_arrives": {
+      "freeze_first": ["sender", "sender role if stated", "received_at", "message id", "the exact answer text", "which frozen question it answers"],
+      "then": "a separate review step decides what, if anything, each answer closes",
+      "ambiguous_answer": "the topic stays UNKNOWN or PARTIAL",
+      "marketing_language_without_operational_detail": "no promotion. A confident sentence about quality is not a fact about sampling, retries, missingness or vantage.",
+      "automatic_promotion_to_PASS": "forbidden",
+      "where_it_is_stored": "as methodological evidence of the OPERATOR_CORRESPONDENCE kind, never as a research observation in the canonical tables",
+      "licensing_content": "recorded as FUTURE_GOVERNANCE_INPUT and nothing more; no governance review is started"
+    }
+  },
+
+  "verdict": {
+    "result": "ANCHOR_CONTACT_CHANNEL_STILL_NOT_ESTABLISHED",
+    "enquiry_state": "APPROVED, HASH_VERIFIED, STILL_CURRENT, UNSENT",
+    "blocking_precondition": "an exact first-party contact address, readable by a person on the published legal page and not resolvable by automated retrieval",
+    "this_is_not_a_repository_defect": "Everything the repository can do is done. The document is frozen, approved, hash-verified and unchanged, and the one missing input is a string only a human viewing the page can supply.",
+    "why_the_mission_did_not_stop_here": "The contact-channel precondition blocks dispatch and blocks nothing else. The three candidate documentation targets were completed, which is what the brief permits and what makes the mission worth running while the channel is open."
+  }
+}

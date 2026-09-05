@@ -1,0 +1,91 @@
+{
+  "$comment": "Mission 1.64 B1 and B2. The record lifecycle question, asked for the third mission running, and answered with materially better evidence that still does not settle it.",
+  "record_version": "1.0.0",
+  "mission": "1.64 — Anchor Enquiry Dispatch & ONYPHE Residual Closure V1",
+  "recorded_at": "2026-09-05",
+  "apparatus": "ONYPHE",
+
+  "the_question": {
+    "asked": "Does each scan create an observation record, or does one service record get updated in place?",
+    "why_it_decides_b2": "If the queryable timestamp sits on a maintained record, a window filter selects services whose LATEST collection fell inside the window. A service observed during the window AND again afterwards then carries a later timestamp and drops out, so a windowed count systematically under-counts exactly the hosts that persist.",
+    "asked_in": ["Mission 1.62", "Mission 1.63", "Mission 1.64"]
+  },
+
+  "new_first_party_evidence": [
+    {
+      "source": "https://search.onyphe.io/docs/onyphe-query-language",
+      "verbatim": "Query data collected some hours ago",
+      "field": "the -hourago function's documented description",
+      "what_it_supports": "The time-range functions are described in terms of data COLLECTION, which is observation-side language rather than record-modification language.",
+      "why_it_is_not_decisive": "A maintained record also has a collection time; what advances is which collection it holds. The sentence describes what is filtered, not how many records exist per service.",
+      "note": "This is close to the sentence Mission 1.63 went looking for and could not find. It is weaker than the sentence that mission's first retrieval summary invented: it says data collected, and does not contrast collection time with record modification."
+    },
+    {
+      "source": "https://search.onyphe.io/docs/onyphe-query-language",
+      "verbatim": "By default, latest result is displayed first on output",
+      "field": "the -sort function's documented description",
+      "what_it_supports": "Ordering results by recency presupposes several results with different times. On a store holding one current record per service there would be nothing for latest-first to mean.",
+      "why_it_is_not_decisive": "The ordering is over a whole result set, which spans many assets and ports. Several results ordered by time does not establish several results for ONE address and port."
+    },
+    {
+      "source": "https://search.onyphe.io/docs/general-apis/simple",
+      "verbatim": "the last 10 or 100 results for given category of data and only for the last 30-days",
+      "what_it_supports": "Up to a hundred results exist per category for one asset inside a thirty-day window. The documented datascan cycle is weekly, so a hundred results in thirty days is far more than one per cycle.",
+      "why_it_is_not_decisive": "Results per ASSET may be spread across many ports rather than repeated on one port. An address exposing twenty services over four weekly cycles produces the same number either way."
+    },
+    {
+      "source": "https://search.onyphe.io/docs/general-apis/summary",
+      "verbatim": "the summary will be composed of data fetched in the last 30-days only, you cannot query historical data with that endpoint",
+      "what_it_supports": "The surface is explicitly split: some endpoints reach only the recent window, and historical querying belongs elsewhere. A store with only current state would have no historical surface to exclude an endpoint from.",
+      "why_it_is_not_decisive": "It establishes that a historical surface exists. It does not establish what a historical document is."
+    },
+    {
+      "source": "https://search.onyphe.io/docs/onyphe-query-language",
+      "finding": "The documented function list carries seventeen functions and NONE of them de-duplicates, collapses per asset, or returns only the latest entry.",
+      "functions_documented": ["-hourago", "-dayago", "-weekago", "-monthago", "-since", "-wildcard", "-orwildcard", "-notwildcard", "-regexp", "-orregexp", "-notregexp", "-exists", "-notexists", "-orexists", "-fields", "-sort", "-tlsexpired"],
+      "what_it_supports": "Nothing in the query language offers to remove duplicates per asset, which is what a store returning several observations per service would eventually be asked for.",
+      "why_it_is_not_decisive": "This is an argument from an ABSENCE. It is recorded because it is real and it carries no weight in the verdict, exactly as the missing scan-identifier field did in Mission 1.63."
+    },
+    {
+      "source": "https://search.onyphe.io/docs/getting-started",
+      "finding": "Nothing on the page describes what a document represents, whether repeated scans append or update, or how results relate to time.",
+      "what_it_supports": "nothing",
+      "why_it_is_recorded": "It was one of the three targets and it came back empty. An unread page and a page read to no effect are different facts."
+    }
+  ],
+
+  "the_discriminating_case_that_is_still_unaddressed": {
+    "$comment": "The whole verdict turns on this one case, and naming it is what makes the residual answerable in a sentence.",
+    "case": "A service is observed DURING window W, and observed again AFTER W.",
+    "under_an_append_model": "The observation inside W remains its own document carrying its own collection time, so a filter for W returns it. Correct.",
+    "under_a_maintained_model": "The single record's collection time has advanced past W, so a filter for W does not return it. The service is missing from a count of what was observed during W, and every host that persisted is missing the same way.",
+    "which_one_the_documentation_states": "Neither.",
+    "why_the_easier_case_does_not_help": "A service observed only before and only after W is excluded under both models, so testing that case discriminates nothing. It is the persisting host that separates them, and that is the common case rather than an edge one."
+  },
+
+  "verdict": {
+    "record_lifecycle": "AMBIGUOUS",
+    "vocabulary": ["OBSERVATION_EVENT_APPEND", "VERSIONED_OBSERVATION_HISTORY", "MAINTAINED_SERVICE_STATE_LAST_SEEN", "AMBIGUOUS", "UNKNOWN"],
+    "why_not_UNKNOWN": "UNKNOWN would say nothing bears on it. Four documented statements bear on it and all four point the same way.",
+    "why_not_OBSERVATION_EVENT_APPEND": "Every piece of evidence is consistent with an append model and none of it states one. The strongest, latest-first ordering and up to a hundred results per asset per month, is fully explained by one document per service per port with no repetition over time.",
+    "b2_result": "PARTIAL",
+    "status_word": "ONYPHE_B2_PARTIAL",
+    "previous": "PARTIAL",
+    "moved": false,
+    "what_did_move": "The evidence went from one self-contradicting sentence to four converging documented statements, and the residual went from the whole question to one named case.",
+    "the_interpretation_that_was_not_chosen": "That the converging evidence is enough. Four statements consistent with a model are not a statement of the model, and choosing the reading that qualifies the last surviving candidate is the refusal this arc has now made five missions running.",
+    "the_mission_1_63_lesson_applied": "That mission nearly recorded a PASS on a sentence a retrieval summary reported and the page did not contain. Every quotation above was taken from a response that printed it in quotation marks, and the one item that arrived as characterisation is recorded as an absence argument carrying no weight."
+  },
+
+  "what_would_close_it": {
+    "one_sentence": "A first-party statement that each scan creates a new document, or that a service document is updated in place.",
+    "why_this_is_now_an_enquiry_question_rather_than_a_reading_question": "Three missions have read the getting-started page, the data model, the query language, the search API, the simple API, the summary API, the refresh documentation and the retention documentation. The public surface for this question is exhausted in the same way the anchor's six operational questions were, and the same instrument answers it.",
+    "cost_if_asked": "one question in a written enquiry",
+    "no_empirical_resolution_attempted": {
+      "records_queried": 0,
+      "hosts_queried": 0,
+      "timestamps_compared": 0,
+      "rule": "Querying one host across two windows and comparing timestamps would retrieve measurement records, contaminate preregistration, and infer an architecture from a sample."
+    }
+  }
+}
