@@ -670,6 +670,19 @@ def render_execution(record: dict) -> str:
         "",
         f"**Execution status: `{record['execution_status']}`.** Sent: **{ex['SENT']}**.",
         "",
+    ]
+    # A later mission may append a forward pointer. It never edits what this
+    # record says; it says which record continues it, so a reader cannot take a
+    # historical state for the current one.
+    superseded = record.get("superseded_by")
+    if superseded:
+        lines += [
+            f"> **Superseded by `{superseded['record']}`**, which records "
+            f"*{superseded['state_it_records']}*. "
+            f"{superseded['what_this_record_still_says']}",
+            "",
+        ]
+    lines += [
         "## The action that was approved",
         "",
         _row(["field", "value"]),

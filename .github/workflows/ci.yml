@@ -487,6 +487,22 @@ jobs:
       - name: Dispatch execution matches its decision rules
         run: uv run python infrastructure/scripts/render_dispatch_execution.py --check
 
+      # Mission 1.66.1. The operator sent the approved enquiry manually and
+      # attested to it. Recomputes both frozen hashes, so an attestation about
+      # bytes that have since moved is refused. Also checks that Mission 1.66's
+      # record keeps its original statement and carries only a forward pointer,
+      # because rewriting it would make that mission describe a moment it did
+      # not observe; that the frozen envelope's sender placeholder was not
+      # replaced with the actual mailbox and the envelope was not marked sent;
+      # that the attested recipient, channel, subject and send count match the
+      # approved action; that OPERATOR_ATTESTED is not reported as
+      # BYTE_VERIFIED while no sent message has been imported and hashed; that
+      # the attested send time is after the approval it claims to execute; that
+      # an unchecked mailbox establishes NOT_CHECKED and never
+      # NO_RESPONSE_EXISTS; and that a SENT question moves no apparatus gate.
+      - name: Dispatch attestation matches its record
+        run: uv run python infrastructure/scripts/render_dispatch_attestation.py --check
+
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
   # Pinned to the same versions as infrastructure/compose.

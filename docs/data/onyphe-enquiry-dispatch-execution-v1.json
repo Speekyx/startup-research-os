@@ -4,9 +4,7 @@
   "mission": "1.66 — Approved Dispatch Execution V1",
   "recorded_at": "2026-09-05",
   "record_id": "onyphe-enquiry-dispatch-execution-v1",
-
   "execution_status": "APPROVED_AWAITING_MANUAL_EXECUTION",
-
   "the_action_that_was_approved": {
     "$comment": "§13. Read from the frozen envelope. Nothing here is a claim that it happened.",
     "dispatch_envelope": "onyphe-dispatch-envelope-v1",
@@ -19,7 +17,6 @@
     "approved_subject": "Three questions about datascan record semantics and scan configuration",
     "content_version": "v1"
   },
-
   "operator_approval": {
     "$comment": "§13. An approval is recorded as an approval. It is not dispatch evidence and this record never lets it become one.",
     "APPROVAL_GIVEN": true,
@@ -44,7 +41,6 @@
     ],
     "approval_is_not_execution": "An approval says an action MAY be performed. Only a performance says it WAS. This record keeps them apart because collapsing them is the single way a dispatch log comes to describe a message nobody sent."
   },
-
   "execution": {
     "$comment": "§2, §3. Every field is null because the operator has not stated that the send happened.",
     "SENT": false,
@@ -60,7 +56,6 @@
     "body_post_send_verification": "NOT_APPLICABLE_NOTHING_SENT",
     "why_every_field_is_null": "§2 requires an explicit operator statement that the enquiry was actually sent, plus the exact sender mailbox. Neither has been given. A record filling these in from the approval would be describing a send that the approval only permitted."
   },
-
   "operator_confirmation": {
     "CONFIRMATION_GIVEN": false,
     "what_was_given_instead": "an approval of the dispatch envelope hash, and then this mission's brief",
@@ -78,7 +73,6 @@
     ],
     "why_optional_stays_optional": "§2 forbids demanding unavailable metadata merely to manufacture completeness. A manual send from a webmail client may expose no message id to the sender at all, and refusing to record the send for want of one would punish an honest report."
   },
-
   "the_repository_cannot_verify_a_manual_send": {
     "$comment": "The finding this mission is for. It is why an attestation level exists at all.",
     "observation": "A reliability assessment is typed into this repository, so a terminal guard can require a person to be present. An outbound manual send happens entirely OUTSIDE the repository, in a mail client nothing here can observe.",
@@ -86,7 +80,6 @@
     "which_is_why": "BODY_POST_SEND_VERIFICATION distinguishes BYTE_VERIFIED from OPERATOR_ATTESTED, and this record may never report the first on the strength of the second.",
     "the_shape_it_shares_with_earlier_missions": "Missions 1.36.1 and 1.42.1 both stopped because a value was authorised and the keystroke was not. This is the same boundary one step further out: the dispatch is authorised and the send has not happened, and here the repository could not even watch it happen."
   },
-
   "integrity_checks_that_will_apply_when_a_send_is_reported": {
     "$comment": "§7 to §12. Frozen now, before any send, so the standard cannot be chosen after seeing what was actually done.",
     "recipient_must_equal": "contact@onyphe.io",
@@ -102,7 +95,6 @@
     "no_automatic_cleanup_exists": "A sent message cannot be unsent. A duplicate is recorded and reported; it is never tidied away.",
     "on_divergence": "The historical envelope is NOT repaired. It records what was approved, and a divergence is a fact about the execution rather than a defect in the approval."
   },
-
   "the_frozen_envelope_was_not_mutated": {
     "$comment": "§4, §5.",
     "envelope_edited": false,
@@ -114,7 +106,6 @@
     "a_guard_that_now_does_a_second_job": "Mission 1.65's validator asserts the envelope's `approval_recorded` is false, which it wrote to mean the mission stops before approval. It now also keeps the approval OUT of the frozen document. The field means THIS DOCUMENT RECORDS NO APPROVAL, never that no approval exists anywhere, and this sentence exists so a later reader does not read the second from the first.",
     "where_the_actual_sender_will_go": "into the `execution` section here, once there is one. The envelope's placeholder is what was approved; the actual mailbox is what was used, and those are two facts."
   },
-
   "no_connector_was_used": {
     "$comment": "§19.",
     "connector_executions": 0,
@@ -122,7 +113,6 @@
     "the_temptation_named": "A mail-capable connector exists in this runtime, the content is approved, the recipient is established, and one call would have made the action look finished. It would have been a different action from the approved one, and the difference is exactly the field the hash binds.",
     "who_may_close_this": "the operator, by sending it; or a new envelope binding a connector and a named sender mailbox, carrying a different hash, approved separately."
   },
-
   "provider_response": {
     "$comment": "§16, §17. Nothing was sent, so nothing can be a reply to it.",
     "response_received": false,
@@ -134,15 +124,39 @@
     "why_that_distinction_is_kept": "Empty because nobody looked and empty because somebody looked are different facts. This record asserts only that the repository holds no reply and that the operator's mailbox was not read, which is weaker and true.",
     "follow_up_sent": false
   },
-
   "apparatus_state_unchanged": {
     "$comment": "§15. A dispatch is not an answer, and an unsent dispatch is not even a dispatch.",
-    "ONYPHE": {"B2": "PARTIAL", "B4": "PARTIAL", "port_22_membership": "UNKNOWN", "post_30d_location_fields": "UNKNOWN", "individual": "INDIVIDUALLY_UNRESOLVED", "changed": false},
-    "Netlas": {"A7": "PASS", "A8": "PARTIAL", "individual": "INDIVIDUALLY_NOT_QUALIFIED", "changed": false},
-    "LeakIX": {"individual": "INDIVIDUALLY_NOT_QUALIFIED", "changed": false},
-    "The Shadowserver Foundation": {"individual": "INDIVIDUALLY_NOT_QUALIFIED", "changed": false},
+    "ONYPHE": {
+      "B2": "PARTIAL",
+      "B4": "PARTIAL",
+      "port_22_membership": "UNKNOWN",
+      "post_30d_location_fields": "UNKNOWN",
+      "individual": "INDIVIDUALLY_UNRESOLVED",
+      "changed": false
+    },
+    "Netlas": {
+      "A7": "PASS",
+      "A8": "PARTIAL",
+      "individual": "INDIVIDUALLY_NOT_QUALIFIED",
+      "changed": false
+    },
+    "LeakIX": {
+      "individual": "INDIVIDUALLY_NOT_QUALIFIED",
+      "changed": false
+    },
+    "The Shadowserver Foundation": {
+      "individual": "INDIVIDUALLY_NOT_QUALIFIED",
+      "changed": false
+    },
     "qualified_count": 0,
     "pair_analysis_ready": false,
     "rule": "Only a reviewed first-party response may move a methodological gate. Approval does not, dispatch does not, and a reply does not until somebody has read it."
+  },
+  "superseded_by": {
+    "$comment": "Mission 1.66.1 appended this pointer and altered nothing else.",
+    "record": "onyphe-manual-dispatch-attestation-v1",
+    "state_it_records": "SENT, OPERATOR_ATTESTED",
+    "what_this_record_still_says": "At the time Mission 1.66 ran, nothing had been established as sent. That was true then, and it is still a true statement about that moment.",
+    "why_this_record_was_not_edited": "Rewriting it to read SENT would make Mission 1.66's report, validator and tests describe a moment the mission did not observe. A forward pointer removes the stale-record hazard without falsifying the history."
   }
 }

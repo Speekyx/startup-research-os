@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.99
+Version: 1.100
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-05 (Sprint 1 / Mission 1.66)
+Last amended: 2026-09-05 (Sprint 1 / Mission 1.66.1)
 
 ---
 
@@ -13,6 +13,99 @@ Last amended: 2026-09-05 (Sprint 1 / Mission 1.66)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.100 — 2026-09-05 (Sprint 1 / Mission 1.66.1)
+
+**`ONYPHE_MANUAL_DISPATCH_ATTESTED`.** The operator sent the approved enquiry
+manually, seven minutes after Mission 1.66 merged reporting it as awaiting
+execution, and attested to it afterwards. **This repository still sent nothing**,
+and this is the first outward action in the project's history to have been
+completed at all.
+
+**MISSION 1.66 WAS NOT REWRITTEN, AND THAT IS THE STRUCTURAL DECISION.** Its
+execution record still reads `APPROVED_AWAITING_MANUAL_EXECUTION`, its verdict
+still reads outcome B, and its baseline is untouched. **Both were true when it
+ran**, and editing them to read SENT would make a mission report describe a moment
+it did not observe. History is a chain of four records — content approved,
+dispatch approved, awaiting execution, operator-attested sent — and each says what
+was established when it was written.
+
+**THE STALE-RECORD HAZARD WAS CLOSED WITHOUT FALSIFYING ANYTHING.** A reader
+meeting the Mission 1.66 record alone would take a historical state for the
+current one. So that record gains **one appended forward pointer** naming this
+attestation, and nothing else in it changes — the Mission 1.58 shape, where a
+withdrawn selection was appended to rather than edited away. The pointer renders
+on the page, so the historical document itself says which record continues it.
+**The alternative was rejected explicitly**: mutating the status would have
+required editing Mission 1.66's validator and four of its tests to describe a
+different file, and a guard edited so that new work can pass is a guard that never
+was.
+
+**THE MOST CONSEQUENTIAL LINK IN THE CHAIN RESTS ON THE WEAKEST EVIDENCE
+AVAILABLE, BECAUSE IT IS THE ONLY EVIDENCE THAT EXISTS.** The content answers to a
+hash. The approval names that hash. The action the approval authorises is fixed by
+seven bound fields. **The one fact that the message actually left rests on a person
+saying so.** No sent-message artifact was imported and this repository never
+observed the send, so the level is `OPERATOR_ATTESTED` and explicitly not
+`BYTE_VERIFIED` — and the record states what the upgrade would take, because a
+weaker level stated with its upgrade path is a position while one stated without
+is a shrug. **A positive probe case proves the distinction is enforced rather than
+merely refused**: an attestation with an imported artifact and a body hash equal
+to the approved content is ACCEPTED.
+
+**EVERY FIELD MATCHED, AND THE SENDER MATCHED NOTHING ON PURPOSE.** Recipient,
+channel, subject and send count are the approved ones. The sender is
+`thib.chm@gmail.com`, admitted under verdict `ALLOWED_BY_APPROVED_PLACEHOLDER`
+rather than `MATCH`, because the envelope deliberately bound
+`OPERATOR_CHOSEN_MAILBOX_AT_SEND_TIME` instead of a mailbox. **The cost Mission
+1.65 stated in advance is the cost that was actually paid**: that envelope's hash
+pins three fields of four, so the approved action never named which mailbox it
+would come from. A cost written down before anyone could know whether it would
+matter, and then incurred exactly as described, is the cheapest evidence available
+that the reasoning was honest rather than decorative.
+
+**THE FROZEN ENVELOPE LEARNED NOTHING FROM THE SEND.** Its sender placeholder is
+not replaced, it is not marked sent, its dispatch count is still zero and no
+approval was written into it. It records the permission; the attestation records
+the event.
+
+**A DEFECT IN THIS MISSION'S OWN GATE WAS FOUND BY CHECKING HOW A CASE WAS
+CAUGHT.** The probe reported 157 of 157 caught — and one case, a record claiming
+`CHECKED_NONE_FOUND` while recording that the mailbox was never searched, was
+caught only by **render drift**. Re-render and it passed. **A case caught by drift
+is a case a re-render releases**, and this one mattered: *checked and found
+nothing* is materially stronger than *not checked*, and it is exactly the upgrade a
+later mission would be tempted to make. Two repairs followed: a rule requiring that
+a claim about what is in a mailbox be backed by having looked, and a probe that
+now sends record mutations through `validate()` directly so drift can never stand
+in for a rule. The final split is **152 caught by rule, 5 by drift**, and the five
+are exactly the hand-edited generated pages where drift is the correct catcher.
+
+**A SENT QUESTION IS STILL NOT AN ANSWER**, and the sentence three missions have
+repeated is now being used for the case it was written for. ONYPHE stays B2
+PARTIAL with port membership and post-30-day location fields UNKNOWN. The mailbox
+was **not searched**, so the reply status is `NOT_CHECKED_AFTER_DISPATCH` and
+explicitly not `NO_RESPONSE_EXISTS`. Netlas is untouched, with nothing guessed and
+no obfuscation decoded. **Qualified apparatuses 0 of 4, so
+`PAIR_ANALYSIS_NOT_READY`.**
+
+0 emails sent by this repository, 0 connector executions, 0 mailbox searches, 0
+follow-ups, 0 replies frozen, 0 replies interpreted, 0 measurement queries, 0
+counts, 0 host records, 0 banners, 0 trials, 0 purchases. 0 canonical mutations, 0
+sources registered, 0 governance reviews, 0 reliability values, 0 independence
+groups, 0 model calls, 0 embeddings, no migration. Baseline verified unchanged:
+325 / 325 / 33, 44 Claims, 45 revisions, 58 Evidence, 4 reliability assessments, 29
+sources, head `0035`. Profile still UNCALIBRATED, Problem-Family still PARKED.
+Validator probed with **157 deliberate violations and 157 caught**, plus one
+positive case. 1935 bare-python tests run before commit.
+
+New: `docs/data/onyphe-manual-dispatch-attestation-v1.json` and its rendered
+`.md`; a forward pointer appended to
+`onyphe-enquiry-dispatch-execution-v1.json`;
+`infrastructure/scripts/render_dispatch_attestation.py`; 57 tests in
+`packages/inferred-claim-evaluator/python`.
+
+Report: `docs/architecture/mission-1.66.1-report.md`.
 
 ## 1.99 — 2026-09-05 (Sprint 1 / Mission 1.66)
 
@@ -4436,6 +4529,7 @@ Additionally authoritative:
 - docs/data/mission-1.66-baseline-v1.md (added in 1.99)
 - docs/data/onyphe-enquiry-dispatch-execution-v1.md (added in 1.99)
 - docs/data/approved-dispatch-execution-v1.md (added in 1.99)
+- docs/data/onyphe-manual-dispatch-attestation-v1.md (added in 1.100)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.
