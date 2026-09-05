@@ -553,3 +553,59 @@ class TestTheServicePresenceGroupingFixture(unittest.TestCase):
 
     def test_the_fixture_was_not_persisted(self) -> None:
         self.assertFalse(self.fixture["persisted"])
+
+
+class TestTheScannerPairFixtures(unittest.TestCase):
+    """Mission 1.60 §44 and §45. The selection record states these as RESULTS,
+    so they are executed here through the real grouping primitive rather than
+    restated. Synthetic values only; nothing is persisted."""
+
+    SELECTION = DOCS / "observation-addressable-scanner-pair-selection-v1.json"
+
+    def setUp(self) -> None:
+        if not self.SELECTION.exists():
+            self.skipTest("no scanner-pair selection record exists")
+        self.fixtures = _load(self.SELECTION)["structural_fixtures"]
+
+    def test_two_independent_supports_form_two_groups(self) -> None:
+        items = [
+            _support("scan-a", FIXTURE_A, EvidenceIndependenceState.KNOWN_INDEPENDENT),
+            _support("scan-b", FIXTURE_B, EvidenceIndependenceState.KNOWN_INDEPENDENT),
+        ]
+        self.assertEqual(len(_groups(items)), 2)
+        self.assertIn("2 provenance groups", self.fixtures["independent_support"]["result"])
+
+    def test_the_unknown_control_collapses_to_one(self) -> None:
+        items = [
+            _support("scan-a", FIXTURE_A, EvidenceIndependenceState.UNKNOWN),
+            _support("scan-b", FIXTURE_B, EvidenceIndependenceState.UNKNOWN),
+        ]
+        self.assertEqual(len(_groups(items)), 1)
+        self.assertIn("1 group", self.fixtures["independent_support"]["control"])
+
+    def test_one_claim_can_carry_both_directions(self) -> None:
+        supporting = _support("scan-a", FIXTURE_A, EvidenceIndependenceState.KNOWN_INDEPENDENT)
+        contradicting = EvidenceItem(
+            evidence_id="scan-b",
+            direction=EvidenceDirection.CONTRADICTS,
+            relevance=1.0,
+            directness=1.0,
+            reliability=FIXTURE_B,
+            extraction_confidence=1.0,
+            independence_state=EvidenceIndependenceState.KNOWN_INDEPENDENT,
+            independence_group_id=None,
+            observed_at=None,
+        )
+        items = [supporting, contradicting]
+        self.assertEqual(len(_groups(items, EvidenceDirection.SUPPORTS)), 1)
+        self.assertEqual(len(_groups(items, EvidenceDirection.CONTRADICTS)), 1)
+
+    def test_the_fixtures_were_executed_and_never_persisted(self) -> None:
+        for name in ("same_target_identity", "independent_support", "contradiction"):
+            self.assertTrue(self.fixtures[name]["executed"], name)
+            self.assertFalse(self.fixtures[name]["persisted"], name)
+
+    def test_the_contradiction_fixture_is_not_a_prediction(self) -> None:
+        """It shows the path is reachable. It says nothing about whether two
+        real scanners would disagree."""
+        self.assertIn("says nothing about", self.fixtures["contradiction"]["not_a_prediction"])

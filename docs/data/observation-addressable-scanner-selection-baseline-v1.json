@@ -1,0 +1,117 @@
+{
+  "$comment": "Mission 1.60 sections 0, 1 and 54. The live baseline, the state carried forward from Missions 1.58 and 1.59 read from their artifacts rather than from the brief, and the documentation ledger.",
+  "record_version": "1.0.0",
+  "mission": "1.60 — Observation-Addressable Scanner Pair Selection V1",
+  "recorded_at": "2026-09-05",
+
+  "repository_precondition": {
+    "mission_1_59_merged": true,
+    "pull_request": 102,
+    "merge_commit": "b7fac0a",
+    "local_main_equals_origin_main": true,
+    "working_tree_clean": true,
+    "branch": "sprint-1/mission-1.60",
+    "migration_head": "0035_refusal_provenance",
+    "verified_from": "git and the live database"
+  },
+
+  "counters": {
+    "raw_records": 325,
+    "normalized_records": 325,
+    "signals": 33,
+    "claims": 44,
+    "claim_revisions": 45,
+    "evidence": 58,
+    "inferred_claims": 1,
+    "threshold_registrations": 1,
+    "claim_derivations": 1,
+    "proposition_evaluation_refusals": 0,
+    "reliability_assessments": 4,
+    "independence_groups": 0,
+    "opportunities": 1,
+    "opportunity_revisions": 1,
+    "opportunity_evidence_links": 7,
+    "embeddings": 0,
+    "sources": 29,
+    "scoring_scores": "ABSENT",
+    "reference_profile": "UNCALIBRATED",
+    "problem_family": "PARKED",
+    "drift": "none"
+  },
+  "evidence_direction_census": {"SUPPORTS": 57, "CONTRADICTS": 1, "claims_carrying_both_directions": 0},
+
+  "carried_forward": {
+    "$comment": "Section 1. Read from the Mission 1.58 and 1.59 artifacts.",
+    "failed_apparatus_a": {
+      "identity": "Censys",
+      "status": "DROPPED_FOR_THIS_ROUTE",
+      "reason": "SNAPSHOT_TIME_SEMANTICS_NOT_ALIGNABLE. Its queryable dataset is a merged current state whose searchable time field records when a record last CHANGED, with the per-service observation time documented as unsearchable. Established from its own documentation on both halves.",
+      "permanently_dropped_because": "This is a settled mismatch, not an unknown. Section 4 of the Mission 1.60 brief forbids searching for another query syntax, inventing a freshness tolerance, or buying a higher access tier in the hope that observation timestamps become queryable.",
+      "retained_as": "NEGATIVE_CONTROL"
+    },
+    "anchor_candidate_b": {
+      "identity": "Netlas",
+      "status_carried": "ANCHOR_CANDIDATE_B",
+      "not": ["SELECTED_APPARATUS_B", "APPROVED_APPARATUS_B"],
+      "why_carried": "Its load-bearing records expose an actual scan_date, which is the property the failed apparatus lacked.",
+      "requalification_required": "all individual gates, because Mission 1.59 evaluated it under a smaller contract"
+    },
+    "protocol_native_construct": {
+      "definition": "The number of DISTINCT public IPv4 addresses from which, during a defined observation window, a TCP connection to port 22 was accepted and the peer sent an identification string whose literal prefix is `SSH-` before protocol negotiation.",
+      "basis": "RFC 4253 section 4.2",
+      "properties": ["SOURCE_INDEPENDENT", "VENDOR_INDEPENDENT", "FINGERPRINT_INDEPENDENT", "CVE_INDEPENDENT"],
+      "carried_unchanged": true
+    },
+    "product_relevance": {
+      "dimensions": ["AUDIENCE_OR_USAGE", "COMPETITIVE_SUPPLY"],
+      "bounded_language": "A protocol-responsive public host is not an installation, a customer, a user, a paying organisation, an active subscription, revenue, market share, adoption or demand.",
+      "kept_load_bearing": true
+    },
+    "observation_addressable_exposure": {
+      "definition": "An apparatus qualifies only if a FUTURE observation can be attributed to a predefined observation window from its published or legitimately available acquisition surface, BEFORE any measurement value is retrieved.",
+      "is_not": [
+        "scans frequently",
+        "updates often",
+        "has a last-updated field",
+        "has a current-state database",
+        "publishes historical results",
+        "claims continuous scanning"
+      ],
+      "introduced_by": "Mission 1.59",
+      "status": "HARD_PRE_SELECTION_GATE"
+    }
+  },
+
+  "documentation_ledger": {
+    "$comment": "Sections 37 and 54. First-party for every load-bearing gate.",
+    "budget": 15,
+    "used": 10,
+    "requests": [
+      {"n": 1, "kind": "FETCH", "url": "https://docs.netlas.io/api-reference/", "apparatus": "anchor B", "sought": "query and pre-retrieval filtering capability", "first_party": true, "load_bearing": true, "established": "a custom query syntax accepting arbitrary field filters and bracket range syntax, plus an `indices` request parameter that selects a particular data-collection DATE. Window selection therefore happens in the REQUEST rather than after retrieval."},
+      {"n": 2, "kind": "FETCH", "url": "https://docs.netlas.io/knowledge-base/query-language/", "apparatus": "anchor B", "sought": "date range grammar and raw banner exposure", "first_party": true, "load_bearing": true, "established": "date and numeric ranges via `[ TO ]` and one-sided `<`, `>`, `<=`, `>=`; port filtering; and a queryable `*.banner` field with wildcard and prefix matching."},
+      {"n": 3, "kind": "SEARCH", "target": "web", "apparatus": "partner discovery", "sought": "active scanners exposing per-observation scan timestamps and raw banners", "first_party": false, "load_bearing": false, "established": "navigational only. Also surfaced a first-party Netlas fact: daily scan volumes are downloadable as JSON files, which is an observation partition by window."},
+      {"n": 4, "kind": "FETCH", "url": "https://www.onyphe.io/docs", "apparatus": "partner candidate", "sought": "observation timestamp and query model", "first_party": true, "load_bearing": false, "result": "HTTP 301 to another host"},
+      {"n": 5, "kind": "FETCH", "url": "https://www.onyphe.com/docs", "apparatus": "partner candidate", "sought": "observation timestamp and query model", "first_party": true, "load_bearing": false, "result": "HTTP 404"},
+      {"n": 6, "kind": "FETCH", "url": "https://www.shadowserver.org/what-we-do/network-reporting/api-documentation/", "apparatus": "partner candidate", "sought": "date-partitioned reports, record timestamp, banner exposure, eligibility", "first_party": true, "load_bearing": false, "established": "the technical documentation has moved to an external wiki; the page itself carries none of the data model."},
+      {"n": 7, "kind": "FETCH", "url": "https://github.com/The-Shadowserver-Foundation/api_utils/wiki/Reports-API", "apparatus": "partner candidate", "sought": "the same facts from the wiki", "first_party": true, "load_bearing": false, "established": "the substantive wiki pages did not load. One usable first-party sentence: some APIs are public and most are private for partners and direct data consumers."},
+      {"n": 8, "kind": "FETCH", "url": "https://docs.leakix.net/docs/api/intro/", "apparatus": "partner candidate", "sought": "event-based records and timestamp filtering", "first_party": true, "load_bearing": false, "result": "HTTP 404"},
+      {"n": 9, "kind": "CARRIED", "url": "docs.netlas.io/knowledge-base/scanning-technology/", "apparatus": "anchor B", "sought": "frame and scanning method", "first_party": true, "load_bearing": true, "established": "retrieved in Mission 1.58 and re-read from the artifact: own purpose-built scanners, the full IPv4 space excluding reserved and special-use ranges, a curated list of over 1000 TCP ports plus selected UDP ports, no IPv6, roughly thirty application-layer protocols identified by banner grabbing and protocol parsing."},
+      {"n": 10, "kind": "CARRIED", "url": "docs.netlas.io/knowledge-base/field-reference/responses/", "apparatus": "anchor B", "sought": "record and timestamp semantics", "first_party": true, "load_bearing": true, "established": "retrieved in Mission 1.59 and re-read from the artifact: each document is a single service response collected during scanning, keyed by (uri, ip); `scan_date` records when the scanning that generated it occurred; `@timestamp` is the index time."}
+    ],
+    "research_data_requests": 0,
+    "target_measurement_requests": 0,
+    "target_host_record_requests": 0,
+    "target_count_requests": 0,
+    "facets_fetched": 0,
+    "trials_started": 0,
+    "purchases": 0
+  },
+
+  "value_exposure": {
+    "target_measurement_retrieved": false,
+    "queries_executed": 0,
+    "dashboards_opened": 0,
+    "incidental_exposure": "Documentation pages describe query grammar and field meanings. Example queries in the grammar documentation illustrate syntax and were read as syntax; none was executed and no result set was requested.",
+    "preregistration_possibility_compromised": false
+  }
+}
