@@ -520,6 +520,24 @@ jobs:
       - name: Documentation reconciliation matches its records
         run: uv run python infrastructure/scripts/render_documentation_reconciliation.py --check
 
+      # Mission 1.67. Two new apparatuses evaluated and neither qualifies, so the gate
+      # guards the readings that were available and refused: that an apparatus an earlier
+      # mission already evaluated cannot be rediscovered as new; that a candidate whose
+      # first-party documentation could not be retrieved never becomes serious; that a
+      # database documented as updated in real time is a maintained current state however
+      # many timestamps it exposes, and a per-address history is not a window-addressable
+      # frame; that a SYN response carries no identification string, so a resource
+      # publishing one cannot witness a protocol-native predicate even where the
+      # apparatus measures that protocol elsewhere; that a count whose unit is
+      # undocumented is not a count of distinct addresses; that configuration
+      # heterogeneity is neither sampling, nor the retrievable frame, nor
+      # time-addressability; that every load-bearing quote names a document this mission
+      # actually retrieved rather than a search summary; and that no pair was selected,
+      # nothing was executed, and no historical verdict was rewritten to fail the rule
+      # this mission adopted.
+      - name: Scanner discovery matches its records
+        run: uv run python infrastructure/scripts/render_scanner_discovery.py --check
+
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
   # Pinned to the same versions as infrastructure/compose.

@@ -1,0 +1,89 @@
+{
+ "$comment": "Mission 1.67 §19, §20 and §44. Produced BEFORE final candidate selection, because a rule adopted after seeing which candidates it would eliminate is a rule chosen for its outcome.",
+ "record_version": "1.0.0",
+ "mission": "1.67 — Second Qualified Scanner Discovery V1",
+ "recorded_at": "2026-09-06",
+ "candidate_requirement": {
+  "name": "APPARATUS_CONFIGURATION_MUST_BE_UNIFORM_ACROSS_THE_FRAME",
+  "offered_by": "Mission 1.66.2, which recorded it with its justification and deliberately did not add it, because a documentation-reconciliation mission editing a frozen apparatus contract in passing is the change-control shape docs/CLAUDE.md §Change control refuses.",
+  "produced_before_candidate_selection": true
+ },
+ "q1_exact_failure_mode": {
+  "question": "What exactly is the failure mode?",
+  "answer": "One apparatus applies different measurement configurations to different parts of its own population during the same nominal observation window, so that the load-bearing predicate is eligible in one part of the frame and not eligible in another. A single count then merges sub-populations selected under different measurement definitions, and the difference lives INSIDE the apparatus rather than between apparatuses, where a comparison would expose it.",
+  "worked_case": "If TCP/22 is inside the port set applied to partition P1 and outside the set applied to partition P2, an address in P2 is not eligible to appear at all. A count over the whole frame reports a number whose deficit is indistinguishable from an address genuinely not answering on 22.",
+  "why_it_is_not_merely_incompleteness": "Incompleteness is a known shortfall against a defined population. Here the population itself has no single definition, so there is no quantity the count is incomplete with respect to."
+ },
+ "q2_distinct_from_sampling": {
+  "question": "Is it distinct from SAMPLING_IS_LOAD_BEARING?",
+  "verdict": "DISTINCT",
+  "reason": "Sampling asks which ELIGIBLE targets were actually attempted. Uniformity asks whether the predicate was ELIGIBLE AT ALL in that part of the frame. A perfectly executed census of a partition whose configuration never opens TCP/22 returns zero for the construct, and no sampling disclosure repairs that: the sampling was complete and the measurement was never defined there.",
+  "ordering": "Uniformity is upstream of sampling. Sampling presupposes an eligible set, and uniformity is what decides whether one exists."
+ },
+ "q3_distinct_from_retrievable_frame": {
+  "question": "Is it distinct from THE_RETRIEVABLE_FRAME_IS_NOT_THE_MEASURED_FRAME?",
+  "verdict": "DISTINCT",
+  "reason": "That rule governs what the REQUESTER may retrieve from what the apparatus measured — Mission 1.62's case, where an apparatus scans everything and can show a requester only their own networks. Uniformity governs what the apparatus MEASURED, before retrieval is reached at all. A uniformity failure survives unrestricted retrieval, because the observations that would have closed the gap were never generated."
+ },
+ "q4_distinct_from_time_addressability": {
+  "question": "Is it distinct from APPARATUS_CONFIGURATION_MUST_BE_TIME_ADDRESSABLE?",
+  "verdict": "DISTINCT",
+  "reason": "Time-addressability asks WHEN a configuration applied. Uniformity asks WHERE within the frame it applied, inside one window. The two are independent in both directions: an apparatus can publish a perfectly dated configuration history that is heterogeneous across regions at every date, and an apparatus can be uniform across its whole frame while publishing only a current, undated port list."
+ },
+ "q5_demonstrated_by_onyphe_evidence": {
+  "question": "Is it demonstrated by ONYPHE evidence already held?",
+  "verdict": "DEMONSTRATED",
+  "source_says": [
+   "Once per week: a week from US, the other one from FR, same list of 500 ports",
+   "Once per week: a week from SG, the other one from CN, TOP 25 ports"
+  ],
+  "source_says_provenance": "ONYPHE Data Refresh Rate page, datascan category, same table, retrieved first-party in Mission 1.66.2 and recorded in docs/data/onyphe-datascan-port-configuration-public-doc-review-v2.json",
+  "project_interpretation": "One apparatus applies at least two port configurations to different parts of the population it measures, within one category. Whether TCP/22 sits inside the 500 and outside the TOP 25 is exactly what is not published, which is what makes this a rule about PUBLISHED STRUCTURE rather than a complaint about a particular port set.",
+  "not_a_retrospective_finding_against_onyphe": "Mission 1.66.2 recorded this as a named risk and moved no gate. §45 forbids editing that package so a new rule retroactively fails it."
+ },
+ "q6_reusable_across_apparatuses": {
+  "question": "Is it likely reusable across scanner apparatuses?",
+  "verdict": "REUSABLE",
+  "reason": "Mission 1.67 supplies a SECOND independent instance, in a different shape, from a different apparatus — which is the strongest evidence available that the rule generalises rather than describing one provider's habits.",
+  "second_instance": {
+   "apparatus": "Shodan",
+   "resource": "shodan search / host database",
+   "source_says": [
+    "Generate a random IPv4 address",
+    "Generate a random port to test from the list of ports that Shodan understands",
+    "the crawlers don't scan incremental network ranges. The crawling is performed completely random to ensure a uniform coverage of the Internet."
+   ],
+   "source_says_provenance": "https://book.shodan.io/behind-the-scenes/crawler-algorithm/",
+   "project_interpretation": "Heterogeneity here is not partitioned by region but produced by randomisation per crawl step: the port under test is drawn per step, so TCP/22 is not applied to every crawled address within a window. The effective configuration varies across the frame by construction rather than by policy.",
+   "why_the_two_shapes_matter": "A rule demonstrated only by regional partitioning would look like a rule about scanner geography. Two shapes — declared regional partitions and per-step randomisation — show the rule is about whether the apparatus publishes enough structure to say which configuration reached which part of the frame, however the heterogeneity arose."
+  }
+ },
+ "q7_changes_future_qualification": {
+  "question": "Does it change future candidate qualification?",
+  "verdict": "CHANGES_QUALIFICATION",
+  "reason": "It becomes a gate applied BEFORE candidate selection rather than a risk noted afterwards. Any candidate publishing regional scanner groups, tiered port sets, randomised target or port selection, or per-customer scan profiles must now be asked whether the configuration that reached each part of the frame is determinable. Both apparatuses evaluated in this mission would have been asked it, and one of them raised it unprompted.",
+  "what_it_does_not_do": "It does not by itself fail an apparatus. An apparatus whose partitions are explicitly published and separable, or whose configuration identity is carried per observation, satisfies it — and so does one whose load-bearing port is included in every partition."
+ },
+ "q8_decision": {
+  "question": "ADOPT or DECLINE?",
+  "decision": "ADOPT",
+  "registry_count_before": 14,
+  "registry_count_after": 15,
+  "added_exactly_once": true,
+  "existing_rule_that_would_have_covered_it": null,
+  "rules_checked_and_found_not_to_cover_it": [
+   "SAMPLING_IS_LOAD_BEARING",
+   "THE_RETRIEVABLE_FRAME_IS_NOT_THE_MEASURED_FRAME",
+   "APPARATUS_CONFIGURATION_MUST_BE_TIME_ADDRESSABLE",
+   "FRAME_INSIDE_THE_DEFINITION"
+  ],
+  "why_frame_inside_the_definition_does_not_cover_it": "That rule catches a metric whose definition names the apparatus's own network — source attribution relocated into the predicate, across apparatuses. Uniformity is about heterogeneity WITHIN one apparatus's frame under one definition.",
+  "change_control": "Mission 1.67 selects apparatuses, so the apparatus contract is legitimately in scope here in a way it was not in Mission 1.66.2.",
+  "no_existing_requirement_renamed_or_merged": true
+ },
+ "rule_text_as_added": {
+  "name": "APPARATUS_CONFIGURATION_MUST_BE_UNIFORM_ACROSS_THE_FRAME",
+  "from": "Mission 1.66.2 offered it; Mission 1.67 adopted it after finding a second independent instance",
+  "rule": "Where one apparatus applies different measurement configurations to different parts of its own population during the same governed measurement period, it must publish enough structure to determine which configuration applied to which part of the frame during that period. Otherwise a single count may silently combine several effective populations. This is not sampling, which asks which eligible targets were attempted; it is not the retrievable frame, which asks what a requester may retrieve; and it is not time-addressability, which asks when a configuration applied. Explicitly published and separable partitions satisfy it, as does a load-bearing port included in every partition, as does configuration identity carried per observation."
+ }
+}

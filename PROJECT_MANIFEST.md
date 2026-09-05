@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.101
+Version: 1.102
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-05 (Sprint 1 / Mission 1.66.2)
+Last amended: 2026-09-06 (Sprint 1 / Mission 1.67)
 
 ---
 
@@ -13,6 +13,119 @@ Last amended: 2026-09-05 (Sprint 1 / Mission 1.66.2)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.102 — 2026-09-06 (Sprint 1 / Mission 1.67)
+
+**`NO_NEW_QUALIFYING_APPARATUS_IDENTIFIED_WITHIN_BOUNDED_SEARCH`.** Two apparatuses
+nobody in this arc had evaluated were taken to complete packages, and they failed at
+two different gates — which is worth more than either failure alone, because they
+are **the two halves of one conjunction, seen separately and never together**.
+
+**RAPID7 PROJECT SONAR HAS THE TEMPORAL OBJECT EVERY EARLIER CANDIDATE LACKED, AND
+CANNOT CARRY THE PREDICATE.** Its studies publish individually named, individually
+addressed files — `2018-06-15-1529049662-fdns_aaaa.json.gz`, reached at
+`.../opendata/studies/{study_id}/{filename}/` and listed per study in
+`sonarfile_set` — so an artifact is selected BEFORE any measurement value is
+retrieved. That is §13's own PASS example, and Missions 1.59, 1.62 and 1.66.2 all
+failed to find it. **A2 is still PARTIAL rather than PASS**, because no retrieved
+document defines what the date in a filename DENOTES, and a window maps onto an
+artifact only if its date is defined. What kills it is A3: the retrievable catalogue
+is eight datasets, the only one covering arbitrary TCP ports is *"SYN scan results
+for common TCP services across all of IPv4"*, and its own wiki says the output
+*"contains the IP addresses that responded positively to the SYN for the port in
+question."* **A SYN response says a port answered and carries not one byte the peer
+sent.** The apparatus states first-party that *"TCP studies include SSH, SMB, Telnet,
+RDP, Mongo, Redis, CouchDB, and more"* — so **the identification string is MEASURED
+and is not in the published retrievable catalogue**, which is
+`THE_RETRIEVABLE_FRAME_IS_NOT_THE_MEASURED_FRAME` recurring as a catalogue-content
+restriction where Mission 1.62 met it as a per-requester one. **This does not
+establish that Sonar cannot capture raw responses** — its HTTP datasets plainly do —
+and §16 forbids transferring their semantics to a TCP/22 resource.
+
+**SHODAN PUBLISHES THE OTHER HALF.** Own crawling is stated plainly: *"the crawlers
+work 24/7 and update the database in real-time"*, *"Generate a random IPv4 address"*,
+*"The algorithm is designed to randomly crawl the Internet once a week."* **A2 FAILS
+on three independent first-party facts**, and the middle one is the one that makes
+this a finding rather than an unexamined silence: **the Filter Reference was fetched
+precisely to check, and documents no time or date filter at all**, so a search cannot
+be restricted to a past window. The only historical surface is per-address — *"The
+historical IP lookups feature of the API provides data going back up to 90 days"*,
+*"it returns at most 1,000 banners"* — and **a per-address history requires already
+holding the address**, so obtaining the set for a window means searching a
+real-time-updated database and inspecting timestamps afterwards. That is
+retrieve-then-inspect, which Mission 1.59 rejected on a different apparatus for the
+same reason. **The honest answer is two-level and both halves are recorded**: at
+ADDRESS level the history parameter really does look like versioned observation
+history; at FRAME level, which is what a count of distinct addresses needs, the
+object is a maintained current state.
+
+**SHODAN TRENDS WAS EVALUATED SEPARATELY RATHER THAN FAILED BY INHERITANCE**, because
+§16 makes that a rule. Three reasons, any one sufficient: no date-range parameter is
+documented, the response carries counts and no identification string, and **the
+documentation does not state what the count counts** — so an undocumented count unit
+cannot witness a construct that requires DISTINCT IPv4 and forbids row, service-row
+and banner counts. **It was not executed**, and both Shodan endpoints are recorded
+`SECRET_BEARING_AND_MEASUREMENT_BEARING_DO_NOT_EXECUTE`, carrying Mission 1.66.2's
+User API lesson forward to a case where both failures land at once.
+
+**THE FRAME-UNIFORMITY RULE IS ADOPTED, AND ON A SECOND INDEPENDENT INSTANCE.**
+Mission 1.66.2 offered `APPARATUS_CONFIGURATION_MUST_BE_UNIFORM_ACROSS_THE_FRAME` and
+declined to add it in passing. This mission found a second instance in a **different
+shape**: ONYPHE partitions by region (*"same list of 500 ports"* against *"TOP 25
+ports"*), Shodan randomises (*"Generate a random port to test from the list of ports
+that Shodan understands"* with *"crawling is performed completely random"*). **A rule
+demonstrated once looks like a rule about one provider's habits**; two shapes show it
+is about whether an apparatus publishes enough structure to say which configuration
+reached which part of the frame, however the heterogeneity arose. Distinct from
+sampling, which asks which ELIGIBLE targets were attempted where this asks whether
+the predicate was eligible at all; from the retrievable frame, which asks what a
+REQUESTER may retrieve where this asks what the apparatus MEASURED; and from
+time-addressability, which asks WHEN where this asks WHERE. **Registry 14 to 15**,
+produced BEFORE final candidate selection, no existing requirement renamed or merged,
+and **no historical verdict edited** — §45 honoured, with a Mission 1.62 test
+re-pointed from 14 to 15 exactly as Mission 1.63 re-pointed it from 13.
+
+**FOUR HITS DIED AT THE DOCUMENTATION PRE-GATE, AND THAT IS REPORTED APART FROM THE
+EPISTEMICS.** BinaryEdge's documentation host 301-redirects every path to one
+Coalition customer notice that itself returns 403; ZoomEye failed on all three of its
+documented hosts; Criminal IP returned 403 twice; FOFA served a client-side
+navigation shell twice. **None became a serious candidate**, and each records what
+that does NOT establish — a fact about this mission's reach, in the shape Mission
+1.60 recorded for three candidates that later documented fully. **Outcome J was
+available and refused**: documentation is numerically the largest group, and reporting
+it as THE binding limitation would misdescribe the two candidates that documented
+themselves thoroughly and failed on epistemics.
+
+**THE RETRIEVAL-SUMMARY GUARD FIRED TWICE.** A search summary reported BinaryEdge
+scanning-engine internals and six months of host history, and another reported
+Criminal IP field-level detail with an example timestamp. **Neither exists at the
+addresses the live hosts serve**, and nothing from either was used in either
+direction. Mission 1.63's nonexistent sentence remains the canonical negative
+control, and this is the first mission to meet it twice.
+
+**24 of 36 first-party document requests**, 12 carrying load-bearing content, 4
+returning nothing usable and **8 failing outright — all counted**, because a budget
+that only counts successes is not a budget. 12 navigation searches, used only to
+locate exact first-party paths so a guessed 404 would not spend budget. **2 serious
+candidates of a permitted 6.** **0 research data requests, 0 API executions, 0
+measurement executions, 0 count-endpoint executions, 0 hosts, 0 banners, 0 downloads,
+0 trials, 0 purchases, 0 accounts, 0 credential reads, 0 mailbox searches, 0 enquiries
+sent.** 0 sources registered, 0 governance reviews, 0 canonical mutations, 0
+reliability values, 0 independence groups, 0 model calls, 0 embeddings, no migration.
+ONYPHE stays `NOT_CHECKED_AFTER_DISPATCH` and Netlas stays unresolved with nothing
+decoded or guessed. **Total apparatuses 6, qualified 0, so `PAIR_ANALYSIS_NOT_READY`
+and no pair selected or ranked.** Validator probed with **119 deliberate violations,
+119 caught** — 115 by rule, 4 by drift, the four being exactly the hand-edited
+generated pages — plus **4 of 4 positive controls**, including a fully evidenced
+qualified package, a two-qualified readiness state that still selects no pair, and a
+valid DECLINE leaving the registry at 14. **Two probe defects were found and fixed**:
+mutators that returned a sub-record instead of the root, and a restore set that
+omitted a file a case mutated, which left Mission 1.66.2's ONYPHE package edited on
+disk until the positive controls refused to pass. **One case ESCAPED and the rule was
+added rather than the record loosened** — an append-model discriminator beside a
+maintained-state temporal object was only refused on the PASS branch, so the
+contradiction could sit in a record whose gate read FAIL. **2089 bare-python tests**
+run before commit, and all **37** CI gates.
 
 ## 1.101 — 2026-09-05 (Sprint 1 / Mission 1.66.2)
 

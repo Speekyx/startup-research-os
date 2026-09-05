@@ -1,0 +1,82 @@
+{
+ "$comment": "Mission 1.67 §10, §11 and §39. The documentation-retrievability pre-gate runs BEFORE a hit becomes a serious candidate, which is Mission 1.62 to 1.66.2's learning carried forward.",
+ "record_version": "1.0.0",
+ "mission": "1.67 — Second Qualified Scanner Discovery V1",
+ "recorded_at": "2026-09-06",
+ "seriousness_rule": {
+  "$comment": "§39.",
+  "requires_all_of": [
+   "active-measurement plausibility established",
+   "first-party method documentation retrievable",
+   "product relevance plausible"
+  ],
+  "a_name_found_only_in_a_listicle_is_not_serious": true
+ },
+ "candidates": [
+  {
+   "name": "Rapid7 Project Sonar",
+   "active_measurement_plausible": true,
+   "first_party_method_docs_retrievable": true,
+   "product_relevance_plausible": true,
+   "documents_retrieved": 6,
+   "verdict": "SERIOUS",
+   "why": "Four independent first-party pages plus a provider-controlled repository wiki, each carrying method rather than marketing."
+  },
+  {
+   "name": "Shodan",
+   "active_measurement_plausible": true,
+   "first_party_method_docs_retrievable": true,
+   "product_relevance_plausible": true,
+   "documents_retrieved": 5,
+   "verdict": "SERIOUS",
+   "why": "Help centre, crawler-algorithm chapter, REST API reference, filter reference and Trends reference all retrievable and all first-party."
+  },
+  {
+   "name": "BinaryEdge",
+   "active_measurement_plausible": "NOT_ESTABLISHED",
+   "first_party_method_docs_retrievable": false,
+   "product_relevance_plausible": "NOT_ESTABLISHED",
+   "documents_retrieved": 0,
+   "verdict": "DOCUMENTATION_NOT_RETRIEVABLE_FOR_QUALIFICATION",
+   "why": "Every attempted documentation path redirects to one customer notice that itself refuses retrieval.",
+   "what_this_does_not_establish": "Nothing about the apparatus. This is a fact about what this environment could retrieve, in the shape Mission 1.60 recorded for three candidates that later documented fully."
+  },
+  {
+   "name": "ZoomEye",
+   "active_measurement_plausible": "NOT_ESTABLISHED",
+   "first_party_method_docs_retrievable": false,
+   "product_relevance_plausible": "NOT_ESTABLISHED",
+   "documents_retrieved": 0,
+   "verdict": "DOCUMENTATION_NOT_RETRIEVABLE_FOR_QUALIFICATION",
+   "why": "Three documented hosts, none serving usable technical documentation to this environment.",
+   "what_this_does_not_establish": "Nothing about the apparatus."
+  },
+  {
+   "name": "Criminal IP",
+   "active_measurement_plausible": "NOT_ESTABLISHED",
+   "first_party_method_docs_retrievable": false,
+   "product_relevance_plausible": "NOT_ESTABLISHED",
+   "documents_retrieved": 0,
+   "verdict": "DOCUMENTATION_NOT_RETRIEVABLE_FOR_QUALIFICATION",
+   "why": "Both attempted developer documentation paths returned HTTP 403.",
+   "what_this_does_not_establish": "Nothing about the apparatus. A search summary reported field-level detail for this candidate and it was not used, in either direction."
+  },
+  {
+   "name": "FOFA",
+   "active_measurement_plausible": "NOT_ESTABLISHED",
+   "first_party_method_docs_retrievable": false,
+   "product_relevance_plausible": "NOT_ESTABLISHED",
+   "documents_retrieved": 0,
+   "verdict": "DOCUMENTATION_NOT_RETRIEVABLE_FOR_QUALIFICATION",
+   "why": "Both attempted documentation paths returned a client-side navigation shell with no field documentation.",
+   "what_this_does_not_establish": "Nothing about the apparatus."
+  }
+ ],
+ "no_retry_discipline": {
+  "$comment": "Standing constraint, and Mission 1.36's precedent.",
+  "http_403_retried": false,
+  "headers_varied": false,
+  "anti_bot_measures_bypassed": false,
+  "third_party_mirror_or_cache_substituted_for_a_first_party_document": false
+ }
+}

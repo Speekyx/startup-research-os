@@ -1,0 +1,107 @@
+{
+ "$comment": "Mission 1.67 §0 and §1. Preconditions verified from git, canonical baseline measured live against the deployment, and the apparatus requirement registry read from the repository artifact rather than from the brief.",
+ "record_version": "1.0.0",
+ "mission": "1.67 — Second Qualified Scanner Discovery V1",
+ "recorded_at": "2026-09-06",
+ "repository_precondition": {
+  "mission_1_66_2_merged": true,
+  "pull_request": 111,
+  "pull_request_state": "MERGED",
+  "merge_commit": "6f9c901c07b3a156c544ff94d8e1daf8f5602fcb",
+  "merge_commit_short": "6f9c901",
+  "operator_reported_main": "6f9c901",
+  "operator_report_agrees_with_git": true,
+  "local_main_equals_origin_main": true,
+  "working_tree_clean": true,
+  "branch": "sprint-1/mission-1.67",
+  "migration_head": "0035_refusal_provenance",
+  "verified_from_git_not_from_prompt": true
+ },
+ "canonical_baseline": {
+  "$comment": "Measured live. Every counter matched the expectation in §0 exactly.",
+  "raw_records": 325,
+  "normalized_records": 325,
+  "signals": 33,
+  "claims": 44,
+  "claim_revisions": 45,
+  "evidence": 58,
+  "inferred_claims": 1,
+  "threshold_registrations": 1,
+  "claim_derivations": 1,
+  "proposition_evaluation_refusals": 0,
+  "evidence_supports": 57,
+  "evidence_contradicts": 1,
+  "claims_carrying_both_directions": 0,
+  "reliability_assessments": 4,
+  "evidence_independence_groups": 0,
+  "opportunities": 1,
+  "opportunity_revisions": 1,
+  "opportunity_evidence_links": 7,
+  "registered_sources": 29,
+  "embeddings": 0,
+  "scores_table": "ABSENT",
+  "reference_profile": "UNCALIBRATED",
+  "problem_family": "PARKED",
+  "migration_head": "0035_refusal_provenance",
+  "drift_from_mission_1_66_2": "none",
+  "measured_live_not_quoted_from_a_report": true
+ },
+ "requirement_registry_before": {
+  "$comment": "§1. Read from docs/data/observation-addressable-apparatus-contract-v1.json, not from the brief's copied list.",
+  "source_artifact": "docs/data/observation-addressable-apparatus-contract-v1.json",
+  "path_within_artifact": "requirement_registry.requirements",
+  "count": 14,
+  "names_in_order": [
+   "SOURCE_EXCLUSIVE_METRIC",
+   "RELIABILITY_REVIEWABILITY",
+   "FRAME_INSIDE_THE_DEFINITION",
+   "AFFIRMATIVE_LINEAGE_REQUIRED",
+   "PRODUCT_RELEVANCE",
+   "READING_A_PUBLISHED_VALUE_IS_NOT_MEASURING_IT",
+   "OBSERVATION_ADDRESSABLE_EXPOSURE",
+   "THE_TEMPORAL_OBJECT_TEST",
+   "SAMPLING_IS_LOAD_BEARING",
+   "ENUMERATED_EXCEPTIONS_MAKE_A_LINEAGE_CLAIM_CHECKABLE",
+   "LINEAGE_EXHAUSTIVENESS_IS_NOT_FRAME_EXHAUSTIVENESS",
+   "THE_RETRIEVABLE_FRAME_IS_NOT_THE_MEASURED_FRAME",
+   "DEFAULT_DATA_SURFACE_MUST_NOT_OVERRIDE_QUALIFIED_EXPOSURE_PATH",
+   "APPARATUS_CONFIGURATION_MUST_BE_TIME_ADDRESSABLE"
+  ],
+  "artifact_carries_a_version_or_hash_field": false,
+  "what_that_absence_means": "The contract record carries record_version for the document as a whole and no per-registry hash. The count and the ordered name list are therefore the identity used by this mission's tests."
+ },
+ "frozen_construct_unchanged": {
+  "$comment": "§2. Restated to fix what a candidate is being judged against. Not re-derived and not modified.",
+  "proposition_subject": "distinct public IPv4 addresses",
+  "conditions": [
+   "during a predefined observation window W, TCP port 22 accepted a connection",
+   "before protocol negotiation the peer emitted an identification string beginning with the literal prefix SSH-"
+  ],
+  "protocol_authority": "RFC 4253 §4.2",
+  "count_unit": "DISTINCT_IPV4",
+  "count_unit_must_never_be": [
+   "ROW_COUNT",
+   "SERVICE_ROW_COUNT",
+   "BANNER_COUNT"
+  ],
+  "must_not_be_substituted_by": [
+   "vendor ssh label",
+   "OpenSSH fingerprint",
+   "CVE exposure",
+   "customer count",
+   "installation count",
+   "market share",
+   "adoption"
+  ]
+ },
+ "parallel_state_untouched": {
+  "$comment": "§34 and §35. Recorded so the mission's own artifacts assert it.",
+  "onyphe_response_status": "NOT_CHECKED_AFTER_DISPATCH",
+  "onyphe_mailbox_searched": false,
+  "onyphe_contacted_again": false,
+  "onyphe_public_reading": "EXHAUSTED",
+  "netlas_recipient_status": "NOT_ESTABLISHED",
+  "netlas_address_decoded_or_guessed": false,
+  "netlas_enquiry_sent": false
+ }
+}

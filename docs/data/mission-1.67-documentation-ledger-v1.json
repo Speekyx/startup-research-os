@@ -1,0 +1,234 @@
+{
+ "$comment": "Mission 1.67 §9 and §53. Every first-party document request, including the ones that returned nothing. A redirect to irrelevant content and a 404 both spend budget.",
+ "record_version": "1.0.0",
+ "mission": "1.67 — Second Qualified Scanner Discovery V1",
+ "recorded_at": "2026-09-06",
+ "budget": {
+  "maximum_first_party_requests": 36,
+  "used": 24,
+  "remaining_unspent": 12,
+  "maximum_serious_candidates": 6,
+  "serious_candidates": 2
+ },
+ "outcome_counts": {
+  "load_bearing": 12,
+  "retrieved_without_load_bearing_content": 4,
+  "failed": 8
+ },
+ "search_navigation_requests": {
+  "count": 12,
+  "$comment": "§7 and §41. Search engines were used for navigation only — to locate exact first-party paths rather than guess them, since a guessed path that 404s spends document budget. No gate is closed by a search result.",
+  "no_gate_closed_by_a_search_summary": true
+ },
+ "retrieval_summary_guard": {
+  "$comment": "§42. Mission 1.63's nonexistent sentence is the canonical negative control, and this mission met the shape twice.",
+  "instances": [
+   {
+    "candidate": "BinaryEdge",
+    "what_the_summary_reported": "Substantive technical content — scanning engine minions and modules, output mangling, and host data up to six months — attributed to docs.binaryedge.io paths.",
+    "what_the_live_documents_returned": "Three separate paths on that host each 301-redirected to one non-technical Coalition customer notice, which itself returned HTTP 403.",
+    "project_interpretation": "The index a search engine holds is not the document the host currently serves. Nothing from that summary was used to close any gate."
+   },
+   {
+    "candidate": "Criminal IP",
+    "what_the_summary_reported": "A confirmed_time field with an example timestamp, a banner search endpoint, and scan cadence figures.",
+    "what_the_live_documents_returned": "HTTP 403 on both attempted first-party documentation paths.",
+    "project_interpretation": "Recorded as documentation not retrievable from this environment. None of the summary's load-bearing wording was used, in either direction."
+   }
+  ]
+ },
+ "requests": [
+  {
+   "n": 1,
+   "url": "https://sonardata.rapid7.com/about/",
+   "candidate": "Rapid7 Project Sonar",
+   "sought": "active-measurement plausibility, which services are scanned, access model",
+   "outcome": "RETRIEVED_LOAD_BEARING",
+   "detail": "Established A1 and named SSH among TCP studies."
+  },
+  {
+   "n": 2,
+   "url": "https://www.rapid7.com/research/project-sonar/",
+   "candidate": "Rapid7 Project Sonar",
+   "sought": "frame and two-stage collection method",
+   "outcome": "RETRIEVED_LOAD_BEARING",
+   "detail": "Established the eligible-frame claim over public IPv4 with opt-out exclusions."
+  },
+  {
+   "n": 3,
+   "url": "https://help.shodan.io/the-basics/what-is-shodan",
+   "candidate": "Shodan",
+   "sought": "what the data is, whether banners are raw",
+   "outcome": "RETRIEVED_LOAD_BEARING",
+   "detail": "Banner described as metadata about software; raw-response status left open here."
+  },
+  {
+   "n": 4,
+   "url": "https://docs.binaryedge.io/",
+   "candidate": "BinaryEdge",
+   "sought": "the first-party technical documentation index",
+   "outcome": "FAILED",
+   "detail": "HTTP 301 to a Coalition help-centre customer notice. First of three."
+  },
+  {
+   "n": 5,
+   "url": "https://sonardata.rapid7.com/changelog/",
+   "candidate": "Rapid7 Project Sonar",
+   "sought": "dataset dating convention and study history",
+   "outcome": "RETRIEVED_NO_LOAD_BEARING_CONTENT",
+   "detail": "Page carried no naming convention, no dates and no SSH study reference. Counted, because a budget that only counts successes is not a budget."
+  },
+  {
+   "n": 6,
+   "url": "https://developer.shodan.io/api",
+   "candidate": "Shodan",
+   "sought": "the host endpoint and any historical parameter",
+   "outcome": "RETRIEVED_LOAD_BEARING",
+   "detail": "Established the history and minify parameters and the per-host scope."
+  },
+  {
+   "n": 7,
+   "url": "https://help.coalitioninc.com/hc/en-us/articles/48928737389979-What-the-BinaryEdge-scanner-does-and-why-Coalition-may-scan-your-internet-facing-systems",
+   "candidate": "BinaryEdge",
+   "sought": "the redirect target, followed once in fairness",
+   "outcome": "FAILED",
+   "detail": "HTTP 403 Forbidden. Not retried and no header varied."
+  },
+  {
+   "n": 8,
+   "url": "https://www.zoomeye.ai/doc",
+   "candidate": "ZoomEye",
+   "sought": "technical documentation",
+   "outcome": "RETRIEVED_NO_LOAD_BEARING_CONTENT",
+   "detail": "Returned a page title only. Not technical documentation."
+  },
+  {
+   "n": 9,
+   "url": "https://help.shodan.io/mastery/data_timeline",
+   "candidate": "Shodan",
+   "sought": "the named page for historical data timeframes — the A2 discriminator",
+   "outcome": "RETRIEVED_LOAD_BEARING",
+   "detail": "Established the 90-day per-IP bound, the 1,000-banner cap, and that the page states nothing about window-restricted search or repeated-observation storage."
+  },
+  {
+   "n": 10,
+   "url": "https://book.shodan.io/behind-the-scenes/crawler-algorithm/",
+   "candidate": "Shodan",
+   "sought": "own-scanner statement, target selection, cadence, port selection",
+   "outcome": "RETRIEVED_LOAD_BEARING",
+   "detail": "Established A1, and established randomised address AND port selection."
+  },
+  {
+   "n": 11,
+   "url": "https://sonardata.rapid7.com/apihelp/",
+   "candidate": "Rapid7 Project Sonar",
+   "sought": "how studies and files are addressed",
+   "outcome": "RETRIEVED_LOAD_BEARING",
+   "detail": "Established dated immutable file addressing and the study/file field sets."
+  },
+  {
+   "n": 12,
+   "url": "https://github.com/rapid7/sonar/wiki/Analyzing-Datasets",
+   "candidate": "Rapid7 Project Sonar",
+   "sought": "dataset file naming and record contents",
+   "outcome": "RETRIEVED_LOAD_BEARING",
+   "detail": "Provider-controlled repository, permitted by §41. Carried naming examples and no SSH or port-22 content."
+  },
+  {
+   "n": 13,
+   "url": "https://www.shodan.io/search/filters",
+   "candidate": "Shodan",
+   "sought": "whether any time or date filter exists — checked BEFORE failing A2 on an absence",
+   "outcome": "RETRIEVED_LOAD_BEARING",
+   "detail": "No time or date filter is documented. This is the check that makes the A2 failure a positive finding rather than an unexamined silence."
+  },
+  {
+   "n": 14,
+   "url": "https://sonardata.rapid7.com/",
+   "candidate": "Rapid7 Project Sonar",
+   "sought": "the retrievable dataset catalogue",
+   "outcome": "RETRIEVED_LOAD_BEARING",
+   "detail": "Established the eight datasets and their exact descriptions."
+  },
+  {
+   "n": 15,
+   "url": "https://github.com/rapid7/sonar/wiki/TCP",
+   "candidate": "Rapid7 Project Sonar",
+   "sought": "what a TCP study record contains",
+   "outcome": "RETRIEVED_LOAD_BEARING",
+   "detail": "Established that TCP study output is SYN responses only."
+  },
+  {
+   "n": 16,
+   "url": "https://docs.binaryedge.io/search/",
+   "candidate": "BinaryEdge",
+   "sought": "host search parameters, for the A2 time-window question",
+   "outcome": "FAILED",
+   "detail": "HTTP 301 to the same Coalition customer notice. Second of three."
+  },
+  {
+   "n": 17,
+   "url": "https://docs.binaryedge.io/SEv2/glossary/",
+   "candidate": "BinaryEdge",
+   "sought": "scanning-engine definitions, for A1 and record semantics",
+   "outcome": "FAILED",
+   "detail": "HTTP 301 to the same Coalition customer notice. Third of three."
+  },
+  {
+   "n": 18,
+   "url": "https://zoomeye.org/api/doc",
+   "candidate": "ZoomEye",
+   "sought": "API documentation",
+   "outcome": "FAILED",
+   "detail": "HTTP 521."
+  },
+  {
+   "n": 19,
+   "url": "https://www.zoomeye.hk/doc?channel=api",
+   "candidate": "ZoomEye",
+   "sought": "the third documented host",
+   "outcome": "FAILED",
+   "detail": "DNS resolution timeout."
+  },
+  {
+   "n": 20,
+   "url": "https://www.criminalip.io/developer/api/get-ip-data",
+   "candidate": "Criminal IP",
+   "sought": "response fields, timestamps, any date-range parameter",
+   "outcome": "FAILED",
+   "detail": "HTTP 403 Forbidden. Not retried and no header varied."
+  },
+  {
+   "n": 21,
+   "url": "https://en.fofa.info/api",
+   "candidate": "FOFA",
+   "sought": "query fields, any time field, raw banner field, scanning statement",
+   "outcome": "RETRIEVED_NO_LOAD_BEARING_CONTENT",
+   "detail": "Client-side navigation shell: section headings only, no field documentation."
+  },
+  {
+   "n": 22,
+   "url": "https://www.criminalip.io/developer/api/get-banner-search",
+   "candidate": "Criminal IP",
+   "sought": "a second path on the same host, in fairness before recording non-retrievability",
+   "outcome": "FAILED",
+   "detail": "HTTP 403 Forbidden."
+  },
+  {
+   "n": 23,
+   "url": "https://en.fofa.info/api/stats/statistical",
+   "candidate": "FOFA",
+   "sought": "a second documented path, in fairness",
+   "outcome": "RETRIEVED_NO_LOAD_BEARING_CONTENT",
+   "detail": "Same client-side navigation shell."
+  },
+  {
+   "n": 24,
+   "url": "https://developer.shodan.io/api/trends",
+   "candidate": "Shodan",
+   "sought": "the Trends resource, evaluated separately because §16 forbids failing one resource by inheritance from another",
+   "outcome": "RETRIEVED_LOAD_BEARING",
+   "detail": "Established that Trends documents no date-range parameter and does not state what its counts count."
+  }
+ ]
+}

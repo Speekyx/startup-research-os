@@ -1,0 +1,191 @@
+{
+ "$comment": "Mission 1.67 §36-§38. Serious candidate 2. Two resources are evaluated separately, because §16 forbids failing one resource by inheritance from another.",
+ "record_version": "1.0.0",
+ "mission": "1.67 — Second Qualified Scanner Discovery V1",
+ "recorded_at": "2026-09-06",
+ "apparatus": "Shodan",
+ "gate_taxonomy": {
+  "$comment": "§36. The repository already defines nine individual hard gates A1-A9 in docs/data/observation-addressable-apparatus-contract-v1.json, and the brief's §36 list numbers some slots differently. The REPOSITORY-native names are used here, so no second parallel taxonomy is created. The additional slots the brief names — configuration membership, configuration time-addressability, configuration frame uniformity, sampling, vantage, retention, access — have no A-number in the contract and are carried beside the gates under their own names.",
+  "gate_names_source": "docs/data/observation-addressable-apparatus-contract-v1.json → individual_hard_gates"
+ },
+ "evaluation_discipline": {
+  "$comment": "§11. After a decisive FAIL, expensive investigation stops. A gate whose answer was already established by a document retrieved BEFORE the fail keeps its real status and is marked established_incidentally; a gate that would have required a new document is marked NOT_EVALUATED_AFTER_DECISIVE_FAIL. Recording a fact already in hand is not further investigation, and discarding it would be pretending to know less than this mission does."
+ },
+ "resources_evaluated": [
+  "Shodan search and host database",
+  "Shodan Trends"
+ ],
+ "gates": {
+  "A1_ACTIVE_MEASUREMENT_PRODUCER": {
+   "status": "PASS",
+   "source_says": [
+    "the crawlers work 24/7 and update the database in real-time.",
+    "Generate a random IPv4 address",
+    "Generate a random port to test from the list of ports that Shodan understands",
+    "the crawlers don't scan incremental network ranges. The crawling is performed completely random to ensure a uniform coverage of the Internet.",
+    "The algorithm is designed to randomly crawl the Internet once a week."
+   ],
+   "source_says_provenance": [
+    "https://book.shodan.io/behind-the-scenes/crawler-algorithm/"
+   ],
+   "project_interpretation": "Own crawler infrastructure and an explicit target-selection algorithm. §12 satisfied."
+  },
+  "A2_OBSERVATION_ADDRESSABLE_EXPOSURE": {
+   "status": "FAIL",
+   "decisive": true,
+   "temporal_object": "MAINTAINED_SERVICE_STATE",
+   "three_independent_blocking_facts": [
+    {
+     "fact": "the database is maintained in real time",
+     "source_says": "the crawlers work 24/7 and update the database in real-time.",
+     "source_says_provenance": "https://book.shodan.io/behind-the-scenes/crawler-algorithm/"
+    },
+    {
+     "fact": "no time or date filter exists in the search surface",
+     "source_says": "The Filter Reference documents no time or date filter such as before, after or timestamp.",
+     "source_says_provenance": "https://www.shodan.io/search/filters",
+     "why_this_one_matters_most": "It is a POSITIVE CHECK of the one documented mechanism that could have closed the gate. Failing A2 on an absence nobody looked for would have been the error; this page was fetched precisely so the absence is an examined one."
+    },
+    {
+     "fact": "the only historical surface is per-address and bounded",
+     "source_says": [
+      "The historical IP lookups feature of the API provides data going back up to 90 days.",
+      "it returns at most 1,000 banners so if the IP has been frequently rescanned during the 90 days then the API will only return the most recent 1,000 banners.",
+      "Returns all services that have been found on the given host IP.",
+      "True if all historical banners should be returned (default: False)"
+     ],
+     "source_says_provenance": [
+      "https://help.shodan.io/mastery/data_timeline",
+      "https://developer.shodan.io/api"
+     ]
+    }
+   ],
+   "project_interpretation": "A per-address history requires already holding the address. Obtaining the address set for a window means running a search against a database described as updated in real time, with no way to restrict that search to a past window, and then inspecting timestamps afterwards. That is retrieve-then-inspect, which §13 fails and which Mission 1.59 rejected on a different apparatus for the same reason: the window cannot be chosen in the request.",
+   "the_honest_two_level_answer": "At ADDRESS level the history parameter does look like versioned observation history within 90 days, and saying otherwise would overstate the failure. At FRAME level — which is what a count of distinct addresses needs — the object is a maintained current state. The construct needs the frame-level answer.",
+   "not_composed_from_weak_facts": "§14 forbids composing weak facts into a PASS. Each of the three facts here independently blocks window-first selection, and the composition runs toward the refusal rather than toward the qualification."
+  },
+  "A3_PROTOCOL_NATIVE_OBSERVATION_EXPOSURE": {
+   "status": "NOT_EVALUATED_AFTER_DECISIVE_FAIL",
+   "exposure_class": "UNKNOWN",
+   "open_question_recorded_not_resolved": {
+    "source_says": "The bulk of the data is taken from banners, which are metadata about a software that's running on a device.",
+    "source_says_provenance": "https://help.shodan.io/the-basics/what-is-shodan",
+    "project_interpretation": "The word metadata points away from a raw response and the page is an introductory one, so it settles nothing. Whether a raw response field exists was NOT pursued after the A2 fail, and this is recorded as an open question rather than as a finding."
+   }
+  },
+  "A4_OBSERVATION_TIME_DOCUMENTED": {
+   "status": "NOT_EVALUATED_AFTER_DECISIVE_FAIL"
+  },
+  "A5_FRAME_DOCUMENTED": {
+   "status": "PARTIAL",
+   "established_incidentally": true,
+   "eligible_frame": "IPv4",
+   "attempted_frame": "a random sample, by documented design",
+   "measured_frame": "UNKNOWN",
+   "retrievable_frame": "UNKNOWN",
+   "project_interpretation": "The apparatus documents that it generates random addresses and does not sweep ranges. §25 forbids inventing census semantics from the phrase internet-wide, and here the apparatus itself says the coverage is achieved by randomisation rather than enumeration."
+  },
+  "A6_NON_VALUE_DOCUMENTATION_AVAILABLE": {
+   "status": "PASS",
+   "project_interpretation": "Every finding was established from documentation, with no measurement value retrieved and no endpoint called."
+  },
+  "A7_AFFIRMATIVE_MEASUREMENT_LINEAGE": {
+   "status": "NOT_EVALUATED_AFTER_DECISIVE_FAIL"
+  },
+  "A8_RELIABILITY_REVIEWABLE": {
+   "status": "NOT_EVALUATED_AFTER_DECISIVE_FAIL",
+   "reliability_value_assigned": null
+  },
+  "A9_PRODUCT_RELEVANT": {
+   "status": "PASS"
+  }
+ },
+ "additional_slots": {
+  "configuration_membership_tcp_22": {
+   "status": "UNKNOWN",
+   "source_says": "Generate a random port to test from the list of ports that Shodan understands",
+   "source_says_provenance": "https://book.shodan.io/behind-the-scenes/crawler-algorithm/",
+   "project_interpretation": "The list is referred to and not enumerated in the retrieved documents, so membership of TCP/22 is UNKNOWN. Separately, the port under test is drawn per crawl step rather than applied to every address."
+  },
+  "configuration_time_addressability": {
+   "status": "NOT_EVALUATED_AFTER_DECISIVE_FAIL"
+  },
+  "configuration_frame_uniformity": {
+   "status": "HETEROGENEITY_OBSERVED",
+   "established_incidentally": true,
+   "separable": "UNKNOWN",
+   "source_says": [
+    "Generate a random port to test from the list of ports that Shodan understands",
+    "the crawlers don't scan incremental network ranges. The crawling is performed completely random to ensure a uniform coverage of the Internet."
+   ],
+   "source_says_provenance": "https://book.shodan.io/behind-the-scenes/crawler-algorithm/",
+   "project_interpretation": "The effective configuration varies across the frame by construction: which port is tested is drawn per step, so TCP/22 is not applied to every crawled address within a window. This is a different shape from ONYPHE's declared regional partitions and it is the same failure mode, which is the second instance the frame-uniformity rule was adopted on.",
+   "established_incidentally_not_investigated": "This came from the same document that established A1, before the A2 fail. No separate uniformity investigation was performed, and whether the strata are separable is UNKNOWN rather than answered."
+  },
+  "sampling": {
+   "status": "PARTIAL",
+   "established_incidentally": true,
+   "project_interpretation": "Randomised target selection is documented, which is a real and reviewable sampling design and is the opposite of a census. Nothing retrieved on failures, retries, rate limiting or partial cycles, which stays UNKNOWN under §25."
+  },
+  "vantage": {
+   "status": "NOT_EVALUATED_AFTER_DECISIVE_FAIL"
+  },
+  "retention": {
+   "status": "PARTIAL",
+   "established_incidentally": true,
+   "source_says": [
+    "The historical IP lookups feature of the API provides data going back up to 90 days.",
+    "it returns at most 1,000 banners so if the IP has been frequently rescanned during the 90 days then the API will only return the most recent 1,000 banners."
+   ],
+   "source_says_provenance": "https://help.shodan.io/mastery/data_timeline",
+   "project_interpretation": "§27 allows finite retention to pass where a future governed acquisition could happen within it. Ninety days is workable in principle; the cap means a frequently rescanned address can lose its earlier observations, which bears on completeness rather than on the horizon."
+  },
+  "access": {
+   "status": "ACCOUNT_REQUIRED",
+   "used_as_a_disqualifier": false
+  }
+ },
+ "second_resource_shodan_trends": {
+  "$comment": "§16. Evaluated separately rather than failed by inheritance. This is the one documented surface that could have carried historical selection, so it was read rather than assumed.",
+  "resource": "Shodan Trends",
+  "source_says": [
+   "Search query used to search the historical database, e.g. product:nginx",
+   "A comma-separated list of properties to get summary information on. e.g. country"
+  ],
+  "source_says_provenance": "https://developer.shodan.io/api/trends",
+  "date_range_parameter": "ABSENT",
+  "response_shape": "monthly buckets carrying a count, plus a total",
+  "count_unit": "UNSTATED",
+  "A2_status": "FAIL",
+  "A3_status": "NOT_EXPOSED",
+  "project_interpretation": "Three separate reasons, any one of which is sufficient. No parameter restricts results to a chosen window, so an arbitrary W cannot be expressed. The response carries counts and no identification string, so the protocol predicate is evaluated by the apparatus rather than checkable by the requester. And the documentation does not state what the count counts — §2 requires DISTINCT IPv4 and forbids row, service-row and banner counts, so an undocumented count unit cannot witness the construct whatever its value.",
+  "endpoint_executed": false
+ },
+ "metadata_endpoint_safety_review": {
+  "$comment": "§32, carrying Mission 1.66.2's User API lesson forward.",
+  "endpoints_considered": [
+   "Shodan Trends /api/v1/search",
+   "Shodan REST /shodan/host/{ip}"
+  ],
+  "classification": "SECRET_BEARING_AND_MEASUREMENT_BEARING_DO_NOT_EXECUTE",
+  "why": "Both require an API key, and both return measurement — the first a count, the second host records and banners. Mission 1.66.2 established that avoiding measurement contamination and avoiding credential exposure are two different properties and that the second is not implied by the first. Here both fail at once.",
+  "executed": false,
+  "credential_read_to_check": false
+ },
+ "repeated_service_discriminator": {
+  "$comment": "§14.",
+  "question": "Service S at address A:port P is observed during W. The same service is observed again after W. Can an acquisition restricted to W still recover the observation from W?",
+  "answer_at_frame_level": "MAINTAINED_SERVICE_STATE",
+  "answer_at_address_level": "VERSIONED_OBSERVATION_HISTORY",
+  "which_one_the_construct_needs": "frame level",
+  "basis": "The search surface documents no window restriction and the database is documented as updated in real time; the 90-day banner history is reachable only once an address is already known."
+ },
+ "verdict": {
+  "individual_status": "INDIVIDUALLY_NOT_QUALIFIED",
+  "decisive_fail_gate": "A2_OBSERVATION_ADDRESSABLE_EXPOSURE",
+  "failed_on_both_evaluated_resources": true,
+  "package_complete": true,
+  "point_score_used": false,
+  "why_not_unresolved": "The blocking facts are positive documented statements plus one examined absence in the exact page that would carry the mechanism, rather than silence nobody looked into."
+ }
+}

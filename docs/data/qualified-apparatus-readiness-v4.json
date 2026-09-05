@@ -1,0 +1,110 @@
+{
+ "$comment": "Mission 1.67 §46. Pair readiness across the four existing candidate apparatuses and the two new serious candidates. Readiness is not selection (§48).",
+ "record_version": "4.0.0",
+ "mission": "1.67 — Second Qualified Scanner Discovery V1",
+ "recorded_at": "2026-09-06",
+ "supersedes": "qualified-apparatus-readiness-v3",
+ "apparatuses": [
+  {
+   "name": "Netlas",
+   "individual": "INDIVIDUALLY_NOT_QUALIFIED",
+   "blocking": [
+    "A8"
+   ],
+   "changed": false,
+   "researched_this_mission": false,
+   "new_this_mission": false
+  },
+  {
+   "name": "ONYPHE",
+   "individual": "INDIVIDUALLY_UNRESOLVED",
+   "blocking": [
+    "B2",
+    "B4"
+   ],
+   "changed": false,
+   "researched_this_mission": false,
+   "new_this_mission": false
+  },
+  {
+   "name": "LeakIX",
+   "individual": "INDIVIDUALLY_NOT_QUALIFIED",
+   "blocking": [
+    "B2"
+   ],
+   "changed": false,
+   "researched_this_mission": false,
+   "new_this_mission": false
+  },
+  {
+   "name": "The Shadowserver Foundation",
+   "individual": "INDIVIDUALLY_NOT_QUALIFIED",
+   "blocking": [
+    "B4"
+   ],
+   "changed": false,
+   "researched_this_mission": false,
+   "new_this_mission": false
+  },
+  {
+   "name": "Rapid7 Project Sonar",
+   "individual": "INDIVIDUALLY_NOT_QUALIFIED",
+   "blocking": [
+    "A3"
+   ],
+   "changed": true,
+   "researched_this_mission": true,
+   "new_this_mission": true
+  },
+  {
+   "name": "Shodan",
+   "individual": "INDIVIDUALLY_NOT_QUALIFIED",
+   "blocking": [
+    "A2"
+   ],
+   "changed": true,
+   "researched_this_mission": true,
+   "new_this_mission": true
+  }
+ ],
+ "total_apparatus_count": 6,
+ "new_serious_candidates": 2,
+ "new_individually_qualified": 0,
+ "qualified_apparatus_count": 0,
+ "pair_analysis_ready": false,
+ "pair_analysis_state": "PAIR_ANALYSIS_NOT_READY",
+ "minimum_required": 2,
+ "no_pair_work_was_performed": {
+  "pairs_compared": 0,
+  "pairs_ranked": 0,
+  "pairs_selected": 0,
+  "same_frame_evaluated": false,
+  "vantage_compatibility_evaluated": false,
+  "lineage_independence_evaluated": false,
+  "shared_measurement_upstream_evaluated": false,
+  "same_target_proposition_evaluated": false,
+  "threshold_preregistrability_evaluated": false
+ },
+ "how_the_existing_four_would_be_viewed_under_the_current_contract": {
+  "$comment": "§45. The registry gained a fifteenth rule this mission. This states how the contract now reads, and changes NO historical verdict. Old mission records stay exactly as written.",
+  "onyphe": "Its documented regional port-set difference is the case the new rule was written from, so under the current contract it would be asked the uniformity question explicitly rather than carrying it as a named risk. Its recorded verdict is unchanged and its package was not edited.",
+  "netlas_leakix_shadowserver": "No retrieved evidence of configuration heterogeneity exists for these three, and none was sought this mission. Absence of observation is not a finding of uniformity, so nothing is asserted about them.",
+  "historical_verdicts_edited": 0
+ },
+ "measurement_construct_unchanged": {
+  "$comment": "§2 and §3. Frozen, and not narrowed to fit a candidate.",
+  "quantity": "the number of distinct public IPv4 addresses from which, during a predefined observation window, TCP port 22 accepted a connection AND the peer sent an identification string beginning with the literal prefix SSH- before protocol negotiation",
+  "authority": "RFC 4253 §4.2",
+  "count_unit": "DISTINCT_IPV4",
+  "substituted_with_a_protocol_label": false,
+  "substituted_with_a_vendor_product": false,
+  "relaxed_to_admit_a_candidate": false
+ },
+ "the_arc_position": {
+  "target": "two apparatuses whose independent measurements can reach one Claim, so the aggregator stops being algebraically identical to the B-2 pass-through baseline",
+  "distance_from_it": "two qualified apparatuses short of two",
+  "what_this_mission_added": "Two complete packages for apparatuses nobody in this arc had evaluated, failing at two different gates — and, for the first time, an apparatus whose TEMPORAL OBJECT is right. Project Sonar publishes dated, immutable, individually addressed per-study artifacts, which is what Missions 1.59, 1.62 and 1.66.2 all failed to find. It fails on the other half of the conjunction.",
+  "the_shape_that_recurred": "Both halves of the requirement have now been seen separately and never together: apparatuses with raw protocol capture publish a maintained current state, and the apparatus with immutable dated snapshots publishes no raw capture for this protocol.",
+  "what_would_not_move_it": "Re-running the same discovery search. §61 forbids it, and the two established blockers name two different dimensions."
+ }
+}
