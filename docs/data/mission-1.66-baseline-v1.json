@@ -1,0 +1,118 @@
+{
+  "$comment": "Mission 1.66 §0. Preconditions and the canonical baseline, measured live before any work.",
+  "record_version": "1.0.0",
+  "mission": "1.66 — Approved Dispatch Execution V1",
+  "recorded_at": "2026-09-05",
+
+  "repository_precondition": {
+    "mission_1_65_merged": true,
+    "pull_request": 108,
+    "pull_request_state": "MERGED",
+    "merge_commit": "f6fee37b7e8e5c33d76f0e49aa78dc38f506a40e",
+    "merge_commit_short": "f6fee37",
+    "operator_reported_main": "f6fee37",
+    "operator_report_agrees_with_git": true,
+    "local_main_equals_origin_main": true,
+    "working_tree_clean": true,
+    "branch": "sprint-1/mission-1.66",
+    "migration_head": "0035_refusal_provenance",
+    "verified_from_git_not_from_prompt": true,
+    "$note": "The brief states the expected main commit. It was checked against git rather than accepted, because a brief reporting a commit is a claim about the repository and the repository is the authority on it."
+  },
+
+  "approved_dispatch_recomputation": {
+    "$comment": "§preconditions. Both hashes recomputed from the files as stored on the merged main.",
+    "enquiry_content_sha256_recomputed": "0b39ef325fd42836a3b65284a7386cbca7ae8f22afcb9629d5574e0ff0f23e9f",
+    "enquiry_content_sha256_recorded": "0b39ef325fd42836a3b65284a7386cbca7ae8f22afcb9629d5574e0ff0f23e9f",
+    "enquiry_content_matches": true,
+    "envelope_sha256_recomputed": "12a62853706a3c65f04859577fa3e9f2d4efaeca99cbf16badf759a55b4fe0d2",
+    "envelope_sha256_recorded": "12a62853706a3c65f04859577fa3e9f2d4efaeca99cbf16badf759a55b4fe0d2",
+    "envelope_sha256_supplied_by_operator": "12a62853706a3c65f04859577fa3e9f2d4efaeca99cbf16badf759a55b4fe0d2",
+    "envelope_matches": true,
+    "verdict": "APPROVED_ENVELOPE_HASH_VERIFIED",
+    "hashing_boundary": "the rendered enquiry file's raw bytes as stored, and canonical JSON over the envelope's seven binding fields",
+    "why_recomputed_rather_than_read": "An approval names a hash. If the bytes moved between approval and execution, the approval names a document nobody approved, and the only way to know is to recompute."
+  },
+
+  "canonical_baseline": {
+    "$comment": "Measured against the live deployment, not recalled from a report.",
+    "raw_records": 325,
+    "normalized_records": 325,
+    "signals": 33,
+    "claims": 44,
+    "claim_revisions": 45,
+    "evidence": 58,
+    "inferred_claims": 1,
+    "threshold_registrations": 1,
+    "claim_derivations": 1,
+    "proposition_evaluation_refusals": 0,
+    "evidence_supports": 57,
+    "evidence_contradicts": 1,
+    "reliability_assessments": 4,
+    "evidence_independence_groups": 0,
+    "opportunities": 1,
+    "opportunity_revisions": 1,
+    "opportunity_evidence_links": 7,
+    "registered_sources": 29,
+    "scores_table": "ABSENT",
+    "reference_profile": "UNCALIBRATED",
+    "problem_family": "PARKED",
+    "migration_head": "0035_refusal_provenance",
+    "drift_from_mission_1_65": "none"
+  },
+
+  "what_this_mission_may_and_may_not_do": {
+    "$comment": "§1. The mission records whether an approved action was performed. It does not perform it.",
+    "may": [
+      "record the operator's approval as an approval",
+      "record an execution the operator confirms happened",
+      "freeze a provider reply verbatim if one already exists"
+    ],
+    "may_not": [
+      "invent the dispatch",
+      "send from a connector",
+      "treat the approval as evidence that a send occurred",
+      "interpret a provider reply",
+      "move an apparatus gate"
+    ]
+  },
+
+  "request_accounting": {
+    "$comment": "§23, §24. Nothing was retrieved and no model was called.",
+    "RESEARCH_DATA_REQUESTS": 0,
+    "MEASUREMENT_QUERIES": 0,
+    "COUNTS_FETCHED": 0,
+    "HOST_RECORDS_FETCHED": 0,
+    "BANNERS_FETCHED": 0,
+    "FACETS_FETCHED": 0,
+    "DOWNLOADS": 0,
+    "TRIALS": 0,
+    "PURCHASES": 0,
+    "FIRST_PARTY_DOC_REQUESTS": 0,
+    "MODEL_CALLS": 0,
+    "EMBEDDINGS": 0,
+    "CONNECTOR_EXECUTIONS": 0,
+    "OUTBOUND_ENQUIRIES_SENT": 0,
+    "MAILBOX_SEARCHES": 0,
+    "why_no_mailbox_search": "The brief requires an explicit operator statement as dispatch evidence and never asks for the operator's mailbox to be read. Searching it would be an access nobody requested, and it would replace an attestation with an inference."
+  },
+
+  "canonical_mutations": {
+    "$comment": "§21. Email provenance is repository evidence and is never a RawRecord, Signal, Claim or Evidence row.",
+    "raw_records_created": 0,
+    "normalized_records_created": 0,
+    "signals_created": 0,
+    "claims_created": 0,
+    "claim_revisions_created": 0,
+    "evidence_created": 0,
+    "threshold_registrations_created": 0,
+    "claim_derivations_created": 0,
+    "refusals_created": 0,
+    "reliability_assessments_created": 0,
+    "independence_groups_created": 0,
+    "opportunities_modified": 0,
+    "sources_registered": 0,
+    "governance_reviews_created": 0,
+    "migrations_created": 0
+  }
+}

@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.98
+Version: 1.99
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-05 (Sprint 1 / Mission 1.65)
+Last amended: 2026-09-05 (Sprint 1 / Mission 1.66)
 
 ---
 
@@ -13,6 +13,96 @@ Last amended: 2026-09-05 (Sprint 1 / Mission 1.65)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.99 — 2026-09-05 (Sprint 1 / Mission 1.66)
+
+**`ONYPHE_APPROVED_DISPATCH_AWAITING_MANUAL_EXECUTION`.** The operator's approval
+arrived, was verified against a recomputed envelope hash, and is recorded as an
+approval. **The action it authorises has not been performed**, and this mission's
+whole job was to say so rather than to assume otherwise. **Nothing was sent.**
+
+**AN APPROVAL IS NOT AN EXECUTION, AND THIS IS WHERE A DISPATCH LOG WOULD START
+LYING.** A permission says an action MAY be performed; only a performance says it
+WAS. The two are unusually easy to merge here because **once the approval exists,
+every field an execution record needs is already known** -- recipient, subject,
+body and channel are all frozen in the envelope the approval names. A record
+could therefore fill itself in completely and be entirely fictional. So the
+approval and the execution are two sections of one artifact, and `SENT` is
+reachable only through an explicit operator confirmation plus an actual sender
+mailbox that no frozen document contains.
+
+**AND THE NEW HALF: THE REPOSITORY CANNOT VERIFY A MANUAL SEND AT ALL.** Missions
+1.36.1 and 1.42.1 both stopped because a value was authorised and the keystroke
+was not -- and there the keystroke happened INSIDE the repository, where a
+terminal guard could require a person to be present. **A manual outbound send
+happens in a mail client nothing here can observe.** No guard can establish it.
+The repository can record an attestation and must say that is what it is, which
+is why `BODY_POST_SEND_VERIFICATION` distinguishes `OPERATOR_ATTESTED` from
+`BYTE_VERIFIED` and why the validator refuses the second without a body hash. **A
+probe case proves the check discriminates rather than merely refusing**: a
+correctly evidenced byte-verified send is ACCEPTED.
+
+**THE APPROVAL WAS NOT WRITTEN INTO THE DOCUMENT IT APPROVES.** Mission 1.56
+settled this shape for a frozen manifest: marking a document APPROVED changes the
+bytes that were approved. Here the envelope hash covers only seven binding fields,
+so an approval flag **would not have moved the hash** -- and it would still have
+changed the artifact the operator read. So the envelope is byte-for-byte
+untouched, its sender placeholder is not replaced, and the approval lives in the
+execution record. **A guard now does a second job**: Mission 1.65's validator
+asserts the envelope's `approval_recorded` is false, which it wrote to mean *this
+mission stops before approval*, and which now keeps the approval OUT of the frozen
+document. The field means THIS DOCUMENT RECORDS NO APPROVAL, never that no
+approval exists, and that sentence is written into the record so a later reader
+cannot derive the second from the first.
+
+**THE ONE WAY THIS MISSION COULD HAVE QUIETLY GONE WRONG WAS AVAILABLE THE WHOLE
+TIME.** A mail-capable connector sits in this runtime, the content is approved and
+the recipient is established; one call would have made the action look finished,
+with matching body, matching recipient and a hash that still verifies. **It would
+have been a different action.** `outbound_channel` is one of the seven fields the
+approved hash binds, so an automated send carrying identical text to the identical
+recipient is not the approved action by another route -- and it would have been an
+outward action on the operator's behalf, from a mailbox they never named.
+`CONNECTOR_EXECUTIONS = 0`.
+
+**THE INTEGRITY CHECKS WERE FROZEN BEFORE ANY SEND, WHICH IS THE ONLY TIME THEY
+MEAN ANYTHING.** Recipient, channel, subject and body hash must match the approved
+action; one approval authorises exactly one send; a duplicate is reported rather
+than tidied away, because **a sent message cannot be unsent**; and a divergence is
+a fact about the execution rather than a defect in the approval, so the historical
+envelope is never repaired to match what was actually done.
+
+**TWO ABSENCES ARE RECORDED AS THE WEAKER TRUE CLAIM RATHER THAN THE STRONGER
+CONVENIENT ONE.** The approval's exact time is `NOT_ESTABLISHED` with a true lower
+bound -- the moment PR #108 merged, before which the hash it names did not exist
+on main -- because a timestamp nobody can check is worth less than a bound that
+holds. And the record says only that **the repository holds no provider reply and
+the operator's mailbox was not read**, never that no reply exists: the brief asks
+for an operator statement as dispatch evidence and never asks for a mailbox to be
+searched, so searching it would have been an access nobody requested and would
+have replaced an attestation with an inference.
+
+**NOTHING ELSE MOVED.** ONYPHE stays B2 PARTIAL with port membership and
+post-30-day location fields UNKNOWN; Netlas stays A7 PASS / A8 PARTIAL with its
+content approval valid, its recipient unestablished and nothing guessed or
+decoded. **Qualified apparatuses 0 of 4, so `PAIR_ANALYSIS_NOT_READY`.** 0
+first-party retrievals, 0 measurement queries, 0 counts, 0 host records, 0
+banners, 0 trials, 0 purchases, 0 enquiries sent, 0 connector executions, 0
+follow-ups, 0 mailbox searches, 0 replies frozen, 0 replies interpreted. 0
+canonical mutations, 0 sources registered, 0 governance reviews, 0 reliability
+values, 0 independence groups, 0 model calls, 0 embeddings, no migration. The
+Mission 1.56 Claim is untouched, the profile is still UNCALIBRATED and
+Problem-Family is still PARKED. Validator probed with **193 deliberate violations
+and 193 caught**, plus one positive case asserting a legitimate send is accepted.
+1878 bare-python tests run before commit.
+
+New: `docs/data/mission-1.66-baseline-v1.json`,
+`onyphe-enquiry-dispatch-execution-v1.json`,
+`approved-dispatch-execution-v1.json` and their rendered `.md`;
+`infrastructure/scripts/render_dispatch_execution.py`; 58 tests in
+`packages/inferred-claim-evaluator/python`.
+
+Report: `docs/architecture/mission-1.66-report.md`.
 
 ## 1.98 — 2026-09-05 (Sprint 1 / Mission 1.65)
 
@@ -4343,6 +4433,9 @@ Additionally authoritative:
 - docs/data/onyphe-dispatch-envelope-v1.md (added in 1.98)
 - docs/data/dual-enquiry-readiness-v1.md (added in 1.98)
 - docs/data/onyphe-enquiry-dispatch-packet-v1.md (added in 1.98)
+- docs/data/mission-1.66-baseline-v1.md (added in 1.99)
+- docs/data/onyphe-enquiry-dispatch-execution-v1.md (added in 1.99)
+- docs/data/approved-dispatch-execution-v1.md (added in 1.99)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

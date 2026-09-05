@@ -1,0 +1,173 @@
+{
+  "$comment": "Mission 1.66. The verdict, and what is waiting on whom.",
+  "record_version": "1.0.0",
+  "mission": "1.66 — Approved Dispatch Execution V1",
+  "recorded_at": "2026-09-05",
+
+  "primary_outcome": "ONYPHE_APPROVED_DISPATCH_AWAITING_MANUAL_EXECUTION",
+  "primary_outcome_statement": "The operator's approval is verified against a recomputed envelope hash and recorded as an approval. The approved action has not been performed: the operator has not stated that the enquiry was sent, and the approved channel is a manual send that this repository cannot perform and cannot observe. The dispatch stays APPROVED_AWAITING_MANUAL_EXECUTION, the frozen envelope is byte-for-byte unchanged, and nothing was sent.",
+  "this_is_not_a_failure": "§28 B says so directly. The mission's job is to record whether the approved action was performed, and recording that it has not been is the correct answer to that question rather than a shortfall against it.",
+
+  "why_this_outcome_and_not_another": {
+    "why_not_A": "Outcome A needs the operator to have actually sent the exact approved action manually. No such statement exists. The only way to reach A from here would be to treat the approval as the send, which is the one thing §13 forbids.",
+    "why_not_C": "Divergence describes an execution that differs from the approved action. There is no execution to differ.",
+    "why_not_D": "A duplicate needs two sends. There are none.",
+    "why_not_E": "That outcome is for a reply proving a send occurred while local provenance is incomplete. No reply is held, and the repository does not assert that none exists anywhere.",
+    "why_not_F": "Both hashes recomputed and matched, on the merged main.",
+    "why_not_G": "PR #108 is MERGED at f6fee37, verified from git.",
+    "why_not_H": "Every canonical counter matched the expected baseline exactly.",
+    "why_not_I": "No canonical row was created, modified or deleted.",
+    "why_not_J": "Nothing blocked the mission. The recording apparatus was built and the state it recorded is that the action is still awaiting its operator."
+  },
+
+  "secondary_outcomes": {
+    "ONYPHE_RESPONSE_NOT_RECEIVED": "the repository holds no reply, and no dispatch is recorded for a reply to answer",
+    "NETLAS_CONTACT_STILL_PENDING": "recipient not established, content approval from Mission 1.61 still valid, still unsent",
+    "PAIR_ANALYSIS_NOT_READY": true,
+    "QUALIFIED_APPARATUS_COUNT_0": true,
+    "APPROVAL_RECORDED_SEPARATELY_FROM_EXECUTION": "the approval is a fact and it is filed as one"
+  },
+
+  "the_two_facts_this_mission_keeps_apart": {
+    "$comment": "The finding worth carrying forward.",
+    "approval": "an operator said this exact action MAY be performed, naming it by a hash that was recomputed and matched",
+    "execution": "somebody performed it",
+    "why_they_are_easy_to_merge": "They arrive close together, the second usually follows the first, and once the approval exists every field the execution record needs is already known -- recipient, subject, body, channel. A record could fill itself in completely and be entirely fictional.",
+    "the_general_rule": "A permission is not an event. The gap between them is exactly where a log stops describing what happened and starts describing what was allowed.",
+    "and_the_new_half": "For every earlier decision this repository has stopped at, the act happened INSIDE it and a guard could require a person. A manual outbound send happens outside it, so no guard can watch. The repository can record an attestation and must say that is what it is.",
+    "earlier_instances": [
+      "Mission 1.36.1 -- the reliability value was authorised and the keystroke was not",
+      "Mission 1.42.1 -- the same, for a second scope, reached with everything else complete",
+      "Mission 1.65 -- content approval is not dispatch approval"
+    ]
+  },
+
+  "what_would_have_completed_the_action_and_was_refused": {
+    "$comment": "§11, §19. Named so it is a recorded decision rather than an omission.",
+    "the_available_route": "a mail-capable connector in this runtime, with approved content and an established recipient",
+    "why_it_was_refused": "The approved envelope binds OPERATOR_MANUAL_SEND as one of its seven hash fields. A connector send carrying identical text to the identical recipient is a different action, and the approval names the action rather than the message.",
+    "what_it_would_have_looked_like": "a completed dispatch, matching content, matching recipient, verifying hash -- and an outward action on the operator's behalf that they did not authorise, from a mailbox they did not name.",
+    "how_it_could_be_authorised": "a re-frozen envelope binding AUTHORIZED_CONNECTOR and an exact sender mailbox. It carries a different hash, needs its own approval, and supersedes rather than edits the current envelope."
+  },
+
+  "integrity_of_the_approved_artifacts": {
+    "enquiry_content_sha256_recomputed": "0b39ef325fd42836a3b65284a7386cbca7ae8f22afcb9629d5574e0ff0f23e9f",
+    "enquiry_content_matches": true,
+    "envelope_sha256_recomputed": "12a62853706a3c65f04859577fa3e9f2d4efaeca99cbf16badf759a55b4fe0d2",
+    "envelope_matches": true,
+    "operator_supplied_hash_matches": true,
+    "envelope_edited_since_approval": false,
+    "enquiry_edited_since_approval": false,
+    "netlas_enquiry_edited": false
+  },
+
+  "netlas_untouched": {
+    "$comment": "§14, §20.",
+    "content_approval": "VALID",
+    "recipient": "NOT_ESTABLISHED",
+    "envelope_state": "INCOMPLETE_RECIPIENT",
+    "envelope_hash": null,
+    "sent": false,
+    "address_guessed": false,
+    "obfuscation_decoded": false,
+    "onyphe_approval_reused_for_netlas": false,
+    "the_rule": "One approval names one envelope hash. It reaches no other action, and an approval for one provider is not an approval for another."
+  },
+
+  "counters": {
+    "outbound_enquiries_sent": 0,
+    "connector_executions": 0,
+    "follow_ups_sent": 0,
+    "netlas_enquiries_sent": 0,
+    "duplicate_sends": 0,
+    "provider_replies_frozen": 0,
+    "provider_replies_interpreted": 0,
+    "research_data_requests": 0,
+    "measurement_queries": 0,
+    "counts_fetched": 0,
+    "host_records_fetched": 0,
+    "banners_fetched": 0,
+    "facets_fetched": 0,
+    "downloads": 0,
+    "trials": 0,
+    "purchases": 0,
+    "model_calls": 0,
+    "model_cost_usd": 0.0,
+    "embeddings": 0,
+    "canonical_mutations": 0,
+    "sources_registered": 0,
+    "governance_reviews_created": 0,
+    "reliability_values_assigned": 0,
+    "independence_groups_created": 0,
+    "apparatus_gates_changed": 0,
+    "pairs_compared": 0,
+    "migrations_created": 0,
+    "reference_profile": "UNCALIBRATED",
+    "problem_family": "PARKED"
+  },
+
+  "apparatus_states_unchanged": {
+    "$comment": "§15.",
+    "Netlas": {"individual": "INDIVIDUALLY_NOT_QUALIFIED", "changed": false},
+    "ONYPHE": {"individual": "INDIVIDUALLY_UNRESOLVED", "changed": false},
+    "LeakIX": {"individual": "INDIVIDUALLY_NOT_QUALIFIED", "changed": false},
+    "The Shadowserver Foundation": {"individual": "INDIVIDUALLY_NOT_QUALIFIED", "changed": false},
+    "qualified_count": 0,
+    "pair_analysis_ready": false,
+    "rule": "Question drafted is not answered. Question approved is not answered. Question sent is not answered. Only a reviewed first-party response may move a gate."
+  },
+
+  "no_pair_work_was_performed": {
+    "pairs_compared": 0,
+    "pairs_ranked": 0,
+    "pairs_selected": 0,
+    "same_frame_evaluated": false,
+    "vantage_compatibility_evaluated": false,
+    "lineage_independence_evaluated": false,
+    "shared_measurement_upstream_evaluated": false,
+    "same_target_proposition_evaluated": false,
+    "threshold_preregistrability_evaluated": false
+  },
+
+  "next_action": {
+    "$comment": "§31. The next action is outside this repository.",
+    "checkpoint": "STOP_AWAITING_MANUAL_EXECUTION",
+    "who_acts_next": "the operator",
+    "what_they_do": "send the exact approved packet, once, manually, to the approved recipient",
+    "packet": "docs/data/onyphe-enquiry-dispatch-packet-v1.md",
+    "what_to_report_back": [
+      "that it was sent",
+      "the exact sender mailbox",
+      "that the send was manual",
+      "that it was sent once",
+      "optionally the time, the message id, and the provider"
+    ],
+    "then": "this execution record moves to SENT with its actual fields populated, under the integrity checks frozen here before any send",
+    "no_new_mission_is_needed_until_that_happens": true,
+    "do_not_poll": "§31 forbids creating a mission merely to check a mailbox for a reply.",
+    "netlas_is_independent": "When the operator supplies the exact address displayed at netlas.io/legal, the Netlas envelope completes, is hashed and gets its own approval string. It does not wait for ONYPHE."
+  },
+
+  "stop_condition": {
+    "gmail_connector_used": false,
+    "onyphe_resent": false,
+    "follow_up_sent": false,
+    "netlas_sent": false,
+    "provider_reply_interpreted": false,
+    "apparatus_gate_changed_from_dispatch": false,
+    "pairs_compared": false,
+    "measurements_retrieved": false,
+    "counts_or_hosts_or_banners_fetched": false,
+    "threshold_chosen": false,
+    "sources_registered": false,
+    "governance_reviewed": false,
+    "reliability_assigned": false,
+    "calibration_performed": false,
+    "score_created": false,
+    "opportunity_modified": false,
+    "model_called": false,
+    "problem_family_unparked": false,
+    "mission_1_67_started": false,
+    "awaiting": "one manual send by the operator, and one address for Netlas"
+  }
+}
