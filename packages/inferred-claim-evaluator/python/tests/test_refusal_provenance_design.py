@@ -391,9 +391,16 @@ class TheDesignChangesNothingThatExists(unittest.TestCase):
         self.assertEqual(record()["unchanged"]["claims_schema"], "untouched")
         self.assertEqual(record()["unchanged"]["evidence_schema"], "untouched")
 
-    def test_the_migration_head_did_not_move(self):
-        heads = sorted(path.stem for path in MIGRATIONS.glob("00*.sql"))
-        self.assertEqual(heads[-1], "0034_deterministic_derivation_provenance")
+    def test_the_migration_this_design_reasons_about_is_still_present(self):
+        """This pinned the HEAD at 0034, which was true while nothing followed.
+
+        Mission 1.54 added 0035 and this failed for no epistemic reason -- the
+        same defect Mission 1.53 re-pointed a database test for, written into its
+        own suite in the same mission. What the design depends on is that 0034 is
+        still there, because every claim it makes about `claim_derivations`
+        reasons about the table 0034 created.
+        """
+        self.assertTrue((MIGRATIONS / "0034_deterministic_derivation_provenance.sql").exists())
 
     def test_no_canonical_mutation(self):
         for name, pair in record()["counters"].items():

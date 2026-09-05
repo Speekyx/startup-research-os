@@ -162,6 +162,7 @@ class TestSchemaRuntime:
             # two carry no expiry and nothing references the run tables.
             "research.threshold_registrations",
             "research.claim_derivations",
+            "research.proposition_evaluation_refusals",
         }
 
     def test_the_source_eligibility_view_exists(self, database) -> None:

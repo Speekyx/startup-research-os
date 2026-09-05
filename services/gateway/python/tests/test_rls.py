@@ -76,6 +76,7 @@ TENANT_TABLES = [
     # a Claim is true, and a Claim must not outlive its own reasoning (ADR-037).
     "research.threshold_registrations",
     "research.claim_derivations",
+    "research.proposition_evaluation_refusals",
 ]
 
 # Deliberately NOT policy-bearing. Listed here so that adding a policy to one of

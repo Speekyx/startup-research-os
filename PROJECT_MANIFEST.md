@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.86
+Version: 1.87
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-05 (Sprint 1 / Mission 1.53)
+Last amended: 2026-09-05 (Sprint 1 / Mission 1.54)
 
 ---
 
@@ -13,6 +13,67 @@ Last amended: 2026-09-05 (Sprint 1 / Mission 1.53)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.87 — 2026-09-05 (Sprint 1 / Mission 1.54)
+
+**`REFUSAL_PROVENANCE_SCHEMA_IMPLEMENTED`.** Migration 0035 creates the one
+additive table ADR-038 froze, `research.proposition_evaluation_refusals`, and
+touches nothing else. Additive only, no backfill, no data migration, zero
+existing rows changed and zero production rows created.
+
+The three properties the design rests on are proven against real rows rather
+than inspected as DDL. A real interpretation run with a bounded expiry and a real
+input row naming the same Signal were inserted, a refusal was inserted
+independently, and the run was deleted through the ordinary mechanism: the inputs
+cascaded to zero and the refusal survived. Deleting the cited Signal alone raises
+a foreign key violation, and so does deleting a threshold registration a refusal
+judged. A real disposable workspace holding all four kinds of row was then
+deleted in one statement and committed, with no deferred-constraint failure and
+the refusal removed with its tenant.
+
+Every member of the identity key is NOT NULL, which is what makes it real rather
+than nominal: Mission 1.53 proved a UNIQUE containing a nullable column admits
+unlimited duplicates. No sentinel and no expression index were needed, because
+the equivalence basis is NOT NULL on a measured contract fact rather than a
+convenience.
+
+One stricter check was considered and rejected on a measurement. Requiring every
+fact value to be a JSON string was enforceable and would have made the table
+unable to represent a refusal about the procurement family, whose notice ids and
+classification codes are arrays of strings on six live Claims. Only 37 of 43
+would have passed. That also corrects an overstatement in the Mission 1.53
+design record, which listed flat string values as holding on every live Claim.
+
+The seven reason codes were read from the evaluator's own refusal calls via the
+AST and compared pair for pair against ADR-038 before the migration was written.
+Zero invented, zero renamed. The pairing check stops a row asserting a shape no
+gate produces, and the two vocabulary checks are kept alongside it so a violation
+names the actual defect.
+
+Two false positives in the new validator were repaired structurally rather than
+by loosening: the identity check first matched a comment quoting the other
+table's key, and the untouched-trigger check first matched the paragraph headed
+WHAT IS NOT TOUCHED. And a defect written in Mission 1.53 surfaced here: that
+mission re-pointed a database test for pinning a migration head, then wrote a
+head pin into its own validator and its own test suite. Both are now the property
+they were protecting, that 0034 is still present.
+
+The leak check went 28 to 29 tenant tables and validate_schema reports 46, both
+picking the table up automatically. Two pinned lists needed extending, which is
+what a new table costs.
+
+0 requests of every kind, 0 model calls, 0 embeddings, every counter unchanged,
+0 INFERRED Claims, 0 derivation rows, 0 threshold registrations, 0 production
+refusal rows, evaluator untouched, claim_derivations untouched, trigger
+untouched, profile still UNCALIBRATED, Problem-Family still PARKED, validator
+probed with 70 deliberate violations and 70 caught, 1354 bare-python tests before
+commit and 3273 pytest tests after.
+
+New: `infrastructure/db/migrations/0035_refusal_provenance.sql`,
+`docs/data/refusal-provenance-schema-v1.json` and `.md`, one script under
+`infrastructure/scripts/`, and 72 database tests in `services/nlp/python`.
+
+Report: `docs/architecture/mission-1.54-report.md`.
 
 ## 1.86 — 2026-09-05 (Sprint 1 / Mission 1.53)
 
@@ -3166,6 +3227,7 @@ Additionally authoritative:
 - docs/data/deterministic-derivation-provenance-schema-v1.md (added in 1.84)
 - docs/data/deterministic-inferred-evaluator-foundation-v1.md (added in 1.85)
 - docs/data/refusal-derivation-binding-design-v1.md (added in 1.86)
+- docs/data/refusal-provenance-schema-v1.md (added in 1.87)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.
