@@ -472,6 +472,21 @@ jobs:
       - name: Dispatch envelopes match their decision rules
         run: uv run python infrastructure/scripts/render_dispatch_envelope.py --check
 
+      # Mission 1.66. An approval is not an execution. Recomputes the approved
+      # content and envelope hashes on every run, so an edit to either after the
+      # approval turns this red. Also checks that the approval was not written
+      # into the document it approves and the sender placeholder was not
+      # replaced there; that SENT requires an explicit operator confirmation and
+      # an actual sender, so an approval alone can never produce it; that a
+      # reported execution matches the approved recipient, channel and subject,
+      # because the hash binds the action rather than the message; that one
+      # approval authorises one send; that BYTE_VERIFIED requires a body hash so
+      # an attestation cannot be promoted into proof; that a dispatch moves no
+      # apparatus gate; and that a provider reply is frozen rather than
+      # interpreted.
+      - name: Dispatch execution matches its decision rules
+        run: uv run python infrastructure/scripts/render_dispatch_execution.py --check
+
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
   # Pinned to the same versions as infrastructure/compose.

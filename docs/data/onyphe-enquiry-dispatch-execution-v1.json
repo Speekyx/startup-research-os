@@ -1,0 +1,148 @@
+{
+  "$comment": "Mission 1.66 §6. The execution record for the approved ONYPHE dispatch. An APPROVAL and an EXECUTION are two different facts, and they are two sections here so that neither can be read as the other.",
+  "record_version": "1.0.0",
+  "mission": "1.66 — Approved Dispatch Execution V1",
+  "recorded_at": "2026-09-05",
+  "record_id": "onyphe-enquiry-dispatch-execution-v1",
+
+  "execution_status": "APPROVED_AWAITING_MANUAL_EXECUTION",
+
+  "the_action_that_was_approved": {
+    "$comment": "§13. Read from the frozen envelope. Nothing here is a claim that it happened.",
+    "dispatch_envelope": "onyphe-dispatch-envelope-v1",
+    "dispatch_envelope_sha256": "12a62853706a3c65f04859577fa3e9f2d4efaeca99cbf16badf759a55b4fe0d2",
+    "enquiry_document_id": "onyphe-technical-methodology-enquiry-v1",
+    "enquiry_content_sha256": "0b39ef325fd42836a3b65284a7386cbca7ae8f22afcb9629d5574e0ff0f23e9f",
+    "approved_recipient": "contact@onyphe.io",
+    "approved_channel": "OPERATOR_MANUAL_SEND",
+    "approved_sender": "OPERATOR_CHOSEN_MAILBOX_AT_SEND_TIME",
+    "approved_subject": "Three questions about datascan record semantics and scan configuration",
+    "content_version": "v1"
+  },
+
+  "operator_approval": {
+    "$comment": "§13. An approval is recorded as an approval. It is not dispatch evidence and this record never lets it become one.",
+    "APPROVAL_GIVEN": true,
+    "exact_string": "APPROVE MISSION 1.65 DISPATCH 12a62853706a3c65f04859577fa3e9f2d4efaeca99cbf16badf759a55b4fe0d2",
+    "names_envelope_sha256": "12a62853706a3c65f04859577fa3e9f2d4efaeca99cbf16badf759a55b4fe0d2",
+    "hash_recomputed_and_matches": true,
+    "operator": "thibchm",
+    "source": "OPERATOR_INTERACTION",
+    "approval_time": "NOT_ESTABLISHED",
+    "approval_time_lower_bound": "2026-09-05T17:09:39Z",
+    "what_the_lower_bound_is": "the moment PR #108 merged, which is the earliest point at which the hash the approval names existed on main",
+    "why_the_exact_time_is_not_recorded": "The approval arrived as an operator message and this repository holds no verifiable timestamp for it. A time written here would be one nobody could check, and a bound that is true is worth more than a moment that is invented.",
+    "what_it_authorises": "sending the frozen text once, to the approved recipient, through the approved channel, by the operator manually",
+    "what_it_does_not_authorise": [
+      "a connector send",
+      "another recipient",
+      "another subject",
+      "modified content",
+      "a resend",
+      "a follow-up",
+      "dispatch of the Netlas enquiry"
+    ],
+    "approval_is_not_execution": "An approval says an action MAY be performed. Only a performance says it WAS. This record keeps them apart because collapsing them is the single way a dispatch log comes to describe a message nobody sent."
+  },
+
+  "execution": {
+    "$comment": "§2, §3. Every field is null because the operator has not stated that the send happened.",
+    "SENT": false,
+    "actual_recipient": null,
+    "actual_channel": null,
+    "actual_sender": null,
+    "actual_subject": null,
+    "sent_at": null,
+    "message_id": null,
+    "message_id_status": "NOT_APPLICABLE_NOTHING_SENT",
+    "send_count": 0,
+    "duplicate_send_count": 0,
+    "body_post_send_verification": "NOT_APPLICABLE_NOTHING_SENT",
+    "why_every_field_is_null": "§2 requires an explicit operator statement that the enquiry was actually sent, plus the exact sender mailbox. Neither has been given. A record filling these in from the approval would be describing a send that the approval only permitted."
+  },
+
+  "operator_confirmation": {
+    "CONFIRMATION_GIVEN": false,
+    "what_was_given_instead": "an approval of the dispatch envelope hash, and then this mission's brief",
+    "what_would_satisfy_it": [
+      "an explicit statement that the ONYPHE enquiry was actually sent",
+      "the exact sender mailbox used",
+      "confirmation that the send was manual rather than automated",
+      "confirmation that it was sent once"
+    ],
+    "optional_and_not_required": [
+      "sent_at",
+      "message id",
+      "mail provider",
+      "sent-folder evidence"
+    ],
+    "why_optional_stays_optional": "§2 forbids demanding unavailable metadata merely to manufacture completeness. A manual send from a webmail client may expose no message id to the sender at all, and refusing to record the send for want of one would punish an honest report."
+  },
+
+  "the_repository_cannot_verify_a_manual_send": {
+    "$comment": "The finding this mission is for. It is why an attestation level exists at all.",
+    "observation": "A reliability assessment is typed into this repository, so a terminal guard can require a person to be present. An outbound manual send happens entirely OUTSIDE the repository, in a mail client nothing here can observe.",
+    "consequence": "No guard can establish that a manual send occurred. The repository can only record what the operator attests, and the honest response is to make the attestation level explicit rather than to pretend to proof.",
+    "which_is_why": "BODY_POST_SEND_VERIFICATION distinguishes BYTE_VERIFIED from OPERATOR_ATTESTED, and this record may never report the first on the strength of the second.",
+    "the_shape_it_shares_with_earlier_missions": "Missions 1.36.1 and 1.42.1 both stopped because a value was authorised and the keystroke was not. This is the same boundary one step further out: the dispatch is authorised and the send has not happened, and here the repository could not even watch it happen."
+  },
+
+  "integrity_checks_that_will_apply_when_a_send_is_reported": {
+    "$comment": "§7 to §12. Frozen now, before any send, so the standard cannot be chosen after seeing what was actually done.",
+    "recipient_must_equal": "contact@onyphe.io",
+    "recipient_divergence_code": "RECIPIENT_DIVERGENCE",
+    "channel_must_equal": "OPERATOR_MANUAL_SEND",
+    "channel_divergence_code": "CHANNEL_DIVERGENCE",
+    "why_a_matching_body_does_not_rescue_a_wrong_channel": "The channel is one of the seven fields the approved hash binds. An automated send carrying the identical text to the identical recipient is a DIFFERENT action from the one approved, and calling it the approved action because the content matched would make the channel field decorative.",
+    "subject_must_equal": "Three questions about datascan record semantics and scan configuration",
+    "subject_divergence_code": "SUBJECT_DIVERGENCE",
+    "body_must_hash_to": "0b39ef325fd42836a3b65284a7386cbca7ae8f22afcb9629d5574e0ff0f23e9f",
+    "send_count_must_equal": 1,
+    "duplicate_code": "DUPLICATE_DISPATCH_OCCURRED",
+    "no_automatic_cleanup_exists": "A sent message cannot be unsent. A duplicate is recorded and reported; it is never tidied away.",
+    "on_divergence": "The historical envelope is NOT repaired. It records what was approved, and a divergence is a fact about the execution rather than a defect in the approval."
+  },
+
+  "the_frozen_envelope_was_not_mutated": {
+    "$comment": "§4, §5.",
+    "envelope_edited": false,
+    "binding_fields_edited": false,
+    "sender_placeholder_replaced_in_envelope": false,
+    "approval_written_into_the_envelope": false,
+    "enquiry_content_edited": false,
+    "why_the_approval_is_not_written_into_the_envelope": "Mission 1.56 settled this shape for a frozen manifest: marking a document APPROVED changes the bytes that were approved. The envelope hash covers only the seven binding fields, so writing an approval flag would not move the hash -- and it would still change the artifact the operator read. The approval therefore lives here.",
+    "a_guard_that_now_does_a_second_job": "Mission 1.65's validator asserts the envelope's `approval_recorded` is false, which it wrote to mean the mission stops before approval. It now also keeps the approval OUT of the frozen document. The field means THIS DOCUMENT RECORDS NO APPROVAL, never that no approval exists anywhere, and this sentence exists so a later reader does not read the second from the first.",
+    "where_the_actual_sender_will_go": "into the `execution` section here, once there is one. The envelope's placeholder is what was approved; the actual mailbox is what was used, and those are two facts."
+  },
+
+  "no_connector_was_used": {
+    "$comment": "§19.",
+    "connector_executions": 0,
+    "connector_state": "AVAILABLE_NOT_AUTHORIZED",
+    "the_temptation_named": "A mail-capable connector exists in this runtime, the content is approved, the recipient is established, and one call would have made the action look finished. It would have been a different action from the approved one, and the difference is exactly the field the hash binds.",
+    "who_may_close_this": "the operator, by sending it; or a new envelope binding a connector and a named sender mailbox, carrying a different hash, approved separately."
+  },
+
+  "provider_response": {
+    "$comment": "§16, §17. Nothing was sent, so nothing can be a reply to it.",
+    "response_received": false,
+    "response_frozen": false,
+    "response_interpreted": false,
+    "basis": "NO_DISPATCH_RECORDED_SO_NO_REPLY_IS_POSSIBLE",
+    "repository_holds_a_reply": false,
+    "operator_mailbox_searched": false,
+    "why_that_distinction_is_kept": "Empty because nobody looked and empty because somebody looked are different facts. This record asserts only that the repository holds no reply and that the operator's mailbox was not read, which is weaker and true.",
+    "follow_up_sent": false
+  },
+
+  "apparatus_state_unchanged": {
+    "$comment": "§15. A dispatch is not an answer, and an unsent dispatch is not even a dispatch.",
+    "ONYPHE": {"B2": "PARTIAL", "B4": "PARTIAL", "port_22_membership": "UNKNOWN", "post_30d_location_fields": "UNKNOWN", "individual": "INDIVIDUALLY_UNRESOLVED", "changed": false},
+    "Netlas": {"A7": "PASS", "A8": "PARTIAL", "individual": "INDIVIDUALLY_NOT_QUALIFIED", "changed": false},
+    "LeakIX": {"individual": "INDIVIDUALLY_NOT_QUALIFIED", "changed": false},
+    "The Shadowserver Foundation": {"individual": "INDIVIDUALLY_NOT_QUALIFIED", "changed": false},
+    "qualified_count": 0,
+    "pair_analysis_ready": false,
+    "rule": "Only a reviewed first-party response may move a methodological gate. Approval does not, dispatch does not, and a reply does not until somebody has read it."
+  }
+}
