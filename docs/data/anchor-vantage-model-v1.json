@@ -1,0 +1,52 @@
+{
+  "$comment": "Mission 1.61 sections 15 to 17. The anchor's vantage model, classified before pairing rather than after.",
+  "record_version": "1.0.0",
+  "mission": "1.61 — Anchor Lineage Confirmation & Partner Documentation Recovery V1",
+  "recorded_at": "2026-09-05",
+  "apparatus": "Netlas",
+
+  "why_vantage_is_asked_before_pairing": {
+    "$comment": "Section 15. Mission 1.60 recorded vantage as NOT_ESTABLISHED and said it should be settled before a pair is formed. This is why.",
+    "the_quantity_is_vantage_relative": "A count of addresses that answered on a port is a count of addresses that answered FROM SOMEWHERE. Routing, filtering, blocklisting of scanner ranges and regional policy all mean that the same address can answer one vantage and not another.",
+    "the_trap_it_would_recreate": "FRAME_INSIDE_THE_DEFINITION, from Mission 1.57. If each apparatus measures the hosts reachable from its own network, then each has put its frame inside the metric, and a proposition admitting both must define its population as a disjunction of two vantages — which relocates source attribution into the predicate exactly as the rejected web-traffic route did.",
+    "why_it_is_not_fatal_by_itself": "Two apparatuses probing from different vantages can still measure one construct if the construct's population is defined as globally routable addresses and both vantages are documented as unrestricted. What cannot be done is to assume it.",
+    "the_asymmetry_with_A7": "Lineage asks who produced the observation. Vantage asks from where. A LEVEL 2 lineage answer leaves vantage entirely open, and this mission found exactly that."
+  },
+
+  "classification_vocabulary": {
+    "MULTI_VANTAGE_DOCUMENTED": "First-party documentation states that probing originates from more than one network location, with enough detail to say whether the locations differ materially.",
+    "SINGLE_VANTAGE_DOCUMENTED": "First-party documentation states that probing originates from one network location or one provider.",
+    "VANTAGE_NOT_DOCUMENTED": "The question was asked against the published documentation, including the record schema, and no answer is published.",
+    "VANTAGE_NOT_ESTABLISHED": "The question has not been asked. Mission 1.60's state."
+  },
+
+  "anchor_classification": {
+    "verdict": "VANTAGE_NOT_DOCUMENTED",
+    "previous_verdict": "VANTAGE_NOT_ESTABLISHED",
+    "previous_verdict_mission": "1.60",
+    "moved": true,
+    "how_it_moved": "From nobody looked to looked and it is not published. That is the same advance Mission 1.35 recorded for an empty relation registry: empty because nobody looked and empty because somebody looked are different facts.",
+    "documents_consulted": [
+      "https://docs.netlas.io/knowledge-base/scanning-technology/",
+      "https://docs.netlas.io/knowledge-base/field-reference/responses/",
+      "https://docs.netlas.io/faq/"
+    ],
+    "what_the_documentation_says": "It refers to the apparatus's own scanning technology, purpose-built for large-scale internet scanning, and to its scanning infrastructure.",
+    "what_it_does_not_say": [
+      "how many scanner nodes exist",
+      "where they are located",
+      "whether probing originates from one network or several",
+      "whether the source addresses of the scanners are published",
+      "whether an operator may request exclusion from scanning"
+    ],
+    "record_side_check": "No field in the documented response schema identifies a scanner node, a probe origin or a scan job, so vantage is not recoverable from a retrieved record either. That is the stronger half of this finding: it means vantage could not be established after the fact by inspecting data, even if data were retrieved.",
+    "in_enquiry": true
+  },
+
+  "consequences_for_the_next_mission": {
+    "does_it_block_A8": "It is one of the three unanswered questions that keep A8 at PARTIAL.",
+    "does_it_block_pairing": "Not by itself. A pair may be analysed with one side's vantage undocumented, provided the record says so and no proposition is written that assumes vantage equivalence.",
+    "what_it_forbids": "Writing a proposition whose population is 'hosts reachable on the public internet' while treating two apparatuses' counts as measurements of that same population, without either vantage being documented.",
+    "a_partner_contrast_worth_carrying": "One of the three partner candidates does publish a vantage statement, naming multiple continents. That asymmetry is a fact about documentation and is recorded in the partner record rather than used here as a reason to prefer anybody."
+  }
+}

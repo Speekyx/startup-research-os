@@ -1,0 +1,144 @@
+{
+  "$comment": "Mission 1.61 sections 0, 1, 2 and 27. The precondition, the frozen scope, and the bounded first-party retrieval ledger.",
+  "record_version": "1.0.0",
+  "mission": "1.61 — Anchor Lineage Confirmation & Partner Documentation Recovery V1",
+  "recorded_at": "2026-09-05",
+
+  "repository_precondition": {
+    "mission_1_60_merged": true,
+    "merge_commit": "c8d0444",
+    "pull_request": "https://github.com/Speekyx/startup-research-os/pull/103",
+    "working_tree_clean_at_start": true,
+    "branch": "sprint-1/mission-1.61",
+    "migration_head": "0035_refusal_provenance"
+  },
+
+  "canonical_baseline": {
+    "$comment": "Measured live against the deployment before any work. Section 0 requires the measurement rather than a quotation from a mission report.",
+    "raw_records": 325,
+    "normalized_records": 325,
+    "signals": 33,
+    "claims": 44,
+    "claim_revisions": 45,
+    "evidence": 58,
+    "inferred_claims": 1,
+    "threshold_registrations": 1,
+    "claim_derivations": 1,
+    "proposition_evaluation_refusals": 0,
+    "reliability_assessments": 4,
+    "independence_groups": 0,
+    "evidence_directions": {"SUPPORTS": 57, "CONTRADICTS": 1},
+    "claims_carrying_both_directions": 0,
+    "opportunities": 1,
+    "opportunity_revisions": 1,
+    "opportunity_evidence_links": 7,
+    "embeddings": 0,
+    "registered_sources": 29,
+    "reference_profile": "UNCALIBRATED",
+    "problem_family": "PARKED",
+    "drift_from_mission_1_60": "none"
+  },
+
+  "scope_freeze": {
+    "$comment": "Section 1. Exactly four apparatus subjects, named by Mission 1.60 and not extended here.",
+    "anchor": "Netlas",
+    "partners": [
+      "The Shadowserver Foundation",
+      "ONYPHE",
+      "LeakIX"
+    ],
+    "subject_count": 4,
+    "new_candidates_evaluated": 0,
+    "out_of_scope_candidates_encountered": [],
+    "out_of_scope_handling": "OUT_OF_SCOPE_CANDIDATE_NOT_EVALUATED",
+    "dropped_apparatus": {
+      "name": "Censys",
+      "status": "DROPPED_FOR_THIS_ROUTE",
+      "retained_as": "NEGATIVE_CONTROL",
+      "reason": "SNAPSHOT_TIME_SEMANTICS_NOT_ALIGNABLE",
+      "reconsidered": false,
+      "why_not_reconsidered": "Section 1 forbids reviving it, and its mismatch is an established fact on first-party documentation from both sides rather than an unknown a new document could resolve."
+    }
+  },
+
+  "what_this_mission_answers": {
+    "$comment": "Stated before the work, so the record cannot be read afterwards as having answered a larger question.",
+    "it_should_answer": "Do we possess enough affirmative first-party evidence to qualify the anchor as a measurement apparatus, and enough working documentation paths to evaluate the three existing partner candidates in the next pair-selection mission?",
+    "it_should_not_answer": "Which pair should we select?",
+    "pair_selection_performed": false,
+    "pair_gates_evaluated": false
+  },
+
+  "documentation_ledger": {
+    "$comment": "Section 27. Anchor at most 8, three partners at most 12, 20 overall. Every entry is a documentation page; none is a query, a count, a facet or a host record.",
+    "budget_total": 20,
+    "budget_anchor": 8,
+    "budget_partners": 12,
+    "used_total": 16,
+    "used_anchor": 7,
+    "used_partners": 9,
+    "research_data_requests": 0,
+    "target_measurement_requests": 0,
+    "target_host_record_requests": 0,
+    "target_count_requests": 0,
+    "facets_fetched": 0,
+    "queries_executed": 0,
+    "trials_started": 0,
+    "purchases": 0,
+    "requests": [
+      {"n": 1, "subject": "anchor", "url": "https://docs.netlas.io/", "purpose": "documentation index, to target the remaining retrievals", "first_party": true, "load_bearing": false, "retrieved": true},
+      {"n": 2, "subject": "anchor", "url": "https://docs.netlas.io/knowledge-base/data-collection/", "purpose": "A7 measurement lineage and collection cadence", "first_party": true, "load_bearing": true, "retrieved": true},
+      {"n": 3, "subject": "anchor", "url": "https://docs.netlas.io/knowledge-base/scanning-technology/", "purpose": "port coverage including port 22, address frame, scanning infrastructure", "first_party": true, "load_bearing": true, "retrieved": true},
+      {"n": 4, "subject": "anchor", "url": "https://docs.netlas.io/faq/", "purpose": "A8 operational questions: retries, exclusions, duplicates, missingness", "first_party": true, "load_bearing": true, "retrieved": true},
+      {"n": 5, "subject": "anchor", "url": "https://docs.netlas.io/knowledge-base/field-reference/responses/", "purpose": "record semantics: what one record is, banner field, scan timestamp, vantage fields", "first_party": true, "load_bearing": true, "retrieved": true},
+      {"n": 6, "subject": "anchor", "url": "https://docs.netlas.io/knowledge-base/data-collection/", "purpose": "verbatim confirmation of the lineage sentence and its exception clause", "first_party": true, "load_bearing": true, "retrieved": true},
+      {"n": 7, "subject": "anchor", "url": "https://docs.netlas.io/changelog/", "purpose": "dated port-list changes and changes to the date-selection mechanism", "first_party": true, "load_bearing": true, "retrieved": true},
+      {"n": 8, "subject": "The Shadowserver Foundation", "url": "https://www.shadowserver.org/what-we-do/network-reporting/", "purpose": "documentation path recovery and lineage statement", "first_party": true, "load_bearing": true, "retrieved": true},
+      {"n": 9, "subject": "ONYPHE", "url": "https://www.onyphe.com/", "purpose": "documentation path recovery", "first_party": true, "load_bearing": true, "retrieved": true},
+      {"n": 10, "subject": "LeakIX", "url": "https://docs.leakix.net/", "purpose": "documentation path recovery", "first_party": true, "load_bearing": true, "retrieved": true},
+      {"n": 11, "subject": "The Shadowserver Foundation", "url": "https://www.shadowserver.org/what-we-do/network-reporting/api-documentation/", "purpose": "B1 to B6 minimum package", "first_party": true, "load_bearing": true, "retrieved": true},
+      {"n": 12, "subject": "ONYPHE", "url": "https://search.onyphe.io/docs", "purpose": "B1 to B6 minimum package", "first_party": true, "load_bearing": true, "retrieved": true},
+      {"n": 13, "subject": "LeakIX", "url": "https://docs.leakix.net/docs/", "purpose": "B1 to B6 minimum package", "first_party": true, "load_bearing": true, "retrieved": true},
+      {"n": 14, "subject": "The Shadowserver Foundation", "url": "https://github.com/The-Shadowserver-Foundation/api_utils/wiki", "purpose": "the API documentation its own site redirects to", "first_party": true, "load_bearing": true, "retrieved": true},
+      {"n": 15, "subject": "ONYPHE", "url": "https://search.onyphe.io/docs/historical-data-availability", "purpose": "B2 observation addressability and retention bounds", "first_party": true, "load_bearing": true, "retrieved": true},
+      {"n": 16, "subject": "LeakIX", "url": "https://github.com/LeakIX/DocSite", "purpose": "documentation source tree, to derive further working paths", "first_party": true, "load_bearing": false, "retrieved": true}
+    ]
+  },
+
+  "value_exposure": {
+    "$comment": "Section 33 and the Mission 1.60 rules. PREREGISTERED is defined against retrieval, so one measurement fetched here would make an honest preregistration impossible for ever.",
+    "target_measurement_retrieved": false,
+    "target_count_retrieved": false,
+    "host_records_retrieved": false,
+    "banners_retrieved": false,
+    "facets_retrieved": false,
+    "queries_executed": 0,
+    "trials_started": 0,
+    "demo_console_used": false,
+    "search_preview_used": false,
+    "purchases": 0,
+    "the_trial_is_not_free": "A zero-cost trial, demo console, search preview or sample explorer destroys preregistration exactly as a paid one would. Access cost is irrelevant to epistemic contamination.",
+    "the_count_is_not_metadata": "A query returning only a number still returns a measurement value about the target population."
+  },
+
+  "canonical_mutations": {
+    "$comment": "Section 60. Nothing in this mission writes to the canonical layer.",
+    "sources_registered": 0,
+    "governance_reviews_created": 0,
+    "collectors_implemented": 0,
+    "normalizers_implemented": 0,
+    "threshold_registrations_created": 0,
+    "claims_created": 0,
+    "evidence_created": 0,
+    "reliability_assessments_created": 0,
+    "reliability_values_assigned": 0,
+    "independence_groups_created": 0,
+    "scores_created": 0,
+    "opportunity_changes": 0,
+    "mission_1_56_claim_modified": false,
+    "model_calls": 0,
+    "model_cost_usd": 0.0,
+    "embeddings": 0,
+    "enquiry_sent": false
+  }
+}

@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.93
+Version: 1.94
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-05 (Sprint 1 / Mission 1.60)
+Last amended: 2026-09-05 (Sprint 1 / Mission 1.61)
 
 ---
 
@@ -13,6 +13,139 @@ Last amended: 2026-09-05 (Sprint 1 / Mission 1.60)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.94 — 2026-09-05 (Sprint 1 / Mission 1.61)
+
+**`ANCHOR_LINEAGE_CONFIRMED_OPERATIONAL_QUESTIONS_REMAIN`**, with
+`PARTNER_DOCUMENTATION_RECOVERED` beside it. The sentence four missions said the
+documentation did not contain is in the documentation, and reading it took two
+retrievals of one page.
+
+**A7 closes at LEVEL 2 and the standard was not lowered to close it.** The
+apparatus states, first-party and verbatim, that all the data is collected
+independently by itself, that it does not rely on third parties or aggregators,
+and that every record is obtained and indexed directly by the platform — followed
+by a clause naming *the only exceptions* as threat intelligence shown in one tool
+and geolocation supplied by partners. That is an affirmative claim with a CLOSED
+exception list, and each exception was then checked against the load-bearing
+predicate one by one: a reputation annotation is not the presence of a service on
+a host, and where an address sits is not whether it answered on a port. Neither
+is load-bearing, so the gate passes. **A LEVEL 1 statement would not have closed
+it**, and this mission supplies the contrast from the other side: one partner
+candidate says its data comes from daily internet-wide scans, sinkholes, honeypot
+sensors, sandboxes, blocklists **and many other sources** — an affirmative claim
+whose list does not end, which cannot be checked against anything.
+
+**The blocker narrowed rather than moved.** Mission 1.60 reported two blocking
+gates and said both close by reading or asking. One closed by reading. The anchor
+now reads seven PASS, one PASS_WITH_STATED_BOUNDS and one PARTIAL, and
+`which_gates_block` goes from `["A7", "A8"]` to `["A8"]`. **It still does not
+individually qualify**, because the gate set is conjunctive and one PARTIAL is
+one short.
+
+**A8 moved without passing, and the movement is that the questions are now
+enumerated.** Eleven operational questions asked against the published
+documentation: four answered, four partial, three unanswered. Answered are the
+address frame, **port 22's inclusion in the current scanned list** — which
+Mission 1.60 explicitly recorded as not established — the record identity, which
+settles that one record is one service response so a count of addresses must be a
+DISTINCT count and never a row count, and the scan-date semantics. Unanswered are
+**sampling**, failure semantics and vantage, and sampling is the load-bearing one:
+`SAMPLING_IS_LOAD_BEARING` says two apparatuses cannot be compared as one count
+unless both expose the same population definition.
+
+**A BOUND WAS FOUND ON A GATE A PREVIOUS MISSION PASSED, AND RECORDING IT IS THE
+AUDIT WORKING.** The apparatus's DEFAULT search surface is a maintained
+current-state view: its own documentation says that when a subnet is fully
+scanned it *replaces* the previous version in the default output, and recommends
+searching without specifying an index to get the most recently collected complete
+data. **That is `MAINTAINED_CURRENT_STATE_LAST_CHANGE`, the exact temporal object
+Mission 1.59 rejected.** A2 still passes, because the gate asks whether a window
+is selectable in the request and the dated index mechanism is documented and
+selectable — but the pass rests entirely on the NON-DEFAULT path, and a collector
+using the default would be reading the rejected temporal object while a record
+elsewhere said the gate had passed. The bound is written into the gate table.
+
+**Vantage moved from `NOT_ESTABLISHED` to `NOT_DOCUMENTED`**, which is the
+Mission 1.35 distinction: empty because nobody looked and empty because somebody
+looked are different facts. Three pages and the response schema were consulted;
+no scanner count, no locations, and **no record field identifies a scanner node
+or probe origin**, so vantage could not be established after the fact even by
+inspecting retrieved data. It is recorded before pairing because it is where
+`FRAME_INSIDE_THE_DEFINITION` would recur: if each apparatus measures the hosts
+reachable from its own network, the frame has moved inside the metric.
+
+**Port-22 window coverage gives TWO answers and the record refuses to collapse
+them.** Current inclusion is ESTABLISHED. Window addressability is
+`PORT_22_NOT_ESTABLISHED`: the changelog dates the SIZE of the port list — one
+entry doubling it, a later one taking it past a thousand — and never its
+MEMBERSHIP, so the list as of any past date is not reconstructable. No removal is
+recorded anywhere, which is favourable evidence about direction and **is not a
+guarantee**, because an absence of recorded removals is an absence and this arc
+has refused to read a positive claim out of a negative space four missions
+running.
+
+**All three partner candidates had their documentation recovered, and the wall
+was the path rather than the apparatus.** Each failure has a named cause: one had
+moved its documentation twice, ending on a GitHub wiki its own site now redirects
+to; one keeps its documentation on a search subdomain rather than the marketing
+domain both Mission 1.60 paths tried; one had a path one level too deep. Four of
+eighteen B-slots are established, five partial, nine unread. **No partner is
+qualified, ranked or selected**, and the record names the preference it declined
+to express: one candidate emerged with a documented multi-continent vantage, a
+documented weekly frame and a published retention table, which is more than the
+anchor publishes about itself on two of those three — and treating that as a lead
+would be picking a partner from a first pass in which two rivals had pages that
+did not load. Two precise blockers are recorded for the next mission instead: one
+candidate's API is described as mostly private to vetted subscribers, which would
+make every other gate moot, and another documents that after 30 days it removes
+*some fields* and truncates retained raw responses, which would end protocol-native
+exposure at 30 days if the banner is among them.
+
+**An enquiry is drafted and NOT sent.** Seven questions, one per unresolved
+operational point, and **nothing already documented is asked** — the validator
+refuses a question whose topic the operational record marks ANSWERED. It requests
+no data, no access, no trial and no price. Its rendered form hashes to
+`310acf288244453cd0a928197386cbf8311ded278e4dcdd22b70412807a049c4`, recorded in
+the closure record rather than in the enquiry, because writing a hash into the
+document it is a hash of changes the bytes it was frozen at. **No recipient
+address is recorded**: none was retrieved first-party during the mission, and
+inventing one would be fabricating a fact about the apparatus.
+
+**The validator caught this mission's own record, and the fix was structural.**
+The forbidden-ask scan refused the enquiry's own sentence saying it asks for no
+trial and no evaluation account — `testing-strategy.md` §23 for the sixth time.
+The repair scopes the scan to the text that would actually be TRANSMITTED rather
+than weakening the rule, which is also stricter: the sendable body is the only
+place those phrases could do harm.
+
+**Two requirements were added to the registry, which now carries eleven**:
+`ENUMERATED_EXCEPTIONS_MAKE_A_LINEAGE_CLAIM_CHECKABLE` and
+`LINEAGE_EXHAUSTIVENESS_IS_NOT_FRAME_EXHAUSTIVENESS`. The second is the one most
+easily lost: that every record was self-collected says nothing about which
+addresses were reached, so a lineage sentence must never be cited for coverage.
+Mission 1.60's own records were **not rewritten** — they still read
+`ANCHOR_B_LINEAGE_PARTIAL` blocking A7 and A8, which is what that mission found.
+
+16 of 20 first-party documentation retrievals — anchor 7 of 8, partners 9 of 12.
+**0 queries executed, 0 counts, 0 host records, 0 facets, 0 trials, 0 purchases.**
+0 canonical mutations, 0 sources registered, 0 governance reviews, 0 collectors,
+0 threshold registrations, 0 Claims, 0 Evidence, 0 reliability values, 0
+independence groups, 0 Scores, 0 Opportunity changes, 0 model calls, 0 embeddings.
+The Mission 1.56 Claim is untouched, the profile is still UNCALIBRATED and
+Problem-Family is still PARKED. Validator probed with **101 deliberate violations
+and 101 caught**. 1592 bare-python tests run before commit.
+
+New: `docs/data/anchor-documentation-confirmation-baseline-v1.json`,
+`anchor-lineage-review-v1.json`, `anchor-operational-reviewability-v1.json`,
+`anchor-vantage-model-v1.json`, `anchor-port-window-coverage-v1.json`,
+`partner-documentation-recovery-v1.json`,
+`anchor-lineage-and-documentation-closure-v1.json`,
+`anchor-technical-lineage-enquiry-v1.json` and their rendered `.md`;
+`infrastructure/scripts/render_anchor_lineage_closure.py`; 63 tests in
+`packages/inferred-claim-evaluator/python`.
+
+Report: `docs/architecture/mission-1.61-report.md`.
 
 ## 1.93 — 2026-09-05 (Sprint 1 / Mission 1.60)
 
@@ -3741,6 +3874,11 @@ Additionally authoritative:
 - docs/data/internet-wide-service-presence-route-gate-closure-v1.md (added in 1.92)
 - docs/data/observation-addressable-apparatus-contract-v1.md (added in 1.93)
 - docs/data/observation-addressable-scanner-pair-selection-v1.md (added in 1.93)
+- docs/data/anchor-lineage-review-v1.md (added in 1.94)
+- docs/data/anchor-operational-reviewability-v1.md (added in 1.94)
+- docs/data/partner-documentation-recovery-v1.md (added in 1.94)
+- docs/data/anchor-lineage-and-documentation-closure-v1.md (added in 1.94)
+- docs/data/anchor-technical-lineage-enquiry-v1.md (added in 1.94)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

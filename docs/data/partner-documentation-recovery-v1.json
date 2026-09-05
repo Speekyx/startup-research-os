@@ -1,0 +1,166 @@
+{
+  "$comment": "Mission 1.61 sections 18 to 25. The three Mission 1.60 partner candidates, whose documentation was not retrievable at the paths tried. Recovery of working paths and the B1 to B6 minimum package. No partner is qualified, disqualified, ranked or selected here.",
+  "record_version": "1.0.0",
+  "mission": "1.61 — Anchor Lineage Confirmation & Partner Documentation Recovery V1",
+  "recorded_at": "2026-09-05",
+
+  "what_mission_1_60_recorded": {
+    "verdict_for_all_three": "DOCUMENTATION_NOT_RETRIEVABLE",
+    "first_failing_gate": "A6",
+    "not_a_refusal": true,
+    "the_sentence_that_governs": "That is a fact about that mission's reach, not a finding about those apparatuses. The asymmetry is in documentation access, not apparatus quality.",
+    "what_this_mission_tests": "Whether the wall was the apparatus or the path."
+  },
+
+  "the_minimum_package": {
+    "$comment": "Section 20. What the next pair-selection mission needs in hand before a partner can be evaluated at all. It mirrors the individual apparatus contract's A1 to A6 so the two sides are assessed by one standard.",
+    "B1": "ACTIVE_MEASUREMENT_PRODUCER — does it generate service observations by probing?",
+    "B2": "OBSERVATION_ADDRESSABLE_EXPOSURE — can a future observation be selected by its observation window from the published surface, before retrieval?",
+    "B3": "PROTOCOL_NATIVE_OBSERVATION_EXPOSURE — is the raw identification string exposed and queryable?",
+    "B4": "OBSERVATION_TIME_DOCUMENTED — are the timestamp semantics defined first-party?",
+    "B5": "FRAME_DOCUMENTED — is the address population actually probed documented?",
+    "B6": "NON_VALUE_DOCUMENTATION_AVAILABLE — is the technical documentation retrievable without fetching a target measurement?"
+  },
+
+  "partners": [
+    {
+      "name": "The Shadowserver Foundation",
+      "b6_previous": "DOCUMENTATION_NOT_RETRIEVABLE",
+      "b6_previous_reason": "documentation moved to a GitHub wiki whose pages did not load",
+      "b6_now": "RETRIEVED",
+      "working_paths": [
+        "https://www.shadowserver.org/what-we-do/network-reporting/",
+        "https://www.shadowserver.org/what-we-do/network-reporting/api-documentation/",
+        "https://github.com/The-Shadowserver-Foundation/api_utils/wiki"
+      ],
+      "why_the_earlier_path_failed": "The documentation has moved twice. The api-documentation page on the main site now carries only a redirect notice to the GitHub wiki, and the wiki's own index loads while several of its individual pages did not.",
+      "package": {
+        "B1": {
+          "status": "ESTABLISHED_WITH_A_PROBLEM",
+          "finding": "It performs its own internet-wide scanning, stated first-party: its data comes from daily internet-wide scans, sinkholes, honeypot sensors, sandboxes, blocklists and many other sources.",
+          "the_problem": "That is an OPEN list ending in 'many other sources'. It is the structural opposite of the anchor's closed exception clause, and it means the lineage question for this apparatus is harder rather than easier: a reader cannot tell whether any external measurement feed is load-bearing for service presence, because the sources are not enumerated.",
+          "lineage_level": "LEVEL_1",
+          "why_not_LEVEL_2": "An affirmative statement that it scans, with an unenumerated remainder, is exactly LEVEL 1. AFFIRMATIVE_LINEAGE_REQUIRED is not satisfied by a list that does not end."
+        },
+        "B2": {"status": "NOT_ESTABLISHED", "note": "the wiki pages describing query filters did not load"},
+        "B3": {"status": "NOT_ESTABLISHED"},
+        "B4": {
+          "status": "PARTIAL",
+          "finding": "Reports are documented as updated every 24 hours, which establishes a cadence and not a per-record observation timestamp semantics."
+        },
+        "B5": {"status": "NOT_ESTABLISHED"},
+        "B6": {"status": "RETRIEVED"}
+      },
+      "port_22_relevance": {
+        "status": "EXPLICITLY_COVERED",
+        "finding": "An Accessible SSH report is among the published report types, identifying hosts with the SSH service running and accessible on the internet."
+      },
+      "the_question_that_must_be_answered_first": {
+        "name": "ACCESS_MODEL_NOT_ESTABLISHED",
+        "why_first": "The published model is daily remediation reports to vetted subscribers about their own networks, with the organisation stating that it does not sell data and that most APIs are private for partners and direct data consumers. If internet-wide observations are not obtainable by a general requester, every other gate is moot.",
+        "status": "NOT_ESTABLISHED",
+        "not_recorded_as": "BLOCKED. The wiki index names a Scan API and a Filters page, and neither was read. Recording a blocker on unread pages would be the mistake this mission exists to correct.",
+        "next_action": "read the Scan and Filters wiki pages before anything else"
+      }
+    },
+    {
+      "name": "ONYPHE",
+      "b6_previous": "DOCUMENTATION_NOT_RETRIEVABLE",
+      "b6_previous_reason": "the documented docs path redirected and then returned 404",
+      "b6_now": "RETRIEVED",
+      "working_paths": [
+        "https://search.onyphe.io/docs",
+        "https://search.onyphe.io/docs/historical-data-availability",
+        "https://search.onyphe.io/docs/data-refresh-rate",
+        "https://search.onyphe.io/docs/write-ups/our-10-commandments-for-ethical-internet-scanning"
+      ],
+      "why_the_earlier_path_failed": "The documentation is not on the marketing domain at all. Both paths Mission 1.60 tried were on the marketing domain; the documentation lives on the search subdomain, which the marketing site links to as its API documentation.",
+      "package": {
+        "B1": {
+          "status": "ESTABLISHED",
+          "finding": "It states first-party that it scans the entire internet every week, that it has scanned at internet scale since 2017, and that it runs full-internet scans weekly plus twice-weekly scans of the top ports.",
+          "lineage_level": "LEVEL_1",
+          "why_not_LEVEL_2": "An affirmative statement that it scans is not a statement that no external measurement dataset is load-bearing for its records. Nothing retrieved addresses that, and Mission 1.57's rule forbids reading the silence as a denial."
+        },
+        "B2": {
+          "status": "PARTIAL",
+          "finding": "Dedicated pages document historical data availability and data refresh rate, and retention is published per data category. No date-window parameter or field name was established.",
+          "retention_bound": "The scan category carrying service data is documented as retained for 7 months.",
+          "why_the_bound_matters": "A preregistered window must still be retrievable when it is evaluated. Seven months is a real constraint on how far ahead a threshold may be registered, and it is a documented number rather than an assumption."
+        },
+        "B3": {
+          "status": "PARTIAL_WITH_A_NAMED_RISK",
+          "finding": "Raw application responses are retained, documented as up to 16KB for the last 30 days. For data older than 30 days the documentation states that some fields are removed and the retained response is truncated to 4KB.",
+          "the_risk": "Truncation to 4KB is harmless for an SSH identification string, which is tens of bytes. The removal of unnamed fields after 30 days is not harmless: if the raw response field is among them, protocol-native exposure ends at 30 days and B3 fails for any window evaluated later than that.",
+          "why_this_is_recorded_as_a_risk_and_not_a_verdict": "The documentation says some fields, and does not say which. Assuming the banner survives would be reading a favourable answer into a gap; assuming it does not would be reading an unfavourable one. It is a precise question with a one-sentence answer."
+        },
+        "B4": {"status": "NOT_ESTABLISHED", "note": "the retention page does not state whether its timestamps record observation or indexing"},
+        "B5": {
+          "status": "PARTIAL",
+          "finding": "Scanning the entire internet weekly is a frame claim. The address ranges included and excluded were not established."
+        },
+        "B6": {"status": "RETRIEVED"}
+      },
+      "vantage": {
+        "status": "DOCUMENTED",
+        "finding": "It states that it operates scanners across Europe, the United States and Asia.",
+        "why_this_is_noted": "The anchor's vantage is not documented. That asymmetry is a fact about the two documentation sets and is recorded here for the next mission to use. It is not a reason to prefer anybody, and this record expresses no preference."
+      }
+    },
+    {
+      "name": "LeakIX",
+      "b6_previous": "DOCUMENTATION_NOT_RETRIEVABLE",
+      "b6_previous_reason": "the documented API intro path returned 404",
+      "b6_now": "RETRIEVED",
+      "working_paths": [
+        "https://docs.leakix.net/",
+        "https://docs.leakix.net/docs/",
+        "https://docs.leakix.net/docs/api/authentication/",
+        "https://github.com/LeakIX/DocSite"
+      ],
+      "why_the_earlier_path_failed": "The path Mission 1.60 tried was one level too deep. The docs index resolves and the authentication page under it resolves; the intro path beneath the API section does not exist.",
+      "package": {
+        "B1": {
+          "status": "NOT_ESTABLISHED",
+          "finding": "Nothing retrieved states whether it performs its own scanning to generate its observations.",
+          "lineage_level": "LEVEL_0",
+          "note": "LEVEL 0 is an absence, and an absence is not a statement in either direction. It is the state Mission 1.57 refused to promote and equally refuses to condemn."
+        },
+        "B2": {
+          "status": "PARTIAL",
+          "finding": "Date filtering is documented as available in the query library. Field names and whether the filter selects observation time were not established."
+        },
+        "B3": {"status": "NOT_ESTABLISHED"},
+        "B4": {"status": "NOT_ESTABLISHED"},
+        "B5": {"status": "NOT_ESTABLISHED"},
+        "B6": {"status": "RETRIEVED"}
+      },
+      "scope_concern": {
+        "name": "VULNERABILITY_FRAMED_INDEX",
+        "finding": "It describes itself as a search engine indexing misconfigurations and vulnerabilities, and documents two scopes, one for services and one for leaks.",
+        "why_this_matters": "Mission 1.59 established that a version- or vulnerability-flavoured metric pulls a common vulnerability database into the load-bearing path on BOTH sides, which is a shared upstream for the metric's meaning even where the scanning is independent. Whether the services scope is a general service index or a filtered view of flagged hosts decides whether this apparatus can carry the protocol-native construct at all.",
+        "status": "NOT_ESTABLISHED",
+        "next_action": "read the services scope documentation before evaluating any other gate"
+      }
+    }
+  ],
+
+  "verdict": {
+    "b6_recovered_for": 3,
+    "b6_recovered_of": 3,
+    "partners_qualified": 0,
+    "partners_disqualified": 0,
+    "partners_ranked": 0,
+    "pair_selected": null,
+    "what_this_establishes": "The Mission 1.60 wall was the path and not the apparatus, for all three candidates. Every one has a working first-party documentation path, and the next mission starts from a document rather than from a 404.",
+    "what_this_does_not_establish": "That any of the three qualifies. Between them, four of eighteen B-slots are established, five are partial, and nine are not established. No pair analysis was performed and none may be read from this record.",
+    "the_honest_summary": "Documentation access is repaired. Apparatus qualification has not begun."
+  },
+
+  "why_no_preference_is_expressed": {
+    "$comment": "Section 25 and the mission's stop condition.",
+    "rule": "This mission answers whether the next one can evaluate these candidates. It does not answer which to pick.",
+    "the_temptation": "One candidate emerged with a documented vantage, a documented weekly frame and a published retention table, which is more than the anchor publishes about itself on two of those three. Recording that as a lead would be selecting a partner on the strength of a first documentation pass in which two other candidates had pages that did not load.",
+    "what_is_recorded_instead": "Each candidate's established, partial and unestablished slots, and for two of them the single question that must be answered before any other gate is worth evaluating."
+  }
+}
