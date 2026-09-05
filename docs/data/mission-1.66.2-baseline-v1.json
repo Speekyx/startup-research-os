@@ -1,0 +1,131 @@
+{
+  "$comment": "Mission 1.66.2 §0. Preconditions, canonical baseline, and the documentation budget.",
+  "record_version": "1.0.0",
+  "mission": "1.66.2 — ONYPHE Public Documentation Reconciliation & Configuration-Metadata Closure V1",
+  "recorded_at": "2026-09-05",
+
+  "repository_precondition": {
+    "mission_1_66_1_merged": true,
+    "pull_request": 110,
+    "pull_request_state": "MERGED",
+    "merge_commit": "61fb5fba731841ccdb0103886a72294b7fd60ba0",
+    "merge_commit_short": "61fb5fb",
+    "operator_reported_main": "61fb5fb",
+    "operator_report_agrees_with_git": true,
+    "local_main_equals_origin_main": true,
+    "working_tree_clean": true,
+    "branch": "sprint-1/mission-1.66.2",
+    "migration_head": "0035_refusal_provenance",
+    "verified_from_git_not_from_prompt": true
+  },
+
+  "frozen_artifacts_unchanged": {
+    "onyphe_enquiry_content_sha256": "0b39ef325fd42836a3b65284a7386cbca7ae8f22afcb9629d5574e0ff0f23e9f",
+    "onyphe_dispatch_envelope_sha256": "12a62853706a3c65f04859577fa3e9f2d4efaeca99cbf16badf759a55b4fe0d2",
+    "netlas_enquiry_content_sha256": "310acf288244453cd0a928197386cbf8311ded278e4dcdd22b70412807a049c4",
+    "recomputed_this_mission": true,
+    "all_match": true
+  },
+
+  "canonical_baseline": {
+    "raw_records": 325,
+    "normalized_records": 325,
+    "signals": 33,
+    "claims": 44,
+    "claim_revisions": 45,
+    "evidence": 58,
+    "inferred_claims": 1,
+    "threshold_registrations": 1,
+    "claim_derivations": 1,
+    "proposition_evaluation_refusals": 0,
+    "evidence_supports": 57,
+    "evidence_contradicts": 1,
+    "reliability_assessments": 4,
+    "evidence_independence_groups": 0,
+    "opportunities": 1,
+    "opportunity_revisions": 1,
+    "opportunity_evidence_links": 7,
+    "registered_sources": 29,
+    "scores_table": "ABSENT",
+    "reference_profile": "UNCALIBRATED",
+    "problem_family": "PARKED",
+    "migration_head": "0035_refusal_provenance",
+    "drift_from_mission_1_66_1": "none"
+  },
+
+  "documentation_budget": {
+    "$comment": "§2. Twelve first-party document requests, all used. A retrieval that returned nothing usable is counted, because a budget that only counts successes is not a budget.",
+    "maximum": 12,
+    "used": 12,
+    "requests": [
+      {"n": 1, "url": "https://search.onyphe.io/docs", "sought": "the documentation index, to get exact page paths rather than guess them", "outcome": "USED"},
+      {"n": 2, "url": "https://search.onyphe.io/docs/historical-data-availability", "sought": "retention horizon, which fields are removed beyond 30 days", "outcome": "USED"},
+      {"n": 3, "url": "https://search.onyphe.io/docs/onyphe-query-language", "sought": "the B2 discriminator: repeated-observation storage semantics", "outcome": "USED"},
+      {"n": 4, "url": "https://search.onyphe.io/docs/data-models/datascan", "sought": "datascan field definitions", "outcome": "HTTP_404_NOT_THIS_PATH"},
+      {"n": 5, "url": "https://search.onyphe.io/docs/data-models/datascan-vulnscan-riskscan", "sought": "datascan field definitions, at the path the index actually publishes", "outcome": "USED"},
+      {"n": 6, "url": "https://search.onyphe.io/docs/data-refresh-rate", "sought": "scan cadence per region, port-set cardinality", "outcome": "USED"},
+      {"n": 7, "url": "https://search.onyphe.io/docs/dorkpedia/scanned-ports-list", "sought": "which category sections the published port list actually carries", "outcome": "USED"},
+      {"n": 8, "url": "https://search.onyphe.io/docs/general-apis/user", "sought": "what the User API response surface exposes", "outcome": "USED"},
+      {"n": 9, "url": "https://search.onyphe.io/docs/write-ups/major-changes-for-historical-queries-and-roadmap-2023", "sought": "the B2 discriminator, from the page most likely to state it", "outcome": "USED"},
+      {"n": 10, "url": "https://search.onyphe.io/docs/write-ups/retrospective-2024-and-roadmap-2025", "sought": "documented configuration drift", "outcome": "REDIRECT_301_TO_BLOG"},
+      {"n": 11, "url": "https://search.onyphe.io/docs/getting-started", "sought": "a published support or contact route", "outcome": "USED"},
+      {"n": 12, "url": "https://blog.onyphe.io/en/retrospective-2024-and-roadmap-2025-2/", "sought": "documented configuration drift and a published contact route", "outcome": "USED"}
+    ],
+    "one_path_was_wrong_and_that_cost_a_request": "Request 4 guessed a data-model path. The index publishes it as datascan-vulnscan-riskscan. The index was fetched first precisely to avoid this, and the guess was made anyway; it is counted rather than quietly retried.",
+    "one_page_the_brief_expected_does_not_exist": "The brief's suggested target set names a Retrospective 2025 / Roadmap 2026. The documentation index carries no such page, and none was invented."
+  },
+
+  "source_boundary": {
+    "$comment": "§1. A search engine may locate a page. It may not be the evidence.",
+    "web_searches_performed": 1,
+    "search_used_only_to_locate_pages": true,
+    "search_summary_used_as_evidence": false,
+    "why_that_matters_here": "The single search returned an analytical summary that already contradicted itself on the one number this mission needed, reporting datascan as both a bi-monthly and a weekly refresh. The first-party page settles it. Mission 1.63 established this rule after a summary reported a sentence that the page did not contain.",
+    "every_load_bearing_claim_requoted_from_the_page": true
+  },
+
+  "request_accounting": {
+    "$comment": "§42. Only public first-party DOCUMENT retrieval happened.",
+    "FIRST_PARTY_DOCUMENT_REQUESTS": 12,
+    "ONYPHE_DATA_API_EXECUTIONS": 0,
+    "USER_API_EXECUTIONS": 0,
+    "SEARCH_API_EXECUTIONS": 0,
+    "EXPORT_API_EXECUTIONS": 0,
+    "SUMMARY_API_EXECUTIONS": 0,
+    "SIMPLE_API_EXECUTIONS": 0,
+    "DISCOVERY_API_EXECUTIONS": 0,
+    "ONDEMAND_SCAN_EXECUTIONS": 0,
+    "MEASUREMENT_QUERIES": 0,
+    "COUNTS_FETCHED": 0,
+    "HOST_RECORDS_FETCHED": 0,
+    "BANNERS_FETCHED": 0,
+    "DOWNLOADS": 0,
+    "TRIALS": 0,
+    "PURCHASES": 0,
+    "MAILBOX_SEARCHES": 0,
+    "ENQUIRIES_SENT": 0,
+    "FOLLOWUPS_SENT": 0,
+    "CREDENTIALS_READ": 0,
+    "MODEL_CALLS": 0,
+    "EMBEDDINGS": 0
+  },
+
+  "canonical_mutations": {
+    "$comment": "§45.",
+    "raw_records_created": 0,
+    "normalized_records_created": 0,
+    "signals_created": 0,
+    "claims_created": 0,
+    "claim_revisions_created": 0,
+    "evidence_created": 0,
+    "threshold_registrations_created": 0,
+    "claim_derivations_created": 0,
+    "refusals_created": 0,
+    "reliability_assessments_created": 0,
+    "independence_groups_created": 0,
+    "opportunities_modified": 0,
+    "sources_registered": 0,
+    "governance_reviews_created": 0,
+    "migrations_created": 0
+  }
+}

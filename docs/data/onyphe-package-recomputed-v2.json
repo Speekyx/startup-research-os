@@ -1,0 +1,47 @@
+{
+  "$comment": "Mission 1.66.2 Part I. ONYPHE's individual gates, recomputed after the documentation reconciliation.",
+  "record_version": "2.0.0",
+  "mission": "1.66.2 — ONYPHE Public Documentation Reconciliation & Configuration-Metadata Closure V1",
+  "recorded_at": "2026-09-05",
+
+  "gates": {
+    "B1": {"verdict": "PASS", "topic": "first-party technical documentation retrievable", "changed": false, "basis": "the documentation portal, the data models and the write-ups were all retrieved this mission"},
+    "B2": {"verdict": "PARTIAL", "topic": "OBSERVATION_ADDRESSABLE_EXPOSURE", "changed": false, "basis": "the repeated-observation case is addressed by no first-party page, after a directed search of the four most likely ones", "blocks": true},
+    "B3": {"verdict": "PASS", "topic": "protocol-native exposure", "changed": false, "basis": "a raw application response field, full-text searchable, truncated rather than removed beyond thirty days", "reopened": false},
+    "B4": {"verdict": "PARTIAL", "topic": "frame and configuration", "changed": false, "basis": "TCP/22 datascan membership unpublished, configuration documented as mutable, membership at a past date published nowhere, and the port set now known to differ by scanner region", "blocks": true},
+    "B5": {"verdict": "PARTIAL", "topic": "vantage", "changed": false, "basis": "scanner node fields are documented per record, and whether they survive thirty days is unknown"},
+    "B6": {"verdict": "PARTIAL", "topic": "RELIABILITY_REVIEWABILITY", "changed": false, "basis": "the documentation is retrievable and does not answer the load-bearing operational questions"}
+  },
+
+  "gates_changed_this_mission": 0,
+
+  "what_moved_and_what_did_not": {
+    "$comment": "The honest accounting. Evidence moved; no verdict did.",
+    "verdicts_changed": 0,
+    "evidence_strengthened": [
+      "B2's PARTIAL now rests on a directed search rather than on documents read for other purposes",
+      "B4 gains a first-party, quantified record that the configuration has changed over time",
+      "B4 gains a new and previously unrecorded fact: the datascan port set differs by scanner region",
+      "B3's PASS is re-confirmed verbatim rather than carried forward",
+      "the three retention UNKNOWNs rest on the retention page re-read for exactly this question"
+    ],
+    "the_distinction_that_matters": "Knowing more about why a gate is PARTIAL is not the same as moving it. Mission 1.63 recorded zero topics changed and called it the honest count; the same applies here, with a fuller basis underneath."
+  },
+
+  "the_finding_that_makes_B4_harder_rather_than_easier": {
+    "name": "DATASCAN_PORT_SET_IS_REGION_DEPENDENT",
+    "basis": "US/FR scan a list of 500 ports; SG/CN scan the TOP 25. Same category, same table.",
+    "effect": "The apparatus applies at least two configurations to different parts of its own population. A windowed count of addresses answering on one port would mix addresses that were eligible to show it with addresses that were not, and the difference would sit inside the apparatus.",
+    "why_it_is_recorded_as_a_risk_rather_than_a_failure": "Whether port 22 is in either list is unknown. If it is in both, the heterogeneity does not bite for this construct. If it is in one, it does. The fact is established; its consequence depends on the answer to a question that has been asked and not answered."
+  },
+
+  "individual_status": {
+    "verdict": "INDIVIDUALLY_UNRESOLVED",
+    "changed": false,
+    "why_not_qualified": "The gate set is conjunctive. B2 is PARTIAL, B4 is PARTIAL, and load-bearing retention is UNKNOWN. Any one of the three is enough.",
+    "why_not_not_qualified": "Nothing was affirmatively refuted. Every blocking state is an absence of published documentation rather than a documented incompatibility, which is the difference between this apparatus and the two that failed on affirmative statements.",
+    "PARTIAL_cannot_qualify": true,
+    "UNKNOWN_cannot_qualify": true,
+    "the_temptation_named": "Twelve first-party documents were retrieved and a great deal was learned. It would be easy to let volume of evidence read as progress toward qualification. Nothing moved, and the reason nothing moved is that what is missing is not more documentation but one sentence about one case."
+  }
+}

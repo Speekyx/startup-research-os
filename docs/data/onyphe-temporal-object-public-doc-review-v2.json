@@ -1,0 +1,70 @@
+{
+  "$comment": "Mission 1.66.2 Part A. The B2 temporal object, re-read against first-party pages fetched for this exact question.",
+  "record_version": "2.0.0",
+  "mission": "1.66.2 — ONYPHE Public Documentation Reconciliation & Configuration-Metadata Closure V1",
+  "recorded_at": "2026-09-05",
+  "supersedes_nothing": "Mission 1.62, 1.63 and 1.64 recorded what their evidence supported. This extends the basis; it does not rewrite them.",
+
+  "the_exact_discriminator": {
+    "$comment": "§A2. One case, stated before any page was read, so a page cannot be made to answer a question shaped around what it happens to say.",
+    "case": "Service S at address A on port P is observed during governed window W. The SAME service is observed again AFTER W. Can a historical query restricted to W still retrieve the observation that happened inside W?",
+    "if_yes": "OBSERVATION_EVENT_APPEND or VERSIONED_OBSERVATION_HISTORY, and B2 may PASS",
+    "if_no": "MAINTAINED_SERVICE_STATE_LAST_SEEN, and B2 FAILS",
+    "if_the_documentation_does_not_say": "AMBIGUOUS, and B2 stays PARTIAL",
+    "why_this_is_the_only_question_left": "Every other temporal fact about the category is documented. What decides whether a windowed count means anything is what happens to a record that is observed twice, and that is a storage-model fact rather than a query-surface fact."
+  },
+
+  "what_the_pages_actually_say": {
+    "$comment": "Quoted from the first-party pages, re-read for this mission rather than carried from a prior report.",
+    "query_language_time_functions": [
+      {"function": "-hourago", "verbatim": "Query data collected some hours ago. The use case is to automate your searches every hour to search for specific gems on previous hour of collected information."},
+      {"function": "-dayago", "verbatim": "In the same way, you may want to execute searches at the day granularity level."},
+      {"function": "-weekago", "verbatim": "Same as before, at the week granularity level."},
+      {"function": "-monthago", "verbatim": "Same as before, at the month granularity level."},
+      {"function": "-since", "verbatim": "Sometimes, you may want to query on the full time range allowed by your license."}
+    ],
+    "default_sort": {"verbatim": "By default, latest result is displayed first on output."},
+    "older_results": {"verbatim": "In some cases, you want to identify the older result", "note": "the page illustrates -sort:0 to reach an oldest result"},
+    "timestamp_definition": {
+      "page": "datascan / vulnscan / riskscan data model",
+      "verbatim": "timestamp of when the data was collected. Allows tracking when a given service or vulnerability was last observed.",
+      "why_it_does_not_settle_the_case": "One sentence, two temporal objects. A moment of collection is an event; tracking when a service was LAST observed is a maintained state. Mission 1.62 recorded this ambiguity and it is confirmed verbatim here rather than resolved."
+    },
+    "raw_response_field": {
+      "verbatim": "raw application response received from the scanned service. Stored as full-text searchable content up to 1 MB.",
+      "bears_on": "B3, which stays PASS and was not reopened"
+    }
+  },
+
+  "the_page_most_likely_to_answer_it_does_not": {
+    "$comment": "The strongest remaining candidate, fetched for this question specifically.",
+    "page": "Major Changes For Historical Queries And Roadmap 2023",
+    "why_it_was_the_best_candidate": "Its title names historical queries, which is the surface the discriminator turns on. If any first-party page were going to state the storage model, this was it.",
+    "finding": "It contains no statement about whether a repeated scan of the same service creates a new document or updates an existing one, and none about versioning, append, overwrite, deduplication or last-seen semantics.",
+    "what_that_establishes": "Not that the model is one thing or the other. That the public documentation does not say, after the question was put to the page written about exactly this surface."
+  },
+
+  "inferences_that_were_available_and_refused": {
+    "$comment": "§A3. Each of these is compatible with BOTH storage models, which is why none of them closes the gate.",
+    "historical_data_exists": "A category with seven months of history can be a stream of retained events or a maintained state with retained versions. Retention is not a storage model.",
+    "data_collected_wording": "-hourago is described as querying data collected in a past hour. A maintained record whose timestamp advanced into that hour would also match, so the phrase does not distinguish the two.",
+    "latest_first_default": "A default sort says which result is shown first. It presupposes more than one result exists to order, and says nothing about whether two results can describe the SAME service at two times.",
+    "older_result_retrievable": "-sort:0 reaching an older result is compatible with several older results for DIFFERENT services, which is what a maintained store also produces.",
+    "last_observed_wording": "This is the half of the timestamp sentence that points the other way, and it is not read as decisive either.",
+    "the_rule": "Resolving an ambiguity in the direction that keeps a candidate alive is what this arc has refused five times. It is refused again here, and this time the refusal costs a whole documentation budget."
+  },
+
+  "what_would_close_it": {
+    "documentary": "one first-party sentence stating whether a repeated scan of the same address, port and service creates a new document or updates an existing one",
+    "already_asked": "Question 1 of the frozen enquiry, sent once to the published general contact route on 2026-09-05",
+    "empirical_route_refused": "Retrieving records and inspecting whether two documents exist for one service would answer it. That is a measurement query, it destroys preregistration, and §A4 forbids it. The question is cheaper to ask than to buy."
+  },
+
+  "verdict": {
+    "B2": "PARTIAL",
+    "state": "AMBIGUOUS",
+    "changed_this_mission": false,
+    "what_did_change": "The basis. Four first-party pages were consulted specifically for the discriminator and none states it, so PARTIAL now rests on a directed search rather than on documents read for other purposes.",
+    "not_promoted_because": "No page addresses the repeated-observation case, and every available wording is compatible with both models."
+  }
+}

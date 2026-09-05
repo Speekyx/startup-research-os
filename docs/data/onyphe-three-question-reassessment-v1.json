@@ -1,0 +1,80 @@
+{
+  "$comment": "Mission 1.66.2 Part G. The three sent questions, reassessed against the documentation found afterwards. The enquiry itself is not edited.",
+  "record_version": "1.0.0",
+  "mission": "1.66.2 — ONYPHE Public Documentation Reconciliation & Configuration-Metadata Closure V1",
+  "recorded_at": "2026-09-05",
+
+  "the_enquiry_was_not_edited": {
+    "frozen_document": "onyphe-technical-methodology-enquiry-v1",
+    "content_sha256": "0b39ef325fd42836a3b65284a7386cbca7ae8f22afcb9629d5574e0ff0f23e9f",
+    "recomputed_this_mission": true,
+    "matches": true,
+    "edited": false,
+    "why_it_may_not_be_edited": "It was sent. A document that was sent and then altered is a record of something nobody received."
+  },
+
+  "questions": [
+    {
+      "n": 1,
+      "topic": "DATASCAN RECORD LIFECYCLE",
+      "gate": "B2",
+      "classification": "STILL_UNRESOLVED",
+      "what_the_public_documentation_added": "Verbatim time-range function descriptions, a documented default sort, and a timestamp definition that names both a collection moment and last-observed tracking in one sentence.",
+      "why_it_is_still_unresolved": "None of it addresses the repeated-observation case. Four first-party pages were consulted specifically for it, including the write-up whose title names historical queries, and none states whether a second scan of the same service creates a document or updates one.",
+      "was_asking_it_justified": "Yes, and more strongly than before. The question was asked because the public documentation did not answer it; a directed search of the public documentation has now confirmed that it does not."
+    },
+    {
+      "n": 2,
+      "topic": "DATASCAN PORT SET",
+      "gate": "B4",
+      "$comment": "Three subparts, kept apart, because collapsing them would let one answer stand for three.",
+      "subparts": [
+        {
+          "subpart": "is TCP/22 in the datascan set",
+          "classification": "STILL_UNRESOLVED",
+          "basis": "the published port list carries one section and it is headed for ctiscan; no datascan TCP section exists on that page"
+        },
+        {
+          "subpart": "what the current datascan configuration is",
+          "classification": "PARTIALLY_CONSTRAINED",
+          "basis": "500 ports from US/FR and the TOP 25 from SG/CN, quoted from the Data Refresh Rate page",
+          "what_is_constrained": "the cardinality, per region",
+          "what_is_not": "the membership, which is what the question asks"
+        },
+        {
+          "subpart": "is the configuration recorded against a date or a version",
+          "classification": "PARTIALLY_CONSTRAINED",
+          "basis": "the 2024 retrospective documents that port counts, cadence and scanner regions all changed",
+          "what_is_constrained": "that the configuration MOVES, which was previously unknown and is now first-party established",
+          "what_is_not": "which ports were in the set on any given date, which is still published nowhere",
+          "direction_of_the_finding": "It makes the question more necessary rather than less. An unchanging configuration would not need to be dated."
+        }
+      ],
+      "overall": "PARTIALLY_CONSTRAINED"
+    },
+    {
+      "n": 3,
+      "topic": "FIELDS RETAINED BEYOND THIRTY DAYS",
+      "gate": "B4 and B6",
+      "$comment": "Three fields, classified independently, because one answered field is not three.",
+      "subparts": [
+        {"field": "ip", "classification": "STILL_UNRESOLVED"},
+        {"field": "@timestamp", "classification": "STILL_UNRESOLVED"},
+        {"field": "node.id / node.country / node.physicalcountry", "classification": "STILL_UNRESOLVED"}
+      ],
+      "what_the_public_documentation_added": "The retention sentence re-read verbatim, confirming that it names the truncated field and does not name the removed ones, and the data model confirming that all five fields exist and what they mean.",
+      "overall": "STILL_UNRESOLVED",
+      "the_already_known_half_stays_known": "That the raw response field is truncated rather than removed. Question 3 states it as known and declines to re-ask it, which is still the right shape."
+    }
+  ],
+
+  "summary": {
+    "questions_answered_by_public_documentation": 0,
+    "questions_partially_constrained": 1,
+    "questions_still_unresolved": 2,
+    "subparts_partially_constrained": 2,
+    "the_honest_reading": "A twelve-document directed search of the provider's own public documentation moved no question to answered. That is not a wasted budget: it converts *we have not found it* into *we looked where it would be and it is not published*, which is what makes the enquiry worth having sent.",
+    "no_question_was_added_or_removed": true,
+    "enquiry_version": "v1, current, sent once"
+  }
+}

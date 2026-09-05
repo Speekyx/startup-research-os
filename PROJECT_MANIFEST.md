@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.100
+Version: 1.101
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-05 (Sprint 1 / Mission 1.66.1)
+Last amended: 2026-09-05 (Sprint 1 / Mission 1.66.2)
 
 ---
 
@@ -13,6 +13,147 @@ Last amended: 2026-09-05 (Sprint 1 / Mission 1.66.1)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.101 — 2026-09-05 (Sprint 1 / Mission 1.66.2)
+
+**`ONYPHE_PUBLIC_DOCUMENTATION_RECONCILED_RESIDUALS_REMAIN`.** Twelve first-party
+documents retrieved and re-read verbatim against the three residual questions.
+**No gate moved**, and establishing that is the result.
+
+**THE REUSABLE FINDING IS WHAT A SPENT BUDGET BUYS WHEN IT CHANGES NOTHING.** A
+documentation budget that returns no gate change is not a failed budget: it buys
+**the difference between an unanswered question and an unpublished answer.** An
+unanswered question might be closed by reading more. An unpublished answer can
+only be closed by asking, by measuring, or by choosing a different apparatus.
+Knowing which of those you face decides the next mission, and this one decides it:
+for ONYPHE, further public reading is exhausted.
+
+**FOUR TRUE STATEMENTS THAT DO NOT CLOSE B2, AND ASSEMBLING THEM WAS THE
+TEMPTATION.** The category keeps seven months of history. `-hourago` is described
+verbatim as *"Query data collected some hours ago"*. The default sort is *"By
+default, latest result is displayed first on output"*. And `-sort:0` reaches an
+older result. Each is documented, each sounds like an append store, and **each is
+equally true of a maintained store**: a record whose timestamp advanced into a
+past hour also matches a query over that hour, and a default ordering presupposes
+several results without saying whether two can describe the SAME service at two
+times. **The page most likely to settle it was fetched for exactly that reason** —
+the write-up whose title names historical queries — and it states nothing about
+whether a repeated scan creates a document or updates one. **B2 stays PARTIAL, on
+a directed search rather than on documents read for other purposes.**
+
+**THE TIMESTAMP SENTENCE IS STILL BOTH THINGS AT ONCE**, quoted verbatim from the
+data model: *"timestamp of when the data was collected. Allows tracking when a
+given service or vulnerability was last observed."* One sentence, two temporal
+objects. Mission 1.62 recorded the ambiguity; this mission confirms it rather than
+resolving it in the direction that would keep the candidate alive.
+
+**A GENUINELY NEW CONFIGURATION FACT: THE DATASCAN PORT SET IS REGION-DEPENDENT.**
+The same table gives US/FR *"same list of 500 ports"* and SG/CN *"TOP 25 ports"*.
+**One apparatus applies at least two configurations to different parts of its own
+population.** If port 22 sits inside the 500 and outside the TOP 25, an address
+reached only by the SG/CN rotation is not eligible to appear at all, and a count
+would mix two populations selected under two different rules — **with the
+difference living inside the apparatus rather than between apparatuses.** Recorded
+as a named risk rather than a defect, because whether 22 is in either list is
+exactly what nobody has published.
+
+**AND THE CONFIGURATION IS NOW DOCUMENTED AS HAVING MOVED.** From the official
+retrospective, verbatim: *"From 200+ ports scanned to more than 400 ports"*,
+*"Bi-monthly refresh rate from FR and US countries, instead of once per month
+previously"*, *"More scanning from HK and SG locations (86 ports for SG & 42 for
+HK)"*, *"Number of scanned ports: from 200+ to 1300+ per month"*. Port counts,
+cadence, scanner regions and category coverage all changed. **This makes
+`APPARATUS_CONFIGURATION_MUST_BE_TIME_ADDRESSABLE` demonstrated rather than
+anticipated** — and it makes B4 harder, not easier: before, the port set was
+undated and might have been constant; it is now known to move, and its value at a
+past window is published nowhere. **The retrospective names HK and SG while the
+current page names SG and CN. That is drift, not contradiction**, and reading two
+documents about different moments as a conflict would be the error.
+
+**TCP/22 STAYS UNKNOWN AND THE CATEGORY TRANSFER WAS REFUSED AGAIN.** The
+published port list carries exactly one section, headed for **ctiscan**, and port
+22 appears under it. There is no datascan TCP section. A configuration fact
+published for one resource does not establish it for another, and the absence of a
+section is not a statement that datascan scans no TCP ports.
+
+**THE USER API LOOKED LIKE A SAFE CONFIGURATION ROUTE AND IS NOT.** Its own
+documentation says it lets you *"View name, API key, remaining credit count,
+expiry date"* alongside *"List of scanned ports, both TCP & UDP"*. So it is
+`SECRET_BEARING_DO_NOT_EXECUTE`: **avoiding measurement contamination is one
+property and not exposing a credential is a different one, and the second is not
+implied by the first.** It was **not executed**, and no credential was read to
+check whether the documentation was loose. **And it would not have answered the
+question anyway**: the port list carries no category or region mapping, and this
+mission established that the set differs by both — so a generic *scanned ports*
+list cannot be attributed to datascan. **Two independent reasons, either of which
+alone stops the call.**
+
+**RETENTION IS UNCHANGED AND ITS SILENCE IS RECORDED AS SILENCE.** Verbatim: *"For
+data older than 30 days, we remove some fields as they are less useful, and we
+truncate data field to 4KB."* The sentence **names the field it truncates and does
+not name the fields it removes.** So `data` truncation is not removal and B3 is
+not reopened, while the address, the observation timestamp and the scanner node
+fields stay **UNKNOWN in both directions** — the archive being useless without
+addresses is an argument from what a sensible provider would do, and historical
+querying existing proves records are reachable rather than which fields they still
+carry.
+
+**A SUPPORT CHANNEL IS ESTABLISHED, CITED RATHER THAN INFERRED**, from the
+official blog: *"Do you have any questions? Contact us at support[at]onyphe{dot}io"*,
+three times on the page. **Mission 1.65 is not rewritten**: it recorded that the
+pages IT inspected published no dedicated support route, which was accurate then
+and is still a true statement about that moment. The enquiry is **not resent**, no
+second envelope exists, and the one send stands. The address is recorded **as
+printed**, not normalised into a usable mailbox, because nothing is being sent and
+the record is more useful holding what the page actually shows.
+
+**A CANDIDATE REGISTRY REQUIREMENT WAS OFFERED AND DELIBERATELY NOT ADDED.**
+`APPARATUS_CONFIGURATION_MUST_BE_UNIFORM_ACROSS_THE_FRAME` is distinct —
+`SAMPLING_IS_LOAD_BEARING` compares population definitions BETWEEN apparatuses,
+and the time-addressability rule governs WHEN a configuration applied, while
+neither governs heterogeneity WITHIN one apparatus at one time. It is recorded
+with its justification for a mission that has the registry in scope, because **a
+documentation-reconciliation mission editing a frozen apparatus contract in
+passing is the change-control shape §Change control refuses.** Registry unchanged
+at **14**.
+
+**THE VALIDATOR REFUSED THIS MISSION'S OWN RECORD, AND IT WAS A FALSE POSITIVE.**
+A guard checking that Mission 1.65's statement survives was written against a
+phrase in the RENDERED prose, and the page renders it as *What it is not:* rather
+than *not a dedicated*. The record was intact. Re-anchored to the record's own
+field and to the sentence whose deletion would BE the rewrite — `testing-strategy.md`
+§23 for the eighth time, and fixed structurally rather than loosened.
+
+Outcome **C** and not **B**: the closest candidate for a definitively closed
+question is configuration mutability, and **establishing that a configuration
+CHANGES moves no gate toward PASS.** Reporting B would let that read as progress
+toward qualification when it is the opposite.
+
+12 of 12 first-party document requests, one of which 404'd on a guessed path and
+is counted anyway. **0 API executions of any kind, 0 credentials read, 0 mailbox
+searches, 0 enquiries sent, 0 follow-ups, 0 measurement queries, 0 counts, 0 host
+records, 0 banners, 0 trials, 0 purchases.** 0 canonical mutations, 0 sources
+registered, 0 governance reviews, 0 reliability values, 0 independence groups, 0
+pairs selected, 0 model calls, 0 embeddings, no migration. ONYPHE stays
+`INDIVIDUALLY_UNRESOLVED`, **qualified apparatuses 0 of 4, so
+`PAIR_ANALYSIS_NOT_READY`**. Validator probed with **214 deliberate violations and
+214 caught**, 209 by rule and 5 by drift, the five being exactly the hand-edited
+generated pages. 2019 bare-python tests run before commit.
+
+New: `docs/data/mission-1.66.2-baseline-v1.json`,
+`onyphe-public-documentation-reconciliation-v1.json`,
+`onyphe-temporal-object-public-doc-review-v2.json`,
+`onyphe-datascan-port-configuration-public-doc-review-v2.json`,
+`onyphe-user-api-configuration-surface-review-v1.json`,
+`onyphe-retention-public-doc-review-v2.json`,
+`onyphe-contact-channel-reconciliation-v1.json`,
+`onyphe-three-question-reassessment-v1.json`,
+`onyphe-package-recomputed-v2.json`, `qualified-apparatus-readiness-v3.json` and
+their rendered `.md`;
+`infrastructure/scripts/render_documentation_reconciliation.py`; 84 tests in
+`packages/inferred-claim-evaluator/python`.
+
+Report: `docs/architecture/mission-1.66.2-report.md`.
 
 ## 1.100 — 2026-09-05 (Sprint 1 / Mission 1.66.1)
 
@@ -4530,6 +4671,16 @@ Additionally authoritative:
 - docs/data/onyphe-enquiry-dispatch-execution-v1.md (added in 1.99)
 - docs/data/approved-dispatch-execution-v1.md (added in 1.99)
 - docs/data/onyphe-manual-dispatch-attestation-v1.md (added in 1.100)
+- docs/data/mission-1.66.2-baseline-v1.md (added in 1.101)
+- docs/data/onyphe-public-documentation-reconciliation-v1.md (added in 1.101)
+- docs/data/onyphe-temporal-object-public-doc-review-v2.md (added in 1.101)
+- docs/data/onyphe-datascan-port-configuration-public-doc-review-v2.md (added in 1.101)
+- docs/data/onyphe-user-api-configuration-surface-review-v1.md (added in 1.101)
+- docs/data/onyphe-retention-public-doc-review-v2.md (added in 1.101)
+- docs/data/onyphe-contact-channel-reconciliation-v1.md (added in 1.101)
+- docs/data/onyphe-three-question-reassessment-v1.md (added in 1.101)
+- docs/data/onyphe-package-recomputed-v2.md (added in 1.101)
+- docs/data/qualified-apparatus-readiness-v3.md (added in 1.101)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

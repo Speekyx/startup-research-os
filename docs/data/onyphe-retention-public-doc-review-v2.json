@@ -1,0 +1,89 @@
+{
+  "$comment": "Mission 1.66.2 Part E. Post-30-day retention, re-read verbatim.",
+  "record_version": "2.0.0",
+  "mission": "1.66.2 — ONYPHE Public Documentation Reconciliation & Configuration-Metadata Closure V1",
+  "recorded_at": "2026-09-05",
+
+  "retention_horizons": {
+    "$comment": "Part E1. Quoted from the Historical Data Availability page.",
+    "verbatim_categories": [
+      {"window": "1 month", "categories": ["ctiscan"]},
+      {"window": "7 months", "categories": ["datascan", "datashot", "riskscan"]},
+      {"window": "12 months", "categories": ["geoloc", "inetnum", "onionscan", "onionshot", "pastries", "resolver", "sniffer", "threatlist", "topsite", "vulnscan", "whois"]},
+      {"window": "48 months", "categories": ["ctl", "domain", "hostname", "ip"]}
+    ],
+    "datascan_horizon": "7 months",
+    "note_on_the_two_categories_this_arc_compares": "datascan keeps seven months and ctiscan one. The category carrying the protocol-native evidence is the one with the longer horizon, and the one whose port membership is published is the one with the shorter."
+  },
+
+  "the_optimisation_sentence": {
+    "$comment": "Part E1 and E2. The load-bearing sentence, quoted exactly, typo included.",
+    "verbatim": "We keep the last 30 days of data will all the fields and up-to 16KB of raw application responses. For data older than 30 days, we remove some fields as they are less useful, and we truncate data field to 4KB.",
+    "optimized_categories_verbatim": ["datascan", "resolver", "riskscan", "vulnscan"],
+    "two_operations_not_one": {
+      "REMOVED": "some fields, and the sentence does not name any of them",
+      "TRUNCATED": "the data field, to 4KB",
+      "why_the_distinction_holds": "The sentence names the field it truncates and does not name the fields it removes. Mission 1.63 read it the same way and the reading is confirmed verbatim here."
+    }
+  },
+
+  "raw_response_field": {
+    "$comment": "Part E2. B3 is not reopened.",
+    "field": "data",
+    "documented_as": "raw application response received from the scanned service. Stored as full-text searchable content up to 1 MB.",
+    "post_30_day_treatment": "TRUNCATED to 4KB",
+    "is_not": "REMOVED",
+    "effect_on_the_construct": "The predicate is a literal prefix of tens of bytes at the start of an identification string. A four-kilobyte truncation does not reach it.",
+    "B3": "PASS",
+    "reopened": false,
+    "the_temptation_refused": "Reading truncation as removal would reopen B3 and would be wrong. Reading truncation as harmless in general would also be wrong; it is harmless for THIS predicate because the predicate lives at the beginning of the field."
+  },
+
+  "location_fields": {
+    "$comment": "Part E3. Each field independent. Silence is UNKNOWN.",
+    "$note": "The data model documents that these fields EXIST and what they mean. No page states whether they survive the 30-day boundary.",
+    "ip": {
+      "documented_definition": "the IP address of the scanned Internet asset. Supports CIDR range searches up to /8.",
+      "post_30_day_state": "UNKNOWN",
+      "basis": "no first-party page names it among the removed fields, and none names it among the retained ones"
+    },
+    "@timestamp": {
+      "documented_definition": "timestamp of when the data was collected. Allows tracking when a given service or vulnerability was last observed.",
+      "post_30_day_state": "UNKNOWN",
+      "basis": "same silence"
+    },
+    "node.id": {
+      "documented_definition": "unique identifier of the scanner node that performed the scan.",
+      "post_30_day_state": "UNKNOWN",
+      "basis": "same silence"
+    },
+    "node.country": {
+      "documented_definition": "logical country the scanner node is assigned to (may differ from physical location).",
+      "post_30_day_state": "UNKNOWN",
+      "basis": "same silence"
+    },
+    "node.physicalcountry": {
+      "documented_definition": "physical country where the scanner node is located.",
+      "post_30_day_state": "UNKNOWN",
+      "basis": "same silence"
+    }
+  },
+
+  "arguments_available_and_refused": {
+    "$comment": "Part E3. Each of these would resolve a field favourably from something other than documentation.",
+    "the_archive_would_be_useless_without_addresses": "An argument from what a sensible provider would do. It is not what this provider documents.",
+    "historical_querying_proves_timestamps_survive": "Historical querying proves that records are reachable in a past range. It does not prove which fields those records still carry, and the same sentence that grants seven months also says some fields are removed.",
+    "the_fields_are_documented_so_they_are_retained": "The data model describes the schema. A schema says what a field means, never how long it lives.",
+    "the_rule": "Silence is UNKNOWN. An unnamed removed field is not guessed in either direction, including when the favourable guess is the one a sensible provider would make true."
+  },
+
+  "verdict": {
+    "ADDRESS_RETENTION": "UNKNOWN",
+    "OBSERVATION_TIME_RETENTION": "UNKNOWN",
+    "VANTAGE_FIELD_RETENTION": "UNKNOWN",
+    "RAW_RESPONSE_RETENTION": "TRUNCATED_NOT_REMOVED",
+    "changed_this_mission": false,
+    "what_did_change": "Nothing about the verdicts. What is new is that the retention page was re-read verbatim for this exact question and still names only the truncated field, so the three UNKNOWNs rest on a directed reading rather than on an incidental one.",
+    "why_it_is_load_bearing": "A count over a past window needs each observation to be attributable to an address, a time and a vantage. If any of the three is dropped beyond thirty days, an older observation stops being locatable, and the window the construct names is longer than thirty days."
+  }
+}

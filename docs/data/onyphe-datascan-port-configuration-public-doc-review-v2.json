@@ -1,0 +1,91 @@
+{
+  "$comment": "Mission 1.66.2 Part B and Part D. The datascan port configuration, and the finding that it is documented as having changed.",
+  "record_version": "2.0.0",
+  "mission": "1.66.2 — ONYPHE Public Documentation Reconciliation & Configuration-Metadata Closure V1",
+  "recorded_at": "2026-09-05",
+
+  "current_documented_configuration": {
+    "$comment": "Part B1. Quoted verbatim from the Data Refresh Rate page.",
+    "datascan_ip_scanning": [
+      {"verbatim": "Once per week: a week from US, the other one from FR, same list of 500 ports"},
+      {"verbatim": "Once per week: a week from SG, the other one from CN, TOP 25 ports"}
+    ],
+    "datascan_url_scanning": {"verbatim": "Continuous update, no specific refresh rate. The more a URL is seen, the more often it will be scanned"},
+    "vulnscan": {"verbatim": "Twice per week: 1 refresh from US, 1 refresh from FR"},
+    "ctiscan": [
+      {"verbatim": "Twice per week: from US & FR, TOP 100 ports"},
+      {"verbatim": "Twice per week: from SG & CN, TOP 25 ports"},
+      {"verbatim": "Once per week: balanced from US & FR, TOP 4000 ports"}
+    ],
+    "cardinality_is_not_membership": "US/FR scan a list OF 500 ports. The page states how many, never which. A count is not a set, and Mission 1.61 recorded the same distinction for the anchor's changelog."
+  },
+
+  "the_finding_this_mission_adds": {
+    "$comment": "New, and it is the substantive result of Part B.",
+    "name": "DATASCAN_PORT_SET_IS_REGION_DEPENDENT",
+    "evidence": "Within the SAME category, the same table gives US/FR a list of 500 ports and SG/CN the TOP 25 ports.",
+    "what_it_means": "The datascan port set is not one set. It is at least two, applied to different parts of the scanned population by different scanner regions.",
+    "why_it_matters_for_the_construct": "The construct counts distinct public IPv4 addresses answering on TCP/22 during a window. If port 22 is inside the 500 and outside the TOP 25, then an address reached only by the SG/CN rotation is not eligible to appear at all, while an address reached by US/FR is. The resulting count would mix two populations selected under two different configurations, and the difference would live inside the apparatus rather than between apparatuses.",
+    "it_is_not_a_refutation": "Whether 22 is in either list is unknown, so this is a named risk to the frame rather than an established defect. It bounds what a count from this apparatus could mean; it does not establish that the apparatus is wrong.",
+    "which_existing_rules_it_touches": [
+      "SAMPLING_IS_LOAD_BEARING, which asks whether two apparatuses expose the same population definition -- here one apparatus may not expose a single one",
+      "THE_RETRIEVABLE_FRAME_IS_NOT_THE_MEASURED_FRAME, which is about what a requester may retrieve rather than about internal configuration heterogeneity",
+      "APPARATUS_CONFIGURATION_MUST_BE_TIME_ADDRESSABLE, which governs WHEN a configuration applied rather than WHERE"
+    ]
+  },
+
+  "historical_configuration_drift": {
+    "$comment": "Part B2. First-party, dated, and quantified.",
+    "DATASCAN_CONFIGURATION_HISTORICALLY_MUTABLE": true,
+    "basis_page": "Retrospective 2024 and Roadmap 2025, published on the official ONYPHE blog",
+    "verbatim": [
+      "From 200+ ports scanned to more than 400 ports;",
+      "Bi-monthly refresh rate from FR and US countries, instead of once per month previously;",
+      "More scanning from HK and SG locations (86 ports for SG & 42 for HK);",
+      "New category of information: CTISCAN dedicated to Cyber Threat Intelligence (CTI);",
+      "Number of scanned ports: from 200+ to 1300+ per month"
+    ],
+    "what_changed_over_time": ["the number of scanned ports", "the refresh cadence", "the scanner regions", "the set of categories"],
+    "the_sharpest_pair": {
+      "$comment": "Two first-party pages, describing different moments, and the difference is the point.",
+      "retrospective_names_regions": "HK and SG, with 86 ports for SG and 42 for HK",
+      "current_page_names_regions": "SG and CN, with TOP 25 ports",
+      "reading": "Both the regions and their port counts differ between the two documents. Neither is wrong: they describe different times. What they establish together is that this configuration moves.",
+      "not_recorded_as_a_contradiction": "A retrospective describing 2024 and a current page describing now are not in conflict. Reading them as a contradiction would be the error; reading them as drift is what they are."
+    },
+    "why_this_strengthens_rather_than_weakens_the_registry_rule": "APPARATUS_CONFIGURATION_MUST_BE_TIME_ADDRESSABLE was added in Mission 1.63 on the observation that neither apparatus binds its port list to a window. It is now demonstrated rather than anticipated: this configuration is published as having changed, in numbers, by the provider itself."
+  },
+
+  "tcp_22_membership": {
+    "$comment": "Part B3 and Part D.",
+    "verdict": "DATASCAN_TCP22_UNKNOWN",
+    "scanned_ports_page_sections_as_printed": ["TCP ports - ctiscan category (5,054 ports)"],
+    "datascan_tcp_section_exists": false,
+    "datascan_udp_section_exists": false,
+    "port_22_appears_under": "TCP ports - ctiscan category (5,054 ports)",
+    "what_that_does_not_establish": "That TCP/22 is in the datascan set. The two categories differ in cadence, in origin regions, in port-set size and in retention, and a configuration fact published for one resource does not establish it for another. Mission 1.63 named this RESOURCE_SPECIFIC_LINEAGE applied to configuration, and refusing the transfer again is the same refusal rather than a new one.",
+    "public_status": "PUBLIC_DATASCAN_TCP_MEMBERSHIP_NOT_PUBLISHED_ON_THIS_PAGE",
+    "absence_is_not_denial": "That the page carries no datascan TCP section does not mean datascan scans no TCP ports. The Data Refresh Rate page says it scans 500 of them. It means the membership is not published there."
+  },
+
+  "configuration_time_addressability": {
+    "verdict": "CONFIGURATION_TIME_UNKNOWN",
+    "why_not_addressable": "The retrospective dates aggregate CHANGES to a year. No first-party page publishes which ports were in the datascan set on a given date, and a narrative count of how many ports were scanned is not a membership list bound to a window.",
+    "why_the_drift_makes_this_worse_rather_than_better": "Before this mission, the port set was undated and might have been constant. It is now documented as having moved, so a count over a past window depends on a configuration whose value at that window is published nowhere.",
+    "current_membership_is_not_historical_membership": true,
+    "PORT_SET_VERSIONED": false,
+    "PORT_SET_DATED": false,
+    "PORT_SET_INVARIANT_FOR_RELEVANT_PERIOD": false
+  },
+
+  "candidate_registry_requirement_offered_and_not_added": {
+    "$comment": "§40. Offered with its justification, and deliberately not written into the registry by a documentation mission.",
+    "proposed_name": "APPARATUS_CONFIGURATION_MUST_BE_UNIFORM_ACROSS_THE_FRAME",
+    "statement": "Where one apparatus applies different measurement configurations to different parts of its own population, a single count drawn from it mixes populations selected under different rules, and the apparatus must publish which configuration reached which part of the frame.",
+    "demonstrated_by": "the same category scanning 500 ports from two regions and the TOP 25 from two others",
+    "why_it_is_not_already_represented": "SAMPLING_IS_LOAD_BEARING compares population definitions BETWEEN apparatuses. THE_RETRIEVABLE_FRAME_IS_NOT_THE_MEASURED_FRAME governs what a requester may retrieve. APPARATUS_CONFIGURATION_MUST_BE_TIME_ADDRESSABLE governs WHEN a configuration applied. None governs heterogeneity WITHIN one apparatus at one time.",
+    "why_it_was_not_added_here": "The registry is a frozen contract owned by another mission's renderer and tests, and §40 sets REGISTRY_UNCHANGED as the default. A documentation-reconciliation mission editing an apparatus contract in passing is the change-control shape docs/CLAUDE.md §Change control refuses. It is recorded here so a mission with the registry in scope can adopt or decline it on the evidence.",
+    "recommended_adopter": "Mission 1.67 — Second Qualified Scanner Discovery V1, which selects apparatuses and would apply it before choosing rather than after",
+    "REGISTRY_UNCHANGED": 14
+  }
+}
