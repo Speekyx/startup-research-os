@@ -1,0 +1,91 @@
+{
+  "$comment": "Mission 1.65 Part B. Three residual methodological questions, frozen. DRAFTED AND NOT SENT. Its rendered form is hashed and the hash is recorded in the dispatch envelope, so this file is never edited after freezing.",
+  "record_version": "1.0.0",
+  "mission": "1.65 — Dual Enquiry Dispatch Envelope Preparation V1",
+  "recorded_at": "2026-09-05",
+  "apparatus": "ONYPHE",
+  "status": "AWAITING_OPERATOR_DISPATCH_APPROVAL",
+
+  "delivery": {
+    "sent": false,
+    "sent_at": null,
+    "$comment": "There is no field here that could be populated by anything but a later mission recording a real send.",
+    "recipient_is_recorded_outside_this_document": true,
+    "why": "Writing a recipient into the body would change the bytes this document is hashed over, which is the mistake the Netlas enquiry was designed to avoid and the reason its approval is still valid three missions later."
+  },
+
+  "provenance_of_the_three_questions": {
+    "$comment": "Section B. Exactly the three residuals Mission 1.64 froze. No fourth was added.",
+    "frozen_by": "Mission 1.64",
+    "source_artifact": "docs/data/onyphe-package-final-recompute-v1.json",
+    "question_count": 3,
+    "questions_added_beyond_the_frozen_three": 0,
+    "gates_they_decide": {
+      "1": "B2 OBSERVATION_ADDRESSABLE_EXPOSURE",
+      "2": "B4 FRAME, and APPARATUS_CONFIGURATION_MUST_BE_TIME_ADDRESSABLE",
+      "3": "B4 FRAME and B6 RELIABILITY_REVIEWABILITY, via whether an observation stays locatable"
+    }
+  },
+
+  "what_this_enquiry_is_not": {
+    "not_a_request_for_data": "It asks for no host, no result row, no count, no export and no sample.",
+    "not_a_request_for_access": "It asks for no account, no API key, no trial, no demo and no evaluation tier. One of the provider's published addresses is explicitly for demos and is deliberately not the recipient.",
+    "not_a_commercial_approach": "It requests no pricing and no quotation and states no intent to purchase.",
+    "not_evidence": "A drafted enquiry establishes nothing. A REPLY would be first-party evidence; this document is a question.",
+    "does_not_ask_for_a_conclusion": "It asks what the system does, never whether the system qualifies. Asking a provider to confirm that its API is observation-addressable would be asking it to grade our gate."
+  },
+
+  "subject": "Three questions about datascan record semantics and scan configuration",
+
+  "preamble": "We are documenting the methodology of published internet-scan datasets before using any of them as a measurement instrument, and your public documentation already answers most of what we needed. Three points we could not settle from it are below. All three are questions about how the data is structured and produced; none of them asks for records, for an account, or for anything commercial, and we are not asking you to assess our use case.",
+
+  "questions": [
+    {
+      "n": 1,
+      "topic": "DATASCAN RECORD LIFECYCLE",
+      "question": "For the datascan category, when the same service on the same address and port is observed by several successive scans, does each scan create a distinct document carrying its own collection timestamp, or is one document for that service updated in place so that its timestamp advances to the most recent observation?",
+      "why_we_ask": "We would like to select the observations made during a defined past interval. Under the first model a service observed inside that interval stays selectable for it afterwards; under the second, a service observed inside it and again later would carry a timestamp outside it. We want to describe the data correctly rather than assume either.",
+      "unanswered_by": "the query language, search, simple and summary API pages and the data model, which document a collection timestamp and a latest-first default sort without stating which of the two models produces them",
+      "gate": "B2"
+    },
+    {
+      "n": 2,
+      "topic": "DATASCAN PORT SET",
+      "question": "Which TCP ports make up the datascan scan set, and is TCP port 22 among them? Separately: is the composition of that set recorded against a date or a configuration version, so that a reader can tell which port set was in effect during a given past scan cycle?",
+      "why_we_ask": "The published scanned-ports page documents the set for the ctiscan category, and we did not want to assume the datascan configuration matches it, since the two differ in cadence, origin and retention. The second half matters because a set that changes over time makes a count comparable only within the period its configuration covers.",
+      "unanswered_by": "the scanned-ports page, which carries one category section and it is not datascan, and the refresh documentation, which gives the datascan set's size and cadence but not its membership",
+      "gate": "B4"
+    },
+    {
+      "n": 3,
+      "topic": "FIELDS RETAINED BEYOND THIRTY DAYS",
+      "question": "For datascan records older than thirty days, which fields are removed? We are specifically asking whether these three survive: the scanned IP address, the collection timestamp, and the scanner node fields identifying which node and country performed the scan.",
+      "why_we_ask": "Your retention documentation states that some fields are removed beyond thirty days and that the raw response field is truncated to 4 KB. The truncation is not a problem for us, and we are not asking about it again. What we cannot tell is whether the fields that locate an observation in identity, time and vantage are among the removed ones, which decides whether an older record can still be attributed to a period and a place.",
+      "unanswered_by": "the historical-data-availability page, which says some fields without enumerating them, and the datascan data model, which carries no per-field retention annotation",
+      "gate": "B4 and B6"
+    }
+  ],
+
+  "closing": "If any of this is already published somewhere we did not find, a pointer is just as useful as an answer. And if any of it is not something you publish, that is a useful answer too and we will record it as undocumented rather than infer it.",
+
+  "no_data_request_proof": {
+    "$comment": "Section B4. Checked mechanically by the validator over the sendable body rather than asserted here.",
+    "forbidden_asks_checked": [
+      "host examples", "result rows", "counts", "API access", "trial", "account",
+      "pricing", "quotation", "target measurement", "port-scan results", "sample export"
+    ],
+    "present_in_body": 0,
+    "already_answered_questions_repeated": 0,
+    "the_one_already_answered_thing": "that the raw data field is truncated to 4 KB rather than removed. Question 3 states it as known and explicitly declines to re-ask it."
+  },
+
+  "content_boundary": {
+    "$comment": "Section B6. The hash must live outside the bytes it hashes, so it is recorded in the dispatch envelope and never here.",
+    "hashed_artifact": "docs/data/onyphe-technical-methodology-enquiry-v1.md",
+    "boundary": "the rendered file's raw bytes as stored",
+    "sendable_body_fields": ["subject", "preamble", "questions", "closing"],
+    "hash_recorded_in": "docs/data/onyphe-dispatch-envelope-v1.json",
+    "hash_recorded_here": false,
+    "why": "Writing a document's own hash into the document changes the bytes the hash was computed over. Mission 1.56 settled this shape and Missions 1.61 and 1.64 kept it."
+  }
+}

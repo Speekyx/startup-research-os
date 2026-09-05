@@ -1,0 +1,81 @@
+{
+  "$comment": "Mission 1.65 Part D. The ONYPHE dispatch envelope. Complete and hashed, awaiting an operator dispatch approval. Nothing is sent.",
+  "record_version": "1.0.0",
+  "mission": "1.65 — Dual Enquiry Dispatch Envelope Preparation V1",
+  "recorded_at": "2026-09-05",
+  "envelope_id": "onyphe-dispatch-envelope-v1",
+  "contract": "outbound-dispatch-envelope@1.0.0",
+
+  "state": "READY_FOR_OPERATOR_APPROVAL",
+
+  "enquiry_document_id": "onyphe-technical-methodology-enquiry-v1",
+  "enquiry_content_sha256": "0b39ef325fd42836a3b65284a7386cbca7ae8f22afcb9629d5574e0ff0f23e9f",
+  "content_version": "v1",
+  "subject": "Three questions about datascan record semantics and scan configuration",
+
+  "content_approval": {
+    "CONTENT_APPROVED": false,
+    "why_false": "No operator has approved this body. The Netlas enquiry carries a separate content approval from Mission 1.61; this one has none, and the dispatch approval below therefore approves both the content and the action together.",
+    "consequence": "Approving this envelope's hash approves sending THIS text to THIS recipient. An operator who wants to read the body first will find it rendered in the packet."
+  },
+
+  "recipient_address": "contact@onyphe.io",
+  "recipient_provenance": {
+    "how_established": "RETRIEVED_FROM_FIRST_PARTY_PAGE",
+    "pages": [
+      {"url": "https://www.onyphe.com/about.html", "rendered_as": "a mailto link", "label_as_printed": "Contact us"},
+      {"url": "https://www.onyphe.com/", "rendered_as": "a mailto link in the header navigation", "label_as_printed": "Contact From Web site"}
+    ],
+    "independently_confirmed_on_two_pages": true,
+    "retrieved_this_mission": true,
+    "address_invented": false,
+    "address_inferred": false,
+    "obfuscation_decoded": false,
+    "the_distinction_that_matters_here": "The local part of this address happens to be a conventional word, and Mission 1.64's validator listed exactly that string among the mailbox forms it refuses. That rule forbids INFERRING a mailbox from convention. This address was not inferred: it is printed as a live mailto link on two first-party pages and was read off them. Provenance is what the rule is about, and a string ban would have refused a correctly established address while still admitting a guessed one that happened to look unusual.",
+    "what_it_is": "a general contact route published by the provider",
+    "what_it_is_not": "a dedicated technical or support channel. No such channel is published, and this record does not claim one."
+  },
+  "addresses_seen_and_excluded": [
+    {"purpose_as_printed": "a personalised demo", "excluded_because": "writing to it would be requesting a trial, and a zero-cost trial destroys preregistration exactly as a paid one would"},
+    {"purpose_as_printed": "sales, and printed obfuscated rather than as a link", "excluded_because": "the enquiry is not a commercial approach, and the address was not resolvable without reconstruction"},
+    {"purpose_as_printed": "an abuse mailbox, referenced only inside a published set of scanning principles as advice to scanner operators generally", "excluded_because": "it is not published as this provider's own contact route, and reconstructing it from that mention would be inventing an address"}
+  ],
+
+  "sender_identity": "OPERATOR_CHOSEN_MAILBOX_AT_SEND_TIME",
+  "sender_identity_is_a_placeholder": true,
+  "why_a_placeholder_is_permitted": "Contract §D3 permits it for OPERATOR_MANUAL_SEND only, because under manual send the sender genuinely is not determined until the operator sends, and binding a mailbox they did not choose would record a fact nobody established.",
+  "its_cost_stated": "This envelope's hash binds content, recipient and channel but NOT the exact sender. Three of the four are pinned rather than four.",
+  "how_to_pin_the_fourth": "If the operator names the mailbox they will send from, a re-frozen envelope binds all four and carries a different hash. This one is then SUPERSEDED rather than edited.",
+
+  "outbound_channel": "OPERATOR_MANUAL_SEND",
+  "channel_authorization_basis": "The repository prepares a packet and the operator sends it themselves. No mechanism in this deployment is used, so no authorisation for one is claimed.",
+  "connector_state": "AVAILABLE_NOT_AUTHORIZED",
+  "why_the_connector_was_not_selected": "A mail-capable connector exists in the runtime. Contract §D2 starts it at AVAILABLE_NOT_AUTHORIZED unless a prior explicit operator authorisation for this research correspondence exists, and none does. Sending from the operator's own account is an outward action on their behalf that they have not asked for.",
+
+  "envelope_sha256": "12a62853706a3c65f04859577fa3e9f2d4efaeca99cbf16badf759a55b4fe0d2",
+  "approval_string": "APPROVE MISSION 1.65 DISPATCH 12a62853706a3c65f04859577fa3e9f2d4efaeca99cbf16badf759a55b4fe0d2",
+  "approvable": true,
+  "approval_recorded": false,
+
+  "what_approval_authorises": "Sending this exact text, once, to this exact recipient, by the operator manually.",
+  "what_approval_does_not_authorise": [
+    "sending the Netlas enquiry",
+    "a retry, a resend or a follow-up",
+    "sending from a connector",
+    "requesting access, a trial, a demo or pricing",
+    "treating any reply as an answer before it is reviewed"
+  ],
+
+  "sent": false,
+  "sent_at": null,
+  "dispatch_count": 0,
+
+  "apparatus_state_unchanged": {
+    "$comment": "Part G.",
+    "onyphe_B2": "PARTIAL",
+    "onyphe_B4": "PARTIAL",
+    "onyphe_individual_status": "INDIVIDUALLY_UNRESOLVED",
+    "changed_this_mission": false,
+    "rule": "Freezing three questions changes nothing about the apparatus. Only a reviewed first-party response may move a gate."
+  }
+}

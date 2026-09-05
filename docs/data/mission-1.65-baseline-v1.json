@@ -1,0 +1,113 @@
+{
+  "$comment": "Mission 1.65 sections 0 and A1. The precondition, the approved-enquiry re-verification, and the retrieval ledger.",
+  "record_version": "1.0.0",
+  "mission": "1.65 — Dual Enquiry Dispatch Envelope Preparation V1",
+  "recorded_at": "2026-09-05",
+
+  "repository_precondition": {
+    "mission_1_64_merged": true,
+    "merge_commit": "c18a766",
+    "pull_request": "https://github.com/Speekyx/startup-research-os/pull/107",
+    "local_main_equals_origin_main": true,
+    "working_tree_clean_at_start": true,
+    "branch": "sprint-1/mission-1.65",
+    "migration_head": "0035_refusal_provenance",
+    "verified_from_git_not_from_prompt": true
+  },
+
+  "canonical_baseline": {
+    "raw_records": 325,
+    "normalized_records": 325,
+    "signals": 33,
+    "claims": 44,
+    "claim_revisions": 45,
+    "evidence": 58,
+    "inferred_claims": 1,
+    "threshold_registrations": 1,
+    "claim_derivations": 1,
+    "proposition_evaluation_refusals": 0,
+    "reliability_assessments_current": 4,
+    "independence_groups": 0,
+    "evidence_directions": {"SUPPORTS": 57, "CONTRADICTS": 1},
+    "claims_carrying_both_directions": 0,
+    "opportunities": 1,
+    "opportunity_revisions": 1,
+    "opportunity_evidence_links": 7,
+    "registered_sources": 29,
+    "embeddings": 0,
+    "scoring_scores_table_exists": false,
+    "reference_profile": "UNCALIBRATED",
+    "problem_family": "PARKED",
+    "drift_from_mission_1_64": "none"
+  },
+
+  "netlas_approved_enquiry": {
+    "$comment": "Section A1. Re-verified, and untouched.",
+    "artifact": "docs/data/anchor-technical-lineage-enquiry-v1.md",
+    "approved_sha256": "310acf288244453cd0a928197386cbf8311ded278e4dcdd22b70412807a049c4",
+    "recomputed_this_mission": true,
+    "verdict": "HASH_VERIFIED",
+    "hashing_boundary": "the file's raw bytes as stored",
+    "recipient_added": false,
+    "sender_added": false,
+    "channel_added": false,
+    "wording_changed": false,
+    "text_normalised": false,
+    "approval_metadata_inserted_into_hashed_document": false,
+    "why_none_of_that_was_done": "Recipient, sender and channel are dispatch facts. Writing any of them into the approved body would change its bytes and void the approval the operator issued against those bytes. They live in a dispatch envelope beside the document."
+  },
+
+  "content_approval_carried_forward": {
+    "$comment": "Section A2. What the existing approval does and does not mean.",
+    "exact_string": "APPROVE MISSION 1.61 ENQUIRY 310acf288244453cd0a928197386cbf8311ded278e4dcdd22b70412807a049c4",
+    "CONTENT_APPROVED": true,
+    "RECIPIENT_APPROVED": false,
+    "CHANNEL_APPROVED": false,
+    "SEND_NOW": false,
+    "why_these_are_four_separate_facts": "An approval names the bytes it was computed over. It says the words are right. It says nothing about who receives them, through what route, or from whom, because none of those was known when it was issued."
+  },
+
+  "documentation_ledger": {
+    "$comment": "Part C only. The Netlas contact page was NOT re-fetched: Missions 1.62, 1.63 and 1.64 each established that automated retrieval returns the obfuscation placeholder, and a fourth attempt would be repeating a known result.",
+    "used": 2,
+    "requests": [
+      {"n": 1, "subject": "ONYPHE", "url": "https://www.onyphe.com/about.html", "sought": "a published first-party contact route, exactly as printed", "usable": true},
+      {"n": 2, "subject": "ONYPHE", "url": "https://www.onyphe.com/", "sought": "every contact route on the page including footer, exactly as printed", "usable": true}
+    ],
+    "netlas_contact_page_refetched": false,
+    "why_not": "Three missions have established that the address there is served through an obfuscation mechanism and that automated retrieval returns a placeholder. A fourth attempt would produce the same placeholder, and pressing further would be circumvention."
+  },
+
+  "request_accounting": {
+    "FIRST_PARTY_CONTACT_DOC_REQUESTS": 2,
+    "RESEARCH_DATA_REQUESTS": 0,
+    "MEASUREMENT_QUERIES": 0,
+    "COUNTS_FETCHED": 0,
+    "HOST_RECORDS_FETCHED": 0,
+    "BANNERS_FETCHED": 0,
+    "TRIALS": 0,
+    "PURCHASES": 0,
+    "OUTBOUND_ENQUIRIES_SENT": 0,
+    "a_demo_address_was_seen_and_not_used": "One of the published addresses is documented as being for a personalised demo. Writing to it would be requesting a trial, which destroys preregistration exactly as a paid one would, so it is recorded as seen and excluded."
+  },
+
+  "canonical_mutations": {
+    "sources_registered": 0,
+    "governance_reviews_created": 0,
+    "threshold_registrations_created": 0,
+    "claims_created": 0,
+    "evidence_created": 0,
+    "reliability_assessments_created": 0,
+    "reliability_values_assigned": 0,
+    "independence_groups_created": 0,
+    "scores_created": 0,
+    "opportunity_changes": 0,
+    "mission_1_56_claim_modified": false,
+    "model_calls": 0,
+    "model_cost_usd": 0.0,
+    "embeddings": 0,
+    "netlas_enquiry_v1_edited": false,
+    "enquiries_sent": 0,
+    "apparatus_gates_changed": 0
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "$comment": "Mission 1.65 Part D. The dispatch-envelope contract. This governs OPERATOR ACTIONS and is deliberately NOT added to the apparatus-requirements registry, which governs measurement apparatuses.",
+  "record_version": "1.0.0",
+  "mission": "1.65 — Dual Enquiry Dispatch Envelope Preparation V1",
+  "recorded_at": "2026-09-05",
+  "contract_id": "outbound-dispatch-envelope@1.0.0",
+
+  "the_rule_this_freezes": {
+    "name": "CONTENT_APPROVAL_IS_NOT_DISPATCH_APPROVAL",
+    "rule": "An approved document may not be sent until a second immutable object identifies the approved content hash, the exact recipient, the exact outbound channel and the sender identity, and is itself approved. That second object is a dispatch envelope.",
+    "why_it_exists": "Mission 1.61 obtained an approval for a body. Missions 1.62, 1.63 and 1.64 each found that the body was ready and the action was not, for a different reason each time. An approval that names only bytes cannot express who receives them, through what route, or from whom.",
+    "where_it_is_recorded": "here, and not in the apparatus-requirements registry",
+    "why_not_the_registry": "That registry answers whether a measurement apparatus qualifies. This answers whether an outbound action may be taken on the operator's behalf. Putting an operator-action rule among apparatus requirements would make the registry two things.",
+    "no_migration": true,
+    "no_global_approval_subsystem": true
+  },
+
+  "three_gates_that_stay_separate": {
+    "$comment": "Mission 1.64 established these. Collapsing any two is how an approval of words becomes an approval of an action.",
+    "CONTENT_APPROVAL": {
+      "asks": "are these the right words?",
+      "granted_by": "an operator approval naming the content hash",
+      "does_not_grant": ["a recipient", "a channel", "permission to send"]
+    },
+    "RECIPIENT_ESTABLISHMENT": {
+      "asks": "who exactly receives it?",
+      "granted_by": "first-party published evidence, or an operator reading the exact string off a first-party page",
+      "never_granted_by": ["a conventional mailbox name", "a plausible-looking syntax", "a WHOIS record", "a third-party contact database", "decoding an obfuscation"]
+    },
+    "CHANNEL_AUTHORIZATION": {
+      "asks": "through what route, and as whom?",
+      "granted_by": "an explicit operator authorisation for this exact envelope",
+      "never_granted_by": ["a connector being present in the runtime", "a connected account", "a previous unrelated mail action", "content approval", "the word continue", "the word go"]
+    }
+  },
+
+  "envelope_required_fields": [
+    "enquiry_document_id",
+    "enquiry_content_sha256",
+    "recipient_address",
+    "recipient_provenance",
+    "sender_identity",
+    "outbound_channel",
+    "channel_authorization_basis",
+    "subject",
+    "content_version",
+    "created_at"
+  ],
+
+  "envelope_rules": {
+    "one_envelope_is_one_intended_outbound_action": true,
+    "must_not_duplicate_the_approved_body": "The envelope names the body by hash and never restates it. A packet may render the body, and it renders it FROM the frozen artifact rather than retyping it.",
+    "must_not_change_the_approved_body": true,
+    "a_second_send_needs_a_second_envelope": "An approval authorises one action. A retry, a resend, a forward or a follow-up is a different action and needs its own envelope and its own approval."
+  },
+
+  "channel_states": {
+    "NOT_EVALUATED": "nobody has looked",
+    "AVAILABLE_NOT_AUTHORIZED": "a mechanism exists and no operator authorisation for this research correspondence does. A connector present in the runtime starts here.",
+    "OPERATOR_MANUAL_SEND": "the operator sends the message themselves from a mailbox of their choosing; the repository prepares the packet and never marks it sent",
+    "AUTHORIZED_CONNECTOR": "an explicit operator authorisation exists for this exact envelope, naming this connector and this sender",
+    "BLOCKED": "the route is refused"
+  },
+
+  "sender_identity_rules": {
+    "$comment": "Section D1 and D3.",
+    "for_a_connector": "the specific operator-visible sender account must be identified before approval. Naming only the connector or the provider is not a sender identity, because it does not say which mailbox the recipient will see.",
+    "if_it_cannot_be_established": "CHANNEL_NOT_READY",
+    "for_manual_send": "OPERATOR_CHOSEN_MAILBOX_AT_SEND_TIME is permitted, and only for OPERATOR_MANUAL_SEND",
+    "why_that_flexibility_is_permitted_here": "Under manual send the sender genuinely is not determined until the operator sends it, and binding a mailbox they did not choose would be recording a fact nobody established.",
+    "its_cost_stated": "An envelope carrying that placeholder binds content, recipient and channel but NOT the exact sender. Three of the four are pinned rather than four.",
+    "how_to_pin_the_fourth": "If the operator names the mailbox they will send from, a re-frozen envelope binds all four and carries a different hash. The earlier envelope is superseded rather than edited.",
+    "preference": "bind the exact sender where it is known"
+  },
+
+  "envelope_hash": {
+    "$comment": "Section D5.",
+    "canonicalisation": "sha256 over canonical JSON of the envelope's binding fields, with sort_keys true, separators without spaces, and ensure_ascii false",
+    "binding_fields": [
+      "enquiry_document_id",
+      "enquiry_content_sha256",
+      "recipient_address",
+      "outbound_channel",
+      "sender_identity",
+      "subject",
+      "content_version"
+    ],
+    "excluded_from_the_hash": ["created_at", "recipient_provenance", "channel_authorization_basis", "state", "notes"],
+    "why_those_are_excluded": "The hash binds the ACTION. When it was recorded, how the recipient was established and why the channel is permitted are provenance about the action rather than parts of it, and a timestamp in the hash would make an identical action hash differently on a different day.",
+    "what_it_binds": "content, recipient, channel and sender into one approvable action",
+    "approval_string_form": "APPROVE MISSION 1.65 DISPATCH <sha256>",
+    "what_that_approval_means": "send this exact action, once",
+    "what_it_does_not_mean": ["send a second enquiry", "retry", "resend", "send the other enquiry", "send from a different mailbox"]
+  },
+
+  "no_envelope_without_a_recipient": {
+    "$comment": "Section D6.",
+    "rule": "An envelope whose recipient is unknown is a TEMPLATE and its state is INCOMPLETE_RECIPIENT.",
+    "no_hash_is_computed_for_it": true,
+    "why": "A hash is an approval handle. Producing one for an action that cannot be taken would let an operator approve something under-specified, and the missing field is the one that decides who reads the message."
+  },
+
+  "envelope_states": {
+    "INCOMPLETE_RECIPIENT": "no recipient established; template only; no hash",
+    "INCOMPLETE_CHANNEL": "recipient known, no permitted channel or sender bound; no hash",
+    "READY_FOR_OPERATOR_APPROVAL": "every required field present; hash computed; awaiting an explicit dispatch approval",
+    "APPROVED_NOT_SENT": "an operator dispatch approval matching the hash exists; nothing sent yet",
+    "SENT": "recorded by the mission that actually sent it, never by the mission that prepared it",
+    "SUPERSEDED": "replaced by a later envelope; never edited in place"
+  },
+
+  "what_this_contract_does_not_do": {
+    "no_database_migration": true,
+    "no_new_global_approval_subsystem": true,
+    "no_registry_entry": true,
+    "it_does_not_authorise_anything": "It describes the shape an authorisation must take. Only an operator grants one."
+  }
+}

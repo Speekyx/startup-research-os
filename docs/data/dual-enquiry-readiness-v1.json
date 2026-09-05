@@ -1,0 +1,166 @@
+{
+  "$comment": "Mission 1.65. The verdict, the two envelope states, and the handoff.",
+  "record_version": "1.0.0",
+  "mission": "1.65 — Dual Enquiry Dispatch Envelope Preparation V1",
+  "recorded_at": "2026-09-05",
+
+  "primary_outcome": "NETLAS_RECIPIENT_PENDING_ONYPHE_ENQUIRY_FROZEN",
+  "primary_outcome_statement": "The ONYPHE enquiry is drafted, frozen and hashed, its recipient is established from two first-party pages that print it as a live link, and its dispatch envelope is complete and awaiting one operator approval. The Netlas enquiry is unchanged and still hash-verified, and its envelope stays a template because the one field it needs is an address only a person reading the provider's page can supply. Nothing was sent.",
+
+  "why_this_outcome_and_not_another": {
+    "why_not_A": "Outcome A needs both recipients established and both envelopes complete. The Netlas recipient is not supplied.",
+    "why_not_C": "Outcome C is the inverse of what happened: it describes Netlas complete and ONYPHE's channel unfindable. The ONYPHE channel was found and the Netlas one was not.",
+    "why_not_D": "Outcome D needs neither recipient established. One is.",
+    "why_not_E": "Outcome E is for recipients known with no permitted channel bindable. A channel is bound for the one recipient that is known: the operator sending it manually.",
+    "why_not_F": "The Netlas body still hashes to the approved value.",
+    "why_not_G": "All three ONYPHE questions were expressible without changing the frozen construct and without asking for data. The construct is not mentioned in the enquiry at all."
+  },
+
+  "secondary_outcomes": {
+    "NETLAS_ENQUIRY": "CONTENT_APPROVED_HASH_VERIFIED_UNCHANGED",
+    "NETLAS_RECIPIENT": "WAITING_FOR_OPERATOR_SUPPLIED_FIRST_PARTY_CONTACT",
+    "NETLAS_ENVELOPE": "INCOMPLETE_RECIPIENT",
+    "ONYPHE_ENQUIRY": "FROZEN",
+    "ONYPHE_RECIPIENT": "ESTABLISHED_FROM_FIRST_PARTY_PAGES",
+    "ONYPHE_CHANNEL": "OPERATOR_MANUAL_SEND",
+    "ONYPHE_ENVELOPE": "READY_FOR_OPERATOR_APPROVAL",
+    "CONNECTOR_STATE": "AVAILABLE_NOT_AUTHORIZED",
+    "OUTBOUND_ENQUIRIES_SENT": 0,
+    "QUALIFIED_APPARATUS_COUNT": 0,
+    "PAIR_ANALYSIS": "PAIR_ANALYSIS_NOT_READY"
+  },
+
+  "envelopes": [
+    {
+      "envelope": "netlas-dispatch-envelope-v1",
+      "state": "INCOMPLETE_RECIPIENT",
+      "content_hash_known": true,
+      "recipient_known": false,
+      "channel_bound": false,
+      "sender_bound": false,
+      "hashed": false,
+      "approvable": false,
+      "blocking_field": "recipient_address"
+    },
+    {
+      "envelope": "onyphe-dispatch-envelope-v1",
+      "state": "READY_FOR_OPERATOR_APPROVAL",
+      "content_hash_known": true,
+      "recipient_known": true,
+      "channel_bound": true,
+      "sender_bound": false,
+      "hashed": true,
+      "approvable": true,
+      "blocking_field": null,
+      "note": "The sender is a permitted placeholder for manual send, so the hash binds three of four fields. Its cost is stated in the envelope."
+    }
+  ],
+
+  "the_asymmetry_and_why_it_is_not_a_preference": {
+    "$comment": "One apparatus is dispatch-ready and the other is not, and that is a fact about two publishers' contact pages.",
+    "observation": "One provider prints its contact address as a live link on two pages. The other serves its address through an anti-scraping mechanism. Nothing about either fact bears on whether the apparatus is a good measurement instrument.",
+    "not_a_ranking": "Both apparatuses remain INDIVIDUALLY_UNRESOLVED or worse, and no pair gate was evaluated. That one enquiry can move first is an accident of publishing practice.",
+    "the_temptation_declined": "It would be easy to read dispatch readiness as progress on the apparatus. It is progress on the ASKING, and the gates are exactly where Mission 1.64 left them."
+  },
+
+  "apparatus_states_unchanged": {
+    "$comment": "Part G. Recorded as a table so a reader can see that nothing moved.",
+    "Netlas": {"A7": "PASS", "A8": "PARTIAL", "individual": "INDIVIDUALLY_NOT_QUALIFIED", "changed": false},
+    "ONYPHE": {"B2": "PARTIAL", "B4": "PARTIAL", "individual": "INDIVIDUALLY_UNRESOLVED", "changed": false},
+    "LeakIX": {"individual": "INDIVIDUALLY_NOT_QUALIFIED", "changed": false, "researched": false},
+    "The Shadowserver Foundation": {"individual": "INDIVIDUALLY_NOT_QUALIFIED", "changed": false, "researched": false},
+    "qualified_count": 0,
+    "pair_analysis_ready": false,
+    "rule": "Question drafted is not answered, question approved is not answered, question sent is not answered."
+  },
+
+  "no_pair_work_was_performed": {
+    "pairs_compared": 0,
+    "pairs_ranked": 0,
+    "pairs_selected": 0,
+    "same_frame_evaluated": false,
+    "vantage_compatibility_evaluated": false,
+    "lineage_independence_evaluated": false,
+    "shared_measurement_upstream_evaluated": false,
+    "same_target_proposition_evaluated": false,
+    "threshold_preregistrability_evaluated": false
+  },
+
+  "counters": {
+    "first_party_contact_doc_requests": 2,
+    "research_data_requests": 0,
+    "measurement_queries": 0,
+    "counts_fetched": 0,
+    "host_records_fetched": 0,
+    "banners_fetched": 0,
+    "trials": 0,
+    "purchases": 0,
+    "outbound_enquiries_sent": 0,
+    "model_calls": 0,
+    "model_cost_usd": 0.0,
+    "embeddings": 0,
+    "canonical_mutations": 0,
+    "sources_registered": 0,
+    "governance_reviews_created": 0,
+    "apparatus_gates_changed": 0,
+    "netlas_enquiry_v1_edited": false,
+    "reference_profile": "UNCALIBRATED",
+    "problem_family": "PARKED"
+  },
+
+  "next_mission_recommendation": {
+    "checkpoint": "STOP_FOR_DISPATCH_APPROVAL",
+    "one_approval_is_available_now": {
+      "envelope": "onyphe-dispatch-envelope-v1",
+      "approval_string_form": "APPROVE MISSION 1.65 DISPATCH <sha256 of the envelope>",
+      "what_it_authorises": "sending the frozen ONYPHE text once, to the established recipient, by the operator manually"
+    },
+    "one_input_is_still_missing": {
+      "envelope": "netlas-dispatch-envelope-v1",
+      "field": "recipient_address",
+      "how_the_operator_supplies_it": "open https://netlas.io/legal/ in a browser, where the address renders, and give the exact displayed string",
+      "then": "the envelope completes, is hashed, and gets its own approval string"
+    },
+    "name": "Mission 1.66 — Approved Dispatch Execution V1",
+    "it_should": [
+      "send exactly the envelopes whose hashes the operator approved, once each",
+      "record delivery provenance: channel, sender, recipient, time, and a message identifier where one exists",
+      "stop after sending, because reviewing a reply is a separate step that belongs after receipt"
+    ],
+    "it_must_not": [
+      "send an envelope whose hash was not approved",
+      "send either enquiry twice",
+      "infer authorisation from content approval, a connected account or an instruction to continue",
+      "treat a dispatch as an answer or an answer as a PASS before review",
+      "edit either frozen enquiry",
+      "request data, access, a trial or pricing in any accompanying message"
+    ]
+  },
+
+  "stop_condition": {
+    "netlas_enquiry_sent": false,
+    "onyphe_enquiry_sent": false,
+    "mail_connector_executed": false,
+    "pairs_compared": false,
+    "measurements_retrieved": false,
+    "source_search_apis_executed": false,
+    "counts_fetched": false,
+    "hosts_or_banners_fetched": false,
+    "trial_started": false,
+    "purchase_made": false,
+    "sources_registered": false,
+    "governance_reviewed": false,
+    "threshold_created": false,
+    "claim_created": false,
+    "evidence_created": false,
+    "reliability_assigned": false,
+    "calibration_performed": false,
+    "score_created": false,
+    "opportunity_modified": false,
+    "model_called": false,
+    "problem_family_unparked": false,
+    "netlas_enquiry_v1_edited": false,
+    "mission_1_66_started": false,
+    "awaiting": "one dispatch approval, and one address"
+  }
+}
