@@ -1,0 +1,90 @@
+{
+  "$comment": "Mission 1.59 sections 19 to 26 and 47. Gate 10. Pursued only as far as it was worth pursuing: gate 5 had already failed and section 67 drops the pair, but apparatus B is the side whose exposure model SURVIVES, so its lineage is worth advancing for whatever pair comes next.",
+  "record_version": "1.0.0",
+  "mission": "1.59 — Internet-Wide Service-Presence Route Gate Closure V1",
+  "recorded_at": "2026-09-05",
+
+  "how_far_this_was_pursued_and_why": {
+    "statement": "Gate 5 failed on documentation from both sides before gate 10 was worked. Section 67 drops the pair on that outcome, so further budget on apparatus A's lineage would have been spent on a route already being dropped.",
+    "what_was_still_worth_doing": "Apparatus B's lineage, because its observation-based exposure is exactly what the next pair needs and its lineage evidence carries forward.",
+    "what_this_record_is_not": "A completed gate-10 determination for the pair. Saying so matters: an unfinished check reported as a finished one is the shape this arc has refused since Mission 1.46."
+  },
+
+  "evidence_hierarchy_applied": {
+    "$comment": "Section 21.",
+    "LEVEL_1_STRONG": "first-party technical methodology explicitly states the values or records are produced by the organisation's own active scans or probes",
+    "LEVEL_2_SUFFICIENT_IF_COMPLETE": "first-party architecture and method documents jointly establish own probing, own observations, own count construction, and no external measurement feed in the load-bearing path",
+    "LEVEL_3_INSUFFICIENT": "marketing wording such as 'we scan the internet', without enough detail to identify which dataset or value it refers to",
+    "LEVEL_4_NOT_EVIDENCE": "no mention of third-party feeds"
+  },
+
+  "apparatus_a_censys": {
+    "affirmative": true,
+    "level": "LEVEL_1",
+    "basis": "Its own methodology page states that all published data derives from its own internet-wide scanning operations, describes its own scanning subnets, and describes completing protocol handshakes itself.",
+    "carried_from": "Mission 1.58",
+    "advanced_by_this_mission": false,
+    "why_not_advanced": "gate 5 had already dropped the pair"
+  },
+
+  "apparatus_b_netlas": {
+    "affirmative": "PARTIAL",
+    "level": "between LEVEL_2 and LEVEL_4, and closer to LEVEL_2 than Mission 1.58 could establish",
+    "what_mission_1_58_had": "A first-party statement that it operates its own purpose-built scanning infrastructure, plus an ABSENCE of any reference to third-party scan data. Mission 1.58 recorded the absence as an absence.",
+    "what_this_mission_added": [
+      "its responses field reference states that each document is a single service response COLLECTED DURING SCANNING, which ties the load-bearing record to its own scanning rather than to an unspecified database",
+      "`scan_date` is documented as when the internet-wide scanning activity that GENERATED the captured response occurred, which is a positive statement about the origin of the record rather than about the organisation's capabilities",
+      "its documentation separates primary internet scan data from auxiliary enrichment drawn from DNS registries, WHOIS and certificate sources, so the external inputs it does use are named and are not host-state measurements"
+    ],
+    "why_this_is_still_not_PASS": "Section 22. None of it is an affirmative statement that no external measurement feed is load-bearing for host observations. What moved is the quality of the evidence, from an absence of a denial to a positive statement about the load-bearing records. That is a real upgrade and it is not closure.",
+    "what_would_close_it": "A first-party technical statement that host-level observations and banners in the responses collection are produced by its own probes and by no external measurement provider. If public documentation is exhausted, a written enquiry.",
+    "advanced_by_this_mission": true
+  },
+
+  "shared_auxiliary_inputs": {
+    "$comment": "Sections 25 and 26. Classified rather than treated alike.",
+    "inputs": [
+      {"input": "routable IPv4 address space", "classification": "SAMPLING_FRAME_INPUT", "impact": "tells each apparatus WHICH addresses may exist, not which hosts run a service. Compatible with independent measurement."},
+      {"input": "the protocol standard itself", "classification": "FINGERPRINT_DEFINITION", "impact": "a shared definition of what counts is what MAKES the two comparable. It is the opposite of a provenance problem."},
+      {"input": "DNS registry, WHOIS and certificate enrichment", "classification": "AUXILIARY_METADATA", "impact": "not load-bearing for a protocol-native host-presence count"},
+      {"input": "a common CVE database", "classification": "MEASUREMENT_UPSTREAM_IF_USED", "impact": "would be load-bearing for a vulnerability-flavoured metric on BOTH sides, and the protocol-native narrowing removes it from the path entirely. Recorded because a later mission tempted to make the metric more interesting by adding a version or vulnerability condition would reintroduce a shared upstream without noticing."}
+    ],
+    "load_bearing_common_measurement_upstream_found": false,
+    "the_structural_point_that_still_holds": "There is no authoritative published count of hosts running a service, so neither apparatus can be copying one. That is STRUCTURAL_NON_REPUBLICATION and it is not the same thing as APPARATUS_LINEAGE_ESTABLISHED, which is what gate 10 asks for. Section 24 keeps them apart, and this record does too."
+  },
+
+  "vantage_and_frame": {
+    "$comment": "Sections 27 and 28. Raised here because it would have become the next blocker.",
+    "issue": "Reachability is measured from somewhere. Two scanners probing from different networks may see different populations because of geofencing, routing, firewalls, rate limiting, anycast and network ACLs.",
+    "status": "NOT_ESTABLISHED for this pair",
+    "why_it_was_not_pursued": "gate 5 had already dropped the pair",
+    "what_it_means_for_the_next_pair": "The target population must say whether it means globally publicly reachable or reachable from a named vantage. If reachability is materially vantage-relative and no governed equivalence exists, gate 6 reopens and SAME_POPULATION can become FAIL. It must be asked BEFORE a pair is selected rather than discovered after.",
+    "related_finding_already_in_hand": "One apparatus documents that under high service density its service data represents a SAMPLING of service details. A sampled record is not a census, and a partial frame must not be described as internet-wide."
+  },
+
+  "gate_10": {
+    "status": "PARTIAL",
+    "apparatus_A_lineage": "LEVEL_1 affirmative",
+    "apparatus_B_lineage": "PARTIAL, strengthened by this mission from an absence to a positive statement about the load-bearing records",
+    "affirmative_A": true,
+    "affirmative_B": false,
+    "common_measurement_upstream": "none found",
+    "shared_auxiliary_inputs": ["routable address space", "the protocol standard", "registry and certificate enrichment"],
+    "exact_basis": [
+      "apparatus A: its methodology page states all published data derives from its own internet-wide scanning operations",
+      "apparatus B: its scanning-technology page states it operates its own purpose-built scanning infrastructure; its responses field reference states each document is a single service response collected during scanning, with scan_date recording when the scanning activity that generated it occurred"
+    ],
+    "absence_of_evidence_treated_as_proof": false
+  },
+
+  "written_enquiry": {
+    "$comment": "Section 23. Drafted, NOT sent. This repository may prepare a message and may never imply it was delivered.",
+    "prepared": true,
+    "sent": false,
+    "would_be_sent_only_if": "an operator authorises outgoing contact, and only for a pair still under consideration",
+    "currently_applicable": false,
+    "why_not_currently_applicable": "the pair is dropped on gate 5, so there is nothing to ask about yet",
+    "draft_question": "For the service-response dataset your search interface exposes, are the underlying host observations and banners produced by your organisation's own active scanning infrastructure, or are host-level observations or counts sourced in whole or in material part from another measurement provider? Separately, is any external measurement dataset load-bearing for the presence or absence of a service on a host, as distinct from enrichment such as registry, WHOIS or certificate metadata?",
+    "why_it_is_worded_that_way": "It asks for facts about lineage rather than for the word independent, which invites interpretation rather than information. And it separates measurement from enrichment, because the answer to those two is different and a single question would blur them."
+  }
+}

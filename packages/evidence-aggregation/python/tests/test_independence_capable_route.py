@@ -520,3 +520,36 @@ class TestTheBroadenedSearch(unittest.TestCase):
         nxt = self.record["next_mission_recommendation"]
         self.assertIn("epistemics are NOT closed", nxt["why_this_and_not_governance_first"])
         self.assertTrue(any("fetch a measurement value" in i for i in nxt["it_must_not"]))
+
+
+class TestTheServicePresenceGroupingFixture(unittest.TestCase):
+    """Mission 1.59 §54. The closure record claims two independent supports form
+    two provenance groups and that the UNKNOWN control collapses to one. That
+    claim is executed here through the REAL grouping primitive rather than
+    restated, because it is the arithmetic the whole route exists to reach."""
+
+    CLOSURE = DOCS / "internet-wide-service-presence-route-gate-closure-v1.json"
+
+    def setUp(self) -> None:
+        if not self.CLOSURE.exists():
+            self.skipTest("no gate-closure record exists")
+        self.fixture = _load(self.CLOSURE)["structural_fixtures"]["independent_support"]
+
+    def test_the_recorded_result_is_what_the_real_grouper_produces(self) -> None:
+        independent = [
+            _support("sp-a", FIXTURE_A, EvidenceIndependenceState.KNOWN_INDEPENDENT),
+            _support("sp-b", FIXTURE_B, EvidenceIndependenceState.KNOWN_INDEPENDENT),
+        ]
+        self.assertEqual(len(_groups(independent)), 2)
+        self.assertIn("2 provenance groups", self.fixture["result"])
+
+    def test_the_recorded_control_is_what_the_real_grouper_produces(self) -> None:
+        unknown = [
+            _support("sp-a", FIXTURE_A, EvidenceIndependenceState.UNKNOWN),
+            _support("sp-b", FIXTURE_B, EvidenceIndependenceState.UNKNOWN),
+        ]
+        self.assertEqual(len(_groups(unknown)), 1)
+        self.assertIn("1 group", self.fixture["control"])
+
+    def test_the_fixture_was_not_persisted(self) -> None:
+        self.assertFalse(self.fixture["persisted"])

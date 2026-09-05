@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.91
+Version: 1.92
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-05 (Sprint 1 / Mission 1.58)
+Last amended: 2026-09-05 (Sprint 1 / Mission 1.59)
 
 ---
 
@@ -13,6 +13,94 @@ Last amended: 2026-09-05 (Sprint 1 / Mission 1.58)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.92 — 2026-09-05 (Sprint 1 / Mission 1.59)
+
+**`SNAPSHOT_TIME_SEMANTICS_NOT_ALIGNABLE`.** The internet-wide scanning pair
+Mission 1.58 found is dropped, on a gate that is not about scanning at all. The
+class survives, and so does most of the work.
+
+**The two apparatuses publish different kinds of temporal object.** One is a
+stream of observations, each carrying a documented `scan_date` recording when the
+scanning that generated it occurred. The other is a maintained current state
+whose searchable time field records when a record last *changed*, with the
+per-service observation time documented as unsearchable because observation
+timestamps change too fast to publish.
+
+**The deciding evidence is the vendor's own worked example.** A host observed
+every day for five days without change carries a searchable last-updated
+timestamp from five days ago. So the same window filter selects hosts whose
+record changed during the window on one side and hosts observed during it on the
+other — two different populations. A host present and unchanged throughout is in
+one set and missing from the other, and a contradiction produced that way would
+be an artefact recorded as a finding, which is the worst failure available to
+this layer.
+
+**FAIL rather than UNKNOWN, and the distinction is earned.** The named cadence
+document Mission 1.58 could not retrieve was pursued and answered. This is an
+established mismatch on first-party documentation from both sides, not a document
+nobody found.
+
+**All four alignment rules were evaluated and all four refused**, including the
+two that would have salvaged the route. A pre-frozen tolerance was refused
+because a tolerance needs an operational basis and the merged side publishes no
+bound on how stale a member of its current state may be — any delta would be a
+round number chosen precisely because it rescues the route.
+Snapshot-inside-interval was refused because establishing it requires per-host
+timelines, which means retrieving the set and inspecting it afterwards.
+
+**Three gates that passed a mission ago now read worse, and that is the audit
+working.** Population reopened on a disclosure that was there to be read: under
+high service density one side's service data represents a sampling rather than a
+census, so a partial frame must not be called internet-wide. Reliability
+reviewability reopened because the narrowed metric turns on how each side decides
+a wire-level predicate and one side's fingerprinting is proprietary. Threshold
+freezability fell as a consequence of gate 5.
+
+**What survives is worth more than the pair.** A protocol-native construct now
+exists, written source-free: hosts that answer with an identification string
+beginning `SSH-` before any negotiation, fixed by RFC 4253 §4.2, which also
+states that other server output must not begin with that prefix. No vendor
+taxonomy, and matching vendor labels are explicitly refused as metric
+equivalence. The narrowing also removes a shared upstream nobody had noticed: a
+version- or vulnerability-flavoured metric would have pulled one CVE database
+into the load-bearing path on both sides.
+
+**A new apparatus requirement is added: `OBSERVATION_ADDRESSABLE_EXPOSURE`.** An
+apparatus qualifies only if a future observation can be attributed to a defined
+window from its published surface, before any value is retrieved. That is not the
+same as scanning often, and Mission 1.58 could not have known to ask for it. The
+generalisable diagnostic behind it: a dataset can be excellent and still be the
+wrong temporal object.
+
+**Gate 10 was advanced rather than closed, and only for the side that survives.**
+Apparatus B's provenance moved from an absence of any third-party reference to a
+positive statement about the load-bearing records, and is still short of an
+affirmative denial, so it stays PARTIAL. Apparatus A's lineage was not pursued
+further because gate 5 had already dropped the pair, and saying so is better than
+reporting an unfinished check as a finished one.
+
+0 measurement endpoints called, 0 measurement values fetched, 0 paid access, 0
+trials — load-bearing, because PREREGISTERED is defined against retrieval. 8 of
+12 first-party documentation requests used, every load-bearing one first-party. 0
+canonical mutations, 0 sources registered, 0 governance reviews, 0 collectors, 0
+threshold registrations, 0 Claims, 0 Evidence, 0 reliability values, 0
+independence groups, 0 Scores, 0 Opportunity changes, 0 model calls, 0
+embeddings. The Mission 1.56 Claim is untouched, the profile is still UNCALIBRATED
+and Problem-Family is still PARKED. Validator probed with 77 deliberate
+violations and 77 caught — one escaped on the first run, a sentence conflating
+structural non-republication with apparatus lineage, and the validator was
+tightened rather than the record loosened. 1488 bare-python tests before commit
+and 3310 pytest tests after.
+
+New: `docs/data/internet-wide-service-presence-gate-closure-baseline-v1.json`,
+`-metric-definition-v1.json`, `-time-contract-v1.json`, `-lineage-review-v1.json`,
+`-route-gate-closure-v1.json` and their rendered `.md`;
+`infrastructure/scripts/render_service_presence_route.py`; 32 tests in
+`packages/inferred-claim-evaluator/python` and 3 in
+`packages/evidence-aggregation/python`.
+
+Report: `docs/architecture/mission-1.59-report.md`.
 
 ## 1.91 — 2026-09-05 (Sprint 1 / Mission 1.58)
 
@@ -3564,6 +3652,7 @@ Additionally authoritative:
 - docs/data/first-deterministic-inferred-pilot-v1.md (added in 1.89)
 - docs/data/independence-capable-route-feasibility-v1.md (added in 1.90)
 - docs/data/apparatus-search-broadened-v1.md (added in 1.91)
+- docs/data/internet-wide-service-presence-route-gate-closure-v1.md (added in 1.92)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

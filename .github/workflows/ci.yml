@@ -386,6 +386,17 @@ jobs:
       # fetching a value first, and every mutation counter must be zero.
       - name: Independence route records match their decision rules
         run: uv run python infrastructure/scripts/render_independence_route.py --check
+      # Mission 1.59 §63. Renders the five gate-closure records and enforces the
+      # rules a later mission could most easily bend to make a route pass: a
+      # vendor product label may not be the metric, a proprietary fingerprint may
+      # not be protocol truth, a scanner name may not enter target identity, a
+      # last-change timestamp may not stand in for an observation time, a pairing
+      # rule chosen after the values is not preregistrable, gate 10 may not pass
+      # from an absence of third-party references, a sampling-frame input is not a
+      # measurement upstream, fifteen gates are not sixteen, and PARTIAL is not
+      # PASS. Also that no measurement value was fetched and nothing was bought.
+      - name: Service-presence gate closure matches its decision rules
+        run: uv run python infrastructure/scripts/render_service_presence_route.py --check
 
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.

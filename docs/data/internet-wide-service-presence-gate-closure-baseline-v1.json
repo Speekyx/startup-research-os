@@ -1,0 +1,119 @@
+{
+  "$comment": "Mission 1.59 sections 0 to 2. The live baseline, the frozen Mission 1.58 candidate reconstructed from its own artifact rather than from the brief, and the gate state this mission started from.",
+  "record_version": "1.0.0",
+  "mission": "1.59 — Internet-Wide Service-Presence Route Gate Closure V1",
+  "recorded_at": "2026-09-05",
+
+  "repository_precondition": {
+    "mission_1_58_merged": true,
+    "pull_request": 101,
+    "merge_commit": "7cfcd88",
+    "local_main_equals_origin_main": true,
+    "working_tree_clean": true,
+    "branch": "sprint-1/mission-1.59",
+    "migration_head": "0035_refusal_provenance",
+    "verified_from": "git and the live database, not from the mission brief"
+  },
+
+  "counters": {
+    "raw_records": 325,
+    "normalized_records": 325,
+    "signals": 33,
+    "claims": 44,
+    "claim_revisions": 45,
+    "evidence": 58,
+    "inferred_claims": 1,
+    "threshold_registrations": 1,
+    "claim_derivations": 1,
+    "proposition_evaluation_refusals": 0,
+    "reliability_assessments": 4,
+    "independence_groups": 0,
+    "opportunities": 1,
+    "opportunity_revisions": 1,
+    "opportunity_evidence_links": 7,
+    "embeddings": 0,
+    "sources": 29,
+    "scoring_scores": "ABSENT",
+    "reference_profile": "UNCALIBRATED",
+    "problem_family": "PARKED",
+    "drift": "none"
+  },
+  "evidence_direction_census": {
+    "SUPPORTS": 57,
+    "CONTRADICTS": 1,
+    "claims_carrying_both_directions": 0
+  },
+
+  "route_under_evaluation": {
+    "$comment": "Reconstructed from docs/data/apparatus-search-broadened-v1.json. Mission 1.58 described the two apparatuses without naming them, which was right for a class survey. Mission 1.59 has to read their actual documentation and hand a named pair to a governance mission, so they are named here. The requirements record stays source-free, as Mission 1.48 established.",
+    "route_id": "ROUTE-D-INTERNET-WIDE-SERVICE-PRESENCE",
+    "frozen_by": "Mission 1.58",
+    "substituted": false,
+    "why_not_substituted": "Section 1. Mission 1.59 evaluates the route Mission 1.58 found. Swapping in a pair that is easier to document would be answering a different question and calling it closure.",
+    "apparatus_a": {
+      "identity": "Censys",
+      "producer": "Censys, Inc.",
+      "interface": "the Censys Platform host dataset and its search API",
+      "claimed_construct": "hosts and the services observed on them across the public IPv4 space",
+      "scan_model": "its own scanners attempt a small number of connections to every IPv4 address, then complete protocol handshakes"
+    },
+    "apparatus_b": {
+      "identity": "Netlas",
+      "producer": "Netlas.io",
+      "interface": "the Netlas responses collection and its search API",
+      "claimed_construct": "service responses captured while sweeping the IPv4 space against a curated port list",
+      "scan_model": "its own purpose-built scanners, banner grabbing and protocol parsing across roughly thirty application-layer protocols"
+    },
+    "product_relevance": "AUDIENCE_OR_USAGE and COMPETITIVE_SUPPLY, bounded by the sentence that a reachable host is not an installation, a customer, a user, a subscription, revenue, demand or adoption"
+  },
+
+  "starting_gate_state": {
+    "$comment": "Section 2. Frozen from the Mission 1.58 artifact, not recomputed.",
+    "1_same_external_construct": "PASS",
+    "2_exact_canonical_subject": "PASS",
+    "3_metric_definition_compatibility": "PASS_IF_NARROWED",
+    "4_unit_compatibility": "PASS",
+    "5_time_compatibility": "UNKNOWN",
+    "6_population_or_frame": "PASS",
+    "7_each_alone_entails": "PASS",
+    "8_no_shared_upstream": "PASS",
+    "9_different_production": "PASS",
+    "10_first_party_lineage_documentation": "PARTIAL",
+    "11_reliability_reviewability": "PASS",
+    "12_governance_feasibility": "UNKNOWN",
+    "13_threshold_freezable": "PASS",
+    "14_falsifiable_both_ways": "PASS",
+    "15_structurally_useful": "PASS",
+    "16_product_relevance": "PASS"
+  },
+  "gates_this_mission_targeted": [3, 5, 10],
+  "gate_12_was_not_targeted": "Section 34 forbids the governance review, and gate 12 is a governance question. It stays UNKNOWN by construction, which means no selection was reachable in this mission even before the epistemic work began. That is stated up front rather than discovered at the end.",
+
+  "documentation_ledger": {
+    "$comment": "Section 43. Every request made, in order. First-party only for load-bearing gate closure.",
+    "budget": 12,
+    "used": 8,
+    "requests": [
+      {"n": 1, "kind": "SEARCH", "target": "docs.netlas.io", "sought": "data update cycles and scan timestamp semantics", "first_party": true, "load_bearing": true},
+      {"n": 2, "kind": "FETCH", "url": "https://docs.netlas.io/knowledge-base/field-reference/responses/", "sought": "timestamp and observation-time semantics of response records", "first_party": true, "load_bearing": true, "established": "two temporal fields: @timestamp is the index time, scan_date is when the scanning activity that generated the response occurred. Each document is a single service response collected during scanning, keyed by (uri, ip): a discrete point-in-time observation rather than a merged state."},
+      {"n": 3, "kind": "FETCH", "url": "https://docs.censys.com/docs/platform-data-definitions", "sought": "host and service timestamp semantics", "first_party": true, "load_bearing": false, "result": "HTTP 404"},
+      {"n": 4, "kind": "SEARCH", "target": "docs.censys.com", "sought": "observed_at and last_updated_at semantics", "first_party": true, "load_bearing": true, "established": "observed_at marks when a service was obtained by a Censys scan and is NOT searchable, because service observation timestamps change too rapidly to publish. The searchable host-level last_updated_at reflects the time of the latest CHANGE, and a host observed daily for five days without change carries a last_updated_at from five days ago."},
+      {"n": 5, "kind": "FETCH", "url": "https://docs.censys.com/docs/platform-historical-data", "sought": "whether point-in-time snapshots are selectable", "first_party": true, "load_bearing": true, "established": "per-host timelines preserve a snapshot per scan and permit comparing two scan events, with access windows bounded by plan tier. This is per-host inspection, not an aggregate window selector."},
+      {"n": 6, "kind": "FETCH", "url": "https://docs.censys.com/docs/platform-host-dataset", "sought": "how the queryable dataset is constructed in time terms", "first_party": true, "load_bearing": true, "established": "the queryable dataset is a MERGED CURRENT STATE built from individual scans. host.services.scan_time marks when a service was LAST observed. No mechanism is documented for restricting an aggregate count to services observed within a specified past window. Under high density, service data represents a SAMPLING of service details."},
+      {"n": 7, "kind": "FETCH", "url": "https://www.rfc-editor.org/rfc/rfc4253", "sought": "the standard-defined protocol version exchange", "first_party": true, "load_bearing": true, "established": "RFC 4253 section 4.2: the server sends SSH-protoversion-softwareversion SP comments CR LF immediately on connection and before any negotiation, and other server output lines must not begin with SSH-."},
+      {"n": 8, "kind": "FETCH", "url": "https://docs.netlas.io/knowledge-base/", "sought": "an affirmative statement that host observations come from its own scanning", "first_party": true, "load_bearing": true, "established": "the index page carries no such statement, and it separates primary internet scan data from auxiliary enrichment drawn from DNS registries, WHOIS and certificate sources."}
+    ],
+    "measurement_endpoints_called": 0,
+    "measurement_values_fetched": 0,
+    "paid_access_purchased": 0,
+    "trials_started": 0,
+    "third_party_summaries_used_for_gate_closure": 0
+  },
+
+  "value_exposure": {
+    "$comment": "Section 32. Reported honestly rather than assumed clean.",
+    "target_measurement_retrieved": false,
+    "incidental_non_target_examples_seen": "Documentation pages describe record structure and field meanings. No page consulted stated a host count for any protocol, and no query was run.",
+    "preregistration_possibility_compromised": false
+  }
+}
