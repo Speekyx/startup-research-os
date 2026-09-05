@@ -374,6 +374,18 @@ jobs:
       # different hash.
       - name: Inferred pilot documents match their records
         run: uv run python infrastructure/scripts/render_inferred_pilot.py --check
+      # Mission 1.57 §44. Renders the four independence-route records and enforces
+      # the decision RULES rather than the answer. A later mission may select a
+      # different route; it may not select one by weakening a rule. So: partial
+      # lineage evidence stays UNKNOWN and cannot become independence, a route
+      # claiming KNOWN_INDEPENDENT carries two-sided documentary basis and none of
+      # it may be organisational separateness, the FRED and Eurostat and Wikimedia
+      # negative controls must keep failing, a complementary pair cannot become one
+      # proposition, a selected route may FAIL no matrix column and must be
+      # reliability-reviewable on both sides, the threshold strategy must forbid
+      # fetching a value first, and every mutation counter must be zero.
+      - name: Independence route records match their decision rules
+        run: uv run python infrastructure/scripts/render_independence_route.py --check
 
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.

@@ -1,0 +1,436 @@
+{
+  "$comment": "Mission 1.57 sections 8 to 14 and 32. The search, in the order it was performed: registered portfolio first, held pairs second, registered-but-unheld third, bounded external discovery only after those failed.",
+  "record_version": "1.0.0",
+  "mission": "1.57 — Independence-Capable Evidence Route Feasibility V1",
+  "recorded_at": "2026-09-05",
+  "portfolio_scan": {
+    "sources_registered": 29,
+    "with_a_local_private_research_v1_review": 8,
+    "without_any_local_review": 21,
+    "eligible_locally_with_zero_unsatisfied_conditions": [
+      "eurostat",
+      "fred",
+      "world-bank",
+      "ted-eu"
+    ],
+    "reviewed_but_conditions_outstanding": {
+      "stack-exchange": 3,
+      "wikimedia-pageviews": 3,
+      "openalex": 2,
+      "gdelt": 1
+    },
+    "measured_from": "registry.source_eligibility for use_profile_id = local-private-research-v1",
+    "note": "Governance was read for completeness. It is not what decided this mission, and saying so matters: the binding constraint turned out to sit upstream of every governance question."
+  },
+  "held_apparatuses": {
+    "$comment": "An apparatus is (producer, method, lineage, metric definition, frame, time semantics, unit, route). Counted here as (source, proposition_kind), which is the partition the reliability contract already uses, so a new apparatus is a new reliability question by construction.",
+    "count": 10,
+    "inventory": [
+      {
+        "source": "gdelt",
+        "record_kind": "lexical_frequency_observation",
+        "proposition_kind": "source_reported_term_frequency_change",
+        "measures": "occurrences of a lexical term in GDELT's own news ngram stream"
+      },
+      {
+        "source": "gdelt",
+        "record_kind": "lexical_frequency_observation",
+        "proposition_kind": "source_reported_term_frequency_contrast",
+        "measures": "relative occurrence of two terms in GDELT's own ngram stream"
+      },
+      {
+        "source": "stack-exchange",
+        "record_kind": "community_question",
+        "proposition_kind": "community_site_published_questions_carrying_tag",
+        "measures": "questions published on Stack Overflow carrying a site tag"
+      },
+      {
+        "source": "stack-exchange",
+        "record_kind": "community_question",
+        "proposition_kind": "community_site_questions_without_accepted_answer",
+        "measures": "the subset of those whose asker accepted no answer"
+      },
+      {
+        "source": "ted-eu",
+        "record_kind": "procurement_notice",
+        "proposition_kind": "source_reported_procurement_value_contrast",
+        "measures": "published award totals in a CPV cohort"
+      },
+      {
+        "source": "ted-eu",
+        "record_kind": "procurement_notice",
+        "proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "measures": "the existential over such cohorts"
+      },
+      {
+        "source": "wikimedia-pageviews",
+        "record_kind": "content_request_count",
+        "proposition_kind": "platform_counted_content_request_change",
+        "measures": "day-over-day change in requests to a named article"
+      },
+      {
+        "source": "wikimedia-pageviews",
+        "record_kind": "content_request_count",
+        "proposition_kind": "platform_counted_content_request_change_witnessed",
+        "measures": "the existential over such changes"
+      },
+      {
+        "source": "wikimedia-pageviews",
+        "record_kind": "content_request_count",
+        "proposition_kind": "metric_threshold_state",
+        "measures": "the Mission 1.56 INFERRED threshold proposition"
+      },
+      {
+        "source": "world-bank",
+        "record_kind": "numeric_observation",
+        "proposition_kind": "source_reported_metric_period_change",
+        "measures": "period change in a WDI indicator"
+      }
+    ],
+    "shared_subjects_across_apparatuses": {
+      "docker": [
+        "wikimedia-pageviews",
+        "stack-exchange"
+      ],
+      "kubernetes": [
+        "wikimedia-pageviews"
+      ],
+      "podman": [
+        "wikimedia-pageviews"
+      ],
+      "climate_and_weather_terms": [
+        "gdelt"
+      ],
+      "SP.POP.TOTL": [
+        "world-bank"
+      ],
+      "cpv_divisions_90_and_92": [
+        "ted-eu"
+      ],
+      "finding": "Exactly ONE subject is observed by two apparatuses, and it is the same one Mission 1.47 found: docker."
+    }
+  },
+  "held_pair_analysis": {
+    "$comment": "Section 9. Re-evaluated under the NEW INFERRED semantics rather than assumed to be unchanged.",
+    "pairs_possible": 1,
+    "pair": {
+      "apparatus_a": "wikimedia-pageviews / platform_counted_content_request_change",
+      "apparatus_b": "stack-exchange / community_site_published_questions_carrying_tag",
+      "shared_subject": "docker",
+      "gate_1_same_external_construct": "FAIL",
+      "why": "A content request is something a READER's client makes of a server. A published question is something a PERSON writes about being stuck. These are two phenomena, and the only proposition admitting both is one that names neither -- which is the near-tautology Mission 1.47 already constructed and refused.",
+      "gate_3_metric_definition": "FAIL",
+      "gate_6_population_or_frame": "FAIL",
+      "verdict": "COMPLEMENTARY_NOT_CORROBORATING",
+      "corroborated_by_the_codebase": "The Opportunity engine's own mapping rationale, written in Mission 1.30, already says PROBLEM_OR_NEED and AUDIENCE_OR_USAGE are different questions and neither implies the other.",
+      "what_the_new_architecture_did_and_did_not_change": "ADR-036 removed the identity blocker that stopped these two ever reaching one Claim. It did not make a request a question."
+    },
+    "held_pair_passed": false,
+    "consequence": "No route is available from data already held, so the POST_HOC-for-held-measurements branch of section 17 does not arise."
+  },
+  "registered_but_unheld_analysis": {
+    "$comment": "Section 10. No acquisition. Semantic, provenance, documentation and governance feasibility only.",
+    "economic_data_family": {
+      "members": [
+        "world-bank",
+        "eurostat",
+        "fred"
+      ],
+      "verdict": "the three publishers this portfolio holds are the three Mission 1.46 already refuted on provenance",
+      "detail": "The eligible economic-data family IS the set of publishers shown to share producers. Naming a fourth would mean reaching outside the eligible set."
+    },
+    "public_procurement_family": {
+      "members": [
+        "ted-eu",
+        "usaspending"
+      ],
+      "verdict": "SEMANTIC_MISMATCH",
+      "detail": "Two independent producers observing two different jurisdictions. Section 24 exactly: independence without the same proposition is useless, and both properties are mandatory."
+    },
+    "developer_family": {
+      "members": [
+        "github",
+        "npm-registry",
+        "pypi",
+        "huggingface"
+      ],
+      "verdict": "SEMANTIC_MISMATCH plus NO_LOCAL_REVIEW",
+      "detail": "Package downloads from two registries are two distribution channels, so two quantities. A registry's own download log is the only apparatus that can measure downloads from that registry, which makes each of them source-exclusive in the Mission 1.56 sense."
+    },
+    "structural_result": "Every registered source is either SOURCE_EXCLUSIVE -- it is the only apparatus that can measure its own platform's activity -- or a member of a publication chain over one upstream producer. No registered pair measures one external construct through two measurement processes."
+  },
+  "negative_controls": {
+    "$comment": "Section 7. Re-run as controls, not reopened as candidates. Each must still fail under the new gates, and each does.",
+    "world_bank_plus_fred": {
+      "verdict": "DEPENDENT_REPUBLICATION",
+      "gate_failed": 8,
+      "basis": "Mission 1.46, from FRED's own metadata: Source World Bank, Release World Development Indicators, Source Code SP.POP.TOTL, and a suggested citation reading 'World Bank ... retrieved from FRED'.",
+      "reopened": false
+    },
+    "world_bank_plus_eurostat": {
+      "verdict": "COMMON_UPSTREAM_SOURCE and SEMANTIC_MISMATCH",
+      "gates_failed": [
+        5,
+        6,
+        8
+      ],
+      "basis": "Mission 1.46, from both publishers' own documentation: the World Bank's indicator metadata lists Eurostat among its sourceOrganization entries, and Eurostat's ESMS metadata states population data are collected from National Statistical Institutes under Regulation (EU) No 1260/2013. Separately, the World Bank counts the de facto population at midyear and Eurostat the usually resident population on 1 January.",
+      "promoted_by_the_inferred_layer": false,
+      "why_not": "The INFERRED layer fixes Claim identity. It does not repair provenance dependence, and it does not make a 1 January stock the same measurement as a midyear estimate. Overturning this control would need new first-party evidence about lineage and semantics, and this mission found none."
+    },
+    "wikimedia_alternative_publication_route": {
+      "verdict": "SAME_MEASUREMENT_UPSTREAM",
+      "gate_failed": 8,
+      "basis": "The metric is generated from Wikimedia's own request logs. Any dump, wrapper, mirror or dashboard republishes that one measurement.",
+      "searched_for": false
+    },
+    "vendor_quoting_a_republisher": {
+      "verdict": "DEPENDENT_REPUBLICATION",
+      "gate_failed": 8,
+      "basis": "Section 26. Two vendors publishing one price both taken from the official feed are one measurement."
+    }
+  },
+  "external_discovery": {
+    "$comment": "Sections 11 to 13. Reached only because no registered pair passed. Searched from the apparatus requirement -- who independently measures construct M under operational definition D -- and never from a brand.",
+    "was_required": true,
+    "research_data_requests": 0,
+    "first_party_method_doc_requests": 6,
+    "governance_doc_requests": 0,
+    "measurement_values_fetched": 0,
+    "apparatus_classes_considered": 5,
+    "classes": [
+      {
+        "class": "PHYSICAL_ATMOSPHERIC_QUANTITY_AT_A_FIXED_SITE",
+        "two_independent_processes_plausible": "YES",
+        "why": "Separate instruments, separate laboratories and separate calibration scales can sample the same air."
+      },
+      {
+        "class": "SHARE_OF_WEB_TRAFFIC_BY_TECHNOLOGY",
+        "two_independent_processes_plausible": "NO",
+        "why": "Each apparatus measures share WITHIN ITS OWN NETWORK, so the frame sits inside the metric definition."
+      },
+      {
+        "class": "NATIONAL_POPULATION_STOCK",
+        "two_independent_processes_plausible": "NO",
+        "why": "Mission 1.46's structural finding: the measurement happens once, at the national producer, and international publishers are distribution layers over it."
+      },
+      {
+        "class": "GEOPHYSICAL_EVENT_MAGNITUDE",
+        "two_independent_processes_plausible": "YES",
+        "why": "Separate seismic station networks compute magnitude for one event from separate inputs.",
+        "not_pursued": "Serious-evaluation budget is three pairs, and the atmospheric class dominates it on documentation accessibility and on time-semantics simplicity."
+      },
+      {
+        "class": "CONSUMER_PRICE_LEVEL",
+        "two_independent_processes_plausible": "PARTIALLY",
+        "why": "An official agency basket and an independently collected online price index use separate inputs, and they measure different baskets under different weighting. Section 25's trap applies before independence is even reached.",
+        "not_pursued": "Fails gate 3 before gate 8 is consulted."
+      }
+    ],
+    "pairs_seriously_evaluated": 3
+  },
+  "candidate_routes": [
+    {
+      "route_id": "ROUTE-A-ATMOSPHERIC-CO2-FIXED-SITE",
+      "proposition_family": "THRESHOLD_STATE",
+      "canonical_subject_type": "a fixed atmospheric observing site",
+      "canonical_subject_plan": "one reviewed registry entry naming the observing site by its established station identifier, matched by exact equality on both sides",
+      "metric_definition": "dry-air mole fraction of carbon dioxide at the site, monthly mean",
+      "unit": "ppm (micromole of CO2 per mole of dry air)",
+      "time_grain": "calendar month, both apparatuses publishing monthly means",
+      "population_or_geography": "the air sampled at the named site; no geographic aggregation on either side",
+      "threshold_provenance_plan": "PREREGISTRABLE_BEFORE_BOTH_MEASUREMENTS",
+      "apparatus_a": {
+        "producer": "a national laboratory operating a continuous in-situ analyser plus its own weekly flask programme",
+        "measurement_method": "cavity ring-down spectroscopy on air drawn from an intake tower and dried, plus independently collected glass flasks analysed at the producer's own laboratory",
+        "upstream_lineage": "its own instruments and its own laboratory; it maintains the WMO mole-fraction reference scale itself",
+        "publication_route": "first-party programme website",
+        "methodology_docs": "retrieved, first-party, describing instrument, drying, intake switching, averaging and the calibration scale",
+        "governance_state": "UNREGISTERED_GOVERNANCE_REQUIRED",
+        "reliability_reviewability": "YES"
+      },
+      "apparatus_b": {
+        "producer": "a university research programme running its own sampling network",
+        "measurement_method": "its own on-site analyser at this site plus flask samples returned to its own laboratory for analysis",
+        "upstream_lineage": "its own instruments and its own laboratory; it reports on its OWN calibration scale, not the other apparatus's",
+        "publication_route": "first-party programme website",
+        "methodology_docs": "retrieved, first-party, stating that it operates an independent sampling network rather than obtaining data from the other producer",
+        "governance_state": "UNREGISTERED_GOVERNANCE_REQUIRED",
+        "reliability_reviewability": "YES"
+      },
+      "semantic_equivalence_verdict": "EQUIVALENT_WITH_A_STATED_SCALE_LIMITATION",
+      "provenance_relation": "KNOWN_INDEPENDENT",
+      "independence_basis": [
+        "apparatus B's own site states that it operates an independent sampling network rather than obtaining data from apparatus A",
+        "apparatus A's own methodology page describes apparatus B's data as independent and uses it for comparison, and comparison for validation is not consumption",
+        "the two report on DIFFERENT calibration scales, which is the sharpest available evidence that neither is a republication of the other: a republished series would carry the originator's scale",
+        "separate instruments and separate analysis laboratories are documented on both sides"
+      ],
+      "independence_limitation_recorded": "The two programmes share the SITE, and apparatus A provides in-kind field support there. That is a shared LOCATION and shared logistics, not a shared measurement: two instruments sampling the same air produce two measurements. But it means their ERRORS are not independent -- a site-level artefact would move both -- and provenance independence is not error independence. This belongs in the eventual reliability review and in the Claim's stated limitations, not in the independence verdict.",
+      "governance_verdict": "NOT_YET_REVIEWED on both sides; data-use terms for apparatus B were not retrievable at the paths tried and establishing them is the next mission's work, not this one's",
+      "falsifiability_verdict": "PASS",
+      "structural_usefulness": "PASS",
+      "calibration_eligibility_potential": "PREREGISTERED, provided no measurement value is fetched before the registration exists",
+      "exact_blockers": [
+        "neither apparatus is a registered source",
+        "no local-private-research-v1 review exists for either",
+        "no collector and no normalizer exists for either",
+        "the record kind a mole-fraction observation would need does not exist"
+      ]
+    },
+    {
+      "route_id": "ROUTE-B-WEB-TECHNOLOGY-SHARE",
+      "proposition_family": "THRESHOLD_STATE",
+      "canonical_subject_type": "a named web technology",
+      "metric_definition": "share of observed web activity attributable to the technology",
+      "unit": "percent",
+      "time_grain": "calendar month",
+      "apparatus_a": {
+        "producer": "a tracking-code network measuring page views on member websites",
+        "measurement_method": "a script on member sites records every page view and parses the user-agent string",
+        "upstream_lineage": "its own network of member sites; whether it consumes any other measurement was not established",
+        "methodology_docs": "retrieved, first-party",
+        "governance_state": "UNREGISTERED_GOVERNANCE_REQUIRED",
+        "reliability_reviewability": "YES"
+      },
+      "apparatus_b": {
+        "producer": "a network operator measuring traffic through its own infrastructure and public resolver",
+        "measurement_method": "aggregated request and DNS telemetry from its own network",
+        "upstream_lineage": "its own network and resolver; whether it consumes any other measurement was not established",
+        "methodology_docs": "retrieved, first-party, and it does not define the share denominator in the overview documentation",
+        "governance_state": "UNREGISTERED_GOVERNANCE_REQUIRED; the published licence is non-commercial only, which this deployment's assessed use profile cannot satisfy",
+        "reliability_reviewability": "UNKNOWN"
+      },
+      "semantic_equivalence_verdict": "NOT_EQUIVALENT",
+      "provenance_relation": "UNKNOWN",
+      "why_independence_does_not_rescue_it": "Suppose the independence proof were assembled and passed. It would still not rescue the route. Apparatus A's own documentation states its statistics describe activity ONLY on its own network, and apparatus B measures only traffic reaching its own infrastructure. So each measures 'share within my own reach', the frame sits inside the metric definition, and the only proposition admitting both would define the event class as a disjunction of the two networks -- which relocates source attribution from the subject of the sentence into its predicate. Mission 1.47 found exactly this shape once, and a proposition that LOOKS source-independent and is not is worse than one that is openly attributed.",
+      "gates_failed": [
+        1,
+        3,
+        6
+      ],
+      "second_independent_failure": "Apparatus B publishes under a non-commercial licence. This deployment is local and its purpose is commercial, and local deployment never implies non-commercial use. Recorded separately so the semantic failure is not read as the only one.",
+      "verdict": "REJECTED",
+      "why_provenance_is_unknown_rather_than_independent": "The two are almost certainly separate measurement systems, and this record does not say so. Section 15 requires affirmative documentation from BOTH sides before KNOWN_INDEPENDENT may be written, and this route failed the semantic gates first, so that proof was never assembled. Recording a likely independence as an established one is exactly the shortcut the standard exists to refuse, and it costs nothing to refuse it here because the route is rejected anyway."
+    },
+    {
+      "route_id": "ROUTE-C-NATIONAL-POPULATION-STOCK",
+      "proposition_family": "THRESHOLD_STATE",
+      "canonical_subject_type": "a country",
+      "metric_definition": "resident population stock at a reference date",
+      "unit": "persons",
+      "apparatus_a": {
+        "producer": "a national statistical institute",
+        "upstream_lineage": "census plus population register",
+        "governance_state": "UNREGISTERED_GOVERNANCE_REQUIRED"
+      },
+      "apparatus_b": {
+        "producer": "an international demographic estimation programme",
+        "upstream_lineage": "not established in this mission; its methodology page was not retrievable at the paths tried",
+        "governance_state": "UNREGISTERED_GOVERNANCE_REQUIRED"
+      },
+      "semantic_equivalence_verdict": "NOT_ESTABLISHED",
+      "provenance_relation": "UNKNOWN",
+      "why_rejected": "Two reasons, and the first is sufficient. Its lineage could not be documented first-party in this mission, and section 15 forbids recording independence on partial evidence -- so the honest verdict is UNKNOWN, and section 46 forbids selecting a route whose independence is UNKNOWN. Independently, the held evidence points the other way: Mission 1.46 established from the publishers' own metadata that international population figures are built from national producers' data, which is common upstream rather than a second measurement. Nothing here overturns that.",
+      "gates_failed": [
+        8,
+        10
+      ],
+      "verdict": "REJECTED"
+    }
+  ],
+  "decision_matrix": {
+    "$comment": "Section 32. PASS / FAIL / UNKNOWN / NOT_APPLICABLE only. No weighted score.",
+    "columns": [
+      "SAME_SUBJECT",
+      "SAME_METRIC",
+      "SAME_UNIT",
+      "SAME_TIME",
+      "SAME_POPULATION",
+      "EACH_ALONE_EVALUATES_FULL_CLAIM",
+      "FALSIFIABLE",
+      "NO_LATENT_BRIDGE",
+      "MEASUREMENT_LINEAGE_A_DOCUMENTED",
+      "MEASUREMENT_LINEAGE_B_DOCUMENTED",
+      "NO_DIRECT_REPUBLICATION",
+      "NO_COMMON_UPSTREAM_MEASUREMENT",
+      "INDEPENDENCE_ESTABLISHED",
+      "RELIABILITY_REVIEWABLE_A",
+      "RELIABILITY_REVIEWABLE_B",
+      "GOVERNANCE_A",
+      "GOVERNANCE_B",
+      "THRESHOLD_PREREGISTRABLE",
+      "STRUCTURALLY_IDENTIFYING",
+      "SEMANTICALLY_USEFUL"
+    ],
+    "rows": {
+      "ROUTE-A-ATMOSPHERIC-CO2-FIXED-SITE": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "UNKNOWN",
+        "UNKNOWN",
+        "PASS",
+        "PASS",
+        "PASS"
+      ],
+      "ROUTE-B-WEB-TECHNOLOGY-SHARE": [
+        "PASS",
+        "FAIL",
+        "PASS",
+        "PASS",
+        "FAIL",
+        "PASS",
+        "PASS",
+        "FAIL",
+        "PASS",
+        "UNKNOWN",
+        "UNKNOWN",
+        "UNKNOWN",
+        "UNKNOWN",
+        "PASS",
+        "UNKNOWN",
+        "UNKNOWN",
+        "FAIL",
+        "PASS",
+        "FAIL",
+        "FAIL"
+      ],
+      "ROUTE-C-NATIONAL-POPULATION-STOCK": [
+        "PASS",
+        "UNKNOWN",
+        "PASS",
+        "UNKNOWN",
+        "UNKNOWN",
+        "PASS",
+        "PASS",
+        "UNKNOWN",
+        "PASS",
+        "FAIL",
+        "UNKNOWN",
+        "UNKNOWN",
+        "UNKNOWN",
+        "PASS",
+        "UNKNOWN",
+        "UNKNOWN",
+        "UNKNOWN",
+        "PASS",
+        "PASS",
+        "UNKNOWN"
+      ]
+    },
+    "governance_unknown_note": "GOVERNANCE_A and GOVERNANCE_B read UNKNOWN for Route A rather than FAIL because neither apparatus is registered and no review exists. That is an unasked question, not a refusal, and section 29 forbids creating the review here."
+  }
+}
