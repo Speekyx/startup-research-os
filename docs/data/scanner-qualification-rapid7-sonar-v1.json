@@ -1,0 +1,170 @@
+{
+ "$comment": "Mission 1.67 §36-§38. Serious candidate 1. COMPLETE does not mean QUALIFIED: a well-documented failure is successful mission output.",
+ "record_version": "1.0.0",
+ "mission": "1.67 — Second Qualified Scanner Discovery V1",
+ "recorded_at": "2026-09-06",
+ "apparatus": "Rapid7 Project Sonar",
+ "gate_taxonomy": {
+  "$comment": "§36. The repository already defines nine individual hard gates A1-A9 in docs/data/observation-addressable-apparatus-contract-v1.json, and the brief's §36 list numbers some slots differently. The REPOSITORY-native names are used here, so no second parallel taxonomy is created. The additional slots the brief names — configuration membership, configuration time-addressability, configuration frame uniformity, sampling, vantage, retention, access — have no A-number in the contract and are carried beside the gates under their own names.",
+  "gate_names_source": "docs/data/observation-addressable-apparatus-contract-v1.json → individual_hard_gates"
+ },
+ "evaluation_discipline": {
+  "$comment": "§11. After a decisive FAIL, expensive investigation stops. A gate whose answer was already established by a document retrieved BEFORE the fail keeps its real status and is marked established_incidentally; a gate that would have required a new document is marked NOT_EVALUATED_AFTER_DECISIVE_FAIL. Recording a fact already in hand is not further investigation, and discarding it would be pretending to know less than this mission does."
+ },
+ "resource_scope": {
+  "$comment": "§16. Every load-bearing fact names the exact resource. The apparatus publishes eight datasets and only one of them covers arbitrary TCP ports, so that is the resource the frozen construct would have to be witnessed through.",
+  "evaluated_resource": "Sonar Data — TCP Scans dataset",
+  "other_resources_present_and_not_evaluated_as_the_construct_carrier": [
+   "Forward DNS (FDNS)",
+   "Reverse DNS (RDNS)",
+   "HTTP GET Responses",
+   "HTTPS GET Responses",
+   "SSL Certificates",
+   "More SSL Certificates (non-443)",
+   "UDP Scans"
+  ],
+  "semantics_transferred_between_resources": false
+ },
+ "gates": {
+  "A1_ACTIVE_MEASUREMENT_PRODUCER": {
+   "status": "PASS",
+   "source_says": [
+    "Project Sonar is a security research project by Rapid7 that conducts internet-wide surveys across different services and protocols",
+    "Project Sonar gathers data in two stages: In the first stage, all public IPv4 addresses (about 3.6 billion of them, excluding those opted-out) are scanned"
+   ],
+   "source_says_provenance": [
+    "https://sonardata.rapid7.com/about/",
+    "https://www.rapid7.com/research/project-sonar/"
+   ],
+   "project_interpretation": "An affirmative statement that the apparatus itself probes Internet targets, not an 'our database contains Internet services' formulation. §12 satisfied."
+  },
+  "A2_OBSERVATION_ADDRESSABLE_EXPOSURE": {
+   "status": "PARTIAL",
+   "source_says": [
+    "2018-06-15-1529049662-fdns_aaaa.json.gz",
+    "https://us.api.insight.rapid7.com/opendata/studies/{study_id}/{filename}/"
+   ],
+   "source_says_provenance": [
+    "https://sonardata.rapid7.com/apihelp/"
+   ],
+   "project_interpretation": "The ADDRESSING MECHANISM is the right shape and is the strongest seen anywhere in this arc: a study publishes individually named, individually addressed files carrying a date and a Unix timestamp, listed per study in sonarfile_set, so an artifact is selected BEFORE any measurement value is retrieved. That is §13's own PASS example, an immutable dated scan snapshot. What is missing is the SEMANTICS: no retrieved first-party sentence defines what the date and the timestamp in a filename denote — study start, study completion, or publication — and a window W can only be mapped onto an artifact whose date is defined. PARTIAL rather than PASS, and PARTIAL rather than FAIL, because the structure is present and the definition is absent.",
+   "why_this_is_not_composed_from_weak_facts": "§14 forbids assembling several weak facts into an append model. Nothing is assembled here: the per-study file set and the per-file address are the published addressing scheme, and the conclusion drawn from them is deliberately PARTIAL rather than PASS."
+  },
+  "A3_PROTOCOL_NATIVE_OBSERVATION_EXPOSURE": {
+   "status": "FAIL",
+   "decisive": true,
+   "exposure_class": "NOT_EXPOSED",
+   "source_says": [
+    "SYN scan results for common TCP services across all of IPv4",
+    "Project Sonar runs numerous TCP studies every month. The output from these is a GZIP compressed CSV that contains the IP addresses that responded positively to the SYN for the port in question.",
+    "Sonar scans a growing number of TCP and UDP services. TCP studies include SSH, SMB, Telnet, RDP, Mongo, Redis, CouchDB, and more."
+   ],
+   "source_says_provenance": [
+    "https://sonardata.rapid7.com/ (TCP Scans dataset description)",
+    "https://github.com/rapid7/sonar/wiki/TCP",
+    "https://sonardata.rapid7.com/about/"
+   ],
+   "project_interpretation": "The apparatus states that its TCP studies include SSH. The one retrievable dataset covering arbitrary TCP ports carries SYN responses only — which addresses answered on a port, and not one byte the peer sent. The frozen construct requires an identification string beginning with the literal prefix SSH- before negotiation, and a SYN response cannot carry it. The datasets that DO carry response content are HTTP, HTTPS and the two certificate sets, and §16 forbids transferring their raw-response semantics to a TCP/22 resource.",
+   "this_is_the_measured_versus_retrievable_frame_rule": "The SSH identification string is MEASURED, on the apparatus's own statement, and is not present in the published retrievable catalogue. That is THE_RETRIEVABLE_FRAME_IS_NOT_THE_MEASURED_FRAME recurring — Mission 1.62 met it as a per-requester restriction and this is the same rule as a catalogue-content restriction.",
+   "what_this_does_not_establish": "It does not establish that Sonar is incapable of raw protocol capture — the HTTP datasets show it plainly is. It establishes that the frozen construct cannot be witnessed through the published catalogue."
+  },
+  "A4_OBSERVATION_TIME_DOCUMENTED": {
+   "status": "PARTIAL",
+   "established_incidentally": true,
+   "source_says": [
+    "name",
+    "fingerprint",
+    "size",
+    "updated_at"
+   ],
+   "source_says_provenance": [
+    "https://sonardata.rapid7.com/apihelp/"
+   ],
+   "project_interpretation": "The file-information response carries updated_at, which is a property of the FILE and not of an observation. No retrieved document defines observation timestamp semantics for a TCP study record — and the TCP record is a CSV of addresses, which carries no per-observation timestamp at all."
+  },
+  "A5_FRAME_DOCUMENTED": {
+   "status": "PARTIAL",
+   "established_incidentally": true,
+   "eligible_frame": "all public IPv4 addresses (about 3.6 billion of them, excluding those opted-out)",
+   "attempted_frame": "UNKNOWN",
+   "measured_frame": "stated to include SSH among TCP studies",
+   "retrievable_frame": "the eight published datasets, of which the only arbitrary-TCP-port one is SYN results",
+   "project_interpretation": "The eligible frame is documented with an explicit exclusion, which is more than most candidates publish. The four frames are recorded apart, per §21, and the measured/retrievable gap is the decisive one."
+  },
+  "A6_NON_VALUE_DOCUMENTATION_AVAILABLE": {
+   "status": "PASS",
+   "project_interpretation": "Every finding above was established from documentation without fetching a single measurement value."
+  },
+  "A7_AFFIRMATIVE_MEASUREMENT_LINEAGE": {
+   "status": "PARTIAL",
+   "established_incidentally": true,
+   "external_input_classification": "NOT_ENUMERATED",
+   "project_interpretation": "Own probing is stated affirmatively, which is the A7 half that defeats an argument from silence. No retrieved document supplies a CLOSED exception list for the TCP resource, so ENUMERATED_EXCEPTIONS_MAKE_A_LINEAGE_CLAIM_CHECKABLE is unsatisfied and the gate stays PARTIAL. No further lineage document was sought after the A3 fail."
+  },
+  "A8_RELIABILITY_REVIEWABLE": {
+   "status": "NOT_EVALUATED_AFTER_DECISIVE_FAIL",
+   "reliability_value_assigned": null
+  },
+  "A9_PRODUCT_RELEVANT": {
+   "status": "PASS",
+   "project_interpretation": "The frozen construct is unchanged and remains product-relevant. §3 forbids relaxing it to find easier measurements."
+  }
+ },
+ "additional_slots": {
+  "configuration_membership_tcp_22": {
+   "status": "UNKNOWN",
+   "project_interpretation": "The about page names SSH among the STUDIES the apparatus runs. That is not a published port list for the TCP Scans dataset, and §17 forbids inferring membership from a generic statement or from another resource."
+  },
+  "configuration_time_addressability": {
+   "status": "NOT_EVALUATED_AFTER_DECISIVE_FAIL"
+  },
+  "configuration_frame_uniformity": {
+   "status": "NOT_EVALUATED_AFTER_DECISIVE_FAIL",
+   "heterogeneity_observed": false,
+   "$comment": "No heterogeneity was observed in the documents retrieved, and none was looked for after the decisive fail. Absence of observation is not a finding of uniformity."
+  },
+  "sampling": {
+   "status": "PARTIAL",
+   "established_incidentally": true,
+   "source_says": [
+    "excluding those opted-out"
+   ],
+   "project_interpretation": "One documented exclusion class. Nothing retrieved on scan failures, timeouts, retry policy, rate limiting or partial cycles, and §25 keeps that silence as UNKNOWN rather than resolving it into census semantics."
+  },
+  "vantage": {
+   "status": "NOT_EVALUATED_AFTER_DECISIVE_FAIL"
+  },
+  "retention": {
+   "status": "UNKNOWN",
+   "established_incidentally": true,
+   "project_interpretation": "No retrieved document states whether past study files remain available. The catalogue shows current update dates and says nothing about how far back the file set reaches."
+  },
+  "access": {
+   "status": "SPECIAL_ACCESS",
+   "source_says": [
+    "Access is granted on a commercial basis to qualified organizations."
+   ],
+   "source_says_provenance": [
+    "https://sonardata.rapid7.com/about/"
+   ],
+   "project_interpretation": "§29 keeps access separate from epistemic qualification, so this is recorded and is NOT a reason for the verdict. It would require separate governance and operator work before any future acquisition.",
+   "used_as_a_disqualifier": false
+  }
+ },
+ "repeated_service_discriminator": {
+  "$comment": "§14, asked exactly as specified.",
+  "question": "Service S at address A:port P is observed during W. The same service is observed again after W. Can an acquisition restricted to W still recover the observation from W?",
+  "answer": "OBSERVATION_EVENT_APPEND",
+  "basis": "Each study run publishes its own separately named, separately addressed file, so a later run produces a new artifact rather than mutating an earlier one.",
+  "bound_stated": "Established from the published addressing scheme. No retrieved first-party sentence states that past files are retained, so the discriminator resolves favourably on structure while retention stays UNKNOWN.",
+  "does_not_rescue_the_verdict": "A favourable temporal object over a resource that carries no identification string cannot witness the construct."
+ },
+ "verdict": {
+  "individual_status": "INDIVIDUALLY_NOT_QUALIFIED",
+  "decisive_fail_gate": "A3_PROTOCOL_NATIVE_OBSERVATION_EXPOSURE",
+  "package_complete": true,
+  "point_score_used": false,
+  "why_not_unresolved": "UNRESOLVED would be right if the blocking facts were silences. They are not: two first-party documents state positively what the TCP output contains, and it does not contain response bytes.",
+  "closest_thing_to_a_pass_in_this_arc": "Its temporal-object structure. Dated, immutable, individually addressed per-study artifacts are exactly what Missions 1.59, 1.62 and 1.66.2 could not find. It fails on the other half."
+ }
+}

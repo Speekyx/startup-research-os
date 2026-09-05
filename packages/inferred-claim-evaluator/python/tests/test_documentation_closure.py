@@ -465,9 +465,14 @@ class TestOutcomeAndRegistry(unittest.TestCase):
         self.assertLess(record["readiness"]["QUALIFIED_APPARATUS_COUNT"], 2)
 
     def test_the_registry_carries_the_new_requirement(self) -> None:
+        # Mission 1.63 added the rule this test was written for and re-pointed the total
+        # from 13 to 14. Mission 1.67 adopted APPARATUS_CONFIGURATION_MUST_BE_UNIFORM_
+        # ACROSS_THE_FRAME and re-points it again, for the same reason: a test pinning a
+        # total is what stops a rule arriving by accident, and pinning it forever would
+        # instead assert that the registry may never grow.
         names = {r["name"] for r in _load(CONTRACT)["requirement_registry"]["requirements"]}
         self.assertIn("APPARATUS_CONFIGURATION_MUST_BE_TIME_ADDRESSABLE", names)
-        self.assertEqual(len(_load(CONTRACT)["requirement_registry"]["requirements"]), 14)
+        self.assertEqual(len(_load(CONTRACT)["requirement_registry"]["requirements"]), 15)
 
     def test_the_declined_requirement_states_its_reason(self) -> None:
         declined = _load(READINESS)["registry_decision"]["declined"]

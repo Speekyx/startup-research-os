@@ -1,0 +1,189 @@
+{
+ "$comment": "Mission 1.67 §8. More names than were deeply evaluated. The universe is NOT exhaustive and does not claim to be.",
+ "record_version": "1.0.0",
+ "mission": "1.67 — Second Qualified Scanner Discovery V1",
+ "recorded_at": "2026-09-06",
+ "apparatus_class": {
+  "$comment": "§4.",
+  "included": "INTERNET_WIDE_ACTIVE_MEASUREMENT",
+  "excluded_classes": [
+   "certificate-transparency-only systems",
+   "passive DNS-only systems",
+   "search-engine crawlers",
+   "job datasets",
+   "app stores",
+   "package registries",
+   "web technology classifiers",
+   "third-party scanner mirrors",
+   "pure threat-intelligence aggregators",
+   "static indexes generated entirely from another scanner"
+  ]
+ },
+ "frozen_controls": {
+  "$comment": "§5. These may not be rediscovered as new.",
+  "names": [
+   "Netlas",
+   "ONYPHE",
+   "LeakIX",
+   "Shadowserver"
+  ],
+  "additionally_known_dropped": [
+   "Censys"
+  ]
+ },
+ "search_strategy": {
+  "$comment": "§7. Requirement-first, not brand-first.",
+  "began_with_properties_not_with_alternatives_lists": true,
+  "example_concepts_used": [
+   "internet-wide scanner historical raw banners",
+   "active IPv4 scan historical observations",
+   "dated Internet scan snapshots SSH banner",
+   "first-party scanner methodology scan configuration"
+  ]
+ },
+ "exhaustiveness": {
+  "claimed": false,
+  "statement": "This mission ran a bounded search under a fixed document budget. That no qualifying apparatus was found does not establish that none exists."
+ },
+ "counts": {
+  "total_hits": 22,
+  "new_serious_candidates": 2,
+  "documentation_not_retrievable": 4,
+  "duplicate_existing_apparatus": 5,
+  "discovered_not_evaluated": 11
+ },
+ "hits": [
+  {
+   "name": "Rapid7 Project Sonar",
+   "classification": "NEW_SERIOUS_CANDIDATE",
+   "reason": "Internet-wide active surveys stated first-party; first-party method documentation retrievable across four independent pages; product-relevant protocol coverage plausible.",
+   "basis": "FIRST_PARTY_DOCUMENTS_RETRIEVED"
+  },
+  {
+   "name": "Shodan",
+   "classification": "NEW_SERIOUS_CANDIDATE",
+   "reason": "Own crawler infrastructure and crawl algorithm stated first-party; help centre, book, API reference and filter reference all retrievable; product relevance plausible.",
+   "basis": "FIRST_PARTY_DOCUMENTS_RETRIEVED"
+  },
+  {
+   "name": "BinaryEdge",
+   "classification": "DOCUMENTATION_NOT_RETRIEVABLE_FOR_QUALIFICATION",
+   "reason": "Three separate paths on the first-party documentation host each 301-redirect to one non-technical customer notice on an acquirer's help centre, which itself returns HTTP 403. §10 forbids elevating a hit to serious on marketing or help-centre pages alone.",
+   "basis": "FOUR_LIVE_RETRIEVALS_ALL_NON_TECHNICAL_OR_FAILED"
+  },
+  {
+   "name": "ZoomEye",
+   "classification": "DOCUMENTATION_NOT_RETRIEVABLE_FOR_QUALIFICATION",
+   "reason": "Three documented hosts attempted: one returned a page title only, one HTTP 521, one DNS timeout.",
+   "basis": "THREE_LIVE_RETRIEVALS_ALL_UNUSABLE"
+  },
+  {
+   "name": "Criminal IP",
+   "classification": "DOCUMENTATION_NOT_RETRIEVABLE_FOR_QUALIFICATION",
+   "reason": "Both attempted first-party developer documentation paths returned HTTP 403. Not retried and no header varied.",
+   "basis": "TWO_LIVE_RETRIEVALS_BOTH_403"
+  },
+  {
+   "name": "FOFA",
+   "classification": "DOCUMENTATION_NOT_RETRIEVABLE_FOR_QUALIFICATION",
+   "reason": "Both attempted documentation paths returned a client-side navigation shell carrying section headings and no field documentation.",
+   "basis": "TWO_LIVE_RETRIEVALS_BOTH_EMPTY_SHELLS"
+  },
+  {
+   "name": "Netlas",
+   "classification": "DUPLICATE_EXISTING_APPARATUS",
+   "reason": "Frozen control under §5. May be referenced as a methodological control and may not be rediscovered as new.",
+   "basis": "REPOSITORY_ARTIFACTS_MISSIONS_1_60_TO_1_65"
+  },
+  {
+   "name": "ONYPHE",
+   "classification": "DUPLICATE_EXISTING_APPARATUS",
+   "reason": "Frozen control under §5. Its regional port-set heterogeneity is cited in this mission's requirement review as a methodological example, which §5 permits.",
+   "basis": "REPOSITORY_ARTIFACTS_MISSIONS_1_62_TO_1_66_2"
+  },
+  {
+   "name": "LeakIX",
+   "classification": "DUPLICATE_EXISTING_APPARATUS",
+   "reason": "Frozen control under §5.",
+   "basis": "REPOSITORY_ARTIFACTS_MISSION_1_62"
+  },
+  {
+   "name": "Shadowserver",
+   "classification": "DUPLICATE_EXISTING_APPARATUS",
+   "reason": "Frozen control under §5.",
+   "basis": "REPOSITORY_ARTIFACTS_MISSION_1_62"
+  },
+  {
+   "name": "Censys",
+   "classification": "DUPLICATE_EXISTING_APPARATUS",
+   "reason": "Already evaluated and dropped in Missions 1.58 and 1.59 on MERGED_CURRENT_STATE and SNAPSHOT_TIME_SEMANTICS_NOT_ALIGNABLE. §5 names four frozen controls and this is a fifth known-dropped apparatus, so it is recorded here rather than treated as a discovery.",
+   "basis": "REPOSITORY_ARTIFACTS_MISSIONS_1_58_AND_1_59"
+  },
+  {
+   "name": "scans.io / Internet-Wide Scan Data Repository",
+   "classification": "DISCOVERED_NOT_EVALUATED",
+   "reason": "Carried as a lead only. A project hypothesis that it is operated by an already-dropped apparatus was NOT established first-party this mission and must not be read as a classification.",
+   "basis": "PROJECT_HYPOTHESIS_NOT_ESTABLISHED"
+  },
+  {
+   "name": "GreyNoise",
+   "classification": "DISCOVERED_NOT_EVALUATED",
+   "reason": "Carried as a lead only. A project hypothesis that its collection is passive sensor-based rather than active probing was NOT established first-party this mission.",
+   "basis": "PROJECT_HYPOTHESIS_NOT_ESTABLISHED"
+  },
+  {
+   "name": "RIPE Atlas",
+   "classification": "DISCOVERED_NOT_EVALUATED",
+   "reason": "Carried as a lead only. Active distributed measurement exists; whether it performs internet-wide TCP service surveys carrying identification strings was NOT established first-party this mission.",
+   "basis": "PROJECT_HYPOTHESIS_NOT_ESTABLISHED"
+  },
+  {
+   "name": "CAIDA Ark",
+   "classification": "DISCOVERED_NOT_EVALUATED",
+   "reason": "Carried as a lead only. Not investigated.",
+   "basis": "PROJECT_HYPOTHESIS_NOT_ESTABLISHED"
+  },
+  {
+   "name": "Measurement Lab",
+   "classification": "DISCOVERED_NOT_EVALUATED",
+   "reason": "Carried as a lead only. Not investigated.",
+   "basis": "PROJECT_HYPOTHESIS_NOT_ESTABLISHED"
+  },
+  {
+   "name": "SANS Internet Storm Center / DShield",
+   "classification": "DISCOVERED_NOT_EVALUATED",
+   "reason": "Carried as a lead only. Not investigated.",
+   "basis": "PROJECT_HYPOTHESIS_NOT_ESTABLISHED"
+  },
+  {
+   "name": "Alpha Strike Labs",
+   "classification": "DISCOVERED_NOT_EVALUATED",
+   "reason": "Carried as a lead only. Not investigated.",
+   "basis": "PROJECT_HYPOTHESIS_NOT_ESTABLISHED"
+  },
+  {
+   "name": "Hunter.how",
+   "classification": "DISCOVERED_NOT_EVALUATED",
+   "reason": "Carried as a lead only. Not investigated.",
+   "basis": "PROJECT_HYPOTHESIS_NOT_ESTABLISHED"
+  },
+  {
+   "name": "Odin",
+   "classification": "DISCOVERED_NOT_EVALUATED",
+   "reason": "Carried as a lead only. Not investigated.",
+   "basis": "PROJECT_HYPOTHESIS_NOT_ESTABLISHED"
+  },
+  {
+   "name": "Netcraft",
+   "classification": "DISCOVERED_NOT_EVALUATED",
+   "reason": "Carried as a lead only. Not investigated.",
+   "basis": "PROJECT_HYPOTHESIS_NOT_ESTABLISHED"
+  },
+  {
+   "name": "SecurityTrails",
+   "classification": "DISCOVERED_NOT_EVALUATED",
+   "reason": "Carried as a lead only. Not investigated.",
+   "basis": "PROJECT_HYPOTHESIS_NOT_ESTABLISHED"
+  }
+ ]
+}
