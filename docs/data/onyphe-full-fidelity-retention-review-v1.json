@@ -1,0 +1,96 @@
+{
+  "$comment": "Mission 1.63 sections 15, 16, 17 and 18. Read 4. The only one of the four targets that fully resolved, and it resolved in the candidate's favour on the load-bearing half.",
+  "record_version": "1.0.0",
+  "mission": "1.63 — Anchor & ONYPHE Documentation Closure V1",
+  "recorded_at": "2026-09-05",
+  "apparatus": "ONYPHE",
+  "target": 4,
+
+  "what_was_sought": {
+    "question": "Which fields are removed after thirty days, and does protocol-native SSH evidence survive?",
+    "carried_from": "Mission 1.62, which recorded the raw field's survival as UNKNOWN and declined to infer it either way."
+  },
+
+  "the_verbatim_rule": {
+    "sentence": "For data older than 30 days, we remove some fields as they are less useful, and we truncate data field to 4KB",
+    "source": "https://search.onyphe.io/docs/historical-data-availability",
+    "the_thirty_day_window": "Within thirty days the documentation describes retention with all fields and up to sixteen kilobytes of raw application responses."
+  },
+
+  "what_the_sentence_settles": {
+    "$comment": "The sentence distinguishes two operations, and the distinction is the whole finding.",
+    "removal": "some fields are REMOVED, and they are not named",
+    "truncation": "the data field is TRUNCATED to four kilobytes",
+    "the_data_field_is_named": true,
+    "why_that_matters": "The raw application response field is named as the thing that is TRUNCATED, which places it outside the set of fields that are REMOVED. It survives beyond thirty days in shortened form.",
+    "does_the_ssh_prefix_survive": "YES",
+    "why": "The construct's predicate is a literal prefix on the beginning of the identification string a service sends on connection. That string is tens of bytes. A four-kilobyte truncation removes nothing from its beginning.",
+    "this_is_a_deduction_from_a_documented_fact_not_an_inference_from_silence": "The field is named in the sentence, its treatment is stated, and the predicate's position within the field is fixed by the protocol standard. Nothing here reads an absence as a statement."
+  },
+
+  "what_the_sentence_does_not_settle": {
+    "which_fields_are_removed": "UNKNOWN. The phrase is some fields and no field names are enumerated anywhere on the page.",
+    "does_the_observation_timestamp_survive": "UNKNOWN. Not addressed.",
+    "does_the_ip_address_survive": "UNKNOWN. Not addressed.",
+    "do_the_scanner_node_fields_survive": "UNKNOWN. Not addressed.",
+    "why_these_are_not_guessed": "Section 15 forbids guessing unnamed removed fields. The address and the observation timestamp are both load-bearing: without the first there is nothing to count distinctly, and without the second there is no window to attribute the observation to. An apparatus that kept the banner and dropped the timestamp would be useless retrospectively, and nothing rules that out."
+  },
+
+  "retention_by_category": {
+    "ctiscan": "1 month",
+    "datascan": "7 months",
+    "datashot": "7 months",
+    "riskscan": "7 months",
+    "twelve_month_categories": ["geoloc", "inetnum", "onionscan", "onionshot", "pastries", "resolver", "sniffer", "threatlist", "topsite", "vulnscan", "whois"],
+    "forty_eight_month_categories": ["ctl", "domain", "hostname", "ip"],
+    "the_relevant_one": "datascan, at seven months",
+    "a_note_on_the_other_one": "ctiscan is retained one month. The published scanned-port list documents ctiscan, which is a second reason that list does not stand in for the datascan configuration."
+  },
+
+  "retrieval_deadlines": {
+    "$comment": "Section 17. Frozen as durations. No dates are chosen.",
+    "MAX_FULL_FIDELITY_RETRIEVAL_DELAY": "30 days from observation",
+    "what_full_fidelity_means_here": "all fields retained, and raw application responses up to sixteen kilobytes",
+    "MAX_PREDICATE_SUFFICIENT_RETRIEVAL_DELAY": "NOT_ESTABLISHED",
+    "why_not_established": "It would be seven months, the datascan retention, IF the observation timestamp and the address survive the thirty-day field removal. The truncated data field is sufficient for the predicate; the fields that locate it in time and space are not established as surviving.",
+    "the_conservative_contract": "A route using this apparatus retrieves within thirty days of the observation window closing. That needs no further documentation and is the deadline a future acquisition should be planned against.",
+    "no_dates_chosen": true,
+    "no_window_selected": true,
+    "no_values_retrieved": true
+  },
+
+  "finite_retention_is_not_automatic_disqualification": {
+    "$comment": "Section 16.",
+    "rule": "The question is whether the load-bearing raw protocol facts can be acquired within a known window, not whether the provider retains everything forever.",
+    "the_future_ordering_this_permits": [
+      "semantic contract frozen",
+      "governance decided",
+      "observation window frozen",
+      "threshold preregistered",
+      "observation occurs",
+      "retrieval within the full-fidelity retention period"
+    ],
+    "does_retention_block_this_apparatus": false,
+    "outcome_F_not_selected": "ONYPHE_PROTOCOL_FULL_FIDELITY_RETENTION_BLOCKER is defined for raw SSH protocol evidence that cannot be retrieved within a known usable window. It can: thirty days, documented."
+  },
+
+  "b3_is_not_reopened": {
+    "$comment": "Section 18.",
+    "verdict": "ONYPHE_B3_PASS",
+    "retained": true,
+    "the_three_conditions_that_would_have_reopened_it": {
+      "field_unavailable_in_the_relevant_surface": "not established; the field is documented in the datascan model",
+      "retention_removes_it_before_usable_retrieval": "refuted; it is truncated rather than removed, and a thirty-day full-fidelity window is documented",
+      "transformations_make_the_prefix_undecidable": "not established; four-kilobyte truncation does not touch the beginning of the string"
+    },
+    "reopened_merely_because_retention_is_finite": false,
+    "what_did_improve": "Mission 1.62 recorded the raw field's survival as UNKNOWN and flagged it as the risk that could end protocol-native exposure at thirty days. It does not end there. That risk is closed."
+  },
+
+  "verdict": {
+    "result": "ONYPHE_FULL_FIDELITY_RETENTION_ESTABLISHED",
+    "scope": "the thirty-day full-fidelity window and the treatment of the raw response field are established. The identity of the removed fields is not.",
+    "moved": true,
+    "how_it_moved": "From an unnamed risk to a bounded contract with one residual unknown, and the residual is about the fields that locate an observation rather than the field that carries the predicate."
+  }
+}

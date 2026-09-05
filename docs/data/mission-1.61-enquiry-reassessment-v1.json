@@ -1,0 +1,83 @@
+{
+  "$comment": "Mission 1.63 sections 22, 23, 24 and 25. The seven frozen questions re-evaluated after the four targeted reads. Case A.",
+  "record_version": "1.0.0",
+  "mission": "1.63 — Anchor & ONYPHE Documentation Closure V1",
+  "recorded_at": "2026-09-05",
+
+  "artifact": {
+    "document": "docs/data/anchor-technical-lineage-enquiry-v1.md",
+    "sha256": "310acf288244453cd0a928197386cbf8311ded278e4dcdd22b70412807a049c4",
+    "bytes_unchanged": true,
+    "edited": false,
+    "status": "AWAITING_OPERATOR_APPROVAL",
+    "sent": false,
+    "frozen_by": "Mission 1.61",
+    "reassessed_by": ["Mission 1.62", "Mission 1.63"]
+  },
+
+  "reassessment_performed_after_the_four_reads": true,
+
+  "question_disposition": [
+    {"n": 1, "topic": "SAMPLING", "disposition": "STILL_UNRESOLVED", "note": "no document read this mission addresses it"},
+    {"n": 2, "topic": "PROBE ATTEMPTS", "disposition": "STILL_UNRESOLVED", "note": "no document read this mission addresses transport-layer probe behaviour"},
+    {"n": 3, "topic": "MEANING OF ABSENCE", "disposition": "STILL_UNRESOLVED", "note": "no document read this mission addresses it"},
+    {"n": 4, "topic": "DUPLICATION", "disposition": "STILL_UNRESOLVED", "note": "no document read this mission addresses whether one address-and-port pair can recur within a cycle"},
+    {"n": 5, "topic": "RAW RESPONSE FIDELITY", "disposition": "STILL_UNRESOLVED", "note": "the anchor publishes no truncation or normalisation policy; the retention finding this mission established is about a different apparatus"},
+    {"n": 6, "topic": "VANTAGE", "disposition": "STILL_UNRESOLVED", "note": "no document read this mission addresses scanner count or location"},
+    {"n": 7, "topic": "PORT SCHEDULE OVER TIME", "disposition": "STILL_UNRESOLVED", "note": "the indices operation was located and its response schema is not published on the rendered page, so the question it would have answered stays open"}
+  ],
+
+  "tally": {
+    "answered_by_public_docs": 0,
+    "no_longer_load_bearing": 0,
+    "still_unresolved": 7,
+    "total": 7
+  },
+
+  "case": {
+    "selected": "CASE_A",
+    "definition": "all seven remain unresolved",
+    "consequence": "v1 remains CURRENT, FROZEN and UNSENT",
+    "verdict": "MISSION_1_61_ENQUIRY_STILL_CURRENT",
+    "superseded": false,
+    "v2_created": false,
+    "v1_edited": false,
+    "hash_authority": "Mission 1.61's hash remains authoritative. Section 23 forbids computing a duplicate hash artifact for identical bytes, and none was computed.",
+    "operative_approval_string": "APPROVE MISSION 1.61 ENQUIRY 310acf288244453cd0a928197386cbf8311ded278e4dcdd22b70412807a049c4",
+    "why_not_CASE_B": "CASE B requires at least one question to have become answered. None did.",
+    "why_not_CASE_C": "CASE C requires no question to remain. Seven remain."
+  },
+
+  "the_enquiry_is_not_evidence": {
+    "statement": "A drafted enquiry establishes nothing. It is a question, and it was not used as an input to any verdict in this mission.",
+    "enquiry_answers_used_in_the_a8_recomputation": false
+  },
+
+  "why_the_reads_did_not_touch_the_enquiry": {
+    "$comment": "Worth stating, because four reads producing zero answered questions could look like the reads were wasted.",
+    "explanation": "Three of the four targets were ONYPHE questions, and the enquiry is addressed to the anchor. Only one target, the indices schema, mapped onto an enquiry question, and it did not resolve. The reads were not aimed at the enquiry; they were aimed at the two apparatuses' individual packages, and three of them moved evidence there.",
+    "what_this_means_for_the_next_step": "Six of the seven questions map onto load-bearing anchor A8 topics that no further public document has been found to address. That is the argument for contacting the provider rather than searching more."
+  },
+
+  "contact_channel": {
+    "$comment": "Sections 24 and 25. A valid question and a valid recipient are two different facts.",
+    "status": "FIRST_PARTY_CONTACT_CHANNEL_NOT_ESTABLISHED",
+    "CONTACT_PAGE_EXISTS": true,
+    "page": "https://netlas.io/legal/",
+    "what_the_page_carries": "a printed instruction that questions or comments should be sent to an address, alongside the company's legal documents",
+    "why_the_address_is_not_recorded": "It is served through an email-obfuscation mechanism, so tool retrieval returned a placeholder rather than the literal string. It was not resolved by Mission 1.62 and was not re-attempted here.",
+    "address_invented": false,
+    "address_decoded_by_guess": false,
+    "conventional_mailboxes_inferred": false,
+    "how_it_becomes_established": "The operator opens that page in a browser, where the address renders, and supplies the exact displayed string. It is then recorded as first-party evidence.",
+    "outbound_messages_sent": 0
+  },
+
+  "next_action": {
+    "$comment": "Section 48. Recorded, not taken.",
+    "recommended": "the operator's decision on sending the frozen enquiry",
+    "why_this_rather_than_more_documentation_search": "Two missions have now spent bounded budgets on the anchor's operational questions. Mission 1.62 read the most likely remaining policy document and it closed none of them; Mission 1.63 pursued the last named lead and its schema is not published. The public route for these six questions is exhausted, which is exactly the condition an enquiry exists for.",
+    "what_approval_would_authorise": "sending that text unchanged to a first-party channel the operator supplies, and nothing else",
+    "sent_automatically": false
+  }
+}

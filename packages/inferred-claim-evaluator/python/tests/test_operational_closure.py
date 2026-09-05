@@ -478,8 +478,16 @@ class TestOutcomeAndRegistry(unittest.TestCase):
         self.assertIn("THE_RETRIEVABLE_FRAME_IS_NOT_THE_MEASURED_FRAME", names)
         self.assertIn("DEFAULT_DATA_SURFACE_MUST_NOT_OVERRIDE_QUALIFIED_EXPOSURE_PATH", names)
 
-    def test_the_earlier_eleven_requirements_survive(self) -> None:
-        names = {r["name"] for r in _load(CONTRACT)["requirement_registry"]["requirements"]}
+    def test_the_earlier_requirements_survive(self) -> None:
+        """Re-pointed in Mission 1.63.
+
+        This asserted a registry length of 13, which the next mission's legitimate
+        addition made false. A test pinning a total is a test asserting the registry
+        never grows. What it is actually protecting is that no earlier requirement
+        is dropped when a new one is appended, and that is what it now asserts.
+        """
+        requirements = _load(CONTRACT)["requirement_registry"]["requirements"]
+        names = {r["name"] for r in requirements}
         for earlier in (
             "SOURCE_EXCLUSIVE_METRIC",
             "RELIABILITY_REVIEWABILITY",
@@ -494,7 +502,8 @@ class TestOutcomeAndRegistry(unittest.TestCase):
             "LINEAGE_EXHAUSTIVENESS_IS_NOT_FRAME_EXHAUSTIVENESS",
         ):
             self.assertIn(earlier, names)
-        self.assertEqual(len(_load(CONTRACT)["requirement_registry"]["requirements"]), 13)
+        self.assertGreaterEqual(len(requirements), 13)
+        self.assertEqual(len(names), len(requirements), "a requirement name is duplicated")
 
     def test_earlier_mission_records_are_not_rewritten(self) -> None:
         selection = _load(DATA / "observation-addressable-scanner-pair-selection-v1.json")

@@ -1,0 +1,105 @@
+{
+  "$comment": "Mission 1.63 section 19. The full ONYPHE individual package recomputed, every mandatory slot reported, not only the interesting ones.",
+  "record_version": "1.0.0",
+  "mission": "1.63 — Anchor & ONYPHE Documentation Closure V1",
+  "recorded_at": "2026-09-05",
+  "apparatus": "ONYPHE",
+
+  "package": {
+    "B1": {
+      "slot": "ACTIVE_MEASUREMENT_PRODUCER",
+      "before": "PASS",
+      "after": "PASS",
+      "changed": false,
+      "basis": "It states first-party that it scans the entire internet weekly, has scanned at internet scale since 2017, and its refresh documentation describes weekly cycles with named origin countries.",
+      "binding_blocker": false
+    },
+    "B2": {
+      "slot": "OBSERVATION_ADDRESSABLE_EXPOSURE",
+      "before": "PARTIAL",
+      "after": "PARTIAL",
+      "changed": false,
+      "basis": "Historical search is documented through calendar-aligned relative time-range functions whose bucket boundaries are published. What the filtered timestamp means at record level is not documented, and the timestamp definition itself carries both a collection-moment reading and a last-observed reading in one sentence.",
+      "binding_blocker": true,
+      "what_improved": "The ambiguity is bounded. The functions, their boundaries and the existence of historical search are established, and the missing fact is one sentence about record semantics.",
+      "what_was_refused": "A retrieval summary reported that the functions filter on collection time and not on record modification dates. The verbatim re-read found no such sentence. A PASS resting on it was not recorded."
+    },
+    "B3": {
+      "slot": "PROTOCOL_NATIVE_EXPOSURE",
+      "before": "PASS",
+      "after": "PASS",
+      "changed": false,
+      "classification": "RAW_IDENTIFICATION_STRING",
+      "basis": "The datascan model documents a raw application response field, full-text searchable, up to one megabyte within the retention window, kept distinct from a normalised summary field.",
+      "binding_blocker": false,
+      "reopened": false,
+      "what_improved": "Mission 1.62 flagged the thirty-day field removal as the risk that could end protocol-native exposure. The retention rule names the raw field as TRUNCATED rather than removed, and a four-kilobyte truncation does not touch the beginning of an identification string. That risk is closed."
+    },
+    "B4": {
+      "slot": "FRAME",
+      "before": "PARTIAL",
+      "after": "PARTIAL",
+      "changed": false,
+      "basis": "The eligible frame is stated as the entire internet scanned weekly. The attempted frame is not established, sampling is not stated, opt-out removal requests are honoured so the retained set is not a complete record of what was observed, and TCP/22 membership in the datascan scan set is not established.",
+      "binding_blocker": true,
+      "what_changed_inside_it": "Port-22 membership moved from unread to read-and-still-unestablished. The published scanned-port list documents the ctiscan category, not datascan, and carries no temporal binding."
+    },
+    "B5": {
+      "slot": "LINEAGE",
+      "before": "PARTIAL",
+      "after": "PARTIAL",
+      "changed": false,
+      "lineage_level": "LEVEL_1",
+      "basis": "Affirmative and repeated statements of its own internet-scale scanning, and a scanner node identifier on each record. No statement excludes an external measurement feed from contributing to service-presence records, and no closed exception clause exists.",
+      "binding_blocker": false,
+      "note": "LEVEL 1 does not block on its own at the individual-apparatus stage; it would matter to a later independence judgement."
+    },
+    "B6": {
+      "slot": "RELIABILITY_REVIEWABILITY",
+      "before": "PARTIAL",
+      "after": "PARTIAL",
+      "changed": false,
+      "basis": "Scan cadence per category and origin, retention per category, the raw response field with its type and size bounds, scanner node identity and country, port and transport fields, published scanning principles, and now the thirty-day retention rule are all documented.",
+      "binding_blocker": false,
+      "missing_facts": [
+        "sampling within a range",
+        "the attempted frame per cycle",
+        "missingness semantics",
+        "transport-layer retry behaviour",
+        "which fields are removed after thirty days"
+      ],
+      "what_improved": "The retention half of this slot is now documented rather than unread."
+    }
+  },
+
+  "slots_changed": 0,
+  "slots_better_evidenced": 3,
+  "which_better_evidenced": ["B3", "B4", "B6"],
+
+  "vantage": {
+    "verdict": "MULTI_VANTAGE_SEPARABLE",
+    "changed": false,
+    "basis": "A scanner node sub-object carrying a node identifier and a country of logical assignment, with weekly cycles documented as alternating origin country."
+  },
+
+  "individual_qualification": {
+    "verdict": "INDIVIDUALLY_UNRESOLVED",
+    "before": "INDIVIDUALLY_UNRESOLVED",
+    "changed": false,
+    "binding_blockers": ["B2", "B4"],
+    "reason": "Two slots pass and four are partial. The qualification rule is conjunctive, so partial is not pass and the package cannot qualify. No hard FAIL exists, so it is not disqualified either.",
+    "why_this_is_not_stagnation": "No slot moved, and three are better evidenced. One named risk was closed, one lead was exhausted and replaced with a specific question, and a verdict that would have rested on a non-existent sentence was refused. The package is in the same state and is better understood.",
+    "what_would_resolve_it": [
+      "one first-party sentence stating whether a datascan record is appended per scan or updated in place, which decides B2 outright in either direction",
+      "a published port list for the datascan category, or the membership of the documented 500-port set, which would decide the port-22 half of B4",
+      "the identity of the fields removed after thirty days, specifically whether the observation timestamp and the address survive"
+    ]
+  },
+
+  "epistemic_and_access_recorded_separately": {
+    "EPISTEMIC_DOCUMENTATION_STATUS": "SUFFICIENT_TO_PROGRESS. Every fact established about this apparatus came from public first-party documentation, with no private API used.",
+    "FUTURE_ACCESS_STATUS": "NOT_ESTABLISHED. Whether a future retrieval requires a paid or gated tier was not assessed. The retention documentation mentions licence-dependent historical depth, which is FUTURE_GOVERNANCE_INPUT and nothing more.",
+    "no_trial_started": true,
+    "no_application_made": true
+  }
+}

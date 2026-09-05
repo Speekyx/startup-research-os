@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.95
+Version: 1.96
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-05 (Sprint 1 / Mission 1.62)
+Last amended: 2026-09-05 (Sprint 1 / Mission 1.63)
 
 ---
 
@@ -13,6 +13,121 @@ Last amended: 2026-09-05 (Sprint 1 / Mission 1.62)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.96 — 2026-09-05 (Sprint 1 / Mission 1.63)
+
+**`ANCHOR_ENQUIRY_STILL_REQUIRED_ONYPHE_UNRESOLVED`.** Four named reads, seven
+retrievals of a budget of eight, and **zero gate verdicts changed**. Three of the
+four reads moved evidence anyway, one closed a named risk outright, and one
+refused a verdict it had nearly recorded.
+
+**THE FINDING WORTH CARRYING IS THAT A RETRIEVAL SUMMARY IS NOT A DOCUMENT.** The
+first read of the candidate's query-language page reported, in analytical prose,
+that its time-range functions filter on time of data collection and not on record
+modification dates, and filter by observation period rather than record state.
+That is exactly the distinction the temporal-object test turns on, phrased as a
+contrast between the two candidate readings, and it would have moved B2 from
+PARTIAL to PASS. It arrived without quotation marks, unlike the timestamp
+definition on the data-model page, so it was re-read verbatim. **The page does not
+contain that sentence.** What it contains is a section described as allowing
+search through historical data and four calendar-bucket boundary definitions.
+Mission 1.61 re-read the anchor's lineage sentence for the same reason and the
+re-read CONFIRMED it; the procedure is identical and the answer went the other
+way. A PASS resting on a sentence that does not exist was not recorded.
+
+**THE PORT-22 READ FOUND A PORT LIST FOR THE WRONG CATEGORY.** The candidate's
+published scanned-port list is headed for the **ctiscan** category and documents
+5,054 TCP ports including 22. The construct's protocol-native evidence lives in
+**datascan**, whose refresh documentation describes a 500-port cycle whose
+membership is published nowhere, and whose retention is seven months against
+ctiscan's one. A configuration fact published for one resource does not establish
+it for another, which is RESOURCE_SPECIFIC_LINEAGE applied to configuration.
+Verdict `PORT_22_STATUS_UNKNOWN`, and the gap is new: before this read the
+question was unread, and it is now a named category mismatch answerable by one
+document.
+
+**THE RETENTION READ RESOLVED, AND IN THE CANDIDATE'S FAVOUR ON THE LOAD-BEARING
+HALF.** Verbatim: *For data older than 30 days, we remove some fields as they are
+less useful, and we truncate data field to 4KB*. The sentence distinguishes two
+operations and **names the raw response field as the one TRUNCATED**, placing it
+outside the set removed. A four-kilobyte truncation does not touch the beginning
+of an identification string of tens of bytes, so the predicate survives and B3 is
+not reopened. Mission 1.62 flagged this as the risk that could end protocol-native
+exposure at thirty days; it does not. Which other fields are removed is still not
+named, and whether the observation timestamp and the address survive is
+`UNKNOWN` rather than guessed in either direction.
+
+**THE ANCHOR READ EXHAUSTED ITS LAST NAMED LEAD WITHOUT CLOSING ANYTHING.** The
+indices operation is located, its documented path recorded, and the rendered API
+reference truncates before the response schema at the operation's own anchor. The
+endpoint was **not executed**: section 5 permits calling a configuration endpoint
+only where evidence proves its response carries no measurement, and the evidence
+that would prove it is the schema that could not be read. Calling it to find out
+whether calling it is safe is circular. `PORT_22_WINDOW_COVERAGE_NOT_ESTABLISHED`,
+with no inference drawn from the current list, from list cardinality, from the
+absence of recorded removals, or from the endpoint merely existing.
+
+**A8 WAS RECOMPUTED AND NOT ONE TOPIC MOVED.** Ten topics, two answered, four
+partial, four unknown, `changed_this_mission` **0**. That is the honest count, and
+recording it beats converting *we now know which page to read* into progress. Five
+load-bearing topics remain unresolved and six of the seven frozen enquiry
+questions target them.
+
+**THE ENQUIRY IS UNCHANGED AND NO DUPLICATE HASH WAS MANUFACTURED.** All seven
+questions reassessed after the four reads, all seven `STILL_UNRESOLVED`, so CASE A
+applies: v1 remains current, frozen and unsent on Mission 1.61's exact hash. Three
+of the four reads were candidate questions and the enquiry is addressed to the
+anchor, which is why four reads produced zero answered questions and is stated
+rather than left looking like waste.
+
+**ONE OFFERED REGISTRY RULE WAS ADDED AND ONE WAS DECLINED.**
+`APPARATUS_CONFIGURATION_MUST_BE_TIME_ADDRESSABLE` is added, demonstrated by both
+apparatuses independently: each publishes a current port list and neither binds it
+to a window. It is distinct because OBSERVATION_ADDRESSABLE_EXPOSURE governs when
+the observation happened and this governs when the configuration applied, and an
+apparatus can expose a perfect observation timestamp while leaving you unable to
+say whether it was probing the port then. `FULL_FIDELITY_RETENTION_IS_PART_OF_
+ACQUISITION_CONTRACT` was **declined**: retention resolved favourably, so the
+evidence demonstrated the opposite of the failure the rule anticipates, and
+`MAX_FULL_FIDELITY_RETRIEVAL_DELAY` was frozen as a per-apparatus duration
+instead. Registry 13 to 14.
+
+**TWO DEFECTS IN THIS MISSION'S OWN TOOLING WERE FOUND AND FIXED.** A validator
+guard compared a field to the literal `NONE` where the record states `NONE` and
+then explains it, so the guard could never fire; repaired to a prefix test and
+proved firing. And a mechanical collapse of nested `if` statements folded a
+sibling check inside a `raise`, making it unreachable while still looking like a
+check — caught because the probe went from 123 caught to 122 caught and one
+escaped, then repaired by hand and re-audited over the AST for any other
+unreachable statement. **A guard that cannot fire is the recurring shape in this
+repository, and the probe is what makes it visible.**
+
+**A MISSION 1.62 TEST WAS RE-POINTED RATHER THAN DELETED.** It pinned the registry
+length at 13, which this mission's legitimate addition made false. A test pinning a
+total is a test asserting the registry never grows; it now asserts that no earlier
+requirement is dropped and that no name is duplicated.
+
+7 of 8 first-party retrievals. **0 measurement queries, 0 counts, 0 host records,
+0 banners, 0 facets, 0 downloads, 0 configuration endpoints executed, 0 trials, 0
+purchases, 0 enquiries sent.** 0 canonical mutations, 0 sources registered, 0
+governance reviews, 0 Claims, 0 Evidence, 0 reliability values, 0 independence
+groups, 0 Scores, 0 model calls, 0 embeddings. The Mission 1.56 Claim is
+untouched, the profile is still UNCALIBRATED and Problem-Family is still PARKED.
+**Qualified apparatuses 0 of 4, so `PAIR_ANALYSIS_NOT_READY`** and no pair gate was
+evaluated. Validator probed with **123 deliberate violations and 123 caught**,
+three of which edited the frozen enquiry. 1717 bare-python tests run before commit.
+
+New: `docs/data/targeted-documentation-closure-baseline-v1.json`,
+`netlas-indices-port-window-review-v1.json`,
+`onyphe-datascan-temporal-object-review-v1.json`,
+`onyphe-scanned-port-review-v1.json`,
+`onyphe-full-fidelity-retention-review-v1.json`, `anchor-a8-recomputed-v1.json`,
+`onyphe-package-recomputed-v1.json`, `qualified-apparatus-readiness-v1.json`,
+`mission-1.61-enquiry-reassessment-v1.json` and their rendered `.md`;
+`infrastructure/scripts/render_documentation_closure.py`; 61 tests in
+`packages/inferred-claim-evaluator/python`.
+
+Report: `docs/architecture/mission-1.63-report.md`.
 
 ## 1.95 — 2026-09-05 (Sprint 1 / Mission 1.62)
 
@@ -4001,6 +4116,14 @@ Additionally authoritative:
 - docs/data/anchor-port-window-review-v1.md (added in 1.95)
 - docs/data/partner-package-completion-v1.md (added in 1.95)
 - docs/data/anchor-operational-closure-and-partner-packages-v1.md (added in 1.95)
+- docs/data/netlas-indices-port-window-review-v1.md (added in 1.96)
+- docs/data/onyphe-datascan-temporal-object-review-v1.md (added in 1.96)
+- docs/data/onyphe-scanned-port-review-v1.md (added in 1.96)
+- docs/data/onyphe-full-fidelity-retention-review-v1.md (added in 1.96)
+- docs/data/anchor-a8-recomputed-v1.md (added in 1.96)
+- docs/data/onyphe-package-recomputed-v1.md (added in 1.96)
+- docs/data/qualified-apparatus-readiness-v1.md (added in 1.96)
+- docs/data/mission-1.61-enquiry-reassessment-v1.md (added in 1.96)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

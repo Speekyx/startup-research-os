@@ -1,0 +1,204 @@
+{
+  "$comment": "Mission 1.63 sections 27, 28, 29 and 30. A status, not a selection. No pair gate was evaluated.",
+  "record_version": "1.0.0",
+  "mission": "1.63 — Anchor & ONYPHE Documentation Closure V1",
+  "recorded_at": "2026-09-05",
+
+  "apparatuses": [
+    {
+      "name": "LeakIX",
+      "individual_status": "INDIVIDUALLY_NOT_QUALIFIED",
+      "binding_failure": "B2, an indexing date and detection endpoints rather than an observation event",
+      "researched_this_mission": false,
+      "changed": false
+    },
+    {
+      "name": "Netlas",
+      "individual_status": "INDIVIDUALLY_NOT_QUALIFIED",
+      "binding_failure": "A8, five load-bearing operational topics unresolved",
+      "researched_this_mission": true,
+      "changed": false
+    },
+    {
+      "name": "ONYPHE",
+      "individual_status": "INDIVIDUALLY_UNRESOLVED",
+      "binding_failure": "B2 and B4",
+      "researched_this_mission": true,
+      "changed": false
+    },
+    {
+      "name": "The Shadowserver Foundation",
+      "individual_status": "INDIVIDUALLY_NOT_QUALIFIED",
+      "binding_failure": "B4, the retrievable frame is limited to networks the requester is responsible for",
+      "researched_this_mission": false,
+      "changed": false
+    }
+  ],
+
+  "$ordering_note": "Alphabetical by apparatus name. Section 45 of Mission 1.62 and section 27 here forbid a preference artifact, so the order carries no meaning.",
+
+  "readiness": {
+    "QUALIFIED_APPARATUS_COUNT": 0,
+    "threshold_for_readiness": 2,
+    "PAIR_ANALYSIS_READY": false,
+    "status_word": "PAIR_ANALYSIS_NOT_READY",
+    "why": "Pair gates are evaluated only between apparatuses that individually qualify. None does.",
+    "this_is_a_status_not_a_selection": true
+  },
+
+  "no_pair_work_was_performed": {
+    "$comment": "Section 27, enumerated so a later reader can see it was not done rather than infer it.",
+    "pairs_compared": 0,
+    "pairs_ranked": 0,
+    "pairs_selected": 0,
+    "same_frame_evaluated": false,
+    "same_observation_window_evaluated": false,
+    "vantage_compatibility_evaluated": false,
+    "lineage_independence_evaluated": false,
+    "shared_measurement_upstream_evaluated": false,
+    "same_target_proposition_evaluated": false,
+    "threshold_preregistrability_evaluated": false,
+    "why": "Individual qualification is necessary and not sufficient. Even two qualifying apparatuses would go to a separate mission for the pair gates, and here there are none."
+  },
+
+  "the_two_hypotheticals_the_brief_asks_about": {
+    "$comment": "Sections 29 and 30. Neither obtains, and recording that keeps the rules visible for the mission where one does.",
+    "if_onyphe_qualified_and_the_anchor_did_not": {
+      "obtains": false,
+      "rule": "Do not lower the anchor's A8, and do not pair a qualified apparatus with a failed one. The next action would remain finding a second qualified apparatus, by provider answer or by bounded partner discovery."
+    },
+    "if_both_became_ready": {
+      "obtains": false,
+      "rule": "Still do not select the pair. A separate mission independently checks common frame, common observation window, vantage compatibility, resource-specific lineage independence, absence of a shared measurement upstream, one TargetProposition, and threshold preregistrability."
+    }
+  },
+
+  "the_negative_controls_were_left_alone": {
+    "$comment": "Section 26.",
+    "researched": 0,
+    "rescue_attempted": 0,
+    "why": "Their failures are established on first-party documentation and are properties of what those platforms publish. A per-requester frame and a last-detection timestamp are not closed by further reading, and re-opening them without contradictory evidence would be looking for a reason to keep a candidate."
+  },
+
+  "primary_outcome": "ANCHOR_ENQUIRY_STILL_REQUIRED_ONYPHE_UNRESOLVED",
+  "primary_outcome_statement": "Both investigated apparatuses remain unresolved, and the four targeted reads materially narrowed the exact questions. The anchor's A8 stays PARTIAL with no topic changed, and its last named public lead is exhausted rather than untried. ONYPHE's package is unchanged in every slot and better evidenced in three: the raw response field is established as surviving retention truncated rather than removed, the port-22 question is now a named category mismatch rather than an unread page, and the temporal ambiguity is bounded to one missing sentence. Zero apparatuses qualify, so pair analysis is not ready.",
+
+  "why_this_outcome_and_not_another": {
+    "why_not_A": "TWO_QUALIFIED_APPARATUSES_READY_FOR_PAIR_ANALYSIS requires at least two individually qualifying apparatuses. There are none, and section 45 says not to force A.",
+    "why_not_B": "ANCHOR_ENQUIRY_STILL_REQUIRED_ONYPHE_QUALIFIED requires ONYPHE to have become individually qualified. It did not; two slots still block it.",
+    "why_not_C": "ANCHOR_OPERATIONALLY_REVIEWABLE_ONYPHE_UNRESOLVED requires the anchor's A8 to have closed. No A8 topic changed status.",
+    "why_not_E": "ONYPHE_TEMPORAL_OBJECT_NOT_ADDRESSABLE requires documentation ESTABLISHING that records are a maintained last-seen state. The documentation is ambiguous, which is not the same as establishing the unfavourable reading any more than it establishes the favourable one.",
+    "why_not_F": "ONYPHE_PROTOCOL_FULL_FIDELITY_RETENTION_BLOCKER requires that raw SSH protocol evidence cannot be retrieved within a known usable window. It can: thirty days, documented, with the raw field named as truncated rather than removed.",
+    "why_not_G": "ANCHOR_PORT_WINDOW_CONFIGURATION_GAP is true of the anchor and is reported as a secondary outcome. Taking it as the primary would let a single-apparatus label hide the ONYPHE half of a two-apparatus mission, which is the reasoning Mission 1.60 used when choosing between imperfect outcome labels.",
+    "why_not_H": "No target measurement, count, host record or banner was retrieved.",
+    "why_D_fits": "Section 45 defines D for both remaining unresolved WHERE the targeted reads materially narrow the exact questions, and calls it a legitimate result. Three of the four reads moved evidence, one closed a named risk outright, and one replaced an unread page with a specific answerable question."
+  },
+
+  "secondary_outcomes": {
+    "$comment": "Section 46. Reported independently so no overall label hides an individual state.",
+    "ANCHOR_A8": "ANCHOR_A8_PARTIAL",
+    "ANCHOR_PORT_WINDOW": "ANCHOR_PORT_WINDOW_NOT_ESTABLISHED",
+    "ONYPHE_B2": "ONYPHE_B2_PARTIAL",
+    "ONYPHE_B3": "ONYPHE_B3_PASS",
+    "ONYPHE_PORT_22": "ONYPHE_PORT_22_UNKNOWN",
+    "ONYPHE_RETENTION": "ONYPHE_FULL_FIDELITY_RETENTION_ESTABLISHED",
+    "ENQUIRY": "MISSION_1_61_ENQUIRY_STILL_CURRENT",
+    "ENQUIRY_V2_CREATED": false,
+    "QUALIFIED_APPARATUS_COUNT": 0,
+    "PAIR_ANALYSIS": "PAIR_ANALYSIS_NOT_READY"
+  },
+
+  "registry_decision": {
+    "$comment": "Sections 33 and 34. One rule offered by the brief is added and one is declined. Declining is itself a recorded decision.",
+    "added": [
+      {
+        "name": "APPARATUS_CONFIGURATION_MUST_BE_TIME_ADDRESSABLE",
+        "from": "Mission 1.63",
+        "rule": "A load-bearing scan-configuration fact, such as which ports a scan covered, must be attributable to the same observation period the measurement will come from, and attributable BEFORE retrieval. A configuration list published as a current reference establishes what is true today and binds no window.",
+        "demonstrated_by": "Both investigated apparatuses. The anchor publishes a current port list and a changelog that dates the list's SIZE rather than its membership, and its per-scan coverage metadata is unpublished. The candidate publishes a port list carrying no date stamp, no version number and no scan-configuration identifier. Two independent apparatuses, the same gap.",
+        "distinct_from": "OBSERVATION_ADDRESSABLE_EXPOSURE governs when the OBSERVATION happened and whether it can be selected. This governs when the CONFIGURATION applied. An apparatus can expose a perfect observation timestamp and still leave you unable to say whether it was probing the port during that window, and the second question is invisible if only the first is asked."
+      }
+    ],
+    "declined": [
+      {
+        "name": "FULL_FIDELITY_RETENTION_IS_PART_OF_ACQUISITION_CONTRACT",
+        "offered_by": "the Mission 1.63 brief, section 34, conditional on retention proving load-bearing",
+        "why_declined": "It did not prove load-bearing. The retention question resolved favourably: the field carrying the predicate is named as truncated rather than removed, and the truncation does not reach the bytes the predicate tests. A rule is added where evidence demonstrates a distinct guard, and this mission's evidence demonstrated the opposite of the failure the rule anticipates.",
+        "what_was_recorded_instead": "MAX_FULL_FIDELITY_RETRIEVAL_DELAY, frozen as a duration on the apparatus record, which is a constraint on a future acquisition rather than a general rule."
+      }
+    ],
+    "registry_size_before": 13,
+    "registry_size_after": 14
+  },
+
+  "next_mission_recommendation": {
+    "$comment": "Section 48, under outcome D with no second qualified apparatus.",
+    "the_condition": "ANCHOR_ENQUIRY_STILL_REQUIRED_ONYPHE_UNRESOLVED with no second apparatus qualifying",
+    "the_rule_that_applies": "The next action is provider contact, not more broad documentation search.",
+    "checkpoint": "STOP_ON_ENQUIRY_CHECKPOINT",
+    "operative_approval_string": "APPROVE MISSION 1.61 ENQUIRY 310acf288244453cd0a928197386cbf8311ded278e4dcdd22b70412807a049c4",
+    "why_contact_rather_than_more_reading": "Two missions have spent bounded budgets on the anchor's six operational questions. Mission 1.62 read the most likely remaining policy document and it addressed none of them. Mission 1.63 pursued the last named lead and its schema is not published on the rendered page. That is the condition an enquiry exists for.",
+    "the_operator_action_that_unblocks_the_channel": "Open the anchor's legal page in a browser, where the obfuscated contact address renders, and supply the exact displayed string.",
+    "three_cheap_reads_that_would_move_ONYPHE": [
+      "a first-party sentence stating whether a datascan record is appended per scan or updated in place, which decides B2 in either direction",
+      "a published port list for the datascan category, or the membership of the documented 500-port set",
+      "the identity of the fields removed after thirty days, specifically whether the observation timestamp and the address survive"
+    ],
+    "it_must_not": [
+      "fetch a measurement value, a count, a host record, a facet or a banner",
+      "execute the anchor's indices endpoint without first establishing that its response carries no measurement",
+      "resolve the candidate's timestamp ambiguity by querying records and comparing timestamps",
+      "read the anchor's default surface as its observation-addressable one",
+      "evaluate a threshold against the anchor's estimated count endpoint",
+      "select or rank a pair before two apparatuses individually qualify",
+      "edit the frozen enquiry v1",
+      "re-open the two frozen negative controls without contradictory first-party documentation"
+    ]
+  },
+
+  "stop_condition": {
+    "pairs_compared": false,
+    "apparatuses_ranked": false,
+    "pair_selected": false,
+    "measurement_fetched": false,
+    "search_query_executed": false,
+    "count_or_facet_executed": false,
+    "hosts_retrieved": false,
+    "banners_retrieved": false,
+    "measurement_data_downloaded": false,
+    "observation_window_chosen": false,
+    "threshold_chosen": false,
+    "threshold_registration_created": false,
+    "enquiry_sent": false,
+    "enquiry_v1_edited": false,
+    "trial_started": false,
+    "access_purchased": false,
+    "source_registered": false,
+    "governance_review_created": false,
+    "collector_created": false,
+    "normalizer_created": false,
+    "claim_created": false,
+    "evidence_created": false,
+    "independence_group_created": false,
+    "reliability_assigned": false,
+    "calibration_performed": false,
+    "score_created": false,
+    "opportunity_altered": false,
+    "model_called": false,
+    "embeddings_created": false,
+    "problem_family_unparked": false,
+    "mission_1_64_started": false,
+    "awaiting": "operator review"
+  },
+
+  "count_endpoint_constraint_carried_forward": {
+    "$comment": "Sections 31 and 32. Not a finding of this mission; carried so it cannot be lost.",
+    "status_word": "ESTIMATED_COUNT_ENDPOINT_PROHIBITED_FOR_DETERMINISTIC_THRESHOLD",
+    "finding": "The anchor's count endpoint is documented as exact below one thousand results and estimated above it, with an error margin not exceeding three per cent.",
+    "consequence": "The intended construct will exceed one thousand, so that endpoint is excluded entirely from deterministic threshold evaluation. An estimate whose error band spans the bound would let the estimator decide the Evidence direction.",
+    "no_probabilistic_semantics_introduced": true,
+    "no_confidence_interval_evaluator_introduced": true,
+    "potential_future_exact_route": "download the qualifying records and compute a deterministic count of distinct addresses, subject to governance and an acquisition contract",
+    "executed_this_mission": false
+  }
+}
