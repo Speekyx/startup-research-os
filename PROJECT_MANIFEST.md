@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.97
+Version: 1.98
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-05 (Sprint 1 / Mission 1.64)
+Last amended: 2026-09-05 (Sprint 1 / Mission 1.65)
 
 ---
 
@@ -13,6 +13,107 @@ Last amended: 2026-09-05 (Sprint 1 / Mission 1.64)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.98 — 2026-09-05 (Sprint 1 / Mission 1.65)
+
+**`NETLAS_RECIPIENT_PENDING_ONYPHE_ENQUIRY_FROZEN`.** One enquiry is now
+dispatch-ready and awaiting a single operator approval; the other is exactly where
+Mission 1.64 left it, waiting on a string. **Nothing was sent.**
+
+**THE RULE THIS MISSION FREEZES IS `CONTENT_APPROVAL_IS_NOT_DISPATCH_APPROVAL`,
+AND IT IS THREE GATES RATHER THAN ONE.** Content approval says a body may be sent;
+recipient establishment says who may read it; channel authorisation says by what
+mechanism. The Netlas enquiry has held the first since Mission 1.61 and has never
+held the other two, which is why an approval issued four missions ago is still
+valid and still unusable. The contract is **not** an apparatus-requirements
+registry entry: the registry governs measurement apparatuses and this governs an
+operator action, so the registry stays at 14.
+
+**AN ENVELOPE HASH HAD TO SURVIVE BEING WRITTEN INTO THE ENVELOPE.** Mission 1.56
+settled the frozen-document shape by keeping a hash outside the bytes it names,
+and an envelope cannot do that, because the thing the operator approves IS the
+envelope. So the digest is taken over a named set of **binding fields** — enquiry
+id, content hash, recipient, channel, sender, subject, content version — and
+excludes the hash, the approval string and everything about when the record was
+written. Recording the hash therefore does not move it, which is checked by
+recomputing it from the file as stored rather than asserted. **The digest binds the
+ACTION and not the document**: changing the recipient, the channel, the sender or
+the subject moves it, and changing the recorded date does not.
+
+**THE RECIPIENT WAS JUDGED ON PROVENANCE RATHER THAN ON THE SPELLING OF THE
+ADDRESS.** The established ONYPHE mailbox has a conventional local part, and
+Mission 1.64's validator lists exactly that string among the mailbox forms it
+refuses. That rule forbids **inferring** a mailbox from convention; this one was
+read off two first-party pages that print it as a live link. A string ban would
+have refused a correctly established address while still admitting a guessed one
+that happened to look unusual, so the check is on how the address was obtained.
+Three other published addresses were seen and excluded by name, including a demo
+address — **writing to it would be requesting a trial, and a zero-cost trial
+destroys preregistration exactly as a paid one would.**
+
+**AN ENVELOPE THAT NAMES NOBODY CARRIES NO HASH.** The Netlas envelope is a
+TEMPLATE: no recipient, no channel evaluated, no digest, no approval string, not
+approvable, and no packet generated. A hash is an approval handle, and producing
+one for an incomplete action would let an operator approve a send whose reader is
+blank. The page carrying the address was **not re-fetched**, because three
+missions have established that automated retrieval returns a placeholder there.
+
+**A CONNECTOR PRESENT IN THE RUNTIME IS STILL NOT CHANNEL AUTHORISATION.** The
+mail-capable connector is recorded `AVAILABLE_NOT_AUTHORIZED` and the channel is
+the operator sending it themselves. The sender is a **placeholder**, permitted for
+manual send only because under manual send the sender genuinely is not determined
+until the moment of sending — and **its cost is stated rather than hidden**: the
+hash binds three of the four fields, and pinning the fourth would produce a
+different envelope that SUPERSEDES this one rather than editing it.
+
+**THE ONYPHE ENQUIRY IS EXACTLY THE THREE RESIDUALS MISSION 1.64 FROZE.** Record
+lifecycle, datascan port set, and which fields survive beyond thirty days. No
+fourth question was added, nothing already documented is re-asked — question 3
+states the known 4 KB truncation as known and explicitly declines to raise it
+again — and the body asks for no records, no account, no trial and nothing
+commercial. **It asks what the system does and never whether the system
+qualifies**, because asking a provider to confirm its API is observation-addressable
+is asking it to grade our gate.
+
+**THE VALIDATOR CAUGHT THIS MISSION'S OWN RECORD**, for the seventh time in the
+`testing-strategy.md` §23 shape: the enquiry's preamble denied asking for anything
+commercial and the denial contained the forbidden word, inside the sendable body
+where the scan is strictest. Reworded rather than scoped, because scoping the scan
+around a denial is how a structural check stops checking.
+
+**AND THE PROBE CAUGHT ITS OWN DEFECT BEFORE THE GATE DID.** One case substituted a
+heading absent from the approved document, so it mutated nothing and reported an
+escape from a working gate — the exact Mission 1.64 shape, caught here by a
+mutation assertion the probe now makes on every case. **A probe case that changes
+nothing tests nothing.**
+
+**THE ASYMMETRY IS A FACT ABOUT TWO CONTACT PAGES AND NOT A RANKING.** One provider
+prints its address as a live link and the other serves it through an obfuscation
+mechanism. Neither fact bears on whether the apparatus is a good measurement
+instrument, and **dispatch readiness is progress on the ASKING rather than on the
+apparatus**: both remain unresolved or worse, qualified apparatuses stay **0 of 4**,
+and `PAIR_ANALYSIS_NOT_READY`.
+
+2 first-party retrievals, **0 measurement queries, 0 counts, 0 host records, 0
+banners, 0 downloads, 0 trials, 0 purchases, 0 enquiries sent, 0 connector
+executions, 0 credentials written**. 0 canonical mutations, 0 sources registered,
+0 governance reviews, 0 Claims, 0 Evidence, 0 reliability values, 0 independence
+groups, 0 Scores, 0 model calls, 0 embeddings. The Mission 1.56 Claim is untouched,
+the profile is still UNCALIBRATED and Problem-Family is still PARKED. The Netlas
+enquiry v1 was **not edited** and still answers to its approved hash. Validator
+probed with **204 deliberate violations and 204 caught**, four of which edited the
+approved document. 1820 bare-python tests run before commit.
+
+New: `docs/data/mission-1.65-baseline-v1.json`,
+`onyphe-technical-methodology-enquiry-v1.json`,
+`outbound-dispatch-envelope-contract-v1.json`,
+`netlas-dispatch-envelope-v1.json`, `onyphe-dispatch-envelope-v1.json`,
+`dual-enquiry-readiness-v1.json` and their rendered `.md`;
+`onyphe-enquiry-dispatch-packet-v1.md`, generated from the frozen enquiry rather
+than retyped; `infrastructure/scripts/render_dispatch_envelope.py`; 51 tests in
+`packages/inferred-claim-evaluator/python`.
+
+Report: `docs/architecture/mission-1.65-report.md`.
 
 ## 1.97 — 2026-09-05 (Sprint 1 / Mission 1.64)
 
@@ -4235,6 +4336,13 @@ Additionally authoritative:
 - docs/data/onyphe-package-final-recompute-v1.md (added in 1.97)
 - docs/data/apparatus-readiness-after-enquiry-dispatch-v1.md (added in 1.97)
 - docs/data/anchor-enquiry-manual-dispatch-packet-v1.md (added in 1.97)
+- docs/data/mission-1.65-baseline-v1.md (added in 1.98)
+- docs/data/onyphe-technical-methodology-enquiry-v1.md (added in 1.98)
+- docs/data/outbound-dispatch-envelope-contract-v1.md (added in 1.98)
+- docs/data/netlas-dispatch-envelope-v1.md (added in 1.98)
+- docs/data/onyphe-dispatch-envelope-v1.md (added in 1.98)
+- docs/data/dual-enquiry-readiness-v1.md (added in 1.98)
+- docs/data/onyphe-enquiry-dispatch-packet-v1.md (added in 1.98)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

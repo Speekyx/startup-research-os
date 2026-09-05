@@ -1,0 +1,60 @@
+{
+  "$comment": "Mission 1.65 Part D. The Netlas dispatch envelope. A TEMPLATE, not an action: its recipient is unknown, so no hash is computed and no approval is possible.",
+  "record_version": "1.0.0",
+  "mission": "1.65 — Dual Enquiry Dispatch Envelope Preparation V1",
+  "recorded_at": "2026-09-05",
+  "envelope_id": "netlas-dispatch-envelope-v1",
+  "contract": "outbound-dispatch-envelope@1.0.0",
+
+  "state": "INCOMPLETE_RECIPIENT",
+
+  "enquiry_document_id": "anchor-technical-lineage-enquiry-v1",
+  "enquiry_content_sha256": "310acf288244453cd0a928197386cbf8311ded278e4dcdd22b70412807a049c4",
+  "content_version": "v1",
+  "subject": "Technical methodology questions about public internet scan data",
+  "content_approval": {
+    "exact_string": "APPROVE MISSION 1.61 ENQUIRY 310acf288244453cd0a928197386cbf8311ded278e4dcdd22b70412807a049c4",
+    "CONTENT_APPROVED": true,
+    "issued_in": "Mission 1.61",
+    "still_valid": true,
+    "why_still_valid": "The bytes it names are unchanged, re-verified this mission."
+  },
+
+  "recipient_address": null,
+  "recipient_provenance": null,
+  "recipient_status": "WAITING_FOR_OPERATOR_SUPPLIED_FIRST_PARTY_CONTACT",
+  "recipient_source_page": "https://netlas.io/legal/",
+  "why_the_recipient_is_unknown": "That page carries a printed contact instruction and serves the address through an obfuscation mechanism, so automated retrieval returns a placeholder. Missions 1.62, 1.63 and 1.64 each established this. The page was not re-fetched here, because a fourth attempt would produce the same placeholder.",
+  "the_operator_action_that_resolves_it": "Open that page in a browser, where the address renders, and supply the exact displayed string.",
+  "address_invented": false,
+  "address_inferred": false,
+  "obfuscation_decoded": false,
+  "conventional_mailboxes_refused": true,
+
+  "sender_identity": null,
+  "outbound_channel": "NOT_EVALUATED",
+  "channel_authorization_basis": null,
+  "why_the_channel_is_not_evaluated": "A channel is evaluated for an action, and there is no action while the recipient is unknown. Binding a route to an envelope that names nobody would be preparing to send to a blank.",
+
+  "envelope_sha256": null,
+  "why_no_hash": "Contract §D6. An envelope whose recipient is unknown is a template, and a hash is an approval handle. Producing one would let an operator approve an action missing the field that decides who reads the message.",
+  "approval_string": null,
+  "approvable": false,
+
+  "packet_generated": false,
+  "why_no_packet": "Part E produces a packet only where the recipient and channel fields are known. A packet with a blank TO line is what Mission 1.64 already produced, and repeating it would add a file and no progress.",
+
+  "what_would_complete_this_envelope": [
+    "the exact address displayed on the first-party legal page, supplied by the operator",
+    "a channel: either OPERATOR_MANUAL_SEND, or an explicit authorisation naming a connector and a sender mailbox",
+    "a sender identity, bound exactly where the channel is a connector"
+  ],
+
+  "apparatus_state_unchanged": {
+    "$comment": "Part G. A question existing changes no gate.",
+    "netlas_A7": "PASS",
+    "netlas_A8": "PARTIAL",
+    "changed_this_mission": false,
+    "rule": "Question drafted is not answered. Question approved is not answered. Question sent is not answered. Only a reviewed first-party response may move a methodological gate."
+  }
+}

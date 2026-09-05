@@ -459,6 +459,19 @@ jobs:
       - name: Enquiry dispatch matches its decision rules
         run: uv run python infrastructure/scripts/render_enquiry_dispatch.py --check
 
+      # Mission 1.65. Freezes CONTENT_APPROVAL_IS_NOT_DISPATCH_APPROVAL and the
+      # three gates that stay separate. Recomputes the Netlas approved body's
+      # hash and the ONYPHE envelope hash on every run, so an edit to either the
+      # approved document or the bound action turns this red rather than leaving
+      # an approval beside different bytes. Also checks that a recipient is
+      # judged on PROVENANCE rather than on the spelling of the address; that an
+      # envelope naming no recipient carries no approval hash; that a connector
+      # present in the runtime is not channel authorisation; that the ONYPHE
+      # enquiry asks for no data, access, trial or price and repeats nothing the
+      # documentation answers; and that nothing is marked sent.
+      - name: Dispatch envelopes match their decision rules
+        run: uv run python infrastructure/scripts/render_dispatch_envelope.py --check
+
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
   # Pinned to the same versions as infrastructure/compose.
