@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.94
+Version: 1.95
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-05 (Sprint 1 / Mission 1.61)
+Last amended: 2026-09-05 (Sprint 1 / Mission 1.62)
 
 ---
 
@@ -13,6 +13,122 @@ Last amended: 2026-09-05 (Sprint 1 / Mission 1.61)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.95 — 2026-09-05 (Sprint 1 / Mission 1.62)
+
+**`ANCHOR_ENQUIRY_REQUIRED_PARTNER_PACKAGES_COMPLETE`.** All three partner
+packages are COMPLETE under one contract and none of the three individually
+qualifies. The anchor's A8 stays PARTIAL. No pair was compared, ranked or
+selected.
+
+**THREE COMPLETE PACKAGES, THREE DIFFERENT FAILURES, AND THAT IS THE RESULT.**
+Mission 1.60 left all three candidates at a documentation wall, which told us
+nothing about any of them. Now each is decided on its own merits and each fails
+somewhere different. **LeakIX fails B2 on documented timestamp semantics**: its
+three date fields are an indexing date, a first-detection date and a
+last-detection date, and none is an observation event. That is Mission 1.59's
+failure exactly — a window filter over a last-seen field selects hosts whose last
+detection fell inside the window, so a host present throughout it is missing from
+the set. **Its B3 passes**, on a documented SSH banner field, and the pass is
+recorded even though the package fails, because a gate is judged on its own
+question. A perfect banner with no pre-retrieval observation-window selector still
+fails, and one may not compensate for the other.
+
+**SHADOWSERVER FAILS ON A DISTINCTION THIS ARC HAD NOT YET NAMED.** It performs
+its own daily internet-wide scanning, and its reporting API states that a
+requester only gets the data on the networks they are responsible for and will
+not be able to get data on other networks or systems, with access limited to
+members of the reports group. **It scans everything and can show us only ours.**
+Its observation-window selector is the cleanest of the three candidates and its
+frame is the requester's own networks, so two requesters retrieve two different
+populations and no proposition about the internet can be witnessed through it.
+That is a FAIL rather than an UNKNOWN, because it is an affirmative documented
+statement rather than a silence.
+
+**ONYPHE IS UNRESOLVED WITH FOUR PARTIAL SLOTS, AND ITS B3 NOW PASSES.** Mission
+1.61 recorded that the raw field's NAME was unestablished; the data model
+documents a `data` field holding the raw application response, full-text
+searchable up to one megabyte, kept distinct from a normalised `summary`. **Its
+B2 turns on an ambiguity that was not resolved favourably**: the timestamp field
+is documented as the moment the data was collected, and in the same sentence as
+allowing tracking of when a service was LAST OBSERVED. Those are two different
+temporal objects, and resolving the ambiguity in the direction that keeps a
+candidate alive is what this arc has refused four times. It also documents a
+scanner node identifier and country per record, and weekly scans alternating
+origin country week to week — so its vantage is `MULTI_VANTAGE_SEPARABLE`, which
+is more than the anchor publishes about itself.
+
+**THE ANCHOR'S A8 STAYS PARTIAL AND ONE ANSWER WAS DOWNGRADED, WHICH IS THE AUDIT
+WORKING.** Ten topics: two answered, four partial, four unknown. **FRAME moved
+from ANSWERED to PARTIAL** once eligible frame and attempted frame were separated:
+the address range is declared and which addresses were actually probed in a cycle
+is not. **RETRY moved from PARTIAL to UNKNOWN** once the API's throttling and
+retry parameters were correctly identified as governing the CLIENT retrying the
+API rather than the SCANNER retrying a probe — answering a measurement question
+with a transport-library setting would have been the easiest mistake available.
+Sampling, vantage and missingness remain unknown, and the most likely remaining
+first-party document, the data collection policy, closes none of them.
+
+**TWO RETRIEVAL-SURFACE CONSTRAINTS WERE ESTABLISHED THAT NOBODY KNEW.** The API
+reference states that if the index parameter is not supplied, the search is
+conducted using the latest publicly available internet scan data — the verbatim
+confirmation of Mission 1.61's A2 bound, and the reason the second new registry
+rule exists. And **the count endpoint returns an ESTIMATE with an error margin
+not exceeding three per cent above one thousand results**. The construct is a
+count of distinct addresses across the public IPv4 space and will exceed one
+thousand, so a threshold evaluated against that endpoint would compare a bound
+against an estimate whose error band could decide the direction. **A SUPPORTS or
+CONTRADICTS produced by the estimator rather than by the world** is precisely the
+artefact-recorded-as-a-finding failure this layer must not have. It bounds HOW
+the value must be obtained rather than whether it can be, and the documented
+download endpoint is the alternative.
+
+**THE FROZEN ENQUIRY WAS NOT EDITED AND NO DUPLICATE HASH WAS MANUFACTURED.** All
+seven of its questions were compared against the updated matrix and all seven are
+STILL_UNRESOLVED, so v1 remains current, no v2 was cut, and Mission 1.61's exact
+hash stays authoritative. The count-estimate finding was deliberately NOT added to
+it: it is documented rather than missing, so it is an answered constraint and not
+a question, and adding it would ask the provider to restate its own documentation.
+
+**A CONTACT PAGE WAS FOUND AND NO ADDRESS WAS INVENTED.** A first-party legal page
+carries a printed contact instruction; the address is served through an
+obfuscation mechanism and the retrieval returned a placeholder. That is recorded
+as `FIRST_PARTY_CONTACT_CHANNEL_NOT_ESTABLISHED` beside the page that carries it,
+because a valid question and a valid channel are two different facts and guessing
+an address would fabricate a fact about a provider.
+
+**THE BRIEF'S OWN INSTRUCTION CAUGHT AN ATTRIBUTION ERROR IN THE BRIEF.** It
+assigned the vetted-private-API blocker to one candidate and the thirty-day
+field-removal blocker to another, and told the mission to resolve each from the
+artifact. The artifact assigns them the other way round, and both were pursued
+against the candidate that actually carries them.
+
+**TWO REQUIREMENTS JOIN THE REGISTRY, NOW THIRTEEN**:
+`THE_RETRIEVABLE_FRAME_IS_NOT_THE_MEASURED_FRAME`, and
+`DEFAULT_DATA_SURFACE_MUST_NOT_OVERRIDE_QUALIFIED_EXPOSURE_PATH`, which governs
+implementation where OBSERVATION_ADDRESSABLE_EXPOSURE governs selection. Earlier
+missions' records were **not rewritten**.
+
+24 of 24 first-party retrievals, five of which returned nothing usable and are
+counted anyway. **0 measurement queries, 0 counts, 0 host records, 0 banners, 0
+facets, 0 downloads, 0 trials, 0 purchases, 0 enquiries sent.** 0 canonical
+mutations, 0 sources registered, 0 governance reviews, 0 Claims, 0 Evidence, 0
+reliability values, 0 independence groups, 0 Scores, 0 model calls, 0 embeddings.
+The Mission 1.56 Claim is untouched, the profile is still UNCALIBRATED and
+Problem-Family is still PARKED. Validator probed with **126 deliberate violations
+and 126 caught**, three of which edited the frozen enquiry. 1656 bare-python tests
+run before commit.
+
+New: `docs/data/anchor-operational-closure-baseline-v1.json`,
+`anchor-operational-methodology-v1.json`, `anchor-sampling-frame-review-v1.json`,
+`anchor-vantage-review-v1.json`, `anchor-port-window-review-v1.json`,
+`partner-shadowserver-package-v1.json`, `partner-onyphe-package-v1.json`,
+`partner-leakix-package-v1.json`, `partner-package-completion-v1.json`,
+`anchor-operational-closure-and-partner-packages-v1.json` and their rendered `.md`;
+`infrastructure/scripts/render_operational_closure.py`; 64 tests in
+`packages/inferred-claim-evaluator/python`.
+
+Report: `docs/architecture/mission-1.62-report.md`.
 
 ## 1.94 — 2026-09-05 (Sprint 1 / Mission 1.61)
 
@@ -3879,6 +3995,12 @@ Additionally authoritative:
 - docs/data/partner-documentation-recovery-v1.md (added in 1.94)
 - docs/data/anchor-lineage-and-documentation-closure-v1.md (added in 1.94)
 - docs/data/anchor-technical-lineage-enquiry-v1.md (added in 1.94)
+- docs/data/anchor-operational-methodology-v1.md (added in 1.95)
+- docs/data/anchor-sampling-frame-review-v1.md (added in 1.95)
+- docs/data/anchor-vantage-review-v1.md (added in 1.95)
+- docs/data/anchor-port-window-review-v1.md (added in 1.95)
+- docs/data/partner-package-completion-v1.md (added in 1.95)
+- docs/data/anchor-operational-closure-and-partner-packages-v1.md (added in 1.95)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

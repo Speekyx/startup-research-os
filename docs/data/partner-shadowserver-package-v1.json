@@ -1,0 +1,92 @@
+{
+  "$comment": "Mission 1.62 sections 17 to 33. The individual apparatus package for The Shadowserver Foundation, evaluated under the same contract as the anchor.",
+  "record_version": "1.0.0",
+  "mission": "1.62 — Anchor Operational Closure & Partner Package Completion V1",
+  "recorded_at": "2026-09-05",
+  "apparatus": "The Shadowserver Foundation",
+
+  "documentation_paths_used": [
+    "https://www.shadowserver.org/what-we-do/network-reporting/",
+    "https://github.com/The-Shadowserver-Foundation/api_utils/wiki/API:-Scan",
+    "https://github.com/The-Shadowserver-Foundation/api_utils/wiki/API:-Reports-Query"
+  ],
+
+  "package": {
+    "B1": {
+      "slot": "ACTIVE_MEASUREMENT_PRODUCER",
+      "status": "PASS",
+      "basis": "It states first-party that its data comes from daily internet-wide scans, alongside sinkholes, honeypot sensors, sandboxes, blocklists and other sources.",
+      "note": "That it probes is established. What its list does to lineage is B5's question, not this one."
+    },
+    "B2": {
+      "slot": "OBSERVATION_ADDRESSABLE_EXPOSURE",
+      "status": "PASS",
+      "basis": "Both documented APIs accept a date parameter taking a single date or a range in the form YYYY-MM-DD:YYYY-MM-DD, and the reports API additionally documents relative ranges. The window is expressed in the request.",
+      "temporal_object": "OBSERVATION_PARTITION_BY_WINDOW",
+      "note_recorded_honestly": "This is the cleanest observation-window selector of the three candidates, and it is recorded as a PASS even though the apparatus fails elsewhere. A gate is judged on its own question."
+    },
+    "B3": {
+      "slot": "PROTOCOL_NATIVE_EXPOSURE",
+      "status": "PARTIAL",
+      "classification": "UNKNOWN",
+      "basis": "A banner field is documented among the queryable fields of both APIs, together with protocol-specific raw fields, and port and protocol are filterable.",
+      "missing_fact": "The scan API is documented as returning records from SSL scan data. Whether an SSH identification string is reachable through it, and under which field, is not established.",
+      "why_not_promoted": "A banner field existing in a field list is not proof that the SSH identification string is exposed by the endpoint a general requester can query. Assuming it would be transferring one dataset's field to another."
+    },
+    "B4": {
+      "slot": "FRAME",
+      "status": "FAIL",
+      "basis": "The reports API documentation states that a requester only gets the data on the networks they are responsible for, and that they will not be able to get data on other networks or systems. Access is documented as limited to members of the reports group, and a general requester cannot obtain internet-wide results. The scan API documents that each of its methods requires special authorization.",
+      "why_this_is_a_FAIL_and_not_an_UNKNOWN": "This is a documented, affirmative statement about what the acquisition surface exposes. It is not silence.",
+      "what_it_means_for_the_construct": "The construct counts distinct addresses across the public IPv4 internet. The frame this apparatus exposes to a requester is that requester's own networks. Two requesters retrieve two different populations, so no single proposition about the internet can be witnessed through it."
+    },
+    "B5": {
+      "slot": "LINEAGE",
+      "status": "NOT_ESTABLISHED",
+      "lineage_level": "LEVEL_1",
+      "basis": "The organisation states affirmatively that it performs its own daily internet-wide scans. The list continues with sinkholes, honeypot sensors, sandboxes, blocklists and many other sources, and does not end. The scan API documentation does not specify which data sources feed the scan data.",
+      "why_not_LEVEL_2": "ENUMERATED_EXCEPTIONS_MAKE_A_LINEAGE_CLAIM_CHECKABLE. An affirmative claim with an open remainder cannot be checked against the load-bearing predicate, because a reader cannot tell whether any unnamed source contributes service-presence observations.",
+      "resource_specific_lineage": "NOT_ESTABLISHED. RESOURCE_SPECIFIC_LINEAGE forbids transferring a provider-level statement to one dataset. What generated the records the scan API returns is not documented, and the organisation's overall sourcing statement does not answer it."
+    },
+    "B6": {
+      "slot": "RELIABILITY_REVIEWABILITY",
+      "status": "PARTIAL",
+      "basis": "Report cadence is documented as every twenty-four hours, and field lists and query parameters are published.",
+      "missing_facts": [
+        "sampling",
+        "frame actually attempted",
+        "missingness semantics",
+        "retry behaviour",
+        "vantage"
+      ],
+      "not_pursued_further": "Section 48. A hard permanent FAIL at B4 makes the remaining expensive questions strategically unnecessary. They are recorded as unexamined rather than left blank."
+    }
+  },
+
+  "port_22_relevance": {
+    "finding": "An Accessible SSH report identifying hosts with the SSH service running and accessible on the internet is among the published report types.",
+    "why_it_does_not_rescue_the_package": "That report is delivered through the reports route, and the reports route is scoped to the networks the recipient is responsible for. The construct is not the SSH-responsive hosts on my own networks."
+  },
+
+  "package_completion": {
+    "status": "PACKAGE_COMPLETE",
+    "definition_met": "Every mandatory slot carries an explicit status with a first-party basis or an explicit absence-of-proof reason.",
+    "slots_total": 6,
+    "slots_with_explicit_status": 6,
+    "unread_slots": 0
+  },
+
+  "individual_qualification": {
+    "verdict": "INDIVIDUALLY_NOT_QUALIFIED",
+    "reason": "One hard FAIL at B4. The qualification rule is conjunctive, so a single hard FAIL ends it regardless of how well the other slots read.",
+    "not_a_documentation_gap": "Mission 1.61 left this candidate at a documentation wall. The wall is gone and the answer is a refusal rather than a silence, which is a better outcome than the one it replaced.",
+    "not_a_judgement_on_the_organisation": "It scans the internet daily and distributes remediation data to thousands of vetted subscribers, and states that it does not sell data. Nothing here is a criticism of that. It is a finding about whether one specific construct can be witnessed through the surface it exposes.",
+    "governance_not_invoked": "This is not a licence or terms verdict, and no governance review was created. The finding is epistemic: the exposed population is not the population the proposition is about."
+  },
+
+  "the_reusable_rule_this_paid_for": {
+    "name": "THE_RETRIEVABLE_FRAME_IS_NOT_THE_MEASURED_FRAME",
+    "rule": "An apparatus can measure the whole internet and expose to any given requester only a slice of it. What bounds a Claim is the frame the acquisition surface EXPOSES, never the frame the apparatus MEASURES. Where the exposed slice is defined by who is asking, two requesters retrieve two different populations and no single proposition about the whole can be witnessed through it.",
+    "how_it_differs_from_existing_rules": "FRAME_INSIDE_THE_DEFINITION is about an apparatus measuring share within its own reach. LINEAGE_EXHAUSTIVENESS_IS_NOT_FRAME_EXHAUSTIVENESS separates who produced an observation from which addresses were reached. Neither covers an apparatus whose measured frame is global and whose retrievable frame is per-requester."
+  }
+}

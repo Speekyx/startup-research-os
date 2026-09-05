@@ -1,0 +1,127 @@
+{
+  "$comment": "Mission 1.62 sections 17 to 33 and 42. The individual apparatus package for ONYPHE, evaluated under the same contract as the anchor.",
+  "record_version": "1.0.0",
+  "mission": "1.62 — Anchor Operational Closure & Partner Package Completion V1",
+  "recorded_at": "2026-09-05",
+  "apparatus": "ONYPHE",
+
+  "documentation_paths_used": [
+    "https://search.onyphe.io/docs",
+    "https://search.onyphe.io/docs/data-refresh-rate",
+    "https://search.onyphe.io/docs/general-apis",
+    "https://search.onyphe.io/docs/general-apis/search",
+    "https://search.onyphe.io/docs/data-models/datascan-vulnscan-riskscan",
+    "https://search.onyphe.io/docs/historical-data-availability",
+    "https://search.onyphe.io/docs/write-ups/our-10-commandments-for-ethical-internet-scanning"
+  ],
+
+  "package": {
+    "B1": {
+      "slot": "ACTIVE_MEASUREMENT_PRODUCER",
+      "status": "PASS",
+      "basis": "It states first-party that it scans the entire internet weekly, that it has scanned at internet scale since 2017, and its refresh documentation describes weekly IP scans of a 500-port list and twice-weekly scans of a shorter list, each with a named originating country."
+    },
+    "B2": {
+      "slot": "OBSERVATION_ADDRESSABLE_EXPOSURE",
+      "status": "PARTIAL",
+      "temporal_object": "NOT_ESTABLISHED",
+      "basis": "The search API documentation states that if the requester does not state they want to search historical data, the search defaults to the last thirty days. That implies a pre-retrieval historical selector exists. The datascan model documents a timestamp field.",
+      "the_ambiguity_that_decides_it": "The timestamp field is documented as the moment the data was collected, and in the same sentence as allowing tracking of when a service was LAST OBSERVED. Those are two different temporal objects. If each scan appends a record carrying its own collection time, this is an observation event stream and B2 passes. If the record is maintained and the timestamp advances to the latest sighting, this is a last-seen field on a current-state view and B2 fails THE_TEMPORAL_OBJECT_TEST exactly as the Mission 1.59 apparatus did.",
+      "not_resolved_favourably": "The wording supports both readings and neither was chosen. Resolving an ambiguity in the direction that keeps a candidate alive is what this arc has refused four times.",
+      "missing_fact": "the exact syntax for selecting a historical window before retrieval, and whether a record is appended per scan or maintained per service",
+      "retention": "The scan category carrying service data is documented as retained for seven months."
+    },
+    "B3": {
+      "slot": "PROTOCOL_NATIVE_EXPOSURE",
+      "status": "PASS",
+      "classification": "RAW_IDENTIFICATION_STRING",
+      "basis": "The datascan model documents a data field of text type holding the raw application response received from the scanned service, stored as full-text searchable content up to one megabyte. A separate summary field holds a summarised, normalised representation, and hash variants of the raw field are documented for de-duplication.",
+      "why_this_qualifies": "The predicate is a literal prefix test on the bytes the peer sent before negotiation. A searchable raw application response is the strongest exposure class in the contract, and the model keeps the raw field distinct from the normalised summary, so the predicate need never touch the normalised one.",
+      "resolves_the_mission_1_61_risk_partly": "Mission 1.61 recorded that the raw field's NAME was not established. It is established now. What is still open is whether it survives the documented thirty-day field removal.",
+      "port_and_protocol": "The model documents a port field of integer type as the destination TCP or UDP port, and a transport field of keyword type taking tcp or udp. Both are filterable."
+    },
+    "B4": {
+      "slot": "FRAME",
+      "status": "PARTIAL",
+      "eligible_frame": "stated as the entire internet, scanned weekly",
+      "attempted_frame": "NOT_ESTABLISHED",
+      "basis": "The refresh documentation states weekly IP scanning alternating between two origin countries against the same 500-port list, and a further weekly cycle alternating between two other origin countries against a shorter top-ports list.",
+      "sampling": "SAMPLING_STATUS_UNKNOWN. No statement establishes whether every address in a range is probed or a sample is taken.",
+      "exclusions": "Its published scanning principles require an opt-out email address and state that removal requests are honoured in a timely manner without questions.",
+      "why_exclusions_matter": "Honoured removal requests mean the retained dataset is not a complete record of what was observed, and an excluded range is absent for a reason unrelated to whether a service is running.",
+      "port_22_membership": "NOT_ESTABLISHED. The 500-port and shorter port lists are documented by size and origin, not by membership. A scanned-ports list page exists in the documentation navigation and was not read within budget; it is the cheapest remaining lead for this slot."
+    },
+    "B5": {
+      "slot": "LINEAGE",
+      "status": "PARTIAL",
+      "lineage_level": "LEVEL_1",
+      "basis": "It states affirmatively and repeatedly that it performs its own internet-scale scanning, and its data model attributes each record to a scanner node.",
+      "why_not_LEVEL_2": "No statement excludes an external measurement feed from contributing to service-presence records, and no closed exception clause exists. AFFIRMATIVE_LINEAGE_REQUIRED is not satisfied by an affirmative claim about own scanning alone.",
+      "resource_specific_lineage": "PARTIAL. The datascan category is documented as scan output and its records carry a scanner node identifier, which is stronger than an organisation-level statement, but it is not an affirmative exclusion of other feeds."
+    },
+    "B6": {
+      "slot": "RELIABILITY_REVIEWABILITY",
+      "status": "PARTIAL",
+      "basis": "Scan cadence, retention, the raw response field and its size bound, scanner node identity and country, port and transport fields, and a published set of scanning principles are all documented first-party. What is absent is the operational half a reliability reviewer would need.",
+      "documented": [
+        "scan cadence per category and per origin country",
+        "retention per category",
+        "the raw response field, its type and its size bound",
+        "scanner node identity and country per record",
+        "port and transport fields",
+        "published scanning principles covering probe rate, scanner identification and opt-out"
+      ],
+      "missing_facts": [
+        "sampling within a range",
+        "attempted frame per cycle",
+        "missingness semantics",
+        "retry behaviour at the transport layer",
+        "which fields are removed after thirty days"
+      ]
+    }
+  },
+
+  "vantage": {
+    "verdict": "MULTI_VANTAGE_SEPARABLE",
+    "basis": "The datascan model documents a node sub-object carrying a unique identifier of the scanner node that performed the scan and a country of logical assignment. The refresh documentation names the countries the weekly cycles originate from and states that they alternate week to week.",
+    "why_separable_matters": "An observation can be attributed to one scanner node and country, so a future proposition could fix the vantage rather than leaving it implicit. That is a materially different state from the anchor's, where vantage is not recoverable even from a retrieved record.",
+    "the_complication_recorded": "Because the origin country alternates between weeks, two consecutive one-week windows are measured from different countries, and a two-week window mixes them. A window definition would have to take that into account or fix the node country explicitly.",
+    "does_the_proposition_need_scanner_identity": "POSSIBLY_YES for this apparatus, and unlike the anchor the apparatus makes it expressible. Recorded here rather than folded into reliability."
+  },
+
+  "thirty_day_retention_and_truncation": {
+    "$comment": "Sections 22 and 42. This is the blocker Mission 1.61 recorded against this candidate, resolved as far as first-party documentation allows.",
+    "documented": "The last thirty days of data are retained with all fields and up to sixteen kilobytes of raw application responses. For data older than thirty days some fields are removed and the retained response is truncated to four kilobytes.",
+    "which_fields_are_removed": "UNKNOWN. The documentation says some fields and does not name them.",
+    "does_the_raw_banner_survive": "UNKNOWN",
+    "why_not_inferred": "The four-kilobyte truncation bound is harmless for an SSH identification string, which is tens of bytes, so truncation alone would not end protocol-native exposure. But the unnamed field removal could, and inferring either survival or loss would be reading a favourable or unfavourable answer into a gap.",
+    "does_the_observation_timestamp_survive": "UNKNOWN",
+    "MAX_FULL_FIDELITY_RETRIEVAL_DELAY": "30 days from observation, on the documented full-fidelity window",
+    "does_this_disqualify": false,
+    "why_not": "Section 42. A retention bound constrains execution rather than the apparatus. A future mission can freeze the window, the threshold and the retrieval schedule so that retrieval occurs inside the full-fidelity window. No dates are chosen now.",
+    "the_bound_that_must_be_carried": "A route using this apparatus must retrieve within thirty days of the observation window closing, or must first establish that the raw response field survives beyond it."
+  },
+
+  "package_completion": {
+    "status": "PACKAGE_COMPLETE",
+    "definition_met": "Every mandatory slot carries an explicit status with a first-party basis or an explicit absence-of-proof reason.",
+    "slots_total": 6,
+    "slots_with_explicit_status": 6,
+    "unread_slots": 0
+  },
+
+  "individual_qualification": {
+    "verdict": "INDIVIDUALLY_UNRESOLVED",
+    "reason": "No hard FAIL, and no full set of passes. B1 and B3 pass, and B2, B4, B5 and B6 are partial. The qualification rule is conjunctive, so partial is not pass.",
+    "what_would_resolve_it": [
+      "whether a datascan record is appended per scan or maintained per service, which decides B2 outright",
+      "the exact historical-window selection syntax",
+      "whether port 22 is on the scanned-port list, from the scanned-ports page already located",
+      "which fields are removed after thirty days",
+      "whether any stage samples"
+    ],
+    "epistemic_documentation_status": "SUFFICIENT_TO_PROGRESS. The individual apparatus properties are being established from public first-party documentation without any private API.",
+    "future_access_status": "NOT_ESTABLISHED. Whether a future measurement retrieval requires a paid or gated account was not assessed, no trial was started, and no application was made. This is FUTURE_GOVERNANCE_INPUT and not an epistemic verdict.",
+    "these_two_are_recorded_separately": "Documentation being public says nothing about whether data retrieval is, and conflating them is how a private API gets treated as accessible because its documentation is open."
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "$comment": "Mission 1.62 sections 0, 1, 48 and 49. The precondition, the frozen scope, and the bounded first-party retrieval ledger.",
+  "record_version": "1.0.0",
+  "mission": "1.62 — Anchor Operational Closure & Partner Package Completion V1",
+  "recorded_at": "2026-09-05",
+
+  "repository_precondition": {
+    "mission_1_61_merged": true,
+    "merge_commit": "8f2ad45",
+    "pull_request": "https://github.com/Speekyx/startup-research-os/pull/104",
+    "local_main_equals_origin_main": true,
+    "working_tree_clean_at_start": true,
+    "branch": "sprint-1/mission-1.62",
+    "migration_head": "0035_refusal_provenance",
+    "adr_036": "Accepted",
+    "adr_037": "Accepted",
+    "adr_038": "Accepted",
+    "verified_from_git_not_from_prompt": true
+  },
+
+  "canonical_baseline": {
+    "$comment": "Measured live against the deployment before any work, via a read-only query. Section 0 requires measurement rather than trust in the expected values.",
+    "raw_records": 325,
+    "normalized_records": 325,
+    "signals": 33,
+    "claims": 44,
+    "claim_revisions": 45,
+    "evidence": 58,
+    "inferred_claims": 1,
+    "threshold_registrations": 1,
+    "claim_derivations": 1,
+    "proposition_evaluation_refusals": 0,
+    "reliability_assessments_current": 4,
+    "independence_groups": 0,
+    "evidence_directions": {"SUPPORTS": 57, "CONTRADICTS": 1},
+    "claims_carrying_both_directions": 0,
+    "opportunities": 1,
+    "opportunity_revisions": 1,
+    "opportunity_evidence_links": 7,
+    "registered_sources": 29,
+    "embeddings": 0,
+    "scoring_scores_table_exists": false,
+    "reference_profile": "UNCALIBRATED",
+    "problem_family": "PARKED",
+    "drift_from_mission_1_61": "none"
+  },
+
+  "scope_freeze": {
+    "$comment": "Section 17. The exact four apparatus subjects carried from Missions 1.60 and 1.61. No candidate four.",
+    "anchor": "Netlas",
+    "partners": [
+      "The Shadowserver Foundation",
+      "ONYPHE",
+      "LeakIX"
+    ],
+    "subject_count": 4,
+    "new_candidates_evaluated": 0,
+    "candidate_substitutions": 0,
+    "dropped_apparatus": {
+      "name": "Censys",
+      "status": "DROPPED_FOR_THIS_ROUTE",
+      "retained_as": "NEGATIVE_CONTROL",
+      "reconsidered": false
+    }
+  },
+
+  "brief_attribution_correction": {
+    "$comment": "Sections 21 and 22 each instruct 'resolve exact candidate from artifact'. Doing so found the two blockers attributed to the wrong candidates in the brief, which is why that instruction exists.",
+    "brief_said": {
+      "vetted_private_api_blocker": "ONYPHE",
+      "thirty_day_field_removal_blocker": "LeakIX"
+    },
+    "artifact_says": {
+      "vetted_private_api_blocker": "The Shadowserver Foundation",
+      "thirty_day_field_removal_blocker": "ONYPHE"
+    },
+    "source_artifact": "docs/data/partner-documentation-recovery-v1.json",
+    "resolution": "The artifact governs, as sections 21 and 22 direct. Both blockers were pursued against the candidate that actually carries them.",
+    "why_this_is_recorded": "A mission that silently re-attributed a blocker would leave the next reader unable to tell which candidate was actually investigated."
+  },
+
+  "documentation_ledger": {
+    "$comment": "Section 48. Bounded first-party retrieval across anchor closure, three partner packages and the contact-channel lookup.",
+    "budget_total": 24,
+    "used_total": 24,
+    "used_anchor": 9,
+    "used_shadowserver": 3,
+    "used_onyphe": 8,
+    "used_leakix": 4,
+    "unusable_responses": 5,
+    "unusable_reason": "five requests returned HTTP 404 or a page whose content did not load; each is counted against the budget because it was spent",
+    "requests": [
+      {"n": 1, "subject": "anchor", "url": "https://docs.netlas.io/api-reference/", "sought": "index/date selection parameters, aggregation, retries, vantage fields", "usable": true, "load_bearing": true},
+      {"n": 2, "subject": "anchor", "url": "https://docs.netlas.io/quick-start/private-scanner/", "sought": "scanner fleet and vantage", "usable": false, "load_bearing": false, "note": "HTTP 404"},
+      {"n": 3, "subject": "The Shadowserver Foundation", "url": "https://github.com/The-Shadowserver-Foundation/api_utils/wiki/Scan", "sought": "scan API scope and filters", "usable": false, "load_bearing": false, "note": "wiki index only; the page path is API:-Scan"},
+      {"n": 4, "subject": "ONYPHE", "url": "https://search.onyphe.io/docs/data-refresh-rate", "sought": "scan cadence, coverage, vantage", "usable": true, "load_bearing": true},
+      {"n": 5, "subject": "The Shadowserver Foundation", "url": "https://github.com/The-Shadowserver-Foundation/api_utils/wiki/API:-Scan", "sought": "scan API scope, date filter, banner field, authorisation", "usable": true, "load_bearing": true},
+      {"n": 6, "subject": "ONYPHE", "url": "https://search.onyphe.io/docs/write-ups/our-10-commandments-for-ethical-internet-scanning", "sought": "sampling, opt-out, probe rate, scanner identification", "usable": true, "load_bearing": true},
+      {"n": 7, "subject": "LeakIX", "url": "https://github.com/LeakIX/DocSite/tree/master/content", "sought": "documentation source tree", "usable": true, "load_bearing": false},
+      {"n": 8, "subject": "anchor", "url": "https://docs.netlas.io/api-reference/indices/", "sought": "per-index metadata and port coverage", "usable": false, "load_bearing": false, "note": "HTTP 404"},
+      {"n": 9, "subject": "The Shadowserver Foundation", "url": "https://github.com/The-Shadowserver-Foundation/api_utils/wiki/API:-Reports-Query", "sought": "report scope, SSH report types, authorisation", "usable": true, "load_bearing": true},
+      {"n": 10, "subject": "LeakIX", "url": "https://github.com/LeakIX/DocSite/tree/master/content/docs", "sought": "documentation section paths", "usable": true, "load_bearing": false},
+      {"n": 11, "subject": "ONYPHE", "url": "https://search.onyphe.io/docs/datascan", "sought": "datascan field reference", "usable": false, "load_bearing": false, "note": "HTTP 404"},
+      {"n": 12, "subject": "anchor", "url": "https://netlas.io/", "sought": "published contact route and scanning policy", "usable": true, "load_bearing": true},
+      {"n": 13, "subject": "LeakIX", "url": "https://docs.leakix.net/docs/query/", "sought": "queryable fields and date filtering", "usable": true, "load_bearing": false},
+      {"n": 14, "subject": "ONYPHE", "url": "https://search.onyphe.io/docs/general-apis", "sought": "API endpoint list", "usable": true, "load_bearing": false},
+      {"n": 15, "subject": "anchor", "url": "https://docs.netlas.io/knowledge-base/query-language/", "sought": "port and banner filtering, de-duplication, scan-date filtering", "usable": true, "load_bearing": true},
+      {"n": 16, "subject": "anchor", "url": "https://netlas.io/legal/", "sought": "published contact route", "usable": true, "load_bearing": true},
+      {"n": 17, "subject": "anchor", "url": "https://netlas.io/legal/data-collection-policy/", "sought": "sampling, opt-out, scanner infrastructure", "usable": false, "load_bearing": false, "note": "HTTP 404; the real path uses underscores"},
+      {"n": 18, "subject": "LeakIX", "url": "https://docs.leakix.net/docs/query/fields/", "sought": "field reference and timestamp semantics", "usable": true, "load_bearing": true},
+      {"n": 19, "subject": "ONYPHE", "url": "https://search.onyphe.io/docs/general-apis/search", "sought": "search syntax, date filtering, banner field", "usable": true, "load_bearing": true},
+      {"n": 20, "subject": "ONYPHE", "url": "https://search.onyphe.io/docs/categories/datascan", "sought": "datascan field reference", "usable": false, "load_bearing": false, "note": "HTTP 404"},
+      {"n": 21, "subject": "anchor", "url": "https://netlas.io/legal/", "sought": "exact hrefs of the linked legal documents", "usable": true, "load_bearing": true},
+      {"n": 22, "subject": "anchor", "url": "https://netlas.io/legal/data_collection_policy/", "sought": "sampling, opt-out, scanner infrastructure, banner fidelity", "usable": true, "load_bearing": true},
+      {"n": 23, "subject": "ONYPHE", "url": "https://search.onyphe.io/docs", "sought": "complete documentation navigation with exact hrefs", "usable": true, "load_bearing": false},
+      {"n": 24, "subject": "ONYPHE", "url": "https://search.onyphe.io/docs/data-models/datascan-vulnscan-riskscan", "sought": "raw response field, timestamps, scanner node fields", "usable": true, "load_bearing": true}
+    ]
+  },
+
+  "request_accounting": {
+    "$comment": "Section 49. Every one of the required counters is zero.",
+    "FIRST_PARTY_DOCUMENT_REQUESTS": 24,
+    "SEARCH_NAVIGATION_REQUESTS": 0,
+    "RESEARCH_DATA_REQUESTS": 0,
+    "MEASUREMENT_QUERIES_EXECUTED": 0,
+    "TARGET_COUNTS_FETCHED": 0,
+    "TARGET_HOST_RECORDS_FETCHED": 0,
+    "TARGET_IPS_FETCHED": 0,
+    "TARGET_BANNERS_FETCHED": 0,
+    "FACETS_FETCHED": 0,
+    "DOWNLOADS_OF_MEASUREMENT_DATA": 0,
+    "TRIALS_STARTED": 0,
+    "PURCHASES": 0,
+    "OUTBOUND_ENQUIRIES_SENT": 0,
+    "the_count_is_measurement": "A query returning only a number still returns a measurement value about the target population. The anchor publishes a count endpoint and it was not called.",
+    "the_trial_is_not_free": "A zero-cost trial, demo console or search preview destroys preregistration exactly as a paid one would. Access cost is irrelevant to epistemic contamination.",
+    "incidental_generic_examples": "Documentation pages carry illustrative examples. None was used analytically and none was queried deliberately."
+  },
+
+  "canonical_mutations": {
+    "$comment": "Section 51. Nothing in this mission writes to the canonical layer.",
+    "sources_registered": 0,
+    "governance_reviews_created": 0,
+    "collectors_implemented": 0,
+    "normalizers_implemented": 0,
+    "threshold_registrations_created": 0,
+    "claims_created": 0,
+    "evidence_created": 0,
+    "reliability_assessments_created": 0,
+    "reliability_values_assigned": 0,
+    "independence_groups_created": 0,
+    "scores_created": 0,
+    "opportunity_changes": 0,
+    "mission_1_56_claim_modified": false,
+    "model_calls": 0,
+    "model_cost_usd": 0.0,
+    "embeddings": 0,
+    "enquiry_v1_edited": false,
+    "enquiries_sent": 0
+  }
+}

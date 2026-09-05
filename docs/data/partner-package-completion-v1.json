@@ -1,0 +1,98 @@
+{
+  "$comment": "Mission 1.62 sections 29, 30, 31, 32, 45 and 46. The three individual packages rolled up. No pair analysis, no ranking, no selection.",
+  "record_version": "1.0.0",
+  "mission": "1.62 — Anchor Operational Closure & Partner Package Completion V1",
+  "recorded_at": "2026-09-05",
+
+  "one_contract_for_all_four": {
+    "$comment": "Section 32. The same individual apparatus contract was applied to the anchor and to each partner. No vendor-specific gate was created.",
+    "rule": "Source-specific facts belong in evidence. The qualification rule stays one rule.",
+    "slots": {
+      "B1": "ACTIVE_MEASUREMENT_PRODUCER",
+      "B2": "OBSERVATION_ADDRESSABLE_EXPOSURE",
+      "B3": "PROTOCOL_NATIVE_EXPOSURE",
+      "B4": "FRAME",
+      "B5": "LINEAGE",
+      "B6": "RELIABILITY_REVIEWABILITY"
+    },
+    "conjunctive": true,
+    "partial_is_not_pass": true,
+    "unknown_is_not_pass": true,
+    "one_hard_fail_ends_it": true
+  },
+
+  "packages": [
+    {
+      "apparatus": "LeakIX",
+      "package_status": "PACKAGE_COMPLETE",
+      "individual_status": "INDIVIDUALLY_NOT_QUALIFIED",
+      "slots": {"B1": "NOT_ESTABLISHED", "B2": "FAIL", "B3": "PASS", "B4": "NOT_ESTABLISHED", "B5": "NOT_ESTABLISHED", "B6": "NOT_ESTABLISHED"},
+      "decided_by": "B2, THE_TEMPORAL_OBJECT_TEST. The queryable dates are an indexing date and detection endpoints, not observation events."
+    },
+    {
+      "apparatus": "ONYPHE",
+      "package_status": "PACKAGE_COMPLETE",
+      "individual_status": "INDIVIDUALLY_UNRESOLVED",
+      "slots": {"B1": "PASS", "B2": "PARTIAL", "B3": "PASS", "B4": "PARTIAL", "B5": "PARTIAL", "B6": "PARTIAL"},
+      "decided_by": "No hard FAIL and no full set of passes. The timestamp field's semantics are documented ambiguously between a collection time and a last-observed marker, and that ambiguity decides B2 either way."
+    },
+    {
+      "apparatus": "The Shadowserver Foundation",
+      "package_status": "PACKAGE_COMPLETE",
+      "individual_status": "INDIVIDUALLY_NOT_QUALIFIED",
+      "slots": {"B1": "PASS", "B2": "PASS", "B3": "PARTIAL", "B4": "FAIL", "B5": "NOT_ESTABLISHED", "B6": "PARTIAL"},
+      "decided_by": "B4. The acquisition surface exposes to a requester only the networks that requester is responsible for, which is not the population the construct is about."
+    }
+  ],
+
+  "$ordering_note": "Packages are listed in a stable order that is not a ranking. Section 45 forbids a preference artifact, so they are ordered alphabetically by apparatus name.",
+
+  "tally": {
+    "packages_complete": 3,
+    "packages_of": 3,
+    "individually_qualified": 0,
+    "individually_unresolved": 1,
+    "individually_not_qualified": 2
+  },
+
+  "what_complete_means_and_does_not": {
+    "$comment": "Section 46.",
+    "complete_means": "Every mandatory slot carries an explicit PASS, FAIL, PARTIAL, NOT_ESTABLISHED or NOT_APPLICABLE, with a first-party basis or an explicit absence-of-proof reason naming the documents inspected and the fact sought.",
+    "complete_does_not_mean_qualified": "A complete package may conclude NOT_QUALIFIED. Two did, and that is the mission succeeding rather than failing.",
+    "no_silent_unknown": "No slot was left unread and called complete. Where a hard FAIL made further retrieval strategically unnecessary, the unexamined slots record the documents inspected and the fact sought rather than a blank."
+  },
+
+  "the_shape_of_the_result": {
+    "$comment": "Worth stating, because three complete packages producing no qualified apparatus looks like a null result and is not one.",
+    "the_three_failed_differently": "One is dead on temporal semantics, one on the frame its acquisition surface exposes, and one is alive with four partial slots. Three candidates that all failed at documentation retrieval, as in Mission 1.60, told us nothing about the apparatuses. Three candidates that fail at three different gates tell us about each of them.",
+    "two_failures_are_permanent_and_one_is_not": "A last-seen timestamp and a per-requester frame are properties of what those platforms publish, and no further reading changes either. The remaining candidate's open questions are all answerable from documents or from one enquiry.",
+    "the_recurring_gate": "B2 has now decided three apparatuses across Missions 1.59, 1.60 and 1.62. Observation-addressability is the gate this class of apparatus fails on, and it fails on it for the same reason each time: a maintained current-state view is a good product and the wrong temporal object."
+  },
+
+  "no_pair_work": {
+    "$comment": "Sections 31 and 45. Explicitly not done, so a later reader can see it was not done rather than infer it.",
+    "pair_comparisons_performed": 0,
+    "pairs_ranked": 0,
+    "pairs_selected": 0,
+    "same_frame_evaluated": false,
+    "vantage_compatibility_evaluated": false,
+    "pair_independence_evaluated": false,
+    "shared_measurement_upstream_evaluated": false,
+    "pair_time_contract_evaluated": false,
+    "same_proposition_key_evaluated": false,
+    "tie_break_applied": false,
+    "why": "Mission 1.62 completes individual packages only. Pair gates are Mission 1.63's work, and they are evaluated only between apparatuses that individually qualify.",
+    "no_preference_expressed": "No package is ranked, and none is described as preferable to another. One package reads more completely than the others; that is a fact about documentation and not a verdict, and with zero qualified apparatuses a comparison would be between unfinished packages anyway. The forbidden vocabulary is enforced by the validator rather than recited here, because a sentence listing the words it refuses is a sentence that contains them."
+  },
+
+  "product_relevance": {
+    "$comment": "Section 33. The same bounded product interpretation for every apparatus.",
+    "construct": "externally observable supply or presence of SSH-speaking services in a defined public IPv4 observation frame and window",
+    "$never": "The construct is never any of: an installation count, a customer count, adoption, a user count, market share, revenue or demand. This is a RULE naming what it forbids, which is why it sits under a $-key: a rule may name the vocabulary it refuses and a field may not. testing-strategy.md §23, met again.",
+    "per_apparatus": {
+      "The Shadowserver Foundation": "PRODUCT_RELEVANCE_OR_METRIC_FAIL, because the dataset a requester can retrieve supports a different construct: the SSH-responsive hosts on that requester's own networks.",
+      "ONYPHE": "SUPPORTED. The datascan category exposes raw application responses per address, port and transport, which is the construct.",
+      "LeakIX": "NOT_ESTABLISHED. An SSH banner field exists; whether the index is a general service census or a filtered view of flagged hosts is not documented, and the package failed upstream of the question."
+    }
+  }
+}

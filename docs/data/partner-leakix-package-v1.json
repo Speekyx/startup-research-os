@@ -1,0 +1,93 @@
+{
+  "$comment": "Mission 1.62 sections 17 to 33. The individual apparatus package for LeakIX, evaluated under the same contract as the anchor. Section 20's temporal object test was applied first and it decided the package.",
+  "record_version": "1.0.0",
+  "mission": "1.62 — Anchor Operational Closure & Partner Package Completion V1",
+  "recorded_at": "2026-09-05",
+  "apparatus": "LeakIX",
+
+  "documentation_paths_used": [
+    "https://docs.leakix.net/docs/",
+    "https://docs.leakix.net/docs/query/",
+    "https://docs.leakix.net/docs/query/fields/",
+    "https://github.com/LeakIX/DocSite/tree/master/content/docs"
+  ],
+
+  "package": {
+    "B2": {
+      "slot": "OBSERVATION_ADDRESSABLE_EXPOSURE",
+      "status": "FAIL",
+      "evaluated_first": true,
+      "why_first": "Section 20. THE_TEMPORAL_OBJECT_TEST is applied before the rest of the budget is spent, because an apparatus already dead for this route should not consume the remaining questions.",
+      "temporal_object": "MAINTAINED_CURRENT_STATE_LAST_CHANGE",
+      "basis": "The field reference documents three date fields and no fourth. One is the indexing date. One is the first detection date. One is the last detection date. Date fields are documented as usable in range queries.",
+      "why_this_is_a_FAIL": "None of the three is an observation event time. An indexing date records when the platform wrote the record. A first-detection and a last-detection date are the endpoints of a maintained record's life, which is exactly a last-seen field on a current-state view.",
+      "the_failure_reproduced": "Mission 1.59 dropped an apparatus because a host observed repeatedly without change carried a searchable timestamp from its last CHANGE rather than its last OBSERVATION, so a window filter selected hosts whose record changed during the window rather than hosts observed during it. The same filter expression here selects hosts whose last detection fell inside the window, which excludes every host detected both before and after it. A host present throughout a window is missing from the set.",
+      "why_a_range_query_does_not_rescue_it": "That date fields support range queries establishes that a filter is expressible, not that the thing filtered is an observation. A queryable timestamp with the wrong semantics is the loophole the gate exists to close.",
+      "not_recorded_as_UNKNOWN": "The field semantics are documented affirmatively. This is an established mismatch, not a silence."
+    },
+    "B1": {
+      "slot": "ACTIVE_MEASUREMENT_PRODUCER",
+      "status": "NOT_ESTABLISHED",
+      "lineage_level": "LEVEL_0",
+      "basis": "No document retrieved states that LeakIX generates its observations by probing. The field reference documents an event pipeline field recording the steps used for indexing a result, whose documented example names a certificate transparency stream.",
+      "why_that_example_matters": "A certificate transparency stream is an external published feed rather than an active probe. READING_A_PUBLISHED_VALUE_IS_NOT_MEASURING_IT, from Mission 1.58: several independent log operators carrying one submitted certificate are many copies and not many witnesses.",
+      "what_this_does_and_does_not_establish": "It establishes that at least one documented pipeline step is not active probing. It does NOT establish that service observations are never produced by own scanning, and no such claim is made here.",
+      "LEVEL_0_is_an_absence": "An absence is not a statement in either direction. It is the state Mission 1.57 refused to promote and equally refuses to condemn."
+    },
+    "B3": {
+      "slot": "PROTOCOL_NATIVE_EXPOSURE",
+      "status": "PASS",
+      "classification": "RAW_IDENTIFICATION_STRING",
+      "basis": "The field reference documents an SSH banner field of text type described as the SSH banner, an SSH message-of-the-day field, and a general summary field described as a banner or summary. An address field of IP type, a port field and a transport field are documented and queryable.",
+      "recorded_even_though_the_package_fails": "This slot passes on its own question and is recorded as passing. A gate is judged on its own question, and hiding a pass because the package fails elsewhere would misdescribe what the documentation says.",
+      "the_caution_that_survives": "A field NAMED for SSH is not automatically the bytes the peer sent before negotiation. Nothing documents whether it is the raw identification string or a parsed derivative, so the classification rests on the field's stated description rather than on a transformation policy."
+    },
+    "B4": {
+      "slot": "FRAME",
+      "status": "NOT_ESTABLISHED",
+      "basis": "No document retrieved states which address universe is eligible or attempted, whether scanning is internet-wide, or whether any stage samples.",
+      "not_pursued_further": "Section 48. A hard permanent FAIL at B2 makes the remaining expensive questions strategically unnecessary. This slot is recorded as unexamined rather than left blank.",
+      "documents_inspected": ["https://docs.leakix.net/docs/", "https://docs.leakix.net/docs/query/", "https://docs.leakix.net/docs/query/fields/"],
+      "fact_sought": "eligible and attempted address frame, sampling, exclusions"
+    },
+    "B5": {
+      "slot": "LINEAGE",
+      "status": "NOT_ESTABLISHED",
+      "lineage_level": "LEVEL_0",
+      "basis": "Same as B1. The event pipeline field indicates observations derive from more than one detection mechanism, and the mechanisms are not enumerated.",
+      "open_ended_source_set": "An unenumerated set of pipeline steps is the open-ended shape ENUMERATED_EXCEPTIONS_MAKE_A_LINEAGE_CLAIM_CHECKABLE refuses. There is no closed exception clause to check.",
+      "resource_specific_lineage": "NOT_ESTABLISHED"
+    },
+    "B6": {
+      "slot": "RELIABILITY_REVIEWABILITY",
+      "status": "NOT_ESTABLISHED",
+      "basis": "Field names, types and query syntax are documented. No methodology, cadence, coverage, retry, missingness or vantage documentation was located.",
+      "not_pursued_further": "Section 48, as B4.",
+      "documents_inspected": ["https://docs.leakix.net/docs/", "https://docs.leakix.net/docs/query/", "https://docs.leakix.net/docs/query/fields/"],
+      "fact_sought": "methodology and failure modes sufficient for a later human review"
+    }
+  },
+
+  "scope_concern": {
+    "name": "VULNERABILITY_FRAMED_INDEX",
+    "status": "SUPPORTED_BY_THE_FIELD_VOCABULARY",
+    "basis": "It describes itself as a search engine indexing misconfigurations and vulnerabilities. Its documented field vocabulary is leak-centric: the detection dates are named for leak first and last detection, and a leak severity field carries values such as critical and high.",
+    "why_this_matters": "Mission 1.59 established that a vulnerability-flavoured metric pulls a common vulnerability database into the load-bearing path on both sides, which is a shared upstream for the metric's MEANING even where the scanning is independent.",
+    "not_the_reason_for_the_verdict": "The package fails on B2, which is decided by timestamp semantics and would fail identically for a general service index. This concern is recorded beside the verdict rather than folded into it."
+  },
+
+  "package_completion": {
+    "status": "PACKAGE_COMPLETE",
+    "definition_met": "Every mandatory slot carries an explicit status with a first-party basis or an explicit absence-of-proof reason. Two slots were not pursued after the hard FAIL and each records the documents inspected and the fact sought.",
+    "slots_total": 6,
+    "slots_with_explicit_status": 6,
+    "unread_slots": 0,
+    "no_silent_unknown": true
+  },
+
+  "individual_qualification": {
+    "verdict": "INDIVIDUALLY_NOT_QUALIFIED",
+    "reason": "One hard FAIL at B2 on THE_TEMPORAL_OBJECT_TEST. The qualification rule is conjunctive, and a passing B3 does not offset it.",
+    "the_shape_of_the_failure": "A dataset can be excellent and still be the wrong TEMPORAL OBJECT. This one exposes an SSH banner field, which is the strongest protocol exposure any candidate offers, on a record whose queryable dates are indexing and detection endpoints rather than observation events. A perfect banner with no pre-retrieval observation-window selector fails observation addressability, and section 43 forbids letting one compensate for the other."
+  }
+}

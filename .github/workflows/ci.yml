@@ -421,6 +421,18 @@ jobs:
       - name: Anchor lineage closure matches its decision rules
         run: uv run python infrastructure/scripts/render_anchor_lineage_closure.py --check
 
+      # Mission 1.62. Checks that what bounds a Claim is the frame the acquisition
+      # surface EXPOSES rather than the one the apparatus MEASURES; that a
+      # collector must bind to a non-default observation-addressable surface;
+      # that A7 is never cited as evidence about coverage; that sampling silence
+      # stays UNKNOWN; that an absent record is not a negative; that a distinct
+      # count is not a row count; that a partial is not a pass and a complete
+      # package is not a qualified one; that no pair is compared, ranked or
+      # selected; and that Mission 1.61's frozen enquiry still answers to the
+      # hash it was frozen at. Editing that enquiry turns this red.
+      - name: Operational closure matches its decision rules
+        run: uv run python infrastructure/scripts/render_operational_closure.py --check
+
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
   # Pinned to the same versions as infrastructure/compose.

@@ -1,0 +1,95 @@
+{
+  "$comment": "Mission 1.62 sections 13, 14 and 41. Whether port 22 coverage can be pinned to an observation window, after a second bounded pass.",
+  "record_version": "1.0.0",
+  "mission": "1.62 — Anchor Operational Closure & Partner Package Completion V1",
+  "recorded_at": "2026-09-05",
+  "apparatus": "Netlas",
+
+  "classification_vocabulary": {
+    "PORT_22_CONTINUOUSLY_COVERED": "first-party documentation states port 22 is permanently or continuously scanned, or publishes a per-date coverage record from which continuity can be read",
+    "PORT_22_CONFIGURATION_VERSIONED": "the scan configuration, including the port list, is versioned and the version applying to a given date is recoverable",
+    "PORT_22_WINDOW_COVERAGE_QUERYABLE_AS_METADATA": "the set of ports covered by a given scan is exposed as queryable metadata on that scan",
+    "PORT_22_WINDOW_COVERAGE_NOT_ESTABLISHED": "none of the above is available"
+  },
+
+  "findings": {
+    "current_inclusion": {
+      "status": "ESTABLISHED",
+      "finding": "Port 22 is explicitly listed among the scanned TCP ports on the currently published list of more than one thousand curated ports.",
+      "source": "https://docs.netlas.io/knowledge-base/scanning-technology/",
+      "established_in": "Mission 1.61"
+    },
+    "configuration_versioning": {
+      "status": "NOT_ESTABLISHED",
+      "finding": "The changelog carries dated entries recording that the number of ports in public scans was doubled, and later that it exceeded one thousand. It does not record which individual ports were added on which date.",
+      "source": "https://docs.netlas.io/changelog/",
+      "consequence": "The SIZE of the list is dated. The MEMBERSHIP of the list is not. Port 22's presence on any past date is therefore not reconstructable from the changelog."
+    },
+    "queryable_scan_metadata": {
+      "status": "NOT_ESTABLISHED",
+      "finding": "The API exposes an indices endpoint and a request parameter taking index labels, and the documented example labels are calendar dates. No documentation retrieved describes an index entry carrying the port set, the address ranges or the coverage of that scan.",
+      "documents_inspected": [
+        "https://docs.netlas.io/api-reference/",
+        "https://docs.netlas.io/api-reference/indices/"
+      ],
+      "note": "The dedicated indices page path tried returned HTTP 404. The endpoint is named in the API reference index; its per-entry fields were not established within budget, and this is the single cheapest remaining lead."
+    },
+    "removals": {
+      "status": "NONE_RECORDED",
+      "finding": "The changelog records no removal of any previously scanned port.",
+      "what_this_is": "favourable evidence about direction of travel",
+      "what_this_is_not": "a guarantee, and not a continuity proof. An absence of recorded removals is an absence, and section 41 forbids absence-of-removal reasoning outright."
+    }
+  },
+
+  "verdict": {
+    "current_inclusion_of_port_22": "ESTABLISHED",
+    "window_coverage_of_port_22": "PORT_22_WINDOW_COVERAGE_NOT_ESTABLISHED",
+    "status_word": "PORT_22_WINDOW_COVERAGE_NOT_ESTABLISHED",
+    "these_are_two_answers_and_not_one": "Port 22 is scanned today. The coverage of port 22 during any particular window cannot be established from the published surface. Promoting the first into the second is exactly what section 41 forbids, and reporting only the first would let a windowed count be read as instrument-stable.",
+    "no_absence_reasoning_used": true
+  },
+
+  "how_future_window_coverage_could_be_established": {
+    "$comment": "Section 14. The route needs to determine, BEFORE any measurement is retrieved, that port 22 was included in the scan configuration for the observation window.",
+    "admissible_mechanisms": [
+      {
+        "mechanism": "a documented invariant",
+        "form": "a first-party statement that port 22 is permanently included in the public scan list",
+        "status": "not published",
+        "cost": "one sentence from the provider"
+      },
+      {
+        "mechanism": "per-scan coverage metadata",
+        "form": "the indices endpoint exposing, per index, the port set that scan covered",
+        "status": "not established; the endpoint exists and its per-entry fields were not read",
+        "cost": "one documentation page, and it is the cheapest remaining lead"
+      },
+      {
+        "mechanism": "a versioned port list",
+        "form": "a dated configuration record from which the list applying to a date is recoverable",
+        "status": "not published; the changelog dates size and not membership",
+        "cost": "provider publication"
+      },
+      {
+        "mechanism": "a first-party answer",
+        "form": "the provider confirming continued inclusion, or committing to publish per-scan port coverage",
+        "status": "this is enquiry v1 question 7",
+        "cost": "one enquiry"
+      }
+    ],
+    "no_window_selected": true,
+    "no_query_executed": true,
+    "no_threshold_chosen": true
+  },
+
+  "what_this_costs_the_route": {
+    "does_it_block_a_threshold": false,
+    "why_not": "A threshold registered now would be evaluated over a future window, and the current list contains port 22.",
+    "what_it_costs": "the ability to state, in the Claim's own wording, that the instrument was unchanged across the window",
+    "the_bound_that_must_be_carried": "Any Claim built on this apparatus must either keep its window short enough that a mid-window schedule change is implausible, or state as a limitation that port-schedule stability across the window is not established.",
+    "forward_risk": "LOW_BUT_UNCOMMITTED",
+    "why_low": "Port 22 is among the most fundamental ports on the documented list and every recorded change to that list is an expansion.",
+    "why_uncommitted": "Low risk assessed from direction of travel is not a documented commitment, and section 41 forbids resting on the absence of recorded removals."
+  }
+}
