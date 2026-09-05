@@ -3,7 +3,15 @@ name = "sros-nlp"
 version = "0.1.0"
 description = "Deterministic signal extraction. No model, no embedding, no network."
 requires-python = ">=3.12"
-dependencies = ["sros-contracts", "sros-signal-model"]
+dependencies = [
+    "sros-contracts",
+    "sros-signal-model",
+    "sros-claim-model",
+    # The evaluator is a PURE dependency: contracts and value objects only.
+    # The direction is persistence -> evaluator and never the reverse, so the
+    # evaluator stays importable with no database on its path.
+    "sros-inferred-claim-evaluator",
+]
 
 [build-system]
 requires = ["hatchling"]

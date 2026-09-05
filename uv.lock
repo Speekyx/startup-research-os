@@ -1696,13 +1696,17 @@ name = "sros-nlp"
 version = "0.1.0"
 source = { editable = "services/nlp/python" }
 dependencies = [
+    { name = "sros-claim-model" },
     { name = "sros-contracts" },
+    { name = "sros-inferred-claim-evaluator" },
     { name = "sros-signal-model" },
 ]
 
 [package.metadata]
 requires-dist = [
+    { name = "sros-claim-model", editable = "packages/claim-model/python" },
     { name = "sros-contracts", editable = "packages/contracts/python" },
+    { name = "sros-inferred-claim-evaluator", editable = "packages/inferred-claim-evaluator/python" },
     { name = "sros-signal-model", editable = "packages/signal-model/python" },
 ]
 

@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.87
+Version: 1.88
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-05 (Sprint 1 / Mission 1.54)
+Last amended: 2026-09-05 (Sprint 1 / Mission 1.55)
 
 ---
 
@@ -13,6 +13,71 @@ Last amended: 2026-09-05 (Sprint 1 / Mission 1.54)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.88 — 2026-09-05 (Sprint 1 / Mission 1.55)
+
+**`DETERMINISTIC_EVALUATION_PERSISTENCE_ORCHESTRATION_READY`, with readiness
+reported in two halves rather than collapsed.** One command routes an
+EvaluationOutcome to exactly one of two persistence paths inside the caller's
+transaction: a directional outcome writes Claim, ClaimRevision, derivation and
+Evidence together or not at all, a refusal writes one row and nothing else.
+Foundation ready TRUE, unattended production ready FALSE, and 0 canonical rows
+written.
+
+The target proposition is passed alongside the outcome, and that is a finding
+rather than a signature preference. A refusal carries no proposition key and no
+Claim draft by the evaluator's own contract, because it declines to name a
+proposition it just declined to establish, while migration 0035 requires the key
+and its preimage. The caller supplies the target it already chose: the target is
+an input, not something the evaluation concluded.
+
+The Claim statement is composed from the target and nothing else, and that is
+where the multi-witness architecture is actually decided. `_persist_one` appends
+a revision whenever the statement differs, so a statement naming the witness or
+the measurement would make every additional Signal look like a reformulated
+Claim. Proved: two witnesses reach one Claim, one revision, two Evidence rows and
+two derivations, and a support plus a contradiction reach one Claim with opposite
+Evidence directions.
+
+Idempotency means same identity AND same payload. A matching unique key with a
+different payload is a conflict, not a replay, for the Claim, the derivation and
+the refusal alike. `evaluator_version` is excluded from the derivation comparison
+deliberately: the identity excludes it too, so rebuilding the software is not a
+new derivation, while reaching a different conclusion under the same rule version
+is a finding.
+
+Policy D selected option A: persist the new derivation, leave Evidence untouched,
+return REVIEW_REQUIRED. Rolling the re-evaluation back would discard the finding
+the reviewer is being asked about. Detection is not re-implemented; Mission 1.41's
+`_persist_evidence` already refuses to overwrite a disagreeing relation, and the
+orchestrator turns that finding into a result. The conflict is reconstructible
+from durable rows by an exact join, and no row declares it a conflict, which is
+exactly why unattended readiness is false.
+
+Every rollback is verified through a separate connection, because a read inside
+the aborted transaction sees its own uncommitted work. The deferred evidence
+trigger is forced rather than assumed.
+
+Two deviations are stated rather than buried: the derivation lands after Evidence
+because the canonical Claim API owns its internal ordering, and the aggregator was
+not re-run because the aggregation suite has no database and running it upstream
+would breach the boundary the brief itself sets. Concurrency is untested and its
+behaviour recorded: the loser of a race hits the UNIQUE constraint and rolls back,
+which is safe and not graceful.
+
+0 requests of every kind, 0 model calls, 0 embeddings, every counter unchanged, 0
+canonical INFERRED Claims, 0 production derivation, refusal or threshold rows, no
+migration, evaluator untouched, `validate_claims.py` untouched, profile still
+UNCALIBRATED, Problem-Family still PARKED, validator probed with 71 deliberate
+violations and 71 caught, 1354 bare-python tests before commit and 3308 pytest
+tests after.
+
+New: `services/nlp/python/sros_nlp/inferred_persistence.py`,
+`docs/data/deterministic-evaluation-persistence-orchestration-v1.json` and `.md`,
+one script under `infrastructure/scripts/`, and 35 transactional tests in
+`services/nlp/python`.
+
+Report: `docs/architecture/mission-1.55-report.md`.
 
 ## 1.87 — 2026-09-05 (Sprint 1 / Mission 1.54)
 
@@ -3228,6 +3293,7 @@ Additionally authoritative:
 - docs/data/deterministic-inferred-evaluator-foundation-v1.md (added in 1.85)
 - docs/data/refusal-derivation-binding-design-v1.md (added in 1.86)
 - docs/data/refusal-provenance-schema-v1.md (added in 1.87)
+- docs/data/deterministic-evaluation-persistence-orchestration-v1.md (added in 1.88)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

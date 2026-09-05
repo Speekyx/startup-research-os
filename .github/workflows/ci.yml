@@ -350,6 +350,17 @@ jobs:
       # that explains what it does NOT touch would otherwise fail its own check.
       - name: Refusal provenance schema matches its migration
         run: uv run python infrastructure/scripts/render_refusal_provenance_schema.py --check
+      # Mission 1.55 §69. Renders the persistence-orchestration record and checks
+      # it against the ORCHESTRATOR's source: the routing must name all four
+      # evaluation results and no NEUTRAL, read from the AST because the module
+      # explains the routing in prose too; the module must import no aggregator,
+      # Gateway, acquisition or Opportunity package; the evaluator must still name
+      # neither psycopg nor sros_nlp, which is the dependency direction; the
+      # canonical Claim builder must actually be called; idempotency must compare a
+      # PAYLOAD rather than trust a key, and must NOT compare evaluator_version;
+      # and Policy D must never update, duplicate or delete a standing Evidence row.
+      - name: Persistence orchestration matches the module it describes
+        run: uv run python infrastructure/scripts/render_persistence_orchestration.py --check
 
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
