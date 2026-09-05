@@ -1,0 +1,51 @@
+{
+  "$comment": "Mission 1.66.2 Part J. Pair readiness across all four candidate apparatuses.",
+  "record_version": "3.0.0",
+  "mission": "1.66.2 — ONYPHE Public Documentation Reconciliation & Configuration-Metadata Closure V1",
+  "recorded_at": "2026-09-05",
+
+  "apparatuses": [
+    {"name": "Netlas", "individual": "INDIVIDUALLY_NOT_QUALIFIED", "blocking": ["A8"], "changed": false, "researched_this_mission": false},
+    {"name": "ONYPHE", "individual": "INDIVIDUALLY_UNRESOLVED", "blocking": ["B2", "B4"], "changed": false, "researched_this_mission": true},
+    {"name": "LeakIX", "individual": "INDIVIDUALLY_NOT_QUALIFIED", "blocking": ["B2"], "changed": false, "researched_this_mission": false},
+    {"name": "The Shadowserver Foundation", "individual": "INDIVIDUALLY_NOT_QUALIFIED", "blocking": ["B4"], "changed": false, "researched_this_mission": false}
+  ],
+
+  "qualified_apparatus_count": 0,
+  "pair_analysis_ready": false,
+  "pair_analysis_state": "PAIR_ANALYSIS_NOT_READY",
+  "minimum_required": 2,
+
+  "no_pair_work_was_performed": {
+    "pairs_compared": 0,
+    "pairs_ranked": 0,
+    "pairs_selected": 0,
+    "same_frame_evaluated": false,
+    "vantage_compatibility_evaluated": false,
+    "lineage_independence_evaluated": false,
+    "shared_measurement_upstream_evaluated": false,
+    "same_target_proposition_evaluated": false,
+    "threshold_preregistrability_evaluated": false
+  },
+
+  "the_arc_position": {
+    "$comment": "Stated plainly, because six missions have now ended here.",
+    "target": "two apparatuses whose independent measurements can reach one Claim, so the aggregator stops being algebraically identical to the B-2 pass-through baseline",
+    "distance_from_it": "two qualified apparatuses short of two",
+    "what_has_actually_been_achieved": "Four candidates have complete packages and each fails somewhere different and for a documented reason. That is not qualification, and it is not nothing: Mission 1.60's three candidates all failed at documentation retrieval, which said nothing about any of them.",
+    "what_would_move_it": [
+      "a reviewed first-party answer to the three sent ONYPHE questions, which is asked and outstanding",
+      "the Netlas contact address, which is one string an operator can read off a page",
+      "a fifth candidate apparatus, which is Mission 1.67"
+    ],
+    "what_would_not_move_it": "More public documentation about the four current candidates. This mission spent a full budget establishing that, for ONYPHE, the remaining facts are not published."
+  },
+
+  "measurement_construct_unchanged": {
+    "$comment": "§3. Frozen, and not narrowed to fit a candidate.",
+    "quantity": "the number of distinct public IPv4 addresses from which, during a predefined observation window, TCP port 22 accepted a connection AND the peer sent an identification string beginning with the literal prefix SSH- before protocol negotiation",
+    "authority": "RFC 4253 §4.2",
+    "substituted_with_a_protocol_label": false,
+    "substituted_with_a_vendor_product": false
+  }
+}

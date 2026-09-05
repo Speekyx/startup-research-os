@@ -503,6 +503,23 @@ jobs:
       - name: Dispatch attestation matches its record
         run: uv run python infrastructure/scripts/render_dispatch_attestation.py --check
 
+      # Mission 1.66.2. Twelve first-party ONYPHE documents reconciled against
+      # the three residual questions. Checks that a retrieval summary is never
+      # evidence; that historical retention, "data collected", a latest-first
+      # default sort and an older-result function cannot promote B2, because each
+      # is compatible with both storage models; that a port-set CARDINALITY is
+      # not a MEMBERSHIP and a ctiscan membership is not a datascan fact; that a
+      # configuration documented as having CHANGED does not become
+      # time-addressable by being documented; that the retention sentence names
+      # the truncated field and not the removed ones, so the unnamed ones stay
+      # UNKNOWN in both directions; that the User API is not executed and its
+      # generic port list is not attributed to datascan; that a support address
+      # is cited rather than inferred from spelling; that Mission 1.65 is not
+      # rewritten because a later document was found; and that nothing was sent,
+      # executed, registered or measured.
+      - name: Documentation reconciliation matches its records
+        run: uv run python infrastructure/scripts/render_documentation_reconciliation.py --check
+
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
   # Pinned to the same versions as infrastructure/compose.

@@ -1,0 +1,65 @@
+{
+  "$comment": "Mission 1.66.2 Part C. The User API, reviewed from its documentation and NOT executed.",
+  "record_version": "1.0.0",
+  "mission": "1.66.2 — ONYPHE Public Documentation Reconciliation & Configuration-Metadata Closure V1",
+  "recorded_at": "2026-09-05",
+
+  "endpoint": {
+    "name": "User APIv2",
+    "documented_path": "https://www.onyphe.io/api/v2/user",
+    "documentation_page": "https://search.onyphe.io/docs/general-apis/user",
+    "EXECUTED": false,
+    "execution_attempts": 0,
+    "credentials_read": 0
+  },
+
+  "why_it_was_looked_at_at_all": {
+    "the_appeal": "Its documentation says it returns a list of scanned ports. That is a CONFIGURATION fact rather than a measurement, so it looked like a route to the TCP/22 question that returns no host records, no banners and no counts.",
+    "the_trap_in_that_appeal": "A route that returns no measurement is not thereby a safe route. Avoiding measurement contamination is one property; not exposing a credential is a different one, and the second is not implied by the first."
+  },
+
+  "what_the_documentation_says_it_exposes": {
+    "$comment": "Part C2. Quoted from the page.",
+    "categories": [
+      {"verbatim": "View name, API key, remaining credit count, expiry date", "kind": "LICENCE_AND_CREDENTIAL"},
+      {"description": "user authorizations regarding accessible categories, fields, and functions", "kind": "AUTHORIZATION"},
+      {"description": "which APIs are included in your license", "kind": "AUTHORIZATION"},
+      {"verbatim": "List of scanned ports, both TCP & UDP", "kind": "CONFIGURATION"},
+      {"verbatim": "List of scanned CVEs in vulnscan category", "kind": "CONFIGURATION"}
+    ],
+    "response_envelope_keys": ["count", "error", "max_page", "myip", "page", "page_size", "results", "status", "text", "took", "total"],
+    "it_is_not_pure_configuration_metadata": true,
+    "classification": "SECRET_BEARING_MIXED_METADATA_SURFACE"
+  },
+
+  "the_credential_finding": {
+    "$comment": "Part C3.",
+    "documentation_names_an_api_key_among_what_the_endpoint_lets_you_view": true,
+    "exact_wording": "View name, API key, remaining credit count, expiry date",
+    "what_is_established": "The provider's own description of this endpoint places an API key inside the set of things it shows. That is enough to classify the surface.",
+    "what_is_not_established": "Whether the key is literally present in the JSON payload as opposed to being the credential you authenticate with. The documentation does not settle it, and the distinction is not needed: a surface whose own documentation lists an API key among its contents is not one to call unattended in order to learn a port list.",
+    "verdict": "SECRET_BEARING_DO_NOT_EXECUTE",
+    "the_rule_this_rests_on": "Never print, persist, log, echo, inspect, commit or expose a credential value. An endpoint documented as showing one is not probed to find out whether the documentation was loose.",
+    "no_credential_was_read_to_check": "Determining whether an API key is configured in this environment would itself require reading a credential store, which §43 forbids and which would be a strange way to establish that credentials must not be exposed."
+  },
+
+  "the_configuration_semantic_gap": {
+    "$comment": "Part C4. Even if it were safe, it would not answer the question.",
+    "USER_API_PORT_LIST_RESOURCE_MAPPING": "UNKNOWN",
+    "which_category_the_ports_belong_to": "NOT_DOCUMENTED",
+    "whether_the_list_is_datascan_specific": "NOT_DOCUMENTED",
+    "whether_scanner_region_matters": "NOT_DOCUMENTED",
+    "whether_the_list_is_current_only": "NOT_DOCUMENTED",
+    "whether_it_carries_version_or_date_semantics": "NOT_DOCUMENTED",
+    "why_the_gap_is_larger_than_it_looks": "This mission established from the Data Refresh Rate page that the port set differs BY CATEGORY (datascan 500, ctiscan TOP 100 / TOP 4000, and a separate TOP 25) and BY REGION (US/FR against SG/CN). An undifferentiated list of scanned ports cannot be attributed to any one of those without a mapping the documentation does not provide.",
+    "the_inference_refused": "That a response saying scanned ports means the datascan US/FR 500-port set. It is exactly the transfer Mission 1.63 refused between ctiscan and datascan, arriving through a different door."
+  },
+
+  "verdict": {
+    "ENDPOINT_EXECUTION_SAFETY": "SECRET_BEARING_DO_NOT_EXECUTE",
+    "DATASCAN_CONFIGURATION_RELEVANCE": "UNKNOWN",
+    "both_reasons_are_independent": "Either alone would stop the call. The surface is credential-bearing, AND what it returns cannot be mapped to the resource the question is about. A future mission that solved only one of them would still not have a route.",
+    "what_would_change_it": "First-party documentation stating which category and region the returned port list describes, and a narrower endpoint or field selection that does not carry licence and key material. Neither exists today.",
+    "what_a_future_mission_may_not_do": "Execute this endpoint because a port list would be useful. §52 permits a later mission to evaluate a narrowly operator-authorised call, and only if the fact cannot be obtained from safer public documentation and credential exposure is controlled. Neither condition is met."
+  }
+}
