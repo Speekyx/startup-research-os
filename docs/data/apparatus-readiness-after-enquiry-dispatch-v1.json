@@ -1,0 +1,137 @@
+{
+  "$comment": "Mission 1.64 Part C. Readiness recomputed, the outcome, and the handoff. No pair gate was evaluated.",
+  "record_version": "1.0.0",
+  "mission": "1.64 — Anchor Enquiry Dispatch & ONYPHE Residual Closure V1",
+  "recorded_at": "2026-09-05",
+
+  "primary_outcome": "ANCHOR_CONTACT_CHANNEL_STILL_NOT_ESTABLISHED",
+  "primary_outcome_statement": "The approved enquiry is hash-verified under three hashing boundaries, still current on all seven questions, and unsent, because the one input it needs is an exact first-party address that only a person viewing the published legal page can read. The three candidate documentation targets were completed as the brief permits: two slots are better evidenced, no slot changed, and the candidate remains individually unresolved. Zero apparatuses qualify.",
+
+  "why_this_outcome_and_not_another": {
+    "why_not_A_B_or_C": "All three require the enquiry to have been sent. It was not, and no dispatch was attempted.",
+    "why_not_D": "MANUAL_ANCHOR_ENQUIRY_DISPATCH_REQUIRED is defined for the case where the exact contact channel IS established and no authorised mail sender exists. The channel is not established, so the missing piece is upstream of the mechanism. A dispatch packet is still produced, with the recipient left blank, because it is useful the moment the address arrives.",
+    "why_not_F": "ONYPHE_TEMPORAL_OBJECT_NOT_ADDRESSABLE requires datascan to be ESTABLISHED as maintained last-seen state. It is ambiguous, and four documented statements lean the other way. Recording the unfavourable reading as established would be the same error as recording the favourable one.",
+    "why_not_G": "ONYPHE_DATASCAN_CONFIGURATION_GAP requires the port configuration to be unestablishABLE. It is unpublished, which one question closes.",
+    "why_not_H": "ONYPHE_LOCATION_FIELDS_RETENTION_GAP requires the locating fields not to survive the necessary retrieval contract. Under the conservative thirty-day contract they survive by the provider's own description; the unknown constrains whether a longer window is available.",
+    "why_not_I": "No target measurement, count, host record or banner was retrieved.",
+    "why_E_fits": "Section 45 defines E for the operator not having supplied an exact first-party displayed contact address, and states that the ONYPHE reads may still complete. Both halves describe this mission exactly."
+  },
+
+  "secondary_outcomes": {
+    "ANCHOR_A7": "PASS",
+    "ANCHOR_A8": "ANCHOR_A8_PARTIAL",
+    "ANCHOR_ENQUIRY": "APPROVED_HASH_VERIFIED_STILL_CURRENT_UNSENT",
+    "ANCHOR_ENQUIRY_SUPERSEDED": false,
+    "ENQUIRY_V2_CREATED": false,
+    "CONTACT_CHANNEL": "FIRST_PARTY_CONTACT_CHANNEL_NOT_ESTABLISHED",
+    "DISPATCH_STATUS": "WAITING_FOR_OPERATOR_SUPPLIED_FIRST_PARTY_CONTACT",
+    "ONYPHE_B2": "ONYPHE_B2_PARTIAL",
+    "ONYPHE_B3": "ONYPHE_B3_PASS",
+    "ONYPHE_PORT_22": "ONYPHE_PORT_22_UNKNOWN",
+    "ONYPHE_CONFIGURATION_TIME": "CONFIGURATION_TIME_NOT_ADDRESSABLE",
+    "ONYPHE_ADDRESS_RETENTION": "ADDRESS_UNKNOWN",
+    "ONYPHE_OBSERVATION_TIME_RETENTION": "OBSERVATION_TIME_UNKNOWN",
+    "ONYPHE_VANTAGE_RETENTION": "VANTAGE_FIELDS_UNKNOWN",
+    "ONYPHE_PACKAGE": "INDIVIDUALLY_UNRESOLVED",
+    "QUALIFIED_APPARATUS_COUNT": 0,
+    "PAIR_ANALYSIS": "PAIR_ANALYSIS_NOT_READY"
+  },
+
+  "apparatuses": [
+    {"name": "LeakIX", "individual_status": "INDIVIDUALLY_NOT_QUALIFIED", "binding_failure": "B2, an indexing date and detection endpoints rather than an observation event", "researched_this_mission": false, "changed": false},
+    {"name": "Netlas", "individual_status": "INDIVIDUALLY_NOT_QUALIFIED", "binding_failure": "A8, five load-bearing operational topics unresolved", "researched_this_mission": false, "changed": false},
+    {"name": "ONYPHE", "individual_status": "INDIVIDUALLY_UNRESOLVED", "binding_failure": "B2 and B4", "researched_this_mission": true, "changed": false},
+    {"name": "The Shadowserver Foundation", "individual_status": "INDIVIDUALLY_NOT_QUALIFIED", "binding_failure": "B4, the retrievable frame is limited to networks the requester is responsible for", "researched_this_mission": false, "changed": false}
+  ],
+
+  "$ordering_note": "Alphabetical by apparatus name. The order carries no meaning and expresses no preference.",
+
+  "readiness": {
+    "QUALIFIED_APPARATUS_COUNT": 0,
+    "threshold_for_readiness": 2,
+    "PAIR_ANALYSIS_READY": false,
+    "status_word": "PAIR_ANALYSIS_NOT_READY",
+    "this_is_a_status_not_a_selection": true,
+    "sending_the_enquiry_would_not_have_changed_this": "An anchor gate moves on a received and reviewed answer, never on a dispatch. Even a sent enquiry leaves the count at zero until a reply is read.",
+    "if_the_candidate_had_qualified": "The count would have been one, and pairing would still be unavailable. A qualified apparatus is not paired with an unresolved one."
+  },
+
+  "no_pair_work_was_performed": {
+    "pairs_compared": 0,
+    "pairs_ranked": 0,
+    "pairs_selected": 0,
+    "same_frame_evaluated": false,
+    "same_observation_window_evaluated": false,
+    "vantage_compatibility_evaluated": false,
+    "lineage_independence_evaluated": false,
+    "shared_measurement_upstream_evaluated": false,
+    "same_target_proposition_evaluated": false,
+    "threshold_preregistrability_evaluated": false
+  },
+
+  "the_negative_controls_were_left_alone": {
+    "researched": 0,
+    "rescue_attempted": 0,
+    "why": "Their failures are properties of what those platforms publish, and neither is closed by further reading."
+  },
+
+  "the_shape_this_mission_leaves": {
+    "$comment": "Worth stating, because two apparatuses blocked on unpublished facts is one problem rather than two.",
+    "observation": "Both remaining apparatuses are now blocked on documentation that exists inside the provider and not outside it. The anchor has six such questions and the candidate has three, and every one of the nine is a methodology question that asks for no data.",
+    "consequence": "The instrument for both is the same: a written enquiry to a first-party channel. The anchor's is drafted, approved and waiting on an address. The candidate's is not drafted.",
+    "what_this_is_not": "It is not a finding that either apparatus is unsuitable. Nine unpublished operational facts is a documentation posture, not an apparatus defect."
+  },
+
+  "next_mission_recommendation": {
+    "checkpoint": "STOP_ON_CONTACT_CHANNEL",
+    "the_single_blocking_input": "the exact first-party contact address displayed on the anchor's published legal page",
+    "how_the_operator_supplies_it": "open https://netlas.io/legal/ in a browser, where the obfuscated address renders, and give the exact displayed string",
+    "operative_approval_string": "APPROVE MISSION 1.61 ENQUIRY 310acf288244453cd0a928197386cbf8311ded278e4dcdd22b70412807a049c4",
+    "and_one_decision_beside_it": "whether a second enquiry should be drafted to the candidate carrying its three residual questions, on the same frozen-and-approved pattern",
+    "it_should": [
+      "dispatch the approved anchor enquiry once an exact address exists, through a channel the operator authorises, exactly once",
+      "record any reply as OPERATOR_CORRESPONDENCE evidence and review it in a separate step before any gate moves",
+      "draft a candidate enquiry carrying the three residual questions, frozen and hashed, if the operator wants that route opened"
+    ],
+    "it_must_not": [
+      "send anything to a guessed or inferred address",
+      "send from the operator's account without the operator asking for it",
+      "treat a dispatch as an answer, or an answer as a PASS before review",
+      "resolve the candidate's record-lifecycle ambiguity by querying records",
+      "transfer a configuration fact from one data category to another",
+      "select or rank a pair before two apparatuses individually qualify"
+    ]
+  },
+
+  "stop_condition": {
+    "pair_selected": false,
+    "pair_gates_compared": false,
+    "measurements_retrieved": false,
+    "hosts_retrieved": false,
+    "target_banners_retrieved": false,
+    "target_counts_fetched": false,
+    "observation_window_chosen": false,
+    "threshold_chosen": false,
+    "threshold_registration_created": false,
+    "source_registered": false,
+    "governance_review_performed": false,
+    "purchase_made": false,
+    "trial_started": false,
+    "collector_created": false,
+    "normalizer_created": false,
+    "claim_created": false,
+    "evidence_created": false,
+    "independence_group_created": false,
+    "reliability_assigned": false,
+    "calibration_performed": false,
+    "score_created": false,
+    "opportunity_modified": false,
+    "model_called": false,
+    "embeddings_created": false,
+    "problem_family_unparked": false,
+    "enquiry_sent": false,
+    "enquiry_v1_edited": false,
+    "mission_1_65_started": false,
+    "awaiting": "operator review, and one address"
+  }
+}

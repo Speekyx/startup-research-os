@@ -446,6 +446,19 @@ jobs:
       - name: Documentation closure matches its decision rules
         run: uv run python infrastructure/scripts/render_documentation_closure.py --check
 
+      # Mission 1.64. Recomputes the approved enquiry's hash on every run, so an
+      # edit to the document the operator approved turns this red rather than
+      # leaving an approval beside different bytes. Also checks that nothing is
+      # sent to an address nobody supplied and no mailbox is inferred; that a
+      # dispatch is not an answer and an answer is not a PASS; that an ambiguous
+      # record lifecycle is not resolved in the direction that would qualify the
+      # last surviving candidate; that a configuration fact is not transferred
+      # between data categories; that a field named as truncated is not called
+      # removed and unnamed removed fields are not guessed; and that fewer than
+      # two qualified apparatuses is not pair-ready.
+      - name: Enquiry dispatch matches its decision rules
+        run: uv run python infrastructure/scripts/render_enquiry_dispatch.py --check
+
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
   # Pinned to the same versions as infrastructure/compose.

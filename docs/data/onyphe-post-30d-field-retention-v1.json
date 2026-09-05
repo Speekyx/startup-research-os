@@ -1,0 +1,67 @@
+{
+  "$comment": "Mission 1.64 B5, B6 and B7. Which fields disappear after thirty days, asked against the field documentation itself.",
+  "record_version": "1.0.0",
+  "mission": "1.64 — Anchor Enquiry Dispatch & ONYPHE Residual Closure V1",
+  "recorded_at": "2026-09-05",
+  "apparatus": "ONYPHE",
+
+  "what_is_already_established_and_not_reopened": {
+    "$comment": "Section B5. Carried from Mission 1.63 and not revisited without contradictory evidence.",
+    "verbatim_rule": "For data older than 30 days, we remove some fields as they are less useful, and we truncate data field to 4KB",
+    "the_raw_field_is_truncated_not_removed": true,
+    "why_that_matters": "The sentence names the raw response field as the one TRUNCATED, which places it outside the set REMOVED. A four-kilobyte cap does not touch the beginning of an identification string of tens of bytes, so the prefix predicate survives.",
+    "b3_reopened": false,
+    "contradictory_evidence_found": false
+  },
+
+  "what_this_mission_asked": {
+    "question": "Which OTHER fields disappear after thirty days, and specifically do the fields that LOCATE an observation survive?",
+    "why_those_four": "The address gives identity, the timestamp gives time, and the scanner node and country give vantage. A retained banner with no address is uncountable, and a retained banner with no timestamp cannot be attributed to a window. Those are the fields on which a retrospective retrieval depends.",
+    "where_it_was_asked": "the datascan field documentation, on the reasoning that a per-field retention annotation would live beside the field it governs"
+  },
+
+  "what_was_found": {
+    "source": "https://search.onyphe.io/docs/data-models/datascan-vulnscan-riskscan",
+    "per_field_retention_annotations_exist": false,
+    "finding": "The field documentation gives names, types, categories and descriptions, and marks no field as removed, dropped or unavailable beyond thirty days. The retention rule lives only in the retention page, where the removed fields are described as some fields and never enumerated.",
+    "checked_specifically": ["the address field", "the timestamp field", "the scanner node sub-object", "the port and transport fields"],
+    "result_for_all_four": "no annotation either way"
+  },
+
+  "verdict": {
+    "$comment": "Section B6. Three separate classifications, none guessed.",
+    "ADDRESS": "ADDRESS_UNKNOWN",
+    "OBSERVATION_TIME": "OBSERVATION_TIME_UNKNOWN",
+    "VANTAGE_FIELDS": "VANTAGE_FIELDS_UNKNOWN",
+    "unnamed_removed_fields_inferred": false,
+    "why_not_inferred_present": "It is tempting to reason that a scan archive without addresses or timestamps would be useless, so those must survive. That is an argument from what a sensible provider would do, not from what this provider documents, and it is exactly the kind of reasonableness inference this arc refuses.",
+    "why_not_inferred_absent": "Equally, nothing says they are removed. The phrase is some fields and it enumerates none, so it supports no claim in either direction.",
+    "moved": false,
+    "what_did_move": "Mission 1.63 recorded these as unknown after reading the retention page. This mission looked in the second place such a fact could live, the field documentation itself, and established that it is not there either. The unknown is now searched rather than merely unresolved."
+  },
+
+  "full_fidelity_bound": {
+    "$comment": "Section B7. Unchanged and carried.",
+    "MAX_FULL_FIDELITY_RETRIEVAL_DELAY": "30 days from observation",
+    "what_full_fidelity_means": "all fields retained, and raw application responses up to sixteen kilobytes",
+    "MAX_PREDICATE_SUFFICIENT_RETRIEVAL_DELAY": "NOT_ESTABLISHED",
+    "why": "It would be seven months, the documented datascan retention, if the address and the observation timestamp survive the field removal. The truncated raw field is sufficient for the predicate; the fields that locate it are not established as surviving.",
+    "the_conservative_contract": "Retrieve within thirty days of the observation window closing. That needs no further documentation and is the deadline a future acquisition should be planned against.",
+    "finite_retention_is_a_scheduling_constraint": true,
+    "no_observation_dates_chosen": true,
+    "no_records_fetched": true
+  },
+
+  "is_this_a_location_fields_retention_gap_outcome": {
+    "candidate_outcome": "ONYPHE_LOCATION_FIELDS_RETENTION_GAP",
+    "selected": false,
+    "why_not": "That outcome is defined for location fields that DO NOT survive the necessary retrieval contract. Under the conservative contract, retrieval happens inside the thirty-day full-fidelity window where all fields are retained by the provider's own description, so the fields survive the contract that would actually be used. The unknown constrains whether a LONGER window is available, not whether the route is possible.",
+    "what_would_make_it_that_outcome": "a first-party statement that the address or the observation timestamp is among the removed fields, which would cap retrospective use at thirty days as a hard bound rather than a chosen one"
+  },
+
+  "what_would_close_it": {
+    "by_reading": "a retention page that enumerates the removed fields, if one exists at a path not yet located",
+    "by_asking": "which fields are removed after thirty days, and whether the address, the observation timestamp and the scanner node fields are among them",
+    "cost_if_asked": "one question in a written enquiry"
+  }
+}

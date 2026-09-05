@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.96
+Version: 1.97
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-05 (Sprint 1 / Mission 1.63)
+Last amended: 2026-09-05 (Sprint 1 / Mission 1.64)
 
 ---
 
@@ -13,6 +13,110 @@ Last amended: 2026-09-05 (Sprint 1 / Mission 1.63)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.97 — 2026-09-05 (Sprint 1 / Mission 1.64)
+
+**`ANCHOR_CONTACT_CHANNEL_STILL_NOT_ESTABLISHED`.** The mission had an approved
+message, a hash that verifies under every plausible boundary, and a mail-capable
+connector in the environment. **It sent nothing**, because the one input it needs
+is a string only a person reading a page can supply.
+
+**THE APPROVAL NAMES A DOCUMENT AND NOT A RECIPIENT, WHICH IS WHY IT HAS
+SURVIVED THREE MISSIONS OF WAITING.** The frozen enquiry records its recipient as
+TO_BE_SUPPLIED_BY_OPERATOR, so the address travels in a dispatch packet beside the
+document rather than inside it. Writing a real address into the body would change
+its bytes and void the approval, and the design that avoids that was made in
+Mission 1.61 before anyone knew the address would be hard to get.
+
+**THE HASHING BOUNDARY IS DOCUMENTED RATHER THAN ASSUMED.** The digest was
+recomputed over the raw bytes as stored, over a UTF-8 decode and re-encode, and
+over a CRLF-to-LF normalisation. All three agree, because the file is LF-only.
+That is worth recording rather than assuming: on a Windows working tree a line
+ending rewrite would have split them, and a mission that tested one boundary would
+not know which one the approval named. The document also survives regeneration by
+its own renderer byte for byte, which two CI gates now enforce together.
+
+**THREE REASONS NOT TO SEND, AND THE MISSION RECORDS ALL THREE.** There is no
+verified recipient. Sending mail from the operator's own account is an outward
+action on their behalf, and an approval of TEXT is not an approval of a CHANNEL.
+And the brief permits only an already-authorised outbound mechanism, which a
+connector merely being present in the environment is not. Any one of the three
+would have been sufficient; the record states them in order so a later mission
+knows which one to clear first.
+
+**NO MAILBOX WAS GUESSED AND THE OBFUSCATION WAS NOT DECODED.** The address is
+published for people to read, and a person reading it is the route the publisher
+intended. Defeating an anti-scraping mechanism to obtain it would be
+circumvention, and a guessed mailbox would put an unapproved recipient beside an
+approved message.
+
+**THE THREE CANDIDATE READS COMPLETED AND NO SLOT MOVED.** The record-lifecycle
+question gained four converging documented statements — time-range functions
+described as querying *data collected some hours ago*, a default sort where *latest
+result is displayed first on output*, up to a hundred results per category per
+asset inside thirty days, and an explicit split between a recent-only surface and
+a historical one — **and none of them states the model**. Every one is fully
+explained by one document per service per port with no repetition over time. B2
+stays PARTIAL, and the residual narrowed to a single named case: a service
+observed during a window AND again afterwards, which an append store returns for
+that window and a maintained store does not.
+
+**THE PORT QUESTION IS NOW AN ESTABLISHED GAP RATHER THAN A SUSPECTED ONE.** The
+published scanned-port list was asked directly for every category section it
+carries and it carries exactly one, for a category that is not the relevant one.
+The datascan set is documented by size and cadence and never by membership.
+
+**THE RETENTION QUESTION WAS ASKED IN THE SECOND PLACE IT COULD LIVE.** The field
+documentation carries no per-field retention annotation at all, so whether the
+address, the observation timestamp and the scanner node fields survive stays
+UNKNOWN — and was not guessed in either direction. Reasoning that a scan archive
+without addresses would be useless, so they must survive, is an argument from what
+a sensible provider would do rather than from what this one documents.
+
+**THE PROBE FOUND A REAL GAP IN THIS MISSION'S OWN VALIDATOR.** Marking the frozen
+enquiry as sent escaped: the validator checked the dispatch record's send state
+and never the frozen document's own delivery fields, which Mission 1.63's
+validator had checked and this one dropped. A hash guards the body and says
+nothing about the fields beside it. Repaired, and two further frozen-document cases
+added. **A second probe case was itself defective**: it substituted a literal that
+does not appear in the approved body, so it mutated nothing and reported an escape
+from a gate that was working. A probe case that changes nothing tests nothing.
+
+**BOTH REMAINING APPARATUSES ARE NOW BLOCKED ON THE SAME KIND OF THING.** The
+anchor has six unpublished operational questions and the candidate has three, and
+every one of the nine is a methodology question asking for no data. That is one
+instrument asked twice rather than two different problems. The candidate's three
+are recorded as questions rather than as gaps, because that is the shape they are
+now in.
+
+Registry unchanged at 14. The rule this mission demonstrates — that an approval
+names a document and a recipient must live outside the hashed range — is a
+property of approval artifacts rather than of measurement apparatuses, and the
+requirement registry is the apparatus registry.
+
+7 first-party retrievals across three targets. **0 measurement queries, 0 counts,
+0 host records, 0 banners, 0 facets, 0 downloads, 0 trials, 0 purchases, 0
+enquiries sent, 0 credentials written.** 0 canonical mutations, 0 sources
+registered, 0 governance reviews, 0 Claims, 0 Evidence, 0 reliability values, 0
+independence groups, 0 Scores, 0 model calls, 0 embeddings. The Mission 1.56 Claim
+is untouched, the profile is still UNCALIBRATED and Problem-Family is still
+PARKED. **Qualified apparatuses 0 of 4, so `PAIR_ANALYSIS_NOT_READY`**, and no
+pair gate was evaluated. Validator probed with **98 deliberate violations and 98
+caught**, three of which edited the approved document. 1769 bare-python tests run
+before commit.
+
+New: `docs/data/mission-1.64-baseline-v1.json`,
+`anchor-enquiry-dispatch-review-v1.json`,
+`onyphe-datascan-record-lifecycle-v1.json`,
+`onyphe-datascan-port-configuration-v1.json`,
+`onyphe-post-30d-field-retention-v1.json`,
+`onyphe-package-final-recompute-v1.json`,
+`apparatus-readiness-after-enquiry-dispatch-v1.json` and their rendered `.md`;
+`anchor-enquiry-manual-dispatch-packet-v1.md`, generated from the frozen enquiry
+rather than retyped; `infrastructure/scripts/render_enquiry_dispatch.py`; 52 tests
+in `packages/inferred-claim-evaluator/python`.
+
+Report: `docs/architecture/mission-1.64-report.md`.
 
 ## 1.96 — 2026-09-05 (Sprint 1 / Mission 1.63)
 
@@ -4124,6 +4228,13 @@ Additionally authoritative:
 - docs/data/onyphe-package-recomputed-v1.md (added in 1.96)
 - docs/data/qualified-apparatus-readiness-v1.md (added in 1.96)
 - docs/data/mission-1.61-enquiry-reassessment-v1.md (added in 1.96)
+- docs/data/anchor-enquiry-dispatch-review-v1.md (added in 1.97)
+- docs/data/onyphe-datascan-record-lifecycle-v1.md (added in 1.97)
+- docs/data/onyphe-datascan-port-configuration-v1.md (added in 1.97)
+- docs/data/onyphe-post-30d-field-retention-v1.md (added in 1.97)
+- docs/data/onyphe-package-final-recompute-v1.md (added in 1.97)
+- docs/data/apparatus-readiness-after-enquiry-dispatch-v1.md (added in 1.97)
+- docs/data/anchor-enquiry-manual-dispatch-packet-v1.md (added in 1.97)
 - Accepted ADRs in docs/architecture/adr/
 
 No implementation may silently contradict them.

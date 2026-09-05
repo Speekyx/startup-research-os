@@ -1,0 +1,109 @@
+{
+  "$comment": "Mission 1.64 B8. Every mandatory individual gate recomputed after the three targeted reads. Not ranked, not compared to the anchor.",
+  "record_version": "1.0.0",
+  "mission": "1.64 — Anchor Enquiry Dispatch & ONYPHE Residual Closure V1",
+  "recorded_at": "2026-09-05",
+  "apparatus": "ONYPHE",
+
+  "package": {
+    "B1": {
+      "slot": "ACTIVE_MEASUREMENT_PRODUCER",
+      "before": "PASS",
+      "after": "PASS",
+      "changed": false,
+      "basis": "First-party statements of weekly internet-scale scanning since 2017, with cycles described by cadence and named origin countries.",
+      "binding_blocker": false
+    },
+    "B2": {
+      "slot": "OBSERVATION_ADDRESSABLE_EXPOSURE",
+      "before": "PARTIAL",
+      "after": "PARTIAL",
+      "changed": false,
+      "basis": "Time-range functions described as querying data collected some period ago, a default sort placing the latest result first, up to a hundred results per category per asset within thirty days, and an explicit split between a recent-only surface and a historical one. Four documented statements, all consistent with an append model and none stating one.",
+      "binding_blocker": true,
+      "record_lifecycle": "AMBIGUOUS",
+      "the_residual": "whether a service observed during a window and again afterwards remains selectable for that window",
+      "what_improved": "The evidence went from one self-contradicting timestamp definition to four converging documented statements, and the residual narrowed from the whole question to one named case."
+    },
+    "B3": {
+      "slot": "PROTOCOL_NATIVE_EXPOSURE",
+      "before": "PASS",
+      "after": "PASS",
+      "changed": false,
+      "classification": "RAW_IDENTIFICATION_STRING",
+      "basis": "A raw application response field, full-text searchable, kept distinct from a normalised summary, and named in the retention rule as truncated rather than removed.",
+      "binding_blocker": false,
+      "reopened": false
+    },
+    "B4": {
+      "slot": "FRAME",
+      "before": "PARTIAL",
+      "after": "PARTIAL",
+      "changed": false,
+      "basis": "The eligible frame is stated as the entire internet scanned weekly. The attempted frame is not established, sampling is not stated, removal requests are honoured so the retained set is not a complete record of what was observed, and the datascan port set is published by size and cadence and never by membership.",
+      "binding_blocker": true,
+      "what_improved": "Port-22 membership moved from suspected-gap to established-gap: the published port list carries exactly one category section and it is not the relevant one. Configuration time-addressability is now explicitly NOT_ADDRESSABLE rather than unasked."
+    },
+    "B5": {
+      "slot": "LINEAGE",
+      "before": "PARTIAL",
+      "after": "PARTIAL",
+      "changed": false,
+      "lineage_level": "LEVEL_1",
+      "basis": "Affirmative statements of own scanning and a scanner node identifier per record, with no closed exception clause excluding an external measurement feed.",
+      "binding_blocker": false
+    },
+    "B6": {
+      "slot": "RELIABILITY_REVIEWABILITY",
+      "before": "PARTIAL",
+      "after": "PARTIAL",
+      "changed": false,
+      "basis": "Cadence, retention, the raw field and its bounds, scanner node identity and country, port and transport fields, published scanning principles, and the thirty-day retention rule are documented. The identity of the removed fields is not, in either of the two places it could live.",
+      "binding_blocker": false,
+      "missing_facts": [
+        "sampling within a range",
+        "the attempted frame per cycle",
+        "missingness semantics",
+        "transport-layer retry behaviour",
+        "which fields are removed after thirty days"
+      ]
+    }
+  },
+
+  "slots_changed": 0,
+  "slots_better_evidenced": 2,
+  "which_better_evidenced": ["B2", "B4"],
+
+  "individual_qualification": {
+    "verdict": "INDIVIDUALLY_UNRESOLVED",
+    "before": "INDIVIDUALLY_UNRESOLVED",
+    "changed": false,
+    "binding_blockers": ["B2", "B4"],
+    "reason": "Three slots pass and three are partial. Qualification is conjunctive, so partial is not pass. No hard FAIL exists, so the apparatus is not disqualified either.",
+    "not_ranked": true,
+    "not_compared_to_the_anchor": true,
+    "why_three_missions_have_not_moved_it": "Each of the three residual questions is small, precise, and unpublished. Missions 1.62, 1.63 and 1.64 have between them read the getting-started page, the data model, the query language, the search, simple and summary APIs, the refresh documentation, the retention documentation and the scanned-port list. The public surface for these three questions is exhausted in the same way the anchor's six were.",
+    "the_shape_this_produces": "Both remaining apparatuses are now blocked on documentation that exists inside the provider and not outside it. That is one instrument, asked twice, rather than two different problems."
+  },
+
+  "the_three_residual_questions": {
+    "$comment": "Written as questions, because they are now enquiry-shaped rather than reading-shaped.",
+    "questions": [
+      "Does each scan create a new document, or is a service document updated in place as later scans observe it?",
+      "What is the membership of the documented datascan port set, and is TCP/22 in it?",
+      "Which fields are removed for data older than thirty days, and are the address, the observation timestamp and the scanner node fields among them?"
+    ],
+    "count": 3,
+    "all_are_methodology_not_data": true,
+    "none_asks_for_a_measurement": true,
+    "an_enquiry_was_not_drafted_this_mission": true,
+    "why_not": "Drafting a second enquiry is not in this mission's scope, and the first one is still undispatched for want of a recipient. Producing a second frozen document to sit beside an unsent one would add a hash and no progress."
+  },
+
+  "epistemic_and_access_recorded_separately": {
+    "EPISTEMIC_DOCUMENTATION_STATUS": "PUBLIC_SURFACE_EXHAUSTED_FOR_THE_THREE_RESIDUALS. Everything established came from public first-party documentation with no account and no private API.",
+    "FUTURE_ACCESS_STATUS": "NOT_ESTABLISHED. Whether a future retrieval needs a paid or gated tier was not assessed; the retention documentation mentions licence-dependent historical depth, which is FUTURE_GOVERNANCE_INPUT and nothing more.",
+    "no_trial_started": true,
+    "no_application_made": true
+  }
+}

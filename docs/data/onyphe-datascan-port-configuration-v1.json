@@ -1,0 +1,65 @@
+{
+  "$comment": "Mission 1.64 B3 and B4. The datascan port set, sought directly, and found to be unpublished.",
+  "record_version": "1.0.0",
+  "mission": "1.64 — Anchor Enquiry Dispatch & ONYPHE Residual Closure V1",
+  "recorded_at": "2026-09-05",
+  "apparatus": "ONYPHE",
+
+  "the_question": {
+    "asked": "What is the first-party definition of the datascan port set, and is TCP/22 in it?",
+    "why_the_ctiscan_list_does_not_answer_it": "Mission 1.63 found the published scanned-port list headed for the ctiscan category. The construct's protocol-native evidence lives in datascan. The two are different resources with different documented retention, and a configuration fact published for one does not establish it for the other."
+  },
+
+  "what_was_found": {
+    "page": "https://search.onyphe.io/docs/dorkpedia/scanned-ports-list",
+    "category_sections_on_the_page": 1,
+    "the_only_section": "TCP ports - ctiscan category (5,054 ports)",
+    "a_datascan_section_exists": false,
+    "port_22_in_the_ctiscan_section": true,
+    "how_it_is_written_there": "category:ctiscan tcp.dest:22 app.transport:tcp",
+    "what_the_refresh_documentation_says_about_datascan": "weekly IP scanning against a 500-port list from two named origin countries, and a further weekly cycle against a shorter top-ports list from two others",
+    "is_the_500_port_membership_published": false,
+    "is_the_top_ports_membership_published": false,
+    "conclusion": "The datascan port set is described by SIZE and by CADENCE and never by MEMBERSHIP."
+  },
+
+  "no_category_transfer_was_performed": {
+    "$comment": "Section B4.",
+    "the_forbidden_inference": "port 22 is in the ctiscan set, therefore port 22 is in the datascan set",
+    "used": false,
+    "why_it_is_forbidden": "Configuration facts are resource-specific. One provider operating two scan products does not make two resource contracts equivalent, and the two here differ in port-set size, cadence, origin countries and retention.",
+    "the_symmetric_refusal": "Neither was the reverse inferred. Nothing says datascan excludes port 22, and asserting exclusion from the absence of a published list would be the same error pointing the other way."
+  },
+
+  "verdict": {
+    "membership": "PORT_22_DATASCAN_STATUS_UNKNOWN",
+    "status_word": "ONYPHE_PORT_22_UNKNOWN",
+    "previous": "PORT_22_STATUS_UNKNOWN",
+    "moved": false,
+    "what_did_move": "Mission 1.63 inferred the gap from a section heading. This mission asked the page directly for every category section it carries and confirmed there is exactly one. The gap is now established rather than suspected.",
+    "configuration_time_addressability": "CONFIGURATION_TIME_NOT_ADDRESSABLE",
+    "why": "The published list carries no date stamp, no version number and no scan-configuration identifier, and no per-scan coverage metadata is documented for any category. Even the one published set is a current reference that binds no window.",
+    "the_requirement_this_engages": {
+      "name": "APPARATUS_CONFIGURATION_MUST_BE_TIME_ADDRESSABLE",
+      "from": "Mission 1.63",
+      "how_it_applies": "A load-bearing scan-configuration fact must be attributable to the observation period the measurement comes from, before retrieval. Here the fact is not attributable to any period, and for the relevant category it is not published at all.",
+      "second_apparatus_confirmed": "This is the second apparatus to fail the requirement, which is what the rule was added on."
+    },
+    "current_membership_is_not_future_window_membership": "Carried forward unchanged. Even had a datascan list been published, a current list would establish what is true today and bind no window."
+  },
+
+  "is_this_a_configuration_gap_outcome": {
+    "candidate_outcome": "ONYPHE_DATASCAN_CONFIGURATION_GAP",
+    "selected": false,
+    "why_not": "That outcome is defined for a load-bearing port configuration that CANNOT be established. What is established here is that it is not PUBLISHED, which is a different thing: the provider knows its own port set, and one question closes it. Recording an unpublished fact as an unestablishable one would overstate the blocker, and this arc distinguishes those two states in every mission since 1.60.",
+    "what_would_make_it_that_outcome": "a first-party statement that the port set is not disclosed, or a refusal to state it"
+  },
+
+  "what_would_close_it": {
+    "by_reading": "a published port list for the datascan category, if one exists at a path not yet located",
+    "by_asking": "the membership of the documented 500-port set, and whether TCP/22 is in it",
+    "cost_if_asked": "one question in a written enquiry",
+    "no_window_selected": true,
+    "no_query_executed": true
+  }
+}
