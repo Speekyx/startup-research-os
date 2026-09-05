@@ -1,0 +1,153 @@
+{
+  "$comment": "Mission 1.63 sections 0, 1, 35 and 36. The precondition, the frozen two-apparatus scope, and the narrow retrieval ledger.",
+  "record_version": "1.0.0",
+  "mission": "1.63 — Anchor & ONYPHE Documentation Closure V1",
+  "recorded_at": "2026-09-05",
+
+  "repository_precondition": {
+    "mission_1_62_merged": true,
+    "merge_commit": "d08a765",
+    "pull_request": "https://github.com/Speekyx/startup-research-os/pull/105",
+    "local_main_equals_origin_main": true,
+    "working_tree_clean_at_start": true,
+    "branch": "sprint-1/mission-1.63",
+    "migration_head": "0035_refusal_provenance",
+    "verified_from_git_not_from_prompt": true
+  },
+
+  "canonical_baseline": {
+    "$comment": "Measured live, read-only, before any work.",
+    "raw_records": 325,
+    "normalized_records": 325,
+    "signals": 33,
+    "claims": 44,
+    "claim_revisions": 45,
+    "evidence": 58,
+    "inferred_claims": 1,
+    "threshold_registrations": 1,
+    "claim_derivations": 1,
+    "proposition_evaluation_refusals": 0,
+    "reliability_assessments_current": 4,
+    "independence_groups": 0,
+    "evidence_directions": {"SUPPORTS": 57, "CONTRADICTS": 1},
+    "claims_carrying_both_directions": 0,
+    "opportunities": 1,
+    "opportunity_revisions": 1,
+    "opportunity_evidence_links": 7,
+    "registered_sources": 29,
+    "embeddings": 0,
+    "scoring_scores_table_exists": false,
+    "reference_profile": "UNCALIBRATED",
+    "problem_family": "PARKED",
+    "drift_from_mission_1_62": "none"
+  },
+
+  "frozen_scope": {
+    "$comment": "Section 1. Two apparatuses may be investigated. Two are frozen negative controls.",
+    "investigated": ["Netlas", "ONYPHE"],
+    "frozen_negative_controls": [
+      {
+        "name": "The Shadowserver Foundation",
+        "carried_status": "PACKAGE_COMPLETE",
+        "carried_verdict": "INDIVIDUALLY_NOT_QUALIFIED",
+        "binding_failure": "B4, the retrievable frame is limited to networks the requester is responsible for",
+        "researched_this_mission": false,
+        "rescue_attempted": false
+      },
+      {
+        "name": "LeakIX",
+        "carried_status": "PACKAGE_COMPLETE",
+        "carried_verdict": "INDIVIDUALLY_NOT_QUALIFIED",
+        "binding_failure": "B2, an indexing date and detection endpoints rather than an observation event",
+        "researched_this_mission": false,
+        "rescue_attempted": false
+      }
+    ],
+    "new_candidates_searched": 0,
+    "pair_selection_allowed": false,
+    "why_pair_selection_is_not_allowed": "No apparatus individually qualifies, and pair gates are evaluated only between apparatuses that do."
+  },
+
+  "the_four_targets": {
+    "$comment": "Section 35. The entire research scope. Not broadened.",
+    "targets": [
+      {"n": 1, "subject": "Netlas", "question": "does the indices surface let a future operator establish, before retrieval, that port 22 was in the scan configuration for a window?"},
+      {"n": 2, "subject": "ONYPHE", "question": "is a datascan record an observation event per scan, or one maintained service record updated by later scans?"},
+      {"n": 3, "subject": "ONYPHE", "question": "is TCP/22 in the scanned-port set of the relevant scan apparatus?"},
+      {"n": 4, "subject": "ONYPHE", "question": "which fields are removed after thirty days, and does protocol-native SSH evidence survive?"}
+    ],
+    "targets_attempted": 4,
+    "targets_fully_resolved": 1,
+    "targets_partially_resolved": 2,
+    "targets_unresolved": 1
+  },
+
+  "documentation_ledger": {
+    "budget": 8,
+    "used": 7,
+    "requests": [
+      {"n": 1, "subject": "ONYPHE", "target": 2, "url": "https://search.onyphe.io/docs/data-models/datascan-vulnscan-riskscan", "sought": "record creation versus update, timestamp semantics, scan identifier fields", "usable": true, "resolved_the_target": false},
+      {"n": 2, "subject": "ONYPHE", "target": 3, "url": "https://search.onyphe.io/docs/dorkpedia/scanned-ports-list", "sought": "TCP/22 membership and its temporal binding", "usable": true, "resolved_the_target": false},
+      {"n": 3, "subject": "ONYPHE", "target": 4, "url": "https://search.onyphe.io/docs/historical-data-availability", "sought": "the exact thirty-day retention rule and which fields are removed", "usable": true, "resolved_the_target": true},
+      {"n": 4, "subject": "Netlas", "target": 1, "url": "https://docs.netlas.io/api-reference/", "sought": "the exact indices endpoint path and its response schema", "usable": true, "resolved_the_target": false},
+      {"n": 5, "subject": "Netlas", "target": 1, "url": "https://docs.netlas.io/api-reference/#tag/Indices/operation/getIndices", "sought": "the indices response schema at its own anchor", "usable": false, "resolved_the_target": false, "note": "the rendered page truncates before the schema"},
+      {"n": 6, "subject": "ONYPHE", "target": 2, "url": "https://search.onyphe.io/docs/onyphe-query-language", "sought": "date-filter syntax and what the filter selects", "usable": true, "resolved_the_target": false, "note": "returned a characterisation that the verbatim re-read refuted"},
+      {"n": 7, "subject": "ONYPHE", "target": 2, "url": "https://search.onyphe.io/docs/onyphe-query-language", "sought": "verbatim confirmation of the filter-semantics sentence", "usable": true, "resolved_the_target": false, "note": "the sentence does not exist on the page"}
+    ],
+    "navigation_only_requests": 1,
+    "why_seven_and_not_four": "Two targets needed a second read: the anchor's indices schema was not on the page its own anchor points at, and one ONYPHE sentence had to be checked verbatim. Section 35 permits the minimal chain needed to reach an exact first-party document, and both extensions stayed inside a named target."
+  },
+
+  "the_verbatim_re_read_that_changed_a_verdict": {
+    "$comment": "The most important process fact in this mission. Recorded here rather than buried in a partner record.",
+    "what_happened": "The first read of the query-language page returned, in analytical prose, that the time-range functions filter on time of data collection and not on record modification dates, and that they filter by observation period rather than record state. That is precisely the distinction the temporal-object test turns on, and taking it at face value would have moved ONYPHE's B2 from PARTIAL to PASS.",
+    "why_it_was_re_read": "It arrived as characterisation rather than in quotation marks, unlike the timestamp definition on the data-model page, which came back quoted. Mission 1.61 re-read the anchor's lineage sentence for the same reason and the re-read CONFIRMED it.",
+    "what_the_re_read_found": "The page does not contain that sentence. What it contains is a section titled for time-range functions described as allowing search through historical data, and calendar-bucket boundary definitions for the hour, day, week and month functions. Nothing states what the filtered timestamp means at record level.",
+    "consequence": "ONYPHE B2 stays PARTIAL. A verdict that would have been recorded on a sentence that does not exist was not recorded.",
+    "the_rule_this_confirms": "A retrieval summary is not a document. Where a single sentence decides a gate, it is quoted or it is not relied on."
+  },
+
+  "request_accounting": {
+    "FIRST_PARTY_DOCUMENT_REQUESTS": 7,
+    "RESEARCH_DATA_REQUESTS": 0,
+    "MEASUREMENT_QUERIES_EXECUTED": 0,
+    "TARGET_COUNTS_FETCHED": 0,
+    "TARGET_HOST_RECORDS_FETCHED": 0,
+    "TARGET_IPS_FETCHED": 0,
+    "TARGET_BANNERS_FETCHED": 0,
+    "FACETS_FETCHED": 0,
+    "MEASUREMENT_DOWNLOADS": 0,
+    "TRIALS_STARTED": 0,
+    "PURCHASES": 0,
+    "OUTBOUND_ENQUIRIES_SENT": 0,
+    "configuration_endpoints_executed": 0,
+    "the_endpoint_that_was_not_executed": {
+      "endpoint": "the anchor's indices endpoint, documented at get /api/indices/",
+      "why_not": "Section 5 permits executing a configuration endpoint only where repository evidence proves its response carries no target measurement values or records. No such evidence exists, so it fails closed. Its response might well be pure scan metadata; might is not proof.",
+      "status": "NOT_EXECUTED"
+    },
+    "the_count_is_measurement": "A response naming which ports a scan configuration covered is apparatus metadata. A response carrying host records, or a number of matching service observations, is measurement. The second was never requested.",
+    "the_trial_is_not_free": "A zero-cost trial, demo console or search preview destroys preregistration exactly as a paid one would."
+  },
+
+  "canonical_mutations": {
+    "sources_registered": 0,
+    "governance_reviews_created": 0,
+    "collectors_implemented": 0,
+    "normalizers_implemented": 0,
+    "threshold_registrations_created": 0,
+    "claims_created": 0,
+    "evidence_created": 0,
+    "reliability_assessments_created": 0,
+    "reliability_values_assigned": 0,
+    "independence_groups_created": 0,
+    "scores_created": 0,
+    "opportunity_changes": 0,
+    "mission_1_56_claim_modified": false,
+    "model_calls": 0,
+    "model_cost_usd": 0.0,
+    "embeddings": 0,
+    "enquiry_v1_edited": false,
+    "enquiries_sent": 0
+  }
+}

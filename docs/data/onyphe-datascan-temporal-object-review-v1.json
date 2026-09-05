@@ -1,0 +1,87 @@
+{
+  "$comment": "Mission 1.63 sections 9, 10, 11 and 12. Read 2. The highest-value ONYPHE question, and the one a retrieval summary nearly answered wrongly.",
+  "record_version": "1.0.0",
+  "mission": "1.63 — Anchor & ONYPHE Documentation Closure V1",
+  "recorded_at": "2026-09-05",
+  "apparatus": "ONYPHE",
+  "target": 2,
+
+  "what_was_sought": {
+    "question": "Is a datascan record an OBSERVATION_EVENT created anew per scan, or a MAINTAINED_SERVICE_STATE updated as later scans observe the same service?",
+    "why_it_decides_b2": "If the queryable timestamp is a last-seen marker on a maintained record, a window filter selects services whose LATEST detection fell inside the window, and a service observed both before and after but not during it behaves differently from one genuinely observed inside it. That is the Mission 1.59 failure and the LeakIX failure."
+  },
+
+  "the_ambiguity_carried_in": {
+    "verbatim_timestamp_definition": "timestamp of when the data was collected. Allows tracking when a given service or vulnerability was last observed.",
+    "why_it_is_ambiguous": "The first clause describes a collection moment, which is an observation event. The second describes tracking when a service was LAST observed, which is what a maintained record's advancing timestamp does. One sentence, two temporal objects.",
+    "carried_from": "Mission 1.62"
+  },
+
+  "what_the_data_model_page_adds": {
+    "record_creation_or_update": "NOT_DOCUMENTED. No sentence describes record creation, updating, deduplication or uniqueness.",
+    "multiple_records_per_ip_and_port": "NOT_DOCUMENTED. Nothing states whether several records can exist for one address and port at different times, nor how they would be distinguished.",
+    "scan_identifier_or_record_version_field": "NONE_DOCUMENTED",
+    "an_observation_that_does_not_decide_it": {
+      "observation": "An observation-event model would ordinarily need some way to tell two records of the same address and port apart, and no such field is documented.",
+      "why_it_does_not_decide": "That is an inference from an absence. An absence is not a statement in either direction, and this arc has refused to read one as a statement four missions running. It is recorded because it is real, and it carries no weight in the verdict."
+    }
+  },
+
+  "what_the_query_language_page_adds": {
+    "time_range_functions_exist": true,
+    "verbatim_section_description": "These functions allows you to search through historical data.",
+    "verbatim_section_introduction": "To refine your searches, we have a number of functions available. They may help you identify assets exposed in the past, reverse the sort results or refine your search for specific assets.",
+    "documented_functions": ["-hourago", "-dayago", "-weekago", "-monthago", "-since"],
+    "verbatim_bucket_boundaries": {
+      "-hourago": "an hour starts at minute 00 and ends at minute 59",
+      "-dayago": "a day starts at 00:00 hour and ends at 23:59 hour",
+      "-weekago": "a week starts on Monday at 00:00 and ends on Sunday at 23:59",
+      "-monthago": "a month starts the 1st at 00:00 and ends last day of the month at 23:59"
+    },
+    "what_this_establishes": "Historical search exists, and the buckets are calendar-aligned rather than rolling. A window is expressible in the request.",
+    "what_this_does_not_establish": "What the filtered timestamp MEANS at record level. Calendar-aligned buckets over a last-seen field are still buckets over a last-seen field.",
+    "granularity_bound": "The documented selectors are RELATIVE bucket offsets rather than an absolute half-open interval. A frozen calendar window would have to be expressed at retrieval time as an offset computed from the retrieval date. That is deterministic and it couples the request's wording to when it is sent."
+  },
+
+  "the_summary_that_was_refuted": {
+    "$comment": "Section 12 forbids resolving this empirically. It does not forbid re-reading a document, and re-reading is what caught this.",
+    "what_the_first_read_reported": "That the time-range functions filter on time of data collection and not on record modification dates, and that they filter by observation period rather than record state.",
+    "why_that_would_have_been_decisive": "It is exactly the distinction section 11 turns on, phrased as a contrast between the two candidate temporal objects. It would have moved B2 to PASS.",
+    "why_it_was_checked": "It arrived as analytical prose rather than in quotation marks, unlike the timestamp definition, which came back quoted.",
+    "what_the_verbatim_read_found": "The page does not contain that sentence. It contains the section description and the bucket boundaries quoted above, and nothing stating what the filtered timestamp means at record level.",
+    "outcome": "A PASS that would have rested on a sentence that does not exist was not recorded.",
+    "precedent": "Mission 1.61 re-read the anchor's lineage sentence for the same reason and the re-read CONFIRMED it. The procedure is the same; the answer went the other way."
+  },
+
+  "the_diagnostic": {
+    "$comment": "Section 11, applied and answered honestly.",
+    "question": "Suppose service S was observed both before and after window W, but not during W. Would the documented filter include or exclude it, and on what basis?",
+    "answer": "NOT_DETERMINABLE_FROM_DOCUMENTATION",
+    "why": "The functions are documented as searching historical data over calendar buckets. Nothing states whether the value they filter is a per-observation collection time or a maintained record's latest sighting. Under the first reading S is excluded, correctly. Under the second, S is included or excluded according to where its latest detection fell, which is a different question."
+  },
+
+  "no_empirical_resolution_was_attempted": {
+    "$comment": "Section 12.",
+    "records_queried": 0,
+    "hosts_queried": 0,
+    "timestamps_compared": 0,
+    "the_rule": "Documentation must establish the semantics. Querying one host across two windows and comparing timestamps would retrieve measurement records and contaminate the route, and it would infer an architecture from a sample.",
+    "if_docs_remain_ambiguous": "B2 remains PARTIAL. It does."
+  },
+
+  "verdict": {
+    "record_model": "AMBIGUOUS",
+    "candidates": {
+      "OBSERVATION_EVENT": "not established",
+      "MAINTAINED_SERVICE_STATE": "not established",
+      "APPEND_WITH_VERSIONED_OBSERVATIONS": "not established"
+    },
+    "b2_result": "PARTIAL",
+    "status_word": "ONYPHE_B2_PARTIAL",
+    "previous": "PARTIAL",
+    "moved": false,
+    "what_did_move": "The ambiguity is now bounded rather than open. Historical search is established, the bucket boundaries are established and calendar-aligned, and the exact missing fact is a single sentence about what the filtered timestamp means at record level.",
+    "the_interpretation_that_was_not_chosen": "The reading under which the timestamp is a per-observation collection time and B2 passes. It is the reading that preserves the candidate, and section 9 forbids choosing it for that reason.",
+    "what_would_close_it": "One first-party sentence stating either that each scan appends a record carrying its own collection time, or that a service record is updated in place as later scans observe it. Either answer closes the gate; one closes it as a PASS and one as a FAIL."
+  }
+}

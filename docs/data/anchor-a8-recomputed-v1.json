@@ -1,0 +1,62 @@
+{
+  "$comment": "Mission 1.63 sections 20 and 21. The anchor's full operational matrix recomputed from all currently held documentation. Enquiry answers are not used, because the enquiry is unsent.",
+  "record_version": "1.0.0",
+  "mission": "1.63 — Anchor & ONYPHE Documentation Closure V1",
+  "recorded_at": "2026-09-05",
+  "apparatus": "Netlas",
+  "gate": "A8 RELIABILITY_REVIEWABLE",
+
+  "basis": {
+    "documents_used": "every anchor document held after Missions 1.60 to 1.63",
+    "enquiry_answers_used": false,
+    "why": "The enquiry is drafted and unsent. A drafted enquiry establishes nothing, and using an imagined answer would be the clearest possible case of imaginary progress.",
+    "new_anchor_documents_read_this_mission": 2,
+    "which": [
+      "https://docs.netlas.io/api-reference/ re-read for the indices operation path",
+      "https://docs.netlas.io/api-reference/#tag/Indices/operation/getIndices"
+    ]
+  },
+
+  "matrix": [
+    {"topic": "SAMPLING", "before": "UNKNOWN", "after": "UNKNOWN", "changed": false, "basis": "no document read this mission addresses it", "load_bearing": true},
+    {"topic": "FRAME", "before": "PARTIAL", "after": "PARTIAL", "changed": false, "basis": "the eligible frame is documented and the attempted frame is not; nothing read this mission bears on it", "load_bearing": true},
+    {"topic": "MISSINGNESS", "before": "UNKNOWN", "after": "UNKNOWN", "changed": false, "basis": "no document read this mission addresses it", "load_bearing": true},
+    {"topic": "RETRY", "before": "UNKNOWN", "after": "UNKNOWN", "changed": false, "basis": "the FAQ documents one request per detected service at the application layer; the transport-layer probe behaviour remains undocumented, and the API's client-side retry parameters are a different question", "load_bearing": true},
+    {"topic": "DUPLICATION", "before": "PARTIAL", "after": "PARTIAL", "changed": false, "basis": "record identity combines request target and address; whether one address-and-port pair can recur within a cycle is undocumented", "load_bearing": false},
+    {"topic": "DISTINCT_ADDRESS_SEMANTICS", "before": "ANSWERED", "after": "ANSWERED", "changed": false, "basis": "the address field is always present; the query language documents no distinct-value operator, so the distinct rule is a client-side transformation and never a record count", "load_bearing": false},
+    {"topic": "BANNER_FIDELITY", "before": "PARTIAL", "after": "PARTIAL", "changed": false, "basis": "the raw field is documented and queryable with wildcard matching; no truncation or normalisation policy is published", "load_bearing": true},
+    {"topic": "SCAN_DATE_SEMANTICS", "before": "ANSWERED", "after": "ANSWERED", "changed": false, "basis": "the per-record scan date records when the scanning that generated the response occurred; an absolute scan-date filter and dated index labels are both documented", "load_bearing": false},
+    {"topic": "VANTAGE", "before": "UNKNOWN", "after": "UNKNOWN", "changed": false, "basis": "no scanner count, location or record-level probe-origin field is published; nothing read this mission bears on it", "load_bearing": true},
+    {"topic": "PORT_22_WINDOW_COVERAGE", "before": "PARTIAL", "after": "PARTIAL", "changed": false, "basis": "the indices operation is located and its response schema is not published on the rendered page; the endpoint was not executed under the fail-closed rule", "load_bearing": true, "what_improved": "the lead is exhausted rather than untried, and the reason it does not close is specific"}
+  ],
+
+  "tally": {
+    "answered": 2,
+    "partial": 4,
+    "unknown": 4,
+    "total": 10,
+    "changed_this_mission": 0
+  },
+
+  "verdict": {
+    "result": "PARTIAL",
+    "status_word": "ANCHOR_A8_PARTIAL",
+    "before": "PARTIAL",
+    "reviewable": false,
+    "moved": false,
+    "why_not_reviewable": "Five load-bearing topics remain unresolved: sampling, the attempted frame, missingness, retry and vantage, with port-window coverage partial beside them. A human reviewer could not complete the five-field reliability review on this basis, and sampling alone decides whether the count is comparable with any other apparatus.",
+    "why_not_NOT_REVIEWABLE": "Nothing retrieved contradicts reviewability. Each remaining question is answerable by the provider in a sentence, and six of the seven frozen enquiry questions target exactly these topics.",
+    "no_imaginary_progress": {
+      "$comment": "Section 21, applied explicitly because this mission had a tempting near-miss.",
+      "we_now_know_which_page_to_read_was_not_converted_into_pass": "The indices operation is located. Locating an operation is not reading its schema.",
+      "endpoint_exists_was_not_converted_into_documented_semantics": "The Get Indices operation exists. Its response fields are unpublished on the rendered page, and it was not executed.",
+      "no_topic_was_advanced_without_a_document": "Zero topics changed status this mission, and that is the honest count."
+    }
+  },
+
+  "what_would_close_a8": {
+    "by_reading": ["the indices response schema, if the machine-readable API specification can be located first-party"],
+    "by_asking": ["sampling", "transport-layer retry", "the meaning of an absent record", "raw response fidelity", "vantage", "the port schedule over time"],
+    "the_arithmetic": "Six of the seven frozen enquiry questions map onto load-bearing A8 topics. One written answer would close most of the gate, which is why the enquiry remains the rational next action rather than more documentation search."
+  }
+}

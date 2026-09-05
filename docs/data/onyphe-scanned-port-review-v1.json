@@ -1,0 +1,68 @@
+{
+  "$comment": "Mission 1.63 sections 13 and 14. Read 3. It found a port list, and it is a port list for the wrong category.",
+  "record_version": "1.0.0",
+  "mission": "1.63 — Anchor & ONYPHE Documentation Closure V1",
+  "recorded_at": "2026-09-05",
+  "apparatus": "ONYPHE",
+  "target": 3,
+
+  "what_was_sought": {
+    "question": "Does the relevant ONYPHE active scanner include TCP/22, and under what temporal or configuration semantics?",
+    "why_the_word_relevant_is_load_bearing": "The construct's protocol-native evidence lives in the datascan category, whose raw application response field carries the identification string. A port list for a different category says nothing about datascan."
+  },
+
+  "what_was_found": {
+    "page": "https://search.onyphe.io/docs/dorkpedia/scanned-ports-list",
+    "verbatim_header": "TCP ports - ctiscan category (5,054 ports)",
+    "port_22_present": true,
+    "how_port_22_is_listed": "category:ctiscan tcp.dest:22 app.transport:tcp",
+    "the_category_this_documents": "ctiscan",
+    "the_category_the_construct_needs": "datascan",
+    "temporal_binding": "NONE. The page carries no date stamp, no version number and no scan-configuration identifier. It is presented as a current reference list.",
+    "scan_cycle_distinctions": "NONE. The list does not separate scan cycles, origin countries, or a top-N subset.",
+    "update_cadence_or_historical_versions": "NOT_DOCUMENTED. Nothing states how often the list changes or whether earlier versions are published."
+  },
+
+  "the_category_mismatch": {
+    "$comment": "The finding of this read, and it did not exist before this mission.",
+    "statement": "The published scanned-port list documents the ctiscan category. The construct's protocol-native evidence is in datascan. Port 22 being listed for ctiscan does not establish that datascan probes it.",
+    "why_this_is_not_a_technicality": [
+      "The two categories have different documented retention: ctiscan one month, datascan seven months.",
+      "The refresh documentation describes the datascan IP cycle in terms of a 500-port list from two origin countries and a shorter top-ports list from two others. Neither of those sets is the 5,054-port ctiscan list, and neither set's membership is published.",
+      "A category is a different resource. Transferring a configuration fact from one resource to another is the same move RESOURCE_SPECIFIC_LINEAGE refuses for lineage, applied to configuration."
+    ],
+    "the_inference_that_was_refused": "That because ONYPHE scans TCP/22 somewhere, the apparatus this route would use scans TCP/22. Section 13 forbids inferring active port coverage from the presence of related fields, and this is the same error one level up: inferring it from coverage in a neighbouring category.",
+    "what_would_resolve_it": "A published port list for the datascan category, or a first-party statement of the 500-port set's membership."
+  },
+
+  "port_22_is_not_universally_ssh": {
+    "$comment": "Section 14, recorded because the temptation runs the other way too.",
+    "rule": "The frozen construct is TCP/22 carrying an identification string with the literal prefix. It is not SSH wherever it runs, and it is not everything on port 22.",
+    "consequence": "Services speaking SSH on an alternate port are outside V1. The apparatus must actually probe TCP/22, and an apparatus that probes SSH broadly on other ports does not thereby satisfy the construct.",
+    "construct_broadened": false
+  },
+
+  "verdict": {
+    "result": "PORT_22_STATUS_UNKNOWN",
+    "status_word": "ONYPHE_PORT_22_UNKNOWN",
+    "scope_of_the_verdict": "the datascan category, which is the apparatus this route would use",
+    "what_is_established": "TCP/22 is listed in the published scanned-port list for the ctiscan category, with no temporal binding.",
+    "what_is_not_established": "That TCP/22 is in the datascan scan set, and that it was in any scan set during a given window.",
+    "candidates_considered_and_not_reached": [
+      "PORT_22_INCLUDED_CURRENTLY",
+      "PORT_22_INCLUDED_IN_VERSIONED_SCAN_SET",
+      "PORT_22_CONTINUOUSLY_INCLUDED",
+      "PORT_22_NOT_INCLUDED"
+    ],
+    "why_not_INCLUDED_CURRENTLY": "That verdict would assert current inclusion for the apparatus in question. What is documented is current inclusion for a different category.",
+    "why_not_NOT_INCLUDED": "Nothing says datascan excludes port 22. It is very likely included in a 500-port set; likely is not documented, and this is a gate rather than a guess.",
+    "moved": true,
+    "how_it_moved": "Mission 1.62 recorded port-22 membership as NOT_ESTABLISHED with the scanned-ports page named as the cheapest lead. The page has been read. The membership is still not established, and the reason is now specific: the published list is for another category."
+  },
+
+  "a_new_gap_that_did_not_exist_before": {
+    "statement": "Before this read, ONYPHE's port-22 membership was simply unread. It is now read, and reading it opened a question nobody had asked: which port set does the datascan apparatus actually use, and is it published anywhere?",
+    "why_this_is_progress": "An unread page is a task. A named category mismatch is a question with a shape, and it is answerable by one document or one sentence.",
+    "not_a_regression": "No slot moved backwards. B4 was PARTIAL before this read and is PARTIAL after it, with a sharper missing fact."
+  }
+}

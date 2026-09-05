@@ -1,0 +1,80 @@
+{
+  "$comment": "Mission 1.63 sections 5, 6, 7 and 8. Read 1. Whether the anchor's indices surface can bind port-22 membership to an observation window before retrieval.",
+  "record_version": "1.0.0",
+  "mission": "1.63 — Anchor & ONYPHE Documentation Closure V1",
+  "recorded_at": "2026-09-05",
+  "apparatus": "Netlas",
+  "target": 1,
+
+  "what_was_sought": {
+    "question": "Does the indices or configuration surface permit a future operator, BEFORE measurement retrieval, to establish that TCP port 22 was in the scan configuration for observation window W?",
+    "why_it_matters": "A count of addresses answering on port 22 during a window is a measurement of the world only if port 22 was actually scanned during that window. If it was not, the count is a fact about the scan schedule wearing the costume of a fact about the internet."
+  },
+
+  "what_was_found": {
+    "endpoint_located": true,
+    "documented_operation": "Get Indices",
+    "documented_path": "get /api/indices/",
+    "documentation_anchor": "https://docs.netlas.io/api-reference/#tag/Indices/operation/getIndices",
+    "response_schema_available": false,
+    "why_not": "The rendered API reference lists the operation in its table of contents and truncates before the response schema. A second read against the operation's own anchor returned the same truncation.",
+    "index_label_shape_confirmed": "Search requests accept index labels, and the documented example labels include calendar dates as well as opaque private identifiers.",
+    "what_that_establishes": "That indices are selectable and that at least some labels are dates.",
+    "what_that_does_not_establish": "What an index entry records. Nothing retrieved says whether an entry carries a scan start and end time, the ports that scan covered, the address ranges it covered, or any completeness information."
+  },
+
+  "the_endpoint_was_not_executed": {
+    "$comment": "Section 5's fail-closed rule, applied.",
+    "executed": false,
+    "the_rule": "A configuration endpoint may be executed only where repository evidence proves its response carries no target measurement values or records. Read documentation only otherwise. Fail closed.",
+    "the_reasoning": "An indices listing is plausibly pure scan metadata: a list of scans with their labels and dates. Plausibly is not proof, and no repository evidence establishes the response shape, because the response schema is exactly what could not be read.",
+    "the_circularity_that_was_refused": "Executing the endpoint to discover whether the endpoint is safe to execute would be deciding the question by doing the thing it governs.",
+    "metadata_versus_measurement": {
+      "would_be_metadata": "a response naming which ports a scan configuration covered",
+      "would_be_measurement": "a response carrying host records, or a number of matching service observations",
+      "which_this_would_have_been": "UNKNOWN, which is why it was not called"
+    }
+  },
+
+  "verdict": {
+    "result": "PORT_22_WINDOW_COVERAGE_NOT_ESTABLISHED",
+    "status_word": "ANCHOR_PORT_WINDOW_NOT_ESTABLISHED",
+    "previous": "PORT_22_WINDOW_COVERAGE_NOT_ESTABLISHED",
+    "moved": false,
+    "what_did_move": "The lead is now exhausted rather than untried. Mission 1.62 recorded the indices endpoint as the cheapest remaining route; it has been pursued, its exact operation is named, and the reason it does not close the gate is specific rather than a missing URL.",
+    "candidates_considered_and_not_reached": [
+      "PORT_22_CONTINUOUSLY_COVERED",
+      "PORT_22_MEMBERSHIP_VERSIONED_BY_INDEX",
+      "PORT_22_MEMBERSHIP_VERSIONED_BY_DATE",
+      "PORT_22_WINDOW_COVERAGE_QUERYABLE_AS_METADATA"
+    ]
+  },
+
+  "no_forbidden_inference_was_used": {
+    "$comment": "Sections 7 and 21. Each of these was available and each was refused.",
+    "from_current_port_list": "Port 22 is on the currently published scanned-port list. That establishes current inclusion and says nothing about any other date. Current inclusion was NOT promoted into window coverage.",
+    "from_list_cardinality": "The changelog dates the SIZE of the port list. A dated size is not a dated membership, and no membership was inferred from a count of ports.",
+    "from_absence_of_removals": "No port removal is recorded anywhere. That is an absence, and absence-of-removal reasoning is forbidden outright. It was not used.",
+    "from_the_endpoint_existing": "The indices operation exists. An endpoint existing is not documented semantics, and it was not read as any."
+  },
+
+  "how_this_could_still_be_closed": {
+    "$comment": "Section 14, unchanged. Ordered by cost.",
+    "mechanisms": [
+      {"mechanism": "the OpenAPI specification", "form": "the machine-readable API specification, which would carry the indices response schema the rendered page truncates", "status": "not located within budget; its URL was not established", "cost": "one documentation retrieval, if the URL can be found first-party"},
+      {"mechanism": "a documented invariant", "form": "a first-party statement that port 22 is permanently included in the public scan list", "status": "not published", "cost": "one sentence from the provider, and it is enquiry v1 question 7"},
+      {"mechanism": "per-scan coverage metadata", "form": "an index entry exposing the port set that scan covered", "status": "possible and unestablished", "cost": "the schema, or the provider"}
+    ],
+    "no_window_selected": true,
+    "no_query_executed": true,
+    "no_threshold_chosen": true
+  },
+
+  "consequence_for_a8": {
+    "$comment": "Section 8. One topic, not the gate.",
+    "topic_updated": "PORT_22_WINDOW_COVERAGE",
+    "topic_status": "PARTIAL",
+    "a8_automatically_reviewable": false,
+    "why": "A8 is conjunctive across its remaining load-bearing unknowns. Closing the port-window topic would have reduced the unresolved set without closing the gate, and it was not closed anyway."
+  }
+}

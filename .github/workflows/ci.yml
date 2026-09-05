@@ -433,6 +433,19 @@ jobs:
       - name: Operational closure matches its decision rules
         run: uv run python infrastructure/scripts/render_operational_closure.py --check
 
+      # Mission 1.63. Checks that a current port list is not membership in an
+      # arbitrary window and list cardinality is not membership history; that a
+      # configuration fact published for one data category does not establish it
+      # for another; that a configuration endpoint is not executed without proof
+      # its response carries no measurement; that an ambiguous timestamp is not
+      # resolved in the direction that keeps a candidate alive and is never
+      # resolved by querying records; that a raw field named as TRUNCATED is not
+      # one REMOVED and finite retention is not automatic disqualification; that
+      # fewer than two qualified apparatuses is not pair-ready; and that Mission
+      # 1.61's frozen enquiry still answers to its hash.
+      - name: Documentation closure matches its decision rules
+        run: uv run python infrastructure/scripts/render_documentation_closure.py --check
+
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
   # Pinned to the same versions as infrastructure/compose.
