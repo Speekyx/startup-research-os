@@ -483,8 +483,16 @@ def load_catalog_into(conn: Any, catalog: SourceCatalog) -> LoadReport:
     )
 
 
-def read_sources(conn: Any) -> list[dict[str, Any]]:
-    """Read the registry as the API and CLI present it."""
+def read_sources(conn: Any, use_profile_id: str) -> list[dict[str, Any]]:
+    """Read the registry as the API and CLI present it, for ONE use profile.
+
+    Mission 1.75. The profile used to be written into the SQL as
+    `commercial-multi-tenant-research-v1`, which is a default wearing a literal:
+    nothing called this function, so nothing had chosen that profile, and the
+    first caller would have inherited an answer it never asked for. It is a
+    parameter now, for the same reason the HTTP routes require one -- a
+    governance verdict without its subject is not an answer.
+    """
     rows = conn.execute(
         """SELECT s.id, s.canonical_name, s.source_family, s.lifecycle, s.description,
                   s.homepage_url, s.documentation_url, s.collector_enabled, s.suspended,
@@ -493,8 +501,9 @@ def read_sources(conn: Any) -> list[dict[str, Any]]:
              FROM registry.sources s
              JOIN registry.source_eligibility e
                ON e.source_id = s.id
-              AND e.use_profile_id = 'commercial-multi-tenant-research-v1'
-            ORDER BY s.id"""
+              AND e.use_profile_id = %s
+            ORDER BY s.id""",
+        (use_profile_id,),
     ).fetchall()
     return [
         {

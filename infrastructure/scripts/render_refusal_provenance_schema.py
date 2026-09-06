@@ -353,9 +353,17 @@ def validate(record: dict) -> None:  # noqa: C901
     for statement in ("DROP TABLE", "DELETE FROM", "TRUNCATE", "UPDATE ", "INSERT INTO"):
         if statement in statements:
             raise ValidationError(f"the migration contains `{statement}`; it must be additive only")
+    # Mission 1.75. This used to require the migration this record describes to be
+    # the LAST one in the directory, which is true only until the next mission adds
+    # one. What it is entitled to assert is that the migration it names EXISTS and
+    # that nothing later renumbered it -- being the newest was never the property
+    # that made the record correct.
     heads = sorted(path.stem for path in MIGRATIONS.glob("00*.sql"))
-    if heads[-1] != f"{migration.get('number')}_refusal_provenance":
-        raise ValidationError(f"the migration head is {heads[-1]}, not the one recorded")
+    named = f"{migration.get('number')}_refusal_provenance"
+    if named not in heads:
+        raise ValidationError(f"the migration {named} the record names does not exist")
+    if named != MIGRATION.stem:
+        raise ValidationError(f"the record names {named}, and this gate reads {MIGRATION.stem}")
     if not MIGRATION_0034.exists():
         raise ValidationError("migration 0034 is missing; this table's FKs depend on it")
 

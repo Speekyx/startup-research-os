@@ -620,6 +620,13 @@ class TestApi:
 # =============================================================== source registry
 
 
+# Mission 1.75. The two registered profiles, named here so the tests read as
+# adversarial pairs. The IMPLEMENTATION is generic over `registry.use_profiles`;
+# these are the two that exist to test it against, not a closed vocabulary.
+LOCAL = "local-private-research-v1"
+COMMERCIAL = "commercial-multi-tenant-research-v1"
+
+
 @needs_postgres
 class TestSourceRegistryApi:
     """Mission 1.0 §27. Read only, and global.
@@ -631,11 +638,16 @@ class TestSourceRegistryApi:
 
     def test_the_registry_is_readable_without_a_workspace(self, api_client) -> None:
         """Source definitions are global platform metadata. Demanding a tenant
-        header would imply an isolation the registry does not have."""
-        response = api_client.get("/api/v1/sources")
+        header would imply an isolation the registry does not have.
+
+        A use profile is still required (Mission 1.75) and is NOT a workspace:
+        the tenant says whose data is being worked on, the profile says which
+        governance regime the caller is asking about."""
+        response = api_client.get("/api/v1/sources", params={"use_profile": LOCAL})
         assert response.status_code == 200
         body = response.json()
         assert body["count"] > 0
+        assert "X-Workspace-Id" not in response.request.headers
 
     def test_the_api_reports_enablement_and_eligibility_separately(self, api_client) -> None:
         """Mission 1.4 made eligibility reachable and Mission 1.5 made enablement
@@ -645,70 +657,49 @@ class TestSourceRegistryApi:
         rule that survives is that the two are reported as different facts and
         that the eligible count matches the view's own contract -- both hold
         whether an operator has enabled something or not."""
-        body = api_client.get("/api/v1/sources").json()
+        body = api_client.get("/api/v1/sources", params={"use_profile": COMMERCIAL}).json()
         for source in body["sources"]:
             assert set(source) >= {"collector_eligible", "collector_enabled"}
 
-        # KNOWN DEFECT, found by Mission 1.15.7 and deliberately not fixed here.
+        # THE DEFECT THIS ASSERTION USED TO CARRY, REPAIRED BY MISSION 1.75.
         #
         # `registry.source_eligibility` became one row per (source, PROFILE) in
-        # Mission 1.15.5. This endpoint joins it on `source_id` alone, so a
-        # source reviewed under two profiles is returned TWICE with two
-        # different verdicts -- and `collector_enabled`, which is a column on
-        # the source and carries its own `collector_use_profile`, is repeated
-        # beside both. `ted-eu` is the first and only such source.
+        # Mission 1.15.5, and this endpoint joined it on `source_id` alone. A
+        # source reviewed under two profiles came back TWICE with two different
+        # verdicts, and `collector_enabled` -- a column on the source, carrying
+        # its own `collector_use_profile` -- was repeated beside both.
         #
-        # So the old assertion here -- enabled implies eligible -- cannot hold
-        # against an unscoped read, and it was asserting a property of the
-        # DATABASE through an endpoint that does not preserve it. The database
-        # itself is correct: `require_eligibility_for_collector` looks up the
-        # row for the profile enablement was granted under, and refuses
-        # otherwise.
+        # The set grew with every profile alignment: `ted-eu` alone, then six
+        # after Mission 1.17, then eight. That growth was the point of writing
+        # it as an equality, and it is why the assertion below is RELATIONAL
+        # instead. A test pinned to eight names would fail the next time the
+        # registry legitimately grows, which is a test asserting that the
+        # project may never progress.
         #
-        # This is the third appearance of one defect -- a verdict reported with
-        # no subject. ADR-027 gave verdicts a subject, Mission 1.15.6 fixed the
-        # CLI reporting commands and 1.15.6.3 fixed readiness. The HTTP layer
-        # was not re-checked, and choosing which profile it should answer about
-        # is a design decision with no default, so it belongs to a mission that
-        # says so rather than to a TED collector mission.
-        #
-        # Asserted as the DEFECT rather than removed, so it fails the day it is
-        # fixed and this comment gets deleted with it.
-        #
-        # MISSION 1.17 MADE IT SIX TIMES BIGGER, and that is worth recording
-        # rather than quietly re-pinning. The endpoint duplicates a source once
-        # per profile that has reviewed it, so while `ted-eu` was the only
-        # source with two profile rows the blast radius was one. Aligning
-        # world-bank, gdelt, eurostat, fred and openalex to the local profile
-        # gave five more sources a second row each.
-        #
-        # Nothing about the defect changed; what changed is how much of the
-        # response it corrupts, and it will grow again with every profile
-        # alignment. The fix is still a design decision about which profile the
-        # HTTP layer answers for, and still belongs to a mission that says so.
-        duplicated = [
-            s["source_id"]
-            for s in body["sources"]
-            if [o for o in body["sources"] if o["source_id"] == s["source_id"]][1:]
-        ]
-        # Mission 1.18 added a seventh and Mission 1.19 an eighth: every profile
-        # alignment grows this set, which is the prediction the comment above
-        # made and the reason it is written as a defect rather than a fixed
-        # number. It stays an EQUALITY so the growth is visible in a diff, and
-        # it will fail the day somebody fixes the join -- which is what a
-        # tripwire asserting a defect is for.
-        assert set(duplicated) == {
-            "ted-eu",
-            "world-bank",
-            "gdelt",
-            "eurostat",
-            "fred",
-            "openalex",
-            "stack-exchange",
-            "wikimedia-pageviews",
-        }, duplicated
+        # The repair is in the join, not over it: the profile is a join
+        # predicate, so there is no duplication to deduplicate.
+        seen = [s["source_id"] for s in body["sources"]]
+        assert len(seen) == len(set(seen)), sorted({s for s in seen if seen.count(s) > 1})
+
+        # Every source reviewed under BOTH profiles -- the ones that used to
+        # duplicate -- still appears exactly once under each.
+        for profile in (LOCAL, COMMERCIAL):
+            ids = [
+                s["source_id"]
+                for s in api_client.get("/api/v1/sources", params={"use_profile": profile}).json()[
+                    "sources"
+                ]
+            ]
+            assert len(ids) == len(set(ids)), profile
+
+        # `collector_enabled` is a column on the SOURCE and carries its own
+        # `collector_use_profile`: the trigger checks eligibility under THAT
+        # profile, not under whoever is asking. `ted-eu` is enabled under local
+        # and listed here under commercial, so the old form of this assertion --
+        # enabled implies eligible, whatever profile you asked about -- was
+        # asserting a property the database never had.
         for source in body["sources"]:
-            if source["collector_enabled"] and source["source_id"] not in duplicated:
+            if source["collector_enabled_for_requested_profile"]:
                 assert source["collector_eligible"], source["source_id"]
         assert body["collector_eligible_count"] == sum(
             1 for s in body["sources"] if not s["blocking_reasons"]
@@ -717,37 +708,54 @@ class TestSourceRegistryApi:
     def test_a_source_is_eligible_exactly_when_it_has_no_blocking_reason(self, api_client) -> None:
         """The view's contract, served unchanged: an empty reason array is the
         pass, and a blocked source always says why."""
-        for source in api_client.get("/api/v1/sources").json()["sources"]:
-            assert source["collector_eligible"] == (not source["blocking_reasons"]), source[
-                "source_id"
-            ]
+        for profile in (LOCAL, COMMERCIAL):
+            body = api_client.get("/api/v1/sources", params={"use_profile": profile}).json()
+            for source in body["sources"]:
+                assert source["collector_eligible"] == (not source["blocking_reasons"]), (
+                    source["source_id"],
+                    profile,
+                )
 
     def test_the_eligibility_endpoint_explains_every_condition(self, api_client) -> None:
         """Mission 1.4 §32. Read-only visibility into why a source can or cannot
         be collected from, condition by condition."""
-        body = api_client.get("/api/v1/sources/fred/eligibility").json()
+        body = api_client.get(
+            "/api/v1/sources/fred/eligibility", params={"use_profile": COMMERCIAL}
+        ).json()
         assert body["source_id"] == "fred"
+        assert body["use_profile"] == COMMERCIAL
         assert body["approval_state"] == "APPROVED_WITH_CONDITIONS"
-        # SIX, NOT THREE, AND IT IS THE SAME DEFECT AS ABOVE IN A SECOND
-        # ENDPOINT. `fred` carries three conditions under each of two profiles,
-        # and this endpoint -- like `/api/v1/sources` -- reports a verdict
-        # without its subject, so it returns the union.
+
+        # THE SECOND HALF OF THE SAME DEFECT, REPAIRED BY MISSION 1.75.
         #
-        # Mission 1.17 is what made it visible: before it, `fred` had reviews
-        # under one profile only. That the profile-blindness reaches more than
-        # one endpoint is new information and belongs here rather than in a
-        # commit message, because whoever fixes `/sources` will otherwise fix
-        # half of it and this test will still pass.
+        # `fred` carries three conditions under EACH of two profiles, and this
+        # endpoint used to join every non-superseded review regardless of
+        # profile -- so it returned six, the union, under a verdict taken from
+        # whichever profile row the database happened to hand back first.
         #
-        # Asserted as the DEFECT, so it fails the day it is fixed.
-        assert len(body["conditions"]) == 6
-        assert {c["condition_key"] for c in body["conditions"]} == {
-            "copyrighted-series-excluded",
-            "fred-api-key",
-            "fred-endorsement-notice",
-        }, "the union is over PROFILES, not over distinct conditions"
-        keys = {c["condition_key"] for c in body["conditions"]}
-        assert keys == {"fred-api-key", "fred-endorsement-notice", "copyrighted-series-excluded"}
+        # That mattered more than the count suggests: the six collapsed to three
+        # distinct condition_keys, so a reader deduplicating by key would have
+        # seen a plausible answer built from two profiles' facts.
+        #
+        # The assertion is relational rather than pinned to three, because the
+        # invariant is that a profile returns ITS OWN conditions and no others,
+        # not that fred has three of them.
+        per_profile = {
+            profile: api_client.get(
+                "/api/v1/sources/fred/eligibility", params={"use_profile": profile}
+            ).json()["conditions"]
+            for profile in (LOCAL, COMMERCIAL)
+        }
+        for profile, conditions in per_profile.items():
+            keys = [c["condition_key"] for c in conditions]
+            assert len(keys) == len(set(keys)), (profile, keys)
+            assert len(conditions) == body["condition_count"] or profile != COMMERCIAL
+
+        union = len(per_profile[LOCAL]) + len(per_profile[COMMERCIAL])
+        assert len(body["conditions"]) < union, (
+            "the endpoint is returning the union over profiles again"
+        )
+        assert len(body["conditions"]) == len(per_profile[COMMERCIAL])
         assert body["collector_enabled"] is False
         for condition in body["conditions"]:
             assert condition["description"]
@@ -762,7 +770,9 @@ class TestSourceRegistryApi:
     def test_the_eligibility_endpoint_serves_key_names_never_credentials(self, api_client) -> None:
         """§37. A CONFIG_REFERENCE condition's detail is the configuration KEY
         NAME. The registry never held the value, so this cannot serve it."""
-        body = api_client.get("/api/v1/sources/fred/eligibility").json()
+        body = api_client.get(
+            "/api/v1/sources/fred/eligibility", params={"use_profile": COMMERCIAL}
+        ).json()
         credential = next(c for c in body["conditions"] if c["condition_key"] == "fred-api-key")
         assert credential["verification_detail"] == "FRED_API_KEY"
         blob = json.dumps(body)
@@ -777,19 +787,23 @@ class TestSourceRegistryApi:
             assert response.status_code in (404, 405), method
 
     def test_an_unknown_source_eligibility_is_a_404(self, api_client) -> None:
-        assert api_client.get("/api/v1/sources/not-a-source/eligibility").status_code == 404
+        response = api_client.get(
+            "/api/v1/sources/not-a-source/eligibility", params={"use_profile": LOCAL}
+        )
+        assert response.status_code == 404
 
     def test_a_source_detail_carries_its_evidence_urls(self, api_client) -> None:
         """The point of recording evidence is that it can be re-opened. An
         approval whose basis cannot be re-read cannot be re-verified when the
         platform changes its terms."""
-        body = api_client.get("/api/v1/sources/tiktok").json()
+        body = api_client.get("/api/v1/sources/tiktok", params={"use_profile": COMMERCIAL}).json()
+        assert body["use_profile"] == COMMERCIAL
         assert body["approval_state"] == "PROHIBITED"
         assert body["evidence"]
         assert all(e["document_url"].startswith("https://") for e in body["evidence"])
 
     def test_the_api_serves_key_names_never_credentials(self, api_client) -> None:
-        body = api_client.get("/api/v1/sources/youtube").json()
+        body = api_client.get("/api/v1/sources/youtube", params={"use_profile": COMMERCIAL}).json()
         references = [r for p in body["access_profiles"] for r in p["secret_references"]]
         assert references == ["YOUTUBE_API_KEY"]
         assert "value" not in json.dumps(body).lower().split("secret_references")[0][-40:]
@@ -802,8 +816,11 @@ class TestSourceRegistryApi:
         is a ZERO, in any dimension -- that is the value a consumer would read
         as "no requests allowed" or, worse, divide by.
         """
-        for source in api_client.get("/api/v1/sources").json()["sources"]:
-            detail = api_client.get(f"/api/v1/sources/{source['source_id']}").json()
+        listed = api_client.get("/api/v1/sources", params={"use_profile": COMMERCIAL}).json()
+        for source in listed["sources"]:
+            detail = api_client.get(
+                f"/api/v1/sources/{source['source_id']}", params={"use_profile": COMMERCIAL}
+            ).json()
             for profile in detail["access_profiles"]:
                 limit = profile["rate_limit"]
                 if limit is None:
@@ -814,7 +831,7 @@ class TestSourceRegistryApi:
                     assert value > 0, f"{source['source_id']}.{name}"
 
     def test_an_unknown_source_is_a_404(self, api_client) -> None:
-        response = api_client.get("/api/v1/sources/not-a-source")
+        response = api_client.get("/api/v1/sources/not-a-source", params={"use_profile": LOCAL})
         assert response.status_code == 404
 
     def test_there_is_no_write_path(self, api_client) -> None:
