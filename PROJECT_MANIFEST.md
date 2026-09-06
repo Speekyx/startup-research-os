@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.113
+Version: 1.114
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-06 (Sprint 1 / Mission 1.74.4)
+Last amended: 2026-09-06 (Sprint 1 / Mission 1.74.5)
 
 ---
 
@@ -13,6 +13,83 @@ Last amended: 2026-09-06 (Sprint 1 / Mission 1.74.4)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.114 - 2026-09-06 (Sprint 1 / Mission 1.74.5)
+
+**`R2_V2_DISPATCH_APPROVED_AWAITING_MANUAL_OPERATOR_ACTION`.** The operator approved
+exactly one manual email dispatch of the v2 packet to `d@globalping.io`. **Nothing was
+sent, no connector was used, and no mailbox was read.**
+
+**A QUOTED DIGEST IS RECOMPUTED, NOT COPIED.** The approval arrived carrying a content
+hash, and **copying it would have made the approval name whatever the instruction said
+rather than whatever the packet is**. So the digest was recomputed from the packet as
+stored, the record keeps BOTH the stated and the recomputed value, and the gate refuses
+them disagreeing -- which turns a quoted string into a check that could have failed. It
+did not, and the assertion passed silently, which is what a check looks like when the
+world is in order.
+
+**THE SENDER STAYS OPEN, AT THE OPERATOR'S EXPLICIT INSTRUCTION**, which is the same
+property Mission 1.65 recorded in advance for a manual mail send: the sender is not
+determined until the send. The approval binds the enquiry, the packet version, the content
+digest, the mechanism, the recipient, the channel, the subject and the send limit, and
+**not the sender** -- and a real mailbox written into that field would be a DIFFERENT
+approval, which the gate refuses.
+
+**A SECOND APPROVAL IS NOT A RENEWAL OF A SPENT ONE.** The recipient changed and the
+recipient is a bound field, so this authorises a different action rather than extending an
+exhausted one; the two approvals name different content digests, different recipients and
+different approval digests, and **neither can stand in for the other**. **The first
+approval was not reused, not reinterpreted and not repaired**: the gate asserts LIVE that
+it still reads exhausted, that its attempt still reads a failure and that its
+`provider_contacted` still reads false, so **a later edit that quietly rehabilitated the
+bounce into a delivery fails here rather than passing quietly**. It gained exactly one
+appended forward pointer with its own digest unchanged -- Mission 1.66.1's shape, used for
+the third time in this arc.
+
+**THE CEILING BELONGS TO THE MEDIUM, NOT TO THE ADDRESS.** The address changed and the
+medium did not, so `BYTE_VERIFIED` stays unreachable, the reachable set is exactly
+`OPERATOR_ATTESTED`, and the upgrade path reads **NONE**. Worth saying plainly because the
+temptation runs the other way: a NEW channel invites the thought that its properties might
+be new too, and a mail client's outbox is something no guard here can observe whichever
+address the mail is going to.
+
+**AN APPROVAL TO ASK IS NOT AN ANSWER.** R2's verdict is unchanged, 0 residuals closed,
+the qualification was not recomputed, R1 was not touched, and the packet is byte-identical
+and still reads `send_status: NOT_AUTHORIZED` while recording no approval of its own --
+because the approval lives beside it, which is the discipline that keeps the packet's own
+field honest.
+
+**0 send attempts, 0 sends, 0 deliveries, 0 provider contacts, 0 emails sent by this
+repository, 0 connector executions, 0 mailbox searches, 0 attestations, 0 residuals
+closed, 0 Globalping API executions, 0 measurements, 0 target HTTP requests, 0 canonical
+mutations, 0 Claims, 0 Evidence, 0 scores, 0 model calls, 0 documentation requests.**
+ONYPHE still `NOT_CHECKED_AFTER_DISPATCH`, Netlas still pending, the scanner arc still
+parked, ADR-039 untouched.
+
+**Verification.** Gate probed with **95 deliberate violations, 95 caught** (92 by rule, 3
+by drift) plus **3 of 3 positive controls** -- and **the one that matters most is this
+approval BOUNCING TOO**, a representable state, because a gate that could only express
+success would force the next failure to be recorded as something it is not. **Eleven of
+the violation cases attack the SPENT approval rather than this one** -- rehabilitating it
+to SENT, resetting it to pending, turning its bounce into a contact, un-exhausting it,
+breaking its digest, retargeting it at the new recipient -- and all eleven are refused,
+**which is what makes "not a renewal" a check rather than a sentence**. **2944 bare-python
+tests**; both runners green; `ruff format --check`, `ruff check` and mypy all run through
+`uv`; all **48** CI gates.
+
+New: `docs/data/globalping-r2-v2-dispatch-approval-v1.json`, the generated
+`docs/data/mission-1.74.5-r2-v2-dispatch-approval-v1.md`,
+`infrastructure/scripts/render_r2_v2_dispatch_approval.py` (CI gate 48),
+`packages/inferred-claim-evaluator/python/tests/test_r2_v2_dispatch_approval.py`, and
+`docs/architecture/mission-1.74.5-report.md`.
+
+Changed: `docs/data/globalping-r2-dispatch-approval-v1.json` gains **one appended forward
+pointer** and no other change; `docs/CLAUDE.md` 1.114 to 1.115; `.github/workflows/ci.yml`
+gains one gate.
+
+Unchanged: the v2 packet is byte-identical including its subject, body, recipient and
+content hash; the v1 packet, the R1 package and every Mission 1.74 record are untouched;
+and no canonical table, source review or ADR was modified.
 
 ## 1.113 - 2026-09-06 (Sprint 1 / Mission 1.74.4)
 

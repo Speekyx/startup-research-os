@@ -718,6 +718,22 @@ jobs:
       - name: R2 replacement packet matches its records
         run: uv run python infrastructure/scripts/render_r2_replacement_packet.py --check
 
+      # Mission 1.74.5. The second approval for the second question, after the first was
+      # exhausted by an attempt that bounced. Three rules: a QUOTED digest is RECOMPUTED
+      # rather than copied, so the record stores both the stated and the recomputed value
+      # and this gate refuses them disagreeing; a SECOND approval is not a RENEWAL of a
+      # spent one, so the earlier approval must still read exhausted, its attempt must
+      # still read a failure and its provider_contacted must still read false; and the
+      # CEILING belongs to the MEDIUM rather than to the address, so BYTE_VERIFIED stays
+      # unreachable on a manual mail send whichever address it goes to. The validator also
+      # refuses: an approval written into the packet; an action digest that does not
+      # recompute or that hashes itself, the status, the date or the sender; a real mailbox
+      # pinned as sender; the wrong packet version approved; a pending execution recording
+      # an attempt, a delivery, a contact or an attestation; two approvals sharing a
+      # digest; and any mail sent, connector executed or mailbox searched here.
+      - name: R2 v2 dispatch approval matches its record
+        run: uv run python infrastructure/scripts/render_r2_v2_dispatch_approval.py --check
+
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
   # Pinned to the same versions as infrastructure/compose.
