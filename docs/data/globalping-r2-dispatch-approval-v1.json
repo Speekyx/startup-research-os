@@ -52,9 +52,9 @@
   },
   "execution": {
     "$comment": "An approval says an action MAY be performed. Only a performance says it WAS -- and here the repository cannot observe the performance at all.",
-    "status": "PENDING_MANUAL_OPERATOR_ACTION",
+    "status": "DISPATCH_ATTEMPTED_DELIVERY_FAILED",
     "sends_made": 0,
-    "operator_attestation_recorded": false,
+    "operator_attestation_recorded": true,
     "attestation_level": null,
     "attestation_levels_reachable_for_this_channel": [
       "OPERATOR_ATTESTED"
@@ -66,7 +66,21 @@
     "mail_connector_used": false,
     "mail_connector_note": "a connector present in the runtime is not channel authorisation. An automated send of identical text to the identical recipient would still be a DIFFERENT action, because the channel is one of the bound fields and the sender would be a mailbox the operator never named.",
     "mailbox_searched": false,
-    "emails_sent_by_this_repository": 0
+    "emails_sent_by_this_repository": 0,
+    "send_attempts": 1,
+    "deliveries_confirmed": 0,
+    "provider_contacted": false,
+    "why_provider_contacted_is_false": "the message was rejected, so nobody at the provider received it. An attempt that bounced is not a contact, and recording it as one would put a conversation in the record that never began.",
+    "attested_by": "operator",
+    "attestation_statement": "The approved GP-R2-Q1 manual email was attempted exactly once, but delivery failed because the approved recipient legal@globalping.io does not exist or rejected delivery.",
+    "attestation_is_of_a_failure_not_of_a_send": true,
+    "why_no_attestation_level": "the levels grade evidence that a message WAS delivered. Nothing was delivered, so neither OPERATOR_ATTESTED nor anything above it applies. Recording a level here would grade the evidence for an event that did not happen.",
+    "bounce_artifact_imported": false,
+    "why_the_bounce_was_not_imported": "reading the operator's mailbox for a non-delivery report would replace an attestation with an inference and require an access nobody requested. Mission 1.66's reasoning, applied to a failure rather than to a send.",
+    "approval_exhausted": true,
+    "why_the_approval_is_exhausted": "the approval authorised exactly one send and one was attempted. A retry to the same address would be a second use of a one-use approval, and a send to a different address is a different action, because the recipient is one of the bound fields.",
+    "retry_to_the_same_recipient_authorised": false,
+    "replacement_requires_a_new_operator_approval": true
   },
   "integrity_checks_frozen_before_any_send": {
     "$comment": "Frozen now, which is the only time they mean anything. A sent message cannot be unsent, so a duplicate is REPORTED rather than tidied away.",
@@ -125,7 +139,9 @@
     "MIGRATIONS": 0,
     "CONSTRUCTS_SELECTED": 0,
     "QUANTITY_CLASSES_SELECTED": 0,
-    "CANONICAL_MUTATIONS": 0
+    "CANONICAL_MUTATIONS": 0,
+    "EMAILS_DELIVERED": 0,
+    "FAILED_DELIVERY_ATTEMPTS_BY_THE_OPERATOR": 1
   },
   "parallel_state_untouched": {
     "onyphe_response_status": "NOT_CHECKED_AFTER_DISPATCH",
@@ -144,5 +160,6 @@
     "this_repository_may_not_perform_it": true,
     "mission_1_75_not_started": true,
     "attestation_is_the_only_evidence_this_channel_can_produce": true
-  }
+  },
+  "execution_outcome_recorded_by_mission": "1.74.4"
 }

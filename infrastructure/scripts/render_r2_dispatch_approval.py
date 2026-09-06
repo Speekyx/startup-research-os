@@ -48,7 +48,13 @@ CLOSURE = DATA / "globalping-residual-closure-v1.json"
 
 RENDERED = DATA / "mission-1.74.2-r2-dispatch-approval-v1.md"
 
-EXECUTION_STATUSES = ("PENDING_MANUAL_OPERATOR_ACTION", "SENT", "SUPERSEDED", "WITHDRAWN")
+EXECUTION_STATUSES = (
+    "PENDING_MANUAL_OPERATOR_ACTION",
+    "SENT",
+    "DISPATCH_ATTEMPTED_DELIVERY_FAILED",
+    "SUPERSEDED",
+    "WITHDRAWN",
+)
 PLACEHOLDER_SENDER = "PLACEHOLDER_PERMITTED_FOR_MANUAL_SEND_ONLY"
 
 HARD_ZERO = (
@@ -232,6 +238,51 @@ def _check_execution(approval: dict) -> None:
             raise ValidationError("the execution is pending and records a send")
         if execution["operator_attestation_recorded"] or level is not None:
             raise ValidationError("the execution is pending and records an attestation")
+
+    # Mission 1.74.4. An attempt that bounced is not a send and is not a contact.
+    if execution["status"] == "DISPATCH_ATTEMPTED_DELIVERY_FAILED":
+        if execution.get("send_attempts", 0) < 1:
+            raise ValidationError("a failed dispatch records no attempt")
+        if sends != 0 or execution.get("deliveries_confirmed", 0) != 0:
+            raise ValidationError(
+                "a failed dispatch records a delivery; nothing arrived, so nothing was sent"
+            )
+        if execution.get("provider_contacted"):
+            raise ValidationError(
+                "a bounced message is recorded as having contacted the provider; nobody "
+                "received it, and a contact that never arrived is not a contact"
+            )
+        if execution["attestation_level"] is not None:
+            raise ValidationError(
+                "a failed dispatch carries an attestation level; the levels grade evidence "
+                "that a message WAS delivered, and none was"
+            )
+        if not execution.get("attestation_is_of_a_failure_not_of_a_send"):
+            raise ValidationError(
+                "the record does not distinguish an attestation of a failure from one of a send"
+            )
+        if not execution.get("approval_exhausted"):
+            raise ValidationError(
+                "a one-send approval survived its attempt; the attempt consumed it"
+            )
+        if execution.get("retry_to_the_same_recipient_authorised"):
+            raise ValidationError("a retry is treated as authorised by the spent approval")
+        if not execution.get("replacement_requires_a_new_operator_approval"):
+            raise ValidationError(
+                "a replacement is treated as covered by the approval that was exhausted"
+            )
+        if execution.get("bounce_artifact_imported"):
+            raise ValidationError(
+                "a non-delivery report was imported from the operator's mailbox; that "
+                "replaces an attestation with an inference"
+            )
+        for field in (
+            "why_provider_contacted_is_false",
+            "why_no_attestation_level",
+            "why_the_approval_is_exhausted",
+        ):
+            if not str(execution.get(field) or "").strip():
+                raise ValidationError(f"the failed dispatch states no {field}")
 
     if execution["status"] == "SENT":
         if not execution["operator_attestation_recorded"]:

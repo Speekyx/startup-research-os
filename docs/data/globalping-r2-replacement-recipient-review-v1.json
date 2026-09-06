@@ -1,0 +1,89 @@
+{
+  "$comment": "Mission 1.74.4. The Terms-designated channel rejected delivery, so the question is whether another first-party channel is established -- judged on PROVENANCE rather than on spelling, which is Mission 1.65's rule.",
+  "record_version": "1.0.0",
+  "mission": "1.74.4",
+  "recorded_at": "2026-09-06",
+  "question": "is d@globalping.io a currently established first-party Globalping contact channel, and is it the channel the provider designates for a Terms question?",
+  "candidate_address": "d@globalping.io",
+  "supplied_by_the_operator": true,
+  "accepted_because_supplied": false,
+  "why": "one rejected attempt, attested by a person, does not establish that an address does not exist. What is recorded is what happened once.",
+  "surfaces_reviewed": [
+    {
+      "surface": "Terms of Use, section 16 Contact Us",
+      "locator": "jsdelivr/globalping, docs/terms/Terms of Use.md",
+      "addresses_found": [
+        "legal@globalping.io"
+      ],
+      "designates_for": "questions about these Terms",
+      "d_address_present": false
+    },
+    {
+      "surface": "Privacy Policy, section 12 Contact Us",
+      "locator": "jsdelivr/globalping, docs/terms/Privacy Policy.md",
+      "addresses_found": [
+        "legal@globalping.io"
+      ],
+      "designates_for": "questions about this Privacy Policy",
+      "d_address_present": false
+    },
+    {
+      "surface": "Cookie Policy, How to contact us",
+      "locator": "jsdelivr/globalping, docs/terms/Cookie Policy.md",
+      "addresses_found": [
+        "legal@globalping.io"
+      ],
+      "designates_for": "the Data Protection Team",
+      "d_address_present": false
+    },
+    {
+      "surface": "website footer, committed source",
+      "locator": "jsdelivr/globalping.io, src/views/components/footer.html",
+      "addresses_found": [
+        "d@globalping.io"
+      ],
+      "verbatim": "<li><a href=\"mailto:d@globalping.io\"> d@globalping.io</a></li>",
+      "designates_for": "general contact",
+      "d_address_present": true
+    },
+    {
+      "surface": "rendered homepage footer",
+      "locator": "https://globalping.io/",
+      "addresses_found": [
+        "d@globalping.io"
+      ],
+      "link_text": "Get in Contact",
+      "designates_for": "general contact",
+      "d_address_present": true,
+      "role": "CORROBORATION_ONLY",
+      "why_corroboration_only": "the rendered page was read through a summarising extraction. Mission 1.63: a retrieval summary is not a document, so the committed source above is what establishes the address and this only agrees with it."
+    }
+  ],
+  "surfaces_reviewed_count": 5,
+  "establishment": {
+    "address_is_established_first_party": true,
+    "basis": "read from the provider's own committed website source as a live mailto link, and corroborated by the rendered page. Not inferred from convention, not guessed, and not accepted merely because it was supplied.",
+    "read_from_committed_source_rather_than_a_rendered_shell": true,
+    "inferred_from_convention": false,
+    "single_letter_local_part_treated_as_disqualifying": false,
+    "why_not": "Mission 1.65 established that a recipient is judged on provenance rather than on spelling: a string rule would have refused a correctly established address while still admitting a guessed one that happened to look ordinary. An unusual local part read off a first-party page is established; a conventional one nobody published is not."
+  },
+  "relevance": {
+    "$comment": "The load-bearing distinction, and the one most easily overstated.",
+    "is_it_the_terms_designated_channel": false,
+    "the_terms_designated_channel_remains": "legal@globalping.io",
+    "classification": "ESTABLISHED_FIRST_PARTY_GENERAL_CONTACT_NOT_THE_TERMS_DESIGNATED_CHANNEL",
+    "why_it_is_still_the_relevant_remaining_route": "three provider documents designate legal@globalping.io and that address rejected delivery, so the designated route is unreachable. The general contact channel is the only other address the provider publishes, which makes it the remaining first-party route to the same organisation -- a weaker basis than a designation, and the record says so rather than promoting it.",
+    "weaker_than_the_original_basis": true
+  },
+  "the_tension_recorded_rather_than_smoothed": "the provider's own current documents designate an address that does not accept mail, while a different address is published and live on its homepage. This record does not resolve that: it is a fact about the provider's published channels, and it is not evidence that the general address is answered, monitored or appropriate for a Terms question.",
+  "what_this_does_not_establish": [
+    "that d@globalping.io is monitored, or answered",
+    "that it is an appropriate channel for a Terms question",
+    "that legal@globalping.io is permanently dead rather than temporarily rejecting",
+    "that the provider intends the footer address to replace the designated one"
+  ],
+  "legal_at_globalping_io_status": "OPERATOR_ATTESTED_DELIVERY_REJECTED_ONCE",
+  "not_recorded_as": "PERMANENTLY_NONEXISTENT",
+  "documentation_requests_used": 6
+}

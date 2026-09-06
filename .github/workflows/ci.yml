@@ -702,6 +702,22 @@ jobs:
       - name: R2 dispatch approval matches its record
         run: uv run python infrastructure/scripts/render_r2_dispatch_approval.py --check
 
+      # Mission 1.74.4. The Terms-designated address rejected delivery, so a replacement
+      # recipient was reviewed and a second packet prepared. Two rules carry this gate: a
+      # SUPPLIED address is a claim, established on provenance or not at all; and an
+      # established GENERAL CONTACT is not a DESIGNATED channel. The validator refuses: a
+      # packet whose digest does not recompute; a v2 reusing v1's digest; an edited v1; a
+      # changed subject or body claimed as preserved; a recipient absent from every
+      # reviewed first-party surface; an address accepted because it was supplied, or
+      # inferred from convention, or judged on its spelling; a general contact promoted to
+      # the Terms-designated channel with no provider document designating it; a review
+      # resting on a rendered shell rather than committed source; one rejected attempt
+      # turned into a permanently dead address; a replacement prepared with no failed
+      # attempt recorded; an exhausted approval whose digest or recipient would reach the
+      # replacement; and any send, approval, connector use or mailbox search.
+      - name: R2 replacement packet matches its records
+        run: uv run python infrastructure/scripts/render_r2_replacement_packet.py --check
+
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
   # Pinned to the same versions as infrastructure/compose.
