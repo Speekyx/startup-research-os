@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.120
+Version: 1.121
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-07 (Sprint 1 / Mission 1.76.2)
+Last amended: 2026-09-07 (Sprint 1 / Mission 1.76.3)
 
 ---
 
@@ -13,6 +13,98 @@ Last amended: 2026-09-07 (Sprint 1 / Mission 1.76.2)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.121 - 2026-09-07 (Sprint 1 / Mission 1.76.3)
+
+**`R2_B_DISPATCH_APPROVED_AWAITING_MANUAL_OPERATOR_ACTION`.** The operator approved exactly
+one manual reply of `GP-R2-B-Q1` in the existing email thread, and this repository sent
+nothing, read no mailbox, used no connector and moved no verdict.
+
+**A QUOTED DIGEST IS RECOMPUTED AND A RESTATED BODY IS COMPARED.** The approval arrived
+carrying both, and copying either would make the approval name **whatever the instruction
+said rather than whatever the packet is**. The hash was recomputed from the packet's own
+`hash_covers` fields as stored and equals both the quoted value and the packet's own
+`content_sha256`; the body was compared byte for byte against the frozen body and matched.
+Both values are kept and the gate refuses them disagreeing, which **turns a quoted string
+into a check that could have failed** -- and Mission 1.74.7 supplies the proof it can, where
+a supplied quotation differed from the stored bytes by a trailing space.
+
+**THE APPROVAL SITS BESIDE THE PACKET AND THE PACKET STILL READS NOT_AUTHORIZED.** Mission
+1.66 settled that marking a frozen document APPROVED changes the artifact the operator read;
+here it **would not even have moved the packet's digest**, which covers seven binding fields
+and not that one, and it would still have changed the bytes. So the packet is byte-identical
+and its `send_status: NOT_AUTHORIZED` with `operator_approval_recorded: false` still reads
+correctly, because that field means **THIS DOCUMENT RECORDS NO AUTHORIZATION** and never
+that none exists. **Both statements are true at once**, which is why the gate now refuses a
+record claiming the approval lives inside the packet -- the probe's one escape, closed by
+adding a rule.
+
+**THE RECIPIENT IS STILL NOT AN ADDRESS, AND IT IS NOT OMITTED -- IT IS NOT A VALUE.** A
+reply inside a thread inherits its recipient, the sender of the message being answered is
+still `NOT_ESTABLISHED`, and binding the sentinel would make the digest read as though an
+address had been pinned. **An unpinned field that looks pinned is the field a later reader
+stops checking.** The digest binds the THREAD instead, by subject, prior enquiry digest and
+prior reply digest, and excludes itself, the execution status, the recorded date and the
+recipient.
+
+**THE OPERATOR'S EXCLUSIONS ARE STORED AS STRUCTURE, NOT AS PROSE.** All eight -- a new
+standalone email, a different thread, a modified body, a second send, any Gmail connector
+action, any mailbox read, any Globalping measurement, any other provider contact -- are
+fields, every one false, and the gate refuses any of them flipped true **or dropped**,
+because **a list that can be shortened is a list a later reading widens by forgetting**. Two
+things it does not lift are recorded beside them: the mailbox read that would establish the
+earlier sender, which this approval neither changes nor depends on, and the attribution of
+whatever comes back, since a reply to this reply inherits the same problem. **Approving a
+question does not improve the evidentiary standing of its answer.**
+
+**AN APPROVAL IS NOT AN EXECUTION, AND THIS IS WHERE A FICTIONAL RECORD IS CHEAPEST** --
+once the approval exists, every field an execution needs is already known. Execution reads
+`PENDING_MANUAL_OPERATOR_ACTION` with every counter at zero, no attestation and no provider
+contact, and `SENT` is reachable only through an explicit operator attestation.
+**BYTE_VERIFIED stays unreachable and the reason is the MEDIUM**: a manual reply happens in
+a mail client nothing here can observe, so a thread rather than a fresh message changes the
+addressing and not the observability -- the reachable set is exactly `OPERATOR_ATTESTED` and
+the upgrade path reads **NONE**, worth saying because a new channel invites the thought that
+its properties might be new too.
+
+**IT IS A THIRD APPROVAL, NOT A RENEWAL, AND THE GATE ASSERTS THAT LIVE.** Each spent
+approval must still answer to its own hash, must not name this packet's digest, must not
+name this question id and must not share this approval's digest -- so an edit that quietly
+retargeted a spent approval at this packet fails there rather than passing quietly. Eight
+probe cases attack the spent approvals rather than this one, and all eight are refused.
+
+**Verification.** Probe of **169 deliberate violations, 169 caught, 0 escaped**, plus **4 of
+4 positive controls**, nine files restored byte for byte. **Packet mutations repair the
+approval's file hash before the gate sees them**, so the content checks do the work rather
+than hiding behind the outer file-hash guard. **The controls are the point**: the legitimate
+`SENT` / `OPERATOR_ATTESTED` transition must stay representable, because a gate that only
+accepts the state we happen to be in is not a gate; so must a bounce, because a gate that
+can only express success would force the next failure to be recorded as something it is not;
+and re-dating the record must NOT refuse, because the digest excludes the recorded date by
+design. **3234 bare-python tests**; both runners green; `ruff format --check`,
+`ruff check` and mypy through `uv`; contract generation `--check`; source catalog `--check`;
+all **52** CI gates, one of them new.
+
+**Nothing moved.** R2-B stays `THIRD_PARTY_TARGET_SCOPE_UNRESOLVED`, C9 stays PARTIAL, the
+tally stays **11 PASS / 1 PARTIAL / 0 FAIL** and the verdict stays `COUNTERPART_UNRESOLVED`
+-- **an approval to ask is not an answer**, and the gate asserts that too. GP-R2-Q1 v1 and
+v2, both their approvals, both execution records, the frozen reply and the GP-R2-B-Q1 packet
+are untouched. **0 emails, 0 outward replies, 0 Gmail reads or writes, 0 connector calls, 0
+GitHub writes, 0 public posts, 0 provider contacts, 0 measurements, 0 target requests, 0
+research API calls, 0 model calls, 0 embeddings, 0 Claims, 0 Evidence, 0 independence
+groups, 0 scores, 0 sources registered, 0 governance mutations, 0 canonical mutations, 0
+migrations.**
+
+New: `docs/data/globalping-r2b-dispatch-approval-v1.json`, the generated
+`docs/data/globalping-r2b-dispatch-approval-v1.md`,
+`infrastructure/scripts/render_r2b_dispatch_approval.py` (CI gate 52),
+`packages/inferred-claim-evaluator/python/tests/test_r2b_dispatch_approval.py`, and
+`docs/reports/mission-1.76.3-report.md`.
+
+Changed: `docs/CLAUDE.md` 1.121 to 1.122; `.github/workflows/ci.yml` gains one gate.
+
+Unchanged: every earlier packet, approval, execution record and review in the Globalping
+arc, and every canonical research table.
 
 ## 1.120 - 2026-09-07 (Sprint 1 / Mission 1.76.2)
 
