@@ -1,0 +1,116 @@
+{
+  "$comment": "Mission 1.76.2. ONE QUESTION, and it is the one that was not answered. The previous enquiry was compound and came back with an answer to the clause that was already settled, so this packet asks nothing about commercial use at all.",
+  "record_version": "1.0.0",
+  "mission": "1.76.2",
+  "recorded_at": "2026-09-07",
+  "question_id": "GP-R2-B-Q1",
+  "packet_version": 1,
+  "residual_id": "R2-B",
+  "supersedes": null,
+  "why_a_new_packet_rather_than_a_v3_of_the_old_one": "GP-R2-Q1 asked four things and was answered. This asks one of them again, alone, which is a different question rather than a further version of that one -- and a new question must not be reachable by an approval written for the old one.",
+  "subject": "Terms scope: HEAD measurements of publicly reachable third-party websites",
+  "why_the_subject_is_unchanged": "the mechanism is a reply inside the existing thread, and a reply keeps the thread's subject. Changing it would start a second conversation about the same question.",
+  "body": "Thanks for confirming the commercial-use point.\n\nJust to clarify the remaining part of my question: does Globalping permit bounded HTTP HEAD measurements of publicly reachable third-party websites that I do not own or operate, provided the measurements comply with Globalping's limits and are not abusive, exploitative, or used as a proxy?",
+  "body_as_supplied_by_the_operator": "Thanks for confirming the commercial-use point.\n\nJust to clarify the remaining part of my question: does Globalping permit\nbounded HTTP HEAD measurements of publicly reachable third-party websites\nthat I do not own or operate, provided the measurements comply with\nGlobalping's limits and are not abusive, exploitative, or used as a proxy?",
+  "body_differs_from_the_supplied_text_only_by_line_wrapping": true,
+  "why_it_was_rewrapped": "the operator's text is hard-wrapped for the brief; every packet in this arc stores paragraphs without hard wrapping, because that is what is pasted into a mail client. The words are identical and both forms are recorded so the difference is checkable rather than asserted.",
+  "recipient": "DETERMINED_BY_THE_THREAD_NOT_SUPPLIED",
+  "recipient_is_an_address": false,
+  "why_the_recipient_is_not_an_address": "the sender of the reply being answered is NOT_ESTABLISHED -- Mission 1.76.1 attempted the mailbox read and the connector refused it -- so no address is known and inventing one would fabricate the field the whole exchange hangs on. The mechanism does not need one: a reply inside a thread inherits its recipient from the thread rather than having it typed. What binds the act is therefore the THREAD, and a thread is tighter than a mailbox: it pins the conversation, the question that opened it and the reply being answered.",
+  "thread_binding": {
+    "thread_subject": "Terms scope: HEAD measurements of publicly reachable third-party websites",
+    "prior_enquiry_packet_content_sha256": "987f3ff57ce661c6dc7b22b950e269930d3df6431b5110e74abbed97d13e2c51",
+    "prior_reply_body_sha256": "be3845f89b636b96e92827b2a2e789b1588623ca884bb37dbbe82159377903e5"
+  },
+  "channel": "PROVIDER_REPLY_THREAD_ESTABLISHED_BY_THE_PRIOR_EXCHANGE",
+  "content_sha256": "fe312c37b8622e5abbdaaa541d00189c5a4a2f78b7082d3f70a034b7413da4dc",
+  "hash_covers": [
+    "question_id",
+    "packet_version",
+    "residual_id",
+    "subject",
+    "body",
+    "thread_binding",
+    "channel"
+  ],
+  "hash_excludes": [
+    "content_sha256",
+    "send_status",
+    "recorded_at",
+    "operator_approval_recorded",
+    "recipient"
+  ],
+  "why_recipient_is_excluded_from_the_hash": "it is not a value this packet carries. Binding a sentinel would make the digest cover a placeholder and read as though an address had been pinned.",
+  "asks_about_commercial_use": false,
+  "why_not": "R2-A closed in Mission 1.74 on the provider's own FAQ, and the last reply confirmed it again. Asking a settled question is how a compound enquiry gets the easy clause answered twice.",
+  "independent_policy_questions_combined": 1,
+  "scope_deliberately_not_broadened_to": [
+    "arbitrary HTTP methods",
+    "GET body retrieval",
+    "scanning",
+    "proxying",
+    "infrastructure exploitation",
+    "unlimited or unbounded traffic",
+    "any target the user does own or operate"
+  ],
+  "legal_interpretation_added": false,
+  "examples_added": false,
+  "expected_answer_discriminator": {
+    "$comment": "Frozen BEFORE dispatch, which is the only time a discriminator means anything. The last one was written the same way and it is what stopped a general commercial-use answer from being read as a target-scope answer.",
+    "closes_r2_b_only_if_the_reply_explicitly_establishes_one_of": {
+      "PERMITTED": "the described bounded HEAD measurements may target publicly reachable third-party websites the user does not own or operate, subject to stated limits",
+      "NOT_PERMITTED": "the described third-party target use is outside permitted scope",
+      "CONDITIONALLY_PERMITTED": "the described third-party target use is permitted only under explicitly stated additional conditions"
+    },
+    "the_answer_must_address_third_party_target_scope_explicitly": true,
+    "does_not_close_r2_b": [
+      "silence",
+      "a generic commercial-use permission",
+      "'publicly reachable target' appearing only in technical API documentation",
+      "product behaviour",
+      "the proxy limitation alone",
+      "absence from the prohibited-use list",
+      "implication or presupposition"
+    ],
+    "why_presupposition_is_listed": "Mission 1.76.1 found the strongest available argument that the last reply answered R2-B -- a no-proxy carve-out presupposes third-party targets -- and refused it, because a presupposition is not a statement. Writing that into the discriminator stops the same argument being rediscovered as a novelty."
+  },
+  "send_status": "NOT_AUTHORIZED",
+  "what_send_status_means": "THIS DOCUMENT RECORDS NO AUTHORIZATION, and never that none exists. An approval lives beside a packet, not inside it.",
+  "operator_approval_recorded": false,
+  "sent": false,
+  "execution_record_created": false,
+  "maximum_outward_replies": 1,
+  "prior_approvals_that_cannot_authorise_this": [
+    {
+      "record": "docs/data/globalping-r2-dispatch-approval-v1.json",
+      "why": "spent by an attempt that bounced, and it names a different content digest"
+    },
+    {
+      "record": "docs/data/globalping-r2-v2-dispatch-approval-v1.json",
+      "why": "spent by the one send it authorised, and it names GP-R2-Q1 v2's digest. A new question is a different action however similar the thread"
+    }
+  ],
+  "requires_a_new_explicit_operator_approval": true,
+  "authority_of_the_prior_reply": {
+    "$comment": "Kept separate from responsiveness on purpose. This packet does not depend on the earlier sender being established, and asking again does not establish them.",
+    "sender_identity": "NOT_ESTABLISHED",
+    "claimed_by_this_mission": false,
+    "does_it_block_preparing_this_packet": false,
+    "what_it_affects": "the evidentiary strength of whatever comes back. A reply in this thread inherits the same attribution problem, so establishing the sender remains a separate and still-open action.",
+    "semantic_responsiveness_and_provider_authority_are_separate_gates": true
+  },
+  "outward_actions_performed_by_this_mission": {
+    "emails_sent": 0,
+    "gmail_reads": 0,
+    "gmail_writes": 0,
+    "mail_connector_calls": 0,
+    "github_writes": 0,
+    "globalping_api_executions": 0,
+    "globalping_measurements_created": 0,
+    "target_http_requests": 0,
+    "research_api_calls": 0,
+    "model_calls": 0,
+    "embeddings": 0,
+    "canonical_research_mutations": 0
+  }
+}
