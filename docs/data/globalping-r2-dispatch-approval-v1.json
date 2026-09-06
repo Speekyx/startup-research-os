@@ -161,5 +161,12 @@
     "mission_1_75_not_started": true,
     "attestation_is_the_only_evidence_this_channel_can_produce": true
   },
-  "execution_outcome_recorded_by_mission": "1.74.4"
+  "execution_outcome_recorded_by_mission": "1.74.4",
+  "forward_pointer": {
+    "$comment": "Appended by Mission 1.74.5. Nothing above this field changed. This approval remains exhausted by an attempt that bounced, its recipient remains legal@globalping.io, and provider_contacted remains false.",
+    "continued_by": "docs/data/globalping-r2-v2-dispatch-approval-v1.json",
+    "appended_by_mission": "1.74.5",
+    "this_approval_was_not_reused": true,
+    "approval_sha256_unchanged": true
+  }
 }
