@@ -223,12 +223,19 @@ class TestAnApprovalIsNotAnExecution(unittest.TestCase):
     def setUp(self):
         self.execution = load(APPROVAL)["execution"]
 
-    def test_the_status_is_pending(self):
-        self.assertEqual(self.execution["status"], "PENDING_MANUAL_OPERATOR_ACTION")
-
-    def test_nothing_was_sent(self):
+    def test_the_attempt_failed_and_nothing_was_delivered(self):
+        # Re-pointed in Mission 1.74.4. This asserted the pre-attempt state, and a test
+        # asserting an approval is never used is a test asserting it never had a purpose.
+        self.assertEqual(self.execution["status"], "DISPATCH_ATTEMPTED_DELIVERY_FAILED")
+        self.assertEqual(self.execution["send_attempts"], 1)
         self.assertEqual(self.execution["sends_made"], 0)
+        self.assertEqual(self.execution["deliveries_confirmed"], 0)
+
+    def test_this_repository_still_sent_nothing(self):
         self.assertEqual(self.execution["emails_sent_by_this_repository"], 0)
+
+    def test_a_bounce_is_not_a_contact(self):
+        self.assertFalse(self.execution["provider_contacted"])
 
     def test_no_mail_connector_was_used(self):
         self.assertFalse(self.execution["mail_connector_used"])
@@ -237,8 +244,9 @@ class TestAnApprovalIsNotAnExecution(unittest.TestCase):
     def test_no_mailbox_was_searched(self):
         self.assertFalse(self.execution["mailbox_searched"])
 
-    def test_no_attestation_exists_yet(self):
-        self.assertFalse(self.execution["operator_attestation_recorded"])
+    def test_the_attestation_is_of_a_failure_and_carries_no_level(self):
+        self.assertTrue(self.execution["operator_attestation_recorded"])
+        self.assertTrue(self.execution["attestation_is_of_a_failure_not_of_a_send"])
         self.assertIsNone(self.execution["attestation_level"])
 
     def test_the_only_route_to_sent_is_stated(self):
@@ -350,10 +358,22 @@ class TestNothingMoved(unittest.TestCase):
     def setUp(self):
         self.approval = load(APPROVAL)
 
-    def test_every_counter_is_zero(self):
+    def test_every_counter_this_repository_owns_is_zero(self):
+        # Re-pointed in Mission 1.74.4. One counter legitimately became non-zero: the
+        # OPERATOR attempted a send once. That is not this repository acting, and
+        # flattening the two would lose exactly the distinction the arc is built on.
+        operator_owned = {"FAILED_DELIVERY_ATTEMPTS_BY_THE_OPERATOR"}
         for counter, value in self.approval["mission_accounting"].items():
+            if counter in operator_owned:
+                continue
             with self.subTest(counter=counter):
                 self.assertEqual(value, 0)
+
+    def test_the_operators_failed_attempt_is_counted_separately(self):
+        accounting = self.approval["mission_accounting"]
+        self.assertEqual(accounting["FAILED_DELIVERY_ATTEMPTS_BY_THE_OPERATOR"], 1)
+        self.assertEqual(accounting["EMAILS_DELIVERED"], 0)
+        self.assertEqual(accounting["EMAILS_SENT"], 0)
 
     def test_no_parallel_arc_was_touched(self):
         parallel = self.approval["parallel_state_untouched"]
@@ -431,10 +451,10 @@ class TestTheRenderer(unittest.TestCase):
     def test_a_missing_field_is_a_refusal_rather_than_a_crash(self):
         self.assertIn('ValidationError(f"the record does not carry', self.source)
 
-    def test_the_page_reports_the_pending_status_and_the_placeholder_sender(self):
+    def test_the_page_reports_the_current_status_and_the_placeholder_sender(self):
         text = PAGE.read_text(encoding="utf-8")
         self.assertIn("Do not edit by hand", text)
-        self.assertIn("PENDING_MANUAL_OPERATOR_ACTION", text)
+        self.assertIn(load(APPROVAL)["execution"]["status"], text)
         self.assertIn("legal@globalping.io", text)
         self.assertIn(PLACEHOLDER_SENDER, text)
 

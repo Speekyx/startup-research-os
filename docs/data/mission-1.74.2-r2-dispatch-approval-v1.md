@@ -2,7 +2,7 @@
 
 Generated from `globalping-r2-dispatch-approval-v1.json`. Do not edit by hand.
 
-**Execution status: `PENDING_MANUAL_OPERATOR_ACTION`**
+**Execution status: `DISPATCH_ATTEMPTED_DELIVERY_FAILED`**
 
 ## What was approved
 
@@ -43,7 +43,7 @@ Mission 1.66 established it: a manual outbound send happens in a mail client not
 | emails sent by this repository | 0 |
 | mail connector used | False |
 | mailbox searched | False |
-| operator attestation recorded | False |
+| operator attestation recorded | True |
 | attestation level | None |
 
 a connector present in the runtime is not channel authorisation. An automated send of identical text to the identical recipient would still be a DIFFERENT action, because the channel is one of the bound fields and the sender would be a mailbox the operator never named.

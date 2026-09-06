@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.112
+Version: 1.113
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-06 (Sprint 1 / Mission 1.74.3)
+Last amended: 2026-09-06 (Sprint 1 / Mission 1.74.4)
 
 ---
 
@@ -13,6 +13,108 @@ Last amended: 2026-09-06 (Sprint 1 / Mission 1.74.3)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.113 - 2026-09-06 (Sprint 1 / Mission 1.74.4)
+
+**`R2_DISPATCH_ATTEMPTED_DELIVERY_FAILED_REPLACEMENT_PREPARED`.** The operator attempted
+the approved GP-R2-Q1 email exactly once and it was rejected. The approval is spent, a
+replacement recipient was reviewed and established, and a second packet is prepared and
+**unapproved**.
+
+**A BOUNCE IS NOT A SEND AND IT IS NOT A CONTACT.** `provider_contacted` stays **false**,
+because nobody received it -- an attempt that bounced would otherwise put a conversation
+in the record that never began. **No attestation level applies either**: the levels grade
+evidence that a message WAS delivered, and nothing was, so recording `OPERATOR_ATTESTED`
+would grade the evidence for an event that did not happen. The attestation is marked
+structurally as being **of a failure rather than of a send**. And **the non-delivery
+report was not imported**: reading the operator's mailbox for a bounce would replace an
+attestation with an inference and require an access nobody requested -- Mission 1.66's
+reasoning, applied to a failure instead of a send.
+
+**THE APPROVAL IS EXHAUSTED BY THE ATTEMPT.** One send was authorised and one was
+attempted. A retry to the same address is a second use of a one-use approval; a send to a
+different address is **a different action**, because the recipient is a bound field. The
+replacement **requires a new explicit operator approval** that does not exist, and the
+approval's own digest did not move -- the execution section changed and the binding fields
+did not.
+
+**A SUPPLIED ADDRESS IS A CLAIM, AND IS ESTABLISHED ON PROVENANCE OR NOT AT ALL.**
+`d@globalping.io` arrived in an instruction, and **that is not why it is accepted**.
+Mission 1.65 judged a recipient on provenance rather than on spelling and refused to infer
+one from convention; the same standard applies to one handed over. Four first-party
+surfaces were read: the **Terms of Use section 16**, the **Privacy Policy section 12** and
+the **Cookie Policy** all designate `legal@globalping.io`, and only the website footer
+publishes the candidate -- established from the provider's own committed source,
+`jsdelivr/globalping.io src/views/components/footer.html`, as the live link
+`<li><a href="mailto:d@globalping.io"> d@globalping.io</a></li>`. The rendered homepage
+agrees and is recorded as **CORROBORATION ONLY**, because that retrieval went through a
+summarising extraction and **a summary is not a document**. **A single-letter local part is
+not treated as disqualifying**: a string rule would refuse a correctly established address
+while admitting a guessed one that happened to look ordinary.
+
+**AN ESTABLISHED GENERAL CONTACT IS NOT A DESIGNATED CHANNEL**, which is the same over-read
+this arc has refused for a schema, for product design and for a FAQ answer.
+**`ESTABLISHED_FIRST_PARTY_GENERAL_CONTACT_NOT_THE_TERMS_DESIGNATED_CHANNEL`**: three
+provider documents designate the original address and not one designates the footer
+address, so calling it designated would assert a standing no provider document gives it.
+What makes it relevant is **weaker and is written down as weaker** -- the designated route
+is unreachable and this is the only other address the provider publishes. **The tension is
+recorded rather than smoothed**: the provider's own current documents designate an address
+that does not accept mail while a different address is live on its homepage, and this
+record does not resolve that, nor is it evidence that the general address is monitored,
+answered or appropriate for a Terms question. **One rejection is not a permanent fact about
+an address**: `OPERATOR_ATTESTED_DELIVERY_REJECTED_ONCE`, explicitly not
+`PERMANENTLY_NONEXISTENT`.
+
+**THE REPLACEMENT PRESERVES THE APPROVED WORDING EXACTLY.** A sentence explaining the
+bounce was considered and NOT added: nothing about the question changes with the
+recipient, and adding prose would make this a differently worded enquiry the operator has
+not read. **The channel label changed**, because reusing the designated-channel label would
+assert a designation this address does not have. **v1 is superseded, not edited** -- it
+still answers to its own hash, and it recorded a correctly established address that later
+rejected delivery, which is a fact about the provider rather than an error in the record.
+
+**BOTH PACKETS SHARE A QUESTION ID, AND THE HASH IS WHAT DEFEATS THE HAZARD.** The
+approval binds `approved_content_sha256` and the digests differ because the recipient and
+channel differ, so the spent approval **cannot name** the replacement -- enforced by
+arithmetic rather than by a rule somebody has to remember, and checked from both
+directions.
+
+**0 emails sent by this repository, 0 connector executions, 0 mailbox searches, 0 emails
+delivered, 0 provider contacts, 0 approvals created, 0 residuals closed, 0 qualifications
+recomputed, 0 Globalping API executions, 0 measurements, 0 canonical mutations, 0 Claims,
+0 Evidence, 0 scores, 0 model calls.** Failed delivery attempts **by the operator**: **1**,
+counted separately, because this repository acting and the operator acting are different
+facts. Six first-party documentation requests. R1 untouched at `SENT` / `OPERATOR_ATTESTED`.
+
+**Verification.** Both gates probed with **64 deliberate violations, 64 caught** (61 by
+rule, 3 by drift) plus **4 of 4 positive controls** -- **one of them inverted and it is the
+important one**: a review that establishes NOTHING must BLOCK the packet bound to it, so
+three controls prove legitimate variants pass and one proves an unestablished address is
+refused. **The probe's writes are now all retried**: this machine intermittently rejects
+writes to these files, and a probe that dies mid-case leaves a record edited on disk --
+Mission 1.67's finding, met three times in this arc, and hardening `restore()` alone was
+not enough because the crash happened on a CASE write. **Four Mission 1.74.2 tests
+asserted the pre-attempt state and were re-pointed rather than deleted**, one of which
+iterated every accounting counter asserting zero and now excludes the counter the OPERATOR
+owns. **2901 bare-python tests**; both runners green; `ruff format --check`, `ruff check`
+and mypy all run through `uv`; all **47** CI gates.
+
+New: `docs/data/globalping-r2-replacement-recipient-review-v1.json`,
+`docs/data/globalping-r2-enquiry-packet-v2.json`, the generated
+`docs/data/mission-1.74.4-r2-replacement-packet-v1.md`,
+`infrastructure/scripts/render_r2_replacement_packet.py` (CI gate 47),
+`packages/inferred-claim-evaluator/python/tests/test_r2_replacement_packet.py`, and
+`docs/architecture/mission-1.74.4-report.md`.
+
+Changed: `docs/data/globalping-r2-dispatch-approval-v1.json` execution section records the
+failed attempt, its approval digest and every binding field unchanged;
+`infrastructure/scripts/render_r2_dispatch_approval.py` gains the failure status and its
+rules; four tests re-pointed; `docs/CLAUDE.md` 1.113 to 1.114.
+
+Unchanged: **both R2 enquiry packet v1 and the R1 package are byte-identical**, every
+Mission 1.74 record is untouched, and no canonical table, source review or ADR was
+modified.
 
 ## 1.112 - 2026-09-06 (Sprint 1 / Mission 1.74.3)
 
