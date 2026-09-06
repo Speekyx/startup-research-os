@@ -672,6 +672,16 @@ jobs:
       - name: Globalping residual closure matches its records
         run: uv run python infrastructure/scripts/render_globalping_residuals.py --check
 
+      # Mission 1.76.3. The operator approved exactly one manual reply, and nothing was
+      # sent. The gate refuses: a digest or body that does not match the packet as stored;
+      # an approval written into the packet; an address in the recipient; a hash covering
+      # the recipient; an execution recording a send, an attestation or a provider contact
+      # while pending; BYTE_VERIFIED on a channel that cannot reach it; more than one
+      # outward reply; any item on the operator's not-authorised list flipped true; a
+      # residual or the qualification moved; and any outward action at all.
+      - name: The R2-B dispatch approval matches its record
+        run: uv run python infrastructure/scripts/render_r2b_dispatch_approval.py --check
+
       # Mission 1.76.2. One follow-up question, asking only the half that was not
       # answered. The gate refuses: either spent approval reaching this packet; a digest
       # that does not recompute; an address written into the recipient, which is a
