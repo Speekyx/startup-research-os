@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.110
+Version: 1.111
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-06 (Sprint 1 / Mission 1.74.1)
+Last amended: 2026-09-06 (Sprint 1 / Mission 1.74.2)
 
 ---
 
@@ -13,6 +13,92 @@ Last amended: 2026-09-06 (Sprint 1 / Mission 1.74.1)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.111 - 2026-09-06 (Sprint 1 / Mission 1.74.2)
+
+**`R2_DISPATCH_APPROVED_AWAITING_MANUAL_OPERATOR_ACTION`.** The operator approved
+dispatch of **GP-R2-Q1** by `OPERATOR_MANUAL_EMAIL` to `legal@globalping.io`, the address
+the Terms designate in section 16. **This repository sent nothing, used no connector and
+searched no mailbox.**
+
+**THE RULES INVERT AGAINST MISSION 1.74.1, AND THAT IS THE FINDING.** R1 was a public
+GitHub issue: every field of the action pinned, `BYTE_VERIFIED` reachable. R2 is a manual
+email: the sender **not** pinned, `BYTE_VERIFIED` **unreachable**. **Both differences are
+properties of the CHANNEL rather than of manual sending**, which is why this is a separate
+gate rather than the same one pointed at another file -- a gate accepting the same
+evidence for both would be asserting something false about one of them.
+
+**THREE FIELDS OF FOUR, AND THE COST WAS STATED IN ADVANCE.** Mission 1.65 wrote it down
+before anyone knew whether it would matter: under a manual mail send the sender genuinely
+is not determined until the send, so the hash pins three of four. Mission 1.66.1 then paid
+exactly that, admitting the sender under `ALLOWED_BY_APPROVED_PLACEHOLDER`. **Mission
+1.74.1 escaped it** because a public repository and a GitHub identity are determined
+before the act; **here it recurs**, and pinning the fourth field would produce a different
+approval that supersedes this one rather than editing it. The validator refuses a real
+mailbox in the sender field for exactly that reason.
+
+**`BYTE_VERIFIED` IS UNREACHABLE, AND THE RECORD SAYS SO RATHER THAN IMPLYING A PATH THAT
+DOES NOT EXIST.** A public issue has a durable URL; a mail client's outbox is something no
+guard here can observe, which is what Mission 1.66 established. So the reachable set is
+exactly `OPERATOR_ATTESTED` and the upgrade path reads **NONE**. Importing a sent-message
+artifact from the operator's own mailbox was considered and refused on Mission 1.66's
+reasoning: it would replace an attestation with an inference and require an access nobody
+requested. **This gate REFUSES `BYTE_VERIFIED` where the R1 gate REQUIRES that it be
+possible**, and a test asserts the two gates disagree on that field, because if they ever
+agreed one of them would be wrong.
+
+**THE CONNECTOR WAS AVAILABLE THROUGHOUT AND WAS NOT USED.** One call would have produced
+matching text, a matching recipient and a verifying content hash -- **and a different
+action**, because the channel is a bound field and the sender would be a mailbox the
+operator never named. **A connector present in the runtime is still not channel
+authorisation.**
+
+**TWO APPROVALS, AND THEY ARE NOT ONE.** Each names its own enquiry, mechanism and
+recipient, and each authorises exactly one act. **The R1 approval's binding fields are
+untouched and its digest still recomputes**; it gained exactly one appended forward
+pointer naming this record, which is Mission 1.66.1's shape -- the stale-record hazard
+closed by appending rather than by editing what an earlier record established. Because the
+packets are never edited, **the R1 gate stayed green throughout**: its check that the R2
+packet still reads `NOT_AUTHORIZED` is a check that the packet was not edited, and the
+discipline is what keeps it valid.
+
+**AN APPROVAL TO ASK IS NOT AN ANSWER.** R2's verdict is unchanged, no residual closed,
+the qualification was not recomputed, the tally is still 10 PASS / 2 PARTIAL / 0 FAIL with
+`COUNTERPART_UNRESOLVED`, and Mission 1.74's closure still reads `enquiries_sent: 0` and
+`residuals_remaining: 2`.
+
+**0 emails sent, 0 mail connector executions, 0 mailbox searches, 0 public posts, 0 GitHub
+issues, 0 gh invocations, 0 provider contacts, 0 enquiries sent, 0 Globalping API
+executions, 0 measurements, 0 target HTTP requests, 0 accounts, 0 tokens, 0 credential
+reads, 0 documentation requests**, 0 sources registered, 0 canonical mutations, 0 Claims,
+0 Evidence, 0 scores, 0 model calls, 0 embeddings, 0 migrations. ONYPHE still
+`NOT_CHECKED_AFTER_DISPATCH`, Netlas still pending, the scanner arc still parked, ADR-039
+untouched.
+
+**Verification.** Gate probed with **108 deliberate violations, 108 caught** (104 by rule,
+4 by drift) plus **4 of 4 positive controls**. **One control's name claimed more than it
+tested and was corrected rather than kept**: it was called a pinned-sender supersession and
+never pinned the sender -- which this gate must refuse outright -- so it was renamed to
+what it proves, an approval superseded before any send. Mission 1.65's rule applied to a
+probe's own honesty rather than to a record's. **A missing field is a refusal rather than a
+crash**, carried forward from 1.74.1 and proved again with five cases. **The R1 gate was
+re-run after the forward pointer was appended** and stays green with its digest unchanged.
+**58 new tests**, taking the bare-python runner to **2853**; both test runners green; `ruff
+format --check`, `ruff check` and mypy all run through `uv`; all **46** CI gates.
+
+New: `docs/data/globalping-r2-dispatch-approval-v1.json`, the generated
+`docs/data/mission-1.74.2-r2-dispatch-approval-v1.md`,
+`infrastructure/scripts/render_r2_dispatch_approval.py` (CI gate 46),
+`packages/inferred-claim-evaluator/python/tests/test_r2_dispatch_approval.py`, and
+`docs/architecture/mission-1.74.2-report.md`.
+
+Changed: `docs/CLAUDE.md` 1.111 to 1.112; `.github/workflows/ci.yml` gains one gate; and
+`docs/data/globalping-r1-dispatch-approval-v1.json` gains **one appended forward pointer**
+and no other change.
+
+Unchanged: both enquiry packets are byte-identical, every Mission 1.74 record is untouched,
+the R1 approval's binding fields and digest are untouched, and no canonical table, source
+review or ADR was modified.
 
 ## 1.110 - 2026-09-06 (Sprint 1 / Mission 1.74.1)
 

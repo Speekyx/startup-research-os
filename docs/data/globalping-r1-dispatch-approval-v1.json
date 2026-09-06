@@ -138,5 +138,12 @@
     "this_repository_may_not_perform_it": true,
     "mission_1_75_not_started": true,
     "r2_dispatch_requires_its_own_approval": true
+  },
+  "forward_pointer": {
+    "$comment": "Appended by Mission 1.74.2. Nothing above this field changed. Its scope block says this approval does not cover R2, which is still true; R2 was approved separately and later, by a different mechanism, in its own record.",
+    "continued_by": "docs/data/globalping-r2-dispatch-approval-v1.json",
+    "appended_by_mission": "1.74.2",
+    "what_this_does_not_change": "every field this record established when it was written, including that THIS approval covers GP-R1-Q1 alone",
+    "approval_sha256_unchanged": true
   }
 }
