@@ -21,6 +21,23 @@ And the address changed while the medium did not, so Mission 1.66's ceiling is
 unmoved: `BYTE_VERIFIED` stays unreachable, because a mail client's outbox is
 something no guard here can observe.
 
+Mission 1.74.6 added the fourth, when the first legitimate `SENT` transition arrived
+and the branch that admits it turned out to check almost nothing:
+
+    A SEND IS NOT A DELIVERY.
+
+A send is an act by the sender; a delivery is an outcome at the receiver. The
+attestation establishes the first and is silent on the second, so a `SENT` record
+here must carry an explicit delivery status, and `UNCONFIRMED` forbids a counted
+delivery and forbids `provider_contacted`. This arc supplies its own proof that the
+two come apart: the v1 message was sent too, and then it bounced. `CONFIRMED` must
+name what established it, and may not name the attestation of sending.
+
+The same branch refuses a message id, because the attestation carries none and the
+only route to one runs through a mailbox nobody authorised reading; refuses a
+sending mailbox written back into the approval, which would make an unpinned field
+look pinned; and refuses a send attested as happening before the approval.
+
     uv run python infrastructure/scripts/render_r2_v2_dispatch_approval.py
     uv run python infrastructure/scripts/render_r2_v2_dispatch_approval.py --check
 
@@ -33,6 +50,7 @@ import argparse
 import hashlib
 import json
 import pathlib
+import re
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 DATA = ROOT / "docs" / "data"
@@ -50,7 +68,21 @@ EXECUTION_STATUSES = (
     "SUPERSEDED",
     "WITHDRAWN",
 )
+DELIVERY_STATUSES = ("UNCONFIRMED", "CONFIRMED", "FAILED")
 PLACEHOLDER_SENDER = "PLACEHOLDER_PERMITTED_FOR_MANUAL_SEND_ONLY"
+
+# An offset is required. A naked local time names no instant, and this record is read
+# by people who are not in the operator's timezone and cannot ask.
+TIMESTAMP = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:[+-]\d{2}:\d{2}|Z)")
+
+# The one source a delivery may never be established from is the attestation that the
+# message was sent, which is the inference this gate exists to refuse.
+THE_SEND_ATTESTATION = (
+    "OPERATOR_SEND_ATTESTATION",
+    "THE_SEND_ATTESTATION",
+    "THE_ATTESTATION_OF_SENDING",
+    "OPERATOR_ATTESTED",
+)
 
 HARD_ZERO = (
     "EMAILS_SENT",
@@ -256,11 +288,33 @@ def _check_execution(approval: dict) -> None:
             raise ValidationError("SENT with no send recorded")
         if level != "OPERATOR_ATTESTED":
             raise ValidationError("SENT without the one attestation level this channel has")
+        _check_the_send_is_attested(approval, execution)
+        _check_delivery_was_not_inferred(execution)
+
+    if (
+        execution["status"] != "PENDING_MANUAL_OPERATOR_ACTION"
+        and not str(execution.get("recorded_by_mission") or "").strip()
+    ):
+        raise ValidationError("the execution moved off pending and names no mission that moved it")
+
+    # A reply is a document. It would be frozen verbatim in its own record before
+    # anything interpreted it, so no status here may claim one arrived.
+    if execution["provider_replied"] or execution["reply_recorded"]:
+        raise ValidationError(
+            "the record claims a provider reply; a reply is a document and would be frozen "
+            "verbatim in its own record before this one referred to it"
+        )
+    if not str(execution["why_no_reply_is_recorded"]).strip():
+        raise ValidationError("the record does not say why no reply is recorded")
 
     if execution["status"] == "DISPATCH_ATTEMPTED_DELIVERY_FAILED":
+        # A bounce can follow a dispatch that really happened, so a failure does not reset
+        # the count of dispatches -- the v1 approval never sent at all, and this one has.
+        # What a failure forbids is a DELIVERY, a CONTACT and a LEVEL, because the levels
+        # grade evidence that a message was delivered and nothing was.
         if execution["send_attempts"] < 1:
             raise ValidationError("a failed dispatch records no attempt")
-        if sends != 0 or execution["deliveries_confirmed"] != 0:
+        if execution["deliveries_confirmed"] != 0:
             raise ValidationError("a failed dispatch records a delivery")
         if execution["provider_contacted"]:
             raise ValidationError("a bounced message is recorded as a provider contact")
@@ -274,6 +328,165 @@ def _check_execution(approval: dict) -> None:
     ):
         if not str(execution[field]).strip():
             raise ValidationError(f"the execution states no {field}")
+
+
+def _check_the_send_is_attested(approval: dict, execution: dict) -> None:
+    """Nothing here observed the send, so every fact about it is the operator's word.
+
+    Which is exactly why the record must say so. The danger in this branch is not a
+    lie; it is a record that reads as though something checked it.
+    """
+    action = approval["approved_action"]
+
+    if execution["sends_made"] != action["maximum_sends"]:
+        raise ValidationError(
+            "the approval authorises one send and the record counts a different number"
+        )
+    if execution["send_attempts"] < execution["sends_made"]:
+        raise ValidationError("more sends were made than attempted, which cannot happen")
+    if not execution["dispatch_performed"]:
+        raise ValidationError("SENT while the record denies a dispatch happened")
+
+    for field in ("attested_by", "attestation_statement", "attested_sender"):
+        if not str(execution.get(field) or "").strip():
+            raise ValidationError(f"SENT with no {field}")
+
+    sender = execution["attested_sender"]
+    if sender == PLACEHOLDER_SENDER:
+        raise ValidationError(
+            "the attested sender is the approval's placeholder; that value means the mailbox "
+            "was undetermined, and a send leaves from a real one"
+        )
+    if "@" not in sender:
+        raise ValidationError(f"the attested sender {sender!r} is not a mailbox")
+    if action["sender"] != PLACEHOLDER_SENDER:
+        raise ValidationError(
+            "the sending mailbox was written back into the approval, which would make an "
+            "unpinned field look pinned and this mailbox look approved in advance"
+        )
+    if execution["sender_written_back_into_the_approval"]:
+        raise ValidationError("the record admits writing the sender back into the approval")
+    if not execution["sender_supplied_only_by_the_attestation"]:
+        raise ValidationError(
+            "the record claims a source for the sender other than the attestation, and the "
+            "approval left it unbound, so here there is no other source"
+        )
+    if not str(execution["why_the_sender_is_attested_rather_than_checked"]).strip():
+        raise ValidationError(
+            "the record does not say why the sender is attested rather than checked"
+        )
+
+    if execution["attested_recipient"] != action["recipient"]:
+        raise ValidationError("the attested recipient is not the approved one")
+    if execution["attested_subject"] != action["approved_subject"]:
+        raise ValidationError("the attested subject is not the approved one")
+    if not execution["recipient_matches_the_approved_recipient"]:
+        raise ValidationError("the record denies a recipient match its own fields show")
+    if not execution["subject_matches_the_approved_subject"]:
+        raise ValidationError("the record denies a subject match its own fields show")
+
+    sent_at = str(execution.get("sent_at") or "")
+    if not TIMESTAMP.fullmatch(sent_at):
+        raise ValidationError(
+            f"the send time {sent_at!r} is not an ISO-8601 timestamp with an explicit offset; "
+            "a naked local time names no instant"
+        )
+    if not execution["sent_at_carries_an_explicit_offset"]:
+        raise ValidationError("the record denies an offset its own timestamp carries")
+    if sent_at[:10] < approval["recorded_at"]:
+        raise ValidationError(
+            "the send is attested as happening before the approval that authorises it"
+        )
+
+    # The body that left is in a mail client. Claiming a comparison would claim a read
+    # nobody authorised.
+    if execution["body_compared_by_this_repository"]:
+        raise ValidationError(
+            "the record claims the sent body was compared; that would need the operator's "
+            "mailbox, and nothing here opened one"
+        )
+    if execution["message_id"] is not None or execution["message_id_available"]:
+        raise ValidationError(
+            "a message id appears in the record; the attestation carries none and the only "
+            "route to one runs through a mailbox nobody authorised reading"
+        )
+
+    if execution["sends_made"] >= action["maximum_sends"] and not execution["approval_exhausted"]:
+        raise ValidationError(
+            "the approval's one send was made and the record does not call it exhausted"
+        )
+    if not execution["a_resend_requires_a_new_operator_approval"]:
+        raise ValidationError("the record permits a resend under a spent approval")
+
+    covers = execution["attestation_covers"]
+    uncovered = execution["attestation_does_not_cover"]
+    if not covers or not uncovered:
+        raise ValidationError("the record does not say what the attestation covers")
+    both = sorted(set(covers) & set(uncovered))
+    if both:
+        raise ValidationError(f"the attestation both covers and does not cover {both}")
+    if "delivery" not in uncovered:
+        raise ValidationError(
+            "the record does not place delivery outside what the attestation covers, and an "
+            "attestation of sending covers sending"
+        )
+
+
+def _check_delivery_was_not_inferred(execution: dict) -> None:
+    """A send is an act by the sender. A delivery is an outcome at the receiver."""
+    delivery = execution["delivery"]
+    status = delivery["delivery_status"]
+    if status not in DELIVERY_STATUSES:
+        raise ValidationError(f"the delivery status {status!r} is undefined")
+    if status == "FAILED":
+        raise ValidationError(
+            "a failed delivery is not recorded under SENT; that outcome has its own status"
+        )
+    if not str(delivery["why_delivery_is_unconfirmed"]).strip():
+        raise ValidationError("the delivery block states no reason for the state it records")
+
+    established_by = delivery["delivery_established_by"]
+    if status == "UNCONFIRMED":
+        if execution["deliveries_confirmed"] != 0:
+            raise ValidationError("the delivery is unconfirmed and a delivery is counted")
+        if established_by is not None:
+            raise ValidationError(
+                "the delivery is unconfirmed and the record names a source that established it"
+            )
+        if execution["provider_contacted"]:
+            raise ValidationError(
+                "the provider is marked contacted on an unconfirmed delivery; a dispatch is "
+                "not a contact, and this arc has already sent a message that never arrived"
+            )
+        if not delivery["absence_of_a_reported_bounce_is_not_evidence"]:
+            raise ValidationError(
+                "the record treats silence as evidence; nothing here looked at a mailbox, and "
+                "silence from an unexamined one is not an observation"
+            )
+        if not str(delivery["why_silence_is_not_evidence"]).strip():
+            raise ValidationError("the record does not say why silence establishes nothing")
+        if not delivery["a_later_bounce_would_move_this_to_FAILED"]:
+            raise ValidationError(
+                "the record makes this state final; a bounce may still arrive, and a state "
+                "that cannot move would force it to be recorded as something else"
+            )
+
+    if status == "CONFIRMED":
+        if execution["deliveries_confirmed"] < 1:
+            raise ValidationError("the delivery is confirmed and none is counted")
+        if not str(established_by or "").strip():
+            raise ValidationError("a confirmed delivery names nothing that established it")
+        if established_by in THE_SEND_ATTESTATION:
+            raise ValidationError(
+                f"the delivery is established by {established_by!r}, which attests the send; "
+                "a send is not a delivery, and that inference is what this refuses"
+            )
+
+    if execution["provider_contacted"]:
+        if status != "CONFIRMED":
+            raise ValidationError("the provider is marked contacted with no confirmed delivery")
+    elif not str(execution["why_provider_contacted_is_false"]).strip():
+        raise ValidationError("the record does not say why the provider is not marked contacted")
 
 
 def _check_the_relationship_to_the_spent_approval(approval: dict, packet: dict) -> None:
@@ -328,8 +541,19 @@ def _check_scope_and_accounting(approval: dict) -> None:
         raise ValidationError("an approval to ask closed a residual")
     if not scope["an_approval_to_ask_is_not_an_answer"]:
         raise ValidationError("the record treats an approval to ask as an answer")
+    if not scope["a_sent_question_is_not_an_answer"]:
+        raise ValidationError("the record treats a sent question as an answer")
+    if scope["r2_closed"]:
+        raise ValidationError("R2 is recorded as closed, and no provider has answered it")
     if scope["qualification_recomputed"]:
         raise ValidationError("the qualification was recomputed by an approval mission")
+    if scope["qualification_recomputed_from_the_fact_of_dispatch"]:
+        raise ValidationError(
+            "the qualification was recomputed from the fact of dispatch; a question in "
+            "flight is an act by us, not evidence about the provider"
+        )
+    if not str(scope["why_dispatch_changes_no_verdict"]).strip():
+        raise ValidationError("the record does not say why a dispatch changes no verdict")
 
     accounting = approval["mission_accounting"]
     for counter in HARD_ZERO:
@@ -373,6 +597,11 @@ def validate() -> dict:
         raise ValidationError("this record exists to carry an approval and carries none")
     if not str(approval["approval"]["approved_by"]).strip():
         raise ValidationError("the approval names no approver")
+    if approval["mission"] != "1.74.5":
+        raise ValidationError(
+            "the approval was reattributed to another mission; 1.74.5 recorded it, and a "
+            "later mission that fills in an execution does not become its author"
+        )
 
     try:
         _check_it_names_the_packet(approval, packet)
@@ -399,7 +628,10 @@ def render(approval: dict) -> str:
         "",
         "Generated from `globalping-r2-v2-dispatch-approval-v1.json`. Do not edit by hand.",
         "",
-        f"**Execution status: `{execution['status']}`**",
+        f"**Execution status: `{execution['status']}`**, recorded by Mission "
+        f"{execution.get('recorded_by_mission') or approval['mission']}. The approval above "
+        f"was recorded by Mission {approval['mission']}; approving and performing are "
+        "separate acts and this page carries both.",
         "",
         "## What was approved",
         "",
@@ -451,7 +683,7 @@ def render(approval: dict) -> str:
         f"{', '.join(f'`{lvl}`' for lvl in execution['attestation_levels_reachable_for_this_channel'])}. "
         f"Upgrade path: {execution['upgrade_path']}",
         "",
-        "## Nothing has been performed",
+        "## What was performed",
         "",
         "| | |",
         "|---|---|",
@@ -459,12 +691,56 @@ def render(approval: dict) -> str:
         f"| sends made | {execution['sends_made']} |",
         f"| deliveries confirmed | {execution['deliveries_confirmed']} |",
         f"| provider contacted | {execution['provider_contacted']} |",
+        f"| provider replied | {execution['provider_replied']} |",
         f"| emails sent by this repository | {execution['emails_sent_by_this_repository']} |",
         f"| mail connector used | {execution['mail_connector_used']} |",
         f"| mailbox searched | {execution['mailbox_searched']} |",
         f"| operator attestation | {execution['operator_attestation_recorded']} |",
         f"| attestation level | {execution['attestation_level']} |",
         "",
+    ]
+
+    if execution["status"] == "SENT":
+        delivery = execution["delivery"]
+        lines += [
+            "## A send is not a delivery",
+            "",
+            "| | |",
+            "|---|---|",
+            f"| sent at | `{execution['sent_at']}` |",
+            f"| sender | `{execution['attested_sender']}` |",
+            f"| recipient | `{execution['attested_recipient']}` |",
+            f"| body used, per the attestation | `{execution['body_used_per_attestation']}` |",
+            f"| body compared by this repository | {execution['body_compared_by_this_repository']} |",
+            f"| message id | {execution['message_id']} |",
+            f"| **delivery** | **`{delivery['delivery_status']}`** |",
+            f"| delivery established by | {delivery['delivery_established_by']} |",
+            "",
+            delivery["why_delivery_is_unconfirmed"],
+            "",
+            f"**{execution['why_provider_contacted_is_false']}**",
+            "",
+            "The attestation covers "
+            + ", ".join(execution["attestation_covers"])
+            + ". It does not cover "
+            + ", ".join(execution["attestation_does_not_cover"])
+            + ".",
+            "",
+            "### The sender is attested, not checked",
+            "",
+            execution["why_the_sender_is_attested_rather_than_checked"],
+            "",
+            f"Written back into the approval: "
+            f"**{execution['sender_written_back_into_the_approval']}**. "
+            f"{execution['why_the_sender_was_not_written_back']}",
+            "",
+            "### The approval is spent",
+            "",
+            execution["why_the_approval_is_exhausted"],
+            "",
+        ]
+
+    lines += [
         f"The packet still reads `send_status: {packet['send_status']}`, unchanged, and "
         "records no approval of its own.",
         "",

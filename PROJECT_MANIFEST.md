@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.114
+Version: 1.115
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-06 (Sprint 1 / Mission 1.74.5)
+Last amended: 2026-09-06 (Sprint 1 / Mission 1.74.6)
 
 ---
 
@@ -13,6 +13,90 @@ Last amended: 2026-09-06 (Sprint 1 / Mission 1.74.5)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.115 - 2026-09-06 (Sprint 1 / Mission 1.74.6)
+
+**`R2_V2_DISPATCH_OPERATOR_ATTESTED_DELIVERY_UNCONFIRMED`.** The operator sent the approved
+GP-R2-Q1 v2 email once, by hand, from `thib.chm@gmail.com` to `d@globalping.io`, and
+attested to it. **No mailbox was read, no connector was used, and this repository sent
+nothing.**
+
+**A SEND IS NOT A DELIVERY.** This is the whole mission. A send is an act by the sender; a
+delivery is an outcome at the receiver, and **the attestation establishes the first and is
+silent on the second**. So `deliveries_confirmed` stays 0, the delivery status reads
+`UNCONFIRMED`, and **`provider_contacted` stays FALSE** -- a contact means something
+reached the provider, and only delivery would establish that. **This arc supplies its own
+proof that the two come apart**: the v1 message to `legal@globalping.io` was sent too, and
+then it bounced, and a record that had marked a contact at the moment of sending would
+have been wrong within the hour. The distinction is now a RULE rather than a sentence:
+`UNCONFIRMED` forbids a counted delivery and forbids a contact; `CONFIRMED` must name what
+established it and **may not name the attestation of sending**, which is refused by name.
+
+**SILENCE IS NOT AN OBSERVATION.** The record does not say "no bounce was reported", which
+would imply someone checked a mailbox. It says the attestation is silent on delivery and
+that **nothing here looked** -- and it was written minutes after the send, sooner than a
+bounce would necessarily arrive. **The state can still move**: a later bounce sends this to
+`DISPATCH_ATTEMPTED_DELIVERY_FAILED`, and that branch was widened to admit it, because a
+bounce can follow a dispatch that really happened, so **a failure no longer resets the
+count of dispatches**. What a failure forbids is a delivery, a contact and a level.
+
+**THE SENDER IS ATTESTED, NOT CHECKED.** Mission 1.74.5 left the mailbox unbound at the
+operator's instruction and **stated that cost in advance**; this is the record of paying
+it. The mailbox is in the record because the operator said so, and that is the whole of the
+evidence for it. **The approval keeps its placeholder**: writing the real address back into
+it would make an unpinned field look pinned and make the mailbox read as approved before
+the fact, so the gate refuses that write-back from the execution side.
+
+**NOTHING WAS INVENTED TO FILL A FIELD.** **No message id** -- the attestation carries
+none, the only route to one runs through the sending mailbox, the field is `null` and a
+non-null value is refused, **because a plausible id is exactly what a fabricated record
+would contain**. **No body comparison** -- what left the mail client has not been seen
+here. **No reply** -- a reply is a document and would be frozen verbatim in its own record
+before anything interpreted it. **No timestamp without an offset**, and a send attested as
+happening before its own approval is refused.
+
+**A SENT QUESTION IS STILL NOT AN ANSWER.** R2's verdict is unchanged, 0 residuals closed,
+R2 not closed, R1 untouched, and the qualification was not recomputed -- **neither in
+general nor from the fact of dispatch**, which is now its own refusal. The v2 packet is
+byte-identical, still reads `send_status: NOT_AUTHORIZED` and still records no approval of
+its own; the approval's digest recomputes unchanged, which is what the envelope rule was
+for.
+
+**1 send by the operator, 1 attestation, 0 deliveries confirmed, 0 provider contacts, 0
+replies, 0 emails sent by this repository, 0 connector executions, 0 mailbox searches, 0
+message ids, 0 residuals closed, 0 Globalping API executions, 0 measurements, 0 target HTTP
+requests, 0 canonical mutations, 0 Claims, 0 Evidence, 0 scores, 0 model calls, 0
+documentation requests.** The mission counters stay at zero because **they count what this
+repository did**, and the operator's send lives in the execution block where it belongs.
+ONYPHE still `NOT_CHECKED_AFTER_DISPATCH`, Netlas still pending, the scanner arc still
+parked, ADR-039 untouched.
+
+**Verification.** Gate probed with **97 deliberate violations, 97 caught** (96 by rule, 1
+by drift), **0 escaped**, plus **3 of 3 positive controls**. **Six cases repair a hash
+before attacking** -- four keep the packet's file hash in step with the edit, two recompute
+the spent approval's own digest -- because without them the outer guard caught every such
+edit for the same reason and **the checks behind it were never asked anything**. **The
+controls are the point**: a delivery confirmed by a source that is NOT the send attestation
+passes, and **this send bouncing later** passes, because a gate that could only express
+success would force the next outcome to be recorded as something it is not. **Eighteen of
+the module's 78 tests now run the gate's own checks against mutated dicts** rather than
+reading its source, because **a refusal spelled in a module is not a refusal until
+something calls it**. **2979 bare-python tests**; both runners green; `ruff format
+--check`, `ruff check` and mypy all run through `uv`; all **48** CI gates.
+
+New: `docs/architecture/mission-1.74.6-report.md`.
+
+Changed: `docs/data/globalping-r2-v2-dispatch-approval-v1.json` records the execution, the
+scope and the next action, its approval digest unchanged;
+`infrastructure/scripts/render_r2_v2_dispatch_approval.py` gains the `SENT` and delivery
+checks; the generated `docs/data/mission-1.74.5-r2-v2-dispatch-approval-v1.md`;
+`packages/inferred-claim-evaluator/python/tests/test_r2_v2_dispatch_approval.py` 56 tests
+to 78; `docs/CLAUDE.md` 1.115 to 1.116.
+
+Unchanged: the v2 packet is byte-identical including its subject, body, recipient and
+content hash; the v1 packet, the v1 approval, the R1 package and every Mission 1.74 record
+are untouched; **no new CI gate was added**, because the gate that governs this record
+already existed; and no canonical table, source review or ADR was modified.
 
 ## 1.114 - 2026-09-06 (Sprint 1 / Mission 1.74.5)
 
