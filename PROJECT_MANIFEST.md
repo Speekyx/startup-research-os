@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.117
+Version: 1.118
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-06 (Sprint 1 / Mission 1.75)
+Last amended: 2026-09-06 (Sprint 1 / Mission 1.76)
 
 ---
 
@@ -13,6 +13,90 @@ Last amended: 2026-09-06 (Sprint 1 / Mission 1.75)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.118 - 2026-09-06 (Sprint 1 / Mission 1.76)
+
+**`NEXT_BOUNDED_EVIDENCE_MOVE_SELECTED`, candidate M1.** An audit and a prioritization, not
+an acquisition: **0 records collected, 0 model calls, 0 embeddings, 0 canonical mutations**,
+and the research state is identical before and after.
+
+**MORE ROWS IS NOT MORE INFORMATION.** 58 Evidence rows are **10 proposition kinds** across
+5 sources, and breadth is measured in kinds. The gate refuses a row count presented as a
+dimension count, one kind counted twice, and a count of independent witnesses in a corpus
+holding **zero** established independence groups.
+
+**THE OPPORTUNITY'S FIRST BLOCKER WAS MIS-STATED, AND THE MISSION FOUND IT.** The record
+says "no reviewed reliability applies, so this hypothesis can contribute to no score",
+which reads as NOBODY HAS REVIEWED THIS. **A reviewed assessment already exists**, at 0.65
+and 0.6, for exactly the measurement and purpose its six Wikimedia rows carry. It does not
+apply for a different reason: **the Evidence cannot state its resource identity**, so the
+repository's own `resolve_reliability` returns NO_APPLICABLE_ASSESSMENT with the detail
+"this evidence record cannot state its measurement-and-purpose scope". Run against held
+data, the same function **RESOLVES cleanly for TED**, whose claims carry `resource_id`, and
+fails for Wikimedia and Stack Exchange, whose claims do not and whose acquisition lineage
+has no such column at all. **The corpus is one deterministic binding away from its first
+scorable evidence.**
+
+**NO SCORE, NO WEIGHTS, NO PERCENTAGES.** The priority is an ordinal tier and a
+lexicographic order fixed before the candidates were read. **TIER 2 IS EMPTY AND THAT
+EMPTINESS IS THE FINDING**: no candidate both adds a currently absent decision-relevant
+dimension AND is executable now. The one that would add a dimension needs a governance
+review, a collector and a normalizer first.
+
+**THE WINNER IS NOT UNIQUELY DOMINANT, AND THE RECORD SAYS SO.** Dominance is a **VETO**,
+not the selection rule: a dominated candidate cannot win, and M1 is dominated by nothing.
+The tier then decides. **Docker was not privileged for having an Opportunity row** -- the
+two candidates attached to no Opportunity were ranked on their own terms and lost on
+information gain, and the hypothesis was measured against every other subject holding
+Evidence.
+
+**TED IS SEPARATED, NOT COLLAPSED.** Its 12 rows establish MARKET_ACTIVITY -- that notices
+were published whose reported values differ -- and **not** willingness to pay, actual spend,
+a framework maximum or a buyer. Their subject relationship to the Docker hypothesis is
+NOT_THE_SAME_SUBJECT, because cleaning and sanitation procurement is not the Docker subject
+and looking commercially interesting is not a relation.
+
+**THE REGISTERED-SOURCE GAP IS RECORDED, NOT FILLED.** No source reviewed under
+`local-private-research-v1` reaches WILLINGNESS_TO_PAY, BUYER_OR_BUDGET_EXISTENCE for this
+subject, SOLUTION_DISSATISFACTION or SOLUTION_GAP. The developer-ecosystem sources that
+could speak to it have **no LOCAL review at all**, and under Mission 1.75's contract an
+absent review is a refusal -- github's RESTRICTED state under the commercial profile says
+nothing about LOCAL and was not borrowed. **No source was discovered and none was invented.**
+
+**TWO CORRECTIONS THE GATE FORCED.** The score check first refused a field named
+`why_no_score`, which is the record explaining that it issues none: **the word is not what
+is dangerous, a NUMBER posing as a priority is**, so it now refuses a numeric value in a
+scoring-shaped field. And ranking the gain classes by list position put UNKNOWN below
+LOW_INCREMENTAL_GAIN -- but **UNKNOWN is an UNBOUNDED gain, not a small one**, and ordering
+it below "a little" asserts exactly what UNKNOWN denies. It is excluded from the comparison
+now, and a placement across it must name its criterion.
+
+**Verification.** Probe of **46 deliberate violations, 46 caught, 0 escaped**, plus **3 of
+3 positive controls**, six files restored byte for byte. All seventeen violation classes
+are covered, several twice. **The controls are the point**: besides the committed state, a
+TIE and a NO-ACTIONABLE-CANDIDATE outcome must both stay expressible, because a gate that
+only accepts the answer we happened to reach is not a gate. **3083 bare-python tests**;
+both runners green; `ruff format --check`, `ruff check` and mypy through `uv`; contract
+generation `--check`; source catalog `--check`; all **49** CI gates, one of them new.
+
+**Canonical state unchanged**: RawRecords 325, Normalized 325, Signals 33, Claims 44,
+revisions 45, Evidence 58, INFERRED 1, thresholds 1, derivations 1, refusals 0,
+ReliabilityAssessments 4, independence groups 0, Opportunities 1/1/7, Embeddings 0, sources
+29, use profiles 2, migration head 0036. Globalping untouched at **11 PASS / 1 PARTIAL / 0
+FAIL**, `COUNTERPART_UNRESOLVED`, recorded as a DEPENDENCY rather than a candidate and
+**not checked externally**.
+
+New: `docs/data/opportunity-evidence-breadth-audit-v1.json`,
+`docs/data/evidence-completion-candidate-moves-v1.json`,
+`docs/data/evidence-completion-priority-v1.json`, their three generated `.md` pages,
+`infrastructure/scripts/render_evidence_breadth_priority.py` (CI gate 49),
+`packages/inferred-claim-evaluator/python/tests/test_evidence_breadth_priority.py`, and
+`docs/reports/mission-1.76-report.md`.
+
+Changed: `docs/CLAUDE.md` 1.118 to 1.119; `.github/workflows/ci.yml` gains one gate.
+
+Unchanged: every canonical research table, every source review, every Globalping record,
+and the existing Opportunity.
 
 ## 1.117 - 2026-09-06 (Sprint 1 / Mission 1.75)
 

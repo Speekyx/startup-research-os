@@ -1,0 +1,615 @@
+{
+  "$comment": "Mission 1.76. THE CURRENT EVIDENCE SURFACE, MEASURED. Nothing here is carried forward from an earlier mission's inventory: historical packet counts are evidence of history, not current truth. Every number below was read from the live canonical deployment during this mission, and nothing was written.",
+  "record_version": "1.0.0",
+  "mission": "1.76",
+  "recorded_at": "2026-09-06",
+  "record_kind": "EVIDENCE_BREADTH_AUDIT",
+  "measured_from": "the live canonical PostgreSQL deployment, read-only",
+  "acquisition_performed": false,
+  "canonical_mutation": 0,
+  "migration_head": "0036_grant_use_profile_vocabulary",
+  "canonical_baseline": {
+    "raw_records": 325,
+    "normalized_records": 325,
+    "signals": 33,
+    "claims": 44,
+    "claim_revisions": 45,
+    "evidence": 58,
+    "inferred_claims": 1,
+    "threshold_registrations": 1,
+    "claim_derivations": 1,
+    "proposition_evaluation_refusals": 0,
+    "reliability_assessments": 4,
+    "evidence_independence_groups": 0,
+    "opportunities": 1,
+    "opportunity_revisions": 1,
+    "opportunity_evidence_links": 7,
+    "embeddings": 0,
+    "registered_sources": 29,
+    "use_profiles": 2
+  },
+  "opportunity": {
+    "id": "06113a8b-a83d-423d-8046-18f87d7dbc01",
+    "title": "subject:docker",
+    "market_scope_key": "GLOBAL",
+    "target_actor": "UNKNOWN_NOT_SUPPORTED",
+    "supported_dimensions": [
+      "AUDIENCE_OR_USAGE",
+      "PROBLEM_OR_NEED"
+    ],
+    "unsupported_dimensions": [
+      "BUYER_OR_BUDGET_EXISTENCE",
+      "COMPETITIVE_SUPPLY",
+      "DISTRIBUTION_SIGNAL",
+      "ECONOMIC_VALUE",
+      "FEASIBILITY_SIGNAL",
+      "MARKET_ACTIVITY",
+      "RECURRENCE_OR_FREQUENCY",
+      "REGULATORY_OR_STRUCTURAL_DRIVER",
+      "SOLUTION_DISSATISFACTION",
+      "SOLUTION_GAP",
+      "WILLINGNESS_TO_PAY",
+      "TREND_OR_CHANGE"
+    ],
+    "epistemic_limitations": [
+      "Every supporting Evidence row is ELIGIBLE_CONTEXT, NON_SCORABLE and MISSING_RELIABILITY: no reviewed reliability applies, so this hypothesis can contribute to no score.",
+      "independence_state is UNKNOWN for every supporting row. Two source families is diversity, never established independence, and the row count is not a count of independent findings.",
+      "market_scope is recorded GLOBAL because the column is NOT NULL and the evidence establishes no geography. Ontology V2 §4 defines GLOBAL as the ABSENCE of a geographic restriction; it is not a claim about a worldwide market.",
+      "The Stack Exchange count is a count of published questions, not of people, and not evidence that any two of them share a problem: that relation is PARKED (Mission 1.27).",
+      "The Wikimedia rows are day-over-day request differences under the platform's own heuristic requester class. Two of the six are decreases, and the calendar does not cancel."
+    ],
+    "uncertainties": [
+      "Whether any of the 88 tagged questions share the same underlying problem, or represent 88 distinct problems",
+      "Whether the same actor authored more than one of the 88 questions (author identity is not captured)",
+      "Whether pageview fluctuations reflect human readers, automated traffic, or a mix, given the heuristic requester classification",
+      "Whether any actor involved has budget or purchasing authority",
+      "Whether any money moves in connection with this topic",
+      "Whether existing solutions for whatever need drove the questions are adequate or inadequate",
+      "Whether actors are dissatisfied with anything they currently use",
+      "Whether the need recurs for the same actor over time or is a one-off",
+      "Whether any regulatory or structural driver shapes this activity",
+      "Whether any distribution channel exists to reach the actors who asked these questions",
+      "Whether an intervention of any kind is feasible to build or operate",
+      "Whether the pageview movements are attributable to any cause connected to the questions"
+    ],
+    "hypothesis_statement": "There is evidence worth further investigation that some actors attend to the \"Docker_(software)\" Wikipedia article (with day-to-day request-count fluctuations under the platform's own heuristic requester classification) and that some actors file public questions tagged \"docker\" on Stack Overflow within a bounded window, indicating at least momentary unserved need at the point of asking; whether this reflects any recurring, severe, or commercially addressable need, and who the relevant actor is, is not established and would require further investigation before any intervention can be scoped."
+  },
+  "evidence_lineages": [
+    {
+      "source_id": "wikimedia-pageviews",
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "claim_resource_id": null,
+      "claim_type": "OBSERVED",
+      "evidence_rows": 18,
+      "claims": 6,
+      "with_reliability": 0,
+      "on_the_opportunity": 0
+    },
+    {
+      "source_id": "wikimedia-pageviews",
+      "proposition_kind": "platform_counted_content_request_change",
+      "claim_resource_id": null,
+      "claim_type": "OBSERVED",
+      "evidence_rows": 18,
+      "claims": 18,
+      "with_reliability": 0,
+      "on_the_opportunity": 6
+    },
+    {
+      "source_id": "ted-eu",
+      "proposition_kind": "source_published_classification_value_contrast_witnessed",
+      "claim_resource_id": "notices/eforms-contract-and-award",
+      "claim_type": "OBSERVED",
+      "evidence_rows": 6,
+      "claims": 4,
+      "with_reliability": 0,
+      "on_the_opportunity": 0
+    },
+    {
+      "source_id": "ted-eu",
+      "proposition_kind": "source_reported_procurement_value_contrast",
+      "claim_resource_id": "notices/eforms-contract-and-award",
+      "claim_type": "OBSERVED",
+      "evidence_rows": 6,
+      "claims": 6,
+      "with_reliability": 0,
+      "on_the_opportunity": 0
+    },
+    {
+      "source_id": "world-bank",
+      "proposition_kind": "source_reported_metric_period_change",
+      "claim_resource_id": "indicator/SP.POP.TOTL",
+      "claim_type": "OBSERVED",
+      "evidence_rows": 4,
+      "claims": 4,
+      "with_reliability": 0,
+      "on_the_opportunity": 0
+    },
+    {
+      "source_id": "gdelt",
+      "proposition_kind": "source_reported_term_frequency_change",
+      "claim_resource_id": "web-ngrams/1gram",
+      "claim_type": "OBSERVED",
+      "evidence_rows": 2,
+      "claims": 2,
+      "with_reliability": 0,
+      "on_the_opportunity": 0
+    },
+    {
+      "source_id": "stack-exchange",
+      "proposition_kind": "community_site_questions_without_accepted_answer",
+      "claim_resource_id": null,
+      "claim_type": "OBSERVED",
+      "evidence_rows": 1,
+      "claims": 1,
+      "with_reliability": 0,
+      "on_the_opportunity": 0
+    },
+    {
+      "source_id": "wikimedia-pageviews",
+      "proposition_kind": "metric_threshold_state",
+      "claim_resource_id": null,
+      "claim_type": "INFERRED",
+      "evidence_rows": 1,
+      "claims": 1,
+      "with_reliability": 0,
+      "on_the_opportunity": 0
+    },
+    {
+      "source_id": "stack-exchange",
+      "proposition_kind": "community_site_published_questions_carrying_tag",
+      "claim_resource_id": null,
+      "claim_type": "OBSERVED",
+      "evidence_rows": 1,
+      "claims": 1,
+      "with_reliability": 0,
+      "on_the_opportunity": 1
+    },
+    {
+      "source_id": "gdelt",
+      "proposition_kind": "source_reported_term_frequency_contrast",
+      "claim_resource_id": "web-ngrams/1gram",
+      "claim_type": "OBSERVED",
+      "evidence_rows": 1,
+      "claims": 1,
+      "with_reliability": 0,
+      "on_the_opportunity": 0
+    }
+  ],
+  "reliability_assessments": [
+    {
+      "source_id": "ted-eu",
+      "resource_id": "notices/eforms-contract-and-award",
+      "record_kind_id": "procurement_notice",
+      "claim_type": "OBSERVED",
+      "proposition_kind": "source_published_classification_value_contrast_witnessed",
+      "reliability": 0.55,
+      "origin": "HUMAN_REVIEW",
+      "superseded": false
+    },
+    {
+      "source_id": "ted-eu",
+      "resource_id": "notices/eforms-contract-and-award",
+      "record_kind_id": "procurement_notice",
+      "claim_type": "OBSERVED",
+      "proposition_kind": "source_reported_procurement_value_contrast",
+      "reliability": 0.5,
+      "origin": "HUMAN_REVIEW",
+      "superseded": false
+    },
+    {
+      "source_id": "wikimedia-pageviews",
+      "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+      "record_kind_id": "content_request_count",
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change",
+      "reliability": 0.65,
+      "origin": "HUMAN_REVIEW",
+      "superseded": false
+    },
+    {
+      "source_id": "wikimedia-pageviews",
+      "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+      "record_kind_id": "content_request_count",
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "reliability": 0.6,
+      "origin": "HUMAN_REVIEW",
+      "superseded": false
+    }
+  ],
+  "subject_tokens": [
+    {
+      "subject_token": "Podman",
+      "source_id": "wikimedia-pageviews",
+      "evidence_rows": 12,
+      "on_the_opportunity": 0
+    },
+    {
+      "subject_token": "Docker_(software)",
+      "source_id": "wikimedia-pageviews",
+      "evidence_rows": 12,
+      "on_the_opportunity": 6
+    },
+    {
+      "subject_token": "Kubernetes",
+      "source_id": "wikimedia-pageviews",
+      "evidence_rows": 12,
+      "on_the_opportunity": 0
+    },
+    {
+      "subject_token": "92",
+      "source_id": "ted-eu",
+      "evidence_rows": 10,
+      "on_the_opportunity": 0
+    },
+    {
+      "subject_token": "SP.POP.TOTL",
+      "source_id": "world-bank",
+      "evidence_rows": 4,
+      "on_the_opportunity": 0
+    },
+    {
+      "subject_token": "docker",
+      "source_id": "stack-exchange",
+      "evidence_rows": 2,
+      "on_the_opportunity": 1
+    },
+    {
+      "subject_token": "90",
+      "source_id": "ted-eu",
+      "evidence_rows": 2,
+      "on_the_opportunity": 0
+    },
+    {
+      "subject_token": null,
+      "source_id": "gdelt",
+      "evidence_rows": 1,
+      "on_the_opportunity": 0
+    },
+    {
+      "subject_token": null,
+      "source_id": "wikimedia-pageviews",
+      "evidence_rows": 1,
+      "on_the_opportunity": 0
+    },
+    {
+      "subject_token": "climate",
+      "source_id": "gdelt",
+      "evidence_rows": 1,
+      "on_the_opportunity": 0
+    },
+    {
+      "subject_token": "weather",
+      "source_id": "gdelt",
+      "evidence_rows": 1,
+      "on_the_opportunity": 0
+    }
+  ],
+  "held_records": [
+    {
+      "source_id": "ted-eu",
+      "record_kind_id": "procurement_notice",
+      "collector_id": "ted-search-api",
+      "normalized": 188,
+      "not_feeding_a_signal": 120
+    },
+    {
+      "source_id": "stack-exchange",
+      "record_kind_id": "community_question",
+      "collector_id": "stack-exchange-questions",
+      "normalized": 104,
+      "not_feeding_a_signal": 16
+    },
+    {
+      "source_id": "wikimedia-pageviews",
+      "record_kind_id": "content_request_count",
+      "collector_id": "wikimedia-pageviews-per-article",
+      "normalized": 21,
+      "not_feeding_a_signal": 0
+    },
+    {
+      "source_id": "gdelt",
+      "record_kind_id": "lexical_frequency_observation",
+      "collector_id": "gdelt-web-ngram",
+      "normalized": 6,
+      "not_feeding_a_signal": 0
+    },
+    {
+      "source_id": "world-bank",
+      "record_kind_id": "numeric_observation",
+      "collector_id": "world-bank-indicators",
+      "normalized": 6,
+      "not_feeding_a_signal": 0
+    }
+  ],
+  "local_governance": [
+    {
+      "source_id": "eurostat",
+      "source_family": "economic_data",
+      "collector_enabled": false,
+      "collector_use_profile": null,
+      "approval_state": "APPROVED_WITH_CONDITIONS",
+      "blocking_reasons": [],
+      "reviewed_under_local": true
+    },
+    {
+      "source_id": "fred",
+      "source_family": "economic_data",
+      "collector_enabled": false,
+      "collector_use_profile": null,
+      "approval_state": "APPROVED_WITH_CONDITIONS",
+      "blocking_reasons": [],
+      "reviewed_under_local": true
+    },
+    {
+      "source_id": "gdelt",
+      "source_family": "news",
+      "collector_enabled": false,
+      "collector_use_profile": "commercial-multi-tenant-research-v1",
+      "approval_state": "APPROVED_WITH_CONDITIONS",
+      "blocking_reasons": [
+        "review conditions not satisfied: gdelt-attribution"
+      ],
+      "reviewed_under_local": true
+    },
+    {
+      "source_id": "openalex",
+      "source_family": "knowledge",
+      "collector_enabled": false,
+      "collector_use_profile": null,
+      "approval_state": "APPROVED_WITH_CONDITIONS",
+      "blocking_reasons": [
+        "review conditions not satisfied: openalex-contact-configured, openalex-spend-bounded"
+      ],
+      "reviewed_under_local": true
+    },
+    {
+      "source_id": "stack-exchange",
+      "source_family": "forum",
+      "collector_enabled": false,
+      "collector_use_profile": null,
+      "approval_state": "APPROVED_WITH_CONDITIONS",
+      "blocking_reasons": [
+        "review conditions not satisfied: stack-exchange-attribution, stack-exchange-official-api-only, stack-exchange-personal-data-minimisation"
+      ],
+      "reviewed_under_local": true
+    },
+    {
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "collector_enabled": true,
+      "collector_use_profile": "local-private-research-v1",
+      "approval_state": "APPROVED_WITH_CONDITIONS",
+      "blocking_reasons": [],
+      "reviewed_under_local": true
+    },
+    {
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "collector_enabled": false,
+      "collector_use_profile": null,
+      "approval_state": "APPROVED_WITH_CONDITIONS",
+      "blocking_reasons": [
+        "review conditions not satisfied: wikimedia-aggregate-only, wikimedia-client-identification, wikimedia-official-api-only"
+      ],
+      "reviewed_under_local": true
+    },
+    {
+      "source_id": "world-bank",
+      "source_family": "economic_data",
+      "collector_enabled": false,
+      "collector_use_profile": "commercial-multi-tenant-research-v1",
+      "approval_state": "APPROVED_WITH_CONDITIONS",
+      "blocking_reasons": [],
+      "reviewed_under_local": true
+    },
+    {
+      "source_id": "apple-app-store",
+      "source_family": "app_store",
+      "collector_enabled": false,
+      "collector_use_profile": null,
+      "approval_state": null,
+      "blocking_reasons": null,
+      "reviewed_under_local": false
+    },
+    {
+      "source_id": "bluesky",
+      "source_family": "social",
+      "collector_enabled": false,
+      "collector_use_profile": null,
+      "approval_state": null,
+      "blocking_reasons": null,
+      "reviewed_under_local": false
+    },
+    {
+      "source_id": "discord",
+      "source_family": "community",
+      "collector_enabled": false,
+      "collector_use_profile": null,
+      "approval_state": null,
+      "blocking_reasons": null,
+      "reviewed_under_local": false
+    },
+    {
+      "source_id": "github",
+      "source_family": "developer",
+      "collector_enabled": false,
+      "collector_use_profile": null,
+      "approval_state": null,
+      "blocking_reasons": null,
+      "reviewed_under_local": false
+    },
+    {
+      "source_id": "google-play",
+      "source_family": "app_store",
+      "collector_enabled": false,
+      "collector_use_profile": null,
+      "approval_state": null,
+      "blocking_reasons": null,
+      "reviewed_under_local": false
+    },
+    {
+      "source_id": "google-trends",
+      "source_family": "search_trends",
+      "collector_enabled": false,
+      "collector_use_profile": null,
+      "approval_state": null,
+      "blocking_reasons": null,
+      "reviewed_under_local": false
+    },
+    {
+      "source_id": "hacker-news",
+      "source_family": "community",
+      "collector_enabled": false,
+      "collector_use_profile": null,
+      "approval_state": null,
+      "blocking_reasons": null,
+      "reviewed_under_local": false
+    },
+    {
+      "source_id": "huggingface",
+      "source_family": "developer",
+      "collector_enabled": false,
+      "collector_use_profile": null,
+      "approval_state": null,
+      "blocking_reasons": null,
+      "reviewed_under_local": false
+    },
+    {
+      "source_id": "meta-instagram",
+      "source_family": "social",
+      "collector_enabled": false,
+      "collector_use_profile": null,
+      "approval_state": null,
+      "blocking_reasons": null,
+      "reviewed_under_local": false
+    },
+    {
+      "source_id": "npm-registry",
+      "source_family": "developer",
+      "collector_enabled": false,
+      "collector_use_profile": null,
+      "approval_state": null,
+      "blocking_reasons": null,
+      "reviewed_under_local": false
+    },
+    {
+      "source_id": "pinterest",
+      "source_family": "product_discovery",
+      "collector_enabled": false,
+      "collector_use_profile": null,
+      "approval_state": null,
+      "blocking_reasons": null,
+      "reviewed_under_local": false
+    },
+    {
+      "source_id": "product-hunt",
+      "source_family": "product_discovery",
+      "collector_enabled": false,
+      "collector_use_profile": null,
+      "approval_state": null,
+      "blocking_reasons": null,
+      "reviewed_under_local": false
+    },
+    {
+      "source_id": "pypi",
+      "source_family": "developer",
+      "collector_enabled": false,
+      "collector_use_profile": null,
+      "approval_state": null,
+      "blocking_reasons": null,
+      "reviewed_under_local": false
+    },
+    {
+      "source_id": "reddit",
+      "source_family": "community",
+      "collector_enabled": false,
+      "collector_use_profile": null,
+      "approval_state": null,
+      "blocking_reasons": null,
+      "reviewed_under_local": false
+    },
+    {
+      "source_id": "spotify",
+      "source_family": "content_platform",
+      "collector_enabled": false,
+      "collector_use_profile": null,
+      "approval_state": null,
+      "blocking_reasons": null,
+      "reviewed_under_local": false
+    },
+    {
+      "source_id": "steam",
+      "source_family": "gaming",
+      "collector_enabled": false,
+      "collector_use_profile": null,
+      "approval_state": null,
+      "blocking_reasons": null,
+      "reviewed_under_local": false
+    },
+    {
+      "source_id": "tiktok",
+      "source_family": "social",
+      "collector_enabled": false,
+      "collector_use_profile": null,
+      "approval_state": null,
+      "blocking_reasons": null,
+      "reviewed_under_local": false
+    },
+    {
+      "source_id": "twitch",
+      "source_family": "creator",
+      "collector_enabled": false,
+      "collector_use_profile": null,
+      "approval_state": null,
+      "blocking_reasons": null,
+      "reviewed_under_local": false
+    },
+    {
+      "source_id": "usaspending",
+      "source_family": "public_procurement",
+      "collector_enabled": false,
+      "collector_use_profile": null,
+      "approval_state": null,
+      "blocking_reasons": null,
+      "reviewed_under_local": false
+    },
+    {
+      "source_id": "x-twitter",
+      "source_family": "social",
+      "collector_enabled": false,
+      "collector_use_profile": null,
+      "approval_state": null,
+      "blocking_reasons": null,
+      "reviewed_under_local": false
+    },
+    {
+      "source_id": "youtube",
+      "source_family": "content_platform",
+      "collector_enabled": false,
+      "collector_use_profile": null,
+      "approval_state": null,
+      "blocking_reasons": null,
+      "reviewed_under_local": false
+    }
+  ],
+  "evidence_facets": [
+    {
+      "observation_category": "UNCATEGORISED",
+      "evidence_level": 1,
+      "direction": "SUPPORTS",
+      "independence_state": "UNKNOWN",
+      "count": 57,
+      "scorable": 0
+    },
+    {
+      "observation_category": "UNCATEGORISED",
+      "evidence_level": 1,
+      "direction": "CONTRADICTS",
+      "independence_state": "UNKNOWN",
+      "count": 1,
+      "scorable": 0
+    }
+  ]
+}
