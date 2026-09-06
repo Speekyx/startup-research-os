@@ -114,10 +114,11 @@ bound.
 
 ## 6. The rubric, and the outcomes refused
 
-**13 pass in principle, 3 require a dedicated policy, 0 blocked, 0 unknown.** No numerical
+**11 pass in principle, 5 require a dedicated policy, 0 blocked, 0 unknown.** No numerical
 score.
 
-- **A was refused** because three rows genuinely require a decision nobody has taken.
+- **A was refused** because five rows genuinely require a decision nobody has taken:
+  data minimization, sensitive content, robots, target terms and retention.
 - **D was refused** because target-specific review is downstream of the shape question
   rather than the dominant blocker.
 - **F was refused** because the repository's own documents are sufficient to name the gap

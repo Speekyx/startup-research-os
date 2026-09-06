@@ -85,7 +85,7 @@ refuses.
 **the absence of a shape is not a prohibition** -- reporting one would convert *nobody has
 decided* into *the project has refused*. Outcome D was refused too, because target-specific
 review is downstream of the shape question rather than the dominant blocker. Outcome A was
-refused because three rubric rows genuinely require a decision, and F because the
+refused because five rubric rows genuinely require a decision, and F because the
 repository's documents are sufficient to name the gap precisely.
 
 **SELF-OPERATION SUPPLIES DIRECTABILITY AND NEVER INDEPENDENCE**, so
