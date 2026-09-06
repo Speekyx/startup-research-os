@@ -1,28 +1,24 @@
-"""Mission 1.74. Two residuals narrowed, neither closed, and nothing sent.
+"""Mission 1.74, continued by Mission 1.74.7. One residual closed, one still open.
 
-Mission 1.73 left Globalping ten of twelve dimensions qualified with two questions
-open: whether the provider commits to returning an initial 3xx rather than following
-it, and whether the Terms' Permitted Use reaches third-party targets.
+Mission 1.74 pursued both residuals to the end of the public record and closed neither,
+froze two enquiries, and sent nothing. Mission 1.74.7 recorded the provider's answer to
+the first: R1 is now R1_PASS_PROVIDER_DECLARED_NO_REDIRECT at an evidence level that did
+not exist when this file was written, C6 is PASS, and the tally reads 11/1/0.
 
-Both were pursued to the end of the public record. R1 was checked across five
-first-party surfaces instead of one, no provider test asserts the behaviour either way,
-and a maintainer statement was found that presupposes redirect responses are returned.
-Every signal points the same way and none of them commits the provider, so the verdict
-is PARTIAL at evidence level R1_C_IMPLEMENTATION_OBSERVED. R2 split in two: the
-commercial half closed positively on the provider's own FAQ answer, and the third-party
-half did not, because the one textual hook that could have widened the scope -- the
-Terms defining the platform by reference to the Website -- was followed and repeats the
-same narrowing.
+So this file now guards two things at once. The current records -- the v2 review, the v2
+closure, the v3 qualification and the v5 decision -- are what the gate validates. The
+superseded ones are asserted to STILL SAY WHAT THEY SAID: 10/2/0, two residuals
+remaining, R1_PARTIAL_IMPLEMENTATION_ONLY. They were right when they were written, and a
+mission that backdated a later closure into them would be rewriting history rather than
+continuing it.
 
-So this file is mostly about the readings that were available and refused. An
-implementation is not a contract. A dependency default is not a provider commitment.
-Zero matches for a word mean the word is absent, not the behaviour. A commercial-use
-answer that defers to the Terms does not widen them. A consumer-scoped liability clause
-does not bind business users. A schema accepting a public target is validation, not
-permission. Silence is not permission and ambiguity is not prohibition either.
-
-Two enquiries are frozen, hashed and unsent. Nothing was measured, submitted, executed
-or retrieved from a target, and no governance was bent to make a provider pass.
+Most of it is still about the readings that were available and refused. An implementation
+is not a contract. A dependency default is not a provider commitment. Zero matches for a
+word mean the word is absent, not the behaviour. A commercial-use answer that defers to
+the Terms does not widen them. A schema accepting a public target is validation, not
+permission. Silence is not permission and ambiguity is not prohibition either. And, added
+by 1.74.7: a provider DECLARATION is not documentation, and a better tally is not a
+verdict.
 """
 
 from __future__ import annotations
@@ -39,14 +35,14 @@ SCRIPTS = REPO_ROOT / "infrastructure" / "scripts"
 
 BASELINE = DATA / "mission-1.74-baseline-v1.json"
 LEDGER = DATA / "mission-1.74-documentation-ledger-v1.json"
-REDIRECT = DATA / "globalping-redirect-contract-review-v1.json"
+REDIRECT = DATA / "globalping-redirect-contract-review-v2.json"
 TERMS_SCOPE = DATA / "globalping-provider-terms-scope-review-v1.json"
 COMMERCIAL = DATA / "globalping-commercial-purpose-review-v1.json"
 THIRD_PARTY = DATA / "globalping-third-party-target-scope-review-v1.json"
-CLOSURE = DATA / "globalping-residual-closure-v1.json"
-QUALIFICATION = DATA / "globalping-counterpart-qualification-v2.json"
+CLOSURE = DATA / "globalping-residual-closure-v2.json"
+QUALIFICATION = DATA / "globalping-counterpart-qualification-v3.json"
 READINESS = DATA / "q1-two-route-readiness-v2.json"
-DECISION = DATA / "quantity-class-selection-decision-v4.json"
+DECISION = DATA / "quantity-class-selection-decision-v5.json"
 R1_PACKET = DATA / "globalping-r1-enquiry-packet-v1.json"
 R2_PACKET = DATA / "globalping-r2-enquiry-packet-v1.json"
 
@@ -89,7 +85,13 @@ class TestTheRecordsExist(unittest.TestCase):
                 self.assertTrue(path.exists(), path.name)
                 self.assertIsInstance(load(path), dict)
 
-    def test_every_record_names_this_mission(self):
+    def test_every_record_names_the_mission_that_wrote_it(self):
+        moved_by_1_74_7 = {
+            "globalping-redirect-contract-review-v2.json",
+            "globalping-residual-closure-v2.json",
+            "globalping-counterpart-qualification-v3.json",
+            "quantity-class-selection-decision-v5.json",
+        }
         for path in (
             BASELINE,
             LEDGER,
@@ -105,7 +107,34 @@ class TestTheRecordsExist(unittest.TestCase):
             R2_PACKET,
         ):
             with self.subTest(record=path.name):
-                self.assertEqual(load(path)["mission"], "1.74")
+                expected = "1.74.7" if path.name in moved_by_1_74_7 else "1.74"
+                self.assertEqual(load(path)["mission"], expected)
+
+    def test_the_superseded_records_still_say_what_they_said(self):
+        # Mission 1.74's records were right when they were written, and a later mission
+        # that backdated the closure into them would be rewriting history rather than
+        # continuing it.
+        for name, verdict in (
+            ("globalping-redirect-contract-review-v1.json", "R1_PARTIAL_IMPLEMENTATION_ONLY"),
+            ("globalping-residual-closure-v1.json", None),
+            ("globalping-counterpart-qualification-v2.json", None),
+            ("quantity-class-selection-decision-v4.json", None),
+        ):
+            record = load(DATA / name)
+            with self.subTest(record=name):
+                self.assertEqual(record["mission"], "1.74")
+                self.assertEqual(record["forward_pointer"]["appended_by_mission"], "1.74.7")
+                if verdict is not None:
+                    self.assertEqual(record["verdict"], verdict)
+        self.assertEqual(
+            load(DATA / "globalping-residual-closure-v1.json")["residuals_remaining"], 2
+        )
+        old_tally = load(DATA / "globalping-counterpart-qualification-v2.json")["tally"]
+        self.assertEqual((old_tally["PASS"], old_tally["PARTIAL"]), (10, 2))
+        self.assertEqual(
+            load(DATA / "quantity-class-selection-decision-v4.json")["primary_outcome"],
+            "GLOBALPING_TWO_PROVIDER_CLARIFICATIONS_REQUIRED",
+        )
 
     def test_both_generated_pages_exist(self):
         self.assertTrue(DECISION_PAGE.exists())
@@ -265,9 +294,37 @@ class TestR1TheRedirectContract(unittest.TestCase):
                 )
                 self.assertTrue(statement["what_it_does_not_establish"].strip())
 
-    def test_the_verdict_is_partial_at_the_implementation_level(self):
-        self.assertEqual(self.redirect["verdict"], "R1_PARTIAL_IMPLEMENTATION_ONLY")
-        self.assertEqual(self.redirect["evidence_level"], "R1_C_IMPLEMENTATION_OBSERVED")
+    def test_the_verdict_closes_on_a_declaration_and_says_declaration(self):
+        # Mission 1.74.7. DOCUMENTED would claim a surface that does not exist: the
+        # specification still has zero occurrences of the word.
+        self.assertEqual(self.redirect["verdict"], "R1_PASS_PROVIDER_DECLARED_NO_REDIRECT")
+        self.assertEqual(
+            self.redirect["evidence_level"], "R1_A2_SOLICITED_RESPONSIVE_PROVIDER_ANSWER"
+        )
+        self.assertFalse(self.redirect["documented_in_any_reviewed_surface"])
+
+    def test_it_closed_the_way_mission_1_74_said_it_could(self):
+        closed_by = self.redirect["closed_by"]
+        self.assertTrue(closed_by["as_anticipated_by_mission_1_74"])
+        self.assertTrue(closed_by["condition_written_before_the_answer_existed"])
+        self.assertIn("technical channel", closed_by["anticipated_wording"])
+
+    def test_the_solicited_answer_meets_every_condition_and_states_its_limit(self):
+        answer = self.redirect["solicited_provider_answer"]
+        for condition in (
+            "solicited",
+            "responsive_to_the_exact_predicate",
+            "attributable_to_the_provider",
+            "durable_and_citable",
+            "retrieved_without_a_summarising_extraction",
+        ):
+            with self.subTest(condition=condition):
+                self.assertTrue(answer[condition])
+        self.assertEqual(answer["redirect_response_returned"], "ESTABLISHED")
+        self.assertEqual(answer["redirect_not_followed"], "ESTABLISHED")
+        self.assertFalse(answer["treated_as_broader_than_the_question"])
+        self.assertFalse(answer["reply_restated_here"])
+        self.assertIn("zero occurrences", answer["what_it_does_not_establish"])
 
     def test_the_statement_did_not_upgrade_the_evidence_level(self):
         self.assertFalse(self.redirect["evidence_level_upgraded_by_the_maintainer_statement"])
@@ -415,9 +472,13 @@ class TestTheClosure(unittest.TestCase):
         self.closure = load(CLOSURE)
         self.residuals = {r["id"]: r for r in self.closure["residuals"]}
 
-    def test_two_residuals_remain(self):
-        self.assertEqual(self.closure["residuals_remaining"], 2)
-        self.assertEqual(sum(1 for r in self.closure["residuals"] if not r["closed"]), 2)
+    def test_one_residual_remains_and_it_is_r2(self):
+        self.assertEqual(self.closure["residuals_remaining"], 1)
+        self.assertEqual(sum(1 for r in self.closure["residuals"] if not r["closed"]), 1)
+        self.assertTrue(self.residuals["R1"]["closed"])
+        self.assertFalse(self.residuals["R2"]["closed"])
+        self.assertFalse(self.residuals["R1"]["closed_on_documentation"])
+        self.assertFalse(self.closure["r2_touched_by_this_mission"])
 
     def test_both_residuals_moved_and_say_how(self):
         for residual_id, residual in self.residuals.items():
@@ -467,12 +528,24 @@ class TestTheEnquiries(unittest.TestCase):
         self.closure = load(CLOSURE)
         self.packets = [load(R1_PACKET), load(R2_PACKET)]
 
-    def test_nothing_was_sent(self):
+    def test_both_were_sent_and_only_one_was_answered(self):
         enquiries = self.closure["enquiries"]
-        self.assertEqual(enquiries["enquiries_sent"], 0)
-        self.assertFalse(enquiries["provider_contacted"])
-        self.assertFalse(enquiries["operator_approval_recorded"])
-        self.assertFalse(enquiries["dispatch_authorised_by_this_mission"])
+        self.assertEqual(enquiries["enquiries_sent"], 2)
+        self.assertTrue(enquiries["operator_approval_recorded"])
+        self.assertTrue(enquiries["r1_reply_received"])
+        self.assertFalse(enquiries["r2_reply_received"])
+        # A contact is receipt demonstrated. R1's reply demonstrates it; R2's own record
+        # still reads provider_contacted false, and this may not overrule it.
+        self.assertTrue(enquiries["provider_contacted"])
+        self.assertIn("R1 only", enquiries["provider_contacted_basis"])
+        self.assertFalse(
+            load(DATA / "globalping-r2-v2-dispatch-approval-v1.json")["execution"][
+                "provider_contacted"
+            ]
+        )
+
+    def test_a_review_mission_still_authorises_no_dispatch(self):
+        self.assertFalse(self.closure["enquiries"]["dispatch_authorised_by_this_mission"])
 
     def test_the_public_review_was_exhausted_first(self):
         self.assertFalse(self.closure["enquiries"]["prepared_before_public_review_was_exhausted"])
@@ -543,22 +616,33 @@ class TestTheQualification(unittest.TestCase):
                 self.assertTrue(gate["mandatory"])
                 self.assertTrue(gate["why"].strip())
 
-    def test_the_tally_is_ten_two_zero_and_matches_the_matrix(self):
+    def test_the_tally_is_eleven_one_zero_and_matches_the_matrix(self):
         tally = self.qualification["tally"]
-        self.assertEqual((tally["PASS"], tally["PARTIAL"], tally["FAIL"]), (10, 2, 0))
+        self.assertEqual((tally["PASS"], tally["PARTIAL"], tally["FAIL"]), (11, 1, 0))
         counted = {name: 0 for name in ("PASS", "PARTIAL", "FAIL", "UNKNOWN")}
         for gate in self.qualification["gates"]:
             counted[gate["status"]] += 1
         self.assertEqual(counted, tally)
 
-    def test_the_tally_did_not_change(self):
-        self.assertFalse(self.qualification["tally_changed"])
+    def test_the_tally_changed_and_the_verdict_did_not(self):
+        self.assertTrue(self.qualification["tally_changed"])
+        self.assertEqual(
+            (
+                self.qualification["tally_before"]["PASS"],
+                self.qualification["tally_before"]["PARTIAL"],
+            ),
+            (10, 2),
+        )
+        self.assertFalse(self.qualification["verdict_changed"])
+        self.assertEqual(self.qualification["verdict"], "COUNTERPART_UNRESOLVED")
 
     def test_c6_follows_r1_and_c9_follows_r2(self):
-        self.assertEqual(self.gates["C6_REQUEST_CONTRACT_RECONSTRUCTABILITY"]["status"], "PARTIAL")
+        self.assertEqual(self.gates["C6_REQUEST_CONTRACT_RECONSTRUCTABILITY"]["status"], "PASS")
         self.assertEqual(self.gates["C9_RIGHTS_FEASIBILITY"]["status"], "PARTIAL")
         self.assertTrue(self.gates["C6_REQUEST_CONTRACT_RECONSTRUCTABILITY"]["recomputed"])
-        self.assertTrue(self.gates["C9_RIGHTS_FEASIBILITY"]["recomputed"])
+        # C9 is NOT recomputed: R2 was not examined, and a reply about redirects
+        # establishes nothing about Terms scope.
+        self.assertFalse(self.gates["C9_RIGHTS_FEASIBILITY"]["recomputed"])
 
     def test_the_counterpart_is_not_qualified(self):
         self.assertEqual(self.qualification["verdict"], "COUNTERPART_UNRESOLVED")
@@ -570,15 +654,16 @@ class TestTheQualification(unittest.TestCase):
     def test_no_score_was_issued(self):
         self.assertTrue(self.qualification["no_score_issued"])
 
-    def test_mission_1_73s_record_is_superseded_rather_than_edited(self):
+    def test_mission_1_74s_record_is_superseded_rather_than_edited(self):
         self.assertEqual(
-            self.qualification["supersedes"], "independent-http-counterpart-qualification-v1.json"
+            self.qualification["supersedes"], "globalping-counterpart-qualification-v2.json"
         )
         self.assertTrue(QUALIFICATION_V1.exists())
+        self.assertTrue((DATA / "globalping-counterpart-qualification-v2.json").exists())
+        self.assertTrue(self.qualification["supersedes_note"].strip())
 
-    def test_the_mission_records_what_it_added_anyway(self):
-        added = self.qualification["what_this_mission_added_even_though_the_tally_did_not_move"]
-        self.assertTrue(added)
+    def test_the_mission_records_what_it_added(self):
+        self.assertTrue(self.qualification["what_this_mission_added"])
 
 
 class TestQ1AndIndependence(unittest.TestCase):
@@ -631,10 +716,21 @@ class TestTheDecision(unittest.TestCase):
     def setUp(self):
         self.decision = load(DECISION)
 
-    def test_the_primary_outcome_names_two_clarifications(self):
+    def test_the_primary_outcome_names_which_residual_closed(self):
+        # A count would have been true and weaker: exactly one remains either way.
         self.assertEqual(
-            self.decision["primary_outcome"], "GLOBALPING_TWO_PROVIDER_CLARIFICATIONS_REQUIRED"
+            self.decision["primary_outcome"],
+            "GLOBALPING_REDIRECT_CONTRACT_CLOSED_RIGHTS_SCOPE_REMAINS",
         )
+
+    def test_nothing_downstream_followed_from_r1_closing(self):
+        did_not = self.decision["what_did_not_follow_from_r1_closing"]
+        self.assertFalse(did_not["quantity_class_selected"])
+        self.assertFalse(did_not["construct_selected"])
+        self.assertEqual(did_not["evidence_independence_groups_created"], 0)
+        self.assertFalse(did_not["counterpart_qualified"])
+        self.assertFalse(did_not["q1_strategically_viable"])
+        self.assertTrue(did_not["why"].strip())
 
     def test_every_other_outcome_was_refused_with_a_reason(self):
         refused = self.decision["outcomes_considered_and_refused"]
@@ -738,8 +834,9 @@ class TestTheDecision(unittest.TestCase):
         requirements = load(APPARATUS_REGISTRY)["requirement_registry"]["requirements"]
         self.assertEqual(len(requirements), 15)
 
-    def test_it_supersedes_the_v3_decision_rather_than_editing_it(self):
-        self.assertEqual(self.decision["supersedes"], "quantity-class-selection-decision-v3.json")
+    def test_it_supersedes_the_v4_decision_rather_than_editing_it(self):
+        self.assertEqual(self.decision["supersedes"], "quantity-class-selection-decision-v4.json")
+        self.assertTrue((DATA / "quantity-class-selection-decision-v4.json").exists())
         self.assertTrue((DATA / "quantity-class-selection-decision-v3.json").exists())
 
 
@@ -850,15 +947,22 @@ class TestTheRenderer(unittest.TestCase):
                 text = page.read_text(encoding="utf-8")
                 self.assertIn("Do not edit by hand", text)
 
-    def test_the_decision_page_reports_the_outcome_and_the_unsent_status(self):
+    def test_the_decision_page_reports_the_outcome_and_names_which_residual_closed(self):
         text = DECISION_PAGE.read_text(encoding="utf-8")
-        self.assertIn("GLOBALPING_TWO_PROVIDER_CLARIFICATIONS_REQUIRED", text)
+        self.assertIn("GLOBALPING_REDIRECT_CONTRACT_CLOSED_RIGHTS_SCOPE_REMAINS", text)
+        self.assertIn("COUNTERPART_UNRESOLVED", text)
+        # The packet field still reads NOT_AUTHORIZED and the page must not let that be
+        # read as "nothing was sent": the dispatch column is beside it.
         self.assertIn("NOT_AUTHORIZED", text)
+        self.assertIn("THIS DOCUMENT RECORDS NO AUTHORIZATION", text)
 
     def test_the_redirect_page_keeps_the_implementation_non_normative(self):
         text = REDIRECT_PAGE.read_text(encoding="utf-8")
         self.assertIn("NON_NORMATIVE", text)
-        self.assertIn("R1_PARTIAL_IMPLEMENTATION_ONLY", text)
+        self.assertIn("R1_PASS_PROVIDER_DECLARED_NO_REDIRECT", text)
+        # The incidental statement keeps its non-closing grade beside the answer.
+        self.assertIn("PROVIDER_MAINTAINER_STATEMENT_INCIDENTAL", text)
+        self.assertIn("R1_A2_SOLICITED_RESPONSIVE_PROVIDER_ANSWER", text)
 
 
 class TestGovernanceRecordsThis(unittest.TestCase):

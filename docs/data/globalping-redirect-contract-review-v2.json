@@ -1,7 +1,7 @@
 {
-  "$comment": "§3 to §10. R1. The question is narrow on purpose, and the evidence is graded rather than pooled.",
-  "record_version": "1.0.0",
-  "mission": "1.74",
+  "$comment": "Mission 1.74.7. R1 CLOSED on a solicited provider answer. Everything Mission 1.74 established is carried forward unchanged -- five surfaces, zero documentation, no provider test, one INCIDENTAL maintainer statement still graded non-closing. What is new is a SOLICITED answer, which is a different kind of thing and lives in its own block rather than being added to the list of statements that were merely found.",
+  "record_version": "2.0.0",
+  "mission": "1.74.7",
   "recorded_at": "2026-09-06",
   "residual": "R1",
   "exact_question": {
@@ -88,17 +88,40 @@
     "classification": "NO_PROVIDER_TESTED_REDIRECT_BEHAVIOUR_FOUND",
     "treated_as_public_api_contract": false
   },
-  "evidence_level": "R1_C_IMPLEMENTATION_OBSERVED",
+  "evidence_level": "R1_A2_SOLICITED_RESPONSIVE_PROVIDER_ANSWER",
   "evidence_level_upgraded_by_the_maintainer_statement": false,
-  "why_not_upgraded": "§3's R1-A needs a normative provider contract and R1-B needs the provider to declare a published implementation normative. An incidental premise in an issue about output formatting is neither, however strongly it points the right way.",
-  "verdict": "R1_PARTIAL_IMPLEMENTATION_ONLY",
-  "verdict_reasoning": "five first-party surfaces reviewed, zero documenting the behaviour, no provider test asserting it, one incidental maintainer statement consistent with not following, and an implementation that does not follow. Everything points the same way and nothing commits the provider to it.",
-  "closable_by": "one documented sentence, or one answer through the provider's technical channel",
-  "forward_pointer": {
-    "$comment": "Appended by Mission 1.74.7. Nothing above this field changed. This record's verdict was correct when written: nothing had committed the provider. The enquiry it anticipated was sent and answered.",
-    "superseded_by": "docs/data/globalping-redirect-contract-review-v2.json",
-    "appended_by_mission": "1.74.7",
-    "what_this_does_not_change": "the five surfaces reviewed, the zero documentation matches, the absent provider test, and the INCIDENTAL grading of the maintainer statement found in issue #347",
-    "closed_the_way_this_record_said_it_could_be": true
+  "why_not_upgraded": "unchanged and still true of the INCIDENTAL statement: an incidental premise in an issue about output formatting is neither R1-A nor R1-B, however strongly it points the right way. The level moved on the SOLICITED answer, which is a different document.",
+  "verdict": "R1_PASS_PROVIDER_DECLARED_NO_REDIRECT",
+  "verdict_reasoning": "the provider was asked the exact frozen question through the channel this project established as first-party, and an organisation member answered it directly and on the record. Both required semantics are established, and the second clause forecloses the only competing reading of the first. Five surfaces of implementation evidence agree with the answer rather than contradicting it. The behaviour is DECLARED rather than DOCUMENTED, which is why the verdict says so.",
+  "closable_by": "closed. Documentation would still be an improvement, because a declaration is not a published contract and a future change would contradict nothing.",
+  "supersedes": "globalping-redirect-contract-review-v1.json",
+  "supersedes_note": "Mission 1.74's record is not edited. It said what was established when it was written, and it was right: nothing had committed the provider. Something has now.",
+  "solicited_provider_answer": {
+    "$comment": "Not a member of provider_statements_found. That list holds statements FOUND while reviewing surfaces, and the gate refuses any of them a closing level. This one was ASKED FOR, through the channel Mission 1.74 established, and the distinction is why that guard can stay exactly as it was.",
+    "frozen_source_record": "docs/data/globalping-r1-provider-reply-v1.json",
+    "reviewed_interpretation_record": "docs/data/globalping-r1-reply-review-v1.json",
+    "reviewed_interpretation_sha256": "677c3366f2c481cb5456eeac600b6aeb4c7daf13082c536916c38d3284f92ffd",
+    "reply_body_sha256": "a73b60fd64c1061eabf452651c5e65ea82044f14dd2db2e7a7e04b87db07c035",
+    "reply_restated_here": false,
+    "permalink": "https://github.com/jsdelivr/globalping/issues/907#issuecomment-5559554359",
+    "author_login": "jimaek",
+    "author_association": "MEMBER",
+    "posted_at": "2026-09-06T13:32:15Z",
+    "solicited": true,
+    "responsive_to_the_exact_predicate": true,
+    "attributable_to_the_provider": true,
+    "durable_and_citable": true,
+    "retrieved_without_a_summarising_extraction": true,
+    "evidence_level": "R1_A2_SOLICITED_RESPONSIVE_PROVIDER_ANSWER",
+    "redirect_response_returned": "ESTABLISHED",
+    "redirect_not_followed": "ESTABLISHED",
+    "what_it_does_not_establish": "documentation. The specification still contains zero occurrences of 'redirect', so the behaviour is declared and not specified: a future change would contradict no published document, and it says nothing about methods other than HEAD, about redirect chains beyond the first hop, or about whether following is configurable.",
+    "treated_as_broader_than_the_question": false
+  },
+  "closed_by": {
+    "how": "one answer through the provider's technical channel",
+    "as_anticipated_by_mission_1_74": true,
+    "anticipated_wording": "one documented sentence, or one answer through the provider's technical channel",
+    "condition_written_before_the_answer_existed": true
   }
 }

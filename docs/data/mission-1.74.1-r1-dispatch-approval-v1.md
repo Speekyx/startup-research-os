@@ -35,13 +35,16 @@ The packet still reads `send_status: NOT_AUTHORIZED`, `operator_approval_recorde
 | issue URL | https://github.com/jsdelivr/globalping/issues/907 |
 | issue created by this repository | False |
 | `gh issue create` invoked | False |
-| GitHub API calls by this repository | 0 |
+| GitHub API **write** calls by this repository | 0 |
+| GitHub API **read** calls against this issue | 2 |
 | operator attestation recorded | True |
-| attestation level | OPERATOR_ATTESTED |
+| attestation level | BYTE_VERIFIED |
 
 Mission 1.66 could reach only OPERATOR_ATTESTED because a manual email send happens inside a mail client nothing here can observe. A public GitHub issue has a durable public URL, so once the operator supplies it the posted title and body can be compared against the approved ones. The ceiling that arc hit is a property of the CHANNEL rather than of manual sending.
 
-**Upgrade path.** a raw read of the issue body compared character for character against the frozen packet body, recorded with raw_body_compared true. Until then the level stays OPERATOR_ATTESTED.
+Mission 1.74.7. The single counter refused every GitHub API call, and Mission 1.74.1 defined the upgrade to BYTE_VERIFIED as a RAW READ of the issue body. Those cannot both hold, so the first legitimate upgrade surfaced the contradiction. What the rule protects is that this repository never WROTE: no issue created, no public post, no gh issue create -- and a read is not that. The write half keeps the refusal at zero. The read half is not merely permitted, it is now REQUIRED to be at least one whenever raw_body_compared is true, because a comparison with no read is a comparison against nothing.
+
+**Upgrade path.** taken. BYTE_VERIFIED is the top of this channel's ladder and there is nothing above it.
 
 ## What this approval does not cover
 

@@ -1,0 +1,160 @@
+{
+  "$comment": "Mission 1.74.7. THE REVIEWED INTERPRETATION. The reply itself is frozen in globalping-r1-provider-reply-v1.json and is not restated here as a source. This record reasons about it, and the split is the point: a document that both holds the evidence and draws the conclusion can quietly adjust the first to suit the second.",
+  "record_version": "1.0.0",
+  "mission": "1.74.7",
+  "recorded_at": "2026-09-06",
+  "record_kind": "REVIEWED_INTERPRETATION",
+  "residual": "R1",
+  "exact_predicate_frozen": false,
+  "target_values_retrieved": 0,
+  "source": {
+    "frozen_reply_record": "docs/data/globalping-r1-provider-reply-v1.json",
+    "frozen_reply_file_sha256": "44b508c8ace77b745ba9e8e0eb2082b7f3406def4ba0e80cae8cdbbb37f97c85",
+    "reply_body_sha256": "a73b60fd64c1061eabf452651c5e65ea82044f14dd2db2e7a7e04b87db07c035",
+    "reply_restated_in_this_record": false,
+    "why_not": "two copies of one sentence drift, and the drift is discovered by whoever trusted the wrong one. This record names the reply by hash and reads it from the frozen one."
+  },
+  "question_1_attribution": {
+    "$comment": "Is the reply attributable to Globalping?",
+    "answer": "YES",
+    "provider_authority_established": true,
+    "signals": [
+      {
+        "signal": "GitHub author_association on the comment",
+        "value": "MEMBER",
+        "strength": "STRONG",
+        "why": "computed by GitHub rather than self-declared: the author is a member of the organization that owns the repository the comment sits in"
+      },
+      {
+        "signal": "listed in GET /orgs/jsdelivr/public_members",
+        "value": "present",
+        "strength": "STRONG",
+        "why": "an independent public endpoint agreeing with the association, so the attribution does not rest on one field"
+      },
+      {
+        "signal": "profile company field",
+        "value": "@jsdelivr",
+        "strength": "WEAK",
+        "why": "self-declared, and recorded as corroboration rather than as a basis"
+      }
+    ],
+    "the_repository_is_the_providers_own": true,
+    "the_author_is_not_the_question_author": true,
+    "what_this_establishes": "the answer comes from the organisation that owns and operates Globalping, on that organisation's own repository, from an account GitHub places inside it",
+    "what_this_does_not_establish": "that the author was authorised to bind the organisation contractually. MEMBER is an organisational relationship, not a delegation of authority, and this review treats the reply as the provider stating how its API behaves rather than as the provider promising that it always will."
+  },
+  "question_2_and_3_semantics": {
+    "$comment": "Does the reply establish both halves? They are examined separately, because a sentence that establishes one and merely suggests the other would close nothing.",
+    "question_asked": "For an HTTP measurement using method HEAD, if the requested URL returns a 3xx response with a Location header, does Globalping return that initial 3xx response without following the redirect?",
+    "question_scope": "HTTP measurement using method HEAD, 3xx response with a Location header",
+    "clause_1": {
+      "clause": "It will return the response",
+      "establishes": "the redirect response itself is returned",
+      "established": true,
+      "how": "the question is a yes/no question whose object is 'that initial 3xx response', and the reply is an affirmative answer to it, so the referent of 'the response' is supplied by the question it answers",
+      "weakness_examined": "read in isolation, 'the response' could denote the final response after a redirect had been followed. That reading is available only if redirects are followed."
+    },
+    "clause_2": {
+      "clause": "and not follow the redirect",
+      "establishes": "the redirect is not followed",
+      "established": true,
+      "how": "stated explicitly and without qualification; no referent needs resolving"
+    },
+    "why_the_two_clauses_settle_each_other": "clause 2 forecloses the only competing reading of clause 1. If the redirect is not followed there is no post-redirect response for 'the response' to denote, so the referent is forced rather than chosen. The reading does not depend on charity toward the answer.",
+    "redirect_response_returned": "ESTABLISHED",
+    "redirect_not_followed": "ESTABLISHED",
+    "both_required_semantics_established": true,
+    "what_the_reply_does_not_establish": [
+      "behaviour for methods other than HEAD, because the question named HEAD and an answer is scoped by the question it answers",
+      "behaviour across redirect chains beyond the first hop",
+      "whether following redirects is available as an option",
+      "any commitment that the behaviour will not change",
+      "anything about R2, which is a different residual on a different channel"
+    ],
+    "treated_as_broader_than_the_question": false
+  },
+  "question_4_evidence_level": {
+    "$comment": "Mission 1.74 refused to upgrade on an INCIDENTAL maintainer statement. This is not that, and the difference is written as five conditions rather than as a judgement.",
+    "evidence_level": "R1_A2_SOLICITED_RESPONSIVE_PROVIDER_ANSWER",
+    "level_is_new": true,
+    "why_a_new_level_rather_than_an_existing_one": "R1-A is a normative provider contract, and the specification still contains zero occurrences of 'redirect'. R1-B needs the provider to declare a published implementation normative, and it has not. The existing non-closing level names an INCIDENTAL statement, and this one was solicited and is responsive. None of the five fitted, so a sixth is defined rather than one of them stretched.",
+    "conditions_all_of_which_must_hold": {
+      "solicited": true,
+      "solicited_basis": "this repository asked the exact frozen question, GP-R1-Q1",
+      "responsive_to_the_exact_predicate": true,
+      "responsive_basis": "the reply is a comment on the issue whose body is byte-identical to the frozen packet body, so it answers that question and not a neighbouring one",
+      "attributable_to_the_provider": true,
+      "attributable_basis": "GitHub author_association MEMBER plus public org membership",
+      "durable_and_citable": true,
+      "durable_basis": "a public permalinked comment on a public issue",
+      "retrieved_without_a_summarising_extraction": true,
+      "retrieval_basis": "GET through the GitHub REST API, which returns stored markdown"
+    },
+    "if_any_condition_failed_the_level_would_be": "PROVIDER_MAINTAINER_STATEMENT_INCIDENTAL",
+    "is_a_closing_level": true,
+    "why_it_closes": "Mission 1.74's own review recorded, before any answer existed, what would close R1: 'one documented sentence, or one answer through the provider's technical channel'. The channel was established first-party in the same mission and the enquiry was addressed to it. The condition was written in advance and it is met.",
+    "closable_by_as_frozen_in_mission_1_74": "one documented sentence, or one answer through the provider's technical channel",
+    "the_incidental_statement_guard_is_unchanged": true,
+    "why_that_guard_still_holds": "the earlier statement was FOUND while reviewing surfaces; this one was ASKED FOR. The guard refusing a found statement a closing level is untouched, and this answer is recorded in its own block rather than added to that list."
+  },
+  "question_4_verdict": {
+    "verdict": "R1_PASS_PROVIDER_DECLARED_NO_REDIRECT",
+    "verdict_is_new": true,
+    "previous_verdict": "R1_PARTIAL_IMPLEMENTATION_ONLY",
+    "previous_evidence_level": "R1_C_IMPLEMENTATION_OBSERVED",
+    "discriminator_frozen_before_the_send": "an answer naming either 'the initial 3xx is returned' or 'redirects are followed' maps directly to R1_PASS_DOCUMENTED_NO_REDIRECT or R1_FAIL_DOCUMENTED_REDIRECT_FOLLOWING. Anything else leaves R1 partial.",
+    "discriminator_decision_honoured": true,
+    "discriminator_label_used_verbatim": false,
+    "why_the_label_differs": "the discriminator named R1_PASS_DOCUMENTED_NO_REDIRECT, and the answer arrived through a technical channel rather than through the specification, which still has zero occurrences of 'redirect'. Calling this DOCUMENTED would claim a surface that does not exist. The change is a NARROWING and not a reinterpretation: the discriminator's decision was PASS and the decision is PASS.",
+    "what_remains_open_even_at_pass": "the behaviour is declared and not specified. No published document states it, so a future change would contradict nothing the provider has written, and this verdict would not detect that change. Asking the provider to document it is a separate act and was not performed.",
+    "residual_closed": true
+  },
+  "question_5_qualification": {
+    "$comment": "The tally moves. The verdict does not.",
+    "c6_before": "PARTIAL",
+    "c6_after": "PASS",
+    "why_c6_moves": "C6 was PARTIAL because no first-party surface stated the redirect behaviour. One now does, responsively and attributably, and the five surfaces of implementation evidence agree with it rather than contradicting it.",
+    "c9_before": "PARTIAL",
+    "c9_after": "PARTIAL",
+    "c9_untouched_by_this_mission": true,
+    "tally_before": {
+      "PASS": 10,
+      "PARTIAL": 2,
+      "FAIL": 0,
+      "UNKNOWN": 0
+    },
+    "tally_after": {
+      "PASS": 11,
+      "PARTIAL": 1,
+      "FAIL": 0,
+      "UNKNOWN": 0
+    },
+    "verdict_before": "COUNTERPART_UNRESOLVED",
+    "verdict_after": "COUNTERPART_UNRESOLVED",
+    "verdict_changed": false,
+    "why_the_verdict_does_not_move": "qualification needs all twelve mandatory dimensions PASS. C9 is still PARTIAL on R2, so one residual closing improves the tally and settles nothing about qualification. A tally that moved and a verdict that did not is the honest shape of this result.",
+    "primary_outcome": "GLOBALPING_REDIRECT_CONTRACT_CLOSED_RIGHTS_SCOPE_REMAINS"
+  },
+  "bounded_to_r1": {
+    "$comment": "Everything this review was told not to touch, recorded as not touched.",
+    "r2_examined": false,
+    "r2_verdict_unchanged": "R2_PARTIAL_COMMERCIAL_ALLOWED_THIRD_PARTY_SCOPE_UNRESOLVED",
+    "r2_dispatch_state_altered": false,
+    "r2_reply_claimed": false,
+    "globalping_measurements_run": 0,
+    "target_http_requests": 0,
+    "quantity_class_selected": false,
+    "construct_selected": false,
+    "evidence_independence_groups_created": 0,
+    "why_none_of_those_follow_from_a_closed_residual": "R1 closing removes a reason not to proceed. It supplies no reason to proceed, and the qualification verdict that would gate any selection has not moved."
+  },
+  "chain": {
+    "$comment": "The distinction this mission was asked to preserve, written as a chain.",
+    "provider_reply": "the public comment on jsdelivr/globalping issue 907",
+    "frozen_source_record": "docs/data/globalping-r1-provider-reply-v1.json",
+    "reviewed_interpretation": "docs/data/globalping-r1-reply-review-v1.json",
+    "gate_result": "docs/data/globalping-redirect-contract-review-v2.json",
+    "each_step_is_a_separate_document": true,
+    "interpretation_written_into_the_frozen_source": false
+  }
+}

@@ -38,16 +38,41 @@ DATA = ROOT / "docs" / "data"
 
 BASELINE = DATA / "mission-1.74-baseline-v1.json"
 LEDGER = DATA / "mission-1.74-documentation-ledger-v1.json"
-REDIRECT = DATA / "globalping-redirect-contract-review-v1.json"
+REDIRECT = DATA / "globalping-redirect-contract-review-v2.json"
 TERMS_SCOPE = DATA / "globalping-provider-terms-scope-review-v1.json"
 COMMERCIAL = DATA / "globalping-commercial-purpose-review-v1.json"
 THIRD_PARTY = DATA / "globalping-third-party-target-scope-review-v1.json"
-CLOSURE = DATA / "globalping-residual-closure-v1.json"
-QUALIFICATION = DATA / "globalping-counterpart-qualification-v2.json"
+CLOSURE = DATA / "globalping-residual-closure-v2.json"
+QUALIFICATION = DATA / "globalping-counterpart-qualification-v3.json"
+
+# Mission 1.74.7. The frozen provider reply and the review that reads it. Two documents
+# on purpose: one that may only record what the surface says, one that may reason.
+FROZEN_REPLY = DATA / "globalping-r1-provider-reply-v1.json"
+REPLY_REVIEW = DATA / "globalping-r1-reply-review-v1.json"
+
+# Superseded, never edited. The gate asserts they still say what they said.
+REDIRECT_V1 = DATA / "globalping-redirect-contract-review-v1.json"
+CLOSURE_V1 = DATA / "globalping-residual-closure-v1.json"
+QUALIFICATION_V2 = DATA / "globalping-counterpart-qualification-v2.json"
+
+R1_DISPATCH = DATA / "globalping-r1-dispatch-approval-v1.json"
+R2_V2_DISPATCH = DATA / "globalping-r2-v2-dispatch-approval-v1.json"
+
+DECISION_V4 = DATA / "quantity-class-selection-decision-v4.json"
 READINESS = DATA / "q1-two-route-readiness-v2.json"
-DECISION = DATA / "quantity-class-selection-decision-v4.json"
+DECISION = DATA / "quantity-class-selection-decision-v5.json"
 R1_PACKET = DATA / "globalping-r1-enquiry-packet-v1.json"
 R2_PACKET = DATA / "globalping-r2-enquiry-packet-v1.json"
+
+# Superseded records, each paired with the successor that replaced it and, where the
+# predecessor's own verdict is the thing a later mission might be tempted to rewrite,
+# the value it must still carry.
+SUPERSEDED = {
+    REDIRECT_V1: (REDIRECT, "R1_PARTIAL_IMPLEMENTATION_ONLY"),
+    CLOSURE_V1: (CLOSURE, None),
+    QUALIFICATION_V2: (QUALIFICATION, None),
+    DECISION_V4: (DECISION, None),
+}
 
 QUALIFICATION_V1 = DATA / "independent-http-counterpart-qualification-v1.json"
 SELECTED_CLASS = DATA / "selected-quantity-class-v1.json"
@@ -78,14 +103,30 @@ RENDERED = {
 
 R1_VERDICTS = (
     "R1_PASS_DOCUMENTED_NO_REDIRECT",
+    # Mission 1.74.7. Narrower than the one above, and deliberately so: the behaviour is
+    # DECLARED by the provider and still not written in any specification.
+    "R1_PASS_PROVIDER_DECLARED_NO_REDIRECT",
     "R1_FAIL_DOCUMENTED_REDIRECT_FOLLOWING",
     "R1_PARTIAL_IMPLEMENTATION_ONLY",
     "R1_UNKNOWN_NO_PROVIDER_CONTRACT",
 )
+R1_CLOSING_VERDICTS = (
+    "R1_PASS_DOCUMENTED_NO_REDIRECT",
+    "R1_PASS_PROVIDER_DECLARED_NO_REDIRECT",
+    "R1_FAIL_DOCUMENTED_REDIRECT_FOLLOWING",
+)
+R1_PASSING_VERDICTS = (
+    "R1_PASS_DOCUMENTED_NO_REDIRECT",
+    "R1_PASS_PROVIDER_DECLARED_NO_REDIRECT",
+)
 
-# §3. Only a normative provider contract may close R1.
+# §3. Only a normative provider contract may close R1 -- and Mission 1.74.7 added the
+# one thing Mission 1.74's own review said would also do it: "one answer through the
+# provider's technical channel". That level is defined by five conditions, all of which
+# the gate checks, and failing any of them drops it to the incidental level below.
 R1_CLOSING_EVIDENCE_LEVELS = (
     "R1_A_NORMATIVE_PROVIDER_CONTRACT",
+    "R1_A2_SOLICITED_RESPONSIVE_PROVIDER_ANSWER",
     "R1_B_PROVIDER_MAINTAINED_IMPLEMENTATION_CONTRACT",
 )
 R1_NON_CLOSING_EVIDENCE_LEVELS = (
@@ -93,6 +134,16 @@ R1_NON_CLOSING_EVIDENCE_LEVELS = (
     "R1_D_DEPENDENCY_DEFAULT",
     "PROVIDER_MAINTAINER_STATEMENT_INCIDENTAL",
 )
+
+# The conditions that separate a solicited answer from a statement somebody stumbled on.
+SOLICITED_ANSWER_CONDITIONS = (
+    "solicited",
+    "responsive_to_the_exact_predicate",
+    "attributable_to_the_provider",
+    "durable_and_citable",
+    "retrieved_without_a_summarising_extraction",
+)
+PROVIDER_ASSOCIATIONS = ("OWNER", "MEMBER", "COLLABORATOR")
 
 GATE_STATUSES = ("PASS", "PARTIAL", "FAIL", "UNKNOWN")
 
@@ -289,6 +340,172 @@ def _check_preconditions(baseline: dict, ledger: dict) -> None:
             raise ValidationError(f"{counter} is not zero")
 
 
+def _check_supersession() -> None:
+    """Mission 1.74.7. A successor may not quietly become the predecessor.
+
+    Three records were superseded rather than edited, because each said what was
+    established when it was written and was right about it. Each gained exactly one
+    appended forward pointer. This asserts, live, that the old ones still read the old
+    way -- so a later edit that backdated the closure into Mission 1.74 fails here.
+    """
+    for old, (new, expected_verdict) in SUPERSEDED.items():
+        record = _load(old)
+        pointer = record.get("forward_pointer")
+        if not pointer:
+            raise ValidationError(f"{old.name} was superseded and carries no forward pointer")
+        if pointer["superseded_by"] != f"docs/data/{new.name}":
+            raise ValidationError(f"{old.name} points at something other than its successor")
+        if pointer["appended_by_mission"] != "1.74.7":
+            raise ValidationError(f"{old.name} names another mission as the appender")
+        if record.get("mission") == "1.74.7":
+            raise ValidationError(f"{old.name} was reattributed to the mission that superseded it")
+        if expected_verdict is not None and record["verdict"] != expected_verdict:
+            raise ValidationError(
+                f"{old.name} no longer records {expected_verdict}; it was correct when it was "
+                "written and a later mission may not rewrite it"
+            )
+
+        successor = _load(new)
+        if successor.get("supersedes") != old.name:
+            raise ValidationError(f"{new.name} does not name {old.name} as superseded")
+        if not str(successor.get("supersedes_note") or "").strip():
+            raise ValidationError(f"{new.name} supersedes silently")
+        if successor is record:
+            raise ValidationError("a record supersedes itself")
+
+    # The predecessor's tally is history and stays 10 / 2 / 0.
+    previous = _load(QUALIFICATION_V2)["tally"]
+    if (previous["PASS"], previous["PARTIAL"], previous["FAIL"]) != (10, 2, 0):
+        raise ValidationError("Mission 1.74's qualification record no longer says 10 / 2 / 0")
+    if _load(CLOSURE_V1)["residuals_remaining"] != 2:
+        raise ValidationError("Mission 1.74's closure record no longer says two remained")
+
+
+def _check_solicited_answer(redirect: dict) -> None:
+    """Mission 1.74.7. A solicited answer closes R1. A statement somebody found does not.
+
+    That distinction is the whole of this check, and it is easy to lose: both are a
+    maintainer sentence in a provider-owned issue. What separates them is that this one
+    was ASKED FOR, answers the exact frozen predicate, is attributable, is citable, and
+    was read raw. All five, or it drops back to the incidental level.
+
+    The frozen reply and the review that reads it are separate documents, and this gate
+    refuses the interpretation being written into the source.
+    """
+    answer = redirect["solicited_provider_answer"]
+    for condition in SOLICITED_ANSWER_CONDITIONS:
+        if answer[condition] is not True:
+            raise ValidationError(
+                f"the answer is not {condition.replace('_', ' ')}, so it is not a solicited "
+                "answer and cannot close R1"
+            )
+    if answer["evidence_level"] != "R1_A2_SOLICITED_RESPONSIVE_PROVIDER_ANSWER":
+        raise ValidationError("the solicited answer is graded at another level")
+    if not str(answer["what_it_does_not_establish"]).strip():
+        raise ValidationError("the solicited answer is recorded with no stated limit")
+    if answer["treated_as_broader_than_the_question"]:
+        raise ValidationError("the answer was read as broader than the question it answers")
+    for half in ("redirect_response_returned", "redirect_not_followed"):
+        if answer[half] != "ESTABLISHED":
+            raise ValidationError(f"{half} is not established, and R1 needs both halves")
+
+    # The frozen source and the interpretation are two documents.
+    frozen = _load(FROZEN_REPLY)
+    review = _load(REPLY_REVIEW)
+    if frozen["contains_interpretation"]:
+        raise ValidationError("the frozen reply record contains interpretation")
+    if frozen["record_kind"] != "FROZEN_PROVIDER_REPLY_SOURCE":
+        raise ValidationError("the frozen reply record does not declare itself a source")
+    if review["record_kind"] != "REVIEWED_INTERPRETATION":
+        raise ValidationError("the review record does not declare itself an interpretation")
+    if review["source"]["reply_restated_in_this_record"]:
+        raise ValidationError(
+            "the interpretation restates the reply; two copies of one sentence drift"
+        )
+    if answer["reply_restated_here"]:
+        raise ValidationError("the gate record restates the reply rather than citing it")
+    if review["source"]["reply_body_sha256"] != frozen["reply"]["body_sha256"]:
+        raise ValidationError("the interpretation names a reply the frozen record does not hold")
+    if answer["reply_body_sha256"] != frozen["reply"]["body_sha256"]:
+        raise ValidationError("the gate record names a reply the frozen record does not hold")
+    if (
+        review["source"]["frozen_reply_file_sha256"]
+        != hashlib.sha256(FROZEN_REPLY.read_bytes()).hexdigest()
+    ):
+        raise ValidationError("the frozen reply file changed after the review read it")
+    if (
+        answer["reviewed_interpretation_sha256"]
+        != hashlib.sha256(REPLY_REVIEW.read_bytes()).hexdigest()
+    ):
+        raise ValidationError("the review file changed after the gate record cited it")
+
+    # Provenance. Mission 1.63: a retrieval summary is not a document.
+    provenance = frozen["provenance"]
+    if provenance["went_through_a_summarising_extraction"]:
+        raise ValidationError(
+            "the reply was retrieved through a summarising extraction, which corroborates "
+            "and does not establish"
+        )
+    if provenance["retrieval_method"] != "RAW_GITHUB_REST_API_READ":
+        raise ValidationError("the reply was not read from a surface that returns stored bytes")
+    if provenance["undocumented_endpoint_used"] or not provenance["endpoints_are_public"]:
+        raise ValidationError("the reply was retrieved from somewhere it should not have been")
+    if provenance["credential_value_read_or_recorded"]:
+        raise ValidationError("a credential value was read or recorded")
+
+    # Attribution. GitHub's own association, not a self-declared field.
+    author = frozen["author"]
+    if author["author_association"] not in PROVIDER_ASSOCIATIONS:
+        raise ValidationError(
+            f"the author association {author['author_association']!r} does not place the "
+            "author inside the organisation that owns the repository"
+        )
+    if not author["listed_in_the_owning_organisations_public_members"]:
+        raise ValidationError("the association rests on one field with nothing agreeing with it")
+    if not author["profile_company_is_self_declared_not_verified"]:
+        raise ValidationError("a self-declared profile field is recorded as verified")
+    if author["is_the_author_of_the_question"]:
+        raise ValidationError("the answer comes from the account that asked the question")
+    if author["login"] != answer["author_login"]:
+        raise ValidationError("the gate record names a different author than the frozen one")
+
+    # The reply must sit under the question this project actually asked.
+    link = frozen["relationship_to_gp_r1_q1"]
+    packet = _load(R1_PACKET)
+    if link["question_id"] != packet["question_id"]:
+        raise ValidationError("the frozen reply is attached to a different enquiry")
+    if not link["issue_body_is_byte_identical_to_the_frozen_packet_body"]:
+        raise ValidationError(
+            "the issue the reply sits under is not the frozen packet body, so the answer "
+            "answers something this project did not freeze"
+        )
+    if not link["issue_title_matches_the_packet_subject"]:
+        raise ValidationError("the issue title is not the packet's subject")
+    if link["packet_body_sha256"] != hashlib.sha256(packet["body"].encode("utf-8")).hexdigest():
+        raise ValidationError("the recorded packet body digest is not the packet's")
+    if link["issue_body_sha256"] != link["packet_body_sha256"]:
+        raise ValidationError("the record claims a match its own digests contradict")
+
+    # A supplied string is a claim. The stored bytes are what is frozen.
+    reply = frozen["reply"]
+    if reply["body_sha256"] != hashlib.sha256(reply["body"].encode("utf-8")).hexdigest():
+        raise ValidationError("the frozen reply does not answer to its own hash")
+    if reply["operator_quotation_matches_the_stored_bytes"] and (
+        reply["body_as_quoted_by_the_operator"] != reply["body"]
+    ):
+        raise ValidationError("the record claims the quotation matches and it does not")
+    if (
+        not reply["operator_quotation_matches_the_stored_bytes"]
+        and not str(reply["difference_from_the_operator_quotation"]).strip()
+    ):
+        raise ValidationError("the quotation differs from the stored bytes and nothing says how")
+    if reply["body_edited_after_posting"]:
+        raise ValidationError(
+            "the comment was edited after posting, so what was frozen is not what was said "
+            "when it was said"
+        )
+
+
 def _check_r1(redirect: dict) -> None:
     """§3 to §10. The evidence grading is the whole point."""
     if redirect["verdict"] not in R1_VERDICTS:
@@ -350,21 +567,39 @@ def _check_r1(redirect: dict) -> None:
     level = redirect["evidence_level"]
     if level not in R1_CLOSING_EVIDENCE_LEVELS + R1_NON_CLOSING_EVIDENCE_LEVELS:
         raise ValidationError(f"the R1 evidence level {level!r} is undefined")
-    if redirect["verdict"] == "R1_PASS_DOCUMENTED_NO_REDIRECT" and (
-        level not in R1_CLOSING_EVIDENCE_LEVELS
-    ):
+    if redirect["verdict"] in R1_PASSING_VERDICTS and level not in R1_CLOSING_EVIDENCE_LEVELS:
         raise ValidationError(
-            "R1 passes on evidence that cannot close it: only a normative provider contract may"
+            "R1 passes on evidence that cannot close it: only a normative provider contract "
+            "or a solicited answer through the provider's own channel may"
         )
     if redirect["verdict"] == "R1_FAIL_DOCUMENTED_REDIRECT_FOLLOWING" and (
         level not in R1_CLOSING_EVIDENCE_LEVELS
     ):
         raise ValidationError("R1 fails on evidence that is not a provider contract")
-    if level in R1_NON_CLOSING_EVIDENCE_LEVELS and redirect["verdict"] in {
-        "R1_PASS_DOCUMENTED_NO_REDIRECT",
-        "R1_FAIL_DOCUMENTED_REDIRECT_FOLLOWING",
-    }:
+    if level in R1_NON_CLOSING_EVIDENCE_LEVELS and redirect["verdict"] in R1_CLOSING_VERDICTS:
         raise ValidationError("a non-closing evidence level produced a closing verdict")
+
+    # §7 again, one layer up. DOCUMENTED is a claim about a surface, and the surfaces
+    # were reviewed: none of them documents this. A verdict may not assert one anyway.
+    if (
+        redirect["verdict"] == "R1_PASS_DOCUMENTED_NO_REDIRECT"
+        and not redirect["documented_in_any_reviewed_surface"]
+    ):
+        raise ValidationError(
+            "the verdict says DOCUMENTED and no reviewed surface documents it; the "
+            "provider-declared verdict is the one that fits a declaration"
+        )
+    if redirect["verdict"] == "R1_PASS_PROVIDER_DECLARED_NO_REDIRECT":
+        if level != "R1_A2_SOLICITED_RESPONSIVE_PROVIDER_ANSWER":
+            raise ValidationError(
+                "the provider-declared verdict rests on a level that is not a solicited answer"
+            )
+        _check_solicited_answer(redirect)
+    elif "solicited_provider_answer" in redirect:
+        raise ValidationError(
+            "a solicited answer is recorded and the verdict does not rest on it; an answer "
+            "that changes nothing is either not an answer or not recorded honestly"
+        )
 
     for statement in redirect["provider_statements_found"]:
         if not str(statement["what_it_does_not_establish"]).strip():
@@ -602,11 +837,34 @@ def _check_closure(closure: dict, redirect: dict, commercial: dict, third_party:
         ["each_question_maps_to_exactly_one_gate"],
         "a question does not map to exactly one gate",
     )
-    if enquiries["enquiries_sent"] != 0:
-        raise ValidationError("an enquiry was sent")
-    _false(enquiries, ["operator_approval_recorded"], "an operator approval was recorded")
+    # Mission 1.74.7. These three were constants when nothing had been sent, and the arc
+    # has since sent both enquiries -- so a constant would now assert something false.
+    # They become live cross-checks against the dispatch records instead, which is
+    # strictly stronger: the closure record can no longer say anything about dispatch
+    # that the dispatch records do not already say.
+    r1_dispatch = _load(R1_DISPATCH)["execution"]
+    r2_dispatch = _load(R2_V2_DISPATCH)["execution"]
+    sent = sum(1 for execution in (r1_dispatch, r2_dispatch) if execution["status"] == "SENT")
+    if enquiries["enquiries_sent"] != sent:
+        raise ValidationError(
+            f"the closure record counts {enquiries['enquiries_sent']} enquiries sent and the "
+            f"dispatch records show {sent}"
+        )
+    _true(enquiries, ["operator_approval_recorded"], "enquiries were sent with no approval")
+
+    # This has not changed and is the point: a review mission never authorises a send.
     _false(enquiries, ["dispatch_authorised_by_this_mission"], "this mission authorised a dispatch")
-    _false(enquiries, ["provider_contacted"], "the provider was contacted")
+
+    # A contact is receipt demonstrated, not a dispatch performed. R1's reply demonstrates
+    # it; R2's own record still reads provider_contacted false, and this may not overrule it.
+    if enquiries["provider_contacted"] and not enquiries["r1_reply_received"]:
+        raise ValidationError("the provider is recorded as contacted with no reply to show for it")
+    if enquiries["r2_reply_received"]:
+        raise ValidationError("an R2 reply is claimed, and no frozen record holds one")
+    if r2_dispatch["provider_contacted"]:
+        raise ValidationError("the R2 dispatch record now claims a contact it did not have")
+    if not str(enquiries.get("provider_contacted_basis") or "").strip():
+        raise ValidationError("the closure record states no basis for the contact it records")
 
 
 def _check_packets(packets: list[dict], closure: dict) -> None:
@@ -680,7 +938,7 @@ def _check_qualification(qualification: dict, redirect: dict, closure: dict) -> 
         raise ValidationError("the recorded tally does not match the matrix")
 
     # C6 must follow R1 and C9 must follow R2.
-    r1_closed = redirect["verdict"] == "R1_PASS_DOCUMENTED_NO_REDIRECT"
+    r1_closed = redirect["verdict"] in R1_PASSING_VERDICTS
     if (gates["C6_REQUEST_CONTRACT_RECONSTRUCTABILITY"]["status"] == "PASS") is not r1_closed:
         raise ValidationError("C6 does not follow the R1 verdict")
     r2_closed = closure["r2_pass_requires_both"]["verdict"] == "R2_PASS"
@@ -756,6 +1014,25 @@ def _check_readiness_and_decision(readiness: dict, decision: dict, qualification
         raise ValidationError("the one-residual outcome was reported with a different count")
     if outcome == "GLOBALPING_TWO_PROVIDER_CLARIFICATIONS_REQUIRED" and remaining != 2:
         raise ValidationError("the two-clarification outcome was reported with a different count")
+
+    # Mission 1.74.7. These two name WHICH residual closed, so a count is not enough:
+    # they are the same number and opposite facts, and reporting the wrong one would say
+    # the rights question is settled when it is the redirect question that is.
+    closed = {r["id"]: r["closed"] for r in _load(CLOSURE)["residuals"]}
+    named = {
+        "GLOBALPING_REDIRECT_CONTRACT_CLOSED_RIGHTS_SCOPE_REMAINS": ("R1", "R2"),
+        "GLOBALPING_RIGHTS_SCOPE_CLOSED_REDIRECT_CONTRACT_REMAINS": ("R2", "R1"),
+    }.get(outcome)
+    if named is not None:
+        settled, open_one = named
+        if not closed[settled]:
+            raise ValidationError(
+                f"the outcome says {settled} closed and the closure record does not"
+            )
+        if closed[open_one]:
+            raise ValidationError(
+                f"the outcome says {open_one} remains and the closure record closed it"
+            )
     if outcome == "GLOBALPING_PROVIDER_TERMS_BLOCK_INTENDED_ACTIVITY":
         blocked = _load(CLOSURE)["project_governance_classification"][
             "provider_terms_block_the_intended_activity"
@@ -883,14 +1160,21 @@ def validate() -> list[dict]:
         r2_packet,
     ) = records
 
-    _check_preconditions(baseline, ledger)
-    _check_r1(redirect)
-    _check_r2(terms, commercial, third_party)
-    _check_closure(closure, redirect, commercial, third_party)
-    _check_packets([r1_packet, r2_packet], closure)
-    _check_qualification(qualification, redirect, closure)
-    _check_readiness_and_decision(readiness, decision, qualification)
-    _check_registry_and_governance(decision, baseline, records)
+    # Mission 1.74.7. A missing field is a refusal, not a crash. Every check below reads
+    # keys that a hand-edited record could simply not have, and a KeyError escaping here
+    # would look like a bug rather than like the record being wrong.
+    try:
+        _check_preconditions(baseline, ledger)
+        _check_supersession()
+        _check_r1(redirect)
+        _check_r2(terms, commercial, third_party)
+        _check_closure(closure, redirect, commercial, third_party)
+        _check_packets([r1_packet, r2_packet], closure)
+        _check_qualification(qualification, redirect, closure)
+        _check_readiness_and_decision(readiness, decision, qualification)
+        _check_registry_and_governance(decision, baseline, records)
+    except (KeyError, TypeError, IndexError) as error:
+        raise ValidationError(f"the records do not carry {error!r}") from error
 
     parallel = baseline["parallel_state_untouched"]
     if parallel["onyphe_response_status"] != "NOT_CHECKED_AFTER_DISPATCH":
@@ -904,6 +1188,42 @@ def validate() -> list[dict]:
 # ------------------------------------------------------------------------ renderers
 
 
+def _solicited_answer_section(redirect: dict) -> str:
+    """Read the reply from the FROZEN record, which is the only place it lives."""
+    if "solicited_provider_answer" not in redirect:
+        return "No answer had arrived when this was written."
+    answer = redirect["solicited_provider_answer"]
+    frozen = _load(FROZEN_REPLY)
+    review = _load(REPLY_REVIEW)
+    semantics = review["question_2_and_3_semantics"]
+    lines = [
+        f"Asked through the provider's public technical channel and answered by "
+        f"`{answer['author_login']}` (`{answer['author_association']}`) on "
+        f"{answer['posted_at']}, at [{frozen['location']['comment_id']}]"
+        f"({answer['permalink']}):",
+        "",
+        f"> {frozen['reply']['body'].strip()}",
+        "",
+        f"Frozen verbatim in `{FROZEN_REPLY.name}`, digest "
+        f"`{frozen['reply']['body_sha256'][:16]}…`, retrieved by "
+        f"`{frozen['provenance']['retrieval_method']}`. The issue it sits under is "
+        f"byte-identical to the frozen packet body, so it answers the question this "
+        f"project asked and not a paraphrase of it.",
+        "",
+        "| half | state | from |",
+        "|---|---|---|",
+        f"| the redirect response is returned | `{answer['redirect_response_returned']}` "
+        f"| {semantics['clause_1']['clause']} |",
+        f"| the redirect is not followed | `{answer['redirect_not_followed']}` "
+        f"| {semantics['clause_2']['clause']} |",
+        "",
+        semantics["why_the_two_clauses_settle_each_other"],
+        "",
+        f"*Does not establish:* {answer['what_it_does_not_establish']}",
+    ]
+    return "\n".join(lines)
+
+
 def render_decision(decision: dict) -> str:
     closure = _load(CLOSURE)
     qualification = _load(QUALIFICATION)
@@ -914,9 +1234,9 @@ def render_decision(decision: dict) -> str:
     r2 = _load(R2_PACKET)
 
     lines = [
-        "# Mission 1.74 — Two residuals, two questions, nothing sent",
+        "# The Globalping residuals — one closed, one open",
         "",
-        "Generated from `quantity-class-selection-decision-v4.json` and the residual reviews.",
+        f"Generated from `{DECISION.name}` and the residual reviews.",
         "Do not edit by hand.",
         "",
         f"**Primary outcome: `{decision['primary_outcome']}`**",
@@ -931,9 +1251,10 @@ def render_decision(decision: dict) -> str:
             f"| {residual['id']} | `{residual['verdict']}` | {residual['closed']} "
             f"| {residual['enquiry_prepared']} |"
         )
-    lines += ["", "What moved even though neither closed:", ""]
+    lines += ["", "What moved:", ""]
     for residual in closure["residuals"]:
-        lines.append(f"- **{residual['id']}** — {residual['what_moved']}")
+        state = "**closed**" if residual["closed"] else "still open"
+        lines.append(f"- **{residual['id']}** ({state}) — {residual['what_moved']}")
 
     lines += [
         "",
@@ -960,10 +1281,12 @@ def render_decision(decision: dict) -> str:
         f"Tally changed: **{qualification['tally_changed']}**. "
         f"Passing dimensions reopened: **{qualification['passing_dimensions_reopened']}**.",
         "",
-        "What the mission added even though the tally did not move:",
+        f"**Verdict: `{qualification['verdict']}`.** {qualification['why']}",
+        "",
+        "What this mission added:",
         "",
     ]
-    for item in qualification["what_this_mission_added_even_though_the_tally_did_not_move"]:
+    for item in qualification["what_this_mission_added"]:
         lines.append(f"- {item}")
 
     lines += [
@@ -980,18 +1303,28 @@ def render_decision(decision: dict) -> str:
         "",
         "## The two frozen enquiries",
         "",
-        "| id | residual | channel | hash | status |",
-        "|---|---|---|---|---|",
+        "| id | residual | channel | hash | the packet's own field | dispatch |",
+        "|---|---|---|---|---|---|",
         f"| {r1['question_id']} | {r1['residual_id']} | `{r1['channel']}` "
-        f"| `{r1['content_sha256'][:16]}…` | **{r1['send_status']}** |",
+        f"| `{r1['content_sha256'][:16]}…` | `{r1['send_status']}` "
+        f"| **{_load(R1_DISPATCH)['execution']['status']}** |",
         f"| {r2['question_id']} | {r2['residual_id']} | `{r2['channel']}` "
-        f"| `{r2['content_sha256'][:16]}…` | **{r2['send_status']}** |",
+        f"| `{r2['content_sha256'][:16]}…` | `{r2['send_status']}` "
+        f"| **{_load(R2_V2_DISPATCH)['execution']['status']} (v2 packet)** |",
+        "",
+        "A packet's own `send_status` means THIS DOCUMENT RECORDS NO AUTHORIZATION and never "
+        "that none exists. The approvals live beside the packets, and the dispatch column "
+        "reads from them.",
         "",
         closure["enquiries"]["two_packets_because"],
         "",
-        f"**Enquiries sent: {closure['enquiries']['enquiries_sent']}. Operator approval recorded: "
-        f"{closure['enquiries']['operator_approval_recorded']}. Provider contacted: "
-        f"{closure['enquiries']['provider_contacted']}.**",
+        f"**Enquiries sent: {closure['enquiries']['enquiries_sent']}. Operator approval "
+        f"recorded: {closure['enquiries']['operator_approval_recorded']}. R1 reply received: "
+        f"{closure['enquiries']['r1_reply_received']}. R2 reply received: "
+        f"{closure['enquiries']['r2_reply_received']}.**",
+        "",
+        f"Provider contacted: **{closure['enquiries']['provider_contacted']}**. "
+        f"{closure['enquiries']['provider_contacted_basis']}",
         "",
         "## Q1",
         "",
@@ -1003,7 +1336,11 @@ def render_decision(decision: dict) -> str:
         f"{readiness['independence']['evidence_independence_groups']} groups, "
         f"`{readiness['pair_analysis']}`.",
         "",
-        "## Nothing moved",
+        "## What Mission 1.74 did not do, and this mission still has not",
+        "",
+        "These count MISSION 1.74's own actions and are carried forward unchanged. The "
+        "enquiries were sent later, by the operator, and are counted in the dispatch records "
+        "rather than here.",
         "",
         "| | |",
         "|---|---|",
@@ -1031,9 +1368,9 @@ def render_decision(decision: dict) -> str:
 
 def render_redirect(redirect: dict) -> str:
     lines = [
-        "# Mission 1.74 — The redirect evidence, graded",
+        "# The redirect evidence, graded",
         "",
-        "Generated from `globalping-redirect-contract-review-v1.json`. Do not edit by hand.",
+        f"Generated from `{REDIRECT.name}`. Do not edit by hand.",
         "",
         "**The question:**",
         "",
@@ -1080,6 +1417,10 @@ def render_redirect(redirect: dict) -> str:
 
     implementation = redirect["implementation"]
     lines += [
+        "## The answer that closed it",
+        "",
+        _solicited_answer_section(redirect),
+        "",
         "## Implementation, kept in its place",
         "",
         f"- follows redirects: **{implementation['CURRENT_IMPLEMENTATION_FOLLOWS_REDIRECTS']}**",

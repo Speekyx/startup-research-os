@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.115
+Version: 1.116
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-06 (Sprint 1 / Mission 1.74.6)
+Last amended: 2026-09-06 (Sprint 1 / Mission 1.74.7)
 
 ---
 
@@ -13,6 +13,125 @@ Last amended: 2026-09-06 (Sprint 1 / Mission 1.74.6)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.116 - 2026-09-06 (Sprint 1 / Mission 1.74.7)
+
+**`R1_CLOSED_PROVIDER_DECLARED_RIGHTS_SCOPE_REMAINS`.** An organisation member answered the
+exact frozen GP-R1-Q1 question on the provider's own issue tracker. R1 moves to
+`R1_PASS_PROVIDER_DECLARED_NO_REDIRECT`, C6 to `PASS`, the tally from 10/2/0 to **11 PASS /
+1 PARTIAL / 0 FAIL** -- and **the counterpart is still not qualified.**
+
+**THE REPLY IS FROZEN BEFORE IT IS READ.** The source record declares itself a source,
+carries `contains_interpretation: false`, and holds no verdict and no evidence level; the
+reasoning lives in a separate record that cites it **by hash and never restates its text**.
+That split is not ceremony: **a single document holding both the evidence and the
+conclusion can adjust the first to suit the second, and nothing in it would show the
+adjustment.** The gate refuses the interpretation being written into the source, refuses
+either restating the reply, and refuses either naming a digest the other does not hold.
+
+**A SUPPLIED STRING IS A CLAIM.** The instruction quoted the reply; the stored comment
+differs from that quotation by **one trailing space**. It changes no meaning, and that is
+exactly why it is recorded -- **a record that adopted the quotation silently here would
+have adopted it just as silently where it mattered.**
+
+**BOTH HALVES, EXAMINED SEPARATELY.** The second clause is explicit. The first is
+anaphoric, and read alone could denote the response after a redirect had been followed.
+**The second clause forecloses that reading**: if the redirect is not followed there is no
+post-redirect response for the phrase to denote, so the referent is FORCED rather than
+chosen, and the reading does not depend on charity toward the answer. The review records
+the weakness before recording why it does not survive.
+
+**A SOLICITED ANSWER IS NOT A STATEMENT SOMEBODY FOUND.** Mission 1.74 refused to upgrade
+on an incidental maintainer remark, and **that refusal is untouched**: the guard forbidding
+any FOUND statement a closing level is byte-identical, and the answer lives in its own
+block rather than being added to that list. The new level is defined by **five conditions
+the gate checks one at a time** -- solicited, responsive to the exact predicate,
+attributable, durable and citable, retrieved without a summarising extraction -- and
+failing any one drops it back to the incidental level. Adding a closing level is the move
+most open to motivated reasoning here, so the justification is **a condition written before
+the answer existed**: Mission 1.74's own review recorded that R1 was closable by "one
+documented sentence, **or one answer through the provider's technical channel**".
+
+**DECLARED, NOT DOCUMENTED.** The frozen discriminator named
+`R1_PASS_DOCUMENTED_NO_REDIRECT`; the verdict recorded is
+`R1_PASS_PROVIDER_DECLARED_NO_REDIRECT`. The DECISION is honoured exactly and the LABEL is
+narrowed, because the specification still contains **zero occurrences of 'redirect'** and
+calling this DOCUMENTED would claim a surface that does not exist -- the gate now refuses
+that verdict whenever no reviewed surface documents the behaviour. **What stays open at
+PASS is written down**: the behaviour is declared and not specified, so a future change
+would contradict no published document and this verdict would not detect it.
+
+**THE TALLY MOVED AND THE VERDICT DID NOT.** Qualification needs all twelve mandatory
+dimensions PASS and C9 is still PARTIAL on R2, so **a better tally is not a verdict**: 0
+classes selected, 0 constructs, 0 independence groups, Q1 still not viable. **A closed
+residual removes a reason not to proceed and supplies no reason to proceed.** Four records
+were **superseded, never edited** -- the redirect review, the closure, the qualification
+and the decision -- each gaining one appended forward pointer, and the gate asserts LIVE
+that the predecessors still read 10/2/0, two residuals remaining and
+`R1_PARTIAL_IMPLEMENTATION_ONLY`, **so an edit that backdated this closure into Mission
+1.74 fails here.**
+
+**TWO DEFECTS SURFACED BY THE FIRST LEGITIMATE TRANSITION.** **The R1 dispatch could never
+have reached `BYTE_VERIFIED`**: Mission 1.74.1 defined the upgrade as a RAW READ of the
+issue body and Mission 1.74.3's gate refused EVERY GitHub API call by this repository, so
+the gate demanded a comparison and forbade the only mechanism that produces one. The
+counter is split -- the WRITE half keeps the refusal at zero, and the READ half is not
+merely permitted but **REQUIRED to be at least one whenever `raw_body_compared` is true**,
+because a comparison with no read compared nothing. Value preserved, name and comparison
+changed, exactly as in 1.74.3. With that resolved the read this mission needed anyway
+performed the comparison: the posted body digest equals the `approved_body_sha256` recorded
+**before** the post, the title matches character for character, and R1 reaches
+`BYTE_VERIFIED`. **The paragraph break Mission 1.74.3 suspected was a conversion artifact
+WAS one** -- it suspected correctly and refused the upgrade anyway, which is what made the
+refusal worth anything. **The closure record asserted things that had become false**: its
+gate pinned `enquiries_sent == 0`, no approval and no contact, constants from a mission
+where nothing had been sent. They are now LIVE cross-checks against the dispatch records,
+which is strictly stronger, and `provider_contacted` is true **for R1 only**, on a reply
+that demonstrates receipt, with the gate refusing it overruling R2's own record.
+
+**BOUNDED TO R1.** R2 was not examined, its dispatch state was not altered, no reply to it
+is claimed, and **0 measurements, 0 target HTTP requests, 0 classes, 0 constructs, 0
+independence groups, 0 canonical mutations, 0 Claims, 0 Evidence, 0 scores, 0 model calls,
+0 migrations**. 4 public GitHub API reads, 0 writes, 0 comments created, 0 credential
+reads. ONYPHE still `NOT_CHECKED_AFTER_DISPATCH`, Netlas still pending, ADR-039 untouched.
+
+**Verification.** Gates probed with **95 deliberate violations, 95 caught** (92 by rule, 3
+by drift), **0 escaped**, plus **4 of 4 positive controls**. **One escape was found and
+closed**: deleting the solicited-answer block raised a bare `KeyError` rather than a
+refusal, so the residuals gate now converts a missing field into a refusal the way the
+dispatch gates already did. **The controls are the point**: a future documented sentence
+must still close R1 the ORIGINAL way, and R1 must still be representable back at
+`OPERATOR_ATTESTED` with no comparison -- a gate that only accepts the state we happen to
+be in is not a gate. **One test mutates Mission 1.74's incidental statement specifically**,
+because adding a closing level must not have widened the old guard. **3029 bare-python
+tests**; both runners green; `ruff format --check`, `ruff check` and mypy all run through
+`uv`; all **48** CI gates, **no new gate** -- the gates that govern these records already
+existed and were extended.
+
+New: `docs/data/globalping-r1-provider-reply-v1.json`,
+`docs/data/globalping-r1-reply-review-v1.json`,
+`docs/data/globalping-redirect-contract-review-v2.json`,
+`docs/data/globalping-residual-closure-v2.json`,
+`docs/data/globalping-counterpart-qualification-v3.json`,
+`docs/data/quantity-class-selection-decision-v5.json`,
+`packages/inferred-claim-evaluator/python/tests/test_r1_provider_reply.py`, and
+`docs/architecture/mission-1.74.7-report.md`.
+
+Changed: `infrastructure/scripts/render_globalping_residuals.py` gains the solicited-answer
+checks, the supersession check and the missing-field conversion;
+`infrastructure/scripts/render_r1_dispatch_approval.py` splits the API counter and gains
+the byte-verification checks; `docs/data/globalping-r1-dispatch-approval-v1.json` reaches
+`BYTE_VERIFIED`; the generated `mission-1.74-globalping-residuals-v1.md`,
+`globalping-redirect-evidence-v1.md` and `mission-1.74.1-r1-dispatch-approval-v1.md`;
+`packages/inferred-claim-evaluator/python/tests/test_globalping_residuals.py` and
+`test_r1_dispatch_approval.py` re-pointed rather than deleted; `docs/CLAUDE.md` 1.116 to
+1.117.
+
+Unchanged, apart from one appended forward pointer each:
+`globalping-redirect-contract-review-v1.json`, `globalping-residual-closure-v1.json`,
+`globalping-counterpart-qualification-v2.json` and
+`quantity-class-selection-decision-v4.json`. The R1 and R2 packets are byte-identical,
+every R2 record is untouched, and no canonical table, source review or ADR was modified.
 
 ## 1.115 - 2026-09-06 (Sprint 1 / Mission 1.74.6)
 
