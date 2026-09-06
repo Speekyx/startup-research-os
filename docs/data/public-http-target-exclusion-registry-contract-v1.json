@@ -1,0 +1,58 @@
+{
+  "$comment": "§29 and §30. The contract, with no entries, because no corpus exists.",
+  "record_version": "1.0.0",
+  "mission": "1.72",
+  "recorded_at": "2026-09-06",
+  "contract_id": "PUBLIC_HTTP_TARGET_EXCLUSION_REGISTRY_V1",
+  "entry_fields": [
+    {
+      "field": "target_scope",
+      "required": true,
+      "note": "an exact origin or an explicitly stated scope; never an unbounded pattern"
+    },
+    {
+      "field": "reason",
+      "required": true
+    },
+    {
+      "field": "basis",
+      "required": true,
+      "note": "what the reason rests on: a retrieved statement, operator correspondence, or a recorded operator decision"
+    },
+    {
+      "field": "recorded_at",
+      "required": true
+    },
+    {
+      "field": "effective_from",
+      "required": true
+    },
+    {
+      "field": "effective_until",
+      "required": false
+    },
+    {
+      "field": "operator",
+      "required": true
+    },
+    {
+      "field": "status",
+      "required": true
+    }
+  ],
+  "hashing": {
+    "algorithm": "sha256",
+    "field": "exclusion_registry_sha256",
+    "a_run_binds_a_registry_version_and_hash": true
+  },
+  "freeze": {
+    "$comment": "§30.",
+    "effective_set_frozen_before_execution": true,
+    "an_exclusion_added_mid_run": "recorded as an explicit event; the pre-run manifest is not rewritten",
+    "the_pre_run_manifest_may_be_silently_rewritten": false,
+    "why": "a manifest edited after the fact would make the run's own record disagree with what it measured, and the disagreement would be invisible."
+  },
+  "entries": [],
+  "entry_count": 0,
+  "why_empty": "no corpus exists, so there is no target to exclude. An entry invented here would be a governance decision about a site nobody has proposed measuring."
+}

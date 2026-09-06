@@ -1,0 +1,149 @@
+{
+  "$comment": "§16 to §22. Start from least collection, because no construct exists to need more.",
+  "record_version": "1.0.0",
+  "mission": "1.72",
+  "recorded_at": "2026-09-06",
+  "policy_id": "PUBLIC_HTTP_DATA_MINIMIZATION_POLICY_V1",
+  "decision": "D2_ALLOWLISTED_HEADERS_AND_STATUS",
+  "options_evaluated": {
+    "D0_FULL_RESPONSE": {
+      "selected": false,
+      "why": "it would retain the publisher's content, which under GOV-1's condition moves the activity into SOURCE_COLLECTION and dissolves the track that justifies it"
+    },
+    "D1_HEADERS_AND_STATUS": {
+      "selected": false,
+      "why": "all headers is too broad: Set-Cookie and the authenticate family carry user-specific and secret-like material, and retaining them by default would collect what nothing needs"
+    },
+    "D2_ALLOWLISTED_HEADERS_AND_STATUS": {
+      "selected": true,
+      "why": "it is the least collection that still supports auditability, and an allowlist can be widened by a later run within a permitted set rather than having to be narrowed after the fact"
+    },
+    "D3_DERIVED_PREDICATE_ONLY": {
+      "selected": false,
+      "why": "no predicate exists, so there is nothing to derive -- and storing only a derived boolean would destroy the auditability the accounting invariant is for"
+    },
+    "D4_TRANSIENT_RESPONSE_PERSIST_MINIMAL_AUDIT": {
+      "selected": false,
+      "why": "it is D2 without the allowlist's determinism; D2 is the same idea made checkable"
+    }
+  },
+  "body": {
+    "$comment": "§18 and §39. Two different questions, and confusing them is the trap.",
+    "BODY_PERSISTENCE_DEFAULT": "DISABLED",
+    "body_bytes_may_be_persisted_in_the_initial_profile": false,
+    "a_future_body_dependent_construct_requires": "a separate governance extension",
+    "available_because_the_client_supports_it": false,
+    "not_persisting_is_the_same_as_not_receiving": false,
+    "network_read_still_bounded": true,
+    "why": "a body-disabled apparatus still reads bytes off the socket, so a finite read cap is required whether or not anything is kept. Treating 'we do not store it' as 'we do not receive it' would leave the one bound that protects the operator machine unset."
+  },
+  "headers": {
+    "$comment": "§19.",
+    "mechanism": "HEADER_ALLOWLIST",
+    "all_response_headers_persisted": false,
+    "always_excluded": [
+      "Set-Cookie",
+      "Set-Cookie2",
+      "WWW-Authenticate",
+      "Proxy-Authenticate",
+      "Authorization",
+      "Proxy-Authorization",
+      "Authentication-Info",
+      "Proxy-Authentication-Info"
+    ],
+    "always_excluded_may_be_overridden_by_a_run": false,
+    "default_persisted_allowlist": [
+      "Content-Type",
+      "Content-Length",
+      "Date"
+    ],
+    "a_run_may_extend_the_allowlist": true,
+    "a_run_may_extend_it_into_the_always_excluded_set": false,
+    "why_the_default_is_small": "no construct exists, so nothing establishes which header a predicate will need. Choosing a wide default now would be choosing part of a construct.",
+    "perfect_secret_detection_claimed": false,
+    "why_minimization_first": "§22. A detector that misses one value has collected it. An allowlist that never contained it has not."
+  },
+  "location_header": {
+    "$comment": "§20. Redirect provenance is needed and a Location can carry a token.",
+    "raw_value": "TRANSIENT_ONLY",
+    "persisted_representation": "scheme, host and path; query string dropped",
+    "query_string_persisted": false,
+    "information_discarded_while_claiming_exact_provenance": false,
+    "how_that_is_avoided": "the persisted record states that the query component was dropped, so a reader knows the representation is minimized rather than complete"
+  },
+  "data_classes": [
+    {
+      "class": "TRANSPORT_METADATA",
+      "capture_allowed": true,
+      "persist_allowed": true,
+      "retention_class": "RUN_SCOPED",
+      "why": "resolved address class, connection outcome, TLS outcome; ours, not the publisher's"
+    },
+    {
+      "class": "REQUEST_METADATA",
+      "capture_allowed": true,
+      "persist_allowed": true,
+      "retention_class": "RUN_SCOPED",
+      "why": "the request we sent, which is our own act and is needed to say what was asked"
+    },
+    {
+      "class": "RESPONSE_STATUS",
+      "capture_allowed": true,
+      "persist_allowed": true,
+      "retention_class": "RUN_SCOPED",
+      "why": "the status line; the smallest thing that makes an observation an observation"
+    },
+    {
+      "class": "RESPONSE_HEADERS",
+      "capture_allowed": true,
+      "persist_allowed": "ALLOWLIST_ONLY",
+      "retention_class": "RUN_SCOPED",
+      "why": "headers can carry user-specific and secret-like material, so persistence is an allowlist"
+    },
+    {
+      "class": "RESPONSE_BODY",
+      "capture_allowed": true,
+      "persist_allowed": false,
+      "retention_class": "NOT_PERSISTED",
+      "why": "capable at the transport layer and not persisted; persisting it would move the activity into SOURCE_COLLECTION under the GOV-1 condition"
+    },
+    {
+      "class": "REDIRECT_METADATA",
+      "capture_allowed": true,
+      "persist_allowed": "MINIMIZED",
+      "retention_class": "RUN_SCOPED",
+      "why": "hop provenance is needed; a Location value can carry identifiers, so it is minimized"
+    },
+    {
+      "class": "DNS_METADATA",
+      "capture_allowed": true,
+      "persist_allowed": true,
+      "retention_class": "RUN_SCOPED",
+      "why": "which address class was resolved and accepted, for the safety audit"
+    },
+    {
+      "class": "TIMING_METADATA",
+      "capture_allowed": true,
+      "persist_allowed": true,
+      "retention_class": "RUN_SCOPED",
+      "why": "attempt timestamps, for temporal provenance"
+    },
+    {
+      "class": "POLICY_METADATA",
+      "capture_allowed": true,
+      "persist_allowed": true,
+      "retention_class": "RUN_SCOPED",
+      "why": "which policy version and which decision applied to this target"
+    }
+  ],
+  "one_global_retention_rule": false,
+  "sensitive_content": {
+    "$comment": "§22.",
+    "arbitrary_full_body_persistence_by_default": false,
+    "credential_or_token_persistence_by_default": false,
+    "secret_like_headers_handled": true,
+    "logs_bounded": true,
+    "target_response_content_copied_into_debug_logs": false
+  },
+  "content_retrieved_this_mission": 0
+}

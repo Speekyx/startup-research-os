@@ -1,0 +1,70 @@
+{
+  "$comment": "§1 to §8. GOV-1, the ADR-level decision. Everything else in this mission hangs off it, which is why it was resolved first and alone.",
+  "record_version": "1.0.0",
+  "mission": "1.72",
+  "recorded_at": "2026-09-06",
+  "adr": "ADR-039",
+  "decision_name": "PUBLIC_HTTP_OBSERVATION_GOVERNANCE_TRACK",
+  "decision": "PUBLIC_HTTP_OBSERVATION_TRACK_ADOPTED",
+  "adopted_conditionally": true,
+  "the_condition": {
+    "$comment": "The finding that makes this decision defensible rather than convenient: GOV-1 is NOT independent of GOV-3.",
+    "statement": "the track is available only while the retained material is transport-level. The moment response bodies or a publisher's expressive content are retained, the retained thing IS the publisher's material and SOURCE_COLLECTION_GOVERNANCE applies instead.",
+    "satisfied_by_gov_3": true,
+    "gov_3_decision_that_satisfies_it": "BODY_PERSISTENCE_DEFAULT_DISABLED",
+    "if_gov_3_had_chosen_full_response": "the track would not have been adoptable at all"
+  },
+  "models_evaluated": {
+    "MODEL_A_SOURCE_COLLECTION_ONLY": {
+      "adopted": false,
+      "why": "it is not merely laborious, it is structurally unavailable. source-registry-v1.md §1 rule 8 requires a GRANT for six named activities on retrieved authoritative evidence, and for a target that has never published terms addressing automated access there is no document to retrieve. Every activity reads NOT_ADDRESSED and rule 2 forbids a path from 'we could not check' to 'we may proceed'. The corpus collapses to the 29 registered sources, which is Mission 1.71's finding.",
+      "and_this_is_the_gate_working": true
+    },
+    "MODEL_B_PUBLIC_HTTP_OBSERVATION_TRACK": {
+      "adopted": true,
+      "why": "the two activities differ in WHAT IS APPROPRIATED, and the difference is testable rather than verbal. See distinguishing_test."
+    },
+    "MODEL_C_PER_TARGET_OPERATOR_REVIEW": {
+      "adopted": false,
+      "why": "it is not wrong, it is at the wrong layer. For a target publishing no terms the operator would be reviewing nothing, which reproduces Model A's evidentiary problem in a form that LOOKS like review while having no basis -- worse than Model A, because it manufactures the appearance of a judgement. The part of it that is real -- is this target public, safe, known to be excluded -- is mechanical, and it survives as GOV-4's preflight.",
+      "its_useful_content_survives_as": "GOV-4"
+    },
+    "MODEL_D_NO_GOVERNED_ROUTE": {
+      "adopted": false,
+      "why": "it would be the honest answer if the two activities could not be distinguished. They can be, on the repository's own material, so leaving it undecided would repeat the move Mission 1.71 refused: treating an absence of a decision as though it were a decision."
+    }
+  },
+  "distinguishing_test": {
+    "$comment": "§3. Is the distinction real or a smaller name for the same act?",
+    "question_1": "if the page's content were entirely different and the transport outcome identical, would the observation change?",
+    "answer_1": "no",
+    "question_2": "if the transport outcome differed and the page content were identical, would it change?",
+    "answer_2": "yes",
+    "conclusion": "the observation is a function of the transport interaction rather than of the publisher's expressive content, so what is appropriated differs. That is a difference in kind and not in degree.",
+    "and_it_holds_only_under_the_condition_above": true,
+    "objection_considered": {
+      "objection": "a status code is still information the publisher produced",
+      "response": "true, and the question the six activities ask is not who caused the fact but whether we are appropriating the publisher's content or database. A transport outcome is closer to a measurement of the world than to a copy of a work. This is a PROJECT-GOVERNANCE distinction and explicitly not a legal conclusion about any target."
+    }
+  },
+  "source_collection_governance_weakened": false,
+  "what_was_not_touched": [
+    "the source registry",
+    "source eligibility",
+    "acquisition authorization",
+    "rule 8's six activities",
+    "any registered source's review"
+  ],
+  "registered_sources_before": 29,
+  "registered_sources_after": 29,
+  "no_target_becomes_a_source_automatically": true,
+  "legal_conclusion_made": false,
+  "vocabulary_used": [
+    "PROJECT_GOVERNANCE_ALLOWED",
+    "PROJECT_GOVERNANCE_BLOCKED",
+    "TARGET_SPECIFIC_REVIEW_MAY_STILL_APPLY",
+    "NO_EXTERNAL_LEGAL_CONCLUSION"
+  ],
+  "run_authorization_required": true,
+  "authorised_by_this_mission": false
+}

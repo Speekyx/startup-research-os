@@ -1,0 +1,55 @@
+{
+  "$comment": "§23. Numeric retention values chosen here are PROJECT POLICY. They are not discovered safety facts and nothing here presents them as evidence.",
+  "record_version": "1.0.0",
+  "mission": "1.72",
+  "recorded_at": "2026-09-06",
+  "policy_id": "PUBLIC_HTTP_RETENTION_POLICY_V1",
+  "retention_by_class": [
+    {
+      "retention_class": "RUN_SCOPED",
+      "applies_to": [
+        "TRANSPORT_METADATA",
+        "REQUEST_METADATA",
+        "RESPONSE_STATUS",
+        "RESPONSE_HEADERS",
+        "REDIRECT_METADATA",
+        "DNS_METADATA",
+        "TIMING_METADATA",
+        "POLICY_METADATA"
+      ],
+      "retention_days": 400,
+      "decision_kind": "PROJECT_POLICY_DEFAULT",
+      "why": "a measurement must remain auditable for longer than the analysis that uses it, and a year plus a margin is the smallest span that survives an annual re-reading. Chosen by the project, not derived from anything."
+    },
+    {
+      "retention_class": "NOT_PERSISTED",
+      "applies_to": [
+        "RESPONSE_BODY"
+      ],
+      "retention_days": 0,
+      "decision_kind": "PROJECT_POLICY_DEFAULT",
+      "why": "nothing is stored, so nothing is retained"
+    },
+    {
+      "retention_class": "RUN_LOGS",
+      "applies_to": [
+        "operational logs"
+      ],
+      "retention_days": 30,
+      "decision_kind": "PROJECT_POLICY_DEFAULT",
+      "why": "logs exist to debug a run, and a run is bounded in days rather than months"
+    }
+  ],
+  "every_numeric_value_carries_its_decision_kind": true,
+  "values_presented_as_evidence_derived": false,
+  "values_presented_as_industry_safe": false,
+  "values_presented_as_legally_required": false,
+  "values_presented_as_provider_recommended": false,
+  "relationship_to_the_project_retention_policy": {
+    "document": "docs/data/data-retention-policy-v1.md",
+    "governs": "records acquired from a REGISTERED source",
+    "this_policy_governs": "observation records under the public-HTTP track",
+    "the_stricter_rule_wins_where_both_apply": true,
+    "this_policy_lengthens_any_existing_retention": false
+  }
+}

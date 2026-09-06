@@ -1,0 +1,88 @@
+{
+  "$comment": "§0 and §50. Measured live before any decision, and re-measurable after.",
+  "record_version": "1.0.0",
+  "mission": "1.72",
+  "recorded_at": "2026-09-06",
+  "exact_predicate_frozen": false,
+  "target_values_retrieved": 0,
+  "repository_precondition": {
+    "mission_1_71_merged": true,
+    "pull_request": 116,
+    "expected_main": "c3b78e6",
+    "observed_main": "c3b78e6",
+    "local_matches_origin": true,
+    "working_tree_clean": true,
+    "mission_1_71_artifacts_present": true,
+    "crawler_implementation_exists": false,
+    "selected_quantity_class_artifact_absent": true,
+    "selected_construct_artifact_absent": true,
+    "counterpart_selected": false
+  },
+  "canonical_baseline": {
+    "$comment": "Every counter matched §0 exactly.",
+    "raw_records": 325,
+    "normalized_records": 325,
+    "signals": 33,
+    "claims": 44,
+    "claim_revisions": 45,
+    "evidence": 58,
+    "inferred_claims": 1,
+    "threshold_registrations": 1,
+    "claim_derivations": 1,
+    "proposition_evaluation_refusals": 0,
+    "evidence_supports": 57,
+    "evidence_contradicts": 1,
+    "reliability_assessments": 4,
+    "evidence_independence_groups": 0,
+    "opportunities": 1,
+    "opportunity_revisions": 1,
+    "opportunity_evidence_links": 7,
+    "registered_sources": 29,
+    "embeddings": 0,
+    "scores_table": "ABSENT",
+    "reference_profile": "UNCALIBRATED",
+    "problem_family": "PARKED",
+    "migration_head": "0035_refusal_provenance",
+    "drift_from_mission_1_71": "none"
+  },
+  "scope": {
+    "$comment": "§1 and §44. Five decisions, nothing else.",
+    "resolves": [
+      "GOV-1",
+      "GOV-2",
+      "GOV-3",
+      "GOV-4",
+      "GOV-5"
+    ],
+    "counterpart_discovery_performed": false,
+    "quantity_class_discovery_performed": false,
+    "construct_selected": false,
+    "predicate_selected": false,
+    "crawler_implemented": false,
+    "scanner_class_reopened": false
+  },
+  "requirement_registry": {
+    "count_before": 15,
+    "requirement_added_this_mission": null
+  },
+  "documentation_budget": {
+    "$comment": "§53. Repository governance first; external only for a general mechanism.",
+    "maximum_requests": 8,
+    "used": 1,
+    "requests": [
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9309.html",
+        "why": "GOV-2 §13 demands deterministic robots failure semantics. Writing what the standard says from recall is the error Mission 1.71 avoided with CIDR blocks, so the mechanism was read rather than remembered.",
+        "is_a_target_inspection": false
+      }
+    ],
+    "target_sites_inspected": 0,
+    "targets_browsed": 0
+  },
+  "parallel_state_untouched": {
+    "onyphe_response_status": "NOT_CHECKED_AFTER_DISPATCH",
+    "netlas_contact": "STILL_PENDING",
+    "scanner_arc_status": "PARKED_BUT_REOPENABLE_ON_NEW_FIRST_PARTY_EVIDENCE",
+    "q1_status": "PROMISING_BUT_ROUTE_QUALIFICATION_REQUIRED"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "$comment": "§55 item 11 and §48. Which policy answers which of Mission 1.71's open rows, so a reader does not have to rediscover the mapping.",
+  "record_version": "1.0.0",
+  "mission": "1.72",
+  "recorded_at": "2026-09-06",
+  "apparatus_contract": "SROS_BOUNDED_HTTP_APPARATUS_CONTRACT_V1",
+  "apparatus_contract_amended": false,
+  "why_not_amended": "the apparatus contract states what the apparatus IS. These policies state what the project permits it to do. Editing the contract to carry a policy would merge two documents that change for different reasons and at different rates.",
+  "resolved_rows": [
+    {
+      "gov": "GOV-1",
+      "mission_1_71_row": "the dominant governance question",
+      "resolved_by": "ADR-039 and public-http-observation-governance-decision-v1.json",
+      "decision": "PUBLIC_HTTP_OBSERVATION_TRACK_ADOPTED"
+    },
+    {
+      "gov": "GOV-2",
+      "mission_1_71_row": "ROBOTS_POLICY",
+      "resolved_by": "public-http-robots-policy-v1.json",
+      "decision": "R1_RESPECT_DISALLOW"
+    },
+    {
+      "gov": "GOV-3",
+      "mission_1_71_row": "DATA_MINIMIZATION, SENSITIVE_CONTENT_HANDLING, RETENTION",
+      "resolved_by": "public-http-data-minimization-policy-v1.json and public-http-retention-policy-v1.json",
+      "decision": "D2_ALLOWLISTED_HEADERS_AND_STATUS with BODY_PERSISTENCE_DEFAULT DISABLED"
+    },
+    {
+      "gov": "GOV-4",
+      "mission_1_71_row": "TARGET_TERMS_HANDLING",
+      "resolved_by": "public-http-target-policy-v1.json and its exclusion registry contract",
+      "decision": "PREFLIGHT_CLASSIFICATION_WITH_A_FROZEN_EXCLUSION_REGISTRY"
+    },
+    {
+      "gov": "GOV-5",
+      "mission_1_71_row": "LOAD_SAFETY numeric values",
+      "resolved_by": "bounded-http-load-profile-v1.json",
+      "decision": "BOUNDED_HTTP_LOAD_PROFILE_V1, every value a project policy default"
+    }
+  ],
+  "all_five_resolved": true,
+  "apparatus_governance_row_after": "GOVERNANCE_FEASIBLE_IN_PRINCIPLE_UNDER_THE_PUBLIC_HTTP_TRACK",
+  "fetcher_implemented": false,
+  "run_authorization_required": true,
+  "second_independent_route_still_required": true,
+  "held_state_not_reopened": {
+    "$comment": "§45 and §46.",
+    "COMMON_CRAWL": "unchanged from Mission 1.70",
+    "HTTP_ARCHIVE": "unchanged from Mission 1.70",
+    "a_new_internal_track_repairs_their_missingness": false,
+    "scanner_arc": "PARKED_BUT_REOPENABLE_ON_NEW_FIRST_PARTY_EVIDENCE"
+  },
+  "requirement_registry": {
+    "$comment": "§47.",
+    "count_before": 15,
+    "count_after": 15,
+    "candidate_rule": "COVERAGE_SEMANTICS_MUST_DISTINGUISH_ATTEMPT_FROM_SUCCESS",
+    "added": false,
+    "why_not": "Mission 1.71 refused to count its own designed solution as an empirical instance. Governance policy design is not another instance either -- writing a policy that respects a rule is not observing an apparatus fail without it."
+  }
+}
