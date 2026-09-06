@@ -1,0 +1,62 @@
+{
+  "$comment": "§48, §49. What the two routes now hold, and what they still do not.",
+  "record_version": "1.0.0",
+  "mission": "1.73",
+  "recorded_at": "2026-09-06",
+  "exact_predicate_frozen": false,
+  "target_values_retrieved": 0,
+  "quantity_class": "FIXED_CORPUS_HTTP_OBSERVATION",
+  "routes": {
+    "SROS_BOUNDED_HTTP_FETCHER": {
+      "apparatus_contract": "READY",
+      "governance_track": "READY",
+      "implemented": false,
+      "run_authorized": false,
+      "produces_its_own_http_observations": true,
+      "population_directable": true,
+      "missingness_legible": true
+    },
+    "GLOBALPING": {
+      "verdict": "COUNTERPART_UNRESOLVED",
+      "produces_its_own_http_observations": true,
+      "population_directable": true,
+      "missingness_legible": true,
+      "residuals": [
+        "R1 redirect behaviour undocumented",
+        "R2 rights scope"
+      ]
+    }
+  },
+  "conditions_for_strategic_viability": {
+    "$comment": "§48. All four are required, and two are met.",
+    "sros_governance_track_ready": true,
+    "one_external_counterpart_qualified": false,
+    "independent_production_plausible": true,
+    "common_http_world_state_family_exists": true,
+    "verdict": "NOT_YET_STRATEGICALLY_VIABLE",
+    "load_bearing_failure": "one_external_counterpart_qualified"
+  },
+  "q1_status_before": "PROMISING_BUT_ROUTE_QUALIFICATION_REQUIRED",
+  "q1_status_after": "PROMISING_BUT_ROUTE_QUALIFICATION_REQUIRED",
+  "q1_status_changed_this_mission": false,
+  "what_did_change": {
+    "resolved_this_mission": [
+      "an operator-directable external HTTP producer exists and was identified on first-party evidence, which no earlier mission in this arc had found",
+      "its measurement lineage is established: community-hosted probes running the provider's unmodified code, with no third-party measurement upstream",
+      "a transport-only result path exists, achieved by choosing HEAD rather than by trusting a provider filter",
+      "prospective temporal addressability is satisfied by construction, which dissolves the historical-snapshot problem that decided Missions 1.59, 1.62 and 1.70",
+      "per-result job statuses distinguish apparatus failure from target observation, with the provider naming `offline` itself",
+      "a bounded 500-target pilot fits inside the free unauthenticated rate",
+      "the terms were read in full, and the commercial clause that looks decisive in isolation is scoped to consumer users"
+    ],
+    "still_unresolved": [
+      "redirect behaviour is absent from the counterpart's specification, so the request contract cannot be frozen as equivalent",
+      "Permitted Use is scoped to the user's own infrastructure and rights not expressly granted are reserved",
+      "no second candidate reached a complete package, so nothing corroborates the shape of this one"
+    ]
+  },
+  "pair_analysis": "PAIR_ANALYSIS_NOT_READY",
+  "two_apparatus_class_route_state": "TWO_APPARATUS_CLASS_ROUTE_NOT_YET_READY_FOR_CONSTRUCT_SELECTION",
+  "evidence_independence_groups": 0,
+  "no_measurement_no_claim_no_evidence": true
+}

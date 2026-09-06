@@ -1,0 +1,54 @@
+{
+  "$comment": "§37, §38, §39, §43. Feasibility, never approval, and never a legal conclusion.",
+  "record_version": "1.0.0",
+  "mission": "1.73",
+  "recorded_at": "2026-09-06",
+  "candidate": "Globalping",
+  "terms_retrieved": true,
+  "retrieved_from": "jsdelivr/globalping docs/terms/Terms of Use.md",
+  "retrieval_note": "three retrievals of the published terms returned navigation shells; the same document is committed as markdown in the provider's public repository and reads in full there",
+  "access_status": "PUBLIC_NO_ACCOUNT",
+  "access_evidence": "'The API is public, free to use, and doesn't require authentication, but it implements rate limits to ensure fair usage and reliability.'",
+  "account_created": false,
+  "trial_started": false,
+  "purchase_made": false,
+  "credential_read": false,
+  "prohibited_use_section": {
+    "prohibits_commercial_use": false,
+    "prohibits_automated_or_programmatic_access": false,
+    "prohibits_measuring_third_parties": false,
+    "what_it_does_prohibit": [
+      "accessing content that contains malware, violates proprietary rights, is sexually explicit, or is unlawful",
+      "abusing the Service and its resources",
+      "trying to bypass limits or restrictions in any way",
+      "operating excessive numbers of probes in one network and location",
+      "connecting a modified probe without prior written authorization",
+      "providing false, manipulated, incomplete or misleading information",
+      "interfering with probe updates, limits or quality-control mechanisms"
+    ]
+  },
+  "the_commercial_clause_read_in_context": {
+    "$comment": "The sentence that looks decisive in isolation, and the reason it is not read that way.",
+    "sentence": "Where we provide the Services for domestic and private use. You agree not to use the Services for any commercial or business purposes, and we have no liability to you for any loss of profit, loss of business, business interruption, or loss of business opportunity.",
+    "the_heading_it_sits_under": "If you are a consumer user:",
+    "the_clause_immediately_above_it": "a separate liability exclusion addressed to business users",
+    "read_as_a_blanket_commercial_prohibition": false,
+    "why_not": "the terms are structured as the usual consumer-and-business split, and the restriction sits inside the CONSUMER branch of a liability section while a separate branch addresses business users. Reading a consumer liability clause as a global prohibition would be the mirror of the over-read this arc refused in Mission 1.79, where a recommendation to seek legal advice was not treated as a grant."
+  },
+  "the_scope_sentence_that_does_bite": {
+    "$comment": "§2 Permitted Use. This is the residual, and it is real.",
+    "sentence": "Globalping works as a platform that allows you to monitor, debug, and benchmark your internet infrastructure using a globally distributed network of probes.",
+    "why_it_matters": "measuring a frozen corpus of third-party websites is not monitoring OUR infrastructure, and §3 reserves 'all rights that are not expressly granted to you under these Terms'. A reservation clause makes the absence of an express grant weigh more rather than less.",
+    "is_a_prohibition": false,
+    "is_a_grant": false
+  },
+  "classification": "DEDICATED_GOVERNANCE_REVIEW_REQUIRED",
+  "clearly_blocks_the_intended_use": false,
+  "clearly_permits_the_intended_use": false,
+  "free_api_treated_as_commercial_permission": false,
+  "terms_silence_treated_as_permission": false,
+  "provider_terms_replace_sros_governance": false,
+  "why": "§39. A future paired run must satisfy ADR-039, the robots policy, the SROS exclusion registry AND the provider's terms. The provider's policy does not stand in for ours in either direction.",
+  "final_legal_or_governance_approval_performed": false,
+  "external_legal_conclusion": "NO_EXTERNAL_LEGAL_CONCLUSION"
+}

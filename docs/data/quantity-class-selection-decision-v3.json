@@ -1,0 +1,161 @@
+{
+  "$comment": "§68 and §69. One primary outcome, and the imperfect fit recorded rather than smoothed.",
+  "record_version": "1.0.0",
+  "mission": "1.73",
+  "recorded_at": "2026-09-06",
+  "exact_predicate_frozen": false,
+  "target_values_retrieved": 0,
+  "primary_outcome": "COUNTERPART_FOUND_REQUEST_CONTRACT_UNRESOLVED",
+  "outcome_fits_imperfectly": true,
+  "why_it_fits_imperfectly": "outcome D names request semantics as the blocker, and there are TWO independent unresolved mandatory gates: the request contract and the rights scope. Reporting D alone would let a reader conclude that one documented sentence about redirects unlocks the route, which is not true. Both residuals are named in the record and in the secondary outcomes, and Mission 1.74 must close both.",
+  "outcomes_considered_and_refused": {
+    "A_INDEPENDENT_HTTP_COUNTERPART_QUALIFIED": {
+      "refused": true,
+      "why": "two mandatory dimensions are PARTIAL, and §45 makes that block qualification"
+    },
+    "B_QUALIFIED_Q1_SELECTED": {
+      "refused": true,
+      "why": "§48's conditions are conjunctive and one is unmet, so selecting Q1 would preregister an experiment on a route nobody has qualified -- the same refusal Mission 1.69 made when it declined to select on an expected answer"
+    },
+    "C_EPISTEMICALLY_QUALIFIED_ACCESS_REVIEW_REQUIRED": {
+      "refused": true,
+      "why": "C claims the epistemic requirements all pass and only access or terms remain. The request contract is an EPISTEMIC gate and it is unresolved, so C would overstate what was established"
+    },
+    "F_RESULT_SURFACE_INCOMPATIBLE": {
+      "refused": true,
+      "why": "a transport-only result path was established under HEAD"
+    },
+    "G_LINEAGE_UNRESOLVED": {
+      "refused": true,
+      "why": "the producer was established on the provider's own README and source"
+    },
+    "H_COMMERCIAL_PURPOSE_GAP": {
+      "refused": true,
+      "why": "H requires an OTHERWISE VIABLE route blocked by the intended use. This route is not otherwise viable, because the request contract is also open -- and the terms do not clearly block the use either, they fail to grant it"
+    },
+    "I_NO_COMPATIBLE_COUNTERPART_IDENTIFIED": {
+      "refused": true,
+      "why": "it would understate badly. An independent, directable, transport-level producer with legible missingness and prospective temporal semantics WAS identified, and reporting I would send the next mission searching for something it already holds -- the mistake Mission 1.69 refused when it declined outcome H"
+    }
+  },
+  "selected_quantity_class": null,
+  "selection_outcome": "NO_SELECTION",
+  "selected_class_artifact_created": false,
+  "selected_construct_created": false,
+  "counterpart_selected": false,
+  "q1_strategically_viable": false,
+  "secondary_outcomes": {
+    "CANDIDATES_DISCOVERED": 3,
+    "SERIOUS_CANDIDATES": 1,
+    "QUALIFIED_COUNTERPARTS": 0,
+    "SELECTED_COUNTERPART": "NONE",
+    "ACTUAL_MEASUREMENT_PRODUCER": "PROVIDER_OPERATED_OPEN_SOURCE_ENGINE (Globalping probes)",
+    "DIRECTABLE_TARGET": "PASS",
+    "TERMINAL_ACCOUNTING": "PASS",
+    "TRANSPORT_RESULT_SURFACE": "PASS",
+    "PROSPECTIVE_TEMPORAL": "PASS",
+    "REQUEST_CONTRACT": "UNRESOLVED",
+    "VANTAGE": "MULTIPLE_SELECTABLE_REGIONS",
+    "RESULT_MINIMIZATION": "TRANSPORT_ONLY_RESULT_PATH_AVAILABLE",
+    "RIGHTS_FEASIBILITY": "DEDICATED_GOVERNANCE_REVIEW_REQUIRED",
+    "INDEPENDENCE_PLAUSIBILITY": "PLAUSIBLE",
+    "Q1": "PROMISING_BUT_ROUTE_QUALIFICATION_REQUIRED",
+    "SELECTED_QUANTITY_CLASS": "NONE",
+    "SELECTED_CONSTRUCT": "NONE",
+    "RUN_AUTHORIZATION_REQUIRED": true,
+    "SROS_FETCHER_IMPLEMENTED": false,
+    "EVIDENCE_INDEPENDENCE_GROUPS": 0,
+    "REGISTRY_COUNT": 15,
+    "SOURCE_COLLECTION_GATE_UNCHANGED": true,
+    "PUBLIC_HTTP_TRACK": "READY",
+    "ONYPHE_RESPONSE": "NOT_CHECKED",
+    "NETLAS_CONTACT": "STILL_PENDING",
+    "SCANNER_CLASS": "PARKED_REOPENABLE",
+    "PAIR_ANALYSIS": "NOT_READY"
+  },
+  "mission_accounting": {
+    "FIRST_PARTY_DOCUMENT_REQUESTS": 26,
+    "FIRST_PARTY_REQUEST_BUDGET": 30,
+    "COUNTERPART_API_EXECUTIONS": 0,
+    "TARGET_HTTP_REQUESTS": 0,
+    "SROS_FETCHER_RUNS": 0,
+    "EXTERNAL_MEASUREMENT_JOBS": 0,
+    "COMMON_CRAWL_QUERIES": 0,
+    "HTTP_ARCHIVE_BIGQUERY": 0,
+    "HAR_DOWNLOADS": 0,
+    "WARC_DOWNLOADS": 0,
+    "TARGET_VALUE_EXPOSURES": 0,
+    "ACCOUNTS_CREATED": 0,
+    "TRIALS": 0,
+    "PURCHASES": 0,
+    "CREDENTIAL_READS": 0,
+    "MAILBOX_SEARCHES": 0,
+    "ENQUIRIES_SENT": 0,
+    "SOURCES_REGISTERED": 0,
+    "SOURCE_GOVERNANCE_MUTATIONS": 0,
+    "THRESHOLDS_REGISTERED": 0,
+    "CLAIMS_CREATED": 0,
+    "EVIDENCE_CREATED": 0,
+    "INDEPENDENCE_GROUPS_CREATED": 0,
+    "RELIABILITY_VALUES_ASSIGNED": 0,
+    "SCORES": 0,
+    "OPPORTUNITY_MUTATIONS": 0,
+    "MODEL_CALLS": 0,
+    "EMBEDDINGS": 0,
+    "MIGRATIONS": 0,
+    "CONSTRUCTS_SELECTED": 0,
+    "QUANTITY_CLASSES_SELECTED": 0,
+    "COUNTERPARTS_SELECTED": 0
+  },
+  "canonical_mutation_boundary": {
+    "raw_records": 325,
+    "normalized_records": 325,
+    "signals": 33,
+    "claims": 44,
+    "claim_revisions": 45,
+    "evidence": 58,
+    "inferred_claims": 1,
+    "reliability_assessments": 4,
+    "evidence_independence_groups": 0,
+    "registered_sources": 29,
+    "scores_table": "ABSENT",
+    "reference_profile": "UNCALIBRATED",
+    "problem_family": "PARKED",
+    "migration_head": "0035_refusal_provenance",
+    "mutations_this_mission": 0
+  },
+  "parallel_state_untouched": {
+    "onyphe_response_status": "NOT_CHECKED_AFTER_DISPATCH",
+    "onyphe_mailbox_searched": false,
+    "netlas_contact_state": "STILL_PENDING",
+    "netlas_enquiry_sent": false,
+    "counterpart_provider_contacted": false,
+    "scanner_arc_reopened": false,
+    "adr_039_weakened": false,
+    "public_http_governance_altered": false,
+    "source_collection_gate_weakened": false
+  },
+  "requirement_registry": {
+    "$comment": "§59.",
+    "count_before": 15,
+    "count_after": 15,
+    "requirement_added": null,
+    "registry_growth_forced": false,
+    "mission_1_70_candidate_rule": "COVERAGE_SEMANTICS_MUST_DISTINGUISH_ATTEMPT_FROM_SUCCESS",
+    "candidate_rule_reviewed": true,
+    "candidate_rule_added": false,
+    "why_not_added": "the counterpart does NOT exhibit the failure: its per-result statuses name `failed` and `offline` explicitly, so it distinguishes apparatus trouble from a target observation. A candidate that AVOIDS a failure mode is not a second empirical instance of it, any more than Missions 1.71 and 1.72's own designs were."
+  },
+  "recommended_next_mission": {
+    "name": "Mission 1.74 — Counterpart Residual Closure V1",
+    "scope": "close R1 and R2 on Globalping only",
+    "must_not": [
+      "resume broad counterpart search",
+      "restart quantity-class discovery",
+      "select a construct",
+      "authorize a run"
+    ],
+    "why_not_construct_selection": "§71's branch for outcome D is explicit: close only the named residuals on that candidate. Choosing a predicate over a route whose request contract is unresolved would freeze a construct on semantics nobody has established.",
+    "mission_1_74_not_started": true
+  }
+}

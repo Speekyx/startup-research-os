@@ -1,0 +1,34 @@
+{
+  "$comment": "§15, §16, §17. Whether a transport-only path exists without ingesting a body.",
+  "record_version": "1.0.0",
+  "mission": "1.73",
+  "recorded_at": "2026-09-06",
+  "candidate": "Globalping",
+  "transport_only_result_path": "TRANSPORT_ONLY_RESULT_PATH_AVAILABLE",
+  "how": "the default method is HEAD, and a HEAD response has no body to return. The result field is documented as 'The raw HTTP response body or `null` if there was no body in response.' So the minimization is achieved by the REQUEST rather than by asking the provider to omit a field.",
+  "body_would_be_ingested_to_extract_a_status": false,
+  "transport_fields_available": [
+    "statusCode",
+    "statusCodeName",
+    "headers",
+    "rawHeaders",
+    "resolvedAddress",
+    "timings"
+  ],
+  "body_field_behaviour": {
+    "field": "rawBody",
+    "required_in_the_schema": true,
+    "value_when_there_is_no_body": "null",
+    "cap_when_there_is_one": "Note that only the first 10 kb are returned.",
+    "truncation_flag": "truncated"
+  },
+  "adr_039_compatibility": {
+    "$comment": "§60. Governance does not bend to make a provider pass.",
+    "observation_track_condition": "the retained material must be transport-level",
+    "satisfied_under_head": true,
+    "satisfied_under_get": false,
+    "why_get_would_not_satisfy_it": "a GET returns up to 10 kb of the publisher's body, and retaining it would move the activity into SOURCE_COLLECTION under ADR-039's condition. That is a constraint on the future request contract rather than a defect in the candidate.",
+    "governance_weakened_to_accommodate_the_candidate": false
+  },
+  "screenshots_dom_or_har_required": false
+}

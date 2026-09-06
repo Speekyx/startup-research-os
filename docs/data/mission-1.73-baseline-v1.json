@@ -1,0 +1,70 @@
+{
+  "$comment": "§0 and §58. Measured live before any search, and re-measurable after.",
+  "record_version": "1.0.0",
+  "mission": "1.73",
+  "recorded_at": "2026-09-06",
+  "exact_predicate_frozen": false,
+  "target_values_retrieved": 0,
+  "repository_precondition": {
+    "mission_1_72_merged": true,
+    "pull_request": 117,
+    "expected_main": "a21547c",
+    "observed_main": "a21547c",
+    "local_matches_origin": true,
+    "working_tree_clean": true,
+    "adr_039_present": true,
+    "public_http_governance_artifacts_present": true,
+    "apparatus_contract_present": true,
+    "sros_fetcher_implementation_exists": false,
+    "selected_quantity_class_artifact_absent": true,
+    "selected_construct_artifact_absent": true
+  },
+  "canonical_baseline": {
+    "raw_records": 325,
+    "normalized_records": 325,
+    "signals": 33,
+    "claims": 44,
+    "claim_revisions": 45,
+    "evidence": 58,
+    "inferred_claims": 1,
+    "threshold_registrations": 1,
+    "claim_derivations": 1,
+    "proposition_evaluation_refusals": 0,
+    "evidence_supports": 57,
+    "evidence_contradicts": 1,
+    "claims_carrying_both_directions": 0,
+    "reliability_assessments": 4,
+    "evidence_independence_groups": 0,
+    "opportunities": 1,
+    "opportunity_revisions": 1,
+    "opportunity_evidence_links": 7,
+    "registered_sources": 29,
+    "embeddings": 0,
+    "scores_table": "ABSENT",
+    "reference_profile": "UNCALIBRATED",
+    "problem_family": "PARKED",
+    "migration_head": "0035_refusal_provenance",
+    "drift_from_mission_1_72": "none"
+  },
+  "scope": {
+    "$comment": "§1 and §50. One counterpart, no construct.",
+    "searching_for": "ONE_INDEPENDENT_HTTP_MEASUREMENT_COUNTERPART",
+    "quantity_class_discovery_performed": false,
+    "scanner_discovery_performed": false,
+    "general_web_source_discovery_performed": false,
+    "common_crawl_http_archive_analysis_reopened": false,
+    "construct_selected": false,
+    "predicate_selected": false,
+    "market_landscape_produced": false
+  },
+  "requirement_registry": {
+    "count_before": 15,
+    "requirement_added_this_mission": null
+  },
+  "parallel_state_untouched": {
+    "onyphe_response_status": "NOT_CHECKED_AFTER_DISPATCH",
+    "netlas_contact": "STILL_PENDING",
+    "scanner_arc_status": "PARKED_BUT_REOPENABLE_ON_NEW_FIRST_PARTY_EVIDENCE",
+    "q1_status_before": "PROMISING_BUT_ROUTE_QUALIFICATION_REQUIRED"
+  }
+}

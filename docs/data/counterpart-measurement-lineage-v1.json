@@ -1,0 +1,55 @@
+{
+  "$comment": "§6, §7, §8, §31, §33, §34, §35. Who actually produces the observation.",
+  "record_version": "1.0.0",
+  "mission": "1.73",
+  "recorded_at": "2026-09-06",
+  "candidate": "Globalping",
+  "producer_classification": "PROVIDER_OPERATED_OPEN_SOURCE_ENGINE",
+  "why_that_classification": "the provider authors the probe software and coordinates the network; the hardware and the network position are community-hosted. The measurement is performed by the provider's unmodified code at a volunteer's location, which is neither the provider's own datacentre nor customer-executed code.",
+  "third_party_measurement_upstream": "NONE_ESTABLISHED",
+  "reseller_or_passthrough": false,
+  "is_a_proxy_for_an_sros_request": false,
+  "why_not_a_proxy": "§33's forbidden shape is SROS fetching the target and sending the captured response away for analysis. Here SROS would send only a target identity and a request specification, and the probe performs its own network observation.",
+  "shared_software_with_sros": {
+    "$comment": "§7. Possible, and it is not the load-bearing question.",
+    "shares_software_with_the_sros_fetcher": "NONE_ESTABLISHED",
+    "and_it_would_not_matter_by_itself": "two independently operated systems may use the same HTTP library and still perform two independent observations. The load-bearing question is whether they independently performed the target observation, and they would."
+  },
+  "shared_observation_upstream_with_sros": false,
+  "common_upstream_measurement": {
+    "$comment": "§34.",
+    "common_crawl": false,
+    "http_archive": false,
+    "sros": false,
+    "auxiliary_shared_infrastructure": [
+      "the public DNS system",
+      "certificate trust stores",
+      "the internet itself"
+    ],
+    "auxiliary_sharing_defeats_independence": false,
+    "why": "§34 states it: auxiliary upstream inputs do not automatically defeat independence"
+  },
+  "externally_triggered_but_independently_produced": {
+    "$comment": "§31.",
+    "sros_initiates_the_job": true,
+    "that_makes_the_measurement_sros_produced": false
+  },
+  "sros_execution_infrastructure_is_not_a_counterpart": {
+    "$comment": "§8. Recorded so the cheap answer stays refused.",
+    "running_the_sros_fetcher_elsewhere_creates_a_second_apparatus": false,
+    "why": "the same apparatus contract and the same code performing both observations is vantage variation, not a second producer"
+  },
+  "frame_uniformity": {
+    "$comment": "The registry's APPARATUS_CONFIGURATION_MUST_BE_UNIFORM_ACROSS_THE_FRAME, added in Mission 1.67, met here explicitly rather than by silence.",
+    "provider_statement": "You may not modify the probe's code or behavior in any way.",
+    "consequence": "every probe in the frame runs the same code, so one configuration reaches the whole frame",
+    "satisfied": true
+  },
+  "vantage_is_not_independence": {
+    "$comment": "§30.",
+    "a_different_geography_is_independence": false,
+    "a_matching_geography_is_the_same_apparatus": false,
+    "kept_separate_from_lineage": true
+  },
+  "marketing_language_used_as_evidence": false
+}

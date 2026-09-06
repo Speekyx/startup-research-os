@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.107
+Version: 1.108
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-06 (Sprint 1 / Mission 1.72)
+Last amended: 2026-09-06 (Sprint 1 / Mission 1.73)
 
 ---
 
@@ -13,6 +13,119 @@ Last amended: 2026-09-06 (Sprint 1 / Mission 1.72)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.108 — 2026-09-06 (Sprint 1 / Mission 1.73)
+
+**`COUNTERPART_FOUND_REQUEST_CONTRACT_UNRESOLVED`.** An independent HTTP producer exists,
+it was identified on first-party evidence, and it is two narrow questions short of
+qualifying. **Ten of twelve mandatory dimensions PASS. Zero FAIL.**
+
+**THE MISSION'S REAL SHIFT IS TEMPORAL AND IT DISSOLVES THE PROBLEM RATHER THAN SOLVING
+IT.** Every apparatus this arc examined since Mission 1.58 died on the temporal object: a
+maintained current-state view, or a historical snapshot whose coverage nobody documents.
+A counterpart that measures **on demand** needs no history at all. The window becomes
+prospective by construction -- freeze the corpus and the contracts, authorise, then both
+apparatuses receive their targets inside a bounded W -- and `createdAt` and `updatedAt`
+are REQUIRED fields on the provider's own measurement response.
+
+**THE CANDIDATE IS GLOBALPING, AND WHAT PASSES IS EVERY PROPERTY MISSION 1.70 COULD NOT
+BUY EXTERNALLY.** The operator supplies the exact target -- *A publicly reachable
+measurement target* -- with `path`, `query` and an optional `host` override, so the
+provider selects no sample and runs no discovery. Its probes perform the request
+themselves: *a globally distributed network of community-hosted probes, allowing anyone
+to run network testing commands like ping or traceroute from any location*, dispatching
+through undici in the provider's own source. Its per-result statuses are `in-progress`,
+`finished`, **`failed`** and **`offline`** -- the last defined as a test *where the
+requested probe was not available to run the test* -- so **the provider names apparatus
+missingness itself rather than leaving us to infer it**. Locations are selectable by
+continent, region, country, state, city, ASN, network and tags. And 250 free tests an
+hour without authentication covers a 500-target pilot inside the six-hour run bound the
+project set itself in Mission 1.72.
+
+**MINIMIZATION IS ACHIEVED BY THE REQUEST RATHER THAN BY TRUSTING A FILTER**, which is
+the nicest fit of the mission: the default method is **HEAD**, a HEAD response has no
+body, and `rawBody` is documented as *The raw HTTP response body or `null` if there was
+no body in response.* So ADR-039's transport-level condition is satisfied by choosing
+what to ask rather than by asking the provider to omit something. **Under GET it would
+not be**, and that is recorded as a constraint on the future request contract rather
+than smoothed away.
+
+**THE FIRST RESIDUAL IS ONE WORD THAT IS NOT IN A 124,793-BYTE SPECIFICATION: REDIRECT.**
+The result schema carries one `statusCode` and one header set with no hop array. The
+probe source dispatches through `undici.Client.dispatch()`, which does not follow
+redirects -- **and that is an observed implementation, not a documented contract.** The
+distinction is not pedantry: an undocumented default can change without notice, and if
+the counterpart began following redirects while SROS did not, both routes would still
+report *a* status and **the divergence would be invisible in the data**. Mission 1.70
+closed the external pair on a redirect semantic that WAS documented; §25 of this brief
+names *undocumented redirects* as exactly the case where equivalence may not be assumed.
+
+**THE SECOND RESIDUAL IS A SCOPE SENTENCE, AND THE CLAUSE THAT LOOKS DECISIVE IS NOT THE
+ONE THAT BITES.** The Terms of Use say *You agree not to use the Services for any
+commercial or business purposes* -- under the heading **"If you are a consumer user:"**,
+with a separate liability clause addressing business users immediately above. Reading a
+consumer-scoped liability clause as a blanket prohibition would be the mirror of the
+over-read this project refused in Mission 1.45, where a recommendation to seek legal
+advice was not treated as a grant. **Prohibited Use prohibits neither commercial use nor
+automated access.** What does bite is §2 Permitted Use: the platform *allows you to
+monitor, debug, and benchmark **your** internet infrastructure*, while §3 reserves *all
+rights that are not expressly granted*. Measuring a frozen corpus of third-party sites is
+not our own infrastructure, and a reservation clause makes the absence of an express
+grant weigh more rather than less. **`DEDICATED_GOVERNANCE_REVIEW_REQUIRED`**: neither
+clearly blocked nor granted.
+
+**THE TERMS WERE BEHIND THREE NAVIGATION SHELLS AND ARE COMMITTED AS MARKDOWN IN THE
+PROVIDER'S OWN REPOSITORY.** Three retrievals of the published pages returned navigation
+only; the same document reads in full in version control. **A document automated
+retrieval cannot reach is not necessarily a document that does not exist**, and that is
+worth carrying: Missions 1.67 and 1.72 both recorded terms as unreachable.
+
+**THE OUTCOME FITS IMPERFECTLY AND THE RECORD SAYS SO** rather than choosing the label
+whose wording bends most easily. Outcome D names request semantics, and there are TWO
+independent unresolved mandatory gates; reporting D alone would let a reader conclude
+that one sentence about redirects unlocks the route. **Outcome I was refused as a
+serious understatement** -- an independent, directable, transport-level producer with
+legible missingness and prospective temporal semantics WAS identified, and reporting
+*none found* would send the next mission hunting for what it already holds, which is the
+mistake Mission 1.69 refused. **A, B, C, F, G and H were each refused with their
+reasons**: H requires an OTHERWISE VIABLE route, and this one is not otherwise viable.
+
+**PRODUCER IDENTITY WAS DECIDED ON ARCHITECTURE RATHER THAN BRANDING**:
+`PROVIDER_OPERATED_OPEN_SOURCE_ENGINE`, because the provider authors the code and
+coordinates the network while volunteers host the hardware. No third-party measurement
+upstream, no shared observation upstream with SROS, and the auxiliary sharing that does
+exist -- DNS, trust stores, the internet -- is recorded as **not** defeating
+independence. **The registry's own frame-uniformity rule is met explicitly**: *You may
+not modify the probe's code or behavior in any way.*
+
+**Q1 STAYS `PROMISING_BUT_ROUTE_QUALIFICATION_REQUIRED`.** Three of §48's four viability
+conditions hold and the fourth is a qualified counterpart, so **no class was selected and
+`selected-quantity-class-v1.json` does not exist.** No construct, no counterpart
+selected, **0 independence groups**, `PAIR_ANALYSIS_NOT_READY`.
+
+**THE CANDIDATE REGISTRY RULE WAS REVIEWED AND NOT ADDED FOR A NEW REASON**: the
+counterpart does not exhibit the failure. Its statuses distinguish apparatus trouble from
+target observation, so a candidate that **avoids** a failure mode is not a second
+empirical instance of it. **Registry unchanged at 15.**
+
+**26 of 30 documentation requests, 11 of which returned nothing usable and are counted.
+0 counterpart API executions, 0 target HTTP requests, 0 SROS fetcher runs, 0 external
+measurement jobs, 0 Common Crawl queries, 0 BigQuery, 0 target-value exposures, 0
+accounts, 0 trials, 0 purchases, 0 credential reads, 0 mailbox searches, 0 enquiries
+sent**, 0 sources registered, 0 canonical mutations, 0 thresholds, 0 Claims, 0 Evidence,
+0 independence groups, 0 reliability values, 0 scores, 0 model calls, 0 embeddings, 0
+migrations. ADR-039 untouched, the source-collection gate unchanged, ONYPHE still
+`NOT_CHECKED_AFTER_DISPATCH`, Netlas still pending, scanner arc parked.
+
+**Verification.** Validator probed with **153 deliberate violations, 153 caught** (150 by
+rule, 3 by drift) plus **7 of 7 positive controls, all variants**. **Two defects in my own
+control models were found by the validator refusing them**, and both were fixed on my
+side rather than by loosening a rule: a serious-candidate count that excluded a candidate
+which had been seriously evaluated and then qualified, and a control asserting a state
+§48 makes unrepresentable -- all four viability conditions met with Q1 not viable.
+**90 new tests**; **2622 bare-python tests**; all pytest suites passed with the database
+unchanged; `ruff format --check`, `ruff check` and mypy all run through `uv`; all **43**
+CI gates.
 
 ## 1.107 — 2026-09-06 (Sprint 1 / Mission 1.72)
 
