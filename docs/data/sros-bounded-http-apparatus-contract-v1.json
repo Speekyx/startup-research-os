@@ -1,0 +1,106 @@
+{
+  "$comment": "§17. The apparatus contract. A run binds ONE exact version of this by hash, and changing semantics without changing the version is the thing this design forbids.",
+  "record_version": "1.0.0",
+  "mission": "1.71",
+  "recorded_at": "2026-09-06",
+  "apparatus_contract_id": "SROS_BOUNDED_HTTP_APPARATUS_CONTRACT_V1",
+  "apparatus_contract_version": "1.0.0",
+  "status": "DESIGNED_NOT_ADOPTED",
+  "implemented": false,
+  "adopted_into_governance": false,
+  "exact_predicate_frozen": false,
+  "target_values_retrieved": 0,
+  "versioning": {
+    "$comment": "§17.",
+    "a_run_binds_one_exact_version": true,
+    "semantics_may_never_change_under_an_unchanged_version": true,
+    "hash_algorithm": "sha256",
+    "hash_covers": "the contract document as stored, excluding any field carrying the hash itself",
+    "why_the_hash_is_recorded_outside_the_document": "Mission 1.56 established it: writing a hash into the bytes it names changes them. The run manifest carries apparatus_contract_sha256; this document does not carry its own."
+  },
+  "what_it_measures": {
+    "$comment": "§2. An apparatus, never a construct.",
+    "object": "the HTTP world state at a defined moment for a defined request against a defined target",
+    "predicate_selected": false,
+    "predicate_is_supplied_later_by": "an approved construct, in a later mission",
+    "the_apparatus_evaluates_no_predicate_itself": true,
+    "response_header_chosen": false,
+    "status_code_chosen": false,
+    "html_token_chosen": false,
+    "server_software_chosen": false,
+    "technology_fingerprint_chosen": false
+  },
+  "stages": {
+    "$comment": "§13. Four stages, and collapsing any two is the defect Mission 1.70 named.",
+    "ordered": [
+      "SCHEDULED",
+      "ATTEMPTED",
+      "RESPONSE_RECEIVED",
+      "PREDICATE_EVALUABLE"
+    ],
+    "attempted_equals_successful": false,
+    "response_absence_means_target_absent_from_population": false,
+    "why": "an item that was scheduled and never attempted, one attempted with no connection, and one that answered are three different facts. Every external route in this arc published only the third."
+  },
+  "prohibited_capabilities": {
+    "$comment": "§4. Absent from the contract rather than disabled by a flag. A capability that exists behind a setting is a capability somebody can turn on.",
+    "authentication_bypass": false,
+    "session_hijacking": false,
+    "captcha_bypass": false,
+    "anti_bot_circumvention": false,
+    "rate_limit_circumvention": false,
+    "vulnerability_probing": false,
+    "directory_brute_forcing": false,
+    "credential_testing": false,
+    "hidden_endpoint_discovery": false,
+    "parameter_fuzzing": false,
+    "port_scanning": false,
+    "non_http_service_probing": false,
+    "retry_with_varied_identity_after_refusal": false,
+    "note": "each is FALSE meaning the apparatus does not do it and has no configuration that would make it do it. A 403, a 429 or a challenge page is a terminal outcome."
+  },
+  "crawl_expansion": {
+    "$comment": "§26.",
+    "recursive_discovery": false,
+    "links_in_responses_become_targets": false,
+    "sitemap_expansion": false,
+    "robots_discovered_expansion": false,
+    "redirects_expand_the_corpus": false,
+    "the_measured_population_is_exactly_the_frozen_manifest": true
+  },
+  "javascript": {
+    "$comment": "§21.",
+    "enabled_by_default": false,
+    "required_by_the_default_architecture": false,
+    "browser_rendered_mode": "A_SEPARATE_APPARATUS_MODE_AND_A_SEPARATE_GOVERNANCE_REVIEW",
+    "why": "observing an HTTP response and executing a publisher's application are different acts with different exposure, and mixing them silently would let a record say 'HTTP observation' about a browser session."
+  },
+  "operator_and_apparatus_are_separate_provenance": {
+    "$comment": "§35.",
+    "same_human_implies_same_apparatus": false,
+    "different_process_implies_independent_apparatus": false,
+    "a_run_records_both": [
+      "operator_authorization_reference",
+      "apparatus_contract_id",
+      "vantage_id"
+    ]
+  },
+  "independence": {
+    "$comment": "§36. The verdict this mission may reach, and the one it may not.",
+    "classification": "INDEPENDENCE_ARCHITECTURE_PLAUSIBLE",
+    "self_operation_establishes_independence": false,
+    "independent_evidence_group_ready": false,
+    "independence_groups_created": 0,
+    "second_independent_route_still_required": true,
+    "two_local_processes_are_two_independence_groups": false,
+    "why_not": "two processes on one machine share code, configuration, vantage, resolver and network path. They are one apparatus run twice, and counting them as two groups would manufacture corroboration out of repetition -- the exact error the aggregator's unknown-provenance collapse exists to prevent."
+  },
+  "reproducibility": {
+    "$comment": "§42 and the RUN_REPRODUCIBILITY rubric row.",
+    "the_run_is_reconstructible": true,
+    "the_observation_is_reproducible": false,
+    "why": "a later run observes a different world state, and saying otherwise would claim the web is static"
+  },
+  "run_authorization_required": true,
+  "governance_feasible_in_principle": false
+}

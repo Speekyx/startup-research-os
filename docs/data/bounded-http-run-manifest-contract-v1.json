@@ -1,0 +1,163 @@
+{
+  "$comment": "§16, §18, §41, §42. What a run must bind before it may start.",
+  "record_version": "1.0.0",
+  "mission": "1.71",
+  "recorded_at": "2026-09-06",
+  "exact_predicate_frozen": false,
+  "target_values_retrieved": 0,
+  "contract_id": "MEASUREMENT_RUN_MANIFEST_V1",
+  "runs_executed": 0,
+  "fields": [
+    {
+      "field": "run_id",
+      "required": true
+    },
+    {
+      "field": "apparatus_contract_id",
+      "required": true
+    },
+    {
+      "field": "apparatus_contract_sha256",
+      "required": true
+    },
+    {
+      "field": "corpus_manifest_id",
+      "required": true
+    },
+    {
+      "field": "corpus_manifest_sha256",
+      "required": true
+    },
+    {
+      "field": "request_contract_id",
+      "required": true
+    },
+    {
+      "field": "request_contract_sha256",
+      "required": true
+    },
+    {
+      "field": "software_version",
+      "required": true
+    },
+    {
+      "field": "git_commit",
+      "required": true
+    },
+    {
+      "field": "dependency_lock_state",
+      "required": true
+    },
+    {
+      "field": "runtime_version",
+      "required": true
+    },
+    {
+      "field": "configuration_hash",
+      "required": true
+    },
+    {
+      "field": "runtime_environment_identifier",
+      "required": true
+    },
+    {
+      "field": "vantage_id",
+      "required": true
+    },
+    {
+      "field": "scheduled_start",
+      "required": true
+    },
+    {
+      "field": "scheduled_end",
+      "required": true
+    },
+    {
+      "field": "actual_start",
+      "required": true
+    },
+    {
+      "field": "actual_end",
+      "required": true
+    },
+    {
+      "field": "operator_authorization_reference",
+      "required": true
+    },
+    {
+      "field": "run_status",
+      "required": true
+    }
+  ],
+  "three_hashes_are_mandatory": [
+    "apparatus_contract_sha256",
+    "corpus_manifest_sha256",
+    "request_contract_sha256"
+  ],
+  "why_three": "they answer three different questions -- what the apparatus IS, what population it measured, and what request it sent. One hash covering all three would make a change to any of them indistinguishable from a change to the others.",
+  "containerization": {
+    "image_digest_may_be_included": true,
+    "containerization_is_required_for_provenance": false,
+    "why": "§18. Requiring it would impose infrastructure to satisfy a record-keeping need"
+  },
+  "abortability": {
+    "$comment": "§41.",
+    "immediate_safe_stop_supported": true,
+    "no_new_attempts_after_abort": true,
+    "in_flight_requests": "allowed to terminate under timeout, or cancelled safely",
+    "remaining_items_become": "RUN_ABORTED_BEFORE_ATTEMPT",
+    "targets_may_disappear_on_abort": false,
+    "the_accounting_invariant_survives_an_abort": true
+  },
+  "resumability": {
+    "$comment": "§42.",
+    "an_interrupted_run_resumes_automatically": false,
+    "rule": "A_RESUME_CREATES_A_NEW_RUN_WITH_A_NEW_RUN_ID",
+    "run_identity_is_preserved_across_a_resume": false,
+    "why": "meaningful time passes between the interruption and the resume, and the world state moves. Continuing under one run identity would present two observation windows as one, which is the temporal-object error Missions 1.59 and 1.70 both refused in other apparatuses.",
+    "the_original_run_keeps_its_terminal_accounting": true
+  },
+  "time_semantics": {
+    "$comment": "§31 and §32.",
+    "per_attempt_timestamps": [
+      "attempt_started_at",
+      "connection_established_at",
+      "response_headers_received_at",
+      "attempt_finished_at"
+    ],
+    "connection_and_header_timestamps_may_be_absent": true,
+    "which_time_is_load_bearing": "CHOSEN_BY_THE_CONSTRUCT_NOT_BY_THE_APPARATUS",
+    "timezone": "UTC",
+    "unlabeled_local_timestamps_permitted": false,
+    "clock_source_recorded": true,
+    "precision_required": "millisecond or coarser; an unrealistic precision is not demanded"
+  },
+  "retry_semantics": {
+    "$comment": "§33.",
+    "retries_governed": true,
+    "per_attempt_record_fields": [
+      "attempt_number",
+      "retry_reason",
+      "timestamps",
+      "terminal_reason"
+    ],
+    "attempt_1_may_be_overwritten_by_attempt_2": false,
+    "all_attempts_are_retained": true,
+    "which_attempt_defines_the_observation": "CHOSEN_BY_THE_CONSTRUCT_NOT_BY_THE_APPARATUS",
+    "candidate_rules_a_construct_may_choose": [
+      "first attempt",
+      "last attempt",
+      "any successful attempt",
+      "all attempts"
+    ],
+    "why_not_chosen_here": "a retry can observe a different world state, so the selection rule is part of what the proposition means rather than part of how the fetcher works."
+  },
+  "vantage": {
+    "$comment": "§34.",
+    "vantage_id_required": true,
+    "vantage_id_is_opaque": true,
+    "sensitive_local_network_detail_published": false,
+    "deployment_local_documentation_required": true,
+    "a_different_machine_or_network_is_a_distinct_vantage": true
+  }
+}

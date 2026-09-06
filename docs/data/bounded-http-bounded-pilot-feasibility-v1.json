@@ -1,0 +1,71 @@
+{
+  "$comment": "§46. Which dimensions must be bounded, without choosing a size.",
+  "record_version": "1.0.0",
+  "mission": "1.71",
+  "recorded_at": "2026-09-06",
+  "exact_predicate_frozen": false,
+  "target_values_retrieved": 0,
+  "dimensions_that_must_be_bounded": [
+    {
+      "dimension": "number_of_targets",
+      "bounded_required": true,
+      "value_chosen": null
+    },
+    {
+      "dimension": "requests_per_target",
+      "bounded_required": true,
+      "value_chosen": null
+    },
+    {
+      "dimension": "redirect_count",
+      "bounded_required": true,
+      "value_chosen": null
+    },
+    {
+      "dimension": "retries",
+      "bounded_required": true,
+      "value_chosen": null
+    },
+    {
+      "dimension": "global_concurrency",
+      "bounded_required": true,
+      "value_chosen": null
+    },
+    {
+      "dimension": "per_host_concurrency",
+      "bounded_required": true,
+      "value_chosen": null
+    },
+    {
+      "dimension": "per_origin_rate",
+      "bounded_required": true,
+      "value_chosen": null
+    },
+    {
+      "dimension": "total_run_duration",
+      "bounded_required": true,
+      "value_chosen": null
+    },
+    {
+      "dimension": "maximum_bytes",
+      "bounded_required": true,
+      "value_chosen": null
+    }
+  ],
+  "dimension_count": 9,
+  "every_dimension_must_be_bounded": true,
+  "unbounded_permitted_on_any_dimension": false,
+  "pilot_size_selected": false,
+  "why_no_size_was_selected": "§46 forbids it, and there is no basis for a figure: the corpus does not exist, the construct does not exist, and no retrieved document establishes a rate any target will tolerate. A number chosen here would be the invented number rule 7 refuses, wearing the costume of a bound.",
+  "local_first_constraint": {
+    "$comment": "§45.",
+    "distributed_infrastructure_required": false,
+    "operable_on_one_controlled_machine_and_network": true,
+    "local_first_waives_rate_limits": false,
+    "local_first_waives_target_policies": false,
+    "local_first_waives_security_controls": false,
+    "local_first_waives_commercial_purpose_rights": false
+  },
+  "classification": "BOUNDED_PILOT_DIMENSIONS_CLOSED_GOVERNANCE_PENDING",
+  "why_not_feasible_in_principle": "every dimension that must be bounded is named and mandatory, so the ENGINEERING side closes. What is not closed is the governance shape the run would need, and reporting BOUNDED_PILOT_FEASIBLE_IN_PRINCIPLE would let a reader take a bounded design for an approved one."
+}

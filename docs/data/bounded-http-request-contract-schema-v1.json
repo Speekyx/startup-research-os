@@ -1,0 +1,219 @@
+{
+  "$comment": "§19 and §20. The schema and its invariants. Mission 1.71 defines what must be frozen and deliberately does not choose most of the values.",
+  "record_version": "1.0.0",
+  "mission": "1.71",
+  "recorded_at": "2026-09-06",
+  "exact_predicate_frozen": false,
+  "target_values_retrieved": 0,
+  "contract_id": "BOUNDED_HTTP_REQUEST_CONTRACT_V1",
+  "fields": [
+    {
+      "field": "http_method",
+      "required_before_run": true,
+      "value_fixed_by_this_contract": null,
+      "note": "§20 forbids freezing GET versus HEAD here; the construct chooses"
+    },
+    {
+      "field": "scheme_policy",
+      "required_before_run": true,
+      "value_fixed_by_this_contract": "HTTP_OR_HTTPS_ONLY",
+      "note": "§5. file, ftp, gopher, data, javascript and custom schemes are refused"
+    },
+    {
+      "field": "port_policy",
+      "required_before_run": true,
+      "value_fixed_by_this_contract": null,
+      "note": "the default port for the scheme unless the manifest URL states one"
+    },
+    {
+      "field": "host_header_rule",
+      "required_before_run": true,
+      "value_fixed_by_this_contract": null,
+      "note": "must be stated; it is part of what was asked"
+    },
+    {
+      "field": "sni_rule",
+      "required_before_run": true,
+      "value_fixed_by_this_contract": null,
+      "note": "must be stated; it can change which certificate and site answer"
+    },
+    {
+      "field": "user_agent",
+      "required_before_run": true,
+      "value_fixed_by_this_contract": null,
+      "note": "must be identifying and stable within a run; the string is not chosen here"
+    },
+    {
+      "field": "accept",
+      "required_before_run": true,
+      "value_fixed_by_this_contract": null,
+      "note": null
+    },
+    {
+      "field": "accept_language",
+      "required_before_run": true,
+      "value_fixed_by_this_contract": null,
+      "note": "it can change the response body, so it is part of the request identity"
+    },
+    {
+      "field": "accept_encoding",
+      "required_before_run": true,
+      "value_fixed_by_this_contract": null,
+      "note": null
+    },
+    {
+      "field": "connection_behavior",
+      "required_before_run": true,
+      "value_fixed_by_this_contract": null,
+      "note": null
+    },
+    {
+      "field": "cookie_policy",
+      "required_before_run": true,
+      "value_fixed_by_this_contract": "NO_COOKIES",
+      "note": "§20. No cookie jar exists in the contract"
+    },
+    {
+      "field": "authentication_policy",
+      "required_before_run": true,
+      "value_fixed_by_this_contract": "NONE",
+      "note": "§4. No credential, session or bearer token exists"
+    },
+    {
+      "field": "redirect_policy",
+      "required_before_run": true,
+      "value_fixed_by_this_contract": null,
+      "note": "§22. Following or not following is a choice; max_redirects is mandatory either way"
+    },
+    {
+      "field": "max_redirects",
+      "required_before_run": true,
+      "value_fixed_by_this_contract": null,
+      "note": "mandatory, and UNBOUNDED is unrepresentable"
+    },
+    {
+      "field": "body_handling",
+      "required_before_run": true,
+      "value_fixed_by_this_contract": null,
+      "note": "§28. BODY_CAPTURE_POLICY_REQUIRED_BEFORE_RUN"
+    },
+    {
+      "field": "response_byte_cap",
+      "required_before_run": true,
+      "value_fixed_by_this_contract": null,
+      "note": "§27. Mandatory before run authorization"
+    },
+    {
+      "field": "header_byte_cap",
+      "required_before_run": true,
+      "value_fixed_by_this_contract": null,
+      "note": "§27. Mandatory before run authorization"
+    },
+    {
+      "field": "connect_timeout",
+      "required_before_run": true,
+      "value_fixed_by_this_contract": null,
+      "note": "§27"
+    },
+    {
+      "field": "read_timeout",
+      "required_before_run": true,
+      "value_fixed_by_this_contract": null,
+      "note": "§27"
+    },
+    {
+      "field": "retry_policy",
+      "required_before_run": true,
+      "value_fixed_by_this_contract": null,
+      "note": "shape is fixed by the run contract; counts and backoff are not chosen here"
+    },
+    {
+      "field": "dns_policy",
+      "required_before_run": true,
+      "value_fixed_by_this_contract": null,
+      "note": "§7. When resolution happens, what is accepted, and whether the connection pins to it"
+    },
+    {
+      "field": "ip_version_policy",
+      "required_before_run": true,
+      "value_fixed_by_this_contract": null,
+      "note": "IPv4, IPv6 or both; it changes which host answers"
+    },
+    {
+      "field": "cache_policy",
+      "required_before_run": true,
+      "value_fixed_by_this_contract": null,
+      "note": "a cached response is not a fresh observation"
+    },
+    {
+      "field": "proxy_policy",
+      "required_before_run": true,
+      "value_fixed_by_this_contract": null,
+      "note": "a proxy changes the vantage, so it may not be an unrecorded detail"
+    },
+    {
+      "field": "vantage_identity",
+      "required_before_run": true,
+      "value_fixed_by_this_contract": null,
+      "note": "§34"
+    },
+    {
+      "field": "robots_policy",
+      "required_before_run": true,
+      "value_fixed_by_this_contract": null,
+      "note": "§23. ROBOTS_POLICY_REQUIRED; enumerated values, no default"
+    },
+    {
+      "field": "javascript_execution",
+      "required_before_run": true,
+      "value_fixed_by_this_contract": "DISABLED",
+      "note": "§21. A browser-rendered mode is a separate apparatus mode"
+    }
+  ],
+  "field_count": 27,
+  "fields_fixed_here": 4,
+  "fields_left_to_the_construct": 23,
+  "every_field_is_required_before_a_run": true,
+  "unbounded_is_representable": false,
+  "default_minimality": {
+    "$comment": "§20.",
+    "the_minimal_act": "one deterministic request, no authentication, no cookies, no persistent browser state, no JavaScript, no form submission",
+    "capabilities_beyond_it": "ABSENT_FROM_THE_CONTRACT_RATHER_THAN_DISABLED_BY_A_FLAG",
+    "get_versus_head_frozen_here": false
+  },
+  "hashing": {
+    "algorithm": "sha256",
+    "field": "request_contract_sha256",
+    "required_before_a_run_may_reference_it": true
+  },
+  "header_handling": {
+    "$comment": "§30.",
+    "raw_header_structure_preserved": true,
+    "duplicate_headers_collapsed": false,
+    "header_order_discarded": false,
+    "raw_values_normalized_away": false,
+    "response_hop_identity_discarded": false,
+    "a_normalized_representation_may_exist_beside_the_raw_one": true,
+    "why": "a later deterministic predicate may turn on a duplicate, an order or an exact byte value, and a canonicalization applied before anyone knows the predicate is a decision made by whoever wrote the parser."
+  },
+  "redirects": {
+    "$comment": "§22.",
+    "per_hop_record_fields": [
+      "source_url",
+      "status",
+      "location_target",
+      "resolved_destination_safety_decision",
+      "timestamp",
+      "terminal_reason"
+    ],
+    "a_redirect_may_silently_change_the_measured_entity": false,
+    "which_response_the_predicate_applies_to": "CHOSEN_BY_THE_CONSTRUCT_NOT_BY_THE_APPARATUS",
+    "candidate_rules_a_construct_may_choose": [
+      "the initial response",
+      "the final response",
+      "every hop",
+      "another exact stated rule"
+    ],
+    "the_apparatus_only_makes_it_representable": true
+  }
+}

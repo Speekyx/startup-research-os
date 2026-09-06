@@ -1,0 +1,76 @@
+{
+  "$comment": "§37. What a SECOND apparatus would need to pair with SROS_BOUNDED_HTTP_FETCHER. Requirements only. No counterpart is selected, ranked, preferred or named as a lead.",
+  "record_version": "1.0.0",
+  "mission": "1.71",
+  "recorded_at": "2026-09-06",
+  "exact_predicate_frozen": false,
+  "target_values_retrieved": 0,
+  "counterpart_selected": false,
+  "counterpart_ranked": false,
+  "counterpart_candidates_evaluated": 0,
+  "requirements": [
+    {
+      "id": "C1",
+      "requirement": "produces its own HTTP observations",
+      "why": "READING_A_PUBLISHED_VALUE_IS_NOT_MEASURING_IT (Mission 1.58). A mirror of somebody else's crawl is a copy, not a second witness."
+    },
+    {
+      "id": "C2",
+      "requirement": "the same frozen population, or a population-equivalence contract that is stated rather than assumed",
+      "why": "Mission 1.70 closed on exactly this. Two coverages nobody can describe do not intersect into a population anybody can describe."
+    },
+    {
+      "id": "C3",
+      "requirement": "attempt and missingness semantics sufficient to state the same proposition's denominator",
+      "why": "the counterpart need not use OUR taxonomy; it must publish enough to distinguish attempted from successful. Neither external route does."
+    },
+    {
+      "id": "C4",
+      "requirement": "a compatible observation window, with a stated temporal object",
+      "why": "Mission 1.59's gate. A maintained current-state view and a stream of dated observations are different objects, and one filter over them selects two different populations."
+    },
+    {
+      "id": "C5",
+      "requirement": "a compatible deterministic request contract, or documented equivalence",
+      "why": "Mission 1.70 tabulated fifteen fields and found 0 matchable. A browser load and a bot fetch are not the same request."
+    },
+    {
+      "id": "C6",
+      "requirement": "a known measurement lineage, affirmatively stated by the counterpart itself",
+      "why": "Mission 1.61's LEVEL 2 standard: an affirmative claim with a CLOSED exception list. An absence of a reference to third-party data is an absence, not a statement."
+    },
+    {
+      "id": "C7",
+      "requirement": "no shared HTTP observation upstream with the operator apparatus",
+      "why": "including shared infrastructure that would make both observe the same transport event rather than two events."
+    },
+    {
+      "id": "C8",
+      "requirement": "rights and access feasible for a commercial-purpose local deployment",
+      "why": "Mission 1.70 found neither external route establishes this, and local deployment never implies non-commercial use."
+    },
+    {
+      "id": "C9",
+      "requirement": "its values remain unseen until the proposition and threshold are preregistered",
+      "why": "PREREGISTERED is defined against RETRIEVAL. One value fetched during qualification makes an honest preregistration impossible for ever."
+    }
+  ],
+  "requirement_count": 9,
+  "held_state_not_reopened": {
+    "$comment": "§38. Mission 1.70's evidence is used as held, and is not rewritten.",
+    "COMMON_CRAWL": {
+      "independently_produces_http_observations": true,
+      "population_and_attempt_semantics": "INSUFFICIENT_UNDER_CURRENT_EVIDENCE",
+      "state_changed_this_mission": false
+    },
+    "HTTP_ARCHIVE": {
+      "independently_produces_http_observations": true,
+      "population_and_attempt_semantics": "INSUFFICIENT_UNDER_CURRENT_EVIDENCE",
+      "state_changed_this_mission": false
+    },
+    "the_operator_fetcher_repairs_their_records_retroactively": false,
+    "why": "designing an apparatus that publishes attempt semantics says nothing about what somebody else's apparatus published. Their limitation is a fact about their documentation and our design cannot reach it."
+  },
+  "second_independent_route_still_required": true,
+  "independence_groups_created": 0
+}
