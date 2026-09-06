@@ -1,0 +1,51 @@
+{
+  "$comment": "§15, §16, §17, §21, §23. R2-B. This one does not close.",
+  "record_version": "1.0.0",
+  "mission": "1.74",
+  "recorded_at": "2026-09-06",
+  "sub_residual": "R2-B",
+  "frozen_intended_activity": {
+    "$comment": "§23. Frozen exactly, and deliberately not simplified in either direction.",
+    "description": "Using Globalping's HTTP measurement service to perform bounded HEAD measurements against a pre-frozen corpus of publicly reachable third-party websites, under ADR-039 target exclusions and robots policy, for local and private Opportunity Intelligence research that may support future commercial product decisions.",
+    "simplified_to_commercial_scraping": false,
+    "simplified_to_monitoring_our_infrastructure": false,
+    "why_neither": "the first overstates what is retained -- no body is persisted under the HEAD route -- and the second misdescribes the targets, which are third parties rather than ours"
+  },
+  "permitted_use_section": {
+    "$comment": "§15, answered in five parts rather than by intuition.",
+    "exact_wording": "Globalping works as a platform that allows you to monitor, debug, and benchmark your internet infrastructure using a globally distributed network of probes.",
+    "form": "DESCRIPTIVE",
+    "form_evidence": "the sentence says what the platform 'works as' and what it 'allows you to' do. It carries no 'only', no 'solely', and no prohibition on other purposes.",
+    "heading": "2. Permitted Use",
+    "heading_suggests": "LIMITATION",
+    "is_it_an_exclusive_purpose_limitation": "AMBIGUOUS",
+    "why_ambiguous": "descriptive in form and limiting by heading, and the two readings are not reconciled anywhere in the document. §5 Prohibited Use is a separate enumerated section that does not mention third-party measurement, which cuts toward descriptive; the heading and the word 'your' cut toward limiting.",
+    "broadened_by_a_later_section": false,
+    "documentation_explicitly_contemplating_arbitrary_public_third_party_targets": false
+  },
+  "api_target_definition": {
+    "$comment": "§16.",
+    "schema_wording": "A publicly reachable measurement target.",
+    "classification": "TECHNICAL_TARGET_VALIDATION_ONLY",
+    "is_an_express_permitted_use_grant": false,
+    "why": "the schema constrains what the API will accept. The provider nowhere states that acceptance by the schema is permission under the Terms, and §16 forbids treating technical capability as contractual permission without that statement."
+  },
+  "product_design_evidence": {
+    "$comment": "§17 and §21. Kept separate from a Terms grant, in both directions.",
+    "classification": "AMBIGUOUS",
+    "pointing_toward_third_party_targets": [
+      "the probe README states 'We block private IP addresses as targets', which presupposes that ordinary targets are public internet endpoints",
+      "the API accepts any publicly reachable target the operator supplies"
+    ],
+    "pointing_toward_own_infrastructure": [
+      "the Terms' Permitted Use says 'your internet infrastructure'",
+      "the website homepage, which the Terms incorporate by reference, says 'Monitor, debug and benchmark your internet infrastructure'"
+    ],
+    "product_design_is_a_terms_grant": false,
+    "provider_examples_override_terms": false
+  },
+  "verdict": "THIRD_PARTY_TARGET_SCOPE_UNRESOLVED",
+  "verdict_reasoning": "nothing prohibits it and nothing grants it. The one textual hook that could have widened the scope -- the Terms defining Globalping by reference to the Website -- was followed, and the incorporated description repeats the same 'your infrastructure' framing. So the ambiguity is not an unread page; it is the document saying the same narrow thing twice while prohibiting nothing.",
+  "terms_silence_turned_favourable": false,
+  "terms_ambiguity_turned_into_prohibition": false
+}

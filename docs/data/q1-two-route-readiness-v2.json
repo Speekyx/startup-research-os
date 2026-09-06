@@ -1,0 +1,47 @@
+{
+  "$comment": "§37, §40, §41.",
+  "record_version": "2.0.0",
+  "supersedes": "q1-two-route-readiness-v1.json",
+  "mission": "1.74",
+  "recorded_at": "2026-09-06",
+  "exact_predicate_frozen": false,
+  "target_values_retrieved": 0,
+  "quantity_class": "FIXED_CORPUS_HTTP_OBSERVATION",
+  "conditions_for_strategic_viability": {
+    "sros_governance_track_ready": true,
+    "one_external_counterpart_qualified": false,
+    "independent_production_plausible": true,
+    "common_http_world_state_family_exists": true,
+    "verdict": "NOT_YET_STRATEGICALLY_VIABLE",
+    "load_bearing_failure": "one_external_counterpart_qualified"
+  },
+  "q1_status_before": "PROMISING_BUT_ROUTE_QUALIFICATION_REQUIRED",
+  "q1_status_after": "PROMISING_BUT_ROUTE_QUALIFICATION_REQUIRED",
+  "q1_status_changed_this_mission": false,
+  "independence": {
+    "$comment": "§40 and §41. No values exist, so no pair language.",
+    "classification": "INDEPENDENCE_ARCHITECTURE_PLAUSIBLE",
+    "evidence_independence_groups": 0,
+    "two_apparatus_class_route_state": "TWO_APPARATUS_CLASS_ROUTE_NOT_YET_READY_FOR_CONSTRUCT_SELECTION",
+    "called_an_independent_evidence_pair": false,
+    "called_a_validated_evidence_pair": false,
+    "called_corroborating_measurements": false,
+    "permitted_language": [
+      "prospective apparatus pair candidate",
+      "two-route architecture",
+      "counterpart unresolved"
+    ]
+  },
+  "pair_analysis": "PAIR_ANALYSIS_NOT_READY",
+  "what_did_change": {
+    "resolved_this_mission": [
+      "commercial-purpose compatibility with the counterpart, on the provider's own FAQ answer that commercial use is supported within the limits of the Terms",
+      "the provider's redirect behaviour is now an examined absence across five first-party surfaces, with no provider test asserting it either way",
+      "both provider contact channels are established from provider documents"
+    ],
+    "still_unresolved": [
+      "whether the provider commits to returning the initial 3xx response",
+      "whether the Terms' Permitted Use extends to measuring third-party targets"
+    ]
+  }
+}

@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.108
+Version: 1.109
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-06 (Sprint 1 / Mission 1.73)
+Last amended: 2026-09-06 (Sprint 1 / Mission 1.74)
 
 ---
 
@@ -13,6 +13,143 @@ Last amended: 2026-09-06 (Sprint 1 / Mission 1.73)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.109 - 2026-09-06 (Sprint 1 / Mission 1.74)
+
+**`GLOBALPING_TWO_PROVIDER_CLARIFICATIONS_REQUIRED`.** Both residuals were pursued to the
+end of the public record, both narrowed, and **neither closed**. The tally is unchanged at
+**10 PASS / 2 PARTIAL / 0 FAIL**, and the mission's product is two frozen, hashed,
+**unsent** questions.
+
+**THE R1 FINDING IS THAT EVERYTHING POINTS THE SAME WAY AND NOTHING COMMITS THE
+PROVIDER.** Mission 1.73 checked one surface; this checked **five**, and the specification
+was re-verified on the retrieved bytes rather than on a summary -- 124,793 bytes, **zero**
+case-insensitive matches for `redirect`, **zero** for `3xx`, and **byte-identical to the
+Mission 1.73 copy**. The 27 `Location` matches are the API's own asynchronous-measurement
+header and example keys such as `pingLocations`, not an HTTP redirect Location. The two
+other repositories' matches are OAuth redirect URIs and site routing middleware. **No
+provider test asserts HTTP measurement redirect behaviour**: the single match in the probe
+repository is an adoption-server test.
+
+**AND A MAINTAINER STATEMENT WAS FOUND THAT POINTS THE RIGHT WAY AND STILL DOES NOT CLOSE
+IT.** In the provider's own issue #347 a maintainer writes that *the body may be empty in
+some cases, most often redirects and error responses* -- which **presupposes that a
+redirect response appears in a Globalping result**, exactly what a non-following apparatus
+produces. It is graded `PROVIDER_MAINTAINER_STATEMENT_INCIDENTAL` and it did not upgrade
+the evidence level, because it defines nothing, promises nothing, and appears in a
+discussion about `rawOutput` formatting. **A closing verdict needs a normative provider
+contract, and an incidental premise in an issue about output formatting is not one,
+however strongly it points the right way.** `R1_PARTIAL_IMPLEMENTATION_ONLY` at
+`R1_C_IMPLEMENTATION_OBSERVED`, and **zero matches for a word mean the word is absent from
+a reviewed surface, never that the behaviour is absent from the apparatus**.
+
+**R2 SPLIT IN TWO, AND ONLY ONE HALF CLOSED.** R2-A closes positively on the provider's
+own FAQ, read from the website's committed source rather than from a rendered shell: asked
+*Can I use credits to power a commercial tool or product?*, the provider answers *Yes, we
+support commercial use of Globalping within the limits of our terms of service.*
+**`COMMERCIAL_USE_GENERAL_PERMITTED_WITHIN_TERMS`** -- and the answer's own qualifier is
+what bounds it. *Within the limits of our terms of service* **defers to the Terms for
+everything other than commerciality**, so it settles WHETHER we may be a commercial user
+and says nothing about WHAT we may point the service at. Reading it as third-party-target
+permission is the cheap move this mission most had to refuse.
+
+**R2-B DID NOT CLOSE, AND THE ONE HOOK THAT COULD HAVE WIDENED IT WAS FOLLOWED.** Section
+2 Permitted Use reads *Globalping works as a platform that allows you to monitor, debug,
+and benchmark your internet infrastructure using a globally distributed network of
+probes* -- **descriptive in form, under a heading that reads as a limitation**, with no
+*only* and no *solely*, and the two readings reconciled nowhere. Section 5 Prohibited Use
+prohibits nothing relevant, which cuts toward descriptive; the heading and the word *your*
+cut the other way. Then Section 1 Definitions says *the Globalping platform further
+described on the Website*, so **the Terms incorporate the Website's description by
+reference** -- and the homepage says *Monitor, debug and benchmark your internet
+infrastructure from a globally distributed network of probes.* **The hook was followed
+looking for a widening and the incorporated text repeats the same narrowing, which is a
+stronger finding than not having looked.** `THIRD_PARTY_TARGET_SCOPE_UNRESOLVED`.
+
+**THREE READINGS WERE AVAILABLE AND ALL THREE REFUSED.** The API schema's *A publicly
+reachable measurement target* is `TECHNICAL_TARGET_VALIDATION_ONLY`, because **the
+provider nowhere states that acceptance by the schema is permission under the Terms**. The
+probe README's *We block private IP addresses as targets* presupposes public endpoints and
+is product design rather than a grant. And Section 3's reservation of *all rights that are
+not expressly granted* sits in a proprietary-rights section about the look and feel of the
+Website: it is **not read as everything-unmentioned-is-prohibited, and not ignored
+either**.
+
+**THE PROJECT MAY REFUSE UNDER AMBIGUITY, AND THAT IS GOVERNANCE RATHER THAN A LEGAL
+CONCLUSION.** `PROVIDER_TERMS_REQUIRE_CLARIFICATION`: the Terms do **not** block the
+intended activity, and that is **not the same as permission**. Outcome G was available and
+refused for exactly that reason, because an ambiguous Permitted Use section is not an
+explicit prohibition. Outcome H was refused too: every signal points at not following
+redirects, which is what the SROS side would want, so **what is missing is the commitment
+rather than the compatibility**.
+
+**TWO ENQUIRIES, BECAUSE TWO PROVIDER-DESIGNATED CHANNELS ARE GENUINELY REQUIRED.** R1 is
+a technical contract question and the provider maintains a public issue tracker where
+maintainers answer such questions; R2 is a Terms question and **the Terms themselves
+designate `legal@globalping.io` in Section 16**. One packet could not have carried both
+without sending a Terms question to a technical channel. Each is frozen, each answers to a
+recomputed SHA-256 over its binding fields -- **excluding its own digest, its send status
+and its recorded date**, which is Mission 1.65's envelope rule -- and each records why the
+public documentation is insufficient and what answer would discriminate. **`send_status`
+is `NOT_AUTHORIZED` on both, `ENQUIRIES_SENT` is 0, no operator approval is recorded, and
+this mission authorises no dispatch.**
+
+**GOVERNANCE DID NOT BEND TO MAKE A PROVIDER PASS.** ADR-039's HEAD transport route, body
+retention restriction, source-collection precedence, robots policy, target exclusions,
+load limits and run-authorization separation are all preserved, the GET route is still
+incompatible with the initial profile, and Mission 1.72's `BODY_PERSISTENCE_DEFAULT` is
+still `DISABLED`. **No PASS dimension was reopened**, because no contradicting evidence
+was found; C4 was incidentally reinforced by the same issue that supplied the maintainer
+statement.
+
+**Q1 STAYS `PROMISING_BUT_ROUTE_QUALIFICATION_REQUIRED`**, failing on the one condition it
+has always failed on, with **0 independence groups**, `PAIR_ANALYSIS_NOT_READY`, no class
+selected and `selected-quantity-class-v1.json` still absent. **Registry unchanged at 15**
+for a fourth mission running: nothing new was observed to register.
+
+**13 of 18 first-party documentation requests, 2 of which returned nothing usable and are
+counted. 0 Globalping API executions, 0 measurements created or read, 0 probe runs, 0
+target HTTP requests, 0 SROS fetcher runs, 0 target-value exposures, 0 accounts, 0 tokens,
+0 trials, 0 purchases, 0 credential reads, 0 mailbox searches, 0 enquiries sent, 0
+provider contacts, 0 alternative counterparts evaluated**, 0 sources registered, 0
+governance mutations, 0 canonical mutations, 0 thresholds, 0 Claims, 0 Evidence, 0
+independence groups, 0 reliability values, 0 scores, 0 model calls, 0 embeddings, 0
+migrations, 0 constructs selected, 0 quantity classes selected. ONYPHE still
+`NOT_CHECKED_AFTER_DISPATCH`, Netlas still pending, the scanner arc still parked.
+
+**Verification.** Validator probed with **207 deliberate violations, 207 caught** (203 by
+rule, 4 by drift) plus **7 of 7 positive controls, all variants rather than the shipped
+bytes**. **One escape was found and closed by adding a rule rather than by editing a
+record**: the R2 sub-results had no vocabulary, so a bogus value slid past a
+correspondence check that only fired on the good value; a sub-result is now a restatement
+of its review's verdict, and each half of the R2 conjunction must follow its own
+sub-result. **116 new tests**, taking the bare-python runner to **2738**; both test runners green; `ruff format --check`, `ruff check`
+and mypy all run through `uv`; all **44** CI gates.
+
+New: `docs/data/mission-1.74-baseline-v1.json`,
+`docs/data/mission-1.74-documentation-ledger-v1.json`,
+`docs/data/globalping-redirect-contract-review-v1.json`,
+`docs/data/globalping-provider-terms-scope-review-v1.json`,
+`docs/data/globalping-commercial-purpose-review-v1.json`,
+`docs/data/globalping-third-party-target-scope-review-v1.json`,
+`docs/data/globalping-residual-closure-v1.json`,
+`docs/data/globalping-counterpart-qualification-v2.json`,
+`docs/data/q1-two-route-readiness-v2.json`,
+`docs/data/quantity-class-selection-decision-v4.json`,
+`docs/data/globalping-r1-enquiry-packet-v1.json`,
+`docs/data/globalping-r2-enquiry-packet-v1.json`, the generated
+`docs/data/mission-1.74-globalping-residuals-v1.md` and
+`docs/data/globalping-redirect-evidence-v1.md`,
+`infrastructure/scripts/render_globalping_residuals.py` (CI gate 44),
+`packages/inferred-claim-evaluator/python/tests/test_globalping_residuals.py`, and
+`docs/architecture/mission-1.74-report.md`.
+
+Changed: `docs/CLAUDE.md` 1.109 to 1.110; `.github/workflows/ci.yml` gains one gate.
+
+Unchanged: Mission 1.73's `independent-http-counterpart-qualification-v1.json`,
+`q1-two-route-readiness-v1.json` and `quantity-class-selection-decision-v3.json` are
+superseded rather than edited; ADR-039, the apparatus requirement registry, the source
+registry and every canonical table are untouched.
 
 ## 1.108 — 2026-09-06 (Sprint 1 / Mission 1.73)
 

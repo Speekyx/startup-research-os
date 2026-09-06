@@ -1,0 +1,126 @@
+{
+  "$comment": "§35, §36. Twelve dimensions recomputed. Ten PASS, two PARTIAL, zero FAIL.",
+  "record_version": "2.0.0",
+  "supersedes": "independent-http-counterpart-qualification-v1.json",
+  "supersedes_note": "Mission 1.73's record is not edited. It said what was established when it was written, and this one records what changed.",
+  "mission": "1.74",
+  "recorded_at": "2026-09-06",
+  "exact_predicate_frozen": false,
+  "target_values_retrieved": 0,
+  "candidate": "Globalping",
+  "operator": "Volentio JSD (jsDelivr)",
+  "gates": [
+    {
+      "dimension": "C1_DIRECTABLE_TARGET",
+      "status": "PASS",
+      "mandatory": true,
+      "recomputed": false,
+      "why": "unchanged; no contradicting evidence found"
+    },
+    {
+      "dimension": "C2_OWN_MEASUREMENT_PRODUCTION",
+      "status": "PASS",
+      "mandatory": true,
+      "recomputed": false,
+      "why": "unchanged; no contradicting evidence found"
+    },
+    {
+      "dimension": "C3_TERMINAL_SUBMISSION_ACCOUNTING",
+      "status": "PASS",
+      "mandatory": true,
+      "recomputed": false,
+      "why": "unchanged; no contradicting evidence found"
+    },
+    {
+      "dimension": "C4_TRANSPORT_LEVEL_RESULT_SURFACE",
+      "status": "PASS",
+      "mandatory": true,
+      "recomputed": false,
+      "why": "unchanged, and incidentally reinforced: issue #347 records that rawOutput copies rawHeaders when the method was HEAD"
+    },
+    {
+      "dimension": "C5_PROSPECTIVE_TEMPORAL_ADDRESSABILITY",
+      "status": "PASS",
+      "mandatory": true,
+      "recomputed": false,
+      "why": "unchanged; no contradicting evidence found"
+    },
+    {
+      "dimension": "C6_REQUEST_CONTRACT_RECONSTRUCTABILITY",
+      "status": "PARTIAL",
+      "mandatory": true,
+      "recomputed": true,
+      "why": "recomputed from R1. The absence is now checked across five surfaces instead of one, and the status is unchanged because none of them documents the behaviour"
+    },
+    {
+      "dimension": "C7_VANTAGE_REVIEWABILITY",
+      "status": "PASS",
+      "mandatory": true,
+      "recomputed": false,
+      "why": "unchanged; no contradicting evidence found"
+    },
+    {
+      "dimension": "C8_RESULT_MINIMIZATION",
+      "status": "PASS",
+      "mandatory": true,
+      "recomputed": false,
+      "why": "unchanged; the HEAD default was re-verified in the current specification"
+    },
+    {
+      "dimension": "C9_RIGHTS_FEASIBILITY",
+      "status": "PARTIAL",
+      "mandatory": true,
+      "recomputed": true,
+      "why": "recomputed from R2. Commercial use closed positively and third-party target scope did not, so the gate stays PARTIAL on a narrower and better-characterised residual"
+    },
+    {
+      "dimension": "C10_INDEPENDENCE_PLAUSIBILITY",
+      "status": "PASS",
+      "mandatory": true,
+      "recomputed": false,
+      "why": "unchanged; no contradicting evidence found"
+    },
+    {
+      "dimension": "C11_BOUNDED_PILOT_FEASIBILITY",
+      "status": "PASS",
+      "mandatory": true,
+      "recomputed": false,
+      "why": "unchanged; no contradicting evidence found"
+    },
+    {
+      "dimension": "C12_SAME_HTTP_WORLD_STATE_FAMILY",
+      "status": "PASS",
+      "mandatory": true,
+      "recomputed": false,
+      "why": "unchanged; no contradicting evidence found"
+    }
+  ],
+  "gate_count": 12,
+  "tally": {
+    "PASS": 10,
+    "PARTIAL": 2,
+    "FAIL": 0,
+    "UNKNOWN": 0
+  },
+  "tally_before": {
+    "PASS": 10,
+    "PARTIAL": 2,
+    "FAIL": 0,
+    "UNKNOWN": 0
+  },
+  "tally_changed": false,
+  "passing_dimensions_reopened": 0,
+  "contradicting_evidence_found": false,
+  "verdict": "COUNTERPART_UNRESOLVED",
+  "why": "§36. Qualification needs all twelve mandatory dimensions PASS. Two are PARTIAL, and PARTIAL blocks.",
+  "no_score_issued": true,
+  "what_this_mission_added_even_though_the_tally_did_not_move": [
+    "R1's absence is checked across five first-party surfaces instead of one",
+    "no provider test asserts redirect behaviour, which §9 asked and nobody had answered",
+    "a provider maintainer statement was found that presupposes redirect responses are returned",
+    "R2-A is closed positively on the provider's own words",
+    "R2-B is a characterised ambiguity rather than an unread page",
+    "both provider channels are established first-party rather than guessed",
+    "two enquiry packets are frozen and hashed, awaiting an operator decision"
+  ]
+}

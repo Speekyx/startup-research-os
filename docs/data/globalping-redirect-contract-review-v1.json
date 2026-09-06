@@ -1,0 +1,97 @@
+{
+  "$comment": "§3 to §10. R1. The question is narrow on purpose, and the evidence is graded rather than pooled.",
+  "record_version": "1.0.0",
+  "mission": "1.74",
+  "recorded_at": "2026-09-06",
+  "residual": "R1",
+  "exact_question": {
+    "$comment": "§4. Frozen, and deliberately not broadened into generic redirect support.",
+    "question": "For a Globalping HTTP measurement using method HEAD against requested URL U, when the response to U is HTTP 3xx with a Location header naming V, does Globalping return the response to U without automatically issuing a subsequent HTTP request to V?",
+    "broadened_into_generic_redirect_support": false
+  },
+  "why_it_is_load_bearing": {
+    "$comment": "§5.",
+    "statement": "if SROS reports the initial response and Globalping silently follows redirects and reports the final one, both return one status and one header set while observing different HTTP interactions -- and the difference is invisible in the resulting values.",
+    "invisible_in_the_values": true
+  },
+  "surfaces_reviewed": [
+    {
+      "surface": "OpenAPI specification",
+      "locator": "https://api.globalping.io/v1/spec.yaml",
+      "redirect_mentions": 0,
+      "three_xx_mentions": 0,
+      "note": "verified on the retrieved bytes rather than on a summary: 124,793 bytes, zero case-insensitive matches for 'redirect' and zero for '3xx'. The 27 'Location' matches are the API's own asynchronous-measurement header and example keys such as pingLocations, not an HTTP redirect Location.",
+      "byte_identical_to_the_mission_1_73_copy": true
+    },
+    {
+      "surface": "API repository (jsdelivr/globalping)",
+      "locator": "code search for redirect",
+      "redirect_mentions": 2,
+      "note": "a package.json dependency name and an ETag middleware test about the API's own responses",
+      "relevant_to_http_measurement": false
+    },
+    {
+      "surface": "probe repository (jsdelivr/globalping-probe)",
+      "locator": "code search for redirect",
+      "redirect_mentions": 1,
+      "note": "one match, in the probe adoption-server test, unrelated to HTTP measurement",
+      "relevant_to_http_measurement": false,
+      "provider_test_asserting_redirect_behaviour": false
+    },
+    {
+      "surface": "CLI repository (jsdelivr/globalping-cli)",
+      "locator": "code search for redirect",
+      "redirect_mentions": 4,
+      "note": "all in OAuth authentication paths (redirect URI), not measurement",
+      "relevant_to_http_measurement": false
+    },
+    {
+      "surface": "website repository (jsdelivr/globalping.io)",
+      "locator": "code search for redirect",
+      "redirect_mentions": 5,
+      "note": "server routing, auth store and trailing-slash middleware; site infrastructure",
+      "relevant_to_http_measurement": false
+    }
+  ],
+  "surfaces_reviewed_count": 5,
+  "documented_in_any_reviewed_surface": false,
+  "zero_matches_means": "NOT_DOCUMENTED_IN_REVIEWED_SURFACE",
+  "zero_matches_proves_no_redirect": false,
+  "provider_statements_found": [
+    {
+      "$comment": "§2. A maintainer statement in a provider-owned issue. It is real evidence and it is not a contract.",
+      "locator": "jsdelivr/globalping issue #347, Improve HTTP response handling",
+      "author_role": "provider maintainer",
+      "quotation": "the body may be empty in some cases, most often redirects and error responses",
+      "what_it_establishes": "the statement PRESUPPOSES that a redirect response appears in a Globalping result, which is what a non-following apparatus produces. It is an incidental premise in an argument about rawOutput formatting.",
+      "what_it_does_not_establish": "a commitment about redirect behaviour. It defines nothing, promises nothing, and appears in a discussion about output formatting rather than about the measurement contract.",
+      "evidence_level": "PROVIDER_MAINTAINER_STATEMENT_INCIDENTAL"
+    }
+  ],
+  "implementation": {
+    "$comment": "§8. Re-confirmed only to preserve the evidence distinction.",
+    "CURRENT_IMPLEMENTATION_FOLLOWS_REDIRECTS": "NO",
+    "basis": "the probe's HTTP handler dispatches through undici's Client.dispatch(), which performs no redirect traversal. Read from provider-authored source in Mission 1.73 and not re-executed here.",
+    "IMPLEMENTATION_CONTRACT_STATUS": "NON_NORMATIVE",
+    "run_against_a_live_target": false,
+    "local_redirect_test_constructed_and_presented_as_provider_behaviour": false
+  },
+  "dependency_default": {
+    "$comment": "§3 level R1-D.",
+    "dependency": "undici",
+    "globalping_normatively_binds_to_it": false,
+    "can_close_r1_by_itself": false
+  },
+  "provider_tests": {
+    "$comment": "§9.",
+    "tests_asserting_http_measurement_redirect_behaviour": 0,
+    "classification": "NO_PROVIDER_TESTED_REDIRECT_BEHAVIOUR_FOUND",
+    "treated_as_public_api_contract": false
+  },
+  "evidence_level": "R1_C_IMPLEMENTATION_OBSERVED",
+  "evidence_level_upgraded_by_the_maintainer_statement": false,
+  "why_not_upgraded": "§3's R1-A needs a normative provider contract and R1-B needs the provider to declare a published implementation normative. An incidental premise in an issue about output formatting is neither, however strongly it points the right way.",
+  "verdict": "R1_PARTIAL_IMPLEMENTATION_ONLY",
+  "verdict_reasoning": "five first-party surfaces reviewed, zero documenting the behaviour, no provider test asserting it, one incidental maintainer statement consistent with not following, and an implementation that does not follow. Everything points the same way and nothing commits the provider to it.",
+  "closable_by": "one documented sentence, or one answer through the provider's technical channel"
+}

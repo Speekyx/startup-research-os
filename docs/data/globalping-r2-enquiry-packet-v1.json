@@ -1,0 +1,34 @@
+{
+  "$comment": "§33 and §34. Frozen and unsent. The digest covers the binding fields and excludes itself, the send status and the recorded date, which is Mission 1.65's envelope rule.",
+  "record_version": "1.0.0",
+  "mission": "1.74",
+  "recorded_at": "2026-09-06",
+  "question_id": "GP-R2-Q1",
+  "residual_id": "R2",
+  "subject": "Terms scope: HEAD measurements of publicly reachable third-party websites",
+  "body": "Do Globalping's Terms permit using the HTTP measurement API for bounded HEAD measurements of publicly reachable third-party websites, including as part of a commercial tool or commercial-purpose research workflow, provided the use complies with Globalping's limits and other policies?\n\nI am asking because the Permitted Use section describes monitoring, debugging and benchmarking 'your internet infrastructure', while the Credits FAQ states that commercial use is supported within the limits of the Terms, and I did not want to read either beyond what it says.",
+  "recipient": "legal@globalping.io",
+  "channel": "PROVIDER_DESIGNATED_TERMS_CHANNEL",
+  "content_sha256": "713d62c91ac56934dab9ad06eaee71951346abc6527a63ccbe5834efd6b5dbe0",
+  "hash_covers": [
+    "question_id",
+    "residual_id",
+    "subject",
+    "body",
+    "recipient",
+    "channel"
+  ],
+  "hash_excludes": [
+    "content_sha256",
+    "send_status",
+    "recorded_at"
+  ],
+  "first_party_channel_basis": "§28. The Terms of Use §16 Contact Us states: 'If you have any questions about these Terms, please contact us: By email: legal@globalping.io'. The address is read from the provider's own document rather than guessed or inferred from convention.",
+  "recipient_guessed": false,
+  "why_public_documentation_is_insufficient": "the Terms neither prohibit nor grant the activity, the one incorporating hook was followed and repeats the same narrow framing, and the Credits FAQ expressly defers to the Terms",
+  "expected_answer_discriminator": "an answer stating that the current Terms do or do not cover measuring third-party publicly reachable targets maps directly to R2-B. A statement that a separate permission is needed maps to PROVIDER_TERMS_REQUIRE_CLARIFICATION rather than to a grant.",
+  "send_status": "NOT_AUTHORIZED",
+  "operator_approval_recorded": false,
+  "sent": false,
+  "execution_record_created": false
+}

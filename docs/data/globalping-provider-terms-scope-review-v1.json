@@ -1,0 +1,100 @@
+{
+  "$comment": "§13, §14, §19, §20, §48, §49. The Terms read whole, with their headings.",
+  "record_version": "1.0.0",
+  "mission": "1.74",
+  "recorded_at": "2026-09-06",
+  "terms_version": {
+    "document": "Globalping Terms of Use",
+    "source": "jsdelivr/globalping, docs/terms/Terms of Use.md",
+    "effective_date": "July 31, 2026",
+    "retrieved_at": "2026-09-06",
+    "identical_to_the_mission_1_73_copy": true
+  },
+  "versions_silently_combined": false,
+  "website_shell_versus_repository_copy": {
+    "$comment": "§48. Mission 1.73 found the published pages returned navigation shells.",
+    "repository_copy_read": true,
+    "discrepancy_found": false,
+    "note": "the repository copy is the one read, and it carries its own effective date",
+    "favourable_version_chosen": false
+  },
+  "structure": {
+    "$comment": "§13 and §14. The headings are what decide the scope of each clause.",
+    "headings": [
+      "1. Definitions",
+      "2. Permitted Use",
+      "3. Proprietary Rights",
+      "4. Limits and Restrictions",
+      "5. Prohibited Use - Globalping",
+      "6. Third Party Websites",
+      "7. Malicious Intent",
+      "8. Liability",
+      "9. Indemnity",
+      "10-15 changes, suspension, warranties, limitation, governing law",
+      "16. Contact Us"
+    ],
+    "liability_branches": [
+      "Whether you are a consumer or a business user:",
+      "If you are a business user:",
+      "If you are a consumer user:"
+    ],
+    "business_users_contemplated": true,
+    "business_users_contemplated_basis": "the Terms carry a branch headed 'If you are a business user:' distinct from the consumer branch",
+    "mention_treated_as_a_grant": false
+  },
+  "consumer_commercial_clause": {
+    "$comment": "§13. The sentence Mission 1.73 refused to read globally.",
+    "sentence": "Where we provide the Services for domestic and private use. You agree not to use the Services for any commercial or business purposes, and we have no liability to you for any loss of profit, loss of business, business interruption, or loss of business opportunity.",
+    "heading_scope": "CONSUMER_ONLY",
+    "applied_globally": false,
+    "section_it_sits_in": "8. Liability"
+  },
+  "definitions_hook": {
+    "$comment": "§49. A genuine textual hook, checked in both directions rather than used only where it helps.",
+    "clause": "**Globalping** the Globalping platform further described on the Website;",
+    "effect": "the Terms incorporate the Website's description of the platform by reference",
+    "so_the_website_description_was_read": true,
+    "what_the_website_says": "Monitor, debug and benchmark your internet infrastructure from a globally distributed network of probes.",
+    "does_it_widen_the_scope": false,
+    "why_this_matters": "the hook was followed looking for a widening and the incorporated description repeats the same narrowing. That is a stronger finding than not having looked."
+  },
+  "reservation_of_rights": {
+    "$comment": "§19. Recorded with its scope rather than as a general prohibition.",
+    "clause": "We reserve all rights that are not expressly granted to you under these Terms or by law, including all rights in relation to the look and feel of the Website and Globalping.",
+    "section": "3. Proprietary Rights",
+    "scope": "SERVICE_AND_IP_RIGHTS",
+    "read_as_everything_unmentioned_is_prohibited": false,
+    "ignored": false,
+    "copyright_licence_semantics_imported_without_textual_basis": false,
+    "how_it_is_weighed": "it sits in a proprietary-rights section and is about intellectual property in the Website and platform. It is not a use-purpose prohibition, and it is also not nothing: it means an absence of an express grant is not itself a grant."
+  },
+  "prohibited_use": {
+    "$comment": "§20.",
+    "third_party_measurement_prohibited": "NO_EXPLICIT_BLOCK_FOUND",
+    "automated_access_prohibited": "NO_EXPLICIT_BLOCK_FOUND",
+    "scanning_prohibited": "NO_EXPLICIT_BLOCK_FOUND",
+    "what_is_prohibited": [
+      "accessing content that contains malware, violates proprietary rights, is sexually explicit, or is unlawful",
+      "abusing the Service and its resources",
+      "trying to bypass limits or restrictions in any way",
+      "operating excessive numbers of probes in one network and location",
+      "connecting a modified probe without prior written authorization",
+      "providing false, manipulated, incomplete or misleading information",
+      "interfering with probe updates, limits or quality-control mechanisms"
+    ],
+    "absence_creates_a_grant": false
+  },
+  "authority_ranking": {
+    "$comment": "§49.",
+    "order": [
+      "Terms of Use",
+      "provider policy pages",
+      "Credits FAQ",
+      "API documentation",
+      "product examples"
+    ],
+    "faq_may_override_contradictory_terms": false,
+    "examples_may_override_terms": false,
+    "faq_used_to_resolve_scope_where_terms_are_consistent": true
+  }
+}
