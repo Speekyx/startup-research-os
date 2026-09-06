@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.111
+Version: 1.112
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-06 (Sprint 1 / Mission 1.74.2)
+Last amended: 2026-09-06 (Sprint 1 / Mission 1.74.3)
 
 ---
 
@@ -13,6 +13,93 @@ Last amended: 2026-09-06 (Sprint 1 / Mission 1.74.2)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.112 - 2026-09-06 (Sprint 1 / Mission 1.74.3)
+
+**`R1_SENT_OPERATOR_ATTESTED_BYTE_VERIFICATION_NOT_REACHED`.** The operator posted the R1
+issue once, manually, and attested to it. The execution record moved to `SENT`. **This
+repository created nothing, invoked no `gh`, and made no GitHub API call.**
+
+**THE SUPPLIED ISSUE NUMBER WAS A PLACEHOLDER AND NO NUMBER WAS INVENTED.** The
+attestation read `issue_number: XXXX`, the template line unfilled. The URL already
+carries it, so `907` is **derived from the URL** and recorded as such -- the two are the
+same fact stated once rather than an independent confirmation. Both the placeholder and
+the derivation are in the record, and the validator now refuses a number that disagrees
+with its own URL.
+
+**`BYTE_VERIFIED` WAS REACHABLE AND WAS NOT REACHED, AND THE REASON IS MISSION 1.63.**
+Mission 1.74.1 established that this channel CAN be byte-verified, so the obvious move was
+to fetch the issue and claim the upgrade. **The page was fetched and the upgrade was
+refused anyway**, because the retrieval went through an HTML-to-markdown conversion AND a
+summarising model -- and **a retrieval summary is not a document** where a sentence
+decides a gate. The extraction rendered the body's paragraph break as a space, which is an
+artifact of the conversion rather than evidence of a difference, and **precisely because
+it is an artifact, that retrieval cannot distinguish it from one.** What the fetch bought
+is recorded as CORROBORATION with its limit stated: the issue exists, it is open, its
+author is the approved identity, its repository and number match, and **its title matched
+character for character**. What it does not establish is byte equality of the body.
+
+**A DEFECT IN THIS PROJECT'S OWN R2 GATE WAS SURFACED BY THE FIRST LEGITIMATE
+TRANSITION.** Mission 1.74.2's gate compared the R1 execution state LIVE against a
+snapshot it had taken when it was written, so **it refused the very transition the R1
+approval was designed to make** -- proved by running it against a mutated copy before
+changing anything. The repair is not a loosening: what that gate is entitled to assert is
+that MISSION 1.74.2 did not move it, which is history and is kept in a field now named
+`r1_execution_state_when_this_was_written`, plus that the R1 approval's BINDING fields and
+digest are untouched, which it already checked and which is the property that actually
+matters. **The value was preserved and only the name and the comparison changed**, and a
+new check replaces the removed one: R1 may not record more posts than R1 authorised.
+
+**THE R1 GATE GOT STRICTER, NOT LOOSER.** A `SENT` record must now name its attester,
+carry an issue URL on a channel that produces one, have that URL parse and name the
+approved repository, have its number agree with its own URL, and **state whether the body
+was compared raw**. That last rule closed a probe escape: deleting `raw_body_compared`
+slipped through because the check only fired for `BYTE_VERIFIED`, so a `SENT` record could
+leave a reader unable to tell an unverified send from an unrecorded verification.
+
+**A CRASHED PROBE LEFT A RECORD EDITED AND THE GATE CAUGHT IT.** The Mission 1.74.2 probe
+hit an intermittent file lock, its restore raised, and it left `PROVIDER_CONTACTS: 1` in
+the R2 approval on disk; **the gate refused it on the next run**. That is Mission 1.67's
+finding recurring -- a restore that can fail silently leaves a record edited -- and the new
+probe **retries and then proves every file is back** rather than assuming the write
+succeeded.
+
+**AN ANSWER HAS NOT ARRIVED.** The issue is open, R1's verdict is unchanged at
+`R1_PARTIAL_IMPLEMENTATION_ONLY`, the tally is still 10 PASS / 2 PARTIAL / 0 FAIL, and
+`COUNTERPART_UNRESOLVED` stands. **A sent question is still not an answer**, and R2 still
+reads `PENDING_MANUAL_OPERATOR_ACTION` with 0 sends.
+
+**0 issues created by this repository, 0 gh invocations, 0 GitHub API calls, 0 emails
+sent, 0 mail connector executions, 0 mailbox searches, 0 residuals closed, 0
+qualifications recomputed, 0 Globalping API executions, 0 measurements, 0 target HTTP
+requests, 0 canonical mutations, 0 Claims, 0 Evidence, 0 scores, 0 model calls, 0
+embeddings, 0 migrations.** Public page retrievals by this repository: **1**, recorded
+rather than glossed. ONYPHE still `NOT_CHECKED_AFTER_DISPATCH`, Netlas still pending, the
+scanner arc still parked, ADR-039 untouched.
+
+**Verification.** Both gates probed with **42 deliberate violations, 42 caught** (39 by
+rule, 3 by drift) plus **4 of 4 positive controls** -- one proving a properly evidenced
+`BYTE_VERIFIED` record IS accepted, so the gate did not merely move its floor, and another
+proving the pre-transition `PENDING` state is still representable, because **a gate that
+only accepts the state we happen to be in is not a gate**. **One escape found and closed
+by adding a rule.** **Five tests asserted the pre-transition state and were re-pointed
+rather than deleted**, to the property rather than the incidental value: a test asserting
+an execution never happens is a test asserting the approval is never used. **2857
+bare-python tests**; both runners green; `ruff format --check`, `ruff check` and mypy all
+run through `uv`; all **46** CI gates.
+
+New: `docs/architecture/mission-1.74.3-report.md`.
+
+Changed: `docs/data/globalping-r1-dispatch-approval-v1.json` execution section moves to
+`SENT`, its approval digest and every binding field unchanged;
+`docs/data/globalping-r2-dispatch-approval-v1.json` renames one scope field and preserves
+its value; `infrastructure/scripts/render_r1_dispatch_approval.py` gains six `SENT` rules;
+`infrastructure/scripts/render_r2_dispatch_approval.py` has its live coupling corrected;
+both generated pages re-render; five tests re-pointed and four added;
+`docs/CLAUDE.md` 1.112 to 1.113.
+
+Unchanged: both enquiry packets are byte-identical, every Mission 1.74 record is untouched,
+the gate count stays at 46, and no canonical table, source review or ADR was modified.
 
 ## 1.111 - 2026-09-06 (Sprint 1 / Mission 1.74.2)
 

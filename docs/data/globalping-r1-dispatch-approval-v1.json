@@ -49,22 +49,47 @@
   },
   "execution": {
     "$comment": "An approval says an action MAY be performed. Only a performance says it WAS, and this record must not fill itself in -- every field an execution needs is already known from the approval, which is exactly what makes a fictional record easy.",
-    "status": "PENDING_MANUAL_OPERATOR_ACTION",
-    "public_posts_made": 0,
-    "issue_url": null,
+    "status": "SENT",
+    "public_posts_made": 1,
+    "issue_url": "https://github.com/jsdelivr/globalping/issues/907",
     "issue_created_by_this_repository": false,
     "gh_issue_create_invoked": false,
     "github_api_calls_made_by_this_repository": 0,
-    "operator_attestation_recorded": false,
-    "attestation_level": null,
+    "operator_attestation_recorded": true,
+    "attestation_level": "OPERATOR_ATTESTED",
     "attestation_levels_defined": [
       "OPERATOR_ATTESTED",
       "BYTE_VERIFIED"
     ],
     "byte_verification_is_possible_for_this_channel": true,
     "why_byte_verification_is_possible_here": "Mission 1.66 could reach only OPERATOR_ATTESTED because a manual email send happens inside a mail client nothing here can observe. A public GitHub issue has a durable public URL, so once the operator supplies it the posted title and body can be compared against the approved ones. The ceiling that arc hit is a property of the CHANNEL rather than of manual sending.",
-    "upgrade_path": "the operator posts the issue and supplies its URL; a later mission retrieves it, compares the posted title and body against this approval, and records BYTE_VERIFIED. Until then the status stays PENDING_MANUAL_OPERATOR_ACTION.",
-    "reachable_only_through": "an explicit operator attestation that the post was made, plus the issue URL. This repository cannot reach SENT by any other route."
+    "upgrade_path": "a raw read of the issue body compared character for character against the frozen packet body, recorded with raw_body_compared true. Until then the level stays OPERATOR_ATTESTED.",
+    "reachable_only_through": "an explicit operator attestation that the post was made, plus the issue URL. This repository cannot reach SENT by any other route.",
+    "issue_number": 907,
+    "issue_number_source": "DERIVED_FROM_THE_ATTESTED_URL",
+    "issue_number_as_supplied_by_the_operator": "XXXX",
+    "why_the_supplied_number_was_not_used": "the operator's attestation left issue_number as the template placeholder 'XXXX'. A number was not invented: the URL already carries it, so it is derived from the URL and the two are the same fact stated once rather than an independent confirmation.",
+    "attested_by": "operator",
+    "attested_account": "@Speekyx",
+    "attestation_statement": "The issue was posted manually by me exactly once using the approved title and frozen body.",
+    "public_page_retrievals_by_this_repository": 1,
+    "corroboration": {
+      "$comment": "Mission 1.63. A RETRIEVAL SUMMARY IS NOT A DOCUMENT. The public page was fetched and converted to markdown by a summarising extraction, so what follows corroborates the attestation and does not replace it.",
+      "public_page_retrieved": true,
+      "retrieval_method": "PUBLIC_PAGE_FETCH_THROUGH_A_SUMMARISING_EXTRACTION",
+      "issue_exists_at_the_attested_url": true,
+      "issue_state_reported": "OPEN",
+      "author_reported": "Speekyx",
+      "author_matches_the_approved_identity": true,
+      "repository_matches_the_approved_target": true,
+      "number_matches_the_url": true,
+      "title_matched_character_for_character": true,
+      "body_wording_matched": true,
+      "what_this_does_not_establish": "byte equality of the body. The extraction rendered the body's paragraph break as a space, which is an artifact of HTML to markdown conversion rather than evidence of a difference -- and precisely because it is an artifact, this retrieval cannot distinguish it from one. Whitespace and exact characters were not compared.",
+      "therefore_the_level_stays": "OPERATOR_ATTESTED"
+    },
+    "byte_verification_not_reached_because": "the only retrieval performed went through a summarising extraction, and Mission 1.63 established that a summary is not a document where a sentence decides a gate. BYTE_VERIFIED requires a raw read of the issue body -- the GitHub API returns the stored markdown -- compared character for character against the frozen packet body. That read has NOT been performed, and no gh invocation was made.",
+    "raw_body_compared": false
   },
   "integrity_checks_frozen_before_any_post": {
     "$comment": "Frozen now, which is the only time they mean anything. A posted issue cannot be unposted, so a duplicate is REPORTED rather than tidied away.",
@@ -145,5 +170,6 @@
     "appended_by_mission": "1.74.2",
     "what_this_does_not_change": "every field this record established when it was written, including that THIS approval covers GP-R1-Q1 alone",
     "approval_sha256_unchanged": true
-  }
+  },
+  "execution_recorded_by_mission": "1.74.3"
 }

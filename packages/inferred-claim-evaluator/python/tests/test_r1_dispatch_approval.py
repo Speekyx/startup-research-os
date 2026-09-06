@@ -192,26 +192,62 @@ class TestTheActionIsBound(unittest.TestCase):
 
 
 class TestAnApprovalIsNotAnExecution(unittest.TestCase):
-    """28 to 38. Nothing was posted, and nothing here could post it."""
+    """28 to 38. The operator posted it; this repository still performed no act.
+
+    Re-pointed in Mission 1.74.3. These three asserted the pre-transition state, and a
+    test asserting an execution never happens is a test asserting the approval is never
+    used. What survives is the property: the act was the operator's, it stayed inside
+    what the approval authorised, and nothing here reached GitHub.
+    """
 
     def setUp(self):
         self.execution = load(APPROVAL)["execution"]
+        self.action = load(APPROVAL)["approved_action"]
 
-    def test_the_status_is_pending_manual_operator_action(self):
-        self.assertEqual(self.execution["status"], "PENDING_MANUAL_OPERATOR_ACTION")
+    def test_the_status_reached_sent_only_through_an_attestation(self):
+        self.assertEqual(self.execution["status"], "SENT")
+        self.assertTrue(self.execution["operator_attestation_recorded"])
+        self.assertTrue(str(self.execution["attested_by"]).strip())
 
-    def test_no_public_post_was_made(self):
-        self.assertEqual(self.execution["public_posts_made"], 0)
-        self.assertIsNone(self.execution["issue_url"])
+    def test_exactly_one_post_was_made_and_it_is_within_the_approval(self):
+        self.assertEqual(self.execution["public_posts_made"], 1)
+        self.assertLessEqual(
+            self.execution["public_posts_made"], self.action["maximum_public_posts"]
+        )
+
+    def test_the_issue_url_is_consistent_with_the_approved_target(self):
+        import re
+
+        match = re.fullmatch(
+            r"https://github\.com/([^/]+/[^/]+)/issues/(\d+)", self.execution["issue_url"]
+        )
+        self.assertIsNotNone(match)
+        self.assertEqual(match.group(1), self.action["target_repository"])
+        self.assertEqual(int(match.group(2)), self.execution["issue_number"])
+
+    def test_the_supplied_issue_number_was_a_placeholder_and_was_not_used(self):
+        self.assertEqual(self.execution["issue_number_as_supplied_by_the_operator"], "XXXX")
+        self.assertEqual(self.execution["issue_number_source"], "DERIVED_FROM_THE_ATTESTED_URL")
+        self.assertTrue(self.execution["why_the_supplied_number_was_not_used"].strip())
 
     def test_this_repository_created_no_issue(self):
         self.assertFalse(self.execution["issue_created_by_this_repository"])
         self.assertFalse(self.execution["gh_issue_create_invoked"])
         self.assertEqual(self.execution["github_api_calls_made_by_this_repository"], 0)
 
-    def test_no_attestation_exists_yet(self):
-        self.assertFalse(self.execution["operator_attestation_recorded"])
-        self.assertIsNone(self.execution["attestation_level"])
+    def test_the_level_is_the_lower_one_and_says_why(self):
+        self.assertEqual(self.execution["attestation_level"], "OPERATOR_ATTESTED")
+        self.assertFalse(self.execution["raw_body_compared"])
+        self.assertTrue(self.execution["byte_verification_not_reached_because"].strip())
+
+    def test_the_public_retrieval_corroborates_and_does_not_replace_the_attestation(self):
+        # Mission 1.63: a retrieval summary is not a document.
+        corroboration = self.execution["corroboration"]
+        self.assertTrue(corroboration["issue_exists_at_the_attested_url"])
+        self.assertTrue(corroboration["title_matched_character_for_character"])
+        self.assertTrue(corroboration["author_matches_the_approved_identity"])
+        self.assertEqual(corroboration["therefore_the_level_stays"], "OPERATOR_ATTESTED")
+        self.assertTrue(corroboration["what_this_does_not_establish"].strip())
 
     def test_both_attestation_levels_are_defined(self):
         self.assertEqual(
@@ -421,10 +457,10 @@ class TestTheRenderer(unittest.TestCase):
         self.assertIn("ValidationError", names)
         self.assertIn("validate", names)
 
-    def test_the_page_is_marked_generated_and_reports_the_pending_status(self):
+    def test_the_page_is_marked_generated_and_reports_the_current_status(self):
         text = PAGE.read_text(encoding="utf-8")
         self.assertIn("Do not edit by hand", text)
-        self.assertIn("PENDING_MANUAL_OPERATOR_ACTION", text)
+        self.assertIn(load(APPROVAL)["execution"]["status"], text)
         self.assertIn("jsdelivr/globalping", text)
 
     def test_a_missing_field_is_a_refusal_rather_than_a_crash(self):
