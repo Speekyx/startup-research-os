@@ -19,13 +19,22 @@ THE CEILING BELONGS TO THE MEDIUM, NOT TO THE ADDRESS. The address changed and t
 medium did not, so BYTE_VERIFIED stays unreachable: a mail client's outbox is
 something no guard here can observe.
 
-Nothing has been sent. The execution is PENDING_MANUAL_OPERATOR_ACTION.
+Mission 1.74.6 recorded the send and added the fourth.
+
+A SEND IS NOT A DELIVERY. A send is an act by the sender; a delivery is an outcome at
+the receiver. The attestation establishes the first and is silent on the second, so
+the record carries an explicit delivery status, UNCONFIRMED forbids a counted
+delivery and forbids provider_contacted, and CONFIRMED must name a source that is not
+the attestation of sending. This arc supplies its own proof that the two come apart:
+the v1 message was sent too, and then it bounced.
 """
 
 from __future__ import annotations
 
 import ast
+import copy
 import hashlib
+import importlib.util
 import json
 import pathlib
 import unittest
@@ -49,6 +58,19 @@ def load(path: pathlib.Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def gate():
+    """The renderer, loaded as a module so its checks can be run against dicts.
+
+    Importing it touches no file: it defines paths and constants, and `main` is
+    guarded. Running its helpers directly is the difference between asserting that a
+    refusal is spelled in the source and asserting that it fires.
+    """
+    spec = importlib.util.spec_from_file_location("render_r2_v2_dispatch_approval", RENDERER)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 def digest(mapping: dict, keys) -> str:
     binding = {key: mapping[key] for key in keys}
     return hashlib.sha256(
@@ -57,8 +79,6 @@ def digest(mapping: dict, keys) -> str:
 
 
 class TestAQuotedDigestIsRecomputed(unittest.TestCase):
-    """1 to 8."""
-
     def setUp(self):
         self.approval = load(APPROVAL)
         self.packet = load(V2_PACKET)
@@ -104,8 +124,6 @@ class TestAQuotedDigestIsRecomputed(unittest.TestCase):
 
 
 class TestTheApprovalStayedOutOfThePacket(unittest.TestCase):
-    """9 to 12."""
-
     def setUp(self):
         self.packet = load(V2_PACKET)
 
@@ -124,8 +142,6 @@ class TestTheApprovalStayedOutOfThePacket(unittest.TestCase):
 
 
 class TestTheActionIsBound(unittest.TestCase):
-    """13 to 22."""
-
     def setUp(self):
         self.action = load(APPROVAL)["approved_action"]
         self.packet = load(V2_PACKET)
@@ -166,31 +182,83 @@ class TestTheActionIsBound(unittest.TestCase):
         self.assertTrue(self.action["why_the_sender_is_not_pinned"].strip())
 
 
-class TestNothingHasBeenPerformed(unittest.TestCase):
-    """23 to 30."""
+class TestTheDispatchWasPerformedAndAttested(unittest.TestCase):
+    """One send happened. Every fact about it is the operator's word, and the record
+    has to say that rather than reading as though something checked it."""
 
     def setUp(self):
-        self.execution = load(APPROVAL)["execution"]
+        self.approval = load(APPROVAL)
+        self.execution = self.approval["execution"]
 
-    def test_the_status_is_pending(self):
-        self.assertEqual(self.execution["status"], "PENDING_MANUAL_OPERATOR_ACTION")
+    def test_the_status_is_sent_and_names_the_mission_that_moved_it(self):
+        self.assertEqual(self.execution["status"], "SENT")
+        self.assertEqual(self.execution["recorded_by_mission"], "1.74.6")
+        self.assertEqual(self.approval["execution_recorded_by_mission"], "1.74.6")
 
-    def test_no_attempt_no_send_no_delivery(self):
-        self.assertEqual(self.execution["send_attempts"], 0)
-        self.assertEqual(self.execution["sends_made"], 0)
-        self.assertEqual(self.execution["deliveries_confirmed"], 0)
+    def test_the_approval_keeps_its_own_mission(self):
+        self.assertEqual(self.approval["mission"], "1.74.5")
 
-    def test_the_provider_is_not_marked_contacted(self):
-        self.assertFalse(self.execution["provider_contacted"])
+    def test_exactly_one_send_under_a_one_send_approval(self):
+        self.assertEqual(self.execution["sends_made"], 1)
+        self.assertEqual(self.execution["send_attempts"], 1)
+        self.assertTrue(self.execution["dispatch_performed"])
+        self.assertEqual(self.approval["approved_action"]["maximum_sends"], 1)
 
-    def test_no_attestation_and_no_level(self):
-        self.assertFalse(self.execution["operator_attestation_recorded"])
-        self.assertIsNone(self.execution["attestation_level"])
+    def test_the_attestation_names_an_attester_and_a_statement(self):
+        self.assertEqual(self.execution["attested_by"], "operator")
+        self.assertTrue(self.execution["attestation_statement"].strip())
+        self.assertTrue(self.execution["operator_attestation_recorded"])
+        self.assertEqual(self.execution["attestation_level"], "OPERATOR_ATTESTED")
+
+    def test_the_attested_recipient_and_subject_are_the_approved_ones(self):
+        action = self.approval["approved_action"]
+        self.assertEqual(self.execution["attested_recipient"], action["recipient"])
+        self.assertEqual(self.execution["attested_subject"], action["approved_subject"])
+
+    def test_the_sender_is_real_and_was_not_written_back_into_the_approval(self):
+        self.assertNotEqual(self.execution["attested_sender"], PLACEHOLDER_SENDER)
+        self.assertIn("@", self.execution["attested_sender"])
+        self.assertEqual(self.approval["approved_action"]["sender"], PLACEHOLDER_SENDER)
+        self.assertFalse(self.execution["sender_written_back_into_the_approval"])
+        self.assertTrue(self.execution["sender_supplied_only_by_the_attestation"])
+
+    def test_the_send_time_carries_an_offset_and_does_not_precede_the_approval(self):
+        sent_at = self.execution["sent_at"]
+        self.assertRegex(sent_at, r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:[+-]\d{2}:\d{2}|Z)$")
+        self.assertTrue(self.execution["sent_at_carries_an_explicit_offset"])
+        self.assertGreaterEqual(sent_at[:10], self.approval["recorded_at"])
+
+    def test_no_message_id_was_invented(self):
+        self.assertIsNone(self.execution["message_id"])
+        self.assertFalse(self.execution["message_id_available"])
+        self.assertTrue(self.execution["why_there_is_no_message_id"].strip())
+
+    def test_the_body_that_left_was_not_compared_by_this_repository(self):
+        self.assertEqual(self.execution["body_used_per_attestation"], "THE_FROZEN_PACKET_BODY")
+        self.assertFalse(self.execution["body_compared_by_this_repository"])
+        self.assertTrue(self.execution["why_the_body_was_not_compared"].strip())
+
+    def test_the_attestation_says_what_it_does_not_cover(self):
+        covers = self.execution["attestation_covers"]
+        uncovered = self.execution["attestation_does_not_cover"]
+        self.assertTrue(covers)
+        self.assertIn("delivery", uncovered)
+        self.assertIn("a reply", uncovered)
+        self.assertEqual(set(covers) & set(uncovered), set())
+
+    def test_the_approval_is_spent_by_the_send(self):
+        self.assertTrue(self.execution["approval_exhausted"])
+        self.assertTrue(self.execution["a_resend_requires_a_new_operator_approval"])
 
     def test_this_repository_sent_nothing_and_read_nothing(self):
         self.assertEqual(self.execution["emails_sent_by_this_repository"], 0)
         self.assertFalse(self.execution["mail_connector_used"])
         self.assertFalse(self.execution["mailbox_searched"])
+
+    def test_no_reply_is_claimed(self):
+        self.assertFalse(self.execution["provider_replied"])
+        self.assertFalse(self.execution["reply_recorded"])
+        self.assertTrue(self.execution["why_no_reply_is_recorded"].strip())
 
     def test_the_ceiling_belongs_to_the_medium(self):
         self.assertFalse(self.execution["byte_verification_is_possible_for_this_channel"])
@@ -200,6 +268,145 @@ class TestNothingHasBeenPerformed(unittest.TestCase):
         )
         self.assertIn("NONE", self.execution["upgrade_path"])
         self.assertTrue(self.execution["why_byte_verification_is_unreachable_here"].strip())
+
+
+class TestASendIsNotADelivery(unittest.TestCase):
+    """The send is attested. The delivery is not, and the record may not close the gap."""
+
+    def setUp(self):
+        self.execution = load(APPROVAL)["execution"]
+        self.delivery = self.execution["delivery"]
+
+    def test_the_delivery_is_unconfirmed(self):
+        self.assertEqual(self.delivery["delivery_status"], "UNCONFIRMED")
+        self.assertIsNone(self.delivery["delivery_established_by"])
+        self.assertEqual(self.execution["deliveries_confirmed"], 0)
+
+    def test_the_provider_is_not_marked_contacted(self):
+        self.assertFalse(self.execution["provider_contacted"])
+        self.assertTrue(self.execution["why_provider_contacted_is_false"].strip())
+
+    def test_silence_is_not_treated_as_evidence(self):
+        self.assertTrue(self.delivery["absence_of_a_reported_bounce_is_not_evidence"])
+        self.assertTrue(self.delivery["why_silence_is_not_evidence"].strip())
+
+    def test_the_state_can_still_move(self):
+        self.assertTrue(self.delivery["a_later_bounce_would_move_this_to_FAILED"])
+        self.assertTrue(self.delivery["a_later_delivery_confirmation_would_need_its_own_source"])
+
+    def test_the_reason_names_the_v1_bounce_as_the_proof_the_two_come_apart(self):
+        self.assertIn("bounce", self.delivery["why_delivery_is_unconfirmed"])
+
+
+class TestTheGateRefusesADeliveryItCannotSee(unittest.TestCase):
+    """Run the gate's own checks against mutated copies, rather than reading its source.
+
+    A refusal spelled in a module is not a refusal until something calls it.
+    """
+
+    def setUp(self):
+        self.gate = gate()
+        self.approval = load(APPROVAL)
+        self.execution = copy.deepcopy(self.approval["execution"])
+
+    def refused(self, execution):
+        with self.assertRaises(self.gate.ValidationError):
+            self.gate._check_delivery_was_not_inferred(execution)
+
+    def test_the_record_as_committed_passes(self):
+        self.gate._check_delivery_was_not_inferred(self.execution)
+        self.gate._check_the_send_is_attested(self.approval, self.execution)
+
+    def test_an_unconfirmed_delivery_may_not_count_one(self):
+        self.execution["deliveries_confirmed"] = 1
+        self.refused(self.execution)
+
+    def test_an_unconfirmed_delivery_may_not_mark_a_contact(self):
+        self.execution["provider_contacted"] = True
+        self.refused(self.execution)
+
+    def test_a_delivery_may_not_be_established_by_the_attestation_of_sending(self):
+        for source in (
+            "OPERATOR_SEND_ATTESTATION",
+            "THE_ATTESTATION_OF_SENDING",
+            "OPERATOR_ATTESTED",
+        ):
+            with self.subTest(source=source):
+                execution = copy.deepcopy(self.execution)
+                execution["delivery"]["delivery_status"] = "CONFIRMED"
+                execution["delivery"]["delivery_established_by"] = source
+                execution["deliveries_confirmed"] = 1
+                self.refused(execution)
+
+    def test_a_confirmed_delivery_must_name_a_source(self):
+        self.execution["delivery"]["delivery_status"] = "CONFIRMED"
+        self.execution["deliveries_confirmed"] = 1
+        self.refused(self.execution)
+
+    def test_a_delivery_confirmed_by_another_source_is_representable(self):
+        self.execution["delivery"]["delivery_status"] = "CONFIRMED"
+        self.execution["delivery"]["delivery_established_by"] = "a reply from the provider"
+        self.execution["deliveries_confirmed"] = 1
+        self.execution["provider_contacted"] = True
+        self.gate._check_delivery_was_not_inferred(self.execution)
+
+    def test_a_failed_delivery_is_not_recorded_under_sent(self):
+        self.execution["delivery"]["delivery_status"] = "FAILED"
+        self.refused(self.execution)
+
+    def test_an_undefined_delivery_status_is_refused(self):
+        self.execution["delivery"]["delivery_status"] = "DELIVERED"
+        self.refused(self.execution)
+
+    def refused_send(self, execution, approval=None):
+        with self.assertRaises(self.gate.ValidationError):
+            self.gate._check_the_send_is_attested(approval or self.approval, execution)
+
+    def test_the_placeholder_may_not_be_attested_as_the_sender(self):
+        self.execution["attested_sender"] = PLACEHOLDER_SENDER
+        self.refused_send(self.execution)
+
+    def test_the_sender_may_not_be_written_back_into_the_approval(self):
+        approval = copy.deepcopy(self.approval)
+        approval["approved_action"]["sender"] = "thib.chm@gmail.com"
+        self.refused_send(self.execution, approval)
+
+    def test_a_message_id_is_refused(self):
+        self.execution["message_id"] = "<CA+abc@mail.gmail.com>"
+        self.refused_send(self.execution)
+
+    def test_a_send_time_without_an_offset_is_refused(self):
+        self.execution["sent_at"] = "2026-09-06T19:39:00"
+        self.refused_send(self.execution)
+
+    def test_a_send_attested_before_its_approval_is_refused(self):
+        self.execution["sent_at"] = "2026-09-05T19:39:00+04:00"
+        self.refused_send(self.execution)
+
+    def test_a_second_send_under_a_one_send_approval_is_refused(self):
+        self.execution["sends_made"] = 2
+        self.refused_send(self.execution)
+
+    def test_a_claimed_body_comparison_is_refused(self):
+        self.execution["body_compared_by_this_repository"] = True
+        self.refused_send(self.execution)
+
+    def test_an_attestation_that_covers_delivery_is_refused(self):
+        self.execution["attestation_does_not_cover"] = ["a reply"]
+        self.refused_send(self.execution)
+
+    def test_a_reply_may_not_be_claimed_here(self):
+        record = copy.deepcopy(self.approval)
+        record["execution"]["provider_replied"] = True
+        with self.assertRaises(self.gate.ValidationError):
+            self.gate._check_execution(record)
+
+    def test_a_bounce_after_this_send_stays_representable(self):
+        record = copy.deepcopy(self.approval)
+        execution = record["execution"]
+        execution["status"] = "DISPATCH_ATTEMPTED_DELIVERY_FAILED"
+        execution["attestation_level"] = None
+        self.gate._check_execution(record)
 
 
 class TestASecondApprovalIsNotARenewal(unittest.TestCase):
@@ -246,8 +453,6 @@ class TestASecondApprovalIsNotARenewal(unittest.TestCase):
 
 
 class TestScopeAndAccounting(unittest.TestCase):
-    """41 to 47."""
-
     def setUp(self):
         self.approval = load(APPROVAL)
 
@@ -264,6 +469,20 @@ class TestScopeAndAccounting(unittest.TestCase):
             scope["r2_verdict_unchanged"],
             "R2_PARTIAL_COMMERCIAL_ALLOWED_THIRD_PARTY_SCOPE_UNRESOLVED",
         )
+
+    def test_a_sent_question_is_not_an_answer_either(self):
+        scope = self.approval["scope"]
+        self.assertTrue(scope["a_sent_question_is_not_an_answer"])
+        self.assertFalse(scope["r2_closed"])
+        self.assertFalse(scope["qualification_recomputed_from_the_fact_of_dispatch"])
+        self.assertTrue(scope["why_dispatch_changes_no_verdict"].strip())
+
+    def test_the_counters_stay_zero_because_they_count_this_repository(self):
+        accounting = self.approval["mission_accounting"]
+        self.assertEqual(accounting["EMAILS_SENT"], 0)
+        self.assertEqual(accounting["PROVIDER_CONTACTS"], 0)
+        self.assertEqual(self.approval["execution"]["emails_sent_by_this_repository"], 0)
+        self.assertEqual(self.approval["execution"]["sends_made"], 1)
 
     def test_every_counter_is_zero(self):
         for counter, value in self.approval["mission_accounting"].items():
@@ -296,8 +515,6 @@ class TestScopeAndAccounting(unittest.TestCase):
 
 
 class TestTheRenderer(unittest.TestCase):
-    """48 to 53."""
-
     def setUp(self):
         self.source = RENDERER.read_text(encoding="utf-8")
         self.tree = ast.parse(self.source)
@@ -330,18 +547,23 @@ class TestTheRenderer(unittest.TestCase):
     def test_a_missing_field_is_a_refusal_rather_than_a_crash(self):
         self.assertIn('ValidationError(f"the record does not carry', self.source)
 
-    def test_the_page_reports_the_pending_status_and_both_approvals(self):
+    def test_the_page_reports_the_dispatch_and_both_approvals(self):
         text = PAGE.read_text(encoding="utf-8")
         self.assertIn("Do not edit by hand", text)
-        self.assertIn("PENDING_MANUAL_OPERATOR_ACTION", text)
+        self.assertIn("SENT", text)
         self.assertIn("d@globalping.io", text)
         self.assertIn("legal@globalping.io", text)
         self.assertIn("DISPATCH_ATTEMPTED_DELIVERY_FAILED", text)
 
+    def test_the_page_separates_the_send_from_the_delivery(self):
+        text = PAGE.read_text(encoding="utf-8")
+        self.assertIn("A send is not a delivery", text)
+        self.assertIn("UNCONFIRMED", text)
+        self.assertIn("recorded by Mission 1.74.6", text)
+        self.assertIn(load(APPROVAL)["execution"]["attested_sender"], text)
+
 
 class TestGovernanceRecordsThis(unittest.TestCase):
-    """54 to 56."""
-
     def test_the_manifest_lists_the_record_and_the_renderer(self):
         text = MANIFEST.read_text(encoding="utf-8")
         self.assertIn(APPROVAL.name, text)
@@ -352,6 +574,9 @@ class TestGovernanceRecordsThis(unittest.TestCase):
 
     def test_the_report_exists(self):
         self.assertTrue((REPO_ROOT / "docs" / "architecture" / "mission-1.74.5-report.md").exists())
+
+    def test_the_dispatch_report_exists(self):
+        self.assertTrue((REPO_ROOT / "docs" / "architecture" / "mission-1.74.6-report.md").exists())
 
 
 if __name__ == "__main__":
