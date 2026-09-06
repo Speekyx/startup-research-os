@@ -1,0 +1,39 @@
+{
+  "$comment": "§28 and §29. Capability and permitted retention are two different questions.",
+  "record_version": "1.0.0",
+  "mission": "1.71",
+  "recorded_at": "2026-09-06",
+  "exact_predicate_frozen": false,
+  "target_values_retrieved": 0,
+  "transport_capture_capability": {
+    "status_line": "CAPABLE",
+    "response_headers": "CAPABLE",
+    "response_body": "CAPABLE_UP_TO_A_CAP",
+    "network_and_timing_metadata": "CAPABLE",
+    "tls_metadata": "CAPABLE"
+  },
+  "permitted_retention": {
+    "status": "BODY_CAPTURE_POLICY_REQUIRED_BEFORE_RUN",
+    "settled_by_this_mission": false,
+    "arbitrary_full_body_retention_assumed": false,
+    "why_not": "§28. No construct is chosen, so nothing establishes that a body is needed at all. Retaining one because the transport can is capability deciding policy."
+  },
+  "why_this_is_not_a_side_policy": {
+    "$comment": "The finding that connects §28 to the governance verdict.",
+    "claim": "what is retained decides which governance regime the act falls under. Retaining response bodies retains the publisher's content, which is squarely the reuse-of-content question source-registry-v1.md §1 rule 8 governs. Retaining a status line and named headers is closer to a record of our own request and its transport outcome.",
+    "and_the_bound_on_that_claim": "this is a DISTINCTION, not a legal conclusion. §50 forbids calling either side permitted, and nothing here asserts that a header-only capture escapes any obligation. What it establishes is that the two are different acts and that choosing between them is a governance decision rather than an implementation detail."
+  },
+  "sensitive_content": {
+    "$comment": "§29.",
+    "a_public_page_may_return_personal_or_sensitive_data": true,
+    "redaction_hooks_required_before_body_retention": true,
+    "retention_hooks_required_before_body_retention": true,
+    "content_retrieved_in_this_mission": 0
+  },
+  "existing_retention_policy_applicability": {
+    "document": "docs/data/data-retention-policy-v1.md",
+    "governs": "records acquired from a REGISTERED source",
+    "applies_to_this_apparatus": "UNRESOLVED",
+    "why": "the targets would not be registered sources, so which retention baseline applies is part of the same unanswered governance question as GOV-1 and GOV-3."
+  }
+}

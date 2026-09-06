@@ -1,0 +1,92 @@
+{
+  "$comment": "§14 and §15. Missingness is measurement provenance, and it is the property every external route in this arc failed to publish.",
+  "record_version": "1.0.0",
+  "mission": "1.71",
+  "recorded_at": "2026-09-06",
+  "exact_predicate_frozen": false,
+  "target_values_retrieved": 0,
+  "classes": [
+    {
+      "class": "NOT_ATTEMPTED_POLICY",
+      "means": "the apparatus decided not to ask",
+      "counts_as_attempted": false
+    },
+    {
+      "class": "NOT_ATTEMPTED_SAFETY",
+      "means": "the apparatus refused to ask, to protect the operator machine",
+      "counts_as_attempted": false
+    },
+    {
+      "class": "ATTEMPTED_NO_CONNECTION",
+      "means": "asked, and nothing was reachable",
+      "counts_as_attempted": true
+    },
+    {
+      "class": "ATTEMPTED_TLS_FAILURE",
+      "means": "asked, reachable, and the secure channel did not establish",
+      "counts_as_attempted": true
+    },
+    {
+      "class": "ATTEMPTED_NO_HTTP_RESPONSE",
+      "means": "asked, connected, and no complete HTTP response arrived",
+      "counts_as_attempted": true
+    },
+    {
+      "class": "HTTP_RESPONSE_NOT_EVALUABLE",
+      "means": "responses arrived and no usable terminal response exists",
+      "counts_as_attempted": true
+    },
+    {
+      "class": "OBSERVATION_AVAILABLE",
+      "means": "a complete response was received within every bound",
+      "counts_as_attempted": true
+    },
+    {
+      "class": "APPARATUS_FAILURE_NOT_A_WORLD_FACT",
+      "means": "our failure, carrying no information about the target",
+      "counts_as_attempted": false
+    }
+  ],
+  "class_count": 8,
+  "added_beyond_the_brief_minimum": {
+    "class": "APPARATUS_FAILURE_NOT_A_WORLD_FACT",
+    "why": "§14 lists a minimum. An internal fetcher error placed in ATTEMPTED_NO_HTTP_RESPONSE would record a fact about the target that never happened, and a denominator built on it would silently absorb our own defects as the world's silence."
+  },
+  "denominator_integrity": {
+    "$comment": "§15. What a later construct must be able to state exactly.",
+    "N_population": {
+      "definition": "the frozen corpus manifest count",
+      "computable_by_the_apparatus": true,
+      "note": "N never shrinks because a target failed. That is the whole point."
+    },
+    "A_attempted": {
+      "definition": "items whose missingness class counts_as_attempted",
+      "computable_by_the_apparatus": true
+    },
+    "R_response_observed": {
+      "definition": "items reaching stage RESPONSE_RECEIVED",
+      "computable_by_the_apparatus": true
+    },
+    "E_predicate_evaluable": {
+      "definition": "items whose captured observation satisfies what the predicate needs",
+      "computable_by_the_apparatus": false,
+      "computable_by": "THE_CONSTRUCT",
+      "why": "no predicate exists, and the apparatus may not guess what one would need"
+    },
+    "P_positive": {
+      "definition": "items satisfying the predicate",
+      "computable_by_the_apparatus": false,
+      "computable_by": "THE_CONSTRUCT"
+    },
+    "which_classes_enter_the_denominator": "NOT_CHOSEN_BY_THIS_MISSION",
+    "why_not_chosen": "§14 says a future construct chooses how these states affect its denominator. Choosing here would freeze half a construct while reporting that none was frozen."
+  },
+  "forbidden_readings": {
+    "response_absence_means_target_absent_from_population": false,
+    "attempted_and_successful_are_the_same_set": false,
+    "missingness_may_be_dropped_from_the_record": false,
+    "only_positive_observations_are_stored": false,
+    "only_responses_are_stored": false
+  },
+  "why_this_is_the_whole_point": "Mission 1.70 closed the external pair because neither Common Crawl nor HTTP Archive documents whether an attempted-and-failed URL appears in what it publishes. An apparatus that stored only responses would reproduce that defect in a system we control, which would be worse: the same opacity, with nobody else to attribute it to."
+}

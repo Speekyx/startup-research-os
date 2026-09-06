@@ -1,0 +1,93 @@
+{
+  "$comment": "§8, §9, §10, §11. The population, frozen before anything is asked.",
+  "record_version": "1.0.0",
+  "mission": "1.71",
+  "recorded_at": "2026-09-06",
+  "exact_predicate_frozen": false,
+  "target_values_retrieved": 0,
+  "contract_id": "CORPUS_MANIFEST_V1",
+  "corpus_created": false,
+  "targets_in_any_corpus": 0,
+  "fields": [
+    {
+      "field": "corpus_manifest_id",
+      "required": true
+    },
+    {
+      "field": "corpus_version",
+      "required": true
+    },
+    {
+      "field": "created_at",
+      "required": true
+    },
+    {
+      "field": "provenance",
+      "required": true,
+      "note": "where the membership came from, and who decided it"
+    },
+    {
+      "field": "canonical_target_identifier",
+      "required": true
+    },
+    {
+      "field": "requested_url_verbatim",
+      "required": true,
+      "note": "§10. What will actually be requested, preserved beside the canonical form"
+    },
+    {
+      "field": "entity_id",
+      "required": true
+    },
+    {
+      "field": "inclusion_basis",
+      "required": true
+    },
+    {
+      "field": "exclusion_basis",
+      "required": false,
+      "note": "required when the item is excluded, and recorded BEFORE the run"
+    }
+  ],
+  "hashing": {
+    "algorithm": "sha256",
+    "field": "corpus_manifest_sha256",
+    "covers": "the manifest as stored, excluding any field carrying the hash itself",
+    "required_before_a_run_may_reference_it": true
+  },
+  "immutability": {
+    "$comment": "§9.",
+    "immutable_once_referenced_by_a_run": true,
+    "membership_may_change_after_execution_begins": false,
+    "a_correction_produces": [
+      "a new manifest version",
+      "a new hash",
+      "a new run"
+    ],
+    "the_old_manifest_may_be_mutated_under_the_same_run_identity": false,
+    "why": "the same discipline Mission 1.56 applied to a frozen document: a manifest that no longer answers to the hash a run named is not the population that run measured."
+  },
+  "canonical_url_rules": {
+    "$comment": "§10. Canonicalization exists for IDENTITY and de-duplication. What is REQUESTED is stored verbatim, because a contract that normalized the request would measure something the manifest never named.",
+    "scheme": "preserved, never upgraded or downgraded",
+    "host_case": "lowercased for identity; the requested host is preserved verbatim",
+    "idn_punycode": "recorded in both forms; the requested form is the one sent",
+    "default_ports": "omitted from the canonical form; never added to the requested form",
+    "path_normalization": "dot-segment resolution per RFC 3986 for identity only",
+    "trailing_slash": "significant, and never normalized away",
+    "fragment": "removed, because a fragment is never sent to a server",
+    "query_string": "preserved exactly where present; see query_string_policy",
+    "duplicate_urls": "refused at manifest build time rather than silently collapsed",
+    "http_and_https_are_the_same_entity": false,
+    "why_not": "§10. They are two different requests to two different ports with two different transport contracts, and a construct that wants to treat them as one entity must say so explicitly. Inventing that equivalence here would decide a construct."
+  },
+  "query_string_policy": {
+    "$comment": "§11.",
+    "status": "QUERY_STRING_POLICY_REQUIRED",
+    "settled_by_this_mission": false,
+    "silently_stripped": false,
+    "why_stripping_is_forbidden": "a stripped query string is a DIFFERENT target, and pretending otherwise would put a measurement of one resource under the identity of another.",
+    "design_preference_for_a_first_pilot": "exclude query-bearing URLs unless the corpus requires them and governance approves them, because a query string can carry an identifier or a token",
+    "preference_is_a_decision": false
+  }
+}

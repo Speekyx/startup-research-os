@@ -1,0 +1,42 @@
+{
+  "$comment": "§49. Mission 1.70 offered this rule and did not add it. Change control requires it to be reviewed rather than carried forward silently or adopted because it is useful.",
+  "record_version": "1.0.0",
+  "mission": "1.71",
+  "recorded_at": "2026-09-06",
+  "candidate": {
+    "name": "COVERAGE_SEMANTICS_MUST_DISTINGUISH_ATTEMPT_FROM_SUCCESS",
+    "offered_by": "Mission 1.70",
+    "added_by_mission_1_70": false,
+    "why_1_70_declined": "one shape seen on two routes is one instance. The standard Mission 1.67 set for itself is a second instance in a DIFFERENT shape."
+  },
+  "the_question_asked_here": "is the failure mode now demonstrated in a second genuinely different shape?",
+  "instances_considered": [
+    {
+      "instance": "Common Crawl and HTTP Archive, Mission 1.70",
+      "counts_as_a_distinct_instance": true,
+      "shape": "an external publisher's coverage surface that does not state whether an attempted-and-failed item appears",
+      "note": "the two routes together are ONE instance of this shape, which is what Mission 1.70 concluded"
+    },
+    {
+      "instance": "the SROS bounded HTTP apparatus designed in this mission",
+      "counts_as_a_distinct_instance": false,
+      "shape": "an apparatus we designed to avoid the failure",
+      "why_it_does_not_count": "§49 states it directly and it is the right rule: designing AROUND a failure mode is not observing a second occurrence of it. If it counted, every registry rule could be promoted by writing a contract that respects it, and the registry would record our own intentions rather than what apparatuses actually do."
+    },
+    {
+      "instance": "the scanner-class apparatuses, Missions 1.59 to 1.68",
+      "counts_as_a_distinct_instance": false,
+      "shape": "sampling and frame disclosure",
+      "why_it_does_not_count": "those failed on which targets were ELIGIBLE or on the temporal object, which the registry already covers under SAMPLING_IS_LOAD_BEARING, THE_RETRIEVABLE_FRAME_IS_NOT_THE_MEASURED_FRAME and THE_TEMPORAL_OBJECT_TEST. Attempt-versus-success is a different question and it was not what refused them."
+    }
+  ],
+  "distinct_instances_found": 1,
+  "second_instance_in_a_different_shape": false,
+  "decision": "NOT_ADDED",
+  "added_because_it_is_useful": false,
+  "why_usefulness_is_not_the_standard": "the rule is genuinely useful and this mission's whole missingness contract is built on it. Adding it on that basis would make the registry a list of good ideas rather than a record of failure modes observed twice, which is the property that lets a later mission trust an entry without re-deriving it.",
+  "registry_count_before": 15,
+  "registry_count_after": 15,
+  "registry_growth_forced": false,
+  "carried_forward_for_a_future_mission": true
+}

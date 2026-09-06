@@ -1,0 +1,133 @@
+{
+  "$comment": "§12 and §43. Exactly one terminal per manifest item per governed run. The invariant matters more than the wording, and the wording is normalized rather than overfitted.",
+  "record_version": "1.0.0",
+  "mission": "1.71",
+  "recorded_at": "2026-09-06",
+  "exact_predicate_frozen": false,
+  "target_values_retrieved": 0,
+  "invariant": {
+    "statement": "corpus_manifest_count == terminal_target_records_count",
+    "exactly_one_terminal_per_target_per_run": true,
+    "a_target_may_disappear_silently": false,
+    "retries_create_extra_population_members": false,
+    "retries_are": "child attempt records under one terminal record"
+  },
+  "stages": [
+    "SCHEDULED",
+    "ATTEMPTED",
+    "RESPONSE_RECEIVED",
+    "APPARATUS_FAILED"
+  ],
+  "predicate_evaluable_is_not_an_apparatus_stage": {
+    "$comment": "The correction that keeps the taxonomy honest.",
+    "why": "whether a received response is evaluable depends on what the predicate needs -- a header the capture policy kept, a body the capture policy may not have stored. The apparatus can certify that a complete response arrived and what it captured; it cannot certify evaluability against a predicate that does not exist yet.",
+    "determined_by": "THE_CONSTRUCT, over the apparatus's records"
+  },
+  "terminals": [
+    {
+      "terminal": "TARGET_EXCLUDED_PRE_RUN",
+      "furthest_stage_certified": "SCHEDULED",
+      "missingness_class": "NOT_ATTEMPTED_POLICY",
+      "why": "the operator placed it in TARGET_POLICY_EXCLUSION_SET before the run, with a recorded reason"
+    },
+    {
+      "terminal": "SCHEME_NOT_PERMITTED",
+      "furthest_stage_certified": "SCHEDULED",
+      "missingness_class": "NOT_ATTEMPTED_POLICY",
+      "why": "the manifest URL carries a scheme outside http and https"
+    },
+    {
+      "terminal": "ROBOTS_DISALLOWED",
+      "furthest_stage_certified": "SCHEDULED",
+      "missingness_class": "NOT_ATTEMPTED_POLICY",
+      "why": "reachable only when ROBOTS_POLICY is RESPECT_DISALLOW; under a different policy this terminal cannot occur, which is one reason the policy is architectural"
+    },
+    {
+      "terminal": "POLICY_SKIPPED",
+      "furthest_stage_certified": "SCHEDULED",
+      "missingness_class": "NOT_ATTEMPTED_POLICY",
+      "why": "any other pre-run policy refusal, with its rule named on the record"
+    },
+    {
+      "terminal": "RUN_ABORTED_BEFORE_ATTEMPT",
+      "furthest_stage_certified": "SCHEDULED",
+      "missingness_class": "NOT_ATTEMPTED_POLICY",
+      "why": "the operator aborted; §41 requires the item to take this state rather than vanish"
+    },
+    {
+      "terminal": "DESTINATION_SAFETY_REJECTED",
+      "furthest_stage_certified": "SCHEDULED",
+      "missingness_class": "NOT_ATTEMPTED_SAFETY",
+      "why": "the target resolved to an address class the network safety contract refuses, so no connection was opened"
+    },
+    {
+      "terminal": "DNS_FAILURE",
+      "furthest_stage_certified": "ATTEMPTED",
+      "missingness_class": "ATTEMPTED_NO_CONNECTION",
+      "why": "resolution was attempted and returned no usable answer"
+    },
+    {
+      "terminal": "DNS_TIMEOUT",
+      "furthest_stage_certified": "ATTEMPTED",
+      "missingness_class": "ATTEMPTED_NO_CONNECTION",
+      "why": "resolution was attempted and did not answer within the bound"
+    },
+    {
+      "terminal": "CONNECT_FAILURE",
+      "furthest_stage_certified": "ATTEMPTED",
+      "missingness_class": "ATTEMPTED_NO_CONNECTION",
+      "why": "a connection to a validated address was attempted and refused or failed"
+    },
+    {
+      "terminal": "CONNECT_TIMEOUT",
+      "furthest_stage_certified": "ATTEMPTED",
+      "missingness_class": "ATTEMPTED_NO_CONNECTION",
+      "why": "a connection was attempted and did not establish within the bound"
+    },
+    {
+      "terminal": "TLS_FAILURE",
+      "furthest_stage_certified": "ATTEMPTED",
+      "missingness_class": "ATTEMPTED_TLS_FAILURE",
+      "why": "kept separate from CONNECT_FAILURE because a TLS refusal is a different fact about the target from an unreachable port, and a later construct may treat them differently"
+    },
+    {
+      "terminal": "READ_TIMEOUT",
+      "furthest_stage_certified": "ATTEMPTED",
+      "missingness_class": "ATTEMPTED_NO_HTTP_RESPONSE",
+      "why": "the connection established and no complete response arrived within the bound"
+    },
+    {
+      "terminal": "HTTP_PROTOCOL_FAILURE",
+      "furthest_stage_certified": "ATTEMPTED",
+      "missingness_class": "ATTEMPTED_NO_HTTP_RESPONSE",
+      "why": "bytes arrived and did not parse as an HTTP response"
+    },
+    {
+      "terminal": "REDIRECT_POLICY_STOP",
+      "furthest_stage_certified": "RESPONSE_RECEIVED",
+      "missingness_class": "HTTP_RESPONSE_NOT_EVALUABLE",
+      "why": "responses WERE received -- the 3xx hops -- and the chain stopped on max hops or a destination the safety contract refuses, so no terminal response exists for the predicate"
+    },
+    {
+      "terminal": "RESPONSE_LIMIT_EXCEEDED",
+      "furthest_stage_certified": "RESPONSE_RECEIVED",
+      "missingness_class": "HTTP_RESPONSE_NOT_EVALUABLE",
+      "why": "a response began and exceeded a header, body or total byte cap, so what was captured is known to be incomplete"
+    },
+    {
+      "terminal": "HTTP_RESPONSE_RECEIVED",
+      "furthest_stage_certified": "RESPONSE_RECEIVED",
+      "missingness_class": "OBSERVATION_AVAILABLE",
+      "why": "a complete response was received within every bound. Whether it is PREDICATE_EVALUABLE is not the apparatus's to say"
+    },
+    {
+      "terminal": "INTERNAL_FETCHER_ERROR",
+      "furthest_stage_certified": "APPARATUS_FAILED",
+      "missingness_class": "APPARATUS_FAILURE_NOT_A_WORLD_FACT",
+      "why": "the apparatus itself failed. Folding this into ATTEMPTED_NO_HTTP_RESPONSE would record 'the target did not answer' when what happened is 'we broke', and those are different facts about different systems"
+    }
+  ],
+  "terminal_count": 17,
+  "every_terminal_maps_to_exactly_one_missingness_class": true,
+  "wording_is_normalizable": "an implementation may rename these, and the invariant it may not weaken is one terminal per target and a total mapping onto missingness classes"
+}

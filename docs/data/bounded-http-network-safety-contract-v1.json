@@ -1,0 +1,129 @@
+{
+  "$comment": "§6 and §7. The apparatus protects the operator machine from a corpus that can name any destination. A corpus is untrusted input, and treating a URL as safe because it looks public is exactly the SSRF shape.",
+  "record_version": "1.0.0",
+  "mission": "1.71",
+  "recorded_at": "2026-09-06",
+  "exact_predicate_frozen": false,
+  "target_values_retrieved": 0,
+  "contract_id": "BOUNDED_HTTP_NETWORK_SAFETY_V1",
+  "a_public_looking_url_is_assumed_safe": false,
+  "destination_check_required_before_every_connection": true,
+  "blocked_destination_classes": [
+    {
+      "class": "IPV4_LOOPBACK",
+      "authority": "IANA IPv4 Special-Purpose Address Registry"
+    },
+    {
+      "class": "IPV4_PRIVATE",
+      "authority": "IANA IPv4 Special-Purpose Address Registry (RFC 1918 blocks)"
+    },
+    {
+      "class": "IPV4_LINK_LOCAL",
+      "authority": "IANA IPv4 Special-Purpose Address Registry (RFC 3927)"
+    },
+    {
+      "class": "IPV4_SHARED_ADDRESS_SPACE",
+      "authority": "IANA IPv4 Special-Purpose Address Registry (RFC 6598)"
+    },
+    {
+      "class": "IPV4_UNSPECIFIED",
+      "authority": "IANA IPv4 Special-Purpose Address Registry"
+    },
+    {
+      "class": "IPV4_BROADCAST",
+      "authority": "IANA IPv4 Special-Purpose Address Registry"
+    },
+    {
+      "class": "IPV4_MULTICAST",
+      "authority": "IANA IPv4 Multicast Address Space Registry"
+    },
+    {
+      "class": "IPV4_RESERVED",
+      "authority": "IANA IPv4 Special-Purpose Address Registry"
+    },
+    {
+      "class": "IPV6_LOOPBACK",
+      "authority": "IANA IPv6 Special-Purpose Address Registry"
+    },
+    {
+      "class": "IPV6_UNSPECIFIED",
+      "authority": "IANA IPv6 Special-Purpose Address Registry"
+    },
+    {
+      "class": "IPV6_LINK_LOCAL",
+      "authority": "IANA IPv6 Special-Purpose Address Registry"
+    },
+    {
+      "class": "IPV6_UNIQUE_LOCAL",
+      "authority": "IANA IPv6 Special-Purpose Address Registry (RFC 4193)"
+    },
+    {
+      "class": "IPV6_MULTICAST",
+      "authority": "IANA IPv6 Multicast Address Space Registry"
+    },
+    {
+      "class": "IPV6_MAPPED_OR_TRANSLATED_IPV4",
+      "authority": "IANA IPv6 Special-Purpose Address Registry"
+    },
+    {
+      "class": "CLOUD_METADATA_ENDPOINTS",
+      "authority": "falls out of IPV4_LINK_LOCAL, and is named separately so a reviewer can see it was considered rather than inferred"
+    },
+    {
+      "class": "LOCALHOST_NAMES",
+      "authority": "RFC 6761 special-use domain names"
+    },
+    {
+      "class": "INTERNAL_OR_SINGLE_LABEL_HOSTNAMES",
+      "authority": "no public suffix, or a name that resolves only inside the operator network"
+    }
+  ],
+  "blocked_class_count": 17,
+  "numeric_ranges": {
+    "$comment": "The design deliberately carries NO transcribed CIDR blocks. This is a rule, not an omission.",
+    "written_into_this_document": false,
+    "must_be_taken_from": "the named IANA registries, at implementation time",
+    "why": "source-registry-v1.md §1 rule 4 refuses model recall as authoritative evidence and rule 7 refuses invented numbers. A governance artifact carrying recalled address ranges would be both, and a stale or mistyped block is a silent hole in exactly the guard that exists to prevent one."
+  },
+  "schemes": {
+    "$comment": "§5.",
+    "allowed": [
+      "http",
+      "https"
+    ],
+    "refused": [
+      "file",
+      "ftp",
+      "gopher",
+      "data",
+      "javascript",
+      "ws",
+      "wss",
+      "custom"
+    ],
+    "ws_and_wss_note": "refused unless separately governed; they are not HTTP observation",
+    "a_redirect_to_a_refused_scheme": "terminates safely as REDIRECT_POLICY_STOP"
+  },
+  "redirects": {
+    "$comment": "§6. The check is per hop, not per target.",
+    "destination_revalidated_after_every_redirect": true,
+    "the_original_hostname_is_sufficient": false,
+    "why": "a public host may redirect to a private address, and a check performed once at the start would pass the target and then follow the redirect straight past it."
+  },
+  "dns_safety": {
+    "$comment": "§7.",
+    "status": "DNS_SAFETY_REQUIRED",
+    "resolution_timing_must_be_stated": true,
+    "accepted_address_set_must_be_stated": true,
+    "connection_pinned_to_a_validated_resolved_address": true,
+    "redirects_trigger_re_resolution": true,
+    "a_hostname_resolving_public_then_private_is_refused": true,
+    "rebinding_addressed": true,
+    "why_pinning_matters": "resolving, validating, and then connecting by NAME lets the second resolution return a different address from the one that was checked. The validated address is what must be connected to.",
+    "every_resolved_address_must_pass": true,
+    "one_passing_address_is_enough": false,
+    "why": "accepting a host because ONE of its addresses is public would let a multi-address answer smuggle a private destination past the check."
+  },
+  "implemented": false,
+  "requests_made": 0
+}

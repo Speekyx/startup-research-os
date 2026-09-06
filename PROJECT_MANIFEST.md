@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.105
+Version: 1.106
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-06 (Sprint 1 / Mission 1.70)
+Last amended: 2026-09-06 (Sprint 1 / Mission 1.71)
 
 ---
 
@@ -13,6 +13,122 @@ Last amended: 2026-09-06 (Sprint 1 / Mission 1.70)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.106 — 2026-09-06 (Sprint 1 / Mission 1.71)
+
+**`BOUNDED_HTTP_FETCHER_APPARATUS_CONTRACT_READY_DEDICATED_POLICY_REQUIRED`.** The
+apparatus semantics close completely. The governance shape does not, and what is missing
+is named rather than vague.
+
+**THE APPARATUS CONTRACT CLOSES THE THING MISSION 1.70 COULD NOT BUY EXTERNALLY.** One
+terminal accounting record per manifest item per governed run,
+`corpus_manifest_count == terminal_target_records_count`, **17 terminal outcomes over 8
+missingness classes with a total mapping and no unreachable class**. An item that was
+never attempted stays in the population; a retry is a child attempt rather than a new
+member; an abort turns every remaining item into `RUN_ABORTED_BEFORE_ATTEMPT` rather than
+letting it vanish.
+
+**AND THE DESIGN'S OWN TEMPTATION WAS THE ONE TO WATCH.** An apparatus we control could
+reproduce exactly the defect that closed the external pair -- storing only responses --
+in a system where nobody else could be blamed for it. That is why missingness is
+first-class and why `only_responses_are_stored` is a refusal rather than a preference.
+
+**ONE MISSINGNESS CLASS WAS ADDED BEYOND THE BRIEF'S MINIMUM, AND IT MATTERS**:
+`APPARATUS_FAILURE_NOT_A_WORLD_FACT`. An internal fetcher error filed under
+`ATTEMPTED_NO_HTTP_RESPONSE` would record that the target did not answer when what
+happened is that we broke, and a denominator built on it would absorb our own defects as
+the world's silence.
+
+**AND ONE STAGE WAS TAKEN AWAY FROM THE APPARATUS.** `PREDICATE_EVALUABLE` is not
+something a fetcher can certify: whether a received response is evaluable depends on what
+the predicate needs, and no predicate exists. So the apparatus tops out at
+`RESPONSE_RECEIVED` plus what it captured, **`N`, `A` and `R` are computable by the
+apparatus while `E` and `P` are explicitly the construct's**, and which classes enter the
+denominator is `NOT_CHOSEN_BY_THIS_MISSION`.
+
+**THE DOMINANT GOVERNANCE FINDING IS NOT ANY SINGLE RUBRIC ROW, AND IT WAS LOCATED IN THE
+REPOSITORY'S OWN RULES RATHER THAN ASSERTED.** The existing gate governs collection from a
+REGISTERED source. Routed through it, a corpus of arbitrary public sites is refused target
+by target -- `source-registry-v1.md` §1 rule 1 (*public visibility is not permission*),
+rule 2 (*uncertainty is never permission*), rule 8 (a GRANT required for six named
+activities, `NOT_ADDRESSED` on any one blocking), and `acquisition-authorization-v1.md` §1
+rule 5 (each resource authorised separately). **Not because a publisher objected, but
+because nobody asked.** That is the gate working, and **the collapse it forces is the
+finding**: restricting the corpus to targets that DO hold a review means restricting it to
+the 29 registered sources, which destroys exactly the directability that made the operator
+route worth designing.
+
+**THE MECHANISM IS NOT NOVEL AND THE EVIDENCE IS THIS ARC'S OWN BUDGET.** Missions 1.59 to
+1.70 performed bounded, identified, one-off HTTP GETs against third parties holding no
+source review at all, routinely. **And the distinction that survives it is stated rather
+than glossed**: the request is identical and the destination of the RESULT is not -- a
+documentation read informs a human judgement, a measurement becomes Evidence under a Claim
+at corpus scale.
+
+**WHAT IS RETAINED DECIDES WHICH REGIME APPLIES, WHICH IS WHY DATA MINIMIZATION IS NOT A
+SIDE POLICY.** Retaining response bodies retains the publisher's content; retaining a
+status line and named headers is closer to a record of our own request. **That is a
+DISTINCTION and explicitly not a legal conclusion**, and the bound is written into the
+record beside it.
+
+**FIVE NAMED POLICY DECISIONS, NONE SETTLED HERE**: whether this is a governed activity
+distinct from source collection and under what track (**ADR-level, and a design mission
+inventing a governance shape in passing is the change-control shape `docs/CLAUDE.md`
+refuses**); the robots policy, which is architectural rather than a setting because a
+robots-respecting apparatus needs a retrieval stage, a terminal outcome and a missingness
+class of its own; body capture and the retention regime; the target-exclusion procedure;
+and the numeric load bounds, which are **mandatory and deliberately unset**, because no
+retrieved document establishes a figure and inventing one is the invented number rule 7
+refuses.
+
+**OUTCOME G WAS AVAILABLE AND REFUSED**: no current rule prohibits the architecture, and
+**the absence of a shape is not a prohibition** -- reporting one would convert *nobody has
+decided* into *the project has refused*. Outcome D was refused too, because target-specific
+review is downstream of the shape question rather than the dominant blocker. Outcome A was
+refused because three rubric rows genuinely require a decision, and F because the
+repository's documents are sufficient to name the gap precisely.
+
+**SELF-OPERATION SUPPLIES DIRECTABILITY AND NEVER INDEPENDENCE**, so
+`INDEPENDENCE_ARCHITECTURE_PLAUSIBLE` and never `INDEPENDENT_EVIDENCE_GROUP_READY`, **0
+independence groups**, and **two local processes are not two groups** -- they share code,
+configuration, vantage, resolver and network path, and counting them twice would
+manufacture corroboration out of repetition. **Nine counterpart requirements are frozen and
+0 counterparts were evaluated, ranked or selected.** Common Crawl and HTTP Archive keep
+Mission 1.70's verdicts verbatim, and **the operator apparatus does not repair their
+records retroactively.**
+
+**THE CANDIDATE REGISTRY RULE WAS REVIEWED AND NOT ADDED.** Designing AROUND a failure mode
+is not observing a second instance of it -- if it counted, every registry rule could be
+promoted by writing a contract that respects it, and the registry would record our
+intentions rather than what apparatuses do. **Registry unchanged at 15**, and a validator
+check refuses any record that counts this mission's own design as an instance.
+
+**NO EXTERNAL DOCUMENTATION REQUEST WAS SPENT, AND THAT IS A DECISION**: 0 of 12, because
+no gate here turns on a quotable sentence, and the one class of external fact the design
+needs -- the exact numeric address ranges -- is **deferred to the named IANA registries at
+implementation rather than transcribed from recall**, since a governance artifact carrying
+recalled CIDR blocks would breach rule 4 and rule 7 at once and a mistyped block is a
+silent hole in the guard that exists to prevent one.
+
+**0 target HTTP requests, 0 crawls, 0 browser runs, 0 curl or wget executions, 0 Common
+Crawl index queries or data downloads, 0 BigQuery executions, 0 HAR downloads, 0
+measurement API executions, 0 target-value exposures, 0 accounts, 0 trials, 0 purchases, 0
+credential reads, 0 mailbox searches, 0 enquiries sent**, 0 sources registered, 0 governance
+or canonical mutations, 0 corpora created, 0 runs executed, 0 crawlers implemented, 0
+thresholds, 0 Claims, 0 Evidence, 0 independence groups, 0 reliability values, 0 scores, 0
+model calls, 0 embeddings, 0 migrations. ONYPHE still `NOT_CHECKED_AFTER_DISPATCH`, Netlas
+still pending, scanner arc parked, Q1 unchanged, **`PAIR_ANALYSIS_NOT_READY`**.
+
+**Verification.** Validator probed with **224 deliberate violations, 224 caught** (221 by
+rule, 3 by drift) plus **6 of 6 positive controls**, and the controls are VARIANTS rather
+than the shipped bytes -- a governance-feasible-but-unauthorized apparatus, a blocked
+outcome named on a rule, **a terminal taxonomy with every outcome renamed and the invariant
+intact**, a corpus with approved query strings, a run manifest carrying an image digest, and
+an unresolved independence architecture. The renamed-taxonomy control is the one that
+matters: it proves the validator checks the property rather than my prose. **120 new
+tests**; **2431 bare-python tests**; all pytest suites passed with the database unchanged;
+**`ruff format --check` and `ruff check` both run before the PR**, after Mission 1.70
+shipped a formatting failure to CI; all **41** CI gates.
 
 ## 1.105 — 2026-09-06 (Sprint 1 / Mission 1.70)
 

@@ -587,6 +587,32 @@ jobs:
       - name: Fixed-corpus web route qualification matches its records
         run: uv run python infrastructure/scripts/render_web_route_qualification.py --check
 
+      # Mission 1.71. An operator-run apparatus is only worth building if it publishes what
+      # the external routes would not: which items it asked about, which it reached, and why
+      # the rest are missing. Refuses: governance feasibility called run authorization, or a
+      # verdict claiming LEGAL, COMPLIANT or AUTHORIZED_TO_RUN; a public-looking URL assumed
+      # safe; any of the private, loopback, link-local, unique-local, multicast or cloud
+      # metadata destination classes unblocked; one passing address treated as validating a
+      # host; a redirect destination not revalidated, or DNS rebinding unaddressed; recalled
+      # numeric address ranges written into the design; authentication, cookies or JavaScript
+      # silently enabled; anti-bot, CAPTCHA or rate-limit circumvention permitted; a refusal
+      # retried under a different identity; recursive crawling, sitemap expansion or
+      # redirect-driven corpus growth; corpus membership changed after execution begins, or a
+      # manifest mutated under an unchanged run identity; a target disappearing without a
+      # terminal status; attempted collapsed into successful; a response absence read as
+      # removal from the population; missingness dropped, or only positives or only responses
+      # stored; an apparatus failure recorded as the target's silence; a retry overwriting a
+      # prior attempt; a redirect silently changing the measured entity; query strings
+      # stripped while claiming the same target; arbitrary full-body retention assumed; a run
+      # missing its apparatus, corpus or request-contract hash, or its software provenance;
+      # unlabeled local timestamps; self-operation treated as independence, or two local
+      # processes as two independence groups; Mission 1.70's Common Crawl and HTTP Archive
+      # findings rewritten; a counterpart, class or construct selected; and any target
+      # request, crawl, index query, BigQuery execution, credential read, mailbox search,
+      # source registration, canonical mutation, Claim, Evidence, reliability or model call.
+      - name: Bounded HTTP apparatus design matches its records
+        run: uv run python infrastructure/scripts/render_bounded_http_apparatus.py --check
+
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
   # Pinned to the same versions as infrastructure/compose.
