@@ -672,6 +672,16 @@ jobs:
       - name: Globalping residual closure matches its records
         run: uv run python infrastructure/scripts/render_globalping_residuals.py --check
 
+      # Mission 1.76.1. A reply arrived on R2 and R2 did not close, for two independent
+      # reasons. The gate refuses: a sender, address or timestamp recorded while nothing
+      # was retrieved; provider authority claimed without them; the reply promoted past
+      # OPERATOR_SUPPLIED; the third-party clause recorded as answered when the reply
+      # names no target; commercial use read as unlimited use; any of the three stated
+      # limitations dropped; R2-B or C9 moved; the qualification recomputed; and the
+      # frozen packet, the spent v1 dispatch or the v2 dispatch record touched.
+      - name: The R2 provider reply matches its records
+        run: uv run python infrastructure/scripts/render_r2_provider_reply.py --check
+
       # Mission 1.76. Which next evidence move, and why that one. MORE ROWS IS NOT
       # MORE INFORMATION, so the gate refuses: a row count read as breadth; one
       # proposition kind counted twice as two; UNKNOWN independence read as

@@ -1,0 +1,98 @@
+{
+  "$comment": "Mission 1.76.1. THE R2 REPLY, FROZEN AS SUPPLIED. This record carries what the operator supplied and says, field by field, what it does NOT carry. It contains no interpretation, no verdict and no evidence level -- those live in globalping-r2-reply-review-v1.json, which cites this one by hash.",
+  "record_version": "1.0.0",
+  "mission": "1.76.1",
+  "recorded_at": "2026-09-06",
+  "record_kind": "FROZEN_PROVIDER_REPLY_SOURCE",
+  "contains_interpretation": false,
+  "reply": {
+    "$comment": "Verbatim, as supplied. Not trimmed, not normalised, not tidied.",
+    "body": "Hey, yes we allow commercial use. As long as there is no abuse like trying to exploit infrastructure or trying to use Globalping as a proxy.\n\nThanks",
+    "body_sha256": "be3845f89b636b96e92827b2a2e789b1588623ca884bb37dbbe82159377903e5",
+    "body_length_characters": 148,
+    "body_source": "OPERATOR_SUPPLIED_TEXT",
+    "body_retrieved_from_the_mailbox": false,
+    "why_the_body_is_still_frozen": "a supplied string is a claim, and freezing it does not promote it. What the freeze buys is that every later reading refers to THESE bytes, so a drift between what was quoted and what is interpreted becomes detectable."
+  },
+  "message_fields_not_established": {
+    "$comment": "The fields the brief asked for that no surface here can supply. Each is null rather than plausible: a sender address is exactly the kind of field a fabricated record fills in convincingly.",
+    "sender_display_name": null,
+    "sender_email_address": null,
+    "sent_at": null,
+    "message_id": null,
+    "in_reply_to_header": null,
+    "recipient_as_received": null,
+    "return_path": null,
+    "dkim_or_spf_result": null,
+    "why_none_of_these_are_recorded": "the only surface carrying them is the operator's mailbox, and the Gmail connector in this session is not authorised: the read returned 'This connector requires additional permissions'. Nothing was read, so nothing can be recorded, and inventing a sender address would manufacture the single field the whole attribution question turns on.",
+    "operator_supplied_any_of_them": false
+  },
+  "as_reported_by_the_operator": {
+    "$comment": "Reported, not established. Kept separate from the fields above.",
+    "thread_subject": "Terms scope: HEAD measurements of publicly reachable third-party websites",
+    "reply_is_in_that_thread": "REPORTED",
+    "question_quoted_by_the_operator": "Do Globalping's Terms permit using the HTTP measurement API for bounded HEAD measurements of publicly reachable third-party websites, including as part of a commercial tool or commercial-purpose research workflow, provided the use complies with Globalping's limits and other policies?",
+    "recipient_the_enquiry_was_sent_to": "d@globalping.io"
+  },
+  "relationship_to_gp_r2_q1_v2": {
+    "$comment": "The one part of the thread relationship that CAN be checked here: the question the operator quotes against the question this repository froze.",
+    "packet_path": "docs/data/globalping-r2-enquiry-packet-v2.json",
+    "packet_content_sha256": "987f3ff57ce661c6dc7b22b950e269930d3df6431b5110e74abbed97d13e2c51",
+    "subject_matches_the_frozen_subject": true,
+    "quoted_question_is_the_frozen_first_paragraph": true,
+    "quoted_question_is_the_whole_frozen_body": false,
+    "what_the_operator_did_not_quote": "the packet's second paragraph, which explains WHY the question was asked: that Permitted Use describes 'your internet infrastructure' while the Credits FAQ supports commercial use. That paragraph is the one that names the tension the reply would have had to resolve.",
+    "therefore": "the subject and the first paragraph match the frozen packet exactly, which corroborates that the reply sits on this enquiry. It does not establish who sent it."
+  },
+  "provenance": {
+    "$comment": "Mission 1.63. A retrieval summary is not a document -- and operator-supplied text is not a retrieval at all. This is one level below the corroborated summary that mission refused to treat as establishing.",
+    "retrieval_method": "NONE_OPERATOR_SUPPLIED_ONLY",
+    "mailbox_read": false,
+    "mailbox_read_attempted": true,
+    "mailbox_read_outcome": "REFUSED_BY_THE_CONNECTOR_FOR_MISSING_PERMISSIONS",
+    "mailbox_access_authorised_by_the_operator": true,
+    "why_the_attempt_was_made": "the operator's instruction scoped mailbox access rather than forbidding it -- 'do not access unrelated mailbox content' -- and asked for the sender address and timestamp, which no other surface holds. This is the first mission in the arc to attempt a mailbox read, and it is recorded as an attempt that failed rather than as an access that happened.",
+    "unrelated_mailbox_content_accessed": false,
+    "search_query_used": "subject:\"Terms scope: HEAD measurements of publicly reachable third-party websites\"",
+    "results_returned": 0,
+    "public_surface_exists": false,
+    "why_no_public_surface": "R1's reply was a public GitHub comment with a permalink, so its author could be established from the provider's own API. A private email has no public surface at all: the mailbox is the only place its headers exist."
+  },
+  "attribution": {
+    "$comment": "Nothing here is established. That is the finding, not an omission.",
+    "attributable_to_globalping_or_jsdelivr": "NOT_ESTABLISHED",
+    "first_party": "NOT_ESTABLISHED",
+    "sufficient_for_provider_authority": false,
+    "what_would_establish_it": "a raw read of the message in the thread, giving the From address, the display name, the Date and the authentication results -- the email equivalent of the author_association and public-membership reads that established R1's author.",
+    "what_is_known": "the enquiry was sent to d@globalping.io, an address established in Mission 1.74.4 from the provider's committed website source. A reply arriving in that thread is CONSISTENT with coming from the provider and does not establish it.",
+    "why_consistency_is_not_attribution": "the same arc already sent this question to an address established from three provider documents and had it bounce. Address behaviour in this thread is not assumable, and a reply's sender is a fact about headers rather than about which thread it appears in."
+  },
+  "what_this_record_deliberately_does_not_do": [
+    "interpret the reply",
+    "assign an evidence level",
+    "move the R2 verdict",
+    "recompute the qualification",
+    "say anything about R1"
+  ],
+  "mission_accounting": {
+    "MAILBOX_READS": 0,
+    "MAILBOX_MESSAGES_RETRIEVED": 0,
+    "EMAILS_SENT": 0,
+    "MAIL_CONNECTOR_EXECUTIONS": 1,
+    "PUBLIC_API_READS": 0,
+    "GLOBALPING_API_EXECUTIONS": 0,
+    "GLOBALPING_MEASUREMENTS_CREATED": 0,
+    "TARGET_HTTP_REQUESTS": 0,
+    "MODEL_CALLS": 0,
+    "EMBEDDINGS": 0,
+    "CLAIMS_CREATED": 0,
+    "EVIDENCE_CREATED": 0,
+    "INDEPENDENCE_GROUPS_CREATED": 0,
+    "SCORES": 0,
+    "SOURCES_REGISTERED": 0,
+    "SOURCE_GOVERNANCE_MUTATIONS": 0,
+    "CANONICAL_MUTATIONS": 0,
+    "MIGRATIONS": 0
+  },
+  "mail_connector_execution_note": "one authorised, scoped search that returned a permissions error and no content. Counted rather than rounded to zero, because an attempt that reached a connector is a different fact from never having tried."
+}

@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.118
+Version: 1.119
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-06 (Sprint 1 / Mission 1.76)
+Last amended: 2026-09-06 (Sprint 1 / Mission 1.76.1)
 
 ---
 
@@ -13,6 +13,86 @@ Last amended: 2026-09-06 (Sprint 1 / Mission 1.76)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.119 - 2026-09-06 (Sprint 1 / Mission 1.76.1)
+
+**`R2_REPLY_FROZEN_ATTRIBUTION_NOT_ESTABLISHED_RESIDUAL_UNCHANGED`.** A reply arrived on
+GP-R2-Q1 v2 and **R2 did not close**, for two independent reasons -- **either alone would
+have been enough**.
+
+**REASON ONE: NOBODY KNOWS WHO SAID IT.** The brief asked for the sender display name, the
+sender address and the sent-at timestamp, and **none of them exists in anything this
+repository can read**. The operator's instruction SCOPED mailbox access rather than
+forbidding it, so for the first time in this arc a mailbox read was ATTEMPTED -- one query
+on the thread subject -- and the connector refused it for missing permissions. Nothing was
+retrieved and no unrelated content was touched. So every header field is **null**, not
+"unknown pending confirmation": **a sender address is exactly the field a fabricated record
+supplies most convincingly**, and the gate refuses any of them being non-null while the
+retrieval method says nothing was read. R1 closed on a RAW READ OF A PUBLIC SURFACE --
+GitHub's own author_association plus an independent membership endpoint. **A private email
+has no public surface at all**, and a reply arriving in a thread is consistent with the
+provider having sent it without establishing that anyone at the provider did. This same arc
+already sent this question to an address established from three provider documents and had
+it bounce.
+
+**REASON TWO: IT ANSWERS THE HALF THAT WAS ALREADY CLOSED**, and this is the sharper
+finding because **no permission grant would fix it**. The enquiry asked four things and the
+reply answers one. The discriminator FROZEN BEFORE THE SEND required an answer *stating*
+that the current Terms do or do not cover measuring third-party publicly reachable targets.
+The reply contains no such statement: it states permission for **commercial use**, which is
+R2-A, and **Mission 1.74 closed R2-A on the provider's own FAQ**. The open half is R2-B,
+third-party target scope, and the reply says nothing about targets.
+
+**THE STRONGEST ARGUMENT THE OTHER WAY IS RECORDED BEFORE IT IS ANSWERED.** A prohibition
+on using Globalping AS A PROXY only makes sense if directing measurements at chosen
+destinations is otherwise contemplated -- you cannot proxy through a service that measures
+only your own infrastructure -- so the carve-out arguably presupposes third-party target
+use. It does not carry: **it is an inference from a presupposition**, and Mission 1.74
+graded exactly that shape non-closing when a maintainer statement PRESUPPOSED redirect
+responses appear in results. **A presupposition is not a statement, and the discriminator
+asked for a statement.** An authorised mailbox read would fix reason one and leave reason
+two exactly where it is -- **which the probe proves, with a control that establishes the
+sender and still does not close R2**.
+
+**THE LIMITATIONS ARE RECORDED AND NOT DROPPED**: no abuse, no exploitation of
+infrastructure, no use as a proxy, each **CLAIMED** rather than established, because the
+speaker is not established. They are written down anyway, because **a limitation is the
+part of a permission a reader is most likely to drop, and the moment to write it down is
+when it is read rather than when it is needed**. `no abuse` is a standard the reply does
+not bound, so it is named and never treated as a checkable condition.
+
+**NOTHING MOVED.** R2-B stays `THIRD_PARTY_TARGET_SCOPE_UNRESOLVED`, C9 stays PARTIAL, the
+tally stays **11 PASS / 1 PARTIAL / 0 FAIL** and the verdict stays `COUNTERPART_UNRESOLVED`;
+the qualification was not recomputed because no input to it changed. **The v2 dispatch
+record still reads `provider_replied: false`**, deliberately: a reply whose sender is not
+established is not a provider reply, and that record is Mission 1.74.6's rather than this
+one's. The frozen v2 packet, the spent v1 dispatch, R1 and every canonical research table
+are untouched: 0 measurements, 0 target requests, 0 model calls, 0 embeddings, 0 Claims, 0
+Evidence, 0 independence groups, 0 canonical mutations. **One counter is not zero**:
+`MAIL_CONNECTOR_EXECUTIONS = 1`, because an attempt that reached a connector and was
+refused is a different fact from never having tried.
+
+**Verification.** Probe of **68 deliberate violations, 68 caught, 0 escaped**, plus **3 of
+3 positive controls**, nine files restored byte for byte. **One escape was found and
+closed**: the gate read the record's own booleans for the packet relationship, so editing
+the frozen packet's body left them true and passed -- **a guard that asks a record whether
+it is correct is not a guard**, and it recomputes now. **The control that matters most is
+the mailbox read that establishes the sender and leaves R2 open**; had the gate closed R2
+there, its two reasons would have been one. **3129 bare-python tests**; both runners
+green; `ruff format --check`, `ruff check` and mypy through `uv`; contract generation
+`--check`; source catalog `--check`; all **50** CI gates, one of them new.
+
+New: `docs/data/globalping-r2-provider-reply-v1.json`,
+`docs/data/globalping-r2-reply-review-v1.json`, the generated
+`docs/data/globalping-r2-reply-evidence-v1.md`,
+`infrastructure/scripts/render_r2_provider_reply.py` (CI gate 50),
+`packages/inferred-claim-evaluator/python/tests/test_r2_provider_reply.py`, and
+`docs/reports/mission-1.76.1-report.md`.
+
+Changed: `docs/CLAUDE.md` 1.119 to 1.120; `.github/workflows/ci.yml` gains one gate.
+
+Unchanged: the v2 packet, the v1 and v2 dispatch records, the third-party target scope
+review, the residual closure, the counterpart qualification, R1, and every canonical table.
 
 ## 1.118 - 2026-09-06 (Sprint 1 / Mission 1.76)
 
