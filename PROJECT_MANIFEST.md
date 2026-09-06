@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.109
+Version: 1.110
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-06 (Sprint 1 / Mission 1.74)
+Last amended: 2026-09-06 (Sprint 1 / Mission 1.74.1)
 
 ---
 
@@ -13,6 +13,95 @@ Last amended: 2026-09-06 (Sprint 1 / Mission 1.74)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.110 - 2026-09-06 (Sprint 1 / Mission 1.74.1)
+
+**`R1_DISPATCH_APPROVED_AWAITING_MANUAL_OPERATOR_ACTION`.** The operator approved
+dispatch of **GP-R1-Q1 only**, by a named mechanism, and **this repository performed no
+outward action**: `OPERATOR_MANUAL_GITHUB_ISSUE`, one public issue on
+`jsdelivr/globalping` under `@Speekyx`, carrying the frozen title and body.
+
+**THE APPROVAL IS RECORDED BESIDE THE PACKET AND NOT INSIDE IT.** Mission 1.66 settled
+that marking a frozen document APPROVED changes the bytes that were approved -- and here
+it would not even have moved the packet's digest, since that covers only the six binding
+fields, **and it would still have changed the artifact the operator read**. So the packet
+is byte-identical, and the approval names it by a hash **recomputed from the packet as
+stored** rather than asserted, plus the packet's own file hash so a later edit is
+detectable. **The packet's `send_status: NOT_AUTHORIZED` therefore still reads
+correctly**: that field means THIS DOCUMENT RECORDS NO AUTHORIZATION and never that no
+authorisation exists -- the distinction Mission 1.66 wrote down, load-bearing for the
+first time.
+
+**EVERY FIELD OF THE ACTION IS PINNED, AND THAT IS WHERE THIS DIFFERS FROM THE ONYPHE
+ARC.** Mission 1.65 stated its cost in advance: the ONYPHE envelope bound a
+**placeholder** sender, because under manual email the sender is not determined until the
+send, so the hash pinned three fields of four -- and Mission 1.66.1 paid exactly that
+cost, matching on recipient, channel and subject while the sender matched nothing. **It
+does not recur here.** The destination is a public repository rather than a mailbox, so
+mechanism, target, identity and title are all determined before the act and the approval
+digest binds all of them; changing any one produces a **different approval that
+supersedes this one rather than editing it**. The digest excludes itself, the execution
+status and the recorded date.
+
+**AN APPROVAL IS NOT AN EXECUTION, AND IT IS UNUSUALLY EASY TO LOSE HERE**: once the
+approval exists, **every field an execution record needs is already known**, so a record
+could fill itself in completely and be entirely fictional. `PENDING_MANUAL_OPERATOR_ACTION`,
+**0 public posts, no issue URL, 0 issues created by this repository, 0 `gh` invocations,
+0 GitHub API calls, no attestation.** `SENT` is reachable only through an explicit
+operator attestation that the post was made.
+
+**`BYTE_VERIFIED` IS REACHABLE HERE, AND SAYING WHY IS WORTH MORE THAN THE UPGRADE.**
+Mission 1.66 could reach only `OPERATOR_ATTESTED`, because a manual email send happens
+inside a mail client nothing here can observe, and Mission 1.66.1 recorded that ceiling
+honestly. A public issue has a **durable public URL**, so once the operator supplies it
+the posted title and body can be compared against the approved ones. **That ceiling was a
+property of the CHANNEL rather than of manual sending.**
+
+**THE INTEGRITY CHECKS ARE FROZEN BEFORE ANY POST**, which is the only time they mean
+anything: title, body and repository must match, **one approval authorises exactly one
+public post**, a second post is **reported as a duplicate rather than tidied away**
+because a posted issue cannot be unposted, and a divergence never repairs the approval.
+
+**ONE APPROVAL COVERS ONE ENQUIRY.** `GP-R2-Q1` was prepared alongside it and is **not**
+approved; its packet is byte-identical and still reads `NOT_AUTHORIZED`. R2 dispatch
+requires its own approval.
+
+**MISSION 1.74 WAS NOT REWRITTEN.** Its closure still reads `enquiries_sent: 0`,
+`residuals_remaining: 2` and `dispatch_authorised_by_this_mission: false` -- all true when
+it ran and still true, because the approval arrived afterwards and lives in its own
+document. **An approval to ask is not an answer**: R1's verdict is unchanged at
+`R1_PARTIAL_IMPLEMENTATION_ONLY`, the qualification was not recomputed, and the tally is
+still 10 PASS / 2 PARTIAL / 0 FAIL with `COUNTERPART_UNRESOLVED`.
+
+**0 public posts, 0 GitHub issues created, 0 `gh` invocations, 0 emails sent, 0 mailbox
+searches, 0 provider contacts, 0 enquiries sent, 0 Globalping API executions, 0
+measurements, 0 target HTTP requests, 0 accounts, 0 tokens, 0 credential reads, 0
+first-party document requests**, 0 sources registered, 0 governance mutations, 0
+canonical mutations, 0 Claims, 0 Evidence, 0 independence groups, 0 reliability values, 0
+scores, 0 model calls, 0 embeddings, 0 migrations. ONYPHE still
+`NOT_CHECKED_AFTER_DISPATCH`, Netlas still pending, the scanner arc still parked, ADR-039
+untouched.
+
+**Verification.** Gate probed with **89 deliberate violations, 89 caught** (86 by rule, 3
+by drift) plus **4 of 4 positive controls** -- including a correctly evidenced
+`BYTE_VERIFIED` send, which is ACCEPTED, because **a gate that refuses everything is not a
+gate**. **A missing field is a refusal rather than a crash**: five cases delete a field the
+gate reads and each is refused, so a truncated record cannot skip a check by not carrying
+its subject -- a defect found by the first render raising `KeyError` on a lookup pointing
+at the wrong block. **57 new tests**, taking the bare-python runner to **2795**; both test
+runners green; `ruff format --check`, `ruff check` and mypy all run through `uv`; all
+**45** CI gates.
+
+New: `docs/data/globalping-r1-dispatch-approval-v1.json`, the generated
+`docs/data/mission-1.74.1-r1-dispatch-approval-v1.md`,
+`infrastructure/scripts/render_r1_dispatch_approval.py` (CI gate 45),
+`packages/inferred-claim-evaluator/python/tests/test_r1_dispatch_approval.py`, and
+`docs/architecture/mission-1.74.1-report.md`.
+
+Changed: `docs/CLAUDE.md` 1.110 to 1.111; `.github/workflows/ci.yml` gains one gate.
+
+Unchanged: both enquiry packets are byte-identical, every Mission 1.74 record is
+untouched, and no canonical table, source review or ADR was modified.
 
 ## 1.109 - 2026-09-06 (Sprint 1 / Mission 1.74)
 
