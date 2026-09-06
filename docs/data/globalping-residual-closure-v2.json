@@ -1,7 +1,7 @@
 {
-  "$comment": "§10, §25, §26, §38, §39. What closed, what did not, and what moved anyway.",
-  "record_version": "1.0.0",
-  "mission": "1.74",
+  "$comment": "Mission 1.74.7. One residual closed, one remains. R2 is carried forward untouched, because a reply to R1 says nothing about a question sent on a different channel.",
+  "record_version": "2.0.0",
+  "mission": "1.74.7",
   "recorded_at": "2026-09-06",
   "exact_predicate_frozen": false,
   "target_values_retrieved": 0,
@@ -9,12 +9,14 @@
     {
       "id": "R1",
       "name": "redirect contract",
-      "verdict": "R1_PARTIAL_IMPLEMENTATION_ONLY",
-      "evidence_level": "R1_C_IMPLEMENTATION_OBSERVED",
-      "closed": false,
+      "verdict": "R1_PASS_PROVIDER_DECLARED_NO_REDIRECT",
+      "evidence_level": "R1_A2_SOLICITED_RESPONSIVE_PROVIDER_ANSWER",
+      "closed": true,
       "moved": true,
-      "what_moved": "the absence is now CHECKED across five first-party surfaces rather than one, no provider test asserts the behaviour, and a maintainer statement was found that presupposes redirect responses are returned",
-      "enquiry_prepared": true
+      "what_moved": "the enquiry was sent, an organisation member answered the exact question directly, and both required semantics are established. The behaviour is now provider-declared rather than only implementation-observed.",
+      "enquiry_prepared": true,
+      "closed_by": "a solicited answer through the provider's public technical channel",
+      "closed_on_documentation": false
     },
     {
       "id": "R2",
@@ -22,7 +24,7 @@
       "verdict": "R2_PARTIAL_COMMERCIAL_ALLOWED_THIRD_PARTY_SCOPE_UNRESOLVED",
       "closed": false,
       "moved": true,
-      "what_moved": "R2-A closed positively on the provider's own FAQ answer, and R2-B is now a characterised ambiguity rather than an unread document: the one incorporating hook was followed and repeats the same narrow framing",
+      "what_moved": "unchanged by this mission. R2-A remains closed on the provider's FAQ and R2-B remains unresolved; the v2 enquiry was sent and no reply has arrived.",
       "enquiry_prepared": true
     }
   ],
@@ -36,7 +38,7 @@
     "B_third_party_targets_within_permitted_use": false,
     "verdict": "R2_PARTIAL"
   },
-  "residuals_remaining": 2,
+  "residuals_remaining": 1,
   "project_governance_classification": {
     "$comment": "§24. The project may refuse under ambiguity, and that is governance.",
     "classification": "PROVIDER_TERMS_REQUIRE_CLARIFICATION",
@@ -63,15 +65,16 @@
     "two_packets_because": "§29. R1 is a technical contract question suited to the provider's public issue tracker; R2 is a Terms question and the Terms themselves designate legal@globalping.io. Two provider-designated channels are genuinely required, so one packet could not have carried both without sending a Terms question to a technical channel.",
     "combined_ambiguous_question_asked": false,
     "each_question_maps_to_exactly_one_gate": true,
-    "enquiries_sent": 0,
-    "operator_approval_recorded": false,
+    "enquiries_sent": 2,
+    "operator_approval_recorded": true,
     "dispatch_authorised_by_this_mission": false,
-    "provider_contacted": false
+    "provider_contacted": true,
+    "provider_contacted_basis": "R1 only. The public issue carries a provider reply, which is receipt demonstrated rather than inferred. R2's email remains an attested dispatch with an unconfirmed delivery, and its own record still reads provider_contacted false.",
+    "r1_reply_received": true,
+    "r2_reply_received": false
   },
-  "forward_pointer": {
-    "$comment": "Appended by Mission 1.74.7. Nothing above this field changed.",
-    "superseded_by": "docs/data/globalping-residual-closure-v2.json",
-    "appended_by_mission": "1.74.7",
-    "what_changed_in_the_successor": "R1 closed; R2 carried forward untouched"
-  }
+  "supersedes": "globalping-residual-closure-v1.json",
+  "supersedes_note": "Mission 1.74's record is not edited. Two residuals were open when it was written.",
+  "r1_closed_by_this_mission": true,
+  "r2_touched_by_this_mission": false
 }

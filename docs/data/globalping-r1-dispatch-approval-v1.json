@@ -54,16 +54,23 @@
     "issue_url": "https://github.com/jsdelivr/globalping/issues/907",
     "issue_created_by_this_repository": false,
     "gh_issue_create_invoked": false,
-    "github_api_calls_made_by_this_repository": 0,
+    "github_api_write_calls_made_by_this_repository": 0,
+    "github_api_read_calls_made_by_this_issue_record": 2,
+    "github_api_read_endpoints": [
+      "GET /repos/jsdelivr/globalping/issues/907",
+      "GET /repos/jsdelivr/globalping/issues/907/comments"
+    ],
+    "why_the_counter_was_split": "Mission 1.74.7. The single counter refused every GitHub API call, and Mission 1.74.1 defined the upgrade to BYTE_VERIFIED as a RAW READ of the issue body. Those cannot both hold, so the first legitimate upgrade surfaced the contradiction. What the rule protects is that this repository never WROTE: no issue created, no public post, no gh issue create -- and a read is not that. The write half keeps the refusal at zero. The read half is not merely permitted, it is now REQUIRED to be at least one whenever raw_body_compared is true, because a comparison with no read is a comparison against nothing.",
+    "value_preserved_by_the_split": "the old counter read 0 and the write counter reads 0. Nothing this repository was forbidden to do became permitted; a distinction the old name could not express was drawn.",
     "operator_attestation_recorded": true,
-    "attestation_level": "OPERATOR_ATTESTED",
+    "attestation_level": "BYTE_VERIFIED",
     "attestation_levels_defined": [
       "OPERATOR_ATTESTED",
       "BYTE_VERIFIED"
     ],
     "byte_verification_is_possible_for_this_channel": true,
     "why_byte_verification_is_possible_here": "Mission 1.66 could reach only OPERATOR_ATTESTED because a manual email send happens inside a mail client nothing here can observe. A public GitHub issue has a durable public URL, so once the operator supplies it the posted title and body can be compared against the approved ones. The ceiling that arc hit is a property of the CHANNEL rather than of manual sending.",
-    "upgrade_path": "a raw read of the issue body compared character for character against the frozen packet body, recorded with raw_body_compared true. Until then the level stays OPERATOR_ATTESTED.",
+    "upgrade_path": "taken. BYTE_VERIFIED is the top of this channel's ladder and there is nothing above it.",
     "reachable_only_through": "an explicit operator attestation that the post was made, plus the issue URL. This repository cannot reach SENT by any other route.",
     "issue_number": 907,
     "issue_number_source": "DERIVED_FROM_THE_ATTESTED_URL",
@@ -86,10 +93,30 @@
       "title_matched_character_for_character": true,
       "body_wording_matched": true,
       "what_this_does_not_establish": "byte equality of the body. The extraction rendered the body's paragraph break as a space, which is an artifact of HTML to markdown conversion rather than evidence of a difference -- and precisely because it is an artifact, this retrieval cannot distinguish it from one. Whitespace and exact characters were not compared.",
-      "therefore_the_level_stays": "OPERATOR_ATTESTED"
+      "therefore_the_level_stays": "OPERATOR_ATTESTED",
+      "therefore_the_level_stays_note": "Mission 1.74.7. This says what THAT retrieval established, and it is still true of it: a summarising extraction leaves the level at OPERATOR_ATTESTED. The level moved on a different retrieval, recorded in byte_verification below, and this block was not rewritten to take credit for it."
     },
-    "byte_verification_not_reached_because": "the only retrieval performed went through a summarising extraction, and Mission 1.63 established that a summary is not a document where a sentence decides a gate. BYTE_VERIFIED requires a raw read of the issue body -- the GitHub API returns the stored markdown -- compared character for character against the frozen packet body. That read has NOT been performed, and no gh invocation was made.",
-    "raw_body_compared": false
+    "byte_verification_not_reached_because": "superseded by the block below. Mission 1.74.3 could not reach it because its only retrieval passed through a summarising extraction; this mission read the issue through the REST API, which returns the stored markdown.",
+    "raw_body_compared": true,
+    "byte_verification": {
+      "$comment": "Mission 1.74.7. The upgrade Mission 1.74.3 specified and did not take, taken on the read that fetching the provider's reply required anyway.",
+      "performed_by_mission": "1.74.7",
+      "retrieval_method": "RAW_GITHUB_REST_API_READ",
+      "went_through_a_summarising_extraction": false,
+      "endpoint": "GET /repos/jsdelivr/globalping/issues/907",
+      "what_the_endpoint_returns": "the stored markdown of the issue body, not a rendering of it",
+      "posted_body_sha256": "78211329b7926c8c522df6b338dfdbf3410d768925e4e02a5831163a71c657a4",
+      "frozen_packet_body_sha256": "78211329b7926c8c522df6b338dfdbf3410d768925e4e02a5831163a71c657a4",
+      "approved_body_sha256": "78211329b7926c8c522df6b338dfdbf3410d768925e4e02a5831163a71c657a4",
+      "posted_body_is_byte_identical_to_the_frozen_body": true,
+      "posted_title_is_byte_identical_to_the_approved_title": true,
+      "comparison": "character for character, including whitespace and line endings",
+      "paragraph_break_artifact_from_1_74_3_explained": "the earlier retrieval rendered the body's paragraph break as a space. The raw read shows the break is present in the stored body, so that was an artifact of the HTML-to-markdown conversion exactly as Mission 1.74.3 suspected -- and could not prove, which is why it refused the upgrade rather than assuming.",
+      "what_this_establishes": "the issue posted at the attested URL carries the approved title and the frozen body, byte for byte. The operator's attestation is now corroborated by a comparison rather than only by a retrieval that could not distinguish an artifact from a difference.",
+      "what_this_does_not_establish": "that the operator posted it, rather than that it is posted. Authorship still rests on the attestation plus the public author field, and byte verification grades the CONTENT rather than the act.",
+      "raw_api_reads_of_this_issue": 2,
+      "mission_accounting_above_counts_mission_1_74_1": "this mission's reads are counted in docs/data/globalping-r1-provider-reply-v1.json, which is where Mission 1.74.7's accounting lives"
+    }
   },
   "integrity_checks_frozen_before_any_post": {
     "$comment": "Frozen now, which is the only time they mean anything. A posted issue cannot be unposted, so a duplicate is REPORTED rather than tidied away.",
@@ -171,5 +198,6 @@
     "what_this_does_not_change": "every field this record established when it was written, including that THIS approval covers GP-R1-Q1 alone",
     "approval_sha256_unchanged": true
   },
-  "execution_recorded_by_mission": "1.74.3"
+  "execution_recorded_by_mission": "1.74.3",
+  "byte_verification_recorded_by_mission": "1.74.7"
 }

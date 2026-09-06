@@ -230,15 +230,42 @@ class TestAnApprovalIsNotAnExecution(unittest.TestCase):
         self.assertEqual(self.execution["issue_number_source"], "DERIVED_FROM_THE_ATTESTED_URL")
         self.assertTrue(self.execution["why_the_supplied_number_was_not_used"].strip())
 
-    def test_this_repository_created_no_issue(self):
+    def test_this_repository_wrote_nothing_to_github(self):
+        # Mission 1.74.7 split the counter. What the rule protects is that this repository
+        # never WROTE; reading the issue is how a byte comparison happens at all.
         self.assertFalse(self.execution["issue_created_by_this_repository"])
         self.assertFalse(self.execution["gh_issue_create_invoked"])
-        self.assertEqual(self.execution["github_api_calls_made_by_this_repository"], 0)
+        self.assertEqual(self.execution["github_api_write_calls_made_by_this_repository"], 0)
+        self.assertNotIn("github_api_calls_made_by_this_repository", self.execution)
 
-    def test_the_level_is_the_lower_one_and_says_why(self):
-        self.assertEqual(self.execution["attestation_level"], "OPERATOR_ATTESTED")
-        self.assertFalse(self.execution["raw_body_compared"])
-        self.assertTrue(self.execution["byte_verification_not_reached_because"].strip())
+    def test_the_reads_are_counted_and_are_all_reads(self):
+        reads = self.execution["github_api_read_calls_made_by_this_issue_record"]
+        endpoints = self.execution["github_api_read_endpoints"]
+        self.assertEqual(len(endpoints), reads)
+        self.assertGreaterEqual(reads, 1)
+        for endpoint in endpoints:
+            with self.subTest(endpoint=endpoint):
+                self.assertTrue(endpoint.startswith("GET "))
+        self.assertTrue(self.execution["why_the_counter_was_split"].strip())
+
+    def test_the_level_reached_the_top_of_this_channels_ladder(self):
+        # Mission 1.74.1 wrote the upgrade path; Mission 1.74.7 took it on a raw read.
+        self.assertEqual(self.execution["attestation_level"], "BYTE_VERIFIED")
+        self.assertTrue(self.execution["raw_body_compared"])
+
+    def test_the_byte_verification_agrees_with_the_digest_recorded_before_the_post(self):
+        block = self.execution["byte_verification"]
+        approved = load(APPROVAL)["approval"]["approved_body_sha256"]
+        self.assertEqual(block["retrieval_method"], "RAW_GITHUB_REST_API_READ")
+        self.assertFalse(block["went_through_a_summarising_extraction"])
+        for field in ("posted_body_sha256", "frozen_packet_body_sha256", "approved_body_sha256"):
+            with self.subTest(field=field):
+                self.assertEqual(block[field], approved)
+        self.assertTrue(block["posted_body_is_byte_identical_to_the_frozen_body"])
+        self.assertTrue(block["posted_title_is_byte_identical_to_the_approved_title"])
+        self.assertGreaterEqual(block["raw_api_reads_of_this_issue"], 1)
+        self.assertTrue(block["what_this_does_not_establish"].strip())
+        self.assertEqual(block["performed_by_mission"], "1.74.7")
 
     def test_the_public_retrieval_corroborates_and_does_not_replace_the_attestation(self):
         # Mission 1.63: a retrieval summary is not a document.

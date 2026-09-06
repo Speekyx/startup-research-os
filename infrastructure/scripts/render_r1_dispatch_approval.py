@@ -189,8 +189,21 @@ def _check_execution(approval: dict) -> None:
         raise ValidationError("this repository created the issue, and it may not")
     if execution["gh_issue_create_invoked"]:
         raise ValidationError("gh issue create was invoked, and it may not be")
-    if execution["github_api_calls_made_by_this_repository"] != 0:
-        raise ValidationError("this repository called the GitHub API on the operator's behalf")
+
+    # Mission 1.74.7. This counter used to refuse EVERY GitHub API call, while Mission
+    # 1.74.1 defined the upgrade to BYTE_VERIFIED as a raw read of the issue body -- so
+    # the gate demanded a comparison and forbade the only mechanism that makes one. What
+    # the rule protects is that this repository never WROTE, and a read is not that.
+    if execution["github_api_write_calls_made_by_this_repository"] != 0:
+        raise ValidationError("this repository wrote to GitHub on the operator's behalf")
+    reads = execution["github_api_read_calls_made_by_this_issue_record"]
+    if not isinstance(reads, int) or reads < 0:
+        raise ValidationError("the record does not state how many raw reads it made")
+    if len(execution["github_api_read_endpoints"]) != reads:
+        raise ValidationError("the listed read endpoints do not match the recorded count")
+    for endpoint in execution["github_api_read_endpoints"]:
+        if not endpoint.startswith("GET "):
+            raise ValidationError(f"the endpoint {endpoint!r} is not a read")
 
     level = execution["attestation_level"]
     if level is not None and level not in ATTESTATION_LEVELS:
@@ -240,6 +253,12 @@ def _check_execution(approval: dict) -> None:
                 "BYTE_VERIFIED without a raw body comparison; a summarising retrieval "
                 "corroborates an attestation and does not replace it"
             )
+        # A comparison needs something to compare against, and the only route to the
+        # stored body is a read. A record claiming one with no read compared nothing.
+        if execution["raw_body_compared"] and reads < 1:
+            raise ValidationError("the body is recorded as compared raw and nothing was read")
+        if level == "BYTE_VERIFIED":
+            _check_byte_verification(approval, execution)
         if (
             level == "OPERATOR_ATTESTED"
             and not str(execution.get("byte_verification_not_reached_because") or "").strip()
@@ -256,6 +275,51 @@ def _check_execution(approval: dict) -> None:
     for field in ("upgrade_path", "reachable_only_through"):
         if not str(execution[field]).strip():
             raise ValidationError(f"the execution states no {field}")
+
+
+def _check_byte_verification(approval: dict, execution: dict) -> None:
+    """Mission 1.74.7. BYTE_VERIFIED is a comparison, so the record must show one.
+
+    The danger here is the same as everywhere in this arc: every number the block needs
+    is already in the record, so a fabricated block would look exactly like a real one.
+    What makes it checkable is that the digests must AGREE with the approval's own
+    `approved_body_sha256`, which was recorded before anything was posted.
+    """
+    block = execution["byte_verification"]
+
+    if block["went_through_a_summarising_extraction"]:
+        raise ValidationError(
+            "the byte verification went through a summarising extraction; Mission 1.63 "
+            "settled that a summary cannot establish byte equality"
+        )
+    if block["retrieval_method"] != "RAW_GITHUB_REST_API_READ":
+        raise ValidationError(
+            f"the retrieval method {block['retrieval_method']!r} does not return stored bytes"
+        )
+    if not str(block["endpoint"]).startswith("GET "):
+        raise ValidationError("the byte verification names no read endpoint")
+    if str(execution["issue_url"]).rsplit("/", 1)[-1] not in block["endpoint"]:
+        raise ValidationError("the endpoint read is not the issue the record attests to")
+
+    approved = approval["approval"]["approved_body_sha256"]
+    for field in ("posted_body_sha256", "frozen_packet_body_sha256", "approved_body_sha256"):
+        if block[field] != approved:
+            raise ValidationError(
+                f"{field} disagrees with the body digest the approval recorded before the post"
+            )
+    for flag in (
+        "posted_body_is_byte_identical_to_the_frozen_body",
+        "posted_title_is_byte_identical_to_the_approved_title",
+    ):
+        if not block[flag]:
+            raise ValidationError(f"BYTE_VERIFIED while {flag} is false")
+
+    if block["raw_api_reads_of_this_issue"] < 1:
+        raise ValidationError("the byte verification records no read of the issue")
+    if not str(block["what_this_does_not_establish"]).strip():
+        raise ValidationError("the byte verification states no limit")
+    if not str(block["performed_by_mission"]).strip():
+        raise ValidationError("the byte verification names no mission that performed it")
 
 
 def _check_integrity_rules(approval: dict) -> None:
@@ -409,12 +473,16 @@ def render(approval: dict) -> str:
         f"| issue URL | {execution['issue_url']} |",
         f"| issue created by this repository | {execution['issue_created_by_this_repository']} |",
         f"| `gh issue create` invoked | {execution['gh_issue_create_invoked']} |",
-        f"| GitHub API calls by this repository | "
-        f"{execution['github_api_calls_made_by_this_repository']} |",
+        f"| GitHub API **write** calls by this repository | "
+        f"{execution['github_api_write_calls_made_by_this_repository']} |",
+        f"| GitHub API **read** calls against this issue | "
+        f"{execution['github_api_read_calls_made_by_this_issue_record']} |",
         f"| operator attestation recorded | {execution['operator_attestation_recorded']} |",
         f"| attestation level | {execution['attestation_level']} |",
         "",
         execution["why_byte_verification_is_possible_here"],
+        "",
+        execution["why_the_counter_was_split"],
         "",
         f"**Upgrade path.** {execution['upgrade_path']}",
         "",
