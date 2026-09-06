@@ -686,6 +686,22 @@ jobs:
       - name: R1 dispatch approval matches its record
         run: uv run python infrastructure/scripts/render_r1_dispatch_approval.py --check
 
+      # Mission 1.74.2. The second enquiry approved, by a different mechanism to a
+      # different kind of channel -- and the rules INVERT against the gate above. A public
+      # repository is determined before the act and a mail client's sender is not, so this
+      # approval pins three fields of four; a public issue has a durable URL and a mail
+      # client's outbox does not, so this gate REFUSES BYTE_VERIFIED where the R1 gate
+      # requires it be possible. The validator refuses: an approval that no longer names
+      # the packet as stored; an approval written into the packet; a digest that does not
+      # recompute or that hashes its own value, the status, the date or the sender; a
+      # changed mechanism, recipient or subject under an unchanged hash; a real mailbox
+      # pinned as sender; BYTE_VERIFIED claimed for a channel that cannot produce it; a
+      # send with no operator attestation; more than the one send authorised; any mail
+      # sent, connector executed or mailbox searched by this repository; and any edit to
+      # Mission 1.74's records or to the R1 approval's binding fields.
+      - name: R2 dispatch approval matches its record
+        run: uv run python infrastructure/scripts/render_r2_dispatch_approval.py --check
+
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
   # Pinned to the same versions as infrastructure/compose.
