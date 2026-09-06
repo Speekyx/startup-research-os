@@ -1,0 +1,176 @@
+{
+  "$comment": "§3 and §53. Every first-party retrieval, including the ones that returned nothing.",
+  "record_version": "1.0.0",
+  "mission": "1.73",
+  "recorded_at": "2026-09-06",
+  "maximum_requests": 30,
+  "used": 26,
+  "requests": [
+    {
+      "n": 1,
+      "url": "https://globalping.io/docs/api.globalping.io",
+      "result": "NAVIGATION_SHELL",
+      "load_bearing": false
+    },
+    {
+      "n": 2,
+      "url": "https://api.globalping.io/v1/spec.yaml",
+      "result": "OPENAPI_SPECIFICATION_124793_BYTES",
+      "load_bearing": true
+    },
+    {
+      "n": 3,
+      "url": "https://github.com/jsdelivr/globalping-probe",
+      "result": "PROBE_README",
+      "load_bearing": true
+    },
+    {
+      "n": 4,
+      "url": "https://globalping.io/docs/measurement-types",
+      "result": "HTTP_404",
+      "load_bearing": false
+    },
+    {
+      "n": 5,
+      "url": "https://globalping.io/terms",
+      "result": "NAVIGATION_SHELL",
+      "load_bearing": false
+    },
+    {
+      "n": 6,
+      "url": "https://globalping.io/terms/terms-of-use",
+      "result": "NAVIGATION_SHELL",
+      "load_bearing": false
+    },
+    {
+      "n": 7,
+      "url": "https://www.jsdelivr.com/terms/globalping",
+      "result": "NAVIGATION_HUB",
+      "load_bearing": false
+    },
+    {
+      "n": 8,
+      "url": "repos/jsdelivr/globalping-probe/contents/src/command",
+      "result": "FILE_LISTING",
+      "load_bearing": true
+    },
+    {
+      "n": 9,
+      "url": "repos/jsdelivr/globalping-probe/.../http-command.ts",
+      "result": "SOURCE",
+      "load_bearing": true
+    },
+    {
+      "n": 10,
+      "url": "repos/jsdelivr/globalping-probe/.../handlers/http/undici.ts",
+      "result": "SOURCE",
+      "load_bearing": true
+    },
+    {
+      "n": 11,
+      "url": "https://urlscan.io/docs/api/",
+      "result": "API_DOCUMENTATION",
+      "load_bearing": true
+    },
+    {
+      "n": 12,
+      "url": "https://urlscan.io/docs/api/results/",
+      "result": "HTTP_404",
+      "load_bearing": false
+    },
+    {
+      "n": 13,
+      "url": "https://beta-docs.atlas.ripe.net/legacy/measurements/types/",
+      "result": "DNS_FAILURE",
+      "load_bearing": false
+    },
+    {
+      "n": 14,
+      "url": "https://atlas.ripe.net/docs/apis/rest-api-manual/measurements/types/",
+      "result": "HTTP_404",
+      "load_bearing": false
+    },
+    {
+      "n": 15,
+      "url": "https://atlas.ripe.net/docs/",
+      "result": "DOCUMENTATION_INDEX",
+      "load_bearing": false
+    },
+    {
+      "n": 16,
+      "url": "https://atlas.ripe.net/docs/apis/rest-api-manual/measurements/definitions.html",
+      "result": "HTTP_404",
+      "load_bearing": false
+    },
+    {
+      "n": 17,
+      "url": "https://atlas.ripe.net/docs/apis/rest-api-manual/measurements/",
+      "result": "SECTION_OVERVIEW",
+      "load_bearing": false
+    },
+    {
+      "n": 18,
+      "url": "https://atlas.ripe.net/docs/.../creating-measurements/definitions/",
+      "result": "MEASUREMENT_TYPE_LIST",
+      "load_bearing": true
+    },
+    {
+      "n": 19,
+      "url": "https://atlas.ripe.net/docs/apis/result-format/",
+      "result": "HTTP_404",
+      "load_bearing": false
+    },
+    {
+      "n": 20,
+      "url": "https://atlas.ripe.net/legal/acceptable-use-policy/",
+      "result": "EMPTY_BODY",
+      "load_bearing": false
+    },
+    {
+      "n": 21,
+      "url": "repos/jsdelivr/globalping/contents",
+      "result": "FILE_LISTING",
+      "load_bearing": false
+    },
+    {
+      "n": 22,
+      "url": "repos/jsdelivr/globalping/contents/docs",
+      "result": "FILE_LISTING",
+      "load_bearing": false
+    },
+    {
+      "n": 23,
+      "url": "repos/jsdelivr/globalping/contents/docs/terms",
+      "result": "FILE_LISTING",
+      "load_bearing": false
+    },
+    {
+      "n": 24,
+      "url": "repos/jsdelivr/globalping/.../docs/terms/Terms of Use.md",
+      "result": "TERMS_OF_USE",
+      "load_bearing": true
+    },
+    {
+      "n": 25,
+      "url": "docs/terms/Terms of Use.md sections 5-9",
+      "result": "LOCAL_READ_OF_RETRIEVED_FILE",
+      "load_bearing": true
+    },
+    {
+      "n": 26,
+      "url": "docs/terms/Terms of Use.md sections 2-4",
+      "result": "LOCAL_READ_OF_RETRIEVED_FILE",
+      "load_bearing": true
+    }
+  ],
+  "failed_or_empty": 11,
+  "failed_counted_against_budget": true,
+  "search_engines_used_for_navigation_only": true,
+  "target_sites_measured": 0,
+  "counterpart_api_executions": 0,
+  "the_terms_were_behind_three_navigation_shells_and_were_found_in_version_control": {
+    "$comment": "Worth recording. Three retrievals of the published terms returned navigation shells, and the same document is committed as markdown in the provider's own public repository, where it reads in full. A document that automated retrieval cannot reach is not necessarily a document that does not exist.",
+    "shells": 3,
+    "found_at": "repos/jsdelivr/globalping/docs/terms/Terms of Use.md"
+  }
+}

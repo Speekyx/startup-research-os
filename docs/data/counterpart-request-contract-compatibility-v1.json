@@ -1,0 +1,157 @@
+{
+  "$comment": "§23, §24, §25. The matrix comes before the verdict. §24 matters here: SROS is under our control, so a fixed documented contract may qualify.",
+  "record_version": "1.0.0",
+  "mission": "1.73",
+  "recorded_at": "2026-09-06",
+  "candidate": "Globalping",
+  "fields": [
+    {
+      "field": "http_method",
+      "classification": "CONFIGURABLE",
+      "documented_as": "HEAD, GET or OPTIONS; default HEAD",
+      "sros_can_construct_an_equivalent": true
+    },
+    {
+      "field": "url_scheme",
+      "classification": "CONFIGURABLE",
+      "documented_as": "protocol HTTP, HTTPS or HTTP2; default HTTPS",
+      "sros_can_construct_an_equivalent": true
+    },
+    {
+      "field": "port",
+      "classification": "CONFIGURABLE",
+      "documented_as": "0-65535",
+      "sros_can_construct_an_equivalent": true
+    },
+    {
+      "field": "path",
+      "classification": "CONFIGURABLE",
+      "documented_as": "the path portion of the URL",
+      "sros_can_construct_an_equivalent": true
+    },
+    {
+      "field": "query",
+      "classification": "CONFIGURABLE",
+      "documented_as": "the query string portion of the URL",
+      "sros_can_construct_an_equivalent": true
+    },
+    {
+      "field": "host_header",
+      "classification": "CONFIGURABLE",
+      "documented_as": "an optional override for the Host header, default based on target",
+      "sros_can_construct_an_equivalent": true
+    },
+    {
+      "field": "sni",
+      "classification": "DERIVABLE",
+      "documented_as": "not named separately; follows the target and host override",
+      "sros_can_construct_an_equivalent": false
+    },
+    {
+      "field": "user_agent",
+      "classification": "FIXED_AND_DOCUMENTED",
+      "documented_as": "reserved by the provider and not settable",
+      "sros_can_construct_an_equivalent": true
+    },
+    {
+      "field": "accept",
+      "classification": "CONFIGURABLE",
+      "documented_as": "via additional request headers",
+      "sros_can_construct_an_equivalent": true
+    },
+    {
+      "field": "accept_language",
+      "classification": "CONFIGURABLE",
+      "documented_as": "via additional request headers",
+      "sros_can_construct_an_equivalent": true
+    },
+    {
+      "field": "accept_encoding",
+      "classification": "CONFIGURABLE",
+      "documented_as": "via additional request headers",
+      "sros_can_construct_an_equivalent": true
+    },
+    {
+      "field": "cookies",
+      "classification": "NOT_APPLICABLE",
+      "documented_as": "no cookie jar is documented for a single measurement",
+      "sros_can_construct_an_equivalent": false
+    },
+    {
+      "field": "authentication",
+      "classification": "NOT_APPLICABLE",
+      "documented_as": "no target authentication is offered",
+      "sros_can_construct_an_equivalent": true
+    },
+    {
+      "field": "redirects",
+      "classification": "UNKNOWN",
+      "documented_as": "absent from the specification; see the residual",
+      "sros_can_construct_an_equivalent": false
+    },
+    {
+      "field": "javascript_execution",
+      "classification": "NOT_APPLICABLE",
+      "documented_as": "not a browser apparatus",
+      "sros_can_construct_an_equivalent": true
+    },
+    {
+      "field": "cache",
+      "classification": "UNKNOWN",
+      "documented_as": "not documented",
+      "sros_can_construct_an_equivalent": false
+    },
+    {
+      "field": "dns_behaviour",
+      "classification": "CONFIGURABLE",
+      "documented_as": "an explicit resolver may be supplied",
+      "sros_can_construct_an_equivalent": true
+    },
+    {
+      "field": "ip_version",
+      "classification": "CONFIGURABLE",
+      "documented_as": "4 or 6, default 4",
+      "sros_can_construct_an_equivalent": true
+    },
+    {
+      "field": "vantage",
+      "classification": "CONFIGURABLE",
+      "documented_as": "continent, region, country, state, city, ASN, network, tags",
+      "sros_can_construct_an_equivalent": true
+    },
+    {
+      "field": "timeout",
+      "classification": "CONFIGURABLE",
+      "documented_as": "an integer timeout option exists in the probe schema",
+      "sros_can_construct_an_equivalent": true
+    },
+    {
+      "field": "retries",
+      "classification": "NOT_APPLICABLE",
+      "documented_as": "not offered per measurement; SROS sets its own to 0",
+      "sros_can_construct_an_equivalent": true
+    }
+  ],
+  "field_count": 21,
+  "tally": {
+    "CONFIGURABLE": 13,
+    "FIXED_AND_DOCUMENTED": 1,
+    "DERIVABLE": 1,
+    "UNKNOWN": 2,
+    "NOT_APPLICABLE": 4
+  },
+  "a_fixed_documented_contract_was_rejected_for_being_fixed": false,
+  "why": "§24. The User-Agent is reserved by the provider and that is fine: SROS can set its own identity on its own side, and the two need not send the same string for the two observations to bear on one proposition. A fixed contract that is DOCUMENTED is reconstructable.",
+  "overall": "REQUEST_CONTRACT_COMPATIBILITY_UNRESOLVED",
+  "the_single_load_bearing_gap": {
+    "field": "redirects",
+    "evidence": "the 124,793-byte specification contains zero occurrences of the word redirect",
+    "result_schema_carries_a_hop_array": false,
+    "implementation_observed": "the probe dispatches through undici.Client.dispatch(), which does not follow redirects",
+    "implementation_is_a_documented_contract": false,
+    "why_that_distinction_is_not_pedantry": "a measurement contract must be frozen and reconstructable by a later reader. An undocumented default can change without notice, and if the counterpart began following redirects while SROS did not, both routes would still report a status and the divergence would be invisible in the data. Mission 1.70 killed the external pair on a redirect semantic that WAS documented; this one is not.",
+    "and_it_is_the_case_the_brief_names": "§25 lists 'undocumented redirects' among the behaviours where equivalence may not be assumed"
+  },
+  "browser_page_load_equated_with_a_single_get": false,
+  "not_applicable_because": "Globalping is a transport-level apparatus rather than a browser"
+}

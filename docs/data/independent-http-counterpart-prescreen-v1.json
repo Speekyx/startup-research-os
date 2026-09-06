@@ -1,0 +1,45 @@
+{
+  "$comment": "§9. Cheap gates in order; a decisive fail stops the candidate.",
+  "record_version": "1.0.0",
+  "mission": "1.73",
+  "recorded_at": "2026-09-06",
+  "gate_order": [
+    "DIRECTABLE_TARGET",
+    "OWN_HTTP_MEASUREMENT",
+    "TRANSPORT_LEVEL_RESULT_AVAILABLE",
+    "PER_SUBMISSION_TERMINAL_ACCOUNTING",
+    "PROSPECTIVE_TIME_ADDRESSABILITY",
+    "REQUEST_CONTRACT_DOCUMENTATION",
+    "VANTAGE_DOCUMENTATION",
+    "RESULT_MINIMIZATION_COMPATIBILITY",
+    "RIGHTS_COMMERCIAL_PURPOSE_FEASIBILITY",
+    "INDEPENDENCE_PLAUSIBILITY"
+  ],
+  "prescreens": [
+    {
+      "candidate": "Globalping",
+      "outcome": "PROCEEDED_TO_FULL_QUALIFICATION",
+      "pages_used": 2,
+      "note": "the OpenAPI specification answered the first five gates on its own"
+    },
+    {
+      "candidate": "urlscan.io",
+      "outcome": "STOPPED_AT_TRANSPORT_LEVEL_RESULT_AVAILABLE",
+      "pages_used": 2,
+      "note": "a browser page capture whose documented retrievable artifacts are the scan result, screenshot and DOM snapshot. No transport-only path established.",
+      "later_gates": "NOT_EVALUATED_AFTER_DECISIVE_FAIL"
+    },
+    {
+      "candidate": "RIPE Atlas",
+      "outcome": "STOPPED_AT_DOCUMENTATION_RETRIEVABILITY",
+      "pages_used": 5,
+      "note": "the http type is documented and the result format and acceptable use policy were not retrievable at the paths tried",
+      "later_gates": "NOT_EVALUATED_AFTER_DECISIVE_FAIL"
+    }
+  ],
+  "what_this_does_not_establish": [
+    "that urlscan.io has no transport-only result path; only that none was found at the paths tried",
+    "that RIPE Atlas is unsuitable; its documentation was not reached",
+    "that no compatible counterpart exists outside the three names touched"
+  ]
+}

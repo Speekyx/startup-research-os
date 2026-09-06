@@ -1,0 +1,40 @@
+{
+  "$comment": "§52. Discovery names recorded whether or not they became serious. This is not a market landscape and it does not claim exhaustive coverage.",
+  "record_version": "1.0.0",
+  "mission": "1.73",
+  "recorded_at": "2026-09-06",
+  "candidates": [
+    {
+      "name": "Globalping",
+      "operator": "Volentio JSD (jsDelivr)",
+      "status": "SERIOUS",
+      "why_considered": "§51's bias in order: an explicit arbitrary-target HTTP measurement, its own probe network, per-result job statuses, status and header exposure, a documented request object, and selectable vantage",
+      "evaluation_order": 1
+    },
+    {
+      "name": "urlscan.io",
+      "operator": "urlscan GmbH",
+      "status": "PRE_GATE_FAILED",
+      "why_considered": "an on-demand URL submission service that performs its own visit",
+      "evaluation_order": 2,
+      "pre_gate_failure": "the result surface is a browser page capture -- DOM snapshot and screenshot -- and the Result API reference was not retrievable at the path tried, so no transport-only result path was established. §16 forbids ingesting a body in order to extract a status."
+    },
+    {
+      "name": "RIPE Atlas",
+      "operator": "RIPE NCC",
+      "status": "PRE_GATE_FAILED",
+      "why_considered": "a distributed measurement network run by a different institution, documenting an http type: 'Make an HTTP request to a target. Configure path, method, port, and HTTP version.'",
+      "evaluation_order": 3,
+      "pre_gate_failure": "the HTTP result format and the acceptable use policy were not retrievable at the paths tried -- the result-format page returned 404 and the AUP returned a page with no body. §54 forbids closing a gate from a third party, so the candidate could not become serious."
+    }
+  ],
+  "candidates_discovered": 3,
+  "serious_candidates": 1,
+  "serious_candidate_cap": 5,
+  "cap_exceeded": false,
+  "qualified_counterparts": 0,
+  "discovery_stopped_after_first_qualification": false,
+  "why_discovery_stopped": "the documentation budget was spent, and §2 caps serious candidates rather than requiring five. Two of the three could not clear the documentation pre-gate at the paths tried, which is a fact about this mission's reach rather than a finding about them.",
+  "exhaustive_market_coverage_claimed": false,
+  "names_are_discovery_hints_not_endorsements": true
+}

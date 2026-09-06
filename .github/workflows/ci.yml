@@ -633,6 +633,27 @@ jobs:
       - name: Public HTTP observation governance matches its records
         run: uv run python infrastructure/scripts/render_public_http_governance.py --check
 
+      # Mission 1.73. The producer of an observation is not the brand on the API, and a
+      # contract that is merely implemented is not a contract that is documented. Refuses:
+      # a reseller, a proxy, an unknown producer, or the SROS fetcher on somebody else's
+      # cloud counted as a counterpart; shared software treated as shared measurement, or a
+      # different vantage treated as independence; an externally triggered job called
+      # SROS-produced; a candidate obtaining its observations from Common Crawl, HTTP
+      # Archive or SROS; a target directable only through the provider's own search; a
+      # provider job failure recorded as target silence; a body ingested in order to read a
+      # status, or a transport-only path claimed with no mechanism; a request contract called
+      # established with unknown fields, or an observed implementation treated as a
+      # documented contract; a browser page load equated with a single GET; a free API read
+      # as commercial permission, terms silence read as permission, a consumer-scoped clause
+      # read as a blanket prohibition, or provider terms replacing ADR-039; a counterpart
+      # qualified while a mandatory gate is not PASS, or rejected with no hard FAIL; Q1
+      # selected with no qualified counterpart; the no-counterpart outcome reported while a
+      # candidate is UNRESOLVED; a construct or counterpart selected; and any counterpart API
+      # execution, target request, account, trial, credential read, source registration,
+      # canonical mutation or model call.
+      - name: Independent HTTP counterpart qualification matches its records
+        run: uv run python infrastructure/scripts/render_counterpart_qualification.py --check
+
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
   # Pinned to the same versions as infrastructure/compose.
