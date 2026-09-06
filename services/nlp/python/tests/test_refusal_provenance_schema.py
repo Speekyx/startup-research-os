@@ -954,11 +954,22 @@ class TestNothingElseChanged:
         for forbidden in ("refusal_id", "evaluation_result", "reason_code"):
             assert forbidden not in columns
 
-    def test_the_migration_head_is_the_new_one(self, privileged_conn):
-        head = privileged_conn.execute(
-            "SELECT max(version) FROM core.schema_migrations"
-        ).fetchone()[0]
-        assert head == "0035_refusal_provenance"
+    def test_this_missions_migration_is_applied(self, privileged_conn):
+        """Mission 1.75. This asserted that 0035 was the LATEST applied migration,
+        which is a historical fact -- Mission 1.53 added the newest one -- checked
+        against a live measurement. It held until the next migration landed, which
+        makes it a test asserting that the project may never progress.
+
+        What it is entitled to assert is that this mission's migration is applied
+        and was not renumbered. Being the newest was never the property that made
+        the record correct."""
+        applied = {
+            row[0]
+            for row in privileged_conn.execute(
+                "SELECT version FROM core.schema_migrations"
+            ).fetchall()
+        }
+        assert "0035_refusal_provenance" in applied
 
     def test_an_empty_table_is_a_valid_state(self, privileged_conn):
         """§38. No live count is asserted anywhere in this file; this is the only

@@ -308,9 +308,23 @@ def validate(record: dict) -> None:  # noqa: C901
     ):
         if record.get(flag) is not False:
             raise ValidationError(f"the STOP CONDITION forbids `{flag}`")
+    # Mission 1.75. This used to compare the LIVE head against a literal, which
+    # asserted a historical fact -- "Mission 1.53's mission added no migration" --
+    # through a measurement of the present. It broke the moment a later mission
+    # added one, which is a gate saying the project may never progress.
+    #
+    # What it is entitled to assert is that THIS record still names the head that
+    # existed when it was written, and that the migration it names was not
+    # removed. Whether anything came after is not this record's business.
     heads = sorted(path.stem for path in MIGRATIONS.glob("00*.sql"))
-    if heads[-1] != MIGRATION_HEAD_EXPECTED or record.get("migration_head") != heads[-1]:
-        raise ValidationError(f"the migration head is {heads[-1]}; this mission creates none")
+    recorded = record.get("migration_head")
+    if recorded != MIGRATION_HEAD_EXPECTED:
+        raise ValidationError(
+            f"the record names {recorded!r} as the head it was written against, and this "
+            f"mission created none, so it should still read {MIGRATION_HEAD_EXPECTED!r}"
+        )
+    if recorded not in heads:
+        raise ValidationError(f"{recorded} no longer exists; a migration was removed")
     guard = VALIDATE_CLAIMS.read_text(encoding="utf-8")
     if "OBSERVED" not in guard or "ClaimType" not in guard:
         raise ValidationError("validate_claims.py no longer restricts the interpreters to OBSERVED")

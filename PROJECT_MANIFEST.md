@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.116
+Version: 1.117
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-06 (Sprint 1 / Mission 1.74.7)
+Last amended: 2026-09-06 (Sprint 1 / Mission 1.75)
 
 ---
 
@@ -13,6 +13,115 @@ Last amended: 2026-09-06 (Sprint 1 / Mission 1.74.7)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.117 - 2026-09-06 (Sprint 1 / Mission 1.75)
+
+**`GATEWAY_USE_PROFILE_SCOPING_REPAIRED`.** The profile-blindness Mission 1.15.7 found and
+Mission 1.17 grew is closed. Source governance reads require an explicit `use_profile`,
+**there is no default**, and no fact crosses a profile boundary.
+
+**THE DEFECT REACHED THREE ROUTES, NOT TWO.** The brief named `/sources` and the
+eligibility route. `GET /sources/{id}` had the same unscoped join AND an unscoped review
+lookup, which made it **the worst of the three**: it returns the review body and its
+evidence URLs, so an arbitrary profile's row there does not merely mislabel a verdict, it
+**hands back the documents behind an assessment the caller is not asking about**.
+
+**THERE IS NO DEFAULT, AND THE REASON IS NOT CAUTION.** Both registered profiles are real
+deployments reaching **different verdicts about the same sources**, so any default would
+answer a question the caller did not ask and would look exactly like an answer. Local,
+commercial, environment-selected, workspace-derived, first-available-review and
+fall-back-to-the-other were each considered and each refused for its own reason. A missing
+profile is 422; an unregistered one is 422; and **an absent review under the requested
+profile is a refusal, never a reason to consult another profile** -- which is the contract
+`registry.source_eligibility` states in its own COMMENT.
+
+**THE FIX IS IN THE JOIN, NOT OVER IT.** The profile is a join predicate, so there is no
+duplication to deduplicate. The join is LEFT: a source the requested profile has never
+reviewed is **still listed**, marked unreviewed and ineligible, because hiding it would
+make "not reviewed here" indistinguishable from "not registered". **8 duplicated sources
+before, 0 after**, under every profile.
+
+**`collector_enabled` IS PROFILE-RELATIVE TOO**, and that is new information. It is a
+column on the SOURCE carrying its own `collector_use_profile`, and the trigger checks
+eligibility under THAT profile. Served flat beside a scoped verdict it reads as "enabled
+for you" -- `ted-eu` is enabled under local and listed under commercial, where it is not
+eligible -- so the re-pointed tripwire's first form, **enabled implies eligible**, was
+still asserting a property the database never had. The routes now return
+`collector_use_profile` and `collector_enabled_for_requested_profile` beside the flag.
+
+**A HARD-CODED DEFAULT WAS HIDING IN DEAD CODE.** `read_sources` wrote
+`commercial-multi-tenant-research-v1` into its SQL; nothing called it, so nothing had
+chosen that profile and **the first caller would have inherited an answer it never asked
+for**. It takes an explicit profile now. **No caller's intended profile had to be guessed,
+because no production HTTP caller exists.**
+
+**ONE MIGRATION, EXPLAINED BEFORE IT WAS WRITTEN**, and it is a single `GRANT SELECT` with
+no DDL. The runtime role could not read `registry.use_profiles`, the canonical vocabulary
+-- the one table migration 0021 created and forgot to grant, unnoticed because nothing read
+it at runtime. **The vocabulary cannot be resolved from what was already readable**:
+`source_eligibility` and `assessed_use_profile` enumerate the profiles that have BEEN USED,
+not those that are REGISTERED, so validating against them would refuse a registered profile
+nobody has reviewed under yet -- the state every new profile begins in. No row is inserted,
+updated or deleted; there is no historical-data consequence; and the runtime role still
+cannot write anywhere in `registry`.
+
+**THREE PLACES PINNED A MOVING FACT.** Applying 0036 broke two CI gates and one pytest
+test that compared the LIVE migration head against a literal, asserting historical facts through a measurement of the
+present -- so any later migration would have broken them. Each now asserts that the
+migration it NAMES exists and that its own record still says what it said. **Being the
+newest was never the property that made either record correct.**
+
+**BOTH MISSION 1.17 TRIPWIRES WERE RE-POINTED, NOT DELETED.** The duplicate-set assertion
+listed eight source ids and grew with every profile alignment; it is now RELATIONAL,
+because **a test pinned to eight names would fail the next time the registry legitimately
+grows, which is a test asserting that the project may never progress**. The conditions
+assertion pinned `fred` at six, and the dangerous part was never the count: the six
+collapsed to **three distinct condition_keys**, so a reader deduplicating by key would have
+seen a plausible answer assembled from two profiles' facts.
+
+**ALL TEN LEAKAGE CASES COVERED, FIVE OF THEM CONSTRUCTED.** The seeded registry gives
+CASE A free and cannot give CASE B at all, and **skipping the direction the data happens
+not to lean would have left the leak that direction could carry untested**. The fixtures
+obey the rules they test around -- the registry refuses an approval with no evidence and a
+condition satisfied by a bare boolean -- and purge BEFORE inserting, because a setup that
+raises halfway leaves a row the next run then fails on for unrelated reasons.
+
+**Verification.** Probe of **14 deliberate violations, 14 caught, 0 escaped**, plus **3 of
+3 positive controls**, router restored byte for byte. **TWO ESCAPED ON THE FIRST RUN**, and
+both were exactly the ones the brief warns about: resolving validity from reviews instead
+of the vocabulary, and hard-coding the two profile names. Both pass against a suite that
+only ever names the two live profiles, so closing them needed a fixture registering **a
+third profile with no reviews** -- the only case that tells the three implementations
+apart. **3029 bare-python tests**; both runners green; `ruff format --check`, `ruff check`
+and mypy through `uv`; contract generation `--check`; all **48** CI gates.
+
+**ZERO research mutation and zero external action.** RawRecords 325, Normalized 325,
+Signals 33, Claims 44, revisions 45, Evidence 58, INFERRED 1, thresholds 1, derivations 1,
+refusals 0, ReliabilityAssessments 4, independence groups 0, Opportunities 1/1/7,
+Embeddings 0, registered sources 29, use_profiles 2 -- all unchanged. 0 research API calls,
+0 provider contacts, 0 model calls, 0 embeddings, 0 scores. **Historical RawRecords were
+not backfilled** and `build_raw_record` still writes `use_profile` on new ones: EXPLICIT
+for new, NOT_ESTABLISHED_AND_NOT_BACKFILLED for historical. Globalping untouched: R1
+`R1_PASS_PROVIDER_DECLARED_NO_REDIRECT`, R2 PARTIAL, **11 PASS / 1 PARTIAL / 0 FAIL**,
+`COUNTERPART_UNRESOLVED`.
+
+New: `infrastructure/db/migrations/0036_grant_use_profile_vocabulary.sql`,
+`docs/data/use-profile-scoped-governance-read-v1.md`,
+`services/gateway/python/tests/test_source_use_profile_scoping.py` (39 tests), and
+`docs/reports/mission-1.75-report.md`.
+
+Changed: `services/gateway/python/sros_gateway/api/sources.py` (all three routes);
+`services/acquisition/python/sros_acquisition/registry/repositories.py` loses a hard-coded
+profile; `services/gateway/python/tests/test_integration.py` re-points both tripwires;
+`infrastructure/scripts/render_persistence_orchestration.py`,
+`render_refusal_provenance_schema.py` and
+`services/nlp/python/tests/test_refusal_provenance_schema.py` stop pinning the live
+migration head -- **the third surfaced only because a background run's exit code was
+checked rather than trusted**;
+`docs/CLAUDE.md` 1.117 to 1.118.
+
+Unchanged: every source review, every verdict, the eligibility view, the collector trigger,
+`build_raw_record`, and every Globalping record.
 
 ## 1.116 - 2026-09-06 (Sprint 1 / Mission 1.74.7)
 
