@@ -1,0 +1,142 @@
+{
+  "$comment": "Mission 1.74.1. The operator approved dispatch of ONE enquiry. This record sits BESIDE the frozen packet rather than inside it, because Mission 1.66 settled that marking a frozen document APPROVED changes the bytes that were approved -- and here it would not even move the packet's digest, since that covers only the six binding fields, and it would still change the artifact the operator read.",
+  "record_version": "1.0.0",
+  "mission": "1.74.1",
+  "recorded_at": "2026-09-06",
+  "exact_predicate_frozen": false,
+  "target_values_retrieved": 0,
+  "approval": {
+    "$comment": "The approval names a document by its hash, recomputed rather than asserted.",
+    "approval_given": true,
+    "approved_by": "operator",
+    "approval_recorded_in_this_document_rather_than_in_the_packet": true,
+    "why": "Mission 1.66. An approval flag written into the frozen packet would change the artifact the operator read, and the packet's own validator asserts that the packet records no approval. That field means THIS DOCUMENT RECORDS NO APPROVAL and never that no approval exists.",
+    "packet_path": "docs/data/globalping-r1-enquiry-packet-v1.json",
+    "packet_file_sha256": "55ad7b9678c2e35aea662c6116dd8a8c8b7234ee653054b17cdba628eb0a4225",
+    "packet_edited_by_this_mission": false,
+    "packet_content_sha256_changed": false,
+    "hash_recomputed_from_the_packet_as_stored": true,
+    "approved_body_sha256": "78211329b7926c8c522df6b338dfdbf3410d768925e4e02a5831163a71c657a4"
+  },
+  "approved_action": {
+    "$comment": "Mission 1.65's envelope rule, one layer out: the digest binds the ACTION and excludes itself, the execution status and the recorded date. Changing the mechanism, the target, the identity or the title produces a different approval that SUPERSEDES this one rather than editing it.",
+    "approves": "GP-R1-Q1",
+    "approved_content_sha256": "9eb7454581b65ccb713e6c98047ac4ad02a7fd8ff3e2bd2da1887cd9b4acb1d9",
+    "mechanism": "OPERATOR_MANUAL_GITHUB_ISSUE",
+    "target_repository": "jsdelivr/globalping",
+    "identity": "@Speekyx",
+    "approved_title": "HTTP measurement: is a 3xx response returned without following the redirect?",
+    "maximum_public_posts": 1,
+    "approval_sha256": "bcddd2b85a1a7be86bb75ac7e1d749ad9269c88cc37ade63dcd4cbc28abb6331",
+    "hash_covers": [
+      "approves",
+      "approved_content_sha256",
+      "mechanism",
+      "target_repository",
+      "identity",
+      "approved_title",
+      "maximum_public_posts"
+    ],
+    "hash_excludes": [
+      "approval_sha256",
+      "execution",
+      "recorded_at"
+    ],
+    "channel_matches_the_packet": true,
+    "channel_match_basis": "the packet's channel is PUBLIC_TECHNICAL_CHANNEL and its recipient is the provider's public issue tracker; the approved mechanism posts one public issue on that tracker, so the approved action is the action the packet describes",
+    "every_binding_field_is_pinned": true,
+    "why_that_differs_from_mission_1_66": "the ONYPHE envelope bound a PLACEHOLDER sender, because under manual email the sender is not determined until the send, and Mission 1.65 stated that cost in advance: the hash pinned three fields of four. Here the destination is a public repository rather than a mailbox, so mechanism, target, identity and title are all determined before the act. The cost stated there does not recur here."
+  },
+  "execution": {
+    "$comment": "An approval says an action MAY be performed. Only a performance says it WAS, and this record must not fill itself in -- every field an execution needs is already known from the approval, which is exactly what makes a fictional record easy.",
+    "status": "PENDING_MANUAL_OPERATOR_ACTION",
+    "public_posts_made": 0,
+    "issue_url": null,
+    "issue_created_by_this_repository": false,
+    "gh_issue_create_invoked": false,
+    "github_api_calls_made_by_this_repository": 0,
+    "operator_attestation_recorded": false,
+    "attestation_level": null,
+    "attestation_levels_defined": [
+      "OPERATOR_ATTESTED",
+      "BYTE_VERIFIED"
+    ],
+    "byte_verification_is_possible_for_this_channel": true,
+    "why_byte_verification_is_possible_here": "Mission 1.66 could reach only OPERATOR_ATTESTED because a manual email send happens inside a mail client nothing here can observe. A public GitHub issue has a durable public URL, so once the operator supplies it the posted title and body can be compared against the approved ones. The ceiling that arc hit is a property of the CHANNEL rather than of manual sending.",
+    "upgrade_path": "the operator posts the issue and supplies its URL; a later mission retrieves it, compares the posted title and body against this approval, and records BYTE_VERIFIED. Until then the status stays PENDING_MANUAL_OPERATOR_ACTION.",
+    "reachable_only_through": "an explicit operator attestation that the post was made, plus the issue URL. This repository cannot reach SENT by any other route."
+  },
+  "integrity_checks_frozen_before_any_post": {
+    "$comment": "Frozen now, which is the only time they mean anything. A posted issue cannot be unposted, so a duplicate is REPORTED rather than tidied away.",
+    "posted_title_must_match_approved_title": true,
+    "posted_body_must_match_the_frozen_packet_body": true,
+    "posted_repository_must_match_target": true,
+    "one_approval_authorises_exactly_one_public_post": true,
+    "a_second_post_is_reported_as_a_duplicate_not_silently_accepted": true,
+    "a_divergence_never_repairs_this_approval": true,
+    "a_divergence_is_recorded_beside_it": true
+  },
+  "scope": {
+    "$comment": "The operator approved ONE enquiry. The other is untouched.",
+    "approved_enquiries": [
+      "GP-R1-Q1"
+    ],
+    "r2_approved": false,
+    "r2_packet_path": "docs/data/globalping-r2-enquiry-packet-v1.json",
+    "r2_packet_edited": false,
+    "r2_send_status_unchanged": "NOT_AUTHORIZED",
+    "why_r2_is_not_covered": "the operator approved GP-R1-Q1 only, and an approval of one action is not an approval of another that happens to have been prepared alongside it",
+    "residuals_closed_by_this_mission": 0,
+    "r1_verdict_unchanged": "R1_PARTIAL_IMPLEMENTATION_ONLY",
+    "qualification_recomputed": false,
+    "an_approval_to_ask_is_not_an_answer": true
+  },
+  "mission_accounting": {
+    "PUBLIC_POSTS": 0,
+    "GITHUB_ISSUES_CREATED": 0,
+    "GH_INVOCATIONS": 0,
+    "EMAILS_SENT": 0,
+    "MAILBOX_SEARCHES": 0,
+    "PROVIDER_CONTACTS": 0,
+    "ENQUIRIES_SENT": 0,
+    "GLOBALPING_API_EXECUTIONS": 0,
+    "GLOBALPING_MEASUREMENTS_CREATED": 0,
+    "TARGET_HTTP_REQUESTS": 0,
+    "SROS_FETCHER_RUNS": 0,
+    "ACCOUNTS_CREATED": 0,
+    "TOKENS_CREATED": 0,
+    "CREDENTIAL_READS": 0,
+    "FIRST_PARTY_DOCUMENT_REQUESTS": 0,
+    "SOURCES_REGISTERED": 0,
+    "SOURCE_GOVERNANCE_MUTATIONS": 0,
+    "CLAIMS_CREATED": 0,
+    "EVIDENCE_CREATED": 0,
+    "INDEPENDENCE_GROUPS_CREATED": 0,
+    "RELIABILITY_VALUES_ASSIGNED": 0,
+    "SCORES": 0,
+    "OPPORTUNITY_MUTATIONS": 0,
+    "MODEL_CALLS": 0,
+    "EMBEDDINGS": 0,
+    "MIGRATIONS": 0,
+    "CONSTRUCTS_SELECTED": 0,
+    "QUANTITY_CLASSES_SELECTED": 0,
+    "CANONICAL_MUTATIONS": 0
+  },
+  "parallel_state_untouched": {
+    "onyphe_response_status": "NOT_CHECKED_AFTER_DISPATCH",
+    "netlas_contact_state": "STILL_PENDING",
+    "onyphe_mailbox_searched": false,
+    "netlas_enquiry_sent": false,
+    "scanner_arc_reopened": false,
+    "adr_039_weakened": false,
+    "mission_1_74_records_edited": false
+  },
+  "recommended_next_action": {
+    "$comment": "It belongs to a person, and it happens outside this repository.",
+    "action": "the operator posts one public issue on jsdelivr/globalping and supplies its URL",
+    "performed_by": "OPERATOR",
+    "this_repository_may_not_perform_it": true,
+    "mission_1_75_not_started": true,
+    "r2_dispatch_requires_its_own_approval": true
+  }
+}

@@ -672,6 +672,20 @@ jobs:
       - name: Globalping residual closure matches its records
         run: uv run python infrastructure/scripts/render_globalping_residuals.py --check
 
+      # Mission 1.74.1. One enquiry approved for dispatch by a named mechanism, and
+      # nothing posted. AN APPROVAL IS NOT AN EXECUTION, and that is easy to lose here
+      # because once the approval exists every field an execution record needs is already
+      # known. The validator refuses: an approval that no longer names the packet as
+      # stored; an approval written into the packet it approves; a packet edited to say it
+      # was approved or sent; an action digest that does not recompute, or that hashes its
+      # own value, the execution status or the date; a changed mechanism, target, identity
+      # or title under an unchanged hash; an execution claiming a post with no operator
+      # attestation; BYTE_VERIFIED with no URL to verify against; more posts than the one
+      # authorised; R2 carried along by an approval that named R1; Mission 1.74's records
+      # rewritten; and any issue, gh invocation or GitHub API call made by this repository.
+      - name: R1 dispatch approval matches its record
+        run: uv run python infrastructure/scripts/render_r1_dispatch_approval.py --check
+
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
   # Pinned to the same versions as infrastructure/compose.
