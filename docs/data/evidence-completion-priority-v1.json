@@ -1,0 +1,163 @@
+{
+  "$comment": "Mission 1.76. THE PRIORITY DECISION. No score, no weights, no percentages. Tiers are ordinal and the comparison inside a tier is lexicographic over criteria fixed before the candidates were read. A tie is reported as a tie.",
+  "record_version": "1.0.0",
+  "mission": "1.76",
+  "recorded_at": "2026-09-06",
+  "record_kind": "EVIDENCE_COMPLETION_PRIORITY",
+  "audit_record": "docs/data/opportunity-evidence-breadth-audit-v1.json",
+  "candidate_record": "docs/data/evidence-completion-candidate-moves-v1.json",
+  "no_numeric_score_issued": true,
+  "why_no_score": "a priority number here would be a weighted sum of judgements nobody calibrated, and it would look exactly like a measurement. The tiers say what they mean and the lexicographic order says which criterion decided.",
+  "elimination": {
+    "$comment": "Applied before ranking, on the rules fixed in advance.",
+    "eliminated": [
+      {
+        "candidate_id": "M7",
+        "rule": "structurally unable to affect any current decision",
+        "detail": "Globalping C9 is PARTIAL and no route is qualified"
+      },
+      {
+        "candidate_id": "M8",
+        "rule": "NOT_ESTABLISHED contribution class",
+        "detail": "no registered source supplies the dimension"
+      }
+    ],
+    "not_eliminated_but_downgraded": [
+      {
+        "candidate_id": "M2",
+        "detail": "NOT_THE_SAME_SUBJECT as the only Opportunity, kept for comparison"
+      },
+      {
+        "candidate_id": "M4",
+        "detail": "NOT_THE_SAME_SUBJECT and KNOWN_DEPENDENT, kept for comparison"
+      }
+    ]
+  },
+  "lexicographic_criteria": [
+    "expected information gain",
+    "adds a missing dimension before more of the same",
+    "governance readiness",
+    "held data or an existing collector before new implementation",
+    "independence potential",
+    "direct product or commercial relevance",
+    "smallest bounded engineering or review surface"
+  ],
+  "tiers": {
+    "TIER_1_EXECUTABLE_DECISION_CHANGING": [
+      "M1"
+    ],
+    "TIER_2_EXECUTABLE_MAJOR_BREADTH": [],
+    "TIER_3_BOUNDED_UNBLOCKING_THEN_HIGH_VALUE": [
+      "M3",
+      "M6"
+    ],
+    "TIER_4_USEFUL_BUT_INCREMENTAL": [
+      "M2",
+      "M4",
+      "M5"
+    ],
+    "TIER_5_NOT_CURRENTLY_ACTIONABLE": []
+  },
+  "tier_placements": {
+    "M3": "placed in tier 3 rather than tier 4 on the second lexicographic criterion and not on gain: it is the only move that addresses the Opportunity's one non-Wikimedia row, and it needs an external documentation retrieval before it can begin, which is what keeps it out of tier 1.",
+    "M6": "placed in tier 3 on an UNBOUNDED gain, which is not a large one. It is the only candidate that could add a DIMENSION the Opportunity records as unsupported, and it sits above the tier-4 moves because they are bounded and known to add nothing new. It is not higher because three sequential steps -- a governance review, a collector, a normalizer -- is not one bounded move, and its subject relation is UNDETERMINED.",
+    "M1": "placed in tier 1 on the first lexicographic criterion: it is the only candidate whose gain is DECISION_CHANGING and which is executable with no external action. It sits above M6's UNBOUNDED gain because tier 1 requires executability, and M6 needs a governance review, a collector and a normalizer before it could begin -- an unbounded gain three steps away is not a reason to defer a bounded one available now."
+  },
+  "tier_2_is_empty_because": "no candidate both adds a currently absent decision-relevant dimension AND is executable now. M6 would add one and is not executable; every executable candidate completes scorability rather than adding a dimension. That emptiness is the finding, not a gap in the analysis: the registered portfolio cannot currently reach the dimensions this hypothesis is missing.",
+  "dominance": [
+    {
+      "pair": "M1 over M2",
+      "dominates": true,
+      "why": "no worse on every load-bearing criterion and strictly better on information gain (DECISION_CHANGING against LOW_INCREMENTAL_GAIN) and on subject relationship (DIRECT against NOT_THE_SAME_SUBJECT)"
+    },
+    {
+      "pair": "M1 over M4",
+      "dominates": true,
+      "why": "strictly better on gain, subject relationship and independence potential"
+    },
+    {
+      "pair": "M1 over M5",
+      "dominates": true,
+      "why": "strictly better on gain and independence potential, equal on the rest"
+    },
+    {
+      "pair": "M1 over M3",
+      "dominates": false,
+      "why": "M3 is strictly better on independence potential and requires no code. M1 is strictly better on gain and needs no external action. Neither dominates, and the TIER separates them rather than a tie-break.",
+      "separated_by": "expected information gain, the first lexicographic criterion"
+    },
+    {
+      "pair": "M1 over M6",
+      "dominates": false,
+      "why": "M6 is strictly better on adding a missing DIMENSION, which M1 does not do at all. M1 is strictly better on gain, governance readiness, collector readiness and engineering surface. Neither dominates.",
+      "separated_by": "executability: M6 needs a governance review, a collector and a normalizer"
+    },
+    {
+      "pair": "anything over M1",
+      "dominates": false,
+      "why": "no candidate is no-worse than M1 on every load-bearing criterion. M3 and M6 each beat it on one criterion and lose on several."
+    }
+  ],
+  "selection": {
+    "primary_outcome": "NEXT_BOUNDED_EVIDENCE_MOVE_SELECTED",
+    "selected_candidate": "M1",
+    "uniquely_dominant": false,
+    "why_selected_without_being_uniquely_dominant": "dominance is not the selection rule; it is the veto. §14 forbids selecting a DOMINATED candidate, and M1 is dominated by nothing. Selection is then by tier, and M1 is the only member of TIER 1 -- the only candidate that is both executable now and targets a currently named sufficiency blocker.",
+    "not_selected_because_it_is_the_only_opportunity": "the Docker hypothesis was compared on its measured breadth against every other subject holding Evidence. Having an Opportunity row is not a priority criterion, and M2 and M4 -- both attached to no Opportunity -- were ranked on their own terms and lost on information gain.",
+    "dominated_by_another": false
+  },
+  "next_mission": {
+    "NEXT_MISSION_ID": "1.77",
+    "NEXT_MISSION_TITLE": "Wikimedia Measurement Scope Binding V1",
+    "TARGET_SUBJECT": "the Wikimedia pageview Evidence lineage, including the six rows on the only Opportunity",
+    "TARGET_DIMENSION": null,
+    "TARGET_PROPERTY": "SCORABILITY",
+    "TARGET_SOURCE": "wikimedia-pageviews, already held",
+    "WHY_THIS_MOVE": "a reviewed reliability for exactly this measurement and purpose already exists and does not apply, because the Evidence cannot state its resource identity. The corpus is one deterministic binding away from its first scorable evidence.",
+    "WHAT_IT_CAN_ESTABLISH": [
+      "that a reviewed reliability applies to the held Wikimedia Evidence",
+      "that aggregation over the Opportunity's Wikimedia rows is reachable",
+      "that the Opportunity's first stated epistemic limitation is no longer true as written"
+    ],
+    "WHAT_IT_CANNOT_ESTABLISH": [
+      "independence: independence_state stays UNKNOWN and no group may be created",
+      "any new evidence dimension; the hypothesis stays at two supported dimensions",
+      "willingness to pay, buyer existence, or any commercial dimension",
+      "that the packet is wholly scorable, because its Stack Exchange row has no assessment",
+      "a score: aggregation becoming reachable is not aggregation being run"
+    ],
+    "EXTERNAL_ACTION_REQUIRED": false,
+    "CANONICAL_MUTATION_EXPECTED": "writing reliability onto held Evidence rows, which IS a canonical mutation and is why it belongs to the next mission rather than to this one",
+    "IT_IS_ONE_MOVE": true,
+    "why_it_is_one_move": "it is category A of §24 -- reuse held data through the repository's own deterministic path -- and it is deliberately not combined with M3's review, which would make a pipeline out of two missions."
+  },
+  "globalping_dependency": {
+    "$comment": "Recorded as a dependency, never as a candidate.",
+    "state": "COUNTERPART_UNRESOLVED",
+    "c9": "PARTIAL",
+    "selectable_now": false,
+    "why": "no route is qualified while C9 is PARTIAL",
+    "what_a_future_qualification_could_unlock": "an independently produced HTTP measurement, which is the only route currently visible to genuine evidence independence rather than source diversity",
+    "checked_externally_by_this_mission": false
+  },
+  "mission_accounting": {
+    "RESEARCH_API_CALLS": 0,
+    "EXTERNAL_PROVIDER_CONTACTS": 0,
+    "MODEL_CALLS": 0,
+    "EMBEDDINGS": 0,
+    "RAW_RECORDS_CREATED": 0,
+    "NORMALIZED_RECORDS_CREATED": 0,
+    "SIGNALS_CREATED": 0,
+    "CLAIMS_CREATED": 0,
+    "EVIDENCE_CREATED": 0,
+    "OPPORTUNITY_MUTATIONS": 0,
+    "INDEPENDENCE_GROUPS_CREATED": 0,
+    "RELIABILITY_ASSESSMENTS_CREATED": 0,
+    "SOURCES_REGISTERED": 0,
+    "SOURCE_GOVERNANCE_MUTATIONS": 0,
+    "SCORES": 0,
+    "CALIBRATIONS": 0,
+    "MIGRATIONS": 0,
+    "CANONICAL_MUTATIONS": 0
+  }
+}

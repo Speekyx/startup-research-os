@@ -672,6 +672,17 @@ jobs:
       - name: Globalping residual closure matches its records
         run: uv run python infrastructure/scripts/render_globalping_residuals.py --check
 
+      # Mission 1.76. Which next evidence move, and why that one. MORE ROWS IS NOT
+      # MORE INFORMATION, so the gate refuses: a row count read as breadth; one
+      # proposition kind counted twice as two; UNKNOWN independence read as
+      # independence; commercial relevance read as willingness to pay; eligibility
+      # borrowed from another use profile; an unregistered source; a PROHIBITED source
+      # called executable; an UNDETERMINED subject relation read as DIRECT; any numeric
+      # ranking score; a dominated candidate selected; Globalping selected while C9 is
+      # PARTIAL; and any canonical mutation, model call or embedding.
+      - name: Evidence breadth prioritization matches its records
+        run: uv run python infrastructure/scripts/render_evidence_breadth_priority.py --check
+
       # Mission 1.74.1. One enquiry approved for dispatch by a named mechanism, and
       # nothing posted. AN APPROVAL IS NOT AN EXECUTION, and that is easy to lose here
       # because once the approval exists every field an execution record needs is already
