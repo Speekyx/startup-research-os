@@ -1,0 +1,168 @@
+{
+  "$comment": "§33 to §40. Mission 1.71 refused to invent numbers as though discovered. This is a POLICY mission, so the project chooses its own conservative limits -- and every one carries value_source PROJECT_POLICY_DEFAULT so nobody later reads it as a finding.",
+  "record_version": "1.0.0",
+  "mission": "1.72",
+  "recorded_at": "2026-09-06",
+  "profile_id": "BOUNDED_HTTP_LOAD_PROFILE_V1",
+  "selection_principle": {
+    "$comment": "§35.",
+    "principle": "the smallest operationally useful initial profile",
+    "optimised_for": [
+      "bounded pilot",
+      "low target burden",
+      "reproducibility",
+      "auditability",
+      "operator safety"
+    ],
+    "optimised_for_throughput": false,
+    "this_is_an_experimental_apparatus_not_a_production_crawler": true
+  },
+  "bounds": [
+    {
+      "bound": "MAX_CORPUS_TARGETS",
+      "value": 500,
+      "unit": "targets",
+      "value_source": "PROJECT_POLICY_DEFAULT",
+      "why": "small enough that one run is reviewable by a person reading its accounting, and large enough that a population is not trivially one site"
+    },
+    {
+      "bound": "GLOBAL_CONCURRENCY",
+      "value": 4,
+      "unit": "in-flight requests",
+      "value_source": "PROJECT_POLICY_DEFAULT",
+      "why": "a bounded pilot on one operator machine; throughput is explicitly not the objective"
+    },
+    {
+      "bound": "PER_ORIGIN_CONCURRENCY",
+      "value": 1,
+      "unit": "in-flight requests per origin",
+      "value_source": "PROJECT_POLICY_DEFAULT",
+      "why": "one request at a time to any one host is the lowest burden a measurement can impose while still finishing"
+    },
+    {
+      "bound": "PER_ORIGIN_REQUEST_RATE",
+      "value": 0.2,
+      "unit": "requests per second per origin",
+      "value_source": "PROJECT_POLICY_DEFAULT",
+      "why": "one request every five seconds; deliberately slower than a browsing human"
+    },
+    {
+      "bound": "CONNECT_TIMEOUT",
+      "value": 10,
+      "unit": "seconds",
+      "value_source": "PROJECT_POLICY_DEFAULT",
+      "why": "long enough for a slow but working host"
+    },
+    {
+      "bound": "READ_TIMEOUT",
+      "value": 20,
+      "unit": "seconds",
+      "value_source": "PROJECT_POLICY_DEFAULT",
+      "why": "bounded so a slow-drip response cannot hold a worker indefinitely"
+    },
+    {
+      "bound": "MAX_REDIRECTS",
+      "value": 5,
+      "unit": "hops",
+      "value_source": "PROJECT_POLICY_DEFAULT",
+      "why": "matches the floor RFC 9309 §2.3.1.2 states for robots retrieval, so one number governs both paths and a reader is not comparing two limits"
+    },
+    {
+      "bound": "MAX_RETRIES",
+      "value": 0,
+      "unit": "retries",
+      "value_source": "PROJECT_POLICY_DEFAULT",
+      "why": "a retry can observe a different world state, and Mission 1.71 deferred the which-attempt-counts rule to the construct. With no construct, zero avoids creating records whose selection rule nobody has decided"
+    },
+    {
+      "bound": "MAX_HEADER_BYTES",
+      "value": 65536,
+      "unit": "bytes",
+      "value_source": "PROJECT_POLICY_DEFAULT",
+      "why": "64 KiB of headers is far beyond ordinary and finite"
+    },
+    {
+      "bound": "MAX_RESPONSE_READ_BYTES",
+      "value": 1048576,
+      "unit": "bytes",
+      "value_source": "PROJECT_POLICY_DEFAULT",
+      "why": "1 MiB read cap. This is the NETWORK bound and it applies even though no body is persisted, because not storing is not the same as not receiving"
+    },
+    {
+      "bound": "MAX_TOTAL_BYTES_PER_TARGET",
+      "value": 2097152,
+      "unit": "bytes",
+      "value_source": "PROJECT_POLICY_DEFAULT",
+      "why": "2 MiB across every hop, so a redirect chain cannot multiply the read cap"
+    },
+    {
+      "bound": "MAX_RUN_DURATION",
+      "value": 21600,
+      "unit": "seconds",
+      "value_source": "PROJECT_POLICY_DEFAULT",
+      "why": "six hours; a run that cannot finish inside one operator sitting is not a bounded pilot"
+    },
+    {
+      "bound": "ROBOTS_REQUEST_BUDGET",
+      "value": 1,
+      "unit": "requests per origin per run",
+      "value_source": "PROJECT_POLICY_DEFAULT",
+      "why": "one fetch per origin, no cache across runs, and it counts toward the origin budget"
+    },
+    {
+      "bound": "MAX_REQUESTS_PER_TARGET",
+      "value": 6,
+      "unit": "requests",
+      "value_source": "PROJECT_POLICY_DEFAULT",
+      "why": "one initial request plus MAX_REDIRECTS hops. Robots is counted per ORIGIN rather than per target, so it is not included here"
+    },
+    {
+      "bound": "BACKOFF_POLICY",
+      "value": "DISABLED",
+      "unit": "policy",
+      "value_source": "PROJECT_POLICY_DEFAULT",
+      "why": "explicitly disabled rather than absent, because MAX_RETRIES is 0 and a backoff with nothing to back off from would be a setting nobody could reach"
+    }
+  ],
+  "bound_count": 15,
+  "every_value_is_finite_or_explicitly_disabled": true,
+  "forbidden_values": {
+    "$comment": "§36. A load-bearing limit may not be absent, and absent has many spellings.",
+    "none": false,
+    "unlimited": false,
+    "infinite": false,
+    "automatic": false,
+    "library_default": false
+  },
+  "every_value_source_is_project_policy": true,
+  "values_presented_as": {
+    "safe_according_to_industry": false,
+    "legally_required": false,
+    "provider_recommended": false,
+    "evidence_derived": false
+  },
+  "per_origin_accounting": {
+    "$comment": "§37.",
+    "one_target_equals_one_request": false,
+    "redirects_count_toward_the_origin_budget": true,
+    "robots_requests_count_toward_the_origin_budget": true,
+    "the_run_must_report": [
+      "requests per manifest target",
+      "requests per origin",
+      "total requests"
+    ]
+  },
+  "retry_reasoning": {
+    "$comment": "§38.",
+    "max_retries": 0,
+    "why_zero": "retries create temporal ambiguity, and Mission 1.71 left the which-attempt-defines-the-observation rule to the construct. Choosing a non-zero value now would create records under a selection rule that does not exist.",
+    "if_a_later_profile_enables_retries": "attempts remain individually recorded, per the run contract"
+  },
+  "body_and_network_interaction": {
+    "$comment": "§39. The trap this bullet exists to close.",
+    "body_persistence": "DISABLED",
+    "network_read_bound": "MAX_RESPONSE_READ_BYTES",
+    "not_persisting_a_body_means_not_receiving_bytes": false,
+    "the_apparatus_terminates_reading_under_a_finite_bound": true
+  }
+}

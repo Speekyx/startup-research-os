@@ -1,0 +1,45 @@
+{
+  "$comment": "§4, §7, §48, §49. Which gate applies is a FUNCTION of what is retained, never a label the caller chooses.",
+  "record_version": "1.0.0",
+  "mission": "1.72",
+  "recorded_at": "2026-09-06",
+  "tracks": {
+    "SOURCE_COLLECTION": {
+      "governs": "retrieval whose material may become normalized source content and feed RawRecord, NormalizedRecord, Signal, Claim and Evidence",
+      "gate": "registry.source_eligibility plus resource-level acquisition authorization",
+      "unchanged_by_this_mission": true
+    },
+    "PUBLIC_HTTP_OBSERVATION": {
+      "governs": "one governed request against a publicly accessible HTTP target under a frozen measurement contract, retaining a transport-level outcome",
+      "gate": "PUBLIC_HTTP_OBSERVATION_POLICY_V1",
+      "created_by_this_mission": true
+    }
+  },
+  "precedence_rule": {
+    "$comment": "§7. Deterministic, and not selectable by the caller.",
+    "rule": "the track is determined by the DECLARED RETENTION PROFILE, not by the caller's stated intent. If the profile retains a response body, publisher expressive content, or any material whose value to us is what the publisher wrote, SOURCE_COLLECTION_GOVERNANCE_APPLIES.",
+    "caller_may_choose_its_track": false,
+    "when_both_could_apply": "SOURCE_COLLECTION wins",
+    "why": "the stricter rights question must win, and a classification a caller can pick is a classification that will be picked to suit."
+  },
+  "the_observation_track_may_not_be_used_for": [
+    "article ingestion",
+    "document corpus acquisition",
+    "page-content research",
+    "web scraping for ideation",
+    "news ingestion",
+    "forum ingestion",
+    "dataset ingestion",
+    "commercial content harvesting",
+    "general-purpose site crawling"
+  ],
+  "enforced_structurally_rather_than_by_prose": true,
+  "how_it_is_enforced": "the retention policy's persisted classes are an allowlist that contains no body class, so a body-retaining configuration is not expressible in the observation track's own contract rather than being forbidden by a note beside it",
+  "forbidden_repository_changes": {
+    "$comment": "§49.",
+    "making_arbitrary_public_sites_eligible_sources": false,
+    "making_unknown_source_rights_pass": false,
+    "relabelling_measurement_targets_as_registered_sources": false
+  },
+  "a_caller_can_determine_the_gate_deterministically": true
+}

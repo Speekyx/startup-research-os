@@ -1,0 +1,169 @@
+{
+  "$comment": "§9 to §15. Robots handling is ARCHITECTURAL: it changes the request budget, the attempt accounting, the terminal taxonomy and the missingness classes, so it is a state machine rather than prose.",
+  "record_version": "1.0.0",
+  "mission": "1.72",
+  "recorded_at": "2026-09-06",
+  "policy_id": "ROBOTS_POLICY_V1",
+  "decision": "R1_RESPECT_DISALLOW",
+  "options_evaluated": {
+    "R0_IGNORE_ROBOTS": {
+      "selected": false,
+      "why": "source-registry-v1.md §1 rule 6 states the project's stance directly: robots directives are limits, not obstacles. Ignoring them would contradict a rule the project already holds, which is not something a policy mission may do by choosing a different default."
+    },
+    "R1_RESPECT_DISALLOW": {
+      "selected": true,
+      "why": "it is deterministic, it matches the project's existing stance, and its failure semantics can be grounded in the standard rather than invented."
+    },
+    "R2_FAIL_CLOSED_ON_UNKNOWN_ROBOTS": {
+      "selected": false,
+      "why": "excluding every target whose robots.txt is merely ABSENT would exclude a large share of the web and make the measured population a function of whether a site publishes a robots.txt -- a coverage bias introduced by us, in a mission whose whole point is population honesty. It is adopted for the UNREACHABLE cases, where the standard itself requires complete disallow, and refused for the ABSENT case, where the standard permits access.",
+      "partially_adopted_for": [
+        "5xx",
+        "network failure",
+        "timeout"
+      ]
+    },
+    "R3_TARGET_POLICY_DECIDES": {
+      "selected": false,
+      "why": "per-target variation is non-determinism by another name, and it reintroduces the unevidenced per-target judgement GOV-1 rejected as Model C."
+    }
+  },
+  "robots_is_a_legal_permission_system": false,
+  "what_this_policy_is": "a project rule about our own conduct. It makes no claim that honouring robots grants permission, or that a target without robots has permitted anything.",
+  "state_machine": [
+    {
+      "condition": "ROBOTS_2XX_PARSEABLE",
+      "outcome": "EVALUATE_RULES",
+      "rfc_9309_position": "MUST follow the parseable rules (§2.3.1.1)",
+      "stricter_than_the_rfc": false,
+      "why": "the ordinary case; the apparatus obeys what it read"
+    },
+    {
+      "condition": "ROBOTS_3XX_WITHIN_LIMIT",
+      "outcome": "FOLLOW_AND_EVALUATE",
+      "rfc_9309_position": "SHOULD follow at least five consecutive redirects, even across authorities, and the file MUST be fetched, parsed and its rules followed in the context of the initial authority (§2.3.1.2)",
+      "stricter_than_the_rfc": false,
+      "why": "hops count toward the origin request budget rather than being invisible"
+    },
+    {
+      "condition": "ROBOTS_3XX_BEYOND_LIMIT",
+      "outcome": "TARGET_EXCLUDED",
+      "rfc_9309_position": "the RFC's floor is five consecutive redirects (§2.3.1.2)",
+      "stricter_than_the_rfc": true,
+      "why": "beyond the floor the file is undefined for us, and the conservative reading excludes"
+    },
+    {
+      "condition": "ROBOTS_404_OR_410",
+      "outcome": "TARGET_PROCEEDS",
+      "rfc_9309_position": "if a server status code indicates that the robots.txt file is unavailable to the crawler, then the crawler MAY access any resources on the server (§2.3.1.3)",
+      "stricter_than_the_rfc": false,
+      "why": "this is the standard's own position and the alternative is worse than strict: excluding every target without a robots.txt would make the population a function of whether a site publishes one, which is a coverage bias WE would be introducing"
+    },
+    {
+      "condition": "ROBOTS_OTHER_4XX",
+      "outcome": "TARGET_PROCEEDS",
+      "rfc_9309_position": "4xx indicates the file is unavailable; the crawler MAY access any resources (§2.3.1.3)",
+      "stricter_than_the_rfc": false,
+      "why": "same as above, excluding the two authentication-flavoured codes below"
+    },
+    {
+      "condition": "ROBOTS_401_OR_403",
+      "outcome": "TARGET_EXCLUDED",
+      "rfc_9309_position": "these are 4xx, so the RFC would permit access (§2.3.1.3)",
+      "stricter_than_the_rfc": true,
+      "why": "the project is deliberately stricter, and not arbitrarily: a robots.txt that refuses an unauthenticated client contradicts this track's own precondition that the target is publicly accessible without authentication. The exclusion follows from the track, not from caution"
+    },
+    {
+      "condition": "ROBOTS_5XX",
+      "outcome": "TARGET_EXCLUDED",
+      "rfc_9309_position": "if the robots.txt file is unreachable due to server or network errors, this means the robots.txt file is undefined and the crawler MUST assume complete disallow (§2.3.1.4)",
+      "stricter_than_the_rfc": false,
+      "why": "the standard requires it"
+    },
+    {
+      "condition": "ROBOTS_NETWORK_FAILURE",
+      "outcome": "TARGET_EXCLUDED",
+      "rfc_9309_position": "unreachable due to server or network errors; MUST assume complete disallow (§2.3.1.4)",
+      "stricter_than_the_rfc": false,
+      "why": "the standard requires it"
+    },
+    {
+      "condition": "ROBOTS_TIMEOUT",
+      "outcome": "TARGET_EXCLUDED",
+      "rfc_9309_position": "the RFC does not name a timeout separately",
+      "stricter_than_the_rfc": true,
+      "why": "treated as unreachable, which is the conservative reading of a case the standard leaves to the crawler; recorded as a project choice rather than as something the RFC says"
+    },
+    {
+      "condition": "ROBOTS_UNPARSEABLE_LINES",
+      "outcome": "EVALUATE_PARSEABLE_RULES",
+      "rfc_9309_position": "crawlers MUST try to parse each line and MUST use the parseable rules (§2.3.1.5)",
+      "stricter_than_the_rfc": false,
+      "why": "a malformed line is skipped; the file is not discarded"
+    },
+    {
+      "condition": "ROBOTS_OVER_PARSE_LIMIT",
+      "outcome": "EVALUATE_FIRST_500_KIB",
+      "rfc_9309_position": "the parsing limit MUST be at least 500 kibibytes (§2.5)",
+      "stricter_than_the_rfc": false,
+      "why": "the apparatus parses at the standard's stated minimum and ignores the remainder"
+    },
+    {
+      "condition": "ROBOTS_DISALLOWED_FOR_OUR_TOKEN",
+      "outcome": "TARGET_EXCLUDED",
+      "rfc_9309_position": "crawlers MUST use case-insensitive matching to find the group that matches the product token and then obey the rules of the group (§2.2.1)",
+      "stricter_than_the_rfc": false,
+      "why": "the point of the policy"
+    },
+    {
+      "condition": "ROBOTS_ALLOWED_FOR_OUR_TOKEN",
+      "outcome": "TARGET_PROCEEDS",
+      "rfc_9309_position": "as above (§2.2.1)",
+      "stricter_than_the_rfc": false,
+      "why": null
+    }
+  ],
+  "state_count": 13,
+  "every_condition_has_exactly_one_outcome": true,
+  "a_target_may_switch_behaviour_silently": false,
+  "rfc_provenance": {
+    "document": "RFC 9309, Robots Exclusion Protocol",
+    "retrieved_from": "https://www.rfc-editor.org/rfc/rfc9309.html",
+    "retrieved_this_mission": true,
+    "quoted_rather_than_recalled": true,
+    "why_it_was_retrieved": "§13 demands deterministic failure semantics. Writing what a standard says from memory is the error Mission 1.71 avoided by deferring CIDR blocks to IANA."
+  },
+  "preflight": {
+    "$comment": "§12. Robots retrieval is a governed stage, not invisible infrastructure.",
+    "robots_fetch_required": true,
+    "consumes_request_budget": true,
+    "counted_toward_per_origin_budget": true,
+    "outcome_vocabulary": [
+      "ROBOTS_FETCH_REQUIRED",
+      "ROBOTS_FETCH_SUCCESS",
+      "ROBOTS_NOT_FOUND",
+      "ROBOTS_FETCH_FAILED",
+      "ROBOTS_DISALLOWED",
+      "ROBOTS_ALLOWED"
+    ],
+    "an_excluded_target_leaves_the_population": false,
+    "an_excluded_target_becomes": "a ROBOTS_EXCLUDED preflight decision and a terminal accounting record"
+  },
+  "user_agent_binding": {
+    "$comment": "§14.",
+    "apparatus_has_a_named_product_token": true,
+    "the_token_is_the_same_string_sent_in_user_agent": true,
+    "matching": "case-insensitive against the product token, per RFC 9309 §2.2.1",
+    "wildcard_rule": "the `*` group is obeyed only if NO group matches our product token, which is the standard's own rule",
+    "evaluating_the_wildcard_group_when_a_specific_group_exists": false,
+    "why": "§14. Reporting that a generic rule was evaluated when an apparatus-specific rule exists and says something different would be a false statement about what was obeyed."
+  },
+  "caching": {
+    "rfc_position": "crawlers MAY cache, and SHOULD NOT use a cached version for more than 24 hours (§2.4)",
+    "project_policy": "ONE_FETCH_PER_ORIGIN_PER_RUN_NO_CACHE_ACROSS_RUNS",
+    "stricter_than_the_rfc": true,
+    "why": "a run is one measurement. A robots decision cached from an earlier run would come from a different moment than the observation it gates, which is the temporal-object confusion this arc has refused three times."
+  },
+  "requests_made_this_mission": 0,
+  "robots_target_requests": 0
+}

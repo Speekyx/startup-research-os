@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.106
+Version: 1.107
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-06 (Sprint 1 / Mission 1.71)
+Last amended: 2026-09-06 (Sprint 1 / Mission 1.72)
 
 ---
 
@@ -13,6 +13,118 @@ Last amended: 2026-09-06 (Sprint 1 / Mission 1.71)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.107 — 2026-09-06 (Sprint 1 / Mission 1.72)
+
+**`PUBLIC_HTTP_OBSERVATION_GOVERNANCE_TRACK_READY`.** All five decisions Mission 1.71
+left open are resolved, **ADR-039** adopts a distinct governance track, and **nothing is
+authorized to run.**
+
+**THE DECISION IS CONDITIONAL, AND THE CONDITION IS WHAT MAKES IT DEFENSIBLE RATHER THAN
+CONVENIENT.** The track is available only while the retained material is transport-level;
+the moment a response body is retained, the retained thing IS the publisher's material
+and source-collection governance applies instead. **GOV-1 is therefore not independent of
+GOV-3**, and had GOV-3 chosen full-response retention this ADR would not have been
+adoptable at all.
+
+**THE DISTINCTION WAS TESTED RATHER THAN ASSERTED.** If the page's content were entirely
+different and the transport outcome identical, the observation does not change; if the
+transport outcome differed and the content were identical, it does. The observation is a
+function of the transport interaction rather than of the publisher's expressive content,
+so **what is appropriated differs in kind and not in degree** -- and the obvious objection
+is answered in the record rather than left standing: a status code is information the
+publisher produced, and the six activities rule 8 governs ask whether we are appropriating
+a publisher's CONTENT OR DATABASE, not who caused a fact to be observable. **A
+project-governance distinction, explicitly not a legal conclusion.**
+
+**MODEL A WAS REFUTED ON STRUCTURE RATHER THAN EFFORT**: the evidentiary standard cannot
+be met for a target that has never published terms, because there is nothing to retrieve.
+**MODEL C WAS REFUTED AS THE WRONG LAYER** -- for such a target the operator would be
+reviewing nothing, which reproduces Model A's problem in a form that LOOKS like review
+while having no basis, and the part of it that is real is mechanical and survives as
+GOV-4's preflight. **MODEL D WAS REFUTED** because the two activities CAN be
+distinguished on material the repository already holds.
+
+**PRECEDENCE IS A FUNCTION, NOT A LABEL.** The track is determined by the DECLARED
+RETENTION PROFILE and never by the caller's stated intent; source collection wins wherever
+both could apply. **And the boundary is structural rather than a note beside it**: the
+observation track's own retention contract has no persistable body class, so a
+body-retaining configuration **is not expressible in it**. A validator check proves the
+structural claim against the contract rather than trusting the sentence.
+
+**GOV-2 IS `R1_RESPECT_DISALLOW`, AND THE FAILURE SEMANTICS WERE READ RATHER THAN
+RECALLED.** RFC 9309 was retrieved -- the single external request of a budget of eight --
+because writing what a standard says from memory is the error Mission 1.71 avoided by
+deferring CIDR blocks to IANA. **Thirteen conditions, one outcome each**, and every row
+says whether it follows the standard or is stricter than it. `R0` was refused on the
+project's own `source-registry-v1.md` §1 rule 6. **`R2` WAS REFUSED FOR A REASON WORTH
+KEEPING**: excluding every target whose robots.txt is merely ABSENT would make the
+measured population a function of whether a site publishes one, **a coverage bias WE would
+be introducing** in the very arc whose subject is population honesty -- so it is adopted
+for the UNREACHABLE cases, where the standard itself requires complete disallow, and
+refused for the ABSENT case, where the standard permits access. **401 and 403 exclude and
+the record says that is ours**, because a robots.txt refusing an unauthenticated client
+contradicts the track's own public-accessibility precondition.
+
+**GOV-3 IS `D2_ALLOWLISTED_HEADERS_AND_STATUS` WITH `BODY_PERSISTENCE_DEFAULT =
+DISABLED`**, and the trap it closes is that **not persisting a body is not the same as not
+receiving bytes** -- the network read stays bounded whether or not anything is kept. The
+secret-bearing header set is **always excluded and a run may not widen the allowlist into
+it**, because an allowlist a caller can extend into `Set-Cookie` is not an allowlist. A
+`Location` value is transient in raw form and minimized when persisted, with the record
+stating that the query component was dropped, so a reader knows the representation is
+minimized rather than complete. **Every retention number carries
+`decision_kind = PROJECT_POLICY_DEFAULT`.**
+
+**GOV-4 KEEPS MISSION 1.71'S INVARIANT INTACT**: an excluded target is **not removed from
+the corpus**, it becomes a terminal accounting record in a `NOT_ATTEMPTED` family.
+Deleting it would shrink `N`, which is precisely the defect that closed the external
+routes. Unknown terms are `TARGET_TERMS_NOT_INDIVIDUALLY_REVIEWED` -- **neither a
+favourable fiction nor an impossible per-item human review**, which would have reinstated
+Model C silently as a side effect of a target policy. The preflight is ordered and
+first-match-wins, so two runs over one corpus classify identically and give the same
+reason.
+
+**GOV-5 CHOSE ACTUAL NUMBERS, AND EVERY ONE SAYS OUT LOUD WHAT IT IS.** Fifteen bounds,
+all finite or explicitly `DISABLED`, all carrying `value_source = PROJECT_POLICY_DEFAULT`:
+500 targets, global concurrency 4, **per-origin concurrency 1 and one request every five
+seconds**, 10 s connect, 20 s read, 5 redirects, **0 retries**, 64 KiB headers, 1 MiB
+network read, 2 MiB per target, 6 h run, 1 robots fetch per origin, 6 requests per target,
+backoff `DISABLED` rather than absent. **Retries are zero because a retry can observe a
+different world state and Mission 1.71 left the which-attempt-counts rule to the
+construct**, so a non-zero value would create records under a selection rule that does not
+exist. **One target is not one request**: redirects and robots retrievals both count
+toward the origin budget.
+
+**NOTHING WAS WEAKENED AND NOTHING WAS AUTHORIZED.** Registered sources 29 before and 29
+after, no review touched, no target registered, no eligibility changed. **Twelve
+eligibility requirements, none defaulting to approval when unknown**, and a run
+additionally needs a specific corpus, request contract, construct and operator approval.
+**Common Crawl and HTTP Archive keep Mission 1.70's verdicts verbatim** and the new track
+is explicitly recorded as NOT repairing their missingness.
+
+**THE CANDIDATE REGISTRY RULE WAS REVIEWED AGAIN AND STILL NOT ADDED.** Mission 1.71
+refused to count its own designed solution as an empirical instance; **writing a policy
+that respects a rule is not observing an apparatus fail without it** either. Registry
+unchanged at **15**.
+
+**0 target HTTP requests, 0 robots target requests, 0 crawls, 0 browser runs, 0 curl or
+wget executions, 0 Common Crawl queries, 0 BigQuery executions, 0 dataset downloads, 0
+target-value exposures, 0 accounts, 0 trials, 0 purchases, 0 credential reads, 0 mailbox
+searches, 0 enquiries sent**, 0 corpora, 0 exclusion entries, 0 runs, 0 crawlers, 0 sources
+registered, 0 canonical mutations, 0 thresholds, 0 Claims, 0 Evidence, 0 independence
+groups, 0 reliability values, 0 scores, 0 model calls, 0 embeddings, 0 migrations. 1 of 8
+documentation requests. ONYPHE still `NOT_CHECKED_AFTER_DISPATCH`, Netlas still pending,
+scanner arc parked, Q1 unchanged, **`PAIR_ANALYSIS_NOT_READY`**.
+
+**Verification.** Validator probed with **186 deliberate violations, 186 caught** (183 by
+rule, 3 by drift) plus **7 of 7 positive controls, all variants rather than the shipped
+bytes**. **A malformed guard in this mission's own validator was found and removed**: a
+conditional expression that would have raised with an empty message had it ever fired,
+sitting beside the check that actually does the work -- the guard-that-cannot-speak shape
+this repository keeps finding. **101 new tests**; **2532 bare-python tests**; all pytest
+suites passed with the database unchanged; **`ruff format --check`, `ruff check` and mypy
+all run through `uv` before the PR** per §59; all **42** CI gates.
 
 ## 1.106 — 2026-09-06 (Sprint 1 / Mission 1.71)
 

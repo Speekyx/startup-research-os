@@ -1,0 +1,104 @@
+{
+  "$comment": "§41 and §42. Eligibility requires ALL of these. No item defaults to approval when UNKNOWN, and none of this authorizes a run.",
+  "record_version": "1.0.0",
+  "mission": "1.72",
+  "recorded_at": "2026-09-06",
+  "policy_id": "PUBLIC_HTTP_OBSERVATION_POLICY_V1",
+  "created_because": "GOV-1 adopted the track",
+  "eligibility_requirements": [
+    {
+      "requirement": "approved measurement purpose",
+      "defaults_to_approval_when_unknown": false
+    },
+    {
+      "requirement": "frozen corpus manifest with its hash",
+      "defaults_to_approval_when_unknown": false
+    },
+    {
+      "requirement": "frozen apparatus contract with its hash",
+      "defaults_to_approval_when_unknown": false
+    },
+    {
+      "requirement": "frozen request contract with its hash",
+      "defaults_to_approval_when_unknown": false
+    },
+    {
+      "requirement": "frozen run manifest",
+      "defaults_to_approval_when_unknown": false
+    },
+    {
+      "requirement": "network safety pass",
+      "defaults_to_approval_when_unknown": false
+    },
+    {
+      "requirement": "target preflight pass",
+      "defaults_to_approval_when_unknown": false
+    },
+    {
+      "requirement": "robots policy pass",
+      "defaults_to_approval_when_unknown": false
+    },
+    {
+      "requirement": "data minimization policy bound",
+      "defaults_to_approval_when_unknown": false
+    },
+    {
+      "requirement": "retention policy bound",
+      "defaults_to_approval_when_unknown": false
+    },
+    {
+      "requirement": "load profile bound",
+      "defaults_to_approval_when_unknown": false
+    },
+    {
+      "requirement": "operator authorization",
+      "defaults_to_approval_when_unknown": false
+    }
+  ],
+  "requirement_count": 12,
+  "measurement_purpose": {
+    "$comment": "§5. General exploration is not measurement authorization.",
+    "required": true,
+    "no_reason_supplied_is_acceptable": false,
+    "general_exploration_is_authorization": false,
+    "a_run_must_bind": [
+      "measurement purpose",
+      "quantity class",
+      "future construct reference when one exists",
+      "corpus manifest",
+      "request contract",
+      "apparatus contract",
+      "run manifest",
+      "operator authorization"
+    ]
+  },
+  "public_visibility_and_permission": {
+    "$comment": "§26. The source-registry principle is preserved rather than reversed.",
+    "public_implies_permission": false,
+    "the_rule_under_this_track": "PUBLIC + TRACK_REQUIREMENTS_PASS => INTERNALLY_GOVERNED_OBSERVATION",
+    "this_is_a_claim_about_external_legal_rights": false,
+    "target_specific_review_may_still_apply": true
+  },
+  "run_authorization": {
+    "$comment": "§42. Separate, and separate from the operator's authority to set policy.",
+    "required": true,
+    "granted_by_this_mission": false,
+    "a_future_run_additionally_needs": [
+      "a specific corpus",
+      "a specific request contract",
+      "a specific construct",
+      "a specific operator approval"
+    ],
+    "governance_track_membership_is_operator_authorization": false
+  },
+  "future_construct_boundary": {
+    "$comment": "§43. The track authorizes an activity SHAPE.",
+    "header_selected": null,
+    "status_code_selected": null,
+    "html_token_selected": null,
+    "technology_selected": null,
+    "what_fact_will_be_measured": "NOT_CHOSEN_BY_THIS_MISSION"
+  },
+  "overall": "PROJECT_GOVERNANCE_ALLOWED_SUBJECT_TO_RUN_AUTHORIZATION",
+  "external_legal_conclusion": "NO_EXTERNAL_LEGAL_CONCLUSION"
+}

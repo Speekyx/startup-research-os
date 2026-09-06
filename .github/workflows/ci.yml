@@ -613,6 +613,26 @@ jobs:
       - name: Bounded HTTP apparatus design matches its records
         run: uv run python infrastructure/scripts/render_bounded_http_apparatus.py --check
 
+      # Mission 1.72. Which gate applies is a function of what is RETAINED, never a label the
+      # caller chooses. Refuses: the observation track weakening source collection, or any
+      # target becoming a source; arbitrary web ingestion called measurement, or a
+      # body-retaining profile expressible inside the observation track; the caller choosing
+      # its own track, or observation winning when both could apply; governance feasibility
+      # called run authorization; a run without a purpose, corpus hash, request-contract hash,
+      # apparatus contract or load profile; an eligibility requirement defaulting to approval
+      # when unknown; a robots condition with no deterministic outcome, a stricter-than-RFC row
+      # that does not say so, a robots request uncounted, or a wildcard group evaluated when a
+      # specific one exists; a persisted body, a non-allowlisted or secret-bearing header, an
+      # allowlist a run could widen into that set, or a raw Location retained; a retention value
+      # presented as evidence-derived; a known restriction ignored, unknown terms read as
+      # permission, an exclusion set changed mid-run, or an excluded target removed from the
+      # population; an unbounded concurrency, rate, redirect, retry, byte or duration limit, a
+      # per-target budget too small for its own redirects, or a load number lacking
+      # PROJECT_POLICY_DEFAULT provenance; and any counterpart search, class or construct
+      # selection, target request, source registration, canonical mutation or model call.
+      - name: Public HTTP observation governance matches its records
+        run: uv run python infrastructure/scripts/render_public_http_governance.py --check
+
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
   # Pinned to the same versions as infrastructure/compose.

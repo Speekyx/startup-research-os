@@ -1,0 +1,110 @@
+{
+  "$comment": "§25 to §31. What a target is, before anything is asked of it.",
+  "record_version": "1.0.0",
+  "mission": "1.72",
+  "recorded_at": "2026-09-06",
+  "policy_id": "PUBLIC_HTTP_TARGET_POLICY_V1",
+  "classes": [
+    {
+      "class": "ELIGIBLE_PUBLIC_TARGET",
+      "proceeds": true,
+      "why": "the preflight found nothing that excludes it"
+    },
+    {
+      "class": "POLICY_EXCLUDED",
+      "proceeds": false,
+      "why": "a track policy other than robots refuses it"
+    },
+    {
+      "class": "ROBOTS_EXCLUDED",
+      "proceeds": false,
+      "why": "ROBOTS_POLICY_V1's state machine returned an exclusion"
+    },
+    {
+      "class": "KNOWN_OPT_OUT",
+      "proceeds": false,
+      "why": "the project already holds an explicit opt-out for this target"
+    },
+    {
+      "class": "AUTH_REQUIRED",
+      "proceeds": false,
+      "why": "the requested resource is authentication-protected, so it fails the track's own public-accessibility precondition"
+    },
+    {
+      "class": "DESTINATION_SAFETY_BLOCKED",
+      "proceeds": false,
+      "why": "the network safety contract refused every resolved address"
+    },
+    {
+      "class": "UNSUPPORTED_SCHEME",
+      "proceeds": false,
+      "why": "the manifest URL is not http or https"
+    },
+    {
+      "class": "OPERATOR_EXCLUDED",
+      "proceeds": false,
+      "why": "a named operator entry in the exclusion registry"
+    },
+    {
+      "class": "KNOWN_AUTOMATION_RESTRICTION",
+      "proceeds": false,
+      "why": "the project already holds a statement from this target restricting automated access relevant to this activity"
+    },
+    {
+      "class": "UNKNOWN_POLICY_CONDITION",
+      "proceeds": false,
+      "why": "something was found that the preflight cannot classify. It excludes rather than proceeds, because an unclassifiable condition is not an absence of one"
+    }
+  ],
+  "class_count": 10,
+  "exactly_one_class_per_target_per_run": true,
+  "public_visibility_and_permission": {
+    "$comment": "§26. The registry principle is preserved, restated for this track.",
+    "public_implies_permission": false,
+    "the_rule": "PUBLIC + TRACK_REQUIREMENTS_PASS => INTERNALLY_GOVERNED_OBSERVATION",
+    "is_a_claim_about_external_legal_rights": false
+  },
+  "known_restrictions": {
+    "$comment": "§27.",
+    "an_explicit_opt_out_excludes": true,
+    "a_known_automation_restriction_relevant_to_this_activity_excludes": true,
+    "an_operator_exclusion_excludes": true,
+    "a_known_restriction_may_be_deliberately_ignored": false,
+    "an_excluded_target_may_be_reinstated": "only by a separate recorded review"
+  },
+  "unknown_terms": {
+    "$comment": "§28. Neither a favourable fiction nor an impossible requirement.",
+    "state": "TARGET_TERMS_NOT_INDIVIDUALLY_REVIEWED",
+    "absence_of_inspection_read_as_absence_of_restriction": false,
+    "manual_terms_review_of_every_corpus_item_required": false,
+    "why_not_required": "GOV-1 chose the track model rather than Model C, and importing a per-item human review here would reinstate the model that was rejected -- and would do it silently, as a side effect of a target policy.",
+    "what_the_state_asserts": "that this target's terms were not individually read. It asserts nothing about what they say in either direction.",
+    "target_specific_review_may_still_apply": true
+  },
+  "preflight_ordering": {
+    "$comment": "Deterministic, so two runs over one corpus classify identically.",
+    "order": [
+      "UNSUPPORTED_SCHEME",
+      "OPERATOR_EXCLUDED",
+      "KNOWN_OPT_OUT",
+      "KNOWN_AUTOMATION_RESTRICTION",
+      "DESTINATION_SAFETY_BLOCKED",
+      "ROBOTS_EXCLUDED",
+      "AUTH_REQUIRED",
+      "POLICY_EXCLUDED",
+      "UNKNOWN_POLICY_CONDITION",
+      "ELIGIBLE_PUBLIC_TARGET"
+    ],
+    "first_match_wins": true,
+    "why_ordered": "an unordered set of checks lets two implementations report different reasons for the same exclusion, and the reason is what a later reader uses to understand the population."
+  },
+  "excluded_targets_and_the_population": {
+    "$comment": "§31 and Mission 1.71's invariant, which this must not break.",
+    "an_excluded_target_is_removed_from_the_corpus": false,
+    "an_excluded_target_becomes": "a terminal accounting record in the NOT_ATTEMPTED_POLICY or NOT_ATTEMPTED_SAFETY missingness family",
+    "the_original_frozen_corpus_is_edited": false,
+    "why": "the corpus records the population INTENT and the preflight records the governance decisions taken over it. Deleting excluded targets would merge two different facts and would shrink N, which is exactly the defect that closed the external routes in Mission 1.70."
+  },
+  "targets_classified_this_mission": 0,
+  "corpus_exists": false
+}
