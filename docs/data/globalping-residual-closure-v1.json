@@ -1,0 +1,71 @@
+{
+  "$comment": "§10, §25, §26, §38, §39. What closed, what did not, and what moved anyway.",
+  "record_version": "1.0.0",
+  "mission": "1.74",
+  "recorded_at": "2026-09-06",
+  "exact_predicate_frozen": false,
+  "target_values_retrieved": 0,
+  "residuals": [
+    {
+      "id": "R1",
+      "name": "redirect contract",
+      "verdict": "R1_PARTIAL_IMPLEMENTATION_ONLY",
+      "evidence_level": "R1_C_IMPLEMENTATION_OBSERVED",
+      "closed": false,
+      "moved": true,
+      "what_moved": "the absence is now CHECKED across five first-party surfaces rather than one, no provider test asserts the behaviour, and a maintainer statement was found that presupposes redirect responses are returned",
+      "enquiry_prepared": true
+    },
+    {
+      "id": "R2",
+      "name": "third-party target and commercial-purpose scope",
+      "verdict": "R2_PARTIAL_COMMERCIAL_ALLOWED_THIRD_PARTY_SCOPE_UNRESOLVED",
+      "closed": false,
+      "moved": true,
+      "what_moved": "R2-A closed positively on the provider's own FAQ answer, and R2-B is now a characterised ambiguity rather than an unread document: the one incorporating hook was followed and repeats the same narrow framing",
+      "enquiry_prepared": true
+    }
+  ],
+  "sub_results": {
+    "R2_A_COMMERCIAL_USE": "PERMITTED_WITHIN_TERMS",
+    "R2_B_THIRD_PARTY_TARGET_SCOPE": "UNRESOLVED"
+  },
+  "r2_pass_requires_both": {
+    "$comment": "§25.",
+    "A_commercial_purpose_compatible": true,
+    "B_third_party_targets_within_permitted_use": false,
+    "verdict": "R2_PARTIAL"
+  },
+  "residuals_remaining": 2,
+  "project_governance_classification": {
+    "$comment": "§24. The project may refuse under ambiguity, and that is governance.",
+    "classification": "PROVIDER_TERMS_REQUIRE_CLARIFICATION",
+    "provider_terms_block_the_intended_activity": false,
+    "and_that_is_not_the_same_as_permission": true,
+    "refusing_under_ambiguity_is_legal_impossibility": false
+  },
+  "adr_039_unchanged": {
+    "$comment": "§51. Governance does not bend to make a provider pass.",
+    "head_transport_route_preserved": true,
+    "body_retention_restriction_preserved": true,
+    "source_collection_precedence_preserved": true,
+    "robots_policy_preserved": true,
+    "target_exclusion_preserved": true,
+    "load_limits_preserved": true,
+    "run_authorization_separation_preserved": true,
+    "get_route_still_incompatible_with_the_initial_profile": true
+  },
+  "enquiries": {
+    "$comment": "§27 to §34. Prepared only after the public review was exhausted.",
+    "prepared_before_public_review_was_exhausted": false,
+    "r1_packet": "globalping-r1-enquiry-packet-v1.json",
+    "r2_packet": "globalping-r2-enquiry-packet-v1.json",
+    "two_packets_because": "§29. R1 is a technical contract question suited to the provider's public issue tracker; R2 is a Terms question and the Terms themselves designate legal@globalping.io. Two provider-designated channels are genuinely required, so one packet could not have carried both without sending a Terms question to a technical channel.",
+    "combined_ambiguous_question_asked": false,
+    "each_question_maps_to_exactly_one_gate": true,
+    "enquiries_sent": 0,
+    "operator_approval_recorded": false,
+    "dispatch_authorised_by_this_mission": false,
+    "provider_contacted": false
+  }
+}

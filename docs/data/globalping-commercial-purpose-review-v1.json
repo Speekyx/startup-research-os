@@ -1,0 +1,30 @@
+{
+  "$comment": "§12 and §18. R2-A. This one closes, and it closes on the provider's own words.",
+  "record_version": "1.0.0",
+  "mission": "1.74",
+  "recorded_at": "2026-09-06",
+  "sub_residual": "R2-A",
+  "question": "can Globalping itself be used as part of a commercial tool or product?",
+  "first_party_evidence": {
+    "locator": "jsdelivr/globalping.io, src/views/pages/credits.html",
+    "surface": "the Credits FAQ as published in the provider's own website source",
+    "question_asked_by_the_provider": "Can I use credits to power a commercial tool or product?",
+    "provider_answer": "Yes, we support commercial use of Globalping within the limits of our terms of service.",
+    "read_from_website_source_rather_than_a_rendered_shell": true
+  },
+  "verdict": "COMMERCIAL_USE_GENERAL_PERMITTED_WITHIN_TERMS",
+  "overstated_beyond_the_provider_text": false,
+  "what_the_answer_does_not_do": {
+    "$comment": "§18. The distinction the validator enforces.",
+    "resolves_third_party_target_scope": false,
+    "why": "the answer's own qualifier is 'within the limits of our terms of service', so it defers to the Terms for everything other than commerciality. It settles WHETHER we may be a commercial user and says nothing about WHAT we may point the service at.",
+    "widens_the_terms": false
+  },
+  "consumer_clause_reconciled": "the FAQ and the consumer-scoped liability clause are consistent once the clause's heading is read: commercial users are contemplated, and the non-commercial sentence binds consumer users only",
+  "access_recorded_separately": {
+    "$comment": "§22. Access is not permission.",
+    "ACCESS_WITHOUT_ACCOUNT": true,
+    "basis": "The API is public, free to use, and doesn't require authentication, but it implements rate limits to ensure fair usage and reliability.",
+    "establishes_r2": false
+  }
+}

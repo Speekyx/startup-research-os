@@ -1,0 +1,157 @@
+{
+  "$comment": "§61, §62. One outcome, and the two questions it hands back to the operator.",
+  "record_version": "4.0.0",
+  "supersedes": "quantity-class-selection-decision-v3.json",
+  "mission": "1.74",
+  "recorded_at": "2026-09-06",
+  "exact_predicate_frozen": false,
+  "target_values_retrieved": 0,
+  "primary_outcome": "GLOBALPING_TWO_PROVIDER_CLARIFICATIONS_REQUIRED",
+  "outcomes_considered_and_refused": {
+    "A_QUALIFIED_Q1_SELECTED": {
+      "refused": true,
+      "why": "two mandatory dimensions are PARTIAL, and §36 makes PARTIAL block"
+    },
+    "B_QUALIFIED": {
+      "refused": true,
+      "why": "same; qualification requires all twelve mandatory dimensions PASS"
+    },
+    "C_ONE_RESIDUAL_REMAINS": {
+      "refused": true,
+      "why": "both R1 and R2 remain unresolved, so exactly one is not the state"
+    },
+    "E_REDIRECT_CLOSED_RIGHTS_REMAINS": {
+      "refused": true,
+      "why": "R1 did not close; the evidence level is implementation-observed"
+    },
+    "F_RIGHTS_CLOSED_REDIRECT_REMAINS": {
+      "refused": true,
+      "why": "R2 did not close either. Its commercial half closed and its third-party target half did not, and §25 requires both"
+    },
+    "G_PROVIDER_TERMS_BLOCK": {
+      "refused": true,
+      "why": "§61 forbids using it from ambiguity. Prohibited Use does not prohibit the activity, and an ambiguous Permitted Use section is not an explicit prohibition"
+    },
+    "H_REDIRECT_CONTRACT_INCOMPATIBLE": {
+      "refused": true,
+      "why": "nothing establishes an incompatible documented behaviour. Every signal points at not following redirects, which is what the SROS side would want; what is missing is the commitment, not the compatibility"
+    }
+  },
+  "selected_quantity_class": null,
+  "selection_outcome": "NO_SELECTION",
+  "selected_class_artifact_created": false,
+  "selected_construct_created": false,
+  "counterpart_qualified": false,
+  "q1_strategically_viable": false,
+  "secondary_outcomes": {
+    "R1": "R1_PARTIAL_IMPLEMENTATION_ONLY",
+    "R1_EVIDENCE_LEVEL": "R1_C_IMPLEMENTATION_OBSERVED",
+    "R2_COMMERCIAL_USE": "PERMITTED_WITHIN_TERMS",
+    "R2_THIRD_PARTY_TARGET_SCOPE": "UNRESOLVED",
+    "R2": "R2_PARTIAL_COMMERCIAL_ALLOWED_THIRD_PARTY_SCOPE_UNRESOLVED",
+    "GLOBALPING_C6": "PARTIAL",
+    "GLOBALPING_C9": "PARTIAL",
+    "GLOBALPING_COUNTERPART": "UNRESOLVED",
+    "GLOBALPING_ENQUIRY_REQUIRED": "YES",
+    "GLOBALPING_R1_ENQUIRY": "PREPARED",
+    "GLOBALPING_R2_ENQUIRY": "PREPARED",
+    "ENQUIRIES_SENT": 0,
+    "Q1": "PROMISING_BUT_ROUTE_QUALIFICATION_REQUIRED",
+    "SELECTED_QUANTITY_CLASS": "NONE",
+    "SELECTED_CONSTRUCT": "NONE",
+    "RUN_AUTHORIZATION_REQUIRED": true,
+    "SROS_FETCHER_IMPLEMENTED": false,
+    "GLOBALPING_MEASUREMENTS": 0,
+    "EVIDENCE_INDEPENDENCE_GROUPS": 0,
+    "REGISTRY_COUNT": 15,
+    "PUBLIC_HTTP_TRACK": "READY",
+    "SOURCE_COLLECTION_GATE_UNCHANGED": true,
+    "ONYPHE_RESPONSE": "NOT_CHECKED",
+    "NETLAS_CONTACT": "STILL_PENDING",
+    "SCANNER_CLASS": "PARKED_REOPENABLE",
+    "PAIR_ANALYSIS": "NOT_READY"
+  },
+  "mission_accounting": {
+    "FIRST_PARTY_DOCUMENT_REQUESTS": 13,
+    "FIRST_PARTY_REQUEST_BUDGET": 18,
+    "GLOBALPING_MEASUREMENTS_CREATED": 0,
+    "GLOBALPING_MEASUREMENTS_READ": 0,
+    "GLOBALPING_API_EXECUTIONS": 0,
+    "GLOBALPING_PROBE_RUNS": 0,
+    "TARGET_HTTP_REQUESTS": 0,
+    "SROS_FETCHER_RUNS": 0,
+    "TARGET_VALUE_EXPOSURES": 0,
+    "ACCOUNTS_CREATED": 0,
+    "TOKENS_CREATED": 0,
+    "TRIALS": 0,
+    "PURCHASES": 0,
+    "CREDENTIAL_READS": 0,
+    "MAILBOX_SEARCHES": 0,
+    "ENQUIRIES_SENT": 0,
+    "PROVIDER_CONTACTS": 0,
+    "ALTERNATIVE_COUNTERPARTS_EVALUATED": 0,
+    "SOURCES_REGISTERED": 0,
+    "SOURCE_GOVERNANCE_MUTATIONS": 0,
+    "THRESHOLDS_REGISTERED": 0,
+    "CLAIMS_CREATED": 0,
+    "EVIDENCE_CREATED": 0,
+    "INDEPENDENCE_GROUPS_CREATED": 0,
+    "RELIABILITY_VALUES_ASSIGNED": 0,
+    "SCORES": 0,
+    "OPPORTUNITY_MUTATIONS": 0,
+    "MODEL_CALLS": 0,
+    "EMBEDDINGS": 0,
+    "MIGRATIONS": 0,
+    "CONSTRUCTS_SELECTED": 0,
+    "QUANTITY_CLASSES_SELECTED": 0
+  },
+  "canonical_mutation_boundary": {
+    "raw_records": 325,
+    "normalized_records": 325,
+    "signals": 33,
+    "claims": 44,
+    "claim_revisions": 45,
+    "evidence": 58,
+    "inferred_claims": 1,
+    "reliability_assessments": 4,
+    "evidence_independence_groups": 0,
+    "registered_sources": 29,
+    "scores_table": "ABSENT",
+    "reference_profile": "UNCALIBRATED",
+    "problem_family": "PARKED",
+    "migration_head": "0035_refusal_provenance",
+    "mutations_this_mission": 0
+  },
+  "parallel_state_untouched": {
+    "onyphe_response_status": "NOT_CHECKED_AFTER_DISPATCH",
+    "onyphe_mailbox_searched": false,
+    "netlas_contact_state": "STILL_PENDING",
+    "netlas_enquiry_sent": false,
+    "globalping_contacted": false,
+    "scanner_arc_reopened": false,
+    "adr_039_weakened": false,
+    "public_http_governance_altered": false,
+    "source_collection_gate_weakened": false,
+    "alternative_counterpart_discovery_performed": false
+  },
+  "requirement_registry": {
+    "$comment": "§52.",
+    "count_before": 15,
+    "count_after": 15,
+    "requirement_added": null,
+    "registry_growth_forced": false,
+    "candidate_rule": "COVERAGE_SEMANTICS_MUST_DISTINGUISH_ATTEMPT_FROM_SUCCESS",
+    "candidate_rule_reopened": false,
+    "why": "Mission 1.73 declined it because Globalping avoids rather than exhibits the failure, and nothing in this mission changes that. A documentation ambiguity is not an apparatus rule."
+  },
+  "legal_conclusion_made": false,
+  "external_legal_conclusion": "NO_EXTERNAL_LEGAL_CONCLUSION",
+  "recommended_next_action": {
+    "$comment": "§64's branch for outcome D.",
+    "action": "OPERATOR_REVIEW_OF_TWO_FROZEN_ENQUIRY_PACKETS",
+    "methodological_work_on_globalping_stopped": true,
+    "alternative_counterpart_search": "NOT_YET",
+    "dispatch_requires_a_separate_explicitly_authorized_action": true,
+    "mission_1_75_not_started": true
+  }
+}

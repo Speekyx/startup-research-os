@@ -1,0 +1,109 @@
+{
+  "$comment": "§45 and §47. Every first-party retrieval, including the ones that found nothing.",
+  "record_version": "1.0.0",
+  "mission": "1.74",
+  "recorded_at": "2026-09-06",
+  "maximum_requests": 18,
+  "used": 13,
+  "split": {
+    "R1": 7,
+    "R2": 6,
+    "contact_channel": 0
+  },
+  "caps": {
+    "R1": 8,
+    "R2": 8,
+    "contact_channel": 2
+  },
+  "contact_channel_cost_zero_because": "the Terms of Use already held from Mission 1.73 name the channel in §16, so no new retrieval was needed to establish it",
+  "requests": [
+    {
+      "n": 1,
+      "surface": "gh search issues jsdelivr/globalping redirect",
+      "residual": "R1",
+      "load_bearing": true
+    },
+    {
+      "n": 2,
+      "surface": "issue #347 Improve HTTP response handling, with comments",
+      "residual": "R1",
+      "load_bearing": true
+    },
+    {
+      "n": 3,
+      "surface": "gh search code jsdelivr/globalping-probe redirect",
+      "residual": "R1",
+      "load_bearing": true
+    },
+    {
+      "n": 4,
+      "surface": "gh search code jsdelivr/globalping redirect",
+      "residual": "R1",
+      "load_bearing": true
+    },
+    {
+      "n": 5,
+      "surface": "https://api.globalping.io/v1/spec.yaml",
+      "residual": "R1",
+      "load_bearing": true
+    },
+    {
+      "n": 6,
+      "surface": "gh search code jsdelivr/globalping-cli redirect + org repo listing",
+      "residual": "R1",
+      "load_bearing": true
+    },
+    {
+      "n": 7,
+      "surface": "gh search code jsdelivr/globalping.io redirect",
+      "residual": "R1",
+      "load_bearing": true
+    },
+    {
+      "n": 8,
+      "surface": "gh search code jsdelivr/globalping.io commercial",
+      "residual": "R2",
+      "load_bearing": true
+    },
+    {
+      "n": 9,
+      "surface": "globalping.io src/views/pages/credits.html",
+      "residual": "R2",
+      "load_bearing": true
+    },
+    {
+      "n": 10,
+      "surface": "jsdelivr/globalping docs/terms/Terms of Use.md (re-fetch)",
+      "residual": "R2",
+      "load_bearing": true
+    },
+    {
+      "n": 11,
+      "surface": "globalping.io src/views/pages listing",
+      "residual": "R2",
+      "load_bearing": false
+    },
+    {
+      "n": 12,
+      "surface": "globalping.io src/views/pages/_index.html",
+      "residual": "R2",
+      "load_bearing": true
+    },
+    {
+      "n": 13,
+      "surface": "globalping.io src/views/pages/docs listing",
+      "residual": "R2",
+      "load_bearing": false
+    }
+  ],
+  "failed_or_empty": 2,
+  "failed_counted_against_budget": true,
+  "search_engines_used": 0,
+  "held_evidence_reused_without_refetch": [
+    "the probe README from Mission 1.73",
+    "the probe HTTP command and undici handler source from Mission 1.73",
+    "the Terms of Use sections 2 to 9 read in Mission 1.73"
+  ],
+  "globalping_api_executions": 0,
+  "target_http_requests": 0
+}

@@ -1,0 +1,34 @@
+{
+  "$comment": "§33 and §34. Frozen and unsent. The digest covers the binding fields and excludes itself, the send status and the recorded date, which is Mission 1.65's envelope rule.",
+  "record_version": "1.0.0",
+  "mission": "1.74",
+  "recorded_at": "2026-09-06",
+  "question_id": "GP-R1-Q1",
+  "residual_id": "R1",
+  "subject": "HTTP measurement: is a 3xx response returned without following the redirect?",
+  "body": "For an HTTP measurement using method HEAD, if the requested URL returns a 3xx response with a Location header, does Globalping return that initial 3xx response without following the redirect?\n\nI could not find this documented in the API specification and wanted to check rather than infer it from the probe implementation.",
+  "recipient": "the public issue tracker of the provider's API repository",
+  "channel": "PUBLIC_TECHNICAL_CHANNEL",
+  "content_sha256": "9eb7454581b65ccb713e6c98047ac4ad02a7fd8ff3e2bd2da1887cd9b4acb1d9",
+  "hash_covers": [
+    "question_id",
+    "residual_id",
+    "subject",
+    "body",
+    "recipient",
+    "channel"
+  ],
+  "hash_excludes": [
+    "content_sha256",
+    "send_status",
+    "recorded_at"
+  ],
+  "first_party_channel_basis": "§29. R1 is a technical contract question about published API behaviour, and the provider maintains a public issue tracker on jsdelivr/globalping where maintainers answer such questions. Verified by retrieving issues from it during this mission.",
+  "recipient_guessed": false,
+  "why_public_documentation_is_insufficient": "five first-party surfaces were reviewed and none documents the behaviour: the specification has zero occurrences of 'redirect', and no provider test asserts it",
+  "expected_answer_discriminator": "an answer naming either 'the initial 3xx is returned' or 'redirects are followed' maps directly to R1_PASS_DOCUMENTED_NO_REDIRECT or R1_FAIL_DOCUMENTED_REDIRECT_FOLLOWING. Anything else leaves R1 partial.",
+  "send_status": "NOT_AUTHORIZED",
+  "operator_approval_recorded": false,
+  "sent": false,
+  "execution_record_created": false
+}

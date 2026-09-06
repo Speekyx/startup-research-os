@@ -654,6 +654,24 @@ jobs:
       - name: Independent HTTP counterpart qualification matches its records
         run: uv run python infrastructure/scripts/render_counterpart_qualification.py --check
 
+      # Mission 1.74. Two residuals narrowed, neither closed, and nothing sent. The
+      # validator refuses: an implementation promoted to a provider contract; a dependency
+      # default treated as a commitment; zero documentation matches read as proof the
+      # provider does not redirect; a source test treated as a public API guarantee; a
+      # commercial-use FAQ answer treated as third-party-target permission; a
+      # consumer-scoped clause applied to business users; a schema acceptance treated as a
+      # Terms grant; product design or examples overriding the Terms; a reservation clause
+      # read as a general prohibition; prohibited-use silence turned into a grant; Terms
+      # ambiguity turned into a prohibition; two Terms versions merged; R2 passing on one
+      # half; C6 or C9 passing while its residual is open; a qualified verdict with a
+      # PARTIAL dimension; a class selected without a qualified counterpart; an enquiry
+      # marked sent, approved or dispatched; a guessed recipient; a packet edited under a
+      # frozen hash; ADR-039 weakened anywhere; and any measurement, target request,
+      # account, token, credential read, source registration, canonical mutation or model
+      # call.
+      - name: Globalping residual closure matches its records
+        run: uv run python infrastructure/scripts/render_globalping_residuals.py --check
+
   # ===========================================================================
   # Integration: real PostgreSQL, Redis and Qdrant via service containers.
   # Pinned to the same versions as infrastructure/compose.
