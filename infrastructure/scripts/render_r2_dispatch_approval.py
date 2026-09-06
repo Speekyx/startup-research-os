@@ -275,13 +275,21 @@ def _check_scope(approval: dict) -> None:
     r1_action = r1["approved_action"]
     if _digest(r1_action, r1_action["hash_covers"]) != r1_action["approval_sha256"]:
         raise ValidationError("the R1 approval no longer answers to its own hash")
-    if r1["execution"]["status"] != scope["r1_execution_state_unchanged"]:
-        raise ValidationError("the R1 execution state moved")
-    if (
-        r1["execution"]["sends_made" if "sends_made" in r1["execution"] else "public_posts_made"]
-        != 0
-    ):
-        raise ValidationError("the R1 execution now records an act")
+    # DEFECT CORRECTED IN MISSION 1.74.3. These two checks compared the R1 execution
+    # state LIVE against a snapshot this record took when it was written, so they refused
+    # the very transition the R1 approval was designed to make: the first legitimate
+    # operator attestation turned this gate red. What this gate is entitled to assert is
+    # that MISSION 1.74.2 did not move it -- history, recorded in the snapshot below --
+    # plus that the R1 approval's BINDING fields are untouched, which is checked above and
+    # is the property that actually matters. The snapshot is no longer compared to the
+    # living record.
+    if scope["r1_execution_state_when_this_was_written"] != "PENDING_MANUAL_OPERATOR_ACTION":
+        raise ValidationError(
+            "the recorded snapshot of the R1 execution state was rewritten; it is what "
+            "Mission 1.74.2 observed, and a later transition does not change it"
+        )
+    if r1["execution"]["public_posts_made"] > r1["approved_action"]["maximum_public_posts"]:
+        raise ValidationError("the R1 execution records more posts than R1 authorised")
 
     if not scope["both_enquiries_now_approved_separately"]:
         raise ValidationError("the record does not say both are approved separately")

@@ -32,6 +32,7 @@ import argparse
 import hashlib
 import json
 import pathlib
+import re
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 DATA = ROOT / "docs" / "data"
@@ -212,9 +213,39 @@ def _check_execution(approval: dict) -> None:
             raise ValidationError("SENT with no post recorded")
         if level is None:
             raise ValidationError("SENT with no attestation level")
-        if level == "BYTE_VERIFIED" and not str(execution["issue_url"] or "").strip():
+        if not str(execution.get("attested_by") or "").strip():
+            raise ValidationError("SENT with nobody named as the attester")
+
+        # This channel produces a durable public artifact, so a send that cannot name one
+        # is a send nothing can ever be checked against.
+        url = str(execution["issue_url"] or "").strip()
+        if not url:
+            raise ValidationError("SENT with no issue URL on a channel that produces one")
+        match = re.fullmatch(r"https://github\.com/([^/]+/[^/]+)/issues/(\d+)", url)
+        if not match:
+            raise ValidationError(f"the issue URL {url!r} is not a GitHub issue URL")
+        if match.group(1) != approval["approved_action"]["target_repository"]:
+            raise ValidationError("the issue URL names a repository the approval did not")
+        if execution.get("issue_number") != int(match.group(2)):
+            raise ValidationError("the recorded issue number disagrees with its own URL")
+
+        # Mission 1.63. A retrieval summary is not a document, so the higher level
+        # requires a raw comparison rather than a corroborating fetch -- and every SENT
+        # record must SAY whether one happened, rather than leaving a later reader unable
+        # to tell an unverified send from an unrecorded verification.
+        if not isinstance(execution.get("raw_body_compared"), bool):
+            raise ValidationError("a SENT record does not state whether the body was compared raw")
+        if level == "BYTE_VERIFIED" and not execution.get("raw_body_compared"):
             raise ValidationError(
-                "BYTE_VERIFIED with no issue URL, so there is nothing to verify against"
+                "BYTE_VERIFIED without a raw body comparison; a summarising retrieval "
+                "corroborates an attestation and does not replace it"
+            )
+        if (
+            level == "OPERATOR_ATTESTED"
+            and not str(execution.get("byte_verification_not_reached_because") or "").strip()
+        ):
+            raise ValidationError(
+                "OPERATOR_ATTESTED on a channel that can reach higher, with no reason given"
             )
 
     if not execution["byte_verification_is_possible_for_this_channel"]:

@@ -2,7 +2,7 @@
 
 Generated from `globalping-r1-dispatch-approval-v1.json`. Do not edit by hand.
 
-**Execution status: `PENDING_MANUAL_OPERATOR_ACTION`**
+**Execution status: `SENT`**
 
 ## What was approved
 
@@ -31,17 +31,17 @@ The packet still reads `send_status: NOT_AUTHORIZED`, `operator_approval_recorde
 
 | | |
 |---|---|
-| public posts made | 0 |
-| issue URL | None |
+| public posts made | 1 |
+| issue URL | https://github.com/jsdelivr/globalping/issues/907 |
 | issue created by this repository | False |
 | `gh issue create` invoked | False |
 | GitHub API calls by this repository | 0 |
-| operator attestation recorded | False |
-| attestation level | None |
+| operator attestation recorded | True |
+| attestation level | OPERATOR_ATTESTED |
 
 Mission 1.66 could reach only OPERATOR_ATTESTED because a manual email send happens inside a mail client nothing here can observe. A public GitHub issue has a durable public URL, so once the operator supplies it the posted title and body can be compared against the approved ones. The ceiling that arc hit is a property of the CHANNEL rather than of manual sending.
 
-**Upgrade path.** the operator posts the issue and supplies its URL; a later mission retrieves it, compares the posted title and body against this approval, and records BYTE_VERIFIED. Until then the status stays PENDING_MANUAL_OPERATOR_ACTION.
+**Upgrade path.** a raw read of the issue body compared character for character against the frozen packet body, recorded with raw_body_compared true. Until then the level stays OPERATOR_ATTESTED.
 
 ## What this approval does not cover
 

@@ -86,13 +86,14 @@
     ],
     "r1_approval_record": "docs/data/globalping-r1-dispatch-approval-v1.json",
     "r1_approval_edited": false,
-    "r1_execution_state_unchanged": "PENDING_MANUAL_OPERATOR_ACTION",
     "both_enquiries_now_approved_separately": true,
     "and_that_is_not_one_approval_covering_both": "each names its own enquiry, its own mechanism and its own recipient, and each authorises exactly one act. Neither may be used to justify the other.",
     "residuals_closed_by_this_mission": 0,
     "r2_verdict_unchanged": "R2_PARTIAL_COMMERCIAL_ALLOWED_THIRD_PARTY_SCOPE_UNRESOLVED",
     "qualification_recomputed": false,
-    "an_approval_to_ask_is_not_an_answer": true
+    "an_approval_to_ask_is_not_an_answer": true,
+    "r1_execution_state_when_this_was_written": "PENDING_MANUAL_OPERATOR_ACTION",
+    "$snapshot_note": "Renamed in Mission 1.74.3 from r1_execution_state_unchanged. The value is unchanged and is what Mission 1.74.2 observed; the old name invited a live comparison, and a live comparison refused the transition the R1 approval was built to make."
   },
   "mission_accounting": {
     "EMAILS_SENT": 0,

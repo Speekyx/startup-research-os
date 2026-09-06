@@ -294,10 +294,22 @@ class TestTwoApprovalsAreNotOne(unittest.TestCase):
         self.assertEqual(pointer["appended_by_mission"], "1.74.2")
         self.assertTrue(pointer["approval_sha256_unchanged"])
 
-    def test_the_r1_execution_did_not_move(self):
-        r1 = load(R1_APPROVAL)["execution"]
-        self.assertEqual(r1["status"], self.scope["r1_execution_state_unchanged"])
-        self.assertEqual(r1["public_posts_made"], 0)
+    def test_the_snapshot_records_what_1_74_2_observed_and_is_not_a_live_constraint(self):
+        # Corrected in Mission 1.74.3. This field was named r1_execution_state_unchanged
+        # and compared LIVE, which refused the very transition the R1 approval was built
+        # to make. It is a snapshot of history; R1 has since legitimately reached SENT.
+        self.assertEqual(
+            self.scope["r1_execution_state_when_this_was_written"],
+            "PENDING_MANUAL_OPERATOR_ACTION",
+        )
+        self.assertEqual(load(R1_APPROVAL)["execution"]["status"], "SENT")
+
+    def test_r1_stayed_within_what_r1_authorised(self):
+        r1 = load(R1_APPROVAL)
+        self.assertLessEqual(
+            r1["execution"]["public_posts_made"],
+            r1["approved_action"]["maximum_public_posts"],
+        )
 
     def test_the_r1_packet_is_untouched(self):
         packet = load(R1_PACKET)
