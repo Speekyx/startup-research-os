@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.119
+Version: 1.120
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-06 (Sprint 1 / Mission 1.76.1)
+Last amended: 2026-09-07 (Sprint 1 / Mission 1.76.2)
 
 ---
 
@@ -13,6 +13,89 @@ Last amended: 2026-09-06 (Sprint 1 / Mission 1.76.1)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.120 - 2026-09-07 (Sprint 1 / Mission 1.76.2)
+
+**`R2_B_FOLLOWUP_PACKET_READY_FOR_OPERATOR_APPROVAL`.** One narrow follow-up packet,
+`GP-R2-B-Q1`, frozen at `fe312c37b8622e5a…` and **NOT_AUTHORIZED**. Nothing was sent, no
+mailbox was touched, and no verdict moved.
+
+**THE RECIPIENT IS NOT AN ADDRESS, AND THAT IS NOT A DODGE.** The brief said to stop with
+EXACT_REPLY_RECIPIENT_REQUIRED if the repository requires an address to authorise a manual
+reply. It does not, for THIS mechanism: the two earlier approvals bound a recipient because
+they composed a FRESH message, where the operator types an address and an unbound one could
+go anywhere. **A reply inside a thread inherits its recipient**, so nothing is typed and
+there is nothing to pin. The digest binds the THREAD instead -- its subject, the prior
+enquiry's digest and the prior reply's digest -- which is **tighter than an address, not
+looser**: it pins the conversation, the question that opened it and the reply being
+answered, where an address would identify a mailbox and say nothing about which exchange
+this belongs to. And the alternative was unavailable: the earlier sender is
+`NOT_ESTABLISHED`, so writing an address would have **invented the one field the whole
+exchange hangs on**. The field carries a sentinel and the gate refuses an `@` in it.
+
+**A NEW QUESTION IS A NEW ACTION.** GP-R2-Q1 asked four things and WAS answered; this asks
+one of them alone, which is a different question rather than a further version. Both
+earlier approvals are spent -- one by an attempt that bounced, one by the send it
+authorised -- and each names a different content digest AND a different question id. The
+gate asserts both LIVE, so an edit that retargeted a spent approval at this packet fails
+there rather than passing quietly.
+
+**ONE QUESTION, AND NOT THE SETTLED ONE.** The last enquiry was compound, and **a compound
+question gets the easiest clause answered** -- the commercial clause was already closed in
+Mission 1.74 and it is the one that came back. This body carries **exactly one question
+mark**, says nothing about commercial use beyond acknowledging the answer already given,
+and names HEAD, third-party and "do not own or operate". Not broadened to arbitrary
+methods, GET bodies, scanning, proxying, infrastructure exploitation, unlimited traffic or
+any target the operator does own. **The wording is the operator's and the only change is
+line wrapping**: both forms are stored and the gate checks that, whitespace-normalised,
+they are identical -- so "only the wrapping changed" is a CHECK rather than a claim.
+
+**THE DISCRIMINATOR IS FROZEN BEFORE DISPATCH** and admits three resolving answers:
+PERMITTED, NOT_PERMITTED and CONDITIONALLY_PERMITTED, each requiring the reply to address
+third-party target scope EXPLICITLY. **NOT_PERMITTED is a resolving answer**, because a
+discriminator that only admitted a yes would be a wish: it would make a refusal
+unrecordable and leave R2-B open however the provider answered. It does not close on
+silence, generic commercial permission, documentation phrasing, product behaviour, the
+proxy limitation alone, absence from the prohibited-use list, or implication. **The
+presupposition route is listed WITH ITS REASON ATTACHED**, because Mission 1.76.1 found
+that argument, refused it, and it will be found again.
+
+**AUTHORITY STAYS A SEPARATE GATE.** The earlier sender is still NOT_ESTABLISHED and this
+mission does not claim otherwise; that does not block preparing the packet -- the gate
+refuses the record saying it does -- and preparing it establishes nobody. **Establishing
+the sender remains a separate and still-open action.**
+
+**Verification.** Probe of **74 deliberate violations, 74 caught, 0 escaped**, plus **3 of
+3 positive controls**, ten files restored byte for byte. All eight cases the brief names
+are covered in the form available at this stage: no approval record exists yet, so "old
+approval reused" is probed by pointing each SPENT approval at this packet's digest and at
+its question id, and "second send" by authorising other than exactly one outward reply.
+**Binding-field mutations are re-digested before the gate sees them**, so the content
+checks do the work rather than hiding behind the hash check. **The controls are the
+point**: an explicit permission AND an explicit prohibition must both resolve, and a
+reworded body asking exactly one question must still pass -- a gate that only accepts the
+sentence we happened to write is a wall. **3171 bare-python tests**; both runners green;
+`ruff format --check`, `ruff check` and mypy through `uv`; contract generation `--check`;
+source catalog `--check`; all **51** CI gates, one of them new.
+
+**Nothing moved.** R2-B stays `THIRD_PARTY_TARGET_SCOPE_UNRESOLVED`, C9 stays PARTIAL, the
+tally stays **11 PASS / 1 PARTIAL / 0 FAIL** and the verdict stays `COUNTERPART_UNRESOLVED`
+-- **preparing a question resolves nothing**, and the gate asserts that too. GP-R2-Q1 v1
+and v2, both approvals, both execution records, their frozen hashes and the received-reply
+source record are untouched. **0 emails, 0 Gmail reads or writes, 0 connector calls, 0
+GitHub writes, 0 measurements, 0 target requests, 0 research API calls, 0 model calls, 0
+embeddings, 0 canonical mutations.**
+
+New: `docs/data/globalping-r2b-enquiry-packet-v1.json`, the generated
+`docs/data/globalping-r2b-followup-packet-v1.md`,
+`infrastructure/scripts/render_r2b_followup_packet.py` (CI gate 51),
+`packages/inferred-claim-evaluator/python/tests/test_r2b_followup_packet.py`, and
+`docs/reports/mission-1.76.2-report.md`.
+
+Changed: `docs/CLAUDE.md` 1.120 to 1.121; `.github/workflows/ci.yml` gains one gate.
+
+Unchanged: every earlier packet, approval, execution record and review in the Globalping
+arc, and every canonical research table.
 
 ## 1.119 - 2026-09-06 (Sprint 1 / Mission 1.76.1)
 

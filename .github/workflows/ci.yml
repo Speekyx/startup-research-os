@@ -672,6 +672,18 @@ jobs:
       - name: Globalping residual closure matches its records
         run: uv run python infrastructure/scripts/render_globalping_residuals.py --check
 
+      # Mission 1.76.2. One follow-up question, asking only the half that was not
+      # answered. The gate refuses: either spent approval reaching this packet; a digest
+      # that does not recompute; an address written into the recipient, which is a
+      # sentinel because the earlier sender is NOT_ESTABLISHED; the body broadened past
+      # the one question or asking about commercial use again; a discriminator that would
+      # close R2-B on silence, generic commercial permission, the proxy limitation or a
+      # presupposition; an approval or a send recorded in the packet; more than one
+      # outward reply; provider authority claimed for the earlier reply; and any outward
+      # action at all.
+      - name: The R2-B follow-up packet matches its record
+        run: uv run python infrastructure/scripts/render_r2b_followup_packet.py --check
+
       # Mission 1.76.1. A reply arrived on R2 and R2 did not close, for two independent
       # reasons. The gate refuses: a sender, address or timestamp recorded while nothing
       # was retrieved; provider authority claimed without them; the reply promoted past
