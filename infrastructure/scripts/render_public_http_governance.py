@@ -159,6 +159,40 @@ class ValidationError(RuntimeError):
     """A record says something this mission's rules refuse."""
 
 
+def _check_the_current_class_selection_is_consistent(path) -> None:
+    """A later mission may select a class. It may not select a run.
+
+    Re-pointed by Mission 1.76.6. This replaced a check that the selection artifact must not
+    exist, which pinned the repository's future to one mission's historical verdict. What is
+    checked now is that whatever selection exists is well formed and authorises nothing.
+    """
+    if not path.exists():
+        return
+    record = json.loads(path.read_text(encoding="utf-8"))
+    if not str(record.get("class_id") or "").strip():
+        raise ValidationError("a quantity-class selection exists and names no class")
+    if record.get("state") != "CLASS_SELECTED":
+        raise ValidationError(
+            f"the quantity-class selection is in state {record.get('state')!r}; selecting a "
+            "class is not selecting a construct and is not authorising a run"
+        )
+    states = record.get("states_kept_apart") or {}
+    if not states.get("CLASS_SELECTED"):
+        raise ValidationError("the selection does not record that a class was selected")
+    for forbidden in ("CONSTRUCT_SELECTED", "RUN_AUTHORIZED"):
+        if states.get(forbidden):
+            raise ValidationError(
+                f"the quantity-class selection records {forbidden}; that is a different "
+                "decision and this artifact may not carry it"
+            )
+    if record.get("corpus_frozen"):
+        raise ValidationError("the quantity-class selection freezes a corpus")
+    if record.get("measurements_executed") != 0:
+        raise ValidationError("the quantity-class selection records a measurement")
+    if record.get("exact_predicate_frozen"):
+        raise ValidationError("the quantity-class selection freezes a predicate")
+
+
 def _load(path: pathlib.Path) -> dict:
     if not path.exists():
         raise ValidationError(f"{path.name} does not exist")
@@ -904,8 +938,7 @@ def _check_no_execution(records: list[dict]) -> None:
                 ):
                     raise ValidationError(f"a reliability number appears: {key}")
 
-    if SELECTED_CLASS.exists():
-        raise ValidationError("selected-quantity-class-v1.json exists and no class was selected")
+    _check_the_current_class_selection_is_consistent(SELECTED_CLASS)
     if SELECTED_CONSTRUCT.exists():
         raise ValidationError("selected-construct-v1.json exists and no construct was selected")
 

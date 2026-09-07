@@ -1,0 +1,128 @@
+{
+  "$comment": "Mission 1.76.6. The blocker v5 named by name is gone, so the selection it refused is made. A class is selected; a construct is not; a run is not authorised.",
+  "record_version": "6.0.0",
+  "supersedes": "quantity-class-selection-decision-v5.json",
+  "supersedes_note": "v5 read `q1_strategically_viable: false` and `counterpart_qualified: false`, with the reason written out: 'the qualification verdict is what gates a selection, and it did not move. C9 is PARTIAL on R2.' C9 is PASS and the verdict is COUNTERPART_RESOLVED.",
+  "mission": "1.76.6",
+  "recorded_at": "2026-09-07",
+  "exact_predicate_frozen": false,
+  "target_values_retrieved": 0,
+  "primary_outcome": "Q1_SELECTED_CONSTRUCT_CONTRACT_REQUIRES_DECISION",
+  "selected_quantity_class": "Q1",
+  "selection_outcome": "CLASS_SELECTED",
+  "selected_class_artifact_created": true,
+  "selected_construct_created": false,
+  "counterpart_qualified": true,
+  "q1_strategically_viable": true,
+  "class_package": "quantity-class-package-q1-v2.json",
+  "construct_evaluation": "http-construct-candidate-evaluation-v1.json",
+  "three_states_kept_apart": {
+    "$comment": "The distinction the artifact exists to carry.",
+    "CLASS_SELECTED": true,
+    "CONSTRUCT_SELECTED": false,
+    "RUN_AUTHORIZED": false
+  },
+  "priority_delta": {
+    "$comment": "§2. Only the decision-relevant delta caused by 11/1/0 -> 12/0/0 was recomputed. No broad portfolio research was re-run.",
+    "what_mission_1_76_recorded": {
+      "selected": "M1",
+      "why": "dominance is not the selection rule; it is the veto. §14 forbids selecting a DOMINATED candidate, and M1 is dominated by nothing. Selection is then by tier, and M1 is the only member of TIER 1 -- the only candidate that is both executable now and targets a currently named sufficiency blocker.",
+      "globalping_state_then": "COUNTERPART_UNRESOLVED",
+      "globalping_selectable_then": false,
+      "why_not_then": "no route is qualified while C9 is PARTIAL",
+      "what_a_future_qualification_would_unlock": "an independently produced HTTP measurement, which is the only route currently visible to genuine evidence independence rather than source diversity"
+    },
+    "comparison": [
+      {
+        "criterion": "SCORABILITY_REPAIR",
+        "M1_wikimedia": "YES -- binds the reviewed 0.65 to Evidence that cannot use it",
+        "http_construct": "NO",
+        "favours": "M1"
+      },
+      {
+        "criterion": "NEW_EVIDENCE_DIMENSION",
+        "M1_wikimedia": "NO -- same proposition kind, same publisher",
+        "http_construct": "YES -- a transport-level observation the corpus has none of",
+        "favours": "HTTP"
+      },
+      {
+        "criterion": "ESTABLISHED_INDEPENDENCE_POTENTIAL",
+        "M1_wikimedia": "NONE -- one publisher, one pipeline",
+        "http_construct": "the only visible route, in Mission 1.76's own words: 'the only route currently visible to genuine evidence independence rather than source diversity'",
+        "favours": "HTTP"
+      },
+      {
+        "criterion": "CONTRADICTION_POTENTIAL",
+        "M1_wikimedia": "NONE -- a single witness cannot disagree with itself",
+        "http_construct": "YES, under a target-level proposition",
+        "favours": "HTTP"
+      },
+      {
+        "criterion": "EXECUTION_READINESS",
+        "M1_wikimedia": "EXECUTABLE_NOW over held data, no external action",
+        "http_construct": "NOT_EXECUTABLE: no construct, no corpus, no fetcher implementation, and a run needs separate operator approval",
+        "favours": "M1"
+      }
+    ],
+    "verdict": "NEITHER_DOMINATES_AND_THEY_ARE_NOT_COMPETING_FOR_THE_SAME_SLOT",
+    "why": "the closure removed the reason the HTTP route was excluded -- it was excluded as UNSELECTABLE, not as low value -- so it re-enters as a track. It did not become executable: there is still no construct, no corpus and no fetcher. M1 remains the only move that is executable now, which is the criterion that put it in TIER 1, and that criterion is untouched.",
+    "mission_1_76_priority_overturned": false,
+    "mission_1_76_priority_narrowed": true,
+    "how_it_was_narrowed": "its TIER 1 placement rested on M1 being the only candidate both executable now and aimed at a named blocker. That is still true. What is no longer true is the sentence beside it -- that no route is qualified -- so the HTTP track is now a parallel contract track rather than a blocked one.",
+    "broad_portfolio_research_rerun": false
+  },
+  "why_a_class_may_be_selected_while_no_construct_is": "the class question is whether two apparatuses can independently produce this world-state unit over a corpus we freeze. They can. The construct question is whether one exact predicate means the same thing measured from two vantages, and it does not follow from the first.",
+  "outcomes_considered_and_refused": [
+    {
+      "outcome": "Q1_AND_HTTP_CONSTRUCT_SELECTED_READY_FOR_CORPUS_FREEZE",
+      "refused_because": "it would require choosing a vantage semantics, and all three coherent choices have real costs. Picking the one that makes a construct appear is choosing a semantics for its convenience."
+    },
+    {
+      "outcome": "Q1_SELECTED_CATEGORICAL_EVALUATOR_REQUIRED",
+      "refused_because": "that outcome is for when the evaluator gap is the ONLY blocker. It is real and it is second: the contract decision determines whether the predicate is categorical at all."
+    },
+    {
+      "outcome": "GLOBALPING_QUALIFIED_BUT_NO_SAME_PROPOSITION_CONSTRUCT",
+      "refused_because": "it reads as a permanent negative about the pair. What is unresolved is a contract decision nobody has taken, not a demonstrated incomparability -- and V2 is a live route to a comparable proposition."
+    },
+    {
+      "outcome": "MISSION_1_77_REMAINS_HIGHER_PRIORITY",
+      "refused_because": "it is true for EXECUTION and it is not the class question. Reporting it as the primary outcome would say the class question was not answered, and it was."
+    }
+  ],
+  "mission_accounting": {
+    "GLOBALPING_API_EXECUTIONS": 0,
+    "TARGET_HTTP_REQUESTS": 0,
+    "SROS_FETCHER_RUNS": 0,
+    "ROBOTS_REQUESTS": 0,
+    "MEASUREMENT_VALUES": 0,
+    "COMMON_CRAWL_QUERIES": 0,
+    "HTTP_ARCHIVE_QUERIES": 0,
+    "RESEARCH_DATA_REQUESTS": 0,
+    "PROVIDER_CONTACTS": 0,
+    "MAILBOX_READS": 0,
+    "CORPORA_FROZEN": 0,
+    "CONSTRUCTS_SELECTED": 0,
+    "RAW_RECORDS_CREATED": 0,
+    "SIGNALS_CREATED": 0,
+    "CLAIMS_CREATED": 0,
+    "EVIDENCE_CREATED": 0,
+    "INDEPENDENCE_GROUPS_CREATED": 0,
+    "THRESHOLD_REGISTRATIONS": 0,
+    "CLAIM_DERIVATIONS": 0,
+    "EVALUATION_REFUSALS": 0,
+    "SCORES": 0,
+    "EMBEDDINGS": 0,
+    "MIGRATIONS": 0
+  },
+  "recommended_next_action": {
+    "action": "OPERATOR_DECISION_ON_THE_VANTAGE_SEMANTICS_OF_THE_CONSTRUCT_CONTRACT",
+    "the_decision": "V1, V2 or V3 in http-construct-candidate-evaluation-v1.json",
+    "preferred_on_current_evidence": "V2_UNIVERSAL_OVER_A_DEFINED_VANTAGE_CLASS",
+    "why_preferred": "it is the only one that keeps two witnesses on one Claim while making a disagreement mean something true. Its cost -- a weak SUPPORTS direction -- is stated rather than discovered later.",
+    "not_selected_by_this_mission": true,
+    "corpus_freeze_authorized": false,
+    "run_authorized": false,
+    "mission_1_77_not_started": true
+  }
+}

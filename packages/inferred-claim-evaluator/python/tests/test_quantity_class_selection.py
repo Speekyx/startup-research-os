@@ -74,6 +74,20 @@ def _producers(package: dict) -> list[dict]:
     ]
 
 
+def selection_authorises_nothing(case, path):
+    """Re-pointed by Mission 1.76.6. These files asserted the selection artifact did not
+    exist, which was true until Mission 1.76.6 selected Q1. What each defends is that its own
+    mission selected nothing, and that whatever selection exists authorises no run."""
+    if not path.exists():
+        return
+    record = json.loads(path.read_text(encoding="utf-8"))
+    case.assertEqual(record["state"], "CLASS_SELECTED")
+    case.assertFalse(record["states_kept_apart"]["CONSTRUCT_SELECTED"])
+    case.assertFalse(record["states_kept_apart"]["RUN_AUTHORIZED"])
+    case.assertFalse(record["corpus_frozen"])
+    case.assertEqual(record["measurements_executed"], 0)
+
+
 class Preconditions(unittest.TestCase):
     def test_mission_1_68_is_recorded_as_merged_at_its_commit(self) -> None:
         precondition = _load(BASELINE)["repository_precondition"]
@@ -332,7 +346,7 @@ class Selection(unittest.TestCase):
         self.assertIsNone(decision["selected_quantity_class"])
         self.assertEqual(decision["selection_outcome"], "NO_SELECTION")
         self.assertFalse(decision["selected_class_artifact_created"])
-        self.assertFalse(SELECTED.exists())
+        selection_authorises_nothing(self, SELECTED)
 
     def test_no_class_is_strategically_viable(self) -> None:
         decision = _load(DECISION)

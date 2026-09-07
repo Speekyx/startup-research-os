@@ -84,6 +84,20 @@ def load(path: pathlib.Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def selection_authorises_nothing(case, path):
+    """Re-pointed by Mission 1.76.6. These files asserted the selection artifact did not
+    exist, which was true until Mission 1.76.6 selected Q1. What each defends is that its own
+    mission selected nothing, and that whatever selection exists authorises no run."""
+    if not path.exists():
+        return
+    record = json.loads(path.read_text(encoding="utf-8"))
+    case.assertEqual(record["state"], "CLASS_SELECTED")
+    case.assertFalse(record["states_kept_apart"]["CONSTRUCT_SELECTED"])
+    case.assertFalse(record["states_kept_apart"]["RUN_AUTHORIZED"])
+    case.assertFalse(record["corpus_frozen"])
+    case.assertEqual(record["measurements_executed"], 0)
+
+
 class TestPreconditions(unittest.TestCase):
     def setUp(self):
         self.baseline = load(BASELINE)
@@ -513,7 +527,7 @@ class TestQ1AndDecision(unittest.TestCase):
         self.assertIsNone(self.decision["selected_quantity_class"])
         self.assertEqual(self.decision["selection_outcome"], "NO_SELECTION")
         self.assertIs(self.decision["selected_class_artifact_created"], False)
-        self.assertFalse(SELECTED_CLASS.exists())
+        selection_authorises_nothing(self, SELECTED_CLASS)
 
     def test_no_construct_and_no_counterpart_were_selected(self):
         self.assertIs(self.decision["selected_construct_created"], False)

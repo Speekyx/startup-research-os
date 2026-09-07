@@ -67,6 +67,20 @@ def entries(block: dict):
     return [(k, v) for k, v in block.items() if not k.startswith("$")]
 
 
+def selection_authorises_nothing(case, path):
+    """Re-pointed by Mission 1.76.6. These files asserted the selection artifact did not
+    exist, which was true until Mission 1.76.6 selected Q1. What each defends is that its own
+    mission selected nothing, and that whatever selection exists authorises no run."""
+    if not path.exists():
+        return
+    record = json.loads(path.read_text(encoding="utf-8"))
+    case.assertEqual(record["state"], "CLASS_SELECTED")
+    case.assertFalse(record["states_kept_apart"]["CONSTRUCT_SELECTED"])
+    case.assertFalse(record["states_kept_apart"]["RUN_AUTHORIZED"])
+    case.assertFalse(record["corpus_frozen"])
+    case.assertEqual(record["measurements_executed"], 0)
+
+
 class TestRecordsExist(unittest.TestCase):
     def test_every_mission_record_exists(self):
         for path in (
@@ -91,8 +105,10 @@ class TestRecordsExist(unittest.TestCase):
         self.assertTrue(POPULATION_PAGE.exists())
 
     def test_no_selected_class_artifact_exists(self):
-        """§41. The artifact exists only if Q1 became strategically viable, and it did not."""
-        self.assertFalse(SELECTED_CLASS.exists())
+        """Re-pointed by Mission 1.76.6. Q1 was not strategically viable on the route
+        pair THIS mission evaluated, and its own record still says so."""
+        self.assertIsNone(load(DECISION)["selected_quantity_class"])
+        selection_authorises_nothing(self, SELECTED_CLASS)
 
     def test_no_selected_construct_artifact_exists(self):
         """§42. A construct belongs to a later mission whatever this one concluded."""
