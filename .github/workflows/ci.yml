@@ -672,6 +672,15 @@ jobs:
       - name: Globalping residual closure matches its records
         run: uv run python infrastructure/scripts/render_globalping_residuals.py --check
 
+      # Mission 1.76.6. A class was selected and a construct was not. The gate refuses:
+      # collapsing CLASS_SELECTED, CONSTRUCT_SELECTED and RUN_AUTHORIZED; a selection whose
+      # premise has gone, since the qualification is asserted live rather than quoted; a
+      # superseded package re-graded in place; a corpus aggregate whose denominator is
+      # selected on what answered; a categorical HTTP predicate smuggled through the
+      # threshold evaluator; a vantage semantics chosen silently; and any measurement.
+      - name: The Q1 class selection matches its records
+        run: uv run python infrastructure/scripts/render_q1_class_selection.py --check
+
       # Mission 1.76.5. R2-B closed on twenty-two characters, which is not a reason to
       # check it less. The gate refuses: a frozen reply that does not answer to its own hash
       # or that carries a verdict, an evidence level or a message id; a review whose quoted

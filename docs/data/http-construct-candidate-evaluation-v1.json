@@ -1,0 +1,218 @@
+{
+  "$comment": "Mission 1.76.6. Three candidate constructs, evaluated in the order the brief fixes: proposition shape, then vantage, then missingness, then semantic correctness, then request comparability, then evaluator fit, then relevance. None is selected.",
+  "record_version": "1.0.0",
+  "mission": "1.76.6",
+  "recorded_at": "2026-09-07",
+  "quantity_class": "Q1",
+  "exact_predicate_frozen": false,
+  "target_values_retrieved": 0,
+  "measurements_executed": 0,
+  "proposition_shape": {
+    "$comment": "Decided FIRST, because it decides what the denominator question even is.",
+    "options_considered": [
+      "TARGET_LEVEL",
+      "CORPUS_COUNT",
+      "CORPUS_RATE",
+      "CORPUS_EXISTENTIAL"
+    ],
+    "preferred": "TARGET_LEVEL",
+    "why": "one preregistered proposition per frozen target has no denominator at all, so it cannot select a population on the measurement's own outcome -- the failure that closed the external pair in Mission 1.70. The corpus becomes a bounded set of independently attempted target propositions, and every target is accounted for whether it was evaluable or not.",
+    "why_corpus_level_is_worse_here": {
+      "corpus_count_or_rate": "each apparatus can only count over the targets IT could evaluate, and the two evaluable sets differ. Restricting to targets evaluable on both is co-coverage selection, which Mission 1.70 refused outright; not restricting means the two counts are over different populations and are not two measurements of one quantity. Evaluability is also not independent of the predicate -- a host that is down cannot be observed returning 3xx -- so conditioning on it is not harmless.",
+      "corpus_existential": "monotone, so it can never be contradicted. Mission 1.48 established that the propositions easiest to converge across apparatuses are exactly the ones that cannot produce the contradiction case, and an existential over a corpus is that shape."
+    },
+    "what_target_level_unlocks": "the contradiction case. Two witnesses reach ONE source-independent proposition, so one may SUPPORT while the other CONTRADICTS -- which Mission 1.48 found structurally unreachable and Mission 1.56 said needs a second witness disagreeing about one proposition.",
+    "refusals_are_first_class": "a target neither apparatus could evaluate produces a refusal row rather than a silent absence. The repository already has that shape: migration 0035 and ADR-038."
+  },
+  "vantage": {
+    "$comment": "The decisive section, and the one that stops every candidate. Evaluated second, because it gates everything after it.",
+    "sros_fetcher_vantage": "one operator machine, one network, one resolver; ours and known",
+    "globalping_vantage": "selectable by continent, region, country, state, city, ASN, network and tags, with each result carrying its probe's location and its resolvedAddress",
+    "both_vantages_are_stated": true,
+    "improvement_over_mission_1_70": "there, GEOGRAPHY_VANTAGE was DIFFERENT_AND_LOAD_BEARING because one side stated its vantage and the other did not. Here both state it. That removes the ignorance and does not remove the difference.",
+    "the_finding": "VANTAGE_IS_PROPOSITION_UNDERSPECIFICATION_NOT_MEASUREMENT_NOISE",
+    "why": "for a target behind a CDN or GeoDNS, the response genuinely differs by client geography, ASN and resolver. So 'target T returns a 3xx status' has no truth value until a vantage is named: the two apparatuses are not noisy witnesses of one fact, they are accurate witnesses of two. That is different from timing jitter, which a window absorbs, and it cannot be handled by corpus selection because which targets vary by vantage is not knowable before measuring -- and selecting on it after measuring is outcome selection.",
+    "mission_1_58_test_applied": "'if the two apparatuses disagree, is that a fact about the world or a bug?' For geo-varying targets it is a fact about the world -- about a DIFFERENT world-state than the proposition names. Corroboration is supposed to tolerate noise, not to absorb an undefined subject.",
+    "three_coherent_resolutions": [
+      {
+        "id": "V1_VANTAGE_IN_PROPOSITION_IDENTITY",
+        "effect": "the two apparatuses assert different propositions and land on different Claims",
+        "cost": "no shared Claim, so no independence and no contradiction. Defeats the purpose."
+      },
+      {
+        "id": "V2_UNIVERSAL_OVER_A_DEFINED_VANTAGE_CLASS",
+        "effect": "'for every vantage in class V, target T returns 3xx'. Each apparatus is a sample from V; a disagreement REFUTES the universal rather than manufacturing a contradiction.",
+        "cost": "the SUPPORTS direction is nearly vacuous, since two samples cannot establish a universal over a class -- only refute it. V must also be defined independently of who observes, or the predicate enumerates its own witnesses.",
+        "the_trap_it_must_avoid": "FRAME_INSIDE_THE_DEFINITION. A universal over 'every vantage observed' makes the proposition's content depend on which apparatuses happened to look, which is Mission 1.47's relocation of source attribution into the predicate, and Mission 1.57 named it a trap."
+      },
+      {
+        "id": "V3_EXPLICIT_TOLERANCE",
+        "effect": "the proposition names no vantage and vantage divergence is declared noise",
+        "cost": "it must say why divergence is noise rather than underspecification, and no retrieved document supports that for CDN-fronted targets. Adopting it would record an artefact as a finding."
+      }
+    ],
+    "which_was_chosen": null,
+    "why_none_was_chosen_here": "each has a real and different cost, and choosing among them decides what the eventual Evidence MEANS. Picking the one that makes a construct appear would be selecting a semantics for its convenience, which is the shape §20 puts vantage second to prevent."
+  },
+  "candidates": [
+    {
+      "id": "CANDIDATE_A",
+      "name": "HEAD_3XX_RESPONSE_OVER_FROZEN_CORPUS",
+      "predicate": "the HEAD response's status code is in the 3xx class",
+      "e_rule": "a valid HTTP status code was received for the frozen request",
+      "p_rule": "300 <= status < 400, which is the class boundary RFC 9110 defines",
+      "verdict": "BLOCKED_ON_VANTAGE",
+      "what_passes": [
+        "transport-level on both apparatuses; neither needs a body",
+        "redirect following can be pinned DISABLED on both, and R1 establishes the provider already does not follow",
+        "categorical class membership defined by a published standard rather than by us"
+      ],
+      "what_blocks_it": "redirects are among the MOST vantage-sensitive responses there are: geo-routing is commonly implemented as a 3xx. So this candidate is not merely exposed to the vantage problem, it is concentrated on it.",
+      "not_selected_merely_because_r1_work_exists": true
+    },
+    {
+      "id": "CANDIDATE_B",
+      "name": "HEAD_RESPONSE_RECEIVED",
+      "predicate": "the frozen HEAD request produced an HTTP response",
+      "e_rule": "the attempt reached a terminal state on the apparatus",
+      "p_rule": "a response was received",
+      "verdict": "REJECTED",
+      "why": "it requires separating a target's non-response from a network-path outcome from an apparatus failure, EQUIVALENTLY on both sides. Each apparatus separates its own apparatus failure well -- the fetcher by APPARATUS_FAILURE_NOT_A_WORLD_FACT, the provider by `offline` -- and neither separates a NETWORK-PATH outcome from a target outcome, because a connection that never arrives looks identical to one that was refused upstream. The two apparatuses take different paths, so the unseparated residue differs between them and lands inside the predicate.",
+      "additionally": "geo-blocking and ASN-level filtering make reachability itself vantage-dependent, so this candidate inherits the vantage problem as well."
+    },
+    {
+      "id": "CANDIDATE_C",
+      "name": "HEAD_NON_ERROR_STATUS",
+      "predicate": "the HEAD response's status is not an error class",
+      "e_rule": "a valid HTTP status code was received",
+      "p_rule": "status < 400, expressed as a numeric threshold",
+      "verdict": "REJECTED_ON_SEMANTICS_BEFORE_VANTAGE",
+      "why": "expressing it as `status < 400` treats a nominal code as a magnitude. HTTP status is categorical with a class structure: 301 is not less than 404 in any sense the predicate uses, and the ordering is an artifact of the numbering. A threshold evaluator would accept the integer and produce a verdict, which is exactly the smuggling the brief names -- the evaluator accepting integers is not evidence that the quantity is one.",
+      "could_it_be_rescued": "yes, as an explicit categorical construct over the class set {2xx, 3xx}, at which point it is Candidate A's shape with a wider positive class and the same vantage blocker."
+    }
+  ],
+  "selected_construct": null,
+  "why_no_construct_was_selected": "every candidate that survives its own semantics fails on vantage, and vantage is not a property of the candidate -- it is a property of the pair. The decision that unblocks all three is the same one, and it is a contract decision about what the proposition is ABOUT rather than a choice among predicates.",
+  "request_comparability": {
+    "$comment": "Mission 1.70's table, applied to this pair. MUST_MATCH means the construct pins it; MAY_DIFFER_AS_APPARATUS_METHOD is what independence requires; WITNESS_PROVENANCE_ONLY is recorded and not compared.",
+    "fields": [
+      {
+        "field": "SCHEME",
+        "classification": "MUST_MATCH"
+      },
+      {
+        "field": "HOST",
+        "classification": "MUST_MATCH"
+      },
+      {
+        "field": "PORT",
+        "classification": "MUST_MATCH"
+      },
+      {
+        "field": "PATH",
+        "classification": "MUST_MATCH"
+      },
+      {
+        "field": "QUERY",
+        "classification": "MUST_MATCH"
+      },
+      {
+        "field": "METHOD",
+        "classification": "MUST_MATCH",
+        "value": "HEAD"
+      },
+      {
+        "field": "REDIRECT_FOLLOWING",
+        "classification": "MUST_MATCH",
+        "value": "DISABLED"
+      },
+      {
+        "field": "HOST_HEADER_OVERRIDE",
+        "classification": "MUST_MATCH",
+        "value": "UNUSED"
+      },
+      {
+        "field": "OBSERVATION_WINDOW",
+        "classification": "MUST_MATCH"
+      },
+      {
+        "field": "USER_AGENT",
+        "classification": "WITNESS_PROVENANCE_ONLY",
+        "note": "each apparatus identifies itself honestly; requiring one string would require one apparatus to impersonate the other"
+      },
+      {
+        "field": "TIMEOUT",
+        "classification": "MAY_DIFFER_AS_APPARATUS_METHOD",
+        "note": "bounded on both and recorded; a differing bound changes which attempts reach a terminal state, so it enters missingness rather than the predicate"
+      },
+      {
+        "field": "DNS_RESOLUTION_PATH",
+        "classification": "MAY_DIFFER_AS_APPARATUS_METHOD",
+        "note": "this is part of what makes the two independent; the provider reports resolvedAddress, so the divergence is observable rather than hidden"
+      },
+      {
+        "field": "TLS_SNI",
+        "classification": "MUST_MATCH",
+        "note": "derived from HOST"
+      },
+      {
+        "field": "IP_VERSION",
+        "classification": "UNRESOLVED",
+        "note": "a target reachable over one family and not the other would diverge for a reason that is neither apparatus's fault and is not the target's state"
+      },
+      {
+        "field": "GEOGRAPHY_AND_ASN_VANTAGE",
+        "classification": "UNRESOLVED",
+        "note": "the blocking field. See the vantage section."
+      }
+    ],
+    "tally": {
+      "MUST_MATCH": 9,
+      "MAY_DIFFER_AS_APPARATUS_METHOD": 2,
+      "WITNESS_PROVENANCE_ONLY": 1,
+      "UNRESOLVED": 2
+    },
+    "overall": "REQUEST_CONTRACT_COMPATIBILITY_MOSTLY_ESTABLISHED_TWO_FIELDS_UNRESOLVED",
+    "the_field_that_would_have_broken_it_silently": "REDIRECT_FOLLOWING. The fetcher's load profile counts redirects toward the origin budget, so following is available to it, while the provider does not follow. A 3xx predicate compared across that difference would compare a redirect response against whatever the redirect led to. The construct must pin it, and nothing in either apparatus's defaults does."
+  },
+  "missingness": {
+    "denominator_rule": "N is the frozen corpus manifest, fixed before any value exists",
+    "targets_removed_from_N_for_any_outcome": 0,
+    "excluded_targets_remain_terminal_records": true,
+    "outcome_selected_denominator": false,
+    "how_target_level_avoids_it": "there is no denominator to select. Each target carries its own proposition and its own terminal state, and a target neither apparatus could evaluate is a refusal rather than a deletion.",
+    "apparatus_failure_is_not_a_world_fact": true,
+    "basis_a": "Mission 1.71's terminal taxonomy, 17 outcomes over 8 missingness classes",
+    "basis_b": "the provider's own `failed` and `offline` per-test statuses"
+  },
+  "evaluator_compatibility": {
+    "$comment": "Reported as a finding, not routed around.",
+    "existing_evaluator": "THRESHOLD_STATE, a measurement compared against a registered bound",
+    "fits_a_target_level_http_predicate": false,
+    "why_not": "class membership is categorical. 'status is in 3xx' is not a magnitude against a bound, and the two-sided range that defines the class is the class DEFINITION rather than a threshold anybody registered. Forcing it through the threshold evaluator would make the evaluator accept it and mean something else.",
+    "what_would_be_required": "CATEGORICAL_MEMBERSHIP_EVALUATOR",
+    "size_of_the_gap": "small and additive. The same four-gate shape -- semantic equivalence first, then applicability, then evaluability, then the categorical comparison -- with a registered CLASS DEFINITION where the threshold evaluator has a registered bound. It needs no change to Claim identity, to Evidence, to the refusal store or to the aggregator.",
+    "this_is_not_the_primary_blocker": "vantage is. The evaluator gap would be worth its own small mission only once the construct contract is decided, because the contract decides whether the predicate is categorical at all.",
+    "inferred_claim_compatibility": {
+      "proposition_identity": "COMPATIBLE",
+      "why": "ADR-036 removed source_id, the measurement value and direction from INFERRED proposition identity, which is exactly what lets two apparatuses reach one Claim and disagree about it.",
+      "source_id_in_identity": false,
+      "measurement_value_in_identity": false,
+      "refusal_provenance": "COMPATIBLE, and needed: unevaluable targets produce refusal rows",
+      "independence_grouping": "COMPATIBLE, and not exercised here",
+      "threshold_registration": "NOT_APPLICABLE for a categorical predicate"
+    }
+  },
+  "product_relevance": {
+    "candidate_a": "redirect and hostname configuration behaviour of deployed sites",
+    "candidate_b": "reachability and operability",
+    "candidate_c": "operability, at a coarser class",
+    "honest_bound": "MODERATE. These are real properties of web infrastructure and a real product category. None of them is demand, market size or willingness to pay, and the primary reason to select one is to give the evidence engine its first genuinely independent measurement shape.",
+    "promotion_refused": "HTTP status -> demand -> market size -> WTP"
+  },
+  "independence": {
+    "state": "INDEPENDENCE_ARCHITECTURALLY_CAPABLE",
+    "groups_created": 0,
+    "why_not_more": "a qualified pair is not a persisted independence judgement, and no Evidence exists to judge. Mission 1.73's qualification says the same thing about itself."
+  }
+}

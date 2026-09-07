@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.123
+Version: 1.124
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-07 (Sprint 1 / Mission 1.76.5)
+Last amended: 2026-09-07 (Sprint 1 / Mission 1.76.6)
 
 ---
 
@@ -13,6 +13,107 @@ Last amended: 2026-09-07 (Sprint 1 / Mission 1.76.5)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.124 - 2026-09-07 (Sprint 1 / Mission 1.76.6)
+
+**`Q1_SELECTED_CONSTRUCT_CONTRACT_REQUIRES_DECISION`.** The repository's first quantity-class
+selection: **Q1, fixed-corpus HTTP**. No construct was selected, no corpus frozen, no
+predicate frozen and no measurement run.
+
+**THE BRIEF ARRIVED NUMBERED 1.76.5, WHICH WAS SPENT** by the R2-B closure merged the same
+day; writing to that report path would have overwritten a merged governance record, so this
+is 1.76.6 and the successor the brief proposes becomes 1.76.7.
+
+**THE PREMISE THAT CHANGED IS THE ONE v5 NAMED BY NAME.** That decision record did not merely
+decline to select -- it wrote down why: *'the qualification verdict is what gates a selection,
+and it did not move. C9 is PARTIAL on R2.'* C9 is PASS, so the selection it refused is made --
+and **the gate asserts the premise LIVE**, recounting the twelve dimensions rather than
+reading the tally, so a selection cannot outlive a qualification quietly reopened.
+
+**THE 1.76 PRIORITY IS NARROWED, NOT OVERTURNED.** M1's TIER 1 placement rested on being the
+only candidate BOTH executable now AND aimed at a named blocker, and that is untouched: the
+HTTP route still has no construct, no corpus and no fetcher. What changed is that it is no
+longer **unselectable**, so it re-enters as a parallel contract track. Mission 1.76 had
+recorded it as a dependency and predicted its value in its own words -- *'the only route
+currently visible to genuine evidence independence rather than source diversity'*. Five
+criteria compared; **neither dominates and they are not competing for the same slot**.
+
+**VANTAGE IS PROPOSITION UNDERSPECIFICATION, NOT MEASUREMENT NOISE.** This is the finding and
+it stops all three candidates. Both apparatuses STATE their vantage -- better than Mission
+1.70, where one did and one did not -- and **stating it removes the ignorance, not the
+difference**. For a CDN- or GeoDNS-fronted target the response genuinely differs by geography,
+ASN and resolver, so *'target T returns 3xx'* **has no truth value until a vantage is named**:
+the two are not noisy witnesses of one fact, they are accurate witnesses of two. Mission
+1.58's test applied -- *is a disagreement a fact about the world or a bug?* -- gives a fact
+about the world, about a DIFFERENT world-state than the proposition names. **And it cannot be
+fixed by corpus selection**, because which targets vary is unknowable before measuring and
+selecting on it afterwards is outcome selection. Three coherent resolutions are recorded with
+their costs and **none was chosen**, because each decides what the eventual Evidence MEANS and
+picking the one that makes a construct appear is choosing a semantics for its convenience.
+**The preferred one carries a named trap**: a universal over 'every vantage observed' makes
+the proposition depend on who looked, which is `FRAME_INSIDE_THE_DEFINITION`.
+
+**TARGET-LEVEL, NOT A CORPUS AGGREGATE**, decided first because it decides what the
+denominator question even is. A target-level proposition **has no denominator to select**;
+every target keeps a terminal record and an unevaluable one produces a refusal row. **A corpus
+count or rate fails the way Mission 1.70 failed** -- each apparatus counts only over what IT
+could evaluate, restricting to the intersection is co-coverage selection, and evaluability is
+not independent of the predicate because a host that is down cannot be observed returning 3xx.
+**A corpus existential fails differently**: monotone, so it can never be contradicted. And
+target-level is what makes the contradiction case reachable at all.
+
+**CANDIDATE C IS REFUSED BEFORE VANTAGE, ON SEMANTICS**: `status < 400` treats a nominal code
+as a magnitude, and **the evaluator accepting integers is not evidence that the quantity is
+one**. **CANDIDATE B is refused** because a network-path outcome is separable from a target
+outcome on neither side, and the two take different paths. **CANDIDATE A is blocked on
+vantage**, and is worse on it than the others because geo-routing is commonly implemented as a
+3xx -- and it was **not preferred merely because R1 work already exists**.
+
+**THE FIELD THAT WOULD HAVE BROKEN IT SILENTLY IS REDIRECT_FOLLOWING.** The provider does not
+follow; the fetcher's own load profile counts redirects toward the origin budget, so it can.
+A 3xx predicate across that difference compares a redirect response against whatever it led
+to, and nothing in either default prevents it.
+
+**A CATEGORICAL EVALUATOR IS REQUIRED AND IT IS THE SECOND BLOCKER.** Class membership is not
+a measurement against a bound. The gap is small and additive and is reported as a finding
+rather than routed around -- and it is not the primary blocker, which is why the outcome is
+not `Q1_SELECTED_CATEGORICAL_EVALUATOR_REQUIRED`.
+
+**Verification.** Probe of **149 deliberate violations, 149 caught, 0 escaped**, plus **4 of 4
+positive controls**, ten files restored byte for byte. **Two escapes found and closed** -- a
+differing PATH and a differing QUERY, both named in the brief's own probe list -- now refused
+against a ten-field MUST_MATCH set. **Two controls are INVERTED**: a later mission must still
+be able to select a construct, and the no-construct state must stay expressible, because a
+gate that could only express one would decide the next mission by refusing the other. **Seven
+gates and seven test assertions were re-pointed rather than deleted**: each pinned a
+filesystem absence to its own mission's historical verdict, and each now keeps that verdict
+and checks that whatever selection exists authorises no run. **3431 bare-python tests**;
+both runners green; `ruff format --check`, `ruff check` and mypy through `uv`; contract
+generation `--check`; source catalog `--check`; all **54** CI gates, one of them new.
+
+**Nothing ran.** 0 Globalping API calls, 0 target HEAD requests, 0 SROS fetcher runs, 0 robots
+requests, 0 Common Crawl or HTTP Archive queries, 0 provider contacts, 0 mailbox reads, 0
+corpora frozen, 0 constructs selected, 0 RawRecords, 0 Signals, 0 Claims, 0 Evidence, 0
+independence groups, 0 threshold registrations, 0 derivations, 0 refusals, 0 scores, 0
+embeddings, 0 migrations. Canonical baseline unchanged at 325/325/33/44/45/58/4/0/1/1/0/1.
+`INDEPENDENCE_ARCHITECTURALLY_CAPABLE`, **0 groups**, and product relevance bounded at
+MODERATE with the demand promotion refused by name.
+
+New: `docs/data/selected-quantity-class-v1.json`,
+`docs/data/quantity-class-package-q1-v2.json`,
+`docs/data/quantity-class-selection-decision-v6.json`,
+`docs/data/http-construct-candidate-evaluation-v1.json`, the generated
+`docs/data/selected-quantity-class-v1.md`,
+`infrastructure/scripts/render_q1_class_selection.py` (CI gate 54),
+`packages/inferred-claim-evaluator/python/tests/test_q1_class_selection.py`, and
+`docs/reports/mission-1.76.6-report.md`.
+
+Changed: two predecessors gain one forward pointer each; seven gates and seven test
+assertions re-pointed from an absence check to a consistency check; `docs/CLAUDE.md` 1.124 to
+1.125.
+
+Unchanged: every Globalping record, every canonical research table, and the decision that M1
+remains the executable move.
 
 ## 1.123 - 2026-09-07 (Sprint 1 / Mission 1.76.5)
 

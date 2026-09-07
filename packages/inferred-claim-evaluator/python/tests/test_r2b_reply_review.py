@@ -58,6 +58,20 @@ def gate():
     return module
 
 
+def selection_authorises_nothing(case, path):
+    """Re-pointed by Mission 1.76.6. These files asserted the selection artifact did not
+    exist, which was true until Mission 1.76.6 selected Q1. What each defends is that its own
+    mission selected nothing, and that whatever selection exists authorises no run."""
+    if not path.exists():
+        return
+    record = json.loads(path.read_text(encoding="utf-8"))
+    case.assertEqual(record["state"], "CLASS_SELECTED")
+    case.assertFalse(record["states_kept_apart"]["CONSTRUCT_SELECTED"])
+    case.assertFalse(record["states_kept_apart"]["RUN_AUTHORIZED"])
+    case.assertFalse(record["corpus_frozen"])
+    case.assertEqual(record["measurements_executed"], 0)
+
+
 class TestTheReplyIsFrozenAndSaysNothingAboutItself(unittest.TestCase):
     def setUp(self):
         self.reply = load(REPLY)
@@ -348,8 +362,10 @@ class TestAClosedResidualAuthorisesNothing(unittest.TestCase):
             with self.subTest(flag=flag):
                 self.assertTrue(self.qual[flag])
 
-    def test_no_quantity_class_record_exists(self):
-        self.assertFalse((DATA / "selected-quantity-class-v1.json").exists())
+    def test_any_quantity_class_selection_authorises_nothing(self):
+        """Re-pointed by Mission 1.76.6. Mission 1.76.5 selected no class and its own
+        accounting still says so; a later selection may exist and must authorise no run."""
+        selection_authorises_nothing(self, DATA / "selected-quantity-class-v1.json")
 
     def test_a_run_still_needs_operator_approval(self):
         self.assertTrue(any("approval" in item for item in self.qual["a_run_still_needs"]))

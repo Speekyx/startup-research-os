@@ -164,5 +164,7 @@
     "counterpart_qualified": false,
     "q1_strategically_viable": false,
     "why": "the qualification verdict is what gates a selection, and it did not move. C9 is PARTIAL on R2, so the tally improved and nothing downstream became available."
-  }
+  },
+  "superseded_by": "quantity-class-selection-decision-v6.json",
+  "superseded_note": "Mission 1.76.6. One appended forward pointer. v5 recorded that no class was selectable BECAUSE C9 was PARTIAL, which was true when it was written."
 }

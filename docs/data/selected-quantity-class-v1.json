@@ -1,0 +1,41 @@
+{
+  "$comment": "Mission 1.76.6. The repository's first quantity-class selection. It says a class was chosen and nothing more: no construct, no corpus, no run.",
+  "record_version": "1.0.0",
+  "mission": "1.76.6",
+  "recorded_at": "2026-09-07",
+  "class_id": "Q1",
+  "class_name": "Fixed-corpus HTTP / HTML observation",
+  "class_package": "quantity-class-package-q1-v2.json",
+  "decision_record": "quantity-class-selection-decision-v6.json",
+  "class_verdict": "STRATEGICALLY_VIABLE",
+  "state": "CLASS_SELECTED",
+  "states_kept_apart": {
+    "CLASS_SELECTED": true,
+    "CONSTRUCT_SELECTED": false,
+    "RUN_AUTHORIZED": false,
+    "why_three_and_not_one": "a class says which world-state unit is worth measuring; a construct says which exact proposition; a run says a measurement may happen. Collapsing them is how a selection becomes an authorisation without anybody deciding."
+  },
+  "apparatuses": [
+    "SROS bounded HTTP fetcher",
+    "Globalping HTTP measurement"
+  ],
+  "counterpart_qualification": "globalping-counterpart-qualification-v4.json",
+  "exact_predicate_frozen": false,
+  "corpus_frozen": false,
+  "measurements_executed": 0,
+  "what_selection_does_not_authorise": [
+    "freezing a corpus",
+    "executing the SROS fetcher",
+    "executing a Globalping measurement",
+    "any request to any target",
+    "creating Evidence or an independence group",
+    "issuing a score"
+  ],
+  "limitations_carried_from_the_provider_declaration": [
+    "compliance with Globalping's limits and other policies",
+    "no abuse",
+    "no exploitation of infrastructure",
+    "no use as a proxy"
+  ],
+  "bounded_to": "bounded HTTP HEAD measurements of publicly reachable third-party websites the operator does not own or operate, provided they comply with Globalping's limits and are not abusive, exploitative, or used as a proxy"
+}

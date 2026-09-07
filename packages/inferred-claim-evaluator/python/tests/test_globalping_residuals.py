@@ -63,6 +63,20 @@ def load(path: pathlib.Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def selection_authorises_nothing(case, path):
+    """Re-pointed by Mission 1.76.6. These files asserted the selection artifact did not
+    exist, which was true until Mission 1.76.6 selected Q1. What each defends is that its own
+    mission selected nothing, and that whatever selection exists authorises no run."""
+    if not path.exists():
+        return
+    record = json.loads(path.read_text(encoding="utf-8"))
+    case.assertEqual(record["state"], "CLASS_SELECTED")
+    case.assertFalse(record["states_kept_apart"]["CONSTRUCT_SELECTED"])
+    case.assertFalse(record["states_kept_apart"]["RUN_AUTHORIZED"])
+    case.assertFalse(record["corpus_frozen"])
+    case.assertEqual(record["measurements_executed"], 0)
+
+
 class TestTheRecordsExist(unittest.TestCase):
     """1 to 4. Twelve records, and none of them is a stub."""
 
@@ -178,7 +192,7 @@ class TestThePrecondition(unittest.TestCase):
     def test_no_selection_artifact_existed_or_exists(self):
         self.assertTrue(self.pre["selected_quantity_class_artifact_absent"])
         self.assertTrue(self.pre["selected_construct_artifact_absent"])
-        self.assertFalse(SELECTED_CLASS.exists())
+        selection_authorises_nothing(self, SELECTED_CLASS)
         self.assertFalse(SELECTED_CONSTRUCT.exists())
 
     def test_the_baseline_records_no_drift(self):

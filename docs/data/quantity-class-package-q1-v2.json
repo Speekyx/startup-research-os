@@ -1,0 +1,56 @@
+{
+  "$comment": "Mission 1.76.6. The class is re-graded on a DIFFERENT route pair. v1's routes were two external archives and Mission 1.70 closed both on coverage semantics; these two are an apparatus this project would operate and a provider that measures on demand.",
+  "record_version": "2.0.0",
+  "supersedes": "quantity-class-package-q1-v1.json",
+  "mission": "1.76.6",
+  "recorded_at": "2026-09-07",
+  "class_id": "Q1",
+  "name": "Fixed-corpus HTTP / HTML observation",
+  "role": "MANDATORY_DEEP",
+  "product_relevance": "MODERATE",
+  "product_relevance_reason": "website reachability, redirect configuration and operability are real properties of deployed web infrastructure, and monitoring them is an established product category. The relevance is MODERATE and is not promoted: an HTTP status is not demand, not market size and not willingness to pay.",
+  "exact_world_state_unit": "the response a public HTTP server returns to a defined request at a moment",
+  "class_verdict": "STRATEGICALLY_VIABLE",
+  "what_the_verdict_covers": "the ROUTE question: two apparatuses that independently produce this class's world-state unit, both directable at one frozen corpus, both prospective, both with legible missingness. It does NOT cover whether any exact predicate is comparable across them, which is the construct question and is separately unresolved.",
+  "population_externally_freezable": "YES_BY_DIRECTION",
+  "population_finding": "v1 recorded this as PARTIAL because neither archive could be POINTED at a corpus. Both of these apparatuses can: the fetcher reads a manifest, and the provider takes the target as a request parameter. So the population is frozen by us before any value exists, which is what Mission 1.70 could not buy externally.",
+  "temporal_preselection": "STRONG",
+  "temporal_basis": "both measure ON DEMAND, so the observation window is prospective by construction and no historical addressability is required from either.",
+  "routes": [
+    {
+      "apparatus": "SROS bounded HTTP fetcher",
+      "production": "OWN_MEASUREMENT",
+      "basis": "docs/data/sros-bounded-http-apparatus-contract-v1.json, ADR-039",
+      "implemented": false,
+      "note": "contract complete since Mission 1.71 and governed since 1.72: one terminal record per manifest item, 17 terminal outcomes over 8 missingness classes, APPARATUS_FAILURE_NOT_A_WORLD_FACT kept separate from the target's silence, and body persistence DISABLED. Not implemented, which is an execution fact rather than a class fact."
+    },
+    {
+      "apparatus": "Globalping HTTP measurement",
+      "production": "OWN_MEASUREMENT",
+      "basis": "docs/data/globalping-counterpart-qualification-v4.json",
+      "implemented": true,
+      "note": "12 of 12 mandatory dimensions PASS. Probes perform the request themselves; per-test statuses include `failed` and `offline`, the latter defined by the provider as a probe that was not available -- apparatus missingness named by the provider rather than inferred by us."
+    }
+  ],
+  "route_count": 2,
+  "same_proposition": "PLAUSIBLE_BUT_NOT_ESTABLISHED",
+  "why_still_not_established": "Mission 1.73 classified the pair SAME_HTTP_WORLD_STATE_FAMILY_PLAUSIBLE and recorded that no exact predicate was chosen. Choosing one is this mission's work, and it did not close -- see the construct evaluation. A family being plausible does not make any particular predicate comparable.",
+  "independence_plausible": true,
+  "independence_basis": "separate code, separate networks, separate resolvers, separate vantages, and no shared measurement upstream. Neither reads the other. This is architectural plausibility and explicitly not a persisted independence judgement.",
+  "request_semantics_risks": {
+    "$comment": "The three that decide whether any predicate survives the pair.",
+    "vantage": "LOAD_BEARING AND UNRESOLVED. Two networks, two resolvers, two geographies. A CDN or a GeoDNS deployment can return a different status to each, so a status predicate is not necessarily a property of the target alone.",
+    "redirect_policy": "RESOLVABLE. R1 established that the provider returns the response and does not follow the redirect. The fetcher's load profile counts redirects toward the origin budget, so it CAN follow them -- a construct must therefore pin following to DISABLED on our side or the two are not measuring the same event.",
+    "method": "RESOLVABLE AND CONSTRAINED. HEAD on both, and HEAD is what the provider's permission covers. GET is outside it."
+  },
+  "bounded_pilot_feasible": "YES",
+  "commercial_purpose_compatibility": "PERMITTED_WITHIN_STATED_LIMITS",
+  "commercial_purpose_note": "established by provider declaration in Mission 1.76.5, carrying: compliance with Globalping's limits and other policies; no abuse; no exploitation of infrastructure; no use as a proxy",
+  "operator_route_considered": true,
+  "what_this_package_does_not_establish": [
+    "that any exact predicate is comparable across the two apparatuses",
+    "that a corpus may be frozen or a measurement run",
+    "that the fetcher exists; it is a contract and not code",
+    "any independence judgement about Evidence"
+  ]
+}
