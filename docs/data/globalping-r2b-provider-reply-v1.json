@@ -1,0 +1,145 @@
+{
+  "$comment": "Mission 1.76.5. The reply as the supplied thread export displays it, frozen before anything reads it. This document carries no verdict and no evidence level: a single document holding both the evidence and the conclusion can adjust the first to suit the second with nothing in it showing the adjustment.",
+  "record_version": "1.0.0",
+  "mission": "1.76.5",
+  "recorded_at": "2026-09-07",
+  "record_kind": "FROZEN_PROVIDER_REPLY",
+  "answers": {
+    "question_id": "GP-R2-B-Q1",
+    "packet_version": 1,
+    "packet_content_sha256": "fe312c37b8622e5abbdaaa541d00189c5a4a2f78b7082d3f70a034b7413da4dc",
+    "thread_subject": "Terms scope: HEAD measurements of publicly reachable third-party websites"
+  },
+  "reply": {
+    "$comment": "Verbatim, as the export displays it. Not trimmed, not normalised, not tidied.",
+    "body": "Yes it's not a problem",
+    "body_sha256": "9810e841d386278e65d17d954574f0d8bd01dc7b95c43e3390d57ae3b978082d",
+    "body_length_characters": 22,
+    "body_is_pure_ascii": true,
+    "apostrophe_codepoint": "U+0027",
+    "why_the_codepoint_is_recorded": "a curly apostrophe and a straight one are different bytes and would hash differently. Recording which one is present makes the digest checkable by somebody re-reading the export rather than trusted.",
+    "body_as_stated_by_the_operator": "Yes it's not a problem",
+    "operator_statement_matches_the_extracted_bytes": true,
+    "why_that_comparison_was_made": "Mission 1.65: a supplied string is a claim, established from the surface or not at all. The operator's message restated this body and the export is what establishes it. Here they agree; in Mission 1.74.7 they differed by a trailing space, which is why the comparison is performed rather than assumed."
+  },
+  "headers_as_displayed": {
+    "$comment": "These are DISPLAYED values from a rendered export, not RFC 5322 header bytes. No Message-ID, no Received chain and no DKIM result is present in the export, and none is invented here.",
+    "sender_display_name": "Dmitriy A.",
+    "sender_email": "d@globalping.io",
+    "recipient_display_name": "Thibault CHAUMONT",
+    "recipient_email": "thib.chm@gmail.com",
+    "subject": "Terms scope: HEAD measurements of publicly reachable third-party websites",
+    "displayed_reply_time_raw": "7 septembre 2026 à 19:40",
+    "displayed_reply_time_normalised": "2026-09-07 19:40",
+    "displayed_time_carries_no_offset": true,
+    "why_no_offset_is_recorded": "the export displays a local wall-clock time in the viewer's own frame and states no zone. Mission 1.10's rule applies unchanged: an unestablished timezone is stated, never chosen, and an RFC3339 offset invented from this document alone would be a fact about nothing.",
+    "message_id": null,
+    "message_id_available": false,
+    "received_chain_available": false,
+    "dkim_or_spf_result_available": false,
+    "why_those_are_null": "a printed thread export renders what a reader sees. The transport headers that would let a third party verify origin are not in it, and none was invented."
+  },
+  "provenance": {
+    "$comment": "Mission 1.45's shape. The artifact is fingerprinted and NOT committed: it carries the operator's mailbox, their personal display name and a Gmail per-account key, and this repository is public. A governance record that had to breach the minimisation obligation it exists to check would be a poor record.",
+    "source_kind": "OPERATOR_SUPPLIED_THREAD_EXPORT",
+    "artifact": "Gmail thread export, PDF, one page",
+    "artifact_sha256": "1641ca979e0d9d65b563c4d8fff28f7bd92033c1eb0d4522ae57fa1a475176e6",
+    "artifact_bytes": 71814,
+    "artifact_committed_to_this_repository": false,
+    "why_the_artifact_is_not_committed": "it contains the operator's personal mailbox and display name and a Gmail per-account identifier in its footer permalink. The fingerprint plus the operative text preserve what a reviewer needs without publishing any of that.",
+    "extracted_text_sha256": "bb4f9bd1af7a04e71b8cf8fc5dab84fc9f5bb416876684b9fb870634267f4bc8",
+    "extraction_method": "PDF_TEXT_LAYER_READ",
+    "extraction_tool": "pdfplumber page.extract_text",
+    "summarising_model_in_the_extraction_path": false,
+    "why_that_matters": "Mission 1.63: a retrieval summary is not a document. This extraction is mechanical -- it reads the text layer and reproduces it -- so the bytes here came from the file rather than from a reading of it.",
+    "what_the_extraction_does_not_establish": "byte equality with what the mail server holds. A PDF render imposes its own line wrapping, so multi-line bodies are compared whitespace-normalised rather than byte for byte. For this 22-character single-line reply the distinction does not arise; for the longer follow-up body it does, and it is recorded as such.",
+    "gmail_permalink_recorded": false,
+    "why_the_permalink_is_not_recorded": "it embeds a Gmail per-account key and thread identifiers, which are operator account metadata and are not needed to establish anything here.",
+    "messages_in_the_thread_as_displayed": 4,
+    "export_printed_at_as_displayed": "07/09/2026 19:47"
+  },
+  "the_thread_as_displayed": {
+    "$comment": "The four messages the export shows, in order, with only what is needed to place this reply. Bodies of the two operator messages are compared against what the repository already holds rather than restated.",
+    "messages": [
+      {
+        "position": 1,
+        "from_display_name": "Thibault CHAUMONT",
+        "from_email": "thib.chm@gmail.com",
+        "to_email": "d@globalping.io",
+        "displayed_time": "2026-09-06 19:39",
+        "identifies": "the GP-R2-Q1 v2 enquiry"
+      },
+      {
+        "position": 2,
+        "from_display_name": "Dmitriy A.",
+        "from_email": "d@globalping.io",
+        "to_email": "thib.chm@gmail.com",
+        "displayed_time": "2026-09-06 20:56",
+        "identifies": "the reply Mission 1.76.1 froze"
+      },
+      {
+        "position": 3,
+        "from_display_name": "Thibault CHAUMONT",
+        "from_email": "thib.chm@gmail.com",
+        "to_email": "d@globalping.io",
+        "displayed_time": "2026-09-07 19:26",
+        "identifies": "the GP-R2-B-Q1 follow-up"
+      },
+      {
+        "position": 4,
+        "from_display_name": "Dmitriy A.",
+        "from_email": "d@globalping.io",
+        "to_email": "thib.chm@gmail.com",
+        "displayed_time": "2026-09-07 19:40",
+        "identifies": "this reply"
+      }
+    ],
+    "this_reply_is_position": 4,
+    "it_directly_follows_the_follow_up": true,
+    "displayed_minutes_between_the_question_and_this_answer": 14
+  },
+  "corroborations": {
+    "$comment": "Three things the export agrees with that were recorded BEFORE it existed. Each is corroboration of an earlier record rather than a new claim, and each is stated with what it does not establish.",
+    "the_sent_follow_up_matches_the_frozen_packet_body": {
+      "match": "WHITESPACE_NORMALISED_IDENTICAL",
+      "byte_identical": false,
+      "why_not_byte_identical": "the export hard-wraps the paragraph across four rendered lines. That is a layout artifact of the render, and Mission 1.74.3's finding applies: precisely because it is an artifact, this retrieval cannot distinguish it from a real difference.",
+      "characters_compared": 338,
+      "what_it_establishes": "that the text displayed as sent is the approved frozen body, up to line wrapping",
+      "what_it_does_not_establish": "byte equality of what left the mail client"
+    },
+    "the_earlier_reply_matches_what_mission_1_76_1_froze": {
+      "match": "WHITESPACE_NORMALISED_IDENTICAL",
+      "frozen_body_sha256": "be3845f89b636b96e92827b2a2e789b1588623ca884bb37dbbe82159377903e5",
+      "why_this_is_worth_recording": "Mission 1.76.1 froze that reply from operator-supplied text with every header field null, and said so. The export was produced afterwards and agrees with it, which is corroboration of a record that could not corroborate itself."
+    },
+    "the_v2_send_time_matches_the_operator_attestation": {
+      "displayed": "2026-09-06 19:39",
+      "attested_by_mission_1_74_6": "2026-09-06T19:39:00+04:00",
+      "agree_to_the_displayed_minute": true,
+      "what_it_suggests": "the export's display frame is consistent with UTC+04:00 for that message",
+      "what_it_does_not_establish": "the display timezone as a general fact. One agreeing timestamp is one observation, and Gmail renders in the viewer's current zone rather than in a zone the document states."
+    }
+  },
+  "discrepancy_recorded_rather_than_resolved": {
+    "$comment": "Two operator-supplied facts about one event disagree. Neither is discarded and neither is silently preferred.",
+    "field": "the send time of GP-R2-B-Q1",
+    "attested_by_the_operator": "2026-09-07T19:19:30+04:00",
+    "displayed_by_the_export": "2026-09-07 19:26",
+    "difference_minutes_if_the_display_frame_is_plus_04_00": 6.5,
+    "resolved": false,
+    "why_it_is_not_resolved": "the export displays a time with no stated zone, so the two cannot be subtracted without assuming a frame. Under the frame the position-1 corroboration suggests, they differ by about six and a half minutes.",
+    "which_is_stronger_for_the_instant": "the displayed time comes from the mail system's own record of the message; the attestation is a person's statement. For the INSTANT of sending the first is better evidence, and it is the one that carries no offset.",
+    "what_was_done": "both are kept. The attested value stays the OPERATOR_ATTESTED send time, because it is the only one carrying an offset and the operator instructed that an offset not be invented from the export. The displayed value is frozen here as a separate fact.",
+    "does_it_bear_on_r2_b": false,
+    "why_not": "nothing in the residual turns on whether the question was sent at 19:19 or 19:26. It is recorded because a discrepancy noticed and not written down is one the next reader has to notice again."
+  },
+  "what_this_document_does_not_do": [
+    "state whether the reply closes R2-B",
+    "assign an evidence level",
+    "establish who Dmitriy A. is beyond the address the reply came from",
+    "claim byte equality with the mail server's stored message",
+    "record a Message-ID, a Received chain or an authentication result",
+    "invent a timezone offset for any displayed time"
+  ]
+}

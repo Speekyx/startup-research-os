@@ -58,9 +58,9 @@ it is not a value. The mechanism is a reply inside an established thread, which 
 |---|---|
 | outward replies made | 1 |
 | send attempts | 1 |
-| deliveries confirmed | 0 |
-| provider contacted | False |
-| provider replied | False |
+| deliveries confirmed | 1 |
+| provider contacted | True |
+| provider replied | True |
 | operator attestation | True |
 | attestation level | OPERATOR_ATTESTED |
 | mail connector used | False |
@@ -80,18 +80,18 @@ Mission 1.66's ceiling, unchanged: a manual reply happens in a mail client nothi
 | body used, per the attestation | `THE_FROZEN_PACKET_BODY` |
 | body compared by this repository | False |
 | message id | None |
-| **delivery** | **`UNCONFIRMED`** |
-| delivery established by | None |
+| **delivery** | **`CONFIRMED`** |
+| delivery established by | A_PROVIDER_REPLY_ANSWERING_THIS_MESSAGE_S_OWN_BOUNDED_QUESTION |
 
-the attestation states that a reply was sent and says nothing about whether it arrived. This arc has already shown the two come apart, because the v1 message to legal@globalping.io was also sent before it bounced.
+to answer the question the correspondent had to receive it, and the answer is responsive to THIS message rather than to the thread in general. That is what establishes delivery; the send attestation never could.
 
-no non-delivery report has been given to this record, and nothing here looked for one. Silence from an unexamined mailbox is not an observation.
+unchanged, and still not what established the delivery. Silence from an unexamined mailbox establishes nothing; a responsive answer does.
 
-**a contact means something reached the provider, and only delivery would establish that. The dispatch is attested and the delivery is not. It is additionally false for a second and independent reason: who is on the other end of this thread is NOT_ESTABLISHED, so even a confirmed delivery would not establish that the PROVIDER was contacted.**
+**Provider contacted: true. The message reached the provider's published contact channel and was answered from it, so both reasons this field was false have been removed: delivery is established, and the correspondent is established as the provider's own published address rather than an unknown party. It became true on evidence, not on the passage of time.**
 
 The attestation covers that a reply was sent, that it was sent exactly once, that it was sent as a reply in the established thread, the sending mailbox, the subject, the stated send time, that the frozen body was used. It does not cover delivery, receipt by a person, who received it, the bytes that actually left the mail client, a reply to it.
 
-### Nobody knows who received it
+### No recipient was attested
 
 the operator stated none, and a reply in a thread does not type one -- it inherits whatever address the thread carries. The sender of the message being answered is still NOT_ESTABLISHED, so this record cannot say who received the reply and does not guess. What IS established is the thread it went into.
 
@@ -110,5 +110,9 @@ the approval record was committed at 2026-09-07T01:12:27+04:00 and merged at 01:
 ### The approval is spent
 
 it authorised exactly one outward reply and one was made. A second reply, including a resend after a bounce that has not happened, is a second use of a one-use approval and needs its own.
+
+### A reply came back, and it is frozen elsewhere
+
+Frozen verbatim in `docs/data/globalping-r2b-provider-reply-v1.json` before anything read it, and cited by hash `9810e841d386278e…`. What it means is decided in a separate reviewed record, because a document holding both the evidence and the conclusion can adjust the first to suit the second.
 
 **Next: wait. If a reply arrives it is frozen verbatim in its own record before anything interprets it; if a non-delivery report arrives, this execution moves to DISPATCH_ATTEMPTED_DELIVERY_FAILED and this approval is spent either way.** Performed by OPERATOR; this repository may not perform it.

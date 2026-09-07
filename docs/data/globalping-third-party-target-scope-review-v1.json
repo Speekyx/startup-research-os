@@ -47,5 +47,7 @@
   "verdict": "THIRD_PARTY_TARGET_SCOPE_UNRESOLVED",
   "verdict_reasoning": "nothing prohibits it and nothing grants it. The one textual hook that could have widened the scope -- the Terms defining Globalping by reference to the Website -- was followed, and the incorporated description repeats the same 'your infrastructure' framing. So the ambiguity is not an unread page; it is the document saying the same narrow thing twice while prohibiting nothing.",
   "terms_silence_turned_favourable": false,
-  "terms_ambiguity_turned_into_prohibition": false
+  "terms_ambiguity_turned_into_prohibition": false,
+  "superseded_by": "globalping-third-party-target-scope-review-v2.json",
+  "superseded_note": "Mission 1.76.5. One appended forward pointer and nothing else. Every finding below was true of the evidence this record had, which was the Terms and the API documentation and no provider answer."
 }

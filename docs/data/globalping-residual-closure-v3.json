@@ -1,8 +1,8 @@
 {
   "$comment": "Mission 1.74.7. One residual closed, one remains. R2 is carried forward untouched, because a reply to R1 says nothing about a question sent on a different channel.",
-  "record_version": "2.0.0",
-  "mission": "1.74.7",
-  "recorded_at": "2026-09-06",
+  "record_version": "3.0.0",
+  "mission": "1.76.5",
+  "recorded_at": "2026-09-07",
   "exact_predicate_frozen": false,
   "target_values_retrieved": 0,
   "residuals": [
@@ -21,30 +21,37 @@
     {
       "id": "R2",
       "name": "third-party target and commercial-purpose scope",
-      "verdict": "R2_PARTIAL_COMMERCIAL_ALLOWED_THIRD_PARTY_SCOPE_UNRESOLVED",
-      "closed": false,
+      "verdict": "R2_PASS_COMMERCIAL_ALLOWED_THIRD_PARTY_SCOPE_PROVIDER_DECLARED",
+      "closed": true,
       "moved": true,
-      "what_moved": "unchanged by this mission. R2-A remains closed on the provider's FAQ and R2-B remains unresolved; the v2 enquiry was sent and no reply has arrived.",
-      "enquiry_prepared": true
+      "what_moved": "the GP-R2-B-Q1 follow-up was sent under a one-use approval and answered directly from the provider's published contact channel. R2-A was already closed on the provider's FAQ; R2-B now closes on a declaration.",
+      "enquiry_prepared": true,
+      "evidence_level": "R2_A2_SOLICITED_RESPONSIVE_PROVIDER_ANSWER_PRIVATE_CORRESPONDENCE",
+      "closed_by": "a solicited answer through the provider's published contact channel",
+      "closed_on_documentation": false
     }
   ],
   "sub_results": {
     "R2_A_COMMERCIAL_USE": "PERMITTED_WITHIN_TERMS",
-    "R2_B_THIRD_PARTY_TARGET_SCOPE": "UNRESOLVED"
+    "R2_B_THIRD_PARTY_TARGET_SCOPE": "PROVIDER_DECLARED_PERMITTED"
   },
   "r2_pass_requires_both": {
-    "$comment": "§25.",
+    "$comment": "Both halves now hold, each on its own evidence.",
     "A_commercial_purpose_compatible": true,
-    "B_third_party_targets_within_permitted_use": false,
-    "verdict": "R2_PARTIAL"
+    "B_third_party_targets_within_permitted_use": true,
+    "verdict": "R2_PASS"
   },
-  "residuals_remaining": 1,
+  "residuals_remaining": 0,
   "project_governance_classification": {
-    "$comment": "§24. The project may refuse under ambiguity, and that is governance.",
-    "classification": "PROVIDER_TERMS_REQUIRE_CLARIFICATION",
+    "$comment": "The project may refuse under ambiguity, and it may also stop refusing when the ambiguity is answered. This is the second, and it is a governance classification rather than a legal conclusion, exactly as the first was.",
+    "classification": "PROVIDER_DECLARED_PERMITTED_FOR_THE_BOUNDED_ACTIVITY_ASKED",
     "provider_terms_block_the_intended_activity": false,
-    "and_that_is_not_the_same_as_permission": true,
-    "refusing_under_ambiguity_is_legal_impossibility": false
+    "this_is_not_a_legal_conclusion": true,
+    "what_would_reopen_it": [
+      "the provider amending its Terms in a way that contradicts the declaration",
+      "the activity widening beyond the bounded HEAD use that was asked about",
+      "a later provider statement withdrawing or narrowing this one"
+    ]
   },
   "adr_039_unchanged": {
     "$comment": "§51. Governance does not bend to make a provider pass.",
@@ -73,10 +80,20 @@
     "r1_reply_received": true,
     "r2_reply_received": false
   },
-  "supersedes": "globalping-residual-closure-v1.json",
-  "supersedes_note": "Mission 1.74's record is not edited. Two residuals were open when it was written.",
+  "supersedes": "globalping-residual-closure-v2.json",
+  "supersedes_note": "R2-B closed on a solicited provider answer. R1 and R2-A are carried forward unchanged.",
   "r1_closed_by_this_mission": true,
   "r2_touched_by_this_mission": false,
-  "superseded_by": "globalping-residual-closure-v3.json",
-  "superseded_note": "Mission 1.76.5. One appended forward pointer. R2-B was genuinely unresolved when this was written, and the v2 enquiry had genuinely not been answered yet."
+  "limitations_carried_forward": [
+    "compliance with Globalping's limits and other policies",
+    "no abuse",
+    "no exploitation of infrastructure",
+    "no use as a proxy"
+  ],
+  "cites": {
+    "frozen_reply": "docs/data/globalping-r2b-provider-reply-v1.json",
+    "reply_body_sha256": "9810e841d386278e65d17d954574f0d8bd01dc7b95c43e3390d57ae3b978082d",
+    "review": "docs/data/globalping-r2b-reply-review-v1.json",
+    "scope_review": "docs/data/globalping-third-party-target-scope-review-v2.json"
+  }
 }

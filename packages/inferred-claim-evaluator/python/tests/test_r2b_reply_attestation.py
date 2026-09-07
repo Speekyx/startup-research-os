@@ -170,20 +170,36 @@ class TestNobodyKnowsWhoReceivedIt(unittest.TestCase):
 
 
 class TestASendIsNotADelivery(unittest.TestCase):
+    """Re-pointed by Mission 1.76.5. This class asserted the delivery was unconfirmed and no
+    reply had come back, which was true of the evidence it had. The rule it defends is not
+    that a delivery is never confirmed -- it is that a delivery is never confirmed BY THE
+    SEND ATTESTATION, and that a reply is never recorded unless it is frozen first."""
+
     def setUp(self):
         self.execution = load(APPROVAL)["execution"]
         self.delivery = self.execution["delivery"]
 
-    def test_the_delivery_is_unconfirmed_and_nothing_established_it(self):
-        self.assertEqual(self.delivery["delivery_status"], "UNCONFIRMED")
-        self.assertIsNone(self.delivery["delivery_established_by"])
-        self.assertEqual(self.execution["deliveries_confirmed"], 0)
+    def test_the_delivery_was_not_established_by_the_send_attestation(self):
+        self.assertEqual(self.delivery["delivery_status"], "CONFIRMED")
+        self.assertTrue(str(self.delivery["delivery_established_by"]).strip())
+        self.assertFalse(self.delivery["delivery_established_by_the_send_attestation"])
+        self.assertNotIn(self.delivery["delivery_established_by"], gate().THE_SEND_ATTESTATION)
+        self.assertEqual(self.execution["deliveries_confirmed"], 1)
 
-    def test_the_provider_is_not_marked_contacted(self):
-        self.assertFalse(self.execution["provider_contacted"])
-        self.assertTrue(self.execution["why_provider_contacted_is_false"].strip())
+    def test_what_established_it_is_a_responsive_answer_and_not_a_later_message(self):
+        """The general rule stands and the basis recorded is narrower than it."""
+        self.assertTrue(
+            self.delivery["a_reply_in_the_thread_would_not_confirm_delivery_of_THIS_message"]
+        )
+        self.assertIn("ANSWERING_THIS_MESSAGE", self.delivery["delivery_established_by"])
+        self.assertTrue(self.delivery["how_responsiveness_was_established"].strip())
 
-    def test_silence_is_not_recorded_as_an_observation(self):
+    def test_the_provider_contact_flag_is_backed_by_the_delivery(self):
+        self.assertTrue(self.execution["provider_contacted"])
+        self.assertEqual(self.delivery["delivery_status"], "CONFIRMED")
+        self.assertTrue(self.execution["why_provider_contacted_is_what_it_is"].strip())
+
+    def test_silence_is_still_not_recorded_as_an_observation(self):
         self.assertTrue(self.delivery["absence_of_a_reported_bounce_is_not_evidence"])
         self.assertTrue(self.delivery["why_silence_is_not_evidence"].strip())
         self.assertFalse(self.execution["mailbox_read"])
@@ -192,15 +208,15 @@ class TestASendIsNotADelivery(unittest.TestCase):
         self.assertTrue(self.delivery["a_later_bounce_would_move_this_to_FAILED"])
         self.assertTrue(self.delivery["a_later_delivery_confirmation_would_need_its_own_source"])
 
-    def test_a_later_message_in_the_thread_would_not_confirm_this_one(self):
-        self.assertTrue(
-            self.delivery["a_reply_in_the_thread_would_not_confirm_delivery_of_THIS_message"]
-        )
-        self.assertTrue(self.delivery["why_not"].strip())
-
-    def test_no_reply_is_recorded(self):
-        self.assertFalse(self.execution["provider_replied"])
-        self.assertFalse(self.execution["reply_recorded"])
+    def test_the_reply_was_frozen_before_it_was_interpreted(self):
+        self.assertTrue(self.execution["provider_replied"])
+        self.assertTrue(self.execution["reply_recorded"])
+        self.assertTrue(self.execution["reply_frozen_before_it_was_interpreted"])
+        frozen = load(REPO_ROOT / self.execution["reply_record"])
+        self.assertEqual(frozen["reply"]["body_sha256"], self.delivery["evidence_sha256"])
+        for banned in ("verdict", "evidence_level"):
+            with self.subTest(field=banned):
+                self.assertNotIn(banned, frozen)
 
 
 class TestTheApprovalIsSpent(unittest.TestCase):
@@ -227,8 +243,12 @@ class TestTheApprovalIsSpent(unittest.TestCase):
         self.assertFalse(execution["mailbox_read"])
 
 
-class TestASentQuestionIsStillNotAnAnswer(unittest.TestCase):
-    def test_r2_b_and_the_qualification_did_not_move(self):
+class TestTheRecordsThisMissionWroteWereNotRewritten(unittest.TestCase):
+    """Re-pointed by Mission 1.76.5. This asserted R2-B had not moved, which was true when
+    Mission 1.76.4 ran. R2-B moved in Mission 1.76.5, in SUCCESSOR records -- and what these
+    two still defend is that the versions 1.76.4 observed were not edited to match."""
+
+    def test_the_versions_1_76_4_observed_still_read_as_they_did(self):
         self.assertEqual(load(THIRD_PARTY)["verdict"], "THIRD_PARTY_TARGET_SCOPE_UNRESOLVED")
         qualification = load(QUALIFICATION)
         gates = {g["dimension"]: g["status"] for g in qualification["gates"]}
@@ -237,6 +257,16 @@ class TestASentQuestionIsStillNotAnAnswer(unittest.TestCase):
             qualification["tally"], {"PASS": 11, "PARTIAL": 1, "FAIL": 0, "UNKNOWN": 0}
         )
         self.assertEqual(qualification["verdict"], "COUNTERPART_UNRESOLVED")
+
+    def test_each_carries_exactly_one_appended_forward_pointer(self):
+        for path, successor in (
+            (THIRD_PARTY, "globalping-third-party-target-scope-review-v2.json"),
+            (QUALIFICATION, "globalping-counterpart-qualification-v4.json"),
+        ):
+            with self.subTest(record=path.name):
+                record = load(path)
+                self.assertEqual(record["superseded_by"], successor)
+                self.assertTrue((DATA / successor).exists())
 
     def test_no_residual_closed_and_nothing_was_recomputed(self):
         scope = load(APPROVAL)["scope"]
@@ -338,13 +368,29 @@ class TestTheGateRefusesInferringDelivery(unittest.TestCase):
         with self.assertRaises(self.gate.ValidationError):
             self.gate._check_execution(approval)
 
-    def delivery(self, **fields):
+    def unconfirmed(self):
+        """The pre-reply state, built explicitly so the inference rules still get attacked."""
         approval = copy.deepcopy(self.approval)
+        approval["execution"].update(
+            {
+                "deliveries_confirmed": 0,
+                "provider_contacted": False,
+                "provider_replied": False,
+                "reply_recorded": False,
+            }
+        )
+        approval["execution"]["delivery"].update(
+            {"delivery_status": "UNCONFIRMED", "delivery_established_by": None}
+        )
+        return approval
+
+    def delivery(self, **fields):
+        approval = self.unconfirmed()
         approval["execution"]["delivery"].update(fields)
         return approval
 
     def test_a_counted_delivery_on_an_unconfirmed_state_is_refused(self):
-        approval = copy.deepcopy(self.approval)
+        approval = self.unconfirmed()
         approval["execution"]["deliveries_confirmed"] = 1
         self.refused(approval)
 
@@ -352,12 +398,18 @@ class TestTheGateRefusesInferringDelivery(unittest.TestCase):
         self.refused(self.delivery(delivery_established_by="OPERATOR_SEND_ATTESTATION"))
 
     def test_a_provider_contact_without_a_confirmed_delivery_is_refused(self):
-        approval = copy.deepcopy(self.approval)
+        approval = self.unconfirmed()
         approval["execution"]["provider_contacted"] = True
         self.refused(approval)
 
     def test_treating_silence_as_evidence_is_refused(self):
         self.refused(self.delivery(absence_of_a_reported_bounce_is_not_evidence=False))
+
+    def test_a_delivery_confirmed_by_the_send_attestation_flag_is_refused(self):
+        approval = copy.deepcopy(self.approval)
+        approval["execution"]["delivery"]["delivery_established_by_the_send_attestation"] = True
+        approval["execution"]["delivery"]["delivery_established_by"] = "OPERATOR_ATTESTED"
+        self.refused(approval)
 
     def test_making_the_unconfirmed_state_final_is_refused(self):
         self.refused(self.delivery(a_later_bounce_would_move_this_to_FAILED=False))
@@ -385,9 +437,33 @@ class TestTheGateRefusesInferringDelivery(unittest.TestCase):
         """That outcome has its own execution status."""
         self.refused(self.delivery(delivery_status="FAILED"))
 
-    def test_claiming_a_reply_came_back_is_refused(self):
-        approval = copy.deepcopy(self.approval)
+    def test_a_reply_claimed_without_a_frozen_record_is_refused(self):
+        """Re-pointed by Mission 1.76.5. A reply MAY be recorded; what may not is a reply
+        recorded without the document that froze it before anything read it."""
+        approval = self.unconfirmed()
         approval["execution"]["provider_replied"] = True
+        approval["execution"]["reply_recorded"] = True
+        approval["execution"]["reply_record"] = ""
+        self.refused(approval)
+
+    def test_a_reply_half_recorded_is_refused(self):
+        approval = copy.deepcopy(self.approval)
+        approval["execution"]["reply_recorded"] = False
+        self.refused(approval)
+
+    def test_a_reply_recorded_without_being_frozen_first_is_refused(self):
+        approval = copy.deepcopy(self.approval)
+        approval["execution"]["reply_frozen_before_it_was_interpreted"] = False
+        self.refused(approval)
+
+    def test_a_reply_record_that_does_not_exist_is_refused(self):
+        approval = copy.deepcopy(self.approval)
+        approval["execution"]["reply_record"] = "docs/data/no-such-reply.json"
+        self.refused(approval)
+
+    def test_a_delivery_citing_a_different_reply_is_refused(self):
+        approval = copy.deepcopy(self.approval)
+        approval["execution"]["delivery"]["evidence_sha256"] = "0" * 64
         self.refused(approval)
 
     def test_a_confirmed_delivery_with_an_independent_source_is_accepted(self):
@@ -406,20 +482,24 @@ class TestTheRenderedPage(unittest.TestCase):
     def setUp(self):
         self.text = PAGE.read_text(encoding="utf-8")
 
-    def test_it_reports_the_send_and_the_unconfirmed_delivery(self):
+    def test_it_reports_the_send_and_the_delivery_state(self):
         self.assertIn("Do not edit by hand", self.text)
         self.assertIn("SENT", self.text)
-        self.assertIn("UNCONFIRMED", self.text)
+        self.assertIn(load(APPROVAL)["execution"]["delivery"]["delivery_status"], self.text)
         self.assertIn("2026-09-07T19:19:30+04:00", self.text)
 
-    def test_it_does_not_claim_a_delivery_a_contact_or_a_reply(self):
+    def test_it_keeps_the_send_and_the_delivery_apart(self):
+        """Re-pointed by Mission 1.76.5. The heading is the point, and it survives the
+        delivery being confirmed: what confirmed it was never the send."""
         self.assertIn("A send is not a delivery", self.text)
-        self.assertIn("| deliveries confirmed | 0 |", self.text)
-        self.assertIn("| provider contacted | False |", self.text)
-        self.assertIn("| provider replied | False |", self.text)
+        self.assertIn("| delivery established by |", self.text)
 
-    def test_it_says_nobody_knows_who_received_it(self):
-        self.assertIn("Nobody knows who received it", self.text)
+    def test_it_names_the_frozen_reply_rather_than_quoting_it(self):
+        self.assertIn("frozen elsewhere", self.text)
+        self.assertIn("globalping-r2b-provider-reply-v1.json", self.text)
+
+    def test_it_says_no_recipient_was_attested(self):
+        self.assertIn("No recipient was attested", self.text)
         self.assertIn("| recipient | None |", self.text)
 
     def test_the_report_exists(self):

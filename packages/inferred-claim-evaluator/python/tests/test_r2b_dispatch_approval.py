@@ -206,11 +206,22 @@ class TestOneReplyWasSentAndNothingMore(unittest.TestCase):
         )
         self.assertTrue(self.execution["approval_exhausted"])
 
-    def test_no_delivery_contact_or_answer_is_claimed(self):
-        self.assertEqual(self.execution["deliveries_confirmed"], 0)
-        self.assertFalse(self.execution["provider_contacted"])
-        self.assertFalse(self.execution["provider_replied"])
-        self.assertFalse(self.execution["reply_recorded"])
+    def test_nothing_is_claimed_that_the_evidence_does_not_carry(self):
+        """Re-pointed by Mission 1.76.5. This asserted no delivery, no contact and no reply,
+        which was true until a reply came back. The property is that each flag is backed by
+        something: a delivery by a source that is not the send attestation, a contact by that
+        delivery, a reply by a frozen record."""
+        delivery = self.execution["delivery"]
+        if delivery["delivery_status"] == "CONFIRMED":
+            self.assertGreaterEqual(self.execution["deliveries_confirmed"], 1)
+            self.assertTrue(str(delivery["delivery_established_by"]).strip())
+            self.assertFalse(delivery["delivery_established_by_the_send_attestation"])
+        else:
+            self.assertEqual(self.execution["deliveries_confirmed"], 0)
+            self.assertFalse(self.execution["provider_contacted"])
+        self.assertEqual(self.execution["provider_replied"], self.execution["reply_recorded"])
+        if self.execution["reply_recorded"]:
+            self.assertTrue(self.execution["reply_frozen_before_it_was_interpreted"])
 
     def test_the_send_is_attested_and_nothing_stronger(self):
         self.assertTrue(self.execution["operator_attestation_recorded"])
@@ -413,7 +424,13 @@ class TestTheGateRefusesTheShortcuts(unittest.TestCase):
                 "deliveries_confirmed": 0,
                 "operator_attestation_recorded": False,
                 "attestation_level": None,
+                "provider_contacted": False,
+                "provider_replied": False,
+                "reply_recorded": False,
             }
+        )
+        approval["execution"]["delivery"].update(
+            {"delivery_status": "UNCONFIRMED", "delivery_established_by": None}
         )
         return approval
 

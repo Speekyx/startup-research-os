@@ -1,10 +1,10 @@
 {
   "$comment": "Mission 1.74.7. Eleven PASS, one PARTIAL, zero FAIL. The tally moved and the verdict did not, which is the honest shape of closing one residual out of two.",
-  "record_version": "3.0.0",
-  "supersedes": "globalping-counterpart-qualification-v2.json",
-  "supersedes_note": "Mission 1.74's record is not edited. C6 was PARTIAL when it was written because nothing first-party stated the behaviour, and that was true then.",
-  "mission": "1.74.7",
-  "recorded_at": "2026-09-06",
+  "record_version": "4.0.0",
+  "supersedes": "globalping-counterpart-qualification-v3.json",
+  "supersedes_note": "C9 moves PARTIAL to PASS on the R2-B closure. Every other dimension is carried forward unchanged and none was re-examined, because nothing in this mission bears on them.",
+  "mission": "1.76.5",
+  "recorded_at": "2026-09-07",
   "exact_predicate_frozen": false,
   "target_values_retrieved": 0,
   "candidate": "Globalping",
@@ -68,10 +68,16 @@
     },
     {
       "dimension": "C9_RIGHTS_FEASIBILITY",
-      "status": "PARTIAL",
+      "status": "PASS",
       "mandatory": true,
       "recomputed": false,
-      "why": "unchanged. R2 was not examined by this mission, its enquiry has no reply, and a reply about redirects establishes nothing about Terms scope"
+      "why": "R1 closed on a public permalinked comment carrying a platform-asserted organisation membership. This closes on private correspondence from a published address, fingerprinted and held by the operator.",
+      "status_before": "PARTIAL",
+      "what_moved": "R1 closed in Mission 1.74.7 and R2-B closes here, so both residuals that held this dimension open are answered. R2-A was already closed on the provider's FAQ.",
+      "basis": "a solicited provider declaration through its published contact channel, frozen verbatim and reviewed against a discriminator written before dispatch",
+      "stated_bound": "the permission is a DECLARATION rather than amended Terms, is exactly as wide as the question asked, and carries the limits that question carried: comply with Globalping's limits and policies, no abuse, no infrastructure exploitation, no use as a proxy.",
+      "evidence_level": "R2_A2_SOLICITED_RESPONSIVE_PROVIDER_ANSWER_PRIVATE_CORRESPONDENCE",
+      "weaker_than_r1_evidence": true
     },
     {
       "dimension": "C10_INDEPENDENCE_PLAUSIBILITY",
@@ -97,31 +103,39 @@
   ],
   "gate_count": 12,
   "tally": {
-    "PASS": 11,
-    "PARTIAL": 1,
+    "PASS": 12,
+    "PARTIAL": 0,
     "FAIL": 0,
     "UNKNOWN": 0
   },
   "tally_before": {
-    "PASS": 10,
-    "PARTIAL": 2,
+    "PASS": 11,
+    "PARTIAL": 1,
     "FAIL": 0,
     "UNKNOWN": 0
   },
   "tally_changed": true,
   "passing_dimensions_reopened": 0,
   "contradicting_evidence_found": false,
-  "verdict": "COUNTERPART_UNRESOLVED",
-  "why": "qualification needs all twelve mandatory dimensions PASS. C9 is PARTIAL on R2, and PARTIAL blocks. A better tally is not a verdict.",
+  "verdict": "COUNTERPART_RESOLVED",
+  "why": "the twelve mandatory dimensions are conjunctive and all twelve now PASS. The counterpart qualifies.",
   "no_score_issued": true,
-  "verdict_changed": false,
-  "what_this_mission_added": [
-    "R1 closed on a solicited, responsive, attributable provider answer",
-    "the reply is frozen verbatim in its own record before any interpretation reads it",
-    "the posted issue body was compared byte for byte against the frozen packet, so the reply is attached to the question this project asked rather than to a paraphrase",
-    "C6 moves from PARTIAL to PASS and the tally from 10/2/0 to 11/1/0",
-    "the verdict does not move, because one residual remains"
-  ],
-  "superseded_by": "globalping-counterpart-qualification-v4.json",
-  "superseded_note": "Mission 1.76.5. One appended forward pointer. C9 was correctly PARTIAL when this was written: R2-B was open and no provider answer existed."
+  "verdict_changed": true,
+  "what_this_mission_added": "the R2-B closure, and with it the last open mandatory dimension. Nothing was measured, collected, selected or scored.",
+  "verdict_before": "COUNTERPART_UNRESOLVED",
+  "what_qualification_does_not_authorise": {
+    "$comment": "Mission 1.73 recorded this before any dimension had closed, and it is unchanged. A qualified counterpart is a counterpart that MAY be used, not one that is running.",
+    "no_construct_is_selected": true,
+    "no_quantity_class_is_selected": true,
+    "no_corpus_is_frozen": true,
+    "no_measurement_was_run": true,
+    "no_independence_group_exists": true,
+    "no_score_is_issued": true,
+    "a_run_still_needs": [
+      "a selected quantity class and a frozen construct",
+      "a specific corpus and request contract",
+      "an ADR-039 governed run configuration",
+      "explicit operator approval"
+    ]
+  }
 }

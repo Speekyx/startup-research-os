@@ -404,7 +404,7 @@ def _check_delivery_was_not_inferred(execution: dict) -> None:
         raise ValidationError(
             "a failed delivery is not recorded under SENT; that outcome has its own status"
         )
-    if not str(delivery["why_delivery_is_unconfirmed"]).strip():
+    if not str(delivery["why_this_delivery_state"]).strip():
         raise ValidationError("the delivery block states no reason for the state it records")
 
     established_by = delivery["delivery_established_by"]
@@ -454,11 +454,57 @@ def _check_delivery_was_not_inferred(execution: dict) -> None:
 
     if execution["provider_contacted"] and status != "CONFIRMED":
         raise ValidationError("the provider is marked contacted with no confirmed delivery")
-    if (
-        not execution["provider_contacted"]
-        and not str(execution["why_provider_contacted_is_false"]).strip()
-    ):
-        raise ValidationError("the record does not say why the provider is not marked contacted")
+    if not str(execution["why_provider_contacted_is_what_it_is"]).strip():
+        raise ValidationError(
+            "the record does not say why the provider contact flag reads as it does"
+        )
+
+
+def _check_the_reply_was_frozen_before_it_was_read(execution: dict) -> None:
+    """A reply may be recorded, and only as a document frozen before anything read it.
+
+    Mission 1.76.4 wrote this as a flat refusal while its own message named the condition.
+    The condition is now checked instead: the record exists, answers to its own hash, names
+    this enquiry, and carries no verdict of its own.
+    """
+    if not execution.get("provider_replied") or not execution.get("reply_recorded"):
+        raise ValidationError(
+            "the record is half-way into recording a reply; provider_replied and "
+            "reply_recorded answer one question and may not disagree"
+        )
+    if not execution.get("reply_frozen_before_it_was_interpreted"):
+        raise ValidationError(
+            "a reply is recorded without being frozen first; a document that carried both the "
+            "evidence and the conclusion could adjust the first to suit the second"
+        )
+
+    name = str(execution.get("reply_record") or "")
+    if not name:
+        raise ValidationError("a reply is recorded and no frozen record is named")
+    path = ROOT / name
+    if not path.exists():
+        raise ValidationError(f"the frozen reply record {name} does not exist")
+
+    reply = _load(path)
+    body = reply["reply"]
+    if hashlib.sha256(body["body"].encode("utf-8")).hexdigest() != body["body_sha256"]:
+        raise ValidationError("the frozen reply does not answer to its own recorded hash")
+    if execution["delivery"].get("evidence_sha256") != body["body_sha256"]:
+        raise ValidationError(
+            "the delivery cites a different reply than the one the execution names"
+        )
+    if reply["answers"]["packet_content_sha256"] != _load(PACKET)["content_sha256"]:
+        raise ValidationError("the frozen reply answers a different enquiry than this one")
+
+    # The frozen source states what was said. It may not state what it means.
+    for banned in ("verdict", "evidence_level", "closes_r2_b", "r2_b_residual_closed"):
+        if banned in reply:
+            raise ValidationError(
+                f"the frozen reply carries {banned!r}; the evidence and the conclusion belong "
+                "in separate documents"
+            )
+    if reply["headers_as_displayed"]["message_id"] is not None:
+        raise ValidationError("the frozen reply carries a message id the export does not have")
 
 
 def _check_execution(approval: dict) -> None:
@@ -506,10 +552,7 @@ def _check_execution(approval: dict) -> None:
         _check_delivery_was_not_inferred(execution)
 
     if execution.get("provider_replied") or execution.get("reply_recorded"):
-        raise ValidationError(
-            "the record claims a reply came back; a reply is a document and would be frozen "
-            "verbatim in its own record before anything interpreted it"
-        )
+        _check_the_reply_was_frozen_before_it_was_read(execution)
 
     for field in (
         "why_byte_verification_is_unreachable_here",
@@ -713,11 +756,11 @@ def render(approval: dict) -> str:
             f"| **delivery** | **`{delivery['delivery_status']}`** |",
             f"| delivery established by | {delivery['delivery_established_by']} |",
             "",
-            delivery["why_delivery_is_unconfirmed"],
+            delivery["why_this_delivery_state"],
             "",
             delivery["why_silence_is_not_evidence"],
             "",
-            f"**{execution['why_provider_contacted_is_false']}**",
+            f"**Provider contacted: {execution['why_provider_contacted_is_what_it_is']}**",
             "",
             "The attestation covers "
             + ", ".join(execution["attestation_covers"])
@@ -725,7 +768,7 @@ def render(approval: dict) -> str:
             + ", ".join(execution["attestation_does_not_cover"])
             + ".",
             "",
-            "### Nobody knows who received it",
+            "### No recipient was attested",
             "",
             execution["why_no_recipient_is_attested"],
             "",
@@ -748,6 +791,16 @@ def render(approval: dict) -> str:
             execution["why_the_approval_is_exhausted"],
             "",
         ]
+        if execution.get("reply_recorded"):
+            lines += [
+                "### A reply came back, and it is frozen elsewhere",
+                "",
+                f"Frozen verbatim in `{execution['reply_record']}` before anything read it, "
+                f"and cited by hash `{delivery['evidence_sha256'][:16]}…`. What it means "
+                "is decided in a separate reviewed record, because a document holding both "
+                "the evidence and the conclusion can adjust the first to suit the second.",
+                "",
+            ]
 
     lines += [
         f"**Next: {approval['recommended_next_action']['action']}.** Performed by "

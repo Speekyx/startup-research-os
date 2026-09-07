@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.122
+Version: 1.123
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-07 (Sprint 1 / Mission 1.76.4)
+Last amended: 2026-09-07 (Sprint 1 / Mission 1.76.5)
 
 ---
 
@@ -13,6 +13,123 @@ Last amended: 2026-09-07 (Sprint 1 / Mission 1.76.4)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.123 - 2026-09-07 (Sprint 1 / Mission 1.76.5)
+
+**`R2_B_CLOSED_PROVIDER_DECLARED_PERMITTED_COUNTERPART_RESOLVED`.** The provider answered the
+exact frozen question through its own published contact channel. R2-B closes, C9 moves PARTIAL
+to PASS, the tally reaches **12 PASS / 0 PARTIAL / 0 FAIL** and the counterpart qualifies --
+and **nothing is authorised to run**.
+
+**THE EVIDENCE WAS READ, NOT ACCEPTED.** The operator restated the reply, the headers and the
+times; none of that is what the record rests on. The supplied export was extracted
+mechanically -- a text-layer read, no summarising model in the path -- and every supplied
+string was compared against what came out. They agreed, which is worth saying only because in
+1.74.7 they did not.
+
+**THREE THINGS RECORDED BEFORE THE EXPORT EXISTED ARE CORROBORATED BY IT**: the frozen
+GP-R2-B-Q1 body, whitespace-normalised identical at 338 characters; the v2 send time attested
+in 1.74.6; and -- the striking one -- **the R2 reply Mission 1.76.1 froze from headerless
+operator text with every header field null**, which a document produced afterwards now agrees
+with. That is corroboration of a record that could not corroborate itself. **None of it is
+byte equality**: a PDF render imposes its own line wrapping, and 1.74.3's finding holds --
+precisely because that is an artifact, this retrieval cannot distinguish it from a real
+difference.
+
+**A DISCREPANCY IS RECORDED RATHER THAN RESOLVED.** The attested send time is
+2026-09-07T19:19:30+04:00 and the export displays 19:26, about six and a half minutes apart
+under the frame the first message suggests. Neither is discarded, **no offset was invented
+from the export**, and nothing in the residual turns on it -- it is written down because a
+discrepancy noticed and not recorded is one the next reader has to notice again.
+
+**WHY A BARE 'YES' CLOSES IT, AND WHY IT IS NOT THE ROUTE THE DISCRIMINATOR REFUSES.** The
+discriminator was frozen in 1.76.2, sent in 1.76.4, and applied here **without a word of it
+changing** -- the gate loads it from the packet and compares the review's quoted branch text,
+so a version softened after the answer arrived fails rather than passing quietly. Its
+exclusion list is the argument: all seven excluded routes are cases of **reasoning from
+adjacent material**, and 'an answer that does not restate the question' is not among them. **A
+presupposition is implied by a statement about something else** -- 1.76.1's no-proxy carve-out,
+refused -- while **an anaphoric answer is a statement about the question**: 'yes' asserts the
+question's proposition and nothing is inferred to reach it. Shortness is not vagueness.
+
+**THE PERMISSION IS EXACTLY AS WIDE AS THE QUESTION, AND THAT IS FRAGILE.** Because the answer
+is anaphoric its scope lives in the question, so a reader who loses the question loses the
+bound -- which is why the bound is recorded beside the answer and the gate enforces it. All
+four limitations survive, **0 dropped**, because the proposition agreed to is the CONDITIONAL
+one the question stated. PERMITTED rather than CONDITIONALLY_PERMITTED, because the latter is
+for ADDITIONAL stated conditions and the provider added none.
+
+**AUTHORITY IS THE PUBLISHED ADDRESS, AND THE GITHUB LINK IS CORROBORATION ONLY.** The reply
+came from the address the provider publishes in its own committed website source, established
+first-party in 1.74.4 -- which **closes an item that record explicitly left open**, that the
+address is monitored or answered. Identifying the display name with the R1 answerer's GitHub
+username is an inference, and 1.74.4 recorded a rendered page as corroboration only for the
+same reason. **This is weaker than R1 and the record says so**: GitHub asserts organisation
+membership as a platform fact a third party can read, and the export carries no DKIM, no SPF
+and no Received chain, none of which was invented.
+
+**A SIBLING EVIDENCE LEVEL, NOT A STRETCHED ONE.** 1.74.7 defined its level with five
+conjunctive conditions BEFORE this reply existed; four hold and **durable_and_citable does
+not**, because this is private correspondence a reader of a public repository cannot go and
+read. So `R2_A2_SOLICITED_RESPONSIVE_PROVIDER_ANSWER_PRIVATE_CORRESPONDENCE` replaces that one
+condition with **fingerprinted operator custody** -- the shape 1.45 already accepted for
+OPERATOR_CORRESPONDENCE, where migration 0033 required a document fingerprint precisely
+because such evidence has no URL. It closes because **durability is not one of the
+discriminator's conditions**, and requiring public citability now that the answer is known
+would be moving the gate after the result.
+
+**DECLARED, NOT DOCUMENTED.** The Terms still describe Permitted Use as 'your internet
+infrastructure' and no published document was amended, so the verdict says DECLARED and the
+classification is a governance one rather than a legal conclusion, with what would reopen it
+written down.
+
+**THE DELIVERY RULE DID NOT BEND.** 1.76.4's rule that a later message in a thread would not
+confirm delivery of this one STANDS, and is not what confirmed it: what did is narrower and
+stronger, that the message which appeared **answers this message's own bounded question**.
+**Two field names were repaired rather than left lying** -- `why_delivery_is_unconfirmed`
+holding the sentence 'it is confirmed' is the one-field-two-meanings defect this repository
+keeps refusing, in a new place.
+
+**THE ARTIFACT IS FINGERPRINTED AND NOT COMMITTED**, because it carries the operator's mailbox
+and a Gmail per-account key and this repository is public -- 1.45's precedent exactly.
+
+**Verification.** Probe of **128 deliberate violations, 128 caught, 0 escaped**, plus **4 of 4
+positive controls**, twelve files restored byte for byte. **Two escapes found and closed by
+adding rules.** **Two controls are INVERTED and they are the point**: the NOT_PERMITTED and
+CONDITIONALLY_PERMITTED branches must stay quotable, because a gate that could only express
+closure would force the next unresolved residual to be recorded as resolved; and a third
+proves the gate did not learn this sentence, since a longer answer saying the same thing
+validates identically. **A dead conditional was found in this mission's own gate** -- a
+subscript written `conditions[f"..." if False else condition]`, which read as though it checked
+each condition's basis and always checked the condition itself, the recurring shape for the
+fourth time. **Thirteen assertions from 1.76.3 and 1.76.4 re-pointed rather than deleted.**
+**3369 bare-python tests**; both runners green; `ruff format --check`, `ruff check` and mypy
+through `uv`; contract generation `--check`; source catalog `--check`; all **53** CI gates, one
+of them new.
+
+**A QUALIFIED COUNTERPART IS NOT A RUNNING ONE.** 0 constructs, 0 quantity classes, 0 corpora,
+0 measurements, 0 independence groups, 0 scores, and `selected-quantity-class-v1.json` still
+does not exist with the gate refusing its existence. **0 emails, 0 Gmail access, 0 connector
+calls, 0 mailbox reads, 0 Globalping API calls, 0 target requests, 0 web searches for a
+different authority basis, 0 Claims, 0 Evidence, 0 canonical mutations, 0 migrations.**
+
+New: `docs/data/globalping-r2b-provider-reply-v1.json`,
+`docs/data/globalping-r2b-reply-review-v1.json`,
+`docs/data/globalping-third-party-target-scope-review-v2.json`,
+`docs/data/globalping-residual-closure-v3.json`,
+`docs/data/globalping-counterpart-qualification-v4.json`, the generated
+`docs/data/globalping-r2b-reply-review-v1.md`,
+`infrastructure/scripts/render_r2b_reply_review.py` (CI gate 53),
+`packages/inferred-claim-evaluator/python/tests/test_r2b_reply_review.py`, and
+`docs/reports/mission-1.76.5-report.md`.
+
+Changed: the R2-B execution records its delivery, with the approval digest unchanged;
+`render_r2b_dispatch_approval.py` admits a frozen reply and checks it; three predecessors gain
+one forward pointer each; two test modules have thirteen assertions re-pointed;
+`docs/CLAUDE.md` 1.123 to 1.124.
+
+Unchanged: the frozen packet, the approval's binding fields and digest, every R1 record, and
+every canonical research table.
 
 ## 1.122 - 2026-09-07 (Sprint 1 / Mission 1.76.4)
 
