@@ -1,0 +1,149 @@
+{
+  "$comment": "Mission 1.76.5. What the frozen reply establishes, judged against the discriminator frozen BEFORE dispatch. The evidence lives in another document and is cited here by hash rather than restated.",
+  "record_version": "1.0.0",
+  "mission": "1.76.5",
+  "recorded_at": "2026-09-07",
+  "cites": {
+    "frozen_reply": "docs/data/globalping-r2b-provider-reply-v1.json",
+    "reply_body_sha256": "9810e841d386278e65d17d954574f0d8bd01dc7b95c43e3390d57ae3b978082d",
+    "enquiry_packet": "docs/data/globalping-r2b-enquiry-packet-v1.json",
+    "packet_content_sha256": "fe312c37b8622e5abbdaaa541d00189c5a4a2f78b7082d3f70a034b7413da4dc",
+    "the_discriminator_was_frozen_before_dispatch": true,
+    "why_that_matters": "a discriminator written after the answer arrived is a description of the answer. This one was committed in Mission 1.76.2, sent in 1.76.4, and is applied here without a word of it being changed."
+  },
+  "gates": {
+    "THREAD_BINDING": {
+      "status": "ESTABLISHED",
+      "basis": "the export shows four messages under the bound thread subject, in order: the GP-R2-Q1 v2 enquiry, the reply Mission 1.76.1 froze, the GP-R2-B-Q1 follow-up whose displayed text is whitespace-normalised identical to the frozen packet body, and this reply. Two of the three digests the packet bound -- the thread subject and the prior reply body -- are checked directly against it.",
+      "what_is_not_checked": "the prior enquiry packet digest, because the export displays the v2 message's body and the packet's digest covers fields rather than the rendered text. The subject and the prior reply body are checked and they agree."
+    },
+    "SENDER_IDENTITY_ESTABLISHED": {
+      "status": "ESTABLISHED_AS_THE_PROVIDER_PUBLISHED_ADDRESS",
+      "sender_email": "d@globalping.io",
+      "sender_display_name": "Dmitriy A.",
+      "basis": "the reply arrives FROM the address the provider publishes in its own committed website source as a live mailto link, established first-party in Mission 1.74.4 from jsdelivr/globalping.io src/views/components/footer.html, and it arrives in answer to a message sent TO that address.",
+      "what_is_established": "that the reply came from the provider's own published contact channel",
+      "what_is_not_established": [
+        "the legal identity of the person behind the display name",
+        "their role or authority to bind the provider contractually",
+        "message origin cryptographically, since the export carries no DKIM or SPF result and no Received chain"
+      ],
+      "mission_1_76_1_is_superseded_on_this_point_only": true,
+      "what_1_76_1_said": "sender NOT_ESTABLISHED, every header field null, because the reply was supplied as text with no headers. That was true of the evidence it had."
+    },
+    "SENDER_EMAIL": "d@globalping.io",
+    "PROVIDER_AUTHORITY_ESTABLISHED": {
+      "status": "ESTABLISHED_FOR_A_STATEMENT_ABOUT_PROVIDER_POLICY",
+      "basis": "a person answering, from the address the provider itself publishes as its contact, a question addressed to that address about the provider's own Terms. That is the same standard Mission 1.74.4 used to establish the channel, applied to a message coming back through it.",
+      "the_1_74_4_open_item_it_closes": "that record listed 'that d@globalping.io is monitored, or answered' among what it did NOT establish. Two replies through it now establish both.",
+      "corroboration": {
+        "observation": "the R1 answer on the provider's public issue tracker came from GitHub user jimaek with author_association MEMBER, and this reply's display name is 'Dmitriy A.'",
+        "treated_as": "CORROBORATION_ONLY",
+        "why_not_the_basis": "identifying the two as one person is an inference from a display name and a username, and Mission 1.74.4 recorded a rendered page as corroboration only for the same reason. The basis is the published address; this only agrees with it."
+      },
+      "weaker_than_r1_and_the_record_says_so": {
+        "r1_basis": "GitHub author_association MEMBER on a public permalinked comment",
+        "r2_b_basis": "an email from the provider's published contact address",
+        "why_r1_is_stronger": "GitHub asserts organisation membership as a platform fact that a third party can read. An email address publishes no such assertion, and the export carries no authentication result."
+      }
+    },
+    "REPLY_FROZEN": {
+      "status": "YES",
+      "record": "docs/data/globalping-r2b-provider-reply-v1.json",
+      "body_sha256": "9810e841d386278e65d17d954574f0d8bd01dc7b95c43e3390d57ae3b978082d",
+      "frozen_before_it_was_read": true,
+      "carries_no_verdict": true
+    },
+    "SEMANTIC_RESPONSIVENESS": {
+      "status": "ESTABLISHED",
+      "the_reply": "Yes it's not a problem",
+      "basis": "it is a direct answer to the immediately preceding message in the same thread, 14 displayed minutes later, from the correspondent the question was addressed to, with the earlier messages quoted beneath it. The question carried exactly one question mark and the answer is 'Yes'.",
+      "the_referent_is_supplied_by_the_question_not_inferred": true,
+      "why_this_is_not_the_presupposition_route_the_discriminator_refuses": "a presupposition is something implied by a statement ABOUT SOMETHING ELSE -- Mission 1.76.1's no-proxy carve-out, which mentions proxying and leaves third-party scope to be reasoned out. An anaphoric answer is a statement about THE QUESTION: 'yes' asserts the question's proposition and nothing has to be inferred to reach it. Every one of the seven routes the discriminator excludes is a case of reasoning from adjacent material, and a direct answer is not one.",
+      "the_discriminator_does_not_require_the_answer_to_restate_the_question": true,
+      "how_that_is_known": "its exclusion list is the place such a requirement would live, and it names silence, a generic commercial permission, documentation phrasing, product behaviour, the proxy limitation alone, absence from a prohibited-use list, and implication or presupposition. 'An answer that does not restate the scope' is not among them.",
+      "unambiguity_test": "had the provider meant to refuse, this reply would not be the one they sent. Shortness is not vagueness: to a bounded yes-or-no question, 'Yes it's not a problem' has one reading."
+    },
+    "THIRD_PARTY_TARGET_SCOPE": {
+      "status": "PERMITTED",
+      "which_discriminator_branch": "PERMITTED",
+      "branch_text": "the described bounded HEAD measurements may target publicly reachable third-party websites the user does not own or operate, subject to stated limits",
+      "why_not_conditionally_permitted": "CONDITIONALLY_PERMITTED is defined for permission granted only under explicitly stated ADDITIONAL conditions. The provider stated none beyond those the question already carried, and the PERMITTED branch already reads 'subject to stated limits'."
+    },
+    "BOUNDED_HEAD_SCOPE": {
+      "status": "ESTABLISHED_EXACTLY_AS_ASKED",
+      "the_permission_is_exactly_as_wide_as_the_question": true,
+      "what_was_asked": "bounded HTTP HEAD measurements of publicly reachable third-party websites the operator does not own or operate, provided they comply with Globalping's limits and are not abusive, exploitative, or used as a proxy",
+      "not_established_by_this_answer": [
+        "GET or any method other than HEAD",
+        "response body retrieval",
+        "scanning or enumeration",
+        "unbounded or unlimited volume",
+        "use as a proxy",
+        "targets the operator does own, which were never in question",
+        "any permission for a different provider or a different service"
+      ],
+      "why_the_list_is_written_down": "the permission's width comes from the question, because the answer is anaphoric. A reader who loses the question loses the bound, so the bound is recorded beside the answer."
+    },
+    "LIMITS_PRESERVED": {
+      "status": "YES",
+      "limitations": [
+        "compliance with Globalping's limits and other policies",
+        "no abuse",
+        "no exploitation of infrastructure",
+        "no use as a proxy"
+      ],
+      "source_of_the_limitations": "they are carried in the question this answer answers, and three of them were independently stated by the provider in the earlier reply Mission 1.76.1 froze",
+      "dropped_by_this_review": 0,
+      "why_they_survive_a_yes": "the proposition the provider agreed to is the conditional one the question stated. Reading the 'yes' as unconditional would widen it past the sentence it answers, which is the over-read this arc has refused four times."
+    },
+    "R2_B_RESIDUAL_CLOSED": {
+      "status": "YES",
+      "closed_by": "a solicited, responsive answer from the provider's published contact channel to the exact question frozen before dispatch",
+      "closed_on_documentation": false,
+      "what_that_costs": "R2-B closes on a DECLARATION rather than on a published document. The Terms still describe Permitted Use as monitoring, debugging and benchmarking 'your internet infrastructure', and this answer does not amend them. Mission 1.74.7 made the same distinction for R1 and the label follows it."
+    }
+  },
+  "evidence_level": {
+    "$comment": "Mission 1.74.7 defined R1_A2_SOLICITED_RESPONSIVE_PROVIDER_ANSWER with five conjunctive conditions, BEFORE this reply existed. Four hold here and the fifth does not, so a sibling level is defined rather than that one stretched.",
+    "level": "R2_A2_SOLICITED_RESPONSIVE_PROVIDER_ANSWER_PRIVATE_CORRESPONDENCE",
+    "level_is_new": true,
+    "sibling_of": "R1_A2_SOLICITED_RESPONSIVE_PROVIDER_ANSWER",
+    "conditions_all_of_which_must_hold": {
+      "solicited": true,
+      "solicited_basis": "this repository froze the exact question GP-R2-B-Q1 and the operator sent it verbatim under a one-use approval",
+      "responsive_to_the_exact_predicate": true,
+      "responsive_basis": "the displayed text of the sent message is whitespace-normalised identical to the frozen packet body, and the reply directly answers it 14 displayed minutes later in the same thread",
+      "attributable_to_the_provider": true,
+      "attributable_basis": "the provider's own published contact address, established first-party from its committed website source in Mission 1.74.4",
+      "retrieved_without_a_summarising_extraction": true,
+      "retrieval_basis": "a mechanical PDF text-layer read. No summarising model is in the path.",
+      "durably_re_examinable": true,
+      "durability_basis": "a fingerprinted operator-held export, sha256 recorded here, plus the operative text. Re-examinable by the operator and by anyone they give the file to."
+    },
+    "the_condition_that_differs_from_r1": {
+      "r1_condition": "durable_and_citable, on a public permalinked comment",
+      "why_it_does_not_hold_here": "this is private correspondence. A reader of this public repository cannot go and read the thread, which is exactly what 'citable' means and exactly what R1 had.",
+      "what_replaces_it": "fingerprinted operator custody -- the shape the repository already accepted for OPERATOR_CORRESPONDENCE in Mission 1.45, where migration 0033 required a document fingerprint precisely because such evidence has no URL.",
+      "this_level_is_weaker_than_r1_and_the_record_says_so": true
+    },
+    "is_a_closing_level": true,
+    "why_it_closes": "the discriminator frozen before dispatch names what closes R2-B and durability is not among its conditions -- its seven exclusions are all about reasoning from adjacent material. Requiring public citability now, after the answer arrived, would be moving the gate once the result was known, which is the mirror image of the failure this arc guards against.",
+    "if_any_condition_failed_the_level_would_be": "PROVIDER_STATEMENT_NOT_ATTRIBUTABLE, and R2-B would stay UNRESOLVED"
+  },
+  "what_this_review_does_not_do": [
+    "amend the provider's Terms, which still read as they did",
+    "establish permission for any method other than HEAD",
+    "establish permission for a different provider",
+    "select a quantity class or a construct",
+    "create EvidenceIndependenceGroups",
+    "recompute anything from the fact of dispatch rather than from the answer",
+    "resolve the six-and-a-half-minute send-time discrepancy"
+  ],
+  "recipient_record_cited": {
+    "record": "docs/data/globalping-r2-replacement-recipient-review-v1.json",
+    "classification": "ESTABLISHED_FIRST_PARTY_GENERAL_CONTACT_NOT_THE_TERMS_DESIGNATED_CHANNEL",
+    "still_true": true,
+    "note": "the address remains an established general contact rather than the Terms-designated channel. That was recorded as a weaker basis when it was chosen, and it is still the weaker basis now that it has answered."
+  }
+}

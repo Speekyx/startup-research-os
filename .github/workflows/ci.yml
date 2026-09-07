@@ -672,6 +672,18 @@ jobs:
       - name: Globalping residual closure matches its records
         run: uv run python infrastructure/scripts/render_globalping_residuals.py --check
 
+      # Mission 1.76.5. R2-B closed on twenty-two characters, which is not a reason to
+      # check it less. The gate refuses: a frozen reply that does not answer to its own hash
+      # or that carries a verdict, an evidence level or a message id; a review whose quoted
+      # discriminator branch is not the packet's, so a discriminator softened after the
+      # answer arrived fails here; a closure resting on one of the seven routes the
+      # discriminator excludes; a dropped limitation or a widened activity, which is the
+      # danger with an anaphoric answer whose bound lives in the question; a superseded
+      # record edited rather than pointed forward; a reopened passing dimension; and a
+      # qualification that authorises a run.
+      - name: The R2-B reply review matches its records
+        run: uv run python infrastructure/scripts/render_r2b_reply_review.py --check
+
       # Mission 1.76.3. The operator approved exactly one manual reply, and nothing was
       # sent. The gate refuses: a digest or body that does not match the packet as stored;
       # an approval written into the packet; an address in the recipient; a hash covering

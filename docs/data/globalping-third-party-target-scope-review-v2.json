@@ -1,0 +1,63 @@
+{
+  "$comment": "Mission 1.76.5. R2-B closes on a provider declaration. The predecessor is not edited: it read the Terms correctly and the Terms have not changed.",
+  "record_version": "2.0.0",
+  "supersedes": "globalping-third-party-target-scope-review-v1.json",
+  "supersedes_note": "v1 concluded UNRESOLVED from the published surfaces alone, and that conclusion was correct on that evidence. What changed is that the provider was asked and answered.",
+  "mission": "1.76.5",
+  "recorded_at": "2026-09-07",
+  "sub_residual": "R2-B",
+  "frozen_intended_activity": {
+    "$comment": "§23. Frozen exactly, and deliberately not simplified in either direction.",
+    "description": "Using Globalping's HTTP measurement service to perform bounded HEAD measurements against a pre-frozen corpus of publicly reachable third-party websites, under ADR-039 target exclusions and robots policy, for local and private Opportunity Intelligence research that may support future commercial product decisions.",
+    "simplified_to_commercial_scraping": false,
+    "simplified_to_monitoring_our_infrastructure": false,
+    "why_neither": "the first overstates what is retained -- no body is persisted under the HEAD route -- and the second misdescribes the targets, which are third parties rather than ours"
+  },
+  "verdict": "THIRD_PARTY_TARGET_SCOPE_PROVIDER_DECLARED_PERMITTED",
+  "verdict_reasoning": "the provider was asked the exact frozen question through its own published contact channel and answered 'Yes it's not a problem'. The permission is exactly as wide as the question and carries the limits the question carried.",
+  "evidence_level": "R2_A2_SOLICITED_RESPONSIVE_PROVIDER_ANSWER_PRIVATE_CORRESPONDENCE",
+  "cites": {
+    "frozen_reply": "docs/data/globalping-r2b-provider-reply-v1.json",
+    "reply_body_sha256": "9810e841d386278e65d17d954574f0d8bd01dc7b95c43e3390d57ae3b978082d",
+    "review": "docs/data/globalping-r2b-reply-review-v1.json"
+  },
+  "declared_not_documented": {
+    "$comment": "Mission 1.74.7's distinction, applied unchanged.",
+    "closed_on_documentation": false,
+    "the_terms_still_read_as_they_did": true,
+    "permitted_use_section_unchanged": {
+      "$comment": "§15, answered in five parts rather than by intuition.",
+      "exact_wording": "Globalping works as a platform that allows you to monitor, debug, and benchmark your internet infrastructure using a globally distributed network of probes.",
+      "form": "DESCRIPTIVE",
+      "form_evidence": "the sentence says what the platform 'works as' and what it 'allows you to' do. It carries no 'only', no 'solely', and no prohibition on other purposes.",
+      "heading": "2. Permitted Use",
+      "heading_suggests": "LIMITATION",
+      "is_it_an_exclusive_purpose_limitation": "AMBIGUOUS",
+      "why_ambiguous": "descriptive in form and limiting by heading, and the two readings are not reconciled anywhere in the document. §5 Prohibited Use is a separate enumerated section that does not mention third-party measurement, which cuts toward descriptive; the heading and the word 'your' cut toward limiting.",
+      "broadened_by_a_later_section": false,
+      "documentation_explicitly_contemplating_arbitrary_public_third_party_targets": false
+    },
+    "why_the_label_says_declared": "no published document was amended. A provider declaration through its own contact channel is what closed this, and a reader who wants a document will not find one."
+  },
+  "what_is_permitted": {
+    "activity": "bounded HTTP HEAD measurements of publicly reachable third-party websites the operator does not own or operate, provided they comply with Globalping's limits and are not abusive, exploitative, or used as a proxy",
+    "limitations_preserved": [
+      "compliance with Globalping's limits and other policies",
+      "no abuse",
+      "no exploitation of infrastructure",
+      "no use as a proxy"
+    ],
+    "not_established": [
+      "GET or any method other than HEAD",
+      "response body retrieval",
+      "scanning or enumeration",
+      "unbounded or unlimited volume",
+      "use as a proxy",
+      "targets the operator does own, which were never in question",
+      "any permission for a different provider or a different service"
+    ]
+  },
+  "terms_silence_turned_favourable": false,
+  "terms_ambiguity_turned_into_prohibition": false,
+  "ambiguity_resolved_by_asking_rather_than_by_reading_harder": true
+}
