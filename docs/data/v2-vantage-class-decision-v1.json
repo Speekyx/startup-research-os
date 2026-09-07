@@ -1,0 +1,307 @@
+{
+  "$comment": "Mission 1.76.7. The operator selected V2 after Mission 1.76.6 recorded no choice. This record is the transition; 1.76.6's `which_was_chosen: null` was true when it was written and is not rewritten.",
+  "record_version": "1.0.0",
+  "mission": "1.76.7",
+  "recorded_at": "2026-09-08",
+  "start_commit": "de5816a",
+  "exact_predicate_frozen": false,
+  "corpus_frozen": false,
+  "measurements_executed": 0,
+  "operator_decision": {
+    "$comment": "Recorded as a transition, not as a rewriting of the mission that offered it.",
+    "decision": "V2",
+    "full_name": "UNIVERSAL_OVER_PREREGISTERED_VANTAGE_CLASS",
+    "decided_after": "mission 1.76.6",
+    "mission_1_76_6_recorded_no_choice": true,
+    "mission_1_76_6_rewritten": false,
+    "why_not_rewritten": "1.76.6 offered three resolutions and chose none, which was true at its completion. A later operator decision is a new fact, not a correction of an earlier record.",
+    "v1_rejected_because": "it produces distinct propositions for distinct vantages and therefore cannot provide independent witnesses to one source-independent proposition",
+    "v3_rejected_because": "the current evidence does not establish that CDN, GeoDNS, resolver, ASN, geographic or network-path divergence is measurement noise rather than real world-state variation",
+    "what_the_decision_selects": "THE_SEMANTIC_MODEL_ONLY",
+    "what_it_does_not_select": [
+      "a construct",
+      "the vantage class",
+      "a corpus",
+      "a run"
+    ]
+  },
+  "semantic_form": {
+    "shape": "FOR ALL v IN V: predicate(target, request, v)",
+    "V_must_be": "finite, preregistrable, and decidable before any measurement",
+    "unbounded_conceptual_class_refused": "all internet vantages",
+    "why": "an unbounded class makes membership undecidable and the universal unfalsifiable in practice, because no finite observation set can be said to have covered it."
+  },
+  "apparatus_vantage_reality": {
+    "$comment": "Read from committed artifacts. Neither apparatus was redesigned, and neither is credited with a capability it does not have.",
+    "sros": {
+      "capability": "SINGLE_DEPLOYMENT_VANTAGE",
+      "basis": "the apparatus contract's own independence note: 'two processes on one machine share code, configuration, vantage, resolver and network path', and the load profile's 'a bounded pilot on one operator machine'",
+      "records_a_vantage_id_per_run": true,
+      "multi_vantage_today": false,
+      "redesigned_by_this_mission": false,
+      "cardinality_of_vantages_it_can_occupy_in_one_run": 1
+    },
+    "globalping": {
+      "capability": "MULTIPLE_SELECTABLE_VANTAGES",
+      "basis": "qualification gate C7: locations are selectable by continent, region, country, state, city, ASN, network and tags, and each result carries its probe's location",
+      "selection_semantics_established": true,
+      "current_availability_checked": false,
+      "why_not": "listing online probes would be an external call and would also make the class depend on availability, which section 4 forbids"
+    },
+    "the_asymmetry": "one apparatus can be pointed at many vantages and the other occupies one. That is a fact about the pair as it stands, recorded rather than designed around."
+  },
+  "vantage_identity_fields": {
+    "$comment": "Section 5. What each apparatus can actually establish, and nothing invented.",
+    "fields": [
+      {
+        "field": "country",
+        "classification": "PROPOSITION_CLASS_MEMBERSHIP",
+        "sros": "known for its own host",
+        "globalping": "selectable and reported"
+      },
+      {
+        "field": "region_or_continent",
+        "classification": "PROPOSITION_CLASS_MEMBERSHIP",
+        "sros": "known for its own host",
+        "globalping": "selectable and reported"
+      },
+      {
+        "field": "asn",
+        "classification": "PROPOSITION_CLASS_MEMBERSHIP",
+        "sros": "known for its own host",
+        "globalping": "selectable and reported"
+      },
+      {
+        "field": "network_or_provider",
+        "classification": "PROPOSITION_CLASS_MEMBERSHIP",
+        "sros": "known for its own host",
+        "globalping": "selectable and reported"
+      },
+      {
+        "field": "city_or_state",
+        "classification": "PROPOSITION_CLASS_MEMBERSHIP",
+        "sros": "known for its own host",
+        "globalping": "selectable and reported"
+      },
+      {
+        "field": "probe_identity",
+        "classification": "APPARATUS_CONFIGURATION",
+        "why": "a probe id names a machine in one provider's fleet; using it as class membership would define the frame by the apparatus"
+      },
+      {
+        "field": "operator_host_identity",
+        "classification": "APPARATUS_CONFIGURATION",
+        "why": "same, on our side"
+      },
+      {
+        "field": "ip_family",
+        "classification": "APPARATUS_CONFIGURATION",
+        "why": "Mission 1.76.6 left it UNRESOLVED; it changes which path is taken rather than which vantage class is occupied"
+      },
+      {
+        "field": "resolver_or_dns_path",
+        "classification": "WITNESS_PROVENANCE",
+        "why": "part of what makes the two independent, and the provider reports resolvedAddress so the divergence is observable"
+      },
+      {
+        "field": "public_source_ip",
+        "classification": "WITNESS_PROVENANCE",
+        "why": "identifies the observer, not the class"
+      },
+      {
+        "field": "probe_tags",
+        "classification": "UNRELIABLE_OR_NOT_ESTABLISHED",
+        "why": "provider-assigned labels whose vocabulary and stability this repository has not established"
+      }
+    ]
+  },
+  "candidate_classes": [
+    {
+      "class_id": "VC_A_EXTERNAL_GEOGRAPHIC_TUPLE_SET",
+      "membership_rule": "a finite set of (ISO 3166-1 alpha-2 country, ASN) pairs fixed before the run from external registries, chosen by a rule that names neither apparatus",
+      "finite_before_run": true,
+      "membership_decidable_before_run": true,
+      "apparatus_independent_definition": true,
+      "sros_full_coverage": false,
+      "sros_coverage_detail": "one member at most, and only if its host happens to sit in one",
+      "globalping_full_coverage": "ATTEMPTABLE_NOT_GUARANTEED",
+      "globalping_coverage_detail": "every member can be requested; whether a probe answers is missingness, and an unavailable member stays in V",
+      "support_semantics": "U1_UNATTAINABLE",
+      "why_support_is_unattainable": "a member is an ABSTRACT class containing many concrete hosts with different resolvers and paths. One probe in a member is a SAMPLE of that member, not a decision of it, so no finite observation establishes 'for all v in V' -- it establishes 'for the concrete hosts we happened to use'.",
+      "refutation_semantics": "SOUND",
+      "why_refutation_is_sound": "one genuine predicate-false observation from a concrete vantage inside a member refutes the universal, because a counterexample inside the class is a counterexample whatever else the class contains",
+      "frame_inside_definition": false,
+      "product_relevance": "MODERATE",
+      "implementation_cost": "LOW for the class; the coverage gap is not an implementation cost",
+      "semantic_verdict": "VALID_FOR_REFUTATION_ONLY"
+    },
+    {
+      "class_id": "VC_B_SINGLETON_OPERATOR_VANTAGE",
+      "membership_rule": "V = { the SROS deployment vantage }",
+      "finite_before_run": true,
+      "membership_decidable_before_run": true,
+      "apparatus_independent_definition": false,
+      "sros_full_coverage": true,
+      "globalping_full_coverage": "only if a probe exists in that exact vantage",
+      "support_semantics": "DEGENERATE",
+      "refutation_semantics": "DEGENERATE",
+      "frame_inside_definition": true,
+      "product_relevance": "LOW",
+      "implementation_cost": "LOW",
+      "semantic_verdict": "REFUSED_TWICE_OVER",
+      "why_refused": "it defines the class by apparatus identity, which section 4 forbids by name. And a universal over a singleton is just the proposition with a vantage qualifier attached -- which is V1, the model the operator explicitly rejected. Any class of cardinality one collapses V2 into V1."
+    },
+    {
+      "class_id": "VC_C_EXTERNALLY_ENUMERATED_CONCRETE_VANTAGES",
+      "membership_rule": "a finite set of concrete network locations named by an external registry -- for example specific measurement anchors or specific IXP-connected prefixes -- enumerated before the run",
+      "finite_before_run": true,
+      "membership_decidable_before_run": true,
+      "apparatus_independent_definition": true,
+      "sros_full_coverage": false,
+      "globalping_full_coverage": false,
+      "coverage_detail": "neither apparatus is AT those locations. Concrete membership makes the universal decidable and makes coverage zero for this pair.",
+      "support_semantics": "UNOBSERVABLE_BY_THIS_PAIR",
+      "refutation_semantics": "UNOBSERVABLE_BY_THIS_PAIR",
+      "frame_inside_definition": false,
+      "product_relevance": "MODERATE",
+      "implementation_cost": "HIGH and out of scope; it would require operating probes at named locations",
+      "semantic_verdict": "DEFINABLE_BUT_UNOBSERVABLE"
+    }
+  ],
+  "the_dilemma": {
+    "$comment": "The three candidates are not three arbitrary options; they map the space, and the space has a hole in it.",
+    "statement": "a vantage class member is either ABSTRACT or CONCRETE, and neither works. Abstract members are apparatus-independent and are SAMPLED rather than decided by one observation, so the universal cannot be supported. Concrete members are decided by one observation, and the only concrete vantages either apparatus occupies are the ones the apparatus defines -- which is the frame guard.",
+    "is_this_a_topology_problem": false,
+    "why_not": "it survives any number of operator probes. Adding vantages to SROS would let it sweep more members, and each sweep would still SAMPLE an abstract member rather than decide it. The limit is the logical form of a universal over classes, not the size of the fleet.",
+    "consequence_for_outcome_d": "V2_REQUIRES_MULTI_VANTAGE_OPERATOR_APPARATUS is refused as the primary outcome for exactly that reason: reporting it would send the next mission to build an apparatus that does not fix the problem."
+  },
+  "support_models": {
+    "U1_COMPLETE_CLASS_WITNESS": {
+      "description": "one Evidence item supports the universal only if its apparatus independently observed every required member and every member satisfied the predicate",
+      "logically_sound": true,
+      "attainable_here": false,
+      "why_not": "for an abstract-member class no apparatus can observe a MEMBER, only a sample from it. And SROS occupies one vantage, so it could not sweep a class of cardinality two or more even if members were decidable.",
+      "selected": true,
+      "why_selected_despite_being_unattainable": "it is the only model that is truthful about what a universal requires. Recording it as the support model and recording that it is unattainable is the honest pair; selecting an attainable but false model would not be."
+    },
+    "U2_MEMBER_EVIDENCE_PLUS_DETERMINISTIC_DERIVATION": {
+      "description": "each vantage observation is evidence about a member proposition, and a derivation establishes the universal once the class is accounted for",
+      "logically_sound": true,
+      "solves_the_independence_goal": false,
+      "why_not": "if the two apparatuses each cover part of V, the universal is established by ONE derivation over a POOLED observation set. That is not two independent witnesses of one proposition; it is one conclusion drawn from both. Pooling is the opposite of the duplication independence requires, and counting it as corroboration would manufacture agreement out of division of labour.",
+      "selected": false
+    },
+    "U3_PARTIAL_POSITIVE_SUPPORT": {
+      "description": "a successful single member counts as partial support for the universal",
+      "logically_sound": false,
+      "selected": false,
+      "why_refused": "'some evidence in favour of all' is not evidence for a universal, and this repository has no logical semantics that would justify it. Worse here: for an abstract-member class a positive observation does not even establish its own member, so the partial support would be partial support for something that was never observed."
+    }
+  },
+  "refutation_semantics": {
+    "sound": true,
+    "rule": "one genuine predicate-false observation, made from a concrete vantage inside a member of V, under the frozen request contract, refutes the universal",
+    "states_that_are_not_refutation": [
+      "NOT_OBSERVED",
+      "APPARATUS_FAILURE",
+      "VANTAGE_UNAVAILABLE",
+      "REQUEST_FAILED_BEFORE_WORLD_STATE_OBSERVED",
+      "PREDICATE_NOT_EVALUABLE"
+    ],
+    "why_they_are_kept_apart": "turning missingness into contradiction is the failure this arc has refused since Mission 1.71. A probe that was not available says nothing about the target.",
+    "both_apparatuses_can_refute": true,
+    "but": "two refutations AGREE. They exercise no disagreement, so refutation alone does not reach the SUPPORTS-versus-CONTRADICTS case."
+  },
+  "evidence_direction_contract": {
+    "supports_and_contradicts_can_represent_v2": "PARTIALLY",
+    "contradicts": "usable, for a genuine in-scope predicate-false observation",
+    "supports": "usable only for a complete-class witness, which is unattainable here, so no admissible SUPPORTS item exists under V2 for this pair",
+    "the_missing_state": "DERIVATION_INCOMPLETE",
+    "why_it_is_missing": "an apparatus that observed some members and found the predicate true at all of them has neither supported the universal nor contradicted it. Forcing that into SUPPORTS is U3; forcing it into CONTRADICTS is false; and NEUTRAL asserts that the observation bears without bearing either way, which is a positive finding this is not.",
+    "smallest_required_extension": "a refusal reason code for an incomplete class sweep, in the existing refusal store -- migration 0035 already holds refusals with a reason code and a candidate target, so no new table and no EvidenceDirection member is needed",
+    "new_evidence_direction_member_required": false
+  },
+  "dual_apparatus_independence": {
+    "sros_can_independently_support_v2": false,
+    "globalping_can_independently_support_v2": false,
+    "why_globalping_cannot_either": "it can attempt every member of an abstract class, and each observation is still a sample of its member. Complete-class witness is not reachable by sampling.",
+    "dual_independent_support_reachable": false,
+    "contradiction_reachable": false,
+    "why_contradiction_is_not_reachable": "the SUPPORTS-versus-CONTRADICTS case needs one apparatus to legitimately SUPPORT while the other CONTRADICTS. No admissible SUPPORTS item exists, so the pair can produce agreement-on-refutation or incompleteness, and not disagreement.",
+    "what_v2_does_deliver": [
+      "a semantically truthful universal proposition",
+      "sound refutation from a single in-scope counterexample",
+      "honest missingness, kept apart from predicate-false",
+      "a target-level shape with no denominator to select"
+    ],
+    "what_it_does_not_deliver": "the independent-support calibration goal this arc has pursued since Mission 1.78. Globalping being qualified does not solve it under V2."
+  },
+  "target_level_preserved": {
+    "reopened_corpus_aggregate": false,
+    "why": "Mission 1.76.6 established target-level on denominator grounds and nothing here bears on it. Reopening it to make V2 easier would be changing a settled finding for convenience."
+  },
+  "worked_semantic_test_case": {
+    "$comment": "Section 15. Used to test the semantics, not selected. No target is named and no request contract is frozen.",
+    "example": "FOR ALL v IN V: HEAD(target, v) yields an HTTP status in class 3xx",
+    "construct_selected": false,
+    "target_named": false,
+    "request_contract_frozen": false
+  },
+  "mission_accounting": {
+    "GLOBALPING_API_EXECUTIONS": 0,
+    "TARGET_HTTP_REQUESTS": 0,
+    "SROS_FETCHER_RUNS": 0,
+    "ROBOTS_REQUESTS": 0,
+    "DNS_PROBES": 0,
+    "MEASUREMENT_VALUES": 0,
+    "TARGETS_SELECTED": 0,
+    "CORPORA_FROZEN": 0,
+    "CONSTRUCTS_SELECTED": 0,
+    "VANTAGE_CLASSES_SELECTED": 0,
+    "RAW_RECORDS_CREATED": 0,
+    "SIGNALS_CREATED": 0,
+    "CLAIMS_CREATED": 0,
+    "EVIDENCE_CREATED": 0,
+    "INDEPENDENCE_GROUPS_CREATED": 0,
+    "THRESHOLD_REGISTRATIONS": 0,
+    "CLAIM_DERIVATIONS": 0,
+    "EVALUATION_REFUSALS": 0,
+    "SCORES": 0,
+    "EMBEDDINGS": 0,
+    "MIGRATIONS": 0
+  },
+  "primary_outcome": "V2_VALID_FOR_REFUTATION_BUT_NOT_INDEPENDENT_SUPPORT",
+  "outcomes_considered_and_refused": [
+    {
+      "outcome": "V2_VANTAGE_CLASS_CONTRACT_READY_FOR_CONSTRUCT_SELECTION",
+      "refused_because": "it requires both apparatuses to bear on the universal in the required way, and neither can produce an admissible complete-class SUPPORT item"
+    },
+    {
+      "outcome": "V2_FRAME_CANNOT_BE_DEFINED_WITHOUT_APPARATUS_DEPENDENCE",
+      "refused_because": "it is false. VC-A and VC-C are both defined without naming either apparatus. The frame CAN be defined independently; what an independent frame costs is the ability to support the universal."
+    },
+    {
+      "outcome": "V2_REQUIRES_MULTI_VANTAGE_OPERATOR_APPARATUS",
+      "refused_because": "the limit survives any fleet size. A multi-vantage SROS would sweep more members and still sample each one, so reporting this would send the next mission to build an apparatus that does not fix the problem."
+    },
+    {
+      "outcome": "V2_SUPPORT_SEMANTICS_REQUIRES_ARCHITECTURE_DECISION",
+      "refused_because": "the architecture is not what blocks it. The missing state is representable in the existing refusal store, and even a perfect representation would have nothing admissible to record."
+    }
+  ],
+  "recommended_next_action": {
+    "$comment": "Section 27's branch for outcome B.",
+    "action": "OPERATOR_COMPARISON_OF_THE_APPARATUS_ARC_AGAINST_MISSION_1_77",
+    "state_plainly": "Globalping does not currently solve the independent-support calibration goal under V2. It is qualified, the semantics are sound, and the support half is out of reach.",
+    "mission_1_76_8_not_recommended_yet": true,
+    "why": "freezing a construct and a corpus would prepare an experiment whose SUPPORT direction cannot be recorded truthfully.",
+    "what_would_change_it": [
+      "a construct whose predicate is decided rather than sampled by one observation from a member -- which is a different construct, not a different class",
+      "an apparatus pair where one can witness a whole class, which no fleet size delivers for abstract members"
+    ],
+    "the_executable_alternative": "M1, the Wikimedia measurement scope binding, which Mission 1.76 placed in TIER 1 and which nothing since has displaced",
+    "corpus_freeze_authorized": false,
+    "run_authorized": false,
+    "mission_1_77_not_started": true
+  }
+}

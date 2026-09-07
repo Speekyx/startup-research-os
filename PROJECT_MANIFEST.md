@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.124
+Version: 1.125
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-07 (Sprint 1 / Mission 1.76.6)
+Last amended: 2026-09-08 (Sprint 1 / Mission 1.76.7)
 
 ---
 
@@ -13,6 +13,91 @@ Last amended: 2026-09-07 (Sprint 1 / Mission 1.76.6)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.125 - 2026-09-08 (Sprint 1 / Mission 1.76.7)
+
+**`V2_VALID_FOR_REFUTATION_BUT_NOT_INDEPENDENT_SUPPORT`.** The operator selected the universal
+semantic model. It can be made truthful, and it does not deliver the thing this arc has been
+pursuing since 1.78.
+
+**THE DECISION IS A TRANSITION, NOT A CORRECTION.** Mission 1.76.6 offered three resolutions
+and chose none; its record still reads `which_was_chosen: null` and the gate refuses a version
+that backdates it. **A later operator decision is a new fact, not a repair of an earlier
+honest record.**
+
+**THE DILEMMA IS THE FINDING: A CLASS MEMBER IS ABSTRACT OR CONCRETE, AND NEITHER WORKS.** If
+members are ABSTRACT -- a country, an ASN, a tuple -- the class is apparatus-independent,
+finite and decidable before the run, and a member is a SET of concrete hosts, so **one probe
+inside a member is a SAMPLE of it rather than a decision of it**: no finite observation
+establishes 'for all v in V', only 'for the concrete hosts we happened to use'. If members are
+CONCRETE the universal becomes decidable, and the only concrete vantages either apparatus
+occupies are the ones the APPARATUS defines -- which is the frame guard. **And it is not a
+topology problem**: adding vantages to the fetcher would sweep more members and still sample
+each one, so the limit is the logical form of a universal over classes rather than the size of
+the fleet. **That is why `V2_REQUIRES_MULTI_VANTAGE_OPERATOR_APPARATUS` is refused** -- it
+would send the next mission to build an apparatus that does not fix the problem.
+
+**A UNIVERSAL OVER A SINGLETON IS THE MODEL THE OPERATOR REJECTED.** The singleton class is
+refused twice over: it defines the class by apparatus identity, AND a universal over one
+member is the proposition with a vantage qualifier attached, which is V1. **Any class of
+cardinality one collapses V2 into V1.** `V2_FRAME_CANNOT_BE_DEFINED_WITHOUT_APPARATUS_DEPENDENCE`
+is also refused because it is FALSE -- two of the three classes name neither apparatus. **The
+frame CAN be defined independently; what an independent frame costs is the ability to support
+the universal.**
+
+**THE TRUTHFUL SUPPORT MODEL IS THE UNATTAINABLE ONE.** U1, complete-class witness, is
+selected and recorded as unattainable here -- **selecting the truthful model and recording
+that it cannot be met is the honest pair**. **U3 is refused**: 'some evidence in favour of
+all' is not evidence for a universal, and for an abstract-member class a positive observation
+does not even establish its own member. **U2 is sound and does not solve the goal**: if each
+apparatus covers part of V the universal rests on ONE derivation over a POOLED set, and
+**pooling is the opposite of the duplication independence requires** -- counting it as
+corroboration would manufacture agreement out of division of labour.
+
+**REFUTATION IS SOUND AND TWO REFUTATIONS AGREE.** One in-scope predicate-false observation
+refutes; five missingness states are kept apart from it and none may refute, because **turning
+missingness into contradiction is the failure this arc has refused since 1.71**. But two
+refutations exercise no disagreement, so refutation alone does not reach the
+SUPPORTS-versus-CONTRADICTS case.
+
+**THE SHORTFALL IS STATED RATHER THAN HIDDEN**: SROS cannot independently support, **Globalping
+cannot either** -- it can attempt every member and each observation is still a sample -- and so
+**the contradiction case is NOT reachable under V2**, since that case needs one apparatus to
+legitimately SUPPORT while the other contradicts. **Globalping being qualified does not solve
+the independent-support calibration goal under V2.**
+
+**THE APPARATUS REALITY WAS READ, NOT ASSUMED**: the fetcher is SINGLE_DEPLOYMENT_VANTAGE on
+its own contract's words, was not redesigned into a probe network, and **no probe availability
+was checked** -- that would be an external call and would make the class depend on
+availability. **The evidence model needs almost nothing**: no new EvidenceDirection member,
+one refusal reason code for an incomplete sweep, in a store migration 0035 already provides.
+
+**Verification.** Probe of **129 deliberate violations, 129 caught, 0 escaped**, plus **4 of 4
+positive controls**, five files restored byte for byte. **One escape found and closed** -- a
+class defined as 'the vantages both apparatuses successfully measured' slipped past a
+word-boundary pattern that 'successfully' does not match. **Two controls are INVERTED and they
+are the point**: the READY outcome must stay expressible for a pair that could reach it, and
+the incomplete-sweep state must stay sayable, because a gate that could only express this
+mission's negative would decide the next one by refusing its positive. **3484 bare-python
+tests**; both runners green; `ruff format --check`, `ruff check` and mypy through `uv`;
+contract generation `--check`; source catalog `--check`; all **55** CI gates, one of them new.
+
+**Nothing was selected or run.** 0 vantage classes selected, 0 constructs, 0 targets named, 0
+corpora, 0 Globalping calls, 0 target HEAD requests, 0 fetcher runs, 0 robots requests, 0 DNS
+probes, 0 measurement values, and 0 across every canonical counter. Q1 stays CLASS_SELECTED
+with construct and run false; Mission 1.76.6's target-level finding is preserved and was not
+reopened to make V2 easier.
+
+New: `docs/data/v2-vantage-class-decision-v1.json`, the generated
+`docs/data/v2-vantage-class-decision-v1.md`,
+`infrastructure/scripts/render_v2_vantage_class.py` (CI gate 55),
+`packages/inferred-claim-evaluator/python/tests/test_v2_vantage_class.py`, and
+`docs/reports/mission-1.76.7-report.md`.
+
+Changed: `docs/CLAUDE.md` 1.125 to 1.126; `.github/workflows/ci.yml` gains one gate.
+
+Unchanged: Mission 1.76.6's records, the Q1 selection, every Globalping record, and every
+canonical research table.
 
 ## 1.124 - 2026-09-07 (Sprint 1 / Mission 1.76.6)
 

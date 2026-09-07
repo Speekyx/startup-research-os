@@ -672,6 +672,16 @@ jobs:
       - name: Globalping residual closure matches its records
         run: uv run python infrastructure/scripts/render_globalping_residuals.py --check
 
+      # Mission 1.76.7. The operator chose V2, and the support half is out of reach. The
+      # gate refuses: a class whose cardinality or membership is not decidable before the
+      # run; a membership rule written in terms of availability, success, reachability,
+      # agreement or evaluability, which chooses the frame from what answered; a singleton
+      # class, which collapses the universal into the V1 the operator rejected; partial
+      # positive support; missingness admitted as refutation; a support capability the
+      # apparatus reality does not carry; a rewritten predecessor; and any measurement.
+      - name: The V2 vantage-class decision matches its record
+        run: uv run python infrastructure/scripts/render_v2_vantage_class.py --check
+
       # Mission 1.76.6. A class was selected and a construct was not. The gate refuses:
       # collapsing CLASS_SELECTED, CONSTRUCT_SELECTED and RUN_AUTHORIZED; a selection whose
       # premise has gone, since the qualification is asserted live rather than quoted; a
