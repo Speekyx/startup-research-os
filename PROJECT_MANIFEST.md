@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.121
+Version: 1.122
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-07 (Sprint 1 / Mission 1.76.3)
+Last amended: 2026-09-07 (Sprint 1 / Mission 1.76.4)
 
 ---
 
@@ -13,6 +13,97 @@ Last amended: 2026-09-07 (Sprint 1 / Mission 1.76.3)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.122 - 2026-09-07 (Sprint 1 / Mission 1.76.4)
+
+**`R2_B_REPLY_SENT_OPERATOR_ATTESTED_DELIVERY_UNCONFIRMED`.** The operator sent the approved
+`GP-R2-B-Q1` once by hand, as a reply in the existing thread, and attested to it. No mailbox
+was read, no connector used, and this repository sent nothing.
+
+**THE EXECUTION MOVED AND THE APPROVAL DID NOT.** `approval_sha256` is byte-identical before
+and after, which is not a coincidence: the digest excludes the execution, the recorded date,
+itself and the recipient precisely so the record can carry a performance without becoming a
+different approval. It is also the strongest check available -- **an execution that moved the
+digest would be an approval rewritten to fit an act already taken** -- and the gate recomputes
+it live rather than trusting the stored value. `mission` still reads 1.76.3 while
+`recorded_by_mission` reads 1.76.4, because **a later mission that fills in an execution does
+not become the approval's author**.
+
+**THE ORDERING IS READ OFF THE REPOSITORY'S OWN HISTORY.** The approval was committed at
+2026-09-07T01:12:27+04:00 and merged at 01:21:45+04:00; the attested send is
+2026-09-07T19:19:30+04:00, eighteen hours later. That is checkable from git rather than
+asserted, and the gate refuses a send earlier than the approval's recorded date, a timestamp
+without an explicit offset -- **a naked local time names no instant** -- and a record denying
+the ordering its own fields show.
+
+**A SEND IS NOT A DELIVERY.** The attestation establishes an act by the sender and is silent
+on the outcome at the receiver, so deliveries stay 0, the status reads UNCONFIRMED and
+**provider_contacted stays FALSE** -- and this arc supplies its own proof the two come apart,
+because the v1 message was sent too and then bounced. Here it is false for a **second and
+independent reason**: who is on the other end of the thread is NOT_ESTABLISHED, so even a
+confirmed delivery would not establish that the PROVIDER was contacted. **Silence is not an
+observation** -- the record does not say no bounce was reported, which would imply someone
+checked a mailbox; it says nothing here looked. **The state can still move**, and one new rule
+covers a hazard this channel introduces: **a later message in the thread would not confirm
+delivery of THIS one**, because a subsequent message establishes that somebody wrote in the
+thread rather than that any particular earlier message arrived.
+
+**NOBODY KNOWS WHO RECEIVED IT, AND NONE WAS GUESSED.** `attested_recipient` is null: a reply
+types no address, it inherits one, and the earlier sender is still NOT_ESTABLISHED. So the
+comparison reads **NOT_APPLICABLE** rather than MATCH, because the approval bound a sentinel
+and **reporting a match would invent an agreement between two things neither of which is an
+address**. What is recorded is that the reply went into the bound thread, on the operator's
+word, with the record saying that is the whole of the evidence for it.
+
+**THE SENDER IS ATTESTED, NOT CHECKED, AND WAS NOT WRITTEN BACK.** The approval binds no
+sender at all -- a reply has no typed address on either end -- so nothing constrains the
+mailbox and the operator's word is the entire evidence. Writing it into the approved action
+would move the digest and make a field the operator never approved read as though they had,
+and the gate refuses any sender key appearing there.
+
+**NOTHING WAS INVENTED TO FILL A FIELD.** No message id, because the only route to one runs
+through a mailbox the approval excluded; no body comparison, for the same reason; and no reply
+recorded, because **a reply is a document and would be frozen verbatim in its own record
+before anything interpreted it**. BYTE_VERIFIED stays unreachable: the channel changed and the
+**observability did not**.
+
+**THE APPROVAL IS SPENT**, and all three approvals in the arc now are -- one by a bounce, one
+by a send, one by this reply. A resend needs its own.
+
+**Verification.** Probe of **120 deliberate violations, 120 caught, 0 escaped**, plus **4 of 4
+positive controls**, nine files restored byte for byte. **The control that matters is
+INVERTED**: 1.76.3 proved SENT was reachable while the record was pending, and this proves the
+**pending state is still representable** now that the record has left it. The other two keep a
+bounce and a delivery confirmed by an INDEPENDENT source representable, because a gate that
+could only express one outcome would force the next one to be recorded as something it is not.
+**Four assertions from 1.76.3 were re-pointed rather than deleted** -- each pinned the state
+the repository happened to be in, and **a test asserting the execution is forever pending is a
+test asserting the approved action may never be performed**. **3296 bare-python tests**;
+both runners green; `ruff format --check`, `ruff check` and mypy through `uv`; contract
+generation `--check`; source catalog `--check`; all **52** CI gates.
+
+**Nothing moved.** R2-B stays `THIRD_PARTY_TARGET_SCOPE_UNRESOLVED`, C9 stays PARTIAL, the
+tally stays **11 PASS / 1 PARTIAL / 0 FAIL** and the verdict stays `COUNTERPART_UNRESOLVED` --
+**a sent question is not an answer**. The frozen packet is byte-identical and still reads
+NOT_AUTHORIZED; GP-R2-Q1 v1 and v2, both their approvals and both their execution records are
+untouched; the frozen R2 reply still carries `sufficient_for_provider_authority: false`. **0
+emails sent by this repository, 0 Gmail reads or writes, 0 connector calls, 0 GitHub writes, 0
+provider contacts, 0 measurements, 0 target requests, 0 research API calls, 0 model calls, 0
+embeddings, 0 Claims, 0 Evidence, 0 independence groups, 0 scores, 0 canonical mutations, 0
+migrations.**
+
+New: `packages/inferred-claim-evaluator/python/tests/test_r2b_reply_attestation.py` and
+`docs/reports/mission-1.76.4-report.md`.
+
+Changed: `docs/data/globalping-r2b-dispatch-approval-v1.json` gains its execution and a moved
+`recommended_next_action`, with the approval digest unchanged; the generated
+`docs/data/globalping-r2b-dispatch-approval-v1.md` renders the SENT branch;
+`infrastructure/scripts/render_r2b_dispatch_approval.py` gains the attestation and delivery
+checks; `packages/inferred-claim-evaluator/python/tests/test_r2b_dispatch_approval.py` has four
+assertions re-pointed; `docs/CLAUDE.md` 1.122 to 1.123.
+
+Unchanged: every other packet, approval, execution record and review in the Globalping arc,
+every CI gate count, and every canonical research table.
 
 ## 1.121 - 2026-09-07 (Sprint 1 / Mission 1.76.3)
 

@@ -1,5 +1,5 @@
 {
-  "$comment": "Mission 1.76.3. The operator approved exactly one manual reply of GP-R2-B-Q1 in the existing thread. This record sits BESIDE the frozen packet, because Mission 1.66 settled that marking a frozen document APPROVED changes the artifact the operator read -- and the packet's own gate asserts it records no approval.",
+  "$comment": "Mission 1.76.3, with the execution recorded by Mission 1.76.4. The operator approved exactly one manual reply of GP-R2-B-Q1 in the existing thread. This record sits BESIDE the frozen packet, because Mission 1.66 settled that marking a frozen document APPROVED changes the artifact the operator read -- and the packet's own gate asserts it records no approval.",
   "record_version": "1.0.0",
   "mission": "1.76.3",
   "recorded_at": "2026-09-07",
@@ -71,15 +71,23 @@
     "the_attribution_of_whatever_comes_back": "a reply to this reply arrives in the same thread and inherits the same problem. Approving the question does not improve the evidentiary standing of its answer."
   },
   "execution": {
-    "$comment": "An approval says an action MAY be performed. Nothing has been performed.",
-    "status": "PENDING_MANUAL_OPERATOR_ACTION",
-    "outward_replies_made": 0,
-    "send_attempts": 0,
-    "deliveries_confirmed": 0,
-    "provider_contacted": false,
-    "provider_replied": false,
-    "operator_attestation_recorded": false,
-    "attestation_level": null,
+    "$comment": "Mission 1.76.4. An approval says an action MAY be performed; this records that one WAS. What it does not record is that the reply arrived, because the attestation is silent on delivery and nothing here may look.",
+    "status": "SENT",
+    "recorded_by_mission": "1.76.4",
+    "outward_replies_made": 1,
+    "send_attempts": 1,
+    "dispatch_performed": true,
+    "sent_at": "2026-09-07T19:19:30+04:00",
+    "sent_at_carries_an_explicit_offset": true,
+    "why_the_offset_matters": "a naked local time names no instant, and this record is read by people who are not in the operator's timezone and cannot ask.",
+    "sent_after_the_approval_was_recorded": true,
+    "how_that_ordering_is_established": "the approval record was committed at 2026-09-07T01:12:27+04:00 and merged at 01:21:45+04:00; the attested send is 2026-09-07T19:19:30+04:00, about eighteen hours later. The ordering is checkable from the repository's own history rather than asserted, which matters because an execution recorded before its approval would be an approval written to fit an act already taken.",
+    "attested_by": "operator",
+    "attested_sender": "thib.chm@gmail.com",
+    "attested_subject": "Terms scope: HEAD measurements of publicly reachable third-party websites",
+    "attestation_statement": "I manually sent the approved GP-R2-B-Q1 v1 exactly once, as a reply in the established email thread, from thib.chm@gmail.com, using the approved subject and the frozen body, at 2026-09-07T19:19:30+04:00.",
+    "operator_attestation_recorded": true,
+    "attestation_level": "OPERATOR_ATTESTED",
     "attestation_levels_reachable_for_this_channel": [
       "OPERATOR_ATTESTED"
     ],
@@ -87,9 +95,63 @@
     "why_byte_verification_is_unreachable_here": "Mission 1.66's ceiling, unchanged: a manual reply happens in a mail client nothing in this repository can observe. The channel is a thread rather than a fresh message and the OBSERVABILITY is identical, because the ceiling is a property of the medium.",
     "upgrade_path": "NONE for this channel. A future mission may record OPERATOR_ATTESTED and nothing above it.",
     "reachable_only_through": "an explicit operator attestation that the reply was sent. This repository cannot reach SENT by any other route.",
+    "attestation_covers": [
+      "that a reply was sent",
+      "that it was sent exactly once",
+      "that it was sent as a reply in the established thread",
+      "the sending mailbox",
+      "the subject",
+      "the stated send time",
+      "that the frozen body was used"
+    ],
+    "attestation_does_not_cover": [
+      "delivery",
+      "receipt by a person",
+      "who received it",
+      "the bytes that actually left the mail client",
+      "a reply to it"
+    ],
+    "attested_recipient": null,
+    "why_no_recipient_is_attested": "the operator stated none, and a reply in a thread does not type one -- it inherits whatever address the thread carries. The sender of the message being answered is still NOT_ESTABLISHED, so this record cannot say who received the reply and does not guess. What IS established is the thread it went into.",
+    "recipient_comparison": "NOT_APPLICABLE",
+    "why_the_recipient_comparison_is_not_applicable": "the approval bound a sentinel rather than an address, deliberately, so there is no approved recipient for an attested one to match. Reporting a MATCH here would invent an agreement between two things neither of which is an address.",
+    "thread_matches_the_bound_thread": true,
+    "how_the_thread_match_is_established": "by the operator's attestation that the reply went into the established thread, and by nothing else. The three digests that bind the thread are properties of documents this repository holds; that the mail client's thread is that conversation is the operator's word.",
+    "subject_matches_the_approved_subject": true,
+    "body_used_per_attestation": "THE_FROZEN_PACKET_BODY",
+    "body_compared_by_this_repository": false,
+    "why_the_body_was_not_compared": "comparing what was sent against the frozen body would require reading the operator's mailbox, which the approval excluded by name. The frozen body is what the attestation says was used; this repository has not seen what left.",
+    "sender_supplied_only_by_the_attestation": true,
+    "why_the_sender_is_attested_rather_than_checked": "the approval binds no sender at all -- a reply in a thread has no typed address on either end -- so no field of it constrains the mailbox and no artifact here records one. The mailbox is known because the operator said so, and that is the whole of the evidence for it.",
+    "sender_written_back_into_the_approval": false,
+    "why_the_sender_was_not_written_back": "the approval's binding fields are what the operator approved, and the sender is not among them. Writing it back would move the approval digest and make a field that was never approved read as though it had been.",
+    "delivery": {
+      "$comment": "A send is an act by the sender. A delivery is an outcome at the receiver. The attestation establishes the first and is silent on the second.",
+      "delivery_status": "UNCONFIRMED",
+      "delivery_established_by": null,
+      "why_delivery_is_unconfirmed": "the attestation states that a reply was sent and says nothing about whether it arrived. This arc has already shown the two come apart, because the v1 message to legal@globalping.io was also sent before it bounced.",
+      "absence_of_a_reported_bounce_is_not_evidence": true,
+      "why_silence_is_not_evidence": "no non-delivery report has been given to this record, and nothing here looked for one. Silence from an unexamined mailbox is not an observation.",
+      "a_later_bounce_would_move_this_to_FAILED": true,
+      "a_later_delivery_confirmation_would_need_its_own_source": true,
+      "a_reply_in_the_thread_would_not_confirm_delivery_of_THIS_message": true,
+      "why_not": "a subsequent message in a thread establishes that somebody wrote in it, not that any particular earlier message was received and read. The two are close enough to be conflated and different enough to matter."
+    },
+    "deliveries_confirmed": 0,
+    "provider_contacted": false,
+    "why_provider_contacted_is_false": "a contact means something reached the provider, and only delivery would establish that. The dispatch is attested and the delivery is not. It is additionally false for a second and independent reason: who is on the other end of this thread is NOT_ESTABLISHED, so even a confirmed delivery would not establish that the PROVIDER was contacted.",
+    "provider_replied": false,
+    "reply_recorded": false,
+    "why_no_reply_is_recorded": "none has been reported, and a reply is a document: it would be frozen verbatim in its own record before anything interpreted it. Nothing was read, and this record claims nothing about what will come back or whether anything will.",
+    "message_id": null,
+    "message_id_available": false,
+    "why_there_is_no_message_id": "the attestation carries none and none was invented. The only route to a message id runs through the sending mailbox, which the approval excluded by name, so the field is null rather than plausible.",
     "mail_connector_used": false,
     "mailbox_read": false,
-    "emails_sent_by_this_repository": 0
+    "emails_sent_by_this_repository": 0,
+    "approval_exhausted": true,
+    "why_the_approval_is_exhausted": "it authorised exactly one outward reply and one was made. A second reply, including a resend after a bounce that has not happened, is a second use of a one-use approval and needs its own.",
+    "a_resend_requires_a_new_operator_approval": true
   },
   "integrity_checks_frozen_before_any_send": {
     "sent_body_must_match_the_frozen_packet_body": true,
@@ -154,10 +216,16 @@
     "MIGRATIONS": 0
   },
   "recommended_next_action": {
-    "action": "the operator sends exactly one manual reply in the existing thread, with the approved subject and the frozen body, then attests to it",
+    "$comment": "Mission 1.76.4. The approved action was performed, so what is awaited changed. Nothing here schedules a follow-up: a deadline nobody agreed with the provider is our own invention, and silence would close nothing.",
+    "action": "wait. If a reply arrives it is frozen verbatim in its own record before anything interprets it; if a non-delivery report arrives, this execution moves to DISPATCH_ATTEMPTED_DELIVERY_FAILED and this approval is spent either way",
     "performed_by": "OPERATOR",
     "this_repository_may_not_perform_it": true,
     "attestation_is_the_only_evidence_this_channel_can_produce": true,
+    "no_deadline_was_agreed_with_the_provider": true,
+    "silence_would_close_nothing": true,
+    "why_silence_closes_nothing": "R2-B is unresolved because no statement establishes third-party target scope. A provider that never answers has still made no statement, so the residual stays exactly where it is rather than resolving in either direction.",
+    "a_second_reply_needs_a_new_approval": true,
     "mission_1_77_not_started": true
-  }
+  },
+  "execution_recorded_at": "2026-09-07"
 }

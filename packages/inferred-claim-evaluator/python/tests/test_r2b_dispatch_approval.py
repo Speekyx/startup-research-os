@@ -186,19 +186,35 @@ class TestTheOperatorsExclusionsAreRecorded(unittest.TestCase):
         self.assertFalse(reply["attribution"]["sufficient_for_provider_authority"])
 
 
-class TestNothingWasPerformed(unittest.TestCase):
+class TestOneReplyWasSentAndNothingMore(unittest.TestCase):
+    """Re-pointed by Mission 1.76.4. This class asserted the execution was pending and
+    empty, which was true until the approved action was performed. What it defends is the
+    property rather than the state: exactly the authorised number of replies, and no
+    delivery, contact or answer claimed on top of them."""
+
     def setUp(self):
         self.execution = load(APPROVAL)["execution"]
+        self.action = load(APPROVAL)["approved_action"]
 
-    def test_the_execution_is_pending_and_empty(self):
-        self.assertEqual(self.execution["status"], "PENDING_MANUAL_OPERATOR_ACTION")
-        for counter in ("outward_replies_made", "send_attempts", "deliveries_confirmed"):
-            with self.subTest(counter=counter):
-                self.assertEqual(self.execution[counter], 0)
+    def test_exactly_the_authorised_number_of_replies_was_made(self):
+        self.assertEqual(self.execution["status"], "SENT")
+        self.assertEqual(
+            self.execution["outward_replies_made"], self.action["maximum_outward_replies"]
+        )
+        self.assertGreaterEqual(
+            self.execution["send_attempts"], self.execution["outward_replies_made"]
+        )
+        self.assertTrue(self.execution["approval_exhausted"])
+
+    def test_no_delivery_contact_or_answer_is_claimed(self):
+        self.assertEqual(self.execution["deliveries_confirmed"], 0)
         self.assertFalse(self.execution["provider_contacted"])
         self.assertFalse(self.execution["provider_replied"])
-        self.assertFalse(self.execution["operator_attestation_recorded"])
-        self.assertIsNone(self.execution["attestation_level"])
+        self.assertFalse(self.execution["reply_recorded"])
+
+    def test_the_send_is_attested_and_nothing_stronger(self):
+        self.assertTrue(self.execution["operator_attestation_recorded"])
+        self.assertEqual(self.execution["attestation_level"], "OPERATOR_ATTESTED")
 
     def test_this_repository_sent_nothing_and_read_nothing(self):
         self.assertEqual(self.execution["emails_sent_by_this_repository"], 0)
@@ -386,18 +402,36 @@ class TestTheGateRefusesTheShortcuts(unittest.TestCase):
                 approval["explicitly_not_authorised"].pop(item)
                 self.refused(self.gate._check_the_exclusions_hold, approval)
 
-    def test_a_pending_execution_recording_a_send_is_refused(self):
+    def pending(self):
+        """The pre-send state, which must stay representable and stay strict."""
         approval = copy.deepcopy(self.approval)
+        approval["execution"].update(
+            {
+                "status": "PENDING_MANUAL_OPERATOR_ACTION",
+                "outward_replies_made": 0,
+                "send_attempts": 0,
+                "deliveries_confirmed": 0,
+                "operator_attestation_recorded": False,
+                "attestation_level": None,
+            }
+        )
+        return approval
+
+    def test_the_pending_state_is_still_representable(self):
+        self.gate._check_execution(self.pending())
+
+    def test_a_pending_execution_recording_a_send_is_refused(self):
+        approval = self.pending()
         approval["execution"]["outward_replies_made"] = 1
         self.refused(self.gate._check_execution, approval)
 
     def test_a_pending_execution_recording_an_attestation_is_refused(self):
-        approval = copy.deepcopy(self.approval)
+        approval = self.pending()
         approval["execution"]["operator_attestation_recorded"] = True
         self.refused(self.gate._check_execution, approval)
 
     def test_a_pending_execution_recording_a_provider_contact_is_refused(self):
-        approval = copy.deepcopy(self.approval)
+        approval = self.pending()
         approval["execution"]["provider_contacted"] = True
         self.refused(self.gate._check_execution, approval)
 
@@ -469,25 +503,17 @@ class TestTheGateRefusesTheShortcuts(unittest.TestCase):
         self.assertIn('ValidationError(f"the records do not carry', RENDERER.read_text("utf-8"))
 
 
-class TestTheLegitimateTransitionStaysRepresentable(unittest.TestCase):
-    """A gate that only accepts the state we happen to be in is not a gate."""
+class TestTheOtherStatesStayRepresentable(unittest.TestCase):
+    """A gate that only accepts the state we happen to be in is not a gate. Mission 1.76.3
+    proved SENT was reachable while the record was pending; Mission 1.76.4 proves the
+    reverse, plus the bounce this approval can still suffer."""
 
     def setUp(self):
         self.gate = gate()
         self.approval = load(APPROVAL)
 
-    def test_a_sent_operator_attested_reply_is_accepted(self):
-        approval = copy.deepcopy(self.approval)
-        approval["execution"].update(
-            {
-                "status": "SENT",
-                "outward_replies_made": 1,
-                "send_attempts": 1,
-                "operator_attestation_recorded": True,
-                "attestation_level": "OPERATOR_ATTESTED",
-            }
-        )
-        self.gate._check_execution(approval)
+    def test_the_sent_record_as_committed_is_accepted(self):
+        self.gate._check_execution(self.approval)
 
     def test_a_failed_dispatch_is_accepted(self):
         approval = copy.deepcopy(self.approval)
@@ -498,7 +524,7 @@ class TestTheLegitimateTransitionStaysRepresentable(unittest.TestCase):
 
     def test_a_sent_reply_may_not_exceed_the_one_it_authorises(self):
         approval = copy.deepcopy(self.approval)
-        approval["execution"].update({"status": "SENT", "outward_replies_made": 2})
+        approval["execution"]["outward_replies_made"] = 2
         with self.assertRaises(self.gate.ValidationError):
             self.gate._check_execution(approval)
 
@@ -510,10 +536,10 @@ class TestTheRendererAndGovernance(unittest.TestCase):
             with self.subTest(module=banned):
                 self.assertNotIn(f"import {banned}", source)
 
-    def test_the_page_reports_the_pending_status_and_the_sentinel(self):
+    def test_the_page_reports_the_execution_state_and_the_sentinel(self):
         text = PAGE.read_text(encoding="utf-8")
         self.assertIn("Do not edit by hand", text)
-        self.assertIn("PENDING_MANUAL_OPERATOR_ACTION", text)
+        self.assertIn(load(APPROVAL)["execution"]["status"], text)
         self.assertIn(gate().RECIPIENT_SENTINEL, text)
         self.assertIn("GP-R2-B-Q1", text)
 
@@ -526,8 +552,10 @@ class TestTheRendererAndGovernance(unittest.TestCase):
             with self.subTest(record=path.name):
                 self.assertIn(path.name, text)
 
-    def test_the_report_exists(self):
-        self.assertTrue((REPO_ROOT / "docs" / "reports" / "mission-1.76.3-report.md").exists())
+    def test_the_reports_exist(self):
+        for name in ("mission-1.76.3-report.md", "mission-1.76.4-report.md"):
+            with self.subTest(report=name):
+                self.assertTrue((REPO_ROOT / "docs" / "reports" / name).exists())
 
 
 if __name__ == "__main__":

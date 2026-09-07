@@ -40,6 +40,7 @@ import argparse
 import hashlib
 import json
 import pathlib
+import re
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 DATA = ROOT / "docs" / "data"
@@ -56,6 +57,18 @@ FROZEN_REPLY = DATA / "globalping-r2-provider-reply-v1.json"
 RENDERED = DATA / "globalping-r2b-dispatch-approval-v1.md"
 
 RECIPIENT_SENTINEL = "DETERMINED_BY_THE_THREAD_NOT_SUPPLIED"
+
+DELIVERY_STATUSES = ("UNCONFIRMED", "CONFIRMED", "FAILED")
+
+TIMESTAMP = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:[+-]\d{2}:\d{2}|Z)")
+
+# Names an inference from the attestation of SENDING could hide behind.
+THE_SEND_ATTESTATION = (
+    "OPERATOR_SEND_ATTESTATION",
+    "THE_SEND_ATTESTATION",
+    "THE_ATTESTATION_OF_SENDING",
+    "OPERATOR_ATTESTED",
+)
 
 EXECUTION_STATUSES = (
     "PENDING_MANUAL_OPERATOR_ACTION",
@@ -257,6 +270,197 @@ def _check_the_exclusions_hold(approval: dict) -> None:
             raise ValidationError(f"the approval does not say it leaves {field} where it was")
 
 
+def _check_the_reply_is_attested(approval: dict, execution: dict) -> None:
+    """Nothing here observed the send, so every fact about it is the operator's word.
+
+    Which is why the record must say so. The danger in this branch is not a lie; it is a
+    record that reads as though something checked it.
+    """
+    action = approval["approved_action"]
+
+    if execution["outward_replies_made"] != action["maximum_outward_replies"]:
+        raise ValidationError(
+            "the approval authorises one reply and the record counts a different number"
+        )
+    if execution["send_attempts"] < execution["outward_replies_made"]:
+        raise ValidationError("more replies were made than attempted, which cannot happen")
+    if not execution["dispatch_performed"]:
+        raise ValidationError("SENT while the record denies a dispatch happened")
+
+    for field in ("attested_by", "attestation_statement", "attested_sender"):
+        if not str(execution.get(field) or "").strip():
+            raise ValidationError(f"SENT with no {field}")
+
+    sender = execution["attested_sender"]
+    if "@" not in sender:
+        raise ValidationError(f"the attested sender {sender!r} is not a mailbox")
+    if any("sender" in key for key in action):
+        raise ValidationError(
+            "the sending mailbox was written into the approved action, which would make a "
+            "field the operator never approved read as though they had"
+        )
+    if execution["sender_written_back_into_the_approval"]:
+        raise ValidationError("the record admits writing the sender back into the approval")
+    if not execution["sender_supplied_only_by_the_attestation"]:
+        raise ValidationError(
+            "the record claims a source for the sender other than the attestation, and the "
+            "approval binds none, so here there is no other source"
+        )
+    if not str(execution["why_the_sender_is_attested_rather_than_checked"]).strip():
+        raise ValidationError(
+            "the record does not say why the sender is attested rather than checked"
+        )
+
+    # A reply inherits its recipient. Attesting one would invent the field the whole
+    # exchange hangs on, which is the same refusal the approval made.
+    if execution["attested_recipient"] is not None:
+        raise ValidationError(
+            f"the record attests a recipient ({execution['attested_recipient']!r}); a reply "
+            "in a thread types no address, and the earlier sender is NOT_ESTABLISHED"
+        )
+    if execution["recipient_comparison"] != "NOT_APPLICABLE":
+        raise ValidationError(
+            "the record compares the recipient against the approved one; the approval bound "
+            "a sentinel, so there is no address for an attested one to match"
+        )
+    for field in (
+        "why_no_recipient_is_attested",
+        "why_the_recipient_comparison_is_not_applicable",
+    ):
+        if not str(execution[field]).strip():
+            raise ValidationError(f"the record does not state {field}")
+    if not execution["thread_matches_the_bound_thread"]:
+        raise ValidationError(
+            "the reply is recorded as going somewhere other than the bound thread"
+        )
+    if not str(execution["how_the_thread_match_is_established"]).strip():
+        raise ValidationError("the record does not say how the thread match is established")
+
+    if execution["attested_subject"] != action["approved_subject"]:
+        raise ValidationError("the attested subject is not the approved one")
+    if not execution["subject_matches_the_approved_subject"]:
+        raise ValidationError("the record denies a subject match its own fields show")
+
+    sent_at = str(execution.get("sent_at") or "")
+    if not TIMESTAMP.fullmatch(sent_at):
+        raise ValidationError(
+            f"the send time {sent_at!r} is not an ISO-8601 timestamp with an explicit offset; "
+            "a naked local time names no instant"
+        )
+    if not execution["sent_at_carries_an_explicit_offset"]:
+        raise ValidationError("the record denies an offset its own timestamp carries")
+    if sent_at[:10] < approval["recorded_at"]:
+        raise ValidationError(
+            "the reply is attested as sent before the approval that authorises it"
+        )
+    if not execution["sent_after_the_approval_was_recorded"]:
+        raise ValidationError(
+            "the record says the reply preceded its approval, which would make the approval "
+            "a document written to fit an act already taken"
+        )
+    if not str(execution["how_that_ordering_is_established"]).strip():
+        raise ValidationError("the record does not say how the ordering is established")
+
+    # The body that left is in a mail client, and the approval excluded reading it.
+    if execution["body_compared_by_this_repository"]:
+        raise ValidationError(
+            "the record claims the sent body was compared; that would need the operator's "
+            "mailbox, which this approval excluded by name"
+        )
+    if execution["message_id"] is not None or execution["message_id_available"]:
+        raise ValidationError(
+            "a message id appears in the record; the attestation carries none and the only "
+            "route to one runs through a mailbox the approval excluded"
+        )
+
+    if not execution["approval_exhausted"]:
+        raise ValidationError(
+            "the approval's one reply was made and the record does not call it exhausted"
+        )
+    if not execution["a_resend_requires_a_new_operator_approval"]:
+        raise ValidationError("the record permits a second reply under a spent approval")
+
+    covers = execution["attestation_covers"]
+    uncovered = execution["attestation_does_not_cover"]
+    if not covers or not uncovered:
+        raise ValidationError("the record does not say what the attestation covers")
+    both = sorted(set(covers) & set(uncovered))
+    if both:
+        raise ValidationError(f"the attestation both covers and does not cover {both}")
+    for outside in ("delivery", "who received it"):
+        if outside not in uncovered:
+            raise ValidationError(
+                f"the record does not place {outside!r} outside what the attestation covers"
+            )
+
+
+def _check_delivery_was_not_inferred(execution: dict) -> None:
+    """A send is an act by the sender. A delivery is an outcome at the receiver."""
+    delivery = execution["delivery"]
+    status = delivery["delivery_status"]
+    if status not in DELIVERY_STATUSES:
+        raise ValidationError(f"the delivery status {status!r} is undefined")
+    if status == "FAILED":
+        raise ValidationError(
+            "a failed delivery is not recorded under SENT; that outcome has its own status"
+        )
+    if not str(delivery["why_delivery_is_unconfirmed"]).strip():
+        raise ValidationError("the delivery block states no reason for the state it records")
+
+    established_by = delivery["delivery_established_by"]
+    if status == "UNCONFIRMED":
+        if execution["deliveries_confirmed"] != 0:
+            raise ValidationError("the delivery is unconfirmed and a delivery is counted")
+        if established_by is not None:
+            raise ValidationError(
+                "the delivery is unconfirmed and the record names a source that established it"
+            )
+        if execution["provider_contacted"]:
+            raise ValidationError(
+                "the provider is marked contacted on an unconfirmed delivery; a dispatch is "
+                "not a contact, and this arc has already sent a message that never arrived"
+            )
+        if not delivery["absence_of_a_reported_bounce_is_not_evidence"]:
+            raise ValidationError(
+                "the record treats silence as evidence; nothing here looked at a mailbox, and "
+                "silence from an unexamined one is not an observation"
+            )
+        if not str(delivery["why_silence_is_not_evidence"]).strip():
+            raise ValidationError("the record does not say why silence establishes nothing")
+        if not delivery["a_later_bounce_would_move_this_to_FAILED"]:
+            raise ValidationError(
+                "the record makes this state final; a bounce may still arrive, and a state "
+                "that cannot move would force it to be recorded as something else"
+            )
+
+    if status == "CONFIRMED":
+        if execution["deliveries_confirmed"] < 1:
+            raise ValidationError("the delivery is confirmed and none is counted")
+        if not str(established_by or "").strip():
+            raise ValidationError("a confirmed delivery names nothing that established it")
+        if established_by in THE_SEND_ATTESTATION:
+            raise ValidationError(
+                f"the delivery is established by {established_by!r}, which attests the send; "
+                "a send is not a delivery, and that inference is what this refuses"
+            )
+
+    # A later message in a thread says somebody wrote in it, not that this one arrived.
+    if not delivery["a_reply_in_the_thread_would_not_confirm_delivery_of_THIS_message"]:
+        raise ValidationError(
+            "the record would let a later message in the thread confirm this one's delivery"
+        )
+    if not str(delivery["why_not"]).strip():
+        raise ValidationError("the record does not say why a later message confirms nothing")
+
+    if execution["provider_contacted"] and status != "CONFIRMED":
+        raise ValidationError("the provider is marked contacted with no confirmed delivery")
+    if (
+        not execution["provider_contacted"]
+        and not str(execution["why_provider_contacted_is_false"]).strip()
+    ):
+        raise ValidationError("the record does not say why the provider is not marked contacted")
+
+
 def _check_execution(approval: dict) -> None:
     execution = approval["execution"]
     if execution["status"] not in EXECUTION_STATUSES:
@@ -289,6 +493,23 @@ def _check_execution(approval: dict) -> None:
             raise ValidationError("the execution is pending and records an attestation")
         if execution["provider_contacted"] or execution["provider_replied"]:
             raise ValidationError("the execution is pending and records a provider contact")
+
+    if execution["status"] == "SENT":
+        if not execution["operator_attestation_recorded"]:
+            raise ValidationError(
+                "SENT with no operator attestation; this repository cannot reach SENT by any "
+                "other route"
+            )
+        if level != "OPERATOR_ATTESTED":
+            raise ValidationError(f"a sent reply is recorded at attestation level {level!r}")
+        _check_the_reply_is_attested(approval, execution)
+        _check_delivery_was_not_inferred(execution)
+
+    if execution.get("provider_replied") or execution.get("reply_recorded"):
+        raise ValidationError(
+            "the record claims a reply came back; a reply is a document and would be frozen "
+            "verbatim in its own record before anything interpreted it"
+        )
 
     for field in (
         "why_byte_verification_is_unreachable_here",
@@ -391,13 +612,25 @@ def render(approval: dict) -> str:
     action = approval["approved_action"]
     execution = approval["execution"]
     block = approval["approval"]
+    sent = execution["status"] == "SENT"
     lines = [
-        "# GP-R2-B-Q1 — approved, and not sent",
+        "# GP-R2-B-Q1 — approved, and sent once"
+        if sent
+        else "# GP-R2-B-Q1 — approved, and not sent",
         "",
         f"Generated from `{APPROVAL.name}`. Do not edit by hand.",
         "",
-        f"**Execution status: `{execution['status']}`.** An approval says an action MAY be "
-        "performed. Nothing has been.",
+        (
+            f"**Execution status: `{execution['status']}`**, recorded by Mission "
+            f"{execution.get('recorded_by_mission') or approval['mission']}. An approval says "
+            "an action MAY be performed; this records that one WAS. It does not record that "
+            "the reply arrived."
+        )
+        if sent
+        else (
+            f"**Execution status: `{execution['status']}`.** An approval says an action MAY be "
+            "performed. Nothing has been."
+        ),
         "",
         "## What was approved",
         "",
@@ -444,12 +677,13 @@ def render(approval: dict) -> str:
         f"- {approval['what_this_approval_does_not_lift']['the_mailbox_read_that_would_establish_the_earlier_sender']}",
         f"- {approval['what_this_approval_does_not_lift']['the_attribution_of_whatever_comes_back']}",
         "",
-        "## Nothing has been performed",
+        "## What was performed" if sent else "## Nothing has been performed",
         "",
         "| | |",
         "|---|---|",
         f"| outward replies made | {execution['outward_replies_made']} |",
         f"| send attempts | {execution['send_attempts']} |",
+        f"| deliveries confirmed | {execution['deliveries_confirmed']} |",
         f"| provider contacted | {execution['provider_contacted']} |",
         f"| provider replied | {execution['provider_replied']} |",
         f"| operator attestation | {execution['operator_attestation_recorded']} |",
@@ -460,6 +694,62 @@ def render(approval: dict) -> str:
         "",
         execution["why_byte_verification_is_unreachable_here"],
         "",
+    ]
+
+    if sent:
+        delivery = execution["delivery"]
+        lines += [
+            "## A send is not a delivery",
+            "",
+            "| | |",
+            "|---|---|",
+            f"| sent at | `{execution['sent_at']}` |",
+            f"| sender | `{execution['attested_sender']}` |",
+            f"| recipient | {execution['attested_recipient']} |",
+            f"| recipient comparison | `{execution['recipient_comparison']}` |",
+            f"| body used, per the attestation | `{execution['body_used_per_attestation']}` |",
+            f"| body compared by this repository | {execution['body_compared_by_this_repository']} |",
+            f"| message id | {execution['message_id']} |",
+            f"| **delivery** | **`{delivery['delivery_status']}`** |",
+            f"| delivery established by | {delivery['delivery_established_by']} |",
+            "",
+            delivery["why_delivery_is_unconfirmed"],
+            "",
+            delivery["why_silence_is_not_evidence"],
+            "",
+            f"**{execution['why_provider_contacted_is_false']}**",
+            "",
+            "The attestation covers "
+            + ", ".join(execution["attestation_covers"])
+            + ". It does not cover "
+            + ", ".join(execution["attestation_does_not_cover"])
+            + ".",
+            "",
+            "### Nobody knows who received it",
+            "",
+            execution["why_no_recipient_is_attested"],
+            "",
+            execution["why_the_recipient_comparison_is_not_applicable"],
+            "",
+            "### The sender is attested, not checked",
+            "",
+            execution["why_the_sender_is_attested_rather_than_checked"],
+            "",
+            f"Written back into the approval: "
+            f"**{execution['sender_written_back_into_the_approval']}**. "
+            f"{execution['why_the_sender_was_not_written_back']}",
+            "",
+            "### The reply followed its approval",
+            "",
+            execution["how_that_ordering_is_established"],
+            "",
+            "### The approval is spent",
+            "",
+            execution["why_the_approval_is_exhausted"],
+            "",
+        ]
+
+    lines += [
         f"**Next: {approval['recommended_next_action']['action']}.** Performed by "
         f"{approval['recommended_next_action']['performed_by']}; this repository may not "
         "perform it.",
