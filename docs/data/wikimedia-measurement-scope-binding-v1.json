@@ -1,0 +1,452 @@
+{
+  "$comment": "Mission 1.77. Why the reviewed Wikimedia reliability scopes are historically known to resolve while the Opportunity-linked production path reported every row NON_SCORABLE. Authoritative where paired with the generated Markdown. Every number here is cross-checked by the gate against docs/data/reliability-resource-binding-diagnostic-v1.json, which is measured from the live deployment by infrastructure/scripts/report_reliability_resource_binding.py.",
+  "record_version": "1.0.0",
+  "mission": "1.77",
+  "recorded_at": "2026-09-10",
+  "record_kind": "measurement_scope_binding_decision",
+  "start_commit": "540ed6e",
+  "branch": "sprint-1/mission-1.77",
+  "migration_head": "0036_grant_use_profile_vocabulary",
+  "diagnostic": {
+    "record": "docs/data/reliability-resource-binding-diagnostic-v1.json",
+    "artifact_version": "reliability-resource-binding-diagnostic@1.0.0",
+    "script": "infrastructure/scripts/report_reliability_resource_binding.py",
+    "rule_module": "packages/evidence-reliability/python/sros_evidence_reliability/lineage.py",
+    "operator_gate_not_ci_gate": "the script reads a deployment; CI starts from an empty database (Mission 1.37 §22)"
+  },
+  "primary_outcome": "RELIABILITY_APPLICABILITY_ROOT_CAUSE_REVISED",
+  "why_this_outcome": "Mission 1.76 diagnosed that 'resource_id is absent from the whole acquisition lineage' and proposed binding the Wikimedia lineage to a committed collector constant. The first statement is false on the held data: every one of the 325 RawRecords carries provenance.resource_id, reachable from any Evidence row through its Signal's inputs, and the real resolver resolves all 36 Wikimedia rows through that join with no source named anywhere. The proposed repair was therefore unnecessary, and it is the hard-coded source exception section 10 forbids. What was actually wrong is a different defect that 1.76 did not name: the Opportunity production path never resolves reliability at all. It reads scoring.evidence.reliability, which ADR-026 Decision 2 keeps NULL by design, so every row of every source read NON_SCORABLE whatever the reviewed assessments said, TED included.",
+  "why_not_REPAIRED": "REPAIRED would name Wikimedia and name a scope binding, and neither is what was broken: the binding existed in the data from acquisition, and the defect repaired here is generic and sits in the consumer. Reporting REPAIRED would confirm the misdiagnosis in the outcome name. The seventeen success criteria of section 27 are nevertheless recorded one by one below, because they are all met and hiding that would be the opposite error.",
+  "secondary_findings": [
+    "OPPORTUNITY_PATH_DID_NOT_RESOLVE_LATE, repaired generically in both Opportunity runners",
+    "OPPORTUNITY_LIMITATION_RECONCILIATION_REQUIRED: the canonical revision-1 limitation is stale and was not edited"
+  ],
+  "production_failure_frozen": {
+    "path": [
+      "infrastructure/scripts/run_opportunity_preparation.py",
+      "infrastructure/scripts/run_opportunity_synthesis.py"
+    ],
+    "how_it_derived_reliability_before": "SELECT e.reliability; reliability_status = RESOLVED if the column is non-null else NO_APPLICABLE_ASSESSMENT. No ReliabilityScope is constructed and resolve_reliability is never called.",
+    "PRODUCTION_SCOPE_BEFORE": "NONE: the path constructs no five-part scope for any row",
+    "RESOLVER_RESULT_BEFORE": "NOT_INVOKED: every row reads NO_APPLICABLE_ASSESSMENT from a NULL column, for all five sources",
+    "MISSING_SCOPE_FACT": "none. The path asks for no fact at all; what is missing is the late resolution ADR-026 Decision 2 requires. The fact 1.76 called missing, the resource, is persisted on every RawRecord.",
+    "reproducible_by_code": "the diagnostic's per-row scorable_via_stored_column counter is 0 of 58 and its evidence_reliability_written counter is 0, before and after",
+    "mission_1_76_audit_path": {
+      "resource_read_from": "research.claims.proposition_facts.resource_id",
+      "rows_where_that_key_exists": "17 of 44 Claims, all TED, World Bank and GDELT kinds; 0 of 25 Wikimedia and Stack Exchange kinds",
+      "why_absent_there": "ADR-035 and ADR-036 keep the resource out of proposition identity for the kinds that converge; a proposition fact says WHAT is asserted and the resource says WHICH measurement produced the witness",
+      "result": "scope None for 46 rows, so the resolver reported that the row cannot state its measurement-and-purpose scope; 12 TED rows resolved",
+      "what_1_76_wrote": "resource_id is absent from the whole acquisition lineage and appears only in the assessment and, for other sources, inside proposition_facts",
+      "status_of_that_sentence": "FALSE. acquisition.raw_records.provenance.resource_id is present on 325 of 325 records, including all 21 Wikimedia records. The narrower sentence in the 1.76 report, that the lineage carries no resource_id COLUMN, is true and was generalised into the false one.",
+      "proof": "docs/data/reliability-resource-binding-diagnostic-v1.json lineage_audit.layers and lineage_audit.raw_record_resources, measured"
+    }
+  },
+  "historical_apparent_contradiction": {
+    "HISTORICAL_RESOLUTION_PATH": "DIAGNOSTIC_RECONSTRUCTION",
+    "historical_scripts": [
+      "infrastructure/scripts/report_docker_reliability_resolution.py (Mission 1.36.1)",
+      "infrastructure/scripts/report_wikimedia_convergent_reliability_resolution.py (Mission 1.44.1)"
+    ],
+    "how_they_built_the_scope": "r.provenance ->> 'resource_id' through nlp.signal_inputs, acquisition.normalized_records and acquisition.raw_records, with LIMIT 1",
+    "CURRENT_PRODUCTION_RESOLUTION_PATH": "NONE_STORED_COLUMN_READ (before this mission); LINEAGE_LATE_RESOLUTION (after)",
+    "mission_1_76_path": "DIAGNOSTIC_RECONSTRUCTION_FROM_THE_CLAIM_LAYER",
+    "PATH_DIFFERENCE": "1.36.1 and 1.44.1 read the resource from acquisition provenance through signal lineage; 1.76 read it from proposition facts, which carry it for some kinds and not others; the Opportunity runners read neither and resolved nothing.",
+    "ROOT_CAUSE": "two defects, neither of them a missing fact. (1) The Opportunity path performs no late resolution, so its scorability report is a report about a NULL column. (2) Mission 1.76's diagnostic reconstructed the scope from the wrong layer and generalised the absence it found there to the whole lineage.",
+    "both_claims_true": {
+      "historical_missions_resolved_exactly": true,
+      "opportunity_path_could_not_bind": "true of the path, which binds nothing; false of the lineage, which binds everything"
+    },
+    "was_mission_1_76_wrong": {
+      "answer": true,
+      "on_what": "the lineage sentence and the proposed repair",
+      "not_on_what": "the priority finding that a reviewed assessment exists and that the corpus is one deterministic step from scorable evidence; that step exists and was the consumer's, not the data's",
+      "proof": "diagnostic measurements.resolved_via_claim_facts 12 versus resolved_via_lineage 48, same resolver, same candidates"
+    },
+    "historical_resolution_was_the_same_rule_this_mission_states_once": "the two historical scripts and this mission read the same persisted fact; what this mission adds is the rule as a named function that refuses ambiguity instead of taking the first row, and its use on the production path"
+  },
+  "scope_exactness": {
+    "five_part_scope_unchanged": true,
+    "resolver_modified": false,
+    "resolver_signature_asserted_by_gate": true,
+    "forbidden_weakenings_used": [],
+    "forbidden_weakenings_refused_by_probe": [
+      "remove resource_id",
+      "nullable resource_id for matching",
+      "wildcard resource_id",
+      "source-wide fallback",
+      "closest-match resolution",
+      "proposition-similarity fallback",
+      "copying 0.65 into witnessed",
+      "copying 0.6 into detailed"
+    ]
+  },
+  "lineage_audit": [
+    {
+      "layer": "scoring.evidence",
+      "identifiers_persisted": ["source_id", "claim_id", "signal_id"],
+      "resource_identity": "NOT_CARRIED",
+      "immutable": true,
+      "notes": "reliability column NULL on 58 of 58 rows by design (ADR-026 Decision 2)"
+    },
+    {
+      "layer": "research.claim_revisions",
+      "identifiers_persisted": ["claim_id", "revision", "statement"],
+      "resource_identity": "NOT_CARRIED",
+      "immutable": true,
+      "notes": "append-only wording; carries no measurement identity"
+    },
+    {
+      "layer": "research.claims",
+      "identifiers_persisted": ["claim_type", "proposition_facts.proposition", "proposition_facts.resource_id (17 of 44)"],
+      "resource_identity": "CARRIED_FOR_SOME_KINDS_ONLY",
+      "immutable": true,
+      "notes": "proposition identity; the resource is a fact for the TED, World Bank and GDELT kinds and deliberately not for the Wikimedia and Stack Exchange kinds (ADR-035, ADR-036). Reading the resource here is reading a WHAT for a WHICH."
+    },
+    {
+      "layer": "nlp.signals",
+      "identifiers_persisted": ["signal_type_id", "extractor_id", "extractor_version", "scope"],
+      "resource_identity": "NOT_CARRIED",
+      "immutable": true,
+      "notes": "scope.resource_id present on 0 of 33; a Signal states a relation, not a provenance"
+    },
+    {
+      "layer": "nlp.signal_inputs",
+      "identifiers_persisted": ["signal_id", "raw_record_id", "normalized_record_id", "source_id", "record_kind_id", "observation_key"],
+      "resource_identity": "NOT_CARRIED, but names the RawRecord that carries it",
+      "immutable": true,
+      "notes": "260 rows, 260 with raw_record_id and record_kind_id; the join that answers the question"
+    },
+    {
+      "layer": "acquisition.normalized_records",
+      "identifiers_persisted": ["raw_record_id", "collector_id", "collector_version", "record_kind_id"],
+      "resource_identity": "NOT_CARRIED (provenance.resource_id on 0 of 325)",
+      "immutable": true,
+      "notes": "reshapes; provenance names the RawRecord and the normalizer"
+    },
+    {
+      "layer": "acquisition.raw_records",
+      "identifiers_persisted": ["source_id", "collector_id", "collector_version", "provenance.resource_id", "provenance.authorization_issued_at", "provenance.use_profile", "provenance.review_version"],
+      "resource_identity": "EXPLICIT_PERSISTED (325 of 325)",
+      "immutable": true,
+      "notes": "written by the collector at acquisition from the dataset the AcquisitionAuthorizationContext authorised, before any socket; the historical fact"
+    },
+    {
+      "layer": "collector code and registry",
+      "identifiers_persisted": [],
+      "resource_identity": "CURRENT_MUTABLE_CONFIGURATION",
+      "immutable": false,
+      "notes": "NOT READ by the rule, the diagnostic or the runners. A constant in a collector module could change after acquisition and would then say nothing about what was acquired."
+    }
+  ],
+  "resource_identity": {
+    "question": "Can the exact held Wikimedia measurement be attributed to exactly one registered resource from facts fixed by the original acquisition?",
+    "answer": "YES",
+    "location": "acquisition.raw_records.provenance.resource_id, reached through nlp.signal_inputs.raw_record_id",
+    "explicit_or_derived": "EXPLICIT",
+    "immutable_facts": [
+      "the RawRecord's provenance is written once at acquisition and never updated; revisions create new records",
+      "provenance.authorization_issued_at and provenance.use_profile on the same record date the authorization the resource was taken from",
+      "collector_id and collector_version are persisted beside it and are not consulted for the resource"
+    ],
+    "written_by": "the collector, from context.authorized_dataset(...).resource_id, after authorize_resource, before the transport opens a socket",
+    "RESOURCE_BINDING_DEPENDS_ON_CURRENT_MUTABLE_CONFIG": "NO",
+    "could_multiple_resources_fit": {
+      "answer": "NO",
+      "measured": "58 of 58 Evidence rows have exactly one distinct lineage resource; 0 ambiguous; 0 absent",
+      "what_would_happen_if_they_did": "the rule builds no scope (NONE_LINEAGE_AMBIGUOUS) and the row stays NON_SCORABLE; proven by a unit test that hands the rule two resources"
+    },
+    "binding_basis": "EXPLICIT_PERSISTED_RESOURCE",
+    "insufficient_bases_not_relied_on": [
+      "Wikimedia currently has only one likely resource",
+      "the ReliabilityAssessment names the resource",
+      "the collector name says Pageviews",
+      "the URL shape resembles Pageviews",
+      "the record kind is content_request_count",
+      "all records are Wikimedia",
+      "an old report wrote the resource string",
+      "no alternative resource was discovered"
+    ],
+    "verification_target": {
+      "expected": "metrics/pageviews/per-article/en.wikipedia.org",
+      "re_derived_from_lineage": "metrics/pageviews/per-article/en.wikipedia.org",
+      "matched": true,
+      "used_as_implementation_authority": false
+    }
+  },
+  "options": {
+    "A": {
+      "name": "Propagate the existing persisted resource fact through scope construction",
+      "verdict": "SELECTED",
+      "why": "the fact exists on every RawRecord, is immutable, is reachable by one join from any Evidence row, and needs no new authority; the smallest truthful implementation"
+    },
+    "B": {
+      "name": "Derive resource identity at scope-construction time from an immutable collector contract",
+      "verdict": "REJECTED",
+      "why": "no collector-to-resource contract is persisted; building one would be the collector-constant lookup table section 10 forbids, and it is unnecessary because A exists"
+    },
+    "C": {
+      "name": "Introduce a generic explicit measurement-resource binding relation",
+      "verdict": "REJECTED",
+      "why": "it would be a second authority for a fact acquisition.raw_records already represents canonically; section 9 forbids creating one"
+    },
+    "D": {
+      "name": "Do not repair because exact identity is not recoverable",
+      "verdict": "REJECTED",
+      "why": "identity is recoverable, explicitly, on 58 of 58 rows"
+    }
+  },
+  "selected_option": "A",
+  "implementation": {
+    "rule": "packages/evidence-reliability/python/sros_evidence_reliability/lineage.py: scope_from_lineage(source_id, claim_type, proposition_facts, lineage_resource_ids, lineage_record_kind_ids) builds the five-part scope when exactly one distinct resource and one distinct record kind are reachable, and refuses otherwise",
+    "consumers": [
+      "infrastructure/scripts/report_reliability_resource_binding.py (diagnostic, read-only)",
+      "infrastructure/scripts/run_opportunity_preparation.py (late resolution replaces the column read)",
+      "infrastructure/scripts/run_opportunity_synthesis.py (late resolution replaces the column read; eligibility_at_citation and the reliability limitation are computed per row instead of hard-coded)"
+    ],
+    "generic": true,
+    "hard_coded_source_exception": false,
+    "source_specific_branches": 0,
+    "forbidden_mappings_used": [],
+    "what_the_runners_now_report_read_only": {
+      "evidence_rows": 58,
+      "eligible_scoring": 48,
+      "eligible_context": 10,
+      "docker_packet_rows": 14,
+      "docker_packet_scoring": 12,
+      "docker_packet_context": 2,
+      "persisted_by_this_measurement": "nothing; build_report and _build_packet were invoked in memory and no artifact or row was written"
+    },
+    "opportunity_preparation_record_not_regenerated": "docs/data/opportunity-preparation-v1.json is the Mission 1.28 to 1.34 record of a 28-row corpus and is pinned by eight tests as history; regenerating it belongs with the Opportunity reconciliation, not with a lineage repair"
+  },
+  "controls": {
+    "detailed_wikimedia": {
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "DETAILED_ROWS_TOTAL": 18,
+      "on_opportunity": 6,
+      "DETAILED_RESOLVED_BEFORE": 0,
+      "DETAILED_RESOLVED_AFTER": 18,
+      "DETAILED_RELIABILITY": 0.65,
+      "DETAILED_ASSESSMENT_ID": "e2419f13-c031-44d5-837c-c56a867baf34",
+      "origin": "HUMAN_REVIEW"
+    },
+    "convergent_wikimedia": {
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change_witnessed"
+      },
+      "CONVERGENT_ROWS_TOTAL": 18,
+      "on_opportunity": 0,
+      "CONVERGENT_RESOLVED_BEFORE": 0,
+      "CONVERGENT_RESOLVED_AFTER": 18,
+      "CONVERGENT_RELIABILITY": 0.6,
+      "CONVERGENT_ASSESSMENT_ID": "19e0ce16-957f-4543-9b15-738a77b13060",
+      "origin": "HUMAN_REVIEW",
+      "same_mechanism_as_detailed": true
+    },
+    "wikimedia_inferred": {
+      "proposition_kind": "metric_threshold_state",
+      "rows": 1,
+      "before": "NO_APPLICABLE_ASSESSMENT",
+      "after": "NO_APPLICABLE_ASSESSMENT",
+      "why": "a new proposition kind and claim type is a new scope, and nothing is inherited by proposition similarity (ADR-036)"
+    },
+    "stack_exchange": {
+      "rows": 2,
+      "on_opportunity": 1,
+      "STACK_EXCHANGE_RESULT_BEFORE": "NO_APPLICABLE_ASSESSMENT",
+      "STACK_EXCHANGE_RESULT_AFTER": "NO_APPLICABLE_ASSESSMENT",
+      "why": "the operator declined both Stack Exchange scopes in Mission 1.36.1; fixing resource binding creates no reliability judgement"
+    },
+    "ted": {
+      "TED_CONTROL_ROWS": 12,
+      "resolved_before": 12,
+      "resolved_after": 12,
+      "assessments": {
+        "source_reported_procurement_value_contrast": {"rows": 6, "reliability": 0.5, "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020"},
+        "source_published_classification_value_contrast_witnessed": {"rows": 6, "reliability": 0.55, "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e"}
+      },
+      "modified": false
+    },
+    "world_bank_and_gdelt": {
+      "rows": 7,
+      "before": "NO_APPLICABLE_ASSESSMENT",
+      "after": "NO_APPLICABLE_ASSESSMENT",
+      "why": "scopes built and exact; no assessment exists for them"
+    },
+    "ambiguity": {
+      "live_rows_with_more_than_one_lineage_resource": 0,
+      "how_the_refusal_is_proven": "a unit test hands scope_from_lineage two distinct resources and asserts no scope is built; the resolver then reports NO_APPLICABLE_ASSESSMENT with the cannot-state-its-scope detail"
+    }
+  },
+  "scorability": {
+    "ASSESSMENT_EXISTS": "YES: 4 current assessments, 12 basis rows, unchanged",
+    "ASSESSMENT_APPLIES": "YES for 48 of 58 rows through lineage; NO for 10 (Stack Exchange 2, World Bank 4, GDELT 3, Wikimedia INFERRED 1)",
+    "EVIDENCE_IS_SCORABLE": "YES for 48 rows through the existing EvidenceFacets.is_scorable when fed the late-resolved value; 0 rows through the stored column",
+    "AGGREGATION_CAN_RUN": "YES, read-only: 34 Claims COMPLETE under REFERENCE_PROFILE_V1 with allow_uncalibrated=True",
+    "SCORE_IS_PERSISTED": "NO: scoring.scores does not exist and nothing wrote a score",
+    "reliability_written_to_evidence": 0,
+    "SCORABLE_EVIDENCE_BEFORE": 0,
+    "SCORABLE_EVIDENCE_AFTER": 48,
+    "SCORABLE_OPPORTUNITY_LINKED_EVIDENCE_BEFORE": 0,
+    "SCORABLE_OPPORTUNITY_LINKED_EVIDENCE_AFTER": 6
+  },
+  "aggregation_diagnostic": {
+    "$banner": ["UNCALIBRATED", "DIAGNOSTIC_ONLY", "NOT_AN_OPPORTUNITY_SCORE"],
+    "profile": "REFERENCE_PROFILE_V1",
+    "profile_status": "UNCALIBRATED",
+    "claims_aggregated": 34,
+    "opportunity_linked_claims_aggregated": 6,
+    "claims_where_full_aggregator_differs_from_pass_through": 0,
+    "claims_with_established_independence": 0,
+    "support_group_count_per_claim": 1,
+    "max_members_received": 4,
+    "limiting_component_everywhere": "reliability",
+    "evidence_level_everywhere": 1,
+    "structural_result_preserved": "one provenance group cannot empirically distinguish the full aggregator from reliability pass-through (Mission 1.43); Wikimedia's multiple witnesses share one publisher, one pipeline and one counting rule and create no established independence",
+    "persisted": false
+  },
+  "opportunity_limitation": {
+    "stale": true,
+    "representation": "CANONICAL_ROW research.opportunity_hypothesis_revisions",
+    "revision_id": "efca07a9-b283-473a-887b-a2ae82989bbe",
+    "opportunity_id": "06113a8b-a83d-423d-8046-18f87d7dbc01",
+    "revision": 1,
+    "created_at": "2026-09-02T19:51:57.812381+00:00",
+    "limitation_text": "Every supporting Evidence row is ELIGIBLE_CONTEXT, NON_SCORABLE and MISSING_RELIABILITY: no reviewed reliability applies, so this hypothesis can contribute to no score.",
+    "true_when_written": true,
+    "why_stale": "the detailed Wikimedia assessment (0.65) was created 2026-09-03T11:53Z and the convergent one (0.6) 2026-09-04T06:51Z, both after the revision; resolved late, 6 of the 7 linked rows carry a reviewed reliability",
+    "action": "STOP",
+    "code": "OPPORTUNITY_LIMITATION_RECONCILIATION_REQUIRED",
+    "historical_revision_edited": false,
+    "revision_2_created": false,
+    "revisions_before": 1,
+    "revisions_after": 1,
+    "how_it_is_reconciled": "a new revision written by an attended synthesis run over the docker packet through the repaired path; that run is an LLM call, which this mission forbids, and it is a mission of its own",
+    "derived_carriers_given_forward_pointers": [
+      "docs/data/evidence-completion-candidate-moves-v1.json",
+      "docs/data/opportunity-evidence-breadth-audit-v1.json",
+      "docs/data/opportunity-synthesis-run-v1.1.json"
+    ],
+    "pointer_shape": "Mission 1.66.1: appended, rendered where the record has a page, nothing above the pointer changed"
+  },
+  "measurements": {
+    "WIKIMEDIA_OPPORTUNITY_EVIDENCE_ROWS": 6,
+    "WIKIMEDIA_DETAILED_SCOPE_ROWS": 18,
+    "WIKIMEDIA_CONVERGENT_SCOPE_ROWS": 18,
+    "STACK_EXCHANGE_OPPORTUNITY_ROWS": 1,
+    "TED_CONTROL_ROWS": 12,
+    "DETAILED_RESOLVED_BEFORE": 0,
+    "DETAILED_RESOLVED_AFTER": 18,
+    "CONVERGENT_RESOLVED_BEFORE": 0,
+    "CONVERGENT_RESOLVED_AFTER": 18,
+    "SCORABLE_EVIDENCE_BEFORE": 0,
+    "SCORABLE_EVIDENCE_AFTER": 48,
+    "SCORABLE_OPPORTUNITY_LINKED_EVIDENCE_BEFORE": 0,
+    "SCORABLE_OPPORTUNITY_LINKED_EVIDENCE_AFTER": 6,
+    "RELIABILITY_ASSESSMENTS_BEFORE": 4,
+    "RELIABILITY_ASSESSMENTS_AFTER": 4,
+    "RELIABILITY_BASIS_ROWS_BEFORE": 12,
+    "RELIABILITY_BASIS_ROWS_AFTER": 12,
+    "INDEPENDENCE_GROUPS_BEFORE": 0,
+    "INDEPENDENCE_GROUPS_AFTER": 0,
+    "PERSISTED_SCORES_BEFORE": "ABSENT",
+    "PERSISTED_SCORES_AFTER": "ABSENT",
+    "before_after_defined_as": "before = the stored column the Opportunity path read; after = the late resolution through lineage. The database is identical on both sides."
+  },
+  "canonical_baseline": {
+    "raw_records": 325,
+    "normalized_records": 325,
+    "signals": 33,
+    "claims": 44,
+    "claim_revisions": 45,
+    "evidence": 58,
+    "inferred_claims": 1,
+    "threshold_registrations": 1,
+    "claim_derivations": 1,
+    "proposition_evaluation_refusals": 0,
+    "reliability_assessments": 4,
+    "reliability_assessment_basis_rows": 12,
+    "independence_groups": 0,
+    "opportunities": 1,
+    "opportunity_revisions": 1,
+    "opportunity_evidence_links": 7,
+    "embeddings": 0,
+    "scores_table": "ABSENT",
+    "registered_sources": 29,
+    "registered_use_profiles": 2,
+    "reference_profile_v1": "UNCALIBRATED",
+    "problem_family": "PARKED",
+    "unchanged_before_and_after": true
+  },
+  "parked_states_preserved": {
+    "q1": {"QUANTITY_CLASS_SELECTED": "Q1", "CLASS_SELECTED": true, "CONSTRUCT_SELECTED": false, "RUN_AUTHORIZED": false},
+    "globalping": {"PASS": 12, "PARTIAL": 0, "FAIL": 0, "verdict": "COUNTERPART_RESOLVED"},
+    "v2": {"primary_outcome": "V2_VALID_FOR_REFUTATION_BUT_NOT_INDEPENDENT_SUPPORT", "dual_independent_support_reachable": false, "corpus_frozen": false, "measurements_executed": 0},
+    "changed_by_this_mission": false
+  },
+  "mission_accounting": {
+    "wikimedia_api_calls": 0,
+    "stack_exchange_api_calls": 0,
+    "ted_api_calls": 0,
+    "world_bank_calls": 0,
+    "gdelt_calls": 0,
+    "globalping_calls": 0,
+    "target_http_requests": 0,
+    "web_source_discovery_requests": 0,
+    "mailbox_reads": 0,
+    "emails_sent": 0,
+    "github_issue_writes": 0,
+    "model_calls": 0,
+    "embeddings": 0,
+    "measurements_executed": 0,
+    "migrations": 0,
+    "historical_rows_rewritten": 0,
+    "reliability_assessments_created": 0,
+    "reliability_basis_rows_created": 0,
+    "independence_groups_created": 0,
+    "scores_persisted": 0,
+    "canonical_research_mutations": 0,
+    "opportunity_revisions_created": 0,
+    "constructs_selected": 0,
+    "corpora_frozen": 0
+  },
+  "repaired_criteria_section_27": {
+    "1_resource_derived_from_truthful_pre_existing_lineage": true,
+    "2_no_assessment_used_to_prove_its_own_applicability": true,
+    "3_no_wikimedia_specific_hard_code": true,
+    "4_five_part_scope_unchanged": true,
+    "5_real_opportunity_linked_detailed_rows_resolve_exactly": true,
+    "6_detailed_scope_returns_existing_0_65_assessment": true,
+    "7_convergent_scope_returns_existing_0_6_assessment": true,
+    "8_stack_exchange_remains_unresolved": true,
+    "9_ted_remains_resolved": true,
+    "10_no_new_assessment": true,
+    "11_no_historical_provenance_invention": true,
+    "12_no_independence_group": true,
+    "13_no_score_persisted": true,
+    "14_no_external_action": true,
+    "15_no_q1_globalping_state_change": true,
+    "16_zero_probe_escapes": true,
+    "17_all_required_suites_green": true,
+    "all_met": true,
+    "why_the_outcome_is_still_not_REPAIRED": "see why_not_REPAIRED"
+  },
+  "remaining_limitation": "The canonical Opportunity still carries a limitation that is false today, and reconciling it needs a new revision from an attended synthesis run. The seventh linked row, Stack Exchange, stays NON_SCORABLE because the operator declined that review, so the hypothesis can never be wholly scorable on this evidence. Every scorable Claim still has one provenance group, so the aggregator is still numerically the pass-through baseline and no calibration is unlocked. Scorable is not scored: no score exists.",
+  "recommended_next_mission": {
+    "id": "1.78",
+    "title": "Opportunity Limitation Reconciliation V1",
+    "shape": "one attended synthesis run over the docker packet through the repaired path, writing revision 2 beside revision 1 with a computed reliability limitation, and regenerating the preparation record from the current 58-row corpus with its eight tests re-pointed",
+    "why_this_and_not_globalping": "the apparatus arc is parked on a semantic limit that no bounded move here changes; the canonical state that is knowingly false today is the Opportunity limitation, and that is the smallest truthful next move",
+    "why_not_calibration": "one provenance group per Claim, unchanged; Mission 1.43's arithmetic still governs",
+    "what_it_must_not_do": "persist a score, create an independence group, edit revision 1, or select a construct"
+  }
+}

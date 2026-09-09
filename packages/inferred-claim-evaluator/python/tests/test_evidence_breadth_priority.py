@@ -82,7 +82,10 @@ class TestTheAuditIsMeasuredAndNotCarriedForward(unittest.TestCase):
     def test_no_independence_group_exists(self):
         self.assertEqual(self.audit["canonical_baseline"]["evidence_independence_groups"], 0)
 
-    def test_every_evidence_row_is_currently_unscorable(self):
+    def test_the_stored_reliability_column_is_null_on_every_lineage(self):
+        """Re-pointed by Mission 1.77. This counts `scoring.evidence.reliability`, which
+        ADR-026 Decision 2 keeps NULL by design; it never said whether a reviewed
+        reliability RESOLVES, and 48 of the 58 rows resolve late from lineage."""
         written = sum(row["with_reliability"] for row in self.audit["evidence_lineages"])
         self.assertEqual(written, 0)
 

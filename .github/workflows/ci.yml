@@ -672,6 +672,19 @@ jobs:
       - name: Globalping residual closure matches its records
         run: uv run python infrastructure/scripts/render_globalping_residuals.py --check
 
+      # Mission 1.77. The resource was in the lineage all along; what never resolved was the
+      # Opportunity path. The gate refuses: a scope whose resource is not the one distinct
+      # resource its RawRecords carry; an ambiguous or absent lineage that still built a
+      # scope; a source or resource name inside the rule or the diagnostic; an import that
+      # reads current collector or registry configuration; a binding whose assessment scope
+      # differs from the row's on any of the five parts, which covers the closest match, the
+      # wildcard, the proposition fallback and the two Wikimedia values swapped; a counter
+      # that moved, a reliability written to a row, a score, a revision; a stale limitation
+      # edited rather than reported; a predecessor rewritten instead of pointed forward; and
+      # a runner that still reads the stored column or hard-codes a citation's eligibility.
+      - name: The Wikimedia scope binding matches its records
+        run: uv run python infrastructure/scripts/render_wikimedia_scope_binding.py --check
+
       # Mission 1.76.7. The operator chose V2, and the support half is out of reach. The
       # gate refuses: a class whose cardinality or membership is not decidable before the
       # run; a membership rule written in terms of availability, success, reachability,

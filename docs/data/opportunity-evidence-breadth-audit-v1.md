@@ -93,3 +93,10 @@ Breadth is a count of KINDS, not of rows. Ten lineages carry 58 rows.
 | embeddings | 0 |
 | registered_sources | 29 |
 | use_profiles | 2 |
+
+
+## Forward pointer
+
+Appended by Mission 1.77; nothing above it changed. See `docs/data/wikimedia-measurement-scope-binding-v1.json`.
+
+evidence_lineages.with_reliability counts the stored scoring.evidence.reliability column, which is NULL by design (ADR-026 Decision 2). Resolved late from lineage, 48 of the 58 rows carry a reviewed reliability and 6 of the 7 Opportunity-linked rows do. The audit's numbers were true of the column and were read as true of the corpus.

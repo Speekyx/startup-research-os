@@ -17,6 +17,13 @@ matches on source, so it lives here, on the same side of the seam as the row
 adapter.
 """
 
+from .lineage import (
+    BASIS_ABSENT,
+    BASIS_AMBIGUOUS,
+    BASIS_EXPLICIT,
+    LineageScope,
+    scope_from_lineage,
+)
 from .model import (
     DOCUMENT_BACKED_BASIS_TYPES,
     ReliabilityAssessment,
@@ -31,7 +38,11 @@ from .model import (
 )
 
 __all__ = [
+    "BASIS_ABSENT",
+    "BASIS_AMBIGUOUS",
+    "BASIS_EXPLICIT",
     "DOCUMENT_BACKED_BASIS_TYPES",
+    "LineageScope",
     "ReliabilityAssessment",
     "ReliabilityBasis",
     "ReliabilityBinding",
@@ -41,4 +52,5 @@ __all__ = [
     "canonical_json",
     "resolve_reliability",
     "scope_from_claim",
+    "scope_from_lineage",
 ]

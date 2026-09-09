@@ -131,3 +131,10 @@ Dimensions no reviewed source currently reaches: `WILLINGNESS_TO_PAY`, `BUYER_OR
 
 - **M7** — An independent Globalping measurement experiment. C9 remains PARTIAL and the counterpart is COUNTERPART_UNRESOLVED, so no route is qualified. It is recorded as a DEPENDENCY, not a candidate: a future qualification could unlock an independent measurement, and this mission may not select it.
 - **M8** — Any unregistered source that could supply willingness-to-pay. no registered source can speak to WILLINGNESS_TO_PAY for this hypothesis, and this mission may not introduce one. Recorded as REGISTERED_SOURCE_GAP.
+
+
+## Forward pointer
+
+Appended by Mission 1.77; nothing above it changed. See `docs/data/wikimedia-measurement-scope-binding-v1.json`.
+
+M1's blocker 'resource_id is absent from the whole acquisition lineage' is FALSE: every RawRecord carries provenance.resource_id, reachable through signal_inputs, and the real resolver resolves all 36 Wikimedia rows through it. The proposed fix (map the collector lineage to the committed WM_RESOURCE_ID constant) is unnecessary and is the hard-coded source exception Mission 1.77 forbids. What was actually missing is late resolution on the Opportunity path, which read a NULL column.

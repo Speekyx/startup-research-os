@@ -94,25 +94,146 @@ def _standings(use_profile: str) -> dict[str, object]:
     return out
 
 
-def _rows(use_profile: str) -> list[dict[str, object]]:
+def _rows(use_profile: str) -> tuple[list[dict[str, object]], list]:
     import psycopg
 
-    query = """
+    # LINEAGE_COLUMNS is a module constant, never caller input.
+    query = "".join(
+        (
+            """
         SELECT e.id, e.claim_id, e.source_id, e.direction, e.observation_category,
                e.independence_state, e.independence_group_id, e.evidence_level,
                e.reliability, e.relevance, e.directness, e.extraction_confidence,
                e.extraction_method, e.observed_at,
                c.claim_type, c.lifecycle, c.temporality, c.origin,
+        """,
+            LINEAGE_COLUMNS,
+            """
                s.signal_type_id, s.scope
           FROM scoring.evidence e
           JOIN research.claims c ON c.id = e.claim_id
           LEFT JOIN nlp.signals s ON s.id = e.signal_id
          ORDER BY e.id
-    """
+    """,
+        )
+    )
     with psycopg.connect(os.environ["DATABASE_URL"]) as conn, conn.cursor() as cur:
         cur.execute(query)
         columns = [d[0] for d in (cur.description or [])]
-        return [dict(zip(columns, row, strict=True)) for row in cur.fetchall()]
+        rows = [dict(zip(columns, row, strict=True)) for row in cur.fetchall()]
+        return rows, _current_assessments(cur)
+
+
+# Mission 1.77. Reliability is resolved LATE, from the lineage, and the binding recorded
+# (ADR-026 Decision 2). `scoring.evidence.reliability` is NULL on every generated row by
+# design, so reading that column alone reported every row NON_SCORABLE whatever the
+# reviewed assessments said. The resource comes from the RawRecords the Signal was derived
+# from -- the rule lives in `sros_evidence_reliability.lineage` and names no source.
+LINEAGE_COLUMNS = """
+           c.proposition_facts,
+           (SELECT array_agg(DISTINCT si.record_kind_id) FROM nlp.signal_inputs si
+             WHERE si.signal_id = e.signal_id) AS lineage_record_kinds,
+           (SELECT array_agg(DISTINCT r.provenance ->> 'resource_id')
+              FROM nlp.signal_inputs si
+              JOIN acquisition.raw_records r ON r.id = si.raw_record_id
+             WHERE si.signal_id = e.signal_id) AS lineage_resources,
+"""
+
+
+def _current_assessments(cur) -> list:
+    from sros_contracts import ClaimType, ReliabilityAssessmentOrigin, ReliabilityBasisType
+    from sros_evidence_reliability import ReliabilityAssessment, ReliabilityBasis, ReliabilityScope
+
+    cur.execute(
+        "SELECT id, version, source_id, resource_id, record_kind_id, claim_type,"
+        " proposition_kind, reliability, origin, reviewed_by, reviewed_at, stated_limitation,"
+        " review_rubric_id, review_rubric_version"
+        " FROM epistemic.reliability_assessments WHERE superseded_at IS NULL ORDER BY created_at"
+    )
+    columns = [d[0] for d in (cur.description or [])]
+    raw = [dict(zip(columns, row, strict=True)) for row in cur.fetchall()]
+    live = []
+    for entry in raw:
+        cur.execute(
+            "SELECT basis_type, document_title, summarized_finding, document_url,"
+            " section_reference, retrieved_at"
+            " FROM epistemic.reliability_assessment_basis WHERE assessment_id = %s",
+            (entry["id"],),
+        )
+        basis = tuple(
+            ReliabilityBasis(
+                basis_type=ReliabilityBasisType(b[0]),
+                document_title=b[1],
+                summarized_finding=b[2],
+                document_url=b[3],
+                section_reference=b[4],
+                retrieved_at=b[5],
+            )
+            for b in cur.fetchall()
+        )
+        live.append(
+            ReliabilityAssessment(
+                id=str(entry["id"]),
+                scope=ReliabilityScope(
+                    source_id=entry["source_id"],
+                    resource_id=entry["resource_id"],
+                    record_kind_id=entry["record_kind_id"],
+                    claim_type=ClaimType(entry["claim_type"]),
+                    proposition_kind=entry["proposition_kind"],
+                ),
+                version=int(entry["version"]),
+                reliability=float(entry["reliability"]),
+                origin=ReliabilityAssessmentOrigin(entry["origin"]),
+                rationale="(not reproduced here)",
+                stated_limitation=entry["stated_limitation"],
+                reviewed_by=entry["reviewed_by"],
+                reviewed_at=entry["reviewed_at"],
+                basis=basis,
+                calibration_dataset_ref=None,
+                review_rubric_id=entry["review_rubric_id"],
+                review_rubric_version=entry["review_rubric_version"],
+            )
+        )
+    return live
+
+
+def _resolve_late(row, live):
+    """The real resolver over the lineage scope. Returns (reliability, status, detail)."""
+    from sros_contracts import ClaimType, ReliabilityResolutionOutcome
+    from sros_evidence_reliability import resolve_reliability, scope_from_lineage
+    from sros_opportunity import ReliabilityStatus
+
+    built = scope_from_lineage(
+        source_id=str(row["source_id"] or ""),
+        claim_type=ClaimType(str(row["claim_type"])),
+        proposition_facts=row["proposition_facts"] or {},
+        lineage_resource_ids=row["lineage_resources"] or [],
+        lineage_record_kind_ids=row["lineage_record_kinds"] or [],
+    )
+    supplied = float(row["reliability"]) if row["reliability"] is not None else None
+    resolution = resolve_reliability(scope=built.scope, candidates=live, supplied=supplied)
+    if resolution.outcome is ReliabilityResolutionOutcome.AMBIGUOUS_ASSESSMENTS:
+        raise SystemExit(
+            f"REFUSED: Evidence {row['id']} matches more than one current assessment; "
+            "never the closest, never the maximum, never the mean"
+        )
+    status = {
+        ReliabilityResolutionOutcome.RESOLVED: ReliabilityStatus.RESOLVED,
+        ReliabilityResolutionOutcome.DIRECTLY_SUPPLIED: ReliabilityStatus.RESOLVED,
+        ReliabilityResolutionOutcome.SUPERSEDED_ONLY: ReliabilityStatus.SUPERSEDED_ONLY,
+        ReliabilityResolutionOutcome.NO_APPLICABLE_ASSESSMENT: (
+            ReliabilityStatus.NO_APPLICABLE_ASSESSMENT
+        ),
+    }[resolution.outcome]
+    binding = resolution.binding
+    detail = {
+        "outcome": resolution.outcome.value,
+        "resource_basis": built.basis,
+        "resource_id": built.scope.resource_id if built.scope else None,
+        "assessment_id": binding.assessment_id if binding else None,
+        "assessment_version": binding.version if binding else None,
+    }
+    return resolution.reliability, status, detail
 
 
 def _families(use_profile: str) -> dict[str, str]:
@@ -136,7 +257,6 @@ def build_report(use_profile: str) -> dict[str, object]:
         EvidenceFacets,
         IndependenceState,
         PacketEligibility,
-        ReliabilityStatus,
         assess_eligibility,
         authorize_packet_for_external_synthesis,
         build_packet,
@@ -148,7 +268,7 @@ def build_report(use_profile: str) -> dict[str, object]:
 
     standings = _standings(use_profile)
     families = _families(use_profile)
-    rows = _rows(use_profile)
+    rows, live_assessments = _rows(use_profile)
 
     assessed: list[tuple[object, PacketEligibility, dict[str, object] | None]] = []
     per_row: list[dict[str, object]] = []
@@ -157,6 +277,7 @@ def build_report(use_profile: str) -> dict[str, object]:
         mapping = map_signal_type(row["signal_type_id"])  # type: ignore[arg-type]
         dimensions = mapping.dimensions if mapping else frozenset()
         bound = mapping.bound if mapping else ""
+        reliability, reliability_status, resolution = _resolve_late(row, live_assessments)
         facets = EvidenceFacets(
             evidence_id=str(row["id"]),
             claim_id=str(row["claim_id"]),
@@ -174,12 +295,8 @@ def build_report(use_profile: str) -> dict[str, object]:
             relevance=row["relevance"],  # type: ignore[arg-type]
             directness=row["directness"],  # type: ignore[arg-type]
             extraction_confidence=row["extraction_confidence"],  # type: ignore[arg-type]
-            reliability=row["reliability"],  # type: ignore[arg-type]
-            reliability_status=(
-                ReliabilityStatus.RESOLVED
-                if row["reliability"] is not None
-                else ReliabilityStatus.NO_APPLICABLE_ASSESSMENT
-            ),
+            reliability=reliability,
+            reliability_status=reliability_status,
             independence_state=IndependenceState(str(row["independence_state"])),
             independence_group_id=(
                 str(row["independence_group_id"]) if row["independence_group_id"] else None
@@ -203,6 +320,7 @@ def build_report(use_profile: str) -> dict[str, object]:
                 "independence_state": facets.independence_state.value,
                 "scorable": facets.is_scorable,
                 "missing_factors": list(facets.missing_factors),
+                "reliability_resolution": resolution,
             }
         )
 

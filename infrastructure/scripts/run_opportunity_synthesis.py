@@ -74,13 +74,19 @@ def _rows():
     import psycopg
 
     with psycopg.connect(os.environ["DATABASE_URL"]) as conn, conn.cursor() as cur:
+        # LINEAGE_COLUMNS is a module constant, never caller input.
         cur.execute(
-            """
+            "".join(
+                (
+                    """
             SELECT e.id, e.claim_id, e.source_id, e.direction, e.observation_category,
                    e.independence_state, e.independence_group_id, e.evidence_level,
                    e.reliability, e.relevance, e.directness, e.extraction_confidence,
                    e.extraction_method, e.observed_at,
                    c.claim_type, c.lifecycle, c.temporality, c.origin,
+            """,
+                    LINEAGE_COLUMNS,
+                    """
                    s.signal_type_id, s.scope, r.statement
               FROM scoring.evidence e
               JOIN research.claims c ON c.id = e.claim_id
@@ -88,10 +94,125 @@ def _rows():
                 ON r.claim_id = c.id AND r.revision = c.current_revision
               LEFT JOIN nlp.signals s ON s.id = e.signal_id
              ORDER BY e.id
-            """
+            """,
+                )
+            )
         )
         columns = [d[0] for d in (cur.description or [])]
-        return [dict(zip(columns, row, strict=True)) for row in cur.fetchall()]
+        rows = [dict(zip(columns, row, strict=True)) for row in cur.fetchall()]
+        return rows, _current_assessments(cur)
+
+
+# Mission 1.77. Reliability is resolved LATE, from the lineage, and the binding recorded
+# (ADR-026 Decision 2). `scoring.evidence.reliability` is NULL on every generated row by
+# design, so reading that column alone reported every row NON_SCORABLE whatever the
+# reviewed assessments said. The resource comes from the RawRecords the Signal was derived
+# from -- the rule lives in `sros_evidence_reliability.lineage` and names no source.
+LINEAGE_COLUMNS = """
+           c.proposition_facts,
+           (SELECT array_agg(DISTINCT si.record_kind_id) FROM nlp.signal_inputs si
+             WHERE si.signal_id = e.signal_id) AS lineage_record_kinds,
+           (SELECT array_agg(DISTINCT r.provenance ->> 'resource_id')
+              FROM nlp.signal_inputs si
+              JOIN acquisition.raw_records r ON r.id = si.raw_record_id
+             WHERE si.signal_id = e.signal_id) AS lineage_resources,
+"""
+
+
+def _current_assessments(cur) -> list:
+    from sros_contracts import ClaimType, ReliabilityAssessmentOrigin, ReliabilityBasisType
+    from sros_evidence_reliability import ReliabilityAssessment, ReliabilityBasis, ReliabilityScope
+
+    cur.execute(
+        "SELECT id, version, source_id, resource_id, record_kind_id, claim_type,"
+        " proposition_kind, reliability, origin, reviewed_by, reviewed_at, stated_limitation,"
+        " review_rubric_id, review_rubric_version"
+        " FROM epistemic.reliability_assessments WHERE superseded_at IS NULL ORDER BY created_at"
+    )
+    columns = [d[0] for d in (cur.description or [])]
+    raw = [dict(zip(columns, row, strict=True)) for row in cur.fetchall()]
+    live = []
+    for entry in raw:
+        cur.execute(
+            "SELECT basis_type, document_title, summarized_finding, document_url,"
+            " section_reference, retrieved_at"
+            " FROM epistemic.reliability_assessment_basis WHERE assessment_id = %s",
+            (entry["id"],),
+        )
+        basis = tuple(
+            ReliabilityBasis(
+                basis_type=ReliabilityBasisType(b[0]),
+                document_title=b[1],
+                summarized_finding=b[2],
+                document_url=b[3],
+                section_reference=b[4],
+                retrieved_at=b[5],
+            )
+            for b in cur.fetchall()
+        )
+        live.append(
+            ReliabilityAssessment(
+                id=str(entry["id"]),
+                scope=ReliabilityScope(
+                    source_id=entry["source_id"],
+                    resource_id=entry["resource_id"],
+                    record_kind_id=entry["record_kind_id"],
+                    claim_type=ClaimType(entry["claim_type"]),
+                    proposition_kind=entry["proposition_kind"],
+                ),
+                version=int(entry["version"]),
+                reliability=float(entry["reliability"]),
+                origin=ReliabilityAssessmentOrigin(entry["origin"]),
+                rationale="(not reproduced here)",
+                stated_limitation=entry["stated_limitation"],
+                reviewed_by=entry["reviewed_by"],
+                reviewed_at=entry["reviewed_at"],
+                basis=basis,
+                calibration_dataset_ref=None,
+                review_rubric_id=entry["review_rubric_id"],
+                review_rubric_version=entry["review_rubric_version"],
+            )
+        )
+    return live
+
+
+def _resolve_late(row, live):
+    """The real resolver over the lineage scope. Returns (reliability, status, detail)."""
+    from sros_contracts import ClaimType, ReliabilityResolutionOutcome
+    from sros_evidence_reliability import resolve_reliability, scope_from_lineage
+    from sros_opportunity import ReliabilityStatus
+
+    built = scope_from_lineage(
+        source_id=str(row["source_id"] or ""),
+        claim_type=ClaimType(str(row["claim_type"])),
+        proposition_facts=row["proposition_facts"] or {},
+        lineage_resource_ids=row["lineage_resources"] or [],
+        lineage_record_kind_ids=row["lineage_record_kinds"] or [],
+    )
+    supplied = float(row["reliability"]) if row["reliability"] is not None else None
+    resolution = resolve_reliability(scope=built.scope, candidates=live, supplied=supplied)
+    if resolution.outcome is ReliabilityResolutionOutcome.AMBIGUOUS_ASSESSMENTS:
+        raise SystemExit(
+            f"REFUSED: Evidence {row['id']} matches more than one current assessment; "
+            "never the closest, never the maximum, never the mean"
+        )
+    status = {
+        ReliabilityResolutionOutcome.RESOLVED: ReliabilityStatus.RESOLVED,
+        ReliabilityResolutionOutcome.DIRECTLY_SUPPLIED: ReliabilityStatus.RESOLVED,
+        ReliabilityResolutionOutcome.SUPERSEDED_ONLY: ReliabilityStatus.SUPERSEDED_ONLY,
+        ReliabilityResolutionOutcome.NO_APPLICABLE_ASSESSMENT: (
+            ReliabilityStatus.NO_APPLICABLE_ASSESSMENT
+        ),
+    }[resolution.outcome]
+    binding = resolution.binding
+    detail = {
+        "outcome": resolution.outcome.value,
+        "resource_basis": built.basis,
+        "resource_id": built.scope.resource_id if built.scope else None,
+        "assessment_id": binding.assessment_id if binding else None,
+        "assessment_version": binding.version if binding else None,
+    }
+    return resolution.reliability, status, detail
 
 
 def _families() -> dict[str, str]:
@@ -134,7 +255,6 @@ def _build_packet():
     from sros_opportunity import (
         EvidenceFacets,
         IndependenceState,
-        ReliabilityStatus,
         assess_eligibility,
         build_packet,
         group_by_subject,
@@ -148,8 +268,10 @@ def _build_packet():
     statements: dict[str, str] = {}
     evidence_to_claim: dict[str, str] = {}
 
-    for row in _rows():
+    rows, live_assessments = _rows()
+    for row in rows:
         mapping = map_signal_type(row["signal_type_id"])
+        reliability, reliability_status, _resolution = _resolve_late(row, live_assessments)
         facets = EvidenceFacets(
             evidence_id=str(row["id"]),
             claim_id=str(row["claim_id"]),
@@ -167,12 +289,8 @@ def _build_packet():
             relevance=row["relevance"],
             directness=row["directness"],
             extraction_confidence=row["extraction_confidence"],
-            reliability=row["reliability"],
-            reliability_status=(
-                ReliabilityStatus.RESOLVED
-                if row["reliability"] is not None
-                else ReliabilityStatus.NO_APPLICABLE_ASSESSMENT
-            ),
+            reliability=reliability,
+            reliability_status=reliability_status,
             independence_state=IndependenceState(str(row["independence_state"])),
             independence_group_id=(
                 str(row["independence_group_id"]) if row["independence_group_id"] else None
@@ -202,16 +320,20 @@ def _build_packet():
             tuple((f, eligibility[f.evidence_id]) for f in group.facets),
         )
         wanted = set(packet.claim_ids)
+        members = set(packet.evidence_ids)
         return (
             packet,
             {cid: text for cid, text in statements.items() if cid in wanted},
-            {eid: cid for eid, cid in evidence_to_claim.items() if eid in set(packet.evidence_ids)},
+            {eid: cid for eid, cid in evidence_to_claim.items() if eid in members},
             standings,
+            # Mission 1.77. Eligibility is per row and resolved late; it was hard-coded
+            # ELIGIBLE_CONTEXT at the call site while no row could be anything else.
+            {eid: e.value for eid, e in eligibility.items() if eid in members},
         )
     raise SystemExit(f"no packet for canonical subject {SUBJECT!r}")
 
 
-def _persist(output, packet, evidence_to_claim, eligibility_at_citation, prompt_hash, model):
+def _persist(output, packet, evidence_to_claim, eligibility_by_evidence, prompt_hash, model):
     """One Opportunity, one revision, one link per cited Evidence, in ONE transaction.
 
     Through the Mission 1.28 schema and no other. A revision is never overwritten:
@@ -237,10 +359,26 @@ def _persist(output, packet, evidence_to_claim, eligibility_at_citation, prompt_
     cited_evidence = [
         e for e in packet.evidence_ids if e in set(output.get("supporting_evidence_ids") or ())
     ]
+    # Mission 1.77. Reliability resolves late from lineage, so this sentence is computed
+    # from the cited rows rather than assumed. Revision 1 was written when every row read
+    # NON_SCORABLE from a NULL column; that sentence was true then and is history now.
+    scoring = sum(1 for e in cited_evidence if eligibility_by_evidence.get(e) == "ELIGIBLE_SCORING")
+    if scoring == 0:
+        reliability_limitation = (
+            "Every supporting Evidence row is ELIGIBLE_CONTEXT, NON_SCORABLE and "
+            "MISSING_RELIABILITY: no reviewed reliability applies, so this hypothesis "
+            "can contribute to no score."
+        )
+    else:
+        reliability_limitation = (
+            f"{scoring} of {len(cited_evidence)} supporting Evidence rows carry a reviewed "
+            "reliability, resolved late from their acquisition lineage and bound to the "
+            f"assessment that produced it (ADR-026); {len(cited_evidence) - scoring} remain "
+            "NON_SCORABLE with no applicable assessment. Scorable is not scored: no Score "
+            "exists in this repository and this run persists none."
+        )
     limitations = [
-        "Every supporting Evidence row is ELIGIBLE_CONTEXT, NON_SCORABLE and "
-        "MISSING_RELIABILITY: no reviewed reliability applies, so this hypothesis "
-        "can contribute to no score.",
+        reliability_limitation,
         "independence_state is UNKNOWN for every supporting row. Two source "
         "families is diversity, never established independence, and the row count "
         "is not a count of independent findings.",
@@ -319,7 +457,7 @@ def _persist(output, packet, evidence_to_claim, eligibility_at_citation, prompt_
                         revision_id,
                         evidence_id,
                         evidence_to_claim[evidence_id],
-                        eligibility_at_citation,
+                        eligibility_by_evidence[evidence_id],
                         list(output.get("supported_dimensions") or ()),
                     ),
                 )
@@ -350,7 +488,7 @@ def main(argv: list[str] | None = None) -> int:
         synthesis_prompt_hash,
     )
 
-    packet, statements, evidence_to_claim, standings = _build_packet()
+    packet, statements, evidence_to_claim, standings, eligibility_by_evidence = _build_packet()
     sufficiency = evaluate(packet)
 
     print(f"packet          {packet.packet_id[:24]}  subject {packet.subject_label}")
@@ -504,7 +642,7 @@ def main(argv: list[str] | None = None) -> int:
     persisted: dict[str, object] = {"opportunity_id": None, "revision_id": None, "links": 0}
     if decision.persist:
         opportunity_id, revision_id, links = _persist(
-            output, packet, evidence_to_claim, "ELIGIBLE_CONTEXT", prompt_hash, model
+            output, packet, evidence_to_claim, eligibility_by_evidence, prompt_hash, model
         )
         persisted = {
             "opportunity_id": opportunity_id,
