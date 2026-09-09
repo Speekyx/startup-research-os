@@ -488,8 +488,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"ok  {OUTPUT.relative_to(ROOT)} is current")
         return 0
 
-    OUTPUT.write_text(rendered, encoding="utf-8", newline="
-")
+    OUTPUT.write_text(rendered, encoding="utf-8", newline="\n")
     totals = report["totals"]
     print(f"wrote {OUTPUT.relative_to(ROOT)}")
     for key, value in totals.items():  # type: ignore[union-attr]
