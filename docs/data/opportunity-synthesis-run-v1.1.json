@@ -180,5 +180,12 @@
     "revision_id": "efca07a9-b283-473a-887b-a2ae82989bbe",
     "links": 7
   },
-  "ran_at": "2026-09-02T19:51:58.200592+00:00"
+  "ran_at": "2026-09-02T19:51:58.200592+00:00",
+  "forward_pointer": {
+    "$comment": "Appended by Mission 1.77. Nothing above this field changed.",
+    "superseded_by": "docs/data/wikimedia-measurement-scope-binding-v1.json",
+    "appended_by_mission": "1.77",
+    "what_changed_in_the_successor": "The persisted revision-1 limitation 'no reviewed reliability applies' was true when written (2026-09-02) and is stale since the Wikimedia assessments of 2026-09-03 and 2026-09-04. It is a canonical row and was NOT edited: OPPORTUNITY_LIMITATION_RECONCILIATION_REQUIRED, by a new revision in a mission of its own.",
+    "record_edited": false
+  }
 }

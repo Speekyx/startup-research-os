@@ -260,5 +260,12 @@
     ],
     "why": "the eight sources reviewed under local-private-research-v1 are two knowledge sources, one forum, one news source, one procurement source and three economic-data sources. None measures what an actor would pay, and procurement value is not willingness to pay for a product hypothesis.",
     "recommended_only_if_no_executable_move_exists": true
+  },
+  "forward_pointer": {
+    "$comment": "Appended by Mission 1.77. Nothing above this field changed.",
+    "superseded_by": "docs/data/wikimedia-measurement-scope-binding-v1.json",
+    "appended_by_mission": "1.77",
+    "what_changed_in_the_successor": "M1's blocker 'resource_id is absent from the whole acquisition lineage' is FALSE: every RawRecord carries provenance.resource_id, reachable through signal_inputs, and the real resolver resolves all 36 Wikimedia rows through it. The proposed fix (map the collector lineage to the committed WM_RESOURCE_ID constant) is unnecessary and is the hard-coded source exception Mission 1.77 forbids. What was actually missing is late resolution on the Opportunity path, which read a NULL column.",
+    "record_edited": false
   }
 }

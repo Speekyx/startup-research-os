@@ -1,0 +1,4781 @@
+{
+  "$comment": "Mission 1.77. Which registered resource produced each held measurement, read from the RawRecords a Signal was derived from, and the REAL resolver run over the resulting five-part scope. Nothing is written back.",
+  "$banner": [
+    "UNCALIBRATED",
+    "DIAGNOSTIC_ONLY",
+    "NOT_AN_OPPORTUNITY_SCORE"
+  ],
+  "artifact_version": "reliability-resource-binding-diagnostic@1.0.0",
+  "generated_by": "mission-1.77",
+  "measured_at": "2026-09-09T20:30:45+00:00",
+  "scope_construction": {
+    "source_id": "scoring.evidence.source_id",
+    "resource_id": "the ONE distinct acquisition.raw_records.provenance.resource_id reachable through nlp.signal_inputs.raw_record_id for the Evidence row's Signal",
+    "record_kind_id": "the ONE distinct nlp.signal_inputs.record_kind_id for the Signal",
+    "claim_type": "research.claims.claim_type",
+    "proposition_kind": "research.claims.proposition_facts.proposition",
+    "ambiguity_rule": "zero distinct resources -> NONE_LINEAGE_ABSENT; more than one distinct resource or record kind -> NONE_LINEAGE_AMBIGUOUS; either way no scope is built and the resolver reports that the row cannot state its scope",
+    "reads_current_collector_or_registry_configuration": false,
+    "source_specific_branches": 0,
+    "resource_bases_admitted": [
+      "EXPLICIT_PERSISTED_RESOURCE"
+    ]
+  },
+  "lineage_audit": {
+    "layers": [
+      {
+        "table": "scoring.evidence",
+        "identifier": "source_id",
+        "rows_carrying_it": 58,
+        "rows": 58
+      },
+      {
+        "table": "research.claims",
+        "identifier": "proposition_facts.resource_id",
+        "rows_carrying_it": 17,
+        "rows": 44
+      },
+      {
+        "table": "nlp.signals",
+        "identifier": "scope.resource_id",
+        "rows_carrying_it": 0,
+        "rows": 33
+      },
+      {
+        "table": "nlp.signal_inputs",
+        "identifier": "record_kind_id",
+        "rows_carrying_it": 260,
+        "rows": 260
+      },
+      {
+        "table": "nlp.signal_inputs",
+        "identifier": "raw_record_id",
+        "rows_carrying_it": 260,
+        "rows": 260
+      },
+      {
+        "table": "acquisition.normalized_records",
+        "identifier": "provenance.resource_id",
+        "rows_carrying_it": 0,
+        "rows": 325
+      },
+      {
+        "table": "acquisition.normalized_records",
+        "identifier": "collector_id",
+        "rows_carrying_it": 325,
+        "rows": 325
+      },
+      {
+        "table": "acquisition.raw_records",
+        "identifier": "provenance.resource_id",
+        "rows_carrying_it": 325,
+        "rows": 325
+      },
+      {
+        "table": "acquisition.raw_records",
+        "identifier": "collector_id",
+        "rows_carrying_it": 325,
+        "rows": 325
+      },
+      {
+        "table": "acquisition.raw_records",
+        "identifier": "collector_version",
+        "rows_carrying_it": 325,
+        "rows": 325
+      },
+      {
+        "table": "acquisition.raw_records",
+        "identifier": "provenance.authorization_issued_at",
+        "rows_carrying_it": 325,
+        "rows": 325
+      }
+    ],
+    "raw_record_resources": [
+      {
+        "source_id": "gdelt",
+        "resource_id": "web-ngrams/1gram",
+        "collector_id": "gdelt-web-ngram",
+        "collector_version": "1.0.0",
+        "records": 6
+      },
+      {
+        "source_id": "stack-exchange",
+        "resource_id": "questions/stackoverflow",
+        "collector_id": "stack-exchange-questions",
+        "collector_version": "1.0.0",
+        "records": 104
+      },
+      {
+        "source_id": "ted-eu",
+        "resource_id": "notices/eforms-contract-and-award",
+        "collector_id": "ted-search-api",
+        "collector_version": "1.0.0",
+        "records": 3
+      },
+      {
+        "source_id": "ted-eu",
+        "resource_id": "notices/eforms-contract-and-award",
+        "collector_id": "ted-search-api",
+        "collector_version": "1.1.0",
+        "records": 185
+      },
+      {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "collector_id": "wikimedia-pageviews-per-article",
+        "collector_version": "1.0.0",
+        "records": 21
+      },
+      {
+        "source_id": "world-bank",
+        "resource_id": "indicator/SP.POP.TOTL",
+        "collector_id": "world-bank-indicators",
+        "collector_version": "1.1.0",
+        "records": 6
+      }
+    ]
+  },
+  "current_assessments": [
+    {
+      "id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+      "version": 1,
+      "scope": {
+        "source_id": "ted-eu",
+        "resource_id": "notices/eforms-contract-and-award",
+        "record_kind_id": "procurement_notice",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "source_reported_procurement_value_contrast"
+      },
+      "reliability": 0.5,
+      "origin": "HUMAN_REVIEW",
+      "reviewed_by": "thibchm",
+      "created_at": "2026-09-01T15:44:21.012435+00:00",
+      "basis_rows": 4
+    },
+    {
+      "id": "e2419f13-c031-44d5-837c-c56a867baf34",
+      "version": 1,
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "reliability": 0.65,
+      "origin": "HUMAN_REVIEW",
+      "reviewed_by": "thibchm",
+      "created_at": "2026-09-03T11:53:02.733748+00:00",
+      "basis_rows": 2
+    },
+    {
+      "id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+      "version": 1,
+      "scope": {
+        "source_id": "ted-eu",
+        "resource_id": "notices/eforms-contract-and-award",
+        "record_kind_id": "procurement_notice",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "source_published_classification_value_contrast_witnessed"
+      },
+      "reliability": 0.55,
+      "origin": "HUMAN_REVIEW",
+      "reviewed_by": "thibchm",
+      "created_at": "2026-09-04T04:44:37.243268+00:00",
+      "basis_rows": 4
+    },
+    {
+      "id": "19e0ce16-957f-4543-9b15-738a77b13060",
+      "version": 1,
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change_witnessed"
+      },
+      "reliability": 0.6,
+      "origin": "HUMAN_REVIEW",
+      "reviewed_by": "thibchm",
+      "created_at": "2026-09-04T06:51:19.661075+00:00",
+      "basis_rows": 2
+    }
+  ],
+  "measurements": {
+    "evidence_rows": 58,
+    "opportunity_linked_rows": 7,
+    "rows_with_exactly_one_lineage_resource": 58,
+    "rows_with_ambiguous_lineage_resource": 0,
+    "rows_with_no_lineage_resource": 0,
+    "rows_with_scope": 58,
+    "resolved_via_claim_facts": 12,
+    "resolved_via_lineage": 48,
+    "opportunity_linked_resolved_via_claim_facts": 0,
+    "opportunity_linked_resolved_via_lineage": 6,
+    "scorable_via_stored_column": 0,
+    "scorable_via_lineage": 48,
+    "opportunity_linked_scorable_via_stored_column": 0,
+    "opportunity_linked_scorable_via_lineage": 6,
+    "resolved_rows_whose_resource_basis_is_explicit": 48
+  },
+  "scopes": [
+    {
+      "source_id": "gdelt",
+      "claim_type": "OBSERVED",
+      "proposition_kind": "source_reported_term_frequency_change",
+      "rows": 2,
+      "on_opportunity_rows": 0,
+      "resolved_via_claim_facts": 0,
+      "resolved_via_lineage": 0,
+      "reliability_via_lineage": [],
+      "assessment_ids_via_lineage": [],
+      "resource_bases": [
+        "EXPLICIT_PERSISTED_RESOURCE"
+      ]
+    },
+    {
+      "source_id": "gdelt",
+      "claim_type": "OBSERVED",
+      "proposition_kind": "source_reported_term_frequency_contrast",
+      "rows": 1,
+      "on_opportunity_rows": 0,
+      "resolved_via_claim_facts": 0,
+      "resolved_via_lineage": 0,
+      "reliability_via_lineage": [],
+      "assessment_ids_via_lineage": [],
+      "resource_bases": [
+        "EXPLICIT_PERSISTED_RESOURCE"
+      ]
+    },
+    {
+      "source_id": "stack-exchange",
+      "claim_type": "OBSERVED",
+      "proposition_kind": "community_site_published_questions_carrying_tag",
+      "rows": 1,
+      "on_opportunity_rows": 1,
+      "resolved_via_claim_facts": 0,
+      "resolved_via_lineage": 0,
+      "reliability_via_lineage": [],
+      "assessment_ids_via_lineage": [],
+      "resource_bases": [
+        "EXPLICIT_PERSISTED_RESOURCE"
+      ]
+    },
+    {
+      "source_id": "stack-exchange",
+      "claim_type": "OBSERVED",
+      "proposition_kind": "community_site_questions_without_accepted_answer",
+      "rows": 1,
+      "on_opportunity_rows": 0,
+      "resolved_via_claim_facts": 0,
+      "resolved_via_lineage": 0,
+      "reliability_via_lineage": [],
+      "assessment_ids_via_lineage": [],
+      "resource_bases": [
+        "EXPLICIT_PERSISTED_RESOURCE"
+      ]
+    },
+    {
+      "source_id": "ted-eu",
+      "claim_type": "OBSERVED",
+      "proposition_kind": "source_published_classification_value_contrast_witnessed",
+      "rows": 6,
+      "on_opportunity_rows": 0,
+      "resolved_via_claim_facts": 6,
+      "resolved_via_lineage": 6,
+      "reliability_via_lineage": [
+        0.55
+      ],
+      "assessment_ids_via_lineage": [
+        "d1afa4be-8462-4461-be20-112cdc55ee7e"
+      ],
+      "resource_bases": [
+        "EXPLICIT_PERSISTED_RESOURCE"
+      ]
+    },
+    {
+      "source_id": "ted-eu",
+      "claim_type": "OBSERVED",
+      "proposition_kind": "source_reported_procurement_value_contrast",
+      "rows": 6,
+      "on_opportunity_rows": 0,
+      "resolved_via_claim_facts": 6,
+      "resolved_via_lineage": 6,
+      "reliability_via_lineage": [
+        0.5
+      ],
+      "assessment_ids_via_lineage": [
+        "3de2af10-60d1-4e3e-a9b6-d67e2345e020"
+      ],
+      "resource_bases": [
+        "EXPLICIT_PERSISTED_RESOURCE"
+      ]
+    },
+    {
+      "source_id": "wikimedia-pageviews",
+      "claim_type": "INFERRED",
+      "proposition_kind": "metric_threshold_state",
+      "rows": 1,
+      "on_opportunity_rows": 0,
+      "resolved_via_claim_facts": 0,
+      "resolved_via_lineage": 0,
+      "reliability_via_lineage": [],
+      "assessment_ids_via_lineage": [],
+      "resource_bases": [
+        "EXPLICIT_PERSISTED_RESOURCE"
+      ]
+    },
+    {
+      "source_id": "wikimedia-pageviews",
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change",
+      "rows": 18,
+      "on_opportunity_rows": 6,
+      "resolved_via_claim_facts": 0,
+      "resolved_via_lineage": 18,
+      "reliability_via_lineage": [
+        0.65
+      ],
+      "assessment_ids_via_lineage": [
+        "e2419f13-c031-44d5-837c-c56a867baf34"
+      ],
+      "resource_bases": [
+        "EXPLICIT_PERSISTED_RESOURCE"
+      ]
+    },
+    {
+      "source_id": "wikimedia-pageviews",
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "rows": 18,
+      "on_opportunity_rows": 0,
+      "resolved_via_claim_facts": 0,
+      "resolved_via_lineage": 18,
+      "reliability_via_lineage": [
+        0.6
+      ],
+      "assessment_ids_via_lineage": [
+        "19e0ce16-957f-4543-9b15-738a77b13060"
+      ],
+      "resource_bases": [
+        "EXPLICIT_PERSISTED_RESOURCE"
+      ]
+    },
+    {
+      "source_id": "world-bank",
+      "claim_type": "OBSERVED",
+      "proposition_kind": "source_reported_metric_period_change",
+      "rows": 4,
+      "on_opportunity_rows": 0,
+      "resolved_via_claim_facts": 0,
+      "resolved_via_lineage": 0,
+      "reliability_via_lineage": [],
+      "assessment_ids_via_lineage": [],
+      "resource_bases": [
+        "EXPLICIT_PERSISTED_RESOURCE"
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "evidence_id": "448135b8-209b-4842-b9da-31d8468b34d6",
+      "claim_id": "7e2382a2-0d06-469d-b60e-6afb4c4dfad4",
+      "signal_id": "c327f5dd-25be-57f5-b3a9-8899f2861445",
+      "source_id": "gdelt",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "source_reported_term_frequency_change",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "gdelt"
+        ],
+        "collectors": [
+          "gdelt-web-ngram@1.0.0"
+        ],
+        "record_kinds": [
+          "lexical_frequency_observation"
+        ],
+        "resources": [
+          "web-ngrams/1gram"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": "web-ngrams/1gram",
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "gdelt",
+        "resource_id": "web-ngrams/1gram",
+        "record_kind_id": "lexical_frequency_observation",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "source_reported_term_frequency_change"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "scorable_via_lineage": false,
+      "missing_factors_via_lineage": [
+        "reliability",
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "e2d80a32-b28e-4578-bd4b-c992c2e45124",
+      "claim_id": "d23a8b89-ad7f-434f-937d-eb25d23617ee",
+      "signal_id": "d2623af0-74f8-565f-b1d7-123babe6f9f3",
+      "source_id": "gdelt",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "source_reported_term_frequency_change",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "gdelt"
+        ],
+        "collectors": [
+          "gdelt-web-ngram@1.0.0"
+        ],
+        "record_kinds": [
+          "lexical_frequency_observation"
+        ],
+        "resources": [
+          "web-ngrams/1gram"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": "web-ngrams/1gram",
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "gdelt",
+        "resource_id": "web-ngrams/1gram",
+        "record_kind_id": "lexical_frequency_observation",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "source_reported_term_frequency_change"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "scorable_via_lineage": false,
+      "missing_factors_via_lineage": [
+        "reliability",
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "f28abcdd-4d4b-4651-8dcd-5e5fe380fdfd",
+      "claim_id": "ec8fc694-c0f5-402f-9985-c2c93d0f15e9",
+      "signal_id": "70e9fcb1-3a0d-5555-aa0e-fa2c38c120ec",
+      "source_id": "gdelt",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "source_reported_term_frequency_contrast",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "gdelt"
+        ],
+        "collectors": [
+          "gdelt-web-ngram@1.0.0"
+        ],
+        "record_kinds": [
+          "lexical_frequency_observation"
+        ],
+        "resources": [
+          "web-ngrams/1gram"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": "web-ngrams/1gram",
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "gdelt",
+        "resource_id": "web-ngrams/1gram",
+        "record_kind_id": "lexical_frequency_observation",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "source_reported_term_frequency_contrast"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "scorable_via_lineage": false,
+      "missing_factors_via_lineage": [
+        "reliability",
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "16a8c39c-d72a-4252-9c67-7be2165e9cae",
+      "claim_id": "6e4c3f21-8881-4453-b4ff-af1b47c464b5",
+      "signal_id": "27f3e558-106d-5838-980f-1d1d72d3b0bc",
+      "source_id": "stack-exchange",
+      "on_opportunity": true,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "community_site_published_questions_carrying_tag",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 88,
+        "sources": [
+          "stack-exchange"
+        ],
+        "collectors": [
+          "stack-exchange-questions@1.0.0"
+        ],
+        "record_kinds": [
+          "community_question"
+        ],
+        "resources": [
+          "questions/stackoverflow"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "stack-exchange",
+        "resource_id": "questions/stackoverflow",
+        "record_kind_id": "community_question",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "community_site_published_questions_carrying_tag"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "scorable_via_lineage": false,
+      "missing_factors_via_lineage": [
+        "reliability",
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "17735944-da2f-4469-837f-8f3fe71922aa",
+      "claim_id": "2a634f95-207d-478f-af40-12c9454f21d6",
+      "signal_id": "d5508068-15e3-5915-b5f5-b068e79b6178",
+      "source_id": "stack-exchange",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "community_site_questions_without_accepted_answer",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 54,
+        "sources": [
+          "stack-exchange"
+        ],
+        "collectors": [
+          "stack-exchange-questions@1.0.0"
+        ],
+        "record_kinds": [
+          "community_question"
+        ],
+        "resources": [
+          "questions/stackoverflow"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "stack-exchange",
+        "resource_id": "questions/stackoverflow",
+        "record_kind_id": "community_question",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "community_site_questions_without_accepted_answer"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "scorable_via_lineage": false,
+      "missing_factors_via_lineage": [
+        "reliability",
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "a77d8ea7-16f7-4259-831d-163c637ffccc",
+      "claim_id": "02248c91-a384-442d-8c78-80ba4c1bd2b1",
+      "signal_id": "f09ecbb8-6b0d-5134-affb-c2ed796049a2",
+      "source_id": "ted-eu",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "source_published_classification_value_contrast_witnessed",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 12,
+        "sources": [
+          "ted-eu"
+        ],
+        "collectors": [
+          "ted-search-api@1.1.0"
+        ],
+        "record_kinds": [
+          "procurement_notice"
+        ],
+        "resources": [
+          "notices/eforms-contract-and-award"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": "notices/eforms-contract-and-award",
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "ted-eu",
+        "resource_id": "notices/eforms-contract-and-award",
+        "record_kind_id": "procurement_notice",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "source_published_classification_value_contrast_witnessed"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "RESOLVED",
+        "reliability": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "ted-eu",
+          "resource_id": "notices/eforms-contract-and-award",
+          "record_kind_id": "procurement_notice",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "source_published_classification_value_contrast_witnessed"
+        }
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "ted-eu",
+          "resource_id": "notices/eforms-contract-and-award",
+          "record_kind_id": "procurement_notice",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "source_published_classification_value_contrast_witnessed"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "cf9f792d-9811-43b7-b089-dcf3e835225a",
+      "claim_id": "02248c91-a384-442d-8c78-80ba4c1bd2b1",
+      "signal_id": "4e8ee7f7-e3b4-5c56-917c-ec11e6b480c5",
+      "source_id": "ted-eu",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "source_published_classification_value_contrast_witnessed",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 14,
+        "sources": [
+          "ted-eu"
+        ],
+        "collectors": [
+          "ted-search-api@1.1.0"
+        ],
+        "record_kinds": [
+          "procurement_notice"
+        ],
+        "resources": [
+          "notices/eforms-contract-and-award"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": "notices/eforms-contract-and-award",
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "ted-eu",
+        "resource_id": "notices/eforms-contract-and-award",
+        "record_kind_id": "procurement_notice",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "source_published_classification_value_contrast_witnessed"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "RESOLVED",
+        "reliability": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "ted-eu",
+          "resource_id": "notices/eforms-contract-and-award",
+          "record_kind_id": "procurement_notice",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "source_published_classification_value_contrast_witnessed"
+        }
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "ted-eu",
+          "resource_id": "notices/eforms-contract-and-award",
+          "record_kind_id": "procurement_notice",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "source_published_classification_value_contrast_witnessed"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "ce349b01-1ea4-4d11-b162-e745e2c82163",
+      "claim_id": "6389d1bf-6dea-47e8-8508-dcf009fe352d",
+      "signal_id": "f0749978-bdda-5778-9b09-97aa8aad9ff0",
+      "source_id": "ted-eu",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "source_published_classification_value_contrast_witnessed",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "ted-eu"
+        ],
+        "collectors": [
+          "ted-search-api@1.1.0"
+        ],
+        "record_kinds": [
+          "procurement_notice"
+        ],
+        "resources": [
+          "notices/eforms-contract-and-award"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": "notices/eforms-contract-and-award",
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "ted-eu",
+        "resource_id": "notices/eforms-contract-and-award",
+        "record_kind_id": "procurement_notice",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "source_published_classification_value_contrast_witnessed"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "RESOLVED",
+        "reliability": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "ted-eu",
+          "resource_id": "notices/eforms-contract-and-award",
+          "record_kind_id": "procurement_notice",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "source_published_classification_value_contrast_witnessed"
+        }
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "ted-eu",
+          "resource_id": "notices/eforms-contract-and-award",
+          "record_kind_id": "procurement_notice",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "source_published_classification_value_contrast_witnessed"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "b7dc27bf-53c8-4e80-9c83-5980c80fa46c",
+      "claim_id": "73e834c4-ddad-4093-9727-79720e074b4b",
+      "signal_id": "97ff6d37-1a2d-5725-ad97-d846767b8631",
+      "source_id": "ted-eu",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "source_published_classification_value_contrast_witnessed",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 3,
+        "sources": [
+          "ted-eu"
+        ],
+        "collectors": [
+          "ted-search-api@1.1.0"
+        ],
+        "record_kinds": [
+          "procurement_notice"
+        ],
+        "resources": [
+          "notices/eforms-contract-and-award"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": "notices/eforms-contract-and-award",
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "ted-eu",
+        "resource_id": "notices/eforms-contract-and-award",
+        "record_kind_id": "procurement_notice",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "source_published_classification_value_contrast_witnessed"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "RESOLVED",
+        "reliability": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "ted-eu",
+          "resource_id": "notices/eforms-contract-and-award",
+          "record_kind_id": "procurement_notice",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "source_published_classification_value_contrast_witnessed"
+        }
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "ted-eu",
+          "resource_id": "notices/eforms-contract-and-award",
+          "record_kind_id": "procurement_notice",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "source_published_classification_value_contrast_witnessed"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "09bfc370-59d2-4aca-83b8-cf717a1cc329",
+      "claim_id": "bf4e4b48-fdf9-48f6-9c69-2178eb361e18",
+      "signal_id": "5ed1cb05-c51a-5b3c-aa72-64350a5b96f1",
+      "source_id": "ted-eu",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "source_published_classification_value_contrast_witnessed",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 17,
+        "sources": [
+          "ted-eu"
+        ],
+        "collectors": [
+          "ted-search-api@1.1.0"
+        ],
+        "record_kinds": [
+          "procurement_notice"
+        ],
+        "resources": [
+          "notices/eforms-contract-and-award"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": "notices/eforms-contract-and-award",
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "ted-eu",
+        "resource_id": "notices/eforms-contract-and-award",
+        "record_kind_id": "procurement_notice",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "source_published_classification_value_contrast_witnessed"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "RESOLVED",
+        "reliability": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "ted-eu",
+          "resource_id": "notices/eforms-contract-and-award",
+          "record_kind_id": "procurement_notice",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "source_published_classification_value_contrast_witnessed"
+        }
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "ted-eu",
+          "resource_id": "notices/eforms-contract-and-award",
+          "record_kind_id": "procurement_notice",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "source_published_classification_value_contrast_witnessed"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "1ad1dc6d-7528-4527-bccd-0a09f47112ac",
+      "claim_id": "bf4e4b48-fdf9-48f6-9c69-2178eb361e18",
+      "signal_id": "d5f054e4-8141-5349-a57e-0336dee82a8a",
+      "source_id": "ted-eu",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "source_published_classification_value_contrast_witnessed",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 20,
+        "sources": [
+          "ted-eu"
+        ],
+        "collectors": [
+          "ted-search-api@1.1.0"
+        ],
+        "record_kinds": [
+          "procurement_notice"
+        ],
+        "resources": [
+          "notices/eforms-contract-and-award"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": "notices/eforms-contract-and-award",
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "ted-eu",
+        "resource_id": "notices/eforms-contract-and-award",
+        "record_kind_id": "procurement_notice",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "source_published_classification_value_contrast_witnessed"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "RESOLVED",
+        "reliability": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "ted-eu",
+          "resource_id": "notices/eforms-contract-and-award",
+          "record_kind_id": "procurement_notice",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "source_published_classification_value_contrast_witnessed"
+        }
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "ted-eu",
+          "resource_id": "notices/eforms-contract-and-award",
+          "record_kind_id": "procurement_notice",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "source_published_classification_value_contrast_witnessed"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "d48e9694-c4d5-4a03-9a28-a4d6fa5053d0",
+      "claim_id": "1e00a6dc-051c-4431-b13b-cc879f01a526",
+      "signal_id": "97ff6d37-1a2d-5725-ad97-d846767b8631",
+      "source_id": "ted-eu",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "source_reported_procurement_value_contrast",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 3,
+        "sources": [
+          "ted-eu"
+        ],
+        "collectors": [
+          "ted-search-api@1.1.0"
+        ],
+        "record_kinds": [
+          "procurement_notice"
+        ],
+        "resources": [
+          "notices/eforms-contract-and-award"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": "notices/eforms-contract-and-award",
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "ted-eu",
+        "resource_id": "notices/eforms-contract-and-award",
+        "record_kind_id": "procurement_notice",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "source_reported_procurement_value_contrast"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "RESOLVED",
+        "reliability": 0.5,
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "ted-eu",
+          "resource_id": "notices/eforms-contract-and-award",
+          "record_kind_id": "procurement_notice",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "source_reported_procurement_value_contrast"
+        }
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.5,
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "ted-eu",
+          "resource_id": "notices/eforms-contract-and-award",
+          "record_kind_id": "procurement_notice",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "source_reported_procurement_value_contrast"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "35c43422-d550-40b8-b466-56a054da067a",
+      "claim_id": "330638b0-4faa-4f44-877f-cbd653bf7df5",
+      "signal_id": "f09ecbb8-6b0d-5134-affb-c2ed796049a2",
+      "source_id": "ted-eu",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "source_reported_procurement_value_contrast",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 12,
+        "sources": [
+          "ted-eu"
+        ],
+        "collectors": [
+          "ted-search-api@1.1.0"
+        ],
+        "record_kinds": [
+          "procurement_notice"
+        ],
+        "resources": [
+          "notices/eforms-contract-and-award"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": "notices/eforms-contract-and-award",
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "ted-eu",
+        "resource_id": "notices/eforms-contract-and-award",
+        "record_kind_id": "procurement_notice",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "source_reported_procurement_value_contrast"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "RESOLVED",
+        "reliability": 0.5,
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "ted-eu",
+          "resource_id": "notices/eforms-contract-and-award",
+          "record_kind_id": "procurement_notice",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "source_reported_procurement_value_contrast"
+        }
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.5,
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "ted-eu",
+          "resource_id": "notices/eforms-contract-and-award",
+          "record_kind_id": "procurement_notice",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "source_reported_procurement_value_contrast"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "e3dbd26b-21da-4fc8-9fe6-5ab3167ecdb4",
+      "claim_id": "6d03f533-9155-4631-89e2-843cb028b010",
+      "signal_id": "4e8ee7f7-e3b4-5c56-917c-ec11e6b480c5",
+      "source_id": "ted-eu",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "source_reported_procurement_value_contrast",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 14,
+        "sources": [
+          "ted-eu"
+        ],
+        "collectors": [
+          "ted-search-api@1.1.0"
+        ],
+        "record_kinds": [
+          "procurement_notice"
+        ],
+        "resources": [
+          "notices/eforms-contract-and-award"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": "notices/eforms-contract-and-award",
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "ted-eu",
+        "resource_id": "notices/eforms-contract-and-award",
+        "record_kind_id": "procurement_notice",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "source_reported_procurement_value_contrast"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "RESOLVED",
+        "reliability": 0.5,
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "ted-eu",
+          "resource_id": "notices/eforms-contract-and-award",
+          "record_kind_id": "procurement_notice",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "source_reported_procurement_value_contrast"
+        }
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.5,
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "ted-eu",
+          "resource_id": "notices/eforms-contract-and-award",
+          "record_kind_id": "procurement_notice",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "source_reported_procurement_value_contrast"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "61d7abf7-d54a-4003-95a1-fcb4b5580002",
+      "claim_id": "dfa8c0f5-8e59-437f-b18b-90e9ac854776",
+      "signal_id": "5ed1cb05-c51a-5b3c-aa72-64350a5b96f1",
+      "source_id": "ted-eu",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "source_reported_procurement_value_contrast",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 17,
+        "sources": [
+          "ted-eu"
+        ],
+        "collectors": [
+          "ted-search-api@1.1.0"
+        ],
+        "record_kinds": [
+          "procurement_notice"
+        ],
+        "resources": [
+          "notices/eforms-contract-and-award"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": "notices/eforms-contract-and-award",
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "ted-eu",
+        "resource_id": "notices/eforms-contract-and-award",
+        "record_kind_id": "procurement_notice",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "source_reported_procurement_value_contrast"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "RESOLVED",
+        "reliability": 0.5,
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "ted-eu",
+          "resource_id": "notices/eforms-contract-and-award",
+          "record_kind_id": "procurement_notice",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "source_reported_procurement_value_contrast"
+        }
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.5,
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "ted-eu",
+          "resource_id": "notices/eforms-contract-and-award",
+          "record_kind_id": "procurement_notice",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "source_reported_procurement_value_contrast"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "5a113b42-91b7-4471-bfa7-838b4feb04ff",
+      "claim_id": "edf6b49e-058f-4432-aece-acac0694008e",
+      "signal_id": "d5f054e4-8141-5349-a57e-0336dee82a8a",
+      "source_id": "ted-eu",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "source_reported_procurement_value_contrast",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 20,
+        "sources": [
+          "ted-eu"
+        ],
+        "collectors": [
+          "ted-search-api@1.1.0"
+        ],
+        "record_kinds": [
+          "procurement_notice"
+        ],
+        "resources": [
+          "notices/eforms-contract-and-award"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": "notices/eforms-contract-and-award",
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "ted-eu",
+        "resource_id": "notices/eforms-contract-and-award",
+        "record_kind_id": "procurement_notice",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "source_reported_procurement_value_contrast"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "RESOLVED",
+        "reliability": 0.5,
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "ted-eu",
+          "resource_id": "notices/eforms-contract-and-award",
+          "record_kind_id": "procurement_notice",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "source_reported_procurement_value_contrast"
+        }
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.5,
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "ted-eu",
+          "resource_id": "notices/eforms-contract-and-award",
+          "record_kind_id": "procurement_notice",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "source_reported_procurement_value_contrast"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "79b36033-1b09-48c7-b352-576bc60f8cfc",
+      "claim_id": "ef1a9208-1375-42c9-ac93-c319bf7adc6b",
+      "signal_id": "f0749978-bdda-5778-9b09-97aa8aad9ff0",
+      "source_id": "ted-eu",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "source_reported_procurement_value_contrast",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "ted-eu"
+        ],
+        "collectors": [
+          "ted-search-api@1.1.0"
+        ],
+        "record_kinds": [
+          "procurement_notice"
+        ],
+        "resources": [
+          "notices/eforms-contract-and-award"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": "notices/eforms-contract-and-award",
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "ted-eu",
+        "resource_id": "notices/eforms-contract-and-award",
+        "record_kind_id": "procurement_notice",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "source_reported_procurement_value_contrast"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "RESOLVED",
+        "reliability": 0.5,
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "ted-eu",
+          "resource_id": "notices/eforms-contract-and-award",
+          "record_kind_id": "procurement_notice",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "source_reported_procurement_value_contrast"
+        }
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.5,
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "ted-eu",
+          "resource_id": "notices/eforms-contract-and-award",
+          "record_kind_id": "procurement_notice",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "source_reported_procurement_value_contrast"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "800f1421-dcef-4656-9c2a-e3bef039282d",
+      "claim_id": "c79f58bb-2241-4908-800b-5765a51cbb95",
+      "signal_id": "064d12bf-e7bb-56e7-a90c-bdd08e89d2ac",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "INFERRED",
+      "proposition_kind": "metric_threshold_state",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "INFERRED",
+        "proposition_kind": "metric_threshold_state"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "scorable_via_lineage": false,
+      "missing_factors_via_lineage": [
+        "reliability",
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "1b93db71-eaed-45c5-a2fa-9e4edea7bc49",
+      "claim_id": "05cac6f6-17f4-4008-b68b-9787bb4ac774",
+      "signal_id": "2cfb6517-fd0a-5591-afe3-aef158e628dc",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": true,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.65,
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "c3bd9af2-6c1e-4bee-9add-ff52b5493833",
+      "claim_id": "0651a63c-6756-4dc9-a215-7ea03d80c658",
+      "signal_id": "8312acd0-a26d-54e2-bbee-d412733cbee6",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.65,
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "f1e0b7a4-d570-429a-91a4-fadff84cdce1",
+      "claim_id": "1829e497-f582-4017-b88d-4d277375ccf7",
+      "signal_id": "d3d42b57-95a4-56c0-800e-7ff955a43a0d",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": true,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.65,
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "92c105c1-e126-4aa6-a11a-4a2fb294c168",
+      "claim_id": "212ecb46-6bb0-4c7b-9b73-d8e5000afaf5",
+      "signal_id": "bb4c3d28-b1c2-5b5f-999d-da62a1f90453",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.65,
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "de1f0dc6-4f5b-42c4-bdb9-fa927f795f07",
+      "claim_id": "343bbbde-35d1-4979-bf40-8103f3579bf4",
+      "signal_id": "23caed60-98ba-5b62-aa99-89b78d761691",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.65,
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "33f8c97d-a55f-479c-aa77-7e021d77e1a3",
+      "claim_id": "3bd0b9be-d175-41c5-a923-e4166f481ea2",
+      "signal_id": "70c4b334-1a20-5df3-a306-a80e980877e3",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.65,
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "6cf92ad6-77ed-4126-b356-41e65856430b",
+      "claim_id": "459e9fec-3ad1-4955-81c6-2aa0f2179bc5",
+      "signal_id": "75307a0c-2c92-5ca1-a91c-76630e9f75ed",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": true,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.65,
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "13a5eadb-977d-4de0-9c35-d0ff53442074",
+      "claim_id": "565bbcb7-9e70-418b-9a8e-a1549b23a230",
+      "signal_id": "a8da7709-a1b4-5bdf-bf4f-37f759d399d1",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": true,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.65,
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "6ff9590b-4b59-461a-955b-90fd1b2de330",
+      "claim_id": "63c3ccc6-4e4f-40d4-92f3-3cbdb5f04c40",
+      "signal_id": "645c4937-bb1d-59af-8932-0f7a3903e2da",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.65,
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "e4c321bc-3ddd-46ec-91bb-c0e5e7afd70a",
+      "claim_id": "6eefe19d-9112-466b-a03e-b34413cd6869",
+      "signal_id": "bb97ace5-d778-56b9-b691-03d200d46754",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.65,
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "e6271f31-7738-417f-a5f7-24b984c54110",
+      "claim_id": "78195b94-99bf-47a3-8c83-26bdb930aa67",
+      "signal_id": "34abb53f-19dd-59d3-8a7b-572c7d51a5e8",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.65,
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "42059751-1a43-4db4-8413-a511ba290623",
+      "claim_id": "81738129-3993-4450-acc4-c683c7d2b23e",
+      "signal_id": "756358e8-2fd1-5c20-badb-4d7f678fb76b",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.65,
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "729c6193-762e-4b4f-8ff5-a3933e41bed1",
+      "claim_id": "8ab0d96d-95f3-4a61-935c-afe2ef3e319b",
+      "signal_id": "92a6778c-f182-58f9-81bf-dfd490549097",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.65,
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "f21a9e62-0651-460d-8c9b-079bb9b7f776",
+      "claim_id": "97dec365-7ee8-4c93-947f-36fd9abf1d1b",
+      "signal_id": "064d12bf-e7bb-56e7-a90c-bdd08e89d2ac",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.65,
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "c35faf7a-e6a3-4600-96a1-73d521063be2",
+      "claim_id": "a2707d23-28ef-491d-9ae6-2e09a39e947d",
+      "signal_id": "23319b7e-6eac-5141-b63d-665233c0dc2c",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.65,
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "516182ff-0122-4d13-9d8a-92bb38065a75",
+      "claim_id": "b3d0d2d0-daa0-4854-a4c0-a31684841b03",
+      "signal_id": "d2d8a9ba-458c-58e5-87fa-7cc660881784",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": true,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.65,
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "d20c9938-ab00-45da-9ef0-66b9da9710cc",
+      "claim_id": "c20aee0c-f5ea-4b55-8520-eb2a2f7f5d9a",
+      "signal_id": "f36a5b74-efb2-54b6-8ba0-ad46d44e2f8c",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.65,
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "487f62c6-2fcf-4790-9773-6e99214d0003",
+      "claim_id": "c58949e4-d8a7-4636-9c53-3bbac3b7b7c0",
+      "signal_id": "2a35b936-78e0-5bc0-b999-4d9564c61d65",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": true,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.65,
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "3fd59732-af9b-4dbe-86f7-9acca886e391",
+      "claim_id": "1324d79c-54c6-4bba-9d7f-2320133f2ea8",
+      "signal_id": "bb97ace5-d778-56b9-b691-03d200d46754",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change_witnessed"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change_witnessed"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "8c8f097d-d6d9-460f-a36e-0b7ef875a4a3",
+      "claim_id": "1324d79c-54c6-4bba-9d7f-2320133f2ea8",
+      "signal_id": "23319b7e-6eac-5141-b63d-665233c0dc2c",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change_witnessed"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change_witnessed"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "fd6c1111-43f3-4f03-8426-243b678bb382",
+      "claim_id": "1324d79c-54c6-4bba-9d7f-2320133f2ea8",
+      "signal_id": "064d12bf-e7bb-56e7-a90c-bdd08e89d2ac",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change_witnessed"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change_witnessed"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "17ab3887-7caf-4a81-a7d1-856bfbbdbdac",
+      "claim_id": "39449935-d841-4e76-b920-dd727204c199",
+      "signal_id": "75307a0c-2c92-5ca1-a91c-76630e9f75ed",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change_witnessed"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change_witnessed"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "261994f7-e52e-4e40-a879-262192659696",
+      "claim_id": "39449935-d841-4e76-b920-dd727204c199",
+      "signal_id": "2cfb6517-fd0a-5591-afe3-aef158e628dc",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change_witnessed"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change_witnessed"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "792d07dc-e6ec-4c9e-8217-41318588f28d",
+      "claim_id": "9bda8081-aebb-48a7-a31d-3fab8e2345a6",
+      "signal_id": "bb4c3d28-b1c2-5b5f-999d-da62a1f90453",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change_witnessed"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change_witnessed"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "d0983e5c-ea2a-44b3-8de4-8cc70e8a74a3",
+      "claim_id": "9bda8081-aebb-48a7-a31d-3fab8e2345a6",
+      "signal_id": "70c4b334-1a20-5df3-a306-a80e980877e3",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change_witnessed"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change_witnessed"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "f4a8b828-a5d2-425e-a4c4-4a595616037d",
+      "claim_id": "9bda8081-aebb-48a7-a31d-3fab8e2345a6",
+      "signal_id": "f36a5b74-efb2-54b6-8ba0-ad46d44e2f8c",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change_witnessed"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change_witnessed"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "15964f84-3748-45a1-84c7-ad0637f300e8",
+      "claim_id": "a4809b1a-56a4-4ae2-a2e3-9ee2f68e4dd3",
+      "signal_id": "92a6778c-f182-58f9-81bf-dfd490549097",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change_witnessed"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change_witnessed"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "c2d04ad8-14af-46a3-b465-8e992125b107",
+      "claim_id": "a4809b1a-56a4-4ae2-a2e3-9ee2f68e4dd3",
+      "signal_id": "645c4937-bb1d-59af-8932-0f7a3903e2da",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change_witnessed"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change_witnessed"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "cdf30329-463e-46b1-bbe9-c9fb58c3ee65",
+      "claim_id": "a4809b1a-56a4-4ae2-a2e3-9ee2f68e4dd3",
+      "signal_id": "8312acd0-a26d-54e2-bbee-d412733cbee6",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change_witnessed"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change_witnessed"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "38f0b7c9-aeea-4f45-a170-a5163b22b3be",
+      "claim_id": "dff657c2-3ee8-429c-b308-4e0d8f3894d2",
+      "signal_id": "756358e8-2fd1-5c20-badb-4d7f678fb76b",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change_witnessed"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change_witnessed"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "a5c63adb-06d9-4f4f-9445-7fda4493d7c8",
+      "claim_id": "dff657c2-3ee8-429c-b308-4e0d8f3894d2",
+      "signal_id": "23caed60-98ba-5b62-aa99-89b78d761691",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change_witnessed"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change_witnessed"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "c94b88c9-7eaa-48c8-a248-c42ae0bf87b7",
+      "claim_id": "dff657c2-3ee8-429c-b308-4e0d8f3894d2",
+      "signal_id": "34abb53f-19dd-59d3-8a7b-572c7d51a5e8",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change_witnessed"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change_witnessed"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "637d5ff5-f33a-43ec-8353-2366fb2af211",
+      "claim_id": "e740d102-4bf2-4f9c-bc01-e82c9fb4ac99",
+      "signal_id": "d2d8a9ba-458c-58e5-87fa-7cc660881784",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change_witnessed"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change_witnessed"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "9c502023-3aca-4ab5-ba45-745feb7aeeee",
+      "claim_id": "e740d102-4bf2-4f9c-bc01-e82c9fb4ac99",
+      "signal_id": "d3d42b57-95a4-56c0-800e-7ff955a43a0d",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change_witnessed"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change_witnessed"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "c2afb9fe-03ef-44a7-a88e-6e82f14bf860",
+      "claim_id": "e740d102-4bf2-4f9c-bc01-e82c9fb4ac99",
+      "signal_id": "a8da7709-a1b4-5bdf-bf4f-37f759d399d1",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change_witnessed"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change_witnessed"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "faab3b4e-85fb-4257-98b5-66ca16908d75",
+      "claim_id": "e740d102-4bf2-4f9c-bc01-e82c9fb4ac99",
+      "signal_id": "2a35b936-78e0-5bc0-b999-4d9564c61d65",
+      "source_id": "wikimedia-pageviews",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "platform_counted_content_request_change_witnessed",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "wikimedia-pageviews"
+        ],
+        "collectors": [
+          "wikimedia-pageviews-per-article@1.0.0"
+        ],
+        "record_kinds": [
+          "content_request_count"
+        ],
+        "resources": [
+          "metrics/pageviews/per-article/en.wikipedia.org"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": null,
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "wikimedia-pageviews",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "record_kind_id": "content_request_count",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "platform_counted_content_request_change_witnessed"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "RESOLVED",
+        "reliability": 0.6,
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1,
+        "origin": "HUMAN_REVIEW",
+        "assessment_scope": {
+          "source_id": "wikimedia-pageviews",
+          "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+          "record_kind_id": "content_request_count",
+          "claim_type": "OBSERVED",
+          "proposition_kind": "platform_counted_content_request_change_witnessed"
+        }
+      },
+      "scorable_via_lineage": true,
+      "missing_factors_via_lineage": [
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "084a6942-592e-40b3-9ac6-55b3413be374",
+      "claim_id": "560f27d6-d75c-4bdd-9060-312a0f07538b",
+      "signal_id": "9593cbd3-ab7c-5860-bc86-acdf3c36ad94",
+      "source_id": "world-bank",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "source_reported_metric_period_change",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "world-bank"
+        ],
+        "collectors": [
+          "world-bank-indicators@1.1.0"
+        ],
+        "record_kinds": [
+          "numeric_observation"
+        ],
+        "resources": [
+          "indicator/SP.POP.TOTL"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": "indicator/SP.POP.TOTL",
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "world-bank",
+        "resource_id": "indicator/SP.POP.TOTL",
+        "record_kind_id": "numeric_observation",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "source_reported_metric_period_change"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "scorable_via_lineage": false,
+      "missing_factors_via_lineage": [
+        "reliability",
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "05c769b1-f3be-4749-b93a-fca564a1fdcb",
+      "claim_id": "8a551705-741e-431c-ab2d-1edd4d24f1ad",
+      "signal_id": "ac480995-0bfe-5c3b-b7a8-c69296329788",
+      "source_id": "world-bank",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "source_reported_metric_period_change",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "world-bank"
+        ],
+        "collectors": [
+          "world-bank-indicators@1.1.0"
+        ],
+        "record_kinds": [
+          "numeric_observation"
+        ],
+        "resources": [
+          "indicator/SP.POP.TOTL"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": "indicator/SP.POP.TOTL",
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "world-bank",
+        "resource_id": "indicator/SP.POP.TOTL",
+        "record_kind_id": "numeric_observation",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "source_reported_metric_period_change"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "scorable_via_lineage": false,
+      "missing_factors_via_lineage": [
+        "reliability",
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "5a909ff9-3173-4ccb-820b-a2da3402d84f",
+      "claim_id": "aab81833-ca25-4798-b540-e3db965375d0",
+      "signal_id": "7f8fd7f6-3533-5dd7-806d-a88edc413d1c",
+      "source_id": "world-bank",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "source_reported_metric_period_change",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "world-bank"
+        ],
+        "collectors": [
+          "world-bank-indicators@1.1.0"
+        ],
+        "record_kinds": [
+          "numeric_observation"
+        ],
+        "resources": [
+          "indicator/SP.POP.TOTL"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": "indicator/SP.POP.TOTL",
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "world-bank",
+        "resource_id": "indicator/SP.POP.TOTL",
+        "record_kind_id": "numeric_observation",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "source_reported_metric_period_change"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "scorable_via_lineage": false,
+      "missing_factors_via_lineage": [
+        "reliability",
+        "observed_at",
+        "evidence_dimension"
+      ]
+    },
+    {
+      "evidence_id": "f753e610-c904-4db5-825a-31dbceb6c373",
+      "claim_id": "efb39063-6458-4d2c-88f9-ccfdf86ac8b6",
+      "signal_id": "733ede36-fa4f-550b-b383-83e1543a5cb9",
+      "source_id": "world-bank",
+      "on_opportunity": false,
+      "claim_type": "OBSERVED",
+      "proposition_kind": "source_reported_metric_period_change",
+      "evidence_reliability_column": null,
+      "lineage": {
+        "signal_input_rows": 2,
+        "sources": [
+          "world-bank"
+        ],
+        "collectors": [
+          "world-bank-indicators@1.1.0"
+        ],
+        "record_kinds": [
+          "numeric_observation"
+        ],
+        "resources": [
+          "indicator/SP.POP.TOTL"
+        ],
+        "distinct_resource_count": 1
+      },
+      "claim_facts_resource_id": "indicator/SP.POP.TOTL",
+      "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+      "scope": {
+        "source_id": "world-bank",
+        "resource_id": "indicator/SP.POP.TOTL",
+        "record_kind_id": "numeric_observation",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "source_reported_metric_period_change"
+      },
+      "resolution_via_claim_facts": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "resolution_via_lineage": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "reliability": null,
+        "assessment_id": null,
+        "assessment_version": null,
+        "origin": null
+      },
+      "scorable_via_lineage": false,
+      "missing_factors_via_lineage": [
+        "reliability",
+        "observed_at",
+        "evidence_dimension"
+      ]
+    }
+  ],
+  "aggregation_diagnostic": {
+    "$banner": [
+      "UNCALIBRATED",
+      "DIAGNOSTIC_ONLY",
+      "NOT_AN_OPPORTUNITY_SCORE"
+    ],
+    "profile": "REFERENCE_PROFILE_V1",
+    "calibration": "UNCALIBRATED",
+    "claims": [
+      {
+        "claim_id": "e740d102-4bf2-4f9c-bc01-e82c9fb4ac99",
+        "source_id": "wikimedia-pageviews",
+        "proposition_kind": "platform_counted_content_request_change_witnessed",
+        "on_opportunity": false,
+        "raw_evidence_count": 4,
+        "scorable_evidence_count": 4,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.6,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.4,
+        "reliability_pass_through": 0.6,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 4,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "1324d79c-54c6-4bba-9d7f-2320133f2ea8",
+        "source_id": "wikimedia-pageviews",
+        "proposition_kind": "platform_counted_content_request_change_witnessed",
+        "on_opportunity": false,
+        "raw_evidence_count": 3,
+        "scorable_evidence_count": 3,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.6,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.4,
+        "reliability_pass_through": 0.6,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 3,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "9bda8081-aebb-48a7-a31d-3fab8e2345a6",
+        "source_id": "wikimedia-pageviews",
+        "proposition_kind": "platform_counted_content_request_change_witnessed",
+        "on_opportunity": false,
+        "raw_evidence_count": 3,
+        "scorable_evidence_count": 3,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.6,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.4,
+        "reliability_pass_through": 0.6,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 3,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "a4809b1a-56a4-4ae2-a2e3-9ee2f68e4dd3",
+        "source_id": "wikimedia-pageviews",
+        "proposition_kind": "platform_counted_content_request_change_witnessed",
+        "on_opportunity": false,
+        "raw_evidence_count": 3,
+        "scorable_evidence_count": 3,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.6,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.4,
+        "reliability_pass_through": 0.6,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 3,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "dff657c2-3ee8-429c-b308-4e0d8f3894d2",
+        "source_id": "wikimedia-pageviews",
+        "proposition_kind": "platform_counted_content_request_change_witnessed",
+        "on_opportunity": false,
+        "raw_evidence_count": 3,
+        "scorable_evidence_count": 3,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.6,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.4,
+        "reliability_pass_through": 0.6,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 3,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "02248c91-a384-442d-8c78-80ba4c1bd2b1",
+        "source_id": "ted-eu",
+        "proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "on_opportunity": false,
+        "raw_evidence_count": 2,
+        "scorable_evidence_count": 2,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.55,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.44999999999999996,
+        "reliability_pass_through": 0.55,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 2,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "39449935-d841-4e76-b920-dd727204c199",
+        "source_id": "wikimedia-pageviews",
+        "proposition_kind": "platform_counted_content_request_change_witnessed",
+        "on_opportunity": false,
+        "raw_evidence_count": 2,
+        "scorable_evidence_count": 2,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.6,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.4,
+        "reliability_pass_through": 0.6,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 2,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "bf4e4b48-fdf9-48f6-9c69-2178eb361e18",
+        "source_id": "ted-eu",
+        "proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "on_opportunity": false,
+        "raw_evidence_count": 2,
+        "scorable_evidence_count": 2,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.55,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.44999999999999996,
+        "reliability_pass_through": 0.55,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 2,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "05cac6f6-17f4-4008-b68b-9787bb4ac774",
+        "source_id": "wikimedia-pageviews",
+        "proposition_kind": "platform_counted_content_request_change",
+        "on_opportunity": true,
+        "raw_evidence_count": 1,
+        "scorable_evidence_count": 1,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.6500000000000001,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.34999999999999987,
+        "reliability_pass_through": 0.65,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 1,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "0651a63c-6756-4dc9-a215-7ea03d80c658",
+        "source_id": "wikimedia-pageviews",
+        "proposition_kind": "platform_counted_content_request_change",
+        "on_opportunity": false,
+        "raw_evidence_count": 1,
+        "scorable_evidence_count": 1,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.6500000000000001,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.34999999999999987,
+        "reliability_pass_through": 0.65,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 1,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "1829e497-f582-4017-b88d-4d277375ccf7",
+        "source_id": "wikimedia-pageviews",
+        "proposition_kind": "platform_counted_content_request_change",
+        "on_opportunity": true,
+        "raw_evidence_count": 1,
+        "scorable_evidence_count": 1,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.6500000000000001,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.34999999999999987,
+        "reliability_pass_through": 0.65,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 1,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "1e00a6dc-051c-4431-b13b-cc879f01a526",
+        "source_id": "ted-eu",
+        "proposition_kind": "source_reported_procurement_value_contrast",
+        "on_opportunity": false,
+        "raw_evidence_count": 1,
+        "scorable_evidence_count": 1,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.5,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.5,
+        "reliability_pass_through": 0.5,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 1,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "212ecb46-6bb0-4c7b-9b73-d8e5000afaf5",
+        "source_id": "wikimedia-pageviews",
+        "proposition_kind": "platform_counted_content_request_change",
+        "on_opportunity": false,
+        "raw_evidence_count": 1,
+        "scorable_evidence_count": 1,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.6500000000000001,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.34999999999999987,
+        "reliability_pass_through": 0.65,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 1,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "330638b0-4faa-4f44-877f-cbd653bf7df5",
+        "source_id": "ted-eu",
+        "proposition_kind": "source_reported_procurement_value_contrast",
+        "on_opportunity": false,
+        "raw_evidence_count": 1,
+        "scorable_evidence_count": 1,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.5,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.5,
+        "reliability_pass_through": 0.5,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 1,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "343bbbde-35d1-4979-bf40-8103f3579bf4",
+        "source_id": "wikimedia-pageviews",
+        "proposition_kind": "platform_counted_content_request_change",
+        "on_opportunity": false,
+        "raw_evidence_count": 1,
+        "scorable_evidence_count": 1,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.6500000000000001,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.34999999999999987,
+        "reliability_pass_through": 0.65,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 1,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "3bd0b9be-d175-41c5-a923-e4166f481ea2",
+        "source_id": "wikimedia-pageviews",
+        "proposition_kind": "platform_counted_content_request_change",
+        "on_opportunity": false,
+        "raw_evidence_count": 1,
+        "scorable_evidence_count": 1,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.6500000000000001,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.34999999999999987,
+        "reliability_pass_through": 0.65,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 1,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "459e9fec-3ad1-4955-81c6-2aa0f2179bc5",
+        "source_id": "wikimedia-pageviews",
+        "proposition_kind": "platform_counted_content_request_change",
+        "on_opportunity": true,
+        "raw_evidence_count": 1,
+        "scorable_evidence_count": 1,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.6500000000000001,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.34999999999999987,
+        "reliability_pass_through": 0.65,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 1,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "565bbcb7-9e70-418b-9a8e-a1549b23a230",
+        "source_id": "wikimedia-pageviews",
+        "proposition_kind": "platform_counted_content_request_change",
+        "on_opportunity": true,
+        "raw_evidence_count": 1,
+        "scorable_evidence_count": 1,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.6500000000000001,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.34999999999999987,
+        "reliability_pass_through": 0.65,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 1,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "6389d1bf-6dea-47e8-8508-dcf009fe352d",
+        "source_id": "ted-eu",
+        "proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "on_opportunity": false,
+        "raw_evidence_count": 1,
+        "scorable_evidence_count": 1,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.55,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.44999999999999996,
+        "reliability_pass_through": 0.55,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 1,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "63c3ccc6-4e4f-40d4-92f3-3cbdb5f04c40",
+        "source_id": "wikimedia-pageviews",
+        "proposition_kind": "platform_counted_content_request_change",
+        "on_opportunity": false,
+        "raw_evidence_count": 1,
+        "scorable_evidence_count": 1,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.6500000000000001,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.34999999999999987,
+        "reliability_pass_through": 0.65,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 1,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "6d03f533-9155-4631-89e2-843cb028b010",
+        "source_id": "ted-eu",
+        "proposition_kind": "source_reported_procurement_value_contrast",
+        "on_opportunity": false,
+        "raw_evidence_count": 1,
+        "scorable_evidence_count": 1,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.5,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.5,
+        "reliability_pass_through": 0.5,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 1,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "6eefe19d-9112-466b-a03e-b34413cd6869",
+        "source_id": "wikimedia-pageviews",
+        "proposition_kind": "platform_counted_content_request_change",
+        "on_opportunity": false,
+        "raw_evidence_count": 1,
+        "scorable_evidence_count": 1,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.6500000000000001,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.34999999999999987,
+        "reliability_pass_through": 0.65,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 1,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "73e834c4-ddad-4093-9727-79720e074b4b",
+        "source_id": "ted-eu",
+        "proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "on_opportunity": false,
+        "raw_evidence_count": 1,
+        "scorable_evidence_count": 1,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.55,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.44999999999999996,
+        "reliability_pass_through": 0.55,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 1,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "78195b94-99bf-47a3-8c83-26bdb930aa67",
+        "source_id": "wikimedia-pageviews",
+        "proposition_kind": "platform_counted_content_request_change",
+        "on_opportunity": false,
+        "raw_evidence_count": 1,
+        "scorable_evidence_count": 1,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.6500000000000001,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.34999999999999987,
+        "reliability_pass_through": 0.65,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 1,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "81738129-3993-4450-acc4-c683c7d2b23e",
+        "source_id": "wikimedia-pageviews",
+        "proposition_kind": "platform_counted_content_request_change",
+        "on_opportunity": false,
+        "raw_evidence_count": 1,
+        "scorable_evidence_count": 1,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.6500000000000001,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.34999999999999987,
+        "reliability_pass_through": 0.65,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 1,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "8ab0d96d-95f3-4a61-935c-afe2ef3e319b",
+        "source_id": "wikimedia-pageviews",
+        "proposition_kind": "platform_counted_content_request_change",
+        "on_opportunity": false,
+        "raw_evidence_count": 1,
+        "scorable_evidence_count": 1,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.6500000000000001,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.34999999999999987,
+        "reliability_pass_through": 0.65,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 1,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "97dec365-7ee8-4c93-947f-36fd9abf1d1b",
+        "source_id": "wikimedia-pageviews",
+        "proposition_kind": "platform_counted_content_request_change",
+        "on_opportunity": false,
+        "raw_evidence_count": 1,
+        "scorable_evidence_count": 1,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.6500000000000001,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.34999999999999987,
+        "reliability_pass_through": 0.65,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 1,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "a2707d23-28ef-491d-9ae6-2e09a39e947d",
+        "source_id": "wikimedia-pageviews",
+        "proposition_kind": "platform_counted_content_request_change",
+        "on_opportunity": false,
+        "raw_evidence_count": 1,
+        "scorable_evidence_count": 1,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.6500000000000001,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.34999999999999987,
+        "reliability_pass_through": 0.65,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 1,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "b3d0d2d0-daa0-4854-a4c0-a31684841b03",
+        "source_id": "wikimedia-pageviews",
+        "proposition_kind": "platform_counted_content_request_change",
+        "on_opportunity": true,
+        "raw_evidence_count": 1,
+        "scorable_evidence_count": 1,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.6500000000000001,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.34999999999999987,
+        "reliability_pass_through": 0.65,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 1,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "c20aee0c-f5ea-4b55-8520-eb2a2f7f5d9a",
+        "source_id": "wikimedia-pageviews",
+        "proposition_kind": "platform_counted_content_request_change",
+        "on_opportunity": false,
+        "raw_evidence_count": 1,
+        "scorable_evidence_count": 1,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.6500000000000001,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.34999999999999987,
+        "reliability_pass_through": 0.65,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 1,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "c58949e4-d8a7-4636-9c53-3bbac3b7b7c0",
+        "source_id": "wikimedia-pageviews",
+        "proposition_kind": "platform_counted_content_request_change",
+        "on_opportunity": true,
+        "raw_evidence_count": 1,
+        "scorable_evidence_count": 1,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.6500000000000001,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.34999999999999987,
+        "reliability_pass_through": 0.65,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 1,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "dfa8c0f5-8e59-437f-b18b-90e9ac854776",
+        "source_id": "ted-eu",
+        "proposition_kind": "source_reported_procurement_value_contrast",
+        "on_opportunity": false,
+        "raw_evidence_count": 1,
+        "scorable_evidence_count": 1,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.5,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.5,
+        "reliability_pass_through": 0.5,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 1,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "edf6b49e-058f-4432-aece-acac0694008e",
+        "source_id": "ted-eu",
+        "proposition_kind": "source_reported_procurement_value_contrast",
+        "on_opportunity": false,
+        "raw_evidence_count": 1,
+        "scorable_evidence_count": 1,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.5,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.5,
+        "reliability_pass_through": 0.5,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 1,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      },
+      {
+        "claim_id": "ef1a9208-1375-42c9-ac93-c319bf7adc6b",
+        "source_id": "ted-eu",
+        "proposition_kind": "source_reported_procurement_value_contrast",
+        "on_opportunity": false,
+        "raw_evidence_count": 1,
+        "scorable_evidence_count": 1,
+        "aggregation_status": "COMPLETE",
+        "support_strength": 0.5,
+        "contradiction_strength": 0.0,
+        "uncertainty_mass": 0.5,
+        "reliability_pass_through": 0.5,
+        "identical_to_reliability_pass_through": true,
+        "support_group_count": 1,
+        "contradiction_group_count": 0,
+        "max_members_received": 1,
+        "established_independence_groups": 0,
+        "limiting_components": [
+          "reliability"
+        ],
+        "evidence_level": 1
+      }
+    ],
+    "claims_where_full_aggregator_differs_from_pass_through": 0,
+    "claims_with_established_independence": 0,
+    "persisted": false
+  },
+  "opportunity_limitation": {
+    "representation": "CANONICAL_ROW research.opportunity_hypothesis_revisions",
+    "revision_id": "efca07a9-b283-473a-887b-a2ae82989bbe",
+    "opportunity_id": "06113a8b-a83d-423d-8046-18f87d7dbc01",
+    "revision": 1,
+    "created_at": "2026-09-02T19:51:57.812381+00:00",
+    "limitation_text": "Every supporting Evidence row is ELIGIBLE_CONTEXT, NON_SCORABLE and MISSING_RELIABILITY: no reviewed reliability applies, so this hypothesis can contribute to no score.",
+    "assessments_created_after_the_revision": [
+      {
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "source_id": "wikimedia-pageviews",
+        "proposition_kind": "platform_counted_content_request_change",
+        "reliability": 0.65,
+        "created_at": "2026-09-03T11:53:02.733748+00:00"
+      },
+      {
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "source_id": "ted-eu",
+        "proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "reliability": 0.55,
+        "created_at": "2026-09-04T04:44:37.243268+00:00"
+      },
+      {
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "source_id": "wikimedia-pageviews",
+        "proposition_kind": "platform_counted_content_request_change_witnessed",
+        "reliability": 0.6,
+        "created_at": "2026-09-04T06:51:19.661075+00:00"
+      }
+    ],
+    "opportunity_linked_rows_resolving_via_lineage": 6,
+    "revisions_before": 1,
+    "revisions_after": 1
+  },
+  "counters": {
+    "before": {
+      "raw_records": 325,
+      "normalized_records": 325,
+      "signals": 33,
+      "claims": 44,
+      "claim_revisions": 45,
+      "evidence": 58,
+      "evidence_reliability_written": 0,
+      "reliability_assessments": 4,
+      "reliability_assessment_basis_rows": 12,
+      "independence_groups": 0,
+      "opportunities": 1,
+      "opportunity_revisions": 1,
+      "opportunity_evidence_links": 7,
+      "threshold_registrations": 1,
+      "claim_derivations": 1,
+      "proposition_evaluation_refusals": 0,
+      "embeddings": 0,
+      "scores_table": "ABSENT"
+    },
+    "after": {
+      "raw_records": 325,
+      "normalized_records": 325,
+      "signals": 33,
+      "claims": 44,
+      "claim_revisions": 45,
+      "evidence": 58,
+      "evidence_reliability_written": 0,
+      "reliability_assessments": 4,
+      "reliability_assessment_basis_rows": 12,
+      "independence_groups": 0,
+      "opportunities": 1,
+      "opportunity_revisions": 1,
+      "opportunity_evidence_links": 7,
+      "threshold_registrations": 1,
+      "claim_derivations": 1,
+      "proposition_evaluation_refusals": 0,
+      "embeddings": 0,
+      "scores_table": "ABSENT"
+    }
+  }
+}

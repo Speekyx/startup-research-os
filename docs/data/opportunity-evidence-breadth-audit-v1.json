@@ -611,5 +611,12 @@
       "count": 1,
       "scorable": 0
     }
-  ]
+  ],
+  "forward_pointer": {
+    "$comment": "Appended by Mission 1.77. Nothing above this field changed.",
+    "superseded_by": "docs/data/wikimedia-measurement-scope-binding-v1.json",
+    "appended_by_mission": "1.77",
+    "what_changed_in_the_successor": "evidence_lineages.with_reliability counts the stored scoring.evidence.reliability column, which is NULL by design (ADR-026 Decision 2). Resolved late from lineage, 48 of the 58 rows carry a reviewed reliability and 6 of the 7 Opportunity-linked rows do. The audit's numbers were true of the column and were read as true of the corpus.",
+    "record_edited": false
+  }
 }

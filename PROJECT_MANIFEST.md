@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.125
+Version: 1.126
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-08 (Sprint 1 / Mission 1.76.7)
+Last amended: 2026-09-10 (Sprint 1 / Mission 1.77)
 
 ---
 
@@ -13,6 +13,100 @@ Last amended: 2026-09-08 (Sprint 1 / Mission 1.76.7)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.126 - 2026-09-10 (Sprint 1 / Mission 1.77)
+
+**`RELIABILITY_APPLICABILITY_ROOT_CAUSE_REVISED`.** Mission 1.76 said the Wikimedia evidence
+could not state its measurement resource. It can, on every row, from a fact the collector wrote
+at acquisition. What never resolved was the Opportunity path, which read a column that is NULL
+by design and called the result a fact about the corpus.
+
+**THE RESOURCE WAS IN THE LINEAGE ALL ALONG.** `acquisition.raw_records.provenance.resource_id`
+is present on **325 of 325** records, written from the AUTHORIZED dataset before any socket,
+and `nlp.signal_inputs` names the RawRecords a Signal was derived from. One join answers *which
+registered resource produced this measurement* for every Evidence row, and **58 of 58 rows
+reach exactly one distinct resource**. Binding basis A, EXPLICIT_PERSISTED_RESOURCE;
+`RESOURCE_BINDING_DEPENDS_ON_CURRENT_MUTABLE_CONFIG = NO`; the collector module and the
+registry are not read.
+
+**WHY THE HISTORICAL MISSIONS RESOLVED AND 1.76 DID NOT.** Missions 1.36.1 and 1.44.1 rebuilt
+the scope from raw-record provenance. Mission 1.76 rebuilt it from `claims.proposition_facts`,
+which carries the resource for the TED, World Bank and GDELT kinds and, by ADR-035 and
+ADR-036, deliberately not for the Wikimedia and Stack Exchange kinds -- **a proposition fact
+says WHAT is asserted; the resource says WHICH measurement produced the witness.** 1.76 found
+the key absent at the claim layer and wrote *absent from the whole acquisition lineage*. Its
+narrower sentence, that the lineage carries no resource_id COLUMN, is true; the generalisation
+is false, and its proposed repair (map the collector lineage to a committed constant) is the
+hard-coded source exception this mission forbids. **Both historical claims are true**: the
+historical resolution succeeded, and the Opportunity path could not bind because it binds
+nothing.
+
+**THE ACTUAL DEFECT WAS THE CONSUMER'S, NOT THE DATA'S.** Both Opportunity runners selected
+`e.reliability` and derived the status from whether it was null -- no scope, no resolver, so
+every row of every source read NON_SCORABLE, TED included. **The scorability report was a
+report about a column.** Both now build the lineage scope per row through one named rule,
+`sros_evidence_reliability.lineage.scope_from_lineage`, call the real resolver and carry the
+binding; the synthesis runner also computes the eligibility a citation is written with and the
+reliability limitation from the cited rows instead of hard-coding `ELIGIBLE_CONTEXT` and *no
+reviewed reliability applies*. **The rule takes no resource parameter**, so a resource known
+from a collector constant, from the assessment it hopes to match or from *the only registered
+resource* has nowhere to go; an ambiguous lineage builds no scope rather than picking.
+
+**THROUGH THE REAL RESOLVER, TWICE, SAME FOUR CANDIDATES**: via claim facts 12 rows resolve
+(TED); via lineage **48** -- Wikimedia detailed 18/18 at 0.65 (`e2419f13`, six of them on the
+Opportunity), convergent 18/18 at 0.6 (`19e0ce16`), TED 12/12 unchanged, Stack Exchange
+NO_APPLICABLE both ways because the operator declined that review, the INFERRED Wikimedia
+row NO_APPLICABLE because a new kind is a new scope. Every binding's assessment scope equals
+the row's on all five parts. **Scorable Evidence 0 to 48, Opportunity-linked 0 to 6.**
+Read-only aggregation over 34 Claims: identical to reliability pass-through on 34 of 34, one
+provenance group each, established independence 0 -- Mission 1.43's structural result stands.
+**Scorable is not scored**: no scores table exists and nothing wrote one.
+
+**WHY NOT `REPAIRED`.** It would name Wikimedia and name a scope binding, and neither is what
+was broken; reporting it would confirm the misdiagnosis in the outcome name. The seventeen
+section-27 criteria are recorded one by one and all hold, because hiding that would be the
+opposite error.
+
+**THE STALE LIMITATION IS REPORTED, NOT EDITED.** Revision 1 of the docker Opportunity
+(2026-09-02) says *no reviewed reliability applies*; the assessments arrived on 2026-09-03 and
+2026-09-04. A canonical row, so **`OPPORTUNITY_LIMITATION_RECONCILIATION_REQUIRED`**, STOP,
+revision 1 untouched, no revision 2. The three derived carriers of the false sentence gained one
+forward pointer each and still carry their sentences. `opportunity-preparation-v1.json` was NOT
+regenerated: it is the Mission 1.28 to 1.34 record of a 28-row corpus, pinned by eight tests.
+
+**Verification.** Probe of **65 deliberate violations, 65 caught, 0 escaped**, plus **5 of 5
+positive controls**, thirteen files restored byte for byte. **Two escapes found and closed on
+the first run**: a resolver signature widened inside the package escaped because the gate
+asked the imported module rather than its source, so the signature and the five-part scope
+are now asserted over the AST of `model.py`; and a runner mutated into a syntax error crashed
+the gate rather than being refused. **Two controls INVERTED**: a proven REPAIRED outcome is
+accepted, and a Stack Exchange row resolving against an assessment of its OWN scope is
+accepted. One 1.76 test re-pointed rather than deleted. **3517 bare-python tests**; 287
+pytest tests with the database unchanged; `ruff format --check`, `ruff check` and mypy through
+`uv`; contract generation `--check`; source catalog `--check`; all **56** CI gates, one of
+them new.
+
+**Nothing was written or called.** 0 external calls of every kind, 0 model calls, 0
+embeddings, 0 assessments, 0 basis rows, 0 independence groups, 0 scores, 0 revisions, 0
+migrations, 0 historical rows rewritten; every canonical counter identical before and after.
+Q1 stays CLASS_SELECTED without a construct or a run; Globalping stays 12/0/0.
+
+New: `packages/evidence-reliability/python/sros_evidence_reliability/lineage.py`,
+`infrastructure/scripts/report_reliability_resource_binding.py` (operator diagnostic),
+`docs/data/reliability-resource-binding-diagnostic-v1.json` and its generated `.md`,
+`docs/data/wikimedia-measurement-scope-binding-v1.json` and its generated `.md`,
+`infrastructure/scripts/render_wikimedia_scope_binding.py` (CI gate 56),
+`packages/evidence-reliability/python/tests/test_wikimedia_scope_binding.py`, and
+`docs/reports/mission-1.77-report.md`.
+
+Changed: `infrastructure/scripts/run_opportunity_preparation.py` and
+`run_opportunity_synthesis.py` resolve reliability late from lineage;
+`render_evidence_breadth_priority.py` renders a forward pointer; three 1.76 records gained one
+forward pointer each and their pages were re-rendered; one 1.76 test re-pointed;
+`docs/CLAUDE.md` 1.126 to 1.127; `.github/workflows/ci.yml` gains one gate.
+
+Unchanged: the resolver, the five-part scope, every assessment and basis row, every canonical
+research table, the Q1 selection, every Globalping record, and the V2 decision.
 
 ## 1.125 - 2026-09-08 (Sprint 1 / Mission 1.76.7)
 

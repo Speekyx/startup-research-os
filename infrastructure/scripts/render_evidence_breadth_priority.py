@@ -501,6 +501,23 @@ def validate() -> tuple[dict, dict, dict]:
 # ------------------------------------------------------------------------ renderers
 
 
+def _pointer_lines(record: dict) -> list[str]:
+    """Mission 1.66.1's shape: a later mission appends one forward pointer and edits nothing."""
+    pointer = record.get("forward_pointer")
+    if not pointer:
+        return []
+    return [
+        "",
+        "## Forward pointer",
+        "",
+        f"Appended by Mission {pointer['appended_by_mission']}; nothing above it changed. "
+        f"See `{pointer['superseded_by']}`.",
+        "",
+        pointer["what_changed_in_the_successor"],
+        "",
+    ]
+
+
 def render_audit(audit: dict) -> str:
     baseline = audit["canonical_baseline"]
     opportunity = audit["opportunity"]
@@ -599,6 +616,7 @@ def render_audit(audit: dict) -> str:
     for label, value in baseline.items():
         lines.append(f"| {label} | {value} |")
     lines.append("")
+    lines += _pointer_lines(audit)
     return "\n".join(lines)
 
 
@@ -661,6 +679,7 @@ def render_moves(moves: dict) -> str:
     for entry in moves["eliminated_before_ranking"]:
         lines.append(f"- **{entry['candidate_id']}** — {entry['title']}. {entry['why']}")
     lines.append("")
+    lines += _pointer_lines(moves)
     return "\n".join(lines)
 
 
