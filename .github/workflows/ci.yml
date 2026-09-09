@@ -672,6 +672,18 @@ jobs:
       - name: Globalping residual closure matches its records
         run: uv run python infrastructure/scripts/render_globalping_residuals.py --check
 
+      # Mission 1.78. Revision 2 of the docker Opportunity, by supersession. The gate refuses:
+      # revision 1 changed in any field; the historical preparation record rewritten; the
+      # cited Evidence set widened beyond revision 1's links; a row scorable without a
+      # resolved binding or non-scorable with one; a reliability that is not its bound
+      # assessment's; a Stack Exchange row carrying a Wikimedia value; the stale sentence
+      # surviving into revision 2, or a non-stale sentence dropped; scoring readiness that
+      # disagrees with its contract; a score, an independence group, a model call, a new
+      # Opportunity, a lost provenance to revision 1, a moved Q1 or Globalping record, and
+      # any non-Opportunity counter that moved.
+      - name: The Opportunity reliability reconciliation matches its records
+        run: uv run python infrastructure/scripts/render_opportunity_reconciliation.py --check
+
       # Mission 1.77. The resource was in the lineage all along; what never resolved was the
       # Opportunity path. The gate refuses: a scope whose resource is not the one distinct
       # resource its RawRecords carry; an ambiguous or absent lineage that still built a

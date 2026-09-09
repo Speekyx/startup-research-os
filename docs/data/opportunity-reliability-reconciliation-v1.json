@@ -1,0 +1,870 @@
+{
+  "$comment": "Mission 1.78. Revision 2 of the docker Opportunity, by supersession: the same hypothesis, the same seven cited rows, the stale reliability sentences replaced by sentences computed from the current resolver. Revision 1 is untouched.",
+  "record_version": "1.0.0",
+  "mission": "1.78",
+  "procedure_version": "opportunity-reliability-reconciliation@1.0.0",
+  "revision_reason": "RELIABILITY_APPLICABILITY_RECONCILIATION",
+  "measured_at": "2026-09-09T21:18:13+00:00",
+  "applied": false,
+  "historical_artifacts": {
+    "preparation_v1": {
+      "path": "docs/data/opportunity-preparation-v1.json",
+      "sha256": "6aab7daf1f222dead72e03baebee43468a9b9d4381d9ee5fefbcb78dd9f09b31"
+    },
+    "preparation_v2": {
+      "path": "docs/data/opportunity-preparation-v2.json",
+      "artifact_version": "opportunity-preparation@2.0.0"
+    }
+  },
+  "opportunity": {
+    "id": "06113a8b-a83d-423d-8046-18f87d7dbc01",
+    "workspace_id": "00000000-0000-4000-8000-000000000001",
+    "title": "subject:docker",
+    "summary": "There is evidence worth further investigation that some actors attend to the \"Docker_(software)\" Wikipedia article (with day-to-day request-count fluctuations under the platform's own heuristic requester classification) and that some actors file public questions tagged \"docker\" on Stack Overflow within a bounded window, indicating at least momentary unserved need at the point of asking; whether this reflects any recurring, severe, or commercially addressable need, and who the relevant actor is, is not established and would require further investigation before any intervention can be scoped.",
+    "market_scope": {
+      "type": "GLOBAL"
+    },
+    "market_scope_key": "GLOBAL",
+    "created_at": "2026-09-02T19:51:57.812381+00:00",
+    "updated_at": "2026-09-02T19:51:57.812381+00:00",
+    "status": "OPPORTUNITY_HYPOTHESIS",
+    "creation_procedure": "opportunity-synthesis@1.0.0",
+    "packet_id": "c25451c569909207357d0af19698e4737b7c85961fcf393bf632ba8b8242110e",
+    "use_profile_id": "local-private-research-v1"
+  },
+  "revision_1": {
+    "id": "efca07a9-b283-473a-887b-a2ae82989bbe",
+    "workspace_id": "00000000-0000-4000-8000-000000000001",
+    "opportunity_id": "06113a8b-a83d-423d-8046-18f87d7dbc01",
+    "revision": 1,
+    "target_actor": "UNKNOWN_NOT_SUPPORTED",
+    "observed_need_or_change": "The packet shows (a) day-to-day changes in request counts for the \"Docker_(software)\" Wikipedia article under the platform's own \"user\" requester class, and (b) 88 questions filed under the \"docker\" tag on Stack Overflow within a bounded window. Together these establish only that some attention exists toward a topic called \"docker\" (an encyclopedia article being requested, and public questions being filed under that subject tag) and that at least some of those questions reflect an actor filing a question -- i.e., some need or gap in understanding at the moment of asking. Neither the identity, role, nor recurrence of any actor is established.",
+    "candidate_intervention": "Not determinable beyond: any investigation would need to characterize what specific problem the class of \"docker\"-tagged questions represents before any intervention class could be named; the packet itself does not support naming a product, feature, or service class -- only that a topic attracts requests and that questions get filed under it.",
+    "hypothesis_statement": "There is evidence worth further investigation that some actors attend to the \"Docker_(software)\" Wikipedia article (with day-to-day request-count fluctuations under the platform's own heuristic requester classification) and that some actors file public questions tagged \"docker\" on Stack Overflow within a bounded window, indicating at least momentary unserved need at the point of asking; whether this reflects any recurring, severe, or commercially addressable need, and who the relevant actor is, is not established and would require further investigation before any intervention can be scoped.",
+    "reasoning_summary": "Six rows report day-over-day differences in Wikipedia pageview request counts for \"Docker_(software)\" under the platform's own heuristic \"user\" requester classification; these are request counts, not reader counts, and the differences are movements within one source stream between adjacent calendar days, not a trend that is shown to continue or that reflects any commercial signal. One row reports a count (88) of Stack Overflow questions carrying the \"docker\" tag within a bounded window; this is a subject label from the site's own vocabulary, not a shared problem, and author identity is not captured, so distinct askers cannot be counted. Together these support only that a \"docker\"-labeled topic receives measured attention (AUDIENCE_OR_USAGE) and that some actor was sufficiently blocked or curious to file a public question (PROBLEM_OR_NEED) at least once within the window. No statement in the packet speaks to recurrence by the same actor, money changing hands, willingness to pay, existence of a buyer, competitive supply, distribution channels, regulatory drivers, dissatisfaction with existing solutions, or feasibility of any intervention. Both source families (forum, knowledge) carry UNKNOWN independence and MISSING_RELIABILITY across all 7 rows, so no scoring or confidence claim can be attached to any of this.",
+    "supported_dimensions": [
+      "AUDIENCE_OR_USAGE",
+      "PROBLEM_OR_NEED"
+    ],
+    "unsupported_dimensions": [
+      "BUYER_OR_BUDGET_EXISTENCE",
+      "COMPETITIVE_SUPPLY",
+      "DISTRIBUTION_SIGNAL",
+      "ECONOMIC_VALUE",
+      "FEASIBILITY_SIGNAL",
+      "MARKET_ACTIVITY",
+      "RECURRENCE_OR_FREQUENCY",
+      "REGULATORY_OR_STRUCTURAL_DRIVER",
+      "SOLUTION_DISSATISFACTION",
+      "SOLUTION_GAP",
+      "WILLINGNESS_TO_PAY",
+      "TREND_OR_CHANGE"
+    ],
+    "epistemic_limitations": [
+      "Every supporting Evidence row is ELIGIBLE_CONTEXT, NON_SCORABLE and MISSING_RELIABILITY: no reviewed reliability applies, so this hypothesis can contribute to no score.",
+      "independence_state is UNKNOWN for every supporting row. Two source families is diversity, never established independence, and the row count is not a count of independent findings.",
+      "market_scope is recorded GLOBAL because the column is NOT NULL and the evidence establishes no geography. Ontology V2 §4 defines GLOBAL as the ABSENCE of a geographic restriction; it is not a claim about a worldwide market.",
+      "The Stack Exchange count is a count of published questions, not of people, and not evidence that any two of them share a problem: that relation is PARKED (Mission 1.27).",
+      "The Wikimedia rows are day-over-day request differences under the platform's own heuristic requester class. Two of the six are decreases, and the calendar does not cancel."
+    ],
+    "uncertainties": [
+      "Whether any of the 88 tagged questions share the same underlying problem, or represent 88 distinct problems",
+      "Whether the same actor authored more than one of the 88 questions (author identity is not captured)",
+      "Whether pageview fluctuations reflect human readers, automated traffic, or a mix, given the heuristic requester classification",
+      "Whether any actor involved has budget or purchasing authority",
+      "Whether any money moves in connection with this topic",
+      "Whether existing solutions for whatever need drove the questions are adequate or inadequate",
+      "Whether actors are dissatisfied with anything they currently use",
+      "Whether the need recurs for the same actor over time or is a one-off",
+      "Whether any regulatory or structural driver shapes this activity",
+      "Whether any distribution channel exists to reach the actors who asked these questions",
+      "Whether an intervention of any kind is feasible to build or operate",
+      "Whether the pageview movements are attributable to any cause connected to the questions"
+    ],
+    "procedure_version": "opportunity-synthesis@1.0.0|opportunity-synthesis-audit@1.2.0|prompt=dfd28a0a77e2cae23a268e39eb1c432f23f905810b26dc129f6fd99f7491195e",
+    "model_version": "claude-sonnet-5",
+    "prompt_version": "1.0.0",
+    "research_session_id": null,
+    "created_at": "2026-09-02T19:51:57.812381+00:00",
+    "created_by": "mission-1.31.1"
+  },
+  "revision_1_links": [
+    {
+      "id": "5e2d5ad4-af47-4dad-9a19-bdaa97e5701e",
+      "workspace_id": "00000000-0000-4000-8000-000000000001",
+      "revision_id": "efca07a9-b283-473a-887b-a2ae82989bbe",
+      "evidence_id": "13a5eadb-977d-4de0-9c35-d0ff53442074",
+      "claim_id": "565bbcb7-9e70-418b-9a8e-a1549b23a230",
+      "eligibility_at_citation": "ELIGIBLE_CONTEXT",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "PROBLEM_OR_NEED"
+      ],
+      "created_at": "2026-09-02T19:51:57.812381+00:00"
+    },
+    {
+      "id": "44c31108-b565-4001-a257-9ebc60de9477",
+      "workspace_id": "00000000-0000-4000-8000-000000000001",
+      "revision_id": "efca07a9-b283-473a-887b-a2ae82989bbe",
+      "evidence_id": "16a8c39c-d72a-4252-9c67-7be2165e9cae",
+      "claim_id": "6e4c3f21-8881-4453-b4ff-af1b47c464b5",
+      "eligibility_at_citation": "ELIGIBLE_CONTEXT",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "PROBLEM_OR_NEED"
+      ],
+      "created_at": "2026-09-02T19:51:57.812381+00:00"
+    },
+    {
+      "id": "d44cf8d5-1b00-4fd8-b081-13bca6b0280b",
+      "workspace_id": "00000000-0000-4000-8000-000000000001",
+      "revision_id": "efca07a9-b283-473a-887b-a2ae82989bbe",
+      "evidence_id": "1b93db71-eaed-45c5-a2fa-9e4edea7bc49",
+      "claim_id": "05cac6f6-17f4-4008-b68b-9787bb4ac774",
+      "eligibility_at_citation": "ELIGIBLE_CONTEXT",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "PROBLEM_OR_NEED"
+      ],
+      "created_at": "2026-09-02T19:51:57.812381+00:00"
+    },
+    {
+      "id": "06136713-f525-4e2b-b9e4-9610a5361f6c",
+      "workspace_id": "00000000-0000-4000-8000-000000000001",
+      "revision_id": "efca07a9-b283-473a-887b-a2ae82989bbe",
+      "evidence_id": "487f62c6-2fcf-4790-9773-6e99214d0003",
+      "claim_id": "c58949e4-d8a7-4636-9c53-3bbac3b7b7c0",
+      "eligibility_at_citation": "ELIGIBLE_CONTEXT",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "PROBLEM_OR_NEED"
+      ],
+      "created_at": "2026-09-02T19:51:57.812381+00:00"
+    },
+    {
+      "id": "bb49c205-24d1-445c-848d-a7479937f939",
+      "workspace_id": "00000000-0000-4000-8000-000000000001",
+      "revision_id": "efca07a9-b283-473a-887b-a2ae82989bbe",
+      "evidence_id": "516182ff-0122-4d13-9d8a-92bb38065a75",
+      "claim_id": "b3d0d2d0-daa0-4854-a4c0-a31684841b03",
+      "eligibility_at_citation": "ELIGIBLE_CONTEXT",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "PROBLEM_OR_NEED"
+      ],
+      "created_at": "2026-09-02T19:51:57.812381+00:00"
+    },
+    {
+      "id": "6664c4d9-8c5c-494d-9c8c-aa375edfc9cb",
+      "workspace_id": "00000000-0000-4000-8000-000000000001",
+      "revision_id": "efca07a9-b283-473a-887b-a2ae82989bbe",
+      "evidence_id": "6cf92ad6-77ed-4126-b356-41e65856430b",
+      "claim_id": "459e9fec-3ad1-4955-81c6-2aa0f2179bc5",
+      "eligibility_at_citation": "ELIGIBLE_CONTEXT",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "PROBLEM_OR_NEED"
+      ],
+      "created_at": "2026-09-02T19:51:57.812381+00:00"
+    },
+    {
+      "id": "e8de12d0-575f-47ad-8d39-5ba2e2615b3c",
+      "workspace_id": "00000000-0000-4000-8000-000000000001",
+      "revision_id": "efca07a9-b283-473a-887b-a2ae82989bbe",
+      "evidence_id": "f1e0b7a4-d570-429a-91a4-fadff84cdce1",
+      "claim_id": "1829e497-f582-4017-b88d-4d277375ccf7",
+      "eligibility_at_citation": "ELIGIBLE_CONTEXT",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "PROBLEM_OR_NEED"
+      ],
+      "created_at": "2026-09-02T19:51:57.812381+00:00"
+    }
+  ],
+  "revision_1_audit": {
+    "limitations": [
+      {
+        "revision_1_sentence": "Every supporting Evidence row is ELIGIBLE_CONTEXT, NON_SCORABLE and MISSING_RELIABILITY: no reviewed reliability applies, so this hypothesis can contribute to no score.",
+        "classification": "STALE_DUE_TO_RELIABILITY_RESOLUTION_FIX"
+      },
+      {
+        "revision_1_sentence": "independence_state is UNKNOWN for every supporting row. Two source families is diversity, never established independence, and the row count is not a count of independent findings.",
+        "classification": "NOT_RELATED_TO_1_77"
+      },
+      {
+        "revision_1_sentence": "market_scope is recorded GLOBAL because the column is NOT NULL and the evidence establishes no geography. Ontology V2 §4 defines GLOBAL as the ABSENCE of a geographic restriction; it is not a claim about a worldwide market.",
+        "classification": "NOT_RELATED_TO_1_77"
+      },
+      {
+        "revision_1_sentence": "The Stack Exchange count is a count of published questions, not of people, and not evidence that any two of them share a problem: that relation is PARKED (Mission 1.27).",
+        "classification": "NOT_RELATED_TO_1_77"
+      },
+      {
+        "revision_1_sentence": "The Wikimedia rows are day-over-day request differences under the platform's own heuristic requester class. Two of the six are decreases, and the calendar does not cancel.",
+        "classification": "NOT_RELATED_TO_1_77"
+      }
+    ],
+    "reasoning_summary": {
+      "revision_1_sentence": "Both source families (forum, knowledge) carry UNKNOWN independence and MISSING_RELIABILITY across all 7 rows, so no scoring or confidence claim can be attached to any of this.",
+      "replacement": "Both source families (forum, knowledge) carry UNKNOWN independence across all 7 rows; 6 of the 7 rows now resolve a reviewed reliability late from lineage and 1 does not, so quantitative aggregation is possible for part of this evidence and no scoring or confidence claim is attached to any of it here.",
+      "classification": "STALE_DUE_TO_RELIABILITY_RESOLUTION_FIX"
+    },
+    "carried_verbatim": [
+      "target_actor",
+      "observed_need_or_change",
+      "candidate_intervention",
+      "hypothesis_statement",
+      "supported_dimensions",
+      "unsupported_dimensions",
+      "uncertainties"
+    ],
+    "hypothesis_statement_changed": false,
+    "why_stale": [
+      {
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "source_id": "ted-eu",
+        "proposition_kind": "source_reported_procurement_value_contrast",
+        "reliability": 0.5,
+        "created_at": "2026-09-01T15:44:21.012435+00:00",
+        "after_revision_1": false
+      },
+      {
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "source_id": "wikimedia-pageviews",
+        "proposition_kind": "platform_counted_content_request_change",
+        "reliability": 0.65,
+        "created_at": "2026-09-03T11:53:02.733748+00:00",
+        "after_revision_1": true
+      },
+      {
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "source_id": "ted-eu",
+        "proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "reliability": 0.55,
+        "created_at": "2026-09-04T04:44:37.243268+00:00",
+        "after_revision_1": true
+      },
+      {
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "source_id": "wikimedia-pageviews",
+        "proposition_kind": "platform_counted_content_request_change_witnessed",
+        "reliability": 0.6,
+        "created_at": "2026-09-04T06:51:19.661075+00:00",
+        "after_revision_1": true
+      }
+    ]
+  },
+  "current_evidence": {
+    "linked_by_revision_1_and_carried": [
+      {
+        "evidence_id": "13a5eadb-977d-4de0-9c35-d0ff53442074",
+        "claim_id": "565bbcb7-9e70-418b-9a8e-a1549b23a230",
+        "source_id": "wikimedia-pageviews",
+        "source_family": "knowledge",
+        "signal_type_id": "content_request_change",
+        "dimensions": [
+          "AUDIENCE_OR_USAGE",
+          "TREND_OR_CHANGE"
+        ],
+        "eligibility_at_revision_1": "ELIGIBLE_CONTEXT",
+        "eligibility_now": "ELIGIBLE_SCORING",
+        "relevance": "CITED_BY_REVISION_1",
+        "reliability_outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "resolved_reliability": 0.65,
+        "scorable": true,
+        "independence_state": "UNKNOWN",
+        "missing_factors": [
+          "observed_at"
+        ],
+        "reason": "the current resolver binds this row to a current assessment on all five scope parts"
+      },
+      {
+        "evidence_id": "16a8c39c-d72a-4252-9c67-7be2165e9cae",
+        "claim_id": "6e4c3f21-8881-4453-b4ff-af1b47c464b5",
+        "source_id": "stack-exchange",
+        "source_family": "forum",
+        "signal_type_id": "community_question_volume",
+        "dimensions": [
+          "PROBLEM_OR_NEED"
+        ],
+        "eligibility_at_revision_1": "ELIGIBLE_CONTEXT",
+        "eligibility_now": "ELIGIBLE_CONTEXT",
+        "relevance": "CITED_BY_REVISION_1",
+        "reliability_outcome": "NO_APPLICABLE_ASSESSMENT",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "questions/stackoverflow",
+        "assessment_id": null,
+        "resolved_reliability": null,
+        "scorable": false,
+        "independence_state": "UNKNOWN",
+        "missing_factors": [
+          "reliability",
+          "observed_at"
+        ],
+        "reason": "no current assessment covers this row's measurement-and-purpose scope"
+      },
+      {
+        "evidence_id": "1b93db71-eaed-45c5-a2fa-9e4edea7bc49",
+        "claim_id": "05cac6f6-17f4-4008-b68b-9787bb4ac774",
+        "source_id": "wikimedia-pageviews",
+        "source_family": "knowledge",
+        "signal_type_id": "content_request_change",
+        "dimensions": [
+          "AUDIENCE_OR_USAGE",
+          "TREND_OR_CHANGE"
+        ],
+        "eligibility_at_revision_1": "ELIGIBLE_CONTEXT",
+        "eligibility_now": "ELIGIBLE_SCORING",
+        "relevance": "CITED_BY_REVISION_1",
+        "reliability_outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "resolved_reliability": 0.65,
+        "scorable": true,
+        "independence_state": "UNKNOWN",
+        "missing_factors": [
+          "observed_at"
+        ],
+        "reason": "the current resolver binds this row to a current assessment on all five scope parts"
+      },
+      {
+        "evidence_id": "487f62c6-2fcf-4790-9773-6e99214d0003",
+        "claim_id": "c58949e4-d8a7-4636-9c53-3bbac3b7b7c0",
+        "source_id": "wikimedia-pageviews",
+        "source_family": "knowledge",
+        "signal_type_id": "content_request_change",
+        "dimensions": [
+          "AUDIENCE_OR_USAGE",
+          "TREND_OR_CHANGE"
+        ],
+        "eligibility_at_revision_1": "ELIGIBLE_CONTEXT",
+        "eligibility_now": "ELIGIBLE_SCORING",
+        "relevance": "CITED_BY_REVISION_1",
+        "reliability_outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "resolved_reliability": 0.65,
+        "scorable": true,
+        "independence_state": "UNKNOWN",
+        "missing_factors": [
+          "observed_at"
+        ],
+        "reason": "the current resolver binds this row to a current assessment on all five scope parts"
+      },
+      {
+        "evidence_id": "516182ff-0122-4d13-9d8a-92bb38065a75",
+        "claim_id": "b3d0d2d0-daa0-4854-a4c0-a31684841b03",
+        "source_id": "wikimedia-pageviews",
+        "source_family": "knowledge",
+        "signal_type_id": "content_request_change",
+        "dimensions": [
+          "AUDIENCE_OR_USAGE",
+          "TREND_OR_CHANGE"
+        ],
+        "eligibility_at_revision_1": "ELIGIBLE_CONTEXT",
+        "eligibility_now": "ELIGIBLE_SCORING",
+        "relevance": "CITED_BY_REVISION_1",
+        "reliability_outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "resolved_reliability": 0.65,
+        "scorable": true,
+        "independence_state": "UNKNOWN",
+        "missing_factors": [
+          "observed_at"
+        ],
+        "reason": "the current resolver binds this row to a current assessment on all five scope parts"
+      },
+      {
+        "evidence_id": "6cf92ad6-77ed-4126-b356-41e65856430b",
+        "claim_id": "459e9fec-3ad1-4955-81c6-2aa0f2179bc5",
+        "source_id": "wikimedia-pageviews",
+        "source_family": "knowledge",
+        "signal_type_id": "content_request_change",
+        "dimensions": [
+          "AUDIENCE_OR_USAGE",
+          "TREND_OR_CHANGE"
+        ],
+        "eligibility_at_revision_1": "ELIGIBLE_CONTEXT",
+        "eligibility_now": "ELIGIBLE_SCORING",
+        "relevance": "CITED_BY_REVISION_1",
+        "reliability_outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "resolved_reliability": 0.65,
+        "scorable": true,
+        "independence_state": "UNKNOWN",
+        "missing_factors": [
+          "observed_at"
+        ],
+        "reason": "the current resolver binds this row to a current assessment on all five scope parts"
+      },
+      {
+        "evidence_id": "f1e0b7a4-d570-429a-91a4-fadff84cdce1",
+        "claim_id": "1829e497-f582-4017-b88d-4d277375ccf7",
+        "source_id": "wikimedia-pageviews",
+        "source_family": "knowledge",
+        "signal_type_id": "content_request_change",
+        "dimensions": [
+          "AUDIENCE_OR_USAGE",
+          "TREND_OR_CHANGE"
+        ],
+        "eligibility_at_revision_1": "ELIGIBLE_CONTEXT",
+        "eligibility_now": "ELIGIBLE_SCORING",
+        "relevance": "CITED_BY_REVISION_1",
+        "reliability_outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "resolved_reliability": 0.65,
+        "scorable": true,
+        "independence_state": "UNKNOWN",
+        "missing_factors": [
+          "observed_at"
+        ],
+        "reason": "the current resolver binds this row to a current assessment on all five scope parts"
+      }
+    ],
+    "in_current_packet_not_linked": [
+      {
+        "evidence_id": "17735944-da2f-4469-837f-8f3fe71922aa",
+        "source_id": "stack-exchange",
+        "signal_type_id": "community_question_without_accepted_answer_volume",
+        "eligibility_now": "ELIGIBLE_CONTEXT",
+        "scorable": false,
+        "classification": "REQUIRES_NEW_SEMANTIC_JUDGEMENT_BEFORE_INCLUSION",
+        "why": "in the current packet and not cited by revision 1; whether it bears on the hypothesis is a synthesis judgement this reconciliation does not make"
+      },
+      {
+        "evidence_id": "17ab3887-7caf-4a81-a7d1-856bfbbdbdac",
+        "source_id": "wikimedia-pageviews",
+        "signal_type_id": "content_request_change",
+        "eligibility_now": "ELIGIBLE_SCORING",
+        "scorable": true,
+        "classification": "REQUIRES_NEW_SEMANTIC_JUDGEMENT_BEFORE_INCLUSION",
+        "why": "in the current packet and not cited by revision 1; whether it bears on the hypothesis is a synthesis judgement this reconciliation does not make"
+      },
+      {
+        "evidence_id": "261994f7-e52e-4e40-a879-262192659696",
+        "source_id": "wikimedia-pageviews",
+        "signal_type_id": "content_request_change",
+        "eligibility_now": "ELIGIBLE_SCORING",
+        "scorable": true,
+        "classification": "REQUIRES_NEW_SEMANTIC_JUDGEMENT_BEFORE_INCLUSION",
+        "why": "in the current packet and not cited by revision 1; whether it bears on the hypothesis is a synthesis judgement this reconciliation does not make"
+      },
+      {
+        "evidence_id": "637d5ff5-f33a-43ec-8353-2366fb2af211",
+        "source_id": "wikimedia-pageviews",
+        "signal_type_id": "content_request_change",
+        "eligibility_now": "ELIGIBLE_SCORING",
+        "scorable": true,
+        "classification": "REQUIRES_NEW_SEMANTIC_JUDGEMENT_BEFORE_INCLUSION",
+        "why": "in the current packet and not cited by revision 1; whether it bears on the hypothesis is a synthesis judgement this reconciliation does not make"
+      },
+      {
+        "evidence_id": "9c502023-3aca-4ab5-ba45-745feb7aeeee",
+        "source_id": "wikimedia-pageviews",
+        "signal_type_id": "content_request_change",
+        "eligibility_now": "ELIGIBLE_SCORING",
+        "scorable": true,
+        "classification": "REQUIRES_NEW_SEMANTIC_JUDGEMENT_BEFORE_INCLUSION",
+        "why": "in the current packet and not cited by revision 1; whether it bears on the hypothesis is a synthesis judgement this reconciliation does not make"
+      },
+      {
+        "evidence_id": "c2afb9fe-03ef-44a7-a88e-6e82f14bf860",
+        "source_id": "wikimedia-pageviews",
+        "signal_type_id": "content_request_change",
+        "eligibility_now": "ELIGIBLE_SCORING",
+        "scorable": true,
+        "classification": "REQUIRES_NEW_SEMANTIC_JUDGEMENT_BEFORE_INCLUSION",
+        "why": "in the current packet and not cited by revision 1; whether it bears on the hypothesis is a synthesis judgement this reconciliation does not make"
+      },
+      {
+        "evidence_id": "faab3b4e-85fb-4257-98b5-66ca16908d75",
+        "source_id": "wikimedia-pageviews",
+        "signal_type_id": "content_request_change",
+        "eligibility_now": "ELIGIBLE_SCORING",
+        "scorable": true,
+        "classification": "REQUIRES_NEW_SEMANTIC_JUDGEMENT_BEFORE_INCLUSION",
+        "why": "in the current packet and not cited by revision 1; whether it bears on the hypothesis is a synthesis judgement this reconciliation does not make"
+      }
+    ],
+    "packet_id_now": "5ed93e207568517a7ef57d22e6b7599200213f7610d902d4f9002110d5c1a98a",
+    "packet_id_at_revision_1": "c25451c569909207357d0af19698e4737b7c85961fcf393bf632ba8b8242110e",
+    "packet_size_now": 14,
+    "packet_eligibility_now": {
+      "ELIGIBLE_SCORING": 12,
+      "ELIGIBLE_CONTEXT": 2
+    },
+    "scoring_ready_now_per_contract": true,
+    "scoring_ready_contract": "SufficiencyResult.scoring_ready = scoring_eligible_rows >= 2, a property of the PACKET; it authorises nothing, REFERENCE_PROFILE_V1 is UNCALIBRATED and no score is persisted"
+  },
+  "census": {
+    "total_evidence": 58,
+    "scorable_evidence": 48,
+    "non_scorable_evidence": 10,
+    "linked_evidence": 7,
+    "scorable_linked_evidence": 6,
+    "non_scorable_linked_evidence": 1,
+    "linked_dimensions": [
+      "AUDIENCE_OR_USAGE",
+      "PROBLEM_OR_NEED",
+      "TREND_OR_CHANGE"
+    ],
+    "linked_source_families": [
+      "forum",
+      "knowledge"
+    ],
+    "linked_reliability_distribution": {
+      "0.65": 6,
+      "NONE": 1
+    },
+    "linked_independence_states": [
+      "UNKNOWN"
+    ]
+  },
+  "revision_2_plan": {
+    "opportunity_id": "06113a8b-a83d-423d-8046-18f87d7dbc01",
+    "prior_revision_id": "efca07a9-b283-473a-887b-a2ae82989bbe",
+    "prior_revision": 1,
+    "revision": 2,
+    "procedure_version": "opportunity-reliability-reconciliation@1.0.0|reason=RELIABILITY_APPLICABILITY_RECONCILIATION|prior_revision=efca07a9-b283-473a-887b-a2ae82989bbe|mission_finding=docs/data/wikimedia-measurement-scope-binding-v1.json|resolver=sros_evidence_reliability.lineage|preparation=opportunity-preparation@2.0.0|preparation_record=docs/data/opportunity-preparation-v2.json|census=rows:58,scoring:48|linked=7",
+    "model_version": null,
+    "prompt_version": null,
+    "created_by": "mission-1.78",
+    "carried_verbatim": [
+      "target_actor",
+      "observed_need_or_change",
+      "candidate_intervention",
+      "hypothesis_statement",
+      "supported_dimensions",
+      "unsupported_dimensions",
+      "uncertainties"
+    ],
+    "epistemic_limitations": [
+      "6 of 7 supporting Evidence rows carry a reviewed reliability (0.65), resolved late from their acquisition lineage and bound to the assessment that produced it (ADR-026, Mission 1.77); 1 remains NON_SCORABLE with no applicable assessment (stack-exchange). Scorable is not scored: REFERENCE_PROFILE_V1 is UNCALIBRATED, no Score exists in this repository, none is persisted, and no ranking exists.",
+      "independence_state is UNKNOWN for every supporting row. Two source families is diversity, never established independence, and the row count is not a count of independent findings.",
+      "market_scope is recorded GLOBAL because the column is NOT NULL and the evidence establishes no geography. Ontology V2 §4 defines GLOBAL as the ABSENCE of a geographic restriction; it is not a claim about a worldwide market.",
+      "The Stack Exchange count is a count of published questions, not of people, and not evidence that any two of them share a problem: that relation is PARKED (Mission 1.27).",
+      "The Wikimedia rows are day-over-day request differences under the platform's own heuristic requester class. Two of the six are decreases, and the calendar does not cancel."
+    ],
+    "reasoning_summary": "Six rows report day-over-day differences in Wikipedia pageview request counts for \"Docker_(software)\" under the platform's own heuristic \"user\" requester classification; these are request counts, not reader counts, and the differences are movements within one source stream between adjacent calendar days, not a trend that is shown to continue or that reflects any commercial signal. One row reports a count (88) of Stack Overflow questions carrying the \"docker\" tag within a bounded window; this is a subject label from the site's own vocabulary, not a shared problem, and author identity is not captured, so distinct askers cannot be counted. Together these support only that a \"docker\"-labeled topic receives measured attention (AUDIENCE_OR_USAGE) and that some actor was sufficiently blocked or curious to file a public question (PROBLEM_OR_NEED) at least once within the window. No statement in the packet speaks to recurrence by the same actor, money changing hands, willingness to pay, existence of a buyer, competitive supply, distribution channels, regulatory drivers, dissatisfaction with existing solutions, or feasibility of any intervention. Both source families (forum, knowledge) carry UNKNOWN independence across all 7 rows; 6 of the 7 rows now resolve a reviewed reliability late from lineage and 1 does not, so quantitative aggregation is possible for part of this evidence and no scoring or confidence claim is attached to any of it here.",
+    "links": [
+      {
+        "evidence_id": "13a5eadb-977d-4de0-9c35-d0ff53442074",
+        "claim_id": "565bbcb7-9e70-418b-9a8e-a1549b23a230",
+        "eligibility_at_citation": "ELIGIBLE_SCORING",
+        "dimensions": [
+          "AUDIENCE_OR_USAGE",
+          "PROBLEM_OR_NEED"
+        ]
+      },
+      {
+        "evidence_id": "16a8c39c-d72a-4252-9c67-7be2165e9cae",
+        "claim_id": "6e4c3f21-8881-4453-b4ff-af1b47c464b5",
+        "eligibility_at_citation": "ELIGIBLE_CONTEXT",
+        "dimensions": [
+          "AUDIENCE_OR_USAGE",
+          "PROBLEM_OR_NEED"
+        ]
+      },
+      {
+        "evidence_id": "1b93db71-eaed-45c5-a2fa-9e4edea7bc49",
+        "claim_id": "05cac6f6-17f4-4008-b68b-9787bb4ac774",
+        "eligibility_at_citation": "ELIGIBLE_SCORING",
+        "dimensions": [
+          "AUDIENCE_OR_USAGE",
+          "PROBLEM_OR_NEED"
+        ]
+      },
+      {
+        "evidence_id": "487f62c6-2fcf-4790-9773-6e99214d0003",
+        "claim_id": "c58949e4-d8a7-4636-9c53-3bbac3b7b7c0",
+        "eligibility_at_citation": "ELIGIBLE_SCORING",
+        "dimensions": [
+          "AUDIENCE_OR_USAGE",
+          "PROBLEM_OR_NEED"
+        ]
+      },
+      {
+        "evidence_id": "516182ff-0122-4d13-9d8a-92bb38065a75",
+        "claim_id": "b3d0d2d0-daa0-4854-a4c0-a31684841b03",
+        "eligibility_at_citation": "ELIGIBLE_SCORING",
+        "dimensions": [
+          "AUDIENCE_OR_USAGE",
+          "PROBLEM_OR_NEED"
+        ]
+      },
+      {
+        "evidence_id": "6cf92ad6-77ed-4126-b356-41e65856430b",
+        "claim_id": "459e9fec-3ad1-4955-81c6-2aa0f2179bc5",
+        "eligibility_at_citation": "ELIGIBLE_SCORING",
+        "dimensions": [
+          "AUDIENCE_OR_USAGE",
+          "PROBLEM_OR_NEED"
+        ]
+      },
+      {
+        "evidence_id": "f1e0b7a4-d570-429a-91a4-fadff84cdce1",
+        "claim_id": "1829e497-f582-4017-b88d-4d277375ccf7",
+        "eligibility_at_citation": "ELIGIBLE_SCORING",
+        "dimensions": [
+          "AUDIENCE_OR_USAGE",
+          "PROBLEM_OR_NEED"
+        ]
+      }
+    ]
+  },
+  "reconciled": true,
+  "revision_2_applied": {
+    "revision_2_id": "8739e7ab-940b-408c-a5e8-7f6675d1597c",
+    "revision_2_number": 2,
+    "revision_2_created_at": "2026-09-09T21:16:39.041270+00:00",
+    "revision_2_row": {
+      "id": "8739e7ab-940b-408c-a5e8-7f6675d1597c",
+      "workspace_id": "00000000-0000-4000-8000-000000000001",
+      "opportunity_id": "06113a8b-a83d-423d-8046-18f87d7dbc01",
+      "revision": 2,
+      "target_actor": "UNKNOWN_NOT_SUPPORTED",
+      "observed_need_or_change": "The packet shows (a) day-to-day changes in request counts for the \"Docker_(software)\" Wikipedia article under the platform's own \"user\" requester class, and (b) 88 questions filed under the \"docker\" tag on Stack Overflow within a bounded window. Together these establish only that some attention exists toward a topic called \"docker\" (an encyclopedia article being requested, and public questions being filed under that subject tag) and that at least some of those questions reflect an actor filing a question -- i.e., some need or gap in understanding at the moment of asking. Neither the identity, role, nor recurrence of any actor is established.",
+      "candidate_intervention": "Not determinable beyond: any investigation would need to characterize what specific problem the class of \"docker\"-tagged questions represents before any intervention class could be named; the packet itself does not support naming a product, feature, or service class -- only that a topic attracts requests and that questions get filed under it.",
+      "hypothesis_statement": "There is evidence worth further investigation that some actors attend to the \"Docker_(software)\" Wikipedia article (with day-to-day request-count fluctuations under the platform's own heuristic requester classification) and that some actors file public questions tagged \"docker\" on Stack Overflow within a bounded window, indicating at least momentary unserved need at the point of asking; whether this reflects any recurring, severe, or commercially addressable need, and who the relevant actor is, is not established and would require further investigation before any intervention can be scoped.",
+      "reasoning_summary": "Six rows report day-over-day differences in Wikipedia pageview request counts for \"Docker_(software)\" under the platform's own heuristic \"user\" requester classification; these are request counts, not reader counts, and the differences are movements within one source stream between adjacent calendar days, not a trend that is shown to continue or that reflects any commercial signal. One row reports a count (88) of Stack Overflow questions carrying the \"docker\" tag within a bounded window; this is a subject label from the site's own vocabulary, not a shared problem, and author identity is not captured, so distinct askers cannot be counted. Together these support only that a \"docker\"-labeled topic receives measured attention (AUDIENCE_OR_USAGE) and that some actor was sufficiently blocked or curious to file a public question (PROBLEM_OR_NEED) at least once within the window. No statement in the packet speaks to recurrence by the same actor, money changing hands, willingness to pay, existence of a buyer, competitive supply, distribution channels, regulatory drivers, dissatisfaction with existing solutions, or feasibility of any intervention. Both source families (forum, knowledge) carry UNKNOWN independence across all 7 rows; 6 of the 7 rows now resolve a reviewed reliability late from lineage and 1 does not, so quantitative aggregation is possible for part of this evidence and no scoring or confidence claim is attached to any of it here",
+      "supported_dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "PROBLEM_OR_NEED"
+      ],
+      "unsupported_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "COMPETITIVE_SUPPLY",
+        "DISTRIBUTION_SIGNAL",
+        "ECONOMIC_VALUE",
+        "FEASIBILITY_SIGNAL",
+        "MARKET_ACTIVITY",
+        "RECURRENCE_OR_FREQUENCY",
+        "REGULATORY_OR_STRUCTURAL_DRIVER",
+        "SOLUTION_DISSATISFACTION",
+        "SOLUTION_GAP",
+        "WILLINGNESS_TO_PAY",
+        "TREND_OR_CHANGE"
+      ],
+      "epistemic_limitations": [
+        "6 of 7 supporting Evidence rows carry a reviewed reliability (0.65), resolved late from their acquisition lineage and bound to the assessment that produced it (ADR-026, Mission 1.77); 1 remains NON_SCORABLE with no applicable assessment (stack-exchange). Scorable is not scored: REFERENCE_PROFILE_V1 is UNCALIBRATED, no Score exists in this repository, none is persisted, and no ranking exists.",
+        "independence_state is UNKNOWN for every supporting row. Two source families is diversity, never established independence, and the row count is not a count of independent findings.",
+        "market_scope is recorded GLOBAL because the column is NOT NULL and the evidence establishes no geography. Ontology V2 §4 defines GLOBAL as the ABSENCE of a geographic restriction; it is not a claim about a worldwide market.",
+        "The Stack Exchange count is a count of published questions, not of people, and not evidence that any two of them share a problem: that relation is PARKED (Mission 1.27).",
+        "The Wikimedia rows are day-over-day request differences under the platform's own heuristic requester class. Two of the six are decreases, and the calendar does not cancel."
+      ],
+      "uncertainties": [
+        "Whether any of the 88 tagged questions share the same underlying problem, or represent 88 distinct problems",
+        "Whether the same actor authored more than one of the 88 questions (author identity is not captured)",
+        "Whether pageview fluctuations reflect human readers, automated traffic, or a mix, given the heuristic requester classification",
+        "Whether any actor involved has budget or purchasing authority",
+        "Whether any money moves in connection with this topic",
+        "Whether existing solutions for whatever need drove the questions are adequate or inadequate",
+        "Whether actors are dissatisfied with anything they currently use",
+        "Whether the need recurs for the same actor over time or is a one-off",
+        "Whether any regulatory or structural driver shapes this activity",
+        "Whether any distribution channel exists to reach the actors who asked these questions",
+        "Whether an intervention of any kind is feasible to build or operate",
+        "Whether the pageview movements are attributable to any cause connected to the questions"
+      ],
+      "procedure_version": "opportunity-reliability-reconciliation@1.0.0|reason=RELIABILITY_APPLICABILITY_RECONCILIATION|prior_revision=efca07a9-b283-473a-887b-a2ae82989bbe|mission_finding=docs/data/wikimedia-measurement-scope-binding-v1.json|resolver=sros_evidence_reliability.lineage|preparation=opportunity-preparation@2.0.0|preparation_record=docs/data/opportunity-preparation-v2.json|census=rows:58,scoring:48|linked=7",
+      "model_version": null,
+      "prompt_version": null,
+      "research_session_id": null,
+      "created_at": "2026-09-09T21:16:39.041270+00:00",
+      "created_by": "mission-1.78"
+    },
+    "written_by_this_invocation": false,
+    "revision_1_after": {
+      "id": "efca07a9-b283-473a-887b-a2ae82989bbe",
+      "workspace_id": "00000000-0000-4000-8000-000000000001",
+      "opportunity_id": "06113a8b-a83d-423d-8046-18f87d7dbc01",
+      "revision": 1,
+      "target_actor": "UNKNOWN_NOT_SUPPORTED",
+      "observed_need_or_change": "The packet shows (a) day-to-day changes in request counts for the \"Docker_(software)\" Wikipedia article under the platform's own \"user\" requester class, and (b) 88 questions filed under the \"docker\" tag on Stack Overflow within a bounded window. Together these establish only that some attention exists toward a topic called \"docker\" (an encyclopedia article being requested, and public questions being filed under that subject tag) and that at least some of those questions reflect an actor filing a question -- i.e., some need or gap in understanding at the moment of asking. Neither the identity, role, nor recurrence of any actor is established.",
+      "candidate_intervention": "Not determinable beyond: any investigation would need to characterize what specific problem the class of \"docker\"-tagged questions represents before any intervention class could be named; the packet itself does not support naming a product, feature, or service class -- only that a topic attracts requests and that questions get filed under it.",
+      "hypothesis_statement": "There is evidence worth further investigation that some actors attend to the \"Docker_(software)\" Wikipedia article (with day-to-day request-count fluctuations under the platform's own heuristic requester classification) and that some actors file public questions tagged \"docker\" on Stack Overflow within a bounded window, indicating at least momentary unserved need at the point of asking; whether this reflects any recurring, severe, or commercially addressable need, and who the relevant actor is, is not established and would require further investigation before any intervention can be scoped.",
+      "reasoning_summary": "Six rows report day-over-day differences in Wikipedia pageview request counts for \"Docker_(software)\" under the platform's own heuristic \"user\" requester classification; these are request counts, not reader counts, and the differences are movements within one source stream between adjacent calendar days, not a trend that is shown to continue or that reflects any commercial signal. One row reports a count (88) of Stack Overflow questions carrying the \"docker\" tag within a bounded window; this is a subject label from the site's own vocabulary, not a shared problem, and author identity is not captured, so distinct askers cannot be counted. Together these support only that a \"docker\"-labeled topic receives measured attention (AUDIENCE_OR_USAGE) and that some actor was sufficiently blocked or curious to file a public question (PROBLEM_OR_NEED) at least once within the window. No statement in the packet speaks to recurrence by the same actor, money changing hands, willingness to pay, existence of a buyer, competitive supply, distribution channels, regulatory drivers, dissatisfaction with existing solutions, or feasibility of any intervention. Both source families (forum, knowledge) carry UNKNOWN independence and MISSING_RELIABILITY across all 7 rows, so no scoring or confidence claim can be attached to any of this.",
+      "supported_dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "PROBLEM_OR_NEED"
+      ],
+      "unsupported_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "COMPETITIVE_SUPPLY",
+        "DISTRIBUTION_SIGNAL",
+        "ECONOMIC_VALUE",
+        "FEASIBILITY_SIGNAL",
+        "MARKET_ACTIVITY",
+        "RECURRENCE_OR_FREQUENCY",
+        "REGULATORY_OR_STRUCTURAL_DRIVER",
+        "SOLUTION_DISSATISFACTION",
+        "SOLUTION_GAP",
+        "WILLINGNESS_TO_PAY",
+        "TREND_OR_CHANGE"
+      ],
+      "epistemic_limitations": [
+        "Every supporting Evidence row is ELIGIBLE_CONTEXT, NON_SCORABLE and MISSING_RELIABILITY: no reviewed reliability applies, so this hypothesis can contribute to no score.",
+        "independence_state is UNKNOWN for every supporting row. Two source families is diversity, never established independence, and the row count is not a count of independent findings.",
+        "market_scope is recorded GLOBAL because the column is NOT NULL and the evidence establishes no geography. Ontology V2 §4 defines GLOBAL as the ABSENCE of a geographic restriction; it is not a claim about a worldwide market.",
+        "The Stack Exchange count is a count of published questions, not of people, and not evidence that any two of them share a problem: that relation is PARKED (Mission 1.27).",
+        "The Wikimedia rows are day-over-day request differences under the platform's own heuristic requester class. Two of the six are decreases, and the calendar does not cancel."
+      ],
+      "uncertainties": [
+        "Whether any of the 88 tagged questions share the same underlying problem, or represent 88 distinct problems",
+        "Whether the same actor authored more than one of the 88 questions (author identity is not captured)",
+        "Whether pageview fluctuations reflect human readers, automated traffic, or a mix, given the heuristic requester classification",
+        "Whether any actor involved has budget or purchasing authority",
+        "Whether any money moves in connection with this topic",
+        "Whether existing solutions for whatever need drove the questions are adequate or inadequate",
+        "Whether actors are dissatisfied with anything they currently use",
+        "Whether the need recurs for the same actor over time or is a one-off",
+        "Whether any regulatory or structural driver shapes this activity",
+        "Whether any distribution channel exists to reach the actors who asked these questions",
+        "Whether an intervention of any kind is feasible to build or operate",
+        "Whether the pageview movements are attributable to any cause connected to the questions"
+      ],
+      "procedure_version": "opportunity-synthesis@1.0.0|opportunity-synthesis-audit@1.2.0|prompt=dfd28a0a77e2cae23a268e39eb1c432f23f905810b26dc129f6fd99f7491195e",
+      "model_version": "claude-sonnet-5",
+      "prompt_version": "1.0.0",
+      "research_session_id": null,
+      "created_at": "2026-09-02T19:51:57.812381+00:00",
+      "created_by": "mission-1.31.1"
+    },
+    "revision_1_byte_identical_after": true,
+    "newest_revision_by_index": {
+      "id": "8739e7ab-940b-408c-a5e8-7f6675d1597c",
+      "revision": 2
+    },
+    "links_written": [
+      {
+        "evidence_id": "13a5eadb-977d-4de0-9c35-d0ff53442074",
+        "eligibility_at_citation": "ELIGIBLE_SCORING"
+      },
+      {
+        "evidence_id": "16a8c39c-d72a-4252-9c67-7be2165e9cae",
+        "eligibility_at_citation": "ELIGIBLE_CONTEXT"
+      },
+      {
+        "evidence_id": "1b93db71-eaed-45c5-a2fa-9e4edea7bc49",
+        "eligibility_at_citation": "ELIGIBLE_SCORING"
+      },
+      {
+        "evidence_id": "487f62c6-2fcf-4790-9773-6e99214d0003",
+        "eligibility_at_citation": "ELIGIBLE_SCORING"
+      },
+      {
+        "evidence_id": "516182ff-0122-4d13-9d8a-92bb38065a75",
+        "eligibility_at_citation": "ELIGIBLE_SCORING"
+      },
+      {
+        "evidence_id": "6cf92ad6-77ed-4126-b356-41e65856430b",
+        "eligibility_at_citation": "ELIGIBLE_SCORING"
+      },
+      {
+        "evidence_id": "f1e0b7a4-d570-429a-91a4-fadff84cdce1",
+        "eligibility_at_citation": "ELIGIBLE_SCORING"
+      }
+    ],
+    "counters_after": {
+      "opportunities": 1,
+      "opportunity_revisions": 2,
+      "opportunity_evidence_links": 14,
+      "raw_records": 325,
+      "normalized_records": 325,
+      "signals": 33,
+      "claims": 44,
+      "claim_revisions": 45,
+      "evidence": 58,
+      "evidence_reliability_written": 0,
+      "reliability_assessments": 4,
+      "reliability_assessment_basis_rows": 12,
+      "independence_groups": 0,
+      "threshold_registrations": 1,
+      "claim_derivations": 1,
+      "proposition_evaluation_refusals": 0,
+      "embeddings": 0,
+      "sources": 29,
+      "source_reviews": 70,
+      "scores_table": "ABSENT"
+    }
+  },
+  "counters": {
+    "before_this_invocation": {
+      "opportunities": 1,
+      "opportunity_revisions": 2,
+      "opportunity_evidence_links": 14,
+      "raw_records": 325,
+      "normalized_records": 325,
+      "signals": 33,
+      "claims": 44,
+      "claim_revisions": 45,
+      "evidence": 58,
+      "evidence_reliability_written": 0,
+      "reliability_assessments": 4,
+      "reliability_assessment_basis_rows": 12,
+      "independence_groups": 0,
+      "threshold_registrations": 1,
+      "claim_derivations": 1,
+      "proposition_evaluation_refusals": 0,
+      "embeddings": 0,
+      "sources": 29,
+      "source_reviews": 70,
+      "scores_table": "ABSENT"
+    },
+    "after": {
+      "opportunities": 1,
+      "opportunity_revisions": 2,
+      "opportunity_evidence_links": 14,
+      "raw_records": 325,
+      "normalized_records": 325,
+      "signals": 33,
+      "claims": 44,
+      "claim_revisions": 45,
+      "evidence": 58,
+      "evidence_reliability_written": 0,
+      "reliability_assessments": 4,
+      "reliability_assessment_basis_rows": 12,
+      "independence_groups": 0,
+      "threshold_registrations": 1,
+      "claim_derivations": 1,
+      "proposition_evaluation_refusals": 0,
+      "embeddings": 0,
+      "sources": 29,
+      "source_reviews": 70,
+      "scores_table": "ABSENT"
+    },
+    "before_reconciliation": {
+      "opportunities": 1,
+      "opportunity_revisions": 1,
+      "opportunity_evidence_links": 7,
+      "raw_records": 325,
+      "normalized_records": 325,
+      "signals": 33,
+      "claims": 44,
+      "claim_revisions": 45,
+      "evidence": 58,
+      "evidence_reliability_written": 0,
+      "reliability_assessments": 4,
+      "reliability_assessment_basis_rows": 12,
+      "independence_groups": 0,
+      "threshold_registrations": 1,
+      "claim_derivations": 1,
+      "proposition_evaluation_refusals": 0,
+      "embeddings": 0,
+      "sources": 29,
+      "source_reviews": 70,
+      "scores_table": "ABSENT"
+    }
+  }
+}

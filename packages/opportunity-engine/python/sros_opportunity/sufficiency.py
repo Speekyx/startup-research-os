@@ -97,11 +97,16 @@ class SufficiencyResult:
 
     @property
     def scoring_ready(self) -> bool:
-        """Always False while any row lacks a reviewed reliability.
+        """At least the rule's minimum of rows carry a reviewed, resolved reliability.
 
-        Separate from `status` on purpose: §12 says formability alone must not
-        make a packet scoring-ready, and two properties that must not imply each
-        other should not share a field.
+        A property of the PACKET, and it authorises nothing: it says aggregation would
+        have enough scorable rows to run over, not that a score may be produced or
+        persisted -- `REFERENCE_PROFILE_V1` is UNCALIBRATED and no score exists.
+        Separate from `status` on purpose: §12 says formability alone must not make a
+        packet scoring-ready, and two properties that must not imply each other should
+        not share a field. (Mission 1.78 rewrote this docstring to say what the code has
+        done since Mission 1.28; it had read "always False while any row lacks a reviewed
+        reliability", which described the corpus of the time rather than the rule.)
         """
         return self.scoring_eligible_rows >= SUFFICIENCY_V1.min_eligible_rows
 
@@ -141,10 +146,13 @@ def evaluate(
         )
     else:
         status = HypothesisStatus.HYPOTHESIS_FORMABLE
+        # Mission 1.78. The wording follows the property rather than assuming its value:
+        # every packet before the late-resolution repair had 0 scoring rows, and the
+        # sentence had hard-coded that.
+        ready = "scoring-ready" if scoring >= rule.min_eligible_rows else "not scoring-ready"
         reasons.append(
             f"{eligible} eligible rows carrying {counting} counting dimensions. "
-            f"{scoring} of them are scoring-eligible, so this packet is formable and "
-            "not scoring-ready."
+            f"{scoring} of them are scoring-eligible, so this packet is formable and {ready}."
         )
 
     return SufficiencyResult(

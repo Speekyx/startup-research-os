@@ -34,7 +34,12 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 DOCS = ROOT / "docs" / "data"
 CATALOG = DOCS / "source-catalog-v1.json"
 SUBJECT_REGISTRY = DOCS / "canonical-subject-registry-v1.json"
-OUTPUT = DOCS / "opportunity-preparation-v1.json"
+# Mission 1.78. The v1 record is the Mission 1.28 to 1.34 view of a 28-row corpus, read
+# through the stored reliability column; it is history and is never rewritten. The current
+# view is written beside it as v2, and carries a pointer back.
+HISTORICAL_V1 = DOCS / "opportunity-preparation-v1.json"
+OUTPUT = DOCS / "opportunity-preparation-v2.json"
+ARTIFACT_VERSION = "opportunity-preparation@2.0.0"
 
 DEFAULT_USE_PROFILE = "local-private-research-v1"
 
@@ -363,6 +368,7 @@ def build_report(use_profile: str) -> dict[str, object]:
                 "packet_id": packet.packet_id,
                 "subject": packet.subject_label,
                 "size": packet.size,
+                "evidence_ids": list(packet.evidence_ids),
                 "canonical_subject_id": group.canonical_subject_id,
                 "source_ids": list(packet.source_ids),
                 "source_families": list(packet.source_families),
@@ -404,7 +410,15 @@ def build_report(use_profile: str) -> dict[str, object]:
         family_totals[key] = family_totals.get(key, 0) + 1
 
     return {
-        "mission": "1.28",
+        "$comment": (
+            "The CURRENT deterministic preparation view over the whole Evidence corpus, "
+            "reliability resolved late from lineage (Mission 1.77). Supersedes the v1 record, "
+            "which stays as the historical view and is not rewritten."
+        ),
+        "artifact_version": ARTIFACT_VERSION,
+        "supersedes": f"docs/data/{HISTORICAL_V1.name}",
+        "mission": "1.78",
+        "reliability_resolution_path": "LINEAGE_LATE_RESOLUTION (sros_evidence_reliability.lineage)",
         "use_profile_id": use_profile,
         "use_profile_note": (
             "DECLARED by the runtime, never inferred (ADR-027). The Evidence rows do "
