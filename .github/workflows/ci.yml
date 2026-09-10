@@ -672,6 +672,21 @@ jobs:
       - name: Globalping residual closure matches its records
         run: uv run python infrastructure/scripts/render_globalping_residuals.py --check
 
+      # Mission 1.83.1. The operator's approval of the frozen egress packet, and what the
+      # registry did about it. The gate refuses: an approval whose digest does not recompute from
+      # the packet's own bound fields, or that cites a hash the packet does not have, or that
+      # names a packet file whose bytes have moved; an approval written into the document it
+      # approves; an acceptance text that does not name the packet, the decision and the subject,
+      # or that does not hash to its recorded digest; a machine recorded as the reviewer or a
+      # verifier clearing a human condition; review v3 edited rather than superseded, a condition
+      # dropped, an adopted condition reworded, or an assessment other than the reviewed activity
+      # moved; a compliance configuration re-pointed without the re-check, or past a capability
+      # condition it never answered; training, fine-tuning, embeddings, redistribution, customer
+      # access, another packet, another purpose or the commercial profile widened; and any
+      # transmitted byte, model call, Opportunity, research acquisition or parked-arc change.
+      - name: The TED egress decision and its persistence match their records
+        run: uv run python infrastructure/scripts/render_ted_egress_decision_persistence.py --check
+
       # Mission 1.83. The TED selected-candidate egress review, and the frozen operator
       # decision packet it prepares rather than takes. The gate refuses: a review that widened
       # its own scope past one source, one profile, one activity, one purpose and one subject;

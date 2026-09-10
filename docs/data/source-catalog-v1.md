@@ -1443,6 +1443,7 @@ The EU's official public procurement journal. Contract award notices record what
 | 1 | 2026-08-31 | `mission-1.15.5` | `APPROVED_WITH_CONDITIONS` | 4 |
 | 2 | 2026-08-31 | `mission-1.15.6` | `APPROVED_WITH_CONDITIONS` | 4 |
 | 3 | 2026-09-04 | `mission-1.45` | `APPROVED_WITH_CONDITIONS` | 7 |
+| 4 | 2026-09-10 | `mission-1.83.1` | `APPROVED_WITH_CONDITIONS` | 7 |
 
 **Access profiles** (how, not whether)
 

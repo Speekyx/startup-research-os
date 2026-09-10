@@ -1,0 +1,262 @@
+{
+  "$comment": "Mission 1.83.1. The operator approved TED-EGRESS-OPPSYNTH-V1 and this mission persisted it: verify the digest, append a review successor, re-verify the capability conditions against the successor, re-record the two human confirmations from the operator's own text, and stop. No model was called, no Opportunity was created, no research data was acquired and no canonical research row moved.",
+  "record_version": "ted-egress-decision-persistence@1.0.0",
+  "mission": "1.83.1",
+  "recorded_at": "2026-09-10",
+  "record_kind": "SOURCE_GOVERNANCE_PERSISTENCE",
+  "start_commit": "78ce9d0",
+  "branch": "sprint-1/mission-1.83.1",
+  "migration_head": "0036_grant_use_profile_vocabulary",
+  "primary_outcome": "TED_EGRESS_PERMITTED_WITH_CONDITIONS_AND_ELIGIBILITY_RESTORED",
+  "outcome_basis": "the approval was verified against the packet rather than trusted, the successor was appended rather than v3 edited, the compliance configuration was re-pointed by performing the re-check rather than by bumping a number, and both human confirmations were re-recorded from the operator's verbatim statement. Every gate now passes and nothing has been sent",
+  "verification_before_writing": {
+    "$comment": "a quoted digest is recomputed, never copied. Both values are kept",
+    "DECISION_PACKET_ID": "TED-EGRESS-OPPSYNTH-V1",
+    "DECISION_PACKET_VERSION": 1,
+    "DECISION_PACKET_SHA256_STATED": "f27c34460f413def15c260e72fd2261a1fba666b574e9e2ee60bf7ef38a39577",
+    "DECISION_PACKET_SHA256_RECOMPUTED": "f27c34460f413def15c260e72fd2261a1fba666b574e9e2ee60bf7ef38a39577",
+    "DIGEST_MATCHES": true,
+    "VERSION_UNCHANGED": true,
+    "PACKET_EDITED": false,
+    "PACKET_APPROVAL_RECORDED_FIELD": false,
+    "packet_field_note": "still false, and that is correct. It means THIS DOCUMENT RECORDS NO APPROVAL, never that none exists; the approval lives beside it in ted-egress-operator-decision-v1.json",
+    "REPRESENTATION_SHA256_APPROVED": "2528a56a4a9e873bfd04662aeb52916eb80faafe10ab085e716cbdcee77c5b72",
+    "REPRESENTATION_SHA256_REMEASURED": "2528a56a4a9e873bfd04662aeb52916eb80faafe10ab085e716cbdcee77c5b72",
+    "REPRESENTATION_UNCHANGED": true,
+    "representation_note": "re-measured through the current deterministic path after the append, and identical. An approval that named a payload the repository no longer produces would be an approval of something else",
+    "ACCEPTANCE_SHA256": "ea589bba5f8be85e1052f205a4b94301c1d0cef9f8ccc93c747015ce820a6908"
+  },
+  "append_not_edit": {
+    "$comment": "a review is appended and superseded, never rewritten",
+    "review_before": 3,
+    "review_after": 4,
+    "v3_content_changed": false,
+    "v3_content_proof": "the committed catalog was read out of git and compared review by review: 9 reviews before, 10 after, exactly one added, none removed, and zero pre-existing reviews changed by a single byte. No non-review field of ted-eu moved and no other source was touched",
+    "v3_superseded_at_set": true,
+    "supersession_note": "v3's superseded_at moved from null to a timestamp, which is the supersession mechanism rather than an edit. Its assessments, conditions, open questions and evidence rows are untouched, and it still records what it recorded",
+    "assessments_changed": [
+      "external_model_transmission"
+    ],
+    "assessments_unchanged_count": 21,
+    "external_model_transmission_before": "NOT_ASSESSED",
+    "external_model_transmission_after": "PERMITTED_WITH_CONDITIONS",
+    "before_note": "v3 does not DECLARE the field at all. Absent means unasked, and the loader resolves an absent assessment to NOT_ASSESSED, which is what the registry reported",
+    "conditions_before": 18,
+    "conditions_after": 28,
+    "conditions_carried_verbatim": true,
+    "conditions_added": 10,
+    "conditions_added_note": "the eight the operator adopted, each carried verbatim and each labelled with the packet id, version and digest it came from, plus two notes: one recording that the transmission decision widens nothing, and one recording why the two representation-bound conditions are enforced by code rather than by a registry verifier",
+    "required_conditions_before": 4,
+    "required_conditions_after": 5,
+    "required_condition_added": "ted-external-model-transmission-accepted",
+    "required_condition_added_note": "a SEPARATE condition rather than a widening of ted-database-right-residual-exposure-accepted. That acceptance was written for BOUNDED QUERIES through the authorised acquisition routes, and a transmission to a processor is neither a query nor the same counterparty. Widening an existing human acceptance to cover a new act is what Mission 1.83 refused to do on the operator's behalf, and appending a second condition is what doing it honestly looks like",
+    "open_questions_before": 7,
+    "open_questions_after": 10,
+    "open_questions_added_note": "three, and each says what the permission does NOT resolve: H-36A is still not established, the instrument still does not address onward transmission, and whether this generalises to another packet is deliberately unanswered",
+    "evidence_rows_changed": false,
+    "evidence_note": "no new document was retrieved, so the documentary basis is v3's exactly"
+  },
+  "compliance_reconciliation": {
+    "$comment": "Mission 1.47 established that a compliance configuration is pinned to a review version because a re-review can change what a condition MEANS. The repair is to PERFORM the re-check, not to bump the number",
+    "pinned_before": 3,
+    "pinned_after": 4,
+    "re_check_performed": true,
+    "capability_conditions_compared": [
+      "ted-attribution",
+      "ted-official-route-only",
+      "ted-personal-data-minimisation"
+    ],
+    "capability_conditions_byte_identical": true,
+    "required_conditions_removed": [],
+    "required_conditions_added": [
+      "ted-external-model-transmission-accepted"
+    ],
+    "added_condition_verification_kind": "HUMAN_CONFIRMATION",
+    "why_the_re_point_is_honest": "the three conditions this configuration answers are byte-identical between v3 and v4, asserted against the catalog rather than assumed. The one condition v4 adds is HUMAN_CONFIRMATION, which no configuration can answer and none here pretends to. Had v4 added a CAPABILITY condition, re-pointing would have verified something else"
+  },
+  "conditions_after_persistence": {
+    "$comment": "five required conditions, all satisfied, by two different kinds of act",
+    "ted-attribution": {
+      "verification": "CAPABILITY",
+      "verifier": "capability:source-attribution-display",
+      "result": "SATISFIED"
+    },
+    "ted-official-route-only": {
+      "verification": "CAPABILITY",
+      "verifier": "capability:source-route-binding",
+      "result": "SATISFIED"
+    },
+    "ted-personal-data-minimisation": {
+      "verification": "CAPABILITY",
+      "verifier": "capability:source-field-minimisation",
+      "result": "SATISFIED"
+    },
+    "ted-database-right-residual-exposure-accepted": {
+      "verification": "HUMAN_CONFIRMATION",
+      "verifier": "local-operator",
+      "verifier_version": "ted-v4-egress-approval-v1",
+      "result": "SATISFIED"
+    },
+    "ted-external-model-transmission-accepted": {
+      "verification": "HUMAN_CONFIRMATION",
+      "verifier": "local-operator",
+      "verifier_version": "ted-v4-egress-approval-v1",
+      "result": "SATISFIED"
+    },
+    "human_confirmations_recorded": 2,
+    "human_confirmations_rest_on_one_statement": true,
+    "one_statement_note": "the operator wrote ONE approval and it covers both: the database-right residual and the onward transmission. Both rows carry it verbatim, and the record says they rest on one act rather than splitting it into two sentences nobody wrote",
+    "verifier_version_names_which_text": "ted-v4-egress-approval-v1, not the v3 identifier, because that one belongs to a materially different statement about a materially different act",
+    "machine_recorded_a_human_condition": false,
+    "verifier_cleared_a_human_condition": false
+  },
+  "gates_after": {
+    "$comment": "measured through the repository's own CLI, and nothing was sent",
+    "source_transmission": "PERMITTED_WITH_CONDITIONS",
+    "profile_egress": "PERMITTED_TO_APPROVED_PROVIDERS",
+    "provider_posture": "APPROVED",
+    "provider_configured": true,
+    "inference_authorization": "AUTHORIZED",
+    "eligibility_before": "BLOCKED",
+    "eligibility_after": "ELIGIBLE",
+    "eligibility_blocked_reason_before": "review conditions not satisfied: ted-attribution, ted-database-right-residual-exposure-accepted, ted-external-model-transmission-accepted, ted-official-route-only, ted-personal-data-minimisation",
+    "packet_gate_before": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+    "packet_gate_after": "AVAILABLE",
+    "packet_gate_note": "the selected packet's own gate, evaluated in memory over the live standings. AVAILABLE is a permission and not an act: nothing was serialised for a provider, no request was composed and no byte left this machine",
+    "bytes_transmitted_to_any_external_model": 0
+  },
+  "what_was_not_authorised": {
+    "$comment": "the operator's own list, carried verbatim into the record and the review",
+    "items": [
+      "model training",
+      "fine-tuning",
+      "embeddings",
+      "public redistribution",
+      "resale",
+      "customer-facing TED source-data access",
+      "another TED packet",
+      "another processing purpose",
+      "commercial-multi-tenant-research-v1",
+      "transmission to a provider whose current reviewed posture is not APPROVED"
+    ],
+    "model_training": "NOT_ASSESSED",
+    "fine_tuning": "NOT_ASSESSED",
+    "embeddings": "NOT_ASSESSED",
+    "public_redistribution": "NOT_PERMITTED",
+    "customer_facing_source_data": "NOT_PERMITTED",
+    "commercial_profile_state": "REQUIRES_REVIEW, unchanged and not inherited",
+    "another_ted_packet": "not authorised; the approval names one subject and one digest",
+    "another_processing_purpose": "not authorised; a different purpose is a different assessment",
+    "widened_by_this_mission": 0
+  },
+  "canonical_state": {
+    "before": {
+      "raw_records": 325,
+      "normalized_records": 325,
+      "signals": 60,
+      "claims": 91,
+      "claim_revisions": 92,
+      "evidence": 112,
+      "reliability_assessments": 4,
+      "independence_groups": 0,
+      "opportunities": 1,
+      "opportunity_revisions": 2,
+      "opportunity_evidence_links": 14,
+      "source_reviews": 70,
+      "scores_table": "ABSENT",
+      "embeddings": 0
+    },
+    "after": {
+      "raw_records": 325,
+      "normalized_records": 325,
+      "signals": 60,
+      "claims": 91,
+      "claim_revisions": 92,
+      "evidence": 112,
+      "reliability_assessments": 4,
+      "independence_groups": 0,
+      "opportunities": 1,
+      "opportunity_revisions": 2,
+      "opportunity_evidence_links": 14,
+      "source_reviews": 71,
+      "scores_table": "ABSENT",
+      "embeddings": 0
+    },
+    "CANONICAL_RESEARCH_MUTATION": 0,
+    "governance_rows_written": {
+      "source_policy_reviews": 1,
+      "source_review_conditions": 5,
+      "source_condition_verifications": 5
+    },
+    "governance_note": "the only rows this mission wrote are governance rows, and they are the point. Every research counter is identical before and after"
+  },
+  "mission_accounting": {
+    "MODEL_CALLS": 0,
+    "embeddings_created": 0,
+    "research_data_fetches": 0,
+    "ted_api_calls": 0,
+    "ted_bulk_downloads": 0,
+    "new_raw_records": 0,
+    "new_normalized_records": 0,
+    "documentation_fetches": 0,
+    "opportunities_created": 0,
+    "opportunity_revisions_created": 0,
+    "opportunity_links_created": 0,
+    "reliability_assessments_created": 0,
+    "independence_groups_created": 0,
+    "scores_persisted": 0,
+    "hypotheses_synthesized": 0,
+    "bytes_transmitted_to_any_external_model": 0
+  },
+  "known_consequence_not_repaired": {
+    "$comment": "recorded rather than silently fixed, because fixing it is a different mission's work",
+    "artifact": "docs/data/opportunity-preparation-v4.json",
+    "what_is_now_stale": "every TED packet's external_synthesis block in the v4 preparation records UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS with the NOT_ASSESSED reason, which was true when Mission 1.82 wrote it and is no longer the live state",
+    "why_not_regenerated": "a historical preparation is never rewritten, which is why v1, v2 and v3 are byte-identical across four missions. The next preparation run writes v5, and it belongs to the mission that needs it rather than to this one. Regenerating in passing would also change 21 packets' blocks as a side effect of a governance act",
+    "records_that_stay_true_about_their_own_moment": [
+      "docs/data/procurement-subject-semantics-class-grain-v1.json: egress NOT_ASSESSED and not decided BY THAT MISSION",
+      "docs/data/ted-selected-candidate-egress-review-v1.json: the state before the decision"
+    ]
+  },
+  "parked_states_preserved": {
+    "changed_by_this_mission": false,
+    "q1": {
+      "QUANTITY_CLASS_SELECTED": "Q1",
+      "CLASS_SELECTED": true,
+      "CONSTRUCT_SELECTED": false,
+      "RUN_AUTHORIZED": false
+    },
+    "globalping": {
+      "PASS": 12,
+      "PARTIAL": 0,
+      "FAIL": 0,
+      "verdict": "COUNTERPART_RESOLVED"
+    },
+    "v2": {
+      "primary_outcome": "V2_VALID_FOR_REFUTATION_BUT_NOT_INDEPENDENT_SUPPORT",
+      "corpus_frozen": false,
+      "measurements_executed": 0
+    }
+  },
+  "selected_candidate_unchanged": {
+    "SELECTED_SUBJECT": "ted-eu:CPV-class:9261",
+    "SELECTED_LABEL": "Sports facilities operation services",
+    "candidate_ranking_reopened": false,
+    "descended_to_category_grain": false
+  },
+  "recommended_next_mission": {
+    "id": "1.84",
+    "title": "Second Opportunity Bounded Synthesis V1",
+    "shape": "regenerate the preparation as v5 so the egress blocks describe the live state, then run ONE attended bounded synthesis over the selected packet through the approved route, under a frozen output gate, and persist an Opportunity hypothesis only if that gate accepts it",
+    "must_not": [
+      "transmit any packet other than the approved digest",
+      "widen the purpose",
+      "create embeddings",
+      "train or fine-tune",
+      "score or rank",
+      "acquire research data"
+    ],
+    "note": "permission makes synthesis reachable and does not make it correct. The Evidence still establishes market activity, buyer or budget existence and economic value, and still establishes no demand, no willingness to pay and no unmet need"
+  },
+  "CONTENT_SHA256": "7163993b503e5baff98fec640dc05e5cbd4d4bce678c6eab4f4d20698b96faa1"
+}

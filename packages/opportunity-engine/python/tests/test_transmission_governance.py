@@ -93,18 +93,38 @@ class TestEveryTargetSourceHasAnExplicitDecision:
         # version, which is stronger than naming one.
         for past in _local_reviews(TED_STAYS_UNASSESSED):
             assert past["reviewed_by"] != "mission-1.29", past["review_version"]
-        review = _current(TED_STAYS_UNASSESSED)
-        assert review.get("external_model_transmission") in (None, "NOT_ASSESSED")
+        # RE-POINTED BY MISSION 1.83.1, which is the moment this tripwire was installed for.
+        # TED's egress is no longer unassessed, and what this test protects survives: every
+        # review that leaves it unasked, and the one that answers it does so on an operator
+        # decision rather than on a mission's own authority. A test pinned to NOT_ASSESSED
+        # forever is a test asserting the question may never be answered.
+        answered = [
+            r
+            for r in _local_reviews(TED_STAYS_UNASSESSED)
+            if r.get("external_model_transmission")
+            not in (None, "NOT_ASSESSED", "NOT_ADDRESSED", "UNCLEAR")
+        ]
+        for review in answered:
+            keys = {c["key"] for c in review["required_conditions"]}
+            assert "ted-external-model-transmission-accepted" in keys, review["review_version"]
+            condition = next(
+                c
+                for c in review["required_conditions"]
+                if c["key"] == "ted-external-model-transmission-accepted"
+            )
+            assert condition["verification"] == "HUMAN_CONFIRMATION", review["review_version"]
         # And the acceptance that would have been orphaned is still the one that
-        # makes TED acquirable, carried on this same review.
-        keys = {c["key"] for c in review["required_conditions"]}
-        assert "ted-database-right-residual-exposure-accepted" in keys
+        # makes TED acquirable, carried on every local review including the current one.
+        for review in _local_reviews(TED_STAYS_UNASSESSED):
+            keys = {c["key"] for c in review["required_conditions"]}
+            assert "ted-database-right-residual-exposure-accepted" in keys
 
     def test_a_source_outside_the_scope_is_untouched(self) -> None:
         """§2 named four sources and three could be recorded. Everything else
         keeps whatever it had, and for every source but Stack Exchange that is
         NOT_ASSESSED."""
-        assessed = set(EXPECTED_DECISIONS) | {"stack-exchange"}
+        # Mission 1.83.1 added TED on an operator decision, so it is assessed now too.
+        assessed = set(EXPECTED_DECISIONS) | {"stack-exchange", "ted-eu"}
         for source in _catalog()["sources"]:
             if source["source_id"] in assessed:
                 continue
@@ -234,7 +254,11 @@ class TestHistoryIsPreserved:
             "ted-database-right-residual-exposure-accepted",
         }
         assert {c["key"] for c in untouched["required_conditions"]} == expected
-        assert {c["key"] for c in _current("ted-eu")["required_conditions"]} == expected
+        # RE-POINTED BY MISSION 1.83.1. The current review REQUIRES all four and adds one, so
+        # the property this asserted -- that no later bump may drop a condition Mission 1.29
+        # relied on -- is a subset check rather than an equality. Equality would say a review
+        # may never require anything more, which is a different and false claim.
+        assert expected <= {c["key"] for c in _current("ted-eu")["required_conditions"]}
         joined = " ".join(untouched["open_questions"])
         assert "H-36A" in joined and "NOT ESTABLISHED" in joined
         assert "H-36B" in joined and "NOT ADDRESSED" in joined

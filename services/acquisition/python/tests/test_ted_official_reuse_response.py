@@ -317,7 +317,10 @@ class TestProfilesAreEvaluatedIndependently:
     def test_the_local_profile_is_still_approving_with_conditions(self, catalog) -> None:
         review = current(catalog, LOCAL_PROFILE)
         assert review.approval_state is SourceApprovalState.APPROVED_WITH_CONDITIONS
-        assert review.reviewed_by == "mission-1.45"
+        # RE-POINTED BY MISSION 1.83.1, which appended v4 on an operator decision. What this
+        # asserted is that the LOCAL profile is evaluated on its own and stays approving; naming
+        # the mission that happened to be current pins the profile to one author for ever.
+        assert review.reviewed_by in ("mission-1.45", "mission-1.83.1")
 
     def test_the_commercial_profile_is_still_requires_review(self, catalog) -> None:
         """Commercial purpose is now first-party supported. Commercial purpose is
@@ -354,7 +357,10 @@ class TestProfilesAreEvaluatedIndependently:
             )
             return {c.key: c.verification.value for c in review.required_conditions}
 
-        assert keys(2) == keys(current_review_version())
+        # RE-POINTED BY MISSION 1.83.1. The property is that a bump never DROPS a condition,
+        # which is what made Mission 1.45's own bump honest. Equality also says a review may
+        # never require anything more, which is a different and false claim.
+        assert keys(2).items() <= keys(current_review_version()).items()
 
 
 # ============================================ nothing downstream was touched
@@ -454,8 +460,13 @@ class TestHistoricalTruth:
     def test_every_earlier_review_is_untouched(self, catalog) -> None:
         history = source_of(catalog).review_history
         earlier = [r for r in history if r.reviewed_by != "mission-1.45"]
-        assert len(earlier) == 7, [r.reviewed_by for r in earlier]
+        # RE-POINTED BY MISSION 1.83.1: every review this mission did not write, however
+        # many exist. A pinned total asserts the registry may never grow, and the property is
+        # that each one predates the reply it could not have known about.
+        assert len(earlier) == len(history) - 2, [r.reviewed_by for r in earlier]
         for review in earlier:
+            if review.reviewed_by == "mission-1.83.1":
+                continue
             assert review.reviewed_at.date().isoformat() < REPLY_DATE
 
     def test_the_reply_is_append_only(self, catalog) -> None:
@@ -468,7 +479,11 @@ class TestHistoricalTruth:
                 for r in history
                 if r.assessed_use_profile == review.assessed_use_profile
             ]
-            assert review.review_version == max(line)
+            # RE-POINTED BY MISSION 1.83.1, which appended v4 above Mission 1.45's v3. The
+            # property is that the line is unbroken and that this mission's review is still in
+            # it, not that it is forever the newest. A test pinning a review as the last one
+            # asserts the source may never be reviewed again.
+            assert review.review_version in line
             assert sorted(line) == list(range(1, len(line) + 1))
 
     def test_the_unsent_request_document_still_claims_nothing_was_sent(self) -> None:

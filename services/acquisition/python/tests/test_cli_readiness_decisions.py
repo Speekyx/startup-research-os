@@ -34,7 +34,13 @@ from sros_acquisition.cli import main
 from sros_acquisition.compliance.verification import ConditionVerificationRecord
 from sros_contracts import ConditionVerification, ConditionVerificationResult
 
-from .conftest import LEGACY_PROFILE, LOCAL_PROFILE, REPO_ROOT, current_review_version
+from .conftest import (
+    LEGACY_PROFILE,
+    LOCAL_PROFILE,
+    REPO_ROOT,
+    current_review_version,
+    human_condition_keys,
+)
 
 CATALOG = REPO_ROOT / "docs" / "data" / "source-catalog-v1.json"
 COMPLIANCE = REPO_ROOT / "docs" / "data" / "source-compliance-v1.json"
@@ -82,13 +88,25 @@ def decision(
     )
 
 
+def all_human_decisions(**kwargs) -> tuple[ConditionVerificationRecord, ...]:
+    """One recorded decision per human condition, which is what a complete deployment holds.
+
+    Mission 1.83.1 re-pointed this from the single decision the fixture used to install. A
+    deployment holding one of two answers is one the gate is right to refuse, and a fixture
+    that supplies one reports its own gap as a gate failure.
+    """
+    return tuple(decision(condition_key=key, **kwargs) for key in human_condition_keys())
+
+
 @pytest.fixture
 def holds_the_decision(monkeypatch):
     """A deployment where the operator recorded their acceptance."""
 
     def _install(*records: ConditionVerificationRecord) -> None:
         monkeypatch.setattr(
-            cli, "_recorded_decisions", lambda source, profile: tuple(records) or (decision(),)
+            cli,
+            "_recorded_decisions",
+            lambda source, profile: tuple(records) or all_human_decisions(),
         )
 
     _install()
@@ -274,8 +292,11 @@ class TestASuppliedRecordAuthorisesNothingByItself:
         """The rule that stops the parameter from becoming a bypass. A record
         naming a `CAPABILITY` condition is refused however it arrives, so a
         report can never be talked into eligibility by handing it one."""
+        # RE-POINTED BY MISSION 1.83.1: every human decision, plus the CAPABILITY record whose
+        # rejection is the point. Supplying one of two human decisions would make the source
+        # blocked for an unrelated reason and hide what this test is isolating.
         holds_the_decision(
-            decision(),
+            *all_human_decisions(),
             decision(condition_key=ATTRIBUTION, verification=ConditionVerification.CAPABILITY),
         )
         out, _ = run(capsys, "--use-profile", LOCAL_PROFILE, "readiness", "ted-eu")

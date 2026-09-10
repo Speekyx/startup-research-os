@@ -191,7 +191,9 @@ class TestTheDecisionIsStillTheHumansAlone:
         recorded decision, which is what the parameter exists for."""
         with pytest.raises(AcquisitionNotAuthorizedError) as caught:
             build_authorization(ted, LOCAL_PROFILE, compliance, environ={})
-        assert caught.value.reasons == (f"review conditions not satisfied: {RESIDUAL}",)
+        (reason,) = caught.value.reasons
+        assert reason.startswith("review conditions not satisfied: ")
+        assert RESIDUAL in reason
 
     def test_the_three_machine_conditions_are_satisfied_by_verifiers(self, records) -> None:
         by_key = {r.condition_key: r for r in records}
@@ -359,45 +361,64 @@ class TestTheAuthorizationBuilds:
         """Live capability results + the recorded human decision, read back."""
         import psycopg
 
+        # RE-POINTED BY MISSION 1.83.1. EVERY human condition the CURRENT review requires, at
+        # the review version the catalog currently carries. A fixture naming one key and one
+        # version supplies an incomplete authorization the moment a successor adds a condition,
+        # and reports it as a gate failure rather than as its own gap.
+        review = ted.review_for(LOCAL_PROFILE)
+        human_keys = sorted(
+            c.key
+            for c in review.required_conditions
+            if c.verification is ConditionVerification.HUMAN_CONFIRMATION
+        )
         live = [
             record
             for record in verify_source(ted, LOCAL_PROFILE, compliance, environ={})
-            if record.condition_key != RESIDUAL
+            if record.condition_key not in human_keys
         ]
+        recorded = []
         with psycopg.connect(DATABASE_URL) as conn:
-            row = conn.execute(
-                """SELECT v.verifier, v.verifier_version, v.result, v.reason, v.reference,
-                          v.verified_at
-                     FROM registry.source_condition_verifications v
-                     JOIN registry.source_review_conditions c ON c.id = v.condition_id
-                     JOIN registry.source_policy_reviews r ON r.id = c.review_id
-                    WHERE v.condition_key = %s AND r.assessed_use_profile = %s
-                      AND r.review_version = 2""",
-                (RESIDUAL, LOCAL_PROFILE),
-            ).fetchone()
-        assert row is not None, "no recorded acceptance to read back"
-        recorded = ConditionVerificationRecord(
-            source_id="ted-eu",
-            review_version=2,
-            condition_key=RESIDUAL,
-            verification=ConditionVerification.HUMAN_CONFIRMATION,
-            verifier=row[0],
-            verifier_version=row[1],
-            result=ConditionVerificationResult(row[2]),
-            reason=row[3],
-            reference=row[4],
-            verified_at=row[5],
-        )
-        return (*live, recorded)
+            version = conn.execute(
+                """SELECT review_version FROM registry.source_policy_reviews
+                    WHERE source_id = 'ted-eu' AND assessed_use_profile = %s
+                      AND superseded_at IS NULL""",
+                (LOCAL_PROFILE,),
+            ).fetchone()[0]
+            for key in human_keys:
+                row = conn.execute(
+                    """SELECT v.verifier, v.verifier_version, v.result, v.reason, v.reference,
+                              v.verified_at
+                         FROM registry.source_condition_verifications v
+                         JOIN registry.source_review_conditions c ON c.id = v.condition_id
+                         JOIN registry.source_policy_reviews r ON r.id = c.review_id
+                        WHERE v.condition_key = %s AND r.assessed_use_profile = %s
+                          AND r.review_version = %s""",
+                    (key, LOCAL_PROFILE, version),
+                ).fetchone()
+                assert row is not None, f"no recorded acceptance to read back for {key}"
+                recorded.append(
+                    ConditionVerificationRecord(
+                        source_id="ted-eu",
+                        review_version=version,
+                        condition_key=key,
+                        verification=ConditionVerification.HUMAN_CONFIRMATION,
+                        verifier=row[0],
+                        verifier_version=row[1],
+                        result=ConditionVerificationResult(row[2]),
+                        reason=row[3],
+                        reference=row[4],
+                        verified_at=row[5],
+                    )
+                )
+        return (*live, *recorded)
 
-    def test_all_four_conditions_are_satisfied(self, complete) -> None:
-        assert len(complete) == 4
-        assert satisfied_condition_keys(complete) == {
-            "ted-attribution",
-            ROUTE_ONLY,
-            MINIMISATION,
-            RESIDUAL,
-        }
+    def test_every_required_condition_is_satisfied(self, ted, complete) -> None:
+        """RE-POINTED BY MISSION 1.83.1: one satisfied record per required condition, however
+        many the review requires. A pinned four asserts the review may never require another."""
+        required = {c.key for c in ted.review_for(LOCAL_PROFILE).required_conditions}
+        assert len(complete) == len(required)
+        assert satisfied_condition_keys(complete) == required
+        assert {"ted-attribution", ROUTE_ONLY, MINIMISATION, RESIDUAL} <= required
 
     def test_the_gate_passes(self, ted, complete) -> None:
         """Asserted BEFORE the authorization, so the authorization is shown to
@@ -546,7 +567,9 @@ class TestTheAcceptanceIsDeploymentStateEitherWay:
             pytest.skip("an acceptance is recorded in this deployment")
         with pytest.raises(AcquisitionNotAuthorizedError) as caught:
             build_authorization(ted, LOCAL_PROFILE, compliance, environ={})
-        assert caught.value.reasons == (f"review conditions not satisfied: {RESIDUAL}",)
+        (reason,) = caught.value.reasons
+        assert reason.startswith("review conditions not satisfied: ")
+        assert RESIDUAL in reason
 
 
 # =================================================== H-36 is unchanged

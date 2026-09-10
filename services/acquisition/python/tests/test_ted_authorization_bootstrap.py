@@ -645,36 +645,55 @@ class TestCrossProfileIsolation:
 # ============================================ the gate, and what still blocks
 
 
-class TestOneHumanDecisionRemains:
-    def test_exactly_one_condition_is_outstanding(self, local_verifications) -> None:
-        """§14. The preferred result, asserted rather than described."""
-        outstanding = {
-            record.condition_key for record in local_verifications if not record.satisfied
-        }
-        assert outstanding == {RESIDUAL}
+class TestOnlyHumanDecisionsRemain:
+    """RE-POINTED BY MISSION 1.83.1, which added a second human condition on an operator
+    decision. These asserted "exactly one", which was true and which pins the registry to a
+    count. What they were protecting is that whatever remains outstanding is a HUMAN decision
+    and that no verifier can produce one, and that survives however many there are."""
 
-    def test_exactly_one_condition_is_a_human_decision(self, ted) -> None:
+    def test_everything_outstanding_is_a_human_decision(self, ted, local_verifications) -> None:
+        """§14. The preferred result, asserted rather than described."""
         review = ted.review_for(LOCAL_PROFILE)
         human = {
             c.key
             for c in review.required_conditions
             if c.verification is ConditionVerification.HUMAN_CONFIRMATION
         }
-        assert human == {RESIDUAL}
+        outstanding = {
+            record.condition_key for record in local_verifications if not record.satisfied
+        }
+        assert outstanding
+        assert outstanding == human
+
+    def test_the_residual_acceptance_is_among_them_and_stays_human(self, ted) -> None:
+        review = ted.review_for(LOCAL_PROFILE)
+        human = {
+            c.key
+            for c in review.required_conditions
+            if c.verification is ConditionVerification.HUMAN_CONFIRMATION
+        }
+        assert RESIDUAL in human
 
     def test_ted_is_still_not_eligible(self, ted, local_verifications) -> None:
         result = evaluate_eligibility(
             ted, LOCAL_PROFILE, None, satisfied_condition_keys(local_verifications)
         )
         assert not result.eligible
-        assert result.blocking_reasons == (f"review conditions not satisfied: {RESIDUAL}",)
+        outstanding = sorted(
+            record.condition_key for record in local_verifications if not record.satisfied
+        )
+        assert result.blocking_reasons == (
+            f"review conditions not satisfied: {', '.join(outstanding)}",
+        )
 
     def test_no_authorization_context_can_be_built(self, ted, compliance) -> None:
         """§32. The answer to *can `AcquisitionAuthorizationContext` currently be
         built* is no, and the one remaining reason is named."""
         with pytest.raises(AcquisitionNotAuthorizedError) as caught:
             build_authorization(ted, LOCAL_PROFILE, compliance, environ={})
-        assert caught.value.reasons == (f"review conditions not satisfied: {RESIDUAL}",)
+        (reason,) = caught.value.reasons
+        assert reason.startswith("review conditions not satisfied: ")
+        assert RESIDUAL in reason
 
     def test_the_readiness_document_and_the_gate_agree(self) -> None:
         """A document that described a different queue from the one the gate
@@ -747,7 +766,9 @@ class TestNothingWasBuilt:
         the tree. What is asserted is that they never consult the registry, not
         that the registry is empty."""
         records = verify_source(ted, LOCAL_PROFILE, compliance, environ={})
-        assert len(records) == 4
+        # RE-POINTED BY MISSION 1.83.1: one record per required condition, however many the
+        # review requires. A pinned count asserts the review may never require another.
+        assert len(records) == len(ted.review_for(LOCAL_PROFILE).required_conditions)
         assert result_for(records, ROUTE_ONLY) is ConditionVerificationResult.SATISFIED
 
     def test_the_compliance_package_reaches_no_network(self) -> None:
