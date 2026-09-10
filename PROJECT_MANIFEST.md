@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.126
+Version: 1.127
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-10 (Sprint 1 / Mission 1.77)
+Last amended: 2026-09-10 (Sprint 1 / Mission 1.78)
 
 ---
 
@@ -13,6 +13,82 @@ Last amended: 2026-09-10 (Sprint 1 / Mission 1.77)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.127 - 2026-09-10 (Sprint 1 / Mission 1.78)
+
+**`OPPORTUNITY_REVISION_2_RECONCILED_TO_CURRENT_SCORABILITY`.** A historical revision may
+remain true about what the system believed then; a new revision must be true about what the
+system can establish now. Revision 1 of the docker Opportunity stays as written, byte for
+byte; revision 2 carries the same hypothesis over the same seven cited rows with the one stale
+sentence replaced by one computed from the current resolver, and nothing stronger.
+
+**WHAT WAS STALE, EXACTLY.** Revision 1 (2026-09-02) says *no reviewed reliability applies*;
+the 0.65 and 0.6 Wikimedia assessments were created on 2026-09-03 and 2026-09-04, and Mission
+1.77 made the Opportunity path resolve late. Audited before anything was written: one
+limitation and the reliability half of one reasoning sentence are
+STALE_DUE_TO_RELIABILITY_RESOLUTION_FIX; the hypothesis, actor, need, intervention,
+dimensions, uncertainties and the four other limitations are STILL_TRUE and carried verbatim.
+
+**RELIABILITY CHANGES WHETHER A ROW MAY ENTER AGGREGATION, NOT WHAT IT ESTABLISHES.** Six
+scorable rows establish no buyer, budget, recurrence, severity, adoption, willingness to pay or
+independence, so the seven statement fields are byte-identical between the revisions, a gate
+refuses any difference, and `model_version` is NULL: **no model was called, for a rewrite or
+for anything else.**
+
+**THE SAME SEVEN ROWS, AND THE SEVEN OTHERS NOT QUIETLY LINKED.** Links are revision-specific
+(unique per revision and Evidence, cascading from the revision), so revision 2 carries its own
+seven with the eligibility each holds NOW: six ELIGIBLE_SCORING at 0.65 bound to `e2419f13`,
+one ELIGIBLE_CONTEXT (Stack Exchange, NO_APPLICABLE_ASSESSMENT because the operator declined
+that review). The current docker packet holds 14 rows; the seven created after revision 1 are
+recorded as REQUIRES_NEW_SEMANTIC_JUDGEMENT_BEFORE_INCLUSION, because relevance to a
+hypothesis is a synthesis judgement a reconciliation does not make.
+
+**HISTORY KEPT WITHOUT A POINTER ON IT.** `opportunity-preparation-v1.json` hashes to the same
+value before and after and still says 28 rows; a pointer would have changed its bytes, so the
+current `opportunity-preparation-v2.json` (58 rows, 48 scoring, late resolution) points back
+at it instead. The reconciliation script describes an existing revision 2 rather than writing
+a third, and a second `--apply` is refused.
+
+**THE CURRENT POINTER IS THE INDEX.** No column names the current revision; the highest
+`revision` per Opportunity is current by the canonical `revision DESC` index. Measured:
+newest returns `8739e7ab` / 2, `revision = 1` returns `efca07a9` identical -- both now pytest
+tests written relationally so an empty CI database passes them.
+
+**SCORING READINESS PER THE CONTRACT, NOT PER THE WISH.** `scoring_ready` is
+`scoring_eligible_rows >= 2`, a PACKET property that authorises nothing; the docker packet
+reads true at 12 and the profile stays UNCALIBRATED with no scores table. **Two defects
+surfaced by the first packet ever to be scoring-ready**, both a sentence written when its
+value could only be one thing: the property's docstring said *always False while any row
+lacks a reviewed reliability*, and the sufficiency reason string hard-coded *not
+scoring-ready* beside a value now reading true. The docstring says what the code has done
+since 1.28 and the sentence follows the property; no rule changed.
+
+**Verification.** Probe of **47 deliberate violations, 47 caught, 0 escaped**, plus **4 of 4
+positive controls**, one INVERTED (a packet below the readiness minimum accepted as not
+scoring-ready; a wholly scorable citation set accepted when every row resolves). **3539
+bare-python tests**; pytest suites green with the database unchanged across 29 tenant tables;
+`ruff format --check`, `ruff check` and mypy through `uv`; contract generation `--check`;
+source catalog `--check`; all **57** CI gates, one of them new.
+
+**Canonical mutation, exactly the reconciliation.** Opportunities 1 to 1, revisions 1 to 2,
+links 7 to 14; every other counter identical, scores ABSENT, independence groups 0,
+assessments 4, 0 external calls, 0 model calls, 0 embeddings. Q1, Globalping and V2 untouched.
+
+New: `infrastructure/scripts/reconcile_opportunity_reliability.py` (operator, once),
+`docs/data/opportunity-preparation-v2.json` and its generated `.md`,
+`docs/data/opportunity-reliability-reconciliation-v1.json` and its generated `.md`,
+`infrastructure/scripts/render_opportunity_reconciliation.py` (CI gate 57),
+`packages/inferred-claim-evaluator/python/tests/test_opportunity_reliability_reconciliation.py`,
+`services/gateway/python/tests/test_opportunity_revisions.py`, and
+`docs/reports/mission-1.78-report.md`.
+
+Changed: `run_opportunity_preparation.py` writes the current view as v2 and records packet
+evidence ids; `sros_opportunity/sufficiency.py` reason text and docstring;
+`docs/CLAUDE.md` 1.127 to 1.128; `.github/workflows/ci.yml` gains one gate.
+
+Unchanged: `opportunity-preparation-v1.json`, Opportunity revision 1 and its links, every
+research table other than the two Opportunity revision tables, the Q1 selection, every
+Globalping record, and the V2 decision.
 
 ## 1.126 - 2026-09-10 (Sprint 1 / Mission 1.77)
 
