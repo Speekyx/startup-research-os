@@ -46,8 +46,13 @@ HISTORICAL_V2 = DOCS / "opportunity-preparation-v2.json"
 # group grain. It stays as written; the current view, with the class-grain procurement
 # subjects beside the group and division packets, is v4.
 HISTORICAL_V3 = DOCS / "opportunity-preparation-v3.json"
-OUTPUT = DOCS / "opportunity-preparation-v4.json"
-ARTIFACT_VERSION = "opportunity-preparation@4.0.0"
+# Mission 1.84. The v4 record is the Mission 1.82 to 1.83.1 view, taken BEFORE the operator
+# decided the TED egress question. Its external_synthesis blocks record
+# UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS with the NOT_ASSESSED reason, which was true when it was
+# written. A historical preparation is never rewritten, so the post-decision view is v5.
+HISTORICAL_V4 = DOCS / "opportunity-preparation-v4.json"
+OUTPUT = DOCS / "opportunity-preparation-v5.json"
+ARTIFACT_VERSION = "opportunity-preparation@5.0.0"
 
 DEFAULT_USE_PROFILE = "local-private-research-v1"
 
@@ -422,18 +427,22 @@ def build_report(use_profile: str) -> dict[str, object]:
             "The CURRENT deterministic preparation view over the whole Evidence corpus, "
             "reliability resolved late from lineage (Mission 1.77), with procurement "
             "subjects at the CPV level each Signal was keyed on -- division, group and class "
-            "(Missions 1.81 and 1.82). Supersedes the v3 record, which stays as the historical "
-            "division-and-group view and is not rewritten; v2 and v1 stay as their own "
+            "(Missions 1.81 and 1.82), and every egress block read from the LIVE source "
+            "review. Supersedes the v4 record, which stays as the historical pre-decision "
+            "view and is not rewritten: v4 recorded every TED packet UNAVAILABLE with the "
+            "NOT_ASSESSED reason, which was true before the operator answered "
+            "TED-EGRESS-OPPSYNTH-V1 in Mission 1.83.1. v3, v2 and v1 stay as their own "
             "historical views."
         ),
         "artifact_version": ARTIFACT_VERSION,
-        "supersedes": f"docs/data/{HISTORICAL_V3.name}",
+        "supersedes": f"docs/data/{HISTORICAL_V4.name}",
         "historical": [
             f"docs/data/{HISTORICAL_V1.name}",
             f"docs/data/{HISTORICAL_V2.name}",
             f"docs/data/{HISTORICAL_V3.name}",
+            f"docs/data/{HISTORICAL_V4.name}",
         ],
-        "mission": "1.82",
+        "mission": "1.84",
         "reliability_resolution_path": "LINEAGE_LATE_RESOLUTION (sros_evidence_reliability.lineage)",
         "use_profile_id": use_profile,
         "use_profile_note": (

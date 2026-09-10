@@ -1,0 +1,112 @@
+{
+  "$comment": "Mission 1.84. One machine-readable schema and one deterministic gate, both frozen before execution. Lexical filtering does not prove semantic safety and this contract does not claim it does: what it cannot name is why the execution stops for a human.",
+  "record_version": "second-opportunity-synthesis-output-contract@1.0.0",
+  "mission": "1.84",
+  "recorded_at": "2026-09-11",
+  "OUTPUT_SCHEMA_VERSION": "second-opportunity-synthesis-output@1.0.0",
+  "OUTPUT_SCHEMA_SHA256": "9f8e3849fb0223f5a4c41466d8d8aed994e1d86d446a52e9eca1fd28d80f65e9",
+  "OUTPUT_GATE_VERSION": "second-opportunity-output-gate@1.0.0",
+  "BASE_GATE_VERSION": "opportunity-synthesis-persistence-gate@1.1.0",
+  "BASE_AUDIT_VERSION": "opportunity-synthesis-audit@1.2.0",
+  "required_fields": [
+    "decision",
+    "subject",
+    "target_actor_if_supported",
+    "observed_need",
+    "candidate_intervention_class",
+    "hypothesis_statement",
+    "supported_dimensions",
+    "unsupported_dimensions",
+    "supporting_evidence_ids",
+    "supporting_claim_ids",
+    "source_families",
+    "independence_status",
+    "reliability_status",
+    "evidence_bound_reasoning_summary",
+    "critical_uncertainties",
+    "commercial_claims_supported",
+    "commercial_claims_not_supported",
+    "recommended_next_evidence",
+    "confidence_classification",
+    "statement_classifications"
+  ],
+  "field_mapping": {
+    "$comment": "the mission brief's field names against the repository vocabulary that already carries them",
+    "subject_key": "subject",
+    "hypothesis": "hypothesis_statement",
+    "observed_facts": "observed_need + evidence_bound_reasoning_summary",
+    "proposed_intervention_hypothesis": "candidate_intervention_class",
+    "unsupported_or_unknown_assumptions": "unsupported_dimensions + commercial_claims_not_supported",
+    "evidence_boundaries": "supporting_evidence_ids + supporting_claim_ids + independence_status + reliability_status",
+    "commercial_unknowns": "commercial_claims_not_supported",
+    "problem_unknowns": "critical_uncertainties",
+    "validation_questions": "critical_uncertainties",
+    "recommended_next_evidence": "recommended_next_evidence (added by this contract)",
+    "confidence_classification": "confidence_classification (added by this contract)"
+  },
+  "added_by_this_contract": [
+    "recommended_next_evidence",
+    "confidence_classification",
+    "statement_classifications"
+  ],
+  "confidence_classifications": [
+    "EXPLORATORY"
+  ],
+  "numeric_confidence_requested": false,
+  "numeric_confidence_note": "a self-reported certainty is not a probability, so the field is a closed enum of one rather than a number. No score is requested, computed or persisted anywhere",
+  "validation_order": [
+    "transport success",
+    "provider response shape",
+    "exact structured-output parse",
+    "schema validation",
+    "semantic output gate",
+    "evidence-boundary gate",
+    "attribution and no-distortion gate",
+    "canonical persistence eligibility"
+  ],
+  "failure_policy": "a failure at any stage persists no Opportunity. The output is never repaired by a second model call, and a refusal is recorded rather than retried",
+  "two_stale_checks_generalised": {
+    "$comment": "found while building this contract, and both would have refused a truthful answer",
+    "reliability_assertion": "the gate required the output to preserve NON_SCORABLE / MISSING_RELIABILITY. Every row in the corpus was non-scorable when Mission 1.31 wrote it; Mission 1.77 resolved reliability from lineage, so 12 of 14 docker rows and 6 of 6 TED rows are scoring-eligible. It now reads the packet and demands the truthful statement either way, plus a refusal of any claim that a score exists",
+    "external_knowledge_markers": "a module constant listing container-ecosystem words: the right check and the wrong list for any other subject. It is a parameter now, defaulting to the frozen list, so every existing caller behaves identically and this packet supplies its own",
+    "weakened": false,
+    "base_gate_version_before": "opportunity-synthesis-persistence-gate@1.0.0",
+    "base_gate_version_after": "opportunity-synthesis-persistence-gate@1.1.0"
+  },
+  "forbidden_transformations": [
+    {
+      "name": "REALISED_SPEND",
+      "establishes": "a stated TOTAL_VALUE at notice scope, including options and renewals",
+      "is_not": "money anybody paid"
+    },
+    {
+      "name": "MARKET_DEMAND",
+      "establishes": "that authorities published notices under one CPV class",
+      "is_not": "market demand, appetite or adoption"
+    },
+    {
+      "name": "SOFTWARE_BUYER",
+      "establishes": "that a contracting authority published a notice",
+      "is_not": "a buyer, customer or prospect for a software product"
+    },
+    {
+      "name": "WILLINGNESS_TO_PAY",
+      "establishes": "an economic value stated in a published notice",
+      "is_not": "willingness to pay or a budget for software"
+    },
+    {
+      "name": "PRODUCT_MARKET_FIT",
+      "establishes": "that activity exists in a bounded set of notices",
+      "is_not": "product-market fit, a validated market or a proven need"
+    }
+  ],
+  "independence_rule": "independence is UNKNOWN for all six rows and there are 0 independence groups, so an output describing several independent sources is refused",
+  "lexical_filtering_is_not_semantic_safety": true,
+  "human_review": {
+    "HUMAN_OUTPUT_REVIEW_REQUIRED": true,
+    "why": "the subject is SEMANTICALLY_COHERENT_BUT_PRODUCT_LINK_UNKNOWN and its overinterpretation risk is recorded HIGH. The gate refuses what it can name; a hypothesis that distorts the evidence without using a named phrase is exactly what it cannot name, and this is the repository's first synthesis over a procurement record. Mission 1.31 also shows the cost of the opposite mistake: a gate accepted on lexical grounds is a gate that has not read the answer",
+    "who": "the named local operator",
+    "when": "after the response passes every deterministic gate and before canonical persistence",
+    "weakened_to_create_opportunity_two": false
+  }
+}
