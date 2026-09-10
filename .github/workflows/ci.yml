@@ -672,6 +672,20 @@ jobs:
       - name: Globalping residual closure matches its records
         run: uv run python infrastructure/scripts/render_globalping_residuals.py --check
 
+      # Mission 1.83. The TED selected-candidate egress review, and the frozen operator
+      # decision packet it prepares rather than takes. The gate refuses: a review that widened
+      # its own scope past one source, one profile, one activity, one purpose and one subject;
+      # commercial reuse, automated processing or a bounded representation promoted from an
+      # argument to a permission; the source and provider gates collapsed into each other, or a
+      # vendor named inside a condition; a payload outside the allowlist, carrying a raw notice,
+      # a notice body or personal data, or trimmed into validity; a decision packet whose digest
+      # does not recompute from its own bound fields, or that defaults an option, or that
+      # records an approval inside itself; training, fine-tuning or embeddings widened by a
+      # decision about inference; and any canonical mutation, model call, research acquisition,
+      # candidate change, Evidence widening or parked-arc change.
+      - name: The TED egress review matches its records
+        run: uv run python infrastructure/scripts/render_ted_selected_candidate_egress.py --check
+
       # Mission 1.82. The CPV codes given their official meaning, and the class grain derived.
       # The gate refuses: a lookup universe that moved, carries labels, or does not hash to the
       # digest the record names; a frozen code with no semantic record, or a concept the freeze

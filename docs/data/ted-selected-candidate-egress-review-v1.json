@@ -1,0 +1,517 @@
+{
+  "$comment": "Mission 1.83. The source-governance review for ONE activity, ONE profile, ONE purpose and ONE selected subject. It records what the held authority establishes and stops where accountable judgement begins. No source review was appended and no approval was recorded: launching a review mission authorises an INVESTIGATION and never a GRANT.",
+  "record_version": "ted-selected-candidate-egress-review@1.0.0",
+  "mission": "1.83",
+  "recorded_at": "2026-09-10",
+  "record_kind": "SOURCE_GOVERNANCE_REVIEW_PREPARATION",
+  "start_commit": "5a543e1",
+  "branch": "sprint-1/mission-1.83",
+  "migration_head": "0036_grant_use_profile_vocabulary",
+  "primary_outcome": "TED_EGRESS_REVIEW_READY_FOR_OPERATOR_DECISION",
+  "outcome_basis": "three of the four independent gates ADR-033 separates are already open, and the fourth was never asked. What the held authority does not settle is not a documentary gap that another Publications Office page would close: the instrument enumerates no acts at all, so onward transmission to a processor is neither permitted nor prohibited by it, and the operator's own residual-exposure acceptance is scoped in its own words to bounded queries. Both residuals are judgement, and judgement belongs to a named person",
+  "scope": {
+    "source_id": "ted-eu",
+    "use_profile_id": "local-private-research-v1",
+    "activity": "external_model_transmission",
+    "processing_purpose": "bounded external inference for Opportunity hypothesis synthesis",
+    "purpose_basis": "the identifier the repository already uses. `opportunity-synthesis-egress-governance-v1.md` states it in its own header and Mission 1.29 assessed three other sources under it; no new name was invented where the vocabulary already defines one",
+    "selected_subject": "ted-eu:CPV-class:9261",
+    "selected_label": "Sports facilities operation services",
+    "explicitly_out_of_scope": [
+      "commercial-multi-tenant-research-v1",
+      "public redistribution",
+      "customer-facing access to TED source data",
+      "resale",
+      "redistribution of raw notices",
+      "model training",
+      "fine-tuning",
+      "embeddings",
+      "arbitrary model-processing purposes",
+      "arbitrary TED packets other than the selected subject"
+    ]
+  },
+  "four_gates": {
+    "$comment": "ADR-033 keeps four questions apart and this mission keeps them apart. Three are open and one is unasked, which is why the blocker is a decision rather than an obstacle",
+    "may_a_model_read_this_material": {
+      "field": "model_processing",
+      "where": "ted-eu source review, local-private-research-v1, v3",
+      "state": "PERMITTED",
+      "bound": "condition 9 of that review scopes the machine-processing permission to inference, extraction, classification and structured analysis. Model training is NOT authorised and embeddings are unassessed for implementation and blocked independently by D-12"
+    },
+    "may_it_leave_this_deployment": {
+      "field": "external_model_transmission",
+      "where": "ted-eu source review, local-private-research-v1, v3",
+      "state": "NOT_ASSESSED",
+      "bound": "the only gate that refuses, and it refuses because nobody has answered it"
+    },
+    "what_does_the_processor_do_with_it": {
+      "field": "posture",
+      "where": "docs/data/model-provider-policy-v1.json, provider anthropic",
+      "state": "APPROVED",
+      "bound": "assessed on the provider's own contract text for the API route under the Commercial Terms of Service: no training on customer content, retention bounded at 30 days, customer retains inputs. A provider posture is not a source permission"
+    },
+    "does_this_deployment_permit_that_class_of_egress": {
+      "field": "external_model_egress",
+      "where": "use profile local-private-research-v1",
+      "state": "PERMITTED_TO_APPROVED_PROVIDERS",
+      "bound": "permitted, and only to a provider whose data-use posture has been reviewed"
+    },
+    "gates_open": 3,
+    "gates_refusing": 1,
+    "source_and_provider_are_not_collapsed": true,
+    "no_provider_named_in_the_source_review": true
+  },
+  "representation": {
+    "$comment": "reconstructed through the CURRENT deterministic preparation path and serialized by the PRODUCTION function, not by a copy. Nothing was transmitted",
+    "PACKET_ID": "e218b56a8f938f4d5f7fc961e7f0c2cfe184c4396395334140c6199b48316592",
+    "PACKET_SCHEMA_VERSION": "opportunity-evidence-packet@1.0.0",
+    "REPRESENTATION_SCHEMA": "opportunity-transmission-representation@1.0.0",
+    "SUBJECT_KEY": "ted-eu:CPV-class:9261",
+    "SUBJECT_LABEL_IN_PAYLOAD": null,
+    "subject_label_note": "the payload carries the CODE, `ted-eu:CPV-class:9261`, and not the retrieved label. Mission 1.82 established that a label is display metadata and the code is the identity, and the packet is built on the identity",
+    "EVIDENCE_COUNT": 6,
+    "CLAIM_COUNT": 5,
+    "SERIALIZED_CHARACTER_COUNT": 3604,
+    "SERIALIZED_BYTE_COUNT": 3604,
+    "REPRESENTATION_SHA256": "2528a56a4a9e873bfd04662aeb52916eb80faafe10ab085e716cbdcee77c5b72",
+    "ALLOWLIST_VALID": true,
+    "REPRESENTATION_VIOLATIONS": 0,
+    "TOP_LEVEL_KEYS": [
+      "claims",
+      "dimension_bounds",
+      "dimensions",
+      "evidence_ids",
+      "independence",
+      "packet_id",
+      "procedures",
+      "source_families",
+      "subject"
+    ],
+    "leaf_values": 28,
+    "serializer": "sros_opportunity.serialize_packet_for_model",
+    "serializer_note": "the bytes were produced by the production serializer rather than by a local copy, and the local copy was asserted equal to them. The decision object handed to it was a MEASUREMENT FIXTURE, never persisted, never transmitted and never a permission: the real gate was evaluated separately and refuses, and both facts are recorded here",
+    "REAL_GATE_AVAILABILITY": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+    "REAL_GATE_REFUSAL_REASONS": [
+      "ted-eu: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
+    ],
+    "trimmed_to_pass": false,
+    "mission_1_82_diagnostic_recomputed": {
+      "$comment": "the brief said recompute and not to encode the earlier numbers as expected truth, and recomputing changed one of them",
+      "claims_then": 5,
+      "claims_now": 5,
+      "characters_then": 3252,
+      "characters_now": 3604,
+      "violations_then": 0,
+      "violations_now": 0,
+      "why_the_character_count_differs": "Mission 1.82 measured a STAND-IN payload rather than the one the serializer composes. It substituted `dimension_bounds` with the placeholder {dimension: 'bounded'} instead of the packet's real bound sentence, and it serialized compactly where the production function uses indent=2 with sorted keys. Neither difference changes what would be sent, because nothing was sent; both change the number. 3604 is the count for the exact bytes `serialize_packet_for_model` produces, and it supersedes 3252 as the figure any approval should cite",
+      "mission_1_82_record_corrected": false,
+      "why_not_corrected": "the Mission 1.82 record states what that mission measured, and it measured what it says it measured. History is appended to, never rewritten; this record is the pointer"
+    }
+  },
+  "personal_data": {
+    "$comment": "scanned over every leaf of the actual assembled payload, not over a description of it",
+    "PERSONAL_DATA_FIELDS": 0,
+    "RAW_SOURCE_PAYLOAD_FIELDS": 0,
+    "NOTICE_BODY_FIELDS": 0,
+    "SOURCE_API_PAYLOAD_FIELDS": 0,
+    "natural_person_name": 0,
+    "email": 0,
+    "telephone": 0,
+    "postal_address": 0,
+    "individual_contact_details": 0,
+    "supplier_contact_person": 0,
+    "buyer_contact_person": 0,
+    "free_text_notice_content": 0,
+    "other_personal_identifiers": 0,
+    "urls": 0,
+    "notice_identifiers": 0,
+    "organisation_is_not_a_natural_person": "no contracting authority or supplier is named in the payload at all, so the question does not arise here. Had one been named, an organisation concept would not have been treated as a natural person",
+    "what_the_payload_actually_carries": "internal ids, four procedure version strings, one source-native subject code, three dimension names, one bound sentence this repository wrote, one independence sentence, and five Claim statements this repository composed. No collected record, no API response body, no notice payload, no buyer, no supplier, no amount attributable to a named contract",
+    "stripping_performed": false
+  },
+  "held_authority": {
+    "IS_THE_CURRENT_QUESTION_ALREADY_ANSWERED_BY_HELD_AUTHORITY": "PARTIAL",
+    "HELD_AUTHORITY_COUNT": 7,
+    "NEW_DOCUMENTATION_FETCHES": 0,
+    "RESEARCH_DATA_FETCHES": 0,
+    "why_no_new_fetch": "the residual is not a documentary gap. Commission Decision 2011/833/EU was read in full by Mission 1.15.2 and re-retrieved on 2026-09-04, and the held text contains ZERO occurrences of 'processor', 'transmit', 'transfer', 'sub-licence' and 'automated'; its two occurrences of 'third part' are the Article 2(2)(b) intellectual-property exclusion. The instrument enumerates NO acts, by design, which is exactly why H-34 closed PERMITTED. A further first-party page cannot address an act the framework does not speak in",
+    "documents": [
+      {
+        "document_type": "OFFICIAL_LICENCE",
+        "title": "Commission Decision 2011/833/EU on the reuse of Commission documents",
+        "retrieved_at": "2026-09-04",
+        "bears_on_this_question": "YES",
+        "what_it_establishes": "Article 3(2) defines reuse by PURPOSE -- 'the use of documents ... for commercial or non-commercial purposes other than the initial purpose for which the documents were produced' -- and enumerates no acts, so METHOD does not enter. That is what closed H-34 PERMITTED and it is the strongest argument toward permission here",
+        "what_it_does_not_establish": "that sending derived propositions to a third-party processor is within the grant. The instrument says nothing about onward transmission because it says nothing about acts"
+      },
+      {
+        "document_type": "OPERATOR_CORRESPONDENCE",
+        "title": "Publications Office written reply on database rights and reuse of TED procurement data, case 2026-COP-201",
+        "retrieved_at": "2026-09-04",
+        "bears_on_this_question": "PARTIAL",
+        "what_it_establishes": "'TED notices and metadata may be reused for both commercial and non-commercial purposes, provided that the source is acknowledged and according to the copyright notice'; 'Whether or not the European Union asserts copyright over the database should not prevent citizens or organisations from reusing the TED data'; 'The way in which the data are retrieved is not relevant in this regard.' The request that drew it described this system by name as a commercial software-as-a-service application",
+        "what_it_does_not_establish": "anything about onward transmission to a processor. The retrieval-method sentence answers a question about ACQUISITION -- bulk download versus Search API -- and reading it as covering egress would answer this mission's question with a sentence that was not addressed to it. That is the inference this review refuses"
+      },
+      {
+        "document_type": "OFFICIAL_TERMS",
+        "title": "TED and SIMAP legal notice (copyright notice)",
+        "retrieved_at": "2026-09-04",
+        "bears_on_this_question": "PARTIAL",
+        "what_it_establishes": "the instrument the reply's acknowledgement condition points at, and the source of the authenticity, ten-year-retrievability and accuracy conditions already on the review",
+        "what_it_does_not_establish": "any rule about processors or onward transmission"
+      },
+      {
+        "document_type": "OFFICIAL_API_DOCS",
+        "title": "TED Developer Docs, Search API",
+        "retrieved_at": "2026-08-31",
+        "bears_on_this_question": "NO",
+        "what_it_establishes": "intended use of the authorised acquisition route",
+        "what_it_does_not_establish": "anything about what may be done with derived material afterwards"
+      },
+      {
+        "document_type": "OFFICIAL_API_DOCS",
+        "title": "TED Open Data Service",
+        "retrieved_at": "2026-08-31",
+        "bears_on_this_question": "NO",
+        "what_it_establishes": "intended use of the second authorised acquisition route",
+        "what_it_does_not_establish": "anything about onward transmission"
+      },
+      {
+        "document_type": "OFFICIAL_LICENCE",
+        "title": "Commission Decision 2011/833/EU, first retrieval",
+        "retrieved_at": "2026-08-31",
+        "bears_on_this_question": "YES",
+        "what_it_establishes": "as above; retained because a review's basis is append-only",
+        "what_it_does_not_establish": "as above"
+      },
+      {
+        "document_type": "OFFICIAL_TERMS",
+        "title": "TED and SIMAP legal notice, first inspection",
+        "retrieved_at": "2026-08-31",
+        "bears_on_this_question": "PARTIAL",
+        "what_it_establishes": "as above; retained because a review's basis is append-only",
+        "what_it_does_not_establish": "as above"
+      }
+    ],
+    "mechanical_scan_of_the_held_decision_text": {
+      "bytes": 17142,
+      "processor": 0,
+      "transmit": 0,
+      "transfer": 0,
+      "sub_licence": 0,
+      "automated": 0,
+      "third_party": 2,
+      "third_party_context": "Article 2(2)(b) and recital 14, both the intellectual-property exclusion",
+      "reuse": 50,
+      "conclusion": "the framework is purpose-framed and act-free. An act it does not name is not thereby prohibited and is not thereby permitted"
+    }
+  },
+  "the_exact_open_question": "Under local-private-research-v1, may the bounded canonical Opportunity synthesis representation derived from TED data be transmitted to an external model solely for inference used to generate an internal Opportunity hypothesis, where the representation contains no raw TED notice payload, no notice body and no personal data, and where the TED data is not used for model training, fine-tuning or embeddings?",
+  "arguments_toward_permission": [
+    {
+      "id": "A1",
+      "statement": "reuse is defined by purpose and enumerates no acts, so the method by which a permitted purpose is pursued does not enter the definition",
+      "authority": "Commission Decision 2011/833/EU Article 3(2); H-34 CLOSED PERMITTED in Mission 1.15.2",
+      "sufficient_alone": false,
+      "why_not": "it establishes that method is not a bar. It does not establish that a new counterparty is not one, and a processor is a party the framework never contemplates"
+    },
+    {
+      "id": "A2",
+      "statement": "the publisher has stated in writing that reuse is permitted for commercial purposes and that the database-copyright question should not prevent it",
+      "authority": "Publications Office reply, case 2026-COP-201, 2026-09-04",
+      "sufficient_alone": false,
+      "why_not": "it answers reuse and retrieval. Commercial reuse alone is not external-model permission, and treating it as one is the first refusal case in this mission's probe"
+    },
+    {
+      "id": "A3",
+      "statement": "the transmitted object contains no TED document text at all: five sentences this repository composed about aggregates, naming no notice, no buyer and no supplier, with zero personal-data fields and zero representation violations, measured",
+      "authority": "this mission, section 4 and section 6",
+      "sufficient_alone": false,
+      "why_not": "a bounded representation lowers the exposure and does not answer whether the act is within the grant. Silence is not permission and neither is safety"
+    },
+    {
+      "id": "A4",
+      "statement": "sending to a contracted processor is not making available to the public, so the re-utilisation limb of Article 7(2)(b) of Directive 96/9/EC is not obviously engaged, and redistribution stays NOT_PERMITTED under this profile",
+      "authority": "Mission 1.29 section 7; the local review's redistribution assessment",
+      "sufficient_alone": false,
+      "why_not": "'not obviously engaged' is the honest phrasing and it is not a finding. H-36A leaves whether any such right subsists NOT ESTABLISHED in either direction"
+    }
+  ],
+  "what_defeats_mechanical_closure": [
+    {
+      "id": "B1",
+      "statement": "THE OPERATOR'S ACCEPTANCE IS SCOPED, IN ITS OWN WORDS, TO BOUNDED QUERIES. The current v3 acceptance reads 'I accept the residual database-right exposure FOR BOUNDED QUERIES THROUGH THE AUTHORISED OFFICIAL ROUTES under local-private-research-v1, review v3.' A transmission to a third party is not a bounded query and reaches a new counterparty with an exposure that is still open. This repository may not widen a human acceptance on the operator's behalf",
+      "kind": "SCOPE_OF_A_HUMAN_CONFIRMATION",
+      "authority": "registry.source_condition_verifications, verifier_version ted-v3-official-reuse-acknowledgement-v1",
+      "closeable_by": "the operator, and by nobody and nothing else",
+      "note": "Mission 1.29 made this argument against the v2 acceptance and the 2026-09-04 reply did not disturb it: the reply made the residual SMALLER and left the acceptance's scope exactly where the operator wrote it"
+    },
+    {
+      "id": "B2",
+      "statement": "THE INSTRUMENT DOES NOT ADDRESS THE ACT. Reuse is act-free by design, so onward transmission to a processor is neither permitted nor prohibited by the framework. Moving from that to PERMITTED_WITH_CONDITIONS is a reading, and a reading is judgement",
+      "kind": "LEGAL_JUDGEMENT",
+      "authority": "the mechanical scan of the held Decision text recorded above",
+      "closeable_by": "an accountable operator decision, or a further first-party clarification"
+    },
+    {
+      "id": "B3",
+      "statement": "H-36A IS STILL NOT ESTABLISHED. Whether a sui generis database right subsists in the TED corpus, and who would hold it, is unresolved; the reply is the publisher's guidance rather than an adjudication, and the legal notice disclaims being legal advice",
+      "kind": "OPEN_LEGAL_QUESTION",
+      "authority": "the current review's own open questions",
+      "closeable_by": "not by this mission, and not by a bounded representation"
+    }
+  ],
+  "activity_matrix": {
+    "$comment": "each activity assessed separately in the review framework's own vocabulary. A state here records what the CURRENT review says, or what this review would propose, and proposing is not recording",
+    "LOCAL_STORAGE": {
+      "current": "PERMITTED",
+      "proposed": "PERMITTED",
+      "changed": false
+    },
+    "DERIVED_ANALYTICS": {
+      "current": "PERMITTED",
+      "proposed": "PERMITTED",
+      "changed": false
+    },
+    "COMMERCIAL_PURPOSE": {
+      "current": "PERMITTED",
+      "proposed": "PERMITTED",
+      "changed": false
+    },
+    "EXTRACTION_CLASSIFICATION": {
+      "current": "PERMITTED",
+      "proposed": "PERMITTED",
+      "changed": false,
+      "note": "carried by model_processing, scoped by condition 9"
+    },
+    "EXTERNAL_MODEL_TRANSMISSION": {
+      "current": "NOT_ASSESSED",
+      "proposed": "OPERATOR_DECISION_REQUIRED",
+      "changed": false,
+      "note": "the only activity this mission is about, and the only one it may not answer. OPERATOR_DECISION_REQUIRED is this record's own word for the state of the QUESTION and is not a PolicyAssessment value: nothing was written to the registry, so no enum member was needed and none was invented"
+    },
+    "MODEL_INFERENCE": {
+      "current": "PERMITTED",
+      "proposed": "PERMITTED",
+      "changed": false,
+      "note": "reading is permitted; where the reading happens is the separate question above"
+    },
+    "MODEL_TRAINING": {
+      "current": "NOT_ASSESSED",
+      "proposed": "NOT_ASSESSED",
+      "changed": false,
+      "note": "condition 9 states it was not assessed and is not authorised. An inference decision does not widen it"
+    },
+    "FINE_TUNING": {
+      "current": "NOT_ASSESSED",
+      "proposed": "NOT_ASSESSED",
+      "changed": false
+    },
+    "EMBEDDINGS": {
+      "current": "NOT_ASSESSED",
+      "proposed": "NOT_ASSESSED",
+      "changed": false,
+      "note": "unassessed for implementation and blocked independently by D-12"
+    },
+    "PUBLIC_REDISTRIBUTION": {
+      "current": "NOT_PERMITTED",
+      "proposed": "NOT_PERMITTED",
+      "changed": false
+    },
+    "CUSTOMER_FACING_SOURCE_DATA": {
+      "current": "NOT_PERMITTED",
+      "proposed": "NOT_PERMITTED",
+      "changed": false,
+      "note": "the profile itself sets customer_facing_source_access false"
+    }
+  },
+  "inference_is_not_training": {
+    "$comment": "section 11. Four activities, four states, and an approval of one widens none of the others",
+    "MODEL_INFERENCE_and_MODEL_TRAINING_are_the_same_activity": false,
+    "an_inference_approval_would_widen_training": false,
+    "an_inference_approval_would_widen_fine_tuning": false,
+    "an_inference_approval_would_widen_embeddings": false,
+    "why": "condition 9 of the current review says training was not assessed because the Article 2(2)(b) third-party-rights question arises there in a materially different form and the engine does not need it. That reasoning is untouched by a decision about where inference runs"
+  },
+  "purpose_limit": {
+    "$comment": "section 12. A permission, if given, is purpose-bound and subject-bound",
+    "source": "ted-eu",
+    "use_profile": "local-private-research-v1",
+    "activity": "external_model_transmission",
+    "processing_purpose": "bounded external inference for Opportunity hypothesis synthesis",
+    "representation": "bounded canonical subject and canonical Claims only",
+    "what_it_must_not_become": "'TED data can be sent to models'. A different purpose is a different assessment, and a packet that exceeds the representation is a different packet"
+  },
+  "attribution": {
+    "ATTRIBUTION_REQUIRED": true,
+    "obligation": "reuse of TED notices is conditioned on source acknowledgement. The Publications Office's written reply of 2026-09-04 states 'provided that the source is acknowledged and according to the copyright notice', which maps onto Article 6(2)(a) of the Re-use Decision",
+    "already_satisfied_by_the_payload": true,
+    "how": "every one of the five Claim statements names the source in its own wording: three open 'Tenders Electronic Daily (EU public procurement) reported that' and two 'The source \"ted-eu\" published'. The acknowledgement is a property the payload already has, not a string to paste into a prompt",
+    "injected_into_the_packet_by_this_mission": false,
+    "why_not_injected": "the obligation is met, and adding licence boilerplate would change the bytes an approval would name in order to assert something the payload already says",
+    "where_the_obligation_also_lives": [
+      "internal provenance, which already records source_id on every row",
+      "any future generated output that restates a TED-derived proposition",
+      "any customer or public surface, which this profile does not have"
+    ],
+    "dropped_because_the_use_is_internal": false
+  },
+  "derived_output": {
+    "DERIVED_OUTPUT_STATUS": "PERMITTED_AS_A_NEW_WORK_SUBJECT_TO_THE_REUSE_CONDITIONS",
+    "what_the_output_would_be": "a newly generated internal Opportunity hypothesis composed from bounded canonical propositions. It is not a copy of a TED notice and contains none",
+    "DERIVED_OUTPUT_CONDITIONS": [
+      "Article 6(2)(b): the reuser must NOT DISTORT the original meaning or message. A hypothesis that restated the packet's propositions as realised expenditure, willingness to pay or market size would breach it, which is a legal obligation as well as an epistemic one",
+      "Article 6(2)(a): source acknowledgement, per the reply and the copyright notice",
+      "Article 2(4): no reuse calculated to deceive or defraud",
+      "Article 6(2)(c): the Commission accepts no liability, so a derived claim is a claim about what TED published and never a warranted statement about the underlying contract",
+      "TED authenticity: only electronically signed notices published in the Supplement are authentic, so a derived claim is attributed to TED's published notice"
+    ],
+    "is_it_redistribution_of_a_ted_database": false,
+    "why_not": "the authority does not say so, and the five conditions above travel with the reuse. An absence of a restriction in a document is not a grant of freedom",
+    "is_it_unrestricted": false
+  },
+  "human_judgement": {
+    "HUMAN_JUDGEMENT_REQUIRED": true,
+    "why": "two residuals, and neither is mechanically extractable. B1 is the SCOPE of a human confirmation, which only its author may widen. B2 is a reading of an instrument that does not name the act. The project's own rule applies: an objective configuration fact is machine-verifiable and a legal conclusion or risk acceptance is human",
+    "impersonated_the_reviewer": false,
+    "SOURCE_REVIEW_APPENDED": false,
+    "why_no_review_was_appended": "no explicit operator authorization exists for this exact packet. Launching a review mission is authorization to INVESTIGATE and never to GRANT the result, and approval is not inferred from the fact that the mission was launched",
+    "claude_recorded_as_reviewer": false,
+    "OPERATOR_DECISION_PACKET_CREATED": true
+  },
+  "already_covered_check": {
+    "$comment": "section 24, asked rather than assumed",
+    "TED_EGRESS_ALREADY_COVERED_BY_CURRENT_REVIEW": false,
+    "current_review_id": "7fbbe3ce-37d5-56c6-8be7-655cf212ef64",
+    "current_review_version": 3,
+    "current_profile": "local-private-research-v1",
+    "current_approval_state": "APPROVED_WITH_CONDITIONS",
+    "external_model_transmission_on_that_row": "NOT_ASSESSED",
+    "read_from": "the live registry, not from a report",
+    "stale_preparation": false,
+    "wrong_review_version_read": false,
+    "activity_resolution_defect": false,
+    "purpose_resolution_defect": false,
+    "conclusion": "the Mission 1.82 measured state is confirmed rather than contradicted. The gate refuses for exactly one reason and it names the right field"
+  },
+  "canonical_state": {
+    "$comment": "measured before and after; this mission mutates nothing",
+    "before": {
+      "raw_records": 325,
+      "normalized_records": 325,
+      "signals": 60,
+      "claims": 91,
+      "claim_revisions": 92,
+      "evidence": 112,
+      "reliability_assessments": 4,
+      "independence_groups": 0,
+      "opportunities": 1,
+      "opportunity_revisions": 2,
+      "opportunity_evidence_links": 14,
+      "source_reviews": 70,
+      "scores_table": "ABSENT",
+      "embeddings": 0
+    },
+    "after": {
+      "raw_records": 325,
+      "normalized_records": 325,
+      "signals": 60,
+      "claims": 91,
+      "claim_revisions": 92,
+      "evidence": 112,
+      "reliability_assessments": 4,
+      "independence_groups": 0,
+      "opportunities": 1,
+      "opportunity_revisions": 2,
+      "opportunity_evidence_links": 14,
+      "source_reviews": 70,
+      "scores_table": "ABSENT",
+      "embeddings": 0
+    },
+    "CANONICAL_RESEARCH_MUTATION": 0,
+    "source_review_rows_written": 0,
+    "condition_verification_rows_written": 0
+  },
+  "mission_accounting": {
+    "MODEL_CALLS": 0,
+    "embeddings_created": 0,
+    "RESEARCH_DATA_FETCHES": 0,
+    "ted_api_calls": 0,
+    "ted_bulk_downloads": 0,
+    "new_raw_records": 0,
+    "new_normalized_records": 0,
+    "NEW_DOCUMENTATION_FETCHES": 0,
+    "OPPORTUNITY_CREATED": 0,
+    "opportunity_revisions_created": 0,
+    "opportunity_links_created": 0,
+    "reliability_assessments_created": 0,
+    "independence_groups_created": 0,
+    "scores_persisted": 0,
+    "bytes_transmitted_to_any_external_model": 0
+  },
+  "selected_candidate_unchanged": {
+    "SELECTED_SUBJECT": "ted-eu:CPV-class:9261",
+    "SELECTED_LABEL": "Sports facilities operation services",
+    "candidate_ranking_reopened": false,
+    "descended_to_category_grain": false,
+    "another_candidate_selected": false
+  },
+  "evidence_semantics_unchanged": {
+    "supports": [
+      "BUYER_OR_BUDGET_EXISTENCE",
+      "ECONOMIC_VALUE",
+      "MARKET_ACTIVITY"
+    ],
+    "does_not_establish": [
+      "realised expenditure",
+      "willingness to pay",
+      "market size",
+      "demand",
+      "software demand",
+      "unmet need",
+      "dissatisfaction",
+      "solution gap",
+      "product-market fit",
+      "profitability"
+    ],
+    "claims_widened_by_this_mission": 0
+  },
+  "parked_states_preserved": {
+    "changed_by_this_mission": false,
+    "q1": {
+      "QUANTITY_CLASS_SELECTED": "Q1",
+      "CLASS_SELECTED": true,
+      "CONSTRUCT_SELECTED": false,
+      "RUN_AUTHORIZED": false
+    },
+    "globalping": {
+      "PASS": 12,
+      "PARTIAL": 0,
+      "FAIL": 0,
+      "verdict": "COUNTERPART_RESOLVED"
+    },
+    "v2": {
+      "primary_outcome": "V2_VALID_FOR_REFUTATION_BUT_NOT_INDEPENDENT_SUPPORT",
+      "corpus_frozen": false,
+      "measurements_executed": 0
+    }
+  },
+  "recommended_next_action": {
+    "id": "operator decision on TED-EGRESS-OPPSYNTH-V1",
+    "shape": "the operator reads the frozen decision packet and answers PERMIT_WITH_EXACT_CONDITIONS, DEFER or REFUSE. If they permit, Mission 1.83.1 verifies the packet digest and appends a review successor; the append will orphan the v3 condition verifications, so that mission must also re-record the operator's acceptance",
+    "must_not": [
+      "approve on the operator's behalf",
+      "call a model",
+      "synthesize a hypothesis",
+      "create an Opportunity",
+      "widen training, fine-tuning or embeddings"
+    ]
+  },
+  "decision_packet": {
+    "DECISION_PACKET_ID": "TED-EGRESS-OPPSYNTH-V1",
+    "DECISION_PACKET_VERSION": 1,
+    "DECISION_PACKET_SHA256": "f27c34460f413def15c260e72fd2261a1fba666b574e9e2ee60bf7ef38a39577",
+    "artifact": "docs/data/ted-selected-candidate-egress-decision-packet-v1.json",
+    "approval_recorded": false
+  }
+}
