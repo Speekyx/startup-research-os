@@ -390,6 +390,16 @@ class SignalMagnitude:
 # ---------------------------------------------------------------------- scope
 
 
+def _under_or_above(code: str, level_code: str) -> bool:
+    """Whether `code` is at or below `level_code`, or one of its ancestors.
+
+    A classification code is a digit string whose trailing zeros are padding, so
+    its depth is the length of its non-zero prefix; an ancestor is a shorter
+    non-zero prefix of the level code.
+    """
+    return code.startswith(level_code) or level_code.startswith(code.rstrip("0"))
+
+
 @dataclass(frozen=True)
 class SignalScope:
     """What the signal is about.
@@ -417,6 +427,14 @@ class SignalScope:
     notice_classes: tuple[str, ...] = ()
     classification_codes: tuple[str, ...] = ()
     classification_scheme: str | None = None
+    # Mission 1.81. The LEVEL of the classification the cohort was keyed on, and
+    # the code every member shares at that level, when the derivation was keyed
+    # finer than the scheme's coarsest level. Absent -- no key, never a null --
+    # on every Signal keyed at the coarsest level, which is every Signal written
+    # before this field existed; a consumer reading an absent level reads the
+    # coarsest one, and that is the historical meaning rather than a default.
+    classification_level: str | None = None
+    classification_level_code: str | None = None
     # Mission 1.19, ADR-032. The dimensions a CONTENT_REQUEST_VOLUME derivation
     # is about. Absent from every other family's scope, which is the same rule
     # the lexical kind follows for geography: a dimension no input carries has
@@ -450,6 +468,25 @@ class SignalScope:
                 "a classification code means nothing without the vocabulary it came "
                 "from. 90911200 is a CPV code, and a reader cannot know that from the "
                 "digits alone"
+            )
+        if (self.classification_level is None) != (self.classification_level_code is None):
+            raise ValueError(
+                "a classification level and the code shared at that level are one fact "
+                "stated twice; carrying one without the other names a level nobody can "
+                "check or a code at no level"
+            )
+        # Every code sits under the level code, or is an ANCESTOR of it: a member may
+        # state the division beside its group, and `92000000` beside `92521000` is one
+        # subject stated at two depths, not two subjects.
+        if self.classification_level_code is not None and not all(
+            _under_or_above(code, self.classification_level_code)
+            for code in self.classification_codes
+        ):
+            raise ValueError(
+                f"classification level code {self.classification_level_code!r} is neither a "
+                f"prefix nor a descendant of every classification code in "
+                f"{list(self.classification_codes)}; a cohort keyed at a level its members "
+                "do not share is not a cohort"
             )
         # ADR-032. An item id means nothing without the platform that issued
         # it: `Kubernetes` is an en.wikipedia article title, and a reader cannot
@@ -494,6 +531,9 @@ class SignalScope:
             payload["source_language_scheme"] = self.source_language_scheme
         if self.classification_scheme:
             payload["classification_scheme"] = self.classification_scheme
+        if self.classification_level is not None:
+            payload["classification_level"] = self.classification_level
+            payload["classification_level_code"] = self.classification_level_code
         if self.community_tag_scheme:
             payload["community_tag_scheme"] = self.community_tag_scheme
         return payload

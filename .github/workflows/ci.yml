@@ -672,6 +672,21 @@ jobs:
       - name: Globalping residual closure matches its records
         run: uv run python infrastructure/scripts/render_globalping_residuals.py --check
 
+      # Mission 1.81. The procurement division narrowed into CPV groups from held data. The
+      # gate refuses: a census that is not the notice audit's; a primary/additional CPV
+      # status the held record does not carry, or a membership model resting on one; a
+      # multi-CPV notice forced into one cohort; value-missing notices removed from a
+      # membership, or a cohort dropped for being small; division evidence reused or
+      # filtered onto a child; a cohort below the procedure's own floor, in two currencies,
+      # or across notice classes; a reliability copied onto a scope it does not match, or
+      # an assessment created; a group read as a product, a bare code with no held label
+      # read as actionable, or a narrower category selected for having moved one level
+      # down; the parent packet deleted or a historical preparation rewritten; a second
+      # derivation run that created rows; and any Opportunity, revision, independence
+      # group, score, model call, acquisition, egress decision or parked-arc change.
+      - name: The procurement subject-grain narrowing matches its records
+        run: uv run python infrastructure/scripts/render_procurement_subject_grain_narrowing.py --check
+
       # Mission 1.80. Which held subject is the second-Opportunity candidate. The gate
       # refuses: a candidate that is not a held packet, or is two of them (kubernetes merged
       # with docker, a CPV division narrowed on the way past, docker admitted); a notice

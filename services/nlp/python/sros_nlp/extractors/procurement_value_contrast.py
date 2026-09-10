@@ -71,6 +71,7 @@ from .base import CandidateGroup, DerivationRequest, GroupOutcome, GroupRefusal,
 
 __all__ = [
     "CPV_DIVISION_LENGTH",
+    "CPV_LEVELS",
     "MINIMUM_COHORT_MEMBERS",
     "ProcurementValueContrastExtractor",
 ]
@@ -89,7 +90,16 @@ MINIMUM_COHORT_MEMBERS = 2
 # cleaning and insurance and are not one market.
 CPV_DIVISION_LENGTH = 2
 
-_PARAMETER_NAMES = frozenset({"amount_type"})
+# Mission 1.81. The levels of the Common Procurement Vocabulary a cohort may be
+# keyed on, by the length of the code prefix that names the level. The names are
+# the vocabulary's own (its published structure names divisions, groups, classes
+# and categories by successive digits); this repository had named only the
+# division before 1.2.0, and a held code carries no level name of its own. A
+# stored code is eight digits with no check digit, and its depth is the number
+# of leading digits before the trailing zeros.
+CPV_LEVELS: dict[int, str] = {2: "division", 3: "group", 4: "class", 5: "category"}
+
+_PARAMETER_NAMES = frozenset({"amount_type", "cpv_grain"})
 
 # **`PAIRED_MONETARY_AMOUNT` and nothing temporal.** This is the whole reason a
 # PARTIAL TED record is usable here: every one carries
@@ -132,7 +142,25 @@ class ProcurementValueContrastExtractor:
     # It is still a version bump: the same identity would otherwise produce
     # different content for inputs that used to refuse, which the model reports
     # as NON_DETERMINISTIC_OUTPUT rather than writing over.
-    extractor_version = "1.1.0"
+    # 1.2.0 -- Mission 1.81. `cpv_grain` names the CPV level the cohort key uses.
+    #
+    # A purely generic grain parameterisation of the same procedure: the cohort
+    # key, the eligibility of an amount, the floor, the currency and scope rules
+    # and the contrast are unchanged, and only WHICH prefix of the classification
+    # code the members must share moves. It is REQUIRED, like `amount_type`, and
+    # for the same reason: the model refuses a declared parameter left unstated,
+    # because a hidden default makes the version meaningless. So a division
+    # derivation under 1.2.0 states `cpv_grain: 2` and is a new derivation
+    # identity over the same witness, exactly as 1.1.0 was over 1.0.1 -- and the
+    # same rule applies: it is historical versioning, not a second observation,
+    # and a runner skips a cohort whose witness set is already persisted. The
+    # level and the shared code are written into the scope at every grain, so a
+    # consumer can tell a group cohort from a division cohort without re-reading
+    # the members; a scope with no level is a 1.1.0 or earlier division cohort.
+    #
+    # MINOR for the same structural reason as 1.1.0: a finer prefix in the key can
+    # only SPLIT a division cohort, never merge two.
+    extractor_version = "1.2.0"
     signal_type_id = "procurement_value_contrast"
     record_kind_id = PROCUREMENT_NOTICE
     family = SignalQuantityFamily.TRANSACTION_VALUE
@@ -172,13 +200,28 @@ class ProcurementValueContrastExtractor:
                     ),
                 )
             )
+        grain = requested.get("cpv_grain")
+        if isinstance(grain, bool) or not isinstance(grain, int) or grain not in CPV_LEVELS:
+            raise SignalRefusedError(
+                SignalDerivationRefusal(
+                    reason=SignalRefusalReason.PARAMETERS_INCOMPLETE,
+                    detail=(
+                        f"`cpv_grain` is required and must be one of {sorted(CPV_LEVELS)}, "
+                        "the prefix lengths that name a level of the Common Procurement "
+                        f"Vocabulary; {grain!r} names no level. There is no default: which "
+                        "level a cohort is keyed on decides what its Signal is about, and "
+                        "choosing it for the caller would be a hidden grain with a name"
+                    ),
+                )
+            )
+        parameters: dict[str, object] = {"amount_type": amount_type, "cpv_grain": grain}
         return SignalDerivation(
             extractor_id=self.extractor_id,
             extractor_version=self.extractor_version,
             kind=SignalDerivationKind.DETERMINISTIC,
             required_facts=_REQUIRED_FACTS,
             parameter_names=_PARAMETER_NAMES,
-            parameters={"amount_type": amount_type},
+            parameters=parameters,
         )
 
     # -------------------------------------------------------------- grouping
@@ -227,8 +270,9 @@ class ProcurementValueContrastExtractor:
         if observation.record_kind_id != self.record_kind_id:
             return None
         notice = observation.section("notice")
-        division = self._cpv_division(observation)
-        if division is None:
+        grain = _grain_of(derivation)
+        prefix = self._cpv_prefix(observation, grain)
+        if prefix is None:
             return None
         wanted = derivation.parameters.get("amount_type")
         if not isinstance(wanted, str):
@@ -237,17 +281,21 @@ class ProcurementValueContrastExtractor:
         if entry is None:
             return None
         _, currency, scope = entry
-        return group_key_of(
-            [
-                ("source_id", observation.source_id),
-                ("record_kind_id", observation.record_kind_id),
-                ("resource_id", observation.resource_id),
-                ("notice_class", notice.get("class")),
-                ("amount_scope", scope),
-                ("currency", currency),
-                ("cpv_division", division),
-            ]
-        )
+        fields: list[tuple[str, object]] = [
+            ("source_id", observation.source_id),
+            ("record_kind_id", observation.record_kind_id),
+            ("resource_id", observation.resource_id),
+            ("notice_class", notice.get("class")),
+            ("amount_scope", scope),
+            ("currency", currency),
+            ("cpv_division", prefix[:CPV_DIVISION_LENGTH]),
+            # 1.2.0. The grain and the prefix at it. At grain 2 the prefix IS the
+            # division, stated twice so a reader of the key sees the level; at a
+            # finer grain it is a strict refinement of the division key.
+            ("cpv_grain", grain),
+            ("cpv_prefix", prefix),
+        ]
+        return group_key_of(fields)
 
     @staticmethod
     def _cpv_division(observation: NormalizedObservation) -> str | None:
@@ -270,6 +318,43 @@ class ProcurementValueContrastExtractor:
         if len(divisions) != 1:
             return None
         return divisions.pop()
+
+    def _cpv_prefix(self, observation: NormalizedObservation, grain: int) -> str | None:
+        """The single classification prefix of `grain` digits this notice is in, or `None`.
+
+        The division rule first, unchanged: a notice across several divisions has no
+        subject at any grain. Below the division, only codes DEEP ENOUGH to state
+        the level decide it -- a code stopping at the division is an ancestor of
+        whatever finer code the notice also carries, and says nothing against it.
+        Two different prefixes at the level are two subjects, and the notice joins
+        neither; no code deep enough is a notice the source did not classify at
+        that level, and it joins none rather than the division it did state. And
+        a shallower code that is NOT above the prefix is a second subject too:
+        `92320000` beside `92622000` names two groups whatever the grain.
+        """
+        division = self._cpv_division(observation)
+        if division is None or grain == CPV_DIVISION_LENGTH:
+            return division
+        prefixes = {
+            code[:grain]
+            for code in (
+                str(entry.get("code"))
+                for entry in _codes_of(observation)
+                if isinstance(entry, dict) and entry.get("code")
+            )
+            if len(code.rstrip("0")) >= grain
+        }
+        if len(prefixes) != 1:
+            return None
+        prefix = prefixes.pop()
+        # A shallower code is an ancestor only if it sits ABOVE the prefix. `92320000`
+        # beside `92622000` is not an ancestor of group 926 at any grain: it is a
+        # second subject stated at a shallower depth, and the notice joins neither.
+        for entry in _codes_of(observation):
+            code = str(entry.get("code")) if isinstance(entry, dict) and entry.get("code") else ""
+            if code and not (code.startswith(prefix) or prefix.startswith(code.rstrip("0"))):
+                return None
+        return prefix
 
     # ---------------------------------------------------------------- derive
 
@@ -453,6 +538,10 @@ class ProcurementValueContrastExtractor:
     ) -> GroupOutcome:
         observations = tuple(member[0] for member in ordered)
         inputs = tuple(o.to_input() for o in observations)
+        grain = _grain_of(derivation)
+        # Every member shares the prefix by construction of the key, so the first
+        # member's is the cohort's. Read through the same rule the key used.
+        level_code = self._cpv_prefix(observations[0], grain)
         resolution = inputs[0].period_type
         assessment = assess_inputs(inputs, derivation, family=self.family, resolution=resolution)
         if assessment.refusal is not None:
@@ -527,6 +616,10 @@ class ProcurementValueContrastExtractor:
                 notice_classes=(str(notice.get("class")),),
                 classification_codes=classification_codes,
                 classification_scheme="CPV",
+                # 1.2.0. Stated at every grain, the division included: a scope with
+                # no level is a Signal written before the level existed.
+                classification_level=CPV_LEVELS[grain],
+                classification_level_code=level_code,
             ),
             window=window,
             derived_at=request.derived_at,
@@ -535,6 +628,14 @@ class ProcurementValueContrastExtractor:
             research_session_id=request.research_session_id,
         )
         return GroupOutcome(drafts=(draft,))
+
+
+def _grain_of(derivation: SignalDerivation) -> int:
+    """The CPV prefix length the derivation is keyed on. `resolve` guarantees it."""
+    grain = derivation.parameters.get("cpv_grain")
+    if isinstance(grain, bool) or not isinstance(grain, int) or grain not in CPV_LEVELS:
+        raise ValueError("a procurement derivation without a resolved `cpv_grain`")
+    return grain
 
 
 def _codes_of(observation: NormalizedObservation) -> list[object]:

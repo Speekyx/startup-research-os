@@ -82,7 +82,9 @@ def main() -> int:
     selection = json.loads(SELECTION.read_text(encoding="utf-8"))
     windows = selection["acquisition_plan"]["windows"]
     extractor = EXTRACTOR_REGISTRY["procurement-value-contrast"]
-    derivation = extractor.resolve({"amount_type": AMOUNT_TYPE})
+    # Mission 1.81 made the CPV grain a required parameter; this script derives at the
+    # division, which is what it always did.
+    derivation = extractor.resolve({"amount_type": AMOUNT_TYPE, "cpv_grain": 2})
 
     workspace_id = os.environ["DEV_WORKSPACE_ID"]
     conn = psycopg.connect(os.environ["DATABASE_URL"], autocommit=False)

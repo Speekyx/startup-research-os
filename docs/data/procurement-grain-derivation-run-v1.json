@@ -1,0 +1,510 @@
+{
+  "$comment": "Mission 1.81. The finer-grain procurement derivation, read back from the canonical rows it persisted: one entry per Signal keyed at the requested CPV grain, with the Claims it witnesses and the Evidence rows that cite it. Nothing here was acquired; every contributing record is a Mission 1.40 NormalizedRecord.",
+  "grain": 3,
+  "network_acquisitions": 0,
+  "signals": [
+    {
+      "signal_id": "e5e2483a-e1a6-5fd0-b4bb-65afe719a1ba",
+      "acquisition_window": "A",
+      "classification_level": "group",
+      "classification_level_code": "921",
+      "classification_codes": [
+        "92110000",
+        "92111100"
+      ],
+      "notice_class": "CONTRACT_NOTICE",
+      "currency": "EUR",
+      "amount_scope": "NOTICE",
+      "contributing_records": 2,
+      "magnitude": "3600000",
+      "magnitude_unit": "EUR",
+      "extractor_version": "1.2.0",
+      "parameters": {
+        "cpv_grain": 3,
+        "amount_type": "TOTAL_VALUE"
+      },
+      "evidence": [
+        {
+          "evidence_id": "54a8cb3c-edd0-4d88-a4d1-98f4725ab6f4",
+          "claim_id": "2a0a8c7c-7162-40ac-8757-4b2ca65bc5c4",
+          "proposition_kind": "source_published_classification_value_contrast_witnessed",
+          "statement": "The source \"ted-eu\" published, in its \"notices/eforms-contract-and-award\" resource, at least one bounded set of \"CONTRACT_NOTICE\" notices classified under \"CPV\" group \"921\" (division \"92\") whose stated \"TOTAL_VALUE\" amounts at \"NOTICE\" scope in \"EUR\" differ from one another."
+        },
+        {
+          "evidence_id": "f98dd9ed-18b8-46e6-b471-5607ad316e37",
+          "claim_id": "eb207ec8-0388-4268-a95c-0acec6be0d52",
+          "proposition_kind": "source_reported_procurement_value_contrast",
+          "statement": "Tenders Electronic Daily (EU public procurement) reported that, in its \"notices/eforms-contract-and-award\" resource, within a bounded set of 2 \"CONTRACT_NOTICE\" notices classified under \"CPV\" group \"921\" (division \"92\"), the largest \"TOTAL_VALUE\" amount at \"NOTICE\" scope stated in \"EUR\" exceeded the smallest by 3600000."
+        }
+      ]
+    },
+    {
+      "signal_id": "75dd2a0c-d3da-5181-86b1-25ff32eb6cb8",
+      "acquisition_window": "A",
+      "classification_level": "group",
+      "classification_level_code": "921",
+      "classification_codes": [
+        "92111200"
+      ],
+      "notice_class": "CONTRACT_AWARD_NOTICE",
+      "currency": "EUR",
+      "amount_scope": "NOTICE",
+      "contributing_records": 2,
+      "magnitude": "22000",
+      "magnitude_unit": "EUR",
+      "extractor_version": "1.2.0",
+      "parameters": {
+        "cpv_grain": 3,
+        "amount_type": "TOTAL_VALUE"
+      },
+      "evidence": [
+        {
+          "evidence_id": "3f8036ba-e1ce-4d52-9577-4652d5fc87fa",
+          "claim_id": "ff29cfc8-3bf7-454d-9b11-0520c4a9c2a4",
+          "proposition_kind": "source_published_classification_value_contrast_witnessed",
+          "statement": "The source \"ted-eu\" published, in its \"notices/eforms-contract-and-award\" resource, at least one bounded set of \"CONTRACT_AWARD_NOTICE\" notices classified under \"CPV\" group \"921\" (division \"92\") whose stated \"TOTAL_VALUE\" amounts at \"NOTICE\" scope in \"EUR\" differ from one another."
+        },
+        {
+          "evidence_id": "52ae08c9-d6f3-47aa-8b0c-4e29c890281a",
+          "claim_id": "fe4d870b-3086-414e-a0e0-64db909de361",
+          "proposition_kind": "source_reported_procurement_value_contrast",
+          "statement": "Tenders Electronic Daily (EU public procurement) reported that, in its \"notices/eforms-contract-and-award\" resource, within a bounded set of 2 \"CONTRACT_AWARD_NOTICE\" notices classified under \"CPV\" group \"921\" (division \"92\"), the largest \"TOTAL_VALUE\" amount at \"NOTICE\" scope stated in \"EUR\" exceeded the smallest by 22000."
+        }
+      ]
+    },
+    {
+      "signal_id": "0dfe10d0-4e87-5db2-bcbb-7b0e92cffe65",
+      "acquisition_window": "A",
+      "classification_level": "group",
+      "classification_level_code": "925",
+      "classification_codes": [
+        "92512000",
+        "92521000",
+        "92532000",
+        "92533000"
+      ],
+      "notice_class": "CONTRACT_NOTICE",
+      "currency": "EUR",
+      "amount_scope": "NOTICE",
+      "contributing_records": 6,
+      "magnitude": "2116000",
+      "magnitude_unit": "EUR",
+      "extractor_version": "1.2.0",
+      "parameters": {
+        "cpv_grain": 3,
+        "amount_type": "TOTAL_VALUE"
+      },
+      "evidence": [
+        {
+          "evidence_id": "4ec7946c-4c0d-432f-be95-935460ce305c",
+          "claim_id": "4f847b5f-5045-42c8-b6fb-0530d93b7dc3",
+          "proposition_kind": "source_published_classification_value_contrast_witnessed",
+          "statement": "The source \"ted-eu\" published, in its \"notices/eforms-contract-and-award\" resource, at least one bounded set of \"CONTRACT_NOTICE\" notices classified under \"CPV\" group \"925\" (division \"92\") whose stated \"TOTAL_VALUE\" amounts at \"NOTICE\" scope in \"EUR\" differ from one another."
+        },
+        {
+          "evidence_id": "296bfd43-40ea-4e7d-8982-d3f62b4c05f2",
+          "claim_id": "fbe8524c-9575-45e0-9e45-ac6817c930ed",
+          "proposition_kind": "source_reported_procurement_value_contrast",
+          "statement": "Tenders Electronic Daily (EU public procurement) reported that, in its \"notices/eforms-contract-and-award\" resource, within a bounded set of 6 \"CONTRACT_NOTICE\" notices classified under \"CPV\" group \"925\" (division \"92\"), the largest \"TOTAL_VALUE\" amount at \"NOTICE\" scope stated in \"EUR\" exceeded the smallest by 2116000."
+        }
+      ]
+    },
+    {
+      "signal_id": "44a6ad17-4f01-5505-a1aa-d9d3a590d1fe",
+      "acquisition_window": "A",
+      "classification_level": "group",
+      "classification_level_code": "926",
+      "classification_codes": [
+        "92600000",
+        "92610000",
+        "92622000"
+      ],
+      "notice_class": "CONTRACT_NOTICE",
+      "currency": "EUR",
+      "amount_scope": "NOTICE",
+      "contributing_records": 6,
+      "magnitude": "16463935.12",
+      "magnitude_unit": "EUR",
+      "extractor_version": "1.2.0",
+      "parameters": {
+        "cpv_grain": 3,
+        "amount_type": "TOTAL_VALUE"
+      },
+      "evidence": [
+        {
+          "evidence_id": "28d6130a-ae21-4010-9016-e40714a9467d",
+          "claim_id": "7f603a5e-a44b-40df-a05f-8c7f9426b169",
+          "proposition_kind": "source_published_classification_value_contrast_witnessed",
+          "statement": "The source \"ted-eu\" published, in its \"notices/eforms-contract-and-award\" resource, at least one bounded set of \"CONTRACT_NOTICE\" notices classified under \"CPV\" group \"926\" (division \"92\") whose stated \"TOTAL_VALUE\" amounts at \"NOTICE\" scope in \"EUR\" differ from one another."
+        },
+        {
+          "evidence_id": "937fbb12-fd41-467a-99e1-e5dc9ab8e26e",
+          "claim_id": "d71bf45b-6de7-42d0-8b0a-d6e2b0a35bea",
+          "proposition_kind": "source_reported_procurement_value_contrast",
+          "statement": "Tenders Electronic Daily (EU public procurement) reported that, in its \"notices/eforms-contract-and-award\" resource, within a bounded set of 6 \"CONTRACT_NOTICE\" notices classified under \"CPV\" group \"926\" (division \"92\"), the largest \"TOTAL_VALUE\" amount at \"NOTICE\" scope stated in \"EUR\" exceeded the smallest by 16463935.12."
+        }
+      ]
+    },
+    {
+      "signal_id": "53e0acf6-3a6e-5d4d-9c09-ea61e8b007f6",
+      "acquisition_window": "A",
+      "classification_level": "group",
+      "classification_level_code": "923",
+      "classification_codes": [
+        "92311000",
+        "92332000"
+      ],
+      "notice_class": "CONTRACT_AWARD_NOTICE",
+      "currency": "EUR",
+      "amount_scope": "NOTICE",
+      "contributing_records": 2,
+      "magnitude": "141936",
+      "magnitude_unit": "EUR",
+      "extractor_version": "1.2.0",
+      "parameters": {
+        "cpv_grain": 3,
+        "amount_type": "TOTAL_VALUE"
+      },
+      "evidence": [
+        {
+          "evidence_id": "0545919e-a49c-4b36-9d0e-e757d8e18bd5",
+          "claim_id": "70cbd5b0-0951-4d2f-bb65-fe88a694e623",
+          "proposition_kind": "source_published_classification_value_contrast_witnessed",
+          "statement": "The source \"ted-eu\" published, in its \"notices/eforms-contract-and-award\" resource, at least one bounded set of \"CONTRACT_AWARD_NOTICE\" notices classified under \"CPV\" group \"923\" (division \"92\") whose stated \"TOTAL_VALUE\" amounts at \"NOTICE\" scope in \"EUR\" differ from one another."
+        },
+        {
+          "evidence_id": "8008d772-0dd0-445c-ae07-77a133edb3c2",
+          "claim_id": "81a6c338-e664-4c4e-a3d9-40bbad15b8a5",
+          "proposition_kind": "source_reported_procurement_value_contrast",
+          "statement": "Tenders Electronic Daily (EU public procurement) reported that, in its \"notices/eforms-contract-and-award\" resource, within a bounded set of 2 \"CONTRACT_AWARD_NOTICE\" notices classified under \"CPV\" group \"923\" (division \"92\"), the largest \"TOTAL_VALUE\" amount at \"NOTICE\" scope stated in \"EUR\" exceeded the smallest by 141936."
+        }
+      ]
+    },
+    {
+      "signal_id": "14bc2858-4803-5964-ab50-996aa85fb6a1",
+      "acquisition_window": "A",
+      "classification_level": "group",
+      "classification_level_code": "925",
+      "classification_codes": [
+        "92511000",
+        "92512000",
+        "92520000",
+        "92521000",
+        "92521100"
+      ],
+      "notice_class": "CONTRACT_AWARD_NOTICE",
+      "currency": "EUR",
+      "amount_scope": "NOTICE",
+      "contributing_records": 4,
+      "magnitude": "14145885",
+      "magnitude_unit": "EUR",
+      "extractor_version": "1.2.0",
+      "parameters": {
+        "cpv_grain": 3,
+        "amount_type": "TOTAL_VALUE"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ccef0cfe-0981-4a95-833a-c168006c309f",
+          "claim_id": "ed360750-6bb7-4c96-9c00-16123045e6ac",
+          "proposition_kind": "source_published_classification_value_contrast_witnessed",
+          "statement": "The source \"ted-eu\" published, in its \"notices/eforms-contract-and-award\" resource, at least one bounded set of \"CONTRACT_AWARD_NOTICE\" notices classified under \"CPV\" group \"925\" (division \"92\") whose stated \"TOTAL_VALUE\" amounts at \"NOTICE\" scope in \"EUR\" differ from one another."
+        },
+        {
+          "evidence_id": "969a3758-30c8-4e1a-a33c-46d00ec2fc4f",
+          "claim_id": "2d6671a7-449d-4552-aa3b-dffbe0c9f262",
+          "proposition_kind": "source_reported_procurement_value_contrast",
+          "statement": "Tenders Electronic Daily (EU public procurement) reported that, in its \"notices/eforms-contract-and-award\" resource, within a bounded set of 4 \"CONTRACT_AWARD_NOTICE\" notices classified under \"CPV\" group \"925\" (division \"92\"), the largest \"TOTAL_VALUE\" amount at \"NOTICE\" scope stated in \"EUR\" exceeded the smallest by 14145885."
+        }
+      ]
+    },
+    {
+      "signal_id": "86e2e385-bb79-5f04-b302-95b4d5c8dca9",
+      "acquisition_window": "B",
+      "classification_level": "group",
+      "classification_level_code": "921",
+      "classification_codes": [
+        "92100000",
+        "92111000",
+        "92111200",
+        "92111240",
+        "92111260",
+        "92112000",
+        "92130000"
+      ],
+      "notice_class": "CONTRACT_NOTICE",
+      "currency": "EUR",
+      "amount_scope": "NOTICE",
+      "contributing_records": 2,
+      "magnitude": "72168",
+      "magnitude_unit": "EUR",
+      "extractor_version": "1.2.0",
+      "parameters": {
+        "cpv_grain": 3,
+        "amount_type": "TOTAL_VALUE"
+      },
+      "evidence": [
+        {
+          "evidence_id": "941a89ee-3eab-4a4f-ab32-b2d37c79db28",
+          "claim_id": "2a0a8c7c-7162-40ac-8757-4b2ca65bc5c4",
+          "proposition_kind": "source_published_classification_value_contrast_witnessed",
+          "statement": "The source \"ted-eu\" published, in its \"notices/eforms-contract-and-award\" resource, at least one bounded set of \"CONTRACT_NOTICE\" notices classified under \"CPV\" group \"921\" (division \"92\") whose stated \"TOTAL_VALUE\" amounts at \"NOTICE\" scope in \"EUR\" differ from one another."
+        },
+        {
+          "evidence_id": "dc37fcf6-fbbd-4de7-b2f2-de09fed84920",
+          "claim_id": "b1b03029-0c2e-4b64-82d9-8de4261fff98",
+          "proposition_kind": "source_reported_procurement_value_contrast",
+          "statement": "Tenders Electronic Daily (EU public procurement) reported that, in its \"notices/eforms-contract-and-award\" resource, within a bounded set of 2 \"CONTRACT_NOTICE\" notices classified under \"CPV\" group \"921\" (division \"92\"), the largest \"TOTAL_VALUE\" amount at \"NOTICE\" scope stated in \"EUR\" exceeded the smallest by 72168."
+        }
+      ]
+    },
+    {
+      "signal_id": "4ddf5b6a-40fb-5ac8-93f3-febdbed39ac7",
+      "acquisition_window": "B",
+      "classification_level": "group",
+      "classification_level_code": "923",
+      "classification_codes": [
+        "92310000",
+        "92311000",
+        "92312200",
+        "92312250",
+        "92360000",
+        "92370000"
+      ],
+      "notice_class": "CONTRACT_NOTICE",
+      "currency": "EUR",
+      "amount_scope": "NOTICE",
+      "contributing_records": 4,
+      "magnitude": "455140",
+      "magnitude_unit": "EUR",
+      "extractor_version": "1.2.0",
+      "parameters": {
+        "cpv_grain": 3,
+        "amount_type": "TOTAL_VALUE"
+      },
+      "evidence": [
+        {
+          "evidence_id": "9775a57b-0c99-4d16-8af4-3f4b73ab4cda",
+          "claim_id": "f39c1f2a-30b4-443a-965b-fa31344e0e1b",
+          "proposition_kind": "source_published_classification_value_contrast_witnessed",
+          "statement": "The source \"ted-eu\" published, in its \"notices/eforms-contract-and-award\" resource, at least one bounded set of \"CONTRACT_NOTICE\" notices classified under \"CPV\" group \"923\" (division \"92\") whose stated \"TOTAL_VALUE\" amounts at \"NOTICE\" scope in \"EUR\" differ from one another."
+        },
+        {
+          "evidence_id": "79c0f019-b1bb-4802-93e4-a7889e2db7b8",
+          "claim_id": "e45e2e0f-2ac2-4b5d-9633-67c298e3f6ab",
+          "proposition_kind": "source_reported_procurement_value_contrast",
+          "statement": "Tenders Electronic Daily (EU public procurement) reported that, in its \"notices/eforms-contract-and-award\" resource, within a bounded set of 4 \"CONTRACT_NOTICE\" notices classified under \"CPV\" group \"923\" (division \"92\"), the largest \"TOTAL_VALUE\" amount at \"NOTICE\" scope stated in \"EUR\" exceeded the smallest by 455140."
+        }
+      ]
+    },
+    {
+      "signal_id": "55418f02-1de1-55bd-8385-cbdb6f4ddcd8",
+      "acquisition_window": "B",
+      "classification_level": "group",
+      "classification_level_code": "925",
+      "classification_codes": [
+        "92520000",
+        "92521000",
+        "92521100",
+        "92534000"
+      ],
+      "notice_class": "CONTRACT_NOTICE",
+      "currency": "EUR",
+      "amount_scope": "NOTICE",
+      "contributing_records": 3,
+      "magnitude": "40280863.55",
+      "magnitude_unit": "EUR",
+      "extractor_version": "1.2.0",
+      "parameters": {
+        "cpv_grain": 3,
+        "amount_type": "TOTAL_VALUE"
+      },
+      "evidence": [
+        {
+          "evidence_id": "e96a94a3-6870-41d8-9e9a-a52073c6277b",
+          "claim_id": "4f847b5f-5045-42c8-b6fb-0530d93b7dc3",
+          "proposition_kind": "source_published_classification_value_contrast_witnessed",
+          "statement": "The source \"ted-eu\" published, in its \"notices/eforms-contract-and-award\" resource, at least one bounded set of \"CONTRACT_NOTICE\" notices classified under \"CPV\" group \"925\" (division \"92\") whose stated \"TOTAL_VALUE\" amounts at \"NOTICE\" scope in \"EUR\" differ from one another."
+        },
+        {
+          "evidence_id": "23f3605a-c922-4b47-b9a5-246aa1ede649",
+          "claim_id": "831ade52-22e9-45bd-99cd-9f5d407b5f8f",
+          "proposition_kind": "source_reported_procurement_value_contrast",
+          "statement": "Tenders Electronic Daily (EU public procurement) reported that, in its \"notices/eforms-contract-and-award\" resource, within a bounded set of 3 \"CONTRACT_NOTICE\" notices classified under \"CPV\" group \"925\" (division \"92\"), the largest \"TOTAL_VALUE\" amount at \"NOTICE\" scope stated in \"EUR\" exceeded the smallest by 40280863.55."
+        }
+      ]
+    },
+    {
+      "signal_id": "960b49b6-1201-52e4-9f86-b5a3ae52bb82",
+      "acquisition_window": "B",
+      "classification_level": "group",
+      "classification_level_code": "926",
+      "classification_codes": [
+        "92600000",
+        "92610000"
+      ],
+      "notice_class": "CONTRACT_NOTICE",
+      "currency": "EUR",
+      "amount_scope": "NOTICE",
+      "contributing_records": 7,
+      "magnitude": "86827200",
+      "magnitude_unit": "EUR",
+      "extractor_version": "1.2.0",
+      "parameters": {
+        "cpv_grain": 3,
+        "amount_type": "TOTAL_VALUE"
+      },
+      "evidence": [
+        {
+          "evidence_id": "3d4b30c1-ee07-4d05-974e-c1305f81b769",
+          "claim_id": "7f603a5e-a44b-40df-a05f-8c7f9426b169",
+          "proposition_kind": "source_published_classification_value_contrast_witnessed",
+          "statement": "The source \"ted-eu\" published, in its \"notices/eforms-contract-and-award\" resource, at least one bounded set of \"CONTRACT_NOTICE\" notices classified under \"CPV\" group \"926\" (division \"92\") whose stated \"TOTAL_VALUE\" amounts at \"NOTICE\" scope in \"EUR\" differ from one another."
+        },
+        {
+          "evidence_id": "68754977-f961-4d6d-8bed-305dace1392e",
+          "claim_id": "410b0619-f126-408e-822d-05b5808880d2",
+          "proposition_kind": "source_reported_procurement_value_contrast",
+          "statement": "Tenders Electronic Daily (EU public procurement) reported that, in its \"notices/eforms-contract-and-award\" resource, within a bounded set of 7 \"CONTRACT_NOTICE\" notices classified under \"CPV\" group \"926\" (division \"92\"), the largest \"TOTAL_VALUE\" amount at \"NOTICE\" scope stated in \"EUR\" exceeded the smallest by 86827200."
+        }
+      ]
+    },
+    {
+      "signal_id": "d6390e84-c683-5073-bce1-ad5ff32be8c6",
+      "acquisition_window": "B",
+      "classification_level": "group",
+      "classification_level_code": "923",
+      "classification_codes": [
+        "92300000",
+        "92311000",
+        "92312100",
+        "92331210"
+      ],
+      "notice_class": "CONTRACT_AWARD_NOTICE",
+      "currency": "EUR",
+      "amount_scope": "NOTICE",
+      "contributing_records": 5,
+      "magnitude": "484126.91",
+      "magnitude_unit": "EUR",
+      "extractor_version": "1.2.0",
+      "parameters": {
+        "cpv_grain": 3,
+        "amount_type": "TOTAL_VALUE"
+      },
+      "evidence": [
+        {
+          "evidence_id": "d1efc021-3db1-4cda-b116-f2a88cbd21da",
+          "claim_id": "70cbd5b0-0951-4d2f-bb65-fe88a694e623",
+          "proposition_kind": "source_published_classification_value_contrast_witnessed",
+          "statement": "The source \"ted-eu\" published, in its \"notices/eforms-contract-and-award\" resource, at least one bounded set of \"CONTRACT_AWARD_NOTICE\" notices classified under \"CPV\" group \"923\" (division \"92\") whose stated \"TOTAL_VALUE\" amounts at \"NOTICE\" scope in \"EUR\" differ from one another."
+        },
+        {
+          "evidence_id": "1122fecd-43fe-4d1c-a193-043d02686f59",
+          "claim_id": "2e06c070-71e8-40e7-8683-824c0130d54f",
+          "proposition_kind": "source_reported_procurement_value_contrast",
+          "statement": "Tenders Electronic Daily (EU public procurement) reported that, in its \"notices/eforms-contract-and-award\" resource, within a bounded set of 5 \"CONTRACT_AWARD_NOTICE\" notices classified under \"CPV\" group \"923\" (division \"92\"), the largest \"TOTAL_VALUE\" amount at \"NOTICE\" scope stated in \"EUR\" exceeded the smallest by 484126.91."
+        }
+      ]
+    },
+    {
+      "signal_id": "1d6b58cc-d912-5521-88bc-81fc41112c3c",
+      "acquisition_window": "B",
+      "classification_level": "group",
+      "classification_level_code": "926",
+      "classification_codes": [
+        "92610000"
+      ],
+      "notice_class": "CONTRACT_AWARD_NOTICE",
+      "currency": "EUR",
+      "amount_scope": "NOTICE",
+      "contributing_records": 2,
+      "magnitude": "235017",
+      "magnitude_unit": "EUR",
+      "extractor_version": "1.2.0",
+      "parameters": {
+        "cpv_grain": 3,
+        "amount_type": "TOTAL_VALUE"
+      },
+      "evidence": [
+        {
+          "evidence_id": "1b981934-9019-40f3-b12e-076ec9516df0",
+          "claim_id": "4c139e41-3607-4cd1-b987-6d530f061d8f",
+          "proposition_kind": "source_published_classification_value_contrast_witnessed",
+          "statement": "The source \"ted-eu\" published, in its \"notices/eforms-contract-and-award\" resource, at least one bounded set of \"CONTRACT_AWARD_NOTICE\" notices classified under \"CPV\" group \"926\" (division \"92\") whose stated \"TOTAL_VALUE\" amounts at \"NOTICE\" scope in \"EUR\" differ from one another."
+        },
+        {
+          "evidence_id": "8c39a1ab-c75f-4091-8db8-cfc7f0cf1fd3",
+          "claim_id": "618ef360-bf40-4adf-9a27-95c7b4e04abb",
+          "proposition_kind": "source_reported_procurement_value_contrast",
+          "statement": "Tenders Electronic Daily (EU public procurement) reported that, in its \"notices/eforms-contract-and-award\" resource, within a bounded set of 2 \"CONTRACT_AWARD_NOTICE\" notices classified under \"CPV\" group \"926\" (division \"92\"), the largest \"TOTAL_VALUE\" amount at \"NOTICE\" scope stated in \"EUR\" exceeded the smallest by 235017."
+        }
+      ]
+    },
+    {
+      "signal_id": "087506e7-2512-5db9-9bc5-fde54d2b3b7b",
+      "acquisition_window": "B",
+      "classification_level": "group",
+      "classification_level_code": "925",
+      "classification_codes": [
+        "92500000",
+        "92512000",
+        "92521000",
+        "92521100"
+      ],
+      "notice_class": "CONTRACT_AWARD_NOTICE",
+      "currency": "EUR",
+      "amount_scope": "NOTICE",
+      "contributing_records": 5,
+      "magnitude": "1774223.99",
+      "magnitude_unit": "EUR",
+      "extractor_version": "1.2.0",
+      "parameters": {
+        "cpv_grain": 3,
+        "amount_type": "TOTAL_VALUE"
+      },
+      "evidence": [
+        {
+          "evidence_id": "57c6af23-8c8b-4e9f-b684-b98cf4846918",
+          "claim_id": "ed360750-6bb7-4c96-9c00-16123045e6ac",
+          "proposition_kind": "source_published_classification_value_contrast_witnessed",
+          "statement": "The source \"ted-eu\" published, in its \"notices/eforms-contract-and-award\" resource, at least one bounded set of \"CONTRACT_AWARD_NOTICE\" notices classified under \"CPV\" group \"925\" (division \"92\") whose stated \"TOTAL_VALUE\" amounts at \"NOTICE\" scope in \"EUR\" differ from one another."
+        },
+        {
+          "evidence_id": "95a6bb74-d500-49c7-b375-4d24505de224",
+          "claim_id": "65ae9f69-df21-43df-ba40-04b7514f89ec",
+          "proposition_kind": "source_reported_procurement_value_contrast",
+          "statement": "Tenders Electronic Daily (EU public procurement) reported that, in its \"notices/eforms-contract-and-award\" resource, within a bounded set of 5 \"CONTRACT_AWARD_NOTICE\" notices classified under \"CPV\" group \"925\" (division \"92\"), the largest \"TOTAL_VALUE\" amount at \"NOTICE\" scope stated in \"EUR\" exceeded the smallest by 1774223.99."
+        }
+      ]
+    }
+  ],
+  "claims": [
+    "2a0a8c7c-7162-40ac-8757-4b2ca65bc5c4",
+    "2d6671a7-449d-4552-aa3b-dffbe0c9f262",
+    "2e06c070-71e8-40e7-8683-824c0130d54f",
+    "410b0619-f126-408e-822d-05b5808880d2",
+    "4c139e41-3607-4cd1-b987-6d530f061d8f",
+    "4f847b5f-5045-42c8-b6fb-0530d93b7dc3",
+    "618ef360-bf40-4adf-9a27-95c7b4e04abb",
+    "65ae9f69-df21-43df-ba40-04b7514f89ec",
+    "70cbd5b0-0951-4d2f-bb65-fe88a694e623",
+    "7f603a5e-a44b-40df-a05f-8c7f9426b169",
+    "81a6c338-e664-4c4e-a3d9-40bbad15b8a5",
+    "831ade52-22e9-45bd-99cd-9f5d407b5f8f",
+    "b1b03029-0c2e-4b64-82d9-8de4261fff98",
+    "d71bf45b-6de7-42d0-8b0a-d6e2b0a35bea",
+    "e45e2e0f-2ac2-4b5d-9633-67c298e3f6ab",
+    "eb207ec8-0388-4268-a95c-0acec6be0d52",
+    "ed360750-6bb7-4c96-9c00-16123045e6ac",
+    "f39c1f2a-30b4-443a-965b-fa31344e0e1b",
+    "fbe8524c-9575-45e0-9e45-ac6817c930ed",
+    "fe4d870b-3086-414e-a0e0-64db909de361",
+    "ff29cfc8-3bf7-454d-9b11-0520c4a9c2a4"
+  ],
+  "evidence_rows": 26,
+  "extractor_version": "1.2.0",
+  "parameters": {
+    "amount_type": "TOTAL_VALUE",
+    "cpv_grain": 3
+  }
+}

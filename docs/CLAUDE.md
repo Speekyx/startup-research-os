@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.130
-Last amended: 2026-09-10 (Sprint 1 / Mission 1.80)
+Version: 1.131
+Last amended: 2026-09-10 (Sprint 1 / Mission 1.81)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.131 | 2026-09-10 | **PROCUREMENT_NARROWING_REQUIRES_DEEPER_CPV_GRAIN: the division narrowed into CPV groups from held data, and none of them is a candidate.** 13 Signals, 21 Claims, 26 Evidence, all scorable at the reviewed TED reliabilities, four formable group packets. **NARROWER IS NOT ACTIONABLE**: each group is a category whose held cohort spans several classes and no held record carries a label at any level. **THE GRAIN IS WHAT THE HELD TOKEN SAYS IT IS** (eight digits, no check digit, null labels; `CPV_LEVELS` adopted with its basis; 1.80's 'classes' were categories and its labels were recalled). **MEMBERSHIP IS DECIDED BY CODES BEFORE ANY VALUE**: primary status UNAVAILABLE, C4 refuse-ambiguous, 77 / 91 / 9 summing to 177 without deduplication; the division packet came from 89 single-division notices. **A RE-DERIVATION**, because every division Signal spans groups; `cpv_grain` REQUIRED because the model refuses a hidden default; the level as CONDITIONAL identity so a group never witnesses the division; floor 2 from the procedure; no scope broadened; the second run created nothing. **DESCENT ALONE WILL NOT FIX IT**: grains 4 and 5 dry-run to smaller cohorts; the deciding input is a label. Probe **44 of 44 caught, 0 escaped, 6 of 6 controls**. **3610 tests**, 60 gates, canonical rows moved by exactly the derivation, 0 external calls, 0 model calls. `mission-1.81-report.md`. |
 | 1.130 | 2026-09-10 | **SECOND_OPPORTUNITY_REQUIRES_SUBJECT_NARROWING: nine held subjects examined and none is a second-Opportunity candidate.** **THE BEST HELD EVIDENCE PACKET IS NOT THE BEST CANDIDATE**: `ted-eu:CPV-division:92` has ten scorable rows, three commercial counting dimensions and is formable, and it is a CATEGORY whose 177 held notices span six-plus CPV classes, so a hypothesis at its grain is a disjunction of unrelated service markets -- TOO_BROAD_TO_BE_ACTIONABLE, REQUIRES_NARROWER_SUBJECT_DISCOVERY. **A NOTICE VALUE IS NOT COMMERCE** (not spend, not willingness to pay, not market size, not demand, and an authority is not a SaaS buyer); **A CATEGORY IS NOT A PRODUCT**; **NOTHING MERGED, NOTHING NARROWED ON THE WAY PAST**. Kubernetes and podman are the docker shape minus a dimension and not formable; population is not demand; publication is not audience; scorable is not independent. **THE FRONTIER CORRECTED THE AUTHOR**: semantic specificity is a dominance field, so the frontier is three candidates, all vetoed. **EGRESS REQUIRED BEFORE SYNTHESIS AND NOT DECIDED**, no candidate vetoed for it alone, representation tested in memory with zero violations and nothing sent. Probe **46 of 46 caught, 0 escaped, 4 of 4 controls**. **3581 tests**, 59 gates, 0 canonical mutations, 0 external calls, 0 model calls. `mission-1.80-report.md`. |
 | 1.129 | 2026-09-10 | **SECOND_OPPORTUNITY_EXPLORATION_IS_NEXT_BOUNDED_MOVE: six linked rows became scorable and the docker hypothesis did not become one word stronger.** **SCORING-READY IS NOT SCORING** five times over: not calibrated, not an authorisation, not independence, not commercial validation. **SIX SCORABLE ROWS ARE ONE SHAPE** -- one source, one family, one counting dimension, one provenance shape -- and the second counting dimension sits on the one row that is not scorable. **THE LEFTOVER ROW IS NOT THE NEXT ROW TO FIX**: the Stack Exchange bottleneck is BOTH, and *questions were published* changes no decision whatever its reliability; the seven uncited rows add no dimension and no provenance; **more Wikimedia is dominated**; Q1 stays PARKED and Globalping's qualification is not independence. **THE TRADE-OFF IS STATED**: the commercial dimension for docker is the most decision-relevant and the least reachable, while `ted-eu:CPV-division:92` reaches three commercial counting dimensions from held, reviewed, scorable rows with one governance question in front of synthesis -- **an executable move that opens a second hypothesis defeats a theoretically better move that cannot start**. Marginal value of the first Opportunity LOW, exploration value MEDIUM, sunk effort counted for nothing. **THE GATE RECOMPUTES DOMINANCE AND CORRECTED THE AUTHOR TWICE.** Probe **46 of 46 caught, 0 escaped, 4 of 4 controls**. **3560 tests**, 58 gates, 0 canonical mutations, 0 external calls, 0 model calls. `mission-1.79-report.md`. |
 | 1.128 | 2026-09-10 | **OPPORTUNITY_REVISION_2_RECONCILED_TO_CURRENT_SCORABILITY: the same hypothesis over the same seven rows, with the one stale sentence replaced and nothing stronger.** **A HISTORICAL REVISION MAY REMAIN TRUE ABOUT WHAT THE SYSTEM BELIEVED THEN; A NEW REVISION MUST BE TRUE ABOUT WHAT IT CAN ESTABLISH NOW.** Revision 1 (2026-09-02) said *no reviewed reliability applies*; the assessments arrived on 09-03 and 09-04 and 1.77 made the path resolve late, so one limitation and half of one reasoning sentence are stale and everything else is carried verbatim -- **the seven statement fields byte-identical, model_version NULL, no model called**, because **reliability changes whether a row may enter aggregation, not what it establishes**. **LINKS ARE REVISION-SPECIFIC**, so revision 2 carries its own seven with today's eligibility (six scoring at 0.65, one context), and **the seven packet rows created after revision 1 are recorded as requiring a semantic judgement, not linked**. **HISTORY KEPT WITHOUT A POINTER ON IT**: the v1 preparation hashes identically and the v2 record points back at it. **THE CURRENT POINTER IS THE INDEX**, highest revision wins, both readers tested relationally. **SCORING READINESS PER THE CONTRACT**: `scoring_eligible_rows >= 2`, a packet property that authorises nothing -- and **two sentences written when the value could only be one thing were found and corrected**, a docstring and a reason string, with no rule changed. Probe **47 of 47 caught, 0 escaped, 4 of 4 controls**, one inverted. **3539 tests**, 57 gates, revisions 1 to 2, links 7 to 14, every other counter identical, 0 external calls, 0 model calls. `mission-1.78-report.md`. |
@@ -1902,6 +1903,30 @@ in the grouping procedure, re-run the preparation runner, and re-select among cl
 packets against the same gates. Not an acquisition, not a model call, not the ted-eu egress
 decision, not an Opportunity, not a score. The egress review comes after a subject exists.
 **Mission 1.81 was not started.**
+
+
+**THE DIVISION NARROWED INTO GROUPS, IN 1.130 (Mission 1.81), AND NONE IS A CANDIDATE.**
+
+    held 177   single-division 89   group-specified 77   ambiguous 91   unspecified 9
+    cohorts keyed 23   derived 13   refused at the floor 10   groups with signals 4 of 6
+    signals 33 -> 46   claims 44 -> 65   evidence 58 -> 84   all 26 new rows scorable
+    preparation v2 -> v3   packets 10 -> 14   formable 3 -> 7   selected none   second run 0
+
+- **THE GRAIN IS WHAT THE HELD TOKEN SAYS IT IS**, and a level name is the vocabulary's, stated.
+- **MEMBERSHIP IS DECIDED BY CODES BEFORE ANY VALUE IS READ**, and an ambiguous notice joins nothing.
+- **A SPREAD ACROSS GROUPS BELONGS TO NO GROUP**, so the children are re-derived, never inherited.
+- **A REQUIRED PARAMETER IS NOT A HIDDEN DEFAULT**, and a new identity over an old witness is skipped.
+- **A FINER LEVEL IS IDENTITY WHEN PRESENT AND NOTHING WHEN ABSENT**, so the old keys stay the old keys.
+- **NARROWER IS NOT ACTIONABLE**, and a bare code with no held label is not a subject to write about.
+- **THE STRUCTURAL TEST TERMINATES ONLY AT THE LEAF**, so descent without semantics is refused.
+
+**Next: Mission 1.82 -- Procurement Subject Semantics and Class-Grain Narrowing V1.** One bounded
+documentation mission: the vocabulary's own labels for the six held groups and fourteen held
+classes, read one concept per fetch from the authority register as Mission 1.40 did; a per-group
+decision on whether an exploratory category hypothesis is adoptable; class-grain cohorts from held
+records only where a label makes the class a coherent subject; re-selection under the same gates.
+No research-data acquisition, no model, no egress decision, no Opportunity. **Mission 1.82 was
+not started.**
 
 
 

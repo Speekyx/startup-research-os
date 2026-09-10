@@ -54,6 +54,7 @@ from sros_claim_model import (
     QualificationOutcome,
     build_claim,
     contract_for,
+    identity_facts,
     qualify,
     witness_facts,
     witness_key,
@@ -75,7 +76,9 @@ __all__ = [
 ]
 
 CONVERGENT_INTERPRETER_ID = "observed-convergent-witness"
-CONVERGENT_INTERPRETER_VERSION = "1.0.0"
+# 1.1.0 -- Mission 1.81. The procurement sentence names the finer CPV level the
+# detailed claim carries, when it carries one; a division claim renders as before.
+CONVERGENT_INTERPRETER_VERSION = "1.1.0"
 
 # The detailed proposition kinds this projects FROM, each with the contract it
 # projects ONTO. Mission 1.39 wrote this as a single pair so a reader could see
@@ -142,11 +145,20 @@ def _render_procurement(facts: Mapping[str, object]) -> str:
     """
     relation = facts["relation"]
     verb = "differ from one another" if relation == "DIFFERS" else "are all equal"
+    classified = (
+        f'classified under "{facts["classification_scheme"]}" division '
+        f'"{facts["classification_division"]}"'
+    )
+    if "classification_level" in facts:
+        classified = (
+            f'classified under "{facts["classification_scheme"]}" '
+            f'{facts["classification_level"]} "{facts["classification_level_code"]}" '
+            f'(division "{facts["classification_division"]}")'
+        )
     return (
         f'The source "{facts["source_id"]}" published, in its "{facts["resource_id"]}" '
         f'resource, at least one bounded set of "{facts["notice_class"]}" notices '
-        f'classified under "{facts["classification_scheme"]}" division '
-        f'"{facts["classification_division"]}" whose stated "{facts["amount_type"]}" '
+        f'{classified} whose stated "{facts["amount_type"]}" '
         f'amounts at "{facts["amount_scope"]}" scope in "{facts["currency"]}" {verb}.'
     )
 
@@ -253,7 +265,9 @@ def convergent_draft(detailed: ClaimDraft, *, signal_type_id: str) -> ClaimDraft
     # is the convergent one. The witness facts are not discarded: they go into
     # the rationale, and they remain on the Signal and reachable through the
     # Evidence, which is where §3 says a witness fact belongs.
-    identity = {name: projected[name] for name in contract.identity_fields}
+    # 1.1.0. Through the contract's own rule, so a CONDITIONAL identity fact present on
+    # the detailed claim stays identity here rather than being silently dropped.
+    identity = identity_facts(contract, projected)
     witness = witness_facts(contract, projected)
 
     return build_claim(

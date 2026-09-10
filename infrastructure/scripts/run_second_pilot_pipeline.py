@@ -105,7 +105,7 @@ def main() -> int:
                     "research_session_id": session_id,
                     "correlation_id": f"m140-derive-{witness}-{uuid.uuid4()}",
                     "extractor_id": EXTRACTOR,
-                    "parameters": {"amount_type": "TOTAL_VALUE"},
+                    "parameters": {"amount_type": "TOTAL_VALUE", "cpv_grain": 2},
                     "normalized_record_ids": normalized_ids,
                     "max_records": len(normalized_ids) or 1,
                 },
