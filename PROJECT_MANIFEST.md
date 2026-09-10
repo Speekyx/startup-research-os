@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.127
+Version: 1.128
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-10 (Sprint 1 / Mission 1.78)
+Last amended: 2026-09-10 (Sprint 1 / Mission 1.79)
 
 ---
 
@@ -13,6 +13,67 @@ Last amended: 2026-09-10 (Sprint 1 / Mission 1.78)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.128 - 2026-09-10 (Sprint 1 / Mission 1.79)
+
+**`SECOND_OPPORTUNITY_EXPLORATION_IS_NEXT_BOUNDED_MOVE`.** Six linked rows became scorable and
+the docker hypothesis did not become one word stronger. Every move that would add a dimension
+it lacks is blocked by a judgement, a parked relation, a restricted source class or an
+architectural grain mismatch; every executable move adds rows to one saturated shape. **The
+first Opportunity is not entitled to the budget.**
+
+**SCORING-READY IS NOT SCORING**, five times over: the packet reads scoring-ready at 12 of 14
+rows, and it is not calibrated, not an authorisation to persist or rank, not independence and
+not commercial validation, each its own gate.
+
+**SIX SCORABLE ROWS ARE ONE SHAPE.** One source, one family, one counting dimension
+(AUDIENCE_OR_USAGE), one provenance shape; the second counting dimension the Opportunity has
+sits on the one row that is not scorable, so scorable dimension diversity is FALSE. Recurrence
+and solution gap are recorded as UNSUPPORTED_INFERENCE from a question count, not as absent.
+
+**THE LEFTOVER ROW IS NOT THE NEXT ROW TO FIX.** The Stack Exchange bottleneck is **BOTH**:
+reliability is missing because the operator answered NO for want of reachable documentation,
+and the proposition is weak because *questions were published* changes no decision whatever
+its reliability. Vetoed as a weak proposition made numerically usable. The seven uncited
+docker rows add no dimension and no provenance and are vetoed too; **more Wikimedia is
+dominated**; Q1 stays PARKED because nothing merged since 1.76.7 reveals a predicate that
+decides rather than samples, and Globalping's qualification is not independence.
+
+**THE TRADE-OFF IS STATED, NOT SMOOTHED.** The commercial dimension for docker (M3) is the
+most decision-relevant candidate and the least reachable: two governance decisions and an
+acquisition, against a grain mismatch Mission 1.33 found architectural. The second-Opportunity
+candidate (M6) reaches three commercial counting dimensions from rows already held, reviewed
+and scorable -- `ted-eu:CPV-division:92`, 10 rows at 0.5 and 0.55, formable -- with one
+governance question (ted-eu egress NOT_ASSESSED) in front of synthesis and none in front of
+selection, on a CATEGORY-scope subject whose product relevance is the question a bounded
+preparation would ask. **An executable move that opens a second hypothesis defeats a
+theoretically better move that cannot start.** Marginal value of the first Opportunity LOW,
+exploration value MEDIUM and not HIGH, sunk effort counted for nothing.
+
+**DOMINANCE IS RECOMPUTED BY THE GATE, AND IT CORRECTED THE AUTHOR TWICE**: M2 belongs on the
+frontier (vetoed, not dominated), and M5 is dominated by M3 on every field. Both went into the
+record and not into the gate. Ordinal fields only; a numeric priority is refused.
+
+**Verification.** Probe of **46 deliberate violations, 46 caught, 0 escaped**, plus **4 of 4
+positive controls** (a Stack Exchange winner whose bottleneck is reliability alone, a
+commercial winner, the shipped winner and the no-move outcome); one control was itself wrong at
+first, constructing a winner the second-Opportunity candidate dominated, and the gate refused
+it correctly. **3560 bare-python tests**; pytest suites green with the database unchanged;
+`ruff format --check`, `ruff check` and mypy through `uv`; contract generation `--check`;
+source catalog `--check`; all **58** CI gates, one of them new.
+
+**Nothing moved.** 0 canonical mutations, 0 external calls, 0 model calls, 0 embeddings, 0
+measurements; revision 2 current, revision 1 readable, Q1, Globalping and V2 untouched.
+
+New: `docs/data/post-reconciliation-evidence-priority-v1.json` and its generated `.md`,
+`infrastructure/scripts/render_post_reconciliation_priority.py` (CI gate 58),
+`packages/inferred-claim-evaluator/python/tests/test_post_reconciliation_priority.py`, and
+`docs/reports/mission-1.79-report.md`.
+
+Changed: `docs/CLAUDE.md` 1.128 to 1.129; `.github/workflows/ci.yml` gains one gate.
+
+Unchanged: every canonical research table, both Opportunity revisions and their links, every
+preparation record, the Q1 selection, every Globalping record, and the V2 decision.
 
 ## 1.127 - 2026-09-10 (Sprint 1 / Mission 1.78)
 
