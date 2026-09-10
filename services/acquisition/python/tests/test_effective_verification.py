@@ -40,7 +40,14 @@ from sros_acquisition.compliance.verification import (
 from sros_acquisition.registry import evaluate_eligibility
 from sros_contracts import ConditionVerification, ConditionVerificationResult
 
-from .conftest import LEGACY_PROFILE, LOCAL_PROFILE, REPO_ROOT, current_review_version
+from .conftest import (  # noqa: F401
+    LEGACY_PROFILE,
+    LOCAL_PROFILE,
+    REPO_ROOT,
+    current_review_version,
+    human_condition_keys,
+    required_condition_keys,
+)
 
 RESIDUAL = "ted-database-right-residual-exposure-accepted"
 ROUTE_ONLY = "ted-official-route-only"
@@ -94,6 +101,16 @@ def decision(
 
 def effective(ted, compliance, decisions=()):
     return resolve_effective_verifications(ted, LOCAL_PROFILE, compliance, decisions, {}, MOMENT)
+
+
+def all_human_decisions(**kwargs):
+    """One decision per HUMAN_CONFIRMATION condition the current review requires.
+
+    Mission 1.83.1. A single decision authorised the context while one human condition
+    existed; a successor added a second, and supplying one of two is an incomplete
+    authorization the gate is right to refuse.
+    """
+    return tuple(decision(condition_key=key, **kwargs) for key in human_condition_keys())
 
 
 def by_key(records):
@@ -260,7 +277,9 @@ class TestMachineConditionsAreAlwaysLive:
         assert condition in " ".join(result.blocking_reasons)
 
         with pytest.raises(AcquisitionNotAuthorizedError) as caught:
-            build_authorization(ted, LOCAL_PROFILE, broken, decisions=(decision(),), environ={})
+            build_authorization(
+                ted, LOCAL_PROFILE, broken, decisions=all_human_decisions(), environ={}
+            )
         assert condition in " ".join(caught.value.reasons)
 
     def test_no_persisted_machine_state_is_ever_read(self, ted, compliance) -> None:
@@ -281,9 +300,11 @@ class TestEffectiveAuthorization:
         """§16, §28. Four of four, and no caller merged anything: the resolver
         did, inside `build_authorization`."""
         context = build_authorization(
-            ted, LOCAL_PROFILE, compliance, decisions=(decision(),), environ={}, now=MOMENT
+            ted, LOCAL_PROFILE, compliance, decisions=all_human_decisions(), environ={}, now=MOMENT
         )
-        assert satisfied_condition_keys(context.verifications) == {
+        # RE-POINTED BY MISSION 1.83.1: every required condition, however many there are.
+        assert satisfied_condition_keys(context.verifications) == set(required_condition_keys())
+        assert satisfied_condition_keys(context.verifications) >= {
             ATTRIBUTION,
             ROUTE_ONLY,
             MINIMISATION,
@@ -293,12 +314,14 @@ class TestEffectiveAuthorization:
     def test_it_refuses_without_one(self, ted, compliance) -> None:
         with pytest.raises(AcquisitionNotAuthorizedError) as caught:
             build_authorization(ted, LOCAL_PROFILE, compliance, environ={}, now=MOMENT)
-        assert caught.value.reasons == (f"review conditions not satisfied: {RESIDUAL}",)
+        (reason,) = caught.value.reasons
+        assert reason.startswith("review conditions not satisfied: ")
+        assert RESIDUAL in reason
 
     def test_the_context_still_carries_only_the_reviewed_routes(self, ted, compliance) -> None:
         """§19. Nothing about an effective verification set widens a route."""
         context = build_authorization(
-            ted, LOCAL_PROFILE, compliance, decisions=(decision(),), environ={}, now=MOMENT
+            ted, LOCAL_PROFILE, compliance, decisions=all_human_decisions(), environ={}, now=MOMENT
         )
         assert set(context.authorized_route_labels) == {SEARCH_API, OPEN_DATA}
         assert BULK_XML not in context.authorized_route_labels
@@ -307,7 +330,7 @@ class TestEffectiveAuthorization:
 
     def test_the_field_gate_is_unchanged(self, ted, compliance) -> None:
         context = build_authorization(
-            ted, LOCAL_PROFILE, compliance, decisions=(decision(),), environ={}, now=MOMENT
+            ted, LOCAL_PROFILE, compliance, decisions=all_human_decisions(), environ={}, now=MOMENT
         )
         allowed = context.data_minimisation.allowed
         assert context.authorize_fields(allowed) == ()
@@ -324,7 +347,7 @@ class TestEffectiveAuthorization:
         before, with an authorised resource now sitting beside them.
         """
         context = build_authorization(
-            ted, LOCAL_PROFILE, compliance, decisions=(decision(),), environ={}, now=MOMENT
+            ted, LOCAL_PROFILE, compliance, decisions=all_human_decisions(), environ={}, now=MOMENT
         )
         assert [d.resource_id for d in context.datasets] == ["notices/eforms-contract-and-award"]
         assert {
@@ -338,7 +361,12 @@ class TestEffectiveAuthorization:
         """§13 of Mission 1.15.6.1, re-asserted through the new path."""
         with pytest.raises(AcquisitionNotAuthorizedError) as caught:
             build_authorization(
-                ted, LEGACY_PROFILE, compliance, decisions=(decision(),), environ={}, now=MOMENT
+                ted,
+                LEGACY_PROFILE,
+                compliance,
+                decisions=all_human_decisions(),
+                environ={},
+                now=MOMENT,
             )
         assert "REQUIRES_REVIEW" in " ".join(caught.value.reasons)
 

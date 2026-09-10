@@ -88,6 +88,49 @@ def current_review_version(source_id: str = "ted-eu", use_profile: str = LOCAL_P
     )
 
 
+# Mission 1.83.1. The same argument one level along. A fixture standing in for recorded operator
+# state has to name the conditions the catalog CURRENTLY requires: a successor may add one, and a
+# fixture naming the keys that existed when it was written supplies an authorization the gate is
+# right to refuse -- reporting its own gap as a gate failure.
+def _current_review(source_id: str = "ted-eu", use_profile: str = LOCAL_PROFILE) -> dict:
+    import json
+
+    catalog = json.loads(
+        (REPO_ROOT / "docs" / "data" / "source-catalog-v1.json").read_text(encoding="utf-8")
+    )
+    source = next(s for s in catalog["sources"] if s["source_id"] == source_id)
+    return max(
+        (r for r in source["reviews"] if r["assessed_use_profile"] == use_profile),
+        key=lambda r: r["review_version"],
+    )
+
+
+def required_condition_keys(
+    source_id: str = "ted-eu", use_profile: str = LOCAL_PROFILE
+) -> tuple[str, ...]:
+    """Every condition the current review requires, of either verification kind."""
+    review = _current_review(source_id, use_profile)
+    return tuple(sorted(c["key"] for c in review["required_conditions"]))
+
+
+def human_condition_keys(
+    source_id: str = "ted-eu", use_profile: str = LOCAL_PROFILE
+) -> tuple[str, ...]:
+    """Every HUMAN_CONFIRMATION condition the current review requires.
+
+    No verifier may produce one, so a deployment holds a recorded decision per key or it holds an
+    incomplete authorization.
+    """
+    review = _current_review(source_id, use_profile)
+    return tuple(
+        sorted(
+            c["key"]
+            for c in review["required_conditions"]
+            if c["verification"] == "HUMAN_CONFIRMATION"
+        )
+    )
+
+
 # Mission 1.45. Evidence must name a document a later reader can get back to.
 # For a published page that is an https URL. Correspondence has no page, so it
 # names the mailbox the matter is re-opened through AND the checksum of the

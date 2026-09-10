@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.132
+Version: 1.133
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-10 (Sprint 1 / Mission 1.83)
+Last amended: 2026-09-10 (Sprint 1 / Mission 1.83.1)
 
 ---
 
@@ -13,6 +13,112 @@ Last amended: 2026-09-10 (Sprint 1 / Mission 1.83)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.133 - 2026-09-10 (Sprint 1 / Mission 1.83.1)
+
+**`TED_EGRESS_PERMITTED_WITH_CONDITIONS_AND_ELIGIBILITY_RESTORED`.** The operator approved
+`TED-EGRESS-OPPSYNTH-V1` version 1 by its digest, adopting all eight frozen conditions and
+accepting the residual exposure for one bounded scope. This mission verified the approval against
+the packet rather than trusting it, appended a review successor rather than editing v3, re-pointed
+the compliance configuration by PERFORMING the re-check, and re-recorded both human confirmations
+from the operator's own words. **Every gate now passes and zero bytes left the machine.**
+
+**A QUOTED DIGEST IS RECOMPUTED AND NEVER COPIED.** Copying it would make the approval name
+whatever the message said rather than whatever the packet is, so both the stated and the
+recomputed value are kept and the gate refuses them disagreeing. They matched, the version was
+still 1, and the packet FILE's own bytes still hashed to what the approval recorded. **The packet
+was not edited**: its `approval_recorded` still reads false, which means THIS DOCUMENT RECORDS NO
+APPROVAL and never that none exists, because marking a frozen document approved changes the bytes
+that were approved.
+
+**THE ACCEPTANCE IS THE OPERATOR'S WORDS.** Recorded verbatim, hashed to
+`ea589bba...`, and required to name the packet id, the recomputed digest, the decision, the
+subject and the representation digest. Nothing was reworded, tidied or completed: the words
+accepted have to be exactly the words reviewed.
+
+**APPENDED, NEVER EDITED, AND PROVED FROM GIT.** The committed catalog was read out of git and
+compared review by review: nine reviews before, ten after, exactly one added, none removed, and
+**zero pre-existing reviews changed by a single byte**. **EXACTLY ONE ASSESSMENT MOVED** -- v3 does
+not DECLARE `external_model_transmission` at all, so absent meant unasked and the loader resolved
+it to NOT_ASSESSED; v4 declares PERMITTED_WITH_CONDITIONS, and every other assessment is
+byte-identical, checked field by field. The eight adopted conditions reached the successor
+**verbatim**, each labelled with the packet id, version and digest it came from, because a
+condition reworded on the way into the registry is a condition the operator did not adopt.
+
+**THE NEW REQUIRED CONDITION IS SEPARATE, NOT A WIDENING.**
+`ted-external-model-transmission-accepted` sits BESIDE
+`ted-database-right-residual-exposure-accepted` rather than replacing it, because that acceptance
+was written for BOUNDED QUERIES through the authorised acquisition routes and a transmission to a
+processor is neither a query nor the same counterparty. **Widening an existing human acceptance to
+cover a new act is what Mission 1.83 refused to do on the operator's behalf; appending a second
+condition is what doing it honestly looks like.** Three open questions were added and each says
+what the permission does NOT resolve: H-36A is still not established, the instrument still
+enumerates no acts, and whether this generalises to another packet is deliberately unanswered.
+
+**THE CONFIGURATION WAS RE-POINTED BY DOING THE RE-CHECK.** Mission 1.47's rule: a compliance
+configuration is pinned to a review version because a re-review can change what a condition MEANS,
+so bumping the number is honest only when the conditions it answers are unchanged. Asserted
+against the catalog rather than assumed -- the three CAPABILITY conditions are byte-identical
+between v3 and v4 -- and the one condition v4 adds is HUMAN_CONFIRMATION, which no configuration
+can answer and none here pretends to. **Had the successor added a capability condition,
+re-pointing would have verified something else.**
+
+**FIVE CONDITIONS, TWO KINDS OF ACT, AND THE MACHINE ANSWERED NEITHER HUMAN ONE.** The verifier
+pass reported both HUMAN_CONFIRMATION conditions UNKNOWN and left them untouched, in its own
+words: *a machine pass does not answer a human condition, and no longer clears one either*. **TWO
+ROWS REST ON ONE STATEMENT AND THE RECORD SAYS SO**: the operator wrote one approval covering both
+the database-right residual and the onward transmission, so both rows carry that text and the same
+`verifier_version` `ted-v4-egress-approval-v1`, which names WHICH TEXT was signed and is
+deliberately not the v3 identifier.
+
+**A PERMISSION IS A GATE STATE AND NOT AN ACT.** Eligibility BLOCKED to ELIGIBLE, source
+transmission NOT_ASSESSED to PERMITTED_WITH_CONDITIONS, the selected packet's own gate
+UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS to AVAILABLE, inference authorization AUTHORIZED across all
+four gates -- and **0 bytes transmitted, 0 packets serialised for a provider, 0 requests
+composed**. The representation was re-measured after the append and is IDENTICAL to the one
+approved, because an approval naming a payload the repository no longer produces would be an
+approval of something else.
+
+**NOTHING WAS WIDENED.** Training, fine-tuning and embeddings keep the states they had, and the
+successor says so in a condition of its own; redistribution and customer access stay NOT_PERMITTED;
+the commercial profile stays REQUIRES_REVIEW and inherits nothing. The operator's own list of ten
+things this does not authorise is carried whole into both the approval record and the review.
+
+**A KNOWN CONSEQUENCE, RECORDED RATHER THAN REPAIRED.** The v4 preparation records every TED
+packet's egress block as UNAVAILABLE with the NOT_ASSESSED reason, true when Mission 1.82 wrote it
+and no longer the live state. **A historical preparation is never rewritten**, which is why v1, v2
+and v3 are byte-identical across four missions; the next run writes v5, and regenerating in passing
+would change twenty-one packets' blocks as a side effect of a governance act. The Mission 1.82 and
+1.83 records were left alone for the same reason.
+
+**Verification.** Probe of **52 deliberate violations, 52 caught, 0 escaped**, plus **3 of 3
+positive controls**. **The probe found its own defect first**: it rewrote the frozen packet on
+every case, so the gate's file-digest check caught all three controls -- repaired, and the three
+cases that legitimately edit the packet now re-point BOTH digests so the refusal comes from a rule
+about the content rather than from the outer guard. **Then the controls found a real defect in the
+gate**, which hard-coded the five conditions this repository happens to carry and so could not
+express a successor adding none; it now DERIVES them from the catalog and checks the property. **A
+second over-constraint went with it**: the gate demanded that several human confirmations rest on
+one statement, forbidding the legitimate case where an operator writes two, and it now checks the
+signed identifiers instead, which is stricter and added two more refusal cases. **FORTY-THREE TESTS ACROSS ELEVEN FILES WERE RE-POINTED, NOT DELETED** -- every one a tripwire this arc installed for this moment, pinning a count, a mission name or a condition set. What each protects is now stated relationally: everything outstanding IS a human decision rather than exactly one; a bump never DROPS a condition rather than never changing the set; a fixture supplies one decision PER human condition rather than the one that existed, through two helpers derived from the catalog beside `current_review_version`; TED carries one correspondence DOCUMENT however many reviews cite it; and a refusal listing condition KEYS is exempt from the scan for the word *model*, because one key now contains it. **A test asserting a count forever is a test asserting the registry may never grow.** **3732
+bare-python tests**; 3393 pytest tests with the database unchanged across 29 tenant tables; `ruff
+format --check`, `ruff check` and mypy through `uv`; contract generation `--check`; source catalog
+`--check`; source registry validator over 29 sources; all **63** CI gates, one of them new.
+
+**What moved.** Source reviews 70 to 71, one review, five conditions and five verifications. Every
+canonical research counter is identical: RawRecords 325, NormalizedRecords 325, Signals 60, Claims
+91, revisions 92, Evidence 112, assessments 4, independence groups 0, Opportunities 1, revisions 2,
+links 14, scores ABSENT, embeddings 0. Zero model calls, zero research-data fetches, zero
+documentation fetches, zero Opportunities, zero hypotheses. Q1, Globalping and V2 untouched.
+
+New: `docs/data/ted-egress-operator-decision-v1.json` and its generated `.md`,
+`docs/data/ted-egress-decision-persistence-v1.json` and its generated `.md`,
+`infrastructure/scripts/render_ted_egress_decision_persistence.py` (CI gate 63), tests in
+inferred-claim-evaluator, and `docs/reports/mission-1.83.1-report.md`.
+
+Changed: `docs/data/source-catalog-v1.json` gains ted-eu local review v4 and nothing else;
+`docs/data/source-compliance-v1.json` re-pointed to v4 with the re-check recorded;
+`docs/CLAUDE.md` 1.133 to 1.134; `.github/workflows/ci.yml` gains one gate.
 
 ## 1.132 - 2026-09-10 (Sprint 1 / Mission 1.83)
 

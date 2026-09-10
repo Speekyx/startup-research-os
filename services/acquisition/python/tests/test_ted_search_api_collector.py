@@ -61,7 +61,13 @@ from sros_contracts import (
 )
 
 from . import ted_search_fixtures as fx
-from .conftest import LEGACY_PROFILE, LOCAL_PROFILE, REPO_ROOT, current_review_version
+from .conftest import (
+    LEGACY_PROFILE,
+    LOCAL_PROFILE,
+    REPO_ROOT,
+    current_review_version,
+    human_condition_keys,  # noqa: F401
+)
 
 COLLECTOR_SOURCE = (
     REPO_ROOT
@@ -88,12 +94,12 @@ def ted(catalog):
     return next(s for s in catalog if s.source_id == "ted-eu")
 
 
-def decision() -> ConditionVerificationRecord:
+def decision(condition_key: str = RESIDUAL) -> ConditionVerificationRecord:
     """The persisted operator acceptance, as `read_human_decisions` returns it."""
     return ConditionVerificationRecord(
         source_id="ted-eu",
         review_version=current_review_version(),
-        condition_key=RESIDUAL,
+        condition_key=condition_key,
         verification=ConditionVerification.HUMAN_CONFIRMATION,
         verifier="local-operator",
         verifier_version="acknowledgement-v1",
@@ -104,11 +110,20 @@ def decision() -> ConditionVerificationRecord:
     )
 
 
+def decisions() -> tuple[ConditionVerificationRecord, ...]:
+    """One acceptance per HUMAN_CONFIRMATION condition the current review requires.
+
+    Mission 1.83.1. A fixture supplying the one human decision that existed builds no context
+    once a successor adds a second, and reports its own gap as an authorization failure.
+    """
+    return tuple(decision(key) for key in human_condition_keys())
+
+
 @pytest.fixture
 def context(ted, compliance):
     """Built through the production path, with the decision supplied (§38)."""
     return build_authorization(
-        ted, LOCAL_PROFILE, compliance, decisions=(decision(),), environ={}, now=MOMENT
+        ted, LOCAL_PROFILE, compliance, decisions=decisions(), environ={}, now=MOMENT
     )
 
 
@@ -251,7 +266,7 @@ class TestResourceGovernance:
         """The resource lives under one profile. The other cannot even build."""
         with pytest.raises(AcquisitionNotAuthorizedError) as caught:
             build_authorization(
-                ted, LEGACY_PROFILE, compliance, decisions=(decision(),), environ={}, now=MOMENT
+                ted, LEGACY_PROFILE, compliance, decisions=decisions(), environ={}, now=MOMENT
             )
         assert "REQUIRES_REVIEW" in " ".join(caught.value.reasons)
 
@@ -287,7 +302,7 @@ class TestRouteBinding:
         """Remove the route and the collector stops before the network. There is
         no second route it tries instead."""
         context = build_authorization(
-            ted, LOCAL_PROFILE, compliance, decisions=(decision(),), environ={}, now=MOMENT
+            ted, LOCAL_PROFILE, compliance, decisions=decisions(), environ={}, now=MOMENT
         )
         without = replace(
             context, access=tuple(a for a in context.access if a.label != TED_ROUTE_LABEL)
@@ -301,7 +316,7 @@ class TestRouteBinding:
         the collector still refuses when the Search API route is gone. That is
         the difference between one route implemented and one route preferred."""
         context = build_authorization(
-            ted, LOCAL_PROFILE, compliance, decisions=(decision(),), environ={}, now=MOMENT
+            ted, LOCAL_PROFILE, compliance, decisions=decisions(), environ={}, now=MOMENT
         )
         assert "ted-open-data-sparql" in {a.label for a in context.access}
         without = replace(
@@ -842,7 +857,7 @@ class TestTheProductionSequence:
         Built through `build_authorization` with the decision supplied, which is
         what the job path does. No verification set is merged by hand."""
         context = build_authorization(
-            ted, LOCAL_PROFILE, compliance, decisions=(decision(),), environ={}, now=MOMENT
+            ted, LOCAL_PROFILE, compliance, decisions=decisions(), environ={}, now=MOMENT
         )
         assert context.use_profile_id == LOCAL_PROFILE
         result = collect(context, FakeTransport(fx.response(fx.CONTRACT_NOTICE)))

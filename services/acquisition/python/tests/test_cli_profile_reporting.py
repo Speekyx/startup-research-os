@@ -35,7 +35,13 @@ from __future__ import annotations
 import pytest
 from sros_acquisition.cli import main
 
-from .conftest import LEGACY_PROFILE, LOCAL_PROFILE, REPO_ROOT, current_review_version
+from .conftest import (
+    LEGACY_PROFILE,
+    LOCAL_PROFILE,
+    REPO_ROOT,
+    current_review_version,
+    required_condition_keys,
+)
 
 CATALOG = REPO_ROOT / "docs" / "data" / "source-catalog-v1.json"
 COMPLIANCE = REPO_ROOT / "docs" / "data" / "source-compliance-v1.json"
@@ -56,11 +62,16 @@ def run(capsys, *argv: str) -> str:
 
 
 class TestConditionsReadsTheRequestedProfile:
-    def test_the_local_profile_reports_its_four_conditions(self, capsys) -> None:
+    def test_the_local_profile_reports_every_condition_it_requires(self, capsys) -> None:
         """The regression, stated as the behaviour rather than as its absence."""
         out = run(capsys, "--use-profile", LOCAL_PROFILE, "conditions", "ted-eu")
         assert "declares no condition" not in out
-        assert "4 condition(s)" in out
+        # RE-POINTED BY MISSION 1.83.1. The count follows the review rather than pinning it,
+        # and the output has to NAME every condition, which is the stronger claim.
+        keys = required_condition_keys()
+        assert f"{len(keys)} condition(s)" in out
+        for key in keys:
+            assert key in out, key
         for key in ("ted-attribution", ROUTE_ONLY, "ted-personal-data-minimisation", RESIDUAL):
             assert key in out, key
 

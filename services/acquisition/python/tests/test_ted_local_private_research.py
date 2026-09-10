@@ -108,8 +108,16 @@ class TestNoFabricatedOperatorResponse:
             for item in past.evidence
             if item.document_type is PolicyEvidenceType.OPERATOR_CORRESPONDENCE
         ]
-        # One per review version that records it: local v3 and commercial v6.
-        assert len(rows) == 2, [r.document_title for r in rows]
+        # RE-POINTED BY MISSION 1.83.1, which appended local v4 carrying v3's basis forward
+        # unchanged. What this asserted is that TED carries exactly ONE correspondence
+        # DOCUMENT, however many reviews cite it, and that nothing else was fabricated
+        # alongside it. Counting citations pins the registry to a review count; counting
+        # documents is the claim.
+        assert rows, "no correspondence row at all"
+        assert len({r.document_url for r in rows}) == 1, [r.document_url for r in rows]
+        assert len({r.document_fingerprint for r in rows}) == 1, [
+            r.document_fingerprint for r in rows
+        ]
         for item in rows:
             assert item.document_url == self.EXPECTED
             assert "2026-COP-201" in item.document_title

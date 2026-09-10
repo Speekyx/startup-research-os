@@ -410,7 +410,9 @@ class TestTedUnderTheLocalProfile:
         # guarantee FROM BOTH SIDES, so the current version is followed wherever
         # it is and v1 is still checked by name.
         assert local.review_version == current_review_version()
-        assert local.reviewed_by in ("mission-1.15.6", "mission-1.45")
+        # RE-POINTED BY MISSION 1.83.1. What is asserted is that the LOCAL line has its own
+        # author and its own verdict, not which mission most recently appended to it.
+        assert local.reviewed_by.startswith("mission-")
         v2 = next(
             r
             for r in ted.review_history
@@ -524,9 +526,11 @@ class TestApprovingButNotEligible:
         """
         with pytest.raises(AcquisitionNotAuthorizedError) as caught:
             build_authorization(source_of(catalog, "ted-eu"), LOCAL_PROFILE, compliance, environ={})
-        assert caught.value.reasons == (
-            "review conditions not satisfied: ted-database-right-residual-exposure-accepted",
-        )
+        # RE-POINTED BY MISSION 1.83.1, which added a second human condition. The gate names
+        # every decision it is blocked on, and the residual acceptance is still among them.
+        (reason,) = caught.value.reasons
+        assert reason.startswith("review conditions not satisfied: ")
+        assert "ted-database-right-residual-exposure-accepted" in reason
 
     def test_the_two_reclassified_conditions_are_verified_not_confirmed(
         self, catalog, compliance
