@@ -1,0 +1,67 @@
+{
+  "$comment": "Mission 1.82 §3. The EXACT set of CPV concepts a bounded first-party vocabulary lookup may ask about, derived from held division-92 procurement records before any label was retrieved. It carries no labels, deliberately: the codes were chosen by what the held records classify, and a retrieved label may not add one, remove one, or send the lookup deeper. Membership is read through the production extractor's own `_cpv_prefix` rule at each grain -- the same rule the derivation uses -- so a notice whose codes name two subjects at a grain, or none deep enough, contributes no code at that grain.",
+  "record_version": "1.0.0",
+  "mission": "1.82",
+  "record_kind": "cpv_semantic_lookup_universe",
+  "division": "92",
+  "levels": {
+    "2": "division",
+    "3": "group",
+    "4": "class",
+    "5": "category"
+  },
+  "DERIVATION_BASIS": "sros_nlp.extractors.procurement_value_contrast.ProcurementValueContrastExtractor._cpv_prefix at grain 3 (group) and 4 (class), over every held, non-superseded procurement_notice NormalizedRecord carrying a CPV code in division 92",
+  "SOURCE_RECORD_COUNT": 177,
+  "held_procurement_records": 187,
+  "GROUP_CODES": [
+    "921",
+    "922",
+    "923",
+    "924",
+    "925",
+    "926"
+  ],
+  "CLASS_CODES": [
+    "9211",
+    "9213",
+    "9222",
+    "9231",
+    "9233",
+    "9235",
+    "9236",
+    "9251",
+    "9252",
+    "9253",
+    "9261",
+    "9262"
+  ],
+  "CODE_COUNT_GROUP": 6,
+  "CODE_COUNT_CLASS": 12,
+  "notices_per_group_code": {
+    "921": 9,
+    "922": 2,
+    "923": 20,
+    "924": 4,
+    "925": 21,
+    "926": 21
+  },
+  "notices_per_class_code": {
+    "9211": 8,
+    "9213": 1,
+    "9222": 1,
+    "9231": 9,
+    "9233": 5,
+    "9235": 2,
+    "9236": 1,
+    "9251": 7,
+    "9252": 9,
+    "9253": 3,
+    "9261": 16,
+    "9262": 2
+  },
+  "notices_with_no_group": 100,
+  "notices_with_no_class": 113,
+  "labels_present": false,
+  "retrieval_performed_before_this_freeze": false,
+  "CONTENT_SHA256": "4ace701c3ee9f27716d3d5e8f67d8933ea043a4844ffe89ff905a967d4624d83"
+}

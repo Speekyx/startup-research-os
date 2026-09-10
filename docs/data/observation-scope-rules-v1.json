@@ -1,6 +1,6 @@
 {
-  "$comment": "Mission 1.34 §2, §3, §12. WHAT LEVEL OF THING each source-native identifier scheme names, for the Evidence rows whose keys the canonical subject registry does NOT map. A rule matches on (source_id, scheme) by EXACT EQUALITY and on nothing else: no string distance, no token overlap, no stem, no synonym table, no embedding, no model matching. A scheme with no rule here resolves to UNDETERMINED, which fails closed at the §15 gate rather than defaulting to a level.\n\nA RULE IS SOURCE_NATIVE ONLY WHERE THE SOURCE'S OWN VOCABULARY SAYS WHAT IT IS. `CPV-division` is a division of the Common Procurement Vocabulary, which is a classification by its own name and construction, so calling it a CATEGORY rests on the publisher's authority rather than on ours. Where a scheme's level depends on WHAT a particular identifier names rather than on the scheme -- an encyclopedia article may be about a product, a person or a country -- NO RULE IS WRITTEN, because a rule there would classify by source instead of by subject. Those identifiers reach a level only through the canonical subject registry, where a person recorded what each one names.\n\nNOTHING HERE IS A RELATION. A rule says what a scheme's identifiers ARE. It never says one contains another; see scope-relation-registry-v1.json, which is empty on purpose. MISSION 1.81 (1.1.0): one rule added for the ted-eu `CPV-group` scheme, which the grouping procedure renders for procurement Signals keyed on a CPV group. Reviewed by mission-1.81; the Mission 1.34 rules are unchanged.",
-  "registry_version": "observation-scope-rules@1.1.0",
+  "$comment": "Mission 1.34 §2, §3, §12. WHAT LEVEL OF THING each source-native identifier scheme names, for the Evidence rows whose keys the canonical subject registry does NOT map. A rule matches on (source_id, scheme) by EXACT EQUALITY and on nothing else: no string distance, no token overlap, no stem, no synonym table, no embedding, no model matching. A scheme with no rule here resolves to UNDETERMINED, which fails closed at the §15 gate rather than defaulting to a level.\n\nA RULE IS SOURCE_NATIVE ONLY WHERE THE SOURCE'S OWN VOCABULARY SAYS WHAT IT IS. `CPV-division` is a division of the Common Procurement Vocabulary, which is a classification by its own name and construction, so calling it a CATEGORY rests on the publisher's authority rather than on ours. Where a scheme's level depends on WHAT a particular identifier names rather than on the scheme -- an encyclopedia article may be about a product, a person or a country -- NO RULE IS WRITTEN, because a rule there would classify by source instead of by subject. Those identifiers reach a level only through the canonical subject registry, where a person recorded what each one names.\n\nNOTHING HERE IS A RELATION. A rule says what a scheme's identifiers ARE. It never says one contains another; see scope-relation-registry-v1.json, which is empty on purpose. MISSION 1.81 (1.1.0): one rule added for the ted-eu `CPV-group` scheme, which the grouping procedure renders for procurement Signals keyed on a CPV group. Reviewed by mission-1.81; the Mission 1.34 rules are unchanged. MISSION 1.82 (1.2.0): one rule added for the ted-eu `CPV-class` scheme, which the grouping procedure renders for procurement Signals keyed on a CPV class. The Mission 1.34 and 1.81 rules are unchanged.",
+  "registry_version": "observation-scope-rules@1.2.0",
   "reviewed_by": "mission-1.34",
   "reviewed_at": "2026-09-03T00:00:00+00:00",
   "match": "(source_id, scheme) by exact equality; the rendered SubjectKey is <source_id>:<scheme>:<part>|<part>...",
@@ -28,6 +28,19 @@
         "a market, which is a space of exchange rather than a filing rule",
         "that a group is one service market or one buyer need; the held records carry the code and no label",
         "that what is observed of the group is true of anything inside it"
+      ]
+    },
+    {
+      "source_id": "ted-eu",
+      "scheme": "CPV-class",
+      "scope_type": "CATEGORY",
+      "origin": "SOURCE_NATIVE",
+      "basis": "Mission 1.82. A CPV class is the level of the Common Procurement Vocabulary one digit below the group: a four-digit prefix shared by every code the cohort's notices carry, keyed by the extractor's `cpv_grain` parameter and written into the Signal scope as classification_level `class` with its code. It is a finer filing rule inside the same classification, so it names a CATEGORY on the publisher's authority for the same reason the division and the group do: it contains many distinct purchases by many buyers from many suppliers. Mission 1.82 retrieved the official label for every held class from the Publications Office authority register, so a class subject now has a stated meaning -- and a label is display metadata, never identity: the subject is the code.",
+      "never_means": [
+        "any particular product purchased under that class",
+        "a market, which is a space of exchange rather than a filing rule",
+        "that a class is one buyer need, however specific its official label reads",
+        "that what is observed of the class is true of anything inside it"
       ]
     },
     {

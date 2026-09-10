@@ -672,6 +672,25 @@ jobs:
       - name: Globalping residual closure matches its records
         run: uv run python infrastructure/scripts/render_globalping_residuals.py --check
 
+      # Mission 1.82. The CPV codes given their official meaning, and the class grain derived.
+      # The gate refuses: a lookup universe that moved, carries labels, or does not hash to the
+      # digest the record names; a frozen code with no semantic record, or a concept the freeze
+      # does not name; a label that is not the first-party register's, that carries no
+      # raw-response digest, that was inferred from a neighbouring code or recalled from
+      # Mission 1.80, or that is used as subject identity; a derivation selected by semantics, a
+      # cohort below the procedure's own floor, a parent Signal copied into a child, or a
+      # membership model changed without evidence; a reliability copied onto a scope the
+      # resolver did not bind, or an assessment created; market-attractiveness vocabulary in a
+      # candidate, a category read as a product, a notice value read as spend or willingness to
+      # pay, an authority read as a buyer for a future product; a class beating its group where
+      # dominance does not say so, or a selection off the frontier, vetoed, not formable or not
+      # at a selectable grain; a historical preparation rewritten or a parent packet deleted; a
+      # second run that created rows; and any Opportunity, revision, independence group, score,
+      # model call, research acquisition, egress decision, grain-5 persistence or parked-arc
+      # change.
+      - name: The procurement subject semantics match their records
+        run: uv run python infrastructure/scripts/render_procurement_subject_semantics.py --check
+
       # Mission 1.81. The procurement division narrowed into CPV groups from held data. The
       # gate refuses: a census that is not the notice audit's; a primary/additional CPV
       # status the held record does not carry, or a membership model resting on one; a

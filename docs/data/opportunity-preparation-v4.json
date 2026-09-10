@@ -1,0 +1,4226 @@
+{
+  "$comment": "The CURRENT deterministic preparation view over the whole Evidence corpus, reliability resolved late from lineage (Mission 1.77), with procurement subjects at the CPV level each Signal was keyed on -- division, group and class (Missions 1.81 and 1.82). Supersedes the v3 record, which stays as the historical division-and-group view and is not rewritten; v2 and v1 stay as their own historical views.",
+  "artifact_version": "opportunity-preparation@4.0.0",
+  "supersedes": "docs/data/opportunity-preparation-v3.json",
+  "historical": [
+    "docs/data/opportunity-preparation-v1.json",
+    "docs/data/opportunity-preparation-v2.json",
+    "docs/data/opportunity-preparation-v3.json"
+  ],
+  "mission": "1.82",
+  "reliability_resolution_path": "LINEAGE_LATE_RESOLUTION (sros_evidence_reliability.lineage)",
+  "use_profile_id": "local-private-research-v1",
+  "use_profile_note": "DECLARED by the runtime, never inferred (ADR-027). The Evidence rows do not themselves record a use profile: most were collected before ADR-027 existed.",
+  "procedures": {
+    "subject_registry": "canonical-subject-registry@1.1.0",
+    "dimension_taxonomy": "opportunity-evidence-dimensions@1.0.0",
+    "dimension_map": "signal-type-dimension-map@1.0.0",
+    "eligibility": "opportunity-input-eligibility@1.0.0",
+    "grouping": "source-native-subject-grouping@1.3.0",
+    "packet": "opportunity-evidence-packet@1.0.0",
+    "sufficiency": "opportunity-sufficiency@1.0.0",
+    "external_synthesis_gate": "opportunity-external-synthesis-gate@1.0.0"
+  },
+  "sufficiency_rule": "Pre-registered for Mission 1.28. A packet is HYPOTHESIS_FORMABLE only if it holds at least 2 Evidence rows that are ELIGIBLE_CONTEXT or ELIGIBLE_SCORING, and those rows together carry at least 2 distinct counting dimensions, where TREND_OR_CHANGE does not count because every Evidence row in this repository carries it by construction.\n\nFormable means a question can be asked without manufacturing its answer. It is NOT scoring-ready, NOT validated, and NOT a finding that an opportunity exists. A packet whose rows are all NON_SCORABLE can be FORMABLE and can still contribute nothing to any score.\n\nA packet holding rows nobody has assessed is HYPOTHESIS_REQUIRES_REVIEW rather than insufficient: unanswered is not the same as answered no, and merging them would let an open question look like a settled one.",
+  "totals": {
+    "evidence_rows_inspected": 112,
+    "eligible_context": 10,
+    "eligible_scoring": 102,
+    "requires_review": 0,
+    "ineligible": 0,
+    "excluded_from_packets": 0,
+    "packets_built": 21,
+    "packets_formable": 14,
+    "packets_insufficient": 7,
+    "opportunity_hypotheses_generated": 0,
+    "model_calls": 0,
+    "cost_units": 0.0
+  },
+  "evidence_dimension_distribution": {
+    "AUDIENCE_OR_USAGE": 37,
+    "BUYER_OR_BUDGET_EXISTENCE": 66,
+    "ECONOMIC_VALUE": 66,
+    "MARKET_ACTIVITY": 66,
+    "PROBLEM_OR_NEED": 1,
+    "TREND_OR_CHANGE": 37
+  },
+  "source_family_composition": {
+    "economic_data": 4,
+    "forum": 2,
+    "knowledge": 37,
+    "news": 3,
+    "public_procurement": 66
+  },
+  "rows": [
+    {
+      "evidence_id": "0545919e-a49c-4b36-9d0e-e757d8e18bd5",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "05c769b1-f3be-4749-b93a-fca564a1fdcb",
+      "source_id": "world-bank",
+      "source_family": "economic_data",
+      "signal_type_id": "numeric_period_change",
+      "dimensions": [],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at",
+        "evidence_dimension"
+      ],
+      "reliability_resolution": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "indicator/SP.POP.TOTL",
+        "assessment_id": null,
+        "assessment_version": null
+      }
+    },
+    {
+      "evidence_id": "084a6942-592e-40b3-9ac6-55b3413be374",
+      "source_id": "world-bank",
+      "source_family": "economic_data",
+      "signal_type_id": "numeric_period_change",
+      "dimensions": [],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at",
+        "evidence_dimension"
+      ],
+      "reliability_resolution": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "indicator/SP.POP.TOTL",
+        "assessment_id": null,
+        "assessment_version": null
+      }
+    },
+    {
+      "evidence_id": "09bfc370-59d2-4aca-83b8-cf717a1cc329",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "0b407e80-336a-4b71-8a59-09f0464bf43f",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "0d8790e9-fbf8-4675-b253-6b35cf294959",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "1122fecd-43fe-4d1c-a193-043d02686f59",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "13a5eadb-977d-4de0-9c35-d0ff53442074",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "15964f84-3748-45a1-84c7-ad0637f300e8",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "16a8c39c-d72a-4252-9c67-7be2165e9cae",
+      "source_id": "stack-exchange",
+      "source_family": "forum",
+      "signal_type_id": "community_question_volume",
+      "dimensions": [
+        "PROBLEM_OR_NEED"
+      ],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "questions/stackoverflow",
+        "assessment_id": null,
+        "assessment_version": null
+      }
+    },
+    {
+      "evidence_id": "17702f3b-c72c-43bd-b183-e7d600e516fd",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "17735944-da2f-4469-837f-8f3fe71922aa",
+      "source_id": "stack-exchange",
+      "source_family": "forum",
+      "signal_type_id": "community_question_without_accepted_answer_volume",
+      "dimensions": [],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at",
+        "evidence_dimension"
+      ],
+      "reliability_resolution": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "questions/stackoverflow",
+        "assessment_id": null,
+        "assessment_version": null
+      }
+    },
+    {
+      "evidence_id": "17ab3887-7caf-4a81-a7d1-856bfbbdbdac",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "1a0bb19a-c849-46b5-a31b-c6716d6d304c",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "1ad1dc6d-7528-4527-bccd-0a09f47112ac",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "1b93db71-eaed-45c5-a2fa-9e4edea7bc49",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "1b981934-9019-40f3-b12e-076ec9516df0",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "23f3605a-c922-4b47-b9a5-246aa1ede649",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "2530ae78-a2b6-4d3b-9008-d84c40a43aff",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "254fc78d-e129-4ce8-9e08-51b4635d7f52",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "261994f7-e52e-4e40-a879-262192659696",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "262cbfad-94e9-4f34-b8b7-121a6241ca08",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "28d6130a-ae21-4010-9016-e40714a9467d",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "296bfd43-40ea-4e7d-8982-d3f62b4c05f2",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "2cc234b1-cae4-422f-a04a-f876744ca6e4",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "33f8c97d-a55f-479c-aa77-7e021d77e1a3",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "35c43422-d550-40b8-b466-56a054da067a",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "38f0b7c9-aeea-4f45-a170-a5163b22b3be",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "3d4b30c1-ee07-4d05-974e-c1305f81b769",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "3f8036ba-e1ce-4d52-9577-4652d5fc87fa",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "3fd59732-af9b-4dbe-86f7-9acca886e391",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "3ff89183-825b-4f46-87a7-ceb25af3b2a0",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "42059751-1a43-4db4-8413-a511ba290623",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "421bf3db-dd9e-4714-9082-20b7b9a0013c",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "448135b8-209b-4842-b9da-31d8468b34d6",
+      "source_id": "gdelt",
+      "source_family": "news",
+      "signal_type_id": "lexical_frequency_change",
+      "dimensions": [],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at",
+        "evidence_dimension"
+      ],
+      "reliability_resolution": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "web-ngrams/1gram",
+        "assessment_id": null,
+        "assessment_version": null
+      }
+    },
+    {
+      "evidence_id": "487f62c6-2fcf-4790-9773-6e99214d0003",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "4ca19a65-fd0e-456b-8243-292a7bc30c69",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "4ec7946c-4c0d-432f-be95-935460ce305c",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "516182ff-0122-4d13-9d8a-92bb38065a75",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "52ae08c9-d6f3-47aa-8b0c-4e29c890281a",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "54a8cb3c-edd0-4d88-a4d1-98f4725ab6f4",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "57c6af23-8c8b-4e9f-b684-b98cf4846918",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "5a113b42-91b7-4471-bfa7-838b4feb04ff",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "5a53cc52-8904-4a6e-819f-d359725de5ee",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "5a909ff9-3173-4ccb-820b-a2da3402d84f",
+      "source_id": "world-bank",
+      "source_family": "economic_data",
+      "signal_type_id": "numeric_period_change",
+      "dimensions": [],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at",
+        "evidence_dimension"
+      ],
+      "reliability_resolution": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "indicator/SP.POP.TOTL",
+        "assessment_id": null,
+        "assessment_version": null
+      }
+    },
+    {
+      "evidence_id": "5fe77dd3-f1b8-4c75-a4ee-e1609536fee0",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "608c7042-e948-4e79-9a7f-484607d18f46",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "61d7abf7-d54a-4003-95a1-fcb4b5580002",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "637d5ff5-f33a-43ec-8353-2366fb2af211",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "68754977-f961-4d6d-8bed-305dace1392e",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "6cf92ad6-77ed-4126-b356-41e65856430b",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "6f489f38-d111-4835-a3ae-7c9db6187d87",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "6ff9590b-4b59-461a-955b-90fd1b2de330",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "729c6193-762e-4b4f-8ff5-a3933e41bed1",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "78ebdb2b-9d12-49ae-841d-e063b3537be8",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "792d07dc-e6ec-4c9e-8217-41318588f28d",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "79b36033-1b09-48c7-b352-576bc60f8cfc",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "79c0f019-b1bb-4802-93e4-a7889e2db7b8",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "7b1bed61-78ef-43a9-862c-bdeda3171bf5",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "8008d772-0dd0-445c-ae07-77a133edb3c2",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "800f1421-dcef-4656-9c2a-e3bef039282d",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": null,
+        "assessment_version": null
+      }
+    },
+    {
+      "evidence_id": "8c39a1ab-c75f-4091-8db8-cfc7f0cf1fd3",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "8c8f097d-d6d9-460f-a36e-0b7ef875a4a3",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "91349ebf-1e99-4522-bccd-1d0c2bfc5c28",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "923ab225-f965-4f43-9e1a-33ff17cbd7d6",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "92c105c1-e126-4aa6-a11a-4a2fb294c168",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "937fbb12-fd41-467a-99e1-e5dc9ab8e26e",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "93d1ae45-13a5-4fc5-a528-9f3bb1e59980",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "941a89ee-3eab-4a4f-ab32-b2d37c79db28",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "95a6bb74-d500-49c7-b375-4d24505de224",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "969a3758-30c8-4e1a-a33c-46d00ec2fc4f",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "9775a57b-0c99-4d16-8af4-3f4b73ab4cda",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "9c502023-3aca-4ab5-ba45-745feb7aeeee",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "a5c63adb-06d9-4f4f-9445-7fda4493d7c8",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "a77d8ea7-16f7-4259-831d-163c637ffccc",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "ac13e9a6-d04f-41c7-8971-c0daa200e944",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "ad959626-6942-41c3-b753-e226e88bd840",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "b7dc27bf-53c8-4e80-9c83-5980c80fa46c",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "b82380df-3f6e-4347-8bab-918114d009db",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "c2afb9fe-03ef-44a7-a88e-6e82f14bf860",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "c2d04ad8-14af-46a3-b465-8e992125b107",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "c35faf7a-e6a3-4600-96a1-73d521063be2",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "c3bd9af2-6c1e-4bee-9add-ff52b5493833",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "c94b88c9-7eaa-48c8-a248-c42ae0bf87b7",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "ccef0cfe-0981-4a95-833a-c168006c309f",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "cd2b1f2e-7743-4745-9aa0-855199f16bb0",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "cdf30329-463e-46b1-bbe9-c9fb58c3ee65",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "ce349b01-1ea4-4d11-b162-e745e2c82163",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "cf9f792d-9811-43b7-b089-dcf3e835225a",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "d0983e5c-ea2a-44b3-8de4-8cc70e8a74a3",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "d1efc021-3db1-4cda-b116-f2a88cbd21da",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "d20c9938-ab00-45da-9ef0-66b9da9710cc",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "d48e9694-c4d5-4a03-9a28-a4d6fa5053d0",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "d6d1618b-07c3-4e67-9e4e-dd9c8eac231c",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "dc37fcf6-fbbd-4de7-b2f2-de09fed84920",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "de1f0dc6-4f5b-42c4-bdb9-fa927f795f07",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "e2d80a32-b28e-4578-bd4b-c992c2e45124",
+      "source_id": "gdelt",
+      "source_family": "news",
+      "signal_type_id": "lexical_frequency_change",
+      "dimensions": [],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at",
+        "evidence_dimension"
+      ],
+      "reliability_resolution": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "web-ngrams/1gram",
+        "assessment_id": null,
+        "assessment_version": null
+      }
+    },
+    {
+      "evidence_id": "e3dbd26b-21da-4fc8-9fe6-5ab3167ecdb4",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "e4c321bc-3ddd-46ec-91bb-c0e5e7afd70a",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "e53d5e28-3516-40b6-8345-9821aff49dc0",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "e6271f31-7738-417f-a5f7-24b984c54110",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "e96a94a3-6870-41d8-9e9a-a52073c6277b",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "f144e04c-44e9-41e3-87e3-c630c22186d6",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "f1e0b7a4-d570-429a-91a4-fadff84cdce1",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "f21a9e62-0651-460d-8c9b-079bb9b7f776",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "f28abcdd-4d4b-4651-8dcd-5e5fe380fdfd",
+      "source_id": "gdelt",
+      "source_family": "news",
+      "signal_type_id": "lexical_frequency_contrast",
+      "dimensions": [],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at",
+        "evidence_dimension"
+      ],
+      "reliability_resolution": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "web-ngrams/1gram",
+        "assessment_id": null,
+        "assessment_version": null
+      }
+    },
+    {
+      "evidence_id": "f2970ec6-82a8-4add-a45e-0792b4f5371d",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "f4a8b828-a5d2-425e-a4c4-4a595616037d",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "f753e610-c904-4db5-825a-31dbceb6c373",
+      "source_id": "world-bank",
+      "source_family": "economic_data",
+      "signal_type_id": "numeric_period_change",
+      "dimensions": [],
+      "eligibility": "ELIGIBLE_CONTEXT",
+      "reasons": [
+        "no reviewed reliability resolves for this row's measurement-by-purpose scope (NO_APPLICABLE_ASSESSMENT), so the row is NON_SCORABLE. It may be cited as context and may never contribute to a score."
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": false,
+      "missing_factors": [
+        "reliability",
+        "observed_at",
+        "evidence_dimension"
+      ],
+      "reliability_resolution": {
+        "outcome": "NO_APPLICABLE_ASSESSMENT",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "indicator/SP.POP.TOTL",
+        "assessment_id": null,
+        "assessment_version": null
+      }
+    },
+    {
+      "evidence_id": "f98dd9ed-18b8-46e6-b471-5607ad316e37",
+      "source_id": "ted-eu",
+      "source_family": "public_procurement",
+      "signal_type_id": "procurement_value_contrast",
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "notices/eforms-contract-and-award",
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "faab3b4e-85fb-4257-98b5-66ca16908d75",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1
+      }
+    },
+    {
+      "evidence_id": "fd6c1111-43f3-4f03-8426-243b678bb382",
+      "source_id": "wikimedia-pageviews",
+      "source_family": "knowledge",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "eligibility": "ELIGIBLE_SCORING",
+      "reasons": [
+        "claim current, relation valid, profile permits, reliability resolved"
+      ],
+      "independence_state": "UNKNOWN",
+      "scorable": true,
+      "missing_factors": [
+        "observed_at"
+      ],
+      "reliability_resolution": {
+        "outcome": "RESOLVED",
+        "resource_basis": "EXPLICIT_PERSISTED_RESOURCE",
+        "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+        "assessment_id": "19e0ce16-957f-4543-9b15-738a77b13060",
+        "assessment_version": 1
+      }
+    }
+  ],
+  "packets": [
+    {
+      "packet_id": "e43163cf451c7d18aed7282904f277b0af516f3d50914057d08b97f9771e6298",
+      "subject": "subject:docker",
+      "size": 14,
+      "evidence_ids": [
+        "13a5eadb-977d-4de0-9c35-d0ff53442074",
+        "16a8c39c-d72a-4252-9c67-7be2165e9cae",
+        "17735944-da2f-4469-837f-8f3fe71922aa",
+        "17ab3887-7caf-4a81-a7d1-856bfbbdbdac",
+        "1b93db71-eaed-45c5-a2fa-9e4edea7bc49",
+        "261994f7-e52e-4e40-a879-262192659696",
+        "487f62c6-2fcf-4790-9773-6e99214d0003",
+        "516182ff-0122-4d13-9d8a-92bb38065a75",
+        "637d5ff5-f33a-43ec-8353-2366fb2af211",
+        "6cf92ad6-77ed-4126-b356-41e65856430b",
+        "9c502023-3aca-4ab5-ba45-745feb7aeeee",
+        "c2afb9fe-03ef-44a7-a88e-6e82f14bf860",
+        "f1e0b7a4-d570-429a-91a4-fadff84cdce1",
+        "faab3b4e-85fb-4257-98b5-66ca16908d75"
+      ],
+      "canonical_subject_id": "docker",
+      "source_ids": [
+        "stack-exchange",
+        "wikimedia-pageviews"
+      ],
+      "source_families": [
+        "forum",
+        "knowledge"
+      ],
+      "signal_type_ids": [
+        "community_question_volume",
+        "community_question_without_accepted_answer_volume",
+        "content_request_change"
+      ],
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "PROBLEM_OR_NEED",
+        "TREND_OR_CHANGE"
+      ],
+      "counting_dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "PROBLEM_OR_NEED"
+      ],
+      "eligibility_counts": {
+        "ELIGIBLE_SCORING": 12,
+        "ELIGIBLE_CONTEXT": 2
+      },
+      "independence": "independence is UNKNOWN for 14 of 14 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 12,
+      "sufficiency": {
+        "status": "HYPOTHESIS_FORMABLE",
+        "reasons": [
+          "14 eligible rows carrying 2 counting dimensions. 12 of them are scoring-eligible, so this packet is formable and scoring-ready."
+        ],
+        "eligible_rows": 14,
+        "distinct_counting_dimensions": 2,
+        "distinct_dimensions_literal": 3,
+        "scoring_ready": true
+      },
+      "external_synthesis": {
+        "availability": "AVAILABLE",
+        "refusal_reasons": [],
+        "per_source": [
+          [
+            "stack-exchange",
+            "PERMITTED"
+          ],
+          [
+            "wikimedia-pageviews",
+            "PERMITTED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "eb96d039154c7c9c98b022ea347b1687e70f14c07a1ef1e6e3ce56084fb2b24d",
+      "subject": "gdelt:lexical-term:ENGLISH|climate",
+      "size": 1,
+      "evidence_ids": [
+        "448135b8-209b-4842-b9da-31d8468b34d6"
+      ],
+      "canonical_subject_id": null,
+      "source_ids": [
+        "gdelt"
+      ],
+      "source_families": [
+        "news"
+      ],
+      "signal_type_ids": [
+        "lexical_frequency_change"
+      ],
+      "dimensions": [],
+      "counting_dimensions": [],
+      "eligibility_counts": {
+        "ELIGIBLE_CONTEXT": 1
+      },
+      "independence": "independence is UNKNOWN for 1 of 1 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 0,
+      "sufficiency": {
+        "status": "HYPOTHESIS_INSUFFICIENT_EVIDENCE",
+        "reasons": [
+          "1 eligible Evidence rows; the rule requires 2",
+          "0 distinct counting dimensions (none); the rule requires 2"
+        ],
+        "eligible_rows": 1,
+        "distinct_counting_dimensions": 0,
+        "distinct_dimensions_literal": 0,
+        "scoring_ready": false
+      },
+      "external_synthesis": {
+        "availability": "AVAILABLE",
+        "refusal_reasons": [],
+        "per_source": [
+          [
+            "gdelt",
+            "PERMITTED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "fba39ffc3d4e5a2273d6e5b6d2714a06508f5931e00e81d3af80b7d4044bb3c3",
+      "subject": "gdelt:lexical-term:ENGLISH|climate|weather",
+      "size": 1,
+      "evidence_ids": [
+        "f28abcdd-4d4b-4651-8dcd-5e5fe380fdfd"
+      ],
+      "canonical_subject_id": null,
+      "source_ids": [
+        "gdelt"
+      ],
+      "source_families": [
+        "news"
+      ],
+      "signal_type_ids": [
+        "lexical_frequency_contrast"
+      ],
+      "dimensions": [],
+      "counting_dimensions": [],
+      "eligibility_counts": {
+        "ELIGIBLE_CONTEXT": 1
+      },
+      "independence": "independence is UNKNOWN for 1 of 1 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 0,
+      "sufficiency": {
+        "status": "HYPOTHESIS_INSUFFICIENT_EVIDENCE",
+        "reasons": [
+          "1 eligible Evidence rows; the rule requires 2",
+          "0 distinct counting dimensions (none); the rule requires 2"
+        ],
+        "eligible_rows": 1,
+        "distinct_counting_dimensions": 0,
+        "distinct_dimensions_literal": 0,
+        "scoring_ready": false
+      },
+      "external_synthesis": {
+        "availability": "AVAILABLE",
+        "refusal_reasons": [],
+        "per_source": [
+          [
+            "gdelt",
+            "PERMITTED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "b19e61dea43c6d474488ed6a9cefa2f524e2bcd964745162da7a0ec35824a87d",
+      "subject": "gdelt:lexical-term:ENGLISH|weather",
+      "size": 1,
+      "evidence_ids": [
+        "e2d80a32-b28e-4578-bd4b-c992c2e45124"
+      ],
+      "canonical_subject_id": null,
+      "source_ids": [
+        "gdelt"
+      ],
+      "source_families": [
+        "news"
+      ],
+      "signal_type_ids": [
+        "lexical_frequency_change"
+      ],
+      "dimensions": [],
+      "counting_dimensions": [],
+      "eligibility_counts": {
+        "ELIGIBLE_CONTEXT": 1
+      },
+      "independence": "independence is UNKNOWN for 1 of 1 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 0,
+      "sufficiency": {
+        "status": "HYPOTHESIS_INSUFFICIENT_EVIDENCE",
+        "reasons": [
+          "1 eligible Evidence rows; the rule requires 2",
+          "0 distinct counting dimensions (none); the rule requires 2"
+        ],
+        "eligible_rows": 1,
+        "distinct_counting_dimensions": 0,
+        "distinct_dimensions_literal": 0,
+        "scoring_ready": false
+      },
+      "external_synthesis": {
+        "availability": "AVAILABLE",
+        "refusal_reasons": [],
+        "per_source": [
+          [
+            "gdelt",
+            "PERMITTED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "e56fd88e03670d4cdede5b45591cdbcfaa5c70df3dc50c2089ea3afdd9f9138f",
+      "subject": "subject:kubernetes",
+      "size": 13,
+      "evidence_ids": [
+        "33f8c97d-a55f-479c-aa77-7e021d77e1a3",
+        "3fd59732-af9b-4dbe-86f7-9acca886e391",
+        "792d07dc-e6ec-4c9e-8217-41318588f28d",
+        "800f1421-dcef-4656-9c2a-e3bef039282d",
+        "8c8f097d-d6d9-460f-a36e-0b7ef875a4a3",
+        "92c105c1-e126-4aa6-a11a-4a2fb294c168",
+        "c35faf7a-e6a3-4600-96a1-73d521063be2",
+        "d0983e5c-ea2a-44b3-8de4-8cc70e8a74a3",
+        "d20c9938-ab00-45da-9ef0-66b9da9710cc",
+        "e4c321bc-3ddd-46ec-91bb-c0e5e7afd70a",
+        "f21a9e62-0651-460d-8c9b-079bb9b7f776",
+        "f4a8b828-a5d2-425e-a4c4-4a595616037d",
+        "fd6c1111-43f3-4f03-8426-243b678bb382"
+      ],
+      "canonical_subject_id": "kubernetes",
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "source_families": [
+        "knowledge"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "counting_dimensions": [
+        "AUDIENCE_OR_USAGE"
+      ],
+      "eligibility_counts": {
+        "ELIGIBLE_SCORING": 12,
+        "ELIGIBLE_CONTEXT": 1
+      },
+      "independence": "independence is UNKNOWN for 13 of 13 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 12,
+      "sufficiency": {
+        "status": "HYPOTHESIS_INSUFFICIENT_EVIDENCE",
+        "reasons": [
+          "1 distinct counting dimensions (AUDIENCE_OR_USAGE); the rule requires 2"
+        ],
+        "eligible_rows": 13,
+        "distinct_counting_dimensions": 1,
+        "distinct_dimensions_literal": 2,
+        "scoring_ready": true
+      },
+      "external_synthesis": {
+        "availability": "AVAILABLE",
+        "refusal_reasons": [],
+        "per_source": [
+          [
+            "wikimedia-pageviews",
+            "PERMITTED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "f280484e94db6380fe06690c6059fe3c590ed491c432205b0a102652353f9c44",
+      "subject": "subject:podman",
+      "size": 12,
+      "evidence_ids": [
+        "15964f84-3748-45a1-84c7-ad0637f300e8",
+        "38f0b7c9-aeea-4f45-a170-a5163b22b3be",
+        "42059751-1a43-4db4-8413-a511ba290623",
+        "6ff9590b-4b59-461a-955b-90fd1b2de330",
+        "729c6193-762e-4b4f-8ff5-a3933e41bed1",
+        "a5c63adb-06d9-4f4f-9445-7fda4493d7c8",
+        "c2d04ad8-14af-46a3-b465-8e992125b107",
+        "c3bd9af2-6c1e-4bee-9add-ff52b5493833",
+        "c94b88c9-7eaa-48c8-a248-c42ae0bf87b7",
+        "cdf30329-463e-46b1-bbe9-c9fb58c3ee65",
+        "de1f0dc6-4f5b-42c4-bdb9-fa927f795f07",
+        "e6271f31-7738-417f-a5f7-24b984c54110"
+      ],
+      "canonical_subject_id": "podman",
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "source_families": [
+        "knowledge"
+      ],
+      "signal_type_ids": [
+        "content_request_change"
+      ],
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "counting_dimensions": [
+        "AUDIENCE_OR_USAGE"
+      ],
+      "eligibility_counts": {
+        "ELIGIBLE_SCORING": 12
+      },
+      "independence": "independence is UNKNOWN for 12 of 12 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 12,
+      "sufficiency": {
+        "status": "HYPOTHESIS_INSUFFICIENT_EVIDENCE",
+        "reasons": [
+          "1 distinct counting dimensions (AUDIENCE_OR_USAGE); the rule requires 2"
+        ],
+        "eligible_rows": 12,
+        "distinct_counting_dimensions": 1,
+        "distinct_dimensions_literal": 2,
+        "scoring_ready": true
+      },
+      "external_synthesis": {
+        "availability": "AVAILABLE",
+        "refusal_reasons": [],
+        "per_source": [
+          [
+            "wikimedia-pageviews",
+            "PERMITTED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "d204a5c7f89e600acc9ebca7d66b68db466b91631b40b2c821e6f681c6b7bf6f",
+      "subject": "ted-eu:CPV-class:9211",
+      "size": 4,
+      "evidence_ids": [
+        "262cbfad-94e9-4f34-b8b7-121a6241ca08",
+        "5fe77dd3-f1b8-4c75-a4ee-e1609536fee0",
+        "cd2b1f2e-7743-4745-9aa0-855199f16bb0",
+        "e53d5e28-3516-40b6-8345-9821aff49dc0"
+      ],
+      "canonical_subject_id": null,
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "signal_type_ids": [
+        "procurement_value_contrast"
+      ],
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility_counts": {
+        "ELIGIBLE_SCORING": 4
+      },
+      "independence": "independence is UNKNOWN for 4 of 4 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 4,
+      "sufficiency": {
+        "status": "HYPOTHESIS_FORMABLE",
+        "reasons": [
+          "4 eligible rows carrying 3 counting dimensions. 4 of them are scoring-eligible, so this packet is formable and scoring-ready."
+        ],
+        "eligible_rows": 4,
+        "distinct_counting_dimensions": 3,
+        "distinct_dimensions_literal": 3,
+        "scoring_ready": true
+      },
+      "external_synthesis": {
+        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+        "refusal_reasons": [
+          "ted-eu: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
+        ],
+        "per_source": [
+          [
+            "ted-eu",
+            "NOT_ASSESSED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "1dd67d61bfc65cb69f7c5aff07eafc3c498370fcc3011ba17eeb7ed1805a69a2",
+      "subject": "ted-eu:CPV-class:9231",
+      "size": 4,
+      "evidence_ids": [
+        "2530ae78-a2b6-4d3b-9008-d84c40a43aff",
+        "421bf3db-dd9e-4714-9082-20b7b9a0013c",
+        "ad959626-6942-41c3-b753-e226e88bd840",
+        "d6d1618b-07c3-4e67-9e4e-dd9c8eac231c"
+      ],
+      "canonical_subject_id": null,
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "signal_type_ids": [
+        "procurement_value_contrast"
+      ],
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility_counts": {
+        "ELIGIBLE_SCORING": 4
+      },
+      "independence": "independence is UNKNOWN for 4 of 4 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 4,
+      "sufficiency": {
+        "status": "HYPOTHESIS_FORMABLE",
+        "reasons": [
+          "4 eligible rows carrying 3 counting dimensions. 4 of them are scoring-eligible, so this packet is formable and scoring-ready."
+        ],
+        "eligible_rows": 4,
+        "distinct_counting_dimensions": 3,
+        "distinct_dimensions_literal": 3,
+        "scoring_ready": true
+      },
+      "external_synthesis": {
+        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+        "refusal_reasons": [
+          "ted-eu: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
+        ],
+        "per_source": [
+          [
+            "ted-eu",
+            "NOT_ASSESSED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "a3ce145965bede21e3ac60a1286692dc8cb8728d71436eb1559fcd09ef338dce",
+      "subject": "ted-eu:CPV-class:9233",
+      "size": 2,
+      "evidence_ids": [
+        "254fc78d-e129-4ce8-9e08-51b4635d7f52",
+        "f144e04c-44e9-41e3-87e3-c630c22186d6"
+      ],
+      "canonical_subject_id": null,
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "signal_type_ids": [
+        "procurement_value_contrast"
+      ],
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility_counts": {
+        "ELIGIBLE_SCORING": 2
+      },
+      "independence": "independence is UNKNOWN for 2 of 2 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 2,
+      "sufficiency": {
+        "status": "HYPOTHESIS_FORMABLE",
+        "reasons": [
+          "2 eligible rows carrying 3 counting dimensions. 2 of them are scoring-eligible, so this packet is formable and scoring-ready."
+        ],
+        "eligible_rows": 2,
+        "distinct_counting_dimensions": 3,
+        "distinct_dimensions_literal": 3,
+        "scoring_ready": true
+      },
+      "external_synthesis": {
+        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+        "refusal_reasons": [
+          "ted-eu: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
+        ],
+        "per_source": [
+          [
+            "ted-eu",
+            "NOT_ASSESSED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "73458c56f3442aa5fcfe4751e4132a0bb44806810caed806da60977669a54417",
+      "subject": "ted-eu:CPV-class:9251",
+      "size": 4,
+      "evidence_ids": [
+        "608c7042-e948-4e79-9a7f-484607d18f46",
+        "6f489f38-d111-4835-a3ae-7c9db6187d87",
+        "78ebdb2b-9d12-49ae-841d-e063b3537be8",
+        "ac13e9a6-d04f-41c7-8971-c0daa200e944"
+      ],
+      "canonical_subject_id": null,
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "signal_type_ids": [
+        "procurement_value_contrast"
+      ],
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility_counts": {
+        "ELIGIBLE_SCORING": 4
+      },
+      "independence": "independence is UNKNOWN for 4 of 4 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 4,
+      "sufficiency": {
+        "status": "HYPOTHESIS_FORMABLE",
+        "reasons": [
+          "4 eligible rows carrying 3 counting dimensions. 4 of them are scoring-eligible, so this packet is formable and scoring-ready."
+        ],
+        "eligible_rows": 4,
+        "distinct_counting_dimensions": 3,
+        "distinct_dimensions_literal": 3,
+        "scoring_ready": true
+      },
+      "external_synthesis": {
+        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+        "refusal_reasons": [
+          "ted-eu: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
+        ],
+        "per_source": [
+          [
+            "ted-eu",
+            "NOT_ASSESSED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "d6dfa0749ccd41d1305ae98c8381d3679c283ac77b996e41cac0bcd0b94c929f",
+      "subject": "ted-eu:CPV-class:9252",
+      "size": 6,
+      "evidence_ids": [
+        "2cc234b1-cae4-422f-a04a-f876744ca6e4",
+        "3ff89183-825b-4f46-87a7-ceb25af3b2a0",
+        "5a53cc52-8904-4a6e-819f-d359725de5ee",
+        "91349ebf-1e99-4522-bccd-1d0c2bfc5c28",
+        "b82380df-3f6e-4347-8bab-918114d009db",
+        "f2970ec6-82a8-4add-a45e-0792b4f5371d"
+      ],
+      "canonical_subject_id": null,
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "signal_type_ids": [
+        "procurement_value_contrast"
+      ],
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility_counts": {
+        "ELIGIBLE_SCORING": 6
+      },
+      "independence": "independence is UNKNOWN for 6 of 6 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 6,
+      "sufficiency": {
+        "status": "HYPOTHESIS_FORMABLE",
+        "reasons": [
+          "6 eligible rows carrying 3 counting dimensions. 6 of them are scoring-eligible, so this packet is formable and scoring-ready."
+        ],
+        "eligible_rows": 6,
+        "distinct_counting_dimensions": 3,
+        "distinct_dimensions_literal": 3,
+        "scoring_ready": true
+      },
+      "external_synthesis": {
+        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+        "refusal_reasons": [
+          "ted-eu: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
+        ],
+        "per_source": [
+          [
+            "ted-eu",
+            "NOT_ASSESSED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "7f6d1224c06d4b5bbdfc436554912c9aafa93e2250a0e0c81afc85bc465a6afc",
+      "subject": "ted-eu:CPV-class:9253",
+      "size": 2,
+      "evidence_ids": [
+        "4ca19a65-fd0e-456b-8243-292a7bc30c69",
+        "923ab225-f965-4f43-9e1a-33ff17cbd7d6"
+      ],
+      "canonical_subject_id": null,
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "signal_type_ids": [
+        "procurement_value_contrast"
+      ],
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility_counts": {
+        "ELIGIBLE_SCORING": 2
+      },
+      "independence": "independence is UNKNOWN for 2 of 2 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 2,
+      "sufficiency": {
+        "status": "HYPOTHESIS_FORMABLE",
+        "reasons": [
+          "2 eligible rows carrying 3 counting dimensions. 2 of them are scoring-eligible, so this packet is formable and scoring-ready."
+        ],
+        "eligible_rows": 2,
+        "distinct_counting_dimensions": 3,
+        "distinct_dimensions_literal": 3,
+        "scoring_ready": true
+      },
+      "external_synthesis": {
+        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+        "refusal_reasons": [
+          "ted-eu: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
+        ],
+        "per_source": [
+          [
+            "ted-eu",
+            "NOT_ASSESSED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "e218b56a8f938f4d5f7fc961e7f0c2cfe184c4396395334140c6199b48316592",
+      "subject": "ted-eu:CPV-class:9261",
+      "size": 6,
+      "evidence_ids": [
+        "0b407e80-336a-4b71-8a59-09f0464bf43f",
+        "0d8790e9-fbf8-4675-b253-6b35cf294959",
+        "17702f3b-c72c-43bd-b183-e7d600e516fd",
+        "1a0bb19a-c849-46b5-a31b-c6716d6d304c",
+        "7b1bed61-78ef-43a9-862c-bdeda3171bf5",
+        "93d1ae45-13a5-4fc5-a528-9f3bb1e59980"
+      ],
+      "canonical_subject_id": null,
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "signal_type_ids": [
+        "procurement_value_contrast"
+      ],
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility_counts": {
+        "ELIGIBLE_SCORING": 6
+      },
+      "independence": "independence is UNKNOWN for 6 of 6 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 6,
+      "sufficiency": {
+        "status": "HYPOTHESIS_FORMABLE",
+        "reasons": [
+          "6 eligible rows carrying 3 counting dimensions. 6 of them are scoring-eligible, so this packet is formable and scoring-ready."
+        ],
+        "eligible_rows": 6,
+        "distinct_counting_dimensions": 3,
+        "distinct_dimensions_literal": 3,
+        "scoring_ready": true
+      },
+      "external_synthesis": {
+        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+        "refusal_reasons": [
+          "ted-eu: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
+        ],
+        "per_source": [
+          [
+            "ted-eu",
+            "NOT_ASSESSED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "af5186a99147ccf1e40e6fbe320a06f72290c0652a5f76b090ab17bbd06f4540",
+      "subject": "ted-eu:CPV-division:90",
+      "size": 2,
+      "evidence_ids": [
+        "b7dc27bf-53c8-4e80-9c83-5980c80fa46c",
+        "d48e9694-c4d5-4a03-9a28-a4d6fa5053d0"
+      ],
+      "canonical_subject_id": null,
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "signal_type_ids": [
+        "procurement_value_contrast"
+      ],
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility_counts": {
+        "ELIGIBLE_SCORING": 2
+      },
+      "independence": "independence is UNKNOWN for 2 of 2 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 2,
+      "sufficiency": {
+        "status": "HYPOTHESIS_FORMABLE",
+        "reasons": [
+          "2 eligible rows carrying 3 counting dimensions. 2 of them are scoring-eligible, so this packet is formable and scoring-ready."
+        ],
+        "eligible_rows": 2,
+        "distinct_counting_dimensions": 3,
+        "distinct_dimensions_literal": 3,
+        "scoring_ready": true
+      },
+      "external_synthesis": {
+        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+        "refusal_reasons": [
+          "ted-eu: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
+        ],
+        "per_source": [
+          [
+            "ted-eu",
+            "NOT_ASSESSED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "846c98974686a5b33209e404b83280e75f69b3b4d23e2a77328f224a5acd4c8a",
+      "subject": "ted-eu:CPV-division:92",
+      "size": 10,
+      "evidence_ids": [
+        "09bfc370-59d2-4aca-83b8-cf717a1cc329",
+        "1ad1dc6d-7528-4527-bccd-0a09f47112ac",
+        "35c43422-d550-40b8-b466-56a054da067a",
+        "5a113b42-91b7-4471-bfa7-838b4feb04ff",
+        "61d7abf7-d54a-4003-95a1-fcb4b5580002",
+        "79b36033-1b09-48c7-b352-576bc60f8cfc",
+        "a77d8ea7-16f7-4259-831d-163c637ffccc",
+        "ce349b01-1ea4-4d11-b162-e745e2c82163",
+        "cf9f792d-9811-43b7-b089-dcf3e835225a",
+        "e3dbd26b-21da-4fc8-9fe6-5ab3167ecdb4"
+      ],
+      "canonical_subject_id": null,
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "signal_type_ids": [
+        "procurement_value_contrast"
+      ],
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility_counts": {
+        "ELIGIBLE_SCORING": 10
+      },
+      "independence": "independence is UNKNOWN for 10 of 10 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 10,
+      "sufficiency": {
+        "status": "HYPOTHESIS_FORMABLE",
+        "reasons": [
+          "10 eligible rows carrying 3 counting dimensions. 10 of them are scoring-eligible, so this packet is formable and scoring-ready."
+        ],
+        "eligible_rows": 10,
+        "distinct_counting_dimensions": 3,
+        "distinct_dimensions_literal": 3,
+        "scoring_ready": true
+      },
+      "external_synthesis": {
+        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+        "refusal_reasons": [
+          "ted-eu: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
+        ],
+        "per_source": [
+          [
+            "ted-eu",
+            "NOT_ASSESSED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "62a96deb5bd35e4d4a7bfa42a929274853a3c6707addd9d96956c28efbd1a22b",
+      "subject": "ted-eu:CPV-group:921",
+      "size": 6,
+      "evidence_ids": [
+        "3f8036ba-e1ce-4d52-9577-4652d5fc87fa",
+        "52ae08c9-d6f3-47aa-8b0c-4e29c890281a",
+        "54a8cb3c-edd0-4d88-a4d1-98f4725ab6f4",
+        "941a89ee-3eab-4a4f-ab32-b2d37c79db28",
+        "dc37fcf6-fbbd-4de7-b2f2-de09fed84920",
+        "f98dd9ed-18b8-46e6-b471-5607ad316e37"
+      ],
+      "canonical_subject_id": null,
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "signal_type_ids": [
+        "procurement_value_contrast"
+      ],
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility_counts": {
+        "ELIGIBLE_SCORING": 6
+      },
+      "independence": "independence is UNKNOWN for 6 of 6 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 6,
+      "sufficiency": {
+        "status": "HYPOTHESIS_FORMABLE",
+        "reasons": [
+          "6 eligible rows carrying 3 counting dimensions. 6 of them are scoring-eligible, so this packet is formable and scoring-ready."
+        ],
+        "eligible_rows": 6,
+        "distinct_counting_dimensions": 3,
+        "distinct_dimensions_literal": 3,
+        "scoring_ready": true
+      },
+      "external_synthesis": {
+        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+        "refusal_reasons": [
+          "ted-eu: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
+        ],
+        "per_source": [
+          [
+            "ted-eu",
+            "NOT_ASSESSED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "f3549844fafe46456600842b0675faafc69d836234790bcafd75364acfe558f4",
+      "subject": "ted-eu:CPV-group:923",
+      "size": 6,
+      "evidence_ids": [
+        "0545919e-a49c-4b36-9d0e-e757d8e18bd5",
+        "1122fecd-43fe-4d1c-a193-043d02686f59",
+        "79c0f019-b1bb-4802-93e4-a7889e2db7b8",
+        "8008d772-0dd0-445c-ae07-77a133edb3c2",
+        "9775a57b-0c99-4d16-8af4-3f4b73ab4cda",
+        "d1efc021-3db1-4cda-b116-f2a88cbd21da"
+      ],
+      "canonical_subject_id": null,
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "signal_type_ids": [
+        "procurement_value_contrast"
+      ],
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility_counts": {
+        "ELIGIBLE_SCORING": 6
+      },
+      "independence": "independence is UNKNOWN for 6 of 6 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 6,
+      "sufficiency": {
+        "status": "HYPOTHESIS_FORMABLE",
+        "reasons": [
+          "6 eligible rows carrying 3 counting dimensions. 6 of them are scoring-eligible, so this packet is formable and scoring-ready."
+        ],
+        "eligible_rows": 6,
+        "distinct_counting_dimensions": 3,
+        "distinct_dimensions_literal": 3,
+        "scoring_ready": true
+      },
+      "external_synthesis": {
+        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+        "refusal_reasons": [
+          "ted-eu: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
+        ],
+        "per_source": [
+          [
+            "ted-eu",
+            "NOT_ASSESSED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "8d9f8917eecde9c392fec9557a30013b8e422e5cabc76dcb15bec2b74595c9f5",
+      "subject": "ted-eu:CPV-group:925",
+      "size": 8,
+      "evidence_ids": [
+        "23f3605a-c922-4b47-b9a5-246aa1ede649",
+        "296bfd43-40ea-4e7d-8982-d3f62b4c05f2",
+        "4ec7946c-4c0d-432f-be95-935460ce305c",
+        "57c6af23-8c8b-4e9f-b684-b98cf4846918",
+        "95a6bb74-d500-49c7-b375-4d24505de224",
+        "969a3758-30c8-4e1a-a33c-46d00ec2fc4f",
+        "ccef0cfe-0981-4a95-833a-c168006c309f",
+        "e96a94a3-6870-41d8-9e9a-a52073c6277b"
+      ],
+      "canonical_subject_id": null,
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "signal_type_ids": [
+        "procurement_value_contrast"
+      ],
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility_counts": {
+        "ELIGIBLE_SCORING": 8
+      },
+      "independence": "independence is UNKNOWN for 8 of 8 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 8,
+      "sufficiency": {
+        "status": "HYPOTHESIS_FORMABLE",
+        "reasons": [
+          "8 eligible rows carrying 3 counting dimensions. 8 of them are scoring-eligible, so this packet is formable and scoring-ready."
+        ],
+        "eligible_rows": 8,
+        "distinct_counting_dimensions": 3,
+        "distinct_dimensions_literal": 3,
+        "scoring_ready": true
+      },
+      "external_synthesis": {
+        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+        "refusal_reasons": [
+          "ted-eu: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
+        ],
+        "per_source": [
+          [
+            "ted-eu",
+            "NOT_ASSESSED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "40e3c3c7f92c2ae2dc1fb2f00e27f7a7d439d88c186cfbff73ac69803cff910e",
+      "subject": "ted-eu:CPV-group:926",
+      "size": 6,
+      "evidence_ids": [
+        "1b981934-9019-40f3-b12e-076ec9516df0",
+        "28d6130a-ae21-4010-9016-e40714a9467d",
+        "3d4b30c1-ee07-4d05-974e-c1305f81b769",
+        "68754977-f961-4d6d-8bed-305dace1392e",
+        "8c39a1ab-c75f-4091-8db8-cfc7f0cf1fd3",
+        "937fbb12-fd41-467a-99e1-e5dc9ab8e26e"
+      ],
+      "canonical_subject_id": null,
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "signal_type_ids": [
+        "procurement_value_contrast"
+      ],
+      "dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "eligibility_counts": {
+        "ELIGIBLE_SCORING": 6
+      },
+      "independence": "independence is UNKNOWN for 6 of 6 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 6,
+      "sufficiency": {
+        "status": "HYPOTHESIS_FORMABLE",
+        "reasons": [
+          "6 eligible rows carrying 3 counting dimensions. 6 of them are scoring-eligible, so this packet is formable and scoring-ready."
+        ],
+        "eligible_rows": 6,
+        "distinct_counting_dimensions": 3,
+        "distinct_dimensions_literal": 3,
+        "scoring_ready": true
+      },
+      "external_synthesis": {
+        "availability": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+        "refusal_reasons": [
+          "ted-eu: external_model_transmission is NOT_ASSESSED under local-private-research-v1. Nobody has decided whether this source's material may leave the deployment, which refuses -- and is an open question an operator can close, not a prohibition."
+        ],
+        "per_source": [
+          [
+            "ted-eu",
+            "NOT_ASSESSED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "abb3339d1995a3160f5dec9a2d665444c0efaef8bff127bebc251e124c0464aa",
+      "subject": "world-bank:metric-geography:SP.POP.TOTL|DE",
+      "size": 2,
+      "evidence_ids": [
+        "05c769b1-f3be-4749-b93a-fca564a1fdcb",
+        "5a909ff9-3173-4ccb-820b-a2da3402d84f"
+      ],
+      "canonical_subject_id": null,
+      "source_ids": [
+        "world-bank"
+      ],
+      "source_families": [
+        "economic_data"
+      ],
+      "signal_type_ids": [
+        "numeric_period_change"
+      ],
+      "dimensions": [],
+      "counting_dimensions": [],
+      "eligibility_counts": {
+        "ELIGIBLE_CONTEXT": 2
+      },
+      "independence": "independence is UNKNOWN for 2 of 2 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 0,
+      "sufficiency": {
+        "status": "HYPOTHESIS_INSUFFICIENT_EVIDENCE",
+        "reasons": [
+          "0 distinct counting dimensions (none); the rule requires 2"
+        ],
+        "eligible_rows": 2,
+        "distinct_counting_dimensions": 0,
+        "distinct_dimensions_literal": 0,
+        "scoring_ready": false
+      },
+      "external_synthesis": {
+        "availability": "AVAILABLE",
+        "refusal_reasons": [],
+        "per_source": [
+          [
+            "world-bank",
+            "PERMITTED"
+          ]
+        ]
+      }
+    },
+    {
+      "packet_id": "cc6449adadda5375a090947e39321e87e73f660e995bdd5cea953fdfc779665c",
+      "subject": "world-bank:metric-geography:SP.POP.TOTL|FR",
+      "size": 2,
+      "evidence_ids": [
+        "084a6942-592e-40b3-9ac6-55b3413be374",
+        "f753e610-c904-4db5-825a-31dbceb6c373"
+      ],
+      "canonical_subject_id": null,
+      "source_ids": [
+        "world-bank"
+      ],
+      "source_families": [
+        "economic_data"
+      ],
+      "signal_type_ids": [
+        "numeric_period_change"
+      ],
+      "dimensions": [],
+      "counting_dimensions": [],
+      "eligibility_counts": {
+        "ELIGIBLE_CONTEXT": 2
+      },
+      "independence": "independence is UNKNOWN for 2 of 2 rows; this packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings",
+      "scoring_eligible": 0,
+      "sufficiency": {
+        "status": "HYPOTHESIS_INSUFFICIENT_EVIDENCE",
+        "reasons": [
+          "0 distinct counting dimensions (none); the rule requires 2"
+        ],
+        "eligible_rows": 2,
+        "distinct_counting_dimensions": 0,
+        "distinct_dimensions_literal": 0,
+        "scoring_ready": false
+      },
+      "external_synthesis": {
+        "availability": "AVAILABLE",
+        "refusal_reasons": [],
+        "per_source": [
+          [
+            "world-bank",
+            "PERMITTED"
+          ]
+        ]
+      }
+    }
+  ],
+  "epistemic_note": "No Opportunity, Signal, Claim, Evidence, ReliabilityAssessment or Score was created by this run. Every packet is a gathering of references; nothing here asserts that an opportunity exists."
+}

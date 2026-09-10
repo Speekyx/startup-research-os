@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.131
-Last amended: 2026-09-10 (Sprint 1 / Mission 1.81)
+Version: 1.132
+Last amended: 2026-09-10 (Sprint 1 / Mission 1.82)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.132 | 2026-09-10 | **PROCUREMENT_SEMANTIC_SUBJECT_CANDIDATE_SELECTED: the register said what the codes mean, and one class survives knowing it.** **THE FREEZE CAME FIRST**: 6 groups and 12 classes derived from held records through the production membership rule, no labels in the artifact, digest `4ace701c...` committed before the first fetch, **0 codes added and 0 removed afterwards** -- and three class codes present in the population but never unambiguous were **recorded rather than fetched**, because widening a freeze after reading labels is the move it exists to stop. **EIGHTEEN DOCUMENTS, EIGHTEEN LABELS**, one concept per fetch from the EU Publications Office register, which answers in RDF/XML -- so **a retrieval summary is not a document is met by the medium rather than by care** -- each hashed, all digests distinct, every `skos:broader` a **corroboration** of a hierarchy the CPV token already establishes; 19 documentation fetches, **0 research-data fetches, 0 third-party fallbacks, 0 labels inferred from neighbours, 0 Mission 1.80 recall**. **DERIVED WHOLE, JUDGED AFTERWARDS**: 29 cohorts keyed at grain 4, 14 derived, 15 refused at the procedure's floor of 2, **every frozen class the procedure admits derived including the ones whose labels turned out to name nothing** -- so no measurement exists because a label read well. 14 Signals, 26 Claims (14 detailed, 12 witnessed, the 1.39 convergence contract at a new grain), 28 Evidence, **all 28 scorable on the existing TED assessments because a reliability scope carries no classification level**, 0 assessments created, three non-EUR cohorts refused rather than converted, second run 0 rows. **SEMANTIC COHERENCE IS A DOMINANCE FIELD, NOT A TIE-BREAK** written after the numbers: it asks what a subject MEANS and is not attractiveness, trend, profitability or apparent SaaS potential. Two groups reach the exploratory gate once labelled (1.81's blocker resolved), two are disjunctions their own official wording exposes, two are coherent and empty -- **so Outcome C is HALF true and was refused as the primary**. **A CLASS DOES NOT WIN FOR BEING NARROWER**: 926 to 9261 costs **zero** Evidence rows and buys a label naming one activity, while 921 to 9211 costs two of six and buys less than it costs; against its equally broad sibling 9252, **9261 wins on coherence alone**. Small cohorts recorded as two facts, **no minimum N invented**. **WHAT WAS NOT CLAIMED**: that the market is good, that its buyers want software, that anybody would pay, that it is underserved; risk HIGH, representation assembled in memory at 3252 characters with 0 violations and **not sent**, egress NOT_ASSESSED and not decided, grain 5 not descended to. Probe **54 of 54 caught, 0 escaped, 7 of 7 controls** -- one escaped currency case closed, one unresolved-label crash made a first-class state, **one control withdrawn because the gate recomputes the ordinal it tried to forge**. **3647 tests**, 61 gates, canonical rows moved by exactly the derivation, 0 model calls, 0 research-data fetches. `mission-1.82-report.md`. |
 | 1.131 | 2026-09-10 | **PROCUREMENT_NARROWING_REQUIRES_DEEPER_CPV_GRAIN: the division narrowed into CPV groups from held data, and none of them is a candidate.** 13 Signals, 21 Claims, 26 Evidence, all scorable at the reviewed TED reliabilities, four formable group packets. **NARROWER IS NOT ACTIONABLE**: each group is a category whose held cohort spans several classes and no held record carries a label at any level. **THE GRAIN IS WHAT THE HELD TOKEN SAYS IT IS** (eight digits, no check digit, null labels; `CPV_LEVELS` adopted with its basis; 1.80's 'classes' were categories and its labels were recalled). **MEMBERSHIP IS DECIDED BY CODES BEFORE ANY VALUE**: primary status UNAVAILABLE, C4 refuse-ambiguous, 77 / 91 / 9 summing to 177 without deduplication; the division packet came from 89 single-division notices. **A RE-DERIVATION**, because every division Signal spans groups; `cpv_grain` REQUIRED because the model refuses a hidden default; the level as CONDITIONAL identity so a group never witnesses the division; floor 2 from the procedure; no scope broadened; the second run created nothing. **DESCENT ALONE WILL NOT FIX IT**: grains 4 and 5 dry-run to smaller cohorts; the deciding input is a label. Probe **44 of 44 caught, 0 escaped, 6 of 6 controls**. **3610 tests**, 60 gates, canonical rows moved by exactly the derivation, 0 external calls, 0 model calls. `mission-1.81-report.md`. |
 | 1.130 | 2026-09-10 | **SECOND_OPPORTUNITY_REQUIRES_SUBJECT_NARROWING: nine held subjects examined and none is a second-Opportunity candidate.** **THE BEST HELD EVIDENCE PACKET IS NOT THE BEST CANDIDATE**: `ted-eu:CPV-division:92` has ten scorable rows, three commercial counting dimensions and is formable, and it is a CATEGORY whose 177 held notices span six-plus CPV classes, so a hypothesis at its grain is a disjunction of unrelated service markets -- TOO_BROAD_TO_BE_ACTIONABLE, REQUIRES_NARROWER_SUBJECT_DISCOVERY. **A NOTICE VALUE IS NOT COMMERCE** (not spend, not willingness to pay, not market size, not demand, and an authority is not a SaaS buyer); **A CATEGORY IS NOT A PRODUCT**; **NOTHING MERGED, NOTHING NARROWED ON THE WAY PAST**. Kubernetes and podman are the docker shape minus a dimension and not formable; population is not demand; publication is not audience; scorable is not independent. **THE FRONTIER CORRECTED THE AUTHOR**: semantic specificity is a dominance field, so the frontier is three candidates, all vetoed. **EGRESS REQUIRED BEFORE SYNTHESIS AND NOT DECIDED**, no candidate vetoed for it alone, representation tested in memory with zero violations and nothing sent. Probe **46 of 46 caught, 0 escaped, 4 of 4 controls**. **3581 tests**, 59 gates, 0 canonical mutations, 0 external calls, 0 model calls. `mission-1.80-report.md`. |
 | 1.129 | 2026-09-10 | **SECOND_OPPORTUNITY_EXPLORATION_IS_NEXT_BOUNDED_MOVE: six linked rows became scorable and the docker hypothesis did not become one word stronger.** **SCORING-READY IS NOT SCORING** five times over: not calibrated, not an authorisation, not independence, not commercial validation. **SIX SCORABLE ROWS ARE ONE SHAPE** -- one source, one family, one counting dimension, one provenance shape -- and the second counting dimension sits on the one row that is not scorable. **THE LEFTOVER ROW IS NOT THE NEXT ROW TO FIX**: the Stack Exchange bottleneck is BOTH, and *questions were published* changes no decision whatever its reliability; the seven uncited rows add no dimension and no provenance; **more Wikimedia is dominated**; Q1 stays PARKED and Globalping's qualification is not independence. **THE TRADE-OFF IS STATED**: the commercial dimension for docker is the most decision-relevant and the least reachable, while `ted-eu:CPV-division:92` reaches three commercial counting dimensions from held, reviewed, scorable rows with one governance question in front of synthesis -- **an executable move that opens a second hypothesis defeats a theoretically better move that cannot start**. Marginal value of the first Opportunity LOW, exploration value MEDIUM, sunk effort counted for nothing. **THE GATE RECOMPUTES DOMINANCE AND CORRECTED THE AUTHOR TWICE.** Probe **46 of 46 caught, 0 escaped, 4 of 4 controls**. **3560 tests**, 58 gates, 0 canonical mutations, 0 external calls, 0 model calls. `mission-1.79-report.md`. |
@@ -1927,6 +1928,32 @@ decision on whether an exploratory category hypothesis is adoptable; class-grain
 records only where a label makes the class a coherent subject; re-selection under the same gates.
 No research-data acquisition, no model, no egress decision, no Opportunity. **Mission 1.82 was
 not started.**
+
+
+**THE CODES GOT THEIR MEANINGS, IN 1.132 (Mission 1.82), AND ONE CLASS SURVIVES KNOWING IT.**
+
+    frozen 6 groups + 12 classes   digest 4ace701c...   committed before the first fetch
+    fetches 19 documentation / 0 research data   labels 18/18 resolved   fallbacks 0
+    cohorts keyed 29   derived 14   refused 15   signals 46 -> 60   evidence 84 -> 112
+    preparation v3 -> v4   packets 14 -> 21   formable 7 -> 14   selected ted-eu:CPV-class:9261
+
+- **THE FREEZE DECIDES WHICH CONCEPTS MAY BE LOOKED UP**, so a label that reads well cannot add a code.
+- **A CODE PRESENT BUT NEVER UNAMBIGUOUS IS RECORDED, NEVER FETCHED**, because that is the widening the freeze forbids.
+- **THE REGISTER RETURNS THE DOCUMENT ITSELF**, so Mission 1.63's rule is met by the medium rather than by care.
+- **A RETRIEVED PARENT CORROBORATES A HIERARCHY THE TOKEN ALREADY ESTABLISHES**, and establishes none of it.
+- **EVERY ADMITTED COHORT IS DERIVED BEFORE ANY LABEL IS JUDGED**, so no measurement exists because a label read well.
+- **COHERENCE IS WHAT A SUBJECT MEANS, NEVER WHAT A MARKET IS WORTH**, and a coherent subject with no Evidence is not actionable.
+- **A CLASS BEATS ITS GROUP ONLY WHERE NARROWING COSTS NO EVIDENCE**, and one of the two pairs here does not qualify.
+- **A LABEL IS DISPLAY METADATA AND THE CODE IS THE IDENTITY**, and a category is still not a product.
+
+**Next: Mission 1.83 -- Selected Procurement Candidate Egress Review V1.** Review only whether the
+bounded representation of the selected packet (`ted-eu:CPV-class:9261`, 6 rows, 5 claims, 3252
+characters, 0 violations) may be transmitted to a configured external model under
+`local-private-research-v1`, and record the decision. It must not call the model, synthesize a
+hypothesis, create an Opportunity, acquire research data, descend to a finer CPV grain, or score.
+**Mission 1.83 was not started.**
+
+
 
 
 

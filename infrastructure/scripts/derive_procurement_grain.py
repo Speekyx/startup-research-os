@@ -48,8 +48,18 @@ sys.path.insert(0, str(ROOT / "services" / "acquisition" / "python"))
 sys.path.insert(0, str(ROOT / "services" / "nlp" / "python"))
 
 DOCS = ROOT / "docs" / "data"
-OUT = DOCS / "procurement-grain-derivation-run-v1.json"
-RERUN = DOCS / "procurement-grain-derivation-rerun-v1.json"
+# Mission 1.82. One record per grain: the group-grain run belongs to Mission 1.81 and
+# stays byte-identical, so the file name carries the level rather than the mission.
+RUN_RECORDS = {
+    3: (
+        DOCS / "procurement-grain-derivation-run-v1.json",
+        DOCS / "procurement-grain-derivation-rerun-v1.json",
+    ),
+    4: (
+        DOCS / "procurement-class-grain-derivation-run-v1.json",
+        DOCS / "procurement-class-grain-derivation-rerun-v1.json",
+    ),
+}
 AUDIT = DOCS / "procurement-division-92-notice-audit-v1.json"
 
 AMOUNT_TYPE = "TOTAL_VALUE"
@@ -175,7 +185,9 @@ def _report_rows(conn, workspace_id: str, fingerprint: str, grain: int) -> dict[
     out = []
     for sid, correlation, scope, magnitude, unit, version, parameters, members in signals:
         window = (
-            correlation.split("-")[2] if correlation and correlation.startswith("m181-") else None
+            correlation.split("-")[2]
+            if correlation and correlation.startswith(("m181-", "m182-"))
+            else None
         )
         out.append(
             {
@@ -219,6 +231,11 @@ def main() -> int:
     parser.add_argument("--audit", action="store_true")
     parser.add_argument("--report", action="store_true")
     parser.add_argument("--grain", type=int, default=3)
+    parser.add_argument(
+        "--tag",
+        default="182",
+        help="mission tag written into the correlation id of a persisted signal",
+    )
     args = parser.parse_args()
 
     import psycopg
@@ -264,6 +281,16 @@ def main() -> int:
     extractor = EXTRACTOR_REGISTRY["procurement-value-contrast"]
     derivation = extractor.resolve({"amount_type": AMOUNT_TYPE, "cpv_grain": args.grain})
 
+    if args.grain not in RUN_RECORDS:
+        print(
+            f"REFUSED: no run record is registered for grain {args.grain}. A derivation "
+            "that persists rows needs a place to record what it wrote, and reusing "
+            "another grain's file would overwrite another mission's record."
+        )
+        conn.close()
+        return 1
+    out_path, rerun_path = RUN_RECORDS[args.grain]
+
     if args.report:
         with conn.cursor() as cur:
             cur.execute("SELECT set_config('sros.workspace_id', %s, true)", (workspace_id,))
@@ -272,10 +299,10 @@ def main() -> int:
         conn.close()
         record["extractor_version"] = extractor.extractor_version
         record["parameters"] = derivation.parameters_json()
-        OUT.write_text(
+        out_path.write_text(
             json.dumps(record, indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n"
         )
-        print(f"wrote {OUT.name} ({len(record['signals'])} signals)")
+        print(f"wrote {out_path.name} ({len(record['signals'])} signals)")
         return 0
     report: dict[str, object] = {
         "$comment": (
@@ -358,7 +385,7 @@ def main() -> int:
                     derivation,
                     DerivationRequest(
                         workspace_id=workspace_id,
-                        correlation_id=f"m181-grain{args.grain}-{witness}-{uuid.uuid4()}",
+                        correlation_id=f"m{args.tag}-grain{args.grain}-{witness}-{uuid.uuid4()}",
                         derived_at=now,
                         expires_at=now + timedelta(days=90),
                         research_session_id=session_id,
@@ -422,7 +449,7 @@ def main() -> int:
                 {
                     "workspace_id": workspace_id,
                     "research_session_id": session_id,
-                    "correlation_id": f"m181-interpret-{uuid.uuid4()}",
+                    "correlation_id": f"m{args.tag}-interpret-{uuid.uuid4()}",
                     "interpreter_id": "observed-signal-restatement",
                     "signal_type_ids": ["procurement_value_contrast"],
                 },
@@ -454,8 +481,8 @@ def main() -> int:
         conn.close()
 
     if args.apply:
-        target = OUT if report["signals_persisted"] else RERUN
-        if target is RERUN:
+        target = out_path if report["signals_persisted"] else rerun_path
+        if target is rerun_path:
             report["$comment"] = (
                 "Mission 1.81 §34. A second execution of the same derivation over the same "
                 "held records: every cohort's witness set and parameter fingerprint already "
