@@ -1,0 +1,921 @@
+{
+  "$comment": "Mission 1.80. Which held subject, if any, is the candidate for SROS's second Opportunity exploration. A read-only comparison over the current preparation record and the deployment; ordinal fields only; nothing canonical moved, no model, no egress decision. Authoritative where paired with the generated Markdown; the gate recomputes every per-candidate fact from the preparation and reconciliation records and the reviewed scope rules.",
+  "record_version": "1.0.0",
+  "mission": "1.80",
+  "recorded_at": "2026-09-10",
+  "record_kind": "second_opportunity_candidate_selection",
+  "start_commit": "c19f8d4",
+  "branch": "sprint-1/mission-1.80",
+  "migration_head": "0036_grant_use_profile_vocabulary",
+  "measured_from": {
+    "preparation_record": "docs/data/opportunity-preparation-v2.json",
+    "preparation_current": "re-run through the canonical runner and --check current",
+    "reconciliation_record": "docs/data/opportunity-reliability-reconciliation-v1.json",
+    "scope_rules": "docs/data/observation-scope-rules-v1.json",
+    "subject_registry": "docs/data/canonical-subject-registry-v1.json (canonical-subject-registry@1.1.0)",
+    "database": "live, read only: 177 held division-92 notices and 11 held division-90 notices inspected for their CPV class codes"
+  },
+  "primary_outcome": "SECOND_OPPORTUNITY_REQUIRES_SUBJECT_NARROWING",
+  "selected_subject": null,
+  "selected_subject_scope": null,
+  "selected_packet_id": null,
+  "selection_basis": "no candidate passes every load-bearing gate: the only frontier candidate, ted-eu:CPV-division:92, is the best held evidence packet and is a CATEGORY whose held cohorts span at least six distinct CPV classes, so a hypothesis at its grain would be a disjunction of unrelated service markets and no product intervention is grounded; every other candidate is vetoed",
+  "best_held_evidence_packet": "ted-eu:CPV-division:92",
+  "best_second_opportunity_candidate": null,
+  "why_they_differ": "the richest held packet is a procurement category, and a category of film production, sports-facility operation, museum, artistic and news-agency services is not one market. Selecting it for its evidence would relocate the subject into a disjunction of its members, which is the shape Mission 1.47 refused for a proposition and applies to a subject just the same.",
+  "candidate_universe": {
+    "built_from": "every packet in the current preparation record other than the one holding the current Opportunity's cited rows",
+    "excluded": [
+      {
+        "subject": "subject:docker",
+        "why": "the current Opportunity's subject (packet 5ed93e20)"
+      }
+    ],
+    "parked_relations_required_by_any_candidate": false,
+    "subjects": [
+      "gdelt:lexical-term:ENGLISH|climate",
+      "gdelt:lexical-term:ENGLISH|climate|weather",
+      "gdelt:lexical-term:ENGLISH|weather",
+      "subject:kubernetes",
+      "subject:podman",
+      "ted-eu:CPV-division:90",
+      "ted-eu:CPV-division:92",
+      "world-bank:metric-geography:SP.POP.TOTL|DE",
+      "world-bank:metric-geography:SP.POP.TOTL|FR"
+    ],
+    "count": 9,
+    "identity_rule": "the repository's own grouping (source-native-subject-grouping@1.2.0 over canonical-subject-registry@1.1.0); nothing merged, nothing inferred; SAME_PROBLEM_FAMILY stays PARKED"
+  },
+  "ordinal_rules": {
+    "evidence_breadth": "rows <= 2 LOW, 3 to 9 MEDIUM, >= 10 HIGH",
+    "scorable_breadth": "scorable rows 0 LOW, 1 to 9 MEDIUM, >= 10 HIGH",
+    "counting_dimension_diversity": "counting dimensions 0 or 1 LOW, 2 MEDIUM, >= 3 HIGH",
+    "source_diversity": "1 source LOW, 2 MEDIUM, >= 3 HIGH",
+    "provenance_diversity": "one publisher, one pipeline LOW",
+    "independence": "UNKNOWN on every row with 0 groups is UNKNOWN; never ESTABLISHED without a group",
+    "semantic_specificity": "PRODUCT and GEOGRAPHY subjects HIGH; CATEGORY, TOPIC and UNDETERMINED LOW",
+    "commercial_information": "NONE without a commercial counting dimension; LOW with one on fewer than 3 scorable rows; MEDIUM with one on 3 or more scorable rows; HIGH is reserved for WILLINGNESS_TO_PAY, which no held row carries",
+    "problem_information": "NONE without PROBLEM_OR_NEED, SOLUTION_GAP or SOLUTION_DISSATISFACTION",
+    "governance_distance_to_synthesis": "NONE when every source in the packet is egress eligible; LOW when one open question blocks it; HIGH when a review was refused",
+    "new_acquisition_required": "NO when the packet is formable from held data"
+  },
+  "candidates": [
+    {
+      "subject_key": "ted-eu:CPV-division:92",
+      "packet_id": "d754770d1a65a8613f12b64903830e314aee72e97838ae1e0797241212964e68",
+      "subject_scope": "CATEGORY",
+      "subject_scope_basis": "reviewed scope rule for ted-eu (SOURCE_NATIVE): a CPV division is a top-level division of the Common Procurement Vocabulary",
+      "subject_type": "CATEGORY",
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "evidence_rows": 10,
+      "scorable_rows": 10,
+      "non_scorable_rows": 0,
+      "proposition_kinds": {
+        "source_reported_procurement_value_contrast": {
+          "rows": 5,
+          "reliability": 0.5,
+          "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020"
+        },
+        "source_published_classification_value_contrast_witnessed": {
+          "rows": 5,
+          "reliability": 0.55,
+          "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e"
+        }
+      },
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "noncounting_dimensions": [],
+      "reliability_distribution": {
+        "0.5": 5,
+        "0.55": 5
+      },
+      "provenance_shapes": 1,
+      "provenance_note": "one publisher, one resource, one collector route; 8 Claims, each with one support group of UNKNOWN provenance",
+      "independence_state": "UNKNOWN",
+      "hypothesis_formable": true,
+      "scoring_ready_packet_property": true,
+      "egress_state": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+      "egress_reason": "ted-eu external_model_transmission is NOT_ASSESSED under local-private-research-v1 (H-39): an open question an operator can close, not a prohibition",
+      "egress_eligible": false,
+      "egress_review_required_before_synthesis": true,
+      "representation_constructible_without_egress": true,
+      "representation_note": "the bounded payload (packet id, subject, procedures, families, dimensions, independence sentence, 8 composed Claim statements, evidence ids) passes check_representation with 0 violations, 4378 characters, no notice payload, no personal data; assembled in memory and not sent",
+      "establishes": "TED published, in its eforms contract-and-award resource, bounded sets of CONTRACT_NOTICE and CONTRACT_AWARD_NOTICE notices classified under CPV division 92 whose stated TOTAL_VALUE amounts at notice scope differ from one another (contrasts of 86,897,500 EUR; 16,581,256 EUR; 14,695,337 EUR; 1,774,223.99 EUR; 15,000,000 SEK); contracting authorities exist in this category; classified procurement activity exists",
+      "does_not_establish": "actual expenditure (BT-161 includes options and renewals and may never be exercised); willingness to pay for any proposed product; market size; product demand; a buyer for an unspecified future SaaS; addressable revenue; unmet need; dissatisfaction; a solution gap; which of the six-plus service classes any of it concerns",
+      "procurement_semantics": {
+        "value_is_realised_spend": false,
+        "value_is_willingness_to_pay": false,
+        "authority_is_buyer_for_unspecified_product": false
+      },
+      "establishes_product_demand": false,
+      "held_class_distribution": {
+        "notices_held": 177,
+        "notice_classes": {
+          "CONTRACT_NOTICE": 115,
+          "CONTRACT_AWARD_NOTICE": 62
+        },
+        "top_cpv_classes": {
+          "92111 motion picture and video services": 26,
+          "92610 sports facility operation": 21,
+          "92521 museum services": 16,
+          "92400 news agency services": 13,
+          "92312 artistic services": 12,
+          "92370 sound technician": 7
+        },
+        "note": "codes read from held normalized records; labels are the CPV vocabulary's own class names as this repository's earlier missions recorded them, cited for orientation and not as a subject"
+      },
+      "product_intervention_grain": "TOO_BROAD_TO_BE_ACTIONABLE",
+      "actionable_grain": "REQUIRES_NARROWER_SUBJECT_DISCOVERY",
+      "what_a_synthesis_could_say": "that EU contracting authorities publish procurement in recreational, cultural and sporting services with widely differing notice values, i.e. an active commercial category with buyers who publish what they buy",
+      "what_it_could_not_say": "what is bought, by whom, for what need, whether any of it is underserved, or which service market a product would enter; the hypothesis would name a disjunction of film, sports, museum, artistic and news-agency services",
+      "product_relevance": "UNKNOWN",
+      "product_decision_it_could_inform": "whether public-procurement-facing products are worth researching at all, and in which class; nothing narrower",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "HIGH",
+        "SCORABLE_BREADTH": "HIGH",
+        "COUNTING_DIMENSION_DIVERSITY": "HIGH",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "MEDIUM",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "UNKNOWN",
+        "SEMANTIC_SPECIFICITY": "LOW",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "YES",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "LOW",
+        "NEW_ACQUISITION_REQUIRED": "NO",
+        "OPERATOR_JUDGMENT_REQUIRED": "YES",
+        "ARCHITECTURE_WORK_REQUIRED": "YES",
+        "OVERINTERPRETATION_RISK": "HIGH"
+      },
+      "current_blockers": [
+        "CATEGORY grain spanning at least six CPV classes; no product intervention grounded at division grain",
+        "ted-eu egress NOT_ASSESSED (an operator decision, recorded here and not taken)",
+        "narrowing to CPV-class grain needs a class-grain cohort derivation and a grouping rule, which the extractor and grouping procedures do not have today (held data only, no acquisition)"
+      ],
+      "dominance_state": "FRONTIER",
+      "veto_state": "VETOED",
+      "veto_reason": "its only product relevance at the current grain requires unsupported semantic invention: a narrower problem or product would have to be named for the hypothesis to be actionable, and naming one is exactly what section 9 forbids",
+      "exploratory_category_hypothesis": {
+        "considered": true,
+        "adopted": false,
+        "why_not": "an exploratory hypothesis at division grain would read 'EU contracting authorities buy recreational, cultural and sporting services at widely differing values', which names no need, no buyer type, no product and no class; the six-plus held classes share nothing but a filing prefix, so the hypothesis would be a disjunction of unrelated service markets, the shape Mission 1.47 refused for a proposition"
+      }
+    },
+    {
+      "subject_key": "ted-eu:CPV-division:90",
+      "packet_id": "5513f09e981dce4b7960a3d6fa60ac40507174596407d4426dfe0240785fe1a3",
+      "subject_scope": "CATEGORY",
+      "subject_scope_basis": "reviewed scope rule for ted-eu",
+      "subject_type": "CATEGORY",
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "evidence_rows": 2,
+      "scorable_rows": 2,
+      "non_scorable_rows": 0,
+      "proposition_kinds": {
+        "source_reported_procurement_value_contrast": {
+          "rows": 1,
+          "reliability": 0.5,
+          "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020"
+        },
+        "source_published_classification_value_contrast_witnessed": {
+          "rows": 1,
+          "reliability": 0.55,
+          "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e"
+        }
+      },
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "noncounting_dimensions": [],
+      "reliability_distribution": {
+        "0.5": 1,
+        "0.55": 1
+      },
+      "provenance_shapes": 1,
+      "independence_state": "UNKNOWN",
+      "hypothesis_formable": true,
+      "scoring_ready_packet_property": true,
+      "egress_state": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+      "egress_reason": "ted-eu external_model_transmission NOT_ASSESSED",
+      "egress_eligible": false,
+      "egress_review_required_before_synthesis": true,
+      "representation_constructible_without_egress": true,
+      "establishes": "one bounded set of 3 CONTRACT_AWARD_NOTICE notices under CPV division 90 (sewage, refuse, cleaning and environmental services) whose EUR totals differ by 686,545.02",
+      "does_not_establish": "as division 92, on 11 held notices instead of 177",
+      "procurement_semantics": {
+        "value_is_realised_spend": false,
+        "value_is_willingness_to_pay": false,
+        "authority_is_buyer_for_unspecified_product": false
+      },
+      "establishes_product_demand": false,
+      "held_class_distribution": {
+        "notices_held": 11,
+        "notice_classes": {
+          "CONTRACT_AWARD_NOTICE": 8,
+          "CONTRACT_NOTICE": 3
+        }
+      },
+      "product_intervention_grain": "TOO_BROAD_TO_BE_ACTIONABLE",
+      "actionable_grain": "REQUIRES_NARROWER_SUBJECT_DISCOVERY",
+      "product_relevance": "UNKNOWN",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "LOW",
+        "SCORABLE_BREADTH": "MEDIUM",
+        "COUNTING_DIMENSION_DIVERSITY": "HIGH",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "LOW",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "UNKNOWN",
+        "SEMANTIC_SPECIFICITY": "LOW",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "YES",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "LOW",
+        "NEW_ACQUISITION_REQUIRED": "NO",
+        "OPERATOR_JUDGMENT_REQUIRED": "YES",
+        "ARCHITECTURE_WORK_REQUIRED": "YES",
+        "OVERINTERPRETATION_RISK": "HIGH"
+      },
+      "current_blockers": [
+        "the same shape as division 92 on two rows and eleven notices",
+        "CATEGORY grain",
+        "ted-eu egress NOT_ASSESSED"
+      ],
+      "dominance_state": "DOMINATED",
+      "dominated_by": "ted-eu:CPV-division:92",
+      "veto_state": "VETOED",
+      "veto_reason": "strictly more-of-the-same than division 92: the same source, dimensions and grain on fewer rows"
+    },
+    {
+      "subject_key": "subject:kubernetes",
+      "packet_id": "87446bf1644f2bcdb7397b47f077211a8ca01f0aba96651264b4b91a489ce743",
+      "subject_scope": "PRODUCT",
+      "subject_scope_basis": "declared PRODUCT in canonical-subject-registry@1.1.0",
+      "subject_type": "PRODUCT",
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "source_families": [
+        "knowledge"
+      ],
+      "evidence_rows": 13,
+      "scorable_rows": 12,
+      "non_scorable_rows": 1,
+      "proposition_kinds": {
+        "platform_counted_content_request_change": {
+          "rows": 6,
+          "reliability": 0.65
+        },
+        "platform_counted_content_request_change_witnessed": {
+          "rows": 6,
+          "reliability": 0.6
+        },
+        "metric_threshold_state": {
+          "rows": 1,
+          "reliability": null,
+          "note": "the INFERRED pilot claim; NO_APPLICABLE_ASSESSMENT"
+        }
+      },
+      "counting_dimensions": [
+        "AUDIENCE_OR_USAGE"
+      ],
+      "noncounting_dimensions": [
+        "TREND_OR_CHANGE"
+      ],
+      "reliability_distribution": {
+        "0.65": 6,
+        "0.6": 6,
+        "NONE": 1
+      },
+      "provenance_shapes": 1,
+      "independence_state": "UNKNOWN",
+      "hypothesis_formable": false,
+      "formability_reason": "13 eligible rows carrying 1 counting dimension; the rule requires 2",
+      "scoring_ready_packet_property": true,
+      "egress_state": "AVAILABLE",
+      "egress_eligible": true,
+      "egress_review_required_before_synthesis": false,
+      "establishes": "adjacent-day request-count differences for the Kubernetes article under the platform's heuristic 'user' class, and existentials over the same six measurements",
+      "does_not_establish": "readers, demand, a problem, a buyer, money, or anything the docker packet does not also fail to establish; no Stack Exchange row exists for this subject",
+      "establishes_product_demand": false,
+      "product_intervention_grain": "PLAUSIBLE_BUT_REQUIRES_SYNTHESIS",
+      "actionable_grain": "NOT_ACTIONABLE",
+      "product_relevance": "LOW",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "HIGH",
+        "SCORABLE_BREADTH": "HIGH",
+        "COUNTING_DIMENSION_DIVERSITY": "LOW",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "NONE",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "LOW",
+        "SEMANTIC_SPECIFICITY": "HIGH",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "NO",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "NONE",
+        "NEW_ACQUISITION_REQUIRED": "YES",
+        "OPERATOR_JUDGMENT_REQUIRED": "NO",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "MEDIUM"
+      },
+      "current_blockers": [
+        "not formable: one counting dimension; a second needs an acquisition (the docker shape without its Stack Exchange row)"
+      ],
+      "dominance_state": "FRONTIER",
+      "veto_state": "VETOED",
+      "veto_reason": "not formable on one counting dimension, and no held-data deterministic step changes that; on the frontier only for naming a product, which Mission 1.79 already found saturated for this shape"
+    },
+    {
+      "subject_key": "subject:podman",
+      "packet_id": "9c9d3eb56189cf29670e6857813b57b6c088b8ef83cef6fbabfc6d9911a9d23f",
+      "subject_scope": "PRODUCT",
+      "subject_scope_basis": "declared PRODUCT in canonical-subject-registry@1.1.0",
+      "subject_type": "PRODUCT",
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "source_families": [
+        "knowledge"
+      ],
+      "evidence_rows": 12,
+      "scorable_rows": 12,
+      "non_scorable_rows": 0,
+      "proposition_kinds": {
+        "platform_counted_content_request_change": {
+          "rows": 6,
+          "reliability": 0.65
+        },
+        "platform_counted_content_request_change_witnessed": {
+          "rows": 6,
+          "reliability": 0.6
+        }
+      },
+      "counting_dimensions": [
+        "AUDIENCE_OR_USAGE"
+      ],
+      "noncounting_dimensions": [
+        "TREND_OR_CHANGE"
+      ],
+      "reliability_distribution": {
+        "0.65": 6,
+        "0.6": 6
+      },
+      "provenance_shapes": 1,
+      "independence_state": "UNKNOWN",
+      "hypothesis_formable": false,
+      "formability_reason": "12 eligible rows carrying 1 counting dimension; the rule requires 2",
+      "scoring_ready_packet_property": true,
+      "egress_state": "AVAILABLE",
+      "egress_eligible": true,
+      "egress_review_required_before_synthesis": false,
+      "establishes": "as kubernetes, for the Podman article, at request counts an order of magnitude smaller",
+      "does_not_establish": "as kubernetes",
+      "establishes_product_demand": false,
+      "product_intervention_grain": "PLAUSIBLE_BUT_REQUIRES_SYNTHESIS",
+      "actionable_grain": "NOT_ACTIONABLE",
+      "product_relevance": "LOW",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "HIGH",
+        "SCORABLE_BREADTH": "HIGH",
+        "COUNTING_DIMENSION_DIVERSITY": "LOW",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "NONE",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "LOW",
+        "SEMANTIC_SPECIFICITY": "HIGH",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "NO",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "NONE",
+        "NEW_ACQUISITION_REQUIRED": "YES",
+        "OPERATOR_JUDGMENT_REQUIRED": "NO",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "MEDIUM"
+      },
+      "current_blockers": [
+        "not formable: one counting dimension"
+      ],
+      "dominance_state": "FRONTIER",
+      "veto_state": "VETOED",
+      "veto_reason": "not formable on one counting dimension, and no held-data deterministic step changes that; on the frontier only for naming a product, which Mission 1.79 already found saturated for this shape"
+    },
+    {
+      "subject_key": "world-bank:metric-geography:SP.POP.TOTL|DE",
+      "packet_id": "5b0675ad3ad3e800bdb955dab187a38077dc1847afc2443e0793c7927e957d6f",
+      "subject_scope": "GEOGRAPHY",
+      "subject_scope_basis": "reviewed scope rule for world-bank (SOURCE_NATIVE): a measurement OF a country",
+      "subject_type": "METRIC",
+      "source_ids": [
+        "world-bank"
+      ],
+      "source_families": [
+        "economic_data"
+      ],
+      "evidence_rows": 2,
+      "scorable_rows": 0,
+      "non_scorable_rows": 2,
+      "proposition_kinds": {
+        "source_reported_metric_period_change": {
+          "rows": 2,
+          "reliability": null
+        }
+      },
+      "counting_dimensions": [],
+      "noncounting_dimensions": [],
+      "reliability_distribution": {
+        "NONE": 2
+      },
+      "provenance_shapes": 1,
+      "independence_state": "UNKNOWN",
+      "hypothesis_formable": false,
+      "formability_reason": "no dimension: the registered mapping assigns a population change to none",
+      "scoring_ready_packet_property": false,
+      "egress_state": "AVAILABLE",
+      "egress_eligible": true,
+      "egress_review_required_before_synthesis": false,
+      "establishes": "World Bank reported that SP.POP.TOTL for Germany rose by 187,180 between 2018 and 2019, and by 67,909 in the following period",
+      "does_not_establish": "market demand, a product, a buyer, or anything about software; demographic context only",
+      "establishes_product_demand": false,
+      "product_intervention_grain": "NOT_ESTABLISHED",
+      "actionable_grain": "NOT_ACTIONABLE",
+      "product_relevance": "LOW",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "LOW",
+        "SCORABLE_BREADTH": "LOW",
+        "COUNTING_DIMENSION_DIVERSITY": "LOW",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "NONE",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "LOW",
+        "SEMANTIC_SPECIFICITY": "HIGH",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "NO",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "NONE",
+        "NEW_ACQUISITION_REQUIRED": "YES",
+        "OPERATOR_JUDGMENT_REQUIRED": "NO",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "HIGH"
+      },
+      "current_blockers": [
+        "no decision-relevant dimension; a population change is not market demand"
+      ],
+      "dominance_state": "DOMINATED",
+      "dominated_by": "subject:kubernetes",
+      "veto_state": "VETOED",
+      "veto_reason": "no decision-relevant dimension, and not formable"
+    },
+    {
+      "subject_key": "world-bank:metric-geography:SP.POP.TOTL|FR",
+      "packet_id": "f9b9fffa5a35f7ceca9c33ed6b8d74c50694f61ce08856b4f1a35f28396db1ab",
+      "subject_scope": "GEOGRAPHY",
+      "subject_scope_basis": "reviewed scope rule for world-bank",
+      "subject_type": "METRIC",
+      "source_ids": [
+        "world-bank"
+      ],
+      "source_families": [
+        "economic_data"
+      ],
+      "evidence_rows": 2,
+      "scorable_rows": 0,
+      "non_scorable_rows": 2,
+      "proposition_kinds": {
+        "source_reported_metric_period_change": {
+          "rows": 2,
+          "reliability": null
+        }
+      },
+      "counting_dimensions": [],
+      "noncounting_dimensions": [],
+      "reliability_distribution": {
+        "NONE": 2
+      },
+      "provenance_shapes": 1,
+      "independence_state": "UNKNOWN",
+      "hypothesis_formable": false,
+      "formability_reason": "no dimension",
+      "scoring_ready_packet_property": false,
+      "egress_state": "AVAILABLE",
+      "egress_eligible": true,
+      "egress_review_required_before_synthesis": false,
+      "establishes": "World Bank reported SP.POP.TOTL for France rose by 219,049 and 223,713 in two periods",
+      "does_not_establish": "as Germany",
+      "establishes_product_demand": false,
+      "product_intervention_grain": "NOT_ESTABLISHED",
+      "actionable_grain": "NOT_ACTIONABLE",
+      "product_relevance": "LOW",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "LOW",
+        "SCORABLE_BREADTH": "LOW",
+        "COUNTING_DIMENSION_DIVERSITY": "LOW",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "NONE",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "LOW",
+        "SEMANTIC_SPECIFICITY": "HIGH",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "NO",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "NONE",
+        "NEW_ACQUISITION_REQUIRED": "YES",
+        "OPERATOR_JUDGMENT_REQUIRED": "NO",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "HIGH"
+      },
+      "current_blockers": [
+        "no decision-relevant dimension"
+      ],
+      "dominance_state": "DOMINATED",
+      "dominated_by": "subject:kubernetes",
+      "veto_state": "VETOED",
+      "veto_reason": "no decision-relevant dimension, and not formable"
+    },
+    {
+      "subject_key": "gdelt:lexical-term:ENGLISH|climate",
+      "packet_id": "b9f384f61fa5642485c0362e60346f180b95286fd217d07413ff952589c320ea",
+      "subject_scope": "UNDETERMINED",
+      "subject_scope_basis": "no reviewed scope rule for gdelt: a word names no level of thing (Mission 1.34)",
+      "subject_type": "TOPIC",
+      "source_ids": [
+        "gdelt"
+      ],
+      "source_families": [
+        "news"
+      ],
+      "evidence_rows": 1,
+      "scorable_rows": 0,
+      "non_scorable_rows": 1,
+      "proposition_kinds": {
+        "source_reported_term_frequency_change": {
+          "rows": 1,
+          "reliability": null
+        }
+      },
+      "counting_dimensions": [],
+      "noncounting_dimensions": [],
+      "reliability_distribution": {
+        "NONE": 1
+      },
+      "provenance_shapes": 1,
+      "independence_state": "UNKNOWN",
+      "hypothesis_formable": false,
+      "formability_reason": "no dimension: lexical frequency measures what media published, which is producer behaviour and maps to nothing",
+      "scoring_ready_packet_property": false,
+      "egress_state": "AVAILABLE",
+      "egress_eligible": true,
+      "egress_review_required_before_synthesis": false,
+      "establishes": "the term 'climate' appeared 11 more times in one fifteen-minute GDELT bucket than in the preceding one",
+      "does_not_establish": "audience demand, readers, a problem, a market; publication activity only",
+      "establishes_product_demand": false,
+      "product_intervention_grain": "NOT_ESTABLISHED",
+      "actionable_grain": "NOT_ACTIONABLE",
+      "product_relevance": "LOW",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "LOW",
+        "SCORABLE_BREADTH": "LOW",
+        "COUNTING_DIMENSION_DIVERSITY": "LOW",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "NONE",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "LOW",
+        "SEMANTIC_SPECIFICITY": "LOW",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "NO",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "NONE",
+        "NEW_ACQUISITION_REQUIRED": "YES",
+        "OPERATOR_JUDGMENT_REQUIRED": "NO",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "HIGH"
+      },
+      "current_blockers": [
+        "no decision-relevant dimension",
+        "a term is not a subject level"
+      ],
+      "dominance_state": "DOMINATED",
+      "dominated_by": "ted-eu:CPV-division:92",
+      "veto_state": "VETOED",
+      "veto_reason": "no decision-relevant dimension, and not formable"
+    },
+    {
+      "subject_key": "gdelt:lexical-term:ENGLISH|climate|weather",
+      "packet_id": "5294d37515e840239603db4b692376d8eefe3d08ee69f932c157003b1aece1c0",
+      "subject_scope": "UNDETERMINED",
+      "subject_scope_basis": "no reviewed scope rule for gdelt",
+      "subject_type": "TOPIC",
+      "source_ids": [
+        "gdelt"
+      ],
+      "source_families": [
+        "news"
+      ],
+      "evidence_rows": 1,
+      "scorable_rows": 0,
+      "non_scorable_rows": 1,
+      "proposition_kinds": {
+        "source_reported_term_frequency_contrast": {
+          "rows": 1,
+          "reliability": null
+        }
+      },
+      "counting_dimensions": [],
+      "noncounting_dimensions": [],
+      "reliability_distribution": {
+        "NONE": 1
+      },
+      "provenance_shapes": 1,
+      "independence_state": "UNKNOWN",
+      "hypothesis_formable": false,
+      "formability_reason": "no dimension",
+      "scoring_ready_packet_property": false,
+      "egress_state": "AVAILABLE",
+      "egress_eligible": true,
+      "egress_review_required_before_synthesis": false,
+      "establishes": "within one bucket, 'climate' appeared 19 more times than 'weather'",
+      "does_not_establish": "as climate",
+      "establishes_product_demand": false,
+      "product_intervention_grain": "NOT_ESTABLISHED",
+      "actionable_grain": "NOT_ACTIONABLE",
+      "product_relevance": "LOW",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "LOW",
+        "SCORABLE_BREADTH": "LOW",
+        "COUNTING_DIMENSION_DIVERSITY": "LOW",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "NONE",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "LOW",
+        "SEMANTIC_SPECIFICITY": "LOW",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "NO",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "NONE",
+        "NEW_ACQUISITION_REQUIRED": "YES",
+        "OPERATOR_JUDGMENT_REQUIRED": "NO",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "HIGH"
+      },
+      "current_blockers": [
+        "no decision-relevant dimension"
+      ],
+      "dominance_state": "DOMINATED",
+      "dominated_by": "ted-eu:CPV-division:92",
+      "veto_state": "VETOED",
+      "veto_reason": "no decision-relevant dimension, and not formable"
+    },
+    {
+      "subject_key": "gdelt:lexical-term:ENGLISH|weather",
+      "packet_id": "bd61b411a9facdcfe555fc527bf8ff09342f5f714663372d3ed3424fd3428db0",
+      "subject_scope": "UNDETERMINED",
+      "subject_scope_basis": "no reviewed scope rule for gdelt",
+      "subject_type": "TOPIC",
+      "source_ids": [
+        "gdelt"
+      ],
+      "source_families": [
+        "news"
+      ],
+      "evidence_rows": 1,
+      "scorable_rows": 0,
+      "non_scorable_rows": 1,
+      "proposition_kinds": {
+        "source_reported_term_frequency_change": {
+          "rows": 1,
+          "reliability": null
+        }
+      },
+      "counting_dimensions": [],
+      "noncounting_dimensions": [],
+      "reliability_distribution": {
+        "NONE": 1
+      },
+      "provenance_shapes": 1,
+      "independence_state": "UNKNOWN",
+      "hypothesis_formable": false,
+      "formability_reason": "no dimension",
+      "scoring_ready_packet_property": false,
+      "egress_state": "AVAILABLE",
+      "egress_eligible": true,
+      "egress_review_required_before_synthesis": false,
+      "establishes": "the term 'weather' appeared 9 more times in one bucket than in the preceding one",
+      "does_not_establish": "as climate",
+      "establishes_product_demand": false,
+      "product_intervention_grain": "NOT_ESTABLISHED",
+      "actionable_grain": "NOT_ACTIONABLE",
+      "product_relevance": "LOW",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "LOW",
+        "SCORABLE_BREADTH": "LOW",
+        "COUNTING_DIMENSION_DIVERSITY": "LOW",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "NONE",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "LOW",
+        "SEMANTIC_SPECIFICITY": "LOW",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "NO",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "NONE",
+        "NEW_ACQUISITION_REQUIRED": "YES",
+        "OPERATOR_JUDGMENT_REQUIRED": "NO",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "HIGH"
+      },
+      "current_blockers": [
+        "no decision-relevant dimension"
+      ],
+      "dominance_state": "DOMINATED",
+      "dominated_by": "ted-eu:CPV-division:92",
+      "veto_state": "VETOED",
+      "veto_reason": "no decision-relevant dimension, and not formable"
+    }
+  ],
+  "dominance": {
+    "rule": "X dominates Y when X is at least as good on every dominance field and strictly better on at least one; dominance is a veto on the dominated candidate, never a selection rule, and section 19's vetoes are applied independently of it",
+    "fields": [
+      "EVIDENCE_BREADTH",
+      "SCORABLE_BREADTH",
+      "COUNTING_DIMENSION_DIVERSITY",
+      "SOURCE_DIVERSITY",
+      "COMMERCIAL_INFORMATION",
+      "PROBLEM_INFORMATION",
+      "SEMANTIC_SPECIFICITY",
+      "PROVENANCE_DIVERSITY",
+      "HYPOTHESIS_FORMABILITY"
+    ],
+    "scales": {
+      "information": [
+        "NONE",
+        "LOW",
+        "MEDIUM",
+        "HIGH"
+      ],
+      "formability": [
+        "NO",
+        "YES"
+      ]
+    },
+    "PARETO_FRONTIER": [
+      "ted-eu:CPV-division:92",
+      "subject:kubernetes",
+      "subject:podman"
+    ],
+    "DOMINATED_CANDIDATES": [
+      "ted-eu:CPV-division:90",
+      "world-bank:metric-geography:SP.POP.TOTL|DE",
+      "world-bank:metric-geography:SP.POP.TOTL|FR",
+      "gdelt:lexical-term:ENGLISH|climate",
+      "gdelt:lexical-term:ENGLISH|climate|weather",
+      "gdelt:lexical-term:ENGLISH|weather"
+    ],
+    "dominated_by": {
+      "ted-eu:CPV-division:90": "ted-eu:CPV-division:92",
+      "world-bank:metric-geography:SP.POP.TOTL|DE": "subject:kubernetes",
+      "world-bank:metric-geography:SP.POP.TOTL|FR": "subject:kubernetes",
+      "gdelt:lexical-term:ENGLISH|climate": "ted-eu:CPV-division:92",
+      "gdelt:lexical-term:ENGLISH|climate|weather": "ted-eu:CPV-division:92",
+      "gdelt:lexical-term:ENGLISH|weather": "ted-eu:CPV-division:92"
+    },
+    "VETOED_CANDIDATES": [
+      "ted-eu:CPV-division:92",
+      "ted-eu:CPV-division:90",
+      "subject:kubernetes",
+      "subject:podman",
+      "world-bank:metric-geography:SP.POP.TOTL|DE",
+      "world-bank:metric-geography:SP.POP.TOTL|FR",
+      "gdelt:lexical-term:ENGLISH|climate",
+      "gdelt:lexical-term:ENGLISH|climate|weather",
+      "gdelt:lexical-term:ENGLISH|weather"
+    ],
+    "frontier_note": "kubernetes and podman sit on the frontier because they name a product and division 92 names a category; semantic specificity is a dominance field, so the richer packet does not dominate them. Both are vetoed on formability, which is the gate a frontier place does not waive. The frontier is what the stated rule produces, not what the author first wrote: the first draft listed both as dominated by division 92."
+  },
+  "load_bearing_gates": {
+    "formable": "ted-eu:CPV-division:92 and ted-eu:CPV-division:90 only",
+    "decision_relevant_dimension": "the two TED packets only",
+    "actionable_grain": "none: both TED packets are REQUIRES_NARROWER_SUBJECT_DISCOVERY, every other candidate NOT_ACTIONABLE",
+    "not_vetoed": "none",
+    "why_no_selection": "a candidate passes only if it clears every gate, and actionable grain is a gate; selecting the richest packet regardless would optimise for Opportunity count, which section 22 forbids"
+  },
+  "narrowing": {
+    "dominant_category": "ted-eu:CPV-division:92",
+    "why_narrowing_is_possible_from_held_data": "the 177 held division-92 notices carry their CPV class codes on every record: at least six classes with seven or more notices each (motion picture and video services, sports facility operation, museum services, news agency services, artistic services, sound technician services); a class-grain cohort is a re-derivation over held NormalizedRecords, not an acquisition",
+    "what_narrowing_requires": "a class-grain cohort derivation (the procurement-value-contrast extractor groups by division), a class-grain subject key in the grouping procedure, currency-pure cohorts as Mission 1.41 requires, and a re-run of the preparation runner; the two reviewed TED reliability scopes carry no classification division and would bind unchanged (Mission 1.40, 1.42)",
+    "what_narrowing_does_not_change": "procurement semantics (a notice value is not spend and not willingness to pay), the egress question, independence (one publisher), or the profile's calibration",
+    "acquisition_required": false,
+    "operator_judgement_required_for_narrowing": false,
+    "operator_judgement_required_before_synthesis": true
+  },
+  "egress": {
+    "EGRESS_REVIEW_REQUIRED_BEFORE_SYNTHESIS": true,
+    "ted_eu_state": "external_model_transmission NOT_ASSESSED under local-private-research-v1",
+    "decided_here": false,
+    "granted": false,
+    "denied": false,
+    "source_review_appended": false,
+    "why_selection_does_not_need_it": "permission to send a bounded representation to a model and evidence sufficiency are separate questions; a candidate is selected on its evidence and blocked on its egress"
+  },
+  "current_state": {
+    "opportunities": 1,
+    "opportunity_revisions": 2,
+    "current_revision_number": 2,
+    "current_revision_id": "8739e7ab-940b-408c-a5e8-7f6675d1597c",
+    "linked_evidence": 7,
+    "scorable_linked_evidence": 6,
+    "non_scorable_linked_evidence": 1,
+    "total_evidence": 58,
+    "scorable_evidence": 48,
+    "reliability_assessments": 4,
+    "independence_groups": 0,
+    "scores_table": "ABSENT",
+    "embeddings": 0,
+    "opportunity_evidence_links": 14,
+    "reference_profile_v1": "UNCALIBRATED"
+  },
+  "parked_states_preserved": {
+    "q1": {
+      "QUANTITY_CLASS_SELECTED": "Q1",
+      "CLASS_SELECTED": true,
+      "CONSTRUCT_SELECTED": false,
+      "RUN_AUTHORIZED": false
+    },
+    "globalping": {
+      "PASS": 12,
+      "PARTIAL": 0,
+      "FAIL": 0,
+      "verdict": "COUNTERPART_RESOLVED"
+    },
+    "v2": {
+      "primary_outcome": "V2_VALID_FOR_REFUTATION_BUT_NOT_INDEPENDENT_SUPPORT",
+      "corpus_frozen": false,
+      "measurements_executed": 0
+    },
+    "changed_by_this_mission": false
+  },
+  "mission_accounting": {
+    "api_calls": 0,
+    "dataset_downloads": 0,
+    "raw_records_created": 0,
+    "web_requests": 0,
+    "mailbox_reads": 0,
+    "outbound_messages": 0,
+    "model_calls": 0,
+    "embeddings": 0,
+    "opportunities_created": 0,
+    "opportunity_revisions_created": 0,
+    "opportunity_links_created": 0,
+    "reliability_assessments_created": 0,
+    "independence_groups_created": 0,
+    "scores_persisted": 0,
+    "source_reviews_appended": 0,
+    "canonical_research_mutations": 0
+  },
+  "recommended_next_mission": {
+    "id": "1.81",
+    "title": "Procurement Subject-Grain Narrowing V1",
+    "shape": "held data only: derive CPV-class-grain cohorts from the held division-92 NormalizedRecords, define class-grain subject keys in the grouping procedure, re-run the preparation runner, and re-select among the class-grain packets against the same gates; no acquisition, no model, no egress decision, no Opportunity",
+    "must_not": [
+      "acquire data to narrow",
+      "call a model",
+      "decide the ted-eu egress question",
+      "create an Opportunity",
+      "score or rank"
+    ]
+  },
+  "representation_check": {
+    "procedure": "opportunity-transmission-representation@1.0.0",
+    "assembled_in_memory": true,
+    "transmitted": false,
+    "model_called": false,
+    "packets": {
+      "ted-eu:CPV-division:92": {
+        "claims": 8,
+        "characters": 4378,
+        "violations": 0
+      },
+      "ted-eu:CPV-division:90": {
+        "claims": 2,
+        "characters": 1777,
+        "violations": 0
+      }
+    },
+    "note": "section 17: representation feasibility is tested deterministically without egress; a constructible payload is not permission to send it"
+  }
+}

@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.129
-Last amended: 2026-09-10 (Sprint 1 / Mission 1.79)
+Version: 1.130
+Last amended: 2026-09-10 (Sprint 1 / Mission 1.80)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.130 | 2026-09-10 | **SECOND_OPPORTUNITY_REQUIRES_SUBJECT_NARROWING: nine held subjects examined and none is a second-Opportunity candidate.** **THE BEST HELD EVIDENCE PACKET IS NOT THE BEST CANDIDATE**: `ted-eu:CPV-division:92` has ten scorable rows, three commercial counting dimensions and is formable, and it is a CATEGORY whose 177 held notices span six-plus CPV classes, so a hypothesis at its grain is a disjunction of unrelated service markets -- TOO_BROAD_TO_BE_ACTIONABLE, REQUIRES_NARROWER_SUBJECT_DISCOVERY. **A NOTICE VALUE IS NOT COMMERCE** (not spend, not willingness to pay, not market size, not demand, and an authority is not a SaaS buyer); **A CATEGORY IS NOT A PRODUCT**; **NOTHING MERGED, NOTHING NARROWED ON THE WAY PAST**. Kubernetes and podman are the docker shape minus a dimension and not formable; population is not demand; publication is not audience; scorable is not independent. **THE FRONTIER CORRECTED THE AUTHOR**: semantic specificity is a dominance field, so the frontier is three candidates, all vetoed. **EGRESS REQUIRED BEFORE SYNTHESIS AND NOT DECIDED**, no candidate vetoed for it alone, representation tested in memory with zero violations and nothing sent. Probe **46 of 46 caught, 0 escaped, 4 of 4 controls**. **3581 tests**, 59 gates, 0 canonical mutations, 0 external calls, 0 model calls. `mission-1.80-report.md`. |
 | 1.129 | 2026-09-10 | **SECOND_OPPORTUNITY_EXPLORATION_IS_NEXT_BOUNDED_MOVE: six linked rows became scorable and the docker hypothesis did not become one word stronger.** **SCORING-READY IS NOT SCORING** five times over: not calibrated, not an authorisation, not independence, not commercial validation. **SIX SCORABLE ROWS ARE ONE SHAPE** -- one source, one family, one counting dimension, one provenance shape -- and the second counting dimension sits on the one row that is not scorable. **THE LEFTOVER ROW IS NOT THE NEXT ROW TO FIX**: the Stack Exchange bottleneck is BOTH, and *questions were published* changes no decision whatever its reliability; the seven uncited rows add no dimension and no provenance; **more Wikimedia is dominated**; Q1 stays PARKED and Globalping's qualification is not independence. **THE TRADE-OFF IS STATED**: the commercial dimension for docker is the most decision-relevant and the least reachable, while `ted-eu:CPV-division:92` reaches three commercial counting dimensions from held, reviewed, scorable rows with one governance question in front of synthesis -- **an executable move that opens a second hypothesis defeats a theoretically better move that cannot start**. Marginal value of the first Opportunity LOW, exploration value MEDIUM, sunk effort counted for nothing. **THE GATE RECOMPUTES DOMINANCE AND CORRECTED THE AUTHOR TWICE.** Probe **46 of 46 caught, 0 escaped, 4 of 4 controls**. **3560 tests**, 58 gates, 0 canonical mutations, 0 external calls, 0 model calls. `mission-1.79-report.md`. |
 | 1.128 | 2026-09-10 | **OPPORTUNITY_REVISION_2_RECONCILED_TO_CURRENT_SCORABILITY: the same hypothesis over the same seven rows, with the one stale sentence replaced and nothing stronger.** **A HISTORICAL REVISION MAY REMAIN TRUE ABOUT WHAT THE SYSTEM BELIEVED THEN; A NEW REVISION MUST BE TRUE ABOUT WHAT IT CAN ESTABLISH NOW.** Revision 1 (2026-09-02) said *no reviewed reliability applies*; the assessments arrived on 09-03 and 09-04 and 1.77 made the path resolve late, so one limitation and half of one reasoning sentence are stale and everything else is carried verbatim -- **the seven statement fields byte-identical, model_version NULL, no model called**, because **reliability changes whether a row may enter aggregation, not what it establishes**. **LINKS ARE REVISION-SPECIFIC**, so revision 2 carries its own seven with today's eligibility (six scoring at 0.65, one context), and **the seven packet rows created after revision 1 are recorded as requiring a semantic judgement, not linked**. **HISTORY KEPT WITHOUT A POINTER ON IT**: the v1 preparation hashes identically and the v2 record points back at it. **THE CURRENT POINTER IS THE INDEX**, highest revision wins, both readers tested relationally. **SCORING READINESS PER THE CONTRACT**: `scoring_eligible_rows >= 2`, a packet property that authorises nothing -- and **two sentences written when the value could only be one thing were found and corrected**, a docstring and a reason string, with no rule changed. Probe **47 of 47 caught, 0 escaped, 4 of 4 controls**, one inverted. **3539 tests**, 57 gates, revisions 1 to 2, links 7 to 14, every other counter identical, 0 external calls, 0 model calls. `mission-1.78-report.md`. |
 | 1.127 | 2026-09-10 | **RELIABILITY_APPLICABILITY_ROOT_CAUSE_REVISED: the resource was in the lineage all along, and what never resolved was the Opportunity path.** `acquisition.raw_records.provenance.resource_id` is on **325 of 325** records, written from the AUTHORIZED dataset before any socket, and one join through `nlp.signal_inputs` answers *which registered resource produced this measurement* for every Evidence row -- **58 of 58 reach exactly one**. **1.76 READ THE WRONG LAYER**: the resource is deliberately not a proposition fact for the kinds that converge (ADR-035, ADR-036), because **a proposition fact says WHAT is asserted and the resource says WHICH measurement produced the witness**; its narrower sentence (no resource_id COLUMN) is true and its generalisation (absent from the whole lineage) is false, and its proposed repair is the hard-coded source exception this mission forbids. **THE DEFECT WAS THE CONSUMER'S**: both Opportunity runners read `e.reliability`, NULL by design (ADR-026 Decision 2), and derived the status from it -- no scope, no resolver, every row of every source NON_SCORABLE, TED included; **the scorability report was a report about a column**. Both now resolve late through one named rule that takes no resource parameter and refuses an ambiguous lineage. **Same resolver, same four candidates: 12 rows resolve via claim facts, 48 via lineage** -- detailed 18/18 at 0.65, convergent 18/18 at 0.6, TED 12/12 unchanged, Stack Exchange NO_APPLICABLE both ways. Scorable 0 to 48, Opportunity-linked 0 to 6, **scorable is not scored**; read-only aggregation identical to pass-through on 34 of 34 with one provenance group each. **WHY NOT REPAIRED**: it would name Wikimedia and a scope binding, neither of which was broken, and the seventeen criteria are recorded as met anyway. **THE STALE LIMITATION IS REPORTED, NOT EDITED**: OPPORTUNITY_LIMITATION_RECONCILIATION_REQUIRED, revision 1 untouched, three predecessors pointed forward and still carrying their sentences. Probe **65 of 65 caught, 0 escaped, 5 of 5 controls** -- **two escapes closed** (a widened resolver signature the gate asked the import about, and a runner that no longer parsed crashing the gate), **two controls INVERTED**. **3517 tests**, 287 pytest, 56 gates, 0 external calls, 0 canonical mutations. `mission-1.77-report.md`. |
@@ -1879,6 +1880,28 @@ candidate subject, record its blockers (for the leading one, ted-eu egress NOT_A
 CATEGORY-scope subject), and STOP before any model synthesis and before any Opportunity is
 created. Not a score, not a rank, not an egress decision taken on the operator's behalf.
 **Mission 1.80 was not started.**
+
+
+**NO HELD SUBJECT IS A SECOND-OPPORTUNITY CANDIDATE, IN 1.130 (Mission 1.80).**
+
+    universe 9 non-docker packets   formable 2   frontier 92, kubernetes, podman   vetoed 9
+    best held evidence packet ted-eu:CPV-division:92   best candidate none   selected none
+    TED 92: 10 rows, 10 scorable, 0.5 x5 and 0.55 x5, CATEGORY, six-plus held classes
+    egress review required before synthesis TRUE, decided here FALSE
+
+- **THE BEST PACKET IS NOT THE BEST CANDIDATE**, and the record keeps the two answers apart.
+- **A NOTICE VALUE IS NOT COMMERCE**, and each boundary is a field rather than a caveat.
+- **A CATEGORY IS NOT A PRODUCT**, and a category is not narrowed on the way past.
+- **MORE ROWS IS NOT MORE DIMENSIONS, AND SCORABLE IS NOT INDEPENDENT.**
+- **EGRESS IS RECORDED AS REQUIRED AND NOT DECIDED**, and nothing is vetoed for it alone.
+- **A GATE THAT RECOMPUTES THE FRONTIER CORRECTS ITS AUTHOR**, a second time running.
+
+**Next: Mission 1.81 -- Procurement Subject-Grain Narrowing V1.** Held data only: derive
+CPV-class-grain cohorts from the 177 held division-92 notices, define class-grain subject keys
+in the grouping procedure, re-run the preparation runner, and re-select among class-grain
+packets against the same gates. Not an acquisition, not a model call, not the ted-eu egress
+decision, not an Opportunity, not a score. The egress review comes after a subject exists.
+**Mission 1.81 was not started.**
 
 
 

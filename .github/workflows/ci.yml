@@ -672,6 +672,22 @@ jobs:
       - name: Globalping residual closure matches its records
         run: uv run python infrastructure/scripts/render_globalping_residuals.py --check
 
+      # Mission 1.80. Which held subject is the second-Opportunity candidate. The gate
+      # refuses: a candidate that is not a held packet, or is two of them (kubernetes merged
+      # with docker, a CPV division narrowed on the way past, docker admitted); a notice
+      # value read as willingness to pay, spend, market size or demand, or a contracting
+      # authority read as a SaaS buyer; publication read as audience and population read
+      # as demand; ordinal fields that disagree with the counts, more rows read as more
+      # dimensions, scorable read as independent; egress NOT_ASSESSED read as permitted,
+      # collection permission read as egress permission, an egress question granted or
+      # denied here, or a candidate vetoed for egress alone; a category selected as a
+      # product, a selection off the frontier, vetoed, not formable or not at an actionable
+      # grain, or made because an earlier mission mentioned it; an outcome without its
+      # evidence; and any Opportunity, revision, assessment, score, model call, acquisition
+      # or parked-arc change.
+      - name: The second-Opportunity candidate selection matches its records
+        run: uv run python infrastructure/scripts/render_second_opportunity_candidate_selection.py --check
+
       # Mission 1.79. The next bounded move, over held data. The gate refuses: six scorable
       # rows read as six observations; scoring-ready read as calibrated, authorised,
       # independent or validated; a dimension supported by no linked row, or recurrence read

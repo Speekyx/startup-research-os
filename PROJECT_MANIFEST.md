@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.128
+Version: 1.129
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-10 (Sprint 1 / Mission 1.79)
+Last amended: 2026-09-10 (Sprint 1 / Mission 1.80)
 
 ---
 
@@ -13,6 +13,61 @@ Last amended: 2026-09-10 (Sprint 1 / Mission 1.79)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.129 - 2026-09-10 (Sprint 1 / Mission 1.80)
+
+**`SECOND_OPPORTUNITY_REQUIRES_SUBJECT_NARROWING`.** Nine held subjects examined as
+candidates for a second Opportunity exploration, over held data only, and none is one. **THE
+BEST HELD EVIDENCE PACKET IS NOT THE BEST SECOND-OPPORTUNITY CANDIDATE**: `ted-eu:CPV-division:92`
+carries ten scorable rows at two reviewed reliabilities and three commercial counting
+dimensions, is formable, and is a CATEGORY whose 177 held notices span at least six distinct
+CPV classes, so a hypothesis at its grain would be a disjunction of unrelated service markets.
+Intervention grain TOO_BROAD_TO_BE_ACTIONABLE, actionable grain REQUIRES_NARROWER_SUBJECT_DISCOVERY.
+
+**A NOTICE VALUE IS NOT COMMERCE.** Not spend (BT-161 includes options and renewals), not
+willingness to pay, not market size, not demand, and a contracting authority is not a buyer
+for an unspecified SaaS; each boundary is a field the gate refuses flipped. **A CATEGORY IS NOT
+A PRODUCT**, and the gate refuses a category at DIRECTLY_SUPPORTED grain or actionable at its
+own grain. **NOTHING WAS MERGED AND NOTHING WAS NARROWED ON THE WAY PAST**: the universe is
+exactly the non-docker packets of preparation v2, and a CPV class is not a packet.
+
+**KUBERNETES AND PODMAN ARE THE DOCKER SHAPE MINUS A DIMENSION**, not formable, saturated per
+1.79, and vetoed on formability. **POPULATION IS NOT DEMAND AND PUBLICATION IS NOT AUDIENCE**:
+World Bank and GDELT candidates carry no dimension and are vetoed. **SCORABLE IS NOT
+INDEPENDENT**: every row UNKNOWN, zero groups, independence UNKNOWN on every candidate.
+
+**THE FRONTIER CORRECTED THE AUTHOR.** The first draft recorded kubernetes and podman as
+dominated by division 92; under the record's own rule semantic specificity is a dominance
+field and they are HIGH where the category is LOW. The frontier is three candidates, all
+vetoed, and the rule was not narrowed to fit the draft.
+
+**EGRESS IS RECORDED AS REQUIRED AND NOT DECIDED.** ted-eu transmission is NOT_ASSESSED;
+`EGRESS_REVIEW_REQUIRED_BEFORE_SYNTHESIS = true`, nothing granted, nothing denied, no review
+appended, and no candidate vetoed for egress alone. The representation of both TED packets was
+tested in memory through the transmission allowlist with zero violations and nothing sent.
+
+**Verification.** Probe of **46 deliberate violations, 46 caught, 0 escaped**, plus **4 of 4
+positive controls** (a valid CPV winner as an exploratory category hypothesis, a valid non-TED
+winner with kubernetes made formable, the shipped narrowing outcome, the no-actionable-candidate
+outcome); one case first caught for the wrong reason and corrected. **3581 bare-python
+tests**; pytest suites green with the database unchanged; `ruff format --check`, `ruff check`
+and mypy through `uv`; contract generation `--check`; source catalog `--check`; all **59** CI
+gates, one of them new.
+
+**Nothing moved.** 0 canonical mutations, 0 external calls, 0 model calls, 0 embeddings, 0
+acquisitions, 0 assessments, 0 scores, 0 source reviews; one Opportunity at revision 2 with
+revision 1 readable, Q1, Globalping and V2 untouched.
+
+New: `docs/data/second-opportunity-candidate-selection-v1.json` and its generated `.md`,
+`infrastructure/scripts/render_second_opportunity_candidate_selection.py` (CI gate 59),
+`packages/inferred-claim-evaluator/python/tests/test_second_opportunity_candidate_selection.py`,
+and `docs/reports/mission-1.80-report.md`.
+
+Changed: `docs/CLAUDE.md` 1.129 to 1.130; `.github/workflows/ci.yml` gains one gate.
+
+Unchanged: every canonical research table, both Opportunity revisions and their links, every
+preparation record, every source review, the Q1 selection, every Globalping record, and the
+V2 decision.
 
 ## 1.128 - 2026-09-10 (Sprint 1 / Mission 1.79)
 
