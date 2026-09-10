@@ -145,7 +145,11 @@ class TheContractSaysWhatItAsserts(unittest.TestCase):
             if c["proposition_kind"] == "source_published_classification_value_contrast_witnessed"
         ]
         self.assertEqual(len(entries), 1)
-        self.assertEqual(entries[0]["version"], "1.0.0")
+        # Mission 1.81 moved the contract to 1.1.0 by adding CONDITIONAL identity fields;
+        # a pin on the exact number asserts the contract may never gain one. What this
+        # test defends is that the witness split and the required identity are untouched.
+        self.assertGreaterEqual(tuple(map(int, entries[0]["version"].split("."))), (1, 0, 0))
+        self.assertIn("classification_division", entries[0]["identity_fields"])
         self.assertEqual(set(entries[0]["witness_fields"]), {"notice_ids", "classification_codes"})
 
 

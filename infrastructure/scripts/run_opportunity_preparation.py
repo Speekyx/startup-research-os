@@ -38,8 +38,12 @@ SUBJECT_REGISTRY = DOCS / "canonical-subject-registry-v1.json"
 # through the stored reliability column; it is history and is never rewritten. The current
 # view is written beside it as v2, and carries a pointer back.
 HISTORICAL_V1 = DOCS / "opportunity-preparation-v1.json"
-OUTPUT = DOCS / "opportunity-preparation-v2.json"
-ARTIFACT_VERSION = "opportunity-preparation@2.0.0"
+# Mission 1.81. The v2 record is the Mission 1.78 to 1.80 view of the 58-row corpus
+# grouped at CPV division grain. It stays as written; the current view, with the
+# finer-grain procurement subjects beside the division packets, is v3.
+HISTORICAL_V2 = DOCS / "opportunity-preparation-v2.json"
+OUTPUT = DOCS / "opportunity-preparation-v3.json"
+ARTIFACT_VERSION = "opportunity-preparation@3.0.0"
 
 DEFAULT_USE_PROFILE = "local-private-research-v1"
 
@@ -412,12 +416,15 @@ def build_report(use_profile: str) -> dict[str, object]:
     return {
         "$comment": (
             "The CURRENT deterministic preparation view over the whole Evidence corpus, "
-            "reliability resolved late from lineage (Mission 1.77). Supersedes the v1 record, "
-            "which stays as the historical view and is not rewritten."
+            "reliability resolved late from lineage (Mission 1.77), with procurement "
+            "subjects at the CPV level each Signal was keyed on (Mission 1.81). Supersedes "
+            "the v2 record, which stays as the historical division-grain view and is not "
+            "rewritten; v1 stays as the Mission 1.28 to 1.34 view."
         ),
         "artifact_version": ARTIFACT_VERSION,
-        "supersedes": f"docs/data/{HISTORICAL_V1.name}",
-        "mission": "1.78",
+        "supersedes": f"docs/data/{HISTORICAL_V2.name}",
+        "historical": [f"docs/data/{HISTORICAL_V1.name}", f"docs/data/{HISTORICAL_V2.name}"],
+        "mission": "1.81",
         "reliability_resolution_path": "LINEAGE_LATE_RESOLUTION (sros_evidence_reliability.lineage)",
         "use_profile_id": use_profile,
         "use_profile_note": (

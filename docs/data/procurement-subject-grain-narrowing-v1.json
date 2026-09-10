@@ -1,0 +1,2850 @@
+{
+  "$comment": "Mission 1.81. Narrow ted-eu:CPV-division:92 into finer-grain procurement subjects from held data, re-run the preparation, and re-select. Authoritative where paired with the generated Markdown; the gate recomputes every census, cohort, preparation and re-selection fact from the notice audit, the derivation run and re-run records, the v3 preparation, the reconciliation record and the reviewed scope rules.",
+  "record_version": "1.0.0",
+  "mission": "1.81",
+  "recorded_at": "2026-09-10",
+  "record_kind": "procurement_subject_grain_narrowing",
+  "start_commit": "34fc556",
+  "branch": "sprint-1/mission-1.81",
+  "migration_head": "0036_grant_use_profile_vocabulary",
+  "measured_from": {
+    "notice_audit": "docs/data/procurement-division-92-notice-audit-v1.json",
+    "derivation_run": "docs/data/procurement-grain-derivation-run-v1.json",
+    "derivation_rerun": "docs/data/procurement-grain-derivation-rerun-v1.json",
+    "preparation_before": "docs/data/opportunity-preparation-v2.json",
+    "preparation_after": "docs/data/opportunity-preparation-v3.json",
+    "reconciliation_record": "docs/data/opportunity-reliability-reconciliation-v1.json",
+    "scope_rules": "docs/data/observation-scope-rules-v1.json",
+    "subject_registry": "docs/data/canonical-subject-registry-v1.json",
+    "mission_1_80_selection": "docs/data/second-opportunity-candidate-selection-v1.json",
+    "database": "live, read for the audit and the derivation; the derivation wrote canonical rows as recorded below"
+  },
+  "primary_outcome": "PROCUREMENT_NARROWING_REQUIRES_DEEPER_CPV_GRAIN",
+  "outcome_fit": "the closest of the six named outcomes, and it fits imperfectly, which the record says: the group-grain cohorts are truthful, formable and scorable, and no group is selectable at its grain because the held data cannot decide its actionability. Descending is possible and was dry-run at grains 4 and 5; it does not by itself supply the missing input, which is the vocabulary's label. So the one further grain-level mission this outcome licenses must carry that label as a semantic input, and a blind descent is refused here.",
+  "reselection_outcome": "SECOND_OPPORTUNITY_REQUIRES_SUBJECT_NARROWING",
+  "cpv_token": {
+    "CPV_HELD_TOKEN_FORMAT": "eight decimal digits, no check digit, no separator; scheme 'CPV'; label null on every held entry",
+    "check_digit_present": false,
+    "label_held": false,
+    "depth_rule": "the depth of a code is the number of leading digits before its trailing zeros; 92000000 is depth 2, 92500000 depth 3, 92521000 depth 5",
+    "CPV_NARROWING_LEVEL": 3,
+    "CPV_NARROWING_LEVEL_NAME": "group",
+    "naming_basis": "the Common Procurement Vocabulary's own published structure names its levels by successive digits: division (2), group (3), class (4), category (5). This repository had named only the division before this mission (CPV_DIVISION_LENGTH); the level names are the vocabulary's, adopted in CPV_LEVELS with that basis stated, and no held token carries a level name. Mission 1.80's prose used 'class' for five-digit prefixes, which the vocabulary calls categories; corrected here.",
+    "repository_term_before": "division only (procurement-value-contrast CPV_DIVISION_LENGTH = 2; grouping scheme CPV-division)",
+    "repository_term_after": "CPV_LEVELS = {2: division, 3: group, 4: class, 5: category}; grouping scheme CPV-<level>",
+    "CPV_PARENT_RULE": "the parent division of any code or prefix is its first two digits; a group code carries its division",
+    "CPV_IDENTITY_STABLE": true,
+    "why_stable": "the prefix is the code's own leading digits; no lookup, no label, no mapping; the same held code yields the same prefix on every run"
+  },
+  "census": {
+    "DIVISION_92_HELD_NOTICES": 177,
+    "CONTRACT_NOTICE_COUNT": 115,
+    "CONTRACT_AWARD_NOTICE_COUNT": 62,
+    "acquisition_windows": {
+      "A": 94,
+      "B": 83
+    },
+    "NOTICE_CPV_CARDINALITY_DISTRIBUTION": {
+      "1": 77,
+      "2": 29,
+      "3": 20,
+      "4": 16,
+      "5": 14,
+      "6": 3,
+      "7": 1,
+      "8": 4,
+      "9": 2,
+      "10": 2,
+      "11": 1,
+      "12": 1,
+      "13": 2,
+      "16": 2,
+      "22": 1,
+      "36": 1,
+      "45": 1
+    },
+    "MULTI_CPV_NOTICES": 100,
+    "division_92_codes_per_notice": {
+      "1": 143,
+      "2": 25,
+      "3": 6,
+      "4": 2,
+      "6": 1
+    },
+    "single_division_notices": 89,
+    "multi_division_notices": 88,
+    "TOTAL_VALUE_present": 125,
+    "TOTAL_VALUE_missing": 52,
+    "currencies_of_present_values": {
+      "EUR": 105,
+      "SEK": 8,
+      "PLN": 4,
+      "CZK": 3,
+      "NOK": 2,
+      "RON": 1,
+      "HUF": 1,
+      "DKK": 1
+    },
+    "PRIMARY_OR_ADDITIONAL_CPV_STATUS": "UNAVAILABLE",
+    "why_unavailable": "every held classification entry carries exactly the keys code, scheme and label, the label is null on all 608 entries, and no entry, no notice field and no raw payload marks a code as main or additional; the status is therefore not established by the held representation and is never inferred from code order",
+    "held_class_prefixes_across_the_division": {
+      "9211": 26,
+      "9231": 22,
+      "9261": 21,
+      "9252": 19,
+      "9233": 14,
+      "9251": 11,
+      "9262": 8,
+      "9237": 8,
+      "9253": 7,
+      "9232": 4,
+      "9222": 4,
+      "9235": 3,
+      "9221": 3,
+      "9236": 3,
+      "9213": 2
+    },
+    "note_on_mission_1_80_counts": "Mission 1.80 counted 177 held notices as any notice carrying a division-92 code; that census stands. Its 'class' distribution used five-digit prefixes, which are the vocabulary's CATEGORY level, and its labels were recalled rather than held: no held record carries a CPV label at any level. Of the 177, 88 carry a code from another division as well and join no procurement cohort at any grain under the extractor's own rule, so the division-92 packet's ten rows were derived from the 89 single-division notices, not from 177."
+  },
+  "membership": {
+    "models_evaluated": {
+      "C1_PRIMARY_CPV_ONLY": {
+        "verdict": "REFUSED",
+        "why": "primary/additional status is UNAVAILABLE in the held representation; choosing codes[0] would make membership depend on the order the source happened to publish"
+      },
+      "C2_ANY_EXPLICIT_CPV_MEMBERSHIP": {
+        "verdict": "REFUSED",
+        "why": "a notice carrying two groups would enter two contrasts with one value, and the existing cohort semantics (one subject per cohort, refused across divisions since 1.0.0) do not admit it"
+      },
+      "C3_MULTI_MEMBERSHIP_WITH_PROVENANCE": {
+        "verdict": "REFUSED_AS_A_NEW_CONTRACT",
+        "why": "truthful in principle and not the smallest rule: it needs a witness that names which of its codes it witnesses under, which no persisted fact carries, and it would put the same published amount into two spreads; a mission that narrows a subject does not also change what a witness is"
+      },
+      "C4_REFUSE_AMBIGUOUS_NOTICE": {
+        "verdict": "SELECTED",
+        "why": "the extractor's own rule since 1.0.0 for divisions, applied one level down: a notice whose codes name more than one subject at the grain, or none deep enough, joins no cohort. Every membership is decided by codes before any amount is read"
+      }
+    },
+    "MEMBERSHIP_MODEL_SELECTED": "C4_REFUSE_AMBIGUOUS_NOTICE",
+    "rule": "at grain L a notice joins the cohort of the one L-digit prefix shared by every code it carries that is at least L digits deep; a code shallower than L must be an ancestor of that prefix; every code must share the division; otherwise the notice joins no cohort at grain L",
+    "tally_at_group_grain": {
+      "group_specified": {
+        "921": 9,
+        "922": 2,
+        "923": 20,
+        "924": 4,
+        "925": 21,
+        "926": 21
+      },
+      "AMBIGUOUS_ACROSS_DIVISIONS": 88,
+      "AMBIGUOUS_ACROSS_GROUPS": 3,
+      "UNSPECIFIED_AT_GROUP": 9
+    },
+    "AMBIGUOUS_MEMBERSHIP_NOTICES": 91,
+    "unspecified_notices": 9,
+    "multi_membership_allowed": false,
+    "deduplicated_to_sum_to_177": false,
+    "sums_to_177": true,
+    "exclusive_assignment_basis": "a notice enters at most one cohort because the rule refuses every notice that could enter two; nothing was assigned to a first or largest cohort"
+  },
+  "corrections_to_mission_1_80": [
+    "Mission 1.80's held_class_distribution labels (motion picture, sports facility, museum, news agency, artistic, sound technician) were recalled from the CPV vocabulary and were not held: no held TED record carries a CPV label. The codes were held and stand.",
+    "Mission 1.80's 'classes' were five-digit prefixes, which the vocabulary names categories; classes are four-digit prefixes.",
+    "Mission 1.80's 177 is the any-code census; the division-92 packet's rows come from the 89 single-division notices, because the extractor refuses a notice across divisions at every grain."
+  ],
+  "cohort_completeness_rule": "a cohort is every held notice of one acquisition window that the extractor's key gathers at the grain; membership is decided by codes, notice class, currency and amount scope before any value is read; a value-missing notice stays in the subject's membership and contributes no amount; nothing was selected after inspecting values",
+  "subject_key_contract": {
+    "form": "ted-eu:CPV-<level>:<prefix>",
+    "example": "ted-eu:CPV-group:925",
+    "parent_child_explicit": "the division is the prefix's first two digits and stays in the proposition facts and the sentence",
+    "deterministic": true,
+    "source_native": true,
+    "hand_authored_names_as_identity": false,
+    "sibling_subjects_collapsed": false,
+    "generic_over_every_qualifying_prefix": true,
+    "hard_coded_prefixes": []
+  },
+  "labels_are_not_product_ideas": "a CPV group is a filing rule; the held records carry no label, and even a label would describe procurement classification, not a customer pain, a SaaS market, a product, a startup idea or a willingness-to-pay statement",
+  "derivation": {
+    "models_evaluated": {
+      "A_REUSE_EXISTING_DIVISION_EVIDENCE": {
+        "verdict": "REFUSED",
+        "why": "every division-92 Signal spans at least two groups, so its magnitude is a spread ACROSS groups and no child subject can truthfully carry it"
+      },
+      "B_FILTER_EXISTING_EVIDENCE": {
+        "verdict": "REFUSED",
+        "why": "a division Evidence row cites one Signal over one cohort; filtering rows reassigns whole spreads, and no row is about one group"
+      },
+      "C_RE_DERIVE_FROM_HELD_NORMALIZED_RECORDS": {
+        "verdict": "SELECTED",
+        "why": "the existing extractor, with the CPV grain as a required parameter, over the same held Mission 1.40 records and the same two acquisition windows"
+      },
+      "D_ARCHITECTURE_CHANGE_REQUIRED": {
+        "verdict": "NOT_NEEDED",
+        "why": "a generic grain parameterisation of an established procedure, one scope field, one conditional identity field on the existing convergence contract; no new signal type, claim kind or table"
+      }
+    },
+    "DERIVATION_MODEL": "C_RE_DERIVE_FROM_HELD_NORMALIZED_RECORDS",
+    "division_92_signals_span_several_groups": {
+      "4e8ee7f7": {
+        "window": "B",
+        "notice_class": "CONTRACT_AWARD_NOTICE",
+        "members": 14,
+        "groups_spanned": [
+          "921",
+          "923",
+          "924",
+          "925",
+          "926"
+        ]
+      },
+      "5ed1cb05": {
+        "window": "B",
+        "notice_class": "CONTRACT_NOTICE",
+        "members": 17,
+        "groups_spanned": [
+          "921",
+          "923",
+          "925",
+          "926"
+        ],
+        "division_only_codes_present": true
+      },
+      "d5f054e4": {
+        "window": "A",
+        "notice_class": "CONTRACT_NOTICE",
+        "members": 20,
+        "groups_spanned": [
+          "921",
+          "922",
+          "923",
+          "925",
+          "926"
+        ],
+        "division_only_codes_present": true
+      },
+      "f0749978": {
+        "window": "B",
+        "notice_class": "CONTRACT_NOTICE",
+        "currency": "SEK",
+        "members": 2,
+        "groups_spanned": [
+          "923",
+          "926"
+        ]
+      },
+      "f09ecbb8": {
+        "window": "A",
+        "notice_class": "CONTRACT_AWARD_NOTICE",
+        "members": 12,
+        "groups_spanned": [
+          "921",
+          "922",
+          "923",
+          "924",
+          "925",
+          "926"
+        ],
+        "division_only_codes_present": true
+      }
+    },
+    "division_claims_copied_onto_children": 0,
+    "EXISTING_SIGNAL_TYPES_REUSED": [
+      "procurement_value_contrast"
+    ],
+    "NEW_SIGNAL_TYPE_CREATED": false,
+    "NEW_SIGNAL_TYPE_REQUIRED": false,
+    "extractor": "procurement-value-contrast@1.2.0",
+    "parameters": {
+      "amount_type": "TOTAL_VALUE",
+      "cpv_grain": 3
+    },
+    "parameter_fingerprint": "8ba2a2efb46ad19e7008c32a2915878ed34b219554c2c665ad2462123f027d57",
+    "generic_across_grains": true,
+    "grains_accepted": {
+      "2": "division",
+      "3": "group",
+      "4": "class",
+      "5": "category"
+    },
+    "interpreter": "observed-signal-restatement@1.5.0",
+    "convergent_interpreter": "observed-convergent-witness@1.1.0",
+    "convergence_contract": "source-published-value-contrast-witnessed@1.1.0 (classification_level and classification_level_code as CONDITIONAL identity)",
+    "grouping": "source-native-subject-grouping@1.3.0",
+    "windows_respected": [
+      "A",
+      "B"
+    ],
+    "membership_frozen_before_values": true,
+    "MINIMUM_REQUIRED_BY_PROCEDURE": 2,
+    "minimum_basis": "MINIMUM_COHORT_MEMBERS in the extractor: a contrast needs two amounts; no threshold was added",
+    "cohorts_keyed": 23,
+    "cohorts_derived": 13,
+    "COHORTS_REFUSED_FOR_INSUFFICIENT_INPUT": 10,
+    "NEW_SIGNALS": 13,
+    "NEW_CLAIMS": 21,
+    "new_claims_detailed": 13,
+    "new_claims_witnessed": 8,
+    "NEW_CLAIM_REVISIONS": 21,
+    "NEW_EVIDENCE": 26,
+    "evidence_conflicts": 0,
+    "division_signals_reinterpreted_to_existing_claims": "REUSED, 0 new rows, 0 new revisions: the 1.5.0 statement of a division Signal is byte-identical to the 1.4.1 statement"
+  },
+  "currency_semantics": {
+    "rule": "currency is a cohort key dimension since procurement-value-contrast@1.1.0 (Mission 1.41); two currencies are two cohorts, and a single-member currency cohort is refused for insufficient input rather than merged",
+    "cross_currency_contrast_performed": false,
+    "fx_conversion_performed": false,
+    "non_eur_cohorts_refused_at_group_grain": [
+      {
+        "window": "B",
+        "notice_class": "CONTRACT_NOTICE",
+        "currency": "SEK",
+        "members": 1,
+        "reason": "INSUFFICIENT_INPUT_OBSERVATIONS"
+      },
+      {
+        "window": "B",
+        "notice_class": "CONTRACT_NOTICE",
+        "currency": "CZK",
+        "members": 1,
+        "reason": "INSUFFICIENT_INPUT_OBSERVATIONS"
+      },
+      {
+        "window": "B",
+        "notice_class": "CONTRACT_NOTICE",
+        "currency": "SEK",
+        "members": 1,
+        "reason": "INSUFFICIENT_INPUT_OBSERVATIONS"
+      }
+    ],
+    "currency_in_proposition_identity": true
+  },
+  "notice_type_semantics": {
+    "rule": "notice class is a cohort key dimension since procurement-value-contrast@1.0.0: a call for competition and a report of an outcome are different procurement stages, and the extractor's own docstring says so",
+    "contract_cited": "services/nlp/python/sros_nlp/extractors/procurement_value_contrast.py group_key; docs/data/ted-eu-transaction-signals-v1.md",
+    "CONTRACT_NOTICE_and_CONTRACT_AWARD_NOTICE_combined": false,
+    "notice_class_in_proposition_identity": true
+  },
+  "reliability": {
+    "resolution_path": "LINEAGE_LATE_RESOLUTION (sros_evidence_reliability.lineage), the current machinery, over the v3 preparation",
+    "new_evidence_rows": 26,
+    "rows": [
+      {
+        "SOURCE_ID": "ted-eu",
+        "RESOURCE_ID": "notices/eforms-contract-and-award",
+        "RECORD_KIND_ID": "procurement_notice",
+        "CLAIM_TYPE": "OBSERVED",
+        "PROPOSITION_KIND": "source_published_classification_value_contrast_witnessed",
+        "RESOLVER_RESULT": "RESOLVED",
+        "RELIABILITY": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "evidence_id": "3f8036ba-e1ce-4d52-9577-4652d5fc87fa"
+      },
+      {
+        "SOURCE_ID": "ted-eu",
+        "RESOURCE_ID": "notices/eforms-contract-and-award",
+        "RECORD_KIND_ID": "procurement_notice",
+        "CLAIM_TYPE": "OBSERVED",
+        "PROPOSITION_KIND": "source_reported_procurement_value_contrast",
+        "RESOLVER_RESULT": "RESOLVED",
+        "RELIABILITY": 0.5,
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "evidence_id": "52ae08c9-d6f3-47aa-8b0c-4e29c890281a"
+      },
+      {
+        "SOURCE_ID": "ted-eu",
+        "RESOURCE_ID": "notices/eforms-contract-and-award",
+        "RECORD_KIND_ID": "procurement_notice",
+        "CLAIM_TYPE": "OBSERVED",
+        "PROPOSITION_KIND": "source_published_classification_value_contrast_witnessed",
+        "RESOLVER_RESULT": "RESOLVED",
+        "RELIABILITY": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "evidence_id": "54a8cb3c-edd0-4d88-a4d1-98f4725ab6f4"
+      },
+      {
+        "SOURCE_ID": "ted-eu",
+        "RESOURCE_ID": "notices/eforms-contract-and-award",
+        "RECORD_KIND_ID": "procurement_notice",
+        "CLAIM_TYPE": "OBSERVED",
+        "PROPOSITION_KIND": "source_published_classification_value_contrast_witnessed",
+        "RESOLVER_RESULT": "RESOLVED",
+        "RELIABILITY": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "evidence_id": "941a89ee-3eab-4a4f-ab32-b2d37c79db28"
+      },
+      {
+        "SOURCE_ID": "ted-eu",
+        "RESOURCE_ID": "notices/eforms-contract-and-award",
+        "RECORD_KIND_ID": "procurement_notice",
+        "CLAIM_TYPE": "OBSERVED",
+        "PROPOSITION_KIND": "source_reported_procurement_value_contrast",
+        "RESOLVER_RESULT": "RESOLVED",
+        "RELIABILITY": 0.5,
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "evidence_id": "dc37fcf6-fbbd-4de7-b2f2-de09fed84920"
+      },
+      {
+        "SOURCE_ID": "ted-eu",
+        "RESOURCE_ID": "notices/eforms-contract-and-award",
+        "RECORD_KIND_ID": "procurement_notice",
+        "CLAIM_TYPE": "OBSERVED",
+        "PROPOSITION_KIND": "source_reported_procurement_value_contrast",
+        "RESOLVER_RESULT": "RESOLVED",
+        "RELIABILITY": 0.5,
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "evidence_id": "f98dd9ed-18b8-46e6-b471-5607ad316e37"
+      },
+      {
+        "SOURCE_ID": "ted-eu",
+        "RESOURCE_ID": "notices/eforms-contract-and-award",
+        "RECORD_KIND_ID": "procurement_notice",
+        "CLAIM_TYPE": "OBSERVED",
+        "PROPOSITION_KIND": "source_published_classification_value_contrast_witnessed",
+        "RESOLVER_RESULT": "RESOLVED",
+        "RELIABILITY": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "evidence_id": "0545919e-a49c-4b36-9d0e-e757d8e18bd5"
+      },
+      {
+        "SOURCE_ID": "ted-eu",
+        "RESOURCE_ID": "notices/eforms-contract-and-award",
+        "RECORD_KIND_ID": "procurement_notice",
+        "CLAIM_TYPE": "OBSERVED",
+        "PROPOSITION_KIND": "source_reported_procurement_value_contrast",
+        "RESOLVER_RESULT": "RESOLVED",
+        "RELIABILITY": 0.5,
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "evidence_id": "1122fecd-43fe-4d1c-a193-043d02686f59"
+      },
+      {
+        "SOURCE_ID": "ted-eu",
+        "RESOURCE_ID": "notices/eforms-contract-and-award",
+        "RECORD_KIND_ID": "procurement_notice",
+        "CLAIM_TYPE": "OBSERVED",
+        "PROPOSITION_KIND": "source_reported_procurement_value_contrast",
+        "RESOLVER_RESULT": "RESOLVED",
+        "RELIABILITY": 0.5,
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "evidence_id": "79c0f019-b1bb-4802-93e4-a7889e2db7b8"
+      },
+      {
+        "SOURCE_ID": "ted-eu",
+        "RESOURCE_ID": "notices/eforms-contract-and-award",
+        "RECORD_KIND_ID": "procurement_notice",
+        "CLAIM_TYPE": "OBSERVED",
+        "PROPOSITION_KIND": "source_reported_procurement_value_contrast",
+        "RESOLVER_RESULT": "RESOLVED",
+        "RELIABILITY": 0.5,
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "evidence_id": "8008d772-0dd0-445c-ae07-77a133edb3c2"
+      },
+      {
+        "SOURCE_ID": "ted-eu",
+        "RESOURCE_ID": "notices/eforms-contract-and-award",
+        "RECORD_KIND_ID": "procurement_notice",
+        "CLAIM_TYPE": "OBSERVED",
+        "PROPOSITION_KIND": "source_published_classification_value_contrast_witnessed",
+        "RESOLVER_RESULT": "RESOLVED",
+        "RELIABILITY": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "evidence_id": "9775a57b-0c99-4d16-8af4-3f4b73ab4cda"
+      },
+      {
+        "SOURCE_ID": "ted-eu",
+        "RESOURCE_ID": "notices/eforms-contract-and-award",
+        "RECORD_KIND_ID": "procurement_notice",
+        "CLAIM_TYPE": "OBSERVED",
+        "PROPOSITION_KIND": "source_published_classification_value_contrast_witnessed",
+        "RESOLVER_RESULT": "RESOLVED",
+        "RELIABILITY": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "evidence_id": "d1efc021-3db1-4cda-b116-f2a88cbd21da"
+      },
+      {
+        "SOURCE_ID": "ted-eu",
+        "RESOURCE_ID": "notices/eforms-contract-and-award",
+        "RECORD_KIND_ID": "procurement_notice",
+        "CLAIM_TYPE": "OBSERVED",
+        "PROPOSITION_KIND": "source_reported_procurement_value_contrast",
+        "RESOLVER_RESULT": "RESOLVED",
+        "RELIABILITY": 0.5,
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "evidence_id": "23f3605a-c922-4b47-b9a5-246aa1ede649"
+      },
+      {
+        "SOURCE_ID": "ted-eu",
+        "RESOURCE_ID": "notices/eforms-contract-and-award",
+        "RECORD_KIND_ID": "procurement_notice",
+        "CLAIM_TYPE": "OBSERVED",
+        "PROPOSITION_KIND": "source_reported_procurement_value_contrast",
+        "RESOLVER_RESULT": "RESOLVED",
+        "RELIABILITY": 0.5,
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "evidence_id": "296bfd43-40ea-4e7d-8982-d3f62b4c05f2"
+      },
+      {
+        "SOURCE_ID": "ted-eu",
+        "RESOURCE_ID": "notices/eforms-contract-and-award",
+        "RECORD_KIND_ID": "procurement_notice",
+        "CLAIM_TYPE": "OBSERVED",
+        "PROPOSITION_KIND": "source_published_classification_value_contrast_witnessed",
+        "RESOLVER_RESULT": "RESOLVED",
+        "RELIABILITY": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "evidence_id": "4ec7946c-4c0d-432f-be95-935460ce305c"
+      },
+      {
+        "SOURCE_ID": "ted-eu",
+        "RESOURCE_ID": "notices/eforms-contract-and-award",
+        "RECORD_KIND_ID": "procurement_notice",
+        "CLAIM_TYPE": "OBSERVED",
+        "PROPOSITION_KIND": "source_published_classification_value_contrast_witnessed",
+        "RESOLVER_RESULT": "RESOLVED",
+        "RELIABILITY": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "evidence_id": "57c6af23-8c8b-4e9f-b684-b98cf4846918"
+      },
+      {
+        "SOURCE_ID": "ted-eu",
+        "RESOURCE_ID": "notices/eforms-contract-and-award",
+        "RECORD_KIND_ID": "procurement_notice",
+        "CLAIM_TYPE": "OBSERVED",
+        "PROPOSITION_KIND": "source_reported_procurement_value_contrast",
+        "RESOLVER_RESULT": "RESOLVED",
+        "RELIABILITY": 0.5,
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "evidence_id": "95a6bb74-d500-49c7-b375-4d24505de224"
+      },
+      {
+        "SOURCE_ID": "ted-eu",
+        "RESOURCE_ID": "notices/eforms-contract-and-award",
+        "RECORD_KIND_ID": "procurement_notice",
+        "CLAIM_TYPE": "OBSERVED",
+        "PROPOSITION_KIND": "source_reported_procurement_value_contrast",
+        "RESOLVER_RESULT": "RESOLVED",
+        "RELIABILITY": 0.5,
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "evidence_id": "969a3758-30c8-4e1a-a33c-46d00ec2fc4f"
+      },
+      {
+        "SOURCE_ID": "ted-eu",
+        "RESOURCE_ID": "notices/eforms-contract-and-award",
+        "RECORD_KIND_ID": "procurement_notice",
+        "CLAIM_TYPE": "OBSERVED",
+        "PROPOSITION_KIND": "source_published_classification_value_contrast_witnessed",
+        "RESOLVER_RESULT": "RESOLVED",
+        "RELIABILITY": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "evidence_id": "ccef0cfe-0981-4a95-833a-c168006c309f"
+      },
+      {
+        "SOURCE_ID": "ted-eu",
+        "RESOURCE_ID": "notices/eforms-contract-and-award",
+        "RECORD_KIND_ID": "procurement_notice",
+        "CLAIM_TYPE": "OBSERVED",
+        "PROPOSITION_KIND": "source_published_classification_value_contrast_witnessed",
+        "RESOLVER_RESULT": "RESOLVED",
+        "RELIABILITY": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "evidence_id": "e96a94a3-6870-41d8-9e9a-a52073c6277b"
+      },
+      {
+        "SOURCE_ID": "ted-eu",
+        "RESOURCE_ID": "notices/eforms-contract-and-award",
+        "RECORD_KIND_ID": "procurement_notice",
+        "CLAIM_TYPE": "OBSERVED",
+        "PROPOSITION_KIND": "source_published_classification_value_contrast_witnessed",
+        "RESOLVER_RESULT": "RESOLVED",
+        "RELIABILITY": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "evidence_id": "1b981934-9019-40f3-b12e-076ec9516df0"
+      },
+      {
+        "SOURCE_ID": "ted-eu",
+        "RESOURCE_ID": "notices/eforms-contract-and-award",
+        "RECORD_KIND_ID": "procurement_notice",
+        "CLAIM_TYPE": "OBSERVED",
+        "PROPOSITION_KIND": "source_published_classification_value_contrast_witnessed",
+        "RESOLVER_RESULT": "RESOLVED",
+        "RELIABILITY": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "evidence_id": "28d6130a-ae21-4010-9016-e40714a9467d"
+      },
+      {
+        "SOURCE_ID": "ted-eu",
+        "RESOURCE_ID": "notices/eforms-contract-and-award",
+        "RECORD_KIND_ID": "procurement_notice",
+        "CLAIM_TYPE": "OBSERVED",
+        "PROPOSITION_KIND": "source_published_classification_value_contrast_witnessed",
+        "RESOLVER_RESULT": "RESOLVED",
+        "RELIABILITY": 0.55,
+        "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e",
+        "evidence_id": "3d4b30c1-ee07-4d05-974e-c1305f81b769"
+      },
+      {
+        "SOURCE_ID": "ted-eu",
+        "RESOURCE_ID": "notices/eforms-contract-and-award",
+        "RECORD_KIND_ID": "procurement_notice",
+        "CLAIM_TYPE": "OBSERVED",
+        "PROPOSITION_KIND": "source_reported_procurement_value_contrast",
+        "RESOLVER_RESULT": "RESOLVED",
+        "RELIABILITY": 0.5,
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "evidence_id": "68754977-f961-4d6d-8bed-305dace1392e"
+      },
+      {
+        "SOURCE_ID": "ted-eu",
+        "RESOURCE_ID": "notices/eforms-contract-and-award",
+        "RECORD_KIND_ID": "procurement_notice",
+        "CLAIM_TYPE": "OBSERVED",
+        "PROPOSITION_KIND": "source_reported_procurement_value_contrast",
+        "RESOLVER_RESULT": "RESOLVED",
+        "RELIABILITY": 0.5,
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "evidence_id": "8c39a1ab-c75f-4091-8db8-cfc7f0cf1fd3"
+      },
+      {
+        "SOURCE_ID": "ted-eu",
+        "RESOURCE_ID": "notices/eforms-contract-and-award",
+        "RECORD_KIND_ID": "procurement_notice",
+        "CLAIM_TYPE": "OBSERVED",
+        "PROPOSITION_KIND": "source_reported_procurement_value_contrast",
+        "RESOLVER_RESULT": "RESOLVED",
+        "RELIABILITY": 0.5,
+        "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020",
+        "evidence_id": "937fbb12-fd41-467a-99e1-e5dc9ab8e26e"
+      }
+    ],
+    "distribution": {
+      "RESOLVED|d1afa4be": 13,
+      "RESOLVED|3de2af10": 13
+    },
+    "SCORABLE_NEW_EVIDENCE": 26,
+    "NONSCORABLE_NEW_EVIDENCE": 0,
+    "assessments_applied": {
+      "3de2af10-60d1-4e3e-a9b6-d67e2345e020": {
+        "proposition_kind": "source_reported_procurement_value_contrast",
+        "reliability": 0.5
+      },
+      "d1afa4be-8462-4461-be20-112cdc55ee7e": {
+        "proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "reliability": 0.55
+      }
+    },
+    "why_the_existing_scopes_apply": "a reliability scope is measurement by purpose: source, resource, record kind, claim type and proposition kind. It carries no classification division (Missions 1.40 and 1.42 recorded that it binds divisions 90 and 92 alike) and it carries no classification level: the group-grain rows are the same measurement (BT-161 stated total values on the same resource and record kind) restated under the same two proposition kinds, with the level as a fact inside the proposition rather than a new kind of proposition. The reviewed limitations (options and renewals inside BT-161, unverified by TED; correction and supersession unestablished) are true of a group cohort exactly as of a division one.",
+    "scope_broadened": false,
+    "scope_narrowed": false,
+    "assessments_created": 0,
+    "what_a_reviewer_could_still_decide": "that a finer classification level is a different purpose and deserves its own scope; nothing here forecloses that, and no value was invented to avoid it"
+  },
+  "cohorts": [
+    {
+      "COHORT_SUBJECT_KEY": "ted-eu:CPV-group:921",
+      "CPV_ID": "921",
+      "CPV_LEVEL": "group",
+      "PARENT_DIVISION": "92",
+      "LABEL_IF_HELD": null,
+      "HELD_NOTICE_COUNT": 9,
+      "NOTICE_TYPES": {
+        "CONTRACT_NOTICE": 6,
+        "CONTRACT_AWARD_NOTICE": 3
+      },
+      "MEMBERSHIP_RULE": "C4_REFUSE_AMBIGUOUS_NOTICE at grain 3",
+      "MEMBERSHIP_COMPLETE_WITHIN_HELD_CORPUS": true,
+      "AMBIGUOUS_MEMBERSHIP_COUNT": 0,
+      "VALUE_PRESENT_COUNT": 7,
+      "VALUE_MISSING_COUNT": 2,
+      "value_missing_notices_kept_in_membership": true,
+      "CURRENCIES": {
+        "EUR": 7
+      },
+      "held_class_prefixes": {
+        "9211": 8,
+        "9213": 1
+      },
+      "held_category_prefix_count": 2,
+      "acquisition_windows": {
+        "A": 4,
+        "B": 5
+      },
+      "derived_cohorts": [
+        {
+          "window": "A",
+          "notice_class": "CONTRACT_AWARD_NOTICE",
+          "currency": "EUR",
+          "amount_scope": "NOTICE",
+          "members": 2,
+          "signal_id": "75dd2a0c-d3da-5181-86b1-25ff32eb6cb8",
+          "magnitude": "22000",
+          "classification_codes": [
+            "92111200"
+          ]
+        },
+        {
+          "window": "A",
+          "notice_class": "CONTRACT_NOTICE",
+          "currency": "EUR",
+          "amount_scope": "NOTICE",
+          "members": 2,
+          "signal_id": "e5e2483a-e1a6-5fd0-b4bb-65afe719a1ba",
+          "magnitude": "3600000",
+          "classification_codes": [
+            "92110000",
+            "92111100"
+          ]
+        },
+        {
+          "window": "B",
+          "notice_class": "CONTRACT_NOTICE",
+          "currency": "EUR",
+          "amount_scope": "NOTICE",
+          "members": 2,
+          "signal_id": "86e2e385-bb79-5f04-b302-95b4d5c8dca9",
+          "magnitude": "72168",
+          "classification_codes": [
+            "92100000",
+            "92111000",
+            "92111200",
+            "92111240",
+            "92111260",
+            "92112000",
+            "92130000"
+          ]
+        }
+      ],
+      "refused_cohorts": [
+        {
+          "window": "B",
+          "notice_class": "CONTRACT_AWARD_NOTICE",
+          "currency": "EUR",
+          "members": 1,
+          "reason": "INSUFFICIENT_INPUT_OBSERVATIONS"
+        }
+      ],
+      "SIGNALS_DERIVED": 3,
+      "CLAIMS_DERIVED": 5,
+      "claims_detailed": 3,
+      "claims_witnessed": 2,
+      "EVIDENCE_DERIVED": 6,
+      "SCORABLE_EVIDENCE": 6,
+      "COUNTING_DIMENSIONS": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "SOURCE_FAMILIES": [
+        "public_procurement"
+      ],
+      "PROVENANCE_SHAPES": 1,
+      "INDEPENDENCE_STATE": "UNKNOWN",
+      "packet_id": "62a96deb5bd35e4d4a7bfa42a929274853a3c6707addd9d96956c28efbd1a22b",
+      "formable": true,
+      "egress_state": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS"
+    },
+    {
+      "COHORT_SUBJECT_KEY": "ted-eu:CPV-group:922",
+      "CPV_ID": "922",
+      "CPV_LEVEL": "group",
+      "PARENT_DIVISION": "92",
+      "LABEL_IF_HELD": null,
+      "HELD_NOTICE_COUNT": 2,
+      "NOTICE_TYPES": {
+        "CONTRACT_AWARD_NOTICE": 1,
+        "CONTRACT_NOTICE": 1
+      },
+      "MEMBERSHIP_RULE": "C4_REFUSE_AMBIGUOUS_NOTICE at grain 3",
+      "MEMBERSHIP_COMPLETE_WITHIN_HELD_CORPUS": true,
+      "AMBIGUOUS_MEMBERSHIP_COUNT": 0,
+      "VALUE_PRESENT_COUNT": 2,
+      "VALUE_MISSING_COUNT": 0,
+      "value_missing_notices_kept_in_membership": true,
+      "CURRENCIES": {
+        "EUR": 2
+      },
+      "held_class_prefixes": {
+        "9222": 2,
+        "9221": 1
+      },
+      "held_category_prefix_count": 2,
+      "acquisition_windows": {
+        "A": 2
+      },
+      "derived_cohorts": [],
+      "refused_cohorts": [
+        {
+          "window": "A",
+          "notice_class": "CONTRACT_AWARD_NOTICE",
+          "currency": "EUR",
+          "members": 1,
+          "reason": "INSUFFICIENT_INPUT_OBSERVATIONS"
+        },
+        {
+          "window": "A",
+          "notice_class": "CONTRACT_NOTICE",
+          "currency": "EUR",
+          "members": 1,
+          "reason": "INSUFFICIENT_INPUT_OBSERVATIONS"
+        }
+      ],
+      "SIGNALS_DERIVED": 0,
+      "CLAIMS_DERIVED": 0,
+      "claims_detailed": 0,
+      "claims_witnessed": 0,
+      "EVIDENCE_DERIVED": 0,
+      "SCORABLE_EVIDENCE": 0,
+      "COUNTING_DIMENSIONS": [],
+      "SOURCE_FAMILIES": [],
+      "PROVENANCE_SHAPES": 0,
+      "INDEPENDENCE_STATE": "UNKNOWN",
+      "packet_id": null,
+      "formable": false,
+      "egress_state": null
+    },
+    {
+      "COHORT_SUBJECT_KEY": "ted-eu:CPV-group:923",
+      "CPV_ID": "923",
+      "CPV_LEVEL": "group",
+      "PARENT_DIVISION": "92",
+      "LABEL_IF_HELD": null,
+      "HELD_NOTICE_COUNT": 20,
+      "NOTICE_TYPES": {
+        "CONTRACT_NOTICE": 12,
+        "CONTRACT_AWARD_NOTICE": 8
+      },
+      "MEMBERSHIP_RULE": "C4_REFUSE_AMBIGUOUS_NOTICE at grain 3",
+      "MEMBERSHIP_COMPLETE_WITHIN_HELD_CORPUS": true,
+      "AMBIGUOUS_MEMBERSHIP_COUNT": 0,
+      "VALUE_PRESENT_COUNT": 13,
+      "VALUE_MISSING_COUNT": 7,
+      "value_missing_notices_kept_in_membership": true,
+      "CURRENCIES": {
+        "EUR": 12,
+        "SEK": 1
+      },
+      "held_class_prefixes": {
+        "9231": 11,
+        "9233": 5,
+        "9235": 2,
+        "9237": 2,
+        "9236": 1
+      },
+      "held_category_prefix_count": 5,
+      "acquisition_windows": {
+        "A": 7,
+        "B": 13
+      },
+      "derived_cohorts": [
+        {
+          "window": "A",
+          "notice_class": "CONTRACT_AWARD_NOTICE",
+          "currency": "EUR",
+          "amount_scope": "NOTICE",
+          "members": 2,
+          "signal_id": "53e0acf6-3a6e-5d4d-9c09-ea61e8b007f6",
+          "magnitude": "141936",
+          "classification_codes": [
+            "92311000",
+            "92332000"
+          ]
+        },
+        {
+          "window": "B",
+          "notice_class": "CONTRACT_AWARD_NOTICE",
+          "currency": "EUR",
+          "amount_scope": "NOTICE",
+          "members": 5,
+          "signal_id": "d6390e84-c683-5073-bce1-ad5ff32be8c6",
+          "magnitude": "484126.91",
+          "classification_codes": [
+            "92300000",
+            "92311000",
+            "92312100",
+            "92331210"
+          ]
+        },
+        {
+          "window": "B",
+          "notice_class": "CONTRACT_NOTICE",
+          "currency": "EUR",
+          "amount_scope": "NOTICE",
+          "members": 4,
+          "signal_id": "4ddf5b6a-40fb-5ac8-93f3-febdbed39ac7",
+          "magnitude": "455140",
+          "classification_codes": [
+            "92310000",
+            "92311000",
+            "92312200",
+            "92312250",
+            "92360000",
+            "92370000"
+          ]
+        }
+      ],
+      "refused_cohorts": [
+        {
+          "window": "A",
+          "notice_class": "CONTRACT_NOTICE",
+          "currency": "EUR",
+          "members": 1,
+          "reason": "INSUFFICIENT_INPUT_OBSERVATIONS"
+        },
+        {
+          "window": "B",
+          "notice_class": "CONTRACT_NOTICE",
+          "currency": "SEK",
+          "members": 1,
+          "reason": "INSUFFICIENT_INPUT_OBSERVATIONS"
+        }
+      ],
+      "SIGNALS_DERIVED": 3,
+      "CLAIMS_DERIVED": 5,
+      "claims_detailed": 3,
+      "claims_witnessed": 2,
+      "EVIDENCE_DERIVED": 6,
+      "SCORABLE_EVIDENCE": 6,
+      "COUNTING_DIMENSIONS": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "SOURCE_FAMILIES": [
+        "public_procurement"
+      ],
+      "PROVENANCE_SHAPES": 1,
+      "INDEPENDENCE_STATE": "UNKNOWN",
+      "packet_id": "f3549844fafe46456600842b0675faafc69d836234790bcafd75364acfe558f4",
+      "formable": true,
+      "egress_state": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS"
+    },
+    {
+      "COHORT_SUBJECT_KEY": "ted-eu:CPV-group:924",
+      "CPV_ID": "924",
+      "CPV_LEVEL": "group",
+      "PARENT_DIVISION": "92",
+      "LABEL_IF_HELD": null,
+      "HELD_NOTICE_COUNT": 4,
+      "NOTICE_TYPES": {
+        "CONTRACT_AWARD_NOTICE": 2,
+        "CONTRACT_NOTICE": 2
+      },
+      "MEMBERSHIP_RULE": "C4_REFUSE_AMBIGUOUS_NOTICE at grain 3",
+      "MEMBERSHIP_COMPLETE_WITHIN_HELD_CORPUS": true,
+      "AMBIGUOUS_MEMBERSHIP_COUNT": 0,
+      "VALUE_PRESENT_COUNT": 2,
+      "VALUE_MISSING_COUNT": 2,
+      "value_missing_notices_kept_in_membership": true,
+      "CURRENCIES": {
+        "EUR": 2
+      },
+      "held_class_prefixes": {},
+      "held_category_prefix_count": 0,
+      "acquisition_windows": {
+        "A": 3,
+        "B": 1
+      },
+      "derived_cohorts": [],
+      "refused_cohorts": [
+        {
+          "window": "A",
+          "notice_class": "CONTRACT_AWARD_NOTICE",
+          "currency": "EUR",
+          "members": 1,
+          "reason": "INSUFFICIENT_INPUT_OBSERVATIONS"
+        },
+        {
+          "window": "B",
+          "notice_class": "CONTRACT_AWARD_NOTICE",
+          "currency": "EUR",
+          "members": 1,
+          "reason": "INSUFFICIENT_INPUT_OBSERVATIONS"
+        }
+      ],
+      "SIGNALS_DERIVED": 0,
+      "CLAIMS_DERIVED": 0,
+      "claims_detailed": 0,
+      "claims_witnessed": 0,
+      "EVIDENCE_DERIVED": 0,
+      "SCORABLE_EVIDENCE": 0,
+      "COUNTING_DIMENSIONS": [],
+      "SOURCE_FAMILIES": [],
+      "PROVENANCE_SHAPES": 0,
+      "INDEPENDENCE_STATE": "UNKNOWN",
+      "packet_id": null,
+      "formable": false,
+      "egress_state": null
+    },
+    {
+      "COHORT_SUBJECT_KEY": "ted-eu:CPV-group:925",
+      "CPV_ID": "925",
+      "CPV_LEVEL": "group",
+      "PARENT_DIVISION": "92",
+      "LABEL_IF_HELD": null,
+      "HELD_NOTICE_COUNT": 21,
+      "NOTICE_TYPES": {
+        "CONTRACT_NOTICE": 12,
+        "CONTRACT_AWARD_NOTICE": 9
+      },
+      "MEMBERSHIP_RULE": "C4_REFUSE_AMBIGUOUS_NOTICE at grain 3",
+      "MEMBERSHIP_COMPLETE_WITHIN_HELD_CORPUS": true,
+      "AMBIGUOUS_MEMBERSHIP_COUNT": 0,
+      "VALUE_PRESENT_COUNT": 19,
+      "VALUE_MISSING_COUNT": 2,
+      "value_missing_notices_kept_in_membership": true,
+      "CURRENCIES": {
+        "EUR": 18,
+        "CZK": 1
+      },
+      "held_class_prefixes": {
+        "9252": 10,
+        "9251": 7,
+        "9253": 4
+      },
+      "held_category_prefix_count": 6,
+      "acquisition_windows": {
+        "A": 11,
+        "B": 10
+      },
+      "derived_cohorts": [
+        {
+          "window": "A",
+          "notice_class": "CONTRACT_AWARD_NOTICE",
+          "currency": "EUR",
+          "amount_scope": "NOTICE",
+          "members": 4,
+          "signal_id": "14bc2858-4803-5964-ab50-996aa85fb6a1",
+          "magnitude": "14145885",
+          "classification_codes": [
+            "92511000",
+            "92512000",
+            "92520000",
+            "92521000",
+            "92521100"
+          ]
+        },
+        {
+          "window": "A",
+          "notice_class": "CONTRACT_NOTICE",
+          "currency": "EUR",
+          "amount_scope": "NOTICE",
+          "members": 6,
+          "signal_id": "0dfe10d0-4e87-5db2-bcbb-7b0e92cffe65",
+          "magnitude": "2116000",
+          "classification_codes": [
+            "92512000",
+            "92521000",
+            "92532000",
+            "92533000"
+          ]
+        },
+        {
+          "window": "B",
+          "notice_class": "CONTRACT_AWARD_NOTICE",
+          "currency": "EUR",
+          "amount_scope": "NOTICE",
+          "members": 5,
+          "signal_id": "087506e7-2512-5db9-9bc5-fde54d2b3b7b",
+          "magnitude": "1774223.99",
+          "classification_codes": [
+            "92500000",
+            "92512000",
+            "92521000",
+            "92521100"
+          ]
+        },
+        {
+          "window": "B",
+          "notice_class": "CONTRACT_NOTICE",
+          "currency": "EUR",
+          "amount_scope": "NOTICE",
+          "members": 3,
+          "signal_id": "55418f02-1de1-55bd-8385-cbdb6f4ddcd8",
+          "magnitude": "40280863.55",
+          "classification_codes": [
+            "92520000",
+            "92521000",
+            "92521100",
+            "92534000"
+          ]
+        }
+      ],
+      "refused_cohorts": [
+        {
+          "window": "B",
+          "notice_class": "CONTRACT_NOTICE",
+          "currency": "CZK",
+          "members": 1,
+          "reason": "INSUFFICIENT_INPUT_OBSERVATIONS"
+        }
+      ],
+      "SIGNALS_DERIVED": 4,
+      "CLAIMS_DERIVED": 6,
+      "claims_detailed": 4,
+      "claims_witnessed": 2,
+      "EVIDENCE_DERIVED": 8,
+      "SCORABLE_EVIDENCE": 8,
+      "COUNTING_DIMENSIONS": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "SOURCE_FAMILIES": [
+        "public_procurement"
+      ],
+      "PROVENANCE_SHAPES": 1,
+      "INDEPENDENCE_STATE": "UNKNOWN",
+      "packet_id": "8d9f8917eecde9c392fec9557a30013b8e422e5cabc76dcb15bec2b74595c9f5",
+      "formable": true,
+      "egress_state": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS"
+    },
+    {
+      "COHORT_SUBJECT_KEY": "ted-eu:CPV-group:926",
+      "CPV_ID": "926",
+      "CPV_LEVEL": "group",
+      "PARENT_DIVISION": "92",
+      "LABEL_IF_HELD": null,
+      "HELD_NOTICE_COUNT": 21,
+      "NOTICE_TYPES": {
+        "CONTRACT_NOTICE": 17,
+        "CONTRACT_AWARD_NOTICE": 4
+      },
+      "MEMBERSHIP_RULE": "C4_REFUSE_AMBIGUOUS_NOTICE at grain 3",
+      "MEMBERSHIP_COMPLETE_WITHIN_HELD_CORPUS": true,
+      "AMBIGUOUS_MEMBERSHIP_COUNT": 0,
+      "VALUE_PRESENT_COUNT": 17,
+      "VALUE_MISSING_COUNT": 4,
+      "value_missing_notices_kept_in_membership": true,
+      "CURRENCIES": {
+        "EUR": 16,
+        "SEK": 1
+      },
+      "held_class_prefixes": {
+        "9261": 16,
+        "9262": 2
+      },
+      "held_category_prefix_count": 1,
+      "acquisition_windows": {
+        "A": 10,
+        "B": 11
+      },
+      "derived_cohorts": [
+        {
+          "window": "A",
+          "notice_class": "CONTRACT_NOTICE",
+          "currency": "EUR",
+          "amount_scope": "NOTICE",
+          "members": 6,
+          "signal_id": "44a6ad17-4f01-5505-a1aa-d9d3a590d1fe",
+          "magnitude": "16463935.12",
+          "classification_codes": [
+            "92600000",
+            "92610000",
+            "92622000"
+          ]
+        },
+        {
+          "window": "B",
+          "notice_class": "CONTRACT_AWARD_NOTICE",
+          "currency": "EUR",
+          "amount_scope": "NOTICE",
+          "members": 2,
+          "signal_id": "1d6b58cc-d912-5521-88bc-81fc41112c3c",
+          "magnitude": "235017",
+          "classification_codes": [
+            "92610000"
+          ]
+        },
+        {
+          "window": "B",
+          "notice_class": "CONTRACT_NOTICE",
+          "currency": "EUR",
+          "amount_scope": "NOTICE",
+          "members": 7,
+          "signal_id": "960b49b6-1201-52e4-9f86-b5a3ae52bb82",
+          "magnitude": "86827200",
+          "classification_codes": [
+            "92600000",
+            "92610000"
+          ]
+        }
+      ],
+      "refused_cohorts": [
+        {
+          "window": "A",
+          "notice_class": "CONTRACT_AWARD_NOTICE",
+          "currency": "EUR",
+          "members": 1,
+          "reason": "INSUFFICIENT_INPUT_OBSERVATIONS"
+        },
+        {
+          "window": "B",
+          "notice_class": "CONTRACT_NOTICE",
+          "currency": "SEK",
+          "members": 1,
+          "reason": "INSUFFICIENT_INPUT_OBSERVATIONS"
+        }
+      ],
+      "SIGNALS_DERIVED": 3,
+      "CLAIMS_DERIVED": 5,
+      "claims_detailed": 3,
+      "claims_witnessed": 2,
+      "EVIDENCE_DERIVED": 6,
+      "SCORABLE_EVIDENCE": 6,
+      "COUNTING_DIMENSIONS": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "SOURCE_FAMILIES": [
+        "public_procurement"
+      ],
+      "PROVENANCE_SHAPES": 1,
+      "INDEPENDENCE_STATE": "UNKNOWN",
+      "packet_id": "40e3c3c7f92c2ae2dc1fb2f00e27f7a7d439d88c186cfbff73ac69803cff910e",
+      "formable": true,
+      "egress_state": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS"
+    }
+  ],
+  "NARROW_COHORT_COUNT": 4,
+  "narrow_subjects_represented": [
+    "ted-eu:CPV-group:921",
+    "ted-eu:CPV-group:922",
+    "ted-eu:CPV-group:923",
+    "ted-eu:CPV-group:924",
+    "ted-eu:CPV-group:925",
+    "ted-eu:CPV-group:926"
+  ],
+  "narrow_subjects_with_signals": [
+    "ted-eu:CPV-group:921",
+    "ted-eu:CPV-group:923",
+    "ted-eu:CPV-group:925",
+    "ted-eu:CPV-group:926"
+  ],
+  "narrow_subjects_refused_for_insufficient_input": [
+    "ted-eu:CPV-group:922",
+    "ted-eu:CPV-group:924"
+  ],
+  "preparation": {
+    "PREPARATION_VERSION_BEFORE": "opportunity-preparation@2.0.0",
+    "PREPARATION_VERSION_AFTER": "opportunity-preparation@3.0.0",
+    "v3_supersedes": "docs/data/opportunity-preparation-v2.json",
+    "v2_untouched_sha256": "80bc6d6a7accf714f36dff1d50afa8cd0c8bc30d4d9675dbc3a494b6df70feba",
+    "v1_untouched_sha256": "6aab7daf1f222dead72e03baebee43468a9b9d4381d9ee5fefbcb78dd9f09b31",
+    "rows": {
+      "before": 58,
+      "after": 84
+    },
+    "scoring_rows": {
+      "before": 48,
+      "after": 74
+    },
+    "packets": {
+      "before": 10,
+      "after": 14
+    },
+    "formable_packets": {
+      "before": 3,
+      "after": 7
+    },
+    "grouping": {
+      "before": "source-native-subject-grouping@1.2.0",
+      "after": "source-native-subject-grouping@1.3.0"
+    },
+    "division_92_packet_retained": true,
+    "division_92_packet": {
+      "subject": "ted-eu:CPV-division:92",
+      "size_before": 10,
+      "size_after": 10,
+      "packet_id_v2": "d754770d1a65a8613f12b64903830e314aee72e97838ae1e0797241212964e68",
+      "packet_id_v3": "846c98974686a5b33209e404b83280e75f69b3b4d23e2a77328f224a5acd4c8a",
+      "why_the_id_moved": "a packet id hashes the procedure versions with the evidence ids, and the grouping procedure moved 1.2.0 to 1.3.0; the rows are the same ten"
+    },
+    "new_packets": [
+      "ted-eu:CPV-group:921",
+      "ted-eu:CPV-group:923",
+      "ted-eu:CPV-group:925",
+      "ted-eu:CPV-group:926"
+    ],
+    "parent_and_child_are_not_duplicates": "the division packet's ten rows cite five division Signals whose cohorts span several groups; the group packets' rows cite thirteen group Signals over subsets of the same notices. Different cohorts, different propositions, coexisting"
+  },
+  "information_gain_test": {
+    "question": "does one more hierarchy level change what a subject at that level can support?",
+    "grain_4_class_dry_run": {
+      "cohorts_derived": 14,
+      "cohorts_refused_insufficient_input": 15,
+      "largest_membership": 6,
+      "persisted": false
+    },
+    "grain_5_category_dry_run": {
+      "cohorts_derived": 6,
+      "cohorts_refused_insufficient_input": 17,
+      "persisted": false
+    },
+    "held_groups_split_into_classes": {
+      "921": 2,
+      "922": 2,
+      "923": 5,
+      "924": 0,
+      "925": 3,
+      "926": 2
+    },
+    "structural_splitting_terminates_only_at_leaf_codes": true,
+    "labels_held_at_any_level": false,
+    "finding": "descending is possible from held data at grains 4 and 5 and produces smaller cohorts of the same three dimensions; it changes nothing about whether a subject at that grain names one market, one service or one buyer need, because the held records carry codes and no labels at any level and the code structure splits at every level until the leaf. The structural too-broad test Mission 1.80 applied to the division is necessary and is not sufficient: applied blindly it descends to eight-digit codes and singleton cohorts. The next grain-level step is warranted only with the vocabulary's own labels for the held groups and classes as a semantic input, which is a documentation read and not an acquisition, and which this mission was not permitted to perform."
+  },
+  "reselection": {
+    "$comment": "Mission 1.81 §21. The Mission 1.80 selection procedure re-run over the v3 preparation, in the same shape and under the same gates, with one ordinal rule refined: a CATEGORY one level below the scheme's coarsest reads MEDIUM semantic specificity rather than LOW, because it is narrower than its parent and still not a product.",
+    "record_version": "2.0.0",
+    "supersedes": "docs/data/second-opportunity-candidate-selection-v1.json",
+    "mission": "1.81",
+    "measured_from": {
+      "preparation_record": "docs/data/opportunity-preparation-v3.json",
+      "reconciliation_record": "docs/data/opportunity-reliability-reconciliation-v1.json",
+      "scope_rules": "docs/data/observation-scope-rules-v1.json (1.1.0)",
+      "subject_registry": "docs/data/canonical-subject-registry-v1.json (canonical-subject-registry@1.1.0)"
+    },
+    "primary_outcome": "SECOND_OPPORTUNITY_REQUIRES_SUBJECT_NARROWING",
+    "selected_subject": null,
+    "selected_subject_scope": null,
+    "selected_packet_id": null,
+    "selection_basis": "no candidate passes every load-bearing gate: the four group packets are formable, scorable at reviewed reliabilities and narrower than the division, and each is a category whose held cohort still spans several classes and whose label is not held, so actionable grain cannot be established from held data; every other candidate is vetoed as in Mission 1.80",
+    "best_held_evidence_packet": "ted-eu:CPV-division:92",
+    "best_narrow_held_packet": "ted-eu:CPV-group:925",
+    "best_narrow_held_packet_basis": "the group packet with the most rows (8) and the most derived cohorts (4); a count of cohorts and rows, never of value",
+    "best_second_opportunity_candidate": null,
+    "why_they_differ": "the richest packet is still the division; the group packets carry fewer rows of the same three dimensions with more specificity, and none is selectable at its grain because its actionability turns on a label the held records do not carry",
+    "candidate_universe": {
+      "built_from": "every packet in the v3 preparation other than the one holding the current Opportunity's cited rows",
+      "excluded": [
+        {
+          "subject": "subject:docker",
+          "why": "the current Opportunity's subject"
+        }
+      ],
+      "parked_relations_required_by_any_candidate": false,
+      "subjects": [
+        "gdelt:lexical-term:ENGLISH|climate",
+        "gdelt:lexical-term:ENGLISH|climate|weather",
+        "gdelt:lexical-term:ENGLISH|weather",
+        "subject:kubernetes",
+        "subject:podman",
+        "ted-eu:CPV-division:90",
+        "ted-eu:CPV-division:92",
+        "ted-eu:CPV-group:921",
+        "ted-eu:CPV-group:923",
+        "ted-eu:CPV-group:925",
+        "ted-eu:CPV-group:926",
+        "world-bank:metric-geography:SP.POP.TOTL|DE",
+        "world-bank:metric-geography:SP.POP.TOTL|FR"
+      ],
+      "count": 13,
+      "identity_rule": "the repository's own grouping (source-native-subject-grouping@1.3.0 over canonical-subject-registry@1.1.0 and observation-scope-rules@1.1.0); nothing merged, nothing inferred; SAME_PROBLEM_FAMILY stays PARKED"
+    },
+    "ordinal_rules": {
+      "evidence_breadth": "rows <= 2 LOW, 3 to 9 MEDIUM, >= 10 HIGH",
+      "scorable_breadth": "scorable rows 0 LOW, 1 to 9 MEDIUM, >= 10 HIGH",
+      "counting_dimension_diversity": "counting dimensions 0 or 1 LOW, 2 MEDIUM, >= 3 HIGH",
+      "source_diversity": "1 source LOW, 2 MEDIUM, >= 3 HIGH",
+      "provenance_diversity": "one publisher, one pipeline LOW",
+      "independence": "UNKNOWN on every row with 0 groups is UNKNOWN; never ESTABLISHED without a group",
+      "semantic_specificity": "PRODUCT and GEOGRAPHY subjects HIGH; a CATEGORY one level below the scheme's coarsest level MEDIUM; the coarsest CATEGORY, TOPIC and UNDETERMINED LOW",
+      "commercial_information": "NONE without a commercial counting dimension; LOW with one on fewer than 3 scorable rows; MEDIUM with one on 3 or more scorable rows; HIGH is reserved for WILLINGNESS_TO_PAY, which no held row carries",
+      "problem_information": "NONE without PROBLEM_OR_NEED, SOLUTION_GAP or SOLUTION_DISSATISFACTION",
+      "governance_distance_to_synthesis": "NONE when every source in the packet is egress eligible; LOW when one open question blocks it; HIGH when a review was refused",
+      "new_acquisition_required": "NO when the packet is formable from held data"
+    },
+    "candidates": [
+      {
+        "subject_key": "gdelt:lexical-term:ENGLISH|climate",
+        "packet_id": "eb96d039154c7c9c98b022ea347b1687e70f14c07a1ef1e6e3ce56084fb2b24d",
+        "subject_scope": "UNDETERMINED",
+        "subject_scope_basis": "no reviewed scope rule for gdelt: a word names no level of thing (Mission 1.34)",
+        "subject_type": "TOPIC",
+        "source_ids": [
+          "gdelt"
+        ],
+        "source_families": [
+          "news"
+        ],
+        "evidence_rows": 1,
+        "scorable_rows": 0,
+        "non_scorable_rows": 1,
+        "proposition_kinds": {
+          "source_reported_term_frequency_change": {
+            "rows": 1,
+            "reliability": null
+          }
+        },
+        "counting_dimensions": [],
+        "noncounting_dimensions": [],
+        "reliability_distribution": {
+          "NONE": 1
+        },
+        "provenance_shapes": 1,
+        "independence_state": "UNKNOWN",
+        "hypothesis_formable": false,
+        "formability_reason": "no dimension: lexical frequency measures what media published, which is producer behaviour and maps to nothing",
+        "scoring_ready_packet_property": false,
+        "egress_state": "AVAILABLE",
+        "egress_eligible": true,
+        "egress_review_required_before_synthesis": false,
+        "establishes": "the term 'climate' appeared 11 more times in one fifteen-minute GDELT bucket than in the preceding one",
+        "does_not_establish": "audience demand, readers, a problem, a market; publication activity only",
+        "establishes_product_demand": false,
+        "product_intervention_grain": "NOT_ESTABLISHED",
+        "actionable_grain": "NOT_ACTIONABLE",
+        "product_relevance": "LOW",
+        "ordinal": {
+          "EVIDENCE_BREADTH": "LOW",
+          "SCORABLE_BREADTH": "LOW",
+          "COUNTING_DIMENSION_DIVERSITY": "LOW",
+          "SOURCE_DIVERSITY": "LOW",
+          "COMMERCIAL_INFORMATION": "NONE",
+          "PROBLEM_INFORMATION": "NONE",
+          "PRODUCT_RELEVANCE": "LOW",
+          "SEMANTIC_SPECIFICITY": "LOW",
+          "PROVENANCE_DIVERSITY": "LOW",
+          "INDEPENDENCE": "UNKNOWN",
+          "HYPOTHESIS_FORMABILITY": "NO",
+          "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "NONE",
+          "NEW_ACQUISITION_REQUIRED": "YES",
+          "OPERATOR_JUDGMENT_REQUIRED": "NO",
+          "ARCHITECTURE_WORK_REQUIRED": "NO",
+          "OVERINTERPRETATION_RISK": "HIGH"
+        },
+        "current_blockers": [
+          "no decision-relevant dimension",
+          "a term is not a subject level"
+        ],
+        "veto_state": "VETOED",
+        "veto_reason": "no decision-relevant dimension, and not formable",
+        "dominance_state": "DOMINATED",
+        "dominated_by": "subject:kubernetes"
+      },
+      {
+        "subject_key": "gdelt:lexical-term:ENGLISH|climate|weather",
+        "packet_id": "fba39ffc3d4e5a2273d6e5b6d2714a06508f5931e00e81d3af80b7d4044bb3c3",
+        "subject_scope": "UNDETERMINED",
+        "subject_scope_basis": "no reviewed scope rule for gdelt",
+        "subject_type": "TOPIC",
+        "source_ids": [
+          "gdelt"
+        ],
+        "source_families": [
+          "news"
+        ],
+        "evidence_rows": 1,
+        "scorable_rows": 0,
+        "non_scorable_rows": 1,
+        "proposition_kinds": {
+          "source_reported_term_frequency_contrast": {
+            "rows": 1,
+            "reliability": null
+          }
+        },
+        "counting_dimensions": [],
+        "noncounting_dimensions": [],
+        "reliability_distribution": {
+          "NONE": 1
+        },
+        "provenance_shapes": 1,
+        "independence_state": "UNKNOWN",
+        "hypothesis_formable": false,
+        "formability_reason": "no dimension",
+        "scoring_ready_packet_property": false,
+        "egress_state": "AVAILABLE",
+        "egress_eligible": true,
+        "egress_review_required_before_synthesis": false,
+        "establishes": "within one bucket, 'climate' appeared 19 more times than 'weather'",
+        "does_not_establish": "as climate",
+        "establishes_product_demand": false,
+        "product_intervention_grain": "NOT_ESTABLISHED",
+        "actionable_grain": "NOT_ACTIONABLE",
+        "product_relevance": "LOW",
+        "ordinal": {
+          "EVIDENCE_BREADTH": "LOW",
+          "SCORABLE_BREADTH": "LOW",
+          "COUNTING_DIMENSION_DIVERSITY": "LOW",
+          "SOURCE_DIVERSITY": "LOW",
+          "COMMERCIAL_INFORMATION": "NONE",
+          "PROBLEM_INFORMATION": "NONE",
+          "PRODUCT_RELEVANCE": "LOW",
+          "SEMANTIC_SPECIFICITY": "LOW",
+          "PROVENANCE_DIVERSITY": "LOW",
+          "INDEPENDENCE": "UNKNOWN",
+          "HYPOTHESIS_FORMABILITY": "NO",
+          "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "NONE",
+          "NEW_ACQUISITION_REQUIRED": "YES",
+          "OPERATOR_JUDGMENT_REQUIRED": "NO",
+          "ARCHITECTURE_WORK_REQUIRED": "NO",
+          "OVERINTERPRETATION_RISK": "HIGH"
+        },
+        "current_blockers": [
+          "no decision-relevant dimension"
+        ],
+        "veto_state": "VETOED",
+        "veto_reason": "no decision-relevant dimension, and not formable",
+        "dominance_state": "DOMINATED",
+        "dominated_by": "subject:kubernetes"
+      },
+      {
+        "subject_key": "gdelt:lexical-term:ENGLISH|weather",
+        "packet_id": "b19e61dea43c6d474488ed6a9cefa2f524e2bcd964745162da7a0ec35824a87d",
+        "subject_scope": "UNDETERMINED",
+        "subject_scope_basis": "no reviewed scope rule for gdelt",
+        "subject_type": "TOPIC",
+        "source_ids": [
+          "gdelt"
+        ],
+        "source_families": [
+          "news"
+        ],
+        "evidence_rows": 1,
+        "scorable_rows": 0,
+        "non_scorable_rows": 1,
+        "proposition_kinds": {
+          "source_reported_term_frequency_change": {
+            "rows": 1,
+            "reliability": null
+          }
+        },
+        "counting_dimensions": [],
+        "noncounting_dimensions": [],
+        "reliability_distribution": {
+          "NONE": 1
+        },
+        "provenance_shapes": 1,
+        "independence_state": "UNKNOWN",
+        "hypothesis_formable": false,
+        "formability_reason": "no dimension",
+        "scoring_ready_packet_property": false,
+        "egress_state": "AVAILABLE",
+        "egress_eligible": true,
+        "egress_review_required_before_synthesis": false,
+        "establishes": "the term 'weather' appeared 9 more times in one bucket than in the preceding one",
+        "does_not_establish": "as climate",
+        "establishes_product_demand": false,
+        "product_intervention_grain": "NOT_ESTABLISHED",
+        "actionable_grain": "NOT_ACTIONABLE",
+        "product_relevance": "LOW",
+        "ordinal": {
+          "EVIDENCE_BREADTH": "LOW",
+          "SCORABLE_BREADTH": "LOW",
+          "COUNTING_DIMENSION_DIVERSITY": "LOW",
+          "SOURCE_DIVERSITY": "LOW",
+          "COMMERCIAL_INFORMATION": "NONE",
+          "PROBLEM_INFORMATION": "NONE",
+          "PRODUCT_RELEVANCE": "LOW",
+          "SEMANTIC_SPECIFICITY": "LOW",
+          "PROVENANCE_DIVERSITY": "LOW",
+          "INDEPENDENCE": "UNKNOWN",
+          "HYPOTHESIS_FORMABILITY": "NO",
+          "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "NONE",
+          "NEW_ACQUISITION_REQUIRED": "YES",
+          "OPERATOR_JUDGMENT_REQUIRED": "NO",
+          "ARCHITECTURE_WORK_REQUIRED": "NO",
+          "OVERINTERPRETATION_RISK": "HIGH"
+        },
+        "current_blockers": [
+          "no decision-relevant dimension"
+        ],
+        "veto_state": "VETOED",
+        "veto_reason": "no decision-relevant dimension, and not formable",
+        "dominance_state": "DOMINATED",
+        "dominated_by": "subject:kubernetes"
+      },
+      {
+        "subject_key": "subject:kubernetes",
+        "packet_id": "e56fd88e03670d4cdede5b45591cdbcfaa5c70df3dc50c2089ea3afdd9f9138f",
+        "subject_scope": "PRODUCT",
+        "subject_scope_basis": "declared PRODUCT in canonical-subject-registry@1.1.0",
+        "subject_type": "PRODUCT",
+        "source_ids": [
+          "wikimedia-pageviews"
+        ],
+        "source_families": [
+          "knowledge"
+        ],
+        "evidence_rows": 13,
+        "scorable_rows": 12,
+        "non_scorable_rows": 1,
+        "proposition_kinds": {
+          "platform_counted_content_request_change": {
+            "rows": 6,
+            "reliability": 0.65
+          },
+          "platform_counted_content_request_change_witnessed": {
+            "rows": 6,
+            "reliability": 0.6
+          },
+          "metric_threshold_state": {
+            "rows": 1,
+            "reliability": null,
+            "note": "the INFERRED pilot claim; NO_APPLICABLE_ASSESSMENT"
+          }
+        },
+        "counting_dimensions": [
+          "AUDIENCE_OR_USAGE"
+        ],
+        "noncounting_dimensions": [
+          "TREND_OR_CHANGE"
+        ],
+        "reliability_distribution": {
+          "0.65": 6,
+          "0.6": 6,
+          "NONE": 1
+        },
+        "provenance_shapes": 1,
+        "independence_state": "UNKNOWN",
+        "hypothesis_formable": false,
+        "formability_reason": "13 eligible rows carrying 1 counting dimension; the rule requires 2",
+        "scoring_ready_packet_property": true,
+        "egress_state": "AVAILABLE",
+        "egress_eligible": true,
+        "egress_review_required_before_synthesis": false,
+        "establishes": "adjacent-day request-count differences for the Kubernetes article under the platform's heuristic 'user' class, and existentials over the same six measurements",
+        "does_not_establish": "readers, demand, a problem, a buyer, money, or anything the docker packet does not also fail to establish; no Stack Exchange row exists for this subject",
+        "establishes_product_demand": false,
+        "product_intervention_grain": "PLAUSIBLE_BUT_REQUIRES_SYNTHESIS",
+        "actionable_grain": "NOT_ACTIONABLE",
+        "product_relevance": "LOW",
+        "ordinal": {
+          "EVIDENCE_BREADTH": "HIGH",
+          "SCORABLE_BREADTH": "HIGH",
+          "COUNTING_DIMENSION_DIVERSITY": "LOW",
+          "SOURCE_DIVERSITY": "LOW",
+          "COMMERCIAL_INFORMATION": "NONE",
+          "PROBLEM_INFORMATION": "NONE",
+          "PRODUCT_RELEVANCE": "LOW",
+          "SEMANTIC_SPECIFICITY": "HIGH",
+          "PROVENANCE_DIVERSITY": "LOW",
+          "INDEPENDENCE": "UNKNOWN",
+          "HYPOTHESIS_FORMABILITY": "NO",
+          "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "NONE",
+          "NEW_ACQUISITION_REQUIRED": "YES",
+          "OPERATOR_JUDGMENT_REQUIRED": "NO",
+          "ARCHITECTURE_WORK_REQUIRED": "NO",
+          "OVERINTERPRETATION_RISK": "MEDIUM"
+        },
+        "current_blockers": [
+          "not formable: one counting dimension; a second needs an acquisition (the docker shape without its Stack Exchange row)"
+        ],
+        "veto_state": "VETOED",
+        "veto_reason": "not formable on one counting dimension, and no held-data deterministic step changes that; on the frontier only for naming a product, which Mission 1.79 already found saturated for this shape",
+        "dominance_state": "FRONTIER"
+      },
+      {
+        "subject_key": "subject:podman",
+        "packet_id": "f280484e94db6380fe06690c6059fe3c590ed491c432205b0a102652353f9c44",
+        "subject_scope": "PRODUCT",
+        "subject_scope_basis": "declared PRODUCT in canonical-subject-registry@1.1.0",
+        "subject_type": "PRODUCT",
+        "source_ids": [
+          "wikimedia-pageviews"
+        ],
+        "source_families": [
+          "knowledge"
+        ],
+        "evidence_rows": 12,
+        "scorable_rows": 12,
+        "non_scorable_rows": 0,
+        "proposition_kinds": {
+          "platform_counted_content_request_change": {
+            "rows": 6,
+            "reliability": 0.65
+          },
+          "platform_counted_content_request_change_witnessed": {
+            "rows": 6,
+            "reliability": 0.6
+          }
+        },
+        "counting_dimensions": [
+          "AUDIENCE_OR_USAGE"
+        ],
+        "noncounting_dimensions": [
+          "TREND_OR_CHANGE"
+        ],
+        "reliability_distribution": {
+          "0.65": 6,
+          "0.6": 6
+        },
+        "provenance_shapes": 1,
+        "independence_state": "UNKNOWN",
+        "hypothesis_formable": false,
+        "formability_reason": "12 eligible rows carrying 1 counting dimension; the rule requires 2",
+        "scoring_ready_packet_property": true,
+        "egress_state": "AVAILABLE",
+        "egress_eligible": true,
+        "egress_review_required_before_synthesis": false,
+        "establishes": "as kubernetes, for the Podman article, at request counts an order of magnitude smaller",
+        "does_not_establish": "as kubernetes",
+        "establishes_product_demand": false,
+        "product_intervention_grain": "PLAUSIBLE_BUT_REQUIRES_SYNTHESIS",
+        "actionable_grain": "NOT_ACTIONABLE",
+        "product_relevance": "LOW",
+        "ordinal": {
+          "EVIDENCE_BREADTH": "HIGH",
+          "SCORABLE_BREADTH": "HIGH",
+          "COUNTING_DIMENSION_DIVERSITY": "LOW",
+          "SOURCE_DIVERSITY": "LOW",
+          "COMMERCIAL_INFORMATION": "NONE",
+          "PROBLEM_INFORMATION": "NONE",
+          "PRODUCT_RELEVANCE": "LOW",
+          "SEMANTIC_SPECIFICITY": "HIGH",
+          "PROVENANCE_DIVERSITY": "LOW",
+          "INDEPENDENCE": "UNKNOWN",
+          "HYPOTHESIS_FORMABILITY": "NO",
+          "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "NONE",
+          "NEW_ACQUISITION_REQUIRED": "YES",
+          "OPERATOR_JUDGMENT_REQUIRED": "NO",
+          "ARCHITECTURE_WORK_REQUIRED": "NO",
+          "OVERINTERPRETATION_RISK": "MEDIUM"
+        },
+        "current_blockers": [
+          "not formable: one counting dimension"
+        ],
+        "veto_state": "VETOED",
+        "veto_reason": "not formable on one counting dimension, and no held-data deterministic step changes that; on the frontier only for naming a product, which Mission 1.79 already found saturated for this shape",
+        "dominance_state": "FRONTIER"
+      },
+      {
+        "subject_key": "ted-eu:CPV-division:90",
+        "packet_id": "af5186a99147ccf1e40e6fbe320a06f72290c0652a5f76b090ab17bbd06f4540",
+        "subject_scope": "CATEGORY",
+        "subject_scope_basis": "reviewed scope rule for ted-eu",
+        "subject_type": "CATEGORY",
+        "source_ids": [
+          "ted-eu"
+        ],
+        "source_families": [
+          "public_procurement"
+        ],
+        "evidence_rows": 2,
+        "scorable_rows": 2,
+        "non_scorable_rows": 0,
+        "proposition_kinds": {
+          "source_reported_procurement_value_contrast": {
+            "rows": 1,
+            "reliability": 0.5,
+            "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020"
+          },
+          "source_published_classification_value_contrast_witnessed": {
+            "rows": 1,
+            "reliability": 0.55,
+            "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e"
+          }
+        },
+        "counting_dimensions": [
+          "BUYER_OR_BUDGET_EXISTENCE",
+          "ECONOMIC_VALUE",
+          "MARKET_ACTIVITY"
+        ],
+        "noncounting_dimensions": [],
+        "reliability_distribution": {
+          "0.5": 1,
+          "0.55": 1
+        },
+        "provenance_shapes": 1,
+        "independence_state": "UNKNOWN",
+        "hypothesis_formable": true,
+        "scoring_ready_packet_property": true,
+        "egress_state": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+        "egress_reason": "ted-eu external_model_transmission NOT_ASSESSED",
+        "egress_eligible": false,
+        "egress_review_required_before_synthesis": true,
+        "representation_constructible_without_egress": true,
+        "establishes": "one bounded set of 3 CONTRACT_AWARD_NOTICE notices under CPV division 90 (sewage, refuse, cleaning and environmental services) whose EUR totals differ by 686,545.02",
+        "does_not_establish": "as division 92, on 11 held notices instead of 177",
+        "procurement_semantics": {
+          "value_is_realised_spend": false,
+          "value_is_willingness_to_pay": false,
+          "authority_is_buyer_for_unspecified_product": false
+        },
+        "establishes_product_demand": false,
+        "held_class_distribution": {
+          "notices_held": 11,
+          "notice_classes": {
+            "CONTRACT_AWARD_NOTICE": 8,
+            "CONTRACT_NOTICE": 3
+          }
+        },
+        "product_intervention_grain": "TOO_BROAD_TO_BE_ACTIONABLE",
+        "actionable_grain": "REQUIRES_NARROWER_SUBJECT_DISCOVERY",
+        "product_relevance": "UNKNOWN",
+        "ordinal": {
+          "EVIDENCE_BREADTH": "LOW",
+          "SCORABLE_BREADTH": "MEDIUM",
+          "COUNTING_DIMENSION_DIVERSITY": "HIGH",
+          "SOURCE_DIVERSITY": "LOW",
+          "COMMERCIAL_INFORMATION": "LOW",
+          "PROBLEM_INFORMATION": "NONE",
+          "PRODUCT_RELEVANCE": "UNKNOWN",
+          "SEMANTIC_SPECIFICITY": "LOW",
+          "PROVENANCE_DIVERSITY": "LOW",
+          "INDEPENDENCE": "UNKNOWN",
+          "HYPOTHESIS_FORMABILITY": "YES",
+          "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "LOW",
+          "NEW_ACQUISITION_REQUIRED": "NO",
+          "OPERATOR_JUDGMENT_REQUIRED": "YES",
+          "ARCHITECTURE_WORK_REQUIRED": "YES",
+          "OVERINTERPRETATION_RISK": "HIGH"
+        },
+        "current_blockers": [
+          "the same shape as division 92 on two rows and eleven notices",
+          "CATEGORY grain",
+          "ted-eu egress NOT_ASSESSED"
+        ],
+        "veto_state": "VETOED",
+        "veto_reason": "strictly more-of-the-same than division 92: the same source, dimensions and grain on fewer rows",
+        "dominance_state": "DOMINATED",
+        "dominated_by": "ted-eu:CPV-division:92"
+      },
+      {
+        "subject_key": "ted-eu:CPV-division:92",
+        "packet_id": "846c98974686a5b33209e404b83280e75f69b3b4d23e2a77328f224a5acd4c8a",
+        "subject_scope": "CATEGORY",
+        "subject_scope_basis": "reviewed scope rule for ted-eu (SOURCE_NATIVE): a CPV division is a top-level division of the Common Procurement Vocabulary",
+        "subject_type": "CATEGORY",
+        "source_ids": [
+          "ted-eu"
+        ],
+        "source_families": [
+          "public_procurement"
+        ],
+        "evidence_rows": 10,
+        "scorable_rows": 10,
+        "non_scorable_rows": 0,
+        "proposition_kinds": {
+          "source_reported_procurement_value_contrast": {
+            "rows": 5,
+            "reliability": 0.5,
+            "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020"
+          },
+          "source_published_classification_value_contrast_witnessed": {
+            "rows": 5,
+            "reliability": 0.55,
+            "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e"
+          }
+        },
+        "counting_dimensions": [
+          "BUYER_OR_BUDGET_EXISTENCE",
+          "ECONOMIC_VALUE",
+          "MARKET_ACTIVITY"
+        ],
+        "noncounting_dimensions": [],
+        "reliability_distribution": {
+          "0.5": 5,
+          "0.55": 5
+        },
+        "provenance_shapes": 1,
+        "provenance_note": "one publisher, one resource, one collector route; 8 Claims, each with one support group of UNKNOWN provenance",
+        "independence_state": "UNKNOWN",
+        "hypothesis_formable": true,
+        "scoring_ready_packet_property": true,
+        "egress_state": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+        "egress_reason": "ted-eu external_model_transmission is NOT_ASSESSED under local-private-research-v1 (H-39): an open question an operator can close, not a prohibition",
+        "egress_eligible": false,
+        "egress_review_required_before_synthesis": true,
+        "representation_constructible_without_egress": true,
+        "representation_note": "the bounded payload (packet id, subject, procedures, families, dimensions, independence sentence, 8 composed Claim statements, evidence ids) passes check_representation with 0 violations, 4378 characters, no notice payload, no personal data; assembled in memory and not sent",
+        "establishes": "TED published, in its eforms contract-and-award resource, bounded sets of CONTRACT_NOTICE and CONTRACT_AWARD_NOTICE notices classified under CPV division 92 whose stated TOTAL_VALUE amounts at notice scope differ from one another (contrasts of 86,897,500 EUR; 16,581,256 EUR; 14,695,337 EUR; 1,774,223.99 EUR; 15,000,000 SEK); contracting authorities exist in this category; classified procurement activity exists",
+        "does_not_establish": "actual expenditure (BT-161 includes options and renewals and may never be exercised); willingness to pay for any proposed product; market size; product demand; a buyer for an unspecified future SaaS; addressable revenue; unmet need; dissatisfaction; a solution gap; which of the six held groups or fourteen held classes any of it concerns, or what any of them contains, since no CPV label is held",
+        "procurement_semantics": {
+          "value_is_realised_spend": false,
+          "value_is_willingness_to_pay": false,
+          "authority_is_buyer_for_unspecified_product": false
+        },
+        "establishes_product_demand": false,
+        "held_class_distribution": {
+          "notices_held": 177,
+          "notice_classes": {
+            "CONTRACT_NOTICE": 115,
+            "CONTRACT_AWARD_NOTICE": 62
+          },
+          "top_cpv_classes": {
+            "9211": 26,
+            "9231": 22,
+            "9261": 21,
+            "9252": 19,
+            "9233": 14,
+            "9251": 11,
+            "9262": 8,
+            "9237": 8
+          },
+          "note": "four-digit class prefixes of the division-92 codes on the held notices, from the notice audit; no label is held at any level, and Mission 1.80's labels were recalled, not held"
+        },
+        "product_intervention_grain": "TOO_BROAD_TO_BE_ACTIONABLE",
+        "actionable_grain": "REQUIRES_NARROWER_SUBJECT_DISCOVERY",
+        "what_a_synthesis_could_say": "that EU contracting authorities publish procurement in recreational, cultural and sporting services with widely differing notice values, i.e. an active commercial category with buyers who publish what they buy",
+        "what_it_could_not_say": "what is bought, by whom, for what need, whether any of it is underserved, or which service market a product would enter; the hypothesis would name a code whose contents are not held and a disjunction of six groups",
+        "product_relevance": "UNKNOWN",
+        "product_decision_it_could_inform": "whether public-procurement-facing products are worth researching at all, and in which class; nothing narrower",
+        "ordinal": {
+          "EVIDENCE_BREADTH": "HIGH",
+          "SCORABLE_BREADTH": "HIGH",
+          "COUNTING_DIMENSION_DIVERSITY": "HIGH",
+          "SOURCE_DIVERSITY": "LOW",
+          "COMMERCIAL_INFORMATION": "MEDIUM",
+          "PROBLEM_INFORMATION": "NONE",
+          "PRODUCT_RELEVANCE": "UNKNOWN",
+          "SEMANTIC_SPECIFICITY": "LOW",
+          "PROVENANCE_DIVERSITY": "LOW",
+          "INDEPENDENCE": "UNKNOWN",
+          "HYPOTHESIS_FORMABILITY": "YES",
+          "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "LOW",
+          "NEW_ACQUISITION_REQUIRED": "NO",
+          "OPERATOR_JUDGMENT_REQUIRED": "YES",
+          "ARCHITECTURE_WORK_REQUIRED": "YES",
+          "OVERINTERPRETATION_RISK": "HIGH"
+        },
+        "current_blockers": [
+          "CATEGORY grain spanning six held groups and fourteen held classes; no product intervention grounded at division grain",
+          "ted-eu egress NOT_ASSESSED (an operator decision, recorded here and not taken)",
+          "no CPV label held at any level: the subject is a code"
+        ],
+        "veto_state": "VETOED",
+        "veto_reason": "a category spanning six held groups, with no label held; narrowed in this mission, and still not selectable at its own grain",
+        "exploratory_category_hypothesis": {
+          "considered": true,
+          "adopted": false,
+          "why_not": "an exploratory hypothesis at division grain would read 'EU contracting authorities buy recreational, cultural and sporting services at widely differing values', which names no need, no buyer type, no product and no class; the six-plus held classes share nothing but a filing prefix, so the hypothesis would be a disjunction of unrelated service markets, the shape Mission 1.47 refused for a proposition"
+        },
+        "dominance_state": "FRONTIER"
+      },
+      {
+        "subject_key": "ted-eu:CPV-group:921",
+        "packet_id": "62a96deb5bd35e4d4a7bfa42a929274853a3c6707addd9d96956c28efbd1a22b",
+        "subject_scope": "CATEGORY",
+        "subject_scope_basis": "reviewed scope rule for ted-eu CPV-group (SOURCE_NATIVE, observation-scope-rules@1.1.0)",
+        "subject_type": "CATEGORY",
+        "cpv_level": "group",
+        "parent_subject": "ted-eu:CPV-division:92",
+        "source_ids": [
+          "ted-eu"
+        ],
+        "source_families": [
+          "public_procurement"
+        ],
+        "evidence_rows": 6,
+        "scorable_rows": 6,
+        "non_scorable_rows": 0,
+        "proposition_kinds": {
+          "source_reported_procurement_value_contrast": {
+            "rows": 3,
+            "reliability": 0.5,
+            "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020"
+          },
+          "source_published_classification_value_contrast_witnessed": {
+            "rows": 3,
+            "reliability": 0.55,
+            "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e"
+          }
+        },
+        "counting_dimensions": [
+          "BUYER_OR_BUDGET_EXISTENCE",
+          "ECONOMIC_VALUE",
+          "MARKET_ACTIVITY"
+        ],
+        "noncounting_dimensions": [],
+        "reliability_distribution": {
+          "0.5": 3,
+          "0.55": 3
+        },
+        "provenance_shapes": 1,
+        "provenance_note": "one publisher, one resource, one collector route; every row's support group of UNKNOWN provenance",
+        "independence_state": "UNKNOWN",
+        "hypothesis_formable": true,
+        "scoring_ready_packet_property": true,
+        "egress_state": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+        "egress_reason": "ted-eu external_model_transmission is NOT_ASSESSED under local-private-research-v1 (H-39): an open question an operator can close, not a prohibition",
+        "egress_eligible": false,
+        "egress_review_required_before_synthesis": true,
+        "representation_constructible_without_egress": true,
+        "held_notices": 9,
+        "held_class_distribution": {
+          "notices_held": 9,
+          "notice_classes": {
+            "CONTRACT_NOTICE": 6,
+            "CONTRACT_AWARD_NOTICE": 3
+          },
+          "top_cpv_classes": {
+            "9211": 8,
+            "9213": 1
+          },
+          "note": "four-digit class prefixes on the group's held notices; no label held"
+        },
+        "establishes": "TED published, in its eforms contract-and-award resource, 3 bounded sets of notices classified under CPV group 921 (division 92) whose stated TOTAL_VALUE amounts at NOTICE scope in EUR differ from one another, across two acquisition windows; contracting authorities publish procurement under this code",
+        "does_not_establish": "what CPV group 921 comprises (no label is held); actual expenditure; willingness to pay; market size; product demand; a buyer for an unspecified product; unmet need; dissatisfaction; a solution gap; that the group is one service market or one buyer need",
+        "procurement_semantics": {
+          "value_is_realised_spend": false,
+          "value_is_willingness_to_pay": false,
+          "authority_is_buyer_for_unspecified_product": false
+        },
+        "buyer_semantics": {
+          "PROCUREMENT_BUYER_EXISTS": true,
+          "BUYER_FOR_PROPOSED_INTERVENTION": false
+        },
+        "establishes_product_demand": false,
+        "product_intervention_grain": "TOO_BROAD_TO_BE_ACTIONABLE",
+        "grain_basis": "the held cohort spans 2 class prefixes and 2 category prefixes of the vocabulary's own hierarchy, and no held fact says what the group is; the structural rule Mission 1.80 applied to the division applies one level down",
+        "actionable_grain": "REQUIRES_NARROWER_SUBJECT_DISCOVERY",
+        "actionable_grain_caveat": "narrower by structure alone does not terminate; the deciding input is the vocabulary's label, which is not held",
+        "what_a_synthesis_could_say": "that EU contracting authorities publish procurement filed under CPV group 921 at widely differing stated values",
+        "what_it_could_not_say": "what group 921 is, what is bought under it, by whom, for what need, or whether a product could enter it",
+        "product_relevance": "UNKNOWN",
+        "product_decision_it_could_inform": "whether procurement filed under CPV group 921 is worth reading about at all; nothing narrower until the code has a held label",
+        "ordinal": {
+          "EVIDENCE_BREADTH": "MEDIUM",
+          "SCORABLE_BREADTH": "MEDIUM",
+          "COUNTING_DIMENSION_DIVERSITY": "HIGH",
+          "SOURCE_DIVERSITY": "LOW",
+          "COMMERCIAL_INFORMATION": "MEDIUM",
+          "PROBLEM_INFORMATION": "NONE",
+          "PRODUCT_RELEVANCE": "UNKNOWN",
+          "SEMANTIC_SPECIFICITY": "MEDIUM",
+          "PROVENANCE_DIVERSITY": "LOW",
+          "INDEPENDENCE": "UNKNOWN",
+          "HYPOTHESIS_FORMABILITY": "YES",
+          "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "LOW",
+          "NEW_ACQUISITION_REQUIRED": "NO",
+          "OPERATOR_JUDGMENT_REQUIRED": "YES",
+          "ARCHITECTURE_WORK_REQUIRED": "NO",
+          "OVERINTERPRETATION_RISK": "HIGH"
+        },
+        "current_blockers": [
+          "CATEGORY grain one level below the division, spanning several held classes; no product intervention grounded",
+          "no CPV label held: the subject is a code the held records cannot read",
+          "ted-eu egress NOT_ASSESSED (an operator decision, recorded here and not taken)"
+        ],
+        "veto_state": "VETOED",
+        "veto_reason": "a category at a finer grain, formable and scorable, whose actionability the held data cannot decide: the structural rule says too broad and no held label says otherwise",
+        "dominance_state": "FRONTIER"
+      },
+      {
+        "subject_key": "ted-eu:CPV-group:923",
+        "packet_id": "f3549844fafe46456600842b0675faafc69d836234790bcafd75364acfe558f4",
+        "subject_scope": "CATEGORY",
+        "subject_scope_basis": "reviewed scope rule for ted-eu CPV-group (SOURCE_NATIVE, observation-scope-rules@1.1.0)",
+        "subject_type": "CATEGORY",
+        "cpv_level": "group",
+        "parent_subject": "ted-eu:CPV-division:92",
+        "source_ids": [
+          "ted-eu"
+        ],
+        "source_families": [
+          "public_procurement"
+        ],
+        "evidence_rows": 6,
+        "scorable_rows": 6,
+        "non_scorable_rows": 0,
+        "proposition_kinds": {
+          "source_reported_procurement_value_contrast": {
+            "rows": 3,
+            "reliability": 0.5,
+            "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020"
+          },
+          "source_published_classification_value_contrast_witnessed": {
+            "rows": 3,
+            "reliability": 0.55,
+            "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e"
+          }
+        },
+        "counting_dimensions": [
+          "BUYER_OR_BUDGET_EXISTENCE",
+          "ECONOMIC_VALUE",
+          "MARKET_ACTIVITY"
+        ],
+        "noncounting_dimensions": [],
+        "reliability_distribution": {
+          "0.5": 3,
+          "0.55": 3
+        },
+        "provenance_shapes": 1,
+        "provenance_note": "one publisher, one resource, one collector route; every row's support group of UNKNOWN provenance",
+        "independence_state": "UNKNOWN",
+        "hypothesis_formable": true,
+        "scoring_ready_packet_property": true,
+        "egress_state": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+        "egress_reason": "ted-eu external_model_transmission is NOT_ASSESSED under local-private-research-v1 (H-39): an open question an operator can close, not a prohibition",
+        "egress_eligible": false,
+        "egress_review_required_before_synthesis": true,
+        "representation_constructible_without_egress": true,
+        "held_notices": 20,
+        "held_class_distribution": {
+          "notices_held": 20,
+          "notice_classes": {
+            "CONTRACT_NOTICE": 12,
+            "CONTRACT_AWARD_NOTICE": 8
+          },
+          "top_cpv_classes": {
+            "9231": 11,
+            "9233": 5,
+            "9235": 2,
+            "9237": 2,
+            "9236": 1
+          },
+          "note": "four-digit class prefixes on the group's held notices; no label held"
+        },
+        "establishes": "TED published, in its eforms contract-and-award resource, 3 bounded sets of notices classified under CPV group 923 (division 92) whose stated TOTAL_VALUE amounts at NOTICE scope in EUR differ from one another, across two acquisition windows; contracting authorities publish procurement under this code",
+        "does_not_establish": "what CPV group 923 comprises (no label is held); actual expenditure; willingness to pay; market size; product demand; a buyer for an unspecified product; unmet need; dissatisfaction; a solution gap; that the group is one service market or one buyer need",
+        "procurement_semantics": {
+          "value_is_realised_spend": false,
+          "value_is_willingness_to_pay": false,
+          "authority_is_buyer_for_unspecified_product": false
+        },
+        "buyer_semantics": {
+          "PROCUREMENT_BUYER_EXISTS": true,
+          "BUYER_FOR_PROPOSED_INTERVENTION": false
+        },
+        "establishes_product_demand": false,
+        "product_intervention_grain": "TOO_BROAD_TO_BE_ACTIONABLE",
+        "grain_basis": "the held cohort spans 5 class prefixes and 5 category prefixes of the vocabulary's own hierarchy, and no held fact says what the group is; the structural rule Mission 1.80 applied to the division applies one level down",
+        "actionable_grain": "REQUIRES_NARROWER_SUBJECT_DISCOVERY",
+        "actionable_grain_caveat": "narrower by structure alone does not terminate; the deciding input is the vocabulary's label, which is not held",
+        "what_a_synthesis_could_say": "that EU contracting authorities publish procurement filed under CPV group 923 at widely differing stated values",
+        "what_it_could_not_say": "what group 923 is, what is bought under it, by whom, for what need, or whether a product could enter it",
+        "product_relevance": "UNKNOWN",
+        "product_decision_it_could_inform": "whether procurement filed under CPV group 923 is worth reading about at all; nothing narrower until the code has a held label",
+        "ordinal": {
+          "EVIDENCE_BREADTH": "MEDIUM",
+          "SCORABLE_BREADTH": "MEDIUM",
+          "COUNTING_DIMENSION_DIVERSITY": "HIGH",
+          "SOURCE_DIVERSITY": "LOW",
+          "COMMERCIAL_INFORMATION": "MEDIUM",
+          "PROBLEM_INFORMATION": "NONE",
+          "PRODUCT_RELEVANCE": "UNKNOWN",
+          "SEMANTIC_SPECIFICITY": "MEDIUM",
+          "PROVENANCE_DIVERSITY": "LOW",
+          "INDEPENDENCE": "UNKNOWN",
+          "HYPOTHESIS_FORMABILITY": "YES",
+          "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "LOW",
+          "NEW_ACQUISITION_REQUIRED": "NO",
+          "OPERATOR_JUDGMENT_REQUIRED": "YES",
+          "ARCHITECTURE_WORK_REQUIRED": "NO",
+          "OVERINTERPRETATION_RISK": "HIGH"
+        },
+        "current_blockers": [
+          "CATEGORY grain one level below the division, spanning several held classes; no product intervention grounded",
+          "no CPV label held: the subject is a code the held records cannot read",
+          "ted-eu egress NOT_ASSESSED (an operator decision, recorded here and not taken)"
+        ],
+        "veto_state": "VETOED",
+        "veto_reason": "a category at a finer grain, formable and scorable, whose actionability the held data cannot decide: the structural rule says too broad and no held label says otherwise",
+        "dominance_state": "FRONTIER"
+      },
+      {
+        "subject_key": "ted-eu:CPV-group:925",
+        "packet_id": "8d9f8917eecde9c392fec9557a30013b8e422e5cabc76dcb15bec2b74595c9f5",
+        "subject_scope": "CATEGORY",
+        "subject_scope_basis": "reviewed scope rule for ted-eu CPV-group (SOURCE_NATIVE, observation-scope-rules@1.1.0)",
+        "subject_type": "CATEGORY",
+        "cpv_level": "group",
+        "parent_subject": "ted-eu:CPV-division:92",
+        "source_ids": [
+          "ted-eu"
+        ],
+        "source_families": [
+          "public_procurement"
+        ],
+        "evidence_rows": 8,
+        "scorable_rows": 8,
+        "non_scorable_rows": 0,
+        "proposition_kinds": {
+          "source_reported_procurement_value_contrast": {
+            "rows": 4,
+            "reliability": 0.5,
+            "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020"
+          },
+          "source_published_classification_value_contrast_witnessed": {
+            "rows": 4,
+            "reliability": 0.55,
+            "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e"
+          }
+        },
+        "counting_dimensions": [
+          "BUYER_OR_BUDGET_EXISTENCE",
+          "ECONOMIC_VALUE",
+          "MARKET_ACTIVITY"
+        ],
+        "noncounting_dimensions": [],
+        "reliability_distribution": {
+          "0.5": 4,
+          "0.55": 4
+        },
+        "provenance_shapes": 1,
+        "provenance_note": "one publisher, one resource, one collector route; every row's support group of UNKNOWN provenance",
+        "independence_state": "UNKNOWN",
+        "hypothesis_formable": true,
+        "scoring_ready_packet_property": true,
+        "egress_state": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+        "egress_reason": "ted-eu external_model_transmission is NOT_ASSESSED under local-private-research-v1 (H-39): an open question an operator can close, not a prohibition",
+        "egress_eligible": false,
+        "egress_review_required_before_synthesis": true,
+        "representation_constructible_without_egress": true,
+        "held_notices": 21,
+        "held_class_distribution": {
+          "notices_held": 21,
+          "notice_classes": {
+            "CONTRACT_NOTICE": 12,
+            "CONTRACT_AWARD_NOTICE": 9
+          },
+          "top_cpv_classes": {
+            "9252": 10,
+            "9251": 7,
+            "9253": 4
+          },
+          "note": "four-digit class prefixes on the group's held notices; no label held"
+        },
+        "establishes": "TED published, in its eforms contract-and-award resource, 4 bounded sets of notices classified under CPV group 925 (division 92) whose stated TOTAL_VALUE amounts at NOTICE scope in EUR differ from one another, across two acquisition windows; contracting authorities publish procurement under this code",
+        "does_not_establish": "what CPV group 925 comprises (no label is held); actual expenditure; willingness to pay; market size; product demand; a buyer for an unspecified product; unmet need; dissatisfaction; a solution gap; that the group is one service market or one buyer need",
+        "procurement_semantics": {
+          "value_is_realised_spend": false,
+          "value_is_willingness_to_pay": false,
+          "authority_is_buyer_for_unspecified_product": false
+        },
+        "buyer_semantics": {
+          "PROCUREMENT_BUYER_EXISTS": true,
+          "BUYER_FOR_PROPOSED_INTERVENTION": false
+        },
+        "establishes_product_demand": false,
+        "product_intervention_grain": "TOO_BROAD_TO_BE_ACTIONABLE",
+        "grain_basis": "the held cohort spans 3 class prefixes and 6 category prefixes of the vocabulary's own hierarchy, and no held fact says what the group is; the structural rule Mission 1.80 applied to the division applies one level down",
+        "actionable_grain": "REQUIRES_NARROWER_SUBJECT_DISCOVERY",
+        "actionable_grain_caveat": "narrower by structure alone does not terminate; the deciding input is the vocabulary's label, which is not held",
+        "what_a_synthesis_could_say": "that EU contracting authorities publish procurement filed under CPV group 925 at widely differing stated values",
+        "what_it_could_not_say": "what group 925 is, what is bought under it, by whom, for what need, or whether a product could enter it",
+        "product_relevance": "UNKNOWN",
+        "product_decision_it_could_inform": "whether procurement filed under CPV group 925 is worth reading about at all; nothing narrower until the code has a held label",
+        "ordinal": {
+          "EVIDENCE_BREADTH": "MEDIUM",
+          "SCORABLE_BREADTH": "MEDIUM",
+          "COUNTING_DIMENSION_DIVERSITY": "HIGH",
+          "SOURCE_DIVERSITY": "LOW",
+          "COMMERCIAL_INFORMATION": "MEDIUM",
+          "PROBLEM_INFORMATION": "NONE",
+          "PRODUCT_RELEVANCE": "UNKNOWN",
+          "SEMANTIC_SPECIFICITY": "MEDIUM",
+          "PROVENANCE_DIVERSITY": "LOW",
+          "INDEPENDENCE": "UNKNOWN",
+          "HYPOTHESIS_FORMABILITY": "YES",
+          "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "LOW",
+          "NEW_ACQUISITION_REQUIRED": "NO",
+          "OPERATOR_JUDGMENT_REQUIRED": "YES",
+          "ARCHITECTURE_WORK_REQUIRED": "NO",
+          "OVERINTERPRETATION_RISK": "HIGH"
+        },
+        "current_blockers": [
+          "CATEGORY grain one level below the division, spanning several held classes; no product intervention grounded",
+          "no CPV label held: the subject is a code the held records cannot read",
+          "ted-eu egress NOT_ASSESSED (an operator decision, recorded here and not taken)"
+        ],
+        "veto_state": "VETOED",
+        "veto_reason": "a category at a finer grain, formable and scorable, whose actionability the held data cannot decide: the structural rule says too broad and no held label says otherwise",
+        "dominance_state": "FRONTIER"
+      },
+      {
+        "subject_key": "ted-eu:CPV-group:926",
+        "packet_id": "40e3c3c7f92c2ae2dc1fb2f00e27f7a7d439d88c186cfbff73ac69803cff910e",
+        "subject_scope": "CATEGORY",
+        "subject_scope_basis": "reviewed scope rule for ted-eu CPV-group (SOURCE_NATIVE, observation-scope-rules@1.1.0)",
+        "subject_type": "CATEGORY",
+        "cpv_level": "group",
+        "parent_subject": "ted-eu:CPV-division:92",
+        "source_ids": [
+          "ted-eu"
+        ],
+        "source_families": [
+          "public_procurement"
+        ],
+        "evidence_rows": 6,
+        "scorable_rows": 6,
+        "non_scorable_rows": 0,
+        "proposition_kinds": {
+          "source_reported_procurement_value_contrast": {
+            "rows": 3,
+            "reliability": 0.5,
+            "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020"
+          },
+          "source_published_classification_value_contrast_witnessed": {
+            "rows": 3,
+            "reliability": 0.55,
+            "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e"
+          }
+        },
+        "counting_dimensions": [
+          "BUYER_OR_BUDGET_EXISTENCE",
+          "ECONOMIC_VALUE",
+          "MARKET_ACTIVITY"
+        ],
+        "noncounting_dimensions": [],
+        "reliability_distribution": {
+          "0.5": 3,
+          "0.55": 3
+        },
+        "provenance_shapes": 1,
+        "provenance_note": "one publisher, one resource, one collector route; every row's support group of UNKNOWN provenance",
+        "independence_state": "UNKNOWN",
+        "hypothesis_formable": true,
+        "scoring_ready_packet_property": true,
+        "egress_state": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+        "egress_reason": "ted-eu external_model_transmission is NOT_ASSESSED under local-private-research-v1 (H-39): an open question an operator can close, not a prohibition",
+        "egress_eligible": false,
+        "egress_review_required_before_synthesis": true,
+        "representation_constructible_without_egress": true,
+        "held_notices": 21,
+        "held_class_distribution": {
+          "notices_held": 21,
+          "notice_classes": {
+            "CONTRACT_NOTICE": 17,
+            "CONTRACT_AWARD_NOTICE": 4
+          },
+          "top_cpv_classes": {
+            "9261": 16,
+            "9262": 2
+          },
+          "note": "four-digit class prefixes on the group's held notices; no label held"
+        },
+        "establishes": "TED published, in its eforms contract-and-award resource, 3 bounded sets of notices classified under CPV group 926 (division 92) whose stated TOTAL_VALUE amounts at NOTICE scope in EUR differ from one another, across two acquisition windows; contracting authorities publish procurement under this code",
+        "does_not_establish": "what CPV group 926 comprises (no label is held); actual expenditure; willingness to pay; market size; product demand; a buyer for an unspecified product; unmet need; dissatisfaction; a solution gap; that the group is one service market or one buyer need",
+        "procurement_semantics": {
+          "value_is_realised_spend": false,
+          "value_is_willingness_to_pay": false,
+          "authority_is_buyer_for_unspecified_product": false
+        },
+        "buyer_semantics": {
+          "PROCUREMENT_BUYER_EXISTS": true,
+          "BUYER_FOR_PROPOSED_INTERVENTION": false
+        },
+        "establishes_product_demand": false,
+        "product_intervention_grain": "TOO_BROAD_TO_BE_ACTIONABLE",
+        "grain_basis": "the held cohort spans 2 class prefixes and 1 category prefixes of the vocabulary's own hierarchy, and no held fact says what the group is; the structural rule Mission 1.80 applied to the division applies one level down",
+        "actionable_grain": "REQUIRES_NARROWER_SUBJECT_DISCOVERY",
+        "actionable_grain_caveat": "narrower by structure alone does not terminate; the deciding input is the vocabulary's label, which is not held",
+        "what_a_synthesis_could_say": "that EU contracting authorities publish procurement filed under CPV group 926 at widely differing stated values",
+        "what_it_could_not_say": "what group 926 is, what is bought under it, by whom, for what need, or whether a product could enter it",
+        "product_relevance": "UNKNOWN",
+        "product_decision_it_could_inform": "whether procurement filed under CPV group 926 is worth reading about at all; nothing narrower until the code has a held label",
+        "ordinal": {
+          "EVIDENCE_BREADTH": "MEDIUM",
+          "SCORABLE_BREADTH": "MEDIUM",
+          "COUNTING_DIMENSION_DIVERSITY": "HIGH",
+          "SOURCE_DIVERSITY": "LOW",
+          "COMMERCIAL_INFORMATION": "MEDIUM",
+          "PROBLEM_INFORMATION": "NONE",
+          "PRODUCT_RELEVANCE": "UNKNOWN",
+          "SEMANTIC_SPECIFICITY": "MEDIUM",
+          "PROVENANCE_DIVERSITY": "LOW",
+          "INDEPENDENCE": "UNKNOWN",
+          "HYPOTHESIS_FORMABILITY": "YES",
+          "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "LOW",
+          "NEW_ACQUISITION_REQUIRED": "NO",
+          "OPERATOR_JUDGMENT_REQUIRED": "YES",
+          "ARCHITECTURE_WORK_REQUIRED": "NO",
+          "OVERINTERPRETATION_RISK": "HIGH"
+        },
+        "current_blockers": [
+          "CATEGORY grain one level below the division, spanning several held classes; no product intervention grounded",
+          "no CPV label held: the subject is a code the held records cannot read",
+          "ted-eu egress NOT_ASSESSED (an operator decision, recorded here and not taken)"
+        ],
+        "veto_state": "VETOED",
+        "veto_reason": "a category at a finer grain, formable and scorable, whose actionability the held data cannot decide: the structural rule says too broad and no held label says otherwise",
+        "dominance_state": "FRONTIER"
+      },
+      {
+        "subject_key": "world-bank:metric-geography:SP.POP.TOTL|DE",
+        "packet_id": "abb3339d1995a3160f5dec9a2d665444c0efaef8bff127bebc251e124c0464aa",
+        "subject_scope": "GEOGRAPHY",
+        "subject_scope_basis": "reviewed scope rule for world-bank (SOURCE_NATIVE): a measurement OF a country",
+        "subject_type": "METRIC",
+        "source_ids": [
+          "world-bank"
+        ],
+        "source_families": [
+          "economic_data"
+        ],
+        "evidence_rows": 2,
+        "scorable_rows": 0,
+        "non_scorable_rows": 2,
+        "proposition_kinds": {
+          "source_reported_metric_period_change": {
+            "rows": 2,
+            "reliability": null
+          }
+        },
+        "counting_dimensions": [],
+        "noncounting_dimensions": [],
+        "reliability_distribution": {
+          "NONE": 2
+        },
+        "provenance_shapes": 1,
+        "independence_state": "UNKNOWN",
+        "hypothesis_formable": false,
+        "formability_reason": "no dimension: the registered mapping assigns a population change to none",
+        "scoring_ready_packet_property": false,
+        "egress_state": "AVAILABLE",
+        "egress_eligible": true,
+        "egress_review_required_before_synthesis": false,
+        "establishes": "World Bank reported that SP.POP.TOTL for Germany rose by 187,180 between 2018 and 2019, and by 67,909 in the following period",
+        "does_not_establish": "market demand, a product, a buyer, or anything about software; demographic context only",
+        "establishes_product_demand": false,
+        "product_intervention_grain": "NOT_ESTABLISHED",
+        "actionable_grain": "NOT_ACTIONABLE",
+        "product_relevance": "LOW",
+        "ordinal": {
+          "EVIDENCE_BREADTH": "LOW",
+          "SCORABLE_BREADTH": "LOW",
+          "COUNTING_DIMENSION_DIVERSITY": "LOW",
+          "SOURCE_DIVERSITY": "LOW",
+          "COMMERCIAL_INFORMATION": "NONE",
+          "PROBLEM_INFORMATION": "NONE",
+          "PRODUCT_RELEVANCE": "LOW",
+          "SEMANTIC_SPECIFICITY": "HIGH",
+          "PROVENANCE_DIVERSITY": "LOW",
+          "INDEPENDENCE": "UNKNOWN",
+          "HYPOTHESIS_FORMABILITY": "NO",
+          "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "NONE",
+          "NEW_ACQUISITION_REQUIRED": "YES",
+          "OPERATOR_JUDGMENT_REQUIRED": "NO",
+          "ARCHITECTURE_WORK_REQUIRED": "NO",
+          "OVERINTERPRETATION_RISK": "HIGH"
+        },
+        "current_blockers": [
+          "no decision-relevant dimension; a population change is not market demand"
+        ],
+        "veto_state": "VETOED",
+        "veto_reason": "no decision-relevant dimension, and not formable",
+        "dominance_state": "DOMINATED",
+        "dominated_by": "subject:kubernetes"
+      },
+      {
+        "subject_key": "world-bank:metric-geography:SP.POP.TOTL|FR",
+        "packet_id": "cc6449adadda5375a090947e39321e87e73f660e995bdd5cea953fdfc779665c",
+        "subject_scope": "GEOGRAPHY",
+        "subject_scope_basis": "reviewed scope rule for world-bank",
+        "subject_type": "METRIC",
+        "source_ids": [
+          "world-bank"
+        ],
+        "source_families": [
+          "economic_data"
+        ],
+        "evidence_rows": 2,
+        "scorable_rows": 0,
+        "non_scorable_rows": 2,
+        "proposition_kinds": {
+          "source_reported_metric_period_change": {
+            "rows": 2,
+            "reliability": null
+          }
+        },
+        "counting_dimensions": [],
+        "noncounting_dimensions": [],
+        "reliability_distribution": {
+          "NONE": 2
+        },
+        "provenance_shapes": 1,
+        "independence_state": "UNKNOWN",
+        "hypothesis_formable": false,
+        "formability_reason": "no dimension",
+        "scoring_ready_packet_property": false,
+        "egress_state": "AVAILABLE",
+        "egress_eligible": true,
+        "egress_review_required_before_synthesis": false,
+        "establishes": "World Bank reported SP.POP.TOTL for France rose by 219,049 and 223,713 in two periods",
+        "does_not_establish": "as Germany",
+        "establishes_product_demand": false,
+        "product_intervention_grain": "NOT_ESTABLISHED",
+        "actionable_grain": "NOT_ACTIONABLE",
+        "product_relevance": "LOW",
+        "ordinal": {
+          "EVIDENCE_BREADTH": "LOW",
+          "SCORABLE_BREADTH": "LOW",
+          "COUNTING_DIMENSION_DIVERSITY": "LOW",
+          "SOURCE_DIVERSITY": "LOW",
+          "COMMERCIAL_INFORMATION": "NONE",
+          "PROBLEM_INFORMATION": "NONE",
+          "PRODUCT_RELEVANCE": "LOW",
+          "SEMANTIC_SPECIFICITY": "HIGH",
+          "PROVENANCE_DIVERSITY": "LOW",
+          "INDEPENDENCE": "UNKNOWN",
+          "HYPOTHESIS_FORMABILITY": "NO",
+          "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "NONE",
+          "NEW_ACQUISITION_REQUIRED": "YES",
+          "OPERATOR_JUDGMENT_REQUIRED": "NO",
+          "ARCHITECTURE_WORK_REQUIRED": "NO",
+          "OVERINTERPRETATION_RISK": "HIGH"
+        },
+        "current_blockers": [
+          "no decision-relevant dimension"
+        ],
+        "veto_state": "VETOED",
+        "veto_reason": "no decision-relevant dimension, and not formable",
+        "dominance_state": "DOMINATED",
+        "dominated_by": "subject:kubernetes"
+      }
+    ],
+    "dominance": {
+      "rule": "X dominates Y when X is at least as good on every dominance field and strictly better on at least one; dominance is a veto on the dominated candidate, never a selection rule, and section 19's vetoes are applied independently of it",
+      "fields": [
+        "EVIDENCE_BREADTH",
+        "SCORABLE_BREADTH",
+        "COUNTING_DIMENSION_DIVERSITY",
+        "SOURCE_DIVERSITY",
+        "COMMERCIAL_INFORMATION",
+        "PROBLEM_INFORMATION",
+        "SEMANTIC_SPECIFICITY",
+        "PROVENANCE_DIVERSITY",
+        "HYPOTHESIS_FORMABILITY"
+      ],
+      "scales": {
+        "information": [
+          "NONE",
+          "LOW",
+          "MEDIUM",
+          "HIGH"
+        ],
+        "formability": [
+          "NO",
+          "YES"
+        ]
+      },
+      "PARETO_FRONTIER": [
+        "subject:kubernetes",
+        "subject:podman",
+        "ted-eu:CPV-division:92",
+        "ted-eu:CPV-group:921",
+        "ted-eu:CPV-group:923",
+        "ted-eu:CPV-group:925",
+        "ted-eu:CPV-group:926"
+      ],
+      "DOMINATED_CANDIDATES": [
+        "gdelt:lexical-term:ENGLISH|climate",
+        "gdelt:lexical-term:ENGLISH|climate|weather",
+        "gdelt:lexical-term:ENGLISH|weather",
+        "ted-eu:CPV-division:90",
+        "world-bank:metric-geography:SP.POP.TOTL|DE",
+        "world-bank:metric-geography:SP.POP.TOTL|FR"
+      ],
+      "dominated_by": {
+        "gdelt:lexical-term:ENGLISH|climate": "subject:kubernetes",
+        "gdelt:lexical-term:ENGLISH|climate|weather": "subject:kubernetes",
+        "gdelt:lexical-term:ENGLISH|weather": "subject:kubernetes",
+        "ted-eu:CPV-division:90": "ted-eu:CPV-division:92",
+        "world-bank:metric-geography:SP.POP.TOTL|DE": "subject:kubernetes",
+        "world-bank:metric-geography:SP.POP.TOTL|FR": "subject:kubernetes"
+      },
+      "VETOED_CANDIDATES": [
+        "gdelt:lexical-term:ENGLISH|climate",
+        "gdelt:lexical-term:ENGLISH|climate|weather",
+        "gdelt:lexical-term:ENGLISH|weather",
+        "subject:kubernetes",
+        "subject:podman",
+        "ted-eu:CPV-division:90",
+        "ted-eu:CPV-division:92",
+        "ted-eu:CPV-group:921",
+        "ted-eu:CPV-group:923",
+        "ted-eu:CPV-group:925",
+        "ted-eu:CPV-group:926",
+        "world-bank:metric-geography:SP.POP.TOTL|DE",
+        "world-bank:metric-geography:SP.POP.TOTL|FR"
+      ],
+      "frontier_note": "the four group packets join the frontier on semantic specificity, where they beat the division; the division stays on it on breadth. Kubernetes and podman stay on it on specificity and are vetoed on formability, as in 1.80. Every frontier candidate is vetoed."
+    },
+    "load_bearing_gates": {
+      "formable": [
+        "ted-eu:CPV-division:92",
+        "ted-eu:CPV-division:90",
+        "ted-eu:CPV-group:921",
+        "ted-eu:CPV-group:923",
+        "ted-eu:CPV-group:925",
+        "ted-eu:CPV-group:926"
+      ],
+      "decision_relevant_dimension": [
+        "ted-eu:CPV-division:92",
+        "ted-eu:CPV-division:90",
+        "ted-eu:CPV-group:921",
+        "ted-eu:CPV-group:923",
+        "ted-eu:CPV-group:925",
+        "ted-eu:CPV-group:926"
+      ],
+      "actionable_grain": "none: every TED packet is REQUIRES_NARROWER_SUBJECT_DISCOVERY, every other candidate NOT_ACTIONABLE",
+      "not_vetoed": "none",
+      "why_no_selection": "a candidate passes only if it clears every gate, and actionable grain is a gate; a narrower category is not actionable for having moved one level down"
+    },
+    "narrowing": {
+      "dominant_category": "ted-eu:CPV-group:925",
+      "narrowing_targets": [
+        "ted-eu:CPV-group:921",
+        "ted-eu:CPV-group:923",
+        "ted-eu:CPV-group:925",
+        "ted-eu:CPV-group:926"
+      ],
+      "why_narrowing_is_possible_from_held_data": "each group's held cohort carries four-digit class codes, and grain 4 derives fourteen cohorts and grain 5 six from held records without acquisition (dry runs, not persisted)",
+      "what_narrowing_requires": "the vocabulary's own labels for the held groups and classes, read from the Publications Office authority register one concept at a time as Mission 1.40 did for divisions; without them a deeper grain is structure without meaning",
+      "what_narrowing_does_not_change": "procurement semantics, the egress question, independence, or the profile's calibration",
+      "acquisition_required": false,
+      "operator_judgement_required_for_narrowing": false,
+      "operator_judgement_required_before_synthesis": true
+    },
+    "egress": {
+      "EGRESS_REVIEW_REQUIRED_BEFORE_SYNTHESIS": true,
+      "ted_eu_state": "external_model_transmission NOT_ASSESSED under local-private-research-v1",
+      "decided_here": false,
+      "granted": false,
+      "denied": false,
+      "source_review_appended": false,
+      "why_selection_does_not_need_it": "permission to send a bounded representation to a model and evidence sufficiency are separate questions; a candidate is selected on its evidence and blocked on its egress"
+    },
+    "representation_check": {
+      "procedure": "opportunity-transmission-representation@1.0.0",
+      "assembled_in_memory": true,
+      "transmitted": false,
+      "model_called": false,
+      "packets": {
+        "ted-eu:CPV-division:92": {
+          "claims": 8,
+          "characters": 4378,
+          "violations": 0
+        },
+        "ted-eu:CPV-division:90": {
+          "claims": 2,
+          "characters": 1777,
+          "violations": 0
+        },
+        "ted-eu:CPV-group:921": {
+          "claims": 5,
+          "characters": 3238,
+          "violations": 0
+        },
+        "ted-eu:CPV-group:923": {
+          "claims": 5,
+          "characters": 3248,
+          "violations": 0
+        },
+        "ted-eu:CPV-group:925": {
+          "claims": 6,
+          "characters": 3744,
+          "violations": 0
+        },
+        "ted-eu:CPV-group:926": {
+          "claims": 5,
+          "characters": 3246,
+          "violations": 0
+        }
+      },
+      "note": "section 17 of Mission 1.80: representation feasibility is tested deterministically without egress; a constructible payload is not permission to send it"
+    },
+    "current_state": {
+      "opportunities": 1,
+      "opportunity_revisions": 2,
+      "current_revision_number": 2,
+      "current_revision_id": "8739e7ab-940b-408c-a5e8-7f6675d1597c",
+      "linked_evidence": 7,
+      "scorable_linked_evidence": 6,
+      "non_scorable_linked_evidence": 1,
+      "total_evidence": 84,
+      "scorable_evidence": 74,
+      "reliability_assessments": 4,
+      "independence_groups": 0,
+      "scores_table": "ABSENT",
+      "embeddings": 0,
+      "opportunity_evidence_links": 14,
+      "reference_profile_v1": "UNCALIBRATED"
+    },
+    "parked_states_preserved": {
+      "q1": {
+        "QUANTITY_CLASS_SELECTED": "Q1",
+        "CLASS_SELECTED": true,
+        "CONSTRUCT_SELECTED": false,
+        "RUN_AUTHORIZED": false
+      },
+      "globalping": {
+        "PASS": 12,
+        "PARTIAL": 0,
+        "FAIL": 0,
+        "verdict": "COUNTERPART_RESOLVED"
+      },
+      "v2": {
+        "primary_outcome": "V2_VALID_FOR_REFUTATION_BUT_NOT_INDEPENDENT_SUPPORT",
+        "corpus_frozen": false,
+        "measurements_executed": 0
+      },
+      "changed_by_this_mission": false
+    },
+    "mission_accounting": {
+      "api_calls": 0,
+      "dataset_downloads": 0,
+      "raw_records_created": 0,
+      "web_requests": 0,
+      "mailbox_reads": 0,
+      "outbound_messages": 0,
+      "model_calls": 0,
+      "embeddings": 0,
+      "opportunities_created": 0,
+      "opportunity_revisions_created": 0,
+      "opportunity_links_created": 0,
+      "reliability_assessments_created": 0,
+      "independence_groups_created": 0,
+      "scores_persisted": 0,
+      "source_reviews_appended": 0,
+      "canonical_research_mutations": 60,
+      "evidence_created": 26,
+      "signals_created": 13,
+      "claims_created": 21,
+      "claim_revisions_created": 21
+    },
+    "recommended_next_mission": {
+      "id": "1.82",
+      "title": "Procurement Subject Semantics and Class-Grain Narrowing V1",
+      "shape": "one bounded documentation mission: read the vocabulary's own labels for the six held groups and fourteen held classes from the Publications Office authority register, one concept per fetch as Mission 1.40 did; decide per group whether an exploratory category hypothesis is adoptable; derive class-grain cohorts from held records only where the label makes the class a coherent subject; re-select. No research-data acquisition, no model, no egress decision, no Opportunity.",
+      "must_not": [
+        "acquire research data to narrow",
+        "call a model",
+        "decide the ted-eu egress question",
+        "create an Opportunity",
+        "score or rank",
+        "descend below the class without testing information gain"
+      ]
+    }
+  },
+  "selection": {
+    "BEST_NARROW_HELD_PACKET": "ted-eu:CPV-group:925",
+    "BEST_SECOND_OPPORTUNITY_CANDIDATE": null,
+    "SELECTED_SUBJECT": null,
+    "SELECTED_SUBJECT_SCOPE": null,
+    "ACTIONABLE_GRAIN_BY_GROUP": {
+      "ted-eu:CPV-group:921": "REQUIRES_NARROWER_SUBJECT_DISCOVERY",
+      "ted-eu:CPV-group:923": "REQUIRES_NARROWER_SUBJECT_DISCOVERY",
+      "ted-eu:CPV-group:925": "REQUIRES_NARROWER_SUBJECT_DISCOVERY",
+      "ted-eu:CPV-group:926": "REQUIRES_NARROWER_SUBJECT_DISCOVERY"
+    },
+    "SELECTION_BASIS": "no candidate passes every load-bearing gate: the four group packets are formable, scorable at reviewed reliabilities and narrower than the division, and each is a category whose held cohort still spans several classes and whose label is not held, so actionable grain cannot be established from held data; every other candidate is vetoed as in Mission 1.80",
+    "value_used_to_select": false
+  },
+  "egress": {
+    "TED_EGRESS_STATE": "NOT_ASSESSED",
+    "EGRESS_REVIEW_REQUIRED_BEFORE_SYNTHESIS": true,
+    "decided_here": false,
+    "source_review_appended": false,
+    "model_serialization": "bounded in-memory validation only, nothing sent"
+  },
+  "counters": {
+    "before": {
+      "raw_records": 325,
+      "normalized_records": 325,
+      "signals": 33,
+      "claims": 44,
+      "claim_revisions": 45,
+      "evidence": 58,
+      "reliability_assessments": 4,
+      "independence_groups": 0,
+      "opportunities": 1,
+      "opportunity_revisions": 2,
+      "opportunity_evidence_links": 14,
+      "source_reviews": 70,
+      "scores_table": "ABSENT",
+      "embeddings": 0
+    },
+    "after": {
+      "raw_records": 325,
+      "normalized_records": 325,
+      "signals": 46,
+      "claims": 65,
+      "claim_revisions": 66,
+      "evidence": 84,
+      "reliability_assessments": 4,
+      "independence_groups": 0,
+      "opportunities": 1,
+      "opportunity_revisions": 2,
+      "opportunity_evidence_links": 14,
+      "source_reviews": 70,
+      "scores_table": "ABSENT",
+      "embeddings": 0
+    },
+    "deltas": {
+      "raw_records": 0,
+      "normalized_records": 0,
+      "signals": 13,
+      "claims": 21,
+      "claim_revisions": 21,
+      "evidence": 26,
+      "reliability_assessments": 0,
+      "independence_groups": 0,
+      "opportunities": 0,
+      "opportunity_revisions": 0,
+      "opportunity_evidence_links": 0,
+      "source_reviews": 0,
+      "scores_table": 0,
+      "embeddings": 0
+    },
+    "IDEMPOTENT_SECOND_RUN": true,
+    "second_run": {
+      "signals_persisted": 0,
+      "skipped_existing_witness": 13,
+      "claims_new": 0,
+      "evidence_new": 0
+    },
+    "interpretation_run_rows_appended": 2,
+    "interpretation_run_rows_note": "a claim interpretation run writes one execution row per run by design (ADR-025); two executions, two rows, zero canonical rows the second time"
+  },
+  "mission_accounting": {
+    "api_calls": 0,
+    "ted_api_calls": 0,
+    "web_requests": 0,
+    "dataset_downloads": 0,
+    "raw_records_created": 0,
+    "normalized_records_created": 0,
+    "mailbox_reads": 0,
+    "outbound_messages": 0,
+    "globalping_calls": 0,
+    "model_calls": 0,
+    "embeddings": 0,
+    "signals_created": 13,
+    "claims_created": 21,
+    "claim_revisions_created": 21,
+    "evidence_created": 26,
+    "reliability_assessments_created": 0,
+    "independence_groups_created": 0,
+    "opportunities_created": 0,
+    "opportunity_revisions_created": 0,
+    "opportunity_links_created": 0,
+    "source_reviews_appended": 0,
+    "scores_persisted": 0
+  },
+  "immutable": {
+    "opportunities": 1,
+    "docker_current_revision": 2,
+    "opportunity_links": 14,
+    "q1": {
+      "QUANTITY_CLASS_SELECTED": "Q1",
+      "CLASS_SELECTED": true,
+      "CONSTRUCT_SELECTED": false,
+      "RUN_AUTHORIZED": false
+    },
+    "globalping": {
+      "PASS": 12,
+      "PARTIAL": 0,
+      "FAIL": 0,
+      "verdict": "COUNTERPART_RESOLVED"
+    },
+    "v2": {
+      "primary_outcome": "V2_VALID_FOR_REFUTATION_BUT_NOT_INDEPENDENT_SUPPORT",
+      "corpus_frozen": false,
+      "measurements_executed": 0
+    }
+  },
+  "recommended_next_mission": {
+    "id": "1.82",
+    "title": "Procurement Subject Semantics and Class-Grain Narrowing V1",
+    "shape": "one bounded documentation mission: read the vocabulary's own labels for the six held groups and fourteen held classes from the Publications Office authority register, one concept per fetch as Mission 1.40 did; decide per group whether an exploratory category hypothesis is adoptable; derive class-grain cohorts from held records only where the label makes the class a coherent subject; re-select. No research-data acquisition, no model, no egress decision, no Opportunity.",
+    "must_not": [
+      "acquire research data to narrow",
+      "call a model",
+      "decide the ted-eu egress question",
+      "create an Opportunity",
+      "score or rank",
+      "descend below the class without testing information gain"
+    ]
+  }
+}

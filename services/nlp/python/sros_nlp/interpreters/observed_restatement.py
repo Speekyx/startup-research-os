@@ -79,7 +79,10 @@ __all__ = [
 ]
 
 INTERPRETER_ID = "observed-signal-restatement"
-INTERPRETER_VERSION = "1.4.1"
+# 1.5.0 -- Mission 1.81. The procurement template states the finer CPV level a
+# cohort was keyed on when the Signal carries one, and nothing else changed:
+# a division Signal produces the byte-identical statement and facts 1.4.1 did.
+INTERPRETER_VERSION = "1.5.0"
 
 SUPPORTED_SIGNAL_TYPES: tuple[str, ...] = (
     "numeric_period_change",
@@ -663,6 +666,7 @@ class ObservedSignalRestatementInterpreter:
             )
         codes = tuple(sorted(signal.scope_list("classification_codes")))
         division = _classification_division(codes, scheme)
+        level, level_code = _classification_level(signal, codes, division)
         notice_ids = _notice_ids(signal)
 
         # NOT_APPLICABLE by construction, like the lexical contrast: nothing
@@ -694,11 +698,20 @@ class ObservedSignalRestatementInterpreter:
             "notice_ids": list(notice_ids),
             "relation": relation,
         }
+        classified = f'classified under "{scheme}" division "{division}"'
+        if level is not None and level_code is not None:
+            # 1.5.0. A finer level is part of what the proposition is ABOUT, so it is
+            # identity and it is in the sentence; the division stays in both, because
+            # the finer code is only readable as a code within it.
+            facts["classification_level"] = level
+            facts["classification_level_code"] = level_code
+            classified = (
+                f'classified under "{scheme}" {level} "{level_code}" (division "{division}")'
+            )
 
         preamble = (
             f'{source_name} reported that, in its "{resource_id}" resource, within a bounded '
-            f'set of {len(notice_ids)} "{notice_class}" notices classified under "{scheme}" '
-            f'division "{division}"'
+            f'set of {len(notice_ids)} "{notice_class}" notices {classified}'
         )
         if relation == "EQUAL":
             statement = (
@@ -795,6 +808,41 @@ def _one_scope_value(signal: SignalView, name: str, *, label: str) -> str:
             "cohort says exactly one, because the cohort was grouped by it",
         )
     return values[0]
+
+
+def _classification_level(
+    signal: SignalView, codes: tuple[str, ...], division: str
+) -> tuple[str | None, str | None]:
+    """The finer classification level the cohort was keyed on, or (None, None).
+
+    Read from the Signal's scope, where the extractor wrote it, and checked against
+    the codes rather than trusted: a level whose code is not a prefix of every
+    member's codes, or does not sit inside the division, names a cohort the
+    members do not form. A level of `division` is the historical default and is
+    stated as nothing extra, so a 1.4.1 statement stays a 1.4.1 statement.
+    """
+    level = signal.scope_text("classification_level")
+    level_code = signal.scope_text("classification_level_code")
+    if level is None and level_code is None:
+        return None, None
+    if level is None or level_code is None:
+        raise _refuse(
+            ClaimEvidenceRefusalReason.SIGNAL_LINEAGE_UNAVAILABLE,
+            "this Signal states a classification level without its code, or a code "
+            "without its level. One fact stated twice, half of it missing",
+        )
+    if level == "division":
+        return None, None
+    if not level_code.startswith(division) or not all(
+        code.startswith(level_code) or level_code.startswith(code.rstrip("0")) for code in codes
+    ):
+        raise _refuse(
+            ClaimEvidenceRefusalReason.AMBIGUOUS_SIGNAL_LINEAGE,
+            f"this Signal says its cohort is keyed on {level} {level_code!r} and its codes "
+            f"{list(codes)} do not all sit under it within division {division!r}. A cohort "
+            "keyed at a level its members do not share is not a cohort",
+        )
+    return level, level_code
 
 
 def _classification_division(codes: tuple[str, ...], scheme: str) -> str:

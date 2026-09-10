@@ -50,7 +50,9 @@ __all__ = [
     "group_by_subject",
 ]
 
-GROUPING_PROCEDURE_VERSION = "source-native-subject-grouping@1.2.0"
+# 1.3.0 -- Mission 1.81. A procurement Signal keyed on a finer CPV level than the
+# division names that level's code as its subject; a division Signal keys as before.
+GROUPING_PROCEDURE_VERSION = "source-native-subject-grouping@1.3.0"
 
 
 @dataclass(frozen=True, order=True)
@@ -137,6 +139,15 @@ def subject_key(
         scheme = str(scope.get("classification_scheme") or "")
         if not codes or not scheme:
             return None
+        level = scope.get("classification_level")
+        level_code = scope.get("classification_level_code")
+        if isinstance(level, str) and isinstance(level_code, str) and level != "division":
+            # Mission 1.81. The extractor keyed this cohort on a finer level and
+            # wrote the level and the shared code into the scope. The subject is
+            # that code at that level, exactly, and the division is recoverable
+            # from its first two digits. Not a merge with the division packet: a
+            # group is a different subject from the division that contains it.
+            return SubjectKey(source_id, f"{scheme}-{level}", (level_code,))
         # The DIVISION, which is the first two digits of a CPV code and the
         # coarsest grouping the scheme itself defines. Mission 1.15.9 already
         # established that two divisions are two markets; grouping at the full

@@ -80,7 +80,9 @@ def main() -> int:
             limit=len(input_ids),
         )
 
-    derivation = extractor.resolve({"amount_type": old["scope"]["amount_types"][0]})
+    # Mission 1.81 made the CPV grain a required parameter; the historical Signal was
+    # derived at the division.
+    derivation = extractor.resolve({"amount_type": old["scope"]["amount_types"][0], "cpv_grain": 2})
     keys = {extractor.group_key(o, derivation) for o in observations}
 
     now = datetime.now(UTC)

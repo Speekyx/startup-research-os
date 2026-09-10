@@ -1,0 +1,6819 @@
+{
+  "$comment": "Mission 1.81 §4. Every held TED notice carrying a division-92 CPV code, as the normalized record states it: codes, depths, notice class, whether a TOTAL_VALUE amount is paired with one currency, and the acquisition window. Primary/additional CPV status is NOT established by the held representation (every code entry carries code, scheme and a null label and nothing else), so it is recorded as such and never inferred.",
+  "division": "92",
+  "held_notices": 177,
+  "notices": [
+    {
+      "notice_id": "125200-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92622000"
+      ],
+      "cpv_code_depths": [
+        5
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "926"
+      ],
+      "single_division": true,
+      "group_membership": "926",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "e4345630-6718-56a8-9bf1-939e9f8ebb69",
+      "raw_record_id": "723a8e01-2ba4-5c6d-8464-bf6520b0f3d1",
+      "observation_key": "ted-eu|notice|125200-2023"
+    },
+    {
+      "notice_id": "125208-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "90910000",
+        "92620000",
+        "98341120"
+      ],
+      "cpv_code_depths": [
+        4,
+        4,
+        7
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "90",
+        "92",
+        "98"
+      ],
+      "groups_carried": [
+        "909",
+        "926",
+        "983"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "3444af42-ab1c-5471-bfb0-2591d1fd4f62",
+      "raw_record_id": "32cf443d-bed9-517d-92c2-d9cbf35a5a74",
+      "observation_key": "ted-eu|notice|125208-2023"
+    },
+    {
+      "notice_id": "125216-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "79340000",
+        "79822500",
+        "92111000"
+      ],
+      "cpv_code_depths": [
+        4,
+        6,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "793",
+        "798",
+        "921"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "80ff3425-1e06-5d5b-9cec-b8620d9e4b26",
+      "raw_record_id": "f7c885c6-44c8-5618-9cf0-f5f8381942e2",
+      "observation_key": "ted-eu|notice|125216-2023"
+    },
+    {
+      "notice_id": "125512-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92350000",
+        "92351000"
+      ],
+      "cpv_code_depths": [
+        4,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "923"
+      ],
+      "single_division": true,
+      "group_membership": "923",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "92e23dfd-5aed-5682-b004-48fdeb7a0438",
+      "raw_record_id": "d3a25223-692e-577e-aa14-69228cde2edc",
+      "observation_key": "ted-eu|notice|125512-2023"
+    },
+    {
+      "notice_id": "125573-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92600000"
+      ],
+      "cpv_code_depths": [
+        3
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "926"
+      ],
+      "single_division": true,
+      "group_membership": "926",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "9c5935ee-81f0-5b56-9186-b768bc3dbf5e",
+      "raw_record_id": "51e13c53-e093-5a9e-a335-f1e9b28f523b",
+      "observation_key": "ted-eu|notice|125573-2023"
+    },
+    {
+      "notice_id": "125594-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92400000"
+      ],
+      "cpv_code_depths": [
+        3
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "924"
+      ],
+      "single_division": true,
+      "group_membership": "924",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "53150058-2eeb-5df1-9ba9-2dfab749742f",
+      "raw_record_id": "f5efd35e-6166-5cee-9233-216d9e8cd927",
+      "observation_key": "ted-eu|notice|125594-2023"
+    },
+    {
+      "notice_id": "125613-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92110000"
+      ],
+      "cpv_code_depths": [
+        4
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "921"
+      ],
+      "single_division": true,
+      "group_membership": "921",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "fd5f2dac-f35a-50bc-ae16-4c75af9dbde3",
+      "raw_record_id": "d303c2db-8b88-5df8-8576-004d976ae719",
+      "observation_key": "ted-eu|notice|125613-2023"
+    },
+    {
+      "notice_id": "125797-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "72262000",
+        "92500000"
+      ],
+      "cpv_code_depths": [
+        5,
+        3
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "72",
+        "92"
+      ],
+      "groups_carried": [
+        "722",
+        "925"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "bcb631a4-474a-570d-bc11-9ec1eb31fa9f",
+      "raw_record_id": "45d660e0-36f1-5654-accb-87a4c6fc10e3",
+      "observation_key": "ted-eu|notice|125797-2023"
+    },
+    {
+      "notice_id": "125913-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "39155100",
+        "79995000",
+        "92511000"
+      ],
+      "cpv_code_depths": [
+        6,
+        5,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "39",
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "391",
+        "799",
+        "925"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "SEK",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "af33e5b8-4d56-5244-a95f-9e39355006f1",
+      "raw_record_id": "52c7efd6-38e6-533b-813f-1e274c9e3d88",
+      "observation_key": "ted-eu|notice|125913-2023"
+    },
+    {
+      "notice_id": "126222-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92512000"
+      ],
+      "cpv_code_depths": [
+        5
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "925"
+      ],
+      "single_division": true,
+      "group_membership": "925",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "bb02c838-4bb6-5141-ae6e-9c30c66c7673",
+      "raw_record_id": "cd1da64d-075f-5f84-b14a-e6ba4f4a3fe9",
+      "observation_key": "ted-eu|notice|126222-2023"
+    },
+    {
+      "notice_id": "126447-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "71000000",
+        "75130000",
+        "75200000",
+        "90700000",
+        "92600000"
+      ],
+      "cpv_code_depths": [
+        2,
+        4,
+        3,
+        3,
+        3
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "71",
+        "75",
+        "90",
+        "92"
+      ],
+      "groups_carried": [
+        "751",
+        "752",
+        "907",
+        "926"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "624762cc-5e87-5044-9bc1-7b664a6414b7",
+      "raw_record_id": "e02d0deb-5c6c-55bc-a686-f0f8b3913d31",
+      "observation_key": "ted-eu|notice|126447-2023"
+    },
+    {
+      "notice_id": "126587-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92330000",
+        "92610000"
+      ],
+      "cpv_code_depths": [
+        4,
+        4
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "923",
+        "926"
+      ],
+      "single_division": true,
+      "group_membership": "AMBIGUOUS_ACROSS_GROUPS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "f1193f34-4ae6-59c3-b438-f6d1554da9da",
+      "raw_record_id": "67d6d327-f107-5143-b985-569eb08ca9d9",
+      "observation_key": "ted-eu|notice|126587-2023"
+    },
+    {
+      "notice_id": "126590-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92521000"
+      ],
+      "cpv_code_depths": [
+        5
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "925"
+      ],
+      "single_division": true,
+      "group_membership": "925",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "bb19d4d5-b5eb-5989-bb07-15d9ecc10591",
+      "raw_record_id": "b7e2991e-8f99-5e65-9881-c678e8f33ee6",
+      "observation_key": "ted-eu|notice|126590-2023"
+    },
+    {
+      "notice_id": "126611-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "79000000",
+        "79340000",
+        "92100000"
+      ],
+      "cpv_code_depths": [
+        2,
+        4,
+        3
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "793",
+        "921"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "545ac029-336b-5d89-b0cf-2e4459e505a1",
+      "raw_record_id": "28653d6b-590c-549d-938c-b894e560e4cf",
+      "observation_key": "ted-eu|notice|126611-2023"
+    },
+    {
+      "notice_id": "126768-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "80000000",
+        "80400000",
+        "80531200",
+        "92000000"
+      ],
+      "cpv_code_depths": [
+        1,
+        3,
+        6,
+        2
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "80",
+        "92"
+      ],
+      "groups_carried": [
+        "804",
+        "805"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "8b523c6f-52c2-5eb8-a1fc-dc919c1c6164",
+      "raw_record_id": "27788084-5bc3-53a1-be4e-e1fbf57823bc",
+      "observation_key": "ted-eu|notice|126768-2023"
+    },
+    {
+      "notice_id": "126803-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "79952000",
+        "92100000"
+      ],
+      "cpv_code_depths": [
+        5,
+        3
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "799",
+        "921"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "c79b5251-bf2d-5205-bf11-43260a3188c9",
+      "raw_record_id": "d996e8f8-bad5-588b-aa0f-1c55c9dc025a",
+      "observation_key": "ted-eu|notice|126803-2023"
+    },
+    {
+      "notice_id": "126880-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "72313000",
+        "72314000",
+        "72319000",
+        "79300000",
+        "92400000"
+      ],
+      "cpv_code_depths": [
+        5,
+        5,
+        5,
+        3,
+        3
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "72",
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "723",
+        "793",
+        "924"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "ec914eba-8ad6-5e2a-8dcd-793242e0adfa",
+      "raw_record_id": "9a2a37ee-e21a-528a-9fee-62439316392d",
+      "observation_key": "ted-eu|notice|126880-2023"
+    },
+    {
+      "notice_id": "126981-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "73000000",
+        "79000000",
+        "79100000",
+        "79120000",
+        "79410000",
+        "79500000",
+        "79996000",
+        "92400000"
+      ],
+      "cpv_code_depths": [
+        2,
+        2,
+        3,
+        4,
+        4,
+        3,
+        5,
+        3
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "73",
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "791",
+        "794",
+        "795",
+        "799",
+        "924"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "7bbddcd2-718f-5f06-be28-6248d468cafa",
+      "raw_record_id": "a344083b-7537-55a2-b740-584126b9c290",
+      "observation_key": "ted-eu|notice|126981-2023"
+    },
+    {
+      "notice_id": "127080-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "71318100",
+        "79950000",
+        "79952000",
+        "92370000"
+      ],
+      "cpv_code_depths": [
+        6,
+        4,
+        5,
+        4
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "71",
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "713",
+        "799",
+        "923"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "40dd7f34-f77d-5cbb-b1dd-4ac57dfef982",
+      "raw_record_id": "78d9a210-e25e-562c-825f-bbdede62d6f7",
+      "observation_key": "ted-eu|notice|127080-2023"
+    },
+    {
+      "notice_id": "127174-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "55510000",
+        "92331210"
+      ],
+      "cpv_code_depths": [
+        4,
+        7
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "55",
+        "92"
+      ],
+      "groups_carried": [
+        "555",
+        "923"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "95b27207-7bce-5c23-895a-4373787b3881",
+      "raw_record_id": "728d313d-b167-55a0-8557-dc86d99907d0",
+      "observation_key": "ted-eu|notice|127174-2023"
+    },
+    {
+      "notice_id": "127310-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92000000"
+      ],
+      "cpv_code_depths": [
+        2
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [],
+      "single_division": true,
+      "group_membership": "UNSPECIFIED_AT_GROUP",
+      "total_value_present": true,
+      "total_value_currency": "PLN",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "694c0d44-a8fa-51fa-8393-e6017e7c9a4e",
+      "raw_record_id": "8299d625-7bdc-52c5-a991-af3e42ef9bee",
+      "observation_key": "ted-eu|notice|127310-2023"
+    },
+    {
+      "notice_id": "127530-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "75124000",
+        "92521000"
+      ],
+      "cpv_code_depths": [
+        5,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "75",
+        "92"
+      ],
+      "groups_carried": [
+        "751",
+        "925"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "f86ee83b-ffa3-5c60-84e3-e2ce77d18a21",
+      "raw_record_id": "fab90d5e-6a64-5ae6-9cc0-d68d2007b80c",
+      "observation_key": "ted-eu|notice|127530-2023"
+    },
+    {
+      "notice_id": "127645-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92610000"
+      ],
+      "cpv_code_depths": [
+        4
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "926"
+      ],
+      "single_division": true,
+      "group_membership": "926",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "e7b555b0-9618-55dd-881e-eae2afafa3ab",
+      "raw_record_id": "9a16b4ef-8943-5d88-90a1-3366907add35",
+      "observation_key": "ted-eu|notice|127645-2023"
+    },
+    {
+      "notice_id": "127704-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "79810000",
+        "79811000",
+        "92112000"
+      ],
+      "cpv_code_depths": [
+        4,
+        5,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "798",
+        "921"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "0aced254-aabd-5f6f-a204-f71ceacbf40f",
+      "raw_record_id": "08ed3a92-1a70-5cc1-a633-3b7145422c73",
+      "observation_key": "ted-eu|notice|127704-2023"
+    },
+    {
+      "notice_id": "127941-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "77200000",
+        "77211300",
+        "77310000",
+        "77341000",
+        "92533000"
+      ],
+      "cpv_code_depths": [
+        3,
+        6,
+        4,
+        5,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "77",
+        "92"
+      ],
+      "groups_carried": [
+        "772",
+        "773",
+        "925"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "SEK",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "d88f1eda-c92d-5037-9d49-36ed53cd56d6",
+      "raw_record_id": "6ea75712-e3fb-50a4-83cb-37bb5a020336",
+      "observation_key": "ted-eu|notice|127941-2023"
+    },
+    {
+      "notice_id": "127960-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92400000"
+      ],
+      "cpv_code_depths": [
+        3
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "924"
+      ],
+      "single_division": true,
+      "group_membership": "924",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "19f8d9f1-c7f2-5127-bf85-fe435ff6c8e3",
+      "raw_record_id": "6fddc159-bef1-58a2-840f-da35088f9f82",
+      "observation_key": "ted-eu|notice|127960-2023"
+    },
+    {
+      "notice_id": "128213-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92610000"
+      ],
+      "cpv_code_depths": [
+        4
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "926"
+      ],
+      "single_division": true,
+      "group_membership": "926",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "690d8a17-6f01-5940-b48f-70e5aa6c1b7e",
+      "raw_record_id": "8f07c579-1c51-536b-b858-2d4f3d675870",
+      "observation_key": "ted-eu|notice|128213-2023"
+    },
+    {
+      "notice_id": "129085-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "45110000",
+        "45112700",
+        "45200000",
+        "45240000",
+        "45261100",
+        "45261210",
+        "45261400",
+        "45261900",
+        "45310000",
+        "45311000",
+        "45313100",
+        "45320000",
+        "45330000",
+        "45421000",
+        "45432100",
+        "45432111",
+        "45432130",
+        "45442100",
+        "45443000",
+        "45450000",
+        "45454000",
+        "92312000"
+      ],
+      "cpv_code_depths": [
+        4,
+        6,
+        3,
+        4,
+        6,
+        7,
+        6,
+        6,
+        4,
+        5,
+        6,
+        4,
+        4,
+        5,
+        6,
+        8,
+        7,
+        6,
+        5,
+        4,
+        5,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "45",
+        "92"
+      ],
+      "groups_carried": [
+        "451",
+        "452",
+        "453",
+        "454",
+        "923"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "85778f5a-efa6-5c7e-b88e-2a9cbf231fa9",
+      "raw_record_id": "a6774d0e-8230-51d0-b1a3-b1bd0f812919",
+      "observation_key": "ted-eu|notice|129085-2023"
+    },
+    {
+      "notice_id": "129155-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "39294100",
+        "48000000",
+        "48500000",
+        "72000000",
+        "73110000",
+        "79300000",
+        "79310000",
+        "79340000",
+        "79341400",
+        "79342000",
+        "79413000",
+        "79430000",
+        "79632000",
+        "79800000",
+        "79950000",
+        "92100000"
+      ],
+      "cpv_code_depths": [
+        6,
+        2,
+        3,
+        2,
+        4,
+        3,
+        4,
+        4,
+        6,
+        5,
+        5,
+        4,
+        5,
+        3,
+        4,
+        3
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "39",
+        "48",
+        "72",
+        "73",
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "392",
+        "485",
+        "731",
+        "793",
+        "794",
+        "796",
+        "798",
+        "799",
+        "921"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "4cc1d391-68e8-565a-abfa-e3e8e35d3bb8",
+      "raw_record_id": "e96e4d75-00fb-5ce0-a36b-9dcbf61c7297",
+      "observation_key": "ted-eu|notice|129155-2023"
+    },
+    {
+      "notice_id": "129223-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "77000000",
+        "77312000",
+        "77314000",
+        "92530000",
+        "92533000"
+      ],
+      "cpv_code_depths": [
+        2,
+        5,
+        5,
+        4,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "77",
+        "92"
+      ],
+      "groups_carried": [
+        "773",
+        "925"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "SEK",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "6fb5909d-83cc-5fdf-9607-059a22b9b57c",
+      "raw_record_id": "0381880c-670a-5e07-a6ed-e92317b7b065",
+      "observation_key": "ted-eu|notice|129223-2023"
+    },
+    {
+      "notice_id": "129366-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92610000"
+      ],
+      "cpv_code_depths": [
+        4
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "926"
+      ],
+      "single_division": true,
+      "group_membership": "926",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "38849a9b-7678-58d1-bcb7-56558a82ff6a",
+      "raw_record_id": "e570fcef-7d36-5e4d-89e1-ee184708ab32",
+      "observation_key": "ted-eu|notice|129366-2023"
+    },
+    {
+      "notice_id": "129501-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92511000"
+      ],
+      "cpv_code_depths": [
+        5
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "925"
+      ],
+      "single_division": true,
+      "group_membership": "925",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "eafc26f4-d9b4-5970-912e-f100a8cd121e",
+      "raw_record_id": "95a02473-5d83-5087-98f9-e38edb4b5cec",
+      "observation_key": "ted-eu|notice|129501-2023"
+    },
+    {
+      "notice_id": "129653-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92311000",
+        "92521210"
+      ],
+      "cpv_code_depths": [
+        5,
+        7
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "923",
+        "925"
+      ],
+      "single_division": true,
+      "group_membership": "AMBIGUOUS_ACROSS_GROUPS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "c40b1a9c-3522-59b2-abb3-b1eaf4303895",
+      "raw_record_id": "ec33a3c5-bbd5-5d6b-86c6-54a7aa9e523b",
+      "observation_key": "ted-eu|notice|129653-2023"
+    },
+    {
+      "notice_id": "129869-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "80410000",
+        "92331210"
+      ],
+      "cpv_code_depths": [
+        4,
+        7
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "80",
+        "92"
+      ],
+      "groups_carried": [
+        "804",
+        "923"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "689d4ffa-b855-598d-8eae-0691265eb14d",
+      "raw_record_id": "ed16a43d-2357-5836-97d0-c5618651a1e7",
+      "observation_key": "ted-eu|notice|129869-2023"
+    },
+    {
+      "notice_id": "129915-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "79342200",
+        "92130000"
+      ],
+      "cpv_code_depths": [
+        6,
+        4
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "793",
+        "921"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "2d0fe3ab-2298-5968-8e0c-57e83c239b03",
+      "raw_record_id": "1bdeaaa7-af85-5b27-8e06-550977f1a6f4",
+      "observation_key": "ted-eu|notice|129915-2023"
+    },
+    {
+      "notice_id": "130061-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92533000"
+      ],
+      "cpv_code_depths": [
+        5
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "925"
+      ],
+      "single_division": true,
+      "group_membership": "925",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "14ad6cd6-4fe7-5da3-846d-12e44c988ff9",
+      "raw_record_id": "c3709195-4278-57e9-b390-6ee19cbb498a",
+      "observation_key": "ted-eu|notice|130061-2023"
+    },
+    {
+      "notice_id": "130284-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92000000"
+      ],
+      "cpv_code_depths": [
+        2
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [],
+      "single_division": true,
+      "group_membership": "UNSPECIFIED_AT_GROUP",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "8ccbf02d-66e5-5d8f-b47e-af3889c852af",
+      "raw_record_id": "d7473130-96a2-52d8-b5c4-6102f84507b8",
+      "observation_key": "ted-eu|notice|130284-2023"
+    },
+    {
+      "notice_id": "130318-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "44423400",
+        "72212783",
+        "79342200",
+        "79961000",
+        "92111250"
+      ],
+      "cpv_code_depths": [
+        6,
+        8,
+        6,
+        5,
+        7
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "44",
+        "72",
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "444",
+        "722",
+        "793",
+        "799",
+        "921"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "RON",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "5a1eda18-ad1b-50db-be45-3e34c5ad8d21",
+      "raw_record_id": "92de9988-b4e7-56bb-8bce-0f98795117b4",
+      "observation_key": "ted-eu|notice|130318-2023"
+    },
+    {
+      "notice_id": "130614-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "31500000",
+        "32321200",
+        "39100000",
+        "39298900",
+        "48921000",
+        "79530000",
+        "79810000",
+        "79822500",
+        "92111100",
+        "92312220",
+        "92521100",
+        "92521210"
+      ],
+      "cpv_code_depths": [
+        3,
+        6,
+        3,
+        6,
+        5,
+        4,
+        4,
+        6,
+        6,
+        7,
+        6,
+        7
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "31",
+        "32",
+        "39",
+        "48",
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "315",
+        "323",
+        "391",
+        "392",
+        "489",
+        "795",
+        "798",
+        "921",
+        "923",
+        "925"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "07f65952-fd3b-5880-a7fd-2baecb7c17a6",
+      "raw_record_id": "c3b43437-122e-551e-a6fc-ac16a41b9595",
+      "observation_key": "ted-eu|notice|130614-2023"
+    },
+    {
+      "notice_id": "130635-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92332000"
+      ],
+      "cpv_code_depths": [
+        5
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "923"
+      ],
+      "single_division": true,
+      "group_membership": "923",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "cc6d099a-d4f0-5e74-b71c-b066f6036415",
+      "raw_record_id": "5591c740-97f7-5d43-b146-1b2e1de70794",
+      "observation_key": "ted-eu|notice|130635-2023"
+    },
+    {
+      "notice_id": "131312-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92000000"
+      ],
+      "cpv_code_depths": [
+        2
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [],
+      "single_division": true,
+      "group_membership": "UNSPECIFIED_AT_GROUP",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "f6efe85a-b5a8-5712-9d8d-766cf8af0cb2",
+      "raw_record_id": "63f4c384-ed64-5fcb-89bc-757d04233b10",
+      "observation_key": "ted-eu|notice|131312-2023"
+    },
+    {
+      "notice_id": "131315-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92111200"
+      ],
+      "cpv_code_depths": [
+        6
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "921"
+      ],
+      "single_division": true,
+      "group_membership": "921",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "685b9062-e89c-55d3-bdbe-c83ef03881f6",
+      "raw_record_id": "cf6c451c-43a3-504b-892b-49d4b0100952",
+      "observation_key": "ted-eu|notice|131315-2023"
+    },
+    {
+      "notice_id": "131531-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "71356200",
+        "79822500",
+        "79952000",
+        "92111200"
+      ],
+      "cpv_code_depths": [
+        6,
+        6,
+        5,
+        6
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "71",
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "713",
+        "798",
+        "799",
+        "921"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "85ac1988-b415-52b6-bc0f-78d9bb629e0f",
+      "raw_record_id": "855aa05e-40fc-5bd5-9e32-ff0fe60aa302",
+      "observation_key": "ted-eu|notice|131531-2023"
+    },
+    {
+      "notice_id": "131744-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92610000"
+      ],
+      "cpv_code_depths": [
+        4
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "926"
+      ],
+      "single_division": true,
+      "group_membership": "926",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "535a8162-497e-5c4d-a107-0b92925f14ef",
+      "raw_record_id": "9458aa75-19f8-5dfa-9e8b-b5a3a50712f6",
+      "observation_key": "ted-eu|notice|131744-2023"
+    },
+    {
+      "notice_id": "131786-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92600000"
+      ],
+      "cpv_code_depths": [
+        3
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "926"
+      ],
+      "single_division": true,
+      "group_membership": "926",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "682915ae-0929-56b3-a2a0-4fd0f9d1ea5f",
+      "raw_record_id": "a6246679-4805-58b7-944c-61578eea6911",
+      "observation_key": "ted-eu|notice|131786-2023"
+    },
+    {
+      "notice_id": "131795-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "79340000",
+        "79342000",
+        "79822500",
+        "79960000",
+        "92100000"
+      ],
+      "cpv_code_depths": [
+        4,
+        5,
+        6,
+        4,
+        3
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "793",
+        "798",
+        "799",
+        "921"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "SEK",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "6e096c11-e9dc-5417-b2d7-d0a75d232400",
+      "raw_record_id": "4e786214-992a-58c7-ae47-316437a01abe",
+      "observation_key": "ted-eu|notice|131795-2023"
+    },
+    {
+      "notice_id": "131879-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92520000",
+        "92521100"
+      ],
+      "cpv_code_depths": [
+        4,
+        6
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "925"
+      ],
+      "single_division": true,
+      "group_membership": "925",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "8c200ea5-b9f1-5e8d-bd49-8e7404e1b5fe",
+      "raw_record_id": "1e6ca926-4203-5c09-8379-2b459c49c9e3",
+      "observation_key": "ted-eu|notice|131879-2023"
+    },
+    {
+      "notice_id": "132006-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "31518600",
+        "32350000",
+        "79952000",
+        "92370000"
+      ],
+      "cpv_code_depths": [
+        6,
+        4,
+        5,
+        4
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "31",
+        "32",
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "315",
+        "323",
+        "799",
+        "923"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "221ae0f3-3a16-560d-9ea1-61ee2e7757ce",
+      "raw_record_id": "77a14957-c57d-5579-ab66-a9544e480e24",
+      "observation_key": "ted-eu|notice|132006-2023"
+    },
+    {
+      "notice_id": "132094-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92000000"
+      ],
+      "cpv_code_depths": [
+        2
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [],
+      "single_division": true,
+      "group_membership": "UNSPECIFIED_AT_GROUP",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "1327d828-1e1b-5bdf-85ed-c6856e8ebaa3",
+      "raw_record_id": "e3f5c0a5-ce73-5727-b058-417be51bd0d6",
+      "observation_key": "ted-eu|notice|132094-2023"
+    },
+    {
+      "notice_id": "132303-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "72212900",
+        "79342000",
+        "79530000",
+        "79550000",
+        "92370000"
+      ],
+      "cpv_code_depths": [
+        6,
+        5,
+        4,
+        4,
+        4
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "72",
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "722",
+        "793",
+        "795",
+        "923"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "27bcfd30-b708-5eb5-afa2-6fc96e434674",
+      "raw_record_id": "820076cb-2531-5229-9056-b702c787e919",
+      "observation_key": "ted-eu|notice|132303-2023"
+    },
+    {
+      "notice_id": "132436-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92331210"
+      ],
+      "cpv_code_depths": [
+        7
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "923"
+      ],
+      "single_division": true,
+      "group_membership": "923",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "ce7daa25-3729-5e0b-8e8c-746468feb288",
+      "raw_record_id": "fa84220a-4e50-514c-bbe9-81f0ec821fcf",
+      "observation_key": "ted-eu|notice|132436-2023"
+    },
+    {
+      "notice_id": "132649-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "79342200",
+        "79961100",
+        "79961350",
+        "92111220",
+        "92112000"
+      ],
+      "cpv_code_depths": [
+        6,
+        6,
+        7,
+        7,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "793",
+        "799",
+        "921"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "a28dc6e2-74a6-5f53-89cd-e2711d77188f",
+      "raw_record_id": "353f5c63-55a2-5b68-bb70-f51c0c5958c5",
+      "observation_key": "ted-eu|notice|132649-2023"
+    },
+    {
+      "notice_id": "132658-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "79000000",
+        "79416000",
+        "79821000",
+        "79822500",
+        "79952000",
+        "92111200"
+      ],
+      "cpv_code_depths": [
+        2,
+        5,
+        5,
+        6,
+        5,
+        6
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "794",
+        "798",
+        "799",
+        "921"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "HUF",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "227cd7d9-f822-5a37-8c59-995846691582",
+      "raw_record_id": "97d6e57c-ae7b-5570-bd40-8dabff8d92c0",
+      "observation_key": "ted-eu|notice|132658-2023"
+    },
+    {
+      "notice_id": "133097-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92000000"
+      ],
+      "cpv_code_depths": [
+        2
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [],
+      "single_division": true,
+      "group_membership": "UNSPECIFIED_AT_GROUP",
+      "total_value_present": true,
+      "total_value_currency": "DKK",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "160d3da2-437f-5562-9b8a-681c51e68f88",
+      "raw_record_id": "9f346788-0d20-5c1e-bf62-be47b6788af1",
+      "observation_key": "ted-eu|notice|133097-2023"
+    },
+    {
+      "notice_id": "133177-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92320000",
+        "92622000"
+      ],
+      "cpv_code_depths": [
+        4,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "923",
+        "926"
+      ],
+      "single_division": true,
+      "group_membership": "AMBIGUOUS_ACROSS_GROUPS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "fd971af4-36eb-57c3-b58c-88d47fcd6cef",
+      "raw_record_id": "c67d83ed-d162-5a61-9dd0-ef4b64c878df",
+      "observation_key": "ted-eu|notice|133177-2023"
+    },
+    {
+      "notice_id": "133318-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "22120000",
+        "22200000",
+        "64216200",
+        "79980000",
+        "92400000"
+      ],
+      "cpv_code_depths": [
+        4,
+        3,
+        6,
+        4,
+        3
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "22",
+        "64",
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "221",
+        "222",
+        "642",
+        "799",
+        "924"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "c183eed7-98fe-531b-8231-73bb424c9750",
+      "raw_record_id": "d917cb91-c284-5e3d-81d0-8ff541e2f6fb",
+      "observation_key": "ted-eu|notice|133318-2023"
+    },
+    {
+      "notice_id": "133624-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92610000"
+      ],
+      "cpv_code_depths": [
+        4
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "926"
+      ],
+      "single_division": true,
+      "group_membership": "926",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "06c162d9-300b-5735-9ec1-d165ec8348ca",
+      "raw_record_id": "bb6c3fa6-429f-5408-a9d7-4c797b72b079",
+      "observation_key": "ted-eu|notice|133624-2023"
+    },
+    {
+      "notice_id": "133931-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "80000000",
+        "92520000"
+      ],
+      "cpv_code_depths": [
+        1,
+        4
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "80",
+        "92"
+      ],
+      "groups_carried": [
+        "925"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "0e1310e5-9c30-5677-a036-63605a4853cb",
+      "raw_record_id": "f802e1d6-7824-5ced-9cd8-bab18f1e9074",
+      "observation_key": "ted-eu|notice|133931-2023"
+    },
+    {
+      "notice_id": "133992-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "18000000",
+        "30200000",
+        "31500000",
+        "31682230",
+        "32320000",
+        "39150000",
+        "39154000",
+        "39290000",
+        "51110000",
+        "51310000",
+        "51610000",
+        "72260000",
+        "72510000",
+        "79822500",
+        "92110000",
+        "92521100"
+      ],
+      "cpv_code_depths": [
+        2,
+        3,
+        3,
+        7,
+        4,
+        4,
+        5,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        6,
+        4,
+        6
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "18",
+        "30",
+        "31",
+        "32",
+        "39",
+        "51",
+        "72",
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "302",
+        "315",
+        "316",
+        "323",
+        "391",
+        "392",
+        "511",
+        "513",
+        "516",
+        "722",
+        "725",
+        "798",
+        "921",
+        "925"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "CZK",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "60fe4326-f91a-5f10-a97d-01eaa4799c6b",
+      "raw_record_id": "e1a3a6b5-b044-5341-bb62-dcb4d81c63d1",
+      "observation_key": "ted-eu|notice|133992-2023"
+    },
+    {
+      "notice_id": "134050-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "79610000",
+        "79995000",
+        "92511000"
+      ],
+      "cpv_code_depths": [
+        4,
+        5,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "796",
+        "799",
+        "925"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "SEK",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "6d71bf97-3670-5ed4-a397-5d599b9f82e4",
+      "raw_record_id": "1a233b04-fe74-5e1a-ac12-aff87f3069dd",
+      "observation_key": "ted-eu|notice|134050-2023"
+    },
+    {
+      "notice_id": "134083-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92351200"
+      ],
+      "cpv_code_depths": [
+        6
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "923"
+      ],
+      "single_division": true,
+      "group_membership": "923",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "f0354062-92d2-58ac-8bac-8b7b545a9a2a",
+      "raw_record_id": "ae2e4006-29d6-5349-8acb-182a8e359abe",
+      "observation_key": "ted-eu|notice|134083-2023"
+    },
+    {
+      "notice_id": "134418-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92512000"
+      ],
+      "cpv_code_depths": [
+        5
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "925"
+      ],
+      "single_division": true,
+      "group_membership": "925",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "d1f802c9-f61f-5acf-9aee-210fbd35efaf",
+      "raw_record_id": "564367c4-8c6f-55f2-a89d-ceb40e513b0f",
+      "observation_key": "ted-eu|notice|134418-2023"
+    },
+    {
+      "notice_id": "134824-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "55300000",
+        "92332000"
+      ],
+      "cpv_code_depths": [
+        3,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "55",
+        "92"
+      ],
+      "groups_carried": [
+        "553",
+        "923"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "6bc6d06b-5e45-5a36-93fb-2ac18b6e2caf",
+      "raw_record_id": "d760a788-b7be-5e15-b934-c59b0624872c",
+      "observation_key": "ted-eu|notice|134824-2023"
+    },
+    {
+      "notice_id": "135202-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "75250000",
+        "92332000"
+      ],
+      "cpv_code_depths": [
+        4,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "75",
+        "92"
+      ],
+      "groups_carried": [
+        "752",
+        "923"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "a1df3d45-36d6-577c-a71a-63e977f14d42",
+      "raw_record_id": "59b3fd4d-d41d-5235-b785-1ff37ef7b638",
+      "observation_key": "ted-eu|notice|135202-2023"
+    },
+    {
+      "notice_id": "135287-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "80400000",
+        "85320000",
+        "92331210"
+      ],
+      "cpv_code_depths": [
+        3,
+        4,
+        7
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "80",
+        "85",
+        "92"
+      ],
+      "groups_carried": [
+        "804",
+        "853",
+        "923"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "PLN",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "1a70ad95-22cb-5d37-8ffc-c88257cf27aa",
+      "raw_record_id": "8ca1c705-00bb-5b96-9e27-30a26e208a0c",
+      "observation_key": "ted-eu|notice|135287-2023"
+    },
+    {
+      "notice_id": "135478-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "72212190",
+        "79342000",
+        "80590000",
+        "92111100"
+      ],
+      "cpv_code_depths": [
+        7,
+        5,
+        4,
+        6
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "72",
+        "79",
+        "80",
+        "92"
+      ],
+      "groups_carried": [
+        "722",
+        "793",
+        "805",
+        "921"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "21a47054-fb8b-59c7-aa9c-d2362c1ff990",
+      "raw_record_id": "63fb948f-08c4-59bf-a041-a6c887ca9e13",
+      "observation_key": "ted-eu|notice|135478-2023"
+    },
+    {
+      "notice_id": "135637-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92221000"
+      ],
+      "cpv_code_depths": [
+        5
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "922"
+      ],
+      "single_division": true,
+      "group_membership": "922",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "da1205a4-9c25-50cd-9d7a-1554762a03d4",
+      "raw_record_id": "7df8e337-c0f2-536e-afd8-71e1792704fe",
+      "observation_key": "ted-eu|notice|135637-2023"
+    },
+    {
+      "notice_id": "135718-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92400000"
+      ],
+      "cpv_code_depths": [
+        3
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "924"
+      ],
+      "single_division": true,
+      "group_membership": "924",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "45656896-0371-59c6-ac84-f15fe57a74ec",
+      "raw_record_id": "fb2e6970-3971-5552-8d79-a6b4e1fbca35",
+      "observation_key": "ted-eu|notice|135718-2023"
+    },
+    {
+      "notice_id": "135947-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92312211",
+        "92312213"
+      ],
+      "cpv_code_depths": [
+        8,
+        8
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "923"
+      ],
+      "single_division": true,
+      "group_membership": "923",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "3a9bf66a-9efa-5f2d-be0c-a526ecba6c51",
+      "raw_record_id": "ee5548ef-5770-5bec-b085-8b3cd742969f",
+      "observation_key": "ted-eu|notice|135947-2023"
+    },
+    {
+      "notice_id": "136023-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92532000"
+      ],
+      "cpv_code_depths": [
+        5
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "925"
+      ],
+      "single_division": true,
+      "group_membership": "925",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "09730c73-43eb-5589-8b34-7550d8f187b0",
+      "raw_record_id": "ea81fd64-df7b-5dcc-822b-07a21481783d",
+      "observation_key": "ted-eu|notice|136023-2023"
+    },
+    {
+      "notice_id": "136160-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "90910000",
+        "92000000",
+        "92300000",
+        "92610000",
+        "98341130"
+      ],
+      "cpv_code_depths": [
+        4,
+        2,
+        3,
+        4,
+        7
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "90",
+        "92",
+        "98"
+      ],
+      "groups_carried": [
+        "909",
+        "923",
+        "926",
+        "983"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "7ee36c48-5b2e-5c5d-9d3a-d06e61c5001b",
+      "raw_record_id": "51478ae4-5dff-5ab5-8cd0-1c97c4a6dcdc",
+      "observation_key": "ted-eu|notice|136160-2023"
+    },
+    {
+      "notice_id": "136204-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92332000"
+      ],
+      "cpv_code_depths": [
+        5
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "923"
+      ],
+      "single_division": true,
+      "group_membership": "923",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "755776f4-768b-5f04-967b-52655a3ceb7c",
+      "raw_record_id": "1fea71e5-8e1f-5671-b2ab-3cfafb11e310",
+      "observation_key": "ted-eu|notice|136204-2023"
+    },
+    {
+      "notice_id": "136289-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "79340000",
+        "79413000",
+        "79822500",
+        "92111200"
+      ],
+      "cpv_code_depths": [
+        4,
+        5,
+        6,
+        6
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "793",
+        "794",
+        "798",
+        "921"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "3b251d4a-0c5b-59c5-af06-dbd22e71bcc1",
+      "raw_record_id": "3740766f-6a4e-5385-b20e-c04fab3a2956",
+      "observation_key": "ted-eu|notice|136289-2023"
+    },
+    {
+      "notice_id": "136453-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "71410000",
+        "75131000",
+        "92310000"
+      ],
+      "cpv_code_depths": [
+        4,
+        5,
+        4
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "71",
+        "75",
+        "92"
+      ],
+      "groups_carried": [
+        "714",
+        "751",
+        "923"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "781c7e23-1ba0-5fcc-80dc-8b830396ed78",
+      "raw_record_id": "ce0e6503-8215-5d09-81f8-205adcce695f",
+      "observation_key": "ted-eu|notice|136453-2023"
+    },
+    {
+      "notice_id": "136498-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92510000"
+      ],
+      "cpv_code_depths": [
+        4
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "925"
+      ],
+      "single_division": true,
+      "group_membership": "925",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "81d19c24-a9d3-5409-a1eb-faa4626836b6",
+      "raw_record_id": "11451621-2bae-5032-b01b-8c24654d5b91",
+      "observation_key": "ted-eu|notice|136498-2023"
+    },
+    {
+      "notice_id": "136794-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92111200"
+      ],
+      "cpv_code_depths": [
+        6
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "921"
+      ],
+      "single_division": true,
+      "group_membership": "921",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "b53bcffe-e557-50ed-8475-ae88cb90f401",
+      "raw_record_id": "251ac999-46a5-58c5-8331-4bea605ae1b8",
+      "observation_key": "ted-eu|notice|136794-2023"
+    },
+    {
+      "notice_id": "136854-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "30231300",
+        "30231310",
+        "32320000",
+        "32321000",
+        "32342400",
+        "32342410",
+        "32350000",
+        "51313000",
+        "71318100",
+        "92370000"
+      ],
+      "cpv_code_depths": [
+        6,
+        7,
+        4,
+        5,
+        6,
+        7,
+        4,
+        5,
+        6,
+        4
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "30",
+        "32",
+        "51",
+        "71",
+        "92"
+      ],
+      "groups_carried": [
+        "302",
+        "323",
+        "513",
+        "713",
+        "923"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "SEK",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "1ff70c6a-4fe4-54be-9d22-45d2a5cc6391",
+      "raw_record_id": "8722235c-a123-58cf-8f72-b10f232bb073",
+      "observation_key": "ted-eu|notice|136854-2023"
+    },
+    {
+      "notice_id": "137030-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92512000"
+      ],
+      "cpv_code_depths": [
+        5
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "925"
+      ],
+      "single_division": true,
+      "group_membership": "925",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "062a9a15-d7b4-570d-96d2-6a841fcf9e17",
+      "raw_record_id": "3cfa3aa9-96b2-564f-b56d-2bf7824ab6ec",
+      "observation_key": "ted-eu|notice|137030-2023"
+    },
+    {
+      "notice_id": "137080-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92610000"
+      ],
+      "cpv_code_depths": [
+        4
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "926"
+      ],
+      "single_division": true,
+      "group_membership": "926",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "2dcd9d46-a8ee-5cca-9bd0-03cbfe8e62e4",
+      "raw_record_id": "17a17bf8-f43b-5486-9924-0dfd97c491b0",
+      "observation_key": "ted-eu|notice|137080-2023"
+    },
+    {
+      "notice_id": "137620-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92111100"
+      ],
+      "cpv_code_depths": [
+        6
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "921"
+      ],
+      "single_division": true,
+      "group_membership": "921",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "cbb6ab81-b599-52d0-abff-fd854c908b09",
+      "raw_record_id": "09ccf298-75e6-58fb-bae0-5ae17a3305f0",
+      "observation_key": "ted-eu|notice|137620-2023"
+    },
+    {
+      "notice_id": "137701-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92521000",
+        "92533000"
+      ],
+      "cpv_code_depths": [
+        5,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "925"
+      ],
+      "single_division": true,
+      "group_membership": "925",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "3db6a21a-2edf-5fd0-962d-75007f5a6b72",
+      "raw_record_id": "cb18b0c1-e807-518f-a223-e3de48567400",
+      "observation_key": "ted-eu|notice|137701-2023"
+    },
+    {
+      "notice_id": "137866-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "32000000",
+        "92400000"
+      ],
+      "cpv_code_depths": [
+        2,
+        3
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "32",
+        "92"
+      ],
+      "groups_carried": [
+        "924"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "NOK",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "c7647003-f542-5ec6-bffd-1c24161e98ad",
+      "raw_record_id": "09198092-f29c-5295-8144-49708536d26c",
+      "observation_key": "ted-eu|notice|137866-2023"
+    },
+    {
+      "notice_id": "137895-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92311000"
+      ],
+      "cpv_code_depths": [
+        5
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "923"
+      ],
+      "single_division": true,
+      "group_membership": "923",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "9d3b62c7-726c-56c6-8559-4fb186a070c7",
+      "raw_record_id": "34897d42-c631-5683-bc7d-de8a06234b45",
+      "observation_key": "ted-eu|notice|137895-2023"
+    },
+    {
+      "notice_id": "138011-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "60100000",
+        "92311000"
+      ],
+      "cpv_code_depths": [
+        3,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "60",
+        "92"
+      ],
+      "groups_carried": [
+        "601",
+        "923"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "18902dca-a803-5982-ac9a-150ba93fe07f",
+      "raw_record_id": "0f16baf6-43dd-55d8-ab12-cc4fda8ab091",
+      "observation_key": "ted-eu|notice|138011-2023"
+    },
+    {
+      "notice_id": "138226-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92211000",
+        "92221000"
+      ],
+      "cpv_code_depths": [
+        5,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "922"
+      ],
+      "single_division": true,
+      "group_membership": "922",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "592104ef-da1f-52fa-b7e9-fb0c316e7ffb",
+      "raw_record_id": "81c1cccb-77fe-5851-aca7-c286da1930ae",
+      "observation_key": "ted-eu|notice|138226-2023"
+    },
+    {
+      "notice_id": "138440-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92000000"
+      ],
+      "cpv_code_depths": [
+        2
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [],
+      "single_division": true,
+      "group_membership": "UNSPECIFIED_AT_GROUP",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "f9d33d6e-29a2-55f9-8459-165dcd7a388a",
+      "raw_record_id": "968c4719-ca9d-5148-8aa5-bd2d3c91ca05",
+      "observation_key": "ted-eu|notice|138440-2023"
+    },
+    {
+      "notice_id": "138472-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "31000000",
+        "31625200",
+        "32000000",
+        "32323500",
+        "32581000",
+        "38421100",
+        "45000000",
+        "45110000",
+        "45111200",
+        "45112700",
+        "45213320",
+        "45215100",
+        "45215120",
+        "45220000",
+        "45233140",
+        "45300000",
+        "45310000",
+        "45311000",
+        "45311100",
+        "45311200",
+        "45312100",
+        "45312200",
+        "45312310",
+        "45314000",
+        "45314300",
+        "45317000",
+        "45330000",
+        "45331100",
+        "45331200",
+        "45332000",
+        "45343000",
+        "45400000",
+        "45422100",
+        "45443000",
+        "45450000",
+        "45453000",
+        "71000000",
+        "71221000",
+        "71222000",
+        "71248000",
+        "71315300",
+        "71320000",
+        "71330000",
+        "71420000",
+        "92520000"
+      ],
+      "cpv_code_depths": [
+        2,
+        6,
+        2,
+        6,
+        5,
+        6,
+        2,
+        4,
+        6,
+        6,
+        7,
+        6,
+        7,
+        4,
+        7,
+        3,
+        4,
+        5,
+        6,
+        6,
+        6,
+        6,
+        7,
+        5,
+        6,
+        5,
+        4,
+        6,
+        6,
+        5,
+        5,
+        3,
+        6,
+        5,
+        4,
+        5,
+        2,
+        5,
+        5,
+        5,
+        6,
+        4,
+        4,
+        4,
+        4
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "31",
+        "32",
+        "38",
+        "45",
+        "71",
+        "92"
+      ],
+      "groups_carried": [
+        "316",
+        "323",
+        "325",
+        "384",
+        "451",
+        "452",
+        "453",
+        "454",
+        "712",
+        "713",
+        "714",
+        "925"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "cfe59735-0389-5e88-a901-19fc520ce0fb",
+      "raw_record_id": "82616f65-136a-5ec9-918e-88ee9ce36938",
+      "observation_key": "ted-eu|notice|138472-2023"
+    },
+    {
+      "notice_id": "138500-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92610000"
+      ],
+      "cpv_code_depths": [
+        4
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "926"
+      ],
+      "single_division": true,
+      "group_membership": "926",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "b12a4520-5308-5be9-aa88-7db229745bcf",
+      "raw_record_id": "28b120a8-7cd9-5887-803f-9a9b47e18f3b",
+      "observation_key": "ted-eu|notice|138500-2023"
+    },
+    {
+      "notice_id": "138840-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92512000"
+      ],
+      "cpv_code_depths": [
+        5
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "925"
+      ],
+      "single_division": true,
+      "group_membership": "925",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "0a17ff74-f787-5dcc-9e0c-3542f8ea2359",
+      "raw_record_id": "bc829350-5d9f-5a4a-a14b-a98e93d7d121",
+      "observation_key": "ted-eu|notice|138840-2023"
+    },
+    {
+      "notice_id": "138915-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "30231000",
+        "32344210",
+        "38127000",
+        "38128000",
+        "45311200",
+        "48600000",
+        "64210000",
+        "76443000",
+        "80000000",
+        "92312212"
+      ],
+      "cpv_code_depths": [
+        5,
+        7,
+        5,
+        5,
+        6,
+        3,
+        4,
+        5,
+        1,
+        8
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "30",
+        "32",
+        "38",
+        "45",
+        "48",
+        "64",
+        "76",
+        "80",
+        "92"
+      ],
+      "groups_carried": [
+        "302",
+        "323",
+        "381",
+        "453",
+        "486",
+        "642",
+        "764",
+        "923"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "2067e098-f32e-55b3-804f-ae32b2225884",
+      "raw_record_id": "11fe0c42-ac23-58ca-a24d-9710e0d487e6",
+      "observation_key": "ted-eu|notice|138915-2023"
+    },
+    {
+      "notice_id": "139042-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "55300000",
+        "55511000",
+        "55521200",
+        "64224000",
+        "64228100",
+        "79952000",
+        "79952100",
+        "79954000",
+        "79956000",
+        "92300000",
+        "92312200",
+        "92312250",
+        "92370000"
+      ],
+      "cpv_code_depths": [
+        3,
+        5,
+        6,
+        5,
+        6,
+        5,
+        6,
+        5,
+        5,
+        3,
+        6,
+        7,
+        4
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "55",
+        "64",
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "553",
+        "555",
+        "642",
+        "799",
+        "923"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "PLN",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "73725771-88cc-5b74-8f07-95630b08c2df",
+      "raw_record_id": "fa2bc1cd-18a8-562d-9df0-fba3a822f114",
+      "observation_key": "ted-eu|notice|139042-2023"
+    },
+    {
+      "notice_id": "139093-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "79952100",
+        "92320000"
+      ],
+      "cpv_code_depths": [
+        6,
+        4
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "799",
+        "923"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "69303309-9039-5a7c-9af0-c71b34247ba7",
+      "raw_record_id": "f49680e7-2ac2-50a9-b2b7-77b0835dcb10",
+      "observation_key": "ted-eu|notice|139093-2023"
+    },
+    {
+      "notice_id": "139177-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92000000"
+      ],
+      "cpv_code_depths": [
+        2
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [],
+      "single_division": true,
+      "group_membership": "UNSPECIFIED_AT_GROUP",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "A",
+      "normalized_record_id": "0baa66c7-f509-5555-85c9-b640c6eb3dca",
+      "raw_record_id": "331922d0-1134-5a59-8173-a82edbc236bb",
+      "observation_key": "ted-eu|notice|139177-2023"
+    },
+    {
+      "notice_id": "139557-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "79620000",
+        "92621000"
+      ],
+      "cpv_code_depths": [
+        4,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "796",
+        "926"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "A",
+      "normalized_record_id": "7f7ef491-ac4a-5392-9c7d-dfa49e48e555",
+      "raw_record_id": "97e18ea1-a5c9-5be5-b464-ba1f1d6d6243",
+      "observation_key": "ted-eu|notice|139557-2023"
+    },
+    {
+      "notice_id": "140202-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92521100"
+      ],
+      "cpv_code_depths": [
+        6
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "925"
+      ],
+      "single_division": true,
+      "group_membership": "925",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "e7cb1348-e380-5781-bb3b-51d403d256e6",
+      "raw_record_id": "2406da01-55c4-52ac-b067-052fa56399e9",
+      "observation_key": "ted-eu|notice|140202-2023"
+    },
+    {
+      "notice_id": "140307-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "75252000",
+        "79714000",
+        "92332000"
+      ],
+      "cpv_code_depths": [
+        5,
+        5,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "75",
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "752",
+        "797",
+        "923"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "89818b13-56c5-520a-a4f9-31b547fb8df0",
+      "raw_record_id": "96d9bc88-88ca-59aa-be64-d88011c5f3c0",
+      "observation_key": "ted-eu|notice|140307-2023"
+    },
+    {
+      "notice_id": "140728-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "45212350",
+        "45454100",
+        "92522000"
+      ],
+      "cpv_code_depths": [
+        7,
+        6,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "45",
+        "92"
+      ],
+      "groups_carried": [
+        "452",
+        "454",
+        "925"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "CZK",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "e3d8571d-3e95-57b1-9454-45d7b10229ec",
+      "raw_record_id": "7bd31da0-2878-55ed-baaa-e999f7877ece",
+      "observation_key": "ted-eu|notice|140728-2023"
+    },
+    {
+      "notice_id": "140858-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92610000"
+      ],
+      "cpv_code_depths": [
+        4
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "926"
+      ],
+      "single_division": true,
+      "group_membership": "926",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "c796d6a9-06ea-52e2-8d1e-d08f85573550",
+      "raw_record_id": "79ea2ff4-f4b7-5e16-a328-9d0e9c6bcd8d",
+      "observation_key": "ted-eu|notice|140858-2023"
+    },
+    {
+      "notice_id": "141223-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "24613200",
+        "92360000"
+      ],
+      "cpv_code_depths": [
+        6,
+        4
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "24",
+        "92"
+      ],
+      "groups_carried": [
+        "246",
+        "923"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "B",
+      "normalized_record_id": "02735127-cc57-5b80-adfe-8dba2ed72909",
+      "raw_record_id": "6be063ef-af05-580b-ad4e-20a667e7b5b4",
+      "observation_key": "ted-eu|notice|141223-2023"
+    },
+    {
+      "notice_id": "141464-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92000000"
+      ],
+      "cpv_code_depths": [
+        2
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [],
+      "single_division": true,
+      "group_membership": "UNSPECIFIED_AT_GROUP",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "f89bbd45-5fa6-5d2f-949b-3e7dbb50079f",
+      "raw_record_id": "0dce9146-b006-5aba-9276-1c55c0d21d5c",
+      "observation_key": "ted-eu|notice|141464-2023"
+    },
+    {
+      "notice_id": "141711-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "22315000",
+        "79961000",
+        "79961100",
+        "79961200",
+        "79961300",
+        "79961320",
+        "92100000",
+        "92111000"
+      ],
+      "cpv_code_depths": [
+        5,
+        5,
+        6,
+        6,
+        6,
+        7,
+        3,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "22",
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "223",
+        "799",
+        "921"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "f085e7b3-3c80-5cee-b9b6-0ea2874dc4b9",
+      "raw_record_id": "3f7b41fd-4ce8-5dc6-b754-c7e121ea968b",
+      "observation_key": "ted-eu|notice|141711-2023"
+    },
+    {
+      "notice_id": "141837-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "39154100",
+        "79822500",
+        "79952000",
+        "92111000",
+        "92400000"
+      ],
+      "cpv_code_depths": [
+        6,
+        6,
+        5,
+        5,
+        3
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "39",
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "391",
+        "798",
+        "799",
+        "921",
+        "924"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "3b75aec1-1c4b-5c0c-89af-d5e08b646022",
+      "raw_record_id": "f66c8326-40c2-5d29-b2c9-ab24ac1753ca",
+      "observation_key": "ted-eu|notice|141837-2023"
+    },
+    {
+      "notice_id": "142760-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "79960000",
+        "92510000",
+        "92512000"
+      ],
+      "cpv_code_depths": [
+        4,
+        4,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "799",
+        "925"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "B",
+      "normalized_record_id": "7ab6824c-a535-5ebb-8b35-899936ba6f28",
+      "raw_record_id": "c4d146f7-2f23-58b0-b24e-7c387cded123",
+      "observation_key": "ted-eu|notice|142760-2023"
+    },
+    {
+      "notice_id": "142829-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92331210"
+      ],
+      "cpv_code_depths": [
+        7
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "923"
+      ],
+      "single_division": true,
+      "group_membership": "923",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "0e46d74d-da5e-5c56-8338-1bfcdc9703b6",
+      "raw_record_id": "a3b1298b-cb7e-5f50-9f4a-a26e745f5cbf",
+      "observation_key": "ted-eu|notice|142829-2023"
+    },
+    {
+      "notice_id": "142909-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "64121100",
+        "79800000",
+        "92400000"
+      ],
+      "cpv_code_depths": [
+        6,
+        3,
+        3
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "64",
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "641",
+        "798",
+        "924"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "5b3086f8-0658-5a83-9625-c4a9f8d0a8ff",
+      "raw_record_id": "43a6b99f-4f13-54c8-815d-666c4ed9cba3",
+      "observation_key": "ted-eu|notice|142909-2023"
+    },
+    {
+      "notice_id": "143100-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "32412000",
+        "79340000",
+        "79341100",
+        "79410000",
+        "79413000",
+        "79415200",
+        "79822500",
+        "79930000",
+        "79933000",
+        "85312300",
+        "92110000"
+      ],
+      "cpv_code_depths": [
+        5,
+        4,
+        6,
+        4,
+        5,
+        6,
+        6,
+        4,
+        5,
+        6,
+        4
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "32",
+        "79",
+        "85",
+        "92"
+      ],
+      "groups_carried": [
+        "324",
+        "793",
+        "794",
+        "798",
+        "799",
+        "853",
+        "921"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "NOK",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "20930032-6dcc-52d0-8a64-e397458c1d42",
+      "raw_record_id": "d3809b65-1c2c-5857-90b0-2eb39e8abc05",
+      "observation_key": "ted-eu|notice|143100-2023"
+    },
+    {
+      "notice_id": "143201-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "48000000",
+        "48224000",
+        "48921000",
+        "72000000",
+        "72212000",
+        "72263000",
+        "72268000",
+        "72311100",
+        "72416000",
+        "79530000",
+        "92111100",
+        "92111210",
+        "92111250"
+      ],
+      "cpv_code_depths": [
+        2,
+        5,
+        5,
+        2,
+        5,
+        5,
+        5,
+        6,
+        5,
+        4,
+        6,
+        7,
+        7
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "48",
+        "72",
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "482",
+        "489",
+        "722",
+        "723",
+        "724",
+        "795",
+        "921"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "B",
+      "normalized_record_id": "0864788b-a292-56ed-a348-d49abb6fed28",
+      "raw_record_id": "065ac3ec-5bec-5633-9a47-1a57877e9ae6",
+      "observation_key": "ted-eu|notice|143201-2023"
+    },
+    {
+      "notice_id": "143242-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92111250"
+      ],
+      "cpv_code_depths": [
+        7
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "921"
+      ],
+      "single_division": true,
+      "group_membership": "921",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "B",
+      "normalized_record_id": "577376e1-bc80-584e-ae1e-38acd81e7c81",
+      "raw_record_id": "945db86a-474a-5160-a14f-a6e2197bef09",
+      "observation_key": "ted-eu|notice|143242-2023"
+    },
+    {
+      "notice_id": "143293-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92312230"
+      ],
+      "cpv_code_depths": [
+        7
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "923"
+      ],
+      "single_division": true,
+      "group_membership": "923",
+      "total_value_present": true,
+      "total_value_currency": "SEK",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "9f3cc92e-a4c4-5094-9fe0-3b50cdb9e235",
+      "raw_record_id": "9f90e0cc-7f18-5207-b1a0-a9302140adb7",
+      "observation_key": "ted-eu|notice|143293-2023"
+    },
+    {
+      "notice_id": "143432-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "72212520",
+        "92110000",
+        "92111260",
+        "92112000"
+      ],
+      "cpv_code_depths": [
+        7,
+        4,
+        7,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "72",
+        "92"
+      ],
+      "groups_carried": [
+        "722",
+        "921"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "B",
+      "normalized_record_id": "911f40f1-1ee9-57eb-b7e8-8267edce3b7c",
+      "raw_record_id": "d4fa6652-cde0-52f9-b011-0768ada261b7",
+      "observation_key": "ted-eu|notice|143432-2023"
+    },
+    {
+      "notice_id": "143497-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "32321200",
+        "72590000",
+        "92320000"
+      ],
+      "cpv_code_depths": [
+        6,
+        4,
+        4
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "32",
+        "72",
+        "92"
+      ],
+      "groups_carried": [
+        "323",
+        "725",
+        "923"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "e8dccf96-c55e-50e8-82d5-2bc5aecb2d50",
+      "raw_record_id": "3e23ef20-bf8c-522b-bfd1-5de71111dfde",
+      "observation_key": "ted-eu|notice|143497-2023"
+    },
+    {
+      "notice_id": "143771-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "39100000",
+        "92000000"
+      ],
+      "cpv_code_depths": [
+        3,
+        2
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "39",
+        "92"
+      ],
+      "groups_carried": [
+        "391"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "9376b733-3f04-5709-bcbf-7fdc576e2a04",
+      "raw_record_id": "fbc5798a-ae7b-5a2f-acec-5a067ce047aa",
+      "observation_key": "ted-eu|notice|143771-2023"
+    },
+    {
+      "notice_id": "143965-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92300000"
+      ],
+      "cpv_code_depths": [
+        3
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "923"
+      ],
+      "single_division": true,
+      "group_membership": "923",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "6cc17bc5-ad44-5aa0-8780-2d76512099c8",
+      "raw_record_id": "077de69a-c499-5716-ac13-9944fb60fc22",
+      "observation_key": "ted-eu|notice|143965-2023"
+    },
+    {
+      "notice_id": "144439-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92310000"
+      ],
+      "cpv_code_depths": [
+        4
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "923"
+      ],
+      "single_division": true,
+      "group_membership": "923",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "95cf7bd2-da02-56f4-a894-59939cd74b8f",
+      "raw_record_id": "5b5933d2-51b7-5d66-ab60-71e28dd889f1",
+      "observation_key": "ted-eu|notice|144439-2023"
+    },
+    {
+      "notice_id": "144869-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "90000000",
+        "90511400",
+        "90520000",
+        "92512100"
+      ],
+      "cpv_code_depths": [
+        1,
+        6,
+        4,
+        6
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "90",
+        "92"
+      ],
+      "groups_carried": [
+        "905",
+        "925"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "2741d63e-0f51-5097-9e84-d200e3f204a4",
+      "raw_record_id": "79f737df-daad-55e5-9f47-0f94f6219103",
+      "observation_key": "ted-eu|notice|144869-2023"
+    },
+    {
+      "notice_id": "145268-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "50300000",
+        "79822500",
+        "79960000",
+        "92200000"
+      ],
+      "cpv_code_depths": [
+        3,
+        6,
+        4,
+        3
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "50",
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "503",
+        "798",
+        "799",
+        "922"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "89296774-96a3-5111-ba23-30c38b480cad",
+      "raw_record_id": "1e0cc770-1d3c-5500-96ee-c70a3ca39df9",
+      "observation_key": "ted-eu|notice|145268-2023"
+    },
+    {
+      "notice_id": "145394-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92534000"
+      ],
+      "cpv_code_depths": [
+        5
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "925"
+      ],
+      "single_division": true,
+      "group_membership": "925",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "2030bb71-71d4-5cd8-a267-69b1487464f8",
+      "raw_record_id": "96e4aa14-d4c0-58ee-91ed-664d298d732d",
+      "observation_key": "ted-eu|notice|145394-2023"
+    },
+    {
+      "notice_id": "145469-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92000000"
+      ],
+      "cpv_code_depths": [
+        2
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [],
+      "single_division": true,
+      "group_membership": "UNSPECIFIED_AT_GROUP",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "B",
+      "normalized_record_id": "5c7b9526-f1fa-5e84-a6d0-1b76e14f7e50",
+      "raw_record_id": "41677a00-d1be-5087-ad2d-6f4ab92f3c4c",
+      "observation_key": "ted-eu|notice|145469-2023"
+    },
+    {
+      "notice_id": "145524-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "31000000",
+        "31625200",
+        "32000000",
+        "32323500",
+        "32581000",
+        "45000000",
+        "45110000",
+        "45111000",
+        "45111200",
+        "45112700",
+        "45213320",
+        "45220000",
+        "45233140",
+        "45300000",
+        "45310000",
+        "45311000",
+        "45311100",
+        "45311200",
+        "45312100",
+        "45312200",
+        "45312310",
+        "45314000",
+        "45314300",
+        "45317000",
+        "45330000",
+        "45331100",
+        "45331211",
+        "45332000",
+        "45333000",
+        "45343000",
+        "45400000",
+        "45422100",
+        "45443000",
+        "45450000",
+        "45453000",
+        "92520000"
+      ],
+      "cpv_code_depths": [
+        2,
+        6,
+        2,
+        6,
+        5,
+        2,
+        4,
+        5,
+        6,
+        6,
+        7,
+        4,
+        7,
+        3,
+        4,
+        5,
+        6,
+        6,
+        6,
+        6,
+        7,
+        5,
+        6,
+        5,
+        4,
+        6,
+        8,
+        5,
+        5,
+        5,
+        3,
+        6,
+        5,
+        4,
+        5,
+        4
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "31",
+        "32",
+        "45",
+        "92"
+      ],
+      "groups_carried": [
+        "316",
+        "323",
+        "325",
+        "451",
+        "452",
+        "453",
+        "454",
+        "925"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "PLN",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "7c95013c-a3d9-59df-85b3-734e8aa49c16",
+      "raw_record_id": "d7431b65-948e-5765-a960-592211e02a03",
+      "observation_key": "ted-eu|notice|145524-2023"
+    },
+    {
+      "notice_id": "145679-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92622000"
+      ],
+      "cpv_code_depths": [
+        5
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "926"
+      ],
+      "single_division": true,
+      "group_membership": "926",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "B",
+      "normalized_record_id": "418aca4e-b391-52d2-97cc-3e73290d14c3",
+      "raw_record_id": "48a6ca77-a6bb-5122-9e2d-439903e101cf",
+      "observation_key": "ted-eu|notice|145679-2023"
+    },
+    {
+      "notice_id": "145823-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "63513000",
+        "92500000"
+      ],
+      "cpv_code_depths": [
+        5,
+        3
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "63",
+        "92"
+      ],
+      "groups_carried": [
+        "635",
+        "925"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "5b3af86a-61a0-538d-98f5-7fcdc4f7d5a2",
+      "raw_record_id": "9a56f83b-abd1-5fa7-8a94-688a455d587a",
+      "observation_key": "ted-eu|notice|145823-2023"
+    },
+    {
+      "notice_id": "145891-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92312100"
+      ],
+      "cpv_code_depths": [
+        6
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "923"
+      ],
+      "single_division": true,
+      "group_membership": "923",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "7f93d185-75b7-5da1-9c4c-724d9f92c3d8",
+      "raw_record_id": "6b6c5812-2da3-5950-af1d-82a4c46a4825",
+      "observation_key": "ted-eu|notice|145891-2023"
+    },
+    {
+      "notice_id": "145981-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92610000"
+      ],
+      "cpv_code_depths": [
+        4
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "926"
+      ],
+      "single_division": true,
+      "group_membership": "926",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "ac76326d-43c5-50cf-a008-436746d5577a",
+      "raw_record_id": "6dfc3d8f-16a6-5f43-87eb-a0897305d879",
+      "observation_key": "ted-eu|notice|145981-2023"
+    },
+    {
+      "notice_id": "146205-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92312200",
+        "92312250",
+        "92370000"
+      ],
+      "cpv_code_depths": [
+        6,
+        7,
+        4
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "923"
+      ],
+      "single_division": true,
+      "group_membership": "923",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "a560a946-835d-5d0d-adde-9e4e0b3d4433",
+      "raw_record_id": "d7bd353b-781d-587d-9a68-705c566511cd",
+      "observation_key": "ted-eu|notice|146205-2023"
+    },
+    {
+      "notice_id": "146311-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92521000"
+      ],
+      "cpv_code_depths": [
+        5
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "925"
+      ],
+      "single_division": true,
+      "group_membership": "925",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "acbe59b0-cbf5-5834-a0b8-9d4fe219c00b",
+      "raw_record_id": "24185fba-f505-5ee5-9e8f-4637edae2a09",
+      "observation_key": "ted-eu|notice|146311-2023"
+    },
+    {
+      "notice_id": "146759-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "60161000",
+        "64110000",
+        "79810000",
+        "79822500",
+        "92312211"
+      ],
+      "cpv_code_depths": [
+        5,
+        4,
+        4,
+        6,
+        8
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "60",
+        "64",
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "601",
+        "641",
+        "798",
+        "923"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "11bf88ff-f03b-5b1a-884e-db73c058ae74",
+      "raw_record_id": "854aa805-8ea6-5353-a782-f9f57be2d18a",
+      "observation_key": "ted-eu|notice|146759-2023"
+    },
+    {
+      "notice_id": "147333-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "30200000",
+        "30237300",
+        "34971000",
+        "38650000",
+        "38651100",
+        "38651600",
+        "79961300",
+        "92224000"
+      ],
+      "cpv_code_depths": [
+        3,
+        6,
+        5,
+        4,
+        6,
+        6,
+        6,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "30",
+        "34",
+        "38",
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "302",
+        "349",
+        "386",
+        "799",
+        "922"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "333ca978-b1e8-5a06-9d5c-1588a5a5dd1a",
+      "raw_record_id": "ae1de6d2-fa19-5929-8b00-0bfe7abd1a9f",
+      "observation_key": "ted-eu|notice|147333-2023"
+    },
+    {
+      "notice_id": "147377-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "79956000",
+        "92520000",
+        "92521100"
+      ],
+      "cpv_code_depths": [
+        5,
+        4,
+        6
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "799",
+        "925"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "B",
+      "normalized_record_id": "6b42bfd0-3931-529f-9cf9-16b1ba474ac2",
+      "raw_record_id": "18ccd357-25fa-52ac-a47a-944c1215f587",
+      "observation_key": "ted-eu|notice|147377-2023"
+    },
+    {
+      "notice_id": "147412-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92360000"
+      ],
+      "cpv_code_depths": [
+        4
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "923"
+      ],
+      "single_division": true,
+      "group_membership": "923",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "94f7cc29-ab61-50a7-ae50-6b6e1acea61b",
+      "raw_record_id": "717f2edb-9cd0-5337-a171-e871e75d312e",
+      "observation_key": "ted-eu|notice|147412-2023"
+    },
+    {
+      "notice_id": "147434-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92521000"
+      ],
+      "cpv_code_depths": [
+        5
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "925"
+      ],
+      "single_division": true,
+      "group_membership": "925",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "269c3249-b320-533d-8719-81229c4c1635",
+      "raw_record_id": "4c7a218f-0efa-5e91-a0b2-fc78265536eb",
+      "observation_key": "ted-eu|notice|147434-2023"
+    },
+    {
+      "notice_id": "147529-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "37400000",
+        "37420000",
+        "37430000",
+        "37433000",
+        "37442500",
+        "37442900",
+        "37452000",
+        "37461300",
+        "92600000"
+      ],
+      "cpv_code_depths": [
+        3,
+        4,
+        4,
+        5,
+        6,
+        6,
+        5,
+        6,
+        3
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "37",
+        "92"
+      ],
+      "groups_carried": [
+        "374",
+        "926"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "36001bf7-fcc3-5e52-83db-19e58ef1d019",
+      "raw_record_id": "da184d35-e6b7-5e5a-ab22-671beae6fdac",
+      "observation_key": "ted-eu|notice|147529-2023"
+    },
+    {
+      "notice_id": "147699-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92600000"
+      ],
+      "cpv_code_depths": [
+        3
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "926"
+      ],
+      "single_division": true,
+      "group_membership": "926",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "4f8b7cfd-6056-5823-84a7-9327e6d292d2",
+      "raw_record_id": "20ec8dc8-02b5-5a22-aee0-6ac5f380bf31",
+      "observation_key": "ted-eu|notice|147699-2023"
+    },
+    {
+      "notice_id": "147740-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "45000000",
+        "70123000",
+        "92610000",
+        "92622000"
+      ],
+      "cpv_code_depths": [
+        2,
+        5,
+        4,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "45",
+        "70",
+        "92"
+      ],
+      "groups_carried": [
+        "701",
+        "926"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "B",
+      "normalized_record_id": "53d92cc2-e283-5b16-abb5-88c463f1edc8",
+      "raw_record_id": "cf9a3c83-fc4c-5ad8-b503-3c4e99a13152",
+      "observation_key": "ted-eu|notice|147740-2023"
+    },
+    {
+      "notice_id": "147879-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92610000"
+      ],
+      "cpv_code_depths": [
+        4
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "926"
+      ],
+      "single_division": true,
+      "group_membership": "926",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "8f9c2fc3-b441-5d40-823e-f5a265029354",
+      "raw_record_id": "6420cc3d-bbc7-5e62-82fc-8c9302b6b425",
+      "observation_key": "ted-eu|notice|147879-2023"
+    },
+    {
+      "notice_id": "148094-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92110000"
+      ],
+      "cpv_code_depths": [
+        4
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "921"
+      ],
+      "single_division": true,
+      "group_membership": "921",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "63ede5ca-5822-53f8-b586-f465fc55d37c",
+      "raw_record_id": "0c7f35b7-264d-5720-ad32-030efcb7d278",
+      "observation_key": "ted-eu|notice|148094-2023"
+    },
+    {
+      "notice_id": "148260-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92310000",
+        "92312210",
+        "92370000"
+      ],
+      "cpv_code_depths": [
+        4,
+        7,
+        4
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "923"
+      ],
+      "single_division": true,
+      "group_membership": "923",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "B",
+      "normalized_record_id": "b406d6e6-7994-56ed-abe5-44ab47336f36",
+      "raw_record_id": "eb755b4b-4334-58fe-b08b-17a12a3b554d",
+      "observation_key": "ted-eu|notice|148260-2023"
+    },
+    {
+      "notice_id": "148317-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92130000"
+      ],
+      "cpv_code_depths": [
+        4
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "921"
+      ],
+      "single_division": true,
+      "group_membership": "921",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "9c92b388-0153-56c3-90a3-72fd2b6246d8",
+      "raw_record_id": "b87c3711-7afd-5d78-8bd2-cf698e69f181",
+      "observation_key": "ted-eu|notice|148317-2023"
+    },
+    {
+      "notice_id": "148516-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92512000"
+      ],
+      "cpv_code_depths": [
+        5
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "925"
+      ],
+      "single_division": true,
+      "group_membership": "925",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "18fa3742-8d24-5daf-801a-d8c658dc7c11",
+      "raw_record_id": "422fdf89-d4e1-5a4f-9578-df6fc2d25af9",
+      "observation_key": "ted-eu|notice|148516-2023"
+    },
+    {
+      "notice_id": "148819-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92521000"
+      ],
+      "cpv_code_depths": [
+        5
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "925"
+      ],
+      "single_division": true,
+      "group_membership": "925",
+      "total_value_present": true,
+      "total_value_currency": "CZK",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "7326700f-8c9a-598b-8909-0ba68b63c929",
+      "raw_record_id": "a2e7a195-ac13-5556-9508-d9b828003e80",
+      "observation_key": "ted-eu|notice|148819-2023"
+    },
+    {
+      "notice_id": "148907-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "45000000",
+        "45300000",
+        "92610000",
+        "92622000"
+      ],
+      "cpv_code_depths": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "45",
+        "92"
+      ],
+      "groups_carried": [
+        "453",
+        "926"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "d2c8cd66-4752-5c70-98d1-06b360f9edb7",
+      "raw_record_id": "8114bffc-2732-54e7-a4cb-511e355bcab5",
+      "observation_key": "ted-eu|notice|148907-2023"
+    },
+    {
+      "notice_id": "149442-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92500000"
+      ],
+      "cpv_code_depths": [
+        3
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "925"
+      ],
+      "single_division": true,
+      "group_membership": "925",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "a03ad1a2-bace-507c-a750-7e2f95d73b81",
+      "raw_record_id": "bd858e00-c575-5258-820b-0529e5f30736",
+      "observation_key": "ted-eu|notice|149442-2023"
+    },
+    {
+      "notice_id": "149532-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "79340000",
+        "79342000",
+        "79342200",
+        "92400000"
+      ],
+      "cpv_code_depths": [
+        4,
+        5,
+        6,
+        3
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "793",
+        "924"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "2bce3c5d-80f7-5b84-a7d5-b72167ae628b",
+      "raw_record_id": "da8edfc6-4748-5708-9a4c-47177dabca19",
+      "observation_key": "ted-eu|notice|149532-2023"
+    },
+    {
+      "notice_id": "149681-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "79342320",
+        "92312000"
+      ],
+      "cpv_code_depths": [
+        7,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "793",
+        "923"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "7d3451db-961c-5f9e-ae61-aef923aef6d8",
+      "raw_record_id": "b9abbbce-f569-5abb-b2d4-f7687fa55eba",
+      "observation_key": "ted-eu|notice|149681-2023"
+    },
+    {
+      "notice_id": "149701-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "32330000",
+        "39294100",
+        "92312211",
+        "92400000"
+      ],
+      "cpv_code_depths": [
+        4,
+        6,
+        8,
+        3
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "32",
+        "39",
+        "92"
+      ],
+      "groups_carried": [
+        "323",
+        "392",
+        "923",
+        "924"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "B",
+      "normalized_record_id": "903e01f3-6345-56f2-979d-3ce0475277bb",
+      "raw_record_id": "2a64efb5-fc18-59fc-9e7d-72e5d81295bf",
+      "observation_key": "ted-eu|notice|149701-2023"
+    },
+    {
+      "notice_id": "149711-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92610000"
+      ],
+      "cpv_code_depths": [
+        4
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "926"
+      ],
+      "single_division": true,
+      "group_membership": "926",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "f018f692-9d3b-5ce5-a40b-57637dea2b9c",
+      "raw_record_id": "b509b5bc-4bef-5c99-9972-ce0d15651c3b",
+      "observation_key": "ted-eu|notice|149711-2023"
+    },
+    {
+      "notice_id": "149932-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "55000000",
+        "92351200",
+        "98332000"
+      ],
+      "cpv_code_depths": [
+        2,
+        6,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "55",
+        "92",
+        "98"
+      ],
+      "groups_carried": [
+        "923",
+        "983"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "7dd2ce58-b855-59b2-97f5-7616f3212e28",
+      "raw_record_id": "1a5b6742-4a02-583b-abe1-6faa74d7c29e",
+      "observation_key": "ted-eu|notice|149932-2023"
+    },
+    {
+      "notice_id": "150104-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "79315000",
+        "79415200",
+        "85300000",
+        "92000000",
+        "92331210"
+      ],
+      "cpv_code_depths": [
+        5,
+        6,
+        3,
+        2,
+        7
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "79",
+        "85",
+        "92"
+      ],
+      "groups_carried": [
+        "793",
+        "794",
+        "853",
+        "923"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "ce457f49-d43f-531c-aa87-b295e73bd613",
+      "raw_record_id": "93e2dafd-8bc1-5aae-9af0-387d38f2d360",
+      "observation_key": "ted-eu|notice|150104-2023"
+    },
+    {
+      "notice_id": "150123-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "37800000",
+        "45212300",
+        "71000000",
+        "92311000"
+      ],
+      "cpv_code_depths": [
+        3,
+        6,
+        2,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "37",
+        "45",
+        "71",
+        "92"
+      ],
+      "groups_carried": [
+        "378",
+        "452",
+        "923"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "B",
+      "normalized_record_id": "0ddfb82a-a3f6-5898-804e-8fe74f355d68",
+      "raw_record_id": "c823e093-2383-5a22-b30d-6495d49ca324",
+      "observation_key": "ted-eu|notice|150123-2023"
+    },
+    {
+      "notice_id": "150243-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92521100"
+      ],
+      "cpv_code_depths": [
+        6
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "925"
+      ],
+      "single_division": true,
+      "group_membership": "925",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "B",
+      "normalized_record_id": "3684f5b7-2866-56e1-b465-d57f7c657109",
+      "raw_record_id": "eae22712-6261-5a08-aad4-09a8058422b8",
+      "observation_key": "ted-eu|notice|150243-2023"
+    },
+    {
+      "notice_id": "150477-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92521100"
+      ],
+      "cpv_code_depths": [
+        6
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "925"
+      ],
+      "single_division": true,
+      "group_membership": "925",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "5eb49ff9-6b47-5304-be33-db1ee9907851",
+      "raw_record_id": "f6024329-a0c1-5f79-aedb-2f6e40f48ecf",
+      "observation_key": "ted-eu|notice|150477-2023"
+    },
+    {
+      "notice_id": "150763-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92610000"
+      ],
+      "cpv_code_depths": [
+        4
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "926"
+      ],
+      "single_division": true,
+      "group_membership": "926",
+      "total_value_present": true,
+      "total_value_currency": "SEK",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "64e0d192-cdd7-5285-ae0c-f898a09cad90",
+      "raw_record_id": "5e322503-c6d9-51ec-9a53-ea356b4b2f27",
+      "observation_key": "ted-eu|notice|150763-2023"
+    },
+    {
+      "notice_id": "151188-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "72700000",
+        "72710000",
+        "92400000"
+      ],
+      "cpv_code_depths": [
+        3,
+        4,
+        3
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "72",
+        "92"
+      ],
+      "groups_carried": [
+        "727",
+        "924"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "e727ad65-15c6-5c66-9581-d11b7747df74",
+      "raw_record_id": "ce39064f-c163-5470-8b37-f64b945a4360",
+      "observation_key": "ted-eu|notice|151188-2023"
+    },
+    {
+      "notice_id": "151372-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92610000"
+      ],
+      "cpv_code_depths": [
+        4
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "926"
+      ],
+      "single_division": true,
+      "group_membership": "926",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "60eb5653-a8a5-5adb-a252-2a81ac398754",
+      "raw_record_id": "814fbc2f-ec16-5871-b6a5-69f4cea30ec6",
+      "observation_key": "ted-eu|notice|151372-2023"
+    },
+    {
+      "notice_id": "151419-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "55241000",
+        "92331210"
+      ],
+      "cpv_code_depths": [
+        5,
+        7
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "55",
+        "92"
+      ],
+      "groups_carried": [
+        "552",
+        "923"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "B",
+      "normalized_record_id": "3b642de3-1191-58b9-a9b4-67d1898aff34",
+      "raw_record_id": "118e9512-06eb-5c48-a0b1-9086c45fec2c",
+      "observation_key": "ted-eu|notice|151419-2023"
+    },
+    {
+      "notice_id": "151497-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92331210"
+      ],
+      "cpv_code_depths": [
+        7
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "923"
+      ],
+      "single_division": true,
+      "group_membership": "923",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "9b36fbe0-eed2-5b7e-97f5-2af8b0435651",
+      "raw_record_id": "ddc37b6c-ffd4-5d12-a186-749e9a77d9c3",
+      "observation_key": "ted-eu|notice|151497-2023"
+    },
+    {
+      "notice_id": "152065-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "24613200",
+        "92360000"
+      ],
+      "cpv_code_depths": [
+        6,
+        4
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "24",
+        "92"
+      ],
+      "groups_carried": [
+        "246",
+        "923"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "fe7481b9-808c-5c83-ae4a-3af47a4ac6a4",
+      "raw_record_id": "aadbc074-06d5-54fa-8316-9e4c5e02a26d",
+      "observation_key": "ted-eu|notice|152065-2023"
+    },
+    {
+      "notice_id": "152153-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92610000"
+      ],
+      "cpv_code_depths": [
+        4
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "926"
+      ],
+      "single_division": true,
+      "group_membership": "926",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "3974196b-f76b-5af6-aac0-4bd2ff157782",
+      "raw_record_id": "29175698-d1c7-57e6-9c54-8194e6d775bf",
+      "observation_key": "ted-eu|notice|152153-2023"
+    },
+    {
+      "notice_id": "152446-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92311000"
+      ],
+      "cpv_code_depths": [
+        5
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "923"
+      ],
+      "single_division": true,
+      "group_membership": "923",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "2c2c2a4e-5494-57b6-a90a-fc4841838181",
+      "raw_record_id": "35a89461-80d3-5851-88ea-74085470cbe0",
+      "observation_key": "ted-eu|notice|152446-2023"
+    },
+    {
+      "notice_id": "152574-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "39293400",
+        "45112720",
+        "45212290",
+        "77320000",
+        "92610000"
+      ],
+      "cpv_code_depths": [
+        6,
+        7,
+        7,
+        4,
+        4
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "39",
+        "45",
+        "77",
+        "92"
+      ],
+      "groups_carried": [
+        "392",
+        "451",
+        "452",
+        "773",
+        "926"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "09c9f7cd-3692-56d3-9875-bbda4936fcd0",
+      "raw_record_id": "41d59b0c-4d74-5b45-ac4c-52b364574a33",
+      "observation_key": "ted-eu|notice|152574-2023"
+    },
+    {
+      "notice_id": "152875-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92312000"
+      ],
+      "cpv_code_depths": [
+        5
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "923"
+      ],
+      "single_division": true,
+      "group_membership": "923",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "B",
+      "normalized_record_id": "24c5f709-55df-5466-994f-1d8c923afd75",
+      "raw_record_id": "9c850788-1e91-5df2-8afa-4970b2e073b5",
+      "observation_key": "ted-eu|notice|152875-2023"
+    },
+    {
+      "notice_id": "152963-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "31000000",
+        "31200000",
+        "45237000",
+        "45311200",
+        "79952100",
+        "92000000",
+        "92370000"
+      ],
+      "cpv_code_depths": [
+        2,
+        3,
+        5,
+        6,
+        6,
+        2,
+        4
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "31",
+        "45",
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "312",
+        "452",
+        "453",
+        "799",
+        "923"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "B",
+      "normalized_record_id": "0bc29dde-52d8-5b51-82c7-9680aa31e1ce",
+      "raw_record_id": "08aad215-6a38-5078-ac87-af9522caa94e",
+      "observation_key": "ted-eu|notice|152963-2023"
+    },
+    {
+      "notice_id": "153205-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "22000000",
+        "92100000"
+      ],
+      "cpv_code_depths": [
+        2,
+        3
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "22",
+        "92"
+      ],
+      "groups_carried": [
+        "921"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "2525caed-b2c9-547e-a9b5-f33f5a8aed65",
+      "raw_record_id": "e25e70f6-8dac-5040-991f-6155316db880",
+      "observation_key": "ted-eu|notice|153205-2023"
+    },
+    {
+      "notice_id": "153337-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92610000"
+      ],
+      "cpv_code_depths": [
+        4
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "926"
+      ],
+      "single_division": true,
+      "group_membership": "926",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "e69f2e13-f24c-53ee-aeef-0235072a860e",
+      "raw_record_id": "2a9918e6-6bb0-5ffc-a4a7-0dc0891630c0",
+      "observation_key": "ted-eu|notice|153337-2023"
+    },
+    {
+      "notice_id": "153458-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "92400000"
+      ],
+      "cpv_code_depths": [
+        3
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "924"
+      ],
+      "single_division": true,
+      "group_membership": "924",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "23ec327d-9c2f-57a9-808b-46326523a581",
+      "raw_record_id": "63fbf5c8-ef0d-5e41-98f8-dc94f562c441",
+      "observation_key": "ted-eu|notice|153458-2023"
+    },
+    {
+      "notice_id": "153526-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "79950000",
+        "79952100",
+        "92320000",
+        "92622000"
+      ],
+      "cpv_code_depths": [
+        4,
+        6,
+        4,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "799",
+        "923",
+        "926"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "B",
+      "normalized_record_id": "b228b401-2289-5aa2-893b-da75a0db36d9",
+      "raw_record_id": "38960d7e-3770-53b0-b1ce-101ee13e4c47",
+      "observation_key": "ted-eu|notice|153526-2023"
+    },
+    {
+      "notice_id": "153861-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92100000",
+        "92111000",
+        "92111200",
+        "92111240",
+        "92111260",
+        "92112000"
+      ],
+      "cpv_code_depths": [
+        3,
+        5,
+        6,
+        7,
+        7,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "921"
+      ],
+      "single_division": true,
+      "group_membership": "921",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "1ce3f1ce-85a6-5602-8b28-db545d4b7155",
+      "raw_record_id": "f315fb6e-37f7-5d74-a519-d6ea3a649d83",
+      "observation_key": "ted-eu|notice|153861-2023"
+    },
+    {
+      "notice_id": "153977-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92520000",
+        "92521000"
+      ],
+      "cpv_code_depths": [
+        4,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "925"
+      ],
+      "single_division": true,
+      "group_membership": "925",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "08e3f725-f95f-599d-824e-2721b2f2b5dd",
+      "raw_record_id": "1b211a28-8a6b-5e3d-a006-c89a76fee683",
+      "observation_key": "ted-eu|notice|153977-2023"
+    },
+    {
+      "notice_id": "153997-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92111000"
+      ],
+      "cpv_code_depths": [
+        5
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "921"
+      ],
+      "single_division": true,
+      "group_membership": "921",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "B",
+      "normalized_record_id": "8d54810c-1e70-511e-9c00-a9bf93017cd9",
+      "raw_record_id": "da55b7a6-8ef9-5283-9400-253128a80c46",
+      "observation_key": "ted-eu|notice|153997-2023"
+    },
+    {
+      "notice_id": "154041-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "79340000",
+        "92100000",
+        "92111000"
+      ],
+      "cpv_code_depths": [
+        4,
+        3,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "793",
+        "921"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "e1a7355b-74ca-5532-a4ea-c383469a2990",
+      "raw_record_id": "07f2cf55-4c3d-5ff1-9207-90fad61b8bc6",
+      "observation_key": "ted-eu|notice|154041-2023"
+    },
+    {
+      "notice_id": "154215-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "22140000",
+        "22150000",
+        "79340000",
+        "79810000",
+        "79951000",
+        "79952000",
+        "79953000",
+        "92111000",
+        "92211000"
+      ],
+      "cpv_code_depths": [
+        4,
+        4,
+        4,
+        4,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "22",
+        "79",
+        "92"
+      ],
+      "groups_carried": [
+        "221",
+        "793",
+        "798",
+        "799",
+        "921",
+        "922"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "75029774-a457-57c0-b75a-4e10eff119a2",
+      "raw_record_id": "757b3d09-c820-56ab-8253-612cb76452d7",
+      "observation_key": "ted-eu|notice|154215-2023"
+    },
+    {
+      "notice_id": "154230-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "72400000",
+        "72421000",
+        "72422000",
+        "92100000",
+        "92200000",
+        "92225000"
+      ],
+      "cpv_code_depths": [
+        3,
+        5,
+        5,
+        3,
+        3,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "72",
+        "92"
+      ],
+      "groups_carried": [
+        "724",
+        "921",
+        "922"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "f38d99d6-5c66-5092-abbe-eb2cbe4016c7",
+      "raw_record_id": "2efbf2cb-04a8-55db-9ac9-8c4b45adf04b",
+      "observation_key": "ted-eu|notice|154230-2023"
+    },
+    {
+      "notice_id": "154456-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92311000"
+      ],
+      "cpv_code_depths": [
+        5
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "923"
+      ],
+      "single_division": true,
+      "group_membership": "923",
+      "total_value_present": false,
+      "total_value_currency": null,
+      "total_value_scope": null,
+      "acquisition_window": "B",
+      "normalized_record_id": "13fca362-8e4d-50f2-86f8-0278500b5e53",
+      "raw_record_id": "ba044c2b-2ef7-54b1-b8b1-655c1a73b5a5",
+      "observation_key": "ted-eu|notice|154456-2023"
+    },
+    {
+      "notice_id": "154526-2023",
+      "notice_type": "CONTRACT_AWARD_NOTICE",
+      "cpv_codes": [
+        "22462000",
+        "72413000",
+        "79340000",
+        "79416000",
+        "79950000",
+        "92111200",
+        "92211000",
+        "98390000"
+      ],
+      "cpv_code_depths": [
+        5,
+        5,
+        4,
+        5,
+        4,
+        6,
+        5,
+        4
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "22",
+        "72",
+        "79",
+        "92",
+        "98"
+      ],
+      "groups_carried": [
+        "224",
+        "724",
+        "793",
+        "794",
+        "799",
+        "921",
+        "922",
+        "983"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "2125fd53-9f75-5947-90a6-7c685003311b",
+      "raw_record_id": "18415d52-229d-5c62-924b-5c3b70cb8b36",
+      "observation_key": "ted-eu|notice|154526-2023"
+    },
+    {
+      "notice_id": "154670-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "48800000",
+        "64228000",
+        "92200000"
+      ],
+      "cpv_code_depths": [
+        3,
+        5,
+        3
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "48",
+        "64",
+        "92"
+      ],
+      "groups_carried": [
+        "488",
+        "642",
+        "922"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "33ecb22c-aa7e-5d7e-93e1-52d5cda372b9",
+      "raw_record_id": "cf7c1c35-0baa-52ae-8b3c-0fc1f8143768",
+      "observation_key": "ted-eu|notice|154670-2023"
+    },
+    {
+      "notice_id": "154692-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "73112000",
+        "90700000",
+        "90712400",
+        "92534000"
+      ],
+      "cpv_code_depths": [
+        5,
+        3,
+        6,
+        5
+      ],
+      "cpv_labels": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "73",
+        "90",
+        "92"
+      ],
+      "groups_carried": [
+        "731",
+        "907",
+        "925"
+      ],
+      "single_division": false,
+      "group_membership": "AMBIGUOUS_ACROSS_DIVISIONS",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "25fc5bcf-c85a-5032-a652-7b8c358bcb6c",
+      "raw_record_id": "ffa93ddd-a3e3-5b84-8384-75e1c1fec630",
+      "observation_key": "ted-eu|notice|154692-2023"
+    },
+    {
+      "notice_id": "154729-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92610000"
+      ],
+      "cpv_code_depths": [
+        4
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "926"
+      ],
+      "single_division": true,
+      "group_membership": "926",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "38123c78-795d-5f75-91b3-c1752ffe87da",
+      "raw_record_id": "7235d3bf-97a6-5c59-8f5f-c676aab8938b",
+      "observation_key": "ted-eu|notice|154729-2023"
+    },
+    {
+      "notice_id": "154922-2023",
+      "notice_type": "CONTRACT_NOTICE",
+      "cpv_codes": [
+        "92311000"
+      ],
+      "cpv_code_depths": [
+        5
+      ],
+      "cpv_labels": [
+        null
+      ],
+      "primary_or_additional_status": "NOT_ESTABLISHED_BY_HELD_RECORD",
+      "divisions_carried": [
+        "92"
+      ],
+      "groups_carried": [
+        "923"
+      ],
+      "single_division": true,
+      "group_membership": "923",
+      "total_value_present": true,
+      "total_value_currency": "EUR",
+      "total_value_scope": "NOTICE",
+      "acquisition_window": "B",
+      "normalized_record_id": "cebde743-dd36-5ca2-abfc-8e8b6ec3fe3a",
+      "raw_record_id": "cae02f96-c682-56ba-822c-9fef1eac55d3",
+      "observation_key": "ted-eu|notice|154922-2023"
+    }
+  ]
+}

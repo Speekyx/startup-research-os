@@ -123,6 +123,15 @@ class PropositionConvergenceContract:
     establishes: str
     does_not_establish: tuple[str, ...]
 
+    # Mission 1.81. Facts that are identity WHEN PRESENT and absent otherwise: a
+    # finer classification level a cohort may or may not have been keyed on. A
+    # detailed claim keyed at the coarsest level carries neither and keeps the
+    # key it has always had; one keyed finer carries both and gets a key of its
+    # own, so a group cohort never witnesses the division's proposition. Defaulted
+    # to none, because none is what every contract written before this field
+    # existed declared, and an unstated conditional set is exactly the empty one.
+    conditional_identity_fields: tuple[str, ...] = ()
+
     def __post_init__(self) -> None:
         if self.claim_type is not ClaimType.OBSERVED:
             raise ValueError(
@@ -141,7 +150,9 @@ class PropositionConvergenceContract:
                 "claim. Attribution is part of the proposition, and a claim that drops "
                 "it asserts something about the world rather than about a publication"
             )
-        overlap = set(self.identity_fields) & set(self.witness_fields)
+        overlap = (set(self.identity_fields) | set(self.conditional_identity_fields)) & set(
+            self.witness_fields
+        )
         if overlap:
             raise ValueError(
                 f"{self.contract_id}: {sorted(overlap)} are declared both identity and "
@@ -164,6 +175,15 @@ class PropositionConvergenceContract:
 
     @property
     def declared_fields(self) -> tuple[str, ...]:
+        return (
+            tuple(self.identity_fields)
+            + tuple(self.conditional_identity_fields)
+            + tuple(self.witness_fields)
+        )
+
+    @property
+    def required_fields(self) -> tuple[str, ...]:
+        """The fields every qualifying observation must carry; conditional ones may not."""
         return tuple(self.identity_fields) + tuple(self.witness_fields)
 
     def to_json(self) -> dict[str, object]:
@@ -175,6 +195,7 @@ class PropositionConvergenceContract:
             "temporality": self.temporality.value,
             "source_boundary": self.source_boundary.value,
             "identity_fields": list(self.identity_fields),
+            "conditional_identity_fields": list(self.conditional_identity_fields),
             "witness_fields": list(self.witness_fields),
             "qualifying_signal_types": list(self.qualifying_signal_types),
             "establishes": self.establishes,
@@ -206,7 +227,7 @@ def qualify(
             f"these facts state proposition {facts.get('proposition')!r}, not "
             f"{contract.proposition_kind!r}",
         )
-    missing = [name for name in contract.declared_fields if name not in facts]
+    missing = [name for name in contract.required_fields if name not in facts]
     if missing:
         return (
             QualificationOutcome.MISSING_REQUIRED_FACT,
@@ -229,7 +250,11 @@ def identity_facts(
     contract: PropositionConvergenceContract, facts: Mapping[str, object]
 ) -> dict[str, object]:
     """The sub-mapping that decides WHICH Claim this is."""
-    return {name: facts[name] for name in contract.identity_fields if name in facts}
+    return {
+        name: facts[name]
+        for name in (*contract.identity_fields, *contract.conditional_identity_fields)
+        if name in facts
+    }
 
 
 def witness_facts(
@@ -315,7 +340,11 @@ def overlap_between(
 # it, rather than a TED-shaped branch or a universal ontology of convergence.
 _PROCUREMENT_VALUE_CONTRAST_WITNESSED = PropositionConvergenceContract(
     contract_id="source-published-value-contrast-witnessed",
-    version="1.0.0",
+    # 1.1.0 -- Mission 1.81. A cohort keyed on a finer CPV level than the division
+    # carries that level and its shared code as CONDITIONAL identity: present, it
+    # is part of which proposition this is; absent, the proposition is the
+    # division's, exactly as every 1.0.0 claim already reads.
+    version="1.1.0",
     proposition_kind="source_published_classification_value_contrast_witnessed",
     claim_type=ClaimType.OBSERVED,
     # EVERGREEN because the proposition carries no period. H-37 is open: a TED
@@ -353,10 +382,12 @@ _PROCUREMENT_VALUE_CONTRAST_WITNESSED = PropositionConvergenceContract(
         # division legitimately carry different codes.
         "classification_codes",
     ),
+    conditional_identity_fields=("classification_level", "classification_level_code"),
     qualifying_signal_types=("procurement_value_contrast",),
     establishes=(
         "that the named source published, in the named resource, at least one bounded "
         "set of notices of the named class under the named classification division "
+        "(and, where the cohort was keyed finer, under the named level and code within it) "
         "whose stated amounts of the named type, scope and currency stand in the named "
         "relation"
     ),

@@ -93,7 +93,7 @@
   "contracts": [
     {
       "contract_id": "source-published-value-contrast-witnessed",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "proposition_kind": "source_published_classification_value_contrast_witnessed",
       "claim_type": "OBSERVED",
       "temporality": "EVERGREEN",
@@ -110,6 +110,10 @@
         "classification_division",
         "relation"
       ],
+      "conditional_identity_fields": [
+        "classification_level",
+        "classification_level_code"
+      ],
       "witness_fields": [
         "notice_ids",
         "classification_codes"
@@ -117,7 +121,7 @@
       "qualifying_signal_types": [
         "procurement_value_contrast"
       ],
-      "establishes": "that the named source published, in the named resource, at least one bounded set of notices of the named class under the named classification division whose stated amounts of the named type, scope and currency stand in the named relation",
+      "establishes": "that the named source published, in the named resource, at least one bounded set of notices of the named class under the named classification division (and, where the cohort was keyed finer, under the named level and code within it) whose stated amounts of the named type, scope and currency stand in the named relation",
       "does_not_establish": [
         "how many such sets exist",
         "what proportion of the division's notices they are",
@@ -143,6 +147,7 @@
         "audience_class",
         "direction"
       ],
+      "conditional_identity_fields": [],
       "witness_fields": [
         "period_label_from",
         "period_label_to"

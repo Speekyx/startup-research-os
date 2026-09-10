@@ -335,7 +335,17 @@ class TestTheRealRun:
         the artifact must move with it. Sufficiency stays a literal because it is
         frozen, and a test that read it from the module could not tell."""
         assert report()["procedures"]["subject_registry"] == SUBJECT_REGISTRY_VERSION
-        assert report()["procedures"]["grouping"] == GROUPING_PROCEDURE_VERSION
+        # Mission 1.81 re-pointed this line. The v1 artifact became a frozen historical
+        # record in Mission 1.78 (its gate hashes it), so it names the grouping version it
+        # was produced under, as a literal; the CURRENT preparation record is the one that
+        # must move with the module constant.
+        assert report()["procedures"]["grouping"] == "source-native-subject-grouping@1.2.0"
+        current = max(
+            DOCS.glob("opportunity-preparation-v*.json"),
+            key=lambda path: int(path.stem.rsplit("-v", 1)[1]),
+        )
+        latest = json.loads(current.read_text(encoding="utf-8"))
+        assert latest["procedures"]["grouping"] == GROUPING_PROCEDURE_VERSION
         assert report()["procedures"]["sufficiency"] == "opportunity-sufficiency@1.0.0"
 
 

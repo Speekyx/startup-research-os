@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.129
+Version: 1.130
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-10 (Sprint 1 / Mission 1.80)
+Last amended: 2026-09-10 (Sprint 1 / Mission 1.81)
 
 ---
 
@@ -13,6 +13,71 @@ Last amended: 2026-09-10 (Sprint 1 / Mission 1.80)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.130 - 2026-09-10 (Sprint 1 / Mission 1.81)
+
+**`PROCUREMENT_NARROWING_REQUIRES_DEEPER_CPV_GRAIN`.** The division `ted-eu:CPV-division:92`
+narrowed into CPV groups from held data alone, through the existing procedure with its grain
+as a required parameter: 13 Signals, 21 Claims, 26 Evidence rows, all scorable at the reviewed
+TED reliabilities, four formable group packets, and **none of them a second-Opportunity
+candidate**. **NARROWER IS NOT ACTIONABLE**: each group is a category one level down whose held
+cohort still spans several classes, and no held record carries a label at any level, so the
+held data cannot say what a group is. The outcome fits imperfectly and the record says so.
+
+**THE GRAIN IS WHAT THE HELD TOKEN SAYS IT IS.** Eight digits, no check digit, label null on
+all 608 entries; the vocabulary's own levels are adopted as `CPV_LEVELS` with the basis stated.
+**Mission 1.80's 'classes' were categories and its labels were recalled, not held**; corrected.
+
+**MEMBERSHIP IS DECIDED BY CODES, BEFORE ANY VALUE IS READ.** Primary/additional status is
+UNAVAILABLE and the model that needs it is refused; the extractor's own refusal of a notice
+across divisions is applied one level down (C4). 77 group-specified, 91 ambiguous, 9
+unspecified, summing to 177 without deduplication. **The division packet's ten rows came from
+89 single-division notices, never from 177.**
+
+**THE DERIVATION IS A RE-DERIVATION**, because every division Signal spans two to six groups
+and no child can carry a spread across groups. `cpv_grain` is REQUIRED, like `amount_type`,
+because the signal model refuses a declared parameter left unstated; the level rides in the
+scope, the sentence and the identity facts, and the convergence contract declares it
+**conditional identity**, so a group cohort never witnesses the division's proposition. Floor
+two, from the procedure; 10 cohorts refused at it; **no scope broadened to keep 0.5 and 0.55**,
+which apply because the scope carries neither division nor level. **The second run created
+nothing.**
+
+**THE INFORMATION-GAIN TEST SAYS DESCENT ALONE WILL NOT FIX IT.** Grains 4 and 5 dry-run to 14
+and 6 smaller cohorts of the same three dimensions; the structural too-broad test terminates
+only at leaf codes. The deciding input is the vocabulary's label, a documentation read this
+mission was not permitted.
+
+**Verification.** Probe of **44 deliberate violations, 44 caught, 0 escaped**, plus **6 of 6
+positive controls**; one case edited a historical record outside the restore set and was
+found, restored and re-run. Two defects found by running at grain 5 (an ancestor code refused;
+a shallower sibling read as an ancestor), neither touching the persisted rows, both tested.
+**3610 bare-python tests**; pytest suites green with the database unchanged; `ruff format
+--check`, `ruff check` and mypy through `uv`; contract generation `--check`; source catalog
+`--check`; all **60** CI gates, one of them new.
+
+**What moved.** Signals 33 to 46, Claims 44 to 65, revisions 45 to 66, Evidence 58 to 84, by
+deterministic derivation over held Mission 1.40 records; RawRecords, NormalizedRecords,
+assessments, independence groups, Opportunities, revisions, links, source reviews, scores and
+embeddings unchanged; v1 and v2 preparations byte-identical, v3 current; the docker revision
+2, Q1, Globalping and V2 untouched; ted-eu egress NOT_ASSESSED and not decided.
+
+New: `docs/data/procurement-subject-grain-narrowing-v1.json` and its generated `.md`,
+`docs/data/procurement-division-92-notice-audit-v1.json`,
+`docs/data/procurement-grain-derivation-run-v1.json` and `-rerun-v1.json`,
+`docs/data/opportunity-preparation-v3.json`,
+`infrastructure/scripts/derive_procurement_grain.py`,
+`infrastructure/scripts/render_procurement_subject_grain_narrowing.py` (CI gate 60), tests in
+nlp, claim-model, opportunity-engine and inferred-claim-evaluator, and
+`docs/reports/mission-1.81-report.md`.
+
+Changed: `procurement-value-contrast` 1.1.0 to 1.2.0 (`cpv_grain`, `CPV_LEVELS`);
+`SignalScope` gains `classification_level` and `classification_level_code`;
+`observed-signal-restatement` 1.4.1 to 1.5.0; `observed-convergent-witness` 1.0.0 to 1.1.0;
+the procurement convergence contract 1.0.0 to 1.1.0 with `conditional_identity_fields`;
+`source-native-subject-grouping` 1.2.0 to 1.3.0; `observation-scope-rules` 1.0.0 to 1.1.0
+(one `CPV-group` rule); `run_opportunity_preparation.py` writes v3; `docs/CLAUDE.md` 1.130 to
+1.131; `.github/workflows/ci.yml` gains one gate.
 
 ## 1.129 - 2026-09-10 (Sprint 1 / Mission 1.80)
 

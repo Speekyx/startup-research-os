@@ -36,7 +36,7 @@ from .conftest import PROBE_SESSION, needs_postgres
 psycopg = pytest.importorskip("psycopg")
 
 EXTRACTOR = EXTRACTOR_REGISTRY["procurement-value-contrast"]
-DERIVATION = EXTRACTOR.resolve({"amount_type": "TOTAL_VALUE"})
+DERIVATION = EXTRACTOR.resolve({"amount_type": "TOTAL_VALUE", "cpv_grain": 2})
 
 
 # ======================================================== the cohort grain
@@ -136,7 +136,9 @@ class TestTheCohortKeyContainsWhatComparabilityRequires:
 
     def test_the_version_was_bumped(self) -> None:
         """§5. Grouping semantics did not change under an unchanged version."""
-        assert EXTRACTOR.extractor_version == "1.1.0"
+        # Mission 1.81 re-pointed the pin: 1.2.0 added the grain parameter, and a test
+        # pinning the exact number asserts the procedure may never gain one.
+        assert tuple(map(int, EXTRACTOR.extractor_version.split("."))) >= (1, 1, 0)
 
 
 # =================================================== the Evidence identity

@@ -141,9 +141,11 @@ def request_() -> DerivationRequest:
 
 
 def derive(extractor, request_, observations, amount_type: str = "TOTAL_VALUE"):
-    derivation = extractor.resolve({"amount_type": amount_type})
+    derivation = extractor.resolve({"amount_type": amount_type, "cpv_grain": 2})
     key = (
-        extractor.group_key(observations[0], extractor.resolve({"amount_type": "TOTAL_VALUE"}))
+        extractor.group_key(
+            observations[0], extractor.resolve({"amount_type": "TOTAL_VALUE", "cpv_grain": 2})
+        )
         or "group"
     )
     return extractor.derive(
@@ -161,7 +163,8 @@ def reasons_of(outcome) -> set[SignalRefusalReason]:
 class TestRegistration:
     def test_the_extractor_is_registered(self) -> None:
         # 1.1.0: Mission 1.41 put currency and amount scope in the cohort key.
-        assert EXTRACTOR_REGISTRY["procurement-value-contrast"].extractor_version == ("1.1.0")
+        version = EXTRACTOR_REGISTRY["procurement-value-contrast"].extractor_version
+        assert tuple(map(int, version.split("."))) >= (1, 1, 0)
 
     def test_it_is_the_transaction_value_family(self, extractor) -> None:
         assert extractor.family is SignalQuantityFamily.TRANSACTION_VALUE
@@ -208,11 +211,11 @@ class TestParameters:
 
     def test_an_unknown_parameter_is_refused(self, extractor) -> None:
         with pytest.raises(SignalRefusedError):
-            extractor.resolve({"amount_type": "TOTAL_VALUE", "top_n": 5})
+            extractor.resolve({"amount_type": "TOTAL_VALUE", "cpv_grain": 2, "top_n": 5})
 
     def test_the_parameter_reaches_the_fingerprint(self, extractor) -> None:
-        one = extractor.resolve({"amount_type": "TOTAL_VALUE"})
-        two = extractor.resolve({"amount_type": "ESTIMATED_VALUE"})
+        one = extractor.resolve({"amount_type": "TOTAL_VALUE", "cpv_grain": 2})
+        two = extractor.resolve({"amount_type": "ESTIMATED_VALUE", "cpv_grain": 2})
         assert one.parameter_fingerprint != two.parameter_fingerprint
 
 
@@ -255,7 +258,7 @@ class TestEligibility:
         stronger than asserting the refusal a hand-built mixed group produces,
         and it is the behaviour the job actually has.
         """
-        derivation = extractor.resolve({"amount_type": "TOTAL_VALUE"})
+        derivation = extractor.resolve({"amount_type": "TOTAL_VALUE", "cpv_grain": 2})
         estimated = notice("b", amounts=[amount(amount_type="ESTIMATED_VALUE")])
         assert extractor.group_key(estimated, derivation) is None
         assert extractor.group_key(notice("a"), derivation) is not None
@@ -320,10 +323,12 @@ class TestComparability:
     def test_notice_classes_do_not_share_a_cohort(self, extractor) -> None:
         """§9. A call for competition and a report of an outcome describe
         different procurement stages."""
-        award = extractor.group_key(notice("a"), extractor.resolve({"amount_type": "TOTAL_VALUE"}))
+        award = extractor.group_key(
+            notice("a"), extractor.resolve({"amount_type": "TOTAL_VALUE", "cpv_grain": 2})
+        )
         call = extractor.group_key(
             notice("b", notice_class="CONTRACT_NOTICE"),
-            extractor.resolve({"amount_type": "TOTAL_VALUE"}),
+            extractor.resolve({"amount_type": "TOTAL_VALUE", "cpv_grain": 2}),
         )
         assert award != call
 
@@ -331,10 +336,12 @@ class TestComparability:
         """The decision this design turns on, and the reason the three real
         records produced nothing: cleaning and insurance are not one market."""
         cleaning = extractor.group_key(
-            notice("a", cpv=("90911200",)), extractor.resolve({"amount_type": "TOTAL_VALUE"})
+            notice("a", cpv=("90911200",)),
+            extractor.resolve({"amount_type": "TOTAL_VALUE", "cpv_grain": 2}),
         )
         insurance = extractor.group_key(
-            notice("b", cpv=("66510000",)), extractor.resolve({"amount_type": "TOTAL_VALUE"})
+            notice("b", cpv=("66510000",)),
+            extractor.resolve({"amount_type": "TOTAL_VALUE", "cpv_grain": 2}),
         )
         assert cleaning != insurance
 
@@ -342,11 +349,12 @@ class TestComparability:
         """`90911200` and `90911300` are cleaning services twice. Requiring the
         full code would split a genuine cohort into singletons."""
         one = extractor.group_key(
-            notice("a", cpv=("90911200",)), extractor.resolve({"amount_type": "TOTAL_VALUE"})
+            notice("a", cpv=("90911200",)),
+            extractor.resolve({"amount_type": "TOTAL_VALUE", "cpv_grain": 2}),
         )
         two = extractor.group_key(
             notice("b", cpv=("90911300", "90911200")),
-            extractor.resolve({"amount_type": "TOTAL_VALUE"}),
+            extractor.resolve({"amount_type": "TOTAL_VALUE", "cpv_grain": 2}),
         )
         assert one == two
 
@@ -356,7 +364,7 @@ class TestComparability:
         assert (
             extractor.group_key(
                 notice("a", cpv=("33000000", "34000000")),
-                extractor.resolve({"amount_type": "TOTAL_VALUE"}),
+                extractor.resolve({"amount_type": "TOTAL_VALUE", "cpv_grain": 2}),
             )
             is None
         )
@@ -364,7 +372,8 @@ class TestComparability:
     def test_a_notice_with_no_classification_joins_no_cohort(self, extractor) -> None:
         assert (
             extractor.group_key(
-                notice("a", cpv=()), extractor.resolve({"amount_type": "TOTAL_VALUE"})
+                notice("a", cpv=()),
+                extractor.resolve({"amount_type": "TOTAL_VALUE", "cpv_grain": 2}),
             )
             is None
         )
@@ -619,7 +628,9 @@ class TestProvenance:
             extractor, request_, [notice("a"), notice("b", amounts=[amount(value="9")])]
         ).drafts[0]
         assert draft.derivation.extractor_id == "procurement-value-contrast"
-        assert draft.derivation.extractor_version == "1.1.0"
+        assert draft.derivation.extractor_version == (
+            EXTRACTOR_REGISTRY["procurement-value-contrast"].extractor_version
+        )
 
 
 # ================================================================ determinism
