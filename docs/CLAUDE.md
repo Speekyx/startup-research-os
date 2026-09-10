@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.128
-Last amended: 2026-09-10 (Sprint 1 / Mission 1.78)
+Version: 1.129
+Last amended: 2026-09-10 (Sprint 1 / Mission 1.79)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.129 | 2026-09-10 | **SECOND_OPPORTUNITY_EXPLORATION_IS_NEXT_BOUNDED_MOVE: six linked rows became scorable and the docker hypothesis did not become one word stronger.** **SCORING-READY IS NOT SCORING** five times over: not calibrated, not an authorisation, not independence, not commercial validation. **SIX SCORABLE ROWS ARE ONE SHAPE** -- one source, one family, one counting dimension, one provenance shape -- and the second counting dimension sits on the one row that is not scorable. **THE LEFTOVER ROW IS NOT THE NEXT ROW TO FIX**: the Stack Exchange bottleneck is BOTH, and *questions were published* changes no decision whatever its reliability; the seven uncited rows add no dimension and no provenance; **more Wikimedia is dominated**; Q1 stays PARKED and Globalping's qualification is not independence. **THE TRADE-OFF IS STATED**: the commercial dimension for docker is the most decision-relevant and the least reachable, while `ted-eu:CPV-division:92` reaches three commercial counting dimensions from held, reviewed, scorable rows with one governance question in front of synthesis -- **an executable move that opens a second hypothesis defeats a theoretically better move that cannot start**. Marginal value of the first Opportunity LOW, exploration value MEDIUM, sunk effort counted for nothing. **THE GATE RECOMPUTES DOMINANCE AND CORRECTED THE AUTHOR TWICE.** Probe **46 of 46 caught, 0 escaped, 4 of 4 controls**. **3560 tests**, 58 gates, 0 canonical mutations, 0 external calls, 0 model calls. `mission-1.79-report.md`. |
 | 1.128 | 2026-09-10 | **OPPORTUNITY_REVISION_2_RECONCILED_TO_CURRENT_SCORABILITY: the same hypothesis over the same seven rows, with the one stale sentence replaced and nothing stronger.** **A HISTORICAL REVISION MAY REMAIN TRUE ABOUT WHAT THE SYSTEM BELIEVED THEN; A NEW REVISION MUST BE TRUE ABOUT WHAT IT CAN ESTABLISH NOW.** Revision 1 (2026-09-02) said *no reviewed reliability applies*; the assessments arrived on 09-03 and 09-04 and 1.77 made the path resolve late, so one limitation and half of one reasoning sentence are stale and everything else is carried verbatim -- **the seven statement fields byte-identical, model_version NULL, no model called**, because **reliability changes whether a row may enter aggregation, not what it establishes**. **LINKS ARE REVISION-SPECIFIC**, so revision 2 carries its own seven with today's eligibility (six scoring at 0.65, one context), and **the seven packet rows created after revision 1 are recorded as requiring a semantic judgement, not linked**. **HISTORY KEPT WITHOUT A POINTER ON IT**: the v1 preparation hashes identically and the v2 record points back at it. **THE CURRENT POINTER IS THE INDEX**, highest revision wins, both readers tested relationally. **SCORING READINESS PER THE CONTRACT**: `scoring_eligible_rows >= 2`, a packet property that authorises nothing -- and **two sentences written when the value could only be one thing were found and corrected**, a docstring and a reason string, with no rule changed. Probe **47 of 47 caught, 0 escaped, 4 of 4 controls**, one inverted. **3539 tests**, 57 gates, revisions 1 to 2, links 7 to 14, every other counter identical, 0 external calls, 0 model calls. `mission-1.78-report.md`. |
 | 1.127 | 2026-09-10 | **RELIABILITY_APPLICABILITY_ROOT_CAUSE_REVISED: the resource was in the lineage all along, and what never resolved was the Opportunity path.** `acquisition.raw_records.provenance.resource_id` is on **325 of 325** records, written from the AUTHORIZED dataset before any socket, and one join through `nlp.signal_inputs` answers *which registered resource produced this measurement* for every Evidence row -- **58 of 58 reach exactly one**. **1.76 READ THE WRONG LAYER**: the resource is deliberately not a proposition fact for the kinds that converge (ADR-035, ADR-036), because **a proposition fact says WHAT is asserted and the resource says WHICH measurement produced the witness**; its narrower sentence (no resource_id COLUMN) is true and its generalisation (absent from the whole lineage) is false, and its proposed repair is the hard-coded source exception this mission forbids. **THE DEFECT WAS THE CONSUMER'S**: both Opportunity runners read `e.reliability`, NULL by design (ADR-026 Decision 2), and derived the status from it -- no scope, no resolver, every row of every source NON_SCORABLE, TED included; **the scorability report was a report about a column**. Both now resolve late through one named rule that takes no resource parameter and refuses an ambiguous lineage. **Same resolver, same four candidates: 12 rows resolve via claim facts, 48 via lineage** -- detailed 18/18 at 0.65, convergent 18/18 at 0.6, TED 12/12 unchanged, Stack Exchange NO_APPLICABLE both ways. Scorable 0 to 48, Opportunity-linked 0 to 6, **scorable is not scored**; read-only aggregation identical to pass-through on 34 of 34 with one provenance group each. **WHY NOT REPAIRED**: it would name Wikimedia and a scope binding, neither of which was broken, and the seventeen criteria are recorded as met anyway. **THE STALE LIMITATION IS REPORTED, NOT EDITED**: OPPORTUNITY_LIMITATION_RECONCILIATION_REQUIRED, revision 1 untouched, three predecessors pointed forward and still carrying their sentences. Probe **65 of 65 caught, 0 escaped, 5 of 5 controls** -- **two escapes closed** (a widened resolver signature the gate asked the import about, and a runner that no longer parsed crashing the gate), **two controls INVERTED**. **3517 tests**, 287 pytest, 56 gates, 0 external calls, 0 canonical mutations. `mission-1.77-report.md`. |
 | 1.126 | 2026-09-08 | **V2_VALID_FOR_REFUTATION_BUT_NOT_INDEPENDENT_SUPPORT: the operator chose the universal model, it can be made truthful, and the support half is out of reach.** **THE DILEMMA IS THE FINDING** -- a class member is ABSTRACT or CONCRETE and neither works: abstract members are apparatus-independent and **SAMPLED rather than decided by one observation**, so no finite observation establishes 'for all v in V'; concrete members are decided and the only ones either apparatus occupies are the ones the APPARATUS defines, which is the frame guard. **AND IT IS NOT A TOPOLOGY PROBLEM** -- more operator vantages sweep more members and still sample each, so **outcome D is refused because it would send the next mission to build an apparatus that does not fix it**. **A UNIVERSAL OVER A SINGLETON IS V1**, the model the operator rejected, so any class of cardinality one collapses V2 into it. **THE FRAME CAN BE DEFINED INDEPENDENTLY; WHAT THAT COSTS IS SUPPORT** -- so outcome C is refused as false. **THE TRUTHFUL SUPPORT MODEL IS THE UNATTAINABLE ONE**: U1 is selected and recorded as unreachable, U3 refused because 'some evidence in favour of all' is not evidence for a universal, and **U2 refused for the goal because pooling member observations across apparatuses is ONE derivation over a POOLED set -- the opposite of the duplication independence requires**. **REFUTATION IS SOUND AND TWO REFUTATIONS AGREE**, so it never reaches SUPPORTS-versus-CONTRADICTS. **GLOBALPING BEING QUALIFIED DOES NOT SOLVE THE INDEPENDENT-SUPPORT CALIBRATION GOAL**, and the record says so rather than hiding it. Probe **129 of 129 caught, 0 escaped, 4 of 4 controls** -- **one escape closed** where 'successfully' slipped a word-boundary pattern, and **two controls INVERTED** so the READY outcome stays expressible for a pair that could reach it. **3484 tests**, 55 gates, 0 measurements, 0 canonical mutations. `mission-1.76.7-report.md`. |
@@ -1854,6 +1855,30 @@ commercial or buyer or WTP evidence, a new decision-relevant dimension, held-but
 including the seven packet rows, and parked Q1 only if a deterministic construct has emerged;
 measure information gain rather than assuming the remaining non-scorable row or the attractive
 dimension. Not scoring, not calibration. **Mission 1.79 was not started.**
+
+
+**THE NEXT MOVE IS A SECOND OPPORTUNITY, IN 1.129 (Mission 1.79).**
+
+    scorable linked rows 6 / 7   sources 1   families 1   counting dimensions 1   provenance shapes 1
+    packet scoring-ready true   calibrated false   persist authorised false   independence false
+    frontier M2, M3, M6   dominated M1, M4, M5   vetoed M1, M2, M4, M5   selected M6
+    first Opportunity marginal value LOW   second-Opportunity exploration value MEDIUM
+
+- **SCORING-READY IS NOT SCORING**, and the five things it is not are five gates.
+- **SIX SCORABLE ROWS ARE ONE SHAPE.** Rows are not kinds, and kinds are not observations.
+- **THE LEFTOVER ROW IS NOT THE NEXT ROW TO FIX.** A weak proposition made scorable is a weak
+  proposition with a number on it.
+- **MORE OF ONE SHAPE IS DOMINATED**, whoever publishes it.
+- **THE FIRST OPPORTUNITY IS NOT ENTITLED TO THE BUDGET**, and sunk effort is not evidence of
+  future information value.
+- **A GATE THAT RECOMPUTES DOMINANCE CORRECTS ITS AUTHOR**, which is what it is for.
+
+**Next: Mission 1.80 -- Second Opportunity Candidate Selection V1.** Held data first, rank the
+held non-docker packets as candidates for a bounded Opportunity preparation, select exactly one
+candidate subject, record its blockers (for the leading one, ted-eu egress NOT_ASSESSED and a
+CATEGORY-scope subject), and STOP before any model synthesis and before any Opportunity is
+created. Not a score, not a rank, not an egress decision taken on the operator's behalf.
+**Mission 1.80 was not started.**
 
 
 

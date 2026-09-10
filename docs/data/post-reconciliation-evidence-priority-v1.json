@@ -1,0 +1,759 @@
+{
+  "$comment": "Mission 1.79. What is the highest-information bounded move for SROS now that six linked Wikimedia rows are genuinely scorable? A read-only, ordinal prioritization over held data. No number is a score, no candidate was executed, nothing canonical moved. Authoritative where paired with the generated Markdown; the gate recomputes the dominance, the dimension matrix and the counters from the reconciliation and preparation records.",
+  "record_version": "1.0.0",
+  "mission": "1.79",
+  "recorded_at": "2026-09-10",
+  "record_kind": "post_reconciliation_evidence_priority",
+  "start_commit": "170dd64",
+  "branch": "sprint-1/mission-1.79",
+  "migration_head": "0036_grant_use_profile_vocabulary",
+  "measured_from": {
+    "reconciliation_record": "docs/data/opportunity-reliability-reconciliation-v1.json",
+    "preparation_record": "docs/data/opportunity-preparation-v2.json",
+    "database": "live, read only: current reader returns revision 2 (8739e7ab), historical reader returns revision 1 (efca07a9)"
+  },
+  "primary_outcome": "SECOND_OPPORTUNITY_EXPLORATION_IS_NEXT_BOUNDED_MOVE",
+  "selected_next_move": "M6_SECOND_OPPORTUNITY",
+  "recommended_next_mission": {
+    "id": "1.80",
+    "title": "Second Opportunity Candidate Selection V1",
+    "shape": "held data first: rank the held non-docker packets as candidates for a bounded Opportunity preparation, select exactly one candidate subject, record its blockers (for the leading candidate, ted-eu external_model_transmission NOT_ASSESSED and a CATEGORY-scope subject), and STOP before any model synthesis and before any Opportunity is created",
+    "must_not": [
+      "create Opportunity #2",
+      "call a model",
+      "acquire data",
+      "decide the ted-eu egress question on the operator's behalf",
+      "score or rank"
+    ]
+  },
+  "current_state": {
+    "opportunity_id": "06113a8b-a83d-423d-8046-18f87d7dbc01",
+    "current_revision_id": "8739e7ab-940b-408c-a5e8-7f6675d1597c",
+    "current_revision_number": 2,
+    "historical_revision_id": "efca07a9-b283-473a-887b-a2ae82989bbe",
+    "total_evidence": 58,
+    "scorable_evidence": 48,
+    "linked_evidence": 7,
+    "scorable_linked_evidence": 6,
+    "non_scorable_linked_evidence": 1,
+    "reliability_assessments": 4,
+    "independence_groups": 0,
+    "scores_table": "ABSENT",
+    "embeddings": 0,
+    "opportunities": 1,
+    "opportunity_revisions": 2,
+    "opportunity_evidence_links": 14
+  },
+  "scoring_ready_is_not_production_scoring": {
+    "PACKET_SCORING_READY": true,
+    "packet_scoring_ready_contract": "SufficiencyResult.scoring_ready = scoring_eligible_rows >= 2, a property of the packet (12 of 14 docker rows are scoring-eligible)",
+    "AGGREGATION_PROFILE_CALIBRATED": false,
+    "aggregation_profile": "REFERENCE_PROFILE_V1 UNCALIBRATED",
+    "PERSISTED_SCORING_AUTHORIZED": false,
+    "INDEPENDENCE_ESTABLISHED": false,
+    "COMMERCIAL_VALIDATION_ESTABLISHED": false,
+    "why_kept_apart": "a packet with enough scorable rows to aggregate over is not a calibrated profile, is not an authorisation to persist or rank, is not independent evidence and is not a commercial fact; each of these is a different question with its own gate, and the reconciled limitation says so in the revision itself"
+  },
+  "current_linked_evidence": [
+    {
+      "evidence_id": "16a8c39c-d72a-4252-9c67-7be2165e9cae",
+      "claim_id": "6e4c3f21-8881-4453-b4ff-af1b47c464b5",
+      "source_id": "stack-exchange",
+      "resource_id": "questions/stackoverflow",
+      "proposition_kind": "community_site_published_questions_carrying_tag",
+      "signal_type_id": "community_question_volume",
+      "dimensions": [
+        "PROBLEM_OR_NEED"
+      ],
+      "counting_dimensions": [
+        "PROBLEM_OR_NEED"
+      ],
+      "directness": 1.0,
+      "relevance": 1.0,
+      "extraction_confidence": 1.0,
+      "freshness": "1.0 (EVERGREEN: an OBSERVED restatement of a publication does not decay)",
+      "reliability_applicability": "NO_APPLICABLE_ASSESSMENT",
+      "resolved_reliability": null,
+      "scorable": false,
+      "independence_state": "UNKNOWN",
+      "provenance_group": "one, unknown provenance",
+      "establishes": "88 questions carrying the site's own tag 'docker' were published on Stack Overflow within a bounded window (2024-03-01 to 2024-03-05); a person filed a public question, i.e. some need or gap at the moment of asking",
+      "does_not_establish": "how many people (author identity never acquired); that any two questions share a problem (relation PARKED, Mission 1.27); recurrence; severity; dissatisfaction; a solution gap (absence of evidence of a solution is not evidence of its absence); anything commercial"
+    },
+    {
+      "evidence_id": "13a5eadb-977d-4de0-9c35-d0ff53442074",
+      "claim_id": "565bbcb7-9e70-418b-9a8e-a1549b23a230",
+      "source_id": "wikimedia-pageviews",
+      "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+      "proposition_kind": "platform_counted_content_request_change",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "counting_dimensions": [
+        "AUDIENCE_OR_USAGE"
+      ],
+      "directness": 1.0,
+      "relevance": 1.0,
+      "extraction_confidence": 1.0,
+      "freshness": "1.0 (EVERGREEN)",
+      "reliability_applicability": "RESOLVED",
+      "resolved_reliability": 0.65,
+      "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+      "scorable": true,
+      "independence_state": "UNKNOWN",
+      "provenance_group": "one, unknown provenance, shared publisher, pipeline and counting rule with the other five",
+      "establishes": "the platform counted +36 requests for the Docker_(software) article between 2024-03-05 and 2024-03-06 under its heuristic 'user' requester class",
+      "does_not_establish": "readers (a request is not a reader); a trend (adjacent-day movement inside one stream, and the calendar does not cancel); demand, adoption, buyers, money, or anything about the people making the requests"
+    },
+    {
+      "evidence_id": "1b93db71-eaed-45c5-a2fa-9e4edea7bc49",
+      "claim_id": "05cac6f6-17f4-4008-b68b-9787bb4ac774",
+      "source_id": "wikimedia-pageviews",
+      "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+      "proposition_kind": "platform_counted_content_request_change",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "counting_dimensions": [
+        "AUDIENCE_OR_USAGE"
+      ],
+      "directness": 1.0,
+      "relevance": 1.0,
+      "extraction_confidence": 1.0,
+      "freshness": "1.0 (EVERGREEN)",
+      "reliability_applicability": "RESOLVED",
+      "resolved_reliability": 0.65,
+      "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+      "scorable": true,
+      "independence_state": "UNKNOWN",
+      "provenance_group": "one, unknown provenance",
+      "establishes": "-21 requests, 2024-03-04 to 2024-03-05, same article and class",
+      "does_not_establish": "as above; a decrease, and two of the six are decreases"
+    },
+    {
+      "evidence_id": "487f62c6-2fcf-4790-9773-6e99214d0003",
+      "claim_id": "c58949e4-d8a7-4636-9c53-3bbac3b7b7c0",
+      "source_id": "wikimedia-pageviews",
+      "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+      "proposition_kind": "platform_counted_content_request_change",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "counting_dimensions": [
+        "AUDIENCE_OR_USAGE"
+      ],
+      "directness": 1.0,
+      "relevance": 1.0,
+      "extraction_confidence": 1.0,
+      "freshness": "1.0 (EVERGREEN)",
+      "reliability_applicability": "RESOLVED",
+      "resolved_reliability": 0.65,
+      "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+      "scorable": true,
+      "independence_state": "UNKNOWN",
+      "provenance_group": "one, unknown provenance",
+      "establishes": "+55 requests, 2024-03-06 to 2024-03-07",
+      "does_not_establish": "as above"
+    },
+    {
+      "evidence_id": "516182ff-0122-4d13-9d8a-92bb38065a75",
+      "claim_id": "b3d0d2d0-daa0-4854-a4c0-a31684841b03",
+      "source_id": "wikimedia-pageviews",
+      "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+      "proposition_kind": "platform_counted_content_request_change",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "counting_dimensions": [
+        "AUDIENCE_OR_USAGE"
+      ],
+      "directness": 1.0,
+      "relevance": 1.0,
+      "extraction_confidence": 1.0,
+      "freshness": "1.0 (EVERGREEN)",
+      "reliability_applicability": "RESOLVED",
+      "resolved_reliability": 0.65,
+      "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+      "scorable": true,
+      "independence_state": "UNKNOWN",
+      "provenance_group": "one, unknown provenance",
+      "establishes": "+735 requests, 2024-03-03 to 2024-03-04 (a Sunday to a Monday)",
+      "does_not_establish": "as above; the calendar does not cancel"
+    },
+    {
+      "evidence_id": "6cf92ad6-77ed-4126-b356-41e65856430b",
+      "claim_id": "459e9fec-3ad1-4955-81c6-2aa0f2179bc5",
+      "source_id": "wikimedia-pageviews",
+      "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+      "proposition_kind": "platform_counted_content_request_change",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "counting_dimensions": [
+        "AUDIENCE_OR_USAGE"
+      ],
+      "directness": 1.0,
+      "relevance": 1.0,
+      "extraction_confidence": 1.0,
+      "freshness": "1.0 (EVERGREEN)",
+      "reliability_applicability": "RESOLVED",
+      "resolved_reliability": 0.65,
+      "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+      "scorable": true,
+      "independence_state": "UNKNOWN",
+      "provenance_group": "one, unknown provenance",
+      "establishes": "-627 requests, 2024-03-01 to 2024-03-02 (a Friday to a Saturday)",
+      "does_not_establish": "as above"
+    },
+    {
+      "evidence_id": "f1e0b7a4-d570-429a-91a4-fadff84cdce1",
+      "claim_id": "1829e497-f582-4017-b88d-4d277375ccf7",
+      "source_id": "wikimedia-pageviews",
+      "resource_id": "metrics/pageviews/per-article/en.wikipedia.org",
+      "proposition_kind": "platform_counted_content_request_change",
+      "signal_type_id": "content_request_change",
+      "dimensions": [
+        "AUDIENCE_OR_USAGE",
+        "TREND_OR_CHANGE"
+      ],
+      "counting_dimensions": [
+        "AUDIENCE_OR_USAGE"
+      ],
+      "directness": 1.0,
+      "relevance": 1.0,
+      "extraction_confidence": 1.0,
+      "freshness": "1.0 (EVERGREEN)",
+      "reliability_applicability": "RESOLVED",
+      "resolved_reliability": 0.65,
+      "assessment_id": "e2419f13-c031-44d5-837c-c56a867baf34",
+      "scorable": true,
+      "independence_state": "UNKNOWN",
+      "provenance_group": "one, unknown provenance",
+      "establishes": "+13 requests, 2024-03-02 to 2024-03-03",
+      "does_not_establish": "as above"
+    }
+  ],
+  "scorable_shape": {
+    "SCORABLE_ROWS": 6,
+    "SCORABLE_SOURCES": 1,
+    "SCORABLE_SOURCE_FAMILIES": 1,
+    "scorable_source_families": [
+      "knowledge"
+    ],
+    "SCORABLE_COUNTING_DIMENSIONS": 1,
+    "scorable_counting_dimensions": [
+      "AUDIENCE_OR_USAGE"
+    ],
+    "SCORABLE_PROVENANCE_GROUPS": 1,
+    "scorable_provenance_groups_note": "six rows on six Claims, each Claim with exactly one support group of UNKNOWN provenance, all six sharing one publisher, one pipeline and one counting rule; one effective provenance shape, not six observations",
+    "SCORABLE_DIMENSION_DIVERSITY": false,
+    "why": "six scorable rows carry one counting dimension from one source in one family; the second counting dimension the Opportunity has (PROBLEM_OR_NEED) sits on the one row that is not scorable"
+  },
+  "dimension_matrix": {
+    "taxonomy": "opportunity-evidence-dimensions@1.0.0 (14 members); the brief's names are mapped where they differ and marked NOT_APPLICABLE where the taxonomy has no member",
+    "counting_rule": "TREND_OR_CHANGE never counts toward diversity: every Evidence row here is a derivation over two or more observations, so every row carries change (opportunity-sufficiency@1.0.0)",
+    "rows": [
+      {
+        "dimension": "AUDIENCE_OR_USAGE",
+        "classification": "SUPPORTED_SCORABLE",
+        "basis": "six Wikimedia rows at 0.65; a request count is attention toward an article, not readers, not users"
+      },
+      {
+        "dimension": "PROBLEM_OR_NEED",
+        "classification": "SUPPORTED_CONTEXT_ONLY",
+        "basis": "one Stack Exchange row, NO_APPLICABLE_ASSESSMENT; 88 published questions, once each"
+      },
+      {
+        "dimension": "TREND_OR_CHANGE",
+        "classification": "SUPPORTED_SCORABLE",
+        "basis": "carried by the six Wikimedia rows and excluded from diversity by the sufficiency rule"
+      },
+      {
+        "dimension": "RECURRENCE_OR_FREQUENCY",
+        "classification": "UNSUPPORTED_INFERENCE",
+        "basis": "88 questions are not 88 people and not one problem 88 times; author identity was never acquired and the same-problem relation is PARKED"
+      },
+      {
+        "dimension": "SEVERITY_OR_COST (brief name)",
+        "classification": "NOT_APPLICABLE",
+        "basis": "no taxonomy member; nearest is SOLUTION_DISSATISFACTION, which is ABSENT"
+      },
+      {
+        "dimension": "SOLUTION_GAP",
+        "classification": "UNSUPPORTED_INFERENCE",
+        "basis": "an unaccepted question is an absence of evidence of a solution, which the dimension's own never_means refuses (Mission 1.32)"
+      },
+      {
+        "dimension": "SOLUTION_DISSATISFACTION",
+        "classification": "ABSENT",
+        "basis": "no held row evaluates a product"
+      },
+      {
+        "dimension": "COMMERCIAL_ACTIVITY (brief name) -> MARKET_ACTIVITY",
+        "classification": "ABSENT",
+        "basis": "no docker-subject row; TED rows carry it for CPV divisions 90 and 92, which are different subjects"
+      },
+      {
+        "dimension": "BUYER_OR_ACTOR_IDENTITY (brief name) -> BUYER_OR_BUDGET_EXISTENCE",
+        "classification": "ABSENT",
+        "basis": "target_actor is UNKNOWN_NOT_SUPPORTED on both revisions"
+      },
+      {
+        "dimension": "BUDGET_OR_SPEND (brief name) -> ECONOMIC_VALUE",
+        "classification": "ABSENT",
+        "basis": "no docker-subject row"
+      },
+      {
+        "dimension": "WILLINGNESS_TO_PAY",
+        "classification": "ABSENT",
+        "basis": "no registered source supports it at any grain (Mission 1.33)"
+      },
+      {
+        "dimension": "MARKET_ACTIVITY",
+        "classification": "ABSENT",
+        "basis": "see COMMERCIAL_ACTIVITY"
+      },
+      {
+        "dimension": "ADOPTION (brief name)",
+        "classification": "NOT_APPLICABLE",
+        "basis": "no taxonomy member; AUDIENCE_OR_USAGE is the nearest and a request is not adoption"
+      },
+      {
+        "dimension": "COMPETITIVE_SUPPLY",
+        "classification": "ABSENT",
+        "basis": "the best-grain source for it (github) is NOT_RECOMMENDED on its acceptable-use policy (Mission 1.33)"
+      },
+      {
+        "dimension": "DISTRIBUTION_SIGNAL",
+        "classification": "ABSENT",
+        "basis": "no held row"
+      },
+      {
+        "dimension": "REGULATORY_OR_STRUCTURAL_DRIVER",
+        "classification": "ABSENT",
+        "basis": "no held row"
+      },
+      {
+        "dimension": "FEASIBILITY_SIGNAL",
+        "classification": "ABSENT",
+        "basis": "no held row"
+      }
+    ],
+    "supported_scorable": [
+      "AUDIENCE_OR_USAGE",
+      "TREND_OR_CHANGE"
+    ],
+    "supported_context_only": [
+      "PROBLEM_OR_NEED"
+    ]
+  },
+  "candidates": [
+    {
+      "candidate_id": "M1_STACK_EXCHANGE_RELIABILITY",
+      "title": "Make the linked Stack Exchange PROBLEM_OR_NEED row scorable",
+      "status": "EXECUTABLE_AFTER_OPERATOR_JUDGMENT",
+      "current_blocker": "the operator answered NO on both Stack Exchange scopes in Mission 1.36.1 because the publisher's methodology documentation is unreachable from this environment (robots policy) and the held basis was judged insufficient for an accountable review; the only route is operator-supplied documentation followed by a new HUMAN_REVIEW decision",
+      "unresolved_scope": {
+        "source_id": "stack-exchange",
+        "resource_id": "questions/stackoverflow",
+        "record_kind_id": "community_question",
+        "claim_type": "OBSERVED",
+        "proposition_kind": "community_site_published_questions_carrying_tag"
+      },
+      "review_packet_exists": true,
+      "review_packet": "docs/data/docker-evidence-reliability-review-packet-v1.json (scope 1 of 3)",
+      "documentary_basis_held": "insufficient by the operator's own decision; no new first-party document has been retrieved since",
+      "new_external_documentation_required": true,
+      "new_human_review_required": true,
+      "new_information_if_successful": "PROBLEM_OR_NEED becomes SCORABLE on one row; the docker packet gains a second scorable counting dimension",
+      "what_it_would_not_establish": "recurrence, severity, dissatisfaction, a solution gap, how many people, or anything commercial; the proposition stays 'questions were published'",
+      "dimension_gain": "NONE",
+      "scorability_gain": "LOW",
+      "source_diversity_gain": "NONE",
+      "independence_gain": "NONE",
+      "commercial_gain": "NONE",
+      "semantic_gain": "NONE",
+      "decision_impact": "LOW",
+      "execution_cost": "MEDIUM",
+      "external_dependency": "HUMAN",
+      "overinterpretation_risk": "MEDIUM",
+      "bottleneck": "BOTH",
+      "dominance_result": "VETOED",
+      "veto_reason": "makes a weak proposition scorable without strengthening its meaning; a scorable count of questions still says nothing a product decision turns on",
+      "recommended_next_mission_if_selected": "an operator reliability-review preparation mission over the Stack Exchange scope, with the documents the operator can supply; no value assigned here"
+    },
+    {
+      "candidate_id": "M2_PROBLEM_STRENGTH",
+      "title": "Recurrence, severity or shared-problem evidence for the docker need",
+      "status": "RESEARCH_REQUIRED_BEFORE_EXECUTION",
+      "current_blocker": "the deterministic route to repeated-problem identity is CLOSED (Missions 1.20 and 1.21: a diagnostic names the envelope, not the problem); the semantic route is the PARKED problem-family classifier (Mission 1.27); explicit-issue-identity sources are RESTRICTED on retrieved terms (Mission 1.22)",
+      "is_the_greater_problem_non_scorability_or_weakness": "WEAKNESS: the held PROBLEM_OR_NEED proposition is 'questions were published', and making it scorable makes that numerically usable without making it say more",
+      "new_information_if_successful": "RECURRENCE_OR_FREQUENCY and possibly SOLUTION_DISSATISFACTION for the docker subject, the dimensions the hypothesis most needs",
+      "dimension_gain": "HIGH",
+      "scorability_gain": "LOW",
+      "source_diversity_gain": "MEDIUM",
+      "independence_gain": "NONE",
+      "commercial_gain": "NONE",
+      "semantic_gain": "HIGH",
+      "decision_impact": "HIGH",
+      "execution_cost": "HIGH",
+      "external_dependency": "ARCHITECTURE",
+      "overinterpretation_risk": "HIGH",
+      "dominance_result": "VETOED",
+      "veto_reason": "depends on a parked semantic relation or on a source class every registered instance of which is RESTRICTED; no bounded acquisition design can be written until one of those moves",
+      "recommended_next_mission_if_selected": "a bounded acquisition-design mission targeting recurrence or severity evidence, which cannot start until the problem-family relation is unparked or an explicit-issue-identity source is approved"
+    },
+    {
+      "candidate_id": "M3_COMMERCIAL_BUYER_WTP",
+      "title": "A subject-matched commercial, buyer, budget or willingness-to-pay dimension for docker",
+      "status": "EXECUTABLE_AFTER_GOVERNANCE_WORK",
+      "current_blocker": "no held docker-subject row carries MARKET_ACTIVITY, BUYER_OR_BUDGET_EXISTENCE, ECONOMIC_VALUE or WILLINGNESS_TO_PAY; the sources that carry commercial semantics observe CATEGORY scopes (ted-eu CPV divisions) and no reviewed scope relation binds docker to any category (Mission 1.35, registry empty); the product-grain sources are RESTRICTED or NOT_RECOMMENDED (Mission 1.33); WILLINGNESS_TO_PAY has no supporting source at any grain",
+      "held_subject_matched_commercial_evidence": false,
+      "cross_subject_transfer_used": false,
+      "ted_attached_to_docker": false,
+      "separately": {
+        "COMMERCIAL_ACTIVITY": "ABSENT for docker; held for CPV 90 and 92 only",
+        "BUYER_IDENTITY": "ABSENT for docker; TED establishes buyer existence for a procurement category, not a product's buyer",
+        "BUDGET_OR_SPEND": "ABSENT for docker; a TED total is a published value including options and renewals, not spend",
+        "WILLINGNESS_TO_PAY": "ABSENT everywhere; the taxonomy's own never_means refuses a listed price, a budget line and a contract total"
+      },
+      "new_information_if_successful": "the dimension the docker hypothesis lacks most, and the one that would change a build decision",
+      "dimension_gain": "HIGH",
+      "scorability_gain": "MEDIUM",
+      "source_diversity_gain": "HIGH",
+      "independence_gain": "POTENTIAL",
+      "commercial_gain": "HIGH",
+      "semantic_gain": "MEDIUM",
+      "decision_impact": "CRITICAL",
+      "execution_cost": "HIGH",
+      "external_dependency": "ACQUISITION",
+      "overinterpretation_risk": "MEDIUM",
+      "dominance_result": "FRONTIER",
+      "veto_reason": "",
+      "why_not_selected": "on the Pareto frontier for information and the wrong side of it for reachability: it needs a governance decision on a product-grain source, or a reviewed scope relation the last search found no authority for, and then an acquisition; Mission 1.33 found the grain mismatch architectural rather than a matter of effort. M6 reaches commercial dimensions from held data with one governance question instead of two plus an acquisition",
+      "recommended_next_mission_if_selected": "a bounded source or construct selection mission for subject-matched commercial, buyer, budget or WTP evidence; nothing acquired automatically"
+    },
+    {
+      "candidate_id": "M4_HELD_UNUSED_EVIDENCE",
+      "title": "Admit the seven docker packet rows revision 1 did not cite",
+      "status": "EXECUTABLE_AFTER_OPERATOR_JUDGMENT",
+      "current_blocker": "relevance to the hypothesis is a synthesis judgement; a reconciliation does not make it and a deterministic rule that admitted every packet row would be 'link everything because it exists'",
+      "rows": [
+        {
+          "evidence_ids": [
+            "17ab3887",
+            "261994f7",
+            "637d5ff5",
+            "9c502023",
+            "c2afb9fe",
+            "faab3b4e"
+          ],
+          "source_id": "wikimedia-pageviews",
+          "proposition_kind": "platform_counted_content_request_change_witnessed",
+          "why_not_linked": "created 2026-09-04, after revision 1; convergent existentials re-reading the same six measurements",
+          "deterministically_decidable": "membership yes (same subject, same article); relevance no",
+          "new_dimension": false,
+          "duplicates_dimension": "AUDIENCE_OR_USAGE, TREND_OR_CHANGE",
+          "new_provenance": false,
+          "changes_scorability": "no: scorable already at 0.6, same family, same pipeline; more rows of one shape",
+          "human_judgement_required": true
+        },
+        {
+          "evidence_ids": [
+            "17735944"
+          ],
+          "source_id": "stack-exchange",
+          "proposition_kind": "community_site_questions_without_accepted_answer",
+          "why_not_linked": "created 2026-09-02 20:27, after revision 1; maps to NO dimension by the recorded decision of Mission 1.32 (an unaccepted answer is one person's non-action)",
+          "deterministically_decidable": "membership yes; relevance no",
+          "new_dimension": false,
+          "duplicates_dimension": "none, and adds none",
+          "new_provenance": false,
+          "changes_scorability": "no: NO_APPLICABLE_ASSESSMENT",
+          "human_judgement_required": true
+        }
+      ],
+      "new_information_if_successful": "none that the hypothesis could use: six more witnesses of one publisher's counting rule and one zero-dimension row",
+      "dimension_gain": "NONE",
+      "scorability_gain": "NONE",
+      "source_diversity_gain": "NONE",
+      "independence_gain": "NONE",
+      "commercial_gain": "NONE",
+      "semantic_gain": "NONE",
+      "decision_impact": "LOW",
+      "execution_cost": "LOW",
+      "external_dependency": "HUMAN",
+      "overinterpretation_risk": "MEDIUM",
+      "dominance_result": "VETOED",
+      "veto_reason": "adds rows but no new decision-relevant dimension, and repeats one source and provenance shape; Wikimedia saturation, see the special test",
+      "recommended_next_mission_if_selected": "a semantic admission review over exactly these seven rows"
+    },
+    {
+      "candidate_id": "M5_Q1_INDEPENDENCE",
+      "title": "Reopen the parked Q1 apparatus arc for independence or contradiction",
+      "status": "PARKED",
+      "current_blocker": "Mission 1.76.7: under V2 an abstract-member class is sampled rather than decided by one observation, so dual independent SUPPORT is not reachable and the contradiction case is not reachable; what would change it is a construct whose predicate is decided rather than sampled, and nothing merged since 1.76.7 (Missions 1.77 and 1.78) produced one",
+      "artifacts_inspected_since_1_76_7": [
+        "docs/data/wikimedia-measurement-scope-binding-v1.json",
+        "docs/data/reliability-resource-binding-diagnostic-v1.json",
+        "docs/data/opportunity-reliability-reconciliation-v1.json",
+        "docs/data/opportunity-preparation-v2.json"
+      ],
+      "deciding_predicate_emerged": false,
+      "preserved": {
+        "QUANTITY_CLASS_SELECTED": "Q1",
+        "CLASS_SELECTED": true,
+        "CONSTRUCT_SELECTED": false,
+        "CORPUS_FROZEN": false,
+        "RUN_AUTHORIZED": false,
+        "MEASUREMENTS": 0,
+        "globalping": "12 PASS / 0 PARTIAL / 0 FAIL, COUNTERPART_RESOLVED",
+        "V2": "V2_VALID_FOR_REFUTATION_BUT_NOT_INDEPENDENT_SUPPORT"
+      },
+      "globalping_qualification_solves_independence": false,
+      "new_information_if_successful": "the first ESTABLISHED independence group in the repository, if a deciding construct existed; it does not",
+      "dimension_gain": "NONE",
+      "scorability_gain": "NONE",
+      "source_diversity_gain": "HIGH",
+      "independence_gain": "POTENTIAL",
+      "commercial_gain": "NONE",
+      "semantic_gain": "LOW",
+      "decision_impact": "MEDIUM",
+      "execution_cost": "HIGH",
+      "external_dependency": "ARCHITECTURE",
+      "overinterpretation_risk": "HIGH",
+      "dominance_result": "VETOED",
+      "veto_reason": "continues infrastructure work without a defined information payoff: no held artifact reveals a predicate that decides rather than samples, and Q1 stays PARKED, reusable",
+      "recommended_next_mission_if_selected": "only the smallest construct-validation mission, and only once a deciding construct has emerged from existing artifacts"
+    },
+    {
+      "candidate_id": "M6_SECOND_OPPORTUNITY",
+      "title": "Select a second Opportunity candidate from held data",
+      "status": "EXECUTABLE_NOW_HELD_DATA_ONLY",
+      "current_blocker": "none for the selection; the leading candidate's later synthesis is blocked by ted-eu external_model_transmission NOT_ASSESSED under local-private-research-v1 (H-39, an open question an operator can close, recorded by Mission 1.29 as costing a re-acceptance)",
+      "held_candidates": [
+        {
+          "subject": "ted-eu:CPV-division:92",
+          "packet_id": "d754770d",
+          "rows": 10,
+          "scorable": 10,
+          "reliability": "0.5 and 0.55, HUMAN_REVIEW",
+          "counting_dimensions": [
+            "BUYER_OR_BUDGET_EXISTENCE",
+            "ECONOMIC_VALUE",
+            "MARKET_ACTIVITY"
+          ],
+          "source_families": [
+            "public_procurement"
+          ],
+          "sufficiency": "HYPOTHESIS_FORMABLE, scoring-ready per contract",
+          "external_synthesis": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS (ted-eu egress NOT_ASSESSED)",
+          "subject_scope": "CATEGORY (a CPV division), not a product",
+          "product_relevance": "UNCERTAIN: a procurement category is a market of public buyers, and whether a digital product opportunity sits in it is exactly the question a bounded preparation would ask",
+          "commercial_relevance": "HIGH",
+          "semantic_specificity": "MEDIUM: 'Recreational, cultural and sporting services' procurement, bounded windows, EUR cohorts",
+          "unresolved_governance": "ted-eu egress",
+          "new_work_required": "LOW for selection; one operator governance decision before synthesis",
+          "verdict": "LEADING"
+        },
+        {
+          "subject": "ted-eu:CPV-division:90",
+          "packet_id": "5513f09e",
+          "rows": 2,
+          "scorable": 2,
+          "counting_dimensions": [
+            "BUYER_OR_BUDGET_EXISTENCE",
+            "ECONOMIC_VALUE",
+            "MARKET_ACTIVITY"
+          ],
+          "sufficiency": "HYPOTHESIS_FORMABLE",
+          "external_synthesis": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+          "verdict": "SERIOUS_BUT_THINNER: the same shape as division 92 on two rows"
+        },
+        {
+          "subject": "subject:kubernetes",
+          "packet_id": "87446bf1",
+          "rows": 13,
+          "scorable": 12,
+          "counting_dimensions": [
+            "AUDIENCE_OR_USAGE"
+          ],
+          "sufficiency": "HYPOTHESIS_INSUFFICIENT_EVIDENCE",
+          "verdict": "DOMINATED: the docker shape minus its second dimension; more rows of one publisher's counting rule"
+        },
+        {
+          "subject": "subject:podman",
+          "packet_id": "9c9d3eb5",
+          "rows": 12,
+          "scorable": 12,
+          "counting_dimensions": [
+            "AUDIENCE_OR_USAGE"
+          ],
+          "sufficiency": "HYPOTHESIS_INSUFFICIENT_EVIDENCE",
+          "verdict": "DOMINATED: as kubernetes"
+        },
+        {
+          "subject": "world-bank and gdelt packets",
+          "rows": "2, 2, 1, 1, 1",
+          "counting_dimensions": [],
+          "verdict": "NOT_A_CANDIDATE: no dimension"
+        }
+      ],
+      "not_selected_for_row_count": true,
+      "new_information_if_successful": "a second bounded hypothesis over a different evidence shape (three commercial counting dimensions, a different source family, reviewed reliabilities on every row), which is the first thing SROS could compare against its first hypothesis; and a measured answer to whether a category-scope subject can carry a product opportunity at all",
+      "dimension_gain": "HIGH",
+      "scorability_gain": "HIGH",
+      "source_diversity_gain": "HIGH",
+      "independence_gain": "NONE",
+      "commercial_gain": "HIGH",
+      "semantic_gain": "MEDIUM",
+      "decision_impact": "HIGH",
+      "execution_cost": "LOW",
+      "external_dependency": "NONE",
+      "overinterpretation_risk": "MEDIUM",
+      "dominance_result": "SELECTED",
+      "veto_reason": "",
+      "recommended_next_mission_if_selected": "Mission 1.80 -- Second Opportunity Candidate Selection V1"
+    }
+  ],
+  "ordinal_scales": {
+    "gain": [
+      "NONE",
+      "LOW",
+      "MEDIUM",
+      "HIGH"
+    ],
+    "independence": [
+      "NONE",
+      "POTENTIAL",
+      "ESTABLISHED_IF_EXECUTED"
+    ],
+    "impact": [
+      "LOW",
+      "MEDIUM",
+      "HIGH",
+      "CRITICAL"
+    ],
+    "cost": [
+      "LOW",
+      "MEDIUM",
+      "HIGH"
+    ],
+    "risk": [
+      "LOW",
+      "MEDIUM",
+      "HIGH"
+    ],
+    "dependency_rank": [
+      "NONE",
+      "HUMAN",
+      "PROVIDER",
+      "ACQUISITION",
+      "ARCHITECTURE"
+    ]
+  },
+  "dominance": {
+    "rule": "X dominates Y when X is at least as good as Y on every gain field, decision impact, execution cost, external dependency and overinterpretation risk, and strictly better on at least one; dominance is a VETO on the dominated candidate, never a selection rule; vetoes from section 10 are applied independently and first",
+    "PARETO_FRONTIER": [
+      "M2_PROBLEM_STRENGTH",
+      "M3_COMMERCIAL_BUYER_WTP",
+      "M6_SECOND_OPPORTUNITY"
+    ],
+    "DOMINATED_CANDIDATES": [
+      "M1_STACK_EXCHANGE_RELIABILITY",
+      "M4_HELD_UNUSED_EVIDENCE",
+      "M5_Q1_INDEPENDENCE"
+    ],
+    "dominated_by": {
+      "M1_STACK_EXCHANGE_RELIABILITY": "M6_SECOND_OPPORTUNITY",
+      "M4_HELD_UNUSED_EVIDENCE": "M6_SECOND_OPPORTUNITY",
+      "M5_Q1_INDEPENDENCE": "M3_COMMERCIAL_BUYER_WTP"
+    },
+    "VETOED_CANDIDATES": [
+      "M1_STACK_EXCHANGE_RELIABILITY",
+      "M2_PROBLEM_STRENGTH",
+      "M4_HELD_UNUSED_EVIDENCE",
+      "M5_Q1_INDEPENDENCE"
+    ],
+    "selection_trade_off": "M3 carries the single most decision-relevant dimension for the existing hypothesis and is the only frontier candidate other than the winner. It loses on reachability, not on value: it needs a governance decision on a product-grain source or a reviewed category relation nobody found an authority for, and then an acquisition, against a grain mismatch Mission 1.33 found architectural. M6 reaches three commercial dimensions from rows already held, reviewed and scorable, with one governance question in front of synthesis and none in front of selection. An executable move that opens a second hypothesis defeats a theoretically better move that cannot start.",
+    "frontier_note": "M2 is on the frontier and vetoed: nothing dominates its dimension and semantic gains, and it depends on a parked semantic relation. Dominance and veto are applied independently; a vetoed frontier candidate cannot be selected, and the gate computed this list, not the author. M5 is dominated by M3 on every field and strictly on impact, risk and dependency, which the author had not noticed and the gate did."
+  },
+  "special_tests": {
+    "stack_exchange": {
+      "A_new_capability_if_assessed": "PROBLEM_OR_NEED becomes a scorable counting dimension on one row, so the docker packet would carry two scorable counting dimensions instead of one; aggregation over that Claim would produce a number",
+      "B_still_unsupported_after": "recurrence, severity, dissatisfaction, solution gap, actor identity, buyer, budget, willingness to pay, competitive supply, distribution, feasibility; independence still UNKNOWN; one publisher per dimension",
+      "C_changes_the_product_decision_more_than_a_commercial_or_problem_strength_dimension": false,
+      "D_bottleneck": "BOTH",
+      "why_both": "MISSING_RELIABILITY is real (NO_APPLICABLE_ASSESSMENT, declined by the operator for want of reachable documentation) and WEAK_PROPOSITION_INFORMATION is the larger half: 'questions were published' is the proposition whatever its reliability, and a scorable version of it changes no decision",
+      "remaining_non_scorable_row_implies_next_fix": false
+    },
+    "wikimedia_saturation": {
+      "current_scorable_wikimedia_rows": 6,
+      "additional_same_shape_rows_held_but_uncited": 6,
+      "same_source_family": true,
+      "independence_unestablished": true,
+      "same_dimensions": true,
+      "aggregation_single_group_equivalence": "one support group per Claim, so the full aggregator equals reliability pass-through (Mission 1.43, re-measured in 1.77 on 34 of 34 Claims)",
+      "more_wikimedia_dominated": true,
+      "why": "another witness of one publisher's counting rule raises observed volume and not evidence strength; it cannot add a dimension, a family, a provenance group or a falsifier"
+    },
+    "second_opportunity": {
+      "CURRENT_OPPORTUNITY_MARGINAL_INFORMATION_VALUE": "LOW",
+      "SECOND_OPPORTUNITY_EXPLORATION_VALUE": "MEDIUM",
+      "why_low": "every move that would add a dimension the docker hypothesis lacks is blocked by an operator judgement, a parked relation, a restricted source class or an architectural grain mismatch; every move that is executable adds rows to one saturated shape",
+      "why_medium_not_high": "the leading held candidate is a CATEGORY-scope procurement subject whose product relevance is uncertain and whose synthesis is behind one egress decision; the other held candidates are the docker shape with fewer dimensions",
+      "diminishing_returns": true,
+      "sunk_effort_counted_as_value": false
+    }
+  },
+  "parked_states_preserved": {
+    "q1": {
+      "QUANTITY_CLASS_SELECTED": "Q1",
+      "CLASS_SELECTED": true,
+      "CONSTRUCT_SELECTED": false,
+      "RUN_AUTHORIZED": false
+    },
+    "globalping": {
+      "PASS": 12,
+      "PARTIAL": 0,
+      "FAIL": 0,
+      "verdict": "COUNTERPART_RESOLVED"
+    },
+    "v2": {
+      "primary_outcome": "V2_VALID_FOR_REFUTATION_BUT_NOT_INDEPENDENT_SUPPORT",
+      "corpus_frozen": false,
+      "measurements_executed": 0
+    },
+    "changed_by_this_mission": false
+  },
+  "mission_accounting": {
+    "api_calls": 0,
+    "research_data_http_calls": 0,
+    "dataset_downloads": 0,
+    "mailbox_reads": 0,
+    "emails_sent": 0,
+    "globalping_calls": 0,
+    "target_measurements": 0,
+    "source_contacts": 0,
+    "accounts_or_trials_or_purchases": 0,
+    "model_calls": 0,
+    "embeddings": 0,
+    "reliability_assessments_created": 0,
+    "evidence_created": 0,
+    "opportunity_revisions_created": 0,
+    "opportunities_created": 0,
+    "independence_groups_created": 0,
+    "scores_persisted": 0,
+    "canonical_research_mutations": 0
+  }
+}

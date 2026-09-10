@@ -672,6 +672,16 @@ jobs:
       - name: Globalping residual closure matches its records
         run: uv run python infrastructure/scripts/render_globalping_residuals.py --check
 
+      # Mission 1.79. The next bounded move, over held data. The gate refuses: six scorable
+      # rows read as six observations; scoring-ready read as calibrated, authorised,
+      # independent or validated; a dimension supported by no linked row, or recurrence read
+      # off a question count; TED attached to docker; a candidate winning while dominated or
+      # vetoed, by being easy, or by being the leftover row; a candidate adding rows without a
+      # dimension or a source that is not vetoed; Globalping qualification read as
+      # independence; a moved Q1 or Globalping record; and any canonical mutation.
+      - name: The post-reconciliation priority matches its records
+        run: uv run python infrastructure/scripts/render_post_reconciliation_priority.py --check
+
       # Mission 1.78. Revision 2 of the docker Opportunity, by supersession. The gate refuses:
       # revision 1 changed in any field; the historical preparation record rewritten; the
       # cited Evidence set widened beyond revision 1's links; a row scorable without a
