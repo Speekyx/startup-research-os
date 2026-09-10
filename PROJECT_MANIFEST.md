@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.131
+Version: 1.132
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-10 (Sprint 1 / Mission 1.82)
+Last amended: 2026-09-10 (Sprint 1 / Mission 1.83)
 
 ---
 
@@ -13,6 +13,102 @@ Last amended: 2026-09-10 (Sprint 1 / Mission 1.82)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.132 - 2026-09-10 (Sprint 1 / Mission 1.83)
+
+**`TED_EGRESS_REVIEW_READY_FOR_OPERATOR_DECISION`.** The selected candidate cannot reach synthesis
+because one field in one source review reads `NOT_ASSESSED`. This mission asked what the held
+authority establishes about changing it, reconstructed the exact object that would leave, and
+stopped: **no source review appended, no approval recorded, no model called, zero canonical
+mutation**. What it produced is a frozen decision packet, `TED-EGRESS-OPPSYNTH-V1`, digest
+`f27c3446...`, whose id, version and hash an operator approval would have to cite.
+
+**THE BLOCKER IS SMALLER THAN IT LOOKS, AND THREE OF FOUR GATES ARE ALREADY OPEN.** ADR-033 keeps
+four questions apart and all four were read rather than the one the brief named: a model may READ
+this material (`model_processing` PERMITTED, scoped by condition 9 to inference, extraction,
+classification and structured analysis); the deployment permits this CLASS of egress
+(`external_model_egress` = PERMITTED_TO_APPROVED_PROVIDERS); the provider posture is APPROVED on
+its own contract text; and whether the material may LEAVE was never asked. **The live gate refuses
+for exactly one reason and its own words end "an open question an operator can close, not a
+prohibition."**
+
+**WHAT WOULD LEAVE IS MEASURED, NOT DESCRIBED.** The packet was rebuilt through the current
+deterministic preparation path and the bytes were produced by the PRODUCTION serializer rather
+than by a copy; the decision object handed to it was a measurement fixture, never persisted and
+never transmitted, and the real gate was evaluated separately and refuses. 6 Evidence rows, 5
+Claim statements, **3604 characters, 0 representation violations, 0 personal-data fields**, nine
+allowlisted keys and 28 leaf values, with no email, telephone, postal code, URL, notice identifier
+or free-text body anywhere in it. **The payload carries the CODE and not the label**, which is
+Mission 1.82's own rule applied.
+
+**THE CHARACTER COUNT WAS RECOMPUTED AND IT CHANGED.** Mission 1.82 recorded 3252 by measuring a
+STAND-IN payload: a placeholder in place of the packet's real dimension-bound sentence, serialized
+compactly where the production function indents and sorts. Neither difference changes what would
+be sent, because nothing was sent; both change the number. **The earlier record was not rewritten**
+-- it says what it measured, and this record is the pointer.
+
+**SEVEN HELD DOCUMENTS, ZERO NEW FETCHES, AND THE REASON IS MECHANICAL.** Commission Decision
+2011/833/EU was read in full in Mission 1.15.2 and re-retrieved on 2026-09-04, and the held text
+contains **zero** occurrences of *processor*, *transmit*, *transfer*, *sub-licence* and
+*automated*; its two occurrences of *third part* are the Article 2(2)(b) intellectual-property
+exclusion. **The instrument enumerates no acts at all**, which is why H-34 closed PERMITTED and
+why a further first-party page cannot address an act the framework does not speak in.
+
+**FOUR ARGUMENTS TOWARD PERMISSION, EACH INSUFFICIENT ALONE.** Reuse is purpose-framed, so method
+is not a bar -- and a new COUNTERPARTY is not method. The publisher's written reply of 2026-09-04
+permits commercial reuse and says retrieval method is irrelevant -- and **that sentence answers
+ACQUISITION**, so reading it as covering egress would answer this question with a sentence not
+addressed to it. The object carries no TED text -- and a bounded representation lowers exposure
+without saying the act is within the grant. A processor is not the public -- and *not obviously
+engaged* is the honest phrasing rather than a finding.
+
+**WHAT DEFEATS MECHANICAL CLOSURE IS THE OPERATOR'S OWN SENTENCE.** The current v3 acceptance
+reads *"I accept the residual database-right exposure FOR BOUNDED QUERIES through the authorised
+official routes."* A transmission to a third party is not a bounded query and reaches a new
+counterparty with an exposure that is still open. Mission 1.29 made this argument against the v2
+acceptance; **the 2026-09-04 reply made the residual SMALLER and left the acceptance's scope
+exactly where its author wrote it**, and this repository may not widen a human acceptance on the
+operator's behalf. The second residual is that moving from an act-free grant to a permission is a
+READING, and a reading is judgement.
+
+**NOTHING WAS WIDENED IN PASSING.** Training, fine-tuning and embeddings keep the states they
+have, and the record says explicitly that an inference decision widens none of them. Redistribution
+and customer-facing access stay NOT_PERMITTED, and the commercial profile is recorded as out of
+scope rather than left to be inferred. **Attribution was neither injected nor dropped**: the
+Article 6(2)(a) obligation is real and already met, because every Claim statement names the source
+in its own wording, and adding boilerplate would change the bytes an approval would name.
+
+**THE PACKET FREEZES THE QUESTION AND DEFAULTS NO ANSWER.** Its digest binds the source, profile,
+activity, purpose, subject, representation schema and digest, the eight negative states, the
+conditions, the held authority, the open questions and the option NAMES, and excludes itself, the
+date and the option prose. The provider condition names a **property** rather than a vendor. Three
+options, each with its cost stated, and **the cost of permitting is written down rather than
+discovered later**: appending a review version orphans the v3 verifications, including the
+HUMAN_CONFIRMATION acceptance, so TED becomes ineligible until the operator records it again.
+
+**Verification.** Probe of **42 deliberate violations, 42 caught, 0 escaped**, plus **7 of 7
+positive controls** -- and **the controls found a real defect in this mission's own gate**, which
+demanded a residual unconditionally and so could not express a mechanically settled permission.
+Repaired in BOTH directions, which is stricter than what it replaced. Two further checks were
+restructured beforehand so that a representation-contract violation and unexpected personal data
+stay expressible as the outcomes they are. **3696 bare-python tests**; 3393 pytest tests with the
+database unchanged across 29 tenant tables; `ruff format --check`, `ruff check` and mypy through
+`uv`; contract generation `--check`; source catalog `--check`; all **62** CI gates, one of them
+new.
+
+**What moved.** Nothing canonical. RawRecords 325, NormalizedRecords 325, Signals 60, Claims 91,
+revisions 92, Evidence 112, assessments 4, independence groups 0, Opportunities 1, revisions 2,
+links 14, source reviews 70, scores ABSENT, embeddings 0, all identical before and after. Zero
+registry rows written, zero research-data fetches, zero documentation fetches, zero bytes
+transmitted to any external model. The selected candidate, the Evidence semantics, Q1, Globalping
+and V2 are untouched, and `external_model_transmission` reads NOT_ASSESSED after exactly as before.
+
+New: `docs/data/ted-selected-candidate-egress-review-v1.json` and its generated `.md`,
+`docs/data/ted-selected-candidate-egress-decision-packet-v1.json` and its generated `.md`,
+`infrastructure/scripts/render_ted_selected_candidate_egress.py` (CI gate 62), tests in
+inferred-claim-evaluator, and `docs/reports/mission-1.83-report.md`.
+
+Changed: `docs/CLAUDE.md` 1.132 to 1.133; `.github/workflows/ci.yml` gains one gate.
 
 ## 1.131 - 2026-09-10 (Sprint 1 / Mission 1.82)
 

@@ -476,3 +476,22 @@ class TestTheRerunIsGovernanceOnly:
         assert totals["eligible_scoring"] == 0
         assert totals["eligible_context"] == totals["evidence_rows_inspected"]
         assert totals["ineligible"] == 0
+
+
+def test_the_egress_review_names_the_production_allowlist():
+    """Mission 1.83. The reviewed payload keys are the ones the code actually permits.
+
+    The egress review lives in another package's suite, which cannot import this one, so the
+    identity is asserted here where the constant already is. A key added to the allowlist
+    without the review being re-measured turns this red rather than passing quietly.
+    """
+    record = json.loads(
+        (
+            pathlib.Path(__file__).resolve().parents[4]
+            / "docs"
+            / "data"
+            / "ted-selected-candidate-egress-review-v1.json"
+        ).read_text(encoding="utf-8")
+    )
+    reviewed = set(record["representation"]["TOP_LEVEL_KEYS"])
+    assert reviewed == set(PERMITTED_PAYLOAD_KEYS)
