@@ -82,4 +82,9 @@ def test_the_group_scheme_has_a_reviewed_category_rule():
     assert rule is not None
     assert rule.scope_type is SubjectScopeType.CATEGORY
     assert rules.rule_for("ted-eu", "CPV-division").scope_type is SubjectScopeType.CATEGORY
-    assert rules.rule_for("ted-eu", "CPV-class") is None
+    # Mission 1.82 registered the class rule, so a test asserting its absence asserted that
+    # the vocabulary may never gain a level. What this line defends is the match rule: a
+    # scheme is looked up by EXACT equality, so an unregistered one resolves to nothing.
+    assert rules.rule_for("ted-eu", "CPV-class").scope_type is SubjectScopeType.CATEGORY
+    assert rules.rule_for("ted-eu", "CPV-category") is None
+    assert rules.rule_for("ted-eu", "CPV") is None

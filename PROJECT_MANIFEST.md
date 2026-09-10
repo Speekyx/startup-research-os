@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.130
+Version: 1.131
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-10 (Sprint 1 / Mission 1.81)
+Last amended: 2026-09-10 (Sprint 1 / Mission 1.82)
 
 ---
 
@@ -13,6 +13,97 @@ Last amended: 2026-09-10 (Sprint 1 / Mission 1.81)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.131 - 2026-09-10 (Sprint 1 / Mission 1.82)
+
+**`PROCUREMENT_SEMANTIC_SUBJECT_CANDIDATE_SELECTED`.** Mission 1.81 ended holding four formable
+group packets it could not judge, because all 608 held CPV entries carry a null label and a bare
+code cannot be actionable or not. The vocabulary's own register supplied the missing input, one
+concept per fetch, over a universe of codes **frozen and committed before the first retrieval**;
+the class grain was then derived over every frozen class the procedure admits, all 27 candidates
+were re-selected, and one class came out carrying no veto: **`ted-eu:CPV-class:9261`, "Sports
+facilities operation services"**.
+
+**THE FREEZE CAME FIRST, AND IT COST SOMETHING.** `freeze_cpv_lookup_universe.py` asks the
+production membership rule itself -- the extractor's own `_cpv_prefix` at grains 3 and 4 -- which
+prefixes form a cohort over the 177 held division-92 notices, writes the answer with no labels in
+it, and hashes it: 6 groups, 12 classes, digest `4ace701c...`, committed as `34d85f6` before any
+fetch. **Zero codes were added after labels were read and zero were removed.** Three class codes
+present in the held population are outside the universe, because each appears only alongside
+another class code and forms no cohort under `C4_REFUSE_AMBIGUOUS_NOTICE`; they are **recorded
+with their counts rather than fetched**, because widening a freeze after reading labels is the
+move the freeze exists to stop.
+
+**EIGHTEEN DOCUMENTS, EIGHTEEN LABELS, NO SUMMARIES.** Each concept fetched on its own from
+`publications.europa.eu/resource/authority/cpv/cpv/<code>`, the Mission 1.40 pattern. The register
+answers in RDF/XML, so **Mission 1.63's rule that a retrieval summary is not a document is met by
+the medium rather than by care**; every raw response is hashed and all eighteen digests differ.
+Every retrieved `skos:broader` agrees with the mechanical code hierarchy, recorded as a
+**corroboration** and nothing more: the hierarchy is still established by the CPV token's digits,
+and no label was inferred from a neighbouring code. 19 documentation fetches, **0 research-data
+fetches, 0 third-party fallbacks**.
+
+**THE CLASS GRAIN WAS DERIVED WHOLE AND JUDGED AFTERWARDS.** 29 cohorts keyed at grain 4, 14
+derived, 15 refused at `MINIMUM_COHORT_MEMBERS = 2` re-read from the extractor. **Every frozen
+class the procedure admits was derived**, including the two-row ones and the classes whose labels
+name nothing a product could enter, so no measurement exists because a label read well. 14 Signals
+became 14 detailed Claims and 12 witnessed ones, the Mission 1.39 convergence contract operating
+at a grain it had not reached. All 28 Evidence rows resolve onto the two existing TED assessments,
+because **a reliability scope carries no classification level at all**; no assessment was created.
+Three non-EUR cohorts were refused at the floor rather than converted, and the second run persisted
+nothing.
+
+**SEMANTIC COHERENCE ENTERED AS A DOMINANCE FIELD, NOT A TIE-BREAK.** Mission 1.81's frontier could
+not separate two equally broad, equally specific categories, and what distinguishes them is what
+their labels mean. The three-point scale asks what a subject MEANS and is **not attractiveness, not
+trend, not perceived profitability, not apparent software potential**. Re-evaluated with their
+labels, two groups reach the exploratory gate, two are disjunctions their own official wording
+exposes, and two are coherent and carry no cohort -- so **Outcome C is half true and was refused as
+the primary**: group grain did become actionable for two groups, and deeper narrowing was not
+thereby unnecessary.
+
+**A CLASS DOES NOT WIN FOR BEING NARROWER.** Narrowing 926 to 9261 costs **zero** Evidence rows,
+keeps the same three counting dimensions and the same two reviewed reliabilities, and buys a label
+naming one activity -- the only condition under which a class defeats its group. Narrowing 921 to
+9211 costs two of six rows and buys less precision than it costs, so neither wins. Against its
+equally broad sibling 9252, 9261 wins **on coherence alone**. Small cohorts are recorded honestly:
+procedural validity and evidential breadth stated as two facts, **no minimum N invented**.
+
+**WHAT WAS NOT CLAIMED.** That operating sports facilities is a good market, that its buyers want
+software, that anybody would pay, that the domain is underserved, or that a product belongs there
+at all. Overinterpretation risk HIGH, product relevance `SEMANTICALLY_COHERENT_BUT_PRODUCT_LINK_UNKNOWN`,
+the bounded representation assembled in memory at 3252 characters with 0 violations and **not
+sent**. `ted-eu` egress stays NOT_ASSESSED and is not decided here. Grain 5 was not descended to.
+
+**Verification.** Probe of **54 deliberate violations, 54 caught, 0 escaped**, plus **7 of 7
+positive controls**. It found two defects: an escaped currency case, where the gate held a
+`currency_semantics` block and never read it, now checked against the cohorts themselves; and a
+crash on an unresolved label, now a first-class state where a candidate may carry no label and may
+not adopt an exploratory hypothesis. One control was **withdrawn rather than fixed**, because it
+tried to make a group win by writing a better ordinal and the gate recomputes that field from the
+packet. **3647 bare-python tests**; pytest suites green with the database unchanged across 29
+tenant tables; `ruff format --check`, `ruff check` and mypy through `uv`; contract generation
+`--check`; source catalog `--check`; all **61** CI gates, one of them new.
+
+**What moved.** Signals 46 to 60, Claims 65 to 91, revisions 66 to 92, Evidence 84 to 112, by
+deterministic class-grain re-derivation over held records; RawRecords, NormalizedRecords,
+assessments, independence groups, Opportunities, revisions, links, source reviews, scores and
+embeddings unchanged; v1, v2 and v3 preparations byte-identical, v4 current with 21 packets and 14
+formable; the docker revision 2, Q1, Globalping and V2 untouched.
+
+New: `docs/data/cpv-semantic-lookup-universe-v1.json`,
+`docs/data/cpv-held-subject-vocabulary-v1.json` and its generated `.md`,
+`docs/data/procurement-subject-semantics-class-grain-v1.json` and its generated `.md`,
+`docs/data/procurement-class-grain-derivation-run-v1.json` and `-rerun-v1.json`,
+`docs/data/opportunity-preparation-v4.json`,
+`infrastructure/scripts/freeze_cpv_lookup_universe.py`,
+`infrastructure/scripts/render_procurement_subject_semantics.py` (CI gate 61), tests in
+inferred-claim-evaluator, and `docs/reports/mission-1.82-report.md`.
+
+Changed: `derive_procurement_grain.py` writes per-grain run records and takes `--tag`;
+`run_opportunity_preparation.py` writes v4; `observation-scope-rules` 1.1.0 to 1.2.0 (one
+`CPV-class` rule); one Mission 1.81 assertion of an absence re-pointed to the rule that now
+exists; `docs/CLAUDE.md` 1.131 to 1.132; `.github/workflows/ci.yml` gains one gate.
 
 ## 1.130 - 2026-09-10 (Sprint 1 / Mission 1.81)
 

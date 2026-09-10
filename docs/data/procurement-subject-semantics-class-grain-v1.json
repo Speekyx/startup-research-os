@@ -1,0 +1,3855 @@
+{
+  "$comment": "Mission 1.82. The semantic input Mission 1.81 proved missing, retrieved for exactly the codes a pre-retrieval freeze names; the class grain derived from held records for every frozen class the procedure admits; and the second-Opportunity candidate re-selected over the whole labelled universe. Authoritative where paired with the generated Markdown; the gate recomputes every census, cohort, derivation, reliability and dominance fact from the frozen universe, the vocabulary slice, the derivation records, the v4 preparation and the reconciliation record.",
+  "record_version": "1.0.0",
+  "mission": "1.82",
+  "recorded_at": "2026-09-10",
+  "record_kind": "procurement_subject_semantics_and_class_grain",
+  "start_commit": "f8c428c",
+  "branch": "sprint-1/mission-1.82",
+  "migration_head": "0036_grant_use_profile_vocabulary",
+  "measured_from": {
+    "lookup_universe": "docs/data/cpv-semantic-lookup-universe-v1.json",
+    "vocabulary": "docs/data/cpv-held-subject-vocabulary-v1.json",
+    "class_derivation_run": "docs/data/procurement-class-grain-derivation-run-v1.json",
+    "class_derivation_rerun": "docs/data/procurement-class-grain-derivation-rerun-v1.json",
+    "group_derivation_run": "docs/data/procurement-grain-derivation-run-v1.json",
+    "preparation_before": "docs/data/opportunity-preparation-v3.json",
+    "preparation_after": "docs/data/opportunity-preparation-v4.json",
+    "reconciliation_record": "docs/data/opportunity-reliability-reconciliation-v1.json",
+    "mission_1_81_narrowing": "docs/data/procurement-subject-grain-narrowing-v1.json",
+    "database": "live, read for the freeze and the derivation; the derivation wrote canonical rows as recorded below"
+  },
+  "primary_outcome": "PROCUREMENT_SEMANTIC_SUBJECT_CANDIDATE_SELECTED",
+  "outcome_basis": "one class earns selection under the same gates Missions 1.80 and 1.81 applied, with the semantic blocker resolved rather than argued around. Outcome C -- that the labels show group grain is already actionable -- is HALF true and was refused as the primary: two groups do reach the actionability gate once labelled, which is 1.81's blocker resolved, and deeper narrowing was not thereby unnecessary. Narrowing 926 to 9261 cost zero Evidence rows and gained a strictly more specific label, so the class wins on the recorded rule rather than because it is narrower (§28).",
+  "freeze": {
+    "artifact": "docs/data/cpv-semantic-lookup-universe-v1.json",
+    "LOOKUP_UNIVERSE_SHA256": "4ace701c3ee9f27716d3d5e8f67d8933ea043a4844ffe89ff905a967d4624d83",
+    "frozen_before_retrieval": true,
+    "committed_before_retrieval": true,
+    "FROZEN_GROUP_CODES": [
+      "921",
+      "922",
+      "923",
+      "924",
+      "925",
+      "926"
+    ],
+    "FROZEN_CLASS_CODES": [
+      "9211",
+      "9213",
+      "9222",
+      "9231",
+      "9233",
+      "9235",
+      "9236",
+      "9251",
+      "9252",
+      "9253",
+      "9261",
+      "9262"
+    ],
+    "CODE_COUNT_GROUP": 6,
+    "CODE_COUNT_CLASS": 12,
+    "SOURCE_RECORD_COUNT": 177,
+    "derivation_basis": "sros_nlp.extractors.procurement_value_contrast.ProcurementValueContrastExtractor._cpv_prefix at grain 3 (group) and 4 (class), over every held, non-superseded procurement_notice NormalizedRecord carrying a CPV code in division 92",
+    "codes_added_after_labels_were_read": 0,
+    "codes_removed_after_labels_were_read": 0,
+    "present_but_not_frozen": {
+      "codes": {
+        "9221": 3,
+        "9232": 4,
+        "9237": 8
+      },
+      "level": "class",
+      "why": "the freeze took the codes that FORM a cohort under the production membership rule at grain 4, not every code PRESENT on a held notice. These three appear only on notices that also carry another class code, so under C4_REFUSE_AMBIGUOUS_NOTICE they form no cohort at grain 4 and can be no candidate at that grain",
+      "labels_retrieved": false,
+      "why_not_retrieved": "they are outside the frozen universe, and the freeze is what stops a label from changing which codes get looked up. Widening it after labels had been read would be that move with a structural excuse. Recorded here instead, with the counts, so the gap is visible; a future mission that changes the membership model must re-freeze and look them up",
+      "candidate_impact": "NONE: no cohort, no packet, no candidate at grain 4"
+    },
+    "why_a_freeze": "the universe decides which concepts may be looked up. Frozen from held codes and committed first, a label that reads well cannot add a code and one that reads badly cannot remove one; the three class codes present in the population but never unambiguous were left outside and recorded rather than fetched, because widening a freeze after reading labels is the move the freeze exists to stop"
+  },
+  "retrieval": {
+    "FIRST_PARTY_AUTHORITY": "European Union Publications Office, EU Vocabularies CPV authority register",
+    "endpoint_pattern": "https://publications.europa.eu/resource/authority/cpv/cpv/<code>",
+    "VOCABULARY_VERSION": "2008",
+    "VOCABULARY_LANGUAGE": "en",
+    "VOCABULARY_SCHEME": "http://data.europa.eu/cpv/cpv",
+    "RETRIEVAL_TIME": "2026-09-10T16:27:15Z",
+    "DOCUMENTATION_FETCHES": 19,
+    "RESEARCH_DATA_FETCHES": 0,
+    "THIRD_PARTY_FALLBACKS": 0,
+    "GROUP_LABELS_RESOLVED": 6,
+    "GROUP_LABELS_UNRESOLVED": 0,
+    "CLASS_LABELS_RESOLVED": 12,
+    "CLASS_LABELS_UNRESOLVED": 0,
+    "retrieval_status_distribution": {
+      "RESOLVED_FROM_FIRST_PARTY_AUTHORITY": 18
+    },
+    "raw_responses_hashed": true,
+    "a_retrieval_summary_is_not_a_document": "the register returns the concept document itself in RDF/XML, so no summarising extraction sits between the source and this record. Mission 1.63's rule is met by the medium rather than by care",
+    "hierarchy_corroborates_and_does_not_establish": "every retrieved skos:broader agrees with the mechanical code hierarchy. The hierarchy stays established from the CPV token; the agreement is a corroboration",
+    "mission_1_80_labels_used": false,
+    "labels_inferred_from_neighbouring_codes": 0
+  },
+  "derivation": {
+    "DERIVATION_MODEL": "C_RE_DERIVE_FROM_HELD_NORMALIZED_RECORDS",
+    "extractor": "procurement-value-contrast@1.2.0",
+    "parameters": {
+      "amount_type": "TOTAL_VALUE",
+      "cpv_grain": 4
+    },
+    "CPV_GRAIN": 4,
+    "grain_level_name": "class",
+    "MEMBERSHIP_MODEL": "C4_REFUSE_AMBIGUOUS_NOTICE",
+    "membership_model_reevaluated": true,
+    "membership_model_changed": false,
+    "MINIMUM_REQUIRED_BY_PROCEDURE": 2,
+    "minimum_basis": "MINIMUM_COHORT_MEMBERS in the extractor, re-read from code and unchanged",
+    "EXISTING_SIGNAL_TYPES_REUSED": [
+      "procurement_value_contrast"
+    ],
+    "NEW_SIGNAL_TYPE_CREATED": false,
+    "selective_derivation": false,
+    "selective_derivation_note": "every frozen class cohort the procedure admits was derived, including the two-row ones and the classes whose labels turned out to name nothing a product could enter. Semantic and actionability gates were applied AFTERWARDS, so no measurement exists because a label read well (§16)",
+    "CLASS_COHORTS_KEYED": 29,
+    "CLASS_COHORTS_DERIVED": 14,
+    "CLASS_COHORTS_REFUSED": 15,
+    "refusal_reasons": {
+      "INSUFFICIENT_INPUT_OBSERVATIONS": 15
+    },
+    "NEW_SIGNALS": 14,
+    "NEW_CLAIMS": 26,
+    "NEW_CLAIM_REVISIONS": 26,
+    "NEW_EVIDENCE": 28,
+    "new_claims_detailed": 14,
+    "new_claims_witnessed": 12,
+    "convergence_note": "14 Signals produced 14 detailed Claims and 12 witnessed ones, because two pairs of class cohorts from the two acquisition windows converge on one broader proposition each. That is the Mission 1.39 convergence contract doing its work at a grain it had not reached before, and it is why claims and evidence do not move in step",
+    "parent_signals_copied": 0,
+    "group_evidence_copied_to_class": 0,
+    "grain_3_records_reproduce_byte_identically": true,
+    "network_acquisitions": 0
+  },
+  "reliability": {
+    "resolution_path": "LINEAGE_LATE_RESOLUTION (sros_evidence_reliability.lineage), unchanged",
+    "scope_modified": false,
+    "assessments_created": 0,
+    "NEW_EVIDENCE_SCORABLE": 28,
+    "NEW_EVIDENCE_NONSCORABLE": 0,
+    "assessments_applied": {
+      "3de2af10-60d1-4e3e-a9b6-d67e2345e020": {
+        "proposition_kind": "source_reported_procurement_value_contrast",
+        "reliability": 0.5,
+        "rows": 14
+      },
+      "d1afa4be-8462-4461-be20-112cdc55ee7e": {
+        "proposition_kind": "source_published_classification_value_contrast_witnessed",
+        "reliability": 0.55,
+        "rows": 14
+      }
+    },
+    "why_the_existing_scopes_apply": "a reliability scope is source, resource, record kind, claim type and proposition kind. It carries no classification level and no code, so a class cohort is the same measurement under the same two proposition kinds as a group or a division cohort. Re-measured through the resolver rather than assumed, and no value was hard-coded: the record states the assessment ids the resolver bound",
+    "what_a_reviewer_could_still_decide": "that a finer classification level is a different measurement purpose deserving its own scope. Nothing here forecloses that, and no assessment was created to avoid it"
+  },
+  "currency_semantics": {
+    "rule": "currency is a cohort key dimension since procurement-value-contrast@1.1.0; two currencies are two cohorts",
+    "cross_currency_contrast_performed": false,
+    "fx_conversion_performed": false,
+    "non_eur_cohorts_refused_at_class_grain": [
+      {
+        "window": "B",
+        "cpv_prefix": "9231",
+        "currency": "SEK",
+        "members": 1
+      },
+      {
+        "window": "B",
+        "cpv_prefix": "9252",
+        "currency": "CZK",
+        "members": 1
+      },
+      {
+        "window": "B",
+        "cpv_prefix": "9261",
+        "currency": "SEK",
+        "members": 1
+      }
+    ]
+  },
+  "notice_type_semantics": {
+    "rule": "notice class is a cohort key dimension since procurement-value-contrast@1.0.0",
+    "CONTRACT_NOTICE_and_CONTRACT_AWARD_NOTICE_combined": false,
+    "bt_161_limitations_preserved": true,
+    "realised_spend_inferred": false
+  },
+  "group_reassessment": {
+    "$comment": "Mission 1.81 could not determine actionability because the groups were bare codes. With the official labels, each group is re-evaluated on its own before any descent, and the answer is not uniform: two groups reach the exploratory-category gate, two are disjunctions their own labels and children expose, and two carry no Evidence.",
+    "groups": [
+      {
+        "GROUP_CODE": "921",
+        "OFFICIAL_LABEL": "Motion picture and video services",
+        "NOTICE_COUNT": 9,
+        "CLASSES_PRESENT": [
+          "9211",
+          "9213"
+        ],
+        "FORMABLE": true,
+        "SCORABLE": 6,
+        "DIMENSIONS": [
+          "BUYER_OR_BUDGET_EXISTENCE",
+          "ECONOMIC_VALUE",
+          "MARKET_ACTIVITY"
+        ],
+        "SEMANTIC_COHERENCE": "RELATED_ACTIVITIES",
+        "semantic_coherence_basis": "the label joins production with an open-ended 'and video services', and its held children are production-and-related and projection: two activities inside one audiovisual domain",
+        "ACTIONABLE_GRAIN": "ACTIONABLE_ONLY_AS_EXPLORATORY_CATEGORY_HYPOTHESIS",
+        "PRODUCT_RELEVANCE": "SEMANTICALLY_COHERENT_BUT_PRODUCT_LINK_UNKNOWN",
+        "OVERINTERPRETATION_RISK": "HIGH",
+        "VETO": "NOT_VETOED",
+        "exploratory_hypothesis_adopted": true
+      },
+      {
+        "GROUP_CODE": "922",
+        "OFFICIAL_LABEL": "Radio and television services",
+        "NOTICE_COUNT": 2,
+        "CLASSES_PRESENT": [
+          "9222"
+        ],
+        "FORMABLE": false,
+        "SCORABLE": 0,
+        "DIMENSIONS": [],
+        "SEMANTIC_COHERENCE": "RELATED_ACTIVITIES",
+        "semantic_coherence_basis": "radio and television are two broadcast activities in one domain; the held population carries one notice and forms no cohort",
+        "ACTIONABLE_GRAIN": "NOT_ACTIONABLE",
+        "PRODUCT_RELEVANCE": "TOO_THIN",
+        "OVERINTERPRETATION_RISK": "HIGH",
+        "VETO": "VETOED",
+        "exploratory_hypothesis_adopted": false
+      },
+      {
+        "GROUP_CODE": "923",
+        "OFFICIAL_LABEL": "Entertainment services",
+        "NOTICE_COUNT": 20,
+        "CLASSES_PRESENT": [
+          "9231",
+          "9233",
+          "9235",
+          "9236"
+        ],
+        "FORMABLE": true,
+        "SCORABLE": 6,
+        "DIMENSIONS": [
+          "BUYER_OR_BUDGET_EXISTENCE",
+          "ECONOMIC_VALUE",
+          "MARKET_ACTIVITY"
+        ],
+        "SEMANTIC_COHERENCE": "UNRELATED_ACTIVITIES",
+        "semantic_coherence_basis": "'Entertainment services' is a heading over held children that are materially unrelated: artistic and literary creation, recreational areas, gambling and betting, and pyrotechnics. Commissioning an artist, running a park, running betting and setting off fireworks are four markets",
+        "ACTIONABLE_GRAIN": "REQUIRES_NARROWER_SUBJECT_DISCOVERY",
+        "PRODUCT_RELEVANCE": "TOO_BROAD",
+        "OVERINTERPRETATION_RISK": "HIGH",
+        "VETO": "VETOED",
+        "exploratory_hypothesis_adopted": false
+      },
+      {
+        "GROUP_CODE": "924",
+        "OFFICIAL_LABEL": "News-agency services",
+        "NOTICE_COUNT": 4,
+        "CLASSES_PRESENT": [],
+        "FORMABLE": false,
+        "SCORABLE": 0,
+        "DIMENSIONS": [],
+        "SEMANTIC_COHERENCE": "SINGLE_DOMAIN",
+        "semantic_coherence_basis": "news-agency services name one activity; the held population forms no cohort",
+        "ACTIONABLE_GRAIN": "NOT_ACTIONABLE",
+        "PRODUCT_RELEVANCE": "TOO_THIN",
+        "OVERINTERPRETATION_RISK": "HIGH",
+        "VETO": "VETOED",
+        "exploratory_hypothesis_adopted": false
+      },
+      {
+        "GROUP_CODE": "925",
+        "OFFICIAL_LABEL": "Library, archives, museums and other cultural services",
+        "NOTICE_COUNT": 21,
+        "CLASSES_PRESENT": [
+          "9251",
+          "9252",
+          "9253"
+        ],
+        "FORMABLE": true,
+        "SCORABLE": 8,
+        "DIMENSIONS": [
+          "BUYER_OR_BUDGET_EXISTENCE",
+          "ECONOMIC_VALUE",
+          "MARKET_ACTIVITY"
+        ],
+        "SEMANTIC_COHERENCE": "UNRELATED_ACTIVITIES",
+        "semantic_coherence_basis": "the official label ends 'and other cultural services', which is the register's own residual wording, and the held children are library and archive services, museum and built-heritage preservation, and botanical and zoological gardens and nature reserves. A library and a zoo are not one market",
+        "ACTIONABLE_GRAIN": "REQUIRES_NARROWER_SUBJECT_DISCOVERY",
+        "PRODUCT_RELEVANCE": "TOO_BROAD",
+        "OVERINTERPRETATION_RISK": "HIGH",
+        "VETO": "VETOED",
+        "exploratory_hypothesis_adopted": false
+      },
+      {
+        "GROUP_CODE": "926",
+        "OFFICIAL_LABEL": "Sporting services",
+        "NOTICE_COUNT": 21,
+        "CLASSES_PRESENT": [
+          "9261",
+          "9262"
+        ],
+        "FORMABLE": true,
+        "SCORABLE": 6,
+        "DIMENSIONS": [
+          "BUYER_OR_BUDGET_EXISTENCE",
+          "ECONOMIC_VALUE",
+          "MARKET_ACTIVITY"
+        ],
+        "SEMANTIC_COHERENCE": "SINGLE_DOMAIN",
+        "semantic_coherence_basis": "'Sporting services' names one domain, and both held children -- sports facilities operation and sport-related services -- are inside it",
+        "ACTIONABLE_GRAIN": "ACTIONABLE_ONLY_AS_EXPLORATORY_CATEGORY_HYPOTHESIS",
+        "PRODUCT_RELEVANCE": "SEMANTICALLY_COHERENT_BUT_PRODUCT_LINK_UNKNOWN",
+        "OVERINTERPRETATION_RISK": "HIGH",
+        "VETO": "NOT_VETOED",
+        "exploratory_hypothesis_adopted": true
+      }
+    ],
+    "groups_reaching_the_exploratory_gate": [
+      "921",
+      "926"
+    ],
+    "deeper_narrowing_was_necessary_for": [
+      "923",
+      "925"
+    ],
+    "finding": "the labels resolved 1.81's blocker. 926 'Sporting services' and 921 'Motion picture and video services' each denote one procurement domain and reach the exploratory gate at group grain; 923 'Entertainment services' and 925 'Library, archives, museums and other cultural services' do not, and their own official wording is the evidence -- 925's label ends in the register's residual 'and other cultural services', and 923's held children are artistic creation, recreational areas, gambling and pyrotechnics. 922 and 924 are coherent and carry no cohort at all"
+  },
+  "semantic_coherence_rule": {
+    "scale": [
+      "UNRELATED_ACTIVITIES",
+      "RELATED_ACTIVITIES",
+      "SINGLE_DOMAIN"
+    ],
+    "definition": "SINGLE_DOMAIN: the official label names one activity. RELATED_ACTIVITIES: it joins activities inside one domain, or ends in an open remainder. UNRELATED_ACTIVITIES: the label or the held children name materially unrelated markets.",
+    "what_it_is_not": "not market attractiveness, not trend, not perceived profitability, not familiarity, not apparent SaaS potential. It asks what the subject MEANS (§12). A subject may be perfectly coherent and commercially uninteresting, and this field would not know",
+    "not_applicable_value": "NOT_A_CLASSIFICATION_SUBJECT",
+    "not_applicable_note": "a product or a bare term has no official classification label, so the field does not apply and decides nothing for or against it in dominance"
+  },
+  "candidates": [
+    {
+      "subject_key": "ted-eu:CPV-group:921",
+      "packet_id": "62a96deb5bd35e4d4a7bfa42a929274853a3c6707addd9d96956c28efbd1a22b",
+      "CPV_LEVEL": "group",
+      "CPV_CODE": "921",
+      "cpv_concept_code": "92100000",
+      "OFFICIAL_LABEL": "Motion picture and video services",
+      "label_language": "en",
+      "label_authority": "European Union Publications Office, EU Vocabularies CPV authority register",
+      "label_is_display_metadata_not_identity": true,
+      "parent_subject": "ted-eu:CPV-division:92",
+      "held_children_in_frozen_universe": [
+        "9211",
+        "9213"
+      ],
+      "subject_scope": "CATEGORY",
+      "subject_scope_basis": "reviewed scope rule for ted-eu CPV-group (SOURCE_NATIVE, observation-scope-rules@1.2.0)",
+      "subject_type": "CATEGORY",
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "NOTICE_COUNT": 9,
+      "SIGNALS": 3,
+      "CLAIMS": 5,
+      "EVIDENCE": 6,
+      "evidence_rows": 6,
+      "SCORABLE_EVIDENCE": 6,
+      "scorable_rows": 6,
+      "non_scorable_rows": 0,
+      "cohorts_derived": 3,
+      "cohorts_refused": null,
+      "proposition_kinds": {
+        "source_reported_procurement_value_contrast": {
+          "rows": 3,
+          "reliability": 0.5,
+          "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020"
+        },
+        "source_published_classification_value_contrast_witnessed": {
+          "rows": 3,
+          "reliability": 0.55,
+          "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e"
+        }
+      },
+      "COUNTING_DIMENSIONS": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "noncounting_dimensions": [],
+      "RELIABILITY_DISTRIBUTION": {
+        "0.5": 3,
+        "0.55": 3
+      },
+      "reliability_distribution": {
+        "0.5": 3,
+        "0.55": 3
+      },
+      "PROVENANCE_SHAPES": 1,
+      "provenance_shapes": 1,
+      "INDEPENDENCE": "UNKNOWN",
+      "independence_state": "UNKNOWN",
+      "FORMABLE": true,
+      "hypothesis_formable": true,
+      "scoring_ready_packet_property": true,
+      "SEMANTIC_COHERENCE": "RELATED_ACTIVITIES",
+      "semantic_coherence_basis": "the label joins production with an open-ended 'and video services', and its held children are production-and-related and projection: two activities inside one audiovisual domain",
+      "exploratory_category_hypothesis": {
+        "considered": true,
+        "adopted": true,
+        "gate_detail": "conditions 1 to 5 hold: the official label denotes one procurement domain, the Evidence is 6 rows derived at this exact code, a synthesis can state that authorities publish procurement under it at differing stated values without inventing a problem, the held children sit inside the domain, and the hypothesis stays useful with problem, intervention and willingness to pay all marked unknown",
+        "statement": "EU contracting authorities publish procurement classified under CPV group 921 (\"Motion picture and video services\") at stated total values that differ widely within bounded sets of notices"
+      },
+      "product_intervention_grain": "PLAUSIBLE_BUT_REQUIRES_SYNTHESIS",
+      "ACTIONABLE_GRAIN": "ACTIONABLE_ONLY_AS_EXPLORATORY_CATEGORY_HYPOTHESIS",
+      "actionable_grain": "ACTIONABLE_ONLY_AS_EXPLORATORY_CATEGORY_HYPOTHESIS",
+      "PRODUCT_RELEVANCE": "SEMANTICALLY_COHERENT_BUT_PRODUCT_LINK_UNKNOWN",
+      "product_relevance": "UNKNOWN",
+      "product_decision_it_could_inform": "whether public-procurement-facing research into \"Motion picture and video services\" is worth starting, and with which buyers; nothing about whether anybody would buy a product",
+      "establishes": "TED published, in its eforms contract-and-award resource, 3 bounded sets of notices classified under CPV group 921 whose stated TOTAL_VALUE amounts at NOTICE scope differ from one another; contracting authorities publish procurement under this code",
+      "does_not_establish": "actual expenditure (BT-161 includes options and renewals); willingness to pay; market size; product demand; a buyer for an unspecified product; unmet need; dissatisfaction; a solution gap; profitability; a competitive gap. The official label says what the code MEANS and nothing about whether the domain is underserved",
+      "procurement_semantics": {
+        "value_is_realised_spend": false,
+        "value_is_willingness_to_pay": false,
+        "authority_is_buyer_for_unspecified_product": false
+      },
+      "buyer_semantics": {
+        "PROCUREMENT_BUYER_EXISTS": true,
+        "BUYER_FOR_PROPOSED_INTERVENTION": false
+      },
+      "establishes_product_demand": false,
+      "EGRESS_STATE": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+      "egress_state": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+      "egress_reason": "ted-eu external_model_transmission is NOT_ASSESSED under local-private-research-v1 (H-39)",
+      "egress_eligible": false,
+      "egress_review_required_before_synthesis": true,
+      "representation_constructible_without_egress": true,
+      "OVERINTERPRETATION_RISK": "HIGH",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "MEDIUM",
+        "SCORABLE_BREADTH": "MEDIUM",
+        "COUNTING_DIMENSION_DIVERSITY": "HIGH",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "MEDIUM",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "UNKNOWN",
+        "SEMANTIC_SPECIFICITY": "MEDIUM",
+        "SEMANTIC_COHERENCE": "RELATED_ACTIVITIES",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "YES",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "LOW",
+        "NEW_ACQUISITION_REQUIRED": "NO",
+        "OPERATOR_JUDGMENT_REQUIRED": "YES",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "HIGH"
+      },
+      "CURRENT_BLOCKERS": [
+        "ted-eu egress NOT_ASSESSED (an operator decision, recorded here and not taken)",
+        "no problem, intervention or willingness-to-pay evidence at any grain"
+      ],
+      "VETO_STATE": "NOT_VETOED",
+      "veto_state": "NOT_VETOED",
+      "veto_reason": "",
+      "DOMINANCE_STATE": "DOMINATED",
+      "dominance_state": "DOMINATED",
+      "dominated_by": "ted-eu:CPV-group:926"
+    },
+    {
+      "subject_key": "ted-eu:CPV-group:922",
+      "packet_id": null,
+      "CPV_LEVEL": "group",
+      "CPV_CODE": "922",
+      "cpv_concept_code": "92200000",
+      "OFFICIAL_LABEL": "Radio and television services",
+      "label_language": "en",
+      "label_authority": "European Union Publications Office, EU Vocabularies CPV authority register",
+      "label_is_display_metadata_not_identity": true,
+      "parent_subject": "ted-eu:CPV-division:92",
+      "held_children_in_frozen_universe": [
+        "9222"
+      ],
+      "subject_scope": "CATEGORY",
+      "subject_scope_basis": "reviewed scope rule for ted-eu CPV-group (SOURCE_NATIVE, observation-scope-rules@1.2.0)",
+      "subject_type": "CATEGORY",
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "NOTICE_COUNT": 2,
+      "SIGNALS": 0,
+      "CLAIMS": 0,
+      "EVIDENCE": 0,
+      "evidence_rows": 0,
+      "SCORABLE_EVIDENCE": 0,
+      "scorable_rows": 0,
+      "non_scorable_rows": 0,
+      "cohorts_derived": 0,
+      "cohorts_refused": null,
+      "proposition_kinds": {},
+      "COUNTING_DIMENSIONS": [],
+      "counting_dimensions": [],
+      "noncounting_dimensions": [],
+      "RELIABILITY_DISTRIBUTION": {},
+      "reliability_distribution": {},
+      "PROVENANCE_SHAPES": 0,
+      "provenance_shapes": 0,
+      "INDEPENDENCE": "UNKNOWN",
+      "independence_state": "UNKNOWN",
+      "FORMABLE": false,
+      "hypothesis_formable": false,
+      "scoring_ready_packet_property": false,
+      "SEMANTIC_COHERENCE": "RELATED_ACTIVITIES",
+      "semantic_coherence_basis": "radio and television are two broadcast activities in one domain; the held population carries one notice and forms no cohort",
+      "exploratory_category_hypothesis": {
+        "considered": true,
+        "adopted": false,
+        "gate_detail": "not formable: the held cohort supports no contrast, so there is no procurement activity to state",
+        "statement": null
+      },
+      "product_intervention_grain": "NOT_ESTABLISHED",
+      "ACTIONABLE_GRAIN": "NOT_ACTIONABLE",
+      "actionable_grain": "NOT_ACTIONABLE",
+      "PRODUCT_RELEVANCE": "TOO_THIN",
+      "product_relevance": "UNKNOWN",
+      "product_decision_it_could_inform": "none at this grain",
+      "establishes": "nothing: 2 held notice(s) at this code form no cohort",
+      "does_not_establish": "actual expenditure (BT-161 includes options and renewals); willingness to pay; market size; product demand; a buyer for an unspecified product; unmet need; dissatisfaction; a solution gap; profitability; a competitive gap. The official label says what the code MEANS and nothing about whether the domain is underserved",
+      "procurement_semantics": {
+        "value_is_realised_spend": false,
+        "value_is_willingness_to_pay": false,
+        "authority_is_buyer_for_unspecified_product": false
+      },
+      "buyer_semantics": {
+        "PROCUREMENT_BUYER_EXISTS": false,
+        "BUYER_FOR_PROPOSED_INTERVENTION": false
+      },
+      "establishes_product_demand": false,
+      "EGRESS_STATE": "NOT_APPLICABLE",
+      "egress_state": "NOT_APPLICABLE",
+      "egress_reason": "ted-eu external_model_transmission is NOT_ASSESSED under local-private-research-v1 (H-39)",
+      "egress_eligible": false,
+      "egress_review_required_before_synthesis": true,
+      "representation_constructible_without_egress": false,
+      "OVERINTERPRETATION_RISK": "HIGH",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "LOW",
+        "SCORABLE_BREADTH": "LOW",
+        "COUNTING_DIMENSION_DIVERSITY": "LOW",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "NONE",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "UNKNOWN",
+        "SEMANTIC_SPECIFICITY": "MEDIUM",
+        "SEMANTIC_COHERENCE": "RELATED_ACTIVITIES",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "NO",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "LOW",
+        "NEW_ACQUISITION_REQUIRED": "YES",
+        "OPERATOR_JUDGMENT_REQUIRED": "YES",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "HIGH"
+      },
+      "CURRENT_BLOCKERS": [
+        "2 held notice(s) and no cohort at the procedure's floor",
+        "ted-eu egress NOT_ASSESSED"
+      ],
+      "VETO_STATE": "VETOED",
+      "veto_state": "VETOED",
+      "veto_reason": "no cohort forms at this code: 2 held notice(s), and the procedure's floor of two comparable amounts is not met, so there is no Evidence to explore with",
+      "DOMINANCE_STATE": "DOMINATED",
+      "dominance_state": "DOMINATED",
+      "dominated_by": "ted-eu:CPV-group:921"
+    },
+    {
+      "subject_key": "ted-eu:CPV-group:923",
+      "packet_id": "f3549844fafe46456600842b0675faafc69d836234790bcafd75364acfe558f4",
+      "CPV_LEVEL": "group",
+      "CPV_CODE": "923",
+      "cpv_concept_code": "92300000",
+      "OFFICIAL_LABEL": "Entertainment services",
+      "label_language": "en",
+      "label_authority": "European Union Publications Office, EU Vocabularies CPV authority register",
+      "label_is_display_metadata_not_identity": true,
+      "parent_subject": "ted-eu:CPV-division:92",
+      "held_children_in_frozen_universe": [
+        "9231",
+        "9233",
+        "9235",
+        "9236"
+      ],
+      "subject_scope": "CATEGORY",
+      "subject_scope_basis": "reviewed scope rule for ted-eu CPV-group (SOURCE_NATIVE, observation-scope-rules@1.2.0)",
+      "subject_type": "CATEGORY",
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "NOTICE_COUNT": 20,
+      "SIGNALS": 3,
+      "CLAIMS": 5,
+      "EVIDENCE": 6,
+      "evidence_rows": 6,
+      "SCORABLE_EVIDENCE": 6,
+      "scorable_rows": 6,
+      "non_scorable_rows": 0,
+      "cohorts_derived": 3,
+      "cohorts_refused": null,
+      "proposition_kinds": {
+        "source_reported_procurement_value_contrast": {
+          "rows": 3,
+          "reliability": 0.5,
+          "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020"
+        },
+        "source_published_classification_value_contrast_witnessed": {
+          "rows": 3,
+          "reliability": 0.55,
+          "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e"
+        }
+      },
+      "COUNTING_DIMENSIONS": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "noncounting_dimensions": [],
+      "RELIABILITY_DISTRIBUTION": {
+        "0.5": 3,
+        "0.55": 3
+      },
+      "reliability_distribution": {
+        "0.5": 3,
+        "0.55": 3
+      },
+      "PROVENANCE_SHAPES": 1,
+      "provenance_shapes": 1,
+      "INDEPENDENCE": "UNKNOWN",
+      "independence_state": "UNKNOWN",
+      "FORMABLE": true,
+      "hypothesis_formable": true,
+      "scoring_ready_packet_property": true,
+      "SEMANTIC_COHERENCE": "UNRELATED_ACTIVITIES",
+      "semantic_coherence_basis": "'Entertainment services' is a heading over held children that are materially unrelated: artistic and literary creation, recreational areas, gambling and betting, and pyrotechnics. Commissioning an artist, running a park, running betting and setting off fireworks are four markets",
+      "exploratory_category_hypothesis": {
+        "considered": true,
+        "adopted": false,
+        "gate_detail": "condition 4: the subject is a disjunction of materially unrelated child markets, so a hypothesis at its grain would name several markets at once",
+        "statement": null
+      },
+      "product_intervention_grain": "TOO_BROAD_TO_BE_ACTIONABLE",
+      "ACTIONABLE_GRAIN": "REQUIRES_NARROWER_SUBJECT_DISCOVERY",
+      "actionable_grain": "REQUIRES_NARROWER_SUBJECT_DISCOVERY",
+      "PRODUCT_RELEVANCE": "TOO_BROAD",
+      "product_relevance": "UNKNOWN",
+      "product_decision_it_could_inform": "none at this grain",
+      "establishes": "TED published, in its eforms contract-and-award resource, 3 bounded sets of notices classified under CPV group 923 whose stated TOTAL_VALUE amounts at NOTICE scope differ from one another; contracting authorities publish procurement under this code",
+      "does_not_establish": "actual expenditure (BT-161 includes options and renewals); willingness to pay; market size; product demand; a buyer for an unspecified product; unmet need; dissatisfaction; a solution gap; profitability; a competitive gap. The official label says what the code MEANS and nothing about whether the domain is underserved",
+      "procurement_semantics": {
+        "value_is_realised_spend": false,
+        "value_is_willingness_to_pay": false,
+        "authority_is_buyer_for_unspecified_product": false
+      },
+      "buyer_semantics": {
+        "PROCUREMENT_BUYER_EXISTS": true,
+        "BUYER_FOR_PROPOSED_INTERVENTION": false
+      },
+      "establishes_product_demand": false,
+      "EGRESS_STATE": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+      "egress_state": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+      "egress_reason": "ted-eu external_model_transmission is NOT_ASSESSED under local-private-research-v1 (H-39)",
+      "egress_eligible": false,
+      "egress_review_required_before_synthesis": true,
+      "representation_constructible_without_egress": true,
+      "OVERINTERPRETATION_RISK": "HIGH",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "MEDIUM",
+        "SCORABLE_BREADTH": "MEDIUM",
+        "COUNTING_DIMENSION_DIVERSITY": "HIGH",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "MEDIUM",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "UNKNOWN",
+        "SEMANTIC_SPECIFICITY": "MEDIUM",
+        "SEMANTIC_COHERENCE": "UNRELATED_ACTIVITIES",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "YES",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "LOW",
+        "NEW_ACQUISITION_REQUIRED": "NO",
+        "OPERATOR_JUDGMENT_REQUIRED": "YES",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "HIGH"
+      },
+      "CURRENT_BLOCKERS": [
+        "the subject's official label and held children name materially unrelated markets",
+        "ted-eu egress NOT_ASSESSED"
+      ],
+      "VETO_STATE": "VETOED",
+      "veto_state": "VETOED",
+      "veto_reason": "a category whose official label and held children name materially unrelated markets; narrowing is what its own children are for",
+      "DOMINANCE_STATE": "DOMINATED",
+      "dominance_state": "DOMINATED",
+      "dominated_by": "ted-eu:CPV-group:921"
+    },
+    {
+      "subject_key": "ted-eu:CPV-group:924",
+      "packet_id": null,
+      "CPV_LEVEL": "group",
+      "CPV_CODE": "924",
+      "cpv_concept_code": "92400000",
+      "OFFICIAL_LABEL": "News-agency services",
+      "label_language": "en",
+      "label_authority": "European Union Publications Office, EU Vocabularies CPV authority register",
+      "label_is_display_metadata_not_identity": true,
+      "parent_subject": "ted-eu:CPV-division:92",
+      "held_children_in_frozen_universe": [],
+      "subject_scope": "CATEGORY",
+      "subject_scope_basis": "reviewed scope rule for ted-eu CPV-group (SOURCE_NATIVE, observation-scope-rules@1.2.0)",
+      "subject_type": "CATEGORY",
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "NOTICE_COUNT": 4,
+      "SIGNALS": 0,
+      "CLAIMS": 0,
+      "EVIDENCE": 0,
+      "evidence_rows": 0,
+      "SCORABLE_EVIDENCE": 0,
+      "scorable_rows": 0,
+      "non_scorable_rows": 0,
+      "cohorts_derived": 0,
+      "cohorts_refused": null,
+      "proposition_kinds": {},
+      "COUNTING_DIMENSIONS": [],
+      "counting_dimensions": [],
+      "noncounting_dimensions": [],
+      "RELIABILITY_DISTRIBUTION": {},
+      "reliability_distribution": {},
+      "PROVENANCE_SHAPES": 0,
+      "provenance_shapes": 0,
+      "INDEPENDENCE": "UNKNOWN",
+      "independence_state": "UNKNOWN",
+      "FORMABLE": false,
+      "hypothesis_formable": false,
+      "scoring_ready_packet_property": false,
+      "SEMANTIC_COHERENCE": "SINGLE_DOMAIN",
+      "semantic_coherence_basis": "news-agency services name one activity; the held population forms no cohort",
+      "exploratory_category_hypothesis": {
+        "considered": true,
+        "adopted": false,
+        "gate_detail": "not formable: the held cohort supports no contrast, so there is no procurement activity to state",
+        "statement": null
+      },
+      "product_intervention_grain": "NOT_ESTABLISHED",
+      "ACTIONABLE_GRAIN": "NOT_ACTIONABLE",
+      "actionable_grain": "NOT_ACTIONABLE",
+      "PRODUCT_RELEVANCE": "TOO_THIN",
+      "product_relevance": "UNKNOWN",
+      "product_decision_it_could_inform": "none at this grain",
+      "establishes": "nothing: 4 held notice(s) at this code form no cohort",
+      "does_not_establish": "actual expenditure (BT-161 includes options and renewals); willingness to pay; market size; product demand; a buyer for an unspecified product; unmet need; dissatisfaction; a solution gap; profitability; a competitive gap. The official label says what the code MEANS and nothing about whether the domain is underserved",
+      "procurement_semantics": {
+        "value_is_realised_spend": false,
+        "value_is_willingness_to_pay": false,
+        "authority_is_buyer_for_unspecified_product": false
+      },
+      "buyer_semantics": {
+        "PROCUREMENT_BUYER_EXISTS": false,
+        "BUYER_FOR_PROPOSED_INTERVENTION": false
+      },
+      "establishes_product_demand": false,
+      "EGRESS_STATE": "NOT_APPLICABLE",
+      "egress_state": "NOT_APPLICABLE",
+      "egress_reason": "ted-eu external_model_transmission is NOT_ASSESSED under local-private-research-v1 (H-39)",
+      "egress_eligible": false,
+      "egress_review_required_before_synthesis": true,
+      "representation_constructible_without_egress": false,
+      "OVERINTERPRETATION_RISK": "HIGH",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "LOW",
+        "SCORABLE_BREADTH": "LOW",
+        "COUNTING_DIMENSION_DIVERSITY": "LOW",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "NONE",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "UNKNOWN",
+        "SEMANTIC_SPECIFICITY": "MEDIUM",
+        "SEMANTIC_COHERENCE": "SINGLE_DOMAIN",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "NO",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "LOW",
+        "NEW_ACQUISITION_REQUIRED": "YES",
+        "OPERATOR_JUDGMENT_REQUIRED": "YES",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "HIGH"
+      },
+      "CURRENT_BLOCKERS": [
+        "4 held notice(s) and no cohort at the procedure's floor",
+        "ted-eu egress NOT_ASSESSED"
+      ],
+      "VETO_STATE": "VETOED",
+      "veto_state": "VETOED",
+      "veto_reason": "no cohort forms at this code: 4 held notice(s), and the procedure's floor of two comparable amounts is not met, so there is no Evidence to explore with",
+      "DOMINANCE_STATE": "DOMINATED",
+      "dominance_state": "DOMINATED",
+      "dominated_by": "ted-eu:CPV-group:926"
+    },
+    {
+      "subject_key": "ted-eu:CPV-group:925",
+      "packet_id": "8d9f8917eecde9c392fec9557a30013b8e422e5cabc76dcb15bec2b74595c9f5",
+      "CPV_LEVEL": "group",
+      "CPV_CODE": "925",
+      "cpv_concept_code": "92500000",
+      "OFFICIAL_LABEL": "Library, archives, museums and other cultural services",
+      "label_language": "en",
+      "label_authority": "European Union Publications Office, EU Vocabularies CPV authority register",
+      "label_is_display_metadata_not_identity": true,
+      "parent_subject": "ted-eu:CPV-division:92",
+      "held_children_in_frozen_universe": [
+        "9251",
+        "9252",
+        "9253"
+      ],
+      "subject_scope": "CATEGORY",
+      "subject_scope_basis": "reviewed scope rule for ted-eu CPV-group (SOURCE_NATIVE, observation-scope-rules@1.2.0)",
+      "subject_type": "CATEGORY",
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "NOTICE_COUNT": 21,
+      "SIGNALS": 4,
+      "CLAIMS": 6,
+      "EVIDENCE": 8,
+      "evidence_rows": 8,
+      "SCORABLE_EVIDENCE": 8,
+      "scorable_rows": 8,
+      "non_scorable_rows": 0,
+      "cohorts_derived": 4,
+      "cohorts_refused": null,
+      "proposition_kinds": {
+        "source_reported_procurement_value_contrast": {
+          "rows": 4,
+          "reliability": 0.5,
+          "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020"
+        },
+        "source_published_classification_value_contrast_witnessed": {
+          "rows": 4,
+          "reliability": 0.55,
+          "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e"
+        }
+      },
+      "COUNTING_DIMENSIONS": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "noncounting_dimensions": [],
+      "RELIABILITY_DISTRIBUTION": {
+        "0.5": 4,
+        "0.55": 4
+      },
+      "reliability_distribution": {
+        "0.5": 4,
+        "0.55": 4
+      },
+      "PROVENANCE_SHAPES": 1,
+      "provenance_shapes": 1,
+      "INDEPENDENCE": "UNKNOWN",
+      "independence_state": "UNKNOWN",
+      "FORMABLE": true,
+      "hypothesis_formable": true,
+      "scoring_ready_packet_property": true,
+      "SEMANTIC_COHERENCE": "UNRELATED_ACTIVITIES",
+      "semantic_coherence_basis": "the official label ends 'and other cultural services', which is the register's own residual wording, and the held children are library and archive services, museum and built-heritage preservation, and botanical and zoological gardens and nature reserves. A library and a zoo are not one market",
+      "exploratory_category_hypothesis": {
+        "considered": true,
+        "adopted": false,
+        "gate_detail": "condition 4: the subject is a disjunction of materially unrelated child markets, so a hypothesis at its grain would name several markets at once",
+        "statement": null
+      },
+      "product_intervention_grain": "TOO_BROAD_TO_BE_ACTIONABLE",
+      "ACTIONABLE_GRAIN": "REQUIRES_NARROWER_SUBJECT_DISCOVERY",
+      "actionable_grain": "REQUIRES_NARROWER_SUBJECT_DISCOVERY",
+      "PRODUCT_RELEVANCE": "TOO_BROAD",
+      "product_relevance": "UNKNOWN",
+      "product_decision_it_could_inform": "none at this grain",
+      "establishes": "TED published, in its eforms contract-and-award resource, 4 bounded sets of notices classified under CPV group 925 whose stated TOTAL_VALUE amounts at NOTICE scope differ from one another; contracting authorities publish procurement under this code",
+      "does_not_establish": "actual expenditure (BT-161 includes options and renewals); willingness to pay; market size; product demand; a buyer for an unspecified product; unmet need; dissatisfaction; a solution gap; profitability; a competitive gap. The official label says what the code MEANS and nothing about whether the domain is underserved",
+      "procurement_semantics": {
+        "value_is_realised_spend": false,
+        "value_is_willingness_to_pay": false,
+        "authority_is_buyer_for_unspecified_product": false
+      },
+      "buyer_semantics": {
+        "PROCUREMENT_BUYER_EXISTS": true,
+        "BUYER_FOR_PROPOSED_INTERVENTION": false
+      },
+      "establishes_product_demand": false,
+      "EGRESS_STATE": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+      "egress_state": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+      "egress_reason": "ted-eu external_model_transmission is NOT_ASSESSED under local-private-research-v1 (H-39)",
+      "egress_eligible": false,
+      "egress_review_required_before_synthesis": true,
+      "representation_constructible_without_egress": true,
+      "OVERINTERPRETATION_RISK": "HIGH",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "MEDIUM",
+        "SCORABLE_BREADTH": "MEDIUM",
+        "COUNTING_DIMENSION_DIVERSITY": "HIGH",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "MEDIUM",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "UNKNOWN",
+        "SEMANTIC_SPECIFICITY": "MEDIUM",
+        "SEMANTIC_COHERENCE": "UNRELATED_ACTIVITIES",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "YES",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "LOW",
+        "NEW_ACQUISITION_REQUIRED": "NO",
+        "OPERATOR_JUDGMENT_REQUIRED": "YES",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "HIGH"
+      },
+      "CURRENT_BLOCKERS": [
+        "the subject's official label and held children name materially unrelated markets",
+        "ted-eu egress NOT_ASSESSED"
+      ],
+      "VETO_STATE": "VETOED",
+      "veto_state": "VETOED",
+      "veto_reason": "a category whose official label and held children name materially unrelated markets; narrowing is what its own children are for",
+      "DOMINANCE_STATE": "DOMINATED",
+      "dominance_state": "DOMINATED",
+      "dominated_by": "ted-eu:CPV-group:921"
+    },
+    {
+      "subject_key": "ted-eu:CPV-group:926",
+      "packet_id": "40e3c3c7f92c2ae2dc1fb2f00e27f7a7d439d88c186cfbff73ac69803cff910e",
+      "CPV_LEVEL": "group",
+      "CPV_CODE": "926",
+      "cpv_concept_code": "92600000",
+      "OFFICIAL_LABEL": "Sporting services",
+      "label_language": "en",
+      "label_authority": "European Union Publications Office, EU Vocabularies CPV authority register",
+      "label_is_display_metadata_not_identity": true,
+      "parent_subject": "ted-eu:CPV-division:92",
+      "held_children_in_frozen_universe": [
+        "9261",
+        "9262"
+      ],
+      "subject_scope": "CATEGORY",
+      "subject_scope_basis": "reviewed scope rule for ted-eu CPV-group (SOURCE_NATIVE, observation-scope-rules@1.2.0)",
+      "subject_type": "CATEGORY",
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "NOTICE_COUNT": 21,
+      "SIGNALS": 3,
+      "CLAIMS": 5,
+      "EVIDENCE": 6,
+      "evidence_rows": 6,
+      "SCORABLE_EVIDENCE": 6,
+      "scorable_rows": 6,
+      "non_scorable_rows": 0,
+      "cohorts_derived": 3,
+      "cohorts_refused": null,
+      "proposition_kinds": {
+        "source_reported_procurement_value_contrast": {
+          "rows": 3,
+          "reliability": 0.5,
+          "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020"
+        },
+        "source_published_classification_value_contrast_witnessed": {
+          "rows": 3,
+          "reliability": 0.55,
+          "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e"
+        }
+      },
+      "COUNTING_DIMENSIONS": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "noncounting_dimensions": [],
+      "RELIABILITY_DISTRIBUTION": {
+        "0.5": 3,
+        "0.55": 3
+      },
+      "reliability_distribution": {
+        "0.5": 3,
+        "0.55": 3
+      },
+      "PROVENANCE_SHAPES": 1,
+      "provenance_shapes": 1,
+      "INDEPENDENCE": "UNKNOWN",
+      "independence_state": "UNKNOWN",
+      "FORMABLE": true,
+      "hypothesis_formable": true,
+      "scoring_ready_packet_property": true,
+      "SEMANTIC_COHERENCE": "SINGLE_DOMAIN",
+      "semantic_coherence_basis": "'Sporting services' names one domain, and both held children -- sports facilities operation and sport-related services -- are inside it",
+      "exploratory_category_hypothesis": {
+        "considered": true,
+        "adopted": true,
+        "gate_detail": "conditions 1 to 5 hold: the official label denotes one procurement domain, the Evidence is 6 rows derived at this exact code, a synthesis can state that authorities publish procurement under it at differing stated values without inventing a problem, the held children sit inside the domain, and the hypothesis stays useful with problem, intervention and willingness to pay all marked unknown",
+        "statement": "EU contracting authorities publish procurement classified under CPV group 926 (\"Sporting services\") at stated total values that differ widely within bounded sets of notices"
+      },
+      "product_intervention_grain": "PLAUSIBLE_BUT_REQUIRES_SYNTHESIS",
+      "ACTIONABLE_GRAIN": "ACTIONABLE_ONLY_AS_EXPLORATORY_CATEGORY_HYPOTHESIS",
+      "actionable_grain": "ACTIONABLE_ONLY_AS_EXPLORATORY_CATEGORY_HYPOTHESIS",
+      "PRODUCT_RELEVANCE": "SEMANTICALLY_COHERENT_BUT_PRODUCT_LINK_UNKNOWN",
+      "product_relevance": "UNKNOWN",
+      "product_decision_it_could_inform": "whether public-procurement-facing research into \"Sporting services\" is worth starting, and with which buyers; nothing about whether anybody would buy a product",
+      "establishes": "TED published, in its eforms contract-and-award resource, 3 bounded sets of notices classified under CPV group 926 whose stated TOTAL_VALUE amounts at NOTICE scope differ from one another; contracting authorities publish procurement under this code",
+      "does_not_establish": "actual expenditure (BT-161 includes options and renewals); willingness to pay; market size; product demand; a buyer for an unspecified product; unmet need; dissatisfaction; a solution gap; profitability; a competitive gap. The official label says what the code MEANS and nothing about whether the domain is underserved",
+      "procurement_semantics": {
+        "value_is_realised_spend": false,
+        "value_is_willingness_to_pay": false,
+        "authority_is_buyer_for_unspecified_product": false
+      },
+      "buyer_semantics": {
+        "PROCUREMENT_BUYER_EXISTS": true,
+        "BUYER_FOR_PROPOSED_INTERVENTION": false
+      },
+      "establishes_product_demand": false,
+      "EGRESS_STATE": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+      "egress_state": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+      "egress_reason": "ted-eu external_model_transmission is NOT_ASSESSED under local-private-research-v1 (H-39)",
+      "egress_eligible": false,
+      "egress_review_required_before_synthesis": true,
+      "representation_constructible_without_egress": true,
+      "OVERINTERPRETATION_RISK": "HIGH",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "MEDIUM",
+        "SCORABLE_BREADTH": "MEDIUM",
+        "COUNTING_DIMENSION_DIVERSITY": "HIGH",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "MEDIUM",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "UNKNOWN",
+        "SEMANTIC_SPECIFICITY": "MEDIUM",
+        "SEMANTIC_COHERENCE": "SINGLE_DOMAIN",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "YES",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "LOW",
+        "NEW_ACQUISITION_REQUIRED": "NO",
+        "OPERATOR_JUDGMENT_REQUIRED": "YES",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "HIGH"
+      },
+      "CURRENT_BLOCKERS": [
+        "ted-eu egress NOT_ASSESSED (an operator decision, recorded here and not taken)",
+        "no problem, intervention or willingness-to-pay evidence at any grain"
+      ],
+      "VETO_STATE": "NOT_VETOED",
+      "veto_state": "NOT_VETOED",
+      "veto_reason": "",
+      "DOMINANCE_STATE": "DOMINATED",
+      "dominance_state": "DOMINATED",
+      "dominated_by": "ted-eu:CPV-class:9261"
+    },
+    {
+      "subject_key": "ted-eu:CPV-class:9211",
+      "packet_id": "d204a5c7f89e600acc9ebca7d66b68db466b91631b40b2c821e6f681c6b7bf6f",
+      "CPV_LEVEL": "class",
+      "CPV_CODE": "9211",
+      "cpv_concept_code": "92110000",
+      "OFFICIAL_LABEL": "Motion picture and video tape production and related services",
+      "label_language": "en",
+      "label_authority": "European Union Publications Office, EU Vocabularies CPV authority register",
+      "label_is_display_metadata_not_identity": true,
+      "parent_subject": "ted-eu:CPV-group:921",
+      "held_children_in_frozen_universe": [],
+      "subject_scope": "CATEGORY",
+      "subject_scope_basis": "reviewed scope rule for ted-eu CPV-class (SOURCE_NATIVE, observation-scope-rules@1.2.0)",
+      "subject_type": "CATEGORY",
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "NOTICE_COUNT": 8,
+      "SIGNALS": 2,
+      "CLAIMS": 4,
+      "EVIDENCE": 4,
+      "evidence_rows": 4,
+      "SCORABLE_EVIDENCE": 4,
+      "scorable_rows": 4,
+      "non_scorable_rows": 0,
+      "cohorts_derived": 2,
+      "cohorts_refused": 2,
+      "proposition_kinds": {
+        "source_reported_procurement_value_contrast": {
+          "rows": 2,
+          "reliability": 0.5,
+          "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020"
+        },
+        "source_published_classification_value_contrast_witnessed": {
+          "rows": 2,
+          "reliability": 0.55,
+          "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e"
+        }
+      },
+      "COUNTING_DIMENSIONS": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "noncounting_dimensions": [],
+      "RELIABILITY_DISTRIBUTION": {
+        "0.5": 2,
+        "0.55": 2
+      },
+      "reliability_distribution": {
+        "0.5": 2,
+        "0.55": 2
+      },
+      "PROVENANCE_SHAPES": 1,
+      "provenance_shapes": 1,
+      "INDEPENDENCE": "UNKNOWN",
+      "independence_state": "UNKNOWN",
+      "FORMABLE": true,
+      "hypothesis_formable": true,
+      "scoring_ready_packet_property": true,
+      "SEMANTIC_COHERENCE": "RELATED_ACTIVITIES",
+      "semantic_coherence_basis": "'production and related services' names an activity plus an open-ended remainder",
+      "exploratory_category_hypothesis": {
+        "considered": true,
+        "adopted": true,
+        "gate_detail": "conditions 1 to 5 hold: the official label denotes one procurement domain, the Evidence is 4 rows derived at this exact code, a synthesis can state that authorities publish procurement under it at differing stated values without inventing a problem, the held children sit inside the domain, and the hypothesis stays useful with problem, intervention and willingness to pay all marked unknown",
+        "statement": "EU contracting authorities publish procurement classified under CPV class 9211 (\"Motion picture and video tape production and related services\") at stated total values that differ widely within bounded sets of notices"
+      },
+      "product_intervention_grain": "PLAUSIBLE_BUT_REQUIRES_SYNTHESIS",
+      "ACTIONABLE_GRAIN": "ACTIONABLE_ONLY_AS_EXPLORATORY_CATEGORY_HYPOTHESIS",
+      "actionable_grain": "ACTIONABLE_ONLY_AS_EXPLORATORY_CATEGORY_HYPOTHESIS",
+      "PRODUCT_RELEVANCE": "SEMANTICALLY_COHERENT_BUT_PRODUCT_LINK_UNKNOWN",
+      "product_relevance": "UNKNOWN",
+      "product_decision_it_could_inform": "whether public-procurement-facing research into \"Motion picture and video tape production and related services\" is worth starting, and with which buyers; nothing about whether anybody would buy a product",
+      "establishes": "TED published, in its eforms contract-and-award resource, 2 bounded sets of notices classified under CPV class 9211 whose stated TOTAL_VALUE amounts at NOTICE scope differ from one another; contracting authorities publish procurement under this code",
+      "does_not_establish": "actual expenditure (BT-161 includes options and renewals); willingness to pay; market size; product demand; a buyer for an unspecified product; unmet need; dissatisfaction; a solution gap; profitability; a competitive gap. The official label says what the code MEANS and nothing about whether the domain is underserved",
+      "procurement_semantics": {
+        "value_is_realised_spend": false,
+        "value_is_willingness_to_pay": false,
+        "authority_is_buyer_for_unspecified_product": false
+      },
+      "buyer_semantics": {
+        "PROCUREMENT_BUYER_EXISTS": true,
+        "BUYER_FOR_PROPOSED_INTERVENTION": false
+      },
+      "establishes_product_demand": false,
+      "EGRESS_STATE": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+      "egress_state": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+      "egress_reason": "ted-eu external_model_transmission is NOT_ASSESSED under local-private-research-v1 (H-39)",
+      "egress_eligible": false,
+      "egress_review_required_before_synthesis": true,
+      "representation_constructible_without_egress": true,
+      "OVERINTERPRETATION_RISK": "HIGH",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "MEDIUM",
+        "SCORABLE_BREADTH": "MEDIUM",
+        "COUNTING_DIMENSION_DIVERSITY": "HIGH",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "MEDIUM",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "UNKNOWN",
+        "SEMANTIC_SPECIFICITY": "HIGH",
+        "SEMANTIC_COHERENCE": "RELATED_ACTIVITIES",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "YES",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "LOW",
+        "NEW_ACQUISITION_REQUIRED": "NO",
+        "OPERATOR_JUDGMENT_REQUIRED": "YES",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "HIGH"
+      },
+      "CURRENT_BLOCKERS": [
+        "ted-eu egress NOT_ASSESSED (an operator decision, recorded here and not taken)",
+        "no problem, intervention or willingness-to-pay evidence at any grain"
+      ],
+      "VETO_STATE": "NOT_VETOED",
+      "veto_state": "NOT_VETOED",
+      "veto_reason": "",
+      "DOMINANCE_STATE": "DOMINATED",
+      "dominance_state": "DOMINATED",
+      "dominated_by": "ted-eu:CPV-class:9261"
+    },
+    {
+      "subject_key": "ted-eu:CPV-class:9213",
+      "packet_id": null,
+      "CPV_LEVEL": "class",
+      "CPV_CODE": "9213",
+      "cpv_concept_code": "92130000",
+      "OFFICIAL_LABEL": "Motion picture projection services",
+      "label_language": "en",
+      "label_authority": "European Union Publications Office, EU Vocabularies CPV authority register",
+      "label_is_display_metadata_not_identity": true,
+      "parent_subject": "ted-eu:CPV-group:921",
+      "held_children_in_frozen_universe": [],
+      "subject_scope": "CATEGORY",
+      "subject_scope_basis": "reviewed scope rule for ted-eu CPV-class (SOURCE_NATIVE, observation-scope-rules@1.2.0)",
+      "subject_type": "CATEGORY",
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "NOTICE_COUNT": 1,
+      "SIGNALS": 0,
+      "CLAIMS": 0,
+      "EVIDENCE": 0,
+      "evidence_rows": 0,
+      "SCORABLE_EVIDENCE": 0,
+      "scorable_rows": 0,
+      "non_scorable_rows": 0,
+      "cohorts_derived": 0,
+      "cohorts_refused": 1,
+      "proposition_kinds": {},
+      "COUNTING_DIMENSIONS": [],
+      "counting_dimensions": [],
+      "noncounting_dimensions": [],
+      "RELIABILITY_DISTRIBUTION": {},
+      "reliability_distribution": {},
+      "PROVENANCE_SHAPES": 0,
+      "provenance_shapes": 0,
+      "INDEPENDENCE": "UNKNOWN",
+      "independence_state": "UNKNOWN",
+      "FORMABLE": false,
+      "hypothesis_formable": false,
+      "scoring_ready_packet_property": false,
+      "SEMANTIC_COHERENCE": "SINGLE_DOMAIN",
+      "semantic_coherence_basis": "motion picture projection is one activity; the held population forms no cohort",
+      "exploratory_category_hypothesis": {
+        "considered": true,
+        "adopted": false,
+        "gate_detail": "not formable: the held cohort supports no contrast, so there is no procurement activity to state",
+        "statement": null
+      },
+      "product_intervention_grain": "NOT_ESTABLISHED",
+      "ACTIONABLE_GRAIN": "NOT_ACTIONABLE",
+      "actionable_grain": "NOT_ACTIONABLE",
+      "PRODUCT_RELEVANCE": "TOO_THIN",
+      "product_relevance": "UNKNOWN",
+      "product_decision_it_could_inform": "none at this grain",
+      "establishes": "nothing: 1 held notice(s) at this code form no cohort",
+      "does_not_establish": "actual expenditure (BT-161 includes options and renewals); willingness to pay; market size; product demand; a buyer for an unspecified product; unmet need; dissatisfaction; a solution gap; profitability; a competitive gap. The official label says what the code MEANS and nothing about whether the domain is underserved",
+      "procurement_semantics": {
+        "value_is_realised_spend": false,
+        "value_is_willingness_to_pay": false,
+        "authority_is_buyer_for_unspecified_product": false
+      },
+      "buyer_semantics": {
+        "PROCUREMENT_BUYER_EXISTS": false,
+        "BUYER_FOR_PROPOSED_INTERVENTION": false
+      },
+      "establishes_product_demand": false,
+      "EGRESS_STATE": "NOT_APPLICABLE",
+      "egress_state": "NOT_APPLICABLE",
+      "egress_reason": "ted-eu external_model_transmission is NOT_ASSESSED under local-private-research-v1 (H-39)",
+      "egress_eligible": false,
+      "egress_review_required_before_synthesis": true,
+      "representation_constructible_without_egress": false,
+      "OVERINTERPRETATION_RISK": "HIGH",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "LOW",
+        "SCORABLE_BREADTH": "LOW",
+        "COUNTING_DIMENSION_DIVERSITY": "LOW",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "NONE",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "UNKNOWN",
+        "SEMANTIC_SPECIFICITY": "HIGH",
+        "SEMANTIC_COHERENCE": "SINGLE_DOMAIN",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "NO",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "LOW",
+        "NEW_ACQUISITION_REQUIRED": "YES",
+        "OPERATOR_JUDGMENT_REQUIRED": "YES",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "HIGH"
+      },
+      "CURRENT_BLOCKERS": [
+        "1 held notice(s) and no cohort at the procedure's floor",
+        "ted-eu egress NOT_ASSESSED"
+      ],
+      "VETO_STATE": "VETOED",
+      "veto_state": "VETOED",
+      "veto_reason": "no cohort forms at this code: 1 held notice(s), and the procedure's floor of two comparable amounts is not met, so there is no Evidence to explore with",
+      "DOMINANCE_STATE": "DOMINATED",
+      "dominance_state": "DOMINATED",
+      "dominated_by": "ted-eu:CPV-class:9233"
+    },
+    {
+      "subject_key": "ted-eu:CPV-class:9222",
+      "packet_id": null,
+      "CPV_LEVEL": "class",
+      "CPV_CODE": "9222",
+      "cpv_concept_code": "92220000",
+      "OFFICIAL_LABEL": "Television services",
+      "label_language": "en",
+      "label_authority": "European Union Publications Office, EU Vocabularies CPV authority register",
+      "label_is_display_metadata_not_identity": true,
+      "parent_subject": "ted-eu:CPV-group:922",
+      "held_children_in_frozen_universe": [],
+      "subject_scope": "CATEGORY",
+      "subject_scope_basis": "reviewed scope rule for ted-eu CPV-class (SOURCE_NATIVE, observation-scope-rules@1.2.0)",
+      "subject_type": "CATEGORY",
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "NOTICE_COUNT": 1,
+      "SIGNALS": 0,
+      "CLAIMS": 0,
+      "EVIDENCE": 0,
+      "evidence_rows": 0,
+      "SCORABLE_EVIDENCE": 0,
+      "scorable_rows": 0,
+      "non_scorable_rows": 0,
+      "cohorts_derived": 0,
+      "cohorts_refused": 1,
+      "proposition_kinds": {},
+      "COUNTING_DIMENSIONS": [],
+      "counting_dimensions": [],
+      "noncounting_dimensions": [],
+      "RELIABILITY_DISTRIBUTION": {},
+      "reliability_distribution": {},
+      "PROVENANCE_SHAPES": 0,
+      "provenance_shapes": 0,
+      "INDEPENDENCE": "UNKNOWN",
+      "independence_state": "UNKNOWN",
+      "FORMABLE": false,
+      "hypothesis_formable": false,
+      "scoring_ready_packet_property": false,
+      "SEMANTIC_COHERENCE": "SINGLE_DOMAIN",
+      "semantic_coherence_basis": "television services name one activity; the held population forms no cohort",
+      "exploratory_category_hypothesis": {
+        "considered": true,
+        "adopted": false,
+        "gate_detail": "not formable: the held cohort supports no contrast, so there is no procurement activity to state",
+        "statement": null
+      },
+      "product_intervention_grain": "NOT_ESTABLISHED",
+      "ACTIONABLE_GRAIN": "NOT_ACTIONABLE",
+      "actionable_grain": "NOT_ACTIONABLE",
+      "PRODUCT_RELEVANCE": "TOO_THIN",
+      "product_relevance": "UNKNOWN",
+      "product_decision_it_could_inform": "none at this grain",
+      "establishes": "nothing: 1 held notice(s) at this code form no cohort",
+      "does_not_establish": "actual expenditure (BT-161 includes options and renewals); willingness to pay; market size; product demand; a buyer for an unspecified product; unmet need; dissatisfaction; a solution gap; profitability; a competitive gap. The official label says what the code MEANS and nothing about whether the domain is underserved",
+      "procurement_semantics": {
+        "value_is_realised_spend": false,
+        "value_is_willingness_to_pay": false,
+        "authority_is_buyer_for_unspecified_product": false
+      },
+      "buyer_semantics": {
+        "PROCUREMENT_BUYER_EXISTS": false,
+        "BUYER_FOR_PROPOSED_INTERVENTION": false
+      },
+      "establishes_product_demand": false,
+      "EGRESS_STATE": "NOT_APPLICABLE",
+      "egress_state": "NOT_APPLICABLE",
+      "egress_reason": "ted-eu external_model_transmission is NOT_ASSESSED under local-private-research-v1 (H-39)",
+      "egress_eligible": false,
+      "egress_review_required_before_synthesis": true,
+      "representation_constructible_without_egress": false,
+      "OVERINTERPRETATION_RISK": "HIGH",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "LOW",
+        "SCORABLE_BREADTH": "LOW",
+        "COUNTING_DIMENSION_DIVERSITY": "LOW",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "NONE",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "UNKNOWN",
+        "SEMANTIC_SPECIFICITY": "HIGH",
+        "SEMANTIC_COHERENCE": "SINGLE_DOMAIN",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "NO",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "LOW",
+        "NEW_ACQUISITION_REQUIRED": "YES",
+        "OPERATOR_JUDGMENT_REQUIRED": "YES",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "HIGH"
+      },
+      "CURRENT_BLOCKERS": [
+        "1 held notice(s) and no cohort at the procedure's floor",
+        "ted-eu egress NOT_ASSESSED"
+      ],
+      "VETO_STATE": "VETOED",
+      "veto_state": "VETOED",
+      "veto_reason": "no cohort forms at this code: 1 held notice(s), and the procedure's floor of two comparable amounts is not met, so there is no Evidence to explore with",
+      "DOMINANCE_STATE": "DOMINATED",
+      "dominance_state": "DOMINATED",
+      "dominated_by": "ted-eu:CPV-class:9233"
+    },
+    {
+      "subject_key": "ted-eu:CPV-class:9231",
+      "packet_id": "1dd67d61bfc65cb69f7c5aff07eafc3c498370fcc3011ba17eeb7ed1805a69a2",
+      "CPV_LEVEL": "class",
+      "CPV_CODE": "9231",
+      "cpv_concept_code": "92310000",
+      "OFFICIAL_LABEL": "Artistic and literary creation and interpretation services",
+      "label_language": "en",
+      "label_authority": "European Union Publications Office, EU Vocabularies CPV authority register",
+      "label_is_display_metadata_not_identity": true,
+      "parent_subject": "ted-eu:CPV-group:923",
+      "held_children_in_frozen_universe": [],
+      "subject_scope": "CATEGORY",
+      "subject_scope_basis": "reviewed scope rule for ted-eu CPV-class (SOURCE_NATIVE, observation-scope-rules@1.2.0)",
+      "subject_type": "CATEGORY",
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "NOTICE_COUNT": 9,
+      "SIGNALS": 2,
+      "CLAIMS": 4,
+      "EVIDENCE": 4,
+      "evidence_rows": 4,
+      "SCORABLE_EVIDENCE": 4,
+      "scorable_rows": 4,
+      "non_scorable_rows": 0,
+      "cohorts_derived": 2,
+      "cohorts_refused": 2,
+      "proposition_kinds": {
+        "source_reported_procurement_value_contrast": {
+          "rows": 2,
+          "reliability": 0.5,
+          "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020"
+        },
+        "source_published_classification_value_contrast_witnessed": {
+          "rows": 2,
+          "reliability": 0.55,
+          "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e"
+        }
+      },
+      "COUNTING_DIMENSIONS": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "noncounting_dimensions": [],
+      "RELIABILITY_DISTRIBUTION": {
+        "0.5": 2,
+        "0.55": 2
+      },
+      "reliability_distribution": {
+        "0.5": 2,
+        "0.55": 2
+      },
+      "PROVENANCE_SHAPES": 1,
+      "provenance_shapes": 1,
+      "INDEPENDENCE": "UNKNOWN",
+      "independence_state": "UNKNOWN",
+      "FORMABLE": true,
+      "hypothesis_formable": true,
+      "scoring_ready_packet_property": true,
+      "SEMANTIC_COHERENCE": "RELATED_ACTIVITIES",
+      "semantic_coherence_basis": "artistic creation, literary creation and interpretation are three activities in one creative domain",
+      "exploratory_category_hypothesis": {
+        "considered": true,
+        "adopted": true,
+        "gate_detail": "conditions 1 to 5 hold: the official label denotes one procurement domain, the Evidence is 4 rows derived at this exact code, a synthesis can state that authorities publish procurement under it at differing stated values without inventing a problem, the held children sit inside the domain, and the hypothesis stays useful with problem, intervention and willingness to pay all marked unknown",
+        "statement": "EU contracting authorities publish procurement classified under CPV class 9231 (\"Artistic and literary creation and interpretation services\") at stated total values that differ widely within bounded sets of notices"
+      },
+      "product_intervention_grain": "PLAUSIBLE_BUT_REQUIRES_SYNTHESIS",
+      "ACTIONABLE_GRAIN": "ACTIONABLE_ONLY_AS_EXPLORATORY_CATEGORY_HYPOTHESIS",
+      "actionable_grain": "ACTIONABLE_ONLY_AS_EXPLORATORY_CATEGORY_HYPOTHESIS",
+      "PRODUCT_RELEVANCE": "SEMANTICALLY_COHERENT_BUT_PRODUCT_LINK_UNKNOWN",
+      "product_relevance": "UNKNOWN",
+      "product_decision_it_could_inform": "whether public-procurement-facing research into \"Artistic and literary creation and interpretation services\" is worth starting, and with which buyers; nothing about whether anybody would buy a product",
+      "establishes": "TED published, in its eforms contract-and-award resource, 2 bounded sets of notices classified under CPV class 9231 whose stated TOTAL_VALUE amounts at NOTICE scope differ from one another; contracting authorities publish procurement under this code",
+      "does_not_establish": "actual expenditure (BT-161 includes options and renewals); willingness to pay; market size; product demand; a buyer for an unspecified product; unmet need; dissatisfaction; a solution gap; profitability; a competitive gap. The official label says what the code MEANS and nothing about whether the domain is underserved",
+      "procurement_semantics": {
+        "value_is_realised_spend": false,
+        "value_is_willingness_to_pay": false,
+        "authority_is_buyer_for_unspecified_product": false
+      },
+      "buyer_semantics": {
+        "PROCUREMENT_BUYER_EXISTS": true,
+        "BUYER_FOR_PROPOSED_INTERVENTION": false
+      },
+      "establishes_product_demand": false,
+      "EGRESS_STATE": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+      "egress_state": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+      "egress_reason": "ted-eu external_model_transmission is NOT_ASSESSED under local-private-research-v1 (H-39)",
+      "egress_eligible": false,
+      "egress_review_required_before_synthesis": true,
+      "representation_constructible_without_egress": true,
+      "OVERINTERPRETATION_RISK": "HIGH",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "MEDIUM",
+        "SCORABLE_BREADTH": "MEDIUM",
+        "COUNTING_DIMENSION_DIVERSITY": "HIGH",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "MEDIUM",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "UNKNOWN",
+        "SEMANTIC_SPECIFICITY": "HIGH",
+        "SEMANTIC_COHERENCE": "RELATED_ACTIVITIES",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "YES",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "LOW",
+        "NEW_ACQUISITION_REQUIRED": "NO",
+        "OPERATOR_JUDGMENT_REQUIRED": "YES",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "HIGH"
+      },
+      "CURRENT_BLOCKERS": [
+        "ted-eu egress NOT_ASSESSED (an operator decision, recorded here and not taken)",
+        "no problem, intervention or willingness-to-pay evidence at any grain"
+      ],
+      "VETO_STATE": "NOT_VETOED",
+      "veto_state": "NOT_VETOED",
+      "veto_reason": "",
+      "DOMINANCE_STATE": "DOMINATED",
+      "dominance_state": "DOMINATED",
+      "dominated_by": "ted-eu:CPV-class:9261"
+    },
+    {
+      "subject_key": "ted-eu:CPV-class:9233",
+      "packet_id": "a3ce145965bede21e3ac60a1286692dc8cb8728d71436eb1559fcd09ef338dce",
+      "CPV_LEVEL": "class",
+      "CPV_CODE": "9233",
+      "cpv_concept_code": "92330000",
+      "OFFICIAL_LABEL": "Recreational-area services",
+      "label_language": "en",
+      "label_authority": "European Union Publications Office, EU Vocabularies CPV authority register",
+      "label_is_display_metadata_not_identity": true,
+      "parent_subject": "ted-eu:CPV-group:923",
+      "held_children_in_frozen_universe": [],
+      "subject_scope": "CATEGORY",
+      "subject_scope_basis": "reviewed scope rule for ted-eu CPV-class (SOURCE_NATIVE, observation-scope-rules@1.2.0)",
+      "subject_type": "CATEGORY",
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "NOTICE_COUNT": 5,
+      "SIGNALS": 1,
+      "CLAIMS": 2,
+      "EVIDENCE": 2,
+      "evidence_rows": 2,
+      "SCORABLE_EVIDENCE": 2,
+      "scorable_rows": 2,
+      "non_scorable_rows": 0,
+      "cohorts_derived": 1,
+      "cohorts_refused": 2,
+      "proposition_kinds": {
+        "source_reported_procurement_value_contrast": {
+          "rows": 1,
+          "reliability": 0.5,
+          "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020"
+        },
+        "source_published_classification_value_contrast_witnessed": {
+          "rows": 1,
+          "reliability": 0.55,
+          "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e"
+        }
+      },
+      "COUNTING_DIMENSIONS": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "noncounting_dimensions": [],
+      "RELIABILITY_DISTRIBUTION": {
+        "0.5": 1,
+        "0.55": 1
+      },
+      "reliability_distribution": {
+        "0.5": 1,
+        "0.55": 1
+      },
+      "PROVENANCE_SHAPES": 1,
+      "provenance_shapes": 1,
+      "INDEPENDENCE": "UNKNOWN",
+      "independence_state": "UNKNOWN",
+      "FORMABLE": true,
+      "hypothesis_formable": true,
+      "scoring_ready_packet_property": true,
+      "SEMANTIC_COHERENCE": "SINGLE_DOMAIN",
+      "semantic_coherence_basis": "recreational-area services name one activity",
+      "exploratory_category_hypothesis": {
+        "considered": true,
+        "adopted": true,
+        "gate_detail": "conditions 1 to 5 hold: the official label denotes one procurement domain, the Evidence is 2 rows derived at this exact code, a synthesis can state that authorities publish procurement under it at differing stated values without inventing a problem, the held children sit inside the domain, and the hypothesis stays useful with problem, intervention and willingness to pay all marked unknown",
+        "statement": "EU contracting authorities publish procurement classified under CPV class 9233 (\"Recreational-area services\") at stated total values that differ widely within bounded sets of notices"
+      },
+      "product_intervention_grain": "PLAUSIBLE_BUT_REQUIRES_SYNTHESIS",
+      "ACTIONABLE_GRAIN": "ACTIONABLE_ONLY_AS_EXPLORATORY_CATEGORY_HYPOTHESIS",
+      "actionable_grain": "ACTIONABLE_ONLY_AS_EXPLORATORY_CATEGORY_HYPOTHESIS",
+      "PRODUCT_RELEVANCE": "SEMANTICALLY_COHERENT_BUT_PRODUCT_LINK_UNKNOWN",
+      "product_relevance": "UNKNOWN",
+      "product_decision_it_could_inform": "whether public-procurement-facing research into \"Recreational-area services\" is worth starting, and with which buyers; nothing about whether anybody would buy a product",
+      "establishes": "TED published, in its eforms contract-and-award resource, 1 bounded sets of notices classified under CPV class 9233 whose stated TOTAL_VALUE amounts at NOTICE scope differ from one another; contracting authorities publish procurement under this code",
+      "does_not_establish": "actual expenditure (BT-161 includes options and renewals); willingness to pay; market size; product demand; a buyer for an unspecified product; unmet need; dissatisfaction; a solution gap; profitability; a competitive gap. The official label says what the code MEANS and nothing about whether the domain is underserved",
+      "procurement_semantics": {
+        "value_is_realised_spend": false,
+        "value_is_willingness_to_pay": false,
+        "authority_is_buyer_for_unspecified_product": false
+      },
+      "buyer_semantics": {
+        "PROCUREMENT_BUYER_EXISTS": true,
+        "BUYER_FOR_PROPOSED_INTERVENTION": false
+      },
+      "establishes_product_demand": false,
+      "EGRESS_STATE": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+      "egress_state": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+      "egress_reason": "ted-eu external_model_transmission is NOT_ASSESSED under local-private-research-v1 (H-39)",
+      "egress_eligible": false,
+      "egress_review_required_before_synthesis": true,
+      "representation_constructible_without_egress": true,
+      "OVERINTERPRETATION_RISK": "HIGH",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "LOW",
+        "SCORABLE_BREADTH": "MEDIUM",
+        "COUNTING_DIMENSION_DIVERSITY": "HIGH",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "MEDIUM",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "UNKNOWN",
+        "SEMANTIC_SPECIFICITY": "HIGH",
+        "SEMANTIC_COHERENCE": "SINGLE_DOMAIN",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "YES",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "LOW",
+        "NEW_ACQUISITION_REQUIRED": "NO",
+        "OPERATOR_JUDGMENT_REQUIRED": "YES",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "HIGH"
+      },
+      "CURRENT_BLOCKERS": [
+        "ted-eu egress NOT_ASSESSED (an operator decision, recorded here and not taken)",
+        "no problem, intervention or willingness-to-pay evidence at any grain"
+      ],
+      "VETO_STATE": "NOT_VETOED",
+      "veto_state": "NOT_VETOED",
+      "veto_reason": "",
+      "DOMINANCE_STATE": "DOMINATED",
+      "dominance_state": "DOMINATED",
+      "dominated_by": "ted-eu:CPV-class:9261"
+    },
+    {
+      "subject_key": "ted-eu:CPV-class:9235",
+      "packet_id": null,
+      "CPV_LEVEL": "class",
+      "CPV_CODE": "9235",
+      "cpv_concept_code": "92350000",
+      "OFFICIAL_LABEL": "Gambling and betting services",
+      "label_language": "en",
+      "label_authority": "European Union Publications Office, EU Vocabularies CPV authority register",
+      "label_is_display_metadata_not_identity": true,
+      "parent_subject": "ted-eu:CPV-group:923",
+      "held_children_in_frozen_universe": [],
+      "subject_scope": "CATEGORY",
+      "subject_scope_basis": "reviewed scope rule for ted-eu CPV-class (SOURCE_NATIVE, observation-scope-rules@1.2.0)",
+      "subject_type": "CATEGORY",
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "NOTICE_COUNT": 2,
+      "SIGNALS": 0,
+      "CLAIMS": 0,
+      "EVIDENCE": 0,
+      "evidence_rows": 0,
+      "SCORABLE_EVIDENCE": 0,
+      "scorable_rows": 0,
+      "non_scorable_rows": 0,
+      "cohorts_derived": 0,
+      "cohorts_refused": 0,
+      "proposition_kinds": {},
+      "COUNTING_DIMENSIONS": [],
+      "counting_dimensions": [],
+      "noncounting_dimensions": [],
+      "RELIABILITY_DISTRIBUTION": {},
+      "reliability_distribution": {},
+      "PROVENANCE_SHAPES": 0,
+      "provenance_shapes": 0,
+      "INDEPENDENCE": "UNKNOWN",
+      "independence_state": "UNKNOWN",
+      "FORMABLE": false,
+      "hypothesis_formable": false,
+      "scoring_ready_packet_property": false,
+      "SEMANTIC_COHERENCE": "RELATED_ACTIVITIES",
+      "semantic_coherence_basis": "gambling and betting are two related activities; the held population forms no cohort",
+      "exploratory_category_hypothesis": {
+        "considered": true,
+        "adopted": false,
+        "gate_detail": "not formable: the held cohort supports no contrast, so there is no procurement activity to state",
+        "statement": null
+      },
+      "product_intervention_grain": "NOT_ESTABLISHED",
+      "ACTIONABLE_GRAIN": "NOT_ACTIONABLE",
+      "actionable_grain": "NOT_ACTIONABLE",
+      "PRODUCT_RELEVANCE": "TOO_THIN",
+      "product_relevance": "UNKNOWN",
+      "product_decision_it_could_inform": "none at this grain",
+      "establishes": "nothing: 2 held notice(s) at this code form no cohort",
+      "does_not_establish": "actual expenditure (BT-161 includes options and renewals); willingness to pay; market size; product demand; a buyer for an unspecified product; unmet need; dissatisfaction; a solution gap; profitability; a competitive gap. The official label says what the code MEANS and nothing about whether the domain is underserved",
+      "procurement_semantics": {
+        "value_is_realised_spend": false,
+        "value_is_willingness_to_pay": false,
+        "authority_is_buyer_for_unspecified_product": false
+      },
+      "buyer_semantics": {
+        "PROCUREMENT_BUYER_EXISTS": false,
+        "BUYER_FOR_PROPOSED_INTERVENTION": false
+      },
+      "establishes_product_demand": false,
+      "EGRESS_STATE": "NOT_APPLICABLE",
+      "egress_state": "NOT_APPLICABLE",
+      "egress_reason": "ted-eu external_model_transmission is NOT_ASSESSED under local-private-research-v1 (H-39)",
+      "egress_eligible": false,
+      "egress_review_required_before_synthesis": true,
+      "representation_constructible_without_egress": false,
+      "OVERINTERPRETATION_RISK": "HIGH",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "LOW",
+        "SCORABLE_BREADTH": "LOW",
+        "COUNTING_DIMENSION_DIVERSITY": "LOW",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "NONE",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "UNKNOWN",
+        "SEMANTIC_SPECIFICITY": "HIGH",
+        "SEMANTIC_COHERENCE": "RELATED_ACTIVITIES",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "NO",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "LOW",
+        "NEW_ACQUISITION_REQUIRED": "YES",
+        "OPERATOR_JUDGMENT_REQUIRED": "YES",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "HIGH"
+      },
+      "CURRENT_BLOCKERS": [
+        "2 held notice(s) and no cohort at the procedure's floor",
+        "ted-eu egress NOT_ASSESSED"
+      ],
+      "VETO_STATE": "VETOED",
+      "veto_state": "VETOED",
+      "veto_reason": "no cohort forms at this code: 2 held notice(s), and the procedure's floor of two comparable amounts is not met, so there is no Evidence to explore with",
+      "DOMINANCE_STATE": "DOMINATED",
+      "dominance_state": "DOMINATED",
+      "dominated_by": "ted-eu:CPV-class:9211"
+    },
+    {
+      "subject_key": "ted-eu:CPV-class:9236",
+      "packet_id": null,
+      "CPV_LEVEL": "class",
+      "CPV_CODE": "9236",
+      "cpv_concept_code": "92360000",
+      "OFFICIAL_LABEL": "Pyrotechnic services",
+      "label_language": "en",
+      "label_authority": "European Union Publications Office, EU Vocabularies CPV authority register",
+      "label_is_display_metadata_not_identity": true,
+      "parent_subject": "ted-eu:CPV-group:923",
+      "held_children_in_frozen_universe": [],
+      "subject_scope": "CATEGORY",
+      "subject_scope_basis": "reviewed scope rule for ted-eu CPV-class (SOURCE_NATIVE, observation-scope-rules@1.2.0)",
+      "subject_type": "CATEGORY",
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "NOTICE_COUNT": 1,
+      "SIGNALS": 0,
+      "CLAIMS": 0,
+      "EVIDENCE": 0,
+      "evidence_rows": 0,
+      "SCORABLE_EVIDENCE": 0,
+      "scorable_rows": 0,
+      "non_scorable_rows": 0,
+      "cohorts_derived": 0,
+      "cohorts_refused": 1,
+      "proposition_kinds": {},
+      "COUNTING_DIMENSIONS": [],
+      "counting_dimensions": [],
+      "noncounting_dimensions": [],
+      "RELIABILITY_DISTRIBUTION": {},
+      "reliability_distribution": {},
+      "PROVENANCE_SHAPES": 0,
+      "provenance_shapes": 0,
+      "INDEPENDENCE": "UNKNOWN",
+      "independence_state": "UNKNOWN",
+      "FORMABLE": false,
+      "hypothesis_formable": false,
+      "scoring_ready_packet_property": false,
+      "SEMANTIC_COHERENCE": "SINGLE_DOMAIN",
+      "semantic_coherence_basis": "pyrotechnic services name one activity; the held population forms no cohort",
+      "exploratory_category_hypothesis": {
+        "considered": true,
+        "adopted": false,
+        "gate_detail": "not formable: the held cohort supports no contrast, so there is no procurement activity to state",
+        "statement": null
+      },
+      "product_intervention_grain": "NOT_ESTABLISHED",
+      "ACTIONABLE_GRAIN": "NOT_ACTIONABLE",
+      "actionable_grain": "NOT_ACTIONABLE",
+      "PRODUCT_RELEVANCE": "TOO_THIN",
+      "product_relevance": "UNKNOWN",
+      "product_decision_it_could_inform": "none at this grain",
+      "establishes": "nothing: 1 held notice(s) at this code form no cohort",
+      "does_not_establish": "actual expenditure (BT-161 includes options and renewals); willingness to pay; market size; product demand; a buyer for an unspecified product; unmet need; dissatisfaction; a solution gap; profitability; a competitive gap. The official label says what the code MEANS and nothing about whether the domain is underserved",
+      "procurement_semantics": {
+        "value_is_realised_spend": false,
+        "value_is_willingness_to_pay": false,
+        "authority_is_buyer_for_unspecified_product": false
+      },
+      "buyer_semantics": {
+        "PROCUREMENT_BUYER_EXISTS": false,
+        "BUYER_FOR_PROPOSED_INTERVENTION": false
+      },
+      "establishes_product_demand": false,
+      "EGRESS_STATE": "NOT_APPLICABLE",
+      "egress_state": "NOT_APPLICABLE",
+      "egress_reason": "ted-eu external_model_transmission is NOT_ASSESSED under local-private-research-v1 (H-39)",
+      "egress_eligible": false,
+      "egress_review_required_before_synthesis": true,
+      "representation_constructible_without_egress": false,
+      "OVERINTERPRETATION_RISK": "HIGH",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "LOW",
+        "SCORABLE_BREADTH": "LOW",
+        "COUNTING_DIMENSION_DIVERSITY": "LOW",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "NONE",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "UNKNOWN",
+        "SEMANTIC_SPECIFICITY": "HIGH",
+        "SEMANTIC_COHERENCE": "SINGLE_DOMAIN",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "NO",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "LOW",
+        "NEW_ACQUISITION_REQUIRED": "YES",
+        "OPERATOR_JUDGMENT_REQUIRED": "YES",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "HIGH"
+      },
+      "CURRENT_BLOCKERS": [
+        "1 held notice(s) and no cohort at the procedure's floor",
+        "ted-eu egress NOT_ASSESSED"
+      ],
+      "VETO_STATE": "VETOED",
+      "veto_state": "VETOED",
+      "veto_reason": "no cohort forms at this code: 1 held notice(s), and the procedure's floor of two comparable amounts is not met, so there is no Evidence to explore with",
+      "DOMINANCE_STATE": "DOMINATED",
+      "dominance_state": "DOMINATED",
+      "dominated_by": "ted-eu:CPV-class:9233"
+    },
+    {
+      "subject_key": "ted-eu:CPV-class:9251",
+      "packet_id": "73458c56f3442aa5fcfe4751e4132a0bb44806810caed806da60977669a54417",
+      "CPV_LEVEL": "class",
+      "CPV_CODE": "9251",
+      "cpv_concept_code": "92510000",
+      "OFFICIAL_LABEL": "Library and archive services",
+      "label_language": "en",
+      "label_authority": "European Union Publications Office, EU Vocabularies CPV authority register",
+      "label_is_display_metadata_not_identity": true,
+      "parent_subject": "ted-eu:CPV-group:925",
+      "held_children_in_frozen_universe": [],
+      "subject_scope": "CATEGORY",
+      "subject_scope_basis": "reviewed scope rule for ted-eu CPV-class (SOURCE_NATIVE, observation-scope-rules@1.2.0)",
+      "subject_type": "CATEGORY",
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "NOTICE_COUNT": 7,
+      "SIGNALS": 2,
+      "CLAIMS": 4,
+      "EVIDENCE": 4,
+      "evidence_rows": 4,
+      "SCORABLE_EVIDENCE": 4,
+      "scorable_rows": 4,
+      "non_scorable_rows": 0,
+      "cohorts_derived": 2,
+      "cohorts_refused": 1,
+      "proposition_kinds": {
+        "source_reported_procurement_value_contrast": {
+          "rows": 2,
+          "reliability": 0.5,
+          "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020"
+        },
+        "source_published_classification_value_contrast_witnessed": {
+          "rows": 2,
+          "reliability": 0.55,
+          "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e"
+        }
+      },
+      "COUNTING_DIMENSIONS": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "noncounting_dimensions": [],
+      "RELIABILITY_DISTRIBUTION": {
+        "0.5": 2,
+        "0.55": 2
+      },
+      "reliability_distribution": {
+        "0.5": 2,
+        "0.55": 2
+      },
+      "PROVENANCE_SHAPES": 1,
+      "provenance_shapes": 1,
+      "INDEPENDENCE": "UNKNOWN",
+      "independence_state": "UNKNOWN",
+      "FORMABLE": true,
+      "hypothesis_formable": true,
+      "scoring_ready_packet_property": true,
+      "SEMANTIC_COHERENCE": "RELATED_ACTIVITIES",
+      "semantic_coherence_basis": "library services and archive services are two activities in one documentary-collection domain",
+      "exploratory_category_hypothesis": {
+        "considered": true,
+        "adopted": true,
+        "gate_detail": "conditions 1 to 5 hold: the official label denotes one procurement domain, the Evidence is 4 rows derived at this exact code, a synthesis can state that authorities publish procurement under it at differing stated values without inventing a problem, the held children sit inside the domain, and the hypothesis stays useful with problem, intervention and willingness to pay all marked unknown",
+        "statement": "EU contracting authorities publish procurement classified under CPV class 9251 (\"Library and archive services\") at stated total values that differ widely within bounded sets of notices"
+      },
+      "product_intervention_grain": "PLAUSIBLE_BUT_REQUIRES_SYNTHESIS",
+      "ACTIONABLE_GRAIN": "ACTIONABLE_ONLY_AS_EXPLORATORY_CATEGORY_HYPOTHESIS",
+      "actionable_grain": "ACTIONABLE_ONLY_AS_EXPLORATORY_CATEGORY_HYPOTHESIS",
+      "PRODUCT_RELEVANCE": "SEMANTICALLY_COHERENT_BUT_PRODUCT_LINK_UNKNOWN",
+      "product_relevance": "UNKNOWN",
+      "product_decision_it_could_inform": "whether public-procurement-facing research into \"Library and archive services\" is worth starting, and with which buyers; nothing about whether anybody would buy a product",
+      "establishes": "TED published, in its eforms contract-and-award resource, 2 bounded sets of notices classified under CPV class 9251 whose stated TOTAL_VALUE amounts at NOTICE scope differ from one another; contracting authorities publish procurement under this code",
+      "does_not_establish": "actual expenditure (BT-161 includes options and renewals); willingness to pay; market size; product demand; a buyer for an unspecified product; unmet need; dissatisfaction; a solution gap; profitability; a competitive gap. The official label says what the code MEANS and nothing about whether the domain is underserved",
+      "procurement_semantics": {
+        "value_is_realised_spend": false,
+        "value_is_willingness_to_pay": false,
+        "authority_is_buyer_for_unspecified_product": false
+      },
+      "buyer_semantics": {
+        "PROCUREMENT_BUYER_EXISTS": true,
+        "BUYER_FOR_PROPOSED_INTERVENTION": false
+      },
+      "establishes_product_demand": false,
+      "EGRESS_STATE": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+      "egress_state": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+      "egress_reason": "ted-eu external_model_transmission is NOT_ASSESSED under local-private-research-v1 (H-39)",
+      "egress_eligible": false,
+      "egress_review_required_before_synthesis": true,
+      "representation_constructible_without_egress": true,
+      "OVERINTERPRETATION_RISK": "HIGH",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "MEDIUM",
+        "SCORABLE_BREADTH": "MEDIUM",
+        "COUNTING_DIMENSION_DIVERSITY": "HIGH",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "MEDIUM",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "UNKNOWN",
+        "SEMANTIC_SPECIFICITY": "HIGH",
+        "SEMANTIC_COHERENCE": "RELATED_ACTIVITIES",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "YES",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "LOW",
+        "NEW_ACQUISITION_REQUIRED": "NO",
+        "OPERATOR_JUDGMENT_REQUIRED": "YES",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "HIGH"
+      },
+      "CURRENT_BLOCKERS": [
+        "ted-eu egress NOT_ASSESSED (an operator decision, recorded here and not taken)",
+        "no problem, intervention or willingness-to-pay evidence at any grain"
+      ],
+      "VETO_STATE": "NOT_VETOED",
+      "veto_state": "NOT_VETOED",
+      "veto_reason": "",
+      "DOMINANCE_STATE": "DOMINATED",
+      "dominance_state": "DOMINATED",
+      "dominated_by": "ted-eu:CPV-class:9261"
+    },
+    {
+      "subject_key": "ted-eu:CPV-class:9252",
+      "packet_id": "d6dfa0749ccd41d1305ae98c8381d3679c283ac77b996e41cac0bcd0b94c929f",
+      "CPV_LEVEL": "class",
+      "CPV_CODE": "9252",
+      "cpv_concept_code": "92520000",
+      "OFFICIAL_LABEL": "Museum services and preservation services of historical sites and buildings",
+      "label_language": "en",
+      "label_authority": "European Union Publications Office, EU Vocabularies CPV authority register",
+      "label_is_display_metadata_not_identity": true,
+      "parent_subject": "ted-eu:CPV-group:925",
+      "held_children_in_frozen_universe": [],
+      "subject_scope": "CATEGORY",
+      "subject_scope_basis": "reviewed scope rule for ted-eu CPV-class (SOURCE_NATIVE, observation-scope-rules@1.2.0)",
+      "subject_type": "CATEGORY",
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "NOTICE_COUNT": 9,
+      "SIGNALS": 3,
+      "CLAIMS": 5,
+      "EVIDENCE": 6,
+      "evidence_rows": 6,
+      "SCORABLE_EVIDENCE": 6,
+      "scorable_rows": 6,
+      "non_scorable_rows": 0,
+      "cohorts_derived": 3,
+      "cohorts_refused": 1,
+      "proposition_kinds": {
+        "source_reported_procurement_value_contrast": {
+          "rows": 3,
+          "reliability": 0.5,
+          "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020"
+        },
+        "source_published_classification_value_contrast_witnessed": {
+          "rows": 3,
+          "reliability": 0.55,
+          "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e"
+        }
+      },
+      "COUNTING_DIMENSIONS": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "noncounting_dimensions": [],
+      "RELIABILITY_DISTRIBUTION": {
+        "0.5": 3,
+        "0.55": 3
+      },
+      "reliability_distribution": {
+        "0.5": 3,
+        "0.55": 3
+      },
+      "PROVENANCE_SHAPES": 1,
+      "provenance_shapes": 1,
+      "INDEPENDENCE": "UNKNOWN",
+      "independence_state": "UNKNOWN",
+      "FORMABLE": true,
+      "hypothesis_formable": true,
+      "scoring_ready_packet_property": true,
+      "SEMANTIC_COHERENCE": "RELATED_ACTIVITIES",
+      "semantic_coherence_basis": "museum services and the preservation of historical sites and buildings are two activities joined by 'and': a collection open to visitors and the conservation of built fabric are related through heritage and are not one activity",
+      "exploratory_category_hypothesis": {
+        "considered": true,
+        "adopted": true,
+        "gate_detail": "conditions 1 to 5 hold: the official label denotes one procurement domain, the Evidence is 6 rows derived at this exact code, a synthesis can state that authorities publish procurement under it at differing stated values without inventing a problem, the held children sit inside the domain, and the hypothesis stays useful with problem, intervention and willingness to pay all marked unknown",
+        "statement": "EU contracting authorities publish procurement classified under CPV class 9252 (\"Museum services and preservation services of historical sites and buildings\") at stated total values that differ widely within bounded sets of notices"
+      },
+      "product_intervention_grain": "PLAUSIBLE_BUT_REQUIRES_SYNTHESIS",
+      "ACTIONABLE_GRAIN": "ACTIONABLE_ONLY_AS_EXPLORATORY_CATEGORY_HYPOTHESIS",
+      "actionable_grain": "ACTIONABLE_ONLY_AS_EXPLORATORY_CATEGORY_HYPOTHESIS",
+      "PRODUCT_RELEVANCE": "SEMANTICALLY_COHERENT_BUT_PRODUCT_LINK_UNKNOWN",
+      "product_relevance": "UNKNOWN",
+      "product_decision_it_could_inform": "whether public-procurement-facing research into \"Museum services and preservation services of historical sites and buildings\" is worth starting, and with which buyers; nothing about whether anybody would buy a product",
+      "establishes": "TED published, in its eforms contract-and-award resource, 3 bounded sets of notices classified under CPV class 9252 whose stated TOTAL_VALUE amounts at NOTICE scope differ from one another; contracting authorities publish procurement under this code",
+      "does_not_establish": "actual expenditure (BT-161 includes options and renewals); willingness to pay; market size; product demand; a buyer for an unspecified product; unmet need; dissatisfaction; a solution gap; profitability; a competitive gap. The official label says what the code MEANS and nothing about whether the domain is underserved",
+      "procurement_semantics": {
+        "value_is_realised_spend": false,
+        "value_is_willingness_to_pay": false,
+        "authority_is_buyer_for_unspecified_product": false
+      },
+      "buyer_semantics": {
+        "PROCUREMENT_BUYER_EXISTS": true,
+        "BUYER_FOR_PROPOSED_INTERVENTION": false
+      },
+      "establishes_product_demand": false,
+      "EGRESS_STATE": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+      "egress_state": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+      "egress_reason": "ted-eu external_model_transmission is NOT_ASSESSED under local-private-research-v1 (H-39)",
+      "egress_eligible": false,
+      "egress_review_required_before_synthesis": true,
+      "representation_constructible_without_egress": true,
+      "OVERINTERPRETATION_RISK": "HIGH",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "MEDIUM",
+        "SCORABLE_BREADTH": "MEDIUM",
+        "COUNTING_DIMENSION_DIVERSITY": "HIGH",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "MEDIUM",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "UNKNOWN",
+        "SEMANTIC_SPECIFICITY": "HIGH",
+        "SEMANTIC_COHERENCE": "RELATED_ACTIVITIES",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "YES",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "LOW",
+        "NEW_ACQUISITION_REQUIRED": "NO",
+        "OPERATOR_JUDGMENT_REQUIRED": "YES",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "HIGH"
+      },
+      "CURRENT_BLOCKERS": [
+        "ted-eu egress NOT_ASSESSED (an operator decision, recorded here and not taken)",
+        "no problem, intervention or willingness-to-pay evidence at any grain"
+      ],
+      "VETO_STATE": "NOT_VETOED",
+      "veto_state": "NOT_VETOED",
+      "veto_reason": "",
+      "DOMINANCE_STATE": "DOMINATED",
+      "dominance_state": "DOMINATED",
+      "dominated_by": "ted-eu:CPV-class:9261"
+    },
+    {
+      "subject_key": "ted-eu:CPV-class:9253",
+      "packet_id": "7f6d1224c06d4b5bbdfc436554912c9aafa93e2250a0e0c81afc85bc465a6afc",
+      "CPV_LEVEL": "class",
+      "CPV_CODE": "9253",
+      "cpv_concept_code": "92530000",
+      "OFFICIAL_LABEL": "Botanical and zoological garden services and nature reserve services",
+      "label_language": "en",
+      "label_authority": "European Union Publications Office, EU Vocabularies CPV authority register",
+      "label_is_display_metadata_not_identity": true,
+      "parent_subject": "ted-eu:CPV-group:925",
+      "held_children_in_frozen_universe": [],
+      "subject_scope": "CATEGORY",
+      "subject_scope_basis": "reviewed scope rule for ted-eu CPV-class (SOURCE_NATIVE, observation-scope-rules@1.2.0)",
+      "subject_type": "CATEGORY",
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "NOTICE_COUNT": 3,
+      "SIGNALS": 1,
+      "CLAIMS": 2,
+      "EVIDENCE": 2,
+      "evidence_rows": 2,
+      "SCORABLE_EVIDENCE": 2,
+      "scorable_rows": 2,
+      "non_scorable_rows": 0,
+      "cohorts_derived": 1,
+      "cohorts_refused": 1,
+      "proposition_kinds": {
+        "source_reported_procurement_value_contrast": {
+          "rows": 1,
+          "reliability": 0.5,
+          "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020"
+        },
+        "source_published_classification_value_contrast_witnessed": {
+          "rows": 1,
+          "reliability": 0.55,
+          "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e"
+        }
+      },
+      "COUNTING_DIMENSIONS": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "noncounting_dimensions": [],
+      "RELIABILITY_DISTRIBUTION": {
+        "0.5": 1,
+        "0.55": 1
+      },
+      "reliability_distribution": {
+        "0.5": 1,
+        "0.55": 1
+      },
+      "PROVENANCE_SHAPES": 1,
+      "provenance_shapes": 1,
+      "INDEPENDENCE": "UNKNOWN",
+      "independence_state": "UNKNOWN",
+      "FORMABLE": true,
+      "hypothesis_formable": true,
+      "scoring_ready_packet_property": true,
+      "SEMANTIC_COHERENCE": "RELATED_ACTIVITIES",
+      "semantic_coherence_basis": "botanical gardens, zoological gardens and nature reserves are three activities in one living-collections and protected-sites domain",
+      "exploratory_category_hypothesis": {
+        "considered": true,
+        "adopted": true,
+        "gate_detail": "conditions 1 to 5 hold: the official label denotes one procurement domain, the Evidence is 2 rows derived at this exact code, a synthesis can state that authorities publish procurement under it at differing stated values without inventing a problem, the held children sit inside the domain, and the hypothesis stays useful with problem, intervention and willingness to pay all marked unknown",
+        "statement": "EU contracting authorities publish procurement classified under CPV class 9253 (\"Botanical and zoological garden services and nature reserve services\") at stated total values that differ widely within bounded sets of notices"
+      },
+      "product_intervention_grain": "PLAUSIBLE_BUT_REQUIRES_SYNTHESIS",
+      "ACTIONABLE_GRAIN": "ACTIONABLE_ONLY_AS_EXPLORATORY_CATEGORY_HYPOTHESIS",
+      "actionable_grain": "ACTIONABLE_ONLY_AS_EXPLORATORY_CATEGORY_HYPOTHESIS",
+      "PRODUCT_RELEVANCE": "SEMANTICALLY_COHERENT_BUT_PRODUCT_LINK_UNKNOWN",
+      "product_relevance": "UNKNOWN",
+      "product_decision_it_could_inform": "whether public-procurement-facing research into \"Botanical and zoological garden services and nature reserve services\" is worth starting, and with which buyers; nothing about whether anybody would buy a product",
+      "establishes": "TED published, in its eforms contract-and-award resource, 1 bounded sets of notices classified under CPV class 9253 whose stated TOTAL_VALUE amounts at NOTICE scope differ from one another; contracting authorities publish procurement under this code",
+      "does_not_establish": "actual expenditure (BT-161 includes options and renewals); willingness to pay; market size; product demand; a buyer for an unspecified product; unmet need; dissatisfaction; a solution gap; profitability; a competitive gap. The official label says what the code MEANS and nothing about whether the domain is underserved",
+      "procurement_semantics": {
+        "value_is_realised_spend": false,
+        "value_is_willingness_to_pay": false,
+        "authority_is_buyer_for_unspecified_product": false
+      },
+      "buyer_semantics": {
+        "PROCUREMENT_BUYER_EXISTS": true,
+        "BUYER_FOR_PROPOSED_INTERVENTION": false
+      },
+      "establishes_product_demand": false,
+      "EGRESS_STATE": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+      "egress_state": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+      "egress_reason": "ted-eu external_model_transmission is NOT_ASSESSED under local-private-research-v1 (H-39)",
+      "egress_eligible": false,
+      "egress_review_required_before_synthesis": true,
+      "representation_constructible_without_egress": true,
+      "OVERINTERPRETATION_RISK": "HIGH",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "LOW",
+        "SCORABLE_BREADTH": "MEDIUM",
+        "COUNTING_DIMENSION_DIVERSITY": "HIGH",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "MEDIUM",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "UNKNOWN",
+        "SEMANTIC_SPECIFICITY": "HIGH",
+        "SEMANTIC_COHERENCE": "RELATED_ACTIVITIES",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "YES",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "LOW",
+        "NEW_ACQUISITION_REQUIRED": "NO",
+        "OPERATOR_JUDGMENT_REQUIRED": "YES",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "HIGH"
+      },
+      "CURRENT_BLOCKERS": [
+        "ted-eu egress NOT_ASSESSED (an operator decision, recorded here and not taken)",
+        "no problem, intervention or willingness-to-pay evidence at any grain"
+      ],
+      "VETO_STATE": "NOT_VETOED",
+      "veto_state": "NOT_VETOED",
+      "veto_reason": "",
+      "DOMINANCE_STATE": "DOMINATED",
+      "dominance_state": "DOMINATED",
+      "dominated_by": "ted-eu:CPV-class:9211"
+    },
+    {
+      "subject_key": "ted-eu:CPV-class:9261",
+      "packet_id": "e218b56a8f938f4d5f7fc961e7f0c2cfe184c4396395334140c6199b48316592",
+      "CPV_LEVEL": "class",
+      "CPV_CODE": "9261",
+      "cpv_concept_code": "92610000",
+      "OFFICIAL_LABEL": "Sports facilities operation services",
+      "label_language": "en",
+      "label_authority": "European Union Publications Office, EU Vocabularies CPV authority register",
+      "label_is_display_metadata_not_identity": true,
+      "parent_subject": "ted-eu:CPV-group:926",
+      "held_children_in_frozen_universe": [],
+      "subject_scope": "CATEGORY",
+      "subject_scope_basis": "reviewed scope rule for ted-eu CPV-class (SOURCE_NATIVE, observation-scope-rules@1.2.0)",
+      "subject_type": "CATEGORY",
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "NOTICE_COUNT": 16,
+      "SIGNALS": 3,
+      "CLAIMS": 5,
+      "EVIDENCE": 6,
+      "evidence_rows": 6,
+      "SCORABLE_EVIDENCE": 6,
+      "scorable_rows": 6,
+      "non_scorable_rows": 0,
+      "cohorts_derived": 3,
+      "cohorts_refused": 2,
+      "proposition_kinds": {
+        "source_reported_procurement_value_contrast": {
+          "rows": 3,
+          "reliability": 0.5,
+          "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020"
+        },
+        "source_published_classification_value_contrast_witnessed": {
+          "rows": 3,
+          "reliability": 0.55,
+          "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e"
+        }
+      },
+      "COUNTING_DIMENSIONS": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "noncounting_dimensions": [],
+      "RELIABILITY_DISTRIBUTION": {
+        "0.5": 3,
+        "0.55": 3
+      },
+      "reliability_distribution": {
+        "0.5": 3,
+        "0.55": 3
+      },
+      "PROVENANCE_SHAPES": 1,
+      "provenance_shapes": 1,
+      "INDEPENDENCE": "UNKNOWN",
+      "independence_state": "UNKNOWN",
+      "FORMABLE": true,
+      "hypothesis_formable": true,
+      "scoring_ready_packet_property": true,
+      "SEMANTIC_COHERENCE": "SINGLE_DOMAIN",
+      "semantic_coherence_basis": "'Sports facilities operation services' names exactly one activity: operating a sports facility. No conjunction, no residual remainder, no second activity",
+      "exploratory_category_hypothesis": {
+        "considered": true,
+        "adopted": true,
+        "gate_detail": "conditions 1 to 5 hold: the official label denotes one procurement domain, the Evidence is 6 rows derived at this exact code, a synthesis can state that authorities publish procurement under it at differing stated values without inventing a problem, the held children sit inside the domain, and the hypothesis stays useful with problem, intervention and willingness to pay all marked unknown",
+        "statement": "EU contracting authorities publish procurement classified under CPV class 9261 (\"Sports facilities operation services\") at stated total values that differ widely within bounded sets of notices"
+      },
+      "product_intervention_grain": "PLAUSIBLE_BUT_REQUIRES_SYNTHESIS",
+      "ACTIONABLE_GRAIN": "ACTIONABLE_ONLY_AS_EXPLORATORY_CATEGORY_HYPOTHESIS",
+      "actionable_grain": "ACTIONABLE_ONLY_AS_EXPLORATORY_CATEGORY_HYPOTHESIS",
+      "PRODUCT_RELEVANCE": "SEMANTICALLY_COHERENT_BUT_PRODUCT_LINK_UNKNOWN",
+      "product_relevance": "UNKNOWN",
+      "product_decision_it_could_inform": "whether public-procurement-facing research into \"Sports facilities operation services\" is worth starting, and with which buyers; nothing about whether anybody would buy a product",
+      "establishes": "TED published, in its eforms contract-and-award resource, 3 bounded sets of notices classified under CPV class 9261 whose stated TOTAL_VALUE amounts at NOTICE scope differ from one another; contracting authorities publish procurement under this code",
+      "does_not_establish": "actual expenditure (BT-161 includes options and renewals); willingness to pay; market size; product demand; a buyer for an unspecified product; unmet need; dissatisfaction; a solution gap; profitability; a competitive gap. The official label says what the code MEANS and nothing about whether the domain is underserved",
+      "procurement_semantics": {
+        "value_is_realised_spend": false,
+        "value_is_willingness_to_pay": false,
+        "authority_is_buyer_for_unspecified_product": false
+      },
+      "buyer_semantics": {
+        "PROCUREMENT_BUYER_EXISTS": true,
+        "BUYER_FOR_PROPOSED_INTERVENTION": false
+      },
+      "establishes_product_demand": false,
+      "EGRESS_STATE": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+      "egress_state": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+      "egress_reason": "ted-eu external_model_transmission is NOT_ASSESSED under local-private-research-v1 (H-39)",
+      "egress_eligible": false,
+      "egress_review_required_before_synthesis": true,
+      "representation_constructible_without_egress": true,
+      "OVERINTERPRETATION_RISK": "HIGH",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "MEDIUM",
+        "SCORABLE_BREADTH": "MEDIUM",
+        "COUNTING_DIMENSION_DIVERSITY": "HIGH",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "MEDIUM",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "UNKNOWN",
+        "SEMANTIC_SPECIFICITY": "HIGH",
+        "SEMANTIC_COHERENCE": "SINGLE_DOMAIN",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "YES",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "LOW",
+        "NEW_ACQUISITION_REQUIRED": "NO",
+        "OPERATOR_JUDGMENT_REQUIRED": "YES",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "HIGH"
+      },
+      "CURRENT_BLOCKERS": [
+        "ted-eu egress NOT_ASSESSED (an operator decision, recorded here and not taken)",
+        "no problem, intervention or willingness-to-pay evidence at any grain"
+      ],
+      "VETO_STATE": "NOT_VETOED",
+      "veto_state": "NOT_VETOED",
+      "veto_reason": "",
+      "DOMINANCE_STATE": "FRONTIER",
+      "dominance_state": "FRONTIER"
+    },
+    {
+      "subject_key": "ted-eu:CPV-class:9262",
+      "packet_id": null,
+      "CPV_LEVEL": "class",
+      "CPV_CODE": "9262",
+      "cpv_concept_code": "92620000",
+      "OFFICIAL_LABEL": "Sport-related services",
+      "label_language": "en",
+      "label_authority": "European Union Publications Office, EU Vocabularies CPV authority register",
+      "label_is_display_metadata_not_identity": true,
+      "parent_subject": "ted-eu:CPV-group:926",
+      "held_children_in_frozen_universe": [],
+      "subject_scope": "CATEGORY",
+      "subject_scope_basis": "reviewed scope rule for ted-eu CPV-class (SOURCE_NATIVE, observation-scope-rules@1.2.0)",
+      "subject_type": "CATEGORY",
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "NOTICE_COUNT": 2,
+      "SIGNALS": 0,
+      "CLAIMS": 0,
+      "EVIDENCE": 0,
+      "evidence_rows": 0,
+      "SCORABLE_EVIDENCE": 0,
+      "scorable_rows": 0,
+      "non_scorable_rows": 0,
+      "cohorts_derived": 0,
+      "cohorts_refused": 1,
+      "proposition_kinds": {},
+      "COUNTING_DIMENSIONS": [],
+      "counting_dimensions": [],
+      "noncounting_dimensions": [],
+      "RELIABILITY_DISTRIBUTION": {},
+      "reliability_distribution": {},
+      "PROVENANCE_SHAPES": 0,
+      "provenance_shapes": 0,
+      "INDEPENDENCE": "UNKNOWN",
+      "independence_state": "UNKNOWN",
+      "FORMABLE": false,
+      "hypothesis_formable": false,
+      "scoring_ready_packet_property": false,
+      "SEMANTIC_COHERENCE": "RELATED_ACTIVITIES",
+      "semantic_coherence_basis": "'Sport-related services' is an open-ended remainder inside the sporting domain; the held population forms no cohort",
+      "exploratory_category_hypothesis": {
+        "considered": true,
+        "adopted": false,
+        "gate_detail": "not formable: the held cohort supports no contrast, so there is no procurement activity to state",
+        "statement": null
+      },
+      "product_intervention_grain": "NOT_ESTABLISHED",
+      "ACTIONABLE_GRAIN": "NOT_ACTIONABLE",
+      "actionable_grain": "NOT_ACTIONABLE",
+      "PRODUCT_RELEVANCE": "TOO_THIN",
+      "product_relevance": "UNKNOWN",
+      "product_decision_it_could_inform": "none at this grain",
+      "establishes": "nothing: 2 held notice(s) at this code form no cohort",
+      "does_not_establish": "actual expenditure (BT-161 includes options and renewals); willingness to pay; market size; product demand; a buyer for an unspecified product; unmet need; dissatisfaction; a solution gap; profitability; a competitive gap. The official label says what the code MEANS and nothing about whether the domain is underserved",
+      "procurement_semantics": {
+        "value_is_realised_spend": false,
+        "value_is_willingness_to_pay": false,
+        "authority_is_buyer_for_unspecified_product": false
+      },
+      "buyer_semantics": {
+        "PROCUREMENT_BUYER_EXISTS": false,
+        "BUYER_FOR_PROPOSED_INTERVENTION": false
+      },
+      "establishes_product_demand": false,
+      "EGRESS_STATE": "NOT_APPLICABLE",
+      "egress_state": "NOT_APPLICABLE",
+      "egress_reason": "ted-eu external_model_transmission is NOT_ASSESSED under local-private-research-v1 (H-39)",
+      "egress_eligible": false,
+      "egress_review_required_before_synthesis": true,
+      "representation_constructible_without_egress": false,
+      "OVERINTERPRETATION_RISK": "HIGH",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "LOW",
+        "SCORABLE_BREADTH": "LOW",
+        "COUNTING_DIMENSION_DIVERSITY": "LOW",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "NONE",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "UNKNOWN",
+        "SEMANTIC_SPECIFICITY": "HIGH",
+        "SEMANTIC_COHERENCE": "RELATED_ACTIVITIES",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "NO",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "LOW",
+        "NEW_ACQUISITION_REQUIRED": "YES",
+        "OPERATOR_JUDGMENT_REQUIRED": "YES",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "HIGH"
+      },
+      "CURRENT_BLOCKERS": [
+        "2 held notice(s) and no cohort at the procedure's floor",
+        "ted-eu egress NOT_ASSESSED"
+      ],
+      "VETO_STATE": "VETOED",
+      "veto_state": "VETOED",
+      "veto_reason": "no cohort forms at this code: 2 held notice(s), and the procedure's floor of two comparable amounts is not met, so there is no Evidence to explore with",
+      "DOMINANCE_STATE": "DOMINATED",
+      "dominance_state": "DOMINATED",
+      "dominated_by": "ted-eu:CPV-class:9211"
+    },
+    {
+      "subject_key": "gdelt:lexical-term:ENGLISH|climate",
+      "packet_id": "eb96d039154c7c9c98b022ea347b1687e70f14c07a1ef1e6e3ce56084fb2b24d",
+      "subject_scope": "UNDETERMINED",
+      "subject_scope_basis": "no reviewed scope rule for gdelt: a word names no level of thing (Mission 1.34)",
+      "subject_type": "TOPIC",
+      "source_ids": [
+        "gdelt"
+      ],
+      "source_families": [
+        "news"
+      ],
+      "evidence_rows": 1,
+      "scorable_rows": 0,
+      "non_scorable_rows": 1,
+      "proposition_kinds": {
+        "source_reported_term_frequency_change": {
+          "rows": 1,
+          "reliability": null
+        }
+      },
+      "counting_dimensions": [],
+      "noncounting_dimensions": [],
+      "reliability_distribution": {
+        "NONE": 1
+      },
+      "provenance_shapes": 1,
+      "independence_state": "UNKNOWN",
+      "hypothesis_formable": false,
+      "formability_reason": "no dimension: lexical frequency measures what media published, which is producer behaviour and maps to nothing",
+      "scoring_ready_packet_property": false,
+      "egress_state": "AVAILABLE",
+      "egress_eligible": true,
+      "egress_review_required_before_synthesis": false,
+      "establishes": "the term 'climate' appeared 11 more times in one fifteen-minute GDELT bucket than in the preceding one",
+      "does_not_establish": "audience demand, readers, a problem, a market; publication activity only",
+      "establishes_product_demand": false,
+      "product_intervention_grain": "NOT_ESTABLISHED",
+      "actionable_grain": "NOT_ACTIONABLE",
+      "product_relevance": "LOW",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "LOW",
+        "SCORABLE_BREADTH": "LOW",
+        "COUNTING_DIMENSION_DIVERSITY": "LOW",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "NONE",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "LOW",
+        "SEMANTIC_SPECIFICITY": "LOW",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "NO",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "NONE",
+        "NEW_ACQUISITION_REQUIRED": "YES",
+        "OPERATOR_JUDGMENT_REQUIRED": "NO",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "HIGH",
+        "SEMANTIC_COHERENCE": "NOT_A_CLASSIFICATION_SUBJECT"
+      },
+      "current_blockers": [
+        "no decision-relevant dimension",
+        "a term is not a subject level"
+      ],
+      "veto_state": "VETOED",
+      "veto_reason": "no decision-relevant dimension, and not formable",
+      "SEMANTIC_COHERENCE": "NOT_A_CLASSIFICATION_SUBJECT",
+      "semantic_coherence_basis": "semantic coherence here asks whether an official classification label denotes one procurement domain. This subject is not a classification code, so the question does not apply to it and it is neither credited nor penalised on the field",
+      "DOMINANCE_STATE": "DOMINATED",
+      "dominance_state": "DOMINATED",
+      "dominated_by": "ted-eu:CPV-group:921"
+    },
+    {
+      "subject_key": "gdelt:lexical-term:ENGLISH|climate|weather",
+      "packet_id": "fba39ffc3d4e5a2273d6e5b6d2714a06508f5931e00e81d3af80b7d4044bb3c3",
+      "subject_scope": "UNDETERMINED",
+      "subject_scope_basis": "no reviewed scope rule for gdelt",
+      "subject_type": "TOPIC",
+      "source_ids": [
+        "gdelt"
+      ],
+      "source_families": [
+        "news"
+      ],
+      "evidence_rows": 1,
+      "scorable_rows": 0,
+      "non_scorable_rows": 1,
+      "proposition_kinds": {
+        "source_reported_term_frequency_contrast": {
+          "rows": 1,
+          "reliability": null
+        }
+      },
+      "counting_dimensions": [],
+      "noncounting_dimensions": [],
+      "reliability_distribution": {
+        "NONE": 1
+      },
+      "provenance_shapes": 1,
+      "independence_state": "UNKNOWN",
+      "hypothesis_formable": false,
+      "formability_reason": "no dimension",
+      "scoring_ready_packet_property": false,
+      "egress_state": "AVAILABLE",
+      "egress_eligible": true,
+      "egress_review_required_before_synthesis": false,
+      "establishes": "within one bucket, 'climate' appeared 19 more times than 'weather'",
+      "does_not_establish": "as climate",
+      "establishes_product_demand": false,
+      "product_intervention_grain": "NOT_ESTABLISHED",
+      "actionable_grain": "NOT_ACTIONABLE",
+      "product_relevance": "LOW",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "LOW",
+        "SCORABLE_BREADTH": "LOW",
+        "COUNTING_DIMENSION_DIVERSITY": "LOW",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "NONE",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "LOW",
+        "SEMANTIC_SPECIFICITY": "LOW",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "NO",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "NONE",
+        "NEW_ACQUISITION_REQUIRED": "YES",
+        "OPERATOR_JUDGMENT_REQUIRED": "NO",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "HIGH",
+        "SEMANTIC_COHERENCE": "NOT_A_CLASSIFICATION_SUBJECT"
+      },
+      "current_blockers": [
+        "no decision-relevant dimension"
+      ],
+      "veto_state": "VETOED",
+      "veto_reason": "no decision-relevant dimension, and not formable",
+      "SEMANTIC_COHERENCE": "NOT_A_CLASSIFICATION_SUBJECT",
+      "semantic_coherence_basis": "semantic coherence here asks whether an official classification label denotes one procurement domain. This subject is not a classification code, so the question does not apply to it and it is neither credited nor penalised on the field",
+      "DOMINANCE_STATE": "DOMINATED",
+      "dominance_state": "DOMINATED",
+      "dominated_by": "ted-eu:CPV-group:921"
+    },
+    {
+      "subject_key": "gdelt:lexical-term:ENGLISH|weather",
+      "packet_id": "b19e61dea43c6d474488ed6a9cefa2f524e2bcd964745162da7a0ec35824a87d",
+      "subject_scope": "UNDETERMINED",
+      "subject_scope_basis": "no reviewed scope rule for gdelt",
+      "subject_type": "TOPIC",
+      "source_ids": [
+        "gdelt"
+      ],
+      "source_families": [
+        "news"
+      ],
+      "evidence_rows": 1,
+      "scorable_rows": 0,
+      "non_scorable_rows": 1,
+      "proposition_kinds": {
+        "source_reported_term_frequency_change": {
+          "rows": 1,
+          "reliability": null
+        }
+      },
+      "counting_dimensions": [],
+      "noncounting_dimensions": [],
+      "reliability_distribution": {
+        "NONE": 1
+      },
+      "provenance_shapes": 1,
+      "independence_state": "UNKNOWN",
+      "hypothesis_formable": false,
+      "formability_reason": "no dimension",
+      "scoring_ready_packet_property": false,
+      "egress_state": "AVAILABLE",
+      "egress_eligible": true,
+      "egress_review_required_before_synthesis": false,
+      "establishes": "the term 'weather' appeared 9 more times in one bucket than in the preceding one",
+      "does_not_establish": "as climate",
+      "establishes_product_demand": false,
+      "product_intervention_grain": "NOT_ESTABLISHED",
+      "actionable_grain": "NOT_ACTIONABLE",
+      "product_relevance": "LOW",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "LOW",
+        "SCORABLE_BREADTH": "LOW",
+        "COUNTING_DIMENSION_DIVERSITY": "LOW",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "NONE",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "LOW",
+        "SEMANTIC_SPECIFICITY": "LOW",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "NO",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "NONE",
+        "NEW_ACQUISITION_REQUIRED": "YES",
+        "OPERATOR_JUDGMENT_REQUIRED": "NO",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "HIGH",
+        "SEMANTIC_COHERENCE": "NOT_A_CLASSIFICATION_SUBJECT"
+      },
+      "current_blockers": [
+        "no decision-relevant dimension"
+      ],
+      "veto_state": "VETOED",
+      "veto_reason": "no decision-relevant dimension, and not formable",
+      "SEMANTIC_COHERENCE": "NOT_A_CLASSIFICATION_SUBJECT",
+      "semantic_coherence_basis": "semantic coherence here asks whether an official classification label denotes one procurement domain. This subject is not a classification code, so the question does not apply to it and it is neither credited nor penalised on the field",
+      "DOMINANCE_STATE": "DOMINATED",
+      "dominance_state": "DOMINATED",
+      "dominated_by": "ted-eu:CPV-group:921"
+    },
+    {
+      "subject_key": "subject:kubernetes",
+      "packet_id": "e56fd88e03670d4cdede5b45591cdbcfaa5c70df3dc50c2089ea3afdd9f9138f",
+      "subject_scope": "PRODUCT",
+      "subject_scope_basis": "declared PRODUCT in canonical-subject-registry@1.1.0",
+      "subject_type": "PRODUCT",
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "source_families": [
+        "knowledge"
+      ],
+      "evidence_rows": 13,
+      "scorable_rows": 12,
+      "non_scorable_rows": 1,
+      "proposition_kinds": {
+        "platform_counted_content_request_change": {
+          "rows": 6,
+          "reliability": 0.65
+        },
+        "platform_counted_content_request_change_witnessed": {
+          "rows": 6,
+          "reliability": 0.6
+        },
+        "metric_threshold_state": {
+          "rows": 1,
+          "reliability": null,
+          "note": "the INFERRED pilot claim; NO_APPLICABLE_ASSESSMENT"
+        }
+      },
+      "counting_dimensions": [
+        "AUDIENCE_OR_USAGE"
+      ],
+      "noncounting_dimensions": [
+        "TREND_OR_CHANGE"
+      ],
+      "reliability_distribution": {
+        "0.65": 6,
+        "0.6": 6,
+        "NONE": 1
+      },
+      "provenance_shapes": 1,
+      "independence_state": "UNKNOWN",
+      "hypothesis_formable": false,
+      "formability_reason": "13 eligible rows carrying 1 counting dimension; the rule requires 2",
+      "scoring_ready_packet_property": true,
+      "egress_state": "AVAILABLE",
+      "egress_eligible": true,
+      "egress_review_required_before_synthesis": false,
+      "establishes": "adjacent-day request-count differences for the Kubernetes article under the platform's heuristic 'user' class, and existentials over the same six measurements",
+      "does_not_establish": "readers, demand, a problem, a buyer, money, or anything the docker packet does not also fail to establish; no Stack Exchange row exists for this subject",
+      "establishes_product_demand": false,
+      "product_intervention_grain": "PLAUSIBLE_BUT_REQUIRES_SYNTHESIS",
+      "actionable_grain": "NOT_ACTIONABLE",
+      "product_relevance": "LOW",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "HIGH",
+        "SCORABLE_BREADTH": "HIGH",
+        "COUNTING_DIMENSION_DIVERSITY": "LOW",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "NONE",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "LOW",
+        "SEMANTIC_SPECIFICITY": "HIGH",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "NO",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "NONE",
+        "NEW_ACQUISITION_REQUIRED": "YES",
+        "OPERATOR_JUDGMENT_REQUIRED": "NO",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "MEDIUM",
+        "SEMANTIC_COHERENCE": "NOT_A_CLASSIFICATION_SUBJECT"
+      },
+      "current_blockers": [
+        "not formable: one counting dimension; a second needs an acquisition (the docker shape without its Stack Exchange row)"
+      ],
+      "veto_state": "VETOED",
+      "veto_reason": "not formable on one counting dimension, and no held-data deterministic step changes that; on the frontier only for naming a product, which Mission 1.79 already found saturated for this shape",
+      "SEMANTIC_COHERENCE": "NOT_A_CLASSIFICATION_SUBJECT",
+      "semantic_coherence_basis": "semantic coherence here asks whether an official classification label denotes one procurement domain. This subject is not a classification code, so the question does not apply to it and it is neither credited nor penalised on the field",
+      "DOMINANCE_STATE": "FRONTIER",
+      "dominance_state": "FRONTIER"
+    },
+    {
+      "subject_key": "subject:podman",
+      "packet_id": "f280484e94db6380fe06690c6059fe3c590ed491c432205b0a102652353f9c44",
+      "subject_scope": "PRODUCT",
+      "subject_scope_basis": "declared PRODUCT in canonical-subject-registry@1.1.0",
+      "subject_type": "PRODUCT",
+      "source_ids": [
+        "wikimedia-pageviews"
+      ],
+      "source_families": [
+        "knowledge"
+      ],
+      "evidence_rows": 12,
+      "scorable_rows": 12,
+      "non_scorable_rows": 0,
+      "proposition_kinds": {
+        "platform_counted_content_request_change": {
+          "rows": 6,
+          "reliability": 0.65
+        },
+        "platform_counted_content_request_change_witnessed": {
+          "rows": 6,
+          "reliability": 0.6
+        }
+      },
+      "counting_dimensions": [
+        "AUDIENCE_OR_USAGE"
+      ],
+      "noncounting_dimensions": [
+        "TREND_OR_CHANGE"
+      ],
+      "reliability_distribution": {
+        "0.65": 6,
+        "0.6": 6
+      },
+      "provenance_shapes": 1,
+      "independence_state": "UNKNOWN",
+      "hypothesis_formable": false,
+      "formability_reason": "12 eligible rows carrying 1 counting dimension; the rule requires 2",
+      "scoring_ready_packet_property": true,
+      "egress_state": "AVAILABLE",
+      "egress_eligible": true,
+      "egress_review_required_before_synthesis": false,
+      "establishes": "as kubernetes, for the Podman article, at request counts an order of magnitude smaller",
+      "does_not_establish": "as kubernetes",
+      "establishes_product_demand": false,
+      "product_intervention_grain": "PLAUSIBLE_BUT_REQUIRES_SYNTHESIS",
+      "actionable_grain": "NOT_ACTIONABLE",
+      "product_relevance": "LOW",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "HIGH",
+        "SCORABLE_BREADTH": "HIGH",
+        "COUNTING_DIMENSION_DIVERSITY": "LOW",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "NONE",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "LOW",
+        "SEMANTIC_SPECIFICITY": "HIGH",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "NO",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "NONE",
+        "NEW_ACQUISITION_REQUIRED": "YES",
+        "OPERATOR_JUDGMENT_REQUIRED": "NO",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "MEDIUM",
+        "SEMANTIC_COHERENCE": "NOT_A_CLASSIFICATION_SUBJECT"
+      },
+      "current_blockers": [
+        "not formable: one counting dimension"
+      ],
+      "veto_state": "VETOED",
+      "veto_reason": "not formable on one counting dimension, and no held-data deterministic step changes that; on the frontier only for naming a product, which Mission 1.79 already found saturated for this shape",
+      "SEMANTIC_COHERENCE": "NOT_A_CLASSIFICATION_SUBJECT",
+      "semantic_coherence_basis": "semantic coherence here asks whether an official classification label denotes one procurement domain. This subject is not a classification code, so the question does not apply to it and it is neither credited nor penalised on the field",
+      "DOMINANCE_STATE": "FRONTIER",
+      "dominance_state": "FRONTIER"
+    },
+    {
+      "subject_key": "ted-eu:CPV-division:90",
+      "packet_id": "af5186a99147ccf1e40e6fbe320a06f72290c0652a5f76b090ab17bbd06f4540",
+      "subject_scope": "CATEGORY",
+      "subject_scope_basis": "reviewed scope rule for ted-eu",
+      "subject_type": "CATEGORY",
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "evidence_rows": 2,
+      "scorable_rows": 2,
+      "non_scorable_rows": 0,
+      "proposition_kinds": {
+        "source_reported_procurement_value_contrast": {
+          "rows": 1,
+          "reliability": 0.5,
+          "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020"
+        },
+        "source_published_classification_value_contrast_witnessed": {
+          "rows": 1,
+          "reliability": 0.55,
+          "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e"
+        }
+      },
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "noncounting_dimensions": [],
+      "reliability_distribution": {
+        "0.5": 1,
+        "0.55": 1
+      },
+      "provenance_shapes": 1,
+      "independence_state": "UNKNOWN",
+      "hypothesis_formable": true,
+      "scoring_ready_packet_property": true,
+      "egress_state": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+      "egress_reason": "ted-eu external_model_transmission NOT_ASSESSED",
+      "egress_eligible": false,
+      "egress_review_required_before_synthesis": true,
+      "representation_constructible_without_egress": true,
+      "establishes": "one bounded set of 3 CONTRACT_AWARD_NOTICE notices under CPV division 90 (sewage, refuse, cleaning and environmental services) whose EUR totals differ by 686,545.02",
+      "does_not_establish": "as division 92, on 11 held notices instead of 177",
+      "procurement_semantics": {
+        "value_is_realised_spend": false,
+        "value_is_willingness_to_pay": false,
+        "authority_is_buyer_for_unspecified_product": false
+      },
+      "establishes_product_demand": false,
+      "held_class_distribution": {
+        "notices_held": 11,
+        "notice_classes": {
+          "CONTRACT_AWARD_NOTICE": 8,
+          "CONTRACT_NOTICE": 3
+        }
+      },
+      "product_intervention_grain": "TOO_BROAD_TO_BE_ACTIONABLE",
+      "actionable_grain": "REQUIRES_NARROWER_SUBJECT_DISCOVERY",
+      "product_relevance": "UNKNOWN",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "LOW",
+        "SCORABLE_BREADTH": "MEDIUM",
+        "COUNTING_DIMENSION_DIVERSITY": "HIGH",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "LOW",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "UNKNOWN",
+        "SEMANTIC_SPECIFICITY": "LOW",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "YES",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "LOW",
+        "NEW_ACQUISITION_REQUIRED": "NO",
+        "OPERATOR_JUDGMENT_REQUIRED": "YES",
+        "ARCHITECTURE_WORK_REQUIRED": "YES",
+        "OVERINTERPRETATION_RISK": "HIGH",
+        "SEMANTIC_COHERENCE": "UNRELATED_ACTIVITIES"
+      },
+      "current_blockers": [
+        "the same shape as division 92 on two rows and eleven notices",
+        "CATEGORY grain",
+        "ted-eu egress NOT_ASSESSED"
+      ],
+      "veto_state": "VETOED",
+      "veto_reason": "strictly more-of-the-same than division 92: the same source, dimensions and grain on fewer rows",
+      "SEMANTIC_COHERENCE": "UNRELATED_ACTIVITIES",
+      "semantic_coherence_basis": "the division-90 label was not retrieved: division 90 is outside the frozen universe, which covers division 92 only. Its coherence is therefore carried forward from Mission 1.80's finding that a CPV division is a disjunction, and is recorded as inherited rather than measured here",
+      "OFFICIAL_LABEL": null,
+      "label_authority": null,
+      "CPV_LEVEL": "division",
+      "CPV_CODE": "90",
+      "held_children_in_frozen_universe": [],
+      "DOMINANCE_STATE": "DOMINATED",
+      "dominance_state": "DOMINATED",
+      "dominated_by": "ted-eu:CPV-group:921"
+    },
+    {
+      "subject_key": "ted-eu:CPV-division:92",
+      "packet_id": "846c98974686a5b33209e404b83280e75f69b3b4d23e2a77328f224a5acd4c8a",
+      "subject_scope": "CATEGORY",
+      "subject_scope_basis": "reviewed scope rule for ted-eu (SOURCE_NATIVE): a CPV division is a top-level division of the Common Procurement Vocabulary",
+      "subject_type": "CATEGORY",
+      "source_ids": [
+        "ted-eu"
+      ],
+      "source_families": [
+        "public_procurement"
+      ],
+      "evidence_rows": 10,
+      "scorable_rows": 10,
+      "non_scorable_rows": 0,
+      "proposition_kinds": {
+        "source_reported_procurement_value_contrast": {
+          "rows": 5,
+          "reliability": 0.5,
+          "assessment_id": "3de2af10-60d1-4e3e-a9b6-d67e2345e020"
+        },
+        "source_published_classification_value_contrast_witnessed": {
+          "rows": 5,
+          "reliability": 0.55,
+          "assessment_id": "d1afa4be-8462-4461-be20-112cdc55ee7e"
+        }
+      },
+      "counting_dimensions": [
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "ECONOMIC_VALUE",
+        "MARKET_ACTIVITY"
+      ],
+      "noncounting_dimensions": [],
+      "reliability_distribution": {
+        "0.5": 5,
+        "0.55": 5
+      },
+      "provenance_shapes": 1,
+      "provenance_note": "one publisher, one resource, one collector route; 8 Claims, each with one support group of UNKNOWN provenance",
+      "independence_state": "UNKNOWN",
+      "hypothesis_formable": true,
+      "scoring_ready_packet_property": true,
+      "egress_state": "UNAVAILABLE_FOR_EXTERNAL_SYNTHESIS",
+      "egress_reason": "ted-eu external_model_transmission is NOT_ASSESSED under local-private-research-v1 (H-39): an open question an operator can close, not a prohibition",
+      "egress_eligible": false,
+      "egress_review_required_before_synthesis": true,
+      "representation_constructible_without_egress": true,
+      "representation_note": "the bounded payload (packet id, subject, procedures, families, dimensions, independence sentence, 8 composed Claim statements, evidence ids) passes check_representation with 0 violations, 4378 characters, no notice payload, no personal data; assembled in memory and not sent",
+      "establishes": "TED published, in its eforms contract-and-award resource, bounded sets of CONTRACT_NOTICE and CONTRACT_AWARD_NOTICE notices classified under CPV division 92 whose stated TOTAL_VALUE amounts at notice scope differ from one another (contrasts of 86,897,500 EUR; 16,581,256 EUR; 14,695,337 EUR; 1,774,223.99 EUR; 15,000,000 SEK); contracting authorities exist in this category; classified procurement activity exists",
+      "does_not_establish": "actual expenditure (BT-161 includes options and renewals and may never be exercised); willingness to pay for any proposed product; market size; product demand; a buyer for an unspecified future SaaS; addressable revenue; unmet need; dissatisfaction; a solution gap; which of the six held groups or fourteen held classes any of it concerns, or what any of them contains, since no CPV label is held",
+      "procurement_semantics": {
+        "value_is_realised_spend": false,
+        "value_is_willingness_to_pay": false,
+        "authority_is_buyer_for_unspecified_product": false
+      },
+      "establishes_product_demand": false,
+      "held_class_distribution": {
+        "notices_held": 177,
+        "notice_classes": {
+          "CONTRACT_NOTICE": 115,
+          "CONTRACT_AWARD_NOTICE": 62
+        },
+        "top_cpv_classes": {
+          "9211": 26,
+          "9231": 22,
+          "9261": 21,
+          "9252": 19,
+          "9233": 14,
+          "9251": 11,
+          "9262": 8,
+          "9237": 8
+        },
+        "note": "four-digit class prefixes of the division-92 codes on the held notices, from the notice audit; no label is held at any level, and Mission 1.80's labels were recalled, not held"
+      },
+      "product_intervention_grain": "TOO_BROAD_TO_BE_ACTIONABLE",
+      "actionable_grain": "REQUIRES_NARROWER_SUBJECT_DISCOVERY",
+      "what_a_synthesis_could_say": "that EU contracting authorities publish procurement in recreational, cultural and sporting services with widely differing notice values, i.e. an active commercial category with buyers who publish what they buy",
+      "what_it_could_not_say": "what is bought, by whom, for what need, whether any of it is underserved, or which service market a product would enter; the hypothesis would name a code whose contents are not held and a disjunction of six groups",
+      "product_relevance": "UNKNOWN",
+      "product_decision_it_could_inform": "whether public-procurement-facing products are worth researching at all, and in which class; nothing narrower",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "HIGH",
+        "SCORABLE_BREADTH": "HIGH",
+        "COUNTING_DIMENSION_DIVERSITY": "HIGH",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "MEDIUM",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "UNKNOWN",
+        "SEMANTIC_SPECIFICITY": "LOW",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "YES",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "LOW",
+        "NEW_ACQUISITION_REQUIRED": "NO",
+        "OPERATOR_JUDGMENT_REQUIRED": "YES",
+        "ARCHITECTURE_WORK_REQUIRED": "YES",
+        "OVERINTERPRETATION_RISK": "HIGH",
+        "SEMANTIC_COHERENCE": "UNRELATED_ACTIVITIES"
+      },
+      "current_blockers": [
+        "CATEGORY grain spanning six held groups and fourteen held classes; no product intervention grounded at division grain",
+        "ted-eu egress NOT_ASSESSED (an operator decision, recorded here and not taken)",
+        "no CPV label held at any level: the subject is a code"
+      ],
+      "veto_state": "VETOED",
+      "veto_reason": "a division whose own official label joins three domains and whose held population spans six groups, four of which now carry their own packets; narrowed twice in this arc and still not selectable at its own grain",
+      "exploratory_category_hypothesis": {
+        "considered": true,
+        "adopted": false,
+        "why_not": "an exploratory hypothesis at division grain would read 'EU contracting authorities buy recreational, cultural and sporting services at widely differing values', which names no need, no buyer type, no product and no class; the six-plus held classes share nothing but a filing prefix, so the hypothesis would be a disjunction of unrelated service markets, the shape Mission 1.47 refused for a proposition"
+      },
+      "SEMANTIC_COHERENCE": "UNRELATED_ACTIVITIES",
+      "semantic_coherence_basis": "'Recreational, cultural and sporting services' joins three domains in its own label, and the held population spans six groups",
+      "OFFICIAL_LABEL": "Recreational, cultural and sporting services",
+      "label_authority": "European Union Publications Office, EU Vocabularies CPV authority register",
+      "CPV_LEVEL": "division",
+      "CPV_CODE": "92",
+      "held_children_in_frozen_universe": [
+        "921",
+        "922",
+        "923",
+        "924",
+        "925",
+        "926"
+      ],
+      "DOMINANCE_STATE": "FRONTIER",
+      "dominance_state": "FRONTIER"
+    },
+    {
+      "subject_key": "world-bank:metric-geography:SP.POP.TOTL|DE",
+      "packet_id": "abb3339d1995a3160f5dec9a2d665444c0efaef8bff127bebc251e124c0464aa",
+      "subject_scope": "GEOGRAPHY",
+      "subject_scope_basis": "reviewed scope rule for world-bank (SOURCE_NATIVE): a measurement OF a country",
+      "subject_type": "METRIC",
+      "source_ids": [
+        "world-bank"
+      ],
+      "source_families": [
+        "economic_data"
+      ],
+      "evidence_rows": 2,
+      "scorable_rows": 0,
+      "non_scorable_rows": 2,
+      "proposition_kinds": {
+        "source_reported_metric_period_change": {
+          "rows": 2,
+          "reliability": null
+        }
+      },
+      "counting_dimensions": [],
+      "noncounting_dimensions": [],
+      "reliability_distribution": {
+        "NONE": 2
+      },
+      "provenance_shapes": 1,
+      "independence_state": "UNKNOWN",
+      "hypothesis_formable": false,
+      "formability_reason": "no dimension: the registered mapping assigns a population change to none",
+      "scoring_ready_packet_property": false,
+      "egress_state": "AVAILABLE",
+      "egress_eligible": true,
+      "egress_review_required_before_synthesis": false,
+      "establishes": "World Bank reported that SP.POP.TOTL for Germany rose by 187,180 between 2018 and 2019, and by 67,909 in the following period",
+      "does_not_establish": "market demand, a product, a buyer, or anything about software; demographic context only",
+      "establishes_product_demand": false,
+      "product_intervention_grain": "NOT_ESTABLISHED",
+      "actionable_grain": "NOT_ACTIONABLE",
+      "product_relevance": "LOW",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "LOW",
+        "SCORABLE_BREADTH": "LOW",
+        "COUNTING_DIMENSION_DIVERSITY": "LOW",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "NONE",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "LOW",
+        "SEMANTIC_SPECIFICITY": "HIGH",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "NO",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "NONE",
+        "NEW_ACQUISITION_REQUIRED": "YES",
+        "OPERATOR_JUDGMENT_REQUIRED": "NO",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "HIGH",
+        "SEMANTIC_COHERENCE": "NOT_A_CLASSIFICATION_SUBJECT"
+      },
+      "current_blockers": [
+        "no decision-relevant dimension; a population change is not market demand"
+      ],
+      "veto_state": "VETOED",
+      "veto_reason": "no decision-relevant dimension, and not formable",
+      "SEMANTIC_COHERENCE": "NOT_A_CLASSIFICATION_SUBJECT",
+      "semantic_coherence_basis": "semantic coherence here asks whether an official classification label denotes one procurement domain. This subject is not a classification code, so the question does not apply to it and it is neither credited nor penalised on the field",
+      "DOMINANCE_STATE": "DOMINATED",
+      "dominance_state": "DOMINATED",
+      "dominated_by": "ted-eu:CPV-class:9211"
+    },
+    {
+      "subject_key": "world-bank:metric-geography:SP.POP.TOTL|FR",
+      "packet_id": "cc6449adadda5375a090947e39321e87e73f660e995bdd5cea953fdfc779665c",
+      "subject_scope": "GEOGRAPHY",
+      "subject_scope_basis": "reviewed scope rule for world-bank",
+      "subject_type": "METRIC",
+      "source_ids": [
+        "world-bank"
+      ],
+      "source_families": [
+        "economic_data"
+      ],
+      "evidence_rows": 2,
+      "scorable_rows": 0,
+      "non_scorable_rows": 2,
+      "proposition_kinds": {
+        "source_reported_metric_period_change": {
+          "rows": 2,
+          "reliability": null
+        }
+      },
+      "counting_dimensions": [],
+      "noncounting_dimensions": [],
+      "reliability_distribution": {
+        "NONE": 2
+      },
+      "provenance_shapes": 1,
+      "independence_state": "UNKNOWN",
+      "hypothesis_formable": false,
+      "formability_reason": "no dimension",
+      "scoring_ready_packet_property": false,
+      "egress_state": "AVAILABLE",
+      "egress_eligible": true,
+      "egress_review_required_before_synthesis": false,
+      "establishes": "World Bank reported SP.POP.TOTL for France rose by 219,049 and 223,713 in two periods",
+      "does_not_establish": "as Germany",
+      "establishes_product_demand": false,
+      "product_intervention_grain": "NOT_ESTABLISHED",
+      "actionable_grain": "NOT_ACTIONABLE",
+      "product_relevance": "LOW",
+      "ordinal": {
+        "EVIDENCE_BREADTH": "LOW",
+        "SCORABLE_BREADTH": "LOW",
+        "COUNTING_DIMENSION_DIVERSITY": "LOW",
+        "SOURCE_DIVERSITY": "LOW",
+        "COMMERCIAL_INFORMATION": "NONE",
+        "PROBLEM_INFORMATION": "NONE",
+        "PRODUCT_RELEVANCE": "LOW",
+        "SEMANTIC_SPECIFICITY": "HIGH",
+        "PROVENANCE_DIVERSITY": "LOW",
+        "INDEPENDENCE": "UNKNOWN",
+        "HYPOTHESIS_FORMABILITY": "NO",
+        "GOVERNANCE_DISTANCE_TO_SYNTHESIS": "NONE",
+        "NEW_ACQUISITION_REQUIRED": "YES",
+        "OPERATOR_JUDGMENT_REQUIRED": "NO",
+        "ARCHITECTURE_WORK_REQUIRED": "NO",
+        "OVERINTERPRETATION_RISK": "HIGH",
+        "SEMANTIC_COHERENCE": "NOT_A_CLASSIFICATION_SUBJECT"
+      },
+      "current_blockers": [
+        "no decision-relevant dimension"
+      ],
+      "veto_state": "VETOED",
+      "veto_reason": "no decision-relevant dimension, and not formable",
+      "SEMANTIC_COHERENCE": "NOT_A_CLASSIFICATION_SUBJECT",
+      "semantic_coherence_basis": "semantic coherence here asks whether an official classification label denotes one procurement domain. This subject is not a classification code, so the question does not apply to it and it is neither credited nor penalised on the field",
+      "DOMINANCE_STATE": "DOMINATED",
+      "dominance_state": "DOMINATED",
+      "dominated_by": "ted-eu:CPV-class:9211"
+    }
+  ],
+  "candidate_universe": {
+    "built_from": "every packet in the v4 preparation other than the one holding the current Opportunity's cited rows, plus every frozen group and class code including those that form no cohort",
+    "excluded": [
+      {
+        "subject": "subject:docker",
+        "why": "the current Opportunity's subject"
+      }
+    ],
+    "subjects": [
+      "gdelt:lexical-term:ENGLISH|climate",
+      "gdelt:lexical-term:ENGLISH|climate|weather",
+      "gdelt:lexical-term:ENGLISH|weather",
+      "subject:kubernetes",
+      "subject:podman",
+      "ted-eu:CPV-class:9211",
+      "ted-eu:CPV-class:9213",
+      "ted-eu:CPV-class:9222",
+      "ted-eu:CPV-class:9231",
+      "ted-eu:CPV-class:9233",
+      "ted-eu:CPV-class:9235",
+      "ted-eu:CPV-class:9236",
+      "ted-eu:CPV-class:9251",
+      "ted-eu:CPV-class:9252",
+      "ted-eu:CPV-class:9253",
+      "ted-eu:CPV-class:9261",
+      "ted-eu:CPV-class:9262",
+      "ted-eu:CPV-division:90",
+      "ted-eu:CPV-division:92",
+      "ted-eu:CPV-group:921",
+      "ted-eu:CPV-group:922",
+      "ted-eu:CPV-group:923",
+      "ted-eu:CPV-group:924",
+      "ted-eu:CPV-group:925",
+      "ted-eu:CPV-group:926",
+      "world-bank:metric-geography:SP.POP.TOTL|DE",
+      "world-bank:metric-geography:SP.POP.TOTL|FR"
+    ],
+    "count": 27,
+    "identity_rule": "source-native-subject-grouping@1.3.0 over canonical-subject-registry@1.1.0 and observation-scope-rules@1.2.0; the code is the identity and the label is display metadata",
+    "parked_relations_required_by_any_candidate": false
+  },
+  "dominance": {
+    "rule": "X dominates Y when X is at least as good on every dominance field that applies to both and strictly better on at least one; dominance is a veto on the dominated candidate, never a selection rule, and the vetoes are applied independently",
+    "fields": [
+      "EVIDENCE_BREADTH",
+      "SCORABLE_BREADTH",
+      "COUNTING_DIMENSION_DIVERSITY",
+      "SOURCE_DIVERSITY",
+      "COMMERCIAL_INFORMATION",
+      "PROBLEM_INFORMATION",
+      "SEMANTIC_SPECIFICITY",
+      "SEMANTIC_COHERENCE",
+      "PROVENANCE_DIVERSITY",
+      "HYPOTHESIS_FORMABILITY"
+    ],
+    "scales": {
+      "information": [
+        "NONE",
+        "LOW",
+        "MEDIUM",
+        "HIGH"
+      ],
+      "coherence": [
+        "UNRELATED_ACTIVITIES",
+        "RELATED_ACTIVITIES",
+        "SINGLE_DOMAIN"
+      ],
+      "formability": [
+        "NO",
+        "YES"
+      ]
+    },
+    "field_added_by_this_mission": "SEMANTIC_COHERENCE",
+    "why_the_field_was_added": "Mission 1.81's frontier could not separate two equally broad, equally specific categories, because the only thing that distinguishes them is what their labels mean, and no label was held. It is what the retrieval bought, so it enters the model as a field rather than as a tie-break written after the numbers were seen",
+    "PARETO_FRONTIER": [
+      "subject:kubernetes",
+      "subject:podman",
+      "ted-eu:CPV-class:9261",
+      "ted-eu:CPV-division:92"
+    ],
+    "DOMINATED_CANDIDATES": [
+      "gdelt:lexical-term:ENGLISH|climate",
+      "gdelt:lexical-term:ENGLISH|climate|weather",
+      "gdelt:lexical-term:ENGLISH|weather",
+      "ted-eu:CPV-class:9211",
+      "ted-eu:CPV-class:9213",
+      "ted-eu:CPV-class:9222",
+      "ted-eu:CPV-class:9231",
+      "ted-eu:CPV-class:9233",
+      "ted-eu:CPV-class:9235",
+      "ted-eu:CPV-class:9236",
+      "ted-eu:CPV-class:9251",
+      "ted-eu:CPV-class:9252",
+      "ted-eu:CPV-class:9253",
+      "ted-eu:CPV-class:9262",
+      "ted-eu:CPV-division:90",
+      "ted-eu:CPV-group:921",
+      "ted-eu:CPV-group:922",
+      "ted-eu:CPV-group:923",
+      "ted-eu:CPV-group:924",
+      "ted-eu:CPV-group:925",
+      "ted-eu:CPV-group:926",
+      "world-bank:metric-geography:SP.POP.TOTL|DE",
+      "world-bank:metric-geography:SP.POP.TOTL|FR"
+    ],
+    "dominated_by": {
+      "ted-eu:CPV-group:921": "ted-eu:CPV-group:926",
+      "ted-eu:CPV-group:922": "ted-eu:CPV-group:921",
+      "ted-eu:CPV-group:923": "ted-eu:CPV-group:921",
+      "ted-eu:CPV-group:924": "ted-eu:CPV-group:926",
+      "ted-eu:CPV-group:925": "ted-eu:CPV-group:921",
+      "ted-eu:CPV-group:926": "ted-eu:CPV-class:9261",
+      "ted-eu:CPV-class:9211": "ted-eu:CPV-class:9261",
+      "ted-eu:CPV-class:9213": "ted-eu:CPV-class:9233",
+      "ted-eu:CPV-class:9222": "ted-eu:CPV-class:9233",
+      "ted-eu:CPV-class:9231": "ted-eu:CPV-class:9261",
+      "ted-eu:CPV-class:9233": "ted-eu:CPV-class:9261",
+      "ted-eu:CPV-class:9235": "ted-eu:CPV-class:9211",
+      "ted-eu:CPV-class:9236": "ted-eu:CPV-class:9233",
+      "ted-eu:CPV-class:9251": "ted-eu:CPV-class:9261",
+      "ted-eu:CPV-class:9252": "ted-eu:CPV-class:9261",
+      "ted-eu:CPV-class:9253": "ted-eu:CPV-class:9211",
+      "ted-eu:CPV-class:9262": "ted-eu:CPV-class:9211",
+      "gdelt:lexical-term:ENGLISH|climate": "ted-eu:CPV-group:921",
+      "gdelt:lexical-term:ENGLISH|climate|weather": "ted-eu:CPV-group:921",
+      "gdelt:lexical-term:ENGLISH|weather": "ted-eu:CPV-group:921",
+      "ted-eu:CPV-division:90": "ted-eu:CPV-group:921",
+      "world-bank:metric-geography:SP.POP.TOTL|DE": "ted-eu:CPV-class:9211",
+      "world-bank:metric-geography:SP.POP.TOTL|FR": "ted-eu:CPV-class:9211"
+    },
+    "VETOED_CANDIDATES": [
+      "gdelt:lexical-term:ENGLISH|climate",
+      "gdelt:lexical-term:ENGLISH|climate|weather",
+      "gdelt:lexical-term:ENGLISH|weather",
+      "subject:kubernetes",
+      "subject:podman",
+      "ted-eu:CPV-class:9213",
+      "ted-eu:CPV-class:9222",
+      "ted-eu:CPV-class:9235",
+      "ted-eu:CPV-class:9236",
+      "ted-eu:CPV-class:9262",
+      "ted-eu:CPV-division:90",
+      "ted-eu:CPV-division:92",
+      "ted-eu:CPV-group:922",
+      "ted-eu:CPV-group:923",
+      "ted-eu:CPV-group:924",
+      "ted-eu:CPV-group:925",
+      "world-bank:metric-geography:SP.POP.TOTL|DE",
+      "world-bank:metric-geography:SP.POP.TOTL|FR"
+    ],
+    "unvetoed_frontier": [
+      "ted-eu:CPV-class:9261"
+    ],
+    "frontier_note": "four candidates survive dominance. Division 92 keeps a place on breadth alone -- ten rows against six -- and is vetoed on grain, as in Missions 1.80 and 1.81. Kubernetes and podman keep theirs on breadth and specificity and are vetoed on formability, as in both earlier missions. The class 9261 is the only one carrying no veto, and it reached the frontier by dominating its own group on specificity and its equally broad sibling 9252 on coherence -- both computed, neither asserted"
+  },
+  "group_versus_class": {
+    "$comment": "§28. A class does not win for being narrower; it wins only where narrowing costs no Evidence and buys precision.",
+    "pairs": [
+      {
+        "group": "ted-eu:CPV-group:926",
+        "group_label": "Sporting services",
+        "group_evidence": 6,
+        "class": "ted-eu:CPV-class:9261",
+        "class_label": "Sports facilities operation services",
+        "class_evidence": 6,
+        "evidence_lost_by_narrowing": 0,
+        "counting_dimensions_lost": [],
+        "verdict": "CLASS_WINS",
+        "why": "the same six rows, the same three counting dimensions, the same two reviewed reliabilities and a strictly more specific label. Narrowing destroyed no Evidence shape and bought precision, which is the only condition under which §28 lets a class defeat its group"
+      },
+      {
+        "group": "ted-eu:CPV-group:921",
+        "group_label": "Motion picture and video services",
+        "group_evidence": 6,
+        "class": "ted-eu:CPV-class:9211",
+        "class_label": "Motion picture and video tape production and related services",
+        "class_evidence": 4,
+        "evidence_lost_by_narrowing": 2,
+        "counting_dimensions_lost": [],
+        "verdict": "NEITHER_WINS_THE_SELECTION",
+        "why": "narrowing 921 to 9211 costs two of six Evidence rows and the class label ends in an open 'and related services', so it buys less precision than it costs. Both are dominated by 9261 and neither is vetoed"
+      }
+    ],
+    "class_automatically_beats_group": false
+  },
+  "small_cohort_hazard": {
+    "$comment": "§29. A two-observation contrast is valid and is not thereby strong; the two facts are recorded apart and no minimum N was invented.",
+    "per_candidate": [
+      {
+        "subject_key": "ted-eu:CPV-class:9211",
+        "PROCEDURE_VALID": true,
+        "EVIDENCE_BREADTH": "MEDIUM",
+        "SEMANTIC_VALUE": "RELATED_ACTIVITIES",
+        "cohorts": 2
+      },
+      {
+        "subject_key": "ted-eu:CPV-class:9231",
+        "PROCEDURE_VALID": true,
+        "EVIDENCE_BREADTH": "MEDIUM",
+        "SEMANTIC_VALUE": "RELATED_ACTIVITIES",
+        "cohorts": 2
+      },
+      {
+        "subject_key": "ted-eu:CPV-class:9233",
+        "PROCEDURE_VALID": true,
+        "EVIDENCE_BREADTH": "LOW",
+        "SEMANTIC_VALUE": "SINGLE_DOMAIN",
+        "cohorts": 1
+      },
+      {
+        "subject_key": "ted-eu:CPV-class:9251",
+        "PROCEDURE_VALID": true,
+        "EVIDENCE_BREADTH": "MEDIUM",
+        "SEMANTIC_VALUE": "RELATED_ACTIVITIES",
+        "cohorts": 2
+      },
+      {
+        "subject_key": "ted-eu:CPV-class:9252",
+        "PROCEDURE_VALID": true,
+        "EVIDENCE_BREADTH": "MEDIUM",
+        "SEMANTIC_VALUE": "RELATED_ACTIVITIES",
+        "cohorts": 3
+      },
+      {
+        "subject_key": "ted-eu:CPV-class:9253",
+        "PROCEDURE_VALID": true,
+        "EVIDENCE_BREADTH": "LOW",
+        "SEMANTIC_VALUE": "RELATED_ACTIVITIES",
+        "cohorts": 1
+      },
+      {
+        "subject_key": "ted-eu:CPV-class:9261",
+        "PROCEDURE_VALID": true,
+        "EVIDENCE_BREADTH": "MEDIUM",
+        "SEMANTIC_VALUE": "SINGLE_DOMAIN",
+        "cohorts": 3
+      }
+    ],
+    "minimum_n_invented": false
+  },
+  "selection": {
+    "SELECTED_SUBJECT": "ted-eu:CPV-class:9261",
+    "SELECTED_LEVEL": "class",
+    "SELECTED_CODE": "9261",
+    "SELECTED_CPV_CONCEPT": "92610000",
+    "SELECTED_LABEL": "Sports facilities operation services",
+    "SELECTED_PACKET": "e218b56a8f938f4d5f7fc961e7f0c2cfe184c4396395334140c6199b48316592",
+    "SELECTED_SUBJECT_SCOPE": "CATEGORY",
+    "ACTIONABLE_GRAIN": "ACTIONABLE_ONLY_AS_EXPLORATORY_CATEGORY_HYPOTHESIS",
+    "SELECTION_BASIS": "the only candidate on the recomputed frontier carrying no veto. Its official label names one activity, its six Evidence rows are derived at exactly that code from held records across two acquisition windows, all six are scorable at the reviewed TED reliabilities, and a synthesis can state what authorities publish under it without inventing a problem. It dominates its own group on specificity at equal Evidence and its equally broad sibling on coherence",
+    "gates": {
+      "exact_code_identity": true,
+      "authoritative_semantic_label_established": true,
+      "evidence_applies_at_exact_grain": true,
+      "packet_formable": true,
+      "actionable_or_adoptable_exploratory_grain": true,
+      "product_research_relevance_not_invented": true,
+      "no_parked_relation_required": true,
+      "no_new_acquisition_required_to_know_the_subject": true,
+      "no_unsupported_problem_or_product_inference": true,
+      "egress_permission_required_for_selection": false
+    },
+    "value_used_to_select": false,
+    "attractiveness_used_to_select": false,
+    "what_was_not_claimed": "that operating sports facilities is a good market, that its buyers want software, that anybody would pay for one, that the domain is underserved, or that a product belongs here at all. What was established is that the subject has one stated meaning and carries the best-shaped held Evidence at that meaning",
+    "BEST_GROUP_PACKET": "ted-eu:CPV-group:925",
+    "best_group_packet_basis": "the group packet with the most Evidence rows (8); a count, and it is vetoed on coherence",
+    "BEST_CLASS_PACKET": "ted-eu:CPV-class:9261",
+    "BEST_HELD_PACKET": "ted-eu:CPV-division:92",
+    "best_held_packet_basis": "the division still holds the most Evidence rows (10) of any procurement packet, and is vetoed on grain for the third mission running",
+    "BEST_SECOND_OPPORTUNITY_CANDIDATE": "ted-eu:CPV-class:9261",
+    "why_best_held_and_best_candidate_differ": "the richest packet is still the division, which means the least; the selected class holds fewer rows of the same shape about a subject that has one stated meaning"
+  },
+  "product_relevance_test": {
+    "question": "what future research decision does this subject enable?",
+    "per_candidate": {
+      "ted-eu:CPV-group:921": "SEMANTICALLY_COHERENT_BUT_PRODUCT_LINK_UNKNOWN",
+      "ted-eu:CPV-group:922": "TOO_THIN",
+      "ted-eu:CPV-group:923": "TOO_BROAD",
+      "ted-eu:CPV-group:924": "TOO_THIN",
+      "ted-eu:CPV-group:925": "TOO_BROAD",
+      "ted-eu:CPV-group:926": "SEMANTICALLY_COHERENT_BUT_PRODUCT_LINK_UNKNOWN",
+      "ted-eu:CPV-class:9211": "SEMANTICALLY_COHERENT_BUT_PRODUCT_LINK_UNKNOWN",
+      "ted-eu:CPV-class:9213": "TOO_THIN",
+      "ted-eu:CPV-class:9222": "TOO_THIN",
+      "ted-eu:CPV-class:9231": "SEMANTICALLY_COHERENT_BUT_PRODUCT_LINK_UNKNOWN",
+      "ted-eu:CPV-class:9233": "SEMANTICALLY_COHERENT_BUT_PRODUCT_LINK_UNKNOWN",
+      "ted-eu:CPV-class:9235": "TOO_THIN",
+      "ted-eu:CPV-class:9236": "TOO_THIN",
+      "ted-eu:CPV-class:9251": "SEMANTICALLY_COHERENT_BUT_PRODUCT_LINK_UNKNOWN",
+      "ted-eu:CPV-class:9252": "SEMANTICALLY_COHERENT_BUT_PRODUCT_LINK_UNKNOWN",
+      "ted-eu:CPV-class:9253": "SEMANTICALLY_COHERENT_BUT_PRODUCT_LINK_UNKNOWN",
+      "ted-eu:CPV-class:9261": "SEMANTICALLY_COHERENT_BUT_PRODUCT_LINK_UNKNOWN",
+      "ted-eu:CPV-class:9262": "TOO_THIN",
+      "ted-eu:CPV-division:90": "TOO_BROAD",
+      "ted-eu:CPV-division:92": "TOO_BROAD"
+    },
+    "selected": {
+      "classification": "SEMANTICALLY_COHERENT_BUT_PRODUCT_LINK_UNKNOWN",
+      "decision_enabled": "whether public-procurement-facing research into \"Sports facilities operation services\" is worth starting, and with which buyers; nothing about whether anybody would buy a product",
+      "not_a_market_attractiveness_score": true
+    }
+  },
+  "procurement_boundaries": {
+    "establishes": [
+      "procurement notices exist under this classification",
+      "contracting authorities publish procurement under it",
+      "stated monetary values exist and differ within bounded sets",
+      "MARKET_ACTIVITY, ECONOMIC_VALUE and BUYER_OR_BUDGET_EXISTENCE under this repository's own definitions"
+    ],
+    "does_not_establish": [
+      "realised expenditure",
+      "willingness to pay for a future product",
+      "software demand",
+      "market size",
+      "unmet need",
+      "dissatisfaction",
+      "product-market fit",
+      "profitability",
+      "a competitive gap"
+    ],
+    "unchanged_by_the_official_label": "a label says what a code MEANS. It cannot turn a published notice value into spend, a contracting authority into a buyer for an unspecified product, or a filing rule into an unmet need, however product-like it reads",
+    "PROCUREMENT_BUYER_EXISTS": true,
+    "BUYER_FOR_PROPOSED_INTERVENTION": false
+  },
+  "representation_check": {
+    "procedure": "opportunity-transmission-representation@1.0.0",
+    "assembled_in_memory": true,
+    "transmitted": false,
+    "model_called": false,
+    "packets": {
+      "ted-eu:CPV-class:9211": {
+        "claims": 4,
+        "characters": 2757,
+        "violations": 0
+      },
+      "ted-eu:CPV-class:9231": {
+        "claims": 4,
+        "characters": 2756,
+        "violations": 0
+      },
+      "ted-eu:CPV-class:9233": {
+        "claims": 2,
+        "characters": 1907,
+        "violations": 0
+      },
+      "ted-eu:CPV-class:9251": {
+        "claims": 4,
+        "characters": 2757,
+        "violations": 0
+      },
+      "ted-eu:CPV-class:9252": {
+        "claims": 5,
+        "characters": 3259,
+        "violations": 0
+      },
+      "ted-eu:CPV-class:9253": {
+        "claims": 2,
+        "characters": 1892,
+        "violations": 0
+      },
+      "ted-eu:CPV-class:9261": {
+        "claims": 5,
+        "characters": 3252,
+        "violations": 0
+      }
+    },
+    "note": "representation feasibility is deterministic and needs no egress; a constructible payload is not permission to send it"
+  },
+  "egress": {
+    "TED_EGRESS_STATE": "NOT_ASSESSED",
+    "EGRESS_REVIEW_REQUIRED_BEFORE_SYNTHESIS": true,
+    "decided_here": false,
+    "granted": false,
+    "denied": false,
+    "source_review_appended": false,
+    "externally_serialized": false
+  },
+  "no_automatic_descent": {
+    "$comment": "§34. Grain 5 was dry-run by Mission 1.81 and is NOT persisted here, and a class won, so the question of descending does not arise.",
+    "grain_5_persisted": false,
+    "grain_5_considered": true,
+    "why_not": "a subject was selected at grain 4, so there is nothing a further descent would resolve. Had none been selected, the comparison §51 requires -- one more descent against leaving the TED arc -- would have been owed before recommending either"
+  },
+  "preparation": {
+    "PREPARATION_BEFORE": "opportunity-preparation@3.0.0",
+    "PREPARATION_AFTER": "opportunity-preparation@4.0.0",
+    "v3_untouched_sha256": "0c264251e8213e36913408c198af7d3cd9c461d05034572f650437e209acabd3",
+    "v2_untouched_sha256": "80bc6d6a7accf714f36dff1d50afa8cd0c8bc30d4d9675dbc3a494b6df70feba",
+    "v1_untouched_sha256": "6aab7daf1f222dead72e03baebee43468a9b9d4381d9ee5fefbcb78dd9f09b31",
+    "rows": {
+      "before": 84,
+      "after": 112
+    },
+    "scoring_rows": {
+      "before": 74,
+      "after": 102
+    },
+    "packets": {
+      "before": 14,
+      "after": 21
+    },
+    "formable_packets": {
+      "before": 7,
+      "after": 14
+    },
+    "division_and_group_packets_retained": true,
+    "new_packets": [
+      "ted-eu:CPV-class:9211",
+      "ted-eu:CPV-class:9231",
+      "ted-eu:CPV-class:9233",
+      "ted-eu:CPV-class:9251",
+      "ted-eu:CPV-class:9252",
+      "ted-eu:CPV-class:9253",
+      "ted-eu:CPV-class:9261"
+    ],
+    "parent_child_coexistence": "division, group and class packets sit side by side over the same held notices, each citing Signals derived at its own grain. They are not duplicates: a division cohort's spread is across groups, a group cohort's across classes, and a class cohort's within one class"
+  },
+  "counters": {
+    "before": {
+      "raw_records": 325,
+      "normalized_records": 325,
+      "signals": 46,
+      "claims": 65,
+      "claim_revisions": 66,
+      "evidence": 84,
+      "reliability_assessments": 4,
+      "independence_groups": 0,
+      "opportunities": 1,
+      "opportunity_revisions": 2,
+      "opportunity_evidence_links": 14,
+      "source_reviews": 70,
+      "scores_table": "ABSENT",
+      "embeddings": 0
+    },
+    "after": {
+      "raw_records": 325,
+      "normalized_records": 325,
+      "signals": 60,
+      "claims": 91,
+      "claim_revisions": 92,
+      "evidence": 112,
+      "reliability_assessments": 4,
+      "independence_groups": 0,
+      "opportunities": 1,
+      "opportunity_revisions": 2,
+      "opportunity_evidence_links": 14,
+      "source_reviews": 70,
+      "scores_table": "ABSENT",
+      "embeddings": 0
+    },
+    "deltas": {
+      "raw_records": 0,
+      "normalized_records": 0,
+      "signals": 14,
+      "claims": 26,
+      "claim_revisions": 26,
+      "evidence": 28,
+      "reliability_assessments": 0,
+      "independence_groups": 0,
+      "opportunities": 0,
+      "opportunity_revisions": 0,
+      "opportunity_evidence_links": 0,
+      "source_reviews": 0,
+      "scores_table": 0,
+      "embeddings": 0
+    },
+    "SECOND_RUN_NEW_ROWS": 0,
+    "second_run": {
+      "signals_persisted": 0,
+      "skipped_existing_witness": 14,
+      "claims_new": 0,
+      "evidence_new": 0
+    }
+  },
+  "mission_accounting": {
+    "research_data_fetches": 0,
+    "ted_api_calls": 0,
+    "dataset_downloads": 0,
+    "raw_records_created": 0,
+    "normalized_records_created": 0,
+    "mailbox_reads": 0,
+    "outbound_messages": 0,
+    "globalping_calls": 0,
+    "globalping_measurements": 0,
+    "model_calls": 0,
+    "embeddings": 0,
+    "documentation_fetches": 19,
+    "signals_created": 14,
+    "claims_created": 26,
+    "claim_revisions_created": 26,
+    "evidence_created": 28,
+    "reliability_assessments_created": 0,
+    "independence_groups_created": 0,
+    "opportunities_created": 0,
+    "opportunity_revisions_created": 0,
+    "opportunity_links_created": 0,
+    "source_reviews_appended": 0,
+    "scores_persisted": 0
+  },
+  "immutable": {
+    "opportunities": 1,
+    "docker_current_revision": 2,
+    "opportunity_links": 14,
+    "q1": {
+      "QUANTITY_CLASS_SELECTED": "Q1",
+      "CLASS_SELECTED": true,
+      "CONSTRUCT_SELECTED": false,
+      "RUN_AUTHORIZED": false
+    },
+    "globalping": {
+      "PASS": 12,
+      "PARTIAL": 0,
+      "FAIL": 0,
+      "verdict": "COUNTERPART_RESOLVED"
+    },
+    "v2": {
+      "primary_outcome": "V2_VALID_FOR_REFUTATION_BUT_NOT_INDEPENDENT_SUPPORT",
+      "corpus_frozen": false,
+      "measurements_executed": 0
+    }
+  },
+  "parked_states_preserved": {
+    "q1": {
+      "QUANTITY_CLASS_SELECTED": "Q1",
+      "CLASS_SELECTED": true,
+      "CONSTRUCT_SELECTED": false,
+      "RUN_AUTHORIZED": false
+    },
+    "globalping": {
+      "PASS": 12,
+      "PARTIAL": 0,
+      "FAIL": 0,
+      "verdict": "COUNTERPART_RESOLVED"
+    },
+    "v2": {
+      "primary_outcome": "V2_VALID_FOR_REFUTATION_BUT_NOT_INDEPENDENT_SUPPORT",
+      "corpus_frozen": false,
+      "measurements_executed": 0
+    },
+    "changed_by_this_mission": false
+  },
+  "recommended_next_mission": {
+    "id": "1.83",
+    "title": "Selected Procurement Candidate Egress Review V1",
+    "shape": "review only whether the bounded representation of the selected packet (ted-eu:CPV-class:9261, 6 rows, 5 claims, 3252 characters, 0 violations) may be transmitted to a configured external model under local-private-research-v1, and record the decision. It must not call the model",
+    "must_not": [
+      "call a model",
+      "synthesize a hypothesis",
+      "create an Opportunity",
+      "acquire research data",
+      "descend to a finer CPV grain",
+      "score or rank"
+    ]
+  },
+  "CONTENT_SHA256": "8a234bd6b7cf503c2c6c8024c2eafbbe64deb71e999afdfd8f956b504ec1b731"
+}
