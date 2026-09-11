@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.135
+Version: 1.136
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-11 (Sprint 1 / Mission 1.84.1)
+Last amended: 2026-09-11 (Sprint 1 / Mission 1.84.2)
 
 ---
 
@@ -13,6 +13,76 @@ Last amended: 2026-09-11 (Sprint 1 / Mission 1.84.1)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.136 - 2026-09-11 (Sprint 1 / Mission 1.84.2)
+
+**`SECOND_OPPORTUNITY_EXECUTION_REJECTED_AND_CLOSED_NO_RETRY`: the call happened, the answer was
+refused, and the approval is spent.** The operator approved exactly one execution. All eight
+pre-execution checks passed -- packet digest `570657e1...`, representation `2528a56a...` at 3604
+characters, prompt `af528949...`, provider posture APPROVED, TED transmission
+PERMITTED_WITH_CONDITIONS, packet gate AVAILABLE with no refusals, every bound parameter matching.
+**One provider request.** The transport succeeded and the provider answered with **18 of the 20
+required fields**, refused at stage 4. Stages 5 through 8 are `NOT_REACHED` rather than passing.
+**No retry, 0 retries, 0 second calls, nothing persisted.**
+
+**AN APPROVAL IS SPENT BY ITS EXECUTION, WHATEVER THE OUTPUT WAS.** Reading a rejected answer as
+unused authority is the single most tempting error here, so it is refused by a deterministic guard
+rather than by memory: the consumed-approval fact lives BESIDE the frozen packet -- editing the
+packet to say it had been used would change the bytes that were approved -- and the runner refuses
+`EXECUTION_APPROVAL_ALREADY_CONSUMED` on V1's digest. A test proves it does NOT refuse a different
+digest, because a guard that blocked every packet would block the successor too.
+
+**TWO RETENTION DEFECTS, BOTH MINE, BOTH IN THIS MISSION'S OWN RUNNER.** The frozen policy says the
+raw response is RETAINED because *a gate verdict over a response nobody kept is unverifiable*, and
+the runner let the Gateway's exception propagate, so the bytes went at exactly the moment they were
+worth most. The usage record the Gateway emits on the failure path went nowhere because no
+telemetry sink was registered. So `ACTUAL_INPUT_TOKENS`, `ACTUAL_OUTPUT_TOKENS` and
+`ACTUAL_EXECUTION_COST` are **NOT_ESTABLISHED**, no raw response is reconstructed from parsed
+values, and **the frozen worst case of 0.04825 is an upper bound computed before the call and
+never recorded as what it cost**.
+
+**THE CAUSE IS STRONGLY_SUPPORTED AND NOT ESTABLISHED.** The missing fields are positions **19 and
+20 of 20**; `statement_classifications` alone serialises to about **3784 tokens** at its documented
+maximum, larger than the entire **3000**-token cap; and Mission 1.31.1 recorded the identical
+signature for the identical cause. **Proving truncation rather than omission needs the bytes and
+the token count, and neither was kept**, so `ROOT_CAUSE =
+NOT_PROVABLE_FROM_RETAINED_EXECUTION_ARTIFACTS` and truncation is explicitly not claimed.
+
+**THE DEFECT IS MISSION 1.84's AND IT IS NAMED**:
+`OUTPUT_CAPACITY_BOUND_NOT_DERIVED_FROM_SCHEMA`. That mission froze a 20-field schema and
+independently froze MAX_OUTPUT_TOKENS at 3000, derived the INPUT estimate and the worst-case cost,
+and never derived the OUTPUT ceiling from the schema's own maximum serialised size -- **while
+citing Mission 1.31.1 by name for having raised that very cap**. The lesson was quoted and not
+applied. **No corrected ceiling is concluded here**; a closure mission that also fixed the thing it
+was closing would do the next mission's reasoning without the next mission's scrutiny.
+
+**NOTHING WAS LOOSENED TO RESCUE THE ANSWER.** 20 required fields, `confidence_classification`
+still required, `statement_classifications` still maxItems 24, no reorder, no invented default,
+and **18 of 20 is not an Opportunity**. V1 is byte-identical with its approval flag still false.
+
+**REPAIRED FOR A FUTURE SEPARATELY-APPROVED CALL**: a recording transport keeps the bytes as they
+arrive, a telemetry sink captures usage, one artifact shape is written on every terminal path,
+hidden reasoning is stripped at any depth and credential shapes are redacted. **Exercised by seven
+synthetic transports and NOT against a provider, because a test call is a second call** -- with a
+tripwire test asserting no fixture constructs the real transport.
+
+**Probe 74 of 74 caught, 0 escaped, 8 of 8 controls.** **Verification.** 3831 bare-python tests;
+3431 pytest with the database unchanged across 29 tenant tables; ruff, mypy over 199 files;
+contracts, catalog and registry checks; all **66** CI gates, one of them new.
+
+**What moved.** Nothing canonical: RawRecords 325, NormalizedRecords 325, Signals 60, Claims 91,
+revisions 92, Evidence 112, assessments 4, groups 0, Opportunities 1, revisions 2, links 14,
+embeddings 0, scores absent, source reviews 71. **TOTAL_PROVIDER_REQUESTS_FOR_MISSION_1_84_2 = 1;
+ADDITIONAL_PROVIDER_REQUESTS_DURING_FAILURE_CLOSURE = 0.** 3604 TED bytes left the machine once,
+under the approved permission, and 0 during the closure.
+
+New: `docs/data/second-opportunity-synthesis-execution-record-v1.json` and its generated `.md`,
+`infrastructure/scripts/run_second_opportunity_execution.py`,
+`infrastructure/scripts/render_second_opportunity_execution_record.py` (CI gate 66), tests in
+opportunity-engine, and `docs/reports/mission-1.84.2-report.md`.
+
+Changed: `docs/CLAUDE.md` 1.136 to 1.137; `.github/workflows/ci.yml` gains one gate. **No frozen
+1.84 or 1.84.1 artifact was altered.**
 
 ## 1.135 - 2026-09-11 (Sprint 1 / Mission 1.84.1)
 

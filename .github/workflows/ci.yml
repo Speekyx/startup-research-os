@@ -672,6 +672,24 @@ jobs:
       - name: Globalping residual closure matches its records
         run: uv run python infrastructure/scripts/render_globalping_residuals.py --check
 
+      # Mission 1.84.2. The one approved provider request happened and its output was rejected
+      # at schema validation. The gate refuses: an approval recovered from a failure, or a
+      # consumed-approval list that does not name V1's digest with a request against it; a
+      # retry, a second call, a fallback model or a fallback provider; the frozen packet edited,
+      # marked approved, moved off its digest, or given a different MAX_OUTPUT_TOKENS; the output
+      # contract loosened to rescue the failed answer, by dropping a required field, reordering,
+      # changing statement_classifications maxItems or inventing a default; a reconstructed raw
+      # response, a hash for bytes nobody kept, or a recoverable claim about them; token usage or
+      # cost estimated and labelled actual, or the frozen worst case recorded as the actual cost;
+      # the capacity hypothesis promoted from STRONGLY_SUPPORTED to established, or truncation
+      # claimed; a retention defect erased; a stage that never ran recorded as passing; a
+      # human-review packet built from a rejected response; a new output ceiling concluded here
+      # rather than in 1.84.3; more than one gateway.complete call site in the runner; and any
+      # provider request, remote test call, transmitted TED byte or canonical mutation during the
+      # closure itself.
+      - name: The second-opportunity execution record matches its own
+        run: uv run python infrastructure/scripts/render_second_opportunity_execution_record.py --check
+
       # Mission 1.84.1. Whether the frozen synthesis can run on a Claude subscription instead of
       # the Anthropic API, and the provider review that question forces. The gate refuses: a
       # subscription route reusing the API route's provider id or reaching its APPROVED posture;
