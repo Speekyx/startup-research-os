@@ -1,0 +1,154 @@
+{
+  "$comment": "Mission 1.84.2. The one approved provider request was made. Its output was rejected by validation stage 4, no retry was made, and nothing was persisted. Two things the frozen retention policy required were NOT retained, and both are defects in this mission's own runner rather than properties of the response.",
+  "record_version": "second-opportunity-synthesis-execution-record@1.0.0",
+  "mission": "1.84.2",
+  "recorded_at": "2026-09-11",
+  "PRIMARY_OUTCOME": "EXECUTION_OUTPUT_REJECTED_AT_SCHEMA_VALIDATION_NO_RETRY",
+  "outcome_basis": "The transport succeeded and the provider answered. The answer carried 18 of the 20 required fields and was refused at the schema-validation stage. A refusal is not a provider failure, and it is not a reason to call again.",
+
+  "APPROVAL_CONSUMED": {
+    "EXECUTION_PACKET_ID": "SECOND-OPPORTUNITY-SYNTH-EXEC-V1",
+    "EXECUTION_PACKET_VERSION": 1,
+    "EXECUTION_PACKET_SHA256": "570657e1a862a96742925f6a5e5a17b0e1860bf9f2f0b8315fa33c560496da92",
+    "DECISION": "APPROVE_EXACTLY_ONE_EXECUTION",
+    "SPENT": true,
+    "spent_note": "The approval authorised exactly one execution and one execution was performed. It is spent whatever the output turned out to be, and a second call needs a new explicit approval naming a packet digest."
+  },
+
+  "PRE_EXECUTION_VERIFICATION": {
+    "$comment": "All eight checks the approval enumerates, run before a socket existed.",
+    "1_EXECUTION_PACKET_SHA256_RECOMPUTED": "570657e1a862a96742925f6a5e5a17b0e1860bf9f2f0b8315fa33c560496da92",
+    "1_MATCHES_APPROVAL": true,
+    "2_VERSION_UNCHANGED": true,
+    "2_PACKET_APPROVAL_FLAG_STILL_FALSE": true,
+    "3_REPRESENTATION_SHA256_RECOMPUTED": "2528a56a4a9e873bfd04662aeb52916eb80faafe10ab085e716cbdcee77c5b72",
+    "3_REPRESENTATION_CHARACTERS": 3604,
+    "3_MATCHES_APPROVAL": true,
+    "4_PROMPT_SHA256_RECOMPUTED": "af5289494416139d302eed704c12b9c53ab2547dca336e2ca4a834ec936c5080",
+    "4_MATCHES_APPROVAL": true,
+    "5_PROVIDER_POSTURE": "APPROVED",
+    "6_TED_EXTERNAL_MODEL_TRANSMISSION": "PERMITTED_WITH_CONDITIONS",
+    "6_LIVE_PACKET_GATE": "AVAILABLE",
+    "6_LIVE_GATE_REFUSAL_REASONS": [],
+    "7_ALL_BOUND_PARAMETERS_MATCH": true,
+    "8_REFUSED_BEFORE_SENDING": false,
+    "VERIFIED_AT": "2026-09-11T18:01:39.558931+00:00"
+  },
+
+  "EXECUTION": {
+    "PROVIDER_REQUESTS_MADE": 1,
+    "RETRIES": 0,
+    "FALLBACK_MODEL_USED": false,
+    "FALLBACK_PROVIDER_USED": false,
+    "SECOND_CALL_MADE": false,
+    "provider": "anthropic",
+    "provider_route": "Anthropic API under the Commercial Terms",
+    "model": "claude-sonnet-5",
+    "tier": "STRONG_MODEL",
+    "max_output_tokens": 3000,
+    "timeout_seconds": 60.0,
+    "max_retries": 0,
+    "transport_outcome": "SUCCEEDED",
+    "provider_answered": true
+  },
+
+  "VALIDATION_STAGES": {
+    "$comment": "The eight ordered stages from the frozen output contract. A stage that never ran is recorded as NOT_REACHED rather than as passing.",
+    "1_transport_success": "PASSED",
+    "2_provider_response_shape": "PASSED",
+    "3_exact_structured_output_parse": "PASSED",
+    "4_schema_validation": "FAILED",
+    "5_semantic_output_gate": "NOT_REACHED",
+    "6_evidence_boundary_gate": "NOT_REACHED",
+    "7_attribution_and_no_distortion_gate": "NOT_REACHED",
+    "8_canonical_persistence_eligibility": "NOT_REACHED",
+    "FAILING_GATE": "4_schema_validation",
+    "FAILING_GATE_MESSAGE": "task 'second-opportunity-synthesis-prompt' structured output is missing required fields: ['confidence_classification', 'statement_classifications']",
+    "fields_required": 20,
+    "fields_present": 18,
+    "fields_missing": [
+      "confidence_classification",
+      "statement_classifications"
+    ],
+    "missing_field_positions_in_required_order": [19, 20],
+    "positions_note": "The two missing fields are the LAST TWO in the schema's required order. Fields 1 through 18 were present."
+  },
+
+  "RETENTION_ACTUAL": {
+    "$comment": "What the frozen policy required against what this runner actually kept. Two shortfalls, both defects in the runner rather than properties of the response.",
+    "raw_provider_response": "NOT_RETAINED",
+    "raw_provider_response_shortfall": "The frozen policy says the raw response is RETAINED, because a gate verdict over a response nobody kept is unverifiable. The runner let the Gateway's exception propagate, so the bytes were discarded at exactly the moment they were worth most. The Gateway builds its result locally and the runner registered no transport recorder.",
+    "parsed_structured_output": "NOT_RETAINED",
+    "parsed_structured_output_shortfall": "Validation raises before the response object is constructed, so the 18 fields that WERE returned are gone too. Their field NAMES survive only through the error message.",
+    "actual_input_tokens": "NOT_RETAINED",
+    "actual_output_tokens": "NOT_RETAINED",
+    "actual_cost_units": "NOT_RETAINED",
+    "usage_shortfall": "The Gateway emits usage on the failure path as well as the success path, including the token counts, but only to a telemetry sink. The runner registered none, so the record went nowhere.",
+    "hidden_reasoning": "NOT_RETAINED",
+    "hidden_reasoning_note": "Required by the policy and satisfied, though satisfied by accident here rather than by design: none was requested and none was kept.",
+    "cost_incurred_but_unmeasured": true,
+    "cost_bound": "The call is bounded above by the frozen worst case of 0.04825 cost units and by the 0.10 ceiling. What it ACTUALLY cost is not established, and no figure is invented."
+  },
+
+  "ROOT_CAUSE": {
+    "$comment": "Deterministic evidence, computed without any further model call.",
+    "STATUS": "STRONGLY_SUPPORTED_NOT_ESTABLISHED",
+    "why_not_established": "Proving truncation rather than model omission needs the raw bytes, and the runner discarded them. The evidence below is arithmetic about the schema and a matching signature in this repository's own history; it is not the response.",
+    "hypothesis": "The frozen MAX_OUTPUT_TOKENS of 3000 is too small for the schema Mission 1.84 froze, so serialisation ran out of budget and the trailing required fields never appeared.",
+    "evidence": [
+      "The two missing fields are positions 19 and 20 of 20 in the schema's required order, and fields 1 through 18 were present. A model choosing to omit fields would not reliably omit exactly the trailing ones.",
+      "`statement_classifications` is an array with maxItems 24 of objects whose statement field allows 300 characters. At its documented maximum that ONE field serialises to roughly 8160 characters, about 3784 tokens at this deployment's measured 2.1565 characters per token -- larger than the entire 3000-token output cap.",
+      "Mission 1.31.1 recorded the identical signature for the identical cause: an output cap of 1500 that was smaller than the requested schema could serialise, with 'the last five required fields missing'. The cap was raised to 3000 and that schema fitted."
+    ],
+    "MY_ERROR_IN_MISSION_1_84": "Mission 1.84 added three fields to the 17-field schema, including the largest field in it, and kept the 3000-token cap that Mission 1.31.1 had sized for the 17-field version. The 1.84 report cited that mission by name for raising the cap and did not re-check that the raised cap still fitted the extended schema. The token budget reasoned about INPUT size and never re-derived the OUTPUT bound.",
+    "not_claimed": "That the model would have produced a valid answer with a larger cap. Nothing here establishes what it would have written."
+  },
+
+  "RUNNER_DEFECTS_REPAIRED": {
+    "$comment": "Repaired for a FUTURE approved call. No call was made to test the repair, because a test call is a second call.",
+    "repaired": [
+      "A recording transport keeps the response bytes as they arrive, so a failure still has a response to point at. It lives in the runner rather than in the Gateway, because what to retain is a per-mission decision.",
+      "A telemetry sink captures the usage record the Gateway already emits on the failure path, so actual tokens and cost survive a rejected output.",
+      "The execution artifact is written on BOTH paths rather than only on success."
+    ],
+    "repair_is_untested_live": true,
+    "repair_is_untested_live_note": "The repair is exercised by verification and by the ordinary suites, and it has not been exercised against a real provider response, because doing so would require a second call nobody approved."
+  },
+
+  "PERSISTENCE": {
+    "PERSISTED": "NOTHING",
+    "opportunity_created": 0,
+    "opportunity_revisions_created": 0,
+    "evidence_links_created": 0,
+    "scores_persisted": 0,
+    "canonical_research_mutation": 0,
+    "note": "PERSIST_NOTHING was the approval's instruction for a failing gate, and it is also what the frozen persistence policy required regardless: nothing persists without a human reading the output first, and there is no output to read."
+  },
+
+  "HUMAN_OUTPUT_REVIEW_REQUIRED": true,
+  "human_review_packet_produced": false,
+  "human_review_packet_note": "There is no valid structured output to review. A human-review packet assembled from an output that failed schema validation would be asking a person to read something the contract already rejected.",
+
+  "WHAT_A_SECOND_CALL_WOULD_NEED": {
+    "$comment": "Recorded so the operator can decide, and NOT acted on. This mission's approval is spent.",
+    "a_new_operator_approval": true,
+    "a_new_execution_packet": true,
+    "why_a_new_packet": "MAX_OUTPUT_TOKENS is a field the execution digest BINDS. Changing it produces a different digest, so the approved packet cannot simply be re-run with a larger cap -- that would be a different call wearing an approved packet's name.",
+    "suggested_change": "Raise MAX_OUTPUT_TOKENS to a bound derived from the schema's own documented maxima rather than inherited from a smaller schema, and re-derive the worst-case cost and the ceiling from it. An alternative worth weighing is reducing `statement_classifications` maxItems, which changes the output CONTRACT and therefore the gate version.",
+    "cost_consequence": "A larger output bound raises the worst-case cost, so the ceiling must be re-derived rather than left at 0.10.",
+    "not_decided_here": true
+  },
+
+  "ACCOUNTING": {
+    "PROVIDER_REQUESTS": 1,
+    "RETRIES": 0,
+    "SECOND_CALLS": 0,
+    "TED_BYTES_SENT": 3604,
+    "TED_BYTES_SENT_NOTE": "The approved representation, transmitted once under the approved permission. This is the first time TED-derived material has left this machine.",
+    "OPPORTUNITIES_CREATED": 0,
+    "CANONICAL_RESEARCH_MUTATION": 0,
+    "EMBEDDINGS_CREATED": 0,
+    "SCORES_PERSISTED": 0,
+    "CREDENTIAL_VALUES_PRINTED_OR_PERSISTED": 0
+  }
+}
