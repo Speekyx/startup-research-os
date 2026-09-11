@@ -1,0 +1,285 @@
+{
+  "$comment": "Mission 1.84.3. The question was what output-token ceiling the frozen schema justifies. It justifies none: eight required paths are unbounded, so the schema has no finite maximum serialized size and no ceiling can be DERIVED from it. The 3000 Mission 1.84 froze was not merely too small; it was underivable, and so is every other number.",
+  "record_version": "second-opportunity-output-capacity-analysis@1.0.0",
+  "mission": "1.84.3",
+  "recorded_at": "2026-09-11",
+  "PRIMARY_OUTCOME": "OUTPUT_SCHEMA_HAS_UNBOUNDED_SERIALIZED_SIZE",
+  "outcome_basis": "Section 6 is a gate before any arithmetic: a finite maximum requires every variable-length component to be bounded. Eight required array paths contain strings with neither an enum nor a maxLength, so the maximum valid serialized output is unbounded. Inventing a practical maximum is exactly what that gate exists to refuse.",
+  "EXECUTION_PACKET_V2_CREATED": false,
+  "why_no_v2": "A packet binds MAX_OUTPUT_TOKENS. Any value chosen here would be invented rather than derived, which is the defect this mission was called to repair. Producing V2 anyway would repeat Mission 1.84's error with better paperwork.",
+  "schema_id": "second-opportunity-synthesis-output@1.0.0",
+  "schema_sha256": "9f8e3849fb0223f5a4c41466d8d8aed994e1d86d446a52e9eca1fd28d80f65e9",
+  "output_gate": "second-opportunity-output-gate@1.0.0",
+  "schema_changed_by_this_mission": false,
+  "FINITE_BOUND": false,
+  "unbounded_paths": [
+    {
+      "path": "supported_dimensions[]",
+      "reason": "string with neither an enum nor a maxLength",
+      "required": true,
+      "maxItems": 14,
+      "item_maxLength": null,
+      "introduced_by": "MISSION_1_31_BASE_SCHEMA"
+    },
+    {
+      "path": "unsupported_dimensions[]",
+      "reason": "string with neither an enum nor a maxLength",
+      "required": true,
+      "maxItems": 14,
+      "item_maxLength": null,
+      "introduced_by": "MISSION_1_31_BASE_SCHEMA"
+    },
+    {
+      "path": "supporting_evidence_ids[]",
+      "reason": "string with neither an enum nor a maxLength",
+      "required": true,
+      "maxItems": 20,
+      "item_maxLength": null,
+      "introduced_by": "MISSION_1_31_BASE_SCHEMA"
+    },
+    {
+      "path": "supporting_claim_ids[]",
+      "reason": "string with neither an enum nor a maxLength",
+      "required": true,
+      "maxItems": 20,
+      "item_maxLength": null,
+      "introduced_by": "MISSION_1_31_BASE_SCHEMA"
+    },
+    {
+      "path": "source_families[]",
+      "reason": "string with neither an enum nor a maxLength",
+      "required": true,
+      "maxItems": 10,
+      "item_maxLength": null,
+      "introduced_by": "MISSION_1_31_BASE_SCHEMA"
+    },
+    {
+      "path": "critical_uncertainties[]",
+      "reason": "string with neither an enum nor a maxLength",
+      "required": true,
+      "maxItems": 12,
+      "item_maxLength": null,
+      "introduced_by": "MISSION_1_31_BASE_SCHEMA"
+    },
+    {
+      "path": "commercial_claims_supported[]",
+      "reason": "string with neither an enum nor a maxLength",
+      "required": true,
+      "maxItems": 8,
+      "item_maxLength": null,
+      "introduced_by": "MISSION_1_31_BASE_SCHEMA"
+    },
+    {
+      "path": "commercial_claims_not_supported[]",
+      "reason": "string with neither an enum nor a maxLength",
+      "required": true,
+      "maxItems": 14,
+      "item_maxLength": null,
+      "introduced_by": "MISSION_1_31_BASE_SCHEMA"
+    }
+  ],
+  "unbounded_path_count": 8,
+  "PROVENANCE": {
+    "$comment": "Which mission put each unbounded field there. This corrects Mission 1.84.2's attribution without excusing it.",
+    "all_eight_unbounded_fields_are_from": "MISSION_1_31_BASE_SCHEMA",
+    "byte_identical_to_base": true,
+    "fields_added_by_mission_1_84": [
+      "confidence_classification",
+      "recommended_next_evidence",
+      "statement_classifications"
+    ],
+    "fields_added_by_mission_1_84_are_all_bounded": true,
+    "corrected_attribution": "Mission 1.84.2 recorded the defect as Mission 1.84's. That is right about the FAILURE TO DERIVE and wrong about the cause: the three fields 1.84 added are the only properly bounded ones in the schema, and the eight that make derivation impossible are Mission 1.31's, inherited byte-identically. So 1.84 could not have derived a ceiling from this schema even if it had tried, which it did not."
+  },
+  "SCHEMA_MAX_SERIALIZED_SIZE": "UNBOUNDED",
+  "EXPECTED_TYPICAL_OUTPUT_SIZE": "NOT_ESTABLISHED",
+  "expected_typical_note": "Not derived. The only real sample is Mission 1.84.2's rejected response, whose bytes were not retained, and one sample would not be a distribution anyway.",
+  "PROVIDER_OUTPUT_TOKEN_LIMIT": "NOT_READ",
+  "provider_limit_note": "Section 7. A provider capability is not evidence that a schema fits inside it, and reading one here would invite exactly that inference. It is irrelevant while the schema is unbounded.",
+  "BOUNDED_SUBSET_FLOOR": {
+    "$comment": "NOT the schema maximum, which does not exist. This is the arithmetic statement that whatever the true maximum is, it is AT LEAST this -- the unbounded arrays are held EMPTY here and can only add. A floor is a fact; a practical maximum would be an invention.",
+    "method": "every bounded field at its maximum legal length, every enum at its longest member, the eight unbounded arrays empty, serialized by json.dumps(sort_keys=True) with default separators -- the repository's own canonical path",
+    "worst_case_escaping_applied": true,
+    "escaping_note": "Strings are filled with the quotation mark, which JSON escapes to two characters, so a maxLength of N occupies 2N serialized characters plus its quotes. Counting visible characters alone would understate the floor.",
+    "FLOOR_SERIALIZED_CHARACTERS": 27709,
+    "FLOOR_UTF8_BYTES": 27709,
+    "FLOOR_INSTANCE_SHA256": "25bd267fbedfd56d9d9e46cd9fec8f10140b792ca6889cda199e2bdecad6c9ab",
+    "frozen_cap_it_is_compared_against": 3000,
+    "floor_exceeds_frozen_cap": true,
+    "directional_token_note": "At the deployment's one measured ratio of 2.1565 characters per token the floor is roughly 12849 tokens against a frozen cap of 3000. That ratio is an INPUT measurement from Mission 1.31.1 and is NOT an output tokenizer; it is shown to establish the DIRECTION of the comparison and is not used to derive any ceiling."
+  },
+  "DOMINANT_FIELDS_BY_SERIALIZED_SIZE": [
+    {
+      "field": "statement_classifications",
+      "serialized_characters": 16133,
+      "bounded": true
+    },
+    {
+      "field": "recommended_next_evidence",
+      "serialized_characters": 4861,
+      "bounded": true
+    },
+    {
+      "field": "evidence_bound_reasoning_summary",
+      "serialized_characters": 1838,
+      "bounded": true
+    },
+    {
+      "field": "hypothesis_statement",
+      "serialized_characters": 1226,
+      "bounded": true
+    },
+    {
+      "field": "observed_need",
+      "serialized_characters": 819,
+      "bounded": true
+    },
+    {
+      "field": "candidate_intervention_class",
+      "serialized_characters": 634,
+      "bounded": true
+    },
+    {
+      "field": "independence_status",
+      "serialized_characters": 625,
+      "bounded": true
+    },
+    {
+      "field": "reliability_status",
+      "serialized_characters": 624,
+      "bounded": true
+    }
+  ],
+  "dominant_field_note": "`statement_classifications` is 16133 of the floor's 27709 characters, about 58 per cent, and it is one of the three fields Mission 1.84 added. It is properly bounded; it is simply large.",
+  "CANONICAL_SERIALIZATION": {
+    "path": "json.dumps(value, sort_keys=True) with default separators",
+    "separators": "', ' and ': ' (Python defaults)",
+    "ensure_ascii": true,
+    "ensure_ascii_note": "Python's default. A non-ASCII character serialises as a \\uXXXX escape of six characters, so ensure_ascii INCREASES serialized size and the floor above does not exploit that. A maximum computed under ensure_ascii=False would be smaller, which is the unsafe direction.",
+    "key_ordering": "deterministic, sorted",
+    "whitespace": "one space after each separator, from the defaults",
+    "escaped_characters": "quotation mark, backslash, and control characters below 0x20",
+    "utf8_handling": "the serialized form is ASCII under ensure_ascii, so characters and bytes coincide"
+  },
+  "TOKENIZATION": {
+    "EXACT_MAX_OUTPUT_TOKEN_COUNT": "NOT_ESTABLISHED",
+    "exact_tokenizer_available": false,
+    "why": "no tokenizer for claude-sonnet-5 is installed in this environment, none is held, and section 15 forbids both a network request to tokenize and installing an unreviewed dependency to obtain a convenient number",
+    "empirical_ratio_available": 2.1565,
+    "empirical_ratio_classification": "EMPIRICAL_LOWER_INFORMATION_BOUND",
+    "empirical_ratio_direction_warning": "Section 16. A characters-per-token ratio that is too HIGH divides the character count by too much and UNDERESTIMATES tokens, which is the unsafe direction for a capacity ceiling. 2.1565 came from one INPUT measurement of a prompt whose composition differs from this output, so it may be too high here and must not be multiplied by a margin as if it were a tokenizer.",
+    "no_ceiling_derived": true
+  },
+  "DERIVED_MIN_OUTPUT_TOKEN_CAPACITY": "NOT_DERIVABLE",
+  "SELECTED_MAX_OUTPUT_TOKENS": "NONE",
+  "rounding_reason": "not reached; no requirement was derivable to round",
+  "THINGS_NOT_DONE": {
+    "$comment": "Section 19 and section 6. Each of these would have produced a number.",
+    "copied_3000": false,
+    "chose_a_round_number": false,
+    "used_a_provider_limit_as_a_schema_bound": false,
+    "reduced_maxitems_to_rescue_capacity": false,
+    "reduced_maxlength_to_rescue_capacity": false,
+    "made_a_required_field_optional": false,
+    "removed_confidence_classification": false,
+    "removed_statement_classifications": false,
+    "reordered_fields": false,
+    "introduced_defaults": false,
+    "changed_the_output_schema": false,
+    "changed_the_output_gate": false,
+    "note": "The failed 18-of-20 response did not influence which fields are kept. Reducing maxItems because field 20 went missing would be shaping a contract around one rejected answer."
+  },
+  "OPTIONS_FOR_THE_OPERATOR": {
+    "$comment": "Section 18. Offered, none implemented, and none recommended as though decided. Each is an architecture choice with a different cost, and picking one is not capacity arithmetic.",
+    "options": [
+      {
+        "id": "BOUND_THE_EIGHT_ITEM_STRINGS",
+        "what": "add a maxLength to the item schema of each of the eight unbounded arrays",
+        "makes_the_schema_finite": true,
+        "cost": "a schema version bump and a gate version bump, and a judgement about what each field's longest legitimate value is -- an id, a dimension name and a free-text uncertainty do not share one sensible bound",
+        "touches_mission_1_31_base_schema": true,
+        "note": "This is the narrowest change that answers the question asked, and it reaches a schema Mission 1.31 froze and Mission 1.31.1 executed against, so it is not local to the second-Opportunity work."
+      },
+      {
+        "id": "REDUCE_STATEMENT_CLASSIFICATIONS",
+        "what": "lower maxItems or the statement maxLength on the largest field",
+        "makes_the_schema_finite": false,
+        "cost": "changes the output CONTRACT and the gate version, and does not remove the unboundedness",
+        "warning": "This would shrink the floor and leave the schema just as unbounded. Doing it in response to the failure is the shape section 19 forbids."
+      },
+      {
+        "id": "REFERENCE_RATHER_THAN_DUPLICATE",
+        "what": "have statement_classifications carry statement IDENTIFIERS rather than repeat the statement text",
+        "makes_the_schema_finite": false,
+        "cost": "a different output representation, and the ids still need bounding",
+        "note": "It attacks the dominant field's size rather than the unboundedness."
+      },
+      {
+        "id": "SPLIT_THE_TASK",
+        "what": "separate synthesis from classification into two deterministic stages",
+        "makes_the_schema_finite": false,
+        "cost": "a second call, which this arc's whole discipline is built to avoid"
+      },
+      {
+        "id": "ACCEPT_AN_OPERATOR_DECLARED_CEILING",
+        "what": "the operator states a ceiling explicitly as their own judgement rather than as a derived bound",
+        "makes_the_schema_finite": false,
+        "cost": "the packet would then record a ceiling that is declared rather than derived, and it must say so in those words",
+        "note": "This is honest and is NOT what this mission was asked to produce. It is listed because refusing to name it would hide a real option."
+      }
+    ],
+    "implemented_here": "NONE",
+    "recommended_here": "NONE"
+  },
+  "REVALIDATION": {
+    "$comment": "Sections 22 to 27. Re-read from live state, not assumed from Mission 1.84.",
+    "representation_sha256_recomputed": "2528a56a4a9e873bfd04662aeb52916eb80faafe10ab085e716cbdcee77c5b72",
+    "representation_unchanged": true,
+    "representation_characters": 3604,
+    "prompt_sha256_recomputed": "af5289494416139d302eed704c12b9c53ab2547dca336e2ca4a834ec936c5080",
+    "prompt_unchanged": true,
+    "provider_id": "anthropic",
+    "provider_route": "Anthropic API under the Commercial Terms",
+    "provider_posture": "APPROVED",
+    "subscription_route_posture": "NOT_APPROVED",
+    "subscription_route_used": false,
+    "model_selected_by_current_policy": "claude-sonnet-5",
+    "model_selection_changed": false,
+    "model_selection_note": "The deployment still configures exactly one text tier; FAST and BALANCED bind the literal string 'null'. Selection is unchanged, and this mission does not mix an output-capacity repair with a model migration.",
+    "pricing_version": "anthropic-published-2026-09-02",
+    "pricing_changed": false,
+    "ted_source_id": "ted-eu",
+    "ted_use_profile": "local-private-research-v1",
+    "ted_external_model_transmission": "PERMITTED_WITH_CONDITIONS",
+    "selected_packet_gate": "AVAILABLE",
+    "live_gate_refusal_reasons": []
+  },
+  "RETENTION_REPAIR_VERIFIED": true,
+  "retention_repair_evidence": "The Mission 1.84.2 closure suite drives seven synthetic terminal paths through the real Gateway with scripted transports and asserts each retains what it can: raw response and its digest, parsed output and its digest, usage, and the terminal outcome. A tripwire test replaces UrllibTransport.__init__ and asserts no fixture constructs the real transport. 31 tests, no network.",
+  "V1_STATE": {
+    "execution_packet_sha256": "570657e1a862a96742925f6a5e5a17b0e1860bf9f2f0b8315fa33c560496da92",
+    "unchanged": true,
+    "EXECUTION_APPROVAL_CONSUMED": true,
+    "FURTHER_CALLS_AUTHORIZED_BY_V1": false,
+    "approval_flag_inside_packet": false,
+    "guard_still_refuses_v1": true,
+    "guard_refusal_code": "EXECUTION_APPROVAL_ALREADY_CONSUMED",
+    "guard_permits_a_new_digest": true,
+    "guard_permits_a_new_digest_note": "A control proves the guard refuses V1's digest and does NOT refuse an unseen one, so a genuinely new packet is not blocked merely because V1 was consumed."
+  },
+  "ACCOUNTING": {
+    "MODEL_CALLS": 0,
+    "PROVIDER_REQUESTS": 0,
+    "REMOTE_TEST_CALLS": 0,
+    "TED_BYTES_SENT": 0,
+    "CANONICAL_RESEARCH_MUTATION": 0,
+    "OPPORTUNITIES_CREATED": 0,
+    "SCORES_PERSISTED": 0,
+    "EMBEDDINGS_CREATED": 0,
+    "SCHEMA_CHANGES": 0,
+    "DEPENDENCIES_INSTALLED": 0,
+    "NETWORK_REQUESTS": 0
+  },
+  "NEXT_REQUIRED_ACTION": "OPERATOR_DECISION_ON_OUTPUT_SCHEMA_BOUNDEDNESS",
+  "next_action_note": "No execution packet can be prepared until the schema has a finite maximum or the operator declares a ceiling as their own judgement. Both are decisions, not arithmetic, and neither is taken here."
+}

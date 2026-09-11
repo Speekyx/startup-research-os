@@ -672,6 +672,28 @@ jobs:
       - name: Globalping residual closure matches its records
         run: uv run python infrastructure/scripts/render_globalping_residuals.py --check
 
+      # Mission 1.84.3. What output-token ceiling the frozen schema justifies, and the answer is
+      # none: eight required paths are unbounded, so no maximum exists to derive one from. The
+      # gate RE-DERIVES boundedness by walking the executable schema rather than reading a
+      # boolean out of the document it guards, and refuses: a FINITE_BOUND claim the live schema
+      # contradicts, or a recorded unbounded-path list that is not the live one; a selected
+      # MAX_OUTPUT_TOKENS or a derived capacity while the schema is unbounded; an exact token
+      # count with no tokenizer, an empirical characters-per-token ratio treated as one, or a
+      # missing warning that too high a ratio underestimates tokens; a provider output limit
+      # recorded as though it bounded the schema; a floor presented as a maximum, computed
+      # without worst-case JSON escaping, or not compared against the frozen cap; the schema
+      # edited to rescue capacity by dropping a required field, reducing statement_classifications
+      # maxItems or the statement maxLength, reordering, or introducing defaults; a provenance
+      # claim the base schema contradicts; a representation, prompt, provider posture, model,
+      # pricing or TED egress that moved; an unverified retention repair; V1 edited, marked
+      # approved, given a new cap in place, or its consumed approval reset; a guard that refuses
+      # every digest rather than only the consumed one; a V2 packet built from an unbounded
+      # schema; an architecture option implemented or recommended as though decided; and any
+      # model call, provider request, network request, transmitted TED byte, installed dependency
+      # or canonical mutation.
+      - name: The second-opportunity output capacity analysis matches the live schema
+        run: uv run python infrastructure/scripts/render_second_opportunity_output_capacity.py --check
+
       # Mission 1.84.2. The one approved provider request happened and its output was rejected
       # at schema validation. The gate refuses: an approval recovered from a failure, or a
       # consumed-approval list that does not name V1's digest with a request against it; a

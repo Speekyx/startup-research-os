@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.136
+Version: 1.137
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-11 (Sprint 1 / Mission 1.84.2)
+Last amended: 2026-09-11 (Sprint 1 / Mission 1.84.3)
 
 ---
 
@@ -13,6 +13,76 @@ Last amended: 2026-09-11 (Sprint 1 / Mission 1.84.2)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.137 - 2026-09-11 (Sprint 1 / Mission 1.84.3)
+
+**`OUTPUT_SCHEMA_HAS_UNBOUNDED_SERIALIZED_SIZE`: the schema has no maximum, so no ceiling can be
+derived from it.** The question was what output-token ceiling
+`second-opportunity-synthesis-output@1.0.0` justifies. It justifies **none**. A recursive walk of
+the executable schema over 33 nodes found **eight required paths** whose arrays bound how MANY
+strings they may hold and not how LONG any of them may be -- a single element could be a megabyte
+and still satisfy the contract. **So the 3000 Mission 1.84 froze was not merely too small; it was
+UNDERIVABLE, and so is every other number.** No ceiling selected, **no execution packet V2**, and
+nothing in the contract changed.
+
+**THE PROVENANCE CORRECTS MISSION 1.84.2 WITHOUT EXCUSING ANYTHING.** All eight unbounded fields
+come from **Mission 1.31's base schema, byte-identically**, and the three fields Mission 1.84 added
+-- `recommended_next_evidence`, `confidence_classification`, `statement_classifications` -- are the
+**only properly bounded ones in the whole schema**. 1.84.2 recorded the defect as 1.84's: right
+about the FAILURE TO DERIVE, wrong about the CAUSE. **1.84 could not have derived a ceiling even if
+it had tried**; what it did wrong was freeze a number anyway and call the budget reasoned. And it
+explains Mission 1.31.1's own history: that mission found its cap by raising 1500 to 3000 until the
+answer fit, because there was nothing to compute.
+
+**A FLOOR IS NOT A MAXIMUM, AND STATING ONE IS ARITHMETIC RATHER THAN INVENTION.** Holding the
+eight unbounded arrays EMPTY, every bounded field at its maximum legal length, worst-case JSON
+escaping applied -- a quotation mark serialises to two characters, so a maxLength of 300 occupies
+600 -- the bounded subset alone is **27709 characters against a frozen cap of 3000**, roughly four
+times it, with `statement_classifications` contributing 16133 of that. Whatever the true maximum
+is, it is at least this, because the unbounded arrays can only add.
+
+**THE TOKEN DIRECTION IS THE UNSAFE ONE AND IS STATED AS SUCH.** No tokenizer for claude-sonnet-5
+is installed or held; section 15 forbids a network request to tokenize and forbids installing an
+unreviewed dependency for a convenient number, and **neither was done**. The 2.1565
+characters-per-token figure is classified `EMPIRICAL_LOWER_INFORMATION_BOUND` with the warning that
+**a ratio that is too HIGH divides by too much and UNDERESTIMATES tokens**; it came from one INPUT
+measurement and is never multiplied by a margin as though it were a tokenizer.
+`EXACT_MAX_OUTPUT_TOKEN_COUNT = NOT_ESTABLISHED`, `DERIVED_MIN_OUTPUT_TOKEN_CAPACITY =
+NOT_DERIVABLE`, `SELECTED_MAX_OUTPUT_TOKENS = NONE`.
+
+**THE FAILED RESPONSE DID NOT SHAPE THE CONTRACT.** No maxItems reduced, no maxLength reduced,
+`confidence_classification` not removed, nothing reordered, no default introduced, no required
+field made optional -- and reducing the dominant field because field 20 went missing **would not
+even make the schema finite**. Five options are offered with their costs, **exactly one of which
+makes a ceiling derivable**, and **none is implemented and none recommended**: choosing among them
+is an architecture decision, and the narrowest one reaches Mission 1.31's base schema that 1.31.1
+already executed against.
+
+**NOTHING ELSE MOVED**, re-read from live state rather than assumed: representation `2528a56a...`
+at 3604 characters, prompt `af528949...`, provider posture APPROVED, subscription route
+NOT_APPROVED and unused, model `claude-sonnet-5` unchanged, pricing
+`anthropic-published-2026-09-02` unchanged, TED PERMITTED_WITH_CONDITIONS with the packet gate
+AVAILABLE. **RETENTION_REPAIR_VERIFIED** on seven synthetic paths with a tripwire proving no fixture
+builds the real transport. **V1 byte-identical, still consumed, cap still 3000**, and the guard
+still refuses its digest while permitting an unseen one.
+
+**Probe 73 of 73 caught, 0 escaped, 8 of 8 controls** -- and **several cases attack the DERIVATION
+rather than the document**, mutating the live schema to prove the gate follows the schema rather
+than the record. **Verification.** 3831 bare-python tests; 3431 pytest with the database unchanged
+across 29 tenant tables; ruff over 988 files with two S105 false positives suppressed and the
+reason stated, because the flagged "token" is an output-token count and not a credential; mypy over
+199 files; contracts, catalog and registry checks; all **67** CI gates, one of them new.
+
+**What moved.** Nothing canonical and nothing governance: every counter identical, and
+**0 model calls, 0 provider requests, 0 network requests, 0 dependencies installed, 0 TED bytes,
+0 schema changes**.
+
+New: `docs/data/second-opportunity-output-capacity-analysis-v1.json` and its generated `.md`,
+`infrastructure/scripts/render_second_opportunity_output_capacity.py` (CI gate 67), tests in
+opportunity-engine, and `docs/reports/mission-1.84.3-report.md`.
+
+Changed: `docs/CLAUDE.md` 1.137 to 1.138; `.github/workflows/ci.yml` gains one gate. **No frozen
+1.84, 1.84.1 or 1.84.2 artifact was altered.**
 
 ## 1.136 - 2026-09-11 (Sprint 1 / Mission 1.84.2)
 
