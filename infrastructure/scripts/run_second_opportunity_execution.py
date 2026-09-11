@@ -31,6 +31,7 @@ import hashlib
 import json
 import os
 import pathlib
+import re
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
@@ -41,6 +42,8 @@ sys.path.insert(0, str(SCRIPTS))
 PACKET_FILE = DATA / "second-opportunity-synthesis-execution-packet-v1.json"
 REGISTER = DATA / "model-provider-policy-v1.json"
 RESPONSE_ARTIFACT = DATA / "second-opportunity-synthesis-response-v1.json"
+EXECUTION_RECORD = DATA / "second-opportunity-synthesis-execution-record-v1.json"
+CORRELATION_ID = "mission-1.84.2-second-opportunity-synthesis"
 
 SUBJECT = "ted-eu:CPV-class:9261"
 SOURCE_ID = "ted-eu"
@@ -361,7 +364,77 @@ def verify(use_profile: str) -> dict:
     }
 
 
-# --------------------------------------------------------------------- the single call
+# --------------------------------------------------------------------- consumed authority
+
+
+def consumed_approvals() -> list[dict]:
+    """Approvals already spent, read from the record that lives BESIDE the frozen packet.
+
+    Section 13. The frozen packet is never edited to say it has been used -- that would change
+    the bytes that were approved -- so the fact lives here, and the guard reads it rather than
+    relying on anybody remembering.
+    """
+    if not EXECUTION_RECORD.exists():
+        return []
+    record = _load(EXECUTION_RECORD)
+    entries = record.get("CONSUMED_APPROVALS")
+    if isinstance(entries, list):
+        return [e for e in entries if isinstance(e, dict)]
+    # A single-execution record is one consumed approval.
+    if record.get("EXECUTION_APPROVAL_CONSUMED"):
+        return [
+            {
+                "execution_packet_sha256": record.get("execution_packet_sha256"),
+                "execution_packet_version": record.get("execution_packet_version"),
+                "provider_requests": record.get("actual_provider_requests"),
+            }
+        ]
+    return []
+
+
+def refuse_if_consumed(packet_sha256: str) -> None:
+    """A failed call spends an approval exactly as a successful one does."""
+    for entry in consumed_approvals():
+        if entry.get("execution_packet_sha256") != packet_sha256:
+            continue
+        raise RefusedError(
+            "EXECUTION_APPROVAL_ALREADY_CONSUMED: the approval for execution packet "
+            f"{packet_sha256} records {entry.get('provider_requests')} provider request(s) "
+            "already made. An approval authorising exactly one execution is spent by the "
+            "execution, whatever the output turned out to be. A further call needs a new "
+            "operator approval naming a new packet digest."
+        )
+
+
+# --------------------------------------------------------------------- retention
+
+
+#: Section 11 E. Shapes a credential takes. Redacted before anything is written, so a provider
+#: error that echoes a header cannot land in a committed artifact.
+SECRET_PATTERNS = (
+    re.compile(r"sk-ant-[A-Za-z0-9_\-]{6,}"),
+    re.compile(r"sk-[A-Za-z0-9]{16,}"),
+    re.compile(r"\bey[JI][A-Za-z0-9_\-]{16,}\.[A-Za-z0-9_\-]{8,}"),
+)
+
+#: Section 11 D. Keys a provider may use for hidden reasoning. None is requested, and none is
+#: kept even if one arrives: the frozen retention policy says NOT RETAINED.
+REASONING_KEYS = ("thinking", "reasoning", "reasoning_content", "chain_of_thought")
+
+
+def redact(text: str) -> str:
+    for pattern in SECRET_PATTERNS:
+        text = pattern.sub("[REDACTED]", text)
+    return text
+
+
+def strip_reasoning(value):
+    """Drop any hidden-reasoning block a provider volunteered, at any depth."""
+    if isinstance(value, dict):
+        return {k: strip_reasoning(v) for k, v in value.items() if k.lower() not in REASONING_KEYS}
+    if isinstance(value, list):
+        return [strip_reasoning(v) for v in value]
+    return value
 
 
 class RecordingTransport:
@@ -369,29 +442,124 @@ class RecordingTransport:
 
     Mission 1.84.2 learned this the expensive way. The frozen retention policy says the raw
     provider response is RETAINED because *a gate verdict over a response nobody kept is
-    unverifiable* -- and on the first run the response was discarded by the exception path,
-    which is precisely when it was worth most. The Gateway cannot fix this for every caller,
-    because what to retain is a per-mission decision; the transport seam is where the bytes
-    arrive, so this is where a mission that must keep them does it.
+    unverifiable* -- and on the consumed call the bytes were discarded by the exception path,
+    which is precisely when they were worth most. The Gateway builds its result locally, so
+    nothing downstream of it can recover them; the transport seam is where they arrive, and a
+    mission that must keep them keeps them here. It is not in the Gateway because what to retain
+    is a per-mission decision, not a property every caller should inherit.
     """
 
     def __init__(self, inner) -> None:
         self.inner = inner
         self.responses: list[dict[str, object]] = []
+        self.transport_errors: list[str] = []
 
-    def post_json(self, *args, **kwargs):  # pragma: no cover - one shape, exercised live
-        response = self.inner.post_json(*args, **kwargs)
+    def post_json(self, *args, **kwargs):
+        try:
+            response = self.inner.post_json(*args, **kwargs)
+        except Exception as exc:
+            # A transport failure has no body, and recording that it had none is itself a fact.
+            self.transport_errors.append(f"{type(exc).__name__}: {redact(str(exc))}")
+            raise
+        body = getattr(response, "body", b"")
+        text = body.decode("utf-8", "replace") if isinstance(body, bytes) else str(body)
         self.responses.append(
             {
                 "status": getattr(response, "status", None),
-                "body": getattr(response, "body", b"").decode("utf-8", "replace"),
+                "body": redact(text),
+                "headers": {
+                    k: v
+                    for k, v in (getattr(response, "headers", {}) or {}).items()
+                    if k.lower() in ("request-id", "x-request-id", "anthropic-request-id")
+                },
             }
         )
         return response
 
 
-def execute(context: dict) -> dict:
-    """EXACTLY ONE provider request. No retry, no fallback, no second attempt."""
+def build_execution_artifact(
+    *,
+    outcome: str,
+    transport_responses: list[dict[str, object]],
+    transport_errors: list[str],
+    telemetry: list,
+    structured: dict | None,
+    failure: BaseException | None,
+    timing: dict,
+    validation: dict | None = None,
+) -> dict:
+    """One artifact shape for every terminal path. Section 11 C.
+
+    A path that produced no bytes says so with an explicit status rather than by omitting a key,
+    because a missing key and a measured absence read the same to whoever comes next.
+    """
+    raw = transport_responses[0] if transport_responses else None
+    usage = [
+        {
+            "input_tokens": u.input_tokens,
+            "output_tokens": u.output_tokens,
+            "cost_units": round(u.cost_units, 6),
+            "priced": bool(getattr(u, "priced", False)),
+            "outcome": getattr(u.outcome, "value", str(u.outcome)),
+            "error_category": getattr(u.error_category, "value", str(u.error_category)),
+        }
+        for u in telemetry
+    ]
+    artifact: dict[str, object] = {
+        "$comment": (
+            "Mission 1.84.2's repaired retention path. Written on every terminal outcome, so a "
+            "rejected response is as recoverable as an accepted one."
+        ),
+        "OUTCOME": outcome,
+        "PROVIDER_REQUESTS_MADE": len(transport_responses) + len(transport_errors),
+        "RETRIES": 0,
+        "timing": timing,
+        "RAW_PROVIDER_RESPONSE_RETAINED": raw is not None,
+        "RAW_PROVIDER_RESPONSE_SHA256": (
+            _sha256(str(raw["body"])) if raw is not None else "NOT_AVAILABLE"
+        ),
+        "RAW_PROVIDER_RESPONSE_CHARACTERS": len(str(raw["body"])) if raw is not None else 0,
+        "RAW_PROVIDER_RESPONSE_STATUS": raw["status"] if raw is not None else "NOT_AVAILABLE",
+        "PROVIDER_REQUEST_ID": (
+            next(iter(raw["headers"].values()), "NOT_EXPOSED")
+            if raw is not None
+            else "NOT_AVAILABLE"
+        ),
+        "transport_errors": list(transport_errors),
+        "USAGE_RETAINED": bool(usage),
+        "usage": usage if usage else "NOT_ESTABLISHED",
+        "HIDDEN_REASONING_REQUESTED": False,
+        "HIDDEN_REASONING_RETAINED": False,
+    }
+    if structured is not None:
+        cleaned = strip_reasoning(structured)
+        artifact["PARSED_OUTPUT_RETAINED"] = True
+        artifact["PARSED_OUTPUT_SHA256"] = _sha256(json.dumps(cleaned, sort_keys=True))
+        artifact["parsed_output"] = cleaned
+    else:
+        artifact["PARSED_OUTPUT_RETAINED"] = False
+        artifact["PARSED_OUTPUT_SHA256"] = "NOT_AVAILABLE"
+    if failure is not None:
+        artifact["failure"] = {
+            "type": type(failure).__name__,
+            "message": redact(str(failure)),
+        }
+    if validation is not None:
+        artifact["validation"] = validation
+    artifact["PERSISTED"] = "NOTHING"
+    return artifact
+
+
+# --------------------------------------------------------------------- the single call
+
+
+def execute(context: dict, *, transport=None, gateway=None) -> dict:
+    """EXACTLY ONE provider request. No retry, no fallback, no second attempt.
+
+    `transport` and `gateway` exist so the retention path can be exercised by synthetic
+    fixtures. A fixture reaches no network by construction, and the default builds the real
+    transport only when nothing was supplied.
+    """
     from sros_llm_gateway.config import load_config_from_env
     from sros_llm_gateway.gateway import LlmGateway
     from sros_llm_gateway.pricing import load_pricing_from_env
@@ -408,19 +576,21 @@ def execute(context: dict) -> dict:
     packet_file = context["packet_file"]
     parts = context["parts"]
 
-    # Usage is emitted on the FAILURE path too, so a sink is what makes actual tokens and cost
-    # recoverable when the output is rejected. Without one they go nowhere, which is the second
-    # thing this runner got wrong on its first run.
-    telemetry: list[object] = []
-    gateway = LlmGateway(
-        config=load_config_from_env(),
-        pricing=load_pricing_from_env(),
-        telemetry=telemetry.append,
-    )
-    recorder = RecordingTransport(UrllibTransport())
-    gateway.register(
-        AnthropicProvider(max_output_tokens=packet_file["MAX_OUTPUT_TOKENS"], transport=recorder)
-    )
+    refuse_if_consumed(packet_file["EXECUTION_PACKET_SHA256"])
+
+    recorder = RecordingTransport(transport if transport is not None else UrllibTransport())
+    telemetry: list = []
+    if gateway is None:
+        gateway = LlmGateway(
+            config=load_config_from_env(),
+            pricing=load_pricing_from_env(),
+            telemetry=telemetry.append,
+        )
+        gateway.register(
+            AnthropicProvider(
+                max_output_tokens=packet_file["MAX_OUTPUT_TOKENS"], transport=recorder
+            )
+        )
 
     prompt = RenderedPrompt(
         system_instructions=parts.system_instructions,
@@ -437,19 +607,19 @@ def execute(context: dict) -> dict:
         response_schema=SECOND_OPPORTUNITY_OUTPUT_SCHEMA,
         prompt=prompt,
         workspace_id=os.environ.get("DEV_WORKSPACE_ID", "00000000-0000-4000-8000-000000000001"),
-        correlation_id="mission-1.84.2-second-opportunity-synthesis",
+        correlation_id=CORRELATION_ID,
         timeout_seconds=float(packet_file["REQUEST_TIMEOUT"]),
         max_retries=int(packet_file["GENERATION_PARAMETERS"]["max_retries"]),
         requires_structured_output=True,
     )
 
     started = dt.datetime.now(dt.UTC)
-    # ONE call. The `except` re-raises after capturing what arrived; it never calls the provider
-    # again, because a retry is a second call and this approval authorises one.
+    # ONE call. The except captures what arrived and re-raises nothing to a retry: there is no
+    # second `gateway.complete` anywhere in this function, and the approval authorises one.
     try:
         response = gateway.complete(request)
         failure = None
-    except Exception as exc:  # noqa: BLE001 -- captured, recorded, re-raised, never retried
+    except Exception as exc:  # noqa: BLE001 -- captured and recorded, never retried
         response = None
         failure = exc
     finished = dt.datetime.now(dt.UTC)
@@ -458,11 +628,29 @@ def execute(context: dict) -> dict:
         "response": response,
         "failure": failure,
         "transport_responses": recorder.responses,
+        "transport_errors": recorder.transport_errors,
         "telemetry": telemetry,
-        "started_at": started.isoformat(),
-        "finished_at": finished.isoformat(),
-        "elapsed_seconds": round((finished - started).total_seconds(), 3),
+        "timing": {
+            "started_at": started.isoformat(),
+            "finished_at": finished.isoformat(),
+            "elapsed_seconds": round((finished - started).total_seconds(), 3),
+        },
     }
+
+
+def terminal_outcome(result: dict) -> str:
+    """Name the terminal state from what actually happened."""
+    failure = result["failure"]
+    if failure is None:
+        return "RESPONSE_RECEIVED_AWAITING_VALIDATION"
+    name = type(failure).__name__
+    if result["transport_errors"] and not result["transport_responses"]:
+        return "EXECUTION_FAILED_TRANSPORT_NO_RETRY"
+    if "Timeout" in name:
+        return "EXECUTION_FAILED_TIMEOUT_NO_RETRY"
+    if "Schema" in name:
+        return "EXECUTION_OUTPUT_REJECTED_AT_SCHEMA_VALIDATION_NO_RETRY"
+    return "EXECUTION_FAILED_NO_RETRY"
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -485,80 +673,43 @@ def main(argv: list[str] | None = None) -> int:
         shown = value if not isinstance(value, dict) else json.dumps(value, sort_keys=True)
         print(f"    {key:38s} {shown}")
 
+    spent = consumed_approvals()
+    print(f"    CONSUMED_APPROVALS                     {len(spent)}")
+
     if not args.execute:
         print("\nverified. Nothing sent. Pass --execute to perform the one approved request.")
         return 0
 
+    try:
+        refuse_if_consumed(context["packet_file"]["EXECUTION_PACKET_SHA256"])
+    except RefusedError as refusal:
+        print(f"\nREFUSED  {refusal}")
+        return 1
+
     print("\n=== ONE provider request")
     result = execute(context)
-    response, failure = result["response"], result["failure"]
-    captured = result["transport_responses"]
-
-    record = {
-        "$comment": (
-            "Mission 1.84.2. What the one approved provider request produced, frozen whether it "
-            "was accepted or rejected. A gate verdict over a response nobody kept is "
-            "unverifiable, so the bytes are recorded on the failure path too."
-        ),
-        "mission": "1.84.2",
-        "EXECUTION_PACKET_ID": APPROVED["EXECUTION_PACKET_ID"],
-        "EXECUTION_PACKET_SHA256": APPROVED["EXECUTION_PACKET_SHA256"],
-        "PROVIDER_REQUESTS_MADE": len(captured),
-        "RETRIES": 0,
-        "timing": {
-            "started_at": result["started_at"],
-            "finished_at": result["finished_at"],
-            "elapsed_seconds": result["elapsed_seconds"],
-        },
-        "transport": [
-            {
-                "status": item["status"],
-                "body_sha256": _sha256(str(item["body"])),
-                "body_characters": len(str(item["body"])),
-            }
-            for item in captured
-        ],
-        "usage": [
-            {
-                "input_tokens": u.input_tokens,
-                "output_tokens": u.output_tokens,
-                "cost_units": round(u.cost_units, 6),
-                "outcome": getattr(u.outcome, "value", str(u.outcome)),
-                "error_category": getattr(u.error_category, "value", str(u.error_category)),
-            }
-            for u in result["telemetry"]
-        ],
-    }
-
-    if failure is not None:
-        record["OUTCOME"] = "EXECUTION_OUTPUT_REJECTED_NO_RETRY"
-        record["failure"] = {"type": type(failure).__name__, "message": str(failure)}
-        record["PERSISTED"] = "NOTHING"
-        RESPONSE_ARTIFACT.write_text(
-            json.dumps(record, indent=2, ensure_ascii=False) + "\n",
-            encoding="utf-8",
-            newline="\n",
-        )
-        print(f"\n    {type(failure).__name__}: {failure}")
-        print("    NO RETRY. NOTHING PERSISTED.")
-        print(f"    wrote {RESPONSE_ARTIFACT.name}")
-        return 2
-
-    output = response.structured or {}
-    record["OUTCOME"] = "RESPONSE_RECEIVED_AWAITING_VALIDATION"
-    record["parsed_output_sha256"] = _sha256(json.dumps(output, sort_keys=True))
-    record["parsed_output"] = output
+    outcome = terminal_outcome(result)
+    response = result["response"]
+    artifact = build_execution_artifact(
+        outcome=outcome,
+        transport_responses=result["transport_responses"],
+        transport_errors=result["transport_errors"],
+        telemetry=result["telemetry"],
+        structured=(response.structured if response is not None else None),
+        failure=result["failure"],
+        timing=result["timing"],
+    )
     RESPONSE_ARTIFACT.write_text(
-        json.dumps(record, indent=2, ensure_ascii=False) + "\n",
+        json.dumps(artifact, indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",
         newline="\n",
     )
-    print(f"    input tokens   {response.usage.input_tokens}")
-    print(f"    output tokens  {response.usage.output_tokens}")
-    print(f"    cost units     {round(response.usage.cost_units, 6)}")
-    print(f"    parsed digest  {record['parsed_output_sha256']}")
+    print(f"    outcome        {outcome}")
+    print(f"    raw retained   {artifact['RAW_PROVIDER_RESPONSE_RETAINED']}")
+    print(f"    usage retained {artifact['USAGE_RETAINED']}")
+    print(f"    wrote          {RESPONSE_ARTIFACT.name}")
     print("\n    NOTHING PERSISTED. HUMAN_OUTPUT_REVIEW_REQUIRED = true.")
-    return 0
+    return 0 if result["failure"] is None else 2
 
 
 if __name__ == "__main__":
