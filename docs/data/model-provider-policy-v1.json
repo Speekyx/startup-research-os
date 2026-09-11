@@ -1,6 +1,6 @@
 {
   "$comment": "Mission 1.23, ADR-033. What each MODEL PROVIDER contractually does with content sent to it. This is a fact about the PROVIDER and never about a source: no vendor name appears in any source review, and no source term appears here. The join happens once, at runtime authorization. Every posture rests on retrieved first-party documents with a retrieval date, exactly as a source review does -- and like a source review, an APPROVED posture records what a provider commits to, not a guarantee and not a legal opinion.",
-  "policy_version": 1,
+  "policy_version": 2,
   "reviewed_by": "mission-1.23",
   "reviewed_at": "2026-09-02T00:00:00+00:00",
   "review_interval_days": 180,
@@ -83,6 +83,46 @@
       "content_ownership": "NOT_APPLICABLE",
       "operator_action_required": "None. Binding a production tier to this provider is refused by name rather than by its posture being unfavourable.",
       "notes": "Registered so that it can be refused explicitly. A test double that fell through to NOT_ASSESSED would be refused for the wrong reason, and a reader debugging a refusal would learn nothing from it."
+    },
+    {
+      "provider_id": "anthropic-claude-subscription",
+      "display_name": "Claude subscription (Free, Pro, Max) through Claude Code",
+      "route_assessed": "A Claude consumer subscription authenticated by claude.ai OAuth, executing through the Claude Code CLI or the Claude Agent SDK. This is the route the `anthropic` entry names as DIFFERENT and does not assess. It is a separate provider id so that no adapter can reach the API route's APPROVED posture by being Anthropic.",
+      "posture": "NOT_APPROVED",
+      "trains_on_submitted_content": "YES_UNLESS_THE_ACCOUNT_HOLDER_OPTS_OUT",
+      "retention": "FIVE_YEARS_IF_DATA_USE_IS_ON_OTHERWISE_30_DAYS",
+      "content_ownership": "GOVERNED_BY_THE_CONSUMER_TERMS_NOT_THE_COMMERCIAL_TERMS",
+      "operator_action_required": "None. This posture is not cleared by configuration. It would move only if Anthropic's own terms for this route committed against training, or if the operator decided that an account setting satisfies a condition written as 'its own terms commit'. That second reading is the operator's to make and is not made here.",
+      "notes": "NOT_APPROVED on the register's own definition: the terms do not establish that submitted content is not used to train. The consumer data policy makes training a CHOICE the account holder makes in settings, and names Claude Code explicitly when it does. That is the difference from the API route, whose posture rests on a sentence that commits: 'Anthropic may not train models on Customer Content from Services.' A setting the account holder can turn on is not a term that commits, and reading it as one would let a provider approval rest on a checkbox nobody re-checks. Retention differs the same way: bounded either way, and its bound is 5 years or 30 days depending on the same setting, against a documented 30 days on the API route. This is what the provider's documents say; it is not a legal opinion and it is not a claim about what any account is set to.",
+      "added_by": "mission-1.84.1",
+      "added_at": "2026-09-11T00:00:00+00:00",
+      "evidence": [
+        {
+          "document_type": "OFFICIAL_TERMS",
+          "document_title": "Anthropic Consumer Terms of Service",
+          "document_url": "https://www.anthropic.com/legal/consumer-terms",
+          "section_reference": "Scope, and use of Materials",
+          "summarized_finding": "Retrieved 2026-09-11. States that these terms govern 'Claude.ai, Claude Pro, and other products and services that we may offer for individuals', and separately that 'Our Commercial Terms of Service govern your use of any Anthropic API key, the Anthropic Console, or any other Anthropic offerings that reference the Commercial Terms of Service.' So the two routes are governed by different instruments, stated by the publisher rather than inferred. On data use it states 'We may use Materials to provide, maintain, and improve the Services and to develop other products and services, including training our models, unless you opt out of training through your account settings.'",
+          "retrieved_at": "2026-09-11T00:00:00+00:00"
+        },
+        {
+          "document_type": "OFFICIAL_DOCUMENTATION",
+          "document_title": "Claude Code documentation - Data usage",
+          "document_url": "https://code.claude.com/docs/en/data-usage",
+          "section_reference": "Data training policy; Data retention",
+          "summarized_finding": "Retrieved 2026-09-11. Names the two classes apart and names Claude Code inside the consumer one: 'Consumer users (Free, Pro, and Max plans): We give you the choice to allow your data to be used to improve future Claude models. We will train new models using data from Free, Pro, and Max accounts when this setting is on (including when you use Claude Code from these accounts).' Against 'Commercial users: (Team and Enterprise plans, API, 3rd-party platforms, and Claude Gov) maintain existing policies: Anthropic does not train generative models using code or prompts sent to Claude Code under commercial terms'. Retention for consumer accounts is 5 years where data use is allowed and 30 days where it is not; commercial standard retention is 30 days.",
+          "retrieved_at": "2026-09-11T00:00:00+00:00"
+        },
+        {
+          "document_type": "OFFICIAL_DOCUMENTATION",
+          "document_title": "Claude Agent SDK overview",
+          "document_url": "https://code.claude.com/docs/en/agent-sdk",
+          "section_reference": "Get started; License and terms",
+          "summarized_finding": "Retrieved 2026-09-11. States 'Unless previously approved, Anthropic does not allow third party developers to offer claude.ai login or rate limits for their products, including agents built on the Claude Agent SDK. Use the API key authentication methods described in the Quickstart instead.' Recorded as evidence that the two routes are treated differently, and NOT read as deciding this deployment: the sentence governs OFFERING claude.ai login to other people, and a single operator running a local tool on their own subscription is not obviously that. What it does establish is that the subscription route is not the documented authentication path for programmatic use.",
+          "retrieved_at": "2026-09-11T00:00:00+00:00"
+        }
+      ]
     }
-  ]
+  ],
+  "$note_on_review_metadata": "`reviewed_by` and `reviewed_at` name the review that ESTABLISHED this register, and are not rewritten when an entry is added. Each provider entry carries its own evidence rows with their own retrieval dates, and an entry added later carries `added_by` and `added_at`. Rewriting the file-level date would claim every posture was re-read on a day only one was."
 }

@@ -672,6 +672,23 @@ jobs:
       - name: Globalping residual closure matches its records
         run: uv run python infrastructure/scripts/render_globalping_residuals.py --check
 
+      # Mission 1.84.1. Whether the frozen synthesis can run on a Claude subscription instead of
+      # the Anthropic API, and the provider review that question forces. The gate refuses: a
+      # subscription route reusing the API route's provider id or reaching its APPROVED posture;
+      # an approved-provider set that grew; a posture with no retrieved first-party evidence; a
+      # record claiming the existing Anthropic posture covers the consumer route, or paraphrasing
+      # away the TED condition's own phrase 'its own terms commit'; a claim that an agent harness
+      # can transmit the frozen prompt bytes or be held to one model call; a subscription recorded
+      # as free, unlimited, or saving a stated number of dollars, or an invented quota percentage;
+      # PAYG marked false for V1; a changed representation or prompt digest; V1 edited, marked
+      # approved, or moved off its frozen digest; a V2 packet produced without all nine section-20
+      # conditions, or a recommendation for a packet that does not exist; a Gateway recorded as
+      # failing closed on a route it cannot express, or an adapter built for a refused route; a
+      # credential value in the record; and any remote call, transmitted TED byte, model call,
+      # Opportunity or canonical mutation.
+      - name: The Claude subscription route feasibility record matches its own
+        run: uv run python infrastructure/scripts/render_claude_subscription_route_feasibility.py --check
+
       # Mission 1.84. The frozen prompt, output contract and execution packet for one attended
       # external-model synthesis nobody has run. The gate refuses: a payload whose digest is not
       # the one the operator's egress approval names, which is the hard stop

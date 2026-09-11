@@ -1,0 +1,200 @@
+{
+  "$comment": "Mission 1.84.1. Whether the already-frozen second-Opportunity synthesis can execute through the operator's Claude subscription instead of the Anthropic API. Three independent answers of no, and only one of them is a governance question.",
+  "record_version": "claude-subscription-route-feasibility@1.0.0",
+  "mission": "1.84.1",
+  "recorded_at": "2026-09-11",
+  "PRIMARY_OUTCOME": "CLAUDE_MAX_ROUTE_NOT_SUPPORTED_FOR_SROS_EXECUTION",
+  "outcome_basis": "The subscription authenticates an AGENT HARNESS, not a bounded inference call. Both subscription-backed surfaces run an agent loop that decides its own number of model requests and composes its own system prompt, so neither can transmit the frozen prompt bytes nor honour MAX_MODEL_CALLS = 1. That is a property of the surface and no operator decision changes it. The provider-governance gap is real and is recorded separately, because it would still block even if the surface problem were solved, and because reporting it as the primary would send the operator to change an account setting that unblocks nothing.",
+  "secondary_outcome": "CLAUDE_MAX_ROUTE_REQUIRES_PROVIDER_GOVERNANCE_REVIEW",
+  "secondary_outcome_basis": "The review was performed here rather than deferred, and it concluded NOT_APPROVED. Recording a posture that refuses is the opposite of manufacturing one.",
+  "premise_correction": {
+    "$comment": "The mission is written about a Claude MAX subscription. The subscription this machine holds is not one, and a record that wrote MAX into its fields would be asserting an account fact nobody established.",
+    "BRIEF_ASSUMED": "MAX",
+    "LOCALLY_HELD_SUBSCRIPTION_TYPE": "pro",
+    "LOCALLY_HELD_RATE_LIMIT_TIER": "default_claude_ai",
+    "MAX_TIER": "NOT_MAX_ON_THIS_MACHINE",
+    "read_from": "~/.claude/.credentials.json, plan metadata fields only",
+    "note": "Plan identity is not a secret and was read; no token value was read, printed, persisted or committed. The operator may hold a Max subscription on another account, which is an operator-declared fact this mission cannot establish and does not assume. Nothing in the three blockers depends on which plan it is."
+  },
+  "BLOCKER_1_PROMPT_IDENTITY": {
+    "$comment": "Section 16. If adapting transport changes transmitted prompt bytes, STOP.",
+    "FROZEN_PROMPT_SHA256": "af5289494416139d302eed704c12b9c53ab2547dca336e2ca4a834ec936c5080",
+    "what_the_digest_covers": "the rendered system region, trusted context, the supplied statements, the task and the output schema, and nothing else",
+    "what_an_agent_harness_sends": "its own system prompt, its own tool definitions, its own context files and its own loop scaffolding, in addition to whatever the caller supplies",
+    "can_the_frozen_bytes_be_transmitted": false,
+    "why": "`--system-prompt` replaces the harness prompt and does not remove tool definitions or the harness's own framing. A run whose transmitted bytes differ from the frozen ones is a different execution, and calling it the same one would make the digest a label rather than a check",
+    "operator_decision_can_clear_this": false
+  },
+  "BLOCKER_2_EXACTLY_ONE_CALL": {
+    "$comment": "Section 20 condition 8, and the frozen packet's MAX_MODEL_CALLS = 1.",
+    "FROZEN_MAX_MODEL_CALLS": 1,
+    "FROZEN_MAX_RETRIES": 0,
+    "FROZEN_MAX_OUTPUT_TOKENS": 3000,
+    "FROZEN_REQUEST_TIMEOUT": 60.0,
+    "one_invocation_is": "one TASK, not one model request",
+    "installed_cli_flags_that_would_bound_it": [],
+    "flags_checked_and_absent": [
+      "--max-turns",
+      "--timeout",
+      "--max-output-tokens"
+    ],
+    "flags_present_but_wrong_unit": [
+      "--max-budget-usd, a dollar cap on API calls, which is not the billing unit on a subscription",
+      "--fallback-model, which is an automatic fallback and is forbidden by section 18"
+    ],
+    "can_exactly_one_call_be_enforced": false,
+    "operator_decision_can_clear_this": false
+  },
+  "BLOCKER_3_PROVIDER_GOVERNANCE": {
+    "$comment": "Sections 10 and 11. A route does not inherit a posture by sharing a vendor.",
+    "CAN_EXISTING_ANTHROPIC_PROVIDER_POSTURE_COVER_SUBSCRIPTION_ROUTE": false,
+    "why_not_inherited": "the register's `anthropic` entry already says so in its own words, written in Mission 1.23 and not for this question: 'Consumer products (Claude Free, Pro, Max) are a DIFFERENT route with different terms and are not assessed here.' The scope of an assessment is a recorded fact, not an inference this mission had to make",
+    "required_property": "the TED egress decision's condition 3, frozen and adopted: 'Transmission only to a provider whose reviewed posture is APPROVED in the provider policy register: its own terms commit, for the API route this deployment would use, that submitted content is not used to train its models, and its retention posture is documented and bounded.'",
+    "what_the_subscription_route_offers_instead": "a setting the account holder turns on or off, which decides both whether submitted content trains models and whether retention is five years or thirty days",
+    "REVIEW_PERFORMED_BY_THIS_MISSION": true,
+    "PROVIDER_GOVERNANCE_STATE": "NOT_APPROVED",
+    "provider_id_registered": "anthropic-claude-subscription",
+    "why_a_separate_provider_id": "so a future adapter is refused BY NAME rather than by absence, and so nothing can reach the API route's APPROVED posture by calling itself anthropic",
+    "operator_decision_can_clear_this": "partly, and only by the operator deciding that an account setting satisfies a condition written as 'its own terms commit'. That is a reading of their own adopted condition and is theirs to make. It is not made here, and it would not clear blockers 1 or 2"
+  },
+  "ROUTES": [
+    {
+      "route_id": "anthropic-platform-api",
+      "provider_id": "anthropic",
+      "authentication": "API key",
+      "usage_model": "pay-as-you-go, metered per token",
+      "governed_by": "Anthropic Commercial Terms of Service",
+      "posture": "APPROVED",
+      "shape": "one bounded request, parameters supplied by the caller",
+      "in_use_by": "SECOND-OPPORTUNITY-SYNTH-EXEC-V1"
+    },
+    {
+      "route_id": "claude-cli-print-subscription-oauth",
+      "provider_id": "anthropic-claude-subscription",
+      "authentication": "claude.ai OAuth, established by `claude setup-token`",
+      "usage_model": "subscription usage limits, rolling session and weekly windows",
+      "governed_by": "Anthropic Consumer Terms of Service",
+      "posture": "NOT_APPROVED",
+      "shape": "an agent loop that decides its own number of model requests",
+      "in_use_by": null
+    },
+    {
+      "route_id": "claude-agent-sdk-subscription",
+      "provider_id": "anthropic-claude-subscription",
+      "authentication": "documented authentication is API key or a cloud provider's credentials; the SDK overview directs third-party developers away from claude.ai login",
+      "usage_model": "whatever the authentication resolves to",
+      "governed_by": "Commercial Terms for the SDK itself; the account's terms for the call",
+      "posture": "NOT_APPROVED",
+      "shape": "an agent loop, in the caller's own process",
+      "in_use_by": null
+    }
+  ],
+  "CANDIDATE_SUBSCRIPTION_ROUTES": [
+    "claude-cli-print-subscription-oauth",
+    "claude-agent-sdk-subscription"
+  ],
+  "SELECTED_SUBSCRIPTION_ROUTE": null,
+  "THE_SWITCH": {
+    "$comment": "The single sharpest fact this mission found, and it is in the tooling's own flag documentation rather than in anybody's reasoning.",
+    "flag": "--bare",
+    "documented_as": "'Minimal mode: skip hooks, LSP, plugin sync, attribution, auto-memory, background prefetches, keychain reads, and CLAUDE.md auto-discovery. ... Anthropic auth is strictly ANTHROPIC_API_KEY or apiKeyHelper via --settings (OAuth and keychain are never read).'",
+    "also_documented_as": "'--bare is the recommended mode for scripted and SDK calls, and will become the default for -p in a future release.'",
+    "consequence": "the one configuration that gives a scripted call a clean, reproducible, context-free surface is exactly the configuration that cannot use the subscription. The two properties SROS needs sit on opposite sides of one switch, and choosing either one gives up the other",
+    "retrieved_at": "2026-09-11T00:00:00+00:00"
+  },
+  "LOCAL_TOOLING": {
+    "CLAUDE_CLI_PRESENT": true,
+    "CLAUDE_CLI_VERSION": "2.1.116",
+    "AGENT_SDK_PRESENT": false,
+    "AGENT_SDK_VERSION": null,
+    "agent_sdk_note": "neither `claude_agent_sdk` for Python nor `@anthropic-ai/claude-agent-sdk` for Node is installed in this repository's environment, and neither is the `anthropic` client SDK. The Gateway speaks raw HTTP on purpose (Mission 0.4 section 20), so adding one would be a dependency decision rather than a wiring detail",
+    "SUBSCRIPTION_AUTH_SUPPORTED": true,
+    "subscription_auth_mechanism": "`claude setup-token`, documented by the installed CLI as 'Set up a long-lived authentication token (requires Claude subscription)'",
+    "NON_INTERACTIVE_SUPPORTED": true,
+    "non_interactive_mechanism": "`claude -p`, with --output-format json and --json-schema",
+    "credential_artifact_present": true,
+    "credential_values_read": 0,
+    "credential_values_printed": 0,
+    "credential_values_persisted": 0
+  },
+  "ENVIRONMENT_COLLISION": {
+    "$comment": "Section 6, and it is load-bearing.",
+    "ANTHROPIC_API_KEY_PRESENT_IN_THIS_AGENT_PROCESS": false,
+    "ANTHROPIC_API_KEY_PRESENT_IN_THE_DEPLOYMENT_ENV": true,
+    "deployment_env_file": "infrastructure/compose/.env",
+    "value_read": false,
+    "value_class_only": "declared, non-empty, long",
+    "why_the_two_differ_matters": "the environment this mission can inspect is the one Claude Code gave it, and the environment an SROS job inherits is the compose one. Reporting the first as though it were the second would have recorded 'no key present' about a deployment that has one",
+    "SUBSCRIPTION_ROUTE_FAILS_CLOSED_TODAY": false,
+    "why_not": "the Gateway has no route concept at all. `AnthropicProvider` is one dataclass bound to one endpoint, and it reads ANTHROPIC_API_KEY from the environment at construction. There is no field a caller could set to request a subscription route, so there is nothing to fail closed -- a subscription request would not be refused, it would be unexpressible, and the nearest thing to it would silently be a pay-as-you-go call",
+    "required_future_invariant": "REQUESTED_ROUTE = CLAUDE_SUBSCRIPTION must never execute through ANTHROPIC_PLATFORM_API. Billing-route ambiguity is a hard failure, and a fallback between billing routes is forbidden"
+  },
+  "GATEWAY_ARCHITECTURE_REQUIRED": {
+    "$comment": "Section 17. Determined, and deliberately not implemented.",
+    "smallest_shape": "a route is part of provider identity rather than a parameter beside it. The register already keys postures by provider id, so registering the subscription route as its own provider id is the whole of the governance half, and it is done. The execution half would be a second adapter naming that id",
+    "implemented_by_this_mission": false,
+    "why_not_implemented": "an adapter for a route whose posture is NOT_APPROVED is code that cannot be authorised to run. Building it would be building for a permission nobody has, and the refusal it needs already exists: a provider whose posture is not APPROVED is refused at authorization, and one absent from the register resolves NOT_ASSESSED and is refused too",
+    "forbidden_shape": "try subscription, then API"
+  },
+  "MODEL_AVAILABILITY": {
+    "AVAILABLE_SUBSCRIPTION_MODELS": "NOT_ESTABLISHED",
+    "why": "no local configuration enumerates what this account is entitled to, and the only ways to find out are a model call or an account page. Section 25 prefers zero remote calls and the answer would change nothing, because the route is blocked upstream of model choice",
+    "what_was_NOT_assumed": "that the API model names are the subscription model names, and that every Anthropic model is available on every plan. The CLI's `--model` flag documents aliases it accepts, which is a fact about the flag rather than about the account",
+    "SELECTED_SUBSCRIPTION_MODEL": null
+  },
+  "BILLING": {
+    "V1_BILLING_CLASS": "API_PAYG",
+    "V1_API_PAYG": true,
+    "SUBSCRIPTION_BILLING_CLASS": "SUBSCRIPTION_USAGE",
+    "SUBSCRIPTION_USAGE_LIMITED": true,
+    "subscription_is_free": false,
+    "subscription_is_unlimited": false,
+    "evidence": "the costs documentation states that 'Claude Max and Pro subscribers have usage included in their subscription', and separately describes hitting a session limit and a weekly limit, with usage credits as the way to continue past them. Included in a subscription is not free and not unlimited",
+    "no_dollar_saving_is_claimed": true,
+    "quota_percentage_invented": false
+  },
+  "RESEARCH_SEMANTICS_UNCHANGED": {
+    "SUBJECT": "ted-eu:CPV-class:9261",
+    "REPRESENTATION_SHA256": "2528a56a4a9e873bfd04662aeb52916eb80faafe10ab085e716cbdcee77c5b72",
+    "PROMPT_SHA256": "af5289494416139d302eed704c12b9c53ab2547dca336e2ca4a834ec936c5080",
+    "OUTPUT_SCHEMA": "second-opportunity-synthesis-output@1.0.0",
+    "OUTPUT_GATE": "second-opportunity-output-gate@1.0.0",
+    "REPRESENTATION_UNCHANGED": true,
+    "PROMPT_UNCHANGED": true
+  },
+  "V1_UNTOUCHED": {
+    "EXECUTION_PACKET_ID": "SECOND-OPPORTUNITY-SYNTH-EXEC-V1",
+    "EXECUTION_PACKET_VERSION": 1,
+    "EXECUTION_PACKET_SHA256": "570657e1a862a96742925f6a5e5a17b0e1860bf9f2f0b8315fa33c560496da92",
+    "OPERATOR_EXECUTION_APPROVAL_RECORDED": false,
+    "edited_by_this_mission": false,
+    "provider_changed": false,
+    "model_changed": false,
+    "approval_invented": false
+  },
+  "EXECUTION_PACKET_V2": {
+    "EXECUTION_PACKET_V2_CREATED": false,
+    "why_not": "section 20 requires nine established properties and three fail: the route cannot transmit the approved prompt bytes, exactly-one-call cannot be enforced, and the provider posture does not satisfy the TED condition. A V2 produced anyway would be an executable record of a call that may not be made",
+    "conditions_met": 6,
+    "conditions_required": 9,
+    "conditions_failed": [
+      "3. route can execute non-interactively AS A SINGLE BOUNDED CALL",
+      "4. provider posture satisfies TED's conditions",
+      "8. exactly-one-call semantics can be enforced"
+    ]
+  },
+  "RECOMMENDED_EXECUTION_PACKET": "V1",
+  "recommendation_basis": "V1 is unchanged, still frozen, still unapproved, and still the only route whose provider posture is APPROVED and whose shape is a single bounded call. Section 23 says to recommend V1 where the subscription route has unresolved governance or route ambiguity, and here it has both plus a surface mismatch",
+  "ACCOUNTING": {
+    "REMOTE_TEST_CALLS": 0,
+    "TED_BYTES_SENT": 0,
+    "OPPORTUNITY_MODEL_CALLS": 0,
+    "ALL_REMOTE_MODEL_CALLS": 0,
+    "documentation_requests": 10,
+    "documentation_requests_note": "6 returned content, 4 were redirect responses, all counted",
+    "canonical_research_mutation": 0,
+    "opportunities_created": 0,
+    "credential_values_exposed": 0
+  },
+  "NEXT_ACTION": "Approve or refuse SECOND-OPPORTUNITY-SYNTH-EXEC-V1 by its digest. The subscription route does not change what that packet says and does not remove the need to decide it."
+}
