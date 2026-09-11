@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.133
+Version: 1.134
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-10 (Sprint 1 / Mission 1.83.1)
+Last amended: 2026-09-11 (Sprint 1 / Mission 1.84)
 
 ---
 
@@ -13,6 +13,102 @@ Last amended: 2026-09-10 (Sprint 1 / Mission 1.83.1)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.134 - 2026-09-11 (Sprint 1 / Mission 1.84)
+
+**`SECOND_OPPORTUNITY_SYNTHESIS_EXECUTION_PACKET_READY_FOR_OPERATOR_APPROVAL`.** One attended
+external inference prepared to the last byte, and none executed. The preparation was regenerated
+as **v5** so the egress blocks describe the live governance rather than the state before the
+operator answered, and v4 is superseded rather than rewritten -- 21 packets, 14 formable, and
+exactly one field moved on 13 of them.
+
+**The hard stop was not triggered, and that is a measurement.** The approved payload was rebuilt
+through the current deterministic path and serialized by the **production** function rather than a
+copy, giving `2528a56a...` -- the string the operator's approval names. Six Evidence rows, five
+Claims, 3604 characters, 0 allowlist violations, 0 personal-data fields. Mission 1.83.1 appended a
+source review, 1.82 changed the subject vocabulary and 1.77 moved the reliability path, so it could
+have gone the other way; **a digest that has to be recomputed to be believed is the only kind worth
+recording.**
+
+**Three stale assertions, all from Mission 1.31, all falsified by 1.77, all generalised rather than
+bypassed.** The persistence gate demanded `NON_SCORABLE` / `MISSING_RELIABILITY` and would have
+refused a TRUTHFUL output -- for its own docker subject as much as for this one -- so it reads the
+packet now and refuses any claim that a score exists (`persistence-gate@1.0.0` to `@1.1.0`). The
+world-knowledge marker list is a container vocabulary, the right check and the wrong list for
+sports facilities, so it became a PARAMETER defaulting to the frozen constant and **every existing
+caller behaves identically**. And the task template told the model that every row is NON_SCORABLE
+as a packet FACT, so the sentence is derived from the packet and the base prompt moves to 1.1.0 --
+with Mission 1.31.1's recorded hash left as history. `synthesis_prompt_hash()` did not move,
+because it hashes the TEMPLATE, which is why this mission hashes the RENDERED regions instead.
+
+**The provider was derived, not chosen.** The gate recomputes the eligible set from the current
+register and refuses a packet naming one it does not approve, so the answer changes on its own if
+the register does; today `gemini` is NOT_APPROVED on its assessed unpaid route and `fake` is
+NEVER_PRODUCTION. **A vendor is not a route**, so the packet names the API route under the
+Commercial Terms and records consumer products as a DIFFERENT route nobody assessed. The model
+universe is held configuration only -- **0 network discovery calls, 0 invented prices** -- and with
+FAST and BALANCED both binding the literal string `"null"` there is no smaller approved model to
+prefer and nothing was chosen for being strongest.
+
+**Only the parameters that exist.** `LlmRequest` carries thirteen fields and **no temperature, no
+top_p, no seed and no reasoning_effort**, so the packet freezes what exists and records the rest as
+null WITH a note that null means unavailable rather than defaulted -- enforced in both directions,
+because a real knob frozen as absent is the mirror of an invented one. `max_retries = 0`,
+overriding the Gateway default and the deployment's own setting, because **a retry is a second
+call**; a timeout is not permission to retry.
+
+**The budget rests on the one measured pair this repository has**: 5967 provider-reported tokens
+against 12868 re-rendered docker characters, 2.1565 characters per token, 15742 wire characters,
+1.25x conservative, 9125 input plus 3000 output. **0 test requests sent.** Worst case 0.04825 cost
+units against a ceiling of 0.10, priced from the held table at `anthropic-published-2026-09-02`,
+with the units recorded as provider-agnostic per ADR-006. The docker prompt now re-renders one
+sentence differently and **the limitation says so** rather than being smoothed away.
+
+**What the gate cannot name is why a human is still required.** The contract states outright that
+lexical filtering does not prove semantic safety, keeps `HUMAN_OUTPUT_REVIEW_REQUIRED` true before
+any persistence, and asks for `EXPLORATORY` as a closed enum of one rather than a number, because
+**a self-reported certainty is not a probability**. The five forbidden transformations are stated
+in BOTH halves, because a model told only what to avoid does not know what it may say.
+
+**An approval lives beside the thing it approves.** `OPERATOR_EXECUTION_APPROVAL_RECORDED = false`
+means THIS DOCUMENT RECORDS NO APPROVAL and never that none exists -- and **no old approval
+authorises this call**, because permitting the material to leave is a different act from executing
+this model with this prompt at this cost. The digest binds every load-bearing field and excludes
+itself, the date, the notes and the accounting.
+
+**Probe 75 of 75 caught, 0 escaped, 8 of 8 controls** -- and **one control was withdrawn because
+the gate was right**: it added a sixth forbidden transformation to the document alone, which is a
+rule in the record the executable prompt does not carry, so it was replaced by a control over a
+list the gate READS rather than pins. **Two assertions were re-pointed rather than deleted**, and
+the re-point found a branch nobody had tested: the fixture packet is entirely context-eligible, so
+the old sentence was still truthful there and only a scoring-eligible packet exercises the other
+half.
+
+**Verification.** 3785 bare-python tests across 9 packages; 3431 pytest with the database reported
+unchanged across 29 tenant tables; `ruff format --check`, `ruff check` and mypy over 199 files
+through the 14 CI package paths; contract generation, catalog and review-results `--check`; source
+registry validator over 29 sources, 0 warnings; all **64** CI gates, one of them new.
+
+**What moved.** Nothing canonical. RawRecords 325, NormalizedRecords 325, Signals 60, Claims 91,
+revisions 92, Evidence 112, assessments 4, independence groups 0, Opportunities 1, revisions 2,
+links 14, scores ABSENT, embeddings 0, source reviews 71 -- every counter identical to the
+preconditions, measured against the live database. **0 model calls, 0 bytes sent, 0 tokens sent, 0
+provider requests, 0 research-data fetches, 0 canonical mutations, 0 Opportunities, 0 scores.** Q1,
+Globalping, the first Opportunity and the candidate selection all untouched.
+
+New: `docs/data/opportunity-preparation-v5.json`,
+`docs/data/second-opportunity-synthesis-prompt-v1.json` and its generated `.md`,
+`docs/data/second-opportunity-synthesis-output-contract-v1.json` and its generated `.md`,
+`docs/data/second-opportunity-synthesis-execution-packet-v1.json` and its generated `.md`,
+`infrastructure/scripts/render_second_opportunity_execution_packet.py` (CI gate 64),
+`packages/opportunity-engine/python/sros_opportunity/second_opportunity.py`, tests in
+inferred-claim-evaluator and opportunity-engine, and `docs/reports/mission-1.84-report.md`.
+
+Changed: `infrastructure/scripts/run_opportunity_preparation.py` renders v5 and pins v4 as
+historical; `packages/opportunity-engine/python/sros_opportunity/validation.py` to
+`persistence-gate@1.1.0`; `.../synthesis.py` to prompt version 1.1.0 with the reliability sentence
+derived from the packet; `.../__init__.py` exports the new names; `docs/CLAUDE.md` 1.134 to 1.135;
+`.github/workflows/ci.yml` gains one gate.
 
 ## 1.133 - 2026-09-10 (Sprint 1 / Mission 1.83.1)
 

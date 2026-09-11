@@ -672,6 +672,23 @@ jobs:
       - name: Globalping residual closure matches its records
         run: uv run python infrastructure/scripts/render_globalping_residuals.py --check
 
+      # Mission 1.84. The frozen prompt, output contract and execution packet for one attended
+      # external-model synthesis nobody has run. The gate refuses: a payload whose digest is not
+      # the one the operator's egress approval names, which is the hard stop
+      # APPROVED_TED_EGRESS_REPRESENTATION_CHANGED and is never repaired by reserialising or by
+      # updating the approval; a scope wider than the approval on source, profile, activity,
+      # purpose, subject or representation schema; a provider the current register does not
+      # approve, or a single-route claim while it approves more than one; a generation parameter
+      # the Gateway's request type does not carry, a null recorded for one it does, or any
+      # max_retries but 0; a token or cost basis that does not recompute, a missing pricing
+      # version, or a ceiling below the worst case; a prompt or schema digest that has drifted
+      # from the code that renders it; an approval recorded inside the packet it approves; an
+      # output contract that drops human review, claims lexical filtering proves semantic safety,
+      # or requests a numeric confidence; and any model call, transmitted byte, test request,
+      # research acquisition, canonical mutation, Opportunity, score or independence group.
+      - name: The second-opportunity execution packet matches its records
+        run: uv run python infrastructure/scripts/render_second_opportunity_execution_packet.py --check
+
       # Mission 1.83.1. The operator's approval of the frozen egress packet, and what the
       # registry did about it. The gate refuses: an approval whose digest does not recompute from
       # the packet's own bound fields, or that cites a hash the packet does not have, or that

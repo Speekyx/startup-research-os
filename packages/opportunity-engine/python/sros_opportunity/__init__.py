@@ -119,6 +119,22 @@ from .scopes import (
     ScopeStatus,
     SubjectScopeType,
 )
+from .second_opportunity import (
+    ANTI_DISTORTION_RULES,
+    CONFIDENCE_CLASSIFICATIONS,
+    FORBIDDEN_TRANSFORMATIONS,
+    PROCUREMENT_EXTERNAL_KNOWLEDGE_MARKERS,
+    SECOND_OPPORTUNITY_GATE_VERSION,
+    SECOND_OPPORTUNITY_OUTPUT_SCHEMA,
+    SECOND_OPPORTUNITY_OUTPUT_SCHEMA_VERSION,
+    SECOND_OPPORTUNITY_PROCEDURE_VERSION,
+    SECOND_OPPORTUNITY_PROMPT_ID,
+    SECOND_OPPORTUNITY_PROMPT_VERSION,
+    SECOND_OPPORTUNITY_SYSTEM,
+    evaluate_second_opportunity_output,
+    render_second_opportunity_prompt,
+    second_opportunity_prompt_hash,
+)
 from .subjects import (
     SUBJECT_REGISTRY_VERSION,
     CanonicalSubject,
@@ -167,6 +183,20 @@ from .validation import (
 )
 
 __all__ = [
+    "ANTI_DISTORTION_RULES",
+    "CONFIDENCE_CLASSIFICATIONS",
+    "FORBIDDEN_TRANSFORMATIONS",
+    "PROCUREMENT_EXTERNAL_KNOWLEDGE_MARKERS",
+    "SECOND_OPPORTUNITY_GATE_VERSION",
+    "SECOND_OPPORTUNITY_OUTPUT_SCHEMA",
+    "SECOND_OPPORTUNITY_OUTPUT_SCHEMA_VERSION",
+    "SECOND_OPPORTUNITY_PROCEDURE_VERSION",
+    "SECOND_OPPORTUNITY_PROMPT_ID",
+    "SECOND_OPPORTUNITY_PROMPT_VERSION",
+    "SECOND_OPPORTUNITY_SYSTEM",
+    "evaluate_second_opportunity_output",
+    "render_second_opportunity_prompt",
+    "second_opportunity_prompt_hash",
     "OBSERVATION_SCOPE_VERSION",
     "SCOPE_TYPE_DEFINITIONS",
     "ObservationScope",

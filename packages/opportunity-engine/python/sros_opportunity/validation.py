@@ -60,7 +60,7 @@ __all__ = [
     "evaluate_persistence",
 ]
 
-PERSISTENCE_GATE_VERSION = "opportunity-synthesis-persistence-gate@1.0.0"
+PERSISTENCE_GATE_VERSION = "opportunity-synthesis-persistence-gate@1.1.0"
 AUDIT_VERSION = "opportunity-synthesis-audit@1.2.0"
 
 #: §7. World-knowledge tokens a model reaches for when it stops reading the
@@ -164,8 +164,16 @@ def audit_synthesis(
     output: Mapping[str, object],
     packet: OpportunityEvidencePacket,
     claim_statements: Mapping[str, str],
+    external_knowledge_markers: Sequence[str] = EXTERNAL_KNOWLEDGE_MARKERS,
 ) -> SynthesisAudit:
-    """Audit the model's prose against what it was actually given."""
+    """Audit the model's prose against what it was actually given.
+
+    `external_knowledge_markers` is a PARAMETER as of gate@1.1.0. The default is the container
+    vocabulary Mission 1.31 froze, so every existing caller behaves identically -- and a packet
+    about another subject supplies its own, because a world-knowledge list that only fits one
+    subject is a check that works once. The rule is unchanged: a word is permitted exactly when
+    a supplied statement contains it.
+    """
     supplied_text = " ".join(claim_statements.values())
     supplied_tokens = _tokens(supplied_text)
     supplied_numbers = _numbers(supplied_text) | {
@@ -200,7 +208,7 @@ def audit_synthesis(
 
         # -- world knowledge the packet never supplied --------------------
         text_tokens = _tokens(text)
-        for marker in EXTERNAL_KNOWLEDGE_MARKERS:
+        for marker in external_knowledge_markers:
             if (
                 marker in text_tokens
                 and marker not in supplied_tokens
@@ -247,6 +255,7 @@ def evaluate_persistence(
     claim_statements: Mapping[str, str],
     evidence_to_claim: Mapping[str, str],
     mandatory_unsupported: Sequence[EvidenceDimension],
+    external_knowledge_markers: Sequence[str] = EXTERNAL_KNOWLEDGE_MARKERS,
 ) -> PersistenceDecision:
     """The gate, frozen before the model ran.
 
@@ -331,12 +340,33 @@ def evaluate_persistence(
                 f"independence_status contains {forbidden!r}; independence is UNKNOWN for "
                 "every row in this packet"
             )
+    # gate@1.1.0. Derived from the PACKET rather than asserted. Mission 1.31 wrote this when
+    # every row in the corpus was non-scorable, and Mission 1.77 resolved reliability from
+    # lineage -- so the fixed assertion would refuse a truthful output for its own subject as
+    # well as for any other. What is required is that the output states the packet's real
+    # scorability, and never that a score exists: this repository has none.
     reliability = str(output.get("reliability_status") or "").upper()
-    if "NON_SCORABLE" not in reliability and "MISSING_RELIABILITY" not in reliability:
-        reasons.append("reliability_status does not preserve NON_SCORABLE / MISSING_RELIABILITY")
+    if packet.scoring_eligible_count == 0:
+        if "NON_SCORABLE" not in reliability and "MISSING_RELIABILITY" not in reliability:
+            reasons.append(
+                "no row in this packet is scoring-eligible and reliability_status does not "
+                "preserve NON_SCORABLE / MISSING_RELIABILITY"
+            )
+    elif "SCORABLE" not in reliability and "SCORING" not in reliability:
+        reasons.append(
+            f"{packet.scoring_eligible_count} of {packet.size} rows are scoring-eligible and "
+            "reliability_status does not say so. A packet's scorability is a fact about it, and "
+            "an output that omits it leaves a reader to guess"
+        )
+    for forbidden in ("SCORED", "SCORE OF", "EVIDENCE SCORE"):
+        if forbidden in reliability:
+            reasons.append(
+                f"reliability_status contains {forbidden!r}. Scoring-ready is not scored, no "
+                "score exists in this repository, and REFERENCE_PROFILE_V1 is UNCALIBRATED"
+            )
 
     # ---- the prose audit --------------------------------------------------
-    audit = audit_synthesis(output, packet, claim_statements)
+    audit = audit_synthesis(output, packet, claim_statements, external_knowledge_markers)
     for failed in audit.failed:
         reasons.append(
             f"{failed.field_name} audited {failed.verdict.value}: {'; '.join(failed.findings)}"

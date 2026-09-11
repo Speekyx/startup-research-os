@@ -54,7 +54,11 @@ __all__ = [
 ]
 
 SYNTHESIS_PROCEDURE_VERSION = "opportunity-synthesis@1.0.0"
-SYNTHESIS_PROMPT_VERSION = "1.0.0"
+#: 1.1.0 (Mission 1.84). The task template stated a reliability fact that Mission 1.77 made
+#: false for every packet, including the one this prompt was written for. It is derived from
+#: the packet now. Nothing else in the prompt changed, and Mission 1.31.1 recorded the hash it
+#: actually sent, which is history and is not rewritten.
+SYNTHESIS_PROMPT_VERSION = "1.1.0"
 SYNTHESIS_PROMPT_ID = "opportunity-synthesis"
 
 #: §6. Dimensions the model must explicitly report on, whether or not the packet
@@ -239,6 +243,31 @@ def _dimension_reference(dimensions: tuple[EvidenceDimension, ...]) -> str:
     return "\n".join(lines)
 
 
+def _reliability_sentence(packet: OpportunityEvidencePacket) -> str:
+    """What this packet's reliability actually is, read from the packet.
+
+    Mission 1.31 wrote one sentence because every row in the corpus was NON_SCORABLE. Mission
+    1.77 resolved reliability late from lineage and that stopped being true, so a fixed sentence
+    became a falsehood presented to the model as a packet fact.
+    """
+    scorable = packet.scoring_eligible_count
+    if scorable == 0:
+        return (
+            "every row is NON_SCORABLE with MISSING_RELIABILITY: no reviewed "
+            "reliability applies to any of these measurements"
+        )
+    if scorable == packet.size:
+        return (
+            f"all {packet.size} rows are SCORABLE: a reviewed reliability applies to every "
+            "measurement. Scoring-ready is not scored, and no score exists"
+        )
+    return (
+        f"{scorable} of {packet.size} rows are SCORABLE against a reviewed reliability and "
+        f"{packet.size - scorable} are NON_SCORABLE. Scoring-ready is not scored, and no "
+        "score exists"
+    )
+
+
 def render_synthesis_prompt(
     packet: OpportunityEvidencePacket,
     claim_statements: Mapping[str, str],
@@ -278,10 +307,7 @@ def render_synthesis_prompt(
         size=packet.size,
         families=", ".join(packet.source_families),
         independence=packet.independence_summary(),
-        reliability=(
-            "every row is NON_SCORABLE with MISSING_RELIABILITY: no reviewed "
-            "reliability applies to any of these measurements"
-        ),
+        reliability=_reliability_sentence(packet),
         scoring=(
             f"{packet.scoring_eligible_count} of {packet.size} rows are scoring-eligible; "
             "this packet cannot contribute to any score"

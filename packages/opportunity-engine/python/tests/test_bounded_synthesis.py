@@ -179,9 +179,39 @@ class TestTheBoundaryHolds:
             assert field["type"] != "number", field
 
     def test_the_prompt_is_versioned_and_hashed(self) -> None:
+        """Re-pointed in Mission 1.84, and the procedure version is asserted UNCHANGED.
+
+        The task template stated `every row is NON_SCORABLE with MISSING_RELIABILITY` as a fact
+        about the packet. Mission 1.77 resolved reliability from lineage and that stopped being
+        true, including for the docker packet this prompt was written for, so the sentence is
+        derived from the packet now and the PROMPT version moves. The PROCEDURE did not change,
+        which is the half a bump could quietly take with it.
+        """
         assert SYNTHESIS_PROCEDURE_VERSION == "opportunity-synthesis@1.0.0"
-        assert SYNTHESIS_PROMPT_VERSION == "1.0.0"
+        assert SYNTHESIS_PROMPT_VERSION == "1.1.0"
         assert len(synthesis_prompt_hash()) == 64
+
+    def test_the_reliability_sentence_is_the_packet_s_own(self) -> None:
+        """Mission 1.84. A fixed sentence became a falsehood presented as a packet fact.
+
+        The fixture packet is entirely context-eligible, so NON_SCORABLE is what it truthfully
+        says. A packet whose rows ARE scoring-eligible must say so instead, and must never say a
+        score exists: this repository has none and REFERENCE_PROFILE_V1 is UNCALIBRATED.
+        """
+        scorable = build_packet(
+            None,
+            "subject:scorable",
+            (
+                (facets(evidence_id="s1", claim_id="c1"), PacketEligibility.ELIGIBLE_SCORING),
+                (facets(evidence_id="s2", claim_id="c2"), PacketEligibility.ELIGIBLE_SCORING),
+            ),
+        )
+        assert scorable.scoring_eligible_count == 2
+        task = render_synthesis_prompt(scorable, STATEMENTS, EVIDENCE_TO_CLAIM).task
+        assert "SCORABLE" in task
+        assert "NON_SCORABLE" not in task
+        assert "MISSING_RELIABILITY" not in task
+        assert "Scoring-ready is not scored" in task
 
     def test_the_prompt_carries_the_independence_and_reliability_facts(self) -> None:
         """§2, §3. The model is TOLD, rather than left to notice."""
