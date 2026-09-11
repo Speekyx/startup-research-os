@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.134
+Version: 1.135
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-11 (Sprint 1 / Mission 1.84)
+Last amended: 2026-09-11 (Sprint 1 / Mission 1.84.1)
 
 ---
 
@@ -13,6 +13,85 @@ Last amended: 2026-09-11 (Sprint 1 / Mission 1.84)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.135 - 2026-09-11 (Sprint 1 / Mission 1.84.1)
+
+**`CLAUDE_MAX_ROUTE_NOT_SUPPORTED_FOR_SROS_EXECUTION`, with
+`CLAUDE_MAX_ROUTE_REQUIRES_PROVIDER_GOVERNANCE_REVIEW` recorded beside it and the review
+PERFORMED rather than deferred.** Whether the already-frozen synthesis could run on the operator's
+Claude subscription instead of the Anthropic API. Three independent answers of no, and only one is
+a governance question.
+
+**A SUBSCRIPTION AUTHENTICATES A HARNESS, NOT A CALL.** Both subscription-backed surfaces are agent
+loops: they compose their own system prompt and decide their own number of model requests. The
+frozen packet binds a PROMPT_SHA256 over exactly the rendered regions and MAX_MODEL_CALLS = 1, and
+**neither can be honoured by a loop** -- one invocation is one TASK, not one model request. Flags
+checked in the installed CLI and ABSENT: `--max-turns`, `--timeout`, `--max-output-tokens`.
+Section 16 makes a changed prompt byte a STOP, because **calling it the same execution would make
+the digest a label rather than a check**. Neither blocker is clearable by any operator decision,
+which is why the governance gap is the SECONDARY: reporting it first would send the operator to
+change an account setting and come back still blocked, the Mission 1.77 misattribution.
+
+**THE SHARPEST FACT IS A FLAG DESCRIPTION, NOT AN ARGUMENT.** `--bare` is documented as the
+recommended mode for scripted and SDK calls and as the future default for `-p`, and in the same
+breath: *"Anthropic auth is strictly ANTHROPIC_API_KEY or apiKeyHelper via --settings (OAuth and
+keychain are never read)."* **The one configuration that gives a scripted call a clean surface is
+exactly the one that cannot use the subscription.**
+
+**THE REGISTER HAD ALREADY ANSWERED THE INHERITANCE QUESTION, IN MISSION 1.23's OWN WORDS**:
+*"Consumer products (Claude Free, Pro, Max) are a DIFFERENT route with different terms and are not
+assessed here."* So the scope of that assessment is a RECORDED FACT rather than an inference. What
+decides the new route is the operator's own adopted condition: a provider whose **"own terms
+commit"** that submitted content is not used to train. The API route has a sentence that commits;
+the subscription route has a SETTING -- Anthropic's own Claude Code data policy says it and names
+Claude Code inside it, and retention moves with the same setting, 5 years or 30 days against a
+documented 30. **A setting the account holder can turn on is not a term that commits**, and reading
+it as one would let a provider approval rest on a checkbox nobody re-checks. `NOT_APPROVED` on the
+register's own definition, registered as its own provider id **so a future adapter is refused BY
+NAME rather than by absence** -- and the APPROVED set is `["anthropic"]` before and after.
+
+**THE PREMISE WAS WRONG AND CORRECTING IT COST NOTHING.** The brief is written about MAX; the
+subscription this machine holds reports `pro`. **MAX_TIER = NOT_MAX_ON_THIS_MACHINE**, plan
+identity read and no token value read, printed or persisted, and **nothing in the three blockers
+depends on which plan it is**.
+
+**THE TWO ENVIRONMENTS WERE REPORTED APART.** `ANTHROPIC_API_KEY` is absent from this agent's
+process and PRESENT in the deployment's compose file, value never read. Reporting the first as the
+second would have recorded *no key present* about a deployment that has one, which is the whole
+reason section 6 exists. And `SUBSCRIPTION_ROUTE_FAILS_CLOSED = false` today for a precise reason:
+the Gateway has **no route concept at all**, so a subscription request is not refused, it is
+unexpressible, and the nearest thing to it would silently be a pay-as-you-go call.
+
+**DETERMINED AND DELIBERATELY NOT BUILT**: a route belongs to provider IDENTITY rather than beside
+it, the governance half is done, and **an adapter for a NOT_APPROVED route is code that cannot be
+authorised to run**. Nothing was assumed: no model list, no API model name copied across, no dollar
+saving, no invented quota percentage, and **0 remote calls of any kind** -- no live call would have
+cleared any of the three blockers.
+
+**Probe 66 of 66 caught, 0 escaped, 8 of 8 controls** -- and **two escaped first, both this gate's
+own rule**: swapping V1's provider and model slipped through because those edits move V1's digest
+and Mission 1.84's gate would have caught them. **A gate that relies on a sibling to enforce its
+own rule stops working the moment the sibling is skipped.** Three SIM102 nested-ifs collapsed BY
+HAND with the probe re-run after, because Mission 1.83 found a mechanical collapse once folded a
+sibling check inside a `raise`.
+
+**Verification.** 3831 bare-python tests across 9 packages; 3431 pytest with the database unchanged
+across 29 tenant tables; `ruff format --check`, `ruff check` and mypy over 199 files; contracts,
+catalog and review results `--check`; source registry 29 sources, 0 warnings; all **65** CI gates,
+one of them new.
+
+**What moved.** The provider register only: policy_version 1 to 2, one entry added, `reviewed_by`
+and `reviewed_at` deliberately NOT rewritten because one entry was reviewed rather than all of
+them. **V1 is byte-identical**, still unapproved, and still the recommendation.
+`EXECUTION_PACKET_V2_CREATED = false`, 6 of 9 conditions met. **0 remote calls, 0 TED bytes, 0
+model calls, 0 canonical research mutation, 0 Opportunities** -- every counter identical.
+
+New: `docs/data/claude-subscription-route-feasibility-v1.json` and its generated `.md`,
+`infrastructure/scripts/render_claude_subscription_route_feasibility.py` (CI gate 65), tests in
+inferred-claim-evaluator, and `docs/reports/mission-1.84.1-report.md`.
+
+Changed: `docs/data/model-provider-policy-v1.json` gains the subscription route at NOT_APPROVED
+and nothing else; `docs/CLAUDE.md` 1.135 to 1.136; `.github/workflows/ci.yml` gains one gate.
 
 ## 1.134 - 2026-09-11 (Sprint 1 / Mission 1.84)
 
