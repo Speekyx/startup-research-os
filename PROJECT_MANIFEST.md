@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.137
+Version: 1.138
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-11 (Sprint 1 / Mission 1.84.3)
+Last amended: 2026-09-12 (Sprint 1 / Mission 1.84.4)
 
 ---
 
@@ -13,6 +13,105 @@ Last amended: 2026-09-11 (Sprint 1 / Mission 1.84.3)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.138 - 2026-09-12 (Sprint 1 / Mission 1.84.4)
+
+**`BOUNDED_SCHEMA_READY_TOKEN_CEILING_REQUIRES_OPERATOR_DECISION`: the contract is finite for the
+first time, and no ceiling was chosen.** The operator decided
+`BOUND_THE_EIGHT_UNBOUNDED_ITEM_TYPES` and explicitly rejected an operator-declared arbitrary
+ceiling as the fix, so a bounded successor exists -- `second-opportunity-synthesis-output@1.1.0`,
+gate `@1.1.0`, prompt `1.1.0` -- and **v1.0.0 is untouched, with a gate check that now enforces its
+defect stays**: a historical execution has to keep resolving against the contract it actually used,
+and repairing v1.0.0 would make the frozen prompt document name a schema nobody sent.
+
+**FOUR INSTRUMENTS, BECAUSE THE FIELDS DIFFER IN KIND.** One maxLength applied eight times would
+have bounded the SIZE of a dimension name and left `MARKET_DEMAND` acceptable, which is the exact
+transformation the semantic gate exists to refuse. Dimensions became the **canonical
+`EvidenceDimension` enum, derived in code** rather than transcribed, so an unknown dimension is
+refused HOWEVER SHORT it is. Evidence ids and Claim ids were **determined separately** and each
+became the canonical UUID grammar; they agree because both subclass the same canonical base, not
+because today's rows look alike. Only three of the eight are prose, and only those three got a
+length: 500 for `critical_uncertainties` and 300 for the two commercial claim arrays, both the
+operator's numbers. **Every maxItems is unchanged, nothing was added, removed or reordered.**
+
+**THE `source_families` TRAP WAS THE ONE THE BRIEF WARNED ABOUT, AND THE WRONG REGISTRY FITS.** Two
+different `source_family` vocabularies exist here, the source catalog's and a diagnostic script's,
+and they share the string `public_procurement` -- exactly the coincidence that makes a wrong binding
+look right. The production path reads `registry.sources.source_family`, which carries a **foreign
+key** to `registry.registry_entries`, whose `registry_entries_id_slug_check` is the grammar that
+decides which family ids can exist. **And it is a REGISTRY rather than a closed vocabulary**:
+`domain.v1.json` lists it under `registries` and not `closed_enums`, so freezing today's fifteen
+members into an enum would make the schema refuse a true answer the moment a sixteenth is
+registered. The bound is the slug grammar and its 128-character maximum, **read out of the migration
+by the gate** rather than trusted as a copy.
+
+**THE COMMERCIAL CLAIM FIELDS WERE INSPECTED BEFORE BEING BOUND, AND THE ANSWER IS NOT THEIR JSON
+TYPE.** The Mission 1.31.1 output carries fourteen sentences, and the persistence gate audits both
+fields as PROSE through the commercial-vocabulary guard, which needs a sentence to read. Narrative
+branch, taken on evidence rather than on assumption.
+
+**THE BOUND NEEDED SOMETHING TO ENFORCE IT, AND NOTHING DID.** `LlmGateway._validate_structured`
+checks that every required key is PRESENT and stops there -- its own docstring says full JSON Schema
+validation arrives with the first real provider -- so **nothing in this repository has ever enforced
+a maxLength, an enum, a maxItems or a pattern on a model's answer**. A bound only the provider is
+told about is a request rather than a contract. `sros_opportunity.schema_validation` implements
+exactly the keyword set these schemas use with **0 dependencies added**, and `unsupported_keywords`
+names anything outside it so a future keyword cannot be silently ignored by a validator that looks
+like it checked.
+
+**FINITE, AND THE MAXIMUM MEASURED.** The same walker that found eight unbounded paths in v1.0.0
+finds **zero** in v1.1.0, and a deterministic maximum instance validates through the real v1.1.0
+validator: **309729 characters, 309729 UTF-8 bytes**. The worst-case fill is a **non-BMP character,
+twelve serialized characters for one character of budget** -- Mission 1.84.3's floor used the
+quotation mark, which costs two, and a maximum computed that way would be 56929. **Understating a
+maximum is the unsafe direction**, so both are reported and the smaller is labelled a diagnostic.
+
+**BOUNDING THE EIGHT MOVED THE DOMINANT CONSUMERS SOMEWHERE ELSE**, which is the field analysis's
+actual finding: `statement_classifications` 28.45%, `critical_uncertainties` 23.27%, the two
+commercial arrays 25.62% between them -- while **the five identifier and vocabulary paths now
+contribute 1.31% in total**. A future capacity change belongs in the narrative fields. **A
+character-class restriction would recover roughly five sixths of the maximum and was NOT applied**:
+the operator authorised a length and nothing else, and the consequence is measured rather than
+hidden.
+
+**THE CEILING WAS NOT CHOSEN, AND THAT IS THE HONEST HALF.** No tokenizer is installed -- checked
+rather than asserted -- and **no held first-party document establishes a safe conversion**. *One
+character is at most one token* is false for any subword tokenizer; *one byte is at most one token*
+holds for a byte-level BPE and **nothing says which family the model uses**, so that premise would
+be an assumption wearing a contract's costume, and it would ignore the framing tokens the API adds
+around a tool call. `EXACT_MAX_OUTPUT_TOKEN_COUNT = NOT_ESTABLISHED`,
+`DERIVED_MIN_OUTPUT_TOKEN_CAPACITY = NOT_DERIVABLE`, `SELECTED_MAX_OUTPUT_TOKENS = NONE`, **no V2,
+no pricing recompute**. `CONFIGURED_OUTPUT_TOKEN_CAPABILITY = NOT_ESTABLISHED` too, because the
+held 4096 is **our adapter's default** and recording it as the model's capability would turn a
+number this repository chose into a discovered fact.
+
+**THE PROMPT MOVED WITH THE SCHEMA AND SAYS SO.** The rendered hash covers the output schema, so it
+moves whether or not a byte changed -- and bytes changed too, because a model refused for a
+501-character element was never told the limit was 500. **21 lines added, 0 removed**, the v1.1.0
+system region **extends v1.0.0 verbatim** (asserted with `startswith`), and the trusted context,
+untrusted region and task are byte-identical. **TED representation `2528a56a...` unchanged**,
+recomputed live through the production serializer.
+
+**Probe 89 caught, 0 escaped, 9 of 9 controls, every file proved restored** -- mutating the shipped
+documents, the live schema AND the predecessor schema, through the whole `validate()` the way CI
+runs it. **Verification.** 3831 bare-python tests; 3591 pytest with the database unchanged across
+29 tenant tables; ruff over 995 files with two S105 false positives suppressed and one SIM102
+collapsed by hand; mypy over 200 files; contracts, catalog and registry; all **68** CI gates, one of
+them new; **87 new tests**.
+
+**What moved.** Nothing canonical: every counter identical, and **0 model calls, 0 provider
+requests, 0 network requests, 0 dependencies installed, 0 TED bytes, 0 Opportunities**.
+
+New: `docs/data/second-opportunity-output-boundedness-decision-v1.json`,
+`second-opportunity-output-capacity-analysis-v2.json`,
+`second-opportunity-synthesis-prompt-v2.json` and their generated `.md` files;
+`infrastructure/scripts/render_second_opportunity_bounded_contract.py` (CI gate 68);
+`packages/opportunity-engine/python/sros_opportunity/schema_validation.py`; tests; and
+`docs/reports/mission-1.84.4-report.md`.
+
+Changed: `docs/CLAUDE.md` 1.138 to 1.139; `second_opportunity.py` gains the v1.1.0 contract beside
+the v1.0.0 one; `.github/workflows/ci.yml` gains one gate. **No frozen 1.31, 1.31.1, 1.84, 1.84.1,
+1.84.2 or 1.84.3 artifact was altered.**
 
 ## 1.137 - 2026-09-11 (Sprint 1 / Mission 1.84.3)
 

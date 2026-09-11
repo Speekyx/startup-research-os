@@ -1,0 +1,225 @@
+{
+  "$comment": "Mission 1.84.4. The Mission 1.84.3 walker re-run against the BOUNDED schema. capacity-analysis-v1 is not rewritten: it truthfully recorded that v1.0.0 has no finite maximum, and it still does.",
+  "record_version": "second-opportunity-output-capacity-analysis@2.0.0",
+  "mission": "1.84.4",
+  "recorded_at": "2026-09-12",
+  "PRIMARY_OUTCOME": "BOUNDED_SCHEMA_READY_TOKEN_CEILING_REQUIRES_OPERATOR_DECISION",
+  "outcome_basis": "The schema is finite: the same recursive walker that found eight unbounded required paths in v1.0.0 finds zero in v1.1.0, and a deterministic maximum-size instance validates through the real v1.1.0 validator. What cannot be established is the CONVERSION from that exact character count to a token ceiling: no exact tokenizer for claude-sonnet-5 is held or installed, no network request may be made to tokenize, and no held first-party document establishes a safe upper bound of tokens from characters or bytes. Section 22 makes that outcome acceptable and forbids inventing the number.",
+  "predecessor": "second-opportunity-output-capacity-analysis@1.0.0",
+  "predecessor_rewritten": false,
+  "schema_id": "second-opportunity-synthesis-output@1.1.0",
+  "schema_sha256": "ec789d1be7d525bf6e498bf61e8a0596ac4582e24e8b45073b3f9ac1cca8b988",
+  "output_gate": "second-opportunity-output-gate@1.1.0",
+  "FINITE_BOUND": true,
+  "unbounded_paths": [],
+  "unbounded_path_count": 0,
+  "predecessor_unbounded_path_count": 8,
+  "MAXIMUM_VALID_INSTANCE": {
+    "MAX_INSTANCE_SCHEMA_VALID": true,
+    "validated_by": "sros_opportunity.schema_validation.schema_violations, the real v1.1.0 validator",
+    "violations": 0,
+    "method": "every array at its maxItems, every enum at its longest member, every bounded narrative at its maxLength, every identifier at its canonical maximum, every field present. There are no optional fields to include: additionalProperties is false and all twenty properties are required.",
+    "fill_character": "U+1F600",
+    "fill_rationale": "The worst case for a length-bounded pattern-free string. Under ensure_ascii a non-BMP character serialises as a surrogate pair of TWELVE characters for one character of budget, which dominates the quotation mark's two. Mission 1.84.3's floor used the quotation mark; a maximum computed that way would be five times too small, which is the unsafe direction.",
+    "MAX_VALID_OUTPUT_CHARACTERS": 309729,
+    "MAX_VALID_OUTPUT_UTF8_BYTES": 309729,
+    "MAX_VALID_OUTPUT_SHA256": "e1a62b812f115b3549b5c3c5b8605f2c8052b998cce5d89ac7b60cee5af71705",
+    "bytes_equal_characters_because": "under ensure_ascii the serialized form is pure ASCII, so the two counts coincide. ensure_ascii=False would give fewer characters and at most four bytes per character, so it is smaller on both measures and is not the worst case.",
+    "ASCII_FILL_MAXIMUM_CHARACTERS": 56929,
+    "ascii_fill_note": "A DIAGNOSTIC and not the maximum. The same instance with every narrative character an ASCII quotation mark. It is reported because the gap between the two is entirely an escaping effect and is what a character-class restriction would recover.",
+    "synthetic_diagnostic_data": true,
+    "not_model_output": true
+  },
+  "FIELD_CONTRIBUTIONS": [
+    {
+      "field": "statement_classifications",
+      "max_serialized_characters": 88133,
+      "percentage_of_total": 28.45
+    },
+    {
+      "field": "critical_uncertainties",
+      "max_serialized_characters": 72074,
+      "percentage_of_total": 23.27
+    },
+    {
+      "field": "commercial_claims_not_supported",
+      "max_serialized_characters": 50491,
+      "percentage_of_total": 16.3
+    },
+    {
+      "field": "commercial_claims_supported",
+      "max_serialized_characters": 28863,
+      "percentage_of_total": 9.32
+    },
+    {
+      "field": "recommended_next_evidence",
+      "max_serialized_characters": 28861,
+      "percentage_of_total": 9.32
+    },
+    {
+      "field": "evidence_bound_reasoning_summary",
+      "max_serialized_characters": 10838,
+      "percentage_of_total": 3.5
+    },
+    {
+      "field": "hypothesis_statement",
+      "max_serialized_characters": 7226,
+      "percentage_of_total": 2.33
+    },
+    {
+      "field": "observed_need",
+      "max_serialized_characters": 4819,
+      "percentage_of_total": 1.56
+    },
+    {
+      "field": "candidate_intervention_class",
+      "max_serialized_characters": 3634,
+      "percentage_of_total": 1.17
+    },
+    {
+      "field": "independence_status",
+      "max_serialized_characters": 3625,
+      "percentage_of_total": 1.17
+    },
+    {
+      "field": "reliability_status",
+      "max_serialized_characters": 3624,
+      "percentage_of_total": 1.17
+    },
+    {
+      "field": "target_actor_if_supported",
+      "max_serialized_characters": 2431,
+      "percentage_of_total": 0.78
+    },
+    {
+      "field": "source_families",
+      "max_serialized_characters": 1339,
+      "percentage_of_total": 0.43
+    },
+    {
+      "field": "subject",
+      "max_serialized_characters": 973,
+      "percentage_of_total": 0.31
+    },
+    {
+      "field": "supporting_evidence_ids",
+      "max_serialized_characters": 827,
+      "percentage_of_total": 0.27
+    },
+    {
+      "field": "supporting_claim_ids",
+      "max_serialized_characters": 824,
+      "percentage_of_total": 0.27
+    },
+    {
+      "field": "unsupported_dimensions",
+      "max_serialized_characters": 516,
+      "percentage_of_total": 0.17
+    },
+    {
+      "field": "supported_dimensions",
+      "max_serialized_characters": 514,
+      "percentage_of_total": 0.17
+    },
+    {
+      "field": "confidence_classification",
+      "max_serialized_characters": 42,
+      "percentage_of_total": 0.01
+    },
+    {
+      "field": "decision",
+      "max_serialized_characters": 35,
+      "percentage_of_total": 0.01
+    }
+  ],
+  "field_contribution_note": "Measured under the worst case. The finding is that bounding the eight moved the dominant consumers ELSEWHERE: the four largest fields are statement_classifications, critical_uncertainties and the two commercial claim arrays, and the eight formerly unbounded identifier and vocabulary paths now contribute under one per cent between them. A future contract change aimed at capacity belongs in the narrative fields.",
+  "SEMANTIC_TYPES": [
+    {
+      "path": "supported_dimensions[]",
+      "bound_method": "CLOSED_VOCABULARY"
+    },
+    {
+      "path": "unsupported_dimensions[]",
+      "bound_method": "CLOSED_VOCABULARY"
+    },
+    {
+      "path": "supporting_evidence_ids[]",
+      "bound_method": "CANONICAL_IDENTIFIER"
+    },
+    {
+      "path": "supporting_claim_ids[]",
+      "bound_method": "CANONICAL_IDENTIFIER"
+    },
+    {
+      "path": "source_families[]",
+      "bound_method": "BOUNDED_IDENTIFIER"
+    },
+    {
+      "path": "critical_uncertainties[]",
+      "bound_method": "BOUNDED_NARRATIVE"
+    },
+    {
+      "path": "commercial_claims_supported[]",
+      "bound_method": "BOUNDED_NARRATIVE"
+    },
+    {
+      "path": "commercial_claims_not_supported[]",
+      "bound_method": "BOUNDED_NARRATIVE"
+    }
+  ],
+  "TOKENIZATION": {
+    "EXACT_TOKENIZER_AVAILABLE": false,
+    "why": "no tokenizer for claude-sonnet-5 is installed or held in this environment. tokenizers, tiktoken, transformers, sentencepiece and the anthropic SDK are all absent, section 21 forbids installing an unreviewed dependency for a convenient number, and a network request to tokenize is forbidden.",
+    "EXACT_MAX_OUTPUT_TOKEN_COUNT": "NOT_ESTABLISHED",
+    "SAFE_TOKEN_BOUND_AVAILABLE": false,
+    "safe_bound_investigation": "Section 22 requires a conversion proven in the correct direction. Nothing held establishes one. 'one character is at most one token' is false for any subword tokenizer. 'one byte is at most one token' holds for a byte-level BPE where every token decodes to at least one byte, and NO held first-party document says which tokenizer family claude-sonnet-5 uses, so that premise would be an assumption rather than a contract. It would also ignore framing tokens the API adds around a tool call, which are not characters of the output at all.",
+    "empirical_ratio_available": 2.1565,
+    "empirical_ratio_classification": "EMPIRICAL_LOWER_INFORMATION_BOUND",
+    "empirical_ratio_use_here": "NONE",
+    "empirical_ratio_direction_warning": "A characters-per-token ratio that is too HIGH divides by too much and UNDERESTIMATES tokens, which is the unsafe direction for a capacity ceiling. It came from one INPUT measurement in Mission 1.31.1 and is not a tokenizer. It is carried forward as the same fact Mission 1.84.3 recorded and is multiplied by nothing."
+  },
+  "DERIVED_MIN_OUTPUT_TOKEN_CAPACITY": "NOT_DERIVABLE",
+  "SELECTED_MAX_OUTPUT_TOKENS": "NONE",
+  "PROVIDER_MODEL_CAPABILITY": {
+    "model": "claude-sonnet-5",
+    "CONFIGURED_OUTPUT_TOKEN_CAPABILITY": "NOT_ESTABLISHED",
+    "what_is_held": "AnthropicProvider.max_output_tokens defaults to 4096 in this repository's adapter, and the compose environment binds LLM_TIER_STRONG_PROVIDER=anthropic and LLM_TIER_STRONG_MODEL=claude-sonnet-5 and states no token capability.",
+    "why_that_is_not_the_capability": "4096 is OUR adapter default, a number this repository chose. It is not a statement by the provider about what the model can emit, and reading it as one would turn a local default into a discovered fact. No live model catalogue was fetched.",
+    "provider_limit_is_not_a_schema_proof": "Section 23. Even a known capability would be a ceiling on what the model CAN emit and never evidence that this schema fits inside it."
+  },
+  "EXECUTION_PACKET_V2_CREATED": false,
+  "why_no_v2": "Section 24 permits V2 only if a defensible token capacity is established, the model supports it and pricing can be recomputed. The first condition fails, so the second and third are not reached. Creating V2 with a number nobody could derive would repeat exactly the defect Mission 1.84 introduced and Mission 1.84.3 found.",
+  "PRICING": {
+    "recomputed": false,
+    "why": "Section 25 conditions the recompute on MAX_OUTPUT_TOKENS becoming defensible. It did not, so INPUT_TOKEN_ESTIMATE, TOTAL_TOKEN_CEILING, WORST_CASE_CALL_COST and EXECUTION_COST_CEILING are not restated here. The V1 packet keeps its own numbers and they describe an execution that already happened.",
+    "pricing_version_held": "anthropic-published-2026-09-02",
+    "pricing_version_unchanged": true
+  },
+  "TED_REPRESENTATION_SHA256": "2528a56a4a9e873bfd04662aeb52916eb80faafe10ab085e716cbdcee77c5b72",
+  "TED_REPRESENTATION_UNCHANGED": true,
+  "RETENTION_REPAIR_VERIFIED": true,
+  "retention_repair_evidence": "The Mission 1.84.2 closure suite was re-run: 31 tests, seven synthetic terminal paths through the real Gateway with scripted transports, each asserting what it retains - raw response and digest, parsed output and digest, usage, terminal outcome. The tripwire replacing UrllibTransport.__init__ still proves no fixture constructs the real transport. No network.",
+  "V1_STATE": {
+    "execution_packet_sha256": "570657e1a862a96742925f6a5e5a17b0e1860bf9f2f0b8315fa33c560496da92",
+    "unchanged": true,
+    "EXECUTION_APPROVAL_CONSUMED": true,
+    "guard_still_refuses_v1": true,
+    "guard_refusal_code": "EXECUTION_APPROVAL_ALREADY_CONSUMED",
+    "guard_permits_a_new_digest": true,
+    "consumption_record_reset": false,
+    "NEW_APPROVAL_REQUIRED_FOR_ANY_FUTURE_EXECUTION": true,
+    "PREVIOUS_APPROVAL_REUSABLE": false
+  },
+  "ACCOUNTING": {
+    "MODEL_CALLS": 0,
+    "PROVIDER_REQUESTS": 0,
+    "REMOTE_TEST_CALLS": 0,
+    "NETWORK_REQUESTS": 0,
+    "TED_BYTES_TRANSMITTED": 0,
+    "DEPENDENCIES_INSTALLED": 0,
+    "CANONICAL_RESEARCH_MUTATIONS": 0,
+    "OPPORTUNITIES_PERSISTED": 0
+  },
+  "NEXT_REQUIRED_ACTION": "OPERATOR_DECISION_ON_OUTPUT_TOKEN_CONVERSION",
+  "next_action_note": "The remaining question is strictly smaller than the one Mission 1.84.3 raised, and it is a different kind of question. The contract now has an exact finite maximum measured in characters and bytes. What is missing is an authorised way to turn that count into a token ceiling: install and review a tokenizer, accept a stated byte-to-token bound as an operator judgement with its basis recorded, or bound the narrative fields further so the maximum falls far enough that any plausible conversion is comfortable. Each is a decision; none of them is arithmetic this mission may perform."
+}

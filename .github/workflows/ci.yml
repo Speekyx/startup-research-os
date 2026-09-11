@@ -694,6 +694,28 @@ jobs:
       - name: The second-opportunity output capacity analysis matches the live schema
         run: uv run python infrastructure/scripts/render_second_opportunity_output_capacity.py --check
 
+      # Mission 1.84.4. The operator decided BOUND_THE_EIGHT_UNBOUNDED_ITEM_TYPES, so a bounded
+      # successor contract exists and v1.0.0 is untouched. The gate re-derives rather than reads:
+      # it runs the capacity walker against BOTH executable schemas, rebuilds and revalidates the
+      # maximum instance, compares the dimension enum against EvidenceDimension itself, and reads
+      # the source-family slug grammar out of the migration that constrains it. It refuses:
+      # v1.0.0 repaired in place, so a historical execution would no longer resolve against the
+      # contract it used; a bound that does not match its field's semantics, including a maxLength
+      # where a closed vocabulary belongs, an enum frozen over a registry, or a length where an
+      # identity grammar belongs; a maxItems reduced, a field added, removed or reordered, or a
+      # required list changed; a maximum instance whose character count, byte count, digest or
+      # per-field contribution is not the rebuilt one; an ASCII-fill diagnostic presented as the
+      # maximum; an exact token count with no tokenizer, a derived capacity or a selected ceiling
+      # with no safe conversion established, or the empirical characters-per-token ratio used as
+      # one; an adapter default recorded as a provider capability; a V2 packet, or pricing
+      # recomputed, without a defensible ceiling; V1 edited, marked approved, or its consumption
+      # reset, or a guard that refuses an unseen digest too; a prompt digest left unchanged while
+      # the schema moved, a v1.1.0 system region that does not extend v1.0.0 verbatim, or a
+      # rendered prompt recorded as sent; a TED representation that moved; capacity-analysis-v1
+      # rewritten; and any model call, provider request, network request or transmitted TED byte.
+      - name: The bounded second-opportunity output contract matches the live schema
+        run: uv run python infrastructure/scripts/render_second_opportunity_bounded_contract.py --check
+
       # Mission 1.84.2. The one approved provider request happened and its output was rejected
       # at schema validation. The gate refuses: an approval recovered from a failure, or a
       # consumed-approval list that does not name V1's digest with a request against it; a
