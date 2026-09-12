@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.142
+Version: 1.143
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-12 (Sprint 1 / Mission 1.84.8)
+Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.9)
 
 ---
 
@@ -13,6 +13,53 @@ Last amended: 2026-09-12 (Sprint 1 / Mission 1.84.8)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.143 - 2026-09-13 (Sprint 1 / Mission 1.84.9)
+
+**`EXECUTION_SEMANTIC_GATE_REJECTED_NO_RETRY`: the one request was made, the schema passed the answer
+this time, and the semantic gate refused it.** The operator approved exactly one execution of
+`SECOND-OPPORTUNITY-SYNTH-EXEC-V3` v3 by its digest `c7b8553d...`, and the approval was recorded
+beside the packet, verbatim and hashed (`d8a1de69...`), with its 32 prohibitions and the nine
+things it withholds a change to carried as data. Every pre-network check passed, and **exactly one**
+request went to the synchronous Messages API: HTTP 200 in 34.4 s, `stop_reason = tool_use`, **9491
+input and 3880 output tokens, 0 thinking tokens, cost 0.057782** against a ceiling of 1.30565.
+Stages 1 to 5 passed, **the v1.1.0 schema included**; the v1.1.0 semantic gate refused the answer
+at stage 6 on five reasons; stages 7 to 10 were not reached. **No retry, nothing persisted, the
+approval spent.**
+
+**THE PROMPT ALIGNMENT DID ITS JOB.** Every generation-relevant bound was met, the summary V2 was
+refused on included, at 868 characters against 900. The refusal came from the next gate.
+
+**THE REFUSAL, STATED AS FACTS.** Three of the five reasons are phrases the forbidden-phrase check
+refuses wherever they appear unless a supplied statement contains them: the answer uses
+`willingness to pay`, `willing to pay` and `actual expenditure` only in denials, in its list of
+unsupported commercial claims, in a statement it classifies `UNKNOWN_REQUIRES_EVIDENCE` and in a
+request for evidence. `willingness to pay`, `actual expenditure` and `BT-161` appear in the v1.2.0
+system region itself. The other two reasons come from the audit, which reads the supplied statements
+and not the system region: the summary asserts "market activity" and cites BT-161, and
+`reliability_status` says "scoring-ready is not the same as scored". Re-running the live gate
+locally over the retained answer, with no network, reproduced the five reasons exactly. Nothing was
+changed on the strength of any of this, and nothing is recommended.
+
+**GATE 74 RE-DERIVES THE RECORD FROM WHAT WAS KEPT.** The semantic gate needs an evidence packet
+held in the database, so gate 74 checks the refusal the other way round: every retained reason must
+name text the answer contains, and where each term occurs is recomputed from the answer. **Probe:
+152 caught, 0 escaped, 6 of 6 controls, every file proved restored.**
+
+**Verification.** 3853 bare-python tests; 4244 pytest, 13 skipped, database unchanged across
+29 tenant tables; ruff over 1032 files; mypy over 201 files; contracts, catalog and registry;
+all **74** CI gates, one new; **74 new tests**.
+
+**What moved.** Nothing canonical: every counter identical, and **1 provider request, 1 model call,
+0 retries, 0 fallbacks, 3604 TED bytes, 0 Opportunities**.
+
+New: `docs/data/second-opportunity-synthesis-execution-approval-v3.json`,
+`second-opportunity-synthesis-response-v3.json`, `second-opportunity-synthesis-execution-record-v3.json`
+and its generated `.md`; `infrastructure/scripts/render_second_opportunity_execution_record_v3.py`
+(CI gate 74); tests; and `docs/reports/mission-1.84.9-report.md`.
+
+Changed: `docs/CLAUDE.md` 1.143 to 1.144; `.github/workflows/ci.yml` gains one gate. **Packet V3, the
+prompt, the schema, the gate, the V3 runner and V1's and V2's records are byte-identical.**
 
 ## 1.142 - 2026-09-12 (Sprint 1 / Mission 1.84.8)
 

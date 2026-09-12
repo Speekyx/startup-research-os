@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.143
-Last amended: 2026-09-12 (Sprint 1 / Mission 1.84.8)
+Version: 1.144
+Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.9)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.144 | 2026-09-13 | **EXECUTION_SEMANTIC_GATE_REJECTED_NO_RETRY: the one request was made, the schema passed the answer this time, and the semantic gate refused it.** The operator approved exactly one execution of V3 by its digest `c7b8553d...`, recorded beside the packet verbatim and hashed with its 32 prohibitions and the nine things it withholds a change to as data. Every pre-network check passed and **ONE** request went to the synchronous Messages API: HTTP 200 in 34.4 s, `stop_reason tool_use`, **9491 in, 3880 out, 0 thinking, cost 0.057782** of a 1.30565 ceiling. **THE PROMPT ALIGNMENT DID ITS JOB**: stages 1 to 5 passed, the v1.1.0 schema included, and the summary V2 was refused on came in at 868 characters against 900. **THE NEXT GATE REFUSED IT**: the v1.1.0 semantic gate at stage 6, on five reasons; 7 to 10 NOT_REACHED; **no retry, nothing persisted, the approval spent**. **THE REFUSAL, STATED AS FACTS**: three reasons are phrases the forbidden-phrase check refuses wherever they appear, and the answer uses them only in denials, its unsupported-claims list, an UNKNOWN_REQUIRES_EVIDENCE statement and a request for evidence, while `willingness to pay`, `actual expenditure` and `BT-161` appear in the v1.2.0 system region itself; the audit, which reads the supplied statements and not the system region, flagged "market activity" and BT-161 in the summary; a local re-run with no network reproduced all five; nothing changed, nothing recommended. **GATE 74 CHECKS THE REFUSAL THE OTHER WAY ROUND**: the semantic gate needs a packet held in the database, so every retained reason must name text the answer contains and the term locations are recomputed. Probe **152 caught, 0 escaped, 6 of 6 controls**. **3853 tests**, 4244 pytest, **74 gates**, **74 new tests**, **1 provider request, 0 retries, 3604 TED bytes, 0 canonical mutation**. `mission-1.84.9-report.md`. |
 | 1.143 | 2026-09-12 | **SECOND_OPPORTUNITY_EXECUTION_PACKET_V3_READY_FOR_OPERATOR_APPROVAL: the prompt now states every bound the schema enforces, and the one call it permits is frozen and unapproved.** The operator kept the v1.1.0 schema, its gate and the 900-character bound, refused to rescue V2's answer or to choose a maximum from its 1113 characters, and asked for the prompt/schema drift to be removed in a general way. **THE AUDIT WAS GENERAL, AND THE FAILED FIELD WAS THE SYMPTOM**: all 75 constraints in the live schema classified by rule (32 must be explicit, 36 carried by the tool schema, 2 redundant, 5 validator-only); v1.1.0 stated **8 of 32** and left 24 to the tool schema, the 900 among them beside **nine other narrative lengths**, eight maxItems, a minLength, the 20-field required set, the closed object, the `UNKNOWN_NOT_SUPPORTED` sentinel and the classified statement's shape, so **a fix scoped to the 900 would have left every one of them**. **ONE SOURCE OF TRUTH**: `render_output_constraints(schema, notes)` renders the block from the live schema; a note carries no digit, the v1.2.0 section no numeric literal, and a separate `PROMPT_MAX_REASONING_LENGTH = 900` is refused by name; every class-A mutation moves the prompt and no other does. Prompt **v1.2.0** `1677cbe5...`, the change confined to the output-contract block. **THE SCHEMA STILL DECIDES**: 900 passes, 901 fails, and the V3 runner is read as a syntax tree so nothing trims, drops, rewrites or summarises the answer. **V3 IS V2'S CALL WITH THE ALIGNED PROMPT**: `c7b8553d...`, representation `2528a56a...`, `claude-sonnet-5` synchronous with thinking disabled, 128000 (not 3914), 60 s, one call, body 22124 = 20623 + 1501, ceiling **1.30565** (+0.001742), approval recorded **false**; V1 and V2 refused by name, an unseen digest permitted. **THE PROBE FOUND THREE HOLES IN THE NEW GATES**: a sentence appended to what V2's answer was used for, and V2's own history rewritten to make its answer a candidate, now refused by rule with the history pinned by digest; final **197 caught, 0 escaped, 18 of 18 controls**. **3853 tests**, 4170 pytest, **73 gates**, **214 new tests**, **0 model calls, 0 provider requests, 0 TED bytes, 0 canonical mutation**. `mission-1.84.8-report.md`. |
 | 1.142 | 2026-09-12 | **EXECUTION_SCHEMA_REJECTED_NO_RETRY: the one request was made, the model finished, and the schema refused the answer on one field.** The operator approved exactly one execution of V2 by its digest `d27f2896...`, recorded beside the packet verbatim and hashed with its 26 prohibitions as data. Fifteen pre-execution checks passed with no network and **ONE** request went to the synchronous Messages API: HTTP 200 in 35.5 s, `stop_reason tool_use`, **8939 in, 3914 out, 0 thinking, cost 0.057018** of a 1.303908 ceiling. Stages 1 to 4 passed; the v1.1.0 schema refused `evidence_bound_reasoning_summary` at **1113 characters against 900**; 6 to 10 NOT_REACHED. **No retry, nothing persisted, the approval spent.** **THE ENVELOPE WAS NOT THE CONSTRAINT**: 3914 of 128000 tokens and 35.5 of 60 seconds; an old Mission 1.31 bound refused it, one **the prompt does not state in words** and the model saw only in the tool schema -- recorded as facts, nothing changed or recommended. **THINKING DISABLED, OBSERVED**: `thinking_tokens = 0`. **THE BYTES WERE KEPT, AND A GAP CLOSED BEFORE THE CALL**: the runner judged before writing, so a crash would have lost the response as 1.84.2 did; a fail-safe now writes what arrived, and was not needed. **SPENT AND REFUSED BY NAME**: V1's guard could not see V2 spent, so the runner reads V2's record and refuses V2 before any network. **GATE 71 RE-DERIVES THE RECORD FROM WHAT WAS KEPT** -- raw digest, stop reason, the violation through the live validator, cost from usage, the stage table, the approval's words, V1 untouched, the runner's refusal. Probe **116 caught, 0 escaped, 6 of 6 controls** -- **the first run caught two by a crash, now refused by name**. **3853 tests**, 3956 pytest, **71 gates**, **68 new tests**, **1 provider request, 0 retries, 3604 TED bytes, 0 canonical mutation**. `mission-1.84.7-report.md`. |
 | 1.141 | 2026-09-12 | **SECOND_OPPORTUNITY_EXECUTION_PACKET_V2_READY_FOR_OPERATOR_APPROVAL: the operator chose the envelope, and the one call it permits is frozen and unapproved.** The operator decided **RUN_AT_THE_PROVIDER_MAXIMUM_ACCEPTING_AN_UNREACHABLE_WORST_CASE**: the bounded contract stays the acceptance language, the synchronous envelope is a strict subset of it, a provider output-limit stop fails closed, and no retry is authorised. **V2 `d27f2896...` prepared, approval recorded false, 0 synthesis calls, 0 Messages API requests, 0 TED bytes.** **THE DECISION IS THE OPERATOR'S**: eleven lines verbatim and hashed, `MATHEMATICALLY_DERIVED false`, four alternatives rejected by name, and the state **CONTRACT_LARGER_THAN_EXECUTION_ENVELOPE** kept apart from ERROR, UNKNOWN and SCHEMA_INVALID, because an error invites repairing the schema and unknown hides the count that settled it. **THE CEILING IS A SELECTION**: 128000 as the documented synchronous maximum, not the schema, not the estimate, not the ratio, with **the adapter's 4096 kept apart**, and **231608 still an estimate** -- not exact, not an output count, not a limit. **THINKING DISABLED, CHECKED BY BUILDING THE BODY** from the live adapter: `{"type": "disabled"}` at 128000, forced tool, no migration; documented, **not observed at runtime**. **A LIMIT STOP FAILS CLOSED ON THE PROVIDER'S OWN SIGNAL**: one adapter classifier with four verdicts, `stop_reason` read **at stage 3, before any parse**, so a cut answer that satisfies the whole schema is consulted for nothing. **THE TIMEOUT DISCLOSED, NOT CHANGED**: 60 s, not streamed, may end the call first. **THE CEILING IS THE WORST CASE ITSELF**: 1.303908, no headroom policy held so no invented multiple, **13.04x V1's**. **FOUR GATES HAD PINNED THE FUTURE TO AN ABSENCE** -- 65, 67, 68, 69 -- and now refuse only a V2 no later mission prepared. **THE PROBE FOUND TWO HOLES IN THE NEW GATE**: *asynchronous* passed a test for *synchronous*, so the route sentence is pinned whole; a loop around the one call site passed a count of call sites, so the runner is read as a syntax tree. Second run **266 caught, 0 escaped, 13 of 13 controls**. **3853 tests**, 3888 pytest, **70 gates**, **169 new tests**, **0 model calls, 0 provider requests, 0 TED bytes, 0 canonical mutation**. `mission-1.84.6-report.md`. |
@@ -2309,6 +2310,36 @@ stages, and an Opportunity hypothesis persisted only after deterministic accepta
 human approval. **Do not execute V3 without that approval, do not approve it on the operator's
 behalf, do not reuse V1's or V2's approval, and do not persist Opportunity #2.
 Mission 1.84.9 was not started.**
+
+
+**ANSWERED IN 1.144 (Mission 1.84.9). The one request was made, the schema passed the answer, and
+the semantic gate refused it.**
+
+    request      1, HTTP 200, 34.4 s of 60, stop_reason tool_use
+    usage        9491 in, 3880 out, 0 thinking; cost 0.057782 of a 1.30565 ceiling
+    stages       1-5 passed, the schema included; 6 failed on five reasons
+    retained     raw body, usage, request id, parsed answer; nothing persisted
+    approval     spent; the runner refuses V3 by name
+
+- **STATING THE BOUNDS WORKED, AND THE SCHEMA WAS NOT THE LAST GATE.** Every generation-relevant
+  bound was met, the summary at 868 characters against 900, and the semantic gate refused
+  the answer.
+- **THE GATE'S PHRASE CHECK REFUSES A PHRASE IN A DENIAL AS IT DOES IN AN ASSERTION**, and this
+  answer used the refused phrases only to say what the packet does not establish. Two of those
+  phrases are in the prompt's own "it is NOT" passages. Recorded as a fact for the operator.
+- **THE AUDIT READS THE SUPPLIED STATEMENTS, NOT THE SYSTEM REGION**, so BT-161, which the prompt
+  itself names, counts as prior knowledge when the answer repeats it.
+- **A GATE THAT CANNOT RE-RUN A VERDICT CAN STILL REFUSE ONE THAT NAMES NOTHING**: gate 74 requires
+  every retained reason to name text the answer contains.
+- **AN APPROVAL IS SPENT BY ITS EXECUTION, WHATEVER THE OUTPUT WAS**, and the runner refuses V3
+  before any network.
+
+**Next is an operator decision, and nothing was started.** V3's approval is spent. Any further
+execution needs a new packet digest and a new explicit approval naming it. Whether anything changes
+first (the gate's phrase and audit checks, the prompt, or nothing) is the operator's to decide, and
+this mission implemented and recommended none. **Do not re-execute V3, do not persist Opportunity
+#2, and do not treat the refused answer as a candidate.
+Mission 1.84.10 was not started.**
 
 
 

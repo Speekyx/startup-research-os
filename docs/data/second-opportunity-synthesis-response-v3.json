@@ -1,0 +1,423 @@
+{
+  "$comment": "Mission 1.84.2's repaired retention path. Written on every terminal outcome, so a rejected response is as recoverable as an accepted one.",
+  "OUTCOME": "EXECUTION_OUTPUT_REJECTED_AT_SEMANTIC_GATE_NO_RETRY",
+  "PROVIDER_REQUESTS_MADE": 1,
+  "RETRIES": 0,
+  "timing": {
+    "started_at": "2026-09-12T20:03:01.233247+00:00",
+    "finished_at": "2026-09-12T20:03:35.590818+00:00",
+    "elapsed_seconds": 34.358
+  },
+  "RAW_PROVIDER_RESPONSE_RETAINED": true,
+  "RAW_PROVIDER_RESPONSE_SHA256": "5bb5dde55437689296e7963787f711555529a0db865809c550be41ba15f5374d",
+  "RAW_PROVIDER_RESPONSE_CHARACTERS": 9542,
+  "RAW_PROVIDER_RESPONSE_STATUS": 200,
+  "PROVIDER_REQUEST_ID": "req_011Cez9FYuKnuu1zASuK1KS3",
+  "transport_errors": [],
+  "USAGE_RETAINED": true,
+  "usage": [
+    {
+      "input_tokens": 9491,
+      "output_tokens": 3880,
+      "cost_units": 0.057782,
+      "priced": true,
+      "outcome": "SUCCESS",
+      "error_category": "None"
+    }
+  ],
+  "HIDDEN_REASONING_REQUESTED": false,
+  "HIDDEN_REASONING_RETAINED": false,
+  "PARSED_OUTPUT_RETAINED": true,
+  "PARSED_OUTPUT_SHA256": "973b8ba15158ca8bb94ba0e0040b4d731218c3048b1b15ae12712913f428df0b",
+  "parsed_output": {
+    "decision": "FORM_HYPOTHESIS",
+    "subject": "ted-eu:CPV-class:9261",
+    "target_actor_if_supported": "Contracting authorities publishing procurement notices classified under CPV class 9261 (division 92) on TED",
+    "observed_need": "The packet establishes only that contracting authorities published contract notices and contract award notices under CPV class 9261 with varying stated TOTAL_VALUE amounts at notice scope; it does not establish a problem, need, or dissatisfaction these authorities experience.",
+    "candidate_intervention_class": "Not determinable from this packet; at most, a class of inquiry into procurement-facing activity for actors publishing notices under CPV 9261 could be scoped, but no intervention class is supported by the supplied statements.",
+    "hypothesis_statement": "It is worth investigating whether contracting authorities that publish CPV-9261-classified contract notices and award notices on TED represent a buyer population with a recurring structural activity worth further characterisation -- but the supplied statements do not establish any need, gap, dissatisfaction, or willingness to pay that would justify a specific intervention, so no product- or feature-level hypothesis can be formed from this packet alone.",
+    "supported_dimensions": [
+      "BUYER_OR_BUDGET_EXISTENCE",
+      "ECONOMIC_VALUE",
+      "MARKET_ACTIVITY"
+    ],
+    "unsupported_dimensions": [
+      "RECURRENCE_OR_FREQUENCY",
+      "WILLINGNESS_TO_PAY",
+      "SOLUTION_GAP",
+      "SOLUTION_DISSATISFACTION",
+      "COMPETITIVE_SUPPLY",
+      "DISTRIBUTION_SIGNAL",
+      "REGULATORY_OR_STRUCTURAL_DRIVER",
+      "FEASIBILITY_SIGNAL",
+      "TREND_OR_CHANGE",
+      "AUDIENCE_OR_USAGE",
+      "PROBLEM_OR_NEED"
+    ],
+    "supporting_evidence_ids": [
+      "0b407e80-336a-4b71-8a59-09f0464bf43f",
+      "0d8790e9-fbf8-4675-b253-6b35cf294959",
+      "17702f3b-c72c-43bd-b183-e7d600e516fd",
+      "1a0bb19a-c849-46b5-a31b-c6716d6d304c",
+      "7b1bed61-78ef-43a9-862c-bdeda3171bf5",
+      "93d1ae45-13a5-4fc5-a528-9f3bb1e59980"
+    ],
+    "supporting_claim_ids": [
+      "d25bd256-49a1-494f-b6f8-4f1c3271d78e",
+      "c99e531d-a72d-40fb-bb21-c76d6715bab0",
+      "a645151c-9350-4b05-903f-f01b95ef5dfc",
+      "65ae9cd9-a570-4be6-9cd6-91a6aaae6098",
+      "3c65a723-4d06-481e-9d88-86cf4adb85b9"
+    ],
+    "source_families": [
+      "public_procurement"
+    ],
+    "independence_status": "Independence is UNKNOWN for 6 of 6 rows; this packet does not establish that its evidence rows are independent findings, and the row count must not be read as a count of independent observations.",
+    "reliability_status": "All 6 rows are SCORABLE, meaning a reviewed reliability applies to each measurement; scoring-ready is not the same as scored, and no score exists for any row in this packet.",
+    "evidence_bound_reasoning_summary": "The packet shows TED published contract notices and contract award notices under CPV class 9261 with differing TOTAL_VALUE figures at notice scope, in bounded cohorts of 2, 3, and 6 notices, with stated spreads between largest and smallest values (e.g. 15,658,679.12 EUR; 235,017 EUR; 86,827,200 EUR). This establishes that a bounded set of contracting authorities exist and that published values differ, i.e. buyer existence, economic value as published, and market activity in the classified scope. It does not establish need, recurrence by the same actor, willingness to pay, solution gaps, dissatisfaction, competitive supply, distribution channels, regulatory drivers, or feasibility of any intervention. TOTAL_VALUE includes options and renewals per BT-161 and may be lawfully withheld, so no proportion or trend may be computed. No actor-level problem is named.",
+    "critical_uncertainties": [
+      "Whether the same contracting authority appears more than once across these notices, which would be required to establish recurrence rather than a one-off cohort observation.",
+      "Whether the published TOTAL_VALUE figures reflect money actually paid or merely an award ceiling including unexercised options and renewals.",
+      "Whether any actor named in these notices has expressed dissatisfaction with an existing solution.",
+      "Whether any solution gap exists for whatever need underlies these notices.",
+      "Whether any competitive supply already serves the activity these notices procure.",
+      "Whether a reachable distribution channel exists to reach these contracting authorities.",
+      "Whether any regulatory or structural driver compels this procurement activity beyond the fact that a notice was published.",
+      "Whether building or operating any intervention aimed at this cohort is technically or operationally feasible.",
+      "Whether the six evidence rows are independent observations or repeated views of the same underlying notices."
+    ],
+    "commercial_claims_supported": [
+      "Contracting authorities publishing under CPV class 9261 exist and have published notices with stated award values on TED.",
+      "Published TOTAL_VALUE amounts differ across notices within the observed bounded cohorts."
+    ],
+    "commercial_claims_not_supported": [
+      "Contracting authorities under CPV 9261 need or want software or any specific product.",
+      "Any actor is willing to pay for a solution addressing an unstated need.",
+      "A market of meaningful size or growth exists in this CPV class.",
+      "Existing solutions are inadequate or unsatisfactory to any buyer.",
+      "Any competitor does or does not already serve this space.",
+      "A reachable distribution channel exists to reach these buyers.",
+      "Any regulatory mandate drives or shapes this procurement activity.",
+      "An intervention aimed at this cohort is feasible to build or operate.",
+      "The observed TOTAL_VALUE figures represent realised expenditure or a price any actor paid.",
+      "The published notices reflect recurring need by the same buyer rather than a bounded one-off cohort."
+    ],
+    "recommended_next_evidence": [
+      "Identification of whether the same contracting authority recurs across multiple notices in this CPV class over time.",
+      "Direct evidence of a specific unmet need or complaint expressed by a named contracting authority in this class.",
+      "Evidence of actual expenditure or payment rather than published award ceilings.",
+      "Evidence describing what goods or services these CPV-9261 notices actually procure and why.",
+      "Evidence of existing suppliers or solutions already serving notices in this CPV class.",
+      "Evidence of a reachable channel through which these contracting authorities could be engaged.",
+      "Evidence of any regulatory or structural rule mandating this specific procurement activity."
+    ],
+    "confidence_classification": "EXPLORATORY",
+    "statement_classifications": [
+      {
+        "statement": "Contracting authorities published contract notices under CPV class 9261 with differing TOTAL_VALUE amounts at notice scope.",
+        "classification": "OBSERVED_OR_EVIDENCE_SUPPORTED"
+      },
+      {
+        "statement": "Contracting authorities published contract award notices under CPV class 9261 with differing TOTAL_VALUE amounts at notice scope.",
+        "classification": "OBSERVED_OR_EVIDENCE_SUPPORTED"
+      },
+      {
+        "statement": "Within a bounded set of 3 contract notices under CPV 9261, the largest TOTAL_VALUE exceeded the smallest by 15,658,679.12 EUR.",
+        "classification": "OBSERVED_OR_EVIDENCE_SUPPORTED"
+      },
+      {
+        "statement": "Within a bounded set of 2 contract award notices under CPV 9261, the largest TOTAL_VALUE exceeded the smallest by 235,017 EUR.",
+        "classification": "OBSERVED_OR_EVIDENCE_SUPPORTED"
+      },
+      {
+        "statement": "Within a bounded set of 6 contract notices under CPV 9261, the largest TOTAL_VALUE exceeded the smallest by 86,827,200 EUR.",
+        "classification": "OBSERVED_OR_EVIDENCE_SUPPORTED"
+      },
+      {
+        "statement": "An actor with authority to buy exists in this classified space.",
+        "classification": "OBSERVED_OR_EVIDENCE_SUPPORTED"
+      },
+      {
+        "statement": "Money moves in the bounded activity observed under CPV class 9261.",
+        "classification": "OBSERVED_OR_EVIDENCE_SUPPORTED"
+      },
+      {
+        "statement": "Transactions or tenders occur in the bounded scope of CPV class 9261 notices.",
+        "classification": "OBSERVED_OR_EVIDENCE_SUPPORTED"
+      },
+      {
+        "statement": "The same contracting authority or need recurs repeatedly within this CPV class.",
+        "classification": "HYPOTHESIS_TO_VALIDATE"
+      },
+      {
+        "statement": "Any actor is willing to pay for a product or service addressing a need in this space.",
+        "classification": "UNKNOWN_REQUIRES_EVIDENCE"
+      },
+      {
+        "statement": "No adequate existing solution serves the need underlying these notices.",
+        "classification": "UNKNOWN_REQUIRES_EVIDENCE"
+      },
+      {
+        "statement": "Actors in this space are dissatisfied with current solutions.",
+        "classification": "UNKNOWN_REQUIRES_EVIDENCE"
+      },
+      {
+        "statement": "Competitors already serve or do not serve this need.",
+        "classification": "UNKNOWN_REQUIRES_EVIDENCE"
+      },
+      {
+        "statement": "A reachable distribution channel exists to reach these contracting authorities.",
+        "classification": "UNKNOWN_REQUIRES_EVIDENCE"
+      },
+      {
+        "statement": "A regulatory or structural driver forces or shapes this procurement activity.",
+        "classification": "UNKNOWN_REQUIRES_EVIDENCE"
+      },
+      {
+        "statement": "An intervention targeting this cohort could be built and operated.",
+        "classification": "UNKNOWN_REQUIRES_EVIDENCE"
+      },
+      {
+        "statement": "The published TOTAL_VALUE figures represent money actually paid rather than an award ceiling including options and renewals.",
+        "classification": "UNKNOWN_REQUIRES_EVIDENCE"
+      }
+    ]
+  },
+  "validation": {
+    "stages": {
+      "1_transport_success": "PASSED",
+      "2_provider_response_shape": "PASSED",
+      "3_provider_completion": "PASSED",
+      "4_structured_output_parse": "PASSED",
+      "5_schema_validation_v1_1_0": "PASSED",
+      "6_semantic_output_gate_v1_1_0": "FAILED",
+      "7_evidence_boundary_and_no_distortion": "NOT_REACHED",
+      "8_attribution_and_provenance": "NOT_REACHED",
+      "9_persistence_eligibility": "NOT_REACHED",
+      "10_human_review": "NOT_REACHED"
+    },
+    "persist": false,
+    "stop_reason": "tool_use",
+    "completion": "COMPLETE",
+    "failed_stage": "6_semantic_output_gate_v1_1_0",
+    "reasons": [
+      "reliability_status contains 'SCORED'. Scoring-ready is not scored, no score exists in this repository, and REFERENCE_PROFILE_V1 is UNCALIBRATED",
+      "evidence_bound_reasoning_summary audited UNSUPPORTED: the number 161 appears in no supplied statement and in no structural fact about the packet; 'market' appears in no supplied statement; prior knowledge is not available as factual support (§7)",
+      "REALISED_SPEND: the output contains 'actual expenditure', which no supplied statement contains. This packet is not money anybody paid, actual expenditure, a budget consumed, or a contract's final cost",
+      "WILLINGNESS_TO_PAY: the output contains 'willingness to pay', which no supplied statement contains. This packet is not willingness to pay, price tolerance, budget for software, or ability to pay for a product",
+      "WILLINGNESS_TO_PAY: the output contains 'willing to pay', which no supplied statement contains. This packet is not willingness to pay, price tolerance, budget for software, or ability to pay for a product"
+    ],
+    "outcome": "EXECUTION_OUTPUT_REJECTED_AT_SEMANTIC_GATE_NO_RETRY"
+  },
+  "PERSISTED": "NOTHING",
+  "execution_packet_id": "SECOND-OPPORTUNITY-SYNTH-EXEC-V3",
+  "execution_packet_sha256": "c7b8553d540332163b6f2fa4d63c82467680d79cee2b7d5988cc7c4d61f554b2",
+  "TERMINAL_OUTCOME": "EXECUTION_OUTPUT_REJECTED_AT_SEMANTIC_GATE_NO_RETRY",
+  "STOP_REASON": "tool_use",
+  "PROVIDER_COMPLETION": "COMPLETE",
+  "PARSED_OUTPUT_JUDGED": true,
+  "RAW_PROVIDER_RESPONSE_BODY": {
+    "model": "claude-sonnet-5",
+    "id": "msg_011Cez9FZnQuRzvQup34Qay2",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01HqJ9RFDyUU6jwK4zxiyaWH",
+        "name": "emit_structured_output",
+        "input": {
+          "decision": "FORM_HYPOTHESIS",
+          "subject": "ted-eu:CPV-class:9261",
+          "target_actor_if_supported": "Contracting authorities publishing procurement notices classified under CPV class 9261 (division 92) on TED",
+          "observed_need": "The packet establishes only that contracting authorities published contract notices and contract award notices under CPV class 9261 with varying stated TOTAL_VALUE amounts at notice scope; it does not establish a problem, need, or dissatisfaction these authorities experience.",
+          "candidate_intervention_class": "Not determinable from this packet; at most, a class of inquiry into procurement-facing activity for actors publishing notices under CPV 9261 could be scoped, but no intervention class is supported by the supplied statements.",
+          "hypothesis_statement": "It is worth investigating whether contracting authorities that publish CPV-9261-classified contract notices and award notices on TED represent a buyer population with a recurring structural activity worth further characterisation -- but the supplied statements do not establish any need, gap, dissatisfaction, or willingness to pay that would justify a specific intervention, so no product- or feature-level hypothesis can be formed from this packet alone.",
+          "supported_dimensions": [
+            "BUYER_OR_BUDGET_EXISTENCE",
+            "ECONOMIC_VALUE",
+            "MARKET_ACTIVITY"
+          ],
+          "unsupported_dimensions": [
+            "RECURRENCE_OR_FREQUENCY",
+            "WILLINGNESS_TO_PAY",
+            "SOLUTION_GAP",
+            "SOLUTION_DISSATISFACTION",
+            "COMPETITIVE_SUPPLY",
+            "DISTRIBUTION_SIGNAL",
+            "REGULATORY_OR_STRUCTURAL_DRIVER",
+            "FEASIBILITY_SIGNAL",
+            "TREND_OR_CHANGE",
+            "AUDIENCE_OR_USAGE",
+            "PROBLEM_OR_NEED"
+          ],
+          "supporting_evidence_ids": [
+            "0b407e80-336a-4b71-8a59-09f0464bf43f",
+            "0d8790e9-fbf8-4675-b253-6b35cf294959",
+            "17702f3b-c72c-43bd-b183-e7d600e516fd",
+            "1a0bb19a-c849-46b5-a31b-c6716d6d304c",
+            "7b1bed61-78ef-43a9-862c-bdeda3171bf5",
+            "93d1ae45-13a5-4fc5-a528-9f3bb1e59980"
+          ],
+          "supporting_claim_ids": [
+            "d25bd256-49a1-494f-b6f8-4f1c3271d78e",
+            "c99e531d-a72d-40fb-bb21-c76d6715bab0",
+            "a645151c-9350-4b05-903f-f01b95ef5dfc",
+            "65ae9cd9-a570-4be6-9cd6-91a6aaae6098",
+            "3c65a723-4d06-481e-9d88-86cf4adb85b9"
+          ],
+          "source_families": [
+            "public_procurement"
+          ],
+          "independence_status": "Independence is UNKNOWN for 6 of 6 rows; this packet does not establish that its evidence rows are independent findings, and the row count must not be read as a count of independent observations.",
+          "reliability_status": "All 6 rows are SCORABLE, meaning a reviewed reliability applies to each measurement; scoring-ready is not the same as scored, and no score exists for any row in this packet.",
+          "evidence_bound_reasoning_summary": "The packet shows TED published contract notices and contract award notices under CPV class 9261 with differing TOTAL_VALUE figures at notice scope, in bounded cohorts of 2, 3, and 6 notices, with stated spreads between largest and smallest values (e.g. 15,658,679.12 EUR; 235,017 EUR; 86,827,200 EUR). This establishes that a bounded set of contracting authorities exist and that published values differ, i.e. buyer existence, economic value as published, and market activity in the classified scope. It does not establish need, recurrence by the same actor, willingness to pay, solution gaps, dissatisfaction, competitive supply, distribution channels, regulatory drivers, or feasibility of any intervention. TOTAL_VALUE includes options and renewals per BT-161 and may be lawfully withheld, so no proportion or trend may be computed. No actor-level problem is named.",
+          "critical_uncertainties": [
+            "Whether the same contracting authority appears more than once across these notices, which would be required to establish recurrence rather than a one-off cohort observation.",
+            "Whether the published TOTAL_VALUE figures reflect money actually paid or merely an award ceiling including unexercised options and renewals.",
+            "Whether any actor named in these notices has expressed dissatisfaction with an existing solution.",
+            "Whether any solution gap exists for whatever need underlies these notices.",
+            "Whether any competitive supply already serves the activity these notices procure.",
+            "Whether a reachable distribution channel exists to reach these contracting authorities.",
+            "Whether any regulatory or structural driver compels this procurement activity beyond the fact that a notice was published.",
+            "Whether building or operating any intervention aimed at this cohort is technically or operationally feasible.",
+            "Whether the six evidence rows are independent observations or repeated views of the same underlying notices."
+          ],
+          "commercial_claims_supported": [
+            "Contracting authorities publishing under CPV class 9261 exist and have published notices with stated award values on TED.",
+            "Published TOTAL_VALUE amounts differ across notices within the observed bounded cohorts."
+          ],
+          "commercial_claims_not_supported": [
+            "Contracting authorities under CPV 9261 need or want software or any specific product.",
+            "Any actor is willing to pay for a solution addressing an unstated need.",
+            "A market of meaningful size or growth exists in this CPV class.",
+            "Existing solutions are inadequate or unsatisfactory to any buyer.",
+            "Any competitor does or does not already serve this space.",
+            "A reachable distribution channel exists to reach these buyers.",
+            "Any regulatory mandate drives or shapes this procurement activity.",
+            "An intervention aimed at this cohort is feasible to build or operate.",
+            "The observed TOTAL_VALUE figures represent realised expenditure or a price any actor paid.",
+            "The published notices reflect recurring need by the same buyer rather than a bounded one-off cohort."
+          ],
+          "recommended_next_evidence": [
+            "Identification of whether the same contracting authority recurs across multiple notices in this CPV class over time.",
+            "Direct evidence of a specific unmet need or complaint expressed by a named contracting authority in this class.",
+            "Evidence of actual expenditure or payment rather than published award ceilings.",
+            "Evidence describing what goods or services these CPV-9261 notices actually procure and why.",
+            "Evidence of existing suppliers or solutions already serving notices in this CPV class.",
+            "Evidence of a reachable channel through which these contracting authorities could be engaged.",
+            "Evidence of any regulatory or structural rule mandating this specific procurement activity."
+          ],
+          "confidence_classification": "EXPLORATORY",
+          "statement_classifications": [
+            {
+              "statement": "Contracting authorities published contract notices under CPV class 9261 with differing TOTAL_VALUE amounts at notice scope.",
+              "classification": "OBSERVED_OR_EVIDENCE_SUPPORTED"
+            },
+            {
+              "statement": "Contracting authorities published contract award notices under CPV class 9261 with differing TOTAL_VALUE amounts at notice scope.",
+              "classification": "OBSERVED_OR_EVIDENCE_SUPPORTED"
+            },
+            {
+              "statement": "Within a bounded set of 3 contract notices under CPV 9261, the largest TOTAL_VALUE exceeded the smallest by 15,658,679.12 EUR.",
+              "classification": "OBSERVED_OR_EVIDENCE_SUPPORTED"
+            },
+            {
+              "statement": "Within a bounded set of 2 contract award notices under CPV 9261, the largest TOTAL_VALUE exceeded the smallest by 235,017 EUR.",
+              "classification": "OBSERVED_OR_EVIDENCE_SUPPORTED"
+            },
+            {
+              "statement": "Within a bounded set of 6 contract notices under CPV 9261, the largest TOTAL_VALUE exceeded the smallest by 86,827,200 EUR.",
+              "classification": "OBSERVED_OR_EVIDENCE_SUPPORTED"
+            },
+            {
+              "statement": "An actor with authority to buy exists in this classified space.",
+              "classification": "OBSERVED_OR_EVIDENCE_SUPPORTED"
+            },
+            {
+              "statement": "Money moves in the bounded activity observed under CPV class 9261.",
+              "classification": "OBSERVED_OR_EVIDENCE_SUPPORTED"
+            },
+            {
+              "statement": "Transactions or tenders occur in the bounded scope of CPV class 9261 notices.",
+              "classification": "OBSERVED_OR_EVIDENCE_SUPPORTED"
+            },
+            {
+              "statement": "The same contracting authority or need recurs repeatedly within this CPV class.",
+              "classification": "HYPOTHESIS_TO_VALIDATE"
+            },
+            {
+              "statement": "Any actor is willing to pay for a product or service addressing a need in this space.",
+              "classification": "UNKNOWN_REQUIRES_EVIDENCE"
+            },
+            {
+              "statement": "No adequate existing solution serves the need underlying these notices.",
+              "classification": "UNKNOWN_REQUIRES_EVIDENCE"
+            },
+            {
+              "statement": "Actors in this space are dissatisfied with current solutions.",
+              "classification": "UNKNOWN_REQUIRES_EVIDENCE"
+            },
+            {
+              "statement": "Competitors already serve or do not serve this need.",
+              "classification": "UNKNOWN_REQUIRES_EVIDENCE"
+            },
+            {
+              "statement": "A reachable distribution channel exists to reach these contracting authorities.",
+              "classification": "UNKNOWN_REQUIRES_EVIDENCE"
+            },
+            {
+              "statement": "A regulatory or structural driver forces or shapes this procurement activity.",
+              "classification": "UNKNOWN_REQUIRES_EVIDENCE"
+            },
+            {
+              "statement": "An intervention targeting this cohort could be built and operated.",
+              "classification": "UNKNOWN_REQUIRES_EVIDENCE"
+            },
+            {
+              "statement": "The published TOTAL_VALUE figures represent money actually paid rather than an award ceiling including options and renewals.",
+              "classification": "UNKNOWN_REQUIRES_EVIDENCE"
+            }
+          ]
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ],
+    "container": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 9491,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 3880,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    }
+  },
+  "USAGE_FROM_RESPONSE": {
+    "input_tokens": 9491,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 0
+    },
+    "output_tokens": 3880,
+    "output_tokens_details": {
+      "thinking_tokens": 0
+    },
+    "service_tier": "standard",
+    "inference_geo": "global"
+  }
+}
