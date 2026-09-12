@@ -258,7 +258,10 @@ class TestTheSchemaWasNotEditedToRescueCapacity:
 class TestNoV2AndV1Untouched:
     def test_no_v2_packet_exists(self, record) -> None:
         assert record["EXECUTION_PACKET_V2_CREATED"] is False
-        assert not PACKET_V2.exists()
+        if PACKET_V2.exists():  # Mission 1.84.6: a later mission's V2, never this one's
+            prepared_by = json.loads(PACKET_V2.read_text(encoding="utf-8"))["prepared_by"]
+            later = tuple(int(p) for p in prepared_by.removeprefix("mission-").split("."))
+            assert later > (1, 84, 3), prepared_by
 
     def test_v1_is_byte_identical_and_still_capped_at_3000(self) -> None:
         packet = json.loads(PACKET_V1.read_text(encoding="utf-8"))

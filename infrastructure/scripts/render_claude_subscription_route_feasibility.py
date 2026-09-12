@@ -302,6 +302,30 @@ def _check_the_payload_is_untouched(record: dict, packet: dict) -> None:
             raise ValidationError(f"§2: {key} is true")
 
 
+PACKET_V2 = DATA / "second-opportunity-synthesis-execution-packet-v2.json"
+
+#: Mission 1.84.6. This mission recorded that IT created no execution packet V2. A V2 that a later
+#: mission prepared does not make that false, so the check reads the packet's author instead of
+#: requiring the file to be absent: a check pinned to an absence pins the repository's future to
+#: one mission's verdict.
+THIS_MISSION = (1, 84, 1)
+
+
+def _v2_prepared_by_a_later_mission() -> bool:
+    try:
+        prepared_by = json.loads(PACKET_V2.read_text(encoding="utf-8")).get("prepared_by")
+    except (OSError, ValueError, AttributeError):
+        return False
+    if not isinstance(prepared_by, str) or not prepared_by.startswith("mission-"):
+        return False
+    try:
+        return tuple(int(part) for part in prepared_by.removeprefix("mission-").split(".")) > (
+            THIS_MISSION
+        )
+    except ValueError:
+        return False
+
+
 def _check_no_v2_was_forced(record: dict) -> None:
     """§20 and §23. Nine conditions or no packet."""
     v2 = record["EXECUTION_PACKET_V2"]
@@ -323,8 +347,11 @@ def _check_no_v2_was_forced(record: dict) -> None:
             )
         if not v2["conditions_failed"]:
             raise ValidationError("no V2, and no failed condition named")
-        if (DATA / "second-opportunity-synthesis-execution-packet-v2.json").exists():
-            raise ValidationError("a V2 packet exists that the record says was not created")
+        if PACKET_V2.exists() and not _v2_prepared_by_a_later_mission():
+            raise ValidationError(
+                "a V2 packet exists that the record says was not created, and it does not name "
+                "a later mission as its author"
+            )
 
     recommended = record["RECOMMENDED_EXECUTION_PACKET"]
     if recommended not in {"V1", "V2", "NONE"}:

@@ -727,13 +727,33 @@ jobs:
       # not support; a documentary proposition that cites no fragment, cites evidence that did not
       # answer 200, or quotes more than a short fragment -- CI holds no network, so whether a
       # fragment is on its page is checked by refetching against the recorded digest, not here; a
-      # ceiling selected, a V2 packet on disk, the schema reduced, or an option implemented or
-      # recommended; an adapter whose default request body moved, whose thinking control is not the
-      # typed two-member choice, or whose fields grew; a capability register that folds the adapter
-      # default into the documented maximum; V1 edited, its cap moved, or the 1.84.2 root cause
-      # rewritten; and a recorded canonical counter that moved.
+      # ceiling selected, a V2 packet on disk that no later mission prepared, the schema reduced, or
+      # an option implemented or recommended; an adapter whose default request body moved, whose
+      # thinking control is not the typed two-member choice, or whose fields grew; a capability
+      # register that folds the adapter default into the documented maximum; V1 edited, its cap
+      # moved, or the 1.84.2 root cause rewritten; and a recorded canonical counter that moved.
       - name: The provider-native token measurement matches its receipt, the live contract and the adapter
         run: uv run python infrastructure/scripts/render_second_opportunity_token_measurement.py --check
+
+      # Mission 1.84.6. The operator decided to run at the provider maximum and accept an
+      # unreachable worst case: the bounded contract stays the acceptance language, the synchronous
+      # execution envelope is a strict subset of it, and a provider output-limit stop fails closed
+      # with no retry. The gate refuses: an operator statement that no longer hashes to its
+      # recorded digest, a decision described as derived, or an estimate read as an exact count,
+      # an output count or a limit; a packet V2 whose bound fields do not hash to its digest, that
+      # carries V1's digest, or whose approval was recorded by the mission that prepared it; V1
+      # edited or its consumption reset; a schema, prompt or TED representation that moved; a
+      # route that is not the synchronous Messages API, a held capability that moved, or
+      # max_tokens other than the documented 128000 or confused with the adapter's 4096; an adapter
+      # that would not send thinking {"type": "disabled"}, or a structured-output migration riding
+      # along; a completion policy under which the adapter reads a limit stop, a refusal or an
+      # unknown stop reason as complete, or stages that do not read the provider's completion
+      # third; a retry, a second call or a continuation; a timeout moved with no review; a pricing
+      # version not held, or a cost ceiling that is not the recomputed worst case; a retention path
+      # no runner test defines; a runner with more than one call site or expecting another digest;
+      # and any preparation call, TED byte or canonical counter that moved.
+      - name: The execution envelope decision and packet V2 match their records and the live adapter
+        run: uv run python infrastructure/scripts/render_second_opportunity_execution_packet_v2.py --check
 
       # Mission 1.84.2. The one approved provider request happened and its output was rejected
       # at schema validation. The gate refuses: an approval recovered from a failure, or a

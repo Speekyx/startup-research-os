@@ -53,6 +53,30 @@ RECEIPT = DATA / "second-opportunity-token-measurement-receipt-v1.json"
 EXECUTION_RECORD_V1 = DATA / "second-opportunity-synthesis-execution-record-v1.json"
 PACKET_V1 = DATA / "second-opportunity-synthesis-execution-packet-v1.json"
 PACKET_V2 = DATA / "second-opportunity-synthesis-execution-packet-v2.json"
+
+
+#: Mission 1.84.6. This mission recorded that IT created no execution packet V2. A V2 that a later
+#: mission prepared does not make that false, so the check reads the packet's author instead of
+#: requiring the file to be absent: a check pinned to an absence pins the repository's future to
+#: one mission's verdict.
+THIS_MISSION = (1, 84, 5)
+
+
+def _v2_prepared_by_a_later_mission() -> bool:
+    try:
+        prepared_by = json.loads(PACKET_V2.read_text(encoding="utf-8")).get("prepared_by")
+    except (OSError, ValueError, AttributeError):
+        return False
+    if not isinstance(prepared_by, str) or not prepared_by.startswith("mission-"):
+        return False
+    try:
+        return tuple(int(part) for part in prepared_by.removeprefix("mission-").split(".")) > (
+            THIS_MISSION
+        )
+    except ValueError:
+        return False
+
+
 CAPACITY_V2 = DATA / "second-opportunity-output-capacity-analysis-v2.json"
 PROMPT_V2 = DATA / "second-opportunity-synthesis-prompt-v2.json"
 
@@ -408,8 +432,10 @@ def _check_measurement(record: dict[str, Any], receipt: dict[str, Any]) -> None:
         raise ValidationError("a ceiling was selected")
     if ceiling["OPERATOR_HEADROOM_POLICY"] != "NONE_HELD":
         raise ValidationError("a headroom policy is claimed and none was approved")
-    if record["EXECUTION_PACKET_V2_CREATED"] is not False or PACKET_V2.exists():
-        raise ValidationError("an execution packet V2 exists")
+    if record["EXECUTION_PACKET_V2_CREATED"] is not False:
+        raise ValidationError("the record claims an execution packet V2")
+    if PACKET_V2.exists() and not _v2_prepared_by_a_later_mission():
+        raise ValidationError("an execution packet V2 exists that no later mission prepared")
     if record["SCHEMA_REDUCED"] is not False:
         raise ValidationError("the schema was reduced")
     if record["OPTIONS_IMPLEMENTED"] != [] or record["OPTION_RECOMMENDED"] != "NONE":

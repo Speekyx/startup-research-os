@@ -35,9 +35,68 @@ from sros_llm_gateway import (
     is_retryable,
 )
 from sros_llm_gateway.providers import AnthropicProvider, AnthropicThinking, GeminiProvider
-from sros_llm_gateway.providers.anthropic import COUNT_TOKENS_ENDPOINT
+from sros_llm_gateway.providers.anthropic import (
+    COUNT_TOKENS_ENDPOINT,
+    FORCED_TOOL_COMPLETE_STOP_REASON,
+    OUTPUT_LIMIT_STOP_REASONS,
+    REFUSAL_STOP_REASON,
+    AnthropicCompletion,
+    classify_forced_tool_completion,
+)
 
 WORKSPACE = "00000000-0000-4000-8000-000000000001"
+
+
+class AnthropicForcedToolCompletion(unittest.TestCase):
+    """Mission 1.84.6. `stop_reason` says whether a forced tool call finished, and fails closed."""
+
+    def test_tool_use_is_the_only_completion(self) -> None:
+        self.assertIs(classify_forced_tool_completion("tool_use"), AnthropicCompletion.COMPLETE)
+
+    def test_both_output_limit_stops_are_the_limit(self) -> None:
+        for value in ("max_tokens", "model_context_window_exceeded"):
+            with self.subTest(value=value):
+                self.assertIs(
+                    classify_forced_tool_completion(value),
+                    AnthropicCompletion.OUTPUT_LIMIT_REACHED,
+                )
+
+    def test_a_refusal_is_its_own_verdict(self) -> None:
+        self.assertIs(classify_forced_tool_completion("refusal"), AnthropicCompletion.REFUSED)
+
+    def test_anything_else_fails_closed(self) -> None:
+        for value in (
+            "end_turn",
+            "pause_turn",
+            "stop_sequence",
+            "",
+            "TOOL_USE",
+            " tool_use",
+            None,
+            0,
+            ["tool_use"],
+            {"stop_reason": "tool_use"},
+        ):
+            with self.subTest(value=value):
+                self.assertIs(
+                    classify_forced_tool_completion(value),
+                    AnthropicCompletion.UNSUPPORTED_STOP_REASON,
+                )
+
+    def test_the_documented_values(self) -> None:
+        self.assertEqual(FORCED_TOOL_COMPLETE_STOP_REASON, "tool_use")
+        self.assertEqual(
+            OUTPUT_LIMIT_STOP_REASONS, frozenset({"max_tokens", "model_context_window_exceeded"})
+        )
+        self.assertEqual(REFUSAL_STOP_REASON, "refusal")
+
+    def test_exactly_four_verdicts(self) -> None:
+        self.assertEqual(
+            {member.name for member in AnthropicCompletion},
+            {"COMPLETE", "OUTPUT_LIMIT_REACHED", "REFUSED", "UNSUPPORTED_STOP_REASON"},
+        )
+
+
 SESSION = "00000000-0000-4000-8000-0000000000aa"
 
 SCHEMA = {

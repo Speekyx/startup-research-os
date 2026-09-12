@@ -230,9 +230,14 @@ class TestNoV2AndNoInvention(unittest.TestCase):
     def setUp(self) -> None:
         self.record = load(RECORD)
 
-    def test_no_v2_packet_was_created_or_exists(self) -> None:
+    def test_this_mission_created_no_v2_packet(self) -> None:
+        """Re-pointed in Mission 1.84.6: a V2 on disk is a later mission's, never this one's."""
         self.assertFalse(self.record["EXECUTION_PACKET_V2"]["EXECUTION_PACKET_V2_CREATED"])
-        self.assertFalse((DATA / "second-opportunity-synthesis-execution-packet-v2.json").exists())
+        path = DATA / "second-opportunity-synthesis-execution-packet-v2.json"
+        if path.exists():
+            prepared_by = load(path)["prepared_by"]
+            later = tuple(int(p) for p in prepared_by.removeprefix("mission-").split("."))
+            self.assertGreater(later, (1, 84, 1), prepared_by)
 
     def test_the_failed_conditions_are_named(self) -> None:
         v2 = self.record["EXECUTION_PACKET_V2"]
