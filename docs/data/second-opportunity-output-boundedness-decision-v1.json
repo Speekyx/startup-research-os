@@ -1,0 +1,202 @@
+{
+  "$comment": "Mission 1.84.4. The operator decided BOUND_THE_EIGHT_UNBOUNDED_ITEM_TYPES and explicitly rejected an operator-declared arbitrary output-token ceiling as the fix for the defect. This record says what each of the eight became and on whose authority. v1.0.0 is untouched: a historical execution must keep resolving against the exact contract it used.",
+  "record_version": "second-opportunity-output-boundedness-decision@1.0.0",
+  "mission": "1.84.4",
+  "recorded_at": "2026-09-12",
+  "OPERATOR_DECISION": "BOUND_THE_EIGHT_UNBOUNDED_ITEM_TYPES",
+  "OPERATOR_REJECTED": "OPERATOR_DECLARED_ARBITRARY_OUTPUT_TOKEN_CEILING",
+  "operator_rejection_note": "Recorded because it shapes what this mission may not do: a ceiling could not be chosen here even if one looked convenient, and the contract had to become finite first.",
+  "PREDECESSOR_SCHEMA": "second-opportunity-synthesis-output@1.0.0",
+  "PREDECESSOR_SCHEMA_SHA256": "9f8e3849fb0223f5a4c41466d8d8aed994e1d86d446a52e9eca1fd28d80f65e9",
+  "PREDECESSOR_UNBOUNDED_PATHS": 8,
+  "SUCCESSOR_SCHEMA": "second-opportunity-synthesis-output@1.1.0",
+  "SUCCESSOR_SCHEMA_SHA256": "ec789d1be7d525bf6e498bf61e8a0596ac4582e24e8b45073b3f9ac1cca8b988",
+  "PREDECESSOR_GATE": "second-opportunity-output-gate@1.0.0",
+  "SUCCESSOR_GATE": "second-opportunity-output-gate@1.1.0",
+  "gate_bump_reason": "The accepted output LANGUAGE changed, so the gate that accepts it is a different gate. The v1.1.0 gate runs the v1.0.0 semantic gate unchanged and adds the structural check the bound now requires: nothing semantic was weakened to make room, and every v1.0.0 refusal is reached through the v1.0.0 gate itself rather than reimplemented beside it.",
+  "V1_0_0_MUTATED_IN_PLACE": false,
+  "V1_0_0_STILL_READABLE": true,
+  "HISTORICAL_OUTPUTS_REVALIDATED_UNDER_V1_1_0": false,
+  "BOUNDED_PATHS": [
+    {
+      "path": "supported_dimensions[]",
+      "semantic_class": "CLOSED_VOCABULARY",
+      "old_constraint": {
+        "type": "string"
+      },
+      "old_constraint_note": "maxItems bounded how many; nothing bounded how long, so the path was unbounded.",
+      "new_constraint": {
+        "type": "string",
+        "enum": "14 members"
+      },
+      "canonical_source_of_constraint": "sros_opportunity.dimensions.EvidenceDimension, the vocabulary the persistence gate itself compares against. Derived in code rather than transcribed, so a second list cannot drift from the first.",
+      "operator_judgement": "none; derived from a canonical repository contract",
+      "reason": "A dimension name is a member of a closed vocabulary, so an unknown dimension must be refused however SHORT it is. A maxLength would have bounded the size and left 'MARKET_DEMAND' acceptable, which is the exact transformation the gate exists to refuse.",
+      "historical_compatibility_impact": "None. v1.0.0 keeps its unbounded item type and the Mission 1.31.1 output still reads against it.",
+      "maxItems_unchanged": 14
+    },
+    {
+      "path": "unsupported_dimensions[]",
+      "semantic_class": "CLOSED_VOCABULARY",
+      "old_constraint": {
+        "type": "string"
+      },
+      "old_constraint_note": "maxItems bounded how many; nothing bounded how long, so the path was unbounded.",
+      "new_constraint": {
+        "type": "string",
+        "enum": "14 members"
+      },
+      "canonical_source_of_constraint": "sros_opportunity.dimensions.EvidenceDimension, the same vocabulary, derived the same way.",
+      "operator_judgement": "none; derived from a canonical repository contract",
+      "reason": "The same, and it matters more here: this array is where section 6 requires the model to report what the packet does NOT establish, so a misspelling would silently satisfy a mandatory report.",
+      "historical_compatibility_impact": "None, for the same reason.",
+      "maxItems_unchanged": 14
+    },
+    {
+      "path": "supporting_evidence_ids[]",
+      "semantic_class": "CANONICAL_IDENTIFIER",
+      "old_constraint": {
+        "type": "string"
+      },
+      "old_constraint_note": "maxItems bounded how many; nothing bounded how long, so the path was unbounded.",
+      "new_constraint": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+        "maxLength": 36,
+        "format": "uuid (annotation)"
+      },
+      "canonical_source_of_constraint": "sros_contracts.ids.EvidenceId, whose constructor canonicalises through str(uuid.UUID(value)). Determined from the Evidence identity class itself.",
+      "operator_judgement": "none; derived from a canonical repository contract",
+      "reason": "An id is an identity, not prose. The pattern makes a sentence structurally impossible where a maxLength of 36 would have admitted any 36 characters.",
+      "historical_compatibility_impact": "None, for the same reason.",
+      "maxItems_unchanged": 20
+    },
+    {
+      "path": "supporting_claim_ids[]",
+      "semantic_class": "CANONICAL_IDENTIFIER",
+      "old_constraint": {
+        "type": "string"
+      },
+      "old_constraint_note": "maxItems bounded how many; nothing bounded how long, so the path was unbounded.",
+      "new_constraint": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+        "maxLength": 36,
+        "format": "uuid (annotation)"
+      },
+      "canonical_source_of_constraint": "sros_contracts.ids.ClaimId, read independently of EvidenceId. The two agree because both subclass the same canonical base, not because today's rows happen to look alike.",
+      "operator_judgement": "none; derived from a canonical repository contract",
+      "reason": "The same, decided separately. Evidence is claim-relative, and a gate that inferred the Claim grammar from the Evidence grammar would be right today by coincidence.",
+      "historical_compatibility_impact": "None, for the same reason.",
+      "maxItems_unchanged": 20
+    },
+    {
+      "path": "source_families[]",
+      "semantic_class": "BOUNDED_IDENTIFIER",
+      "old_constraint": {
+        "type": "string"
+      },
+      "old_constraint_note": "maxItems bounded how many; nothing bounded how long, so the path was unbounded.",
+      "new_constraint": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$",
+        "maxLength": 128
+      },
+      "canonical_source_of_constraint": "registry.registry_entries, constraint registry_entries_id_slug_check in migration 0001_foundation.sql, reached by the foreign key migration 0004_source_registry.sql puts on registry.sources.source_family.",
+      "operator_judgement": "none; derived from a canonical repository contract",
+      "reason": "A bounded identifier namespace rather than a closed vocabulary. domain.v1.json lists source_family under registries and not under closed_enums, and the repository's own rule is that adding a registry entry must never require a contract change. Fifteen members are registered today and freezing them into an enum would make the schema refuse a true answer the moment a sixteenth is.",
+      "historical_compatibility_impact": "One, named rather than smoothed. run_opportunity_preparation.py writes the sentinel 'UNREGISTERED' for a source_id absent from the catalog, and that string does not match the slug grammar, so an output restating it would be refused under v1.1.0. The current packet carries 0 of them and the preparation script was NOT changed here: an output that cannot name its source family being refused is the correct behaviour, and widening the grammar to admit a sentinel would let a sentinel pass as a registry id.",
+      "maxItems_unchanged": 10
+    },
+    {
+      "path": "critical_uncertainties[]",
+      "semantic_class": "BOUNDED_NARRATIVE",
+      "old_constraint": {
+        "type": "string"
+      },
+      "old_constraint_note": "maxItems bounded how many; nothing bounded how long, so the path was unbounded.",
+      "new_constraint": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      },
+      "canonical_source_of_constraint": "operator decision, Mission 1.84.4 section 10.",
+      "operator_judgement": "ITEM_MAX_LENGTH = 500 (section 10)",
+      "reason": "Genuinely narrative, so length is the instrument. One element is one bounded uncertainty; minLength 1 refuses an empty element, which asserts nothing while occupying a slot.",
+      "historical_compatibility_impact": "None. No historical output is revalidated under v1.1.0.",
+      "maxItems_unchanged": 12
+    },
+    {
+      "path": "commercial_claims_supported[]",
+      "semantic_class": "BOUNDED_NARRATIVE",
+      "old_constraint": {
+        "type": "string"
+      },
+      "old_constraint_note": "maxItems bounded how many; nothing bounded how long, so the path was unbounded.",
+      "new_constraint": {
+        "type": "string",
+        "maxLength": 300
+      },
+      "canonical_source_of_constraint": "operator decision, Mission 1.84.4 section 11.",
+      "operator_judgement": "ITEM_MAX_LENGTH = 300 (section 11), narrative branch taken",
+      "reason": "Narrative, established by inspection rather than assumed from the JSON type: the Mission 1.31.1 output carries sentences, and the persistence gate audits these fields as PROSE through the commercial-vocabulary guard, which needs a sentence to read.",
+      "historical_compatibility_impact": "None.",
+      "maxItems_unchanged": 8
+    },
+    {
+      "path": "commercial_claims_not_supported[]",
+      "semantic_class": "BOUNDED_NARRATIVE",
+      "old_constraint": {
+        "type": "string"
+      },
+      "old_constraint_note": "maxItems bounded how many; nothing bounded how long, so the path was unbounded.",
+      "new_constraint": {
+        "type": "string",
+        "maxLength": 300
+      },
+      "canonical_source_of_constraint": "operator decision, Mission 1.84.4 section 11.",
+      "operator_judgement": "ITEM_MAX_LENGTH = 300 (section 11), narrative branch taken",
+      "reason": "The same field inspected the same way. Fourteen sentences in the historical output, every one a proposition rather than a dimension name.",
+      "historical_compatibility_impact": "None.",
+      "maxItems_unchanged": 14
+    }
+  ],
+  "WHY_A_STRUCTURAL_VALIDATOR_WAS_NEEDED": "LlmGateway._validate_structured checks that every required key is PRESENT and stops there; its own docstring says full JSON Schema validation arrives with the first real provider. So before this mission nothing in the repository enforced a maxLength, an enum, a maxItems or a pattern on a model's answer. A bound that only the provider is told about is a request rather than a contract, so sros_opportunity.schema_validation enforces exactly the keyword set these two schemas use, with unsupported_keywords naming anything outside it so a future keyword cannot be silently ignored.",
+  "NO_DEPENDENCY_ADDED": true,
+  "THINGS_NOT_DONE": {
+    "$comment": "Section 12 and section 32, asserted rather than promised.",
+    "failed_18_of_20_response_used_as_design_evidence": false,
+    "max_items_reduced": false,
+    "field_removed": false,
+    "required_field_made_optional": false,
+    "field_reordered": false,
+    "default_introduced": false,
+    "v1_0_0_edited": false,
+    "narrative_character_class_restricted": false,
+    "ted_representation_changed": false,
+    "semantic_gate_weakened": false
+  },
+  "narrative_character_class_note": "A pattern restricting narrative fields to printable characters would cut the maximum by roughly five sixths, and it is NOT applied: the operator authorised a length for these fields and nothing else, and a character-class rule would also refuse legitimate accented text. The consequence is measured in the capacity analysis rather than hidden.",
+  "PROMPT": {
+    "PREDECESSOR_VERSION": "1.0.0",
+    "PREDECESSOR_SHA256": "af5289494416139d302eed704c12b9c53ab2547dca336e2ca4a834ec936c5080",
+    "SUCCESSOR_VERSION": "1.1.0",
+    "SUCCESSOR_SHA256": "2f60c61f63cda410b9f60e3eafd9676f983e7ff0220245c03c88136511ac7e82",
+    "why_the_digest_moved": "The rendered prompt hash covers the output schema, so bounding the contract moves it whether or not a rendered byte changed. Rendered bytes changed too: the v1.1.0 system region states the bounds, because a model refused for a 501-character element was never told 500 was the limit.",
+    "regions_identical": [
+      "trusted_context",
+      "untrusted",
+      "task"
+    ],
+    "regions_changed": [
+      "system_instructions"
+    ],
+    "system_lines_removed": 0,
+    "system_lines_added": 21,
+    "successor_extends_predecessor_verbatim": true
+  },
+  "TED_REPRESENTATION_SHA256": "2528a56a4a9e873bfd04662aeb52916eb80faafe10ab085e716cbdcee77c5b72",
+  "TED_REPRESENTATION_UNCHANGED": true,
+  "TED_REPRESENTATION_CHARACTERS": 3604,
+  "ted_note": "Section 15. Recomputed from live state through the production serializer, not copied. The schema repair does not authorise changing source material, and a moved digest would have stopped this mission before capacity derivation."
+}

@@ -40,6 +40,7 @@ from typing import Any
 
 from .dimensions import EvidenceDimension
 from .packet import OpportunityEvidencePacket
+from .schema_validation import schema_violations
 from .synthesis import (
     MANDATORY_UNSUPPORTED_REPORT,
     SYNTHESIS_OUTPUT_SCHEMA,
@@ -64,6 +65,22 @@ __all__ = [
     "render_second_opportunity_prompt",
     "second_opportunity_prompt_hash",
     "evaluate_second_opportunity_output",
+    # -- Mission 1.84.4, the bounded successor. The names above stay bound to v1.0.0. --
+    "SECOND_OPPORTUNITY_PROMPT_VERSION_V1_1",
+    "SECOND_OPPORTUNITY_OUTPUT_SCHEMA_VERSION_V1_1",
+    "SECOND_OPPORTUNITY_GATE_VERSION_V1_1",
+    "SECOND_OPPORTUNITY_OUTPUT_SCHEMA_V1_1",
+    "SECOND_OPPORTUNITY_SYSTEM_V1_1",
+    "BOUNDED_OUTPUT_CONTRACT_RULES",
+    "CANONICAL_UUID_PATTERN",
+    "REGISTRY_SLUG_PATTERN",
+    "REGISTRY_SLUG_MAX_LENGTH",
+    "CRITICAL_UNCERTAINTY_MAX_LENGTH",
+    "COMMERCIAL_CLAIM_MAX_LENGTH",
+    "BOUNDED_ITEM_TYPES",
+    "render_second_opportunity_prompt_v1_1",
+    "second_opportunity_prompt_hash_v1_1",
+    "evaluate_second_opportunity_output_v1_1",
 ]
 
 SECOND_OPPORTUNITY_PROCEDURE_VERSION = "second-opportunity-synthesis@1.0.0"
@@ -466,3 +483,262 @@ _FORBIDDEN_PHRASES: dict[str, tuple[str, ...]] = {
 
 def _forbidden_phrases(name: str) -> tuple[str, ...]:
     return _FORBIDDEN_PHRASES[name]
+
+
+# =============================================================================================
+# Mission 1.84.4 -- the bounded successor contract.
+#
+# Mission 1.84.3 found that `second-opportunity-synthesis-output@1.0.0` has NO finite maximum
+# serialized size: eight required array paths bound how MANY strings they hold and never how LONG
+# any of them may be, so a single element could be a megabyte and still satisfy the contract. All
+# eight are Mission 1.31's base schema, byte-identically; the three fields Mission 1.84 added are
+# the only properly bounded ones in it.
+#
+# The operator's decision was BOUND_THE_EIGHT_UNBOUNDED_ITEM_TYPES, and explicitly NOT an
+# operator-declared arbitrary token ceiling. So a successor exists and v1.0.0 is untouched: the
+# historical execution must keep resolving against the exact contract it actually used, and gate
+# 64 asserts the frozen prompt document still names v1.0.0's digest.
+#
+# EACH BOUND MATCHES THE FIELD'S SEMANTICS. One maxLength applied to all eight would be a number
+# rather than a contract: a dimension is a member of a closed vocabulary, an Evidence id is a
+# UUID, a source family is a registry slug, and only three of the eight are prose.
+# =============================================================================================
+
+SECOND_OPPORTUNITY_PROMPT_VERSION_V1_1 = "1.1.0"
+SECOND_OPPORTUNITY_OUTPUT_SCHEMA_VERSION_V1_1 = "second-opportunity-synthesis-output@1.1.0"
+SECOND_OPPORTUNITY_GATE_VERSION_V1_1 = "second-opportunity-output-gate@1.1.0"
+
+#: The canonical identity grammar for `ClaimId` and `EvidenceId`. Both are `_UuidId` in
+#: `sros_contracts.ids`, whose constructor canonicalises through `str(uuid.UUID(value))` -- so the
+#: canonical form is lowercase hex with hyphens, and an uppercase or braced spelling is a
+#: DIFFERENT string from the one the packet supplies. `format: "uuid"` is carried beside this for
+#: interop, exactly as `gen_jsonschema` emits it, and it is an ANNOTATION: the pattern is what
+#: refuses prose. Determined independently for Claim and for Evidence, as sections 7 and 8
+#: require; they agree because both subclass the same canonical base, not because current rows
+#: happen to look alike.
+CANONICAL_UUID_PATTERN = "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+
+#: A UUID in canonical form is exactly 36 characters. Carried as `maxLength` beside the pattern
+#: because a recursive capacity walker reads a declared bound and does not reason about a regex.
+CANONICAL_UUID_LENGTH = 36
+
+#: `source_family` is a REGISTRY, not a closed enum. `domain.v1.json` lists it under `registries`
+#: and not under `closed_enums`; `registry.sources.source_family` carries a foreign key to
+#: `registry.registry_entries (registry, id)`; and that table's `registry_entries_id_slug_check`
+#: is the canonical grammar. Freezing today's fifteen members into an enum would put an extensible
+#: registry inside a frozen contract, and the next registered family would make the schema refuse
+#: a true answer.
+REGISTRY_SLUG_PATTERN = "^[a-z0-9][a-z0-9._-]{0,127}$"
+REGISTRY_SLUG_MAX_LENGTH = 128
+
+#: Section 10, the operator's number. One element is one bounded uncertainty, not an essay.
+CRITICAL_UNCERTAINTY_MAX_LENGTH = 500
+
+#: Section 11, the operator's number, and it applies because these fields are genuinely narrative.
+#: The historical Mission 1.31.1 output carries sentences -- "That a buyer with budget authority
+#: exists in this space" -- and the persistence gate audits them as PROSE through the commercial-
+#: vocabulary guard, which needs a sentence to read. They are NOT canonical dimension names.
+COMMERCIAL_CLAIM_MAX_LENGTH = 300
+
+
+def _bounded_schema() -> dict[str, object]:
+    """v1.0.0 with the eight unbounded item types bounded, and nothing else changed.
+
+    Built by copying the v1.0.0 schema and REPLACING eight `items` subschemas. No `maxItems` is
+    reduced, no field is removed, nothing is reordered and no default is introduced -- section 12
+    forbids letting the failed 18/20 response decide any of that, and shrinking the field it
+    omitted would not have made the schema finite anyway.
+    """
+    schema: dict[str, Any] = json.loads(json.dumps(SECOND_OPPORTUNITY_OUTPUT_SCHEMA))
+    properties: dict[str, Any] = schema["properties"]
+
+    # Derived from the canonical vocabulary rather than transcribed. Section 6 forbids a
+    # manually-maintained second dimension list where a canonical source exists, and
+    # `EvidenceDimension` is what the gate itself compares against.
+    dimension_values = [dimension.value for dimension in EvidenceDimension]
+    for name in ("supported_dimensions", "unsupported_dimensions"):
+        properties[name]["items"] = {
+            "type": "string",
+            "enum": dimension_values,
+            "description": (
+                "A member of the canonical EvidenceDimension vocabulary. An unknown dimension is "
+                "refused however short it is."
+            ),
+        }
+
+    for name, what in (
+        ("supporting_evidence_ids", "Evidence"),
+        ("supporting_claim_ids", "Claim"),
+    ):
+        properties[name]["items"] = {
+            "type": "string",
+            "format": "uuid",
+            "pattern": CANONICAL_UUID_PATTERN,
+            "maxLength": CANONICAL_UUID_LENGTH,
+            "description": (
+                f"A canonical {what} id: the lowercase hyphenated UUID form that "
+                "`sros_contracts.ids` produces. Prose is impossible here."
+            ),
+        }
+
+    properties["source_families"]["items"] = {
+        "type": "string",
+        "pattern": REGISTRY_SLUG_PATTERN,
+        "maxLength": REGISTRY_SLUG_MAX_LENGTH,
+        "description": (
+            "A `source_family` registry id, under the slug grammar `registry.registry_entries` "
+            "enforces. A registry rather than an enum, because a family may be registered "
+            "without a contract change."
+        ),
+    }
+
+    properties["critical_uncertainties"]["items"] = {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": CRITICAL_UNCERTAINTY_MAX_LENGTH,
+        "description": "One bounded uncertainty, stated once. Not an essay and not an enum.",
+    }
+
+    for name in ("commercial_claims_supported", "commercial_claims_not_supported"):
+        properties[name]["items"] = {
+            "type": "string",
+            "maxLength": COMMERCIAL_CLAIM_MAX_LENGTH,
+            "description": (
+                "One concise auditable commercial proposition. The explanation belongs in "
+                "`evidence_bound_reasoning_summary`, which is already bounded."
+            ),
+        }
+
+    return schema
+
+
+SECOND_OPPORTUNITY_OUTPUT_SCHEMA_V1_1: dict[str, object] = _bounded_schema()
+
+
+#: What each formerly-unbounded path became, and by which method. Kept as data so the decision
+#: artifact, the gate and the capacity walker read one table rather than three copies of it.
+BOUNDED_ITEM_TYPES: tuple[tuple[str, str], ...] = (
+    ("supported_dimensions", "CLOSED_VOCABULARY"),
+    ("unsupported_dimensions", "CLOSED_VOCABULARY"),
+    ("supporting_evidence_ids", "CANONICAL_IDENTIFIER"),
+    ("supporting_claim_ids", "CANONICAL_IDENTIFIER"),
+    ("source_families", "BOUNDED_IDENTIFIER"),
+    ("critical_uncertainties", "BOUNDED_NARRATIVE"),
+    ("commercial_claims_supported", "BOUNDED_NARRATIVE"),
+    ("commercial_claims_not_supported", "BOUNDED_NARRATIVE"),
+)
+
+
+def _bounded_output_block() -> str:
+    dimensions = ", ".join(dimension.value for dimension in EvidenceDimension)
+    return (
+        "THE OUTPUT CONTRACT IS BOUNDED, AND AN ANSWER THAT EXCEEDS A BOUND IS REFUSED RATHER "
+        "THAN TRIMMED.\n\n"
+        "  supported_dimensions, unsupported_dimensions\n"
+        f"    exactly these names, spelled exactly: {dimensions}\n\n"
+        "  supporting_evidence_ids, supporting_claim_ids\n"
+        "    the ids supplied to you, copied verbatim. No prose, no description, no partial id.\n\n"
+        "  source_families\n"
+        "    the family names supplied to you as a packet fact, copied verbatim.\n\n"
+        "  critical_uncertainties\n"
+        f"    at most {CRITICAL_UNCERTAINTY_MAX_LENGTH} characters each. One uncertainty per "
+        "element.\n\n"
+        "  commercial_claims_supported, commercial_claims_not_supported\n"
+        f"    at most {COMMERCIAL_CLAIM_MAX_LENGTH} characters each. One proposition per element; "
+        "the\n    reasoning belongs in evidence_bound_reasoning_summary.\n\n"
+        "These are limits on FORM, never on how much you may refuse to conclude. A shorter answer "
+        "that\nnames more unknowns is a better answer here than a longer one that names fewer."
+    )
+
+
+BOUNDED_OUTPUT_CONTRACT_RULES = _bounded_output_block()
+
+
+SECOND_OPPORTUNITY_SYSTEM_V1_1 = (
+    SECOND_OPPORTUNITY_SYSTEM + "\n" + BOUNDED_OUTPUT_CONTRACT_RULES + "\n"
+)
+
+
+def render_second_opportunity_prompt_v1_1(
+    packet: OpportunityEvidencePacket,
+    claim_statements: Mapping[str, str],
+    evidence_to_claim: Mapping[str, str],
+) -> SynthesisPromptParts:
+    """The v1.1.0 regions. Only the system region differs from v1.0.0.
+
+    The trusted context, the untrusted region and the task are the v1.0.0 objects unchanged, which
+    is what keeps the TED factual content supplied to the model byte-identical across the version
+    bump (sections 14 and 15).
+    """
+    base = render_second_opportunity_prompt(packet, claim_statements, evidence_to_claim)
+    return SynthesisPromptParts(
+        system_instructions=SECOND_OPPORTUNITY_SYSTEM_V1_1,
+        trusted_context=base.trusted_context,
+        untrusted=base.untrusted,
+        task=base.task,
+        metadata={
+            **base.metadata,
+            "prompt_version": SECOND_OPPORTUNITY_PROMPT_VERSION_V1_1,
+            "output_schema_version": SECOND_OPPORTUNITY_OUTPUT_SCHEMA_VERSION_V1_1,
+            "gate_version": SECOND_OPPORTUNITY_GATE_VERSION_V1_1,
+        },
+    )
+
+
+def second_opportunity_prompt_hash_v1_1(parts: SynthesisPromptParts) -> str:
+    """The v1.1.0 digest, over the same regions plus the v1.1.0 schema.
+
+    The schema sits inside the hashed payload exactly as it does for v1.0.0, so bounding the
+    contract moves this digest whether or not a rendered byte changed. Pretending the old SHA
+    still identifies this execution is what section 13 refuses.
+    """
+    payload = json.dumps(
+        {
+            "procedure": SECOND_OPPORTUNITY_PROCEDURE_VERSION,
+            "prompt_id": SECOND_OPPORTUNITY_PROMPT_ID,
+            "prompt_version": SECOND_OPPORTUNITY_PROMPT_VERSION_V1_1,
+            "system_instructions": parts.system_instructions,
+            "task": parts.task,
+            "trusted_context": parts.trusted_context,
+            "untrusted": [list(pair) for pair in parts.untrusted],
+            "output_schema": SECOND_OPPORTUNITY_OUTPUT_SCHEMA_V1_1,
+        },
+        sort_keys=True,
+        ensure_ascii=False,
+        separators=(",", ":"),
+    )
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def evaluate_second_opportunity_output_v1_1(
+    output: Mapping[str, object],
+    packet: OpportunityEvidencePacket,
+    claim_statements: Mapping[str, str],
+    evidence_to_claim: Mapping[str, str],
+    mandatory_unsupported: Sequence[EvidenceDimension] = MANDATORY_UNSUPPORTED_REPORT,
+) -> PersistenceDecision:
+    """The v1.1.0 gate: the v1.0.0 semantic gate, plus the bound it now has to enforce.
+
+    **Structure is checked and the semantic gate still runs.** A short answer naming an unknown
+    dimension fails on structure; a well-formed answer saying the packet establishes willingness
+    to pay fails on meaning. Reporting only the first would let a caller fix the one they were
+    told about and be refused again.
+
+    **Nothing semantic was weakened to make room** (section 16). Every v1.0.0 refusal is reached
+    through the v1.0.0 gate itself rather than reimplemented, so the two cannot drift apart.
+    """
+    structural = schema_violations(dict(output), SECOND_OPPORTUNITY_OUTPUT_SCHEMA_V1_1)
+    decision = evaluate_second_opportunity_output(
+        output, packet, claim_statements, evidence_to_claim, mandatory_unsupported
+    )
+    reasons = [
+        *(f"{SECOND_OPPORTUNITY_OUTPUT_SCHEMA_VERSION_V1_1}: {v}" for v in structural),
+        *decision.refusal_reasons,
+    ]
+    return PersistenceDecision(
+        persist=not reasons,
+        gate_version=SECOND_OPPORTUNITY_GATE_VERSION_V1_1,
+        refusal_reasons=tuple(reasons),
+        audit=decision.audit,
+        notes=decision.notes,
+    )
