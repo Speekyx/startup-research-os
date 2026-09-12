@@ -24,6 +24,10 @@ JSON, and no repair model anywhere in this file.
 
 The credential is read from the environment by the provider adapter and is never read, printed,
 logged or written here.
+
+**Mission 1.84.7 made the one request, and V2's approval is spent.** Its execution record lives
+beside the packet and the consumed-approval guard reads it, so from now on this runner refuses V2's
+digest by name before anything else, exactly as it refuses V1's.
 """
 
 from __future__ import annotations
@@ -35,6 +39,7 @@ import importlib.util
 import json
 import os
 import pathlib
+import re
 import sys
 from collections.abc import Callable, Mapping
 from typing import Any
@@ -48,6 +53,7 @@ PACKET_FILE = DATA / "second-opportunity-synthesis-execution-packet-v2.json"
 APPROVAL_FILE = DATA / "second-opportunity-synthesis-execution-approval-v2.json"
 REGISTER = DATA / "model-provider-policy-v1.json"
 RESPONSE_ARTIFACT = DATA / "second-opportunity-synthesis-response-v2.json"
+EXECUTION_RECORD_V2 = DATA / "second-opportunity-synthesis-execution-record-v2.json"
 CORRELATION_ID = "second-opportunity-synthesis-execution-v2"
 
 SUBJECT = "ted-eu:CPV-class:9261"
@@ -250,12 +256,31 @@ def check_approval(packet_sha256: str) -> dict[str, Any]:
 
 
 def refuse_if_consumed(packet_sha256: str) -> None:
-    """V1's guard, reading the record beside V1. A spent approval names a spent digest."""
+    """V1's guard, then V2's own record. A spent approval names a spent digest.
+
+    V1's guard reads only the record beside V1, so once V2 ran it could not see that V2's approval
+    was spent. V2's execution record says so, and this reads it: the digest it names is refused,
+    and any other digest is not.
+    """
     v1 = v1_runner()
     try:
         v1.refuse_if_consumed(packet_sha256)
     except v1.RefusedError as exc:
         raise RefusedError("EXECUTION_APPROVAL_ALREADY_CONSUMED", str(exc)) from exc
+    if not EXECUTION_RECORD_V2.exists():
+        return
+    record = _load(EXECUTION_RECORD_V2)
+    if (
+        record.get("EXECUTION_APPROVAL_CONSUMED") is True
+        and record.get("execution_packet_sha256") == packet_sha256
+    ):
+        raise RefusedError(
+            "EXECUTION_APPROVAL_ALREADY_CONSUMED",
+            f"the approval for execution packet {packet_sha256} records "
+            f"{record.get('actual_provider_requests')} provider request(s) already made. It is "
+            "spent by the execution, whatever the output was, and a further call needs a new "
+            "operator approval naming a new packet digest",
+        )
 
 
 # --------------------------------------------------------------------- verification
@@ -787,6 +812,111 @@ def build_artifact(result: Mapping[str, Any], report: Mapping[str, Any]) -> dict
     return artifact
 
 
+# --------------------------------------------------------------------- keeping what arrived
+
+#: Mission 1.84.7. Recorded when judging or rendering the response failed AFTER the call. The request
+#: was made and the approval is spent either way; this names a failure of this code, never of the
+#: provider, and it authorises nothing further.
+POST_CALL_FAILURE = "EXECUTION_POST_CALL_HANDLING_FAILED_NO_RETRY"
+
+#: Credential shapes, redacted on the fallback path too. The recording transport already redacted
+#: the body; an exception message is the other place a header could surface.
+_SECRET = re.compile(r"sk-ant-[A-Za-z0-9_\-]{6,}|sk-[A-Za-z0-9]{16,}")
+_REASONING_KEYS = ("thinking", "reasoning", "reasoning_content", "chain_of_thought")
+
+
+def _without_reasoning(value: Any) -> Any:
+    if isinstance(value, dict):
+        return {
+            k: _without_reasoning(v)
+            for k, v in value.items()
+            if str(k).lower() not in _REASONING_KEYS
+        }
+    if isinstance(value, list):
+        return [_without_reasoning(v) for v in value]
+    return value
+
+
+def fallback_artifact(
+    result: Mapping[str, Any], error: BaseException, report: Mapping[str, Any] | None
+) -> dict[str, Any]:
+    """The bytes that arrived, kept when judging them failed.
+
+    Mission 1.84.2 lost its only response on an exception path. Here the request has been made and
+    the approval is spent, so whatever breaks after the call, what the recording transport captured
+    is written -- plain data only, so writing it cannot fail in turn.
+    """
+    responses = []
+    for raw in result.get("transport_responses") or []:
+        body = _SECRET.sub("[REDACTED]", str(raw.get("body")))
+        try:
+            kept: Any = _without_reasoning(json.loads(body))
+        except ValueError:
+            kept = body
+        responses.append(
+            {
+                "status": raw.get("status"),
+                "body_sha256": _sha256(body),
+                "body": kept,
+                "headers": {str(k): str(v) for k, v in (raw.get("headers") or {}).items()},
+            }
+        )
+    failure = result.get("failure")
+    outcome = str(report.get("outcome")) if report else POST_CALL_FAILURE
+    return {
+        "$comment": (
+            "Written because judging or rendering the response failed after the call. What arrived "
+            "is kept as the recording transport captured it; nothing was sent again."
+        ),
+        "OUTCOME": outcome,
+        "TERMINAL_OUTCOME": outcome,
+        "POST_CALL_HANDLING_FAILED": True,
+        "post_call_error": {
+            "type": type(error).__name__,
+            "message": _SECRET.sub("[REDACTED]", str(error)),
+        },
+        "execution_packet_id": EXPECTED["EXECUTION_PACKET_ID"],
+        "execution_packet_sha256": EXPECTED["EXECUTION_PACKET_SHA256"],
+        "PROVIDER_REQUESTS_MADE": len(responses) + len(result.get("transport_errors") or []),
+        "RETRIES": 0,
+        "timing": dict(result.get("timing") or {}),
+        "RAW_PROVIDER_RESPONSE_RETAINED": bool(responses),
+        "transport_responses": responses,
+        "transport_errors": [
+            _SECRET.sub("[REDACTED]", str(e)) for e in result.get("transport_errors") or []
+        ],
+        "call_failure": (
+            None
+            if failure is None
+            else {
+                "type": type(failure).__name__,
+                "message": _SECRET.sub("[REDACTED]", str(failure)),
+            }
+        ),
+        "validation": dict(report) if report else "NOT_COMPLETED",
+        "HIDDEN_REASONING_RETAINED": False,
+        "PERSISTED": "NOTHING",
+    }
+
+
+def settle(result: Mapping[str, Any], context: Mapping[str, Any]) -> tuple[dict[str, Any], str]:
+    """Judge what arrived and render its artifact; if either fails, keep the bytes anyway."""
+    report: dict[str, Any] | None = None
+    try:
+        report = validate_execution(result, context)
+        artifact = build_artifact(result, report)
+        return report, json.dumps(artifact, indent=2, ensure_ascii=False) + "\n"
+    except Exception as exc:  # noqa: BLE001 -- the request is spent; what arrived is kept regardless
+        kept = fallback_artifact(result, exc, report)
+        if report is None:
+            report = {
+                "outcome": POST_CALL_FAILURE,
+                "stop_reason": "NOT_AVAILABLE",
+                "reasons": [f"{type(exc).__name__}: {_SECRET.sub('[REDACTED]', str(exc))}"],
+            }
+        return report, json.dumps(kept, indent=2, ensure_ascii=False, default=str) + "\n"
+
+
 # --------------------------------------------------------------------- entry point
 
 
@@ -834,10 +964,9 @@ def main(argv: list[str] | None = None) -> int:
 
     print("\n=== ONE provider request")
     result = execute(context)
-    report = validate_execution(result, context)
-    artifact = build_artifact(result, report)
+    report, text = settle(result, context)
     with RESPONSE_ARTIFACT.open("x", encoding="utf-8", newline="\n") as handle:
-        handle.write(json.dumps(artifact, indent=2, ensure_ascii=False) + "\n")
+        handle.write(text)
     print(f"    outcome        {report['outcome']}")
     print(f"    stop reason    {report['stop_reason']}")
     print(f"    wrote          {RESPONSE_ARTIFACT.name}")

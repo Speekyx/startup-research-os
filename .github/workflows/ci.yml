@@ -755,6 +755,23 @@ jobs:
       - name: The execution envelope decision and packet V2 match their records and the live adapter
         run: uv run python infrastructure/scripts/render_second_opportunity_execution_packet_v2.py --check
 
+      # Mission 1.84.7. The one execution the operator approved under packet V2, checked against
+      # what it retained rather than against what the record says. The raw response digest is
+      # recomputed from the retained body, the stop reason is read through the adapter's classifier,
+      # the schema violation is recomputed by the live v1.1.0 validator over the retained answer, the
+      # cost is recomputed from the reported usage at the held price, and the stage table is derived
+      # from those facts. The gate refuses: an approval that does not name V2's digest, whose words
+      # no longer hash to their digest, that the executing mission did not record, or that no longer
+      # forbids a second request, a retry after max_tokens or automatic persistence; a record
+      # claiming more than one request, a retry, a fallback, a continuation or a repair; a stop
+      # reason, request id, usage, cost, timing or stage table the retained response does not
+      # reproduce; a NOT_REACHED stage counted as passed; a factual outcome that does not follow from
+      # the runner's; a human-review packet for a rejected answer; any persistence, canonical
+      # mutation or moved counter; a credential shape anywhere; V1's record edited; and a runner that
+      # would execute V2 again.
+      - name: The V2 execution record matches its approval, its retained response and the runner
+        run: uv run python infrastructure/scripts/render_second_opportunity_execution_record_v2.py --check
+
       # Mission 1.84.2. The one approved provider request happened and its output was rejected
       # at schema validation. The gate refuses: an approval recovered from a failure, or a
       # consumed-approval list that does not name V1's digest with a request against it; a
