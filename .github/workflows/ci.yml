@@ -819,6 +819,17 @@ jobs:
       - name: The V3 execution record matches its approval, its retained response and the runner
         run: uv run python infrastructure/scripts/render_second_opportunity_execution_record_v3.py --check
 
+      # Mission 1.84.10. The semantic output gate v1.2.0, frozen before the V3 diagnostic replay.
+      # The freeze record is derived from the live code and the gate refuses: an implementation or
+      # frozen test file that is not the one pinned at the freeze; a v1.0.0 or v1.1.0 module that is
+      # not bb0f50a's; a moved output schema; an operator decision not carried as given; a field
+      # context the brief requires that moved; a forbidden concept removed, a v1.0.0 phrase dropped
+      # or a §20 concept unnamed; prompt text treated as evidence or a wider trusted licence; a thin
+      # matrix; a run of the historical answer in the gate or its tests; and a record field the
+      # code does not derive.
+      - name: The semantic gate v1.2.0 is the one frozen before the V3 diagnostic replay
+        run: uv run python infrastructure/scripts/render_second_opportunity_semantic_gate_v1_2.py --check
+
       # Mission 1.84.2. The one approved provider request happened and its output was rejected
       # at schema validation. The gate refuses: an approval recovered from a failure, or a
       # consumed-approval list that does not name V1's digest with a request against it; a
