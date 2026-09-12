@@ -43,11 +43,16 @@ from ..types import (
 )
 
 __all__ = [
+    "AnthropicCompletion",
     "AnthropicProvider",
     "AnthropicThinking",
     "ANTHROPIC_API_VERSION",
     "COUNT_TOKENS_ENDPOINT",
+    "FORCED_TOOL_COMPLETE_STOP_REASON",
+    "OUTPUT_LIMIT_STOP_REASONS",
+    "REFUSAL_STOP_REASON",
     "STRUCTURED_TOOL_NAME",
+    "classify_forced_tool_completion",
 ]
 
 ANTHROPIC_API_VERSION = "2023-06-01"
@@ -61,6 +66,49 @@ COUNT_TOKENS_ENDPOINT = "https://api.anthropic.com/v1/messages/count_tokens"
 # The tool a structured request is forced into. Named for what it does rather
 # than after a domain concept: the schema is supplied per request.
 STRUCTURED_TOOL_NAME = "emit_structured_output"
+
+# Mission 1.84.6. What `stop_reason` says about a request whose structured output
+# was forced into a tool call, in documented values only. `tool_use` is the one
+# that means the call finished with its tool call. `max_tokens` and
+# `model_context_window_exceeded` mean generation ran out of room, so whatever
+# arrived may be incomplete however well-formed it looks. `refusal` may not match
+# the schema at all. Anything else is a stop this adapter has not been told how to
+# read, and it is not read as a success.
+FORCED_TOOL_COMPLETE_STOP_REASON = "tool_use"
+OUTPUT_LIMIT_STOP_REASONS = frozenset({"max_tokens", "model_context_window_exceeded"})
+REFUSAL_STOP_REASON = "refusal"
+
+
+class AnthropicCompletion(StrEnum):
+    """How a forced-tool response ended, read from `stop_reason` and nothing else.
+
+    The completion signal takes precedence over the content. A response that ran
+    out of room can still carry a parseable, even schema-valid, object -- the part
+    generated before the limit -- and nothing inside the object says it was cut.
+    """
+
+    COMPLETE = "COMPLETE"
+    OUTPUT_LIMIT_REACHED = "OUTPUT_LIMIT_REACHED"
+    REFUSED = "REFUSED"
+    UNSUPPORTED_STOP_REASON = "UNSUPPORTED_STOP_REASON"
+
+
+def classify_forced_tool_completion(stop_reason: object) -> AnthropicCompletion:
+    """Fail closed: only the documented completion value is COMPLETE.
+
+    `end_turn`, `pause_turn`, a missing field and any value added after this was
+    written all land in UNSUPPORTED_STOP_REASON, because a forced tool call that
+    did not end in `tool_use` did not finish in the way this adapter asked for.
+    """
+    if not isinstance(stop_reason, str):
+        return AnthropicCompletion.UNSUPPORTED_STOP_REASON
+    if stop_reason == FORCED_TOOL_COMPLETE_STOP_REASON:
+        return AnthropicCompletion.COMPLETE
+    if stop_reason in OUTPUT_LIMIT_STOP_REASONS:
+        return AnthropicCompletion.OUTPUT_LIMIT_REACHED
+    if stop_reason == REFUSAL_STOP_REASON:
+        return AnthropicCompletion.REFUSED
+    return AnthropicCompletion.UNSUPPORTED_STOP_REASON
 
 
 class AnthropicThinking(StrEnum):

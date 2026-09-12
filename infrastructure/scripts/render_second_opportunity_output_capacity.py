@@ -54,6 +54,30 @@ ANALYSIS = DATA / "second-opportunity-output-capacity-analysis-v1.json"
 ANALYSIS_MD = DATA / "second-opportunity-output-capacity-analysis-v1.md"
 PACKET_V1 = DATA / "second-opportunity-synthesis-execution-packet-v1.json"
 PACKET_V2 = DATA / "second-opportunity-synthesis-execution-packet-v2.json"
+
+
+#: Mission 1.84.6. This mission recorded that IT created no execution packet V2. A V2 that a later
+#: mission prepared does not make that false, so the check reads the packet's author instead of
+#: requiring the file to be absent: a check pinned to an absence pins the repository's future to
+#: one mission's verdict.
+THIS_MISSION = (1, 84, 3)
+
+
+def _v2_prepared_by_a_later_mission() -> bool:
+    try:
+        prepared_by = json.loads(PACKET_V2.read_text(encoding="utf-8")).get("prepared_by")
+    except (OSError, ValueError, AttributeError):
+        return False
+    if not isinstance(prepared_by, str) or not prepared_by.startswith("mission-"):
+        return False
+    try:
+        return tuple(int(part) for part in prepared_by.removeprefix("mission-").split(".")) > (
+            THIS_MISSION
+        )
+    except ValueError:
+        return False
+
+
 EXECUTION_RECORD = DATA / "second-opportunity-synthesis-execution-record-v1.json"
 
 V1_SHA256 = "570657e1a862a96742925f6a5e5a17b0e1860bf9f2f0b8315fa33c560496da92"
@@ -317,8 +341,11 @@ def _check_v1_and_v2(record: dict) -> None:
     created = record["EXECUTION_PACKET_V2_CREATED"]
     if created and not PACKET_V2.exists():
         raise ValidationError("the record claims a V2 packet that is not on disk")
-    if not created and PACKET_V2.exists():
-        raise ValidationError("a V2 packet exists that the record says was not created")
+    if not created and PACKET_V2.exists() and not _v2_prepared_by_a_later_mission():
+        raise ValidationError(
+            "a V2 packet exists that the record says was not created, and it does not name a "
+            "later mission as its author"
+        )
     if created and record["PRIMARY_OUTCOME"] == "OUTPUT_SCHEMA_HAS_UNBOUNDED_SERIALIZED_SIZE":
         raise ValidationError(
             "a V2 packet was created from an unbounded schema, so its MAX_OUTPUT_TOKENS was "

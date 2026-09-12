@@ -1,0 +1,108 @@
+{
+  "$comment": "Mission 1.84.6. The operator's answer to the decision Mission 1.84.5 requested. An architecture decision the operator owns: nothing in it is derived, and the gate refuses a record that calls it derived.",
+  "record_version": "second-opportunity-execution-envelope-decision@1.0.0",
+  "mission": "1.84.6",
+  "recorded_by": "mission-1.84.6",
+  "recorded_at": "2026-09-12",
+  "DECISION_REQUESTED_BY": "mission-1.84.5",
+  "DECISION_REQUEST": "OPERATOR_DECISION_ON_A_BOUNDED_CONTRACT_LARGER_THAN_THE_MODEL_CAN_EMIT",
+  "DECISION": "RUN_AT_THE_PROVIDER_MAXIMUM_ACCEPTING_AN_UNREACHABLE_WORST_CASE",
+  "DECISION_OWNER": "OPERATOR",
+  "DECISION_KIND": "ARCHITECTURE",
+  "MATHEMATICALLY_DERIVED": false,
+  "OPERATOR_STATEMENT": [
+    "OPERATOR_DECISION_ON_A_BOUNDED_CONTRACT_LARGER_THAN_THE_MODEL_CAN_EMIT =",
+    "RUN_AT_THE_PROVIDER_MAXIMUM_ACCEPTING_AN_UNREACHABLE_WORST_CASE",
+    "This is an explicit architecture decision.",
+    "The operator accepts that:",
+    "OUTPUT_CONTRACT_FULL_DOMAIN_REACHABLE_BY_SELECTED_MODEL = false",
+    "The output contract remains the acceptance language.",
+    "The execution envelope is a strict subset of that language.",
+    "This is NOT considered a schema defect.",
+    "A valid schema value need not necessarily be generatable under every execution configuration.",
+    "The execution must fail closed if the provider reaches its output limit before a complete valid response is obtained.",
+    "No retry is authorised."
+  ],
+  "operator_statement_note": "The operator's words from the Mission 1.84.6 brief, section 0, one line per sentence and otherwise verbatim. The digest below is over the lines joined by a single newline, so the record names the words and not a paraphrase of them.",
+  "OPERATOR_STATEMENT_SHA256": "0380a0132249eed44c2c97ab38b102bd667a847c41e9bf197ae0a5df7f445b00",
+  "reason": "the bounded acceptance contract intentionally has a larger theoretical domain than the selected model's synchronous generation capability",
+  "accepted_consequence": "some schema-valid pathological outputs are unreachable in one synchronous run",
+  "safety_consequence": "provider-limit / incomplete / malformed output is rejected with no persistence",
+  "REJECTED_ALTERNATIVES": [
+    "BOUND_THE_NARRATIVE_FIELDS_FURTHER",
+    "RESTRICT_THE_NARRATIVE_CHARACTER_CLASS",
+    "CHANGE_THE_ROUTE_TO_THE_BATCHES_300K_BETA",
+    "SPLIT_THE_SYNTHESIS_ACROSS_CALLS"
+  ],
+  "OUTPUT_CONTRACT_FULL_DOMAIN_REACHABLE_BY_SELECTED_MODEL": false,
+  "NOT_A_SCHEMA_DEFECT": true,
+  "EXECUTION_ENVELOPE_IS_A_STRICT_SUBSET_OF_THE_CONTRACT": true,
+  "ENVELOPE_MODEL": {
+    "CONTRACT_QUESTION": "What outputs would SROS accept?",
+    "ENVELOPE_QUESTION": "What outputs can this exact provider route produce in this run?",
+    "questions_note": "Two different questions. The contract is the acceptance language and does not shrink to fit a route; the envelope is what one route can produce in one run and does not grow to fit the contract.",
+    "CONTRACT_MAXIMUM": "FINITE_BUT_LARGER_THAN_THE_EXECUTION_ENVELOPE",
+    "CONTRACT_MAXIMUM_CHARACTERS": 309729,
+    "CONTRACT_MAXIMUM_TOKEN_ESTIMATE": 231608,
+    "CONTRACT_MAXIMUM_TOKEN_ESTIMATE_EXACT": false,
+    "EXECUTION_ROUTE": "SYNCHRONOUS_MESSAGES_API",
+    "EXECUTION_MAXIMUM_OUTPUT_TOKENS": 128000,
+    "CONTRACT_FULL_DOMAIN_REACHABLE": false,
+    "STATE": "CONTRACT_LARGER_THAN_EXECUTION_ENVELOPE",
+    "STATE_IS_NOT": [
+      "ERROR",
+      "UNKNOWN",
+      "SCHEMA_INVALID"
+    ],
+    "state_note": "A first-class state rather than a failure. It says which valid answers this route can deliver in one run, and the answer is: not all of them. Reading it as an error would invite repairing the schema; reading it as unknown would hide that the provider's own count settled it."
+  },
+  "RESTS_ON": {
+    "mission_1_84_4": {
+      "record": "docs/data/second-opportunity-output-capacity-analysis-v2.json",
+      "OUTPUT_SCHEMA": "second-opportunity-synthesis-output@1.1.0",
+      "FINITE_BOUND": true,
+      "UNBOUNDED_PATHS": 0,
+      "MAX_VALID_OUTPUT_CHARACTERS": 309729
+    },
+    "mission_1_84_5": {
+      "record": "docs/data/second-opportunity-provider-token-measurement-v1.json",
+      "MODEL": "claude-sonnet-5",
+      "MAX_INSTANCE_TOKEN_ESTIMATE": 231608,
+      "ESTIMATE_NOT_EXACT": true,
+      "INPUT_TO_OUTPUT_TOKENIZATION_EQUIVALENCE": "NOT_ESTABLISHED",
+      "DOCUMENTED_SYNCHRONOUS_MAXIMUM": 128000,
+      "PRIMARY_OUTCOME": "BOUNDED_SCHEMA_EXCEEDS_OR_APPROACHES_MODEL_CAPABILITY"
+    }
+  },
+  "WHAT_THE_ESTIMATE_IS": "evidence that the theoretical maximum schema instance is not comfortably representable inside the synchronous execution envelope",
+  "WHAT_THE_ESTIMATE_IS_NOT": [
+    "an exact count",
+    "an output token count",
+    "a required execution limit"
+  ],
+  "MAX_OUTPUT_TOKENS_SELECTED": 128000,
+  "MAX_OUTPUT_TOKENS_BASIS": "OPERATOR_SELECTED_DOCUMENTED_PROVIDER_MAXIMUM",
+  "OUTPUT_TOKEN_CEILING_BASIS": "OPERATOR_SELECTED_PROVIDER_MAXIMUM",
+  "MAX_OUTPUT_TOKENS_NOT_BASED_ON": [
+    "SCHEMA_DERIVED_MAXIMUM",
+    "PROVIDER_NATIVE_TOKEN_ESTIMATE",
+    "EMPIRICAL_CHARS_PER_TOKEN"
+  ],
+  "THINKING": "DISABLED",
+  "SELECTED_ROUTE": "SYNCHRONOUS_MESSAGES_API",
+  "ROUTES_NOT_USED": [
+    "MESSAGE_BATCHES_BETA",
+    "anthropic-claude-subscription"
+  ],
+  "FAIL_CLOSED_ON_PROVIDER_LIMIT": true,
+  "RETRY_AUTHORISED": false,
+  "CONTINUATION_AUTHORISED": false,
+  "REPAIR_MODEL_AUTHORISED": false,
+  "SCHEMA_CHANGED": false,
+  "SCHEMA_V1_2_0_CREATED": false,
+  "PROMPT_CHANGED": false,
+  "NATIVE_STRUCTURED_OUTPUT_MIGRATION": false,
+  "migration_note": "The execution-envelope decision and a structured-output mechanism migration are two decisions, and this record is the first one only. The forced-tool mechanism and the local v1.1.0 validator are unchanged.",
+  "AUTHORISES_A_REQUEST": false,
+  "authorisation_note": "This decision makes an execution packet preparable. It authorises no provider request: that needs an operator approval naming the packet's digest, recorded beside the packet."
+}

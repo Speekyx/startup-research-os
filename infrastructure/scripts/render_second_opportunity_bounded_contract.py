@@ -73,6 +73,29 @@ PROMPT_V1 = DATA / "second-opportunity-synthesis-prompt-v1.json"
 PACKET_V1 = DATA / "second-opportunity-synthesis-execution-packet-v1.json"
 PACKET_V2 = DATA / "second-opportunity-synthesis-execution-packet-v2.json"
 
+
+#: Mission 1.84.6. This mission recorded that IT created no execution packet V2. A V2 that a later
+#: mission prepared does not make that false, so the check reads the packet's author instead of
+#: requiring the file to be absent: a check pinned to an absence pins the repository's future to
+#: one mission's verdict.
+THIS_MISSION = (1, 84, 4)
+
+
+def _v2_prepared_by_a_later_mission() -> bool:
+    try:
+        prepared_by = json.loads(PACKET_V2.read_text(encoding="utf-8")).get("prepared_by")
+    except (OSError, ValueError, AttributeError):
+        return False
+    if not isinstance(prepared_by, str) or not prepared_by.startswith("mission-"):
+        return False
+    try:
+        return tuple(int(part) for part in prepared_by.removeprefix("mission-").split(".")) > (
+            THIS_MISSION
+        )
+    except ValueError:
+        return False
+
+
 V1_SHA256 = "570657e1a862a96742925f6a5e5a17b0e1860bf9f2f0b8315fa33c560496da92"
 REPRESENTATION_SHA256 = "2528a56a4a9e873bfd04662aeb52916eb80faafe10ab085e716cbdcee77c5b72"
 PROMPT_V1_SHA256 = "af5289494416139d302eed704c12b9c53ab2547dca336e2ca4a834ec936c5080"
@@ -423,10 +446,11 @@ def _check_no_ceiling_was_invented(record: dict) -> None:
 def _check_no_v2(record: dict) -> None:
     if record["EXECUTION_PACKET_V2_CREATED"]:
         raise ValidationError("the record claims a V2 packet")
-    if PACKET_V2.exists():
+    if PACKET_V2.exists() and not _v2_prepared_by_a_later_mission():
         raise ValidationError(
-            f"{PACKET_V2.name} exists while the record says no V2 was created. Section 24 permits "
-            "one only when a defensible capacity is established"
+            f"{PACKET_V2.name} exists while the record says no V2 was created, and it does not "
+            "name a later mission as its author. Section 24 permits one only when a defensible "
+            "capacity is established"
         )
     if record["PRICING"]["recomputed"]:
         raise ValidationError("pricing was recomputed without a defensible MAX_OUTPUT_TOKENS")

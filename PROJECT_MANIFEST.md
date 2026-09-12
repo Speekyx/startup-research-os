@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.139
+Version: 1.140
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-12 (Sprint 1 / Mission 1.84.5)
+Last amended: 2026-09-12 (Sprint 1 / Mission 1.84.6)
 
 ---
 
@@ -13,6 +13,73 @@ Last amended: 2026-09-12 (Sprint 1 / Mission 1.84.5)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.140 - 2026-09-12 (Sprint 1 / Mission 1.84.6)
+
+**`SECOND_OPPORTUNITY_EXECUTION_PACKET_V2_READY_FOR_OPERATOR_APPROVAL`: the operator chose the
+envelope, and the one call it permits is frozen and unapproved.** The operator decided
+`RUN_AT_THE_PROVIDER_MAXIMUM_ACCEPTING_AN_UNREACHABLE_WORST_CASE`: the bounded contract stays the
+acceptance language, the synchronous execution envelope is a strict subset of it, a provider
+output-limit stop fails closed, and no retry is authorised. Execution packet
+**`SECOND-OPPORTUNITY-SYNTH-EXEC-V2` v2, `d27f2896...`**, is prepared and **not approved**, and **no
+synthesis ran, no Messages API request was made and no TED byte was sent.**
+
+**THE DECISION IS THE OPERATOR'S, AND THE RECORD SAYS SO.** Eleven lines verbatim, hashed
+(`0380a013...`), `MATHEMATICALLY_DERIVED = false`, and the four rejected alternatives named. The
+state is `CONTRACT_LARGER_THAN_EXECUTION_ENVELOPE`, first-class and explicitly **not `ERROR`,
+`UNKNOWN` or `SCHEMA_INVALID`**: reading it as an error would invite repairing the schema, and
+reading it as unknown would hide that the provider's own count settled it. The contract answers
+what SROS would accept; the envelope answers what this route can produce in one run.
+
+**THE CEILING IS A SELECTION, NOT A DERIVATION.** `max_tokens = 128000`, basis
+`OPERATOR_SELECTED_DOCUMENTED_PROVIDER_MAXIMUM`, not the schema, not the estimate and not the
+empirical ratio; the adapter's **4096 stays the adapter's**. **231608 stays an estimate**: not an
+exact count, not an output token count and not an execution limit, and the gate refuses a record
+that says otherwise.
+
+**THINKING DISABLED, CHECKED BY BUILDING THE BODY.** The gate builds the request from the live
+adapter with the packet's own parameters and requires `{"type": "disabled"}`, `max_tokens` 128000
+and the forced tool, with no structured-output migration riding along. Documented and verified
+locally; **not observed at runtime**, because nothing was sent.
+
+**A LIMIT STOP FAILS CLOSED ON THE PROVIDER'S OWN SIGNAL.** The adapter gained one classifier with
+four verdicts, and the runner reads `stop_reason` at **stage 3, before anything is parsed**: a
+response cut at the limit can satisfy the whole v1.1.0 schema and none of it is consulted.
+**THE TIMEOUT IS DISCLOSED, NOT CHANGED**: 60 seconds, not streamed, and it may end the call before
+the token ceiling does, failing closed.
+
+**THE COST CEILING IS THE WORST CASE ITSELF.** 11954 estimated input tokens and 128000 output tokens
+at the held price: **1.303908**, with no headroom policy held and so no invented multiple -- 13.04
+times V1's ceiling, stated so the approval is given against the number.
+
+**FOUR GATES HAD PINNED THE FUTURE TO AN ABSENCE.** Gates 65, 67, 68 and 69 each refused any V2 file
+on disk; each now refuses only a V2 that no later mission prepared, with 64 tests holding both
+halves.
+
+**THE PROBE FOUND TWO HOLES IN THE NEW GATE, AND BOTH ARE CLOSED.** A route sentence calling the
+batch beta *asynchronous* passed a test for the word *synchronous*, so the reviewed sentence is now
+pinned whole; and a loop around the runner's one call site passed a count of call sites, so the
+runner is now read as a syntax tree -- one call, in no loop, in a function called once and never
+re-entered. **Second run: 266 caught, 0 escaped, 13 of 13 controls, every file proved restored.**
+
+**Verification.** 3853 bare-python tests; 3888 pytest, 13 skipped, database unchanged across 29
+tenant tables; ruff over 1011 files; mypy over 200 files; contracts, catalog and registry; all **70**
+CI gates, one new and four re-pointed; **169 new tests**.
+
+**What moved.** Nothing canonical: every counter identical, and **0 model calls, 0 provider
+requests, 0 TED bytes, 0 Opportunities**.
+
+New: `docs/data/second-opportunity-execution-envelope-decision-v1.json`,
+`second-opportunity-synthesis-execution-packet-v2.json` and their generated `.md` files;
+`infrastructure/scripts/run_second_opportunity_execution_v2.py`;
+`infrastructure/scripts/render_second_opportunity_execution_packet_v2.py` (CI gate 70); tests; and
+`docs/reports/mission-1.84.6-report.md`.
+
+Changed: `docs/CLAUDE.md` 1.140 to 1.141; `sros_llm_gateway.providers.anthropic` gains
+`classify_forced_tool_completion` and its stop-reason constants, with its fields and default
+request body unchanged; gates 65, 67, 68 and 69 re-pointed from absence to authorship;
+`.github/workflows/ci.yml` gains one gate. **No frozen 1.31, 1.31.1, 1.84, 1.84.1, 1.84.2, 1.84.3,
+1.84.4 or 1.84.5 artifact was altered.**
 
 ## 1.139 - 2026-09-12 (Sprint 1 / Mission 1.84.5)
 
