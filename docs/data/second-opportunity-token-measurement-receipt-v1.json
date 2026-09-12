@@ -1,0 +1,55 @@
+{
+  "$comment": "Written once by run_second_opportunity_token_measurement.py. The one request Mission 1.84.5 authorises. Header VALUES are never recorded, and nothing here was retried.",
+  "record_version": 1,
+  "mission": "1.84.5",
+  "OUTCOME": "MEASURED",
+  "started_at": "2026-09-12T08:18:27Z",
+  "finished_at": "2026-09-12T08:18:30Z",
+  "MODEL": "claude-sonnet-5",
+  "MEASUREMENT_SURFACE": "POST /v1/messages/count_tokens",
+  "endpoint": "https://api.anthropic.com/v1/messages/count_tokens",
+  "anthropic_version": "2023-06-01",
+  "request_shape": {
+    "url": "https://api.anthropic.com/v1/messages/count_tokens",
+    "header_names": [
+      "anthropic-version",
+      "x-api-key"
+    ],
+    "body_keys": [
+      "messages",
+      "model"
+    ],
+    "model": "claude-sonnet-5",
+    "message_count": 1,
+    "message_role": "user",
+    "content_type": "string",
+    "system_sent": false,
+    "tools_sent": false,
+    "thinking_sent": false,
+    "max_tokens_sent": false,
+    "timeout_seconds": 60.0
+  },
+  "credential_source": "LOADED_FROM_COMPOSE_FILE_ONE_KEY_ONLY",
+  "credential_value_recorded": false,
+  "MEASUREMENT_SCHEMA_ID": "second-opportunity-synthesis-output@1.1.0",
+  "MEASUREMENT_SCHEMA_SHA256": "ec789d1be7d525bf6e498bf61e8a0596ac4582e24e8b45073b3f9ac1cca8b988",
+  "MEASUREMENT_TEXT_CHARACTERS": 309729,
+  "MEASUREMENT_TEXT_UTF8_BYTES": 309729,
+  "MEASUREMENT_TEXT_SHA256": "e1a62b812f115b3549b5c3c5b8605f2c8052b998cce5d89ac7b60cee5af71705",
+  "response": {
+    "status": 200,
+    "body": "{\"input_tokens\":231608}",
+    "request_id": "req_011CeyDXXrz9Nc4XTZfPVo4w"
+  },
+  "transport_error": null,
+  "INPUT_TOKENS": 231608,
+  "failure": null,
+  "ACCOUNTING": {
+    "TOKEN_COUNT_API_REQUESTS": 1,
+    "RETRIES": 0,
+    "MESSAGES_API_REQUESTS": 0,
+    "MODEL_INFERENCE_REQUESTS": 0,
+    "TED_BYTES_SENT": 0,
+    "RESEARCH_BYTES_SENT": 0
+  }
+}

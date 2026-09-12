@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.138
+Version: 1.139
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-12 (Sprint 1 / Mission 1.84.4)
+Last amended: 2026-09-12 (Sprint 1 / Mission 1.84.5)
 
 ---
 
@@ -13,6 +13,84 @@ Last amended: 2026-09-12 (Sprint 1 / Mission 1.84.4)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.139 - 2026-09-12 (Sprint 1 / Mission 1.84.5)
+
+**`BOUNDED_SCHEMA_EXCEEDS_OR_APPROACHES_MODEL_CAPABILITY`: the provider counted the maximum, and the
+model cannot emit it.** The operator decided `PROVIDER_NATIVE_TOKEN_MEASUREMENT` against
+`claude-sonnet-5` and rejected a local third-party tokenizer, an arbitrary round ceiling and
+shrinking the schema for convenience. **One** request to `POST /v1/messages/count_tokens`, carrying
+the model and one user message holding exactly the synthetic maximum-valid instance Mission 1.84.4
+measured -- 309729 characters, rebuilt from the live schema and refused had it moved -- answered
+**231608**. The documented maximum output of one synchronous request to that model is **128K**, so
+the headroom is **-103608** and the estimate is **1.8094** times the maximum. Section 21 stops:
+**no ceiling, no V2, no schema reduction, no option recommended.**
+
+**ONE REQUEST, AND NOTHING THAT COULD BECOME A SECOND.** A one-shot runner, dry by default, whose
+transport seam refuses any URL but the count endpoint, a second call, and any body but the smallest
+valid one; a receipt written with an exclusive create; a second execution refused by name; and no
+retry path at all. The credential was read from the compose file one key only, never by sourcing
+the file, and its value was never printed or recorded.
+
+**AN ESTIMATE, AND IT SAYS SO.** The page says the count may differ by a small amount and
+quantifies nothing, so `DOCUMENTED_TOKEN_COUNT_MARGIN = NONE`. The count uses the tokenizer of the
+model named, so `SAME_MODEL_TOKENIZER_MEASUREMENT = true` -- and it counts INPUT tokens for escaped
+text in a user message, which no page equates with the OUTPUT tokens of the same object emitted as a
+tool call. `INPUT_TO_OUTPUT_TOKENIZATION_EQUIVALENCE = NOT_ESTABLISHED`, and **the gate refuses an
+`EXACT_MAX_OUTPUT_TOKEN_COUNT` key anywhere in the record.**
+
+**THE HELD RATIO WOULD HAVE UNDERESTIMATED IT BY MORE THAN A THIRD.** 2.1565 characters per token
+predicts 143626; the provider says 231608; this text measures 1.3373. Mission 1.84.3 warned that a
+ratio too high underestimates tokens, and on the worst-case text it would have, by 87982.
+
+**THE DOCUMENTATION WAS READ, NOT RECALLED.** 18 fetches from the provider's own documentation, 17
+answered and one 404 recorded rather than dropped; thirteen propositions each cited by evidence id
+and line; the seven values the brief expected each re-established from a live page. **128K is read
+as 128000**, the reading the same pages use for 1M and the one that errs toward too little headroom.
+**F is claimed only as far as it is written**: counting is not message creation, and the pages
+never say the word inference.
+
+**THINKING IS A TYPED CHOICE, NOT A FREE PARAMETER.** `AnthropicThinking` has two members:
+`PROVIDER_DEFAULT` sends no field, so the old request body is **byte-identical**, and `DISABLED`
+sends the documented `{"type": "disabled"}`. A string or a dict is refused, no parameter bag exists,
+`LlmRequest` is unchanged, and **no prompt moved**, because thinking is a transport parameter.
+Forced tool use with thinking disabled is not restricted by the documentation.
+
+**V1 RAN ON A SHARED BUDGET, AND ITS ROOT CAUSE WAS NOT REWRITTEN.** The adapter never sent a
+thinking field, this model thinks adaptively by default, forced tool use works under adaptive
+thinking and `max_tokens` caps thinking and answer together, so V1's 3000 tokens were shared:
+`V1_OUTPUT_BUDGET_SHARED_WITH_ADAPTIVE_THINKING = true`. How much it thought is **NOT_ESTABLISHED**,
+because the usage record was never retained, so Mission 1.84.2's
+`NOT_PROVABLE_FROM_RETAINED_EXECUTION_ARTIFACTS` stands and this is a **contributing-factor
+possibility**.
+
+**THE DOCUMENTED MAXIMUM AND THE ADAPTER DEFAULT SIT SIDE BY SIDE.** A new capability register keeps
+128000, the batch beta's 300000 and the 1M context window beside the adapter's 4096 and never in
+place of it, and Mission 1.84.4's capability block stays untouched as history. **The batch route
+was not adopted by arithmetic**: it is a different, asynchronous, beta route outside what the egress
+review and the provider posture assessed. **Five operator options with their costs, none
+implemented and none recommended.**
+
+**Probe 199 caught, 0 escaped, 10 of 10 controls, every file proved restored**, 12 of the cases
+editing the live adapter or schema module and running the gate in a fresh interpreter -- and **the
+first run found a vacuous control in the probe itself**, replaced by two real ones.
+**Verification.** 3847 bare-python tests; 3719 pytest with the database unchanged across 29 tenant
+tables; ruff over 1002 files with three S105 false positives suppressed; mypy over 200 files;
+contracts, catalog and registry; all **69** CI gates, one of them new; **128 new tests**.
+
+**What moved.** Nothing canonical: every counter identical, and **1 token-count request, 0 retries,
+0 Messages API requests, 0 model inference, 0 TED bytes, 0 Opportunities**.
+
+New: `docs/data/second-opportunity-token-measurement-receipt-v1.json`,
+`second-opportunity-provider-token-measurement-v1.json`, `provider-model-capability-register-v1.json`
+and their generated `.md` files; `infrastructure/scripts/run_second_opportunity_token_measurement.py`;
+`infrastructure/scripts/render_second_opportunity_token_measurement.py` (CI gate 69); tests; and
+`docs/reports/mission-1.84.5-report.md`.
+
+Changed: `docs/CLAUDE.md` 1.139 to 1.140; `sros_llm_gateway.providers.anthropic` gains
+`AnthropicThinking` and a token-counting method, with its default request body unchanged;
+`.github/workflows/ci.yml` gains one gate. **No frozen 1.31, 1.31.1, 1.84, 1.84.1, 1.84.2, 1.84.3 or
+1.84.4 artifact was altered.**
 
 ## 1.138 - 2026-09-12 (Sprint 1 / Mission 1.84.4)
 

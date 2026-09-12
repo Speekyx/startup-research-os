@@ -716,6 +716,25 @@ jobs:
       - name: The bounded second-opportunity output contract matches the live schema
         run: uv run python infrastructure/scripts/render_second_opportunity_bounded_contract.py --check
 
+      # Mission 1.84.5. One provider-native token count of the synthetic maximum-valid output
+      # instance against claude-sonnet-5 estimated 231608 input tokens, above the documented 128K
+      # synchronous output maximum, so the bounded contract exceeds what the model can emit and no
+      # ceiling was chosen. The gate refuses: a receipt whose measured text is not the rebuilt
+      # maximum instance, whose request carried anything beyond model and messages, or that
+      # records a retry, a second request, a messages call, an inference, a transmitted TED byte
+      # or anything shaped like a credential; a measurement that names an exact output token count,
+      # recomputes the headroom or the ratio differently, or reports an outcome the arithmetic does
+      # not support; a documentary proposition that cites no fragment, cites evidence that did not
+      # answer 200, or quotes more than a short fragment -- CI holds no network, so whether a
+      # fragment is on its page is checked by refetching against the recorded digest, not here; a
+      # ceiling selected, a V2 packet on disk, the schema reduced, or an option implemented or
+      # recommended; an adapter whose default request body moved, whose thinking control is not the
+      # typed two-member choice, or whose fields grew; a capability register that folds the adapter
+      # default into the documented maximum; V1 edited, its cap moved, or the 1.84.2 root cause
+      # rewritten; and a recorded canonical counter that moved.
+      - name: The provider-native token measurement matches its receipt, the live contract and the adapter
+        run: uv run python infrastructure/scripts/render_second_opportunity_token_measurement.py --check
+
       # Mission 1.84.2. The one approved provider request happened and its output was rejected
       # at schema validation. The gate refuses: an approval recovered from a failure, or a
       # consumed-approval list that does not name V1's digest with a request against it; a
