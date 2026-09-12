@@ -772,6 +772,39 @@ jobs:
       - name: The V2 execution record matches its approval, its retained response and the runner
         run: uv run python infrastructure/scripts/render_second_opportunity_execution_record_v2.py --check
 
+      # Mission 1.84.8. The operator kept the v1.1.0 schema and gate and asked for the prompt to
+      # state what the schema enforces, in a general way. The gate re-derives, from the live schema
+      # through the live renderer, every constraint's class and whether prompt v1.1.0 and v1.2.0
+      # state it; it mutates a copy of the schema one constraint at a time and refuses a
+      # generation-relevant bound that can move under an unchanged prompt, or a constraint of any
+      # other class that moves it. It refuses: a constraint block not rendered from the live schema,
+      # or edited by hand; a renderer that reads anything but the schema, or carries a number; a
+      # v1.2.0 system region that is not v1.0.0's verbatim plus the derived block; a
+      # generation-relevant bound left unstated; an inventory, class, missing list or drift count
+      # the live code does not reproduce; V2 facts the retained response does not reproduce; V2's
+      # answer used for more than establishing that the violation happened, or marked a candidate;
+      # any historical prompt, packet, approval, record or response not byte-identical to what
+      # Mission 1.84.7 left; a raised or replacement bound; an answer changed to fit; and any model
+      # call, provider request, TED byte or canonical mutation.
+      - name: Prompt v1.2.0 states every generation-relevant bound the live schema enforces
+        run: uv run python infrastructure/scripts/render_second_opportunity_output_constraint_alignment.py --check
+
+      # Mission 1.84.8. Execution packet V3: V2's call with the aligned prompt, frozen and
+      # unapproved. The gate refuses: bound fields that do not hash to the digest, a spent digest,
+      # or an approval recorded by the mission that prepared the packet; V1 or V2 edited or their
+      # consumption reset; a schema or gate that moved, a prompt that is not the aligned v1.2.0, or
+      # a TED representation that moved; a route, model, thinking configuration, max_tokens,
+      # completion policy, stage order, timeout, retention or persistence policy that moved from V2;
+      # an answer permitted to be changed to fit a bound; a retry, a second call or a continuation;
+      # a request body that grew by more than the system region; a cost ceiling that is not the
+      # recomputed worst case; a retention path no V3 runner test defines; V2's record treating its
+      # rejected answer as a candidate; a runner with more than one call site, that slices,
+      # rewrites, drops or summarises the answer before judging it, expecting another digest, blind
+      # to V1's or V2's spent approval, or refusing an unseen digest; and any preparation call, TED
+      # byte or canonical counter that moved.
+      - name: Execution packet V3 is V2's call with the aligned prompt, and matches the live code
+        run: uv run python infrastructure/scripts/render_second_opportunity_execution_packet_v3.py --check
+
       # Mission 1.84.2. The one approved provider request happened and its output was rejected
       # at schema validation. The gate refuses: an approval recovered from a failure, or a
       # consumed-approval list that does not name V1's digest with a request against it; a

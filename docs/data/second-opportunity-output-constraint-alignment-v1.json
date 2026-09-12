@@ -1,0 +1,1021 @@
+{
+  "$comment": "Mission 1.84.8. The operator kept the v1.1.0 schema and gate and asked for the prompt to state what the schema enforces, in a general way. This record audits every constraint of that schema against both prompts, and CI gate 72 re-derives it from the live schema, the live renderer and the frozen v1.1.0 text.",
+  "record_version": "second-opportunity-output-constraint-alignment@1.0.0",
+  "mission": "1.84.8",
+  "recorded_by": "mission-1.84.8",
+  "recorded_on": "2026-09-12",
+  "START_COMMIT": "02f6f42e6d04c0dcc6ae8aafcd44370e55bcc0be",
+  "ALIGNMENT_OUTCOME": "PROMPT_SCHEMA_CONSTRAINT_ALIGNMENT_DERIVED",
+  "summary": "Prompt v1.1.0 stated 8 of the schema's 32 generation-relevant constraints in words and left 24 to the forced tool's input schema, the bound V2 was refused on among them. Prompt v1.2.0 states all of them, rendered from the live schema, and the schema and the gate are unchanged",
+  "OPERATOR_DECISION": {
+    "DECISIONS": [
+      "KEEP_OUTPUT_SCHEMA_V1_1_0_UNCHANGED",
+      "KEEP_OUTPUT_GATE_V1_1_0_UNCHANGED",
+      "DO_NOT_RAISE_EVIDENCE_BOUND_REASONING_SUMMARY_MAX_LENGTH",
+      "CORRECT_PROMPT_SCHEMA_CONSTRAINT_ALIGNMENT"
+    ],
+    "DECISION_OWNER": "OPERATOR",
+    "OPERATOR_STATEMENT": [
+      "The operator has reviewed Mission 1.84.7.",
+      "Operator decision:",
+      "KEEP_OUTPUT_SCHEMA_V1_1_0_UNCHANGED",
+      "KEEP_OUTPUT_GATE_V1_1_0_UNCHANGED",
+      "DO_NOT_RAISE_EVIDENCE_BOUND_REASONING_SUMMARY_MAX_LENGTH",
+      "CORRECT_PROMPT_SCHEMA_CONSTRAINT_ALIGNMENT",
+      "The rejected V2 answer MUST NOT be rescued.",
+      "Its 1113-character reasoning summary MUST NOT be used to choose a new schema",
+      "maximum.",
+      "The architectural defect to address is narrower:",
+      "the executable schema required:",
+      "evidence_bound_reasoning_summary.maxLength = 900",
+      "but prompt v1.1.0 did not explicitly communicate that limit in its",
+      "human-readable bounded-output instructions, while it explicitly communicated",
+      "other narrative bounds.",
+      "Mission 1.84.8 must remove that drift in a GENERAL way.",
+      "ZERO external model calls.",
+      "ZERO provider inference requests.",
+      "ZERO TED transmission.",
+      "ZERO canonical research mutation."
+    ],
+    "OPERATOR_STATEMENT_SHA256": "ce84b610853144936088842119ccde2280e55815bbeca88fdc0cbf803ddbf413",
+    "V2_ANSWER_RESCUED": false,
+    "V2_VALUE_USED_TO_CHOOSE_A_MAXIMUM": false,
+    "AUTHORISES_A_SCHEMA_CHANGE": false,
+    "AUTHORISES_AN_INFERENCE": false,
+    "note": "the decision is about how the prompt communicates the contract. It approves no execution: V3 needs its own operator approval naming its own digest"
+  },
+  "V2_FACTS": {
+    "EXECUTION_PACKET_SHA256": "d27f2896a99a77958562d85f9262277e1a430cab654d210a0f8d88f36f1db16e",
+    "OUTCOME": "EXECUTION_SCHEMA_REJECTED_NO_RETRY",
+    "PROVIDER_REQUESTS": 1,
+    "MODEL_CALLS": 1,
+    "RETRIES": 0,
+    "FALLBACKS": 0,
+    "STOP_REASON": "tool_use",
+    "INPUT_TOKENS": 8939,
+    "OUTPUT_TOKENS": 3914,
+    "THINKING_TOKENS": 0,
+    "ACTUAL_COST": 0.057018,
+    "FAILED_STAGE": "5_schema_validation_v1_1_0",
+    "SCHEMA_VIOLATIONS": [
+      "evidence_bound_reasoning_summary: 1113 characters exceeds maxLength 900"
+    ],
+    "STAGES_NOT_REACHED": [
+      "6_semantic_output_gate_v1_1_0",
+      "7_evidence_boundary_and_no_distortion",
+      "8_attribution_and_provenance",
+      "9_persistence_eligibility",
+      "10_human_review"
+    ],
+    "CANONICAL_PERSISTENCE": false,
+    "APPROVAL_CONSUMED": true,
+    "DISCREPANCIES": []
+  },
+  "V2_OUTPUT_USE": {
+    "USED_TO_ESTABLISH": [
+      "that a schema violation occurred, on one field, against a bound the v1.1.0 prompt did not state in words"
+    ],
+    "NOT_USED_TO_CHOOSE": [
+      "a new maxLength",
+      "a new maxItems",
+      "a new field order",
+      "a new requiredness rule",
+      "a new semantic allowance",
+      "a new Evidence interpretation"
+    ],
+    "note": "One rejected generation is not a contract-design distribution. The retained answer establishes that the violation happened and nothing about what a bound should be; no length, count, order, requiredness or allowance here was chosen from it"
+  },
+  "CONTRACT": {
+    "OUTPUT_SCHEMA_VERSION": "second-opportunity-synthesis-output@1.1.0",
+    "OUTPUT_SCHEMA_SHA256": "ec789d1be7d525bf6e498bf61e8a0596ac4582e24e8b45073b3f9ac1cca8b988",
+    "OUTPUT_GATE_VERSION": "second-opportunity-output-gate@1.1.0",
+    "SCHEMA_CHANGED": false,
+    "GATE_CHANGED": false,
+    "EVIDENCE_BOUND_REASONING_SUMMARY_MAX_LENGTH": 900,
+    "EVIDENCE_BOUND_REASONING_SUMMARY_MAX_LENGTH_SOURCE": "the live schema's properties.evidence_bound_reasoning_summary.maxLength, inherited byte-identically from Mission 1.31's base schema through v1.0.0 and v1.1.0",
+    "CRITICAL_UNCERTAINTY_ITEM_MAX_LENGTH": 500,
+    "COMMERCIAL_CLAIM_ITEM_MAX_LENGTH": 300
+  },
+  "RENDERER": {
+    "id": "output-constraint-renderer@1.0.0",
+    "module": "packages/opportunity-engine/python/sros_opportunity/output_constraints.py",
+    "INPUTS": [
+      "the live output schema object",
+      "the explicit rendering policy"
+    ],
+    "NOT_INPUTS": [
+      "model output",
+      "execution history",
+      "a response artifact",
+      "any value an answer happened to have"
+    ],
+    "DETERMINISTIC": true,
+    "notes": {
+      "supporting_evidence_ids": "the ids supplied to you, copied verbatim. No prose, no description, no partial id.",
+      "supporting_claim_ids": "the ids supplied to you, copied verbatim. No prose, no description, no partial id.",
+      "source_families": "the family names supplied to you as a packet fact, copied verbatim.",
+      "critical_uncertainties": "One uncertainty per element.",
+      "commercial_claims_supported": "One proposition per element; the reasoning belongs in evidence_bound_reasoning_summary.",
+      "commercial_claims_not_supported": "One proposition per element; the reasoning belongs in evidence_bound_reasoning_summary."
+    },
+    "note": "Fields follow the schema's own required order and adjacent fields whose rendered lines are identical share a stanza. A note is guidance that is not a limit and may carry no digit, so every number the model reads comes from the schema"
+  },
+  "CLASSIFICATION_POLICY": {
+    "object_required": {
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "rationale": "omitting a field fails validation, so the block states how many fields there are and that every one is required"
+    },
+    "object_closed": {
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "rationale": "a field outside the contract fails validation, so the block says no other field is allowed"
+    },
+    "type": {
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "rationale": "the tool schema carries every field's JSON type, and the rendered wording (characters, elements, exactly one of) already presupposes it"
+    },
+    "closed_choice": {
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "rationale": "a closed choice whose selection carries meaning; the exact members are rendered"
+    },
+    "composed_length": {
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "rationale": "the model composes this text and has to control its length while writing it"
+    },
+    "copied_length": {
+      "class": "INTERNAL_VALIDATOR_ONLY",
+      "rationale": "the value is copied verbatim from what the packet supplies, so generation never chooses its length; the bound serves the capacity walker and the validator"
+    },
+    "identity_grammar": {
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "rationale": "regex syntax is not useful prose: the block says which supplied values to copy verbatim, and the tool schema carries their canonical form"
+    },
+    "annotation": {
+      "class": "INTERNAL_VALIDATOR_ONLY",
+      "rationale": "an annotation the local validator does not assert; the pattern beside it does the work"
+    },
+    "sentinel": {
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "rationale": "the schema's own description names an exact string the answer must use when the field has no supported value; that is refusal behaviour, and it is rendered verbatim"
+    },
+    "chosen_cardinality": {
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "rationale": "the model chooses how many elements to write and can naturally write too many"
+    },
+    "vocabulary_cardinality": {
+      "class": "SEMANTICALLY_REDUNDANT_WITH_EXISTING_INSTRUCTION",
+      "rationale": "the items are drawn from a closed vocabulary no larger than this bound, and the vocabulary is rendered, so no duplicate-free answer can exceed it"
+    }
+  },
+  "CONSTRAINT_INVENTORY": [
+    {
+      "path": "<root>",
+      "keyword": "type",
+      "value": "object",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "<root>",
+      "keyword": "required",
+      "value": [
+        "decision",
+        "subject",
+        "target_actor_if_supported",
+        "observed_need",
+        "candidate_intervention_class",
+        "hypothesis_statement",
+        "supported_dimensions",
+        "unsupported_dimensions",
+        "supporting_evidence_ids",
+        "supporting_claim_ids",
+        "source_families",
+        "independence_status",
+        "reliability_status",
+        "evidence_bound_reasoning_summary",
+        "critical_uncertainties",
+        "commercial_claims_supported",
+        "commercial_claims_not_supported",
+        "recommended_next_evidence",
+        "confidence_classification",
+        "statement_classifications"
+      ],
+      "rule": "object_required",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": false,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "<root>",
+      "keyword": "additionalProperties",
+      "value": false,
+      "rule": "object_closed",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": false,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "decision",
+      "keyword": "type",
+      "value": "string",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "decision",
+      "keyword": "enum",
+      "value": [
+        "FORM_HYPOTHESIS",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "rule": "closed_choice",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": true,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "subject",
+      "keyword": "type",
+      "value": "string",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "subject",
+      "keyword": "maxLength",
+      "value": 80,
+      "rule": "composed_length",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": false,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "target_actor_if_supported",
+      "keyword": "type",
+      "value": "string",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "target_actor_if_supported",
+      "keyword": "maxLength",
+      "value": 200,
+      "rule": "composed_length",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": false,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "target_actor_if_supported",
+      "keyword": "sentinel",
+      "value": "UNKNOWN_NOT_SUPPORTED",
+      "rule": "sentinel",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": false,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "observed_need",
+      "keyword": "type",
+      "value": "string",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "observed_need",
+      "keyword": "maxLength",
+      "value": 400,
+      "rule": "composed_length",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": false,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "candidate_intervention_class",
+      "keyword": "type",
+      "value": "string",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "candidate_intervention_class",
+      "keyword": "maxLength",
+      "value": 300,
+      "rule": "composed_length",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": false,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "hypothesis_statement",
+      "keyword": "type",
+      "value": "string",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "hypothesis_statement",
+      "keyword": "maxLength",
+      "value": 600,
+      "rule": "composed_length",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": false,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "supported_dimensions",
+      "keyword": "type",
+      "value": "array",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "supported_dimensions",
+      "keyword": "maxItems",
+      "value": 14,
+      "rule": "vocabulary_cardinality",
+      "class": "SEMANTICALLY_REDUNDANT_WITH_EXISTING_INSTRUCTION",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "supported_dimensions[]",
+      "keyword": "type",
+      "value": "string",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "supported_dimensions[]",
+      "keyword": "enum",
+      "value": [
+        "PROBLEM_OR_NEED",
+        "RECURRENCE_OR_FREQUENCY",
+        "ECONOMIC_VALUE",
+        "WILLINGNESS_TO_PAY",
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "MARKET_ACTIVITY",
+        "TREND_OR_CHANGE",
+        "SOLUTION_GAP",
+        "SOLUTION_DISSATISFACTION",
+        "COMPETITIVE_SUPPLY",
+        "AUDIENCE_OR_USAGE",
+        "DISTRIBUTION_SIGNAL",
+        "REGULATORY_OR_STRUCTURAL_DRIVER",
+        "FEASIBILITY_SIGNAL"
+      ],
+      "rule": "closed_choice",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": true,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "unsupported_dimensions",
+      "keyword": "type",
+      "value": "array",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "unsupported_dimensions",
+      "keyword": "maxItems",
+      "value": 14,
+      "rule": "vocabulary_cardinality",
+      "class": "SEMANTICALLY_REDUNDANT_WITH_EXISTING_INSTRUCTION",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "unsupported_dimensions[]",
+      "keyword": "type",
+      "value": "string",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "unsupported_dimensions[]",
+      "keyword": "enum",
+      "value": [
+        "PROBLEM_OR_NEED",
+        "RECURRENCE_OR_FREQUENCY",
+        "ECONOMIC_VALUE",
+        "WILLINGNESS_TO_PAY",
+        "BUYER_OR_BUDGET_EXISTENCE",
+        "MARKET_ACTIVITY",
+        "TREND_OR_CHANGE",
+        "SOLUTION_GAP",
+        "SOLUTION_DISSATISFACTION",
+        "COMPETITIVE_SUPPLY",
+        "AUDIENCE_OR_USAGE",
+        "DISTRIBUTION_SIGNAL",
+        "REGULATORY_OR_STRUCTURAL_DRIVER",
+        "FEASIBILITY_SIGNAL"
+      ],
+      "rule": "closed_choice",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": true,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "supporting_evidence_ids",
+      "keyword": "type",
+      "value": "array",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "supporting_evidence_ids",
+      "keyword": "maxItems",
+      "value": 20,
+      "rule": "chosen_cardinality",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": false,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "supporting_evidence_ids[]",
+      "keyword": "type",
+      "value": "string",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "supporting_evidence_ids[]",
+      "keyword": "maxLength",
+      "value": 36,
+      "rule": "copied_length",
+      "class": "INTERNAL_VALIDATOR_ONLY",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "supporting_evidence_ids[]",
+      "keyword": "pattern",
+      "value": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "rule": "identity_grammar",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "supporting_evidence_ids[]",
+      "keyword": "format",
+      "value": "uuid",
+      "rule": "annotation",
+      "class": "INTERNAL_VALIDATOR_ONLY",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "supporting_claim_ids",
+      "keyword": "type",
+      "value": "array",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "supporting_claim_ids",
+      "keyword": "maxItems",
+      "value": 20,
+      "rule": "chosen_cardinality",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": false,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "supporting_claim_ids[]",
+      "keyword": "type",
+      "value": "string",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "supporting_claim_ids[]",
+      "keyword": "maxLength",
+      "value": 36,
+      "rule": "copied_length",
+      "class": "INTERNAL_VALIDATOR_ONLY",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "supporting_claim_ids[]",
+      "keyword": "pattern",
+      "value": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "rule": "identity_grammar",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "supporting_claim_ids[]",
+      "keyword": "format",
+      "value": "uuid",
+      "rule": "annotation",
+      "class": "INTERNAL_VALIDATOR_ONLY",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "source_families",
+      "keyword": "type",
+      "value": "array",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "source_families",
+      "keyword": "maxItems",
+      "value": 10,
+      "rule": "chosen_cardinality",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": false,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "source_families[]",
+      "keyword": "type",
+      "value": "string",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "source_families[]",
+      "keyword": "maxLength",
+      "value": 128,
+      "rule": "copied_length",
+      "class": "INTERNAL_VALIDATOR_ONLY",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "source_families[]",
+      "keyword": "pattern",
+      "value": "^[a-z0-9][a-z0-9._-]{0,127}$",
+      "rule": "identity_grammar",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "independence_status",
+      "keyword": "type",
+      "value": "string",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "independence_status",
+      "keyword": "maxLength",
+      "value": 300,
+      "rule": "composed_length",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": false,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "reliability_status",
+      "keyword": "type",
+      "value": "string",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "reliability_status",
+      "keyword": "maxLength",
+      "value": 300,
+      "rule": "composed_length",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": false,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "evidence_bound_reasoning_summary",
+      "keyword": "type",
+      "value": "string",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "evidence_bound_reasoning_summary",
+      "keyword": "maxLength",
+      "value": 900,
+      "rule": "composed_length",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": false,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "critical_uncertainties",
+      "keyword": "type",
+      "value": "array",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "critical_uncertainties",
+      "keyword": "maxItems",
+      "value": 12,
+      "rule": "chosen_cardinality",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": false,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "critical_uncertainties[]",
+      "keyword": "type",
+      "value": "string",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "critical_uncertainties[]",
+      "keyword": "minLength",
+      "value": 1,
+      "rule": "composed_length",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": false,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "critical_uncertainties[]",
+      "keyword": "maxLength",
+      "value": 500,
+      "rule": "composed_length",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": true,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "commercial_claims_supported",
+      "keyword": "type",
+      "value": "array",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "commercial_claims_supported",
+      "keyword": "maxItems",
+      "value": 8,
+      "rule": "chosen_cardinality",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": false,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "commercial_claims_supported[]",
+      "keyword": "type",
+      "value": "string",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "commercial_claims_supported[]",
+      "keyword": "maxLength",
+      "value": 300,
+      "rule": "composed_length",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": true,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "commercial_claims_not_supported",
+      "keyword": "type",
+      "value": "array",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "commercial_claims_not_supported",
+      "keyword": "maxItems",
+      "value": 14,
+      "rule": "chosen_cardinality",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": false,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "commercial_claims_not_supported[]",
+      "keyword": "type",
+      "value": "string",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "commercial_claims_not_supported[]",
+      "keyword": "maxLength",
+      "value": 300,
+      "rule": "composed_length",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": true,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "recommended_next_evidence",
+      "keyword": "type",
+      "value": "array",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "recommended_next_evidence",
+      "keyword": "maxItems",
+      "value": 8,
+      "rule": "chosen_cardinality",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": false,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "recommended_next_evidence[]",
+      "keyword": "type",
+      "value": "string",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "recommended_next_evidence[]",
+      "keyword": "maxLength",
+      "value": 300,
+      "rule": "composed_length",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": false,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "confidence_classification",
+      "keyword": "type",
+      "value": "string",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "confidence_classification",
+      "keyword": "enum",
+      "value": [
+        "EXPLORATORY"
+      ],
+      "rule": "closed_choice",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": true,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "statement_classifications",
+      "keyword": "type",
+      "value": "array",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "statement_classifications",
+      "keyword": "maxItems",
+      "value": 24,
+      "rule": "chosen_cardinality",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": false,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "statement_classifications[]",
+      "keyword": "type",
+      "value": "object",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "statement_classifications[]",
+      "keyword": "required",
+      "value": [
+        "statement",
+        "classification"
+      ],
+      "rule": "object_required",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": false,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "statement_classifications[]",
+      "keyword": "additionalProperties",
+      "value": false,
+      "rule": "object_closed",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": false,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "statement_classifications[].statement",
+      "keyword": "type",
+      "value": "string",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "statement_classifications[].statement",
+      "keyword": "maxLength",
+      "value": 300,
+      "rule": "composed_length",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": false,
+      "explicit_in_v1_2_0": true
+    },
+    {
+      "path": "statement_classifications[].classification",
+      "keyword": "type",
+      "value": "string",
+      "rule": "type",
+      "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+      "explicit_in_v1_1_0": null,
+      "explicit_in_v1_2_0": null
+    },
+    {
+      "path": "statement_classifications[].classification",
+      "keyword": "enum",
+      "value": [
+        "OBSERVED_OR_EVIDENCE_SUPPORTED",
+        "HYPOTHESIS_TO_VALIDATE",
+        "UNKNOWN_REQUIRES_EVIDENCE"
+      ],
+      "rule": "closed_choice",
+      "class": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "explicit_in_v1_1_0": true,
+      "explicit_in_v1_2_0": true
+    }
+  ],
+  "CLASS_COUNTS": {
+    "A": 32,
+    "B": 36,
+    "C": 2,
+    "D": 5
+  },
+  "EXPLICIT_IN_V1_1_0": [
+    "decision enum",
+    "supported_dimensions[] enum",
+    "unsupported_dimensions[] enum",
+    "critical_uncertainties[] maxLength",
+    "commercial_claims_supported[] maxLength",
+    "commercial_claims_not_supported[] maxLength",
+    "confidence_classification enum",
+    "statement_classifications[].classification enum"
+  ],
+  "MISSING_FROM_V1_1_0": [
+    "<root> required",
+    "<root> additionalProperties",
+    "subject maxLength",
+    "target_actor_if_supported maxLength",
+    "target_actor_if_supported sentinel",
+    "observed_need maxLength",
+    "candidate_intervention_class maxLength",
+    "hypothesis_statement maxLength",
+    "supporting_evidence_ids maxItems",
+    "supporting_claim_ids maxItems",
+    "source_families maxItems",
+    "independence_status maxLength",
+    "reliability_status maxLength",
+    "evidence_bound_reasoning_summary maxLength",
+    "critical_uncertainties maxItems",
+    "critical_uncertainties[] minLength",
+    "commercial_claims_supported maxItems",
+    "commercial_claims_not_supported maxItems",
+    "recommended_next_evidence maxItems",
+    "recommended_next_evidence[] maxLength",
+    "statement_classifications maxItems",
+    "statement_classifications[] required",
+    "statement_classifications[] additionalProperties",
+    "statement_classifications[].statement maxLength"
+  ],
+  "FAILED_FIELD_BOUND_MISSING_FROM_V1_1_0": true,
+  "WERE_OTHER_SCHEMA_BOUNDS_MISSING_FROM_PROMPT": true,
+  "OTHER_SCHEMA_BOUNDS_MISSING_FROM_V1_1_0": [
+    "subject maxLength 80",
+    "target_actor_if_supported maxLength 200",
+    "observed_need maxLength 400",
+    "candidate_intervention_class maxLength 300",
+    "hypothesis_statement maxLength 600",
+    "supporting_evidence_ids maxItems 20",
+    "supporting_claim_ids maxItems 20",
+    "source_families maxItems 10",
+    "independence_status maxLength 300",
+    "reliability_status maxLength 300",
+    "critical_uncertainties maxItems 12",
+    "critical_uncertainties[] minLength 1",
+    "commercial_claims_supported maxItems 8",
+    "commercial_claims_not_supported maxItems 14",
+    "recommended_next_evidence maxItems 8",
+    "recommended_next_evidence[] maxLength 300",
+    "statement_classifications maxItems 24",
+    "statement_classifications[].statement maxLength 300"
+  ],
+  "OTHER_GENERATION_CONSTRAINTS_MISSING_FROM_V1_1_0": [
+    "<root> required",
+    "<root> additionalProperties",
+    "target_actor_if_supported sentinel",
+    "statement_classifications[] required",
+    "statement_classifications[] additionalProperties"
+  ],
+  "UNSTATED_IN_V1_2_0": [],
+  "CARDINALITY_POLICY": "Every array's maximum is stated unless the schema itself makes it non-binding: an array whose members are drawn from a closed vocabulary no larger than its maxItems cannot exceed it without a duplicate, and the vocabulary is stated. Identifier arrays are stated too, though this packet supplies fewer ids than their maximum, because that margin is a fact about one packet and not about the contract",
+  "DRIFT_PROPERTY": {
+    "A_MUTATIONS": 32,
+    "A_MUTATIONS_MOVING_THE_PROMPT": 32,
+    "OTHER_CLASS_MUTATIONS": 10,
+    "OTHER_CLASS_MUTATIONS_LEAVING_THE_PROMPT": 10,
+    "TYPE_CONSTRAINTS_NOT_MUTATED": 33,
+    "VOCABULARY_BOUNDS_MADE_BINDING": 2,
+    "VOCABULARY_BOUNDS_MADE_BINDING_MOVING_THE_PROMPT": 2,
+    "DESCRIPTIONS_REWORDED": 10
+  },
+  "drift_note": "Every class-A constraint was mutated in a copy of the schema and moved the rendered prompt; every constraint of another class was mutated within its class and moved nothing; each vocabulary bound pushed below its vocabulary became binding and appeared; rewording every description left the prompt unchanged. Type keywords are not mutated, because changing a type turns the field into a different contract",
+  "ENFORCEMENT": {
+    "LOCAL_VALIDATOR_AUTHORITATIVE": true,
+    "POST_PROCESSING": {
+      "TRUNCATION": false,
+      "ITEM_DROPPING": false,
+      "REWRITING": false,
+      "AUTO_SUMMARY": false,
+      "STATEMENT_SPLITTING": false,
+      "SEMANTIC_NORMALISATION": false
+    },
+    "note": "The prompt communicates and the validator decides. An answer over a communicated bound is refused at stage 5 exactly as V2's was; nothing truncates, drops, rewrites, summarises, splits or normalises it to fit"
+  },
+  "PROMPT": {
+    "PREDECESSOR_VERSION": "1.1.0",
+    "PREDECESSOR_SHA256": "2f60c61f63cda410b9f60e3eafd9676f983e7ff0220245c03c88136511ac7e82",
+    "SUCCESSOR_VERSION": "1.2.0",
+    "SUCCESSOR_SHA256": "1677cbe53e83e644fa15e5492cf88e3ec578538351924f2b3a504e27f3a0878d",
+    "document": "docs/data/second-opportunity-synthesis-prompt-v3.json"
+  },
+  "ACCOUNTING": {
+    "MODEL_CALLS": 0,
+    "PROVIDER_REQUESTS": 0,
+    "MESSAGES_API_REQUESTS": 0,
+    "TOKEN_COUNT_API_REQUESTS": 0,
+    "TED_BYTES_SENT": 0,
+    "CANONICAL_MUTATIONS": 0,
+    "DOCUMENTATION_FETCHES": 0
+  }
+}

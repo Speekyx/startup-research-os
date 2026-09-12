@@ -39,6 +39,7 @@ from collections.abc import Mapping, Sequence
 from typing import Any
 
 from .dimensions import EvidenceDimension
+from .output_constraints import OUTPUT_CONSTRAINT_RENDERER_VERSION, render_output_constraints
 from .packet import OpportunityEvidencePacket
 from .schema_validation import schema_violations
 from .synthesis import (
@@ -81,6 +82,16 @@ __all__ = [
     "render_second_opportunity_prompt_v1_1",
     "second_opportunity_prompt_hash_v1_1",
     "evaluate_second_opportunity_output_v1_1",
+    # -- Mission 1.84.8, prompt v1.2.0. The schema and gate stay v1.1.0; only the prompt moves. --
+    "SECOND_OPPORTUNITY_PROMPT_VERSION_V1_2",
+    "OUTPUT_CONSTRAINT_NOTES_V1_2",
+    "OUTPUT_CONTRACT_OPENING",
+    "OUTPUT_CONTRACT_CLOSING",
+    "SECOND_OPPORTUNITY_OUTPUT_CONSTRAINTS_V1_2",
+    "SECOND_OPPORTUNITY_OUTPUT_CONTRACT_BLOCK_V1_2",
+    "SECOND_OPPORTUNITY_SYSTEM_V1_2",
+    "render_second_opportunity_prompt_v1_2",
+    "second_opportunity_prompt_hash_v1_2",
 ]
 
 SECOND_OPPORTUNITY_PROCEDURE_VERSION = "second-opportunity-synthesis@1.0.0"
@@ -742,3 +753,113 @@ def evaluate_second_opportunity_output_v1_1(
         audit=decision.audit,
         notes=decision.notes,
     )
+
+
+# =============================================================================================
+# Mission 1.84.8 -- prompt v1.2.0: the output-contract block, derived from the live schema.
+#
+# Mission 1.84.7's one request came back finished and was refused by the v1.1.0 schema on
+# `evidence_bound_reasoning_summary`, whose bound the v1.1.0 block above never stated in words: it
+# named two narrative bounds by hand and left the rest to the forced tool's input schema. The
+# operator kept the schema and the gate exactly as they are and asked for that drift to be removed
+# in a GENERAL way, so what follows is not a corrected copy of the list above. It is rendered from
+# `SECOND_OPPORTUNITY_OUTPUT_SCHEMA_V1_1` by `render_output_constraints`, and no bound is written
+# here.
+#
+# v1.1.0 is not touched. `BOUNDED_OUTPUT_CONTRACT_RULES` and `SECOND_OPPORTUNITY_SYSTEM_V1_1` still
+# render the bytes Mission 1.84.7 sent, because a historical execution must keep resolving against
+# the prompt it actually used.
+# =============================================================================================
+
+SECOND_OPPORTUNITY_PROMPT_VERSION_V1_2 = "1.2.0"
+
+#: Per-field guidance that is not a limit, carried from the v1.1.0 block word for word. The
+#: renderer refuses a note carrying a digit: every number the model reads comes from the schema.
+OUTPUT_CONSTRAINT_NOTES_V1_2: dict[str, str] = {
+    "supporting_evidence_ids": (
+        "the ids supplied to you, copied verbatim. No prose, no description, no partial id."
+    ),
+    "supporting_claim_ids": (
+        "the ids supplied to you, copied verbatim. No prose, no description, no partial id."
+    ),
+    "source_families": "the family names supplied to you as a packet fact, copied verbatim.",
+    "critical_uncertainties": "One uncertainty per element.",
+    "commercial_claims_supported": (
+        "One proposition per element; the reasoning belongs in evidence_bound_reasoning_summary."
+    ),
+    "commercial_claims_not_supported": (
+        "One proposition per element; the reasoning belongs in evidence_bound_reasoning_summary."
+    ),
+}
+
+#: The v1.1.0 block's framing sentences, unchanged: a bound refuses rather than trims, and a bound
+#: limits form, never how much may be left unconcluded.
+OUTPUT_CONTRACT_OPENING = (
+    "THE OUTPUT CONTRACT IS BOUNDED, AND AN ANSWER THAT EXCEEDS A BOUND IS REFUSED RATHER THAN "
+    "TRIMMED."
+)
+OUTPUT_CONTRACT_CLOSING = (
+    "These are limits on FORM, never on how much you may refuse to conclude. A shorter answer "
+    "that\nnames more unknowns is a better answer here than a longer one that names fewer."
+)
+
+SECOND_OPPORTUNITY_OUTPUT_CONSTRAINTS_V1_2 = render_output_constraints(
+    SECOND_OPPORTUNITY_OUTPUT_SCHEMA_V1_1, OUTPUT_CONSTRAINT_NOTES_V1_2
+)
+
+SECOND_OPPORTUNITY_OUTPUT_CONTRACT_BLOCK_V1_2 = (
+    OUTPUT_CONTRACT_OPENING
+    + "\n\n"
+    + SECOND_OPPORTUNITY_OUTPUT_CONSTRAINTS_V1_2
+    + "\n\n"
+    + OUTPUT_CONTRACT_CLOSING
+)
+
+SECOND_OPPORTUNITY_SYSTEM_V1_2 = (
+    SECOND_OPPORTUNITY_SYSTEM + "\n" + SECOND_OPPORTUNITY_OUTPUT_CONTRACT_BLOCK_V1_2 + "\n"
+)
+
+
+def render_second_opportunity_prompt_v1_2(
+    packet: OpportunityEvidencePacket,
+    claim_statements: Mapping[str, str],
+    evidence_to_claim: Mapping[str, str],
+) -> SynthesisPromptParts:
+    """The v1.2.0 regions. Only the system region differs from v1.1.0, and only after v1.0.0's part.
+
+    The trusted context, the untrusted region and the task are the v1.1.0 objects unchanged, so the
+    TED factual content supplied to the model is byte-identical across the version bump.
+    """
+    base = render_second_opportunity_prompt_v1_1(packet, claim_statements, evidence_to_claim)
+    return SynthesisPromptParts(
+        system_instructions=SECOND_OPPORTUNITY_SYSTEM_V1_2,
+        trusted_context=base.trusted_context,
+        untrusted=base.untrusted,
+        task=base.task,
+        metadata={**base.metadata, "prompt_version": SECOND_OPPORTUNITY_PROMPT_VERSION_V1_2},
+    )
+
+
+def second_opportunity_prompt_hash_v1_2(parts: SynthesisPromptParts) -> str:
+    """The v1.2.0 digest: the same regions and the unchanged v1.1.0 schema, plus the renderer.
+
+    The renderer's version is bound as well as its output, so a change to how constraints are
+    rendered moves the digest even in the unlikely case that it leaves this schema's text alone.
+    """
+    payload = json.dumps(
+        {
+            "procedure": SECOND_OPPORTUNITY_PROCEDURE_VERSION,
+            "prompt_id": SECOND_OPPORTUNITY_PROMPT_ID,
+            "prompt_version": SECOND_OPPORTUNITY_PROMPT_VERSION_V1_2,
+            "output_constraint_renderer": OUTPUT_CONSTRAINT_RENDERER_VERSION,
+            "system_instructions": parts.system_instructions,
+            "task": parts.task,
+            "trusted_context": parts.trusted_context,
+            "untrusted": [list(pair) for pair in parts.untrusted],
+            "output_schema": SECOND_OPPORTUNITY_OUTPUT_SCHEMA_V1_1,
+        },
+        sort_keys=True,
+        ensure_ascii=False,
+        separators=(",", ":"),
+    )
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
