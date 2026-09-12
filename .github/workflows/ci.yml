@@ -805,6 +805,20 @@ jobs:
       - name: Execution packet V3 is V2's call with the aligned prompt, and matches the live code
         run: uv run python infrastructure/scripts/render_second_opportunity_execution_packet_v3.py --check
 
+      # Mission 1.84.9. The one approved request under packet V3 was made, the v1.1.0 schema passed
+      # the answer, and the v1.1.0 semantic gate refused it at stage 6. The gate re-derives the
+      # record from what was kept and refuses: an approval that does not name V3's digest in the
+      # operator's own words, or that no longer forbids a second request, a retry, a repair, a
+      # rewrite or V1's and V2's approvals, or no longer withholds a change to the 900 bound; a
+      # raw digest, stop reason, usage, cost or schema verdict the retained response does not
+      # reproduce; a semantic refusal naming text the retained answer does not contain, or term
+      # locations that are not where the answer carries them; a stage table those facts do not
+      # imply, or a NOT_REACHED counted as passed; a human-review packet for a refused answer; V1's
+      # or V2's record edited; a runner that would execute V3 again; any persistence or moved
+      # counter; and a credential shape anywhere.
+      - name: The V3 execution record matches its approval, its retained response and the runner
+        run: uv run python infrastructure/scripts/render_second_opportunity_execution_record_v3.py --check
+
       # Mission 1.84.2. The one approved provider request happened and its output was rejected
       # at schema validation. The gate refuses: an approval recovered from a failure, or a
       # consumed-approval list that does not name V1's digest with a request against it; a

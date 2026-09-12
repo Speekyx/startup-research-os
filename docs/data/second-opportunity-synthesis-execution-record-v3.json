@@ -1,0 +1,211 @@
+{
+  "$comment": "Mission 1.84.9. The authoritative record of the one execution under execution packet V3, beside the packet and beside V1's and V2's records, which it does not touch. Every runtime value is read from the retained response and re-derived by CI gate 74.",
+  "record_version": "second-opportunity-synthesis-execution-record@3.0.0",
+  "mission": "1.84.9",
+  "recorded_by": "mission-1.84.9",
+  "recorded_on": "2026-09-13",
+  "START_COMMIT": "e26265a19dcd56e232c61b04d0dba0b558d43095",
+  "PRIMARY_OUTCOME": "EXECUTION_SEMANTIC_GATE_REJECTED_NO_RETRY",
+  "RUNNER_OUTCOME": "EXECUTION_OUTPUT_REJECTED_AT_SEMANTIC_GATE_NO_RETRY",
+  "outcome_note": "The provider finished normally (stop_reason tool_use), the forced tool call parsed, and the v1.1.0 schema passed the answer: the length bound V2 was refused on was met this time. The v1.1.0 semantic gate refused it at stage 6 on five reasons. Stages 7 to 10 were not reached, and a stage that was not reached is not a stage that passed",
+  "execution_packet_id": "SECOND-OPPORTUNITY-SYNTH-EXEC-V3",
+  "execution_packet_version": 3,
+  "execution_packet_sha256": "c7b8553d540332163b6f2fa4d63c82467680d79cee2b7d5988cc7c4d61f554b2",
+  "OPERATOR_APPROVAL": {
+    "file": "docs/data/second-opportunity-synthesis-execution-approval-v3.json",
+    "file_sha256": "9f951e64d9bc93e1dfb907763c2fdfedc1f3df46b48e63acf927fef3671d027c",
+    "operator_statement_sha256": "d8a1de699bde030777da1a4169d515d951ad0e392d89737019db9ebdc542a3d6",
+    "decision": "APPROVE_EXACTLY_ONE_EXECUTION",
+    "approved_by": "thibchm, the operator",
+    "recorded_by": "mission-1.84.9"
+  },
+  "EXECUTION_APPROVAL_CONSUMED": true,
+  "FURTHER_CALLS_AUTHORIZED_BY_V3": false,
+  "actual_provider_requests": 1,
+  "actual_model_calls": 1,
+  "retries": 0,
+  "fallbacks": 0,
+  "continuation_requests": 0,
+  "repair_calls": 0,
+  "PROVIDER": "anthropic",
+  "ROUTE": "POST https://api.anthropic.com/v1/messages",
+  "ROUTE_KIND": "SYNCHRONOUS_MESSAGES_API",
+  "BETA_HEADERS": [],
+  "MODEL": "claude-sonnet-5",
+  "RESPONSE_MODEL": "claude-sonnet-5",
+  "THINKING_POLICY": "DISABLED",
+  "THINKING_REQUEST_VALUE": {
+    "type": "disabled"
+  },
+  "THINKING_TOKENS_REPORTED": 0,
+  "thinking_note": "The response reports output_tokens_details.thinking_tokens = 0, as V2's did: thinking disabled, observed at runtime",
+  "MAX_TOKENS": 128000,
+  "REQUEST_TIMEOUT_SECONDS": 60.0,
+  "PROMPT_VERSION": "1.2.0",
+  "PROMPT_SHA256": "1677cbe53e83e644fa15e5492cf88e3ec578538351924f2b3a504e27f3a0878d",
+  "OUTPUT_SCHEMA_VERSION": "second-opportunity-synthesis-output@1.1.0",
+  "OUTPUT_SCHEMA_SHA256": "ec789d1be7d525bf6e498bf61e8a0596ac4582e24e8b45073b3f9ac1cca8b988",
+  "OUTPUT_GATE_VERSION": "second-opportunity-output-gate@1.1.0",
+  "timing": {
+    "started_at": "2026-09-12T20:03:01.233247+00:00",
+    "finished_at": "2026-09-12T20:03:35.590818+00:00",
+    "elapsed_seconds": 34.358
+  },
+  "TIMED_OUT": false,
+  "HTTP_STATUS": 200,
+  "PROVIDER_REQUEST_ID": "req_011Cez9FYuKnuu1zASuK1KS3",
+  "PROVIDER_MESSAGE_ID": "msg_011Cez9FZnQuRzvQup34Qay2",
+  "STOP_REASON": "tool_use",
+  "PROVIDER_COMPLETION": "COMPLETE",
+  "RESPONSE_ARTIFACT": {
+    "file": "docs/data/second-opportunity-synthesis-response-v3.json",
+    "file_sha256": "cf5eb183aa7d329f29e8c2c0f04e3939f1661e488952acdf414d07ad8f488ed6",
+    "RAW_PROVIDER_RESPONSE_RETAINED": true,
+    "raw_response_sha256": "5bb5dde55437689296e7963787f711555529a0db865809c550be41ba15f5374d",
+    "raw_response_characters": 9542,
+    "raw_digest_recomputable_from_retained_body": true,
+    "PARSED_OUTPUT_RETAINED": true,
+    "parsed_output_sha256": "973b8ba15158ca8bb94ba0e0040b4d731218c3048b1b15ae12712913f428df0b",
+    "USAGE_RETAINED": true,
+    "HIDDEN_REASONING_RETAINED": false
+  },
+  "POST_CALL_FALLBACK_USED": false,
+  "retention_note": "The normal path wrote the artifact: the raw body, the usage, the parsed answer and the verdict that judged it. The post-call fail-safe was not needed",
+  "ACTUAL_USAGE": {
+    "input_tokens": 9491,
+    "output_tokens": 3880,
+    "total_tokens": 13371,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "thinking_tokens": 0,
+    "source": "the provider's usage block in the retained response, identical to the Gateway's telemetry"
+  },
+  "ACTUAL_COST": {
+    "cost_units": 0.057782,
+    "input_cost_units": 0.018982,
+    "output_cost_units": 0.0388,
+    "pricing_version": "anthropic-published-2026-09-02",
+    "priced": true
+  },
+  "cost_note": "Derived from the usage the provider reported, at the held pricing table, and equal to the Gateway's telemetry. The provider's invoice is not observed. The worst case of 1.30565 was a bound computed before the call and is not what the call cost",
+  "INPUT_TOKEN_ESTIMATE": 12825,
+  "INPUT_ESTIMATE_COVERED_THE_ACTUAL": true,
+  "WORST_CASE_CALL_COST": 1.30565,
+  "EXECUTION_COST_CEILING": 1.30565,
+  "ACTUAL_COST_WITHIN_CEILING": true,
+  "VALIDATION_STAGES": {
+    "1_transport_success": "PASSED",
+    "2_provider_response_shape": "PASSED",
+    "3_provider_completion": "PASSED",
+    "4_structured_output_parse": "PASSED",
+    "5_schema_validation_v1_1_0": "PASSED",
+    "6_semantic_output_gate_v1_1_0": "FAILED",
+    "7_evidence_boundary_and_no_distortion": "NOT_REACHED",
+    "8_attribution_and_provenance": "NOT_REACHED",
+    "9_persistence_eligibility": "NOT_REACHED",
+    "10_human_review": "NOT_REACHED"
+  },
+  "STAGES_PASSED": 5,
+  "FAILED_STAGE": "6_semantic_output_gate_v1_1_0",
+  "SCHEMA_VIOLATIONS": [],
+  "SEMANTIC_GATE_REFUSAL_REASONS": [
+    "reliability_status contains 'SCORED'. Scoring-ready is not scored, no score exists in this repository, and REFERENCE_PROFILE_V1 is UNCALIBRATED",
+    "evidence_bound_reasoning_summary audited UNSUPPORTED: the number 161 appears in no supplied statement and in no structural fact about the packet; 'market' appears in no supplied statement; prior knowledge is not available as factual support (§7)",
+    "REALISED_SPEND: the output contains 'actual expenditure', which no supplied statement contains. This packet is not money anybody paid, actual expenditure, a budget consumed, or a contract's final cost",
+    "WILLINGNESS_TO_PAY: the output contains 'willingness to pay', which no supplied statement contains. This packet is not willingness to pay, price tolerance, budget for software, or ability to pay for a product",
+    "WILLINGNESS_TO_PAY: the output contains 'willing to pay', which no supplied statement contains. This packet is not willingness to pay, price tolerance, budget for software, or ability to pay for a product"
+  ],
+  "SEMANTIC_GATE_AUDIT_FAILED_FIELDS": [
+    "evidence_bound_reasoning_summary"
+  ],
+  "SEMANTIC_REFUSAL_TERM_LOCATIONS": [
+    {
+      "term": "SCORED",
+      "occurs_in": [
+        "reliability_status"
+      ]
+    },
+    {
+      "term": "market",
+      "occurs_in": [
+        "supported_dimensions[2]",
+        "evidence_bound_reasoning_summary",
+        "commercial_claims_not_supported[2]"
+      ]
+    },
+    {
+      "term": "161",
+      "occurs_in": [
+        "evidence_bound_reasoning_summary"
+      ]
+    },
+    {
+      "term": "actual expenditure",
+      "occurs_in": [
+        "recommended_next_evidence[2]"
+      ]
+    },
+    {
+      "term": "willingness to pay",
+      "occurs_in": [
+        "hypothesis_statement",
+        "evidence_bound_reasoning_summary"
+      ]
+    },
+    {
+      "term": "willing to pay",
+      "occurs_in": [
+        "commercial_claims_not_supported[1]",
+        "statement_classifications[9].statement"
+      ]
+    }
+  ],
+  "semantic_note": "Recorded as facts for the operator, with nothing changed on the strength of them and nothing recommended. 'willingness to pay', 'actual expenditure' and 'BT-161' appear in the v1.2.0 system region itself, in the passages that tell the model what this packet is NOT; 'willing to pay' and 'scored' do not. The answer uses the refused phrases in denials, in its list of unsupported commercial claims, in a statement it classifies UNKNOWN_REQUIRES_EVIDENCE and in a request for evidence, and it asserts 'market activity' in its summary. The gate's forbidden-phrase check refuses a phrase wherever it appears unless a supplied statement contains it, and its audit reads the supplied statements rather than the system region. Re-running the live v1.1.0 gate locally over the retained answer, with the packet rebuilt from the research database and no network, reproduced the five reasons exactly",
+  "NOT_REACHED_IS_NOT_PASSED": true,
+  "HUMAN_OUTPUT_REVIEW_REQUIRED": true,
+  "HUMAN_REVIEW_PACKET": "NOT_PRODUCED",
+  "human_review_note": "No human-review packet: a human reviews an answer every machine stage accepted, and this one was refused at stage 6. The retained answer is evidence of what the model produced, not a candidate for persistence",
+  "CANONICAL_PERSISTENCE": false,
+  "OPPORTUNITY_PERSISTED": false,
+  "CANONICAL_MUTATIONS": 0,
+  "TED_BYTES_SENT": 3604,
+  "TED_REPRESENTATION_CHARACTERS": 3604,
+  "TED_REPRESENTATION_SHA256": "2528a56a4a9e873bfd04662aeb52916eb80faafe10ab085e716cbdcee77c5b72",
+  "REQUEST_BODY_CHARACTERS": 22124,
+  "ted_note": "The TED-derived bytes that left: the 3604-character representation the egress decision approved, rebuilt and unchanged, inside the 22124-character request body",
+  "CANONICAL_COUNTERS_BEFORE": {
+    "acquisition.raw_records": 325,
+    "acquisition.normalized_records": 325,
+    "nlp.signals": 60,
+    "research.claims": 91,
+    "research.claim_revisions": 92,
+    "scoring.evidence": 112,
+    "epistemic.reliability_assessments": 4,
+    "scoring.evidence_independence_groups": 0,
+    "research.opportunities": 1,
+    "research.opportunity_hypothesis_revisions": 2,
+    "research.opportunity_hypothesis_evidence": 14,
+    "nlp.embedding_provenance": 0,
+    "registry.source_policy_reviews": 71,
+    "scoring.scores": "ABSENT"
+  },
+  "CANONICAL_COUNTERS_AFTER": {
+    "acquisition.raw_records": 325,
+    "acquisition.normalized_records": 325,
+    "nlp.signals": 60,
+    "research.claims": 91,
+    "research.claim_revisions": 92,
+    "scoring.evidence": 112,
+    "epistemic.reliability_assessments": 4,
+    "scoring.evidence_independence_groups": 0,
+    "research.opportunities": 1,
+    "research.opportunity_hypothesis_revisions": 2,
+    "research.opportunity_hypothesis_evidence": 14,
+    "nlp.embedding_provenance": 0,
+    "registry.source_policy_reviews": 71,
+    "scoring.scores": "ABSENT"
+  },
+  "V1_EXECUTION_RECORD_SHA256": "b769ddeb6ea4d4e773640c3ed83caeff52c52c857fd9125325140de4ab38c799",
+  "V2_EXECUTION_RECORD_SHA256": "3fb8d5bae0cb2c64e165961518d9dfd3b1de98eef5244600ea0e5efc289001a7",
+  "CREDENTIAL_VALUES_RECORDED": false
+}
