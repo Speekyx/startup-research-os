@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.143
+Version: 1.144
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.9)
+Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.10)
 
 ---
 
@@ -13,6 +13,53 @@ Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.9)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.144 - 2026-09-13 (Sprint 1 / Mission 1.84.10)
+
+**`V3_DIAGNOSTIC_REVEALED_NEXT_EXECUTION_BLOCKER`: the semantic gate was repaired in a general way,
+frozen before V3 was replayed through it, and the replay found a defect in the repair.** The operator
+kept schema v1.1.0 and prompt v1.2.0 and asked for the gate's assertion context to be repaired with no
+answer whitelisted, no forbidden concept removed and no boundary weakened. **Gate v1.2.0** was built
+beside v1.1.0 in two new modules, tested on synthetic cases only, **frozen, committed and pushed
+(`3f8c634`) before the one diagnostic replay**. `guards.py`, `validation.py`, `second_opportunity.py`
+and `schema_validation.py` are byte-identical to bb0f50a, and V3's five v1.1.0 reasons reproduce
+exactly.
+
+**WHAT v1.2.0 IS.** A concept is refused when it is ASSERTED, and denials scope their clause. A
+contrastive continuation re-asserts. Every schema field has one of seven dispositions and a shape,
+so a request that stops being request-shaped is read as an assertion. The support universe has three
+typed channels, and trusted limiting context, passed explicitly, licenses only definitional
+identifiers (`BT-161`). `market activity` is licensed as the canonical enum term of a declared and
+supported dimension, never as the word. SCORED is refused in any asserted form, and the forbidden
+concepts are refused as assertions, with the §20 concepts added.
+
+**THE REPLAY.** It ran once, in DIAGNOSTIC_ONLY mode, through the V3 runner's own stages with only
+the gate swapped. CI re-runs it from a snapshot authenticated by rebuilding the approved
+representation and prompt. The five historical refusals no longer fire. **One new refusal does, at
+stage 6:** `statement_classifications[7]` on `'tender'`, a word the supplied statements carry as
+"Tenders". The classifier folds plurals on the answer's side and the licence compares exact tokens.
+**It is a defect of the frozen gate, found by the replay, and it was not repaired**, because a gate
+changed after seeing V3 is tuned on V3. **No V4 packet, runner or approval surface was created.**
+
+**Probe: 139 caught, 0 escaped, 19 of 19 controls**, including the plural fix the
+replay suggests, refused as a re-freeze by stealth.
+
+**Verification.** 3853 bare-python tests; 4463 pytest, 13 skipped, database unchanged across
+29 tenant tables; ruff over 1042 files; mypy over 203 files; contracts, catalog and registry;
+all **76** CI gates, two new; **219 new tests**.
+
+**What moved.** Nothing canonical: every counter identical, and **0 model calls, 0 provider
+requests, 0 Messages API requests, 0 TED bytes**.
+
+New: `sros_opportunity/assertion_context.py`, `sros_opportunity/second_opportunity_gate_v1_2.py`,
+`docs/data/second-opportunity-output-gate-v1.2-freeze-v1.json` and `second-opportunity-v3-diagnostic-replay-v1.json`
+with their generated `.md`; `infrastructure/scripts/render_second_opportunity_semantic_gate_v1_2.py` (CI gate 75)
+and `render_second_opportunity_v3_diagnostic_replay.py` (CI gate 76); tests; and
+`docs/reports/mission-1.84.10-report.md`.
+
+Changed: `docs/CLAUDE.md` 1.144 to 1.145; `.github/workflows/ci.yml` gains two gates. **The schema,
+the prompt, the v1.0.0 and v1.1.0 gates, every V1, V2 and V3 artifact and the V3 runner are
+byte-identical.**
 
 ## 1.143 - 2026-09-13 (Sprint 1 / Mission 1.84.9)
 

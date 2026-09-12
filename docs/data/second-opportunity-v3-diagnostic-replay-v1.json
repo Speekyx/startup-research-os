@@ -1,0 +1,392 @@
+{
+  "$comment": "Mission 1.84.10. V3's retained answer replayed DIAGNOSTICALLY through the frozen gate v1.2.0 and the V3 runner's own stages. V3 stays historically rejected and is never a candidate. CI gate 76 re-derives every field from the authenticated snapshot.",
+  "record_version": "second-opportunity-v3-diagnostic-replay@1.0.0",
+  "mission": "mission-1.84.10",
+  "DIAGNOSTIC_ONLY": true,
+  "FREEZE_COMMIT": "3f8c63400d7b7a3e0088e2e1c1c119efd7aa7845",
+  "FREEZE_RECORD_SHA256": "4404336259dd2d18ce905f1c002f2ca5ccff511f9e4988911ea110084bb65cd1",
+  "FROZEN_IMPLEMENTATION_SHA256": "47bbcb459b0b69153d23c7dcc7f273e0e47d0b84a72522d25f773cd462db82b0",
+  "GATE_V1_2_DESIGN_FROZEN_BEFORE_V3_DIAGNOSTIC_REPLAY": true,
+  "V3_EXECUTION_PACKET_SHA256": "c7b8553d540332163b6f2fa4d63c82467680d79cee2b7d5988cc7c4d61f554b2",
+  "V3_FACTS": {
+    "PRIMARY_OUTCOME": "EXECUTION_SEMANTIC_GATE_REJECTED_NO_RETRY",
+    "execution_packet_sha256": "c7b8553d540332163b6f2fa4d63c82467680d79cee2b7d5988cc7c4d61f554b2",
+    "actual_provider_requests": 1,
+    "actual_model_calls": 1,
+    "retries": 0,
+    "continuation_requests": 0,
+    "repair_calls": 0,
+    "STOP_REASON": "tool_use",
+    "SCHEMA_VIOLATIONS": [],
+    "CANONICAL_PERSISTENCE": false,
+    "EXECUTION_APPROVAL_CONSUMED": true,
+    "input_tokens": 9491,
+    "output_tokens": 3880,
+    "thinking_tokens": 0,
+    "cost_units": 0.057782,
+    "schema_validation": "PASSED",
+    "semantic_gate_v1_1_0": "FAILED",
+    "semantic_reasons": 5
+  },
+  "HISTORICAL_V3_STAGE_TABLE": {
+    "1_transport_success": "PASSED",
+    "2_provider_response_shape": "PASSED",
+    "3_provider_completion": "PASSED",
+    "4_structured_output_parse": "PASSED",
+    "5_schema_validation_v1_1_0": "PASSED",
+    "6_semantic_output_gate_v1_1_0": "FAILED",
+    "7_evidence_boundary_and_no_distortion": "NOT_REACHED",
+    "8_attribution_and_provenance": "NOT_REACHED",
+    "9_persistence_eligibility": "NOT_REACHED",
+    "10_human_review": "NOT_REACHED"
+  },
+  "HISTORICAL_V3_GATE_V1_1_VERSION": "second-opportunity-output-gate@1.1.0",
+  "HISTORICAL_V3_GATE_V1_1_VERDICT": "FAILED",
+  "HISTORICAL_REASONS_REPRODUCED": true,
+  "HISTORICAL_REASON_COUNT": 5,
+  "DIAGNOSTIC_GATE_VERSION": "second-opportunity-output-gate@1.2.0",
+  "DIAGNOSTIC_GATE_V1_2_VERDICT": "FAILED",
+  "DIAGNOSTIC_GATE_V1_2_REASONS": [
+    "statement_classifications[7].statement audited UNSUPPORTED: 'tender' appears in no supplied statement; prior knowledge is not available as factual support (§7)"
+  ],
+  "DIAGNOSTIC_AUDIT": [
+    {
+      "field": "target_actor_if_supported",
+      "verdict": "SUPPORTED"
+    },
+    {
+      "field": "observed_need",
+      "verdict": "SUPPORTED"
+    },
+    {
+      "field": "candidate_intervention_class",
+      "verdict": "SUPPORTED"
+    },
+    {
+      "field": "hypothesis_statement",
+      "verdict": "SUPPORTED"
+    },
+    {
+      "field": "independence_status",
+      "verdict": "SUPPORTED"
+    },
+    {
+      "field": "reliability_status",
+      "verdict": "SUPPORTED"
+    },
+    {
+      "field": "evidence_bound_reasoning_summary",
+      "verdict": "SUPPORTED"
+    },
+    {
+      "field": "critical_uncertainties[0]",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "critical_uncertainties[1]",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "critical_uncertainties[2]",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "critical_uncertainties[3]",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "critical_uncertainties[4]",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "critical_uncertainties[5]",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "critical_uncertainties[6]",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "critical_uncertainties[7]",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "critical_uncertainties[8]",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "commercial_claims_supported[0]",
+      "verdict": "SUPPORTED"
+    },
+    {
+      "field": "commercial_claims_supported[1]",
+      "verdict": "SUPPORTED"
+    },
+    {
+      "field": "commercial_claims_not_supported[0]",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "commercial_claims_not_supported[1]",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "commercial_claims_not_supported[2]",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "commercial_claims_not_supported[3]",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "commercial_claims_not_supported[4]",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "commercial_claims_not_supported[5]",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "commercial_claims_not_supported[6]",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "commercial_claims_not_supported[7]",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "commercial_claims_not_supported[8]",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "commercial_claims_not_supported[9]",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "recommended_next_evidence[0]",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "recommended_next_evidence[1]",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "recommended_next_evidence[2]",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "recommended_next_evidence[3]",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "recommended_next_evidence[4]",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "recommended_next_evidence[5]",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "recommended_next_evidence[6]",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "statement_classifications[0].statement",
+      "verdict": "SUPPORTED"
+    },
+    {
+      "field": "statement_classifications[1].statement",
+      "verdict": "SUPPORTED"
+    },
+    {
+      "field": "statement_classifications[2].statement",
+      "verdict": "SUPPORTED"
+    },
+    {
+      "field": "statement_classifications[3].statement",
+      "verdict": "SUPPORTED"
+    },
+    {
+      "field": "statement_classifications[4].statement",
+      "verdict": "SUPPORTED"
+    },
+    {
+      "field": "statement_classifications[5].statement",
+      "verdict": "SUPPORTED"
+    },
+    {
+      "field": "statement_classifications[6].statement",
+      "verdict": "SUPPORTED"
+    },
+    {
+      "field": "statement_classifications[7].statement",
+      "verdict": "UNSUPPORTED"
+    },
+    {
+      "field": "statement_classifications[8].statement",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "statement_classifications[9].statement",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "statement_classifications[10].statement",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "statement_classifications[11].statement",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "statement_classifications[12].statement",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "statement_classifications[13].statement",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "statement_classifications[14].statement",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "statement_classifications[15].statement",
+      "verdict": "NOT_FACTUAL"
+    },
+    {
+      "field": "statement_classifications[16].statement",
+      "verdict": "NOT_FACTUAL"
+    }
+  ],
+  "DIAGNOSTIC_STAGES": {
+    "1_transport_success": "PASSED",
+    "2_provider_response_shape": "PASSED",
+    "3_provider_completion": "PASSED",
+    "4_structured_output_parse": "PASSED",
+    "5_schema_validation_v1_1_0": "PASSED",
+    "6_semantic_output_gate_v1_2_0": "FAILED",
+    "7_evidence_boundary_and_no_distortion": "NOT_REACHED",
+    "8_attribution_and_provenance": "NOT_REACHED",
+    "9_persistence_eligibility": "NOT_REACHED",
+    "10_human_review": "NOT_MANUFACTURED_DIAGNOSTIC_ONLY"
+  },
+  "DIAGNOSTIC_STAGE_SUMMARY": {
+    "6_semantic_output_gate_v1_2_0": "FAILED",
+    "7_evidence_boundary_and_no_distortion": "NOT_REACHED",
+    "8_attribution_and_provenance": "NOT_REACHED",
+    "9_persistence_eligibility": "NOT_REACHED"
+  },
+  "DIAGNOSTIC_FAILED_STAGE": "6_semantic_output_gate_v1_2_0",
+  "DIAGNOSTIC_STAGE_REASONS": [
+    "statement_classifications[7].statement audited UNSUPPORTED: 'tender' appears in no supplied statement; prior knowledge is not available as factual support (§7)"
+  ],
+  "MACHINERY_OUTCOME": "EXECUTION_OUTPUT_REJECTED_AT_SEMANTIC_GATE_NO_RETRY",
+  "DIAGNOSTIC_OUTCOME": "V3_DIAGNOSTIC_REVEALED_NEXT_EXECUTION_BLOCKER",
+  "DIAGNOSTIC_PROVENANCE": null,
+  "TRUSTED_CONTEXT_SHA256": "015181aa08d7b5443f5158a5b459594753a0ea249a6bf0c7cbac3e4ad0eb9185",
+  "TRUSTED_IDENTIFIERS": [
+    "BT-161",
+    "BT-195",
+    "BT-198"
+  ],
+  "SNAPSHOT_AUTHENTICATION": {
+    "packet_id": "e218b56a8f938f4d5f7fc961e7f0c2cfe184c4396395334140c6199b48316592",
+    "representation_sha256": "2528a56a4a9e873bfd04662aeb52916eb80faafe10ab085e716cbdcee77c5b72",
+    "prompt_sha256": "1677cbe53e83e644fa15e5492cf88e3ec578538351924f2b3a504e27f3a0878d"
+  },
+  "ORIGINAL_RAW_RESPONSE_SHA256": "5bb5dde55437689296e7963787f711555529a0db865809c550be41ba15f5374d",
+  "V3_HISTORICALLY_REJECTED": true,
+  "V3_HISTORICAL_OUTCOME": "EXECUTION_SEMANTIC_GATE_REJECTED_NO_RETRY",
+  "V3_CANDIDATE": false,
+  "V3_HUMAN_REVIEW_PACKET": "NOT_PRODUCED",
+  "V3_PERSISTABLE": false,
+  "STAGE_10_MANUFACTURED": false,
+  "PERSISTED": "NOTHING",
+  "RECONSTRUCTED_BODY_NOTE": "stage 8 reads a body re-serialised from the retained response, so its raw digest is of that body; the digest of the bytes that arrived is ORIGINAL_RAW_RESPONSE_SHA256",
+  "PACKET_SNAPSHOT": {
+    "packet_id": "e218b56a8f938f4d5f7fc961e7f0c2cfe184c4396395334140c6199b48316592",
+    "packet_version": "opportunity-evidence-packet@1.0.0",
+    "subject": "ted-eu:CPV-class:9261",
+    "subject_label": "ted-eu:CPV-class:9261",
+    "evidence_ids": [
+      "0b407e80-336a-4b71-8a59-09f0464bf43f",
+      "0d8790e9-fbf8-4675-b253-6b35cf294959",
+      "17702f3b-c72c-43bd-b183-e7d600e516fd",
+      "1a0bb19a-c849-46b5-a31b-c6716d6d304c",
+      "7b1bed61-78ef-43a9-862c-bdeda3171bf5",
+      "93d1ae45-13a5-4fc5-a528-9f3bb1e59980"
+    ],
+    "claim_ids": [
+      "3c65a723-4d06-481e-9d88-86cf4adb85b9",
+      "65ae9cd9-a570-4be6-9cd6-91a6aaae6098",
+      "a645151c-9350-4b05-903f-f01b95ef5dfc",
+      "c99e531d-a72d-40fb-bb21-c76d6715bab0",
+      "d25bd256-49a1-494f-b6f8-4f1c3271d78e"
+    ],
+    "signal_type_ids": [
+      "procurement_value_contrast"
+    ],
+    "source_ids": [
+      "ted-eu"
+    ],
+    "source_families": [
+      "public_procurement"
+    ],
+    "use_profile_ids": [
+      "local-private-research-v1"
+    ],
+    "dimensions": [
+      "BUYER_OR_BUDGET_EXISTENCE",
+      "ECONOMIC_VALUE",
+      "MARKET_ACTIVITY"
+    ],
+    "counting_dimensions": [
+      "BUYER_OR_BUDGET_EXISTENCE",
+      "ECONOMIC_VALUE",
+      "MARKET_ACTIVITY"
+    ],
+    "dimension_bounds": [
+      "Published award totals for a bounded set of notices in one CPV division. eForms BT-161 is the value of all contracts awarded in the notice INCLUDING OPTIONS AND RENEWALS -- not money paid, not necessarily one supplier, not realised expenditure, and not a price. It may be lawfully withheld under BT-195 to BT-198, so any cohort covers the published subset only and no proportion may be computed from it. It is not willingness to pay for a SaaS product, or for any product."
+    ],
+    "eligibility_counts": {
+      "ELIGIBLE_SCORING": 6
+    },
+    "independence_counts": {
+      "UNKNOWN": 6
+    },
+    "reliability_status_counts": {
+      "RESOLVED": 6
+    },
+    "observed_at_present": 0,
+    "procedures": {
+      "packet": "opportunity-evidence-packet@1.0.0",
+      "grouping": "source-native-subject-grouping@1.3.0",
+      "dimension_map": "signal-type-dimension-map@1.0.0",
+      "eligibility": "opportunity-input-eligibility@1.0.0"
+    },
+    "claim_statements": {
+      "3c65a723-4d06-481e-9d88-86cf4adb85b9": "Tenders Electronic Daily (EU public procurement) reported that, in its \"notices/eforms-contract-and-award\" resource, within a bounded set of 6 \"CONTRACT_NOTICE\" notices classified under \"CPV\" class \"9261\" (division \"92\"), the largest \"TOTAL_VALUE\" amount at \"NOTICE\" scope stated in \"EUR\" exceeded the smallest by 86827200.",
+      "65ae9cd9-a570-4be6-9cd6-91a6aaae6098": "Tenders Electronic Daily (EU public procurement) reported that, in its \"notices/eforms-contract-and-award\" resource, within a bounded set of 2 \"CONTRACT_AWARD_NOTICE\" notices classified under \"CPV\" class \"9261\" (division \"92\"), the largest \"TOTAL_VALUE\" amount at \"NOTICE\" scope stated in \"EUR\" exceeded the smallest by 235017.",
+      "a645151c-9350-4b05-903f-f01b95ef5dfc": "The source \"ted-eu\" published, in its \"notices/eforms-contract-and-award\" resource, at least one bounded set of \"CONTRACT_AWARD_NOTICE\" notices classified under \"CPV\" class \"9261\" (division \"92\") whose stated \"TOTAL_VALUE\" amounts at \"NOTICE\" scope in \"EUR\" differ from one another.",
+      "c99e531d-a72d-40fb-bb21-c76d6715bab0": "Tenders Electronic Daily (EU public procurement) reported that, in its \"notices/eforms-contract-and-award\" resource, within a bounded set of 3 \"CONTRACT_NOTICE\" notices classified under \"CPV\" class \"9261\" (division \"92\"), the largest \"TOTAL_VALUE\" amount at \"NOTICE\" scope stated in \"EUR\" exceeded the smallest by 15658679.12.",
+      "d25bd256-49a1-494f-b6f8-4f1c3271d78e": "The source \"ted-eu\" published, in its \"notices/eforms-contract-and-award\" resource, at least one bounded set of \"CONTRACT_NOTICE\" notices classified under \"CPV\" class \"9261\" (division \"92\") whose stated \"TOTAL_VALUE\" amounts at \"NOTICE\" scope in \"EUR\" differ from one another."
+    },
+    "evidence_to_claim": {
+      "0b407e80-336a-4b71-8a59-09f0464bf43f": "d25bd256-49a1-494f-b6f8-4f1c3271d78e",
+      "0d8790e9-fbf8-4675-b253-6b35cf294959": "d25bd256-49a1-494f-b6f8-4f1c3271d78e",
+      "17702f3b-c72c-43bd-b183-e7d600e516fd": "c99e531d-a72d-40fb-bb21-c76d6715bab0",
+      "1a0bb19a-c849-46b5-a31b-c6716d6d304c": "a645151c-9350-4b05-903f-f01b95ef5dfc",
+      "7b1bed61-78ef-43a9-862c-bdeda3171bf5": "65ae9cd9-a570-4be6-9cd6-91a6aaae6098",
+      "93d1ae45-13a5-4fc5-a528-9f3bb1e59980": "3c65a723-4d06-481e-9d88-86cf4adb85b9"
+    }
+  },
+  "accounting": {
+    "MODEL_CALLS": 0,
+    "PROVIDER_REQUESTS": 0,
+    "MESSAGES_API_REQUESTS": 0,
+    "TED_BYTES_SENT": 0,
+    "CANONICAL_MUTATIONS": 0
+  },
+  "replayed_at": "2026-09-12T21:40:36.448744+00:00"
+}

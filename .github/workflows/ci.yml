@@ -830,6 +830,17 @@ jobs:
       - name: The semantic gate v1.2.0 is the one frozen before the V3 diagnostic replay
         run: uv run python infrastructure/scripts/render_second_opportunity_semantic_gate_v1_2.py --check
 
+      # Mission 1.84.10. V3's retained answer replayed DIAGNOSTICALLY, once, through the frozen gate
+      # v1.2.0 and the V3 runner's own stages. The gate re-derives every field from a packet
+      # snapshot it authenticates by rebuilding the approved representation and the v1.2.0 prompt,
+      # and refuses: a frozen gate that no longer validates; a different freeze commit, or (where
+      # history is present) a freeze that did not precede the replay; a V3 artifact that moved or a
+      # V3 fact that is not the one recorded; five historical reasons that no longer reproduce; a
+      # tampered snapshot; a stage, verdict, reason or outcome the replay does not derive; stage 10
+      # manufactured, V3 made a candidate or persistable, or a human-review packet for it.
+      - name: V3's diagnostic replay through gate v1.2.0 re-derives from its authenticated snapshot
+        run: uv run python infrastructure/scripts/render_second_opportunity_v3_diagnostic_replay.py --check
+
       # Mission 1.84.2. The one approved provider request happened and its output was rejected
       # at schema validation. The gate refuses: an approval recovered from a failure, or a
       # consumed-approval list that does not name V1's digest with a request against it; a

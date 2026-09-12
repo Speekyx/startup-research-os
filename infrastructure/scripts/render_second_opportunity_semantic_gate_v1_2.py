@@ -512,8 +512,8 @@ def main(argv: list[str] | None = None) -> int:
     group.add_argument("--write", action="store_true")
     args = parser.parse_args(argv)
     if args.write:
-        RECORD.write_text(
-            json.dumps(build_record(), indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+        RECORD.write_bytes(
+            (json.dumps(build_record(), indent=2, ensure_ascii=False) + "\n").encode("utf-8")
         )
     try:
         record = validate()
@@ -522,7 +522,7 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     text = render(record)
     if args.write:
-        RECORD_MD.write_text(text, encoding="utf-8")
+        RECORD_MD.write_bytes(text.encode("utf-8"))
     elif not RECORD_MD.exists() or RECORD_MD.read_text(encoding="utf-8") != text:
         print(f"FAIL: {RECORD_MD.name} is stale; run with --write")
         return 1
