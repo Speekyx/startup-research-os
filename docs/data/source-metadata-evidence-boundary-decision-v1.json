@@ -1,0 +1,48 @@
+{
+  "$comment": "Mission 1.84.11. The operator's evidence-boundary decision on source metadata, first class and independent of any answer. CI gate 77 re-derives every field from the code.",
+  "record_version": "source-metadata-evidence-boundary-decision@1.0.0",
+  "mission": "mission-1.84.11",
+  "decision_id": "SOURCE-METADATA-EVIDENCE-BOUNDARY-V1",
+  "SOURCE_NAME_OR_PUBLISHER_LABEL_COUNTS_AS_FACTUAL_SUPPORT": false,
+  "SOURCE_METADATA_MUST_NOT_LICENSE_DOMAIN_ASSERTIONS": true,
+  "decision_owner": "OPERATOR",
+  "decision_type": "EVIDENCE_BOUNDARY",
+  "mathematically_derived": false,
+  "reason": "provenance metadata identifies where data came from; it does not establish domain facts through accidental lexical overlap",
+  "metadata_is": [
+    "publisher name",
+    "source name",
+    "registry display name",
+    "dataset title",
+    "provider label",
+    "provenance label"
+  ],
+  "metadata_may_support": [
+    "a statement about provenance itself, naming the source by its whole label"
+  ],
+  "metadata_may_not_support": [
+    "a domain proposition, through any word inside a label",
+    "a number, through any figure inside a label",
+    "a forbidden concept, through any phrase inside a label"
+  ],
+  "moved_into_packet_structural_facts": false,
+  "independent_of_any_answer": true,
+  "operator_decision": [
+    "FIX_SYMMETRIC_INFLECTION_NORMALIZATION = true",
+    "SOURCE_NAME_OR_PUBLISHER_LABEL_COUNTS_AS_FACTUAL_SUPPORT = false",
+    "SOURCE_METADATA_MUST_NOT_LICENSE_DOMAIN_ASSERTIONS = true",
+    "KEEP_OUTPUT_SCHEMA_V1_1_0_UNCHANGED",
+    "KEEP_PROMPT_V1_2_0_UNCHANGED",
+    "KEEP_HISTORICAL_GATE_V1_1_0_UNCHANGED",
+    "KEEP_FROZEN_GATE_V1_2_0_UNCHANGED",
+    "DO_NOT_WHITELIST_THE_V3_ANSWER",
+    "DO_NOT_WEAKEN_EVIDENCE_BOUNDARIES"
+  ],
+  "operator_decision_sha256": "206d639fa1f6f232d30a29ba3f2203f9772152ec2715060fea9657425d25c085",
+  "architecture_decision_record": "docs/architecture/adr/ADR-040-source-metadata-is-provenance-not-factual-support.md",
+  "implemented_by": {
+    "gate": "second-opportunity-output-gate@1.3.0",
+    "support_universe": "opportunity-support-universe@2.0.0",
+    "source_metadata": "second-opportunity-source-metadata@1.0.0"
+  }
+}
