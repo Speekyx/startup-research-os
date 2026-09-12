@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.141
+Version: 1.142
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-12 (Sprint 1 / Mission 1.84.7)
+Last amended: 2026-09-12 (Sprint 1 / Mission 1.84.8)
 
 ---
 
@@ -13,6 +13,66 @@ Last amended: 2026-09-12 (Sprint 1 / Mission 1.84.7)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.142 - 2026-09-12 (Sprint 1 / Mission 1.84.8)
+
+**`SECOND_OPPORTUNITY_EXECUTION_PACKET_V3_READY_FOR_OPERATOR_APPROVAL`: the prompt now states every
+bound the schema enforces, and the one call it permits is frozen and unapproved.** The operator kept
+the v1.1.0 schema and gate and the 900-character bound, refused to rescue V2's answer or to choose a
+maximum from its 1113 characters, and asked for the drift between the prompt and the schema to be
+removed in a general way. An audit of all 75 constraints in the live schema found 32 that generation
+must see. Prompt v1.1.0 stated 8 of them in words and left 24 to the forced tool's input schema: the
+900 on `evidence_bound_reasoning_summary`, nine other narrative lengths, eight maxItems, a minLength,
+the 20-field required set, the closed object, the `UNKNOWN_NOT_SUPPORTED` sentinel and the shape of a
+classified statement. Prompt **v1.2.0** (`1677cbe5...`) states all 32, and **execution packet V3**
+(`c7b8553d...`) is V2's call with that prompt and nothing else changed. **Approval recorded false, 0
+model calls, 0 provider requests, 0 TED bytes.**
+
+**ONE SOURCE OF TRUTH.** `render_output_constraints(schema, notes)` renders the block from the live
+schema and an explicit policy, never from model output, history or a record. A note carries guidance
+and no digit, and the v1.2.0 section carries no numeric literal, so every number the model reads is
+the schema's; gate 72 reads both as syntax trees and refuses a separate `PROMPT_MAX_REASONING_LENGTH`
+by name. Mutating each of the 32 class-A constraints moves the rendered prompt, and no other mutation
+does. The change is confined to the output-contract block; v1.0.0 and v1.1.0 still render the bytes
+they sent.
+
+**THE SCHEMA STILL DECIDES.** 900 characters pass and 901 are refused, and synthetic answers show the
+same at 500, at 300 and at the item counts. Gate 73 reads the V3 runner as a syntax tree: no slice,
+one binding of the parsed answer, and nothing written into it, deleted from it or called on it but a
+read.
+
+**ONLY THE PROMPT MOVED.** Representation `2528a56a...` (3604 characters); anthropic, synchronous,
+`claude-sonnet-5`, thinking disabled; 128000 output tokens, not V2's 3914; 60 s; one call, no retry.
+The request body is 22124 characters, V2's 20623 plus the 1501 the system region adds; the input
+estimate is 12825, and the worst case and ceiling are **1.30565**, 0.001742 above V2's 1.303908.
+V1's and V2's digests are refused by name, an unseen digest is permitted, and V3's awaits an
+approval. Retention is verified on ten synthetic terminal paths and eight properties.
+
+**THE PROBE FOUND THREE HOLES IN THIS MISSION'S OWN GATES.** The first run let a sentence be appended
+to what V2's answer was used for, beside the refusals; that block is now fixed word for word. The
+second let V2's own history be rewritten to make its rejected answer a candidate; both gates now
+refuse that by rule, and gate 72 pins V1's and V2's records, packets and prompts, V2's approval and
+V2's response by digest. **Final: 197 caught, 0 escaped, 18 of 18 controls, every file proved
+restored.**
+
+**Verification.** 3853 bare-python tests; 4170 pytest, 13 skipped, database unchanged across
+29 tenant tables; ruff over 1028 files; mypy over 201 files; contracts, catalog and registry;
+all **73** CI gates, two new; **214 new tests**.
+
+**What moved.** Nothing canonical: every counter identical, and **0 model calls, 0 provider
+requests, 0 Messages API requests, 0 TED bytes, 0 Opportunities**.
+
+New: `packages/opportunity-engine/python/sros_opportunity/output_constraints.py`;
+`docs/data/second-opportunity-output-constraint-alignment-v1.json`,
+`second-opportunity-synthesis-prompt-v3.json` and `second-opportunity-synthesis-execution-packet-v3.json`
+with their generated `.md`; `infrastructure/scripts/render_second_opportunity_output_constraint_alignment.py`
+(CI gate 72), `render_second_opportunity_execution_packet_v3.py` (CI gate 73) and
+`run_second_opportunity_execution_v3.py`; tests; and `docs/reports/mission-1.84.8-report.md`.
+
+Changed: `docs/CLAUDE.md` 1.142 to 1.143; `second_opportunity.py` gains prompt v1.2.0 beside the
+untouched v1.0.0 and v1.1.0; `.github/workflows/ci.yml` gains two gates. **The v1.1.0 schema and gate,
+packets V1 and V2, their records, V2's approval and response, and the TED representation are
+byte-identical.**
 
 ## 1.141 - 2026-09-12 (Sprint 1 / Mission 1.84.7)
 
