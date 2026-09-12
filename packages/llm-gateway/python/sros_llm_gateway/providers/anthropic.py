@@ -14,12 +14,19 @@ other instruction in the prompt — including any an attacker managed to place i
 a data region. A forced tool call is enforced by the provider's decoder, so the
 failure mode becomes "no output" rather than "plausible output shaped by
 whoever asked last".
+
+**Thinking is a typed choice, not a free parameter** (Mission 1.84.5). On models
+where thinking is on by default, a request that says nothing about thinking
+spends part of `max_tokens` on reasoning before the answer, so a bounded
+structured output cannot be sized without saying which configuration it runs
+under. `AnthropicThinking` names the two this adapter can send.
 """
 
 from __future__ import annotations
 
 import os
 from dataclasses import dataclass
+from enum import StrEnum
 from typing import Any
 
 from sros_contracts import LlmTier
@@ -35,14 +42,43 @@ from ..types import (
     ProviderTimeoutError,
 )
 
-__all__ = ["AnthropicProvider", "ANTHROPIC_API_VERSION", "STRUCTURED_TOOL_NAME"]
+__all__ = [
+    "AnthropicProvider",
+    "AnthropicThinking",
+    "ANTHROPIC_API_VERSION",
+    "COUNT_TOKENS_ENDPOINT",
+    "STRUCTURED_TOOL_NAME",
+]
 
 ANTHROPIC_API_VERSION = "2023-06-01"
 DEFAULT_ENDPOINT = "https://api.anthropic.com/v1/messages"
 
+# Mission 1.84.5. Token counting is a separate surface from message creation: it
+# generates nothing, it is metered under its own rate limits, and what it returns
+# is an estimate of INPUT tokens under the tokenizer of the model named.
+COUNT_TOKENS_ENDPOINT = "https://api.anthropic.com/v1/messages/count_tokens"
+
 # The tool a structured request is forced into. Named for what it does rather
 # than after a domain concept: the schema is supplied per request.
 STRUCTURED_TOOL_NAME = "emit_structured_output"
+
+
+class AnthropicThinking(StrEnum):
+    """What this adapter tells the Messages API about thinking.
+
+    Two members and deliberately no third. `PROVIDER_DEFAULT` sends no `thinking`
+    field, so the body is byte-identical to what the adapter sent before this
+    type existed, and the model's own default applies -- which on a model with
+    thinking on by default means reasoning shares `max_tokens` with the answer.
+    `DISABLED` sends `{"type": "disabled"}`.
+
+    An enum rather than a pass-through dict: a free parameter would let a caller
+    send any configuration nobody reviewed, and the set of requests this adapter
+    can produce should be readable in this file.
+    """
+
+    PROVIDER_DEFAULT = "PROVIDER_DEFAULT"
+    DISABLED = "DISABLED"
 
 
 @dataclass
@@ -56,8 +92,12 @@ class AnthropicProvider:
     name: str = "anthropic"
     api_key: str = ""
     endpoint: str = DEFAULT_ENDPOINT
+    count_tokens_endpoint: str = COUNT_TOKENS_ENDPOINT
     transport: HttpTransport | None = None
+    # OUR default, chosen by this repository. It is not a statement by the
+    # provider about what any model can emit.
     max_output_tokens: int = 4096
+    thinking: AnthropicThinking = AnthropicThinking.PROVIDER_DEFAULT
     # Embeddings are local BGE-M3 (ADR-006). Advertising support here would let
     # the router send embedding volume to a paid API, which is the single
     # largest avoidable cost in the system.
@@ -68,6 +108,11 @@ class AnthropicProvider:
     )
 
     def __post_init__(self) -> None:
+        if not isinstance(self.thinking, AnthropicThinking):
+            # A plain string or a dict would reach the request body unreviewed.
+            raise TypeError(
+                f"thinking must be an AnthropicThinking member, not {type(self.thinking).__name__}"
+            )
         if not self.api_key:
             self.api_key = os.environ.get("ANTHROPIC_API_KEY", "")
         if self.transport is None:
@@ -101,6 +146,8 @@ class AnthropicProvider:
             "system": system_text,
             "messages": [{"role": "user", "content": user_text}],
         }
+        if self.thinking is AnthropicThinking.DISABLED:
+            body["thinking"] = {"type": "disabled"}
         if request.response_schema is not None:
             body["tools"] = [
                 {
@@ -142,6 +189,55 @@ class AnthropicProvider:
         if response.status != 200:
             raise self._error_for(response)
         return self._normalize(response)
+
+    # -- token counting (Mission 1.84.5) -------------------------------------
+
+    def count_tokens_body(self, text: str, model: str) -> dict[str, Any]:
+        """The smallest valid count request: the model and one user message.
+
+        No system prompt, no tools, no `max_tokens` and no `thinking` field. What
+        is being measured is the text, and every other field would add tokens
+        the measurement is not about.
+        """
+        if not text:
+            raise ProviderInvalidRequestError(
+                "a token count needs non-empty text", provider=self.name
+            )
+        return {"model": model, "messages": [{"role": "user", "content": text}]}
+
+    def count_input_tokens(self, text: str, model: str, timeout_seconds: float) -> int:
+        """ONE request to the token-counting endpoint, and no retry.
+
+        Returns the provider's estimate of input tokens for `text` under the
+        tokenizer of `model`. Nothing here converts that number into an output
+        capacity; that is a different question and the caller owns it.
+        """
+        body = self.count_tokens_body(text, model)
+        headers = self._headers()
+        assert self.transport is not None  # set in __post_init__  # noqa: S101
+
+        try:
+            response = self.transport.post_json(
+                self.count_tokens_endpoint, headers, body, timeout_seconds
+            )
+        except TimeoutError as exc:
+            raise ProviderTimeoutError(str(exc), provider=self.name) from exc
+        except TransportError as exc:
+            raise ProviderTemporaryError(str(exc), provider=self.name) from exc
+
+        if response.status != 200:
+            raise self._error_for(response)
+        try:
+            payload = response.json()
+        except TransportError as exc:
+            raise ProviderTemporaryError(str(exc), provider=self.name) from exc
+        tokens = payload.get("input_tokens")
+        if isinstance(tokens, bool) or not isinstance(tokens, int) or tokens < 0:
+            raise ProviderTemporaryError(
+                "malformed count_tokens response: `input_tokens` is not a non-negative integer",
+                provider=self.name,
+            )
+        return tokens
 
     # -- response normalization ---------------------------------------------
 

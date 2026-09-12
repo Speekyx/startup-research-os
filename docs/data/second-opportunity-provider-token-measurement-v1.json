@@ -1,0 +1,806 @@
+{
+  "$comment": "Mission 1.84.5. The one provider-native token count of the synthetic maximum output instance, the documentation it rests on, and what it does and does not establish. Written by the mission from the receipt and from the retrieved first-party pages; every documentation fragment was extracted from the retrieved bytes, never retyped. The gate re-derives every number it can.",
+  "record_version": 1,
+  "mission": "1.84.5",
+  "recorded_at": "2026-09-12",
+  "PRIMARY_OUTCOME": "BOUNDED_SCHEMA_EXCEEDS_OR_APPROACHES_MODEL_CAPABILITY",
+  "outcome_basis": "The provider-native estimate for the canonical serialization of the contract's maximum valid instance is larger than the model's documented maximum output. Section 21 stops here: no ceiling is selected, no execution packet is prepared, and the schema is not reduced to make the number fit.",
+  "START_COMMIT": "2159d3f0ff934851d565dfc499f2cfaea9ffdb2a",
+  "PRECONDITIONS_1_84_4": {
+    "SCHEMA_ID": "second-opportunity-synthesis-output@1.1.0",
+    "SCHEMA_SHA256": "ec789d1be7d525bf6e498bf61e8a0596ac4582e24e8b45073b3f9ac1cca8b988",
+    "FINITE_BOUND": true,
+    "UNBOUNDED_PATHS": 0,
+    "MAX_VALID_OUTPUT_CHARACTERS": 309729,
+    "MAX_VALID_OUTPUT_UTF8_BYTES": 309729,
+    "MAX_VALID_OUTPUT_SHA256": "e1a62b812f115b3549b5c3c5b8605f2c8052b998cce5d89ac7b60cee5af71705",
+    "PROMPT_VERSION": "1.1.0",
+    "PROMPT_SHA256": "2f60c61f63cda410b9f60e3eafd9676f983e7ff0220245c03c88136511ac7e82",
+    "TED_REPRESENTATION_SHA256": "2528a56a4a9e873bfd04662aeb52916eb80faafe10ab085e716cbdcee77c5b72",
+    "V1_EXECUTION_APPROVAL_CONSUMED": true,
+    "EXECUTION_PACKET_V2_CREATED": false
+  },
+  "OPERATOR_DECISIONS": {
+    "TOKEN_MEASUREMENT_ROUTE": "PROVIDER_NATIVE_TOKEN_MEASUREMENT",
+    "MODEL": "claude-sonnet-5",
+    "CLAUDE_SONNET_5_THINKING_POLICY": "DISABLED",
+    "rejected_by_the_operator": [
+      "an unofficial or local third-party tokenizer",
+      "an arbitrary 4k, 8k, 16k, 32k or 64k ceiling",
+      "shrinking the bounded schema for convenience"
+    ]
+  },
+  "DOCUMENTATION_EVIDENCE": [
+    {
+      "id": "E01",
+      "requested_url": "https://platform.claude.com/docs/en/about-claude/models/overview.md",
+      "final_url": "https://platform.claude.com/docs/en/models/overview.md",
+      "redirected": true,
+      "http_status": 200,
+      "retrieved_at": "2026-09-12T07:59:05Z",
+      "bytes": 16851,
+      "sha256": "b2ae292320b5d068b20c426e6e4e0333d1a11e25c8457748ca39de25de283c27",
+      "first_party": true,
+      "used": true
+    },
+    {
+      "id": "E02",
+      "requested_url": "https://platform.claude.com/docs/en/about-claude/models/migration-guide.md",
+      "final_url": "https://platform.claude.com/docs/en/about-claude/models/migration-guide.md",
+      "redirected": false,
+      "http_status": 200,
+      "retrieved_at": "2026-09-12T07:59:07Z",
+      "bytes": 1150,
+      "sha256": "fb012ba97c3db3adc35e06043ab9dca0dfcc03d16579348049499308c3cd59da",
+      "first_party": true,
+      "used": true
+    },
+    {
+      "id": "E03",
+      "requested_url": "https://platform.claude.com/docs/en/pricing.md",
+      "final_url": "https://platform.claude.com/docs/en/pricing.md",
+      "redirected": false,
+      "http_status": 404,
+      "retrieved_at": "2026-09-12T07:59:08Z",
+      "bytes": 9,
+      "sha256": "0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5",
+      "first_party": true,
+      "used": false
+    },
+    {
+      "id": "E04",
+      "requested_url": "https://platform.claude.com/docs/en/build-with-claude/extended-thinking.md",
+      "final_url": "https://platform.claude.com/docs/en/build-with-claude/extended-thinking.md",
+      "redirected": false,
+      "http_status": 200,
+      "retrieved_at": "2026-09-12T07:59:09Z",
+      "bytes": 22064,
+      "sha256": "f36ffca7bb81f3a718ac63d4feddc5d0579349aa60e328285bea1b996afc466b",
+      "first_party": true,
+      "used": true
+    },
+    {
+      "id": "E05",
+      "requested_url": "https://platform.claude.com/docs/en/build-with-claude/adaptive-thinking.md",
+      "final_url": "https://platform.claude.com/docs/en/build-with-claude/thinking-steering-and-cost.md",
+      "redirected": true,
+      "http_status": 200,
+      "retrieved_at": "2026-09-12T07:59:11Z",
+      "bytes": 41336,
+      "sha256": "4c9186b0826656ab962c5b36753dbffe2033c50e369ce0c53218131356c76ba1",
+      "first_party": true,
+      "used": true
+    },
+    {
+      "id": "E06",
+      "requested_url": "https://platform.claude.com/docs/en/build-with-claude/effort.md",
+      "final_url": "https://platform.claude.com/docs/en/build-with-claude/effort.md",
+      "redirected": false,
+      "http_status": 200,
+      "retrieved_at": "2026-09-12T07:59:12Z",
+      "bytes": 35309,
+      "sha256": "33d9c4c4d238dac35a54b33d429f0e4fe1de00f6118f2d5befec2f080b398dff",
+      "first_party": true,
+      "used": true
+    },
+    {
+      "id": "E07",
+      "requested_url": "https://platform.claude.com/docs/en/build-with-claude/token-counting.md",
+      "final_url": "https://platform.claude.com/docs/en/build-with-claude/token-counting.md",
+      "redirected": false,
+      "http_status": 200,
+      "retrieved_at": "2026-09-12T07:59:13Z",
+      "bytes": 43398,
+      "sha256": "05c17f1ab73c1b6e24afe1480b6fe03fdee276444b90b22c1915740793265c06",
+      "first_party": true,
+      "used": true
+    },
+    {
+      "id": "E08",
+      "requested_url": "https://platform.claude.com/docs/en/build-with-claude/structured-outputs.md",
+      "final_url": "https://platform.claude.com/docs/en/build-with-claude/structured-outputs.md",
+      "redirected": false,
+      "http_status": 200,
+      "retrieved_at": "2026-09-12T07:59:15Z",
+      "bytes": 110492,
+      "sha256": "4e500fed30c759764ba06bcd96b9df7160ecb8e5e7611aae9bc229086e0b9204",
+      "first_party": true,
+      "used": true
+    },
+    {
+      "id": "E09",
+      "requested_url": "https://platform.claude.com/docs/en/build-with-claude/context-windows.md",
+      "final_url": "https://platform.claude.com/docs/en/build-with-claude/context-windows.md",
+      "redirected": false,
+      "http_status": 200,
+      "retrieved_at": "2026-09-12T07:59:16Z",
+      "bytes": 15957,
+      "sha256": "e4c7bfac8865c5ad159c66bcc6a2e606ceb6cd922b1c1ceb2e5cf9bff093fcd0",
+      "first_party": true,
+      "used": true
+    },
+    {
+      "id": "E10",
+      "requested_url": "https://platform.claude.com/docs/en/api/rate-limits.md",
+      "final_url": "https://platform.claude.com/docs/en/api/rate-limits.md",
+      "redirected": false,
+      "http_status": 200,
+      "retrieved_at": "2026-09-12T07:59:17Z",
+      "bytes": 33086,
+      "sha256": "6bd36bc714a3b2ce3fda8099f990f5257b3abc2fe3ed6a001ace9aa31bc0ded4",
+      "first_party": true,
+      "used": true
+    },
+    {
+      "id": "E11",
+      "requested_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview.md",
+      "final_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview.md",
+      "redirected": false,
+      "http_status": 200,
+      "retrieved_at": "2026-09-12T07:59:19Z",
+      "bytes": 38176,
+      "sha256": "87e737a50fa73fe6b55fad499a2b23f16e6c4e1fffad818197e0c112ecb5aae7",
+      "first_party": true,
+      "used": true
+    },
+    {
+      "id": "E12",
+      "requested_url": "https://platform.claude.com/docs/en/about-claude/pricing.md",
+      "final_url": "https://platform.claude.com/docs/en/about-claude/pricing.md",
+      "redirected": false,
+      "http_status": 200,
+      "retrieved_at": "2026-09-12T08:00:21Z",
+      "bytes": 45051,
+      "sha256": "d79ad28567196bd55dd50e2fd89341b9da9774a45c1d02fcf387078507fd15e0",
+      "first_party": true,
+      "used": true
+    },
+    {
+      "id": "E13",
+      "requested_url": "https://platform.claude.com/docs/en/build-with-claude/thinking.md",
+      "final_url": "https://platform.claude.com/docs/en/build-with-claude/thinking.md",
+      "redirected": false,
+      "http_status": 200,
+      "retrieved_at": "2026-09-12T08:01:03Z",
+      "bytes": 71790,
+      "sha256": "2d5530d2353b11fe9bd19c2ef9b1ddc4a7127b67d65fe2f92b34eeb95293242b",
+      "first_party": true,
+      "used": true
+    },
+    {
+      "id": "E14",
+      "requested_url": "https://platform.claude.com/docs/en/models/sonnet-5/overview.md",
+      "final_url": "https://platform.claude.com/docs/en/models/sonnet-5/overview.md",
+      "redirected": false,
+      "http_status": 200,
+      "retrieved_at": "2026-09-12T08:01:04Z",
+      "bytes": 13348,
+      "sha256": "6ca17e3121ec558ce10f405145ed9df26ba18bc7ac4cee5d42cc16feefe2bd38",
+      "first_party": true,
+      "used": true
+    },
+    {
+      "id": "E15",
+      "requested_url": "https://platform.claude.com/docs/en/models/sonnet-5/migration-guide.md",
+      "final_url": "https://platform.claude.com/docs/en/models/sonnet-5/migration-guide.md",
+      "redirected": false,
+      "http_status": 200,
+      "retrieved_at": "2026-09-12T08:01:06Z",
+      "bytes": 38352,
+      "sha256": "ffbb0da772db9854827013343a9461030ab0b5a885813b965b97a830dcd0c55f",
+      "first_party": true,
+      "used": true
+    },
+    {
+      "id": "E16",
+      "requested_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools.md",
+      "final_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools.md",
+      "redirected": false,
+      "http_status": 200,
+      "retrieved_at": "2026-09-12T08:01:07Z",
+      "bytes": 37555,
+      "sha256": "58d22e8fdeebaf5874019f7aa06bb2950423ef42c0c0043d6ee65a583c172f85",
+      "first_party": true,
+      "used": true
+    },
+    {
+      "id": "E17",
+      "requested_url": "https://platform.claude.com/docs/en/api/messages-count-tokens.md",
+      "final_url": "https://platform.claude.com/docs/en/api/messages/count_tokens.md",
+      "redirected": true,
+      "http_status": 200,
+      "retrieved_at": "2026-09-12T08:01:42Z",
+      "bytes": 93142,
+      "sha256": "6ff18ceebd9fe6ef51403826477cf54b52190c39bde9a4b9890879d7b2c76b88",
+      "first_party": true,
+      "used": true
+    },
+    {
+      "id": "E18",
+      "requested_url": "https://platform.claude.com/docs/en/build-with-claude/thinking-troubleshooting.md",
+      "final_url": "https://platform.claude.com/docs/en/build-with-claude/thinking-troubleshooting.md",
+      "redirected": false,
+      "http_status": 200,
+      "retrieved_at": "2026-09-12T08:02:24Z",
+      "bytes": 17107,
+      "sha256": "8b39ee35c7ac19a6106aceca5b4365ef7db543751822d323c900889575c63f1b",
+      "first_party": true,
+      "used": true
+    }
+  ],
+  "DOCUMENTATION_FETCHES": {
+    "attempted": 18,
+    "succeeded": 17,
+    "failed": [
+      "E03"
+    ],
+    "failed_note": "E03 is the pricing path the local API skill lists; it answered 404 and was not retried with any variation. The pricing page was then fetched at the path the platform's own pages link to (E12).",
+    "third_party_sources": 0,
+    "document_versions": "The retrieved pages publish no version number. Each is identified by its final URL, its retrieval instant and the SHA-256 of the bytes retrieved."
+  },
+  "DOCUMENTED_PROPOSITIONS": {
+    "A_MODEL_ID": {
+      "established": "claude-sonnet-5",
+      "classification": "DOCUMENTED",
+      "fragments": [
+        {
+          "evidence": "E14",
+          "line": 11,
+          "verbatim": "Model ID: `claude-sonnet-5`"
+        },
+        {
+          "evidence": "E01",
+          "line": 33,
+          "verbatim_row_whitespace_collapsed": "| Claude API ID | `claude-fable-5-1` | `claude-opus-5` | `claude-sonnet-5` | `claude-haiku-4-5-20251001` |"
+        }
+      ]
+    },
+    "B_MAX_OUTPUT": {
+      "established": "128K tokens on the synchronous Messages API; 300k on the Message Batches API with a beta header",
+      "classification": "DOCUMENTED",
+      "fragments": [
+        {
+          "evidence": "E14",
+          "line": 13,
+          "verbatim": "Max output: 128K tokens"
+        },
+        {
+          "evidence": "E14",
+          "line": 33,
+          "verbatim": "Synchronous Messages API limit."
+        },
+        {
+          "evidence": "E09",
+          "line": 36,
+          "verbatim": "A single request to any of them can generate up to 128k output tokens (`max_tokens`)."
+        },
+        {
+          "evidence": "E15",
+          "line": 45,
+          "verbatim": "Claude Sonnet 5 supports up to 128k output tokens"
+        },
+        {
+          "evidence": "E13",
+          "line": 1141,
+          "verbatim_row_whitespace_collapsed": "| Claude Sonnet 5 | 128k | 300k |"
+        },
+        {
+          "evidence": "E01",
+          "line": 37,
+          "verbatim_row_whitespace_collapsed": "| Max output | 128K tokens | 128K tokens | 128K tokens | 64K tokens |"
+        }
+      ]
+    },
+    "C_TOKENIZER": {
+      "established": "the tokenizer introduced with Claude Opus 4.7; about 30 percent more tokens than Sonnet 4.6 for the same text",
+      "classification": "DOCUMENTED",
+      "fragments": [
+        {
+          "evidence": "E15",
+          "line": 23,
+          "verbatim": "Claude Sonnet 5 also uses a new tokenizer."
+        },
+        {
+          "evidence": "E15",
+          "line": 43,
+          "verbatim": "The same input text produces approximately 30% more tokens than on Claude Sonnet 4.6."
+        },
+        {
+          "evidence": "E14",
+          "line": 32,
+          "verbatim": "current tokenizer (introduced with Claude Opus 4.7)"
+        },
+        {
+          "evidence": "E07",
+          "line": 36,
+          "verbatim": "Claude 4.7 and later models and Claude Mythos Preview use a newer tokenizer."
+        }
+      ]
+    },
+    "D_TOKEN_COUNT_BEHAVIOUR": {
+      "established": "the endpoint takes the same inputs as message creation and returns the total input tokens across messages, system prompt and tools",
+      "classification": "DOCUMENTED",
+      "fragments": [
+        {
+          "evidence": "E17",
+          "line": 8,
+          "verbatim": "**POST** `/v1/messages/count_tokens`"
+        },
+        {
+          "evidence": "E07",
+          "line": 21,
+          "verbatim": "accepts the same structured list of inputs for creating a message"
+        },
+        {
+          "evidence": "E07",
+          "line": 21,
+          "verbatim": "The response contains the total number of input tokens."
+        },
+        {
+          "evidence": "E17",
+          "line": 2844,
+          "verbatim": "The total number of tokens across the provided list of messages, system prompt, and tools."
+        }
+      ]
+    },
+    "E_TOKENIZER_USED_BY_THE_COUNT": {
+      "established": "the tokenizer of the model named in the request",
+      "classification": "DOCUMENTED",
+      "scope_note": "The sentence stands in the page's section on the Fable and Mythos models and is general in form; the page's model-independent note tells the reader to recount against the model they plan to use.",
+      "fragments": [
+        {
+          "evidence": "E07",
+          "line": 1395,
+          "verbatim": "The token counting endpoint counts under the tokenizer of the `model` you pass."
+        },
+        {
+          "evidence": "E07",
+          "line": 36,
+          "verbatim": "Recount prompts against the model you plan to use"
+        }
+      ]
+    },
+    "F_COUNT_IS_NOT_MESSAGE_CREATION": {
+      "established": "counting happens before a message is sent and is not message creation",
+      "classification": "DOCUMENTED_AS_NOT_MESSAGE_CREATION",
+      "wording_note": "The pages do not use the word inference. What they state is that counting precedes sending and that caching occurs only during actual message creation, so nothing is recorded here beyond that.",
+      "fragments": [
+        {
+          "evidence": "E07",
+          "line": 11,
+          "verbatim": "determine the number of tokens in a message before you send it to Claude"
+        },
+        {
+          "evidence": "E07",
+          "line": 1423,
+          "verbatim": "prompt caching only occurs during actual message creation"
+        }
+      ]
+    },
+    "G_BILLING": {
+      "established": "free to use",
+      "classification": "DOCUMENTED",
+      "fragments": [
+        {
+          "evidence": "E07",
+          "line": 1405,
+          "verbatim": "Token counting is **free to use**"
+        }
+      ]
+    },
+    "H_SEPARATE_RATE_LIMITS": {
+      "established": "counting and message creation have separate and independent rate limits",
+      "classification": "DOCUMENTED",
+      "fragments": [
+        {
+          "evidence": "E07",
+          "line": 1414,
+          "verbatim": "Token counting and message creation have separate and independent rate limits."
+        }
+      ]
+    },
+    "I_ESTIMATE_NOT_EXACT": {
+      "established": "an estimate that may differ by an unquantified small amount and may include system-added tokens that are not billed",
+      "classification": "DOCUMENTED",
+      "fragments": [
+        {
+          "evidence": "E07",
+          "line": 26,
+          "verbatim": "The token count is an **estimate**."
+        },
+        {
+          "evidence": "E07",
+          "line": 26,
+          "verbatim": "might differ by a small amount."
+        },
+        {
+          "evidence": "E07",
+          "line": 28,
+          "verbatim": "Token counts may include tokens added automatically by Anthropic for system optimizations."
+        },
+        {
+          "evidence": "E07",
+          "line": 28,
+          "verbatim": "**You are not billed for system-added tokens**."
+        }
+      ]
+    },
+    "J_ADAPTIVE_THINKING_DEFAULT": {
+      "established": "on Claude Sonnet 5 a request with no thinking field runs with adaptive thinking",
+      "classification": "DOCUMENTED",
+      "fragments": [
+        {
+          "evidence": "E13",
+          "line": 49,
+          "verbatim": "On Claude Opus 5, Claude Sonnet 5,"
+        },
+        {
+          "evidence": "E13",
+          "line": 49,
+          "verbatim": "thinking is already on and needs no configuration"
+        },
+        {
+          "evidence": "E15",
+          "line": 56,
+          "verbatim": "Adaptive thinking is on by default for Claude Sonnet 5."
+        },
+        {
+          "evidence": "E14",
+          "line": 101,
+          "verbatim": "On by default on Claude Sonnet 5."
+        },
+        {
+          "evidence": "E18",
+          "line": 31,
+          "verbatim_row_whitespace_collapsed": "| Claude Sonnet 5 | Adaptive only | On | `\"enabled\"` |"
+        },
+        {
+          "evidence": "E05",
+          "line": 50,
+          "verbatim": "Claude almost always thinks."
+        }
+      ]
+    },
+    "K_THINKING_CAN_BE_DISABLED": {
+      "established": "yes, with thinking: {type: disabled}",
+      "classification": "DOCUMENTED",
+      "fragments": [
+        {
+          "evidence": "E13",
+          "line": 293,
+          "verbatim": "On Claude Sonnet 5, where thinking is on by default, you can turn it off:"
+        },
+        {
+          "evidence": "E13",
+          "line": 304,
+          "verbatim": "\"thinking\": {\"type\": \"disabled\"},"
+        },
+        {
+          "evidence": "E15",
+          "line": 49,
+          "verbatim": "To turn thinking off, pass `thinking: {type: \"disabled\"}`."
+        },
+        {
+          "evidence": "E18",
+          "line": 41,
+          "verbatim": "Models marked `On` default to thinking but accept `thinking: {type: \"disabled\"}`."
+        },
+        {
+          "evidence": "E17",
+          "line": 1220,
+          "verbatim": "`ThinkingConfigDisabled object`"
+        }
+      ],
+      "residual_note": "The effort restriction on disabling is stated for Claude Opus 5 and later models; the per-model table carries no such footnote on the Sonnet 5 row, and this adapter sends no effort, which leaves the documented default.",
+      "residual_fragments": [
+        {
+          "evidence": "E13",
+          "line": 431,
+          "verbatim": "This restriction applies to Claude Opus 5 and later models"
+        }
+      ]
+    },
+    "L_MAX_TOKENS_COVERS_THINKING_AND_ANSWER": {
+      "established": "max_tokens is one hard cap on thinking plus response text",
+      "classification": "DOCUMENTED",
+      "fragments": [
+        {
+          "evidence": "E05",
+          "line": 880,
+          "verbatim": "`max_tokens` is a hard cap on total output for the request, thinking and response text combined."
+        },
+        {
+          "evidence": "E15",
+          "line": 41,
+          "verbatim": "`max_tokens` remains a hard limit on total output (thinking plus response text)"
+        },
+        {
+          "evidence": "E09",
+          "line": 48,
+          "verbatim": "Thinking tokens are a subset of your `max_tokens` parameter"
+        },
+        {
+          "evidence": "E13",
+          "line": 289,
+          "verbatim": "Thinking tokens count toward `max_tokens`"
+        },
+        {
+          "evidence": "E13",
+          "line": 469,
+          "verbatim": "You're still charged for the full thinking tokens."
+        }
+      ]
+    },
+    "M_STRUCTURED_OUTPUT_AND_FORCED_TOOL_USE": {
+      "established": "forced tool use works with adaptive thinking and fails only with manual extended thinking and on two named models; the model supports native structured outputs, which this adapter does not use",
+      "classification": "DOCUMENTED",
+      "fragments": [
+        {
+          "evidence": "E13",
+          "line": 1125,
+          "verbatim": "is incompatible with manual extended thinking but works with adaptive thinking"
+        },
+        {
+          "evidence": "E16",
+          "line": 561,
+          "verbatim": "`any` and `tool` are not supported and result in an error"
+        },
+        {
+          "evidence": "E16",
+          "line": 561,
+          "verbatim": "including on models where thinking is on by default such as Claude Opus 5, supports forced tool use"
+        },
+        {
+          "evidence": "E16",
+          "line": 860,
+          "verbatim": "the API prefills the assistant message to force a tool to be used"
+        },
+        {
+          "evidence": "E08",
+          "line": 9,
+          "verbatim": "`claude-opus-4-6`, `claude-sonnet-5`, `claude-sonnet-4-6`"
+        },
+        {
+          "evidence": "E08",
+          "line": 16,
+          "verbatim": "**Strict tool use** (`strict: true`)"
+        },
+        {
+          "evidence": "E08",
+          "line": 15,
+          "verbatim": "**JSON outputs** (`output_config.format`)"
+        },
+        {
+          "evidence": "E11",
+          "line": 876,
+          "verbatim_row_whitespace_collapsed": "| Claude Sonnet 5 | `auto`, `none`***`any`, `tool` | 354 tokens***474 tokens |"
+        }
+      ]
+    }
+  },
+  "BRIEF_EXPECTATIONS_RE_ESTABLISHED": [
+    {
+      "expected_by_the_brief": "max output 128000",
+      "established_from_documentation": "128K tokens, read as 128000",
+      "proposition": "B_MAX_OUTPUT",
+      "agrees": true
+    },
+    {
+      "expected_by_the_brief": "adaptive thinking on by default",
+      "established_from_documentation": "on by default",
+      "proposition": "J_ADAPTIVE_THINKING_DEFAULT",
+      "agrees": true
+    },
+    {
+      "expected_by_the_brief": "thinking can be disabled",
+      "established_from_documentation": "yes, type disabled",
+      "proposition": "K_THINKING_CAN_BE_DISABLED",
+      "agrees": true
+    },
+    {
+      "expected_by_the_brief": "max_tokens = thinking + response",
+      "established_from_documentation": "one hard cap on both",
+      "proposition": "L_MAX_TOKENS_COVERS_THINKING_AND_ANSWER",
+      "agrees": true
+    },
+    {
+      "expected_by_the_brief": "POST /v1/messages/count_tokens",
+      "established_from_documentation": "POST /v1/messages/count_tokens",
+      "proposition": "D_TOKEN_COUNT_BEHAVIOUR",
+      "agrees": true
+    },
+    {
+      "expected_by_the_brief": "token counting is free",
+      "established_from_documentation": "free to use",
+      "proposition": "G_BILLING",
+      "agrees": true
+    },
+    {
+      "expected_by_the_brief": "the count is an estimate",
+      "established_from_documentation": "an estimate",
+      "proposition": "I_ESTIMATE_NOT_EXACT",
+      "agrees": true
+    }
+  ],
+  "MEASUREMENT": {
+    "PROVIDER_NATIVE_MAX_INSTANCE_TOKEN_ESTIMATE": 231608,
+    "MEASUREMENT_SURFACE": "POST /v1/messages/count_tokens",
+    "MODEL": "claude-sonnet-5",
+    "MEASUREMENT_SCHEMA_ID": "second-opportunity-synthesis-output@1.1.0",
+    "MEASUREMENT_SCHEMA_SHA256": "ec789d1be7d525bf6e498bf61e8a0596ac4582e24e8b45073b3f9ac1cca8b988",
+    "MEASUREMENT_TEXT_SHA256": "e1a62b812f115b3549b5c3c5b8605f2c8052b998cce5d89ac7b60cee5af71705",
+    "MEASUREMENT_TEXT_CHARACTERS": 309729,
+    "MEASUREMENT_TEXT_UTF8_BYTES": 309729,
+    "measured_serialization": "json.dumps(instance, sort_keys=True) with ensure_ascii, the serialization Mission 1.84.4 measured as the maximum: every narrative character is U+1F600 escaped as a twelve-character surrogate pair.",
+    "ESTIMATE_NOT_EXACT": true,
+    "estimate_basis": "proposition I_ESTIMATE_NOT_EXACT",
+    "SAME_MODEL_TOKENIZER_MEASUREMENT": true,
+    "same_model_basis": "proposition E_TOKENIZER_USED_BY_THE_COUNT: the request named claude-sonnet-5",
+    "INPUT_TO_OUTPUT_TOKENIZATION_EQUIVALENCE": "NOT_ESTABLISHED",
+    "why_input_to_output_is_not_established": "The count is of INPUT tokens for this text in a user message. No retrieved page states that the model spends the same number of OUTPUT tokens emitting the same object as a tool call, and a model need not emit the escaped form it was counted in: it could emit the raw character instead, or add tool-call framing the count never saw. Either direction is possible and neither is established.",
+    "DOCUMENTED_TOKEN_COUNT_MARGIN": "NONE",
+    "margin_note": "The page says the count might differ by a small amount and quantifies nothing, so no documented margin exists to apply.",
+    "SYSTEM_ADDED_TOKENS_MAY_BE_INCLUDED": true,
+    "receipt": "docs/data/second-opportunity-token-measurement-receipt-v1.json",
+    "receipt_sha256": "70b9c441b853b7562412a8fcbaa063083568aa029263a4d53c6e4f19c88e85c4",
+    "request_id": "req_011CeyDXXrz9Nc4XTZfPVo4w"
+  },
+  "CAPACITY_COMPARISON": {
+    "MODEL_MAX_OUTPUT_TOKENS": 128000,
+    "documented_form": "128K tokens",
+    "integer_reading": "K read as one thousand, the reading under which the same pages write 1M tokens for the context window. It is also the smaller of the two possible readings, so any headroom computed from it errs toward too little, which is the safe direction.",
+    "ADAPTER_DEFAULT_MAX_OUTPUT_TOKENS": 4096,
+    "adapter_default_is_not_a_capability": "4096 is this repository's AnthropicProvider default. It is kept distinct from the documented maximum, and neither was allowed to overwrite the other.",
+    "HEADROOM_TO_PROVIDER_MAX": -103608,
+    "ESTIMATE_OVER_PROVIDER_MAX": 1.8094,
+    "EXCEEDS_PROVIDER_MAX": true,
+    "arithmetic_is_not_proof": "An estimate compared with a ceiling is arithmetic. It is not evidence that a real output of this size would or would not fit, in either direction.",
+    "provider_max_is_not_an_execution_budget": "128000 is the most a single synchronous request may ask for. It is not a budget this repository has selected, and nothing here selects one.",
+    "BATCH_API_BETA_MAX_OUTPUT_TOKENS": 300000,
+    "batch_documented_form": "300k",
+    "HEADROOM_TO_BATCH_BETA_MAX": 68392,
+    "batch_route_adopted": false,
+    "why_the_batch_route_is_not_adopted": "It is a different route: the Message Batches API behind a beta header, asynchronous, and outside the route the TED egress review and the provider posture assessed. Moving to it is an operator decision with its own review, not a consequence of arithmetic."
+  },
+  "EMPIRICAL_RATIO_CROSS_CHECK": {
+    "held_ratio_characters_per_token": 2.1565,
+    "held_ratio_source": "Mission 1.84's one measured pair, 12868 characters for 5967 tokens",
+    "predicted_tokens_from_held_ratio": 143626,
+    "provider_native_estimate": 231608,
+    "held_ratio_underestimates_by_tokens": 87982,
+    "held_ratio_underestimates_by_fraction": 0.3799,
+    "measured_characters_per_token": 1.3373,
+    "note": "Mission 1.84.3 classified the held ratio as a lower-information bound and warned that a ratio too high underestimates tokens. On this text it would have. Arithmetic, recorded to show the direction of the error; it is not used for anything."
+  },
+  "THINKING": {
+    "CLAUDE_SONNET_5_THINKING_POLICY": "DISABLED",
+    "MODEL_DEFAULT": "ADAPTIVE_ON_BY_DEFAULT",
+    "THINKING_DISABLE_SUPPORTED": "DOCUMENTED",
+    "THINKING_CONTROL_REQUIRES_ARCHITECTURE_DECISION": false,
+    "ADAPTER_CAPABILITY": {
+      "type": "AnthropicThinking",
+      "members": [
+        "PROVIDER_DEFAULT",
+        "DISABLED"
+      ],
+      "default": "PROVIDER_DEFAULT",
+      "disabled_request_field": {
+        "type": "disabled"
+      },
+      "default_request_body_unchanged": true,
+      "generic_parameter_collection": false
+    },
+    "FUTURE_V2_THINKING": "DISABLED",
+    "THINKING_TOKENS_SHARE_V2_MAX_TOKENS": false,
+    "thinking_tokens_basis": "Documented (propositions K and L) and the adapter's DISABLED body is tested. Not observed at runtime, because this mission sent no Messages API request.",
+    "FORCED_TOOL_USE_WITH_THINKING_DISABLED": "NOT_RESTRICTED_BY_DOCUMENTATION",
+    "forced_tool_use_note": "The define-tools restriction table names manual extended thinking and two other models, and neither is this configuration."
+  },
+  "V1_THINKING_FINDING": {
+    "V1_THINKING_FIELD_SENT": false,
+    "V1_EFFECTIVE_THINKING_CONFIGURATION": "ADAPTIVE_BY_MODEL_DEFAULT",
+    "V1_MAX_OUTPUT_TOKENS": 3000,
+    "V1_OUTPUT_BUDGET_SHARED_WITH_ADAPTIVE_THINKING": true,
+    "basis": "The adapter that ran V1 never emitted a thinking field, forced tool use works with adaptive thinking (M), a request without the field runs adaptive thinking on this model (J), and max_tokens caps thinking and answer together (L).",
+    "V1_THINKING_TOKENS_CONSUMED": "NOT_ESTABLISHED",
+    "why_not_established": "Adaptive thinking decides per request, display defaults to omitted, and the V1 usage record was never retained, so whether and how much it thought is unknown.",
+    "V1_ROOT_CAUSE": "NOT_PROVABLE_FROM_RETAINED_EXECUTION_ARTIFACTS",
+    "ROOT_CAUSE_REWRITTEN": false,
+    "status": "CONTRIBUTING_FACTOR_POSSIBILITY"
+  },
+  "STRUCTURED_OUTPUT": {
+    "NATIVE_PROVIDER_STRUCTURED_OUTPUT": false,
+    "mechanism": "forced tool use, no strict flag and no output_config",
+    "MODEL_SUPPORTS_NATIVE_STRUCTURED_OUTPUTS": true,
+    "MIGRATED": false,
+    "LOCAL_VALIDATOR_AUTHORITATIVE": true
+  },
+  "CEILING": {
+    "SELECTED_MAX_OUTPUT_TOKENS": "NONE",
+    "OPERATOR_HEADROOM_POLICY": "NONE_HELD",
+    "why_none": "A ceiling needs either a documented guarantee or a measurement plus an approved headroom policy. There is no documented margin, no approved policy, and the measured maximum is already larger than anything a synchronous request may ask for."
+  },
+  "EXECUTION_PACKET_V2_CREATED": false,
+  "SCHEMA_REDUCED": false,
+  "COST": {
+    "TOKEN_COUNT_API_COST": 0,
+    "token_count_cost_basis": "proposition G_BILLING",
+    "FUTURE_INFERENCE_COST": "NOT_COMPUTED",
+    "why_not_computed": "No MAX_OUTPUT_TOKENS is selected, so there is nothing to price."
+  },
+  "OPERATOR_OPTIONS": [
+    {
+      "option": "BOUND_THE_NARRATIVE_FIELDS_FURTHER",
+      "effect": "lowers the maximum where Mission 1.84.4 located it: the narrative fields",
+      "cost": "a contract change whose numbers must be the operator's, not derived from this estimate"
+    },
+    {
+      "option": "RESTRICT_THE_NARRATIVE_CHARACTER_CLASS",
+      "effect": "removes the twelve-character escape that dominates the maximum; Mission 1.84.4 measured the ASCII-fill form at 56929 characters",
+      "cost": "a contract change; the token count of the restricted form is NOT measured, because a second count request is outside this mission's authority"
+    },
+    {
+      "option": "CHANGE_THE_ROUTE_TO_THE_BATCHES_300K_BETA",
+      "effect": "a documented 300k ceiling on this model",
+      "cost": "a beta, asynchronous route outside what the egress review and the provider posture assessed; an estimate with no documented margin is still not proof of fit"
+    },
+    {
+      "option": "SPLIT_THE_SYNTHESIS_ACROSS_CALLS",
+      "effect": "each call carries part of the contract",
+      "cost": "an architecture change to a contract written for exactly one call"
+    },
+    {
+      "option": "RUN_AT_THE_PROVIDER_MAXIMUM_ACCEPTING_AN_UNREACHABLE_WORST_CASE",
+      "effect": "valid outputs up to the ceiling can be emitted; the gate refuses anything truncated",
+      "cost": "an operator judgement that part of the contract is unreachable, which the brief has so far declined to make"
+    }
+  ],
+  "OPTIONS_IMPLEMENTED": [],
+  "OPTION_RECOMMENDED": "NONE",
+  "ACCOUNTING": {
+    "DOCUMENTATION_FETCHES": 18,
+    "TOKEN_COUNT_API_REQUESTS": 1,
+    "RETRIES": 0,
+    "MESSAGES_API_REQUESTS": 0,
+    "MODEL_INFERENCE_REQUESTS": 0,
+    "TED_BYTES_SENT": 0,
+    "RESEARCH_BYTES_SENT": 0,
+    "CANONICAL_MUTATIONS": 0
+  },
+  "CANONICAL_COUNTERS": {
+    "acquisition.raw_records": 325,
+    "acquisition.normalized_records": 325,
+    "nlp.signals": 60,
+    "research.claims": 91,
+    "research.claim_revisions": 92,
+    "scoring.evidence": 112,
+    "epistemic.reliability_assessments": 4,
+    "scoring.evidence_independence_groups": 0,
+    "research.opportunities": 1,
+    "research.opportunity_hypothesis_revisions": 2,
+    "research.opportunity_hypothesis_evidence": 14,
+    "nlp.embedding_provenance": 0,
+    "registry.source_policy_reviews": 71
+  },
+  "NEXT_REQUIRED_ACTION": "OPERATOR_DECISION_ON_A_BOUNDED_CONTRACT_LARGER_THAN_THE_MODEL_CAN_EMIT"
+}

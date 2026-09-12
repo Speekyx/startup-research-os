@@ -1,0 +1,65 @@
+{
+  "$comment": "Mission 1.84.5. The held provider and model capability facts for the Anthropic route, each resting on a retrieved first-party page. Successor to the PROVIDER_MODEL_CAPABILITY block of second-opportunity-output-capacity-analysis-v2.json, which is left as Mission 1.84.4 wrote it. The adapter's defaults are recorded beside the model's documented facts and never in place of them.",
+  "record_version": 1,
+  "mission": "1.84.5",
+  "recorded_at": "2026-09-12",
+  "provider": "anthropic",
+  "route": "Claude API, Messages endpoint, API key",
+  "evidence_record": "docs/data/second-opportunity-provider-token-measurement-v1.json",
+  "MODELS": {
+    "claude-sonnet-5": {
+      "DOCUMENTED_MAX_OUTPUT_TOKENS": 128000,
+      "max_output_documented_form": "128K tokens",
+      "max_output_scope": "synchronous Messages API",
+      "BATCH_API_BETA_MAX_OUTPUT_TOKENS": 300000,
+      "batch_documented_form": "300k",
+      "CONTEXT_WINDOW_TOKENS": 1000000,
+      "context_documented_form": "1M tokens",
+      "THINKING_DEFAULT": "ADAPTIVE_ON_BY_DEFAULT",
+      "THINKING_DISABLE_SUPPORTED": true,
+      "MAX_TOKENS_COVERS": "THINKING_AND_RESPONSE",
+      "TOKENIZER": "the tokenizer introduced with Claude Opus 4.7",
+      "FORCED_TOOL_USE": {
+        "WITH_ADAPTIVE_THINKING": "SUPPORTED",
+        "WITH_MANUAL_EXTENDED_THINKING": "NOT_ACCEPTED_ON_THIS_MODEL",
+        "WITH_THINKING_DISABLED": "NOT_RESTRICTED_BY_DOCUMENTATION"
+      },
+      "NATIVE_STRUCTURED_OUTPUTS_SUPPORTED": true,
+      "TOOL_USE_SYSTEM_PROMPT_TOKENS": {
+        "auto_or_none": 354,
+        "any_or_tool": 474
+      },
+      "DOCUMENTED_PRICE_USD_PER_MTOK": {
+        "input": 2,
+        "output": 10
+      },
+      "propositions": [
+        "A_MODEL_ID",
+        "B_MAX_OUTPUT",
+        "C_TOKENIZER",
+        "J_ADAPTIVE_THINKING_DEFAULT",
+        "K_THINKING_CAN_BE_DISABLED",
+        "L_MAX_TOKENS_COVERS_THINKING_AND_ANSWER",
+        "M_STRUCTURED_OUTPUT_AND_FORCED_TOOL_USE"
+      ],
+      "price_fragment": {
+        "evidence": "E12",
+        "line": 38,
+        "verbatim": "The $2/$10 per million input/output token pricing for Claude Sonnet 5"
+      }
+    }
+  },
+  "ADAPTER": {
+    "class": "sros_llm_gateway.providers.anthropic.AnthropicProvider",
+    "ADAPTER_DEFAULT_MAX_OUTPUT_TOKENS": 4096,
+    "adapter_default_is_not_a_capability": "A number this repository chose. It says nothing about what any model can emit.",
+    "THINKING_CONFIGURATIONS": [
+      "PROVIDER_DEFAULT",
+      "DISABLED"
+    ],
+    "DEFAULT_THINKING": "PROVIDER_DEFAULT",
+    "NATIVE_STRUCTURED_OUTPUT_USED": false,
+    "COUNT_TOKENS_ENDPOINT": "https://api.anthropic.com/v1/messages/count_tokens"
+  },
+  "DOCUMENTED_MAX_AND_ADAPTER_DEFAULT_DISTINCT": true
+}

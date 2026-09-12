@@ -19,8 +19,14 @@ whoever assembles the application, and a tier with no configured provider raises
 rather than silently downgrading (ADR-006).
 """
 
-from .anthropic import AnthropicProvider
+from .anthropic import AnthropicProvider, AnthropicThinking
 from .fake import EchoProvider, FailingProvider
 from .gemini import GeminiProvider
 
-__all__ = ["AnthropicProvider", "GeminiProvider", "EchoProvider", "FailingProvider"]
+__all__ = [
+    "AnthropicProvider",
+    "AnthropicThinking",
+    "GeminiProvider",
+    "EchoProvider",
+    "FailingProvider",
+]

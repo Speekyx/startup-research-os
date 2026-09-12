@@ -34,7 +34,8 @@ from sros_llm_gateway import (
     category_of,
     is_retryable,
 )
-from sros_llm_gateway.providers import AnthropicProvider, GeminiProvider
+from sros_llm_gateway.providers import AnthropicProvider, AnthropicThinking, GeminiProvider
+from sros_llm_gateway.providers.anthropic import COUNT_TOKENS_ENDPOINT
 
 WORKSPACE = "00000000-0000-4000-8000-000000000001"
 SESSION = "00000000-0000-4000-8000-0000000000aa"
@@ -379,6 +380,130 @@ class RetryPolicyThroughTheGateway(unittest.TestCase):
         with self.assertRaises(ProviderTemporaryError):
             gateway.complete(request(max_retries=2))
         self.assertEqual(len(transport.calls), 3, "one attempt plus two retries")
+
+
+# ======================================================= thinking (Mission 1.84.5)
+
+
+class AnthropicThinkingControl(unittest.TestCase):
+    """On a model with thinking on by default, a request that says nothing about
+    thinking spends part of `max_tokens` on reasoning before the answer. The
+    adapter can now say which configuration a request runs under, and only two."""
+
+    def test_the_default_sends_no_thinking_field_so_the_old_body_is_unchanged(self) -> None:
+        body = AnthropicProvider(api_key="k").build_body(request(response_schema=SCHEMA), "m")
+        self.assertNotIn("thinking", body)
+        self.assertEqual(
+            set(body), {"model", "max_tokens", "system", "messages", "tools", "tool_choice"}
+        )
+
+    def test_disabled_sends_exactly_the_documented_object(self) -> None:
+        provider = AnthropicProvider(api_key="k", thinking=AnthropicThinking.DISABLED)
+        body = provider.build_body(request(response_schema=SCHEMA), "m")
+        self.assertEqual(body["thinking"], {"type": "disabled"})
+        self.assertEqual(body["tool_choice"], {"type": "tool", "name": "emit_structured_output"})
+
+    def test_disabled_reaches_the_wire(self) -> None:
+        transport = FakeTransport.returning(anthropic_ok())
+        AnthropicProvider(
+            api_key="k", transport=transport, thinking=AnthropicThinking.DISABLED
+        ).complete(request(), "m")
+        self.assertEqual(transport.last_body["thinking"], {"type": "disabled"})
+
+    def test_there_are_exactly_two_configurations(self) -> None:
+        """A third member would be a configuration nobody reviewed for a bounded output."""
+        self.assertEqual({m.value for m in AnthropicThinking}, {"PROVIDER_DEFAULT", "DISABLED"})
+
+    def test_a_string_or_a_dict_is_refused_at_construction(self) -> None:
+        """A free value would reach the request body unreviewed."""
+        for bad in ("DISABLED", "disabled", {"type": "disabled"}, None):
+            with self.subTest(value=bad), self.assertRaises(TypeError):
+                AnthropicProvider(api_key="k", thinking=bad)  # type: ignore[arg-type]
+
+    def test_the_adapter_default_output_budget_did_not_move(self) -> None:
+        """4096 is OUR default. The model's documented maximum is a different number and
+        a different fact, and neither was allowed to overwrite the other."""
+        self.assertEqual(AnthropicProvider(api_key="k").max_output_tokens, 4096)
+
+    def test_no_native_structured_output_field_is_sent(self) -> None:
+        """Structured output is still forced tool use, and the local validator stays
+        authoritative. Nothing here migrated to a provider-side schema guarantee."""
+        body = AnthropicProvider(api_key="k", thinking=AnthropicThinking.DISABLED).build_body(
+            request(response_schema=SCHEMA), "m"
+        )
+        self.assertNotIn("output_config", body)
+        self.assertNotIn("strict", body["tools"][0])
+
+
+class AnthropicTokenCounting(unittest.TestCase):
+    """One request to the counting surface. It generates nothing, it is not retried
+    here, and nothing here turns its answer into an output capacity."""
+
+    def test_the_count_body_is_the_model_and_one_user_message(self) -> None:
+        body = AnthropicProvider(api_key="k").count_tokens_body("hello", "m")
+        self.assertEqual(body, {"model": "m", "messages": [{"role": "user", "content": "hello"}]})
+
+    def test_the_count_body_carries_no_thinking_even_when_disabled(self) -> None:
+        provider = AnthropicProvider(api_key="k", thinking=AnthropicThinking.DISABLED)
+        self.assertNotIn("thinking", provider.count_tokens_body("hello", "m"))
+
+    def test_one_request_to_the_count_endpoint(self) -> None:
+        transport = FakeTransport.json_ok({"input_tokens": 42})
+        provider = AnthropicProvider(api_key="k", transport=transport)
+        self.assertEqual(provider.count_input_tokens("hello", "m", 30.0), 42)
+        self.assertEqual(len(transport.calls), 1)
+        call = transport.calls[0]
+        self.assertEqual(call["url"], COUNT_TOKENS_ENDPOINT)
+        self.assertNotEqual(call["url"], provider.endpoint)
+        self.assertEqual(call["headers"]["anthropic-version"], "2023-06-01")
+        self.assertEqual(call["timeout_seconds"], 30.0)
+
+    def test_empty_text_is_refused_before_any_request(self) -> None:
+        transport = FakeTransport()
+        with self.assertRaises(ProviderInvalidRequestError):
+            AnthropicProvider(api_key="k", transport=transport).count_input_tokens("", "m", 30.0)
+        self.assertEqual(transport.calls, [])
+
+    def test_a_missing_credential_sends_nothing(self) -> None:
+        transport = FakeTransport()
+        with self.assertRaises(ProviderAuthenticationError):
+            AnthropicProvider(api_key="", transport=transport).count_input_tokens("x", "m", 30.0)
+        self.assertEqual(transport.calls, [])
+
+    def test_an_error_status_is_categorised_and_not_retried(self) -> None:
+        transport = FakeTransport.returning(
+            error_response(500, "boom"), HttpResponse(200, b'{"input_tokens": 1}')
+        )
+        with self.assertRaises(ProviderTemporaryError):
+            AnthropicProvider(api_key="k", transport=transport).count_input_tokens("x", "m", 30.0)
+        self.assertEqual(len(transport.calls), 1, "the second scripted response is never asked for")
+
+    def test_a_malformed_count_is_refused(self) -> None:
+        for payload in (
+            {},
+            {"input_tokens": -1},
+            {"input_tokens": True},
+            {"input_tokens": 1.5},
+            {"input_tokens": "12"},
+        ):
+            with self.subTest(payload=payload), self.assertRaises(ProviderTemporaryError):
+                AnthropicProvider(
+                    api_key="k", transport=FakeTransport.json_ok(payload)
+                ).count_input_tokens("x", "m", 30.0)
+
+    def test_a_body_that_is_not_json_is_a_temporary_error(self) -> None:
+        transport = FakeTransport.returning(HttpResponse(200, b"<html>proxy</html>"))
+        with self.assertRaises(ProviderTemporaryError):
+            AnthropicProvider(api_key="k", transport=transport).count_input_tokens("x", "m", 30.0)
+
+    def test_the_credential_never_appears_in_a_count_error(self) -> None:
+        secret = "sk-synthetic-count-marker"  # noqa: S105 - a fixture, not a credential
+        transport = FakeTransport.returning(error_response(401, "invalid x-api-key"))
+        with self.assertRaises(ProviderAuthenticationError) as ctx:
+            AnthropicProvider(api_key=secret, transport=transport).count_input_tokens(
+                "x", "m", 30.0
+            )
+        self.assertNotIn(secret, str(ctx.exception))
 
 
 if __name__ == "__main__":
