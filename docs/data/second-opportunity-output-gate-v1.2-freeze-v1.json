@@ -1,0 +1,366 @@
+{
+  "$comment": "Mission 1.84.10. The semantic output gate v1.2.0, derived from the live code and frozen before the V3 diagnostic replay. CI gate 75 re-derives every field.",
+  "record_version": "second-opportunity-output-gate-freeze@1.0.0",
+  "mission": "mission-1.84.10",
+  "GATE_VERSION": "second-opportunity-output-gate@1.2.0",
+  "PREDECESSOR_GATE_VERSION": "second-opportunity-output-gate@1.1.0",
+  "PREDECESSOR_GATE_MUTATED": false,
+  "COMPONENT_VERSIONS": {
+    "gate": "second-opportunity-output-gate@1.2.0",
+    "output_schema": "second-opportunity-synthesis-output@1.1.0",
+    "persistence_gate": "opportunity-synthesis-persistence-gate@1.2.0",
+    "audit": "opportunity-synthesis-audit@1.3.0",
+    "claim_guard": "opportunity-claim-guard@1.3.0",
+    "field_context_policy": "second-opportunity-field-context-policy@1.0.0",
+    "support_universe": "opportunity-support-universe@1.0.0",
+    "trusted_context": "second-opportunity-trusted-context@1.0.0"
+  },
+  "OPERATOR_DECISION": [
+    "KEEP_OUTPUT_SCHEMA_V1_1_0_UNCHANGED",
+    "KEEP_PROMPT_V1_2_0_UNCHANGED",
+    "REPAIR_SEMANTIC_GATE_ASSERTION_CONTEXT",
+    "DO_NOT_WHITELIST_THE_V3_ANSWER",
+    "DO_NOT_REMOVE_FORBIDDEN_CONCEPTS",
+    "DO_NOT_WEAKEN_EVIDENCE_BOUNDARIES"
+  ],
+  "OUTPUT_SCHEMA_VERSION": "second-opportunity-synthesis-output@1.1.0",
+  "OUTPUT_SCHEMA_SHA256": "ec789d1be7d525bf6e498bf61e8a0596ac4582e24e8b45073b3f9ac1cca8b988",
+  "OUTPUT_SCHEMA_CHANGED": false,
+  "PROMPT_VERSION": "1.2.0",
+  "PROMPT_SHA256": "1677cbe53e83e644fa15e5492cf88e3ec578538351924f2b3a504e27f3a0878d",
+  "SYSTEM_REGION_V1_2_SHA256": "dd418805fc1131da3f8562d4e63de7f66d31718ac6a7c18734361888892e2fbf",
+  "PROMPT_CHANGED": false,
+  "HISTORICAL_MODULES": {
+    "packages/opportunity-engine/python/sros_opportunity/guards.py": "41c732fa3ccc8210cd0131c4ee9bb3ac5f181c6a4a5a68459b71c37a17e5e29c",
+    "packages/opportunity-engine/python/sros_opportunity/validation.py": "c62c3f91bc2255a411435eb8256f4a055c4f816a5172d3496c4382d96ddc8ed6",
+    "packages/opportunity-engine/python/sros_opportunity/second_opportunity.py": "24ba090d3ff750ae95105458ba5528a1597449a902184a1d009b58dc9bc9221b",
+    "packages/opportunity-engine/python/sros_opportunity/schema_validation.py": "243ef0532deaf6c85c3cee1e3cac50e8bfe356a45061d3f9f1beaf68b09ed790"
+  },
+  "IMPLEMENTATION_FILES": {
+    "packages/opportunity-engine/python/sros_opportunity/assertion_context.py": "3afcffc210393400241b7ed5b818d4caab615e882c30cf6c7b2495eee2c3081b",
+    "packages/opportunity-engine/python/sros_opportunity/second_opportunity_gate_v1_2.py": "90a2c89a506ee05c3b6368bfb70c6738c16c70a3459b3bc9cff3574e5002134a"
+  },
+  "IMPLEMENTATION_SHA256": "47bbcb459b0b69153d23c7dcc7f273e0e47d0b84a72522d25f773cd462db82b0",
+  "FROZEN_TEST_FILE": {
+    "packages/opportunity-engine/python/tests/test_semantic_gate_v1_2.py": "c84d99cfe8d43027f89ba5e46ae599b04b5fd786472818c1e014f46343560cf0"
+  },
+  "DISPOSITIONS": [
+    "SUPPORTED_ASSERTION",
+    "HYPOTHESIS_TO_VALIDATE",
+    "EXPLICITLY_NOT_SUPPORTED",
+    "UNKNOWN_REQUIRES_EVIDENCE",
+    "FUTURE_EVIDENCE_REQUEST",
+    "STRUCTURAL_FACT",
+    "TRUSTED_LIMITING_FACT"
+  ],
+  "SHAPES": [
+    "FREE",
+    "REQUEST",
+    "UNCERTAINTY",
+    "LABELLED",
+    "ENUMERATION"
+  ],
+  "FIELD_POLICY": [
+    {
+      "field": "decision",
+      "disposition": "STRUCTURAL_FACT",
+      "shape": "ENUMERATION",
+      "label_key": null
+    },
+    {
+      "field": "subject",
+      "disposition": "STRUCTURAL_FACT",
+      "shape": "ENUMERATION",
+      "label_key": null
+    },
+    {
+      "field": "target_actor_if_supported",
+      "disposition": "SUPPORTED_ASSERTION",
+      "shape": "FREE",
+      "label_key": null
+    },
+    {
+      "field": "observed_need",
+      "disposition": "SUPPORTED_ASSERTION",
+      "shape": "FREE",
+      "label_key": null
+    },
+    {
+      "field": "candidate_intervention_class",
+      "disposition": "SUPPORTED_ASSERTION",
+      "shape": "FREE",
+      "label_key": null
+    },
+    {
+      "field": "hypothesis_statement",
+      "disposition": "HYPOTHESIS_TO_VALIDATE",
+      "shape": "FREE",
+      "label_key": null
+    },
+    {
+      "field": "supported_dimensions",
+      "disposition": "STRUCTURAL_FACT",
+      "shape": "ENUMERATION",
+      "label_key": null
+    },
+    {
+      "field": "unsupported_dimensions",
+      "disposition": "EXPLICITLY_NOT_SUPPORTED",
+      "shape": "ENUMERATION",
+      "label_key": null
+    },
+    {
+      "field": "supporting_evidence_ids",
+      "disposition": "STRUCTURAL_FACT",
+      "shape": "ENUMERATION",
+      "label_key": null
+    },
+    {
+      "field": "supporting_claim_ids",
+      "disposition": "STRUCTURAL_FACT",
+      "shape": "ENUMERATION",
+      "label_key": null
+    },
+    {
+      "field": "source_families",
+      "disposition": "STRUCTURAL_FACT",
+      "shape": "ENUMERATION",
+      "label_key": null
+    },
+    {
+      "field": "independence_status",
+      "disposition": "STRUCTURAL_FACT",
+      "shape": "FREE",
+      "label_key": null
+    },
+    {
+      "field": "reliability_status",
+      "disposition": "STRUCTURAL_FACT",
+      "shape": "FREE",
+      "label_key": null
+    },
+    {
+      "field": "evidence_bound_reasoning_summary",
+      "disposition": "SUPPORTED_ASSERTION",
+      "shape": "FREE",
+      "label_key": null
+    },
+    {
+      "field": "critical_uncertainties",
+      "disposition": "UNKNOWN_REQUIRES_EVIDENCE",
+      "shape": "UNCERTAINTY",
+      "label_key": null
+    },
+    {
+      "field": "commercial_claims_supported",
+      "disposition": "SUPPORTED_ASSERTION",
+      "shape": "FREE",
+      "label_key": null
+    },
+    {
+      "field": "commercial_claims_not_supported",
+      "disposition": "EXPLICITLY_NOT_SUPPORTED",
+      "shape": "FREE",
+      "label_key": null
+    },
+    {
+      "field": "recommended_next_evidence",
+      "disposition": "FUTURE_EVIDENCE_REQUEST",
+      "shape": "REQUEST",
+      "label_key": null
+    },
+    {
+      "field": "confidence_classification",
+      "disposition": "STRUCTURAL_FACT",
+      "shape": "ENUMERATION",
+      "label_key": null
+    },
+    {
+      "field": "statement_classifications",
+      "disposition": null,
+      "shape": "LABELLED",
+      "label_key": "classification"
+    }
+  ],
+  "CLASSIFICATION_DISPOSITIONS": {
+    "OBSERVED_OR_EVIDENCE_SUPPORTED": "SUPPORTED_ASSERTION",
+    "HYPOTHESIS_TO_VALIDATE": "HYPOTHESIS_TO_VALIDATE",
+    "UNKNOWN_REQUIRES_EVIDENCE": "UNKNOWN_REQUIRES_EVIDENCE"
+  },
+  "FORBIDDEN_CONCEPTS": [
+    {
+      "name": "REALISED_SPEND",
+      "phrases": [
+        "realised spend",
+        "realized spend",
+        "actual spend",
+        "money spent",
+        "amount paid",
+        "was paid",
+        "they paid",
+        "expenditure of",
+        "actual expenditure",
+        "realised expenditure",
+        "realized expenditure",
+        "actually spent",
+        "actually paid"
+      ],
+      "never": "money anybody paid, actual expenditure, a budget consumed, or a contract's final cost"
+    },
+    {
+      "name": "MARKET_DEMAND",
+      "phrases": [
+        "market demand",
+        "demand for",
+        "there is demand",
+        "demonstrates demand",
+        "shows demand",
+        "appetite for",
+        "software demand",
+        "product demand"
+      ],
+      "never": "market demand, appetite, interest, adoption, uptake, or a market that wants anything"
+    },
+    {
+      "name": "SOFTWARE_BUYER",
+      "phrases": [
+        "would buy",
+        "will buy",
+        "are buyers",
+        "is a buyer",
+        "potential customers",
+        "prospective customers",
+        "target customers"
+      ],
+      "never": "a buyer for a software product, a customer, a prospect, a user, or anybody who would purchase an intervention nobody has specified"
+    },
+    {
+      "name": "WILLINGNESS_TO_PAY",
+      "phrases": [
+        "willingness to pay",
+        "willing to pay",
+        "able to pay",
+        "budget for software",
+        "can afford",
+        "willingness to spend",
+        "willing to spend"
+      ],
+      "never": "willingness to pay, price tolerance, budget for software, or ability to pay for a product"
+    },
+    {
+      "name": "PRODUCT_MARKET_FIT",
+      "phrases": [
+        "product-market fit",
+        "product market fit",
+        "validated market",
+        "proven need",
+        "confirmed need",
+        "confirmed opportunity"
+      ],
+      "never": "product-market fit, a validated market, a proven need, or a confirmed opportunity"
+    },
+    {
+      "name": "MARKET_SIZE",
+      "phrases": [
+        "market size",
+        "size of the market",
+        "addressable market"
+      ],
+      "never": "the size of any market, which no observation here measures"
+    },
+    {
+      "name": "BUYER_NEED",
+      "phrases": [
+        "buyer need"
+      ],
+      "never": "a need that any buyer has"
+    },
+    {
+      "name": "UNMET_NEED",
+      "phrases": [
+        "unmet need",
+        "underserved",
+        "unserved need"
+      ],
+      "never": "an unmet or underserved need"
+    },
+    {
+      "name": "SOLUTION_DISSATISFACTION",
+      "phrases": [
+        "dissatisfaction",
+        "dissatisfied"
+      ],
+      "never": "dissatisfaction with any existing solution"
+    },
+    {
+      "name": "SOLUTION_GAP",
+      "phrases": [
+        "solution gap",
+        "market gap",
+        "gap in the market"
+      ],
+      "never": "a gap no solution fills"
+    },
+    {
+      "name": "COMPETITIVE_GAP",
+      "phrases": [
+        "competitive gap",
+        "competitor weakness",
+        "weak competition",
+        "weak competitors"
+      ],
+      "never": "a weakness in whoever already serves the need"
+    },
+    {
+      "name": "PROFITABILITY",
+      "phrases": [
+        "profitability",
+        "profitable",
+        "profit margin"
+      ],
+      "never": "profit for anybody"
+    }
+  ],
+  "FORBIDDEN_CONCEPTS_REMOVED": 0,
+  "SUPPORT_UNIVERSE": {
+    "version": "opportunity-support-universe@1.0.0",
+    "categories": [
+      "SOURCE_STATEMENTS",
+      "PACKET_STRUCTURAL_FACTS",
+      "TRUSTED_LIMITING_OR_DEFINITIONAL_CONTEXT"
+    ],
+    "PROMPT_TEXT_IS_NOT_OBSERVED_EVIDENCE": true,
+    "trusted_context_version": "second-opportunity-trusted-context@1.0.0",
+    "trusted_context_sources": [
+      "the packet's own dimension_bounds, each with the mapping version and signal type that produced it",
+      "the establishes side of FORBIDDEN_TRANSFORMATIONS, rendered in prompt 1.2.0"
+    ],
+    "trusted_context_licenses": "DEFINITIONAL_IDENTIFIERS_ONLY",
+    "trusted_context_never_licenses": [
+      "its words",
+      "its numbers as magnitudes",
+      "any concept it limits"
+    ]
+  },
+  "CANONICAL_TERM_POLICY": "the EvidenceDimension enum term in words, derived in code (MARKET_ACTIVITY -> market activity); licensed as a whole phrase only where the answer declares the dimension AND the packet supports it; no paraphrase and no single word is licensed",
+  "MATRICES": {
+    "TestSection5AssertionNotTokenPresence": 12,
+    "TestSection13SentenceScopedDenial": 6,
+    "TestSection14Scored": 12,
+    "TestSection11RecommendedNextEvidence": 7,
+    "TestSection12CriticalUncertainties": 6,
+    "TestSection20ForbiddenConceptsStayForbidden": 13,
+    "TestAdversarialAssertions": 16
+  },
+  "GATE_V1_2_DESIGN_FROZEN_BEFORE_V3_DIAGNOSTIC_REPLAY": true,
+  "V3_DIAGNOSTIC_REPLAY_PERFORMED_BEFORE_FREEZE": false,
+  "V3_TEXT_USED_AS_TEST_CASE": false,
+  "WHITELIST_ENTRIES": 0,
+  "accounting": {
+    "MODEL_CALLS": 0,
+    "PROVIDER_REQUESTS": 0,
+    "MESSAGES_API_REQUESTS": 0,
+    "TED_BYTES_SENT": 0,
+    "CANONICAL_MUTATIONS": 0
+  }
+}
