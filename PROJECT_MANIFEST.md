@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.140
+Version: 1.141
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-12 (Sprint 1 / Mission 1.84.6)
+Last amended: 2026-09-12 (Sprint 1 / Mission 1.84.7)
 
 ---
 
@@ -13,6 +13,61 @@ Last amended: 2026-09-12 (Sprint 1 / Mission 1.84.6)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.141 - 2026-09-12 (Sprint 1 / Mission 1.84.7)
+
+**`EXECUTION_SCHEMA_REJECTED_NO_RETRY`: the one request was made, the model finished, and the schema
+refused the answer on one field.** The operator approved exactly one execution of
+`SECOND-OPPORTUNITY-SYNTH-EXEC-V2` v2 by its digest `d27f2896...`, and the approval was recorded
+beside the packet, verbatim and hashed (`19bf1b16...`), with its 26 prohibitions carried as data.
+The fifteen pre-execution checks passed with no network, and **exactly one** request went to the
+synchronous Messages API: HTTP 200 in 35.5 s, `stop_reason = tool_use`, **8939 input and 3914 output
+tokens, 0 thinking tokens, cost 0.057018** against a ceiling of 1.303908. Stages 1 to 4 passed; the
+v1.1.0 schema refused `evidence_bound_reasoning_summary` at **1113 characters against 900**; stages
+6 to 10 were not reached. **No retry, nothing persisted, the approval spent.**
+
+**THE ENVELOPE WAS NOT THE CONSTRAINT.** The answer used 3914 of 128000 output tokens and 35.5 of 60
+seconds, and the provider's own completion signal said it finished. What refused it is a
+900-character bound from Mission 1.31's base schema that the v1.1.0 prompt does not state in words;
+the bound reached the model only inside the forced tool's input schema. Recorded as facts: nothing
+was changed on the strength of them and nothing is recommended.
+
+**THINKING DISABLED, OBSERVED.** The response reports `thinking_tokens = 0`, the first runtime
+evidence of what Mission 1.84.6 could only document and verify locally.
+
+**THE BYTES WERE KEPT, AND A GAP WAS CLOSED BEFORE THE CALL.** The 1.84.6 runner judged and rendered
+the answer before writing anything, so an exception after the call would have lost the only
+response exactly as Mission 1.84.2 lost V1's. A fail-safe now writes what the transport captured
+whatever breaks after the call; it was not needed. The raw response digest is recomputable from the
+retained body.
+
+**SPENT, AND REFUSED BY NAME.** V1's guard reads only V1's record and could not see V2 spent, so the
+runner now reads V2's execution record too: a verification run after the call refuses V2 before any
+network, and any other digest is still permitted.
+
+**GATE 71 RE-DERIVES THE RECORD FROM WHAT WAS KEPT**: the raw digest from the retained body, the stop
+reason through the adapter's classifier, the schema violation through the live validator, the cost
+from the reported usage, the stage table from those facts, the approval against its own words, V1's
+record against its digest, and whether the runner would execute V2 again. **Probe: 116 caught, 0
+escaped, 6 of 6 controls, every file proved restored**; the first run caught two cases by a crash
+rather than a rule -- a usage and a cost given as NOT_ESTABLISHED while the response reports them --
+and both are now refused by name.
+
+**Verification.** 3853 bare-python tests; 3956 pytest, 13 skipped, database unchanged
+across 29 tenant tables; ruff over 1017 files; mypy over 200 files; contracts, catalog and registry;
+all **71** CI gates, one new; **68 new tests**.
+
+**What moved.** Nothing canonical: every counter identical, and **1 provider request, 1 model call,
+0 retries, 0 fallbacks, 3604 TED bytes, 0 Opportunities**.
+
+New: `docs/data/second-opportunity-synthesis-execution-approval-v2.json`,
+`second-opportunity-synthesis-response-v2.json`, `second-opportunity-synthesis-execution-record-v2.json`
+and its generated `.md`; `infrastructure/scripts/render_second_opportunity_execution_record_v2.py`
+(CI gate 71); tests; and `docs/reports/mission-1.84.7-report.md`.
+
+Changed: `docs/CLAUDE.md` 1.141 to 1.142; `run_second_opportunity_execution_v2.py` gains the
+post-call fail-safe and reads V2's consumption; `.github/workflows/ci.yml` gains one gate. **Packet
+V2, V1's packet and record, the prompt, the schema and the gates it binds are byte-identical.**
 
 ## 1.140 - 2026-09-12 (Sprint 1 / Mission 1.84.6)
 
