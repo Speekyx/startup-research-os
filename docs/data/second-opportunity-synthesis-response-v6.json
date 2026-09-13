@@ -1,0 +1,347 @@
+{
+  "$comment": "Mission 1.84.2's repaired retention path. Written on every terminal outcome, so a rejected response is as recoverable as an accepted one.",
+  "OUTCOME": "EXECUTION_OUTPUT_REJECTED_AT_SCHEMA_VALIDATION_NO_RETRY",
+  "PROVIDER_REQUESTS_MADE": 1,
+  "RETRIES": 0,
+  "timing": {
+    "started_at": "2026-09-13T18:59:51.437351+00:00",
+    "finished_at": "2026-09-13T19:00:24.563347+00:00",
+    "elapsed_seconds": 33.126
+  },
+  "RAW_PROVIDER_RESPONSE_RETAINED": true,
+  "RAW_PROVIDER_RESPONSE_SHA256": "4c63becd5ff62436d30bf9d3f16406935fd8b63a69764835dbb746a67e6e940c",
+  "RAW_PROVIDER_RESPONSE_CHARACTERS": 8904,
+  "RAW_PROVIDER_RESPONSE_STATUS": 200,
+  "PROVIDER_REQUEST_ID": "req_011Cf1xF6ofhz7ANL8KTpLST",
+  "transport_errors": [],
+  "USAGE_RETAINED": true,
+  "usage": [
+    {
+      "input_tokens": 12903,
+      "output_tokens": 3637,
+      "cost_units": 0.062176,
+      "priced": true,
+      "outcome": "SUCCESS",
+      "error_category": "None"
+    }
+  ],
+  "HIDDEN_REASONING_REQUESTED": false,
+  "HIDDEN_REASONING_RETAINED": false,
+  "PARSED_OUTPUT_RETAINED": true,
+  "PARSED_OUTPUT_SHA256": "e8332db816337e94fd35c0b4ad39f073f4b2cf1372f5c47fbf6a132827e7b824",
+  "parsed_output": {
+    "parameter name": "value",
+    "decision": "FORM_HYPOTHESIS",
+    "subject": "ted-eu:CPV-class:9261",
+    "target_actor_if_supported": "Contracting authorities that published CONTRACT_NOTICE and CONTRACT_AWARD_NOTICE records under CPV class 9261 (division 92) in the ted-eu notices/eforms-contract-and-award resource",
+    "observed_need": "The packet establishes only that contracting authorities published notices (contract notices and contract award notices) classified under CPV class 9261, with published TOTAL_VALUE figures at notice scope that differ across notices. No need, problem or dissatisfaction of any actor is stated.",
+    "candidate_intervention_class": "An information or analytics service that aggregates and compares published procurement-notice values within a defined CPV classification, for use by parties who track public contract notice activity.",
+    "hypothesis_statement": "Whether contracting authorities publishing CONTRACT_NOTICE and CONTRACT_AWARD_NOTICE records under CPV class 9261 constitute a stable, addressable class of actors for whom a notice-tracking or notice-value-comparison offering could be tested, given only that such notices exist and their published TOTAL_VALUE figures vary; this does not establish any need, budget for software, willingness to pay, or dissatisfaction with existing tools.",
+    "supported_dimensions": [
+      "BUYER_OR_BUDGET_EXISTENCE",
+      "ECONOMIC_VALUE",
+      "MARKET_ACTIVITY"
+    ],
+    "unsupported_dimensions": [
+      "RECURRENCE_OR_FREQUENCY",
+      "WILLINGNESS_TO_PAY",
+      "SOLUTION_GAP",
+      "SOLUTION_DISSATISFACTION",
+      "COMPETITIVE_SUPPLY",
+      "DISTRIBUTION_SIGNAL",
+      "REGULATORY_OR_STRUCTURAL_DRIVER",
+      "FEASIBILITY_SIGNAL"
+    ],
+    "supporting_evidence_ids": [
+      "0b407e80-336a-4b71-8a59-09f0464bf43f",
+      "0d8790e9-fbf8-4675-b253-6b35cf294959",
+      "17702f3b-c72c-43bd-b183-e7d600e516fd",
+      "1a0bb19a-c849-46b5-a31b-c6716d6d304c",
+      "7b1bed61-78ef-43a9-862c-bdeda3171bf5",
+      "93d1ae45-13a5-4fc5-a528-9f3bb1e59980"
+    ],
+    "supporting_claim_ids": [
+      "d25bd256-49a1-494f-b6f8-4f1c3271d78e",
+      "c99e531d-a72d-40fb-bb21-c76d6715bab0",
+      "a645151c-9350-4b05-903f-f01b95ef5dfc",
+      "65ae9cd9-a570-4be6-9cd6-91a6aaae6098",
+      "3c65a723-4d06-481e-9d88-86cf4adb85b9"
+    ],
+    "source_families": [
+      "public_procurement"
+    ],
+    "independence_status": "Independence is UNKNOWN for 6 of 6 rows. This packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings.",
+    "reliability_status": "All 6 rows are SCORABLE, meaning a reviewed reliability applies to every measurement. Scoring-ready is not scored, and no score exists; 6 of 6 rows are scoring-eligible but this packet cannot contribute to any score.",
+    "evidence_bound_reasoning_summary": "The packet contains six rows, all from ted-eu's notices/eforms-contract-and-award resource, describing bounded sets of CONTRACT_NOTICE and CONTRACT_AWARD_NOTICE records classified under CPV class 9261. The statements establish that such notices exist (contracting authorities publish them, evidencing BUYER_OR_BUDGET_EXISTENCE), that published TOTAL_VALUE figures at notice scope differ across notices within these bounded sets (ECONOMIC_VALUE), and that this activity occurred within a defined classification (MARKET_ACTIVITY). Per eForms BT-161, TOTAL_VALUE includes options and renewals and is not realised expenditure or a price. No statement addresses recurrence of any underlying need, dissatisfaction with any current solution, gaps in existing supply, who else serves this space, distribution channels, regulatory drivers, feasibility of building anything, or willingness to pay for a product. The narrowest defensible hypothesis is that a class of contracting authorities publishing notices under this CPV code exists and is worth investigating further as a possible actor class, not that any need, budget, or demand for a specific intervention has been shown.",
+    "critical_uncertainties": [
+      "Whether any contracting authority in this CPV class experiences a recurring problem, as opposed to a single observed instance of notice publication.",
+      "Whether any of the published TOTAL_VALUE figures reflect money actually paid, as opposed to an award ceiling including options and renewals.",
+      "Whether any actor has expressed willingness to pay for a product addressing procurement-notice tracking or comparison.",
+      "Whether existing tools or services already serve any need these authorities might have, and whether they are adequate.",
+      "Whether the contracting authorities behind these six rows are the same or different entities across notices.",
+      "Whether a reachable channel exists to engage the authorities that published these notices.",
+      "Whether any regulatory or structural condition specifically drives the pattern of value differences observed."
+    ],
+    "commercial_claims_supported": [
+      "Contracting authorities publish procurement notices under CPV class 9261 with varying published TOTAL_VALUE figures at notice scope, per ted-eu records.",
+      "An actor with authority to initiate procurement (a contracting authority) is evidenced to exist in connection with CPV class 9261 notices."
+    ],
+    "commercial_claims_not_supported": [
+      "Contracting authorities in CPV class 9261 have unmet needs for software or services.",
+      "There is willingness to pay for any product addressing procurement activity in this CPV class.",
+      "A market of a measurable size exists for an intervention targeting this CPV class.",
+      "Existing solutions serving this need are inadequate or unsatisfactory to any buyer.",
+      "Any specific supplier or competitor already serves or fails to serve this space.",
+      "The published TOTAL_VALUE figures represent realised expenditure or prices paid.",
+      "Notice publication frequency indicates a recurring problem for any single actor.",
+      "A distribution channel exists that a new entrant could use to reach these authorities."
+    ],
+    "recommended_next_evidence": [
+      "Observation of whether the same contracting authority appears repeatedly across multiple notices in this CPV class over time.",
+      "Observation of whether any contracting authority has stated a specific unmet need or dissatisfaction with current procurement processes or tools.",
+      "Observation of actual expenditure or payment records tied to awarded contracts in this CPV class, distinct from published TOTAL_VALUE.",
+      "Observation of any existing vendor or tool already serving contracting authorities in this CPV class.",
+      "Observation of any stated budget line or commitment to pay for a procurement-related software or service offering."
+    ],
+    "confidence_classification": "EXPLORATORY",
+    "statement_classifications": [
+      {
+        "statement": "ted-eu published at least one bounded set of CONTRACT_NOTICE notices under CPV class 9261 with differing TOTAL_VALUE amounts at notice scope.",
+        "classification": "OBSERVED_OR_EVIDENCE_SUPPORTED"
+      },
+      {
+        "statement": "ted-eu published at least one bounded set of CONTRACT_AWARD_NOTICE notices under CPV class 9261 with differing TOTAL_VALUE amounts at notice scope.",
+        "classification": "OBSERVED_OR_EVIDENCE_SUPPORTED"
+      },
+      {
+        "statement": "Within a bounded set of 3 CONTRACT_NOTICE notices under CPV class 9261, the largest TOTAL_VALUE exceeded the smallest by 15658679.12 EUR.",
+        "classification": "OBSERVED_OR_EVIDENCE_SUPPORTED"
+      },
+      {
+        "statement": "Within a bounded set of 2 CONTRACT_AWARD_NOTICE notices under CPV class 9261, the largest TOTAL_VALUE exceeded the smallest by 235017 EUR.",
+        "classification": "OBSERVED_OR_EVIDENCE_SUPPORTED"
+      },
+      {
+        "statement": "Within a bounded set of 6 CONTRACT_NOTICE notices under CPV class 9261, the largest TOTAL_VALUE exceeded the smallest by 86827200 EUR.",
+        "classification": "OBSERVED_OR_EVIDENCE_SUPPORTED"
+      },
+      {
+        "statement": "Contracting authorities publishing notices under CPV class 9261 face a recurring operational problem.",
+        "classification": "UNKNOWN_REQUIRES_EVIDENCE"
+      },
+      {
+        "statement": "Whether contracting authorities under CPV class 9261 are dissatisfied with existing procurement tools is worth testing.",
+        "classification": "HYPOTHESIS_TO_VALIDATE"
+      },
+      {
+        "statement": "Whether any actor in this CPV class would pay for a notice-tracking or comparison product is worth testing.",
+        "classification": "HYPOTHESIS_TO_VALIDATE"
+      },
+      {
+        "statement": "Existing solutions adequately or inadequately serve procurement notice tracking in this CPV class.",
+        "classification": "UNKNOWN_REQUIRES_EVIDENCE"
+      },
+      {
+        "statement": "A specific competitor or supplier already serves contracting authorities in this CPV class.",
+        "classification": "UNKNOWN_REQUIRES_EVIDENCE"
+      }
+    ]
+  },
+  "validation": {
+    "stages": {
+      "1_transport_success": "PASSED",
+      "2_provider_response_shape": "PASSED",
+      "3_provider_completion": "PASSED",
+      "4_structured_output_parse": "PASSED",
+      "5_schema_validation_v1_2_0": "FAILED",
+      "6_semantic_output_gate_v1_4_0": "NOT_REACHED",
+      "7_evidence_boundary_and_no_distortion": "NOT_REACHED",
+      "8_attribution_and_provenance": "NOT_REACHED",
+      "9_persistence_eligibility": "NOT_REACHED",
+      "10_human_review": "NOT_REACHED"
+    },
+    "persist": false,
+    "stop_reason": "tool_use",
+    "completion": "COMPLETE",
+    "failed_stage": "5_schema_validation_v1_2_0",
+    "reasons": [
+      "<root>: unknown field 'parameter name'; additionalProperties is false"
+    ],
+    "outcome": "EXECUTION_OUTPUT_REJECTED_AT_SCHEMA_VALIDATION_NO_RETRY"
+  },
+  "PERSISTED": "NOTHING",
+  "execution_packet_id": "SECOND-OPPORTUNITY-SYNTH-EXEC-V6",
+  "execution_packet_sha256": "969128dd2453ab2a6907335d9386c9c3f3fac991db91c674b151c9db777aa8a9",
+  "TERMINAL_OUTCOME": "EXECUTION_OUTPUT_REJECTED_AT_SCHEMA_VALIDATION_NO_RETRY",
+  "STOP_REASON": "tool_use",
+  "PROVIDER_COMPLETION": "COMPLETE",
+  "PARSED_OUTPUT_JUDGED": true,
+  "RAW_PROVIDER_RESPONSE_BODY": {
+    "model": "claude-sonnet-5",
+    "id": "msg_011Cf1xF7mDGyrcSEUxTZytf",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01EheqxjaJteubpTwa8a5E2t",
+        "name": "emit_structured_output",
+        "input": {
+          "parameter name": "value",
+          "decision": "FORM_HYPOTHESIS",
+          "subject": "ted-eu:CPV-class:9261",
+          "target_actor_if_supported": "Contracting authorities that published CONTRACT_NOTICE and CONTRACT_AWARD_NOTICE records under CPV class 9261 (division 92) in the ted-eu notices/eforms-contract-and-award resource",
+          "observed_need": "The packet establishes only that contracting authorities published notices (contract notices and contract award notices) classified under CPV class 9261, with published TOTAL_VALUE figures at notice scope that differ across notices. No need, problem or dissatisfaction of any actor is stated.",
+          "candidate_intervention_class": "An information or analytics service that aggregates and compares published procurement-notice values within a defined CPV classification, for use by parties who track public contract notice activity.",
+          "hypothesis_statement": "Whether contracting authorities publishing CONTRACT_NOTICE and CONTRACT_AWARD_NOTICE records under CPV class 9261 constitute a stable, addressable class of actors for whom a notice-tracking or notice-value-comparison offering could be tested, given only that such notices exist and their published TOTAL_VALUE figures vary; this does not establish any need, budget for software, willingness to pay, or dissatisfaction with existing tools.",
+          "supported_dimensions": [
+            "BUYER_OR_BUDGET_EXISTENCE",
+            "ECONOMIC_VALUE",
+            "MARKET_ACTIVITY"
+          ],
+          "unsupported_dimensions": [
+            "RECURRENCE_OR_FREQUENCY",
+            "WILLINGNESS_TO_PAY",
+            "SOLUTION_GAP",
+            "SOLUTION_DISSATISFACTION",
+            "COMPETITIVE_SUPPLY",
+            "DISTRIBUTION_SIGNAL",
+            "REGULATORY_OR_STRUCTURAL_DRIVER",
+            "FEASIBILITY_SIGNAL"
+          ],
+          "supporting_evidence_ids": [
+            "0b407e80-336a-4b71-8a59-09f0464bf43f",
+            "0d8790e9-fbf8-4675-b253-6b35cf294959",
+            "17702f3b-c72c-43bd-b183-e7d600e516fd",
+            "1a0bb19a-c849-46b5-a31b-c6716d6d304c",
+            "7b1bed61-78ef-43a9-862c-bdeda3171bf5",
+            "93d1ae45-13a5-4fc5-a528-9f3bb1e59980"
+          ],
+          "supporting_claim_ids": [
+            "d25bd256-49a1-494f-b6f8-4f1c3271d78e",
+            "c99e531d-a72d-40fb-bb21-c76d6715bab0",
+            "a645151c-9350-4b05-903f-f01b95ef5dfc",
+            "65ae9cd9-a570-4be6-9cd6-91a6aaae6098",
+            "3c65a723-4d06-481e-9d88-86cf4adb85b9"
+          ],
+          "source_families": [
+            "public_procurement"
+          ],
+          "independence_status": "Independence is UNKNOWN for 6 of 6 rows. This packet does not establish that its evidence is independent, and the count of rows is not a count of independent findings.",
+          "reliability_status": "All 6 rows are SCORABLE, meaning a reviewed reliability applies to every measurement. Scoring-ready is not scored, and no score exists; 6 of 6 rows are scoring-eligible but this packet cannot contribute to any score.",
+          "evidence_bound_reasoning_summary": "The packet contains six rows, all from ted-eu's notices/eforms-contract-and-award resource, describing bounded sets of CONTRACT_NOTICE and CONTRACT_AWARD_NOTICE records classified under CPV class 9261. The statements establish that such notices exist (contracting authorities publish them, evidencing BUYER_OR_BUDGET_EXISTENCE), that published TOTAL_VALUE figures at notice scope differ across notices within these bounded sets (ECONOMIC_VALUE), and that this activity occurred within a defined classification (MARKET_ACTIVITY). Per eForms BT-161, TOTAL_VALUE includes options and renewals and is not realised expenditure or a price. No statement addresses recurrence of any underlying need, dissatisfaction with any current solution, gaps in existing supply, who else serves this space, distribution channels, regulatory drivers, feasibility of building anything, or willingness to pay for a product. The narrowest defensible hypothesis is that a class of contracting authorities publishing notices under this CPV code exists and is worth investigating further as a possible actor class, not that any need, budget, or demand for a specific intervention has been shown.",
+          "critical_uncertainties": [
+            "Whether any contracting authority in this CPV class experiences a recurring problem, as opposed to a single observed instance of notice publication.",
+            "Whether any of the published TOTAL_VALUE figures reflect money actually paid, as opposed to an award ceiling including options and renewals.",
+            "Whether any actor has expressed willingness to pay for a product addressing procurement-notice tracking or comparison.",
+            "Whether existing tools or services already serve any need these authorities might have, and whether they are adequate.",
+            "Whether the contracting authorities behind these six rows are the same or different entities across notices.",
+            "Whether a reachable channel exists to engage the authorities that published these notices.",
+            "Whether any regulatory or structural condition specifically drives the pattern of value differences observed."
+          ],
+          "commercial_claims_supported": [
+            "Contracting authorities publish procurement notices under CPV class 9261 with varying published TOTAL_VALUE figures at notice scope, per ted-eu records.",
+            "An actor with authority to initiate procurement (a contracting authority) is evidenced to exist in connection with CPV class 9261 notices."
+          ],
+          "commercial_claims_not_supported": [
+            "Contracting authorities in CPV class 9261 have unmet needs for software or services.",
+            "There is willingness to pay for any product addressing procurement activity in this CPV class.",
+            "A market of a measurable size exists for an intervention targeting this CPV class.",
+            "Existing solutions serving this need are inadequate or unsatisfactory to any buyer.",
+            "Any specific supplier or competitor already serves or fails to serve this space.",
+            "The published TOTAL_VALUE figures represent realised expenditure or prices paid.",
+            "Notice publication frequency indicates a recurring problem for any single actor.",
+            "A distribution channel exists that a new entrant could use to reach these authorities."
+          ],
+          "recommended_next_evidence": [
+            "Observation of whether the same contracting authority appears repeatedly across multiple notices in this CPV class over time.",
+            "Observation of whether any contracting authority has stated a specific unmet need or dissatisfaction with current procurement processes or tools.",
+            "Observation of actual expenditure or payment records tied to awarded contracts in this CPV class, distinct from published TOTAL_VALUE.",
+            "Observation of any existing vendor or tool already serving contracting authorities in this CPV class.",
+            "Observation of any stated budget line or commitment to pay for a procurement-related software or service offering."
+          ],
+          "confidence_classification": "EXPLORATORY",
+          "statement_classifications": [
+            {
+              "statement": "ted-eu published at least one bounded set of CONTRACT_NOTICE notices under CPV class 9261 with differing TOTAL_VALUE amounts at notice scope.",
+              "classification": "OBSERVED_OR_EVIDENCE_SUPPORTED"
+            },
+            {
+              "statement": "ted-eu published at least one bounded set of CONTRACT_AWARD_NOTICE notices under CPV class 9261 with differing TOTAL_VALUE amounts at notice scope.",
+              "classification": "OBSERVED_OR_EVIDENCE_SUPPORTED"
+            },
+            {
+              "statement": "Within a bounded set of 3 CONTRACT_NOTICE notices under CPV class 9261, the largest TOTAL_VALUE exceeded the smallest by 15658679.12 EUR.",
+              "classification": "OBSERVED_OR_EVIDENCE_SUPPORTED"
+            },
+            {
+              "statement": "Within a bounded set of 2 CONTRACT_AWARD_NOTICE notices under CPV class 9261, the largest TOTAL_VALUE exceeded the smallest by 235017 EUR.",
+              "classification": "OBSERVED_OR_EVIDENCE_SUPPORTED"
+            },
+            {
+              "statement": "Within a bounded set of 6 CONTRACT_NOTICE notices under CPV class 9261, the largest TOTAL_VALUE exceeded the smallest by 86827200 EUR.",
+              "classification": "OBSERVED_OR_EVIDENCE_SUPPORTED"
+            },
+            {
+              "statement": "Contracting authorities publishing notices under CPV class 9261 face a recurring operational problem.",
+              "classification": "UNKNOWN_REQUIRES_EVIDENCE"
+            },
+            {
+              "statement": "Whether contracting authorities under CPV class 9261 are dissatisfied with existing procurement tools is worth testing.",
+              "classification": "HYPOTHESIS_TO_VALIDATE"
+            },
+            {
+              "statement": "Whether any actor in this CPV class would pay for a notice-tracking or comparison product is worth testing.",
+              "classification": "HYPOTHESIS_TO_VALIDATE"
+            },
+            {
+              "statement": "Existing solutions adequately or inadequately serve procurement notice tracking in this CPV class.",
+              "classification": "UNKNOWN_REQUIRES_EVIDENCE"
+            },
+            {
+              "statement": "A specific competitor or supplier already serves contracting authorities in this CPV class.",
+              "classification": "UNKNOWN_REQUIRES_EVIDENCE"
+            }
+          ]
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ],
+    "container": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 12903,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 3637,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    }
+  },
+  "USAGE_FROM_RESPONSE": {
+    "input_tokens": 12903,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 0
+    },
+    "output_tokens": 3637,
+    "output_tokens_details": {
+      "thinking_tokens": 0
+    },
+    "service_tier": "standard",
+    "inference_geo": "global"
+  }
+}

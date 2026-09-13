@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.152
-Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.17)
+Version: 1.153
+Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.18)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.153 | 2026-09-13 | **EXECUTION_SCHEMA_REJECTED_NO_RETRY: the one V6 request was made, no length bound was exceeded, and the schema refused the answer on a key it does not declare.** The operator approved exactly one execution of V6 by its digest `969128dd...`, accepted the recorded V6 process deviation for V6 only and renewed the residual semantic-limitation acceptance for this one attempt only, neither a precedent; the approval was recorded beside the packet verbatim (228 lines, `c6b6602c...`) after 34 named values were compared with the frozen packet. All 50 pre-network checks passed and **ONE** request went to the synchronous Messages API: HTTP 200 in 33.1 s, `stop_reason tool_use`, **12903 in, 3637 out, 0 thinking, cost 0.062176** of a 1.31706 ceiling. **STAGE 5 REFUSED IT ON ITS SHAPE**: `"parameter name": "value"` as the first of 21 keys beside all 20 declared ones, in a closed object the prompt describes in words. **THE LENGTH DECISION HELD**: the summary at 1169 against 1500 and a target of 1200; 11 of 12 texts within target, 1 over target and within bound, 0 over bound. Stages 6 to 10 NOT_REACHED; **no retry, no review packet, nothing persisted, the approval and both acceptances spent**, and a second `--execute`, tripwired, refused before any network. **GATE 91** re-derives the record, keeps v1.1.0 as a diagnostic that is never a verdict, and pins the raw response, the parsed output, the approval and the record. Probe **95 caught, 0 escaped, 13 of 13 controls**. 3853 + 5444 tests, 91 gates, 80 new tests, 1 provider request, 0 retries, 0 canonical mutation. `mission-1.84.18-report.md`. |
 | 1.152 | 2026-09-13 | **SECOND_OPPORTUNITY_EXECUTION_PACKET_V6_READY_FOR_OPERATOR_APPROVAL: gate v1.4.0 is gate v1.3.0 bound to schema v1.2.0, frozen and committed before V6 existed, and V6 is frozen and unapproved.** The operator decided, in five lines carried as data and bound into the V6 digest, to create a successor gate bound to schema v1.2.0, keep v1.3.0 immutable, keep every non-structural behaviour, and use v1.2.0 as the V6 contract. **GATE v1.4.0** (`eb03899b...`): v1.3.0 called once, its v1.1.0 structural reasons recomputed and required to lead its list or it fails closed, replaced by v1.2.0's, every other reason, the audit and the notes kept; no integer literal; v1.3.0 (`cc3c4902...`) untouched. **THE DIFFERENTIAL FOUND NOTHING OUTSIDE THE BOUND**: 104 synthetic cases and v1.3.0's own 159 tests replayed through both gates, 0 common-domain and 0 non-structural divergences, verdicts changed only in the 901 to 1500 band, 1501 refused naming `@1.2.0` and 1500; **committed as `402a698` before any V6 artifact was rendered; its push failed, was misread, and reached the remote only at the end.** **PROMPT v1.5.0** (`0713eb80...`): two system lines move, in their numbers only; 0/0/0 unstated, and the same checks refuse v1.4.0 under v1.2.0. **CAPACITY**: maximum 316929 (+7200 = 600 x 12), the full domain unreachable with no token count, one headroom row moves, persistence COMPATIBLE. **V6 RUNNER**: 1189 characters reach stage 9, one unsupported sentence is refused at 6 after 5 passes, 1501 at 5. **PACKET V6** `969128dd...`: V5's call over v1.2.0, v1.4.0 and v1.5.0, body 31967 (+4), ceiling 1.31706, residual risk not carried, approval NOT recorded. **GATES 87 TO 90**, and **gate 86 re-pointed** from an absence to the decision. Probe 123 caught, 0 escaped, 22 of 22 controls. 3853 + 5364 tests, 90 gates, 271 new tests, 0 model calls, 0 provider requests, 0 token counts, 0 TED bytes, 0 canonical mutation. `mission-1.84.17-report.md`. |
 | 1.151 | 2026-09-13 | **DETERMINISTIC_STAGE_6_TO_9_PATH_NOT_READY, blocker SEMANTIC_GATE_V1_3_0_BINDS_OUTPUT_SCHEMA_V1_1_0: the operator's 1500 is recorded, schema v1.2.0 carries it, persistence holds it, and gate v1.3.0 cannot admit it.** The operator moved `evidence_bound_reasoning_summary.maxLength` from 900 to 1500 as `OPERATOR_SEMANTIC_BUDGET`; the decision is their words (44 lines, `84c83f92...`), not derived from 868, 1078 or 1031, not estimated, not proven optimal. **V5 reconfirmed and untouched**: every figure matches, its refusal replays under v1.1.0, and it is not revalidated under v1.2.0. **SCHEMA v1.2.0** (`7d67bad3...`): exactly one semantic leaf moves, finite by a walker proven non-vacuous, one headroom row moves (1500 / 1200, the target derived), 1501 fails. **PERSISTENCE COMPATIBLE**: a plain `str` model field, SQL write paths that pass the text as it is, a `TEXT` column with no CHECK already holding 1456 characters. **SECTION 10 STOPPED IT**: gate v1.3.0 (`cc3c4902...`, unchanged) validates structure against schema v1.1.0 inside its evaluator by import, so a synthetic 1189-character summary v1.2.0 admits is refused at stage 6 with v1.1.0's bound; no prompt v1.5.0, V6 runner or packet V6, and v1.3.0 not mutated. **GATE 86** rebuilds the record from the code and the artifacts. Probe 66 caught, 0 escaped, 15 of 15 controls. 3853 + 5086 tests, 86 gates, 65 new tests, 0 model calls, 0 provider requests, 0 TED bytes, 0 canonical mutation. `mission-1.84.16-report.md`. |
 | 1.150 | 2026-09-13 | **EXECUTION_SCHEMA_REJECTED_NO_RETRY: the one V5 request was made, the generation targets decided nothing, and the schema refused the summary on its hard maximum.** The operator approved exactly one execution of V5 by its digest `da3e7d09...`, accepted the 4/5 headroom policy and the two field roles, and renewed the residual semantic-limitation acceptance for this one attempt only; the approval was recorded beside the packet verbatim (214 lines, `60beeb26...`) after 33 named values were compared with the frozen packet. All 38 pre-network checks passed and **ONE** request went to the synchronous Messages API: HTTP 200 in 33.8 s, `stop_reason tool_use`, **12899 in, 3797 out, 0 thinking, cost 0.063768** of a 1.317056 ceiling. **STAGE 5 REFUSED IT ON ONE FIELD**: `evidence_bound_reasoning_summary` 1031 characters against a hard maximum of 900 and a stated target of 720 (V4 1078, V3 868). **THE TARGETS DECIDED NOTHING, AND THE ANSWER SHOWS IT**: of twelve composed texts nine were within target, two over target and within their hard maximum (`observed_need` 358, `hypothesis_statement` 529) and not refused, and `candidate_intervention_class`, refused in V4 at 316, came back at 133. Stages 6 to 10 NOT_REACHED; **no retry, no review packet, nothing persisted, the approval spent**, and a second `--execute`, tripwired, refused before any network. **GATE 85** re-derives the record, measures every target, requires the texts over a hard maximum to be exactly the texts refused, and pins the raw response, the parsed output and the approval. Probe 151 caught, 0 escaped, 10 of 10 controls. 3853 + 5021 tests, 85 gates, 75 new tests, 1 provider request, 0 retries, 0 canonical mutation. `mission-1.84.15-report.md`. |
@@ -2593,6 +2594,39 @@ again, because V5's acceptance expired with V5. One call will be one observation
 without that approval, do not approve it on the operator's behalf, do not reuse V1's to V5's approvals,
 do not revalidate V5 under v1.2.0, and do not persist Opportunity #2.
 Mission 1.84.18 was not started.**
+
+
+**ANSWERED IN 1.153 (Mission 1.84.18). The one V6 request was made, and the schema refused the answer
+on a key it does not declare.**
+
+    request      1, HTTP 200, 33.1 s of 60, stop_reason tool_use
+    usage        12903 in, 3637 out, 0 thinking; cost 0.062176 of a 1.31706 ceiling
+    stages       1-4 passed; 5 failed: "parameter name": "value", undeclared in a closed object
+    summary      1169 characters, within the 1500 and the 1200 target
+    targets      11 of 12 within target; 1 over target and within bound; 0 over bound
+    retained     raw body, usage, request id, parsed answer; nothing persisted
+    approval     spent, with both acceptances; the runner refuses V6 by name
+
+- **THE LENGTH DECISION HELD, AND THE ANSWER FAILED ON SOMETHING ELSE.** No composed text exceeded its
+  hard maximum, and the summary sat under its target. The one violation is a key outside the twenty the
+  schema declares.
+- **A CLOSED OBJECT REFUSES AN EXTRA KEY WHATEVER IT HOLDS.** The key was not removed to make the answer
+  pass, and the string occurs nowhere in the prompt, the schema or the runner.
+- **A HISTORICAL CONTRACT IS A DIAGNOSTIC, NEVER A VERDICT.** Schema v1.1.0 would also report the
+  summary over 900; the record carries it with `IS_A_VERDICT = false`, and the gate refuses it read any
+  other way.
+- **AN ACCEPTANCE THAT EXPIRES WITH THE ATTEMPT EXPIRES WHATEVER THE OUTCOME WAS.** The process
+  deviation and the residual semantic limitation were for V6 only, and are spent with it.
+- **NOT_REACHED IS STILL NOT PASSED.** Stages 6 to 9 have still never judged a real answer.
+- **A RECORD THAT PINS WHAT ARRIVED CANNOT BE REWRITTEN INTO A CANDIDATE**, even with the key removed and
+  every digest recomputed.
+
+**Next is an operator decision, and nothing was started.** V6 is spent. Any further execution needs a
+new packet digest and a new explicit approval naming it. One call establishes that this answer carried
+an undeclared key, and nothing about how often any answer would. This mission recommends nothing. **Do
+not re-execute V1 to V6, do not treat the refused answer as a candidate, and do not persist Opportunity
+#2.
+Mission 1.84.19 was not started.**
 
 
 

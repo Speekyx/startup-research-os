@@ -87,7 +87,13 @@ class TestTheCommittedPacket:
         assert packet["NEW_APPROVAL_REQUIRED"] is True
         assert packet["PREVIOUS_APPROVAL_REUSABLE"] is False
         assert packet["EXECUTION_COST_CEILING"] == packet["WORST_CASE_CALL_COST"]
-        assert not gate.APPROVAL.exists()
+
+    def test_the_approval_lives_beside_the_packet_and_names_its_digest(self, gate, packet):
+        """Mission 1.84.18 recorded the operator's approval beside V6; the packet still records none."""
+        approval = json.loads(gate.APPROVAL.read_text(encoding="utf-8"))
+        assert approval["recorded_by"] == "mission-1.84.18"
+        assert approval["EXECUTION_PACKET_SHA256"] == packet["EXECUTION_PACKET_SHA256"]
+        assert packet["OPERATOR_EXECUTION_APPROVAL_RECORDED"] is False
 
 
 class TestIdentityAndApproval:
