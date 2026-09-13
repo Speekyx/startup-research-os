@@ -864,6 +864,42 @@ jobs:
       - name: V3's diagnostic replay through gate v1.3.0 re-derives from the authenticated snapshot
         run: uv run python infrastructure/scripts/render_second_opportunity_v3_diagnostic_replay_v1_3.py --check
 
+      # Mission 1.84.12. The census of gate v1.3.0's deterministic semantic rules, the prompt block
+      # rendered from its first-class policy objects, and prompt v1.3.0. The gate refuses: a merged
+      # artifact that moved; gate v1.3.0, the schema or prompt v1.2.0 changed; a reconfirmed V3 fact
+      # that is not the one recorded; a refusal site the census does not map, or an enforced rule no
+      # site produces; a fixture refusal claimed by no rule or by two, or an enforced rule no fixture
+      # reaches; a v1.2.0 quotation v1.2.0 does not contain; a class-A rule prompt v1.3.0 leaves
+      # unstated, or a check that would pass v1.2.0; a class-A mutation that does not move the block,
+      # or a class-D list that does; a digit, a pattern, the historical sentence or a hard-coded
+      # source name in the system region; a source name shown that is not already in the approved
+      # representation; a moved representation, task or TED statement; and a derived field that moved.
+      - name: The semantic prompt block states every class-A rule of gate v1.3.0, from first-class objects
+        run: uv run python infrastructure/scripts/render_second_opportunity_semantic_prompt_alignment.py --check
+
+      # Mission 1.84.12. Stages 6 to 9 of the V4 runner over synthetic responses, with the real gate
+      # v1.3.0, provenance reading and OpportunityHypothesis constructor, and nothing stubbed. The
+      # gate refuses: a valid fixture that does not reach stage 9; a failure that stops at another
+      # stage or reaches a later one; a runner whose semantic gate can be injected or whose stages 6
+      # to 9 cannot refuse; the real transport constructed; and a derived field that moved.
+      - name: Stages 6 to 9 of the V4 runner each refuse at their own stage, with the real machinery
+        run: uv run python infrastructure/scripts/render_second_opportunity_stage_6_9_preflight.py --check
+
+      # Mission 1.84.12. Execution packet V4: V3's call with prompt v1.3.0 and gate v1.3.0, frozen
+      # and unapproved. The gate refuses: bound fields that do not hash to the digest, a spent digest,
+      # or an approval recorded by the mission that prepared the packet; V1, V2 or V3 edited, their
+      # consumption reset, or V3 made a candidate; a prompt that is not v1.3.0 or leaves a rule or a
+      # bound unstated; gate 79 or 80 no longer validating; gate v1.3.0, the schema or the TED
+      # representation moved; an approved evidence boundary that is not the snapshot's; a route,
+      # model, thinking configuration, max_tokens, completion policy, timeout, retention or
+      # persistence policy that moved from V3; a request body the snapshot does not rebuild; a cost
+      # ceiling that is not the recomputed worst case; a retention path no V4 runner test defines; a
+      # runner with more than one call site, that edits the answer before judging it, whose semantic
+      # gate can be injected, expecting another digest, blind to V1's, V2's or V3's spent approval,
+      # or refusing an unseen digest; and any preparation call, TED byte or canonical counter that moved.
+      - name: Execution packet V4 is V3's call with prompt v1.3.0 and gate v1.3.0, and matches the live code
+        run: uv run python infrastructure/scripts/render_second_opportunity_execution_packet_v4.py --check
+
       # Mission 1.84.2. The one approved provider request happened and its output was rejected
       # at schema validation. The gate refuses: an approval recovered from a failure, or a
       # consumed-approval list that does not name V1's digest with a request against it; a

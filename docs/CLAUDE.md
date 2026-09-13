@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.146
-Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.11)
+Version: 1.147
+Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.12)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.147 | 2026-09-13 | **SECOND_OPPORTUNITY_EXECUTION_PACKET_V4_READY_FOR_OPERATOR_APPROVAL: prompt v1.3.0 states every generation-relevant rule of the unchanged gate v1.3.0, stages 6 to 9 were proved on synthetic answers, and packet V4 is frozen and unapproved.** Schema v1.1.0 and gate v1.3.0 (`cc3c4902...`) unchanged; V3 not replayed, not whitelisted, not used to render. **THE CENSUS**: 53 rules (A 30, B 12, C 4, D 7), 46 of 46 refusal sites mapped, 41 fixtures with every refusal claimed exactly once. **PROMPT v1.3.0** (`a62fa218...`): v1.2.0 plus a block rendered from the gate's first-class policy objects and a SOURCE NAMES section of labels already in the representation; 0 class-A rules unstated (v1.2.0: 17); representation `2528a56a...` unchanged. **STAGES 6 TO 9** with the real gate, provenance reading and OpportunityHypothesis: the valid answer reaches 9, failures stop at 6/6/7/8/9. **PACKET V4** `7832b3bc...`: V3's call, ceiling 1.312398, human review required, approval NOT recorded. Probe 205 caught, 0 escaped, 26 of 26 controls. 3853 + 4812 tests, 81 gates, 0 model calls. `mission-1.84.12-report.md`. |
 | 1.146 | 2026-09-13 | **V3_DIAGNOSTIC_REVEALED_GENUINE_OUTPUT_SUPPORT_FAILURE: the inflection asymmetry was repaired in a general way, a source's name stopped counting as evidence, and V3's one remaining refusal is now true.** The operator decided that gate v1.2.0's asymmetry is a gate defect, and that a source name, publisher name, registry label or provenance label is NOT factual support because a domain word occurs inside it. **Gate v1.3.0** built beside v1.1.0 and v1.2.0 in four new modules, synthetic cases only, **frozen and pushed (`0fe3822`) before the one diagnostic replay**, with v1.2.0 still its own freeze and the historical modules still bb0f50a's. **ONE FUNCTION, BOTH SIDES**: `normalize_token`, five written rules for English noun number, each justified by the gated vocabulary; no stemmer, no dependency, irregular and derived forms never collapsed, verb forms verbatim; 46 markers and 60 concept phrases run through both sides, 0 asymmetries, 0 metadata leaks. **FOUR SUPPORT ORIGINS**: content and metadata split, labels through an explicit registry-built channel that licenses only their own whole occurrence as a name, an undeclared source refused by name; ADR-040 and the evidence-boundary decision, owner OPERATOR, type EVIDENCE_BOUNDARY, not derived; an OBSERVED disjunction fails closed. **THE REPLAY**, once, from 1.84.10's authenticated snapshot and with no database: v1.1.0's five reasons and v1.2.0's one reproduce exactly; **under v1.3.0 stage 6 stops on one field**, `statement_classifications[7]`, whose word *tenders* is supplied only inside *Tenders Electronic Daily (EU public procurement)* and which joins two alternatives under one OBSERVED label. **A genuine support failure of the answer, not a gate defect; stages 7 to 9 not reached; no V4.** Probe **195 caught, 0 escaped, 28 of 29 controls**, the one failed control the probe's own error (the freeze record pins the decision document's digest). **3853 tests**, 4707 pytest, **78 gates**, **244 new tests**, **0 model calls, 0 provider requests, 0 TED bytes, 0 canonical mutation**. `mission-1.84.11-report.md`. |
 | 1.145 | 2026-09-13 | **V3_DIAGNOSTIC_REVEALED_NEXT_EXECUTION_BLOCKER: the semantic gate was repaired in a general way, frozen before V3 was replayed through it, and the replay found a defect in the repair.** Schema v1.1.0 and prompt v1.2.0 unchanged; **gate v1.2.0** built beside v1.1.0 in two new modules, synthetic cases only, **frozen, committed and pushed (`3f8c634`) before the one diagnostic replay**, with `guards.py`, `validation.py`, `second_opportunity.py` and `schema_validation.py` byte-identical and V3's five v1.1.0 reasons reproducing exactly. **ASSERTION, NOT TOKEN PRESENCE**: denials scope their clause, a contrast re-asserts, every schema field has a disposition and a shape so a request that stops being request-shaped is read as an assertion, three typed support channels with trusted context passed explicitly and licensing identifiers only (`BT-161`), the canonical term `market activity` and never the word, SCORED refused in any asserted form, the §20 concepts added and none removed. **THE REPLAY**, DIAGNOSTIC_ONLY, once, through the V3 runner's own stages, re-derived in CI from a snapshot that rebuilds the approved representation and prompt: **the five historical refusals no longer fire, and ONE new refusal does at stage 6**, `statement_classifications[7]` on `'tender'`, a word the supplied statements carry as *Tenders*, because the classifier folds plurals on the answer's side and the licence compares exact tokens. **A defect of the frozen gate, found by the replay, not repaired, and no V4 created.** Probe **139 caught, 0 escaped, 19 of 19 controls**, the plural fix the replay suggests refused as a re-freeze by stealth. **3853 tests**, 4463 pytest, **76 gates**, **219 new tests**, **0 model calls, 0 provider requests, 0 TED bytes, 0 canonical mutation**. `mission-1.84.10-report.md`. |
 | 1.144 | 2026-09-13 | **EXECUTION_SEMANTIC_GATE_REJECTED_NO_RETRY: the one request was made, the schema passed the answer this time, and the semantic gate refused it.** The operator approved exactly one execution of V3 by its digest `c7b8553d...`, recorded beside the packet verbatim and hashed with its 32 prohibitions and the nine things it withholds a change to as data. Every pre-network check passed and **ONE** request went to the synchronous Messages API: HTTP 200 in 34.4 s, `stop_reason tool_use`, **9491 in, 3880 out, 0 thinking, cost 0.057782** of a 1.30565 ceiling. **THE PROMPT ALIGNMENT DID ITS JOB**: stages 1 to 5 passed, the v1.1.0 schema included, and the summary V2 was refused on came in at 868 characters against 900. **THE NEXT GATE REFUSED IT**: the v1.1.0 semantic gate at stage 6, on five reasons; 7 to 10 NOT_REACHED; **no retry, nothing persisted, the approval spent**. **THE REFUSAL, STATED AS FACTS**: three reasons are phrases the forbidden-phrase check refuses wherever they appear, and the answer uses them only in denials, its unsupported-claims list, an UNKNOWN_REQUIRES_EVIDENCE statement and a request for evidence, while `willingness to pay`, `actual expenditure` and `BT-161` appear in the v1.2.0 system region itself; the audit, which reads the supplied statements and not the system region, flagged "market activity" and BT-161 in the summary; a local re-run with no network reproduced all five; nothing changed, nothing recommended. **GATE 74 CHECKS THE REFUSAL THE OTHER WAY ROUND**: the semantic gate needs a packet held in the database, so every retained reason must name text the answer contains and the term locations are recomputed. Probe **152 caught, 0 escaped, 6 of 6 controls**. **3853 tests**, 4244 pytest, **74 gates**, **74 new tests**, **1 provider request, 0 retries, 3604 TED bytes, 0 canonical mutation**. `mission-1.84.9-report.md`. |
@@ -2408,6 +2409,37 @@ prompt version and the operator's decision. This mission recommends nothing. **D
 anything, do not re-execute V3, do not treat its answer as a candidate, and do not persist
 Opportunity #2.
 Mission 1.84.12 was not started.**
+
+
+**ANSWERED IN 1.147 (Mission 1.84.12). The prompt now says what the gate checks, stages 6 to 9 work on
+a synthetic answer, and V4 awaits an approval.**
+
+    prompt v1.3.0   v1.2.0 plus the gate's class-A rules, rendered from its policy objects
+    gate v1.3.0     unchanged (cc3c4902...)
+    representation  unchanged (2528a56a..., 3604 characters)
+    stages 6 to 9   the valid answer is eligible at 9; each failure stops at its own stage
+    packet V4       7832b3bc..., ceiling 1.312398, approval NOT recorded
+    calls           0 model calls, 0 provider requests, 0 TED bytes
+
+- **A PROMPT STATES WHAT THE GATE REFUSES, OR THE GATE REFUSES BY SURPRISE.** Every deterministic rule
+  is classed and every refusal site is mapped to one. The class-A rules are rendered from the gate's
+  own objects, so a rule that changes moves the prompt, and CI sees it.
+- **A PROPOSITION, NEVER A RECIPE.** The internal lists and patterns stay internal. The prompt says
+  what may be asserted, not how the check reads.
+- **A NAME IS SHOWN AS A NAME.** The model is told which strings in the statements are source names,
+  using only strings already present. It can tell provenance from content, and nothing new leaves.
+- **A STAGE THAT CANNOT REFUSE IS NOT A STAGE.** The gate made V3's stage 7 redundant, and V3's stage 9
+  refused nothing. V4's stage 7 reads the approved boundary and its stage 9 builds the hypothesis. Each
+  is proved to refuse at its own place.
+- **A SYNTHETIC PASS IS NOT EVIDENCE.** It shows the machinery works on a well-formed answer and says
+  nothing about what a model will write.
+
+**Next is an operator decision, and nothing was started.** V4 needs an approval naming its digest,
+recorded beside it. One rule is enforced by the prompt and by human review, not by the gate: a word
+inside a name that is not gated vocabulary. An answer that passes stages 1 to 9 is eligible for human
+review only. This mission recommends nothing. **Do not execute V4 without that approval, do not
+re-execute V3, do not treat its answer as a candidate, and do not persist Opportunity #2.
+Mission 1.84.13 was not started.**
 
 
 

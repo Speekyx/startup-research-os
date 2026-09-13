@@ -1,0 +1,147 @@
+{
+  "$comment": "Mission 1.84.12. Stages 6 to 9 of the V4 runner, run over synthetic responses with the real gate v1.3.0, the real provenance reading and the real OpportunityHypothesis constructor. A synthetic pass is not evidence about a model's answer. CI gate 80 re-derives every field.",
+  "record_version": "second-opportunity-stage-6-9-preflight@1.0.0",
+  "mission": "mission-1.84.12",
+  "RUNNER": "run_second_opportunity_execution_v4.py",
+  "STAGES": [
+    "1_transport_success",
+    "2_provider_response_shape",
+    "3_provider_completion",
+    "4_structured_output_parse",
+    "5_schema_validation_v1_1_0",
+    "6_semantic_output_gate_v1_3_0",
+    "7_evidence_boundary_and_no_distortion",
+    "8_attribution_and_provenance",
+    "9_persistence_eligibility",
+    "10_human_review"
+  ],
+  "SEMANTIC_GATE_INJECTABLE": false,
+  "STUBS_USED": false,
+  "REAL_TRANSPORT_CONSTRUCTED": false,
+  "FIXTURES": [
+    {
+      "fixture": "A_VALID",
+      "what": "a well-formed answer the gate and the hypothesis model both accept",
+      "intended_stage": "NONE_ELIGIBLE_AT_9",
+      "failed_stage": null,
+      "outcome": "EXECUTION_OUTPUT_ACCEPTED_AWAITING_HUMAN_REVIEW",
+      "stages": {
+        "6_semantic_output_gate_v1_3_0": "PASSED",
+        "7_evidence_boundary_and_no_distortion": "PASSED",
+        "8_attribution_and_provenance": "PASSED",
+        "9_persistence_eligibility": "ELIGIBLE_FOR_HUMAN_REVIEW_ONLY",
+        "10_human_review": "REQUIRED_NOT_PERFORMED"
+      },
+      "reasons": [],
+      "MISREPORTED_AS_A_LATER_STAGE": false
+    },
+    {
+      "fixture": "B_SEMANTIC_FAILURE",
+      "what": "an OBSERVED statement joining alternatives",
+      "intended_stage": "6_semantic_output_gate_v1_3_0",
+      "failed_stage": "6_semantic_output_gate_v1_3_0",
+      "outcome": "EXECUTION_OUTPUT_REJECTED_AT_SEMANTIC_GATE_NO_RETRY",
+      "stages": {
+        "6_semantic_output_gate_v1_3_0": "FAILED",
+        "7_evidence_boundary_and_no_distortion": "NOT_REACHED",
+        "8_attribution_and_provenance": "NOT_REACHED",
+        "9_persistence_eligibility": "NOT_REACHED",
+        "10_human_review": "NOT_REACHED"
+      },
+      "reasons": [
+        "statement_classifications[3].statement audited UNSUPPORTED: DISJUNCTIVE_OBSERVED_STATEMENT_REQUIRES_EXPLICIT_SUPPORT_POLICY: this statement is classified OBSERVED and joins alternatives with ['or'] outside any denial. One classification cannot say which alternative the evidence supports, and the gate evaluates no disjunction, so it fails closed (observed-statement-disjunction-policy@1.0.0)"
+      ],
+      "MISREPORTED_AS_A_LATER_STAGE": false
+    },
+    {
+      "fixture": "B2_STRAY_ID_REFUSED_BY_THE_GATE",
+      "what": "a cited Evidence id the packet does not carry, which V3's stage 7 was built for",
+      "intended_stage": "6_semantic_output_gate_v1_3_0",
+      "failed_stage": "6_semantic_output_gate_v1_3_0",
+      "outcome": "EXECUTION_OUTPUT_REJECTED_AT_SEMANTIC_GATE_NO_RETRY",
+      "stages": {
+        "6_semantic_output_gate_v1_3_0": "FAILED",
+        "7_evidence_boundary_and_no_distortion": "NOT_REACHED",
+        "8_attribution_and_provenance": "NOT_REACHED",
+        "9_persistence_eligibility": "NOT_REACHED",
+        "10_human_review": "NOT_REACHED"
+      },
+      "reasons": [
+        "cited Evidence ids not in the packet: ['73737373-7373-4373-8373-737373737373']. A hypothesis may cite only what it was given",
+        "Evidence 73737373-7373-4373-8373-737373737373 was cited without its Claim a3a3a3a3-a3a3-4a3a-8a3a-a3a3a3a3a3a3. Evidence is claim-relative, so a citation missing its claim cites nothing"
+      ],
+      "MISREPORTED_AS_A_LATER_STAGE": false
+    },
+    {
+      "fixture": "C_EVIDENCE_BOUNDARY_FAILURE",
+      "what": "the gate is handed a packet with a row the approval does not bind, and the answer cites it",
+      "intended_stage": "7_evidence_boundary_and_no_distortion",
+      "failed_stage": "7_evidence_boundary_and_no_distortion",
+      "outcome": "EXECUTION_OUTPUT_REJECTED_AT_EVIDENCE_BOUNDARY_NO_RETRY",
+      "stages": {
+        "6_semantic_output_gate_v1_3_0": "PASSED",
+        "7_evidence_boundary_and_no_distortion": "FAILED",
+        "8_attribution_and_provenance": "NOT_REACHED",
+        "9_persistence_eligibility": "NOT_REACHED",
+        "10_human_review": "NOT_REACHED"
+      },
+      "reasons": [
+        "cited ids outside the approved evidence boundary: ['73737373-7373-4373-8373-737373737373', 'a3a3a3a3-a3a3-4a3a-8a3a-a3a3a3a3a3a3']",
+        "cited Evidence without its approved Claim: ['73737373-7373-4373-8373-737373737373']"
+      ],
+      "MISREPORTED_AS_A_LATER_STAGE": false
+    },
+    {
+      "fixture": "D_ATTRIBUTION_FAILURE",
+      "what": "a response whose request-id header is empty",
+      "intended_stage": "8_attribution_and_provenance",
+      "failed_stage": "8_attribution_and_provenance",
+      "outcome": "EXECUTION_OUTPUT_REJECTED_AT_ATTRIBUTION_NO_RETRY",
+      "stages": {
+        "6_semantic_output_gate_v1_3_0": "PASSED",
+        "7_evidence_boundary_and_no_distortion": "PASSED",
+        "8_attribution_and_provenance": "FAILED",
+        "9_persistence_eligibility": "NOT_REACHED",
+        "10_human_review": "NOT_REACHED"
+      },
+      "reasons": [
+        "no provider_request_id"
+      ],
+      "MISREPORTED_AS_A_LATER_STAGE": false
+    },
+    {
+      "fixture": "E_PERSISTENCE_ELIGIBILITY_FAILURE",
+      "what": "a source name the gate reads as a name and the hypothesis model reads as a word",
+      "intended_stage": "9_persistence_eligibility",
+      "failed_stage": "9_persistence_eligibility",
+      "outcome": "EXECUTION_OUTPUT_REJECTED_AT_PERSISTENCE_ELIGIBILITY_NO_RETRY",
+      "stages": {
+        "6_semantic_output_gate_v1_3_0": "PASSED",
+        "7_evidence_boundary_and_no_distortion": "PASSED",
+        "8_attribution_and_provenance": "PASSED",
+        "9_persistence_eligibility": "FAILED",
+        "10_human_review": "NOT_REACHED"
+      },
+      "reasons": [
+        "the canonical OpportunityHypothesis refuses this answer: dry-construction:c464e30a24400d11d547f2ade85f5e21d1f020aa1c76ea2ba7c95d095cdc246f: profitability: 'profitability' is not supportable by any registered source: no observation in this portfolio measures it, and no dimension may be invented so that it can be asserted."
+      ],
+      "MISREPORTED_AS_A_LATER_STAGE": false
+    }
+  ],
+  "VALID_FIXTURE_REACHES_STAGE_9": true,
+  "EVERY_NEGATIVE_FIXTURE_AT_ITS_INTENDED_STAGE": true,
+  "OUTCOME": "DETERMINISTIC_STAGE_6_TO_9_PATH_READY",
+  "SYNTHETIC_PASS_IS_NOT_EVIDENCE": true,
+  "V3_RUNNER_STAGE_7_REDUNDANT_UNDER_GATE_V1_3": true,
+  "V3_RUNNER_STAGE_9_COULD_REFUSE": false,
+  "V4_STAGE_7_READS_THE_APPROVED_BOUNDARY": true,
+  "V4_STAGE_9_CONSTRUCTS_THE_CANONICAL_HYPOTHESIS": true,
+  "findings_note": "Under gate v1.3.0, every refusal V3's stage 7 could make (a cited id outside the packet, a missing audit, a failed field) is made first at stage 6, as B2 shows, so V3's stage 7 could never fail after stage 6 passed; V4's stage 7 reads the boundary from the digest-bound packet, and C is the only way it can refuse, a context the pre-flight verification also refuses. V3's stage 9 refused nothing; V4's builds the OpportunityHypothesis persistence would build, and E shows an answer the gate accepts that the hypothesis model's own prose guard refuses.",
+  "accounting": {
+    "MODEL_CALLS": 0,
+    "PROVIDER_REQUESTS": 0,
+    "MESSAGES_API_REQUESTS": 0,
+    "TED_BYTES_SENT": 0,
+    "CANONICAL_MUTATIONS": 0
+  }
+}

@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.145
+Version: 1.146
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.11)
+Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.12)
 
 ---
 
@@ -13,6 +13,67 @@ Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.11)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.146 - 2026-09-13 (Sprint 1 / Mission 1.84.12)
+
+**`SECOND_OPPORTUNITY_EXECUTION_PACKET_V4_READY_FOR_OPERATOR_APPROVAL`: prompt v1.3.0 states every
+generation-relevant rule of the unchanged semantic gate, stages 6 to 9 were proved on synthetic
+answers with the real machinery, and execution packet V4 is frozen and unapproved.** The operator kept
+schema v1.1.0 and gate v1.3.0 and forbade rescuing or whitelisting V3. A source's name stays
+provenance, and an OBSERVED statement must be atomic and directly supported. V3 was not replayed, and
+no V3 text renders anything.
+
+**THE CENSUS.** 53 deterministic rules of gate v1.3.0, each classed:
+- 30 must be explicit in the prompt: 13 stated by v1.2.0, 17 not;
+- 12 are structural and already in the output contract;
+- 4 are validator-only;
+- 7 are internal and never exposed.
+
+All 46 refusal sites map to a rule. 41 synthetic fixtures show every refusal claimed by exactly one
+rule and every enforced rule reached.
+
+**PROMPT v1.3.0** (`a62fa218...`) is v1.2.0 byte for byte, plus two additions:
+- a semantic block rendered from the gate's first-class policy objects. It reads no answer, history or
+  source text, and carries no digit, no pattern and no publisher's name;
+- a SOURCE NAMES section listing the four registry labels that already occur in the TED statements.
+
+The representation (`2528a56a...`, 3604) did not move. **0 class-A rules are unstated**, against 17 in
+v1.2.0. "or" is refused only inside an OBSERVED item. One rule is instruction-only: a word inside a
+name that is not gated vocabulary passes the gate.
+
+**STAGES 6 TO 9.** The V4 runner's own stages ran over six synthetic fixtures, with gate v1.3.0 fixed,
+the real provenance reading and the canonical OpportunityHypothesis. The valid answer reaches 9, and
+the failures stop at 6, 6, 7, 8 and 9. What this showed:
+- under v1.3.0, V3's stage 7 was redundant, and its stage 9 refused nothing;
+- V4's stage 7 reads the approved boundary from the packet;
+- V4's stage 9 constructs the hypothesis in memory. It found a name the gate accepts and the
+  hypothesis guard refuses.
+
+**PACKET V4** (`7832b3bc...`) is V3's call with prompt v1.3.0 and gate v1.3.0 at stage 6: anthropic,
+synchronous Messages API, claude-sonnet-5, thinking DISABLED, 128000, 1 call, 0 retries, 60 s.
+- The body is 27946 characters, for an estimated 16199 input tokens.
+- The ceiling is **1.312398** (V3's was 1.30565).
+- Human review is required, and the approval is NOT recorded. The runner refuses with
+  `OPERATOR_APPROVAL_NOT_RECORDED` before any transport.
+
+Probe **205 caught, 0 escaped, 26 of 26 controls**. **3853 tests**, 4812 pytest, **81 gates**, **105 new tests**, **0 model calls, 0
+provider requests, 0 TED bytes, 0 canonical mutation**. `mission-1.84.12-report.md`.
+
+New:
+- `sros_opportunity/semantic_generation_rules.py` and `sros_opportunity/second_opportunity_prompt_v1_3.py`;
+- `infrastructure/scripts/second_opportunity_synthetic_fixtures.py` and
+  `run_second_opportunity_execution_v4.py`;
+- CI gates 79 (`render_second_opportunity_semantic_prompt_alignment.py`), 80
+  (`render_second_opportunity_stage_6_9_preflight.py`) and 81
+  (`render_second_opportunity_execution_packet_v4.py`);
+- `docs/data/second-opportunity-semantic-prompt-alignment-v1.json`,
+  `second-opportunity-synthesis-prompt-v4.json`, `second-opportunity-stage-6-9-preflight-v1.json` and
+  `second-opportunity-synthesis-execution-packet-v4.json`, with their generated `.md`;
+- tests, and `docs/reports/mission-1.84.12-report.md`.
+
+Changed: `docs/CLAUDE.md` 1.146 to 1.147; `.github/workflows/ci.yml` gains three gates. **The schema,
+gate v1.3.0, prompt v1.2.0, every V1, V2 and V3 artifact and every earlier runner are byte-identical.**
+The ADR index is not updated.
 
 ## 1.145 - 2026-09-13 (Sprint 1 / Mission 1.84.11)
 
