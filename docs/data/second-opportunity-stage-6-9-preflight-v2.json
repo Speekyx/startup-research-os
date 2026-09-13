@@ -1,0 +1,336 @@
+{
+  "$comment": "Mission 1.84.17. Stages 5 to 9 of the V6 runner and every retention path, run over synthetic responses with schema v1.2.0, gate v1.4.0, the real provenance reading and the real OpportunityHypothesis constructor. A synthetic pass is not evidence about a model's answer. CI gate 89 re-derives every field.",
+  "record_version": "second-opportunity-stage-6-9-preflight@2.0.0",
+  "mission": "mission-1.84.17",
+  "RUNNER": "run_second_opportunity_execution_v6.py",
+  "STAGES": [
+    "1_transport_success",
+    "2_provider_response_shape",
+    "3_provider_completion",
+    "4_structured_output_parse",
+    "5_schema_validation_v1_2_0",
+    "6_semantic_output_gate_v1_4_0",
+    "7_evidence_boundary_and_no_distortion",
+    "8_attribution_and_provenance",
+    "9_persistence_eligibility",
+    "10_human_review"
+  ],
+  "STRUCTURE": {
+    "STAGE_5_SCHEMA": "SECOND_OPPORTUNITY_OUTPUT_SCHEMA_V1_2",
+    "STAGE_6_GATE": "evaluate_second_opportunity_output_v1_4",
+    "REFUSES_AT": [
+      "5_schema_validation_v1_2_0",
+      "6_semantic_output_gate_v1_4_0",
+      "7_evidence_boundary_and_no_distortion",
+      "8_attribution_and_provenance",
+      "9_persistence_eligibility"
+    ]
+  },
+  "SEMANTIC_GATE_INJECTABLE": false,
+  "STUBS_USED": false,
+  "REAL_TRANSPORT_CONSTRUCTED": false,
+  "SUMMARY_BOUNDS": {
+    "v1_1_0": 900,
+    "v1_2_0": 1500
+  },
+  "FIXTURES": [
+    {
+      "fixture": "A_VALID",
+      "what": "a well-formed answer the gate and the hypothesis model both accept",
+      "summary_characters": 237,
+      "intended_stage": "NONE_ELIGIBLE_AT_9",
+      "failed_stage": null,
+      "outcome": "EXECUTION_OUTPUT_ACCEPTED_AWAITING_HUMAN_REVIEW",
+      "stages": {
+        "5_schema_validation_v1_2_0": "PASSED",
+        "6_semantic_output_gate_v1_4_0": "PASSED",
+        "7_evidence_boundary_and_no_distortion": "PASSED",
+        "8_attribution_and_provenance": "PASSED",
+        "9_persistence_eligibility": "ELIGIBLE_FOR_HUMAN_REVIEW_ONLY",
+        "10_human_review": "REQUIRED_NOT_PERFORMED"
+      },
+      "reasons": [],
+      "MISREPORTED_AS_A_LATER_STAGE": false
+    },
+    {
+      "fixture": "B_SEMANTIC_FAILURE",
+      "what": "an OBSERVED statement joining alternatives",
+      "summary_characters": 237,
+      "intended_stage": "6_semantic_output_gate_v1_4_0",
+      "failed_stage": "6_semantic_output_gate_v1_4_0",
+      "outcome": "EXECUTION_OUTPUT_REJECTED_AT_SEMANTIC_GATE_NO_RETRY",
+      "stages": {
+        "5_schema_validation_v1_2_0": "PASSED",
+        "6_semantic_output_gate_v1_4_0": "FAILED",
+        "7_evidence_boundary_and_no_distortion": "NOT_REACHED",
+        "8_attribution_and_provenance": "NOT_REACHED",
+        "9_persistence_eligibility": "NOT_REACHED",
+        "10_human_review": "NOT_REACHED"
+      },
+      "reasons": [
+        "statement_classifications[3].statement audited UNSUPPORTED: DISJUNCTIVE_OBSERVED_STATEMENT_REQUIRES_EXPLICIT_SUPPORT_POLICY: this statement is classified OBSERVED and joins alternatives with ['or'] outside any denial. One classification cannot say which alternative the evidence supports, and the gate evaluates no disjunction, so it fails closed (observed-statement-disjunction-policy@1.0.0)"
+      ],
+      "MISREPORTED_AS_A_LATER_STAGE": false
+    },
+    {
+      "fixture": "B2_STRAY_ID_REFUSED_BY_THE_GATE",
+      "what": "a cited Evidence id the packet does not carry, which V3's stage 7 was built for",
+      "summary_characters": 237,
+      "intended_stage": "6_semantic_output_gate_v1_4_0",
+      "failed_stage": "6_semantic_output_gate_v1_4_0",
+      "outcome": "EXECUTION_OUTPUT_REJECTED_AT_SEMANTIC_GATE_NO_RETRY",
+      "stages": {
+        "5_schema_validation_v1_2_0": "PASSED",
+        "6_semantic_output_gate_v1_4_0": "FAILED",
+        "7_evidence_boundary_and_no_distortion": "NOT_REACHED",
+        "8_attribution_and_provenance": "NOT_REACHED",
+        "9_persistence_eligibility": "NOT_REACHED",
+        "10_human_review": "NOT_REACHED"
+      },
+      "reasons": [
+        "cited Evidence ids not in the packet: ['73737373-7373-4373-8373-737373737373']. A hypothesis may cite only what it was given",
+        "Evidence 73737373-7373-4373-8373-737373737373 was cited without its Claim a3a3a3a3-a3a3-4a3a-8a3a-a3a3a3a3a3a3. Evidence is claim-relative, so a citation missing its claim cites nothing"
+      ],
+      "MISREPORTED_AS_A_LATER_STAGE": false
+    },
+    {
+      "fixture": "C_EVIDENCE_BOUNDARY_FAILURE",
+      "what": "the gate is handed a packet with a row the approval does not bind, and the answer cites it",
+      "summary_characters": 237,
+      "intended_stage": "7_evidence_boundary_and_no_distortion",
+      "failed_stage": "7_evidence_boundary_and_no_distortion",
+      "outcome": "EXECUTION_OUTPUT_REJECTED_AT_EVIDENCE_BOUNDARY_NO_RETRY",
+      "stages": {
+        "5_schema_validation_v1_2_0": "PASSED",
+        "6_semantic_output_gate_v1_4_0": "PASSED",
+        "7_evidence_boundary_and_no_distortion": "FAILED",
+        "8_attribution_and_provenance": "NOT_REACHED",
+        "9_persistence_eligibility": "NOT_REACHED",
+        "10_human_review": "NOT_REACHED"
+      },
+      "reasons": [
+        "cited ids outside the approved evidence boundary: ['73737373-7373-4373-8373-737373737373', 'a3a3a3a3-a3a3-4a3a-8a3a-a3a3a3a3a3a3']",
+        "cited Evidence without its approved Claim: ['73737373-7373-4373-8373-737373737373']"
+      ],
+      "MISREPORTED_AS_A_LATER_STAGE": false
+    },
+    {
+      "fixture": "D_ATTRIBUTION_FAILURE",
+      "what": "a response whose request-id header is empty",
+      "summary_characters": 237,
+      "intended_stage": "8_attribution_and_provenance",
+      "failed_stage": "8_attribution_and_provenance",
+      "outcome": "EXECUTION_OUTPUT_REJECTED_AT_ATTRIBUTION_NO_RETRY",
+      "stages": {
+        "5_schema_validation_v1_2_0": "PASSED",
+        "6_semantic_output_gate_v1_4_0": "PASSED",
+        "7_evidence_boundary_and_no_distortion": "PASSED",
+        "8_attribution_and_provenance": "FAILED",
+        "9_persistence_eligibility": "NOT_REACHED",
+        "10_human_review": "NOT_REACHED"
+      },
+      "reasons": [
+        "no provider_request_id"
+      ],
+      "MISREPORTED_AS_A_LATER_STAGE": false
+    },
+    {
+      "fixture": "E_PERSISTENCE_ELIGIBILITY_FAILURE",
+      "what": "a source name the gate reads as a name and the hypothesis model reads as a word",
+      "summary_characters": 235,
+      "intended_stage": "9_persistence_eligibility",
+      "failed_stage": "9_persistence_eligibility",
+      "outcome": "EXECUTION_OUTPUT_REJECTED_AT_PERSISTENCE_ELIGIBILITY_NO_RETRY",
+      "stages": {
+        "5_schema_validation_v1_2_0": "PASSED",
+        "6_semantic_output_gate_v1_4_0": "PASSED",
+        "7_evidence_boundary_and_no_distortion": "PASSED",
+        "8_attribution_and_provenance": "PASSED",
+        "9_persistence_eligibility": "FAILED",
+        "10_human_review": "NOT_REACHED"
+      },
+      "reasons": [
+        "the canonical OpportunityHypothesis refuses this answer: dry-construction:c464e30a24400d11d547f2ade85f5e21d1f020aa1c76ea2ba7c95d095cdc246f: profitability: 'profitability' is not supportable by any registered source: no observation in this portfolio measures it, and no dimension may be invented so that it can be asserted."
+      ],
+      "MISREPORTED_AS_A_LATER_STAGE": false
+    },
+    {
+      "fixture": "F_LONG_SUMMARY_POSITIVE",
+      "what": "the fixture's own summary repeated, longer than v1.1.0's bound and within v1.2.0's",
+      "summary_characters": 1189,
+      "intended_stage": "NONE_ELIGIBLE_AT_9",
+      "failed_stage": null,
+      "outcome": "EXECUTION_OUTPUT_ACCEPTED_AWAITING_HUMAN_REVIEW",
+      "stages": {
+        "5_schema_validation_v1_2_0": "PASSED",
+        "6_semantic_output_gate_v1_4_0": "PASSED",
+        "7_evidence_boundary_and_no_distortion": "PASSED",
+        "8_attribution_and_provenance": "PASSED",
+        "9_persistence_eligibility": "ELIGIBLE_FOR_HUMAN_REVIEW_ONLY",
+        "10_human_review": "REQUIRED_NOT_PERFORMED"
+      },
+      "reasons": [],
+      "MISREPORTED_AS_A_LATER_STAGE": false
+    },
+    {
+      "fixture": "G_LONG_SUMMARY_SEMANTIC_NEGATIVE",
+      "what": "the same long summary with one sentence no supplied statement supports",
+      "summary_characters": 1216,
+      "intended_stage": "6_semantic_output_gate_v1_4_0",
+      "failed_stage": "6_semantic_output_gate_v1_4_0",
+      "outcome": "EXECUTION_OUTPUT_REJECTED_AT_SEMANTIC_GATE_NO_RETRY",
+      "stages": {
+        "5_schema_validation_v1_2_0": "PASSED",
+        "6_semantic_output_gate_v1_4_0": "FAILED",
+        "7_evidence_boundary_and_no_distortion": "NOT_REACHED",
+        "8_attribution_and_provenance": "NOT_REACHED",
+        "9_persistence_eligibility": "NOT_REACHED",
+        "10_human_review": "NOT_REACHED"
+      },
+      "reasons": [
+        "evidence_bound_reasoning_summary audited BOUND_EXCEEDED: WILLINGNESS_TO_PAY: 'willing to pay' is asserted (asserted), and no source content statement asserts it. This packet is not willingness to pay, price tolerance, budget for software, or ability to pay for a product"
+      ],
+      "MISREPORTED_AS_A_LATER_STAGE": false
+    },
+    {
+      "fixture": "H_SUMMARY_AT_THE_NEW_BOUND",
+      "what": "a summary of exactly v1.2.0's bound",
+      "summary_characters": 1500,
+      "intended_stage": "NONE_ELIGIBLE_AT_9",
+      "failed_stage": null,
+      "outcome": "EXECUTION_OUTPUT_ACCEPTED_AWAITING_HUMAN_REVIEW",
+      "stages": {
+        "5_schema_validation_v1_2_0": "PASSED",
+        "6_semantic_output_gate_v1_4_0": "PASSED",
+        "7_evidence_boundary_and_no_distortion": "PASSED",
+        "8_attribution_and_provenance": "PASSED",
+        "9_persistence_eligibility": "ELIGIBLE_FOR_HUMAN_REVIEW_ONLY",
+        "10_human_review": "REQUIRED_NOT_PERFORMED"
+      },
+      "reasons": [],
+      "MISREPORTED_AS_A_LATER_STAGE": false
+    },
+    {
+      "fixture": "I_SUMMARY_ONE_OVER_THE_NEW_BOUND",
+      "what": "a summary one character over v1.2.0's bound",
+      "summary_characters": 1501,
+      "intended_stage": "5_schema_validation_v1_2_0",
+      "failed_stage": "5_schema_validation_v1_2_0",
+      "outcome": "EXECUTION_OUTPUT_REJECTED_AT_SCHEMA_VALIDATION_NO_RETRY",
+      "stages": {
+        "5_schema_validation_v1_2_0": "FAILED",
+        "6_semantic_output_gate_v1_4_0": "NOT_REACHED",
+        "7_evidence_boundary_and_no_distortion": "NOT_REACHED",
+        "8_attribution_and_provenance": "NOT_REACHED",
+        "9_persistence_eligibility": "NOT_REACHED",
+        "10_human_review": "NOT_REACHED"
+      },
+      "reasons": [
+        "evidence_bound_reasoning_summary: 1501 characters exceeds maxLength 1500"
+      ],
+      "MISREPORTED_AS_A_LATER_STAGE": false
+    }
+  ],
+  "VALID_FIXTURE_REACHES_STAGE_9": true,
+  "EVERY_NEGATIVE_FIXTURE_AT_ITS_INTENDED_STAGE": true,
+  "LONG_SUMMARY": {
+    "POSITIVE_CHARACTERS": 1189,
+    "POSITIVE_REACHES_STAGE_9": true,
+    "NEGATIVE_CHARACTERS": 1216,
+    "NEGATIVE_PASSES_STAGE_5": true,
+    "NEGATIVE_REFUSED_AT_STAGE_6": true,
+    "AT_THE_NEW_BOUND_REACHES_STAGE_9": true,
+    "ONE_OVER_THE_NEW_BOUND_REFUSED_AT_STAGE_5": true
+  },
+  "RETENTION_PATHS": {
+    "success": {
+      "terminal_outcome": "EXECUTION_OUTPUT_ACCEPTED_AWAITING_HUMAN_REVIEW",
+      "raw_response_retained": true,
+      "stop_reason": "tool_use",
+      "persisted": "NOTHING"
+    },
+    "timeout": {
+      "terminal_outcome": "EXECUTION_FAILED_TIMEOUT_NO_RETRY",
+      "raw_response_retained": false,
+      "stop_reason": "NOT_AVAILABLE",
+      "persisted": "NOTHING"
+    },
+    "provider_refusal": {
+      "terminal_outcome": "EXECUTION_REFUSED_BY_PROVIDER_NO_RETRY",
+      "raw_response_retained": true,
+      "stop_reason": "refusal",
+      "persisted": "NOTHING"
+    },
+    "provider_output_limit_max_tokens": {
+      "terminal_outcome": "EXECUTION_OUTPUT_LIMIT_REACHED_NO_RETRY",
+      "raw_response_retained": true,
+      "stop_reason": "max_tokens",
+      "persisted": "NOTHING"
+    },
+    "provider_output_limit_context_window": {
+      "terminal_outcome": "EXECUTION_OUTPUT_LIMIT_REACHED_NO_RETRY",
+      "raw_response_retained": true,
+      "stop_reason": "model_context_window_exceeded",
+      "persisted": "NOTHING"
+    },
+    "unsupported_stop_reason": {
+      "terminal_outcome": "EXECUTION_STOP_REASON_UNSUPPORTED_NO_RETRY",
+      "raw_response_retained": true,
+      "stop_reason": "end_turn",
+      "persisted": "NOTHING"
+    },
+    "parse_failure": {
+      "terminal_outcome": "EXECUTION_OUTPUT_REJECTED_AT_STRUCTURED_PARSE_NO_RETRY",
+      "raw_response_retained": true,
+      "stop_reason": "tool_use",
+      "persisted": "NOTHING"
+    },
+    "schema_failure": {
+      "terminal_outcome": "EXECUTION_OUTPUT_REJECTED_AT_SCHEMA_VALIDATION_NO_RETRY",
+      "raw_response_retained": true,
+      "stop_reason": "tool_use",
+      "persisted": "NOTHING"
+    },
+    "semantic_failure": {
+      "terminal_outcome": "EXECUTION_OUTPUT_REJECTED_AT_SEMANTIC_GATE_NO_RETRY",
+      "raw_response_retained": true,
+      "stop_reason": "tool_use",
+      "persisted": "NOTHING"
+    },
+    "evidence_boundary_failure": {
+      "terminal_outcome": "EXECUTION_OUTPUT_REJECTED_AT_EVIDENCE_BOUNDARY_NO_RETRY",
+      "raw_response_retained": true,
+      "stop_reason": "tool_use",
+      "persisted": "NOTHING"
+    },
+    "provenance_failure": {
+      "terminal_outcome": "EXECUTION_OUTPUT_REJECTED_AT_ATTRIBUTION_NO_RETRY",
+      "raw_response_retained": true,
+      "stop_reason": "tool_use",
+      "persisted": "NOTHING"
+    },
+    "persistence_eligibility_failure": {
+      "terminal_outcome": "EXECUTION_OUTPUT_REJECTED_AT_PERSISTENCE_ELIGIBILITY_NO_RETRY",
+      "raw_response_retained": true,
+      "stop_reason": "tool_use",
+      "persisted": "NOTHING"
+    },
+    "human_review_ready_success": {
+      "terminal_outcome": "EXECUTION_OUTPUT_ACCEPTED_AWAITING_HUMAN_REVIEW",
+      "raw_response_retained": true,
+      "stop_reason": "tool_use",
+      "persisted": "NOTHING"
+    }
+  },
+  "RETENTION_OUTCOME": "RETENTION_PATH_READY_FOR_NEXT_EXECUTION",
+  "OUTCOME": "DETERMINISTIC_STAGE_6_TO_9_PATH_READY",
+  "SYNTHETIC_PASS_IS_NOT_EVIDENCE": true,
+  "accounting": {
+    "MODEL_CALLS": 0,
+    "PROVIDER_REQUESTS": 0,
+    "MESSAGES_API_REQUESTS": 0,
+    "TOKEN_COUNT_API_REQUESTS": 0,
+    "TED_BYTES_SENT": 0,
+    "CANONICAL_MUTATIONS": 0
+  }
+}

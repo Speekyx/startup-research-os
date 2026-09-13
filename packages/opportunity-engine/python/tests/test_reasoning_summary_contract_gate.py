@@ -164,8 +164,68 @@ class TestV5StaysAsItWas:
 
 class TestNothingPastSectionTen:
     @pytest.mark.parametrize("index", range(6))
-    def test_a_v6_artifact_is_refused(self, gate, copies, index):
+    def test_a_v6_artifact_no_later_mission_authored_is_refused(self, gate, copies, index):
         gate.NOT_PREPARED[index].write_bytes(b"{}\n")
+        with pytest.raises(gate.ValidationError, match="section 10"):
+            gate.validate()
+
+
+def _authored(path: pathlib.Path, mission: str) -> None:
+    if path.suffix == ".json":
+        path.write_bytes(json.dumps({"recorded_by": f"mission-{mission}"}).encode("utf-8"))
+    else:
+        path.write_bytes(f'"""Mission {mission}. A successor artifact."""\n'.encode())
+
+
+class TestTheDecisionSectionTenAskedFor:
+    """Mission 1.84.17 re-pointed the absence check to the decision: a later mission's frozen
+    successor gate re-opens the V6 path, and the record of what 1.84.16 did stays as it was."""
+
+    def test_artifacts_a_later_mission_authored_are_admitted(self, gate, copies):
+        for path in gate.NOT_PREPARED:
+            _authored(path, "1.84.17")
+        record = gate.validate()
+        assert record["NOT_PREPARED"]["V6_CREATED"] is False
+
+    def test_without_a_successor_freeze_they_are_refused(self, gate, copies, tmp_path, monkeypatch):
+        monkeypatch.setattr(gate, "SUCCESSOR_FREEZE", tmp_path / "no-freeze.json")
+        _authored(gate.NOT_PREPARED[4], "1.84.17")
+        with pytest.raises(gate.ValidationError, match="section 10"):
+            gate.validate()
+
+    @pytest.mark.parametrize(
+        "key, value",
+        [
+            ("mission", "mission-1.84.16"),
+            ("GATE_V1_4_FROZEN", False),
+            ("PREDECESSOR_GATE_VERSION", "second-opportunity-output-gate@1.2.0"),
+        ],
+    )
+    def test_a_successor_freeze_that_is_not_the_decision_is_refused(
+        self, gate, copies, tmp_path, monkeypatch, key, value
+    ):
+        freeze = tmp_path / gate.SUCCESSOR_FREEZE.name
+        freeze.write_bytes(gate.SUCCESSOR_FREEZE.read_bytes())
+        _edit(freeze, lambda d: d.__setitem__(key, value))
+        monkeypatch.setattr(gate, "SUCCESSOR_FREEZE", freeze)
+        _authored(gate.NOT_PREPARED[4], "1.84.17")
+        with pytest.raises(gate.ValidationError, match="section 10"):
+            gate.validate()
+
+    def test_a_successor_bound_to_another_schema_is_refused(
+        self, gate, copies, tmp_path, monkeypatch
+    ):
+        freeze = tmp_path / gate.SUCCESSOR_FREEZE.name
+        freeze.write_bytes(gate.SUCCESSOR_FREEZE.read_bytes())
+        _edit(freeze, lambda d: d["OUTPUT_SCHEMA"].__setitem__("sha256", "0" * 64))
+        monkeypatch.setattr(gate, "SUCCESSOR_FREEZE", freeze)
+        _authored(gate.NOT_PREPARED[4], "1.84.17")
+        with pytest.raises(gate.ValidationError, match="section 10"):
+            gate.validate()
+
+    @pytest.mark.parametrize("index", range(6))
+    def test_an_artifact_naming_this_mission_is_still_refused(self, gate, copies, index):
+        _authored(gate.NOT_PREPARED[index], "1.84.16")
         with pytest.raises(gate.ValidationError, match="section 10"):
             gate.validate()
 

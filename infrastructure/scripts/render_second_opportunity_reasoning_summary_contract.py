@@ -97,6 +97,12 @@ NOT_PREPARED = (
     DATA / "second-opportunity-synthesis-execution-packet-v6.json",
     DATA / "second-opportunity-synthesis-execution-approval-v6.json",
 )
+#: The architecture decision section 10 asked for, once a LATER mission takes it: a successor gate
+#: bound to schema v1.2.0, frozen by its own record. Mission 1.84.17 re-pointed the check above from
+#: an absence to that decision, the precedent absence-pinned gates follow: this record, which says
+#: what 1.84.16 did and did not prepare, is unchanged.
+SUCCESSOR_FREEZE = DATA / "second-opportunity-output-gate-v1.4-freeze-v1.json"
+THIS_MISSION = (1, 84, 16)
 
 MISSION = "mission-1.84.16"
 START_COMMIT = "f3ff867f7b83c32324f148860940cbfa6f26746a"
@@ -720,10 +726,55 @@ def gate_block(fixtures: Any, new: dict[str, Any]) -> dict[str, object]:
 # --------------------------------------------------------------------------- the record
 
 
+def _later(value: object) -> bool:
+    """Whether a mission label names a mission after this one."""
+    match = re.search(r"(\d+)\.(\d+)\.(\d+)", str(value or ""))
+    return match is not None and tuple(int(part) for part in match.groups()) > THIS_MISSION
+
+
+def _successor_prepared(present: list[pathlib.Path]) -> bool:
+    """Whether a later mission took the decision section 10 asked for, and authored what exists.
+
+    A successor gate bound to schema v1.2.0 must be frozen by its own record naming another mission,
+    and every V6 artifact present must name a later mission as its author: a record through
+    `recorded_by`, `prepared_by` or `mission`, a module through its docstring. Anything short of that
+    is the state section 10 stopped, and is refused as before.
+    """
+    if not SUCCESSOR_FREEZE.exists():
+        return False
+    freeze = _load(SUCCESSOR_FREEZE)
+    if not (
+        _later(freeze.get("mission"))
+        and freeze.get("GATE_V1_4_FROZEN") is True
+        and freeze.get("PREDECESSOR_GATE_VERSION") == SECOND_OPPORTUNITY_GATE_VERSION_V1_3
+        and (freeze.get("OUTPUT_SCHEMA") or {}).get("sha256") == SCHEMA_V1_2_SHA256
+    ):
+        return False
+    for path in present:
+        text = path.read_text(encoding="utf-8")
+        if path.suffix == ".json":
+            try:
+                record = json.loads(text)
+            except ValueError:
+                return False
+            authors = (
+                [record.get(k) for k in ("recorded_by", "prepared_by", "mission")]
+                if isinstance(record, dict)
+                else []
+            )
+        else:
+            authors = re.findall(r"Mission (\d+\.\d+\.\d+)", text[:600])
+        if not any(_later(author) for author in authors):
+            return False
+    return True
+
+
 def not_prepared_block() -> dict[str, object]:
-    present = [path.name for path in NOT_PREPARED if path.exists()]
-    if present:
-        raise ValidationError(f"section 10 stopped V6, and these exist: {present}")
+    present = [path for path in NOT_PREPARED if path.exists()]
+    if present and not _successor_prepared(present):
+        raise ValidationError(
+            f"section 10 stopped V6, and these exist: {[path.name for path in present]}"
+        )
     return {
         "stopped_at": "section 10, the semantic-gate audit",
         "sections_not_executed": [

@@ -958,9 +958,59 @@ jobs:
       # another row; a summary target not derived from 1500 at 4/5; a persistence audit that lost a
       # layer, a source or a 900 it found; gate v1.3.0 changed, or its coupling to schema v1.1.0 no
       # longer demonstrated on the synthetic answer; V5 revalidated under v1.2.0 or given a review
-      # packet; a prompt v1.5.0, a V6 runner or a V6 packet; and any network or canonical accounting.
+      # packet; a prompt v1.5.0, a V6 runner or a V6 packet unless a later mission froze a successor
+      # gate bound to schema v1.2.0 and authored them (1.84.17 did); and any network or canonical
+      # accounting.
       - name: The reasoning-summary contract decision, schema v1.2.0 and the gate coupling that stops V6
         run: uv run python infrastructure/scripts/render_second_opportunity_reasoning_summary_contract.py --check
+
+      # Mission 1.84.17. The semantic output gate v1.4.0, frozen before execution packet V6 depends
+      # on it. The gate refuses: an implementation or a frozen test file other than the pinned ones;
+      # gate v1.3.0 no longer its own freeze, or any of its files edited; components other than the
+      # gate and the output schema moved; a schema other than v1.2.0, or a v1.2.0 that differs from
+      # v1.1.0 in more than the summary bound; a successor that carries a number, calls gate v1.3.0
+      # other than once, or defines more than its evaluator; any synthetic case whose two verdicts
+      # differ beyond what the one moved leaf explains; the old bound reported by v1.4.0, a band
+      # summary refused structurally, or a semantic violation in the band admitted; one over 1500
+      # not refused by name; gate v1.3.0's own test file, replayed through both gates, failing or
+      # diverging; a V1 to V5 artifact moved or a historical answer used; and any network accounting.
+      - name: Semantic gate v1.4.0 is gate v1.3.0 bound to schema v1.2.0, frozen, and diverges nowhere else
+        run: uv run python infrastructure/scripts/render_second_opportunity_semantic_gate_v1_4.py --check
+
+      # Mission 1.84.17. Prompt v1.5.0 and the output capacity under schema v1.2.0. The gate refuses:
+      # gate v1.4.0 not frozen; a merged artifact, the representation or prompt v1.4.0 moved; a
+      # v1.5.0 trusted context, TED region or task other than v1.4.0's; a system region that moves a
+      # line other than the summary's bound and target, or to other numbers; a bound, rule or target
+      # unstated, or a check that would pass prompt v1.4.0 under v1.2.0; the old bound in any region; a
+      # number in the prompt module; a maximum instance that does not validate or moves by more than
+      # the one bound explains; a headroom row other than the summary's; a persistence audit or
+      # catalog that moved; a reachability claim resting on anything but the recorded count; and any
+      # token count or network request.
+      - name: Prompt v1.5.0 moves only the summary's bound and target, and schema v1.2.0's capacity
+        run: uv run python infrastructure/scripts/render_second_opportunity_prompt_v1_5.py --check
+
+      # Mission 1.84.17. Stages 5 to 9 of the V6 runner and every retention path, on synthetic
+      # answers. The gate refuses: a fixture stopping at another stage or reaching a later one; a
+      # long summary within v1.2.0's bound not reaching stage 9, or one with a semantic violation not
+      # refused at 6; one over the bound not refused at 5; a runner whose stage 5 is not schema
+      # v1.2.0, whose stage 6 is not gate v1.4.0 alone, whose gate can be injected, or which cannot
+      # refuse at stages 5 to 9; a retention path whose artifact loses its outcome or what arrived, or
+      # persists anything; and the real transport constructed.
+      - name: The V6 runner's stages 5 to 9 and every retention path, on synthetic answers
+        run: uv run python infrastructure/scripts/render_second_opportunity_stage_6_9_preflight_v2.py --check
+
+      # Mission 1.84.17. Execution packet V6, frozen and unapproved. The gate refuses: bound fields
+      # that do not hash to the digest, a spent digest, an unreviewed field, or an approval recorded
+      # by the preparing mission; V1 to V5 edited or their consumption reset; a schema, summary bound,
+      # target or decision record other than the operator's; a gate other than the frozen v1.4.0, or
+      # gates 86, 88 or 89 no longer validating; a prompt other than v1.5.0; a route, model, thinking,
+      # max_tokens, completion, timeout, retention or persistence policy moved from V5; a request body
+      # the V6 runner does not rebuild, or a ceiling other than the recomputed worst case; a
+      # residual-risk acceptance carried over; a retention path no V6 test defines; a runner with two
+      # call sites, post-processing, an injectable gate or another digest, or one that would execute
+      # V1 to V5 again; and any preparation call, TED byte or canonical counter that moved.
+      - name: Execution packet V6 is V5's call over schema v1.2.0, gate v1.4.0 and prompt v1.5.0
+        run: uv run python infrastructure/scripts/render_second_opportunity_execution_packet_v6.py --check
 
       # Mission 1.84.2. The one approved provider request happened and its output was rejected
       # at schema validation. The gate refuses: an approval recovered from a failure, or a

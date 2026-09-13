@@ -1,0 +1,247 @@
+{
+  "$comment": "Mission 1.84.17. Schema v1.2.0 as the V6 execution contract: finite, its maximum rebuilt and revalidated, its reachability, its headroom rows and its persistence. CI gate 88 re-derives every field. No token was counted and nothing was sent.",
+  "record_version": "second-opportunity-output-capacity@3.0.0",
+  "mission": "1.84.17",
+  "recorded_by": "mission-1.84.17",
+  "HISTORY_UNCHANGED": {
+    "docs/data/second-opportunity-synthesis-prompt-v5.json": "9d0fd099913f2c2a93ca00f6816315023dc71f985eb91c985ee224f65c728af3",
+    "docs/data/second-opportunity-output-capacity-analysis-v2.json": "507b12d794a51732d3c9f719d189dbc66371866c9f728770bd80484968d83e1d",
+    "docs/data/second-opportunity-provider-token-measurement-v1.json": "83477ebafb4643c225ed450c7c20cc51a35f56008f8a2baea80d65748119ece0",
+    "docs/data/second-opportunity-execution-envelope-decision-v1.json": "eb085da1236cf1755b1d7fe49c74543509c1a59f4d12fb92d6c60aced3a2ed05",
+    "docs/data/second-opportunity-generation-headroom-policy-v1.json": "91a71efa10ab01788992f3e6080136ded22a5d7ace660a8fee1bae4aae8743ff",
+    "docs/data/second-opportunity-reasoning-summary-contract-decision-v1.json": "f8aa8b525b87cf561b7a8eb181d6fb68ffe50da10a62cd153af37137ecee0886",
+    "docs/data/second-opportunity-reasoning-summary-contract-v1.json": "b6a620fa64eb438140b4dcbb417e97aa6961870d0f334e7a91938e8188793516"
+  },
+  "OUTPUT_SCHEMA_VERSION": "second-opportunity-synthesis-output@1.2.0",
+  "OUTPUT_SCHEMA_SHA256": "7d67bad3df06691ba46a4dcc65cbf186bc5825a87719e985637aec68640e1b66",
+  "PREDECESSOR_OUTPUT_SCHEMA_VERSION": "second-opportunity-synthesis-output@1.1.0",
+  "PREDECESSOR_OUTPUT_SCHEMA_SHA256": "ec789d1be7d525bf6e498bf61e8a0596ac4582e24e8b45073b3f9ac1cca8b988",
+  "FINITE_BOUND": true,
+  "unbounded_path_count": 0,
+  "walker": "Mission 1.84.4's walker, render_second_opportunity_bounded_contract.unbounded_paths",
+  "MAXIMUM_VALID_INSTANCE": {
+    "MAX_INSTANCE_SCHEMA_VALID": true,
+    "fill": "U+1F600",
+    "MAX_VALID_OUTPUT_CHARACTERS": 316929,
+    "MAX_VALID_OUTPUT_UTF8_BYTES": 316929,
+    "MAX_VALID_OUTPUT_SHA256": "aaf3b84e611760e065379fa50bd605e11c0b1a48a67c8753b1106baee8df2aef",
+    "ASCII_FILL_MAXIMUM_CHARACTERS": 58129,
+    "method": "Mission 1.84.4's builder over schema v1.2.0: every string at its maxLength in the non-BMP fill, every array at its maxItems, serialized with sorted keys and ASCII escaping, then validated through the repository's own validator"
+  },
+  "PREDECESSOR_MAXIMUM_VALID_INSTANCE": {
+    "MAX_INSTANCE_SCHEMA_VALID": true,
+    "fill": "U+1F600",
+    "MAX_VALID_OUTPUT_CHARACTERS": 309729,
+    "MAX_VALID_OUTPUT_UTF8_BYTES": 309729,
+    "MAX_VALID_OUTPUT_SHA256": "e1a62b812f115b3549b5c3c5b8605f2c8052b998cce5d89ac7b60cee5af71705",
+    "ASCII_FILL_MAXIMUM_CHARACTERS": 56929
+  },
+  "DELTA_FROM_V1_1_0": {
+    "characters": 7200,
+    "utf8_bytes": 7200,
+    "explained_by": "evidence_bound_reasoning_summary: 600 more characters of the fill, each serialized as 12 characters"
+  },
+  "FIELD_CONTRIBUTIONS": [
+    {
+      "field": "candidate_intervention_class",
+      "v1_1_0": 3634,
+      "v1_2_0": 3634,
+      "delta": 0
+    },
+    {
+      "field": "commercial_claims_not_supported",
+      "v1_1_0": 50491,
+      "v1_2_0": 50491,
+      "delta": 0
+    },
+    {
+      "field": "commercial_claims_supported",
+      "v1_1_0": 28863,
+      "v1_2_0": 28863,
+      "delta": 0
+    },
+    {
+      "field": "confidence_classification",
+      "v1_1_0": 42,
+      "v1_2_0": 42,
+      "delta": 0
+    },
+    {
+      "field": "critical_uncertainties",
+      "v1_1_0": 72074,
+      "v1_2_0": 72074,
+      "delta": 0
+    },
+    {
+      "field": "decision",
+      "v1_1_0": 35,
+      "v1_2_0": 35,
+      "delta": 0
+    },
+    {
+      "field": "evidence_bound_reasoning_summary",
+      "v1_1_0": 10838,
+      "v1_2_0": 18038,
+      "delta": 7200
+    },
+    {
+      "field": "hypothesis_statement",
+      "v1_1_0": 7226,
+      "v1_2_0": 7226,
+      "delta": 0
+    },
+    {
+      "field": "independence_status",
+      "v1_1_0": 3625,
+      "v1_2_0": 3625,
+      "delta": 0
+    },
+    {
+      "field": "observed_need",
+      "v1_1_0": 4819,
+      "v1_2_0": 4819,
+      "delta": 0
+    },
+    {
+      "field": "recommended_next_evidence",
+      "v1_1_0": 28861,
+      "v1_2_0": 28861,
+      "delta": 0
+    },
+    {
+      "field": "reliability_status",
+      "v1_1_0": 3624,
+      "v1_2_0": 3624,
+      "delta": 0
+    },
+    {
+      "field": "source_families",
+      "v1_1_0": 1339,
+      "v1_2_0": 1339,
+      "delta": 0
+    },
+    {
+      "field": "statement_classifications",
+      "v1_1_0": 88133,
+      "v1_2_0": 88133,
+      "delta": 0
+    },
+    {
+      "field": "subject",
+      "v1_1_0": 973,
+      "v1_2_0": 973,
+      "delta": 0
+    },
+    {
+      "field": "supported_dimensions",
+      "v1_1_0": 514,
+      "v1_2_0": 514,
+      "delta": 0
+    },
+    {
+      "field": "supporting_claim_ids",
+      "v1_1_0": 824,
+      "v1_2_0": 824,
+      "delta": 0
+    },
+    {
+      "field": "supporting_evidence_ids",
+      "v1_1_0": 827,
+      "v1_2_0": 827,
+      "delta": 0
+    },
+    {
+      "field": "target_actor_if_supported",
+      "v1_1_0": 2431,
+      "v1_2_0": 2431,
+      "delta": 0
+    },
+    {
+      "field": "unsupported_dimensions",
+      "v1_1_0": 516,
+      "v1_2_0": 516,
+      "delta": 0
+    }
+  ],
+  "REACHABILITY": {
+    "CONTRACT_FULL_DOMAIN_REACHABLE": false,
+    "reasoning": [
+      "schema v1.2.0 relaxes one maxLength of v1.1.0 and tightens nothing, so every answer v1.1.0 admits, its maximum instance included, v1.2.0 admits too (checked here through the validator)",
+      "Mission 1.84.5 counted that 309729-character instance at 231608 input tokens, a provider-native estimate, against an execution envelope of 128000 output tokens",
+      "so v1.2.0's domain holds an answer the envelope cannot carry, whatever v1.2.0's own maximum counts to, and no new count is needed to say so"
+    ],
+    "STATE": "CONTRACT_LARGER_THAN_EXECUTION_ENVELOPE",
+    "MAX_OUTPUT_TOKENS": 128000,
+    "MAX_OUTPUT_TOKENS_SOURCE": "second-opportunity-execution-envelope-decision-v1.json",
+    "V1_1_0_MAXIMUM_TOKEN_ESTIMATE": 231608,
+    "V1_2_0_MAXIMUM_TOKEN_ESTIMATE": "NOT_COUNTED",
+    "EXACT_MAX_OUTPUT_TOKEN_COUNT": "NOT_ESTABLISHED",
+    "INPUT_TO_OUTPUT_TOKENIZATION_EQUIVALENCE": "NOT_ESTABLISHED",
+    "TOKEN_COUNT_REQUESTS": 0
+  },
+  "HEADROOM": {
+    "GENERATION_HEADROOM_POLICY": "TARGET_AT_MOST_80_PERCENT_OF_HARD_MAX_LENGTH",
+    "GENERATION_TARGET_RATIO": "4/5",
+    "GENERATION_HEADROOM_POLICY_DIGEST": "c53ce0e9fc5832d17e2dfc2c1ccf5cb43fcd681e708a1be2d16ab44a7cb4dfd1",
+    "ARRAY_HEADROOM_POLICY": "NONE",
+    "ROWS": 12,
+    "REASONING_SUMMARY": {
+      "v1_1_0": [
+        900,
+        720
+      ],
+      "v1_2_0": [
+        1500,
+        1200
+      ],
+      "target_source": "floor(1500 * 4/5) under TARGET_AT_MOST_80_PERCENT_OF_HARD_MAX_LENGTH"
+    },
+    "OTHER_HEADROOM_ROW_DRIFT": 0,
+    "HAND_MAINTAINED_TARGETS": 0
+  },
+  "PERSISTENCE": {
+    "PERSISTENCE_COMPATIBILITY": "COMPATIBLE",
+    "DATABASE_STORAGE_COMPATIBILITY": "COMPATIBLE",
+    "PERSISTENCE_MAXIMUM_FOR_REASONING_SUMMARY": "NONE_BELOW_THE_POSTGRESQL_TEXT_LIMIT",
+    "model_field": {
+      "object": "OpportunityHypothesis.reasoning_summary",
+      "source": "packages/opportunity-engine/python/sros_opportunity/hypothesis.py",
+      "type": "str",
+      "length_bound": "NONE"
+    },
+    "database_column": {
+      "migration": "0029_opportunity_hypothesis_persistence.sql",
+      "definition": "reasoning_summary       TEXT        NOT NULL,",
+      "later_migrations_naming_it": 0,
+      "type": "TEXT",
+      "declared_length": null
+    },
+    "OBSERVED_DATABASE": {
+      "observed_on": "2026-09-13",
+      "observed_by": "mission-1.84.17",
+      "server_version": "16.4",
+      "column": "research.opportunity_hypothesis_revisions.reasoning_summary",
+      "data_type": "text",
+      "character_maximum_length": null,
+      "atttypmod": -1,
+      "is_nullable": "NO",
+      "check_constraints_naming_the_column": [],
+      "triggers_on_the_table": [],
+      "existing_rows": 2,
+      "existing_longest_value_characters": 1456
+    },
+    "CATALOG_UNCHANGED_SINCE_1_84_16": true,
+    "SCHEMA_V1_2_0_BOUND": 1500,
+    "COMPATIBLE_WITH_THE_BOUND": true,
+    "PERSISTENCE_COMPATIBILITY_CHANGED": false
+  },
+  "PROMPT_V1_5_SHA256": "0713eb8053e83627e1156324cc9003031fff1f8e81289efe5cc89f182f542abb",
+  "accounting": {
+    "MODEL_CALLS": 0,
+    "PROVIDER_REQUESTS": 0,
+    "MESSAGES_API_REQUESTS": 0,
+    "TOKEN_COUNT_API_REQUESTS": 0,
+    "TED_BYTES_SENT": 0,
+    "CANONICAL_MUTATIONS": 0
+  }
+}
