@@ -1038,6 +1038,21 @@ jobs:
       - name: The provider-strict projection is the frozen one, and schema v1.2.0 still decides
         run: uv run python infrastructure/scripts/render_second_opportunity_provider_strict_projection.py --check
 
+      # Mission 1.84.19. Execution packet V7: V6's call with a strict tool over the frozen
+      # projection, frozen and unapproved. The gate refuses: bound fields that do not hash to the
+      # digest, a spent digest, an unreviewed field, or an approval recorded by the preparing
+      # mission; V1 to V6 edited or V6's refusal re-derived as anything but its one undeclared
+      # field; a contract, gate or prompt that moved from V6; strict fields that are not gate 92's
+      # frozen ones, or a moved freeze commit; a request body differing from V6's anywhere but the
+      # strict flag and the projected tool schema; a route, model, thinking, max_tokens, timeout,
+      # retention or persistence policy moved from V6; a ceiling that is not the recomputed worst
+      # case; a residual-risk acceptance carried over; a synthetic answer that does not stop where
+      # it must, an extra root key included; a runner whose stage 5 is not the full contract, whose
+      # adapter is not the strict one, or that would execute V1 to V6 again; and any preparation
+      # call, TED byte or canonical counter that moved.
+      - name: Execution packet V7 is V6's call with a strict tool over the frozen projection
+        run: uv run python infrastructure/scripts/render_second_opportunity_execution_packet_v7.py --check
+
       # Mission 1.84.2. The one approved provider request happened and its output was rejected
       # at schema validation. The gate refuses: an approval recovered from a failure, or a
       # consumed-approval list that does not name V1's digest with a request against it; a
