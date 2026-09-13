@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.149
-Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.14)
+Version: 1.150
+Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.15)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.150 | 2026-09-13 | **EXECUTION_SCHEMA_REJECTED_NO_RETRY: the one V5 request was made, the generation targets decided nothing, and the schema refused the summary on its hard maximum.** The operator approved exactly one execution of V5 by its digest `da3e7d09...`, accepted the 4/5 headroom policy and the two field roles, and renewed the residual semantic-limitation acceptance for this one attempt only; the approval was recorded beside the packet verbatim (214 lines, `60beeb26...`) after 33 named values were compared with the frozen packet. All 38 pre-network checks passed and **ONE** request went to the synchronous Messages API: HTTP 200 in 33.8 s, `stop_reason tool_use`, **12899 in, 3797 out, 0 thinking, cost 0.063768** of a 1.317056 ceiling. **STAGE 5 REFUSED IT ON ONE FIELD**: `evidence_bound_reasoning_summary` 1031 characters against a hard maximum of 900 and a stated target of 720 (V4 1078, V3 868). **THE TARGETS DECIDED NOTHING, AND THE ANSWER SHOWS IT**: of twelve composed texts nine were within target, two over target and within their hard maximum (`observed_need` 358, `hypothesis_statement` 529) and not refused, and `candidate_intervention_class`, refused in V4 at 316, came back at 133. Stages 6 to 10 NOT_REACHED; **no retry, no review packet, nothing persisted, the approval spent**, and a second `--execute`, tripwired, refused before any network. **GATE 85** re-derives the record, measures every target, requires the texts over a hard maximum to be exactly the texts refused, and pins the raw response, the parsed output and the approval. Probe 151 caught, 0 escaped, 10 of 10 controls. 3853 + 5021 tests, 85 gates, 75 new tests, 1 provider request, 0 retries, 0 canonical mutation. `mission-1.84.15-report.md`. |
 | 1.149 | 2026-09-13 | **SECOND_OPPORTUNITY_EXECUTION_PACKET_V5_READY_FOR_OPERATOR_APPROVAL: a generation target at 4/5 of each composed text's hard maximum, derived from the live schema and stated beside it, field roles, and packet V5 frozen and unapproved.** V4's result accepted and untouched (its two violations reproduced exactly, not rescued); schema v1.1.0, gate v1.3.0 (`cc3c4902...`) and the representation unchanged; the ratio selected by the operator, held as `Fraction(4, 5)`, and not derived from V4 (`V4_VALUES_USED_TO_DERIVE_HEADROOM = false`, enforced: the headroom modules read no file and carry no integer beyond 0, 1, 4, 5, 96). **ONE DERIVATION**: `(hard * 4) // 5` for the twelve composed texts the existing classifications name (the class 300 to 240, the summary 900 to 720); copied ids, closed choices, the `subject` identity and all element counts get none (`ARRAY_HEADROOM_POLICY = NONE`). **A TARGET IS NOT VALIDATION**: target, target + 1 and hard pass, hard + 1 fails, for all twelve and through the V5 runner. **NO DRIFT** across 34 mutations. **PROMPT v1.4.0** (`960955f4...`): v1.3.0 plus one block (targets beside hard maxima, the class named only, the summary a synthesis not a ledger, concision never costing information, a reread with no scratchpad); 0/0/0 unstated bounds, rules and targets; native maxLength enforcement NOT_HELD. **PACKET V5** `da3e7d09...`: V4's call, body 31963, ceiling 1.317056, approval NOT recorded. Probe 127 caught, 0 escaped, 31 of 31 controls (a first run's one escape was an inert probe case, reported and corrected). 3853 + 4946 tests, 84 gates, 103 new tests, 0 model calls. `mission-1.84.14-report.md`. |
 | 1.148 | 2026-09-13 | **EXECUTION_SCHEMA_REJECTED_NO_RETRY: the one V4 request was made, and the v1.1.0 schema refused the answer on two length bounds the prompt states in words.** The operator approved exactly one execution of V4 by its digest `7832b3bc...` and accepted, for that one execution, the documented limit of the vocabulary-bounded semantic gate; the approval was recorded beside the packet verbatim (160 lines, `064b87fc...`) after 30 named values were compared with the frozen packet. All 28 pre-network checks passed and **ONE** request went to the synchronous Messages API: HTTP 200 in 34.1 s, `stop_reason tool_use`, **11599 in, 3950 out, 0 thinking, cost 0.062698** of a 1.312398 ceiling. **STAGE 5 REFUSED IT**: `candidate_intervention_class` 316 characters against 300, `evidence_bound_reasoning_summary` 1078 against 900, both stated in words in prompt v1.3.0 as in v1.2.0, under which V3 met them (224, 868); stages 6 to 10 NOT_REACHED, so the semantic gate v1.3.0 never judged it; **no retry, no review packet, nothing persisted, the approval spent**, and a second `--execute` refused before any network. **GATE 82** re-derives the record and pins the raw response, the parsed output and the approval, so a trimmed, re-digested answer is still refused. Probe 116 caught, 0 escaped, 9 of 9 controls. 3853 + 4843 tests, 82 gates, 31 new tests, 1 provider request, 0 retries, 0 canonical mutation. `mission-1.84.13-report.md`. |
 | 1.147 | 2026-09-13 | **SECOND_OPPORTUNITY_EXECUTION_PACKET_V4_READY_FOR_OPERATOR_APPROVAL: prompt v1.3.0 states every generation-relevant rule of the unchanged gate v1.3.0, stages 6 to 9 were proved on synthetic answers, and packet V4 is frozen and unapproved.** Schema v1.1.0 and gate v1.3.0 (`cc3c4902...`) unchanged; V3 not replayed, not whitelisted, not used to render. **THE CENSUS**: 53 rules (A 30, B 12, C 4, D 7), 46 of 46 refusal sites mapped, 41 fixtures with every refusal claimed exactly once. **PROMPT v1.3.0** (`a62fa218...`): v1.2.0 plus a block rendered from the gate's first-class policy objects and a SOURCE NAMES section of labels already in the representation; 0 class-A rules unstated (v1.2.0: 17); representation `2528a56a...` unchanged. **STAGES 6 TO 9** with the real gate, provenance reading and OpportunityHypothesis: the valid answer reaches 9, failures stop at 6/6/7/8/9. **PACKET V4** `7832b3bc...`: V3's call, ceiling 1.312398, human review required, approval NOT recorded. Probe 205 caught, 0 escaped, 26 of 26 controls. 3853 + 4812 tests, 81 gates, 0 model calls. `mission-1.84.12-report.md`. |
@@ -2498,6 +2499,36 @@ residual semantic limitation accepted for V4 is not carried over: an approval of
 accepts it again. **Do not execute V5 without that approval, do not re-execute V1 to V4, do not treat
 V4's answer as a candidate, and do not persist Opportunity #2.
 Mission 1.84.15 was not started.**
+
+
+**ANSWERED IN 1.150 (Mission 1.84.15). The one V5 request was made, and the schema refused the summary
+on its hard maximum.**
+
+    request      1, HTTP 200, 33.8 s of 60, stop_reason tool_use
+    usage        12899 in, 3797 out, 0 thinking; cost 0.063768 of a 1.317056 ceiling
+    stages       1-4 passed; 5 failed on one bound (summary 1031 > 900, target 720); 6-10 not reached
+    targets      9 of 12 within target; 2 over target and within bound, not refused; 1 over bound, refused
+    retained     raw body, usage, request id, parsed answer; nothing persisted
+    approval     spent; the residual-risk acceptance expired with it; the runner refuses V5 by name
+
+- **A TARGET DECIDED NOTHING, AND THIS TIME THE ANSWER PROVES IT.** Two texts over their target and
+  within their hard maximum passed the schema; the one text over its hard maximum did not. Gate 85
+  requires exactly that correspondence.
+- **THE CLASS ROLE HELD AND THE SUMMARY ROLE DID NOT.** The class came back at 133 characters, a class
+  and not a paragraph. The summary came back at 1031 against a stated target of 720: a compact synthesis
+  was asked for in words and not delivered.
+- **A MISSED TARGET IS NOT A FAILURE; A MISSED BOUND IS.** The refusal is on the 900, which the prompt
+  has stated in words since v1.2.0.
+- **NOT_REACHED IS STILL NOT PASSED.** Stages 6 to 9 have still never judged a real answer.
+- **AN APPROVAL IS SPENT BY ITS EXECUTION, WHATEVER THE OUTPUT WAS**, and so is the residual-risk
+  acceptance attached to it.
+
+**Next is an operator decision, and nothing was started.** V5 is spent. Any further execution needs a
+new packet digest and a new explicit approval naming it. One call is one observation: it establishes
+that this answer's summary exceeded its hard maximum under a prompt stating a target below it, and
+nothing about how often it would. This mission recommends nothing. **Do not re-execute V1 to V5, do not
+treat the refused answer as a candidate, and do not persist Opportunity #2.
+Mission 1.84.16 was not started.**
 
 
 

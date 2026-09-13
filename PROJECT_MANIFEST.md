@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.148
+Version: 1.149
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.14)
+Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.15)
 
 ---
 
@@ -13,6 +13,44 @@ Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.14)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.149 - 2026-09-13 (Sprint 1 / Mission 1.84.15)
+
+**`EXECUTION_SCHEMA_REJECTED_NO_RETRY`: the one V5 request was made, and the v1.1.0 schema refused the
+answer on the summary's hard maximum.** The operator approved exactly one execution of packet V5 by its
+digest `da3e7d09...`. They accepted the generation-headroom policy (4/5, prompt guidance only, not a
+validation bound) and the two field roles, and renewed the residual semantic-limitation acceptance for
+this one attempt only. The approval was recorded beside the packet, verbatim and hashed (214 lines,
+`60beeb26...`), after the 33 values it names were compared with the frozen packet. **Packet V5 was not
+edited.**
+
+**ONE REQUEST.** All 38 pre-network checks passed under a tripwire. Then one request went to the
+synchronous Messages API: HTTP 200 in 33.8 s, `stop_reason tool_use`, 12899 input tokens, 3797 output,
+0 thinking, cost **0.063768** against a ceiling of 1.317056.
+
+**STAGE 5 REFUSED IT ON ONE FIELD.**
+- `evidence_bound_reasoning_summary` is 1031 characters: 131 over its hard maximum of 900, 311 over its
+  stated target of 720. V4's was 1078, V3's 868.
+- `candidate_intervention_class`, one of V4's two violations, came back at 133 against a target of 240.
+- Stages 6 to 10 were not reached, so the semantic gate v1.3.0 never judged this answer.
+
+**THE TARGETS DECIDED NOTHING.** Of twelve composed texts:
+- nine are within their target;
+- two are over their target and within their hard maximum (`observed_need` 358 of 320 and 400,
+  `hypothesis_statement` 529 of 480 and 600), and the schema refused neither;
+- one is over its hard maximum, and it was refused.
+
+**No retry, no review packet, nothing persisted, and the approval and the residual-risk acceptance are
+spent.** A second `--execute`, run with the transport tripwired, was refused before any network with
+`EXECUTION_APPROVAL_ALREADY_CONSUMED`.
+
+**GATE 85** re-derives the record from what was kept: the raw digest, the completion, the schema
+verdict through the live validator, the violation, every generation target, the cost and the stage
+table. It requires the texts over a hard maximum to be exactly the texts refused. It pins the raw
+response, the parsed output and the approval, so a summary truncated to 900 or to 720 with every digest
+recomputed is still refused. Probe **151 caught, 0 escaped, 10 of 10 controls**. 3853 + 5021 tests, 85
+gates, 75 new tests, 1 provider request, 0 retries, 0 canonical mutation.
+`mission-1.84.15-report.md`.
 
 ## 1.148 - 2026-09-13 (Sprint 1 / Mission 1.84.14)
 
