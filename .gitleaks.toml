@@ -39,7 +39,7 @@ useDefault = true
 
 [allowlist]
 description = """
-Four identifiers that are not credentials, matched by exact value.
+Five identifiers that are not credentials, matched by exact value.
 
 `"key"` in source-compliance-v1.json is the stable identifier of an enumerated
 resource-exclusion rule. Two values: the Eurostat trade-data carve-outs the
@@ -75,6 +75,19 @@ will need its own entry here. That cost is deliberate: a `^[0-9a-f]{64}$` patter
 would have covered all of them and would also have suppressed a large fraction of
 real API keys, which is the trade this file already refused once.
 
+`83477eba...` (added in Mission 1.84.17) is a FILE DIGEST: the SHA-256 of the
+committed bytes of `docs/data/second-opportunity-provider-token-measurement-v1.json`,
+recorded under `HISTORY_UNCHANGED` in second-opportunity-output-capacity-analysis-v3.json
+to prove that Mission 1.84.5's record was not edited. It tripped `generic-api-key`
+because the JSON key is that file's PATH, which contains the word "token", beside 64
+hex characters of high entropy.
+
+It is not a credential and structurally cannot become one. Anyone can recompute it
+with `sha256sum` over a file in this repository, and CI gate 88 recomputes it on every
+run and refuses the record if it does not match. Added by exact value for the reason
+the proposition key above was: a pattern for all 64-hex digests would also suppress
+real keys.
+
 Matched by exact VALUE, with no path clause, so a real key added to any of these
 files later is still caught -- which is the property that matters.
 """
@@ -86,5 +99,6 @@ regexes = [
   '''^at-trade-cn8$''',
   '''^indicators-api-v2$''',
   '''^e452cf18200011aa65da75ebea5a0036bd49b2a365612dc3bbb2db8963ba2684$''',
+  '''^83477ebafb4643c225ed450c7c20cc51a35f56008f8a2baea80d65748119ece0$''',
 ]
 regexTarget = "secret"
