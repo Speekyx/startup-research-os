@@ -1,0 +1,373 @@
+{
+  "$comment": "Mission 1.84.16. Rebuilt by CI gate 86 from the live code and the committed artifacts; the file must equal the rebuild. Nothing here was sent anywhere.",
+  "record_version": "second-opportunity-reasoning-summary-contract@1.0.0",
+  "mission": "1.84.16",
+  "recorded_by": "mission-1.84.16",
+  "START_COMMIT": "f3ff867f7b83c32324f148860940cbfa6f26746a",
+  "BRANCH": "sprint-1/mission-1.84.16",
+  "PRIMARY_OUTCOME": "DETERMINISTIC_STAGE_6_TO_9_PATH_NOT_READY",
+  "BLOCKER": "SEMANTIC_GATE_V1_3_0_BINDS_OUTPUT_SCHEMA_V1_1_0",
+  "outcome_note": "Section 10 stops the mission: gate v1.3.0 re-validates every answer against schema v1.1.0, so a summary the operator's new bound admits is refused at stage 6. The stage 6 to 9 path is therefore not ready under schema v1.2.0, and no V6 was prepared",
+  "DECISION": {
+    "file": "docs/data/second-opportunity-reasoning-summary-contract-decision-v1.json",
+    "file_sha256": "f8aa8b525b87cf561b7a8eb181d6fb68ffe50da10a62cd153af37137ecee0886",
+    "operator_statement_sha256": "84c83f92204dcb10dabff8a44a2c8cddc03f600fb5456e1616bd539b460691d3",
+    "operator_statement_lines": 44,
+    "operator_message_sha256": "c329e908aea6596782757469439614b5744574a19975736194feac61513518a4",
+    "decision_owner": "OPERATOR",
+    "decision_type": "OUTPUT_CONTRACT",
+    "field": "evidence_bound_reasoning_summary",
+    "keyword": "maxLength",
+    "old_hard_maximum": 900,
+    "new_hard_maximum": 1500,
+    "DECISION_BASIS": "OPERATOR_SEMANTIC_BUDGET",
+    "MATHEMATICALLY_DERIVED": false,
+    "HISTORICAL_OUTPUT_LENGTH_DERIVED": false,
+    "STATISTICALLY_ESTIMATED": false,
+    "PROVEN_OPTIMAL": false,
+    "historical_observations_used_to_derive_1500": false,
+    "AUTHORISES_EXECUTION": false,
+    "V5_HISTORICAL_VERDICT_UNCHANGED": true,
+    "historical_observations": [
+      {
+        "execution": "V3",
+        "characters": 868
+      },
+      {
+        "execution": "V4",
+        "characters": 1078
+      },
+      {
+        "execution": "V5",
+        "characters": 1031
+      }
+    ]
+  },
+  "V5": {
+    "execution_packet_sha256": "da3e7d09d97c30cd02859eaee729b6bd164cd99812feac34572a0e1d93aa511a",
+    "PRIMARY_OUTCOME": "EXECUTION_SCHEMA_REJECTED_NO_RETRY",
+    "provider_requests": 1,
+    "model_calls": 1,
+    "retries": 0,
+    "fallbacks": 0,
+    "continuations": 0,
+    "repair_calls": 0,
+    "stop_reason": "tool_use",
+    "input_tokens": 12899,
+    "output_tokens": 3797,
+    "thinking_tokens": 0,
+    "total_tokens": 16696,
+    "cost_units": 0.063768,
+    "stages": {
+      "1_transport_success": "PASSED",
+      "2_provider_response_shape": "PASSED",
+      "3_provider_completion": "PASSED",
+      "4_structured_output_parse": "PASSED",
+      "5_schema_validation_v1_1_0": "FAILED",
+      "6_semantic_output_gate_v1_3_0": "NOT_REACHED",
+      "7_evidence_boundary_and_no_distortion": "NOT_REACHED",
+      "8_attribution_and_provenance": "NOT_REACHED",
+      "9_persistence_eligibility": "NOT_REACHED",
+      "10_human_review": "NOT_REACHED"
+    },
+    "violations_replayed_under_v1_1_0": [
+      "evidence_bound_reasoning_summary: 1031 characters exceeds maxLength 900"
+    ],
+    "canonical_persistence": false,
+    "canonical_mutations": 0,
+    "approval_consumed": true,
+    "human_review_packet": "NOT_PRODUCED",
+    "record_file_sha256": "42da9819c066e107d4539c1c4a857425e6809c4389ab69249bebec154b51ea7a",
+    "response_file_sha256": "7eb7c3f47d15b353228ae5a44d77ee6d31d593080ac5cc6c4ae9934b1bcd79aa",
+    "V5_HISTORICAL_VERDICT_UNCHANGED": true,
+    "REVALIDATED_UNDER_V1_2_0": false,
+    "CANDIDATE": false,
+    "PERSISTABLE": false,
+    "note": "V5 stays judged against schema v1.1.0. Its answer is not run through v1.2.0 anywhere in this mission, and no verdict under v1.2.0 exists for it"
+  },
+  "SCHEMA": {
+    "old_identity": "second-opportunity-synthesis-output@1.1.0",
+    "old_sha256": "ec789d1be7d525bf6e498bf61e8a0596ac4582e24e8b45073b3f9ac1cca8b988",
+    "new_identity": "second-opportunity-synthesis-output@1.2.0",
+    "new_sha256": "7d67bad3df06691ba46a4dcc65cbf186bc5825a87719e985637aec68640e1b66",
+    "SEMANTIC_DIFF": [
+      {
+        "path": "properties.evidence_bound_reasoning_summary.maxLength",
+        "old": 900,
+        "new": 1500
+      }
+    ],
+    "field_path": "evidence_bound_reasoning_summary.maxLength",
+    "SCHEMA_FIELDS_ADDED": 0,
+    "SCHEMA_FIELDS_REMOVED": 0,
+    "REQUIREDNESS_CHANGED": false,
+    "ENUMS_CHANGED": false,
+    "MAX_ITEMS_CHANGED": false,
+    "MIN_ITEMS_CHANGED": false,
+    "PATTERNS_CHANGED": false,
+    "ADDITIONAL_PROPERTIES_CHANGED": false,
+    "ALL_OTHER_MAX_LENGTHS_CHANGED": 0,
+    "CONSTRAINTS": 75,
+    "CONSTRAINTS_CHANGED": [
+      "evidence_bound_reasoning_summary maxLength"
+    ],
+    "METADATA_DIFFERENCES": 0,
+    "v1_1_0_edited": false
+  },
+  "FINITE": {
+    "walker_control": "shown v1.2.0 with observed_need's bound removed, it names observed_need",
+    "walker": "infrastructure/scripts/render_second_opportunity_bounded_contract.py: unbounded_paths, Mission 1.84.4's re-derivation",
+    "FINITE_BOUND": true,
+    "UNBOUNDED_REQUIRED_PATHS": 0,
+    "UNBOUNDED_REACHABLE_PATHS": 0,
+    "unbounded_paths_v1_1_0": [],
+    "unbounded_paths_v1_2_0": []
+  },
+  "HEADROOM": {
+    "GENERATION_HEADROOM_POLICY": "TARGET_AT_MOST_80_PERCENT_OF_HARD_MAX_LENGTH",
+    "GENERATION_TARGET_RATIO": "4/5",
+    "ARRAY_HEADROOM_POLICY": "NONE",
+    "rows_v1_1_0": 12,
+    "rows_v1_2_0": 12,
+    "rows_changed": [
+      "evidence_bound_reasoning_summary"
+    ],
+    "summary_v1_1_0": {
+      "hard_maximum": 900,
+      "target": 720
+    },
+    "summary_v1_2_0": {
+      "hard_maximum": 1500,
+      "target": 1200
+    },
+    "target_source": "the live schema v1.2.0 maxLength and the existing 4/5 policy, through headroom_table",
+    "every_other_row_identical": true
+  },
+  "BOUNDARIES": {
+    "answer": "the synthetic fixture's valid answer, with its summary replaced by synthetic text",
+    "rows": [
+      {
+        "characters": 1199,
+        "schema_v1_2_0": "PASS",
+        "above_generation_target": false,
+        "violations": []
+      },
+      {
+        "characters": 1200,
+        "schema_v1_2_0": "PASS",
+        "above_generation_target": false,
+        "violations": []
+      },
+      {
+        "characters": 1201,
+        "schema_v1_2_0": "PASS",
+        "above_generation_target": true,
+        "violations": []
+      },
+      {
+        "characters": 1499,
+        "schema_v1_2_0": "PASS",
+        "above_generation_target": true,
+        "violations": []
+      },
+      {
+        "characters": 1500,
+        "schema_v1_2_0": "PASS",
+        "above_generation_target": true,
+        "violations": []
+      },
+      {
+        "characters": 1501,
+        "schema_v1_2_0": "FAIL",
+        "above_generation_target": true,
+        "violations": [
+          "evidence_bound_reasoning_summary: 1501 characters exceeds maxLength 1500"
+        ]
+      }
+    ],
+    "target_diagnostics_authoritative": false
+  },
+  "PERSISTENCE": {
+    "A_model": {
+      "object": "OpportunityHypothesis.reasoning_summary",
+      "source": "packages/opportunity-engine/python/sros_opportunity/hypothesis.py",
+      "type": "str",
+      "length_bound": "NONE"
+    },
+    "B_orm": {
+      "orm": "NONE",
+      "note": "persistence is SQL through psycopg on the write paths below"
+    },
+    "C_database_column": {
+      "migration": "0029_opportunity_hypothesis_persistence.sql",
+      "definition": "reasoning_summary       TEXT        NOT NULL,",
+      "later_migrations_naming_it": 0,
+      "type": "TEXT",
+      "declared_length": null
+    },
+    "D_database_checks": {
+      "migrations_checking_the_column": 0,
+      "observed": {
+        "observed_on": "2026-09-13",
+        "observed_by": "mission-1.84.16",
+        "server_version": "16.4",
+        "column": "research.opportunity_hypothesis_revisions.reasoning_summary",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "atttypmod": -1,
+        "is_nullable": "NO",
+        "check_constraints_naming_the_column": [],
+        "triggers_on_the_table": [],
+        "existing_rows": 2,
+        "existing_longest_value_characters": 1456,
+        "note": "read from information_schema.columns, pg_attribute, pg_constraint and pg_trigger. A text column with no type modifier has no declared length; the two revisions of Opportunity #1 already hold reasoning summaries, the longest 1456 characters"
+      }
+    },
+    "E_serialization": [
+      {
+        "path": "infrastructure/scripts/run_opportunity_synthesis.py",
+        "inserts_the_revision": true,
+        "slices_the_summary": false
+      },
+      {
+        "path": "infrastructure/scripts/reconcile_opportunity_reliability.py",
+        "inserts_the_revision": true,
+        "slices_the_summary": false
+      },
+      {
+        "path": "infrastructure/scripts/run_second_opportunity_execution_v5.py",
+        "stage_9_constructs_the_hypothesis": true,
+        "slices_the_summary": false
+      }
+    ],
+    "F_api_and_domain": {
+      "generated_contracts_carrying_the_summary": 0,
+      "gateway_modules_carrying_the_summary": 0
+    },
+    "G_prose_guard": {
+      "source": "packages/opportunity-engine/python/sros_opportunity/guards.py",
+      "length_sized_numbers": []
+    },
+    "H_literal_900_and_720": [
+      {
+        "path": "packages/opportunity-engine/python/sros_opportunity/synthesis.py",
+        "line": 200,
+        "what": "the summary bound of historical schema v1.0.0, which v1.2.0 does not read"
+      },
+      {
+        "path": "infrastructure/scripts/run_opportunity_synthesis.py",
+        "line": 549,
+        "what": "an output-token count in Mission 1.31's cost estimate, not a character bound"
+      }
+    ],
+    "H_hidden_coupling": "SEMANTIC_GATE_V1_3_0_BINDS_OUTPUT_SCHEMA_V1_1_0",
+    "PERSISTENCE_MAXIMUM_FOR_REASONING_SUMMARY": "NONE_BELOW_THE_POSTGRESQL_TEXT_LIMIT",
+    "source": "the model field, both write paths, stage 9, migration 0029 and the observed catalog",
+    "PERSISTENCE_COMPATIBILITY": "COMPATIBLE",
+    "DATABASE_STORAGE_COMPATIBILITY": "COMPATIBLE",
+    "PERSISTENCE_MODEL_CHANGED": false
+  },
+  "SEMANTIC_GATE": {
+    "identity": "second-opportunity-output-gate@1.3.0",
+    "implementation_sha256": "cc3c490268e6f64a0b2107c2fb0c2fe6a1b1c71ab44c353419cd7d86c4485bf3",
+    "SEMANTIC_GATE_CHANGED": false,
+    "coupling": {
+      "code": "SEMANTIC_GATE_V1_3_0_BINDS_OUTPUT_SCHEMA_V1_1_0",
+      "brief_section": 10,
+      "evaluator": "evaluate_second_opportunity_output_v1_3",
+      "module": "packages/opportunity-engine/python/sros_opportunity/second_opportunity_gate_v1_3.py",
+      "structural_check_line": 225,
+      "structural_check": "schema_violations(dict(output), SECOND_OPPORTUNITY_OUTPUT_SCHEMA_V1_1)",
+      "component_output_schema": "second-opportunity-synthesis-output@1.1.0",
+      "operator_decision_keeps_v1_1_0": true,
+      "gate_77_pins_output_schema_sha256": "ec789d1be7d525bf6e498bf61e8a0596ac4582e24e8b45073b3f9ac1cca8b988",
+      "requires_a_successor_identity": true,
+      "semantic_behaviour_would_change": false,
+      "note": "gate v1.3.0 validates the answer's structure against schema v1.1.0 inside its own evaluator, so the 900 is enforced again at stage 6 whatever stage 5 admits. Admitting a longer summary through stage 6 needs a gate with another identity; v1.3.0 is not mutated in place"
+    },
+    "demonstration": {
+      "answer": "the synthetic fixture's valid answer; no historical answer is used",
+      "control_refusal_reasons": [],
+      "summary": "the fixture's own summary repeated 5 times, so no word is new",
+      "summary_characters": 1189,
+      "schema_v1_2_0_violations": [],
+      "gate_v1_3_0_refusal_reasons": [
+        "second-opportunity-synthesis-output@1.1.0: evidence_bound_reasoning_summary: 1189 characters exceeds maxLength 900"
+      ]
+    }
+  },
+  "NOT_PREPARED": {
+    "stopped_at": "section 10, the semantic-gate audit",
+    "sections_not_executed": [
+      "13 to 15 prompt v1.5.0",
+      "17 exact maximum serialized size under v1.2.0",
+      "18 execution envelope restated",
+      "21 and 22 stages 6 to 9 through a V6 runner",
+      "28 cost recomputation",
+      "29 to 32 execution packet V6 and its runner"
+    ],
+    "files_that_must_not_exist": [
+      "packages/opportunity-engine/python/sros_opportunity/second_opportunity_prompt_v1_5.py",
+      "infrastructure/scripts/run_second_opportunity_execution_v6.py",
+      "infrastructure/scripts/render_second_opportunity_execution_packet_v6.py",
+      "docs/data/second-opportunity-synthesis-prompt-v6.json",
+      "docs/data/second-opportunity-synthesis-execution-packet-v6.json",
+      "docs/data/second-opportunity-synthesis-execution-approval-v6.json"
+    ],
+    "V6_CREATED": false,
+    "EXECUTION_PACKET_V6_SHA256": null,
+    "OPERATOR_EXECUTION_APPROVAL_RECORDED": false,
+    "RESIDUAL_SEMANTIC_LIMITATION_ACCEPTED_FOR_V6": false
+  },
+  "OPTIONS": [
+    {
+      "option": "A gate successor whose only change is the schema it validates against",
+      "what_it_takes": "a new gate identity bound to schema v1.2.0, frozen with its own implementation digest, and shown to judge every case of v1.3.0's test matrix exactly as v1.3.0 does; then prompt v1.5.0 and packet V6 as the brief describes"
+    },
+    {
+      "option": "Keep schema v1.1.0 as the execution contract",
+      "what_it_takes": "nothing changes; the 900 stays, and schema v1.2.0 stays recorded and unused"
+    }
+  ],
+  "RECOMMENDATION": "NONE",
+  "CANONICAL_COUNTERS_BEFORE": {
+    "acquisition.raw_records": 325,
+    "acquisition.normalized_records": 325,
+    "nlp.signals": 60,
+    "research.claims": 91,
+    "research.claim_revisions": 92,
+    "scoring.evidence": 112,
+    "epistemic.reliability_assessments": 4,
+    "scoring.evidence_independence_groups": 0,
+    "research.opportunities": 1,
+    "research.opportunity_hypothesis_revisions": 2,
+    "research.opportunity_hypothesis_evidence": 14,
+    "nlp.embedding_provenance": 0,
+    "registry.source_policy_reviews": 71,
+    "scoring.scores": "ABSENT"
+  },
+  "CANONICAL_COUNTERS_AFTER": {
+    "acquisition.raw_records": 325,
+    "acquisition.normalized_records": 325,
+    "nlp.signals": 60,
+    "research.claims": 91,
+    "research.claim_revisions": 92,
+    "scoring.evidence": 112,
+    "epistemic.reliability_assessments": 4,
+    "scoring.evidence_independence_groups": 0,
+    "research.opportunities": 1,
+    "research.opportunity_hypothesis_revisions": 2,
+    "research.opportunity_hypothesis_evidence": 14,
+    "nlp.embedding_provenance": 0,
+    "registry.source_policy_reviews": 71,
+    "scoring.scores": "ABSENT"
+  },
+  "ACCOUNTING": {
+    "MODEL_CALLS": 0,
+    "PROVIDER_REQUESTS": 0,
+    "MESSAGES_API_REQUESTS": 0,
+    "TOKEN_COUNT_API_REQUESTS": 0,
+    "TED_BYTES_SENT": 0,
+    "CANONICAL_MUTATIONS": 0
+  }
+}
