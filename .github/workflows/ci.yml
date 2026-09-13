@@ -900,6 +900,18 @@ jobs:
       - name: Execution packet V4 is V3's call with prompt v1.3.0 and gate v1.3.0, and matches the live code
         run: uv run python infrastructure/scripts/render_second_opportunity_execution_packet_v4.py --check
 
+      # Mission 1.84.13. The one execution under packet V4, re-derived from what it kept. The gate
+      # refuses: a raw response or parsed output other than the pinned ones that arrived, even with
+      # every digest recomputed; a stop reason, schema verdict, violation length or stage table the
+      # retained answer does not imply; a stage after the failure marked passed; the worst case, a
+      # rounded figure or NOT_ESTABLISHED in place of the reported usage and its cost; a human-review
+      # packet for an answer a machine stage refused; an approval other than the operator's words,
+      # or one that lost a prohibition, a withheld change or its residual-risk bounds; V1's, V2's or
+      # V3's record edited or unspent; a runner that would execute V1 to V4 again; any persistence,
+      # canonical mutation or moved counter; and a credential shape anywhere.
+      - name: The V4 execution record matches its approval, its retained response and the runner
+        run: uv run python infrastructure/scripts/render_second_opportunity_execution_record_v4.py --check
+
       # Mission 1.84.2. The one approved provider request happened and its output was rejected
       # at schema validation. The gate refuses: an approval recovered from a failure, or a
       # consumed-approval list that does not name V1's digest with a request against it; a
