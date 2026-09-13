@@ -1,0 +1,2353 @@
+{
+  "$comment": "Mission 1.84.19. The provider-strict projection of output schema v1.2.0 and everything said about it, re-derived by CI gate 92. The contract keeps deciding stage 5 locally; this projection is what a strict tool would carry, and nothing more.",
+  "record_version": "second-opportunity-provider-strict-projection-record@1.0.0",
+  "mission": "1.84.19",
+  "recorded_by": "mission-1.84.19",
+  "recorded_on": "2026-09-14",
+  "OPERATOR_DECISION": [
+    "KEEP_OUTPUT_SCHEMA_V1_2_0_UNCHANGED",
+    "KEEP_SEMANTIC_GATE_V1_4_0_UNCHANGED",
+    "KEEP_PROMPT_V1_5_0_SEMANTICS_UNCHANGED",
+    "KEEP_GENERATION_HEADROOM_4_OVER_5_UNCHANGED",
+    "DO_NOT_REMOVE_ADDITIONAL_PROPERTIES_FALSE",
+    "DO_NOT_ALLOW_UNKNOWN_FIELDS",
+    "DO_NOT_POST_PROCESS_UNKNOWN_FIELDS_AWAY",
+    "INVESTIGATE_AND_PREPARE_PROVIDER_STRICT_TOOL_USE",
+    "USE_A_DETERMINISTIC_PROVIDER_STRICT_SCHEMA_PROJECTION_IF_REQUIRED",
+    "KEEP_THE_FULL_LOCAL_SCHEMA_V1_2_0_AS_THE_AUTHORITATIVE_STAGE_5_CONTRACT"
+  ],
+  "DOCUMENTATION_EVIDENCE": [
+    {
+      "id": "E01",
+      "requested_url": "https://platform.claude.com/docs/en/build-with-claude/structured-outputs.md",
+      "final_url": "https://platform.claude.com/docs/en/build-with-claude/structured-outputs.md",
+      "redirected": false,
+      "http_status": 200,
+      "retrieved_at": "2026-09-13T20:12:13Z",
+      "bytes": 110492,
+      "sha256": "4e500fed30c759764ba06bcd96b9df7160ecb8e5e7611aae9bc229086e0b9204",
+      "first_party": true
+    },
+    {
+      "id": "E02",
+      "requested_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/strict-tool-use.md",
+      "final_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/strict-tool-use.md",
+      "redirected": false,
+      "http_status": 200,
+      "retrieved_at": "2026-09-13T20:12:14Z",
+      "bytes": 40202,
+      "sha256": "96c6f3246a419d99bad3266755ca942160e56cbbc24fb4c84c0a6bc86eaaed9a",
+      "first_party": true
+    },
+    {
+      "id": "E03",
+      "requested_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/implement-tool-use.md",
+      "final_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools.md",
+      "redirected": true,
+      "http_status": 200,
+      "retrieved_at": "2026-09-13T20:12:14Z",
+      "bytes": 37555,
+      "sha256": "58d22e8fdeebaf5874019f7aa06bb2950423ef42c0c0043d6ee65a583c172f85",
+      "first_party": true
+    },
+    {
+      "id": "E04",
+      "requested_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview.md",
+      "final_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview.md",
+      "redirected": false,
+      "http_status": 200,
+      "retrieved_at": "2026-09-13T20:12:15Z",
+      "bytes": 38176,
+      "sha256": "87e737a50fa73fe6b55fad499a2b23f16e6c4e1fffad818197e0c112ecb5aae7",
+      "first_party": true
+    }
+  ],
+  "DOCUMENTATION_FETCHES": {
+    "requests": 8,
+    "pages": 4,
+    "failed": [],
+    "third_party_sources": 0,
+    "note": "Each page was read twice: once to review it, and once by the script that recorded the rows above. Both reads of each page gave the same SHA-256. E03 was requested at the path the platform's own pages link to and redirected to define-tools; the redirect is recorded."
+  },
+  "DOCUMENTED_PROPOSITIONS": {
+    "STRICT_TOOL_USE_SUPPORTED": [
+      {
+        "evidence": "E01",
+        "line": 9,
+        "verbatim": "Supported models: `claude-fable-5-1`"
+      },
+      {
+        "evidence": "E01",
+        "line": 9,
+        "verbatim": "`claude-sonnet-5`"
+      },
+      {
+        "evidence": "E01",
+        "line": 16,
+        "verbatim": "* **Strict tool use** (`strict: true`): Guarantee schema validation on tool names and inputs"
+      },
+      {
+        "evidence": "E01",
+        "line": 10,
+        "verbatim": "- Platforms: Claude API"
+      }
+    ],
+    "NO_BETA_HEADER": [
+      {
+        "evidence": "E01",
+        "line": 21,
+        "verbatim": "beta headers are no longer required"
+      }
+    ],
+    "STRICT_FLAG_LOCATION": [
+      {
+        "evidence": "E02",
+        "line": 375,
+        "verbatim": "Set `\"strict\": true` as a top-level property in your tool definition, alongside `name`, `description`, and `input_schema`."
+      }
+    ],
+    "STRICT_TOOL_USE_GUARANTEES_INPUT_SCHEMA_COMPLIANCE": [
+      {
+        "evidence": "E02",
+        "line": 364,
+        "verbatim": "* Tool `input` strictly follows the `input_schema`"
+      },
+      {
+        "evidence": "E01",
+        "line": 2906,
+        "verbatim": "While structured outputs guarantee schema compliance in most cases, there are scenarios where the output may not match your schema:"
+      }
+    ],
+    "SUBSET_SHARED": [
+      {
+        "evidence": "E01",
+        "line": 2816,
+        "verbatim": "Structured outputs support standard JSON Schema with some limitations. Both JSON outputs and strict tool use share these limitations."
+      }
+    ],
+    "TYPES_SUPPORTED": [
+      {
+        "evidence": "E01",
+        "line": 2819,
+        "verbatim": "* All basic types: object, array, string, integer, number, boolean, null"
+      }
+    ],
+    "ENUM_SUPPORTED": [
+      {
+        "evidence": "E01",
+        "line": 2820,
+        "verbatim": "* `enum` (strings, numbers, bools, or nulls only - no complex types"
+      }
+    ],
+    "CONST_SUPPORTED": [
+      {
+        "evidence": "E01",
+        "line": 2821,
+        "verbatim": "* `const`"
+      }
+    ],
+    "REQUIRED_AND_ADDITIONAL_PROPERTIES_FALSE_SUPPORTED": [
+      {
+        "evidence": "E01",
+        "line": 2825,
+        "verbatim": "* `required` and `additionalProperties` (must be set to `false` for objects)"
+      }
+    ],
+    "FORMATS_SUPPORTED": [
+      {
+        "evidence": "E01",
+        "line": 2826,
+        "verbatim": "* String formats: `date-time`, `time`, `date`, `duration`, `email`, `hostname`, `uri`, `ipv4`, `ipv6`, `uuid`"
+      }
+    ],
+    "MIN_ITEMS_0_OR_1": [
+      {
+        "evidence": "E01",
+        "line": 2827,
+        "verbatim": "* Array `minItems` (only values 0 and 1 supported)"
+      }
+    ],
+    "STRING_LENGTH_NOT_SUPPORTED": [
+      {
+        "evidence": "E01",
+        "line": 2835,
+        "verbatim": "* String constraints (`minLength`, `maxLength`)"
+      }
+    ],
+    "ARRAY_MAX_ITEMS_NOT_SUPPORTED": [
+      {
+        "evidence": "E01",
+        "line": 2836,
+        "verbatim": "* Array constraints beyond `minItems` of 0 or 1"
+      }
+    ],
+    "NUMERICAL_NOT_SUPPORTED": [
+      {
+        "evidence": "E01",
+        "line": 2834,
+        "verbatim": "* Numerical constraints (such as `minimum`, `maximum`, `multipleOf`)"
+      }
+    ],
+    "ADDITIONAL_PROPERTIES_OTHER_THAN_FALSE_NOT_SUPPORTED": [
+      {
+        "evidence": "E01",
+        "line": 2837,
+        "verbatim": "* `additionalProperties` set to anything other than `false`"
+      }
+    ],
+    "UNSUPPORTED_FEATURE_IS_A_400": [
+      {
+        "evidence": "E01",
+        "line": 2839,
+        "verbatim": "If you use an unsupported feature, you'll receive a 400 error with details."
+      }
+    ],
+    "PATTERN_PARTIAL": [
+      {
+        "evidence": "E01",
+        "line": 2846,
+        "verbatim": "* Quantifiers: `*`, `+`, `?`, simple `{n,m}` cases"
+      },
+      {
+        "evidence": "E01",
+        "line": 2855,
+        "verbatim": "* Complex `{n,m}` quantifiers with large ranges"
+      },
+      {
+        "evidence": "E01",
+        "line": 2857,
+        "verbatim": "Simple regex patterns work well. Complex patterns may result in 400 errors."
+      }
+    ],
+    "SDK_DESCRIPTION_TRANSFORMATION": [
+      {
+        "evidence": "E01",
+        "line": 1387,
+        "verbatim": "2. **Update descriptions** with constraint info"
+      },
+      {
+        "evidence": "E01",
+        "line": 1390,
+        "verbatim": "5. **Validate responses** against your original schema (with all constraints)"
+      }
+    ],
+    "ENUM_CAPITALIZATION_NOT_GUARANTEED": [
+      {
+        "evidence": "E01",
+        "line": 2927,
+        "verbatim": "Structured outputs don't guarantee the capitalization of string `enum` and `const` values"
+      },
+      {
+        "evidence": "E01",
+        "line": 2936,
+        "verbatim": "This applies to both JSON outputs and strict tool use."
+      }
+    ],
+    "REFUSAL_AND_MAX_TOKENS_MAY_NOT_MATCH": [
+      {
+        "evidence": "E01",
+        "line": 2915,
+        "verbatim": "* The output may not match your schema because the refusal message takes precedence over schema constraints"
+      },
+      {
+        "evidence": "E01",
+        "line": 2922,
+        "verbatim": "* The output may be incomplete and not match your schema"
+      }
+    ],
+    "COMPLEXITY_LIMITS": [
+      {
+        "evidence": "E01",
+        "line": 2948,
+        "verbatim": "| Strict tools per request    | 20    |"
+      },
+      {
+        "evidence": "E01",
+        "line": 2949,
+        "verbatim": "| Optional parameters         | 24    |"
+      },
+      {
+        "evidence": "E01",
+        "line": 2950,
+        "verbatim": "| Parameters with union types | 16    |"
+      },
+      {
+        "evidence": "E01",
+        "line": 2960,
+        "verbatim": "you'll receive a 400 error with the message \"Schema is too complex for compilation.\""
+      },
+      {
+        "evidence": "E01",
+        "line": 2960,
+        "verbatim": "**compilation timeout of 180 seconds**"
+      }
+    ],
+    "FIRST_REQUEST_COMPILATION_LATENCY": [
+      {
+        "evidence": "E01",
+        "line": 2796,
+        "verbatim": "* **First request latency:** The first time you use a specific schema, there is additional latency while the grammar compiles"
+      },
+      {
+        "evidence": "E01",
+        "line": 2798,
+        "verbatim": "* **Automatic caching:** Compiled grammars are cached for 24 hours from last use"
+      }
+    ],
+    "INJECTED_FORMAT_PROMPT": [
+      {
+        "evidence": "E01",
+        "line": 2808,
+        "verbatim": "When using structured outputs, Claude automatically receives an additional system prompt explaining the expected output format."
+      }
+    ],
+    "SCHEMA_CACHED_24H": [
+      {
+        "evidence": "E02",
+        "line": 1120,
+        "verbatim": "Tool schemas are temporarily cached for up to 24 hours since last use. Prompts and responses are not retained beyond the API response."
+      }
+    ],
+    "FORCED_TOOL_USE_RESTRICTIONS": [
+      {
+        "evidence": "E03",
+        "line": 557,
+        "verbatim": "Not every model and setting supports forced tool use."
+      },
+      {
+        "evidence": "E03",
+        "line": 561,
+        "verbatim": "| Manual [extended thinking]"
+      },
+      {
+        "evidence": "E03",
+        "line": 562,
+        "verbatim": "| Claude Fable 5.1 and [Claude Mythos 5.1]"
+      }
+    ],
+    "FORCED_TOOL_USE_WITH_STRICT": [
+      {
+        "evidence": "E03",
+        "line": 867,
+        "verbatim": "combine `tool_choice: {\"type\": \"any\"}` with [strict tool use]"
+      },
+      {
+        "evidence": "E03",
+        "line": 860,
+        "verbatim": "Note that when you have `tool_choice` as `any` or `tool`, the API prefills the assistant message to force a tool to be used."
+      }
+    ],
+    "OVERVIEW_STRICT": [
+      {
+        "evidence": "E04",
+        "line": 749,
+        "verbatim": "Add `strict: true` to your custom tool definitions to ensure Claude's tool calls always match your schema exactly."
+      }
+    ]
+  },
+  "CAPABILITY_FINDINGS": {
+    "STRICT_TOOL_USE_SUPPORTED": {
+      "value": true,
+      "scope": "claude-sonnet-5 on the Claude API",
+      "rests_on": [
+        "STRICT_TOOL_USE_SUPPORTED",
+        "OVERVIEW_STRICT"
+      ]
+    },
+    "STRICT_TOOL_USE_GUARANTEES_INPUT_SCHEMA_COMPLIANCE": {
+      "value": "WITHIN_THE_SUPPORTED_SUBSET_WITH_DOCUMENTED_EXCEPTIONS",
+      "exceptions": [
+        "a refusal (stop_reason refusal) may not match the schema",
+        "an output cut at max_tokens may not match the schema",
+        "the capitalization of enum and const values is not guaranteed"
+      ],
+      "rests_on": [
+        "STRICT_TOOL_USE_GUARANTEES_INPUT_SCHEMA_COMPLIANCE",
+        "REFUSAL_AND_MAX_TOKENS_MAY_NOT_MATCH",
+        "ENUM_CAPITALIZATION_NOT_GUARANTEED"
+      ]
+    },
+    "ADDITIONAL_PROPERTIES_FALSE_SUPPORTED": {
+      "value": true,
+      "note": "must be false for every object; any other value is not supported",
+      "rests_on": [
+        "REQUIRED_AND_ADDITIONAL_PROPERTIES_FALSE_SUPPORTED",
+        "ADDITIONAL_PROPERTIES_OTHER_THAN_FALSE_NOT_SUPPORTED"
+      ]
+    },
+    "REQUIRED_SUPPORTED": {
+      "value": true,
+      "rests_on": [
+        "REQUIRED_AND_ADDITIONAL_PROPERTIES_FALSE_SUPPORTED"
+      ]
+    },
+    "STRING_MAX_LENGTH_SUPPORTED": {
+      "value": false,
+      "note": "minLength and maxLength are not supported; using one is a 400 error",
+      "rests_on": [
+        "STRING_LENGTH_NOT_SUPPORTED",
+        "UNSUPPORTED_FEATURE_IS_A_400"
+      ]
+    },
+    "ARRAY_MAX_ITEMS_SUPPORTED": {
+      "value": false,
+      "note": "only minItems of 0 or 1 is supported",
+      "rests_on": [
+        "ARRAY_MAX_ITEMS_NOT_SUPPORTED",
+        "MIN_ITEMS_0_OR_1"
+      ]
+    },
+    "PATTERN_SUPPORTED": {
+      "value": "PARTIAL_DOCUMENTED_REGEX_SUBSET",
+      "note": "anchors, *, +, ?, character classes, ., \\d, \\w, \\s and groups are listed; simple {n,m} cases are supported and complex ones with large ranges are not, and neither is defined. A pattern carrying a counted quantifier is therefore not established as supported, and all three of the contract's patterns carry one",
+      "rests_on": [
+        "PATTERN_PARTIAL"
+      ]
+    },
+    "ENUM_SUPPORTED": {
+      "value": true,
+      "note": "string, number, boolean or null members; capitalization not guaranteed",
+      "rests_on": [
+        "ENUM_SUPPORTED",
+        "ENUM_CAPITALIZATION_NOT_GUARANTEED"
+      ]
+    },
+    "CONST_SUPPORTED": {
+      "value": true,
+      "rests_on": [
+        "CONST_SUPPORTED"
+      ]
+    },
+    "FORMAT_UUID_SUPPORTED": {
+      "value": true,
+      "rests_on": [
+        "FORMATS_SUPPORTED"
+      ]
+    },
+    "BETA_HEADER_REQUIRED": {
+      "value": false,
+      "rests_on": [
+        "NO_BETA_HEADER"
+      ]
+    },
+    "STRICT_FLAG_LOCATION": {
+      "value": "TOOL_DEFINITION_TOP_LEVEL",
+      "note": "beside name, description and input_schema, never inside input_schema",
+      "rests_on": [
+        "STRICT_FLAG_LOCATION"
+      ]
+    },
+    "FORCED_TOOL_CHOICE_COMPATIBLE": {
+      "value": true,
+      "note": "forced tool_choice is restricted only under manual extended thinking and on Claude Fable 5.1 and Mythos 5.1; claude-sonnet-5 with thinking disabled is neither, and the documentation describes combining forced tool choice with strict tool use",
+      "rests_on": [
+        "FORCED_TOOL_USE_RESTRICTIONS",
+        "FORCED_TOOL_USE_WITH_STRICT"
+      ]
+    },
+    "SYNCHRONOUS_MESSAGES_API_COMPATIBLE": {
+      "value": true,
+      "note": "strict is a property of a tool definition in a Messages API request; the documentation's examples use POST https://api.anthropic.com/v1/messages",
+      "rests_on": [
+        "STRICT_FLAG_LOCATION",
+        "STRICT_TOOL_USE_SUPPORTED"
+      ]
+    },
+    "COMMERCIAL_TERMS_ROUTE": {
+      "value": "UNCHANGED",
+      "note": "strict mode is a request property on the route the provider register already approves, not a new route, a new product or a new data flow",
+      "rests_on": []
+    }
+  },
+  "CAVEATS": [
+    {
+      "caveat": "ENUM_CAPITALIZATION_NOT_GUARANTEED",
+      "handling": "local stage 5 compares enum members exactly, so a case variant is refused"
+    },
+    {
+      "caveat": "REFUSAL_OR_MAX_TOKENS_MAY_NOT_MATCH",
+      "handling": "the completion is read from stop_reason before any parse, unchanged"
+    },
+    {
+      "caveat": "INTERNAL_COMPLEXITY_LIMITS_NOT_VERIFIABLE_WITHOUT_A_PROVIDER_REQUEST",
+      "handling": "the explicit limits hold (1 strict tool, 0 optional parameters, 0 union types); the internal grammar-size limits are undocumented, and a schema too complex to compile is a 400 error the one approved request would spend"
+    },
+    {
+      "caveat": "FIRST_REQUEST_COMPILATION_LATENCY_NOT_ESTABLISHED",
+      "handling": "the first request with a schema waits while its grammar compiles, for an undocumented time up to a 180-second compilation timeout; the 60-second request timeout is kept as frozen, so a long compilation would end the one call"
+    },
+    {
+      "caveat": "INJECTED_FORMAT_PROMPT_TOKENS_NOT_ESTABLISHED",
+      "handling": "the documentation says structured outputs add a system prompt explaining the format; its size is not documented and it is not in the request body the estimate measures"
+    },
+    {
+      "caveat": "TOOL_SCHEMA_CACHED_24_HOURS",
+      "handling": "the projected schema is cached by the provider for up to 24 hours; it carries no TED value, no identifier and no subject, which this gate checks"
+    }
+  ],
+  "CAPABILITY_PROFILE_ID": "anthropic-strict-tool-capability@1.0.0",
+  "CAPABILITY_PROFILE": {
+    "profile_id": "anthropic-strict-tool-capability@1.0.0",
+    "reviewed_on": "2026-09-13",
+    "documentation": [
+      "https://platform.claude.com/docs/en/build-with-claude/structured-outputs",
+      "https://platform.claude.com/docs/en/agents-and-tools/tool-use/strict-tool-use"
+    ],
+    "supported_types": [
+      "array",
+      "boolean",
+      "integer",
+      "null",
+      "number",
+      "object",
+      "string"
+    ],
+    "structural_keywords": [
+      "items",
+      "properties"
+    ],
+    "enforced_keywords": [
+      "additionalProperties",
+      "const",
+      "enum",
+      "format",
+      "minItems",
+      "required",
+      "type"
+    ],
+    "annotation_keywords": [
+      "description"
+    ],
+    "local_only_keywords": [
+      "exclusiveMaximum",
+      "exclusiveMinimum",
+      "maxItems",
+      "maxLength",
+      "maximum",
+      "minLength",
+      "minimum",
+      "multipleOf"
+    ],
+    "supported_formats": [
+      "date",
+      "date-time",
+      "duration",
+      "email",
+      "hostname",
+      "ipv4",
+      "ipv6",
+      "time",
+      "uri",
+      "uuid"
+    ],
+    "supported_min_items": [
+      0,
+      1
+    ],
+    "max_strict_tools": 20,
+    "max_optional_parameters": 24,
+    "max_union_parameters": 16,
+    "strict_flag_location": "TOOL_DEFINITION_TOP_LEVEL",
+    "beta_header_required": false,
+    "enum_capitalization_guaranteed": false,
+    "basis": {
+      "type": "All basic types: object, array, string, integer, number, boolean, null",
+      "required": "`required` and `additionalProperties` (must be set to `false` for objects)",
+      "additionalProperties": "`required` and `additionalProperties` (must be set to `false` for objects)",
+      "enum": "`enum` (strings, numbers, bools, or nulls only - no complex types",
+      "const": "`const`",
+      "format": "String formats: `date-time`, `time`, `date`, `duration`, `email`, `hostname`, `uri`, `ipv4`, `ipv6`, `uuid`",
+      "minItems": "Array `minItems` (only values 0 and 1 supported)",
+      "maxLength": "String constraints (`minLength`, `maxLength`)",
+      "minLength": "String constraints (`minLength`, `maxLength`)",
+      "maxItems": "Array constraints beyond `minItems` of 0 or 1",
+      "minimum": "Numerical constraints (such as `minimum`, `maximum`, `multipleOf`)",
+      "maximum": "Numerical constraints (such as `minimum`, `maximum`, `multipleOf`)",
+      "multipleOf": "Numerical constraints (such as `minimum`, `maximum`, `multipleOf`)",
+      "pattern": "Quantifiers: `*`, `+`, `?`, simple `{n,m}` cases; NOT supported: Complex `{n,m}` quantifiers with large ranges",
+      "description": "a description constrains nothing and is sent unchanged",
+      "properties": "an object's property set, sent exactly",
+      "items": "an array's element schema, projected recursively"
+    }
+  },
+  "CAPABILITY_PROFILE_SHA256": "7f3ed84547d163c330d637f6a0171b527017399bb6738cdcccc55cad08b24313",
+  "CANONICAL_OUTPUT_SCHEMA": {
+    "id": "second-opportunity-synthesis-output@1.2.0",
+    "sha256": "7d67bad3df06691ba46a4dcc65cbf186bc5825a87719e985637aec68640e1b66",
+    "characters": 4906,
+    "authority": "decides stage 5 locally, unchanged"
+  },
+  "PROVIDER_STRICT_INPUT_SCHEMA": {
+    "id": "second-opportunity-provider-strict-input-schema@1.0.0",
+    "sha256": "87028f451205494a948e83740e73b9ca59ce3243f54e24c123b7cc2354c69783",
+    "characters": 4249,
+    "is_not": [
+      "a successor output contract",
+      "a weaker replacement for stage 5",
+      "a persistence contract",
+      "a semantic gate",
+      "authority to discard an unsupported constraint"
+    ],
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision",
+        "subject",
+        "target_actor_if_supported",
+        "observed_need",
+        "candidate_intervention_class",
+        "hypothesis_statement",
+        "supported_dimensions",
+        "unsupported_dimensions",
+        "supporting_evidence_ids",
+        "supporting_claim_ids",
+        "source_families",
+        "independence_status",
+        "reliability_status",
+        "evidence_bound_reasoning_summary",
+        "critical_uncertainties",
+        "commercial_claims_supported",
+        "commercial_claims_not_supported",
+        "recommended_next_evidence",
+        "confidence_classification",
+        "statement_classifications"
+      ],
+      "properties": {
+        "decision": {
+          "type": "string",
+          "enum": [
+            "FORM_HYPOTHESIS",
+            "INSUFFICIENT_EVIDENCE"
+          ]
+        },
+        "subject": {
+          "type": "string"
+        },
+        "target_actor_if_supported": {
+          "type": "string",
+          "description": "The narrowest actor the statements support, or the exact string UNKNOWN_NOT_SUPPORTED if they name none."
+        },
+        "observed_need": {
+          "type": "string"
+        },
+        "candidate_intervention_class": {
+          "type": "string"
+        },
+        "hypothesis_statement": {
+          "type": "string"
+        },
+        "supported_dimensions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "PROBLEM_OR_NEED",
+              "RECURRENCE_OR_FREQUENCY",
+              "ECONOMIC_VALUE",
+              "WILLINGNESS_TO_PAY",
+              "BUYER_OR_BUDGET_EXISTENCE",
+              "MARKET_ACTIVITY",
+              "TREND_OR_CHANGE",
+              "SOLUTION_GAP",
+              "SOLUTION_DISSATISFACTION",
+              "COMPETITIVE_SUPPLY",
+              "AUDIENCE_OR_USAGE",
+              "DISTRIBUTION_SIGNAL",
+              "REGULATORY_OR_STRUCTURAL_DRIVER",
+              "FEASIBILITY_SIGNAL"
+            ],
+            "description": "A member of the canonical EvidenceDimension vocabulary. An unknown dimension is refused however short it is."
+          }
+        },
+        "unsupported_dimensions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "PROBLEM_OR_NEED",
+              "RECURRENCE_OR_FREQUENCY",
+              "ECONOMIC_VALUE",
+              "WILLINGNESS_TO_PAY",
+              "BUYER_OR_BUDGET_EXISTENCE",
+              "MARKET_ACTIVITY",
+              "TREND_OR_CHANGE",
+              "SOLUTION_GAP",
+              "SOLUTION_DISSATISFACTION",
+              "COMPETITIVE_SUPPLY",
+              "AUDIENCE_OR_USAGE",
+              "DISTRIBUTION_SIGNAL",
+              "REGULATORY_OR_STRUCTURAL_DRIVER",
+              "FEASIBILITY_SIGNAL"
+            ],
+            "description": "A member of the canonical EvidenceDimension vocabulary. An unknown dimension is refused however short it is."
+          }
+        },
+        "supporting_evidence_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid",
+            "description": "A canonical Evidence id: the lowercase hyphenated UUID form that `sros_contracts.ids` produces. Prose is impossible here."
+          }
+        },
+        "supporting_claim_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid",
+            "description": "A canonical Claim id: the lowercase hyphenated UUID form that `sros_contracts.ids` produces. Prose is impossible here."
+          }
+        },
+        "source_families": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "A `source_family` registry id, under the slug grammar `registry.registry_entries` enforces. A registry rather than an enum, because a family may be registered without a contract change."
+          }
+        },
+        "independence_status": {
+          "type": "string"
+        },
+        "reliability_status": {
+          "type": "string"
+        },
+        "evidence_bound_reasoning_summary": {
+          "type": "string"
+        },
+        "critical_uncertainties": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "One bounded uncertainty, stated once. Not an essay and not an enum."
+          }
+        },
+        "commercial_claims_supported": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "One concise auditable commercial proposition. The explanation belongs in `evidence_bound_reasoning_summary`, which is already bounded."
+          }
+        },
+        "commercial_claims_not_supported": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "One concise auditable commercial proposition. The explanation belongs in `evidence_bound_reasoning_summary`, which is already bounded."
+          }
+        },
+        "recommended_next_evidence": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "What would have to be OBSERVED next to move a hypothesis forward. Not a plan and not a roadmap."
+        },
+        "confidence_classification": {
+          "type": "string",
+          "enum": [
+            "EXPLORATORY"
+          ],
+          "description": "EXPLORATORY, and nothing else. A label, never a probability."
+        },
+        "statement_classifications": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "statement",
+              "classification"
+            ],
+            "properties": {
+              "statement": {
+                "type": "string"
+              },
+              "classification": {
+                "type": "string",
+                "enum": [
+                  "OBSERVED_OR_EVIDENCE_SUPPORTED",
+                  "HYPOTHESIS_TO_VALIDATE",
+                  "UNKNOWN_REQUIRES_EVIDENCE"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "PROJECTOR": {
+    "version": "anthropic-strict-input-schema-projector@1.0.0",
+    "file": "packages/llm-gateway/python/sros_llm_gateway/providers/anthropic_strict.py",
+    "implementation_sha256": "4eef60b03ac48caf72e337af7e9e1ad07b05d3fe3d14412dfe7ce7287679f02e",
+    "inputs": [
+      "the canonical schema",
+      "the capability profile"
+    ],
+    "reads": "no file, no model output, no execution record"
+  },
+  "TESTS": {
+    "files": {
+      "packages/llm-gateway/python/tests/test_anthropic_strict.py": "397fe3e1614cc7436291924a6b444ebb5508f6620d44b89fade4f6b7b6986a1d",
+      "packages/opportunity-engine/python/tests/test_second_opportunity_provider_strict_projection.py": "d24771194b098af5a74867a055b9ee68f5c5950da90886ae85ff95df8611c327"
+    },
+    "sha256": "fe4abd1cd6512ef70f237bb9ab5dbfc19a657bc5983436fe04ec6c21e0f115d9"
+  },
+  "CONSTRAINT_ACCOUNTING": {
+    "base": "sros_opportunity.output_constraints.constraint_inventory over schema v1.2.0",
+    "constraints": 75,
+    "totals": {
+      "PROVIDER_ENFORCED": 44,
+      "LOCAL_ONLY": 30,
+      "REPRESENTED_IN_DESCRIPTION_AND_LOCAL_ONLY": 1,
+      "UNSUPPORTED_ARCHITECTURE_BLOCKER": 0
+    },
+    "CANONICAL_CONSTRAINTS_ACCOUNTED_FOR": "100_PERCENT",
+    "rows": [
+      {
+        "path": "<root>",
+        "keyword": "type",
+        "canonical_value": "object",
+        "canonical_value_sha256": "626992da9517ee49930ee1340383a0cc334563d9aa429619a17842d0eeecb524",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "object",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "<root>",
+        "keyword": "required",
+        "canonical_value": [
+          "decision",
+          "subject",
+          "target_actor_if_supported",
+          "observed_need",
+          "candidate_intervention_class",
+          "hypothesis_statement",
+          "supported_dimensions",
+          "unsupported_dimensions",
+          "supporting_evidence_ids",
+          "supporting_claim_ids",
+          "source_families",
+          "independence_status",
+          "reliability_status",
+          "evidence_bound_reasoning_summary",
+          "critical_uncertainties",
+          "commercial_claims_supported",
+          "commercial_claims_not_supported",
+          "recommended_next_evidence",
+          "confidence_classification",
+          "statement_classifications"
+        ],
+        "canonical_value_sha256": "25dbd00994b2e264dd5a42528eb0ec4a5084192472c539f9b8b8d021aff350e7",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": [
+          "decision",
+          "subject",
+          "target_actor_if_supported",
+          "observed_need",
+          "candidate_intervention_class",
+          "hypothesis_statement",
+          "supported_dimensions",
+          "unsupported_dimensions",
+          "supporting_evidence_ids",
+          "supporting_claim_ids",
+          "source_families",
+          "independence_status",
+          "reliability_status",
+          "evidence_bound_reasoning_summary",
+          "critical_uncertainties",
+          "commercial_claims_supported",
+          "commercial_claims_not_supported",
+          "recommended_next_evidence",
+          "confidence_classification",
+          "statement_classifications"
+        ],
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "`required` and `additionalProperties` (must be set to `false` for objects)"
+      },
+      {
+        "path": "<root>",
+        "keyword": "additionalProperties",
+        "canonical_value": false,
+        "canonical_value_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": false,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "`required` and `additionalProperties` (must be set to `false` for objects)"
+      },
+      {
+        "path": "decision",
+        "keyword": "type",
+        "canonical_value": "string",
+        "canonical_value_sha256": "e9e5c1c9e4f6277339d1bcde0733a59bd42f8731f449da6dc13010a916930d48",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "string",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "decision",
+        "keyword": "enum",
+        "canonical_value": [
+          "FORM_HYPOTHESIS",
+          "INSUFFICIENT_EVIDENCE"
+        ],
+        "canonical_value_sha256": "6f2579cda71c6f5f982e3e0a6ecb43c06403c475afed97af16e010a3c9f1d645",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": [
+          "FORM_HYPOTHESIS",
+          "INSUFFICIENT_EVIDENCE"
+        ],
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "`enum` (strings, numbers, bools, or nulls only - no complex types"
+      },
+      {
+        "path": "subject",
+        "keyword": "type",
+        "canonical_value": "string",
+        "canonical_value_sha256": "e9e5c1c9e4f6277339d1bcde0733a59bd42f8731f449da6dc13010a916930d48",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "string",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "subject",
+        "keyword": "maxLength",
+        "canonical_value": 80,
+        "canonical_value_sha256": "48449a14a4ff7d79bb7a1b6f3d488eba397c36ef25634c111b49baf362511afc",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "String constraints (`minLength`, `maxLength`)"
+      },
+      {
+        "path": "target_actor_if_supported",
+        "keyword": "type",
+        "canonical_value": "string",
+        "canonical_value_sha256": "e9e5c1c9e4f6277339d1bcde0733a59bd42f8731f449da6dc13010a916930d48",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "string",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "target_actor_if_supported",
+        "keyword": "maxLength",
+        "canonical_value": 200,
+        "canonical_value_sha256": "27badc983df1780b60c2b3fa9d3a19a00e46aac798451f0febdca52920faaddf",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "String constraints (`minLength`, `maxLength`)"
+      },
+      {
+        "path": "target_actor_if_supported",
+        "keyword": "sentinel",
+        "canonical_value": "UNKNOWN_NOT_SUPPORTED",
+        "canonical_value_sha256": "102a79a56b808e6e41ef1eec31888d930961cd906d58ee79dd53d2d8e8418a37",
+        "disposition": "REPRESENTED_IN_DESCRIPTION_AND_LOCAL_ONLY",
+        "projected_value": "The narrowest actor the statements support, or the exact string UNKNOWN_NOT_SUPPORTED if they name none.",
+        "local_enforcement": "NOT_A_SCHEMA_ASSERTION_IN_EITHER_SCHEMA",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "the contract states the sentinel in a description and asserts nothing; the description is sent unchanged"
+      },
+      {
+        "path": "observed_need",
+        "keyword": "type",
+        "canonical_value": "string",
+        "canonical_value_sha256": "e9e5c1c9e4f6277339d1bcde0733a59bd42f8731f449da6dc13010a916930d48",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "string",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "observed_need",
+        "keyword": "maxLength",
+        "canonical_value": 400,
+        "canonical_value_sha256": "26d228663f13a88592a12d16cf9587caab0388b262d6d9f126ed62f9333aca94",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "String constraints (`minLength`, `maxLength`)"
+      },
+      {
+        "path": "candidate_intervention_class",
+        "keyword": "type",
+        "canonical_value": "string",
+        "canonical_value_sha256": "e9e5c1c9e4f6277339d1bcde0733a59bd42f8731f449da6dc13010a916930d48",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "string",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "candidate_intervention_class",
+        "keyword": "maxLength",
+        "canonical_value": 300,
+        "canonical_value_sha256": "983bd614bb5afece5ab3b6023f71147cd7b6bc2314f9d27af7422541c6558389",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "String constraints (`minLength`, `maxLength`)"
+      },
+      {
+        "path": "hypothesis_statement",
+        "keyword": "type",
+        "canonical_value": "string",
+        "canonical_value_sha256": "e9e5c1c9e4f6277339d1bcde0733a59bd42f8731f449da6dc13010a916930d48",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "string",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "hypothesis_statement",
+        "keyword": "maxLength",
+        "canonical_value": 600,
+        "canonical_value_sha256": "284b7e6d788f363f910f7beb1910473e23ce9d6c871f1ce0f31f22a982d48ad4",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "String constraints (`minLength`, `maxLength`)"
+      },
+      {
+        "path": "supported_dimensions",
+        "keyword": "type",
+        "canonical_value": "array",
+        "canonical_value_sha256": "9b2a344820da3e82bfe8dba723e10565e30024d9cd391b853fbadc55f585c909",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "array",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "supported_dimensions",
+        "keyword": "maxItems",
+        "canonical_value": 14,
+        "canonical_value_sha256": "8527a891e224136950ff32ca212b45bc93f69fbb801c3b1ebedac52775f99e61",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "SEMANTICALLY_REDUNDANT_WITH_EXISTING_INSTRUCTION",
+        "basis": "Array constraints beyond `minItems` of 0 or 1"
+      },
+      {
+        "path": "supported_dimensions[]",
+        "keyword": "type",
+        "canonical_value": "string",
+        "canonical_value_sha256": "e9e5c1c9e4f6277339d1bcde0733a59bd42f8731f449da6dc13010a916930d48",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "string",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "supported_dimensions[]",
+        "keyword": "enum",
+        "canonical_value": [
+          "PROBLEM_OR_NEED",
+          "RECURRENCE_OR_FREQUENCY",
+          "ECONOMIC_VALUE",
+          "WILLINGNESS_TO_PAY",
+          "BUYER_OR_BUDGET_EXISTENCE",
+          "MARKET_ACTIVITY",
+          "TREND_OR_CHANGE",
+          "SOLUTION_GAP",
+          "SOLUTION_DISSATISFACTION",
+          "COMPETITIVE_SUPPLY",
+          "AUDIENCE_OR_USAGE",
+          "DISTRIBUTION_SIGNAL",
+          "REGULATORY_OR_STRUCTURAL_DRIVER",
+          "FEASIBILITY_SIGNAL"
+        ],
+        "canonical_value_sha256": "b0ff91e074b6105266592e0fe1211235e05e28e4a8d26c60773a5b99acd37de7",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": [
+          "PROBLEM_OR_NEED",
+          "RECURRENCE_OR_FREQUENCY",
+          "ECONOMIC_VALUE",
+          "WILLINGNESS_TO_PAY",
+          "BUYER_OR_BUDGET_EXISTENCE",
+          "MARKET_ACTIVITY",
+          "TREND_OR_CHANGE",
+          "SOLUTION_GAP",
+          "SOLUTION_DISSATISFACTION",
+          "COMPETITIVE_SUPPLY",
+          "AUDIENCE_OR_USAGE",
+          "DISTRIBUTION_SIGNAL",
+          "REGULATORY_OR_STRUCTURAL_DRIVER",
+          "FEASIBILITY_SIGNAL"
+        ],
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "`enum` (strings, numbers, bools, or nulls only - no complex types"
+      },
+      {
+        "path": "unsupported_dimensions",
+        "keyword": "type",
+        "canonical_value": "array",
+        "canonical_value_sha256": "9b2a344820da3e82bfe8dba723e10565e30024d9cd391b853fbadc55f585c909",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "array",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "unsupported_dimensions",
+        "keyword": "maxItems",
+        "canonical_value": 14,
+        "canonical_value_sha256": "8527a891e224136950ff32ca212b45bc93f69fbb801c3b1ebedac52775f99e61",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "SEMANTICALLY_REDUNDANT_WITH_EXISTING_INSTRUCTION",
+        "basis": "Array constraints beyond `minItems` of 0 or 1"
+      },
+      {
+        "path": "unsupported_dimensions[]",
+        "keyword": "type",
+        "canonical_value": "string",
+        "canonical_value_sha256": "e9e5c1c9e4f6277339d1bcde0733a59bd42f8731f449da6dc13010a916930d48",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "string",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "unsupported_dimensions[]",
+        "keyword": "enum",
+        "canonical_value": [
+          "PROBLEM_OR_NEED",
+          "RECURRENCE_OR_FREQUENCY",
+          "ECONOMIC_VALUE",
+          "WILLINGNESS_TO_PAY",
+          "BUYER_OR_BUDGET_EXISTENCE",
+          "MARKET_ACTIVITY",
+          "TREND_OR_CHANGE",
+          "SOLUTION_GAP",
+          "SOLUTION_DISSATISFACTION",
+          "COMPETITIVE_SUPPLY",
+          "AUDIENCE_OR_USAGE",
+          "DISTRIBUTION_SIGNAL",
+          "REGULATORY_OR_STRUCTURAL_DRIVER",
+          "FEASIBILITY_SIGNAL"
+        ],
+        "canonical_value_sha256": "b0ff91e074b6105266592e0fe1211235e05e28e4a8d26c60773a5b99acd37de7",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": [
+          "PROBLEM_OR_NEED",
+          "RECURRENCE_OR_FREQUENCY",
+          "ECONOMIC_VALUE",
+          "WILLINGNESS_TO_PAY",
+          "BUYER_OR_BUDGET_EXISTENCE",
+          "MARKET_ACTIVITY",
+          "TREND_OR_CHANGE",
+          "SOLUTION_GAP",
+          "SOLUTION_DISSATISFACTION",
+          "COMPETITIVE_SUPPLY",
+          "AUDIENCE_OR_USAGE",
+          "DISTRIBUTION_SIGNAL",
+          "REGULATORY_OR_STRUCTURAL_DRIVER",
+          "FEASIBILITY_SIGNAL"
+        ],
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "`enum` (strings, numbers, bools, or nulls only - no complex types"
+      },
+      {
+        "path": "supporting_evidence_ids",
+        "keyword": "type",
+        "canonical_value": "array",
+        "canonical_value_sha256": "9b2a344820da3e82bfe8dba723e10565e30024d9cd391b853fbadc55f585c909",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "array",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "supporting_evidence_ids",
+        "keyword": "maxItems",
+        "canonical_value": 20,
+        "canonical_value_sha256": "f5ca38f748a1d6eaf726b8a42fb575c3c71f1864a8143301782de13da2d9202b",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "Array constraints beyond `minItems` of 0 or 1"
+      },
+      {
+        "path": "supporting_evidence_ids[]",
+        "keyword": "type",
+        "canonical_value": "string",
+        "canonical_value_sha256": "e9e5c1c9e4f6277339d1bcde0733a59bd42f8731f449da6dc13010a916930d48",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "string",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "supporting_evidence_ids[]",
+        "keyword": "maxLength",
+        "canonical_value": 36,
+        "canonical_value_sha256": "76a50887d8f1c2e9301755428990ad81479ee21c25b43215cf524541e0503269",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "INTERNAL_VALIDATOR_ONLY",
+        "basis": "String constraints (`minLength`, `maxLength`)"
+      },
+      {
+        "path": "supporting_evidence_ids[]",
+        "keyword": "pattern",
+        "canonical_value": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+        "canonical_value_sha256": "bf836037677dad7ca01440958600946e7ea415cb8d64006408a32ccbd4a6fc91",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "a counted quantifier: the documentation supports simple {n,m} cases and excludes complex ones with large ranges without defining either, so support is not established. Basis: Quantifiers: `*`, `+`, `?`, simple `{n,m}` cases; NOT supported: Complex `{n,m}` quantifiers with large ranges"
+      },
+      {
+        "path": "supporting_evidence_ids[]",
+        "keyword": "format",
+        "canonical_value": "uuid",
+        "canonical_value_sha256": "a945e7407a1b885b9f967f4810a675082c52b896a9aed5b93c2ba7cd2a5211f8",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "uuid",
+        "local_enforcement": "NOT_A_SCHEMA_ASSERTION_IN_EITHER_SCHEMA",
+        "prompt_states_it": false,
+        "constraint_class": "INTERNAL_VALIDATOR_ONLY",
+        "basis": "String formats: `date-time`, `time`, `date`, `duration`, `email`, `hostname`, `uri`, `ipv4`, `ipv6`, `uuid`"
+      },
+      {
+        "path": "supporting_claim_ids",
+        "keyword": "type",
+        "canonical_value": "array",
+        "canonical_value_sha256": "9b2a344820da3e82bfe8dba723e10565e30024d9cd391b853fbadc55f585c909",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "array",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "supporting_claim_ids",
+        "keyword": "maxItems",
+        "canonical_value": 20,
+        "canonical_value_sha256": "f5ca38f748a1d6eaf726b8a42fb575c3c71f1864a8143301782de13da2d9202b",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "Array constraints beyond `minItems` of 0 or 1"
+      },
+      {
+        "path": "supporting_claim_ids[]",
+        "keyword": "type",
+        "canonical_value": "string",
+        "canonical_value_sha256": "e9e5c1c9e4f6277339d1bcde0733a59bd42f8731f449da6dc13010a916930d48",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "string",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "supporting_claim_ids[]",
+        "keyword": "maxLength",
+        "canonical_value": 36,
+        "canonical_value_sha256": "76a50887d8f1c2e9301755428990ad81479ee21c25b43215cf524541e0503269",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "INTERNAL_VALIDATOR_ONLY",
+        "basis": "String constraints (`minLength`, `maxLength`)"
+      },
+      {
+        "path": "supporting_claim_ids[]",
+        "keyword": "pattern",
+        "canonical_value": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+        "canonical_value_sha256": "bf836037677dad7ca01440958600946e7ea415cb8d64006408a32ccbd4a6fc91",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "a counted quantifier: the documentation supports simple {n,m} cases and excludes complex ones with large ranges without defining either, so support is not established. Basis: Quantifiers: `*`, `+`, `?`, simple `{n,m}` cases; NOT supported: Complex `{n,m}` quantifiers with large ranges"
+      },
+      {
+        "path": "supporting_claim_ids[]",
+        "keyword": "format",
+        "canonical_value": "uuid",
+        "canonical_value_sha256": "a945e7407a1b885b9f967f4810a675082c52b896a9aed5b93c2ba7cd2a5211f8",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "uuid",
+        "local_enforcement": "NOT_A_SCHEMA_ASSERTION_IN_EITHER_SCHEMA",
+        "prompt_states_it": false,
+        "constraint_class": "INTERNAL_VALIDATOR_ONLY",
+        "basis": "String formats: `date-time`, `time`, `date`, `duration`, `email`, `hostname`, `uri`, `ipv4`, `ipv6`, `uuid`"
+      },
+      {
+        "path": "source_families",
+        "keyword": "type",
+        "canonical_value": "array",
+        "canonical_value_sha256": "9b2a344820da3e82bfe8dba723e10565e30024d9cd391b853fbadc55f585c909",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "array",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "source_families",
+        "keyword": "maxItems",
+        "canonical_value": 10,
+        "canonical_value_sha256": "4a44dc15364204a80fe80e9039455cc1608281820fe2b24f1e5233ade6af1dd5",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "Array constraints beyond `minItems` of 0 or 1"
+      },
+      {
+        "path": "source_families[]",
+        "keyword": "type",
+        "canonical_value": "string",
+        "canonical_value_sha256": "e9e5c1c9e4f6277339d1bcde0733a59bd42f8731f449da6dc13010a916930d48",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "string",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "source_families[]",
+        "keyword": "maxLength",
+        "canonical_value": 128,
+        "canonical_value_sha256": "2747b7c718564ba5f066f0523b03e17f6a496b06851333d2d59ab6d863225848",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "INTERNAL_VALIDATOR_ONLY",
+        "basis": "String constraints (`minLength`, `maxLength`)"
+      },
+      {
+        "path": "source_families[]",
+        "keyword": "pattern",
+        "canonical_value": "^[a-z0-9][a-z0-9._-]{0,127}$",
+        "canonical_value_sha256": "99cb954f6c293b949cc4cf5e417dc1477c6330b531f78f69612277d9d0bc6660",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "a counted quantifier: the documentation supports simple {n,m} cases and excludes complex ones with large ranges without defining either, so support is not established. Basis: Quantifiers: `*`, `+`, `?`, simple `{n,m}` cases; NOT supported: Complex `{n,m}` quantifiers with large ranges"
+      },
+      {
+        "path": "independence_status",
+        "keyword": "type",
+        "canonical_value": "string",
+        "canonical_value_sha256": "e9e5c1c9e4f6277339d1bcde0733a59bd42f8731f449da6dc13010a916930d48",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "string",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "independence_status",
+        "keyword": "maxLength",
+        "canonical_value": 300,
+        "canonical_value_sha256": "983bd614bb5afece5ab3b6023f71147cd7b6bc2314f9d27af7422541c6558389",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "String constraints (`minLength`, `maxLength`)"
+      },
+      {
+        "path": "reliability_status",
+        "keyword": "type",
+        "canonical_value": "string",
+        "canonical_value_sha256": "e9e5c1c9e4f6277339d1bcde0733a59bd42f8731f449da6dc13010a916930d48",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "string",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "reliability_status",
+        "keyword": "maxLength",
+        "canonical_value": 300,
+        "canonical_value_sha256": "983bd614bb5afece5ab3b6023f71147cd7b6bc2314f9d27af7422541c6558389",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "String constraints (`minLength`, `maxLength`)"
+      },
+      {
+        "path": "evidence_bound_reasoning_summary",
+        "keyword": "type",
+        "canonical_value": "string",
+        "canonical_value_sha256": "e9e5c1c9e4f6277339d1bcde0733a59bd42f8731f449da6dc13010a916930d48",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "string",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "evidence_bound_reasoning_summary",
+        "keyword": "maxLength",
+        "canonical_value": 1500,
+        "canonical_value_sha256": "9f69998560dcfd8016442e0a32e959191df095817a164ce844c64ec5a8b0cc1b",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "String constraints (`minLength`, `maxLength`)"
+      },
+      {
+        "path": "critical_uncertainties",
+        "keyword": "type",
+        "canonical_value": "array",
+        "canonical_value_sha256": "9b2a344820da3e82bfe8dba723e10565e30024d9cd391b853fbadc55f585c909",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "array",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "critical_uncertainties",
+        "keyword": "maxItems",
+        "canonical_value": 12,
+        "canonical_value_sha256": "6b51d431df5d7f141cbececcf79edf3dd861c3b4069f0b11661a3eefacbba918",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "Array constraints beyond `minItems` of 0 or 1"
+      },
+      {
+        "path": "critical_uncertainties[]",
+        "keyword": "type",
+        "canonical_value": "string",
+        "canonical_value_sha256": "e9e5c1c9e4f6277339d1bcde0733a59bd42f8731f449da6dc13010a916930d48",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "string",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "critical_uncertainties[]",
+        "keyword": "minLength",
+        "canonical_value": 1,
+        "canonical_value_sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "String constraints (`minLength`, `maxLength`)"
+      },
+      {
+        "path": "critical_uncertainties[]",
+        "keyword": "maxLength",
+        "canonical_value": 500,
+        "canonical_value_sha256": "0604cd3138feed202ef293e062da2f4720f77a05d25ee036a7a01c9cfcdd1f0a",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "String constraints (`minLength`, `maxLength`)"
+      },
+      {
+        "path": "commercial_claims_supported",
+        "keyword": "type",
+        "canonical_value": "array",
+        "canonical_value_sha256": "9b2a344820da3e82bfe8dba723e10565e30024d9cd391b853fbadc55f585c909",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "array",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "commercial_claims_supported",
+        "keyword": "maxItems",
+        "canonical_value": 8,
+        "canonical_value_sha256": "2c624232cdd221771294dfbb310aca000a0df6ac8b66b696d90ef06fdefb64a3",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "Array constraints beyond `minItems` of 0 or 1"
+      },
+      {
+        "path": "commercial_claims_supported[]",
+        "keyword": "type",
+        "canonical_value": "string",
+        "canonical_value_sha256": "e9e5c1c9e4f6277339d1bcde0733a59bd42f8731f449da6dc13010a916930d48",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "string",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "commercial_claims_supported[]",
+        "keyword": "maxLength",
+        "canonical_value": 300,
+        "canonical_value_sha256": "983bd614bb5afece5ab3b6023f71147cd7b6bc2314f9d27af7422541c6558389",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "String constraints (`minLength`, `maxLength`)"
+      },
+      {
+        "path": "commercial_claims_not_supported",
+        "keyword": "type",
+        "canonical_value": "array",
+        "canonical_value_sha256": "9b2a344820da3e82bfe8dba723e10565e30024d9cd391b853fbadc55f585c909",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "array",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "commercial_claims_not_supported",
+        "keyword": "maxItems",
+        "canonical_value": 14,
+        "canonical_value_sha256": "8527a891e224136950ff32ca212b45bc93f69fbb801c3b1ebedac52775f99e61",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "Array constraints beyond `minItems` of 0 or 1"
+      },
+      {
+        "path": "commercial_claims_not_supported[]",
+        "keyword": "type",
+        "canonical_value": "string",
+        "canonical_value_sha256": "e9e5c1c9e4f6277339d1bcde0733a59bd42f8731f449da6dc13010a916930d48",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "string",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "commercial_claims_not_supported[]",
+        "keyword": "maxLength",
+        "canonical_value": 300,
+        "canonical_value_sha256": "983bd614bb5afece5ab3b6023f71147cd7b6bc2314f9d27af7422541c6558389",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "String constraints (`minLength`, `maxLength`)"
+      },
+      {
+        "path": "recommended_next_evidence",
+        "keyword": "type",
+        "canonical_value": "array",
+        "canonical_value_sha256": "9b2a344820da3e82bfe8dba723e10565e30024d9cd391b853fbadc55f585c909",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "array",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "recommended_next_evidence",
+        "keyword": "maxItems",
+        "canonical_value": 8,
+        "canonical_value_sha256": "2c624232cdd221771294dfbb310aca000a0df6ac8b66b696d90ef06fdefb64a3",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "Array constraints beyond `minItems` of 0 or 1"
+      },
+      {
+        "path": "recommended_next_evidence[]",
+        "keyword": "type",
+        "canonical_value": "string",
+        "canonical_value_sha256": "e9e5c1c9e4f6277339d1bcde0733a59bd42f8731f449da6dc13010a916930d48",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "string",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "recommended_next_evidence[]",
+        "keyword": "maxLength",
+        "canonical_value": 300,
+        "canonical_value_sha256": "983bd614bb5afece5ab3b6023f71147cd7b6bc2314f9d27af7422541c6558389",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "String constraints (`minLength`, `maxLength`)"
+      },
+      {
+        "path": "confidence_classification",
+        "keyword": "type",
+        "canonical_value": "string",
+        "canonical_value_sha256": "e9e5c1c9e4f6277339d1bcde0733a59bd42f8731f449da6dc13010a916930d48",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "string",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "confidence_classification",
+        "keyword": "enum",
+        "canonical_value": [
+          "EXPLORATORY"
+        ],
+        "canonical_value_sha256": "e2b340f615efec0d9d8cddbdc02039a08541f70ea0e10ff141ec7ba7f3d45597",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": [
+          "EXPLORATORY"
+        ],
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "`enum` (strings, numbers, bools, or nulls only - no complex types"
+      },
+      {
+        "path": "statement_classifications",
+        "keyword": "type",
+        "canonical_value": "array",
+        "canonical_value_sha256": "9b2a344820da3e82bfe8dba723e10565e30024d9cd391b853fbadc55f585c909",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "array",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "statement_classifications",
+        "keyword": "maxItems",
+        "canonical_value": 24,
+        "canonical_value_sha256": "c2356069e9d1e79ca924378153cfbbfb4d4416b1f99d41a2940bfdb66c5319db",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "Array constraints beyond `minItems` of 0 or 1"
+      },
+      {
+        "path": "statement_classifications[]",
+        "keyword": "type",
+        "canonical_value": "object",
+        "canonical_value_sha256": "626992da9517ee49930ee1340383a0cc334563d9aa429619a17842d0eeecb524",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "object",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "statement_classifications[]",
+        "keyword": "required",
+        "canonical_value": [
+          "statement",
+          "classification"
+        ],
+        "canonical_value_sha256": "642956048110650283e09b8ae9026578ea4665bc75cc7ba1ebbccd7e12afa814",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": [
+          "statement",
+          "classification"
+        ],
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "`required` and `additionalProperties` (must be set to `false` for objects)"
+      },
+      {
+        "path": "statement_classifications[]",
+        "keyword": "additionalProperties",
+        "canonical_value": false,
+        "canonical_value_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": false,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "`required` and `additionalProperties` (must be set to `false` for objects)"
+      },
+      {
+        "path": "statement_classifications[].statement",
+        "keyword": "type",
+        "canonical_value": "string",
+        "canonical_value_sha256": "e9e5c1c9e4f6277339d1bcde0733a59bd42f8731f449da6dc13010a916930d48",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "string",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "statement_classifications[].statement",
+        "keyword": "maxLength",
+        "canonical_value": 300,
+        "canonical_value_sha256": "983bd614bb5afece5ab3b6023f71147cd7b6bc2314f9d27af7422541c6558389",
+        "disposition": "LOCAL_ONLY",
+        "projected_value": null,
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "String constraints (`minLength`, `maxLength`)"
+      },
+      {
+        "path": "statement_classifications[].classification",
+        "keyword": "type",
+        "canonical_value": "string",
+        "canonical_value_sha256": "e9e5c1c9e4f6277339d1bcde0733a59bd42f8731f449da6dc13010a916930d48",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": "string",
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": false,
+        "constraint_class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE",
+        "basis": "All basic types: object, array, string, integer, number, boolean, null"
+      },
+      {
+        "path": "statement_classifications[].classification",
+        "keyword": "enum",
+        "canonical_value": [
+          "OBSERVED_OR_EVIDENCE_SUPPORTED",
+          "HYPOTHESIS_TO_VALIDATE",
+          "UNKNOWN_REQUIRES_EVIDENCE"
+        ],
+        "canonical_value_sha256": "4e678f39d832656581358520c03eab31393530dc2e88932223d9a9c541891677",
+        "disposition": "PROVIDER_ENFORCED",
+        "projected_value": [
+          "OBSERVED_OR_EVIDENCE_SUPPORTED",
+          "HYPOTHESIS_TO_VALIDATE",
+          "UNKNOWN_REQUIRES_EVIDENCE"
+        ],
+        "local_enforcement": "LOCAL_STAGE_5_ASSERTS",
+        "prompt_states_it": true,
+        "constraint_class": "MUST_BE_EXPLICIT_IN_PROMPT",
+        "basis": "`enum` (strings, numbers, bools, or nulls only - no complex types"
+      }
+    ]
+  },
+  "REMOVED_AND_NOT_STATED_IN_THE_PROMPT": {
+    "count": 8,
+    "rows": [
+      {
+        "path": "supported_dimensions",
+        "keyword": "maxItems",
+        "class": "SEMANTICALLY_REDUNDANT_WITH_EXISTING_INSTRUCTION"
+      },
+      {
+        "path": "unsupported_dimensions",
+        "keyword": "maxItems",
+        "class": "SEMANTICALLY_REDUNDANT_WITH_EXISTING_INSTRUCTION"
+      },
+      {
+        "path": "supporting_evidence_ids[]",
+        "keyword": "maxLength",
+        "class": "INTERNAL_VALIDATOR_ONLY"
+      },
+      {
+        "path": "supporting_evidence_ids[]",
+        "keyword": "pattern",
+        "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE"
+      },
+      {
+        "path": "supporting_claim_ids[]",
+        "keyword": "maxLength",
+        "class": "INTERNAL_VALIDATOR_ONLY"
+      },
+      {
+        "path": "supporting_claim_ids[]",
+        "keyword": "pattern",
+        "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE"
+      },
+      {
+        "path": "source_families[]",
+        "keyword": "maxLength",
+        "class": "INTERNAL_VALIDATOR_ONLY"
+      },
+      {
+        "path": "source_families[]",
+        "keyword": "pattern",
+        "class": "PROVIDED_BY_TOOL_SCHEMA_AND_NOT_USEFUL_AS_PROSE"
+      }
+    ],
+    "note": "V6's tool schema carried these bounds; the strict tool schema does not, and the prompt states none of them, by the classification Mission 1.84.8 made of what the prompt must state. A class C bound cannot be exceeded by a duplicate-free answer drawn from a rendered vocabulary; a class D bound sits on a value the model copies; a class B pattern fixes the canonical form of a copied identifier, which the descriptions sent unchanged describe in words and format uuid still constrains for the two id arrays. Local stage 5 enforces every one of them unchanged"
+  },
+  "STRUCTURE_AND_ANNOTATIONS": [
+    {
+      "path": "target_actor_if_supported",
+      "keyword": "description",
+      "canonical_value": "The narrowest actor the statements support, or the exact string UNKNOWN_NOT_SUPPORTED if they name none.",
+      "disposition": "ANNOTATION_CARRIED_UNCHANGED",
+      "projected_value": "The narrowest actor the statements support, or the exact string UNKNOWN_NOT_SUPPORTED if they name none.",
+      "reason": "a description constrains nothing and is sent unchanged"
+    },
+    {
+      "path": "supported_dimensions[]",
+      "keyword": "description",
+      "canonical_value": "A member of the canonical EvidenceDimension vocabulary. An unknown dimension is refused however short it is.",
+      "disposition": "ANNOTATION_CARRIED_UNCHANGED",
+      "projected_value": "A member of the canonical EvidenceDimension vocabulary. An unknown dimension is refused however short it is.",
+      "reason": "a description constrains nothing and is sent unchanged"
+    },
+    {
+      "path": "supported_dimensions",
+      "keyword": "items",
+      "canonical_value": "<schema>",
+      "disposition": "PROVIDER_ENFORCED",
+      "projected_value": "<schema>",
+      "reason": "an array's element schema, projected recursively"
+    },
+    {
+      "path": "unsupported_dimensions[]",
+      "keyword": "description",
+      "canonical_value": "A member of the canonical EvidenceDimension vocabulary. An unknown dimension is refused however short it is.",
+      "disposition": "ANNOTATION_CARRIED_UNCHANGED",
+      "projected_value": "A member of the canonical EvidenceDimension vocabulary. An unknown dimension is refused however short it is.",
+      "reason": "a description constrains nothing and is sent unchanged"
+    },
+    {
+      "path": "unsupported_dimensions",
+      "keyword": "items",
+      "canonical_value": "<schema>",
+      "disposition": "PROVIDER_ENFORCED",
+      "projected_value": "<schema>",
+      "reason": "an array's element schema, projected recursively"
+    },
+    {
+      "path": "supporting_evidence_ids[]",
+      "keyword": "description",
+      "canonical_value": "A canonical Evidence id: the lowercase hyphenated UUID form that `sros_contracts.ids` produces. Prose is impossible here.",
+      "disposition": "ANNOTATION_CARRIED_UNCHANGED",
+      "projected_value": "A canonical Evidence id: the lowercase hyphenated UUID form that `sros_contracts.ids` produces. Prose is impossible here.",
+      "reason": "a description constrains nothing and is sent unchanged"
+    },
+    {
+      "path": "supporting_evidence_ids",
+      "keyword": "items",
+      "canonical_value": "<schema>",
+      "disposition": "PROVIDER_ENFORCED",
+      "projected_value": "<schema>",
+      "reason": "an array's element schema, projected recursively"
+    },
+    {
+      "path": "supporting_claim_ids[]",
+      "keyword": "description",
+      "canonical_value": "A canonical Claim id: the lowercase hyphenated UUID form that `sros_contracts.ids` produces. Prose is impossible here.",
+      "disposition": "ANNOTATION_CARRIED_UNCHANGED",
+      "projected_value": "A canonical Claim id: the lowercase hyphenated UUID form that `sros_contracts.ids` produces. Prose is impossible here.",
+      "reason": "a description constrains nothing and is sent unchanged"
+    },
+    {
+      "path": "supporting_claim_ids",
+      "keyword": "items",
+      "canonical_value": "<schema>",
+      "disposition": "PROVIDER_ENFORCED",
+      "projected_value": "<schema>",
+      "reason": "an array's element schema, projected recursively"
+    },
+    {
+      "path": "source_families[]",
+      "keyword": "description",
+      "canonical_value": "A `source_family` registry id, under the slug grammar `registry.registry_entries` enforces. A registry rather than an enum, because a family may be registered without a contract change.",
+      "disposition": "ANNOTATION_CARRIED_UNCHANGED",
+      "projected_value": "A `source_family` registry id, under the slug grammar `registry.registry_entries` enforces. A registry rather than an enum, because a family may be registered without a contract change.",
+      "reason": "a description constrains nothing and is sent unchanged"
+    },
+    {
+      "path": "source_families",
+      "keyword": "items",
+      "canonical_value": "<schema>",
+      "disposition": "PROVIDER_ENFORCED",
+      "projected_value": "<schema>",
+      "reason": "an array's element schema, projected recursively"
+    },
+    {
+      "path": "critical_uncertainties[]",
+      "keyword": "description",
+      "canonical_value": "One bounded uncertainty, stated once. Not an essay and not an enum.",
+      "disposition": "ANNOTATION_CARRIED_UNCHANGED",
+      "projected_value": "One bounded uncertainty, stated once. Not an essay and not an enum.",
+      "reason": "a description constrains nothing and is sent unchanged"
+    },
+    {
+      "path": "critical_uncertainties",
+      "keyword": "items",
+      "canonical_value": "<schema>",
+      "disposition": "PROVIDER_ENFORCED",
+      "projected_value": "<schema>",
+      "reason": "an array's element schema, projected recursively"
+    },
+    {
+      "path": "commercial_claims_supported[]",
+      "keyword": "description",
+      "canonical_value": "One concise auditable commercial proposition. The explanation belongs in `evidence_bound_reasoning_summary`, which is already bounded.",
+      "disposition": "ANNOTATION_CARRIED_UNCHANGED",
+      "projected_value": "One concise auditable commercial proposition. The explanation belongs in `evidence_bound_reasoning_summary`, which is already bounded.",
+      "reason": "a description constrains nothing and is sent unchanged"
+    },
+    {
+      "path": "commercial_claims_supported",
+      "keyword": "items",
+      "canonical_value": "<schema>",
+      "disposition": "PROVIDER_ENFORCED",
+      "projected_value": "<schema>",
+      "reason": "an array's element schema, projected recursively"
+    },
+    {
+      "path": "commercial_claims_not_supported[]",
+      "keyword": "description",
+      "canonical_value": "One concise auditable commercial proposition. The explanation belongs in `evidence_bound_reasoning_summary`, which is already bounded.",
+      "disposition": "ANNOTATION_CARRIED_UNCHANGED",
+      "projected_value": "One concise auditable commercial proposition. The explanation belongs in `evidence_bound_reasoning_summary`, which is already bounded.",
+      "reason": "a description constrains nothing and is sent unchanged"
+    },
+    {
+      "path": "commercial_claims_not_supported",
+      "keyword": "items",
+      "canonical_value": "<schema>",
+      "disposition": "PROVIDER_ENFORCED",
+      "projected_value": "<schema>",
+      "reason": "an array's element schema, projected recursively"
+    },
+    {
+      "path": "recommended_next_evidence",
+      "keyword": "items",
+      "canonical_value": "<schema>",
+      "disposition": "PROVIDER_ENFORCED",
+      "projected_value": "<schema>",
+      "reason": "an array's element schema, projected recursively"
+    },
+    {
+      "path": "recommended_next_evidence",
+      "keyword": "description",
+      "canonical_value": "What would have to be OBSERVED next to move a hypothesis forward. Not a plan and not a roadmap.",
+      "disposition": "ANNOTATION_CARRIED_UNCHANGED",
+      "projected_value": "What would have to be OBSERVED next to move a hypothesis forward. Not a plan and not a roadmap.",
+      "reason": "a description constrains nothing and is sent unchanged"
+    },
+    {
+      "path": "confidence_classification",
+      "keyword": "description",
+      "canonical_value": "EXPLORATORY, and nothing else. A label, never a probability.",
+      "disposition": "ANNOTATION_CARRIED_UNCHANGED",
+      "projected_value": "EXPLORATORY, and nothing else. A label, never a probability.",
+      "reason": "a description constrains nothing and is sent unchanged"
+    },
+    {
+      "path": "statement_classifications[]",
+      "keyword": "properties",
+      "canonical_value": [
+        "statement",
+        "classification"
+      ],
+      "disposition": "PROVIDER_ENFORCED",
+      "projected_value": [
+        "statement",
+        "classification"
+      ],
+      "reason": "an object's property set, sent exactly"
+    },
+    {
+      "path": "statement_classifications",
+      "keyword": "items",
+      "canonical_value": "<schema>",
+      "disposition": "PROVIDER_ENFORCED",
+      "projected_value": "<schema>",
+      "reason": "an array's element schema, projected recursively"
+    },
+    {
+      "path": "<root>",
+      "keyword": "properties",
+      "canonical_value": [
+        "decision",
+        "subject",
+        "target_actor_if_supported",
+        "observed_need",
+        "candidate_intervention_class",
+        "hypothesis_statement",
+        "supported_dimensions",
+        "unsupported_dimensions",
+        "supporting_evidence_ids",
+        "supporting_claim_ids",
+        "source_families",
+        "independence_status",
+        "reliability_status",
+        "evidence_bound_reasoning_summary",
+        "critical_uncertainties",
+        "commercial_claims_supported",
+        "commercial_claims_not_supported",
+        "recommended_next_evidence",
+        "confidence_classification",
+        "statement_classifications"
+      ],
+      "disposition": "PROVIDER_ENFORCED",
+      "projected_value": [
+        "decision",
+        "subject",
+        "target_actor_if_supported",
+        "observed_need",
+        "candidate_intervention_class",
+        "hypothesis_statement",
+        "supported_dimensions",
+        "unsupported_dimensions",
+        "supporting_evidence_ids",
+        "supporting_claim_ids",
+        "source_families",
+        "independence_status",
+        "reliability_status",
+        "evidence_bound_reasoning_summary",
+        "critical_uncertainties",
+        "commercial_claims_supported",
+        "commercial_claims_not_supported",
+        "recommended_next_evidence",
+        "confidence_classification",
+        "statement_classifications"
+      ],
+      "reason": "an object's property set, sent exactly"
+    }
+  ],
+  "KEYWORD_OCCURRENCES": {
+    "PROVIDER_ENFORCED": 56,
+    "LOCAL_ONLY": 30,
+    "REPRESENTED_IN_DESCRIPTION_AND_LOCAL_ONLY": 0,
+    "UNSUPPORTED_ARCHITECTURE_BLOCKER": 0,
+    "ANNOTATION_CARRIED_UNCHANGED": 11
+  },
+  "INVARIANTS": {
+    "SAME_NODE_PATHS": true,
+    "ROOT_CANONICAL_PROPERTY_NAMES": [
+      "decision",
+      "subject",
+      "target_actor_if_supported",
+      "observed_need",
+      "candidate_intervention_class",
+      "hypothesis_statement",
+      "supported_dimensions",
+      "unsupported_dimensions",
+      "supporting_evidence_ids",
+      "supporting_claim_ids",
+      "source_families",
+      "independence_status",
+      "reliability_status",
+      "evidence_bound_reasoning_summary",
+      "critical_uncertainties",
+      "commercial_claims_supported",
+      "commercial_claims_not_supported",
+      "recommended_next_evidence",
+      "confidence_classification",
+      "statement_classifications"
+    ],
+    "ROOT_PROVIDER_STRICT_PROPERTY_NAMES": [
+      "decision",
+      "subject",
+      "target_actor_if_supported",
+      "observed_need",
+      "candidate_intervention_class",
+      "hypothesis_statement",
+      "supported_dimensions",
+      "unsupported_dimensions",
+      "supporting_evidence_ids",
+      "supporting_claim_ids",
+      "source_families",
+      "independence_status",
+      "reliability_status",
+      "evidence_bound_reasoning_summary",
+      "critical_uncertainties",
+      "commercial_claims_supported",
+      "commercial_claims_not_supported",
+      "recommended_next_evidence",
+      "confidence_classification",
+      "statement_classifications"
+    ],
+    "ROOT_PROPERTY_SETS_EQUAL": true,
+    "ROOT_PROPERTY_COUNT": 20,
+    "OBJECTS": 2,
+    "EVERY_OBJECT_SAME_PROPERTY_NAMES": true,
+    "EVERY_OBJECT_SAME_REQUIRED": true,
+    "EVERY_OBJECT_ADDITIONAL_PROPERTIES_FALSE": true,
+    "SAME_TYPES": true,
+    "SAME_ENUMS": true,
+    "NO_KEYWORD_ADDED": true,
+    "NO_LOCAL_ONLY_KEYWORD_SENT": true,
+    "NO_PROPERTY_NAMED_BY_AN_EARLIER_ANSWER": true,
+    "STRICT_FLAG_NOT_INSIDE_THE_SCHEMA": true,
+    "CARRIES_NO_IDENTIFIER_OR_SUBJECT": true
+  },
+  "DESCRIPTION_POLICY": {
+    "DESCRIPTION_TRANSFORMATION": "NOT_APPLIED",
+    "why": "the provider's SDKs can move removed constraints into descriptions; that is a client convenience, not an API requirement. Every removed bound on text the model composes is already stated in words by prompt v1.5.0, rendered from the same schema, so a description copy would be a second rendering of the same number. The contract's own descriptions are sent unchanged, and none is rewritten or weakened"
+  },
+  "COMPLEXITY": {
+    "strict_tools": 1,
+    "optional_parameters": 0,
+    "union_parameters": 0,
+    "limits": {
+      "strict_tools": 20,
+      "optional_parameters": 24,
+      "union_parameters": 16
+    },
+    "internal_limits": "NOT_VERIFIABLE_WITHOUT_A_PROVIDER_REQUEST"
+  },
+  "SIMULATIONS": [
+    {
+      "case": "a valid synthetic answer",
+      "projection_expected": "PASS",
+      "projection_observed": "PASS",
+      "canonical_expected": "PASS",
+      "canonical_observed": "PASS",
+      "canonical_violations": []
+    },
+    {
+      "case": "an extra root key, 'parameter name': 'value'",
+      "projection_expected": "FAIL",
+      "projection_observed": "FAIL",
+      "canonical_expected": "FAIL",
+      "canonical_observed": "FAIL",
+      "canonical_violations": [
+        "<root>: unknown field 'parameter name'; additionalProperties is false"
+      ]
+    },
+    {
+      "case": "a required field missing",
+      "projection_expected": "FAIL",
+      "projection_observed": "FAIL",
+      "canonical_expected": "FAIL",
+      "canonical_observed": "FAIL",
+      "canonical_violations": [
+        "<root>: missing required field 'subject'"
+      ]
+    },
+    {
+      "case": "a wrong type",
+      "projection_expected": "FAIL",
+      "projection_observed": "FAIL",
+      "canonical_expected": "FAIL",
+      "canonical_observed": "FAIL",
+      "canonical_violations": [
+        "supported_dimensions: expected an array, got str"
+      ]
+    },
+    {
+      "case": "an enum member outside the vocabulary",
+      "projection_expected": "FAIL",
+      "projection_observed": "FAIL",
+      "canonical_expected": "FAIL",
+      "canonical_observed": "FAIL",
+      "canonical_violations": [
+        "decision: 'MAYBE' is not one of the 2 permitted values"
+      ]
+    },
+    {
+      "case": "an extra key inside a classified statement",
+      "projection_expected": "FAIL",
+      "projection_observed": "FAIL",
+      "canonical_expected": "FAIL",
+      "canonical_observed": "FAIL",
+      "canonical_violations": [
+        "statement_classifications[0]: unknown field 'note'; additionalProperties is false"
+      ]
+    },
+    {
+      "case": "a 1500-character summary",
+      "projection_expected": "PASS",
+      "projection_observed": "PASS",
+      "canonical_expected": "PASS",
+      "canonical_observed": "PASS",
+      "canonical_violations": []
+    },
+    {
+      "case": "a 1501-character summary",
+      "projection_expected": "PASS",
+      "projection_observed": "PASS",
+      "canonical_expected": "FAIL",
+      "canonical_observed": "FAIL",
+      "canonical_violations": [
+        "evidence_bound_reasoning_summary: 1501 characters exceeds maxLength 1500"
+      ]
+    },
+    {
+      "case": "25 classified statements against maxItems 24",
+      "projection_expected": "PASS",
+      "projection_observed": "PASS",
+      "canonical_expected": "FAIL",
+      "canonical_observed": "FAIL",
+      "canonical_violations": [
+        "statement_classifications: 25 items exceeds maxItems 24"
+      ]
+    },
+    {
+      "case": "an empty uncertainty against minLength 1",
+      "projection_expected": "PASS",
+      "projection_observed": "PASS",
+      "canonical_expected": "FAIL",
+      "canonical_observed": "FAIL",
+      "canonical_violations": [
+        "critical_uncertainties[0]: 0 characters is below minLength 1"
+      ]
+    },
+    {
+      "case": "a source family outside the slug grammar",
+      "projection_expected": "PASS",
+      "projection_observed": "PASS",
+      "canonical_expected": "FAIL",
+      "canonical_observed": "FAIL",
+      "canonical_violations": [
+        "source_families[0]: 'Not A Slug' does not match ^[a-z0-9][a-z0-9._-]{0,127}$"
+      ]
+    },
+    {
+      "case": "an uppercase Evidence id against the lowercase pattern",
+      "projection_expected": "PASS",
+      "projection_observed": "PASS",
+      "canonical_expected": "FAIL",
+      "canonical_observed": "FAIL",
+      "canonical_violations": [
+        "supporting_evidence_ids[0]: '0000000A-0000-4000-8000-00000000000A' does not match ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      ]
+    }
+  ],
+  "SIMULATION_NOTE": "The projection is simulated with the local validator, which treats format as an annotation; the provider documents enforcing uuid. Nothing here stands in for a provider request.",
+  "TERMINOLOGY": {
+    "PROVIDER_STRICT_SUBSET_COMPLIANCE": "what strict mode can guarantee: a tool input that satisfies the projected schema, within the documented exceptions",
+    "FULL_CANONICAL_SCHEMA_COMPLIANCE": "LOCAL_STAGE_5_ONLY",
+    "not_claimed": "strict mode does not guarantee output schema v1.2.0"
+  },
+  "UNCHANGED": {
+    "OUTPUT_SCHEMA_CHANGED": false,
+    "OUTPUT_SCHEMA_SHA256": "7d67bad3df06691ba46a4dcc65cbf186bc5825a87719e985637aec68640e1b66",
+    "SEMANTIC_GATE_CHANGED": false,
+    "SEMANTIC_GATE_IMPLEMENTATION_SHA256": "eb03899bbf7cc56f51994679dc4514f5c3c7ef63f4b6126aeb19ff18ccb160bb",
+    "PERSISTENCE_CONTRACT_CHANGED": false,
+    "PROMPT_SEMANTICS_CHANGED": false,
+    "ADDITIONAL_PROPERTIES_FALSE_KEPT_IN_THE_CONTRACT": true,
+    "UNKNOWN_FIELDS_POST_PROCESSED": false,
+    "REASONING_SUMMARY_HARD_MAX": 1500
+  },
+  "V6": {
+    "replayed_through_the_projection": false,
+    "note": "V6's retained answer is evidence and is not run through this projection, repaired or reclassified. The synthetic extra-key case reproduces its shape, not its bytes"
+  },
+  "FREEZE": {
+    "CAPABILITY_PROFILE_SHA256": "7f3ed84547d163c330d637f6a0171b527017399bb6738cdcccc55cad08b24313",
+    "STRICT_PROJECTION_SHA256": "87028f451205494a948e83740e73b9ca59ce3243f54e24c123b7cc2354c69783",
+    "PROJECTOR_IMPLEMENTATION_SHA256": "4eef60b03ac48caf72e337af7e9e1ad07b05d3fe3d14412dfe7ce7287679f02e",
+    "TEST_SHA256": "fe4abd1cd6512ef70f237bb9ab5dbfc19a657bc5983436fe04ec6c21e0f115d9",
+    "commit": "recorded by the V7 packet, which is prepared only after this freeze is committed, pushed and found on the remote"
+  },
+  "ACCOUNTING": {
+    "MODEL_CALLS": 0,
+    "PROVIDER_REQUESTS": 0,
+    "MESSAGES_API_REQUESTS": 0,
+    "TOKEN_COUNT_API_REQUESTS": 0,
+    "TED_BYTES_SENT": 0,
+    "CANONICAL_MUTATIONS": 0,
+    "DOCUMENTATION_REQUESTS": 8
+  }
+}

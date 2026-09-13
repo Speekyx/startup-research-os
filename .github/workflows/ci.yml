@@ -1026,6 +1026,18 @@ jobs:
       - name: The V6 execution record matches its approval, its retained response and the runner
         run: uv run python infrastructure/scripts/render_second_opportunity_execution_record_v6.py --check
 
+      # Mission 1.84.19. The provider-strict projection of output schema v1.2.0, frozen before any
+      # V7 artifact existed. The gate refuses: a capability finding the recorded documentation does
+      # not state; a canonical constraint without a disposition, a length or count claimed as
+      # provider-enforced, or one neither sent nor enforced locally; a composed bound neither sent
+      # nor stated in the prompt; a projection that adds or drops a property or a required name,
+      # opens an object, widens a type, edits an enum, sends an unsupported keyword or carries the
+      # strict flag inside the schema; a simulation where the contract is not stricter than the
+      # projection; the contract or gate v1.4.0 moved; full canonical compliance attributed to the
+      # provider; and a profile, projection, projector or test that is not the frozen one.
+      - name: The provider-strict projection is the frozen one, and schema v1.2.0 still decides
+        run: uv run python infrastructure/scripts/render_second_opportunity_provider_strict_projection.py --check
+
       # Mission 1.84.2. The one approved provider request happened and its output was rejected
       # at schema validation. The gate refuses: an approval recovered from a failure, or a
       # consumed-approval list that does not name V1's digest with a request against it; a
