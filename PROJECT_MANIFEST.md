@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.151
+Version: 1.152
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.17)
+Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.18)
 
 ---
 
@@ -13,6 +13,30 @@ Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.17)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.152 - 2026-09-13 (Sprint 1 / Mission 1.84.18)
+
+**`EXECUTION_SCHEMA_REJECTED_NO_RETRY`: the one V6 request was made, no length bound was exceeded, and
+the schema refused the answer on a key it does not declare.** The operator approved exactly one
+execution of V6 by its digest `969128dd...`, accepted the recorded V6 process deviation for V6 only and
+renewed the residual semantic-limitation acceptance for this one attempt only, neither a precedent. The
+approval was recorded beside the packet verbatim (228 lines, `c6b6602c...`) after 34 named values were
+compared with the frozen packet; packet V6 was not touched.
+
+All 50 pre-network checks passed under a tripwire and **ONE** request went to the synchronous Messages
+API: HTTP 200 in 33.1 s, `stop_reason tool_use`, **12903 in, 3637 out, 0 thinking, cost 0.062176** of a
+1.31706 ceiling. **STAGE 5 REFUSED IT ON ITS SHAPE, NOT ITS LENGTH**: the tool input carries
+`"parameter name": "value"` as the first of 21 keys beside all 20 declared ones, and schema v1.2.0 is a
+closed object. The summary came back at **1169 characters, within the 1500 and within the 1200
+target**; 11 of 12 composed texts within their target, 1 over target and within bound, 0 over bound.
+Stages 6 to 10 NOT_REACHED; **no retry, no review packet, nothing persisted, the approval spent**, and a
+second `--execute`, tripwired, refused before any network.
+
+**GATE 91** re-derives the record from the retained response, records the violation's details, keeps
+schema v1.1.0 as a diagnostic that may never be a verdict, and pins the raw response, the parsed output,
+the approval and the record, so the key removed and every digest recomputed is still refused. Probe
+**95 caught, 0 escaped, 13 of 13 controls**. 3853 + 5444 tests, 91 gates, 80 new tests, 1 provider
+request, 0 retries, 0 canonical mutation. `mission-1.84.18-report.md`.
 
 ## 1.151 - 2026-09-13 (Sprint 1 / Mission 1.84.17)
 
