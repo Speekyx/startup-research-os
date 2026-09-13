@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.149
+Version: 1.150
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.15)
+Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.16)
 
 ---
 
@@ -13,6 +13,37 @@ Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.15)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.150 - 2026-09-13 (Sprint 1 / Mission 1.84.16)
+
+**`DETERMINISTIC_STAGE_6_TO_9_PATH_NOT_READY`, blocker `SEMANTIC_GATE_V1_3_0_BINDS_OUTPUT_SCHEMA_V1_1_0`:
+the operator's new summary bound is recorded, schema v1.2.0 carries it, persistence can hold it, and
+semantic gate v1.3.0 cannot admit it.** The operator moved `evidence_bound_reasoning_summary.maxLength`
+from 900 to 1500 as a semantic budget they own (`OPERATOR_SEMANTIC_BUDGET`). The decision is recorded
+as their own words (44 lines, `84c83f92...`), and it says the bound was not derived from V3's 868, V4's
+1078 or V5's 1031, and is neither estimated nor proven optimal.
+
+**V5 WAS RECONFIRMED AND LEFT AS IT WAS.** Its record matches every figure, its refusal replays exactly
+under schema v1.1.0 (1031 over 900), and it is not revalidated under v1.2.0 anywhere.
+
+**SCHEMA v1.2.0** (`7d67bad3...`) deep-copies v1.1.0 and moves one number:
+- its semantic diff from v1.1.0 is exactly `properties.evidence_bound_reasoning_summary.maxLength: 900 -> 1500`;
+- it is finite, by a walker first shown to find a path it is given;
+- of the twelve headroom rows, only the summary's moves: 900 / 720 to 1500 / 1200, the target derived;
+- 1199 to 1500 pass and 1501 fails through the live validator.
+
+**PERSISTENCE IS COMPATIBLE.** The model field is a plain `str`, the write paths are SQL that pass the
+summary as it is, the column is `TEXT` with no CHECK, and it already holds a 1456-character summary.
+The only literal 900s on those paths are historical schema v1.0.0 and a token estimate.
+
+**GATE v1.3.0 STOPPED IT (brief section 10).** Unchanged (`cc3c4902...`), it validates structure
+against schema v1.1.0 inside its own evaluator (line 225), by import rather than by a literal. So a
+synthetic 1189-character summary that v1.2.0 admits is refused at stage 6 with exactly v1.1.0's bound.
+**No prompt v1.5.0, no V6 runner and no packet V6 were prepared; gate v1.3.0 was not mutated.**
+
+**GATE 86** rebuilds the record from the live code and the artifacts. Probe **66 caught, 0 escaped, 15
+of 15 controls**. 3853 + 5086 tests, 86 gates, 65 new tests, 0 model calls, 0 provider requests, 0 TED bytes,
+0 canonical mutation. `mission-1.84.16-report.md`.
 
 ## 1.149 - 2026-09-13 (Sprint 1 / Mission 1.84.15)
 

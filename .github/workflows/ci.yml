@@ -951,6 +951,17 @@ jobs:
       - name: The V5 execution record matches its approval, its retained response and the runner
         run: uv run python infrastructure/scripts/render_second_opportunity_execution_record_v5.py --check
 
+      # Mission 1.84.16. The operator's reasoning-summary contract decision, schema v1.2.0, and the
+      # coupling that stopped V6. The gate refuses: a decision other than the operator's words, or
+      # one that calls 1500 derived, estimated or optimal; schema v1.1.0 moved; a v1.2.0 whose
+      # semantic diff is not exactly the one bound, that is not finite, or whose headroom moves
+      # another row; a summary target not derived from 1500 at 4/5; a persistence audit that lost a
+      # layer, a source or a 900 it found; gate v1.3.0 changed, or its coupling to schema v1.1.0 no
+      # longer demonstrated on the synthetic answer; V5 revalidated under v1.2.0 or given a review
+      # packet; a prompt v1.5.0, a V6 runner or a V6 packet; and any network or canonical accounting.
+      - name: The reasoning-summary contract decision, schema v1.2.0 and the gate coupling that stops V6
+        run: uv run python infrastructure/scripts/render_second_opportunity_reasoning_summary_contract.py --check
+
       # Mission 1.84.2. The one approved provider request happened and its output was rejected
       # at schema validation. The gate refuses: an approval recovered from a failure, or a
       # consumed-approval list that does not name V1's digest with a request against it; a
