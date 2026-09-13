@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.150
+Version: 1.151
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.16)
+Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.17)
 
 ---
 
@@ -13,6 +13,39 @@ Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.16)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.151 - 2026-09-13 (Sprint 1 / Mission 1.84.17)
+
+**`SECOND_OPPORTUNITY_EXECUTION_PACKET_V6_READY_FOR_OPERATOR_APPROVAL`: gate v1.4.0 is gate v1.3.0 bound
+to schema v1.2.0, frozen and committed before V6 existed, and V6 is frozen and unapproved.** The operator
+decided, in five lines now carried as data and bound into the V6 digest, to create a successor gate bound
+to schema v1.2.0, keep gate v1.3.0 immutable, keep every non-structural behaviour unchanged, and use
+schema v1.2.0 as the V6 execution contract.
+
+**GATE v1.4.0** (`eb03899b...`) calls v1.3.0 once, recomputes its schema v1.1.0 structural reasons and
+fails closed unless they lead its list, replaces them with v1.2.0's, and keeps every other reason, the
+audit and the notes. It carries no integer literal, and no v1.3.0-pinned file was touched (`cc3c4902...`).
+
+**THE DIFFERENTIAL FOUND NOTHING OUTSIDE THE BOUND.** 104 synthetic cases, and v1.3.0's own 159 tests
+replayed unmodified through both gates: 0 common-domain and 0 non-structural divergences, a verdict
+changed only in the 901 to 1500 band, and 1501 refused naming `@1.2.0` and 1500. **Committed as
+`402a698` before any V6 artifact was rendered; its push failed, the check after it was misread, and it
+reached the remote only at the end, so section 24 is met for the commit and not for the push.**
+
+**PROMPT v1.5.0** (`0713eb80...`): two system lines move, only in their numbers (900 to 1500, 720 and 900
+to 1200 and 1500); every other region is byte-identical; 0 unstated bounds, rules and targets, and the
+same checks refuse v1.4.0 under v1.2.0. **CAPACITY**: v1.2.0 finite, maximum 316929 characters (+7200 =
+600 x 12); the full domain unreachable by monotonic reasoning with no token count; one headroom row
+moves; persistence COMPATIBLE.
+
+**THE V6 RUNNER** takes a 1189-character summary to stage 9, refuses the same with one unsupported
+sentence at stage 6 after stage 5 passes, and refuses 1501 at stage 5. **PACKET V6** `969128dd...`: V5's
+call over v1.2.0, v1.4.0 and v1.5.0, body 31967 (+4), ceiling 1.31706, the residual-risk acceptance not
+carried over, approval NOT recorded; the runner, dry, stops at `OPERATOR_APPROVAL_NOT_RECORDED`.
+
+**GATES 87 TO 90** added, and **GATE 86 re-pointed** from an absence to the decision it asked for.
+Probe **123 caught, 0 escaped, 22 of 22 controls**. 3853 + 5364 tests, 90 gates, 271 new tests, 0 model
+calls, 0 provider requests, 0 token counts, 0 TED bytes, 0 canonical mutation. `mission-1.84.17-report.md`.
 
 ## 1.150 - 2026-09-13 (Sprint 1 / Mission 1.84.16)
 
