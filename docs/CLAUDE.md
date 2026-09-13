@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.148
-Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.13)
+Version: 1.149
+Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.14)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.149 | 2026-09-13 | **SECOND_OPPORTUNITY_EXECUTION_PACKET_V5_READY_FOR_OPERATOR_APPROVAL: a generation target at 4/5 of each composed text's hard maximum, derived from the live schema and stated beside it, field roles, and packet V5 frozen and unapproved.** V4's result accepted and untouched (its two violations reproduced exactly, not rescued); schema v1.1.0, gate v1.3.0 (`cc3c4902...`) and the representation unchanged; the ratio selected by the operator, held as `Fraction(4, 5)`, and not derived from V4 (`V4_VALUES_USED_TO_DERIVE_HEADROOM = false`, enforced: the headroom modules read no file and carry no integer beyond 0, 1, 4, 5, 96). **ONE DERIVATION**: `(hard * 4) // 5` for the twelve composed texts the existing classifications name (the class 300 to 240, the summary 900 to 720); copied ids, closed choices, the `subject` identity and all element counts get none (`ARRAY_HEADROOM_POLICY = NONE`). **A TARGET IS NOT VALIDATION**: target, target + 1 and hard pass, hard + 1 fails, for all twelve and through the V5 runner. **NO DRIFT** across 34 mutations. **PROMPT v1.4.0** (`960955f4...`): v1.3.0 plus one block (targets beside hard maxima, the class named only, the summary a synthesis not a ledger, concision never costing information, a reread with no scratchpad); 0/0/0 unstated bounds, rules and targets; native maxLength enforcement NOT_HELD. **PACKET V5** `da3e7d09...`: V4's call, body 31963, ceiling 1.317056, approval NOT recorded. Probe 127 caught, 0 escaped, 31 of 31 controls (a first run's one escape was an inert probe case, reported and corrected). 3853 + 4946 tests, 84 gates, 103 new tests, 0 model calls. `mission-1.84.14-report.md`. |
 | 1.148 | 2026-09-13 | **EXECUTION_SCHEMA_REJECTED_NO_RETRY: the one V4 request was made, and the v1.1.0 schema refused the answer on two length bounds the prompt states in words.** The operator approved exactly one execution of V4 by its digest `7832b3bc...` and accepted, for that one execution, the documented limit of the vocabulary-bounded semantic gate; the approval was recorded beside the packet verbatim (160 lines, `064b87fc...`) after 30 named values were compared with the frozen packet. All 28 pre-network checks passed and **ONE** request went to the synchronous Messages API: HTTP 200 in 34.1 s, `stop_reason tool_use`, **11599 in, 3950 out, 0 thinking, cost 0.062698** of a 1.312398 ceiling. **STAGE 5 REFUSED IT**: `candidate_intervention_class` 316 characters against 300, `evidence_bound_reasoning_summary` 1078 against 900, both stated in words in prompt v1.3.0 as in v1.2.0, under which V3 met them (224, 868); stages 6 to 10 NOT_REACHED, so the semantic gate v1.3.0 never judged it; **no retry, no review packet, nothing persisted, the approval spent**, and a second `--execute` refused before any network. **GATE 82** re-derives the record and pins the raw response, the parsed output and the approval, so a trimmed, re-digested answer is still refused. Probe 116 caught, 0 escaped, 9 of 9 controls. 3853 + 4843 tests, 82 gates, 31 new tests, 1 provider request, 0 retries, 0 canonical mutation. `mission-1.84.13-report.md`. |
 | 1.147 | 2026-09-13 | **SECOND_OPPORTUNITY_EXECUTION_PACKET_V4_READY_FOR_OPERATOR_APPROVAL: prompt v1.3.0 states every generation-relevant rule of the unchanged gate v1.3.0, stages 6 to 9 were proved on synthetic answers, and packet V4 is frozen and unapproved.** Schema v1.1.0 and gate v1.3.0 (`cc3c4902...`) unchanged; V3 not replayed, not whitelisted, not used to render. **THE CENSUS**: 53 rules (A 30, B 12, C 4, D 7), 46 of 46 refusal sites mapped, 41 fixtures with every refusal claimed exactly once. **PROMPT v1.3.0** (`a62fa218...`): v1.2.0 plus a block rendered from the gate's first-class policy objects and a SOURCE NAMES section of labels already in the representation; 0 class-A rules unstated (v1.2.0: 17); representation `2528a56a...` unchanged. **STAGES 6 TO 9** with the real gate, provenance reading and OpportunityHypothesis: the valid answer reaches 9, failures stop at 6/6/7/8/9. **PACKET V4** `7832b3bc...`: V3's call, ceiling 1.312398, human review required, approval NOT recorded. Probe 205 caught, 0 escaped, 26 of 26 controls. 3853 + 4812 tests, 81 gates, 0 model calls. `mission-1.84.12-report.md`. |
 | 1.146 | 2026-09-13 | **V3_DIAGNOSTIC_REVEALED_GENUINE_OUTPUT_SUPPORT_FAILURE: the inflection asymmetry was repaired in a general way, a source's name stopped counting as evidence, and V3's one remaining refusal is now true.** The operator decided that gate v1.2.0's asymmetry is a gate defect, and that a source name, publisher name, registry label or provenance label is NOT factual support because a domain word occurs inside it. **Gate v1.3.0** built beside v1.1.0 and v1.2.0 in four new modules, synthetic cases only, **frozen and pushed (`0fe3822`) before the one diagnostic replay**, with v1.2.0 still its own freeze and the historical modules still bb0f50a's. **ONE FUNCTION, BOTH SIDES**: `normalize_token`, five written rules for English noun number, each justified by the gated vocabulary; no stemmer, no dependency, irregular and derived forms never collapsed, verb forms verbatim; 46 markers and 60 concept phrases run through both sides, 0 asymmetries, 0 metadata leaks. **FOUR SUPPORT ORIGINS**: content and metadata split, labels through an explicit registry-built channel that licenses only their own whole occurrence as a name, an undeclared source refused by name; ADR-040 and the evidence-boundary decision, owner OPERATOR, type EVIDENCE_BOUNDARY, not derived; an OBSERVED disjunction fails closed. **THE REPLAY**, once, from 1.84.10's authenticated snapshot and with no database: v1.1.0's five reasons and v1.2.0's one reproduce exactly; **under v1.3.0 stage 6 stops on one field**, `statement_classifications[7]`, whose word *tenders* is supplied only inside *Tenders Electronic Daily (EU public procurement)* and which joins two alternatives under one OBSERVED label. **A genuine support failure of the answer, not a gate defect; stages 7 to 9 not reached; no V4.** Probe **195 caught, 0 escaped, 28 of 29 controls**, the one failed control the probe's own error (the freeze record pins the decision document's digest). **3853 tests**, 4707 pytest, **78 gates**, **244 new tests**, **0 model calls, 0 provider requests, 0 TED bytes, 0 canonical mutation**. `mission-1.84.11-report.md`. |
@@ -2468,6 +2469,35 @@ refused on two length bounds, and nothing about how often any prompt meets them.
 recommends nothing. **Do not re-execute V1, V2, V3 or V4, do not treat the refused answer as a
 candidate, and do not persist Opportunity #2.
 Mission 1.84.14 was not started.**
+
+
+**ANSWERED IN 1.149 (Mission 1.84.14). Every composed text now has a generation target below its hard
+maximum, stated beside it, and V5 awaits an approval.**
+
+    policy       TARGET_AT_MOST_80_PERCENT_OF_HARD_MAX_LENGTH, ratio Fraction(4, 5), the operator's
+    targets      twelve composed texts: 300 -> 240, 900 -> 720, ...; no copied, closed or counted value
+    prompt       v1.4.0 = v1.3.0 + one block (960955f4...)
+    packet V5    da3e7d09..., ceiling 1.317056, approval NOT recorded
+    calls        0 model calls, 0 provider requests, 0 TED bytes
+
+- **A TARGET IS A REQUEST, A BOUND IS A RULE.** The prompt asks for margin below each hard maximum.
+  The validator, the gate and the persistence model do not know targets exist, and an answer over a
+  target and within its bound passes.
+- **ONE FUNCTION, NO SECOND COPY.** Every target is computed from the live bound and the exact ratio,
+  and the policy carries no number that could drift from the schema.
+- **THE RATIO IS A DECISION, NOT A MEASUREMENT.** No historical answer set it, and a record that says
+  otherwise is refused.
+- **CONCISION NEVER COSTS INFORMATION.** The prompt says so in words: a field may exceed its target to
+  stay complete, never its hard maximum.
+- **A FIELD CARRIES ITS OWN INFORMATION ONCE.** The class names a class, and the summary synthesises
+  rather than repeating the lists beside it.
+
+**Next is an operator decision, and nothing was started.** V5 needs an approval naming its digest,
+recorded beside it. A target is a request and not a guarantee, and one call will be one observation. The
+residual semantic limitation accepted for V4 is not carried over: an approval of V5 would say whether it
+accepts it again. **Do not execute V5 without that approval, do not re-execute V1 to V4, do not treat
+V4's answer as a candidate, and do not persist Opportunity #2.
+Mission 1.84.15 was not started.**
 
 
 
