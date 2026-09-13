@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.145
-Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.10)
+Version: 1.146
+Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.11)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.146 | 2026-09-13 | **V3_DIAGNOSTIC_REVEALED_GENUINE_OUTPUT_SUPPORT_FAILURE: the inflection asymmetry was repaired in a general way, a source's name stopped counting as evidence, and V3's one remaining refusal is now true.** The operator decided that gate v1.2.0's asymmetry is a gate defect, and that a source name, publisher name, registry label or provenance label is NOT factual support because a domain word occurs inside it. **Gate v1.3.0** built beside v1.1.0 and v1.2.0 in four new modules, synthetic cases only, **frozen and pushed (`0fe3822`) before the one diagnostic replay**, with v1.2.0 still its own freeze and the historical modules still bb0f50a's. **ONE FUNCTION, BOTH SIDES**: `normalize_token`, five written rules for English noun number, each justified by the gated vocabulary; no stemmer, no dependency, irregular and derived forms never collapsed, verb forms verbatim; 46 markers and 60 concept phrases run through both sides, 0 asymmetries, 0 metadata leaks. **FOUR SUPPORT ORIGINS**: content and metadata split, labels through an explicit registry-built channel that licenses only their own whole occurrence as a name, an undeclared source refused by name; ADR-040 and the evidence-boundary decision, owner OPERATOR, type EVIDENCE_BOUNDARY, not derived; an OBSERVED disjunction fails closed. **THE REPLAY**, once, from 1.84.10's authenticated snapshot and with no database: v1.1.0's five reasons and v1.2.0's one reproduce exactly; **under v1.3.0 stage 6 stops on one field**, `statement_classifications[7]`, whose word *tenders* is supplied only inside *Tenders Electronic Daily (EU public procurement)* and which joins two alternatives under one OBSERVED label. **A genuine support failure of the answer, not a gate defect; stages 7 to 9 not reached; no V4.** Probe **195 caught, 0 escaped, 28 of 29 controls**, the one failed control the probe's own error (the freeze record pins the decision document's digest). **3853 tests**, 4707 pytest, **78 gates**, **244 new tests**, **0 model calls, 0 provider requests, 0 TED bytes, 0 canonical mutation**. `mission-1.84.11-report.md`. |
 | 1.145 | 2026-09-13 | **V3_DIAGNOSTIC_REVEALED_NEXT_EXECUTION_BLOCKER: the semantic gate was repaired in a general way, frozen before V3 was replayed through it, and the replay found a defect in the repair.** Schema v1.1.0 and prompt v1.2.0 unchanged; **gate v1.2.0** built beside v1.1.0 in two new modules, synthetic cases only, **frozen, committed and pushed (`3f8c634`) before the one diagnostic replay**, with `guards.py`, `validation.py`, `second_opportunity.py` and `schema_validation.py` byte-identical and V3's five v1.1.0 reasons reproducing exactly. **ASSERTION, NOT TOKEN PRESENCE**: denials scope their clause, a contrast re-asserts, every schema field has a disposition and a shape so a request that stops being request-shaped is read as an assertion, three typed support channels with trusted context passed explicitly and licensing identifiers only (`BT-161`), the canonical term `market activity` and never the word, SCORED refused in any asserted form, the §20 concepts added and none removed. **THE REPLAY**, DIAGNOSTIC_ONLY, once, through the V3 runner's own stages, re-derived in CI from a snapshot that rebuilds the approved representation and prompt: **the five historical refusals no longer fire, and ONE new refusal does at stage 6**, `statement_classifications[7]` on `'tender'`, a word the supplied statements carry as *Tenders*, because the classifier folds plurals on the answer's side and the licence compares exact tokens. **A defect of the frozen gate, found by the replay, not repaired, and no V4 created.** Probe **139 caught, 0 escaped, 19 of 19 controls**, the plural fix the replay suggests refused as a re-freeze by stealth. **3853 tests**, 4463 pytest, **76 gates**, **219 new tests**, **0 model calls, 0 provider requests, 0 TED bytes, 0 canonical mutation**. `mission-1.84.10-report.md`. |
 | 1.144 | 2026-09-13 | **EXECUTION_SEMANTIC_GATE_REJECTED_NO_RETRY: the one request was made, the schema passed the answer this time, and the semantic gate refused it.** The operator approved exactly one execution of V3 by its digest `c7b8553d...`, recorded beside the packet verbatim and hashed with its 32 prohibitions and the nine things it withholds a change to as data. Every pre-network check passed and **ONE** request went to the synchronous Messages API: HTTP 200 in 34.4 s, `stop_reason tool_use`, **9491 in, 3880 out, 0 thinking, cost 0.057782** of a 1.30565 ceiling. **THE PROMPT ALIGNMENT DID ITS JOB**: stages 1 to 5 passed, the v1.1.0 schema included, and the summary V2 was refused on came in at 868 characters against 900. **THE NEXT GATE REFUSED IT**: the v1.1.0 semantic gate at stage 6, on five reasons; 7 to 10 NOT_REACHED; **no retry, nothing persisted, the approval spent**. **THE REFUSAL, STATED AS FACTS**: three reasons are phrases the forbidden-phrase check refuses wherever they appear, and the answer uses them only in denials, its unsupported-claims list, an UNKNOWN_REQUIRES_EVIDENCE statement and a request for evidence, while `willingness to pay`, `actual expenditure` and `BT-161` appear in the v1.2.0 system region itself; the audit, which reads the supplied statements and not the system region, flagged "market activity" and BT-161 in the summary; a local re-run with no network reproduced all five; nothing changed, nothing recommended. **GATE 74 CHECKS THE REFUSAL THE OTHER WAY ROUND**: the semantic gate needs a packet held in the database, so every retained reason must name text the answer contains and the term locations are recomputed. Probe **152 caught, 0 escaped, 6 of 6 controls**. **3853 tests**, 4244 pytest, **74 gates**, **74 new tests**, **1 provider request, 0 retries, 3604 TED bytes, 0 canonical mutation**. `mission-1.84.9-report.md`. |
 | 1.143 | 2026-09-12 | **SECOND_OPPORTUNITY_EXECUTION_PACKET_V3_READY_FOR_OPERATOR_APPROVAL: the prompt now states every bound the schema enforces, and the one call it permits is frozen and unapproved.** The operator kept the v1.1.0 schema, its gate and the 900-character bound, refused to rescue V2's answer or to choose a maximum from its 1113 characters, and asked for the prompt/schema drift to be removed in a general way. **THE AUDIT WAS GENERAL, AND THE FAILED FIELD WAS THE SYMPTOM**: all 75 constraints in the live schema classified by rule (32 must be explicit, 36 carried by the tool schema, 2 redundant, 5 validator-only); v1.1.0 stated **8 of 32** and left 24 to the tool schema, the 900 among them beside **nine other narrative lengths**, eight maxItems, a minLength, the 20-field required set, the closed object, the `UNKNOWN_NOT_SUPPORTED` sentinel and the classified statement's shape, so **a fix scoped to the 900 would have left every one of them**. **ONE SOURCE OF TRUTH**: `render_output_constraints(schema, notes)` renders the block from the live schema; a note carries no digit, the v1.2.0 section no numeric literal, and a separate `PROMPT_MAX_REASONING_LENGTH = 900` is refused by name; every class-A mutation moves the prompt and no other does. Prompt **v1.2.0** `1677cbe5...`, the change confined to the output-contract block. **THE SCHEMA STILL DECIDES**: 900 passes, 901 fails, and the V3 runner is read as a syntax tree so nothing trims, drops, rewrites or summarises the answer. **V3 IS V2'S CALL WITH THE ALIGNED PROMPT**: `c7b8553d...`, representation `2528a56a...`, `claude-sonnet-5` synchronous with thinking disabled, 128000 (not 3914), 60 s, one call, body 22124 = 20623 + 1501, ceiling **1.30565** (+0.001742), approval recorded **false**; V1 and V2 refused by name, an unseen digest permitted. **THE PROBE FOUND THREE HOLES IN THE NEW GATES**: a sentence appended to what V2's answer was used for, and V2's own history rewritten to make its answer a candidate, now refused by rule with the history pinned by digest; final **197 caught, 0 escaped, 18 of 18 controls**. **3853 tests**, 4170 pytest, **73 gates**, **214 new tests**, **0 model calls, 0 provider requests, 0 TED bytes, 0 canonical mutation**. `mission-1.84.8-report.md`. |
@@ -2373,6 +2374,40 @@ publisher's name supplies, or something else. This mission recommends none of th
 execute anything, do not re-execute V3, do not treat its answer as a candidate, and do not persist
 Opportunity #2.
 Mission 1.84.11 was not started.**
+
+
+**ANSWERED IN 1.146 (Mission 1.84.11). The gate was repaired again, frozen before the replay, and V3's
+one remaining refusal is now true.**
+
+    gate v1.3.0   beside v1.1.0 and v1.2.0; frozen and pushed at 0fe3822 BEFORE the replay
+    V3 v1.1.0     FAILED on the same five reasons, reproduced exactly
+    V3 v1.2.0     FAILED on the same one reason, reproduced exactly
+    V3 v1.3.0     FAILED on one field: a word supplied only in a name, and a disjunction
+    V4            NOT_CREATED
+    calls         0 model calls, 0 provider requests, 0 TED bytes
+
+- **ONE FUNCTION READS BOTH SIDES, OR THE GATE IS NOT SYMMETRIC.** A fold applied to the answer and not
+  to the support refuses a supplied word in its other number. The repair is one function, checked by
+  running every gated term through both sides.
+- **INFLECTION IS NOT STEMMING.** Noun number in written rules, each justified by a gated term.
+  Irregular forms need a reviewed mapping, derived forms are different words, and verb forms stay
+  verbatim.
+- **A SOURCE'S NAME IS PROVENANCE, NEVER A FACT.** A label licenses its own whole occurrence as a name
+  and nothing else. It arrives through an explicit channel built from the registry, and a source with
+  no declared names is refused rather than read whole.
+- **A TRUE REFUSAL IS NOT A GATE DEFECT.** The replay's finding now says where the word was supplied
+  and why that does not count, and the gate is not weakened to rescue the answer that prompted it.
+- **A DISJUNCTION UNDER ONE OBSERVED LABEL FAILS CLOSED**, because the gate evaluates vocabulary and
+  cannot say which alternative the label is about.
+
+**Next is an operator decision, and nothing was started.** V3 is historical and spent. A future
+execution needs a new packet digest, a new approval and an answer whose OBSERVED statements assert
+what the source content says. Stages 7 to 9 are still untested on a real answer under v1.3.0. Whether
+the prompt should say that source names are not evidence, or that disjunctions are refused, is a
+prompt version and the operator's decision. This mission recommends nothing. **Do not execute
+anything, do not re-execute V3, do not treat its answer as a candidate, and do not persist
+Opportunity #2.
+Mission 1.84.12 was not started.**
 
 
 

@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.144
+Version: 1.145
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.10)
+Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.11)
 
 ---
 
@@ -13,6 +13,40 @@ Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.10)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.145 - 2026-09-13 (Sprint 1 / Mission 1.84.11)
+
+**`V3_DIAGNOSTIC_REVEALED_GENUINE_OUTPUT_SUPPORT_FAILURE`: the gate's inflection asymmetry was repaired
+in a general way, a source's name stopped counting as evidence, and V3's one remaining refusal is now
+true.** The operator made two decisions. Gate v1.2.0's asymmetry is a gate defect: it folded plurals on
+the answer's side and compared exact tokens on the supplied side. And a source name, publisher name,
+registry label or provenance label is not factual support because a domain word occurs inside it.
+**Gate v1.3.0** was built beside v1.1.0 and v1.2.0 in four new modules, tested on synthetic cases only,
+and **frozen and pushed (`0fe3822`) before the one diagnostic replay**. Gate v1.2.0 is still its own
+freeze, and the historical modules are still bb0f50a's.
+
+**ONE FUNCTION, BOTH SIDES.** `lexical_inflection.normalize_token` applies five written rules for
+English noun number: the `-s`, `-ies` and `-sses` plurals and two companion singular rules, each
+justified by the gated vocabulary. It is no stemmer and adds no dependency. Irregular and derived forms
+never collapse, and the verb forms a NOT-supported item may not claim stay verbatim. CI gate 77 runs 46
+markers and 60 concept phrases through both sides: 0 asymmetries and 0 metadata leaks.
+
+**FOUR SUPPORT ORIGINS.** The supplied statements split into `SOURCE_CONTENT_STATEMENT` and
+`SOURCE_METADATA_LABEL`, beside the unchanged structural and trusted channels. Labels arrive through an
+explicit channel built from the registry and license only their own whole occurrence, read as a name.
+An undeclared source is refused by name. ADR-040 and the evidence-boundary decision record the
+operator's decision: owner OPERATOR, type EVIDENCE_BOUNDARY, not mathematically derived. An OBSERVED
+statement that joins alternatives fails closed.
+
+**THE REPLAY** ran once, DIAGNOSTIC_ONLY, from Mission 1.84.10's authenticated snapshot and with no
+database. V3's five v1.1.0 reasons and v1.2.0's one reason reproduce exactly. **Under v1.3.0, stage 6
+stops on one field**, `statement_classifications[7]`: *"Transactions or tenders occur in the bounded
+scope of CPV class 9261 notices."* Its word *tenders* is supplied only inside *Tenders Electronic Daily
+(EU public procurement)*, and it joins two alternatives under one OBSERVED label. **That is a genuine
+support failure of the answer, not a gate defect. Stages 7 to 9 were not reached, and no V4 exists.**
+Probe **195 caught, 0 escaped, 28 of 29 controls**; the one failed control was the probe's own error,
+since the freeze record pins the decision document's digest. **3853 tests**, 4707 pytest, **78 gates**, **244 new tests**, **0 model calls, 0 provider
+requests, 0 TED bytes, 0 canonical mutation**. `mission-1.84.11-report.md`.
 
 ## 1.144 - 2026-09-13 (Sprint 1 / Mission 1.84.10)
 
