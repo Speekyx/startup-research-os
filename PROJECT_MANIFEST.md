@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.146
+Version: 1.147
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.12)
+Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.13)
 
 ---
 
@@ -13,6 +13,46 @@ Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.12)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.147 - 2026-09-13 (Sprint 1 / Mission 1.84.13)
+
+**`EXECUTION_SCHEMA_REJECTED_NO_RETRY`: the one V4 request was made, and the v1.1.0 schema refused
+the answer on two length bounds the prompt states in words.** The operator approved exactly one
+execution of `SECOND-OPPORTUNITY-SYNTH-EXEC-V4` v4 by its digest `7832b3bc...`, and accepted, for that
+one execution, the documented limit of the vocabulary-bounded semantic gate. The approval was recorded
+beside the packet, extracted verbatim from the message (160 lines, `064b87fc...`), after 30 named
+values were compared with the frozen packet. It carries 34 prohibitions, 13 withheld changes and the
+bounded risk acceptance as data.
+
+**THE REQUEST.** All 28 pre-network checks passed with no network, and **exactly one** request went to
+the synchronous Messages API:
+- HTTP 200 in 34.1 s, `stop_reason = tool_use`;
+- **11599 input tokens** (16199 estimated), **3950 output, 0 thinking**;
+- **cost 0.062698** against a ceiling of 1.312398.
+
+**THE VERDICT.** Stages 1 to 4 passed. **Stage 5 refused the answer**:
+- `candidate_intervention_class` is 316 characters, against a bound of 300;
+- `evidence_bound_reasoning_summary` is 1078 characters, against 900.
+
+Both bounds are stated in words in prompt v1.3.0, as they were in v1.2.0, under which V3 met them (224
+and 868). Stages 6 to 10 were not reached, so the semantic gate v1.3.0 never judged the answer. **No
+retry, no human-review packet, nothing persisted, and the approval is spent.** A second `--execute`
+was refused before any network with `EXECUTION_APPROVAL_ALREADY_CONSUMED`.
+
+**GATE 82** re-derives the record from what was kept. It pins the raw response, the parsed output and
+the approval by digest, so an answer trimmed and re-digested into a candidate is still refused. Probe
+**116 caught, 0 escaped, 9 of 9 controls**. **3853 tests**, 4843 pytest, **82 gates**, **31 new tests**. **1 provider request, 0 retries, 3604 TED bytes, 0 canonical
+mutation**. `mission-1.84.13-report.md`.
+
+New:
+- `docs/data/second-opportunity-synthesis-execution-approval-v4.json`;
+- `second-opportunity-synthesis-response-v4.json`;
+- `second-opportunity-synthesis-execution-record-v4.json` and its generated `.md`;
+- `infrastructure/scripts/render_second_opportunity_execution_record_v4.py` (CI gate 82);
+- its tests, and `docs/reports/mission-1.84.13-report.md`.
+
+Changed: `docs/CLAUDE.md` 1.147 to 1.148; `.github/workflows/ci.yml` gains one gate. **Packet V4, prompt
+v1.3.0, schema v1.1.0, gate v1.3.0, the V4 runner and V1's, V2's and V3's records are byte-identical.**
 
 ## 1.146 - 2026-09-13 (Sprint 1 / Mission 1.84.12)
 
