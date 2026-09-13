@@ -962,6 +962,19 @@ jobs:
       - name: The reasoning-summary contract decision, schema v1.2.0 and the gate coupling that stops V6
         run: uv run python infrastructure/scripts/render_second_opportunity_reasoning_summary_contract.py --check
 
+      # Mission 1.84.17. The semantic output gate v1.4.0, frozen before execution packet V6 depends
+      # on it. The gate refuses: an implementation or a frozen test file other than the pinned ones;
+      # gate v1.3.0 no longer its own freeze, or any of its files edited; components other than the
+      # gate and the output schema moved; a schema other than v1.2.0, or a v1.2.0 that differs from
+      # v1.1.0 in more than the summary bound; a successor that carries a number, calls gate v1.3.0
+      # other than once, or defines more than its evaluator; any synthetic case whose two verdicts
+      # differ beyond what the one moved leaf explains; the old bound reported by v1.4.0, a band
+      # summary refused structurally, or a semantic violation in the band admitted; one over 1500
+      # not refused by name; gate v1.3.0's own test file, replayed through both gates, failing or
+      # diverging; a V1 to V5 artifact moved or a historical answer used; and any network accounting.
+      - name: Semantic gate v1.4.0 is gate v1.3.0 bound to schema v1.2.0, frozen, and diverges nowhere else
+        run: uv run python infrastructure/scripts/render_second_opportunity_semantic_gate_v1_4.py --check
+
       # Mission 1.84.2. The one approved provider request happened and its output was rejected
       # at schema validation. The gate refuses: an approval recovered from a failure, or a
       # consumed-approval list that does not name V1's digest with a request against it; a
