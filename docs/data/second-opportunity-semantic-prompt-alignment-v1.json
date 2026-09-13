@@ -1,0 +1,2024 @@
+{
+  "$comment": "Mission 1.84.12. The census of gate v1.3.0's deterministic semantic rules, the prompt block rendered from its first-class policy objects, and the checks that bind them. Nothing here reads an answer to render text; CI gate 79 re-derives every field.",
+  "record_version": "second-opportunity-semantic-prompt-alignment@1.0.0",
+  "mission": "mission-1.84.12",
+  "OPERATOR_DECISION": [
+    "KEEP_OUTPUT_SCHEMA_V1_1_0_UNCHANGED",
+    "KEEP_SEMANTIC_GATE_V1_3_0_UNCHANGED",
+    "DO_NOT_REPAIR_GATE_TO_RESCUE_V3",
+    "DO_NOT_WHITELIST_V3",
+    "DO_NOT_TREAT_SOURCE_METADATA_AS_FACTUAL_SUPPORT",
+    "ALIGN_THE_PROMPT_WITH_GENERATION_RELEVANT_SEMANTIC_GATE_RULES",
+    "OBSERVED_STATEMENTS_MUST_BE_ATOMIC_AND_DIRECTLY_SUPPORTED",
+    "OBSERVED_DISJUNCTIONS_MUST_BE_SPLIT_OR_DOWNCLASSIFIED",
+    "SOURCE_NAME_OR_PUBLISHER_LABEL_COUNTS_AS_FACTUAL_SUPPORT = false",
+    "SOURCE_METADATA_MUST_NOT_LICENSE_DOMAIN_ASSERTIONS = true"
+  ],
+  "HISTORY_UNCHANGED": {
+    "docs/data/second-opportunity-synthesis-execution-record-v3.json": "abb093389664405f80878d2a1963beabfa4c271ed559437384146a92ccfb00a3",
+    "docs/data/second-opportunity-synthesis-response-v3.json": "cf5eb183aa7d329f29e8c2c0f04e3939f1661e488952acdf414d07ad8f488ed6",
+    "docs/data/second-opportunity-synthesis-execution-packet-v3.json": "096eb1845e55a8792c4de7f07b35319de61b6e1af52bd9c4544bd2205533b130",
+    "docs/data/second-opportunity-synthesis-execution-approval-v3.json": "9f951e64d9bc93e1dfb907763c2fdfedc1f3df46b48e63acf927fef3671d027c",
+    "docs/data/second-opportunity-synthesis-prompt-v3.json": "f8e6610facf5cfba7b7aed2fd4b3b365187a74a01b9490915ab008760688ab4e",
+    "docs/data/second-opportunity-v3-diagnostic-replay-v1.json": "43ec43831229bd7afc91910bbe371c275f4c1f3a1f4663332b49d90d50f8fb15",
+    "docs/data/second-opportunity-v3-diagnostic-replay-gate-v1.3-v1.json": "43d80c29ea7bab6bc9c60c53bb20f40b232095c42c9ec50d5861f5b7d4c28468",
+    "docs/data/second-opportunity-output-gate-v1.2-freeze-v1.json": "4404336259dd2d18ce905f1c002f2ca5ccff511f9e4988911ea110084bb65cd1",
+    "docs/data/second-opportunity-output-gate-v1.3-freeze-v1.json": "2f0f07540a812b1054fbb5c696c599c934c18695cc85ddbd2dfaae83f38b79f7",
+    "docs/data/source-metadata-evidence-boundary-decision-v1.json": "11af9195da1c9d4aec4cad055d030a07fd515ecbe3019875f6c2e4a0b64cb610",
+    "docs/architecture/adr/ADR-040-source-metadata-is-provenance-not-factual-support.md": "4e28ac6a303d43ade89fc902cffc4bcb82825b7228b76d89903a87d266a3c102",
+    "docs/data/second-opportunity-synthesis-execution-packet-v1.json": "7132fc35ab263b86bbe89016f84fd10e9ed54bcc7fb8b30d072e86279b472241",
+    "docs/data/second-opportunity-synthesis-execution-record-v1.json": "b769ddeb6ea4d4e773640c3ed83caeff52c52c857fd9125325140de4ab38c799",
+    "docs/data/second-opportunity-synthesis-execution-packet-v2.json": "5a2f5a7ea20c6de9d4f50498f304e59b6918db63e5ccc9814f988fd3d4f14871",
+    "docs/data/second-opportunity-synthesis-execution-record-v2.json": "3fb8d5bae0cb2c64e165961518d9dfd3b1de98eef5244600ea0e5efc289001a7"
+  },
+  "RECONFIRMED_FROM_MERGED_ARTIFACTS": {
+    "GATE_V1_1_0_REASONS": 5,
+    "GATE_V1_2_0_REASONS": 1,
+    "GATE_V1_2_0_REASON_TERM": "tender",
+    "GATE_V1_3_0_FAILED_FIELDS": [
+      "statement_classifications[7].statement"
+    ],
+    "GATE_V1_3_0_REFUSED_STATEMENT": "Transactions or tenders occur in the bounded scope of CPV class 9261 notices.",
+    "GATE_V1_3_0_REFUSED_CLASSIFICATION": "OBSERVED_OR_EVIDENCE_SUPPORTED",
+    "GATE_V1_3_0_FINDINGS": [
+      "DISJUNCTIVE_OBSERVED_STATEMENT_REQUIRES_EXPLICIT_SUPPORT_POLICY",
+      "SOURCE_METADATA_LABEL_IS_NOT_FACTUAL_SUPPORT"
+    ],
+    "EVERY_OTHER_FIELD_PASSES": true,
+    "V3_HISTORICALLY_REJECTED": true,
+    "V3_CANDIDATE": false,
+    "V3_PERSISTABLE": false,
+    "V3_HUMAN_REVIEW_PACKET": "NOT_PRODUCED",
+    "V3_APPROVAL_CONSUMED": true
+  },
+  "SEMANTIC_GATE_VERSION": "second-opportunity-output-gate@1.3.0",
+  "SEMANTIC_GATE_IMPLEMENTATION_SHA256": "cc3c490268e6f64a0b2107c2fb0c2fe6a1b1c71ab44c353419cd7d86c4485bf3",
+  "SEMANTIC_GATE_CHANGED": false,
+  "OUTPUT_SCHEMA_VERSION": "second-opportunity-synthesis-output@1.1.0",
+  "OUTPUT_SCHEMA_SHA256": "ec789d1be7d525bf6e498bf61e8a0596ac4582e24e8b45073b3f9ac1cca8b988",
+  "OUTPUT_SCHEMA_CHANGED": false,
+  "PROMPT_V1_2_SHA256": "1677cbe53e83e644fa15e5492cf88e3ec578538351924f2b3a504e27f3a0878d",
+  "PROMPT_V1_2_CHANGED": false,
+  "CENSUS_VERSION": "second-opportunity-semantic-rule-census@1.0.0",
+  "CENSUS": [
+    {
+      "rule_id": "SCHEMA_V1_1_0_VALIDATION",
+      "component": "second-opportunity-output-gate@1.3.0",
+      "fields": [
+        "*"
+      ],
+      "disposition": "STRUCTURAL",
+      "accepts": "an answer the v1.1.0 schema validates",
+      "refuses": "a missing, extra or out-of-bound field, reported by the v1.1.0 validator",
+      "model_controllable": true,
+      "explicit_in_v1_2": true,
+      "v1_2_evidence": [
+        "system",
+        "THE OUTPUT CONTRACT IS BOUNDED, AND AN ANSWER THAT EXCEEDS A BOUND IS REFUSED RATHER THAN TRIMMED."
+      ],
+      "must_be_explicit_in_v1_3": false,
+      "class": "B",
+      "class_name": "STRUCTURAL_AND_ALREADY_EXPRESSED_BY_OUTPUT_CONTRACT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.second_opportunity:SECOND_OPPORTUNITY_OUTPUT_SCHEMA_V1_1"
+      ],
+      "rationale": "the output-contract block v1.2.0 renders from the schema states every generation-relevant bound, so the schema needs no semantic prose",
+      "instruction": null,
+      "refusal_signature": "^second\\-opportunity\\-synthesis\\-output@1\\.1\\.0: "
+    },
+    {
+      "rule_id": "CONFIDENCE_IS_EXPLORATORY",
+      "component": "second-opportunity-output-gate@1.3.0",
+      "fields": [
+        "confidence_classification"
+      ],
+      "disposition": "STRUCTURAL_FACT",
+      "accepts": "EXPLORATORY",
+      "refuses": "any other value on a FORM_HYPOTHESIS answer",
+      "model_controllable": true,
+      "explicit_in_v1_2": true,
+      "v1_2_evidence": [
+        "system",
+        "CONFIDENCE. `confidence_classification` is EXPLORATORY and"
+      ],
+      "must_be_explicit_in_v1_3": false,
+      "class": "B",
+      "class_name": "STRUCTURAL_AND_ALREADY_EXPRESSED_BY_OUTPUT_CONTRACT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.second_opportunity:CONFIDENCE_CLASSIFICATIONS"
+      ],
+      "rationale": "a closed choice of one, rendered by the contract and restated by v1.2.0",
+      "instruction": null,
+      "refusal_signature": "^confidence_classification is "
+    },
+    {
+      "rule_id": "NEXT_EVIDENCE_NOT_EMPTY",
+      "component": "second-opportunity-output-gate@1.3.0",
+      "fields": [
+        "recommended_next_evidence"
+      ],
+      "disposition": "FUTURE_EVIDENCE_REQUEST",
+      "accepts": "at least one item",
+      "refuses": "an empty list on a FORM_HYPOTHESIS answer",
+      "model_controllable": true,
+      "explicit_in_v1_2": false,
+      "v1_2_evidence": null,
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.second_opportunity_gate_v1_3:evaluate_second_opportunity_output_v1_3"
+      ],
+      "rationale": "the schema sets no minimum, and v1.2.0 says what the field names but not that it may not be empty",
+      "instruction": "recommended_next_evidence has at least one item",
+      "refusal_signature": "^recommended_next_evidence is empty"
+    },
+    {
+      "rule_id": "CLASSIFICATIONS_NOT_EMPTY",
+      "component": "second-opportunity-output-gate@1.3.0",
+      "fields": [
+        "statement_classifications"
+      ],
+      "disposition": "LABELLED",
+      "accepts": "at least one classified statement",
+      "refuses": "an empty list on a FORM_HYPOTHESIS answer",
+      "model_controllable": true,
+      "explicit_in_v1_2": false,
+      "v1_2_evidence": null,
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.second_opportunity_gate_v1_3:evaluate_second_opportunity_output_v1_3"
+      ],
+      "rationale": "the schema sets no minimum, and 'classify every substantive statement' does not say the list may not be empty",
+      "instruction": "statement_classifications has at least one item",
+      "refusal_signature": "^statement_classifications is empty"
+    },
+    {
+      "rule_id": "CLASSIFICATION_KINDS_CLOSED",
+      "component": "second-opportunity-output-gate@1.3.0",
+      "fields": [
+        "statement_classifications"
+      ],
+      "disposition": "LABELLED",
+      "accepts": "the three classification labels",
+      "refuses": "any other label",
+      "model_controllable": true,
+      "explicit_in_v1_2": true,
+      "v1_2_evidence": [
+        "system",
+        "classification: exactly one of: OBSERVED_OR_EVIDENCE_SUPPORTED, HYPOTHESIS_TO_VALIDATE, UNKNOWN_REQUIRES_EVIDENCE"
+      ],
+      "must_be_explicit_in_v1_3": false,
+      "class": "B",
+      "class_name": "STRUCTURAL_AND_ALREADY_EXPRESSED_BY_OUTPUT_CONTRACT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.second_opportunity_gate_v1_2:CLASSIFICATION_DISPOSITIONS"
+      ],
+      "rationale": "a closed choice the contract renders member by member",
+      "instruction": null,
+      "refusal_signature": "^statement_classifications carries unknown kinds"
+    },
+    {
+      "rule_id": "SOMETHING_REMAINS_UNKNOWN",
+      "component": "second-opportunity-output-gate@1.3.0",
+      "fields": [
+        "statement_classifications"
+      ],
+      "disposition": "LABELLED",
+      "accepts": "at least one HYPOTHESIS_TO_VALIDATE or UNKNOWN_REQUIRES_EVIDENCE item",
+      "refuses": "a list in which every item is classified OBSERVED_OR_EVIDENCE_SUPPORTED",
+      "model_controllable": true,
+      "explicit_in_v1_2": false,
+      "v1_2_evidence": null,
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.second_opportunity_gate_v1_3:evaluate_second_opportunity_output_v1_3"
+      ],
+      "rationale": "v1.2.0 defines the three classifications and never says one of the other two is required",
+      "instruction": "at least one item of statement_classifications is HYPOTHESIS_TO_VALIDATE or UNKNOWN_REQUIRES_EVIDENCE: a packet this narrow always leaves something to test or something unknown",
+      "refusal_signature": "^every statement is classified as observed"
+    },
+    {
+      "rule_id": "INSUFFICIENT_EVIDENCE_IS_AN_OUTCOME",
+      "component": "opportunity-synthesis-persistence-gate@1.3.0",
+      "fields": [
+        "decision"
+      ],
+      "disposition": "STRUCTURAL_FACT",
+      "accepts": "INSUFFICIENT_EVIDENCE, recorded as a correct outcome that creates no Opportunity",
+      "refuses": "nothing: it ends the gate with no hypothesis formed",
+      "model_controllable": true,
+      "explicit_in_v1_2": true,
+      "v1_2_evidence": [
+        "system",
+        "DECIDE. If the packet supports a narrow hypothesis, answer FORM_HYPOTHESIS."
+      ],
+      "must_be_explicit_in_v1_3": false,
+      "class": "B",
+      "class_name": "STRUCTURAL_AND_ALREADY_EXPRESSED_BY_OUTPUT_CONTRACT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.assertion_audit_v1_3:evaluate_persistence_v1_3"
+      ],
+      "rationale": "v1.2.0's DECIDE paragraph states both answers and prefers the refusal to a hypothesis that needs an unsupplied fact",
+      "instruction": null,
+      "refusal_signature": "^the model answered INSUFFICIENT_EVIDENCE"
+    },
+    {
+      "rule_id": "DECISION_IS_ONE_OF_TWO",
+      "component": "opportunity-synthesis-persistence-gate@1.3.0",
+      "fields": [
+        "decision"
+      ],
+      "disposition": "STRUCTURAL_FACT",
+      "accepts": "FORM_HYPOTHESIS or INSUFFICIENT_EVIDENCE",
+      "refuses": "any other value",
+      "model_controllable": true,
+      "explicit_in_v1_2": true,
+      "v1_2_evidence": [
+        "system",
+        "exactly one of: FORM_HYPOTHESIS, INSUFFICIENT_EVIDENCE"
+      ],
+      "must_be_explicit_in_v1_3": false,
+      "class": "B",
+      "class_name": "STRUCTURAL_AND_ALREADY_EXPRESSED_BY_OUTPUT_CONTRACT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.second_opportunity:SECOND_OPPORTUNITY_OUTPUT_SCHEMA_V1_1"
+      ],
+      "rationale": "a closed choice the contract renders",
+      "instruction": null,
+      "refusal_signature": "^decision .* is not one of the two permitted values"
+    },
+    {
+      "rule_id": "EVERY_SOURCE_DECLARES_ITS_NAMES",
+      "component": "opportunity-synthesis-persistence-gate@1.3.0",
+      "fields": [
+        "*"
+      ],
+      "disposition": "STRUCTURAL",
+      "accepts": "a packet whose every source has registry labels in the metadata channel",
+      "refuses": "a packet source the caller declared no names for",
+      "model_controllable": false,
+      "explicit_in_v1_2": false,
+      "v1_2_evidence": null,
+      "must_be_explicit_in_v1_3": false,
+      "class": "C",
+      "class_name": "VALIDATOR_ONLY_NOT_USEFUL_AS_GENERATION_PROSE",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.support_origin:TypedSupportUniverse.undeclared_sources"
+      ],
+      "rationale": "the caller builds the metadata channel from the registry; no answer can satisfy or break it",
+      "instruction": null,
+      "refusal_signature": "^no source metadata is declared for"
+    },
+    {
+      "rule_id": "SUBJECT_IS_THE_PACKET_IDENTITY",
+      "component": "opportunity-synthesis-persistence-gate@1.3.0",
+      "fields": [
+        "subject"
+      ],
+      "disposition": "STRUCTURAL_FACT",
+      "accepts": "the packet's subject label, exactly",
+      "refuses": "any other subject",
+      "model_controllable": true,
+      "explicit_in_v1_2": false,
+      "v1_2_evidence": null,
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.assertion_audit_v1_3:evaluate_persistence_v1_3"
+      ],
+      "rationale": "the task prints the SUBJECT and never says the field must carry it unchanged",
+      "instruction": "subject is the SUBJECT the task names, copied exactly",
+      "refusal_signature": "^subject is "
+    },
+    {
+      "rule_id": "CITED_EVIDENCE_IN_PACKET",
+      "component": "opportunity-synthesis-persistence-gate@1.3.0",
+      "fields": [
+        "supporting_evidence_ids"
+      ],
+      "disposition": "STRUCTURAL_FACT",
+      "accepts": "Evidence ids the packet supplied",
+      "refuses": "an Evidence id the packet does not carry",
+      "model_controllable": true,
+      "explicit_in_v1_2": true,
+      "v1_2_evidence": [
+        "system",
+        "the ids supplied to you, copied verbatim. No prose, no description, no partial id."
+      ],
+      "must_be_explicit_in_v1_3": false,
+      "class": "B",
+      "class_name": "STRUCTURAL_AND_ALREADY_EXPRESSED_BY_OUTPUT_CONTRACT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.second_opportunity:OUTPUT_CONSTRAINT_NOTES_V1_2"
+      ],
+      "rationale": "the contract's own note says to copy the supplied ids verbatim",
+      "instruction": null,
+      "refusal_signature": "^cited Evidence ids not in the packet"
+    },
+    {
+      "rule_id": "CITED_CLAIMS_IN_PACKET",
+      "component": "opportunity-synthesis-persistence-gate@1.3.0",
+      "fields": [
+        "supporting_claim_ids"
+      ],
+      "disposition": "STRUCTURAL_FACT",
+      "accepts": "Claim ids the packet supplied",
+      "refuses": "a Claim id the packet does not carry",
+      "model_controllable": true,
+      "explicit_in_v1_2": true,
+      "v1_2_evidence": [
+        "system",
+        "the ids supplied to you, copied verbatim. No prose, no description, no partial id."
+      ],
+      "must_be_explicit_in_v1_3": false,
+      "class": "B",
+      "class_name": "STRUCTURAL_AND_ALREADY_EXPRESSED_BY_OUTPUT_CONTRACT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.second_opportunity:OUTPUT_CONSTRAINT_NOTES_V1_2"
+      ],
+      "rationale": "the contract's own note says to copy the supplied ids verbatim",
+      "instruction": null,
+      "refusal_signature": "^cited Claim ids not in the packet"
+    },
+    {
+      "rule_id": "AT_LEAST_ONE_EVIDENCE_CITED",
+      "component": "opportunity-synthesis-persistence-gate@1.3.0",
+      "fields": [
+        "supporting_evidence_ids"
+      ],
+      "disposition": "STRUCTURAL_FACT",
+      "accepts": "at least one cited Evidence id",
+      "refuses": "no Evidence id cited",
+      "model_controllable": true,
+      "explicit_in_v1_2": false,
+      "v1_2_evidence": null,
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.assertion_audit_v1_3:evaluate_persistence_v1_3"
+      ],
+      "rationale": "the schema sets no minimum, and v1.2.0 says which ids may be cited but not that one must be",
+      "instruction": "supporting_evidence_ids cites at least one Evidence id",
+      "refusal_signature": "^no supporting Evidence id was cited"
+    },
+    {
+      "rule_id": "AT_LEAST_ONE_CLAIM_CITED",
+      "component": "opportunity-synthesis-persistence-gate@1.3.0",
+      "fields": [
+        "supporting_claim_ids"
+      ],
+      "disposition": "STRUCTURAL_FACT",
+      "accepts": "at least one cited Claim id",
+      "refuses": "no Claim id cited",
+      "model_controllable": true,
+      "explicit_in_v1_2": false,
+      "v1_2_evidence": null,
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.assertion_audit_v1_3:evaluate_persistence_v1_3"
+      ],
+      "rationale": "the schema sets no minimum, and v1.2.0 says which ids may be cited but not that one must be",
+      "instruction": "supporting_claim_ids cites at least one Claim id",
+      "refusal_signature": "^no supporting Claim id was cited"
+    },
+    {
+      "rule_id": "EVIDENCE_CITED_WITH_ITS_CLAIM",
+      "component": "opportunity-synthesis-persistence-gate@1.3.0",
+      "fields": [
+        "supporting_evidence_ids",
+        "supporting_claim_ids"
+      ],
+      "disposition": "STRUCTURAL_FACT",
+      "accepts": "every cited Evidence id together with the Claim id it is labelled with",
+      "refuses": "an Evidence id cited without its Claim",
+      "model_controllable": true,
+      "explicit_in_v1_2": false,
+      "v1_2_evidence": null,
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.assertion_audit_v1_3:evaluate_persistence_v1_3"
+      ],
+      "rationale": "Evidence is claim-relative; the task labels each pair and never says the pair travels together",
+      "instruction": "every Evidence id in supporting_evidence_ids has the Claim id it is labelled with in supporting_claim_ids",
+      "refusal_signature": "^Evidence \\S+ was cited without its Claim"
+    },
+    {
+      "rule_id": "SOURCE_FAMILIES_FROM_PACKET",
+      "component": "opportunity-synthesis-persistence-gate@1.3.0",
+      "fields": [
+        "source_families"
+      ],
+      "disposition": "STRUCTURAL_FACT",
+      "accepts": "family names the packet supplied",
+      "refuses": "a family the packet does not carry",
+      "model_controllable": true,
+      "explicit_in_v1_2": true,
+      "v1_2_evidence": [
+        "system",
+        "the family names supplied to you as a packet fact, copied verbatim."
+      ],
+      "must_be_explicit_in_v1_3": false,
+      "class": "B",
+      "class_name": "STRUCTURAL_AND_ALREADY_EXPRESSED_BY_OUTPUT_CONTRACT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.second_opportunity:OUTPUT_CONSTRAINT_NOTES_V1_2"
+      ],
+      "rationale": "the contract's own note says to copy the supplied family names verbatim",
+      "instruction": null,
+      "refusal_signature": "^source families the packet does not carry"
+    },
+    {
+      "rule_id": "SUPPORTED_DIMENSIONS_FROM_PACKET",
+      "component": "opportunity-synthesis-persistence-gate@1.3.0",
+      "fields": [
+        "supported_dimensions"
+      ],
+      "disposition": "STRUCTURAL_FACT",
+      "accepts": "dimensions the packet carries",
+      "refuses": "a dimension claimed as supported that the packet does not carry",
+      "model_controllable": true,
+      "explicit_in_v1_2": true,
+      "v1_2_evidence": [
+        "system",
+        "A dimension you were not given evidence for is UNSUPPORTED"
+      ],
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.assertion_context:PacketStructuralFacts"
+      ],
+      "rationale": "v1.2.0 says a dimension without evidence is unsupported, and the task lists the supported ones",
+      "instruction": null,
+      "refusal_signature": "^dimensions claimed as supported that this packet does not carry"
+    },
+    {
+      "rule_id": "SUPPORTED_AND_UNSUPPORTED_DISJOINT",
+      "component": "opportunity-synthesis-persistence-gate@1.3.0",
+      "fields": [
+        "supported_dimensions",
+        "unsupported_dimensions"
+      ],
+      "disposition": "STRUCTURAL_FACT",
+      "accepts": "two disjoint lists",
+      "refuses": "a dimension listed as both supported and unsupported",
+      "model_controllable": true,
+      "explicit_in_v1_2": false,
+      "v1_2_evidence": null,
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.assertion_audit_v1_3:evaluate_persistence_v1_3"
+      ],
+      "rationale": "nothing in v1.2.0 says the two lists may not share a name",
+      "instruction": "no dimension appears both in supported_dimensions and in unsupported_dimensions",
+      "refusal_signature": "^dimensions reported both supported and unsupported"
+    },
+    {
+      "rule_id": "MANDATORY_UNSUPPORTED_REPORTED",
+      "component": "opportunity-synthesis-persistence-gate@1.3.0",
+      "fields": [
+        "unsupported_dimensions"
+      ],
+      "disposition": "EXPLICITLY_NOT_SUPPORTED",
+      "accepts": "every mandatory dimension the packet does not carry, listed as unsupported",
+      "refuses": "a mandatory dimension left unmentioned",
+      "model_controllable": true,
+      "explicit_in_v1_2": true,
+      "v1_2_evidence": [
+        "task",
+        "dimensions you MUST report on and mark unsupported unless a supplied"
+      ],
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.synthesis:MANDATORY_UNSUPPORTED_REPORT"
+      ],
+      "rationale": "the task names the dimensions that must be reported and marked unsupported",
+      "instruction": null,
+      "refusal_signature": "^§6 requires an explicit unsupported report"
+    },
+    {
+      "rule_id": "INDEPENDENCE_RECORDS_UNKNOWN",
+      "component": "opportunity-synthesis-persistence-gate@1.3.0",
+      "fields": [
+        "independence_status"
+      ],
+      "disposition": "STRUCTURAL_FACT",
+      "accepts": "a restatement recording UNKNOWN",
+      "refuses": "a status without UNKNOWN, or one calling the sources independent",
+      "model_controllable": true,
+      "explicit_in_v1_2": true,
+      "v1_2_evidence": [
+        "system",
+        "INDEPENDENCE AND RELIABILITY are supplied to you as facts about the packet."
+      ],
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.assertion_audit_v1_3:evaluate_persistence_v1_3"
+      ],
+      "rationale": "v1.2.0 says to repeat the packet's independence fact as given and never to call source families independent sources",
+      "instruction": null,
+      "refusal_signature": "^independence_status (?:does not record UNKNOWN|contains )"
+    },
+    {
+      "rule_id": "RELIABILITY_RESTATES_SCORABILITY",
+      "component": "opportunity-synthesis-persistence-gate@1.3.0",
+      "fields": [
+        "reliability_status"
+      ],
+      "disposition": "STRUCTURAL_FACT",
+      "accepts": "a restatement of the packet's scorability in the task's own terms",
+      "refuses": "a status that drops the scorability the packet has",
+      "model_controllable": true,
+      "explicit_in_v1_2": true,
+      "v1_2_evidence": [
+        "system",
+        "Repeat them as given."
+      ],
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.assertion_audit_v1_3:evaluate_persistence_v1_3"
+      ],
+      "rationale": "v1.2.0 says to repeat the reliability fact as given, and the task gives it",
+      "instruction": null,
+      "refusal_signature": "^(?:no row in this packet is scoring-eligible and reliability_status|\\d+ of \\d+ rows are scoring-eligible and reliability_status)"
+    },
+    {
+      "rule_id": "AUDIT_READS_EVERY_FIELD",
+      "component": "opportunity-synthesis-audit@1.4.0",
+      "fields": [
+        "target_actor_if_supported",
+        "observed_need",
+        "candidate_intervention_class",
+        "hypothesis_statement",
+        "independence_status",
+        "reliability_status",
+        "evidence_bound_reasoning_summary",
+        "critical_uncertainties",
+        "commercial_claims_supported",
+        "commercial_claims_not_supported",
+        "recommended_next_evidence",
+        "statement_classifications"
+      ],
+      "disposition": "ANY",
+      "accepts": "every text, each read in its field's context",
+      "refuses": "nothing on its own: it collects the findings the rules below produce",
+      "model_controllable": false,
+      "explicit_in_v1_2": false,
+      "v1_2_evidence": null,
+      "must_be_explicit_in_v1_3": false,
+      "class": "C",
+      "class_name": "VALIDATOR_ONLY_NOT_USEFUL_AS_GENERATION_PROSE",
+      "enforcement": "GATE_MECHANISM",
+      "canonical_policy_source": [
+        "sros_opportunity.assertion_audit_v1_3:audit_output"
+      ],
+      "rationale": "the aggregation that turns findings into refusals; the rules it aggregates are listed on their own",
+      "instruction": null,
+      "refusal_signature": null
+    },
+    {
+      "rule_id": "FIELD_HAS_A_CONTEXT",
+      "component": "opportunity-synthesis-audit@1.4.0",
+      "fields": [
+        "*"
+      ],
+      "disposition": "STRUCTURAL",
+      "accepts": "only the contract's fields",
+      "refuses": "a field the field-context policy does not name",
+      "model_controllable": true,
+      "explicit_in_v1_2": true,
+      "v1_2_evidence": [
+        "system",
+        "every one required, and no other field."
+      ],
+      "must_be_explicit_in_v1_3": false,
+      "class": "B",
+      "class_name": "STRUCTURAL_AND_ALREADY_EXPRESSED_BY_OUTPUT_CONTRACT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.second_opportunity_gate_v1_2:SECOND_OPPORTUNITY_FIELD_POLICY"
+      ],
+      "rationale": "the contract says the object carries no other field",
+      "instruction": null,
+      "refusal_signature": "has no field context, so its text cannot be read as anything"
+    },
+    {
+      "rule_id": "CLASSIFICATION_LABEL_KNOWN",
+      "component": "opportunity-synthesis-audit@1.4.0",
+      "fields": [
+        "statement_classifications"
+      ],
+      "disposition": "LABELLED",
+      "accepts": "an item carrying one of the three labels",
+      "refuses": "an item whose label has no disposition",
+      "model_controllable": true,
+      "explicit_in_v1_2": true,
+      "v1_2_evidence": [
+        "system",
+        "classification: exactly one of: OBSERVED_OR_EVIDENCE_SUPPORTED, HYPOTHESIS_TO_VALIDATE, UNKNOWN_REQUIRES_EVIDENCE"
+      ],
+      "must_be_explicit_in_v1_3": false,
+      "class": "B",
+      "class_name": "STRUCTURAL_AND_ALREADY_EXPRESSED_BY_OUTPUT_CONTRACT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.second_opportunity_gate_v1_2:CLASSIFICATION_DISPOSITIONS"
+      ],
+      "rationale": "a closed choice the contract renders member by member",
+      "instruction": null,
+      "refusal_signature": "^unknown label "
+    },
+    {
+      "rule_id": "DEFINITIONAL_IDENTIFIER_SUPPLIED",
+      "component": "opportunity-synthesis-audit@1.4.0",
+      "fields": [
+        "target_actor_if_supported",
+        "observed_need",
+        "candidate_intervention_class",
+        "hypothesis_statement",
+        "independence_status",
+        "reliability_status",
+        "evidence_bound_reasoning_summary",
+        "critical_uncertainties",
+        "commercial_claims_supported",
+        "commercial_claims_not_supported",
+        "recommended_next_evidence",
+        "statement_classifications"
+      ],
+      "disposition": "ANY",
+      "accepts": "a definitional identifier a trusted fact carries",
+      "refuses": "an identifier of a trusted scheme that no trusted fact supplies",
+      "model_controllable": true,
+      "explicit_in_v1_2": true,
+      "v1_2_evidence": [
+        "system",
+        "USE ONLY THE SUPPLIED EVIDENCE."
+      ],
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.assertion_context:TrustedContext"
+      ],
+      "rationale": "an external definition is prior knowledge, which v1.2.0 says is unavailable",
+      "instruction": null,
+      "refusal_signature": "^the definitional identifier \\S+ is supplied by no trusted"
+    },
+    {
+      "rule_id": "NUMBERS_ARE_SUPPLIED",
+      "component": "opportunity-synthesis-audit@1.4.0",
+      "fields": [
+        "target_actor_if_supported",
+        "observed_need",
+        "candidate_intervention_class",
+        "hypothesis_statement",
+        "independence_status",
+        "reliability_status",
+        "evidence_bound_reasoning_summary",
+        "critical_uncertainties",
+        "commercial_claims_supported",
+        "commercial_claims_not_supported",
+        "recommended_next_evidence",
+        "statement_classifications"
+      ],
+      "disposition": "ANY",
+      "accepts": "a number a source content statement or a packet structural fact carries",
+      "refuses": "any other number, including a figure that occurs only inside a source name",
+      "model_controllable": true,
+      "explicit_in_v1_2": true,
+      "v1_2_evidence": [
+        "system",
+        "NUMBERS. You may restate a number that appears in a supplied statement."
+      ],
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.support_origin:TypedSupportUniverse.supplied_numbers"
+      ],
+      "rationale": "v1.2.0 states the rule for numbers; the source-name part is rendered with the metadata rule",
+      "instruction": null,
+      "refusal_signature": "^the number \\S+ appears in no source content statement"
+    },
+    {
+      "rule_id": "FIELD_SHAPE_KEPT",
+      "component": "second-opportunity-field-context-policy@1.0.0",
+      "fields": [
+        "critical_uncertainties",
+        "recommended_next_evidence"
+      ],
+      "disposition": "UNKNOWN_REQUIRES_EVIDENCE / FUTURE_EVIDENCE_REQUEST",
+      "accepts": "an uncertainty that states what is not known; a request that names what would have to be observed",
+      "refuses": "an item that asserts instead, which is then read as the assertion it became",
+      "model_controllable": true,
+      "explicit_in_v1_2": false,
+      "v1_2_evidence": null,
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.second_opportunity_gate_v1_2:SECOND_OPPORTUNITY_FIELD_POLICY"
+      ],
+      "rationale": "v1.2.0 names what the fields are for and never says their text keeps that shape; rendered from the field policy at proposition level, without the patterns that read it",
+      "instruction": null,
+      "refusal_signature": "^it is not (?:request|uncertainty)-shaped"
+    },
+    {
+      "rule_id": "FIELD_TEXT_READ_BY_ITS_DISPOSITION",
+      "component": "second-opportunity-field-context-policy@1.0.0",
+      "fields": [
+        "target_actor_if_supported",
+        "observed_need",
+        "candidate_intervention_class",
+        "hypothesis_statement",
+        "independence_status",
+        "reliability_status",
+        "evidence_bound_reasoning_summary",
+        "critical_uncertainties",
+        "commercial_claims_supported",
+        "commercial_claims_not_supported",
+        "recommended_next_evidence",
+        "statement_classifications"
+      ],
+      "disposition": "ANY",
+      "accepts": "text that does what its field does",
+      "refuses": "nothing on its own: each field's disposition decides which rules read its text",
+      "model_controllable": true,
+      "explicit_in_v1_2": false,
+      "v1_2_evidence": null,
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_MECHANISM",
+      "canonical_policy_source": [
+        "sros_opportunity.second_opportunity_gate_v1_2:SECOND_OPPORTUNITY_FIELD_POLICY"
+      ],
+      "rationale": "which fields assert, which propose a test and which only name an unknown decides what a word may do in each; v1.2.0 never says so, and the field policy is its first-class source",
+      "instruction": null,
+      "refusal_signature": null
+    },
+    {
+      "rule_id": "TRANSFORMATION_CONCEPTS_NOT_ASSERTED",
+      "component": "opportunity-synthesis-audit@1.4.0",
+      "fields": [
+        "target_actor_if_supported",
+        "observed_need",
+        "candidate_intervention_class",
+        "hypothesis_statement",
+        "independence_status",
+        "reliability_status",
+        "evidence_bound_reasoning_summary",
+        "critical_uncertainties",
+        "commercial_claims_supported",
+        "commercial_claims_not_supported",
+        "recommended_next_evidence",
+        "statement_classifications"
+      ],
+      "disposition": "ASSERTING OR SHAPED",
+      "accepts": "a transformation concept denied, listed as not supported, or named as unknown",
+      "refuses": "a transformation concept asserted with no source content statement asserting it",
+      "model_controllable": true,
+      "explicit_in_v1_2": true,
+      "v1_2_evidence": [
+        "system",
+        "WHAT THIS PACKET IS AND IS NOT. Each line is refused by a deterministic gate."
+      ],
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.second_opportunity:FORBIDDEN_TRANSFORMATIONS",
+        "sros_opportunity.second_opportunity_gate_v1_2:FORBIDDEN_CONCEPTS_V1_2"
+      ],
+      "rationale": "v1.2.0's anti-distortion block states each transformation and what it is not",
+      "instruction": null,
+      "refusal_signature": "^(?:REALISED_SPEND|MARKET_DEMAND|SOFTWARE_BUYER|WILLINGNESS_TO_PAY|PRODUCT_MARKET_FIT): '.*' is asserted \\("
+    },
+    {
+      "rule_id": "ADDED_CONCEPTS_NOT_ASSERTED",
+      "component": "opportunity-synthesis-audit@1.4.0",
+      "fields": [
+        "target_actor_if_supported",
+        "observed_need",
+        "candidate_intervention_class",
+        "hypothesis_statement",
+        "independence_status",
+        "reliability_status",
+        "evidence_bound_reasoning_summary",
+        "critical_uncertainties",
+        "commercial_claims_supported",
+        "commercial_claims_not_supported",
+        "recommended_next_evidence",
+        "statement_classifications"
+      ],
+      "disposition": "ASSERTING OR SHAPED",
+      "accepts": "an added concept denied, listed as not supported, or named as unknown",
+      "refuses": "an added concept asserted with no source content statement asserting it",
+      "model_controllable": true,
+      "explicit_in_v1_2": false,
+      "v1_2_evidence": null,
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.second_opportunity_gate_v1_2:FORBIDDEN_CONCEPTS_V1_2"
+      ],
+      "rationale": "gate v1.2.0 added concepts the v1.2.0 prompt never names; rendered from each concept's own name and never-text, and never from its phrases",
+      "instruction": null,
+      "refusal_signature": "^(?:MARKET_SIZE|BUYER_NEED|UNMET_NEED|SOLUTION_DISSATISFACTION|SOLUTION_GAP|COMPETITIVE_GAP|PROFITABILITY): '.*' is asserted \\("
+    },
+    {
+      "rule_id": "LIMITING_FACT_NEVER_SUPPORTS_ITS_CONCEPT",
+      "component": "second-opportunity-trusted-context@1.0.0",
+      "fields": [
+        "target_actor_if_supported",
+        "observed_need",
+        "candidate_intervention_class",
+        "hypothesis_statement",
+        "independence_status",
+        "reliability_status",
+        "evidence_bound_reasoning_summary",
+        "critical_uncertainties",
+        "commercial_claims_supported",
+        "commercial_claims_not_supported",
+        "recommended_next_evidence",
+        "statement_classifications"
+      ],
+      "disposition": "ASSERTING OR SHAPED",
+      "accepts": "a trusted identifier restated as the limit it is",
+      "refuses": "a trusted identifier cited for the concept its fact limits",
+      "model_controllable": true,
+      "explicit_in_v1_2": true,
+      "v1_2_evidence": [
+        "system",
+        "WHAT THIS PACKET IS AND IS NOT. Each line is refused by a deterministic gate."
+      ],
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.assertion_context:TrustedFact.never_supports"
+      ],
+      "rationale": "v1.2.0's anti-distortion block pairs each definition with what it is not",
+      "instruction": null,
+      "refusal_signature": "^[A-Z]+-\\d+ is restated from the trusted "
+    },
+    {
+      "rule_id": "NO_SCORE_ASSERTED",
+      "component": "opportunity-synthesis-audit@1.4.0",
+      "fields": [
+        "target_actor_if_supported",
+        "observed_need",
+        "candidate_intervention_class",
+        "hypothesis_statement",
+        "independence_status",
+        "reliability_status",
+        "evidence_bound_reasoning_summary",
+        "critical_uncertainties",
+        "commercial_claims_supported",
+        "commercial_claims_not_supported",
+        "recommended_next_evidence",
+        "statement_classifications"
+      ],
+      "disposition": "ASSERTING OR SHAPED",
+      "accepts": "a score denied",
+      "refuses": "a score asserted",
+      "model_controllable": true,
+      "explicit_in_v1_2": true,
+      "v1_2_evidence": [
+        "system",
+        "no probability and no score anywhere in this task."
+      ],
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.assertion_context:SCORE_TERMS"
+      ],
+      "rationale": "v1.2.0 says there is no score anywhere in this task",
+      "instruction": null,
+      "refusal_signature": "^'(?:scored|score)' is asserted \\("
+    },
+    {
+      "rule_id": "SOURCE_NAME_IS_NOT_A_SUPPLIED_WORD",
+      "component": "opportunity-support-universe@2.0.0",
+      "fields": [
+        "target_actor_if_supported",
+        "observed_need",
+        "candidate_intervention_class",
+        "hypothesis_statement",
+        "independence_status",
+        "reliability_status",
+        "evidence_bound_reasoning_summary",
+        "commercial_claims_supported",
+        "statement_classifications"
+      ],
+      "disposition": "SUPPORTED_ASSERTION / STRUCTURAL_FACT / HYPOTHESIS_TO_VALIDATE",
+      "accepts": "a domain word a source content statement carries",
+      "refuses": "a domain word whose only supplied occurrence is inside a source metadata label",
+      "model_controllable": true,
+      "explicit_in_v1_2": false,
+      "v1_2_evidence": null,
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.second_opportunity_gate_v1_3:SOURCE_METADATA_EVIDENCE_BOUNDARY_DECISION",
+        "sros_opportunity.support_origin:SupportOrigin"
+      ],
+      "rationale": "the operator's evidence-boundary decision (ADR-040); v1.2.0 predates it and never separates what a source reported from what it is called",
+      "instruction": null,
+      "refusal_signature": "^SOURCE_METADATA_LABEL_IS_NOT_FACTUAL_SUPPORT: "
+    },
+    {
+      "rule_id": "SOURCE_NAME_LICENSES_ITS_WHOLE_OCCURRENCE",
+      "component": "second-opportunity-source-metadata@1.0.0",
+      "fields": [
+        "target_actor_if_supported",
+        "observed_need",
+        "candidate_intervention_class",
+        "hypothesis_statement",
+        "independence_status",
+        "reliability_status",
+        "evidence_bound_reasoning_summary",
+        "critical_uncertainties",
+        "commercial_claims_supported",
+        "commercial_claims_not_supported",
+        "recommended_next_evidence",
+        "statement_classifications"
+      ],
+      "disposition": "ANY",
+      "accepts": "a source named by its whole label, as provenance",
+      "refuses": "nothing on its own: the gate reads the whole label as a name before reading words",
+      "model_controllable": true,
+      "explicit_in_v1_2": false,
+      "v1_2_evidence": null,
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_MECHANISM",
+      "canonical_policy_source": [
+        "sros_opportunity.second_opportunity_gate_v1_3:SOURCE_METADATA_EVIDENCE_BOUNDARY_DECISION",
+        "sros_opportunity.support_origin:SourceMetadataLabelKind"
+      ],
+      "rationale": "naming where a statement came from is always allowed, and a model told only that names are not evidence would stop attributing",
+      "instruction": null,
+      "refusal_signature": null
+    },
+    {
+      "rule_id": "PRIOR_KNOWLEDGE_IS_NOT_SUPPORT",
+      "component": "opportunity-synthesis-audit@1.4.0",
+      "fields": [
+        "target_actor_if_supported",
+        "observed_need",
+        "candidate_intervention_class",
+        "hypothesis_statement",
+        "independence_status",
+        "reliability_status",
+        "evidence_bound_reasoning_summary",
+        "commercial_claims_supported",
+        "statement_classifications"
+      ],
+      "disposition": "SUPPORTED_ASSERTION / STRUCTURAL_FACT / HYPOTHESIS_TO_VALIDATE",
+      "accepts": "domain vocabulary a source content statement carries",
+      "refuses": "domain vocabulary no supplied statement carries at all",
+      "model_controllable": true,
+      "explicit_in_v1_2": true,
+      "v1_2_evidence": [
+        "system",
+        "USE ONLY THE SUPPLIED EVIDENCE."
+      ],
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.second_opportunity:PROCUREMENT_EXTERNAL_KNOWLEDGE_MARKERS"
+      ],
+      "rationale": "v1.2.0 says prior knowledge is unavailable as factual support; the vocabulary list itself is class D",
+      "instruction": null,
+      "refusal_signature": "^'[^']*' appears in no source content statement, compared under "
+    },
+    {
+      "rule_id": "UNMEASURED_COMMERCIAL_QUANTITIES_NEVER_ASSERTED",
+      "component": "opportunity-claim-guard@1.4.0",
+      "fields": [
+        "target_actor_if_supported",
+        "observed_need",
+        "candidate_intervention_class",
+        "hypothesis_statement",
+        "independence_status",
+        "reliability_status",
+        "evidence_bound_reasoning_summary",
+        "commercial_claims_supported",
+        "statement_classifications"
+      ],
+      "disposition": "SUPPORTED_ASSERTION / STRUCTURAL_FACT / HYPOTHESIS_TO_VALIDATE",
+      "accepts": "such a quantity denied or named as unknown",
+      "refuses": "a quantity no registered source measures, asserted",
+      "model_controllable": true,
+      "explicit_in_v1_2": true,
+      "v1_2_evidence": [
+        "system",
+        "Specifically, you may not assert anything about: how many people or organisations"
+      ],
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.guards:FORBIDDEN_TERMS"
+      ],
+      "rationale": "v1.2.0 lists at proposition level what may not be asserted; the term list itself is class D",
+      "instruction": null,
+      "refusal_signature": "is not supportable by any registered source"
+    },
+    {
+      "rule_id": "COMMERCIAL_TERMS_NEED_THEIR_DIMENSION",
+      "component": "opportunity-claim-guard@1.4.0",
+      "fields": [
+        "target_actor_if_supported",
+        "observed_need",
+        "candidate_intervention_class",
+        "hypothesis_statement",
+        "independence_status",
+        "reliability_status",
+        "evidence_bound_reasoning_summary",
+        "commercial_claims_supported",
+        "statement_classifications"
+      ],
+      "disposition": "SUPPORTED_ASSERTION / STRUCTURAL_FACT / HYPOTHESIS_TO_VALIDATE",
+      "accepts": "a commercial term whose dimension the answer lists as supported and the packet carries",
+      "refuses": "a commercial term asserting a dimension no eligible evidence supports",
+      "model_controllable": true,
+      "explicit_in_v1_2": true,
+      "v1_2_evidence": [
+        "system",
+        "Specifically, you may not assert anything about: how many people or organisations"
+      ],
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.guards:FORBIDDEN_TERMS"
+      ],
+      "rationale": "v1.2.0 forbids asserting these subjects at all, which is stricter than the gate",
+      "instruction": null,
+      "refusal_signature": "^'[^']*' asserts [A-Z_]+, which no eligible evidence in this packet"
+    },
+    {
+      "rule_id": "NO_VALIDATION_LANGUAGE",
+      "component": "opportunity-claim-guard@1.4.0",
+      "fields": [
+        "target_actor_if_supported",
+        "observed_need",
+        "candidate_intervention_class",
+        "hypothesis_statement",
+        "independence_status",
+        "reliability_status",
+        "evidence_bound_reasoning_summary",
+        "commercial_claims_supported",
+        "statement_classifications"
+      ],
+      "disposition": "SUPPORTED_ASSERTION / STRUCTURAL_FACT / HYPOTHESIS_TO_VALIDATE",
+      "accepts": "a hypothesis record",
+      "refuses": "wording that states a conclusion",
+      "model_controllable": true,
+      "explicit_in_v1_2": true,
+      "v1_2_evidence": [
+        "system",
+        "anything as high-confidence, validated, proven or significant."
+      ],
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.guards:VALIDATION_WORDS"
+      ],
+      "rationale": "v1.2.0 forbids describing anything as validated, proven or high-confidence",
+      "instruction": null,
+      "refusal_signature": "^'[^']*' states a conclusion; this is a hypothesis record"
+    },
+    {
+      "rule_id": "OBSERVED_DISJUNCTION_FAILS_CLOSED",
+      "component": "observed-statement-disjunction-policy@1.0.0",
+      "fields": [
+        "statement_classifications"
+      ],
+      "disposition": "SUPPORTED_ASSERTION",
+      "accepts": "an OBSERVED item that states one proposition, or denies alternatives together",
+      "refuses": "an OBSERVED item that joins alternatives outside any denial",
+      "model_controllable": true,
+      "explicit_in_v1_2": false,
+      "v1_2_evidence": null,
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.assertion_audit_v1_3:DISJUNCTION_POLICY_VERSION",
+        "sros_opportunity.assertion_audit_v1_3:DISJUNCTIVE_OBSERVED_STATEMENT",
+        "docs/data/second-opportunity-output-gate-v1.3-freeze-v1.json:DISJUNCTION_POLICY"
+      ],
+      "rationale": "the gate evaluates no disjunction, so one classification over two alternatives fails closed; v1.2.0 predates the rule",
+      "instruction": null,
+      "refusal_signature": "^DISJUNCTIVE_OBSERVED_STATEMENT_REQUIRES_EXPLICIT_SUPPORT_POLICY: "
+    },
+    {
+      "rule_id": "NOTHING_PROMOTED_TO_A_CONCLUSION",
+      "component": "opportunity-synthesis-audit@1.4.0",
+      "fields": [
+        "hypothesis_statement",
+        "critical_uncertainties",
+        "recommended_next_evidence",
+        "statement_classifications"
+      ],
+      "disposition": "HYPOTHESIS_TO_VALIDATE / UNKNOWN_REQUIRES_EVIDENCE / FUTURE_EVIDENCE_REQUEST",
+      "accepts": "a hypothesis, an unknown or a request kept as what it is",
+      "refuses": "one promoted to a conclusion by certainty or validation wording",
+      "model_controllable": true,
+      "explicit_in_v1_2": false,
+      "v1_2_evidence": null,
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.assertion_context:CERTAINTY_MARKERS"
+      ],
+      "rationale": "v1.2.0 forbids writing a hypothesis as an observation and never mentions certainty; the word list itself is class D",
+      "instruction": "a hypothesis, an unknown and a request for evidence stay what they are: no adverb of certainty and no wording of confirmation turns one into a conclusion",
+      "refusal_signature": "^\\[.*\\] promote a [A-Z_]+ to a conclusion"
+    },
+    {
+      "rule_id": "NOT_SUPPORTED_ITEM_NEVER_CLAIMS_SUPPORT",
+      "component": "opportunity-synthesis-audit@1.4.0",
+      "fields": [
+        "commercial_claims_not_supported"
+      ],
+      "disposition": "EXPLICITLY_NOT_SUPPORTED",
+      "accepts": "an item that names a claim the packet does not support",
+      "refuses": "an item that says the claim it names is established",
+      "model_controllable": true,
+      "explicit_in_v1_2": false,
+      "v1_2_evidence": null,
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "GATE_ENFORCED",
+      "canonical_policy_source": [
+        "sros_opportunity.second_opportunity_gate_v1_2:SECOND_OPPORTUNITY_FIELD_POLICY"
+      ],
+      "rationale": "rendered from the field's disposition; the predicate list that reads it is class D",
+      "instruction": null,
+      "refusal_signature": "^it says the claim is '"
+    },
+    {
+      "rule_id": "OBSERVED_IS_ATOMIC_AND_DIRECTLY_SUPPORTED",
+      "component": "opportunity-synthesis-audit@1.4.0",
+      "fields": [
+        "statement_classifications"
+      ],
+      "disposition": "SUPPORTED_ASSERTION",
+      "accepts": "one proposition a source content statement or a packet structural fact states itself",
+      "refuses": "nothing beyond the vocabulary, number and disjunction rules: the gate evaluates no proposition's truth",
+      "model_controllable": true,
+      "explicit_in_v1_2": false,
+      "v1_2_evidence": null,
+      "must_be_explicit_in_v1_3": true,
+      "class": "A",
+      "class_name": "MUST_BE_EXPLICIT_IN_PROMPT",
+      "enforcement": "INSTRUCTION_BEYOND_THE_GATE",
+      "canonical_policy_source": [
+        "sros_opportunity.assertion_audit_v1_3:LEXICAL_MATCH_IS_FACTUAL_SUPPORT",
+        "operator decision OBSERVED_STATEMENTS_MUST_BE_ATOMIC_AND_DIRECTLY_SUPPORTED"
+      ],
+      "rationale": "a lexical match is necessary and never sufficient; the operator decided an OBSERVED statement is atomic and directly supported, which the gate cannot check and the prompt must say",
+      "instruction": null,
+      "refusal_signature": null
+    },
+    {
+      "rule_id": "LABEL_EQUAL_TO_A_GATED_TERM_NEVER_MASKS",
+      "component": "opportunity-synthesis-audit@1.4.0",
+      "fields": [
+        "target_actor_if_supported",
+        "observed_need",
+        "candidate_intervention_class",
+        "hypothesis_statement",
+        "independence_status",
+        "reliability_status",
+        "evidence_bound_reasoning_summary",
+        "critical_uncertainties",
+        "commercial_claims_supported",
+        "commercial_claims_not_supported",
+        "recommended_next_evidence",
+        "statement_classifications"
+      ],
+      "disposition": "ANY",
+      "accepts": "a label that is not itself a gated term, read as a name",
+      "refuses": "nothing on its own: such a label is read as the term it spells",
+      "model_controllable": false,
+      "explicit_in_v1_2": false,
+      "v1_2_evidence": null,
+      "must_be_explicit_in_v1_3": false,
+      "class": "C",
+      "class_name": "VALIDATOR_ONLY_NOT_USEFUL_AS_GENERATION_PROSE",
+      "enforcement": "GATE_MECHANISM",
+      "canonical_policy_source": [
+        "sros_opportunity.assertion_audit_v1_3:maskable_labels"
+      ],
+      "rationale": "depends on what the registry calls a source, which no answer controls",
+      "instruction": null,
+      "refusal_signature": null
+    },
+    {
+      "rule_id": "DIMENSION_NAME_OF_A_SUPPORTED_DIMENSION",
+      "component": "opportunity-synthesis-audit@1.4.0",
+      "fields": [
+        "target_actor_if_supported",
+        "observed_need",
+        "candidate_intervention_class",
+        "hypothesis_statement",
+        "independence_status",
+        "reliability_status",
+        "evidence_bound_reasoning_summary",
+        "commercial_claims_supported",
+        "statement_classifications"
+      ],
+      "disposition": "ANY",
+      "accepts": "the canonical name of a dimension listed as supported and carried by the packet",
+      "refuses": "nothing on its own: the name is read as a structural fact",
+      "model_controllable": true,
+      "explicit_in_v1_2": true,
+      "v1_2_evidence": [
+        "system",
+        "exactly these names, spelled exactly: PROBLEM_OR_NEED"
+      ],
+      "must_be_explicit_in_v1_3": false,
+      "class": "B",
+      "class_name": "STRUCTURAL_AND_ALREADY_EXPRESSED_BY_OUTPUT_CONTRACT",
+      "enforcement": "GATE_MECHANISM",
+      "canonical_policy_source": [
+        "sros_opportunity.assertion_context:canonical_dimension_phrase"
+      ],
+      "rationale": "the contract renders the dimension names, spelled exactly",
+      "instruction": null,
+      "refusal_signature": null
+    },
+    {
+      "rule_id": "EMPTY_OR_SENTINEL_TEXT_ASSERTS_NOTHING",
+      "component": "opportunity-synthesis-audit@1.4.0",
+      "fields": [
+        "target_actor_if_supported",
+        "observed_need",
+        "candidate_intervention_class",
+        "hypothesis_statement",
+        "independence_status",
+        "reliability_status",
+        "evidence_bound_reasoning_summary",
+        "critical_uncertainties",
+        "commercial_claims_supported",
+        "commercial_claims_not_supported",
+        "recommended_next_evidence",
+        "statement_classifications"
+      ],
+      "disposition": "ANY",
+      "accepts": "an empty text or the sentinel UNKNOWN_NOT_SUPPORTED",
+      "refuses": "nothing: such a text is not factual",
+      "model_controllable": true,
+      "explicit_in_v1_2": true,
+      "v1_2_evidence": [
+        "system",
+        "or the exact string UNKNOWN_NOT_SUPPORTED if they name none."
+      ],
+      "must_be_explicit_in_v1_3": false,
+      "class": "B",
+      "class_name": "STRUCTURAL_AND_ALREADY_EXPRESSED_BY_OUTPUT_CONTRACT",
+      "enforcement": "GATE_MECHANISM",
+      "canonical_policy_source": [
+        "sros_opportunity.second_opportunity:SECOND_OPPORTUNITY_OUTPUT_SCHEMA_V1_1"
+      ],
+      "rationale": "the contract renders the sentinel verbatim",
+      "instruction": null,
+      "refusal_signature": null
+    },
+    {
+      "rule_id": "NOTHING_CHECKABLE_IS_NOTED",
+      "component": "opportunity-synthesis-persistence-gate@1.3.0",
+      "fields": [
+        "target_actor_if_supported",
+        "observed_need",
+        "candidate_intervention_class",
+        "hypothesis_statement",
+        "independence_status",
+        "reliability_status",
+        "evidence_bound_reasoning_summary",
+        "critical_uncertainties",
+        "commercial_claims_supported",
+        "commercial_claims_not_supported",
+        "recommended_next_evidence",
+        "statement_classifications"
+      ],
+      "disposition": "ANY",
+      "accepts": "nothing: a note, never a refusal",
+      "refuses": "nothing",
+      "model_controllable": false,
+      "explicit_in_v1_2": false,
+      "v1_2_evidence": null,
+      "must_be_explicit_in_v1_3": false,
+      "class": "C",
+      "class_name": "VALIDATOR_ONLY_NOT_USEFUL_AS_GENERATION_PROSE",
+      "enforcement": "GATE_MECHANISM",
+      "canonical_policy_source": [
+        "sros_opportunity.assertion_audit_v1_3:evaluate_persistence_v1_3"
+      ],
+      "rationale": "a record of an answer with nothing checkable in it, not a rule an answer follows",
+      "instruction": null,
+      "refusal_signature": null
+    },
+    {
+      "rule_id": "INFLECTION_POLICY",
+      "component": "opportunity-lexical-inflection@1.0.0",
+      "fields": [
+        "target_actor_if_supported",
+        "observed_need",
+        "candidate_intervention_class",
+        "hypothesis_statement",
+        "independence_status",
+        "reliability_status",
+        "evidence_bound_reasoning_summary",
+        "critical_uncertainties",
+        "commercial_claims_supported",
+        "commercial_claims_not_supported",
+        "recommended_next_evidence",
+        "statement_classifications"
+      ],
+      "disposition": "ANY",
+      "accepts": "a word in any number its written rules fold",
+      "refuses": "nothing on its own: both sides of every comparison use one function",
+      "model_controllable": true,
+      "explicit_in_v1_2": false,
+      "v1_2_evidence": null,
+      "must_be_explicit_in_v1_3": false,
+      "class": "D",
+      "class_name": "INTERNAL_SAFETY_RULE_NOT_TO_BE_EXPOSED_AS_AN_EVASION_RECIPE",
+      "enforcement": "GATE_MECHANISM",
+      "canonical_policy_source": [
+        "sros_opportunity.lexical_inflection:INFLECTION_RULES"
+      ],
+      "rationale": "a normalizer rule; publishing it teaches which forms are compared and which are not",
+      "instruction": null,
+      "refusal_signature": null
+    },
+    {
+      "rule_id": "SUPPORT_PREDICATES_VERBATIM",
+      "component": "opportunity-claim-guard@1.4.0",
+      "fields": [
+        "commercial_claims_not_supported"
+      ],
+      "disposition": "EXPLICITLY_NOT_SUPPORTED",
+      "accepts": "nothing on its own",
+      "refuses": "nothing on its own: the verb forms a not-supported item may not use are matched verbatim",
+      "model_controllable": true,
+      "explicit_in_v1_2": false,
+      "v1_2_evidence": null,
+      "must_be_explicit_in_v1_3": false,
+      "class": "D",
+      "class_name": "INTERNAL_SAFETY_RULE_NOT_TO_BE_EXPOSED_AS_AN_EVASION_RECIPE",
+      "enforcement": "GATE_MECHANISM",
+      "canonical_policy_source": [
+        "sros_opportunity.assertion_context:SUPPORT_PREDICATES"
+      ],
+      "rationale": "a word list; the proposition it enforces is rendered with the field's disposition",
+      "instruction": null,
+      "refusal_signature": null
+    },
+    {
+      "rule_id": "CLAUSE_SCOPED_DENIAL_READING",
+      "component": "opportunity-claim-guard@1.4.0",
+      "fields": [
+        "target_actor_if_supported",
+        "observed_need",
+        "candidate_intervention_class",
+        "hypothesis_statement",
+        "independence_status",
+        "reliability_status",
+        "evidence_bound_reasoning_summary",
+        "critical_uncertainties",
+        "commercial_claims_supported",
+        "commercial_claims_not_supported",
+        "recommended_next_evidence",
+        "statement_classifications"
+      ],
+      "disposition": "ANY",
+      "accepts": "nothing on its own",
+      "refuses": "nothing on its own: denials scope their clause, and a contrast after a denial re-asserts",
+      "model_controllable": true,
+      "explicit_in_v1_2": false,
+      "v1_2_evidence": null,
+      "must_be_explicit_in_v1_3": false,
+      "class": "D",
+      "class_name": "INTERNAL_SAFETY_RULE_NOT_TO_BE_EXPOSED_AS_AN_EVASION_RECIPE",
+      "enforcement": "GATE_MECHANISM",
+      "canonical_policy_source": [
+        "sros_opportunity.assertion_context:DENIAL_MARKERS_V1_3",
+        "sros_opportunity.assertion_context:_CLAUSE_BOUNDARY"
+      ],
+      "rationale": "how the gate reads grammar; publishing it would teach phrasing, and the propositions it protects are stated as propositions",
+      "instruction": null,
+      "refusal_signature": null
+    },
+    {
+      "rule_id": "REQUEST_AND_UNCERTAINTY_PATTERNS",
+      "component": "second-opportunity-field-context-policy@1.0.0",
+      "fields": [
+        "critical_uncertainties",
+        "recommended_next_evidence"
+      ],
+      "disposition": "UNKNOWN_REQUIRES_EVIDENCE / FUTURE_EVIDENCE_REQUEST",
+      "accepts": "nothing on its own",
+      "refuses": "nothing on its own: the patterns that decide whether a shape was kept",
+      "model_controllable": true,
+      "explicit_in_v1_2": false,
+      "v1_2_evidence": null,
+      "must_be_explicit_in_v1_3": false,
+      "class": "D",
+      "class_name": "INTERNAL_SAFETY_RULE_NOT_TO_BE_EXPOSED_AS_AN_EVASION_RECIPE",
+      "enforcement": "GATE_MECHANISM",
+      "canonical_policy_source": [
+        "sros_opportunity.assertion_context:is_request_shaped",
+        "sros_opportunity.assertion_context:is_uncertainty_shaped"
+      ],
+      "rationale": "patterns; the shapes they protect are rendered from the field policy",
+      "instruction": null,
+      "refusal_signature": null
+    },
+    {
+      "rule_id": "GATED_VOCABULARY_LISTS",
+      "component": "opportunity-synthesis-audit@1.4.0",
+      "fields": [
+        "target_actor_if_supported",
+        "observed_need",
+        "candidate_intervention_class",
+        "hypothesis_statement",
+        "independence_status",
+        "reliability_status",
+        "evidence_bound_reasoning_summary",
+        "critical_uncertainties",
+        "commercial_claims_supported",
+        "commercial_claims_not_supported",
+        "recommended_next_evidence",
+        "statement_classifications"
+      ],
+      "disposition": "ANY",
+      "accepts": "nothing on its own",
+      "refuses": "nothing on its own: the lists the vocabulary rules above consult",
+      "model_controllable": true,
+      "explicit_in_v1_2": false,
+      "v1_2_evidence": null,
+      "must_be_explicit_in_v1_3": false,
+      "class": "D",
+      "class_name": "INTERNAL_SAFETY_RULE_NOT_TO_BE_EXPOSED_AS_AN_EVASION_RECIPE",
+      "enforcement": "GATE_MECHANISM",
+      "canonical_policy_source": [
+        "sros_opportunity.second_opportunity:PROCUREMENT_EXTERNAL_KNOWLEDGE_MARKERS",
+        "sros_opportunity.second_opportunity_gate_v1_2:FORBIDDEN_CONCEPTS_V1_2 phrases",
+        "sros_opportunity.guards:FORBIDDEN_TERMS",
+        "sros_opportunity.guards:VALIDATION_WORDS",
+        "sros_opportunity.assertion_context:CERTAINTY_MARKERS",
+        "sros_opportunity.assertion_context:SCORE_TERMS"
+      ],
+      "rationale": "a published list is a list of words to avoid, and a model that avoids the words has not stopped asserting the thing",
+      "instruction": null,
+      "refusal_signature": null
+    },
+    {
+      "rule_id": "LABEL_MATCHING_ORDER",
+      "component": "second-opportunity-source-metadata@1.0.0",
+      "fields": [
+        "target_actor_if_supported",
+        "observed_need",
+        "candidate_intervention_class",
+        "hypothesis_statement",
+        "independence_status",
+        "reliability_status",
+        "evidence_bound_reasoning_summary",
+        "critical_uncertainties",
+        "commercial_claims_supported",
+        "commercial_claims_not_supported",
+        "recommended_next_evidence",
+        "statement_classifications"
+      ],
+      "disposition": "ANY",
+      "accepts": "nothing on its own",
+      "refuses": "nothing on its own: labels are matched whole, longest first, never overlapping",
+      "model_controllable": false,
+      "explicit_in_v1_2": false,
+      "v1_2_evidence": null,
+      "must_be_explicit_in_v1_3": false,
+      "class": "D",
+      "class_name": "INTERNAL_SAFETY_RULE_NOT_TO_BE_EXPOSED_AS_AN_EVASION_RECIPE",
+      "enforcement": "GATE_MECHANISM",
+      "canonical_policy_source": [
+        "sros_opportunity.support_origin:label_spans"
+      ],
+      "rationale": "a matching rule; publishing it would teach how to hide a word inside something shaped like a name",
+      "instruction": null,
+      "refusal_signature": null
+    },
+    {
+      "rule_id": "DISJUNCTION_BOUNDARY_READING",
+      "component": "observed-statement-disjunction-policy@1.0.0",
+      "fields": [
+        "statement_classifications"
+      ],
+      "disposition": "SUPPORTED_ASSERTION",
+      "accepts": "nothing on its own",
+      "refuses": "nothing on its own: where a connective counts as joining alternatives",
+      "model_controllable": true,
+      "explicit_in_v1_2": false,
+      "v1_2_evidence": null,
+      "must_be_explicit_in_v1_3": false,
+      "class": "D",
+      "class_name": "INTERNAL_SAFETY_RULE_NOT_TO_BE_EXPOSED_AS_AN_EVASION_RECIPE",
+      "enforcement": "GATE_MECHANISM",
+      "canonical_policy_source": [
+        "sros_opportunity.assertion_audit_v1_3:disjunctive_connectives"
+      ],
+      "rationale": "a boundary rule; the proposition it enforces is rendered as a proposition",
+      "instruction": null,
+      "refusal_signature": null
+    }
+  ],
+  "CENSUS_RULES": 53,
+  "CENSUS_CLASS_COUNTS": {
+    "A": 30,
+    "B": 12,
+    "C": 4,
+    "D": 7
+  },
+  "CENSUS_ENFORCEMENT_COUNTS": {
+    "GATE_ENFORCED": 38,
+    "GATE_MECHANISM": 14,
+    "INSTRUCTION_BEYOND_THE_GATE": 1
+  },
+  "REFUSAL_SITES": 46,
+  "REFUSAL_SITES_MAPPED": 46,
+  "REFUSAL_SITES_UNMAPPED": 0,
+  "ENFORCED_RULES": [
+    "ADDED_CONCEPTS_NOT_ASSERTED",
+    "AT_LEAST_ONE_CLAIM_CITED",
+    "AT_LEAST_ONE_EVIDENCE_CITED",
+    "CITED_CLAIMS_IN_PACKET",
+    "CITED_EVIDENCE_IN_PACKET",
+    "CLASSIFICATIONS_NOT_EMPTY",
+    "CLASSIFICATION_KINDS_CLOSED",
+    "CLASSIFICATION_LABEL_KNOWN",
+    "COMMERCIAL_TERMS_NEED_THEIR_DIMENSION",
+    "CONFIDENCE_IS_EXPLORATORY",
+    "DECISION_IS_ONE_OF_TWO",
+    "DEFINITIONAL_IDENTIFIER_SUPPLIED",
+    "EVERY_SOURCE_DECLARES_ITS_NAMES",
+    "EVIDENCE_CITED_WITH_ITS_CLAIM",
+    "FIELD_HAS_A_CONTEXT",
+    "FIELD_SHAPE_KEPT",
+    "INDEPENDENCE_RECORDS_UNKNOWN",
+    "INSUFFICIENT_EVIDENCE_IS_AN_OUTCOME",
+    "LIMITING_FACT_NEVER_SUPPORTS_ITS_CONCEPT",
+    "MANDATORY_UNSUPPORTED_REPORTED",
+    "NEXT_EVIDENCE_NOT_EMPTY",
+    "NOTHING_PROMOTED_TO_A_CONCLUSION",
+    "NOT_SUPPORTED_ITEM_NEVER_CLAIMS_SUPPORT",
+    "NO_SCORE_ASSERTED",
+    "NO_VALIDATION_LANGUAGE",
+    "NUMBERS_ARE_SUPPLIED",
+    "OBSERVED_DISJUNCTION_FAILS_CLOSED",
+    "PRIOR_KNOWLEDGE_IS_NOT_SUPPORT",
+    "RELIABILITY_RESTATES_SCORABILITY",
+    "SCHEMA_V1_1_0_VALIDATION",
+    "SOMETHING_REMAINS_UNKNOWN",
+    "SOURCE_FAMILIES_FROM_PACKET",
+    "SOURCE_NAME_IS_NOT_A_SUPPLIED_WORD",
+    "SUBJECT_IS_THE_PACKET_IDENTITY",
+    "SUPPORTED_AND_UNSUPPORTED_DISJOINT",
+    "SUPPORTED_DIMENSIONS_FROM_PACKET",
+    "TRANSFORMATION_CONCEPTS_NOT_ASSERTED",
+    "UNMEASURED_COMMERCIAL_QUANTITIES_NEVER_ASSERTED"
+  ],
+  "COVERAGE": {
+    "FIXTURES": 41,
+    "REFUSALS_CLAIMED": 53,
+    "REFUSALS_UNCLAIMED": 0,
+    "REFUSALS_CLAIMED_TWICE": 0,
+    "ENFORCED_RULES_REACHED": 38,
+    "ENFORCED_RULES": 38,
+    "BY_FIXTURE": {
+      "schema_missing_field": [
+        "SCHEMA_V1_1_0_VALIDATION"
+      ],
+      "confidence_other": [
+        "CONFIDENCE_IS_EXPLORATORY",
+        "SCHEMA_V1_1_0_VALIDATION"
+      ],
+      "next_evidence_empty": [
+        "NEXT_EVIDENCE_NOT_EMPTY"
+      ],
+      "classifications_empty": [
+        "CLASSIFICATIONS_NOT_EMPTY"
+      ],
+      "classification_unknown_kind": [
+        "CLASSIFICATION_KINDS_CLOSED",
+        "CLASSIFICATION_LABEL_KNOWN",
+        "SCHEMA_V1_1_0_VALIDATION"
+      ],
+      "classification_unknown_label": [
+        "CLASSIFICATION_KINDS_CLOSED",
+        "CLASSIFICATION_LABEL_KNOWN",
+        "SCHEMA_V1_1_0_VALIDATION"
+      ],
+      "all_observed": [
+        "SOMETHING_REMAINS_UNKNOWN"
+      ],
+      "insufficient_evidence": [
+        "INSUFFICIENT_EVIDENCE_IS_AN_OUTCOME"
+      ],
+      "decision_other": [
+        "DECISION_IS_ONE_OF_TWO",
+        "SCHEMA_V1_1_0_VALIDATION"
+      ],
+      "undeclared_source": [
+        "EVERY_SOURCE_DECLARES_ITS_NAMES"
+      ],
+      "subject_other": [
+        "SUBJECT_IS_THE_PACKET_IDENTITY"
+      ],
+      "stray_evidence": [
+        "CITED_EVIDENCE_IN_PACKET"
+      ],
+      "stray_claim": [
+        "CITED_CLAIMS_IN_PACKET"
+      ],
+      "no_evidence": [
+        "AT_LEAST_ONE_EVIDENCE_CITED"
+      ],
+      "no_claim": [
+        "AT_LEAST_ONE_CLAIM_CITED",
+        "EVIDENCE_CITED_WITH_ITS_CLAIM"
+      ],
+      "evidence_without_claim": [
+        "EVIDENCE_CITED_WITH_ITS_CLAIM"
+      ],
+      "stray_family": [
+        "SOURCE_FAMILIES_FROM_PACKET"
+      ],
+      "overclaimed_dimension": [
+        "SUPPORTED_DIMENSIONS_FROM_PACKET"
+      ],
+      "both_lists": [
+        "SUPPORTED_AND_UNSUPPORTED_DISJOINT"
+      ],
+      "mandatory_missing": [
+        "MANDATORY_UNSUPPORTED_REPORTED"
+      ],
+      "independence_not_unknown": [
+        "INDEPENDENCE_RECORDS_UNKNOWN"
+      ],
+      "independence_called_independent": [
+        "INDEPENDENCE_RECORDS_UNKNOWN"
+      ],
+      "reliability_scorable_dropped": [
+        "RELIABILITY_RESTATES_SCORABILITY"
+      ],
+      "reliability_non_scorable_dropped": [
+        "RELIABILITY_RESTATES_SCORABILITY"
+      ],
+      "extra_field": [
+        "FIELD_HAS_A_CONTEXT",
+        "SCHEMA_V1_1_0_VALIDATION"
+      ],
+      "unsupplied_identifier": [
+        "DEFINITIONAL_IDENTIFIER_SUPPLIED"
+      ],
+      "unsupplied_number": [
+        "NUMBERS_ARE_SUPPLIED"
+      ],
+      "uncertainty_not_shaped": [
+        "FIELD_SHAPE_KEPT"
+      ],
+      "request_not_shaped": [
+        "FIELD_SHAPE_KEPT"
+      ],
+      "transformation_concept": [
+        "TRANSFORMATION_CONCEPTS_NOT_ASSERTED"
+      ],
+      "added_concept": [
+        "ADDED_CONCEPTS_NOT_ASSERTED"
+      ],
+      "limiting_fact_restated": [
+        "LIMITING_FACT_NEVER_SUPPORTS_ITS_CONCEPT",
+        "TRANSFORMATION_CONCEPTS_NOT_ASSERTED"
+      ],
+      "score_asserted": [
+        "NO_SCORE_ASSERTED"
+      ],
+      "word_only_in_a_source_name": [
+        "SOURCE_NAME_IS_NOT_A_SUPPLIED_WORD"
+      ],
+      "word_supplied_nowhere": [
+        "PRIOR_KNOWLEDGE_IS_NOT_SUPPORT"
+      ],
+      "unmeasured_quantity": [
+        "UNMEASURED_COMMERCIAL_QUANTITIES_NEVER_ASSERTED"
+      ],
+      "commercial_term_without_its_dimension": [
+        "COMMERCIAL_TERMS_NEED_THEIR_DIMENSION"
+      ],
+      "validation_wording": [
+        "NO_VALIDATION_LANGUAGE"
+      ],
+      "observed_disjunction": [
+        "OBSERVED_DISJUNCTION_FAILS_CLOSED"
+      ],
+      "hypothesis_promoted": [
+        "NOTHING_PROMOTED_TO_A_CONCLUSION"
+      ],
+      "not_supported_item_claims_support": [
+        "NOT_SUPPORTED_ITEM_NEVER_CLAIMS_SUPPORT"
+      ]
+    }
+  },
+  "RULES_QUOTED_FROM_V1_2": [
+    "SCHEMA_V1_1_0_VALIDATION",
+    "CONFIDENCE_IS_EXPLORATORY",
+    "CLASSIFICATION_KINDS_CLOSED",
+    "INSUFFICIENT_EVIDENCE_IS_AN_OUTCOME",
+    "DECISION_IS_ONE_OF_TWO",
+    "CITED_EVIDENCE_IN_PACKET",
+    "CITED_CLAIMS_IN_PACKET",
+    "SOURCE_FAMILIES_FROM_PACKET",
+    "SUPPORTED_DIMENSIONS_FROM_PACKET",
+    "MANDATORY_UNSUPPORTED_REPORTED",
+    "INDEPENDENCE_RECORDS_UNKNOWN",
+    "RELIABILITY_RESTATES_SCORABILITY",
+    "FIELD_HAS_A_CONTEXT",
+    "CLASSIFICATION_LABEL_KNOWN",
+    "DEFINITIONAL_IDENTIFIER_SUPPLIED",
+    "NUMBERS_ARE_SUPPLIED",
+    "TRANSFORMATION_CONCEPTS_NOT_ASSERTED",
+    "LIMITING_FACT_NEVER_SUPPORTS_ITS_CONCEPT",
+    "NO_SCORE_ASSERTED",
+    "PRIOR_KNOWLEDGE_IS_NOT_SUPPORT",
+    "UNMEASURED_COMMERCIAL_QUANTITIES_NEVER_ASSERTED",
+    "COMMERCIAL_TERMS_NEED_THEIR_DIMENSION",
+    "NO_VALIDATION_LANGUAGE",
+    "DIMENSION_NAME_OF_A_SUPPORTED_DIMENSION",
+    "EMPTY_OR_SENTINEL_TEXT_ASSERTS_NOTHING"
+  ],
+  "UNSTATED_IN_V1_2": [
+    "NEXT_EVIDENCE_NOT_EMPTY",
+    "CLASSIFICATIONS_NOT_EMPTY",
+    "SOMETHING_REMAINS_UNKNOWN",
+    "SUBJECT_IS_THE_PACKET_IDENTITY",
+    "AT_LEAST_ONE_EVIDENCE_CITED",
+    "AT_LEAST_ONE_CLAIM_CITED",
+    "EVIDENCE_CITED_WITH_ITS_CLAIM",
+    "SUPPORTED_AND_UNSUPPORTED_DISJOINT",
+    "FIELD_SHAPE_KEPT",
+    "FIELD_TEXT_READ_BY_ITS_DISPOSITION",
+    "ADDED_CONCEPTS_NOT_ASSERTED",
+    "SOURCE_NAME_IS_NOT_A_SUPPLIED_WORD",
+    "SOURCE_NAME_LICENSES_ITS_WHOLE_OCCURRENCE",
+    "OBSERVED_DISJUNCTION_FAILS_CLOSED",
+    "NOTHING_PROMOTED_TO_A_CONCLUSION",
+    "NOT_SUPPORTED_ITEM_NEVER_CLAIMS_SUPPORT",
+    "OBSERVED_IS_ATOMIC_AND_DIRECTLY_SUPPORTED"
+  ],
+  "UNSTATED_IN_V1_2_COUNT": 17,
+  "UNSTATED_GENERATION_RELEVANT_SEMANTIC_RULES": 0,
+  "RENDERER": "semantic-generation-rules-renderer@1.0.0",
+  "POLICY_VERSION": "second-opportunity-semantic-generation-policy@1.0.0",
+  "POLICY_DIGEST": "e5bf9a9cb65e9a4165ee32510678b973c3e94d56ed8e52b5ec95d07a831653b0",
+  "SEMANTIC_BLOCK_SHA256": "7f37fab4eaef42f4c1cb3a1e64cc708c17d0b95a8a744e08913971b3ce1d2d00",
+  "SEMANTIC_BLOCK_LINES": 91,
+  "DRIFT": {
+    "CLASS_A_MUTATIONS": [
+      "census_instruction",
+      "classification_label",
+      "classification_meaning",
+      "concept_added",
+      "concept_never_text",
+      "disjunction_connectives",
+      "disposition_wording",
+      "field_disposition",
+      "metadata_is",
+      "metadata_may_not_support"
+    ],
+    "CLASS_A_MOVED": 10,
+    "CLASS_D_MUTATIONS": [
+      "census_mechanism_rationale",
+      "certainty_markers",
+      "concept_phrases",
+      "denial_markers",
+      "external_knowledge_markers",
+      "forbidden_terms",
+      "inflection_rules",
+      "support_predicates",
+      "validation_words"
+    ],
+    "CLASS_D_MOVED": 0
+  },
+  "DISJUNCTION_CROSS_CHECK": {
+    "CONNECTIVES": [
+      "or",
+      "either ... or"
+    ],
+    "DETECTED": {
+      "or": [
+        "or"
+      ],
+      "either ... or": [
+        "either",
+        "or"
+      ]
+    },
+    "DENIED_TOGETHER_DETECTED": false
+  },
+  "EXPOSURE": {
+    "DIGITS_IN_SEMANTIC_BLOCK": 0,
+    "REGEX_FRAGMENTS_IN_SEMANTIC_BLOCK": 0,
+    "HISTORICAL_SENTENCE_IN_PROMPT": false,
+    "WORD_TENDER_IN_ADDED_SYSTEM_TEXT": false,
+    "HISTORICAL_EXECUTION_NAMED_IN_ADDED_SYSTEM_TEXT": false,
+    "SOURCE_NAME_HARD_CODED_IN_SYSTEM_REGION": false,
+    "SYSTEM_REGION_PACKET_INDEPENDENT": true
+  },
+  "SOURCE_ORIGIN": {
+    "SOURCE_LABELS_SHOWN": [
+      {
+        "text": "ted-eu",
+        "kind": "PROVENANCE_LABEL",
+        "source_id": "ted-eu"
+      },
+      {
+        "text": "Tenders Electronic Daily (EU public procurement)",
+        "kind": "REGISTRY_DISPLAY_NAME",
+        "source_id": "ted-eu"
+      },
+      {
+        "text": "Tenders Electronic Daily",
+        "kind": "SOURCE_NAME",
+        "source_id": "ted-eu"
+      },
+      {
+        "text": "notices/eforms-contract-and-award",
+        "kind": "PROVENANCE_LABEL",
+        "source_id": "ted-eu"
+      }
+    ],
+    "SOURCE_LABELS_OCCUR_IN_APPROVED_REPRESENTATION": true,
+    "SOURCE_ORIGIN_VISIBLE_TO_MODEL": true,
+    "REPRESENTATION_SHA256": "2528a56a4a9e873bfd04662aeb52916eb80faafe10ab085e716cbdcee77c5b72",
+    "REPRESENTATION_CHARACTERS": 3604,
+    "REPRESENTATION_CHANGED": false
+  },
+  "PROMPT_V1_3_SHA256": "a62fa218ab04e7da5b050ec40dcf2450c749dafd34262fe8c83e9fbc040acc5a",
+  "PROMPT_V1_3_RECORD": "second-opportunity-synthesis-prompt-v4.json",
+  "COMPLIANCE_CASES": [
+    {
+      "case": "A",
+      "claim": "a source name containing a domain word never yields an OBSERVED fact of that word",
+      "prompt_rules": [
+        "SOURCE_NAME_IS_NOT_A_SUPPLIED_WORD",
+        "OBSERVED_IS_ATOMIC_AND_DIRECTLY_SUPPORTED"
+      ],
+      "gate_verdicts": {
+        "forbidden": "PASSES_GATE",
+        "forbidden_gated_word": "REFUSED_BY_GATE"
+      }
+    },
+    {
+      "case": "B",
+      "claim": "an atomic OBSERVED statement a source content statement establishes is allowed",
+      "prompt_rules": [
+        "OBSERVED_IS_ATOMIC_AND_DIRECTLY_SUPPORTED"
+      ],
+      "gate_verdicts": {
+        "compliant": "PASSES_GATE"
+      }
+    },
+    {
+      "case": "C",
+      "claim": "an OBSERVED statement never joins alternatives",
+      "prompt_rules": [
+        "OBSERVED_DISJUNCTION_FAILS_CLOSED"
+      ],
+      "gate_verdicts": {
+        "forbidden": "REFUSED_BY_GATE"
+      }
+    },
+    {
+      "case": "D",
+      "claim": "two statements are preferred to one joined statement",
+      "prompt_rules": [
+        "OBSERVED_DISJUNCTION_FAILS_CLOSED"
+      ],
+      "gate_verdicts": {
+        "compliant": "PASSES_GATE"
+      }
+    },
+    {
+      "case": "E",
+      "claim": "incomplete support gives HYPOTHESIS_TO_VALIDATE or UNKNOWN_REQUIRES_EVIDENCE",
+      "prompt_rules": [
+        "OBSERVED_IS_ATOMIC_AND_DIRECTLY_SUPPORTED",
+        "OBSERVED_DISJUNCTION_FAILS_CLOSED"
+      ],
+      "gate_verdicts": {
+        "forbidden": "PASSES_GATE",
+        "compliant": "PASSES_GATE"
+      }
+    },
+    {
+      "case": "F",
+      "claim": "a publisher's name may appear, whole, as provenance",
+      "prompt_rules": [
+        "SOURCE_NAME_LICENSES_ITS_WHOLE_OCCURRENCE"
+      ],
+      "gate_verdicts": {
+        "compliant": "PASSES_GATE"
+      }
+    },
+    {
+      "case": "G",
+      "claim": "a forbidden concept may appear as not supported or as unknown, never as observed",
+      "prompt_rules": [
+        "TRANSFORMATION_CONCEPTS_NOT_ASSERTED",
+        "FIELD_TEXT_READ_BY_ITS_DISPOSITION"
+      ],
+      "gate_verdicts": {
+        "forbidden": "REFUSED_BY_GATE",
+        "compliant": "PASSES_GATE"
+      }
+    }
+  ],
+  "V3_REPLAYED": false,
+  "V3_WHITELISTED": false,
+  "V3_TEXT_USED_TO_RENDER": false,
+  "accounting": {
+    "MODEL_CALLS": 0,
+    "PROVIDER_REQUESTS": 0,
+    "MESSAGES_API_REQUESTS": 0,
+    "TED_BYTES_SENT": 0,
+    "CANONICAL_MUTATIONS": 0
+  }
+}
