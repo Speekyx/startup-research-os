@@ -912,6 +912,31 @@ jobs:
       - name: The V4 execution record matches its approval, its retained response and the runner
         run: uv run python infrastructure/scripts/render_second_opportunity_execution_record_v4.py --check
 
+      # Mission 1.84.14. The operator's generation-headroom policy and prompt v1.4.0. The gate
+      # refuses: a merged artifact that moved, V1 to V4 and Mission 1.84.12's records; V4's facts or
+      # its two schema violations not reproduced; the schema, gate v1.3.0 or prompt v1.3.0 changed;
+      # a hard bound equal to a length a historical answer had; a ratio that is not exactly 4/5; a
+      # target not floor(hard * 4/5) of the live bound; a target on a copied value, a closed choice,
+      # the subject identity or an element count; a target the validator enforces; a bound or ratio
+      # mutation that fails to move exactly its targets, or anything else that moves one; a headroom
+      # module that reads a file or carries a historical length; prompt v1.4.0 that is not v1.3.0
+      # plus the block, leaves a target, bound or class-A rule unstated, calls a target a limit,
+      # drops a role or the quality floor, or names a historical execution; and stages 6 to 9 not ready.
+      - name: Every composed text has a generation target derived from its live bound under the operator's 4/5
+        run: uv run python infrastructure/scripts/render_second_opportunity_generation_headroom.py --check
+
+      # Mission 1.84.14. Execution packet V5: V4's call with prompt v1.4.0, frozen and unapproved.
+      # The gate reuses gate 81's frozen helpers and compares everything with V4. It refuses: bound
+      # fields that do not hash to the digest, a spent digest, an unreviewed field, or an approval
+      # recorded by the preparing mission; V1 to V4 edited, unspent or rewritten; a prompt, headroom
+      # policy, ratio or record other than gate 83's; the V5 runner's stages 6 to 9 not refusing at
+      # their own stages; the schema, gate or representation moved; a route, model, thinking,
+      # max_tokens, completion, timeout, retention or persistence policy that moved from V4; a body
+      # the snapshot does not rebuild; a ceiling that is not the recomputed worst case; a runner with
+      # two call sites, post-processing, an injectable gate, another digest or a blind guard.
+      - name: Execution packet V5 is V4's call with prompt v1.4.0, and matches the live code
+        run: uv run python infrastructure/scripts/render_second_opportunity_execution_packet_v5.py --check
+
       # Mission 1.84.2. The one approved provider request happened and its output was rejected
       # at schema validation. The gate refuses: an approval recovered from a failure, or a
       # consumed-approval list that does not name V1's digest with a request against it; a

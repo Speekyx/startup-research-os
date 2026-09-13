@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.147
+Version: 1.148
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.13)
+Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.14)
 
 ---
 
@@ -13,6 +13,61 @@ Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.13)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.148 - 2026-09-13 (Sprint 1 / Mission 1.84.14)
+
+**`SECOND_OPPORTUNITY_EXECUTION_PACKET_V5_READY_FOR_OPERATOR_APPROVAL`: a generation target at 4/5 of
+each composed text's hard maximum, derived from the live schema and stated beside it, field roles that
+keep each field's information in one place, and packet V5 frozen and unapproved.** The operator
+accepted V4's historical result. They kept schema v1.1.0, gate v1.3.0 and the representation, forbade
+raising a bound from V4, truncating or fitting an answer, and chose the ratio themselves. **Nothing here
+derives it from V4.**
+
+**ONE DERIVATION.** `generation_target = (hard * 4) // 5`, with the ratio held as an exact
+`Fraction(4, 5)`.
+- **Twelve composed texts** get a target: the class 300 to 240, the summary 900 to 720, and every other
+  composed text the same way. Selection uses the existing output-constraint classification and the
+  semantic census. They disagree on `subject`, and the strict reading wins: an identity copy gets no
+  target.
+- **Copied ids, closed choices and all ten element counts get none** (`ARRAY_HEADROOM_POLICY = NONE`).
+- **A target is not validation.** Target, target + 1 and the hard maximum pass the schema, and hard + 1
+  fails, for all twelve texts; gate 84 proves the same through the V5 runner's stages.
+- **Nothing drifts.** `HEADROOM_TARGET_DRIFT = 0` across 34 mutations of bounds, ratios, copied
+  lengths, counts and choices. The headroom modules read no file and carry no integer beyond 0, 1, 4,
+  5 and 96.
+
+**PROMPT v1.4.0** (`960955f4...`) is v1.3.0 byte for byte, plus one block:
+- the twelve targets, each beside its hard maximum;
+- `candidate_intervention_class` names the class only;
+- the summary is a synthesis, not a ledger;
+- concision never costs an uncertainty, an unsupported claim, provenance, a limitation, the
+  observed/unknown line or an Evidence reference;
+- a reread before submitting, with no scratchpad and no second call.
+
+For v1.4.0, the counts of unstated schema bounds, class-A rules and targets are 0, 0 and 0. Native
+`maxLength` enforcement is `NOT_HELD`. Stages 6 to 9 are still ready.
+
+**PACKET V5** (`da3e7d09...`) is V4's call with prompt v1.4.0.
+- The body is 31963 characters, for an estimated 18528 input tokens.
+- The ceiling is **1.317056** (V4's was 1.312398).
+- Human review is required, and the approval is NOT recorded.
+
+Probe **127 caught, 0 escaped, 31 of 31 controls**. A first run's one escape was an inert probe case,
+which is reported, corrected and run again. **3853 tests**, 4946 pytest, **84 gates**, **103 new tests**. **0 model calls, 0 provider requests, 0 TED bytes, 0
+canonical mutation**. `mission-1.84.14-report.md`.
+
+New:
+- `sros_opportunity/generation_headroom.py` and `sros_opportunity/second_opportunity_prompt_v1_4.py`;
+- `infrastructure/scripts/run_second_opportunity_execution_v5.py`;
+- CI gates 83 (`render_second_opportunity_generation_headroom.py`) and 84
+  (`render_second_opportunity_execution_packet_v5.py`);
+- `docs/data/second-opportunity-generation-headroom-policy-v1.json`,
+  `second-opportunity-synthesis-prompt-v5.json` and `second-opportunity-synthesis-execution-packet-v5.json`,
+  with their generated `.md`;
+- tests, and `docs/reports/mission-1.84.14-report.md`.
+
+Changed: `docs/CLAUDE.md` 1.148 to 1.149; `.github/workflows/ci.yml` gains two gates. **The schema, gate
+v1.3.0, prompt v1.3.0, every V1 to V4 artifact and every earlier runner are byte-identical.**
 
 ## 1.147 - 2026-09-13 (Sprint 1 / Mission 1.84.13)
 

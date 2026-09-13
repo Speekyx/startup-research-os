@@ -1,0 +1,551 @@
+{
+  "$comment": "Mission 1.84.14. The operator's generation-headroom policy, the targets derived from the live schema, the proofs that a target is not validation and that nothing but a bound or the ratio moves one, and prompt v1.4.0's checks. CI gate 83 re-derives every field.",
+  "record_version": "second-opportunity-generation-headroom-policy-record@1.0.0",
+  "mission": "mission-1.84.14",
+  "OPERATOR_DECISION": [
+    "KEEP_OUTPUT_SCHEMA_V1_1_0_UNCHANGED",
+    "KEEP_SEMANTIC_GATE_V1_3_0_UNCHANGED",
+    "KEEP_TED_REPRESENTATION_UNCHANGED",
+    "DO_NOT_RAISE_MAX_LENGTHS_FROM_V4",
+    "DO_NOT_TRUNCATE_MODEL_OUTPUT",
+    "DO_NOT_POST_PROCESS_MODEL_OUTPUT_TO_FIT",
+    "ADD_SCHEMA_DERIVED_GENERATION_HEADROOM",
+    "ADD_NON_REDUNDANT_FIELD_GUIDANCE",
+    "GENERATION_HEADROOM_POLICY = TARGET_AT_MOST_80_PERCENT_OF_HARD_MAX_LENGTH",
+    "GENERATION_TARGET_RATIO = 0.80"
+  ],
+  "HISTORY_UNCHANGED": {
+    "docs/data/second-opportunity-semantic-prompt-alignment-v1.json": "dec1cb103020eb8b0bbd4bd67027a5b0178d1f99a54583527db3cbc3ce202f53",
+    "docs/data/second-opportunity-stage-6-9-preflight-v1.json": "4c5564b98cfabd83e7d7029908b50caa8a81dd6907a1a64d56ff4c80b4ab0c00",
+    "docs/data/second-opportunity-synthesis-execution-approval-v2.json": "1885358d0b7fde8e95a587f124cf9b85d41b1471ee0aeb4a21cd0a5e2712555c",
+    "docs/data/second-opportunity-synthesis-execution-approval-v3.json": "9f951e64d9bc93e1dfb907763c2fdfedc1f3df46b48e63acf927fef3671d027c",
+    "docs/data/second-opportunity-synthesis-execution-approval-v4.json": "c5cb608e4cf5aac6698ebec005658184e173518bb0ea719ba7e25185d5a73957",
+    "docs/data/second-opportunity-synthesis-execution-packet-v1.json": "7132fc35ab263b86bbe89016f84fd10e9ed54bcc7fb8b30d072e86279b472241",
+    "docs/data/second-opportunity-synthesis-execution-packet-v2.json": "5a2f5a7ea20c6de9d4f50498f304e59b6918db63e5ccc9814f988fd3d4f14871",
+    "docs/data/second-opportunity-synthesis-execution-packet-v3.json": "096eb1845e55a8792c4de7f07b35319de61b6e1af52bd9c4544bd2205533b130",
+    "docs/data/second-opportunity-synthesis-execution-packet-v4.json": "f398a0d13c4553c8cb212c40a7892bc90cf0b810538c7e7c989548f858490435",
+    "docs/data/second-opportunity-synthesis-execution-record-v1.json": "b769ddeb6ea4d4e773640c3ed83caeff52c52c857fd9125325140de4ab38c799",
+    "docs/data/second-opportunity-synthesis-execution-record-v2.json": "3fb8d5bae0cb2c64e165961518d9dfd3b1de98eef5244600ea0e5efc289001a7",
+    "docs/data/second-opportunity-synthesis-execution-record-v3.json": "abb093389664405f80878d2a1963beabfa4c271ed559437384146a92ccfb00a3",
+    "docs/data/second-opportunity-synthesis-execution-record-v4.json": "3e61c2d92df1184aac53f66e5c6e57fc9aeacb4aae4ebe9eb1c68bf774b10e1b",
+    "docs/data/second-opportunity-synthesis-prompt-v4.json": "eb5ce92e1b586a4788722a6fc412c7c3245fa0e9cbf259899a7a55d583b17e88",
+    "docs/data/second-opportunity-synthesis-response-v2.json": "8f98939afa049ab3089c41304bdc7b4f0ee86788d54425f764fc1375964dbb11",
+    "docs/data/second-opportunity-synthesis-response-v3.json": "cf5eb183aa7d329f29e8c2c0f04e3939f1661e488952acdf414d07ad8f488ed6",
+    "docs/data/second-opportunity-synthesis-response-v4.json": "76ff8155062c44f727afc530e5a8d435d2bd70720bee524baeed0ee5f6e40205"
+  },
+  "V4": {
+    "V4_OUTCOME": "EXECUTION_SCHEMA_REJECTED_NO_RETRY",
+    "V4_APPROVAL_CONSUMED": true,
+    "V4_PROVIDER_REQUESTS": 1,
+    "V4_MODEL_CALLS": 1,
+    "V4_RETRIES": 0,
+    "V4_FALLBACKS": 0,
+    "V4_CONTINUATIONS": 0,
+    "V4_REPAIR_CALLS": 0,
+    "V4_STOP_REASON": "tool_use",
+    "V4_USAGE": {
+      "input_tokens": 11599,
+      "output_tokens": 3950,
+      "thinking_tokens": 0,
+      "total_tokens": 15549
+    },
+    "V4_ACTUAL_COST": 0.062698,
+    "V4_STAGES": {
+      "1_transport_success": "PASSED",
+      "2_provider_response_shape": "PASSED",
+      "3_provider_completion": "PASSED",
+      "4_structured_output_parse": "PASSED",
+      "5_schema_validation_v1_1_0": "FAILED",
+      "6_semantic_output_gate_v1_3_0": "NOT_REACHED",
+      "7_evidence_boundary_and_no_distortion": "NOT_REACHED",
+      "8_attribution_and_provenance": "NOT_REACHED",
+      "9_persistence_eligibility": "NOT_REACHED",
+      "10_human_review": "NOT_REACHED"
+    },
+    "V4_HISTORICAL_VIOLATIONS_REPRODUCED": [
+      "candidate_intervention_class: 316 characters exceeds maxLength 300",
+      "evidence_bound_reasoning_summary: 1078 characters exceeds maxLength 900"
+    ],
+    "V4_CANONICAL_PERSISTENCE": false,
+    "V4_CANONICAL_MUTATIONS": 0,
+    "V4_CANDIDATE": false,
+    "V4_PERSISTABLE": false,
+    "V4_HUMAN_REVIEW_PACKET": "NOT_PRODUCED",
+    "V4_REVALIDATED_UNDER_PROMPT_V1_4": false,
+    "HISTORICAL_OBSERVATIONS": {
+      "candidate_intervention_class": {
+        "v4_characters": 316,
+        "v3_characters": 224
+      },
+      "evidence_bound_reasoning_summary": {
+        "v4_characters": 1078,
+        "v3_characters": 868
+      }
+    },
+    "HISTORICAL_OBSERVATIONS_USED_TO_DERIVE_HEADROOM": false
+  },
+  "OUTPUT_SCHEMA_VERSION": "second-opportunity-synthesis-output@1.1.0",
+  "OUTPUT_SCHEMA_SHA256": "ec789d1be7d525bf6e498bf61e8a0596ac4582e24e8b45073b3f9ac1cca8b988",
+  "OUTPUT_SCHEMA_CHANGED": false,
+  "CANDIDATE_INTERVENTION_CLASS_MAX_LENGTH": 300,
+  "EVIDENCE_BOUND_REASONING_SUMMARY_MAX_LENGTH": 900,
+  "HARD_BOUND_FROM_A_HISTORICAL_LENGTH": false,
+  "SEMANTIC_GATE_VERSION": "second-opportunity-output-gate@1.3.0",
+  "SEMANTIC_GATE_IMPLEMENTATION_SHA256": "cc3c490268e6f64a0b2107c2fb0c2fe6a1b1c71ab44c353419cd7d86c4485bf3",
+  "SEMANTIC_GATE_CHANGED": false,
+  "PROMPT_V1_3_SHA256": "a62fa218ab04e7da5b050ec40dcf2450c749dafd34262fe8c83e9fbc040acc5a",
+  "PROMPT_V1_3_CHANGED": false,
+  "INDEPENDENCE": {
+    "V4_VALUES_USED_TO_DERIVE_HEADROOM": false,
+    "HEADROOM_MODULES_READ_FILES": false,
+    "HEADROOM_MODULES_CARRY_A_HISTORICAL_LENGTH": false,
+    "RATIO_SELECTED_BY": "OPERATOR",
+    "RATIO_DERIVED_FROM_HISTORY": false,
+    "FIELD_SPECIFIC_RATIOS": false
+  },
+  "GENERATION_HEADROOM_POLICY": "TARGET_AT_MOST_80_PERCENT_OF_HARD_MAX_LENGTH",
+  "GENERATION_HEADROOM_POLICY_VERSION": "second-opportunity-generation-headroom-policy@1.0.0",
+  "GENERATION_TARGET_RATIO": "4/5",
+  "GENERATION_TARGET_RATIO_DECIMAL": "0.80",
+  "RATIO_REPRESENTATION": "fractions.Fraction(4, 5), exact; targets in integer arithmetic",
+  "TARGET_FORMULA": "floor(hard_maximum * 4 / 5)",
+  "HEADROOM_IS_VALIDATION": false,
+  "APPLIES_TO": {
+    "keyword": "maxLength",
+    "constraint_rule": "composed_length",
+    "identity_rules_excluded": [
+      "SUBJECT_IS_THE_PACKET_IDENTITY"
+    ]
+  },
+  "ARRAY_HEADROOM_POLICY": "NONE",
+  "HEADROOM_TABLE": [
+    {
+      "field": "target_actor_if_supported",
+      "hard_maximum": 200,
+      "generation_target": 160,
+      "constraint_classification": "composed_length (MUST_BE_EXPLICIT_IN_PROMPT)",
+      "target_source": "floor(200 * 4/5) under TARGET_AT_MOST_80_PERCENT_OF_HARD_MAX_LENGTH",
+      "hard_bound_source": "output schema target_actor_if_supported maxLength",
+      "label": "target_actor_if_supported"
+    },
+    {
+      "field": "observed_need",
+      "hard_maximum": 400,
+      "generation_target": 320,
+      "constraint_classification": "composed_length (MUST_BE_EXPLICIT_IN_PROMPT)",
+      "target_source": "floor(400 * 4/5) under TARGET_AT_MOST_80_PERCENT_OF_HARD_MAX_LENGTH",
+      "hard_bound_source": "output schema observed_need maxLength",
+      "label": "observed_need"
+    },
+    {
+      "field": "candidate_intervention_class",
+      "hard_maximum": 300,
+      "generation_target": 240,
+      "constraint_classification": "composed_length (MUST_BE_EXPLICIT_IN_PROMPT)",
+      "target_source": "floor(300 * 4/5) under TARGET_AT_MOST_80_PERCENT_OF_HARD_MAX_LENGTH",
+      "hard_bound_source": "output schema candidate_intervention_class maxLength",
+      "label": "candidate_intervention_class"
+    },
+    {
+      "field": "hypothesis_statement",
+      "hard_maximum": 600,
+      "generation_target": 480,
+      "constraint_classification": "composed_length (MUST_BE_EXPLICIT_IN_PROMPT)",
+      "target_source": "floor(600 * 4/5) under TARGET_AT_MOST_80_PERCENT_OF_HARD_MAX_LENGTH",
+      "hard_bound_source": "output schema hypothesis_statement maxLength",
+      "label": "hypothesis_statement"
+    },
+    {
+      "field": "independence_status",
+      "hard_maximum": 300,
+      "generation_target": 240,
+      "constraint_classification": "composed_length (MUST_BE_EXPLICIT_IN_PROMPT)",
+      "target_source": "floor(300 * 4/5) under TARGET_AT_MOST_80_PERCENT_OF_HARD_MAX_LENGTH",
+      "hard_bound_source": "output schema independence_status maxLength",
+      "label": "independence_status"
+    },
+    {
+      "field": "reliability_status",
+      "hard_maximum": 300,
+      "generation_target": 240,
+      "constraint_classification": "composed_length (MUST_BE_EXPLICIT_IN_PROMPT)",
+      "target_source": "floor(300 * 4/5) under TARGET_AT_MOST_80_PERCENT_OF_HARD_MAX_LENGTH",
+      "hard_bound_source": "output schema reliability_status maxLength",
+      "label": "reliability_status"
+    },
+    {
+      "field": "evidence_bound_reasoning_summary",
+      "hard_maximum": 900,
+      "generation_target": 720,
+      "constraint_classification": "composed_length (MUST_BE_EXPLICIT_IN_PROMPT)",
+      "target_source": "floor(900 * 4/5) under TARGET_AT_MOST_80_PERCENT_OF_HARD_MAX_LENGTH",
+      "hard_bound_source": "output schema evidence_bound_reasoning_summary maxLength",
+      "label": "evidence_bound_reasoning_summary"
+    },
+    {
+      "field": "critical_uncertainties[]",
+      "hard_maximum": 500,
+      "generation_target": 400,
+      "constraint_classification": "composed_length (MUST_BE_EXPLICIT_IN_PROMPT)",
+      "target_source": "floor(500 * 4/5) under TARGET_AT_MOST_80_PERCENT_OF_HARD_MAX_LENGTH",
+      "hard_bound_source": "output schema critical_uncertainties[] maxLength",
+      "label": "each element of critical_uncertainties"
+    },
+    {
+      "field": "commercial_claims_supported[]",
+      "hard_maximum": 300,
+      "generation_target": 240,
+      "constraint_classification": "composed_length (MUST_BE_EXPLICIT_IN_PROMPT)",
+      "target_source": "floor(300 * 4/5) under TARGET_AT_MOST_80_PERCENT_OF_HARD_MAX_LENGTH",
+      "hard_bound_source": "output schema commercial_claims_supported[] maxLength",
+      "label": "each element of commercial_claims_supported"
+    },
+    {
+      "field": "commercial_claims_not_supported[]",
+      "hard_maximum": 300,
+      "generation_target": 240,
+      "constraint_classification": "composed_length (MUST_BE_EXPLICIT_IN_PROMPT)",
+      "target_source": "floor(300 * 4/5) under TARGET_AT_MOST_80_PERCENT_OF_HARD_MAX_LENGTH",
+      "hard_bound_source": "output schema commercial_claims_not_supported[] maxLength",
+      "label": "each element of commercial_claims_not_supported"
+    },
+    {
+      "field": "recommended_next_evidence[]",
+      "hard_maximum": 300,
+      "generation_target": 240,
+      "constraint_classification": "composed_length (MUST_BE_EXPLICIT_IN_PROMPT)",
+      "target_source": "floor(300 * 4/5) under TARGET_AT_MOST_80_PERCENT_OF_HARD_MAX_LENGTH",
+      "hard_bound_source": "output schema recommended_next_evidence[] maxLength",
+      "label": "each element of recommended_next_evidence"
+    },
+    {
+      "field": "statement_classifications[].statement",
+      "hard_maximum": 300,
+      "generation_target": 240,
+      "constraint_classification": "composed_length (MUST_BE_EXPLICIT_IN_PROMPT)",
+      "target_source": "floor(300 * 4/5) under TARGET_AT_MOST_80_PERCENT_OF_HARD_MAX_LENGTH",
+      "hard_bound_source": "output schema statement_classifications[].statement maxLength",
+      "label": "statement, in each element of statement_classifications"
+    }
+  ],
+  "TARGETED_TEXTS": 12,
+  "UNTARGETED_BOUNDS": [
+    {
+      "field": "subject",
+      "keyword": "maxLength",
+      "hard_bound": 80,
+      "constraint_rule": "composed_length",
+      "reason": "a supplied identity copied exactly, under SUBJECT_IS_THE_PACKET_IDENTITY"
+    },
+    {
+      "field": "supported_dimensions",
+      "keyword": "maxItems",
+      "hard_bound": 14,
+      "constraint_rule": "vocabulary_cardinality",
+      "reason": "ARRAY_HEADROOM_POLICY = NONE: element counts keep their limit"
+    },
+    {
+      "field": "unsupported_dimensions",
+      "keyword": "maxItems",
+      "hard_bound": 14,
+      "constraint_rule": "vocabulary_cardinality",
+      "reason": "ARRAY_HEADROOM_POLICY = NONE: element counts keep their limit"
+    },
+    {
+      "field": "supporting_evidence_ids",
+      "keyword": "maxItems",
+      "hard_bound": 20,
+      "constraint_rule": "chosen_cardinality",
+      "reason": "ARRAY_HEADROOM_POLICY = NONE: element counts keep their limit"
+    },
+    {
+      "field": "supporting_evidence_ids[]",
+      "keyword": "maxLength",
+      "hard_bound": 36,
+      "constraint_rule": "copied_length",
+      "reason": "copied_length: generation does not choose this length"
+    },
+    {
+      "field": "supporting_claim_ids",
+      "keyword": "maxItems",
+      "hard_bound": 20,
+      "constraint_rule": "chosen_cardinality",
+      "reason": "ARRAY_HEADROOM_POLICY = NONE: element counts keep their limit"
+    },
+    {
+      "field": "supporting_claim_ids[]",
+      "keyword": "maxLength",
+      "hard_bound": 36,
+      "constraint_rule": "copied_length",
+      "reason": "copied_length: generation does not choose this length"
+    },
+    {
+      "field": "source_families",
+      "keyword": "maxItems",
+      "hard_bound": 10,
+      "constraint_rule": "chosen_cardinality",
+      "reason": "ARRAY_HEADROOM_POLICY = NONE: element counts keep their limit"
+    },
+    {
+      "field": "source_families[]",
+      "keyword": "maxLength",
+      "hard_bound": 128,
+      "constraint_rule": "copied_length",
+      "reason": "copied_length: generation does not choose this length"
+    },
+    {
+      "field": "critical_uncertainties",
+      "keyword": "maxItems",
+      "hard_bound": 12,
+      "constraint_rule": "chosen_cardinality",
+      "reason": "ARRAY_HEADROOM_POLICY = NONE: element counts keep their limit"
+    },
+    {
+      "field": "commercial_claims_supported",
+      "keyword": "maxItems",
+      "hard_bound": 8,
+      "constraint_rule": "chosen_cardinality",
+      "reason": "ARRAY_HEADROOM_POLICY = NONE: element counts keep their limit"
+    },
+    {
+      "field": "commercial_claims_not_supported",
+      "keyword": "maxItems",
+      "hard_bound": 14,
+      "constraint_rule": "chosen_cardinality",
+      "reason": "ARRAY_HEADROOM_POLICY = NONE: element counts keep their limit"
+    },
+    {
+      "field": "recommended_next_evidence",
+      "keyword": "maxItems",
+      "hard_bound": 8,
+      "constraint_rule": "chosen_cardinality",
+      "reason": "ARRAY_HEADROOM_POLICY = NONE: element counts keep their limit"
+    },
+    {
+      "field": "statement_classifications",
+      "keyword": "maxItems",
+      "hard_bound": 24,
+      "constraint_rule": "chosen_cardinality",
+      "reason": "ARRAY_HEADROOM_POLICY = NONE: element counts keep their limit"
+    }
+  ],
+  "RENDERER": "generation-headroom-renderer@1.0.0",
+  "POLICY_DIGEST": "c53ce0e9fc5832d17e2dfc2c1ccf5cb43fcd681e708a1be2d16ab44a7cb4dfd1",
+  "FIELD_ROLES": [
+    {
+      "field": "candidate_intervention_class",
+      "intent": "NAME_THE_CLASS_ONLY",
+      "lines": [
+        "names the class of intervention, and only the class: a short category. It is not a business plan, a product description, a justification, a summary of the evidence, an account of the target actor or a list of features.",
+        "The reasons belong in evidence_bound_reasoning_summary, and the actor in target_actor_if_supported."
+      ]
+    },
+    {
+      "field": "evidence_bound_reasoning_summary",
+      "intent": "COMPACT_SYNTHESIS_NOT_DUPLICATE_LEDGER",
+      "lines": [
+        "a synthesis, not a ledger: what the evidence establishes, why the hypothesis remains exploratory, and the most important evidence boundary. It stays substantive.",
+        "It does not repeat item by item what critical_uncertainties, commercial_claims_not_supported, recommended_next_evidence and statement_classifications already list, and it does not enumerate every Evidence and Claim id that supporting_evidence_ids and supporting_claim_ids carry; it may still name the Evidence a point rests on."
+      ]
+    }
+  ],
+  "QUALITY_FLOOR": [
+    "an uncertainty",
+    "an unsupported claim",
+    "a source's provenance",
+    "a relevant limitation",
+    "the difference between what is observed and what is unknown",
+    "an Evidence reference the answer needs"
+  ],
+  "EXACTNESS": {
+    "HARD_MAXIMA_CHECKED": 10000,
+    "TARGETS_EXACT": true
+  },
+  "BOUNDARIES": [
+    {
+      "field": "target_actor_if_supported",
+      "generation_target": 160,
+      "hard_maximum": 200,
+      "verdicts": {
+        "target": "PASS",
+        "target_plus_one": "PASS",
+        "hard_maximum": "PASS",
+        "hard_maximum_plus_one": "SCHEMA_INVALID"
+      }
+    },
+    {
+      "field": "observed_need",
+      "generation_target": 320,
+      "hard_maximum": 400,
+      "verdicts": {
+        "target": "PASS",
+        "target_plus_one": "PASS",
+        "hard_maximum": "PASS",
+        "hard_maximum_plus_one": "SCHEMA_INVALID"
+      }
+    },
+    {
+      "field": "candidate_intervention_class",
+      "generation_target": 240,
+      "hard_maximum": 300,
+      "verdicts": {
+        "target": "PASS",
+        "target_plus_one": "PASS",
+        "hard_maximum": "PASS",
+        "hard_maximum_plus_one": "SCHEMA_INVALID"
+      }
+    },
+    {
+      "field": "hypothesis_statement",
+      "generation_target": 480,
+      "hard_maximum": 600,
+      "verdicts": {
+        "target": "PASS",
+        "target_plus_one": "PASS",
+        "hard_maximum": "PASS",
+        "hard_maximum_plus_one": "SCHEMA_INVALID"
+      }
+    },
+    {
+      "field": "independence_status",
+      "generation_target": 240,
+      "hard_maximum": 300,
+      "verdicts": {
+        "target": "PASS",
+        "target_plus_one": "PASS",
+        "hard_maximum": "PASS",
+        "hard_maximum_plus_one": "SCHEMA_INVALID"
+      }
+    },
+    {
+      "field": "reliability_status",
+      "generation_target": 240,
+      "hard_maximum": 300,
+      "verdicts": {
+        "target": "PASS",
+        "target_plus_one": "PASS",
+        "hard_maximum": "PASS",
+        "hard_maximum_plus_one": "SCHEMA_INVALID"
+      }
+    },
+    {
+      "field": "evidence_bound_reasoning_summary",
+      "generation_target": 720,
+      "hard_maximum": 900,
+      "verdicts": {
+        "target": "PASS",
+        "target_plus_one": "PASS",
+        "hard_maximum": "PASS",
+        "hard_maximum_plus_one": "SCHEMA_INVALID"
+      }
+    },
+    {
+      "field": "critical_uncertainties[]",
+      "generation_target": 400,
+      "hard_maximum": 500,
+      "verdicts": {
+        "target": "PASS",
+        "target_plus_one": "PASS",
+        "hard_maximum": "PASS",
+        "hard_maximum_plus_one": "SCHEMA_INVALID"
+      }
+    },
+    {
+      "field": "commercial_claims_supported[]",
+      "generation_target": 240,
+      "hard_maximum": 300,
+      "verdicts": {
+        "target": "PASS",
+        "target_plus_one": "PASS",
+        "hard_maximum": "PASS",
+        "hard_maximum_plus_one": "SCHEMA_INVALID"
+      }
+    },
+    {
+      "field": "commercial_claims_not_supported[]",
+      "generation_target": 240,
+      "hard_maximum": 300,
+      "verdicts": {
+        "target": "PASS",
+        "target_plus_one": "PASS",
+        "hard_maximum": "PASS",
+        "hard_maximum_plus_one": "SCHEMA_INVALID"
+      }
+    },
+    {
+      "field": "recommended_next_evidence[]",
+      "generation_target": 240,
+      "hard_maximum": 300,
+      "verdicts": {
+        "target": "PASS",
+        "target_plus_one": "PASS",
+        "hard_maximum": "PASS",
+        "hard_maximum_plus_one": "SCHEMA_INVALID"
+      }
+    },
+    {
+      "field": "statement_classifications[].statement",
+      "generation_target": 240,
+      "hard_maximum": 300,
+      "verdicts": {
+        "target": "PASS",
+        "target_plus_one": "PASS",
+        "hard_maximum": "PASS",
+        "hard_maximum_plus_one": "SCHEMA_INVALID"
+      }
+    }
+  ],
+  "DRIFT": {
+    "MUTATIONS": {
+      "TARGETED_BOUND": 12,
+      "RATIO": 3,
+      "UNTARGETED_LENGTH": 4,
+      "COUNT": 10,
+      "CHOICE": 5
+    },
+    "HEADROOM_TARGET_DRIFT": 0
+  },
+  "PROMPT": {
+    "UNSTATED_GENERATION_CONSTRAINTS": 0,
+    "UNSTATED_GENERATION_RELEVANT_SEMANTIC_RULES": 0,
+    "UNSTATED_GENERATION_TARGETS": 0,
+    "PROMPT_V1_3_UNSTATED_GENERATION_TARGETS": 12,
+    "SOFT_TARGET_AND_HARD_MAXIMUM_STATED_DISTINCTLY": true,
+    "SELF_CHECK_STATED": true,
+    "SCRATCHPAD_REQUESTED": false,
+    "SEPARATE_SELF_CRITIQUE_CALL": false,
+    "EXPOSURE": {
+      "HISTORICAL_LENGTH_IN_ADDED_TEXT": false,
+      "HISTORICAL_EXECUTION_NAMED_IN_ADDED_TEXT": false,
+      "WORD_TENDER_IN_ADDED_TEXT": false,
+      "SOURCE_NAME_HARD_CODED_IN_SYSTEM_REGION": false,
+      "SYSTEM_REGION_PACKET_INDEPENDENT": true
+    }
+  },
+  "PROMPT_V1_4_SHA256": "960955f44a7ac0b95c995941aeac6ca772e196f4e6cb309b44ecfaa741bd6f46",
+  "PROMPT_V1_4_RECORD": "second-opportunity-synthesis-prompt-v5.json",
+  "NATIVE_STRUCTURED_OUTPUT": {
+    "NATIVE_STRUCTURED_OUTPUTS_SUPPORTED": true,
+    "NATIVE_PROVIDER_MAX_LENGTH_ENFORCEMENT": "NOT_HELD",
+    "STRUCTURED_OUTPUT_MECHANISM": "FORCED_TOOL_USE",
+    "PROVIDER_MECHANISM_MIGRATED": false,
+    "DOCUMENTATION_REFRESHED": false,
+    "note": "The capability register records that native structured outputs are supported and records nothing, from any reviewed page, about whether they enforce maxLength. That fact is not held, no documentation was fetched, and the forced tool and the local validator stay the mechanism"
+  },
+  "STAGES": {
+    "STAGE_6_TO_9_PREFLIGHT": "DETERMINISTIC_STAGE_6_TO_9_PATH_READY",
+    "RUNNER": "run_second_opportunity_execution_v4.py"
+  },
+  "REPRESENTATION_SHA256": "2528a56a4a9e873bfd04662aeb52916eb80faafe10ab085e716cbdcee77c5b72",
+  "REPRESENTATION_CHARACTERS": 3604,
+  "REPRESENTATION_CHANGED": false,
+  "accounting": {
+    "MODEL_CALLS": 0,
+    "PROVIDER_REQUESTS": 0,
+    "MESSAGES_API_REQUESTS": 0,
+    "TOKEN_COUNT_API_REQUESTS": 0,
+    "TED_BYTES_SENT": 0,
+    "DOCUMENTATION_FETCHES": 0,
+    "CANONICAL_MUTATIONS": 0
+  }
+}
