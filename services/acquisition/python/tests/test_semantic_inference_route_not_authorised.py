@@ -203,11 +203,18 @@ class TestNoInferenceRouteIsConfigured:
         assert "LLM_TIER_EMBEDDING_PROVIDER=local" in template
 
     def test_no_local_inference_provider_exists_in_the_repository(self) -> None:
+        """Pinned to the property, not to a file list: Mission 1.84.19 added
+        `anthropic_strict.py`, the strict-tool extension of the external Anthropic
+        adapter, and a pinned list refused it while the property still held."""
         modules = {p.stem for p in (GATEWAY / "providers").glob("*.py")}
-        assert modules == {"__init__", "anthropic", "gemini", "fake"}
-        # Both real providers are external services; `fake` is a test double.
-        assert "local" not in modules
-        assert "ollama" not in modules
+        assert {"__init__", "anthropic", "gemini", "fake"} <= modules
+        # Both real providers are external services; `fake` is a test double. A
+        # further module extends the external Anthropic adapter and adds no route.
+        for stem in sorted(modules - {"__init__", "anthropic", "gemini", "fake"}):
+            text = (GATEWAY / "providers" / f"{stem}.py").read_text(encoding="utf-8")
+            assert "(AnthropicProvider):" in text, stem
+        for marker in ("local", "ollama", "llama", "vllm"):
+            assert not any(marker in stem for stem in modules), marker
 
     def test_the_two_gates_are_independent(self) -> None:
         """Stated as an assertion because it decides what a later mission must

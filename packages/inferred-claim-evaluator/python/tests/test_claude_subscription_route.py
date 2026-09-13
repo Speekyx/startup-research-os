@@ -303,11 +303,24 @@ class TestTheArchitectureWasDeterminedAndNotBuilt(unittest.TestCase):
         )
 
     def test_no_subscription_adapter_exists_in_the_gateway(self) -> None:
+        """Re-pointed by Mission 1.84.19 from a pinned module list to the property it protects.
+
+        The list pinned the gateway's future to the four modules that existed in Mission 1.84.1,
+        so the strict-tool extension of the APPROVED API route (`anthropic_strict.py`) failed it
+        without being a subscription adapter. What must stay true is that no provider module
+        names, reaches or authenticates the subscription route.
+        """
         providers = (
             REPO_ROOT / "packages" / "llm-gateway" / "python" / "sros_llm_gateway" / "providers"
         )
-        names = sorted(p.stem for p in providers.glob("*.py"))
-        self.assertEqual(names, ["__init__", "anthropic", "fake", "gemini"])
+        modules = sorted(providers.glob("*.py"))
+        self.assertTrue({"__init__", "anthropic", "fake", "gemini"} <= {p.stem for p in modules})
+        markers = (SUBSCRIPTION_ID, "subscription", "oauth", "keychain", "claude code", "--bare")
+        for module in modules:
+            self.assertNotIn("subscription", module.stem)
+            text = module.read_text(encoding="utf-8").lower()
+            for marker in markers:
+                self.assertNotIn(marker, text, f"{module.name} names {marker!r}")
 
 
 class TestTheGateIsWired(unittest.TestCase):

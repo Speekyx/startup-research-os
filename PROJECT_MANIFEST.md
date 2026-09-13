@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.152
+Version: 1.153
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.18)
+Last amended: 2026-09-14 (Sprint 1 / Mission 1.84.19)
 
 ---
 
@@ -13,6 +13,29 @@ Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.18)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.153 - 2026-09-14 (Sprint 1 / Mission 1.84.19)
+
+**`SECOND_OPPORTUNITY_EXECUTION_PACKET_V7_READY_FOR_OPERATOR_APPROVAL`: the provider's strict tool use
+carries a frozen projection of schema v1.2.0, the full contract still decides stage 5 locally, and V7 is
+frozen and unapproved.** The operator kept the contract, gate v1.4.0, prompt v1.5.0 and the 4/5 headroom,
+refused to open the closed object or filter an unknown key away, and asked for strict tool use over a
+deterministic projection. V6 reconfirmed from what it kept: one undeclared root key, one event, no rate.
+
+**FIRST-PARTY REVIEW**: four provider pages read on 2026-09-13, 27 propositions quoted by line. Strict
+tool use is documented for `claude-sonnet-5` on the Messages API, `"strict": true` at the tool's top
+level, no beta header, forced `tool_choice` compatible; lengths, counts and numeric bounds are not
+supported, patterns only in part. **THE PROJECTION** (`87028f45...`, profile `7f3ed845...`, projector
+`4eef60b0...`) keeps the 20 names, every required list, type, enum, the uuid format and every object
+closed, and sends none of the 30 LOCAL_ONLY constraints, each still enforced at stage 5: 75 constraints,
+44 provider-enforced, 30 local-only, 1 description, 0 blockers. **FROZEN, COMMITTED AND PUSHED as
+`57154af`, found on the remote by `ls-remote` before any V7 artifact existed.**
+
+**PACKET V7** `51023d0d...`: V6's call with a strict tool; the body differs from V6's in exactly
+`tools[0].input_schema` and `tools[0].strict` (31967 -> 31326); prompt byte-identical; ceiling
+**recomputed at 1.316316**, not copied; residual risk not carried; approval NOT recorded. An extra root
+key still stops at local stage 5. **GATES 92 AND 93.** Probe **76 caught, 0 escaped, 28 of 28 controls**, after two runs that each found a defect in gate 93, both fixed. 3877 + 5643 tests, 93 gates, 199 new tests, 0 model calls,
+0 provider requests, 0 token counts, 0 TED bytes, 0 canonical mutation. `mission-1.84.19-report.md`.
 
 ## 1.152 - 2026-09-13 (Sprint 1 / Mission 1.84.18)
 

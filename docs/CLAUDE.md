@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.153
-Last amended: 2026-09-13 (Sprint 1 / Mission 1.84.18)
+Version: 1.154
+Last amended: 2026-09-14 (Sprint 1 / Mission 1.84.19)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.154 | 2026-09-14 | **SECOND_OPPORTUNITY_EXECUTION_PACKET_V7_READY_FOR_OPERATOR_APPROVAL: the provider's strict tool use carries a frozen projection of schema v1.2.0, the full contract still decides stage 5 locally, and V7 is frozen and unapproved.** The operator kept schema v1.2.0, gate v1.4.0, prompt v1.5.0 and the 4/5 headroom, refused to open the closed object or filter an unknown key away, and asked for strict tool use over a deterministic projection. **V6 RECONFIRMED** from its record and retained answer: one undeclared root key, `OBSERVED_UNKNOWN_PROPERTY_EVENTS_V6 = 1`, rate NOT_ESTABLISHED, not replayed through the projection. **FIRST-PARTY REVIEW**: four provider pages, 27 propositions quoted by line; strict tool use documented for `claude-sonnet-5`, `"strict": true` at the tool's top level, no beta header, forced `tool_choice` compatible; lengths, counts and numeric bounds unsupported, patterns only in part. **TWO SCHEMA IDENTITIES**: the contract `7d67bad3...` decides stage 5; the projection `87028f45...` (profile `7f3ed845...`, projector `4eef60b0...`, a pure function in `providers/`) keeps the 20 names, every required list, type, enum, the uuid format and every object closed, and sends none of the 30 LOCAL_ONLY lengths, counts and patterns: 75 constraints, 44 / 30 / 1 / 0 blockers, 100% accounted for, 8 removed and not stated in the prompt, all still enforced locally; `FULL_CANONICAL_SCHEMA_COMPLIANCE = LOCAL_STAGE_5_ONLY`. **FROZEN AND PUSHED AS `57154af`, FOUND ON THE REMOTE BY `ls-remote` BEFORE ANY V7 ARTIFACT.** **PACKET V7** `51023d0d...`: V6's call with a strict tool, the body differing from V6's in exactly `tools[0].input_schema` and `tools[0].strict` (31967 -> 31326), prompt byte-identical with its execution binding changed, ceiling **recomputed at 1.316316** and not copied, strict-format prompt tokens NOT_ESTABLISHED, compilation latency against the 60 s timeout disclosed, residual risk not carried, approval NOT recorded; an extra root key still stops at local stage 5. **GATES 92 AND 93.** Probe **76 caught, 0 escaped, 28 of 28 controls**, after two runs that each found a defect in gate 93, both fixed. 3877 + 5643 tests, 93 gates, 199 new tests, 0 model calls, 0 provider requests, 0 token counts, 0 TED bytes, 0 canonical mutation. `mission-1.84.19-report.md`. |
 | 1.153 | 2026-09-13 | **EXECUTION_SCHEMA_REJECTED_NO_RETRY: the one V6 request was made, no length bound was exceeded, and the schema refused the answer on a key it does not declare.** The operator approved exactly one execution of V6 by its digest `969128dd...`, accepted the recorded V6 process deviation for V6 only and renewed the residual semantic-limitation acceptance for this one attempt only, neither a precedent; the approval was recorded beside the packet verbatim (228 lines, `c6b6602c...`) after 34 named values were compared with the frozen packet. All 50 pre-network checks passed and **ONE** request went to the synchronous Messages API: HTTP 200 in 33.1 s, `stop_reason tool_use`, **12903 in, 3637 out, 0 thinking, cost 0.062176** of a 1.31706 ceiling. **STAGE 5 REFUSED IT ON ITS SHAPE**: `"parameter name": "value"` as the first of 21 keys beside all 20 declared ones, in a closed object the prompt describes in words. **THE LENGTH DECISION HELD**: the summary at 1169 against 1500 and a target of 1200; 11 of 12 texts within target, 1 over target and within bound, 0 over bound. Stages 6 to 10 NOT_REACHED; **no retry, no review packet, nothing persisted, the approval and both acceptances spent**, and a second `--execute`, tripwired, refused before any network. **GATE 91** re-derives the record, keeps v1.1.0 as a diagnostic that is never a verdict, and pins the raw response, the parsed output, the approval and the record. Probe **95 caught, 0 escaped, 13 of 13 controls**. 3853 + 5444 tests, 91 gates, 80 new tests, 1 provider request, 0 retries, 0 canonical mutation. `mission-1.84.18-report.md`. |
 | 1.152 | 2026-09-13 | **SECOND_OPPORTUNITY_EXECUTION_PACKET_V6_READY_FOR_OPERATOR_APPROVAL: gate v1.4.0 is gate v1.3.0 bound to schema v1.2.0, frozen and committed before V6 existed, and V6 is frozen and unapproved.** The operator decided, in five lines carried as data and bound into the V6 digest, to create a successor gate bound to schema v1.2.0, keep v1.3.0 immutable, keep every non-structural behaviour, and use v1.2.0 as the V6 contract. **GATE v1.4.0** (`eb03899b...`): v1.3.0 called once, its v1.1.0 structural reasons recomputed and required to lead its list or it fails closed, replaced by v1.2.0's, every other reason, the audit and the notes kept; no integer literal; v1.3.0 (`cc3c4902...`) untouched. **THE DIFFERENTIAL FOUND NOTHING OUTSIDE THE BOUND**: 104 synthetic cases and v1.3.0's own 159 tests replayed through both gates, 0 common-domain and 0 non-structural divergences, verdicts changed only in the 901 to 1500 band, 1501 refused naming `@1.2.0` and 1500; **committed as `402a698` before any V6 artifact was rendered; its push failed, was misread, and reached the remote only at the end.** **PROMPT v1.5.0** (`0713eb80...`): two system lines move, in their numbers only; 0/0/0 unstated, and the same checks refuse v1.4.0 under v1.2.0. **CAPACITY**: maximum 316929 (+7200 = 600 x 12), the full domain unreachable with no token count, one headroom row moves, persistence COMPATIBLE. **V6 RUNNER**: 1189 characters reach stage 9, one unsupported sentence is refused at 6 after 5 passes, 1501 at 5. **PACKET V6** `969128dd...`: V5's call over v1.2.0, v1.4.0 and v1.5.0, body 31967 (+4), ceiling 1.31706, residual risk not carried, approval NOT recorded. **GATES 87 TO 90**, and **gate 86 re-pointed** from an absence to the decision. Probe 123 caught, 0 escaped, 22 of 22 controls. 3853 + 5364 tests, 90 gates, 271 new tests, 0 model calls, 0 provider requests, 0 token counts, 0 TED bytes, 0 canonical mutation. `mission-1.84.17-report.md`. |
 | 1.151 | 2026-09-13 | **DETERMINISTIC_STAGE_6_TO_9_PATH_NOT_READY, blocker SEMANTIC_GATE_V1_3_0_BINDS_OUTPUT_SCHEMA_V1_1_0: the operator's 1500 is recorded, schema v1.2.0 carries it, persistence holds it, and gate v1.3.0 cannot admit it.** The operator moved `evidence_bound_reasoning_summary.maxLength` from 900 to 1500 as `OPERATOR_SEMANTIC_BUDGET`; the decision is their words (44 lines, `84c83f92...`), not derived from 868, 1078 or 1031, not estimated, not proven optimal. **V5 reconfirmed and untouched**: every figure matches, its refusal replays under v1.1.0, and it is not revalidated under v1.2.0. **SCHEMA v1.2.0** (`7d67bad3...`): exactly one semantic leaf moves, finite by a walker proven non-vacuous, one headroom row moves (1500 / 1200, the target derived), 1501 fails. **PERSISTENCE COMPATIBLE**: a plain `str` model field, SQL write paths that pass the text as it is, a `TEXT` column with no CHECK already holding 1456 characters. **SECTION 10 STOPPED IT**: gate v1.3.0 (`cc3c4902...`, unchanged) validates structure against schema v1.1.0 inside its evaluator by import, so a synthetic 1189-character summary v1.2.0 admits is refused at stage 6 with v1.1.0's bound; no prompt v1.5.0, V6 runner or packet V6, and v1.3.0 not mutated. **GATE 86** rebuilds the record from the code and the artifacts. Probe 66 caught, 0 escaped, 15 of 15 controls. 3853 + 5086 tests, 86 gates, 65 new tests, 0 model calls, 0 provider requests, 0 TED bytes, 0 canonical mutation. `mission-1.84.16-report.md`. |
@@ -2627,6 +2628,46 @@ an undeclared key, and nothing about how often any answer would. This mission re
 not re-execute V1 to V6, do not treat the refused answer as a candidate, and do not persist Opportunity
 #2.
 Mission 1.84.19 was not started.**
+
+
+**ANSWERED IN 1.154 (Mission 1.84.19). The provider's strict tool use carries a frozen projection of the
+contract, the contract still decides stage 5, and V7 awaits an approval.**
+
+    contract      schema v1.2.0 (7d67bad3...), unchanged; decides stage 5 locally
+    projection    87028f45..., profile 7f3ed845..., projector 4eef60b0...; 44 / 30 / 1 / 0
+    freeze        57154af, pushed and found on the remote before any V7 artifact
+    request       V6's body plus tools[0].strict and the projected schema, nothing else
+    packet V7     51023d0d..., body 31326, ceiling 1.316316, approval NOT recorded
+
+- **A PROVIDER GUARANTEE AND A LOCAL CONTRACT ARE TWO IDENTITIES.** The projection is what the tool
+  carries; the contract is what decides. Neither is named as the other, and full canonical compliance is
+  attributed only to stage 5.
+- **WHAT THE PROVIDER DOES NOT DOCUMENT ENFORCING IS NOT SENT, AND IS NOT DROPPED.** Thirty lengths,
+  counts and patterns leave the tool schema and stay in the contract, each accounted for; eight of them
+  are stated nowhere in the prompt, and gate 92 names them.
+- **A COUNTED QUANTIFIER THE DOCUMENTATION CALLS "SIMPLE" WITHOUT DEFINING IT IS NOT ESTABLISHED AS
+  SUPPORTED.** All three of the contract's patterns carry one, so all three are local-only.
+- **AN OBSERVED EVENT IS NOT A RATE.** V6 carried one undeclared key once, and the projection was not
+  chosen from it: it is a pure function of the contract and the reviewed profile.
+- **A FREEZE IS VERIFIED BY ITS REF BEFORE ANYTHING DEPENDS ON IT.** V6's process deviation was a push
+  that failed and was misread. This one was checked with `ls-remote` before the V7 runner, gate 93 or
+  packet V7 existed, and the probe checked it again from the remote.
+- **A DIFFERENCE IN A REQUEST BODY IS COMPUTED, NOT DESCRIBED.** Both runners rebuild their bodies over
+  one snapshot, and any path outside the two approved ones refuses the packet.
+- **A CEILING IS RECOMPUTED FROM THE BODY IT PRICES**, and the tokens strict mode adds to the input are
+  recorded as NOT_ESTABLISHED rather than covered.
+
+**Next is one operator decision, and it is not a mission's to take.** Approving
+`SECOND-OPPORTUNITY-SYNTH-EXEC-V7` by its digest `51023d0d...`, recorded beside the packet by a later
+mission, authorises exactly one request on the synchronous route with a strict forced tool over the
+frozen projection, thinking disabled at 128000, the ten ordered stages with the full schema v1.2.0 at
+stage 5, and an Opportunity hypothesis persisted only after deterministic acceptance and a separate human
+approval. The approval must say whether it accepts the residual semantic limitation again, because V6's
+acceptance expired with V6. One call will be one observation, and whether strict decoding prevents an
+undeclared key is documented and not yet observed. **Do not execute V7 without that approval, do not
+approve it on the operator's behalf, do not reuse V1's to V6's approvals, and do not persist Opportunity
+#2.
+Mission 1.84.20 was not started.**
 
 
 
