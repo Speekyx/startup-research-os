@@ -1130,6 +1130,20 @@ jobs:
       - name: Prompt v1.6.0 is v1.5.0 plus the generation-surface block, and the frozen gate agrees
         run: uv run python infrastructure/scripts/render_second_opportunity_prompt_v1_6.py --check
 
+      # Mission 1.84.23. Execution packet V10: V9's request with prompt v1.6.0, frozen and
+      # unapproved. The gate refuses: bound fields that do not hash to the digest, a spent or
+      # superseded digest, an unreviewed field, an approval recorded by the preparing mission or
+      # either risk accepted by it; V1 to V6 or V9 edited or their consumption reset, V9's record not
+      # what gate 98 validates or its refusals classified otherwise than gate 99 records, V7 or V8
+      # described as anything but superseded; a prompt other than the frozen v1.6.0, or a freeze
+      # commit or push other than the one verified before V10; a body differing from V9's anywhere
+      # but the system region; a hard ceiling moved or a planning estimate not recomputed from the
+      # body; a synthetic answer that does not stop where it must; a runner that would execute V1 to
+      # V9, renames a refusal or does not demand both risk decisions; and any preparation call, TED
+      # byte or canonical counter that moved.
+      - name: Execution packet V10 is V9's request with prompt v1.6.0, frozen and unapproved
+        run: uv run python infrastructure/scripts/render_second_opportunity_execution_packet_v10.py --check
+
       # Mission 1.84.2. The one approved provider request happened and its output was rejected
       # at schema validation. The gate refuses: an approval recovered from a failure, or a
       # consumed-approval list that does not name V1's digest with a request against it; a
