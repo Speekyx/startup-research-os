@@ -1,0 +1,56 @@
+{
+  "$comment": "Mission 1.84.21. Execution packet V8 superseded before it was approved or executed. The packet is left exactly as Mission 1.84.20 froze it; the V8 runner reads this record and refuses the digest it names, by name, before its approval and any transport.",
+  "record_version": "second-opportunity-execution-packet-supersession@1.0.0",
+  "recorded_by": "mission-1.84.21",
+  "recorded_on": "2026-09-14",
+  "SUPERSEDED_EXECUTION_PACKET_ID": "SECOND-OPPORTUNITY-SYNTH-EXEC-V8",
+  "SUPERSEDED_EXECUTION_PACKET_VERSION": 8,
+  "SUPERSEDED_EXECUTION_PACKET_SHA256": "583946460c6cf68c1be5519916f92d268e36ed65924aeb24901731439586c399",
+  "SUPERSEDED_EXECUTION_PACKET_FILE_SHA256": "4ec6c6bf91fdd88ae9c374336b74880cc7c6a24386850cc2a1df297c1de549da",
+  "STATUS": "SUPERSEDED_BEFORE_EXECUTION",
+  "REASON": "CLIENT_TIMEOUT_SHORTER_THAN_PROVIDER_STRICT_COMPILATION_TIMEOUT",
+  "V8_EXECUTED": false,
+  "V8_APPROVED": false,
+  "V8_APPROVAL_CONSUMED": false,
+  "V8_PROVIDER_REQUESTS": 0,
+  "V8_MODEL_CALLS": 0,
+  "V8_PACKET_MODIFIED": false,
+  "NOT_DESCRIBED_AS": [
+    "FAILED",
+    "CONSUMED",
+    "REJECTED_BY_PROVIDER"
+  ],
+  "REFUSAL_OUTCOME": "EXECUTION_PACKET_SUPERSEDED_BEFORE_EXECUTION",
+  "REFUSAL_IS_NOT": "EXECUTION_APPROVAL_ALREADY_CONSUMED",
+  "GUARD": {
+    "runner": "infrastructure/scripts/run_second_opportunity_execution_v8.py",
+    "function": "refuse_if_superseded",
+    "called_from": [
+      "refuse_if_consumed, which execute calls before the approval is read and before any transport exists, and which verification and --execute call"
+    ]
+  },
+  "TIMEOUT_DECISION_RECORD_VERSION": "second-opportunity-execution-timeout-decision-record@1.0.0",
+  "TIMEOUT_DECISION_RECORD_SHA256": "14fd18d49c4ac8798e4aa897e4bbe0093be810e71f84185e7ac07392db1f3f66",
+  "SUCCESSOR_EXECUTION_PACKET_ID": "SECOND-OPPORTUNITY-SYNTH-EXEC-V9",
+  "OPERATOR_DECISION": [
+    "ACCEPT_ALL_V8_ARCHITECTURE_AND_GOVERNANCE_EXCEPT_THE_60_SECOND_CLIENT_TIMEOUT",
+    "KEEP_OUTPUT_SCHEMA_V1_2_0",
+    "KEEP_SEMANTIC_GATE_V1_4_0",
+    "KEEP_PROMPT_V1_5_0",
+    "KEEP_PROVIDER_STRICT_MODE_TRUE",
+    "KEEP_STRICT_PROJECTION_V1_0_0",
+    "KEEP_STRICT_CAPABILITY_PROFILE_V1_0_0",
+    "KEEP_STRICT_PROJECTION_FREEZE_COMMIT_57154AFF",
+    "KEEP_TED_REPRESENTATION_2528A56A",
+    "KEEP_GENERATION_HEADROOM_4_OVER_5",
+    "KEEP_SUMMARY_HARD_MAXIMUM_1500_AND_TARGET_1200",
+    "KEEP_HARD_EXECUTION_COST_CEILING_3_608_PROVEN",
+    "KEEP_PLANNING_COST_ESTIMATE_1_316316",
+    "DO_NOT_APPROVE_V8",
+    "SUPERSEDE_V8_BEFORE_EXECUTION",
+    "CREATE_V9_WITH_ONLY_CLIENT_TIMEOUT_CHANGE",
+    "REQUEST_TIMEOUT 60.0 -> 240.0 SECONDS",
+    "240_SECONDS_IS_AN_OPERATOR_AVAILABILITY_BUDGET"
+  ],
+  "note": "No inference occurred under V8, so it did not fail, was not consumed and was not refused by the provider. Its 60-second client timeout was shorter than the provider's documented 180-second grammar compilation timeout, and the operator did not approve it. V1 to V6 stay consumed, V7 stays superseded, and a successor needs an approval naming its own digest"
+}

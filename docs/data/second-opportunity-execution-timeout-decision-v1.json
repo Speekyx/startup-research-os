@@ -1,0 +1,131 @@
+{
+  "$comment": "Mission 1.84.21. The operator's client-timeout decision for V8's successor, the mismatch it answers, and what it leaves unestablished. Re-derived by CI gate 96.",
+  "record_version": "second-opportunity-execution-timeout-decision-record@1.0.0",
+  "mission": "1.84.21",
+  "recorded_by": "mission-1.84.21",
+  "recorded_on": "2026-09-14",
+  "PRIMARY_OUTCOME": "CLIENT_TIMEOUT_ALIGNED_BY_OPERATOR_DECISION",
+  "OPERATOR_DECISION": [
+    "ACCEPT_ALL_V8_ARCHITECTURE_AND_GOVERNANCE_EXCEPT_THE_60_SECOND_CLIENT_TIMEOUT",
+    "KEEP_OUTPUT_SCHEMA_V1_2_0",
+    "KEEP_SEMANTIC_GATE_V1_4_0",
+    "KEEP_PROMPT_V1_5_0",
+    "KEEP_PROVIDER_STRICT_MODE_TRUE",
+    "KEEP_STRICT_PROJECTION_V1_0_0",
+    "KEEP_STRICT_CAPABILITY_PROFILE_V1_0_0",
+    "KEEP_STRICT_PROJECTION_FREEZE_COMMIT_57154AFF",
+    "KEEP_TED_REPRESENTATION_2528A56A",
+    "KEEP_GENERATION_HEADROOM_4_OVER_5",
+    "KEEP_SUMMARY_HARD_MAXIMUM_1500_AND_TARGET_1200",
+    "KEEP_HARD_EXECUTION_COST_CEILING_3_608_PROVEN",
+    "KEEP_PLANNING_COST_ESTIMATE_1_316316",
+    "DO_NOT_APPROVE_V8",
+    "SUPERSEDE_V8_BEFORE_EXECUTION",
+    "CREATE_V9_WITH_ONLY_CLIENT_TIMEOUT_CHANGE",
+    "REQUEST_TIMEOUT 60.0 -> 240.0 SECONDS",
+    "240_SECONDS_IS_AN_OPERATOR_AVAILABILITY_BUDGET"
+  ],
+  "OPERATOR_STATED_INTENTIONS": {
+    "RESIDUAL_SEMANTIC_LIMITATION_INTENDED_FOR_V9_APPROVAL": "ACCEPT",
+    "IS_AN_APPROVAL": false,
+    "RECORDED_AS_ACCEPTED": false
+  },
+  "V8_RECONFIRMATION": {
+    "EXECUTION_PACKET_ID": "SECOND-OPPORTUNITY-SYNTH-EXEC-V8",
+    "EXECUTION_PACKET_VERSION": 8,
+    "EXECUTION_PACKET_SHA256_RECOMPUTED": "583946460c6cf68c1be5519916f92d268e36ed65924aeb24901731439586c399",
+    "EXECUTION_PACKET_FILE_SHA256": "4ec6c6bf91fdd88ae9c374336b74880cc7c6a24386850cc2a1df297c1de549da",
+    "approval_recorded": false,
+    "approval_file_exists": false,
+    "execution_record_exists": false,
+    "response_artifact_exists": false,
+    "provider_requests": 0,
+    "REQUEST_TIMEOUT": 60.0,
+    "MAX_RETRIES": 0,
+    "HARD_EXECUTION_COST_CEILING": "3.608",
+    "HARD_EXECUTION_COST_CEILING_PROVEN": true,
+    "PLANNING_COST_ESTIMATE": "1.316316",
+    "request_body_characters": 31326,
+    "request_body_sha256": "58956019f78f414ee11392bee5e99eedda4eb1b4deb20d3f20219dfc60739842",
+    "provider_strict_mode": true,
+    "timeout_in_the_provider_body": false
+  },
+  "TIMEOUT_MISMATCH": {
+    "STRICT_GRAMMAR_COMPILATION": "MAY_OCCUR_ON_THE_FIRST_REQUEST_FOR_A_SCHEMA",
+    "STRICT_GRAMMAR_COMPILATION_LATENCY": "NOT_ESTABLISHED",
+    "PROVIDER_GRAMMAR_COMPILATION_TIMEOUT_SECONDS": 180,
+    "CURRENT_CLIENT_REQUEST_TIMEOUT_SECONDS": 60.0,
+    "MAX_RETRIES": 0,
+    "CLIENT_TIMEOUT_IS_SHORTER_THAN_PROVIDER_COMPILATION_TIMEOUT": true,
+    "CLAIMS_A_REQUEST_WILL_EXCEED_60_SECONDS": false,
+    "ISSUE": "POSSIBILITY_NOT_FREQUENCY",
+    "documentation": [
+      {
+        "evidence": "D04",
+        "line": 2796,
+        "verbatim": "**First request latency:** The first time you use a specific schema, there is additional latency while the grammar compiles"
+      },
+      {
+        "evidence": "D04",
+        "line": 2798,
+        "verbatim": "**Automatic caching:** Compiled grammars are cached for 24 hours from last use"
+      },
+      {
+        "evidence": "D04",
+        "line": 2960,
+        "verbatim": "the API also enforces a **compilation timeout of 180 seconds**"
+      }
+    ],
+    "documentation_page": {
+      "id": "D04",
+      "final_url": "https://platform.claude.com/docs/en/build-with-claude/structured-outputs.md",
+      "retrieved_at": "2026-09-14T05:10:45Z",
+      "sha256": "4e500fed30c759764ba06bcd96b9df7160ecb8e5e7611aae9bc229086e0b9204"
+    },
+    "documentation_source": "CI gate 94's record, which quotes the fragments from bytes read on 2026-09-14; no page was requested again"
+  },
+  "TIMEOUT_DECISION": {
+    "REQUEST_TIMEOUT_V8_SECONDS": 60.0,
+    "REQUEST_TIMEOUT_V9_SECONDS": 240.0,
+    "DECISION_OWNER": "OPERATOR",
+    "DECISION_TYPE": "EXECUTION_AVAILABILITY",
+    "BASIS": "OPERATOR_AVAILABILITY_BUDGET",
+    "MATHEMATICALLY_DERIVED": false,
+    "STATISTICALLY_ESTIMATED": false,
+    "PROVIDER_GUARANTEED": false,
+    "LATENCY_PREDICTION": false,
+    "BILLING_BOUND": false,
+    "DERIVED_FROM_OBSERVED_ELAPSED_TIMES": false,
+    "GUARANTEES_SUCCESSFUL_COMPLETION": false,
+    "reasoning": "a client-side budget beyond the documented 180-second provider grammar compilation timeout, with additional operational margin. It was chosen by the operator; it predicts no latency, rests on no measurement, and does not make the one attempt succeed",
+    "RETRY_ADDED_TO_OFFSET_THE_RISK": false,
+    "MAX_RETRIES_V9": 0,
+    "TIMEOUT_MISMATCH_REDUCED": true,
+    "TIMEOUT_RISK_ELIMINATED": false,
+    "END_TO_END_LATENCY_BOUND": "NOT_ESTABLISHED",
+    "GENERATION_RATE_DOCUMENTED": false,
+    "OUTPUT_TOKENS_REACHABLE_WITHIN_TIMEOUT": "NOT_ESTABLISHED",
+    "STRICT_FIRST_REQUEST_TIMEOUT_RISK_ACCEPTED_FOR_V9": false,
+    "CLIENT_TIMEOUT_MECHANISM": "the value travels unchanged from the request to urllib.request.urlopen(timeout=...), a socket timeout on the blocking operations of one non-streamed request. The gateway applies no ceiling of its own, and the deployment's LLM_REQUEST_TIMEOUT_SECONDS is not read on this path",
+    "CLIENT_TIMEOUT_EXCEEDS_PROVIDER_COMPILATION_TIMEOUT": true
+  },
+  "COST_EQUALITY": {
+    "COST_CEILING_RECORD_SHA256": "2184ff405cd8edd8766da4fc03bd64218c7b554da141d6e7589c5515c31a0d0b",
+    "HARD_EXECUTION_COST_CEILING": "3.608",
+    "HARD_EXECUTION_COST_CEILING_PROVEN": true,
+    "PLANNING_COST_ESTIMATE": "1.316316",
+    "TIMEOUT_ENTERS_THE_COST_DERIVATION": false,
+    "TIMEOUT_CHANGES_BILLING": false,
+    "TIMEOUT_RELATED_PROVIDER_FEE": "NONE_PUBLISHED",
+    "RE_DERIVED_BY_GATE_94": true
+  },
+  "ACCOUNTING": {
+    "MODEL_CALLS": 0,
+    "PROVIDER_REQUESTS": 0,
+    "MESSAGES_API_REQUESTS": 0,
+    "TOKEN_COUNT_API_REQUESTS": 0,
+    "TED_BYTES_SENT": 0,
+    "CANONICAL_MUTATIONS": 0,
+    "DOCUMENTATION_REQUESTS": 0
+  }
+}
