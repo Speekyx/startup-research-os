@@ -1078,6 +1078,32 @@ jobs:
       - name: Execution packet V8 is V7's request under a proven cost ceiling
         run: uv run python infrastructure/scripts/render_second_opportunity_execution_packet_v8.py --check
 
+      # Mission 1.84.21. The operator's client-timeout decision, and V8 superseded before
+      # execution. The gate refuses: a timeout other than the operator's 240 seconds, or one called
+      # provider-guaranteed, derived, estimated, a latency prediction or a billing bound; an
+      # end-to-end latency bound claimed or the timeout risk said eliminated; a retry added to offset
+      # it; the mismatch misstated, or a request claimed to take longer than 60 seconds; the timeout
+      # said to enter the provider body or the cost; the operator's stated intention recorded as an
+      # approval; V8 edited, approved, executed, or recorded as consumed, failed or refused by the
+      # provider; and a V8 runner that no longer refuses V8, by name, before its approval and any
+      # transport.
+      - name: The client timeout is the operator's 240 seconds, and V8 was superseded before execution
+        run: uv run python infrastructure/scripts/render_second_opportunity_execution_timeout_decision.py --check
+
+      # Mission 1.84.21. Execution packet V9: V8's request, byte for byte, with the operator's
+      # 240-second timeout, frozen and unapproved. The gate refuses: bound fields that do not hash to
+      # the digest, a spent or superseded digest, an unreviewed field, an approval recorded by the
+      # preparing mission or either risk accepted by it; V1 to V6 edited or their consumption reset,
+      # V7 or V8 described as anything but superseded before execution; a timeout other than 240, or
+      # one misdescribed or offset by a retry; a contract, gate, prompt, projection, freeze, route,
+      # model, thinking, max_tokens, retention or persistence policy moved; a body that is not V8's
+      # bytes; a cost figure moved; a synthetic answer that does not stop where it must; a runner
+      # that does not wait exactly 240 seconds with no retry, whose guard renames a refusal, whose
+      # approval check does not demand both risk decisions, or that would execute V1 to V8; and any
+      # preparation call, TED byte or canonical counter that moved.
+      - name: Execution packet V9 is V8's request with the operator's 240-second timeout
+        run: uv run python infrastructure/scripts/render_second_opportunity_execution_packet_v9.py --check
+
       # Mission 1.84.2. The one approved provider request happened and its output was rejected
       # at schema validation. The gate refuses: an approval recovered from a failure, or a
       # consumed-approval list that does not name V1's digest with a request against it; a

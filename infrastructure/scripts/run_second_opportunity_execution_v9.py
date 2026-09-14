@@ -1,44 +1,37 @@
-"""Execute the second-Opportunity synthesis under execution packet V8. Prepared by Mission 1.84.20.
+"""Execute the second-Opportunity synthesis under execution packet V9. Prepared by Mission 1.84.21.
 
-ONE provider request, under `SECOND-OPPORTUNITY-SYNTH-EXEC-V8` version 8, and only once an operator
+ONE provider request, under `SECOND-OPPORTUNITY-SYNTH-EXEC-V9` version 9, and only once an operator
 approval naming this packet's digest, and deciding both of the risks it discloses, is recorded BESIDE
 the packet.
 
-    uv run python infrastructure/scripts/run_second_opportunity_execution_v8.py
-    uv run python infrastructure/scripts/run_second_opportunity_execution_v8.py --execute
+    uv run python infrastructure/scripts/run_second_opportunity_execution_v9.py
+    uv run python infrastructure/scripts/run_second_opportunity_execution_v9.py --execute
 
-**Verification is the default and execution is the opt-in**, exactly as for V1 to V7. Mission 1.84.20
+**Verification is the default and execution is the opt-in**, exactly as for V1 to V8. Mission 1.84.21
 prepared this runner and ran only its verification: no approval exists, so `--execute` refuses before
 a transport is built.
 
-**The request is V7's, byte for byte**, and V8 changes nothing a provider would see:
+**V9 is V8 with one change: the client timeout is 240 seconds, not 60.** The operator set it as an
+availability budget beyond the provider's documented 180-second grammar compilation timeout. It is
+not a provider guarantee, not a latency prediction, not a statistical estimate and not a billing
+bound, and no end-to-end latency bound is established. It travels unchanged to the transport and is
+no part of the provider body, so the request V9 would send is V8's, and V7's, byte for byte:
 
 * the one tool is STRICT, `"strict": true` beside the tool's name, description and input schema,
-  through `AnthropicStrictToolProvider`;
-* its input schema is the provider-strict PROJECTION of output schema v1.2.0, frozen by CI gate 92
-  at 57154af;
+  through `AnthropicStrictToolProvider`, over the provider-strict PROJECTION frozen at 57154af;
 * **stage 5 is the full output schema v1.2.0, validated locally**, and strict decoding replaces no
-  stage. The prompt is v1.5.0, stage 6 is gate v1.4.0, and stages 7 to 9 judge as V7's did.
+  stage. The prompt is v1.5.0, stage 6 is gate v1.4.0, and stages 7 to 9 judge as V8's did;
+* the hard execution cost ceiling (3.608) and the planning estimate (1.316316) are V8's, recomputed
+  here in exact decimal arithmetic from the configured prices; the timeout enters neither.
 
-**What V8 changes is what the packet may say about cost.** V7 called a body-based estimate plus the
-output maximum its ceiling. V8 carries that figure as a PLANNING estimate. Its HARD ceiling rests on
-the documented 1M-token context window, the 128000-token output maximum and the data-residency
-multiplier, all re-derived by CI gate 94, and is recomputed here in exact decimal arithmetic from the
-configured prices.
+**An approval must decide both disclosed risks, explicitly and for V9 only**: the residual limitation
+of the vocabulary-bounded semantic gate, and the first strict request's timeout, which 240 seconds
+reduces and does not remove. An approval that does not accept both executes nothing.
 
-**An approval must decide both disclosed risks, explicitly and for V8 only**: the residual limitation
-of the vocabulary-bounded semantic gate, and the first strict request's grammar compilation, whose
-latency is not documented and may outlast the one attempt's 60-second timeout. An approval that does
-not accept both executes nothing.
-
-**V1 to V6 are spent, and V7 was superseded before execution.** This runner reads all seven through
-V7's guard and keeps the name it gives: a spent digest is refused as `EXECUTION_APPROVAL_ALREADY_CONSUMED`,
-V7's as `EXECUTION_PACKET_SUPERSEDED_BEFORE_EXECUTION`, and an unseen digest is not refused.
-
-**V8 itself was superseded before execution** (Mission 1.84.21): its 60-second client timeout was
-shorter than the provider's documented 180-second grammar compilation timeout. It was never approved
-and never executed, so it is refused as `EXECUTION_PACKET_SUPERSEDED_BEFORE_EXECUTION`, never as a
-spent approval, before its approval is read and before any transport exists.
+**V1 to V6 are spent, and V7 and V8 were superseded before execution.** This runner reads all eight
+through V8's guard and keeps the name it gives: a spent digest is refused as
+`EXECUTION_APPROVAL_ALREADY_CONSUMED`, V7's and V8's as `EXECUTION_PACKET_SUPERSEDED_BEFORE_EXECUTION`,
+and an unseen digest is not refused.
 
 The credential is read from the environment by the provider adapter and is never read, printed,
 logged or written here.
@@ -64,23 +57,24 @@ DATA = ROOT / "docs" / "data"
 SCRIPTS = ROOT / "infrastructure" / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
-PACKET_FILE = DATA / "second-opportunity-synthesis-execution-packet-v8.json"
-APPROVAL_FILE = DATA / "second-opportunity-synthesis-execution-approval-v8.json"
-#: Prompt v1.5.0's record, which V6's packet bound and V7 and V8 bind unchanged.
+PACKET_FILE = DATA / "second-opportunity-synthesis-execution-packet-v9.json"
+APPROVAL_FILE = DATA / "second-opportunity-synthesis-execution-approval-v9.json"
+#: Prompt v1.5.0's record, which V6's packet bound and V7, V8 and V9 bind unchanged.
 PROMPT_DOCUMENT = DATA / "second-opportunity-synthesis-prompt-v6.json"
 REGISTER = DATA / "model-provider-policy-v1.json"
 STRICT_PROJECTION_RECORD = DATA / "second-opportunity-provider-strict-projection-v1.json"
 #: The cost-ceiling record CI gate 94 re-derives, and V7's supersession beside V7's packet.
 COST_CEILING_RECORD = DATA / "second-opportunity-execution-cost-ceiling-v1.json"
 V7_SUPERSESSION_RECORD = DATA / "second-opportunity-synthesis-execution-supersession-v7.json"
-RESPONSE_ARTIFACT = DATA / "second-opportunity-synthesis-response-v8.json"
-EXECUTION_RECORD_V8 = DATA / "second-opportunity-synthesis-execution-record-v8.json"
-#: Mission 1.84.21. V8's supersession, beside its packet as V7's is beside V7's, naming the one
-#: digest this runner must no longer execute.
+RESPONSE_ARTIFACT = DATA / "second-opportunity-synthesis-response-v9.json"
+EXECUTION_RECORD_V9 = DATA / "second-opportunity-synthesis-execution-record-v9.json"
+#: V8's supersession, which V8's guard reads, and the operator's timeout decision, both re-derived
+#: by CI gate 96 and pinned here by digest.
 V8_SUPERSESSION_RECORD = DATA / "second-opportunity-synthesis-execution-supersession-v8.json"
+TIMEOUT_DECISION_RECORD = DATA / "second-opportunity-execution-timeout-decision-v1.json"
 CONSUMED = "EXECUTION_APPROVAL_ALREADY_CONSUMED"
 SUPERSEDED = "EXECUTION_PACKET_SUPERSEDED_BEFORE_EXECUTION"
-CORRELATION_ID = "second-opportunity-synthesis-execution-v8"
+CORRELATION_ID = "second-opportunity-synthesis-execution-v9"
 
 SUBJECT = "ted-eu:CPV-class:9261"
 SOURCE_ID = "ted-eu"
@@ -93,14 +87,15 @@ V5_SHA256 = "da3e7d09d97c30cd02859eaee729b6bd164cd99812feac34572a0e1d93aa511a"
 V6_SHA256 = "969128dd2453ab2a6907335d9386c9c3f3fac991db91c674b151c9db777aa8a9"
 #: Superseded before execution, never approved, never consumed.
 V7_SHA256 = "51023d0d2ed780db4c7d5018a289939e7c9c83061f8768051ef1cd7b8ae674e8"
+V8_SHA256 = "583946460c6cf68c1be5519916f92d268e36ed65924aeb24901731439586c399"
 
-#: The packet as Mission 1.84.20 prepared it. Pinned here rather than read from the packet, because a
+#: The packet as Mission 1.84.21 prepared it. Pinned here rather than read from the packet, because a
 #: runner that took its expectations from the file it checks would check nothing. An operator
 #: approval does not change these values: it names them.
 EXPECTED: dict[str, object] = {
-    "EXECUTION_PACKET_ID": "SECOND-OPPORTUNITY-SYNTH-EXEC-V8",
-    "EXECUTION_PACKET_VERSION": 8,
-    "EXECUTION_PACKET_SHA256": "583946460c6cf68c1be5519916f92d268e36ed65924aeb24901731439586c399",
+    "EXECUTION_PACKET_ID": "SECOND-OPPORTUNITY-SYNTH-EXEC-V9",
+    "EXECUTION_PACKET_VERSION": 9,
+    "EXECUTION_PACKET_SHA256": "ba681da94b3e89f22c7e39bdb2dc4ef95d0527ca3db561c849eb089652d9425d",
     "PROVIDER_ID": "anthropic",
     "MODEL_ID": "claude-sonnet-5",
     "SUBJECT_KEY": SUBJECT,
@@ -122,7 +117,7 @@ EXPECTED: dict[str, object] = {
     "MAX_OUTPUT_TOKENS": 128000,
     "MAX_MODEL_CALLS": 1,
     "MAX_RETRIES": 0,
-    "REQUEST_TIMEOUT": 60.0,
+    "REQUEST_TIMEOUT": 240.0,
     "REQUEST_BODY_CHARACTERS": 31326,
     "REQUEST_BODY_SHA256": "58956019f78f414ee11392bee5e99eedda4eb1b4deb20d3f20219dfc60739842",
     "PLANNING_INPUT_TOKEN_ESTIMATE": 18158,
@@ -137,8 +132,14 @@ EXPECTED: dict[str, object] = {
     "V7_SUPERSESSION_RECORD_SHA256": (
         "1b6fe65dff1777b5f9a8ffb7bf483b1ab78dc12d9dbb2bbd01e5083d436d95e4"
     ),
-    "RESIDUAL_SEMANTIC_LIMITATION_ACCEPTED_FOR_V8": False,
-    "STRICT_FIRST_REQUEST_TIMEOUT_RISK_ACCEPTED_FOR_V8": False,
+    "V8_SUPERSESSION_RECORD_SHA256": (
+        "4bf7ce015c5b36a33e5fc48e79f35dc1ab3b91bddb831a55eb5448d7b5156367"
+    ),
+    "TIMEOUT_DECISION_RECORD_SHA256": (
+        "14fd18d49c4ac8798e4aa897e4bbe0093be810e71f84185e7ac07392db1f3f66"
+    ),
+    "RESIDUAL_SEMANTIC_LIMITATION_ACCEPTED_FOR_V9": False,
+    "STRICT_FIRST_REQUEST_TIMEOUT_RISK_ACCEPTED_FOR_V9": False,
     "PROVIDER_STRICT_MODE": True,
     "STRUCTURED_OUTPUT_MECHANISM": "FORCED_STRICT_TOOL_USE",
     "PROVIDER_STRICT_SCHEMA_ID": "second-opportunity-provider-strict-input-schema@1.0.0",
@@ -180,10 +181,10 @@ STAGES = (
     "10_human_review",
 )
 
-#: Both risks V8 discloses, each needing its own explicit decision in the approval, for V8 only.
+#: Both risks V9 discloses, each needing its own explicit decision in the approval, for V9 only.
 RISK_DECISIONS = {
-    "RESIDUAL_SEMANTIC_LIMITATION_ACCEPTED_FOR_V8": "RESIDUAL_SEMANTIC_LIMITATION_NOT_ACCEPTED",
-    "STRICT_FIRST_REQUEST_TIMEOUT_RISK_ACCEPTED_FOR_V8": (
+    "RESIDUAL_SEMANTIC_LIMITATION_ACCEPTED_FOR_V9": "RESIDUAL_SEMANTIC_LIMITATION_NOT_ACCEPTED",
+    "STRICT_FIRST_REQUEST_TIMEOUT_RISK_ACCEPTED_FOR_V9": (
         "STRICT_FIRST_REQUEST_TIMEOUT_RISK_NOT_ACCEPTED"
     ),
 }
@@ -242,24 +243,24 @@ def v1_runner() -> Any:
     return _module("second_opportunity_runner_v1", SCRIPTS / "run_second_opportunity_execution.py")
 
 
-def v7_runner() -> Any:
-    """The V7 runner, whose guard reads V1's to V6's records through V6's and V7's supersession."""
+def v8_runner() -> Any:
+    """The V8 runner, whose guard reads V1's to V7's through V7's and V8's own supersession."""
     return _module(
-        "second_opportunity_runner_v7", SCRIPTS / "run_second_opportunity_execution_v7.py"
+        "second_opportunity_runner_v8", SCRIPTS / "run_second_opportunity_execution_v8.py"
     )
 
 
 def packet_gate() -> Any:
-    """One authority for what the V8 digest binds: Mission 1.84.20's own gate."""
+    """One authority for what the V9 digest binds: Mission 1.84.21's own gate."""
     return _module(
-        "execution_packet_v8_gate", SCRIPTS / "render_second_opportunity_execution_packet_v8.py"
+        "execution_packet_v9_gate", SCRIPTS / "render_second_opportunity_execution_packet_v9.py"
     )
 
 
 def registry_gate() -> Any:
     """One authority for a source's names: the registry reading gate 78 uses."""
     return _module(
-        "registry_entries_for_v8",
+        "registry_entries_for_v9",
         SCRIPTS / "render_second_opportunity_v3_diagnostic_replay_v1_3.py",
     )
 
@@ -475,14 +476,14 @@ def strict_tool_problems(body: Mapping[str, Any]) -> list[str]:
 def check_approval(packet_sha256: str) -> dict[str, Any]:
     """The operator's approval, beside the packet and never inside it.
 
-    Creating V8 authorised nothing. An approval is a separate record naming this packet's id, version
-    and digest, and deciding, explicitly and for V8 only, both risks the packet discloses. V1's to
-    V6's approvals are spent and name different digests, and V7 never had one.
+    Creating V9 authorised nothing. An approval is a separate record naming this packet's id, version
+    and digest, and deciding, explicitly and for V9 only, both risks the packet discloses. V1's to
+    V6's approvals are spent and name different digests, and V7 and V8 never had one.
     """
     if not APPROVAL_FILE.exists():
         raise RefusedError(
             "OPERATOR_APPROVAL_NOT_RECORDED",
-            f"no approval names execution packet {packet_sha256}. Preparing V8 authorised no "
+            f"no approval names execution packet {packet_sha256}. Preparing V9 authorised no "
             "request, and this runner sends nothing without one",
         )
     approval = _load(APPROVAL_FILE)
@@ -506,48 +507,29 @@ def check_approval(packet_sha256: str) -> dict[str, Any]:
         if not isinstance(approval.get(key), bool):
             raise RefusedError(
                 "OPERATOR_APPROVAL_INCOMPLETE",
-                f"the approval does not decide {key}; it must say true or false, for V8 only",
+                f"the approval does not decide {key}; it must say true or false, for V9 only",
             )
         if approval[key] is not True:
             raise RefusedError(
-                refusal, f"the approval records {key}=false, and V8 is not executed without it"
+                refusal, f"the approval records {key}=false, and V9 is not executed without it"
             )
     return approval
 
 
-def refuse_if_superseded(packet_sha256: str) -> None:
-    """A packet superseded before execution is refused by name. It had no approval to spend."""
-    if not V8_SUPERSESSION_RECORD.exists():
-        return
-    record = _load(V8_SUPERSESSION_RECORD)
-    if (
-        record.get("STATUS") == "SUPERSEDED_BEFORE_EXECUTION"
-        and record.get("SUPERSEDED_EXECUTION_PACKET_SHA256") == packet_sha256
-    ):
-        raise RefusedError(
-            SUPERSEDED,
-            f"execution packet {packet_sha256} was superseded before it was approved or executed "
-            f"({record.get('REASON')}). It is not consumed and did not fail: it can no longer be "
-            "executed, and its successor needs an approval of its own",
-        )
-
-
 def refuse_if_consumed(packet_sha256: str) -> None:
-    """V1's to V7's standing through V7's guard, under the name it gives, V8's supersession, then
-    V8's own record.
+    """V1's to V8's standing through V8's guard, under the name it gives, then V9's own record.
 
-    V7's guard reads V1's to V6's records through V6's, and refuses V7 as superseded. The name is
-    kept: a spent approval is refused as spent, and V7 and V8, which never had one, as superseded.
+    V8's guard reads V1's to V7's through V7's, and refuses V8 as superseded. The name is kept: a
+    spent approval is refused as spent, and V7 and V8, which never had one, as superseded.
     """
-    v7 = v7_runner()
+    v8 = v8_runner()
     try:
-        v7.refuse_if_consumed(packet_sha256)
-    except v7.RefusedError as exc:
+        v8.refuse_if_consumed(packet_sha256)
+    except v8.RefusedError as exc:
         raise RefusedError(exc.code, str(exc)) from exc
-    refuse_if_superseded(packet_sha256)
-    if not EXECUTION_RECORD_V8.exists():
+    if not EXECUTION_RECORD_V9.exists():
         return
-    record = _load(EXECUTION_RECORD_V8)
+    record = _load(EXECUTION_RECORD_V9)
     if (
         record.get("EXECUTION_APPROVAL_CONSUMED") is True
         and record.get("execution_packet_sha256") == packet_sha256
@@ -612,7 +594,7 @@ def verify(use_profile: str = USE_PROFILE) -> dict[str, Any]:
             "marking a frozen document approved changes the bytes that were approved",
         )
 
-    # 3. V1 to V6 spent, V7 superseded, V8 neither: each refused under its own name
+    # 3. V1 to V6 spent, V7 and V8 superseded, V9 none of these: each refused under its own name
     for label, digest in (
         ("V1", V1_SHA256),
         ("V2", V2_SHA256),
@@ -634,21 +616,23 @@ def verify(use_profile: str = USE_PROFILE) -> dict[str, Any]:
                 f"{label}_GUARD_INACTIVE",
                 f"the consumed-approval guard no longer refuses {label}'s spent digest",
             )
-    try:
-        refuse_if_consumed(V7_SHA256)
-    except RefusedError as exc:
-        if exc.code != SUPERSEDED:
+    for label, digest in (("V7", V7_SHA256), ("V8", V8_SHA256)):
+        try:
+            refuse_if_consumed(digest)
+        except RefusedError as exc:
+            if exc.code != SUPERSEDED:
+                raise RefusedError(
+                    f"{label}_SUPERSESSION_GUARD_INACTIVE",
+                    f"{label}'s digest is refused as {exc.code}",
+                ) from exc
+            findings[f"03_{label}_SUPERSEDED_BEFORE_EXECUTION"] = True
+        else:
             raise RefusedError(
-                "V7_SUPERSESSION_GUARD_INACTIVE", f"V7's digest is refused as {exc.code}"
-            ) from exc
-        findings["03_V7_SUPERSEDED_BEFORE_EXECUTION"] = True
-    else:
-        raise RefusedError(
-            "V7_SUPERSESSION_GUARD_INACTIVE",
-            "V7's runner would still execute V7, which was superseded before execution",
-        )
+                f"{label}_SUPERSESSION_GUARD_INACTIVE",
+                f"the guard would still execute {label}, which was superseded before execution",
+            )
     refuse_if_consumed(recomputed)
-    findings["03_V8_APPROVAL_CONSUMED"] = False
+    findings["03_V9_APPROVAL_CONSUMED"] = False
 
     # 4. the TED representation, rebuilt through production serialisation, and the boundary
     v1 = v1_runner()
@@ -669,7 +653,7 @@ def verify(use_profile: str = USE_PROFILE) -> dict[str, Any]:
             f"recomputed {representation}. The approval is never updated to match",
         )
     if evidence_packet.packet_id != packet["SELECTED_PACKET_ID"]:
-        raise RefusedError("SELECTED_PACKET_MOVED", "the rebuilt packet is not the one V8 names")
+        raise RefusedError("SELECTED_PACKET_MOVED", "the rebuilt packet is not the one V9 names")
     boundary = {
         "APPROVED_EVIDENCE_IDS": list(evidence_packet.evidence_ids),
         "APPROVED_CLAIM_IDS": list(evidence_packet.claim_ids),
@@ -842,8 +826,8 @@ def verify(use_profile: str = USE_PROFILE) -> dict[str, Any]:
         or packet["REQUEST_BODY_SHA256"] != _sha256(wire)
     ):
         raise RefusedError(
-            "V8_REQUEST_BODY_HAS_UNAPPROVED_DRIFT",
-            f"the body is {len(wire)} characters hashing to {_sha256(wire)}, and V8 sends V7's "
+            "V9_REQUEST_BODY_HAS_UNAPPROVED_DRIFT",
+            f"the body is {len(wire)} characters hashing to {_sha256(wire)}, and V9 sends V8's "
             "bytes exactly",
         )
     selectors = billing_selectors(body)
@@ -857,9 +841,20 @@ def verify(use_profile: str = USE_PROFILE) -> dict[str, Any]:
 
     # 10. one call, no retry
     if int(packet["MAX_MODEL_CALLS"]) != 1 or int(packet["MAX_RETRIES"]) != 0:
-        raise RefusedError("CALL_LIMIT_MOVED", "V8 authorises one call and no retry")
+        raise RefusedError("CALL_LIMIT_MOVED", "V9 authorises one call and no retry")
     if int(packet["GENERATION_PARAMETERS"]["max_retries"]) != 0:
         raise RefusedError("CALL_LIMIT_MOVED", "the request would carry a retry")
+    request = build_request(parts, packet)
+    findings["10_REQUEST_TIMEOUT_SECONDS"] = request.timeout_seconds
+    if (
+        request.timeout_seconds != EXPECTED["REQUEST_TIMEOUT"]
+        or packet["REQUEST_TIMEOUT"] != (EXPECTED["REQUEST_TIMEOUT"])
+    ):
+        raise RefusedError(
+            "REQUEST_TIMEOUT_MOVED",
+            f"the request would wait {request.timeout_seconds} s, and the operator decided "
+            f"{EXPECTED['REQUEST_TIMEOUT']} s",
+        )
 
     # 11. the hard ceiling, recomputed from documented bounds at the configured price, and the
     #     planning estimate beside it, never in its place
@@ -867,7 +862,7 @@ def verify(use_profile: str = USE_PROFILE) -> dict[str, Any]:
     if pricing.version != packet["PRICING_VERSION"]:
         raise RefusedError(
             "MODEL_COST_BASIS_CHANGED",
-            f"the configured pricing is {pricing.version!r} and V8 was priced on "
+            f"the configured pricing is {pricing.version!r} and V9 was priced on "
             f"{packet['PRICING_VERSION']!r}",
         )
     price = pricing.price_for(str(packet["PROVIDER_ID"]), str(packet["MODEL_ID"]))
@@ -902,13 +897,19 @@ def verify(use_profile: str = USE_PROFILE) -> dict[str, Any]:
     ):
         raise RefusedError(
             "TRUE_EXECUTION_COST_CEILING_NOT_ESTABLISHED",
-            "the cost-ceiling record is not the one V8 was prepared on, or proves nothing",
+            "the cost-ceiling record is not the one V9 was prepared on, or proves nothing",
         )
     if (
         _sha256(V7_SUPERSESSION_RECORD.read_text(encoding="utf-8"))
         != EXPECTED["V7_SUPERSESSION_RECORD_SHA256"]
     ):
         raise RefusedError("V7_SUPERSESSION_MOVED", "V7's supersession record was edited")
+    for path, key, code in (
+        (V8_SUPERSESSION_RECORD, "V8_SUPERSESSION_RECORD_SHA256", "V8_SUPERSESSION_MOVED"),
+        (TIMEOUT_DECISION_RECORD, "TIMEOUT_DECISION_RECORD_SHA256", "TIMEOUT_DECISION_MOVED"),
+    ):
+        if _sha256(path.read_text(encoding="utf-8")) != EXPECTED[key]:
+            raise RefusedError(code, f"{path.name} is not the record V9 was prepared on")
 
     # 12. every remaining bound field
     for key in (
@@ -924,6 +925,8 @@ def verify(use_profile: str = USE_PROFILE) -> dict[str, Any]:
         "HARD_EXECUTION_COST_CEILING",
         "COST_CEILING_RECORD_SHA256",
         "V7_SUPERSESSION_RECORD_SHA256",
+        "V8_SUPERSESSION_RECORD_SHA256",
+        "TIMEOUT_DECISION_RECORD_SHA256",
         *RISK_DECISIONS,
     ):
         if packet[key] != EXPECTED[key]:
@@ -1330,7 +1333,7 @@ def validate_execution(result: Mapping[str, Any], context: Mapping[str, Any]) ->
 
 
 def build_artifact(result: Mapping[str, Any], report: Mapping[str, Any]) -> dict[str, Any]:
-    """V6's artifact, named for V8: the raw body, the usage, the parsed input and what judged it."""
+    """V6's artifact, named for V9: the raw body, the usage, the parsed input and what judged it."""
     v1 = v1_runner()
     responses = list(result.get("transport_responses") or [])
     payload = None
@@ -1487,7 +1490,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--use-profile", default=USE_PROFILE)
     args = parser.parse_args(argv)
 
-    print("=== pre-execution verification (execution packet V8)")
+    print("=== pre-execution verification (execution packet V9)")
     try:
         context = verify(args.use_profile)
     except RefusedError as refusal:

@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.154
+Version: 1.155
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-14 (Sprint 1 / Mission 1.84.20)
+Last amended: 2026-09-14 (Sprint 1 / Mission 1.84.21)
 
 ---
 
@@ -13,6 +13,32 @@ Last amended: 2026-09-14 (Sprint 1 / Mission 1.84.20)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.155 - 2026-09-14 (Sprint 1 / Mission 1.84.21)
+
+**`SECOND_OPPORTUNITY_EXECUTION_PACKET_V9_READY_FOR_OPERATOR_APPROVAL`: the client timeout aligned with the
+provider's strict compilation limit by operator decision, V8 superseded before execution, and V9, V8's
+request byte for byte with a 240-second timeout, frozen and unapproved.** The operator accepted all of
+V8 except its 60-second client timeout, shorter than the documented 180-second grammar compilation
+timeout: a possibility, never a frequency.
+
+**THE DECISION** (gate 96): 60.0 -> 240.0 seconds, owned by the operator, of type
+EXECUTION_AVAILABILITY, an availability budget; not derived, not estimated, not provider-guaranteed,
+not a latency prediction or a billing bound. `TIMEOUT_MISMATCH_REDUCED = true`,
+`TIMEOUT_RISK_ELIMINATED = false`, `END_TO_END_LATENCY_BOUND = NOT_ESTABLISHED`, no retry. The value
+reaches `urlopen(timeout=...)` unchanged; the deployment's 60 is not read on this path. No
+documentation page requested: the fragments are gate 94's.
+
+**V8 SUPERSEDED_BEFORE_EXECUTION**: not approved, executed or consumed, its packet untouched; the V8
+runner, the one Mission 1.84.20 file changed, refuses it by name before its approval and any transport.
+**PACKET V9** `ba681da9...`: V8's 31326-character body, 0 differences, no timeout in it; cost 3.608 and
+1.316316, unchanged; schema, gate, prompt, projection, freeze, route, model, thinking, max_tokens and
+representation unchanged; both risks left to the operator, whose intention to accept the residual one
+is recorded as an intention only; approval NOT recorded. **GATES 96 AND 97.** Probe **95 caught, 0 escaped, 30 of 30 controls**, on its third
+run: the first found gate 96 letting gate 94's refusals through unnamed, fixed; the second lost the
+network in one control. 3877 + 6210 tests, 97 gates, 285 new tests, 0 model calls, 0 provider requests,
+0 token counts, 0 TED bytes, 0 canonical mutation, 0 documentation requests.
+`mission-1.84.21-report.md`.
 
 ## 1.154 - 2026-09-14 (Sprint 1 / Mission 1.84.20)
 
