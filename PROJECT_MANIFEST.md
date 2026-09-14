@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.153
+Version: 1.154
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-14 (Sprint 1 / Mission 1.84.19)
+Last amended: 2026-09-14 (Sprint 1 / Mission 1.84.20)
 
 ---
 
@@ -13,6 +13,31 @@ Last amended: 2026-09-14 (Sprint 1 / Mission 1.84.19)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.154 - 2026-09-14 (Sprint 1 / Mission 1.84.20)
+
+**`SECOND_OPPORTUNITY_EXECUTION_PACKET_V8_READY_FOR_OPERATOR_APPROVAL`: a hard execution cost ceiling
+proven from first-party documentation, V7 superseded before execution, and V8, V7's request byte for
+byte, frozen and unapproved.** The operator accepted the strict architecture and refused V7 because its
+1.316316 was a body-based estimate plus the output maximum, while strict mode adds provider-side input
+of undocumented size: `V7_COST_NUMBER_CLASSIFICATION = ESTIMATE_NOT_PROVEN_HARD_CEILING`, a governance
+and accounting defect, not an architecture one.
+
+**FIRST-PARTY REVIEW**: twelve pages read on 2026-09-14, one request each, 65 fragments quoted by line.
+`claude-sonnet-5` has a 1M-token window by default; everything in the request, the three input fields
+of usage and the prompt strict mode injects count toward it, and input alone over it is refused;
+`max_tokens` is an absolute maximum at 128000; no long-context premium; caching only with
+`cache_control`, which the body lacks; Priority Tier not on Sonnet 5; `inference_geo` left to a workspace
+default, so the 1.1 US-only multiplier is included. **HARD_EXECUTION_COST_CEILING = 3.608** (2.2 +
+1.408, exact decimals), proven, no unknown category; 1.316316 kept as a PLANNING_ESTIMATE.
+
+**V7 SUPERSEDED_BEFORE_EXECUTION**: not approved, not executed, not consumed, its packet untouched; the V7
+runner, the one Mission 1.84.19 file changed, refuses its digest by name before its approval and any
+transport. **PACKET V8** `58394646...`: V7's 31326-character body byte for byte, 0 differences; both
+risks, the residual semantic limitation and the first strict request's timeout, left to the operator;
+approval NOT recorded. **GATES 94 AND 95.** Probe **99 caught, 0 escaped, 27 of 27 controls**. 3877 + 5925
+tests, 95 gates, 282 new tests, 0 model calls, 0 provider requests, 0 token counts, 0 TED bytes, 0
+canonical mutation, 12 documentation requests. `mission-1.84.20-report.md`.
 
 ## 1.153 - 2026-09-14 (Sprint 1 / Mission 1.84.19)
 

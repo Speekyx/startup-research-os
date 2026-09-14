@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.154
-Last amended: 2026-09-14 (Sprint 1 / Mission 1.84.19)
+Version: 1.155
+Last amended: 2026-09-14 (Sprint 1 / Mission 1.84.20)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.155 | 2026-09-14 | **SECOND_OPPORTUNITY_EXECUTION_PACKET_V8_READY_FOR_OPERATOR_APPROVAL: the execution cost ceiling is proven from first-party documentation, V7 was superseded before execution, and V8, V7's request byte for byte, is frozen and unapproved.** The operator accepted the strict architecture and refused V7: its `EXECUTION_COST_CEILING` of 1.316316 was the body-based input estimate plus all 128000 output tokens, while strict mode adds provider-side input whose size is not documented, so `V7_COST_NUMBER_CLASSIFICATION = ESTIMATE_NOT_PROVEN_HARD_CEILING`: a governance and accounting defect. **THREE QUANTITIES APART**: a body-based input estimate (18158), a planning cost (1.316316, never a worst case or a ceiling), and a hard ceiling resting on documented bounds only. **FIRST-PARTY REVIEW**: twelve pages, one request each, 65 fragments quoted by line: a 1M-token window by default on `claude-sonnet-5`, holding the system prompt, messages, tool definitions, all three input fields of usage and the prompt strict mode injects, with input alone over it refused; `max_tokens` an absolute maximum at 128000; no long-context premium; caching only with `cache_control`, absent from the body; Priority Tier not on Sonnet 5; `inference_geo` left to a workspace default, so the 1.1 US-only multiplier is in; a token-counting sentence on unbilled system tokens recorded and resolved conservatively. **HARD_EXECUTION_COST_CEILING = 3.608** (1000000 x 0.002 x 1.1 + 128000 x 0.01 x 1.1, exact decimals), `UNKNOWN_COST_CATEGORIES = []`. **V7 SUPERSEDED_BEFORE_EXECUTION**, not approved, executed or consumed, its packet untouched: its runner, the one Mission 1.84.19 file changed, calls `refuse_if_superseded` before the approval and any transport, and run against the research database with every network path tripwired its verification and `--execute` both stop there. **PACKET V8** `58394646...`: V7's 31326-character body, `58956019...`, 0 differences; schema, gate, prompt, strict projection, freeze, route, model, thinking, max_tokens, 60 s timeout and representation unchanged; both risks left to the operator, and the runner executes nothing unless an approval accepts both; approval NOT recorded. **GATES 94 AND 95.** Probe **99 caught, 0 escaped, 27 of 27 controls**, in one run. 3877 + 5925 tests, 95 gates, 282 new tests, 0 model calls, 0 provider requests, 0 token counts, 0 TED bytes, 0 canonical mutation, 12 documentation requests. `mission-1.84.20-report.md`. |
 | 1.154 | 2026-09-14 | **SECOND_OPPORTUNITY_EXECUTION_PACKET_V7_READY_FOR_OPERATOR_APPROVAL: the provider's strict tool use carries a frozen projection of schema v1.2.0, the full contract still decides stage 5 locally, and V7 is frozen and unapproved.** The operator kept schema v1.2.0, gate v1.4.0, prompt v1.5.0 and the 4/5 headroom, refused to open the closed object or filter an unknown key away, and asked for strict tool use over a deterministic projection. **V6 RECONFIRMED** from its record and retained answer: one undeclared root key, `OBSERVED_UNKNOWN_PROPERTY_EVENTS_V6 = 1`, rate NOT_ESTABLISHED, not replayed through the projection. **FIRST-PARTY REVIEW**: four provider pages, 27 propositions quoted by line; strict tool use documented for `claude-sonnet-5`, `"strict": true` at the tool's top level, no beta header, forced `tool_choice` compatible; lengths, counts and numeric bounds unsupported, patterns only in part. **TWO SCHEMA IDENTITIES**: the contract `7d67bad3...` decides stage 5; the projection `87028f45...` (profile `7f3ed845...`, projector `4eef60b0...`, a pure function in `providers/`) keeps the 20 names, every required list, type, enum, the uuid format and every object closed, and sends none of the 30 LOCAL_ONLY lengths, counts and patterns: 75 constraints, 44 / 30 / 1 / 0 blockers, 100% accounted for, 8 removed and not stated in the prompt, all still enforced locally; `FULL_CANONICAL_SCHEMA_COMPLIANCE = LOCAL_STAGE_5_ONLY`. **FROZEN AND PUSHED AS `57154af`, FOUND ON THE REMOTE BY `ls-remote` BEFORE ANY V7 ARTIFACT.** **PACKET V7** `51023d0d...`: V6's call with a strict tool, the body differing from V6's in exactly `tools[0].input_schema` and `tools[0].strict` (31967 -> 31326), prompt byte-identical with its execution binding changed, ceiling **recomputed at 1.316316** and not copied, strict-format prompt tokens NOT_ESTABLISHED, compilation latency against the 60 s timeout disclosed, residual risk not carried, approval NOT recorded; an extra root key still stops at local stage 5. **GATES 92 AND 93.** Probe **76 caught, 0 escaped, 28 of 28 controls**, after two runs that each found a defect in gate 93, both fixed. 3877 + 5643 tests, 93 gates, 199 new tests, 0 model calls, 0 provider requests, 0 token counts, 0 TED bytes, 0 canonical mutation. `mission-1.84.19-report.md`. |
 | 1.153 | 2026-09-13 | **EXECUTION_SCHEMA_REJECTED_NO_RETRY: the one V6 request was made, no length bound was exceeded, and the schema refused the answer on a key it does not declare.** The operator approved exactly one execution of V6 by its digest `969128dd...`, accepted the recorded V6 process deviation for V6 only and renewed the residual semantic-limitation acceptance for this one attempt only, neither a precedent; the approval was recorded beside the packet verbatim (228 lines, `c6b6602c...`) after 34 named values were compared with the frozen packet. All 50 pre-network checks passed and **ONE** request went to the synchronous Messages API: HTTP 200 in 33.1 s, `stop_reason tool_use`, **12903 in, 3637 out, 0 thinking, cost 0.062176** of a 1.31706 ceiling. **STAGE 5 REFUSED IT ON ITS SHAPE**: `"parameter name": "value"` as the first of 21 keys beside all 20 declared ones, in a closed object the prompt describes in words. **THE LENGTH DECISION HELD**: the summary at 1169 against 1500 and a target of 1200; 11 of 12 texts within target, 1 over target and within bound, 0 over bound. Stages 6 to 10 NOT_REACHED; **no retry, no review packet, nothing persisted, the approval and both acceptances spent**, and a second `--execute`, tripwired, refused before any network. **GATE 91** re-derives the record, keeps v1.1.0 as a diagnostic that is never a verdict, and pins the raw response, the parsed output, the approval and the record. Probe **95 caught, 0 escaped, 13 of 13 controls**. 3853 + 5444 tests, 91 gates, 80 new tests, 1 provider request, 0 retries, 0 canonical mutation. `mission-1.84.18-report.md`. |
 | 1.152 | 2026-09-13 | **SECOND_OPPORTUNITY_EXECUTION_PACKET_V6_READY_FOR_OPERATOR_APPROVAL: gate v1.4.0 is gate v1.3.0 bound to schema v1.2.0, frozen and committed before V6 existed, and V6 is frozen and unapproved.** The operator decided, in five lines carried as data and bound into the V6 digest, to create a successor gate bound to schema v1.2.0, keep v1.3.0 immutable, keep every non-structural behaviour, and use v1.2.0 as the V6 contract. **GATE v1.4.0** (`eb03899b...`): v1.3.0 called once, its v1.1.0 structural reasons recomputed and required to lead its list or it fails closed, replaced by v1.2.0's, every other reason, the audit and the notes kept; no integer literal; v1.3.0 (`cc3c4902...`) untouched. **THE DIFFERENTIAL FOUND NOTHING OUTSIDE THE BOUND**: 104 synthetic cases and v1.3.0's own 159 tests replayed through both gates, 0 common-domain and 0 non-structural divergences, verdicts changed only in the 901 to 1500 band, 1501 refused naming `@1.2.0` and 1500; **committed as `402a698` before any V6 artifact was rendered; its push failed, was misread, and reached the remote only at the end.** **PROMPT v1.5.0** (`0713eb80...`): two system lines move, in their numbers only; 0/0/0 unstated, and the same checks refuse v1.4.0 under v1.2.0. **CAPACITY**: maximum 316929 (+7200 = 600 x 12), the full domain unreachable with no token count, one headroom row moves, persistence COMPATIBLE. **V6 RUNNER**: 1189 characters reach stage 9, one unsupported sentence is refused at 6 after 5 passes, 1501 at 5. **PACKET V6** `969128dd...`: V5's call over v1.2.0, v1.4.0 and v1.5.0, body 31967 (+4), ceiling 1.31706, residual risk not carried, approval NOT recorded. **GATES 87 TO 90**, and **gate 86 re-pointed** from an absence to the decision. Probe 123 caught, 0 escaped, 22 of 22 controls. 3853 + 5364 tests, 90 gates, 271 new tests, 0 model calls, 0 provider requests, 0 token counts, 0 TED bytes, 0 canonical mutation. `mission-1.84.17-report.md`. |
@@ -2668,6 +2669,43 @@ undeclared key is documented and not yet observed. **Do not execute V7 without t
 approve it on the operator's behalf, do not reuse V1's to V6's approvals, and do not persist Opportunity
 #2.
 Mission 1.84.20 was not started.**
+
+
+**ANSWERED IN 1.155 (Mission 1.84.20). The execution cost ceiling is proven from documented bounds, V7
+was superseded before execution, and V8 awaits an approval.**
+
+    defect        V7 called a body estimate plus the output maximum its ceiling (1.316316)
+    bound         the 1M context window holds all billable input, the strict prompt included; 128000 out
+    categories    each bounded or shown not to apply; US-only residency 1.1 included; unknown none
+    ceiling       3.608, proven; 1.316316 kept as a PLANNING_ESTIMATE, never a ceiling
+    V7            SUPERSEDED_BEFORE_EXECUTION: not approved, not executed, not consumed, refused by name
+    packet V8     58394646..., V7's body byte for byte, both risks left open, approval NOT recorded
+
+- **AN ESTIMATE IS NOT A CEILING UNLESS A PROOF SAYS SO.** A figure computed from the body the client
+  serialises bounds nothing the provider adds. A ceiling rests on a documented upper bound, and on
+  nothing estimated or observed.
+- **WHAT CANNOT BE COUNTED CAN STILL BE BOUNDED.** The size of the prompt strict mode injects is not
+  documented; that it counts toward the context window is, and so is the window.
+- **A DEFAULT THE REPOSITORY CANNOT SEE IS PRICED AT ITS DEAREST DOCUMENTED VALUE.** The request leaves
+  `inference_geo` to the workspace, so the 1.1 US-only multiplier is in the ceiling.
+- **EVERY PUBLISHED CHARGE IS BOUNDED OR SHOWN NOT TO APPLY**, each against the body the runner builds;
+  a charge the price list does not publish is recorded as such and not invented.
+- **A PACKET THAT WAS NEVER EXECUTED IS SUPERSEDED, NOT CONSUMED.** V7 is refused under its own name, by
+  its own runner, before its approval is read; V1 to V6 keep theirs.
+- **A GOVERNANCE CORRECTION MOVES NO REQUEST BYTE.** V8 sends V7's body exactly; what changed is what
+  the packet may say about cost, and the two risk decisions it leaves to the operator.
+
+**Next is one operator decision, and it is not a mission's to take.** Approving
+`SECOND-OPPORTUNITY-SYNTH-EXEC-V8` by its digest `58394646...`, recorded beside the packet by a later
+mission, authorises exactly one request: V7's body on the synchronous route with a strict forced tool
+over the frozen projection, thinking disabled at 128000, the ten ordered stages with the full schema
+v1.2.0 at stage 5, under a hard execution cost ceiling of 3.608, and an Opportunity hypothesis persisted
+only after deterministic acceptance and a separate human approval. The approval must decide, explicitly
+and for V8 only, the residual semantic limitation and the first strict request's timeout risk; the
+runner executes nothing unless both are accepted. **Do not execute V8 without that approval, do not
+approve it or accept either risk on the operator's behalf, do not execute V7, do not reuse V1's to V6's
+approvals, and do not persist Opportunity #2.
+Mission 1.84.21 was not started.**
 
 
 

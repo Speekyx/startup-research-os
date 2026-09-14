@@ -1,0 +1,58 @@
+{
+  "$comment": "Mission 1.84.20. Execution packet V7 superseded before it was approved or executed. The packet is left exactly as Mission 1.84.19 froze it; the V7 runner reads this record and refuses the digest it names, by name, before any transport exists.",
+  "record_version": "second-opportunity-execution-packet-supersession@1.0.0",
+  "recorded_by": "mission-1.84.20",
+  "recorded_on": "2026-09-14",
+  "SUPERSEDED_EXECUTION_PACKET_ID": "SECOND-OPPORTUNITY-SYNTH-EXEC-V7",
+  "SUPERSEDED_EXECUTION_PACKET_VERSION": 7,
+  "SUPERSEDED_EXECUTION_PACKET_SHA256": "51023d0d2ed780db4c7d5018a289939e7c9c83061f8768051ef1cd7b8ae674e8",
+  "SUPERSEDED_EXECUTION_PACKET_FILE_SHA256": "f5fbb440e1188afcb35bd6085d2e7d15691fb7c96cd31ee6851379cada3298f8",
+  "STATUS": "SUPERSEDED_BEFORE_EXECUTION",
+  "REASON": "COST_CEILING_SEMANTICS_NOT_PROVEN",
+  "V7_EXECUTED": false,
+  "V7_APPROVED": false,
+  "V7_APPROVAL_CONSUMED": false,
+  "V7_PROVIDER_REQUESTS": 0,
+  "V7_MODEL_CALLS": 0,
+  "V7_PACKET_MODIFIED": false,
+  "V7_COST_NUMBER": "1.316316",
+  "V7_COST_NUMBER_CLASSIFICATION": "ESTIMATE_NOT_PROVEN_HARD_CEILING",
+  "V7_EXECUTION_COST_CEILING_PROVEN": false,
+  "V7_APPROVAL_AUTHORISED": false,
+  "NOT_DESCRIBED_AS": [
+    "FAILED",
+    "CONSUMED",
+    "REJECTED_BY_PROVIDER"
+  ],
+  "REFUSAL_OUTCOME": "EXECUTION_PACKET_SUPERSEDED_BEFORE_EXECUTION",
+  "REFUSAL_IS_NOT": "EXECUTION_APPROVAL_ALREADY_CONSUMED",
+  "GUARD": {
+    "runner": "infrastructure/scripts/run_second_opportunity_execution_v7.py",
+    "function": "refuse_if_superseded",
+    "called_from": [
+      "execute, before the approval is read and before any transport exists",
+      "refuse_if_consumed, which verification and --execute call"
+    ]
+  },
+  "COST_CEILING_RECORD_VERSION": "second-opportunity-execution-cost-ceiling-record@1.0.0",
+  "COST_CEILING_RECORD_SHA256": "2184ff405cd8edd8766da4fc03bd64218c7b554da141d6e7589c5515c31a0d0b",
+  "SUCCESSOR_EXECUTION_PACKET_ID": "SECOND-OPPORTUNITY-SYNTH-EXEC-V8",
+  "OPERATOR_DECISION": [
+    "ACCEPT_THE_PROVIDER_STRICT_ARCHITECTURE_OF_MISSION_1_84_19",
+    "KEEP_OUTPUT_SCHEMA_V1_2_0",
+    "KEEP_SEMANTIC_GATE_V1_4_0",
+    "KEEP_PROMPT_V1_5_0",
+    "KEEP_PROVIDER_STRICT_MODE_TRUE",
+    "KEEP_STRICT_PROJECTION_V1_0_0",
+    "KEEP_STRICT_CAPABILITY_PROFILE_V1_0_0",
+    "KEEP_STRICT_PROJECTION_FREEZE_COMMIT_57154AFF",
+    "KEEP_TED_REPRESENTATION_2528A56A",
+    "KEEP_GENERATION_HEADROOM_4_OVER_5",
+    "KEEP_SUMMARY_HARD_MAXIMUM_1500_AND_TARGET_1200",
+    "DO_NOT_APPROVE_V7",
+    "V7_EXECUTION_COST_CEILING_PROVEN = false",
+    "V7_APPROVAL_AUTHORISED = false",
+    "DEFECT_CLASS = GOVERNANCE_ACCOUNTING, NOT_STRICT_TOOL_ARCHITECTURE"
+  ],
+  "note": "No inference occurred under V7, so it did not fail, was not consumed and was not refused by the provider. Its cost figure was an estimate it called a ceiling, and the operator did not approve it. V1 to V6 stay consumed, and a successor needs an approval naming its own digest"
+}
