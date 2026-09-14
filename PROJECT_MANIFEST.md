@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.155
+Version: 1.156
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-14 (Sprint 1 / Mission 1.84.21)
+Last amended: 2026-09-14 (Sprint 1 / Mission 1.84.22)
 
 ---
 
@@ -13,6 +13,39 @@ Last amended: 2026-09-14 (Sprint 1 / Mission 1.84.21)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.156 - 2026-09-14 (Sprint 1 / Mission 1.84.22)
+
+**`EXECUTION_SEMANTIC_GATE_REJECTED_NO_RETRY`: the one V9 request was made, the full v1.2.0 schema passed
+the answer for the first time since V3, and gate v1.4.0 refused it at stage 6.** The operator approved
+exactly one execution of V9 by its digest `ba681da9...` and accepted, for V9 only, the residual semantic
+limitation and the first strict request's timeout risk. The approval was extracted from the operator's
+message by script (202 lines, `de5ee683...`), compared value for value with the frozen packet (54
+values), and written beside it with an exclusive create; the packet was not touched.
+
+**THE REQUEST**: 58 of 58 pre-network checks, under a tripwire on the real transport and on urlopen,
+then ONE request to the synchronous Messages API with a strict forced tool over the frozen projection:
+HTTP 200 in 54.6 s of 240, `stop_reason tool_use`, 12493 in, 3734 out, 0 thinking. **Cost 0.062326**
+from the reported usage at the held price, against a planning estimate of 1.316316 and a hard ceiling
+of 3.608; standard tier, `inference_geo global`, no cache tokens: no billed category the ceiling was not
+proven under.
+
+**THE STAGES**: 1 to 5 passed, the full schema included, with exactly the 20 declared root keys and the
+summary at 1145 against 1200 and 1500. Stage 6 refused it on seven reasons over two fields: the word
+*market* in `candidate_intervention_class`, which no supplied statement contains, and all six
+`recommended_next_evidence` items, written as imperatives the gate does not read as requests, one of
+them also carrying *confirmed*. Prompt v1.5.0 states each rule in words. Stages 7 to 10 NOT_REACHED; no
+retry, no review packet, nothing persisted; the approval and both acceptances spent, and a second
+`--execute` refused before any network.
+
+**GATE 98** re-derives the record and replays all ten stages with no database, from Mission 1.84.10's
+authenticated snapshot rebuilt digest for digest; it measures each refusal against the answer, checks
+each billed category against the ceiling, holds V1 to V6 to gate 91 and V7 and V8 to their
+supersessions, asks the runner whether it would execute V9 again, and pins the response, the parsed
+output, the approval and the record. Three tests re-pointed from an absent approval to the recorded one.
+Probe **92 caught, 0 escaped, 25 of 25 controls**, in one run: 91 by rule, 1 by drift. 3877 +
+6291 tests, 98 gates, 81 new tests, 1 provider request, 0 retries, 3604 TED bytes, 0 canonical
+mutation. `mission-1.84.22-report.md`.
 
 ## 1.155 - 2026-09-14 (Sprint 1 / Mission 1.84.21)
 
