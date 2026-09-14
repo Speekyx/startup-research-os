@@ -1104,6 +1104,19 @@ jobs:
       - name: Execution packet V9 is V8's request with the operator's 240-second timeout
         run: uv run python infrastructure/scripts/render_second_opportunity_execution_packet_v9.py --check
 
+      # Mission 1.84.22. The one V9 request was made, the full v1.2.0 schema passed the answer, and
+      # gate v1.4.0 refused it at stage 6. The gate re-derives every stage with no database, replaying
+      # the V9 runner from Mission 1.84.10's authenticated snapshot, and refuses: a record that
+      # disagrees with the retained raw response, the parsed answer, the approval or the replay; an
+      # answer rewritten to pass with every digest recomputed; the approval marked unused, a second
+      # request, a retry, fallback, continuation or repair; a stage after the failure marked passed,
+      # or a review packet for a refused answer; a cost that is the planning estimate or the ceiling
+      # rather than the reported usage, or a billed category the ceiling was not proven under; V1 to
+      # V6 edited or reset, V7 or V8 approved or run; a runner that would execute V9 again, or whose
+      # --execute reaches a transport; and a canonical counter that moved.
+      - name: The one V9 request is recorded as it happened, and V9 cannot run again
+        run: uv run python infrastructure/scripts/render_second_opportunity_execution_record_v9.py --check
+
       # Mission 1.84.2. The one approved provider request happened and its output was rejected
       # at schema validation. The gate refuses: an approval recovered from a failure, or a
       # consumed-approval list that does not name V1's digest with a request against it; a
