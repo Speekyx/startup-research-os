@@ -1117,6 +1117,19 @@ jobs:
       - name: The one V9 request is recorded as it happened, and V9 cannot run again
         run: uv run python infrastructure/scripts/render_second_opportunity_execution_record_v9.py --check
 
+      # Mission 1.84.23. Prompt v1.6.0: v1.5.0 with the generation-surface block, rendered from the
+      # field policy, the field roles, the support channels and the census. The gate refuses: gate
+      # v1.4.0 not the frozen one, before or after its conformance cases; V9's seven refusals not
+      # reproduced from the retained answer, or one outside the two families; prompt v1.5.0 or the
+      # representation moved; a trusted context, TED region or task other than v1.5.0's; a system
+      # region other than v1.5.0's bytes followed by the surface block; a rule left unstated, or a
+      # census that would pass v1.5.0; a canonical request form the frozen gate does not read as a
+      # request, or an instruction it does; a synthetic case judged otherwise than the policy says;
+      # a V9 sentence, a file read or a private gate pattern reachable from the policy or the prompt;
+      # and any model call or network request.
+      - name: Prompt v1.6.0 is v1.5.0 plus the generation-surface block, and the frozen gate agrees
+        run: uv run python infrastructure/scripts/render_second_opportunity_prompt_v1_6.py --check
+
       # Mission 1.84.2. The one approved provider request happened and its output was rejected
       # at schema validation. The gate refuses: an approval recovered from a failure, or a
       # consumed-approval list that does not name V1's digest with a request against it; a
