@@ -1053,6 +1053,31 @@ jobs:
       - name: Execution packet V7 is V6's call with a strict tool over the frozen projection
         run: uv run python infrastructure/scripts/render_second_opportunity_execution_packet_v7.py --check
 
+      # Mission 1.84.20. The execution cost ceiling, proven from first-party documentation, and V7
+      # superseded before execution. The gate refuses: an estimate or planning cost called a
+      # ceiling; a provider fact resting on no quoted fragment or a page that is not first-party; a
+      # context window the quotes do not state; the strict prompt's unknown size said covered; a
+      # billing category dropped, or called inapplicable while the request selects it; the
+      # data-residency multiplier left out; an input bound taken from the body estimate or from
+      # observed usage; a ceiling the decimal derivation does not give; V7's figure called proven;
+      # V7 edited, approved, executed, or recorded as consumed, failed or refused by the provider;
+      # and a V7 runner that no longer refuses V7, by name, before its approval and any transport.
+      - name: The execution cost ceiling is proven, and V7 was superseded before execution
+        run: uv run python infrastructure/scripts/render_second_opportunity_execution_cost_ceiling.py --check
+
+      # Mission 1.84.20. Execution packet V8: V7's request, byte for byte, under gate 94's ceiling,
+      # frozen and unapproved. The gate refuses: bound fields that do not hash to the digest, a
+      # spent or superseded digest, an unreviewed field, an approval recorded by the preparing
+      # mission or either risk accepted by it; V1 to V6 edited or their consumption reset, V7
+      # described as anything but superseded before execution; a contract, gate, prompt, strict
+      # projection, freeze, route, model, thinking, max_tokens, timeout, retention or persistence
+      # policy moved; a body that is not V7's bytes; a cost figure that is not gate 94's, or V7's
+      # cost fields back; a synthetic answer that does not stop where it must; a runner whose
+      # guard renames V7's refusal, whose approval check does not demand both risk decisions, or
+      # that would execute V1 to V7; and any preparation call, TED byte or canonical counter moved.
+      - name: Execution packet V8 is V7's request under a proven cost ceiling
+        run: uv run python infrastructure/scripts/render_second_opportunity_execution_packet_v8.py --check
+
       # Mission 1.84.2. The one approved provider request happened and its output was rejected
       # at schema validation. The gate refuses: an approval recovered from a failure, or a
       # consumed-approval list that does not name V1's digest with a request against it; a
