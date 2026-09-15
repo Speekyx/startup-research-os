@@ -293,7 +293,7 @@ operator's decision.
 | V10 cannot execute again | runner `refuse_if_consumed(5ed6771d...)` → `EXECUTION_APPROVAL_ALREADY_CONSUMED` under a tripwire; gate 101's `--execute` check passes |
 | V1 to V10 immutable | all 70 `second-opportunity-synthesis-*` files identical to 91cbb19. 69 are unchanged since the commit that added them; V1's record was closed by its own mission. Gates 91, 98, 99, 100 and 101 `--check` pass and write nothing |
 | stages 7 to 10 | NOT_REACHED for V9 and V10; both `EXECUTION_SEMANTIC_GATE_REJECTED_NO_RETRY` |
-| canonical counters | @@COUNTERS@@ |
+| canonical counters | unchanged, read-only, before and after the full verification: RawRecords 325, NormalizedRecords 325, Signals 60, Claims 91, ClaimRevisions 92, Evidence 112, ReliabilityAssessments 4, EvidenceIndependenceGroups 0, Opportunities 1, OpportunityRevisions 2, OpportunityEvidenceLinks 14, Embeddings 0, Scores absent, SourceReviews 71 |
 | Opportunity #2 | does not exist: one row in `research.opportunities` (`06113a8b...`), 2 revisions |
 | no provider path | the gate modules import no transport or HTTP module; every process tripwired; no credential in any environment |
 | frozen digests | gate v1.4.0 `eb03899b...`, prompt v1.6.0 `a89960ce...`, schema v1.2.0 `7d67bad3...`, packet V10 `5ed6771d...`, approval `5b0090e2...`, response `6a9e5d4d...`, record `981cfb43...`: all unchanged |
@@ -346,10 +346,10 @@ change and no network call. Its record is fully derived and compared at every ru
 
 ```
 new tests            43, in test_second_opportunity_stage6_diagnostic_v10.py (one full derivation, tripwired)
-bare-python tests    @@BARE@@
-pytest               @@PYTEST@@
-CI gates             102 (gate 102 added after gate 101), @@GATES@@
-ruff, format, mypy   @@LINT@@
+bare-python tests    3877, across 9 packages (the new tests are pytest tests)
+pytest               6742 passed, 13 skipped, across 9 packages; the database unchanged by the run
+CI gates             102 (gate 102 added after gate 101), all passing locally
+ruff, format, mypy   clean
 probe                15 violations caught, 0 escaped; 2 of 2 positive controls; every file restored and
                      proved by digest; each run in a child with the transport and urlopen tripwired and
                      no credential; 668 s. A first run stopped on a setup error of the probe itself (a

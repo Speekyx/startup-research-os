@@ -46,7 +46,10 @@ corrected in the report and left where it was written.
 **No V11 recommended**, and another attempt under an unchanged prompt, schema and gate is not justified
 on this evidence; five operator decisions (D1 successor gate, D2 pre-modifier policy, D3 class field,
 D4 whether to attempt again, D5 prompt stricter than gate). **GATE 102** re-derives the whole diagnosis
-and pins gate v1.4.0, the clause reader and the fixture. @@NUMBERS@@ `mission-1.84.25-report.md`.
+and pins gate v1.4.0, the clause reader and the fixture. Probe **15 caught, 0 escaped, 2 of 2 controls**,
+after a first run stopped on the probe's own setup error and restored every file. 3877 + 6742 tests,
+102 gates, 43 new tests, 0 provider requests, 0 model calls, 0 TED bytes, 0 canonical mutation.
+`mission-1.84.25-report.md`.
 
 ## 1.158 - 2026-09-15 (Sprint 1 / Mission 1.84.24)
 
