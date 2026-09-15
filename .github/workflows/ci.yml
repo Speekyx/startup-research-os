@@ -1157,6 +1157,17 @@ jobs:
       - name: Execution record V10 matches what the one request kept, and V10 cannot run again
         run: uv run python infrastructure/scripts/render_second_opportunity_execution_record_v10.py --check
 
+      # Mission 1.84.25. A diagnosis, not a repair: why gate v1.4.0 refused V10 at stage 6. The gate
+      # refuses: V10's two refusals no longer reproduced by the frozen gate from the retained answer;
+      # a trace that no longer shows `software` split off its leading `whether` by the coordinated-
+      # clause pattern, or `market` asserted in one clause and supplied nowhere; a classification
+      # outside the operator's four categories, or resting on a policy sentence no longer found in
+      # its file; a synthetic matrix whose divergences are not the scoped lists; gate v1.4.0, the
+      # clause reader or the fixture moved; prompt v1.6.0 no longer stating the class rule; V10 not
+      # held to gate 101; and a record or page that is not what the diagnosis re-derives.
+      - name: The stage 6 diagnostic of V10 re-derives, and nothing it holds constant moved
+        run: uv run python infrastructure/scripts/render_second_opportunity_stage6_diagnostic_v10.py --check
+
       # Mission 1.84.2. The one approved provider request happened and its output was rejected
       # at schema validation. The gate refuses: an approval recovered from a failure, or a
       # consumed-approval list that does not name V1's digest with a request against it; a
