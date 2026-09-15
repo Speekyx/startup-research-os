@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.156
+Version: 1.157
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-14 (Sprint 1 / Mission 1.84.22)
+Last amended: 2026-09-15 (Sprint 1 / Mission 1.84.23)
 
 ---
 
@@ -13,6 +13,43 @@ Last amended: 2026-09-14 (Sprint 1 / Mission 1.84.22)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.157 - 2026-09-15 (Sprint 1 / Mission 1.84.23)
+
+**`SECOND_OPPORTUNITY_EXECUTION_PACKET_V10_READY_FOR_OPERATOR_APPROVAL`: prompt v1.6.0 states the
+bounded forms the frozen gate already reads, and packet V10, V9's request with the new system region,
+is frozen and unapproved.** The operator accepted V9's result and kept schema v1.2.0, gate v1.4.0, the
+strict architecture, projection v1.0.0, the 240-second timeout, the 3.608 ceiling and the 4/5 headroom.
+The supported-assertion policy was not weakened and the request parser was not expanded.
+
+**V9 RE-DERIVED**: gate 98's replay of the V9 runner's stages over the retained answer returns the
+seven stage 6 reasons exactly. One is a genuine support failure under the current policy (*market* in
+`candidate_intervention_class`, supplied by no statement); six are requests for evidence written as
+instructions, which the gate does not read as requests.
+
+**PROMPT v1.6.0** (`a89960ce...`): v1.5.0's 311-line system region as a byte-identical prefix, then one
+39-line block rendered from `second-opportunity-generation-surface-policy@1.0.0` over objects the gate
+already owns: which fields assert and where their words may come from, the class of intervention as
+such a field (`NAME_THE_CLASS_ONLY` is not free vocabulary), and a request as a noun phrase opening
+with *Evidence of*, *Observation of* or *Identification of*, never an instruction, leaving its result
+open and carrying no wording of certainty. Unstated surface rules 6 -> 0, the same census finding all
+six in v1.5.0; 18 of 18 canonical forms read as requests by the frozen `is_request_shaped` and 0 of 11
+instructions; 9 synthetic cases as the policy says; gate v1.4.0 `eb03899b...` before and after; no V9
+sentence, no file read, no private gate pattern, no digit in the block. **Frozen and pushed as
+`ed0ce1a`, found on the remote by `ls-remote` before any V10 artifact existed.**
+
+**PACKET V10** (`5ed6771d...`): V9's body with the v1.6.0 system region and one difference,
+`system: changed`, 31326 -> 34261 characters (`703fb271...`); planning estimate recomputed at 1.31972
+(19860 input tokens), never a bound; hard ceiling 3.608 unchanged; 240 s, 0 retries, one call; 17
+synthetic preflight rows stop where they must. The V10 runner refuses V1 to V6 and V9 as consumed and
+V7 and V8 as superseded; run against the research database under a tripwire, its verification exits 0
+and `--execute` is refused as `OPERATOR_APPROVAL_NOT_RECORDED` before any network. Both risks, the
+residual semantic limitation and the strict first-request timeout, are left to the operator; approval
+NOT recorded.
+
+**GATES 99 AND 100.** Probe **102 caught, 0 escaped, 25 of 25 controls**, in one run: 99 by rule, 2
+by drift, and 1 by the policy's own constructor, which the frozen gate 99 reports as an exception. 3877 + 6612 tests, 100 gates, 321 new tests, 0 model calls, 0 provider requests, 0 token counts, 0 TED
+bytes, 0 canonical mutation. `mission-1.84.23-report.md`.
 
 ## 1.156 - 2026-09-14 (Sprint 1 / Mission 1.84.22)
 
