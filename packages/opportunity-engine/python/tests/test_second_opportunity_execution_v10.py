@@ -705,13 +705,17 @@ class TestNoApprovalNoTransport:
         assert refusal.value.code == "OPERATOR_APPROVAL_NOT_RECORDED"
         assert built == []
 
-    def test_no_approval_is_recorded_beside_v10(self, runner):
-        """True while V10 awaits the operator. A later mission that records an approval re-points
-        this to what the approval must then be, as Mission 1.84.22 did for V9."""
-        assert not runner.APPROVAL_FILE.exists()
-        with pytest.raises(runner.RefusedError) as refusal:
-            runner.check_approval(str(runner.EXPECTED["EXECUTION_PACKET_SHA256"]))
-        assert refusal.value.code == "OPERATOR_APPROVAL_NOT_RECORDED"
+    def test_the_committed_approval_names_v10_and_decides_both_risks(self, runner):
+        """Re-pointed in Mission 1.84.24, when the operator approved exactly one execution of V10.
+
+        This asserted that no approval existed, which was true until the operator gave one. The
+        property kept is the one that mattered: the approval beside the packet was recorded by a later
+        mission than the one that prepared V10, names V10's digest, and decides both risks.
+        """
+        approval = json.loads(runner.APPROVAL_FILE.read_text(encoding="utf-8"))
+        assert approval["EXECUTION_PACKET_SHA256"] == runner.EXPECTED["EXECUTION_PACKET_SHA256"]
+        assert approval["recorded_by"] == "mission-1.84.24"
+        assert all(approval[key] is True for key in runner.RISK_DECISIONS)
 
     @pytest.mark.parametrize(
         ("override", "code"),
