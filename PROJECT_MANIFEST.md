@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.158
+Version: 1.159
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-15 (Sprint 1 / Mission 1.84.24)
+Last amended: 2026-09-15 (Sprint 1 / Mission 1.84.25)
 
 ---
 
@@ -13,6 +13,43 @@ Last amended: 2026-09-15 (Sprint 1 / Mission 1.84.24)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.159 - 2026-09-15 (Sprint 1 / Mission 1.84.25)
+
+**`STAGE_6_ROOT_CAUSE_ESTABLISHED_OPERATOR_DECISION_REQUIRED`: V10's two stage 6 refusals have two
+causes, one in the gate and one in the answer, and nothing was repaired.** A diagnostic mission only:
+0 provider calls, 0 model inferences, 0 retries, nothing persisted, no packet, no V11, and V10's
+verdict unchanged. Four read-only agents (gate, contract, synthetic matrix, governance), the main agent
+the only writer.
+
+**`software` IN `observed_need` IS A `GATE_DEFECT`.** Gate v1.4.0 reproduces both retained reasons
+exactly. The clause reader's `coord` pattern (`assertion_context.py`, inherited from v1.2.0) reads
+*..., or software gap is not established ...* as a coordinated clause with its own subject, because a
+verb follows the last list item within three tokens, and cuts it off from the leading *Whether*. In the
+detached clause the word stands before the head noun of a trailing denial, which clears only its
+subject, so it is ASSERTED and the marker check, which runs on asserted occurrences only, refuses it.
+The documented policy refuses a word only where it is asserted, keeps a list under its one scope, and a
+frozen v1.2.0 test passes a denied gated word in an asserting field; the code itself records the split
+and corrects it for the disjunction rule only. **`market` IN `candidate_intervention_class` IS A
+`GENUINE_OUTPUT_DEFECT`**: one clause, no scope, the hyphen splits the token, no statement carries it,
+and MARKET_ACTIVITY licenses its whole phrase only; prompt v1.6.0 states the class rule, and V9 used the
+same word under v1.5.0. V10 stays rejected whatever the gate defect.
+
+**SYNTHETIC MATRIX**: 39 general cases on the frozen v1.3.0 fixture, three fields; 9 of 9 asserted
+controls refused, 13 of 13 scoped controls passed, **10 divergences, all one shape** (a scoped list whose
+last item is followed by a verb), 3 pre-modifier cases left UNDETERMINED where the principle and the
+bounded subject-denial rule differ. Smallest: *Whether a need or software exists is unknown.* refused,
+*Whether software exists is unknown.* passed. The Oxford comma is irrelevant. Earlier wording that
+described the refusal as field-level (V10's record note, the 1.84.24 report, docs/CLAUDE.md 1.159) is
+corrected in the report and left where it was written.
+
+**No V11 recommended**, and another attempt under an unchanged prompt, schema and gate is not justified
+on this evidence; five operator decisions (D1 successor gate, D2 pre-modifier policy, D3 class field,
+D4 whether to attempt again, D5 prompt stricter than gate). **GATE 102** re-derives the whole diagnosis
+and pins gate v1.4.0, the clause reader and the fixture. Probe **15 caught, 0 escaped, 2 of 2 controls**,
+after a first run stopped on the probe's own setup error and restored every file. 3877 + 6742 tests,
+102 gates, 43 new tests, 0 provider requests, 0 model calls, 0 TED bytes, 0 canonical mutation.
+`mission-1.84.25-report.md`.
 
 ## 1.158 - 2026-09-15 (Sprint 1 / Mission 1.84.24)
 
