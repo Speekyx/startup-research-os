@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.157
+Version: 1.158
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-15 (Sprint 1 / Mission 1.84.23)
+Last amended: 2026-09-15 (Sprint 1 / Mission 1.84.24)
 
 ---
 
@@ -13,6 +13,42 @@ Last amended: 2026-09-15 (Sprint 1 / Mission 1.84.23)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.158 - 2026-09-15 (Sprint 1 / Mission 1.84.24)
+
+**`EXECUTION_SEMANTIC_GATE_REJECTED_NO_RETRY`: the one V10 request was made, every request for evidence
+came back in the form the gate reads, and gate v1.4.0 refused the answer at stage 6 on two unsupported
+words.** The operator approved exactly one execution of V10 by its digest `5ed6771d...`, approved prompt
+v1.6.0's generation-surface alignment, and accepted, for V10 only, the residual semantic limitation and
+the first strict request's timeout risk. The approval was extracted from the operator's message by
+script (254 lines, `77d5da89...`), compared value for value with the frozen packet (53 values), and
+written beside it with an exclusive create; the packet was not touched.
+
+**THE REQUEST**: 61 of 61 pre-network checks under a tripwire, run again from the start after the
+research database, down with Docker Desktop, was brought back. Then ONE request to the synchronous
+Messages API with a strict forced tool over the frozen projection: HTTP 200 in 36.0 s of 240,
+`stop_reason tool_use`, 13435 in, 3919 out, 0 thinking. **Cost 0.06606** from the reported usage at the
+held price, against a planning estimate of 1.31972 and a hard ceiling of 3.608; standard tier,
+`inference_geo global`, no cache tokens: no billed category outside the ceiling. The credential reached
+the adapter through the runner's own configuration path (`setdefault` from the git-ignored compose
+`.env`); its value was never read.
+
+**THE STAGES**: 1 to 5 passed, the full schema included, with exactly the 20 declared root keys and the
+summary at 1208 against 1200 and 1500. **All seven `recommended_next_evidence` items open with a
+canonical head and the frozen gate reads each as a request**, where V9's six were all refused. Stage 6
+refused the answer on two words no supplied statement contains: *market* in
+`candidate_intervention_class` (*market-observation exercise*), and *software* in `observed_need`, inside
+a sentence the answer ends with *is not established by these statements*. Recorded as facts, nothing
+recommended. Stages 7 to 10 NOT_REACHED; no retry, no review packet, nothing persisted; the approval and
+both acceptances spent, and a second `--execute` refused before any network.
+
+**GATE 101** re-derives the record, replays all ten stages with no database from the authenticated
+snapshot with prompt v1.6.0's regions rebuilt digest for digest, measures each refusal and every
+request's shape against the answer, holds V9 to gate 98 and V1 to V6 to gate 91, and pins the raw
+response, the parsed output, the approval and the record. A record note that interpreted the
+`observed_need` refusal was corrected to the facts before the record was pinned. Three tests re-pointed
+from an absent approval to the one now recorded. Probe **112 caught, 0 escaped, 27 of 27 controls**, in one run: 111 by rule, 1 by drift. 3877 + 6699 tests, 101 gates, 87 new tests, 1 provider request, 0 retries,
+3604 TED bytes, 0 canonical mutation. `mission-1.84.24-report.md`.
 
 ## 1.157 - 2026-09-15 (Sprint 1 / Mission 1.84.23)
 

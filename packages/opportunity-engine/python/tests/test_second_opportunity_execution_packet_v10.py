@@ -129,10 +129,16 @@ class TestTheCommittedPacket:
             ]
         )
 
-    def test_no_approval_is_recorded_beside_v10(self, gate, packet):
-        """True while V10 awaits the operator. A later mission that records an approval re-points
-        this to what the approval must then be, as Mission 1.84.22 did for V9."""
-        assert not gate.APPROVAL.exists()
+    def test_the_approval_beside_the_packet_is_a_later_missions(self, gate, packet):
+        """Re-pointed in Mission 1.84.24, when the operator approved exactly one execution of V10.
+
+        This asserted that no approval existed beside the packet. One does now, and what it must be
+        is what gate 100 already required of any: recorded by a mission later than the one that
+        prepared V10, naming V10's digest, with the packet itself still recording no approval.
+        """
+        approval = json.loads(gate.APPROVAL.read_text(encoding="utf-8"))
+        assert approval["recorded_by"] == "mission-1.84.24"
+        assert approval["EXECUTION_PACKET_SHA256"] == packet["EXECUTION_PACKET_SHA256"]
         assert packet["OPERATOR_EXECUTION_APPROVAL_RECORDED"] is False
 
     def test_the_request_is_v9s_bytes_with_the_v1_6_system_region(self, packet):
@@ -596,8 +602,11 @@ class TestTheRunner:
             gate._check_runner(packet, snap[1], snap[2])
 
     def test_the_shipped_approval_check_decides_both_risks(self, gate, packet):
+        before = gate.APPROVAL.read_bytes()
         gate._check_approval_behaviour(gate.runner(), packet)
-        assert not gate.APPROVAL.exists()
+        # Re-pointed in Mission 1.84.24: the check writes its synthetic approvals to a temporary copy,
+        # and the operator's approval beside the packet is left byte for byte as it was.
+        assert gate.APPROVAL.read_bytes() == before
 
     def test_an_approval_check_that_ignores_the_risks_is_refused(self, gate, packet):
         module = gate.runner()

@@ -1144,6 +1144,19 @@ jobs:
       - name: Execution packet V10 is V9's request with prompt v1.6.0, frozen and unapproved
         run: uv run python infrastructure/scripts/render_second_opportunity_execution_packet_v10.py --check
 
+      # Mission 1.84.24. The one approved V10 request happened, the full schema passed the answer,
+      # and gate v1.4.0 refused it at stage 6 on two unsupported terms, every request for evidence
+      # read as a request. The gate refuses: a record that disagrees with the retained raw response,
+      # the parsed answer or the approval, each pinned; a stage table the replay from the
+      # authenticated snapshot does not reproduce, prompt v1.6.0's regions rebuilt digest for digest;
+      # a refusal that does not measure, or a request verdict other than the frozen gate's; a stage
+      # after the failure marked anything but NOT_REACHED, or a review packet for a refused answer; a
+      # cost other than the reported usage at the held price, over the ceiling, or a billed category
+      # outside it; V1 to V6 or V9 edited, V7 or V8 restored or approved; a runner that would execute
+      # V10 again; and a canonical counter that moved or a credential shape.
+      - name: Execution record V10 matches what the one request kept, and V10 cannot run again
+        run: uv run python infrastructure/scripts/render_second_opportunity_execution_record_v10.py --check
+
       # Mission 1.84.2. The one approved provider request happened and its output was rejected
       # at schema validation. The gate refuses: an approval recovered from a failure, or a
       # consumed-approval list that does not name V1's digest with a request against it; a
