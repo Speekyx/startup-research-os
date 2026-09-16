@@ -1,0 +1,1293 @@
+{
+  "$comment": "Mission 1.85.1. First-person structured evidence source qualification under local-private-research-v1, from first-party documentation retrieved on 2026-09-16. RAW_VERIFIED rows were re-read by the main agent from the retrieved bytes and carry the SHA-256 of the document; SUMMARISED_FETCH rows came through a summarising retrieval and never carry a decisive reason alone. Documentation requests only: no research data was retrieved and no model was called. Checked by packages/opportunity-engine/python/tests/test_first_person_source_qualification.py.",
+  "qualification_version": "first-person-source-qualification@1.0.0",
+  "mission": "mission-1.85.1",
+  "roadmap_node": "N01",
+  "use_profile": "local-private-research-v1",
+  "frozen_candidate_set": {
+    "artifact": "docs/data/first-person-source-candidates-v1.json",
+    "frozen_set_sha256": "c2f0189421df66b6ad629329b006fdd9715dce3a85ef0f324b91cfff63874b91",
+    "frozen_commit": "0eee973b1a7e63a7cf2e60edd867147a9dd50c07",
+    "corrections": []
+  },
+  "approving_verdicts": [
+    "PERMITTED",
+    "PERMITTED_WITH_CONDITIONS"
+  ],
+  "required_activities": [
+    "automated_access",
+    "api_use",
+    "commercial_use",
+    "storage",
+    "derived_analytics",
+    "model_processing"
+  ],
+  "admissibility_rule": "ELIGIBLE only if the official route exposes an appropriate structured field, every required activity is PERMITTED or PERMITTED_WITH_CONDITIONS on first-party evidence, no binding restriction conflicts with the SROS route, and provenance and stable identifiers suffice for lineage. Among eligible candidates prefer the most currently unsupported business dimensions unlocked through structured fields with the fewest new ontology assumptions, then the simpler official route.",
+  "candidates": [
+    {
+      "candidate_id": "github",
+      "family": "F-ISSUE",
+      "evidence": [
+        {
+          "id": "github-E1",
+          "url": "https://raw.githubusercontent.com/github/docs/main/content/site-policy/acceptable-use-policies/github-acceptable-use-policies.md",
+          "title": "GitHub Acceptable Use Policies (published source of the docs.github.com page)",
+          "publisher": "GitHub, Inc.",
+          "evidence_type": "OFFICIAL_TERMS",
+          "section": "7. Information Usage Restrictions",
+          "proposition": "Information from the Service may be used only for the listed reasons, whether scraped, collected through the API or otherwise obtained.",
+          "stance": "RESTRICTS",
+          "bears_on": [
+            "commercial_use",
+            "storage",
+            "derived_analytics",
+            "model_processing"
+          ],
+          "verification": "RAW_VERIFIED",
+          "sha256": "8f22cce7e5e0dfe8555ea60ab5d960f8bd875142011a272a9b236f2fdb44cf8d",
+          "retrieved_at": "2026-09-16T16:09:28+00:00"
+        },
+        {
+          "id": "github-E2",
+          "url": "https://raw.githubusercontent.com/github/docs/main/content/site-policy/acceptable-use-policies/github-acceptable-use-policies.md",
+          "title": "GitHub Acceptable Use Policies",
+          "publisher": "GitHub, Inc.",
+          "evidence_type": "OFFICIAL_TERMS",
+          "section": "7. Information Usage Restrictions",
+          "proposition": "Researchers may use public, non-personal information for research only if resulting publications are open access; archivists may use public information for archival purposes.",
+          "stance": "RESTRICTS",
+          "bears_on": [
+            "commercial_use",
+            "derived_analytics"
+          ],
+          "verification": "RAW_VERIFIED",
+          "sha256": "8f22cce7e5e0dfe8555ea60ab5d960f8bd875142011a272a9b236f2fdb44cf8d",
+          "retrieved_at": "2026-09-16T16:09:28+00:00"
+        },
+        {
+          "id": "github-E3",
+          "url": "https://raw.githubusercontent.com/github/docs/main/content/site-policy/acceptable-use-policies/github-acceptable-use-policies.md",
+          "title": "GitHub Acceptable Use Policies",
+          "publisher": "GitHub, Inc.",
+          "evidence_type": "OFFICIAL_TERMS",
+          "section": "6. Services Usage Limits",
+          "proposition": "No reproducing, copying or exploiting any portion of the Service without express written permission.",
+          "stance": "RESTRICTS",
+          "bears_on": [
+            "storage",
+            "commercial_use"
+          ],
+          "verification": "RAW_VERIFIED",
+          "sha256": "8f22cce7e5e0dfe8555ea60ab5d960f8bd875142011a272a9b236f2fdb44cf8d",
+          "retrieved_at": "2026-09-16T16:09:28+00:00"
+        },
+        {
+          "id": "github-E4",
+          "url": "https://raw.githubusercontent.com/github/docs/main/content/site-policy/github-terms/github-terms-of-service.md",
+          "title": "GitHub Terms of Service (published source of the docs.github.com page)",
+          "publisher": "GitHub, Inc.",
+          "evidence_type": "OFFICIAL_TERMS",
+          "section": "G.1",
+          "proposition": "GitHub reserves all rights not expressly granted.",
+          "stance": "RESTRICTS",
+          "bears_on": [
+            "storage",
+            "derived_analytics",
+            "model_processing"
+          ],
+          "verification": "RAW_VERIFIED",
+          "sha256": "7e2a7a7317a8007c84b5a760f6d9c27796f24253d3257ef8cfa35733167a3d09",
+          "retrieved_at": "2026-09-16T16:09:29+00:00"
+        },
+        {
+          "id": "github-E5",
+          "url": "https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api",
+          "title": "Rate limits for the REST API",
+          "publisher": "GitHub, Inc.",
+          "evidence_type": "OFFICIAL_API_DOCS",
+          "section": "Primary rate limit",
+          "proposition": "Unauthenticated requests for public data are allowed at 60 per hour; authenticated at 5,000 per hour; secondary limits apply.",
+          "stance": "GRANTS",
+          "bears_on": [
+            "automated_access",
+            "api_use"
+          ],
+          "verification": "SUMMARISED_FETCH",
+          "sha256": null,
+          "retrieved_at": "2026-09-16"
+        },
+        {
+          "id": "github-E6",
+          "url": "https://docs.github.com/en/rest/issues/issues",
+          "title": "REST API endpoints for issues",
+          "publisher": "GitHub, Inc.",
+          "evidence_type": "OFFICIAL_API_DOCS",
+          "section": "Get an issue; Update an issue",
+          "proposition": "Issues expose state, state_reason (including duplicate), labels and reactions; the canonical duplicate target appears only in the update request body, not in read responses.",
+          "stance": "NOT_ADDRESSED",
+          "bears_on": [
+            "route"
+          ],
+          "verification": "SUMMARISED_FETCH",
+          "sha256": null,
+          "retrieved_at": "2026-09-16"
+        }
+      ],
+      "activities": {
+        "automated_access": "PERMITTED_WITH_CONDITIONS",
+        "api_use": "PERMITTED_WITH_CONDITIONS",
+        "commercial_use": "UNCLEAR",
+        "storage": "NOT_ADDRESSED",
+        "derived_analytics": "UNCLEAR",
+        "model_processing": "NOT_ADDRESSED"
+      },
+      "activity_evidence": {
+        "automated_access": [
+          "github-E5"
+        ],
+        "api_use": [
+          "github-E5"
+        ],
+        "commercial_use": [
+          "github-E1",
+          "github-E2",
+          "github-E3"
+        ],
+        "storage": [
+          "github-E3",
+          "github-E4"
+        ],
+        "derived_analytics": [
+          "github-E1",
+          "github-E2"
+        ],
+        "model_processing": [
+          "github-E4"
+        ]
+      },
+      "route": {
+        "resource": "GET /repos/{owner}/{repo}/issues and /repos/{owner}/{repo}/issues/{number}",
+        "auth": "none for public data (60 per hour); personal access token for 5,000 per hour",
+        "access": "public",
+        "structured_fields": [
+          "state",
+          "state_reason",
+          "labels (repository-defined names)",
+          "reactions (8 counts, meaning undocumented)",
+          "parent_issue_url"
+        ],
+        "pagination": "link header, per_page up to 100",
+        "rate_limits": "60/h unauthenticated, 5,000/h authenticated, secondary limits",
+        "storage_restrictions": "AUP sections 6 and 7",
+        "deletion_obligations": "AUP section 8 removal requests; 410 for deleted issues",
+        "historical_retrieval": "state=all, since",
+        "stable_ids": true,
+        "native_duplicate_relation": "close reason only; canonical target not exposed on read routes",
+        "platform_native_fields": true
+      },
+      "eligibility": {
+        "structured_field": "PARTIAL",
+        "all_activities_approving": false,
+        "conflicting_binding_restriction": true,
+        "provenance_sufficient": true,
+        "eligible": false
+      },
+      "decisive_reasons": [
+        {
+          "reason": "AUP section 7 limits every use of GitHub information, including information collected through the API, to research on public non-personal information with open-access publications, or to archiving; the SROS route is neither",
+          "evidence": [
+            "github-E1",
+            "github-E2"
+          ]
+        },
+        {
+          "reason": "storage and model processing have no grant, and GitHub reserves all rights not expressly granted",
+          "evidence": [
+            "github-E3",
+            "github-E4"
+          ]
+        }
+      ],
+      "operator_decision_note": "Committing to open-access publication would not qualify GitHub: section 7 would still cover only non-personal information, storage and model processing would still have no grant, and the canonical duplicate target is not exposed on read routes.",
+      "registration": "REGISTERED"
+    },
+    {
+      "candidate_id": "steam",
+      "family": "F-REVIEW",
+      "evidence": [
+        {
+          "id": "steam-E1",
+          "url": "https://partner.steamgames.com/doc/store/getreviews",
+          "title": "User Reviews - Get List (Steamworks Documentation)",
+          "publisher": "Valve Corporation",
+          "evidence_type": "OFFICIAL_API_DOCS",
+          "section": "Response fields",
+          "proposition": "Each review carries voted_up, documented as true for a positive recommendation, and a unique recommendationid.",
+          "stance": "NOT_ADDRESSED",
+          "bears_on": [
+            "route"
+          ],
+          "verification": "RAW_VERIFIED",
+          "sha256": "b2e90c257e1b2da2a5d2b5a6914c1ff8230896847f14e74c8a3bc5d2079a2549",
+          "retrieved_at": "2026-09-16T16:09:20+00:00"
+        },
+        {
+          "id": "steam-E2",
+          "url": "https://steamcommunity.com/dev/apiterms",
+          "title": "Steam Web API Terms of Use",
+          "publisher": "Valve Corporation",
+          "evidence_type": "OFFICIAL_TERMS",
+          "section": "Grant; ownership",
+          "proposition": "The grant covers implementing the API in an Application and distributing Steam Data to end users for their personal use; Steam Data is the property of Valve.",
+          "stance": "RESTRICTS",
+          "bears_on": [
+            "api_use",
+            "commercial_use",
+            "storage",
+            "derived_analytics"
+          ],
+          "verification": "RAW_VERIFIED",
+          "sha256": "1de56c73d33be5e87386689ed50ab5801ffc0f1cfd9e6cc15f6311fc4c854ba7",
+          "retrieved_at": "2026-09-16T16:09:20+00:00"
+        },
+        {
+          "id": "steam-E3",
+          "url": "https://store.steampowered.com/subscriber_agreement/",
+          "title": "Steam Subscriber Agreement",
+          "publisher": "Valve Corporation",
+          "evidence_type": "OFFICIAL_TERMS",
+          "section": "2.A; 2.G",
+          "proposition": "The licence is for personal, non-commercial use, and Content and Services may not be exploited for any commercial purpose.",
+          "stance": "RESTRICTS",
+          "bears_on": [
+            "commercial_use",
+            "storage",
+            "derived_analytics"
+          ],
+          "verification": "RAW_VERIFIED",
+          "sha256": "0d624f000234b8c0a7c7ec3b19385144108c0d799755997b3eea671e5f0d1352",
+          "retrieved_at": "2026-09-16T16:09:19+00:00"
+        },
+        {
+          "id": "steam-E4",
+          "url": "https://store.steampowered.com/subscriber_agreement/",
+          "title": "Steam Subscriber Agreement",
+          "publisher": "Valve Corporation",
+          "evidence_type": "OFFICIAL_TERMS",
+          "section": "4.C",
+          "proposition": "Scripts, bots or other non-human-controlled systems may not be used to interact with Content and Services.",
+          "stance": "RESTRICTS",
+          "bears_on": [
+            "automated_access"
+          ],
+          "verification": "RAW_VERIFIED",
+          "sha256": "0d624f000234b8c0a7c7ec3b19385144108c0d799755997b3eea671e5f0d1352",
+          "retrieved_at": "2026-09-16T16:09:19+00:00"
+        }
+      ],
+      "activities": {
+        "automated_access": "UNCLEAR",
+        "api_use": "UNCLEAR",
+        "commercial_use": "UNCLEAR",
+        "storage": "UNCLEAR",
+        "derived_analytics": "UNCLEAR",
+        "model_processing": "NOT_ADDRESSED"
+      },
+      "activity_evidence": {
+        "automated_access": [
+          "steam-E4"
+        ],
+        "api_use": [
+          "steam-E2"
+        ],
+        "commercial_use": [
+          "steam-E2",
+          "steam-E3"
+        ],
+        "storage": [
+          "steam-E2",
+          "steam-E3"
+        ],
+        "derived_analytics": [
+          "steam-E2",
+          "steam-E3"
+        ],
+        "model_processing": []
+      },
+      "route": {
+        "resource": "GET store.steampowered.com/appreviews/{appid}?json=1",
+        "auth": "none documented",
+        "access": "public",
+        "structured_fields": [
+          "voted_up (documented positive recommendation)",
+          "total_positive",
+          "total_negative",
+          "review_score (formula undocumented)"
+        ],
+        "pagination": "cursor",
+        "rate_limits": "not documented for this route",
+        "storage_restrictions": "Web API Terms and Subscriber Agreement; applicability to this route unclear",
+        "deletion_obligations": "not documented",
+        "historical_retrieval": "day_range capped at 365 for filter=all; completeness not documented",
+        "stable_ids": true,
+        "native_duplicate_relation": "none",
+        "platform_native_fields": true
+      },
+      "eligibility": {
+        "structured_field": "PASS",
+        "all_activities_approving": false,
+        "conflicting_binding_restriction": true,
+        "provenance_sufficient": true,
+        "eligible": false
+      },
+      "decisive_reasons": [
+        {
+          "reason": "no first-party document grants a third party any of the six activities; the only instruments addressing commercial and automated use restrict both, and whether they govern this route needs legal judgement",
+          "evidence": [
+            "steam-E2",
+            "steam-E3",
+            "steam-E4"
+          ]
+        }
+      ],
+      "registration": "REGISTERED"
+    },
+    {
+      "candidate_id": "google-play",
+      "family": "F-REVIEW",
+      "evidence": [
+        {
+          "id": "google-play-E1",
+          "url": "https://developers.google.com/android-publisher/reply-to-reviews",
+          "title": "Reply to Reviews (Google Play Developer API)",
+          "publisher": "Google LLC",
+          "evidence_type": "OFFICIAL_API_DOCS",
+          "section": "Overview; limitations",
+          "proposition": "The reviews API gives a developer feedback for their own app, and only reviews created or modified within the last week.",
+          "stance": "RESTRICTS",
+          "bears_on": [
+            "automated_access",
+            "api_use",
+            "route"
+          ],
+          "verification": "RAW_VERIFIED",
+          "sha256": "2c33da36daef57660d462400433fdc6e3a3c9b7697d936f02fd6a571a2731c5d",
+          "retrieved_at": "2026-09-16T16:09:22+00:00"
+        },
+        {
+          "id": "google-play-E2",
+          "url": "https://developers.google.com/terms",
+          "title": "Google APIs Terms of Service",
+          "publisher": "Google LLC",
+          "evidence_type": "OFFICIAL_TERMS",
+          "section": "Section 5",
+          "proposition": "API users may not scrape, build databases or otherwise create permanent copies of content accessed through the APIs.",
+          "stance": "PROHIBITS",
+          "bears_on": [
+            "storage"
+          ],
+          "verification": "RAW_VERIFIED",
+          "sha256": "8a3874066c43dc22e85cb1d3f04c52e84b42e3eafb33baa8e3f2450d1a504523",
+          "retrieved_at": "2026-09-16T16:09:24+00:00"
+        },
+        {
+          "id": "google-play-E3",
+          "url": "https://play.google.com/robots.txt",
+          "title": "play.google.com robots.txt",
+          "publisher": "Google LLC",
+          "evidence_type": "OFFICIAL_ACCESS_CONTROL",
+          "section": "User-agent *",
+          "proposition": "The store review path /store/getreviews is disallowed.",
+          "stance": "PROHIBITS",
+          "bears_on": [
+            "automated_access"
+          ],
+          "verification": "RAW_VERIFIED",
+          "sha256": "cad8995e4d35174309d6d04c1f6765afeb7643e88cf2155af27cbdabb92ef552",
+          "retrieved_at": "2026-09-16T16:09:26+00:00"
+        }
+      ],
+      "activities": {
+        "automated_access": "NOT_ADDRESSED",
+        "api_use": "NOT_ADDRESSED",
+        "commercial_use": "NOT_ADDRESSED",
+        "storage": "NOT_PERMITTED",
+        "derived_analytics": "NOT_ADDRESSED",
+        "model_processing": "NOT_ADDRESSED"
+      },
+      "activity_evidence": {
+        "automated_access": [
+          "google-play-E1",
+          "google-play-E3"
+        ],
+        "api_use": [
+          "google-play-E1"
+        ],
+        "commercial_use": [],
+        "storage": [
+          "google-play-E2"
+        ],
+        "derived_analytics": [],
+        "model_processing": []
+      },
+      "route": {
+        "resource": "GET androidpublisher/v3/applications/{packageName}/reviews",
+        "auth": "OAuth service account linked to a Play developer account",
+        "access": "account-bound, own apps only",
+        "structured_fields": [
+          "starRating (1-5)",
+          "thumbsUpCount",
+          "reviewId"
+        ],
+        "pagination": "token, maxResults up to 100",
+        "rate_limits": "per-app quotas",
+        "storage_restrictions": "Google APIs Terms section 5",
+        "deletion_obligations": "delete stored content when access ends",
+        "historical_retrieval": "last week only",
+        "stable_ids": true,
+        "native_duplicate_relation": "none",
+        "platform_native_fields": true
+      },
+      "eligibility": {
+        "structured_field": "PASS",
+        "all_activities_approving": false,
+        "conflicting_binding_restriction": true,
+        "provenance_sufficient": true,
+        "eligible": false
+      },
+      "decisive_reasons": [
+        {
+          "reason": "the only official review-rating route covers the developer's own apps for one week, SROS owns no Play app, and the API terms forbid building databases of API content",
+          "evidence": [
+            "google-play-E1",
+            "google-play-E2"
+          ]
+        },
+        {
+          "reason": "the public store review path is disallowed for automated access",
+          "evidence": [
+            "google-play-E3"
+          ]
+        }
+      ],
+      "registration": "REGISTERED"
+    },
+    {
+      "candidate_id": "apple-app-store",
+      "family": "F-REVIEW",
+      "evidence": [
+        {
+          "id": "apple-app-store-E1",
+          "url": "https://developer.apple.com/tutorials/data/documentation/appstoreconnectapi/customer-reviews.json",
+          "title": "App Store Connect API: Customer Reviews",
+          "publisher": "Apple Inc.",
+          "evidence_type": "OFFICIAL_API_DOCS",
+          "section": "Abstract",
+          "proposition": "The customer-reviews resource returns the ratings and reviews customers write for your own app.",
+          "stance": "RESTRICTS",
+          "bears_on": [
+            "api_use",
+            "route"
+          ],
+          "verification": "RAW_VERIFIED",
+          "sha256": "7776a0539f56d48895de454af18f3d0e63662dc7992dbd1f31c82ac2e18897ff",
+          "retrieved_at": "2026-09-16T16:09:27+00:00"
+        },
+        {
+          "id": "apple-app-store-E2",
+          "url": "https://www.apple.com/legal/internet-services/itunes/us/terms.html",
+          "title": "Apple Media Services Terms and Conditions",
+          "publisher": "Apple Inc.",
+          "evidence_type": "OFFICIAL_TERMS",
+          "section": "Usage rules",
+          "proposition": "No automated process may scrape, copy, or perform measurement, analysis or monitoring of any portion of the Content or Services.",
+          "stance": "PROHIBITS",
+          "bears_on": [
+            "automated_access",
+            "derived_analytics"
+          ],
+          "verification": "RAW_VERIFIED",
+          "sha256": "15a2cfa089361021a1baf7bc778ade561a18138c1420243001f922950dd9c520",
+          "retrieved_at": "2026-09-16T16:09:27+00:00"
+        },
+        {
+          "id": "apple-app-store-E3",
+          "url": "https://www.apple.com/legal/internet-services/itunes/us/terms.html",
+          "title": "Apple Media Services Terms and Conditions",
+          "publisher": "Apple Inc.",
+          "evidence_type": "OFFICIAL_TERMS",
+          "section": "Usage rules",
+          "proposition": "Services and Content are for personal, noncommercial purposes unless Apple specifies otherwise.",
+          "stance": "RESTRICTS",
+          "bears_on": [
+            "commercial_use"
+          ],
+          "verification": "RAW_VERIFIED",
+          "sha256": "15a2cfa089361021a1baf7bc778ade561a18138c1420243001f922950dd9c520",
+          "retrieved_at": "2026-09-16T16:09:27+00:00"
+        },
+        {
+          "id": "apple-app-store-E4",
+          "url": "https://developer.apple.com/support/terms/apple-developer-program-license-agreement",
+          "title": "Apple Developer Program License Agreement",
+          "publisher": "Apple Inc.",
+          "evidence_type": "OFFICIAL_TERMS",
+          "section": "2.6; 2.8",
+          "proposition": "Apple Services may be used only as necessary for the developer's own covered products, and data provided by the Services may not be harvested.",
+          "stance": "RESTRICTS",
+          "bears_on": [
+            "api_use",
+            "storage"
+          ],
+          "verification": "SUMMARISED_FETCH",
+          "sha256": null,
+          "retrieved_at": "2026-09-16"
+        }
+      ],
+      "activities": {
+        "automated_access": "NOT_PERMITTED",
+        "api_use": "NOT_PERMITTED",
+        "commercial_use": "UNCLEAR",
+        "storage": "NOT_ADDRESSED",
+        "derived_analytics": "UNCLEAR",
+        "model_processing": "NOT_ADDRESSED"
+      },
+      "activity_evidence": {
+        "automated_access": [
+          "apple-app-store-E2"
+        ],
+        "api_use": [
+          "apple-app-store-E1",
+          "apple-app-store-E4"
+        ],
+        "commercial_use": [
+          "apple-app-store-E3"
+        ],
+        "storage": [
+          "apple-app-store-E4"
+        ],
+        "derived_analytics": [
+          "apple-app-store-E2"
+        ],
+        "model_processing": []
+      },
+      "route": {
+        "resource": "GET api.appstoreconnect.apple.com/v1/apps/{id}/customerReviews",
+        "auth": "App Store Connect API key (team)",
+        "access": "account-bound, own apps only",
+        "structured_fields": [
+          "rating (1-5)",
+          "territory",
+          "createdDate",
+          "review id"
+        ],
+        "pagination": "limit up to 200",
+        "rate_limits": "per-key rolling hour",
+        "storage_restrictions": "Developer Program License Agreement 2.6",
+        "deletion_obligations": "not documented",
+        "historical_retrieval": "list endpoint",
+        "stable_ids": true,
+        "native_duplicate_relation": "none",
+        "platform_native_fields": true
+      },
+      "eligibility": {
+        "structured_field": "PASS",
+        "all_activities_approving": false,
+        "conflicting_binding_restriction": true,
+        "provenance_sufficient": true,
+        "eligible": false
+      },
+      "decisive_reasons": [
+        {
+          "reason": "the only documented rating route is scoped to the developer's own apps, and Apple's media services terms forbid automated measurement or analysis of store content",
+          "evidence": [
+            "apple-app-store-E1",
+            "apple-app-store-E2"
+          ]
+        }
+      ],
+      "registration": "REGISTERED"
+    },
+    {
+      "candidate_id": "gitlab-com",
+      "family": "F-ISSUE",
+      "evidence": [
+        {
+          "id": "gitlab-com-E1",
+          "url": "https://handbook.gitlab.com/handbook/legal/api-terms/",
+          "title": "GitLab API Terms of Use",
+          "publisher": "GitLab Inc.",
+          "evidence_type": "OFFICIAL_TERMS",
+          "section": "1.3.9",
+          "proposition": "The APIs may not be used for bulk collection or scraping of information, including repeated or systematic bulk export of API data, except where applicable law permits.",
+          "stance": "PROHIBITS",
+          "bears_on": [
+            "automated_access",
+            "storage"
+          ],
+          "verification": "RAW_VERIFIED",
+          "sha256": "439b686f5b63750320fbe1e7dd5fcc7e111476c08a847ca2523701ffd34e6421",
+          "retrieved_at": "2026-09-16T16:09:29+00:00"
+        },
+        {
+          "id": "gitlab-com-E2",
+          "url": "https://gitlab.com/robots.txt",
+          "title": "gitlab.com robots.txt",
+          "publisher": "GitLab Inc.",
+          "evidence_type": "OFFICIAL_ACCESS_CONTROL",
+          "section": "User-agent *",
+          "proposition": "The API path /api/v* is disallowed.",
+          "stance": "PROHIBITS",
+          "bears_on": [
+            "automated_access"
+          ],
+          "verification": "RAW_VERIFIED",
+          "sha256": "9e1e837e03b726eedb04c30b565e69068ccbb96c4d12c7c090d9affcf54f5eb0",
+          "retrieved_at": "2026-09-16T16:09:31+00:00"
+        },
+        {
+          "id": "gitlab-com-E3",
+          "url": "https://docs.gitlab.com/api/issues/",
+          "title": "Issues API",
+          "publisher": "GitLab Inc.",
+          "evidence_type": "OFFICIAL_API_DOCS",
+          "section": "List project issues",
+          "proposition": "Issues expose state, labels, upvotes and a closed_as_duplicate_of relation.",
+          "stance": "NOT_ADDRESSED",
+          "bears_on": [
+            "route"
+          ],
+          "verification": "SUMMARISED_FETCH",
+          "sha256": null,
+          "retrieved_at": "2026-09-16"
+        }
+      ],
+      "activities": {
+        "automated_access": "NOT_PERMITTED",
+        "api_use": "UNCLEAR",
+        "commercial_use": "NOT_ADDRESSED",
+        "storage": "NOT_ADDRESSED",
+        "derived_analytics": "NOT_ADDRESSED",
+        "model_processing": "NOT_ADDRESSED"
+      },
+      "activity_evidence": {
+        "automated_access": [
+          "gitlab-com-E1",
+          "gitlab-com-E2"
+        ],
+        "api_use": [
+          "gitlab-com-E1"
+        ],
+        "commercial_use": [],
+        "storage": [
+          "gitlab-com-E1"
+        ],
+        "derived_analytics": [],
+        "model_processing": []
+      },
+      "route": {
+        "resource": "GET /api/v4/projects/:id/issues",
+        "auth": "none for public projects",
+        "access": "public",
+        "structured_fields": [
+          "state",
+          "labels",
+          "upvotes",
+          "downvotes",
+          "closed_as_duplicate_of",
+          "moved_to_id"
+        ],
+        "pagination": "offset or keyset",
+        "rate_limits": "500 per minute per IP unauthenticated",
+        "storage_restrictions": "API Terms 1.3.9",
+        "deletion_obligations": "not documented",
+        "historical_retrieval": "created_after, updated_after",
+        "stable_ids": true,
+        "native_duplicate_relation": "closed_as_duplicate_of",
+        "platform_native_fields": true
+      },
+      "eligibility": {
+        "structured_field": "PASS",
+        "all_activities_approving": false,
+        "conflicting_binding_restriction": true,
+        "provenance_sufficient": true,
+        "eligible": false
+      },
+      "decisive_reasons": [
+        {
+          "reason": "the API terms prohibit bulk or systematic collection of API data, which is the SROS route, and robots disallows the API path",
+          "evidence": [
+            "gitlab-com-E1",
+            "gitlab-com-E2"
+          ]
+        }
+      ],
+      "registration": "NOT_REGISTERED"
+    },
+    {
+      "candidate_id": "codeberg",
+      "family": "F-ISSUE",
+      "evidence": [
+        {
+          "id": "codeberg-E1",
+          "url": "https://codeberg.org/robots.txt",
+          "title": "codeberg.org robots.txt",
+          "publisher": "Codeberg e.V.",
+          "evidence_type": "OFFICIAL_ACCESS_CONTROL",
+          "section": "User-agent *",
+          "proposition": "The API path /api/ is disallowed.",
+          "stance": "PROHIBITS",
+          "bears_on": [
+            "automated_access"
+          ],
+          "verification": "RAW_VERIFIED",
+          "sha256": "7a9daf796e5f5f8b01e9f634a63e53031a14c6779abe10f66b2e0a7db2e8b33a",
+          "retrieved_at": "2026-09-16T16:09:32+00:00"
+        },
+        {
+          "id": "codeberg-E2",
+          "url": "https://codeberg.org/Codeberg/org/raw/branch/main/TermsOfUse.md",
+          "title": "Codeberg Terms of Use",
+          "publisher": "Codeberg e.V.",
+          "evidence_type": "OFFICIAL_TERMS",
+          "section": "3(2)",
+          "proposition": "Contributors own all rights in the content they provide; the terms contain no API-use terms.",
+          "stance": "RESTRICTS",
+          "bears_on": [
+            "commercial_use",
+            "storage",
+            "derived_analytics",
+            "api_use"
+          ],
+          "verification": "RAW_VERIFIED",
+          "sha256": "ede36b9890d9c87f74b0b6292ae6d9c409d9b993a66eabacf57ef57e24733503",
+          "retrieved_at": "2026-09-16T16:09:33+00:00"
+        }
+      ],
+      "activities": {
+        "automated_access": "NOT_PERMITTED",
+        "api_use": "NOT_ADDRESSED",
+        "commercial_use": "UNCLEAR",
+        "storage": "UNCLEAR",
+        "derived_analytics": "UNCLEAR",
+        "model_processing": "NOT_ADDRESSED"
+      },
+      "activity_evidence": {
+        "automated_access": [
+          "codeberg-E1"
+        ],
+        "api_use": [
+          "codeberg-E2"
+        ],
+        "commercial_use": [
+          "codeberg-E2"
+        ],
+        "storage": [
+          "codeberg-E2"
+        ],
+        "derived_analytics": [
+          "codeberg-E2"
+        ],
+        "model_processing": []
+      },
+      "route": {
+        "resource": "GET /api/v1/repos/{owner}/{repo}/issues",
+        "auth": "not documented for public reads",
+        "access": "public",
+        "structured_fields": [
+          "state",
+          "labels"
+        ],
+        "pagination": "page, limit, link header",
+        "rate_limits": "not documented",
+        "storage_restrictions": "not documented",
+        "deletion_obligations": "not documented",
+        "historical_retrieval": "since, before",
+        "stable_ids": true,
+        "native_duplicate_relation": "none",
+        "platform_native_fields": true
+      },
+      "eligibility": {
+        "structured_field": "PARTIAL",
+        "all_activities_approving": false,
+        "conflicting_binding_restriction": true,
+        "provenance_sufficient": true,
+        "eligible": false
+      },
+      "decisive_reasons": [
+        {
+          "reason": "robots disallows the API path for every agent and no API or reuse grant exists; whether the repository-content licence rule covers issues needs legal judgement",
+          "evidence": [
+            "codeberg-E1",
+            "codeberg-E2"
+          ]
+        }
+      ],
+      "registration": "NOT_REGISTERED"
+    },
+    {
+      "candidate_id": "kernel-org-bugzilla",
+      "family": "F-ISSUE",
+      "evidence": [
+        {
+          "id": "kernel-org-bugzilla-E1",
+          "url": "https://bugzilla.kernel.org/robots.txt",
+          "title": "bugzilla.kernel.org robots.txt",
+          "publisher": "The Linux Kernel Organization",
+          "evidence_type": "OFFICIAL_ACCESS_CONTROL",
+          "section": "User-agent *",
+          "proposition": "CGI paths are disallowed and /rest/ is not; a directive that does not disallow a path grants nothing.",
+          "stance": "NOT_ADDRESSED",
+          "bears_on": [
+            "automated_access"
+          ],
+          "verification": "RAW_VERIFIED",
+          "sha256": "1817045293071436e0fbe35bc2a927907f264a096666b417c5a3816e24e8e986",
+          "retrieved_at": "2026-09-16T16:09:33+00:00"
+        },
+        {
+          "id": "kernel-org-bugzilla-E2",
+          "url": "https://www.kernel.org/legal.html",
+          "title": "Legal disclaimers and copyright",
+          "publisher": "The Linux Kernel Organization",
+          "evidence_type": "OFFICIAL_LICENCE",
+          "section": "Copyright and license",
+          "proposition": "Content on this site is copyright of the organisation under CC BY-SA 4.0 unless stated otherwise; whether that reaches third-party bug reports on the Bugzilla host is not stated.",
+          "stance": "NOT_ADDRESSED",
+          "bears_on": [
+            "commercial_use",
+            "storage",
+            "derived_analytics"
+          ],
+          "verification": "RAW_VERIFIED",
+          "sha256": "2d23fc76bcfaed1496b60499e0d2212bcafce993b3243fbe373bbf084ec044b0",
+          "retrieved_at": "2026-09-16T16:09:35+00:00"
+        },
+        {
+          "id": "kernel-org-bugzilla-E3",
+          "url": "https://bugzilla.kernel.org/",
+          "title": "Bugzilla front page (anti-bot challenge)",
+          "publisher": "The Linux Kernel Organization",
+          "evidence_type": "OFFICIAL_ACCESS_CONTROL",
+          "section": "Challenge page",
+          "proposition": "The host serves a proof-of-work anti-scraping challenge; solving it would be bypassing bot detection.",
+          "stance": "RESTRICTS",
+          "bears_on": [
+            "automated_access"
+          ],
+          "verification": "SUMMARISED_FETCH",
+          "sha256": null,
+          "retrieved_at": "2026-09-16"
+        }
+      ],
+      "activities": {
+        "automated_access": "UNCLEAR",
+        "api_use": "NOT_ADDRESSED",
+        "commercial_use": "UNCLEAR",
+        "storage": "UNCLEAR",
+        "derived_analytics": "UNCLEAR",
+        "model_processing": "NOT_ADDRESSED"
+      },
+      "activity_evidence": {
+        "automated_access": [
+          "kernel-org-bugzilla-E1",
+          "kernel-org-bugzilla-E3"
+        ],
+        "api_use": [],
+        "commercial_use": [
+          "kernel-org-bugzilla-E2"
+        ],
+        "storage": [
+          "kernel-org-bugzilla-E2"
+        ],
+        "derived_analytics": [
+          "kernel-org-bugzilla-E2"
+        ],
+        "model_processing": []
+      },
+      "route": {
+        "resource": "GET /rest/bug and /rest/bug/{id}",
+        "auth": "not required for public reads (upstream Bugzilla documentation)",
+        "access": "public",
+        "structured_fields": [
+          "status",
+          "resolution",
+          "keywords",
+          "dupe_of"
+        ],
+        "pagination": "limit, offset",
+        "rate_limits": "not documented",
+        "storage_restrictions": "not documented",
+        "deletion_obligations": "not documented",
+        "historical_retrieval": "history with new_since",
+        "stable_ids": true,
+        "native_duplicate_relation": "dupe_of",
+        "platform_native_fields": true
+      },
+      "eligibility": {
+        "structured_field": "PASS",
+        "all_activities_approving": false,
+        "conflicting_binding_restriction": null,
+        "provenance_sufficient": true,
+        "eligible": false
+      },
+      "decisive_reasons": [
+        {
+          "reason": "the operator publishes no terms for the Bugzilla host, its licence statement is scoped to its own site content, and a robots file that does not disallow a path is not a grant",
+          "evidence": [
+            "kernel-org-bugzilla-E1",
+            "kernel-org-bugzilla-E2"
+          ]
+        }
+      ],
+      "registration": "NOT_REGISTERED"
+    },
+    {
+      "candidate_id": "trustpilot",
+      "family": "F-REVIEW",
+      "evidence": [
+        {
+          "id": "trustpilot-E1",
+          "url": "https://corporate.trustpilot.com/legal/for-reviewers/terms-of-use-for-consumers",
+          "title": "Terms of Use for Consumers",
+          "publisher": "Trustpilot A/S",
+          "evidence_type": "OFFICIAL_TERMS",
+          "section": "4",
+          "proposition": "Text mining, data mining or web scraping of the platform for any purpose is not allowed without express permission, and content may not be commercially exploited.",
+          "stance": "PROHIBITS",
+          "bears_on": [
+            "automated_access",
+            "commercial_use",
+            "storage",
+            "derived_analytics",
+            "model_processing"
+          ],
+          "verification": "RAW_VERIFIED",
+          "sha256": "735967420e551a72fc82679e84f0b9eb5b4671e6065ff2d707301fff959bc4d5",
+          "retrieved_at": "2026-09-16T16:09:36+00:00"
+        },
+        {
+          "id": "trustpilot-E2",
+          "url": "https://api.trustpilot.com/robots.txt",
+          "title": "api.trustpilot.com robots.txt",
+          "publisher": "Trustpilot A/S",
+          "evidence_type": "OFFICIAL_ACCESS_CONTROL",
+          "section": "User-agent *",
+          "proposition": "The whole API host is disallowed.",
+          "stance": "PROHIBITS",
+          "bears_on": [
+            "automated_access"
+          ],
+          "verification": "RAW_VERIFIED",
+          "sha256": "1ca1326bee44e4964cf928dbe9982bc3e0768ce244ff21b8a0806aafb716798f",
+          "retrieved_at": "2026-09-16T16:09:37+00:00"
+        },
+        {
+          "id": "trustpilot-E3",
+          "url": "https://developers.trustpilot.com/api-module-overview/",
+          "title": "API module overview",
+          "publisher": "Trustpilot A/S",
+          "evidence_type": "OFFICIAL_API_DOCS",
+          "section": "Overview",
+          "proposition": "API access requires a paid business account, covers the business's own data, and requires deletions to be mirrored.",
+          "stance": "RESTRICTS",
+          "bears_on": [
+            "api_use",
+            "storage"
+          ],
+          "verification": "SUMMARISED_FETCH",
+          "sha256": null,
+          "retrieved_at": "2026-09-16"
+        }
+      ],
+      "activities": {
+        "automated_access": "NOT_PERMITTED",
+        "api_use": "NOT_PERMITTED",
+        "commercial_use": "NOT_PERMITTED",
+        "storage": "NOT_PERMITTED",
+        "derived_analytics": "NOT_PERMITTED",
+        "model_processing": "NOT_PERMITTED"
+      },
+      "activity_evidence": {
+        "automated_access": [
+          "trustpilot-E1",
+          "trustpilot-E2"
+        ],
+        "api_use": [
+          "trustpilot-E3"
+        ],
+        "commercial_use": [
+          "trustpilot-E1"
+        ],
+        "storage": [
+          "trustpilot-E1",
+          "trustpilot-E3"
+        ],
+        "derived_analytics": [
+          "trustpilot-E1"
+        ],
+        "model_processing": [
+          "trustpilot-E1"
+        ]
+      },
+      "route": {
+        "resource": "GET /v1/business-units/{businessUnitId}/all-reviews",
+        "auth": "API key of a paid business account",
+        "access": "account-bound, own business",
+        "structured_fields": [
+          "stars (meaning not documented in prose)",
+          "isVerified",
+          "review id"
+        ],
+        "pagination": "pageToken",
+        "rate_limits": "833 per 5 minutes recommended; yearly tier",
+        "storage_restrictions": "mirror deletions every 28 days",
+        "deletion_obligations": "Deletions API",
+        "historical_retrieval": "all reviews",
+        "stable_ids": true,
+        "native_duplicate_relation": "none",
+        "platform_native_fields": true
+      },
+      "eligibility": {
+        "structured_field": "PASS",
+        "all_activities_approving": false,
+        "conflicting_binding_restriction": true,
+        "provenance_sufficient": true,
+        "eligible": false
+      },
+      "decisive_reasons": [
+        {
+          "reason": "the terms prohibit text mining, data mining and scraping for any purpose and commercial exploitation, and robots disallows the API host",
+          "evidence": [
+            "trustpilot-E1",
+            "trustpilot-E2"
+          ]
+        }
+      ],
+      "registration": "NOT_REGISTERED"
+    }
+  ],
+  "eligible_candidates": [],
+  "outcome": "NO_GO",
+  "selected_source": null,
+  "selected_resource": null,
+  "source_reviews_appended": [],
+  "sources_registered": [],
+  "review_append_decision": "No local-private-research-v1 review was appended and no source was registered. No candidate supports an approving verdict. A blocking local review would change no gate outcome, because ADR-027 already refuses a source with no review under the declared profile, and several verdicts are UNCLEAR on questions that need legal judgement a review must not settle. Registering an unregistered source only to record a refusal would be a speculative catalog entry.",
+  "operator_decision_required": {
+    "A": "Start roadmap node N08: an authorised first-person text semantic-extraction contract (a D-12 decision, external model transmission reviews, human reference labels), so that already-approved first-person text such as Stack Exchange questions becomes usable.",
+    "B": "Take a documented product decision that would satisfy a source's publication or licensing condition. This mission found no single condition whose satisfaction alone would qualify a candidate: GitHub's open-access condition would still leave the non-personal-information scope, storage, model processing and the duplicate target unresolved, and every other candidate is blocked by prohibitions, own-account scoping or missing grants.",
+    "note": "Written permission from an operator (for example Valve, Trustpilot or Codeberg) is a further route the evidence leaves open; requesting it is an outward action that needs its own approval."
+  },
+  "raw_reads": [
+    {
+      "candidate": "steam",
+      "url": "https://store.steampowered.com/subscriber_agreement/",
+      "http_status": 200,
+      "sha256": "0d624f000234b8c0a7c7ec3b19385144108c0d799755997b3eea671e5f0d1352",
+      "bytes": 86134,
+      "retrieved_at": "2026-09-16T16:09:19+00:00",
+      "phrases_verified": {
+        "personal, non-commercial use": true,
+        "for any commercial purpose": true,
+        "non-human-controlled systems": true
+      }
+    },
+    {
+      "candidate": "steam",
+      "url": "https://steamcommunity.com/dev/apiterms",
+      "http_status": 200,
+      "sha256": "1de56c73d33be5e87386689ed50ab5801ffc0f1cfd9e6cc15f6311fc4c854ba7",
+      "bytes": 28907,
+      "retrieved_at": "2026-09-16T16:09:20+00:00",
+      "phrases_verified": {
+        "distribute Steam Data to end users for their personal use": true,
+        "property of Valve": true
+      }
+    },
+    {
+      "candidate": "steam",
+      "url": "https://partner.steamgames.com/doc/store/getreviews",
+      "http_status": 200,
+      "sha256": "b2e90c257e1b2da2a5d2b5a6914c1ff8230896847f14e74c8a3bc5d2079a2549",
+      "bytes": 124162,
+      "retrieved_at": "2026-09-16T16:09:20+00:00",
+      "phrases_verified": {
+        "voted_up": true,
+        "true means it was a positive recommendation": true
+      }
+    },
+    {
+      "candidate": "google-play",
+      "url": "https://developers.google.com/android-publisher/reply-to-reviews",
+      "http_status": 200,
+      "sha256": "2c33da36daef57660d462400433fdc6e3a3c9b7697d936f02fd6a571a2731c5d",
+      "bytes": 71665,
+      "retrieved_at": "2026-09-16T16:09:22+00:00",
+      "phrases_verified": {
+        "within the last week": true,
+        "your app": true
+      }
+    },
+    {
+      "candidate": "google-play",
+      "url": "https://developers.google.com/terms",
+      "http_status": 200,
+      "sha256": "8a3874066c43dc22e85cb1d3f04c52e84b42e3eafb33baa8e3f2450d1a504523",
+      "bytes": 70916,
+      "retrieved_at": "2026-09-16T16:09:24+00:00",
+      "phrases_verified": {
+        "Scrape, build databases, or otherwise create permanent copies": true
+      }
+    },
+    {
+      "candidate": "google-play",
+      "url": "https://play.google.com/robots.txt",
+      "http_status": 200,
+      "sha256": "cad8995e4d35174309d6d04c1f6765afeb7643e88cf2155af27cbdabb92ef552",
+      "bytes": 3199,
+      "retrieved_at": "2026-09-16T16:09:26+00:00",
+      "phrases_verified": {
+        "Disallow: /store/getreviews": true
+      }
+    },
+    {
+      "candidate": "apple-app-store",
+      "url": "https://www.apple.com/legal/internet-services/itunes/us/terms.html",
+      "http_status": 200,
+      "sha256": "15a2cfa089361021a1baf7bc778ade561a18138c1420243001f922950dd9c520",
+      "bytes": 156640,
+      "retrieved_at": "2026-09-16T16:09:27+00:00",
+      "phrases_verified": {
+        "measurement, analysis, or monitoring": true,
+        "personal, noncommercial purposes": true
+      }
+    },
+    {
+      "candidate": "apple-app-store",
+      "url": "https://developer.apple.com/tutorials/data/documentation/appstoreconnectapi/customer-reviews.json",
+      "http_status": 200,
+      "sha256": "7776a0539f56d48895de454af18f3d0e63662dc7992dbd1f31c82ac2e18897ff",
+      "bytes": 15011,
+      "retrieved_at": "2026-09-16T16:09:27+00:00",
+      "phrases_verified": {
+        "your app": true
+      }
+    },
+    {
+      "candidate": "github",
+      "url": "https://raw.githubusercontent.com/github/docs/main/content/site-policy/acceptable-use-policies/github-acceptable-use-policies.md",
+      "http_status": 200,
+      "sha256": "8f22cce7e5e0dfe8555ea60ab5d960f8bd875142011a272a9b236f2fdb44cf8d",
+      "bytes": 12171,
+      "retrieved_at": "2026-09-16T16:09:28+00:00",
+      "phrases_verified": {
+        "regardless of whether the information was scraped, collected through our API, or obtained otherwise": true,
+        "only if any publications resulting from that research are [open access]": true,
+        "public, non-personal information": true
+      }
+    },
+    {
+      "candidate": "github",
+      "url": "https://raw.githubusercontent.com/github/docs/main/content/site-policy/github-terms/github-terms-of-service.md",
+      "http_status": 200,
+      "sha256": "7e2a7a7317a8007c84b5a760f6d9c27796f24253d3257ef8cfa35733167a3d09",
+      "bytes": 49588,
+      "retrieved_at": "2026-09-16T16:09:29+00:00",
+      "phrases_verified": {
+        "We reserve all rights that are not expressly granted to you": true
+      }
+    },
+    {
+      "candidate": "gitlab-com",
+      "url": "https://handbook.gitlab.com/handbook/legal/api-terms/",
+      "http_status": 200,
+      "sha256": "439b686f5b63750320fbe1e7dd5fcc7e111476c08a847ca2523701ffd34e6421",
+      "bytes": 2331871,
+      "retrieved_at": "2026-09-16T16:09:29+00:00",
+      "phrases_verified": {
+        "bulk collection or scraping of information": true
+      }
+    },
+    {
+      "candidate": "gitlab-com",
+      "url": "https://gitlab.com/robots.txt",
+      "http_status": 200,
+      "sha256": "9e1e837e03b726eedb04c30b565e69068ccbb96c4d12c7c090d9affcf54f5eb0",
+      "bytes": 3230,
+      "retrieved_at": "2026-09-16T16:09:31+00:00",
+      "phrases_verified": {
+        "Disallow: /api/v*": true
+      }
+    },
+    {
+      "candidate": "codeberg",
+      "url": "https://codeberg.org/robots.txt",
+      "http_status": 200,
+      "sha256": "7a9daf796e5f5f8b01e9f634a63e53031a14c6779abe10f66b2e0a7db2e8b33a",
+      "bytes": 2192,
+      "retrieved_at": "2026-09-16T16:09:32+00:00",
+      "phrases_verified": {
+        "Disallow: /api/": true
+      }
+    },
+    {
+      "candidate": "codeberg",
+      "url": "https://codeberg.org/Codeberg/org/raw/branch/main/TermsOfUse.md",
+      "http_status": 200,
+      "sha256": "ede36b9890d9c87f74b0b6292ae6d9c409d9b993a66eabacf57ef57e24733503",
+      "bytes": 13617,
+      "retrieved_at": "2026-09-16T16:09:33+00:00",
+      "phrases_verified": {
+        "Contributors own all rights and ownership for content and contributions they provided": true
+      }
+    },
+    {
+      "candidate": "kernel-org-bugzilla",
+      "url": "https://bugzilla.kernel.org/robots.txt",
+      "http_status": 200,
+      "sha256": "1817045293071436e0fbe35bc2a927907f264a096666b417c5a3816e24e8e986",
+      "bytes": 164,
+      "retrieved_at": "2026-09-16T16:09:33+00:00",
+      "phrases_verified": {
+        "Disallow: /*.cgi": true
+      }
+    },
+    {
+      "candidate": "kernel-org-bugzilla",
+      "url": "https://www.kernel.org/legal.html",
+      "http_status": 200,
+      "sha256": "2d23fc76bcfaed1496b60499e0d2212bcafce993b3243fbe373bbf084ec044b0",
+      "bytes": 10008,
+      "retrieved_at": "2026-09-16T16:09:35+00:00",
+      "phrases_verified": {
+        "Creative Commons Attribution ShareAlike 4.0 International License": true
+      }
+    },
+    {
+      "candidate": "trustpilot",
+      "url": "https://corporate.trustpilot.com/legal/for-reviewers/terms-of-use-for-consumers",
+      "http_status": 200,
+      "sha256": "735967420e551a72fc82679e84f0b9eb5b4671e6065ff2d707301fff959bc4d5",
+      "bytes": 4802347,
+      "retrieved_at": "2026-09-16T16:09:36+00:00",
+      "phrases_verified": {
+        "text mining, data mining or web scraping": true
+      }
+    },
+    {
+      "candidate": "trustpilot",
+      "url": "https://api.trustpilot.com/robots.txt",
+      "http_status": 200,
+      "sha256": "1ca1326bee44e4964cf928dbe9982bc3e0768ce244ff21b8a0806aafb716798f",
+      "bytes": 104,
+      "retrieved_at": "2026-09-16T16:09:37+00:00",
+      "phrases_verified": {
+        "Disallow: /": true
+      }
+    }
+  ],
+  "raw_read_note": "Each raw read is a documentation request whose body was normalised (tags and markup removed, whitespace collapsed) and searched for the exact decisive wording. Dynamic pages may hash differently on a later request; the digest records this retrieval.",
+  "no_research_data_retrieved": true,
+  "model_calls": 0
+}
