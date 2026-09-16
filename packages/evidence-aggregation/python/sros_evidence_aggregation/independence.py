@@ -96,7 +96,9 @@ def _group_key(item: EvidenceItem) -> tuple[GroupKind, str]:
     state = item.independence_state
     if state is EvidenceIndependenceState.KNOWN_DEPENDENT:
         # Two dependent records with DIFFERENT lineages are two groups. Sharing
-        # the state does not make them share an origin.
+        # the state does not make them share an origin. Nor does it make them
+        # independent of each other: two lineages never count as two groups of
+        # established independence for Levels 2 and 3 (levels.py, algorithm 1.1.0).
         return GroupKind.DECLARED_DEPENDENT, str(item.independence_group_id)
     if state is EvidenceIndependenceState.KNOWN_INDEPENDENT:
         # Its own group. Independence was established, so it accumulates.
