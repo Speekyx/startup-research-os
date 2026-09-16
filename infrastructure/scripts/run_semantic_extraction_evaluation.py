@@ -4,11 +4,13 @@ DRY BY DEFAULT. Without `--execute` it verifies the packet and exits having buil
 nothing. With `--execute` it refuses, in this order and before any transport exists:
 
     1. a packet whose recomputed digest differs from its recorded digest or from EXPECTED_PACKET_SHA256
-    2. an approval flag written into the packet
+    2. an approval flag written into the packet, or a reference block that is not a human reference
+       (Mission 1.85.5: a SINGLE_HUMAN_REFERENCE must carry RESULT_SCOPE DEVELOPMENT_PILOT and
+       PILOT_NOT_CERTIFICATION, and never reach holdout)
     3. any packet status other than READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL (before reading an approval)
     4. a missing --approval-sha256, a missing approval file, or an approval file whose sha256 differs
     5. an approval that does not name this packet id, version and digest, or does not accept the ceiling,
-       the retention bound and the retry interpretation
+       the retention bound, the retry interpretation and the packet's reference strength
     6. an existing attempt record (an approval is spent by the attempt, whatever the outcome)
     7. a failed ADR-033 four-gate authorization
 
@@ -48,7 +50,8 @@ READY = "READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL"
 APPROVAL_DECISION = "APPROVE_EXACTLY_ONE_EVALUATION_RUN"
 # Pinned, not read from the packet: a runner that took its expectation from the file it checks would
 # check nothing. Re-pinned only when a mission deliberately re-renders the packet.
-EXPECTED_PACKET_SHA256 = "8b5a8e3dd3631b1b02a8fb6a0a1d3a3e5d42d0d67ee8d973a47b3f6f8e331646"
+EXPECTED_PACKET_SHA256 = "894d853236b951c066bc221ac4780ab866963b66ff1b06649691b5b79cfe9202"
+HUMAN_REFERENCE_STRENGTHS = ("SINGLE_HUMAN_REFERENCE", "MULTI_HUMAN_REFERENCE")
 
 
 class Refused(SystemExit):
@@ -77,7 +80,22 @@ def verify_packet(
         or packet["selection"]["split"] != "DEVELOPMENT"
     ):
         raise Refused("HOLDOUT_IN_A_DEVELOPMENT_PACKET")
+    check_reference(packet)
     return packet
+
+
+def check_reference(packet: dict[str, Any]) -> None:
+    reference = packet.get("reference") or {}
+    strength = reference.get("REFERENCE_STRENGTH")
+    if packet.get("status") == READY and strength not in HUMAN_REFERENCE_STRENGTHS:
+        raise Refused("READY_WITHOUT_A_HUMAN_REFERENCE", str(strength))
+    if strength == "SINGLE_HUMAN_REFERENCE" and (
+        reference.get("RESULT_SCOPE") != "DEVELOPMENT_PILOT"
+        or reference.get("result_label") != "PILOT_NOT_CERTIFICATION"
+        or reference.get("holdout_reference_permitted") is not False
+        or reference.get("ai_annotations_used_as_reference") != 0
+    ):
+        raise Refused("SINGLE_HUMAN_REFERENCE_OVERCLAIMED")
 
 
 def check_approval(
@@ -117,6 +135,12 @@ def check_approval(
         != packet["execution_bounds"]["hard_ceiling_usd_approved"]
     ):
         raise Refused("OPERATOR_APPROVAL_INCOMPLETE", "the accepted ceiling is not the packet's")
+    if approval.get("accepted_reference_strength") != (packet.get("reference") or {}).get(
+        "REFERENCE_STRENGTH"
+    ):
+        raise Refused(
+            "OPERATOR_APPROVAL_INCOMPLETE", "the accepted reference strength is not the packet's"
+        )
     return approval
 
 
@@ -286,8 +310,12 @@ def execute(
             }
         )
     out_dir.mkdir(parents=True, exist_ok=True)
+    reference = packet.get("reference") or {}
     run = {
         "packet_sha256": packet["packet_sha256"],
+        "REFERENCE_STRENGTH": reference.get("REFERENCE_STRENGTH"),
+        "RESULT_SCOPE": reference.get("RESULT_SCOPE"),
+        "result_label": reference.get("result_label"),
         "calls": calls,
         "records": results,
         "finished_at": datetime.now(UTC).isoformat(timespec="seconds"),

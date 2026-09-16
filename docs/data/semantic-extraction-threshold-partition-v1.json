@@ -1,0 +1,214 @@
+{
+ "$comment": "THRESHOLD PARTITION (Mission 1.85.5). The Mission 1.85.4 threshold decision package, unchanged, partitioned by the reference each criterion needs. No value was lowered and nothing is authorised: every entry is PROPOSED_NOT_AUTHORISED until the operator records a separate decision. A pilot criterion reads its value against a SINGLE_HUMAN_REFERENCE on DEVELOPMENT and yields a PILOT_NOT_CERTIFICATION reading, never PASS or FAIL.",
+ "partition_id": "semantic-extraction-threshold-partition",
+ "version": "1.0.0",
+ "mission": "1.85.5",
+ "source_package": "docs/data/semantic-extraction-threshold-decision-package-v1.json",
+ "source_package_sha256": "05fb8ee2f9f45cd9637ad8300fe8f880df31da8e0d6427c3d3729d0fd1d187be",
+ "reference_model": "semantic-reference-strength@1.0.0",
+ "values_changed": false,
+ "decision_recorded": false,
+ "pilot_result_label": "PILOT_NOT_CERTIFICATION",
+ "pilot_outcome_rule": "for each AUTHORISED pilot criterion report PILOT_WITHIN_PROPOSED_BOUND, PILOT_OUTSIDE_PROPOSED_BOUND or PILOT_INSUFFICIENT_SUPPORT, all under RESULT_SCOPE = DEVELOPMENT_PILOT and REFERENCE_STRENGTH = SINGLE_HUMAN_REFERENCE; no pilot reading is a PASS, a FAIL or a certification",
+ "pilot_prohibited_claims": [
+  "INTER_HUMAN_RELIABILITY",
+  "VALIDATED_HUMAN_CONSENSUS",
+  "GENERALISATION_TO_HOLDOUT",
+  "PRODUCTION_READINESS",
+  "CALIBRATED_SEMANTIC_ACCURACY"
+ ],
+ "holdout_policy": "HOLDOUT_REQUIRES_MULTI_HUMAN_OR_NEW_OPERATOR_DECISION",
+ "operator_options_per_pilot_item": [
+  "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
+  "REVISE_BEFORE_THE_PILOT_RUN (state the new value and why, before any pilot result)",
+  "REJECT_FOR_THE_PILOT"
+ ],
+ "buckets": {
+  "SINGLE_HUMAN_PILOT_VALID": [
+   {
+    "metric": "false_present_rate_upper_95",
+    "label": "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+    "proposed": 0.1,
+    "reference_needed": "SINGLE_HUMAN_REFERENCE",
+    "pilot_reading": "development point estimate and Clopper-Pearson upper bound against the one human's PRESENT/ABSENT cells; with a low prevalence expect PILOT_INSUFFICIENT_SUPPORT",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "false_present_rate_upper_95",
+    "label": "REPORTED_FAILED_ATTEMPT",
+    "proposed": 0.2,
+    "reference_needed": "SINGLE_HUMAN_REFERENCE",
+    "pilot_reading": "development point estimate and Clopper-Pearson upper bound against the one human's cells",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "min_true_present_and_min_true_absent",
+    "label": "each extractable label",
+    "proposed": 1,
+    "reference_needed": "SINGLE_HUMAN_REFERENCE",
+    "pilot_reading": "defeats constant classifiers against the one human's cells on DEVELOPMENT",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "mechanical_unsupported_assertions_accepted",
+    "label": "all",
+    "proposed": 0,
+    "reference_needed": "NONE",
+    "pilot_reading": "a validator property; needs no reference at all",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "validator_acceptance_rate",
+    "label": "all",
+    "proposed": 0.95,
+    "reference_needed": "NONE",
+    "pilot_reading": "accepted extractions over records attempted; needs no reference",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "unnecessary_abstention_rate_on_gold_decided",
+    "label": "all",
+    "proposed": 0.1,
+    "reference_needed": "SINGLE_HUMAN_REFERENCE",
+    "pilot_reading": "abstention on records the one human decided; 'gold-decided' reads 'single-human-decided' in the pilot",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "run_to_run_label_flip_rate",
+    "label": "each extractable label",
+    "proposed": 0.1,
+    "reference_needed": "NONE",
+    "pilot_reading": "compares runs with each other; needs no reference, but each run needs its own approval",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "composition_gate",
+    "label": "each extractable label, each split",
+    "proposed": {
+     "min_present": 4,
+     "min_absent": 4
+    },
+    "reference_needed": "SINGLE_HUMAN_REFERENCE",
+    "pilot_reading": "the same min 4 PRESENT / min 4 ABSENT read on the one human's cells; unmet is REFERENCE_SET_INSUFFICIENT for the pilot",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "recall",
+    "label": "each extractable label",
+    "proposed": null,
+    "reference_needed": "SINGLE_HUMAN_REFERENCE",
+    "pilot_reading": "descriptive only, against the one human's PRESENT cells",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "cost_and_latency",
+    "label": "all",
+    "proposed": null,
+    "reference_needed": "NONE",
+    "pilot_reading": "recorded from the run; never quality",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   }
+  ],
+  "REQUIRES_MULTI_HUMAN_REFERENCE": [
+   {
+    "metric": "false_present_rate_upper_95",
+    "label": "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+    "proposed": 0.1,
+    "why": "the certified false-PRESENT rate is scored against adjudicated gold, not one person's reading",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "false_present_rate_upper_95",
+    "label": "REPORTED_FAILED_ATTEMPT",
+    "proposed": 0.2,
+    "why": "the certified false-PRESENT rate is scored against adjudicated gold",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "inter_annotator_kappa_per_extractable_label",
+    "label": "each extractable label",
+    "proposed": 0.6,
+    "why": "agreement between people needs at least two people; with one annotator it is NOT_APPLICABLE_SINGLE_ANNOTATOR, never 0",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "composition_gate",
+    "label": "each extractable label, each split",
+    "proposed": {
+     "min_present": 4,
+     "min_absent": 4
+    },
+    "why": "the gold composition gate is computed after adjudication",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   }
+  ],
+  "REQUIRES_HOLDOUT": [
+   {
+    "metric": "false_present_rate_upper_95",
+    "label": "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+    "proposed": 0.1,
+    "why": "the pass condition is defined on HOLDOUT",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "false_present_rate_upper_95",
+    "label": "REPORTED_FAILED_ATTEMPT",
+    "proposed": 0.2,
+    "why": "the pass condition is defined on HOLDOUT",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "min_true_present_and_min_true_absent",
+    "label": "each extractable label",
+    "proposed": 1,
+    "why": "the pass condition is defined on HOLDOUT",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "mechanical_unsupported_assertions_accepted",
+    "label": "all",
+    "proposed": 0,
+    "why": "certification repeats it on HOLDOUT",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "validator_acceptance_rate",
+    "label": "all",
+    "proposed": 0.95,
+    "why": "certification repeats it on HOLDOUT",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "unnecessary_abstention_rate_on_gold_decided",
+    "label": "all",
+    "proposed": 0.1,
+    "why": "certification repeats it on HOLDOUT against gold",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "run_to_run_label_flip_rate",
+    "label": "each extractable label",
+    "proposed": 0.1,
+    "why": "certification repeats it on HOLDOUT",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "composition_gate",
+    "label": "each extractable label, each split",
+    "proposed": {
+     "min_present": 4,
+     "min_absent": 4
+    },
+    "why": "the holdout composition gate needs holdout labels",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "recall",
+    "label": "each extractable label",
+    "proposed": null,
+    "why": "descriptive recall on HOLDOUT",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   }
+  ]
+ }
+}

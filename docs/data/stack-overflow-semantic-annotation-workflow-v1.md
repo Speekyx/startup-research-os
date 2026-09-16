@@ -57,7 +57,14 @@ Every document that reports these labels repeats that limit.
 ```
 uv run python infrastructure/scripts/semantic_annotation.py analyse
 ```
-- **Before two annotators exist,** the command prints `HUMAN_LABELS_PENDING` and writes nothing.
+- **With no committed annotation,** the command prints `HUMAN_LABELS_PENDING` and writes nothing.
+- **With exactly one (Mission 1.85.5),** it writes `stack-overflow-semantic-single-human-reference-composition-development-v1.json`:
+  - reference strength `SINGLE_HUMAN_REFERENCE`, result scope `DEVELOPMENT_PILOT`, result label `PILOT_NOT_CERTIFICATION`;
+  - per-label state counts and prevalence for that one annotator;
+  - every inter-annotator metric (κ, α, positive- and negative-specific agreement, span and subject agreement between humans) as `NOT_APPLICABLE_SINGLE_ANNOTATOR`, never 0;
+  - no adjudication queue.
+
+  This is a pilot reference, not inter-annotator gold. No second annotation is generated, and a model annotation never fills the gap: an `AI_ASSISTED_PROVISIONAL` file lives under its own name (`stack-overflow-semantic-provisional-ai-annotations-development-*-v1.json`), is refused by `import`, and is only ever compared with the human reference as a diagnostic. HOLDOUT requires a multi-human reference or a new operator decision.
 - **Once two exist, it writes:**
   - per-label state counts and prevalence;
   - Cohen's κ in two forms (three states, and PRESENT/ABSENT), and Krippendorff's α;

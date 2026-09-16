@@ -242,7 +242,11 @@ def runner():
 class TestRunnerGovernance:
     def test_the_committed_packet_verifies_and_is_blocked(self, runner) -> None:
         packet = runner.verify_packet()
-        assert packet["status"] == "BLOCKED_HUMAN_LABELS"
+        assert packet["status"] == "BLOCKED_OPERATOR_DECISIONS"
+        assert packet["reference"]["REFERENCE_STRENGTH"] == "SINGLE_HUMAN_REFERENCE"
+        assert packet["reference"]["RESULT_SCOPE"] == "DEVELOPMENT_PILOT"
+        assert packet["reference"]["result_label"] == "PILOT_NOT_CERTIFICATION"
+        assert packet["reference"]["holdout_reference_permitted"] is False
         assert packet["operator_approval_recorded"] is False
         assert packet["selection"]["holdout_included"] is False
         assert packet["selection"]["egress_approved_record_ids"] == []
@@ -298,13 +302,18 @@ class TestRunnerGovernance:
             "accepts_retention_bound": True,
             "accepts_retry_interpretation": True,
             "accepted_hard_ceiling_usd": ready["execution_bounds"]["hard_ceiling_usd_approved"],
+            "accepted_reference_strength": "SINGLE_HUMAN_REFERENCE",
         }
-        cases = {
-            "OPERATOR_APPROVAL_DOES_NOT_NAME_THIS_PACKET": dict(good, packet_sha256="0" * 64),
-            "OPERATOR_APPROVAL_INCOMPLETE": dict(good, accepts_retry_interpretation="yes"),
-        }
-        for code, approval in cases.items():
-            path = tmp_path / f"{code}.json"
+        cases = [
+            ("OPERATOR_APPROVAL_DOES_NOT_NAME_THIS_PACKET", dict(good, packet_sha256="0" * 64)),
+            ("OPERATOR_APPROVAL_INCOMPLETE", dict(good, accepts_retry_interpretation="yes")),
+            (
+                "OPERATOR_APPROVAL_INCOMPLETE",
+                dict(good, accepted_reference_strength="MULTI_HUMAN_REFERENCE"),
+            ),
+        ]
+        for number, (code, approval) in enumerate(cases):
+            path = tmp_path / f"case-{number}.json"
             path.write_text(json.dumps(approval), encoding="utf-8")
             with pytest.raises(runner.Refused) as refused:
                 runner.check_approval(ready, path, hashlib.sha256(path.read_bytes()).hexdigest())
@@ -327,6 +336,39 @@ class TestRunnerGovernance:
         with pytest.raises(runner.Refused) as refused:
             runner.check_approval(blocked, path, hashlib.sha256(path.read_bytes()).hexdigest())
         assert refused.value.refusal == "PACKET_NOT_READY_FOR_APPROVAL"
+
+    def test_a_ready_single_human_packet_still_needs_a_separate_operator_approval(
+        self, runner, tmp_path
+    ) -> None:
+        ready = json.loads(runner.PACKET.read_text("utf-8"))
+        ready["status"] = runner.READY
+        runner.check_reference(ready)
+        with pytest.raises(runner.Refused) as refused:
+            runner.check_approval(ready, tmp_path / "approval.json", None)
+        assert refused.value.refusal == "APPROVAL_SHA256_NOT_SUPPLIED"
+        with pytest.raises(runner.Refused) as refused:
+            runner.check_approval(ready, tmp_path / "approval.json", "0" * 64)
+        assert refused.value.refusal == "OPERATOR_APPROVAL_NOT_RECORDED"
+        assert not runner.APPROVAL.exists()
+
+    def test_a_reference_that_is_not_human_or_overclaims_is_refused(self, runner) -> None:
+        ready = json.loads(runner.PACKET.read_text("utf-8"))
+        ready["status"] = runner.READY
+        for strength in ("AI_ASSISTED_PROVISIONAL", "NO_HUMAN_REFERENCE", None):
+            packet = dict(ready, reference=dict(ready["reference"], REFERENCE_STRENGTH=strength))
+            with pytest.raises(runner.Refused) as refused:
+                runner.check_reference(packet)
+            assert refused.value.refusal == "READY_WITHOUT_A_HUMAN_REFERENCE"
+        for overclaim in (
+            {"RESULT_SCOPE": "CERTIFICATION"},
+            {"result_label": None},
+            {"holdout_reference_permitted": True},
+            {"ai_annotations_used_as_reference": 1},
+        ):
+            packet = dict(ready, reference=dict(ready["reference"], **overclaim))
+            with pytest.raises(runner.Refused) as refused:
+                runner.check_reference(packet)
+            assert refused.value.refusal == "SINGLE_HUMAN_REFERENCE_OVERCLAIMED"
 
     def test_an_attempt_record_spends_the_approval(self, runner, tmp_path) -> None:
         attempt = tmp_path / "attempt.json"

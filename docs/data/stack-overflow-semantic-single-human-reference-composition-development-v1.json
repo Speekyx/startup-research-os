@@ -1,0 +1,168 @@
+{
+ "$comment": "SINGLE_HUMAN_REFERENCE composition (Mission 1.85.5). One genuine human annotator; no second human exists and none was simulated. Inter-annotator metrics are NOT_APPLICABLE_SINGLE_ANNOTATOR, not zero. A pilot reference, never inter-annotator gold.",
+ "split": "DEVELOPMENT",
+ "reference_strength": "SINGLE_HUMAN_REFERENCE",
+ "result_scope": "DEVELOPMENT_PILOT",
+ "result_label": "PILOT_NOT_CERTIFICATION",
+ "holdout_policy": "HOLDOUT_REQUIRES_MULTI_HUMAN_OR_NEW_OPERATOR_DECISION",
+ "annotators": [
+  "operator-a"
+ ],
+ "annotator_files_sha256": [
+  "be162c909bd849c8bea413db42072d5fa81cbca616843faef7cc0284a7561511"
+ ],
+ "records": 50,
+ "labels": {
+  "REPORTED_FAILED_ATTEMPT": {
+   "status": "EXTRACTABLE",
+   "state_counts": {
+    "PRESENT": 15,
+    "ABSENT": 33,
+    "UNCERTAIN": 2
+   },
+   "prevalence_present_among_decided": 0.3125,
+   "inter_annotator_agreement": {
+    "cohen_kappa": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "krippendorff_alpha": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "positive_specific_agreement": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "negative_specific_agreement": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "span_agreement_between_humans": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "subject_agreement_between_humans": "NOT_APPLICABLE_SINGLE_ANNOTATOR"
+   }
+  },
+  "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+   "status": "EXTRACTABLE",
+   "state_counts": {
+    "PRESENT": 0,
+    "ABSENT": 49,
+    "UNCERTAIN": 1
+   },
+   "prevalence_present_among_decided": 0.0,
+   "inter_annotator_agreement": {
+    "cohen_kappa": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "krippendorff_alpha": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "positive_specific_agreement": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "negative_specific_agreement": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "span_agreement_between_humans": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "subject_agreement_between_humans": "NOT_APPLICABLE_SINGLE_ANNOTATOR"
+   }
+  },
+  "SUCCESSFUL_WORKAROUND": {
+   "status": "ANNOTATION_ONLY",
+   "state_counts": {
+    "PRESENT": 3,
+    "ABSENT": 47,
+    "UNCERTAIN": 0
+   },
+   "prevalence_present_among_decided": 0.06,
+   "inter_annotator_agreement": {
+    "cohen_kappa": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "krippendorff_alpha": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "positive_specific_agreement": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "negative_specific_agreement": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "span_agreement_between_humans": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "subject_agreement_between_humans": "NOT_APPLICABLE_SINGLE_ANNOTATOR"
+   }
+  },
+  "EXPLICIT_FEATURE_REQUEST": {
+   "status": "ANNOTATION_ONLY",
+   "state_counts": {
+    "PRESENT": 1,
+    "ABSENT": 49,
+    "UNCERTAIN": 0
+   },
+   "prevalence_present_among_decided": 0.02,
+   "inter_annotator_agreement": {
+    "cohen_kappa": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "krippendorff_alpha": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "positive_specific_agreement": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "negative_specific_agreement": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "span_agreement_between_humans": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "subject_agreement_between_humans": "NOT_APPLICABLE_SINGLE_ANNOTATOR"
+   }
+  },
+  "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+   "status": "BLOCKED",
+   "state_counts": {
+    "PRESENT": 2,
+    "ABSENT": 48,
+    "UNCERTAIN": 0
+   },
+   "prevalence_present_among_decided": 0.04,
+   "inter_annotator_agreement": {
+    "cohen_kappa": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "krippendorff_alpha": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "positive_specific_agreement": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "negative_specific_agreement": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "span_agreement_between_humans": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "subject_agreement_between_humans": "NOT_APPLICABLE_SINGLE_ANNOTATOR"
+   }
+  },
+  "SWITCHING_INTENT": {
+   "status": "BLOCKED",
+   "state_counts": {
+    "PRESENT": 1,
+    "ABSENT": 49,
+    "UNCERTAIN": 0
+   },
+   "prevalence_present_among_decided": 0.02,
+   "inter_annotator_agreement": {
+    "cohen_kappa": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "krippendorff_alpha": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "positive_specific_agreement": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "negative_specific_agreement": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "span_agreement_between_humans": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "subject_agreement_between_humans": "NOT_APPLICABLE_SINGLE_ANNOTATOR"
+   }
+  },
+  "STATED_HYPOTHETICAL_PAYMENT": {
+   "status": "BLOCKED",
+   "state_counts": {
+    "PRESENT": 0,
+    "ABSENT": 50,
+    "UNCERTAIN": 0
+   },
+   "prevalence_present_among_decided": 0.0,
+   "inter_annotator_agreement": {
+    "cohen_kappa": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "krippendorff_alpha": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "positive_specific_agreement": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "negative_specific_agreement": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "span_agreement_between_humans": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "subject_agreement_between_humans": "NOT_APPLICABLE_SINGLE_ANNOTATOR"
+   }
+  },
+  "STATED_PAST_PAYMENT": {
+   "status": "BLOCKED",
+   "state_counts": {
+    "PRESENT": 2,
+    "ABSENT": 48,
+    "UNCERTAIN": 0
+   },
+   "prevalence_present_among_decided": 0.04,
+   "inter_annotator_agreement": {
+    "cohen_kappa": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "krippendorff_alpha": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "positive_specific_agreement": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "negative_specific_agreement": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "span_agreement_between_humans": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+    "subject_agreement_between_humans": "NOT_APPLICABLE_SINGLE_ANNOTATOR"
+   }
+  }
+ },
+ "adjudication_queue_size": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+ "gates": {
+  "composition": {
+   "rule": {
+    "min_present": 4,
+    "min_absent": 4
+   },
+   "status": "PROPOSED_NOT_AUTHORISED",
+   "verdict": "GATE_NOT_AUTHORISED"
+  },
+  "agreement_floor": {
+   "status": "REQUIRES_MULTI_HUMAN_REFERENCE",
+   "verdict": "NOT_APPLICABLE_SINGLE_ANNOTATOR"
+  }
+ }
+}
