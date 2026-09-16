@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.159
+Version: 1.160
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-15 (Sprint 1 / Mission 1.84.25)
+Last amended: 2026-09-16 (Sprint 1 / Mission 1.84.26)
 
 ---
 
@@ -13,6 +13,37 @@ Last amended: 2026-09-15 (Sprint 1 / Mission 1.84.25)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.160 - 2026-09-16 (Sprint 1 / Mission 1.84.26)
+
+**`SEMANTIC_GATE_V1_5_0_D1_D2_IMPLEMENTED_DIVERGENCE_LIMITED_TO_AUTHORISED_REPAIRS`: gate v1.5.0 sits
+beside v1.4.0, repairs the two assertion-scope defects the operator authorised, and moves nothing
+else.** 0 provider calls, 0 model inferences, 0 token counts, 0 retries, nothing persisted, no packet,
+no V11. Four read-only agents (D1 design, D2 design, matrix, governance), the main agent the only
+writer.
+
+**D1**: a noun list governed by one leading `whether` or denial keeps that scope when the sentence's
+predicate follows its last item (*Whether a need or software exists is unknown.* passes). A
+coordinated-clause boundary is vetoed only on positive evidence of a list: a scope anchor, bare-noun
+items, a short noun-phrase conjunct and an unsaturated head. *No evidence establishes software demand,
+and buyers are willing to pay.* still splits and fails, as do propositions with their own subject under
+`whether`. **D2**: a gated modifier in the one modifier slot of a clause-initial subject whose head is
+followed at once by a denial of its existence is not asserted (*Software gap is not established.*
+passes). It is bounded to that noun phrase and stops where the answer predicates of the subject again;
+*..., but the market clearly needs a solution.*, *..., it exists.* and *..., and they are probably
+large.* still fail.
+
+**VERSIONED, NOT EDITED**: `assertion_scope_v1_5`, `assertion_audit_v1_5` and
+`second_opportunity_gate_v1_5` are new. The audit's six re-bound functions and the evaluator are
+v1.3.0's syntax trees with declared renames only, and every other helper is v1.3.0's object. The
+reading loop over v1.2.0's own functions reproduces v1.3.0's `classify` on 842 readings. Gates v1.4.0,
+v1.3.0 and v1.2.0 recompute to their frozen digests, and gate 102's diagnosis is byte for byte merged.
+**DIFFERENTIAL**: 131 cases; 46 repaired and 7 reason-only changes, each attributed (A 23, B 24, A+B
+6), 0 unattributed, 0 assertions added, 0 policy refusals passed, 4 residual over-refusals kept
+refusing. The sweep of 148 frozen gate-test sentences changes no reading. **V9 AND V10, DIAGNOSTICALLY**:
+records untouched and v1.4.0 reproduces their reasons. Under v1.5.0 V9 is unchanged, and V10 keeps
+`market` alone: not eligible, not for review, not for persistence. **GATE 103.** Probe **18 caught, 0 escaped, 2 of 2 controls**, 5 of them re-freezing the pin after breaking a rule. 3877 + 6940 tests, 103 gates, 198 new tests, 0 provider requests, 0 model calls, 0 TED bytes, 0 canonical mutation.
+`mission-1.84.26-report.md`.
 
 ## 1.159 - 2026-09-15 (Sprint 1 / Mission 1.84.25)
 

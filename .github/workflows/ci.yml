@@ -1168,6 +1168,20 @@ jobs:
       - name: The stage 6 diagnostic of V10 re-derives, and nothing it holds constant moved
         run: uv run python infrastructure/scripts/render_second_opportunity_stage6_diagnostic_v10.py --check
 
+      # Mission 1.84.26. Semantic gate v1.5.0 beside v1.4.0: operator decisions D1 (a noun list
+      # governed by one leading denial or uncertainty keeps that scope) and D2 (a gated modifier
+      # inside an explicitly denied subject noun phrase is not asserted), and nothing else. The gate
+      # refuses: gate v1.4.0, v1.3.0 or v1.2.0 moved, or gate 102's diagnosis; a v1.5.0
+      # implementation or test file other than the pinned one; an audit or evaluator function that is
+      # not v1.3.0's syntax tree with only its declared renames, or a shared helper that is not
+      # v1.3.0's object; a matrix case whose divergence neither D1 nor D2 explains, where the
+      # successor asserts something v1.4.0 did not, or where it passes what the policy refuses; a
+      # divergence set other than the pinned one; a changed reading in the frozen sweep; V9's or
+      # V10's record edited, or gate v1.4.0 no longer reproducing their reasons; V10 not still refused
+      # on `market` under v1.5.0; and a successor module that imports the network or an NLP library.
+      - name: Semantic gate v1.5.0 repairs D1 and D2 only, and history is untouched
+        run: uv run python infrastructure/scripts/render_second_opportunity_semantic_gate_v1_5.py --check
+
       # Mission 1.84.2. The one approved provider request happened and its output was rejected
       # at schema validation. The gate refuses: an approval recovered from a failure, or a
       # consumed-approval list that does not name V1's digest with a request against it; a
